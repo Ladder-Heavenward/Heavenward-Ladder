@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>No system beats a fair game</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r30j.html">← 30j the bell curve</a><a href="r30concl.html">next: 30·∎ size and chance add over countably many pieces →</a></p>
+  <div class="tags"><span class="tag proof">30k · proof</span></div>
+  <h1>No system beats a fair game</h1>
+  <p>Gamblers have always hunted for a system: bet more after a loss, stop when ahead, wait for a streak to break. This step proves that in a fair game no such system works, as long as it must stop within some fixed time. A fair game is one where, whatever has happened so far, your fortune after the next round averages what it is now. From that, your average fortune never changes. Stopping at a moment you choose, using only what has already happened, does not change it either. And betting more or less as you go does not change it. The same reasoning answers a question about ruin: start with some dollars, bet one at a time on a fair coin, and stop when you reach a target or go broke. The chance of reaching the target is simply your start over your target.</p>
+  <p class="gesture">In a fair game the average fortune never changes. Stopping by a rule that looks only at the past, within a fixed time, keeps it, so no system that stops in time can beat the game, and a fair walk reaches its target with chance start over target.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r30f.html">30f</a> (given chances and whole-chance), <a href="r30g.html">30g</a> (averages) and <a href="r30d.html">30d</a> (the fenced limit). <a href="r30n.html">30n</a> walks further with the same game.</p></div>
+</header>
+
+<section class="class step" data-step="30k1">
+  <h2 class="sthead"><span class="stno">30k1</span>A fair game</h2>
+  <p class="stands">Stands on 30f2, 30f3, 30g1.</p>
+  <p data-pid="60ebb3">Let X₀, X₁, X₂, … be a gambler’s fortune after each round. In this step each Xₙ takes finitely many values, so the <i>history</i> up to round n, the values of X₀, …, Xₙ, is one of finitely many lists. Histories of chance 0 are left out.</p>
+  <p data-pid="f61e32">From here on, the game is <i>fair</i> when, for every n and every history h up to round n, the average of Xₙ₊₁ given h is the present fortune:</p>
+  <p class="eqline" data-pid="660226">E(Xₙ₊₁ | h) = Σ x P(Xₙ₊₁ = x | h) = Xₙ on h.</p>
+  <p data-pid="d657d8">Its accepted name is a martingale. A fair coin, betting a dollar a round on heads, is a fair game: Xₙ₊₁ = Xₙ + 1 or Xₙ − 1, each with chance 1/2, whatever came before.</p>
+  <p data-pid="651314">Fair-stays-fair technique: <b>in a fair game, E Xₙ = E X₀ for every n.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the fair-stays-fair technique">
+E\,X_{n+1} = \sum_h E(X_{n+1} \mid h)\,P(h) @@ whole-chance (30f3) over the histories h up to round n, for averages
+= \sum_h X_n(h)\,P(h) = E\,X_n @@ the game is fair; step-total (30g1)
+\htmlClass{new}{E\,X_n = E\,X_0} \quad \blacksquare @@ induction on n
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · fair game · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">30k1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\text{a fair coin, one dollar a round on heads},\ \ X_0 = 5"></span></span>List the fortunes after two rounds, with their chances. <br>Find E X₂. Check it against the fair-stays-fair technique. <br>For each history after one round, find the average of X₂ given that history, and check that the game is fair there.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30k2">
+  <h2 class="sthead"><span class="stno">30k2</span>Stopping does not help</h2>
+  <p class="stands">Stands on 30k1.</p>
+  <p data-pid="c2d1e6">From here on, a <i>stopping rule</i> T is a round number chosen by looking only at the past: whether T = n is decided by the history up to round n. It is <i>bounded</i> when T ≤ N always, for one fixed N. “Stop the first time you are 3 ahead, or at round 100” is a bounded stopping rule. “Stop the round before the biggest loss” is not a stopping rule at all, since it looks ahead. Its accepted name is a stopping time.</p>
+  <p data-pid="d79f58">Stopping-keeps technique: <b>if T is a bounded stopping rule in a fair game, E X<sub>T</sub> = E X₀.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the stopping-keeps technique">
+X_T = X_0 + \sum_{n=0}^{N-1} (X_{n+1} - X_n)\,1_{\{T > n\}} @@ the steps taken before stopping; T ≤ N
+\{T > n\} \text{ is decided by the history } h \text{ up to round } n @@ a stopping rule looks only at the past
+E\big((X_{n+1} - X_n)\,1_{\{T > n\}}\big) = \sum_{h:\,T > n} \big(E(X_{n+1} \mid h) - X_n(h)\big)P(h) = 0 @@ whole-chance; the game is fair
+\htmlClass{new}{E\,X_T = E\,X_0} \quad \blacksquare @@ average-adds (30g1), over finitely many n
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · stopping · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30k2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="X_0 = 0,\ \ \pm 1 \text{ a round on a fair coin}"></span> <span data-tex-inline="T = \text{the first round with } X = 1,\ \text{or round } 3"></span></span>Check that T is a bounded stopping rule. <br>List every history up to T, with its chance and X<sub>T</sub>. <br>Find E X<sub>T</sub>, and the chance of stopping 1 ahead. <br>Where does the average lost on the other histories come from?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30k3">
+  <h2 class="sthead"><span class="stno">30k3</span>No system</h2>
+  <p class="stands">Stands on 30k1, 30k2.</p>
+  <p data-pid="04944e">A <i>system</i> chooses the stake Hₙ for round n from the history up to round n − 1, with |Hₙ| ≤ K for one fixed K. Its winnings after n rounds are Wₙ = H₁(X₁ − X₀) + ⋯ + Hₙ(Xₙ − Xₙ₋₁).</p>
+  <p data-pid="e10337">No-system technique: <b>in a fair game, every system with a bounded stopping rule has average winnings 0.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the no-system technique">
+E\big(W_{n+1} - W_n \mid h\big) = H_{n+1}(h)\big(E(X_{n+1} \mid h) - X_n(h)\big) = 0 @@ the stake is fixed by h; the game is fair
+W_0 = 0,\ \ W_0, W_1, \ldots \text{ is a fair game} @@ given the history of X, which fixes the Wₖ
+\htmlClass{new}{E\,W_T = 0} \quad \blacksquare @@ stopping-keeps (30k2)
+  </pre>
+  <p data-pid="40647e">Doubling after each loss seems to beat this: the first win covers every loss and gains the first stake. It needs stakes with no ceiling and a stopping time with no bound, and both are illegal here. With a ceiling on stakes, a long run of losses ruins the doubler often enough to bring the average back to 0.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · no system · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30k3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\text{a fair coin, stakes } 1,\ 2,\ 4,\ \text{stop at the first win or after round } 3"></span></span>List the histories, their chances and the winnings on each. <br>Find the chance of winning, and E W<sub>T</sub>. <br>Check that the stakes are fixed by the past and bounded, and that T is a bounded stopping rule.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30k4">
+  <h2 class="sthead"><span class="stno">30k4</span>The chance of ruin</h2>
+  <p class="stands">Stands on 30k2, 30d3, 22i.</p>
+  <p data-pid="66aa0b">Start with k dollars, 0 &lt; k &lt; N. Bet one dollar a round on a fair coin. Stop at T, the first round your fortune is 0 or N.</p>
+  <p data-pid="e0d82f">Ruin-chance technique: <b>the chance of reaching N before 0 is k/N.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the ruin-chance technique">
+P(T > mN) \le (1 - 2^{-N})^m \to 0 @@ each block of N rounds ends the game if all are heads; blocks are independent
+\min(T, n) \text{ is a bounded stopping rule} @@ stop at T, or at n, whichever is first
+E\,X_{\min(T, n)} = k @@ stopping-keeps (30k2)
+X_{\min(T, n)} \to X_T \text{ with chance } 1,\ \ 0 \le X_{\min(T, n)} \le N @@ T is finite with chance 1; a fence N
+E\,X_T = k @@ fenced-limit (30d3)
+N \cdot P(X_T = N) + 0 \cdot P(X_T = 0) = k @@ X_T is 0 or N
+\htmlClass{new}{P(\text{reach } N \text{ before } 0) = k/N} \quad \blacksquare @@ the line above
+  </pre>
+  <p data-pid="091939">Start with 90 dollars and aim for 100 on a fair coin, and you win 9 times in 10, a small gain each time. The 1 time in 10 you lose all 90. On average you gain 0.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · ruin · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30k4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a player at a fair in Billings, Montana, starts with 10 dollars and bets 1 dollar a round on a fair coin</span></span>Find the chance of reaching 50 dollars before going broke. <br>Find the average fortune when the game ends. <br>Find the chance of going broke if the target is raised to 100 dollars. <br>Find the chance of going broke if there is no target at all, and the player stops only when broke. (Let the target grow.)</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30k5">
+  <h2 class="sthead"><span class="stno">30k5</span>Illegal moves</h2>
+  <p class="stands">Stands on 30k1 to 30k4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{doubling after each loss always wins in the end}\,? @@ stakes have no ceiling and T no bound; both are needed
+\text{stop the round before a loss}\,? @@ not a stopping rule: it looks ahead
+\text{stopping-keeps for any stopping rule}\,? @@ stop the first time you are 1 ahead: X_T = 1 always, yet X₀ = 0
+\text{a fair game keeps each fortune near its start}\,? @@ only the average is kept; the walk spreads like √n
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30k5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{doubling on a fair coin, stakes } 1, 2, 4, \ldots, 512,\ \text{at most } 10 \text{ rounds}"></span></span>What is the chance of ten losses in a row, and how much is lost then? What is the chance of winning, and how much is won? What are the average winnings?</li><li><span class="givens"><span data-tex-inline="X_0 = 0,\ \pm 1 \text{ a round, at most } 3 \text{ rounds}"></span> <span data-tex-inline="\text{rule: stop just before the first loss}"></span></span>On the history win, win, loss, when must you stop? Can that be decided at round 2, from rounds 1 and 2 alone? What is E X<sub>T</sub> under this rule?</li><li><span class="givens"><span data-tex-inline="X_0 = 0,\ \pm 1 \text{ a round}"></span> <span data-tex-inline="T = \text{the first round with } X = 1,\ \text{no cap}"></span></span>What is X<sub>T</sub> when T is finite? Is E X<sub>T</sub> = E X₀? Which demand of the stopping-keeps technique does T fail? What was E X<sub>T</sub> with a cap of 3 rounds (30k2.1)?</li><li><span class="givens"><span data-tex-inline="X_0 = 0,\ \pm 1 \text{ a round},\ 100 \text{ rounds}"></span></span>What is E X₁₀₀? What is its spread width? What is the chance that X₁₀₀ = 0 exactly? Does the game keep the fortune near its start?</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">30k.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="X_0 = k,\ \pm 1 \text{ a round on a fair coin}"></span> <span data-tex-inline="T = \text{the first round with } X = 0 \text{ or } N"></span></span>Build a second fair game from the walk: show that Yₙ = Xₙ² − n is fair. Find the average of X²ₙ₊₁ given a history with Xₙ = x. <br>By stopping-keeps at min(T, n), find E min(T, n) in terms of E X²<sub>min(T, n)</sub>. <br>Let n grow, with the rising-limit technique on one side and the fenced-limit technique on the other. Find E T = k(N − k). <br>Find the average length of the game in 30k4.1, start 10 and target 50.</div>
+  <div class="chq"><span class="chid">30k.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="X_0 = 0,\ \pm 1 \text{ a round}"></span> <span data-tex-inline="T = \text{the first round with } X = 1"></span> <span data-tex-inline="P(T \le 3) = 5/8,\ \ P(T \le 9) = 193/256"></span></span>With a cap of N rounds, min(T, N) is bounded, so E X<sub>min(T, N)</sub> = 0. Find the part of this average from the histories that reach 1 by round N, for N = 3 and N = 9. <br>Find the part from the histories that do not, and their average fortune at round N, for N = 3 and N = 9. <br>As N grows, P(T ≤ N) heads to 1. Where does the average 0 hide?</div>
+  <div class="chq"><span class="chid">30k.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="X_0 = 0,\ \ X_1 = \pm 1 \text{ by a fair coin},\ \ X_2 = -X_1"></span></span>Fair games have E Xₙ = E X₀ for every n. Turn it round: if E Xₙ = E X₀ for every n, must the game be fair? Find E X₁ and E X₂, and E(X₂ | X₁ = 1). <br>Now ask more: E X<sub>T</sub> = E X₀ for every bounded stopping rule T. Fix a round n and a history h up to n. Let T = n + 1 on h, and T = n elsewhere. Find E X<sub>T</sub> − E Xₙ. <br>Find what E X<sub>T</sub> = E X₀ for this T forces about E(Xₙ₊₁ | h).</div>
+  <div class="chq"><span class="chid">30k.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="p_k = P(\text{reach } N \text{ before } 0 \text{ from } k)"></span> <span data-tex-inline="p_0 = 0,\ \ p_N = 1"></span></span>Prove the ruin-chance technique another way, by whole-chance over the first toss. Find pₖ in terms of pₖ₊₁ and pₖ₋₁, for 0 &lt; k &lt; N. <br>Show that the steps pₖ₊₁ − pₖ are all equal. Find them from p₀ and p_N. <br>Find pₖ. Where does this route use that the game ends with chance 1?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r30j.html">← 30j · the bell curve</a><a href="r30concl.html">30·∎ · size and chance add over countably many pieces →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A fair game is a martingale, and the history up to round n is its filtration. A stopping rule is a stopping time. The stopping-keeps technique is the optional stopping theorem, here for bounded stopping times. A system is a predictable process, and its winnings are the martingale transform, a discrete stochastic integral. Doubling after each loss is the martingale betting system, from which the word comes. The ruin-chance is the gambler’s ruin.</p>
+  <h3>Who said it first</h3>
+  <p>Blaise Pascal and Pierre de Fermat posed the gambler’s ruin in 1656, and Christiaan Huygens published it in 1657. Paul Lévy studied fair games in the 1930s. Jean Ville named them martingales in 1939, after the betting system. Joseph Doob built the theory, with optional stopping, in 1940 and in his book of 1953.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“Stop the first time you are 1 ahead. The walk is sure to get there, so E X_T = 1, which beats the fair game.” Not allowed: T has no bound, and the fortunes before T have no fence below, so the fenced limit does not apply. The average time to get there is endless.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'history',t:R`h = (X_0, \ldots, X_n)`,n:`Finitely many.`},
+  {k:'ember',kl:'fair',t:R`E(X_{n+1} \mid h) = X_n`,n:`Whatever came before.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{E\,X_n = E\,X_0}`,n:`The average never moves.`}
+],{title:'The slides · fair game · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'rule',t:R`\{T = n\} \text{ from the past}`,n:`Bounded by N.`},
+  {k:'ember',kl:'steps',t:R`(X_{n+1} - X_n)1_{\{T > n\}}`,n:`Each averages 0.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{E\,X_T = E\,X_0}`,n:`Stopping keeps the average.`}
+],{title:'The slides · stopping · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'stakes',t:R`H_n \text{ from the past}`,n:`Bounded.`},
+  {k:'ember',kl:'winnings',t:R`W_n = \sum H_k(X_k - X_{k-1})`,n:`Itself fair.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{E\,W_T = 0}`,n:`No edge.`}
+],{title:'The slides · no system · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'bounded',t:R`\min(T, n)`,n:`Stopping keeps k.`},
+  {k:'ember',kl:'limit',t:R`0 \le X \le N`,n:`Fenced.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{P(\text{reach } N) = k/N}`,n:`Start over target.`}
+],{title:'The slides · ruin · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The best test</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r30s.html">← 30s is the difference real?</a><a href="r30u.html">next: 30u belief updated →</a></p>
+  <div class="tags"><span class="tag tech">30t · technique</span></div>
+  <h1>The best test</h1>
+  <p>The step before this one built tests the way people first built them, by picking a sensible number from the data and asking how surprising it would be if the claim were true. Sensible is not the same as best. With the same data, and the same chance of wrongly rejecting a true claim, one test can catch a false claim far more often than another. This step finds the test that catches it most often. The answer is to set the claim beside its rival and ask, for the data in hand, how many times more likely the rival makes them than the claim. That ratio is rarely large when the claim is true, whatever the data. Rejecting the claim when the ratio is large is the best test there is, and the proof takes four lines. Then the step asks how much of the data a test really needs. Often one number, a count or an average, carries everything the data say about the unknown, and the rest can be thrown away without losing anything.</p>
+  <p class="gesture">Weigh a claim against its rival by the ratio of the chances they give the data seen. If the claim is true, the ratio reaches twenty at most one time in twenty, and the same holds for every size. Rejecting the claim when the ratio is large beats every other test at the same level. A summary that the chances depend on only through it loses nothing, and every best test uses only it.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r14stat.html">14·stat</a> (the likelihood), <a href="r30f.html">30f</a> (the given-chance, independent and turn-around techniques), <a href="r30g.html">30g</a> (averages as integrals, the average-adds technique), <a href="r30m.html">30m</a> (the density-average technique), <a href="r30h.html">30h</a> (the stray-bound technique), <a href="r30c.html">30c</a> (the integral), <a href="r30j.html">30j</a> (the average-function technique), <a href="r30l.html">30l</a> (the odds-update technique), <a href="r30q.html">30q</a> (the sample-average technique), <a href="r30r.html">30r</a> (the best guess, the bell-guess technique), <a href="r30s.html">30s</a> (the claim, the level, the two kinds of error, power, the bell test), <a href="r17c.html">17c</a> (logs of products) and <a href="r08stat.html">8·stat</a> (the squared-misses technique). <a href="r30u.html">30u</a> lets the stories carry chances of their own.</p></div>
+</header>
+
+<section class="class step" data-step="30t1">
+  <h2 class="sthead"><span class="stno">30t1</span>Two stories, one ratio</h2>
+  <p class="stands">Stands on 14·stat (the likelihood), 30s1 (the claim), 30f (the independent technique), 30g (averages as integrals), 30m (the density-average technique), 30h (the stray-bound technique) and 17c (the log-of-a-product technique).</p>
+  <p data-pid="9a9f9a">A test of 30s tries a claim, H₀. Here the claim is set against one rival, H₁, what is believed instead if the claim falls. In this step each of them names one chance law in full: under H₀ the data x have chance (or density) f₀(x), under H₁ they have f₁(x). 14·stat and 30r read the chance of exactly what was seen, as a function of the knob, as the likelihood. Here the knob has only two settings, and the natural thing to compare is their ratio.</p>
+  <p data-pid="f691ce">The likelihood ratio of the data is Λ(x) = f₁(x)/f₀(x), wherever f₀(x) &gt; 0. When the data are n readings, independent under each story, each story’s chance is a product, so Λ is a product of one ratio per reading, and log Λ is a sum (17c). Large Λ means the data fit H₁ better than H₀. The worry is that large ratios might turn up often by luck even when H₀ is true. They cannot.</p>
+  <p data-pid="1a96e9">Ratio-bound technique: <b>if H₀ is true, the chance that the likelihood ratio reaches k is at most 1/k, for every k &gt; 0.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the ratio-bound technique">
+\Lambda(x) = f_1(x)/f_0(x) \ge 0 \text{ where } f_0(x) > 0 @@ the likelihood ratio, a chance variable under H₀
+E_0[\Lambda] = \textstyle\int_{f_0 > 0} \tfrac{f_1}{f_0}\,f_0 = \int_{f_0 > 0} f_1 @@ the average as an integral (30g), by a density (30m); a sum when the data are counts
+\textstyle\int_{f_0 > 0} f_1 \le \int f_1 = 1 @@ f₁ is a chance law: never negative, total 1
+P_0(\Lambda \ge k) \le E_0[\Lambda]/k @@ the stray-bound technique (30h), since Λ ≥ 0
+\htmlClass{new}{P_0(\Lambda \ge k) \le 1/k} \quad \blacksquare @@ E₀[Λ] ≤ 1
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: clipped fins at Bonneville Dam">
+H_0:\ \theta = 0.5,\ \ H_1:\ \theta = 0.7;\ \ 13 \text{ of } 20 \text{ fish clipped} @@ θ the share of hatchery fish, marked by a clipped fin, in a run of coho counted at the fish ladder
+\Lambda = \big(\tfrac{0.7}{0.5}\big)^{13}\big(\tfrac{0.3}{0.5}\big)^{7} @@ one ratio per fish, multiplied (30f, independent fish)
+\log\Lambda = 13\log 1.4 + 7\log 0.6 \approx 4.374 - 3.576 = 0.798 @@ the log-of-a-product technique (17c)
+\Lambda \approx 2.22 @@ the data fit 0.7 a little more than twice as well as 0.5
+\htmlClass{new}{P_0(\Lambda \ge 2.22) \le 0.45} \quad \blacksquare @@ the ratio-bound technique: a ratio this size is common under H₀
+  </pre>
+  <p data-pid="55bd8c">A ratio of 2 is weak. The ratio-bound technique says what a strong one means: a ratio of 20 turns up less than one time in twenty when H₀ is true, and a ratio of 1000 less than one time in a thousand, whatever the claim and rival are and however the data were made. Notice what the ratio does not say. It does not give the chance that H₁ is true. By the odds-update technique of 30l, the ratio multiplies the odds of H₁ held before the data, and those odds have to come from somewhere: that is 30u.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the ratio · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">30t1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="H_0:\ \theta = 0.5,\ \ H_1:\ \theta = 0.7;\ \ 66 \text{ of } 100 \text{ clipped}"></span></span>A larger count at the Bonneville fish ladder. Find log Λ and Λ. Find the ceiling the ratio-bound technique puts on the chance, under H₀, of a ratio this large.</li><li><span class="givens"><span data-tex-inline="\text{counts } 3, 1, 4, 2;\ \ H_0:\ \lambda = 2,\ \ H_1:\ \lambda = 3"></span></span>A beach on the Olympic coast logs the number of gray whales seen from shore each morning, taken as rare-event counts (22·stat) with average λ. Find Λ. Find whether it depends on the four counts or only on their total.</li><li>Prove that E₁[1/Λ] ≤ 1, where f₁ &gt; 0. Find what this says about the chance, under H₁, that Λ ≤ 1/k.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30t2">
+  <h2 class="sthead"><span class="stno">30t2</span>The most powerful test</h2>
+  <p class="stands">Stands on 30t1, 30s3 (the two kinds of error, and power), 30c (the integral of a function never negative), 30g (the average-adds technique), 30q1 (the sample-average technique) and 30j (the average-function technique).</p>
+  <p data-pid="06d430">A test is a rule φ that looks at the data and rejects H₀ (φ(x) = 1) or keeps it (φ(x) = 0). As in 30s, its chance of an error of the first kind is P₀(φ = 1), and its power is P₁(φ = 1), one less the chance of an error of the second kind. Fix the level α in advance. Among all tests whose chance of an error of the first kind is at most α, which has the greatest power?</p>
+  <p data-pid="cd47ab">Best-test technique: <b>let φ* reject H₀ when Λ(x) &gt; k and keep it when Λ(x) &lt; k, for some k ≥ 0, and let α = P₀(φ* = 1). Then every test φ with P₀(φ = 1) ≤ α has P₁(φ = 1) ≤ P₁(φ* = 1).</b> Where Λ(x) = k exactly, φ* may do either; for readings with a density this has chance 0.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the best-test technique">
+(\varphi^*(x) - \varphi(x))(f_1(x) - k f_0(x)) \ge 0 \text{ for every } x @@ where f₁ &gt; kf₀, φ* = 1 ≥ φ; where f₁ &lt; kf₀, φ* = 0 ≤ φ; where equal, 0
+\textstyle\int (\varphi^* - \varphi)(f_1 - k f_0) \ge 0 @@ the integral of a function never negative (30c)
+\textstyle\int \varphi^* f_1 - \int \varphi f_1 \ge k\big(\int \varphi^* f_0 - \int \varphi f_0\big) @@ the average-adds technique (30g), integrals split
+k\big(P_0(\varphi^* = 1) - P_0(\varphi = 1)\big) = k\big(\alpha - P_0(\varphi = 1)\big) \ge 0 @@ ∫φf₀ is P₀(φ = 1); k ≥ 0
+\htmlClass{new}{P_1(\varphi^* = 1) \ge P_1(\varphi = 1)} \quad \blacksquare @@ ∫φf₁ is P₁(φ = 1)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: apples in a Yakima packing house">
+X_1, \dots, X_{25} \text{ bell-shaped, spread width } 25\text{ g};\ \ H_0:\ \mu = 200,\ \ H_1:\ \mu = 210 @@ a packer’s claim about the average weight of its Honeycrisp apples, tested against a heavier story
+\log\Lambda = \tfrac{\mu_1 - \mu_0}{\sigma^2}\textstyle\sum x_i - \tfrac{n(\mu_1^2 - \mu_0^2)}{2\sigma^2} @@ the log of a product of bell densities (30j); the squares in xᵢ cancel
+\Lambda > k \iff \bar x > c @@ μ₁ &gt; μ₀, so log Λ climbs with x̄
+P_0(\bar x > c) = 0.05:\ \ c = 200 + 1.645 \cdot \tfrac{25}{\sqrt{25}} \approx 208.2 @@ under H₀, x̄ is a bell (30j, average-functions multiply) of spread width σ/√n (30q1)
+P_1(\bar x > 208.2) = P\big(Z > \tfrac{208.2 - 210}{5}\big) \approx 0.64 @@ the power, Z a standard bell
+\htmlClass{new}{\text{the same test is best against every } \mu_1 > 200} \quad \blacksquare @@ c does not depend on μ₁
+  </pre>
+  <p data-pid="2b3704">The last line is worth a second look. The best test of 200 against 210 never used the number 210, only that it was bigger. So one test, reject when x̄ &gt; 208.2, is the best against every story above 200 at once. It is the one-sided form of the bell test of 30s, and now it is proved best rather than chosen for being sensible. It is not best against a story below 200: there the best test rejects when x̄ is small.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · best test · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30t2.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\sigma = 25,\ \ n = 25,\ \ H_0:\ \mu = 200,\ \ H_1:\ \mu = 210,\ \ \alpha = 0.01"></span></span>Find the best test and its power. Use 2.326 for the bell’s top 1% point.</li><li><span class="givens"><span data-tex-inline="\sigma = 25,\ \ H_0:\ \mu = 200,\ \ H_1:\ \mu = 210,\ \ \alpha = 0.05"></span></span>Find the least number of apples that gives the best test a power of at least 0.9. Use 1.645 and 1.282.</li><li><span class="givens"><span data-tex-inline="20 \text{ fish};\ \ H_0:\ \theta = 0.5,\ \ H_1:\ \theta = 0.7"></span></span>Show that Λ climbs with the count of clipped fish. Find the best test that rejects for a set of counts, at level 0.05 or less, and its power.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30t3">
+  <h2 class="sthead"><span class="stno">30t3</span>Summaries that lose nothing</h2>
+  <p class="stands">Stands on 30t1, 30t2, 30f (the given-chance technique), 30r (the best guess) and 8·stat (the squared-misses technique).</p>
+  <p data-pid="3c7bec">Twenty fish come with an order: clipped, clipped, wild, clipped, and so on. Does the order say anything about the share θ? It cannot, if the fish are independent with the same chance. Only the count seems to matter. Call a summary T of the data a full summary when, once T(x) = t is known, the given chance of the data is the same under every θ (30f). Then the rest of the data, beyond T, is a draw that θ has no say in.</p>
+  <p data-pid="7cb06b">Summary-factor technique: <b>for data with chances f(x; θ), T is a full summary exactly when f(x; θ) = g(T(x), θ) · h(x), with g depending on the data only through T and h not depending on θ.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the summary-factor technique, for counted data">
+P_\theta(X = x \mid T = t) = \tfrac{f(x;\theta)}{\sum_{T(y) = t} f(y;\theta)} \text{ for } T(x) = t @@ the given-chance technique (30f): X = x already makes T = t
+\text{if } f = g(T, \theta)\,h: \ \ \tfrac{g(t,\theta)\,h(x)}{g(t,\theta)\sum_{T(y)=t} h(y)} = \tfrac{h(x)}{\sum_{T(y)=t} h(y)} @@ g(t, θ) is the same for every y with T(y) = t, and cancels
+\text{so } T \text{ is a full summary} @@ the given chance is free of θ
+\text{if } T \text{ is full: } f(x;\theta) = P_\theta(T = t) \cdot P(X = x \mid T = t) @@ the given-chance technique, turned round; the second factor is free of θ
+\htmlClass{new}{f(x;\theta) = g(T(x),\theta)\,h(x)} \quad \blacksquare @@ g(t, θ) = P_θ(T = t), h(x) = P(X = x | T = T(x))
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: the average of bell readings is a full summary">
+f(x;\mu) = (2\pi\sigma^2)^{-n/2}\exp\big(-\tfrac{1}{2\sigma^2}\textstyle\sum (x_i - \mu)^2\big) @@ n independent bell readings, σ known, μ unknown
+\textstyle\sum (x_i - \mu)^2 = \sum (x_i - \bar x)^2 + n(\bar x - \mu)^2 @@ the squared-misses technique (8·stat)
+f = \underbrace{e^{-n(\bar x - \mu)^2/(2\sigma^2)}}_{g(\bar x,\,\mu)} \cdot \underbrace{(2\pi\sigma^2)^{-n/2} e^{-\sum (x_i - \bar x)^2/(2\sigma^2)}}_{h(x)} @@ the exp of a sum is a product
+\htmlClass{new}{\bar x \text{ is a full summary for } \mu} \quad \blacksquare @@ the summary-factor technique, with densities in place of chances
+  </pre>
+  <p data-pid="181a5b">Now look back. The likelihood ratio is g(T, θ₁)/g(T, θ₀): h cancels. So the best test uses the data only through a full summary. The best guess of 30r makes g(T, θ) greatest, so it too depends only on T. A full summary is not a loss of information but a proof that the rest was never information about θ at all. It is information about the model, though: whether the fish really are independent can only be checked from the order that the count throws away.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · full summary · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30t3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="20 \text{ fish},\ \ 13 \text{ clipped}"></span></span>Find the given chance of one particular order of clipped and wild fish, once the count 13 is known. Find whether it depends on θ.</li><li><span class="givens"><span data-tex-inline="f(x;\lambda) = \prod e^{-\lambda}\lambda^{x_i}/x_i!"></span></span>For rare-event counts, find g and h, and a full summary. Check that the whale counts 3, 1, 4, 2 and 2, 2, 3, 3 give the same Λ between λ = 2 and λ = 3.</li><li><span class="givens"><span data-tex-inline="3.1,\ 7.4,\ 5.2,\ 6.0"></span></span>Four readings, each landing evenly in [0, θ]. Write f(x; θ) with the help of the largest reading. Find a full summary, and the best guess of θ.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30t4">
+  <h2 class="sthead"><span class="stno">30t4</span>Illegal moves</h2>
+  <p class="stands">Stands on 30t1 to 30t3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\Lambda = 20 \Rightarrow P(H_1 \text{ true}) = \tfrac{20}{21}\,? @@ the ratio compares how well each fits; it multiplies odds held before the data (30l), and needs them
+\text{reject } \bar x > 208.2 \text{ is best against } \mu_1 = 190 \text{ too}\,? @@ for μ₁ &lt; μ₀, log Λ falls as x̄ climbs: the best test rejects for small x̄
+\bar x \text{ is a full summary for readings landing evenly in } [0, \theta]\,? @@ the chances depend on the data through the largest reading, not the average
+\Lambda = (0.7/0.5)^{13} \text{ for } 13 \text{ of } 20 \text{ clipped}\,? @@ the seven wild fish carry a ratio too: (0.3/0.5)⁷
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30t4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\Lambda = 20"></span></span>Find P(H₁ true | data) by the odds-update technique (30l) when H₀ and H₁ start with chances 0.5 and 0.5, and when they start with 0.99 and 0.01. <br>Find what the first line takes for granted.</li><li><span class="givens"><span data-tex-inline="H_0:\ \mu = 200,\ \ H_1:\ \mu = 190,\ \ \sigma = 25,\ \ n = 25"></span></span>Find the power of the test reject when x̄ &gt; 208.2 against μ₁ = 190, and the best test at α = 0.05 and its power. <br>Find the slip.</li><li><span class="givens"><span data-tex-inline="\text{readings } 1, 1, 10 \text{ and } 3, 4, 5"></span></span>Both lists have average 4. Find the likelihood of θ = 8 for each list when readings land evenly in [0, θ]. <br>Find what the third line forgets.</li><li><span class="givens"><span data-tex-inline="13 \text{ of } 20 \text{ clipped}"></span></span>Find what the fourth line gives, and the true Λ. <br>Find which fish the fourth line leaves out, and why they count.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">30t.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="20 \text{ fish};\ \ H_0:\ \theta = 0.5,\ \ H_1:\ \theta = 0.7"></span></span>With counts, no test that rejects for a fixed set of counts has level exactly 0.05. <br>Build a test that rejects at 15 or more, and at 14 with the toss of a bent coin, whose chance of an error of the first kind is exactly 0.05. Find its power. Prove it is best, by the lines of 30t2 with φ taking values in [0, 1].</div>
+  <div class="chq"><span class="chid">30t.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="H_0:\ \text{readings even in } [0, 1],\ \ H_1:\ \text{even in } [0, 2]"></span></span>Here f₀ is 0 on part of the line where f₁ is not, so Λ is endless there. <br>Find the best test with α = 0.05 for one reading, and its power. Find a test with power 1 at α = 0 when there are n readings and the largest is above 1, and the chance it misses.</div>
+  <div class="chq"><span class="chid">30t.4.3</span><span class="tagq">converse</span>The best-test technique says the ratio test is most powerful. Turn it round: if a test φ with P₀(φ = 1) = α is as powerful as φ*, must φ agree with φ* wherever Λ ≠ k? <br>Prove your answer from the first two lines of 30t2, using that a never-negative function with integral 0 is 0 except on a size-0 set (30c).</div>
+  <div class="chq"><span class="chid">30t.4.4</span><span class="tagq">reroute</span>30s built the bell test of μ = μ₀ by rejecting when |x̄ − μ₀| is large. Reroute it as a ratio: compare H₀ against the best guess of μ from 30r, by Λ = f(x; x̄)/f(x; μ₀), with σ known. <br>Show that 2 log Λ = n(x̄ − μ₀)²/σ² = Z², and that rejecting for large Λ is the bell test of 30s.</div>
+  <div class="chq"><span class="chid">30t.4.5</span><span class="tagq">seam</span>In 1925 a statistician at a farm research station north of London printed tables for testing, with one in twenty as a handy line, and read a small chance of the data under H₀ as evidence against it, to be weighed with everything else known. In 1933 two others in London, one of them newly arrived from Warsaw, recast a test as a rule for deciding: fix the false alarm chance in advance, then take the test of greatest power, and they proved the best-test technique. The first answered, for thirty years, that science is not a factory, and that a scientist judging one experiment is not choosing a rule for a thousand. <br>Find which of 30t’s techniques belongs to each side, and which number each side would report for the Yakima apples if x̄ came out at 209. <br>Go back to 30s.4.3: a surprise chance of 0.04 against one of 0.06. Find how each side would read the pair. <br>Is a test a measure of the evidence in this one set of data, or a rule whose chances of error hold over many uses? The test taught in most courses today mixes the two. What would each side object to in it?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r30s.html">← 30s · is the difference real?</a><a href="r30u.html">30u · belief updated →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>H₀ is the null hypothesis and H₁ the alternative; a claim or rival that names one chance law in full is a simple hypothesis. Λ is the likelihood ratio; the ratio-bound technique is sometimes called the universal bound. A test is φ, a test function; φ* is the likelihood ratio test, and the best-test technique is the Neyman–Pearson lemma. A test that is best against every story of a family at once is uniformly most powerful; it exists when the ratio climbs with one number, a monotone likelihood ratio. A full summary is a sufficient statistic, and the summary-factor technique is the factorization theorem (Fisher–Neyman). The ratio with the most likely parameter put in, as in 30t.4.4, is the generalized likelihood ratio; for large samples 2 log Λ is spread like χ² (30s), Wilks’s theorem, whose proof waits much higher up the ladder.</p>
+  <h3>Who said it first</h3>
+  <p>Ronald Fisher defined sufficiency in 1922, in the paper that also named likelihood, and gave the factorization; Jerzy Neyman proved it in general in 1935. Jerzy Neyman and Egon Pearson proved the lemma in 1933. Samuel Wilks found the large-sample law of the ratio in 1938. Richard Royall stressed the ratio-bound in 1997 as the reason a likelihood ratio can be read as evidence on its own.</p>
+  <p>In 30t.4.5, the statistician of 1925 is Ronald Fisher, at Rothamsted, in <i>Statistical Methods for Research Workers</i>; the two of 1933 are Jerzy Neyman and Egon Pearson, at University College London. Fisher’s sharpest reply was his paper of 1955, <i>Statistical methods and scientific induction</i>.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'the ratio',t:R`\Lambda = f_1(x)/f_0(x)`,n:`Two stories, one number.`},
+  {k:'ember',kl:'its average',t:R`E_0[\Lambda] \le 1`,n:`Under the story on trial.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{P_0(\Lambda \ge k) \le 1/k}`,n:`The stray-bound technique.`}
+],{title:'The slides · the ratio · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'pointwise',t:R`(\varphi^* - \varphi)(f_1 - kf_0) \ge 0`,n:`Check both sides of k.`},
+  {k:'ember',kl:'total',t:R`\textstyle\int \varphi^* f_1 - \int \varphi f_1 \ge k(\alpha - P_0(\varphi = 1))`,n:`Integrate.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{P_1(\varphi^* = 1) \ge P_1(\varphi = 1)}`,n:`No test with fewer false alarms catches more.`}
+],{title:'The slides · best test · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'given T',t:R`P_\theta(X = x \mid T = t) = h(x)/\textstyle\sum h(y)`,n:`g cancels.`},
+  {k:'ember',kl:'turned round',t:R`f = P_\theta(T = t)\,P(X = x \mid T = t)`,n:`The given-chance technique.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{f = g(T, \theta)\,h(x)}`,n:`The summary-factor technique.`}
+],{title:'The slides · full summary · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

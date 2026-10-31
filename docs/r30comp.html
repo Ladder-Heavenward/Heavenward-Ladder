@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How much can a noisy line carry?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r30phys.html">← 30·phys how is energy shared among molecules?</a><a href="r30econ.html">next: 30·econ can you beat the market by watching prices? →</a></p>
+  <div class="tags"><span class="tag comp">30·comp · computing</span></div>
+  <h1>How much can a noisy line carry?</h1>
+  <p>How much can a noisy line carry? Every line that carries a message garbles some of it. A phone line hisses, a radio link from a buoy off Cape Flattery fades in a storm, and a fibre under the Pacific, landing on the Oregon coast at Pacific City, loses a little of its light in every kilometre. The old answer was to say everything twice, or three times, and let the copies outvote the errors. But each repeat cuts the speed, and the errors never quite go away: a message sent three times can still have two of its copies spoiled. It looked as if a noisy line forced a trade, so that fewer errors always cost more repeats, without end. What makes the question hard is that it seems to need a measure of how much a message holds, apart from what it says. Rung twenty-two counted the ways a thing can sit in bits. Rung thirty made chance a size and averages integrals. With both, this page finds how much a message holds on average, how short a code for it can be, how much one signal tells about another, and how much a noisy line can carry. The answer to the old trade is a surprise: below a certain speed set by the noise, errors can be made as rare as anyone likes without slowing down any further.</p>
+  <p class="gesture">A rare thing tells you more when it happens than a common thing does. Measure the surprise of an outcome by the log of one over its chance, and average it: that average is the least number of bits a code needs for each outcome, give or take one, and coding long blocks at a time takes away even that one. One signal tells you about another by however much it cuts your surprise about it, and that amount is the same read either way. A line that flips each bit with a fixed small chance tells you, for each bit sent, one bit less the surprise of a flip, at best. Pick a large number of long codewords at random. The noise flips about its usual share of each block, and the chance that some other codeword lies as close to what came out is tiny as long as the codewords are not too many. So a code that runs at any speed below that best amount can make its errors as rare as you like.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r22comp.html">22·comp</a> (the ways-to-bits and share-count techniques), <a href="r17crypt.html">17·crypt</a> (bits of a choice), <a href="r17a.html">17a</a> (the log-bounds technique), <a href="r17h.html">17h</a> (change of base), <a href="r23h.html">23h</a> (the binomial-sum technique), <a href="r30f.html">30f</a> (the chance-rules and independent techniques), <a href="r30g.html">30g</a> (the average-adds technique), <a href="r30h.html">30h</a> (the spread-bound and averages-settle techniques) and <a href="r30phys.html">30·phys</a> (the energy-share technique: most ways under fixed totals). 30·econ asks whether watching prices can beat the market.</p></div>
+</header>
+
+<section class="class step" data-step="30comp1">
+  <h2 class="sthead"><span class="stno">30comp1</span>Surprise and its average</h2>
+  <p class="stands">Stands on 22·comp (the ways-to-bits and share-count techniques), 17·crypt (bits of a choice), 30g (the average-adds technique), 30f (the independent technique) and 17a (the log-bounds technique).</p>
+  <p data-pid="11e943">17·crypt counted a choice among 2ⁿ equally likely ways as n bits. When the ways are not equally likely, call log₂(1/p) the surprise of an outcome with chance p. A sure thing has surprise 0. A coin’s heads has 1 bit. Let X take values with chances p(x).</p>
+  <pre class="lines" data-k="ember" data-label="this page: the surprise-average technique">
+H(X) = \operatorname{E}\big[\log_2\tfrac{1}{p(X)}\big] = \textstyle\sum_x p(x)\log_2\tfrac{1}{p(x)} @@ the average surprise (30g’s average)
+X, Y \text{ independent}:\ \log_2\tfrac{1}{p(x)p(y)} = \log_2\tfrac{1}{p(x)} + \log_2\tfrac{1}{p(y)} @@ independent (30f): chances multiply, so surprises add (17c)
+H(X, Y) = H(X) + H(Y) @@ the average-adds technique (30g)
+H(X) - \log_2 n = \textstyle\sum_x p(x)\log_2\tfrac{1/n}{p(x)} \le \tfrac{1}{\ln 2}\sum_x p(x)\big(\tfrac{1/n}{p(x)} - 1\big) \le 0 @@ n values; the log-bounds technique (17a), ln y ≤ y − 1; change of base (17h)
+\htmlClass{new}{0 \le H(X) \le \log_2 n,\ \text{ with } \log_2 n \text{ only for equal chances}} \quad \blacksquare @@ equality in ln y ≤ y − 1 only at y = 1
+  </pre>
+  <p data-pid="6fc574">Surprise-average technique: <b>the average surprise H(X) adds over independent parts, and is largest, log₂ n bits, when all n outcomes are equally likely.</b> Its accepted name is the <i>entropy</i> of X, the same word as 22·comp’s, and for two outcomes with chances p and 1 − p it is 22·comp’s h(p). 30·phys found the shares of energy as the most H under fixed totals. Here H is read the other way: as what a message holds.</p>
+  <p data-pid="4a77c4">Seattle has measurable rain on about 150 days of the year. The surprise of tomorrow’s yes or no is h(150/365) = 0.977 bits a day: nearly as much as a coin. Snow falls on about 5 days a year, and the yes or no of snow holds h(5/365) = 0.104 bits a day. A year of snow records holds about 38 bits, though it takes 365 yeses and noes to write it plainly.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · surprise · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">30·comp.1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a source with chances ½, ¼, ⅛, ⅛ for four outcomes</span></span>Find its H, and the H of two independent outcomes of it taken together. <br>Find the H of four equally likely outcomes, and find which source holds more.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30comp2">
+  <h2 class="sthead"><span class="stno">30comp2</span>The shortest codes</h2>
+  <p class="stands">Stands on 30·comp.1, 4j (stages-multiply) and 17a (the log-bounds technique).</p>
+  <p data-pid="ad0778">A code gives each outcome a string of bits. Read a stream of them without commas, and you must know where each codeword ends: so no codeword may begin another. Draw every string of length L as a leaf at the bottom of a tree that splits in two at each bit. A codeword of length ℓ sits above 2^(L − ℓ) of the leaves, and since none begins another, no two codewords sit above the same leaf.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the leaf-count technique">
+\textstyle\sum_x 2^{L - \ell_x} \le 2^L @@ separate sets of leaves, out of 2^L (stages-multiply, 4j)
+\htmlClass{new}{\textstyle\sum_x 2^{-\ell_x} \le 1} \quad \blacksquare @@ divide by 2^L
+  </pre>
+  <p data-pid="2c6a20">Leaf-count technique: <b>the lengths ℓ of a code in which no codeword begins another satisfy Σ 2^(−ℓ) ≤ 1, and any lengths that satisfy it can be given such a code.</b> For the second half, hand out the shortest lengths first, each to the leftmost branch of the tree still free. The total says there is always room.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the source coding technique">
+L = \textstyle\sum_x p(x)\ell_x,\ \ L - H = \sum_x p(x)\log_2\tfrac{p(x)}{2^{-\ell_x}} @@ the average length, against H
+H - L = \textstyle\sum_x p(x)\log_2\tfrac{2^{-\ell_x}}{p(x)} \le \tfrac{1}{\ln 2}\big(\sum_x 2^{-\ell_x} - 1\big) \le 0 @@ the log-bounds technique (17a), and the leaf-count technique
+\ell_x = \big\lceil\log_2\tfrac{1}{p(x)}\big\rceil \Rightarrow \textstyle\sum_x 2^{-\ell_x} \le \sum_x p(x) = 1 @@ these lengths are allowed
+L \lt \textstyle\sum_x p(x)\big(\log_2\tfrac{1}{p(x)} + 1\big) = H + 1 @@ each length is less than its surprise plus 1
+\htmlClass{new}{H \le L \lt H + 1;\ \text{ for blocks of } n:\ H \le \tfrac{L_n}{n} \lt H + \tfrac1n} \quad \blacksquare @@ a block of n independent outcomes has H(Xⁿ) = nH (the surprise-average technique)
+  </pre>
+  <p data-pid="379b37">Source coding technique: <b>no code without commas averages fewer than H bits an outcome, and coding blocks of n outcomes at a time gets within 1/n of H.</b> So H is exactly how far a source can be squeezed. 22·comp found the same for a file with a share p of ones, by counting. For Seattle’s snow, one day at a time needs 1 bit a day, since no codeword can be shorter. Blocks of 10 days need less than 0.204 bits a day, and blocks of 100 less than 0.114.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · codes · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30·comp.2.1</span><span class="ph make">make</span><span class="givens"><span class="gtx">a source with chances 0.9 and 0.1</span></span>Find the lengths ⌈log₂(1/p)⌉, their average, and H. <br>Make a code for blocks of two outcomes with those rounded-up lengths, and find its average length per outcome.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30comp3">
+  <h2 class="sthead"><span class="stno">30comp3</span>What one signal says about another</h2>
+  <p class="stands">Stands on 30·comp.1, 30f (the given-chance and whole-chance techniques) and 17a (the log-bounds technique).</p>
+  <p data-pid="d2aa2c">Send X down a line, and receive Y. After seeing Y, the surprise left about X averages H(X | Y) = E[log₂(1/p(X | Y))], with 30f’s given chance. How much did Y tell you about X?</p>
+  <pre class="lines" data-k="ember" data-label="this page: the shared-information technique">
+I(X; Y) = H(X) - H(X \mid Y) = \operatorname{E}\big[\log_2\tfrac{p(X \mid Y)}{p(X)}\big] @@ the surprise taken away, on average
+\tfrac{p(x \mid y)}{p(x)} = \tfrac{p(x, y)}{p(x)p(y)} = \tfrac{p(y \mid x)}{p(y)} @@ the given-chance technique (30f), read both ways
+I(X; Y) = H(Y) - H(Y \mid X) = H(X) + H(Y) - H(X, Y) @@ the same average, read from Y’s side
+-I(X; Y) = \textstyle\sum p(x, y)\log_2\tfrac{p(x)p(y)}{p(x, y)} \le \tfrac{1}{\ln 2}\big(\sum p(x)p(y) - 1\big) = 0 @@ the log-bounds technique (17a)
+\htmlClass{new}{I(X; Y) = I(Y; X) \ge 0,\ \ = 0 \text{ only if } X, Y \text{ are independent}} \quad \blacksquare @@ equality in the log-bounds only where p(x, y) = p(x)p(y)
+  </pre>
+  <p data-pid="544fe5">Shared-information technique: <b>what Y tells about X equals what X tells about Y, it is never negative, and it is 0 only when the two are independent.</b> Its accepted name is <i>mutual information</i>. Now take a line that flips each bit it carries with chance ε, apart from every other bit, whatever was sent.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the flip-line technique">
+H(Y \mid X) = h(\varepsilon) @@ whatever X is, Y is X or its flip, with chances 1 − ε and ε
+I(X; Y) = H(Y) - h(\varepsilon) \le 1 - h(\varepsilon) @@ the shared-information technique; Y is one bit, so H(Y) ≤ 1 (the surprise-average technique)
+P(X = 0) = \tfrac12 \Rightarrow P(Y = 0) = \tfrac12(1 - \varepsilon) + \tfrac12\varepsilon = \tfrac12 @@ the whole-chance technique (30f)
+\htmlClass{new}{C = \max I(X; Y) = 1 - h(\varepsilon)} \quad \blacksquare @@ equally likely inputs reach the bound
+  </pre>
+  <p data-pid="e8af98">Flip-line technique: <b>a line that flips each bit with chance ε tells at most 1 − h(ε) bits for each bit sent, and equally likely inputs reach it.</b> Its accepted name is the line’s <i>capacity</i>. At ε = 0.01 it is 0.919 bits a bit. At ε = 0.1 it is 0.531. At ε = ½ it is 0: the output is a coin whatever goes in.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · shared · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30·comp.3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a line that flips each bit with chance 0.1; inputs 0 with chance 0.8</span></span>Find P(Y = 0), H(Y), and I(X; Y). <br>Find the capacity, and how much of it these inputs use.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30comp4">
+  <h2 class="sthead"><span class="stno">30comp4</span>The noisy channel technique</h2>
+  <p class="stands">Stands on 30·comp.3, 23h (the binomial-sum technique), 30h (the spread-bound technique), 30f (the chance-rules technique) and 30g (the average-adds technique).</p>
+  <p data-pid="d54ebd">Send blocks of n bits. A code is a list of 2^(nR) codewords, so each block carries nR bits, and R is the rate. The line flips each bit with chance ε. Decode by looking for the one codeword that differs from what arrived in at most n(ε + δ) places, for a small δ with ε + δ < ½. First, how many strings lie that close to a given one?</p>
+  <pre class="lines" data-k="ember" data-label="this page: the ball-count technique">
+1 = (\rho + (1 - \rho))^n = \textstyle\sum_j \binom nj \rho^j(1 - \rho)^{n - j} @@ the binomial-sum technique (23h), ρ = k/n ≤ ½
+\textstyle\sum_{j \le k}\binom nj \rho^j(1 - \rho)^{n - j} \ge \sum_{j \le k}\binom nj \rho^k(1 - \rho)^{n - k} @@ ρ/(1 − ρ) ≤ 1, so fewer factors ρ give more
+\htmlClass{new}{\textstyle\sum_{j \le k}\binom nj \le \rho^{-k}(1 - \rho)^{-(n - k)} = 2^{n\,h(k/n)}} \quad \blacksquare @@ take log₂; the first line bounds the left side by 1
+  </pre>
+  <p data-pid="bf3554">Ball-count technique: <b>at most 2^(n h(ρ)) strings of n bits differ from a given one in at most ρn places, for ρ ≤ ½.</b> Now pick each codeword at random, every bit a fair coin, apart from the rest. Send codeword 1.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the noisy channel technique">
+P(\text{flips} \gt n(\varepsilon + \delta)) \le \tfrac{n\varepsilon(1 - \varepsilon)}{(n\delta)^2} = \tfrac{\varepsilon(1 - \varepsilon)}{n\delta^2} @@ the flips count has average nε and spread nε(1 − ε); the spread-bound technique (30h)
+P(\text{codeword } j \text{ lies within } n(\varepsilon + \delta) \text{ of what arrived}) \le \tfrac{2^{n h(\varepsilon + \delta)}}{2^n} @@ codeword j is a fresh random string, apart from what arrived; the ball-count technique
+P(\text{some other codeword does}) \le 2^{nR}\cdot 2^{-n(1 - h(\varepsilon + \delta))} @@ the chance of an or is at most the sum (30f’s chance-rules)
+P(\text{error}) \le \tfrac{\varepsilon(1 - \varepsilon)}{n\delta^2} + 2^{-n(1 - h(\varepsilon + \delta) - R)} @@ an error needs one of the two
+R \lt 1 - h(\varepsilon) \Rightarrow \text{pick } \delta \text{ with } R \lt 1 - h(\varepsilon + \delta) @@ h has no gaps (12): it moves a little for a small δ
+\htmlClass{new}{\text{the average error, over random codes, heads to } 0 \text{ as } n \text{ grows}} \quad \blacksquare @@ both terms do; the same holds for every codeword sent, and an average over codes (30g) is not above all its values
+  </pre>
+  <p data-pid="ce4e01">Noisy channel technique: <b>a line that flips each bit with chance ε can carry any rate below its capacity 1 − h(ε) with errors as rare as you like, by coding long enough blocks.</b> The proof shows that some code works, since random codes work on average, without building one. That rates above the capacity cannot be carried with rare errors is also true. Its proof is held in trust: it waits much higher up the ladder.</p>
+  <p data-pid="3f1370">At ε = 0.01, saying each bit three times and taking the vote runs at rate ⅓ and still errs 3ε² − 2ε³ ≈ 0.0003 of the time. The technique promises rate 0.9, with errors as rare as wanted, for long enough blocks. Codes found since come within a hair of it, and every phone and fibre link now uses them. For a line with hiss, of width B in hertz and signal-to-noise ratio S/N, the same reasoning with the bell gives capacity B log₂(1 + S/N) bits a second, held in trust here. An old phone line passes about 3100 Hz at a ratio near 3000, so about 36 000 bits a second. The last dial-up modems ran at 33 600.</p>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · laws with a known exception rate</div>
+    <p data-pid="227571">A code never makes a noisy line exact. Each block that arrives is decoded to a guess, and the guess is wrong with some chance. What the noisy channel technique gives is a stated bound on that chance, in advance, for every block: the error term of its proof. A designer picks the rate and the block length so that the bound falls below what the user can bear: one error in a billion blocks, say.</p>
+    <p data-pid="8c54dd"><b>A code is judged by its rate and the chance that a decoded block is wrong, and that chance is bounded before the message is sent.</b></p>
+    <p data-pid="cc5284">That is the whole bargain of statistics, built into a machine. The decoder decides on every block, and it is wrong at a known rate. It is anexact because errors still happen. It is rigorous because their rate is computed and held below a line chosen before any message is sent. Repeating more and more never got there: it pushed errors down only by slowing down without end.</p>
+    <p class="bait" data-pid="f316a2">A data link from a buoy off Cape Flattery flips about one bit in twenty in a storm. What rate would you ask of its code, and what chance of a wrong block would you accept for wave heights reported every hour?</p>
+  </aside>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · noisy channel · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · capacity against repeating</div>
+    <div class="kn"><span class="m">flip chance ε</span><input type="range" id="ke" min="0.001" max="0.3" step="0.001" value="0.01"><output id="oe"></output></div>
+    <div id="pl"></div>
+    <div class="cap">Ember: the capacity 1 − h(ε), the highest rate at which errors can be made as rare as wanted. Ink dots: saying each bit 1, 3, 5, 7 or 9 times and taking the vote, at rates 1, 1/3, 1/5, 1/7, 1/9; the verdict gives each one’s error. Dot on the curve: the slider’s ε.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30·comp.4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">ε = 0.01, δ = 0.01, R = 0.8</span> <span class="gtx">h(0.02) = 0.1414</span></span>Find the two terms of the error bound for n = 1000 and n = 10 000. <br>Find the error and rate of saying each bit three times, and how the capacity compares.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30comp5">
+  <h2 class="sthead"><span class="stno">30comp5</span>Illegal moves</h2>
+  <p class="stands">Stands on 30·comp.1 to 30·comp.4.</p>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+H \text{ is the number of outcomes, in bits}\,? @@ it is the average surprise; log₂ n only when the chances are equal
+\text{a code can average fewer than } H \text{ bits}\,? @@ not without commas: the source coding technique
+I(X; Y) \ne I(Y; X)\,? @@ the shared-information technique: it is the same either way
+\text{a line with } \varepsilon = 0.6 \text{ carries nothing}\,? @@ flip every bit received: it is a line with ε = 0.4, capacity 1 − h(0.4)
+\text{more repeats are the only way to fewer errors}\,? @@ below capacity, longer blocks lower errors at a fixed rate
+\text{the technique builds the code}\,? @@ it shows that some code works, by averaging over random ones
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30·comp.5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span class="gtx">a fair six-sided die</span></span>Find H, and the shortest whole-number length a code for one roll can average.</li><li><span class="givens"><span class="gtx">X and Y independent</span></span>Find I(X; Y) and H(X | Y).</li><li><span class="givens"><span class="gtx">a line with ε = 0.5</span></span>Find its capacity, and what a received bit says about the sent one.</li><li><span class="givens"><span class="gtx">the code 0, 01, 11</span></span>Find whether a stream of it can be read without commas, and Σ 2^(−ℓ).</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">30·comp.6.1</span><span class="tagq">build</span>Build a code for blocks of four bits that corrects any single flip, with seven bits sent per block: three check bits, each the sum (with 1 + 1 = 0) of a different three of the four. <br>Find its rate, its chance of a wrong block at ε = 0.01, and how it compares with saying each bit three times.</div>
+  <div class="chq"><span class="chid">30·comp.6.2</span><span class="tagq">edge</span>Find what the flip-line technique gives as ε heads to 0 and to ½. <br>Find the rate the noisy channel technique allows at ε = 10⁻⁶, and what a fibre link gains by coding at all.</div>
+  <div class="chq"><span class="chid">30·comp.6.3</span><span class="tagq">converse</span>The leaf-count technique finds that lengths of a code without commas satisfy Σ 2^(−ℓ) ≤ 1. Turn it round: must every code whose lengths satisfy it be readable without commas?</div>
+  <div class="chq"><span class="chid">30·comp.6.4</span><span class="tagq">reroute</span>Find the source coding technique’s floor a second way, by counting: of the 2^(nH) or so typical blocks of n outcomes (the averages-settle technique, 30h, applied to the surprise), how many can get codewords shorter than n(H − δ) bits?</div>
+  <div class="chq"><span class="chid">30·comp.6.5</span><span class="tagq">seam</span>One side holds that information is what this page measured: a count of surprise, the same for a love letter and a list of random digits of the same chances, and that meaning is no part of it. The other holds that a measure of information that cannot tell sense from noise has measured something else, and that what a message says, and whether it is true, is what information is. <br>Which side does the noisy channel technique need?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r30phys.html">← 30·phys · how is energy shared among molecules?</a><a href="r30econ.html">30·econ · can you beat the market by watching prices? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The surprise log₂(1/p) is the self-information (surprisal); its average H is the Shannon entropy, in bits. A code in which no codeword begins another is a prefix code, and the leaf-count technique is the Kraft inequality (with McMillan’s extension to every uniquely decodable code). The source coding technique is Shannon’s source coding theorem; the code with lengths ⌈log₂(1/p)⌉ is a Shannon code, and the best code is Huffman’s. H(X | Y) is the conditional entropy, I(X; Y) the mutual information, and its being at least 0 Gibbs’s inequality. The flip line is the binary symmetric channel, and 1 − h(ε) its channel capacity. The noisy channel technique is the noisy-channel coding theorem (Shannon’s second theorem); decoding to the codeword in the ball, with random codes, is the random coding argument. B log₂(1 + S/N) is the Shannon–Hartley law. Codes that come near capacity include turbo codes and low-density parity-check codes; the build challenge’s code is the Hamming (7, 4) code.</p>
+  <h3>Who said it first</h3>
+  <p>Ralph Hartley measured information by the log of the number of choices in 1928, and Harry Nyquist counted the signalling speed of a line in 1924 and 1928. Claude Shannon’s “A Mathematical Theory of Communication” (1948) gave entropy, the source coding and noisy-channel theorems, and capacity, with John von Neumann’s suggestion, as the story goes, to call H entropy. Leon Kraft gave the leaf count in 1949, David Huffman the best code in 1952, and Richard Hamming his single-error code in 1950. Amiel Feinstein (1954) and Shannon (1957) gave the first full proofs of the noisy channel theorem for general channels. Robert Gallager’s low-density parity-check codes (1960) and Claude Berrou, Alain Glavieux and Punya Thitimajshima’s turbo codes (1993) came within a fraction of a decibel of capacity. In 30·comp.6.5, Warren Weaver’s introduction (1949) said the theory sets meaning aside on purpose; Yehoshua Bar-Hillel and Rudolf Carnap proposed a measure of semantic information in 1952; and Shannon himself warned in “The Bandwagon” (1956) against carrying the theory where it did not belong.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="30·comp: a worked “proof”, not allowed">
+H(X) = 0.469 \text{ for chances } 0.9, 0.1 @@ fine: h(0.1)
+\text{so one outcome can be coded in } 0.469 \text{ bits} @@ not allowed: a single codeword has a whole number of bits, at least 1
+\text{blocks of } n \text{ reach } 0.469 + \tfrac1n \text{ bits an outcome} @@ fine: the source coding technique, and that is where the 0.469 is earned
+  </pre>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+const V=c=>'var('+c+')';
+// plot(series, xr, yr, opts): series = [{pts:[[x,y],...], c:'--ember', w:1.6, dash:''}]; returns svg string
+function plot(series, xr, yr, o){ o=o||{}; const W=360,H=o.H||210,L=34,B=22,T=8,Rr=8;
+  const sx=x=>L+(x-xr[0])/(xr[1]-xr[0])*(W-L-Rr), sy=y=>H-B-(y-yr[0])/(yr[1]-yr[0])*(H-B-T);
+  let s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;max-width:440px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  (o.yt||[]).forEach(y=>{ s+='<line x1="'+L+'" x2="'+(W-Rr)+'" y1="'+sy(y)+'" y2="'+sy(y)+'" style="stroke:'+V('--grid')+';stroke-width:0.6"/><text x="'+(L-3)+'" y="'+(sy(y)+3)+'" text-anchor="end" style="font:9px var(--mono);fill:'+V('--muted')+'">'+y+'</text>'; });
+  (o.xt||[]).forEach(x=>{ s+='<text x="'+sx(x)+'" y="'+(H-8)+'" text-anchor="middle" style="font:9px var(--mono);fill:'+V('--muted')+'">'+x+'</text>'; });
+  s+='<line x1="'+L+'" x2="'+L+'" y1="'+T+'" y2="'+(H-B)+'" style="stroke:'+V('--ink')+';stroke-width:0.8"/><line x1="'+L+'" x2="'+(W-Rr)+'" y1="'+(H-B)+'" y2="'+(H-B)+'" style="stroke:'+V('--ink')+';stroke-width:0.8"/>';
+  series.forEach(se=>{ const cl=v=>Math.max(yr[0]-0.05*(yr[1]-yr[0]),Math.min(yr[1]+0.05*(yr[1]-yr[0]),v));
+    const d=se.pts.filter(p=>isFinite(p[1])).map((p,i)=>(i?'L':'M')+sx(p[0]).toFixed(1)+','+sy(cl(p[1])).toFixed(1)).join('');
+    s+='<path d="'+d+'" style="fill:none;stroke:'+V(se.c||'--ember')+';stroke-width:'+(se.w||1.6)+(se.dash?';stroke-dasharray:'+se.dash:'')+'"/>'; });
+  (o.dots||[]).forEach(p=>{ s+='<circle cx="'+sx(p[0])+'" cy="'+sy(p[1])+'" r="2.6" style="fill:'+V(p[2]||'--ember')+'"/>'; });
+  if(o.xl) s+='<text x="'+(W-Rr)+'" y="'+(H-B-4)+'" text-anchor="end" style="font:9px var(--mono);fill:'+V('--muted')+'">'+o.xl+'</text>';
+  if(o.yl) s+='<text x="'+(L+4)+'" y="'+(T+9)+'" style="font:9px var(--mono);fill:'+V('--muted')+'">'+o.yl+'</text>';
+  return s+'</svg>'; }
+
+const h2=p=>(p<=0||p>=1)?0:-p*Math.log2(p)-(1-p)*Math.log2(1-p);
+function rep(e,m){ let s=0; for(let j=(m+1)/2;j<=m;j++){ let c=1; for(let i=0;i<j;i++) c=c*(m-i)/(i+1); s+=c*Math.pow(e,j)*Math.pow(1-e,m-j); } return s; }
+const sci=v=>{ if(v>=0.001) return fm(v,4); const e=Math.floor(Math.log10(v)); const sup='⁰¹²³⁴⁵⁶⁷⁸⁹'; return fm(v/Math.pow(10,e),2)+' × 10⁻'+String(-e).split('').map(d=>sup[+d]).join(''); };
+function draw(){ const e=+$('ke').value; $('oe').textContent=fm(e,3);
+  const A=[]; for(let i=0;i<=300;i++){ const x=0.5*i/300; A.push([x,1-h2(x)]); }
+  const ms=[1,3,5,7,9], D=ms.map(m=>[e,1/m,'--ink']); D.push([e,1-h2(e),'--ember']);
+  $('pl').innerHTML=plot([{pts:A,c:'--ember'}],[0,0.5],[0,1],{xt:[0,0.1,0.2,0.3,0.4,0.5],yt:[0,0.25,0.5,0.75,1],xl:'flip chance ε',yl:'rate, bits a bit',dots:D,H:220});
+  const v=$('vd'); v.className='verdict';
+  v.textContent='Capacity 1 − h(ε) = '+fm(1-h2(e),3)+'. Saying each bit 1, 3, 5, 7, 9 times errs '+ms.map(m=>sci(rep(e,m))).join(', ')+' at rates 1, 0.333, 0.2, 0.143, 0.111. Long codes at rate '+fm(0.98*(1-h2(e)),3)+' can err less than any of these.'; }
+$('ke').oninput=draw; draw();
+window.__pic={set:(e)=>{ $('ke').value=e; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'one',t:R`\log_2\tfrac{1}{p}`,n:`Rare tells more.`},
+  {k:'ember',kl:'average',t:R`\htmlClass{new}{H = \operatorname{E}\log_2\tfrac{1}{p(X)}}`,n:`Entropy.`},
+  {k:'ember',kl:'most',t:R`H \le \log_2 n`,n:`Equal chances.`}
+],{title:'The slides · surprise · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'leaves',t:R`\htmlClass{new}{\textstyle\sum 2^{-\ell} \le 1}`,n:`No codeword begins another.`},
+  {k:'ember',kl:'floor',t:R`L \ge H`,n:`Log-bounds.`},
+  {k:'ember',kl:'blocks',t:R`\tfrac{L_n}{n} \lt H + \tfrac1n`,n:`Squeezed to H.`}
+],{title:'The slides · codes · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'taken away',t:R`I = H(X) - H(X \mid Y)`,n:`Surprise removed.`},
+  {k:'ember',kl:'either way',t:R`I(X;Y) = I(Y;X) \ge 0`,n:`Log-bounds.`},
+  {k:'ember',kl:'flip line',t:R`\htmlClass{new}{C = 1 - h(\varepsilon)}`,n:`Capacity.`}
+],{title:'The slides · shared · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'ball',t:R`\htmlClass{new}{\textstyle\sum_{j \le k}\binom nj \le 2^{nh(k/n)}}`,n:`Strings nearby.`},
+  {k:'ember',kl:'random code',t:R`2^{nR}\cdot 2^{-n(1 - h)}`,n:`Too far apart to mix up.`},
+  {k:'ember',kl:'rate',t:R`R \lt 1 - h(\varepsilon)`,n:`Errors as rare as wanted.`}
+],{title:'The slides · noisy channel · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`L \lt H\,?`,n:`Not without commas.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

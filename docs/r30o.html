@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Waiting and arriving</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r30n.html">← 30n random walks</a><a href="r30p.html">next: 30p chance that steps →</a></p>
+  <div class="tags"><span class="tag tech">30o · technique</span></div>
+  <h1>Waiting and arriving</h1>
+  <p>Calls come in to a dispatch centre in Missoula at no set times. Cars roll up to the one open ticket window at a ferry terminal, a few a minute, never on a timetable. Along the coast from Vancouver Island to northern California, the great earthquakes of the subduction zone have come every few centuries, the last on a winter night some three hundred years ago. Each of these is a stream of arrivals, each arrival rare in any short moment, and each independent of the others. Rung twenty two counted such arrivals in a fixed stretch of time. This step asks the other question: how long until the next one? The answer is the wait that forgets, found on the page before. Two streams together make one faster stream, and a race between them is won in a simple proportion. A machine that breaks and is mended at random settles to a steady share of its time working. And a line at one window settles too, so long as the window works faster than people arrive; as the two rates draw close, the line grows without limit.</p>
+  <p class="gesture">In a stream of rare arrivals the wait for the next one is exponential, whatever happened before. The first of two independent waits is again exponential, at the sum of the rates. A chain that forgets its past, moving at steady rates, settles to steady chances, and a line at one window averages the busy share over the idle share.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r22j.html">22j</a> (the rare-events technique), <a href="r22stat.html">22·stat</a> (the rare-count and pages-add techniques), <a href="r30m.html">30m</a> (the exponential density, and the density-average and forgets-the-wait techniques), <a href="r30f.html">30f</a> (the chance of A given B, and the independent and whole-chance techniques), <a href="r30e.html">30e</a> (product size and the either-order-sized technique), <a href="r24h.html">24h</a> (the shift-to-rest technique), <a href="r15i.html">15i</a> (the endless-ratio-sum technique) and <a href="r23e.html">23e</a> (the term-by-term technique). <a href="r30p.html">30p</a> lets a chain step at whole times, and finds its steady state as an arrow that a grid only stretches.</p></div>
+</header>
+
+<section class="class step" data-step="30o1">
+  <h2 class="sthead"><span class="stno">30o1</span>The wait for a rare arrival</h2>
+  <p class="stands">Stands on 22j2 (the rare-events technique), 22·stat1 (the rare-count technique), 30f2 (independent events) and 30m2 (the exponential density and the forgets-the-wait technique).</p>
+  <p data-pid="da516c">From here on, a <i>rare-arrival stream</i> of rate λ is a way of placing arrivals in time such that the count of arrivals in any stretch of length t is a rare count of average λt, P(k arrivals) = e^(−λt)(λt)ᵏ / k!, and the counts in stretches that do not overlap are independent. 22j and 22·stat built such counts from many small chances: each short moment has a small chance of an arrival, apart from every other moment.</p>
+  <p data-pid="758ab1">First-gap technique: <b>in a rare-arrival stream of rate λ, from any moment s the wait T to the next arrival has P(T &gt; t) = e^(−λt): it is exponential of rate λ, with average 1/λ, and it is independent of the arrivals before s.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the first-gap technique">
+\{T > t\} = \{\text{no arrival in } (s, s + t]\} @@ the next arrival comes after s + t exactly when that stretch is empty
+P(T > t) = e^{-\lambda t}\tfrac{(\lambda t)^0}{0!} = e^{-\lambda t} @@ the rare count with k = 0 and average λt
+\text{the count in } (s, s + t] \text{ is independent of the counts before } s @@ stretches that do not overlap are independent (30f2)
+\htmlClass{new}{T \text{ is exponential of rate } \lambda,\ \ E T = \tfrac{1}{\lambda},\ \text{whatever came before}} \quad \blacksquare @@ the exponential density (30m2)
+  </pre>
+  <p data-pid="e80ae7">From the moment of an arrival, the gap to the next is exponential of rate λ as well, and the gaps are independent of each other. That needs the stream restarted at a moment that the stream itself chooses, and it is held in trust: its proof waits much higher up the ladder. The steps below use it only for the queue of 30o4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the great earthquakes of the coast">
+\lambda \approx \tfrac{1}{500} \text{ per year} @@ a rough rate for the great earthquakes of the subduction zone off the coast, from the layers they left on the sea floor
+P(\text{none in the next } 50 \text{ years}) = e^{-50/500} = e^{-0.1} \approx 0.905 @@ the first-gap technique
+P(\text{at least one in } 50 \text{ years}) \approx 0.095 @@ the chance-rules technique (30f1)
+\htmlClass{new}{\text{the years since the last, in January 1700, do not change it, in this model}} \quad \blacksquare @@ the forgets-the-wait technique (30m2): the stream has no memory
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the first gap · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">30o1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\lambda = 12 \text{ per hour}"></span></span>Calls to a help line come as a rare-arrival stream. Find the average wait for the next call in minutes, and the chance of no call in 10 minutes.</li><li><span class="givens"><span data-tex-inline="\lambda = 60 \text{ per hour}"></span></span>A meteor shower at its peak. Find the chance of waiting more than 3 minutes for the next meteor.</li><li><span class="givens"><span data-tex-inline="\lambda = \tfrac{1}{500} \text{ per year}"></span></span>Find the chance of at least one great earthquake in the next 100 years, and the number of years after which that chance reaches ½.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30o2">
+  <h2 class="sthead"><span class="stno">30o2</span>Two streams at once</h2>
+  <p class="stands">Stands on 30o1, 30m (the density-average and forgets-the-wait techniques), 30e (product size, and the either-order-sized technique, 30e3), 30f2 (independent events) and 22·stat4 (the pages-add technique).</p>
+  <p data-pid="97c5d5">Two independent waits run side by side: a call for the police and a call for an ambulance, a bulb in the kitchen and a bulb in the hall. Which comes first, and when?</p>
+  <p data-pid="c2cc0c">First-of-two technique: <b>if S and T are independent, with P(S &gt; t) = e^(−λt) and P(T &gt; t) = e^(−μt), then the first of them, the lesser of S and T, has P(lesser &gt; t) = e^(−(λ + μ)t); and S comes first with chance λ/(λ + μ).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the first-of-two technique">
+P(\min(S, T) > t) = P(S > t \text{ and } T > t) = e^{-\lambda t}\,e^{-\mu t} @@ the lesser is late exactly when both are; independent events multiply (30f2)
+= e^{-(\lambda + \mu)t} @@ the first of the two is exponential of rate λ + μ
+P(S < T) = \textstyle\int_0^\infty\!\!\int_s^\infty \lambda e^{-\lambda s}\,\mu e^{-\mu t}\,dt\,ds @@ independent: the pair has the product density on the plane (30e1)
+= \textstyle\int_0^\infty \lambda e^{-\lambda s}\,e^{-\mu s}\,ds @@ the inner integral is P(T &gt; s); the either-order-sized technique (30e3) allows either order
+\htmlClass{new}{P(S < T) = \tfrac{\lambda}{\lambda + \mu}} \quad \blacksquare @@ the total of the exponential density of rate λ + μ is 1
+  </pre>
+  <p data-pid="f8525b">Two independent rare-arrival streams, of rates λ and μ, together make one rare-arrival stream of rate λ + μ: in any stretch the two counts add to a rare count of average (λ + μ)t, by the pages-add technique of 22·stat. Each arrival of the joined stream is from the first with chance λ/(λ + μ).</p>
+  <pre class="lines" data-k="ember" data-label="this step: a dispatch centre">
+\text{police } 6 \text{ an hour},\ \ \text{fire and ambulance } 3 \text{ an hour} @@ two independent rare-arrival streams at a dispatch centre in Missoula
+\text{all calls: } 9 \text{ an hour},\ \ \text{average wait } \tfrac{60}{9} \approx 6.7 \text{ minutes} @@ the pages-add technique; the first-gap technique
+P(\text{a call within } 5 \text{ minutes}) = 1 - e^{-9\cdot 5/60} = 1 - e^{-0.75} \approx 0.528 @@ the first-of-two technique
+\htmlClass{new}{P(\text{the next call is for the police}) = \tfrac{6}{9} = \tfrac23} \quad \blacksquare @@ the first-of-two technique
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · two streams · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30o2.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{average lives } 1000\ \text{h and } 1500\ \text{h}"></span></span>Two bulbs with exponential lives burn independently. Find the average time to the first failure, and the chance that the first bulb fails first.</li><li><span class="givens"><span data-tex-inline="3 \text{ tellers, each finishing at rate } \tfrac14 \text{ per minute}"></span></span>All three tellers at a bank are busy, each with a service time that is exponential. Find the average wait until one is free.</li><li><span class="givens"><span data-tex-inline="6 \text{ and } 3 \text{ an hour}"></span></span>Find the chance of no call at all at the dispatch centre in 20 minutes.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30o3">
+  <h2 class="sthead"><span class="stno">30o3</span>Chains that forget, in continuous time</h2>
+  <p class="stands">Stands on 30o1, 30m2 (the forgets-the-wait technique), 30f3 (the whole-chance technique) and 24h1 (the shift-to-rest technique).</p>
+  <p data-pid="9712d1">A machine is either working or broken. While it works, its wait to break is exponential of rate a; while broken, its wait to be mended is exponential of rate b. By the forgets-the-wait technique, its future depends only on its state now, not on how long it has been there or what came before: it is a <i>chain that forgets its past</i>. Write p(t) for the chance that it is working at time t.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the rate rule for the chance">
+P(\text{breaks within } h \mid \text{working at } t) = 1 - e^{-ah} = ah + r(h) @@ the forgets-the-wait technique; r(h)/h heads to 0 as h does: (1 − e^(−ah))/h heads to a, the slope of e^(−ax) at 0 (the slope-of-exp technique, 17f)
+p(t + h) = p(t)\,(1 - ah) + (1 - p(t))\,bh + r_2(h) @@ the whole-chance technique (30f3) over the state at t; two changes within h carry chance at most ah · bh
+\tfrac{p(t + h) - p(t)}{h} = b - (a + b)\,p(t) + \tfrac{r_2(h)}{h} @@ divide by h
+p'(t) = b - (a + b)\,p(t) @@ let h head to 0
+\htmlClass{new}{p'(t) = -(a + b)\big(p(t) - \tfrac{b}{a + b}\big)} \quad \blacksquare @@ the same rule, written for the shift-to-rest technique
+  </pre>
+  <p data-pid="1564a9">Two-state technique: <b>a chain with two states that leaves the first at rate a and the second at rate b, with a + b &gt; 0, is in the first state at time t with chance p(t) = b/(a + b) + (p(0) − b/(a + b)) e^(−(a + b)t). It settles at b/(a + b) from every start, and the gap shrinks by the factor e^(−(a + b)t).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the two-state technique">
+p' = k\,(p - A),\ \ k = -(a + b),\ \ A = \tfrac{b}{a + b} @@ the rate rule above
+p(t) = A + (p(0) - A)\,e^{kt} @@ the shift-to-rest technique (24h1): the one solution with this start
+\htmlClass{new}{p(t) \to \tfrac{b}{a + b}} \quad \blacksquare @@ k &lt; 0, so e^(kt) heads to 0
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: a chair lift">
+a = \tfrac{1}{200},\ \ b = \tfrac12 \text{ per hour} @@ a lift that breaks on average once in 200 hours of running and takes 2 hours on average to mend
+\tfrac{b}{a + b} = \tfrac{0.5}{0.505} \approx 0.990 @@ in the long run, working 99% of the time
+p(0) = 0:\ \ p(4) = 0.990\,(1 - e^{-0.505 \times 4}) \approx 0.990 \times 0.867 @@ broken at the start of a morning
+\htmlClass{new}{p(4) \approx 0.859} \quad \blacksquare @@ four hours later, still not quite settled
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · forgetting chains · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30o3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="a = \tfrac{1}{100},\ \ b = \tfrac14 \text{ per hour}"></span></span>Find the long-run share of time the machine works, and the rate at which the gap shrinks.</li><li><span class="givens"><span data-tex-inline="a = b = 1,\ \ p(0) = 1"></span></span>Find p(t), and the time when p first falls to 0.6.</li><li><span class="givens"><span data-tex-inline="a = \tfrac{1}{200},\ \ b = \tfrac12,\ \ p(0) = 0"></span></span>Find the time after which the chair lift is working with chance at least 0.98.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30o4">
+  <h2 class="sthead"><span class="stno">30o4</span>A line at one window</h2>
+  <p class="stands">Stands on 30o1 to 30o3, 30m2 (the forgets-the-wait technique), 15i3 (the endless-ratio-sum technique) and 23e3 (the term-by-term technique).</p>
+  <p data-pid="6d0c44">People arrive at one window as a rare-arrival stream of rate λ. The window serves one at a time, and each service time is exponential of rate μ, independent of everything else. The number in the system, waiting or being served, is a chain that forgets its past on the states 0, 1, 2, …: it goes up one at rate λ, and down one at rate μ when it is not 0. Its <i>steady chances</i> pₙ are those that, once held, stay held: the rate rule of 30o3, written for every state, gives slope 0.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the steady equations">
+0 = \mu p_1 - \lambda p_0 @@ state 0: in from 1 at rate μ, out at rate λ (as in 30o3)
+0 = \lambda p_{n-1} + \mu p_{n+1} - (\lambda + \mu)\,p_n,\ \ n \ge 1 @@ state n: in from n − 1 and from n + 1, out both ways
+\mu p_{n+1} - \lambda p_n = \mu p_n - \lambda p_{n-1} @@ the second line, regrouped
+\htmlClass{new}{\mu p_{n+1} = \lambda p_n \text{ for every } n \ge 0} @@ induction on n (4b), from the first line: the flow up across each cut equals the flow down
+  </pre>
+  <p data-pid="7e2fb0">Steady-line technique: <b>if λ &lt; μ, write ρ = λ/μ. The steady chance of n in the system is (1 − ρ)ρⁿ, the window is busy with chance ρ, and the average number in the system is ρ/(1 − ρ).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the steady-line technique">
+p_n = \rho^n p_0 @@ the cut line above, n times
+1 = \textstyle\sum_n \rho^n p_0 = \tfrac{p_0}{1 - \rho} @@ the chances add to 1; the endless-ratio-sum technique (15i3), ρ &lt; 1
+p_0 = 1 - \rho,\ \ p_n = (1 - \rho)\rho^n @@ busy with chance 1 − p₀ = ρ
+\textstyle\sum_n n\rho^n = \rho\,\tfrac{d}{d\rho}\tfrac{1}{1 - \rho} = \tfrac{\rho}{(1 - \rho)^2} @@ the term-by-term technique (23e3), inside the reach |ρ| &lt; 1
+\htmlClass{new}{\text{average number} = (1 - \rho)\tfrac{\rho}{(1 - \rho)^2} = \tfrac{\rho}{1 - \rho}} \quad \blacksquare @@ the average of a count (30g1)
+  </pre>
+  <p data-pid="3ed03e">How long does a newcomer spend there? One who finds n ahead waits for n services and then its own. The one being served forgets how long it has been served (30m2), so each of the n + 1 takes 1/μ on average. That arrivals of a rare stream find n ahead with the steady chance pₙ is held in trust: its proof waits much higher up the ladder. With it, the average time is the average of (n + 1)/μ, which is (ρ/(1 − ρ) + 1)/μ = 1/(μ − λ).</p>
+  <pre class="lines" data-k="ember" data-label="this step: a ticket window at a ferry terminal">
+\lambda = 50,\ \ \mu = 60 \text{ an hour}:\ \ \rho = \tfrac56 @@ cars arrive at 50 an hour; one ticket window serves 60 an hour
+\text{average in the system } \tfrac{5/6}{1/6} = 5,\ \ \text{average time } \tfrac{1}{60 - 50} \text{ h} = 6 \text{ minutes} @@ the steady-line technique, and the average time
+\lambda = 55:\ \ 11 \text{ cars},\ 12 \text{ minutes};\ \ \lambda = 58:\ \ 29 \text{ cars},\ 30 \text{ minutes} @@ the same window, a busier afternoon
+\htmlClass{new}{\text{a window busy } 97\% \text{ of the time keeps a line of } 29} \quad \blacksquare @@ ρ/(1 − ρ) grows without bound as ρ heads to 1
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · the line · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30o4.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\lambda = 20,\ \ \mu = 30 \text{ an hour}"></span></span>Find ρ, the chance the window is idle, the average number in the system, the average time in minutes, and the chance of 3 or more in the system.</li><li><span class="givens"><span data-tex-inline="\lambda = 50 \text{ an hour}"></span></span>Find the least service rate μ that keeps the average time at the window at most 5 minutes.</li><li><span class="givens"><span data-tex-inline="\rho = 0.9"></span></span>Find the chance that the system holds at least 10.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30o5">
+  <h2 class="sthead"><span class="stno">30o5</span>Illegal moves</h2>
+  <p class="stands">Stands on 30o1 to 30o4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{buses come as a rare-arrival stream, one every 10 minutes on average; a rider who arrives at random waits 5}\,? @@ the first-gap technique: the wait from any moment averages 10 minutes
+\text{no great earthquake since 1700, so in a rare-arrival stream one is overdue}\,? @@ the stream forgets: the chance in the next 50 years is the same every year
+\text{arrivals at 50 an hour and service at 50 an hour balance, so the line stays short}\,? @@ with ρ = 1 there are no steady chances: the line wanders off without bound
+\text{double the service rate, and the average line halves}\,? @@ at λ = 50, μ from 60 to 120 takes it from 5 to about 0.71, a seventh
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30o5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\lambda = 6 \text{ per hour}"></span></span>Find the average wait for the next bus from a random moment, and the average gap between buses. <br>Find why the rider’s wait is not half the gap.</li><li><span class="givens"><span data-tex-inline="\lambda = \tfrac{1}{500} \text{ per year}"></span></span>Find the chance of a great earthquake in the 50 years after 1700, and in the 50 years after 2026, in this model. <br>Find what the second line assumes that the model denies.</li><li><span class="givens"><span data-tex-inline="\lambda = \mu"></span></span>Find pₙ from the cut line, in terms of p₀, and whether they can add to 1. <br>Find what fails in the third line.</li><li><span class="givens"><span data-tex-inline="\lambda = 50,\ \ \mu = 60,\ 120"></span></span>Find the average number in the system for each. <br>Find why the line more than halves.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">30o.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{rate } \lambda,\ \ T_2 \text{ the time of the second arrival}"></span></span>Build the density of T₂. Find P(T₂ &gt; t) as the chance of at most one arrival in [0, t], then its slope. <br>Find E T₂, and check it against two gaps of average 1/λ.</div>
+  <div class="chq"><span class="chid">30o.6.2</span><span class="tagq">edge</span>A window has no waiting room: a car that finds it busy drives away. Arrivals come at rate λ, service at rate μ. <br>Find, by the two-state technique, the share of time the window is busy, and the share of cars turned away, taking arrivals to see the steady chances. Find the share at λ = 50 and μ = 60 an hour.</div>
+  <div class="chq"><span class="chid">30o.6.3</span><span class="tagq">converse</span>Turn the first-gap technique round. Let the gaps between arrivals be independent, each exponential of rate λ, starting at time 0. <br>Prove that the count of arrivals in [0, t] is a rare count of average λt: find P(at least n arrivals) as P(Tₙ ≤ t), with Tₙ the time of the n-th arrival, for n = 1 and n = 2 by 30o.6.1.</div>
+  <div class="chq"><span class="chid">30o.6.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\text{rate } \lambda,\ \text{each arrival kept with chance } p"></span></span>Each arrival of a rare-arrival stream is kept with chance p, independently of everything else. Reroute the first-of-two technique: the kept and the dropped arrivals make two streams. <br>Find the chance of exactly k kept in a stretch of length t by the whole-chance technique over the full count, and show it is a rare count of average pλt.</div>
+  <div class="chq"><span class="chid">30o.6.5</span><span class="tagq">seam</span>The great earthquakes of the coast have left layers of mud on the sea floor, at gaps that range from a couple of centuries to near a thousand years. One model treats them as a rare-arrival stream, which has no memory: the chance in the next 50 years never changes. Another lets the chance grow as strain builds, so that the years since 1700 count. The two give different chances for the next 50 years, and building codes and insurance are set from them. <br>Which model should a city on the coast plan by? What would the record of past layers need to show to decide between them?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r30n.html">← 30n · random walks</a><a href="r30p.html">30p · chance that steps →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A rare-arrival stream is a Poisson process, λ its rate or intensity; the first-gap technique says its interarrival times are exponential, and the property held in trust, the stream restarting at an arrival, is its strong Markov property. Joining two streams is superposition, and keeping each arrival with chance p is thinning. The first-of-two technique is the minimum of independent exponentials, or competing exponential clocks. A chain that forgets its past in continuous time is a continuous-time Markov chain, a, b and λ, μ its transition rates, and the rate rules its forward (Kolmogorov) equations. Its steady chances are the stationary distribution; the cut line is detailed balance for a birth–death chain. The line at one window is the M/M/1 queue, ρ its utilization or traffic intensity. That arrivals of a Poisson stream see the steady chances is PASTA, "Poisson arrivals see time averages"; average number equals arrival rate times average time is Little's law. The window with no waiting room is a loss system, and the share of cars turned away is Erlang's loss formula for one line. That a rider arriving at random waits a whole average gap is the waiting-time (or inspection) paradox.</p>
+  <h3>Who said it first</h3>
+  <p>Agner Krarup Erlang, an engineer at the Copenhagen Telephone Company, used the Poisson stream for calls in 1909 and gave the loss formula in 1917; the unit of telephone traffic is named the erlang after him. Andrey Kolmogorov wrote the rate rules for chains in continuous time in 1931. David Kendall gave the notation M/M/1 in 1953. John Little proved his law in 1961, and Ronald Wolff proved PASTA in 1982. The last great earthquake of the Cascadia subduction zone was on 26 January 1700: the drowned forests of the coast give the year, and a tsunami with no felt earthquake recorded along the coast of Japan gives the day and hour, as Kenji Satake and his colleagues showed in 1996. Chris Goldfinger and colleagues dated the layers of mud left on the sea floor by its earlier earthquakes, giving a long record with an average gap of several centuries.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'empty stretch',t:R`\{T > t\} = \{\text{none in } (s, s + t]\}`,n:`The next arrival is late.`},
+  {k:'ember',kl:'rare count',t:R`P = e^{-\lambda t}`,n:`k = 0.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{T \text{ exponential, rate } \lambda}`,n:`And it forgets.`}
+],{title:'The slides · the first gap · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'both late',t:R`e^{-\lambda t}e^{-\mu t}`,n:`The independent technique.`},
+  {k:'ember',kl:'the race',t:R`\textstyle\int_0^\infty \lambda e^{-\lambda s}e^{-\mu s}\,ds`,n:`P(T &gt; s), averaged.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{rate } \lambda + \mu;\ \ P(S < T) = \tfrac{\lambda}{\lambda + \mu}}`,n:`Rates add, and share the win.`}
+],{title:'The slides · two streams · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'a short time',t:R`p(t + h) = p\,(1 - ah) + (1 - p)\,bh + \cdots`,n:`The whole-chance technique.`},
+  {k:'ember',kl:'the rate rule',t:R`p^{\prime} = b - (a + b)\,p`,n:`Let h head to 0.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{p(t) \to \tfrac{b}{a + b}}`,n:`The shift-to-rest technique.`}
+],{title:'The slides · forgetting chains · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'cuts',t:R`\mu p_{n+1} = \lambda p_n`,n:`Flow up equals flow down.`},
+  {k:'ember',kl:'add to 1',t:R`p_n = (1 - \rho)\rho^n`,n:`An endless ratio sum.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{average } \tfrac{\rho}{1 - \rho}}`,n:`Without bound as ρ heads to 1.`}
+],{title:'The slides · the line · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

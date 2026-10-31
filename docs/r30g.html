@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Averages as integrals</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r30f.html">← 30f chance is size</a><a href="r30h.html">next: 30h averages settle →</a></p>
+  <div class="tags"><span class="tag proof">30g · proof</span></div>
+  <h1>Averages as integrals</h1>
+  <p>A number that depends on chance, like the total of two dice or tomorrow’s rainfall, is a function on the chance space: for each outcome, it gives a number. Its average is its total over the chance space, with chance as the size. Rung five’s statistics annex found averages by weighting each value by its chance. That is the step-total of this rung, and now it works for every sized function, not only those with a few values. From the average come the spread, which measures how far the values stray from it, and the co-spread of two such numbers. Averages always add. Spreads add when the parts are independent, and then they add the way the squares of the two short sides of a right triangle add.</p>
+  <p class="gesture">A chance variable is a sized function on a chance space, and its average is its total. Averages add; independent averages multiply; and the spreads of independent parts add.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r30f.html">30f</a> (chance spaces and independence), <a href="r30c.html">30c</a> and <a href="r30d.html">30d</a> (the total, and that it adds), <a href="r27h.html">27h</a> (measuring sticks for arrows) and the averages and spreads of <a href="r05stat.html">5·stat</a> and <a href="r08stat.html">8·stat</a>. <a href="r30h.html">30h</a> uses spreads to show that averages settle.</p></div>
+</header>
+
+<section class="class step" data-step="30g1">
+  <h2 class="sthead"><span class="stno">30g1</span>A number that depends on chance</h2>
+  <p class="stands">Stands on 30f1, 30c, 30d1.</p>
+  <p data-pid="6ccfa9">From here on, a <i>chance variable</i> on a chance space is a function X from Ω to the reals whose height sets {X &gt; t} are events. Its accepted name is random variable. P(X ∈ A) is the chance of the event that X lands in A.</p>
+  <p data-pid="2d89b2">From here on, its <i>average</i> is its total over Ω with chance as the size:</p>
+  <p class="eqline" data-pid="cb4e9f">E X = ∫ X dP,</p>
+  <p data-pid="83afc9">when ∫|X| dP is finite. Its accepted names are expected value, expectation and mean, often written μ.</p>
+  <pre class="lines" data-k="ember" data-label="this step: an X with finitely many values">
+X = x_i \text{ on } \{X = x_i\},\ \ i = 1, \ldots, n @@ a step function on Ω (30c1), with signs split as in 30c3
+\htmlClass{new}{E\,X = x_1 P(X = x_1) + \cdots + x_n P(X = x_n)} @@ step-total: value times size
+X = \text{one fair die}:\ \ E\,X = (1 + 2 + \cdots + 6)/6 = 3.5 @@ 5·stat’s weighted average
+  </pre>
+  <p data-pid="afe403">Average-adds technique: <b>E(aX + bY) = a E X + b E Y, and X ≤ Y gives E X ≤ E Y.</b> This is the total adding and scaling (30d1), with signs split as in 30c3. So the total of two dice averages 7, with no need to list the 36 outcomes.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · average · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">30g1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="X = \text{the number of heads in three fair coin tosses}"></span></span>List the values of X and the chance of each. Check that the chances add to 1. <br>Find E X from the list, by the step-total. <br>Write X = X₁ + X₂ + X₃, with Xₖ = 1 if toss k is heads and 0 if not. Find E Xₖ, and then E X again by the average-adds technique. <br>Find the average number of heads in 100 tosses. Which of the two routes is shorter?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30g2">
+  <h2 class="sthead"><span class="stno">30g2</span>The spread</h2>
+  <p class="stands">Stands on 30g1.</p>
+  <p data-pid="1a424a">From here on, for X with average μ, its <i>spread</i> is Var X = E[(X − μ)²], and its <i>spread width</i> is σ = √Var X. For two chance variables X and Y with averages μ and ν, their <i>co-spread</i> is Cov(X, Y) = E[(X − μ)(Y − ν)]. The accepted names are variance, standard deviation and covariance.</p>
+  <p data-pid="42fcb4">Spread-of-a-sum technique: <b>Var X = E X² − μ², Var(aX + b) = a² Var X, and Var(X + Y) = Var X + Var Y + 2 Cov(X, Y).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the spread-of-a-sum technique">
+(X - \mu)^2 = X^2 - 2\mu X + \mu^2 @@ two-term square (5h)
+\text{Var}\,X = E\,X^2 - 2\mu^2 + \mu^2 = E\,X^2 - \mu^2 @@ average-adds (30g1); E of a constant is that constant
+aX + b - (a\mu + b) = a(X - \mu) \Rightarrow \text{Var}(aX + b) = a^2\,\text{Var}\,X @@ a shift does not spread
+\big((X + Y) - (\mu + \nu)\big)^2 = (X - \mu)^2 + (Y - \nu)^2 + 2(X - \mu)(Y - \nu) @@ two-term square
+\htmlClass{new}{\text{Var}(X + Y) = \text{Var}\,X + \text{Var}\,Y + 2\,\text{Cov}(X, Y)} \quad \blacksquare @@ average-adds
+  </pre>
+  <p data-pid="f187ee">One fair die: E X² = 91/6, so Var X = 91/6 − 49/4 = 35/12, and σ ≈ 1.71.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · spread · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30g2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="X = 1 \text{ with chance } p,\ \ X = 0 \text{ otherwise}"></span></span>Find E X and E X². <br>Find Var X by the spread-of-a-sum technique, and the spread width. <br>Find the p that makes the spread largest, and that largest spread and width. <br>A voter in Washington backs a measure with chance 0.52. Code a yes as 1 and a no as 0. Find the spread and the spread width of one answer.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30g3">
+  <h2 class="sthead"><span class="stno">30g3</span>Independent parts</h2>
+  <p class="stands">Stands on 30g1, 30g2, 30f2, 30d1.</p>
+  <p data-pid="ad2b47">From here on, chance variables X and Y are <i>independent</i> when the events {X ∈ A} and {Y ∈ B} are independent for every pair of intervals A and B. Many chance variables are independent when every finite selection of such events multiplies.</p>
+  <p data-pid="e0e861">Independent-averages-multiply technique: <b>if X and Y are independent with finite averages, E(XY) = E X · E Y.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the independent-averages-multiply technique">
+X = x_i \text{ on } \{X = x_i\},\ \ Y = y_j \text{ on } \{Y = y_j\} @@ first, finitely many values
+E(XY) = \sum_{i, j} x_i y_j\,P(X = x_i,\ Y = y_j) = \sum_{i, j} x_i y_j\,P(X = x_i)P(Y = y_j) @@ step-total on the pieces; independent
+= \big(\textstyle\sum_i x_i P(X = x_i)\big)\big(\sum_j y_j P(Y = y_j)\big) = E\,X \cdot E\,Y @@ the double sum splits
+X, Y \ge 0:\ \ s_n(X) \uparrow X,\ \ s_n(Y) \uparrow Y @@ total-from-below (30c3): each sₙ(X) uses only sets {X ∈ interval}
+E(s_n(X)\,s_n(Y)) = E\,s_n(X) \cdot E\,s_n(Y) \to E\,X \cdot E\,Y @@ rising-limit (30d1) on each side
+\htmlClass{new}{E(XY) = E\,X \cdot E\,Y} \quad \blacksquare @@ for signs, split X = X⁺ − X⁻ and Y likewise
+  </pre>
+  <p data-pid="176db8">Independent-spreads-add technique: <b>if X and Y are independent, Cov(X, Y) = 0, so Var(X + Y) = Var X + Var Y.</b> Cov(X, Y) = E(XY) − μν = 0. And n independent copies of X with spread σ² have Var(X₁ + ⋯ + Xₙ) = nσ²: their average has spread σ²/n and width σ/√n.</p>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · counting, and the triangle</div>
+    <p data-pid="5220a3">4i counted, and 21h split a motion into parts along directions you choose. Spreads add the same way. The co-spread is a measuring stick for chance variables, as 27h’s were for arrows: ⟨X, Y⟩ = Cov(X, Y), and Var X is the square of X’s length.</p>
+    <p data-pid="6a09f3"><b>The spreads of independent parts add, so their widths combine like the two short sides of a right triangle.</b></p>
+    <p data-pid="8291e5">Independent parts are perpendicular: their co-spread is 0. So their widths add like the sides of a right triangle. Two independent errors of widths 3 g and 4 g make an error of width 5 g, not 7 g.</p>
+    <p class="bait" data-pid="1d3555">A bag of flour is weighed on a scale with width 3 g, and the scale’s own zero is set with width 4 g, independently. How wide is the error of the reading? Of ten bags weighed one after another and added?</p>
+  </aside>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · independent · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30g3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="T = X + Y,\ \ X, Y \text{ two independent fair dice}"></span> <span data-tex-inline="\text{Var}\,X = 35/12"></span></span>Find Var T by the independent-spreads-add technique, and its spread width. <br>List the 11 values of T with their chances. Find E T² from the list, and Var T = E T² − (E T)². Check that the two agree. <br>One hundred independent fair dice are rolled. Find the spread and the spread width of their average.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30g4">
+  <h2 class="sthead"><span class="stno">30g4</span>Illegal moves</h2>
+  <p class="stands">Stands on 30g1 to 30g3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{averages add only for independent parts}\,? @@ average-adds needs nothing: E(X + X) = 2E X
+\text{Var}(X + Y) = \text{Var}\,X + \text{Var}\,Y \text{ always}\,? @@ Y = X: Var(2X) = 4 Var X, not 2 Var X
+\text{Cov}(X, Y) = 0 \Rightarrow X, Y \text{ independent}\,? @@ X = −1, 0, 1 each with chance 1/3, Y = X²: Cov 0, yet Y is fixed by X
+\text{width of a sum} = \text{sum of widths}\,? @@ for independent parts, √(σ₁² + σ₂²), like the triangle
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30g4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="X = \text{one fair die}"></span></span>What are E X, E(X + X) and E X + E X? Are X and X independent? Where in the average-adds technique, or its proof, is independence asked for?</li><li><span class="givens"><span data-tex-inline="X = \text{one fair die},\ \ Y = X"></span> <span data-tex-inline="\text{Var}\,X = 35/12"></span></span>What is Var(X + Y) = Var(2X)? What is Var X + Var Y? Which term of the spread-of-a-sum technique makes up the gap, and what is it here?</li><li><span class="givens"><span data-tex-inline="X = -1,\ 0,\ 1 \text{ each with chance } 1/3,\ \ Y = X^2"></span></span>What are E X, E Y and E(XY)? What is Cov(X, Y)? What are P(X = 0 and Y = 0) and P(X = 0) P(Y = 0)? Are X and Y independent?</li><li><span class="givens"><span class="gtx">a ferry crossing from Tsawwassen to Swartz Bay, time with spread width 6 minutes</span> <span class="gtx">the drive to the terminal, time with spread width 8 minutes, independent of the crossing</span></span>Is the spread width of the whole trip 6 + 8 = 14 minutes? What is it? For what kind of link between the two times would the width be 14 minutes?</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">30g.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="n \text{ coats handed back to their } n \text{ owners in a random order, every order equally likely}"></span></span>At a coat check in Missoula, the tickets are lost and the coats go back at random. X is the number of people who get their own coat. Build X as a sum of n one-or-zero chance variables I₁, …, Iₙ. <br>Find E Iₖ and E X. Does the answer depend on n? <br>Find E(Iⱼ Iₖ) for j ≠ k, and Cov(Iⱼ, Iₖ). Are Iⱼ and Iₖ independent? <br>Find Var X from the spread-of-a-sum technique, written out for n parts. Check the answer for n = 3 by listing all 6 orders.</div>
+  <div class="chq"><span class="chid">30g.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="X = 2^k \text{ with chance } 2^{-k},\ \ k = 1, 2, 3, \ldots"></span> <span data-tex-inline="Y = 2^k \text{ with chance } 3 \cdot 4^{-k},\ \ k = 1, 2, 3, \ldots"></span></span>Check that the chances of X add to 1, and those of Y. <br>Find ∫ X dP by the rising-limit technique, cutting X off at k ≤ n. Does X have an average? <br>Find E Y. Find E Y² the same way. Does Y have a spread? <br>Which techniques of this step can be used on Y, and which cannot?</div>
+  <div class="chq"><span class="chid">30g.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{Var}\,X = 0"></span></span>A chance variable that is the same number c at every outcome has spread 0. Turn it round: if Var X = 0, must X be a constant? <br>Let f = (X − μ)², so f ≥ 0 and ∫ f dP = 0. The step function (1/n) on {f &gt; 1/n}, and 0 elsewhere, lies below f. Find what that shows about P(f &gt; 1/n). <br>Find P(f &gt; 0) from the countably many sets {f &gt; 1/n}. <br>On the dart space [0, 1] with size as chance, build an X that is not the same number everywhere, yet has spread 0. What is the right claim?</div>
+  <div class="chq"><span class="chid">30g.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="c \text{ any number},\ \ \mu = E\,X"></span></span>Prove the short way for the spread, Var X = E X² − μ², another way. Show that E(X − c)² = Var X + (μ − c)² for every number c. Expand (X − μ + μ − c)², and use E(X − μ) = 0. <br>Find the c that makes E(X − c)² least. What is the least value? <br>Put c = 0 and read off the short way. <br>One fair die: find E(X − 3)² and E(X − 3.5)², and check the first against the formula.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r30f.html">← 30f · chance is size</a><a href="r30h.html">30h · averages settle →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A chance variable is a random variable, its average the expected value or mean E[X] = μ, its spread the variance Var(X) = σ², its width the standard deviation σ, and the co-spread the covariance Cov(X, Y). Average-adds is linearity of expectation. Co-spread over the product of the widths is the correlation coefficient, which lies between −1 and 1 by 27h’s measuring-stick inequality, accepted name Cauchy–Schwarz. Uncorrelated means co-spread 0, which is weaker than independent.</p>
+  <h3>Who said it first</h3>
+  <p>Christiaan Huygens wrote the first book on expected values in 1657. Abraham de Moivre and Pierre-Simon Laplace used spreads in the eighteenth century, and Carl Friedrich Gauss built his method of least squares on them in 1809. Ronald Fisher named the variance in 1918. Treating the expected value as a Lebesgue integral is Kolmogorov’s, in 1933.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“A die averages 3.5, so a roll of 3.5 is the most likely.” Not allowed: the average is a total over the chance space, and it need not be a value X ever takes. No face shows 3.5.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'variable',t:R`X:\ \Omega \to \mathbb{R}`,n:`A sized function.`},
+  {k:'ember',kl:'average',t:R`E\,X = \int X\,dP`,n:`Its total.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{E(aX + bY) = aE\,X + bE\,Y}`,n:`Averages add.`}
+],{title:'The slides · average · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'spread',t:R`\text{Var}\,X = E(X - \mu)^2`,n:`Stray, squared, averaged.`},
+  {k:'ember',kl:'short way',t:R`E\,X^2 - \mu^2`,n:`Two-term square.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{Var}(X+Y) = \ldots + 2\,\text{Cov}}`,n:`Co-spread joins.`}
+],{title:'The slides · spread · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'multiply',t:R`E(XY) = E\,X\,E\,Y`,n:`Split the double sum.`},
+  {k:'ember',kl:'perpendicular',t:R`\text{Cov}(X, Y) = 0`,n:`A measuring stick.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{Var}(X+Y) = \text{Var}\,X + \text{Var}\,Y}`,n:`Widths add like sides.`}
+],{title:'The slides · independent · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

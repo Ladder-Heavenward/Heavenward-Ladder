@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Chance in one function</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r30h.html">← 30h averages settle</a><a href="r30j.html">next: 30j the bell curve →</a></p>
+  <div class="tags"><span class="tag proof">30i · proof</span></div>
+  <h1>Chance in one function</h1>
+  <p>Rung twenty-three stored a whole list of numbers in one function, and read the list back from the function’s slopes at zero. A count that depends on chance has a list too: the chance it is zero, the chance it is one, the chance it is two, and so on. Store that list, and one function holds everything about the count. Its slope at one gives the average. And when two independent counts are added, their functions simply multiply. This step uses that to answer a question first asked about family names in Victorian England: if each member of a family line has children by chance, how likely is it that the line dies out? The answer is a point where the function meets a straight line.</p>
+  <p class="gesture">A whole-number chance variable is stored in its chance function, which gives back every chance and the average. Independent counts add by multiplying their chance functions, and a family line dies out with chance the least point where the function meets the line through zero at slope one.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r23j.html">23j</a> (storing functions and read-back), <a href="r30g.html">30g</a> (averages and independence), <a href="r30d.html">30d</a> (the rising limit), <a href="r30f.html">30f</a> (whole-chance) and <a href="r22j.html">22j</a> (from counting to rare events). <a href="r30j.html">30j</a> uses a function of the same kind for any chance variable.</p></div>
+</header>
+
+<section class="class step" data-step="30i1">
+  <h2 class="sthead"><span class="stno">30i1</span>Storing the chances</h2>
+  <p class="stands">Stands on 23j, 30g1.</p>
+  <p data-pid="487f54">Let X take whole-number values 0, 1, 2, …, with pₖ = P(X = k). From here on, its <i>chance function</i> is the storing function (23j) of the list p₀, p₁, p₂, …:</p>
+  <p class="eqline" data-pid="c235c3">G(s) = E sˣ = p₀ + p₁ s + p₂ s² + ⋯.</p>
+  <p data-pid="5754fe">The sum settles for |s| ≤ 1, since |pₖ sᵏ| ≤ pₖ and the pₖ add to 1. Its accepted name is the probability generating function.</p>
+  <p data-pid="acb933">Chances-from-G technique: <b>P(X = k) = G⁽ᵏ⁾(0)/k!, so two whole-number chance variables with the same chance function have the same chances.</b> This is 23j’s read-back technique.</p>
+  <pre class="lines" data-k="ember" data-label="this step: three chance functions">
+X = 1 \text{ with chance } p,\ 0 \text{ otherwise}:\ \ G(s) = 1 - p + ps @@ one coin, heads with chance p
+X = \text{one fair die}:\ \ G(s) = (s + s^2 + \cdots + s^6)/6 @@ each face 1/6
+X = \text{a rare count with average } \lambda:\ \ G(s) = \sum e^{-\lambda}\lambda^k s^k/k! = e^{\lambda(s - 1)} @@ 22j’s chances; the growth sum (23)
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · storing · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">30i1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="G(s) = (1 + s)^3/8"></span></span>Check G(1). <br>Read back p₀, p₁, p₂ and p₃ by the chances-from-G technique, from the slopes at 0. <br>Check them by multiplying out (1 + s)³. <br>Find a count with these chances, from 30g1.1, and the chance it is at least 2.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30i2">
+  <h2 class="sthead"><span class="stno">30i2</span>The average from the slope</h2>
+  <p class="stands">Stands on 30i1, 30d1.</p>
+  <p data-pid="1aab8e">Average-from-G technique: <b>E X = G′(1), meaning the number G′(s) heads to as s rises to 1.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the average-from-G technique">
+G^{\prime}(s) = \sum_k k\,p_k\,s^{k-1} \text{ for } 0 \le s < 1 @@ term by term inside the reach (23e)
+k\,p_k\,s^{k-1} \text{ rises to } k\,p_k \text{ as } s \text{ rises to } 1 @@ each term at least 0
+\textstyle\sum_k k\,p_k\,s^{k-1} \to \sum_k k\,p_k = E\,X @@ rising-limit (30d1), with the counting size on 0, 1, 2, …
+\htmlClass{new}{E\,X = G^{\prime}(1)} \quad \blacksquare @@ the average is the step-total (30g1)
+  </pre>
+  <p data-pid="0b6fcf">Likewise G″(1) = E X(X − 1), so Var X = G″(1) + G′(1) − G′(1)². For the rare count, G′(s) = λe^(λ(s − 1)) and G″(s) = λ²e^(λ(s − 1)), so its average is λ and its spread is λ² + λ − λ² = λ: 22·stat’s spread equal to its average, now proved.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · slope · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30i2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="G(s) = (s + s^2 + \cdots + s^6)/6"></span> <span data-tex-inline="G(s) = (1 - p + ps)^n"></span></span>For one die, find G′(1) and G″(1). Find the average and the spread. Check them against 30g2. <br>For n coins, find G′(1) and G″(1). Find the average and the spread of the number of heads. <br>Check the spread for n coins against the independent-spreads-add technique and 30g2.1.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30i3">
+  <h2 class="sthead"><span class="stno">30i3</span>Sums multiply</h2>
+  <p class="stands">Stands on 30i1, 30g3.</p>
+  <p data-pid="8af510">Sums-multiply technique: <b>if X and Y are independent whole-number chance variables, then G<sub>X+Y</sub>(s) = G<sub>X</sub>(s) G<sub>Y</sub>(s).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the sums-multiply technique">
+s^{X + Y} = s^X s^Y @@ powers add (4f)
+s^X \text{ and } s^Y \text{ independent} @@ each is built from X alone, or Y alone (30g3)
+\htmlClass{new}{E\,s^{X+Y} = E\,s^X \cdot E\,s^Y} \quad \blacksquare @@ independent-averages-multiply (30g3)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: what it buys">
+n \text{ independent coins}:\ \ (1 - p + ps)^n @@ read back: P(k heads) = C(n, k) pᵏ(1 − p)ⁿ⁻ᵏ, 4·stat’s count
+\text{rare counts } \lambda \text{ and } \mu:\ \ e^{\lambda(s - 1)}e^{\mu(s - 1)} = e^{(\lambda + \mu)(s - 1)} @@ a rare count with average λ + μ (chances-from-G)
+  </pre>
+  <p data-pid="32e8be">So misprints on two pages, each a rare count, add to a rare count, as 22·stat found by summing. Here no sum is needed: the functions multiply, and read-back does the rest.</p>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · connections, not families</div>
+    <p data-pid="eb41d9">9a grouped things by how they connect, not by the family they came from. A chance law is known the same way. A count is a rare count because its chance function is e^(λ(s − 1)), whatever it counts: misprints, calls, crashes, or the sum of two rare counts.</p>
+    <p data-pid="1c7b60"><b>A chance law is known by what its chance function does, not by where the count came from.</b></p>
+    <p data-pid="6d247e">What the function does under adding is the law’s fingerprint. Two laws that multiply into the same function are the same law, however different their stories.</p>
+    <p class="bait" data-pid="4c32aa">Calls to a help line in Victoria and calls to one in Portland are each rare counts. Is their total a rare count? What would you need to check, and what would you not?</p>
+  </aside>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · multiply · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30i3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="X, Y \text{ two independent fair dice}"></span> <span data-tex-inline="G_X(s) = G_Y(s) = (s + \cdots + s^6)/6"></span></span>Find G of the total X + Y as a product. <br>Read back the chance of a total of 7: find the number in front of s⁷ when the product is multiplied out. <br>Check it by counting the pairs of faces that total 7. <br>Find the chances of a total of 2 and of 12 the same way.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30i4">
+  <h2 class="sthead"><span class="stno">30i4</span>Will the family line die out?</h2>
+  <p class="stands">Stands on 30i1, 30i3, 30f3, 22a.</p>
+  <p data-pid="29d793">One founder has children: a count with chance function G. Each child has children by the same law, independently, and so on down the generations. Zₙ is the number in generation n, with Z₀ = 1.</p>
+  <p data-pid="34b5cf">Dying-out technique: <b>the line dies out with chance q, the least s in [0, 1] with G(s) = s.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the dying-out technique">
+E\,s^{Z_n} = \sum_j P(Z_{n-1} = j)\,G(s)^j = G_{n-1}\big(G(s)\big) @@ whole-chance (30f3) over Zₙ₋₁; j independent families multiply (30i3)
+G_n = G \circ G \circ \cdots \circ G \ (n \text{ times}) @@ induction on n
+q_n = P(Z_n = 0) = G_n(0) = G(q_{n-1}),\ \ q_0 = 0 @@ chances-from-G at k = 0
+q_n \text{ rises and stays at most } 1 \Rightarrow q_n \to q,\ \ G(q) = q @@ G rises on [0, 1]; a climb under a ceiling (22a); G is continuous
+r = G(r),\ r \ge 0 \Rightarrow q_n \le r \text{ for every } n \Rightarrow q \le r @@ q₀ = 0 ≤ r, and qₙ = G(qₙ₋₁) ≤ G(r) = r
+\htmlClass{new}{P(\text{the line dies out}) = q,\ \text{the least root of } G(s) = s} \quad \blacksquare @@ dying out is the rising union of {Zₙ = 0}; rising sets (30d1)
+  </pre>
+  <p data-pid="0a72df">G(1) = 1 always, so q ≤ 1. G bends upward on [0, 1]. If its slope at 1, the average number of children, is at most 1, the curve stays above the line until 1 and the line dies out with chance 1, unless every member has exactly one child. If the average is above 1, the curve crosses the line once before 1, and the line survives with chance 1 − q &gt; 0.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · dying out · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30i4.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\text{each member has } 0,\ 1 \text{ or } 2 \text{ children, with chances } 1/4,\ 1/4,\ 1/2"></span></span>Find G and the average number of children. <br>Solve G(s) = s. Find the chance the line dies out, and the chance it survives. <br>Find q₁, q₂ and q₃, the chances that the line has died out by generations 1, 2 and 3. Check that they climb toward the answer.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30i5">
+  <h2 class="sthead"><span class="stno">30i5</span>Illegal moves</h2>
+  <p class="stands">Stands on 30i1 to 30i4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+G_{X + Y} = G_X + G_Y\,? @@ sums multiply: two coins give (1 − p + ps)², not 2(1 − p + ps)
+G_{X+Y} = G_X G_Y \text{ for any } X, Y\,? @@ Y = X: E s^{2X} is not (E s^X)²
+\text{average } 1 \text{ child, so the line goes on for ever}\,? @@ q = 1 when the average is 1, unless every member has exactly one child
+G(1) \text{ gives the average}\,? @@ G(1) = 1 always; the average is the slope G′(1)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30i5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{two tosses of a fair coin},\ \ G(s) = 1/2 + s/2 \text{ for one}"></span></span>What is the chance function of the number of heads in two tosses, from its chances 1/4, 1/2, 1/4? Is it 2(1/2 + s/2)? What is 2(1/2 + s/2) at s = 1, and can a chance function take that value there?</li><li><span class="givens"><span data-tex-inline="X = 1 \text{ or } 0,\ \text{each with chance } 1/2,\ \ Y = X"></span></span>What are the values of X + Y = 2X, and their chances? What is its chance function? Is it (1/2 + s/2)²? Which chance differs?</li><li><span class="givens"><span data-tex-inline="\text{each member has } 0 \text{ or } 2 \text{ children, each with chance } 1/2"></span></span>What is the average number of children? What is G, and what is the least root of G(s) = s? Does the line go on for ever? What are q₁, q₂ and q₃? And if every member has exactly one child?</li><li><span class="givens"><span data-tex-inline="G(s) = e^{2(s - 1)}"></span></span>What is G(1)? What is the average, from the slope at 1? Would G(1) be the same for every count?</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">30i.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{each pot holds a keeper with chance } p,\ \text{independently}"></span> <span data-tex-inline="X = \text{the number of empty pots before the first keeper}"></span></span>A crabber out of Newport, Oregon, pulls pots one by one. Find P(X = k), and check that the chances add to 1. <br>Build the chance function: G(s) = p/(1 − (1 − p)s). Find the average and the spread from it. <br>Y is the number of empty pots before the second keeper. Find its chance function by the sums-multiply technique, and read back P(Y = k). <br>Take p = 0.3. Find the average of X, and P(Y = 2).</div>
+  <div class="chq"><span class="chid">30i.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="p_k = \dfrac{1}{k(k + 1)},\ \ k = 1, 2, 3, \ldots"></span></span>Check that the chances add to 1. Split 1/(k(k + 1)) into 1/k − 1/(k + 1). <br>Find G′(s) for 0 ≤ s &lt; 1 as a sum, term by term. <br>Find what G′(s) heads to as s rises to 1. What does the average-from-G technique give? Does this count have an average?</div>
+  <div class="chq"><span class="chid">30i.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="X, Y \in \{0, 1, 2\}"></span> <span data-tex-inline="P(X = i, Y = j) = \tfrac{2}{9} \text{ for } (i, j) = (0, 1), (1, 2), (2, 0)"></span> <span data-tex-inline="P(X = i, Y = j) = 0 \text{ for } (i, j) = (1, 0), (2, 1), (0, 2)"></span> <span data-tex-inline="P(X = i, Y = i) = \tfrac{1}{9}"></span></span>The sums-multiply technique: independent counts have G of the sum equal to the product. Turn it round: if G<sub>X+Y</sub> = G<sub>X</sub> G<sub>Y</sub>, must X and Y be independent? <br>Find the chances of X, and of Y. Find G<sub>X</sub> and G<sub>Y</sub>. <br>Find the chances of X + Y, and G<sub>X+Y</sub>. Compare it with G<sub>X</sub> G<sub>Y</sub>. <br>Are X and Y independent? Try X = 1, Y = 0.</div>
+  <div class="chq"><span class="chid">30i.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="G(s) = 1/2 + s/4 + s^2/4"></span> <span data-tex-inline="m = G^{\prime}(1)"></span></span>Prove that a line with average m &lt; 1 dies out another way, with the stray-bound (30h1). Find m for this G. <br>From Gₙ = G ∘ ⋯ ∘ G and the chain rule, find E Zₙ = Gₙ′(1) in terms of m. <br>Bound P(Zₙ ≥ 1) by the stray-bound. Find the bound at n = 10. <br>Find what the bound heads to, and finish the proof. Check the answer against the least root of G(s) = s.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r30h.html">← 30h · averages settle</a><a href="r30j.html">30j · the bell curve →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The chance function is the probability generating function. The rare count is the Poisson distribution, and n coins give the binomial distribution. A family line in which each member has children by one law is a Galton–Watson branching process; the dying-out chance is the extinction probability. The cases with average below, at and above 1 are subcritical, critical and supercritical.</p>
+  <h3>Who said it first</h3>
+  <p>Abraham de Moivre used generating functions for dice in 1730, and Pierre-Simon Laplace made them a method in 1812. Francis Galton asked in 1873 why so many aristocratic family names die out, and Henry William Watson answered with the iterated generating function in 1874, though he wrongly concluded that every line dies out. Irénée-Jules Bienaymé had stated the correct answer in 1845, and Johan Steffensen gave the full proof in 1930.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“G(1) = 1, so s = 1 solves G(s) = s, so every family line dies out with chance 1.” Not allowed: the chance is the least root. When the average is above 1, a smaller root sits below 1, and that is the answer.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'store',t:R`G(s) = \sum p_k s^k`,n:`One function.`},
+  {k:'ember',kl:'read',t:R`p_k = G^{(k)}(0)/k!`,n:`Read-back (23j).`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{G = e^{\lambda(s-1)}}`,n:`The rare count, stored.`}
+],{title:'The slides · storing · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'slope',t:R`G^{\prime}(s) = \sum k p_k s^{k-1}`,n:`Term by term.`},
+  {k:'ember',kl:'rise',t:R`s \uparrow 1`,n:`Rising-limit.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{E\,X = G^{\prime}(1)}`,n:`Spread from G″.`}
+],{title:'The slides · slope · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'powers',t:R`s^{X+Y} = s^X s^Y`,n:`Powers add.`},
+  {k:'ember',kl:'average',t:R`E\,s^X\,E\,s^Y`,n:`Independent.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{G_{X+Y} = G_X G_Y}`,n:`Rare + rare = rare.`}
+],{title:'The slides · multiply · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'compose',t:R`G_n = G \circ \cdots \circ G`,n:`Generation by generation.`},
+  {k:'ember',kl:'climb',t:R`q_n = G(q_{n-1}) \uparrow q`,n:`Under a ceiling.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{q = \min\{s : G(s) = s\}}`,n:`Average above 1: may survive.`}
+],{title:'The slides · dying out · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

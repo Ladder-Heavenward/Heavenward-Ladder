@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How the numbers were got</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r30u.html">← 30u belief updated</a><a href="r30w.html">next: 30w inductive axioms revisited →</a></p>
+  <div class="tags"><span class="tag tech">30v · technique</span></div>
+  <h1>How the numbers were got</h1>
+  <p>Every technique of this rung starts from data and a chance law that made them. Nothing in the mathematics checks that the law is right. If the people counted were the easy ones to reach, or the people treated were the ones who wanted treatment, the tests and intervals will be exact answers to the wrong question. This step is about the part before the numbers. It shows how a comparison of whole groups can point the opposite way from every comparison inside them, as it did at a great university in California. It measures how far a sample leans when the chance of being picked depends on the answer. It proves the one guarantee that only an experiment gives: when a coin decides who is treated, the groups are alike on average in everything, measured or not. It uses a computer as a coin, and says how many runs are enough. And it ends with the questions to ask of any report before believing it.</p>
+  <p class="gesture">A rate for a whole group is a weighted average of its rates in the parts, so groups spread differently over the parts can compare one way overall and the other way in every part. A sample whose picking chance moves with the answer leans by their co-spread. Assigning treatment by a fair draw makes the difference of group averages right on average, for every trait. A chance found by simulation is good to about one over twice the square root of the number of runs.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r06stat.html">6·stat</a> (the fair-sample and fair-share techniques), <a href="r30f.html">30f</a> (the given-chance, independent and whole-chance techniques), <a href="r30g.html">30g</a> (the average-adds, spread-of-a-sum and independent-spreads-add techniques; co-spread), <a href="r30h.html">30h</a> (the spread-bound and averages-settle techniques), <a href="r30s.html">30s</a> (the surprise chance), <a href="r30u.html">30u</a> (belief updated), <a href="r04j.html">4j</a> (choosing numbers) and <a href="r10.html">rung 10</a> (limits). <a href="r30w.html">30w</a> looks back over the whole climb at the techniques that recur.</p></div>
+</header>
+
+<section class="class step" data-step="30v1">
+  <h2 class="sthead"><span class="stno">30v1</span>Seeing against doing</h2>
+  <p class="stands">Stands on 30f (the whole-chance technique), 5·stat (chance as a fraction) and 6·stat.</p>
+  <p data-pid="4c5585">There are two ways to get numbers about a cause. In an observational study you record what people did and what happened to them; you decide nothing. In an experiment you decide who gets what, and then record. Observing is often the only way, for smoking or for earthquakes. Its danger is a hidden third: something that drives both who did what and what happened, so that a link seen between the two is borrowed from it. The first danger to check is simple arithmetic.</p>
+  <p data-pid="d8ec27">Mixed-rate technique: <b>a group’s overall rate is the average of its rates in the parts, each weighted by the share of the group in that part. So two groups spread differently over the parts can compare one way overall and the other way in every part.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the mixed-rate technique">
+P(A) = \textstyle\sum_i P(A \mid B_i)\,P(B_i) @@ the whole-chance technique (30f), the parts Bᵢ splitting the group
+\text{group 1: } r_i,\ \text{shares } s_i;\ \ \text{group 2: } r_i',\ \text{shares } s_i' @@ rates and shares in each part
+r_1 = 0.9,\ r_2 = 0.5,\ \ s = (0.1,\ 0.9):\ \ \text{overall } 0.54 @@ group 1 mostly in the hard part
+r_1' = 0.8,\ r_2' = 0.4,\ \ s' = (0.9,\ 0.1):\ \ \text{overall } 0.76 @@ group 2 mostly in the easy part
+\htmlClass{new}{\text{group 1 higher in each part, lower overall}} \quad \blacksquare @@ the shares, not the rates, decide the overall comparison
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: graduate admissions at Berkeley, fall 1973">
+\text{men: } 2691 \text{ applied to the six largest departments, about } 1198 \text{ admitted} = 44.5\% @@ the university’s own figures, rates rounded to the percent
+\text{women: } 1835 \text{ applied, about } 557 \text{ admitted} = 30.3\% @@ the same six departments
+\text{A: } 62\% \text{ against } 82\%;\ \ \text{B: } 63 \text{ against } 68;\ \ \text{C: } 37 \text{ against } 34 @@ men’s rate against women’s, by department
+\text{D: } 33 \text{ against } 35;\ \ \text{E: } 28 \text{ against } 24;\ \ \text{F: } 6 \text{ against } 7 @@ women higher in four of six
+\text{men: } 51\% \text{ applied to A and B;\ \ women: } 7\% @@ A and B admitted about 64%, C to F about 26%
+\htmlClass{new}{\text{women at men’s shares: } \textstyle\sum r_i' s_i \approx 51\%} \quad \blacksquare @@ the mixed-rate technique, with the shares swapped
+  </pre>
+  <p data-pid="8e0075">The campus-wide figures that worried the university were 44% of 8442 men admitted against 35% of 4321 women. Broken into departments, the gap vanished and even turned round: women had applied mostly to the departments that turned most people away. That does not prove there was no unfairness. It moves the question to why the departments differed, which the numbers cannot answer. A hidden third can always be one level further down.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · mixed rates · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">30v1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{Berkeley, six departments, 1973}"></span></span>Find, for men and for women, the share who applied to A or B, and the admit rates of A and B together and of C to F together.</li><li><span class="givens"><span data-tex-inline="\text{men’s shares } s_i,\ \ \text{women’s rates } r_i&#x27;"></span></span>Find the overall rate the men would have had at the women’s shares, Σ rᵢ sᵢ′. Compare with the women’s 30.3%.</li><li>A survey in Seattle finds that people who drink more coffee have more lung disease. Find a hidden third that could explain it. Find an experiment that could settle it, and why it might not be allowed.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30v2">
+  <h2 class="sthead"><span class="stno">30v2</span>Samples that lean</h2>
+  <p class="stands">Stands on 6·stat (the fair-sample technique), 30f (the given-chance technique), 30g (co-spread, the average-adds technique), 30h (the averages-settle technique) and rung 10 (limits of quotients).</p>
+  <p data-pid="5e583a">6·stat called a sample fair when every group of its size is equally likely to be picked, and watched a poll of over two million answers miss. Here is how far a sample misses when the chance of being picked depends on the value being measured. Each member, with value X, is picked with chance π(X), independently of the others. Take X with finitely many values.</p>
+  <p data-pid="edf58f">Picked-lean technique: <b>as the population grows, the average of the picked values heads, with chance tending to 1, to E X + Cov(X, π(X))/E[π(X)]. It leans toward the values that are easier to pick, by the co-spread of the value with its chance of being picked.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the picked-lean technique">
+\bar X_{\text{picked}} = \tfrac{\frac1N \sum_i X_i I_i}{\frac1N \sum_i I_i} @@ Iᵢ = 1 when member i is picked, 0 when not
+E[XI] = \textstyle\sum_x x\,P(X = x,\ I = 1) = \sum_x x\,\pi(x)\,P(X = x) = E[X\pi(X)] @@ the given-chance technique (30f), value by value
+\tfrac1N \textstyle\sum X_i I_i \to E[X\pi(X)],\ \ \tfrac1N \sum I_i \to E[\pi(X)] @@ the averages-settle technique (30h), in chance
+\bar X_{\text{picked}} \to E[X\pi(X)]\,/\,E[\pi(X)] @@ limits of quotients (rung 10), E[π(X)] &gt; 0
+E[X\pi(X)] = E X\cdot E[\pi(X)] + \operatorname{Cov}(X, \pi(X)) @@ co-spread (30g), by the average-adds technique
+\htmlClass{new}{\bar X_{\text{picked}} \to E X + \tfrac{\operatorname{Cov}(X,\,\pi(X))}{E[\pi(X)]}} \quad \blacksquare @@ divide through
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: anglers on the Deschutes">
+\text{trips of } 2 \text{ h and } 6 \text{ h, equally common:}\ \ E X = 4 \text{ h} @@ the true average fishing trip on a stretch of the river
+\pi(x) = cx @@ a counter who walks the bank at a random moment meets an angler with chance in proportion to time spent there
+\text{picked average} \to E[X^2]/E[X] = \tfrac{(4 + 36)/2}{4} = 5 \text{ h} @@ the picked-lean technique, c cancelling
+\htmlClass{new}{\text{the survey overstates the trip by } 25\%} \quad \blacksquare @@ Cov(X, cX)/E[cX] = Var X / E X = 4/4 = 1 h
+  </pre>
+  <p data-pid="029a00">Size does not help. A large leaning sample settles, by the averages-settle technique, on the wrong number, and settles there with great confidence. What helps is knowing the picking chances: weigh each picked value by 1/π, and the lean is undone, since E[X π(X) · 1/π(X)] = E X. Surveys do this when they know who was hard to reach. When the chance of answering depends on the answer itself and nobody knows how, no arithmetic can repair it.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · the lean · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30v2.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{trips } 1, 3, 8 \text{ h};\ \ \text{shares } 0.5, 0.3, 0.2;\ \ \pi(x) = cx"></span></span>Find the true average trip and the average the bank counter heads to. Find Cov(X, π(X))/E[π(X)] and check the technique.</li><li><span class="givens"><span data-tex-inline="30\% \text{ volunteer};\ \ \text{answer chance } 0.6 \text{ and } 0.2"></span></span>A survey in Tacoma asks whether people did volunteer work last year. Volunteers answer with chance 0.6, others with chance 0.2. Find the share of volunteers among the answers. Weigh each answer by one over its chance, and find the share again.</li><li>Prove that if π(X) is the same for every member, the picked average heads to E X. Prove the same when the picking chance depends only on a trait W independent of X (30f).</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30v3">
+  <h2 class="sthead"><span class="stno">30v3</span>Assigned by a coin</h2>
+  <p class="stands">Stands on 6·stat (the fair-sample technique), 30g (the average-adds and spread-of-a-sum techniques), 30v1 and 30v2.</p>
+  <p data-pid="adc70b">Take N units, people or plots. Each has two futures: y if treated, z if not. Only one is ever seen. The effect we want is the average of the differences, τ = ȳ − z̄, over all N. In an experiment, a fair draw picks m of the N to treat (6·stat); the rest, the control group, are left alone or given a look-alike. Let I be 1 for a treated unit and 0 for a control.</p>
+  <p data-pid="06e67a">Fair-split technique: <b>under a fair draw of the treated group, the treated average of y has average ȳ, and the control average of z has average z̄. So the difference of the two group averages has average τ. For any trait w, measured or not, the two groups’ averages of w differ by 0 on average.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the fair-split technique">
+P(I_i = 1) = m/N,\ \ P(I_i = 0) = (N - m)/N @@ the fair-sample technique (6·stat)
+E\big[\tfrac1m \textstyle\sum_i y_i I_i\big] = \tfrac1m \sum_i y_i \tfrac{m}{N} = \bar y @@ the average-adds technique (30g); the yᵢ are fixed numbers
+E\big[\tfrac{1}{N - m} \textstyle\sum_i z_i (1 - I_i)\big] = \bar z @@ the same lines for the control group
+E[\text{treated average} - \text{control average}] = \bar y - \bar z = \tau @@ the average-adds technique
+\htmlClass{new}{y = z = w:\ \ \text{the groups differ in } w \text{ by } 0 \text{ on average}} \quad \blacksquare @@ any trait is a pair of futures that the treatment does not change
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: the polio vaccine trial of 1954">
+\text{fair draw, look-alike shot, nobody told:}\ \ 28 \text{ against } 71 @@ polio cases per 100 000 children, vaccine against look-alike, about 200 000 in each group
+\text{refused to take part:}\ \ 46 @@ children whose parents said no
+\text{second graders vaccinated, first and third graders watched:}\ \ 25 \text{ against } 54 @@ the observed design run beside it, in other districts
+\text{second graders whose parents refused:}\ \ 44 @@ in the observed design
+\htmlClass{new}{\text{the observed design shows } 29 \text{ fewer, the drawn one } 43} \quad \blacksquare @@ the watched grades mixed in families who would have refused, at lower risk
+  </pre>
+  <p data-pid="bd9287">Three more tools ride on the fair draw. Control means a comparison group treated in every way alike except the treatment; the look-alike shot, a placebo, makes the control truly alike. Blinding means that neither the children’s families nor the doctors judging each case knew who had which, so a doctor’s hopes could not tilt a diagnosis. Blocking means drawing within groups of alike units, such as pairs of plots in the same soil: the effect is then read from differences inside each pair, whose spread is Var y + Var z − 2 Cov(y, z) by the spread-of-a-sum technique (30g), small when the pair are much alike.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · fair split · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30v3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{polio trial}"></span></span>Find the drop in cases per 100 000 in the drawn trial and in the observed design. Find why the refusing families had fewer cases, and which way that tilts the observed design.</li><li><span class="givens"><span data-tex-inline="w = 1,\ 2,\ 3,\ 6;\ \ m = 2"></span></span>Four plots, two treated by a fair draw. List the six splits and the difference of the groups’ averages of w for each. Find its average.</li><li><span class="givens"><span data-tex-inline="\operatorname{Var} = 9 \text{ each},\ \ \operatorname{Cov} = 7.2"></span></span>Two rows in the same soil. Find the spread of the difference in yield within the pair, and the spread when the two rows are chosen independently, with co-spread 0.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30v4">
+  <h2 class="sthead"><span class="stno">30v4</span>The computer as a coin, and reading a report</h2>
+  <p class="stands">Stands on 30g (the independent-spreads-add technique), 30h (the spread-bound technique), 30v3, 30s1 (the surprise chance) and 4j (choosing numbers).</p>
+  <p data-pid="66ab95">Many chances are too tangled to work out by hand, but easy to imitate: let a computer run the chance process R times, independently, and count how often the event happens. The share of hits p̂ estimates the chance p. How many runs are enough?</p>
+  <p data-pid="d6897e">Run-count technique: <b>the share p̂ of hits in R independent runs has average p and spread p(1 − p)/R, at most 1/(4R). So P(|p̂ − p| ≥ e) ≤ 1/(4Re²) for every e &gt; 0.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the run-count technique">
+\hat p = \tfrac1R \textstyle\sum_r J_r,\ \ J_r = 1 \text{ when run } r \text{ hits},\ \ P(J_r = 1) = p @@ R independent runs
+E\hat p = p @@ the average-adds technique (30g)
+\operatorname{Var} J_r = E[J_r^2] - p^2 = p - p^2 @@ J² = J, since J is 0 or 1
+\operatorname{Var}\hat p = \tfrac{1}{R^2}\cdot R\,p(1 - p) = \tfrac{p(1 - p)}{R} \le \tfrac{1}{4R} @@ the independent-spreads-add technique (30g); p(1 − p) = ¼ − (p − ½)²
+\htmlClass{new}{P(|\hat p - p| \ge e) \le \tfrac{1}{4Re^2}} \quad \blacksquare @@ the spread-bound technique (30h)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: mulch on hazelnut rows in the Willamette Valley">
+\text{mulched: } 31, 34, 29, 36;\ \ \text{bare: } 27, 30, 25, 28 @@ kilograms of nuts from eight rows, four mulched by a fair draw
+\text{difference of averages} = 32.5 - 27.5 = 5.0 @@ the effect seen
+\text{if mulch does nothing: each of } \tbinom84 = 70 \text{ splits equally likely} @@ the fair-split technique: the yields stay, only the labels move (4j)
+2 \text{ splits give } 5.0 \text{ or more:}\ \ p = \tfrac{2}{70} \approx 0.029 @@ the surprise chance (30s): a difference this large by the draw alone
+R = 10\,000 \text{ random splits:}\ \ P(|\hat p - p| \ge 0.01) \le 0.25 @@ the run-count technique; with p(1 − p) ≈ 0.028 in place of ¼, at most 0.028
+\htmlClass{new}{\text{for } P(|\hat p - p| \ge 0.01) \le 0.05,\ R = 50\,000 \text{ runs are enough}} \quad \blacksquare @@ 1/(4R · 0.0001) ≤ 0.05
+  </pre>
+  <p data-pid="c339a6">With eight rows the 70 splits can be listed by hand; with eighty rows there are about 10²³ splits, which a computer listing a billion a second would need some three million years to get through, and the computer’s coin takes over. Because the draw was real, the test needs no bell and no other chance law: the chance it reports is the chance of the draw itself. That is the deepest reason to assign by a coin.</p>
+  <p data-pid="2eef54">Reading a report, ask these before the numbers:</p>
+  <ul>
+    <li data-pid="6ee615">Who was counted, and how were they picked? Could the chance of being counted move with the answer (30v2)?</li>
+    <li data-pid="692d21">Did someone decide who was treated, by a fair draw, or were people watched doing what they chose (30v1, 30v3)?</li>
+    <li data-pid="8448d3">Compared with what? Was there a control group, alike but for the treatment? Did anyone know who had what?</li>
+    <li data-pid="d74ea9">How many, and how wide is the interval (30q, 30u)? A difference the size of its own spread width is weak.</li>
+    <li data-pid="4466b2">How large is the effect, not only whether it is real (30s)? And how many comparisons were tried before this one was reported?</li>
+  </ul>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · enough runs · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30v4.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="p = 0.029,\ \ R = 1000"></span></span>Find the spread width of p̂. Find the run-count ceiling on P(|p̂ − p| ≥ 0.01), first with ¼, then with p(1 − p).</li><li><span class="givens"><span data-tex-inline="\text{mulched: } 31, 34, 29, 36;\ \ \text{bare: } 27, 30, 25, 28"></span></span>List the splits of the eight yields into two groups of four whose difference of averages is 5.0 or more. Find how many give 4.0 or more.</li><li>A news story reports that teenagers in Portland who eat breakfast get better grades, from a survey of 500 who answered an online form. Go through the five questions above and find which the story cannot pass.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30v5">
+  <h2 class="sthead"><span class="stno">30v5</span>Illegal moves</h2>
+  <p class="stands">Stands on 30v1 to 30v4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+30.3\% < 44.5\% \Rightarrow \text{women admitted at a lower rate in each department}\,? @@ the overall rate mixes the departments by shares that differ (the mixed-rate technique)
+2.4 \text{ million answers cannot be far off}\,? @@ a leaning sample settles on E X + Cov(X, π)/E π, however large
+\text{vaccinated } 25 \text{ against refused } 44 \text{ measures the vaccine}\,? @@ who refuses is not drawn by a coin: the families differ
+1000 \text{ runs give } p \text{ to within } 0.001\,? @@ the spread width of p̂ is √(p(1 − p)/R), about 0.005 here
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30v5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{Berkeley, six departments}"></span></span>Find the departments where women were admitted at a higher rate than men. <br>Find what the first line takes for granted.</li><li><span class="givens"><span data-tex-inline="\text{trips } 2, 6 \text{ h};\ \ \pi(x) = cx;\ \ N = 10^6"></span></span>Find what the bank counter’s average heads to as N grows, and the true average. <br>Find the slip in the second line.</li><li><span class="givens"><span data-tex-inline="25,\ 44,\ 28,\ 71"></span></span>Find which two of these rates come from groups split by a fair draw. <br>Find what the third line compares, besides the vaccine.</li><li><span class="givens"><span data-tex-inline="p \approx 0.029,\ \ R = 1000"></span></span>Find the spread width of p̂, and the R that would make it 0.001. <br>Find the slip.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">30v.4.1</span><span class="tagq">build</span>Build a table of two clinics and two treatments in which treatment 1 has a higher recovery rate than treatment 2 in each clinic by at least 10 points, yet a lower rate overall. <br>Use the mixed-rate technique to find which shares make it work, and the least gap the shares must have.</div>
+  <div class="chq"><span class="chid">30v.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\pi(x) = 0 \text{ for some } x"></span></span>The weights 1/π undo a lean only where π &gt; 0. <br>Find what the picked average heads to when the people with X = x are never picked, and prove that no weighing of the picked values can recover E X for every population with the same picked part.</div>
+  <div class="chq"><span class="chid">30v.4.3</span><span class="tagq">converse</span>Turn the picked-lean technique round: if Cov(X, π(X)) = 0, the picked average of X heads to E X. Must the picked average of X² then head to E[X²]? <br>Test it with X taking values −1, 0 and 1, and a picking chance that depends on X.</div>
+  <div class="chq"><span class="chid">30v.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\text{buses every } 10 \text{ or } 20 \text{ minutes, equally often}"></span></span>A rider arriving at a random moment waits for the next bus. Reroute the picked-lean technique through the whole-chance technique (30f): the gap the rider lands in is picked with chance in proportion to its length. <br>Find the average gap the rider lands in, and the rider’s average wait. Compare with the average gap.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r30u.html">← 30u · belief updated</a><a href="r30w.html">30w · inductive axioms revisited →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A hidden third is a confounding (or lurking) variable. The reversal of the mixed-rate technique is Simpson’s paradox; the swapped-shares rate of 30v1 is a standardized rate. The lean of a sample is selection bias, or nonresponse bias when it comes from who answers; the trip example is length-biased sampling, and 30v.4.4 is the waiting-time (or inspection) paradox. Weighing by 1/π is inverse probability weighting, the Horvitz–Thompson estimator. The two futures are potential outcomes; random assignment, control, placebo, blinding (double-blind when neither subjects nor judges know) and blocking are the principles of experimental design; a fair draw within pairs is a matched-pairs design. Running a chance process on a computer is simulation, or the Monte Carlo method; the test of 30v4 that moves the labels is a permutation (or randomization) test.</p>
+  <h3>Who said it first</h3>
+  <p>Ronald Fisher set out randomization, replication and blocking in <i>The Design of Experiments</i> (1935), from field trials at Rothamsted, and gave the permutation test there. Jerzy Neyman wrote the two futures down in 1923; Donald Rubin made them the basis of causal inference from 1974. Edward Simpson described the reversal in 1951, after Karl Pearson and Udny Yule had seen it. Peter Bickel, Eugene Hammel and J. W. O’Connell analysed the Berkeley figures in <i>Science</i> in 1975. Daniel Horvitz and Donovan Thompson published the weights in 1952. The 1954 field trial of Jonas Salk’s vaccine was evaluated by Thomas Francis Jr.; the Monte Carlo method was named by Stanislaw Ulam and John von Neumann at Los Alamos in the 1940s.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'the parts',t:R`P(A) = \textstyle\sum_i P(A \mid B_i)P(B_i)`,n:`The whole-chance technique.`},
+  {k:'ember',kl:'the shares',t:R`s_i \ne s_i\'`,n:`Two groups, spread differently.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{higher in every part, lower overall}}`,n:`The shares decide.`}
+],{title:'The slides · mixed rates · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'picked',t:R`E[XI] = E[X\pi(X)]`,n:`Value by value.`},
+  {k:'ember',kl:'settles',t:R`\bar X_{\text{picked}} \to E[X\pi]/E[\pi]`,n:`Averages settle.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{E X + \operatorname{Cov}(X, \pi)/E\pi}`,n:`The lean is a co-spread.`}
+],{title:'The slides · the lean · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'each unit',t:R`P(I_i = 1) = m/N`,n:`A fair draw.`},
+  {k:'ember',kl:'each group',t:R`E[\text{treated average}] = \bar y`,n:`The average-adds technique.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{E[\text{difference}] = \tau}`,n:`For every trait, measured or not.`}
+],{title:'The slides · fair split · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'average',t:R`E\hat p = p`,n:`Each run is a fair coin of chance p.`},
+  {k:'ember',kl:'spread',t:R`\operatorname{Var}\hat p = p(1 - p)/R \le 1/(4R)`,n:`Independent spreads add.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{P(|\hat p - p| \ge e) \le 1/(4Re^2)}`,n:`The spread-bound technique.`}
+],{title:'The slides · enough runs · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

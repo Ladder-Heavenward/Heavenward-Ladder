@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Chance that steps</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r30o.html">← 30o waiting and arriving</a><a href="r30q.html">next: 30q estimating from samples →</a></p>
+  <div class="tags"><span class="tag tech">30p · technique</span></div>
+  <h1>Chance that steps</h1>
+  <p>Some things move from one condition to another in steps, and where they go next depends only on where they are now. A winter day in Seattle is wet or dry, and a wet day is more often followed by another wet one. A rental car left in Portland this week may be in Seattle or Vancouver next week. The day before yesterday does not enter. Such a process is a chain that forgets its past. All its chances for one step fit in a grid, and the chances for many steps come from multiplying by that grid again and again. Rung twenty-seven found the arrows a grid only stretches. Here one of them is the answer to a plain question: in the long run, how often is it wet? The chances settle on a list that the grid leaves where it is, whatever the start, and this step proves when and how fast.</p>
+  <p class="gesture">A chain that forgets its past keeps its one-step chances in a grid whose columns add to one. Multiplying by the grid moves the chances one step on. When every entry of the grid is above zero, the chances settle on one list that the grid only stretches, by one, and they settle from every start, faster than a fixed shrinking factor. With two conditions the whole run is written down by hand.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r30f.html">30f</a> (given chances, and the whole-chance technique), <a href="r30g.html">30g</a> (the average-adds technique), <a href="r27f.html">27f</a> (the stretch-test technique: the arrows a map only stretches), <a href="r27l.html">27l</a> (the middle-sum and leading-stretch techniques), <a href="r27e.html">27e</a> (det is 0 exactly when the columns are not free) and <a href="r22c.html">22c</a> (crowding lists settle). <a href="r30o.html">30o</a> ran a chain of this kind in continuous time. <a href="r30q.html">30q</a> turns from chances that are known to chances that must be estimated from samples.</p></div>
+</header>
+
+<section class="class step" data-step="30p1">
+  <h2 class="sthead"><span class="stno">30p1</span>The chance grid</h2>
+  <p class="stands">Stands on 30f2 (given chances), 30f3 (the whole-chance technique) and 27d (grids multiply as maps compose).</p>
+  <p data-pid="33e6b7">Take finitely many states, numbered 1 to k: wet and dry, or three car-rental offices. A chain moves from state to state in steps. It forgets its past: the chance that step n + 1 lands in state i, given that step n is in state j, is a number P<sub>ij</sub> that does not depend on n, nor on where the chain was before step n. P<sub>ij</sub> is a given chance (30f2). The k × k grid P is the chance grid of the chain. Its column j lists where the chain goes from state j, so every entry is at least 0 and every column adds to 1.</p>
+  <p data-pid="29534c">Write x<sub>n</sub> for the chance list after n steps: its entry i is the chance that step n is in state i. Its entries are at least 0 and add to 1.</p>
+  <p data-pid="fe96fc">Chance-grid technique: <b>the chance list after n steps is x<sub>n</sub> = Pⁿx<sub>0</sub>, and every column of Pⁿ adds to 1.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the chance-grid technique">
+(x_{n+1})_i = \textstyle\sum_j P(\text{at } i \text{ at } n + 1 \mid \text{at } j \text{ at } n)\,(x_n)_j @@ the whole-chance technique (30f3): the states at step n split the chances into separate cases
+(x_{n+1})_i = \textstyle\sum_j P_{ij}\,(x_n)_j,\ \ \text{so } x_{n+1} = Px_n @@ the chain forgets its past; a grid times an arrow (27d)
+x_n = P^n x_0 @@ induction on n, with P⁰ = I
+\textstyle\sum_i (Px)_i = \sum_j \big(\sum_i P_{ij}\big)x_j = \sum_j x_j @@ swap the order of a finite sum; each column of P adds to 1
+\htmlClass{new}{\text{column } j \text{ of } P^n \text{ is } P^n e_j,\ \text{and its entries add to } 1} \quad \blacksquare @@ e_j has entries adding to 1, and each P keeps the total
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: wet and dry days">
+P = \begin{pmatrix} 0.7 & 0.4 \\ 0.3 & 0.6 \end{pmatrix} @@ state 1 wet, state 2 dry: after a wet day, wet with chance 0.7; after a dry day, wet with chance 0.4
+x_0 = (1, 0) @@ today is wet
+x_1 = (0.7,\ 0.3),\ \ x_2 = (0.61,\ 0.39) @@ the chance-grid technique: 0.7 · 0.7 + 0.4 · 0.3 = 0.61
+\htmlClass{new}{x_3 = (0.583,\ 0.417),\ \ x_{10} \approx (0.5714,\ 0.4286)} \quad \blacksquare @@ the start fades; 4/7 ≈ 0.5714 is where it heads
+  </pre>
+  <p data-pid="d6ccad">The grid above is a model with chances near those of Seattle’s winter days. The chance of rain two days on is not 0.7 times 0.7: the chain may pass through a dry day and come back, and the whole-chance technique counts that road too.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the chance grid · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">30p1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="P = \begin{pmatrix} 0.7 &amp; 0.4 \\ 0.3 &amp; 0.6 \end{pmatrix},\ \ x_0 = (0, 1)"></span></span>Today is dry. Find the chance of a wet day tomorrow, and the day after.</li><li><span class="givens"><span data-tex-inline="C = \begin{pmatrix} 0.6 &amp; 0.2 &amp; 0.3 \\ 0.3 &amp; 0.7 &amp; 0.2 \\ 0.1 &amp; 0.1 &amp; 0.5 \end{pmatrix}"></span></span>A rental car moves each week between offices in Seattle (1), Portland (2) and Vancouver (3). It starts in Portland. Find its chance list after one week and after two.</li><li><span class="givens"><span data-tex-inline="P = \begin{pmatrix} 0.7 &amp; 0.4 \\ 0.3 &amp; 0.6 \end{pmatrix}"></span></span>Find P², and check that each of its columns adds to 1.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30p2">
+  <h2 class="sthead"><span class="stno">30p2</span>One settled list</h2>
+  <p class="stands">Stands on 30p1, 27f (the stretch-test technique), 27e (det is 0 exactly when the columns are not free), 27j (elimination), 22c (crowding lists settle), 8h (the triangle technique) and 11e (sequences through continuous functions).</p>
+  <p data-pid="328d05">A settled list is a chance list π with Pπ = π: entries at least 0, adding to 1, and only stretched by P, by 1 (27f). A chain started at π stays at π for ever, by the chance-grid technique. Its accepted name is in the basement. Measure the size of an arrow d by |d| = |d₁| + ⋯ + |d<sub>k</sub>|.</p>
+  <p data-pid="f96ef2">27·now met the next two techniques for the grid of the web, as the shrinking-differences and one-rank techniques. A lesson does not stand on an annex, so here are their proofs again, under the same names, for chances.</p>
+  <p data-pid="1cd054">Shrinking-differences technique: <b>if every column of P adds to 1, and m adds up the least entry of each row, then |Pd| ≤ (1 − m)|d| for every arrow d whose entries add to 0.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the shrinking-differences technique">
+m_i = \min_j P_{ij},\ \ m = m_1 + \cdots + m_k @@ the least entry of row i
+(Pd)_i = \textstyle\sum_j (P_{ij} - m_i)\,d_j @@ subtract m_i(d₁ + ⋯ + d_k) = 0
+|(Pd)_i| \le \textstyle\sum_j (P_{ij} - m_i)\,|d_j| @@ the triangle technique (8h); each P_ij − m_i is at least 0
+|Pd| \le \textstyle\sum_j |d_j| \sum_i (P_{ij} - m_i) @@ add over i, and swap the order of the finite sum
+\htmlClass{new}{|Pd| \le (1 - m)\,|d|} \quad \blacksquare @@ column j of P adds to 1, and the m_i add to m
+  </pre>
+  <p data-pid="b240d9">One-rank technique: <b>if every entry of P is above 0, there is exactly one settled list π. Every entry of π is above 0, and from every start x₀ the chance lists reach it: |Pⁿx₀ − π| ≤ 2(1 − m)ⁿ.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the one-rank technique">
+0 < m \le 1 @@ every row has an entry above 0 for its least; and m ≤ the sum of column 1, which is 1
+|P^{n+r}x_0 - P^n x_0| = |P^n(P^r x_0 - x_0)| \le (1 - m)^n \cdot 2 @@ shrinking-differences n times; the difference of two chance lists adds to 0 and has size at most 2
+P^n x_0 \to \pi\ \text{for some list } \pi @@ the lists crowd, entry by entry, so each entry settles (22c)
+\pi_i \ge 0,\ \ \textstyle\sum_i \pi_i = 1,\ \ P\pi = \pi @@ limits keep ≥ and finite sums; x ↦ Px is continuous, so P(Pⁿx₀) heads to Pπ (11e), and it is Pⁿ⁺¹x₀
+|\pi' - \pi| = |P^n(\pi' - \pi)| \le (1 - m)^n|\pi' - \pi| \to 0 @@ a second settled list π′ would have to be π
+\htmlClass{new}{|P^n x_0 - \pi| = |P^n(x_0 - \pi)| \le 2(1 - m)^n} \quad \blacksquare @@ π is settled, so Pⁿπ = π; every entry of π = Pπ is a sum with weights above 0
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: where the rental cars end up">
+C = \begin{pmatrix} 0.6 & 0.2 & 0.3 \\ 0.3 & 0.7 & 0.2 \\ 0.1 & 0.1 & 0.5 \end{pmatrix} @@ Seattle, Portland, Vancouver; every entry above 0
+(C - I)\pi = 0:\ \ -0.4\pi_1 + 0.2\pi_2 + 0.3\pi_3 = 0,\ \ 0.1\pi_1 + 0.1\pi_2 - 0.5\pi_3 = 0 @@ two of the three rows; the third is minus their sum, since the columns of C − I add to 0
+\pi = \tfrac{1}{36}(13,\ 17,\ 6) @@ elimination (27j), then scale so the entries add to 1
+m = 0.2 + 0.2 + 0.1 = 0.5 @@ the least entry of each row
+\htmlClass{new}{|C^n x_0 - \pi| \le 2 \cdot 0.5^n:\ \text{within } 0.0625 \text{ after five weeks, from any start}} \quad \blacksquare @@ the one-rank technique
+  </pre>
+  <p data-pid="c206a0">The columns of P − I always add to 0, so its rows are not free, det(P − I) = 0, and 1 is a stretch of every chance grid (27f, 27e). That much needs no entry above 0. What the entries above 0 buy is one settled list, with chances in it, reached from every start.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · one settled list · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30p2.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="C = \begin{pmatrix} 0.6 &amp; 0.2 &amp; 0.3 \\ 0.3 &amp; 0.7 &amp; 0.2 \\ 0.1 &amp; 0.1 &amp; 0.5 \end{pmatrix}"></span></span>Check that π = (13, 17, 6)/36 is settled. A company runs 360 cars on these chances. Find about how many sit at each office in the long run.</li><li><span class="givens"><span data-tex-inline="P = \begin{pmatrix} 0.7 &amp; 0.4 \\ 0.3 &amp; 0.6 \end{pmatrix}"></span></span>Find m, the settled list, and how many days make the bound 2(1 − m)ⁿ less than 0.01.</li><li><span class="givens"><span data-tex-inline="Q = \begin{pmatrix} 0 &amp; 0.5 \\ 1 &amp; 0.5 \end{pmatrix}"></span></span>Q has an entry 0. Find m for Q, and its settled list. Find Q²; is every entry above 0?</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30p3">
+  <h2 class="sthead"><span class="stno">30p3</span>Two states by hand, and the share of time</h2>
+  <p class="stands">Stands on 30p1, 30p2, 27l (the middle-sum and leading-stretch techniques), 30g1 (the average-adds technique) and 30o3 (the two-state technique).</p>
+  <p data-pid="9624b3">With two states the chain has two numbers: a, the chance of leaving state 1, and b, the chance of leaving state 2. 30o3’s two-state technique ran the same chain with rates in continuous time; here time comes in steps. Then P has columns (1 − a, a) and (b, 1 − b).</p>
+  <p data-pid="26da2f">Fading-start technique: <b>if a + b &gt; 0, the settled list is π = (b, a)/(a + b), and x<sub>n</sub> = π + (1 − a − b)ⁿ(x₀ − π) for every start x₀.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the fading-start technique">
+\lambda_1 = 1,\ \ \lambda_2 = (1 - a) + (1 - b) - 1 = 1 - a - b @@ the middle-sum technique (27l): the two stretches add to the middle sum 2 − a − b
+P\,(b, a) = (b - ab + ab,\ ab + a - ab) = (b, a) @@ so π = (b, a)/(a + b) is settled
+P\,(1, -1) = (1 - a - b,\ a - 1 + b) = (1 - a - b)(1, -1) @@ the other arrow P only stretches
+x_0 - \pi = c\,(1, -1) @@ both are chance lists, so x₀ − π has entries adding to 0
+\htmlClass{new}{x_n = \pi + (1 - a - b)^n(x_0 - \pi)} \quad \blacksquare @@ the leading-stretch technique (27l), worked by hand
+  </pre>
+  <p data-pid="9fbbf5">For the wet and dry days, a = 0.3 and b = 0.4. So π = (4/7, 3/7), the second stretch is 0.3, and the chance of a wet day n days after a wet day is 4/7 + (3/7)(0.3)ⁿ. The start is forgotten by a factor 0.3 a day.</p>
+  <p data-pid="ae7b95">The settled list also counts time. Let W<sub>t</sub> be 1 if day t is wet and 0 if not. The number of wet days among the first n is W₀ + ⋯ + W<sub>n−1</sub>, and its average is the sum of the chances of a wet day.</p>
+  <p data-pid="cf5733">Share-of-time technique: <b>if Pⁿx₀ heads to π, then the average share of the first n steps spent in state i heads to π<sub>i</sub>.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the share-of-time technique">
+E\big[\tfrac1n(W_0 + \cdots + W_{n-1})\big] = \tfrac1n\big((x_0)_i + \cdots + (x_{n-1})_i\big) @@ the average-adds technique (30g1); the average of a 0-or-1 variable is its chance of 1
+|(x_t)_i - \pi_i| \le \varepsilon \text{ for every } t \ge N @@ the lists head to π
+\Big|\tfrac1n\textstyle\sum_{t < n}(x_t)_i - \pi_i\Big| \le \tfrac{2N}{n} + \varepsilon \text{ for } n \ge N @@ the first N terms are each within 2 of π_i; the rest within ε
+\htmlClass{new}{\text{the average share heads to } \pi_i} \quad \blacksquare @@ make ε small, then n large
+  </pre>
+  <p data-pid="2411d9">So the settled list answers both questions: the chance of rain on a day far ahead, and the share of rainy days in a long winter, on average. That the share itself, and not only its average, settles with chance 1 is the chain’s form of the surely-settle technique (30h4). Its proof for chains waits much higher up the ladder.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · two states · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30p3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="a = 0.3,\ \ b = 0.4,\ \ x_0 = (1, 0)"></span></span>Find the chance of a wet day three days after a wet day, by the fading-start technique, and check it against 30p1. Find the same for ten days.</li><li><span class="givens"><span data-tex-inline="a = 0.2,\ \ b = 0.5"></span></span>A Portland commuter bikes (state 1) or drives (state 2). After a bike day she bikes again with chance 0.8; after a drive day she bikes with chance 0.5. Find the long-run share of bike days. She drove today. Find the first n for which her chance of biking on day n is within 0.01 of that share.</li><li><span class="givens"><span data-tex-inline="\pi = (0.9,\ 0.1),\ \ 1 - a - b = 0.5"></span></span>Find the a and b of a two-state chain with this settled list and this second stretch.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30p4">
+  <h2 class="sthead"><span class="stno">30p4</span>Illegal moves</h2>
+  <p class="stands">Stands on 30p1 to 30p3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+P(\text{wet in two days} \mid \text{wet today}) = 0.7^2 = 0.49\,? @@ the chain can go through a dry day and come back: 0.61
+\text{the chances have settled, so tomorrow no longer depends on today}\,? @@ given today, tomorrow’s chances are still a column of P
+\pi = (4, 3) \text{ solves } P\pi = \pi,\ \text{so it is the settled list}\,? @@ any multiple solves it; the entries must add to 1
+\text{the grid } \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix} \text{ has a settled list, so its chances settle from every start}\,? @@ from (1, 0) they flip for ever; the one-rank technique needs every entry above 0
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30p4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="P = \begin{pmatrix} 0.7 &amp; 0.4 \\ 0.3 &amp; 0.6 \end{pmatrix}"></span></span>Find the chance of wet two days after a wet day by listing both roads. <br>Find what the first line forgets.</li><li><span class="givens"><span data-tex-inline="x_{100} \approx (4/7,\ 3/7)"></span></span>Find the chance of wet tomorrow if today is dry, and if today is wet. <br>Find what has settled, and what has not.</li><li><span class="givens"><span data-tex-inline="P = \begin{pmatrix} 0.7 &amp; 0.4 \\ 0.3 &amp; 0.6 \end{pmatrix},\ \ \pi = (4, 3)"></span></span>Check Pπ = π. <br>Find what the third line forgets.</li><li><span class="givens"><span data-tex-inline="F = \begin{pmatrix} 0 &amp; 1 \\ 1 &amp; 0 \end{pmatrix},\ \ x_0 = (1, 0)"></span></span>Find x₁, x₂, x₃, and the settled list of F. Find m for F. <br>Find which condition of the one-rank technique F breaks.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">30p.4.1</span><span class="tagq">build</span>Build a chance grid with three states that has two different settled lists. <br>Find every settled list it has.</div>
+  <div class="chq"><span class="chid">30p.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="F = \begin{pmatrix} 0 &amp; 1 \\ 1 &amp; 0 \end{pmatrix}"></span></span>The chances of F never settle from (1, 0). Find the average share of the first n steps spent in state 1, and where it heads. <br>Find whether the share-of-time technique needs the chances to settle, or something weaker.</div>
+  <div class="chq"><span class="chid">30p.4.3</span><span class="tagq">converse</span>Settle whether a chain whose chances settle on one list from every start must have a grid with every entry above 0. <br>Find what the one-rank technique gives when only some power Pʳ has every entry above 0.</div>
+  <div class="chq"><span class="chid">30p.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="a,\ b,\ \pi = (\pi_1, \pi_2)"></span></span>Reroute the settled list of two states by balance: in the long run, the chance of a step from 1 to 2 equals the chance of a step from 2 to 1. <br>Find π from π₁a = π₂b, and prove this balance from Pπ = π.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r30o.html">← 30o · waiting and arriving</a><a href="r30q.html">30q · estimating from samples →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A chain that forgets its past is a Markov chain, and forgetting is the Markov property. The chance grid is its transition matrix; here its columns add to 1, while many books write it the other way up, with rows that add to 1, and multiply the chance list from the left. A grid with entries at least 0 and columns adding to 1 is a stochastic matrix. The settled list is the stationary distribution (or steady state, or invariant distribution). A chain whose grid has some power with every entry above 0 is regular, or irreducible and aperiodic. The one-rank technique is a case of the Perron–Frobenius theorem, and the shrinking factor 1 − m is Dobrushin’s ergodic coefficient. The share-of-time technique, with chance 1 in place of on average, is the ergodic theorem for Markov chains. The balance of the reroute challenge is detailed balance.</p>
+  <h3>Who said it first</h3>
+  <p>Andrey Markov introduced chains in 1906, to show that the weak law of large numbers does not need independence. In 1913 he counted the vowels and consonants in the first 20 000 letters of Pushkin’s Eugene Onegin and treated them as a two-state chain. Oskar Perron (1907) and Georg Frobenius (1912) proved that a positive matrix has one positive leading eigenvector. Wolfgang Doeblin and Roland Dobrushin gave the contraction bounds in the 1930s and 1950s. Andrey Kolmogorov set chains on the axioms of chance in the 1930s.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'one step',t:R`x_{n+1} = Px_n`,n:`The whole-chance technique.`},
+  {k:'ember',kl:'many steps',t:R`x_n = P^n x_0`,n:`Multiply again and again.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{the columns of } P^n \text{ add to } 1}`,n:`Chances stay chances.`}
+],{title:'The slides · the chance grid · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'shrink',t:R`|Pd| \le (1 - m)|d|`,n:`Differences of chance lists shrink.`},
+  {k:'ember',kl:'crowd',t:R`P^n x_0 \to \pi`,n:`So the lists settle (22c).`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{P\pi = \pi,\ \text{one } \pi,\ \text{from every start}}`,n:`Only stretched, by 1.`}
+],{title:'The slides · one settled list · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'stretches',t:R`1,\ \ 1 - a - b`,n:`The middle-sum technique.`},
+  {k:'ember',kl:'the run',t:R`x_n = \pi + (1 - a - b)^n(x_0 - \pi)`,n:`The start fades by a fixed factor.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\pi = \tfrac{(b,\ a)}{a + b}}`,n:`The share of time, too.`}
+],{title:'The slides · two states · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

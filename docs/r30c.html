@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Slice the heights, not the inputs</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r30b.html">← 30b the sets that have sizes</a><a href="r30d.html">next: 30d when limits pass through integrals →</a></p>
+  <div class="tags"><span class="tag proof">30c · proof</span></div>
+  <h1>Slice the heights, not the inputs</h1>
+  <p>Rung fifteen cut the inputs into strips and stood a rectangle on each. This step turns the knife the other way. It cuts the heights. For each height, it asks where the function stands above that height, and how big that set is. A cashier counting a till works the same way: not coin by coin in the order they came in, but all the quarters, then all the dimes, each pile times its value. A function whose height sets all have sizes is a sized function. Its total is the best that can be done from below with functions that take only a few values. For every curve rung fifteen could handle, the new total and the old area agree. But the new total also handles functions that rung fifteen could not, and it cannot see what happens on a set of size zero.</p>
+  <p class="gesture">A sized function has sized height sets. Its total is the least upper bound of the totals of step functions below it, and for continuous functions this is rung fifteen’s area.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r30b.html">30b</a> (the line’s sizes), <a href="r15c.html">15c</a> (lower and upper sums, and exactly-one-between), <a href="r10d.html">10d</a> (the squeeze and its q) and <a href="r12a.html">12a</a> (continuous functions). <a href="r30d.html">30d</a> passes limits through the new total.</p></div>
+</header>
+
+<section class="class step" data-step="30c1">
+  <h2 class="sthead"><span class="stno">30c1</span>Step functions and their totals</h2>
+  <p class="stands">Stands on 30b3.</p>
+  <p data-pid="dd1319">From here on, a <i>step function</i> takes finitely many values, each on a sized set: s = c₁ on A₁, …, cₙ on Aₙ, with the Aₖ separate and covering the line, and every cₖ ≥ 0. Its <i>total</i> is</p>
+  <p class="eqline" data-pid="c0cc68">∫ s dm = c₁ m(A₁) + ⋯ + cₙ m(Aₙ), with 0 · ∞ = 0.</p>
+  <p data-pid="c013cb">Step-total technique: <b>the total of a step function does not depend on how it is written, totals add, and a step function below another has a total no larger.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the step-total technique">
+s = c_i \text{ on } A_i,\ \ t = d_j \text{ on } B_j @@ two step functions, or one written two ways
+A_i \cap B_j \text{ sized, separate, cover the line} @@ sized-family (30b2)
+\sum_i c_i\, m(A_i) = \sum_{i, j} c_i\, m(A_i \cap B_j) @@ countable-adding (30b3), finitely many pieces
+s + t = c_i + d_j \text{ on } A_i \cap B_j \Rightarrow \textstyle\int (s + t) = \int s + \int t @@ total on the common pieces
+s \le t \Rightarrow c_i \le d_j \text{ wherever } A_i \cap B_j \text{ is not empty} @@ compare piece by piece
+\htmlClass{new}{\textstyle\int s\,dm \text{ is well made, adds, and keeps order}} \quad \blacksquare @@ the lines above
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · steps · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">30c1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="s = 2 \text{ on } [0, 1),\ \ 5 \text{ on } [1, 3),\ \ 1 \text{ on } [3, 4],\ \ 0 \text{ elsewhere}"></span></span>This is the rain rate, in mm an hour, at a gauge in Forks, Washington, over four hours. Find the total of s, and what the total measures.</li><li>Write s again with [1, 3) split into [1, 2) and [2, 3). Find the total this way.</li><li><span class="givens"><span data-tex-inline="t = 1 \text{ on } [0, 2),\ \ 3 \text{ on } [2, 4],\ \ 0 \text{ elsewhere}"></span></span>A second gauge reads t. Find the total of t. Write s + t as a step function on common pieces, and find its total.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30c2">
+  <h2 class="sthead"><span class="stno">30c2</span>Slicing the heights</h2>
+  <p class="stands">Stands on 30b2, 12a.</p>
+  <p data-pid="7e1984">From here on, a function f from the line to [0, ∞] is <i>sized</i> when every height set {f &gt; t}, the set of x with f(x) &gt; t, is sized. Its accepted name is measurable function.</p>
+  <p data-pid="35b5bc">Height-slices technique: <b>continuous functions are sized, and sums, products and the least upper bound of a list of sized functions are sized.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the height-slices technique">
+f \text{ continuous} \Rightarrow \{f > t\} \text{ is open} @@ near a point above t, f stays above t (12a)
+\{\sup_n f_n > t\} = \bigcup_n \{f_n > t\} @@ some fₙ is above t exactly when the least upper bound is
+\{f + g > t\} = \bigcup_{q \text{ fraction}} \{f > q\} \cap \{g > t - q\} @@ a fraction fits between f(x) and t − g(x) (8e)
+\{fg > t\} = \bigcup_{q > 0 \text{ fraction}} \{f > q\} \cap \{g > t/q\} \ \ (t \ge 0) @@ likewise, for f, g ≥ 0
+\htmlClass{new}{\text{each is a countable union of sized sets}} \quad \blacksquare @@ sized-family (30b2)
+  </pre>
+  <p data-pid="68ce2d">So every function the ladder has met so far is sized, and so is every limit of a rising list of them. 10d’s q, with q = 1 on the fractions and 0 elsewhere, is sized: its height sets are the empty set, the fractions, or the whole line.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · slicing · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30c2.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = (x - 2)^2 \text{ on } [0, 4],\ \ 0 \text{ elsewhere}"></span></span>Find the height sets {f &gt; t} for t = 0, 0.25, 1 and 4, and their sizes.</li><li>Find {f &gt; t} and its size for every t from 0 to 4.</li><li><span class="givens"><span data-tex-inline="q(x) = 1 \text{ at fractions},\ 0 \text{ elsewhere}"></span></span>Find {q &gt; t} for t = −1, 0, 0.5 and 1, and their sizes.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30c3">
+  <h2 class="sthead"><span class="stno">30c3</span>The total of a sized function</h2>
+  <p class="stands">Stands on 30c1, 30c2.</p>
+  <p data-pid="840d6c">From here on, for a sized f ≥ 0, its <i>total</i> is the least upper bound of the totals of step functions s with 0 ≤ s ≤ f:</p>
+  <p class="eqline" data-pid="5fe7b1">∫ f dm = sup { ∫ s dm : s a step function, s ≤ f }.</p>
+  <p data-pid="eacab9">The total over a sized set A is ∫<sub>A</sub> f dm = ∫ f · 1<sub>A</sub> dm, where 1<sub>A</sub> is 1 on A and 0 elsewhere. Its accepted name is the integral; f is integrable when its total is finite.</p>
+  <p data-pid="59dbd1">Total-from-below technique: <b>every sized f ≥ 0 is the limit of a rising list of step functions below it.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the total-from-below technique">
+s_n(x) = \min\big(n,\ \lfloor 2^n f(x) \rfloor / 2^n\big) @@ round f down to a multiple of 1/2ⁿ, and cap it at n
+s_n = k/2^n \text{ on } \{k/2^n \le f < (k+1)/2^n\} @@ finitely many values, each on a sized set (30c2)
+s_n \le s_{n+1} \le f @@ a finer rounding down is no lower
+f(x) - s_n(x) \le 1/2^n \text{ once } n \ge f(x) @@ rounding loses less than one step
+\htmlClass{new}{s_n(x) \to f(x) \text{ at every } x} \quad \blacksquare @@ and sₙ(x) → ∞ where f(x) = ∞
+  </pre>
+  <p data-pid="7f1855">For f that takes both signs, write f = f⁺ − f⁻, with f⁺ = max(f, 0) and f⁻ = max(−f, 0). When ∫|f| dm is finite, ∫f dm = ∫f⁺ dm − ∫f⁻ dm.</p>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · two sizes of truth</div>
+    <p data-pid="f6edd7">1e set a claim about each one beside a claim about the crowd. The total is a crowd claim. It speaks of the whole function at once and can be blind to any one point. Change f on a set of size 0 and no step function’s total moves, so the total does not move.</p>
+    <p data-pid="46a033"><b>A total is a claim about the whole function, and it cannot see what happens on a set of size 0.</b></p>
+    <p data-pid="95debf">So a claim can be true of f except on a size-0 set. That is a different size of claim from one true at every point. 10d’s q is 0 except on a size-0 set, and its total is 0.</p>
+    <p class="bait" data-pid="46be57">Two thermometers log a day’s temperatures, and one of them glitches for an instant at noon. Do their totals over the day agree? Which claims about the day do they share, and which not?</p>
+  </aside>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · totals · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30c3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="f(x) = x \text{ on } [0, 1],\ \ 0 \text{ elsewhere}"></span></span>Find s₁, s₂ and s₃ of the total-from-below technique: their values, and the sets they take them on. <br>Find the total of each, and a rule for the total of sₙ. <br>Find the number the totals head to, and check it against rung fifteen’s area.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30c4">
+  <h2 class="sthead"><span class="stno">30c4</span>The new total meets the old area</h2>
+  <p class="stands">Stands on 30c3, 15c.</p>
+  <p data-pid="d9a06a">Agrees-with-area technique: <b>if f ≥ 0 is continuous on [a, b], its total over [a, b] is 15’s area ∫ₐᵇ f(x) dx.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the agrees-with-area technique">
+P:\ a = x_0 < x_1 < \cdots < x_n = b,\ \ m_i, M_i \text{ the least and most of } f \text{ on } [x_{i-1}, x_i] @@ a partition and its strips (15a)
+s = m_i \text{ on each strip is a step function below } f @@ strips are sized (30b4)
+L(f, P) = \textstyle\int s\,dm \le \int_{[a,b]} f\,dm @@ the total is a least upper bound
+t \le f \text{ a step function} \Rightarrow t \le M_i \text{ on each strip} \Rightarrow \textstyle\int t \le U(f, P) @@ step-total keeps order (30c1)
+L(f, P) \le \textstyle\int_{[a,b]} f\,dm \le U(f, P) \text{ for every } P @@ the lines above
+\htmlClass{new}{\textstyle\int_{[a,b]} f\,dm = \int_a^b f(x)\,dx} \quad \blacksquare @@ exactly-one-between (15c)
+  </pre>
+  <p data-pid="7c4aa0">So nothing rung fifteen built is lost. But 10d’s q, which has no area by rung fifteen (10d, 15c), has total 0 here. The new total measures more functions, and agrees with the old one wherever the old one works.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · old meets new · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30c4.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="f(x) = x^2 \text{ on } [0, 2],\ \ P:\ 0,\ 0.5,\ 1,\ 1.5,\ 2"></span></span>Find the step function below f that the proof of 30c4 builds on these strips, and its total L(f, P). <br>Find U(f, P), and the step function above f with that total. <br>Find the total of f over [0, 2], and check that it lies between.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30c5">
+  <h2 class="sthead"><span class="stno">30c5</span>Illegal moves</h2>
+  <p class="stands">Stands on 30c1 to 30c4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\textstyle\int f\,dm = 0 \Rightarrow f = 0 \text{ at every point}\,? @@ only except on a size-0 set: 10d’s q
+\text{the new total is a sum over the inputs}\,? @@ it sums over the heights: value times the size where it is taken
+\text{a function with a jump at every fraction has no total}\,? @@ it is sized; the jumps sit on a size-0 set
+\textstyle\int (f - g) = \int f - \int g \text{ when both totals are } \infty\,? @@ ∞ − ∞ has no value; split only when ∫|f| is finite
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30c5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f = 1 \text{ at } x = 3,\ \ 0 \text{ elsewhere}"></span></span>Is a function with total 0 zero at every point? Find the total of f, and where f is not 0. <br>What is true of every sized f ≥ 0 with total 0?</li><li><span class="givens"><span data-tex-inline="f = 1 \text{ on } [0, 1],\ \ 0 \text{ elsewhere}"></span></span>Is the new total a sum over the inputs? f is 1 at each of endlessly many inputs. Find what adding f(x) over every input would give, and what the total gives.</li><li><span class="givens"><span data-tex-inline="f(\tfrac pq) = \tfrac1q \text{ for } \tfrac pq \text{ in lowest terms in } [0, 1],\ \ f = 0 \text{ elsewhere}"></span></span>f jumps at every fraction. Does it then have no total? Find {f &gt; 0.3}, and whether it is sized. Find whether f is sized, and its total.</li><li><span class="givens"><span data-tex-inline="f = 1 \text{ on } [0, \infty),\ \ g = 1 \text{ on } [1, \infty),\ \ 0 \text{ elsewhere}"></span></span>Can ∫(f − g) be found as ∫f − ∫g here? Find ∫f, ∫g and ∫(f − g). <br>Slide f to start at 2 instead. Find ∫(f − g) now. What would ∞ − ∞ have to be?</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">30c.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="f = n \text{ on } (\tfrac{1}{2^n},\ \tfrac{1}{2^{n-1}}],\ \ n = 1, 2, 3, \ldots;\ \ f = 0 \text{ elsewhere}"></span></span>f has no ceiling on (0, 1], so rung fifteen gives it no area. Prove that f is sized. <br>Build the step functions sₙ that agree with f on its first n pieces and are 0 elsewhere. Find their totals. <br>Prove that every step function below f has total at most 2. Find the total of f.</div>
+  <div class="chq"><span class="chid">30c.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="0 \cdot \infty = 0"></span></span>Write the step function 1 on [0, 1] with a second piece: 0 on the rest of the line. Find its total if 0 · ∞ were ∞ instead of 0, and which part of the step-total technique would fail. <br>Find whether the function that is ∞ at 0 and 0 elsewhere is sized, and its total.</div>
+  <div class="chq"><span class="chid">30c.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="q(x) = 1 \text{ at fractions},\ 0 \text{ elsewhere, on } [0, 1]"></span></span>Agrees-with-area: a continuous f ≥ 0 has a total equal to rung fifteen’s area. Turn it round: if f has a total on [0, 1], must it have an area? <br>Find the total of q on [0, 1]. Find its lower and upper sums for any partition. <br>Find which way of totalling gives q a number, and whether the converse holds.</div>
+  <div class="chq"><span class="chid">30c.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="f(x) = x \text{ on } [0, 1],\ \ 0 \text{ elsewhere}"></span></span>Find the total of f again, rounding down to tenths, then hundredths, then thousandths, instead of halves. <br>Find the totals of the three step functions. Check that each lies below the next. <br>Find where the proof of total-from-below used halves, and whether tenths do as well.</div>
+  <div class="chq"><span class="chid">30c.4.5</span><span class="tagq">seam</span><span class="givens"><span class="gtx">16c.4.4: is the integral the sum of the boxes, or the undoing of the slope?</span></span>Rung sixteen met a function from 1881 whose slope exists everywhere and has a ceiling, yet that slope has no area in rung fifteen’s sense. A new integral of 1902 gave every such slope a total, and this step builds that total. <br>The total agrees with rung fifteen’s area for continuous functions (30c4). Find a function on this page with a total and no area. <br>It is proved much higher up the ladder that, with this total, every slope with a ceiling totals to the change in its function. Is the total then a sum of boxes, an undoing of a slope, or both? When the two meanings part, which deserves the name integral?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r30b.html">← 30b · the sets that have sizes</a><a href="r30d.html">30d · when limits pass through integrals →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A sized function is a Lebesgue measurable function, and a step function is a simple function. The total is the Lebesgue integral, ∫ f dm or ∫ f dλ. “Except on a size-0 set” is “almost everywhere”, written a.e. Functions with ∫|f| finite are integrable, and the family of them is written L¹.</p>
+  <h3>Who said it first</h3>
+  <p>Henri Lebesgue described the idea in 1901 and gave it in full in his thesis of 1902. He later compared it to a shopkeeper who sorts the coins by value before counting them, where the old way counts them in the order they were handed over.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“q is 1 on the fractions, which are in every strip, so every upper sum is the strip’s length and the total of q is 1.” Not allowed: that reasons with rung fifteen’s upper sums, which q has no area for. The total slices heights: q = 1 on a set of size 0, so its total is 1 · 0 = 0.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'step',t:R`s = c_i \text{ on } A_i`,n:`Finitely many values.`},
+  {k:'ember',kl:'total',t:R`\sum c_i\, m(A_i)`,n:`Pile times value.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\int s \text{ is well made}}`,n:`Adds, keeps order.`}
+],{title:'The slides · steps · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'slice',t:R`\{f > t\}`,n:`Where f stands above t.`},
+  {k:'ember',kl:'sized',t:R`\text{every slice sized}`,n:`A sized function.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\sup, +, \times \text{ keep it}}`,n:`Continuous ones are sized.`}
+],{title:'The slides · slicing · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'below',t:R`0 \le s \le f`,n:`Steps under f.`},
+  {k:'ember',kl:'total',t:R`\int f = \sup \int s`,n:`Best from below.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{s_n \uparrow f}`,n:`Rounding the heights down.`}
+],{title:'The slides · totals · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'lower',t:R`L(f, P) = \int s`,n:`A step below.`},
+  {k:'ember',kl:'upper',t:R`\int t \le U(f, P)`,n:`Every step below.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\int f\,dm = \int_a^b f}`,n:`One number, two ways.`}
+],{title:'The slides · old meets new · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

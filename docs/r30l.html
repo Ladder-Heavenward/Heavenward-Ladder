@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Chance by the rules</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r30concl.html">← 30·∎ size and chance add over countably many pieces</a><a href="r30m.html">next: 30m densities →</a></p>
+  <div class="tags"><span class="tag tech">30l · technique</span></div>
+  <h1>Chance by the rules</h1>
+  <p>A lottery ticket bought at a corner store in Vancouver, a card drawn from a shuffled deck, a test result handed over in a clinic in Eugene: each asks for a chance, and each chance has to be worked out by hand before anything can be done with it. The rung has already said what a chance is, a size on a space of outcomes, and it has laid down the rules a chance obeys. This step turns those rules into tools. Where every case is equally likely, a chance is a count, and the counting of choices from long ago does the work. Where events happen one after another, a tree lays them out, and the chance of each path is a product along its branches. Where a result has to be read backwards, from what was seen to what caused it, a chance given one thing is turned around into a chance given the other, and the easiest way to do that by hand is with odds. The worked runs show how often careful people get the backwards reading wrong.</p>
+  <p class="gesture">When the cases are equally likely, a chance is the count of the good cases over the count of all of them. Along a tree, chances multiply on the branches of one path and add over separate paths. To read a result backwards, the odds before are multiplied by a ratio of two chances, and that gives the odds after.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r30f.html">30f</a> (the chance-rules technique; the chance of A given B, and the independent technique; the whole-chance and turn-around techniques), <a href="r30b.html">30b</a> (the countable-adding technique), <a href="r04j.html">4j</a> (the separate-piles, stages-multiply and choosing-counts-parts techniques) and <a href="r05stat.html">5·stat</a> (chance given that, as a fraction). <a href="r30m.html">30m</a> moves from counted cases to chances spread along the line.</p></div>
+</header>
+
+<section class="class step" data-step="30l1">
+  <h2 class="sthead"><span class="stno">30l1</span>Counting equally likely cases</h2>
+  <p class="stands">Stands on 30f1 (a chance space, with P(Ω) = 1), 30b3 (the countable-adding technique), 4j5 (the separate-piles technique), 4j6 (the stages-multiply technique) and 4j13 (the choosing-counts-parts technique).</p>
+  <p data-pid="7cc2b9">4·stat and 5·stat took a chance to be a count of cases over a count of all cases, as a way of speaking. In a chance space (30f1) it is a technique, once the cases are given equal chances. Let Ω have finitely many outcomes, and let each single outcome be an event.</p>
+  <p data-pid="88873a">Equal-cases technique: <b>if Ω has n outcomes, each one an event with the same chance, then each outcome has chance 1/n, and an event made of k outcomes has chance k/n.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the equal-cases technique">
+\Omega = \{\omega_1\} \cup \cdots \cup \{\omega_n\},\ \ \text{separate pieces} @@ each outcome is its own event
+1 = P(\Omega) = P(\{\omega_1\}) + \cdots + P(\{\omega_n\}) @@ P(Ω) = 1 (30f1); size adds over separate pieces (the countable-adding technique, 30b3)
+1 = n\,c,\ \ c = \tfrac{1}{n} @@ every outcome has the same chance c
+A = \{\omega_{i_1}\} \cup \cdots \cup \{\omega_{i_k}\} @@ an event of k outcomes, split into its outcomes
+\htmlClass{new}{P(A) = k\cdot\tfrac{1}{n} = \tfrac{k}{n}} \quad \blacksquare @@ the countable-adding technique again
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: a lottery ticket">
+|\Omega| = \tbinom{49}{6} = 13\,983\,816 @@ a ticket picks 6 of the numbers 1 to 49, and so does the draw (the choosing-counts-parts technique, 4j13)
+\text{every draw equally likely} @@ the guess the machine is built to make true
+\text{jackpot: } \tfrac{1}{13\,983\,816} @@ the equal-cases technique, k = 1
+\text{exactly 3 right: } \tbinom{6}{3}\tbinom{43}{3} = 20 \times 12\,341 = 246\,820 @@ choose 3 of the 6 winning numbers, then 3 of the 43 others (the stages-multiply technique, 4j6)
+\htmlClass{new}{P(\text{exactly 3 right}) = \tfrac{246\,820}{13\,983\,816} \approx 0.01765,\ \text{about 1 in 57}} \quad \blacksquare @@ the equal-cases technique
+  </pre>
+  <p data-pid="b33327">Equal chances for the cases are a guess about the world, not a fact of counting. A lottery machine is built and tested to make the guess good; a die with a chipped corner is not. The technique says what follows once the guess is made. Whether to make it is checked against tallies, as 15·stat checked a density against a histogram.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · equal cases · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">30l1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\binom{49}{6} = 13\,983\,816"></span></span>Find the chance that a ticket has exactly 4 of the 6 numbers right, and write it as about 1 in how many.</li><li><span class="givens"><span data-tex-inline="\text{two fair dice}"></span></span>Find the chance that the larger of the two numbers shown is exactly 4. Count the cases where both are at most 4, and those where both are at most 3.</li><li><span class="givens"><span data-tex-inline="\text{five cards from a deck of 52}"></span></span>Find the chance that the hand holds exactly two aces.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30l2">
+  <h2 class="sthead"><span class="stno">30l2</span>Trees, and the chance of at least one</h2>
+  <p class="stands">Stands on 30l1, 30f2 (the chance of A given B, and the independent technique), 30f1 (the chance-rules technique), 30b3 (the countable-adding technique) and 4b (induction).</p>
+  <p data-pid="4b3100">Many chances come from things done one after another: a card, then another card; a throw, then another throw. A <i>tree</i> draws them so. Each branch carries the chance of its step given the path that leads to it. A path from the root to a leaf is one way the whole run can go, and two different paths are separate events.</p>
+  <p data-pid="365721">Branch-product technique: <b>the chance of a path through a tree is the product of the given chances on its branches; and the chance of an event is the sum of the chances of the separate paths that make it up.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the branch-product technique">
+P(A_1 \text{ and } A_2) = P(A_1)\,P(A_2 \mid A_1) @@ the chance of A₂ given A₁ (30f2), multiplied out, with P(A₁) &gt; 0
+P(A_1 \text{ and } \cdots \text{ and } A_n) = P(A_1 \text{ and } \cdots \text{ and } A_{n-1})\,P(A_n \mid A_1 \text{ and } \cdots \text{ and } A_{n-1}) @@ the same line, with the first n − 1 steps as one event
+P(\text{path}) = P(A_1)\,P(A_2 \mid A_1)\cdots P(A_n \mid A_1 \text{ and } \cdots \text{ and } A_{n-1}) @@ induction on n (4b)
+E = \text{path}_1 \cup \cdots \cup \text{path}_m,\ \ \text{separate} @@ different paths part at some branch
+\htmlClass{new}{P(E) = P(\text{path}_1) + \cdots + P(\text{path}_m)} \quad \blacksquare @@ the countable-adding technique (30b3)
+  </pre>
+  <p data-pid="63b9a3">At-least-one technique: <b>if A₁, …, Aₙ are independent, the chance that at least one of them happens is 1 − (1 − P(A₁))(1 − P(A₂))⋯(1 − P(Aₙ)).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the at-least-one technique">
+P(\text{not } A \text{ and } B) = P(B) - P(A \text{ and } B) = (1 - P(A))\,P(B) @@ B splits into its part in A and its part out of A (30b3); this is the independent technique (30f2)
+\text{not } A_1, \ldots, \text{not } A_n \text{ are independent} @@ the line above, one event at a time
+P(\text{none happens}) = (1 - P(A_1))\cdots(1 - P(A_n)) @@ none happens = not A₁ and … and not Aₙ
+\htmlClass{new}{P(\text{at least one}) = 1 - (1 - P(A_1))\cdots(1 - P(A_n))} \quad \blacksquare @@ the chance-rules technique (30f1): P(not E) = 1 − P(E)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: two cards, and the gamblers’ question">
+P(\text{ace, ace}) = \tfrac{4}{52}\cdot\tfrac{3}{51} = \tfrac{1}{221} @@ the branch-product technique: after one ace, 3 are left among 51 cards
+P(\text{exactly one ace}) = \tfrac{4}{52}\cdot\tfrac{48}{51} + \tfrac{48}{52}\cdot\tfrac{4}{51} = \tfrac{32}{221} @@ two separate paths, added
+P(\text{at least one six in 4 throws}) = 1 - \big(\tfrac56\big)^4 = \tfrac{671}{1296} \approx 0.518 @@ the at-least-one technique: separate throws are independent
+\htmlClass{new}{P(\text{at least one double six in 24 throws of two dice}) = 1 - \big(\tfrac{35}{36}\big)^{24} \approx 0.491} \quad \blacksquare @@ the same technique: a little less than an even bet
+  </pre>
+  <p data-pid="f6024c">The last two lines were a gambler’s question in Paris in 1654. Four throws for one six, and twenty four throws for a double six, keep the same ratio of throws to faces. The gambler had found by playing that the first bet won more often than half the time and the second did not. The technique shows why: chances of at least one do not grow in proportion to the throws.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · trees · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30l2.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{three cards from a deck of 52}"></span></span>Find the chance that all three are hearts, by a path of the tree.</li><li><span class="givens"><span data-tex-inline="\text{three smoke alarms, each failing with chance } 0.05"></span></span>The alarms fail independently. Find the chance that at least one sounds in a fire.</li><li><span class="givens"><span data-tex-inline="23 \text{ people},\ \ 365 \text{ equally likely birthdays}"></span></span>Find the chance that no two share a birthday, as a path of a tree that seats one person at a time. Then find the chance that at least two do.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30l3">
+  <h2 class="sthead"><span class="stno">30l3</span>Turning a given chance around, by hand</h2>
+  <p class="stands">Stands on 30l2 and 30f3 (the turn-around and whole-chance techniques).</p>
+  <p data-pid="9bec22">A test result is seen. What is wanted is the chance of the cause given the result, and what is known is the chance of the result given the cause. The turn-around technique of 30f3 does this. By hand there are two good ways. The first is to count an imagined crowd. The second is to work with <i>odds</i>: the odds of A are P(A) / P(not A), so a chance of 1/4 is odds of 1/3, one to three.</p>
+  <p data-pid="d53552">Odds-update technique: <b>if P(E) &gt; 0 and P(E | not A) &gt; 0, the odds of A given E are the odds of A times the ratio P(E | A) / P(E | not A).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the odds-update technique">
+P(A \mid E) = \tfrac{P(E \mid A)\,P(A)}{P(E)} @@ the turn-around technique (30f3)
+P(\text{not } A \mid E) = \tfrac{P(E \mid \text{not } A)\,P(\text{not } A)}{P(E)} @@ the same, for not A
+\tfrac{P(A \mid E)}{P(\text{not } A \mid E)} = \tfrac{P(E \mid A)}{P(E \mid \text{not } A)}\cdot\tfrac{P(A)}{P(\text{not } A)} @@ divide: P(E) cancels
+\htmlClass{new}{\text{odds after} = \text{ratio} \times \text{odds before}} \quad \blacksquare @@ the odds of A given E, and the odds of A
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: a screening test">
+P(A) = 0.01,\ \ P(E \mid A) = 0.9,\ \ P(E \mid \text{not } A) = 0.09 @@ 1 in 100 have the condition; the test finds 9 in 10 of them; it wrongly flags 9 in 100 of the rest
+\text{crowd of } 10\,000:\ \ 100 \text{ have it, } 90 \text{ flagged};\ \ 9900 \text{ do not, } 891 \text{ flagged} @@ the branch-product technique, in counts
+P(A \mid E) = \tfrac{90}{90 + 891} = \tfrac{90}{981} = \tfrac{10}{109} \approx 0.092 @@ the whole-chance technique (30f3) for P(E), then the turn-around technique
+\text{odds: } \tfrac{1}{99}\times\tfrac{0.9}{0.09} = \tfrac{10}{99},\ \ \text{chance } \tfrac{10}{109} @@ the odds-update technique: the same answer, in one line
+\htmlClass{new}{\text{a second test, independent given the condition: } \tfrac{10}{99}\times 10 = \tfrac{100}{99},\ \ \text{chance} \approx 0.50} \quad \blacksquare @@ the odds-update technique again, with the first answer as the odds before
+  </pre>
+  <p data-pid="5c1d7d">A positive result on a test that is right nine times in ten leaves a chance of about one in eleven. The condition is rare, and the many people without it make most of the flags. The ratio 0.9 / 0.09 = 10 is all the test can say. What the result means also needs the odds before, and those come from outside the test.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · odds · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30l3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="P(A) = \tfrac{1}{500},\ \ P(E \mid A) = 0.99,\ \ P(E \mid \text{not } A) = 0.02"></span></span>Find P(A | E) by counting a crowd of 100 000, and again by the odds-update technique.</li><li><span class="givens"><span data-tex-inline="\text{the test of part a, done twice}"></span></span>The two results are independent given the condition. Find the chance of the condition after two positive results.</li><li><span class="givens"><span data-tex-inline="60\%\ \text{from Oliver},\ 2\%\ \text{bruised};\ \ 40\%\ \text{from Kelowna},\ 5\%\ \text{bruised}"></span></span>Two Okanagan orchards send apples to one packing house. Find the chance that an apple is bruised, and the chance that a bruised apple came from Kelowna.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30l4">
+  <h2 class="sthead"><span class="stno">30l4</span>Illegal moves</h2>
+  <p class="stands">Stands on 30l1 to 30l3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{the test finds 9 in 10 who have it, so a flagged person has it with chance } 0.9\,? @@ that is P(E | A); the chance wanted is P(A | E), about 0.092
+P(\text{at least one six in 4 throws}) = \tfrac16 + \tfrac16 + \tfrac16 + \tfrac16 = \tfrac23\,? @@ the throws are not separate events: two sixes are counted twice
+\text{red has come up five times running, so black is due}\,? @@ separate spins are independent: the chance of black is the same as before
+P(\text{ace, ace}) = \tfrac{4}{52}\cdot\tfrac{4}{52}\ \text{for two cards from one deck}\,? @@ the second draw depends on the first: it is 4/52 · 3/51
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30l4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="P(A) = 0.01,\ \ P(E \mid A) = 0.9,\ \ P(E \mid \text{not } A) = 0.09"></span></span>Find P(E | A) and P(A | E), and how far apart they are. <br>Find what the first line swaps.</li><li><span class="givens"><span data-tex-inline="4 \text{ throws of one die}"></span></span>Find the chance of at least one six by the at-least-one technique, and the sum of the four chances. <br>Find why adding fails here, and what the sum would be after 7 throws.</li><li><span class="givens"><span data-tex-inline="18 \text{ red},\ 18 \text{ black},\ 2 \text{ green pockets}"></span></span>A roulette wheel at a casino in Reno has 38 pockets. Find the chance of black on the next spin, before and after five reds in a row. <br>Find the slip.</li><li><span class="givens"><span data-tex-inline="\text{two cards from one deck}"></span></span>Find the chance of two aces by the branch-product technique, and the number in the fourth line. <br>Find what the fourth line forgets.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">30l.5.1</span><span class="tagq">build</span>A game show has three doors, a car behind one and goats behind two, placed with equal chances. You pick door 1. The host, who knows where the car is, opens another door that hides a goat, choosing at random when both do. Then you may switch. <br>Build the tree, and find the chance that switching wins the car.</div>
+  <div class="chq"><span class="chid">30l.5.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="X \text{ spun on } [0, 1),\ \ P(X \in [a, b]) = b - a"></span></span>A spinner lands at X, with chances given by length (30b4). <br>Find P(X = ½). Find whether 30f2 gives a meaning to the chance that X &gt; 0.4 given that X = ½, and why the turn-around and odds-update techniques cannot be used here.</div>
+  <div class="chq"><span class="chid">30l.5.3</span><span class="tagq">converse</span>Prove that if P(B) &gt; 0, then A and B are independent exactly when P(A | B) = P(A). <br>Then prove that two separate events, each with chance above 0, are never independent.</div>
+  <div class="chq"><span class="chid">30l.5.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="23 \text{ people},\ \ 365 \text{ birthdays}"></span></span>Reroute 30l2.1c by the equal-cases technique alone. Count the lists of 23 birthdays, and the lists with no two the same, by 4j. <br>Check that the chance matches the tree.</div>
+  <div class="chq"><span class="chid">30l.5.5</span><span class="tagq">seam</span>In 1964 a woman was robbed in Los Angeles. Witnesses saw a couple run to a yellow car: a woman with a blond ponytail, and a man with a beard and a moustache. At the trial the prosecutor proposed a chance for each feature, such as 1/10 for a yellow car and 1/4 for a man with a moustache, and a mathematics instructor multiplied them. Six chances gave 1 in 12 million, and a couple who matched was convicted. In 1968 the state’s highest court reversed the verdict. <br>Find what the multiplication needs from the at-least-one and independent techniques. Suppose 12 million couples could have been there, each matching with chance 1 in 12 million. Find the chance that some other couple also matched, given that at least one did. Is a tiny chance of matching the chance of being innocent?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r30concl.html">← 30·∎ · size and chance add over countably many pieces</a><a href="r30m.html">30m · densities →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The equal-cases technique is the classical definition of probability, read as a technique: outcomes that are equally likely, then favourable cases over all cases. A tree of chances is a probability tree (or tree diagram). The branch-product technique is the multiplication rule, or chain rule, of probability; adding over paths is the addition rule for disjoint events, with the law of total probability behind it. The at-least-one technique is the complement rule at work. Odds keep their name; the ratio P(E | A) / P(E | not A) is the likelihood ratio, or Bayes factor, and the odds-update technique is Bayes' rule in odds form. Counting an imagined crowd is the method of natural frequencies. For a test, P(E | A) is its sensitivity, P(not E | not A) its specificity, P(A) the prevalence or base rate, and P(A | E) the positive predictive value. Swapping P(E | A) for P(A | E) is the base-rate fallacy, called in a courtroom the prosecutor's fallacy. The belief that black is due after a run of red is the gambler's fallacy. The three doors are the Monty Hall problem; the shared birthdays, the birthday problem.</p>
+  <h3>Who said it first</h3>
+  <p>The gambler of 1654 was Antoine Gombaud, the Chevalier de Méré, and Blaise Pascal and Pierre de Fermat answered him in letters that began the calculus of chance. Pierre-Simon Laplace set out the classical definition in his Analytic Theory of Probabilities (1812) and his Philosophical Essay (1814). Alan Turing and I. J. Good worked with odds and the logarithm of the likelihood ratio, which they called the weight of evidence, at Bletchley Park in the Second World War; Harold Jeffreys used the Bayes factor in his Theory of Probability (1939). Richard von Mises posed the birthday problem in 1939. Steve Selvin put the three doors in a letter to The American Statistician in 1975, and Marilyn vos Savant's answer in 1990 drew thousands of letters insisting she was wrong. Amos Tversky and Daniel Kahneman showed in the 1970s how often people ignore the base rate; William Thompson and Edward Schumann named the prosecutor's fallacy in 1987. Gerd Gigerenzer and Ulrich Hoffrage showed in 1995 that natural frequencies make the turn-around easier. The robbery of 1964 is People v. Collins: the Supreme Court of California reversed the conviction in 1968, and its opinion worked out the chance, about 0.41, that another couple matched. Lotto 6/49 began in Canada in 1982.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'the pieces',t:R`1 = P(\Omega) = \textstyle\sum_i P(\{\omega_i\})`,n:`Size adds over separate pieces.`},
+  {k:'ember',kl:'so each',t:R`P(\{\omega_i\}) = \tfrac{1}{n}`,n:`All the same.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{P(A) = \tfrac{k}{n}}`,n:`A chance is a count.`}
+],{title:'The slides · equal cases · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'one path',t:R`P(A_1)\,P(A_2 \mid A_1)\cdots`,n:`Multiply along the branches.`},
+  {k:'ember',kl:'many paths',t:R`P(E) = \textstyle\sum P(\text{path})`,n:`Add over separate paths.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{1 - \textstyle\prod (1 - P(A_i))}`,n:`At least one, by the nots.`}
+],{title:'The slides · trees · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'turn twice',t:R`P(A \mid E),\ \ P(\text{not } A \mid E)`,n:`The turn-around technique for each.`},
+  {k:'ember',kl:'divide',t:R`\tfrac{P(E \mid A)}{P(E \mid \text{not } A)}\cdot\tfrac{P(A)}{P(\text{not } A)}`,n:`P(E) cancels.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{odds after} = \text{ratio} \times \text{odds before}}`,n:`One line by hand.`}
+],{title:'The slides · odds · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

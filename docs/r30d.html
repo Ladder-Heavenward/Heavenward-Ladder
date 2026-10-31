@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>When limits pass through integrals</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r30c.html">← 30c slice the heights, not the inputs</a><a href="r30e.html">next: 30e either order →</a></p>
+  <div class="tags"><span class="tag proof">30d · proof</span></div>
+  <h1>When limits pass through integrals</h1>
+  <p>Rung twenty-three asked when a limit of functions can pass through an integral, and needed the functions to settle everywhere at once. That demand is strict. Many lists of functions settle point by point, each at its own pace, and still behave. The new total does better. If the functions only rise, their totals rise to the total of the limit. If they do not rise, the total of the limit is still no more than the lowest the totals keep coming back to. And if every function in the list stays under one fixed function with a finite total, the limit passes through the integral with no other demand. These three techniques are what the rest of the rung, and all of chance, stands on.</p>
+  <p class="gesture">Rising lists pass their limit through the total; any list of positive functions loses no total in the limit; and a list fenced by one function with a finite total passes its limit through exactly.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r30c.html">30c</a> (sized functions and their totals), <a href="r30b.html">30b</a> (countable adding), <a href="r22a.html">22a</a> (a climb under a ceiling arrives) and <a href="r23d.html">23d</a> (settling everywhere at once). <a href="r30e.html">30e</a> uses all three to swap the order of a double total.</p></div>
+</header>
+
+<section class="class step" data-step="30d1">
+  <h2 class="sthead"><span class="stno">30d1</span>Rising lists</h2>
+  <p class="stands">Stands on 30c3, 30b3, 22a.</p>
+  <p data-pid="938ab6">Rising-limit technique: <b>if 0 ≤ f₁ ≤ f₂ ≤ ⋯ are sized and fₙ(x) settles at f(x) at every x, then ∫fₙ dm settles at ∫f dm.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: rising sets">
+A_1 \subseteq A_2 \subseteq \cdots \text{ sized},\ \ A = \bigcup A_n @@ a rising list of sets
+A = A_1 \cup (A_2 \setminus A_1) \cup (A_3 \setminus A_2) \cup \cdots @@ separate sized pieces (30b2)
+\htmlClass{new}{m(A_n) \to m(A)} \quad \blacksquare @@ countable-adding (30b3): m(Aₙ) is a partial sum
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: the rising-limit technique">
+\textstyle\int f_n \le \int f_{n+1} \le \int f @@ a step below fₙ is below fₙ₊₁ and below f
+\textstyle\int f_n \to L \le \int f @@ a climb under a ceiling arrives (22a)
+s = c_i \text{ on } A_i \text{ a step function} \le f,\ \ 0 < c < 1 @@ now show L is at least ∫s
+E_n = \{f_n \ge c\,s\} \text{ rises to the whole line} @@ where s(x) &gt; 0, f(x) ≥ s(x) &gt; c s(x), and fₙ(x) settles at f(x)
+\textstyle\int f_n \ge c \sum_i c_i\, m(A_i \cap E_n) \to c \int s @@ fₙ ≥ c s on Eₙ; rising sets, above
+L \ge c \textstyle\int s \text{ for every } c < 1 \text{ and every step } s \le f @@ let c rise to 1
+\htmlClass{new}{\textstyle\int f_n\,dm \to \int f\,dm} \quad \blacksquare @@ ∫f is the least upper bound of such ∫s
+  </pre>
+  <p data-pid="0ee70a">Now the total adds: if f and g are sized and at least 0, ∫(f + g) dm = ∫f dm + ∫g dm. Take rising steps sₙ ↑ f and tₙ ↑ g (30c3). Then sₙ + tₙ ↑ f + g, and step totals add (30c1). The total also scales: ∫cf dm = c∫f dm for c ≥ 0.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · rising · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">30d1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f_n(x) = \min(n,\ 1/\sqrt{x}) \text{ on } (0, 1],\ \ 0 \text{ elsewhere}"></span></span>Find where fₙ = n. Prove that f₁ ≤ f₂ ≤ f₃ ≤ ⋯.</li><li>Find the total of fₙ, piece by piece, with agrees-with-area on the piece where fₙ = 1/√x. Find the totals for n = 1, 2, 3 and 10.</li><li>Find the limit of fₙ(x) at each x, and its total by the rising-limit technique. Compare with the improper area of 1/√x on (0, 1] from 16i.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30d2">
+  <h2 class="sthead"><span class="stno">30d2</span>Nothing is gained in the limit</h2>
+  <p class="stands">Stands on 30d1.</p>
+  <p data-pid="351799">For a list of reals a₁, a₂, …, let bₙ be the greatest lower bound of aₙ, aₙ₊₁, aₙ₊₂, …. The bₙ rise. From here on, the number they head to is the <i>lower limit</i> of the list: the lowest value the list keeps coming back near. If the list settles, its lower limit is where it settles.</p>
+  <p data-pid="8d57d2">Lower-limit technique: <b>if fₙ ≥ 0 are sized, the total of their lower limit is at most the lower limit of their totals.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the lower-limit technique">
+g_n = \inf_{k \ge n} f_k \text{ is sized, and } g_n \uparrow \liminf f_k @@ {gₙ ≥ t} sits between countable sized sets (30c2); the bₙ above
+g_n \le f_k \text{ for every } k \ge n \Rightarrow \textstyle\int g_n \le \inf_{k \ge n} \int f_k @@ step-total keeps order (30c1)
+\textstyle\int g_n \to \int \liminf f_k @@ rising-limit (30d1)
+\htmlClass{new}{\textstyle\int \liminf f_n \le \liminf \int f_n} \quad \blacksquare @@ let n grow on both sides
+  </pre>
+  <p data-pid="dfefbb">The two sides can differ. Let fₙ be 1 on [n, n + 1] and 0 elsewhere. Every fₙ has total 1. At every x, fₙ(x) is 0 once n &gt; x, so the lower limit of the fₙ is 0, with total 0. The bump slid off to the right and took its total with it.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · lower limit · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30d2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="f_n = n \text{ on } (0, \tfrac1n],\ \ 0 \text{ elsewhere}"></span></span>Find the total of each fₙ. <br>Find the limit of fₙ(x) at x = 0.3, at x = 0.001, and at every x. <br>Find both sides of the lower-limit technique, and which is larger. <br>Find where the total went.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30d3">
+  <h2 class="sthead"><span class="stno">30d3</span>A fence makes the limit pass</h2>
+  <p class="stands">Stands on 30d2.</p>
+  <p data-pid="adca26">Fenced-limit technique: <b>if fₙ(x) settles at f(x) at every x, and |fₙ| ≤ g for every n with ∫g dm finite, then ∫fₙ dm settles at ∫f dm.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the fenced-limit technique">
+g + f_n \ge 0,\ \ g - f_n \ge 0 @@ the fence
+\textstyle\int (g + f) \le \liminf \int (g + f_n) = \int g + \liminf \int f_n @@ lower-limit (30d2); totals add (30d1)
+\textstyle\int (g - f) \le \int g - \limsup \int f_n @@ the same, with −fₙ; limsup is the upper limit
+\limsup \textstyle\int f_n \le \int f \le \liminf \int f_n @@ take away the finite ∫g
+\htmlClass{new}{\textstyle\int f_n\,dm \to \int f\,dm} \quad \blacksquare @@ the upper limit is at most the lower limit, so the list settles
+  </pre>
+  <p data-pid="0da03a">The fence is what the sliding bump of 30d2 lacked: no single g with a finite total stands over all of [n, n + 1] for every n. Compare 23e, which passed a limit through rung fifteen’s area only when the list settled everywhere at once. The fence asks less. The list may settle at its own pace at each point.</p>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · loose, then locked</div>
+    <p data-pid="5cade4">2c gathered things loosely under a rule, then locked them. A list of functions that settles point by point is loose: each point goes at its own pace, and the totals can slide away, as the bump did.</p>
+    <p data-pid="095526"><b>Let each point settle at its own pace, then lock the whole list under one fence with a finite total.</b></p>
+    <p data-pid="f0f67d">The fence is the lock. Once one function with a finite total stands over the whole list, no total can escape, and the limit passes through exactly. Nothing about the pace has changed. Only the room to escape is gone.</p>
+    <p class="bait" data-pid="63608d">The fraction of a lake frozen each night creeps toward its winter value, at its own pace in each bay. Which fence would let you pass the limit through the lake’s total?</p>
+  </aside>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · fenced · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30d3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f_n(x) = x^n \text{ on } [0, 1],\ \ 0 \text{ elsewhere}"></span></span>Find the limit f(x) at each x. Find a fence g with a finite total. <br>Find ∫fₙ, and check that it settles at ∫f.</li><li><span class="givens"><span data-tex-inline="f_n(x) = n x^n \text{ on } [0, 1),\ \ 0 \text{ elsewhere}"></span></span>Find the limit at each x, and ∫fₙ. Find whether the totals settle at the total of the limit. <br>Could a fence with a finite total stand over every fₙ? Find what the fenced-limit technique answers, without trying to build one.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30d4">
+  <h2 class="sthead"><span class="stno">30d4</span>Illegal moves</h2>
+  <p class="stands">Stands on 30d1 to 30d3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+f_n \to f \text{ at every point} \Rightarrow \textstyle\int f_n \to \int f\,? @@ the sliding bump: totals 1, limit total 0
+\textstyle\int \liminf f_n = \liminf \int f_n \text{ always}\,? @@ lower-limit gives only ≤
+|f_n| \le g \text{ with } \textstyle\int g = \infty \text{ is fence enough}\,? @@ g = 1 fences the sliding bump, and the limit still fails
+\text{the list must settle everywhere at once, as in 23e}\,? @@ the fence asks only for settling point by point
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30d4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f_n = \tfrac1n \text{ on } [0, n],\ \ 0 \text{ elsewhere}"></span></span>Does settling at every point carry the totals with it? Find the limit at each x, how far fₙ is from it at its worst, and each total.</li><li><span class="givens"><span data-tex-inline="f_n = 1 \text{ on } [0, 1] \text{ for odd } n,\ \ 1 \text{ on } [1, 3] \text{ for even } n,\ \ 0 \text{ elsewhere}"></span></span>Is the lower-limit line always an equality? Find the lower limit of fₙ(x) at each x, its total, and the lower limit of the totals.</li><li><span class="givens"><span data-tex-inline="f_n = 1 \text{ on } [n, n+1],\ 0 \text{ elsewhere};\ \ g = 1 \text{ everywhere}"></span></span>g stands over every fₙ. Is that fence enough? Find ∫g, and the line of the fenced-limit proof that fails with it.</li><li><span class="givens"><span data-tex-inline="f_n(x) = x^n \text{ on } [0, 1],\ \ 0 \text{ elsewhere}"></span></span>Must a list settle everywhere at once for its totals to pass? Find whether this list settles everywhere at once on [0, 1] (23d), and whether its totals settle at the total of its limit (30d3.1).</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">30d.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{round } k = 1, 2, 3, \ldots:\ \ 1 \text{ on } [\tfrac jk, \tfrac{j+1}k] \text{ for } j = 0, 1, \ldots, k-1, \text{ in turn}"></span></span>List the blocks in order, each 0 off its block: f₁ = 1 on [0, 1], then f₂ and f₃ on the halves, then f₄, f₅ and f₆ on the thirds, and so on. Build the first six. <br>Prove that the totals head to 0. Find the first n with ∫fₙ below 0.01. <br>Prove that fₙ(x) settles at no x in [0, 1].</div>
+  <div class="chq"><span class="chid">30d.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="f_n = 1 \text{ on } [n, \infty),\ \ 0 \text{ elsewhere}"></span></span>The rising-limit technique needs a rising list. This list falls. Find its limit at each x, each total, and the total of the limit. <br>Find a demand on f₁ that makes a falling list of fₙ ≥ 0 pass its limit through the total, and which technique of 30d then does it.</div>
+  <div class="chq"><span class="chid">30d.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="f_n = \tfrac1n \text{ on } [n,\ n + \sqrt n],\ \ 0 \text{ elsewhere}"></span></span>Fenced-limit: a fence with a finite total makes the limit pass. Turn it round: if the limit passes, must there be such a fence? <br>Find the limit at each x, each total, and whether the totals settle at the total of the limit. <br>Prove that any g with g ≥ fₙ for every n has g ≥ 1/n on [n, n + 1]. Find what that does to ∫g.</div>
+  <div class="chq"><span class="chid">30d.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="f_n \text{ continuous on } [p, q],\ \ f_n \to f \text{ everywhere at once on } [p, q]"></span></span>23e passed this limit through the area. Prove it another way, from the fenced-limit technique, with each function 0 off [p, q]. <br>f is continuous (23d), so it has a ceiling M on [p, q]. Find N with |fₙ − f| ≤ 1 for n ≥ N, and a fence for those fₙ with a finite total. <br>Find which of the two techniques asks less of the list.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r30c.html">← 30c · slice the heights, not the inputs</a><a href="r30e.html">30e · either order →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The rising-limit technique is the monotone convergence theorem. The lower-limit technique is Fatou’s lemma, and the lower and upper limits are the limit inferior and limit superior, lim inf and lim sup. The fenced-limit technique is the dominated convergence theorem, and the fence g is a dominating function.</p>
+  <h3>Who said it first</h3>
+  <p>Henri Lebesgue proved the fenced limit, first for a constant fence, in 1902 and in general by 1908. Beppo Levi proved the rising limit in 1906, and Pierre Fatou proved the lower limit in 1906 in his work on series.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“Each fₙ is under g, so f is under g, so ∫f is at most ∫g, so ∫fₙ settles at ∫f.” Not allowed: being bounded by the same number does not make a list settle. The proof needs lower-limit twice, once from each side.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'rise',t:R`f_n \uparrow f`,n:`Point by point.`},
+  {k:'ember',kl:'totals',t:R`\int f_n \uparrow L \le \int f`,n:`Under a ceiling.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\int f_n \to \int f}`,n:`And totals add.`}
+],{title:'The slides · rising · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'floor',t:R`g_n = \inf_{k \ge n} f_k`,n:`Rises.`},
+  {k:'ember',kl:'compare',t:R`\int g_n \le \int f_k`,n:`For k ≥ n.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\int \liminf \le \liminf \int}`,n:`Total can escape.`}
+],{title:'The slides · lower limit · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'fence',t:R`|f_n| \le g,\ \int g < \infty`,n:`One fence for all.`},
+  {k:'ember',kl:'both ways',t:R`\limsup \le \int f \le \liminf`,n:`From lower-limit twice.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\int f_n \to \int f}`,n:`Pace does not matter.`}
+],{title:'The slides · fenced · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

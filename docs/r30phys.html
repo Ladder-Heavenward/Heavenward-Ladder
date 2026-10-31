@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How is energy shared among molecules?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r30bio.html">← 30·bio how does a gene spread through a population?</a><a href="r30comp.html">next: 30·comp how much can a noisy line carry? →</a></p>
+  <div class="tags"><span class="tag phys">30·phys · physics</span></div>
+  <h1>How is energy shared among molecules?</h1>
+  <p>How is energy shared among molecules? A litre of air in a room in Victoria holds about twenty-five thousand billion billion molecules, and a fixed amount of energy among them. Some race, some crawl, some spin, and a few shake along their bonds. No one can follow them. Yet the air has one temperature, one pressure, and a heat capacity that can be looked up in a table and is the same next year. The newsflash before this page found the spread of speeds by asking that no direction be special. But how is the energy shared out among all the ways a molecule can hold it: moving, turning, shaking, sitting high up in the air or low down? What makes the question hard is that every sharing out that adds up to the right total is allowed. Why should one of them be the one we see? The answer this page gives is a counting answer. The sharing we see is the one that can happen in the most ways, by an amount so large that the others never show. Rung twenty-eight found best points on a constraint, and rung twenty-two counted ways in bits. Together they find the sharing, and from it the thin air on a mountain top, the faint pull on protons in a hospital scanner, the heat a gas soaks up, and why the shaking of a nitrogen molecule takes no part at room temperature.</p>
+  <p class="gesture">Hand out a fixed total of energy among a great many molecules, each of which can sit in any of its states. The number of ways to do it with given shares is largest, by far, at one set of shares, and those shares can be found as a best point on a constraint: the uphill arrow of the count lines up with the uphill arrows of the two totals that are held fixed. The answer is that a state’s share falls off as an exponential in its energy, at a pace set by the temperature. One sum over all the states then holds everything: the average energy is a slope of its log, and the spread of the energy is the next slope. A body cut off with an exact energy, a body in touch with a big room, and a body that can swap molecules with the room as well all give the same averages, because the spread is a tiny share of the whole. Every part of a molecule’s energy that goes as a square averages half of the same small amount, which counts the heat a gas or a solid soaks up. And a shake that comes in lumps too big for the temperature to pay for sits still, frozen out.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r28g.html">28g</a> (the lines-up technique), <a href="r22comp.html">22·comp</a> (the ways-to-bits and share-count techniques), <a href="r22k.html">22k</a> (the size of n!), <a href="r17a.html">17a</a> (the log-bounds technique), <a href="r22e.html">22e</a> (the geometric sum), <a href="r28then.html">28·then</a> (free energy, chemical potential, and C_V of air), <a href="r30f.html">30f</a> (chance as size), <a href="r30g.html">30g</a> (averages and spreads), <a href="r30j.html">30j</a> (the bell), <a href="r30m.html">30m</a> (the stretched-density technique), <a href="r30e.html">30e</a> (either order), <a href="r30then.html">30·then</a> (the wall-push technique), <a href="r17phys.html">17·phys</a> (light in lumps, E = hf) and <a href="r15chem.html">15·chem</a> (the air on a mountain top). 30·comp counts what a noisy line can carry.</p></div>
+</header>
+
+<section class="class step" data-step="30phys1">
+  <h2 class="sthead"><span class="stno">30phys1</span>The most ways, under a fixed total</h2>
+  <p class="stands">Stands on 22·comp (the share-count technique), 22k (the size of n!), 28g (the lines-up technique), 17a (the log-bounds technique) and 28·then (the second law of heat).</p>
+  <p data-pid="ce3cee">Each of N molecules sits in one of the states i = 1, 2, 3, …, with energy Eᵢ. Hand out the molecules with shares pᵢ. 22·comp counted the ways to choose a share p of N things as about 2^(N h(p)). The same count, with 22k’s size of n! and many states, gives the number of ways W for the shares pᵢ: ln W ≈ −N Σ pᵢ ln pᵢ. The total energy is fixed, N Σ pᵢEᵢ = U. Which shares have the most ways?</p>
+  <pre class="lines" data-k="ember" data-label="this page: the energy-share technique">
+H(p) = -\textstyle\sum_i p_i\ln p_i,\ \ \sum_i p_i = 1,\ \ \sum_i p_iE_i = \varepsilon @@ the count to make greatest, and the two totals held fixed; ε = U/N
+-\ln p_i - 1 = \lambda + \beta E_i @@ the lines-up technique (28g), run with many knobs and two constraints, one multiplier each
+p_i = \tfrac{e^{-\beta E_i}}{Z},\ \ Z = \textstyle\sum_j e^{-\beta E_j} @@ the shares add to 1, which fixes λ
+H(r) \le -\textstyle\sum_i r_i\ln p_i = \beta\varepsilon + \ln Z = H(p) @@ any shares r with the same ε: the log-bounds technique (17a), ln x ≤ x − 1 with x = pᵢ/rᵢ
+\htmlClass{new}{p_i = \tfrac{1}{Z}e^{-E_i/kT}} \quad \blacksquare @@ S = Nk H: its slope along U is kβ (the slope of ln Z along β is −ε), and the second law makes it 1/T (22·comp, 28·then)
+  </pre>
+  <p data-pid="797bbb">Energy-share technique: <b>among all ways to share out a fixed total of energy, the shares with the most ways give each state a share in proportion to e^(−E/kT), where T is the temperature.</b> The lines-up technique finds the shares. The log-bounds technique proves that they truly have the most ways, and not merely a level point. Its accepted name is the <i>canonical distribution</i>.</p>
+  <p data-pid="224023">The most ways are the most by far. Any other set of shares r has a count smaller by a factor of about e^(−N(H(p) − H(r))). With N near 10²² and H(p) − H(r) even as small as 10⁻¹⁵, that factor is e^(−10 000 000): it never shows.</p>
+  <p data-pid="d49a58">A molecule of air at height h has extra energy mgh. So the share of molecules at height h falls as e^(−mgh/kT), and drops by a factor of e every kT/(mg). For air at 15 °C, with m = 28.96 × 1.66 × 10⁻²⁷ kg, that is 8.4 km. At the summit of Mount Rainier, 4392 m up, the share is e^(−4392/8433) ≈ 0.59 of the share at sea level. 15·chem gave the summit’s pressure as about 0.60 atm. The air is colder up there, and that is most of the gap.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · most ways · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">30·phys.1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">air at −10 °C (263 K); m = 28.96 × 1.66 × 10⁻²⁷ kg; g = 9.81 m/s²</span> <span class="gtx">the summit of Mount Hood, 3429 m</span></span>Find kT/(mg), and the share of air at the summit against sea level, both at that one temperature. <br>Find the height at which the share is one half.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30phys2">
+  <h2 class="sthead"><span class="stno">30phys2</span>One sum holds everything</h2>
+  <p class="stands">Stands on 30·phys.1, 30g (averages and spreads) and 17·phys (E = hf).</p>
+  <p data-pid="5e976e">Write β = 1/kT. The sum Z = Σ e^(−βEᵢ) has an accepted name, the <i>partition function</i>. It looks like a mere total that makes the shares add to 1. It is much more.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the sum-over-states technique">
+\tfrac{dZ}{d\beta} = -\textstyle\sum E_ie^{-\beta E_i} \Rightarrow -\tfrac{d\ln Z}{d\beta} = \sum E_ip_i = \operatorname{E}E @@ the slope of each term (17); divide by Z
+\tfrac{d^2Z}{d\beta^2} = \textstyle\sum E_i^2e^{-\beta E_i} \Rightarrow \tfrac{1}{Z}\tfrac{d^2Z}{d\beta^2} = \operatorname{E}[E^2] @@ once more
+\tfrac{d^2\ln Z}{d\beta^2} = \tfrac{1}{Z}\tfrac{d^2Z}{d\beta^2} - \big(\tfrac{1}{Z}\tfrac{dZ}{d\beta}\big)^2 = \operatorname{E}[E^2] - (\operatorname{E}E)^2 @@ the slope of a quotient
+\htmlClass{new}{\operatorname{E}E = -\tfrac{d\ln Z}{d\beta},\ \ \operatorname{Var}E = \tfrac{d^2\ln Z}{d\beta^2} = kT^2c} \quad \blacksquare @@ the spread (30g); c = d(E E)/dT, since dβ/dT = −1/(kT²)
+  </pre>
+  <p data-pid="391786">Sum-over-states technique: <b>the average energy is minus the slope of ln Z along β, and the spread of the energy is the next slope, which equals kT² times the heat capacity c.</b> So the heat a body soaks up and the jitter of its energy are one number. The free energy of 28·then is F = −NkT ln Z, so every quantity of the body’s heat can be read from Z.</p>
+  <p data-pid="068e10">The simplest body has two states, 0 and Δ. Then Z = 1 + e^(−βΔ), and the share in the upper state is 1/(e^(βΔ) + 1). A proton in a magnet is such a body: its spin points with the field or against it. In a 1.5 T hospital scanner in Seattle the gap is Δ = h × 63.9 MHz = 4.2 × 10⁻²⁶ J, and at body heat, 310 K, βΔ ≈ 9.9 × 10⁻⁶. The two shares differ by about βΔ/2: five protons in a million more point with the field than against it. The picture of the inside of a body is made from those five.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · one sum · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30·phys.2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a 3.0 T scanner, Δ = h × 127.7 MHz, at 310 K</span> <span data-tex-inline="h = 6.626 \times 10^{-34} \text{ J s},\ k = 1.381 \times 10^{-23} \text{ J/K}"></span></span>Find βΔ and the difference of the two shares. <br>Find the average energy of a two-state body as T grows without bound, and as T heads to 0.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30phys3">
+  <h2 class="sthead"><span class="stno">30phys3</span>Three ways to hold a body</h2>
+  <p class="stands">Stands on 30·phys.1, 30·phys.2, 22·comp (the ways-to-bits technique) and 28·then (the chemical potential).</p>
+  <p data-pid="214659">A body can be held three ways. Sealed off, its energy is exact: drop the energy total from the lines-up technique, keep only Σpᵢ = 1 over the states of that energy, and every state gets the same share. Then H = ln W, and S = k ln W: 22·comp’s entropy. In touch with a large room, it trades energy, and only the average is fixed: the energy-share technique. Open to the room, it trades molecules too, and the average number of molecules is a third total held fixed.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the grand-share technique">
+\textstyle\sum p_i = 1,\ \ \sum p_iE_i = \varepsilon,\ \ \sum p_iN_i = \nu @@ three totals; Nᵢ the molecules in state i
+-\ln p_i - 1 = \lambda + \beta E_i - \beta\mu N_i @@ the lines-up technique, one multiplier for each total; write the third as −βμ
+\htmlClass{new}{p_i = \tfrac{1}{\mathcal Z}e^{-(E_i - \mu N_i)/kT}} \quad \blacksquare @@ the log-bounds technique again shows these have the most ways
+  </pre>
+  <p data-pid="e9ea77">Grand-share technique: <b>a body that trades energy and molecules with a large room shares itself out in proportion to e^(−(E − μN)/kT), where μ is the room’s chemical potential.</b> A site that holds one oxygen molecule, with energy −ε₀, or none, is such a body. Its share full is 1/(1 + e^(−(ε₀ + μ)/kT)). 28·then gave μ = μ° + kT ln(P/P°) for a gas, per molecule. Put it in, and the share full is P/(P + P½) for a fixed P½. Myoglobin, the oxygen store of muscle, follows this curve with P½ near 2.8 mmHg. In the muscle of an elephant seal diving off Año Nuevo, at 20 mmHg it is 88% full, and at 2 mmHg it has given up more than half its oxygen.</p>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · the cloud</div>
+    <p data-pid="78e638">Why do three ways of holding a body give the same heat capacities and the same pressures? Because the energy of a body in touch with a room is a cloud, and the cloud is thin. By the sum-over-states technique its spread is NkT²c for N molecules. For air, c = (5/2)k and the average energy per molecule is (5/2)kT. So the spread width, as a share of the energy, is √(2/(5N)).</p>
+    <p data-pid="3d47c1"><b>A quantity of heat is the middle of a cloud of energies, and is reported with its width, √(kT²C), however thin.</b></p>
+    <p data-pid="7a05dd">A litre of air at 20 °C and one atmosphere holds N = PV/kT = 2.5 × 10²² molecules. Its energy is uncertain by four parts in a million million. A sealed litre and a litre in touch with the room differ by less than any instrument can read. The averages of this page are anexact: they are the middle of a cloud. They are rigorous because the width of the cloud is computed, and it is far below the measurement.</p>
+    <p class="bait" data-pid="7a7151">A speck of dust in the air of Victoria holds about a billion molecules. Would its energy be thin enough a cloud to call its temperature exact? What width would you report?</p>
+  </aside>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · three ways · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30·phys.3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">myoglobin, P½ = 2.8 mmHg</span> <span class="gtx">one litre of air at 20 °C and one atmosphere</span></span>Find the share of myoglobin full at 40 mmHg and at 5 mmHg, and the pressure at which it is 90% full. <br>Find the spread width of the litre’s energy as a share, if the litre held only a million molecules instead.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30phys4">
+  <h2 class="sthead"><span class="stno">30phys4</span>Half of kT for every square</h2>
+  <p class="stands">Stands on 30·phys.1, 30j (the bell), 30m (the stretched-density technique), 30·then (the wall-push technique) and 28·then (C_V of air).</p>
+  <p data-pid="07e44a">Many parts of a molecule’s energy go as a square of something that can take any value: ½mv_x² for its motion along x, ½Iω² for a turn, ½κx² for the stretch of a bond. Take one such part, a y² with y any real number.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the half-kT technique">
+p(y) \propto e^{-\beta a y^2} @@ the energy-share technique, with the states running over every y
+p \text{ is a bell with spread } \tfrac{1}{2\beta a} @@ e^(−y²/(2σ²)) with σ² = 1/(2βa): the bell (30j), stretched (30m’s stretched-density technique)
+\operatorname{E}[ay^2] = a\cdot\tfrac{1}{2\beta a} @@ the average square of a bell centred at 0 is its spread (30g)
+\htmlClass{new}{\operatorname{E}[ay^2] = \tfrac12 kT,\ \text{ whatever } a \text{ is}} \quad \blacksquare @@ β = 1/kT
+  </pre>
+  <p data-pid="9085a4">Half-kT technique: <b>every part of the energy that goes as a square averages ½kT, whatever its size, so a body’s heat capacity counts its squares: ½k for each.</b> 30·then found ½kT along each direction from the gas law. Here it comes from the energy-share technique, and it covers turning and shaking as well. Its accepted name is <i>equipartition</i>.</p>
+  <p data-pid="6fadd3">Count squares, and multiply by ½R for a mole. Argon has three: (3/2)R = 12.5 J/(mol K), as measured. Nitrogen and oxygen have three for motion and two for turning: (5/2)R = 20.8, the 2.5R that 28·then used for air, as measured. A solid has three springs per atom, each with a square for motion and one for stretch: 3R = 24.9. Copper measures 24.4, and lead 26.4. Diamond measures 6.1. And nitrogen’s bond is a spring too, with two more squares, which should make it (7/2)R. It is not. The counting is right; something stops some squares from taking their share.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · squares · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30·phys.4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">copper, 63.55 g a mole</span> <span data-tex-inline="R = 8.314 \text{ J/(mol K)}"></span></span>Find the half-kT technique’s heat capacity of copper per gram, and the heat to warm a 1 kg copper pan from 20 °C to 100 °C. <br>Find the heat capacity it gives a mole of water vapour, with three for motion and three for turning, and none for shaking.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30phys5">
+  <h2 class="sthead"><span class="stno">30phys5</span>Molecular partition functions</h2>
+  <p class="stands">Stands on 30·phys.2, 30·phys.4, 30e (either order), 22e (the geometric sum) and 17·phys (light in lumps, E = hf).</p>
+  <p data-pid="0b66db">A molecule’s energy is the sum of independent parts: moving, turning, shaking. Then Z splits.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the states-multiply technique">
+E_{(i, j)} = E^{\text{move}}_i + E^{\text{shake}}_j @@ a state is a pair: one state of each part
+Z = \textstyle\sum_{i, j}e^{-\beta E^{\text{move}}_i}e^{-\beta E^{\text{shake}}_j} @@ e to a sum is a product (17e)
+\htmlClass{new}{Z = Z_{\text{move}}\,Z_{\text{turn}}\,Z_{\text{shake}}} \quad \blacksquare @@ sum one index at a time, either order (30e), and use the same for turning
+  </pre>
+  <p data-pid="9e0fa6">States-multiply technique: <b>when a molecule’s energy is a sum of independent parts, its sum over states is the product of each part’s, so ln Z adds and so do the average energies.</b> Now the shake. A bond, measured, takes energy only in lumps hf, like 17·phys’s light: its states have energies 0, hf, 2hf, and so on.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the frozen-shake technique">
+Z_{\text{shake}} = \textstyle\sum_{n \ge 0}e^{-n\beta hf} = \tfrac{1}{1 - e^{-\beta hf}} @@ a geometric sum (22e), ratio below 1
+\operatorname{E}E_{\text{shake}} = -\tfrac{d}{d\beta}\ln Z_{\text{shake}} = \tfrac{hf}{e^{\beta hf} - 1} @@ the sum-over-states technique
+kT \gg hf:\ \ \tfrac{hf}{e^{\beta hf} - 1} \approx kT @@ e^x − 1 ≈ x for small x: the half-kT technique’s two squares
+\htmlClass{new}{kT \ll hf:\ \ \operatorname{E}E_{\text{shake}} \approx hf\,e^{-hf/kT} \to 0} \quad \blacksquare @@ the shake is frozen: its lump is too dear
+  </pre>
+  <p data-pid="1760f0">Frozen-shake technique: <b>a shake that takes energy in lumps hf holds about kT when kT is far above hf, and almost nothing when kT is far below it.</b> For nitrogen, hf/k = 3390 K. At 293 K the share of molecules shaking at all is e^(−11.6) ≈ 9 in a million, and the shake adds 0.0013k to the heat capacity: nitrogen stays at (5/2)R. Iodine’s bond is loose, hf/k = 309 K, and at 293 K its shake is mostly awake: 0.91k more. Diamond’s springs are stiff, near 1320 K, and the same count gives 5.7 J/(mol K) against the 6.1 measured. The squares were all there. The lumps froze them.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · parts · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · the heat capacity of a gas of two-atom molecules</div>
+    <div class="kn"><span class="m">hf/k, K</span><input type="range" id="kth" min="200" max="4000" step="10" value="3390"><output id="oth"></output>
+    <span class="m">T, K</span><input type="range" id="kT" min="50" max="3000" step="1" value="293"><output id="oT"></output></div>
+    <div id="pl"></div>
+    <div class="cap">Ember: the heat capacity per mole, in units of R, of a gas whose molecules move, turn, and shake with lumps hf: (5/2) plus the shake’s share. Ink: (5/2) and (7/2), the half-kT technique with the shake frozen and with it awake. Dot: the slider’s temperature. Nitrogen 3390 K, oxygen about 2270 K, chlorine about 810 K, iodine about 309 K.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30·phys.5.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">nitrogen, hf/k = 3390 K</span></span>Find the share of molecules shaking at all at 1000 K, and the shake’s heat capacity there, as a share of k. <br>Find the temperature at which the shake’s average energy is half of kT.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30phys6">
+  <h2 class="sthead"><span class="stno">30phys6</span>Illegal moves</h2>
+  <p class="stands">Stands on 30·phys.1 to 30·phys.5.</p>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{every state gets the same share}\,? @@ only when the energy is exact; in touch with a room, shares fall as e^(−E/kT)
+\text{the lines-up shares are the most ways}\,? @@ the lines-up technique finds a level point; the log-bounds technique proves it is the most
+\text{a stiffer spring holds more energy}\,? @@ half-kT for every square, whatever a; until its lumps freeze it, when it holds less
+\operatorname{Var}E = (\operatorname{E}E)^2\,? @@ the spread is kT²c, the next slope of ln Z
+Z_{\text{move}} + Z_{\text{shake}}\,? @@ independent parts multiply their sums over states
+\text{the most likely state has the most energy}\,? @@ the share falls with energy; it is the count of states near an energy that can rise
+  </pre>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30·phys.6.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span class="gtx">a two-state body with gap Δ, at T = Δ/k</span></span>Find the share in the upper state.</li><li><span class="givens"><span class="gtx">a gas of single atoms with no shake and no turn</span></span>Find its heat capacity per mole.</li><li><span class="givens"><span class="gtx">nitrogen at 293 K</span></span>Find whether the shake or the turning holds more energy, on average.</li><li><span class="givens"><span class="gtx">three states of energies 0, Δ and 2Δ; the shares ½, 0, ½</span></span>Find the shares the energy-share technique gives with the same average energy, and which set has more ways.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">30·phys.7.1</span><span class="tagq">build</span>Build a body with three states of energies 0, Δ and 2Δ, the middle one counted twice (two states with the same energy). <br>Find Z, the average energy and the spread, and check that the spread is kT² times the slope of the average along T.</div>
+  <div class="chq"><span class="chid">30·phys.7.2</span><span class="tagq">edge</span>Find what the energy-share technique gives as T heads to 0, and as T grows without bound. <br>Find what a negative T would mean for a two-state body, and whether a sealed set of protons could reach it.</div>
+  <div class="chq"><span class="chid">30·phys.7.3</span><span class="tagq">converse</span>The half-kT technique finds that a square holds ½kT. Turn it round: if a part of the energy averages ½kT at every temperature, must it go as a square?</div>
+  <div class="chq"><span class="chid">30·phys.7.4</span><span class="tagq">reroute</span>Find the frozen-shake technique’s average energy a second way, with no Z: write the share in the state nhf as (1 − e^(−βhf))e^(−nβhf), and add up nhf times the share, as an endless sum (22).</div>
+  <div class="chq"><span class="chid">30·phys.7.5</span><span class="tagq">seam</span>One side holds that the second law of heat is a law of counting: entropy rises because the most ways are the most by far, and a body left to itself drifts into them. The other replies that the laws of motion run the same backwards, so for every path that climbs into the most ways there is a path that climbs out. And a sealed box, left long enough, comes back as near as you like to where it started. <br>Can counting alone give time a direction?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r30bio.html">← 30·bio · how does a gene spread through a population?</a><a href="r30comp.html">30·comp · how much can a noisy line carry? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The energy-share technique gives the Boltzmann distribution (the canonical distribution), and e^(−E/kT) the Boltzmann factor. H = −Σ p ln p is the Gibbs entropy (per k), and finding shares as the most H under fixed totals is the maximum entropy method. Z is the partition function (Zustandssumme, the sum over states). The three ways of holding a body are the microcanonical, canonical and grand canonical ensembles; 𝒵 is the grand partition function and μ the chemical potential. The site’s curve P/(P + P½) is the Langmuir isotherm, and myoglobin’s P½ is its P50. The half-kT technique is the equipartition theorem; 3R for solids is the law of Dulong and Petit. The frozen-shake technique is the Einstein model of a vibration, hf/k the vibrational temperature, and the factorisation of Z the molecular partition function written as translational, rotational and vibrational parts. The thin cloud of 30·phys.3 is the equivalence of ensembles in the thermodynamic limit.</p>
+  <h3>Who said it first</h3>
+  <p>Ludwig Boltzmann gave the e^(−E/kT) shares in 1868 and the count of ways in 1877; Max Planck wrote S = k ln W in that form about 1900. Josiah Willard Gibbs set out the ensembles and the sum over states in Elementary Principles in Statistical Mechanics (1902). Edwin Jaynes argued in 1957 that the shares are the most H under what is known, a reading of statistical mechanics as inference. Pierre Louis Dulong and Alexis Thérèse Petit found the 3R rule in 1819, and Heinrich Weber measured diamond’s low heat capacity in 1875. Maxwell called the failure of equipartition for gases the greatest difficulty of the molecular theory (1875). Albert Einstein froze the springs of a solid with Planck’s lumps in 1907, and Peter Debye improved the count in 1912. Irving Langmuir gave the site curve in 1916. In 30·phys.7.5, Josef Loschmidt raised the reversed paths against Boltzmann in 1876, and Ernst Zermelo the return of a sealed box in 1896, from a result of Henri Poincaré (1890); Boltzmann answered both, and the answer still argued over is that the world began in very few ways.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="30·phys: a worked “proof”, not allowed">
+p_i = \tfrac1Z e^{-\beta E_i} @@ fine: the energy-share technique
+\text{the ground state has the largest share} @@ fine, for each single state
+\text{so most molecules have energy near } 0 @@ not allowed: there may be many more states at higher energy, as 30·then’s 4πv² showed; the peak of the speeds is at √(2kT/m), not 0
+  </pre>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+const V=c=>'var('+c+')';
+// plot(series, xr, yr, opts): series = [{pts:[[x,y],...], c:'--ember', w:1.6, dash:''}]; returns svg string
+function plot(series, xr, yr, o){ o=o||{}; const W=360,H=o.H||210,L=34,B=22,T=8,Rr=8;
+  const sx=x=>L+(x-xr[0])/(xr[1]-xr[0])*(W-L-Rr), sy=y=>H-B-(y-yr[0])/(yr[1]-yr[0])*(H-B-T);
+  let s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;max-width:440px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  (o.yt||[]).forEach(y=>{ s+='<line x1="'+L+'" x2="'+(W-Rr)+'" y1="'+sy(y)+'" y2="'+sy(y)+'" style="stroke:'+V('--grid')+';stroke-width:0.6"/><text x="'+(L-3)+'" y="'+(sy(y)+3)+'" text-anchor="end" style="font:9px var(--mono);fill:'+V('--muted')+'">'+y+'</text>'; });
+  (o.xt||[]).forEach(x=>{ s+='<text x="'+sx(x)+'" y="'+(H-8)+'" text-anchor="middle" style="font:9px var(--mono);fill:'+V('--muted')+'">'+x+'</text>'; });
+  s+='<line x1="'+L+'" x2="'+L+'" y1="'+T+'" y2="'+(H-B)+'" style="stroke:'+V('--ink')+';stroke-width:0.8"/><line x1="'+L+'" x2="'+(W-Rr)+'" y1="'+(H-B)+'" y2="'+(H-B)+'" style="stroke:'+V('--ink')+';stroke-width:0.8"/>';
+  series.forEach(se=>{ const cl=v=>Math.max(yr[0]-0.05*(yr[1]-yr[0]),Math.min(yr[1]+0.05*(yr[1]-yr[0]),v));
+    const d=se.pts.filter(p=>isFinite(p[1])).map((p,i)=>(i?'L':'M')+sx(p[0]).toFixed(1)+','+sy(cl(p[1])).toFixed(1)).join('');
+    s+='<path d="'+d+'" style="fill:none;stroke:'+V(se.c||'--ember')+';stroke-width:'+(se.w||1.6)+(se.dash?';stroke-dasharray:'+se.dash:'')+'"/>'; });
+  (o.dots||[]).forEach(p=>{ s+='<circle cx="'+sx(p[0])+'" cy="'+sy(p[1])+'" r="2.6" style="fill:'+V(p[2]||'--ember')+'"/>'; });
+  if(o.xl) s+='<text x="'+(W-Rr)+'" y="'+(H-B-4)+'" text-anchor="end" style="font:9px var(--mono);fill:'+V('--muted')+'">'+o.xl+'</text>';
+  if(o.yl) s+='<text x="'+(L+4)+'" y="'+(T+9)+'" style="font:9px var(--mono);fill:'+V('--muted')+'">'+o.yl+'</text>';
+  return s+'</svg>'; }
+
+const sci=v=>{ if(v>=0.001) return fm(v,4); const e=Math.floor(Math.log10(v)); const sup='⁰¹²³⁴⁵⁶⁷⁸⁹'; return fm(v/Math.pow(10,e),2)+' × 10⁻'+String(-e).split('').map(d=>sup[+d]).join(''); };
+const cv=(th,T)=>{ const x=th/T; if(x>300) return 0; const e=Math.exp(x); return x*x*e/((e-1)*(e-1)); };
+function draw(){ const th=+$('kth').value, T=+$('kT').value; $('oth').textContent=th; $('oT').textContent=T;
+  const A=[]; for(let i=1;i<=300;i++){ const t=10*i; A.push([t,2.5+cv(th,t)]); }
+  const c=2.5+cv(th,T);
+  $('pl').innerHTML=plot([{pts:[[0,2.5],[3000,2.5]],c:'--ink',w:1},{pts:[[0,3.5],[3000,3.5]],c:'--ink',w:1},{pts:A,c:'--ember'}],[0,3000],[2,4],{xt:[0,500,1000,1500,2000,2500,3000],yt:[2,2.5,3,3.5,4],xl:'T, K',yl:'C/R',dots:[[T,c,'--ink']],H:220});
+  const v=$('vd'); v.className='verdict';
+  v.textContent='At '+T+' K the shake adds '+fm(cv(th,T),4)+' of R, so C = '+fm(c,3)+'R = '+fm(8.314*c,2)+' J/(mol K). The share of molecules shaking at all is e^(−'+fm(th/T,2)+') = '+sci(Math.exp(-th/T))+'.'; }
+$('kth').oninput=draw; $('kT').oninput=draw; draw();
+window.__pic={set:(th,T)=>{ $('kth').value=th; $('kT').value=T; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'count',t:R`\ln W \approx -N\textstyle\sum p_i\ln p_i`,n:`Share-count.`},
+  {k:'ember',kl:'lines up',t:R`-\ln p_i - 1 = \lambda + \beta E_i`,n:`28g.`},
+  {k:'ember',kl:'shares',t:R`\htmlClass{new}{p_i \propto e^{-E_i/kT}}`,n:`Most ways, by far.`}
+],{title:'The slides · most ways · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'sum',t:R`Z = \textstyle\sum e^{-\beta E_i}`,n:`Over the states.`},
+  {k:'ember',kl:'average',t:R`\htmlClass{new}{\operatorname{E}E = -\tfrac{d\ln Z}{d\beta}}`,n:`A slope.`},
+  {k:'ember',kl:'spread',t:R`\operatorname{Var}E = kT^2c`,n:`The next slope.`}
+],{title:'The slides · one sum · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'sealed',t:R`S = k\ln W`,n:`Equal shares.`},
+  {k:'ember',kl:'in touch',t:R`e^{-E/kT}`,n:`Energy traded.`},
+  {k:'ember',kl:'open',t:R`\htmlClass{new}{e^{-(E - \mu N)/kT}}`,n:`Molecules too.`}
+],{title:'The slides · three ways · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'bell',t:R`p(y) \propto e^{-\beta ay^2}`,n:`Any square.`},
+  {k:'ember',kl:'half',t:R`\htmlClass{new}{\operatorname{E}[ay^2] = \tfrac12 kT}`,n:`Whatever a is.`},
+  {k:'ember',kl:'count',t:R`\tfrac32R,\ \tfrac52R,\ 3R`,n:`Gas, air, solid.`}
+],{title:'The slides · squares · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'product',t:R`\htmlClass{new}{Z = Z_{\text{move}}Z_{\text{turn}}Z_{\text{shake}}}`,n:`Parts multiply.`},
+  {k:'ember',kl:'lumps',t:R`Z_{\text{shake}} = \tfrac{1}{1 - e^{-\beta hf}}`,n:`Geometric.`},
+  {k:'ember',kl:'frozen',t:R`hf\,e^{-hf/kT}`,n:`Too dear.`}
+],{title:'The slides · parts · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'illegal',t:R`Z_{\text{move}} + Z_{\text{shake}}\,?`,n:`Multiply.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

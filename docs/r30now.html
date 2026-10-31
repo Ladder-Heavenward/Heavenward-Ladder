@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How many findings survive?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r30nav.html">← 30·nav how sure am I of where I am?</a><a href="floor5concl.html">next: 5·∎ what the statistics floor shows →</a></p>
+  <div class="tags"><span class="tag now">30·now · research front</span></div>
+  <h1>How many findings survive?</h1>
+  <p>How many findings survive? A finding in medicine, psychology or biology is usually reported with a test: the difference was real, because luck alone would make one so large less than one time in twenty. Read that way, about one finding in twenty might be a fluke, and the rest should hold up when someone does the work again. In 2005 an essay argued that in many fields most published findings are false, and gave the arithmetic. Ten years later a team repeated a hundred studies from leading psychology journals, and found that only about a third came out the same way the second time. Large drug trials, once their plans had to be written down before they began, stopped finding that drugs worked most of the time, and began finding it rarely. What makes the question hard is that every single step looks honest. Each test is done correctly. The trouble is in which tests get done, how many, when they stop, and which get written up. This page uses rung thirty’s chance rules to find what share of passed tests are true, how trying many analyses and peeking at the data as it comes in raise the rate of false alarms, why the findings that pass are larger than the truth, what the professional statement on the use of the test said in 2016, and what writing the plan down first changed. It ends with what is still argued.</p>
+  <p class="gesture">Turn the chance around. Of all the ideas a field tests, some share are true. A true one passes with the chance the study has of seeing it, and a false one passes with the chance of a false alarm, one in twenty. So the share of passed tests that are true depends on how many ideas were true to begin with, and on how strong the studies were, and it can be well under a half. Trying many analyses multiplies the chances of a false alarm, as the count of at least one success among many tries already showed. Looking at the data after each new batch and stopping when the test passes is the same mistake in time: the chance of a false alarm is at least one in twenty and at most one in twenty for each look, and with endless looks it reaches certainty. A finding that passed a test is filtered, and the average of what passes is larger than the truth, much larger when the study was weak. Write the plan down first, and the many analyses and the peeking go away, and the rate of success falls to what is real.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r30f.html">30f</a> (the chance-rules, given-chance, turn-around and whole-chance techniques), <a href="r30l.html">30l</a> (the at-least-one technique), <a href="r30s.html">30s</a> (the bell-test, two-sample and power techniques), <a href="r30j.html">30j</a> (the bell), <a href="r30k.html">30k</a> (the stopping-keeps technique), <a href="r30v.html">30v</a> (the run-count technique), <a href="r30q.html">30q</a> (the bell-cover technique) and <a href="r30econ.html">30·econ</a> (tries, and the luck among them). After it, the statistics floor’s conclusion.</p></div>
+</header>
+
+<section class="class step" data-step="30now1">
+  <h2 class="sthead"><span class="stno">30now1</span>Found, and true</h2>
+  <p class="stands">Stands on 30f (the given-chance, turn-around and whole-chance techniques) and 30s (the two kinds of error; the power technique).</p>
+  <p data-pid="f0042e">A field tests many ideas. Let π be the share that are true. A test passes a false idea with chance α, the false-alarm line, usually 0.05. It passes a true idea with chance 1 − β, its power (30s). Ask: of the ideas that pass, what share are true?</p>
+  <pre class="lines" data-k="ember" data-label="this page: the found-and-true technique">
+P(\text{pass}) = (1 - \beta)\,\pi + \alpha\,(1 - \pi) @@ the whole-chance technique (30f), over true and false
+P(\text{true} \mid \text{pass}) = \tfrac{P(\text{pass} \mid \text{true})\,P(\text{true})}{P(\text{pass})} @@ the turn-around technique (30f)
+\htmlClass{new}{P(\text{true} \mid \text{pass}) = \tfrac{(1 - \beta)\,\pi}{(1 - \beta)\,\pi + \alpha\,(1 - \pi)}} \quad \blacksquare @@ put the two lines together
+  </pre>
+  <p data-pid="9ad157">Found-and-true technique: <b>the share of passed tests that are true is (1 − β)π over (1 − β)π + α(1 − π), so it falls when few of the ideas tested are true and when the studies are weak.</b> With π = 0.5 and power 0.8, 94% of passed tests are true. With π = 0.1 and power 0.8, 64%. With π = 0.1 and power 0.2, which surveys of some fields have found typical, 31%: most of what passes is false, though each test was done correctly.</p>
+  <p data-pid="14ae14">The 2005 essay made exactly this argument, adding the ways the analysis can bend toward passing. The one-in-twenty line controls how often a false idea passes. It does not control how often a passed idea is false. Those are 30f’s two given chances, P(pass | false) and P(false | pass), and they can be far apart.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · found · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">30·now.1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a field in which 1 idea in 4 is true; power 0.5</span></span>Find the share of passed tests that are true at α = 0.05. <br>Find it again at α = 0.005.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30now2">
+  <h2 class="sthead"><span class="stno">30now2</span>Many tries, and peeking</h2>
+  <p class="stands">Stands on 30·now.1, 30l (the at-least-one technique), 30f (the chance-rules technique), 30k (the stopping-keeps technique) and 30v (the run-count technique).</p>
+  <p data-pid="652bd0">An analysis has many forks: which outcome, which patients to leave out, which other measurements to allow for. By 30l’s at-least-one technique, as 30·econ.4 used it, five independent analyses of a false idea give at least one pass with chance 1 − 0.95⁵ ≈ 23%, and twenty with 64%. The forks of one data set are not independent, but they share the same direction: more forks, more passes.</p>
+  <p data-pid="02c1c7">Peeking is the same in time. A study adds patients in batches and runs the test after each batch, stopping as soon as it passes. Let Aⱼ be the event that look j passes, each with chance α when the idea is false.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the peeking technique">
+P(A_k) = \alpha @@ the last look alone is a fair test
+P(A_1 \text{ or } \cdots \text{ or } A_k) \ge P(A_k) = \alpha @@ the chance-rules technique (30f): a bigger event has at least the chance
+P(A_1 \text{ or } \cdots \text{ or } A_k) \le P(A_1) + \cdots + P(A_k) = k\alpha @@ the chance-rules technique, one look at a time: P(A or B) ≤ P(A) + P(B)
+\text{each new look adds an event, so the chance never falls} @@ the event for k looks is inside the event for k + 1
+\htmlClass{new}{\alpha \le P(\text{some look passes}) \le k\alpha,\ \text{rising with } k} \quad \blacksquare @@ by a million simulated runs (30v’s run-count technique, width under 0.0005): 2 looks 8.3%, 5 looks 14.2%, 10 looks 19.3%, 20 looks 24.8%
+  </pre>
+  <p data-pid="896a7b">Peeking technique: <b>a test looked at k times, stopping at the first pass, raises the false-alarm chance from α to somewhere between α and kα, and more looks never lower it.</b> 30k’s stopping-keeps technique is not broken: the average of the running total at the stop is still 0. What peeking changes is the chance of ever crossing the line, and with looks that never end that chance is 1; its proof waits much higher up the ladder. A plan written down first fixes the number of looks and the line each must pass.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · tries · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · peeking at a test of a false idea</div>
+    <div class="kn"><span class="m">looks</span><input type="range" id="kk" min="1" max="20" step="1" value="5"><output id="ok"></output></div>
+    <div id="pl"></div>
+    <div class="cap">Ink: 40 studies of an idea that is false, each a running test statistic, a fair walk scaled so that every single look is a fair test at 5%. Ember: the lines ±1.96. A study stops at its first look past a line. Fixed table of chance numbers.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30·now.2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a false idea, α = 0.05</span></span>Find the chance of at least one pass in 10 independent analyses. <br>Find the bounds the peeking technique gives for 3 looks, and where the simulated 10.7% sits between them.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30now3">
+  <h2 class="sthead"><span class="stno">30now3</span>Passed findings are too large</h2>
+  <p class="stands">Stands on 30·now.1, 30j (the bell) and 30f (the given-chance technique).</p>
+  <p data-pid="515750">Let a study measure an effect whose true size, in widths of its own measurement, is δ. Its result is Z, a bell of width 1 about δ, with density φ(z − δ), where φ(u) = e^{−u²/2}/√(2π). It passes if Z > c, with c = 1.96. What is the average of Z among the studies that pass?</p>
+  <pre class="lines" data-k="ember" data-label="this page: the filtered-average technique">
+E[Z \mid Z > c] = \tfrac{1}{P(Z > c)}\int_c^\infty z\,\varphi(z - \delta)\,dz @@ the given-chance technique (30f), as an average
+\int_c^\infty (z - \delta)\,\varphi(z - \delta)\,dz = \Big[-\varphi(z - \delta)\Big]_c^\infty = \varphi(c - \delta) @@ the slope of φ(u) is −u φ(u)
+\int_c^\infty z\,\varphi(z - \delta)\,dz = \delta\,P(Z > c) + \varphi(c - \delta) @@ z = δ + (z − δ)
+\htmlClass{new}{E[Z \mid Z > c] = \delta + \tfrac{\varphi(c - \delta)}{P(Z > c)}} \quad \blacksquare @@ divide
+  </pre>
+  <p data-pid="0d55fe">Filtered-average technique: <b>among studies that pass, the average result is the true size plus φ(c − δ)/P(Z > c), so passed findings overstate the truth, and the weaker the study, the more.</b> With δ = 2.8, power 80%, the passed average is 3.15: 1.13 times the truth. With δ = 1, power 17%, it is 2.49: two and a half times the truth. A replication of the same size has power 17% again, so it fails five times in six, though the effect is real.</p>
+  <p data-pid="e9d14b">In 2015 a team repeated 100 studies from three leading psychology journals of 2008, with plans fixed in advance and the original authors consulted. Of the originals, 97% had passed. Of the repeats, 36% passed, and the effects found were on average about half the originals’.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · filtered · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30·now.3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\delta = 2,\ \ c = 1.96,\ \ \varphi(-0.04) = 0.3986,\ \ P(Z &gt; 1.96) = 0.516"></span></span>Find the average of passed results, and how many times the truth it is. <br>Find the chance that a replication of the same size passes.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30now4">
+  <h2 class="sthead"><span class="stno">30now4</span>The statement of 2016, and writing the plan first</h2>
+  <p class="stands">Stands on 30·now.1 to 30·now.3, 30s (the two-sample and bell-test techniques) and 30q (the bell-cover technique).</p>
+  <p data-pid="e2aefe">In 2016 the professional society of statisticians in the United States issued, for the first time, a statement on the use of a single number, the chance under the no-effect idea of a result at least as far out, the p of a test. It gave six principles. That number says how far the data sit from one model. It is not the chance that the idea is true, nor the chance that the result came by luck alone. A decision should not turn only on whether it passes a line. Honest use needs every analysis reported. It does not measure how large or how important an effect is. On its own it is not a good measure of evidence.</p>
+  <p data-pid="e5e6d0">One remedy is older: write the plan down first, outcome, size and analysis, in a public register, before the first patient. From 2000, large trials funded by the heart and lung institute of the United States had to register their plans. Of 30 such trials published before 2000, 17 found the treatment worked, 57%. Of 25 published after, 2 did, 8%. Is that drop luck?</p>
+  <pre class="lines" data-k="ember" data-label="this page: the drop, tested and given its width">
+\hat p_1 = 17/30 = 0.567,\ \ \hat p_2 = 2/25 = 0.080,\ \ \hat p_1 - \hat p_2 = 0.487 @@ the two shares
+\text{pooled } \hat p = 19/55 = 0.345,\ \ \text{width} = \sqrt{0.345 \times 0.655\,(\tfrac1{30} + \tfrac1{25})} = 0.129 @@ the two-sample technique (30s), with one pooled share if there were no difference
+z = 0.487/0.129 = 3.78,\ \ P(|Z| > 3.78) = 0.00016 @@ the bell-test technique (30s): not luck, at any usual line
+\text{width} = \sqrt{\tfrac{0.567 \times 0.433}{30} + \tfrac{0.08 \times 0.92}{25}} = 0.105 @@ the two-sample technique, each share with its own spread
+\htmlClass{new}{0.487 \pm 1.96 \times 0.105:\ \text{a drop of between } 28 \text{ and } 69 \text{ points in } 100} \quad \blacksquare @@ the bell-cover technique (30q): the size, with its width
+  </pre>
+  <p data-pid="e919f5"><b>Writing the plan first took away the many tries and the peeking, and the share of large trials that found a benefit fell from more than half to under one in ten.</b> The drop is far beyond luck. Its size is wide, from about a quarter to over two thirds. What caused it is a separate question: the registers came in at the same time as other changes in how trials were run.</p>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · the cloud</div>
+    <p data-pid="d660d4">A result reported as passed or failed is a dot. A result reported with its width is a cloud: the drop was 49 points, give or take 21. The cloud shows at once what the dot hides: whether the effect could be tiny, or huge, and how much a second study might move it. The 2016 statement asked for exactly this: estimates with their widths, in place of a single line passed or not.</p>
+    <p data-pid="e26665"><b>Report the size of an effect with its width, and fix the plan, the looks and the line before the data come in.</b></p>
+    <p data-pid="241403">A decision still has to be made, and it is still made with a stated chance of being wrong. A trial that will decide whether thousands of patients take a drug is sized in advance so that a real benefit of a stated size passes with chance 90%, and a false one with chance at most 5%, at one planned look. That is not a weakness to apologise for. It is the second kind of rigour: say how wrong you might be, and how often.</p>
+    <p class="bait" data-pid="9f7274">A study reports a benefit with p = 0.04 and gives no interval. What would you ask for before believing it, and what would change your mind?</p>
+  </aside>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · plan first · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30·now.4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">the 2015 repeats: 97 originals had passed; the repeats had power about 0.92</span></span>Find the average number of repeats that should pass, and its width, if every original were true. <br>Find how many widths below that the 35 that passed lie.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30now5">
+  <h2 class="sthead"><span class="stno">30now5</span>What is shown, and what is open</h2>
+  <p class="stands">Stands on 30·now.1 to 30·now.4.</p>
+  <p data-pid="494602"><b>A test controls how often a false idea passes, not how often a passed idea is false; when many ideas are tried, peeked at and filtered, much of what is published does not survive, and how much survives in each field is still being measured.</b></p>
+  <ul>
+    <li data-pid="08291a">Argued, 2005. An essay showed, with the found-and-true technique, that in fields with weak studies, few true ideas and flexible analysis, most published findings are likely to be false.</li>
+    <li data-pid="55e964">Shown, 2011. A paper in psychology showed by simulation that a few common choices of analysis, each defensible, could raise the false-alarm rate from 5% to over 60%.</li>
+    <li data-pid="0e328f">Measured, 2015. One hundred psychology studies repeated: 36% passed again. Similar projects in cancer biology and economics followed, with rates of survival from under half to about two thirds.</li>
+    <li data-pid="861fea">Stated, 2016. The professional statement on p: six principles, and a call for widths, full reporting and judgement.</li>
+    <li data-pid="a10a96">Done. Registers of plans for trials, required from 2000 for large trials funded in the United States and from 2007 by law for many others; and reports registered before the data, in which a journal accepts the plan, so that the result is published whatever it is.</li>
+    <li data-pid="94c488">Open. What line, if any, to use. In 2017 a group of 72 researchers proposed 0.005 for new findings; in 2019 over 800 signed a call to stop dividing results into significant and not. One journal of psychology banned the number in 2015.</li>
+    <li data-pid="4fae1c">Open. Whether to read chance as a long-run rate or as a degree of belief, which 30u’s updating answers differently, and whether that reading would fix the problem or move it.</li>
+    <li data-pid="6b84c8">Open. How much survives in each field, and how to tell, before repeating it, which findings will.</li>
+  </ul>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · open · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30·now.5.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">the 2015 repeats: 36% passed; power 0.92; a false original passes again in the same direction with chance 0.025</span></span>Find the share t of the originals that were true, if those figures held exactly. <br>Find the share of passed originals the found-and-true technique gives with π = 0.1 and power 0.35.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30now6">
+  <h2 class="sthead"><span class="stno">30now6</span>Illegal moves</h2>
+  <p class="stands">Stands on 30·now.1 to 30·now.5.</p>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+p = 0.03, \text{ so the idea is false with chance } 3\%\,? @@ p is P(this far | no effect), not P(no effect | this far)
+\text{a one-in-twenty line makes 95\% of findings true}\,? @@ the found-and-true technique: it can be 31%
+\text{look after each batch, stop when it passes: still 5\%}\,? @@ the peeking technique: up to kα
+\text{the effect passed, so its size is about right}\,? @@ the filtered-average technique: too large
+\text{the repeat failed, so the effect is not real}\,? @@ with power 17% a real effect fails five times in six
+\text{p} > 0.05,\ \text{so there is no effect}\,? @@ the cloud: report the size with its width
+  </pre>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30·now.6.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span class="gtx">π = 1, every idea tested true</span></span>Find what the found-and-true technique gives, whatever α.</li><li><span class="givens"><span class="gtx">one look, k = 1</span></span>Find what the peeking technique gives.</li><li><span class="givens"><span class="gtx">δ very large</span></span>Find what the filtered-average technique gives, and why.</li><li><span class="givens"><span class="gtx">a study with power 1 − β = α</span></span>Find the share of its passes that are true, and what such a study tells you.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">30·now.7.1</span><span class="tagq">build</span>Build a written plan for a study you could run in your own town, for example whether Washington State Ferries sailings run later on wet days: the outcome, the data, the size, the looks and the line, fixed before you see any of it. <br>Find the power your plan has for a delay of 2 minutes on average.</div>
+  <div class="chq"><span class="chid">30·now.7.2</span><span class="tagq">edge</span>Find what the found-and-true technique gives as π heads to 0, and what the filtered-average technique gives as δ heads to minus without bound.</div>
+  <div class="chq"><span class="chid">30·now.7.3</span><span class="tagq">converse</span>A false idea seldom passes twice. Turn it round: if a finding passes on every repeat, must it be true? Find what a shared mistake in every repeat, the same faulty instrument, does to the found-and-true technique.</div>
+  <div class="chq"><span class="chid">30·now.7.4</span><span class="tagq">reroute</span>Find the share of passed tests that are true a second way, without the turn-around technique: imagine 1000 ideas, count the true and false ones that pass, and divide.</div>
+  <div class="chq"><span class="chid">30·now.7.5</span><span class="tagq">seam</span>One side holds that the line should be moved, from 0.05 to 0.005 for new findings, so that far fewer false ones pass, while tests stay simple and comparable. The other holds that any line invites the same games at a new place, and that results should be reported as sizes with widths, judged in context, with no line at all. <br>Should science keep a line for what counts as found?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r30nav.html">← 30·nav · how sure am I of where I am?</a><a href="floor5concl.html">5·∎ · what the statistics floor shows →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The share of passed tests that are true is the positive predictive value. Trying many analyses and reporting the one that passed is p-hacking, or the garden of forking paths; peeking and stopping at the first pass is optional stopping, and correcting for it gives group sequential designs. The excess of passed findings over the truth is the winner’s curse, or the significance filter, and the factor it brings is the exaggeration ratio, or type M error. The failure of many published findings to come out the same again is the replication crisis. Writing the plan first is preregistration; a plan accepted by a journal before the data is a registered report. The p of a test is the p-value, and the statement of 2016 is the ASA statement on p-values.</p>
+  <h3>Who said it first</h3>
+  <p>John Ioannidis published “Why most published research findings are false” in PLoS Medicine in 2005. Joseph Simmons, Leif Nelson and Uri Simonsohn published “False-positive psychology” in 2011. The Open Science Collaboration, led by Brian Nosek, published “Estimating the reproducibility of psychological science” in Science in 2015. Ronald Wasserstein and Nicole Lazar wrote the American Statistical Association’s statement, published in March 2016. Peter Armitage worked out the false-alarm rates of repeated looks in 1969. Robert Kaplan and Veronica Irvin compared the trials of the National Heart, Lung, and Blood Institute before and after registration, 17 of 30 against 2 of 25, in PLOS ONE in 2015. ClinicalTrials.gov opened in 2000, and a law of 2007 widened the duty to register. Chris Chambers launched registered reports at the journal Cortex in 2013. Basic and Applied Social Psychology banned p-values in 2015. Daniel Benjamin and 71 others proposed the line 0.005 in 2017; Valentin Amrhein, Sander Greenland and Blake McShane, with over 800 signatories, called to retire statistical significance in Nature in 2019. Andrew Gelman and John Carlin named type M errors in 2014. In 30·now.7.5 the two sides are those two proposals.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="30·now: a worked “proof”, not allowed">
+P(\text{pass} \mid \text{false}) = 0.05 @@ fine: the line
+\text{the test passed} @@ fine
+\text{so } P(\text{false} \mid \text{pass}) = 0.05 @@ not allowed: the given chance turned round without the turn-around technique; it is α(1 − π)/P(pass), which can be over a half
+  </pre>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+const V=c=>'var('+c+')';
+// plot(series, xr, yr, opts): series = [{pts:[[x,y],...], c:'--ember', w:1.6, dash:''}]; returns svg string
+function plot(series, xr, yr, o){ o=o||{}; const W=360,H=o.H||210,L=34,B=22,T=8,Rr=8;
+  const sx=x=>L+(x-xr[0])/(xr[1]-xr[0])*(W-L-Rr), sy=y=>H-B-(y-yr[0])/(yr[1]-yr[0])*(H-B-T);
+  let s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;max-width:440px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  (o.yt||[]).forEach(y=>{ s+='<line x1="'+L+'" x2="'+(W-Rr)+'" y1="'+sy(y)+'" y2="'+sy(y)+'" style="stroke:'+V('--grid')+';stroke-width:0.6"/><text x="'+(L-3)+'" y="'+(sy(y)+3)+'" text-anchor="end" style="font:9px var(--mono);fill:'+V('--muted')+'">'+y+'</text>'; });
+  (o.xt||[]).forEach(x=>{ s+='<text x="'+sx(x)+'" y="'+(H-8)+'" text-anchor="middle" style="font:9px var(--mono);fill:'+V('--muted')+'">'+x+'</text>'; });
+  s+='<line x1="'+L+'" x2="'+L+'" y1="'+T+'" y2="'+(H-B)+'" style="stroke:'+V('--ink')+';stroke-width:0.8"/><line x1="'+L+'" x2="'+(W-Rr)+'" y1="'+(H-B)+'" y2="'+(H-B)+'" style="stroke:'+V('--ink')+';stroke-width:0.8"/>';
+  series.forEach(se=>{ const cl=v=>Math.max(yr[0]-0.05*(yr[1]-yr[0]),Math.min(yr[1]+0.05*(yr[1]-yr[0]),v));
+    const d=se.pts.filter(p=>isFinite(p[1])).map((p,i)=>(i?'L':'M')+sx(p[0]).toFixed(1)+','+sy(cl(p[1])).toFixed(1)).join('');
+    s+='<path d="'+d+'" style="fill:none;stroke:'+V(se.c||'--ember')+';stroke-width:'+(se.w||1.6)+(se.dash?';stroke-dasharray:'+se.dash:'')+'"/>'; });
+  (o.dots||[]).forEach(p=>{ s+='<circle cx="'+sx(p[0])+'" cy="'+sy(p[1])+'" r="2.6" style="fill:'+V(p[2]||'--ember')+'"/>'; });
+  if(o.xl) s+='<text x="'+(W-Rr)+'" y="'+(H-B-4)+'" text-anchor="end" style="font:9px var(--mono);fill:'+V('--muted')+'">'+o.xl+'</text>';
+  if(o.yl) s+='<text x="'+(L+4)+'" y="'+(T+9)+'" style="font:9px var(--mono);fill:'+V('--muted')+'">'+o.yl+'</text>';
+  return s+'</svg>'; }
+
+function rng(a){ return function(){ a|=0; a=a+0x6D2B79F5|0; let t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+const SIMS={1:0.050,2:0.083,3:0.107,4:0.126,5:0.142,6:0.155,7:0.166,8:0.176,9:0.185,10:0.193,11:0.201,12:0.208,13:0.214,14:0.220,15:0.225,16:0.230,17:0.235,18:0.240,19:0.244,20:0.248};
+function draw(){ const k=+$('kk').value; $('ok').textContent=k+(k==1?' look':' looks'); const r=rng(7);
+  const nrm=()=>{ let u=r()||1e-9, v=r(); return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v); };
+  const S=[]; let pass=0;
+  for(let j=0;j<40;j++){ let s=0; const P=[]; let stop=false;
+    for(let i=1;i<=k;i++){ s+=nrm(); const z=s/Math.sqrt(i); P.push([i,z]); if(Math.abs(z)>1.96){ stop=true; break; } }
+    if(stop) pass++; S.push({pts:P.length>1?P:[[P[0][0]-0.15,P[0][1]],[P[0][0]+0.15,P[0][1]]],c:'--ink',w:0.9}); }
+  S.push({pts:[[1,1.96],[Math.max(k,2),1.96]],c:'--ember',w:1.2,dash:'4 3'},{pts:[[1,-1.96],[Math.max(k,2),-1.96]],c:'--ember',w:1.2,dash:'4 3'});
+  $('pl').innerHTML=plot(S,[1,Math.max(k,2)],[-4,4],{xt:k>10?[1,5,10,15,20]:[1,Math.max(k,2)],yt:[-4,-1.96,0,1.96,4],xl:'look',yl:'z',H:220});
+  const v=$('vd'); v.className='verdict';
+  v.textContent=k+(k==1?' look: ':' looks: ')+pass+' of these 40 studies of a false idea passed. Over many studies the share is about '+fm(100*SIMS[k],1)+'%, between the peeking technique’s bounds of 5% and '+fm(Math.min(100,5*k),0)+'%.'; }
+$('kk').oninput=draw; draw();
+window.__pic={set:(k)=>{ $('kk').value=k; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'pass',t:R`(1-\beta)\pi + \alpha(1-\pi)`,n:`Whole chance.`},
+  {k:'ember',kl:'true',t:R`\htmlClass{new}{\tfrac{(1-\beta)\pi}{(1-\beta)\pi + \alpha(1-\pi)}}`,n:`Turned round.`},
+  {k:'ember',kl:'weak',t:R`31\%`,n:`π = 0.1, power 0.2.`}
+],{title:'The slides · found · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'many',t:R`1 - 0.95^m`,n:`At least one (30l).`},
+  {k:'ember',kl:'peek',t:R`\htmlClass{new}{\alpha \le P \le k\alpha}`,n:`Rising.`},
+  {k:'ember',kl:'ever',t:R`1`,n:`Endless looks.`}
+],{title:'The slides · tries · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'pass',t:R`Z > 1.96`,n:`Filtered.`},
+  {k:'ember',kl:'average',t:R`\htmlClass{new}{\delta + \tfrac{\varphi(c-\delta)}{P(Z>c)}}`,n:`Too large.`},
+  {k:'ember',kl:'weak',t:R`2.5\times`,n:`δ = 1.`}
+],{title:'The slides · filtered · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'before',t:R`17/30`,n:`57%.`},
+  {k:'ember',kl:'after',t:R`2/25`,n:`8%.`},
+  {k:'ember',kl:'cloud',t:R`\htmlClass{new}{0.487 \pm 0.207}`,n:`Size with width.`}
+],{title:'The slides · plan first · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'shown',t:R`36\%`,n:`Repeats passed.`},
+  {k:'ember',kl:'open',t:R`\htmlClass{new}{\text{what line}}`,n:`Argued.`}
+],{title:'The slides · open · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'illegal',t:R`p = P(\text{false})\,?`,n:`Turned the wrong way.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How sure am I of where I am?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r30logi.html">← 30·logi how many seats should an airline sell?</a><a href="r30now.html">next: 30·now how many findings survive? →</a></p>
+  <div class="tags"><span class="tag nav">30·nav · navigation</span></div>
+  <h1>How sure am I of where I am?</h1>
+  <p>How sure am I of where I am? A ferry leaves Seattle for Bremerton on a winter morning in fog. It must thread Rich Passage, the narrow water between Bainbridge Island and the Kitsap shore, past the rocks at its eastern mouth. The captain has more than one way of knowing where the boat is. The satellite receiver gives one answer. The radar, timing echoes off the shore, gives another. Speed and heading, carried forward from the last good fix, give a third. They never quite agree. Every navigator since the first ships has faced this: several answers, each a little wrong, and one boat. Should you trust the best one and ignore the rest? Take a plain average? What makes it hard is that the answers are not equally good, and how good each one is changes as the trip goes on. This page uses rung thirty’s spreads to settle it. Two fixes are best combined with weights, each fix weighted by one over its spread, and the result is better than either. A plain average can be worse than the best fix alone. A position carried forward grows less certain as it ages, and a new fix pulls it back. And errors east and north, joined, give the chance of being more than any distance off, which is what the captain needs to decide whether to go through.</p>
+  <p class="gesture">Each fix is the true place plus an error that averages nothing, with a known spread. A weighted average of two fixes is again the true place plus an error, and its spread is the square of each weight times that fix’s spread, added. Choose the weight to make that spread least, and the weight on each fix comes out in proportion to one over its spread. The spread of the result is then one over the sum of one over each spread: the trusts add. A poor fix gets a small weight, and still helps a little. A plain average gives it half the say, and is worse than the good fix alone whenever the poor fix’s width is more than about one and three quarter times the good one’s. Between fixes, a position carried forward from speed and heading is a random walk, and its spread grows in step with the time. Each fix pulls it back, and the spread settles into a saw tooth. Finally, errors east and north are independent and at right angles, so their spreads add like the squares of the sides of a right triangle, and the chance of being more than a distance off falls off as an exponential of the square of that distance.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r30g.html">30g</a> (the average-adds and independent-spreads-add techniques), <a href="r30n.html">30n</a> (the root-n technique), <a href="r30q.html">30q</a> (the sample-average technique), <a href="r30e.html">30e</a> (the either-order-sized technique), <a href="r30m.html">30m</a> (the bell; the stretched-density technique), <a href="r28i.html">28i</a> (changing variables in a double integral), <a href="r14g.html">14g</a> (the bends-up technique) and <a href="r08i.html">8i</a> (the quadratic formula). 30·now asks how many findings survive.</p></div>
+</header>
+
+<section class="class step" data-step="30nav1">
+  <h2 class="sthead"><span class="stno">30nav1</span>Two fixes, one line</h2>
+  <p class="stands">Stands on 30g (the average-adds and independent-spreads-add techniques), 13 (slope) and 14g (the bends-up technique).</p>
+  <p data-pid="5c42cd">Work across the ferry’s track first: one number, x, how far the boat is to the left of its line. Fix A reads A = x + e_A and fix B reads B = x + e_B, with independent errors that average 0 and have widths a and b. Combine them as X = wA + (1 − w)B.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the weigh-by-trust technique">
+E\,X = w x + (1 - w) x = x @@ the average-adds technique (30g): any w keeps the average right
+\operatorname{Var} X = w^2 a^2 + (1 - w)^2 b^2 @@ the independent-spreads-add technique (30g)
+\tfrac{d}{dw}\operatorname{Var} X = 2wa^2 - 2(1 - w)b^2 = 0 \iff w = \tfrac{b^2}{a^2 + b^2} @@ slope 0 (13); the slope rises, so this is the bottom (14g)
+\tfrac{w}{1 - w} = \tfrac{b^2}{a^2} = \tfrac{1/a^2}{1/b^2} @@ each weight in proportion to one over its spread
+\htmlClass{new}{\operatorname{Var} X = \tfrac{a^2b^2}{a^2 + b^2} = \tfrac{1}{1/a^2 + 1/b^2}} \quad \blacksquare @@ put w back in, and simplify
+  </pre>
+  <p data-pid="49c2b9">Weigh-by-trust technique: <b>two independent fixes are best combined with weights in proportion to one over their spreads, and then one over the spread of the result is the sum of one over each spread, so the result is better than either fix.</b> A phone’s satellite fix under open sky has a width of about 2.0 m in each direction (30·nav.4 finds this from the published figure). A radar range off the shore might have a width of 10 m. Then w = 100/104 = 0.96 on the satellite fix, and the width of the result is 1.96 m: the radar helps, a little.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · two fixes · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">30·nav.1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a radar fix of width 6 m and a position carried forward of width 8 m</span></span>Find the weight on each, and the width of the combined fix. <br>Find the width of their plain average.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30nav2">
+  <h2 class="sthead"><span class="stno">30nav2</span>Trusts add, and the plain average</h2>
+  <p class="stands">Stands on 30·nav.1 and 30g (the independent-spreads-add technique).</p>
+  <p data-pid="05d25c">With n fixes of widths σ₁, …, σ_n, combine the first two by the weigh-by-trust technique, then combine the result with the third, and so on. At each stage one over the spread grows by one over the new fix’s spread.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the trusts-add technique, and the plain-average check">
+\tfrac{1}{\sigma^2} = \tfrac{1}{\sigma_1^2} + \cdots + \tfrac{1}{\sigma_n^2},\ \ \text{weights } \tfrac{1/\sigma_i^2}{\sum_j 1/\sigma_j^2} @@ the weigh-by-trust technique, n − 1 times
+n \text{ equal fixes of width } s:\ \ \sigma = s/\sqrt n @@ the sample-average technique (30q) again
+\text{plain average of two: } \operatorname{Var} = \tfrac{a^2 + b^2}{4} @@ the independent-spreads-add technique, with w = ½
+\tfrac{a^2 + b^2}{4} < a^2 \iff b^2 < 3a^2 @@ multiply by 4, take a² away
+\htmlClass{new}{\text{the plain average beats the better fix alone exactly when } b < \sqrt3\,a} \quad \blacksquare @@ √3 ≈ 1.73
+  </pre>
+  <p data-pid="3d480a">Trusts-add technique: <b>with weights in proportion to one over each spread, one over the spread of the result is the sum of one over each spread, while a plain average of two fixes beats the better fix only when the worse is less than √3 times as wide.</b> The satellite fix of 2 m and the radar of 10 m, averaged plainly, give a width of √104/2 = 5.1 m: two and a half times worse than the satellite fix alone. Weighted, they give 1.96 m. The radar’s answer is not thrown away; it is given the small say it has earned.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · trusts add · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30·nav.2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">three fixes of widths 3 m, 4 m and 12 m</span></span>Find the weight on each and the width of the combined fix. <br>Find whether the plain average of the first two beats the first alone.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30nav3">
+  <h2 class="sthead"><span class="stno">30nav3</span>A fix that ages</h2>
+  <p class="stands">Stands on 30·nav.1, 30n (the root-n technique) and 30g (the independent-spreads-add technique).</p>
+  <p data-pid="242489">Between fixes, the boat’s place is carried forward from speed and heading: dead reckoning. Small errors in the log’s speed and in the current add up minute by minute, as the steps of a random walk (30n). So the spread of the carried position grows by a fixed amount q for each minute. Let P be its spread just after a fix, and let fixes of spread R come every t minutes.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the predict-and-correct technique">
+P^- = P + qt @@ predict: the root-n technique (30n), t more steps of the walk
+P^+ = \tfrac{1}{1/P^- + 1/R} = \tfrac{P^- R}{P^- + R} @@ correct: the weigh-by-trust technique, carried position against fix
+P^+ = P:\ \ P(P + qt + R) = (P + qt)R @@ a steady saw tooth: the same spread after every fix
+P^2 + qt\,P - qtR = 0 @@ multiply out
+\htmlClass{new}{P = \tfrac{-qt + \sqrt{(qt)^2 + 4qtR}}{2}} \quad \blacksquare @@ the quadratic formula (8i), the positive root
+  </pre>
+  <p data-pid="c9fedb">Predict-and-correct technique: <b>between fixes a carried position’s spread grows by q each minute, and each fix brings it back by the weigh-by-trust technique, so the spread settles into a saw tooth whose low point solves P² + qtP − qtR = 0.</b> Take q = 225 m² a minute, a width of 15 m after one minute of carrying, and radar fixes of width 10 m every 5 minutes. Then qt = 1125 and P = 92.4: a width of 9.6 m just after each fix, growing to √1217 = 34.9 m just before the next. If the satellite fix is lost, 10 minutes of carrying from 2 m reach √(4 + 2250) = 47.5 m.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · ageing · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · the width of a carried position, fixed every few minutes</div>
+    <div class="kn"><span class="m">every</span><input type="range" id="kt" min="1" max="10" step="1" value="5"><output id="ot"></output></div>
+    <div id="pl"></div>
+    <div class="cap">Ember: the width, in metres, of the boat’s place across its track, over 40 minutes. It grows like a random walk at q = 225 m² a minute, and each radar fix of width 10 m pulls it back by the weigh-by-trust technique. Ink: the radar’s own width, 10 m.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30·nav.3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">q = 100 m² a minute; fixes of width 5 m every 4 minutes</span></span>Find the width just after each fix, and just before the next. <br>Find the width after 20 minutes with no fixes, from a start of 5 m.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30nav4">
+  <h2 class="sthead"><span class="stno">30nav4</span>East and north: the chance of being far off</h2>
+  <p class="stands">Stands on 30·nav.1, 30m (the bell; the stretched-density technique), 30e (the either-order-sized technique), 28i (changing variables in a double integral) and 17 (exp).</p>
+  <p data-pid="b4010b">Now the plane. Let the error east be E and the error north N, independent, each a bell of width σ, by 30m’s stretched-density technique (1/σ)φ(x/σ). Their joint density is the product, (1/(2πσ²)) e^{−(x² + y²)/(2σ²)}. The distance off is R, with R² = E² + N².</p>
+  <pre class="lines" data-k="ember" data-label="this page: the circle-chance technique">
+P(R > r) = \iint_{x^2 + y^2 > r^2} \tfrac{1}{2\pi\sigma^2}\,e^{-(x^2 + y^2)/(2\sigma^2)}\,dx\,dy @@ independent, so the densities multiply; the either-order-sized technique (30e)
+= \int_0^{2\pi}\!\!\int_r^\infty \tfrac{1}{2\pi\sigma^2}\,e^{-\rho^2/(2\sigma^2)}\,\rho\,d\rho\,d\theta @@ distance and turn in place of east and north (28i)
+= \int_r^\infty \tfrac{\rho}{\sigma^2}\,e^{-\rho^2/(2\sigma^2)}\,d\rho = \Big[-e^{-\rho^2/(2\sigma^2)}\Big]_r^\infty @@ the turn gives 2π; the inside has the slope shown (17)
+\htmlClass{new}{P(R > r) = e^{-r^2/(2\sigma^2)}} \quad \blacksquare @@ and E R² = 2σ², spreads adding at right angles
+  </pre>
+  <p data-pid="d76c16">Circle-chance technique: <b>if the errors east and north are independent bells of width σ, the chance of being more than r off is e^{−r²/(2σ²)}.</b> Turned round: the circle that holds the boat with chance 95% has radius σ√(2 ln 20) = 2.45σ. The published figure for a phone under open sky is a 4.9 m radius at 95%, so σ ≈ 2.0 m.</p>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · counting and the triangle</div>
+    <p data-pid="002980">The two errors are independent and at right angles. Their spreads add like the squares of the sides of a right triangle: the average of R² is σ² + σ². Nothing about the boat is known exactly, yet the chance of each distance off is known exactly, given the widths. That is rigour of the second kind, and a decision can stand on it.</p>
+    <p data-pid="95a8f4"><b>Give a position with its width, and decide with the chance of being wrong stated: errors at right angles add like the squares of a triangle’s sides.</b></p>
+    <p data-pid="5e24a1">Orchard Rocks lie at the eastern mouth of Rich Passage. Suppose the captain will pass within 30 m of a hazard only if the chance of being more than 30 m off the fix is below 1 in 1000. That needs 30 ≥ σ√(2 ln 1000) = 3.72σ, so σ ≤ 8.1 m. On the satellite fix, σ = 2 m: go. On radar alone, σ = 10 m, the chance of being more than 30 m off is e^{−4.5} = 1.1%, eleven times the line: slow down, or stand further off.</p>
+    <p class="bait" data-pid="5ad9f2">The satellite fix and the radar disagree by 40 m, when their widths are 2 m and 10 m. Is that one of the chances the circle-chance technique allows, or a sign that one of them is broken?</p>
+  </aside>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · circle · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30·nav.4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">errors east and north each of width σ = 2 m</span></span>Find the chance of being more than 10 m off. <br>Find the radius that holds the boat with chance 999 in 1000.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30nav5">
+  <h2 class="sthead"><span class="stno">30nav5</span>Illegal moves</h2>
+  <p class="stands">Stands on 30·nav.1 to 30·nav.4.</p>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{trust the best fix, ignore the rest}\,? @@ any independent fix lowers the spread when weighed by trust
+\text{average the fixes plainly}\,? @@ worse than the best fix when the other is over √3 times as wide
+\text{weights in proportion to one over the width}\,? @@ one over the spread, the width squared
+\text{a carried position stays as good as its last fix}\,? @@ its spread grows by q a minute
+\text{widths east and north add: } 2 + 2 = 4 \text{ m}\,? @@ spreads add: the average of R² is σ² + σ²
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30·nav.5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span class="gtx">two fixes of the same width s</span></span>Find the weights and the width of the combined fix.</li><li><span class="givens"><span class="gtx">a fix of width 0</span></span>Find what the weigh-by-trust technique does with it.</li><li><span class="givens"><span class="gtx">fixes every minute in the predict-and-correct technique, q = 225, R = 100</span></span>Find the steady width after each fix.</li><li><span class="givens"><span class="gtx">σ = 10 m</span></span>Find the radius that holds the boat with chance 95%.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">30·nav.6.1</span><span class="tagq">build</span>Build a plan for crossing from Anacortes to Friday Harbor in fog with a satellite fix, a radar and a log, giving each a width you can defend. <br>Find the widest the satellite fix may be before you slow down near a hazard 50 m off your line.</div>
+  <div class="chq"><span class="chid">30·nav.6.2</span><span class="tagq">edge</span>Find what the predict-and-correct technique gives as q heads to 0, and as the fixes come further and further apart.</div>
+  <div class="chq"><span class="chid">30·nav.6.3</span><span class="tagq">converse</span>Independent fixes, weighed by trust, give a spread smaller than either. Turn it round: if two fixes share an error, a tide both forget, must combining them still help? Find the spread of wA + (1 − w)B when their errors have co-spread c.</div>
+  <div class="chq"><span class="chid">30·nav.6.4</span><span class="tagq">reroute</span>Find the weigh-by-trust weights a second way, without slopes: write the spread as a²b²/(a² + b²) plus a square in w, and read off where the square is 0.</div>
+  <div class="chq"><span class="chid">30·nav.6.5</span><span class="tagq">seam</span>One side holds that a navigator should trust the satellite fix: it is a hundred times better than anything else on the bridge, and weighing it against worse fixes adds work and little else. The other holds that every fix should be kept and weighed, and the old ways practised, since a satellite signal can be jammed or faked and gives no warning when it is wrong. <br>When the satellite fix and the radar disagree by far more than their widths, which should the captain believe?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r30logi.html">← 30·logi · how many seats should an airline sell?</a><a href="r30now.html">30·now · how many findings survive? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>Weighting each fix by one over its spread is inverse-variance weighting; one over a spread is a precision, and the trusts-add technique says precisions add. The predict-and-correct technique, in one dimension, is the Kalman filter; P is the error variance, q the process noise and R the measurement noise. A position carried from speed and heading is dead reckoning. The distance off, when errors east and north are independent bells of one width, has the Rayleigh distribution; the 95% radius is R95, and the 50% radius the circular error probable.</p>
+  <h3>Who said it first</h3>
+  <p>Adrien-Marie Legendre published the method of least squares in 1805, and Carl Friedrich Gauss, who said he had used it since 1795, justified it from the bell in 1809. Pierre-Simon Laplace showed how to weight observations of unequal precision. Lord Rayleigh found the distribution of the distance off in 1880, for the sum of many sound waves of random phase. Rudolf Kálmán published the predict-and-correct filter in 1960, and Stanley Schmidt at the Ames Research Center fitted it to the navigation of the Apollo spacecraft. In 30·nav.6.5, jamming and faking of satellite signals at sea has been reported in many places since about 2017, and navies and some merchant fleets went back to teaching navigation by the stars.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="30·nav: a worked “proof”, not allowed">
+\text{the satellite fix has width } 2 \text{ m, the radar } 10 \text{ m} @@ fine
+\text{two readings are better than one, so average them} @@ not allowed: a plain average has width √104/2 = 5.1 m, worse than 2 m; weigh by one over the spread
+  </pre>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+const V=c=>'var('+c+')';
+// plot(series, xr, yr, opts): series = [{pts:[[x,y],...], c:'--ember', w:1.6, dash:''}]; returns svg string
+function plot(series, xr, yr, o){ o=o||{}; const W=360,H=o.H||210,L=34,B=22,T=8,Rr=8;
+  const sx=x=>L+(x-xr[0])/(xr[1]-xr[0])*(W-L-Rr), sy=y=>H-B-(y-yr[0])/(yr[1]-yr[0])*(H-B-T);
+  let s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;max-width:440px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  (o.yt||[]).forEach(y=>{ s+='<line x1="'+L+'" x2="'+(W-Rr)+'" y1="'+sy(y)+'" y2="'+sy(y)+'" style="stroke:'+V('--grid')+';stroke-width:0.6"/><text x="'+(L-3)+'" y="'+(sy(y)+3)+'" text-anchor="end" style="font:9px var(--mono);fill:'+V('--muted')+'">'+y+'</text>'; });
+  (o.xt||[]).forEach(x=>{ s+='<text x="'+sx(x)+'" y="'+(H-8)+'" text-anchor="middle" style="font:9px var(--mono);fill:'+V('--muted')+'">'+x+'</text>'; });
+  s+='<line x1="'+L+'" x2="'+L+'" y1="'+T+'" y2="'+(H-B)+'" style="stroke:'+V('--ink')+';stroke-width:0.8"/><line x1="'+L+'" x2="'+(W-Rr)+'" y1="'+(H-B)+'" y2="'+(H-B)+'" style="stroke:'+V('--ink')+';stroke-width:0.8"/>';
+  series.forEach(se=>{ const cl=v=>Math.max(yr[0]-0.05*(yr[1]-yr[0]),Math.min(yr[1]+0.05*(yr[1]-yr[0]),v));
+    const d=se.pts.filter(p=>isFinite(p[1])).map((p,i)=>(i?'L':'M')+sx(p[0]).toFixed(1)+','+sy(cl(p[1])).toFixed(1)).join('');
+    s+='<path d="'+d+'" style="fill:none;stroke:'+V(se.c||'--ember')+';stroke-width:'+(se.w||1.6)+(se.dash?';stroke-dasharray:'+se.dash:'')+'"/>'; });
+  (o.dots||[]).forEach(p=>{ s+='<circle cx="'+sx(p[0])+'" cy="'+sy(p[1])+'" r="2.6" style="fill:'+V(p[2]||'--ember')+'"/>'; });
+  if(o.xl) s+='<text x="'+(W-Rr)+'" y="'+(H-B-4)+'" text-anchor="end" style="font:9px var(--mono);fill:'+V('--muted')+'">'+o.xl+'</text>';
+  if(o.yl) s+='<text x="'+(L+4)+'" y="'+(T+9)+'" style="font:9px var(--mono);fill:'+V('--muted')+'">'+o.yl+'</text>';
+  return s+'</svg>'; }
+
+const QN=225, RN=100, TN=40;
+function draw(){ const t=+$('kt').value; $('ot').textContent=t+' min';
+  const pts=[]; let P=4; let lo=0, hi=0;
+  for(let m=0;m<TN;m+=t){ pts.push([m,Math.sqrt(P)]); const Pm=P+QN*t; const m2=Math.min(m+t,TN); pts.push([m2,Math.sqrt(P+QN*(m2-m))]); if(m2==m+t){ P=Pm*RN/(Pm+RN); pts.push([m2,Math.sqrt(P)]); } }
+  const qt=QN*t, Ps=(-qt+Math.sqrt(qt*qt+4*qt*RN))/2;
+  $('pl').innerHTML=plot([{pts:[[0,10],[TN,10]],c:'--ink',w:1,dash:'4 3'},{pts:pts,c:'--ember'}],[0,TN],[0,60],{xt:[0,10,20,30,40],yt:[0,10,20,30,40,50,60],xl:'minutes',yl:'m',H:220});
+  const v=$('vd'); v.className='verdict';
+  v.textContent='Fixes every '+t+' min: the width settles to '+fm(Math.sqrt(Ps),1)+' m just after each fix and '+fm(Math.sqrt(Ps+qt),1)+' m just before the next. The chance of being more than 30 m off, just before a fix, is about '+fm(100*Math.exp(-900/(2*(Ps+qt))),1)+'% if east and north each carry that width.'; }
+$('kt').oninput=draw; draw();
+window.__pic={set:(k)=>{ $('kt').value=k; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'mix',t:R`X = wA + (1 - w)B`,n:`Average x.`},
+  {k:'ember',kl:'spread',t:R`w^2a^2 + (1-w)^2b^2`,n:`Independent.`},
+  {k:'ember',kl:'best',t:R`\htmlClass{new}{w \propto 1/a^2}`,n:`Weigh by trust.`},
+  {k:'ember',kl:'result',t:R`1/(1/a^2 + 1/b^2)`,n:`Better than either.`}
+],{title:'The slides · two fixes · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'n',t:R`\htmlClass{new}{1/\sigma^2 = \textstyle\sum 1/\sigma_i^2}`,n:`Trusts add.`},
+  {k:'ember',kl:'equal',t:R`s/\sqrt n`,n:`The cloud.`},
+  {k:'ember',kl:'plain',t:R`b < \sqrt3\,a`,n:`Or worse.`}
+],{title:'The slides · trusts add · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'predict',t:R`P + qt`,n:`The walk.`},
+  {k:'ember',kl:'correct',t:R`\tfrac{1}{1/P^- + 1/R}`,n:`Weigh by trust.`},
+  {k:'ember',kl:'saw',t:R`\htmlClass{new}{P^2 + qtP - qtR = 0}`,n:`Steady.`}
+],{title:'The slides · ageing · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'joint',t:R`\tfrac{1}{2\pi\sigma^2}e^{-(x^2+y^2)/(2\sigma^2)}`,n:`Multiply.`},
+  {k:'ember',kl:'turn',t:R`\rho\,d\rho\,d\theta`,n:`28i.`},
+  {k:'ember',kl:'chance',t:R`\htmlClass{new}{e^{-r^2/(2\sigma^2)}}`,n:`Being r off.`},
+  {k:'ember',kl:'95%',t:R`2.45\sigma`,n:`4.9 m.`}
+],{title:'The slides · circle · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`w \propto 1/a\,?`,n:`One over the spread.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

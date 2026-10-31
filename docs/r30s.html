@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Is the difference real?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r30r.html">← 30r the most likely parameter</a><a href="r30t.html">next: 30t the best test →</a></p>
+  <div class="tags"><span class="tag tech">30s · technique</span></div>
+  <h1>Is the difference real?</h1>
+  <p>A coin tossed ten thousand times lands heads a little more than half the time. A team wins a little more than half its games. The gardener’s peas come out a little off three to one. Every record differs a little from what a plain claim predicts, because chance never lands exactly on its average. The question is whether this difference is the ordinary wobble of chance or a sign that the claim is wrong. This step turns the question into a number: if the claim were true, how often would chance alone throw up a difference at least this large? A small number is a surprise, and a surprise counts against the claim. Then come the two ways a test can be wrong, and how large a sample must be to catch a difference that is really there. Last, counts in a table, where the peas get their test.</p>
+  <p class="gesture">Measure the difference in widths. If the claim is true, the bell says how often chance alone reaches that far: the surprise chance. A test rejects the claim when the surprise is small, and so wrongly rejects a true claim at a rate fixed in advance. Missing a real difference is the other error, and only a larger sample makes it rare. For counts in cells the squared misses over the expected counts make one test number, and with two cells it is exactly the bell test squared.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r30q.html">30q</a> (the sample-average, bell-cover and small-sample-cover techniques), <a href="r30j.html">30j</a> (the central limit technique), <a href="r30m.html">30m</a> (the bell-series technique), <a href="r30g.html">30g</a> (the spread-of-a-sum and independent-spreads-add techniques), <a href="r30f.html">30f</a> (independence and the turn-around technique), <a href="r14stat.html">14·stat</a> (a coin tossed 10 000 times), <a href="r05bio.html">5·bio</a> (the first pea counts) and <a href="r04stat.html">4·stat</a> (two-way tables). <a href="r30t.html">30t</a> asks which test is the best one.</p></div>
+</header>
+
+<section class="class step" data-step="30s1">
+  <h2 class="sthead"><span class="stno">30s1</span>The surprise chance, and the bell test</h2>
+  <p class="stands">Stands on 30q1 (the sample-average technique), 30q3 (the bell-cover technique), 30j3 (the central limit technique), 30m3 (the bell-series technique) and 14·stat.</p>
+  <p data-pid="fa450e">A test starts from a claim to be tried, written H₀: the coin is fair, the share is 3/4, two averages are equal. From the record it makes a test number Z, the difference from what the claim predicts, measured in widths worked out as if the claim were true. A seen value z is then judged by the surprise chance: the chance, if the claim is true, that chance alone gives a test number at least as far from 0 as z.</p>
+  <p data-pid="022f63">Bell-test technique: <b>suppose that when the claim is true, Z heads in chance to the bell. Then the surprise chance of a seen z heads to the bell’s area outside −|z| to |z|. And the rule “reject the claim when |Z| ≥ 1.96” rejects a true claim with a chance that heads to 0.05.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the bell-test technique">
+\text{surprise chance of } z = P(|Z| \ge |z| \mid \text{claim true}) @@ the definition
+\to \text{the bell’s area outside } -|z| \text{ to } |z| @@ the central limit technique (30j3), with the claim’s average and width
+P(\text{reject} \mid \text{claim true}) = P(|Z| \ge 1.96 \mid \text{claim true}) @@ the rule
+\htmlClass{new}{\to 1 - 0.950 = 0.05} \quad \blacksquare @@ 30q3: the area inside is 0.950
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: is the coin fair?">
+n = 10\,000,\ \ k = 5067,\ \ \text{claim } p = 0.5 @@ 14·stat’s coin
+\text{width of the count} = \sqrt{n \cdot 0.5 \cdot 0.5} = 50 @@ the sample-average technique (30q1), as a count, worked as if the claim were true
+z = (5067 - 5000)/50 = 1.34 @@ the difference in widths
+\text{surprise chance} \approx \text{the bell’s area outside } \pm 1.34 \approx 0.18 @@ the bell-test technique
+\htmlClass{new}{|z| < 1.96:\ \text{the record does not reject a fair coin}} \quad \blacksquare @@ chance alone goes this far about one time in five or six
+  </pre>
+  <p data-pid="f98a95">Not rejecting is not proving. The record allows a fair coin, and it allows a coin with chance 0.505 just as well. 14·stat asked whether the coin is fair. The answer the record can give is weaker: it does not show that it is unfair.</p>
+  <p data-pid="54acf8">The test above is two-sided: a difference either way counts against the claim. When the story against the claim points one way only, a lake grown clearer or apples grown heavier, a one-sided test counts differences in that direction alone. It rejects when Z ≥ 1.645, since the standard bell’s area above 1.645 is 0.05 (the bell-series technique, 30m3).</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the surprise chance · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">30s1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="88 \text{ wins in } 162,\ \ \text{claim } p = 0.5"></span></span>The Seattle Mariners’ 2023 season. Find z and the surprise chance. Find whether the record rejects a team that wins each game with chance one half.</li><li><span class="givens"><span data-tex-inline="5474 \text{ round of } 7324,\ \ \text{claim } p = 3/4"></span></span>The first pea counts. Find z and the surprise chance.</li><li><span class="givens"><span data-tex-inline="n = 10\,000,\ \ \text{claim } p = 0.5"></span></span>Find the least number of heads at which the bell test rejects a fair coin, on the high side.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30s2">
+  <h2 class="sthead"><span class="stno">30s2</span>Small samples, and two samples</h2>
+  <p class="stands">Stands on 30s1, 30q4 (the trusted t law and the small-sample-cover technique), 30g2 (the spread-of-a-sum technique), 30g3 (the independent-spreads-add technique) and 30q1.</p>
+  <p data-pid="05b826">For bell-shaped readings with σ unknown, the test number is T = (X̄ − μ₀)/(S/√n), and the trusted law of 30q4 replaces the bell, with its table for n − 1.</p>
+  <p data-pid="57c5f0">Small-sample-test technique: <b>if every reading is bell-shaped and the claim μ = μ₀ is true, then the rule “reject when |T| ≥ t”, with t from the table for n − 1, rejects with chance exactly 0.05.</b> It is the small-sample-cover technique turned around: |T| ≥ t exactly when μ₀ lies outside X̄ ± tS/√n, and that happens with chance 0.05 when μ₀ is the true μ.</p>
+  <pre class="lines" data-k="ember" data-label="this step: has the lake got clearer?">
+\bar x = 5.625,\ \ s \approx 0.6714,\ \ n = 8,\ \ \text{claim } \mu_0 = 5.0 @@ the readings of 30q2, against an average of 5.0 m in earlier years
+t_{\text{seen}} = 0.625/0.2374 \approx 2.63 @@ the difference in estimated widths
+2.63 \ge 2.365 @@ the table for 7 degrees
+\htmlClass{new}{\text{the claim } \mu = 5.0 \text{ is rejected at } 0.05} \quad \blacksquare @@ the same answer as 30q4: 5.0 lies outside 5.06 to 6.19
+  </pre>
+  <p data-pid="0d85af">Two-sample technique: <b>for independent samples of sizes n₁ and n₂ with spreads σ₁² and σ₂², the difference X̄₁ − X̄₂ has spread σ₁²/n₁ + σ₂²/n₂.</b> By the independent-spreads-add technique (30g3), with Var(−Y) = Var Y by the spread-of-a-sum technique (30g2), and the sample-average technique for each. So the claim of equal averages is tested with Z = (X̄₁ − X̄₂)/√(σ₁²/n₁ + σ₂²/n₂), which heads to the bell when the claim is true and the samples are large.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · small samples · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30s2.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="3.8,\ 4.6,\ 5.1,\ 4.2,\ 4.9\ \text{kg},\ \ \mu_0 = 4.0"></span></span>Test the claim that Skagit steelhead average 4.0 kg, from the five weighed in 30q2.1a.</li><li><span class="givens"><span data-tex-inline="540 \text{ of } 1000,\ \ 500 \text{ of } 1000"></span></span>Two polls ask the same question, one in Oregon and one in Washington. Test the claim that the two shares are equal, using p̂(1 − p̂) for each spread.</li><li><span class="givens"><span data-tex-inline="n = 8,\ \ \bar x = 5.625,\ \ s \approx 0.6714"></span></span>Find the claimed averages μ₀ that the lake’s readings do not reject at 0.05.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30s3">
+  <h2 class="sthead"><span class="stno">30s3</span>Two kinds of error, and power</h2>
+  <p class="stands">Stands on 30s1, 30q1, 30j3 and 30m3.</p>
+  <p data-pid="af035e">A test can go wrong in two ways. It can reject a claim that is true: an error of the first kind. Its chance is the level, 0.05 above, fixed in advance. It can keep a claim that is false: an error of the second kind. The chance of rejecting a false claim is the power of the test. It depends on how false the claim is, and on n.</p>
+  <p data-pid="f5aa8c">Test-power technique: <b>for the bell test of the claim p = p₀ from n tosses, when the true chance is p, the power is about the bell’s area above 1.96 − d plus its area below −1.96 − d, where d = (p − p₀)√n / √(p₀(1 − p₀)).</b> Here “about” takes the width at p₀ for the width at p, which differ little when p is near p₀.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the test-power technique">
+Z = \frac{\hat p - p_0}{w_0} = \frac{\hat p - p}{w_0} + d,\ \ w_0 = \sqrt{p_0(1 - p_0)/n} @@ split the difference at the true p
+\frac{\hat p - p}{w_0} \approx \text{bell} @@ the central limit technique (30j3), with w₀ for the true width
+P(Z \ge 1.96) \approx \text{the bell’s area above } 1.96 - d @@ shift by d
+\htmlClass{new}{\text{power} \approx \text{area above } 1.96 - d + \text{area below } -1.96 - d} \quad \blacksquare @@ the two ways to reject
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: a coin with chance 0.51">
+p_0 = 0.5,\ \ p = 0.51,\ \ n = 10\,000 @@ a coin a little off
+d = 0.01 \times 100/0.5 = 2 @@ the test-power technique
+\text{power} \approx \text{area above } -0.04 + \text{area below } -3.96 \approx 0.516 @@ about a coin toss
+\text{power } 0.8 \text{ needs } 1.96 - d = -0.84,\ \ d = 2.80 @@ the bell’s area above −0.84 is 0.80
+\htmlClass{new}{n \approx (2.80 \times 0.5/0.01)^2 \approx 19\,600} \quad \blacksquare @@ d grows like √n
+  </pre>
+  <p data-pid="457780">The two errors pull against each other. Rejecting only past 2.576 makes the first kind rarer, 1 in 100, and the second kind more common. For a fixed level, only a larger sample buys power, and the cost grows with the square of the precision wanted: half the difference takes four times the tosses.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · two kinds of error · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30s3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="p_0 = 0.5,\ \ p = 0.505,\ \ n = 10\,000"></span></span>Find d and the power of the bell test.</li><li><span class="givens"><span data-tex-inline="p_0 = 0.5,\ \ p = 0.53"></span></span>Find the n that gives power 0.8, and the power with n = 10 000.</li><li><span class="givens"><span data-tex-inline="20 \text{ independent tests, each claim true}"></span></span>Each test rejects at level 0.05. Find the chance that at least one of the twenty rejects.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30s4">
+  <h2 class="sthead"><span class="stno">30s4</span>Counts in cells, and the peas</h2>
+  <p class="stands">Stands on 30s1, 30f2 (independence), 4·stat (two-way tables and the two-ways-to-the-total technique) and 5·bio (the first pea counts).</p>
+  <p data-pid="ed3e8f">Counts fall into cells: round or wrinkled; round and yellow, round and green, wrinkled and yellow, wrinkled and green. A claim gives each cell an expected count, its chance times n. One test number gathers all the cells: X² = the sum, over the cells, of (seen − expected)² / expected.</p>
+  <p data-pid="46b916">Two-cell technique: <b>with two cells, of chances p₀ and 1 − p₀, X² = Z², where Z is the bell test number of 30s1.</b> So “reject when X² ≥ 3.841” is the bell test, since 1.96² ≈ 3.841.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the two-cell technique">
+\text{seen } k,\ n - k;\ \ \text{expected } np_0,\ n(1 - p_0) @@ the two cells
+(n - k) - n(1 - p_0) = -(k - np_0) @@ the two misses are equal and opposite
+X^2 = (k - np_0)^2\Big(\tfrac{1}{np_0} + \tfrac{1}{n(1 - p_0)}\Big) @@ take out the common square
+\tfrac{1}{np_0} + \tfrac{1}{n(1 - p_0)} = \tfrac{1}{np_0(1 - p_0)} @@ add the fractions: p₀ + (1 − p₀) = 1 on top
+\htmlClass{new}{X^2 = \frac{(k - np_0)^2}{np_0(1 - p_0)} = Z^2} \quad \blacksquare @@ 30s1’s Z, squared
+  </pre>
+  <p data-pid="375d02">Held in trust: <b>when the claim is true and every expected count is large, X² over c cells has a chance law heading to one that depends only on the number of degrees, c − 1. For a two-way table with r rows and k columns, tested for independence with expected counts row total × column total / n, the degrees are (r − 1)(k − 1).</b> Its accepted name is the χ² distribution. Its proof waits much higher up the ladder; the two-cell technique is its first case, proved. What it gives: a table. The 0.05 values are 3.841 for 1 degree, 5.991 for 2, 7.815 for 3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the first pea counts">
+5474 \text{ round},\ 1850 \text{ wrinkled};\ \text{expected } 5493,\ 1831 @@ the claim 3 : 1, with n = 7324 (5·bio)
+X^2 = \tfrac{19^2}{5493} + \tfrac{19^2}{1831} \approx 0.066 + 0.197 = 0.263 @@ the misses are −19 and +19
+0.263 \approx (-0.513)^2 @@ the two-cell technique: z from 30s1.1b
+315,\ 108,\ 101,\ 32;\ \ \text{rows } 423,\ 133;\ \text{columns } 416,\ 140 @@ round or wrinkled against yellow or green, 556 seeds (5·bio)
+\text{expected } \tfrac{423 \cdot 416}{556} \approx 316.49,\ 106.51,\ 99.51,\ 33.49 @@ independent shape and colour (30f2): row share times column share, times n
+X^2 \approx 0.116 < 3.841 @@ 1 degree: (2 − 1)(2 − 1)
+\htmlClass{new}{\text{neither count rejects its claim}} \quad \blacksquare @@ 3 : 1 stands, and shape and colour pass as independent
+  </pre>
+  <p data-pid="c5b974">Why row total × column total / n: if shape and colour are independent, the chance of round and yellow is the chance of round times the chance of yellow (30f2). The record’s shares, 423/556 and 416/556, stand in for those chances. The expected counts then have the same row and column totals as the table, by the two-ways-to-the-total technique (4·stat), so only one cell is free: one degree.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · counts in cells · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30s4.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="6022 \text{ yellow},\ 2001 \text{ green},\ \ \text{claim } 3 : 1"></span></span>The seed colours of 5·bio. Find X², and check it equals z².</li><li><span class="givens"><span data-tex-inline="315,\ 108,\ 101,\ 32,\ \ \text{claim } 9 : 3 : 3 : 1"></span></span>Test the four seed kinds against 9 : 3 : 3 : 1. Find the expected counts, X², the degrees and the verdict.</li><li><span class="givens"><span data-tex-inline="\begin{array}{c|cc} &amp; \text{yes} &amp; \text{no} \\ \hline \text{Oregon} &amp; 540 &amp; 460 \\ \text{Washington} &amp; 500 &amp; 500 \end{array}"></span></span>The two polls of 30s2.1b as a two-way table. Find the expected counts, X², and whether it rejects independence of state and answer at 0.05.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30s5">
+  <h2 class="sthead"><span class="stno">30s5</span>Illegal moves</h2>
+  <p class="stands">Stands on 30s1 to 30s4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{surprise chance } 0.18,\ \text{so the chance that the coin is fair is } 0.18\,? @@ it is a chance of the record given the claim, not of the claim given the record
+0.18 > 0.05,\ \text{so the coin is fair}\,? @@ not rejecting is not proving; the test may have little power
+X^2 = \tfrac{(0.7474 - 0.75)^2}{0.75} + \tfrac{(0.2526 - 0.25)^2}{0.25} \text{ from the shares}\,? @@ X² is built on counts: shares divide it by n
+\text{twenty traits tested; one has surprise } 0.03,\ \text{so that one is real}\,? @@ among twenty true claims, one surprise below 0.05 is more likely than not
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30s5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="z = 1.34"></span></span>Find the surprise chance of 1.34. Find which chance the turn-around technique (30f3) would need to give the chance that the coin is fair. <br>Find what the first line turns around.</li><li><span class="givens"><span data-tex-inline="p_0 = 0.5,\ \ p = 0.505,\ \ n = 10\,000"></span></span>Find the power of the test against this coin (30s3.1a). <br>Find what the second line forgets.</li><li><span class="givens"><span data-tex-inline="5474,\ 1850,\ \ n = 7324"></span></span>Find X² from the shares and from the counts, and their ratio. <br>Find what the third line forgets.</li><li><span class="givens"><span data-tex-inline="20 \text{ tests at } 0.05"></span></span>Find the chance that at least one of twenty true claims gives a surprise below 0.05. <br>Find what the fourth line forgets.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">30s.4.1</span><span class="tagq">build</span>Build a two-way table of 100 cases, two rows and two columns, whose X² is exactly 0. <br>Build another with the same row and column totals whose X² is above 3.841.</div>
+  <div class="chq"><span class="chid">30s.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="8 \text{ of } 8 \text{ show the first form},\ \ \text{claim } 3 : 1"></span></span>Find the expected counts and X², and the surprise chance the table gives. <br>Find the exact chance of 8 of 8 by 14·stat’s chance-of-a-record technique, and why the table is shaky when an expected count is small.</div>
+  <div class="chq"><span class="chid">30s.4.3</span><span class="tagq">converse</span>One study reports a surprise chance of 0.04, another of 0.06, on the same question. Settle whether the first found something and the second did not. <br>Should a test end in a number to be weighed, or in a decision made by a rule fixed in advance?</div>
+  <div class="chq"><span class="chid">30s.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="315,\ 108,\ 101,\ 32"></span></span>Reroute the 2 × 2 test through two shares: the share yellow among round seeds against the share yellow among wrinkled ones, with the pooled share for the width. <br>Find z, and check that z² is the X² of 30s4.</div>
+  <div class="chq"><span class="chid">30s.4.5</span><span class="tagq">seam closer</span><span class="givens"><span data-tex-inline="5474{:}1850,\ 6022{:}2001,\ 705{:}224,\ 882{:}299,\ 428{:}152,\ 651{:}207,\ 787{:}277"></span></span>The friar’s seven experiments of 5·bio, each against 3 : 1. Find X² for each, and their total. Find E Z² when Z is a bell, and so about what total seven true claims give on average. <br>The chance that seven true claims give a total of 2.14 or less is about 0.05. A statistician in 1936 added up the friar’s experiments and found a total of about 42 where about 84 was to be expected. Should the counts be trusted, and what besides a thumb on the scale could make counts fit this well?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r30r.html">← 30r · the most likely parameter</a><a href="r30t.html">30t · the best test →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The claim to be tried is the null hypothesis, and what a rejection points to is the alternative hypothesis. The test number is the test statistic, and the surprise chance is the p-value. The bell test is the z-test; the small-sample test is Student’s one-sample t-test; the two-sample technique gives the two-sample z-test (with S’s for σ’s and small samples, Welch’s t-test). Rejecting at 0.05 is “significant at the 5% level”, and 0.05 is the significance level, α. An error of the first kind is a type I error, or false positive; of the second kind, a type II error, or false negative, with chance β; the power is 1 − β. X² is Pearson’s chi-squared statistic; with a claimed list of chances it is the goodness-of-fit test, and with expected counts from row and column totals it is the test of independence (or of homogeneity) for a contingency table. The trusted law is the χ² distribution with c − 1 or (r − 1)(c − 1) degrees of freedom. The rule of thumb that every expected count be at least 5 is Cochran’s. Testing many claims and reporting the surprising ones is the multiple comparisons problem.</p>
+  <h3>Who said it first</h3>
+  <p>John Arbuthnot in 1710 used the excess of boys over girls born in London in 82 straight years to argue against pure chance, an early test. Karl Pearson introduced the chi-squared test in 1900, and Ronald Fisher corrected its degrees of freedom for tables in 1922. Fisher’s Statistical Methods for Research Workers (1925) spread the p-value and the 5% level. Jerzy Neyman and Egon Pearson set tests up as decisions with two kinds of error and power in 1928 and 1933; Fisher rejected their view, and the quarrel lasted until his death in 1962. Fisher’s paper of 1936, Has Mendel’s work been rediscovered?, found Mendel’s counts closer to his ratios than chance usually allows; Allan Franklin, A. W. F. Edwards, Daniel Fairbanks, Daniel Hartl and Teddy Seidenfeld revisited the question in Ending the Mendel–Fisher Controversy (2008). Gregor Mendel published the pea counts in 1866.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'in widths',t:R`z = \frac{k - np_0}{\sqrt{np_0(1 - p_0)}}`,n:`Worked as if the claim were true.`},
+  {k:'ember',kl:'the bell',t:R`P(|Z| \ge |z|) \approx \text{area outside } \pm|z|`,n:`The central limit technique.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{reject when } |z| \ge 1.96}`,n:`A true claim falls 5 times in 100.`}
+],{title:'The slides · the surprise chance · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'the number',t:R`T = \frac{\bar X - \mu_0}{S/\sqrt n}`,n:`The trusted law of 30q4.`},
+  {k:'ember',kl:'two samples',t:R`\mathrm{Var}(\bar X_1 - \bar X_2) = \frac{\sigma_1^2}{n_1} + \frac{\sigma_2^2}{n_2}`,n:`Spreads add.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{reject when } |T| \ge t_{n-1}}`,n:`Exact for bell-shaped data.`}
+],{title:'The slides · small samples · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'first kind',t:R`P(\text{reject} \mid \text{true}) = 0.05`,n:`Fixed in advance.`},
+  {k:'ember',kl:'the shift',t:R`d = (p - p_0)\sqrt n/\sqrt{p_0(1 - p_0)}`,n:`Grows like √n.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{n \approx \big(2.80\,\sigma/\delta\big)^2}`,n:`For power 0.8.`}
+],{title:'The slides · two kinds of error · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'one number',t:R`X^2 = \sum \frac{(\text{seen} - \text{expected})^2}{\text{expected}}`,n:`All the cells at once.`},
+  {k:'ember',kl:'two cells',t:R`X^2 = Z^2`,n:`Proved: the bell test squared.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{X^2 \approx 0.263:\ \ 3 : 1 \text{ stands}}`,n:`The first pea counts.`}
+],{title:'The slides · counts in cells · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

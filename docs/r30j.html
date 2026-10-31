@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The bell curve</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r30i.html">← 30i chance in one function</a><a href="r30k.html">next: 30k no system beats a fair game →</a></p>
+  <div class="tags"><span class="tag proof">30j · proof</span></div>
+  <h1>The bell curve</h1>
+  <p>Heights of people, errors of measurement, the total of a hundred dice: plot how often each value turns up, and the same shape appears again and again, high in the middle and falling away on both sides like a bell. This step explains why. First it finds the total area under the bell, which takes a trip into the plane and back. Then it stores a chance variable in a function of a new kind, built from the growth function, that works for any chance variable, not only counts. With that function, it shows that adding many independent copies of almost anything and rescaling gives a function that heads to the bell’s own. One last matching step, which turns the meeting of these functions into the meeting of chances, is held in trust; its proof waits much higher up the ladder.</p>
+  <p class="gesture">The bell’s total is the root of pi. The average-function of a sum of independent copies, rescaled, heads to the bell’s, so sums of many independent parts take the bell’s shape.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r30e.html">30e</a> (either order), <a href="r28i.html">28i</a> (changing the variables), <a href="r30g.html">30g</a> and <a href="r30h.html">30h</a> (averages, spreads, independence), <a href="r30d.html">30d</a> (the fenced limit), <a href="r23a.html">23a</a> and <a href="r23b.html">23b</a> (matching polynomials and how wrong they are) and <a href="r22j.html">22j</a> (many small chances). <a href="r30q.html">30q</a> uses the bell to estimate from samples.</p></div>
+</header>
+
+<section class="class step" data-step="30j1">
+  <h2 class="sthead"><span class="stno">30j1</span>The bell’s total</h2>
+  <p class="stands">Stands on 30e3, 28i.</p>
+  <p data-pid="45538e">Bell-total technique: <b>∫ e^(−x²) dx over the whole line is √π.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the bell-total technique">
+I = \textstyle\int_{-\infty}^{\infty} e^{-x^2}\,dx,\ \ I^2 = \int\!\!\int e^{-x^2 - y^2}\,dx\,dy @@ either-order (30e3); the function is at least 0
+x = r\cos\theta,\ y = r\sin\theta,\ \ dx\,dy = r\,dr\,d\theta @@ changing the variables (28i)
+I^2 = \textstyle\int_0^{2\pi}\!\!\int_0^{\infty} e^{-r^2}\,r\,dr\,d\theta @@ x² + y² = r²
+\textstyle\int_0^{\infty} e^{-r^2}\,r\,dr = \big[-\tfrac12 e^{-r^2}\big]_0^{\infty} = \tfrac12 @@ the slope of e^(−r²) is −2r e^(−r²) (16)
+\htmlClass{new}{I^2 = 2\pi \cdot \tfrac12 = \pi,\ \ I = \sqrt{\pi}} \quad \blacksquare @@ I &gt; 0
+  </pre>
+  <p data-pid="f81b09">From here on, the <i>bell</i> is the chance variable Z with chances P(a &lt; Z ≤ b) = ∫ₐᵇ φ(x) dx, where</p>
+  <p class="eqline" data-pid="38c523">φ(x) = e^(−x²/2) / √(2π).</p>
+  <p data-pid="9dfa8d">φ is its <i>density</i>: chance per unit length. Its total is 1, putting x = √2 u in the bell-total. Its average is 0, since φ is the same on both sides of 0. Its spread is ∫ x² φ(x) dx = 1, by undoing the slope of φ, which is −xφ (16). Its accepted names are the standard normal distribution and the normal density.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · bell total · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">30j1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\textstyle\int e^{-x^2}\,dx = \sqrt{\pi}"></span> <span data-tex-inline="P(-1 &lt; Z \le 1) \approx 0.6827,\ \ P(-2 &lt; Z \le 2) \approx 0.9545,\ \ P(-3 &lt; Z \le 3) \approx 0.9973"></span></span>Find ∫ e^(−x²/2) dx and ∫ e^(−3x²) dx over the whole line, by putting x = cu in the bell-total for a suitable c. <br>Find the chance that the bell lands one width or more from its average, two widths or more, and three widths or more. <br>Compare each with the spread-bound 1/k². Why is the spread-bound so much larger?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30j2">
+  <h2 class="sthead"><span class="stno">30j2</span>The average-function</h2>
+  <p class="stands">Stands on 30g1, 30g3, 30d3.</p>
+  <p data-pid="c3b2a2">From here on, the <i>average-function</i> of a chance variable X is M(t) = E e^(tX), for the t where this average is finite. M(0) = 1 always. Its accepted name is the moment generating function.</p>
+  <p data-pid="827c34">Average-function technique: <b>if M is finite on an interval around 0, then near 0, M(t) = 1 + t E X + t² E X²/2 + r(t) with r(t)/t² heading to 0. If X and Y are independent, M<sub>X+Y</sub> = M<sub>X</sub> M<sub>Y</sub>.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the average-function technique">
+e^{tX} = \sum_k t^k X^k/k! @@ the growth sum (23)
+\big|\textstyle\sum_{k \le n} t^k X^k/k!\big| \le e^{|tX|} \le e^{tX} + e^{-tX} @@ a fence with a finite average, for |t| inside the interval
+M(t) = \sum_k t^k\,E\,X^k/k! @@ fenced-limit (30d3)
+\htmlClass{new}{M(t) = 1 + t\,E\,X + \tfrac{t^2}{2}E\,X^2 + r(t),\ \ r(t)/t^2 \to 0} @@ a power sum with reach above 0 (23c); how wrong the match is (23b)
+e^{t(X + Y)} = e^{tX}e^{tY} \Rightarrow \htmlClass{new}{M_{X+Y} = M_X M_Y} \quad \blacksquare @@ independent-averages-multiply (30g3)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: the bell’s own average-function">
+M_Z(t) = \tfrac{1}{\sqrt{2\pi}}\textstyle\int e^{tx - x^2/2}\,dx @@ the average as a total against the density
+tx - x^2/2 = t^2/2 - (x - t)^2/2 @@ complete the square (8i)
+\htmlClass{new}{M_Z(t) = e^{t^2/2}} @@ sliding keeps the total (30a3), and φ has total 1
+  </pre>
+  <p data-pid="ed1b9c">So n independent bells have a sum with average-function e^(nt²/2), and their average (Z₁ + ⋯ + Zₙ)/n has e^(t²/(2n)): the average-function of a bell narrowed to spread 1/n. With the matching step that 30j3 holds in trust, the average of independent bell readings is itself a bell, narrower by √n.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · average-function · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30j2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="X = 1 \text{ or } -1,\ \text{each with chance } 1/2"></span> <span data-tex-inline="X = \text{one fair die}"></span></span>For the coin, find M(t) = E e^(tX). Write it as a power sum in t, and read E X and E X² from its first terms. <br>For the die, find M(t), and read E X and E X² from the first terms of its power sum. Check them against 30g. <br>For the coin, Zₙ = (X₁ + ⋯ + Xₙ)/√n. Find M of Zₙ, and its value at t = 1 for n = 100. Compare with e^(1/2).</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30j3">
+  <h2 class="sthead"><span class="stno">30j3</span>Every sum heads to the bell</h2>
+  <p class="stands">Stands on 30j1, 30j2, 22j1.</p>
+  <p data-pid="33d154">Let X₁, X₂, … be independent with the same law, average μ, spread width σ &gt; 0, and an average-function finite on an interval around 0. Rescale their sum to average 0 and spread 1:</p>
+  <p class="eqline" data-pid="79424d">Zₙ = (X₁ + ⋯ + Xₙ − nμ) / (σ√n).</p>
+  <p data-pid="df320a">Central limit technique: <b>the average-function of Zₙ heads to e^(t²/2), the bell’s, at every t near 0; so P(a &lt; Zₙ ≤ b) heads to ∫ₐᵇ φ(x) dx.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the central limit technique">
+Y_k = (X_k - \mu)/\sigma,\ \ E\,Y = 0,\ \ E\,Y^2 = 1 @@ Var(aX + b) = a² Var X (30g2)
+M_Y(u) = 1 + u^2/2 + r(u),\ \ r(u)/u^2 \to 0 @@ average-function (30j2)
+M_{Z_n}(t) = M_Y(t/\sqrt n)^n = \big(1 + \tfrac{t^2/2 + n\,r(t/\sqrt n)}{n}\big)^n @@ Zₙ = (Y₁ + ⋯ + Yₙ)/√n; sums multiply (30j2)
+n\,r(t/\sqrt n) = t^2 \cdot \dfrac{r(t/\sqrt n)}{(t/\sqrt n)^2} \to 0 @@ for t ≠ 0; at t = 0 both sides are 1
+(1 + x_n/n)^n \to e^x \text{ when } x_n \to x @@ many-small-chances (22j1): n ln(1 + xₙ/n) → x, by the slope of ln at 1 (17b)
+\htmlClass{new}{M_{Z_n}(t) \to e^{t^2/2}} @@ xₙ = t²/2 + n r(t/√n) → t²/2
+\text{matching average-functions give matching limits} @@ held in trust: its proof waits much higher up the ladder
+\htmlClass{new}{P(a < Z_n \le b) \to \textstyle\int_a^b \varphi(x)\,dx} \quad \blacksquare @@ the bell (30j1)
+  </pre>
+  <p data-pid="e24acf">Nothing about the shape of X survived except its average and its spread. A coin, a die, a waiting time: add enough of them, rescale, and the bell appears. The finite average-function shortens the proof. The same holds with only a finite spread, and that proof also waits much higher up the ladder.</p>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · the middle of a change</div>
+    <p data-pid="be8d15">13a found the slope in the middle of a change: not the before, not the after, but what the chords settle on as they close in. The bell is a middle of this kind. Each part’s own shape is a before. The bell is what every sum passes through as the parts grow many and each grows small.</p>
+    <p data-pid="d85101"><b>The bell is the shape a sum passes through when its many small parts have faded into their spread.</b></p>
+    <p data-pid="5b28d5">In the proof, every term of M<sub>Y</sub> past t²/2 fades as n grows. Only the middle term, the spread, is left, and the bell is the shape of that term alone.</p>
+    <p class="bait" data-pid="36609d">Heights of adults are close to a bell; weights of adults are not, and lean to the right. What in their parts might make the difference?</p>
+  </aside>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · central limit · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30j3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="S = \text{the total of } 100 \text{ independent fair dice}"></span> <span data-tex-inline="\text{one die: } \mu = 3.5,\ \ \sigma^2 = 35/12"></span> <span data-tex-inline="P(-1.17 &lt; Z \le 1.17) \approx 0.758"></span></span>Find the average and the spread width of S. <br>Find how many widths 330 and 370 lie from the average. <br>Find, from the bell, roughly the chance that S lies between 330 and 370. <br>Find the chance the spread-bound promises for |S − 350| &lt; 20. Compare.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30j4">
+  <h2 class="sthead"><span class="stno">30j4</span>Illegal moves</h2>
+  <p class="stands">Stands on 30j1 to 30j3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{every chance variable is close to a bell}\,? @@ only sums of many independent parts; one die is flat
+\text{the bell describes the sum, not rescaled, for large } n\,? @@ the sum spreads like σ√n; only Zₙ heads to the bell
+\textstyle\int e^{-x^2}\,dx \text{ has a closed form by undoing a slope}\,? @@ no formula undoes it; the plane gives only the whole-line total
+\text{independent parts are not needed}\,? @@ X₁ = X₂ = ⋯: Zₙ = √n Y₁, which never nears the bell
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30j4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="X = \text{one fair die}"></span> <span data-tex-inline="T = \text{the total of two fair dice}"></span></span>What are the chances of X for each face? Do they rise and fall like a bell? What are the chances of T, from 2 to 12? Which is nearer a bell, and why?</li><li><span class="givens"><span data-tex-inline="S_n = X_1 + \cdots + X_n,\ \ X_k = \pm 1 \text{ fair coins}"></span> <span data-tex-inline="P(-1 &lt; Z \le 1) \approx 0.6827,\ \ P(-0.1 &lt; Z \le 0.1) \approx 0.0797"></span></span>What is the spread width of Sₙ for n = 100, and for n = 10 000? Roughly what is the chance that |Sₙ| ≤ 10, for each n, from the bell applied to Zₙ? Does the sum Sₙ itself head to the bell?</li><li><span class="givens"><span data-tex-inline="I = \textstyle\int_0^1 e^{-x^2}\,dx"></span></span>Can the plane trick find I? What region does I² = ∫∫ e^(−x² − y²) cover, and does it suit r and θ? Between the quarter discs of radius 1 and √2 it lies; what bounds on I do they give?</li><li><span class="givens"><span data-tex-inline="X_1 = X_2 = \cdots = Y,\ \ Y = \pm 1 \text{ a fair coin}"></span></span>What is Zₙ = (X₁ + ⋯ + Xₙ)/√n here? What values does it take, and with what chances? Does P(−1 &lt; Zₙ ≤ 1) head to 0.6827?</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">30j.4.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">suppose 52 percent of Oregon voters back a measure</span> <span data-tex-inline="n \text{ voters polled at random, independently}"></span> <span data-tex-inline="P(Z \le -1.27) \approx 0.102,\ \ P(Z \le -2.53) \approx 0.0057"></span></span>Build the chance that a poll shows a minority for the measure, a share of 50 percent or less. Code each answer 1 or 0, with spread 0.52 × 0.48. <br>For n = 1000, find the spread width of the share, and how many widths 0.50 lies below 0.52. Find the chance from the bell. <br>Do the same for n = 4000. <br>Find how the chance of a wrong verdict changes when the poll is made four times as large.</div>
+  <div class="chq"><span class="chid">30j.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="S = \text{the number of heads in } n \text{ fair tosses}"></span> <span data-tex-inline="\varphi(0) = 1/\sqrt{2\pi} \approx 0.3989"></span></span>The bell gives P(Z = 0) = 0: one point has no length. Is P(S = n/2) also 0? Find P(S = 50) for n = 100. <br>The bell has height φ(0) per unit width at its middle, and S has width √n/2. Compare P(S = n/2) with φ(0)/(√n/2), for n = 100 and n = 10 000. <br>Find what P(S = n/2) heads to as n grows. What does the central limit technique promise about one value, and what does it not?</div>
+  <div class="chq"><span class="chid">30j.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="Z_1, Z_2 \text{ independent bells}"></span></span>Every sum of many independent parts heads to the bell. Turn it round: can the bell itself be split into independent parts? <br>Find the average-function of (Z₁ + Z₂)/√2. What law does it match? <br>Find the average-function of (Z₁ + ⋯ + Zₙ)/√n for independent bells. Find what this shows about the bell and the central limit technique.</div>
+  <div class="chq"><span class="chid">30j.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="M_Z(t) = e^{t^2/2}"></span></span>The page found the bell’s spread by undoing the slope of φ. Find it another way. Write e^(t²/2) as a power sum in t, from the growth sum. <br>Read E Z and E Z² from it, by the average-function technique (each term is tᵏ E Zᵏ/k!). <br>Read E Z⁴ as well. Check E Z² by undoing the slope of φ, as on the page.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r30i.html">← 30i · chance in one function</a><a href="r30k.html">30k · no system beats a fair game →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The bell is the standard normal, or Gaussian, distribution, written N(0, 1), and φ is the normal density. The bell-total is the Gaussian integral. The average-function is the moment generating function, and E Xᵏ is the kth moment. The central limit technique is the central limit theorem. The matching step held in trust is Curtiss’ continuity theorem for moment generating functions; its proof needs the inversion of the Laplace transform.</p>
+  <h3>Who said it first</h3>
+  <p>Abraham de Moivre found the bell as the limit of coin tosses in 1733. Pierre-Simon Laplace extended it in 1812, and Carl Friedrich Gauss used it for errors of measurement in 1809. The squaring trick for the bell’s total is credited to Siméon Denis Poisson. Aleksandr Lyapunov proved a general central limit theorem in 1901; Jarl Waldemar Lindeberg gave the form with only a finite variance in 1922. Francis Galton built a board of pins, the quincunx, that shows the bell in falling beads.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“M of Zₙ is (1 + t²/(2n))ⁿ, which heads to e^(t²/2).” Not allowed as written: M<sub>Y</sub>(u) is 1 + u²/2 only up to the error r(u). The proof must show that n times the error at u = t/√n heads to 0.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'square',t:R`I^2 = \int\!\!\int e^{-(x^2+y^2)}`,n:`Into the plane.`},
+  {k:'ember',kl:'turn',t:R`r\,dr\,d\theta`,n:`Change the variables.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{I = \sqrt{\pi}}`,n:`The bell has total 1.`}
+],{title:'The slides · bell total · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'define',t:R`M(t) = E\,e^{tX}`,n:`Any chance variable.`},
+  {k:'ember',kl:'expand',t:R`1 + tE\,X + \tfrac{t^2}{2}E\,X^2`,n:`Fenced, term by term.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{M_Z = e^{t^2/2}}`,n:`Sums multiply.`}
+],{title:'The slides · average-function · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'rescale',t:R`Z_n = \frac{S_n - n\mu}{\sigma\sqrt n}`,n:`Average 0, spread 1.`},
+  {k:'ember',kl:'function',t:R`\big(1 + \tfrac{t^2/2 + \cdots}{n}\big)^n`,n:`Many small chances.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{M_{Z_n} \to e^{t^2/2}}`,n:`Every sum heads to the bell.`}
+],{title:'The slides · central limit · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

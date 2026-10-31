@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Not every set has a size</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r30.html">← 30 entering statistics</a><a href="r30b.html">next: 30b the sets that have sizes →</a></p>
+  <div class="tags"><span class="tag proof">30a · proof</span></div>
+  <h1>Not every set has a size</h1>
+  <p>Rung fifteen measured the area under a curve by cutting the inputs into strips. That works for the curves of everyday life. It fails for a set as scattered as the fractions on the line, which sit in every strip and fill none of them. So this rung starts again with a plainer question: how long is a set? Cover the set with countably many intervals and add up their lengths. Do it as tightly as you can. The least total is the set’s outer size. It gives an interval its length, it never adds up to more than the pieces, and it does not change when the set slides along the line. Then comes a surprise. If the axiom of choice from rung six is true, there is a set inside one unit of the line that no size can measure at all. Not every set has a size, and the rest of the rung learns which ones do.</p>
+  <p class="gesture">Outer size gives each interval its length, adds at most, and is kept by sliding. Yet once choice is allowed, some sets have no size that slides and adds over countably many pieces.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r08c.html">8c</a> (the least upper bound), <a href="r15a.html">15a</a> (partitions and lengths), <a href="r22d.html">22d</a> (endless sums), <a href="r22i.html">22i</a> (testing sums) and <a href="r06a.html">6a</a> (picking one from every box). <a href="r30b.html">30b</a> picks out the sets that do have sizes.</p></div>
+</header>
+
+<section class="class step" data-step="30a1">
+  <h2 class="sthead"><span class="stno">30a1</span>How long is a set?</h2>
+  <p class="stands">Stands on 8c, 22d, 15a.</p>
+  <p data-pid="3a2fb2">Take any set A of reals. A <i>cover</i> of A is a list of open intervals I₁, I₂, I₃, … whose union holds every point of A. The list may be finite or endless. Its total is ℓ(I₁) + ℓ(I₂) + ⋯, the sum of their lengths, which may be endless.</p>
+  <p data-pid="5a384a">From here on, the <i>outer size</i> of A, written m*(A), is the greatest lower bound of the totals of all covers of A. It exists by 8c, since every total is at least 0. It may be ∞. Its accepted name is outer measure.</p>
+  <p data-pid="687ed3">Cover-total technique: <b>the outer size of an interval is its length.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the cover-total technique, for [a, b]">
+(a - \varepsilon,\ b + \varepsilon) \text{ covers } [a, b] @@ one interval is a cover
+m^*([a, b]) \le b - a + 2\varepsilon \text{ for every } \varepsilon > 0,\ \text{so } m^*([a, b]) \le b - a @@ outer size is a greatest lower bound (8c)
+\text{take any cover } I_1, I_2, \ldots \text{ of } [a, b] @@ now the other way
+s = \sup\{x \in [a, b] : [a, x] \text{ is covered by finitely many } I_k\} @@ a lies in some I_k, so the set is not empty (8c)
+s \in I_j = (c, d) \text{ for some } j @@ s is in [a, b], and the Iₖ cover it
+\text{some } x \in (c, s] \text{ has } [a, x] \text{ covered by finitely many} @@ else a number below s would be an upper bound (8c)
+\text{add } I_j:\ [a, y] \text{ is covered for every } y < d,\ y \le b @@ so s ≥ min(d, b); as s &lt; d, s = b
+[a, b] \subseteq I_1 \cup \cdots \cup I_n \text{ for some } n @@ the same with y = b, which is below d
+\ell(I_1) + \cdots + \ell(I_n) \ge b - a @@ chain the intervals from a to b: each starts before the last one ends
+\htmlClass{new}{m^*([a, b]) = b - a} \quad \blacksquare @@ every cover totals at least b − a
+  </pre>
+  <p data-pid="a871f5">The same holds for open and half-open intervals, which differ from [a, b] by two points: a point has outer size 0, since (x − ε, x + ε) covers it.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · outer size · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">30a1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="A = \{0.2,\ 0.5,\ 0.9\}"></span></span>Cover each point of A by one open interval of length 0.001. Find the total of the cover. <br>For any ε &gt; 0, find a cover of A with total below ε. Find the outer size of A.</li><li><span class="givens"><span data-tex-inline="B = [0.3,\ 0.7]"></span></span>Find the total of the cover of B by the one interval (0.29, 0.71). <br>Find the outer size of B, and which technique gives it.</li><li><span class="givens"><span data-tex-inline="(0, 1)"></span></span>Find a cover of (0, 1) with total 1. <br>Every cover of (0, 1) also covers [0.01, 0.99]. Find the least its total can be, by the cover-total technique. <br>Find the outer size of (0, 1).</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30a2">
+  <h2 class="sthead"><span class="stno">30a2</span>Outer size adds at most</h2>
+  <p class="stands">Stands on 30a1, 22d.</p>
+  <p data-pid="62e052">Outer-adds-at-most technique: <b>the outer size of a union of countably many sets is at most the sum of their outer sizes.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the outer-adds-at-most technique">
+A = A_1 \cup A_2 \cup \cdots,\ \ \varepsilon > 0 @@ if any m*(Aₙ) is ∞ there is nothing to prove
+\text{cover } A_n \text{ by } I_{n,1}, I_{n,2}, \ldots \text{ with total } \le m^*(A_n) + \varepsilon/2^n @@ a greatest lower bound is approached (8c)
+\text{all the } I_{n,k} \text{ together cover } A @@ countably many; picking a cover for each n is choice, countably often (6a)
+m^*(A) \le \sum_n \big(m^*(A_n) + \varepsilon/2^n\big) = \sum_n m^*(A_n) + \varepsilon @@ geometric sum (15i)
+\htmlClass{new}{m^*(A_1 \cup A_2 \cup \cdots) \le m^*(A_1) + m^*(A_2) + \cdots} \quad \blacksquare @@ ε was any positive number
+  </pre>
+  <p data-pid="8bae94">So every countable set has outer size 0. The fractions are countable: list p/q in lowest terms with q ≥ 1 by levels, |p| + q = 1, then 2, then 3, and each level holds finitely many. So they have outer size 0, though they sit in every interval. A set can be everywhere and still take up no room.</p>
+  <p data-pid="2db604">And a bigger set never has a smaller outer size: a cover of B is a cover of every part of B.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · adds at most · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30a2.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="0,\ 1,\ \tfrac12,\ \tfrac13,\ \tfrac23,\ \tfrac14,\ \tfrac34,\ \tfrac15,\ \ldots"></span> <span data-tex-inline="\text{the } n\text{th gets an open interval of length } 0.01/2^{n+1} \text{ about it}"></span></span>This list holds every fraction in [0, 1]. Find the lengths of the first three intervals, and the total of them all.</li><li>The intervals cover every fraction in [0, 1]. Find whether they can cover all of [0, 1]. Use the cover-total technique, and the fact that a bigger set never has a smaller outer size.</li><li>Find the outer size of the numbers in [0, 1] that are not fractions. Split [0, 1] into its fractions and the rest, and use outer-adds-at-most.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30a3">
+  <h2 class="sthead"><span class="stno">30a3</span>Sliding keeps the size</h2>
+  <p class="stands">Stands on 30a1.</p>
+  <p data-pid="7a76c6">For a set A and a real t, A + t is the set of a + t for a in A: A slid along the line by t.</p>
+  <p data-pid="874884">Shift-keeps technique: <b>m*(A + t) = m*(A) for every set A and every real t.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the shift-keeps technique">
+I_1, I_2, \ldots \text{ covers } A \iff I_1 + t, I_2 + t, \ldots \text{ covers } A + t @@ slide every point by t
+\ell(I_k + t) = \ell(I_k) @@ (c + t, d + t) has length d − c
+\htmlClass{new}{m^*(A + t) = m^*(A)} \quad \blacksquare @@ the same totals, so the same least total
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · sliding · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30a3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="I = [0,\ 0.2)"></span> <span data-tex-inline="I,\ \ I + 0.2,\ \ I + 0.4"></span></span>Find each copy, its outer size, and which technique gives it. <br>Find the union of the three and its outer size. Compare with the sum of the three outer sizes.</li><li><span class="givens"><span data-tex-inline="I,\ \ I + 0.1,\ \ I + 0.15"></span></span>Find the union of these three and its outer size. Compare with the sum of the three, and find where the difference went.</li><li><span class="givens"><span data-tex-inline="\text{the fractions, slid by } \sqrt2"></span></span>Find the outer size of this set, and whether any of its members is a fraction.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30a4">
+  <h2 class="sthead"><span class="stno">30a4</span>A set with no size</h2>
+  <p class="stands">Stands on 30a2, 30a3, 6a.</p>
+  <p data-pid="8e1097">What would a size on the line need? Give every set A of reals a number m(A), from 0 to ∞, so that intervals get their lengths, sliding keeps sizes, and size adds over countably many separate pieces. Separate pieces share no point.</p>
+  <p data-pid="afb223">Call two reals x and y <i>kin</i> when x − y is a fraction. Kin splits [0, 1] into boxes: each real sits in exactly one box with all its kin. There are more boxes than any list can hold.</p>
+  <p data-pid="236c8b">No-size-set technique: <b>if choice is true, some set in [0, 1] has no size that gives intervals their lengths, is kept by sliding, and adds over countably many separate pieces.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the no-size-set technique">
+V = \text{one real from each box of kin in } [0, 1] @@ picking one from every box (6a): choice
+q_1, q_2, q_3, \ldots \text{ lists the fractions in } [-1, 1] @@ countably many: list them by levels, as in 30a2
+V + q_i,\ V + q_j \text{ separate when } i \ne j @@ v + qᵢ = w + qⱼ makes v and w kin, so v = w and qᵢ = qⱼ
+[0, 1] \subseteq \bigcup_i (V + q_i) \subseteq [-1, 2] @@ x in [0, 1] is v + (x − v), with v its kin in V and x − v a fraction in [−1, 1]
+1 \le \sum_i m(V + q_i) = \sum_i m(V) \le 3 @@ adds over separate pieces; sliding keeps size; a bigger set is not smaller
+m(V) = 0 \Rightarrow \text{the sum is } 0 < 1;\ \ m(V) > 0 \Rightarrow \text{the sum is } \infty > 3 @@ the same number added endlessly
+\htmlClass{new}{V \text{ has no such size}} \quad \blacksquare @@ both cases fail
+  </pre>
+  <p data-pid="c55fba">Outer size gives V a number, of course. So outer size cannot add over every countable split into separate pieces. Something has to give. Either some sets are left without a size, or sizes stop adding. The ladder keeps adding, because chance will need it, and leaves some sets out.</p>
+  <p data-pid="5377a4">The proof used choice to build V. 6c showed that choice can be laid down or refused. It is proved much higher up the ladder that refusing it leaves room for every set of reals to have a size, so V cannot be built without some choosing.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · no size · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30a4.1</span><span class="ph do">do</span><ol class="parts" type="a"><li>Find which of these pairs are kin: 0.25 and 0.75; √2/2 and √2/2 − 1/3; √2/2 and √2/4.</li><li><span class="givens"><span data-tex-inline="x = \sqrt2 - 1 \approx 0.414"></span></span>Find two kin of x in [0, 1], other than x.</li><li>Find the box of kin that holds 1/3, and how many of its members lie in V.</li><li>Suppose V + 1/2 and V + 1/3 shared a point, v + 1/2 = w + 1/3, with v and w in V. Find v − w, and what that makes of v and w. <br>Find the false line it leads to.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30a5">
+  <h2 class="sthead"><span class="stno">30a5</span>Illegal moves</h2>
+  <p class="stands">Stands on 30a1 to 30a4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{the fractions are in every interval, so they have size } 1 \text{ in } [0, 1]\,? @@ countably many points; outer-adds-at-most gives 0
+m^*(A \cup B) = m^*(A) + m^*(B) \text{ whenever } A, B \text{ are separate}\,? @@ V’s slid copies show outer size cannot always add
+\text{the set } V \text{ is written down: here is its first member}\,? @@ choice says V exists; it names no member of it
+\text{a set with outer size } 0 \text{ is empty}\,? @@ every single point, and every countable set, has outer size 0
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30a5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{the fractions in } [0, 1]"></span></span>They sit in every interval inside [0, 1]. Do they then take up its whole length? Find a cover of them with total below 0.001, and what it tells you.</li><li><span class="givens"><span data-tex-inline="V + q_1,\ V + q_2,\ \ldots \text{ from 30a4}"></span></span>Suppose outer size added over any two separate sets. Would it then add over any finitely many? Find what that gives for m*(V + q₁) + ⋯ + m*(V + qₙ), for every n, and so for m*(V). <br>Can m*(V) be 0, when the copies cover [0, 1]? Find which supposition fails.</li><li>Choice gives V. Is 1/2 in V? Which member of the box of √2 does V hold? Find a line of 30a4 that answers either, if any does.</li><li><span class="givens"><span data-tex-inline="\{0.3\},\ \ \{0.1,\ 0.2,\ 0.3,\ \ldots\}"></span></span>Is a set of outer size 0 empty? Find the outer size of each of these sets, and how many points each holds.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">30a.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{the fractions in } [0, 1]"></span></span>Build an open set G, a countable union of open intervals, that holds every fraction in [0, 1] and has outer size below 0.01. <br>Let K be the part of [0, 1] outside G. Prove that K has outer size at least 0.99, and that K holds no fraction. <br>Find whether K holds any interval of positive length.</div>
+  <div class="chq"><span class="chid">30a.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="1 \le \sum_i m(V + q_i) \le 3"></span></span>Suppose a size had to add only over finitely many separate pieces, not countably many. Find which lines of the no-size-set proof still hold. <br>From m(V + q₁) + ⋯ + m(V + qₙ) ≤ 3 for every n, find m(V). Find whether a false line still follows.</div>
+  <div class="chq"><span class="chid">30a.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="m^*(A + t) = m^*(A)"></span></span>Shift-keeps: a slid set has the same outer size. Turn it round: if two sets have the same outer size, is one a slide of the other? <br>Test [0, 1] against the numbers in [0, 1] that are not fractions (30a2.1). Test {0} against the fractions.</div>
+  <div class="chq"><span class="chid">30a.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="a_1,\ a_2,\ a_3,\ \ldots \text{ a list of a countable set } A"></span></span>Prove that A has outer size 0 another way, without outer-adds-at-most. Cover aₙ by an open interval of length ε/2ⁿ, and find the total. <br>Outer-adds-at-most picked a cover for each of countably many pieces. Find which of the two proofs makes endlessly many picks, and which makes none.</div>
+  <div class="chq"><span class="chid">30a.4.5</span><span class="tagq">seam</span><span class="givens"><span class="gtx">6a.4.5: endlessly many pairs of socks, and no rule to tell the two of a pair apart</span></span>Rung six asked whether a choosing function for these socks exists. Choice grants one, and 30a4 used the same kind of choosing to build V. <br>Find the line of 30a4 that spends choice, and whether any later line needs to know what V holds. <br>In 1905 some held that a set no rule can name is no set at all. Others held that it is enough for its existence to follow from the axioms. V has a property that can be proved: no size fits it. <br>Can a set that nobody can name have a property that can be proved? Which side does V take?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r30.html">← 30 · entering statistics</a><a href="r30b.html">30b · the sets that have sizes →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>Outer size is Lebesgue outer measure, m*. The set V is a Vitali set. The kin relation is an equivalence relation, and its boxes are equivalence classes; V is a set of representatives. The fact that no size on every set of reals slides and adds over countably many pieces is the non-existence of a translation-invariant countably additive measure on all subsets of ℝ extending length.</p>
+  <h3>Who said it first</h3>
+  <p>Émile Borel measured sets by countable covers in 1898. Henri Lebesgue built outer measure in his thesis of 1902. Giuseppe Vitali found the set with no size in 1905, using choice. Robert Solovay showed in 1970 that without choice, assuming a further axiom about large sets, every set of reals can be measurable.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“[0, 1] is a union of its points. Each point has size 0. So [0, 1] has size 0 + 0 + ⋯ = 0.” Not allowed: [0, 1] has more points than any list holds, so it is not a union of countably many of them, and countable adding never applies.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'cover',t:R`A \subseteq I_1 \cup I_2 \cup \cdots`,n:`Countably many open intervals.`},
+  {k:'ember',kl:'size',t:R`m^*(A) = \inf \sum \ell(I_k)`,n:`The tightest total.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{m^*([a,b]) = b - a}`,n:`Length is kept.`}
+],{title:'The slides · outer size · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'pieces',t:R`A = \bigcup A_n`,n:`Countably many.`},
+  {k:'ember',kl:'cover',t:R`\varepsilon/2^n`,n:`A little slack each.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{m^*(A) \le \sum m^*(A_n)}`,n:`Fractions: size 0.`}
+],{title:'The slides · adds at most · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'slide',t:R`A + t`,n:`Every point moves by t.`},
+  {k:'ember',kl:'covers',t:R`I_k + t`,n:`Lengths unchanged.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{m^*(A+t) = m^*(A)}`,n:`Size does not care where.`}
+],{title:'The slides · sliding · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'pick',t:R`V`,n:`One from each box of kin.`},
+  {k:'ember',kl:'slide',t:R`V + q_i`,n:`Separate, countably many.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{1 \le \sum m(V) \le 3}`,n:`No number fits.`}
+],{title:'The slides · no size · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

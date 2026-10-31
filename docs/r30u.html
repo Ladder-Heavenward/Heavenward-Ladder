@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Belief updated</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r30t.html">← 30t the best test</a><a href="r30v.html">next: 30v how the numbers were got →</a></p>
+  <div class="tags"><span class="tag tech">30u · technique</span></div>
+  <h1>Belief updated</h1>
+  <p>The tests of the last two steps never say how likely a claim is. They say how often a rule would be fooled if the claim were true. Many people want the other thing: given what was seen, how sure should I be? That question has an answer only if you say how sure you were before you looked. Then the turn-around technique, proved earlier on this rung, does the rest, and it does it the same way every time: what you believed before, times how well each possibility fits the data, scaled so the total is one. This step makes that the method. It finds the beliefs before that keep their shape when data arrive, so that updating is a matter of adding counts. It meets a famous answer to whether the sun will rise tomorrow. And it sets an interval of belief beside the covering interval built four steps back. With no strong belief before, the two give the same numbers and claim different things, and with one they part.</p>
+  <p class="gesture">The belief after the data is the belief before times the likelihood, scaled to total one. Updating in two stages gives the same as updating once. A beta belief about a share stays a beta after counts, its two numbers raised by the successes and failures; a bell belief about an average stays a bell, its sureness raised by the sureness of the data. With no strong belief before, the interval of belief matches the covering interval in its numbers, but not in what it claims.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r30f.html">30f</a> (the given-chance, turn-around and whole-chance techniques), <a href="r30e.html">30e</a> (either order), <a href="r30j.html">30j</a> (the bell), <a href="r30q.html">30q</a> (the sample-average and bell-cover techniques), <a href="r30r.html">30r</a> (the knob, the best guess), <a href="r30l.html">30l</a> (the odds-update technique), <a href="r30t.html">30t</a> (the likelihood ratio, the summary-factor technique), <a href="r14stat.html">14·stat</a> (the likelihood), <a href="r16e.html">16e</a> (the parts technique for areas), <a href="r16i.html">16i</a> (improper integrals), <a href="r08i.html">8i</a> (completing the square) and <a href="r05stat.html">5·stat</a> (the turned-chance technique). <a href="r30v.html">30v</a> asks how the numbers were got.</p></div>
+</header>
+
+<section class="class step" data-step="30u1">
+  <h2 class="sthead"><span class="stno">30u1</span>From before to after</h2>
+  <p class="stands">Stands on 30f (the given-chance, turn-around and whole-chance techniques), 30l (the odds-update technique), 30t1 (the likelihood ratio), 30e (either order), 14·stat and 30r (the likelihood) and 5·stat (the turned-chance technique).</p>
+  <p data-pid="1a1f42">Treat the knob θ of 30r as a chance variable of its own. Your belief before the data is a chance law π(θ) on the possible values: how sure you are of each, before looking. The data x have chance f(x | θ) given θ, the likelihood of 14·stat read as a given chance. Your belief after the data is the given chance π(θ | x). 5·stat turned a given chance round by counting; 30f proved the turn-around technique for every chance space, and 30l put it in odds: with only two settings, the odds after are the odds before times the likelihood ratio of 30t1. Here it becomes a method for any number of settings.</p>
+  <p data-pid="6bc1ac">Belief-update technique: <b>the belief after is the belief before times the likelihood, scaled to total 1: π(θ | x) = f(x | θ) π(θ) / Σ f(x | t) π(t), the sum over every possible t.</b> When θ has a density the sum is an integral, by the same lines with the joint density f(x | θ)π(θ) on the product (30e).</p>
+  <pre class="lines" data-k="ember" data-label="this step: the belief-update technique">
+\pi(\theta_j \mid x) = P(\Theta = \theta_j \text{ and } X = x)\,/\,P(X = x) @@ the given-chance technique (30f), P(X = x) &gt; 0
+P(\Theta = \theta_j \text{ and } X = x) = f(x \mid \theta_j)\,\pi(\theta_j) @@ the given-chance technique, turned round
+P(X = x) = \textstyle\sum_i f(x \mid \theta_i)\,\pi(\theta_i) @@ the whole-chance technique (30f), the θᵢ splitting the space
+\htmlClass{new}{\pi(\theta_j \mid x) = \tfrac{f(x \mid \theta_j)\,\pi(\theta_j)}{\sum_i f(x \mid \theta_i)\,\pi(\theta_i)}} \quad \blacksquare @@ the turn-around technique (30f), with its bottom spelled out
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: two batches of fish, or one">
+\pi(\theta \mid x, y) \propto f(x, y \mid \theta)\,\pi(\theta) @@ the belief-update technique; ∝ means equal up to a factor free of θ
+f(x, y \mid \theta) = f(y \mid \theta)\,f(x \mid \theta) @@ x and y independent given θ (30f)
+f(y \mid \theta)\,f(x \mid \theta)\,\pi(\theta) \propto f(y \mid \theta)\,\pi(\theta \mid x) @@ the belief-update technique for x alone
+\htmlClass{new}{\text{updating on } x \text{, then on } y \text{, gives the belief after both}} \quad \blacksquare @@ the scaling to total 1 takes care of the rest
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: three stories about the coho at Bonneville">
+\theta \in \{0.5,\ 0.6,\ 0.7\},\ \ \pi = \tfrac13 \text{ each} @@ three stories about the hatchery share, held equally before counting
+f(13 \text{ of } 20 \mid \theta) \propto \theta^{13}(1 - \theta)^{7} @@ the chance of the count (14·stat); the choosing number cancels
+\propto 9.54,\ \ 21.40,\ \ 21.19\ \ (\text{times } 10^{-7}) @@ the likelihoods, to four figures
+\htmlClass{new}{\pi(\theta \mid \text{data}) \approx 0.183,\ \ 0.411,\ \ 0.407} \quad \blacksquare @@ the belief-update technique: each over the total
+  </pre>
+  <p data-pid="166ffc">The second block is why the method is so natural: today’s belief after is tomorrow’s belief before. The third shows its price. The answer depends on the belief before, and somebody had to choose it. Two people who start apart and see the same data come closer as the data pile up, because the likelihood grows sharp and swamps the belief before. They never meet exactly, and one who gave a story chance 0 will never move off 0.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · before to after · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">30u1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\pi(0.5) = 0.2,\ \ \pi(0.6) = 0.3,\ \ \pi(0.7) = 0.5;\ \ 13 \text{ of } 20"></span></span>A fisheries biologist expects a high hatchery share this year. Find her belief after the count.</li><li><span class="givens"><span data-tex-inline="7 \text{ of the first } 10,\ \ 6 \text{ of the next } 10;\ \ \pi = \tfrac13 \text{ each}"></span></span>Find the belief after the first batch, then use it as the belief before the second. Check the end against the third block above.</li><li>Prove that if f(x | θ) is the same for every θ, the belief after is the belief before. Find what this says about data that cannot tell the stories apart.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30u2">
+  <h2 class="sthead"><span class="stno">30u2</span>Beliefs that keep their shape</h2>
+  <p class="stands">Stands on 30u1, 14·stat (the chance of a record), 16e (the parts technique for areas) and 16i (improper integrals).</p>
+  <p data-pid="ee5a45">For a share θ between 0 and 1, a handy family of beliefs is the beta family. For a, b &gt; 0, the beta(a, b) density is θ^(a − 1)(1 − θ)^(b − 1)/B(a, b) on (0, 1), where B(a, b) is the integral of the top from 0 to 1, finite by 16i. beta(1, 1) is flat: every share equally believed. Larger a leans toward 1, larger b toward 0, and larger a + b means more sure.</p>
+  <p data-pid="d6df6e">Shape-keeping technique: <b>with a beta(a, b) belief before about a share θ, and k successes in n independent tries, the belief after is beta(a + k, b + n − k). Its average is (a + k)/(a + b + n).</b> A belief before that stays in its family after the update is called shape-keeping.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the shape-keeping technique">
+\pi(\theta \mid k) \propto \theta^{k}(1 - \theta)^{n - k} \cdot \theta^{a - 1}(1 - \theta)^{b - 1} @@ the belief-update technique (30u1); the chance of the count (14·stat)
+\phantom{\pi(\theta \mid k)} = \theta^{a + k - 1}(1 - \theta)^{b + n - k - 1} @@ powers of one base add
+\pi(\theta \mid k) \text{ is the beta}(a + k,\ b + n - k) \text{ density} @@ the one multiple of this with total 1
+B(a + 1, b) = \tfrac{a}{b}\,B(a, b + 1) @@ the parts technique for areas (16e) on [p, 1 − p], then p heading to 0 (16i): the end terms vanish
+B(a, b) = B(a + 1, b) + B(a, b + 1) @@ θ + (1 − θ) = 1 inside the integral
+\tfrac{B(a + 1, b)}{B(a, b)} = \tfrac{a}{a + b},\ \ \text{the average of beta}(a, b) @@ put the fourth line in the fifth; the average is ∫θ times the density
+\htmlClass{new}{\text{average after} = \tfrac{a + k}{a + b + n}} \quad \blacksquare @@ the average of beta(a + k, b + n − k)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: will the sun rise tomorrow?">
+a = b = 1:\ \ \text{every chance of sunrise equally believed} @@ the flat belief before
+n \text{ sunrises in } n \text{ days:}\ \ \text{beta}(n + 1,\ 1) @@ the shape-keeping technique, k = n
+P(\text{sunrise tomorrow} \mid \text{data}) = \textstyle\int \theta\,\pi(\theta \mid \text{data})\,d\theta = \tfrac{n + 1}{n + 2} @@ the whole-chance technique (30f) over θ: the average after
+n = 1\,826\,213 \text{ days, five thousand years} @@ the span of recorded history, as one answer of 1814 counted it
+\htmlClass{new}{\text{odds of } 1\,826\,214 \text{ to } 1} \quad \blacksquare @@ (n + 1)/(n + 2) against 1/(n + 2)
+  </pre>
+  <p data-pid="0aa6fb">The beta numbers behave like counts. a − 1 and b − 1 are successes and failures you act as if you had already seen, and the update adds the real ones. The average after is a weighted mix of the average before and the share seen, and the weight on the data grows with n. The sunrise answer is right by its own rules and still strange: nobody believes the sun’s next rising is a draw from a jar, and that is exactly what the sum assumed.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · keep the shape · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30u2.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{beta}(2, 2) \text{ before};\ \ 13 \text{ of } 20"></span></span>Find the belief after and its average. Compare with the share seen and with the flat belief before.</li><li><span class="givens"><span data-tex-inline="10\,958 \text{ sunrises}"></span></span>Someone aged thirty has seen about this many sunrises. Find the chance of one more, by the flat belief before, and the odds.</li><li>Show that the average after, (a + k)/(a + b + n), lies between the average before a/(a + b) and the share seen k/n. Find the weight on the share seen.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30u3">
+  <h2 class="sthead"><span class="stno">30u3</span>Belief intervals and covering intervals</h2>
+  <p class="stands">Stands on 30u1, 30u2, 30t3 (the summary-factor technique), 30j (the bell), 30q (the sample-average and bell-cover techniques) and 8i (completing the square).</p>
+  <p data-pid="97b993">For an average μ measured by n bell readings of spread σ², the shape-keeping belief is itself a bell. Let the belief before be a bell with average m and spread τ². By 30t3 the data speak only through x̄.</p>
+  <p data-pid="864a28">Bell-update technique: <b>with a bell belief before, of average m and spread τ², and n bell readings of known spread σ² with average x̄, the belief after is a bell whose spread S² has 1/S² = 1/τ² + n/σ², and whose average is M = S²(m/τ² + n x̄/σ²). As τ grows without bound, the belief after heads to the bell with average x̄ and spread σ²/n.</b> One over a spread measures sureness, and sureness adds.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the bell-update technique">
+\pi(\mu \mid x) \propto e^{-(\mu - m)^2/(2\tau^2)}\;e^{-n(\bar x - \mu)^2/(2\sigma^2)} @@ the belief-update technique (30u1); the data through x̄ (30t3)
+\text{exponent} = -\tfrac12\big[(\tfrac{1}{\tau^2} + \tfrac{n}{\sigma^2})\mu^2 - 2(\tfrac{m}{\tau^2} + \tfrac{n\bar x}{\sigma^2})\mu\big] + C @@ multiply out; C is free of μ
+\phantom{\text{exponent}} = -\tfrac{(\mu - M)^2}{2S^2} + C' @@ completing the square (8i)
+\pi(\mu \mid x) \text{ is the bell with average } M,\ \text{spread } S^2 @@ the one multiple with total 1 (30j)
+\htmlClass{new}{\tau \to \infty:\ \ 1/S^2 \to n/\sigma^2,\ \ M \to \bar x} \quad \blacksquare @@ 1/τ² heads to 0 (rung 10)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: the Yakima apples, twice">
+n = 25,\ \ \sigma = 25,\ \ \bar x = 206.4 @@ 25 Honeycrisp apples weighed, in grams
+\text{covering: } 206.4 \pm 1.96 \cdot 5 = [196.6,\ 216.2] @@ the 95% interval of the bell-cover technique (30q)
+\text{flat belief: } 206.4 \pm 1.96 \cdot 5 = [196.6,\ 216.2] @@ the bell-update technique with τ endless: the same numbers
+\text{before: bell}(200,\ 4^2) \text{ from last season:}\ \ M \approx 202.5,\ \ S \approx 3.12 @@ 1/S² = 1/16 + 25/625 = 0.1025
+\htmlClass{new}{\text{belief interval } 202.5 \pm 6.1 = [196.4,\ 208.6]} \quad \blacksquare @@ chance 0.95 after the data, by this belief before
+  </pre>
+  <p data-pid="ffd93e">The first two lines print the same numbers and make different claims. The 95% interval of 30q is a method with a promise made before the data: in 95% of samples, the interval it builds will cover μ. Once built, this interval covers μ or it does not, and μ is not a chance variable, so there is no chance left to state. The belief interval treats μ as a chance variable and says: given these data and this belief before, μ lies in here with chance 0.95. With a flat belief the numbers agree, which is why the two readings are so often confused. With a real belief before they part, as the last line shows. They also part where counts are small: with 0 sick fish in 20, the bell interval for a share collapses to a single point, while a belief interval from a flat belief still runs from 0 to about 0.13.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · two intervals · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30u3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="n = 16,\ \ \sigma = 25,\ \ \bar x = 204"></span></span>Find the 95% interval of the bell-cover technique and the 95% belief interval from a flat belief before. Find what each claims.</li><li><span class="givens"><span data-tex-inline="\text{bell}(200,\ 4^2) \text{ before};\ \ n = 100,\ \ \sigma = 25,\ \ \bar x = 206.4"></span></span>Find M, S, the 95% belief interval and the 95% interval of 30q. Find which way the data pulled the belief, and whether the belief before still counts for much.</li><li><span class="givens"><span data-tex-inline="0 \text{ sick fish in } 20;\ \ \text{flat belief before}"></span></span>Find the belief after. Find u with chance 0.95 that θ ≤ u, after the data. Find the bell interval p̂ ± 1.96√(p̂(1 − p̂)/n).</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30u4">
+  <h2 class="sthead"><span class="stno">30u4</span>Illegal moves</h2>
+  <p class="stands">Stands on 30u1 to 30u3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+P\big(\mu \in [196.6,\ 216.2]\big) = 0.95 \text{ for 30q’s interval}\,? @@ once built, the interval covers μ or not; 0.95 was a promise about the method
+\pi(\theta \mid x) \propto f(x \mid \theta) + \pi(\theta)\,? @@ the turn-around technique multiplies
+\text{flat on } \theta \Rightarrow \text{flat on } \theta^2\,? @@ P(θ² ≤ ¼) = P(θ ≤ ½) = ½, not ¼: a flat belief is flat only in one way of measuring
+\pi(0.5) = 0,\ \text{enough data can bring } 0.5 \text{ back}\,? @@ zero times any likelihood is zero
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30u4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{interval } [196.6,\ 216.2],\ \ \mu = 210"></span></span>Suppose the true average is 210. Find the chance that this interval covers μ. <br>Find what 0.95 was a chance of.</li><li><span class="givens"><span data-tex-inline="\pi = \tfrac13 \text{ each};\ \ 13 \text{ of } 20"></span></span>Find what the second line gives for the three stories, scaled to total 1, and compare with 30u1. <br>Find what the second line forgets.</li><li><span class="givens"><span data-tex-inline="\theta \text{ flat on } [0, 1]"></span></span>Find P(θ² ≤ u) for u in [0, 1], and the density of θ². <br>Find the slip.</li><li><span class="givens"><span data-tex-inline="\pi(0.5) = 0,\ \ \pi(0.6) = \pi(0.7) = \tfrac12;\ \ 50 \text{ of } 100"></span></span>Find the belief after. <br>Find why the data, which fit 0.5 best, cannot move it.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">30u.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{average } 0.3"></span></span>Build a beta belief before about a share that is worth ten tries of data and has average 0.3. <br>Find the belief after 13 clipped fish of 20, its average, and how much the belief before pulled it from 0.65.</div>
+  <div class="chq"><span class="chid">30u.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{beta}(a, b),\ \ a, b \to 0"></span></span>As a and b head to 0, the average after heads to the share seen k/n. But beta(0, 0) has no total. <br>Find ∫ from p to 1 − p of 1/(θ(1 − θ)) and what it does as p heads to 0. Find for which k the update of this belief before still gives a belief after with total 1.</div>
+  <div class="chq"><span class="chid">30u.4.3</span><span class="tagq">converse</span>The belief-update technique turns a belief before into a belief after. Turn it round: knowing the belief after and the likelihood, can the belief before be found? <br>Prove that it can wherever the likelihood is not 0, up to scaling, and find what is lost where the likelihood is 0.</div>
+  <div class="chq"><span class="chid">30u.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\textstyle\int_0^1 \binom{n}{k}\theta^k(1 - \theta)^{n - k}\,d\theta = \tfrac{1}{n + 1}"></span></span>With a flat belief before, every count k from 0 to n is equally likely before the tries. Reroute this without integrals: throw n + 1 points evenly on [0, 1]; the first sets θ, and the other n succeed when they land left of it. <br>Find the chance that the first point has exactly k of the others to its left, by counting orders.</div>
+  <div class="chq"><span class="chid">30u.4.5</span><span class="tagq">seam</span>In 1763 a friend published the essay of a minister in Kent who had died two years before; it turned a chance round to learn about a cause, with a flat belief before. In 1814 a mathematician in Paris used the same sum for the sun’s rising and gave the odds of 30u2. A century later a statistician at a farm station north of London wrote that this way of reasoning rests on an error and must be wholly rejected: a chance is how often something happens in many repeats, and an unknown constant has no chance. In 1939 a geophysicist in Cambridge answered with a book that rebuilt statistics on beliefs before, and an actuary in Italy went further: chance does not exist outside the mind, and is only a sureness that must obey 30f’s rules to avoid sure losses. <br>Find the seam closer of 5·stat about the sunrise, and what the minister’s sum needed before it could start. <br>Find which of 30q and 30u each side would have written, and why both obey the same axioms of 30f. <br>Is a chance a fact about the world, counted in repeats, or a fact about what someone knows? Can a fixed, unknown number have a chance? Does the dispute matter when the data are many?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r30t.html">← 30t · the best test</a><a href="r30v.html">30v · how the numbers were got →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The belief before is the prior and the belief after the posterior; inference by the belief-update technique is Bayesian inference, and the technique is Bayes’ rule (or theorem) for parameters. A shape-keeping belief is a conjugate prior: beta with a binomial count, the bell with bell readings (normal–normal). These have nothing to do with the flipped pairs of 25e, whose accepted name is also conjugate. The beta density’s total B(a, b) is the beta function, B(a, b) = Γ(a)Γ(b)/Γ(a + b) with 26l’s Γ. (n + 1)/(n + 2) is Laplace’s rule of succession. One over a spread is the precision. A belief interval is a credible interval; the interval of 30q is the confidence interval. A flat belief that has no total, as in 30u.4.2, is an improper prior; the rule never to give a possible story chance 0 is Cromwell’s rule. The reading of chance as long-run frequency is frequentist, and the reading as degree of belief is Bayesian or subjective.</p>
+  <h3>Who said it first</h3>
+  <p>Thomas Bayes’s essay was published by Richard Price in 1763; it found the flat-belief update for a share, with a ball rolled on a table, the argument of 30u.4.4. Pierre-Simon Laplace found the rule independently in 1774 and gave the sunrise odds in his <i>Essai philosophique sur les probabilités</i> of 1814. Jerzy Neyman defined confidence intervals in 1937. Conjugate priors were named by Howard Raiffa and Robert Schlaifer in 1961.</p>
+  <p>In 30u.4.5, the minister is Thomas Bayes, of Tunbridge Wells, and his friend Richard Price; the mathematician in Paris is Laplace; the statistician who rejected inverse chance is Ronald Fisher, in <i>Statistical Methods for Research Workers</i> (1925); the geophysicist is Harold Jeffreys, whose <i>Theory of Probability</i> appeared in 1939; the actuary is Bruno de Finetti, who wrote from 1931 on and opened his book of 1970 with the words “probability does not exist”.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'top',t:R`P(\Theta = \theta_j,\ X = x) = f(x \mid \theta_j)\pi(\theta_j)`,n:`The given-chance technique.`},
+  {k:'ember',kl:'bottom',t:R`P(X = x) = \textstyle\sum_i f(x \mid \theta_i)\pi(\theta_i)`,n:`The whole-chance technique.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\pi(\theta \mid x) \propto f(x \mid \theta)\,\pi(\theta)}`,n:`Before, times likelihood.`}
+],{title:'The slides · before to after · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'multiply',t:R`\theta^{k}(1-\theta)^{n-k}\,\theta^{a-1}(1-\theta)^{b-1}`,n:`Belief times likelihood.`},
+  {k:'ember',kl:'add',t:R`\text{beta}(a + k,\ b + n - k)`,n:`Counts add to the numbers.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\tfrac{a + k}{a + b + n}}`,n:`The average after.`}
+],{title:'The slides · keep the shape · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'after',t:R`1/S^2 = 1/\tau^2 + n/\sigma^2`,n:`Sureness adds.`},
+  {k:'ember',kl:'flat',t:R`\tau \to \infty:\ M \to \bar x,\ S^2 \to \sigma^2/n`,n:`The same numbers as 30q.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{same numbers, different claims}}`,n:`A promise about a method, or a chance about μ.`}
+],{title:'The slides · two intervals · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

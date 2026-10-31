@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Averages settle</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r30g.html">← 30g averages as integrals</a><a href="r30i.html">next: 30i chance in one function →</a></p>
+  <div class="tags"><span class="tag proof">30h · proof</span></div>
+  <h1>Averages settle</h1>
+  <p>Toss a fair coin ten times and you may well get seven heads. Toss it ten thousand times and the share of heads will sit very close to one half. Everyone who has gambled or counted knows this. This step proves it, in two strengths. First, a chance variable that is never negative can rarely stray far above its average, and one with a small spread can rarely stray far from its average. From that, the average of many independent tries is very unlikely to be far from the true average once the tries are many. Then a stronger claim: with chance one, the run of averages actually settles at the true average, and stays there. The proof counts how often things can go wrong, and finds that, past some point, they stop going wrong for good.</p>
+  <p class="gesture">Strays far above the average are rare, and the rarer the smaller the spread. So the average of many independent copies is very likely near the true average, and with chance one it settles there.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r30g.html">30g</a> (averages, spreads, and independent parts), <a href="r30f.html">30f</a> (chance rules), <a href="r22d.html">22d</a> (endless sums) and <a href="r10a.html">10a</a> (the challenge and the answer). <a href="r30j.html">30j</a> asks what shape the strays take.</p></div>
+</header>
+
+<section class="class step" data-step="30h1">
+  <h2 class="sthead"><span class="stno">30h1</span>Strays are rare</h2>
+  <p class="stands">Stands on 30g1, 30g2.</p>
+  <p data-pid="bb1ff7">Stray-bound technique: <b>if X ≥ 0 and a &gt; 0, then P(X ≥ a) ≤ E X / a.</b></p>
+  <p data-pid="f06723">Spread-bound technique: <b>if X has average μ and spread width σ, then P(|X − μ| ≥ kσ) ≤ 1/k² for every k &gt; 0.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: both techniques">
+a \cdot 1_{\{X \ge a\}} \le X @@ where X ≥ a the left side is a ≤ X; elsewhere it is 0 ≤ X
+a\,P(X \ge a) \le E\,X @@ average-adds keeps order (30g1)
+\htmlClass{new}{P(X \ge a) \le E\,X / a} @@ stray-bound
+\{|X - \mu| \ge k\sigma\} = \{(X - \mu)^2 \ge k^2\sigma^2\} @@ both sides at least 0
+P(|X - \mu| \ge k\sigma) \le E(X - \mu)^2 / (k^2\sigma^2) = 1/k^2 @@ stray-bound with (X − μ)², a = k²σ²
+\htmlClass{new}{P(|X - \mu| \ge k\sigma) \le 1/k^2} \quad \blacksquare @@ spread-bound
+  </pre>
+  <p data-pid="d9e63b">The spread-bound needs nothing about the shape of X but its spread. Whatever X is, at most 1 in 4 of its chance lies two widths or more from its average, and at most 1 in 9 lies three widths or more away.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · strays · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">30h1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">X = the yearly rainfall at Tofino, on the west coast of Vancouver Island</span> <span data-tex-inline="\mu \approx 3300\ \text{mm},\ \ \sigma = 450\ \text{mm (a round value for its spread width)}"></span></span>Bound the chance of a year with 6600 mm or more, twice the average, by the stray-bound. <br>Bound the chance of a year three widths or more from the average, by the spread-bound. Find those years in millimetres. <br>Bound the chance of a year with 6600 mm or more again, by the spread-bound. Which bound is stronger, and why? <br>Bound the chance of a dry year, 1650 mm or less. Which of the two bounds can do it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30h2">
+  <h2 class="sthead"><span class="stno">30h2</span>Averages settle, very likely</h2>
+  <p class="stands">Stands on 30h1, 30g3.</p>
+  <p data-pid="7133cb">Let X₁, X₂, … be independent chance variables with the same law: P(Xₖ ∈ A) is the same for every k. Each has average μ and spread σ². Their average after n tries is X̄ₙ = (X₁ + ⋯ + Xₙ)/n.</p>
+  <p data-pid="ffd1da">Averages-settle technique: <b>for every ε &gt; 0, P(|X̄ₙ − μ| ≥ ε) ≤ σ²/(nε²), which heads to 0 as n grows.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the averages-settle technique">
+E\,\bar X_n = \mu,\ \ \text{Var}\,\bar X_n = n\sigma^2/n^2 = \sigma^2/n @@ average-adds; independent-spreads-add; Var(aX) = a² Var X (30g)
+P(|\bar X_n - \mu| \ge \varepsilon) \le \text{Var}\,\bar X_n / \varepsilon^2 @@ spread-bound, with kσ = ε
+\htmlClass{new}{P(|\bar X_n - \mu| \ge \varepsilon) \le \sigma^2/(n\varepsilon^2) \to 0} \quad \blacksquare @@ the challenge (10a): for n past σ²/(ε² δ) the chance is under δ
+  </pre>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · the cloud</div>
+    <p data-pid="797bc7">21a wrote π as a fence with a width you choose. An average from tries is the same. It is never the true μ, and it carries a width: σ/√n. The width shrinks as the tries grow, by the square root.</p>
+    <p data-pid="771c55"><b>An average from tries is reported with its width, σ over the root of the number of tries.</b></p>
+    <p data-pid="3182c0">A poll of 1000 voters, each for or against, has σ at most 1/2, so a width of at most 0.5/√1000 ≈ 0.016. Report the share with that width or the report is unfinished. Quadruple the poll, and the width only halves.</p>
+    <p class="bait" data-pid="626c72">A poll of 1000 voters in Washington finds 52 percent for a measure. How many voters would the poll need before two widths no longer reach 50 percent?</p>
+  </aside>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · settle · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30h2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\bar X_n = \text{the share of heads in } n \text{ tosses of a fair coin}"></span> <span data-tex-inline="\mu = 1/2,\ \ \sigma^2 = 1/4,\ \ \varepsilon = 0.01"></span></span>Find the averages-settle bound on P(|X̄ₙ − 1/2| ≥ 0.01) for n = 1000, 10 000 and 100 000. <br>What does the bound tell you at n = 1000? <br>Find the least n that makes the bound 0.05 or less. <br>Find the spread width of X̄ₙ at that n.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30h3">
+  <h2 class="sthead"><span class="stno">30h3</span>Only finitely often</h2>
+  <p class="stands">Stands on 30f1, 22d.</p>
+  <p data-pid="ed923c">Finitely-often technique: <b>if A₁, A₂, … are events and Σ P(Aₙ) is finite, then with chance 1 only finitely many of them happen.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the finitely-often technique">
+\text{infinitely many } A_k \text{ happen} \Rightarrow \text{some } A_k \text{ with } k \ge n \text{ happens, for every } n @@ the event is inside each Bₙ = A_n ∪ A_{n+1} ∪ ⋯
+P(\text{infinitely many}) \le P(B_n) \le \sum_{k \ge n} P(A_k) @@ split Bₙ into Aₙ, A_{n+1} less Aₙ, …: separate, each inside its Aₖ (30b2, 30b3)
+\sum_{k \ge n} P(A_k) \to 0 @@ the tail of a settling sum (22d)
+\htmlClass{new}{P(\text{infinitely many } A_n) = 0} \quad \blacksquare @@ a number below every tail is 0
+  </pre>
+  <p data-pid="fbdd09">So chance 1 for “only finitely many” comes from counting alone. Nothing is needed about whether the events are independent.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · finitely often · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30h3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\text{a dart lands in } [0, 1] \text{ with length as chance}"></span> <span data-tex-inline="A_n = \{\text{the dart lands within } 1/n^2 \text{ of } 1/2\}"></span> <span data-tex-inline="B_n = \{\text{the dart lands within } 1/n \text{ of } 1/2\}"></span></span>Find P(A₁) and P(Aₙ) for n ≥ 2. Is Σ P(Aₙ) finite? <br>What does the finitely-often technique tell you about the Aₙ? <br>Check it straight from the dart: if the dart lands at x ≠ 1/2, which Aₙ happen? <br>Find P(Bₙ) and whether Σ P(Bₙ) is finite. What does the technique tell you about the Bₙ? Which Bₙ happen when the dart lands at x ≠ 1/2?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30h4">
+  <h2 class="sthead"><span class="stno">30h4</span>Averages settle, surely</h2>
+  <p class="stands">Stands on 30h2, 30h3, 30g3.</p>
+  <p data-pid="694c48">Surely-settle technique: <b>if X₁, X₂, … are independent with the same law, average μ and E X⁴ finite, then with chance 1, X̄ₙ settles at μ.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the surely-settle technique">
+Y_k = X_k - \mu,\ \ E\,Y_k = 0,\ \ S_n = Y_1 + \cdots + Y_n @@ shift each try to average 0
+E\,S_n^4 = \sum_{i, j, k, l} E(Y_i Y_j Y_k Y_l) @@ multiply out; average-adds
+\text{a term with a lone index has average } 0 @@ independent-averages-multiply, and E Y = 0
+E\,S_n^4 = n\,E\,Y^4 + 3n(n - 1)\,\sigma^4 \le C n^2 @@ i = j = k = l: n terms; two pairs: 3n(n − 1) terms
+P(|S_n| \ge n\varepsilon) \le C n^2 / (n\varepsilon)^4 = C/(\varepsilon^4 n^2) @@ stray-bound with S_n⁴ ≥ n⁴ε⁴
+\sum_n C/(\varepsilon^4 n^2) < \infty \Rightarrow |\bar X_n - \mu| \ge \varepsilon \text{ only finitely often, with chance } 1 @@ 22f’s sum of 1/n²; finitely-often
+\htmlClass{new}{\bar X_n \to \mu \text{ with chance } 1} \quad \blacksquare @@ ε = 1, 1/2, 1/3, …: countably many events of chance 0
+  </pre>
+  <p data-pid="270aee">The averages-settle technique says that at any one large n, a stray is unlikely. This one says more: run the tries for ever, and with chance 1 the strays stop. The demand on E X⁴ makes the proof short. The same is true with only E|X| finite, and that proof waits much higher up the ladder.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · surely · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30h4.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="X_k = 1 \text{ for heads},\ 0 \text{ for tails, fair coin}"></span> <span data-tex-inline="Y_k = X_k - 1/2,\ \ \varepsilon = 0.1"></span></span>Find E Y⁴ and σ⁴. <br>Find E Sₙ⁴ = n E Y⁴ + 3n(n − 1)σ⁴ for this coin, and a C with E Sₙ⁴ ≤ C n². <br>Find the fourth-average bound C/(ε⁴n²) on P(|X̄ₙ − 1/2| ≥ 0.1), and the spread-bound σ²/(nε²), at n = 100 and at n = 1000. Which is smaller at each? <br>The proof needs the bounds to add up to a finite total over all n. Which of the two does?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30h5">
+  <h2 class="sthead"><span class="stno">30h5</span>Illegal moves</h2>
+  <p class="stands">Stands on 30h1 to 30h4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{after five tails a fair coin is due a head}\,? @@ the tosses are independent: the next has chance 1/2
+\text{averages settle, so the count of heads minus } n/2 \text{ shrinks}\,? @@ that count has width √n/2, which grows
+P(|X - \mu| \ge 2\sigma) \text{ is exactly } 1/4\,? @@ 1/4 is a ceiling; most laws stray far less often
+\textstyle\sum P(A_n) = \infty \Rightarrow \text{infinitely many happen}\,? @@ not without more; take every Aₙ the same event of chance 1/2
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30h5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span class="gtx">a fair coin tossed in Astoria, Oregon, has come up tails five times in a row</span></span>What is the chance of five tails and then a head, and of five tails? What is the chance of a head on the sixth toss, given five tails? Is the coin due a head?</li><li><span class="givens"><span data-tex-inline="n = 100,\ 10\,000,\ 1\,000\,000 \text{ fair tosses}"></span></span>What is the spread width of the number of heads minus n/2, for each n? What is the spread width of the share of heads? Which one shrinks, and which grows?</li><li><span class="givens"><span data-tex-inline="X = \text{one fair die},\ \ \sigma = \sqrt{35/12}"></span> <span data-tex-inline="W = -1,\ 0,\ 1 \text{ with chances } 1/8,\ 3/4,\ 1/8"></span></span>What is P(|X − 3.5| ≥ 2σ)? Is it 1/4? What are the spread width of W and P(|W| ≥ 2σ)? Can the spread-bound be reached?</li><li><span class="givens"><span data-tex-inline="A \text{ the event that the first toss of a fair coin is heads}"></span> <span data-tex-inline="A_n = A \text{ for every } n"></span></span>What is Σ P(Aₙ)? What is the chance that infinitely many Aₙ happen? Is it 1?</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">30h.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{a poll of } n \text{ Montana voters, each yes or no, independently}"></span> <span data-tex-inline="\sigma \le 1/2"></span></span>Build a poll. Find the least n that makes the spread width of the share of yes answers at most 0.01, whatever the true share. <br>Find the least n for which the averages-settle bound promises P(the poll’s share strays 0.03 or more from the true share) ≤ 0.05. <br>The second n is about twice the first. Why does the spread-bound ask for more voters than the width suggests?</div>
+  <div class="chq"><span class="chid">30h.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="X = 0 \text{ with chance } 1 - m/a,\ \ X = a \text{ with chance } m/a,\ \ 0 &lt; m &lt; a"></span> <span data-tex-inline="W = -1 \text{ or } 1,\ \text{each with chance } 1/2"></span></span>Find E X and P(X ≥ a). Can the stray-bound be made any smaller, for every X ≥ 0 with average m? <br>Build a law with average μ and width σ for which P(|X − μ| ≥ kσ) is exactly 1/k², for one chosen k &gt; 1. Try X = μ ± kσ with chance 1/(2k²) each, and μ otherwise. <br>W may be negative. Find E W and P(W ≥ 1). Does the stray-bound hold for W? Which line of its proof fails?</div>
+  <div class="chq"><span class="chid">30h.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{a dart lands in } [0, 1] \text{ with length as chance}"></span> <span data-tex-inline="A_n = \{\text{the dart lands in } (0, 1/n)\}"></span></span>By the finitely-often technique, Σ P(Aₙ) finite gives only finitely many Aₙ, with chance 1. Turn it round: if only finitely many happen, with chance 1, must Σ P(Aₙ) be finite? <br>Find P(Aₙ) and Σ P(Aₙ). <br>Find which Aₙ happen when the dart lands at x &gt; 0, and the chance that infinitely many happen.</div>
+  <div class="chq"><span class="chid">30h.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="0 \le X_k \le 1,\ \text{independent, same law, average } \mu"></span> <span data-tex-inline="S_n = X_1 + \cdots + X_n"></span></span>Prove the surely-settle technique another way for tries between 0 and 1, with spreads only. First look only at n = 1, 4, 9, …, k². Find the spread-bound on P(|S_{k²}/k² − μ| ≥ ε). Is the sum over k finite? What does the finitely-often technique give? <br>For k² ≤ n &lt; (k + 1)², Sₙ lies between S_{k²} and S_{(k+1)²}, since no try is negative. Show that S_{k²}/(k + 1)² ≤ X̄ₙ ≤ S_{(k+1)²}/k². <br>Find what (k/(k + 1))² heads to, and finish the proof.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r30g.html">← 30g · averages as integrals</a><a href="r30i.html">30i · chance in one function →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The stray-bound is Markov’s inequality, and the spread-bound is Chebyshev’s inequality. Averages-settle is the weak law of large numbers, which says X̄ₙ converges to μ in probability. The finitely-often technique is the first Borel–Cantelli lemma. Surely-settle is the strong law of large numbers, which says X̄ₙ converges to μ almost surely. Independent copies with the same law are i.i.d., independent and identically distributed. Believing a coin is due is the gambler’s fallacy.</p>
+  <h3>Who said it first</h3>
+  <p>Jacob Bernoulli proved the first law of large numbers, for coin tosses, in his Ars Conjectandi, published in 1713; he called it his golden theorem. Pafnuty Chebyshev proved the spread-bound in 1867, and his student Andrey Markov the stray-bound. Émile Borel proved the strong law for coin tosses in 1909, and Francesco Cantelli the finitely-often lemma in 1917. Andrey Kolmogorov proved the strong law with only a finite average in 1933.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“The share of heads settles at 1/2, so after many tosses heads and tails come out even.” Not allowed: the share settles because the difference is divided by n. The difference itself has width √n/2, so it usually grows.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'cut',t:R`a\,1_{\{X \ge a\}} \le X`,n:`A step below X.`},
+  {k:'ember',kl:'stray',t:R`P(X \ge a) \le E\,X/a`,n:`Rare high.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{P(|X - \mu| \ge k\sigma) \le 1/k^2}`,n:`Rare far.`}
+],{title:'The slides · strays · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'average',t:R`\bar X_n`,n:`Spread σ²/n.`},
+  {k:'ember',kl:'bound',t:R`\sigma^2/(n\varepsilon^2)`,n:`Spread-bound.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{P(|\bar X_n - \mu| \ge \varepsilon) \to 0}`,n:`Width σ/√n.`}
+],{title:'The slides · settle · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'tail',t:R`B_n = \bigcup_{k \ge n} A_k`,n:`Something past n.`},
+  {k:'ember',kl:'bound',t:R`\sum_{k \ge n} P(A_k) \to 0`,n:`A settling tail.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{P(\text{infinitely many}) = 0}`,n:`Counting is enough.`}
+],{title:'The slides · finitely often · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'fourth',t:R`E\,S_n^4 \le Cn^2`,n:`Lone indices vanish.`},
+  {k:'ember',kl:'sum',t:R`\sum C/(\varepsilon^4 n^2)`,n:`Settles.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\bar X_n \to \mu \text{ with chance } 1}`,n:`The strays stop.`}
+],{title:'The slides · surely · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

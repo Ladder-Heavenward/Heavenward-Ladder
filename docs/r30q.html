@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Estimating from samples</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r30p.html">← 30p chance that steps</a><a href="r30r.html">next: 30r the most likely parameter →</a></p>
+  <div class="tags"><span class="tag tech">30q · technique</span></div>
+  <h1>Estimating from samples</h1>
+  <p>Nobody weighs every salmon in a river or asks every voter in a state. A few are measured, and the rest are guessed at. The guess is the average of the sample, and the honest question is how far it may be from the average of the whole. This step answers it in three moves. The average of a sample wanders less than one measurement does, and by a known amount: halving its wander takes four times as many measurements. The spread of the whole can itself be estimated from the sample, with one small correction that keeps the estimate honest on average. And the bell curve turns the wander into an interval that catches the true average with a stated chance. When the sample is small and the spread unknown, the bell is replaced by a wider curve with a table of its own, and this step says which parts of that are proved and which are held in trust.</p>
+  <p class="gesture">The average of a sample has the same average as one measurement, and its spread width is the measurement’s divided by the root of the sample size. The sample’s own spread, with one less than the count in the bottom, has the true spread as its average. The bell turns the average and its width into an interval that covers the true average with a stated chance; for small samples a wider table takes the bell’s place.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r30g.html">30g</a> (the average-adds, spread-of-a-sum and independent-spreads-add techniques), <a href="r30h.html">30h</a> (the spread-bound technique), <a href="r30j.html">30j</a> (the central limit technique), <a href="r30m.html">30m</a> (the standard bell and the bell-series technique), <a href="r30n.html">30n</a> (the root-n technique), <a href="r08stat.html">8·stat</a> (the squared-misses technique) and <a href="r28p.html">28p</a> (doubts in measured numbers). <a href="r30r.html">30r</a> asks which guess at a chance law makes the sample most likely.</p></div>
+</header>
+
+<section class="class step" data-step="30q1">
+  <h2 class="sthead"><span class="stno">30q1</span>The average of a sample, and its width</h2>
+  <p class="stands">Stands on 30g1 (the average-adds technique), 30g2 (the spread-of-a-sum technique), 30g3 (the independent-spreads-add technique) and 30n1 (the root-n technique).</p>
+  <p data-pid="f3c5ab">A sample of size n is n chance variables X₁, …, Xₙ, independent, each with the same chance law as one measurement X. Write μ = E X for the true average and σ² = Var X for the true spread. The sample average is X̄ = (X₁ + ⋯ + Xₙ)/n. It is itself a chance variable: another sample gives another X̄.</p>
+  <p data-pid="547d0d">Sample-average technique: <b>E X̄ = μ and Var X̄ = σ²/n, so the spread width of X̄ is σ/√n.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the sample-average technique">
+E\bar X = \tfrac1n\,(EX_1 + \cdots + EX_n) = \tfrac1n\,n\mu @@ the average-adds technique (30g1)
+E\bar X = \mu @@ the sample average is right on average
+\mathrm{Var}(X_1 + \cdots + X_n) = n\sigma^2 @@ the independent-spreads-add technique (30g3), as in the root-n technique (30n1)
+\mathrm{Var}(cY) = c^2\,\mathrm{Var}\,Y @@ the spread-of-a-sum technique (30g2)
+\htmlClass{new}{\mathrm{Var}\,\bar X = \tfrac{n\sigma^2}{n^2} = \tfrac{\sigma^2}{n},\ \ \text{width } \tfrac{\sigma}{\sqrt n}} \quad \blacksquare @@ c = 1/n
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: timing a pendulum again">
+\sigma = 0.05\ \text{s} @@ one timing of the swing of 28p’s pendulum, by hand with a stopwatch
+\text{width of the average of } 16 \text{ timings} = 0.05/4 = 0.0125\ \text{s} @@ the sample-average technique
+\text{the total of } 16 \text{ timings has width } 0.05 \cdot 4 = 0.2\ \text{s, not } 16 \cdot 0.05 = 0.8\ \text{s} @@ independent spreads add as squares; 28p’s worst case adds the widths
+\htmlClass{new}{\text{four times the timings halve the width}} \quad \blacksquare @@ √(4n) = 2√n
+  </pre>
+  <p data-pid="de1f1e">28p ended with doubts that fall at random and partly cancel. Here is how much they cancel: n independent doubts of width σ add to a doubt of width σ√n, not nσ. The worst-case bound of 28p is never wrong; this one is the usual size.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the average of a sample · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">30q1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\sigma = 0.05\ \text{s}"></span></span>Find the spread width of the average of 4, of 16 and of 100 timings.</li><li><span class="givens"><span data-tex-inline="\sigma = 0.05\ \text{s}"></span></span>Find how many timings bring the width of the average below 0.002 s.</li><li><span class="givens"><span data-tex-inline="X \in \{1, 2, 3, 4, 5, 6\}"></span></span>A fair die. Find μ and σ², and the spread width of the average of 100 rolls.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30q2">
+  <h2 class="sthead"><span class="stno">30q2</span>The spread of a sample</h2>
+  <p class="stands">Stands on 30q1, 8·stat (the squared-misses technique) and 30g1 (the average-adds technique).</p>
+  <p data-pid="a78e41">σ is rarely known. The sample has its own spread. 8·stat met two versions of it, one with n in the bottom and one with n − 1, and left the choice to the question. Now there is a reason for n − 1.</p>
+  <p data-pid="a2a4d2">Sample-spread technique: <b>let S² = ((X₁ − X̄)² + ⋯ + (Xₙ − X̄)²)/(n − 1), for n ≥ 2. Then E S² = σ².</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the sample-spread technique">
+\textstyle\sum_i (X_i - \mu)^2 = \sum_i (X_i - \bar X)^2 + n(\bar X - \mu)^2 @@ the squared-misses technique (8·stat), with c = μ
+E\textstyle\sum_i (X_i - \mu)^2 = n\sigma^2 @@ average-adds (30g1); each term has average σ²
+E\big[n(\bar X - \mu)^2\big] = n\,\mathrm{Var}\,\bar X = \sigma^2 @@ the sample-average technique (30q1)
+E\textstyle\sum_i (X_i - \bar X)^2 = n\sigma^2 - \sigma^2 = (n - 1)\sigma^2 @@ average-adds on the first line
+\htmlClass{new}{E S^2 = \sigma^2} \quad \blacksquare @@ divide by n − 1
+  </pre>
+  <p data-pid="6a3864">With n in the bottom the average would be (n − 1)σ²/n, a little short every time. The misses are measured from X̄, which sits closer to the sample than μ does, by the squared-misses technique; dividing by n − 1 puts back exactly what that costs.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the clarity of Lake Washington">
+5.1,\ 6.3,\ 4.8,\ 5.9,\ 6.6,\ 5.4,\ 4.9,\ 6.0 @@ eight readings of water clarity in metres: how deep a white disc stays in sight
+\bar x = 45.0/8 = 5.625 @@ the sample average
+\textstyle\sum_i (x_i - \bar x)^2 = 3.155 @@ the misses from 5.625, squared and added
+\htmlClass{new}{s^2 = 3.155/7 \approx 0.4507,\ \ s \approx 0.671} \quad \blacksquare @@ the sample-spread technique; with 8 in the bottom, 0.394
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · the spread of a sample · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30q2.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="3.8,\ 4.6,\ 5.1,\ 4.2,\ 4.9\ \text{kg}"></span></span>Five steelhead from the Skagit River are weighed. Find x̄, s² and s, and the spread with 5 in the bottom.</li><li><span class="givens"><span data-tex-inline="n = 2"></span></span>Show that S² = (X₁ − X₂)²/2. For one toss of a fair coin scored 0 or 1, find σ², and find E S² by finding the chance that two tosses differ.</li><li><span class="givens"><span data-tex-inline="n = 8"></span></span>Find the share of σ² that the spread with n in the bottom gives on average, and how far short it falls for n = 8 and for n = 100.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30q3">
+  <h2 class="sthead"><span class="stno">30q3</span>An interval that covers</h2>
+  <p class="stands">Stands on 30q1, 30j3 (the central limit technique) and 30m3 (the standard bell and the bell-series technique).</p>
+  <p data-pid="1b04a8">X̄ will miss μ. The bell says by how much, and how often. Write Zₙ = (X̄ − μ)/(σ/√n), the sample average measured from μ in widths. The central limit technique (30j3) says the chance that Zₙ lands in an interval heads, as n grows, to the standard bell’s area over it. That area between −1.96 and 1.96 is 0.950, by the bell-series technique (30m3).</p>
+  <p data-pid="a6e9e0">Bell-cover technique: <b>the interval from X̄ − 1.96σ/√n to X̄ + 1.96σ/√n covers μ with a chance that heads to 0.95 as n grows.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the bell-cover technique">
+\mu \text{ is in } \bar X \pm 1.96\,\sigma/\sqrt n \iff |\bar X - \mu| \le 1.96\,\sigma/\sqrt n @@ the same event, read from either end
+\iff |Z_n| \le 1.96 @@ divide by σ/√n, which is above 0
+P(|Z_n| \le 1.96) \to \text{the bell’s area from } -1.96 \text{ to } 1.96 @@ the central limit technique (30j3)
+\htmlClass{new}{P(\mu \in \bar X \pm 1.96\,\sigma/\sqrt n) \to 0.950} \quad \blacksquare @@ the bell-series technique (30m3), to three places
+  </pre>
+  <p data-pid="9ba629">The chance belongs to the interval, before the sample is drawn. Once the numbers are in, the interval either covers μ or it does not. What 95% describes is the method: used again and again on fresh samples, it covers μ about 95 times in 100. Its accepted name is in the basement.</p>
+  <p data-pid="1db358">For a share, X is 1 for yes and 0 for no, μ is the true share p, and σ² = p(1 − p). The interval uses p̂(1 − p̂) in place of the unknown p(1 − p). That the swap changes nothing in the limit is held in trust: its proof waits much higher up the ladder.</p>
+  <pre class="lines" data-k="ember" data-label="this step: a poll in Oregon">
+n = 1000,\ \ \hat p = 540/1000 = 0.54 @@ a sample of voters asked one yes-or-no question
+\sqrt{\hat p(1 - \hat p)/n} = \sqrt{0.54 \cdot 0.46/1000} \approx 0.01576 @@ the sample-average technique, with p̂ for p
+1.96 \times 0.01576 \approx 0.031 @@ the half-width
+\htmlClass{new}{0.509 \text{ to } 0.571,\ \text{at } 95\%} \quad \blacksquare @@ the bell-cover technique: “54% give or take 3 points”
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · an interval that covers · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30q3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="n = 16,\ \ \bar x = 2.006\ \text{s},\ \ \sigma = 0.05\ \text{s}"></span></span>Find the 95% interval for the true time of the pendulum’s swing. The bell’s area between −2.576 and 2.576 is 0.990. Find the 99% interval.</li><li><span class="givens"><span data-tex-inline="\text{half-width } 0.02"></span></span>Find how many voters a poll needs for a half-width of 2 points at 95% whatever the share, using p(1 − p) ≤ 1/4.</li><li><span class="givens"><span data-tex-inline="n = 1000,\ \ \hat p = 0.54"></span></span>Find the half-width at 99%, and whether the 99% interval still lies above one half.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30q4">
+  <h2 class="sthead"><span class="stno">30q4</span>Small samples: a wider table</h2>
+  <p class="stands">Stands on 30q2, 30q3, 30h2 (the averages-settle technique) and 30m3 (the standard bell).</p>
+  <p data-pid="bfe053">With σ unknown, replace it by the sample’s S. For a large sample S is close to σ, and the bell-cover technique still holds. For eight readings of a lake it is not close enough: S wanders too, and the ratio wanders more than the bell allows.</p>
+  <p data-pid="c6f289">Held in trust: <b>if every Xᵢ is bell-shaped, then T = (X̄ − μ)/(S/√n) has a chance law that depends only on n − 1, and not on μ or σ.</b> Its accepted name is the t distribution with n − 1 degrees of freedom. Its proof waits much higher up the ladder. What it gives: a table. For each n − 1 the table gives the t with P(|T| ≤ t) = 0.95.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the table, and where it heads">
+n - 1 = 1,\ 2,\ 4,\ 7,\ 9,\ 19,\ 29,\ 99 @@ degrees
+t = 12.706,\ 4.303,\ 2.776,\ 2.365,\ 2.262,\ 2.093,\ 2.045,\ 1.984 @@ the 95% values, held in trust with the law
+S^2 \to \sigma^2 \text{ in chance as } n \text{ grows} @@ the averages-settle technique (30h2), run on the squares
+\htmlClass{new}{t \to 1.960,\ \text{the bell’s value}} @@ for large n, S may stand in for σ
+  </pre>
+  <p data-pid="43210d">Small-sample-cover technique: <b>if every Xᵢ is bell-shaped, the interval X̄ ± t S/√n, with t from the table for n − 1, covers μ with chance 0.95, for every n ≥ 2.</b> The proof is the bell-cover proof with T for Zₙ, and the trusted law in place of the limit: so the 0.95 here is exact, not a limit.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the clarity of Lake Washington, small-sample">
+\bar x = 5.625,\ \ s \approx 0.6714,\ \ n = 8 @@ 30q2
+s/\sqrt 8 \approx 0.2374 @@ the estimated width of the average
+2.365 \times 0.2374 \approx 0.561 @@ t for 7 degrees
+\htmlClass{new}{5.06 \text{ to } 6.19\ \text{m, at } 95\%} \quad \blacksquare @@ the small-sample-cover technique; 1.96 would give 5.16 to 6.09, too narrow
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · a wider table · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30q4.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="3.8,\ 4.6,\ 5.1,\ 4.2,\ 4.9\ \text{kg}"></span></span>Find the 95% interval for the true average weight of the Skagit steelhead, from 30q2.1a.</li><li><span class="givens"><span data-tex-inline="n = 8"></span></span>Find how much wider the small-sample interval is than one with 1.96, as a ratio.</li><li><span class="givens"><span data-tex-inline="n - 1 = 29,\ \ \bar x = 12.4,\ \ s = 3.0"></span></span>Find the 95% interval with t, and with 1.96, and how much they differ.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30q5">
+  <h2 class="sthead"><span class="stno">30q5</span>Illegal moves</h2>
+  <p class="stands">Stands on 30q1 to 30q4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{the chance that } \mu \text{ lies between } 5.06 \text{ and } 6.19 \text{ is } 0.95\,? @@ μ is a fixed number; the 95% belongs to the method, before the sample
+\text{the width of the average of } 16 \text{ timings is } 0.05/16\,? @@ the width divides by √n, not n
+\bar x \pm 1.96\,s/\sqrt 5 \text{ for five steelhead}\,? @@ with S for σ and n = 5 the table gives 2.776
+95\% \text{ of the readings lie between } 5.06 \text{ and } 6.19\,? @@ the interval is for the average, not for single readings
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30q5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="5.06 \le \mu \le 6.19"></span></span>Twenty lakes are each sampled and each given its own 95% interval. Find about how many intervals miss. <br>Find what the first line forgets.</li><li><span class="givens"><span data-tex-inline="\sigma = 0.05,\ \ n = 16"></span></span>Find both widths. <br>Find what the second line forgets.</li><li><span class="givens"><span data-tex-inline="\bar x = 4.52,\ \ s \approx 0.526,\ \ n = 5"></span></span>Find both intervals. <br>Find why the narrow one covers less often than it claims.</li><li><span class="givens"><span data-tex-inline="5.1,\ 6.3,\ 4.8,\ 5.9,\ 6.6,\ 5.4,\ 4.9,\ 6.0"></span></span>Count the readings inside 5.06 to 6.19. <br>Find what the fourth line mixes up.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">30q.4.1</span><span class="tagq">build</span>Build a list of four numbers with sample average 10 and s = 2. <br>Find how many such lists have whole-number entries.</div>
+  <div class="chq"><span class="chid">30q.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="n = 1,\ \ n = 2"></span></span>Find what S² is for a sample of one. <br>For n = 2, t = 12.706. Find why the interval from two readings is so wide.</div>
+  <div class="chq"><span class="chid">30q.4.3</span><span class="tagq">converse</span>E S² = σ². Settle whether E S = σ. <br>Use the spread of S, which is at least 0.</div>
+  <div class="chq"><span class="chid">30q.4.4</span><span class="tagq">reroute</span>Reroute the interval without the bell, by the spread-bound technique (30h1) on X̄. <br>Find the k that makes the chance of a miss at most 0.05 for every n, and how much wider that interval is than the bell’s.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r30p.html">← 30p · chance that steps</a><a href="r30r.html">30r · the most likely parameter →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The sample average X̄ is the sample mean, an estimator of the population mean μ; its spread width σ/√n is the standard error of the mean. An estimator whose average is the thing it estimates is unbiased: the sample-average technique says X̄ is unbiased, and the sample-spread technique says S², the sample variance, is. Dividing by n − 1 in place of n is Bessel’s correction. The interval of the bell-cover technique is a 95% confidence interval, and 95% is its confidence level; 1.96 is the critical value of the standard normal. The law held in trust is Student’s t distribution, and the small-sample-cover interval is the t interval. The swap of p̂ for p in the poll’s interval is justified by Slutsky’s theorem; the interval is the Wald interval. “Give or take 3 points” is a poll’s margin of error.</p>
+  <h3>Who said it first</h3>
+  <p>Carl Friedrich Gauss and Pierre-Simon Laplace worked out the error of an average around 1810. Friedrich Bessel used n − 1 in astronomy in the early nineteenth century. William Sealy Gosset, a brewer at Guinness in Dublin who measured barley and yeast in small samples, published the t distribution in 1908 under the name Student, because the brewery did not let its staff publish. Ronald Fisher proved its form in 1925 and gave it the letter t. Jerzy Neyman defined confidence intervals in 1937. The Secchi disc is named for Angelo Secchi, who lowered one into the Mediterranean in 1865;</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'on average',t:R`E\bar X = \mu`,n:`Average-adds.`},
+  {k:'ember',kl:'spreads add',t:R`\mathrm{Var}(X_1 + \cdots + X_n) = n\sigma^2`,n:`Independent.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{width } \sigma/\sqrt n}`,n:`Four times the sample, half the width.`}
+],{title:'The slides · the average of a sample · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'misses',t:R`\sum (X_i - \mu)^2 = \sum (X_i - \bar X)^2 + n(\bar X - \mu)^2`,n:`Squared-misses.`},
+  {k:'ember',kl:'averages',t:R`n\sigma^2 = E\sum (X_i - \bar X)^2 + \sigma^2`,n:`The sample-average technique.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{E S^2 = \sigma^2}`,n:`One less than the count.`}
+],{title:'The slides · the spread of a sample · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'in widths',t:R`Z_n = \frac{\bar X - \mu}{\sigma/\sqrt n}`,n:`The central limit technique.`},
+  {k:'ember',kl:'the bell',t:R`P(|Z_n| \le 1.96) \to 0.950`,n:`The bell-series technique.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\bar X \pm 1.96\,\sigma/\sqrt n}`,n:`Covers μ 95 times in 100.`}
+],{title:'The slides · an interval that covers · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'held in trust',t:R`T = \frac{\bar X - \mu}{S/\sqrt n}`,n:`Its law depends only on n − 1.`},
+  {k:'ember',kl:'the table',t:R`t_7 = 2.365,\ \ t_{29} = 2.045`,n:`Heading to 1.960.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\bar X \pm t\,S/\sqrt n}`,n:`Exact for bell-shaped data.`}
+],{title:'The slides · a wider table · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

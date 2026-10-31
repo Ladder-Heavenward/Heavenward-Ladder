@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Chance is size</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r30e.html">← 30e either order</a><a href="r30g.html">next: 30g averages as integrals →</a></p>
+  <div class="tags"><span class="tag proof">30f · proof</span></div>
+  <h1>Chance is size</h1>
+  <p>The statistics annexes have spoken of chance since rung two: the chance of heads, the chance of a misprint, the chance a forecast is right. They used it carefully, and never said what it is. This step says. A chance is a size. The things that might happen make up a set, the events are its sized parts, and the size of the whole is one. Everything the annexes did with chance follows from that: the chance something does not happen, the chance of one thing or another, the chance of one thing given another, and the rule that turns a given chance around. The last of these is how a doctor reads a test result, and this step shows why a good test for a rare condition still raises many false alarms.</p>
+  <p class="gesture">A chance space is a set with a sized family of events and a size of total one. From the rules of size come the chance of not, of or, of one given another, of independent events, and the turned-around chance.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r30b.html">30b</a> (sized families and countable adding) and on the statistics annexes from <a href="r02stat.html">2·stat</a> on, which used chance before it was defined. <a href="r30g.html">30g</a> totals over a chance space to find averages.</p></div>
+</header>
+
+<section class="class step" data-step="30f1">
+  <h2 class="sthead"><span class="stno">30f1</span>A chance space</h2>
+  <p class="stands">Stands on 30b2, 30b3.</p>
+  <p data-pid="231232">From here on, a <i>chance space</i> is three things. A set Ω of outcomes: everything that might happen. A family of subsets of Ω called <i>events</i>, which holds Ω and is closed under taking what is left over and under joining countably many. And a size P on the events with P(Ω) = 1, that adds over countably many separate events. P(A) is the <i>chance</i> of A. Its accepted names are probability space and probability.</p>
+  <p data-pid="f6bde8">Two examples. A fair die: Ω = {1, 2, 3, 4, 5, 6}, every subset is an event, and P(A) is the number of faces in A over 6. A dart thrown with no aim within [0, 1]: Ω = [0, 1], the events are the sized sets, and P is the line’s size m. Each single point then has chance 0, yet the dart lands somewhere.</p>
+  <p data-pid="28ab95">Chance-rules technique: <b>P(not A) = 1 − P(A), and P(A or B) = P(A) + P(B) − P(A and B).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the chance-rules technique">
+\Omega = A \cup A^c,\ \text{separate} \Rightarrow 1 = P(A) + P(A^c) @@ countable-adding (30b3), two pieces
+A \cup B = A \cup (B \setminus A),\ \ B = (B \setminus A) \cup (A \cap B) @@ separate pieces
+P(A \cup B) = P(A) + P(B \setminus A) = P(A) + P(B) - P(A \cap B) @@ the size adds on each line
+\htmlClass{new}{P(A^c) = 1 - P(A),\ \ P(A \cup B) = P(A) + P(B) - P(A \cap B)} \quad \blacksquare @@ the lines above
+  </pre>
+  <p data-pid="ed909b">Not, or and and on events are 1’s not, or and and on claims about the outcome. A ⊆ B gives P(A) ≤ P(B).</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · chance space · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">30f1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\Omega = \{(a, b) : a, b \in \{1, \ldots, 6\}\},\ \ \text{each with chance } \tfrac{1}{36}"></span></span>Two fair dice are rolled. Find the chance of a double, and of a total of 7. <br>Find the chance of a double or a total of 7, by the chance-rules technique, and the chance of neither. <br>Find the chance of at least one 6, through the chance of no 6.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30f2">
+  <h2 class="sthead"><span class="stno">30f2</span>Given, and independent</h2>
+  <p class="stands">Stands on 30f1.</p>
+  <p data-pid="14e525">From here on, for events A and B with P(B) &gt; 0, the <i>chance of A given B</i> is</p>
+  <p class="eqline" data-pid="5be880">P(A | B) = P(A ∩ B) / P(B).</p>
+  <p data-pid="efec93">It is the chance of A once B is known to have happened: B becomes the whole, and A is measured inside it. Its accepted name is conditional probability.</p>
+  <p data-pid="92bda9">Given-chance technique: <b>for fixed B with P(B) &gt; 0, A ↦ P(A | B) is a chance on the same events.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the given-chance technique">
+P(\Omega \mid B) = P(B)/P(B) = 1 @@ Ω ∩ B = B
+A_1, A_2, \ldots \text{ separate} \Rightarrow A_k \cap B \text{ separate} @@ a point in two of them would be in two Aₖ
+P\big(\textstyle\bigcup A_k \mid B\big) = \sum P(A_k \cap B)/P(B) = \sum P(A_k \mid B) @@ countable-adding (30b3)
+\htmlClass{new}{P(\,\cdot \mid B) \text{ is a chance}} \quad \blacksquare @@ the definition of a chance space
+  </pre>
+  <p data-pid="46a630">From here on, A and B are <i>independent</i> when P(A ∩ B) = P(A)P(B). When P(B) &gt; 0 this says P(A | B) = P(A): knowing B tells nothing about A. Many events are independent when every finite selection of them multiplies this way.</p>
+  <p data-pid="664624">Independent technique: <b>if A and B are independent, so are A and not B.</b> P(A ∩ Bᶜ) = P(A) − P(A ∩ B) = P(A) − P(A)P(B) = P(A)P(Bᶜ).</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · given · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30f2.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\Omega = \{(a, b) : a, b \in \{1, \ldots, 6\}\},\ \ \text{each with chance } \tfrac{1}{36}"></span></span>Find the chance of a total of 8 given that the first die shows 3.</li><li>Find the chance of a total of 8 given that at least one die shows 3.</li><li>Find whether “the first is even” and “the total is 7” are independent. Then the same for “the first is even” and “the total is 8”.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30f3">
+  <h2 class="sthead"><span class="stno">30f3</span>The whole chance, and turning it around</h2>
+  <p class="stands">Stands on 30f2.</p>
+  <p data-pid="3abe2c">Whole-chance technique: <b>if B₁, B₂, … are separate events of positive chance that fill Ω, then P(A) = Σ P(A | Bₖ) P(Bₖ).</b></p>
+  <p data-pid="ec4507">Turn-around technique: <b>if P(A) &gt; 0 and P(B) &gt; 0, then P(B | A) = P(A | B) P(B) / P(A).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: both techniques">
+A = \bigcup_k (A \cap B_k),\ \text{separate} @@ the Bₖ fill Ω and share no point
+P(A) = \sum_k P(A \cap B_k) = \sum_k P(A \mid B_k)P(B_k) @@ countable-adding; given-chance, multiplied out
+\htmlClass{new}{P(A) = \textstyle\sum_k P(A \mid B_k)P(B_k)} @@ whole-chance
+P(A \cap B) = P(A \mid B)P(B) = P(B \mid A)P(A) @@ given-chance, both ways
+\htmlClass{new}{P(B \mid A) = P(A \mid B)P(B)/P(A)} \quad \blacksquare @@ turn-around
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: a screening test for a rare condition">
+P(\text{has it}) = 0.001,\ \ P(+ \mid \text{has it}) = 0.99,\ \ P(+ \mid \text{does not}) = 0.02 @@ one in a thousand; the test catches 99 in 100; 2 in 100 false alarms
+P(+) = 0.99 \cdot 0.001 + 0.02 \cdot 0.999 = 0.02097 @@ whole-chance, with B₁ = has it, B₂ = does not
+P(\text{has it} \mid +) = 0.99 \cdot 0.001 / 0.02097 \approx 0.047 @@ turn-around
+  </pre>
+  <p data-pid="56dda0">A positive result raises the chance from 1 in 1000 to about 1 in 21. Most positives are false alarms, because the people without the condition are so many more. The test is good. The condition is rare.</p>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · laws with a known exception rate</div>
+    <p data-pid="0dbfb7">5d stated laws that hold with a known rate of exceptions. A chance is exactly such a law. “The test raises a false alarm 2 times in 100” is exact, and it is checked against thousands of tests, not against any one.</p>
+    <p data-pid="910336"><b>A chance is a law stated with its exception rate, exact about the many and silent about the one.</b></p>
+    <p data-pid="db5537">No single person is 4.7 percent ill. The 4.7 percent is a claim about everyone who tests positive, kept as exactly as any other measurement, with its exceptions counted in.</p>
+    <p class="bait" data-pid="3ff176">A forecast says 30 percent chance of rain in Seattle tomorrow, and it rains. Was the forecast wrong? How many forecasts would you need to check it?</p>
+  </aside>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · turn around · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30f3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="P(\text{has it}) = 0.01,\ \ P(+ \mid \text{has it}) = 0.99,\ \ P(+ \mid \text{does not}) = 0.02"></span></span>Find P(+) by the whole-chance technique, and P(has it | +) by turn-around. <br>A second test is done. Given whether the person has it, its result is independent of the first. Find the chance of having it after a second positive, starting from your last answer. <br>Compare with the condition at 1 in 1000, where one positive gave about 0.047.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30f4">
+  <h2 class="sthead"><span class="stno">30f4</span>Illegal moves</h2>
+  <p class="stands">Stands on 30f1 to 30f3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+P(A \mid B) = P(B \mid A)\,? @@ the screening test: 0.99 one way, 0.047 the other
+P(A \cup B) = P(A) + P(B) \text{ always}\,? @@ only for separate A and B; else take away P(A ∩ B)
+\text{separate events are independent}\,? @@ separate: P(A ∩ B) = 0, which is P(A)P(B) only if one has chance 0
+\text{chance } 0 \text{ means it cannot happen}\,? @@ the dart lands on some point, and each point has chance 0
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30f4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="A = \text{the total is } 12,\ \ B = \text{the first die shows } 6"></span></span>Is P(A | B) the same as P(B | A)? Find both, for two fair dice.</li><li><span class="givens"><span class="gtx">A forecast for Portland, Oregon: 60 percent chance of rain on Saturday, 60 percent on Sunday.</span></span>Is the chance of rain this weekend 120 percent? Find what the chance-rules technique needs to give the chance of rain on at least one day. <br>Find it if the two days are independent. Find the least and the most it could be.</li><li><span class="givens"><span data-tex-inline="A = \text{the first die shows } 1,\ \ B = \text{the first die shows } 2"></span></span>Are separate events independent? Find P(A ∩ B) and P(A)P(B). If you learn that A happened, what do you know about B?</li><li><span class="givens"><span class="gtx">A dart thrown with no aim within [0, 1].</span></span>Does chance 0 mean it cannot happen? Find the chance that the dart lands exactly at 0.5, and the chance it lands on a fraction. <br>It lands at some x. Find the chance that x had before the throw.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">30f.4.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">Two fair coins.</span></span>Build three events, each two of them independent, but not all three together. Try A = the first is heads, B = the second is heads, C = the two match. <br>Find every chance you need, and check which products hold.</div>
+  <div class="chq"><span class="chid">30f.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="P(A \mid B) = P(A \cap B)/P(B)"></span></span>Find P(A | Ω) for any event A. <br>For the dart of 30f1, take B = {0.5}. Find P(B), and whether P(A | B) is defined. <br>Find every event that is independent of itself.</div>
+  <div class="chq"><span class="chid">30f.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="P(A \cup B) = P(A) + P(B)"></span></span>Chance-rules: for separate events, the chance of A or B is the sum of their chances. Turn it round: if the chances add, must A and B be separate? <br>Test the dart with A = [0, 0.5] and B = [0.5, 1]. Find what does follow from the or rule.</div>
+  <div class="chq"><span class="chid">30f.4.4</span><span class="tagq">reroute</span><span class="givens"><span class="gtx">100,000 people; 1 in 1000 have the condition; 99 in 100 of them test positive; 2 in 100 of the rest test positive.</span></span>Find the screening answer of 30f3 again by counting people instead of turning chances around. Find how many have it and test positive, and how many do not and test positive. <br>Find the share of the positives who have it, and compare with 0.047. <br>Find which line of the count does the work of whole-chance, and which does the work of turn-around.</div>
+  <div class="chq"><span class="chid">30f.4.5</span><span class="tagq">seam</span><span class="givens"><span class="gtx">7a.4.4: a sea battle will be fought tomorrow, or it will not.</span></span>Rung seven asked whether one of the two is true today. A chance space puts tomorrow among its outcomes and gives the battle a chance, such as 0.3. <br>Find what the chance space claims today, and what it leaves open. <br>Is a chance of 0.3 a third truth value, between true and false? Or is it the size of the set of outcomes where the battle is fought, with each outcome fully true or false? <br>If the world is already settled and only you do not know, is the 0.3 about the world or about you? 30u returns to this.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r30e.html">← 30e · either order</a><a href="r30g.html">30g · averages as integrals →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A chance space is a probability space (Ω, 𝓕, P), the events form a σ-algebra 𝓕, and P is a probability measure. The three demands are Kolmogorov’s axioms. The given chance is conditional probability, the whole-chance technique is the law of total probability, and the turn-around technique is Bayes’ theorem, or Bayes’ rule. Confusing P(A | B) with P(B | A) is the base rate fallacy, or the prosecutor’s fallacy in a courtroom.</p>
+  <h3>Who said it first</h3>
+  <p>Gerolamo Cardano, Blaise Pascal and Pierre de Fermat counted chances in games of dice between the 1560s and 1654. Thomas Bayes’ essay, published after his death in 1763, turned a given chance around; Pierre-Simon Laplace stated the rule in general in 1774. Andrey Kolmogorov laid chance on measure in 1933, and his axioms are the ones on this page.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“The test is right 99 times in 100, so a positive result is right 99 times in 100.” Not allowed: 0.99 is P(+ | has it). The question asks for P(has it | +), and turning it around needs P(has it), the rate of the condition, which the claim never used.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'outcomes',t:R`\Omega`,n:`All that might happen.`},
+  {k:'ember',kl:'size',t:R`P(\Omega) = 1`,n:`Adds countably.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{P(A^c) = 1 - P(A)}`,n:`And the or rule.`}
+],{title:'The slides · chance space · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'given',t:R`P(A \mid B) = P(A \cap B)/P(B)`,n:`B is the new whole.`},
+  {k:'ember',kl:'independent',t:R`P(A \cap B) = P(A)P(B)`,n:`B tells nothing about A.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{P(\cdot \mid B) \text{ is a chance}}`,n:`And not B too.`}
+],{title:'The slides · given · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'whole',t:R`P(A) = \sum P(A \mid B_k)P(B_k)`,n:`Over a split.`},
+  {k:'ember',kl:'turn',t:R`P(B \mid A) = \frac{P(A \mid B)P(B)}{P(A)}`,n:`Given, both ways.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{P(\text{ill} \mid +) \approx 0.047}`,n:`Rare stays rare.`}
+],{title:'The slides · turn around · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

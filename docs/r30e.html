@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Either order</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r30d.html">← 30d when limits pass through integrals</a><a href="r30f.html">next: 30f chance is size →</a></p>
+  <div class="tags"><span class="tag proof">30e · proof</span></div>
+  <h1>Either order</h1>
+  <p>Rung twenty-eight added up a function over a region of the plane in two ways: across and then up, or up and then across. For continuous functions on rectangles, the two orders agreed. This step does the same for the new total. Sizes on the plane are built from rectangles, the way sizes on the line were built from intervals. Then a set in the plane is cut into slices, one for each place along the bottom edge, and its size is the total of the slices’ lengths. From that, a function that is never negative can be totalled in either order, always with the same answer. A function that takes both signs can be too, as long as the total of its size is finite. Without that, the two orders can disagree, and this step shows one that does.</p>
+  <p class="gesture">A sized set in the plane has the total of its slices’ lengths for its size. So a function that is never negative, or whose size has a finite total, can be totalled in either order with the same answer.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r30a.html">30a</a> and <a href="r30b.html">30b</a> (outer size and the split test), <a href="r30d.html">30d</a> (the three limit techniques) and <a href="r28h.html">28h</a> (double integrals). <a href="r30j.html">30j</a> uses either order to find the bell’s total.</p></div>
+</header>
+
+<section class="class step" data-step="30e1">
+  <h2 class="sthead"><span class="stno">30e1</span>Sizes on the plane</h2>
+  <p class="stands">Stands on 30a, 30b.</p>
+  <p data-pid="5d3a0f">A rectangle A × B is the set of points (x, y) with x in A and y in B, for intervals A and B. Its size is m(A) · m(B).</p>
+  <p data-pid="7253c9">From here on, the outer size of a set in the plane is the greatest lower bound of the totals of its covers by countably many open rectangles. A set in the plane is sized when it passes the split test with this outer size. The proofs of 30a and 30b go through word for word, with one change: where 30a1 chained intervals along a line, the plane cuts the rectangles of a finite cover along a common grid, and counts the cells. The plane’s sized sets form a sized family, size adds over countably many separate sized pieces, and every rectangle is sized with size m(A)m(B).</p>
+  <p data-pid="2706ca">From here on these are the <i>product sizes</i> m₂ on the plane. Their accepted name is the product measure.</p>
+  <p data-pid="5dd20f">The slice of a set E in the plane at x is Eₓ, the set of y with (x, y) in E.</p>
+  <p data-pid="5cd1a1">A countable union of rectangles is also a countable union of separate rectangles: take each new rectangle’s part outside the ones before it, which is finitely many rectangles.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · plane · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">30e1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="E = [0, 3] \times [0, 1]\ \cup\ [0, 1] \times [0, 3]"></span></span>A field near Missoula, Montana, is L-shaped: in km, it is E. Write E as two separate rectangles in two different ways. Find its size each way.</li><li>Find the slices Eₓ at x = 0.5, x = 2 and x = 4, and their lengths.</li><li>Find the size of E less its corner square [0, 1] × [0, 1].</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30e2">
+  <h2 class="sthead"><span class="stno">30e2</span>Size is the total of the slices</h2>
+  <p class="stands">Stands on 30e1, 30d1, 30d3.</p>
+  <p data-pid="f8372b">Slices technique: <b>if E is a sized set in the plane, then except on a size-0 set of x, the slice Eₓ is sized, x ↦ m(Eₓ) is sized, and m₂(E) = ∫ m(Eₓ) dx.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the slices technique, from rectangles out">
+E = A \times B:\ \ m(E_x) = m(B) \text{ on } A,\ 0 \text{ off } A;\ \ \textstyle\int m(E_x)\,dx = m(A)m(B) @@ a rectangle
+E = \text{separate rectangles } R_1, R_2, \ldots:\ \ m(E_x) = \sum_k m\big((R_k)_x\big) @@ countable-adding (30b3); rising-limit (30d1) on the partial sums
+G_1 \supseteq G_2 \supseteq \cdots,\ \text{each a countable union of rectangles},\ m_2(G_1) < \infty,\ G = \bigcap G_k @@ falling sets
+m\big((G_k)_x\big) \to m(G_x),\ \ \textstyle\int m\big((G_k)_x\big)\,dx \to \int m(G_x)\,dx @@ fenced-limit (30d3), fenced by m((G₁)ₓ)
+\text{sized } E,\ m_2(E) < \infty:\ E \subseteq G,\ m_2(G \setminus E) = 0 @@ Gₖ a cover with total under m₂(E) + 1/k (30e1)
+m_2(N) = 0 \Rightarrow m(N_x) = 0 \text{ except on a size-0 set of } x @@ N inside such a G with m₂(G) = 0; a total of 0 (30c)
+\htmlClass{new}{m_2(E) = \textstyle\int m(E_x)\,dx} \quad \blacksquare @@ E = G less a size-0 set; for infinite m₂(E), cut E into countably many pieces of finite size
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · slices · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30e2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="E = \{(x, y) : 0 \le x \le 2,\ 0 \le y \le x\}"></span></span>Find the slice Eₓ for each x, and its length. <br>Find the total of the slice lengths. Compare with the area of the triangle from rung fifteen. <br>Find the slices across, at each y, and the total of their lengths.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30e3">
+  <h2 class="sthead"><span class="stno">30e3</span>Either order</h2>
+  <p class="stands">Stands on 30e2, 30c3, 30d1.</p>
+  <p data-pid="ea076c">Either-order-sized technique: <b>if f ≥ 0 is sized on the plane, then ∫∫ f dm₂ = ∫ ( ∫ f(x, y) dy ) dx = ∫ ( ∫ f(x, y) dx ) dy.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the either-order-sized technique, for f ≥ 0">
+f = 1_E:\ \ \textstyle\int\!\!\int 1_E\,dm_2 = m_2(E) = \int m(E_x)\,dx = \int\big(\int 1_E(x, y)\,dy\big)dx @@ slices (30e2)
+\text{the same with slices across, at each } y @@ the plane does not prefer x to y
+f \text{ a step function}:\ \text{both orders add} @@ totals add (30d1)
+f \ge 0 \text{ sized}:\ s_n \uparrow f \text{ steps} @@ total-from-below (30c3)
+\textstyle\int s_n(x, y)\,dy \uparrow \int f(x, y)\,dy \text{ at each } x,\ \text{then } \int(\cdots)dx \uparrow \int(\int f\,dy)dx @@ rising-limit (30d1), twice
+\htmlClass{new}{\textstyle\int\!\!\int f\,dm_2 = \int\big(\int f\,dy\big)dx = \int\big(\int f\,dx\big)dy} \quad \blacksquare @@ rising-limit, a third time, on the plane
+  </pre>
+  <p data-pid="d198da">When f takes both signs, split it as f⁺ − f⁻ (30c3). If ∫∫|f| dm₂ is finite, each part has a finite total, both orders agree for each, and the two take away. So f can be totalled in either order whenever the total of |f| is finite, and that can be checked in either order, because |f| ≥ 0.</p>
+  <p data-pid="713c98">This is 28h’s either-order, for every sized function that allows it.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · either order · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30e3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x, y) = x\,e^{-xy} \text{ on } [0, 1] \times [0, \infty),\ \ 0 \text{ elsewhere}"></span></span>Find ∫ f(x, y) dy at each x, then its total over x.</li><li>Find ∫ f(x, y) dx at each y &gt; 0, by parts (16e), and its value at y = 1. Find whether the total of that over y looks easy.</li><li>Find the technique that gives the value of the second order without doing it, and why it applies here.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30e4">
+  <h2 class="sthead"><span class="stno">30e4</span>When the orders disagree</h2>
+  <p class="stands">Stands on 30e3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: two orders, two answers">
+f = 1 \text{ on } [n, n+1]^2,\ \ f = -1 \text{ on } [n+1, n+2] \times [n, n+1],\ \ n = 0, 1, 2, \ldots @@ a staircase of squares, plus then minus
+\text{fix } y \in [n, n+1]:\ \textstyle\int f(x, y)\,dx = 1 - 1 = 0 @@ one + square and one − square in that row
+\textstyle\int\big(\int f\,dx\big)dy = 0 @@ every row totals 0
+\text{fix } x \in [0, 1]:\ \textstyle\int f\,dy = 1;\ \ x \in [n+1, n+2]:\ \textstyle\int f\,dy = 1 - 1 = 0 @@ the first column has only the + square
+\textstyle\int\big(\int f\,dy\big)dx = 1 @@ only the first column counts
+\htmlClass{new}{0 \ne 1:\ \ \textstyle\int\!\!\int |f|\,dm_2 = \infty} \quad \blacksquare @@ endlessly many unit squares, so the technique does not apply
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30e4.1</span><span class="ph bend">bend</span><span class="givens"><span data-tex-inline="f = 1 \text{ on } [n, n+1]^2,\ \ -1 \text{ on } [n+1, n+2] \times [n, n+1],\ \ n = 0, 1, 2 \text{ only};\ \ 0 \text{ elsewhere}"></span></span>Find the total along each row, at y in [0, 1], [1, 2] and [2, 3], and the total of the rows. <br>Find the total along each column, at x in [0, 1], [1, 2], [2, 3] and [3, 4], and the total of the columns. <br>Do the two orders agree here? Find what the endless staircase does to the column that holds the last − square, and why that changes the answer.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30e5">
+  <h2 class="sthead"><span class="stno">30e5</span>Illegal moves</h2>
+  <p class="stands">Stands on 30e1 to 30e4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{any } f \text{ can be totalled in either order}\,? @@ the staircase: 0 one way, 1 the other
+\textstyle\int\big(\int f\,dy\big)dx \text{ finite} \Rightarrow \int\!\!\int |f| \text{ finite}\,? @@ the staircase gives a finite answer each way; check |f|
+\text{every slice of a sized set is sized}\,? @@ only except on a size-0 set of x
+\text{the order matters only for functions with jumps}\,? @@ the staircase can be smoothed and still disagree
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30e5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="g(x, y) = f(y, x),\ \ f \text{ the staircase of 30e4}"></span></span>Can any function be totalled in either order? This is the staircase flipped across the line y = x. Find the total of each row and of each column, and the two orders.</li><li><span class="givens"><span data-tex-inline="f \text{ the staircase of 30e4}"></span></span>Both orders gave finite answers. Is the total of |f| then finite? Find |f| on each square, and the total of |f|.</li><li><span class="givens"><span data-tex-inline="E = \{0\} \times V,\ \ V \text{ from 30a4}"></span></span>Is every slice of a sized set sized? Cover E by the rectangle (−ε, ε) × (−1, 2), and find what that gives for the outer size of E. Is E sized? Find its slice at x = 0, and whether that slice is sized.</li><li><span class="givens"><span data-tex-inline="f(x, y) = \dfrac{x^2 - y^2}{(x^2 + y^2)^2} \text{ on } (0, 1] \times (0, 1]"></span></span>Does the order matter only for functions with jumps? f has no jump on this square. Check that y/(x² + y²) has slope f in y. Find ∫ f dy at each x, then the total over x. <br>Find the other order by swapping the roles of x and y. Find whether the total of |f| is finite.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">30e.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\frac{e^{-x} - e^{-2x}}{x} = \int_1^2 e^{-xy}\,dy \quad (x &gt; 0)"></span></span>Rung sixteen has no undoing to total (e^(−x) − e^(−2x))/x over (0, ∞). Build its total from a double total. <br>Check the given line. Total e^(−xy) over (0, ∞) × [1, 2] in the other order, and find the value. <br>Find the technique that licenses the swap, and why it applies.</div>
+  <div class="chq"><span class="chid">30e.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="G = \{(x, x^2) : 0 \le x \le 1\}"></span></span>G is the graph of y = x² on [0, 1], a curve in the plane, and it is sized. Find its slice at each x, and its size by the slices technique. <br>Find the size of a straight line in the plane, cut into countably many segments. <br>Find whether the plane can be a union of countably many lines.</div>
+  <div class="chq"><span class="chid">30e.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="f(x, y) = \dfrac{xy}{(x^2 + y^2)^2} \text{ on } [-1, 1]^2,\ \ f(0, 0) = 0"></span></span>Either-order: when the total of |f| is finite, the two orders agree. Turn it round: if the two orders agree, must the total of |f| be finite? <br>Find ∫ f dy at each x ≠ 0, using f(x, −y) = −f(x, y). Find both orders. <br>On the square [a/2, a]², prove f ≥ 1/(16a²). Total |f| over these squares for a = 1, 1/2, 1/4, …, and find whether the total of |f| is finite.</div>
+  <div class="chq"><span class="chid">30e.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="f(x) = (x - 2)^2 \text{ on } [0, 4],\ \ 0 \text{ elsewhere}"></span> <span data-tex-inline="E = \{(x, t) : 0 \le t &lt; f(x)\}"></span></span>Find the total of f another way, through its height sets (30c2.1). E is the set under the graph. <br>Find the slice of E at each x, and its slice at each height t. <br>Total the slices in both orders. One order gives ∫ f dx. Find the other, ∫ m{f &gt; t} dt, and check that the two agree.</div>
+  <div class="chq"><span class="chid">30e.4.5</span><span class="tagq">seam</span><span class="givens"><span class="gtx">10d.4.4: can a whole be made of pieces with no width?</span></span>An old book squeezed a quantity between estimates. A book of 1635 built areas from endlessly many slices with no width, and a critic attacked it in print. <br>Find the plane size of one slice {x} × [0, 1] of the unit square. Find the total of the slice lengths over x in [0, 1]. <br>The square is the union of its slices, and each slice has plane size 0. Find which reading the slices technique uses: the slices as sets in the plane, or the lengths of the slices totalled over x. <br>Has the method of 1635 been made rigorous, or replaced by something that only looks like it?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r30d.html">← 30d · when limits pass through integrals</a><a href="r30f.html">30f · chance is size →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The product sizes are the product measure, m ⊗ m, or Lebesgue measure on ℝ². The slices technique is Cavalieri’s principle in its measure form. The either-order-sized technique is the Fubini–Tonelli theorem: Tonelli for f ≥ 0, Fubini when ∫|f| is finite.</p>
+  <h3>Who said it first</h3>
+  <p>Bonaventura Cavalieri compared solids by their slices in 1635. Guido Fubini proved the either-order theorem for Lebesgue integrals in 1907, and Leonida Tonelli gave the form for positive functions in 1909. The staircase of squares is a standard example since the early twentieth century.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“Each row of the staircase totals 0, so the whole staircase totals 0, so each column must total 0 too.” Not allowed: the whole staircase has no total, since ∫∫|f| is endless, so neither order is the total of anything.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'rectangle',t:R`m_2(A \times B) = m(A)\,m(B)`,n:`The building block.`},
+  {k:'ember',kl:'cover',t:R`\text{countably many rectangles}`,n:`As on the line.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{m_2 \text{ adds countably}}`,n:`The proofs go through.`}
+],{title:'The slides · plane · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'slice',t:R`E_x`,n:`The part above x.`},
+  {k:'ember',kl:'build',t:R`\text{rectangles} \to \text{unions} \to \text{falling}`,n:`Limits through totals.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{m_2(E) = \int m(E_x)\,dx}`,n:`Size is total of slices.`}
+],{title:'The slides · slices · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'steps',t:R`1_E,\ \text{then steps}`,n:`From slices.`},
+  {k:'ember',kl:'limits',t:R`s_n \uparrow f`,n:`Three rising limits.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\int(\int f\,dy)dx = \int(\int f\,dx)dy}`,n:`For f ≥ 0, or ∫|f| finite.`}
+],{title:'The slides · either order · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

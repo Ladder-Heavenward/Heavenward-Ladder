@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How does a gene spread through a population?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r30then.html">← 30·then why does pollen jiggle in water?</a><a href="r30phys.html">next: 30·phys how is energy shared among molecules? →</a></p>
+  <div class="tags"><span class="tag bio">30·bio · biology</span></div>
+  <h1>How does a gene spread through a population?</h1>
+  <p>How does a gene spread through a population? The threespine stickleback is a small fish of the coast, from the Salish Sea down into California. In the sea it wears a row of bony plates along each side. In the lakes of British Columbia, cut off from the sea when the glaciers melted, the same fish wears only a few. The form of the gene for few plates is rare in the sea, perhaps one copy in a hundred, and in lake after lake it has become nearly the only form. How does a form of a gene go from rare to everywhere? And when a form is lost, as nearly every variant has been lost from the island foxes off the coast of southern California, what took it away? What makes the question hard is that two forces work at once. Selection favours the form that leaves more young, and pushes steadily. Chance decides which parents happen to leave young at all, and it pushes every which way, hardest in small populations. Rung five counted one cross of peas. This page follows a whole population, generation after generation, with rung thirty’s chance as size, averages and fair games, and asks which force did the work.</p>
+  <p class="gesture">Mix the eggs and pollen of a whole population at random, and the three kinds of plant come out in shares fixed by the share of each form of the gene, and those shares then stay put. Give one form an edge in leaving young, and its odds against the other grow by a fixed factor each generation, so it spreads along a rising curve that is slow at both ends. In general the share of a form moves uphill on the population’s average fitness, and rests at the tops: when the mixed kind does best, both forms are kept, in a share fixed by how much worse each pure kind does. And in a population of fixed size, chance alone makes the share of a form a fair game. Its average stays put, its spread grows, and the mixing of forms drains away by a fixed share each generation, until one form is everywhere. The chance that a form ends up everywhere is exactly its share at the start.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r05bio.html">5·bio</a> (alleles and the friar’s cross), <a href="r30f.html">30f</a> (the independent technique), <a href="r30g.html">30g</a> (the average-adds and independent-spreads-add techniques), <a href="r30h.html">30h</a> (the stray-bound technique), <a href="r30d.html">30d</a> (the fenced-limit technique), <a href="r30k.html">30k</a> (the fair-stays-fair technique), <a href="r30j.html">30j</a> (the bell), <a href="r17j.html">17j</a> (the equal-steps-equal-factors technique), <a href="r17bio.html">17·bio</a> (the logistic-solution technique), <a href="r14a.html">14a</a> (the flat-top technique) and <a href="r30then.html">30·then</a> (the fit-total technique). 30·phys shares energy among molecules.</p></div>
+</header>
+
+<section class="class step" data-step="30bio1">
+  <h2 class="sthead"><span class="stno">30bio1</span>Allele shares at rest</h2>
+  <p class="stands">Stands on 5·bio (alleles, gametes), 30f (the independent technique) and 30g (the average-adds technique).</p>
+  <p data-pid="aee7f7">Take one gene with two alleles, A and a, in a large population. Write p for the share of A among all the copies, and q = 1 − p. 5·bio crossed two plants. Now cross a whole population: every new plant gets one copy from an egg and one from a pollen grain, each drawn from the whole pool of copies, apart from each other (30f).</p>
+  <pre class="lines" data-k="ember" data-label="this page: the one-round-rest technique">
+P(AA) = p\cdot p,\ \ P(Aa) = 2pq,\ \ P(aa) = q^2 @@ independent draws (30f); Aa can come two ways, A from the egg or A from the pollen
+p^2 + 2pq + q^2 = (p + q)^2 = 1 @@ the three kinds take up every plant
+p' = \tfrac{2p^2 + 2pq}{2} = p(p + q) = p @@ the new share of A: two copies in each AA, one in each Aa
+\htmlClass{new}{\text{after one round: } p^2,\ 2pq,\ q^2,\ \text{ and they stay}} \quad \blacksquare @@ p′ = p, so the next round gives the same shares
+  </pre>
+  <p data-pid="bd5d40">One-round-rest technique: <b>if copies join at random, one round of mixing sets the shares of AA, Aa and aa at p², 2pq and q², and they stay there while nothing else acts.</b> Mixing alone changes nothing. A gene spreads only when something breaks one of the conditions: copies that do not join at random, an edge in leaving young, a population too small to be a whole pool, or copies arriving from outside.</p>
+  <p data-pid="3e9629">A classic test: a survey of 1000 people in England typed for the MN blood groups found 298 MM, 489 MN and 213 NN. So p = (2 · 298 + 489)/2000 = 0.5425. The technique predicts 294.3, 496.4 and 209.3. The mixed kind misses by 7.4, against a spread width of √(1000 · 0.4964 · 0.5036) = 15.8, so Z = −0.47 (30·then’s scaled miss). The population looks like one at rest.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · at rest · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">30·bio.1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a population that starts with half AA and half aa, and no Aa</span></span>Find p, and the shares of AA, Aa and aa after one round of random mixing, and after two. <br>Find the share of Aa that the start had, against the share at rest.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30bio2">
+  <h2 class="sthead"><span class="stno">30bio2</span>Selection and allele shares</h2>
+  <p class="stands">Stands on 30·bio.1, 17j (the equal-steps-equal-factors technique) and 17·bio (the logistic-solution technique).</p>
+  <p data-pid="d6c8e2">Now let the three kinds leave young at different rates: on average w₁₁ for AA, w₁₂ for Aa and w₂₂ for aa, counted as copies passed on into the next round. Its accepted name is <i>fitness</i>. Each kind’s share of the copies is weighted by its fitness, and the weights are shared out over their total, the average fitness w̄ = p²w₁₁ + 2pqw₁₂ + q²w₂₂.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the odds-growth technique">
+p' = \tfrac{p^2w_{11} + pqw_{12}}{\bar w} = \tfrac{p\,(pw_{11} + qw_{12})}{\bar w} @@ the copies of A after selection, over all copies
+w_{11} = (1 + s)^2,\ \ w_{12} = 1 + s,\ \ w_{22} = 1 @@ each copy of A adds the same edge s
+p' = \tfrac{p\,(1 + s)(1 + ps)}{\bar w} @@ pw₁₁ + qw₁₂ = (1 + s)(p(1 + s) + q) = (1 + s)(1 + ps)
+q' = \tfrac{q\,(1 + ps)}{\bar w} @@ the same for a: pw₁₂ + qw₂₂ = p(1 + s) + q = 1 + ps
+\htmlClass{new}{\tfrac{p'}{q'} = (1 + s)\,\tfrac{p}{q}} \quad \blacksquare @@ divide: the factor 1 + ps and w̄ cancel
+  </pre>
+  <p data-pid="ebccd9">Odds-growth technique: <b>when each copy of A adds the same edge s, the odds p/q of A against a grow by the factor 1 + s every generation.</b> Equal steps, equal factors (17j): the odds grow like an exponential, and p itself follows 17·bio’s logistic curve, slow when A is rare, fastest at a half, slow again near the end. From 1% to 99% the odds go from 1/99 to 99, a factor of 9801, which takes ln 9801/ln(1 + s) generations: 188 for s = 0.05, and 464 for s = 0.02.</p>
+  <p data-pid="423863">Not every edge works this way. If only AA gets the edge, so A helps only in a double dose, then a rare A sits almost always in Aa, where it shows no edge. At p = 0.01 and s = 0.02, the share of A rises by 0.0002 a generation when each copy counts, and by 0.000002 when only a double dose counts: a hundred times slower. The stickleback’s few-plates form behaves much like this second kind, which is part of why a lake fish keeps a stock of it hidden in the sea.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · selection · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30·bio.2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">an edge s = 0.1 for each copy of A, from p = 0.01</span></span>Find the number of generations for p to reach 0.5, and to reach 0.99. <br>Find p after 20 generations, from the odds.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30bio3">
+  <h2 class="sthead"><span class="stno">30bio3</span>Fitness landscapes</h2>
+  <p class="stands">Stands on 30·bio.2, 14a (the flat-top technique) and 13 (slopes).</p>
+  <p data-pid="ec1a2b">Draw w̄ as a function of p, over [0, 1]. Its accepted name is a <i>fitness landscape</i>, though here it has only one direction to walk in. Which way does selection move p on it?</p>
+  <pre class="lines" data-k="ember" data-label="this page: the uphill-share technique">
+w_1 = pw_{11} + qw_{12},\ \ w_2 = pw_{12} + qw_{22},\ \ \bar w = pw_1 + qw_2 @@ the average fitness of a copy of A, of a copy of a, and of all
+\tfrac{d\bar w}{dp} = 2(pw_{11} + qw_{12}) - 2(pw_{12} + qw_{22}) = 2(w_1 - w_2) @@ the slope of p²w₁₁ + 2p(1 − p)w₁₂ + (1 − p)²w₂₂ (13)
+p' - p = \tfrac{pw_1}{\bar w} - p = \tfrac{p\,(w_1 - \bar w)}{\bar w} = \tfrac{pq\,(w_1 - w_2)}{\bar w} @@ w₁ − w̄ = w₁ − pw₁ − qw₂ = q(w₁ − w₂)
+\htmlClass{new}{p' - p = \tfrac{pq}{2\bar w}\,\tfrac{d\bar w}{dp}} \quad \blacksquare @@ put in the slope
+  </pre>
+  <p data-pid="79b568">Uphill-share technique: <b>selection moves the share p in the direction in which the average fitness w̄ rises, at a pace set by pq and the slope of w̄, so p rests only where that slope is 0 or at an end.</b> When the mixed kind does best, w₁₁ = 1 − s, w₁₂ = 1, w₂₂ = 1 − t, the slope is 0 inside [0, 1], at a top.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the balanced-share technique">
+w_1 - w_2 = p(1 - s) + q - p - q(1 - t) = -ps + qt @@ put the fitnesses in
+-ps + qt = 0 \iff p^* = \tfrac{t}{s + t} @@ the flat-top technique (14a): the slope of w̄ is 0
+\htmlClass{new}{p \lt p^* \Rightarrow p' \gt p,\ \ p \gt p^* \Rightarrow p' \lt p} \quad \blacksquare @@ the uphill-share technique: −ps + qt falls as p rises
+  </pre>
+  <p data-pid="082e34">Balanced-share technique: <b>when the mixed kind leaves the most young, both alleles are kept, and the share of A rests at t/(s + t), where s and t are the shortfalls of AA and aa.</b> In the lowlands of West Africa where malaria is common, carrying one copy of the sickle allele guards against malaria, two copies cause sickle cell disease, and none leaves a child open to malaria. With shortfalls near 0.15 for no copies and 0.85 for two, the technique rests the sickle allele at 0.15/(0.15 + 0.85) = 0.15, near the shares found in such regions. Where malaria is gone, the edge is gone, and the uphill-share technique says the allele falls.</p>
+  <p data-pid="b3a0cb">When the mixed kind does worst, the landscape has its tops at the ends and a valley between. Selection pushes p to whichever end it starts nearer. A population on one top cannot cross the valley by selection alone, even toward a higher top.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · landscape · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · twenty populations, generation by generation</div>
+    <div class="kn"><span class="m">plants N</span><input type="range" id="kN" min="10" max="500" step="10" value="50"><output id="oN"></output>
+    <span class="m">edge s</span><input type="range" id="ks" min="0" max="0.1" step="0.005" value="0"><output id="os"></output></div>
+    <div id="pl"></div>
+    <div class="cap">Twenty populations of N plants (2N copies), each starting with A at a share of 0.2, run for 200 generations. Each generation draws its 2N copies at random from the last, weighted by an edge s for each copy of A. Ember: the twenty shares. Ink: the path selection alone would take. The draws are the same every time, so moving a slider changes only N or s.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30·bio.3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">s = 0.15 for AA (no sickle copy), t = 0.85 for aa (two copies); here a is the sickle allele, with share q</span></span>Find the resting share of the sickle allele, and w̄ there and at q = 0. <br>Find the change in q in one generation from q = 0.05.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30bio4">
+  <h2 class="sthead"><span class="stno">30bio4</span>Drift in a finite population</h2>
+  <p class="stands">Stands on 30·bio.1, 30g (the spread of a count), 30k (the fair-stays-fair technique), 30h (the stray-bound technique) and 30d (the fenced-limit technique).</p>
+  <p data-pid="218a9d">Now take a population of N plants, so 2N copies, and no edge for either allele. Each generation draws its 2N copies at random from the last one’s, each copy A with chance p. The count of A is a sum of 2N independent parts, so it has average 2Np and spread 2Npq (30g). The share p′ has average p and spread pq/(2N). Its accepted name is <i>drift</i>.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the shrinking-mix technique">
+\operatorname{E}[p' \mid p] = p @@ a fair game (30k): the share’s next average is its present value
+\operatorname{E}[p'^2 \mid p] = p^2 + \tfrac{pq}{2N} @@ an average square is the square of the average plus the spread (30g)
+\operatorname{E}[p'q' \mid p] = p - p^2 - \tfrac{pq}{2N} = pq\big(1 - \tfrac{1}{2N}\big) @@ q′ = 1 − p′
+\htmlClass{new}{\operatorname{E}[2p_nq_n] = 2p_0q_0\big(1 - \tfrac{1}{2N}\big)^n} \quad \blacksquare @@ average once more over p, n times
+  </pre>
+  <p data-pid="db825f">Shrinking-mix technique: <b>with drift alone, the average share of mixed plants, 2pq, shrinks by the factor 1 − 1/(2N) every generation.</b> With 50 plants, a hundred generations keep only 37% of it. The mixing drains away because chance, sooner or later, carries every population to one end, where it stays. Which end?</p>
+  <pre class="lines" data-k="ember" data-label="this page: the fix-chance technique">
+\operatorname{E}p_n = p_0 @@ the fair-stays-fair technique (30k)
+p_n \notin \{0, 1\} \Rightarrow p_nq_n \ge \tfrac{1}{2N}\big(1 - \tfrac{1}{2N}\big) = c @@ at least one copy of each allele
+P(p_n \notin \{0, 1\}) \le \tfrac{\operatorname{E}[p_nq_n]}{c} \to 0 @@ the stray-bound technique (30h), and the shrinking-mix technique
+p_n \to p_\infty \in \{0, 1\} \text{ with chance } 1 @@ an end, once reached, is kept: no copies of the other allele are left to draw
+\operatorname{E}p_\infty = \lim \operatorname{E}p_n = p_0 @@ the fenced-limit technique (30d): 0 ≤ pₙ ≤ 1
+\htmlClass{new}{P(A \text{ ends up everywhere}) = p_0} \quad \blacksquare @@ E p_∞ = 1 · P(p_∞ = 1) + 0
+  </pre>
+  <p data-pid="7dfd0e">Fix-chance technique: <b>with drift alone, an allele ends up in every copy with chance equal to its share at the start, and otherwise it is lost.</b> A single new copy, in a population of N plants, starts at 1/(2N): in 50 plants it ends up everywhere one time in 100, however good or bad it is, as long as it gives no edge. The island foxes of the Channel Islands off southern California have lived for thousands of years in populations of a few hundred to a few thousand. Surveys of their genes found almost no variation left on San Nicolas Island, the drift these techniques predict for a small population kept small for long.</p>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · the cloud</div>
+    <p data-pid="7b72f5">An allele’s share in a real population is never still. Drift alone moves it each generation by a spread width √(pq/2N). So a reported share is a cloud, and a change in it is evidence of selection only when it stands out of the cloud.</p>
+    <p data-pid="b5f205"><b>A change in an allele’s share is called selection only when it stands outside the width drift alone gives it, and the chance of a false call is stated.</b></p>
+    <p data-pid="1cc93f">Call a one-generation change selection only when it is more than two spread widths of drift. By the bell (30j), drift alone passes that line about one time in twenty, so the call is wrong at a rate stated in advance. A smaller change is not proof of no selection. An edge of 1% moves p by about 0.002 a generation near a half, far inside the cloud of a population of 500. Selection that weak is real, and slow, and seen only over many generations.</p>
+    <p class="bait" data-pid="744d4b">In a lake on Vancouver Island with 100 breeding sticklebacks, the few-plates allele goes from 0.40 to 0.46 in one generation. Is that drift or selection? How sure could you be either way?</p>
+  </aside>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · drift · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30·bio.4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a population of N = 50 plants</span></span>Find the share of the start’s mixed plants that drift leaves, on average, after 100 generations. <br>Find the chance that a single new copy ends up everywhere, and the spread width of p after one generation from p = 0.5.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30bio5">
+  <h2 class="sthead"><span class="stno">30bio5</span>Illegal moves</h2>
+  <p class="stands">Stands on 30·bio.1 to 30·bio.4.</p>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{a dominant allele spreads until it is three quarters}\,? @@ dominance changes what shows, not the share: at rest p stays put, whatever it is
+\text{the best allele always ends up everywhere}\,? @@ when the mixed kind does best, both are kept; and drift can lose a good allele
+\text{selection climbs to the highest top}\,? @@ it climbs the nearest slope; a valley can hold it on a lower top
+\text{drift has no direction, so it changes nothing on average}\,? @@ the average share is kept; the mixing 2pq is not
+\text{a new allele with no edge spreads half the time}\,? @@ it fixes with chance 1/(2N), its share at the start
+p' = p + s\,? @@ the edge multiplies the odds by 1 + s; it does not add s to the share
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30·bio.5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span class="gtx">p = 0.3, at rest</span></span>Find the share of plants that carry at least one A.</li><li><span class="givens"><span class="gtx">w₁₁ = 0.9, w₁₂ = 0.8, w₂₂ = 1</span></span>Find the resting point inside [0, 1], and which way p moves from p = 0.5.</li><li><span class="givens"><span class="gtx">an allele with share 0.3 in 20 plants, no edge</span></span>Find its chance of ending up everywhere, and of being lost.</li><li><span class="givens"><span class="gtx">an edge s = 0.01 for each copy, p = 0.5, N = 500</span></span>Find the change selection makes in one generation, and the spread width of drift.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">30·bio.6.1</span><span class="tagq">build</span>Build a population in which an allele with no edge at all spreads to every copy faster than drift alone would carry it: change who mixes with whom, or let copies arrive from outside. <br>Find which condition of the one-round-rest technique your population breaks.</div>
+  <div class="chq"><span class="chid">30·bio.6.2</span><span class="tagq">edge</span>Find what the fix-chance and shrinking-mix techniques give as N grows without bound. <br>Find what the odds-growth technique gives as s heads to 0, and which force wins when s is about 1/(2N).</div>
+  <div class="chq"><span class="chid">30·bio.6.3</span><span class="tagq">converse</span>The one-round-rest technique finds that random mixing gives shares p², 2pq, q². Turn it round: if a sample shows shares close to p², 2pq, q², must the mixing have been random?</div>
+  <div class="chq"><span class="chid">30·bio.6.4</span><span class="tagq">reroute</span>Find the fix-chance technique a second way for N = 1 (two copies): write the chance of ending at all A from each count 0, 1, 2, and solve the three equations, as 30k’s ruin-chance technique did for a walk.</div>
+  <div class="chq"><span class="chid">30·bio.6.5</span><span class="tagq">seam</span>One side holds that most of the differences between the genes of two species were spread by drift: changes that made no difference to fitness, carried to every copy by chance, at a steady pace like a clock. The other holds that selection did most of the work, and that a change which looks like it makes no difference has simply not been understood yet. Both sides read the same sequences. <br>What count would tell them apart?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r30then.html">← 30·then · why does pollen jiggle in water?</a><a href="r30phys.html">30·phys · how is energy shared among molecules? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The one-round-rest technique is the Hardy–Weinberg principle, and a population with shares p², 2pq, q² is in Hardy–Weinberg equilibrium. w₁₁, w₁₂, w₂₂ are relative fitnesses, s and t selection coefficients, and the mixed kind’s edge is heterozygote advantage (overdominance); its shortfall is underdominance. The uphill-share technique is Wright’s formula for the change in allele frequency, and w̄ against p his adaptive landscape. The drawing of 2N copies is the Wright–Fisher model; 2pq is the heterozygosity, and N the effective population size. The fix-chance technique gives the probability of fixation of a neutral allele. The view in the seam’s first side is the neutral theory of molecular evolution, and its steady pace the molecular clock.</p>
+  <h3>Who said it first</h3>
+  <p>G. H. Hardy and Wilhelm Weinberg found the resting shares independently in 1908; Udny Yule’s question about why dominant traits do not take over prompted Hardy’s letter. The MN survey is from the textbook literature of the twentieth century and should be checked against its source. Ronald Fisher, J. B. S. Haldane and Sewall Wright built the mathematics of selection and drift between 1918 and 1932; Haldane estimated the edge of the dark peppered moth near Manchester in 1924. Anthony Allison tied the sickle allele to malaria in 1954. Motoo Kimura gave the fixation chances in 1962 and proposed the neutral theory in 1968, with Jack King and Thomas Jukes (1969); Tomoko Ohta extended it to nearly neutral changes in 1973. David Kingsley’s group (Colosimo and colleagues, 2005) found the few-plates allele of the stickleback gene Eda at low shares in the sea and nearly fixed in fresh water. Robert Wayne and colleagues (1991) found almost no genetic variation among the foxes of San Nicolas Island.</p>
+  <p>In 30·bio.6.5, the neutral side is Kimura’s; the selectionist side runs from the critics of the 1970s to John Gillespie and later work finding selection in genome-wide data. The quarrel between Fisher (selection in large populations) and Wright (drift in small, divided ones, his shifting balance) is its older form.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="30·bio: a worked “proof”, not allowed">
+\operatorname{E}[p' \mid p] = p @@ fine: drift is a fair game
+\operatorname{E}[p_n] = p_0 \text{ for every } n @@ fine: the fair-stays-fair technique
+\text{so each population keeps } p_n \text{ near } p_0 @@ not allowed: the average is kept, but each population drifts to 0 or 1; it is the shares across many populations that average p₀
+  </pre>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+const V=c=>'var('+c+')';
+// plot(series, xr, yr, opts): series = [{pts:[[x,y],...], c:'--ember', w:1.6, dash:''}]; returns svg string
+function plot(series, xr, yr, o){ o=o||{}; const W=360,H=o.H||210,L=34,B=22,T=8,Rr=8;
+  const sx=x=>L+(x-xr[0])/(xr[1]-xr[0])*(W-L-Rr), sy=y=>H-B-(y-yr[0])/(yr[1]-yr[0])*(H-B-T);
+  let s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;max-width:440px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  (o.yt||[]).forEach(y=>{ s+='<line x1="'+L+'" x2="'+(W-Rr)+'" y1="'+sy(y)+'" y2="'+sy(y)+'" style="stroke:'+V('--grid')+';stroke-width:0.6"/><text x="'+(L-3)+'" y="'+(sy(y)+3)+'" text-anchor="end" style="font:9px var(--mono);fill:'+V('--muted')+'">'+y+'</text>'; });
+  (o.xt||[]).forEach(x=>{ s+='<text x="'+sx(x)+'" y="'+(H-8)+'" text-anchor="middle" style="font:9px var(--mono);fill:'+V('--muted')+'">'+x+'</text>'; });
+  s+='<line x1="'+L+'" x2="'+L+'" y1="'+T+'" y2="'+(H-B)+'" style="stroke:'+V('--ink')+';stroke-width:0.8"/><line x1="'+L+'" x2="'+(W-Rr)+'" y1="'+(H-B)+'" y2="'+(H-B)+'" style="stroke:'+V('--ink')+';stroke-width:0.8"/>';
+  series.forEach(se=>{ const cl=v=>Math.max(yr[0]-0.05*(yr[1]-yr[0]),Math.min(yr[1]+0.05*(yr[1]-yr[0]),v));
+    const d=se.pts.filter(p=>isFinite(p[1])).map((p,i)=>(i?'L':'M')+sx(p[0]).toFixed(1)+','+sy(cl(p[1])).toFixed(1)).join('');
+    s+='<path d="'+d+'" style="fill:none;stroke:'+V(se.c||'--ember')+';stroke-width:'+(se.w||1.6)+(se.dash?';stroke-dasharray:'+se.dash:'')+'"/>'; });
+  (o.dots||[]).forEach(p=>{ s+='<circle cx="'+sx(p[0])+'" cy="'+sy(p[1])+'" r="2.6" style="fill:'+V(p[2]||'--ember')+'"/>'; });
+  if(o.xl) s+='<text x="'+(W-Rr)+'" y="'+(H-B-4)+'" text-anchor="end" style="font:9px var(--mono);fill:'+V('--muted')+'">'+o.xl+'</text>';
+  if(o.yl) s+='<text x="'+(L+4)+'" y="'+(T+9)+'" style="font:9px var(--mono);fill:'+V('--muted')+'">'+o.yl+'</text>';
+  return s+'</svg>'; }
+
+function rng(seed){ let s=seed>>>0; return ()=>{ s+=0x6D2B79F5; let t=s; t=Math.imul(t^(t>>>15),t|1); t^=t+Math.imul(t^(t>>>7),t|61); return ((t^(t>>>14))>>>0)/4294967296; }; }
+const G=200, P0=0.2, POP=20, U=[];
+(function(){ const r=rng(30); for(let k=0;k<POP;k++){ const row=new Float32Array(G*1000); for(let i=0;i<row.length;i++) row[i]=r(); U.push(row); } })();
+function draw(){ const N=+$('kN').value, s=+$('ks').value; $('oN').textContent=N; $('os').textContent=fm(s,3);
+  const S=[]; let fix=0, lost=0;
+  for(let k=0;k<POP;k++){ let p=P0; const pts=[[0,p]];
+    for(let g=1; g<=G; g++){ const pw=p*(1+s)/(1+p*s); let c=0; const off=(g-1)*1000; for(let i=0;i<2*N;i++) if(U[k][off+i]<pw) c++; p=c/(2*N); pts.push([g,p]); }
+    if(p===1) fix++; if(p===0) lost++; S.push({pts:pts,c:'--ember',w:0.8}); }
+  const D=[]; let o=P0/(1-P0); for(let g=0; g<=G; g++){ D.push([g,o/(1+o)]); o*=(1+s); }
+  S.push({pts:D,c:'--ink',w:1.6});
+  $('pl').innerHTML=plot(S,[0,G],[0,1],{xt:[0,50,100,150,200],yt:[0,0.25,0.5,0.75,1],xl:'generation',yl:'share of A',H:240});
+  const v=$('vd'); v.className='verdict';
+  v.textContent='After 200 generations: '+fix+' of 20 populations have A in every copy, '+lost+' have lost it, '+(POP-fix-lost)+' still hold both. Drift alone would fix A one time in five (its share at the start), and keep on average '+fm(100*Math.pow(1-1/(2*N),G),1)+'% of the mixing.'; }
+$('kN').oninput=draw; $('ks').oninput=draw; draw();
+window.__pic={set:(N,s)=>{ $('kN').value=N; $('ks').value=s; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'join',t:R`p^2,\ 2pq,\ q^2`,n:`Independent draws.`},
+  {k:'ember',kl:'the share',t:R`p^{\prime} = p^2 + pq = p`,n:`Unchanged.`},
+  {k:'ember',kl:'rest',t:R`\htmlClass{new}{\text{one round, then still}}`,n:`Mixing alone.`}
+],{title:'The slides · at rest · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'weights',t:R`p^{\prime} = \tfrac{p(pw_{11} + qw_{12})}{\bar w}`,n:`Shared over w̄.`},
+  {k:'ember',kl:'odds',t:R`\htmlClass{new}{\tfrac{p^{\prime}}{q^{\prime}} = (1 + s)\tfrac pq}`,n:`Equal factors.`},
+  {k:'ember',kl:'curve',t:R`\text{logistic}`,n:`17·bio.`}
+],{title:'The slides · selection · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'slope',t:R`\tfrac{d\bar w}{dp} = 2(w_1 - w_2)`,n:`Two averages.`},
+  {k:'ember',kl:'uphill',t:R`\htmlClass{new}{p^{\prime} - p = \tfrac{pq}{2\bar w}\bar w^{\prime}}`,n:`Up the slope.`},
+  {k:'ember',kl:'balance',t:R`p^* = \tfrac{t}{s + t}`,n:`Both kept.`}
+],{title:'The slides · landscape · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'fair',t:R`\operatorname{E}[p^{\prime} \mid p] = p`,n:`A fair game.`},
+  {k:'ember',kl:'mixing',t:R`\htmlClass{new}{(1 - \tfrac{1}{2N})^n}`,n:`Drains away.`},
+  {k:'ember',kl:'fixing',t:R`P = p_0`,n:`Its share at the start.`}
+],{title:'The slides · drift · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`p^{\prime} = p + s\,?`,n:`The odds multiply.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

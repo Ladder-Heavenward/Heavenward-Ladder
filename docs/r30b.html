@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The sets that have sizes</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r30a.html">← 30a not every set has a size</a><a href="r30c.html">next: 30c slice the heights, not the inputs →</a></p>
+  <div class="tags"><span class="tag proof">30b · proof</span></div>
+  <h1>The sets that have sizes</h1>
+  <p>The last step found a set that no size can measure. So the ladder needs a test that tells the good sets from the bad. The test is a knife. Take any set at all and cut it with the set you are testing, into the part inside and the part outside. If the outer sizes of the two parts always add back to the outer size of the whole, the knife cuts cleanly, and the set you tested has a size. This step shows that the sets passing the test are closed under taking what is left over and under joining countably many. On them, outer size adds exactly over countably many separate pieces. And every interval passes. That is enough to measure every set you are ever likely to meet.</p>
+  <p class="gesture">A set has a size when it splits every set’s outer size exactly. Such sets survive leftovers and countable unions, outer size adds exactly over them, and every interval is one of them.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r30a.html">30a</a> (outer size and its techniques) and <a href="r22d.html">22d</a> (endless sums). <a href="r30c.html">30c</a> uses the sized sets to total a function.</p></div>
+</header>
+
+<section class="class step" data-step="30b1">
+  <h2 class="sthead"><span class="stno">30b1</span>The split test</h2>
+  <p class="stands">Stands on 30a2.</p>
+  <p data-pid="9a711d">From here on, a set A of reals is <i>sized</i> when, for every set E of reals,</p>
+  <p class="eqline" data-pid="97b5a2">m*(E) = m*(E ∩ A) + m*(E ∖ A).</p>
+  <p data-pid="adb5ff">E ∩ A is the part of E inside A, and E ∖ A the part outside. The test is the <i>split test</i>. Its accepted name is measurable.</p>
+  <p data-pid="6c6b39">Split-test technique: <b>A is sized when m*(E ∩ A) + m*(E ∖ A) ≤ m*(E) for every E, and then so is the set of reals outside A.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the split-test technique">
+E = (E \cap A) \cup (E \setminus A) @@ every point of E is inside A or outside it
+m^*(E) \le m^*(E \cap A) + m^*(E \setminus A) \text{ always} @@ outer-adds-at-most (30a2), with two pieces
+\text{so only } \le \text{ the other way needs checking} @@ the two together give =
+E \cap A^{c} = E \setminus A,\ \ E \setminus A^{c} = E \cap A @@ Aᶜ is the set of reals outside A
+\htmlClass{new}{A \text{ sized} \iff A^{c} \text{ sized}} \quad \blacksquare @@ the test is the same two pieces, swapped
+  </pre>
+  <p data-pid="088a6f">A set of outer size 0 is sized: E ∩ A sits inside A, so m*(E ∩ A) = 0, and E ∖ A sits inside E.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · split test · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">30b1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="A = \{\tfrac12,\ \tfrac13,\ \tfrac14,\ \ldots\}"></span> <span data-tex-inline="E = [0, 1]"></span></span>Find the outer size of A. Write E ∩ A and E ∖ A, and find their outer sizes. <br>Check the split test for this E.</li><li><span class="givens"><span data-tex-inline="E = [0.4,\ 2]"></span></span>Write E ∩ A and E ∖ A, find their outer sizes, and check the split test.</li><li>Take the set Aᶜ of reals outside A, and E = [0, 1]. Find the two pieces the split test cuts E into, and whether the test differs from the one for A.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30b2">
+  <h2 class="sthead"><span class="stno">30b2</span>Countably many sized sets</h2>
+  <p class="stands">Stands on 30b1, 30a2.</p>
+  <p data-pid="72970d">Sized-family technique: <b>if A₁, A₂, … are sized, so is their union, and so is the part of the line outside any one of them.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: two sized sets join">
+m^*(E) = m^*(E \cap A) + m^*(E \setminus A) @@ split E by A
+m^*(E \setminus A) = m^*\big((E \setminus A) \cap B\big) + m^*\big(E \setminus (A \cup B)\big) @@ split E ∖ A by B
+m^*\big(E \cap (A \cup B)\big) \le m^*(E \cap A) + m^*\big((E \setminus A) \cap B\big) @@ E ∩ (A ∪ B) is those two pieces; outer-adds-at-most
+\htmlClass{new}{m^*\big(E \cap (A \cup B)\big) + m^*\big(E \setminus (A \cup B)\big) \le m^*(E)} \quad \blacksquare @@ the lines above; split-test (30b1)
+  </pre>
+  <p data-pid="0e6174">So finite unions of sized sets are sized, and so are finite intersections and differences, by taking what is left over (30b1). Next, countably many.</p>
+  <pre class="lines" data-k="ember" data-label="this step: countably many join">
+B_1 = A_1,\ \ B_n = A_n \setminus (A_1 \cup \cdots \cup A_{n-1}) @@ separate sized pieces with the same union U
+m^*\big(E \cap (B_1 \cup \cdots \cup B_n)\big) = m^*(E \cap B_1) + \cdots + m^*(E \cap B_n) @@ split by Bₙ each time; induction on n
+m^*(E) \ge m^*(E \cap B_1) + \cdots + m^*(E \cap B_n) + m^*(E \setminus U) @@ B₁ ∪ ⋯ ∪ Bₙ is sized; E ∖ U sits inside its outside
+m^*(E) \ge \sum_n m^*(E \cap B_n) + m^*(E \setminus U) \ge m^*(E \cap U) + m^*(E \setminus U) @@ let n grow (22a); outer-adds-at-most (30a2)
+\htmlClass{new}{U = A_1 \cup A_2 \cup \cdots \text{ is sized}} \quad \blacksquare @@ split-test (30b1)
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · family · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30b2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="A_1 = [0,\ 0.5],\ \ A_2 = [0.3,\ 0.8],\ \ A_3 = [0.6,\ 1.2]"></span></span>Build the separate pieces B₁, B₂, B₃ of the countably-many proof. Find each one, and its length. <br>Find the total of the lengths of the B pieces, and the size of A₁ ∪ A₂ ∪ A₃. <br>Find the sum of the lengths of the A pieces, and what the difference counts.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30b3">
+  <h2 class="sthead"><span class="stno">30b3</span>Size adds over countably many pieces</h2>
+  <p class="stands">Stands on 30b2.</p>
+  <p data-pid="a7fad4">From here on, the <i>size</i> of a sized set A is m(A) = m*(A). On sized sets the asterisk is dropped.</p>
+  <p data-pid="cf7260">Countable-adding technique: <b>if A₁, A₂, … are sized and separate, m(A₁ ∪ A₂ ∪ ⋯) = m(A₁) + m(A₂) + ⋯.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the countable-adding technique">
+m^*\big(E \cap (A_1 \cup \cdots \cup A_n)\big) = \sum_{k \le n} m^*(E \cap A_k) @@ 30b2, with Bₖ = Aₖ, since they are already separate
+E = A_1 \cup A_2 \cup \cdots:\ \ m(E) \ge \sum_{k \le n} m(A_k) \text{ for every } n @@ a bigger set is not smaller (30a2)
+m(E) \ge \sum_k m(A_k) @@ let n grow (22a)
+m(E) \le \sum_k m(A_k) @@ outer-adds-at-most (30a2)
+\htmlClass{new}{m(A_1 \cup A_2 \cup \cdots) = m(A_1) + m(A_2) + \cdots} \quad \blacksquare @@ both ways
+  </pre>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · the ledger</div>
+    <p data-pid="54c1e9">0c kept exact books on stuff that nobody watched piece by piece. Size now keeps the same books on sets. Cut a sized set into countably many separate sized pieces, and every scrap of its size is entered once: none is made, and none is lost.</p>
+    <p data-pid="518aa4"><b>Size keeps exact books over countably many separate pieces, and a set that would break the books is left out of them.</b></p>
+    <p data-pid="e5b745">The set V of 30a is the entry the ledger refuses. Its slid copies would make the books come out wrong whatever V were given, so the ledger leaves V out rather than let the books fail.</p>
+    <p class="bait" data-pid="af95d6">The fractions in [0, 1] are countably many points, each of size 0. What total size do the books give them, and what is left for the rest of [0, 1]?</p>
+  </aside>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · adds exactly · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30b3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="A_n = [\tfrac{1}{n+1},\ \tfrac1n),\ \ n = 1, 2, 3, \ldots"></span></span>Write A₁, A₂ and A₃. Find which Aₙ holds 0.3. <br>Prove that no number lies in two of them. Find the union of them all.</li><li>Find the size of the union two ways: as an interval, and by countable adding.</li><li>Find the size of the union of the Aₙ with n even. Use the sum 1 − ½ + ⅓ − ¼ + ⋯ = ln 2 from 23e. Find the size of the union of the rest.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30b4">
+  <h2 class="sthead"><span class="stno">30b4</span>Every interval has a size</h2>
+  <p class="stands">Stands on 30b1, 30b2, 30a1.</p>
+  <p data-pid="903a5b">Intervals-sized technique: <b>every interval is sized, and its size is its length.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: (a, ∞) passes the split test">
+A = (a, \infty),\ \ E \text{ any set},\ \ \varepsilon > 0 @@ if m*(E) is ∞ there is nothing to prove
+I_1, I_2, \ldots \text{ cover } E,\ \ \sum \ell(I_k) \le m^*(E) + \varepsilon @@ the definition of outer size (30a1)
+I_k \cap A,\ \ I_k \setminus A \text{ are intervals},\ \ \ell(I_k \cap A) + \ell(I_k \setminus A) = \ell(I_k) @@ cut each interval at a
+m^*(E \cap A) + m^*(E \setminus A) \le \sum \ell(I_k \cap A) + \sum \ell(I_k \setminus A) + 2\varepsilon @@ fatten each piece a little to make it open; cover-total
+\le m^*(E) + 3\varepsilon @@ the line before
+\htmlClass{new}{(a, \infty) \text{ is sized}} \quad \blacksquare @@ ε was any positive number; split-test (30b1)
+  </pre>
+  <p data-pid="54548d">Then (−∞, b] is sized as what is left over, (a, b] = (a, ∞) ∩ (−∞, b] is sized, and every other interval differs from one of these by a point or two. Its size is its length, by the cover-total technique.</p>
+  <p data-pid="607c0e">From here on, the sized sets of the line, with their size m, are called the line’s sizes. Their accepted name is measure on the line. Every open set is a countable union of intervals with fraction ends, so it is sized. Every closed set is what is left over from an open one, so it is sized too.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · intervals · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30b4.1</span><span class="ph do">do</span><ol class="parts" type="a"><li>Write the numbers in [0, 1) whose first decimal digit is 3 or 7 as intervals. Find their size.</li><li>Find the size of the numbers in [0, 1) with no 3 and no 7 among their first two digits. Count the intervals.</li><li>Find the size of those with no 3 and no 7 among their first n digits. Find the size of those with no 3 and no 7 anywhere, and whether that set is countable.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30b5">
+  <h2 class="sthead"><span class="stno">30b5</span>Illegal moves</h2>
+  <p class="stands">Stands on 30b1 to 30b4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{every set passes the split test}\,? @@ 30a’s V does not; else its slid copies would add
+m(A \cup B) = m(A) + m(B) \text{ for any two sized sets}\,? @@ only when they are separate; else the overlap counts twice
+\text{a union of any number of sized sets is sized}\,? @@ countably many; every set is a union of its single points
+\text{the sized sets are the intervals and nothing else}\,? @@ the fractions, the open sets and their leftovers are sized too
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30b5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="V \text{ from 30a4}"></span></span>Does every set pass the split test? Suppose V did. Each slid copy V + qᵢ would pass it too, since sliding keeps outer size. Find what countable adding would then make of 1 ≤ Σ m(V + qᵢ) ≤ 3.</li><li><span class="givens"><span data-tex-inline="A = [0, 2],\ \ B = [1, 3]"></span></span>Is m(A ∪ B) = m(A) + m(B) here? Find both sides, and the part counted twice.</li><li><span class="givens"><span data-tex-inline="\{x\} \text{ for each } x \text{ in } V"></span></span>Each single point is sized, and V is the union of its points. Is V then sized? Find how many sets the sized-family technique joins, and whether the points of V fit in a list.</li><li><span class="givens"><span data-tex-inline="\text{the fractions in } [0, 1],\ \ [0, 1] \cup [2, 3]"></span></span>Are the intervals the only sized sets? Find whether each of these is sized, and whether it is an interval.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">30b.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{stage } n:\ \text{remove an open middle interval of length } 1/4^n \text{ from each of the } 2^{n-1} \text{ pieces left}"></span></span>Start from [0, 1]. Build the first two stages: find the intervals removed and the pieces left. <br>Find the total length removed over every stage. Prove that the set K left at the end is sized, and find its size. <br>Prove that K holds no interval of positive length. Each piece left after stage n is at most 1/2ⁿ long.</div>
+  <div class="chq"><span class="chid">30b.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="m^*(E \cap A) + m^*(E \setminus A) \le m^*(E)"></span></span>Find the sets E that can never fail this line, whatever A is. <br>Find whether the empty set and the whole line are sized, straight from the split test. <br>Find why every set of outer size 0 passes the test with no work at all.</div>
+  <div class="chq"><span class="chid">30b.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="m(A \cup B) = m(A) + m(B)"></span></span>Countable adding: separate sized sets have sizes that add. Turn it round: if two sized sets of finite size have sizes that add, must they be separate? <br>Test [0, 1] and [1, 2]. Test [0, 1] and the fractions in [0, 2]. <br>Prove what does follow: m(A ∩ B) = 0. Split A ∪ B into A and B ∖ A, and B into B ∖ A and A ∩ B.</div>
+  <div class="chq"><span class="chid">30b.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\text{the fractions in } [0, 1]"></span></span>Prove that this set is sized in two ways: once as a set of outer size 0 (30b1), once from single points, the intervals-sized technique and the sized-family technique. <br>Find what each proof needs that the other does not.</div>
+  <div class="chq"><span class="chid">30b.4.5</span><span class="tagq">seam</span><span class="givens"><span class="gtx">8b.4.4: decide whether the line is made of its points</span></span>Rung eight asked whether the line is made of its points. Now every point is sized, with size 0, and [0, 1] is sized, with size 1. <br>Find the technique of this step that would add up the sizes of the points of [0, 1], if it could. Find why it cannot. <br>Is [0, 1] the union of its points? Is its size the sum of theirs? If a whole can be the union of its parts while its size is not the sum of theirs, what does size measure that the points alone do not carry?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r30a.html">← 30a · not every set has a size</a><a href="r30c.html">30c · slice the heights, not the inputs →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A sized set is a Lebesgue measurable set, and the split test is Carathéodory’s criterion. The sized-family technique says the measurable sets form a σ-algebra. Countable adding is countable additivity, and the line’s sizes are Lebesgue measure. Sets made from intervals by countably many unions and leftovers are the Borel sets.</p>
+  <h3>Who said it first</h3>
+  <p>Henri Lebesgue defined measurable sets in 1902 by comparing a set’s outer measure with the outer measure of its complement. Constantin Carathéodory gave the split test in 1914, and it is the form used everywhere since, because it works for every kind of size, not only length.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“Every set of reals is a union of intervals of length 0, the single points; intervals are sized; so every set is sized.” Not allowed: the sized-family technique joins countably many sets, and most sets of reals have more points than any list.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'cut',t:R`E = (E \cap A) \cup (E \setminus A)`,n:`Inside and outside.`},
+  {k:'ember',kl:'test',t:R`m^*(E \cap A) + m^*(E \setminus A) \le m^*(E)`,n:`Only this way.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{A \text{ sized} \iff A^c \text{ sized}}`,n:`Size-0 sets pass.`}
+],{title:'The slides · split test · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'two',t:R`A \cup B`,n:`Split twice.`},
+  {k:'ember',kl:'many',t:R`B_n = A_n \setminus (A_1 \cup \cdots)`,n:`Make them separate.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\bigcup A_n \text{ sized}}`,n:`Leftovers too.`}
+],{title:'The slides · family · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'pieces',t:R`A_k \text{ separate, sized}`,n:`Countably many.`},
+  {k:'ember',kl:'ledger',t:R`\ge \text{ and } \le`,n:`From split test and from covers.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{m(\bigcup A_k) = \sum m(A_k)}`,n:`Exact books.`}
+],{title:'The slides · adds exactly · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'cut',t:R`I_k \cap A,\ I_k \setminus A`,n:`Lengths add.`},
+  {k:'ember',kl:'half-line',t:R`(a, \infty)`,n:`Passes the split test.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{every interval is sized}}`,n:`Open and closed sets too.`}
+],{title:'The slides · intervals · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

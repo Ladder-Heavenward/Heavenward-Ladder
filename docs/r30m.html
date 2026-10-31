@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Densities</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r30l.html">← 30l chance by the rules</a><a href="r30n.html">next: 30n random walks →</a></p>
+  <div class="tags"><span class="tag tech">30m · technique</span></div>
+  <h1>Densities</h1>
+  <p>A train pulls out just as you reach the platform, and the next is some minutes away. An atom of a hospital tracer sits in a vial, and nobody can say when it will break apart. A cannery in Prince Rupert fills tins of salmon, and no two tins hold quite the same weight. None of these answers is one of a few cases to be counted. Each can land anywhere along a stretch of the line, and its chances are spread over that stretch the way paint is spread along a fence. The statistics annex of rung fifteen drew such a spread as a curve, its density, and read chances as areas under it. With the integral the rung has built, that picture becomes exact, and the average and the spread of the answer become integrals too. This step proves the one rule that turns every average into an integral against the density, and then works three densities that come back again and again: the flat one for a wait with a timetable, the falling one for a wait with no memory at all, and the bell.</p>
+  <p class="gesture">If an answer has a density, the average of any function of it is the integral of that function times the density. A flat density gives the middle of its stretch as the average. A falling exponential density gives a wait that forgets how long it has already lasted. The bell, shifted and stretched, gives its chances by a power series.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r30c.html">30c</a> (the total, and the step-total, total-from-below and agrees-with-area techniques), <a href="r30d.html">30d</a> (the rising-limit technique), <a href="r30f.html">30f</a> (the chance of A given B), <a href="r30g.html">30g</a> (average, spread, and the average-adds and spread-of-a-sum techniques), <a href="r30j.html">30j</a> (the bell Z and its density φ), <a href="r15stat.html">15·stat</a> (densities, and the range-chance and area-so-far techniques), <a href="r16d.html">16d</a> (the straight-inside technique), <a href="r26l.html">26l</a> (the factorial-step technique), <a href="r22j.html">22j</a> (the exp-as-a-sum technique) and <a href="r23e.html">23e</a> (the term-by-term technique). <a href="r30n.html">30n</a> adds independent steps, and finds how far a walk gets.</p></div>
+</header>
+
+<section class="class step" data-step="30m1">
+  <h2 class="sthead"><span class="stno">30m1</span>Averages against a density</h2>
+  <p class="stands">Stands on 15·stat (a density), 30c (the total over a sized set; the step-total technique, 30c1, and the total-from-below technique, 30c3), 30d1 (the rising-limit technique) and 30g (average and spread; the average-adds technique, 30g1, and the spread-of-a-sum technique, 30g2).</p>
+  <p data-pid="3c550d">From here on, a chance variable X has <i>density</i> f when f is a sized function with f ≥ 0, ∫ f = 1 over the line, and P(X in A) = ∫ over A of f, for every sized set A (30c). 15·stat asked this only of intervals. For a continuous f on an interval, 30c’s total is 15’s area (the agrees-with-area technique, 30c4), so the two agree. The average and the spread of 30g were integrals over the chance space Ω. A density moves them onto the line.</p>
+  <p data-pid="c9caaf">Density-average technique: <b>if X has density f and g is a sized function with g ≥ 0, then E g(X) = ∫ g(x) f(x) dx. The same holds for any sized g with ∫ |g(x)| f(x) dx finite.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the density-average technique">
+g = 1_A:\ \ E\,1_A(X) = P(X \in A) = \textstyle\int_A f @@ the average of 1 on an event and 0 off it is its chance (30g1); f is a density
+g = \textstyle\sum_i c_i 1_{A_i}:\ \ E\,g(X) = \sum_i c_i\int_{A_i} f = \int g f @@ a step function: the average-adds technique (30g1), and the step-total technique (30c1) for the integral
+g_n \text{ step functions},\ \ 0 \le g_n \le g_{n+1},\ \ g_n \to g @@ the total-from-below technique (30c3) gives them, for g ≥ 0 sized
+E\,g_n(X) = \textstyle\int g_n f \ \text{ for every } n @@ the line before
+\htmlClass{new}{E\,g(X) = \textstyle\int g(x) f(x)\,dx} @@ the rising-limit technique (30d1), on both sides: g_n(X) rises to g(X), and g_n f to g f
+g = g^+ - g^-,\ \ \textstyle\int |g| f \text{ finite} \ \Rightarrow\ E\,g(X) = \int g f \quad \blacksquare @@ the two parts, each with a finite total, subtracted
+  </pre>
+  <p data-pid="77a088">With g(x) = x and g(x) = (x − μ)² the technique gives E X = ∫ x f(x) dx, and Var X = ∫ (x − μ)² f(x) dx. The spread-of-a-sum technique (30g2) gives the form that is easiest by hand: Var X = E X² − (E X)².</p>
+  <pre class="lines" data-k="ember" data-label="this step: waiting on a platform">
+f(x) = \tfrac{1}{6} \text{ on } [0, 6],\ \ 0 \text{ elsewhere} @@ trains every 6 minutes, reached at a moment unrelated to the timetable: the flat density
+E X = \textstyle\int_0^6 \tfrac{x}{6}\,dx = 3 @@ the density-average technique; the area-under-a-power technique (15i5)
+E X^2 = \textstyle\int_0^6 \tfrac{x^2}{6}\,dx = 12 @@ the same, with g(x) = x²
+\text{Var}\,X = 12 - 3^2 = 3 @@ the spread-of-a-sum technique (30g2)
+\htmlClass{new}{\text{average wait } 3 \text{ minutes, spread width } \sqrt3 \approx 1.73 \text{ minutes}} \quad \blacksquare @@ on [a, b] in general: average (a + b)/2, spread (b − a)²/12
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · averages on the line · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">30m1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = \tfrac{1}{360} \text{ on } [0, 360)"></span></span>A clock stops at a moment with no link to the hour. Its minute hand points at X degrees. Find E X, Var X and the spread width.</li><li><span class="givens"><span data-tex-inline="f(x) = 2x \text{ on } [0, 1]"></span></span>Check that f is a density. Find E X, Var X and P(X &gt; ½).</li><li><span class="givens"><span data-tex-inline="f(x) = 3x^2 \text{ on } [0, 1]"></span></span>Find E X, E X², Var X, and the number m with P(X ≤ m) = ½.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30m2">
+  <h2 class="sthead"><span class="stno">30m2</span>The wait that forgets</h2>
+  <p class="stands">Stands on 30m1, 30f2 (the chance of A given B), 16d (the straight-inside technique), 26l2 (the factorial-step technique) and 17e (the adding-becomes-multiplying technique).</p>
+  <p data-pid="774ba9">Let λ &gt; 0. The <i>exponential</i> density of rate λ is f(x) = λe^(−λx) for x ≥ 0, and 0 for x &lt; 0. Its running total is F(x) = 1 − e^(−λx), so P(X &gt; t) = e^(−λt) for t ≥ 0. It is a density: F starts at 0 and rises to 1 as x grows.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the average and spread of the exponential">
+E X^k = \textstyle\int_0^\infty x^k\,\lambda e^{-\lambda x}\,dx @@ the density-average technique (30m1)
+= \tfrac{1}{\lambda^k}\textstyle\int_0^\infty y^k e^{-y}\,dy = \tfrac{k!}{\lambda^k} @@ y = λx (the straight-inside technique, 16d); Γ(k + 1) = k! (the factorial-step technique, 26l2)
+E X = \tfrac{1}{\lambda},\ \ E X^2 = \tfrac{2}{\lambda^2} @@ k = 1 and k = 2
+\htmlClass{new}{\text{Var}\,X = \tfrac{2}{\lambda^2} - \tfrac{1}{\lambda^2} = \tfrac{1}{\lambda^2},\ \ \text{spread width } \tfrac{1}{\lambda}} \quad \blacksquare @@ the spread-of-a-sum technique (30g2)
+  </pre>
+  <p data-pid="8930b6">Forgets-the-wait technique: <b>if P(X &gt; t) = e^(−λt) for every t ≥ 0, then for all s, t ≥ 0, P(X &gt; s + t | X &gt; s) = P(X &gt; t). Having waited s, the rest of the wait has the same chances as the whole wait had at the start.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the forgets-the-wait technique">
+\{X > s + t\} \subseteq \{X > s\} @@ a wait longer than s + t is longer than s
+P(X > s + t \mid X > s) = \tfrac{P(X > s + t)}{P(X > s)} @@ the chance of A given B (30f2): here A and B is the smaller event
+= \tfrac{e^{-\lambda(s + t)}}{e^{-\lambda s}} @@ the running total
+\htmlClass{new}{= e^{-\lambda t} = P(X > t)} \quad \blacksquare @@ the adding-becomes-multiplying technique (17e)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: a hospital tracer">
+\text{half-life } 8.02 \text{ days}:\ \ e^{-8.02\lambda} = \tfrac12,\ \ \lambda = \tfrac{\ln 2}{8.02} \approx 0.0864 \text{ per day} @@ iodine-131: half of the atoms are left after 8.02 days; the half-life is the m with F(m) = ½
+E X = \tfrac{1}{\lambda} \approx 11.57 \text{ days} @@ the average life of one atom: longer than the half-life
+P(X > 30) = e^{-30\lambda} \approx 0.0748 @@ the running total
+\htmlClass{new}{P(X > 38.02 \mid X > 30) = P(X > 8.02) = \tfrac12} \quad \blacksquare @@ the forgets-the-wait technique: an atom that has lasted 30 days is as new
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · the wait that forgets · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30m2.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{half-life } 5730 \text{ years}"></span></span>Carbon-14 in a piece of driftwood. Find λ, the average life of one atom, and the chance that an atom lasts 10 000 years.</li><li><span class="givens"><span data-tex-inline="\lambda = 2"></span></span>Find P(X &gt; 1), P(½ &lt; X &lt; 3/2) and P(X &gt; 3 | X &gt; 2).</li><li><span class="givens"><span data-tex-inline="\text{rate } \lambda"></span></span>Find the chance that an exponential wait lands within one spread width of its average.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30m3">
+  <h2 class="sthead"><span class="stno">30m3</span>The bell, shifted and stretched</h2>
+  <p class="stands">Stands on 30m1, 30j1 (the bell Z, its density φ, its average 0 and spread 1), 30g2 (the spread-of-a-sum technique), 16d (the straight-inside technique), 22j3 (the exp-as-a-sum technique), 23e3 (the term-by-term technique) and 22g1 (the bracket technique).</p>
+  <p data-pid="8cbfcb">30j1 named the bell: the chance variable Z with density φ(z) = e^(−z²/2) / √(2π), whose total is 1 by the bell-total technique. 30j1 found its average 0 and its spread 1. From here on, Z is called the <i>standard bell</i>, and the other bells come from it by a shift and a stretch.</p>
+  <p data-pid="f9dc9a">Stretched-density technique: <b>if X has density f, and Y = μ + σX with σ &gt; 0, then Y has density (1/σ) f((y − μ)/σ), average μ + σ E X and spread σ² Var X.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the stretched-density technique">
+P(a \le Y \le b) = P\big(\tfrac{a - \mu}{\sigma} \le X \le \tfrac{b - \mu}{\sigma}\big) @@ σ &gt; 0 keeps order
+= \textstyle\int_{(a - \mu)/\sigma}^{(b - \mu)/\sigma} f(x)\,dx = \int_a^b \tfrac{1}{\sigma} f\big(\tfrac{y - \mu}{\sigma}\big)\,dy @@ x = (y − μ)/σ (the straight-inside technique, 16d)
+E Y = \mu + \sigma E X @@ the average-adds technique (30g1)
+\htmlClass{new}{\text{Var}\,Y = \sigma^2\,\text{Var}\,X} \quad \blacksquare @@ the spread-of-a-sum technique (30g2): Var(aX + b) = a² Var X
+  </pre>
+  <p data-pid="73c07c">So μ + σZ has the bell density of average μ and spread width σ: (1/(σ√(2π))) e^(−(y − μ)²/(2σ²)). Every chance for it comes from the standard bell, at z = (y − μ)/σ. And those come by hand from a power series.</p>
+  <p data-pid="ab0d6b">Bell-series technique: <b>for every x ≥ 0, P(0 ≤ Z ≤ x) = (1/√(2π)) Σ (−1)ᵏ x^(2k+1) / (2ᵏ k! (2k + 1)), the sum over k = 0, 1, 2, …</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the bell-series technique">
+e^{-z^2/2} = \textstyle\sum_k \tfrac{(-z^2/2)^k}{k!} = \sum_k \tfrac{(-1)^k z^{2k}}{2^k\,k!} @@ the exp-as-a-sum technique (22j3), at −z²/2; its reach is every real
+\htmlClass{new}{\textstyle\int_0^x e^{-z^2/2}\,dz = \sum_k \tfrac{(-1)^k x^{2k+1}}{2^k\,k!\,(2k + 1)}} \quad \blacksquare @@ the term-by-term technique (23e3), inside the reach; then divide by √(2π)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: tins of salmon">
+P(0 \le Z \le 1) = \tfrac{1}{\sqrt{2\pi}}\big(1 - \tfrac16 + \tfrac1{40} - \tfrac1{336} + \tfrac1{3456} - \cdots\big) \approx 0.3413 @@ the bell-series technique; the terms alternate and shrink, so the error is less than the first left out (the bracket technique, 22g1)
+P(|Z| \le 1) \approx 0.683,\ \ P(|Z| \le 2) \approx 0.954,\ \ P(|Z| \le 3) \approx 0.997 @@ φ is even; the same series at 2 and at 3
+Y = 215 + 1.5\,Z \text{ grams} @@ tins labelled 213 g, filled on average to 215 g, spread width 1.5 g: a bell is the guess, checked on a histogram of weighed tins
+P(Y < 213) = P\big(Z < -\tfrac{4}{3}\big) = \tfrac12 - P\big(0 \le Z \le \tfrac43\big) @@ the stretched-density technique; φ is even
+\htmlClass{new}{P(Y < 213) \approx 0.5 - 0.4088 = 0.091,\ \ \text{about 1 tin in 11 under its label}} \quad \blacksquare @@ the bell-series technique at 4/3
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · the bell · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30m3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="P(0 \le Z \le 1) \approx 0.3413,\ \ P(0 \le Z \le 2) \approx 0.4772"></span></span>Find P(−1 ≤ Z ≤ 2) and P(Z &gt; 2).</li><li><span class="givens"><span data-tex-inline="x = \tfrac12"></span></span>Find P(0 ≤ Z ≤ ½) by the first four terms of the bell-series technique. Find a bound on the error from the fifth.</li><li><span class="givens"><span data-tex-inline="Y = 215 + 1.5\,Z,\ \ P(Z &lt; -3.09) \approx 0.001"></span></span>The cannery wants at most 1 tin in 1000 under 213 g, with the same spread width. Find the average fill it must set.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30m4">
+  <h2 class="sthead"><span class="stno">30m4</span>Illegal moves</h2>
+  <p class="stands">Stands on 30m1 to 30m3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+f = 3 \text{ on } [0, \tfrac13],\ \text{so the chance of landing at } 0.2 \text{ is } 3\,? @@ a height is not a chance: a single value has chance 0 (15·stat), and chances come from areas
+E X^2 = (E X)^2\,? @@ for the flat density on [0, 1], E X² = 1/3 and (E X)² = 1/4; the gap is Var X
+\text{an exponential wait of rate } \lambda \text{ has average } \lambda\,? @@ its average is 1/λ: a high rate means short waits
+Y = 2X \text{ has density } 2 f(2y)\,? @@ the stretched-density technique gives (1/2) f(y/2)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30m4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f = 3 \text{ on } [0, \tfrac13]"></span></span>Find P(0.2 ≤ X ≤ 0.3) and P(X = 0.2). <br>Find what the first line takes for a chance.</li><li><span class="givens"><span data-tex-inline="f = 1 \text{ on } [0, 1]"></span></span>Find E X² and (E X)². <br>Find what the second line forgets.</li><li><span class="givens"><span data-tex-inline="\text{calls at rate } \lambda = 12 \text{ per hour}"></span></span>Find the average wait for the next call, in minutes, when the gaps are exponential of rate 12 per hour. <br>Find what the third line confuses.</li><li><span class="givens"><span data-tex-inline="X \text{ flat on } [0, 1],\ \ Y = 2X"></span></span>Find the density of Y and P(Y ≤ 1). Find the chance of Y ≤ 1 that the function 2f(2y) would give. <br>Find the slip.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">30m.5.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="U, V \text{ independent, each flat on } [0, 1]"></span></span>Build the density of the larger of U and V. Find P(max ≤ x) first, by the independent technique, then its slope. <br>Find its average.</div>
+  <div class="chq"><span class="chid">30m.5.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="f(x) = \tfrac{1}{\pi(1 + x^2)}"></span></span>Check that f is a density on the whole line by 26k. <br>Find whether ∫ |x| f(x) dx is finite, and whether the density-average technique gives X an average.</div>
+  <div class="chq"><span class="chid">30m.5.3</span><span class="tagq">converse</span>Turn the forgets-the-wait technique round. Let G(t) = P(X &gt; t) be continuous, with 0 &lt; G(1) &lt; 1, and G(s + t) = G(s) G(t) for all s, t ≥ 0. <br>Prove that G(t) = e^(−λt) for some λ &gt; 0. Find G at whole numbers, then at fractions, then use that G has no gaps.</div>
+  <div class="chq"><span class="chid">30m.5.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="X \ge 0 \text{ with density } f"></span></span>Reroute the average of the exponential. Prove that E X = ∫₀^∞ P(X &gt; t) dt, by writing x = ∫₀^x dt inside ∫ x f(x) dx and using the either-order-sized technique (30e3). <br>Check it on the exponential and on the flat density on [0, 6].</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r30l.html">← 30l · chance by the rules</a><a href="r30n.html">30n · random walks →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A density is a probability density function; a chance variable with one is (absolutely) continuous. The density-average technique is often called the law of the unconscious statistician, because people use it without noticing that it needs a proof. The flat density is the uniform distribution, the falling one the exponential distribution, and λ its rate; the forgets-the-wait technique is the memoryless property, and the exponential is the only continuous distribution that has it (30m.5.3). The half-life is the median of the exponential, and 1/λ the mean lifetime. The bell is the normal (or Gaussian) distribution, Z the standard normal, μ + σZ the normal with mean μ and standard deviation σ, and (y − μ)/σ a z-score. The running total of Z is written Φ, and is tabulated; ∫₀ˣ e^(−t²) dt, scaled, is the error function. The density of 30m.5.2 is the Cauchy distribution.</p>
+  <h3>Who said it first</h3>
+  <p>Abraham de Moivre found the bell in 1733 as the shape of the counts of heads in many tosses. Carl Friedrich Gauss derived it in 1809 as the law of errors that makes the mean the best guess, and Pierre-Simon Laplace gave it its central place in 1810 and 1812. Siméon Denis Poisson noticed in 1824 that the density of 30m.5.2 has no average, and Augustin-Louis Cauchy met it in 1853. Ernest Rutherford measured the falling activity of radioactive substances from 1900 and spoke of a half-life by 1907; Egon von Schweidler argued in 1905 that each atom breaks apart by chance, which gives the exponential. The half-life of iodine-131, about 8.02 days, and of carbon-14, about 5730 years, are measured values; Willard Libby built radiocarbon dating in the late 1940s.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'markers',t:R`E\,1_A(X) = \textstyle\int_A f`,n:`An event’s chance.`},
+  {k:'ember',kl:'steps, then limits',t:R`E\,g_n(X) = \textstyle\int g_n f`,n:`The rising-limit technique.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{E\,g(X) = \textstyle\int g f}`,n:`Every average is an integral.`}
+],{title:'The slides · averages on the line · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'the tail',t:R`P(X > t) = e^{-\lambda t}`,n:`Its running total, turned over.`},
+  {k:'ember',kl:'given',t:R`\tfrac{e^{-\lambda(s + t)}}{e^{-\lambda s}}`,n:`A chance given another.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{P(X > s + t \mid X > s) = P(X > t)}`,n:`No memory of the wait so far.`}
+],{title:'The slides · the wait that forgets · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'stretch',t:R`Y = \mu + \sigma X`,n:`Density (1/σ) f((y − μ)/σ).`},
+  {k:'ember',kl:'series',t:R`e^{-z^2/2} = \textstyle\sum_k \tfrac{(-1)^k z^{2k}}{2^k k!}`,n:`Then term by term.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{P(0 \le Z \le x) = \tfrac{1}{\sqrt{2\pi}}\textstyle\sum_k \tfrac{(-1)^k x^{2k+1}}{2^k k!(2k + 1)}}`,n:`Bell chances by hand.`}
+],{title:'The slides · the bell · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

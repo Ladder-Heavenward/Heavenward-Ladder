@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The most likely parameter</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r30q.html">← 30q estimating from samples</a><a href="r30s.html">next: 30s is the difference real? →</a></p>
+  <div class="tags"><span class="tag tech">30r · technique</span></div>
+  <h1>The most likely parameter</h1>
+  <p>Rung fourteen’s statistics page took one coin and one record of heads, and asked which chance would make that record most likely. The answer was the share seen. Now the same question is asked of every kind of record: counts of earthquakes in a month, the waits between birds at a feeder, the depths at which a disc vanishes in a lake. Each kind of record comes from a family of chance laws with a knob, and the record is fixed while the knob turns. The best guess is the knob setting that makes the record most likely. A record is many readings, and their chances multiply. The logarithm turns the product into a sum, so the slopes are easy, and the best guesses come out as familiar averages. Then the shape of the top answers the second question rung fourteen asked: how far behind do the other guesses fall, and so how sure is the best one.</p>
+  <p class="gesture">Fix the record and turn the knob: the chance of the record, as a function of the knob, is the likelihood. Its logarithm has the same best setting and is a sum. For rare counts the best guess is the average count; for waits it is one over the average wait; for the bell it is the average and the spread with the count in the bottom. The sharper the top, the surer the guess.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r14stat.html">14·stat</a> (the chance-of-a-record, seen-share and end-guess techniques), <a href="r22stat.html">22·stat</a> (the rare-count and mean-and-spread techniques), <a href="r17c.html">17c</a> (the logarithm of a product), <a href="r14f.html">14f</a> (the first-test and one-critical-point techniques), <a href="r28a.html">28a</a> (one knob at a time), <a href="r08stat.html">8·stat</a> (the squared-misses technique), <a href="r30f.html">30f</a> (independence), <a href="r30m.html">30m</a> (densities, and the stretched-density technique), <a href="r30o.html">30o</a> (the first-gap technique) and <a href="r30q.html">30q</a> (the sample-average and sample-spread techniques). <a href="r30s.html">30s</a> asks whether a difference seen is real.</p></div>
+</header>
+
+<section class="class step" data-step="30r1">
+  <h2 class="sthead"><span class="stno">30r1</span>The likelihood of a sample, and its logarithm</h2>
+  <p class="stands">Stands on 14·stat (the chance-of-a-record and seen-share techniques), 30f2 (independence), 30m1 (densities), 17c (the logarithm of a product) and 17b (ln is rising).</p>
+  <p data-pid="48e64f">A family of chance laws has a knob θ: the coin’s chance p, a rate λ, an average μ. Readings x₁, …, xₙ are independent, and f(x; θ) is the chance of a reading x when the knob is at θ. For readings that take any real value, f is the density of 30m1, and the chance of landing within a small h of x is close to f(x; θ) h; the h does not move with θ, so f stands in for the chance.</p>
+  <p data-pid="9ee35e">The likelihood is L(θ) = f(x₁; θ) ⋯ f(xₙ; θ): the chance of the record, by independence (30f2), read as a function of the knob. The best guess θ̂ is a setting where L is greatest. As on 14·stat, L(θ) is not the chance that θ is right.</p>
+  <p data-pid="350f20">Log-likelihood technique: <b>where L is above 0, L is greatest at exactly the same settings as ℓ(θ) = ln f(x₁; θ) + ⋯ + ln f(xₙ; θ).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the log-likelihood technique">
+\ln L(\theta) = \textstyle\sum_i \ln f(x_i; \theta) = \ell(\theta) @@ the logarithm of a product is the sum of the logarithms (17c)
+L(\theta_1) < L(\theta_2) \iff \ell(\theta_1) < \ell(\theta_2) @@ ln is rising (17b)
+\htmlClass{new}{\text{the tops of } L \text{ are the tops of } \ell} \quad \blacksquare @@ a top is a setting no other beats
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: 14·stat by the logarithm">
+\ell(p) = \ln\tbinom nk + k\ln p + (n - k)\ln(1 - p) @@ the chance-of-a-record technique (14·stat), logged
+\ell'(p) = \tfrac kp - \tfrac{n - k}{1 - p} = \tfrac{k - np}{p(1 - p)} @@ the slope of ln (17b), term by term
+\htmlClass{new}{\hat p = k/n} \quad \blacksquare @@ the sign of k − np, as on 14·stat: the seen-share technique again, in one line
+  </pre>
+  <p data-pid="2dba79">The best guess does not care how the knob is labelled. Same-best technique: <b>if g is one-to-one on the settings, the best guess of g(θ) is g(θ̂).</b> L as a function of φ = g(θ) is L(g⁻¹(φ)), and it is greatest where g⁻¹(φ) = θ̂. So the best guess of the spread width σ is the root of the best guess of σ².</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the logarithm · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">30r1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="k = 7,\ \ n = 10"></span></span>Find ℓ(0.7) − ℓ(0.5), and e to minus that. Compare with 14·stat’s ratio L(0.5)/L(0.7).</li><li><span class="givens"><span data-tex-inline="k = 5474,\ \ n = 7324"></span></span>Round peas among all peas in the first pea counts. Find p̂, and the sign of ℓ′ at the 3/4 the gardener expected.</li><li><span class="givens"><span data-tex-inline="9 \text{ of } 40 \text{ pairs}"></span></span>Two tosses of a coin both land heads with chance p². In 40 pairs of tosses, 9 pairs were both heads. Find the best guess of p², and then of p, by the same-best technique.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30r2">
+  <h2 class="sthead"><span class="stno">30r2</span>Counts and waits</h2>
+  <p class="stands">Stands on 30r1, 22·stat (the rare-count technique), 30o1 (the first-gap technique), 14f (the first-test and one-critical-point techniques) and 14·stat (the end-guess technique).</p>
+  <p data-pid="d80647">A count of rare events in a fixed stretch, a month or a page, is k with chance e^(−λ)λᵏ/k! (the rare-count technique, 22·stat). A wait between events that arrive at rate λ has density λe^(−λx) for x ≥ 0 (the first-gap technique, 30o1).</p>
+  <p data-pid="e2b59c">Rare-guess technique: <b>for counts k₁, …, kₙ of rare events with k̄ &gt; 0, the best guess of λ is the average count k̄.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the rare-guess technique">
+\ell(\lambda) = -n\lambda + \big(\textstyle\sum_i k_i\big)\ln\lambda - \sum_i \ln k_i! @@ the log-likelihood technique (30r1) on e^(−λ)λ^k/k!
+\ell'(\lambda) = -n + \tfrac{n\bar k}{\lambda} = \tfrac{n(\bar k - \lambda)}{\lambda} @@ Σ kᵢ = n k̄
+\ell' > 0 \text{ for } \lambda < \bar k,\ \ \ell' < 0 \text{ for } \lambda > \bar k @@ the sign of k̄ − λ
+\htmlClass{new}{\hat\lambda = \bar k} \quad \blacksquare @@ the first-test and one-critical-point techniques (14f) on (0, ∞)
+  </pre>
+  <p data-pid="255fbe">Gap-guess technique: <b>for waits x₁, …, xₙ of rate λ, the best guess of λ is 1/x̄, and of the average wait it is x̄.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the gap-guess technique">
+\ell(\lambda) = n\ln\lambda - \lambda\textstyle\sum_i x_i = n\ln\lambda - n\bar x\lambda @@ the log-likelihood technique on λe^(−λx)
+\ell'(\lambda) = \tfrac n\lambda - n\bar x @@ positive for λ below 1/x̄, negative above
+\htmlClass{new}{\hat\lambda = 1/\bar x,\ \text{ average wait } 1/\hat\lambda = \bar x} \quad \blacksquare @@ 14f; then the same-best technique with g(λ) = 1/λ
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: earthquakes and hummingbirds">
+2,\ 0,\ 1,\ 3,\ 1,\ 2,\ 0,\ 1,\ 4,\ 2,\ 1,\ 1 @@ a year of monthly counts of felt earthquakes in one county of Washington
+\hat\lambda = 18/12 = 1.5 \text{ a month} @@ the rare-guess technique
+3.1,\ 0.8,\ 5.2,\ 1.9,\ 2.4,\ 0.6,\ 4.0,\ 2.0 @@ minutes between visits of hummingbirds to a feeder in Victoria
+\htmlClass{new}{\hat\lambda = 8/20 = 0.4 \text{ a minute},\ \text{average wait } 2.5\ \text{min}} \quad \blacksquare @@ the gap-guess technique
+  </pre>
+  <p data-pid="3538df">When every count is 0, ℓ(λ) = −nλ falls all the way, and the best guess sits at the end, λ̂ = 0, where the slope is −n: 14·stat’s end-guess technique, for counts.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · counts and waits · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30r2.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="2,\ 0,\ 1,\ 3,\ 1,\ 2,\ 0,\ 1,\ 4,\ 2,\ 1,\ 1"></span></span>Find the best guess of λ, and then of the chance of a month with no felt earthquake, by the same-best technique.</li><li><span class="givens"><span data-tex-inline="3.1,\ 0.8,\ 5.2,\ 1.9,\ 2.4,\ 0.6,\ 4.0,\ 2.0"></span></span>Find the best guess of the chance that the next wait is longer than 5 minutes, using P(wait &gt; t) = e^(−λt).</li><li><span class="givens"><span data-tex-inline="0,\ 0,\ 0,\ 0,\ 0,\ 0"></span></span>Six months with no eruption of a volcano. Find ℓ(λ), its slope, and the best guess. Find where the slope is 0.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30r3">
+  <h2 class="sthead"><span class="stno">30r3</span>The bell, with two knobs</h2>
+  <p class="stands">Stands on 30r1, 30m3 (the stretched-density technique), 8·stat (the squared-misses technique), 28a (one knob at a time), 14f (one-critical-point) and 30q2 (the sample-spread technique).</p>
+  <p data-pid="ca8c20">The bell with average μ and spread v = σ² has density e^(−(x − μ)²/(2v)) / √(2πv), the standard bell of 30m3 stretched by σ and moved by μ (the stretched-density technique). Two knobs turn together.</p>
+  <p data-pid="ee69e4">Bell-guess technique: <b>for bell-shaped readings x₁, …, xₙ, not all equal, the best guess of μ is x̄, and of σ² it is v̂ = ((x₁ − x̄)² + ⋯ + (xₙ − x̄)²)/n.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the bell-guess technique">
+\ell(\mu, v) = -\tfrac n2\ln(2\pi v) - \tfrac{1}{2v}\textstyle\sum_i (x_i - \mu)^2 @@ the log-likelihood technique on the bell
+\textstyle\sum_i (x_i - \mu)^2 = D + n(\bar x - \mu)^2,\ \ D = \sum_i (x_i - \bar x)^2 > 0 @@ the squared-misses technique (8·stat)
+\ell(\mu, v) \le \ell(\bar x, v) \text{ for every } v,\ \text{equal only at } \mu = \bar x @@ the second term is least at μ = x̄
+\tfrac{d}{dv}\,\ell(\bar x, v) = -\tfrac{n}{2v} + \tfrac{D}{2v^2} = \tfrac{D - nv}{2v^2} @@ one knob at a time (28a): μ held at x̄
+\htmlClass{new}{\hat\mu = \bar x,\ \ \hat v = D/n} \quad \blacksquare @@ the slope is positive below D/n and negative above: one-critical-point (14f)
+  </pre>
+  <p data-pid="b7eac4">The best guess of the spread has n in the bottom, and 30q2 proved that its average is (n − 1)σ²/n, a little short. The most likely guess and the guess that is right on average are different guesses, and both are honest about what they are.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · the bell · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30r3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="5.1,\ 6.3,\ 4.8,\ 5.9,\ 6.6,\ 5.4,\ 4.9,\ 6.0"></span></span>The clarity readings of Lake Washington (30q2). Find μ̂, v̂ and σ̂, and compare v̂ with s².</li><li><span class="givens"><span data-tex-inline="-1.2,\ 0.4,\ 2.1,\ -0.8,\ 0.5\ \text{m}"></span></span>Errors of a phone’s position against a surveyed marker in Tacoma, taken as bell-shaped with average 0 known. Find ℓ(v) with μ = 0 fixed, and the best guess of v.</li><li><span class="givens"><span data-tex-inline="3.8,\ 4.6,\ 5.1,\ 4.2,\ 4.9\ \text{kg}"></span></span>The steelhead of 30q2.1a. Find μ̂ and σ̂, and compare σ̂ with s.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30r4">
+  <h2 class="sthead"><span class="stno">30r4</span>How sharp the top is</h2>
+  <p class="stands">Stands on 30r1, 30r2, 30q1 (the sample-average technique), 30q3 (the bell-cover technique), 22·stat (the mean-and-spread technique), 23a (the matching polynomial) and 14·stat.</p>
+  <p data-pid="46d313">14·stat measured how far the other guesses fall behind by the ratio L(p)/L(p̂). In logarithms that is ℓ(p) − ℓ(p̂), and near the top it is close to ½ ℓ″(p̂)(p − p̂)² (23a). A sharp top, with −ℓ″(θ̂) large, leaves few guesses near the best one.</p>
+  <p data-pid="bec9be">Top-bend technique: <b>for a share k/n with 0 &lt; k &lt; n, and for rare counts with k̄ &gt; 0, the number 1/(−ℓ″(θ̂)) is the spread of θ̂ given by the sample-average technique, with θ̂ in place of θ.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the top-bend technique">
+\ell''(p) = -\tfrac{k}{p^2} - \tfrac{n - k}{(1 - p)^2} @@ the slope of 30r1’s ℓ′
+-\ell''(\hat p) = \tfrac{n}{\hat p} + \tfrac{n}{1 - \hat p} = \tfrac{n}{\hat p(1 - \hat p)} @@ k = n p̂
+\mathrm{Var}\,\hat p = \tfrac{p(1 - p)}{n} @@ the sample-average technique (30q1): one 0-or-1 reading has spread p(1 − p)
+\ell''(\lambda) = -\tfrac{n\bar k}{\lambda^2},\ \ -\ell''(\hat\lambda) = \tfrac{n}{\bar k} @@ 30r2’s ℓ′, sloped again
+\mathrm{Var}\,\hat\lambda = \tfrac{\lambda}{n} @@ one rare count has spread λ (the mean-and-spread technique, 22·stat)
+\htmlClass{new}{\tfrac{1}{-\ell''(\hat\theta)} = \text{the spread, with } \hat\theta \text{ for } \theta} \quad \blacksquare @@ the two lines match, line for line
+  </pre>
+  <p data-pid="e75ce3">Held in trust: <b>for large samples from a family whose ℓ is smoothly sloped, θ̂ is close to bell-shaped about the true θ, with spread close to 1/(−ℓ″(θ̂)).</b> Its proof waits much higher up the ladder. What it gives: the interval θ̂ ± 1.96/√(−ℓ″(θ̂)), at about 95%, for any such family. For the share and for rare counts it is the bell-cover interval of 30q3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: 7 heads in 10, and the earthquakes">
+-\ell''(0.7) = 10/0.21 \approx 47.6,\ \ 1/\sqrt{47.6} \approx 0.145 @@ the top-bend technique
+0.7 \pm 1.96 \times 0.145 = 0.42 \text{ to } 0.98 @@ about 95%; 14·stat’s tenth-ratio stretch was 0.37 to 0.93
+-\ell''(1.5) = 12/1.5 = 8,\ \ 1/\sqrt 8 \approx 0.354 @@ twelve months, k̄ = 1.5
+\htmlClass{new}{1.5 \pm 0.69:\ \ 0.81 \text{ to } 2.19 \text{ a month}} \quad \blacksquare @@ about 95%, by the trusted bell shape
+  </pre>
+  <p data-pid="7364f1">For ten tosses the bell is a rough fit: the interval runs nearly to 1, and a lopsided hump is squeezed into a shape that is even on both sides. For ten thousand tosses the two stretches agree closely.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · the bend of the top · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30r4.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="k = 5067,\ \ n = 10\,000"></span></span>Find −ℓ″(p̂), the width, and the 95% interval. Find whether it holds 0.5.</li><li><span class="givens"><span data-tex-inline="3.1,\ 0.8,\ 5.2,\ 1.9,\ 2.4,\ 0.6,\ 4.0,\ 2.0"></span></span>For the waits, find ℓ″(λ) and −ℓ″(λ̂), the width, and the about-95% interval for the rate λ.</li><li><span class="givens"><span data-tex-inline="k = 70,\ \ n = 100"></span></span>Find the 95% interval for p, and compare its width with that for 7 in 10.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30r5">
+  <h2 class="sthead"><span class="stno">30r5</span>Illegal moves</h2>
+  <p class="stands">Stands on 30r1 to 30r4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+L(0.7) \approx 0.267,\ \text{so the chance that } p = 0.7 \text{ is } 0.267\,? @@ L is the chance of the record given the guess, not of the guess given the record
+L(\lambda) = f(x_1; \lambda) + f(x_2; \lambda) \text{ for two waits}\,? @@ independent readings multiply (30f2)
+\ell'(\hat\lambda) = 0 \text{ at every best guess}\,? @@ a best guess at an end need not have slope 0
+E\hat v = \sigma^2\,? @@ v̂ has n in the bottom: its average is (n − 1)σ²/n
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30r5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="k = 7,\ \ n = 10"></span></span>Find L(0.6), L(0.7) and L(0.8), and their total. <br>Find what the first line mixes up.</li><li><span class="givens"><span data-tex-inline="x_1 = 1,\ \ x_2 = 3\ \text{min}"></span></span>Find the best guess of λ from the product, and the setting that makes the sum in the second line greatest, to two places. <br>Find which one is the chance of the record.</li><li><span class="givens"><span data-tex-inline="0,\ 0,\ 0,\ 0,\ 0,\ 0"></span></span>Find ℓ′(0) for six empty months. <br>Find what the third line forgets.</li><li><span class="givens"><span data-tex-inline="n = 2"></span></span>Find E v̂ as a share of σ². <br>Find what the fourth line forgets.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">30r.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="f(x; \theta) = \dfrac{1}{\pi\,(1 + (x - \theta)^2)}"></span></span>This density has total 1 for every θ. Find every setting where ℓ′ is 0 for the two readings −a and a, with a &gt; 0, and which of them are tops. <br>Build two readings whose best guess is not their average.</div>
+  <div class="chq"><span class="chid">30r.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="3.1,\ 7.4,\ 5.2"></span></span>Readings spread evenly over [0, θ], with density 1/θ there and 0 elsewhere. Find L(θ) for these readings, for θ below 7.4 and above it. <br>Find the best guess, and the slope of L there.</div>
+  <div class="chq"><span class="chid">30r.4.3</span><span class="tagq">converse</span>The best guess of μ for the bell is right on average. Settle whether every best guess is right on average. <br>Look at v̂ of the bell, and at the best guess of the rate from a single wait, 1/X.</div>
+  <div class="chq"><span class="chid">30r.4.4</span><span class="tagq">reroute</span>Reroute the best guesses by matching averages: set the sample average equal to the law’s average, and solve for the knob. <br>Find what this gives for rare counts, for waits, and for the readings 3.1, 7.4, 5.2 spread evenly over [0, θ]. Find where it agrees with the best guess.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r30q.html">← 30q · estimating from samples</a><a href="r30s.html">30s · is the difference real? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The best guess is the maximum likelihood estimate (MLE), and the method is maximum likelihood estimation. The knob is the parameter, and the family is a parametric model. ℓ is the log-likelihood. The same-best technique is the invariance (or equivariance) property of the MLE. −ℓ″(θ̂) is the observed information; its average is the Fisher information. The statement held in trust is the asymptotic normality of the MLE, and the interval it gives is a Wald interval. Matching averages is the method of moments. The density of the build challenge is the Cauchy distribution, whose likelihood can have several peaks. The edge challenge is the German tank problem’s model, where the MLE is the sample maximum.</p>
+  <h3>Who said it first</h3>
+  <p>Daniel Bernoulli proposed choosing the most probable value for astronomical observations in 1778, and Carl Friedrich Gauss in 1809 derived the normal law by asking that the mean be the most likely value. Ronald Fisher made maximum likelihood a general method between 1912 and 1922, named the likelihood, and showed the large-sample spread 1/I(θ). Karl Pearson’s method of moments (1894) is what he argued against. Harold Cramér and C. R. Rao found in 1945 that no unbiased estimator has a spread below 1/I(θ). Allied statisticians used serial numbers to estimate German tank production during the Second World War.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'the record',t:R`L(\theta) = \prod_i f(x_i; \theta)`,n:`Independent readings multiply.`},
+  {k:'ember',kl:'the log',t:R`\ell(\theta) = \sum_i \ln f(x_i; \theta)`,n:`Same tops, since ln rises.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\hat p = k/n}`,n:`14·stat in one line.`}
+],{title:'The slides · the logarithm · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'counts',t:R`\ell'(\lambda) = n(\bar k - \lambda)/\lambda`,n:`Rare counts.`},
+  {k:'ember',kl:'waits',t:R`\ell'(\lambda) = n/\lambda - n\bar x`,n:`Exponential gaps.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\hat\lambda = \bar k,\ \ \hat\lambda = 1/\bar x}`,n:`Familiar averages.`}
+],{title:'The slides · counts and waits · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'two knobs',t:R`\ell(\mu, v) = -\tfrac n2\ln(2\pi v) - \tfrac{1}{2v}\sum (x_i - \mu)^2`,n:`The bell, logged.`},
+  {k:'ember',kl:'μ first',t:R`\hat\mu = \bar x`,n:`Squared-misses.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\hat v = \tfrac1n\sum (x_i - \bar x)^2}`,n:`n in the bottom.`}
+],{title:'The slides · the bell · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'the bend',t:R`-\ell''(\hat p) = \frac{n}{\hat p(1 - \hat p)}`,n:`Sharp tops for big samples.`},
+  {k:'ember',kl:'the spread',t:R`\mathrm{Var}\,\hat p = \frac{p(1 - p)}{n}`,n:`The sample-average technique.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\hat\theta \pm 1.96/\sqrt{-\ell''(\hat\theta)}}`,n:`Held in trust in general.`}
+],{title:'The slides · the bend of the top · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

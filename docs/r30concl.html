@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Size and chance add over countably many pieces</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+.cl-lock{display:none;border-left:3px solid var(--gold);background:var(--sand);padding:10px 14px;border-radius:0 4px 4px 0;max-width:66ch}
+body.cl-locked .cl-lock{display:block} body.cl-locked .cl-body{display:none}
+.cl-lock button{margin-top:6px;font-size:.8rem}
+.claim{border:1px solid var(--grid);border-left:4px solid var(--teal);background:var(--card);border-radius:0 6px 6px 0;padding:10px 16px;max-width:66ch}
+.claim p{margin:.4em 0}
+ul.cl-adds{max-width:66ch;padding-left:1.1em} ul.cl-adds li{margin:.5em 0}
+ul.cl-adds .cl-w{display:none;color:var(--muted);font-style:italic}
+ul.cl-adds li.cl-wait .cl-t{display:none} ul.cl-adds li.cl-wait .cl-w{display:inline}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r30k.html">← 30k no system beats a fair game</a><a href="r30l.html">next: 30l chance by the rules →</a></p>
+  <div class="tags"><span class="tag concl">30·∎ · conclusion</span></div>
+  <h1>Size and chance add over countably many pieces</h1>
+  <p class="gesture">The sized sets keep exact books over countably many pieces, and a chance is such a size with total one. From that come totals by slicing heights, limits through totals, given and turned-around chances, averages that settle, counts stored in one function, the bell, and fair games that no system beats.</p>
+  <div class="ready"><h3>What this stands on</h3><p>The survey of <a href="r30.html">rung 30</a>, and its proof steps: <a href="r30a.html">30a</a> to <a href="r30k.html">30k</a>. It opens once 30k is ticked, and it gains a line each time you finish a step or annex after it.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The conclusion · the rung's claim, in full, and its proof</div>
+  <div class="cl-lock"><p>This page opens once every question on <a href="r30k.html">30k no system beats a fair game</a> is ticked. The claim below is proved from the steps of this rung, so it waits for them.</p><button type="button" class="cl-peek">reviewing the ladder? open it anyway</button></div>
+  <div class="cl-body">
+  <h3>What the rung set out to show</h3>
+  <p data-pid="815e21">The survey of rung 30 asked what a chance is, and what can be proved once it is said. <b>A chance is a size with total one, so averages are totals, and the techniques of size give the laws of averages, sums and fair games.</b> The price is that some sets have no size at all, and the ladder leaves them out rather than let its books fail.</p>
+  <p data-pid="97bc91"><a href="r30a.html">30a</a> built outer size and found a set without a size. <a href="r30b.html">30b</a> picked out the sets that have sizes, and <a href="r30c.html">30c</a> totalled functions by slicing their heights. <a href="r30d.html">30d</a> passed limits through totals, and <a href="r30e.html">30e</a> took totals on the plane in either order. <a href="r30f.html">30f</a> made chance a size, <a href="r30g.html">30g</a> made averages totals, and <a href="r30h.html">30h</a> showed averages settle. <a href="r30i.html">30i</a> stored a count in one function, <a href="r30j.html">30j</a> found the bell, and <a href="r30k.html">30k</a> showed no system beats a fair game. This page puts the claim together.</p>
+  <h3>The claim, in full</h3>
+  <div class="claim">
+  <p data-pid="f8aaf0"><b>The sets of reals that pass the split test are closed under leftovers and countable unions, contain every interval, and on them size adds over countably many separate pieces. If choice is true, not every set passes. A chance space is such a size with total one.</b></p>
+  <p data-pid="10a3a2">Every sized f ≥ 0 has a total, which agrees with rung fifteen’s area for continuous f. Rising lists, and lists fenced by one function with a finite total, pass their limits through the total, and a total on the plane can be taken in either order when f ≥ 0 or ∫|f| is finite.</p>
+  <p data-pid="e18af2">Given chances, independence, the whole chance and the turned-around chance follow from the rules of size. Averages add, and spreads of independent parts add. The average of n independent copies strays ε from μ with chance at most σ²/(nε²), and with chance 1 it settles at μ. A whole-number count is fixed by its chance function, and independent counts multiply theirs. The rescaled sum of independent copies has an average-function that heads to the bell’s. In a fair game, a bounded stopping rule keeps the average fortune, and a fair walk from k reaches N before 0 with chance k/N.</p>
+  </div>
+  <h3>The proof</h3>
+  <p data-pid="4976c5">Each part below is a technique already proved on a step of this rung. The proof cites them by name and joins them.</p>
+  <pre class="lines" data-k="ember" data-label="size">
+m^*([a, b]) = b - a,\ \ m^*(\textstyle\bigcup A_n) \le \sum m^*(A_n),\ \ m^*(A + t) = m^*(A) @@ the cover-total, outer-adds-at-most and shift-keeps techniques (30a)
+\text{choice} \Rightarrow \text{some } V \subseteq [0, 1] \text{ has no size} @@ the no-size-set technique (30a)
+\text{sized sets: closed under leftovers and countable unions} @@ the split-test and sized-family techniques (30b)
+\htmlClass{new}{m(\textstyle\bigcup A_n) = \sum m(A_n) \text{ for separate sized } A_n;\ \text{intervals are sized}} \quad \blacksquare @@ the countable-adding and intervals-sized techniques (30b)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="totals and limits">
+\textstyle\int s = \sum c_i\,m(A_i);\ \ s_n \uparrow f @@ the step-total, height-slices and total-from-below techniques (30c)
+\textstyle\int_{[a,b]} f\,dm = \int_a^b f(x)\,dx \text{ for continuous } f @@ the agrees-with-area technique (30c)
+f_n \uparrow f \text{ or } |f_n| \le g,\ \textstyle\int g < \infty \Rightarrow \int f_n \to \int f @@ the rising-limit, lower-limit and fenced-limit techniques (30d)
+\htmlClass{new}{\textstyle\int\!\!\int f = \int(\int f\,dy)dx = \int(\int f\,dx)dy} \quad \blacksquare @@ the slices and either-order-sized techniques (30e)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="chance and averages">
+P(A^c) = 1 - P(A),\ \ P(B \mid A) = P(A \mid B)P(B)/P(A) @@ the chance-rules, given-chance, independent, whole-chance and turn-around techniques (30f)
+E(aX + bY) = aE\,X + bE\,Y;\ \ \text{independent: } \text{Var}(X + Y) = \text{Var}\,X + \text{Var}\,Y @@ the average-adds, spread-of-a-sum, independent-averages-multiply and independent-spreads-add techniques (30g)
+P(|\bar X_n - \mu| \ge \varepsilon) \le \sigma^2/(n\varepsilon^2);\ \ \bar X_n \to \mu \text{ with chance } 1 @@ the stray-bound, spread-bound, averages-settle, finitely-often and surely-settle techniques (30h)
+G_{X+Y} = G_X G_Y,\ \ E\,X = G^{\prime}(1),\ \ \text{dying out} = \min\{s : G(s) = s\} @@ the chances-from-G, average-from-G, sums-multiply and dying-out techniques (30i)
+M_{Z_n}(t) \to e^{t^2/2} @@ the bell-total, average-function and central limit techniques (30j)
+\htmlClass{new}{E\,X_T = E\,X_0;\ \ P(\text{reach } N) = k/N} \quad \blacksquare @@ the fair-stays-fair, stopping-keeps, no-system and ruin-chance techniques (30k)
+  </pre>
+  <p data-pid="4123f2">So the rung’s claim holds: size and chance add over countably many pieces, and from that one demand come the laws of averages, sums and fair games. One step is held in trust, on 30j: that matching average-functions give matching limits.</p>
+  <h3>What the rest of the rung adds</h3>
+  <p data-pid="018284">Each step and annex after the proof steps adds a line to the claim. A line appears here once you have finished its page.</p>
+  <ul class="cl-adds">
+    <li data-after="r30l" data-pid="91d2b9"><b><a href="r30l.html">30l chance by the rules</a></b>: <span class="cl-t">chances counted with the rules of 30f, by hand.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r30m" data-pid="eecb4a"><b><a href="r30m.html">30m densities</a></b>: <span class="cl-t">chances of continuous measurements as totals of a density.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r30n" data-pid="13f305"><b><a href="r30n.html">30n random walks</a></b>: <span class="cl-t">walks that wander, and whether they come back.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r30o" data-pid="b63037"><b><a href="r30o.html">30o waiting and arriving</a></b>: <span class="cl-t">waiting times and arrivals that come by chance.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r30p" data-pid="940345"><b><a href="r30p.html">30p chance that steps</a></b>: <span class="cl-t">chance that moves from state to state, and the mix it settles into.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r30q" data-pid="054203"><b><a href="r30q.html">30q estimating from samples</a></b>: <span class="cl-t">estimates from samples, with their widths.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r30r" data-pid="0004c9"><b><a href="r30r.html">30r the most likely parameter</a></b>: <span class="cl-t">the value that makes the data most likely.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r30s" data-pid="7c273e"><b><a href="r30s.html">30s is the difference real?</a></b>: <span class="cl-t">tests of whether a difference could be chance alone.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r30t" data-pid="b7e821"><b><a href="r30t.html">30t the best test</a></b>: <span class="cl-t">the most powerful test for a given false-alarm rate.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r30u" data-pid="c706e5"><b><a href="r30u.html">30u belief updated</a></b>: <span class="cl-t">beliefs updated from evidence by the turn-around rule.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r30v" data-pid="b46c4c"><b><a href="r30v.html">30v how the numbers were got</a></b>: <span class="cl-t">how sampling and design decide what numbers can show.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r30w" data-pid="189aec"><b><a href="r30w.html">30w inductive axioms revisited</a></b>: <span class="cl-t">the axioms that recur under every technique, looked at again.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r30then" data-pid="4fb0c6"><b><a href="r30then.html">30·then why does pollen jiggle in water?</a></b>: <span class="cl-t">a jiggle explained by molecules and measured by chance.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r30bio" data-pid="a2b9ce"><b><a href="r30bio.html">30·bio how does a gene spread through a population?</a></b>: <span class="cl-t">genes that drift and spread by chance.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r30phys" data-pid="36753b"><b><a href="r30phys.html">30·phys how is energy shared among molecules?</a></b>: <span class="cl-t">the most likely sharing of energy.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r30comp" data-pid="8fc6dd"><b><a href="r30comp.html">30·comp how much can a noisy line carry?</a></b>: <span class="cl-t">how much a noisy line can carry.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r30econ" data-pid="55f312"><b><a href="r30econ.html">30·econ can you beat the market by watching prices?</a></b>: <span class="cl-t">prices as a fair game.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r30logi" data-pid="6fe932"><b><a href="r30logi.html">30·logi how many seats should an airline sell?</a></b>: <span class="cl-t">overbooking set by the chances of no-shows.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r30nav" data-pid="6b7177"><b><a href="r30nav.html">30·nav how sure am I of where I am?</a></b>: <span class="cl-t">a position estimated with its width.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r30now" data-pid="8eb81f"><b><a href="r30now.html">30·now how many findings survive?</a></b>: <span class="cl-t">how many published findings hold up when repeated.</span><span class="cl-w">its line appears when you finish it.</span></li>
+  </ul>
+  <p data-pid="d2bc1e">That is the end of guessing without a technique. From here on, a guess from things comes with its width and its exception rate. You are only just getting started with what chance can measure.</p>
+  </div>
+</section>
+
+<nav class="nextrung"><a href="r30k.html">← 30k · no system beats a fair game</a><a href="r30l.html">30l · chance by the rules →</a></nav>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+  const need="r30k";
+  let p={}; try{ p=JSON.parse(LS.getItem('pages:done')||'{}')||{}; }catch(e){}
+  let peek=false; try{ peek=sessionStorage.getItem('cl:peek')==='1'; }catch(e){}
+  const done=k=>!!(p[k]&&p[k].v);
+  function apply(){
+    const open=peek||done(need);
+    document.body.classList.toggle('cl-locked',!open);
+    document.querySelectorAll('ul.cl-adds li[data-after]').forEach(li=>li.classList.toggle('cl-wait',!(peek||done(li.dataset.after))));
+    if(open&&done(need)){ const me=(window.ladderPage?ladderPage():(location.pathname.split('/').pop()||'').replace(/\.html?$/,''));
+      if(window.MarksSync&&MarksSync.reportPage) MarksSync.reportPage(me,true,true,true,false);
+      else { try{ p[me]={v:true,a:true,o:true,h:false,t:Date.now()}; LS.setItem('pages:done',JSON.stringify(p)); }catch(e){} } }
+  }
+  const b=document.querySelector('.cl-peek'); if(b) b.addEventListener('click',()=>{ peek=true; try{ sessionStorage.setItem('cl:peek','1'); }catch(e){} apply(); });
+  apply();
+  try{ if(window.MarksSync&&MarksSync.pages) MarksSync.pages().then(q=>{ if(q){ p=Object.assign({},p,q); apply(); } },()=>{}); }catch(e){}
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>
