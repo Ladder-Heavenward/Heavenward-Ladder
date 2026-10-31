@@ -935,7 +935,7 @@ function startEdit(p){ if(!ED.db||!ED.owner||!editable(p)||p.isContentEditable) 
   const b=p.querySelector('button.pa'); if(b) b.remove(); const before=p.innerHTML;
   p.contentEditable='true'; p.classList.add('pediting'); p.focus();
   const bar=document.createElement('div'); bar.className='pebar';
-  bar.innerHTML='<button type="button" data-e="save">save</button><button type="button" data-e="cancel">cancel</button><span class="pehint">prose only · bold with ctrl/⌘ B</span>';
+  bar.innerHTML='<button type="button" data-e="save">save</button><button type="button" data-e="cancel">cancel</button><span class="pehint">prose only · bold with '+(/Mac|iPhone|iPad/.test(navigator.platform||navigator.userAgent)?'⌘B':'Ctrl+B')+'</span>';
   p.after(bar);
   const done=()=>{ p.contentEditable='false'; p.classList.remove('pediting'); bar.remove(); if(b){ p.appendChild(document.createTextNode(' ')); p.appendChild(b); } };
   bar.addEventListener('click',async e=>{ const k=e.target.dataset.e; if(!k) return;
