@@ -51,7 +51,7 @@
  {"q": "The n-th root of aₙ heads to 2. What does the root test say?", "a": "it wanders", "w": ["it settles", "nothing", "its total is 2"], "why": "q > 1: the pieces do not head to 0."},
  {"q": "Pieces like (n/(2n + 1))ⁿ. Which test suits them?", "a": "the root test", "w": ["the ratio test", "the grouping technique", "the shrink technique"], "why": "Pieces built from n-th powers."},
  {"q": "Pieces like 2ⁿ/n!. Which test suits them?", "a": "the ratio test", "w": ["the root test", "the shrink technique", "no test"], "why": "Pieces built from factorials."},
- {"q": "Σ |aₙ| settles. What follows for Σ aₙ?", "a": "it settles too", "w": ["nothing", "it wanders", "it equals Σ |aₙ|"], "why": "The size technique; accepted name: absolute convergence."},
+ {"q": "Σ |aₙ| settles. What follows for Σ aₙ?", "a": "it settles too", "w": ["nothing", "it wanders", "it equals Σ |aₙ|"], "why": "The settles-in-size technique; accepted name: absolute convergence."},
  {"q": "Σ aₙ settles. Must Σ |aₙ| settle?", "a": "no: 1 − ½ + ⅓ − ⋯", "w": ["yes", "only if aₙ → 0", "yes, at the same total"], "why": "Illegal move; 22g settles the alternating sum."}];
 (window.LADDER_CARDS=window.LADDER_CARDS||{})["22f"]=[{"q": "f falls on [k, k + 1]. Where does the strip of height f(k + 1) stand?", "a": "under the curve", "w": ["over the curve", "across it", "off the strip"], "why": "Lowest at the right end, highest at the left."},
  {"q": "f positive and falling, aₙ = f(n). What settles exactly when Σ aₙ does?", "a": "∫₁^∞ f", "w": ["f(n)", "Σ f(n)²", "∫₀¹ f"], "why": "The area technique for sums."},

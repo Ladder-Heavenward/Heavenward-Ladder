@@ -118,7 +118,7 @@
  {"q": "A spiral staircase seen from the side. What is it?", "a": "a wave", "w": ["a circle", "a line", "an ellipse"], "why": "Height goes up as the turn goes round."}];
 (window.LADDER_CARDS=window.LADDER_CARDS||{})["21·cb20"]=[{"q": "Multiplying two pairs. What happens to lengths and angles?", "a": "lengths multiply, angles add", "w": ["both multiply", "both add", "lengths add, angles multiply"], "why": "The multiply-and-add technique."},
  {"q": "(cos θ + i sin θ)ⁿ. What is it?", "a": "cos nθ + i sin nθ", "w": ["cosⁿ θ + i sinⁿ θ", "n cos θ + i n sin θ", "cos θⁿ + i sin θⁿ"], "why": "Angles add n times (de Moivre’s)."},
- {"q": "The numbers whose 5th power is 1. How many, and where?", "a": "5, at the corners of a regular pentagon", "w": ["1, at 1", "2, at 1 and −1", "5, on the floor"], "why": "The equal-parts technique."},
+ {"q": "The numbers whose 5th power is 1. How many, and where?", "a": "5, at the corners of a regular pentagon", "w": ["1, at 1", "2, at 1 and −1", "5, on the floor"], "why": "The even-spacing technique."},
  {"q": "iᵗ. What is it?", "a": "the turn of t quarter turns: cos(πt/2) + i sin(πt/2)", "w": ["i times t", "t to the power i", "1 for every t"], "why": "The quarter-power technique."},
  {"q": "i². What angle is it?", "a": "π, the half turn", "w": ["π/2", "2π", "0"], "why": "Two quarter turns."},
  {"q": "The square roots of i. Where do they sit?", "a": "at arcs π/4 and 5π/4", "w": ["at 1 and −1", "at π/2 only", "nowhere"], "why": "Halve the angle, then add half a turn."}];
