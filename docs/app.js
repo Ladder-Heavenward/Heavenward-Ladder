@@ -5,6 +5,8 @@
   const BASE = new URL('./', document.currentScript.src).href, CACHE = 'ladder-pages', KEY = BASE + '__installed.json';
   const A = (() => { try { return JSON.parse(localStorage.getItem('ladder-app') || '{}'); } catch (e) { return {}; } })();
   const saveA = () => { try { localStorage.setItem('ladder-app', JSON.stringify(A)); } catch (e) {} };
+  /* the install page's big button needs the browser's install offer, which comes once, early */
+  window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); window.__bip = e; document.dispatchEvent(new Event('ladder-installable')); });
   navigator.serviceWorker.register(BASE + 'sw.js', { scope: BASE }).catch(() => {});
   if (navigator.storage && navigator.storage.persist) navigator.storage.persisted().then(p => p || navigator.storage.persist()).catch(() => {});
 

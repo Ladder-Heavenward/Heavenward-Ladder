@@ -317,6 +317,9 @@ let openSeen=new Set(), openSeeded=true;
 try{ const raw=LS.getItem('ladder:openSeen'); if(raw===null) openSeeded=false; else openSeen=new Set(JSON.parse(raw)||[]); }catch(e){}
 function saveOpenSeen(){ try{ LS.setItem('ladder:openSeen',JSON.stringify([...openSeen])); }catch(e){} }
 function packLadder(){
+  /* the "open it at the foot" cue shows only on the lowest rung not yet opened (Andrew, 2026-10-31) */
+  let lowest=Infinity;
+  document.querySelectorAll('section.rung li.k-theory.built:not(.passed)').forEach(th=>{ const v=parseFloat(((th.querySelector(':scope>.n')||{}).textContent||'').trim()); if(!isNaN(v)&&v<lowest) lowest=v; });
   document.querySelectorAll('section.rung').forEach(sec=>{
     const th=sec.querySelector('li.k-theory.built'); if(!th) return;
     const subs=[...sec.querySelectorAll('ol.ladder>li')].filter(li=>li!==th);
@@ -326,7 +329,7 @@ function packLadder(){
     const open=th.classList.contains('passed');
     const lab=((th.querySelector(':scope>.n')||{}).textContent||'').trim();
     if(open&&!openSeen.has(lab)){ openSeen.add(lab); saveOpenSeen(); if(openSeeded){ sec.classList.add('packed'); unpack(sec,true); } }
-    if(!open){ sec.classList.add('packed'); cue.textContent='open it at the foot of its page to unpack its '+(subs.length>1?'steps':'step'); }
+    if(!open){ sec.classList.add('packed'); cue.textContent=parseFloat(lab)===lowest?'open it at the foot of its page to unpack its '+(subs.length>1?'steps':'step'):''; }
     else if(sec.classList.contains('packed')&&!sec.dataset.unpacking){ sec.classList.remove('packed'); cue.textContent=''; }
     else cue.textContent='';
     const built=subs.filter(li=>li.classList.contains('built'));
@@ -459,7 +462,7 @@ function deskHTML(){
   const b=document.createElement('button'); b.id='deskbtn'; b.setAttribute('aria-label','open the desk: questions and a grapher'); b.textContent='☰ desk';
   const d=document.createElement('div'); d.id='desk'; d.setAttribute('role','dialog'); d.setAttribute('aria-label','desk');
   const qs=!!document.querySelector('.sayback');
-  d.innerHTML='<div class="dtabs">'+(qs?'<button data-p="qs">Questions</button>':'')+'<button data-p="graph">Graph</button><button data-p="moves">Reference</button><button data-p="rand">Laundry</button><button data-p="rec">Record</button><button class="x" aria-label="close">✕</button></div>'
+  d.innerHTML='<div class="dtabs">'+(qs?'<button data-p="qs">Questions</button>':'')+'<button data-p="graph">Graph</button><button data-p="moves">Reference</button><button data-p="rand">Laundry</button><button data-p="rec">Record</button><a class="dshare" href="install.html">Share the ladder</a><button class="x" aria-label="close">✕</button></div>'
     +(qs?'<div class="dpane" id="dp-qs"><p class="dnote">The page’s questions, here so you can read them beside the class.</p><div class="dq" id="dq"></div></div>':'')
     +'<div class="dpane" id="dp-graph"><div id="dmg"></div><p class="dnote" style="margin-top:10px">Type it as on paper: x^2, 2sin(x), e^x, ln x, √x, |x|, x!. a, b, c and k get sliders.</p></div>'
     +'<div class="dpane" id="dp-moves"><p class="dnote" id="dmnote">The techs this step uses and builds: what each is called, what it does in words, and the line in symbols.</p><div id="dmoves"></div><p><a class="dlink" href="moves.html">every tech you have earned →</a></p></div>'
