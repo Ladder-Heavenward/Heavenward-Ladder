@@ -121,14 +121,14 @@ function build(){
       const lic=licensers(out.lines); if(lic.length!==1||lic[0]!==L.name) continue;
       const others=shuffle(openL.filter(x=>x.name!==L.name).map(x=>x.name)).slice(0,2);
       const wrong=others.concat(shuffle(AX.slice())).slice(0,3);
-      return {index, stray, step:L.step, lines:out.lines, ask:'Which technique licenses the line marked ?', right:L.name, opts:shuffle([L.name,...wrong]), why:out.why};
+      return {index, addr:s.id+c.ix+'.'+L.id, stray, step:L.step, lines:out.lines, ask:'Which technique licenses the line marked ?', right:L.name, opts:shuffle([L.name,...wrong]), why:out.why};
     }
     if(c.kind==='names') continue;
     const si='seed:'+s.id+c.ix; if(used[si]) continue;
     const r=String(c.c), op=c.kind==='add'?' + ':' · ', lim=has('4g')?99:Math.max(4,c.c+2);
     const pool=[c.c+1,c.c-1,c.a*c.b,c.a+c.b,Number(String(c.a)+String(c.b)),c.c+2,c.c-2,c.a,c.b,0,1,2,3,4].filter(x=>x>=0&&x<=lim&&String(x)!==r);
     const wrong=shuffle([...new Set(pool.map(String))]).slice(0,3);
-    return {index:si, stray, step:s.step, lead:'The box holds '+r+'. ', lines:[[c.l+' = ▢',null]], ask:'What number fills the box ▢?', right:r, opts:shuffle([r,...wrong]),
+    return {index:si, addr:s.id+c.ix, stray, step:s.step, lead:'The box holds '+r+'. ', lines:[[c.l+' = ▢',null]], ask:'What number fills the box ▢?', right:r, opts:shuffle([r,...wrong]),
       why:c.kind==='add'?c.a+' + '+c.b+' unfolds, by plus-a-next and plus-zero, to '+r+'.':c.a+' · '+c.b+' unfolds, by times-a-next and times-zero, to '+r+'.'};
   }
   return {closed:'Every question these pools hold has been asked. Each step you open adds its pools.'};
@@ -153,9 +153,9 @@ function render(box){
     +'<div class="rzlines">'+q.lines.map(([t,w],i)=>'<div class="rzl"><span class="rzn">'+(i+1)+'</span><span class="rzt">'+esc(t)+'</span><span class="rzw">'+(w?esc(w):'?')+'</span></div>').join('')+'</div>'
     +'<p class="rzask">'+esc(q.ask)+'</p><div class="rzopts">'+q.opts.map(o=>'<button type="button" class="rzo">'+esc(o)+'</button>').join('')+'</div>'
     +'<p class="rzwhy" hidden></p><p><button type="button" class="dlink rznext">another question</button></p>'
-    +'<p class="dnote">this question’s seed: <button type="button" class="rzseed" title="tap to report this question">'+esc(q.index)+'</button></p>'+picker(q);
+    +'<p class="dnote">this question’s address (seed.link): <button type="button" class="rzseed" title="tap to report this question">'+esc(q.addr)+'</button>. Tap it if the question does not make sense.</p>'+picker(q);
   wire();
-  box.querySelector('.rzseed').onclick=()=>{ if(window.__report) window.__report({kind:'laundry',where:'seed '+q.index,text:q.lines.map(l=>l[0]).join(' / ')+' | '+q.ask+' | answer: '+q.right}); };
+  box.querySelector('.rzseed').onclick=()=>{ if(window.__report) window.__report({kind:'laundry',where:q.addr,text:q.lines.map(l=>l[0]).join(' / ')+' | '+q.ask+' | answer: '+q.right}); };
   const why=box.querySelector('.rzwhy'); let done=false;
   box.querySelectorAll('.rzo').forEach(b=>b.onclick=()=>{ if(done) return; done=true;
     const ok=b.textContent===q.right;

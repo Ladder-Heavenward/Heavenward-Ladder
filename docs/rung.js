@@ -543,14 +543,13 @@ function ladderBar(){
   const home=!!document.querySelector('.rungs');
   const bar=document.createElement('nav'); bar.id='lbar'; bar.setAttribute('aria-label','the ladder bar');
   bar.innerHTML=(home?'<button type="button" class="lb lb-ladder"':'<a class="lb lb-ladder" href="index.html"')+' title="the ladder: how far you have climbed"><svg viewBox="0 0 20 28" width="15" height="21" aria-hidden="true"><path d="M5 1v26M15 1v26M5 6h10M5 12h10M5 18h10M5 24h10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg><span class="lb-l">the ladder</span><b class="lb-far"></b><span class="lb-star"></span>'+(home?'</button>':'</a>')
-    +'<span class="lb-gap"></span>'+(ladderPage()==='about'?'<button type="button" class="lb lb-rep" aria-label="report to the author" title="report to the author">⚑ <span class="lb-l">report</span></button>':'')+'<button type="button" class="lb lb-keys" aria-label="the keys" hidden>⌨ <span class="lb-l">keys</span></button>'+'<button type="button" class="lb lb-tray" aria-label="the tray">☰ <span class="lb-l">tray</span></button>';
+    +'<span class="lb-gap"></span>'+'<button type="button" class="lb lb-keys" aria-label="the keys" hidden>⌨ <span class="lb-l">keys</span></button>'+'<button type="button" class="lb lb-tray" aria-label="the tray">☰ <span class="lb-l">tray</span></button>';
   document.body.appendChild(bar); document.body.classList.add('hasbar');
   const stats=()=>{ let v={far:-1,stars:0}; try{ v=Object.assign(v,JSON.parse(LS.getItem('ladder:stats')||'{}')); }catch(e){}
     bar.querySelector('.lb-far').textContent=v.far<0?'':String(v.far);
     bar.querySelector('.lb-star').textContent=v.stars?'★ '+v.stars:''; };
   window.__barStats=stats; stats();
   if(home) bar.querySelector('.lb-ladder').onclick=()=>climbTo(true);
-  const rb=bar.querySelector('.lb-rep'); if(rb) rb.onclick=()=>{ if(window.__report) window.__report({kind:'page'}); };
   const kb=bar.querySelector('.lb-keys'); if(kb) kb.onclick=()=>{ const b=document.querySelector('#mk-tray .mk-btn'); if(b) b.click(); };
   bar.querySelector('.lb-tray').onclick=()=>{ const b=document.getElementById('deskbtn'); if(b) b.click(); };
   const sync=()=>{ const t=document.getElementById('mk-tray'), d=document.getElementById('desk');
@@ -1195,4 +1194,22 @@ window.LadderCards={open,close,info:me};
     const a=li.querySelector(':scope>.t>a[href]');
     if(e.metaKey||e.ctrlKey) window.open(a.href,'_blank'); else location.href=a.href;
   },true);
+})();
+
+/* Tap to agree (Andrew, 2026-10-31): the first time the ladder opens on a device, the learner (or, under 18,
+   a parent or guardian) agrees to the license and terms. The agreement is kept on this device with its date.
+   The license, about and install pages stay open to read first; the author's desk never asks. */
+(function(){
+  const TERMS='2026-10-31';
+  const pg=ladderPage();
+  if(window.LADDER_PAGE||/^(license|about|install|404)$/.test(pg)) return;
+  let ok=null; try{ ok=JSON.parse(LS.getItem('ladder:agreed')||'null'); }catch(e){}
+  if(ok&&ok.terms===TERMS) return;
+  const show=()=>{ if(document.getElementById('agreebox')) return;
+    const box=document.createElement('div'); box.id='agreebox'; box.setAttribute('role','dialog'); box.setAttribute('aria-modal','true'); box.setAttribute('aria-label','license and terms');
+    box.innerHTML='<div class="agcard"><h3>Before you climb</h3><p>The Ladder is free for learners, classrooms and homes, for non-commercial use. It makes no promise about any test or placement. Your progress stays on this device and is never sent anywhere.</p><p>Please read the <a href="license.html">license and terms</a>. If you are under 18, ask a parent or guardian to read them and agree for you.</p><button type="button" class="agyes">I agree</button><p class="agsmall">Tapping “I agree” means you, or your parent or guardian, accept the license and terms.</p></div>';
+    document.body.appendChild(box); document.body.classList.add('agreeing');
+    box.querySelector('.agyes').onclick=()=>{ try{ LS.setItem('ladder:agreed',JSON.stringify({terms:TERMS,at:new Date().toISOString()})); }catch(e){}
+      box.remove(); document.body.classList.remove('agreeing'); }; };
+  if(document.body) show(); else document.addEventListener('DOMContentLoaded',show);
 })();
