@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>13h · Powers, constants and sums</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+#cvA,#cvB{touch-action:none}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r13g.html">← 13g the growing square</a><a href="r13i.html">next: 13i products and quotients →</a></p>
+  <div class="tags"><span class="tag tech">13h · technique</span></div>
+  <h1>Powers, constants and sums</h1>
+  <p>Most slopes you will ever compute are of sums of terms, each a constant times a power of the input. Three rules cover them, and rungs 13d to 13f proved each. A power brings its count down in front and loses one from it. A constant factor rides along, and an added constant leaves. A sum goes term by term. One gap remains. The power rule has been proved for whole powers, for negative whole powers away from 0, and for a half, but not for a third or two thirds or any other fraction. This step closes the gap from the definition and the chain rule. Then it puts the rules to work. It rewrites roots and fractions so the rule can see the power, and it refuses the moves that look like these rules and are not.</p>
+  <p class="gesture">Rewrite every term as a constant times a power of the input. Bring the power down in front and take one off it. Constant factors ride, added constants leave. A sum goes term by term, and nothing else does.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r13d.html">13d</a> (power for slopes, constant-has-slope-0, slopes-add, constant-factor for slopes, lifting, polynomial-slope, displaced-slopes), <a href="r13f.html">13f</a> (negative-powers), <a href="r13e.html">13e</a> (chain for slopes, slope-of-√, undoing's-slope), <a href="r08i.html">8i</a> (x^(p/q), fractional-powers-defined, whole-exponent, fraction-exponent, odd roots of negatives), <a href="r08f.html">8f</a> (ⁿ√, powers-keep-order), <a href="r10c.html">10c</a> (power-limit, reciprocal-limit), <a href="r10d.html">10d</a> (squeezed-by-distance), <a href="r11c.html">11c</a> (limit-passes-inside), <a href="r11d.html">11d</a> (polynomials-are-continuous), <a href="r05g.html">5g</a> (fractions-of-rationals). <a href="r13i.html">13i</a> and <a href="r13j.html">13j</a> use these rules inside products and chains; <a href="r13l.html">13l</a> reaches the fractional powers by a second road.</p></div>
+</header>
+
+<section class="class step" data-step="13h1">
+  <h2 class="sthead"><span class="stno">13h1</span>The rule, and how far it is proved</h2>
+  <p class="stands">Stands on 13d (power for slopes), 13f (negative-powers) and 8i (fractional powers).</p>
+  <p data-pid="e076a3">In its usual form the power rule is (xⁿ)′ = n xⁿ⁻¹: <b>bring the power down in front, and take one off the power.</b> On this ladder each case has its licence.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>the power n</th><th>where</th><th>licence</th></tr>
+    <tr><td>a whole number n ≥ 1</td><td>every real</td><td>Power for slopes (13d), by induction from the product rule</td></tr>
+    <tr><td>0</td><td>every real</td><td>x⁰ = 1 is a constant: constant-has-slope-0 (13d), slope 0 = 0 · x⁻¹ away from 0</td></tr>
+    <tr><td>−1, −2, −3, …</td><td>every real but 0</td><td>Negative-powers (13f), from the reciprocal rule</td></tr>
+    <tr><td>½</td><td>every real above 0</td><td>Slope-of-√ (13e), by the conjugate</td></tr>
+    <tr><td>any other fraction p/q</td><td>every real above 0</td><td>this step: root-slope and fraction-power for slopes</td></tr>
+  </table></div>
+  <p data-pid="e514b8">The fraction case needs 8i's lines. Take a positive real w and a fraction p/q, with p an integer and q a positive integer. Then w^(p/q) names (q√w)^p. Fractional-powers-defined showed that the name does not depend on which pair (p, q) is used for the fraction. So the plan is two links: first the slope of the q-th root, then a chain with the outside r ↦ r^p.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · what is proved · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">13h1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">x^5,  x^0,  x^{−2},  x^{2/3}</span></span>For each, name the technique that licenses the power rule so far. <br>Say which one is not yet licensed.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13h2">
+  <h2 class="sthead"><span class="stno">13h2</span>The slope of a q-th root</h2>
+  <p class="stands">Stands on 13h1, 13e (slope-of-√) and 4b (induction).</p>
+  <p data-pid="b7c0cc">13e found the slope of √ by the conjugate: (√(y + h) − √y)(√(y + h) + √y) = h, by difference-of-squares. For a cube root, or a q-th root, difference-of-squares needs a longer partner, and 5h's grid of cells supplies it.</p>
+  <p data-pid="1d1389">Difference-of-powers technique: <b>for reals u and v and every number q ≥ 1, u^q − v^q = (u − v) · Σ_{j&lt;q} u^(q−1−j) v^j = (u − v)(u^(q−1) + u^(q−2)v + ⋯ + v^(q−1)).</b></p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the difference-of-powers technique, by induction on q">
+q = 1:\ \ u - v = (u - v)\cdot u^0 v^0 @@ the sum has one term, u⁰v⁰ = 1 (power-zero); times-one on ℝ
+u^{q+1} - v^{q+1} = u\,(u^q - v^q) + \htmlClass{new}{v^q (u - v)} @@ add and take away u · v^q (negative on ℝ, plus-zero on ℝ), then spread on ℝ turned about; power-of-a-next
+= u\,(u - v)\textstyle\sum_{j \lt q} u^{q-1-j}v^j + v^q (u - v) @@ the induction hypothesis
+= (u - v)\Big(\textstyle\sum_{j \lt q} u^{q-j}v^j + v^q\Big) @@ spread on ℝ turned about; factor-out brings u inside: u · u^(q−1−j) = u^(q−j)
+= (u - v)\textstyle\sum_{j \lt q + 1} u^{q-j}v^j \quad \blacksquare @@ sum-one-more: v^q is the term at j = q, since u⁰ = 1; induction
+  </pre>
+  <p data-pid="bab858">With q = 2 it is difference-of-squares: u² − v² = (u − v)(u + v). With q = 3 it is u³ − v³ = (u − v)(u² + uv + v²). Multiply back by the grid of cells to check: the cells u · uv and −v · u² cancel, and so on along the row, leaving u³ − v³.</p>
+  <p data-pid="98cfc5">Now the root. Fix a number q ≥ 1 and a real w &gt; 0, and keep |h| &lt; w, so that w + h &gt; 0 and the q-th root is defined on the open interval (0, 2w) around w. Write u = q√(w + h) and v = q√w. Both are positive, u^q = w + h and v^q = w (8f's line), and u ≠ v, because their q-th powers differ (powers-keep-order turned back).</p>
+  <p data-pid="324312">Root-continuity technique: <b>a q-th root lands where it is headed.</b> Precisely: for w &gt; 0, |q√(w + h) − q√w| ≤ |h|/v^(q−1) whenever |h| &lt; w. So q√(w + h) → q√w as h → 0. By difference-of-powers, |h| = |u^q − v^q| = |u − v| · S, where S = Σ_{j&lt;q} u^(q−1−j)v^j. S is a sum of positive reals, at least its last term v^(q−1). So |u − v| ≤ |h|/v^(q−1), and 10d's squeezed-by-distance, with C = 1/v^(q−1), sends u to v.</p>
+  <p data-pid="439303">Root-slope technique: <b>for every number q ≥ 1 and every real w &gt; 0, x ↦ q√x has a slope at w, and it is (1/q) · w^(1/q − 1).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the root-slope technique">
+\dfrac{\sqrt[q]{w + h} - \sqrt[q]{w}}{h} = \dfrac{u - v}{u^q - v^q} @@ h = (w + h) − w = u^q − v^q: substitute for the expression
+= \dfrac{u - v}{(u - v)\,S} @@ difference-of-powers, with S = Σ_{j&lt;q} u^(q−1−j) v^j
+= \htmlClass{new}{\dfrac{1}{S}} \quad (h \ne 0) @@ cancel u − v (fractions-of-rationals i): licensed because u ≠ v when h ≠ 0
+u \to v \text{ as } h \to 0 @@ root-continuity
+S \to \textstyle\sum_{j \lt q} v^{q-1-j} v^j = \htmlClass{new}{q\,v^{q-1}} @@ limit-passes-inside (11c): t ↦ Σ t^(q−1−j) v^j is a polynomial, continuous at v (polynomials-are-continuous); each term is v^(q−1) (powers-add-their-counts)
+\text{slope} = \dfrac{1}{q\,v^{q-1}} @@ reciprocal-limit (10c): q v^(q−1) ≠ 0
+= \tfrac1q\, w^{-(q-1)/q} = \htmlClass{keep}{\tfrac1q\, w^{\frac1q - 1}} \quad \blacksquare @@ v = w^(1/q) and fraction-exponent (8i): v^(q−1) = w^((q−1)/q)
+  </pre>
+  <p data-pid="90e43d">With q = 2 this is slope-of-√ again: ½ w^(−½) = 1/(2√w). With q = 3 and w = 8: v = 2, S heads to 3 · 2² = 12, and the slope of ∛ at 8 is 1/12. Its chord slope at h = 0.001 is (∛8.001 − 2)/0.001 ≈ 0.0833299, against 1/12 ≈ 0.0833333.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · root-slope · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13h2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">u^4 − v^4</span></span>Factor it by difference-of-powers. <br>Check by multiplying back with the grid of cells.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13h3">
+  <h2 class="sthead"><span class="stno">13h3</span>Every fraction</h2>
+  <p class="stands">Stands on 13h2 and 13e (chain for slopes).</p>
+  <p data-pid="baf2a1">Fraction-power technique for slopes: <b>the power rule is true for every fraction power, at every positive input.</b> Precisely: take a fraction p/q, with p an integer and q a positive integer, and a real w &gt; 0. Then the function x ↦ x^(p/q) on (0, ∞) has slope (p/q) · w^(p/q − 1) at w.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the fraction-power technique for slopes">
+x^{p/q} = \big(\sqrt[q]{x}\big)^p @@ 8i's line for fractional powers: a chain, inside r = q√x, outside r ↦ r^p
+r_0 = \sqrt[q]{a} \gt 0,\ \ \text{inside's slope } \tfrac1q a^{\frac1q - 1} @@ root-slope
+\text{outside's slope at } r_0:\ \ p\,r_0^{\,p-1} @@ power for slopes if p ≥ 1; negative-powers if p ≤ −1 (r₀ ≠ 0); constant-has-slope-0 if p = 0, where both sides are 0
+\text{slope} = p\,r_0^{\,p-1}\cdot \tfrac1q\, a^{\frac1q - 1} @@ chain for slopes (13e): rates through a chain multiply
+= \tfrac{p}{q}\, a^{\frac{p-1}{q}}\, a^{\frac1q - 1} @@ r₀^(p−1) = (q√a)^(p−1) = a^((p−1)/q): 8i's line
+= \htmlClass{keep}{\tfrac{p}{q}\, a^{\frac{p}{q} - 1}} \quad \blacksquare @@ fraction-exponent: (p − 1)/q + 1/q − 1 = p/q − 1
+  </pre>
+  <p data-pid="f55376">So for every fraction n and every w &gt; 0, the slope of xⁿ at w is n w^(n−1). For a whole n this is so at every real, and for a negative whole n at every real but 0. Fractional-powers-defined made the name x^(p/q) honest whichever pair is used. The answer (p/q)w^(p/q − 1) depends only on the fraction, so the slope is honest too. Worked: x^(2/3) at 8 has slope ⅔ · 8^(−1/3) = ⅔ · ½ = ⅓. x^(3/2) at 4 has slope (3/2) · 4^(1/2) = 3. x^(−1/2) at 4 has slope −½ · 4^(−3/2) = −1/16.</p>
+  <p data-pid="bdecba">Odd roots of negatives, 8i's other line, follow by one more chain. For odd q and w &lt; 0, q√x = −q√(−x). So the inside is −x, with slope −1, and the outside is −q√r at r₀ = −w &gt; 0. The slope is −(1/q)(−w)^(1/q − 1) · (−1) = (1/q)(−w)^(1/q − 1). So ∛ has slope 1/12 at −8 as at 8. At 0 it has none, by 13e's undoing's-slope turned about.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · every fraction · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · left: y = c · xⁿ + k, with its tangent line · right: its slope function c · n · xⁿ⁻¹, and a target to match</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="lbl">the power n</div><div class="chips" id="nch"></div>
+      <canvas id="cvA"></canvas>
+      <div class="kn">
+        <span class="m">c</span><input type="range" id="kc" min="-3" max="3" step="0.25" value="1"><output id="oc"></output>
+        <span class="m">k</span><input type="range" id="kk" min="-3" max="3" step="0.25" value="0"><output id="ok"></output>
+        <span class="m">x₀</span><input type="range" id="kx" min="-2.5" max="2.5" step="0.05" value="1"><output id="ox"></output>
+      </div>
+      <div class="cap">Ink: y = c · xⁿ + k. Teal dashed: the same before the lift (k = 0). Ember: the tangent line at x₀. For a fractional n only inputs above 0 are drawn, as 8i allows; for a negative n, 0 is left out. Drag on the picture to move x₀.</div>
+    </div>
+    <div class="panel">
+      <div class="lbl">match a slope function</div><div class="chips" id="tch"></div>
+      <canvas id="cvB"></canvas>
+      <div class="cap">Ember: the slope function c · n · xⁿ⁻¹. The dot at x₀ has the tangent's slope for its height. Gold dashed: a target slope function; choose one, then find c and n whose slope function lies on it. That is the power rule run backwards. Note what k does to the ember curve: nothing.</div>
+      <div class="verdict" id="vd"></div>
+    </div>
+  </div>
+  <div class="eqbox" id="eq"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13h3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">(x^{3/2})′ at 4</span></span>Find it by fraction-power for slopes. <br>Name the inside and the outside of the chain.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13h4">
+  <h2 class="sthead"><span class="stno">13h4</span>First, make the power visible</h2>
+  <p class="stands">Stands on 13h3 and 8i (whole and fraction exponents).</p>
+  <p data-pid="c4837a"><b>The rule fires only on the shape c · xⁿ.</b> Roots and fractions hide the power, so the first move is always to rewrite, with 8i's whole-exponent and fraction-exponent and 5g's fractions-of-rationals.</p>
+  <pre class="lines" data-k="ember" data-label="this step: rewriting into powers">
+\sqrt{x} = x^{1/2},\quad \dfrac{1}{x^3} = x^{-3} @@ 8i's lines: a square root is the power ½; one over a power is the negative power
+\sqrt[3]{x^2} = x^{2/3},\quad \dfrac{1}{\sqrt{x}} = x^{-1/2} @@ the root's order goes on the bottom of the fraction, the power on top (x > 0)
+x\sqrt{x} = x^1 \cdot x^{1/2} = \htmlClass{new}{x^{3/2}} @@ fraction-exponent: same base, the powers add
+\dfrac{5}{2x^4} = \tfrac52\, x^{-4} @@ the 2 is under the bar but not under the power: (5/2) · (1/x⁴)
+\dfrac{5}{(2x)^4} = \dfrac{5}{16x^4} = \tfrac{5}{16}\, x^{-4} @@ power-of-a-product: here the 2 is under the power and is raised with it
+  </pre>
+  <p data-pid="004942">Brackets decide. The tempting illegal move here is to take the slope of a bottom where it stands: “the slope of 1/x³ is 1/(3x²)”. That is no rule. Rewrite, x⁻³, and the slope is −3x⁻⁴ = −3/x⁴. A sign check catches the slip. The chord of 1/x³ through 1 and 2 has slope (⅛ − 1)/1 = −⅞, so the graph is not climbing there, and 1/(3x²) is positive.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · make it visible · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13h4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">3/x^2,  ∛x,  1/√x</span></span>Write each as a constant times a power of x. <br>Find each slope at 1.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13h5">
+  <h2 class="sthead"><span class="stno">13h5</span>Constants ride, added constants leave</h2>
+  <p class="stands">Stands on 13h4 and 13d (constant-factor, lifting).</p>
+  <p data-pid="2238e2">13d's constant-factor for slopes says a constant factor comes out: (cf)′ = cf′, because c multiplies every chord slope. Lifting says an added constant changes no slope: (f + k)′ = f′, because k is in the old value and the new, and leaves in every subtraction. <b>A constant factor rides along, and an added constant leaves.</b></p>
+  <p data-pid="0aa68d">Three slips live here. A constant that looks as if it changes: (√2)³ is one real, 2√2 ≈ 2.83, so its slope is 0, not 3(√2)² = 6. Ask of every letter whether it changes when x does. A constant inside the power: (3x)² is 9x², with slope 18x. Writing 2 · 3x = 6x lets the 3 ride as if it were outside. Rewrite first; 13j says what a multiple inside does in general. And a letter in the high place: 2ˣ is not a power of x, since its base stays put and its power moves. The power rule needs the opposite. 8i gave 2ˣ a value only at fractions x, and its slope waits for rung 17.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13h5.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">y = 5x^3 + (√3)^4</span></span>Say which parts change when x does. <br>Find y′ at 2.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13h6">
+  <h2 class="sthead"><span class="stno">13h6</span>Sums term by term, and only sums</h2>
+  <p class="stands">Stands on 13h5 and 13d (slopes-add).</p>
+  <p data-pid="a184ca">Slopes-add says slopes add, so a sum or difference goes one term at a time. With constant-factor for slopes and the power rule, every polynomial falls in one pass, which is 13d's polynomial-slope, and so does every sum of powers.</p>
+  <pre class="lines" data-k="ember" data-label="this step: term by term">
+y = 4x^3 - 5x^2 + 3x - 7 @@ four terms, each a constant times a power
+y' = 4 \cdot \htmlClass{new}{3x^2} - 5 \cdot \htmlClass{new}{2x} + 3 \cdot \htmlClass{new}{1} - \htmlClass{new}{0} @@ power for slopes on each power; constant-factor for slopes; lifting for the 7; slopes-add
+= 12x^2 - 10x + 3 @@ regroup for times on ℝ
+y'(1) = 12 - 10 + 3 = \htmlClass{keep}{5} @@ then substitute: the slope first, the input second
+y = 3\sqrt{x} - \dfrac{2}{x} + \sqrt[3]{x^2} = 3x^{1/2} - 2x^{-1} + x^{2/3} @@ rewrite into powers (x > 0)
+y' = \tfrac32 x^{-1/2} + 2x^{-2} + \tfrac23 x^{-1/3} @@ fraction-power for slopes, negative-powers, constant-factor for slopes, slopes-add
+y'(1) = \tfrac32 + 2 + \tfrac23 = \htmlClass{keep}{\tfrac{25}{6}} @@ every power of 1 is 1
+  </pre>
+  <p data-pid="b2eba0">Always take the slope first and put in the input second. Put x = 1 in first and you have the constant 4 − 5 + 3 − 7 = −5, whose slope is 0.</p>
+  <p data-pid="70d31c"><b>Term by term works for sums and nothing else.</b> A product or a quotient is not taken factor by factor, and that is the commonest slip of all. For (x² + 1)/x, “slope of the top over slope of the bottom” gives 2x/1. But no quotient rule is needed: 5g's fractions-of-rationals iii, read backwards, splits a fraction over one bottom into a sum.</p>
+  <pre class="lines" data-k="ember" data-label="this step: make it a sum first">
+y = \dfrac{x^2 + 1}{x} \quad (x \ne 0) @@ a quotient: no term-by-term rule
+= \dfrac{x^2}{x} + \dfrac{1}{x} @@ fractions-of-rationals iii backwards: a sum over one bottom splits
+= \htmlClass{new}{x + x^{-1}} @@ cancel; rewrite into powers
+y' = 1 - x^{-2} = 1 - \dfrac{1}{x^2} @@ term by term: slope-of-a-line, negative-powers, slopes-add. At 2: ¾, not 2x = 4
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · term by term · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13h6.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">y = (x^3 + 2)/x</span></span>Split it into a sum first. <br>Find its slope at 1.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13h7">
+  <h2 class="sthead"><span class="stno">13h7</span>Letters for constants</h2>
+  <p class="stands">Stands on 13h6 and 8i (completing the sameness).</p>
+  <p data-pid="edeee4">The rules do not care whether a constant is a numeral or a letter, so long as it does not change when x does. That lets one column work for a whole family at once.</p>
+  <pre class="lines" data-k="ember" data-label="this step: every quadratic at once">
+y = tx^2 + bx + c \quad (t \ne 0) @@ t, b, c reals kept fixed
+y' = \htmlClass{new}{2tx + b} @@ a rides on 2x, b rides on 1, c leaves (constant-factor for slopes, lifting, slopes-add)
+2tx + b = 0 \;\Leftrightarrow\; x = -\dfrac{b}{2t} @@ adding-keeps-answers, multiplying-keeps-answers: where the slope is 0
+  </pre>
+  <p data-pid="4c87c3">8i's completing the square found the same input another way: tx² + bx + c = t(x − s)² + k with s = −b/(2t). Here s is 8i's displacement, renamed, since h is a change on this rung. That is the input where the completed form takes its least value (t &gt; 0) or its greatest (t &lt; 0). Two roads, one input. Why a slope of 0 should mark a least or greatest value is rung 14's question; here the completed form already showed it. And c is missing from the slope: lifting the function never moves that input.</p>
+  <p data-pid="21f6c2">13d's displaced-slopes carries the displacement pattern through. (x − 3)² has slope 2(x − 3), (x − 3)³ has slope 3(x − 3)², and √(x − 3) has slope ½(x − 3)^(−1/2) for x &gt; 3. The x − 3 rides along unchanged. A multiple inside is another matter: (2x − 3)² = 4x² − 12x + 9 has slope 8x − 12 = 4(2x − 3), not 2(2x − 3). 13j says why.</p>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · letters · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13h7.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="x &gt; 0;"></span> <span data-tex-inline="\frac{4}{\sqrt{x}},"></span> <span data-tex-inline="\sqrt[3]{x} \cdot x^2,"></span> <span data-tex-inline="\frac{1}{3x^2},"></span> <span data-tex-inline="\frac{1}{(3x)^2},"></span> <span data-tex-inline="\sqrt{9x}"></span></span>Write each as a constant times a power of x.</li><li><span class="givens"><span data-tex-inline="x^7,"></span> <span data-tex-inline="x^{-4},"></span> <span data-tex-inline="x^{3/2},"></span> <span data-tex-inline="\frac{1}{\sqrt{x}},"></span> <span data-tex-inline="\sqrt[3]{x^2}"></span></span>Using fraction-power for slopes, find each slope at 4, giving the last two in root form.</li><li><span class="givens"><span data-tex-inline="p(x) = 5x^4 - 3x^2 + x - 8,"></span> <span data-tex-inline="f(x) = 2\sqrt{x} + 6/x"></span></span>Find p's slope at minus 1, and f's slope at 9.</li><li><span class="givens"><span data-tex-inline="f(x) = (x + 2)^{3/2}"></span></span>Find f's slope at 2 by displaced-slopes from the three-halves power. <br>Check it by writing f as a root times a first power and using product for slopes.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13h8">
+  <h2 class="sthead"><span class="stno">13h8</span>Illegal moves</h2>
+  <p class="stands">Stands on 13h1 to 13h7.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\Big(\dfrac{1}{x^3}\Big)' = \dfrac{1}{3x^2}\,? @@ rewrite x⁻³: the slope is −3x⁻⁴. At 1: −3, not ⅓
+\big((\sqrt2)^3\big)' = 3(\sqrt2)^2 = 6\,? @@ (√2)³ is one real; its slope is 0 (constant-has-slope-0)
+\big((3x)^2\big)' = 2 \cdot 3x\,? @@ (3x)² = 9x², slope 18x. The 3 is inside the power
+(2^x)' = x \cdot 2^{x-1}\,? @@ 2ˣ is not a power of x; its slope waits for rung 17
+\Big(\dfrac{x^2 + 1}{x}\Big)' = \dfrac{2x}{1}\,? @@ split first: 1 − 1/x². At 2: ¾, not 4
+y = 4x^3 - 5x^2 + 3x - 7,\ \ y(1) = -5,\ \ y'(1) = 0\,? @@ the input went in before the slope was taken. y′(1) = 5
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13h8.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="(x + 1)^2,"></span> <span data-tex-inline="2^x,"></span> <span data-tex-inline="\sqrt{4x^3},"></span> <span data-tex-inline="\frac{1}{x + 1},"></span> <span data-tex-inline="\frac{x^5}{x^2}"></span></span>Decide which can be written as one constant times one power of x, and for each that cannot, find what stops it.</li><li><span class="givens"><span data-tex-inline="f(x) = 2x^3,"></span> <span data-tex-inline="g(x) = (2x)^3"></span></span>Predict which has the greater slope at 1, then compute both.</li><li><span class="givens"><span data-tex-inline="f(x) = \frac{x^3 - 4x}{x},"></span> <span data-tex-inline="\text{slip: top and bottom separately}"></span> <span data-tex-inline="\text{gave } 3x^2 - 4"></span></span>Find the true slope by splitting first, and compare the two at 1.</li><li><span class="givens"><span data-tex-inline="x^{-1}"></span></span>Run the backward rule on it, and find where it breaks.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13h9">
+  <h2 class="sthead"><span class="stno">13h9</span>Running it backwards</h2>
+  <p class="stands">Stands on 13h1 to 13h7.</p>
+  <p data-pid="f39fa1">Undo the power rule: given the slope x^m, what had it? Forward, the power dropped by one and the old power came down in front. So go up by one and divide by the new power. x^(m+1)/(m + 1) has slope (m + 1)x^m/(m + 1) = x^m, by fraction-power for slopes and constant-factor for slopes. That is true for every fraction m other than −1, on x &gt; 0; for a whole m ≥ 0 it is true on every real. Any constant may be added, by lifting; whether those are all the answers is rung 14's question, as 13d said. Worked: slope 6x² + 2x comes from 2x³ + x²; slope √x from ⅔x^(3/2); slope 1/x² from −1/x.</p>
+  <p data-pid="85323a">One slope has no answer here. m = −1 asks you to divide by 0. And no power of x has slope x⁻¹. Suppose (xⁿ)′ = n x^(n−1) were x⁻¹ at every w &gt; 0. Then n x^(n−1) and x⁻¹ would agree at 1, so n = 1. And then the slope is 1, which is not 1/x at 2. Refuted. Rung 17 builds the function that fills the hole.</p>
+  <section class="slides" id="sl7"><div class="eyebrow">The slides · backwards · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13h9.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="x^{-3/2},"></span> <span data-tex-inline="2x^{1/3},"></span> <span data-tex-inline="\tfrac14 x^{-1}"></span></span>Write each with roots and bottoms, and no negative or fractional powers.</li><li><span class="givens"><span data-tex-inline="-3x^{-4},"></span> <span data-tex-inline="\frac{1}{2\sqrt{x}},"></span> <span data-tex-inline="\tfrac23 x^{-1/3},"></span> <span data-tex-inline="1"></span></span>Find the power of x, with factor 1, whose slope function is each of these.</li><li><span class="givens"><span data-tex-inline="\text{slope function: } 2 - \frac{3}{x^2}"></span></span>Rebuild a function with this slope, and check it forward.</li><li><span class="givens"><span data-tex-inline="x &gt; 0,"></span> <span data-tex-inline="\text{slope function } 3\sqrt{x} - \frac{2}{x^2},"></span> <span data-tex-inline="\text{value } 1 \text{ at } 1"></span></span>Find the function, among those lifting can build, one move per line.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">13h.4.1</span><span class="tagq">build</span>Build a function of your own for positive inputs, of three terms, one written with a root, one with a bottom and one a plain power, whose slope at 4 is exactly 1. <br>Check it by writing each term as a constant times a power of x first.</div>
+  <div class="chq"><span class="chid">13h.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="p = 0,"></span> <span data-tex-inline="x^0 \text{ on } (0, \infty)"></span></span>Find the slope fraction-power for slopes gives here, and check it another way.</div>
+  <div class="chq"><span class="chid">13h.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="f \text{ on } (0, \infty),"></span> <span data-tex-inline="f'(w) = n w^{n - 1} \text{ for every } w &gt; 0"></span></span>Prove or refute that f must be the nth power.</div>
+  <div class="chq"><span class="chid">13h.4.4</span><span class="tagq">seam</span>A book of 1656 reached its rules for fractional powers by checking a pattern on case after case and calling it induction. A rival objected that a pattern seen is not a pattern proved. A young reader of the book guessed his rule for (1 + x)^(p/q) the same way. <br>Is a rule that is true in every case you try a technique?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r13g.html">← 13g · the growing square</a><a href="r13i.html">13i · products and quotients →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>Thompson notes that a mere multiplication by a constant reappears as a mere multiplication after the slope is taken, and that a constant added on contributes nothing to the growth and drops out of the result.</p><cite>Thompson, Calculus Made Easy, 2nd ed. (1914), ch. V</cite></aside>
+  <p>In question 13h.4.4 the book of 1656 is John Wallis’s Arithmetica infinitorum; the rival is Pierre de Fermat; the young reader is Isaac Newton, and his rule is the binomial series.</p>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; const a=Math.abs(v); let s=d!=null?v.toFixed(d):(a>=100?v.toFixed(2):a>=1?v.toFixed(4):a>=0.0001?v.toFixed(5):v.toPrecision(3)); if(s.indexOf('.')>=0&&s.indexOf('e')<0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const NS=[{l:'−2',n:-2,t:'-2',m:'-3'},{l:'−1',n:-1,t:'-1',m:'-2'},{l:'⅓',n:1/3,t:'\\frac13',m:'-\\frac23'},{l:'½',n:0.5,t:'\\frac12',m:'-\\frac12'},{l:'⅔',n:2/3,t:'\\frac23',m:'-\\frac13'},{l:'1',n:1,t:'1',m:'0'},{l:'3/2',n:1.5,t:'\\frac32',m:'\\frac12'},{l:'2',n:2,t:'2',m:'1'},{l:'3',n:3,t:'3',m:'2'}];
+const TG=[{l:'none'},{l:'6x²',c:2,n:3,f:x=>6*x*x},{l:'−1/x²',c:1,n:-1,f:x=>-1/(x*x)},{l:'1/√x',c:2,n:0.5,f:x=>x>0?1/Math.sqrt(x):NaN},{l:'3',c:3,n:1,f:x=>3},{l:'−4/x³',c:2,n:-2,f:x=>-4/(x*x*x)},{l:'x^(−2/3)',c:3,n:1/3,f:x=>x>0?Math.pow(x,-2/3):NaN}];
+let ni=7, C=1, Kl=0, X0=1, ti=0;
+const kc=$('kc'),kk=$('kk'),kx=$('kx'),cvA=$('cvA'),cvB=$('cvB');
+const frac=n=>!Number.isInteger(n);
+const dom=(n,x)=>frac(n)?x>0:(n<0?x!==0:true);
+const pw=(n,x)=>dom(n,x)?Math.pow(x,n):NaN;
+function x0(){ const n=NS[ni].n; let x=X0; if(frac(n)&&x<=0.1) x=0.1; if(n<0&&Math.abs(x)<0.1) x=x<0?-0.1:0.1; return x; }
+const f=x=>C*pw(NS[ni].n,x)+Kl, df=x=>{ const n=NS[ni].n; return dom(n,x)?C*n*Math.pow(x,n-1):NaN; };
+const PA=plane(cvA,{x:[-2.6,2.6],y:[-4,6],grid:1,aspect:0.85,draw:P=>{ P.axes(); const n=NS[ni].n, x=x0();
+  P.fn(t=>C*pw(n,t),'--teal',1.6,[5,4]); P.fn(f,'--ink',2.4);
+  const m=df(x), y=f(x); if(isFinite(m)) P.line(-2.6,y+m*(-2.6-x),2.6,y+m*(2.6-x),'--ember',2); P.dot(x,y,'--ember',5.5); }});
+Object.defineProperty(PA.o,'aspect',{get:()=>cvA.clientWidth>560?0.8:0.9});
+const PB=plane(cvB,{x:[-2.6,2.6],y:[-6,8],grid:1,aspect:0.85,draw:P=>{ P.axes(); const T=TG[ti];
+  if(T.f) P.fn(T.f,'--gold',2.4,[6,5]); P.fn(df,'--ember',2.4); const x=x0(); P.dot(x,df(x),'--ember',5.5); }});
+Object.defineProperty(PB.o,'aspect',{get:()=>cvB.clientWidth>560?0.8:0.9});
+function read(){ const n=NS[ni], x=x0(), m=df(x), y=f(x);
+  $('oc').textContent=fm(C,2); $('ok').textContent=fm(Kl,2); $('ox').textContent=fm(x,2);
+  const nm1=n.n-1, cs=C*n.n, cst=fm(cs);
+  const ch=0.001, chs=(f(x+ch)-f(x))/ch;
+  tex($('eq'),R`\begin{gathered}y = ${fm(C)}\,x^{${n.t}} ${Kl<0?'-':'+'} ${fm(Math.abs(Kl))}\qquad y' = ${cst}\,x^{${n.m}}\\ \text{at } x_0 = ${fm(x,2)}:\ \ y = ${fm(y)},\ \ y' = \htmlClass{new}{${fm(m)}}\\ \text{tangent line: } y - ${fm(y)} = ${fm(m)}\,(x - ${fm(x,2)})\\ \text{one chord slope, } h = 0.001:\ \ ${fm(chs)}\end{gathered}`,true);
+  const vd=$('vd'), T=TG[ti];
+  if(!T.f){ vd.className='verdict'; vd.textContent='Choose a target slope function above, then move c and n until the ember curve lies on the gold one. k never matters.'; return; }
+  const hit=Math.abs(C-T.c)<1e-9&&Math.abs(n.n-T.n)<1e-9;
+  vd.className='verdict '+(hit?'win':'lose');
+  vd.textContent=hit?'Matched: c · n · xⁿ⁻¹ = '+T.l+' with c = '+fm(C)+', n = '+n.l+'. Any k gives the same slope function (lifting): the backward rule fixes the function only up to a lift.':'Not yet: your slope function is '+cst+' · x^('+n.m.replace(/\\frac(\d)(\d)/,'$1/$2')+'). The target is '+T.l+'. Try the power one higher than the target\'s, then fix c.'; }
+function all(){ PA.redraw(); PB.redraw(); read(); }
+function chips(id,list,cur,set){ const ch=$(id); list.forEach((q,i)=>{ const b=document.createElement('button'); b.textContent=q.l; if(i===cur) b.className='on'; b.onclick=()=>{ set(i); [...ch.children].forEach(z=>z.classList.toggle('on',z===b)); all(); }; ch.appendChild(b); }); }
+chips('nch',NS,ni,i=>ni=i); chips('tch',TG,ti,i=>ti=i);
+kc.oninput=()=>{ C=+kc.value; all(); }; kk.oninput=()=>{ Kl=+kk.value; all(); }; kx.oninput=()=>{ X0=+kx.value; all(); };
+let drag=false; [cvA,cvB].forEach(cv=>{ cv.addEventListener('pointerdown',e=>{ drag=cv; cv.setPointerCapture&&cv.setPointerCapture(e.pointerId); mv(e); }); cv.addEventListener('pointermove',mv); ['pointerup','pointercancel'].forEach(t=>cv.addEventListener(t,()=>drag=false)); });
+function mv(e){ if(!drag) return; const P=drag===cvA?PA:PB; const q=P.point(e); X0=Math.max(-2.5,Math.min(2.5,Math.round(q.x*20)/20)); kx.value=X0; all(); }
+window.__pic={set:(n,c,k,x,t)=>{ if(n!=null){ ni=NS.findIndex(q=>q.l===n); [...$('nch').children].forEach((b,i)=>b.classList.toggle('on',i===ni)); } if(c!=null){ C=c; kc.value=c; } if(k!=null){ Kl=k; kk.value=k; } if(x!=null){ X0=x; kx.value=x; } if(t!=null){ ti=t; [...$('tch').children].forEach((b,i)=>b.classList.toggle('on',i===ti)); } all(); return {x:x0(),y:f(x0()),m:df(x0()),txt:$('vd').textContent}; }};
+all();
+
+/* ---------- slides ---------- */
+const N='\\htmlClass{new}', K='\\htmlClass{keep}';
+stepper('#sl1',[
+  {k:'ember',kl:'what is proved',t:R`(x^n)' = n\,x^{n-1}:\ \ n \ge 1,\ \ n = 0,\ \ n \le -1,\ \ n = \tfrac12`,n:`power for slopes, constant-has-slope-0, negative-powers, slope-of-√. The other fractions are this step's.`}
+],{title:'The slides · what is proved · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'difference-of-powers',t:R`u^q - v^q = (u - v)\,${N}{(u^{q-1} + u^{q-2}v + \cdots + v^{q-1})}`,n:`By induction: add and take away u · v^q. q = 2 is difference-of-squares.`},
+  {k:'ember',kl:'root-slope · 1 of 4',t:R`u = \sqrt[q]{w + h},\ \ v = \sqrt[q]{w},\ \ u^q - v^q = h`,n:`w > 0 and |h| < w. u ≠ v when h ≠ 0.`},
+  {k:'ember',kl:'root-slope · 2 of 4',t:R`\dfrac{u - v}{h} = \dfrac{u - v}{u^q - v^q} = ${N}{\dfrac{1}{S}}`,n:`difference-of-powers, then cancel u − v. S is the long partner, a sum of positive reals.`},
+  {k:'ember',kl:'root-slope · 3 of 4',t:R`|u - v| \le \dfrac{|h|}{v^{q-1}} \;\Rightarrow\; u \to v`,n:`root-continuity: S is at least its last term. squeezed-by-distance (10d).`},
+  {k:'ember',kl:'root-slope · 4 of 4',t:R`\dfrac1S \to \dfrac{1}{q v^{q-1}} = ${N}{\tfrac1q\,a^{\frac1q - 1}}`,n:`limit-passes-inside with a polynomial in u; reciprocal-limit; fraction-exponent. At 8 for q = 3: 1/12. ∎`}
+],{title:'The slides · root-slope · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'fraction-power for slopes',t:R`x^{p/q} = (\sqrt[q]x)^p \;\Rightarrow\; ${N}{\tfrac{p}{q}\,a^{\frac pq - 1}}`,n:`8i's line makes it a chain. Outside r^p (power for slopes, negative-powers or constant-has-slope-0), inside root-slope. chain for slopes, then fraction-exponent. ∎`},
+  {k:'ember',kl:'worked',t:R`(x^{2/3})'(8) = \tfrac23 \cdot 8^{-1/3} = ${N}{\tfrac13}`,n:`8^(1/3) = 2. Also x^(3/2) at 4: 3; x^(−1/2) at 4: −1/16.`}
+],{title:'The slides · every fraction · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'make it visible',t:R`\dfrac{5}{2x^4} = \tfrac52 x^{-4}\qquad \dfrac{5}{(2x)^4} = \tfrac5{16}x^{-4}`,n:`Brackets decide what is under the power (power-of-a-product).`},
+  {k:'ember',kl:'1/x³',t:R`\big(x^{-3}\big)' = ${N}{-3x^{-4}}`,n:`Not 1/(3x²): at 1 the chord to 2 already falls, −⅞.`}
+],{title:'The slides · make it visible · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'term by term',t:R`(4x^3 - 5x^2 + 3x - 7)' = 12x^2 - 10x + 3`,n:`power for slopes, constant-factor for slopes, lifting, slopes-add. At 1: 5. Slope first, input second.`},
+  {k:'ember',kl:'powers mixed',t:R`\big(3x^{1/2} - 2x^{-1} + x^{2/3}\big)'(1) = ${N}{\tfrac{25}{6}}`,n:`3/2 + 2 + 2/3, by fraction-power for slopes, negative-powers, constant-factor for slopes, slopes-add.`},
+  {k:'ember',kl:'split a quotient',t:R`\dfrac{x^2 + 1}{x} = x + x^{-1} \;\Rightarrow\; 1 - \dfrac{1}{x^2}`,n:`fractions-of-rationals iii read backwards. At 2: ¾. Top-over-bottom slopes would say 4.`}
+],{title:'The slides · term by term · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'letters',t:R`(tx^2 + bx + c)' = 2tx + b = 0 \Leftrightarrow x = -\dfrac{b}{2t}`,n:`The input of 8i's completed form. c leaves.`},
+  {k:'ember',kl:'displaced',t:R`\big((x - 3)^3\big)' = 3(x - 3)^2`,n:`displaced-slopes: the displacement rides along. (2x − 3)² is not a displacement of x: its slope is 4(2x − 3).`}
+],{title:'The slides · letters · ← → keys work'});
+stepper('#sl7',[
+  {k:'teal',kl:'backwards · 1 of 2',t:R`x^m \;\Leftarrow\; \dfrac{x^{m+1}}{m + 1}`,n:`Up one, divide by the new power. Check forward with fraction-power for slopes and constant-factor for slopes. Plus any lift (lifting).`},
+  {k:'teal',kl:'backwards · 2 of 2',t:R`m = -1:\ \ \dfrac{x^0}{0}\ ?`,n:`No power of x has slope 1/x: it would need n = 1 at the input 1, and then the slope is 1. Rung 17 fills the hole.`}
+],{title:'The slides · backwards · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

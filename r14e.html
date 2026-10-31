@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>14e · Same slopes, same shape lifted</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:3.5em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r14d.html">← 14d zero slope means flat</a><a href="r14concl.html">next: 14·∎ conclusion →</a></p>
+  <div class="tags"><span class="tag proof">14e · proof</span></div>
+  <h1>Same slopes, same shape lifted</h1>
+  <p>13d's lifting said that lifting a function by a constant changes no slope: a function and the same function lifted have the same slope at every input. Three steps of rung 13 then found functions with a given slope: the square for twice the input, the cube for three times the square. Each time they said that adding a constant gives another, and asked whether those are all. Run lifting backwards. If two functions have the same slope at every input of an interval, their difference has slope 0 there, and 14d's zero-slope-is-constant makes the difference a constant. So the answer to “what has this slope?” is one function and every lift of it, and nothing else, on an interval. That one sentence settles which motion a falling or braking body can have, and which curve a decay can follow.</p>
+  <p class="gesture">Two functions with the same slope on an interval have a difference whose slope is 0 there. By zero-slope-is-constant the difference is a constant, so one is the other lifted.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r14d.html">14d</a> (zero-slope-is-constant), <a href="r13d.html">13d</a> (lifting, slopes-add, constant-factor for slopes, power for slopes, polynomial-slope, f″), <a href="r13h.html">13h</a> (fraction-power for slopes), <a href="r13f.html">13f</a> (quotient for slopes), <a href="r14c.html">14c</a> (velocity). <a href="r14g.html">14g</a> and <a href="r14phys.html">14·phys</a> use it; rung 15 builds a function with any given continuous slope, as an area.</p></div>
+</header>
+
+<section class="class step" data-step="14e1">
+  <h2 class="sthead"><span class="stno">14e1</span>The technique</h2>
+  <p class="stands">Stands on 14d (zero-slope-is-constant) and 13d (slopes-add).</p>
+  <p data-pid="569b12">Same-slopes technique: <b>if f and g have slopes at every input of an interval I, and f′(x) = g′(x) for every x ∈ I, then for some real C, f(x) = g(x) + C for every x ∈ I.</b></p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the same-slopes technique">
+d(x) = f(x) - g(x) @@ 10c's difference of functions
+d'(x) = f'(x) - g'(x) = 0 \text{ for } x \in I @@ slopes-add and constant-factor for slopes (13d), with the constant −1
+\htmlClass{new}{d \text{ is constant on } I} @@ <span class="hl-new">zero-slope-is-constant (14d)</span>: the domain is an interval
+\text{call it } C:\ f(x) = g(x) + C \quad \blacksquare @@ C = f(x₀) − g(x₀) for any one x₀ ∈ I
+  </pre>
+  <p data-pid="5cfd48">Every hypothesis is spent in zero-slope-is-constant. <b>So the whole of rung 14 so far is under this one line.</b> Zero-slope-is-constant needs average-slope, average-slope needs level-ends, level-ends needs flat-top and highest-and-lowest, and highest-and-lowest needs no-holes.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · same-slopes · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · left: the family F + C, one curve picked · right: the shared slope function</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="chips" id="fch"></div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">C</span><input type="range" id="kc" min="-3" max="3" step="0.1" value="0"><output id="oc"></output></div>
+      <div class="kn" id="kn2"><span class="m">C on the left</span><input type="range" id="kd" min="-3" max="3" step="0.1" value="0"><output id="od"></output></div>
+      <div class="kn"><span class="m">x</span><input type="range" id="kx" min="0" max="1000" step="1" value="700"><output id="ox"></output></div>
+      <div class="cap">Muted: the family, one lift apart. Ink: the curve picked by C. Plum: the tangent lines at the same x on every curve, all with one slope. The gold dot is a fact at one input that picks the curve.</div>
+      <div class="verdict" id="vdF"></div>
+    </div>
+    <div class="panel">
+      <div class="lbl">the slope every curve of the family has</div>
+      <canvas id="cvS"></canvas>
+      <div class="cap">Plum: f, the slope function they share. Gold dot: its value at x, the slope of every plum line on the left.</div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">14e1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = x^2 + 3,  g(x) = x^2 − 1</span></span>Check that f and g have the same slope everywhere. <br>Find the constant C with f = g + C.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="14e2">
+  <h2 class="sthead"><span class="stno">14e2</span>Antiderivatives</h2>
+  <p class="stands">Stands on 14e1 and 13d (power for slopes).</p>
+  <p class="eqline" data-pid="406e2b">From here on, F is an antiderivative of f on an interval I when F has a slope at every input of I and F′(x) = f(x) for every x ∈ I. Its accepted name is antiderivative; some books say primitive. The rule that names a constant for the family is written “+ C”. The mark is shorthand for the whole family: F + C names one member for each real C.</p>
+  <p data-pid="d038b2">All-antiderivatives technique: <b>if F is an antiderivative of f on an interval I, then the antiderivatives of f on I are exactly the functions F + C, one for each real C.</b> Each F + C is one, by lifting. Any antiderivative G has G′ = f = F′ on I, so G = F + C by same-slopes. ∎</p>
+  <p data-pid="bdb336">So 13d's, 13g's and 13h's question has its answer. Reading the power rule backwards gives the antiderivatives of a power:</p>
+  <pre class="lines" data-k="teal" data-label="from 13d and 13h: the power rule, backwards">
+\left(\tfrac{x^{n+1}}{n + 1}\right)' = x^n \text{ for every whole } n \ge 0 @@ power for slopes (13d) and constant-factor for slopes
+x^n:\ \ \htmlClass{new}{\tfrac{x^{n+1}}{n + 1} + C} \text{ on } \mathbb{R} @@ all-antiderivatives: all of them
+x^{-3}:\ \ -\tfrac{1}{2x^2} + C \text{ on } (0, \infty), \text{ and on } (-\infty, 0) @@ quotient for slopes (13f) for the slope of 1/x²; one interval at a time
+x^{1/2}:\ \ \tfrac23 x^{3/2} + C \text{ on } (0, \infty) @@ fraction-power for slopes (13h): (x^(3/2))′ = (3/2)x^(1/2)
+6x^2 - 4x + 5:\ \ 2x^3 - 2x^2 + 5x + C @@ slopes-add and constant-factor for slopes run backwards, term by term; check by polynomial-slope
+  </pre>
+  <p data-pid="7861cd">The rule xⁿ⁺¹/(n + 1) breaks at one power. For n = −1 it asks to divide by 0. Nothing on this ladder so far has slope 1/x, and no power of x does.</p>
+  <p data-pid="b46649">The interval matters, as it did in zero-slope-is-constant. Take the domain ℝ without 0, and the function equal to −1/x + 1 for x &gt; 0 and −1/x − 2 for x &lt; 0. It has slope 1/x² at every input, the same as −1/x. It differs from −1/x by 1 on one side and by −2 on the other. There, the family needs one constant for each interval of the domain.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · antiderivatives · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14e2.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = 8x^3 - 6x + 1 \text{ on } \mathbb{R}"></span></span>Find every antiderivative of f.</li><li><span class="givens"><span data-tex-inline="F'(x) = 3x^2 + 2,"></span> <span data-tex-inline="F(1) = 4"></span></span>Find F.</li><li><span class="givens"><span data-tex-inline="f(x) = 1/x^3 \text{ on } (0, \infty)"></span></span>Find every antiderivative of f.</li><li><span class="givens"><span data-tex-inline="y(0) = 67\ \text{m},"></span> <span data-tex-inline="\text{velocity at } 0: \ 0,"></span> <span data-tex-inline="\text{acceleration: } -9.8\ \text{m/s}^2"></span></span>A stone is let go from rest above the water under the Golden Gate Bridge. Find its height y at every instant until it lands, and prove that no other height fits.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="14e3">
+  <h2 class="sthead"><span class="stno">14e3</span>One motion, not many</h2>
+  <p class="stands">Stands on 14e2 and 14c (velocity).</p>
+  <p data-pid="70ac86">Take as given a body falling near the ground with a constant acceleration −g. Its velocity is the slope of its height, y′ (14c), and its acceleration is the slope of its velocity, y″. Is the height ½gt² below the start the only one that fits? Here is the answer, with the slopes run twice.</p>
+  <pre class="lines" data-k="teal" data-label="a falling body: the only height that fits">
+y''(t) = -g \text{ for every } t,\ \ y(0) = y_0,\ \ y'(0) = v_0 @@ the acceleration, the start, the starting velocity
+y'(t) = -gt + C_1 @@ all-antiderivatives: y′ is an antiderivative of the constant −g
+C_1 = v_0 @@ at t = 0
+y(t) = -\tfrac12 g t^2 + v_0 t + C_2 @@ all-antiderivatives again: an antiderivative of −gt + v₀
+\htmlClass{new}{y(t) = y_0 + v_0 t - \tfrac12 g t^2} @@ C₂ = y₀ at t = 0: one motion, and no other
+  </pre>
+  <p data-pid="0ae7d5"><b>Two facts at one instant, the position and the velocity, pick one function out of the family.</b> The acceleration fixes the shape, and each constant is a single lift. The same lines make a braking car's x = 25t − 2.5t², from x(0) = 0, v(0) = 25 m/s and an acceleration of −5 m/s², the only motion that fits. 13·phys held both in trust, and those flags are closed here.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · one motion · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14e3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">y″ = −10,  y(0) = 20,  y′(0) = 5</span></span>Find y′, then y, naming each constant as you fix it. <br>Find the height at t = 1.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="14e4">
+  <h2 class="sthead"><span class="stno">14e4</span>Decay curves, compared</h2>
+  <p class="stands">Stands on 14e3 and 13f (quotient for slopes).</p>
+  <p data-pid="a8d923">Take as given a chemical that breaks down at a rate proportional to how much is left. Its concentration y(t), in mol/L, has slope y′ = −ky for a constant k &gt; 0. Compare a curve from 0.0200 mol/L with one from 0.0100 mol/L. What does that rate alone say about them? Same-slopes does not apply directly, because the two curves have different slopes. But their ratio has slope 0.</p>
+  <pre class="lines" data-k="ember" data-label="this step: two solutions of y′ = −ky">
+y' = -ky,\ \ z' = -kz \text{ on an interval},\ \ z \ne 0 \text{ there} @@ two concentrations under one rate law
+\left(\tfrac{y}{z}\right)' = \tfrac{y'z - yz'}{z^2} @@ quotient for slopes (13f)
+= \tfrac{(-ky)z - y(-kz)}{z^2} = 0 @@ the law, twice; the two terms cancel
+\htmlClass{new}{y = Cz},\ \ C = \tfrac{y(0)}{z(0)} @@ zero-slope-is-constant: the ratio is constant
+  </pre>
+  <p data-pid="4029f6"><b>So a curve from twice the start is twice the curve, at every instant: it halves in the same time.</b> Which function decays this way has to wait for rung 17. But whatever it is, every first-order curve with this k is a multiple of it.</p>
+  <p data-pid="e0be82">One of the inventors of the calculus, in a letter meant for the other, hid his method in an anagram of letters. He said only that it found the rates of any quantities joined by an equation, and the reverse: given the rates, the quantities.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · decay curves · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14e4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">y′ = −ky,  z′ = −kz,  y(0) = 6,  z(0) = 2</span></span>Show that y/z has slope 0. <br>Find y(t)/z(t) at every t.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="14e5">
+  <h2 class="sthead"><span class="stno">14e5</span>Illegal moves</h2>
+  <p class="stands">Stands on 14e1 to 14e4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\text{the antiderivative of } 2x \text{ is } x^2\,? @@ one of them: x² + C, for every C
+\tfrac{x^0}{0} \text{ has slope } x^{-1}\,? @@ the rule breaks at n = −1
+f' = g' \text{ on the domain, so } f - g \text{ is one constant}\,? @@ only on an interval: −1/x and its split lift differ by 1 and by −2
+f'' = g'', \text{ so } f - g \text{ is constant}\,? @@ x and 0: f − g is linear, mx + b
+\text{one fact pins a motion}\,? @@ the start alone leaves the velocity free: y₀ + v₀t − ½gt² for every v₀
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14e5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = x^3,"></span> <span data-tex-inline="g(x) = x^3 + |x|/x"></span></span>Show that f and g have the same slope at every input where both have one.<br>Decide whether their difference is constant, and whether that goes against same-slopes.</li><li><span class="givens"><span data-tex-inline="f(x) = |x|,\ g(x) = x,"></span> <span data-tex-inline="f' = g' \text{ on } (0, \infty)"></span></span>Decide whether f is g plus a constant on the positive reals, and on the whole real line.</li><li><span class="givens"><span data-tex-inline="f(x) = x^{-1}"></span></span>Run the power rule backwards on f, and find what goes wrong.</li><li><span class="givens"><span data-tex-inline="\text{Claim: if } f'' = g''"></span> <span data-tex-inline="\text{on an interval, then}"></span> <span data-tex-inline="f - g \text{ is constant.}"></span></span>Refute the claim, and fix it.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="14e6">
+  <h2 class="sthead"><span class="stno">14e6</span>Running it backwards</h2>
+  <p class="stands">Stands on 14e1 to 14e4.</p>
+  <p data-pid="d86888">Handed a slope and asked for the function, run the slope rules backwards term by term, check by taking the slope, and add + C. Handed a value at one input, solve for C. Handed a second slope, do it twice and expect two constants. Handed a claim that two functions with the same slopes differ by a constant, check that the domain is an interval. Handed a formula that relates a function to its own slope, look for a ratio or a difference whose slope is 0. Found upward; written downward.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14e6.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="F(x) = x^4 - 2x + 7,"></span> <span data-tex-inline="F' = f"></span></span>Find f, and two other antiderivatives of it.</li><li><span class="givens"><span data-tex-inline="F' = G' \text{ on } \mathbb{R},"></span> <span data-tex-inline="F(0) = 3,\ G(0) = -1,"></span> <span data-tex-inline="s = 5,\ F(s) = 40"></span></span>Find the value of G at s.</li><li><span class="givens"><span data-tex-inline="y' = -2y \text{ and } z' = -2z \text{ on } \mathbb{R},"></span> <span data-tex-inline="z \text{ is never } 0,"></span> <span data-tex-inline="y(0) = 6,\ z(0) = 2,"></span> <span data-tex-inline="s = 1,\ z(s) = 0.27"></span></span>Find the value of y at s.</li><li><span class="givens"><span data-tex-inline="v(t) = 4 - 2t\ \text{m/s},"></span> <span data-tex-inline="x(3) = 10\ \text{m}"></span></span>Find the cart's position x at every instant, and where it is at the start.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">14e.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="x^3 \text{ and } x^3 + |x|/x \text{ share their slopes.}"></span> <span data-tex-inline="D: \text{ every real but } 0."></span> <span data-tex-inline="f' = g' = 1/x^2 \text{ on } D,"></span> <span data-tex-inline="f - g \text{ takes the values } 1 \text{ and } 5."></span> <span data-tex-inline="h' = 1/x^2 \text{ on } D,"></span> <span data-tex-inline="h(1) = 0,\ h(-1) = 3."></span></span>Make an f and a g of your own that fit.<br>Find h, and prove there is no other.</div>
+  <div class="chq"><span class="chid">14e.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="f = 0"></span></span>Find every antiderivative of f on an interval, and on a domain made of three intervals.</div>
+  <div class="chq"><span class="chid">14e.4.3</span><span class="tagq">loop</span><span class="givens"><span data-tex-inline="\text{Wanted: } L' = 1/x \text{ on } (0, \infty)"></span></span>Decide, as far as you can take it, whether any L fits. If one does, choose its value at one, and prove from its slope whether it is increasing.</div>
+  <div class="chq"><span class="chid">14e.4.4</span><span class="tagq">seam</span>In 1814 a mathematician imagined an intelligence that knew at one instant every force acting in nature and the place of every thing in it. For such a mind nothing would be uncertain, and the future would be as present as the past. This step proved that an acceleration known at every instant, with one position and one velocity, fixes the motion. <br>Is that what he claimed? <br>What did he assume that this step does not give?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r14d.html">← 14d · zero slope means flat</a><a href="r14concl.html">14·∎ · conclusion →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>Newton, in a letter meant for Leibniz, hid his method in an anagram of letters and said only that it found the rates of any quantities joined by an equation, and the reverse: given the rates, the quantities.</p><cite>Newton, second letter for Leibniz, through Oldenburg (October 1676); paraphrase</cite></aside>
+  <p>The intelligence of the closer is Pierre-Simon Laplace’s, from his Philosophical Essay on Probabilities (1814). The falling height ½gt² is Galileo’s.</p>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?3:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=v=>fm(v).replace('-','−');
+const FN={
+  sq:{lab:'slope 2x',ftex:R`2x`,Ftex:R`x^2`,lo:-2,hi:2,F:x=>x*x,f:x=>2*x,y:[-3.5,7.5]},
+  cu:{lab:'slope 3x² − 3',ftex:R`3x^2 - 3`,Ftex:R`x^3 - 3x`,lo:-2.2,hi:2.2,F:x=>x*x*x-3*x,f:x=>3*x*x-3,y:[-6,6]},
+  rc:{lab:'slope 1/x², on two intervals',ftex:R`\tfrac{1}{x^2}`,Ftex:R`-\tfrac1x`,lo:-3,hi:3,F:x=>-1/x,f:x=>1/(x*x),y:[-6,6],split:0}
+};
+let key='sq',F=FN.sq;
+const cvF=$('cvF'),cvS=$('cvS'),kc=$('kc'),kd=$('kd'),kx=$('kx');
+const X=()=>{ let x=F.lo+(F.hi-F.lo)*(+kx.value)/1000; x=Math.round(x*20)/20; if(F.split!==undefined&&Math.abs(x)<0.15) x=x<0?-0.15:0.15; return x; };
+const Cof=x=>(F.split!==undefined&&x<F.split)?+kd.value:+kc.value;
+const G=x=>F.F(x)+Cof(x);
+const PF=plane(cvF,{x:[-2,2],y:[-3,7],grid:1,aspect:0.8,draw:P=>drawF(P)});
+const PS=plane(cvS,{x:[-2,2],y:[-3,7],grid:1,aspect:0.8,draw:P=>drawS(P)});
+[[PF,cvF],[PS,cvS]].forEach(([P,cv])=>Object.defineProperty(P.o,'aspect',{get:()=>cv.clientWidth>480?0.75:0.9}));
+function curve(P,fn,colr,w,lo,hi){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.beginPath(); let pen=false; for(let k=0;k<=800;k++){ const t=lo+(hi-lo)*k/800; const v=(F.split!==undefined&&Math.abs(t-F.split)<1e-3)?NaN:fn(t); if(!isFinite(v)||Math.abs(v)>60){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); }
+function drawF(P){ P.o.x=[F.lo,F.hi]; P.o.y=F.y; P.o.grid=1; P.axes();
+  for(let C=-3;C<=3;C++) curve(P,x=>F.F(x)+C,'--grid',1.2,F.lo,F.hi);
+  curve(P,G,'--ink',2.8,F.lo,F.hi);
+  const x=X(), s=F.f(x), L=0.12*(F.hi-F.lo);
+  for(let C=-3;C<=3;C++){ const y=F.F(x)+C; if(y<F.y[0]||y>F.y[1]) continue; P.line(x-L,y-s*L,x+L,y+s*L,'--plum',1.6,[]); }
+  P.line(x-L,G(x)-s*L,x+L,G(x)+s*L,'--plum',2.6,[]); P.dot(x,G(x),'--gold',6); }
+function drawS(P){ let lo=0,hi=0; for(let k=0;k<=400;k++){ const t=F.lo+(F.hi-F.lo)*k/400; if(F.split!==undefined&&Math.abs(t)<0.3) continue; const v=F.f(t); lo=Math.min(lo,v); hi=Math.max(hi,v); } hi=Math.min(hi,12); const pad=0.12*(hi-lo+1);
+  P.o.x=[F.lo,F.hi]; P.o.y=[lo-pad,hi+pad]; P.o.grid=(hi-lo)>6?2:1; P.axes(); curve(P,F.f,'--plum',2.6,F.lo,F.hi); const x=X(); P.dot(x,F.f(x),'--gold',6); }
+function read(){ const x=X(); $('ox').textContent=mm(x); $('oc').textContent=mm(+kc.value); $('od').textContent=mm(+kd.value); $('kn2').style.display=F.split!==undefined?'':'none';
+  const vd=$('vdF'); const s=F.f(x);
+  if(F.split!==undefined&&Math.abs(+kc.value-(+kd.value))>1e-9){ vd.className='verdict lose'; vd.textContent='Two lifts, '+mm(+kd.value)+' on the left and '+mm(+kc.value)+' on the right: still slope 1/x² at every input. The domain is not an interval, so same-slopes allows one constant per piece.'; }
+  else { vd.className='verdict win'; vd.textContent='Every curve has slope '+mm(s)+' at x = '+mm(x)+'. The fact F('+mm(x)+') = '+mm(G(x))+' picks C = '+mm(Cof(x))+(F.split!==undefined?' on its own side only: the other side is free.':', and only that curve.'); }
+  const Ct=F.split!==undefined?R`C = ${mm(+kc.value)}\ (x \gt 0),\ \ ${mm(+kd.value)}\ (x \lt 0)`:R`C = ${mm(+kc.value)}`;
+  tex($('eqF'),R`\begin{gathered}F(x) = ${F.Ftex} + C,\ \ F'(x) = ${F.ftex}\\ ${Ct}\\ F'(${mm(x)}) = ${mm(s)}\end{gathered}`,true); }
+function all(){ PF.redraw(); PS.redraw(); read(); }
+[kc,kd,kx].forEach(k=>k.addEventListener('input',all));
+const fch=$('fch');
+Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===key) b.className='on'; b.onclick=()=>{ key=k; F=FN[k]; [...fch.children].forEach(z=>z.classList.toggle('on',z===b)); all(); }; fch.appendChild(b); });
+window.__pic={set:(k,c,d,x)=>{ [...fch.children][Object.keys(FN).indexOf(k)].click(); kc.value=c; kd.value=d; kx.value=x; all(); return {x:X(),txt:$('vdF').textContent}; }};
+all();
+
+/* ---------- slides ---------- */
+const Nw='\\htmlClass{new}';
+stepper('#sl1',[
+  {k:'ember',kl:'same-slopes',t:R`f' = g' \text{ on } I \;\Rightarrow\; ${Nw}{f = g + C}`,n:`I an interval.`},
+  {k:'ember',kl:'its column',t:R`(f - g)' = 0 \;\Rightarrow\; f - g \text{ constant}`,n:`slopes-add, constant-factor for slopes, then zero-slope-is-constant. All of rung 14 so far stands under it.`}
+],{title:'The slides · same-slopes · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'antiderivative',t:R`F' = f \text{ on } I`,n:`Its accepted name is antiderivative; some books say primitive.`},
+  {k:'ember',kl:'all-antiderivatives',t:R`\{F + C : C \in \mathbb{R}\}`,n:`Each is one (lifting); every one is one of these (same-slopes).`},
+  {k:'teal',kl:'from 13d · powers backwards',t:R`x^n:\ \ \tfrac{x^{n+1}}{n + 1} + C`,n:`power for slopes read backwards. Check by taking the slope.`},
+  {k:'ember',kl:'n = −1',t:R`\tfrac{x^0}{0}\,?`,n:`The rule asks to divide by 0. No power of x has slope 1/x.`},
+  {k:'ember',kl:'the interval',t:R`-\tfrac1x + 1\ (x \gt 0),\ \ -\tfrac1x - 2\ (x \lt 0)`,n:`Slope 1/x² everywhere; differs from −1/x by 1 and by −2. One constant per piece.`}
+],{title:'The slides · antiderivatives · ← → keys work'});
+stepper('#sl3',[
+  {k:'teal',kl:'a falling body · one motion',t:R`y = ${Nw}{y_0 + v_0 t - \tfrac12 g t^2}`,n:`all-antiderivatives twice; the position and velocity at 0 fix the two constants.`}
+],{title:'The slides · one motion · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'decay curves',t:R`\left(\tfrac{y}{z}\right)' = \tfrac{(-ky)z - y(-kz)}{z^2} = 0`,n:`quotient for slopes and the rate law: the ratio is constant. Twice the start, twice the curve.`}
+],{title:'The slides · decay curves · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`f'' = g'' \not\Rightarrow f - g \text{ constant}`,n:`f − g is linear: two constants, not one.`}
+],{title:'The slides · illegal · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

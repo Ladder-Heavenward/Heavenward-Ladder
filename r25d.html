@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Every polynomial has a root</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r25c.html">← 25c the size of a product</a><a href="r25concl.html">next: 25·∎ the rung’s conclusion →</a></p>
+  <div class="tags"><span class="tag proof">25d · proof</span></div>
+  <h1>Every polynomial has a root</h1>
+  <p>On the line, some polynomials have no root at all. Adding one number whose square is minus one gave every quadratic its roots. This step proves far more: every polynomial, of any degree, with any complex numbers in front, has a root among the new numbers. Nothing more needs to be added, ever. The proof finds the input where the polynomial is smallest in size, and shows that a smallest size which is not zero can always be pushed lower. So the smallest size is zero, and there is the root.</p>
+  <p class="gesture">Every polynomial that is not constant has a root in the new numbers. So it splits into one line factor for each power, and has exactly as many roots as its degree, counted with repeats.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r12c.html">12c</a> (the highest-and-lowest technique), <a href="r22b.html">22b</a> (every bounded list has a settling thread), <a href="r21cb20.html">21·cb20</a> (out and round, equal parts of a turn), <a href="r25c.html">25c</a> (sizes multiply, the triangle, the value fence). <a href="r25concl.html">25·∎</a> puts the rung together.</p></div>
+</header>
+
+<section class="class step" data-step="25d1">
+  <h2 class="sthead"><span class="stno">25d1</span>Far out, the top term wins</h2>
+  <p class="stands">Stands on 25c1 and 25c2.</p>
+  <p data-pid="f21d63">From here on in this step, p(z) = a₀ + a₁z + ⋯ + aₙzⁿ with n ≥ 1 and aₙ ≠ 0, and the aₖ are any complex numbers.</p>
+  <p data-pid="4238c0">Far-out technique: <b>if |z| ≥ R, with R = max(1, 2(|a₀| + ⋯ + |aₙ₋₁|)/|aₙ|), then |p(z)| ≥ |aₙ||z|ⁿ/2.</b> Far from 0, the polynomial is as large as its top term, halved.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the far-out technique">
+|p(z)| \ge |a_n z^n| - |a_0 + \cdots + a_{n-1}z^{n-1}| @@ the second half of the plane triangle (25c2)
+|a_0 + \cdots + a_{n-1}z^{n-1}| \le (|a_0| + \cdots + |a_{n-1}|)\,|z|^{n-1} @@ the triangle; |z|ᵏ ≤ |z|ⁿ⁻¹ when |z| ≥ 1
+\le \tfrac12 |a_n|\,|z|\,|z|^{n-1} = \tfrac12|a_n||z|^n @@ |z| ≥ R ≥ 2(|a₀| + ⋯ + |aₙ₋₁|)/|aₙ|
+\htmlClass{new}{|p(z)| \ge \tfrac12|a_n||z|^n \text{ for } |z| \ge R} \quad \blacksquare @@ the first line, less the bound
+  </pre>
+  <p data-pid="82ed6c">So the size of p(z) heads past every ceiling as z moves away from 0, in every direction. The smallest sizes, if there is a smallest, live inside some disc.</p>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">25d1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="p(z) = z^3 - 2z + 4i"></span></span>Find the R of the far-out technique. <br>Find |p(R)| and |p(−Ri)|, and check that each is at least |a₃|R³/2.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="25d2">
+  <h2 class="sthead"><span class="stno">25d2</span>A lowest size on a disc</h2>
+  <p class="stands">Stands on 25d1, 25c3 (the value fence), 22b (settling threads) and 12c.</p>
+  <p data-pid="dd1bb2">Lowest-size technique: <b>some z₀ in ℂ has |p(z₀)| ≤ |p(z)| for every z in ℂ.</b> Rung 12 found lowest values on a closed interval of the line. The same argument works on a closed disc, one part at a time.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the lowest-size technique">
+\rho = \max\!\big(R,\ (2|a_0|/|a_n|)^{1/n}\big),\ \ D = \{z : |z| \le \rho\} @@ a disc big enough for 25d1
+|z| > \rho \Rightarrow |p(z)| \ge \tfrac12|a_n|\rho^n \ge |a_0| = |p(0)| @@ 25d1; the choice of ρ
+m = \inf\{|p(z)| : z \in D\} @@ a set of reals ≥ 0 has a greatest lower bound (no holes, 8)
+z_k \in D \text{ with } |p(z_k)| < m + \tfrac1k @@ m + 1/k is not a lower bound
+z_{k_j} \to z_0,\ |z_0| \le \rho @@ floor parts, then upright parts, have settling threads (22b); |z| ≤ ρ is kept in the limit
+|p(z_{k_j}) - p(z_0)| \le C|z_{k_j} - z_0| \to 0,\ \text{so } |p(z_0)| = m @@ the value fence (25c3); both bounds squeeze to m
+\htmlClass{new}{|p(z_0)| \le |p(z)| \text{ for every } z \in \mathbb{C}} \quad \blacksquare @@ inside D by the choice of m; outside, by line 2, since 0 is in D
+  </pre>
+  <p data-pid="65647f">The proof did not say where z₀ is. It only showed that the least size is reached somewhere. That is enough for the next footing.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · a lowest size · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">25d2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="p(z) = z^2 + 1"></span></span>Find the lowest size of p(z) on the circle |z| = 2, and where it is reached. <br>Find the lowest size over the whole plane, and where. <br>Find the ρ of the lowest-size technique for this p, and check that the lowest points of the plane lie inside D.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="25d3">
+  <h2 class="sthead"><span class="stno">25d3</span>Not lowest, unless zero</h2>
+  <p class="stands">Stands on 25d2, 21·cb20 (out and round) and 25c.</p>
+  <p data-pid="c83786">Push-down technique: <b>if p(z₀) ≠ 0, some z has |p(z)| &lt; |p(z₀)|.</b> Near z₀, the polynomial is p(z₀) plus a first term that can be pointed straight back at 0.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the push-down technique">
+p(z_0 + h) = p(z_0)\,(1 + c\,h^k + h^{k+1}q(h)),\ c \ne 0,\ k \ge 1 @@ share out the powers of z₀ + h; divide by p(z₀); c is the first coefficient that is not 0
+-\tfrac{|c|}{c} = \cos\theta + i\sin\theta,\ \ u = \cos\tfrac{\theta}{k} + i\sin\tfrac{\theta}{k} @@ a number of size 1 has a turn (21·cb20.1)
+u^k = -\tfrac{|c|}{c},\ \ c\,(tu)^k = -|c|\,t^k \text{ for } t > 0 @@ multiply and add: kth power of the turn (21·cb20.2)
+|1 + c(tu)^k + (tu)^{k+1}q(tu)| \le 1 - |c|t^k + t^{k+1}Q @@ the triangle (25c2); |q| ≤ Q on |h| ≤ 1 (25c3); 0 &lt; t ≤ 1, |c|tᵏ &lt; 1
+< 1 \ \text{ when } t < |c|/Q @@ t^{k+1}Q &lt; |c|tᵏ
+\htmlClass{new}{|p(z_0 + tu)| < |p(z_0)|} \quad \blacksquare @@ sizes multiply (25c1)
+  </pre>
+  <p data-pid="661c1b">The key line is the third. Because every number has kth roots in ℂ, you can choose the direction u so that the first change, c(tu)ᵏ, points exactly against 1. On the line that fails: for x² + 1 at 0 the first change is +t² and no real direction makes it negative. That is why the line has polynomials with no root.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · push down · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">25d3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="p(z) = z^2 + 1"></span> <span data-tex-inline="z_0 = 0"></span></span>Write p(0 + h) as p(0)(1 + chᵏ + ⋯), and find c and k. <br>Find a direction u of size 1 with cuᵏ = −|c|, and a t with |p(tu)| < 1. <br>Do the same at z₀ = 1, and find a point nearby where |p| is less than |p(1)| = 2.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="25d4">
+  <h2 class="sthead"><span class="stno">25d4</span>Every polynomial has a root</h2>
+  <p class="stands">Stands on 25d2, 25d3 and 25c3.</p>
+  <p data-pid="720075">Root technique: <b>every polynomial of degree n ≥ 1 with complex numbers in front has a root in ℂ; and p(z) = aₙ(z − r₁)(z − r₂)⋯(z − rₙ) for some r₁, …, rₙ in ℂ.</b> So it has n roots, counted with repeats, and no others.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the root technique">
+|p(z_0)| \le |p(z)| \text{ for all } z @@ the lowest-size technique (25d2)
+p(z_0) \ne 0 \Rightarrow \text{some } |p(z)| < |p(z_0)| @@ the push-down technique (25d3)
+p(z_0) = 0 @@ the two lines above cannot both hold otherwise
+p(z) = p(z) - p(z_0) = \textstyle\sum a_k(z^k - z_0^k) = (z - z_0)\,p_1(z) @@ each zᵏ − z₀ᵏ has the factor z − z₀ (25c3)
+p_1 \text{ has degree } n-1 \text{ and top coefficient } a_n @@ the top term of aₙ(zⁿ − z₀ⁿ)
+\htmlClass{new}{p(z) = a_n(z-r_1)\cdots(z-r_n)} \quad \blacksquare @@ repeat on p₁, n times in all
+p(w) = 0 \Rightarrow w = r_j \text{ for some } j @@ a product of numbers is 0 only if one is (5d, in the field ℂ)
+  </pre>
+  <p data-pid="ff3e5d">So ℂ is the end of the road for roots. The line needed i for x² + 1. Once i is in, every polynomial, even one with i itself in front, already has all its roots. No further numbers are needed for any polynomial at all.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · the root technique · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">25d4.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="p(z) = z^3 - 1"></span></span>Find all three roots, as a + bi, by the equal-parts technique (21·cb20.3). <br>Write p as a product of three line factors. <br>Check by multiplying the two factors that are not on the floor first.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="25d5">
+  <h2 class="sthead"><span class="stno">25d5</span>Illegal moves</h2>
+  <p class="stands">Stands on 25d1 to 25d4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+|p| \text{ heads past every ceiling far out, so it has a least value}\,? @@ that keeps the least inside a disc; a settling thread (22b) and the value fence are what reach it
+\text{a least value of } |p| \text{ on the line is a root}\,? @@ x² + 1 is least at 0 on the line, where it is 1; the push-down needs a direction off the line
+z^n = c \text{ has one root, } c^{1/n}\,? @@ it has n of them, one turn of 2π/n apart (21·cb20.3), when c ≠ 0
+\text{every polynomial with real numbers in front has a real root}\,? @@ x² + 1; the root technique promises roots in ℂ only
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">25d5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span class="gtx">g(z) = |z| when z ≠ 0, and g(0) = 1</span></span>Find whether g heads past every ceiling far out. <br>Find the greatest lower bound of its values, and whether some z reaches it. <br>Find the tool of 25d2 that g lacks.</li><li><span class="givens"><span data-tex-inline="x^2 + 1"></span></span>Find its least value on the line, and where. <br>Find p(ti) for small t > 0, and what the push-down needed that the line lacks.</li><li><span class="givens"><span data-tex-inline="z^3 = 8"></span></span>Find all three roots, as a + bi. <br>Find their sizes and their turns.</li><li><span class="givens"><span data-tex-inline="x^4 + 4"></span></span>Find whether it has a root on the line. <br>Check that 1 + i, 1 − i, −1 + i and −1 − i are its roots. <br>Find the degrees for which a polynomial with real numbers in front must have a real root, by rung 12.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">25d.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="1 + 2i,\ \ 3"></span></span>Build a polynomial of least degree, with real numbers in front, that has both as roots. Prove with the flip technique that 1 − 2i must be a root of it too. <br>Then build one of degree 2, with complex numbers in front and top coefficient 1, whose roots are i and 1 + i.</div>
+  <div class="chq"><span class="chid">25d.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="p(z) = 1 + z^5"></span> <span data-tex-inline="z_0 = 0"></span></span>Find which line of the root technique fails for a polynomial of degree 0, and why. <br>Find c and k for this p at z₀, and every direction u of size 1 that pushes down. <br>Find |p(tu)| for t = ½ along each of them.</div>
+  <div class="chq"><span class="chid">25d.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="f(z) = z\overline{z} + 1"></span></span>A least size of a polynomial is 0. Turn it round: must every function on ℂ whose size heads past every ceiling far out, and that obeys a value fence, have a root? <br>Find the least size of this f, and where it is reached. <br>Find the line of the push-down technique that breaks for f, and why.</div>
+  <div class="chq"><span class="chid">25d.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="z^2 - (1 + 2i)z + (-1 + i)"></span></span>Prove that every az² + bz + c, with a ≠ 0 and any complex numbers in front, has a root in ℂ without the lowest size: complete the square, and use that every number has square roots (21·cb20.3). <br>Find the roots of this one that way.</div>
+  <div class="chq"><span class="chid">25d.4.5</span><span class="tagq">seam</span><span class="givens"><span data-tex-inline="x^2 + 1"></span></span>A writer of 1746 proved this step’s claim by pushing down, much as 25d3 does, and took it for granted that a least size is reached. Others assumed that a polynomial of degree n has n roots of some kind, and proved only that those roots are of the form a + bi. A young mathematician, in his thesis of 1799, objected to both: one had left a hole, and the other calculated with roots before knowing they exist. His own first proof, drawn with curves, had a hole of its own, filled only in 1920. <br>Which objection is fair? <br>This step’s proof shows that a root exists, and never finds where. Is a proof that cannot find the root as good as one that can?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r25c.html">← 25c · the size of a product</a><a href="r25concl.html">25·∎ · the rung’s conclusion →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The root technique is the fundamental theorem of algebra; a field in which every polynomial has a root is algebraically closed. The push-down technique is d’Alembert’s lemma (or Argand’s inequality). The lowest-size technique is the extreme value theorem on a closed disc, a compact set.</p>
+  <h3>Who said it first</h3>
+  <p>Albert Girard claimed in 1629 that a polynomial of degree n has n roots. Jean le Rond d’Alembert gave a flawed proof in 1746. Carl Friedrich Gauss criticized the earlier attempts in his 1799 thesis and gave four proofs in his life, the first with a gap of its own. Jean-Robert Argand published the proof by least size in 1806 and 1814; Augustin-Louis Cauchy made it rigorous in 1821.</p>
+  <p>In 25d.4.5, the writer of 1746 is d’Alembert, the others include Euler (1749) and Lagrange (1772), and the young mathematician is Gauss. The hole in Gauss’s first proof, about how a curve crosses a circle, was filled by Alexander Ostrowski in 1920. Proofs that find the root step by step, and the question whether that matters, come much higher up the ladder.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'far out',t:R`|z|>\rho \Rightarrow |p(z)| \ge |p(0)|`,n:`Outside the disc, nothing beats 0.`},
+  {k:'ember',kl:'inside',t:R`m = \inf_D |p|`,n:`A greatest lower bound.`},
+  {k:'ember',kl:'reached',t:R`\htmlClass{new}{|p(z_0)| = m}`,n:`A settling thread, and the value fence.`}
+],{title:'The slides · a lowest size · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'near z₀',t:R`p(z_0+h) = p(z_0)(1 + ch^k + \cdots)`,n:`One leading change.`},
+  {k:'ember',kl:'aim it',t:R`c\,(tu)^k = -|c|t^k`,n:`A kth root picks the direction.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{|p(z_0+tu)| < |p(z_0)|}`,n:`Not lowest after all.`}
+],{title:'The slides · push down · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'lowest',t:R`|p(z_0)| \text{ least}`,n:`25d2.`},
+  {k:'ember',kl:'not unless zero',t:R`p(z_0) \ne 0 \Rightarrow \text{lower}`,n:`25d3.`},
+  {k:'ember',kl:'so',t:R`p(z_0) = 0`,n:`A root.`},
+  {k:'ember',kl:'split',t:R`\htmlClass{new}{p = a_n\prod(z - r_j)}`,n:`Factor and repeat.`}
+],{title:'The slides · the root technique · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

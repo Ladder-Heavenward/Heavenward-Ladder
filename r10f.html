@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>10f · Computing limits</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+#cvW{touch-action:none;cursor:ew-resize} #cvN{touch-action:manipulation}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.5em;text-align:right}
+.ro{display:grid;gap:2px;font-family:var(--mono);font-size:.82rem}
+.ro div{display:flex;justify-content:space-between;gap:8px;border-bottom:1px solid var(--grid);padding:2px 0}
+.mvctl{display:flex;gap:8px;align-items:center;flex-wrap:wrap} .mvctl .m{font-family:var(--mono);font-size:.8rem;color:var(--muted)}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r10concl.html">← 10·∎ conclusion</a><a href="r10g.html">next: 10g playing the challenge game →</a></p>
+  <div class="tags"><span class="tag tech">10f · technique</span></div>
+  <h1>Computing limits</h1>
+  <p>Nobody plays the game every time. Limits are known to add, multiply and divide (10c). The value at the input is known not to count (10a's agreeing-near). So most limits are found by rewriting the expression into one you can simply substitute into. This step is the kit of rewrites: when each is licensed, what it does, and the tempting moves that look like rewrites and are not. It also extends the game in two directions rung 9 pointed to. One is inputs that grow past every bound, where 9g's fractions settle. The other is sequences, where 9·cb4's run of one, a half, a third and on is finally said to head somewhere.</p>
+  <p class="gesture">Try to substitute. If the bottom comes out 0 and the top does too, the expression is hiding a common factor: rewrite it into something that agrees with it near the input, then substitute into that.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r10a.html">10a</a> (agreeing-near, line-limit), <a href="r10b.html">10b</a> (one-limit), <a href="r10c.html">10c</a> (limits-add, limits-multiply, reciprocal-limit, limits-divide, constant-factor, power-limit, substitution), <a href="r10d.html">10d</a> (squeeze, squeezed-to-0, squeezed-by-distance), <a href="r10e.html">10e</a> (one-sided limits, two-sides-agree, two-sides-differ, no-side-at-0), <a href="r05h.html">5h</a> (factoring), <a href="r08i.html">8i</a> (roots, the conjugate), <a href="r08e.html">8e</a> (counting-passes-any-real, everyday-counting-passes), <a href="r08g.html">8g</a> (∞ in intervals), <a href="r08cb5.html">8·cb5</a> (cut-offs), <a href="r09g.html">9g</a> (polynomial-division, factor, leading-term), <a href="r09cb4.html">9·cb4</a> (sequences). <a href="r10g.html">10g</a> plays the game by hand; <a href="r10bio.html">10·bio</a> takes a limit far out; rung 11 builds on substitution.</p></div>
+</header>
+
+<section class="class step" data-step="10f1">
+  <h2 class="sthead"><span class="stno">10f1</span>The two licences, and the first move</h2>
+  <p class="stands">Stands on 10c (substitution) and 10a5 (agreeing-near).</p>
+  <p data-pid="c78146">Every move in this step is licensed by one of two kinds of technique. Licence one, the limit techniques. Substitution says a polynomial, or a fraction of polynomials whose bottom is not 0 at w, heads to its value at w. Limits-add, limits-multiply and limits-divide combine limits you already have. Licence two, agreeing-near: two functions that agree on a neighbourhood of w have the same limits there, whatever they do at w. <b>So the first move is always the same: substitute.</b></p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="teal" data-label="from 10c: substitute, when the bottom is not 0">
+\lim_{x \to -1} \tfrac{x^3 + 2x}{x^2 + 1} @@ the bottom at −1 is 2, not 0: substitution applies
+= \tfrac{\htmlClass{new}{(-1)^3 + 2(-1)}}{\htmlClass{new}{(-1)^2 + 1}} = \tfrac{-3}{2} @@ substitute; arithmetic
+  </pre>
+  <p data-pid="0db0a8">Three things can happen when you substitute into a fraction. A real over a bottom that is not 0: done, by substitution. A top that is not 0 over a bottom that is 0: the outputs pass every bound on at least one side, and there is no limit. (See 10e's no-side-at-0, and the line for passing every bound below.) Check each side. Both 0: not an answer but a signal. The top and the bottom are both 0 at w, so by 9g's factor both have the factor x − w hiding
+ in them. Find it, cancel it (agreeing-near licenses the cancel, since it is legal everywhere but at w), and substitute again.</p>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">10f1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">lim_{x→2} (x² + 1)/(x − 3)</span></span>Substitute, and say which of the three things happens. <br>Name the technique that licenses the answer.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10f2">
+  <h2 class="sthead"><span class="stno">10f2</span>Factor and cancel, through a hole</h2>
+  <p class="stands">Stands on 10f1, 5h (factoring) and 9g (polynomial division).</p>
+  <pre class="lines" data-k="ember" data-label="this step: the hole of 9a">
+\lim_{x \to 1} \tfrac{x^2 - 1}{x - 1} @@ substitute: (1 − 1)/(1 − 1), both 0: a signal
+= \lim_{x \to 1} \tfrac{\htmlClass{new}{(x - 1)(x + 1)}}{x - 1} @@ difference-of-squares (5h) on the top
+= \lim_{x \to 1}\,(x + 1) @@ cancel x − 1: the two agree at every x ≠ 1 (agreeing-near)
+= \htmlClass{keep}{2} @@ substitution (or line-limit)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: factor both, and 9g's fraction">
+\lim_{x \to 2} \tfrac{x^2 + x - 6}{x^2 - 4} = \lim_{x \to 2} \tfrac{\htmlClass{new}{(x + 3)(x - 2)}}{\htmlClass{new}{(x + 2)(x - 2)}} @@ both 0 at 2. Top by sum-and-product (product −6, sum 1); bottom by difference-of-squares
+= \lim_{x \to 2} \tfrac{x + 3}{x + 2} = \htmlClass{keep}{\tfrac54} @@ cancel (agreeing-near); substitution: the bottom is 4 now
+\lim_{x \to 2} \tfrac{x^2 - 4}{x^2 - x - 2} = \lim_{x \to 2} \tfrac{x + 2}{x + 1} = \htmlClass{keep}{\tfrac43} @@ 9g's example: it lacks the input 2, and heads to 4/3 there
+  </pre>
+  <p data-pid="a82cd4">When the factor is not visible, factor says it is there anyway, and 9g's polynomial-division finds the rest. x³ − 8 is 0 at 2, so x − 2 divides it. Long division gives x³ − 8 = (x − 2)(x² + 2x + 4). So lim_{x→2} (x³ − 8)/(x − 2) = lim_{x→2} (x² + 2x + 4) = 12. Watch the logic of the cancel each time. (x³ − 8)/(x − 2) and x² + 2x + 4 are not the same function: the first has no value at 2, the second has 12 there. <b>They agree everywhere else, and that is all a limit needs.</b></p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · factor and cancel · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · left: walk toward the input, then step through the rewrite · right: a sequence and its threshold</div>
+    <div class="panel">
+      <div class="chips" role="group" aria-label="limit" id="lch"></div>
+      <div class="eqbox" id="eqQ"></div>
+      <div class="kn"><span class="m" id="ksl">h</span><input type="range" id="ks" min="0" max="6" step="0.05" value="1"><output id="os"></output></div>
+      <canvas id="cvW"></canvas>
+      <div class="cap" id="cap">The function near w, zooming in as h shrinks. Teal: x = w − h. Ember: x = w + h. The hollow dot is the pair the function lacks; the dashed gold row is the height the values settle on. Drag on the picture to set h.</div>
+      <div class="ro" id="ro"></div>
+      <div class="mvctl"><button id="mb">← previous move</button><button id="mf">next move →</button><span class="m" id="mpos"></span></div>
+      <div class="eqbox" id="mv"></div>
+    </div>
+    <div class="panel">
+      <div class="chips" role="group" aria-label="sequence" id="sch"></div>
+      <div class="kn"><span class="m">ε</span><input type="range" id="se" min="-3" max="0" step="0.05" value="-1"><output id="ose"></output></div>
+      <canvas id="cvN"></canvas>
+      <div class="cap">The terms a_n for n from 0 to 24, as dots (n across, the term up). Gold rows: within ε of the claimed limit. The threshold N is the least number from which every term stays in the target (checked by the technique's bound, not by eye); terms from N on are teal, earlier ones ember.</div>
+      <div class="eqbox" id="eqN"></div>
+    </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10f2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">lim_{x→3} (x² − 9)/(x² − 3x)</span></span>Factor and cancel, and find the limit. <br>Say why cancelling is allowed though x − 3 is 0 at 3.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10f3">
+  <h2 class="sthead"><span class="stno">10f3</span>Roots: the conjugate, and a root’s own limit</h2>
+  <p class="stands">Stands on 10f2, 8i (the conjugate) and 5g (one bottom).</p>
+  <p data-pid="5ec142">A root needs a limit of its own before anything can be substituted into it. Root-limit technique: <b>for reals w and c with w + c &gt; 0, lim_{x→w} √(x + c) = √(w + c).</b> Times the conjugate (8i): √(x + c) − √(w + c) = (x − w)/(√(x + c) + √(w + c)), so for x ≥ −c, |√(x + c) − √(w + c)| ≤ |x − w|/√(w + c). That is 10d's squeezed-by-distance with C = 1/√(w + c), on the neighbourhood of reach w + c, inside the domain. ∎ (10e's root-at-0 is the edge case, from the right.)</p>
+  <p data-pid="ac0aa5">When a root sits in a 0/0, the hidden factor is behind it. Multiply top and bottom by the conjugate: the same two terms with the sign between them changed. Difference-of-squares clears the root, and the factor shows itself. Multiplying by P/P is multiplying by 1 where P ≠ 0, so nothing changes but the look.</p>
+  <pre class="lines" data-k="teal" data-label="from 8i: the conjugate">
+\lim_{x \to 0} \tfrac{\sqrt{x + 4} - 2}{x} @@ substitute: (2 − 2)/0, both 0
+= \lim_{x \to 0} \tfrac{\sqrt{x + 4} - 2}{x} \cdot \htmlClass{new}{\tfrac{\sqrt{x + 4} + 2}{\sqrt{x + 4} + 2}} @@ times 1: √(x + 4) + 2 ≥ 2, never 0
+= \lim_{x \to 0} \tfrac{\htmlClass{new}{(x + 4) - 4}}{x\,(\sqrt{x + 4} + 2)} @@ difference-of-squares on the top; leave the bottom as a product, since you expect to cancel
+= \lim_{x \to 0} \tfrac{1}{\sqrt{x + 4} + 2} @@ the top is x; cancel (agreeing-near)
+= \tfrac{1}{2 + 2} = \htmlClass{keep}{\tfrac14} @@ root-limit (c = 4, a = 0), limits-add, reciprocal-limit
+  </pre>
+  <p data-pid="d4e9ec">And a fraction inside a fraction is the same story in a different costume: clear the inner bottoms (5g) and the factor appears.</p>
+  <pre class="lines" data-k="ember" data-label="this step: fractions in fractions">
+\lim_{x \to 3} \tfrac{\frac1x - \frac13}{x - 3} = \lim_{x \to 3} \tfrac{\htmlClass{new}{\frac{3 - x}{3x}}}{x - 3} @@ one bottom 3x for the inner difference (fractions-of-rationals)
+= \lim_{x \to 3} \tfrac{\htmlClass{new}{-(x - 3)}}{3x\,(x - 3)} @@ 3 − x = −(x − 3): the displacement written backwards (negative-of-a-sum)
+= \lim_{x \to 3} \tfrac{-1}{3x} = \htmlClass{keep}{-\tfrac19} @@ cancel (agreeing-near); substitution
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · the conjugate · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10f3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">lim_{x→4} (√x − 2)/(x − 4)</span></span>Multiply by the conjugate over itself. <br>Find the limit, naming root-limit where it is used.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10f4">
+  <h2 class="sthead"><span class="stno">10f4</span>Squeeze when you cannot rewrite</h2>
+  <p class="stands">Stands on 10f3 and 10d (squeezed-to-0).</p>
+  <p data-pid="c29914">When there is no algebra to grab, 10d's squeezed-by-distance and squeezed-to-0 do the work. <b>Bound the distance |f(x) − L| by something you know heads to 0.</b> (x − 1)² · q(x), with 9a's q, has |(x − 1)² q(x)| ≤ (x − 1)², which heads to 0 at 1 by substitution. So it heads to 0 at 1, by squeezed-to-0. No rewrite could have found that: q has no formula to rewrite.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10f4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = (x − 2)² · q(x),  with 9a’s q</span></span>Find lim_{x→2} f(x). <br>Say why no rewrite could have found it.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10f5">
+  <h2 class="sthead"><span class="stno">10f5</span>Inputs that grow past every bound</h2>
+  <p class="stands">Stands on 10f4, 8g (∞ in intervals) and 8e (counting passes any real).</p>
+  <p data-pid="e671ea">9g said that far out, (2x + 1)/(x − 1) is within any 1/n of 2. That is a game too, with one change: there is no point w to be near, so you answer with a threshold instead of a reach. 8g wrote ∞ in intervals to say “no end on this side”; it gets one more job, inside a mark.</p>
+  <p class="eqline" data-pid="0db85a">From here on, ∞ may also be written in the mark x → ∞, read “x grows without bound”, and −∞ in the mark x → −∞, read “x falls without bound”. There, as in 8g's intervals, ∞ is not a number. It says only that the inputs pass every real. It is never added, multiplied, compared, divided by, or put in the place of x.</p>
+  <p class="eqline" data-pid="a46665">From here on, let f be a function whose inputs and outputs are reals, defined far out: some interval (c, ∞) is a part of dom f. Then lim_{x→∞} f(x) = L means: ∀ε &gt; 0 ∃N : ∀x ∈ dom f (x &gt; N ⇒ |f(x) − L| &lt; ε), with N a real. Read it “the limit of f(x), as x grows without bound, is L”, or “f heads to L far out”; N is called a threshold. lim_{x→−∞} f(x) = L is the same with (−∞, c) and x &lt; N.</p>
+  <p data-pid="ea219d">One-over-x-far-out technique: <b>lim_{x→∞} 1/x = 0.</b> Given ε, answer N = 1/ε: if x &gt; 1/ε &gt; 0 then 0 &lt; 1/x &lt; ε (positive-reciprocal on ℚ). ∎ That an answer exists for every ε is 8e's counting-passes-any-real at work. 10b's and 10c's proofs carry over with one change of words. Far-out-too technique: <b>One-limit, limits-add, limits-subtract, limits-multiply, constant-factor, power-limit, reciprocal-limit, limits-divide and squeeze are true with x → ∞ in place of x → w.</b> In each column, the window 0 &lt; |x − w| &lt; δ becomes x &gt; N. The least of the reaches becomes the greatest of the thresholds (8b's max), so that x is past all of them. Here is limits-add, carried over:</p>
+  <pre class="lines" data-k="ember" data-label="this step: limits-add far out (far-out-too)">
+\text{let } \varepsilon \gt 0;\ \text{call } N_1, N_2 \text{ for } f, g \text{ at } \tfrac{\varepsilon}{2} @@ each limit far out, at half the gap
+N = \htmlClass{new}{\max(N_1, N_2, c)};\ \ \text{assume } x \gt N @@ the greatest: x is past every threshold, and in the domain
+\begin{gathered}|(f + g)(x) - (L + M)|\\ \le |f(x) - L| + |g(x) - M| \lt \varepsilon \quad \blacksquare\end{gathered} @@ as limits-add's column: regroup, triangle, the two promises
+  </pre>
+  <p data-pid="15d76e">With those, a fraction of polynomials far out is decided by its leading terms. Rational-functions-far-out technique: <b>for polynomials p and q of degrees n and m, with leading coefficients a_n and b_m: if n = m, lim_{x→∞} p(x)/q(x) = a_n/b_m; if n &lt; m, the limit is 0.</b> Divide top and bottom by x^m (times 1, for x &gt; 0). Every term but the leading ones becomes a constant times a power of 1/x, which heads to 0 by one-over-x-far-out and power-limit. Then limits-divide, since the bottom heads to b_m ≠ 0. ∎</p>
+  <pre class="lines" data-k="ember" data-label="this step: divide by the greatest power on the bottom">
+\lim_{x \to \infty} \tfrac{3x^2 + 1}{x^2 + 5} = \lim_{x \to \infty} \tfrac{\htmlClass{new}{3 + \frac{1}{x^2}}}{\htmlClass{new}{1 + \frac{5}{x^2}}} @@ times (1/x²)/(1/x²), which is 1 for x ≠ 0
+= \tfrac{3 + 0}{1 + 0} = \htmlClass{keep}{3} @@ 1/x² = (1/x)(1/x) → 0 · 0 (one-over-x-far-out, limits-multiply); far-out-too's limits-add and limits-divide
+\tfrac{2x + 1}{x - 1} = 2 + \tfrac{3}{x - 1}:\ \ x \gt \htmlClass{new}{1 + \tfrac{3}{\varepsilon}} \Rightarrow \left|\tfrac{3}{x - 1}\right| \lt \varepsilon @@ 9g's divide first, answered by hand: N = 1 + 3/ε. The limit is 2
+\lim_{x \to \infty} \tfrac{5x + 2}{x^2 - 3} = \tfrac{0 + 0}{1 - 0} = \htmlClass{keep}{0} @@ divide by x²: the top's degree is less (rational-functions-far-out)
+  </pre>
+  <p data-pid="2b1ffb">Big minus big is the trap. √(x² + x) − x has both pieces passing every bound, and it is tempting to call the difference 0. Rationalise instead.</p>
+  <pre class="lines" data-k="teal" data-label="from 8i: the conjugate, far out">
+\sqrt{x^2 + x} - x = \tfrac{(x^2 + x) - x^2}{\sqrt{x^2 + x} + x} = \tfrac{\htmlClass{new}{x}}{\sqrt{x^2 + x} + x} @@ times the conjugate over itself; difference-of-squares; for x &gt; 0 the bottom is positive
+= \tfrac{1}{\sqrt{1 + \frac1x} + 1} @@ divide top and bottom by x: for x &gt; 0, √(x² + x) = x√(1 + 1/x) (8i: √(ab) = √a√b, √(x²) = |x| = x)
+\left|\sqrt{1 + \tfrac1x} - 1\right| = \tfrac{1/x}{\sqrt{1 + \frac1x} + 1} \le \tfrac1x @@ the conjugate once more: so √(1 + 1/x) heads to 1 far out (squeeze in far-out-too, with one-over-x-far-out)
+\lim_{x \to \infty}\big(\sqrt{x^2 + x} - x\big) = \tfrac{1}{1 + 1} = \htmlClass{keep}{\tfrac12} @@ far-out-too's limits-add and reciprocal-limit. Not 0
+  </pre>
+  <p data-pid="2d6d6d">One more tech, for running a limit far out back to a limit at a point. Swap-to-one-over-x technique: <b>lim_{x→∞} f(x) = L exactly when lim_{t→0⁺} f(1/t) = L.</b> Inputs x &gt; N &gt; 0 are exactly the 1/t with 0 &lt; t &lt; 1/N (positive-reciprocal on ℚ). So a threshold N answers one game exactly when the reach 1/N answers the other. ∎ A limit far out is a one-sided limit at 0 in disguise. The picture uses this to draw it on a finite screen, and 10·bio uses it to read a ceiling off a line.</p>
+  <p data-pid="43d627">Some outputs head nowhere because they grow. That needs words that are not a limit.</p>
+  <p class="eqline" data-pid="96675e">From here on, “f(x) passes every bound as x → ∞” means: ∀M ∃N : ∀x ∈ dom f (x &gt; N ⇒ f(x) &gt; M), with M and N reals. And “f(x) passes every bound as x → a⁺” means: ∀M ∃δ &gt; 0 : ∀x ∈ dom f (a &lt; x &lt; a + δ ⇒ f(x) &gt; M); likewise as x → a⁻ and as x → a, with those windows, and as x → −∞. “Passes below every bound” is the same with f(x) &lt; M. These are statements about outputs, not limits: no L is claimed, and this ladder never writes them as a limit equal to ∞.</p>
+  <p data-pid="5ce8d6">When f(x) heads to L far out, f is said to have the horizontal asymptote y = L. When f(x) passes every bound, or below every bound, as x → w from either side, f has the vertical asymptote x = w. Asymptote is from the Greek for “not falling together”. Passing every bound is also written as a limit equal to ∞, as in lim_{x→w⁺} f(x) = ∞, and called an infinite limit. The mark is shorthand for “passes every bound”. ∞ is not a number, and by passing-every-bound below, a function with an infinite limit has no limit in 10a's sense.</p>
+  <p data-pid="1f7c00">Passing-every-bound technique: <b>if f(x) passes every bound (or below every bound) as x → w⁺, then f has no limit from the right at w; and likewise for the other sides and far out.</b> Suppose it headed to L. Challenge with ε = 1 and call the reach. The bound M = |L| + 1 gives a reach of its own. An input in both windows has f(x) &gt; |L| + 1 and |f(x) − L| &lt; 1, so f(x) &lt; L + 1 ≤ |L| + 1. ⊥. Refute. ∎ Now 9e's sentence is finished. 1/x passes every bound as x → 0⁺: for M &gt; 0 answer δ = 1/M, by positive-reciprocal on ℚ; for M ≤ 0 any δ, since 1/x &gt; 0. And 1/x passes below every bound as x → 0⁻. 9g's 1/(x − 1) does the same at 1. And x² passes every bound as x → ∞ (N = max(1, M), since x² ≥ x past 1), so it has no limit far out.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · far out · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10f5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = \dfrac{x + 2}{x - 1},"></span> <span data-tex-inline="\text{Substituting 1 gives 3}"></span> <span data-tex-inline="\text{over 0.}"></span></span>Find what the outputs do on each side of 1, in this step's words, and prove it for the right side.</li><li><span class="givens"><span data-tex-inline="f(x) = \sqrt{x^2 + 4x} - x"></span></span>Guess the limit of f far out by “big minus big is 0”; then compute it.</li><li><span class="givens"><span data-tex-inline="“1/\infty = 0, \text{ so } \lim_{x \to \infty} 1/x = 0.”"></span> <span data-tex-inline="\varepsilon = 0.001"></span></span>Find the line of this step that says the true thing, and play its game for ε.</li><li><span class="givens"><span data-tex-inline="t_n = (-1)^n"></span></span>Prove that t has no limit.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10f6">
+  <h2 class="sthead"><span class="stno">10f6</span>Sequences, where 9·cb4 left them</h2>
+  <p class="stands">Stands on 10f5 and 9·cb4 (sequences).</p>
+  <p data-pid="cb2dc7">A sequence is a function on ℕ (9·cb4), so its inputs can only grow. The game is the one far out, with a whole-number threshold.</p>
+  <p class="eqline" data-pid="b6f535">From here on, for a sequence a of reals, lim_{n→∞} a_n = L, also written a_n → L, means: ∀ε &gt; 0 ∃N ∈ ℕ : ∀n ∈ ℕ (n ≥ N ⇒ |a_n − L| &lt; ε). Read it “a_n heads to L”; the sequence converges to L, and L is its limit. The mark n → ∞ says that the input letter n runs through the numbers past every one.</p>
+  <p data-pid="427cf2">One-limit's proof works here with n = max(N₁, N₂), so a sequence has at most one limit. The limit techniques carry over as far-out-too says. One-over-n technique: <b>lim_{n→∞} 1/S(n) = 0.</b> Given ε, 8e's everyday-counting-passes gives a number N ≠ 0 with 1/N &lt; ε. For n ≥ N, S(n) &gt; N, so 0 &lt; 1/S(n) &lt; 1/N &lt; ε (positive-reciprocal on ℚ). ∎ That is the sentence 9·cb4 could not finish: the never-rising run of reals 1, ½, ⅓, ⋯ never stands still, and it heads to 0. Cut-offs technique: <b>for a real x ≥ 0 with 8·cb5's cut-offs c_k, lim_{k→∞} c_k = x.</b> 8·cb5's digit rule kept c_k ≤ x &lt; c_k + 10^(−k), so |c_k − x| &lt; 10^(−k) &lt; 1/k for k ≠ 0 (since 10^k &gt; k, by induction). Everyday-counting-passes gives N with 1/N &lt; ε, and k ≥ N does it. ∎ So 1, 1.4, 1.41, 1.414, ⋯ heads to √2: 10d's numbers squeezed, said as a limit.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · a sequence · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10f6.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = \dfrac{x^3 - 3x}{x^2 + x}"></span></span>Find the limit of f at 2, naming the technique that licenses substituting.</li><li><span class="givens"><span data-tex-inline="f(x) = \dfrac{x^2 + x - 6}{x + 3},"></span> <span data-tex-inline="g(x) = \dfrac{x^3 - 1}{x^2 - 1}"></span></span>Find the limit of f at −3 and of g at 1.</li><li><span class="givens"><span data-tex-inline="f(x) = \dfrac{x - 16}{\sqrt{x} - 4}"></span></span>Find the limit of f at 16.</li><li><span class="givens"><span data-tex-inline="f(x) = \dfrac{4x^2 - x}{2x^2 + 7},"></span> <span data-tex-inline="g(x) = \dfrac{5x + 2}{x^2 - 3}"></span></span>By rational-functions-far-out, find the limits of f and g far out, naming its case each time.</li><li><span class="givens"><span data-tex-inline="t_n = \dfrac{2n + 1}{n + 1}"></span></span>Prove that t heads to 2, giving N for every ε.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10f7">
+  <h2 class="sthead"><span class="stno">10f7</span>One side at a time</h2>
+  <p class="stands">Stands on 10f6, 10e (sides) and 8h (bars by cases).</p>
+  <p data-pid="a832e9"><b>An absolute value is two formulas glued where its inside is 0</b>, and that is often where a limit is asked. Split by sides (10e), compute each, compare.</p>
+  <pre class="lines" data-k="teal" data-label="from 10e: split by sides">
+\tfrac{|x^2 - 1|}{x - 1} \text{ near } 1 @@ the inside x² − 1 changes sign at 1
+x \gt 1:\ \ \tfrac{x^2 - 1}{x - 1} = x + 1 \to \htmlClass{new}{2} @@ inside positive: the bars change nothing; difference-of-squares, cancel
+-1 \lt x \lt 1:\ \ \tfrac{-(x^2 - 1)}{x - 1} = -(x + 1) \to \htmlClass{new}{-2} @@ inside negative: the bars change the sign
+2 \ne -2:\ \ \text{no limit at } 1 @@ two-sides-differ (10e)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10f7.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">|x² − 4|/(x − 2)  near 2</span></span>Find each one-sided limit. <br>Decide whether the limit exists.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10f8">
+  <h2 class="sthead"><span class="stno">10f8</span>The illegal-move gallery</h2>
+  <p class="stands">Stands on 10f1 to 10f7.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\tfrac00 = 1,\ \text{or } \tfrac00 = 0\,? @@ 0/0 names nothing (5d). It is a signal. The limits above came out 2, 5/4, 12, ¼, −1/9: anything at all
+\begin{aligned}&\text{limits-divide with}\\ &\quad\text{the bottom heading to } 0\,?\end{aligned} @@ the technique is silent there. Using it anyway gives 0/0 and the slip above
+\text{“both grow, so the quotient heads to } 1\text{”}\,? @@ (2x + 1)/(x + 5) heads to 2: divide by x and see
+\text{“big minus big is } 0\text{”}\,? @@ √(x² + x) − x heads to ½
+\tfrac{x^2 + 4}{x + 2} \text{, cancel the } x\text{'s}\,? @@ cancel factors, not terms: at −2 the top is 8, so x + 2 is not a factor
+\tfrac{1}{\infty} = 0\,? @@ ∞ is not a number and is never put in the place of x. one-over-x-far-out says the true thing, with a threshold
+\text{substitute into the wrong piece}\,? @@ the value at a break says nothing; each side's formula gives that side's limit
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10f8.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">“lim_{x→∞} ((x + 1) − x) = ∞ − ∞ = 0.”</span></span>Which illegal move is this? <br>Find the limit.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10f9">
+  <h2 class="sthead"><span class="stno">10f9</span>Running it backwards</h2>
+  <p class="stands">Stands on 10f1 to 10f7.</p>
+  <p data-pid="1e29bf">To understand a tech, build something it has to undo. Want a fraction that is 0 over 0 at 4 and heads to 7 there? The simplified form must be 7 at 4, such as x + 3. Hide the factor x − 4 in top and bottom and expand: ((x + 3)(x − 4))/(x − 4) = (x² − x − 12)/(x − 4). Anyone who factors and cancels finds 7. Every 0/0 limit in this step was made that way, by someone who started from the answer.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · built backwards · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10f9.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{After cancelling,}"></span> <span data-tex-inline="\text{someone&#x27;s last line was},"></span> <span data-tex-inline="\lim_{x \to 2} (x + 5) = 7,"></span> <span data-tex-inline="\text{and the bottom they started}"></span> <span data-tex-inline="\text{with was } x^2 - 2x \text{.}"></span></span>Find the top.</li><li><span class="givens"><span data-tex-inline="\text{Halfway through, a line}"></span> <span data-tex-inline="\text{read},"></span> <span data-tex-inline="\dfrac{x - 1}{(x - 1)(\sqrt{x} + 1)}"></span></span>Find the original limit and its value.</li><li><span class="givens"><span data-tex-inline="\text{A fraction of polynomials}"></span> <span data-tex-inline="\text{heads to } 3/5 \text{ far out, and}"></span> <span data-tex-inline="\text{its top is } 3x^2 + x \text{.}"></span></span>Find what must be true of its bottom, and write one.</li><li>Starting from the answer −2 at 3, build a zero-over-zero limit that needs the conjugate to solve.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">10f.4.1</span><span class="tagq">build</span>Build limits of your own.<ol class="parts" type="a"><li>Build a fraction of polynomials with a hole at 4 where it heads to 7, a vertical asymptote at 1, and a horizontal asymptote at height 2.</li><li><span class="givens"><span data-tex-inline="f(x) = x^3 - 10x^2"></span></span>Show that f passes every bound far out: give a threshold N for every bound M.</li><li>Write a sequence that never rises, never stands still, and heads to 3, and prove it heads to 3.</li><li><span class="givens"><span data-tex-inline="f(x) = \dfrac{x}{x + 1}"></span></span>By swap-to-one-over-x, turn the limit of f far out into a limit from the right at 0, and compute both.</li></ol></div>
+  <div class="chq"><span class="chid">10f.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="t_n = 5"></span></span>Does t head to 5? <br>Which N answers every ε?</div>
+  <div class="chq"><span class="chid">10f.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{Passing-every-bound:}"></span> <span data-tex-inline="\text{passing every bound refutes}"></span> <span data-tex-inline="\text{every limit.}"></span> <span data-tex-inline="f \text{ has no limit far out.}"></span></span>Must it pass every bound, or pass below every bound?</div>
+  <div class="chq"><span class="chid">10f.4.4</span><span class="tagq">seam</span>The first calculus textbook (1696) gave a rule for a fraction whose top and bottom both vanish at the same input. Letters found long afterwards show that a younger mathematician had sent it to the book's author, under an agreement by which the author paid for his discoveries. Whose rule is it? <br>After this step, does a zero-over-zero limit need a rule of its own at all?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r10concl.html">← 10·∎ · conclusion</a><a href="r10g.html">10g · playing the challenge game →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>In 10f.4.4, the textbook is the Marquis de l’Hôpital’s Analyse des infiniment petits (1696), and the sender is Johann Bernoulli; the rule is known as l’Hôpital’s rule. 8e’s counting-passes-any-real is the Archimedean property.</p>
+  <p>Accepted names: far-out-too is the limit laws at infinity; a sequence that heads to L converges to L; the row y = L and the column x = w of 10f’s lines are the horizontal and vertical asymptotes.</p>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const N='\\htmlClass{new}', K='\\htmlClass{keep}';
+const EX={
+  hole:{lab:'the hole',q:R`\lim_{x\to 1} \tfrac{x^2 - 1}{x - 1}`,f:x=>(x*x-1)/(x-1),a:1,L:2,
+    moves:[R`\tfrac{x^2 - 1}{x - 1} \text{ at } 1\text{: } \tfrac{0}{0}\text{, a signal}`,R`= \tfrac{${N}{(x - 1)(x + 1)}}{x - 1}\ \ (\text{DSQ})`,R`= ${N}{x + 1}\ \ (x \ne 1\text{: agreeing-near})`,R`\to 1 + 1 = ${N}{2}`]},
+  fac:{lab:'factor both',q:R`\lim_{x\to 2} \tfrac{x^2 + x - 6}{x^2 - 4}`,f:x=>(x*x+x-6)/(x*x-4),a:2,L:1.25,
+    moves:[R`\tfrac{x^2 + x - 6}{x^2 - 4} \text{ at } 2\text{: } \tfrac00`,R`= \tfrac{${N}{(x + 3)(x - 2)}}{${N}{(x + 2)(x - 2)}}`,R`= \tfrac{x + 3}{x + 2}\ \ (\text{AGR})`,R`\to ${N}{\tfrac54}`]},
+  rat:{lab:'the conjugate',q:R`\lim_{x\to 0} \tfrac{\sqrt{x + 4} - 2}{x}`,f:x=>(Math.sqrt(x+4)-2)/x,a:0,L:0.25,
+    moves:[R`\tfrac{\sqrt{x + 4} - 2}{x} \text{ at } 0\text{: } \tfrac00`,R`= \tfrac{\sqrt{x+4} - 2}{x}\cdot ${N}{\tfrac{\sqrt{x+4} + 2}{\sqrt{x+4} + 2}}`,R`= \tfrac{${N}{(x + 4) - 4}}{x\,(\sqrt{x+4} + 2)}`,R`= \tfrac{1}{\sqrt{x+4} + 2}\ \ (\text{AGR})`,R`\to \tfrac{1}{2 + 2} = ${N}{\tfrac14}\ \ (\text{RTL})`]},
+  frac:{lab:'fractions in fractions',q:R`\lim_{x\to 3} \tfrac{\frac1x - \frac13}{x - 3}`,f:x=>(1/x-1/3)/(x-3),a:3,L:-1/9,
+    moves:[R`\text{at } 3\text{: } \tfrac00`,R`= \tfrac{${N}{\frac{3 - x}{3x}}}{x - 3}`,R`= \tfrac{${N}{-(x - 3)}}{3x\,(x - 3)}`,R`= -\tfrac{1}{3x}\ \ (\text{AGR})`,R`\to ${N}{-\tfrac19}`]},
+  abs:{lab:'absolute value',q:R`\tfrac{|x^2 - 1|}{x - 1} \text{ near } 1`,f:x=>Math.abs(x*x-1)/(x-1),a:1,Lm:-2,Lp:2,
+    moves:[R`\text{at } 1\text{: } \tfrac00`,R`x \gt 1:\ \tfrac{${N}{x^2 - 1}}{x - 1} = x + 1 \to ${N}{2}`,R`-1 \lt x \lt 1:\ \tfrac{${N}{-(x^2 - 1)}}{x - 1} \to ${N}{-2}`,R`2 \ne -2\text{: no limit (two-sides-differ)}`]},
+  inf:{lab:'far out',q:R`\lim_{x\to \infty} \tfrac{2x + 1}{x - 1}`,f:x=>(2*x+1)/(x-1),inf:true,L:2,
+    moves:[R`\tfrac{2x + 1}{x - 1}\text{: big over big}`,R`= ${N}{2 + \tfrac{3}{x - 1}}\ \ (\text{PDV})`,R`x \gt 1 + \tfrac{3}{\varepsilon} \Rightarrow \tfrac{3}{x - 1} \lt \varepsilon`,R`\to ${N}{2}`]},
+  diff:{lab:'big minus big',q:R`\lim_{x\to\infty} \big(\sqrt{x^2 + x} - x\big)`,f:x=>x/(Math.sqrt(x*x+x)+x),inf:true,L:0.5,
+    moves:[R`\sqrt{x^2 + x} - x\text{: big minus big}`,R`= \tfrac{${N}{x}}{\sqrt{x^2 + x} + x}\ \ (\text{conjugate})`,R`= \tfrac{1}{${N}{\sqrt{1 + 1/x}} + 1}\ \ (x \gt 0)`,R`\to \tfrac{1}{1 + 1} = ${N}{\tfrac12}`]}
+};
+let E=EX.hole, key='hole', mi=0;
+const ks=$('ks');
+const fmt=v=>{ if(!isFinite(v)) return '—'; const a=Math.abs(v); if(a!==0&&(a<1e-5||a>=1e7)) return v.toExponential(4); return (+v.toPrecision(9)).toString(); };
+function nice(span){ const r=span/6, p=Math.pow(10,Math.floor(Math.log10(r))); const m=r/p; return (m<1.5?1:m<3.5?2:m<7.5?5:10)*p; }
+const cv=$('cvW');
+const P=plane(cv,{x:[0,4],y:[-3,1],grid:0,labels:false,aspect:0.62,draw:P=>draw(P)});
+Object.defineProperty(P.o,'aspect',{get:()=>cv.clientWidth>600?0.5:0.72});
+function axes2(P){ const c=P.ctx,o=P.o,gx=nice(o.x[1]-o.x[0]),gy=nice(o.y[1]-o.y[0]);
+  const dec=g=>Math.max(0,-Math.floor(Math.log10(g)+1e-9)), lab=(v,g)=>{ const s=v.toFixed(dec(g)); return /^-0\.?0*$/.test(s)?'0':s.replace('-','−'); };
+  c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1];x+=gx){ c.moveTo(P.X(x),P.Y(o.y[0])); c.lineTo(P.X(x),P.Y(o.y[1])); }
+  for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1];y+=gy){ c.moveTo(P.X(o.x[0]),P.Y(y)); c.lineTo(P.X(o.x[1]),P.Y(y)); }
+  c.stroke(); c.font='11px IBM Plex Mono, monospace'; c.fillStyle=col('--muted');
+  c.textAlign='center'; let k=0; for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1];x+=gx,k++){ if(P.W<500&&k%2) continue; c.fillText(lab(x,gx),P.X(x),P.H-4); }
+  c.textAlign='left'; for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1];y+=gy){ c.fillText(lab(y,gy),4,P.Y(y)-3); } }
+const hOf=()=>Math.pow(10,-(+ks.value));
+function draw(P){ const c=P.ctx, h=hOf(); axes2(P);
+  const g=E.inf?(t=>E.f(1/t)):E.f, a=E.inf?0:E.a;
+  if(E.inf) P.fn(t=>t>0?g(t):NaN,'--ink',2);
+  else P.fn(x=>Math.abs(x-a)<1e-12?NaN:g(x),'--ink',2);
+  const Ls=E.Lm!==undefined?[E.Lm,E.Lp]:[E.L];
+  Ls.forEach(L=>{ P.line(P.o.x[0],L,P.o.x[1],L,'--gold',1.4,[6,4]); c.fillStyle=col('--card'); c.strokeStyle=col('--ink'); c.lineWidth=2; c.beginPath(); c.arc(P.X(a),P.Y(L),5.5,0,7); c.fill(); c.stroke(); });
+  const pts=E.inf?[[h,'--ember']]:[[a-h,'--teal'],[a+h,'--ember']];
+  pts.forEach(([x,cl])=>{ const y=g(x); if(isFinite(y)){ P.line(x,P.o.y[0],x,y,cl,1.2,[3,3]); P.dot(x,y,cl,6); } });
+  c.font='12px IBM Plex Mono, monospace'; c.fillStyle=col('--muted'); c.textAlign='right'; c.fillText(E.inf?'drawn against t = 1/x':'a = '+fmt(a),P.W-6,14); }
+function frame(){ const h=hOf(), z=Math.max(h,0.002), a=E.inf?0:E.a; let x0,x1; if(E.inf){ x0=-0.15*2.5*z; x1=2.5*z; } else { x0=a-2.5*z; x1=a+2.5*z; }
+  const g=E.inf?(t=>E.f(1/t)):E.f; let lo=Infinity,hi=-Infinity;
+  for(let i=0;i<=200;i++){ const x=x0+(x1-x0)*i/200; if(E.inf&&x<=0) continue; const y=g(x); if(isFinite(y)&&Math.abs(y)<1e6){ lo=Math.min(lo,y); hi=Math.max(hi,y); } }
+  const Ls=E.Lm!==undefined?[E.Lm,E.Lp]:[E.L]; Ls.forEach(L=>{ lo=Math.min(lo,L); hi=Math.max(hi,L); });
+  let pad=(hi-lo)*0.18; if(pad<1e-9) pad=0.05; P.o.x=[x0,x1]; P.o.y=[lo-pad,hi+pad]; }
+function readout(){ const h=hOf(), r=$('ro');
+  if(E.inf){ const x=1/h; $('os').textContent='x = '+fmt(x); r.innerHTML=`<div><b>x</b><span>${fmt(x)}</span></div><div><b>f(x)</b><span>${fmt(E.f(x))}</span></div><div><b>distance from ${fmt(E.L)}</b><span>${fmt(Math.abs(E.f(x)-E.L))}</span></div>`; }
+  else { $('os').textContent='h = '+fmt(h); r.innerHTML=`<div><b>x = w − h = ${fmt(E.a-h)}</b><span>f(x) = ${fmt(E.f(E.a-h))}</span></div><div><b>x = w + h = ${fmt(E.a+h)}</b><span>f(x) = ${fmt(E.f(E.a+h))}</span></div><div><b>x = w = ${fmt(E.a)}</b><span>no value</span></div>`; } }
+function moves(){ const M=E.moves; mi=Math.max(0,Math.min(M.length-1,mi)); tex($('mv'),R`\begin{gathered}`+M.slice(0,mi+1).join(R`\\ `)+R`\end{gathered}`,true); $('mpos').textContent='move '+(mi+1)+' of '+M.length; $('mb').disabled=mi===0; $('mf').disabled=mi===M.length-1; }
+function all(){ frame(); P.redraw(); readout(); }
+const CAPA=$('cap').textContent, CAPI='Drawn against t = 1/x (the swap-to-one-over-x technique), so x growing without bound is t heading to 0 from the right. Ember: the current x, at t = 1/x. The hollow dot at t = 0 is the height being approached, which no x reaches. Dashed gold: that height. Drag on the picture to move x.';
+function setE(k){ key=k; E=EX[k]; mi=0; $('ksl').textContent=E.inf?'x':'h'; tex($('eqQ'),E.q,true); $('cap').textContent=E.inf?CAPI:CAPA; moves(); all(); }
+const lch=$('lch'); Object.keys(EX).forEach(k=>{ const b=document.createElement('button'); b.textContent=EX[k].lab; if(k===key) b.className='on'; b.onclick=()=>{ [...lch.children].forEach(z=>z.classList.toggle('on',z===b)); setE(k); }; lch.appendChild(b); });
+ks.addEventListener('input',all);
+$('mf').onclick=()=>{ mi++; moves(); }; $('mb').onclick=()=>{ mi--; moves(); };
+let dr=false; function dragTo(ev){ const p=P.point(ev); const a=E.inf?0:E.a; const d=Math.abs(p.x-a); if(d>0){ ks.value=Math.min(6,Math.max(0,-Math.log10(d))); all(); } }
+cv.addEventListener('pointerdown',ev=>{ dr=true; cv.setPointerCapture&&cv.setPointerCapture(ev.pointerId); dragTo(ev); }); cv.addEventListener('pointermove',ev=>{ if(dr) dragTo(ev); }); ['pointerup','pointercancel'].forEach(t=>cv.addEventListener(t,()=>dr=false));
+setE('hole');
+
+/* ---------- right: sequences ---------- */
+const DIG=[1,4,1,4,2,1,3,5,6,2,3,7,3,0,9,5,0,4,8,8,0,1,6,8,8,7]; // √2 = 1.41421356237309504880168872…
+const cut=k=>{ let v=1, p=1; for(let i=1;i<=k;i++){ p/=10; v+=DIG[i]*p; } return v; };
+const SQ={
+  rec:{lab:'1/S(n)',a:n=>1/(n+1),L:0,tex:R`a_n = \tfrac{1}{S(n)}`,bound:n=>1/(n+1),why:R`|a_n| = \tfrac{1}{n + 1}`},
+  cut:{lab:'cut-offs of √2',a:n=>cut(n),L:Math.SQRT2,tex:R`c_k = 1.41421\cdots \text{ cut at } k \text{ places}`,bound:n=>Math.pow(10,-n),why:R`|c_k - \sqrt2| \lt 10^{-k}`},
+  rat:{lab:'(2n + 1)/(n + 1)',a:n=>(2*n+1)/(n+1),L:2,tex:R`a_n = \tfrac{2n + 1}{n + 1}`,bound:n=>1/(n+1),why:R`|a_n - 2| = \tfrac{1}{n + 1}`},
+  alt:{lab:'(−1)ⁿ',a:n=>n%2?-1:1,L:0,tex:R`a_n = (-1)^n,\ \text{claim } 0`,bound:n=>1,why:R`|a_n - 0| = 1`}
+};
+let S=SQ.rec, skey='rec';
+const se=$('se'), cvN=$('cvN');
+const PN=plane(cvN,{x:[-1,25],y:[-1.3,1.3],grid:0,labels:false,aspect:0.7,draw:P=>drawN(P)});
+let nInfo={};
+function drawN(P){ const c=P.ctx, e=Math.pow(10,+se.value), L=S.L;
+  let lo=L-e, hi=L+e; for(let n=0;n<25;n++){ lo=Math.min(lo,S.a(n)); hi=Math.max(hi,S.a(n)); } const pad=(hi-lo)*0.12+0.02; P.o.y=[lo-pad,hi+pad];
+  c.fillStyle=col('--gold'); c.globalAlpha=.18; c.fillRect(P.X(-1),P.Y(L+e),P.X(25)-P.X(-1),P.Y(L-e)-P.Y(L+e)); c.globalAlpha=1; P.line(-1,L,25,L,'--gold',1.4);
+  let Nn=null; for(let n=0;n<=200;n++){ if(S.bound(n)<e){ Nn=n; break; } }
+  if(skey==='alt') Nn=e>1?0:null;
+  for(let n=0;n<25;n++){ const v=S.a(n); P.dot(n,v,(Nn!==null&&n>=Nn)?'--teal':'--ember',4.2); }
+  if(Nn!==null&&Nn<25) P.line(Nn-0.5,P.o.y[0],Nn-0.5,P.o.y[1],'--ink',1.2,[4,3]);
+  c.font='11px IBM Plex Mono, monospace'; c.fillStyle=col('--muted'); c.textAlign='center'; [0,5,10,15,20,24].forEach(n=>c.fillText(String(n),P.X(n),P.H-3));
+  nInfo={e,Nn}; }
+function readN(){ const {e,Nn}=nInfo; $('ose').textContent=e.toPrecision(3);
+  const ls=[S.tex, S.why+R`,\ \ \varepsilon = ${e.toPrecision(3)}`];
+  if(skey==='alt') ls.push(Nn===null?R`\text{no threshold: every term is 1 from } 0 \text{ (and from any claim, one of them is)}`:R`\varepsilon \gt 1\text{: every term is in the target}`);
+  else ls.push(R`N = ${Nn}\text{: from there on, every term is within } \varepsilon`);
+  tex($('eqN'),R`\begin{gathered}`+ls.join(R`\\ `)+R`\end{gathered}`,true); }
+const sch=$('sch'); Object.keys(SQ).forEach(k=>{ const b=document.createElement('button'); b.textContent=SQ[k].lab; if(k===skey) b.className='on'; b.onclick=()=>{ skey=k; S=SQ[k]; [...sch.children].forEach(z=>z.classList.toggle('on',z===b)); PN.redraw(); readN(); }; sch.appendChild(b); });
+se.addEventListener('input',()=>{ PN.redraw(); readN(); });
+PN.redraw(); readN();
+
+/* ---------- slides ---------- */
+stepper('#sl1',[
+  {k:'ember',kl:'factor and cancel · 1 of 4',t:R`\lim_{x\to 4} \tfrac{x^2 - 16}{x^2 - 4x}`,n:`Substitute first: (16 − 16)/(16 − 16), both 0. A signal: x − 4 is hiding in both (factor).`},
+  {k:'ember',kl:'factor and cancel · 2 of 4',t:R`= \lim_{x\to 4} \tfrac{${N}{(x - 4)(x + 4)}}{${N}{x\,(x - 4)}}`,n:`Top by difference-of-squares; bottom by taking out the common x.`},
+  {k:'ember',kl:'factor and cancel · 3 of 4',t:R`= \lim_{x\to 4} \tfrac{x + 4}{x}`,n:`Cancel x − 4: they agree at every x ≠ 4, and agreeing-near never looks at 4.`},
+  {k:'ember',kl:'factor and cancel · 4 of 4',t:R`= \tfrac{8}{4} = ${K}{2}`,n:`substitution: the bottom is 4 now, not 0.`}
+],{title:'The slides · factor and cancel · ← → keys work'});
+stepper('#sl2',[
+  {k:'teal',kl:'from 8i · the conjugate · 1 of 4',t:R`\lim_{x\to 9} \tfrac{\sqrt x - 3}{x - 9}`,n:`Substitute: (3 − 3)/0, both 0. The root hides the factor.`},
+  {k:'teal',kl:'from 8i · the conjugate · 2 of 4',t:R`= \lim \tfrac{\sqrt x - 3}{x - 9}\cdot ${N}{\tfrac{\sqrt x + 3}{\sqrt x + 3}}`,n:`Times 1: √x + 3 is never 0.`},
+  {k:'teal',kl:'from 8i · the conjugate · 3 of 4',t:R`= \lim \tfrac{${N}{x - 9}}{(x - 9)(\sqrt x + 3)} = \lim \tfrac{1}{\sqrt x + 3}`,n:`difference-of-squares on the top; cancel (agreeing-near).`},
+  {k:'teal',kl:'from 8i · the conjugate · 4 of 4',t:R`= \tfrac{1}{3 + 3} = ${K}{\tfrac16}`,n:`root-limit gives √x → 3 at 9; then limits-add and reciprocal-limit.`}
+],{title:'The slides · the conjugate · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'far out · 1 of 3',t:R`\lim_{x\to\infty} \tfrac{6x^2 - x}{2x^2 + 3x + 1}`,n:`Big over big. The greatest power on the bottom is x².`},
+  {k:'ember',kl:'far out · 2 of 3',t:R`= \lim \tfrac{${N}{6 - \frac1x}}{${N}{2 + \frac3x + \frac{1}{x^2}}}`,n:`Divide every term by x²: times (1/x²)/(1/x²), which is 1 for x ≠ 0.`},
+  {k:'ember',kl:'far out · 3 of 3',t:R`\to \tfrac{6 - 0}{2 + 0 + 0} = ${K}{3}`,n:`one-over-x-far-out and power-limit for the powers of 1/x; far-out-too's techniques. The leading terms decided it (rational-functions-far-out).`},
+  {k:'ember',kl:'big minus big · 1 of 4',t:R`\lim_{x\to\infty}\big(\sqrt{x^2 + x} - x\big)`,n:`Both pieces pass every bound. “Big minus big is 0” is the tempting illegal move.`},
+  {k:'ember',kl:'big minus big · 2 of 4',t:R`= \lim \tfrac{${N}{x}}{\sqrt{x^2 + x} + x}`,n:`Times the conjugate over itself; difference-of-squares on the top.`},
+  {k:'ember',kl:'big minus big · 3 of 4',t:R`= \lim \tfrac{1}{${N}{\sqrt{1 + \frac1x}} + 1}`,n:`Divide by x: for x &gt; 0, √(x² + x) = x√(1 + 1/x).`},
+  {k:'ember',kl:'big minus big · 4 of 4',t:R`\to \tfrac{1}{1 + 1} = ${K}{\tfrac12}`,n:`√(1 + 1/x) → 1 by a squeeze (its distance from 1 is at most 1/x). Not 0.`}
+],{title:'The slides · far out · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'a sequence · 1 of 2',t:R`\tfrac{1}{S(n)} \lt \tfrac1N \lt \varepsilon \ \ (n \ge N)`,n:`everyday-counting-passes gives N with 1/N &lt; ε; positive-reciprocal on ℚ does the rest. The run 1, ½, ⅓, ⋯ heads to 0 (one-over-n).`},
+  {k:'ember',kl:'a sequence · 2 of 2',t:R`|c_k - \sqrt2| \lt 10^{-k} \lt \tfrac1k`,n:`8·cb5's cut-offs head to their real (cut-offs): 1, 1.4, 1.41, ⋯ → √2.`}
+],{title:'The slides · a sequence · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'built backwards · 1 of 3',t:R`\text{want: } \tfrac00 \text{ at } -1,\ \text{limit } 5`,n:`Start with something that is 5 at −1, with no trouble there.`},
+  {k:'ember',kl:'built backwards · 2 of 3',t:R`${K}{2x + 7}\text{ is } 5 \text{ at } -1;\ \text{hide } ${N}{x + 1}`,n:`The factor to hide is the one that is 0 at −1.`},
+  {k:'ember',kl:'built backwards · 3 of 3',t:R`\tfrac{(2x + 7)(x + 1)}{x + 1} = \tfrac{${N}{2x^2 + 9x + 7}}{x + 1}`,n:`Expand. At −1: (2 − 9 + 7)/0, both 0; factoring and cancelling brings back 5.`}
+],{title:'The slides · built backwards · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

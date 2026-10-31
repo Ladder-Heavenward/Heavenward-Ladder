@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Volumes by cross sections</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r16i.html">← 16i improper integrals</a><a href="r16phys.html">next: 16·phys how far did it go, if you only know how fast? →</a></p>
+  <div class="tags"><span class="tag tech">16j · technique</span></div>
+  <h1>Volumes by cross sections</h1>
+  <p>Rung 15 laid down three axioms for area and squeezed every other area out of boxes. Volume is built the same way, with solid boxes in place of flat ones. Three axioms for volume, and one squeeze between stacks of thin slabs, prove that a solid's volume is the integral of the areas of its cross sections. From that come the prism’s volume, base times height, and the pyramid’s, a third of that, from the area under the square. Then comes the technique that solids with matching slices have the same volume. Then the volumes of solids built on a flat region with square or rectangular slices. And last, the mass of a solid whose density changes from slice to slice.</p>
+  <p class="gesture">Slice the solid by parallel planes. The volume is the integral of the slices’ areas along the line that crosses them. A prism: base times height. A pyramid: a third of base times height. Matching slices, matching volumes. Mass is the integral of each slice’s area times its heaviness for its size.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r15a.html">15a</a> (the three area axioms, the model), <a href="r15c.html">15c</a> (integrable, and the test), <a href="r16c.html">16c</a> (area-is-a-change), <a href="r16f.html">16f</a> (the table), <a href="r16g.html">16g</a> (the area between), <a href="r16d.html">16d</a> (substitution for areas). <a href="r16cb12.html">16·cb12</a> uses density to float and sink.</p></div>
+</header>
+
+<section class="class step" data-step="16j1">
+  <h2 class="sthead"><span class="stno">16j1</span>Three rules for volume</h2>
+  <p class="stands">Stands on 9e (points of the plane as pairs) and 15a (the three area axioms).</p>
+  <p class="eqline" data-pid="4630de">From here on, a point of space is a triple (x, y, z) of reals, as a point of the plane is a pair (9e). For a set S of points of space and a real k, the slice of S at x = k is the set of pairs (y, z) with (k, y, z) in S.</p>
+  <p class="eqline" data-pid="a7cdbe">From here on, for p &lt; q, c &lt; d and e &lt; f, the box [p, q] × [c, d] × [e, f] is the set of points (x, y, z) with p ≤ x ≤ q, c ≤ y ≤ d and e ≤ z ≤ f. Its accepted name is a rectangular box, or cuboid.</p>
+  <p data-pid="87f7cc">Box-volume axiom: <b>the box [p, q] × [c, d] × [e, f] has volume (q − p)(d − c)(f − e).</b> Inside-no-more axiom for volume: <b>if one solid lies inside another, and both have volumes, the first volume is no more than the second.</b> Side-by-side axiom for volume: <b>if two solids with volumes share no points except some on a single flat wall x = k, y = k or z = k, then the two together have the sum of the two volumes.</b></p>
+  <p data-pid="14d4a9">These are rung 15's three rules, one dimension up. Nothing else is assumed. In particular, nothing yet says that a ball has a volume at all. The next footing squeezes one out.</p>
+  <p data-pid="d51f49">In this step the names prism and pyramid are given by slices alone. A prism's slices all have one area. A pyramid's slices shrink evenly, in every direction, toward a point. Nothing more about them is used here than their slices.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · three rules · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">16j1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">S: the points (x, y, z) with 0 ≤ x ≤ 2,  0 ≤ y ≤ 1,  0 ≤ z ≤ 3</span></span>Describe the slice of S at x = 1, and its area. <br>Find the volume of S by the box-volume axiom.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="16j2">
+  <h2 class="sthead"><span class="stno">16j2</span>Cross sections squeeze the volume</h2>
+  <p class="stands">Stands on 16j1, 15c (integrable, and the test) and 16g (the region between two graphs).</p>
+  <p data-pid="74a905">Slab technique: <b>if a flat region R has area a, and the solid [p, q] × R has a volume obeying the three volume axioms, that volume is a(q − p).</b> Here R lies in the (y, z) plane, like a slice.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the slab technique">
+\text{boxes inside } R \text{ total } L,\ \ \text{boxes over } R \text{ total } U @@ R’s area is squeezed by boxes (15c, 16g): L ≤ a ≤ U, and U − L as small as you like
+[p, q] \times \text{each box} \text{ is a solid box} @@ the box-volume axiom: its volume is (q − p) times the box’s area
+(q - p)L \le V \le (q - p)U @@ side by side, the walls y = k between them; inside-no-more for volume
+\htmlClass{new}{V = a(q - p)} \quad \blacksquare @@ squeezed between two totals that close on a(q − p)
+  </pre>
+  <p class="eqline" data-pid="9864db">From here on, the slices of a solid S between the planes x = u and x = v are tight when, for partitions of [u, v] as fine as you like, each piece has two flat regions with areas: an inner one, inside every slice over the piece, and an outer one, holding every slice over the piece. And the total, over the pieces, of (outer area − inner area) times the width can be made as small as you like.</p>
+  <p data-pid="90b6aa">Cross-sections technique: <b>a solid’s volume is the integral of the areas of its cross sections.</b> Let S lie between the planes x = u and x = v. Let its slices be tight. Let the slice at x have area A(x), with A integrable on [u, v]. If S has a volume obeying the three volume axioms, it is ∫ᵤᵛ A(x) dx.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the cross-sections technique">
+[x_{k-1}, x_k] \times I_k \subseteq S \cap \text{slab}_k \subseteq [x_{k-1}, x_k] \times O_k @@ the slices are tight: I_k, of area a_k, inside every slice over the piece; O_k, of area b_k, holding them all
+\textstyle\sum a_k \Delta x_k \le V \le \sum b_k \Delta x_k @@ the slab technique for each; side by side, the walls x = x_k between them; inside-no-more for volume
+\textstyle\sum a_k \Delta x_k \le \int_u^v A \le \sum b_k \Delta x_k @@ a_k ≤ A(x) ≤ b_k on the piece (inside-no-more, 15a), so the sums sit outside L(A, P) and U(A, P)
+\textstyle\sum (b_k - a_k)\Delta x_k \text{ as small as you like} @@ tight
+\htmlClass{new}{V = \textstyle\int_u^v A(x)\,dx} \quad \blacksquare @@ two numbers between the same two totals, which close together, are equal
+  </pre>
+  <p class="eqline" data-pid="857b23">From here on, a solid whose slices are tight, with integrable areas A(x), has volume ∫ᵤᵛ A(x) dx.</p>
+  <p data-pid="cf9509">Nesting slices are tight. If on each piece of a partition the slices grow, each inside the next, or shrink, each inside the one before, take the smallest slice for I and the largest for O. Then the total of (b − a)Δx is U(A, P) − L(A, P), which the test for integrable (15c) makes as small as you like. Every solid in this step has nesting slices.</p>
+  <section class="slides" id="sl7"><div class="eyebrow">The slides · cross sections · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16j2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">S: the points (x, y, z) with 0 ≤ x ≤ 3,  |y| ≤ x,  |z| ≤ x</span></span>Describe the slice at x, and check that the slices nest. <br>Find the volume of S by the cross-sections technique.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="16j3">
+  <h2 class="sthead"><span class="stno">16j3</span>Prisms and pyramids</h2>
+  <p class="stands">Stands on 16j2 and 15h (exact areas).</p>
+  <p data-pid="39cd76">Prism technique: <b>if every slice of S for 0 ≤ x ≤ h has the same area B, then S has volume Bh. A box p × q × r has volume pqr.</b> ∫₀ʰ B dx = Bh; for the box, B = qr (box-area).</p>
+  <p data-pid="558d1f">Pyramid technique: <b>if the slice at x, for 0 ≤ x ≤ h, is the base slice shrunk by the factor x/h in each direction, so that A(x) = B(x/h)², then the volume is Bh/3.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the pyramid technique">
+A(x) = B\,\tfrac{x^2}{h^2} @@ a set shrunk by a factor c each way has c² times the area (boxes first, then squeezed: 15a, 15c)
+V = \textstyle\int_0^h \tfrac{B}{h^2}x^2\,dx = \tfrac{B}{h^2}\cdot\tfrac{h^3}{3} @@ cross-sections; the table (16f)
+\htmlClass{new}{V = \tfrac13 Bh} \quad \blacksquare @@ a third of the prism on the same base
+  </pre>
+  <p data-pid="1b8a61">Matching-slices technique: <b>if two solids lie between x = u and x = v and their slices at each x have the same area, they have the same volume.</b> When both have tight slices, both are ∫ᵤᵛ A by the cross-sections technique. A pile of coins pushed into a slant has the same volume as the straight pile.</p>
+  <p data-pid="0ce894">One of the first to slice solids this way compared a flat figure to a cloth woven of parallel threads, and a solid to a book made of parallel pages. He argued that two solids are to each other as the totals of their pages, compared page by page.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · prisms and pyramids · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · slice areas, and slabs that add to a volume</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="lbl">slice area A(x), with n slabs</div>
+      <canvas id="cvF"></canvas>
+      <div class="chips" id="fch"></div>
+      <div class="kn"><span class="m">n</span><input type="range" id="kn" min="1" max="40" step="1" value="8"><output id="on"></output></div>
+      <div class="cap">Ink: A(x). Teal: slabs of width (v − u)/n, each as tall as the slice at its middle. Their total is a volume estimate; the integral is the volume.</div>
+    </div>
+    <div class="panel">
+      <div class="lbl">the flat base, and the slice at x</div>
+      <canvas id="cvL"></canvas>
+      <div class="kn"><span class="m">x</span><input type="range" id="kx" min="0" max="1" step="0.005" value="0.4"><output id="ox"></output></div>
+      <div class="cap">For the square-slice solid: the base between y = x² and y = √x, and in ember the gap at the knob's x, the side of the square slice standing there.</div>
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16j3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a cone of height 4 on a base of area 9</span></span>Guess its volume as a share of the prism with the same base and height. <br>Find it by the pyramid technique.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="16j4">
+  <h2 class="sthead"><span class="stno">16j4</span>Known slices</h2>
+  <p class="stands">Stands on 16j3 and 16g (the region between two graphs).</p>
+  <pre class="lines" data-k="ember" data-label="this step: solids on a flat region">
+\text{base between } y = x^2 \text{ and } y = \sqrt x,\ 0 \le x \le 1;\ \text{slices are squares on the gap} @@ the side at x is √x − x² (16g)
+A(x) = (\sqrt x - x^2)^2 = x - 2x^{5/2} + x^4 @@ 5h's square of a difference
+V = \tfrac12 - \tfrac47 + \tfrac15 = \tfrac{9}{70} \approx 0.1286 @@ cross-sections; the table for x^(5/2)
+\text{base } 0 \le y \le 4 - x^2;\ \text{square slices}:\ \ V = \textstyle\int_{-2}^{2}(4 - x^2)^2\,dx = \tfrac{512}{15} @@ odd-and-even-areas (16d) doubles ∫₀²
+\text{base } 0 \le y \le \sqrt x,\ 0 \le x \le 4;\ \text{rectangles of height } 2:\ \ V = 2 \cdot \tfrac{16}{3} = \tfrac{32}{3} @@ A(x) = 2√x
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · known slices · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16j4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">base between y = 0 and y = 2 − x,  0 ≤ x ≤ 2;  slices across x are squares on the gap</span></span>Find the area of the slice at x, and the volume. <br>Say which solid of 16j3 this is, and check its volume by the technique there.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="16j5">
+  <h2 class="sthead"><span class="stno">16j5</span>Density</h2>
+  <p class="stands">Stands on 16j4.</p>
+  <p class="eqline" data-pid="8a2933">A solid's density is its mass per unit volume, ρ = m/V when it is the same throughout; its accepted name is density, in kg/m³.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · density · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16j5.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="V = 48,"></span> <span data-tex-inline="h = 9"></span></span>Find the base area of the pyramid.</li><li><span class="givens"><span data-tex-inline="V = \int_0^2 (3x + 1)\,dx"></span></span>Build a solid whose slices give V, with its slice at each x.</li><li><span class="givens"><span data-tex-inline="\text{base } 0 \le y \le f(x),"></span> <span data-tex-inline="0 \le x \le 1,"></span> <span data-tex-inline="\text{square slices},"></span> <span data-tex-inline="V = \int_0^1 x^4\,dx"></span></span>Find f.</li><li><span class="givens"><span data-tex-inline="m = 6000 \text{ kg},"></span> <span data-tex-inline="V = 6 \text{ m}^3,"></span> <span data-tex-inline="\text{fresh water} \approx 1000 \text{ kg/m}^3"></span></span>Find the density of the tank's water.<br>Could this be fresh water?</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="16j6">
+  <h2 class="sthead"><span class="stno">16j6</span>Mass by slices</h2>
+  <p class="stands">Stands on 16j5 and 16j2 (cross-sections).</p>
+  <p data-pid="b6a26b">Density technique: <b>if the density depends only on x, as ρ(x), and the slice at x has area A(x), the mass is ∫ᵤᵛ ρ(x)A(x) dx.</b> On a thin slab from x to x + Δx the mass lies between the least and greatest of ρA times Δx; the sums squeeze to the integral (15h).</p>
+  <pre class="lines" data-k="ember" data-label="this step: a soil column">
+A = 2 \text{ m}^2,\ \rho(x) = 1200 + 300x \text{ kg/m}^3,\ 0 \le x \le 3 \text{ m} @@ a core from a field near Manteca; x is depth
+m = \textstyle\int_0^3 2(1200 + 300x)\,dx = 2(3600 + 1350) = 9900 \text{ kg} @@ density; area-is-a-change
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · mass by slices · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16j6.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{square base, side } 6 \text{ m},"></span> <span data-tex-inline="\text{height } 10 \text{ m}"></span></span>Find the volume of the pyramid.</li><li><span class="givens"><span data-tex-inline="\text{base } 0 \le y \le x,"></span> <span data-tex-inline="0 \le x \le 3,"></span> <span data-tex-inline="\text{slices across } x \text{ are squares}"></span></span>Find the volume of the solid.</li><li><span class="givens"><span data-tex-inline="\text{base between}"></span> <span data-tex-inline="y = x \text{ and } y = x^2,"></span> <span data-tex-inline="0 \le x \le 1,"></span> <span data-tex-inline="\text{slices: rectangles of height } 5"></span></span>Find the volume of the solid.</li><li><span class="givens"><span data-tex-inline="\text{rod } 2 \text{ m long},"></span> <span data-tex-inline="\text{cross-section } 0.01 \text{ m}^2,"></span> <span data-tex-inline="\rho(x) = 7800 - 400x \text{ kg/m}^3"></span></span>Find the mass of the rod, with x the distance from one end.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="16j7">
+  <h2 class="sthead"><span class="stno">16j7</span>Illegal moves</h2>
+  <p class="stands">Stands on 16j1 to 16j6.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+V_{\text{pyramid}} = \tfrac12 Bh\,? @@ the slice shrinks as x², not as x: a third
+\text{square slices: } A(x) = \sqrt x - x^2\,? @@ that is the side; the area is its square
+\begin{aligned}&\text{a slanted pile has more}\\ &\quad\text{volume than a straight one}\,?\end{aligned} @@ matching-slices: matching slices, matching volume
+m = \rho\,V \text{ when } \rho \text{ changes}\,? @@ only for one density throughout; otherwise ∫ ρA
+  </pre>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16j7.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{a pyramid},"></span> <span data-tex-inline="\text{slicing planes across}"></span> <span data-tex-inline="\text{a direction other than } x"></span></span>Run the step's volume formula on these slices as far as the step's techniques take it.<br>Write what is missing before it could be proved.</li><li><span class="givens"><span data-tex-inline="A(x) = \tfrac{1}{x^2},"></span> <span data-tex-inline="x \ge 1 \text{, out forever}"></span></span>Find the volume of the solid with these slices, if it has one.<br>Write the step whose integral you need.</li><li><span class="givens"><span data-tex-inline="V_1 = V_2"></span></span>Prove or refute: two solids with the given volumes have matching slices.</li><li><span class="givens"><span data-tex-inline="\text{base area } B,"></span> <span data-tex-inline="\text{height } h,"></span> <span data-tex-inline="\text{slice shrinks by } x/h"></span> <span data-tex-inline="\text{in one direction only}"></span></span>Find the slice area at each x, and the volume.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">16j.4.1</span><span class="tagq">build</span>Design a solid of your own over a stretch of length h whose slices are not all the same shape, and find its volume.<br>Then build a second solid, of another shape, with the same slice areas, and find its volume without a new integral.</div>
+  <div class="chq"><span class="chid">16j.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{a cube of side } s"></span></span>Cut the cube into three pyramids, each with a face of the cube for its base and one far point of the cube for its top.<br>Find each piece's volume without any integral, and check it against the pyramid technique.</div>
+  <div class="chq"><span class="chid">16j.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="V = \tfrac13 Bh"></span></span>Prove or refute: a solid with base area B, height h and the given volume is a pyramid.</div>
+  <div class="chq"><span class="chid">16j.4.4</span><span class="tagq">seam</span>One mathematician summed the "indivisible" pages of a solid to compare volumes. Another, a Jesuit, objected in the 1640s that a solid is not made of planes, which have no thickness. Endlessly many of them, he said, sum to nothing or to everything. The first answered that he compared the pages, he did not add them. This step proved the page-by-page comparison, by squeezing between stacks of thin slabs. <br>Was the objector right? <br>Does the squeeze answer him?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r16i.html">← 16i · improper integrals</a><a href="r16cb12.html">16·cb12 · floating and sinking →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Solid shapes</h3>
+  <p>Prisms and pyramids as shapes in their own right, with faces and edges, belong to the geometry of space, which the ladder builds after the plane. This step uses only their slices.</p>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>Cavalieri compared a flat figure to a cloth woven of parallel threads and a solid to a book made of parallel pages, and argued that two solids are to each other as the totals of their pages, compared page by page.</p><cite>Bonaventura Cavalieri, Geometria indivisibilibus (1635); paraphrase</cite></aside>
+  <p>In 16j.4.4, the one who summed the pages is Bonaventura Cavalieri, and the Jesuit who objected is Paul Guldin.</p>
+  <h3>Accepted names</h3>
+  <p>The cross-sections technique is Cavalieri’s principle, in its integral form. The three volume axioms are the start of Jordan content, in three dimensions.</p>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+/* least and greatest of F.f on [lo, hi]: the ends, F's critical points inside, and a fine sample (exact between critical points for the functions used here) */
+function ext(F,lo,hi){ if(F.dir) return [0,1]; let m=Infinity,M=-Infinity; const t=x=>{ const v=F.f(x); if(v<m) m=v; if(v>M) M=v; };
+  t(lo); t(hi); (F.crit||[]).forEach(c=>{ if(c>lo&&c<hi) t(c); }); for(let k=1;k<64;k++) t(lo+(hi-lo)*k/64); return [m,M]; }
+function sums(F,pts){ let L=0,U=0; const ms=[],Ms=[]; for(let i=1;i<pts.length;i++){ const [m,M]=ext(F,pts[i-1],pts[i]), w=pts[i]-pts[i-1]; ms.push(m); Ms.push(M); L+=m*w; U+=M*w; } return {L,U,ms,Ms}; }
+const eq=(a,b,n)=>Array.from({length:n+1},(_,i)=>a+(b-a)*i/n);
+function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
+function boxes(P,pts,hs,stroke,fill,alpha){ const c=P.ctx; for(let i=1;i<pts.length;i++){ const a=pts[i-1],b=pts[i],h=hs[i-1]; c.globalAlpha=alpha; P.poly([[a,0],[b,0],[b,h],[a,h]],null,fill); c.globalAlpha=1; P.poly([[a,0],[b,0],[b,h],[a,h]],stroke,null,1.2); } }
+function dirDots(P,a,b){ const c=P.ctx; c.fillStyle=col('--ink'); for(let k=0;k<=300;k++){ const x=a+(b-a)*k/300; const y=(k%2)?0:1; c.fillRect(P.X(x)-1,P.Y(y)-1,2,2); } }
+/* shade between the graph of fn and the axis from lo to hi: above in pos colour, below in neg colour */
+function shade(P,fn,lo,hi,pos,neg,alpha){ if(hi<lo){ const t=lo; lo=hi; hi=t; } const c=P.ctx, N=300; c.globalAlpha=alpha==null?0.32:alpha;
+  for(let k=0;k<N;k++){ const x0=lo+(hi-lo)*k/N, x1=lo+(hi-lo)*(k+1)/N, xm=(x0+x1)/2, y=fn(xm); if(!isFinite(y)) continue; P.poly([[x0,0],[x1,0],[x1,fn(x1)],[x0,fn(x0)]],null,y>=0?pos:neg); }
+  c.globalAlpha=1; }
+function rangeOf(fn,lo,hi,pad){ let m=Infinity,M=-Infinity; for(let k=0;k<=400;k++){ const v=fn(lo+(hi-lo)*k/400); if(isFinite(v)){ if(v<m) m=v; if(v>M) M=v; } } if(m>0) m=0; if(M<0) M=0; const p=(M-m)*(pad==null?0.12:pad)||1; return [m-p,M+p]; }
+function chips(el,FN,get,setk,after){ Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===get()) b.className='on'; b.onclick=()=>{ setk(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+const Nw='\\htmlClass{new}';
+function gridFor(sp){ return sp>40?10:sp>16?4:sp>8?2:sp>3?1:sp>1.2?0.5:0.25; }
+function frame2(P,fn,lo,hi,pad){ const w=hi-lo; P.o.x=[lo-0.12*w,hi+0.08*w]; P.o.y=rangeOf(fn,lo,hi,pad==null?0.12:pad); const sx=P.o.x[1]-P.o.x[0], sy=P.o.y[1]-P.o.y[0]; let g=gridFor(sx); while(sy/g>24) g*=2; P.o.grid=g; }
+const num=(f,a,b,n)=>{ n=n||4000; const h=(b-a)/n; let s=0; for(let i=0;i<n;i++) s+=f(a+(i+0.5)*h)*h; return s; };
+/* axes with separate steps across and up */
+function axes2(P,gx,gy){ const c=P.ctx,o=P.o; c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ c.moveTo(P.X(x),P.Y(o.y[0])); c.lineTo(P.X(x),P.Y(o.y[1])); }
+  for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ c.moveTo(P.X(o.x[0]),P.Y(y)); c.lineTo(P.X(o.x[1]),P.Y(y)); } c.stroke();
+  c.strokeStyle=col('--muted'); c.lineWidth=1.3; c.beginPath(); if(o.y[0]<=0&&o.y[1]>=0){ c.moveTo(P.X(o.x[0]),P.Y(0)); c.lineTo(P.X(o.x[1]),P.Y(0)); } if(o.x[0]<=0&&o.x[1]>=0){ c.moveTo(P.X(0),P.Y(o.y[0])); c.lineTo(P.X(0),P.Y(o.y[1])); } c.stroke();
+  c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; const ly=Math.min(P.H-6,Math.max(12,P.Y(0)+14));
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ if(Math.abs(x)<1e-9) continue; c.fillText(+x.toFixed(6),P.X(x),ly); }
+  c.textAlign='right'; const lx=Math.max(32,Math.min(P.W-4,P.X(0)-5)); for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ if(Math.abs(y)<1e-9) continue; c.fillText(String(+y.toFixed(6)).replace('-','−'),lx,P.Y(y)+4); } }
+function nice(sp){ const raw=sp/6, p=Math.pow(10,Math.floor(Math.log10(raw))), m=raw/p; return (m<1.5?1:m<3.5?2:m<7.5?5:10)*p; }
+const kn=$('kn'),kx=$('kx'),cvF=$('cvF'),cvL=$('cvL');
+const FN={pyr:{lab:'pyramid, B = 36, h = 10',f:x=>36*x*x/100,a:0,b:10,V:120},sq:{lab:'square slices on √x − x²',f:x=>Math.pow(Math.sqrt(x)-x*x,2),a:0,b:1,V:9/70},hill:{lab:'square slices on 4 − x²',f:x=>Math.pow(4-x*x,2),a:-2,b:2,V:512/15}};
+let key='pyr';
+const PF=plane(cvF,{x:[0,10],y:[0,40],grid:1,aspect:0.8,draw:P=>drawF(P)});
+const PL=plane(cvL,{x:[-0.12,1.1],y:[-0.1,1.1],grid:1,aspect:0.8,draw:P=>drawL(P)});
+[[PF,cvF],[PL,cvL]].forEach(([P,cv])=>Object.defineProperty(P.o,'aspect',{get:()=>cv.clientWidth>480?0.75:0.9}));
+const est=()=>{ const F=FN[key], n=+kn.value, w=(F.b-F.a)/n; let s=0; for(let i=0;i<n;i++) s+=F.f(F.a+(i+0.5)*w)*w; return s; };
+function drawF(P){ const F=FN[key], n=+kn.value, w=(F.b-F.a)/n, [lo,hi]=rangeOf(F.f,F.a,F.b,0.1); P.o.x=[F.a-(F.b-F.a)*0.08,F.b+(F.b-F.a)*0.04]; P.o.y=[lo,hi]; axes2(P,nice(F.b-F.a),nice(hi-lo));
+  const pts=[]; for(let i=0;i<=n;i++) pts.push(F.a+i*w); const hs=[]; for(let i=0;i<n;i++) hs.push(F.f(F.a+(i+0.5)*w)); boxes(P,pts,hs,'--teal','--teal',0.25); curve(P,F.f,'--ink',2.6,F.a,F.b); }
+function drawL(P){ const x=+kx.value; axes2(P,0.2,0.2); shade(P,t=>Math.sqrt(t)-t*t,0,1,'--muted','--muted',0); const c=P.ctx; c.globalAlpha=0.18;
+  for(let k=0;k<200;k++){ const a=k/200,b=(k+1)/200; P.poly([[a,a*a],[b,b*b],[b,Math.sqrt(b)],[a,Math.sqrt(a)]],null,'--teal'); } c.globalAlpha=1;
+  curve(P,t=>t*t,'--ink',2,0,1.05); curve(P,Math.sqrt,'--ink',2,0,1.1); P.line(x,x*x,x,Math.sqrt(x),'--ember',4); }
+function read(){ const F=FN[key], n=+kn.value, x=+kx.value, s=Math.sqrt(x)-x*x; $('on').textContent=n; $('ox').textContent=mm(x,3);
+  const e=est(); const vd=$('vdF'); vd.className='verdict'+(Math.abs(e-F.V)/F.V<0.005?' win':'');
+  vd.textContent='With '+n+' slabs the '+F.lab.split(',')[0]+' is about '+mm(e,4)+'; by cross sections it is '+mm(F.V,4)+'. On the right, the square slice at x = '+mm(x,3)+' has side '+mm(s,4)+' and area '+mm(s*s,4)+'.';
+  tex($('eqF'),R`\begin{gathered}\textstyle\sum A(m_i)\,\Delta x \approx ${mm(e,4)},\ \ V = ${mm(F.V,4)}\\ A(${mm(x,3)}) = (\sqrt{${mm(x,3)}} - ${mm(x,3)}^2)^2 \approx ${mm(s*s,4)}\end{gathered}`,true); }
+function all(){ PF.redraw(); PL.redraw(); read(); }
+kn.addEventListener('input',all); kx.addEventListener('input',all);
+chips($('fch'),FN,()=>key,k=>{ key=k; },all);
+window.__pic={set:(k,n,x)=>{ [...$('fch').children][Object.keys(FN).indexOf(k)].click(); kn.value=n; kx.value=x; all(); return {est:+est().toFixed(5),V:+FN[k].V.toFixed(5),num:+num(FN[k].f,FN[k].a,FN[k].b).toFixed(5)}; }};
+all();
+stepper('#sl1',[
+  {k:'ember',kl:'slices',t:R`\{(y, z) : (k, y, z) \in S\}`,n:`The slice at x = k.`},
+  {k:'ember',kl:'three rules',t:R`${Nw}{V = (q - p)(d - c)(f - e)}`,n:`Boxes; inside no more; side by side.`}
+],{title:'The slides · three rules · ← → keys work'});
+stepper('#sl7',[
+  {k:'ember',kl:'slab',t:R`${Nw}{V = a(q - p)}`,n:`Boxes over the base, times the length.`},
+  {k:'ember',kl:'tight slices',t:R`I_k \subseteq \text{slice} \subseteq O_k`,n:`The gap shrinks with the pieces.`},
+  {k:'ember',kl:'cross-sections',t:R`${Nw}{V = \textstyle\int_u^v A(x)\,dx}`,n:`Squeezed between stacks of slabs.`},
+  {k:'ember',kl:'nesting',t:R`\text{nesting} \Rightarrow \text{tight}`,n:`The gap is U − L.`}
+]);
+stepper('#sl2',[
+  {k:'ember',kl:'prism',t:R`V = Bh`,n:`Every slice B.`},
+  {k:'ember',kl:'the box',t:R`V = pqr`,n:`B = qr.`},
+  {k:'ember',kl:'pyramid',t:R`${Nw}{V = \tfrac13 Bh}`,n:`From ∫x².`},
+  {k:'ember',kl:'matching-slices',t:R`A_1 = A_2 \Rightarrow V_1 = V_2`,n:`Matching slices.`},
+  {k:'ember',kl:'pages of a book',t:R`1635`,n:`A solid as a book of pages.`}
+],{title:'The slides · prisms and pyramids · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'square slices',t:R`A = (\sqrt x - x^2)^2`,n:`The side is the gap.`},
+  {k:'ember',kl:'9/70',t:R`\tfrac12 - \tfrac47 + \tfrac15`,n:`The table.`},
+  {k:'ember',kl:'rectangles',t:R`A = 2\sqrt x \Rightarrow \tfrac{32}{3}`,n:`Height 2.`}
+],{title:'The slides · known slices · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'density',t:R`\rho = \tfrac{m}{V}`,n:`kg/m³.`}
+],{title:'The slides · density · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'mass by slices',t:R`${Nw}{m = \textstyle\int \rho(x)A(x)\,dx}`,n:`Slab by slab.`},
+  {k:'ember',kl:'the core',t:R`9900 \text{ kg}`,n:`Near Manteca.`}
+],{title:'The slides · mass by slices · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'illegal',t:R`\tfrac12 Bh`,n:`A third, not a half.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

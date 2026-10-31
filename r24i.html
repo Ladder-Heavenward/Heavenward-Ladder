@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Slope fields and stepping forward</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+.kn{font-size:.88rem}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r24h.html">← 24h the two model equations</a><a href="r24j.html">next: 24j the logistic equation solved →</a></p>
+  <div class="tags"><span class="tag tech">24i · technique</span></div>
+  <h1>Slope fields and stepping forward</h1>
+  <p>Most rules on rates have no formula for their solution. The rule still says, at every place, which way the solution must head. Draw that as a short stroke at each point of a grid and you have a field of slopes, and every solution is a curve that runs along the strokes. To follow one, start at the start, step a short way along the stroke you are standing on, and look again. This step makes that walk exact enough to trust. It counts how far one step can slip, and how the slips of many steps add up, using the matching polynomials of the last rung and the drift of nearby starts from this one. It finds a better step that looks ahead before it moves. And it meets rules that punish the plain walk however carefully it is taken, because the step must be tiny to keep the walk steady long after the solution itself has gone quiet.</p>
+  <p class="gesture">A rule on rates draws a field of slopes, and a solution runs along it. Step along the stroke you stand on, and look again. Each step slips by about the square of its length, and the slips of a whole walk add to about one step length. Looking ahead before you step makes the slips much smaller. Some rules make the plain walk swing wildly unless the steps are tiny, and a step backward cures it.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r24d.html">24d</a> (tame rules, the existence and drift techniques), <a href="r23b.html">23b</a> (the match-error and error-ceiling techniques), <a href="r23l.html">23l</a> (trapezoids), <a href="r24a.html">24a</a> (the own-rate technique), <a href="r22h.html">22h</a> (sequences to know by heart). <a href="r24j.html">24j</a> solves the logistic rule, and walks it.</p></div>
+</header>
+
+<section class="class step" data-step="24i1">
+  <h2 class="sthead"><span class="stno">24i1</span>Walking the field</h2>
+  <p class="stands">Stands on 24a2 (a rule and a start), 24a3 (the own-rate technique), 17b1 (the slope-of-log technique) and 11e (sequences go through).</p>
+  <p class="eqline" data-pid="c7de19">From here on, the <i>slope field</i> of y′ = F(x, y) is the picture with, at each point (x, y), a short stroke of slope F(x, y). The <i>forward walk</i> with step h from (x₀, y₀) is xₙ₊₁ = xₙ + h, yₙ₊₁ = yₙ + h·F(xₙ, yₙ). Accepted name: a direction field, and the forward step method.</p>
+  <p data-pid="b5d8d5">A solution through a point leaves it along the stroke there, since its slope is F at that point. The walk does the same, but keeps that slope for a whole step, while the solution bends away. So each step lands a little off the solution it set out on.</p>
+  <p data-pid="6e7022">Small-step technique: <b>for y′ = ky from (0, A), n forward steps of length x/n land at A(1 + kx/n)ⁿ, which heads to Ae^(kx) as n grows.</b> The walk closes in on the one solution of 24a3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the small-step technique">
+y_{j+1} = y_j + h\,k\,y_j = (1 + hk)\,y_j @@ one forward step of y′ = ky
+y_n = A(1 + hk)^n = A\big(1 + \tfrac{kx}{n}\big)^n @@ n steps, with h = x/n
+\big(1 + \tfrac{u}{n}\big)^n \to e^{u} \text{ for every real } u @@ n·ln(1 + u/n) heads to u, since ln has slope 1 at 1 (17b1); exp carries the limit through (11e)
+\htmlClass{new}{y_n \to Ae^{kx}} \quad \blacksquare @@ the one solution, by the own-rate technique (24a3)
+  </pre>
+  <p data-pid="ca9c45">With k = 1, A = 1 and x = 1: four steps give 1.25⁴ = 2.4414, eight give 2.5658, sixteen give 2.6379, against e = 2.71828. The errors are 0.277, 0.152, 0.080. Doubling the steps about halves the error. The next footing says why.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the forward walk · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · the slope field of y′ = x − y, and two walks from y(0) = 1</div>
+    <div id="pl"></div>
+    <div class="kn"><span class="m">step h</span><input type="range" id="kn" min="1" max="10" step="1" value="5"><output id="okn"></output></div>
+    <div class="cap">Grey strokes: the slope field. Ink: the solution x − 1 + 2e^(−x). Ember: the forward walk. Teal: the look-ahead walk of 24i3. Shorten the step and both walks close in; the teal one closes in much faster.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">24i1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="y&#x27; = x + y"></span></span>Find the slope of the field at (1, 2) and at (−1, −1). <br>Find the line on which every stroke is flat.</li><li><span class="givens"><span data-tex-inline="y&#x27; = x + y,\ \ y(0) = 1,\ \ h = 0.1"></span></span>Find y₁, y₂ and y₃ by the forward walk. <br>Check that y = 2eˣ − x − 1 solves the rule with this start, and find how far the walk is from it at x = 0.3.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24i2">
+  <h2 class="sthead"><span class="stno">24i2</span>The slip of one step, and of the walk</h2>
+  <p class="stands">Stands on 24i1, 23b1 (the match-error technique), 23b2 (the error-ceiling technique), 24d1 (tame rules) and 24d3 (the drift technique).</p>
+  <p data-pid="81d886">Walk-error technique: <b>let F be tame with constant L on a region holding the walk and the solutions through its points, and let every such solution have second slope at most K in size. Then the forward walk with step h lands, at x, within (Kh/2L)(e^(L(x − x₀)) − 1) of the solution through the start.</b> Each step slips by at most Kh²/2; each slip moves the walk onto a nearby solution; and nearby solutions drift apart no faster than the drift technique allows.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the walk-error technique, for x = x_N">
+z_j = \text{the solution through } (x_j, y_j);\ \ z_0 = y \text{, the solution through the start} @@ the walk's own points, each a start (24d2)
+z_j(x_{j+1}) = y_j + h\,F(x_j, y_j) + \tfrac12 z_j''(c)\,h^2 = y_{j+1} + \tfrac12 z_j''(c)\,h^2 @@ the match-error technique (23b1), with n = 1: z_j′(x_j) = F(x_j, y_j)
+|z_j(x_{j+1}) - z_{j+1}(x_{j+1})| \le \tfrac12 K h^2 @@ the error-ceiling technique (23b2): one step's slip
+|z_j(x_N) - z_{j+1}(x_N)| \le \tfrac12 K h^2\, e^{L(x_N - x_{j+1})} @@ the drift technique (24d3), from x_{j+1} to x_N
+|y_N - y(x_N)| \le \sum_{j=0}^{N-1} |z_{j+1}(x_N) - z_j(x_N)| @@ y_N = z_N(x_N); add the gaps (8h, the triangle technique)
+\textstyle\sum_{j=0}^{N-1} h\,e^{L(x_N - x_{j+1})} \le \int_{x_0}^{x_N} e^{L(x_N - t)}\,dt = \tfrac{1}{L}\big(e^{L(x_N - x_0)} - 1\big) @@ each box sits under the falling curve (22f1)
+\htmlClass{new}{|y_N - y(x_N)| \le \tfrac{Kh}{2L}\big(e^{L(x_N - x_0)} - 1\big)} \quad \blacksquare @@ the last two lines, times Kh/2
+  </pre>
+  <p data-pid="0e988f">Read the two sizes apart. One step slips by about h². A walk to a fixed x takes (x − x₀)/h steps, so the slips add to about h. Halve the step, and each slip falls to a quarter, the count of steps doubles, and the walk's error halves. For y′ = y on [0, 1], K = e and L = 1, and the bound at h = 0.25 is 0.584, against a true error of 0.277. The bound is honest, not tight.</p>
+  <p data-pid="5c5a49">The factor e^(L(x − x₀)) is the drift technique's. The walk does not fail because one step is bad. It fails because every slip becomes a new start, and starts drift.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · the walk’s error · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24i2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="y&#x27; = y,\ \ y(0) = 1,\ \ 0 \le x \le 1"></span></span>Find an h the walk-error technique allows for an error below 0.01 at x = 1, and the number of steps it needs. <br>Find the true error of the walk with that many steps. <br>Find the fewest steps whose true error is below 0.01.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24i3">
+  <h2 class="sthead"><span class="stno">24i3</span>Looking ahead</h2>
+  <p class="stands">Stands on 24i2, 23b2 (the error-ceiling technique), 13h2 (the difference-of-powers technique) and 23l1 (the trapezoid technique).</p>
+  <p class="eqline" data-pid="f59b0b">From here on, a <i>look-ahead step</i> from (xₙ, yₙ) takes the slope s₁ = F(xₙ, yₙ), takes a trial step to ỹ = yₙ + h·s₁, reads the slope s₂ = F(xₙ₊₁, ỹ) there, and then steps with the average: yₙ₊₁ = yₙ + h(s₁ + s₂)/2. Accepted name: the improved (trapezoidal) step, a second-order step method.</p>
+  <p data-pid="d74e87">Look-ahead technique: <b>for y′ = ky, one look-ahead step multiplies by 1 + hk + (hk)²/2, the matching polynomial of e^(hk) of degree 2; for k &gt; 0 the walk lands within Axk³h²e^(kx)/6 of Ae^(kx). And for y′ = f(x) the look-ahead walk is the trapezoid sum of 23l1.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the look-ahead technique">
+s_1 = ky_n,\ \ \tilde y = (1 + hk)\,y_n,\ \ s_2 = k(1 + hk)\,y_n @@ the definition, with F(x, y) = ky
+y_{n+1} = y_n + \tfrac{h}{2}\big(ky_n + k(1 + hk)y_n\big) = \big(1 + u + \tfrac{u^2}{2}\big)\,y_n,\ \ u = hk @@ collect
+0 \le e^{u} - \big(1 + u + \tfrac{u^2}{2}\big) \le \tfrac{u^3}{6}e^{u} \ \ (u \ge 0) @@ the error-ceiling technique (23b2) for exp, n = 2: its third slope is at most e^u
+b^n - a^n = (b - a)(b^{n-1} + \cdots + a^{n-1}) \le n\,(b - a)\,b^{n-1} \ \ (0 \le a \le b) @@ the difference-of-powers technique (13h2)
+\htmlClass{new}{0 \le Ae^{kx} - y_n \le A\,n\tfrac{u^3}{6}e^{u}e^{(n-1)u} = \tfrac{A\,x\,k^3h^2}{6}\,e^{kx}} \quad \blacksquare @@ a = 1 + u + u²/2, b = e^u, nh = x
+F = f(x):\ \ y_{n+1} = y_n + \tfrac{h}{2}\big(f(x_n) + f(x_{n+1})\big) @@ the trial value ỹ is never used: one trapezoid strip per step (23l1)
+  </pre>
+  <p data-pid="6f692b">Now each step slips by about h³, and the walk by about h². For y′ = y on [0, 1]: four look-ahead steps give 2.6949, an error of 0.023, against 0.277 for four forward steps. Eight give 2.7118, an error of 0.0064: halving the step quartered the error, as h² says. The same holds for every rule with enough slopes; the proof is the same matching, with more letters, and the build challenge asks for one case.</p>
+  <p data-pid="d3571e">A second look-ahead takes its slope at the middle of the step: a half step to the middle, read the slope there, and use it for the whole step. For y′ = ky it multiplies by the same 1 + u + u²/2. For y′ = f(x) it is the midpoint box sum.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · looking ahead · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24i3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="y&#x27; = -2y,\ \ y(0) = 1,\ \ h = 0.25"></span></span>Find y at x = 0.5 by two look-ahead steps, and by two forward steps. <br>Find how far each is from e^(−1).</li><li><span class="givens"><span data-tex-inline="y&#x27; = 3x^2,\ \ y(0) = 0,\ \ h = 0.5"></span></span>Find y at x = 1 by the look-ahead walk, and by the forward walk. <br>Find the true value, and which sum of 23l each walk is.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24i4">
+  <h2 class="sthead"><span class="stno">24i4</span>Rules that punish the plain walk</h2>
+  <p class="stands">Stands on 24i1, 22h2 (the standard-sequences technique) and 24a3 (the own-rate technique).</p>
+  <p data-pid="88e5b8">Stiff-step technique: <b>for y′ = −ky with k &gt; 0, forward steps shrink toward 0, as the solution does, exactly when hk &lt; 2; backward steps, yₙ₊₁ = yₙ + h·F(xₙ₊₁, yₙ₊₁), shrink toward 0 for every h &gt; 0.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the stiff-step technique">
+y_{n+1} = y_n - hk\,y_n = (1 - hk)\,y_n,\ \ y_n = (1 - hk)^n y_0 @@ forward steps
+|1 - hk| < 1 \iff 0 < hk < 2 @@ unpack the size
+hk > 2:\ |y_n| = |1 - hk|^n\,|y_0| \text{ passes every ceiling, with alternating sign} @@ a power of a number above 1 in size (22h2, turned over)
+y_{n+1} = y_n - hk\,y_{n+1} \Rightarrow y_{n+1} = \tfrac{1}{1 + hk}\,y_n @@ backward steps: the new value appears on both sides; solve for it
+\htmlClass{new}{0 < \tfrac{1}{1 + hk} < 1 \text{ for every } h > 0,\ \text{so backward steps settle at } 0} \quad \blacksquare @@ the standard sequences (22h2)
+  </pre>
+  <p data-pid="77cd30">A rule is <i>stiff</i> when it holds a part that dies fast beside a part that moves slowly. Take y′ = −50(y − cos x) from y(0) = 0. Within a tenth of a unit the solution lies on cos x, nudged a little, and after that it is as gentle as cos x. A step of 0.1 would follow cos x well. But near the solution the rule is y′ ≈ −50y plus a slow part, so the forward walk needs 50h &lt; 2, that is h &lt; 0.04, to stay steady at all. At h = 0.03 it gives 0.5654 at x = 1, against the true 0.5569. At h = 0.05 it gives −3325. Backward steps of 0.1 give 0.5563.</p>
+  <p data-pid="91b22d">So small steps are not enough, or rather they are enough at a price that can be ruinous. A reaction in a flame can hold a step that dies in a millionth of a second beside one that takes a second. Forward steps would need half a million of them for each second, every one of them forced by a part of the solution that vanished long ago. The backward step costs more per step, since the new value must be solved for, and wins by taking steps sized to what is still happening.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24i4.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="y&#x27; = -30y,\ \ y(0) = 1"></span></span>Find y₁ to y₅ by forward steps with h = 0.1, and with h = 0.05. <br>Find y₁ to y₅ by backward steps with h = 0.1. <br>Find the true y(0.5), and the largest h for which forward steps shrink.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24i5">
+  <h2 class="sthead"><span class="stno">24i5</span>Illegal moves</h2>
+  <p class="stands">Stands on 24i1 to 24i4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{halve the step, and each step's slip halves}\,? @@ a slip is about h², so it falls to a quarter; the walk's error halves, since there are twice as many slips
+y_{n+1} = y_n + h\,F(x_{n+1}, \tilde y) \text{ is the look-ahead step}\,? @@ the slope at the trial point alone is as crude as the forward step; the average of the two slopes is what matches degree 2
+\text{a smaller step always gives a better walk}\,? @@ every step also rounds; with many tiny steps the rounding slips add up, and can swamp the rest
+\text{the solution is gentle, so a step that follows it is steady}\,? @@ on a stiff rule the plain walk swings wildly unless hk &lt; 2, however gentle the solution
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24i5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="y&#x27; = y,\ \ y(0) = 1"></span></span>Find the slip of one forward step from x = 0 with h = 0.2, and with h = 0.1. <br>Find by what factor the slip fell, and by what factor the error at x = 1 falls (use 24i1's numbers).</li><li><span class="givens"><span data-tex-inline="y&#x27; = y,\ \ y(0) = 1,\ \ h = 0.25"></span></span>Find y at x = 1 by steps yₙ₊₁ = yₙ + h·F(xₙ₊₁, ỹ), using the trial point's slope alone. <br>Find its error, and compare it with the forward walk's 0.277 and the look-ahead walk's 0.023.</li><li><span class="givens"><span data-tex-inline="y&#x27; = y,\ \ y(0) = 1"></span></span>Walk forward to x = 1, rounding every yₙ to two decimal places, with h = 0.1, h = 0.01 and h = 0.001. <br>Find which h does best, and what happens at h = 0.001.</li><li><span class="givens"><span data-tex-inline="y&#x27; = -50(y - \cos x),\ \ y(0) = 0"></span></span>Find the largest h for which forward steps stay steady. <br>Find whether a step of 0.1, which follows cos x well, stays steady.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">24i.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="y&#x27; = x + y"></span></span>Build the look-ahead step for this rule and show that from any (xₙ, yₙ) it agrees with the solution through that point up to the h² term. <br>Find the h³ terms of each, and the slip they leave.</div>
+  <div class="chq"><span class="chid">24i.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="y&#x27; = y^2,\ \ y(0) = 1,\ \ h = 0.1"></span></span>Walk forward to x = 1, and find y₁₀. <br>The solution runs off at x = 1 (24e2). Find what the walk does at x = 1 with h = 0.05 and h = 0.01, and which hypothesis of the walk-error technique fails.</div>
+  <div class="chq"><span class="chid">24i.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="y&#x27; = \sqrt{|y|},\ \ y(0) = 0"></span></span>The walk-error technique needs a tame rule. Turn it round: if the walk settles as h shrinks, must it settle on the solution, or on one at all? <br>Find the forward walk of this rule from 0, and from y(0) = 10⁻⁶ with h = 0.1 to x = 1, against the true (x + 2√y₀)²/4.</div>
+  <div class="chq"><span class="chid">24i.4.4</span><span class="tagq">reroute</span>Prove the walk-error bound without solutions through the walk's points. Write eₙ = |yₙ − y(xₙ)|, show eₙ₊₁ ≤ (1 + hL)eₙ + Kh²/2, sum the geometric sum, and use 1 + hL ≤ e^(hL) from the log-bounds technique (17a4).</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r24h.html">← 24h · the two model equations</a><a href="r24j.html">24j · the logistic equation solved →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The forward walk is Euler's method; the look-ahead step is Heun's method, or the improved Euler method, and the step that reads the slope at the middle is the midpoint method; both are second-order Runge–Kutta methods. The backward step is the backward (implicit) Euler method. One step's slip is the local truncation error, the walk's error is the global error, and a method whose walk error is about hᵖ has order p. The interval of h on which a method stays steady for y′ = −ky is its region of absolute stability.</p>
+  <h3>Who said it first</h3>
+  <p>Leonhard Euler described stepping along the field in his Institutiones calculi integralis (1768). Augustin-Louis Cauchy proved, around 1824, that the walks settle on a solution as the step shrinks, the first proof that solutions exist. Karl Heun (1900) and Carl Runge (1895) and Wilhelm Kutta (1901) built the look-ahead steps. Charles Curtiss and Joseph Hirschfelder named stiff equations in 1952, studying the chemistry of flames.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+/* sequence and sum plots for rungs 22 on: plot({xlo,xhi,ylo,yhi,series:[{pts,c,dots,open,w}],h:[{y,c,dash,t}]}) */
+const V=c=>'var('+c+')';
+function plot(o){ const W=320,H=220,P=26, X=x=>P+(x-o.xlo)/(o.xhi-o.xlo)*(W-P-6), Y=y=>H-P-(y-o.ylo)/(o.yhi-o.ylo)*(H-P-8);
+  let s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;max-width:380px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  s+='<line x1="'+P+'" y1="'+Y(Math.max(o.ylo,Math.min(o.yhi,0)))+'" x2="'+W+'" y2="'+Y(Math.max(o.ylo,Math.min(o.yhi,0)))+'" style="stroke:'+V('--grid')+';stroke-width:1.4"/>';
+  s+='<line x1="'+P+'" y1="0" x2="'+P+'" y2="'+(H-P)+'" style="stroke:'+V('--grid')+';stroke-width:1.4"/>';
+  (o.ticks||[]).forEach(t=>{ s+='<text x="2" y="'+(Y(t)+4)+'" style="font-size:10px;fill:'+V('--ink')+'">'+t+'</text>'; });
+  (o.h||[]).forEach(l=>{ s+='<line x1="'+P+'" y1="'+Y(l.y)+'" x2="'+W+'" y2="'+Y(l.y)+'" style="stroke:'+V(l.c||'--teal')+';stroke-width:1.4;stroke-dasharray:'+(l.dash||'5 4')+'"/>'; if(l.t) s+='<text x="'+(W-4)+'" y="'+(Y(l.y)-4)+'" text-anchor="end" style="font-size:10px;fill:'+V(l.c||'--teal')+'">'+l.t+'</text>'; });
+  (o.series||[]).forEach(q=>{ const pts=q.pts.filter(p=>isFinite(p[1])&&p[1]>=o.ylo-1e9);
+    if(q.open) s+='<polyline points="'+pts.map(p=>X(p[0])+','+Y(Math.max(o.ylo,Math.min(o.yhi,p[1])))).join(' ')+'" style="fill:none;stroke:'+V(q.c||'--ink')+';stroke-width:'+(q.w||1.6)+'"/>';
+    if(q.dots!==false) pts.forEach(p=>{ if(p[1]>=o.ylo&&p[1]<=o.yhi) s+='<circle cx="'+X(p[0])+'" cy="'+Y(p[1])+'" r="'+(q.r||2.4)+'" style="fill:'+V(q.c||'--ink')+'"/>'; }); });
+  return s+'</svg>'; }
+
+let hs=5; const e=$('kn'); e.addEventListener('input',()=>{ hs=+e.value; draw(); });
+const F=(x,y)=>x-y, ex=x=>x-1+2*Math.exp(-x);
+function draw(){ const h=hs/10, ser=[];
+  for(let i=0;i<=12;i++) for(let j=0;j<=10;j++){ const x=i*0.25, y=-0.5+j*0.3, s=F(x,y), d=0.09/Math.sqrt(1+s*s); ser.push({pts:[[x-d,y-s*d],[x+d,y+s*d]],c:'--grid',open:true,dots:false,w:1}); }
+  const pts=[]; for(let i=0;i<=120;i++){ const x=3*i/120; pts.push([x,ex(x)]); }
+  const fw=[[0,1]], la=[[0,1]]; let x=0,y=1,z=1; const n=Math.round(3/h);
+  for(let k=0;k<n;k++){ y=y+h*F(x,y); const s1=F(x,z), zt=z+h*s1, s2=F(x+h,zt); z=z+h*(s1+s2)/2; x+=h; fw.push([x,y]); la.push([x,z]); }
+  $('pl').innerHTML=plot({xlo:0,xhi:3,ylo:-0.5,yhi:2.5,ticks:[0,1,2],series:ser.concat([{pts,c:'--ink',open:true,dots:false,w:2.4},{pts:fw,c:'--ember',open:true,w:1.6},{pts:la,c:'--teal',open:true,w:1.6}])});
+  $('okn').textContent=h.toFixed(1); const v=$('vd'); v.className='verdict';
+  v.textContent='h = '+h.toFixed(1)+': at x = 3 the solution is '+ex(3).toFixed(4)+', the forward walk '+y.toFixed(4)+' (off by '+Math.abs(y-ex(3)).toFixed(4)+'), the look-ahead walk '+z.toFixed(4)+' (off by '+Math.abs(z-ex(3)).toFixed(4)+').'; }
+draw();
+window.__pic={set:j=>{ hs=j; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'one step',t:R`\htmlClass{new}{y_{n+1} = y_n + h\,F(x_n, y_n)}`,n:`Along the stroke you stand on.`},
+  {k:'ember',kl:'y′ = ky',t:R`y_n = A(1 + hk)^n`,n:`A factor per step.`},
+  {k:'ember',kl:'settles',t:R`\big(1 + \tfrac{kx}{n}\big)^n \to e^{kx}`,n:`The walk finds 24a3’s solution.`}
+],{title:'The slides · the forward walk · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'one slip',t:R`|z_j(x_{j+1}) - y_{j+1}| \le \tfrac12 Kh^2`,n:`The match-error technique.`},
+  {k:'ember',kl:'carried',t:R`\tfrac12 Kh^2\,e^{L(x_N - x_{j+1})}`,n:`The drift technique.`},
+  {k:'ember',kl:'added',t:R`\htmlClass{new}{\tfrac{Kh}{2L}\big(e^{L(x - x_0)} - 1\big)}`,n:`About h, not h².`}
+],{title:'The slides · the walk’s error · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'trial',t:R`\tilde y = y_n + h\,F(x_n, y_n)`,n:`Step on trial.`},
+  {k:'ember',kl:'average',t:R`\htmlClass{new}{y_{n+1} = y_n + \tfrac{h}{2}\big(F(x_n, y_n) + F(x_{n+1}, \tilde y)\big)}`,n:`Average the two slopes.`},
+  {k:'ember',kl:'y′ = ky',t:R`1 + u + \tfrac{u^2}{2}`,n:`Matches e^u to degree 2.`}
+],{title:'The slides · looking ahead · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

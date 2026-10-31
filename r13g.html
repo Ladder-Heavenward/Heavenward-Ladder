@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>13g · The growing square</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+#cvQ{touch-action:none}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+.gw{overflow-x:auto;max-width:100%}
+table.cells{border-collapse:collapse;margin:6px auto;font-size:.88rem}
+table.cells td,table.cells th{border:1px solid var(--grid);padding:5px 6px;text-align:center;font-weight:400;min-width:3.6em}
+table.cells th{background:var(--sand);color:var(--muted);font-family:var(--mono);font-size:.78rem}
+table.cells td{background:var(--card)}
+table.cells td.c0{color:var(--muted)} table.cells td.c1{box-shadow:inset 4px 0 0 var(--ember)} table.cells td.c2{box-shadow:inset 4px 0 0 var(--teal)}
+table.cells td small{display:block;font-family:var(--mono);font-size:.74rem;color:var(--muted)}
+@media (max-width:520px){table.cells{font-size:.74rem} table.cells td,table.cells th{padding:3px 3px;min-width:2.9em} table.cells td small{font-size:.66rem}}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r13concl.html">← 13·∎ conclusion</a><a href="r13h.html">next: 13h powers, constants and sums →</a></p>
+  <div class="tags"><span class="tag tech">13g · technique</span></div>
+  <h1>The growing square</h1>
+  <p>13a defined the slope and computed it for the square, the cube and one over the input. This step puts the definition in your hands until the gesture runs without asking. Take the square, change the input a little, and write the new product in 5h's grid of cells. There is the old product, two cells that each carry the change once, and one cell that carries it twice. Take away the old product, divide by the change, which is never 0, and you have the chord slope exactly. Then the limit decides which cells stay and which go to 0, and a single count settles it: how many times a cell carries the change. The cube runs the same way, and so does every polynomial, by two roads.</p>
+  <p class="gesture">Change the input a little, and write the new value in the grid of cells. Take away the old value, and divide by the change. Every cell that carries the change once leaves a piece without it, which stays. Every cell that carries it twice or more leaves some behind, which goes to 0 in the limit.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r13a.html">13a</a> (Δ, h, the chord slope, f′(w), slope-of-x², slope-of-x³, the forbidden h = 0), <a href="r05h.html">5h</a> (grid-of-cells, the grid of cells, square-of-a-sum, collecting like terms), <a href="r13c.html">13c</a> (the cells are writing, not shapes), <a href="r13d.html">13d</a> (polynomial-slope, lifting), <a href="r04j.html">4j</a> (the table of choices, two-term-power), <a href="r09g.html">9g</a> (polynomials, polynomial-division, factor), <a href="r10c.html">10c</a> (substitution, power-limit). <a href="r13h.html">13h</a> runs the rules this step sees; <a href="r13k.html">13k</a> reads the cells with two h's as the nearby line's error.</p></div>
+</header>
+
+<section class="class step" data-step="13g1">
+  <h2 class="sthead"><span class="stno">13g1</span>A proverb, and what the words mean here</h2>
+  <p class="stands">Stands on 5e (the square as a product) and 8f (powers of reals).</p>
+  <p data-pid="1cd08b">A popular calculus book of 1914 opens with an old proverb, for the reader who is afraid of the subject: what one fool can do, another can. It means it as comfort, and it is the right mood for a technique step.</p>
+  <p data-pid="2fca53">The title uses three words that have shapes in everyday speech, and none of the shapes is meant. “Square” is 5e's word: x² is x · x, a product, and nothing else. “Growing” says only that the input changes, from x to x + h. And the cells are 5h's grid of cells, which 13c said plainly: an arrangement of products in writing. There is a row for each term of one sum and a column for each term of the other. The grid is often drawn as a picture of something growing by strips, with a size read into each cell. The ladder has not built that, and rung 15 builds what they would read into it. <b>So a cell holds a product, and this step calls it the cell's product.</b></p>
+  <p class="eqline" data-pid="a776a8">One more word, for the next power. From here on, x³ is also read “x cubed”, and called the cube of x: x · x · x, a product, as 5e's square is x · x. 8f read ³√a as “the cube root of a”, and 9f's picture had a link called “cube”; both are this product, run backwards or forwards. The shape that shares the name waits for geometry, on rung 18.</p>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">13g1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">x = 4</span></span>Write the square of x and the cube of x as products. <br>Say why neither needs a drawn square or a drawn cube.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13g2">
+  <h2 class="sthead"><span class="stno">13g2</span>The square, in the grid of cells</h2>
+  <p class="stands">Stands on 13g1, 5h (the grid of cells) and 13a (Δ and the chord slope).</p>
+  <p data-pid="6eef10">Let y = x · x and change the input by h, a real other than 0 (13a's line). The new value is (x + h)(x + h), a product of two sums. So 5h's grid-of-cells technique writes it as four cells: a row for x and a row for h, a column for x and a column for h.</p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="teal" data-label="from 5h: the grid of cells (grid-of-cells), read in ℝ">
+(x + h)(x + h) = \htmlClass{keep}{x \cdot x} + x \cdot h + h \cdot x + \htmlClass{new}{h \cdot h} @@ grid-of-cells with a = c = x and b = d = h: one cell for each row and column
+= x^2 + \htmlClass{new}{2xh} + h^2 @@ turn-about for times on ℝ: x · h and h · x are like terms; collect them (5h)
+  </pre>
+  <p data-pid="343835">The x · x cell is the old product: its cell's product is y itself. The two cells x · h and h · x each carry one factor h. The h · h cell carries two. Now run 13a's gesture through the grid, one move per line.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the square's change, divided, then the limit">
+y + \Delta y = (x + h)(x + h) @@ 13a's Δ: the new value is the old value plus the change
+y + \Delta y = x^2 + 2xh + h^2 @@ the grid of cells, collected
+\Delta y = \htmlClass{new}{2xh + h^2} @@ take away y = x² from both sides (adding-keeps-answers): the change, all of it
+\dfrac{\Delta y}{h} = \htmlClass{new}{2x + h} \quad (h \ne 0) @@ multiply by h⁻¹ (spread on ℝ, reciprocal on ℝ): licensed because h ≠ 0. This is the chord slope, exactly
+y' = \lim_{h \to 0}\,(2x + h) = \htmlClass{keep}{2x} @@ agreeing-near and line-limit (10a): the linear function h ↦ 2x + h heads to its value at 0. slope-of-x² again
+  </pre>
+  <p data-pid="b0df03">Read the fourth line cell by cell. The two one-h cells, divided by h, became 2x, which has no h left in it. The h · h cell, divided by h, became h. <b>Nothing was set aside: for every h ≠ 0 the chord slope is 2x + h, not “about 2x”.</b> Then the limit sends h to 0, and the piece that still carries an h goes with it. The slope is where the chord slopes head.</p>
+  <p data-pid="0cca0f">Check it with numbers. At x = 100 with h = 1, the new product is 101 · 101 = 10201, so Δy = 201. The one-h cells give 200 and the h · h cell gives 1. With h = 0.1, 100.1 · 100.1 = 10020.01, so Δy = 20.01 and the chord slope is 20.01/0.1 = 200.1. The one-h cells give 200 every time. The h · h cell gives exactly h after the division, and only the limit takes it away.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the square · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · left: the grid of cells for the new value · right: what each h-count gives to the chord slope, against h</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="chips" id="fch"></div>
+      <div class="kn">
+        <span class="m">x</span><input type="range" id="kx" min="-3" max="3" step="0.1" value="2"><output id="ox"></output>
+        <span class="m">|h|</span><input type="range" id="kh" min="-3" max="0" step="0.01" value="-1"><output id="oh"></output>
+      </div>
+      <div class="chips" id="hch"><button class="on" data-s="1">h &gt; 0</button><button data-s="-1">h &lt; 0</button></div>
+      <div class="gw"><table class="cells" id="grid"></table></div>
+      <div class="cap">Each cell holds its product, written above its value. Grey: h-count 0, the old value, which leaves in the subtraction. Ember bar: h-count 1, which stays after dividing by h. Teal bar: h-count 2 or more, which goes to 0 in the limit.</div>
+      <div class="eqbox" id="eqG"></div>
+    </div>
+    <div class="panel">
+      <canvas id="cvQ"></canvas>
+      <div class="cap">Across: the change h, with h = 0 left out. Ember: the h-count-1 cells divided by h. Teal: the cells with two or more h's, divided by h. Ink: their sum, the chord slope. The hollow ring at h = 0 is where the chord slope heads, the slope. The gold column is your h; drag on the picture to move it.</div>
+      <div class="verdict" id="vd"></div>
+    </div>
+  </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13g2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">y = x · x,  x = 3,  h = 0.5</span></span>Write the four cells as numbers. <br>Check that they add up to 3.5 · 3.5.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13g3">
+  <h2 class="sthead"><span class="stno">13g3</span>The count of h decides</h2>
+  <p class="stands">Stands on 13g2 and 10c (limit techniques).</p>
+  <p data-pid="f0c5d4">Why does the h · h cell go and the one-h cells stay? Not because it is small. For one fixed h every cell is just a real, and h · h can be larger than 2xh (take x = 0.01 and h = 1). The difference shows only after the division, and only in the limit.</p>
+  <p class="eqline" data-pid="087cbf">From here on, in this step, the h-count of a cell is the number of factors h written in it. The cell x · x has h-count 0, x · h has h-count 1, h · h has h-count 2.</p>
+  <p data-pid="3c8506">Count-of-h technique: <b>let a cell be c · hᵏ, with c a real that does not depend on h and k a number. If k = 0, the cell is part of the old value and leaves in the subtraction. If k = 1, the cell divided by h is c, which stays in the limit. If k ≥ 2, the cell divided by h is c · hᵏ⁻¹, which heads to 0 as h → 0.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the count-of-h technique">
+k = 0:\ \ c \text{ is also a cell of the old value} @@ put h = 0 in the grid: only the h-count-0 cells remain, and they make the old value (power-zero, anything-times-zero)
+k = 1:\ \ \dfrac{c\,h}{h} = \htmlClass{new}{c} \quad (h \ne 0) @@ regroup for times on ℝ, reciprocal on ℝ, times-one on ℝ: licensed because h ≠ 0. A constant heads to itself (line-limit with step 0)
+k \ge 2:\ \ \dfrac{c\,h^k}{h} = c\,\htmlClass{new}{h^{k-1}} @@ power-of-a-next and reciprocal on ℝ: one factor h cancels, at least one is left
+\lim_{h \to 0} c\,h^{k-1} = c \cdot 0^{k-1} = \htmlClass{keep}{0} \quad \blacksquare @@ power-limit and constant-factor (10c): hᵏ⁻¹ heads to 0ᵏ⁻¹, which is 0 since k − 1 ≥ 1 (anything-times-zero)
+  </pre>
+  <p data-pid="7825b0">A large number in front changes nothing: 500 · h · h divided by h is 500h, which still heads to 0. A small number in front saves nothing either: 0.001 · h divided by h is 0.001, which stays. It is the count of h's, never how small a cell looks for one h, that decides.</p>
+  <p data-pid="fa3ee7">That popular book sorts small quantities into those of the first order of smallness and those of the second. It lets the second go as negligible beside the first.</p>
+  <p data-pid="0a7fc3">Its sorting is the h-count, and its instinct is right about which pieces leave. The ladder's reason is different. No piece is negligible: for every h ≠ 0, every cell is in the chord slope. The pieces with h-count 2 or more leave because, after the division, they still carry an h. Count-of-h sends that h to 0 in the limit.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · count-of-h · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13g3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">the cells 7,  7h,  0.01h^2,  900h^3</span></span>Give each cell’s h-count. <br>Say what each gives to the slope, divided by h as h heads to 0.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13g4">
+  <h2 class="sthead"><span class="stno">13g4</span>The cube, likewise</h2>
+  <p class="stands">Stands on 13g3 and 4j (the table of choices).</p>
+  <p data-pid="99a179">Now y = x³ = x · x · x. The new value is (x + h)(x + h)(x + h), which is (x + h) times the square's four cells. So the grid has two rows, x and h, and four columns, the square's cells x · x, x · h, h · x, h · h: eight cells in all.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the cube's grid of cells">
+(x + h)^3 = (x + h)\,(x \cdot x + x \cdot h + h \cdot x + h \cdot h) @@ power-of-a-next for powers of a real; the square's grid above
+= \htmlClass{keep}{x^3} + \htmlClass{new}{3x^2 h} + 3x h^2 + h^3 @@ grid-of-cells, two rows by four columns: one cell of h-count 0, three of h-count 1, three of h-count 2, one of h-count 3; collect
+\Delta y = 3x^2 h + 3x h^2 + h^3 @@ take away y = x³ (adding-keeps-answers)
+\dfrac{\Delta y}{h} = \htmlClass{new}{3x^2} + 3xh + h^2 \quad (h \ne 0) @@ divide by h: count-of-h, cell by cell
+y' = \htmlClass{keep}{3x^2} @@ count-of-h: only the three one-h cells stay. slope-of-x³ again
+  </pre>
+  <p data-pid="67c925">Count the cells by their h-count: one, three, three, one. That is row 3 of 4j's table (Pascal's), and it is no accident. Picking, from each of the three brackets, either its x or its h is 4j's counting of choices. So the cells with k factors h number <span data-tex-inline="\binom{3}{k}"></span> by choosing-counts-parts. These counts have the accepted name binomial coefficients: a binomial is a sum of two terms, like x + h. At x = 2 with h = 0.1: the old product is 8. The one-h cells give 3 · 4 · 0.1 = 1.2. The two-h cells give 3 · 2 · 0.01 = 0.06. The three-h cell gives 0.001. Together 1.261, and 2.1³ − 8 = 9.261 − 8 = 1.261. Divided by h: 12 + 0.6 + 0.01 = 12.61, which heads to 12.</p>
+  <p data-pid="e87890">Further, you cannot lay the cells out flat, but the counting does not care. For xⁿ, 4j's binomial technique, read in ℝ, writes (x + h)ⁿ as the sum of the cells <span data-tex-inline="\binom{n}{k} x^{n-k} h^k"></span>. The cells with h-count 1 are <span data-tex-inline="\binom{n}{1}"></span> = n of them, each x^{n−1}h. Count-of-h keeps exactly those, so the slope is n x^{n−1}: 13d's power for slopes, seen by counting instead of by induction. <b>The second entry of every row of 4j's table is the power itself.</b></p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · the cube · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13g4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">y = x^4</span></span>Find the cells of h-count 1 in (x + h)⁴ by counting choices. <br>Read off the slope of y.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13g5">
+  <h2 class="sthead"><span class="stno">13g5</span>Any polynomial, from first principles</h2>
+  <p class="stands">Stands on 13g4 and 9g (polynomials, factor).</p>
+  <p data-pid="4e879d">A polynomial is a sum of terms aₖxᵏ (9g). Change x to x + h in each term, and expand each power by the grid or by two-term-power. What comes out is a sum of cells, each a real times a power of h. Collect the cells by their h-count and you have a polynomial in h. Its h-count-0 cells make p(x) (put h = 0); its h-count-1 cells make the slope.</p>
+  <p data-pid="94e660">Polynomial-chord technique: <b>for a polynomial p and a real w, there is a polynomial Q in h with (p(w + h) − p(w))/h = Q(h) for every h ≠ 0. Then p′(w) = Q(0), which is the coefficient of h in p(w + h).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the polynomial-chord technique, the first road (expanding)">
+p(a + h) = \textstyle\sum_{k \le n} a_k (a + h)^k @@ substitute for the expression (9g's line)
+= b_0 + b_1 h + b_2 h^2 + \cdots + b_n h^n @@ two-term-power on each power, then collect by powers of h (termwise, factor-out): b's are reals that depend on a, not on h
+b_0 = p(a) @@ put h = 0: every term with an h is 0 (anything-times-zero), and (a + 0)ᵏ = aᵏ
+\dfrac{p(a + h) - p(a)}{h} = \htmlClass{new}{b_1 + b_2 h + \cdots + b_n h^{n-1}} \quad (h \ne 0) @@ take away b₀ = p(a); multiply by h⁻¹: call this Q(h), a polynomial in h
+p'(a) = \lim_{h \to 0} Q(h) = Q(0) = \htmlClass{keep}{b_1} \quad \blacksquare @@ agreeing-near; substitution (10c): a polynomial in h heads to its value at 0
+  </pre>
+  <p data-pid="47c0ba">There is a second road, and it uses only 9g's techniques. Since p(w) − p(w) = 0, the real w is a zero of the polynomial x ↦ p(x) − p(w). So factor writes p(x) − p(w) = (x − w)q(x) for a polynomial q. Then for x ≠ w, by 13a's two-ways-to-write-a-limit, the chord slope is (p(x) − p(w))/(x − w) = q(x). Its limit as x → w is q(w), by substitution. So p′(w) = q(w), and polynomial-division's long division finds q. The displacement pattern x − w is the factor that the division takes away.</p>
+  <pre class="lines" data-k="ember" data-label="this step: both roads, p(x) = x³ − 2x + 5 at 2">
+p(2) = 8 - 4 + 5 = 9 @@ substitute for the expression
+p(2 + h) = 8 + 12h + 6h^2 + h^3 - 4 - 2h + 5 @@ the cube's cells at 2: 2³, 3 · 2² · h, 3 · 2 · h², h³
+= 9 + \htmlClass{new}{10h} + 6h^2 + h^3 @@ collect by powers of h
+p'(2) = \htmlClass{keep}{10} @@ polynomial-chord: the coefficient of h. polynomial-slope agrees: 3 · 2² − 2 = 10
+p(x) - 9 = x^3 - 2x - 4 = (x - 2)(x^2 + 2x + 2) @@ the second road: factor, with q found by polynomial-division (multiply back by 5h's grid to check)
+q(2) = 4 + 4 + 2 = \htmlClass{keep}{10} @@ the slope, again: p′(2) = q(2)
+  </pre>
+  <p data-pid="b67a5b">So every polynomial's slope can be found from the definition with no rule at all: expand, collect by h-count, read the h-count-1 coefficient. Polynomial-slope is the same answer collected once for all.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · polynomial-chord · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13g5.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="y = x \cdot x,"></span> <span data-tex-inline="x = 5,"></span> <span data-tex-inline="h = 0.2"></span></span>Write each of the four cells as a number, and the change of y, and check it against the product at 5.2 less 25.</li><li><span class="givens"><span data-tex-inline="y = x \cdot x,"></span> <span data-tex-inline="x = 10,"></span> <span data-tex-inline="h \in \{1, 0.1, 0.01\}"></span></span>For each h, compute the one-h cells and the h-times-h cell, and their ratio.</li><li><span class="givens"><span data-tex-inline="y = x^3,"></span> <span data-tex-inline="x = 2,"></span> <span data-tex-inline="h = 0.1"></span></span>Using count-of-h, find the sum of the cells of each h-count, add them, and check against the change of the cube from 2 to 2.1.</li><li><span class="givens"><span data-tex-inline="p(x) = x^2 + 5x + 2"></span></span>From the definition, one move per line, find p's slope at minus 1. <br>Name the piece that left in the subtraction and the piece the limit took.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13g6">
+  <h2 class="sthead"><span class="stno">13g6</span>Illegal moves, and why each breaks</h2>
+  <p class="stands">Stands on 13g1 to 13g5.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+y = x^2 + 3x:\ \ \Delta y = 2xh + h^2 + \htmlClass{keep}{3h} @@ the change: the square's cells and the cell 3 · h. Its h-count is 1
+3h \text{ “is small, so drop it”}\,? @@ divided by h it is 3, which stays. Dropped, the answer is 2x, the slope of another function; the true slope is 2x + 3
+h = 0 \text{ “to remove the } h \cdot h \text{ cell”}\,? @@ then Δy = 0 and the chord slope is 0/0 (nothing-times-0-is-1). The cell is not made 0; count-of-h sends it to 0 in the limit, after the division
+(x + h)^2 = x^2 + h^2\,? @@ loses both one-h cells, the only cells that stay. At x = 3, h = 1: 16 against 9 + 1 = 10
+\dfrac{\Delta y}{h} = 2x + h \text{, so } y' = 2x + h\,? @@ the chord slope is not the slope. The slope is a limit: no h survives it
+\text{a cell is small for one } h \text{, so it leaves}\,? @@ x = 0.01, h = 1: h · h = 1 against 2xh = 0.02. Size for one h decides nothing; the h-count does
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · the illegal drop · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13g6.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="y = x \cdot x,"></span> <span data-tex-inline="x = 3,"></span> <span data-tex-inline="h = -0.1"></span></span>Find which cells are negative, and check that the step's two-cell change still gives the change.</li><li><span class="givens"><span data-tex-inline="x = 1,"></span> <span data-tex-inline="\Delta y = 2h + 500h^2,"></span> <span data-tex-inline="h = 0.01"></span></span>Find which piece is larger at this h, and which survives the limit.</li><li><span class="givens"><span data-tex-inline="p(x) = x^3 - x,"></span> <span data-tex-inline="w = 1"></span></span>Using 9g's polynomial-division, divide the change of p from 1 by x less 1, and compare the quotient at 1 with polynomial-slope's answer. <br>Put x equal to 1 in before dividing, and find the line that breaks.</li><li><span class="givens"><span data-tex-inline="\text{slope } 2x;"></span> <span data-tex-inline="\text{one rebuilds } x^2,"></span> <span data-tex-inline="\text{another } x^2 - 9"></span></span>Decide whether both can be right, and find one extra fact that chooses between them. <br>Decide whether the full change, for every x and h, chooses.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13g7">
+  <h2 class="sthead"><span class="stno">13g7</span>Running it backwards</h2>
+  <p class="stands">Stands on 13g1 to 13g5.</p>
+  <p data-pid="551f3c">The forward gesture turns a function into its change. Backwards, a change rebuilds the function, and it is exact. Suppose some y answers every x and every h with the change Δy = 6xh + 3h². Put x = 0 and call the change x: then y(x) − y(0) = 6 · 0 · x + 3x² = 3x², so y(x) = 3x² + y(0). The change fixes how y grows, and fixes y itself once one value is known. Check by running forward: 3(x + h)² − 3x² = 6xh + 3h².</p>
+  <p data-pid="531d29">Backwards from the slope alone is a different question. Which y has slope 3x²? x³ does, and so does x³ + 7, by 13d's lifting. Slope 2x + 3? x² + 3x, or that plus any constant. Whether those are all the answers is rung 14's question, as 13d said. And backwards from a chord slope: say the chord slopes of some polynomial at w are exactly 5 + 4h + h². Then by polynomial-chord its slope at w is 5. And p(w + h) = p(w) + 5h + 4h² + h³: the cells of a cube at some input, plus a lift.</p>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · backwards · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13g7.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="y = x \cdot x,"></span> <span data-tex-inline="\Delta y = 1.21,"></span> <span data-tex-inline="h = 0.1"></span></span>Find x, one move per line.</li><li><span class="givens"><span data-tex-inline="\Delta y = 12x^2h + 12xh^2 + 4h^3"></span></span>Find the function and its slope.</li><li><span class="givens"><span data-tex-inline="p(1 + h) = 4 - 3h + 2h^2 + h^3"></span></span>Find p's value and slope at 1. <br>Rebuild p itself, by setting h to x less 1.</li><li><span class="givens"><span data-tex-inline="\Delta y = 2xh + h^2 + 4h,"></span> <span data-tex-inline="y(0) = 1"></span></span>Rebuild y, and check it forward.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">13g.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{chord slopes at } 1:"></span> <span data-tex-inline="5 + 2h + h^2 \text{ for every } h \ne 0"></span></span>Build a polynomial of your own with these chord slopes, and find every such polynomial. <br>Check its slope at 1 by count-of-h.</div>
+  <div class="chq"><span class="chid">13g.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="k = 0"></span></span>Run count-of-h with this k, a cell with no h at all, and find where such cells go in the change.</div>
+  <div class="chq"><span class="chid">13g.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{the chord slopes of } f \text{ at } w"></span> <span data-tex-inline="\text{are a polynomial in } h"></span></span>Prove or refute that f must be a polynomial.</div>
+  <div class="chq"><span class="chid">13g.4.4</span><span class="tagq">seam</span>A philosopher charged in 1734 that the calculus divides by an increment as if it were something, then throws it away as if it were nothing. A treatise of 1742 answered with two volumes of proofs in the old Greek style. <br>Does this step’s h-count answer the philosopher? <br>Which of his two charges does it meet?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r13concl.html">← 13·∎ · conclusion</a><a href="r13h.html">13h · powers, constants and sums →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>The popular book is Silvanus P. Thompson’s Calculus Made Easy. 4j’s table is Pascal’s triangle. In question 13g.4.4 the philosopher is George Berkeley, and the treatise is Colin Maclaurin’s Treatise of Fluxions, whose proofs follow Archimedes.</p>
+  <aside class="voice para"><p>Thompson opens his book with an old proverb for the reader who is afraid of the subject: what one fool can do, another can. He means it as comfort, and it is the right mood for a technique step.</p><cite>Thompson, Calculus Made Easy, 2nd ed. (1914), Prologue</cite></aside>
+  <aside class="voice para"><p>Thompson sorts small quantities into those of the first order of smallness and those of the second, and lets the second go as negligible beside the first.</p><cite>Thompson, Calculus Made Easy, 2nd ed. (1914), ch. II</cite></aside>
+  <p>Accepted names: the entries of 4j’s table are the binomial coefficients.</p>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; const a=Math.abs(v); let s=d!=null?v.toFixed(d):(a>=100?v.toFixed(2):a>=1?v.toFixed(4):a>=0.0001?v.toFixed(6):v.toPrecision(3)); if(s.indexOf('.')>=0&&s.indexOf('e')<0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+/* each function: rows and columns of the grid, each label with its h-count and value maker */
+const FN={
+  sq:{lab:'x · x',tx:'x \\cdot x',
+    rows:[['x',0],['h',1]],cols:[['x',0],['h',1]],extra:null,
+    y:x=>x*x,d:x=>2*x},
+  cu:{lab:'x · x · x',tx:'x \\cdot x \\cdot x',
+    rows:[['x',0],['h',1]],cols:[['x·x',0],['x·h',1],['h·x',1],['h·h',2]],extra:null,
+    y:x=>x*x*x,d:x=>3*x*x},
+  sq3:{lab:'x · x + 3x',tx:'x \\cdot x + 3x',
+    rows:[['x',0],['h',1]],cols:[['x',0],['h',1]],extra:true,
+    y:x=>x*x+3*x,d:x=>2*x+3}
+};
+let fk='sq', X=2, S=1, LH=-1;
+const kx=$('kx'),kh=$('kh'),cv=$('cvQ');
+const H=()=>S*Math.pow(10,LH);
+function val(lbl,x,h){ return lbl.split('·').reduce((p,t)=>p*(t==='x'?x:h),1); }
+function cells(x,h){ const F=FN[fk], out=[]; F.rows.forEach(r=>F.cols.forEach(c=>{ const k=r[1]+c[1]; out.push({p:r[0]+' · '+c[0].replace(/·/g,' · '),k,v:val(r[0],x,h)*val(c[0],x,h)}); }));
+  if(F.extra){ out.push({p:'3 · x',k:0,v:3*x,ex:true}); out.push({p:'3 · h',k:1,v:3*h,ex:true}); } return out; }
+function shares(x,h){ const c=cells(x,h); let s1=0,s2=0,s0=0; c.forEach(q=>{ if(q.k===0) s0+=q.v; else if(q.k===1) s1+=q.v; else s2+=q.v; }); return {s0,s1,s2}; }
+function grid(){ const F=FN[fk], h=H(), x=X; const g=$('grid'); let s='<tr><th></th>'+F.cols.map(c=>'<th>'+c[0]+'</th>').join('')+'</tr>';
+  F.rows.forEach(r=>{ s+='<tr><th>'+r[0]+'</th>'+F.cols.map(c=>{ const k=r[1]+c[1], v=val(r[0],x,h)*val(c[0],x,h); return '<td class="'+(k===0?'c0':k===1?'c1':'c2')+'"><small>'+r[0]+' · '+c[0].replace(/·/g,' · ')+'</small>'+fm(v)+'</td>'; }).join('')+'</tr>'; });
+  if(F.extra){ s+='<tr><th>3 ·</th><td class="c0"><small>3·x</small>'+fm(3*x)+'</td><td class="c1"><small>3·h</small>'+fm(3*h)+'</td></tr>'; }
+  g.innerHTML=s; }
+const PQ=plane(cv,{x:[-1,1],y:[0,4],grid:0,aspect:0.8,draw:P=>drawQ(P)});
+Object.defineProperty(PQ.o,'aspect',{get:()=>cv.clientWidth>560?0.75:0.85});
+function nice(span){ const p=Math.pow(10,Math.floor(Math.log10(span/4))); const r=span/4/p; return p*(r>=5?5:r>=2?2:1); }
+function tl(v,g){ const dec=Math.max(0,-Math.floor(Math.log10(g))); const s=(Math.round(v/g)*g).toFixed(dec); return s==='-0'?'0':String(+s); }
+function ticks(P){ const c=P.ctx, gx=nice(P.o.x[1]-P.o.x[0]), gy=nice(P.o.y[1]-P.o.y[0]); c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
+  for(let x=Math.ceil(P.o.x[0]/gx)*gx;x<=P.o.x[1]+1e-12;x+=gx){ c.moveTo(P.X(x),P.Y(P.o.y[0])); c.lineTo(P.X(x),P.Y(P.o.y[1])); }
+  for(let y=Math.ceil(P.o.y[0]/gy)*gy;y<=P.o.y[1]+1e-12;y+=gy){ c.moveTo(P.X(P.o.x[0]),P.Y(y)); c.lineTo(P.X(P.o.x[1]),P.Y(y)); } c.stroke();
+  c.fillStyle=col('--muted'); c.font='10px IBM Plex Mono, monospace'; c.textAlign='center'; const ly=Math.min(P.H-4,Math.max(12,P.Y(Math.max(P.o.y[0],Math.min(P.o.y[1],0)))+13));
+  for(let x=Math.ceil(P.o.x[0]/gx)*gx;x<=P.o.x[1]+1e-12;x+=gx){ if(Math.abs(x)<gx*1e-6) continue; c.fillText(tl(x,gx),P.X(x),ly); }
+  c.textAlign='left'; for(let y=Math.ceil(P.o.y[0]/gy)*gy;y<=P.o.y[1]+1e-12;y+=gy){ c.fillText(tl(y,gy),2,P.Y(y)-2); } }
+function drawQ(P){ const F=FN[fk], h=H(), x=X, W=Math.max(2*Math.abs(h),0.05); P.o.x=[-W,W];
+  const sh=t=>{ const s=shares(x,t); return {a:s.s1/t,b:s.s2/t}; };
+  let lo=Infinity,hi=-Infinity; for(let k=-100;k<=100;k++){ const t=W*k/100; if(t===0) continue; const s=sh(t); [s.a,s.b,s.a+s.b].forEach(v=>{lo=Math.min(lo,v);hi=Math.max(hi,v);}); }
+  lo=Math.min(lo,0); hi=Math.max(hi,0); const pad=(hi-lo)*0.12+0.5; P.o.y=[lo-pad,hi+pad];
+  P.axes(); ticks(P);
+  P.line(h,P.o.y[0],h,P.o.y[1],'--gold',1.4,[4,4]);
+  P.fn(t=>Math.abs(t)<W*1e-3?NaN:sh(t).a,'--ember',2.4);
+  P.fn(t=>Math.abs(t)<W*1e-3?NaN:sh(t).b,'--teal',2.2);
+  P.fn(t=>Math.abs(t)<W*1e-3?NaN:sh(t).a+sh(t).b,'--ink',2.2);
+  const c=P.ctx, L=F.d(x); c.fillStyle=col('--card'); c.strokeStyle=col('--ink'); c.lineWidth=2; c.beginPath(); c.arc(P.X(0),P.Y(L),5.5,0,7); c.fill(); c.stroke();
+  const s=sh(h); P.dot(h,s.a,'--ember',4.5); P.dot(h,s.b,'--teal',4.5); P.dot(h,s.a+s.b,'--ink',5); }
+const pm=v=>v<0?'- '+fm(-v):'+ '+fm(v);
+function read(){ const F=FN[fk], h=H(), x=X, s=shares(x,h), dy=F.y(x+h)-F.y(x);
+  $('ox').textContent=fm(x,1); $('oh').textContent=fm(Math.abs(h));
+  tex($('eqG'),R`\begin{gathered}y = ${F.tx},\ \ x = ${fm(x,1)},\ \ h = ${fm(h)}\\ \Delta y = \htmlClass{new}{${fm(s.s1)}} \htmlClass{keep}{${pm(s.s2)}} = ${fm(dy)}\\ \dfrac{\Delta y}{h} = \htmlClass{new}{${fm(s.s1/h)}} \htmlClass{keep}{${pm(s.s2/h)}} = ${fm(dy/h)}\\ y' = ${fm(F.d(x))}\end{gathered}`,true);
+  const vd=$('vd'); const gap=Math.abs(dy/h-F.d(x));
+  vd.className='verdict '+(Math.abs(h)<=0.01?'win':'lose');
+  vd.textContent='h-count 1, divided by h: '+fm(s.s1/h)+', the same at every h. Two or more h\'s, divided by h: '+fm(s.s2/h)+', and it shrinks with h. The chord slope is off the slope '+fm(F.d(x))+' by exactly '+fm(gap)+'. '+(Math.abs(h)<=0.01?'Small h: the teal share is nearly gone, but it is not 0 for any h ≠ 0.':'Shrink h and watch the teal share run into 0.');
+}
+function all(){ grid(); PQ.redraw(); read(); }
+(function(){ const ch=$('fch'); Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===fk) b.className='on'; b.onclick=()=>{ fk=k; [...ch.children].forEach(z=>z.classList.toggle('on',z===b)); all(); }; ch.appendChild(b); }); })();
+kx.oninput=()=>{ X=+kx.value; all(); }; kh.oninput=()=>{ LH=+kh.value; all(); };
+$('hch').querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{ S=+b.dataset.s; $('hch').querySelectorAll('[data-s]').forEach(z=>z.classList.toggle('on',z===b)); all(); });
+let drag=false;
+cv.addEventListener('pointerdown',e=>{ drag=true; cv.setPointerCapture&&cv.setPointerCapture(e.pointerId); mv(e); });
+function mv(e){ if(!drag) return; const q=PQ.point(e); let h=q.x; if(Math.abs(h)<0.001) h=h<0?-0.001:0.001; h=Math.max(-1,Math.min(1,h)); S=h<0?-1:1; LH=Math.log10(Math.abs(h)); kh.value=LH; $('hch').querySelectorAll('[data-s]').forEach(z=>z.classList.toggle('on',+z.dataset.s===S)); all(); }
+cv.addEventListener('pointermove',mv); ['pointerup','pointercancel'].forEach(t=>cv.addEventListener(t,()=>drag=false));
+window.__pic={set:(k,x,h)=>{ if(k){ fk=k; [...$('fch').children].forEach((b,i)=>b.classList.toggle('on',Object.keys(FN)[i]===k)); } if(x!=null){ X=x; kx.value=x; } if(h!=null){ S=h<0?-1:1; LH=Math.log10(Math.abs(h)); kh.value=LH; $('hch').querySelectorAll('[data-s]').forEach(z=>z.classList.toggle('on',+z.dataset.s===S)); } all(); const s=shares(X,H()); return {s1:s.s1,s2:s.s2,cells:cells(X,H()).length,txt:$('vd').textContent}; }};
+all();
+
+/* ---------- slides ---------- */
+const N='\\htmlClass{new}', K='\\htmlClass{keep}';
+stepper('#sl1',[
+  {k:'teal',kl:'from 5h: the grid',t:R`(x + h)(x + h) = ${K}{x \cdot x} + x \cdot h + h \cdot x + ${N}{h \cdot h}`,n:`grid-of-cells: a row for each term of one sum, a column for each term of the other. Each cell holds its product.`},
+  {k:'ember',kl:'the square · 1 of 4',t:R`y + \Delta y = x^2 + 2xh + h^2`,n:`The new value, cells collected: turn-about for times on ℝ makes x · h and h · x like terms.`},
+  {k:'ember',kl:'the square · 2 of 4',t:R`\Delta y = ${N}{2xh + h^2}`,n:`Take away the old value, the h-count-0 cell. The change is all the rest.`},
+  {k:'ember',kl:'the square · 3 of 4',t:R`\dfrac{\Delta y}{h} = ${N}{2x + h}\quad (h \ne 0)`,n:`Divide by h, licensed because h ≠ 0. The chord slope, exactly.`},
+  {k:'ember',kl:'the square · 4 of 4',t:R`y' = \lim_{h \to 0}(2x + h) = ${N}{2x}`,n:`agreeing-near and line-limit. The h left behind by the h · h cell goes to 0 in the limit.`},
+  {k:'ember',kl:'numbers',t:R`101 \cdot 101 - 10000 = 200 + 1`,n:`x = 100, h = 1: the one-h cells give 200, the h · h cell 1. With h = 0.1 the chord slope is 200.1.`}
+],{title:'The slides · the square · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'count-of-h · k = 1',t:R`\dfrac{c\,h}{h} = ${N}{c}`,n:`A cell with one h leaves a constant behind. It stays.`},
+  {k:'ember',kl:'count-of-h · k ≥ 2',t:R`\dfrac{c\,h^k}{h} = c\,h^{k-1} \to ${N}{0}`,n:`At least one h is left; power-limit and constant-factor send it to 0. A big c changes nothing.`}
+],{title:'The slides · count-of-h · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'the cube · 1 of 3',t:R`(x + h)^3 = x^3 + ${N}{3x^2 h} + 3xh^2 + h^3`,n:`Two rows, four columns: eight cells, with h-counts 0, 1, 1, 1, 2, 2, 2, 3 (row 3 of 4j's table).`},
+  {k:'ember',kl:'the cube · 2 of 3',t:R`\dfrac{\Delta y}{h} = 3x^2 + 3xh + h^2`,n:`Take away x³, divide by h.`},
+  {k:'ember',kl:'the cube · 3 of 3',t:R`y' = ${N}{3x^2}`,n:`count-of-h: only the three one-h cells stay. At 2: 1.261 is the change for h = 0.1, and 12.61 the chord slope.`},
+  {k:'ember',kl:'xⁿ by counting',t:R`\binom{n}{1} x^{n-1} h \;\Rightarrow\; (x^n)' = ${N}{n x^{n-1}}`,n:`two-term-power read in ℝ: n cells with one h. power for slopes, seen by counting.`}
+],{title:'The slides · the cube · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'polynomial-chord · road 1',t:R`p(2 + h) = 9 + ${N}{10h} + 6h^2 + h^3`,n:`x³ − 2x + 5 at 2: expand, collect by powers of h. The coefficient of h is the slope: 10.`},
+  {k:'ember',kl:'polynomial-chord · road 2',t:R`p(x) - 9 = (x - 2)(x^2 + 2x + 2)`,n:`factor and polynomial-division. Then p′(2) = q(2) = 10. The displacement x − 2 is the factor taken away.`}
+],{title:'The slides · polynomial-chord · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'the illegal drop',t:R`\Delta y = 2xh + h^2 + ${K}{3h}`,n:`x² + 3x: the 3h has h-count 1. Divided by h it is 3, which stays: the slope is 2x + 3, not 2x.`}
+],{title:'The slides · the illegal drop · ← → keys work'});
+stepper('#sl6',[
+  {k:'teal',kl:'backwards · 1 of 2',t:R`\Delta y = 6xh + 3h^2`,n:`Put x = 0 and call the change x: y(x) − y(0) = 3x².`},
+  {k:'teal',kl:'backwards · 2 of 2',t:R`y = ${N}{3x^2} + y(0)`,n:`The change fixes y once one value is known. Check forward: 3(x + h)² − 3x² = 6xh + 3h².`}
+],{title:'The slides · backwards · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

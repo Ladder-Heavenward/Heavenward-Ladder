@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>3·comp · Can a program run forever?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+.run{display:flex;flex-wrap:wrap;gap:5px;font-family:var(--mono);font-size:.85rem;min-height:34px}
+.run span{padding:3px 8px;border:1px solid var(--grid);border-radius:4px;background:var(--card)}
+.run span.new{border-color:var(--ember);color:var(--ember)}
+.run span.more{border:none;color:var(--muted)}
+.lp{font-family:var(--mono);font-size:.85rem;padding:6px 10px;border-left:3px solid var(--teal);background:var(--sand);border-radius:0 4px 4px 0;white-space:pre-wrap}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r03c.html">← 3c why infinity is chosen, not discovered</a><a href="r04.html">next: 4 operating over a series →</a></p>
+  <div class="tags"><span class="tag comp">3·comp · computing</span></div>
+  <h1>Can a program run forever?</h1>
+  <p>Can a program run forever? A program is a list of steps for a machine, and many programs say: do this step again, and again, until something is so. That is a loop. A loop that should stop and does not is one of the oldest troubles in computing. The screen freezes, the fan spins, and nobody can tell whether the machine is nearly done or will never be done. Yet some loops are meant to run forever, like the one that turns a traffic light from green to yellow to red and back. What makes the question hard is that watching cannot settle it. You can watch a loop stop. You can never watch it run forever, since every watch ends. This page treats a loop as the next-one rule of this rung, run by a machine, with a test that can stop it. It proves that one loop never stops, from the fact that the next one after a set is never empty. It shows a loop that runs forever by coming back to where it was, and a loop that stops because its work shrinks. And it shows why no program can read every program and always tell whether it stops.</p>
+  <p class="gesture">A loop does one step again and again, and checks its test before each pass. It stops the first time the test is false. A loop whose step always makes a next one, with the test “not yet empty”, never stops, since the next one after a set is never empty. A loop that comes back to where it was does the same passes again, and never stops. A loop that takes a member out of a list you can write down, and puts nothing back, empties the list and stops. Shrinking is not enough for an endless set. And no checker can tell, for every program, whether it stops.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r02b.html">2b</a> (the outsider set), <a href="r02c.html">2c</a> (⋃, ∖), <a href="r03a.html">3a</a> (S, iterating, the names, next-never-empty, merging back, S outside the run), <a href="r03b.html">3b</a> (inductive, the axiom of infinity) and <a href="r01comp.html">1·comp</a> (a machine checks a condition). Rung 4 builds counting, which settles the shrinking loop for every list at once.</p></div>
+</header>
+
+<section class="class step" data-step="3comp1">
+  <h2 class="sthead"><span class="stno">3comp1</span>A loop is the next-one rule, run by a machine</h2>
+  <p class="stands">Stands on 3a1 (the move, as a mark; iterating) and 3a5 (the names).</p>
+  <p data-pid="e594e3">3a1 called feeding a move its own output, again and again, iterating it. A machine iterates with a <b>loop</b>. A loop has a step, called its body, and a test. Before each pass the machine checks the test, as 1·comp’s machine checks a condition. If the test is true, it does the body once and checks again. If the test is false, it stops.</p>
+  <p data-pid="c956b1">Here is a loop in plain words, built from 3a’s next one:</p>
+  <div class="lp">start: x is 0
+while x ≠ 4: x becomes S(x)</div>
+  <p data-pid="1fb736">The machine checks 0 ≠ 4: true, so x becomes 1. Then 1 ≠ 4, and x becomes 2. Then 2, then 3, then 4. Now the test 4 ≠ 4 is false, and the loop stops at 4. Each value it passed through is a name of 3a5, made by S from the one before.</p>
+  <p data-pid="46dc8a"><b>A loop does its body again and again, checking its test before each pass, and stops the first time the test is false.</b> A loop that stops is one whose test, sooner or later, comes out false.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · a loop · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">3·comp.1.1</span><span class="ph do">do</span>start: x is 1 <br>while x ≠ 3: x becomes S(x) <br>Write the values x takes, and the value the loop stops at. <br>Write the stopping value as a list of named sets.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="3comp2">
+  <h2 class="sthead"><span class="stno">3comp2</span>A loop that never stops</h2>
+  <p class="stands">Stands on 3·comp1, 3a9 (next-never-empty) and 1e5 (speak of everything by speaking of anything).</p>
+  <p data-pid="4443af">Change the test:</p>
+  <div class="lp">start: x is 1
+while x ≠ ∅: x becomes S(x)</div>
+  <p data-pid="8a2a5f">Before the first pass, x is 1, which has 0 as a member. So 1 ≠ ∅, and the test is true. Before any later pass, x has just been made by the body. Let y be the value the body was given. Then x is S(y), and the next-never-empty technique says S(y) ≠ ∅. Nothing was supposed about y, so this is true before every later pass.</p>
+  <p data-pid="ccb0fe">So the test is true before every pass, and the loop never stops. That is a proof about every pass the loop will ever make. No one watched them. <b>A loop whose body always makes a next one, with the test “not yet empty”, never stops.</b></p>
+  <p data-pid="790712">It never comes back to a value it had, either. 3a10 found that the names 0 to 4 and S(4) differ, each from each, and 3a’s run never lands where it has been. That every value is new, however far the loop runs, is held in trust here; rung 4 proves that different sets have different next ones.</p>
+  <p data-pid="cac1b9">A test can also miss. Start the first loop from {1} instead of 0. Each pass makes a next one of a set outside the run, and 3a13 found that it stays outside. So x is never 4, the test never fails, and the loop that stopped from 0 runs forever from {1}.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · never stops · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">3·comp.2.1</span><span class="ph do">do</span>start: x is 2 <br>while 0 ∈ x: x becomes S(x) <br>Find whether the test is true before the first pass. <br>Find whether it is true before every later pass, and the technique that settles it.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="3comp3">
+  <h2 class="sthead"><span class="stno">3comp3</span>Forever by coming back</h2>
+  <p class="stands">Stands on 3·comp2 and 0b2 (the mark for sameness).</p>
+  <p data-pid="365be9">Not every loop that runs forever is a mistake. At a crossing in Eugene, the signal is run by a loop like this one:</p>
+  <div class="lp">start: x is green
+while x is a colour of the signal:
+  x becomes the colour after x
+(after green comes yellow, after yellow red, after red green)</div>
+  <p data-pid="54e2b3">The run is green, yellow, red, green, and there it is back where it started. The test looks only at x, and the body looks only at x. So from green, the loop does exactly what it did the last time it was at green. It makes yellow, then red, then green, again and again.</p>
+  <p data-pid="c12544">Back-again technique: <b>a loop whose test and body look only at x, and that comes back to a value it had, runs forever.</b> Here is why. When the loop was at that value before, it went on, so the test was true there. Now it is at the same value, so the test is true again, and the body makes the same next value. From there it repeats what it did, and comes back again.</p>
+  <p data-pid="42c895">So there are two ways to run forever. The signal comes back, round and round. The next-one loop of 3·comp2 goes on and never comes back. A loop that comes back is easy to catch: keep a list of the values it has had, and stop when one turns up again. A loop that never comes back makes a new value on every pass, and the list never helps.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · back again · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">3·comp.3.1</span><span class="ph undo">undo</span><span class="givens"><span class="gtx">A loop whose test and body look only at x. Its run so far: {Rex}, {Pip}, {Rex, Pip}, {Pip}.</span></span>Find the next three values. <br>Find whether the loop stops, and the technique that settles it.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="3comp4">
+  <h2 class="sthead"><span class="stno">3comp4</span>A loop whose work shrinks</h2>
+  <p class="stands">Stands on 3·comp1, 2b8 (sifting never adds), 2c8 (∖), 3a11 (running S backwards) and 3b (inductive, the axiom).</p>
+  <p data-pid="6a1999">When the ferry docks at Bainbridge Island, the cars on its deck drive off, one at a time. A program that tracks the deck looks like this:</p>
+  <div class="lp">start: u is the set of cars on the deck
+while u ≠ ∅: pick a member c of u;
+  u becomes u ∖ {c}</div>
+  <p data-pid="cd4eb2">Each pass takes a member out and puts nothing back. The new u is a sift of the old one, so it is part of the old one (2b8). Take u = {van, truck, bike}. The passes might give {truck, bike}, then {bike}, then ∅, and the loop stops. Every order of picking empties it.</p>
+  <p data-pid="cf2600">Shrinking-work technique, held in trust: <b>a loop that takes a member out of a set you can write down, on each pass, and puts nothing back, empties the set and stops.</b> For any one set you write down, you can write out the passes and watch it empty. That it works for every such set at once is a claim about how many members a set has, and rung 4 builds that.</p>
+  <p data-pid="a0a908">3a11’s merging back is a shrinking loop too. Start x at 4, and while x ≠ 0, let x become ⋃x. The run is 4, 3, 2, 1, 0, and it stops.</p>
+  <p data-pid="ad46c3">Now take away the words “you can write down”. Let I be an inductive set, which the axiom of 3b gives. Run the deck loop on I, taking out 0, then 1, then 2, and on. Each pass takes a member out, and I still never empties. The next one after the member taken out last is in I, by the step part of inductive. It was never taken out, since every member taken out so far came before it; that last fact is held in trust until rung 4. Shrinking is enough for a set you can finish writing. It is not enough for an endless one.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · shrinking work · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · run a loop, one pass at a time</div>
+    <div class="chips" role="group" aria-label="loop" id="lch"></div>
+    <div class="lp" id="lpt"></div>
+    <div class="chips" role="group" aria-label="controls"><button id="bpass">one pass</button><button id="bmore">five passes</button><button id="breset">start again</button></div>
+    <div class="run" id="run"></div>
+    <div class="cap">Pick a loop. Each pass checks the test, then does the body. The run shows every value x has had, the newest in ember.</div>
+    <div class="verdict" id="vdl"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">3·comp.4.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">start: x is {0, {0}}</span> <span class="gtx">while x ≠ ∅: x becomes ⋃x</span></span>Write the run, and find where it stops. <br>Find the run from 3 = {0, 1, 2}, and the first value it shares with the other run.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="3comp5">
+  <h2 class="sthead"><span class="stno">3comp5</span>Why nobody can always tell</h2>
+  <p class="stands">Stands on 3·comp2 to 3·comp4, 2b4 (why a sieve needs a bowl), 2b14 (the outsider set) and 1b5 (refute).</p>
+  <p data-pid="ff7745">The page has settled three loops by argument: one never stops, one comes back, one shrinks and stops. Could a program do this work for us? Picture a checker, a program that reads any program and answers “stops” or “runs forever”, and is always right.</p>
+  <p data-pid="f2ad0b">Here is a sketch of why there can be none, held in trust. Build a program that reads its own text, asks the checker about itself, and does the opposite. If the checker says “stops”, it runs a loop that never stops. If the checker says “runs forever”, it stops at once. Suppose the checker says “stops”: then the program runs forever, and the checker was wrong. Suppose it says “runs forever”: then the program stops, and the checker was wrong again. Both cases clash with “always right”, so refute: no such checker.</p>
+  <p data-pid="b19781">That is the shape of 2b4’s catalogue and 2b14’s outsider set: a thing asked about itself, made to do the opposite. The full argument needs programs as objects that programs can read, and it is much higher up the ladder. <b>No checker can read every program and always tell, rightly, whether it stops.</b> Each loop on this page was settled by an argument made for that loop, and no single method makes them all.</p>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · the universe, gathering</div>
+    <p data-pid="7908a0">Watch a loop run, and every watch ends. You see that it has not stopped yet, and never that it will not. 3b found the same of the universe: the rule for the next cell can be written down, and the finished collection never turns up.</p>
+    <p data-pid="251fa9"><b>Watching can show that a loop stops, and only an argument can show that it does not.</b></p>
+    <p data-pid="03bb46">So a claim that a loop runs forever is never seen. It is argued, as 3·comp2 argued it, by speaking of every pass at once.</p>
+    <p class="bait" data-pid="174879">A machine at a lab has run a loop for a year without stopping. What would it take to know it never will?</p>
+  </aside>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · nobody can always tell · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">3·comp.5.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">A checker answers by watching: it runs the loop while x passes 0, 1, 2, 3, 4. If the loop has stopped by then, it answers “stops”, and otherwise “runs forever”.</span></span>Find a loop built with S that it answers wrongly. <br>Find a loop that it answers rightly with “runs forever”, and the argument that makes the answer right.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="3comp6">
+  <h2 class="sthead"><span class="stno">3comp6</span>Illegal moves</h2>
+  <p class="stands">Stands on 3·comp1 to 3·comp5.</p>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\begin{aligned}&\text{the work shrinks each pass,}\\ &\quad\text{so the loop stops}\,?\end{aligned} @@ only for a set you can write down: an inductive set shrinks forever
+\begin{aligned}&\text{watched a long time and still going,}\\ &\quad\text{so it runs forever}\,?\end{aligned} @@ every watch ends; the next pass may stop it
+\text{from } \{1\}\text{, while } x \ne 4\text{: it reaches } 4\,? @@ the next one after a set outside the run stays outside it (3a13)
+\begin{aligned}&x \text{ becomes } S(x) \text{ from } 4\text{:}\\ &\quad\text{it comes back to } 0\,?\end{aligned} @@ 0 is nobody’s next: next-never-empty
+\begin{aligned}&\text{the signal comes back to green,}\\ &\quad\text{so the loop is broken}\,?\end{aligned} @@ coming back is how a loop meant to run forever runs
+\begin{aligned}&\text{a checker that tries every program}\\ &\quad\text{settles them all}\,?\end{aligned} @@ the program that does the opposite refutes any checker
+  </pre>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">3·comp.6.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">“The loop x becomes S(x) from {1}, with the test x ≠ 4, makes a new value every pass, so sooner or later it reaches 4.”</span></span>Find the illegal move. <br>Find the technique that shows it never reaches 4.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">3·comp.7.1</span><span class="tagq">build</span>Write a loop of your own, with a test and a body built from the tools of rungs 2 and 3. <br>Make it stop from one starting set and run forever from another, and argue each in plain words.</div>
+  <div class="chq"><span class="chid">3·comp.7.2</span><span class="tagq">edge</span><span class="givens"><span class="gtx">while x ≠ ∅: x becomes ⋃x</span></span>Find what the loop does from {{∅}}. <br>Find what it does from Ω, in 2f’s looped world, where Ω = {Ω}.</div>
+  <div class="chq"><span class="chid">3·comp.7.3</span><span class="tagq">converse</span><span class="givens"><span class="gtx">Back-again: a loop that comes back to a value it had runs forever.</span></span>Must a loop that runs forever come back to a value it had? <br>Find a loop on this page that settles it, and the techniques that show it never comes back, as far as S(4).</div>
+  <div class="chq"><span class="chid">3·comp.7.4</span><span class="tagq">edge</span><span class="givens"><span class="gtx">while x ∉ x: x becomes S(x)</span> <span class="gtx">while x ∈ x: x becomes S(x)</span></span>Find, for each loop and any starting set, whether it stops. <br>Find whether the second loop ever does its body at all.</div>
+  <div class="chq"><span class="chid">3·comp.7.5</span><span class="tagq">seam</span>One side held that every precise question in mathematics can be settled by a method followed step by step. The other found a precise question that no such method settles: whether a program stops. <br>If no method can settle it, is each program still either one that stops or one that runs forever?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r03c.html">← 3c · why infinity is chosen, not discovered</a><a href="r04.html">4 · operating over a series →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p>A loop with a test checked before each pass is a <b>while loop</b>; its step is the <b>loop body</b>. A loop that never stops is an <b>infinite loop</b>. A loop that comes back to a value it had is in a <b>cycle</b>. Something that shrinks on every pass and shows a loop must stop is a <b>loop variant</b>, and showing that a program stops is proving <b>termination</b>. The question whether a program stops is the <b>halting problem</b>, and a question no step-by-step method settles is <b>undecidable</b>.</p>
+  <h3>Who said it first</h3>
+  <p>David Hilbert and Wilhelm Ackermann asked in 1928 for a method that settles, step by step, whether any statement of logic follows from others: the decision problem. In 1930 Hilbert closed a radio address with “We must know; we will know.” In 1936 Alonzo Church and Alan Turing each showed there is no such method. Turing’s argument is the opposite program of 3·comp5, made precise. Those are the two sides of 3·comp.7.5. Turing (1949) and Robert Floyd (1967) showed how to prove that a loop stops by finding something that shrinks on every pass and cannot shrink forever.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="3·comp: a worked “proof”, not allowed">
+\text{start at } I\text{, take out } 0\text{, then } 1\text{, then } 2\text{, …} @@ fine: each pass takes a member out
+\text{the set gets smaller every pass} @@ fine: each new set is part of the old one
+\text{so it empties, and the loop stops} @@ not allowed: the shrinking-work technique is for sets you can write down; I never empties
+  </pre>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+const nmS=(b,j)=>{ let s=b; for(let i=0;i<j;i++) s='S('+s+')'; return s; };
+const named=j=>j<=4?String(j):nmS('4',j-4);
+const LOOPS={
+ a:{lab:'to 4, from 0',txt:'start: x is 0\nwhile x ≠ 4: x becomes S(x)',v:j=>named(j),test:j=>j!==4,why:j=>'Stopped at 4: the test 4 ≠ 4 is false.'},
+ b:{lab:'to 4, from {1}',txt:'start: x is {1}\nwhile x ≠ 4: x becomes S(x)',v:j=>nmS('{1}',j),test:j=>true,why:j=>'Still running. Each value is a next one of a set outside the run, and stays outside it (3a13): never 4.'},
+ c:{lab:'until empty',txt:'start: x is 1\nwhile x ≠ ∅: x becomes S(x)',v:j=>named(j+1),test:j=>true,why:j=>'Still running. Next-never-empty: every value the body makes is non-empty, so the test is true before every pass.'},
+ d:{lab:'merge back',txt:'start: x is 4\nwhile x ≠ 0: x becomes ⋃x',v:j=>String(Math.max(0,4-j)),test:j=>j<4,why:j=>'Stopped at 0: merging back ran S backwards, 4, 3, 2, 1, 0.'},
+ e:{lab:'the signal',txt:'start: x is green\nwhile x is a colour of the signal:\n  x becomes the colour after x',v:j=>['green','yellow','red'][j%3],test:j=>true,why:j=>j>=3?'It has come back to green. Back-again: from there it repeats what it did, forever.':'Still running. Wait for it to come back to a value it had.'},
+ f:{lab:'the car deck',txt:'start: u is {van, truck, bike}\nwhile u ≠ ∅: pick a member c of u;\n  u becomes u ∖ {c}',v:j=>['{van, truck, bike}','{truck, bike}','{bike}','∅'][Math.min(j,3)],test:j=>j<3,why:j=>'Stopped at ∅: a member out on each pass, nothing back.'}};
+let lk='a', n=0;
+function drawL(){ const L=LOOPS[lk]; $('lpt').textContent=L.txt;
+  const run=$('run'); run.innerHTML=''; const lo=Math.max(0,n-7);
+  if(lo>0){ const m=document.createElement('span'); m.className='more'; m.textContent='⋯'; run.appendChild(m); }
+  for(let j=lo;j<=n;j++){ const s=document.createElement('span'); s.textContent=L.v(j); if(j===n&&n>0) s.className='new'; run.appendChild(s); }
+  const vd=$('vdl'); const going=L.test(n);
+  if(!going){ vd.className='verdict win'; vd.textContent=L.why(n); }
+  else { vd.className='verdict'; vd.textContent=n===0?'Before the first pass: the test is true, so the body will run.':L.why(n); }
+  $('bpass').disabled=!going; $('bmore').disabled=!going; }
+function pass(k){ for(let i=0;i<k;i++){ if(!LOOPS[lk].test(n)) break; n++; } drawL(); }
+Object.keys(LOOPS).forEach(k=>{ const b=document.createElement('button'); b.textContent=LOOPS[k].lab; if(k===lk) b.className='on';
+  b.onclick=()=>{ lk=k; n=0; [...$('lch').children].forEach(z=>z.classList.toggle('on',z===b)); drawL(); }; $('lch').appendChild(b); });
+$('bpass').onclick=()=>pass(1); $('bmore').onclick=()=>pass(5); $('breset').onclick=()=>{ n=0; drawL(); };
+drawL();
+window.__pic={set:(k,p)=>{ [...$('lch').children][Object.keys(LOOPS).indexOf(k)].click(); pass(p||0); return $('vdl').textContent+' | '+$('run').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'the run',t:R`\begin{aligned}&\text{x is 0.} &&\text{start}\\ &\text{0 $\ne$ 4, so x becomes 1.} &&\text{the test, then the body}\\ &\text{… x becomes 4.} &&\text{the same, with 1, 2, 3}\\ &\text{4 $\ne$ 4 is false: stop.} &&\text{the test fails}\end{aligned}`,n:`The loop stops at 4.`}
+],{title:'The slides · a loop · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'every pass',t:R`\begin{aligned}&\text{Before the first pass: 1 $\ne$ $\varnothing$.} &&\text{0 $\in$ 1}\\ &\text{Let y be what the body was given.} &&\text{speak of anything}\\ &\text{Then x is S(y), and S(y) $\ne$ $\varnothing$.} &&\text{next-never-empty}\\ &\text{So the test is true before every pass.} &&\text{no watching needed}\end{aligned}`,n:`The loop never stops.`}
+],{title:'The slides · never stops · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'the signal',t:R`\begin{aligned}&\text{green, yellow, red, green, …}\\ &\text{back at green: the same test, the same body}\end{aligned}`,n:`It repeats forever.`}
+],{title:'The slides · back again · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'the deck',t:R`\begin{aligned}&\text{\{van, truck, bike\}}\\ &\text{\{truck, bike\}}\\ &\text{\{bike\}}\\ &\text{$\varnothing$: stop}\end{aligned}`,n:`A member out on each pass, nothing back.`},
+  {k:'ember',kl:'merging back',t:R`\begin{aligned}&\text{4, 3, 2, 1, 0: stop}\end{aligned}`,n:`3a11: ⋃ runs S backwards on the run.`}
+],{title:'The slides · shrinking work · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'the opposite program',t:R`\begin{aligned}&\text{Ask the checker about me.} &&\text{the program reads itself}\\ &\text{“Stops”: run forever.} &&\text{the opposite}\\ &\text{“Runs forever”: stop.} &&\text{the opposite}\end{aligned}`,n:`Either answer is wrong. The outsider shape of 2b14, held in trust.`}
+],{title:'The slides · nobody can always tell · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'illegal',t:R`\begin{aligned}&\text{the work shrinks, so the loop stops?}\end{aligned}`,n:`Only for a set you can write down.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

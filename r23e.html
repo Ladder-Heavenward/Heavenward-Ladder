@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Term by term</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r23d.html">← 23d settling everywhere at once</a><a href="r23f.html">next: 23f the function that refuses its series →</a></p>
+  <div class="tags"><span class="tag proof">23e · proof</span></div>
+  <h1>Term by term</h1>
+  <p>A polynomial's slope is found one term at a time, and so is its area. An endless power sum looks like a polynomial that never stops, so it is tempting to do the same. For an endless sum that is a real question, because the slope of a total need not be the total of the slopes. This step proves that inside the reach it works. A power sum may be taken apart term by term, for slopes and for areas, and the answer has the same reach. So a power sum is smooth inside its reach, and its coefficients are its own matching polynomial. Running this backwards turns the plain geometric sum into sums for the logarithm and for the angle whose tangent is x, and gives a famous slow sum for π.</p>
+  <p class="gesture">Inside its reach, a power sum can be differentiated and integrated one term at a time, and the reach does not change. So it is smooth there, and it is the matching sum of its own total. Integrating the geometric sum gives the sums for the logarithm and the arctangent.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r23d.html">23d</a> (settling everywhere at once), <a href="r23c.html">23c</a> (the reach), <a href="r16a.html">16a</a> (the area function), <a href="r16b.html">16b</a> (its slope is the height), <a href="r21m.html">21m</a> (arctan). <a href="r23f.html">23f</a> finds a smooth function its sum does not reach.</p></div>
+</header>
+
+<section class="class step" data-step="23e1">
+  <h2 class="sthead"><span class="stno">23e1</span>Areas, term by term</h2>
+  <p class="stands">Stands on 23d2 (settling everywhere at once), 16a (the area function) and 15e (areas add, scale, split).</p>
+  <p data-pid="05b645">Area-at-once technique: <b>if continuous fₙ settle everywhere at once to f on [p, q], then ∫ₚ^q fₙ heads to ∫ₚ^q f.</b> One N bounds the gap at every input, so it bounds the gap in areas.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the area-at-once technique">
+f \text{ is continuous, so integrable} @@ kept continuity (23d3); 15f
+n \ge N \Rightarrow |f_n(t) - f(t)| < \varepsilon \text{ for every } t \in [p, q] @@ settling everywhere at once
+\Big|\int_p^q f_n - \int_p^q f\Big| \le \int_p^q |f_n - f| \le \varepsilon(q - p) @@ areas add and keep order (15e); the bound on an area (16a)
+\htmlClass{new}{\int_p^q f_n \to \int_p^q f} \quad \blacksquare @@ ε(q − p) can be made as small as you like
+  </pre>
+  <p data-pid="6811b1">Back to xⁿ on [0, 1]: ∫₀¹ xⁿ = 1/(n + 1) heads to 0, which is the area of the limit. Here it came out right without settling at once. But fₙ(x) = n²x(1 − x)ⁿ settles at each point to 0 on [0, 1], while its areas n²/((n + 1)(n + 2)) head to 1. At each point is not enough.</p>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">23e1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\int_0^1 x^n\,dx,\ \ \int_0^1 n^2 x(1-x)^n\,dx"></span></span>Find both areas by 16e's factorial areas. <br>Find where n²x(1 − x)ⁿ is highest on [0, 1], and its height there, for n = 10 and n = 100. <br>Find its value at x = 0.1 for n = 10 and n = 100.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="23e2">
+  <h2 class="sthead"><span class="stno">23e2</span>The slope sum has the same reach</h2>
+  <p class="stands">Stands on 23c (the reach) and 22h2 (nᵏrⁿ heads to 0).</p>
+  <p data-pid="14b6bc">Same-reach technique: <b>Σ cₖ(x − a)ᵏ and its slope sum Σ k cₖ(x − a)ᵏ⁻¹ have the same reach.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the same-reach technique, one direction">
+|x - a| < s < r < R @@ choose s and r between |x − a| and the reach
+|c_k| r^k \le B \text{ for every } k @@ Σcₖ(x − a)ᵏ settles at distance r (23c), so its pieces have a ceiling (22b)
+|k c_k s^{k-1}| \le \tfrac{B}{s}\, k \big(\tfrac{s}{r}\big)^k @@ the slope sum at distance s; |cₖ| ≤ B/rᵏ
+\textstyle\sum k \big(\tfrac{s}{r}\big)^k \text{ settles} @@ ratio of neighbours heads to s/r &lt; 1 (22e2)
+\htmlClass{new}{\text{the slope sum settles at distance } s, \text{ so its reach is at least } R} \quad \blacksquare @@ s was any distance under R; 23c1
+  </pre>
+  <p data-pid="cfed81">The other direction is easier: |cₖ(x − a)ᵏ| ≤ |x − a| · |k cₖ(x − a)ᵏ⁻¹| once k ≥ 1, so where the slope sum settles in size, so does the sum.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">23e2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\textstyle\sum_{k \ge 1} \tfrac{x^k}{k^2}"></span></span>Write its slope sum, and the slope sum of that. <br>Find the reach of all three. <br>Decide each of the three at x = 1.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="23e3">
+  <h2 class="sthead"><span class="stno">23e3</span>Slopes, term by term</h2>
+  <p class="stands">Stands on 23e1, 23e2, 23d4 (power sums settle at once inside the reach) and 16b (the slope of an area function is the height).</p>
+  <p data-pid="baa5d3">Term-by-term technique: <b>inside its reach, f(x) = Σ cₖ(x − a)ᵏ has slope f′(x) = Σ k cₖ(x − a)ᵏ⁻¹ and area ∫ₐˣ f = Σ cₖ(x − a)ᵏ⁺¹/(k + 1).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the term-by-term technique">
+g(x) = \textstyle\sum_{k \ge 1} k c_k (x-a)^{k-1} @@ the slope sum: it settles inside R (23e2)
+g \text{ is continuous inside } R @@ 23d4, for the slope sum
+\int_a^x g = \textstyle\sum_{k \ge 1} k c_k \int_a^x (t-a)^{k-1}\,dt = \sum_{k \ge 1} c_k (x-a)^k = f(x) - c_0 @@ area at once (23e1), on [a, x], where the sum settles at once
+f(x) = c_0 + \int_a^x g @@ the line above
+\htmlClass{new}{f'(x) = g(x)} \quad \blacksquare @@ the slope of an area function is the height (16b)
+  </pre>
+  <p data-pid="90e15a">Apply it again, and again. Smooth-sum technique: <b>a power sum is smooth inside its reach, and cₖ = f⁽ᵏ⁾(a)/k!.</b> The kth slope sum, at x = a, keeps only its first piece, k! cₖ. So a power sum is the endless matching polynomial of its own total. Two power sums about a with the same total near a have the same coefficients.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · term by term · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">23e3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\textstyle\sum_{k \ge 0} x^k = \tfrac{1}{1-x},\ \ |x| &lt; 1"></span></span>Find the slope of each side, term by term on the left. <br>Multiply both sides by x, and find the slope of each side again. <br>Find the totals of Σ k/2ᵏ and of Σ k²/2ᵏ.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="23e4">
+  <h2 class="sthead"><span class="stno">23e4</span>Sums from the geometric sum</h2>
+  <p class="stands">Stands on 23e3, 15i (the geometric sum, with its last term), 17a (ln as an area) and 21m (arctan).</p>
+  <pre class="lines" data-k="ember" data-label="this step: ln(1 + x) and arctan x, from finite geometric sums">
+\tfrac{1}{1+t} = 1 - t + t^2 - \cdots + (-t)^{n-1} + \tfrac{(-t)^n}{1+t} @@ the finite geometric sum (15i), exact
+\ln(1+x) = \int_0^x \tfrac{dt}{1+t} = x - \tfrac{x^2}{2} + \cdots \pm \tfrac{x^n}{n} + \int_0^x \tfrac{(-t)^n}{1+t}\,dt @@ 17a, term by term on a finite sum
+\Big|\int_0^x \tfrac{(-t)^n}{1+t}\,dt\Big| \le \tfrac{|x|^{n+1}}{(n+1)(1 - |x|)} \text{ for } -1 < x < 0;\ \le \tfrac{x^{n+1}}{n+1} \text{ for } 0 \le x \le 1 @@ 1 + t ≥ 1 − |x| or ≥ 1
+\htmlClass{new}{\ln(1+x) = \textstyle\sum_{k \ge 1} \tfrac{(-1)^{k+1}x^k}{k} \text{ for } -1 < x \le 1} @@ the leftover heads to 0: the gap 23b left is closed
+\tfrac{1}{1+t^2} = 1 - t^2 + t^4 - \cdots + (-t^2)^{n-1} + \tfrac{(-t^2)^n}{1+t^2} @@ the same, with −t² for t
+\Big|\arctan x - \textstyle\sum_{k=0}^{n-1} \tfrac{(-1)^k x^{2k+1}}{2k+1}\Big| \le \int_0^{|x|} t^{2n}\,dt = \tfrac{|x|^{2n+1}}{2n+1} @@ arctan x = ∫₀ˣ dt/(1 + t²) (21m); 1 + t² ≥ 1
+\htmlClass{new}{\arctan x = x - \tfrac{x^3}{3} + \tfrac{x^5}{5} - \cdots,\ \ \tfrac{\pi}{4} = 1 - \tfrac13 + \tfrac15 - \cdots} \quad \blacksquare @@ for |x| ≤ 1; at x = 1, arctan 1 = π/4 (21m)
+  </pre>
+  <p data-pid="b90feb">The last sum is beautiful and nearly useless for computing: a thousand pieces give π/4 to about three places, since the leftover is about 1/(2n + 1). Put x = 1/√3 instead, where arctan is π/6, and each piece shrinks by a third. That is how π was first pushed past a hundred places.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">23e4.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\tfrac{\pi}{6} = \arctan\tfrac{1}{\sqrt3}"></span></span>Write π as 6 times the arctan sum at x = 1/√3. <br>Use the leftover bound to find how many pieces give π to within 10⁻⁶. <br>Compute with that many pieces, and compare with π.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="23e5">
+  <h2 class="sthead"><span class="stno">23e5</span>Illegal moves</h2>
+  <p class="stands">Stands on 23e1 to 23e4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+f_n \to f \text{ at each point} \Rightarrow \int f_n \to \int f\,? @@ n²x(1 − x)ⁿ: areas head to 1, the limit has area 0 (23e1)
+\text{the slope sum settles at the edge because the sum does}\,? @@ Σxᵏ/k² settles at 1; its slope sum Σxᵏ⁻¹/k is the harmonic sum there
+\Big(\textstyle\sum f_k\Big)^{\prime} = \sum f_k^{\prime} \text{ for any functions}\,? @@ only proved here for power sums inside the reach
+\tfrac{\pi}{4} = 1 - \tfrac13 + \tfrac15 - \cdots, \text{ so reorder to compute faster}\,? @@ it settles only by taking turns: reordering can change the total (22g3)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">23e5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f_n(x) = n^2 x (1-x)^n"></span></span>Find fₙ(0.1) for n = 10, 100 and 1000, and the area under fₙ on [0, 1] for n = 10 and 100. <br>Find which kind of settling the list does, and which kind it lacks.</li><li><span class="givens"><span data-tex-inline="\textstyle\sum_{k \ge 1} \tfrac{x^k}{k^2},\ \ x = 1"></span></span>Find whether the sum settles at 1, and whether its slope sum settles there. <br>Find what the line took for granted about the edge.</li><li><span class="givens"><span data-tex-inline="f_n(x) = \tfrac{\sin nx}{n}"></span></span>Find a bound on |fₙ(x)| that serves every x, and where fₙ settles. <br>Find fₙ′(0), and whether it heads to the slope of the limit at 0.</li><li><span class="givens"><span data-tex-inline="1 + \tfrac15 - \tfrac13 + \tfrac19 + \tfrac1{13} - \tfrac17 + \cdots"></span></span>Its pieces are those of 1 − ⅓ + ⅕ − ⋯, taken two gains for each loss. <br>Find whether 1 − ⅓ + ⅕ − ⋯ settles in size. <br>The new order's running total after 30 000 pieces is about 0.9587. Compare it with π/4.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">23e.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\ln\tfrac{1+x}{1-x}"></span></span>Build its power sum about 0 from the sum for ln(1 + x), and find its reach. <br>Find the x that makes (1 + x)/(1 − x) = 2. <br>Find ln 2 to five places with as few pieces as you can, and compare with 1 − ½ + ⅓ − ⋯.</div>
+  <div class="chq"><span class="chid">23e.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\ln(1+x) = x - \tfrac{x^2}{2} + \tfrac{x^3}{3} - \cdots,\ \ x = 1"></span></span>The sum settles at the edge x = 1, to ln 2. <br>Write its slope sum, term by term, and the running totals of that at x = 1. <br>Find the slope of ln(1 + x) at 1. Find whether any number the running totals give is that slope.</div>
+  <div class="chq"><span class="chid">23e.4.3</span><span class="tagq">converse</span>Two power sums about 0 with the same total near 0 have the same coefficients. Turn it round with less: if Σ aₖxᵏ and Σ bₖxᵏ both have reach above 1, and the same total at x = 1, ½, ⅓, ¼, …, must aₖ = bₖ for every k? <br>Work with the difference D(x) = Σ (aₖ − bₖ)xᵏ, and use its continuity at 0.</div>
+  <div class="chq"><span class="chid">23e.4.4</span><span class="tagq">reroute</span>Prove arctan ½ + arctan ⅓ = π/4, by the tangent-sum technique (21d). <br>Find π from five pieces of each arctan sum, and compare with five pieces of the sum at x = 1/√3 from 23e4.</div>
+  <div class="chq"><span class="chid">23e.4.5</span><span class="tagq">seam</span><span class="givens"><span data-tex-inline="\tfrac{\pi}{4} = 1 - \tfrac13 + \tfrac15 - \cdots"></span></span>This sum was set down in Sanskrit verse in Kerala, in south India, around 1400, with a correction for its slowness. A Scot and a German found it again in the 1670s, and most books give it the German's name. Some historians argue that the Kerala work could have reached Europe by way of missionaries in India; others find no trail. <br>Find the running total after 10 pieces, and the leftover bound there. <br>When a technique is found twice, whose is it? <br>Does a name on a technique record who found it first, who proved it, or who passed it on?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r23d.html">← 23d · settling everywhere at once</a><a href="r23f.html">23f · the function that refuses its series →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The term-by-term technique is term-by-term differentiation and integration of power series; the smooth-sum technique says a power series is analytic and equals its Taylor series. The sum for π/4 is the Leibniz series (Madhava–Leibniz series); the sum for arctan is Gregory's series.</p>
+  <h3>Who said it first</h3>
+  <p>Madhava of Sangamagrama found the arctangent sum and the sum for π/4 around 1400, in Kerala. James Gregory found the arctangent sum in 1671 and Gottfried Leibniz the π/4 sum in 1673. Abraham Sharp used x = 1/√3 to reach 71 decimal places of π in 1699, and John Machin reached 100 in 1706 with a faster blend of arctangents. In 23e.4.5, the verse is Madhava's, passed down in later Kerala texts such as the Yuktibhāṣā (about 1530), which also proves it; the Scot is Gregory and the German Leibniz. George Gheverghese Joseph and Dennis Almeida (2007) argued the case for travel to Europe.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'slope',t:R`\htmlClass{new}{\Big(\textstyle\sum c_k (x-a)^k\Big)^{\prime} = \sum k c_k (x-a)^{k-1}}`,n:`Inside the reach.`},
+  {k:'ember',kl:'one sum',t:R`c_k = \tfrac{f^{(k)}(a)}{k!}`,n:`A power sum is its own match.`}
+],{title:'The slides · term by term · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Does a bouncing ball ever stop?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r22econ.html">← 22·econ how far does one dollar of spending go?</a><a href="r22now.html">next: 22·now can one digit of π be found alone? →</a></p>
+  <div class="tags"><span class="tag phys">22·phys · physics</span></div>
+  <h1>Does a bouncing ball ever stop?</h1>
+  <p>Does a bouncing ball ever stop? Drop a ping-pong ball on a table and listen. The clicks come faster and faster, then blur into a buzz, then stop. Each bounce seems to reach the same share of the height before it, so there is always a next bounce, a little lower. Is there a last one? What makes it hard is that two answers both look right. Endlessly many bounces seem to need endless time. Yet a few seconds later the ball is plainly lying still. This page shows, with 22e’s geometric yardstick and 13·phys’s falling stone, how far the ball travels, when the bouncing would end if the share never changed, how to hear the share in the clicks, and why a real ball stops leaving the table after a count of bounces you could write down.</p>
+  <p class="gesture">If each bounce reaches the same share of the last height, the heights shrink by that share, and the times in the air shrink by its square root. Both lists make endless ratio sums, so the distance and the time are finite, though the bounces never run out. Two neighbouring gaps between clicks stand in the ratio of that square root, so the ear can measure the share. A real bounce also spends a moment pressed against the table, and that moment does not shrink. Endlessly many such moments would take endless time, so a real ball stops bouncing after a finite count.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r15i.html">15i</a> (endless ratio sums), <a href="r22d.html">22d</a> (a sum is where its partial sums settle; shrinking is not enough), <a href="r22e.html">22e</a> (compare with a geometric sum), <a href="r13phys.html">13·phys</a> (free fall), <a href="r10phys.html">10·phys</a> (endless stages, finite time) and <a href="r17h.html">17h</a> (solving with logs). 22·now turns an endless sum into a single far digit.</p></div>
+</header>
+
+<section class="class step" data-step="22phys1">
+  <h2 class="sthead"><span class="stno">22phys1</span>How far the ball travels</h2>
+  <p class="stands">Stands on 15i (endless-ratio-sum).</p>
+  <p data-pid="497324">The rules of table tennis ask that a table give a bounce of about 23 cm when a ball is dropped on it from 30 cm. Take as a measured law, for heights near those, that each bounce reaches the same share r of the height before it. Here r ≈ 23/30 ≈ 0.767. Drop the ball from height h. The bounces reach h r, h r², h r³, and so on.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the distance technique">
+h \text{ down; then } rh \text{ up and down; then } r^2h \text{ up and down}; \ \ldots @@ each bounce goes up and comes back
+D = h + 2(rh + r^2h + r^3h + \cdots) @@ the whole path as an endless sum
+= h + \tfrac{2rh}{1 - r} @@ endless-ratio-sum (15i): first term rh, ratio r
+\htmlClass{new}{D = h\,\tfrac{1 + r}{1 - r}} \quad \blacksquare @@ over one denominator
+  </pre>
+  <p data-pid="8d9c2a">Distance technique: <b>a ball whose bounces each reach a share r of the last height travels h(1 + r)/(1 − r) in all.</b> From 30 cm, with r = 23/30, D = 0.30 × 53/7 ≈ 2.27 m. Endlessly many bounces cover less than two and a half metres.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · distance · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">22·phys.1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a ball dropped from 1.2 m</span> <span data-tex-inline="r = 0.6"></span></span>Find the total distance it travels. <br>Find the height of the fifth bounce.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22phys2">
+  <h2 class="sthead"><span class="stno">22phys2</span>How long the bouncing lasts</h2>
+  <p class="stands">Stands on 22·phys.1, 13·phys (free fall) and 15i (endless-ratio-sum).</p>
+  <p data-pid="1bc231">A stone dropped from height H falls for √(2H/g) seconds, since H = ½gt² (13·phys). A hop up to height H and back takes twice that: the climb is the fall run backwards. Write t₀ = √(2h/g) for the first fall.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the time technique">
+\text{hop } k:\ \ 2\sqrt{\tfrac{2r^k h}{g}} = 2t_0\,(\sqrt r)^k @@ height rᵏh; up and down
+T = t_0 + 2t_0\big(\sqrt r + (\sqrt r)^2 + (\sqrt r)^3 + \cdots\big) @@ the first fall, then every hop
+= t_0 + \tfrac{2t_0\sqrt r}{1 - \sqrt r} @@ endless-ratio-sum (15i): ratio √r &lt; 1
+\htmlClass{new}{T = t_0\,\tfrac{1 + \sqrt r}{1 - \sqrt r}} \quad \blacksquare @@ over one denominator
+  </pre>
+  <p data-pid="c527b2">Time technique: <b>if every bounce reaches a share r of the last height, endlessly many bounces end within t₀(1 + √r)/(1 − √r) seconds.</b> From 30 cm, t₀ = √(0.6/9.8) ≈ 0.247 s and √r ≈ 0.876, so T ≈ 0.247 × 1.876/0.124 ≈ 3.73 s. The times shrink more slowly than the heights: by √r, not by r.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · time · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · drop the ball</div>
+    <div class="kn"><span class="m">h</span><input type="range" id="kh" min="0.1" max="2" step="0.05" value="0.3"><output id="oh"></output></div>
+    <div class="kn"><span class="m">r</span><input type="range" id="kr" min="0.3" max="0.95" step="0.005" value="0.765"><output id="or"></output></div>
+    <div id="pl"></div>
+    <div class="cap">Ink: the ball’s height against time. Ember ticks: the clicks, one at each landing. Teal dashes: the time technique’s end, T. Hops under a millimetre are drawn flat.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22·phys.2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a ball dropped from 1.2 m</span> <span data-tex-inline="r = 0.64"></span> <span data-tex-inline="g = 9.8 \text{ m/s}^2"></span></span>Find when the bouncing ends. <br>Find the time of the first fall and the first five hops together, and its share of the whole.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22phys3">
+  <h2 class="sthead"><span class="stno">22phys3</span>Hearing the share</h2>
+  <p class="stands">Stands on 22·phys.2.</p>
+  <p data-pid="c3abe2">Each click is a landing, and the gap between two clicks is one hop: 2t₀(√r)ᵏ. A phone can record the clicks, and a sound editor times the gaps to a thousandth of a second.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the click technique">
+\tfrac{\text{gap}_{k+1}}{\text{gap}_k} = \tfrac{2t_0(\sqrt r)^{k+1}}{2t_0(\sqrt r)^k} = \sqrt r @@ the time technique, hop by hop
+r = \Big(\tfrac{\text{gap}_{k+1}}{\text{gap}_k}\Big)^2 @@ square both sides
+\htmlClass{new}{\text{time left after a click} = \tfrac{\text{next gap}}{1 - \sqrt r}} \quad \blacksquare @@ the gaps still to come, an endless ratio sum (15i)
+  </pre>
+  <p data-pid="fa548f">Click technique: <b>two neighbouring gaps between clicks stand in the ratio √r, so the ear can measure the share.</b> Gaps of 0.400 s and then 0.350 s give √r = 0.875 and r ≈ 0.766, a table that meets the rule. The next gap should be 0.306 s, and the buzz should end 0.306/0.125 ≈ 2.45 s after the click that closed the 0.350 s gap.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · clicks · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22·phys.3.1</span><span class="ph undo">undo</span><span class="givens"><span class="gtx">three clicks, the first two 0.500 s apart, the next two 0.420 s apart</span></span>Find r. <br>Find the time from the third click to silence, if the share never changes.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22phys4">
+  <h2 class="sthead"><span class="stno">22phys4</span>What really stops it</h2>
+  <p class="stands">Stands on 22·phys.2, 22d (passing every bound) and 17h (solving with logs).</p>
+  <p data-pid="71a162">The time technique trusts the share law at every height, down to the width of an atom and below. Measure where it can fail. A real bounce is not instant. The ball squashes against the table and springs back, and it stays pressed there for a short time τ. For a ping-pong ball τ is about a thousandth of a second. Unlike the hops, τ does not shrink as the hops do.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the contact technique">
+\text{bounce } k \text{ takes at least } \tau \gt 0 @@ the ball is pressed to the table each time
+n \text{ bounces take at least } n\tau @@ add; the hops only add more
+n\tau \text{ passes every bound} @@ everyday-counting-passes (8e)
+\htmlClass{new}{\text{endlessly many real bounces take endless time}} \quad \blacksquare @@ yet the ball rests in seconds: so it bounces only finitely often
+  </pre>
+  <p data-pid="7b8e7d">Contact technique: <b>bounces that each take at least a fixed time cannot be endlessly many in a few seconds.</b> So the share law must fail at some small height. It surely fails once a hop lasts no longer than the contact itself. Below that the table’s shake, the ball’s squash and the air decide, and the ball ends up resting, or rolling.</p>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · laws with a known exception rate</div>
+    <p data-pid="1808e6">The share law was measured from drops of about 30 cm. It is a law in the ladder’s sense: a measured regularity, with a range. Read past its range, it promises endlessly many bounces in under four seconds. Every one of those endlessly many bounces happens below the range. After twenty bounces from 30 cm the hops are under 2 mm high.</p>
+    <p data-pid="dde1c4"><b>A law that promises endlessly many events in a moment has been read past its range.</b></p>
+    <p data-pid="fb0c43">So keep the law, and mark where it ends. From 30 cm, the first hop under a millimetre is the 22nd, and the time technique says that all the hops from there on take about 0.21 s together. Whatever happens down there, the law places the end of the buzz to within about a fifth of a second.</p>
+    <p class="bait" data-pid="b2e0dc">A basketball dropped from a third-floor window in Tacoma, with r ≈ 0.7: would you trust the time technique for its end, and to within how much?</p>
+  </aside>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · contact · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22·phys.4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a ball dropped from 30 cm</span> <span data-tex-inline="r = 0.767"></span> <span data-tex-inline="\tau = 0.001 \text{ s}"></span> <span data-tex-inline="g = 9.8 \text{ m/s}^2"></span></span>Find the first hop that lasts less than τ. <br>Find its height.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22phys5">
+  <h2 class="sthead"><span class="stno">22phys5</span>Illegal moves</h2>
+  <p class="stands">Stands on 22·phys.1 to 22·phys.4.</p>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{endlessly many bounces take endless time}\,? @@ hop times shrink by √r &lt; 1: their sum settles (15i)
+\text{the hop times shrink by } r\,? @@ by √r: the fall time goes as the root of the height
+\text{the hops shrink, so they end in a finite time}\,? @@ shrinking is not enough (22d): hops of 1, ½, ⅓, … seconds pass every bound
+\text{the time is finite, so a real ball bounces endlessly often}\,? @@ the law is read past its range; each contact takes τ
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22·phys.5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="r = 1"></span></span>Find D and T. <br>Find which line of the time technique breaks.</li><li><span class="givens"><span class="gtx">hops lasting 1, ½, ⅓, ¼, … seconds</span></span>Find whether the bouncing ends.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">22·phys.6.1</span><span class="tagq">build</span>Build a drop height and a share r so that, by the time technique, the bouncing ends within 2.5 s and the ball travels at least 3 m.</div>
+  <div class="chq"><span class="chid">22·phys.6.2</span><span class="tagq">edge</span>Let r head toward 1, with h fixed. <br>Find what D and T do, and the ratio D/T heads to.</div>
+  <div class="chq"><span class="chid">22·phys.6.3</span><span class="tagq">converse</span>A ball’s bouncing ends in a finite time. Must each bounce reach the same share of the height before it?</div>
+  <div class="chq"><span class="chid">22·phys.6.4</span><span class="tagq">reroute</span><span class="givens"><span class="gtx">landing speed v_0 = g t_0</span> <span class="gtx">each bounce leaves at √r times its landing speed</span></span>Find T a second way, from speeds: a hop that leaves at speed u lasts 2u/g (13·phys).</div>
+  <div class="chq"><span class="chid">22·phys.6.5</span><span class="tagq">seam</span>A lamp is switched on at noon, off half a minute later, on again a quarter minute after that, and so on, each wait half the last. The switching is over at one minute past noon. One reader holds that the lamp must then be on or off, and either answer clashes with the switching. Another holds that the story fixes nothing at one minute past, so nothing clashes. Is the lamp on or off at one minute past noon?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r22econ.html">← 22·econ · how far does one dollar of spending go?</a><a href="r22now.html">22·now · can one digit of π be found alone? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The ratio of the speed after a bounce to the speed before it is the coefficient of restitution, e; the share of height is r = e². The time τ is the contact time. Endlessly many events in a finite time is Zeno behaviour, in the study of systems that switch; the bouncing ball is its standard example. A task made of endlessly many steps in a finite time is a supertask.</p>
+  <h3>Who said it first</h3>
+  <p>Isaac Newton measured the share of speed kept in collisions of balls hung as pendulums (Principia, 1687). The table tennis rule of a 23 cm bounce from 30 cm is in the sport’s international laws. Karl Johansson, Magnus Egerstedt, John Lygeros and Shankar Sastry named Zeno behaviour (1999). In 22·phys.6.5, James Thomson (1954) argued from the lamp that supertasks cannot be done; Paul Benacerraf (1962) answered that the story of the switching says nothing about the lamp at the end, so no clash follows.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="22·phys: a worked “proof”, not allowed">
+\text{hop } k \text{ lasts } 2t_0 r^k @@ not allowed: the fall time goes as the root of the height, so 2t₀(√r)ᵏ
+T = t_0\tfrac{1 + r}{1 - r} = 0.247 \times \tfrac{53}{7} \approx 1.87 \text{ s} @@ follows from the wrong line
+\text{so the buzz ends under 2 s after the drop} @@ false: about 3.73 s
+  </pre>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+const V=c=>'var('+c+')', g=9.8;
+function draw(){ const h=+$('kh').value, r=+$('kr').value; $('oh').textContent=fm(h,2)+' m'; $('or').textContent=fm(r,3);
+  const sr=Math.sqrt(r), t0=Math.sqrt(2*h/g), T=t0*(1+sr)/(1-sr), D=h*(1+r)/(1-r);
+  const W=340,H=190,ox=8,oy=170, tmax=T*1.06, sx=t=>ox+t/tmax*(W-ox-8), sy=y=>oy-y/h*150;
+  let p=[], t=0, k=0, hk=h, clicks=[], mm=0;
+  for(let i=0;i<=24;i++){ const s=i/24*t0; p.push(sx(s)+','+sy(h-0.5*g*s*s)); }
+  t=t0; clicks.push(t);
+  while(k<400){ k++; hk=h*Math.pow(r,k); const d=2*Math.sqrt(2*hk/g);
+    if(hk<0.001){ break; }
+    mm=k; for(let i=1;i<=16;i++){ const s=i/16*d; p.push(sx(t+s)+','+sy(g*d/2*s-0.5*g*s*s)); }
+    t+=d; clicks.push(t); }
+  p.push(sx(tmax)+','+sy(0));
+  let s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;max-width:420px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  s+='<line x1="0" y1="'+oy+'" x2="'+W+'" y2="'+oy+'" style="stroke:'+V('--grid')+'"/>';
+  s+='<line x1="'+sx(T)+'" y1="12" x2="'+sx(T)+'" y2="'+oy+'" style="stroke:'+V('--teal')+';stroke-width:1.5;stroke-dasharray:5 4"/>';
+  s+='<text x="'+(sx(T)-4)+'" y="22" text-anchor="end" style="font:10px var(--mono);fill:'+V('--teal')+'">T = '+fm(T,2)+' s</text>';
+  s+='<polyline points="'+p.join(' ')+'" style="fill:none;stroke:'+V('--ink')+';stroke-width:1.4"/>';
+  for(const c of clicks) s+='<line x1="'+sx(c)+'" y1="'+oy+'" x2="'+sx(c)+'" y2="'+(oy+8)+'" style="stroke:'+V('--ember')+';stroke-width:1.2"/>';
+  $('pl').innerHTML=s+'</svg>';
+  const tl=t; const v=$('vd'); v.className='verdict';
+  v.textContent='h = '+fm(h,2)+' m, r = '+fm(r,3)+'. Distance D = '+fm(D,2)+' m. End T = '+fm(T,2)+' s. Hops over 1 mm: '+mm+', ending at '+fm(tl,2)+' s; the endlessly many hops below 1 mm take '+fm(T-tl,3)+' s.'; }
+$('kh').oninput=draw; $('kr').oninput=draw; draw();
+window.__pic={set:(h,r)=>{ $('kh').value=h; $('kr').value=r; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'heights',t:R`h,\ rh,\ r^2h,\ \ldots`,n:`Each a share r of the last.`},
+  {k:'ember',kl:'the path',t:R`\htmlClass{new}{h\,\tfrac{1 + r}{1 - r}}`,n:`Down once, then up and down.`}
+],{title:'The slides · distance · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'a hop',t:R`2t_0(\sqrt r)^k`,n:`Shrinks by √r.`},
+  {k:'ember',kl:'the end',t:R`\htmlClass{new}{t_0\,\tfrac{1 + \sqrt r}{1 - \sqrt r}}`,n:`Endlessly many hops, a finite time.`}
+],{title:'The slides · time · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'ratio',t:R`\tfrac{\text{gap}_{k+1}}{\text{gap}_k} = \sqrt r`,n:`Heard, not seen.`},
+  {k:'ember',kl:'time left',t:R`\htmlClass{new}{\tfrac{\text{next gap}}{1 - \sqrt r}}`,n:`An endless ratio sum.`}
+],{title:'The slides · clicks · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'each bounce',t:R`\ge \tau`,n:`The squash does not shrink.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{n\tau \to \infty}`,n:`Only finitely many real bounces.`}
+],{title:'The slides · contact · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`\text{shrinking} \Rightarrow \text{finite}\,?`,n:`Shrinking is not enough.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

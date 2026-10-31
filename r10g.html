@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="ladder-cert" content="rung"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>10g · Playing the challenge game</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input[type=range]{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.tick{font-size:.9rem;display:flex;gap:6px;align-items:center}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r10f.html">← 10f computing limits</a><a href="r10bio.html">next: 10·bio how fast can an enzyme go? →</a></p>
+  <div class="tags"><span class="tag tech">10g · technique</span></div>
+  <h1>Playing the challenge game</h1>
+  <p>10a watched rounds won; 10f mostly avoided the game by rewriting. Here you play it yourself, against any challenge, with a recipe for the answer. The skill is the one the ladder is for: not spotting a move but running an inequality backwards on purpose. You start from where you must end, the output within the gap of the value, and rewrite it, one licensed move at a time, until it says something about how near the input is. Then you turn round and write it forwards for a reader. And you learn to lose on purpose: to play the challenger, with the denial of the definition worked out by rung 7's techs, and refute a claim.</p>
+  <p class="gesture">Write the output's distance as the input's distance times a leftover. Promise first to stay near enough that the leftover has a ceiling. Then ask for less than the gap over the ceiling. Answer with the lesser of the two promises.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r10a.html">10a</a> (the definition, line-limit, square-limit, one-over-x-limit), <a href="r10c.html">10c</a> (budgets, the least of several), <a href="r10f.html">10f</a> (root-limit), <a href="r08h.html">8h</a> (size-of-a-product, size-of-a-negative, unpack-the-bars, triangle), <a href="r08g.html">8g</a> (multiplying keeps or turns the order), <a href="r08i.html">8i</a> (the conjugate), <a href="r01i.html">1i</a> (find it backwards, write it forwards), <a href="r07d.html">7d</a> (not-every, negated-if forward), <a href="r01e.html">1e</a> (not-some, counterexample). Rung 11 chains these promises; every later proof that says “choose δ” is one round of this game.</p></div>
+</header>
+
+<section class="class step" data-step="10g1">
+  <h2 class="sthead"><span class="stno">10g1</span>Two directions, one argument</h2>
+  <p class="stands">Stands on 10a (the game) and 1i (reading a proof).</p>
+  <p data-pid="ff05f2">A finished proof that f heads to L reads forwards: “Let ε &gt; 0. Put δ = (something). Suppose 0 &lt; |x − z| &lt; δ. Then … &lt; ε.” Read cold, the δ seems to come from nowhere. It came from scratch work done in the other direction, starting at the goal. That is the way 1i said proofs are found: backwards from what you want, asking what would make it true, then written forwards with every line licensed. <b>Both directions are legitimate; only the forward one is the proof.</b> This step shows both every time.</p>
+  <p data-pid="34c788">The scratch work always has the same three beats, the method of this step. (Here a beat is a step of the method; 6·phys's beats, the swelling and fading of two close tones, keep their meaning.) Expose the displacement: rewrite |f(x) − L| so that |x − z| appears as a factor, |f(x) − L| = |x − z| · W(x). Call W(x) the leftover. Tame the leftover. If it is a constant, there is nothing to do. If not, make a first promise, |x − z| &lt; r, chosen so that W(x) has a ceiling B on that stretch. Read off δ: then |f(x) − L| ≤ B|x − z|, and asking for |x − z| &lt; ε/B finishes. Both promises at once: δ = min(r, ε/B).</p>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">10g1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a write-up that opens “Let ε > 0. Put δ = ε/5.”</span></span>Say what the scratch work must have shown for that δ to come out. <br>Say which direction a reader meets first, and which you work in first.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10g2">
+  <h2 class="sthead"><span class="stno">10g2</span>The linear function: the leftover is a constant</h2>
+  <p class="stands">Stands on 10g1 and 10a6 (line-limit).</p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="teal" data-label="from 10a: scratch work, backwards from the goal">
+|f(x) - 3| \lt \varepsilon,\ \ f(x) = 5 - 2x,\ a = 1 @@ the goal; at 1 the output is 3
+|\htmlClass{new}{2 - 2x}| \lt \varepsilon @@ substitute for the expression; collect
+\htmlClass{new}{2}\,|x - 1| \lt \varepsilon @@ 2 − 2x = −2(x − 1); size-of-a-product; |−2| = 2
+|x - 1| \lt \htmlClass{new}{\tfrac{\varepsilon}{2}} @@ multiply by ½, positive, so the order is kept (8g). Read off δ = ε/2
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: the write-up, forwards">
+\text{Let } \varepsilon \gt 0.\ \text{Put } \htmlClass{new}{\delta = \tfrac{\varepsilon}{2}}. @@ the δ, now with its origin known
+\text{Suppose } 0 \lt |x - 1| \lt \delta. @@ any input the promise covers
+|f(x) - 3| = |2 - 2x| = 2\,|x - 1| @@ the rewrite, forwards
+\lt 2\delta = \htmlClass{keep}{\varepsilon} \quad \blacksquare @@ the supposition, then the choice of δ
+  </pre>
+  <p data-pid="765555">Each line of the write-up is a line of the scratch work run the other way. The leftover was 2, the size of the step (the linear function falls by 2 per step across; the bars took the sign). In general |(mx + b) − (mz + b)| = |m||x − z| and δ = ε/|m|. <b>The linear function stretches distances by |m|, and the answer undoes the stretch.</b> A step of 0 is the one case where the recipe divides by 0, and it does not need it: every δ wins.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10g2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">lim_{x→2} (4x − 3) = 5</span></span>Do the scratch work: expose |x − 2| and find the leftover. <br>Write the δ, then the write-up forwards.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10g3">
+  <h2 class="sthead"><span class="stno">10g3</span>A square: tame the leftover with a first promise</h2>
+  <p class="stands">Stands on 10g2 and 10a7 (square-limit).</p>
+  <p data-pid="69abcf">Take x² + 3x near 1, heading to 4. One way is 10c's budget: give x² half and 3x half, and take the lesser of their answers. The other is to play it directly, and it shows the three beats cleanly.</p>
+  <pre class="lines" data-k="ember" data-label="this step: three beats, x² + 3x near 1">
+\begin{gathered}|x^2 + 3x - 4| = |\htmlClass{new}{(x - 1)(x + 4)}|\\ = |x - 1|\,\htmlClass{keep}{|x + 4|}\end{gathered} @@ expose: x² + 3x − 4 is 0 at 1, so x − 1 is a factor (factor; sum-and-product: product −4, sum 3); size-of-a-product
+\htmlClass{new}{|x - 1| \lt 1} \Rightarrow 0 \lt x \lt 2 \Rightarrow 4 \lt x + 4 \lt 6 @@ tame: a first promise of 1, unpacked by the stretch (8h), then add 4 throughout (8g)
+|x + 4| \lt \htmlClass{new}{6} @@ the ceiling B = 6 on that stretch
+|x^2 + 3x - 4| \lt 6\,|x - 1| \lt \varepsilon \;\Leftarrow\; |x - 1| \lt \tfrac{\varepsilon}{6} @@ read off
+\htmlClass{new}{\delta = \min\!\big(1, \tfrac{\varepsilon}{6}\big)} @@ both promises
+  </pre>
+  <p data-pid="29e926">The tempting shortcut is illegal. δ = ε/|x + 4| has x in it, and the line says ∃δ ∀x, so δ is named before any x is handed over (1e: the order of the signs is not decoration). Lose on purpose to see the first promise earn its place. Drop it and answer ε = 30 with ε/6 = 5: then x = 5.9 is in the window, and 5.9² + 3 · 5.9 = 52.51, which is 48.51 from 4. Out there the leftover |x + 4| is 9.9, not below the ceiling 6 you counted on. <b>The ceiling was only true inside the promise.</b> With both promises, ε = 30 gets δ = 1, and every input in (0, 2) other than 1 has its output within 30 of 4, comfortably.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · scratch · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · left: the leftover and its ceiling on the first promise · right: the game, answered by the recipe</div>
+    <div class="panel">
+      <div class="chips" role="group" aria-label="family" id="fch"></div>
+      <div class="kn">
+        <span class="m" id="kal">z</span><input type="range" id="ka"><output id="oa"></output>
+        <span class="m">r</span><input type="range" id="kr" min="0.05" max="3" step="0.05" value="1"><output id="or"></output>
+        <span class="m" id="kel">ε</span><input type="range" id="ke" min="-3" max="1.5" step="0.05" value="-0.5"><output id="oe"></output>
+      </div>
+      <label class="tick"><input type="checkbox" id="drop"> drop the first promise (answer with ε/B alone)</label>
+      <canvas id="cw"></canvas>
+      <div class="cap">The leftover W(x) (ink) on the stretch |x − z| &lt; r (teal). Dashed gold: its ceiling B there. If the stretch reaches 0 for 1/x, or leaves the domain for √x, there is no ceiling, or no game.</div>
+      <div class="eqbox" id="eqw"></div>
+    </div>
+    <div class="panel">
+      <canvas id="cf"></canvas>
+      <div class="cap">The graph of f. Gold rows: within ε of L. Grey columns: the recipe's δ around z. Teal where the graph lands in the target, ember where it escapes. For “losing: x² at 2, claim 4.5”, the gold rows are around the false claim with the challenger's ε = ¼, the knob sets your δ, and the ember dot is the challenger's input x = 2 + ½ min(δ, 0.01).</div>
+      <div class="verdict" id="vd"></div>
+      <div class="eqbox" id="eqc"></div>
+    </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10g3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{Let } P \text{ be } \lim_{x \to -1} (3x + 7) = 4."></span></span>Show P: scratch work backwards, then the write-up forwards.</li><li><span class="givens"><span data-tex-inline="\text{Let } P \text{ be } \lim_{x \to 3} x^2 = 9."></span> <span data-tex-inline="|x - 3| &lt; 1 \text{ (first promise)}"></span></span>Show P from the first promise: scratch work, then the write-up.</li><li><span class="givens"><span data-tex-inline="\text{Take that recipe for } x^2 \text{ at}"></span> <span data-tex-inline="\text{3.}"></span> <span data-tex-inline="\varepsilon = 0.7 \text{ or } \varepsilon = 70,"></span> <span data-tex-inline="d = \varepsilon/7"></span></span>Find the δ that answers each ε. <br>Show that d alone loses at the larger ε, by naming an escaping input.</li><li><span class="givens"><span data-tex-inline="\text{Let } P \text{ be } \lim_{x \to 5} 1/x = \tfrac15."></span> <span data-tex-inline="|x - 5| &lt; 1 \text{ (first promise)}"></span></span>Show P from the first promise, and check one round with numbers.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10g4">
+  <h2 class="sthead"><span class="stno">10g4</span>One over x: keep off 0</h2>
+  <p class="stands">Stands on 10g3 and 10a8 (one-over-x-limit).</p>
+  <pre class="lines" data-k="teal" data-label="from 10a: one-over-x-limit's recipe, near ½">
+\left|\tfrac1x - 2\right| = \tfrac{|1 - 2x|}{|x|} = |x - \tfrac12| \cdot \htmlClass{keep}{\tfrac{2}{|x|}} @@ expose: one bottom; 1 − 2x = −2(x − ½); size-of-a-product
+\htmlClass{new}{|x - \tfrac12| \lt \tfrac14} \Rightarrow x \gt \tfrac14 \Rightarrow \tfrac{2}{|x|} \lt \htmlClass{new}{8} @@ tame: half the distance from ½ to 0; positive-reciprocal on ℚ
+\htmlClass{new}{\delta = \min\!\big(\tfrac14, \tfrac{\varepsilon}{8}\big)} @@ read off: one-over-x-limit's min(|a|/2, a²ε/2) at a = ½
+  </pre>
+  <p data-pid="6dc86e">The first promise has a second job here: keep x away from 0, where the leftover has no ceiling at all. A promise of 1 near ½ would let x be 0.01, where 2/|x| is 200, or let the window reach past 0 to inputs where 1/x is negative. <b>Size the promise by the distance to the trouble: half of it is always safe.</b></p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · 1/x near 1 · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10g4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">lim_{x→4} 1/x = ¼,  first promise |x − 4| < 1</span></span>Find the ceiling on the leftover inside the first promise. <br>Write the recipe for δ.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10g5">
+  <h2 class="sthead"><span class="stno">10g5</span>Roots: the conjugate exposes the displacement</h2>
+  <p class="stands">Stands on 10g4, 8i (the conjugate) and 10e (root-at-0).</p>
+  <pre class="lines" data-k="teal" data-label="from 8i and 10f: the conjugate, near 4">
+|\sqrt x - 2| = \tfrac{|x - 4|}{\sqrt x + 2} @@ times the conjugate over itself (√x + 2 &gt; 0); difference-of-squares on the top
+\le \tfrac{|x - 4|}{\htmlClass{new}{2}} @@ the leftover 1/(√x + 2) is at most ½, since √x ≥ 0: no promise needed for a ceiling
+\htmlClass{new}{\delta = \min(4, 2\varepsilon)} @@ the 4 keeps the window inside the domain [0, ∞): it is the reach on which √x is defined near 4
+  </pre>
+  <p data-pid="8bf146"><b>So a first promise can do either job: bound the leftover, or keep the window where the function is defined.</b> Near 0 itself no multiple of ε wins for √x: the inputs must come within ε² (10e's root-at-0), because the root climbs faster than any linear function there.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10g5.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">lim_{x→9} √x = 3</span></span>Expose |x − 9| with the conjugate, and bound the leftover. <br>Write a δ, with a first promise that keeps x where √x is defined.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10g6">
+  <h2 class="sthead"><span class="stno">10g6</span>Combining recipes</h2>
+  <p class="stands">Stands on 10g5 and 10c (limits add, multiply).</p>
+  <p data-pid="2c500a">10c's proofs are instructions for building answers out of answers. <b>For a sum, give each piece half the gap and take the lesser answer.</b> For x² + 3x near 1, x² answers ε/2 with square-limit's min(1, (ε/2)/3) = min(1, ε/6). And 3x answers ε/2 with line-limit's (ε/2)/3 = ε/6. The lesser is min(1, ε/6), the same recipe the three beats found directly. For a product, limits-multiply's recipe is min(δ₁, δ₂, δ₃): a first promise for the wild factor and two budgets. For a quotient, away-from-zero's promise and reciprocal-limit's budget. You rarely need these by hand, since the techniques give the limit without any δ. But when a later proof asks for an explicit answer, this is how one is built, piece by piece, from answers you already have.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10g6.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">at 2:  x² answers min(1, ε/5),  5x answers ε/5</span></span>Give x² + 5x a recipe at 2, heading to 14. <br>Say which of 10c’s proofs you followed.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10g7">
+  <h2 class="sthead"><span class="stno">10g7</span>A write-up, complete</h2>
+  <p class="stands">Stands on 10g1 to 10g6.</p>
+  <p data-pid="837e62">Here is the full forward proof for 1/x near ½, as it would be written for a reader, every sentence a move: Let ε &gt; 0. Put δ = min(¼, ε/8). Suppose 0 &lt; |x − ½| &lt; δ. Since δ ≤ ¼, x &gt; ½ − ¼ = ¼, so x is positive and 1/|x| &lt; 4. Then |1/x − 2| = |1 − 2x|/|x| = 2|x − ½|/|x| &lt; 2 · 4 · |x − ½| = 8|x − ½|. Since δ ≤ ε/8, 8|x − ½| &lt; ε. So |1/x − 2| &lt; ε. ∎ Check it against the scratch work above: every bound used was earned by one of the two promises, and the order of the sentences is the order of the moves.</p>
+  <p data-pid="53d146">A checklist for any write-up. Open with “let ε &gt; 0” (speak of everything). Name δ before any x appears. Suppose 0 &lt; |x − z| &lt; δ, the 0 &lt; included. Spend each promise exactly where it is needed, saying which. End with |f(x) − L| &lt; ε. <b>If a line uses a bound, the line above must have earned it.</b></p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10g7.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = 4 \text{ at } z = 7,"></span> <span data-tex-inline="f \text{ is a linear function with}"></span> <span data-tex-inline="\text{step } m = 0 \text{.}"></span> <span data-tex-inline="\delta = \varepsilon/|m|"></span></span>Try the recipe, and find every δ that wins.</li><li><span class="givens"><span data-tex-inline="\text{A write-up says “Suppose}"></span> <span data-tex-inline="|x - 2| &lt; \delta \text{”, leaving out}"></span> <span data-tex-inline="\text{the } 0 &lt; \text{.}"></span> <span data-tex-inline="F(x) = x^2,"></span> <span data-tex-inline="G(x) = \dfrac{x^2 - 4}{x - 2},"></span> <span data-tex-inline="H(x) = x^2 \text{ for } x \ne 2,\ H(2) = 7"></span></span>Decide, for F, G and H at 2, whether that breaks the proof.</li><li><span class="givens"><span data-tex-inline="f(x) = \sqrt{x} \text{ at } 0, \text{ from the right},"></span> <span data-tex-inline="\delta = k\varepsilon,\ k &gt; 0 \text{ fixed}"></span></span>Prove that no such answer wins every round.</li><li><span class="givens"><span data-tex-inline="f(x) = x^2 + 3x \text{ near } 1,"></span> <span data-tex-inline="|x - 1| &lt; \tfrac12 \text{ (first promise)},"></span> <span data-tex-inline="d = \min(1, \varepsilon/6)"></span></span>Redo the recipe from this promise. <br>Find the ε for which it gives a larger δ than d.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10g8">
+  <h2 class="sthead"><span class="stno">10g8</span>Losing on purpose: the challenger’s sentence</h2>
+  <p class="stands">Stands on 10g7, 7d (denials pushed inward) and 10b (one limit).</p>
+  <p data-pid="bb902b">To refute a claimed limit you play the challenger. What must the challenger show? The denial of the definition, pushed inward by rung 1's and rung 7's techs. Not-heading-to technique: <b>for f defined near z, ¬(lim_{x→z} f(x) = L) exactly when ∃ε &gt; 0 ∀δ &gt; 0 ∃x ∈ dom f (0 &lt; |x − z| &lt; δ ∧ ε ≤ |f(x) − L|).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the not-heading-to technique, the denial pushed inward">
+\neg\,\forall \varepsilon \gt 0\ \exists \delta \gt 0\ \forall x\,(A \Rightarrow B) @@ the claim denied; A is 0 &lt; |x − a| &lt; δ, B is |f(x) − L| &lt; ε
+\htmlClass{new}{\exists \varepsilon \gt 0}\ \neg\,\exists \delta \gt 0\ \forall x\,(A \Rightarrow B) @@ not-every, bounded (7d): not every gives some not. Back: counterexample (1e)
+\exists \varepsilon \gt 0\ \htmlClass{new}{\forall \delta \gt 0}\ \neg\,\forall x\,(A \Rightarrow B) @@ not-some (1e): not some is every not; both ways
+\exists \varepsilon \gt 0\ \forall \delta \gt 0\ \htmlClass{new}{\exists x}\ \neg(A \Rightarrow B) @@ not-every again. Back: counterexample
+\exists \varepsilon \gt 0\ \forall \delta \gt 0\ \exists x\,(A \;\htmlClass{keep}{\land}\; \neg B) @@ negated-if forward (7d): denying an if is an and. Back: negated-if (1g)
+\exists \varepsilon \gt 0\ \forall \delta \gt 0\ \exists x\,(A \land \htmlClass{new}{\varepsilon \le |f(x) - L|}) \quad \blacksquare @@ three-way-order on ℝ: ¬(p &lt; ε) is ε ≤ p
+  </pre>
+  <p data-pid="549495"><b>Read it as a strategy: the challenger names one gap, and then, for every reach you might answer, produces an input in your window whose output escapes.</b> The leftward direction, from the strategy to the denial, needs no either-way principle: counterexample, not-some and negated-if are rung 1's. The rightward direction, from a bare denial to a strategy, is where rung 7 earns its keep. In practice you always prove the strategy, and the denial follows.</p>
+  <pre class="lines" data-k="ember" data-label="this step: x² does not head to 4.5 at 2">
+\varepsilon = \tfrac14 @@ the true value is 4, half a unit from 4.5; name a gap less than that
+\text{any } \delta \gt 0:\ \ x = 2 + \tfrac12\min(\delta,\ 0.01) @@ in your window, and within 0.01 of 2 for the challenger's own arithmetic
+4 \lt x^2 \lt 2.01^2 = 4.0401 @@ powers-keep-order (8f), since 2 &lt; x &lt; 2.01
+|x^2 - 4.5| \gt 4.5 - 4.0401 = 0.4599 \ge \tfrac14 @@ unpack-the-bars; so x escapes. Every δ loses: by not-heading-to's leftward direction, the claim is refuted
+  </pre>
+  <p data-pid="d6bb3f">A jump falls the same way, with no true value to hide behind. Claim any L for |x|/x at 0. The challenger names ε = ½. For any δ, both δ/2 and −δ/2 are in the window, with outputs 1 and −1, two apart. By 10b's two-targets no L is within ½ of both, so one of them escapes. That is not-heading-to's strategy for every L at once, and it is 10e's two-sides-differ seen from the challenger's chair.</p>
+  <p data-pid="34a60f">Notice the challenger uses a min too: an input inside your window, and close enough to 2 for their own bound. 10d's heads-nowhere and 10e's no-side-at-0 were this same play, with a fraction and an irrational, or with an input far enough in. The warning below, from a well-known calculus book, applies to both sides of the game.</p>
+  <p data-pid="2808bd">The book observes that a finished proof of this kind hides the scratch work that found its δ, which is why such proofs can look like magic. Its advice is to see first, informally, why the statement is true, and only then write the proof.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · the challenger · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10g8.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">claim: lim_{x→1} (3x + 2) = 6</span></span>Name the challenger’s gap. <br>For every δ, name an input in the window whose output escapes.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10g9">
+  <h2 class="sthead"><span class="stno">10g9</span>Illegal moves</h2>
+  <p class="stands">Stands on 10g1 to 10g8.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\delta = \tfrac{\varepsilon}{|x + 4|}\,? @@ δ is named before x (∃δ ∀x)
+\delta = \tfrac{\varepsilon}{6} \text{ alone}\,? @@ the ceiling 6 works only inside the first promise: ε = 30 loses at x = 5.9
+\text{promise } 1 \text{ near } \tfrac12 \text{ for } \tfrac1x\,? @@ the window reaches 0; the leftover has no ceiling there
+\text{write-up: “Suppose } |x - a| \lt \delta\text{”}\,? @@ drops the 0 &lt;: harmless for x², fatal for a function with a stray value at a
+\text{challenger: “for } \delta = 0.1,\ x = 2.05 \text{ escapes”}\,? @@ one δ beaten is not a refutation: the challenger must beat every δ with one ε
+\neg\lim = L \;\Rightarrow\; \forall \varepsilon\ \exists \delta \ldots \text{ fails at } \varepsilon = 1\,? @@ the denial needs some ε, not a particular one you guessed; find the ε that works
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10g9.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">“For x² at 3, δ = ε/7 wins.”</span></span>Which illegal move is this? <br>Find an ε and an input in the window that escapes.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10g10">
+  <h2 class="sthead"><span class="stno">10g10</span>Running it backwards</h2>
+  <p class="stands">Stands on 10g1 to 10g8.</p>
+  <p data-pid="bbbe50">Handed a recipe, recover the game: min(1, ε/9) for x² came from a first promise of 1 and a ceiling 9 = 1 + 2|z|, so z = ±4. Handed a write-up with a blank, fill it from the scratch work. Handed a claim you think false, find the true value and name a gap less than the distance to it. Found upward; written downward.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10g10.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{A write-up reads:}"></span> <span data-tex-inline="“\text{Put } \delta = \varepsilon/6."></span> <span data-tex-inline="\text{Suppose } 0 &lt; |x - 2| &lt; \delta."></span> <span data-tex-inline="\text{Then } |f(x) - 9| = 6|x - 2| &lt; \varepsilon.”"></span></span>Find every linear function that fits it.</li><li><span class="givens"><span data-tex-inline="\text{Someone answers for } x^2"></span> <span data-tex-inline="\text{near 5 with},"></span> <span data-tex-inline="\delta = \min(2, \varepsilon/11)."></span></span>Does the recipe win every round? <br>If not, name an ε and an escaping input.</li><li><span class="givens"><span data-tex-inline="\text{The recipe}"></span> <span data-tex-inline="\min(\tfrac14, \varepsilon/8) \text{ was}"></span> <span data-tex-inline="\text{one-over-x-limit&#x27;s at some}"></span> <span data-tex-inline="z \text{.}"></span></span>Find z and the first promise.</li><li><span class="givens"><span data-tex-inline="“\text{Let } \varepsilon &gt; 0. \text{ Put } \delta = \min(1, \varepsilon/5)."></span> <span data-tex-inline="\text{Suppose } 0 &lt; |x + 2| &lt; \delta."></span> <span data-tex-inline="\text{Then } |x - 2| &lt; 5 \text{ because } \_\_\_."></span> <span data-tex-inline="\text{So } |x^2 - 4| = |x + 2| \cdot |x - 2|,"></span> <span data-tex-inline="&lt; \_\_\_ \le \varepsilon, \text{ because } \_\_\_.”"></span></span>Fill the blanks.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">10g.4.1</span><span class="tagq">build</span>Build write-ups of your own, and lose one on purpose.<ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = x^3 - 2x,"></span> <span data-tex-inline="z = 2"></span></span>Find a recipe for f near z, and write it up.</li><li><span class="givens"><span data-tex-inline="f(x) = \dfrac{1}{x - 3},"></span> <span data-tex-inline="z = 4"></span></span>Write a recipe for f near z, sized to the distance from z to the trouble, and write it up.</li><li><span class="givens"><span data-tex-inline="f(x) = 1/x,"></span> <span data-tex-inline="z = 2,"></span> <span data-tex-inline="L = 0.6"></span></span>By not-heading-to, prove that f does not head to L at z.</li></ol></div>
+  <div class="chq"><span class="chid">10g.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="f(x) = x^2,"></span> <span data-tex-inline="z = 2,"></span> <span data-tex-inline="\varepsilon = 1,"></span> <span data-tex-inline="\delta = \min(1, 1/5)"></span></span>Find a larger δ that still wins, and the largest.</div>
+  <div class="chq"><span class="chid">10g.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{Squeezed-by-distance turns}"></span> <span data-tex-inline="\text{the bound},"></span> <span data-tex-inline="|f(x) - L| \le C|x - z| \text{ on the reach } r,"></span> <span data-tex-inline="\text{into the recipe}"></span> <span data-tex-inline="\delta = \min(r, \varepsilon/C) \text{.}"></span></span>If that recipe wins every round, is the bound true on the reach?</div>
+  <div class="chq"><span class="chid">10g.4.4</span><span class="tagq">seam</span>A great mathematician, it is said, believed that a finished building should not show its scaffolding, and printed his proofs with the traces of their finding removed. A younger one complained that he was like the fox who wipes out its tracks in the sand with its tail. The oldest geometry book that has come down whole runs only forwards. A later Greek geometer described both directions, and called the backward one analysis. Should a written proof show how it was found?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r10f.html">← 10f · computing limits</a><a href="r10bio.html">10·bio · how fast can an enzyme go? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>The calculus book is Michael Spivak’s. In 10g.4.4, the builder who hid his scaffolding is Carl Friedrich Gauss, and the fox remark is Niels Henrik Abel’s; the forward-only book is Euclid’s Elements, and the geometer who named analysis is Pappus of Alexandria.</p>
+  <aside class="voice para"><p>Spivak observes that a finished proof of this kind hides the scratch work that found its δ, which is why such proofs can look like magic; his advice is to see first, informally, why the statement is true, and only then write the proof.</p><cite>Spivak, Calculus, ch. 5</cite></aside>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const ka=$('ka'),kr=$('kr'),ke=$('ke'),drop=$('drop');
+let fam='line';
+const fm=v=>{ if(!isFinite(v)) return '\\infty'; const a=Math.abs(v); let s=a>=100?v.toFixed(0):a>=1?v.toFixed(3):a>=0.0095?v.toFixed(4):v.toPrecision(2); if(s.indexOf('.')>=0&&s.indexOf('e')<0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const fmt=v=>fm(v).replace('\\infty','∞');
+const sg=v=>Math.abs(v)<1e-12?'':(v<0?'- '+fm(-v):'+ '+fm(v));
+function model(){ const a=+ka.value, r=+kr.value;
+  if(fam==='line'){ const m=a; return {a:1,L:3,f:x=>m*(x-1)+3,W:x=>Math.abs(m),B:Math.abs(m),r,usesR:false,tf:`f(x) = ${fm(m)}(x - 1) + 3`,ex:R`|f(x) - 3| = |x - 1| \cdot ${fm(Math.abs(m))}`}; }
+  if(fam==='sq3') return {a:1,L:4,f:x=>x*x+3*x,W:x=>Math.abs(x+4),B:5+r,r,usesR:true,tf:R`f(x) = x^2 + 3x,\ z = 1`,ex:R`|x^2 + 3x - 4| = |x - 1|\,|x + 4|`};
+  if(fam==='sq') return {a,L:a*a,f:x=>x*x,W:x=>Math.abs(x+a),B:2*Math.abs(a)+r,r,usesR:true,tf:R`f(x) = x^2,\ z = ${fm(a)}`,ex:R`|x^2 - ${fm(a*a)}| = |x ${sg(-a)}|\,|x ${sg(a)}|`};
+  if(fam==='inv'){ const B=r>=a?Infinity:1/(a*(a-r)); return {a,L:1/a,f:x=>1/x,W:x=>1/(a*Math.abs(x)),B,r,usesR:true,wall:true,tf:R`f(x) = \tfrac1x,\ z = ${fm(a)}`,ex:R`\left|\tfrac1x - \tfrac{1}{${fm(a)}}\right| = |x - ${fm(a)}|\cdot\tfrac{1}{${fm(a)}|x|}`}; }
+  if(fam==='rt'){ const B=r>a?NaN:1/Math.sqrt(a); return {a,L:Math.sqrt(a),f:x=>x>=0?Math.sqrt(x):NaN,W:x=>x>=0?1/(Math.sqrt(x)+Math.sqrt(a)):NaN,B,r,usesR:true,dom:true,tf:R`f(x) = \sqrt x,\ z = ${fm(a)}`,ex:R`|\sqrt x - ${fm(Math.sqrt(a))}| = \tfrac{|x - ${fm(a)}|}{\sqrt x + ${fm(Math.sqrt(a))}}`}; }
+  return {a:2,L:4.5,truth:4,f:x=>x*x,lose:true,r,usesR:false,B:NaN,W:x=>NaN,tf:R`f(x) = x^2,\ \text{claim } 4.5 \text{ at } 2`,ex:R`\text{the challenger: } \varepsilon = \tfrac14`}; }
+function recipe(M,e){ if(M.lose) return e; if(!isFinite(M.B)) return 0; if(M.B===0) return 3; const d=e/M.B; return (M.usesR&&!drop.checked)?Math.min(M.r,d):d; }
+function referee(M,e,d){ if(!(d>0)) return {win:false,none:true}; const N=1500; let worst=null,wv=-1;
+  for(const s of [-1,1]) for(let k=1;k<=N;k++){ const t=k<N?k/N:1-1e-9, x=M.a+s*d*t; if(M.wall&&x<=0) return {win:false,wall:true}; if(M.dom&&x<0) return {win:false,dom:true}; const v=Math.abs(M.f(x)-M.L); if(v>=e&&v>wv){ wv=v; worst=x; } }
+  if(worst===null) return {win:true}; const s0=Math.sign(worst-M.a)||1; for(const t of [0.95,0.9,0.8,0.7,0.5]){ const x=+(M.a+s0*d*t).toPrecision(4); const v=M.f(x); if(Math.abs(v-M.L)>=e&&Math.abs(x-M.a)<d) return {win:false,x,fx:v}; } return {win:false,x:worst,fx:M.f(worst)}; }
+function largest(M,e){ const cap=5; if(referee(M,e,cap).win) return cap; let lo=0,hi=cap; for(let i=0;i<40;i++){ const m=(lo+hi)/2; if(m>0&&referee(M,e,m).win) lo=m; else hi=m; } return lo; }
+function niceStep(span){ const r=span/6, p=Math.pow(10,Math.floor(Math.log10(r))), m=r/p; return (m<1.5?1:m<3.5?2:m<7.5?5:10)*p; }
+function axes2(P){ const c=P.ctx,o=P.o,gx=niceStep(o.x[1]-o.x[0]),gy=niceStep(o.y[1]-o.y[0]);
+  const dec=g=>Math.max(0,-Math.floor(Math.log10(g)+1e-9)), lab=(v,g)=>{ const s=v.toFixed(dec(g)); return /^-0\.?0*$/.test(s)?'0':s.replace('-','−'); };
+  c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1];x+=gx){ c.moveTo(P.X(x),P.Y(o.y[0])); c.lineTo(P.X(x),P.Y(o.y[1])); }
+  for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1];y+=gy){ c.moveTo(P.X(o.x[0]),P.Y(y)); c.lineTo(P.X(o.x[1]),P.Y(y)); }
+  c.stroke(); c.strokeStyle=col('--muted'); c.lineWidth=1.3; c.beginPath();
+  if(o.y[0]<=0&&o.y[1]>=0){ c.moveTo(P.X(o.x[0]),P.Y(0)); c.lineTo(P.X(o.x[1]),P.Y(0)); }
+  if(o.x[0]<=0&&o.x[1]>=0){ c.moveTo(P.X(0),P.Y(o.y[0])); c.lineTo(P.X(0),P.Y(o.y[1])); } c.stroke();
+  c.font='11px IBM Plex Mono, monospace'; c.fillStyle=col('--muted');
+  c.textAlign='center'; let k=0; for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1];x+=gx,k++){ if(P.W<420&&k%2) continue; c.fillText(lab(x,gx),P.X(x),P.H-4); }
+  c.textAlign='left'; for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1];y+=gy){ c.fillText(lab(y,gy),4,P.Y(y)-3); } }
+const cw=$('cw'), cf=$('cf');
+const PW=plane(cw,{x:[-1,3],y:[0,6],grid:0,labels:false,aspect:0.75,draw:P=>drawW(P)});
+const PF=plane(cf,{x:[-1,3],y:[0,6],grid:0,labels:false,aspect:0.75,draw:P=>drawF(P)});
+function drawW(P){ const M=model(), c=P.ctx; axes2(P); if(M.lose){ P.text('no leftover: this is the challenger\'s game',P.o.x[0]+(P.o.x[1]-P.o.x[0])*0.03,(P.o.y[0]+P.o.y[1])/2,'--ember','left',12); return; }
+  c.fillStyle=col('--teal'); c.globalAlpha=.12; c.fillRect(P.X(M.a-M.r),P.Y(P.o.y[1]),P.X(M.a+M.r)-P.X(M.a-M.r),P.Y(P.o.y[0])-P.Y(P.o.y[1])); c.globalAlpha=1;
+  P.line(M.a-M.r,P.o.y[0],M.a-M.r,P.o.y[1],'--teal',1.2,[5,4]); P.line(M.a+M.r,P.o.y[0],M.a+M.r,P.o.y[1],'--teal',1.2,[5,4]);
+  P.fn(x=>M.wall&&Math.abs(x)<1e-3?NaN:M.W(x),'--muted',1.4,[3,3]);
+  P.fn(x=>Math.abs(x-M.a)<M.r&&!(M.wall&&Math.abs(x)<1e-3)?M.W(x):NaN,'--ink',2.6);
+  if(isFinite(M.B)){ P.line(P.o.x[0],M.B,P.o.x[1],M.B,'--gold',1.6,[6,4]); P.text('B = '+fmt(M.B),P.o.x[0]+(P.o.x[1]-P.o.x[0])*0.08,M.B+(P.o.y[1]-P.o.y[0])*0.02,'--gold','left',12); }
+  else P.text(M.dom?'the stretch leaves the domain':'no ceiling: the stretch reaches 0',P.o.x[0]+(P.o.x[1]-P.o.x[0])*0.03,P.o.y[1]-(P.o.y[1]-P.o.y[0])*0.08,'--ember','left',12); }
+function drawF(P){ const M=model(), e=Math.pow(10,+ke.value), c=P.ctx; const eE=M.lose?0.25:e; const d=Math.min(recipe(M,e),50); axes2(P);
+  const xl=P.X(P.o.x[0]),xr=P.X(P.o.x[1]);
+  c.fillStyle=col('--gold'); c.globalAlpha=.18; c.fillRect(xl,P.Y(M.L+eE),xr-xl,P.Y(M.L-eE)-P.Y(M.L+eE)); c.globalAlpha=1; P.line(P.o.x[0],M.L,P.o.x[1],M.L,'--gold',1.5);
+  if(d>0){ c.fillStyle=col('--ink'); c.globalAlpha=.07; c.fillRect(P.X(M.a-d),P.Y(P.o.y[1]),P.X(M.a+d)-P.X(M.a-d),P.Y(P.o.y[0])-P.Y(P.o.y[1])); c.globalAlpha=1; P.line(M.a-d,P.o.y[0],M.a-d,P.o.y[1],'--muted',1.2,[5,4]); P.line(M.a+d,P.o.y[0],M.a+d,P.o.y[1],'--muted',1.2,[5,4]); }
+  P.fn(x=>M.wall&&Math.abs(x)<1e-3?NaN:M.f(x),'--ink',1.4);
+  P.fn(x=>(Math.abs(x-M.a)<d&&Math.abs(M.f(x)-M.L)<eE)?M.f(x):NaN,'--teal',3);
+  P.fn(x=>(Math.abs(x-M.a)<d&&Math.abs(M.f(x)-M.L)>=eE)?M.f(x):NaN,'--ember',3);
+  if(M.lose){ const x=2+0.5*Math.min(d,0.01); P.dot(x,x*x,'--ember',6); }
+  else { const r=referee(M,e,d); if(!r.win&&!r.none&&r.x!==undefined&&isFinite(r.fx)) P.dot(r.x,r.fx,'--ember',6); } }
+function frames(){ const M=model(), e=Math.pow(10,+ke.value);
+  let x0=M.a-Math.max(M.r*1.6,1.2), x1=M.a+Math.max(M.r*1.6,1.2); if(M.wall){ x0=Math.min(-0.3,M.a-M.r-0.3); x1=M.a+Math.max(M.r,1)*1.4; } if(M.dom){ x0=Math.min(-0.5,M.a-M.r-0.3); }
+  let top=0; for(let i=0;i<=200;i++){ const x=x0+(x1-x0)*i/200; if(Math.abs(x-M.a)<M.r){ const w=M.W(x); if(isFinite(w)) top=Math.max(top,w); } }
+  if(isFinite(M.B)) top=Math.max(top,M.B); top=Math.min(Math.max(top*1.25,1),M.wall?8:30); PW.o.x=[x0,x1]; PW.o.y=[-top*0.06,top];
+  const d=recipe(M,e), span=M.lose?0.6:Math.max(1.4,Math.min(8,isFinite(d)?d*1.3:2)); let fx0=M.a-span, fx1=M.a+span; if(M.wall) fx0=Math.max(0.02,M.a-span); if(M.dom) fx0=Math.max(-0.2,fx0);
+  let lo=Infinity,hi=-Infinity; for(let i=0;i<=200;i++){ const x=fx0+(fx1-fx0)*i/200; const v=M.f(x); if(isFinite(v)){ lo=Math.min(lo,v); hi=Math.max(hi,v); } }
+  const eE=M.lose?0.25:e; lo=Math.min(lo,M.L-eE); hi=Math.max(hi,M.L+eE); if(M.wall) hi=Math.min(hi,Math.max(M.L+eE,M.L*4)+0.5); const pad=(hi-lo)*0.08+0.05; PF.o.x=[fx0,fx1]; PF.o.y=[lo-pad,hi+pad]; }
+function readout(){ const M=model(), e=Math.pow(10,+ke.value), d=recipe(M,e);
+  $('oa').textContent=fmt(+ka.value); $('or').textContent=fmt(+kr.value)+(M.usesR?'':' (not used)'); $('oe').textContent=fmt(e);
+  const v=$('vd');
+  if(M.lose){ const x=2+0.5*Math.min(d,0.01), y=x*x; v.className='verdict lose'; v.textContent='The challenger wins against δ = '+fmt(d)+': x = '+fmt(x)+' is in the window, and x² = '+fmt(y)+' is '+fmt(Math.abs(y-4.5))+' from 4.5, not less than ¼. The same play beats every δ.';
+    tex($('eqw'),R`\begin{gathered}\text{claim } 4.5;\ \text{the truth is } 4\\ \varepsilon = \tfrac14 \lt 4.5 - 4\end{gathered}`,true);
+    tex($('eqc'),R`\begin{gathered}x = 2 + \tfrac12\min(\delta, 0.01) = ${fm(x)}\\ x^2 \lt 2.01^2 = 4.0401\\ |x^2 - 4.5| \gt 0.4599 \ge \tfrac14\end{gathered}`,true); return; }
+  tex($('eqw'),R`\begin{gathered}${M.tf}\\ ${M.ex}\\ ${!M.usesR?R`\text{the leftover is the constant } ${fm(M.B)}`:(isFinite(M.B)?R`\text{on } |x - ${fm(M.a)}| \lt ${fm(M.r)}\text{: } W(x) \le B = ${fm(M.B)}`:R`\text{on } |x - ${fm(M.a)}| \lt ${fm(M.r)}\text{: no ceiling}`)}\end{gathered}`,true);
+  const big=largest(M,e), r=referee(M,e,d);
+  const rt=!M.usesR?R`\delta = \tfrac{\varepsilon}{B} = ${fm(d)}`:(!isFinite(M.B)?R`\text{no recipe from this promise}`:(drop.checked?R`\delta = \tfrac{\varepsilon}{B} = ${fm(d)}\ \ \text{(first promise dropped)}`:R`\delta = \min\big(r, \tfrac{\varepsilon}{B}\big) = ${fm(d)}`));
+  tex($('eqc'),R`\begin{gathered}${rt}\\ \text{largest } \delta \text{ that wins: } ${big>=5?R`\text{at least } 5`:fm(big)}\end{gathered}`,true);
+  if(r.none){ v.className='verdict lose'; v.textContent='No δ to play: the leftover has no ceiling on this promise. Shrink r.'; }
+  else if(r.win){ v.className='verdict win'; v.textContent='The recipe wins: every input within '+fmt(d)+' of '+fmt(M.a)+', other than '+fmt(M.a)+', lands within '+fmt(e)+' of '+fmt(M.L)+'.'; }
+  else if(r.wall){ v.className='verdict lose'; v.textContent='The window reaches 0, where 1/x has no value and nearby outputs are huge: the recipe loses.'; }
+  else if(r.dom){ v.className='verdict lose'; v.textContent='The window leaves the domain [0, ∞): √x is not defined on all of it.'; }
+  else { v.className='verdict lose'; v.textContent='The recipe loses: x = '+fmt(r.x)+' is within '+fmt(d)+' of '+fmt(M.a)+', but f(x) = '+fmt(r.fx)+' is '+fmt(Math.abs(r.fx-M.L))+' from '+fmt(M.L)+'.'; } }
+function all(){ frames(); PW.redraw(); PF.redraw(); readout(); }
+function setFam(f){ fam=f; const lab=$('kal');
+  if(f==='line'){ lab.textContent='m'; ka.min=-4; ka.max=4; ka.step=0.1; ka.value=-2; ke.value=-0.5; }
+  if(f==='sq3'){ lab.textContent='—'; ka.min=0; ka.max=1; ka.step=1; ka.value=0; kr.value=1; ke.value=-1; }
+  if(f==='sq'){ lab.textContent='z';
+ ka.min=-3; ka.max=3; ka.step=0.1; ka.value=2; kr.value=1; ke.value=-0.5; }
+  if(f==='inv'){ lab.textContent='z';
+ ka.min=0.2; ka.max=4; ka.step=0.05; ka.value=0.5; kr.value=0.25; ke.value=-1.5; }
+  if(f==='rt'){ lab.textContent='z';
+ ka.min=0.25; ka.max=9; ka.step=0.25; ka.value=4; kr.value=1; ke.value=-1; }
+  if(f==='lose'){ lab.textContent='—'; ka.min=0; ka.max=1; ka.step=1; ka.value=0; ke.value=-1; }
+  $('kel').textContent=f==='lose'?'δ':'ε'; ka.disabled=(f==='sq3'||f==='lose'); kr.disabled=(f==='line'||f==='lose'); all(); }
+const fch=$('fch');
+[['line','linear function (through (1, 3))'],['sq3','x² + 3x near 1'],['sq','x² near a'],['inv','1/x near a'],['rt','√x near a'],['lose','losing: x² at 2, claim 4.5']].forEach(([k,t])=>{ const b=document.createElement('button'); b.textContent=t; if(k===fam) b.className='on'; b.onclick=()=>{ [...fch.children].forEach(z=>z.classList.toggle('on',z===b)); setFam(k); }; fch.appendChild(b); });
+[ka,kr,ke].forEach(k=>k.addEventListener('input',all)); drop.addEventListener('change',all);
+setFam('line');
+
+/* ---------- slides ---------- */
+const N='\\htmlClass{new}', K='\\htmlClass{keep}';
+stepper('#sl1',[
+  {k:'ember',kl:'scratch · x² near −1 · 1 of 6',t:R`\text{goal: } |x^2 - 1| \lt \varepsilon \text{ for } x \text{ near } -1`,n:`(−1)² = 1, so the claim is x² → 1 at −1. Start from the goal.`},
+  {k:'ember',kl:'scratch · 2 of 6',t:R`|x^2 - 1| = ${N}{|x + 1|}\cdot|x - 1|`,n:`difference-of-squares. The displacement from −1 is x − (−1) = x + 1: there it is.`},
+  {k:'ember',kl:'scratch · 3 of 6',t:R`${N}{|x + 1| \lt 1} \Rightarrow -2 \lt x \lt 0`,n:`A first promise, unpacked by the stretch.`},
+  {k:'ember',kl:'scratch · 4 of 6',t:R`-3 \lt x - 1 \lt -1 \Rightarrow ${N}{|x - 1| \lt 3}`,n:`Take 1 from all three parts. The ceiling: B = 3, which is square-limit's ceiling 1 + 2|−1|.`},
+  {k:'ember',kl:'scratch · 5 of 6',t:R`\begin{gathered}|x^2 - 1| \lt 3\,|x + 1| \lt \varepsilon\\ \Leftarrow |x + 1| \lt ${N}{\tfrac{\varepsilon}{3}}\end{gathered}`,n:`The second promise.`},
+  {k:'ember',kl:'scratch · 6 of 6',t:R`${N}{\delta = \min\!\big(1, \tfrac{\varepsilon}{3}\big)}`,n:`Both promises. The scratch work ends; the write-up begins.`},
+  {k:'ember',kl:'the write-up',t:R`\begin{gathered}0 \lt |x + 1| \lt \delta \Rightarrow\\ |x^2 - 1| = |x + 1|\,${K}{|x - 1|}\\ \lt \delta \cdot ${K}{3} \le \tfrac{\varepsilon}{3}\cdot 3 = \varepsilon\end{gathered}`,n:`Forwards: δ ≤ 1 gives |x − 1| &lt; 3; δ ≤ ε/3 gives the last step. ∎`}
+],{title:'The slides · scratch work · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'1/x near 1 · 1 of 4',t:R`\left|\tfrac1x - 1\right| = |x - 1|\cdot ${K}{\tfrac{1}{|x|}}`,n:`One bottom. The leftover 1/|x| has no ceiling near 0, which is only 1 away.`},
+  {k:'ember',kl:'1/x near 1 · 2 of 4',t:R`|x - 1| \lt 1 \Rightarrow 0 \lt x \lt 2\ \ ${N}{\times}`,n:`Tempting and useless: x may be 0.001, where 1/|x| is 1000.`},
+  {k:'ember',kl:'1/x near 1 · 3 of 4',t:R`${N}{|x - 1| \lt \tfrac12} \Rightarrow \tfrac{1}{|x|} \lt ${N}{2}`,n:`Half the distance to 0: x stays above ½.`},
+  {k:'ember',kl:'1/x near 1 · 4 of 4',t:R`${N}{\delta = \min\!\big(\tfrac12, \tfrac{\varepsilon}{2}\big)}`,n:`Check: ε = 0.1, δ = 0.05, x = 0.96: 1/x ≈ 1.0417, 0.0417 from 1. ✓`}
+],{title:'The slides · 1/x near 1 · ← → keys work'});
+stepper('#sl3',[
+  {k:'teal',kl:'from 7d · not-heading-to · 1 of 3',t:R`\neg\forall\varepsilon\,\exists\delta\,\forall x\,(A \Rightarrow B)`,n:`The claim denied. Push the not inward, one sign at a time.`},
+  {k:'teal',kl:'from 7d · not-heading-to · 2 of 3',t:R`${N}{\exists\varepsilon}\,${N}{\forall\delta}\,${N}{\exists x}\,\neg(A \Rightarrow B)`,n:`not-every, not-some, not-every: each sign flips as the not passes it.`},
+  {k:'teal',kl:'from 7d · not-heading-to · 3 of 3',t:R`\exists\varepsilon\,\forall\delta\,\exists x\,(A \land ${N}{\varepsilon \le |f(x) - L|})`,n:`negated-if forward and three-way-order on ℝ. The challenger's strategy: one gap, an escaping input for every reach.`},
+  {k:'teal',kl:'refuted · 1 of 3',t:R`\text{claim: } \lim_{x\to 3}(2x - 1) = 6`,n:`The truth is 5 (line-limit). Play the challenger.`},
+  {k:'teal',kl:'refuted · 2 of 3',t:R`\varepsilon = ${N}{\tfrac12};\ \ x = 3 + \tfrac12\min\!\big(\delta, \tfrac14\big)`,n:`A gap less than the distance 1 to the truth; an input in the window and within ⅛ of 3.`},
+  {k:'teal',kl:'refuted · 3 of 3',t:R`\begin{gathered}2x - 1 \le 5 + \tfrac14\\ \Rightarrow\; |(2x - 1) - 6| \ge \tfrac34 \ge ${N}{\tfrac12}\end{gathered}`,n:`x ≤ 3 + ⅛, so 2x − 1 ≤ 5¼. The input escapes, for every δ. By not-heading-to, the claim is refuted. ∎`}
+],{title:'The slides · the challenger · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

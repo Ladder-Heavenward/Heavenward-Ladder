@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>From counting to rare events</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r22i.html">← 22i testing sums by hand</a><a href="r22k.html">next: 22k how fast things grow →</a></p>
+  <div class="tags"><span class="tag tech">22j · technique</span></div>
+  <h1>From counting to rare events</h1>
+  <p>Some things happen rarely, but have a great many chances to happen: a misprint among thousands of letters, a call to a help line from among thousands of people, a meteor in a patch of sky. Counting them exactly would need to know how many chances there were, and you seldom do. This step shows you do not need to. When the chances are many and each is small, only their average count matters, and the chances of seeing none, one, two or more come from a single endless sum. Along the way that sum turns out to be the growth function of the seventeenth rung, written out piece by piece.</p>
+  <p class="gesture">Many tries, each with a small chance, behave like one rule that needs only the average count. The chance of exactly k is the average to the kth power over k factorial, times e to the minus the average. Those chances add to one because e to a power is an endless sum.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r17e.html">17e</a> (exp and e), <a href="r17b.html">17b</a> (the slope of ln), <a href="r04j.html">4j</a> (counting choices), <a href="r14stat.html">14·stat</a> (the chance of k heads), <a href="r22e.html">22e</a> (the ratio test). <a href="r22stat.html">22·stat</a> puts it to work on misprints and help lines. <a href="r22k.html">22k</a> ranks how fast things grow.</p></div>
+</header>
+
+<section class="class step" data-step="22j1">
+  <h2 class="sthead"><span class="stno">22j1</span>A tiny chance, many times</h2>
+  <p class="stands">Stands on 17b (the slope of ln at 1 is 1), 17e (exp) and 22h1 (sequences through continuous functions).</p>
+  <p data-pid="43a532">Many-small-chances technique: <b>for any real x, (1 + x/N)ᴺ heads to eˣ as N grows. In particular, (1 − λ/N)ᴺ heads to e^(−λ).</b> 17e did x = 1.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the many-small-chances technique">
+\ln\big(1 + \tfrac{x}{N}\big)^N = N\ln\big(1 + \tfrac{x}{N}\big) = x \cdot \tfrac{\ln(1 + h)}{h},\ h = \tfrac{x}{N} @@ for x ≠ 0 and N past |x|
+\tfrac{\ln(1 + h)}{h} = \tfrac{\ln(1 + h) - \ln 1}{h} \to 1 @@ the slope of ln at 1 is 1/1 (17b), as h heads to 0
+N\ln\big(1 + \tfrac{x}{N}\big) \to x @@ the product technique (10c)
+\htmlClass{new}{\big(1 + \tfrac{x}{N}\big)^N = \exp\big(N\ln(1 + \tfrac xN)\big) \to e^x} \quad \blacksquare @@ exp is continuous (17e; 22h1)
+  </pre>
+  <p data-pid="c044b7">Read with x = −λ: if each of N tries has chance λ/N, the chance that none of them comes off is (1 − λ/N)ᴺ, which is about e^(−λ) once N is large. It does not matter whether N is a thousand or a million. Only λ, the average count, is left.</p>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">22j1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\big(1 - \tfrac{2}{N}\big)^N,\ \ e^{-2} \approx 0.1353"></span></span>Find it for N = 10, 100 and 1000, to four places. <br>Find the smallest N that brings it within 0.005 of e⁻².</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22j2">
+  <h2 class="sthead"><span class="stno">22j2</span>The chance of exactly k</h2>
+  <p class="stands">Stands on 22j1, 14·stat (k of N with chance p) and 4j (counting choices).</p>
+  <p data-pid="dd4f18">Rare-events technique: <b>if each of N tries has chance λ/N, the chance of exactly k successes heads to e^(−λ) λᵏ / k! as N grows.</b> Only λ is left in the answer.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the rare-events technique">
+P_N(k) = \tbinom{N}{k}\big(\tfrac{\lambda}{N}\big)^k\big(1 - \tfrac{\lambda}{N}\big)^{N-k} @@ k of N, each with chance λ/N (14·stat)
+\tbinom{N}{k}\tfrac{1}{N^k} = \tfrac{1}{k!} \cdot \tfrac{N}{N}\cdot\tfrac{N-1}{N}\cdots\tfrac{N-k+1}{N} \to \tfrac{1}{k!} @@ 4j's count; k fixed, each of the k fractions heads to 1
+\big(1 - \tfrac{\lambda}{N}\big)^{N-k} = \big(1 - \tfrac{\lambda}{N}\big)^N \big(1 - \tfrac{\lambda}{N}\big)^{-k} \to e^{-\lambda} \cdot 1 @@ 22j1; k is fixed
+\htmlClass{new}{P_N(k) \to e^{-\lambda}\tfrac{\lambda^k}{k!}} \quad \blacksquare @@ the product technique (10c)
+  </pre>
+  <p data-pid="6eacbd">Take something that has, on average, a quarter of a chance to happen each day, out of a great many small chances. On about 78 days in 100, it does not happen. It happens once on about 1 day in 5, twice on about 1 day in 40, and three times on about 1 day in 500.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · rare events · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22j2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">λ = 2</span></span>Find the chances of exactly 0, 1, 2, 3 and 4, to three places. <br>Find the chance of 5 or more.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22j3">
+  <h2 class="sthead"><span class="stno">22j3</span>The chances add to one</h2>
+  <p class="stands">Stands on 22j1, 22j2, 4j (the two-term-power technique), 22e2 (the ratio test) and 22a2 (the climb technique).</p>
+  <p data-pid="169fc6">Exp-as-a-sum technique: <b>for every λ ≥ 0, e^λ = 1 + λ + λ²/2! + λ³/3! + ⋯. So the chances e^(−λ) λᵏ/k! add to one.</b> The rung 23 power sums take this to every real λ.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the exp-as-a-sum technique">
+\textstyle S = \sum \tfrac{\lambda^k}{k!} \text{ settles} @@ the ratio of neighbours is λ/(k + 1), which heads to 0 (22e2)
+\big(1 + \tfrac{\lambda}{N}\big)^N = \textstyle\sum_{k=0}^{N} \tfrac{\lambda^k}{k!}\, c_{N,k},\ \ c_{N,k} = \tfrac{N}{N}\cdot\tfrac{N-1}{N}\cdots\tfrac{N-k+1}{N} @@ the two-term-power technique (4j), as in 22j2
+0 \le c_{N,k} \le 1 \Rightarrow \big(1 + \tfrac{\lambda}{N}\big)^N \le S @@ every piece is at most λᵏ/k!, and λ ≥ 0
+M \le N \Rightarrow \big(1 + \tfrac{\lambda}{N}\big)^N \ge \textstyle\sum_{k=0}^{M} \tfrac{\lambda^k}{k!}\, c_{N,k} @@ drop the pieces past M; they are not negative
+e^\lambda \ge \textstyle\sum_{k=0}^{M} \tfrac{\lambda^k}{k!} \text{ for every } M,\ \ e^\lambda \le S @@ let N grow (22j1); each c_{N,k} heads to 1
+\htmlClass{new}{e^\lambda = \textstyle\sum_{k \ge 0} \tfrac{\lambda^k}{k!},\ \ \sum_{k \ge 0} e^{-\lambda}\tfrac{\lambda^k}{k!} = 1} \quad \blacksquare @@ the running totals climb to S and never pass e^λ (22a2)
+  </pre>
+  <p data-pid="40ff34">With λ = 1 this is the sum 22i fenced in eight pieces. Its total is e. The number that 17e found as a limit of powers is also an endless sum of fractions, and the sum is the fast way to compute it.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22j3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="e^{0.5}"></span></span>Find it to four places by the exp-as-a-sum technique. <br>Use the leftover technique of 22i to find how many pieces you need, and the fence they give.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22j4">
+  <h2 class="sthead"><span class="stno">22j4</span>Illegal moves</h2>
+  <p class="stands">Stands on 22j1 to 22j3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\big(1 - \tfrac{\lambda}{N}\big)^N \to 1^N = 1\,? @@ the base and the power move together (22h5)
+\text{rare-events technique with } N = 10,\ \lambda = 5\,? @@ each chance is ½, not small; the technique needs N large with λ fixed
+e^{-\lambda}\tfrac{\lambda^k}{k!} \text{ for events that come in clumps}\,? @@ the tries must be independent of one another (14·stat); clumped events break it
+\text{the chances add to } e^{\lambda}, \text{ so the chance of some } k \text{ is } e^\lambda > 1\,? @@ the e^(−λ) in front is part of each chance
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22j4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\big(1 - \tfrac{2}{N}\big)^N \text{ at } N = 1000"></span></span>Find it to three places, and 1¹⁰⁰⁰. <br>Find what the illegal line holds still that moves.</li><li><span class="givens"><span class="gtx">N = 10 tries, each with chance ½</span></span>Find the chance of exactly 5 by the count of 14·stat, and by the rare-events technique with λ = 5. <br>Find why they differ.</li><li><span class="givens"><span class="gtx">cars that come only in groups of four, half a group a minute on average</span></span>Find the average count of cars a minute, and the chance of exactly one car in a minute. <br>Find what the rare-events technique would give, and what it takes for granted.</li><li><span class="givens"><span class="gtx">λ = 1</span></span>Find e⁻¹(1 + 1 + 1/2! + ⋯ + 1/5!), to four places. <br>Find the total of every chance, and what the e⁻¹ in front does.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">22j.4.1</span><span class="tagq">build</span>Build λ so that, by the rare-events technique, the chance of at least one event is exactly ½. <br>Find the chance of exactly one at that λ.</div>
+  <div class="chq"><span class="chid">22j.4.2</span><span class="tagq">edge</span><span class="givens"><span class="gtx">λ = 3</span></span>Each of N tries has chance 3/N. Find the smallest N for which that is a chance. <br>Find the chance of exactly 3 at that N, at N = 6 and at N = 100, and the limit the technique gives.</div>
+  <div class="chq"><span class="chid">22j.4.3</span><span class="tagq">converse</span>The technique starts from an average count λ and ends with chances. Turn it round: from the chances alone, find Σ k·e^(−λ)λᵏ/k!, each count weighted by its chance, and show that it is λ.</div>
+  <div class="chq"><span class="chid">22j.4.4</span><span class="tagq">reroute</span>Prove (1 − λ/N)ᴺ → e^(−λ) without the slope of ln. Use 1 − 1/x ≤ ln x ≤ x − 1 (17a) at x = 1 − λ/N, and squeeze N ln(1 − λ/N).</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r22i.html">← 22i · testing sums by hand</a><a href="r22k.html">22k · how fast things grow →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The chances e^(−λ) λᵏ/k! are the Poisson distribution with mean λ; the rare-events technique is the Poisson limit theorem, also called the law of rare events or the law of small numbers. The exp-as-a-sum technique is the power series (Taylor series) of the exponential, which rung 23 builds in general.</p>
+  <h3>Who said it first</h3>
+  <p>Abraham de Moivre found the limit in 1711. Siméon Denis Poisson published it in 1837, in a book on the verdicts of juries. Ladislaus Bortkiewicz made it famous in 1898 with a count of Prussian cavalrymen killed by the kicks of their horses: about 0.7 a corps a year, and the record fitted the rule.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'none',t:R`\big(1 - \tfrac{\lambda}{N}\big)^N \to e^{-\lambda}`,n:`Only the average is left.`},
+  {k:'ember',kl:'exactly k',t:R`\htmlClass{new}{e^{-\lambda}\lambda^k/k!}`,n:`Many tries, each with a small chance.`}
+],{title:'The slides · rare events · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

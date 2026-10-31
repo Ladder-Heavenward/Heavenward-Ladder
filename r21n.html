@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trig integrals and substitution; circle area</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r21m.html">← 21m running trig backwards</a><a href="r21o.html">next: 21o adding up slices →</a></p>
+  <div class="tags"><span class="tag tech">21n · technique</span></div>
+  <h1>Trig integrals and substitution; circle area</h1>
+  <p>Every slope found on this rung, read backwards, is an area found for free. This step collects them, then goes further: it trades a hard area for an easy one by pretending the input is the height of a point going round a circle. That trade finally answers the oldest area question there is. A disc covers π times its radius times its radius.</p>
+  <p class="gesture">Read the rung’s slopes backwards and you have its areas. Letting the input be the height of a point on a circle turns square roots into the circle’s own coordinates. That is how the area of the disc comes out as π times the radius squared.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r16d.html">16d</a> (substitution for areas), <a href="r21k.html">21k</a> (half arcs), <a href="r21m.html">21m</a> (backward slopes), <a href="r17i.html">17i</a> (g′ over g). <a href="r21o.html">21o</a> spins areas into solids.</p></div>
+</header>
+
+<section class="class step" data-step="21n1">
+  <h2 class="sthead"><span class="stno">21n1</span>The slopes, read backwards</h2>
+  <p class="stands">Stands on 21g, 21l2, 21m3, 16c (areas by antiderivatives) and 17i (∫ g′/g = ln |g|).</p>
+  <p data-pid="f30e98">Trig-area technique: <b>∫ cos = sin, ∫ sin = −cos, ∫ sec² = tan, ∫ sec tan = sec, ∫ 1/√(1 − x²) = arcsin and ∫ 1/(1 + x²) = arctan, each + C.</b> And ∫ tan x dx = −ln |cos x| + C.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the trig-area technique, the one new entry">
+\tan x = \frac{\sin x}{\cos x} = -\frac{(\cos x)'}{\cos x} @@ the slope of cos is −sin (21g)
+\int \frac{g'}{g} = \ln|g| + C @@ area-under-g′/g (17i), where g ≠ 0
+\htmlClass{new}{\int \tan x\,dx = -\ln|\cos x| + C} \quad \blacksquare @@ g = cos x
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · table · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">21n1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\int_0^{\pi/2} \cos x\,dx,\ \ \int_0^{\pi/4} \tan x\,dx,\ \ \int_0^{1/2} \frac{dx}{\sqrt{1 - x^2}}"></span></span>Find each.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21n2">
+  <h2 class="sthead"><span class="stno">21n2</span>Powers of sine and cosine</h2>
+  <p class="stands">Stands on 21n1, 16d (substitution for areas) and 21k2 (half arcs).</p>
+  <p data-pid="88040c">Odd-or-even technique: <b>for an odd power, keep one factor and turn the rest into the other coordinate with the circle technique; for an even power, halve the arc.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the odd-or-even technique, once each">
+\int \sin^3 x\,dx = \int (1 - \cos^2 x)\sin x\,dx @@ odd: keep one sin, the circle technique on the rest
+= \int (1 - u^2)(-du) = -u + \tfrac{u^3}{3} + C,\ \ u = \cos x @@ substitution (16d), du = −sin x dx
+\int \cos^2 x\,dx = \int \tfrac{1 + \cos 2x}{2}\,dx @@ even: half arcs (21k2)
+\htmlClass{new}{\int \cos^2 x\,dx = \tfrac{x}{2} + \tfrac{\sin 2x}{4} + C} \quad \blacksquare @@ straight-inside (16d) on cos 2x
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · powers · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21n2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\int \cos^3 x\,dx,\ \ \int_0^{\pi} \sin^2 x\,dx"></span></span>Find each.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21n3">
+  <h2 class="sthead"><span class="stno">21n3</span>The area of the disc</h2>
+  <p class="stands">Stands on 21n2, 16d (substitution for areas) and 21m2 (arcsin).</p>
+  <p data-pid="0460b9">Disc technique: <b>the disc of radius r has area πr².</b> Put x = r sin θ: as θ runs from 0 to π/2, x runs from 0 to r, and the root becomes r cos θ.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the disc technique">
+\text{area} = 4\int_0^r \sqrt{r^2 - x^2}\,dx @@ four equal quarters (flips over both axes keep area)
+x = r\sin\theta,\ \ dx = r\cos\theta\,d\theta,\ \ \sqrt{r^2 - x^2} = r\cos\theta @@ substitution (16d) with g = r sin; cos θ ≥ 0 on [0, π/2]
+= 4r^2\int_0^{\pi/2} \cos^2\theta\,d\theta = 4r^2\Big[\tfrac{\theta}{2} + \tfrac{\sin 2\theta}{4}\Big]_0^{\pi/2} @@ odd-or-even (21n2)
+\htmlClass{new}{\text{area} = 4r^2 \cdot \tfrac{\pi}{4} = \pi r^2} \quad \blacksquare @@ sin π = sin 0 = 0
+  </pre>
+  <p data-pid="f163cd">The same trade gives the slice of a disc between two rays an arc θ apart: its area is ½ r² θ. A whole turn, θ = 2π, gives πr² again.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · disc · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21n3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">the disc of radius 1,  the part with x ≥ ½</span></span>Guess whether it is more or less than a tenth of the disc. <br>Find its area.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21n4">
+  <h2 class="sthead"><span class="stno">21n4</span>Putting x = a tan θ</h2>
+  <p class="stands">Stands on 21n3, 21m3 (backward slopes) and 21c (1 + tan² = sec²).</p>
+  <p data-pid="2fd279">Tan-trade technique: <b>with x = a tan θ, a² + x² becomes a² sec² θ; so ∫ dx/(a² + x²) = (1/a) arctan(x/a) + C.</b> And with x = a sin θ, ∫ dx/√(a² − x²) = arcsin(x/a) + C, for a > 0.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the tan-trade technique">
+x = a\tan\theta,\ \ dx = a\sec^2\theta\,d\theta @@ the slope of tan (21g)
+\int \frac{a\sec^2\theta\,d\theta}{a^2\sec^2\theta} = \int \frac{d\theta}{a} = \frac{\theta}{a} + C @@ 1 + tan² = sec² (21c)
+\htmlClass{new}{\int \frac{dx}{a^2 + x^2} = \frac1a\arctan\frac{x}{a} + C} \quad \blacksquare @@ θ = arctan(x/a)
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · tan trade · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21n4.1</span><span class="ph undo">undo</span><span class="givens"><span data-tex-inline="\int_0^3 \frac{dx}{9 + x^2},\ \ \int_0^1 \frac{dx}{\sqrt{4 - x^2}}"></span></span>Find each.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21n5">
+  <h2 class="sthead"><span class="stno">21n5</span>Illegal moves</h2>
+  <p class="stands">Stands on 21n1 to 21n4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\int \sin^2 x\,dx = \tfrac{\sin^3 x}{3} + C\,? @@ the slope of that is sin² x cos x
+\int \sin x\,dx = \cos x + C\,? @@ −cos x: the slope of cos is −sin
+x = \sin\theta \text{ but keep the old ends}\,? @@ the ends move: x from 0 to 1 is θ from 0 to π/2
+\int_0^{2\pi} \sin x\,dx = 0 \Rightarrow \text{no area}\,? @@ net 0; the area between curve and floor is 4
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21n5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\int \sin x\cos x\,dx"></span></span>Find it with u = sin x, then with u = cos x. <br>Find why the two answers differ.</li><li><span class="givens"><span data-tex-inline="\int_0^{\pi} \sin^2 x\,dx,\ \ \int_0^{\pi} \cos^2 x\,dx"></span></span>Guess which is larger. <br>Find both.</li><li><span class="givens"><span data-tex-inline="\int_{-1}^{1} x^3\cos x\,dx"></span></span>Find it without finding an antiderivative.</li><li><span class="givens"><span class="gtx">the slice of the disc of radius 4 between rays π/3 apart</span></span>Find its area.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">21n.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\tfrac{x^2}{a^2} + \tfrac{y^2}{b^2} \le 1"></span></span>Build the area of this oval, with a, b > 0, from the disc technique.</div>
+  <div class="chq"><span class="chid">21n.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\int_0^{\pi} \sin^n x\,dx"></span></span>Find it for n = 0, 1, 2, 3, 4. <br>Find what happens to it as n grows.</div>
+  <div class="chq"><span class="chid">21n.4.3</span><span class="tagq">converse</span>The disc of radius r has area πr². Turn it round: find whether a region with area πr² and every point within r of one point must be the disc.</div>
+  <div class="chq"><span class="chid">21n.4.4</span><span class="tagq">reroute</span>Find the disc’s area again without trig: slice it into thin rings of radius t and width dt, each with area about 2πt dt.</div>
+  <div class="chq"><span class="chid">21n.4.5</span><span class="tagq">seam</span>Drop a needle on a floor of boards whose width is the needle’s length. The chance it lands across a crack works out, with the integral of sin, to 2/π. A man reported dropping a needle 3408 times and getting π right to six places. <br>Was that luck, skill, or a lie? <br>How many drops would you expect to need for six places?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r21m.html">← 21m · running trig backwards</a><a href="r21o.html">21o · adding up slices →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The substitutions x = a sin θ and x = a tan θ are trigonometric substitutions. The slice between two rays is a sector, with area ½r²θ.</p>
+  <h3>Who said it first</h3>
+  <p>In 21n.4.5, the needle is the Comte de Buffon’s (stated 1733, published 1777), and the 3408 drops are Mario Lazzarini’s (1901), whose 355/113 is now generally read as a result chosen in advance.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'trig areas',t:R`\htmlClass{new}{\int \tan x\,dx = -\ln|\cos x| + C}`,n:`The rest are slopes read backwards.`}
+],{title:'The slides · table · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'odd or even',t:R`\htmlClass{new}{\int \cos^2 x\,dx = \tfrac{x}{2} + \tfrac{\sin 2x}{4} + C}`,n:`Even: halve the arc.`}
+],{title:'The slides · powers · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'disc area',t:R`\htmlClass{new}{\text{area} = \pi r^2}`,n:`x = r sin θ.`}
+],{title:'The slides · disc · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'tan trade',t:R`\htmlClass{new}{\int \frac{dx}{a^2 + x^2} = \frac1a\arctan\frac{x}{a} + C}`,n:`x = a tan θ.`}
+],{title:'The slides · tan trade · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`\int \sin x\,dx \ne \cos x + C`,n:`Minus.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

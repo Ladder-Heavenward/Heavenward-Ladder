@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Radians</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r21i.html">← 21i around the circle</a><a href="r21k.html">next: 21k identities →</a></p>
+  <div class="tags"><span class="tag tech">21j · technique</span></div>
+  <h1>Radians</h1>
+  <p>Rung 18 measured an angle by halving the quarter turn, and counted its size in quarter turns and in degrees. This rung measured it a second way: the length of its arc, counted in radii. This step shows the two ways measure one size, written in different units. It also shows why mathematicians keep to the radius: in any other unit, the slopes of the circle’s coordinates come with an awkward extra number.</p>
+  <p class="gesture">An angle measured in radii, in degrees or in turns is one angle in three units. Any measure that keeps 18f’s rules for sizes is the arc in another unit, so there was only ever one way to measure angles. The radius is the unit the circle chooses for itself.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r18f.html">18f</a> (the size technique), <a href="r21a.html">21a</a> (an angle is an arc), <a href="r21d.html">21d</a> (moves keep path length), <a href="r21f.html">21f</a> (sin h / h → 1). <a href="r21k.html">21k</a> runs the identities.</p></div>
+</header>
+
+<section class="class step" data-step="21j1">
+  <h2 class="sthead"><span class="stno">21j1</span>Arcs keep the rules of degrees</h2>
+  <p class="stands">Stands on 18f4 (the size technique), 21a4 (arc-picks-a-point) and 21d1 (path-length-kept).</p>
+  <p data-pid="a1c5b3">For an angle BAC, slide A to the origin and take the points where its two rays cross the circle of radius 1 about A. Its arc is the length of the shorter arc between them. Arc-rules technique: <b>the arc of an angle obeys every rule 18f’s size technique proved for sizes, with π in place of 180°.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the arc-rules technique">
+\text{equal angles} \iff \text{equal arcs} @@ a move carries one onto the other, and moves keep path length (21d1)
+\text{one ray: } 0;\ \ \text{opposite rays: } \pi @@ no arc; half the circle (21a)
+0 < \theta < \pi:\ \text{exactly one ray on each side} @@ arc-picks-a-point (21a4), and its flip for the other side
+D \text{ between: } \theta_{BAD} + \theta_{DAC} = \theta_{BAC} @@ the arc from B to C passes through D's point, and lengths of arcs end to end add
+\htmlClass{new}{m\angle BAC = \tfrac{180}{\pi}\,\theta_{BAC} \text{ obeys the rules of sizes}} \quad \blacksquare @@ multiply each line by 180/π
+  </pre>
+  <p data-pid="ffa19c">So halving the quarter turn and walking the rim give measures with the same rules. The next footing shows they are one measure.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · arc rules · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · one angle in three units</div>
+    <div class="kn"><span class="m">θ</span><input type="range" id="kt" min="0" max="6.28" step="0.01" value="1"><output id="okt"></output></div>
+    <div id="pl"></div>
+    <div class="cap">Ink: the circle of radius 1. Ember: the arc of the angle. Plum dots: one radius, two radii, three radii laid round the rim; six and a bit go round once.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">21j1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">rays from (0, 0) through (1, 0), (1, 1) and (0, 1)</span></span>Find the arcs of the three angles they make. <br>Check that the two small arcs add to the large one.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21j2">
+  <h2 class="sthead"><span class="stno">21j2</span>Only one measure keeps the rules</h2>
+  <p class="stands">Stands on 21j1 and 4b (induction).</p>
+  <p data-pid="572293">Sizes-are-arcs technique: <b>any measure that keeps the rules of 18f’s sizes, with a half turn measuring 180, is 180/π times the arc.</b> 18f’s degrees keep those rules, so an angle of x° has arc πx/180, and its size in quarter turns is 2/π times its arc. Halving i and walking the rim measure one thing.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the sizes-are-arcs technique">
+f(\theta) = m\angle \text{ of an angle with arc } \theta @@ well defined: equal arcs, equal angles, equal measures
+f(s + t) = f(s) + f(t),\ \ f(\pi) = 180 @@ angle addition; opposite rays
+f(\tfrac{k}{n}\pi) = \tfrac{k}{n} \cdot 180 @@ n copies of π/n make π; then k copies, by induction
+s < t \Rightarrow f(s) < f(t) @@ f(t) = f(s) + f(t − s), and only one ray has measure 0
+\tfrac{k}{n}\pi \le \theta < \tfrac{k + 1}{n}\pi \Rightarrow \big|f(\theta) - \tfrac{180}{\pi}\theta\big| < \tfrac{180}{n} @@ both lie between k/n · 180 and (k + 1)/n · 180
+\htmlClass{new}{f(\theta) = \tfrac{180}{\pi}\,\theta} \quad \blacksquare @@ true within 180/n for every n
+  </pre>
+  <p data-pid="3d48c5">From here on, the arc of an angle is its size in radians, and “°” means “times π/180”: 180° = π, so 1° = π/180 and 1 radian = 180°/π.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · one measure · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21j2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">arcs π/5 and 1;  angles 135° and 1°</span></span>Find the degrees of each arc, and the arc of each angle.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21j3">
+  <h2 class="sthead"><span class="stno">21j3</span>Arcs on any circle</h2>
+  <p class="stands">Stands on 21j2 and 20h3 (pulls).</p>
+  <p data-pid="8d3d53">Arc-on-any-circle technique: <b>on a circle of radius r, an angle of θ radians at the centre cuts an arc of length rθ.</b> The circle of radius r is the circle of radius 1 pulled by r, and a pull by r multiplies every path length by r.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the arc-on-any-circle technique">
+P \mapsto rP @@ a pull by r about the centre (20h3) sends the circle of radius 1 to the circle of radius r
+\text{lengths} \times r @@ every chord is multiplied by r, so every sum of chords is
+\htmlClass{new}{s = r\theta} \quad \blacksquare @@ angles are kept, since rays through the centre are sent to themselves
+\theta \text{ turns per second} \Rightarrow r\theta \text{ per second at the rim} @@ a wheel’s rim moves r times as fast as its angle
+  </pre>
+  <p data-pid="de7f63">Three units name one angle: θ radians is θ/2π turns and 180θ/π degrees.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · any circle · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21j3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a wheel of radius 30 cm</span></span>Find how far it rolls in 2½ turns. <br>Find how far a point on its rim travels when it turns through 40°.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21j4">
+  <h2 class="sthead"><span class="stno">21j4</span>Why the radius</h2>
+  <p class="stands">Stands on 21j2, 21f (sin h / h → 1) and 21g (slopes).</p>
+  <p data-pid="e5d48e">Degree-slope technique: <b>in degrees, the slope of the sine is π/180 times the cosine; only in radians is it the cosine itself.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the degree-slope technique">
+g(x) = \sin(x°) = \sin\!\big(\tfrac{\pi}{180}x\big) @@ “°” means times π/180
+g'(x) = \tfrac{\pi}{180}\cos\!\big(\tfrac{\pi}{180}x\big) @@ the chain rule with the slope of sin (21g)
+\htmlClass{new}{\tfrac{d}{dx}\sin(x°) = \tfrac{\pi}{180}\cos(x°)} \quad \blacksquare @@ the extra number never goes away
+\tfrac{\sin(x°)}{x} \to \tfrac{\pi}{180} @@ and sin h ≈ h holds only for h in radians (21f)
+  </pre>
+  <p data-pid="bde2a7">Every slope, every swing and every small-angle guess would carry π/180 in degrees. The radius is the unit in which the circle’s coordinates are their own slopes, up to sign.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · why radians · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21j4.1</span><span class="ph undo">undo</span><span class="givens"><span data-tex-inline="g(x) = \sin(x°)"></span></span>Find g′(0). <br>Find how far g(1) is from 1 · g′(0).</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21j5">
+  <h2 class="sthead"><span class="stno">21j5</span>Illegal moves</h2>
+  <p class="stands">Stands on 21j1 to 21j4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\sin 30 = \tfrac12\,? @@ sin 30° = ½; 30 radians is nearly five turns, and sin 30 ≈ −0.988
+s = r\theta \text{ with } \theta = 60\,? @@ only with θ in radians: 60° = π/3
+360° = \pi\,? @@ 180° = π; 360° is a whole turn, 2π
+\tfrac{d}{dx}\sin(x°) = \cos(x°)\,? @@ times π/180
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21j5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\sin 30"></span></span>Find which quarter of the turn 30 radians ends in. <br>Find the sign of sin 30.</li><li><span class="givens"><span class="gtx">the minute hand of a clock, for 20 minutes</span></span>Find the size of its turn in radians.</li><li><span class="givens"><span class="gtx">one radian</span></span>Find it in degrees, to one place.</li><li><span class="givens"><span class="gtx">an angle of 200°</span></span>Find whether 18f’s sizes allow it. <br>Find what a turn of 200° is.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">21j.4.1</span><span class="tagq">build</span>Build a measure in which a right angle is 100. <br>Find the measure of a whole turn, and of one radian, in it.</div>
+  <div class="chq"><span class="chid">21j.4.2</span><span class="tagq">edge</span>Find every angle whose measure in degrees is the same number as its measure in radians.</div>
+  <div class="chq"><span class="chid">21j.4.3</span><span class="tagq">converse</span>A measure that keeps every rule of 18f’s sizes is 180/π times the arc. Turn it round: drop the rule that only one ray measures 0, keep f(s + t) = f(s) + f(t) and f(π) = 180, and find which lines of 21j2 fail.</div>
+  <div class="chq"><span class="chid">21j.4.4</span><span class="tagq">reroute</span>Prove angle addition for arcs from 21d’s turning-adds-arcs technique instead of adding lengths along the rim.</div>
+  <div class="chq"><span class="chid">21j.4.5</span><span class="tagq">seam</span>A revolution once made a right angle 100 units, to fit counting in tens, and printed new tables for it. Sailors kept 90, as people had for thousands of years. Mathematicians ignored both and used the radius. <br>Is there a natural unit for angles? <br>What would make one unit more natural than another?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r21i.html">← 21i · around the circle</a><a href="r21k.html">21k · identities →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The arc measure is the radian measure; the unit is the radian, written rad or nothing at all. A measure with 400 to the turn is the gradian (or gon). Some writers prefer the whole turn, 2π, as the unit and call it τ (tau).</p>
+  <h3>Who said it first</h3>
+  <p>Roger Cotes measured angles by the radius in 1714. The word “radian” was first printed in 1873, by James Thomson, brother of Lord Kelvin. In 21j.4.5, the revolution is the French Revolution’s decimal reform of the 1790s; the 360 of degrees goes back to Babylonian counting in sixties.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+/* moves of the plane, drawn in SVG, for rung 20 */
+const V=c=>'var('+c+')';
+const FLAG=[[0,0],[0,3],[2,3],[2,2.4],[0.6,2.4],[0.6,1.8],[1.5,1.8],[1.5,1.2],[0.6,1.2],[0.6,0]];
+const M={
+  id:()=>p=>p,
+  slide:(h,k)=>p=>[p[0]+h,p[1]+k],
+  turn:(a,b)=>p=>[a*p[0]-b*p[1],b*p[0]+a*p[1]],
+  stretch:k=>p=>[k*p[0],k*p[1]],
+  flipU:(c,s)=>p=>{ const d=2*(p[0]*c+p[1]*s); return [d*c-p[0],d*s-p[1]]; },              /* across the line through O along (c, s), c² + s² = 1 */
+  flipAt:(q,c,s)=>p=>{ const x=p[0]-q[0],y=p[1]-q[1],d=2*(x*c+y*s); return [q[0]+d*c-x,q[1]+d*s-y]; },
+  turnAt:(q,a,b)=>p=>{ const x=p[0]-q[0],y=p[1]-q[1]; return [q[0]+a*x-b*y,q[1]+b*x+a*y]; },
+  then:(g,f)=>p=>g(f(p))                                                                    /* f first, then g */
+};
+const unit=(x,y)=>{ const r=Math.hypot(x,y); return [x/r,y/r]; };
+const fx=v=>(Math.abs(v)<5e-10?0:v);
+const show=(v,d)=>{ let s=fx(v).toFixed(d==null?2:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return (s==='-0'?'0':s).replace('-','−'); };
+/* shapes: {pts, c, fill, dash, w, open}; dots: {p, c, t}; lines: {p, d, c, dash} */
+function svgPlane(o){ const lo=o.lo==null?-6:o.lo, hi=o.hi==null?6:o.hi, S=300, X=x=>(x-lo)/(hi-lo)*S, Y=y=>S-(y-lo)/(hi-lo)*S;
+  let s='<svg viewBox="0 0 '+S+' '+S+'" style="width:100%;max-width:340px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  for(let g=Math.ceil(lo);g<=hi;g++){ s+='<line x1="'+X(g)+'" y1="0" x2="'+X(g)+'" y2="'+S+'" style="stroke:'+V('--grid')+';stroke-width:'+(g===0?1.6:0.6)+'"/><line x1="0" y1="'+Y(g)+'" x2="'+S+'" y2="'+Y(g)+'" style="stroke:'+V('--grid')+';stroke-width:'+(g===0?1.6:0.6)+'"/>'; }
+  (o.lines||[]).forEach(l=>{ const L=40; s+='<line x1="'+X(l.p[0]-L*l.d[0])+'" y1="'+Y(l.p[1]-L*l.d[1])+'" x2="'+X(l.p[0]+L*l.d[0])+'" y2="'+Y(l.p[1]+L*l.d[1])+'" style="stroke:'+V(l.c||'--teal')+';stroke-width:1.6;stroke-dasharray:'+(l.dash||'5 4')+'"/>'; });
+  (o.shapes||[]).forEach(z=>{ const pts=z.pts.map(p=>X(p[0]).toFixed(1)+','+Y(p[1]).toFixed(1)).join(' ');
+    s+='<'+(z.open?'polyline':'polygon')+' points="'+pts+'" style="fill:'+(z.fill?V(z.c):'none')+';fill-opacity:'+(z.fill?0.28:0)+';stroke:'+V(z.c)+';stroke-width:'+(z.w||2)+(z.dash?';stroke-dasharray:'+z.dash:'')+'"/>'; });
+  (o.dots||[]).forEach(d=>{ s+='<circle cx="'+X(d.p[0])+'" cy="'+Y(d.p[1])+'" r="4" style="fill:'+V(d.c||'--ink')+'"/>'+(d.t?'<text x="'+(X(d.p[0])+7)+'" y="'+(Y(d.p[1])-6)+'" style="fill:'+V(d.c||'--ink')+';font:12px IBM Plex Mono,monospace">'+d.t+'</text>':''); });
+  return s+'</svg>'; }
+function knob(id,lab,min,max,step,val){ return '<div class="kn"><span class="m">'+lab+'</span><input type="range" id="'+id+'" min="'+min+'" max="'+max+'" step="'+step+'" value="'+val+'"><output id="o'+id+'"></output></div>'; }
+function chipRow(el,keys,get,set,after){ el.innerHTML=''; keys.forEach(k=>{ const b=document.createElement('button'); b.type='button'; b.textContent=k; if(k===get()) b.className='on'; b.onclick=()=>{ set(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+
+let th=1;
+$('kt').addEventListener('input',()=>{ th=+$('kt').value; draw(); });
+function draw(){ const C=[],A=[],R=[];
+  for(let t=0;t<=6.3;t+=0.03) C.push([Math.cos(t),Math.sin(t)]);
+  for(let t=0;t<=th+0.001;t+=0.01) A.push([Math.cos(t),Math.sin(t)]);
+  for(let k=1;k<=6;k++) R.push({p:[Math.cos(k),Math.sin(k)],c:'--plum',t:String(k)});
+  $('pl').innerHTML=svgPlane({lo:-1.6,hi:1.6,shapes:[{pts:C,c:'--ink',open:true},{pts:A,c:'--ember',open:true,w:3.2},{pts:[[1,0],[0,0],[Math.cos(th),Math.sin(th)]],c:'--teal',open:true}],dots:R});
+  $('okt').textContent=show(th);
+  const v=$('vd'); v.className='verdict'; v.textContent='Arc '+show(th)+' radii = '+show(th*180/Math.PI)+'° = '+show(th/(2*Math.PI))+' of a turn.'+(th>Math.PI?' Past π, this is a turn, not an angle: 18f’s sizes stop at 180°.':''); }
+draw();
+window.__pic={set:t=>{ th=t; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'arc rules',t:R`\htmlClass{new}{m\angle = \tfrac{180}{\pi}\,\theta}`,n:`Keeps all the rules.`}
+],{title:'The slides · arc rules · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'one measure',t:R`\htmlClass{new}{180° = \pi}`,n:`Halving and walking agree.`}
+],{title:'The slides · one measure · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'arc length',t:R`\htmlClass{new}{s = r\theta}`,n:`θ in radians.`}
+],{title:'The slides · any circle · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'degree slope',t:R`\htmlClass{new}{\tfrac{d}{dx}\sin(x°) = \tfrac{\pi}{180}\cos(x°)}`,n:`Radians remove the π/180.`}
+],{title:'The slides · why radians · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`\sin 30 \ne \sin 30°`,n:`Radians unless marked.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

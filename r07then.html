@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>7·then · Is a number too big to write down still a number?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r07phys.html">← 7·phys circuits I</a><a href="r07cb4.html">next: 7·cb4 the least member →</a></p>
+  <div class="tags"><span class="tag then">7·then · newsflash</span></div>
+  <h1>Is a number too big to write down still a number?</h1>
+  <p>Is a number too big to write down still a number? Rung 4 built the counting numbers by a next-one rule, and adding, multiplying and powers by repeating. Repeat powers, and repeat that, and a few strokes of a pen name a number whose digits could not be written on every atom there is. Is it a number at all? Rung 4 says yes, and this page proves things about it, down to its last digit. Then it meets a number that rung 4's repeating cannot reach, which exists only because rung 7 says every statement is true or false. In 2024 a team of volunteers found its fifth value. Nobody expects to find its sixth.</p>
+  <p class="gesture">Write a power with an arrow; each extra arrow repeats the one before, so two arrows and a 3 mean a power of a power of a power. Every such expression names a counting number, by recursion. Since nine is less than ten and ten less than twenty-seven, a power of three has between about a third and a half as many digits as its power. A busy beaver is the longest-running rulebook of its size that still stops; it is a number because each rulebook stops or does not.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r04c.html">4c</a> (recursion), <a href="r04f.html">4f</a> (powers), <a href="r04g.html">4g</a> (order), <a href="r04h.html">4h</a> (numerals), <a href="r04i.html">4i</a> (even-or-odd, remainders), <a href="r04stat.html">4·stat</a> (greatest-of-a-finite-set), <a href="r07a.html">7a</a> (the either-way principle), <a href="r07b.html">7b</a> (decidable, finite-search). <a href="r09cb4.html">9·cb4</a> builds the ladder of operations as iterates.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · read it through, then work the picture and the slides</div>
+
+  <h3>Arrows</h3>
+  <p data-pid="3f9570">Adding repeats the next one, multiplying repeats adding, and a power repeats multiplying: 4f's ladder of operations. In 1976 the next steps were written with arrows.</p>
+  <p class="eqline" data-pid="923f08">From here on, for numbers a and b, a↑b names aᵇ. For n ≥ 1, a↑ⁿ⁺¹b names the value at b of the one function fixed by recursion with start a↑ⁿ⁺¹0 = 1 and step a↑ⁿ⁺¹S(b) = a↑ⁿ(a↑ⁿ⁺¹b). Here ↑¹ is ↑, ↑² is written ↑↑ and ↑³ is ↑↑↑. Read a↑↑b “a arrow arrow b”. a↑↑b is a tower of b copies of a, worked out from the top down.</p>
+  <p data-pid="727a33">Arrows-name-numbers technique: <b>for every n ≥ 1, and all numbers p and b, p↑ⁿb is a counting number, and only one.</b></p>
+  <pre class="lines" data-k="ember" data-label="7·then: the arrows-name-numbers technique">
+\varphi(n):\ b \mapsto a\uparrow^n b \text{ is a function from } \mathbb N \text{ to } \mathbb N @@ the condition, for induction on n ≥ 1, with a fixed
+\varphi(1): b \mapsto a^b @@ 4f: powers are defined for every b
+\varphi(n) \Rightarrow \varphi(n + 1) @@ recursion, with start 1 and the step x ↦ a↑ⁿx, a function by φ(n)
+\htmlClass{new}{a \uparrow^n b \in \mathbb N \text{ for all } n \ge 1,\ a,\ b} \quad \blacksquare @@ induction; recursion's “exactly one” makes the value unique
+  </pre>
+  <pre class="lines" data-k="ember" data-label="7·then: worked">
+2\uparrow\uparrow 3 = 2^{2^2} = 2^4 = 16,\ \ 2\uparrow\uparrow 4 = 2^{16} = 65\,536 @@ from the top of the tower down
+2\uparrow\uparrow\uparrow 3 = 2\uparrow\uparrow(2\uparrow\uparrow 2) = 2\uparrow\uparrow 4 = 65\,536 @@ the step, twice
+3\uparrow\uparrow 3 = 3^{27} = 7\,625\,597\,484\,987 @@ thirteen digits
+3\uparrow\uparrow\uparrow 3 = 3\uparrow\uparrow 7\,625\,597\,484\,987 @@ a tower of 7 625 597 484 987 threes
+  </pre>
+
+  <h3>How many digits</h3>
+  <p data-pid="b3d64b">Digits-of-a-power technique: <b>for every k ≥ 1, 3²ᵏ &lt; 10ᵏ &lt; 3³ᵏ. So 3ᵐ has more than k digits when m ≥ 3k, and at most k digits when m ≤ 2k.</b> 9 &lt; 10 &lt; 27, and multiplying by numbers other than 0 keeps order (4g's cancel for times and keep-order for plus). So by induction 9ᵏ &lt; 10ᵏ &lt; 27ᵏ; and 9ᵏ = 3²ᵏ, 27ᵏ = 3³ᵏ by 4f's exponent rules. In 4h's numerals, a number below 10ᵏ has at most k digits, and one at least 10ᵏ has more than k.</p>
+  <pre class="lines" data-k="ember" data-label="7·then: 3↑↑4, sized">
+m = 3\uparrow\uparrow 3 = 7\,625\,597\,484\,987 @@ so 3↑↑4 = 3ᵐ
+m \ge 3 \cdot 2\,541\,865\,828\,329 @@ 4i: division by 3
+3^m \text{ has more than } 2\,541\,865\,828\,329 \text{ digits} @@ digits-of-a-power
+m \le 2 \cdot 3\,812\,798\,742\,494 @@ division by 2
+3^m \text{ has at most } 3\,812\,798\,742\,494 \text{ digits} @@ digits-of-a-power; the exact count, which a later rung's tools find, is 3 638 334 640 025
+\text{one digit per mm: } 2.5 \text{ to } 3.8 \text{ million km} @@ six to ten times the way to the Moon
+  </pre>
+  <p data-pid="e19ff6">So 3↑↑4 could be written, with a very long strip of paper. 3↑↑5 = 3^(3↑↑4) has more digits than 3↑↑4 has divided by 3. That count of digits itself runs to trillions of digits. The atoms in the part of the universe anyone can see are thought to number about 10⁸⁰, so 3↑↑5 cannot be written even one digit to an atom. And 3↑↑↑3 is a tower of 7 625 597 484 987 threes.</p>
+
+  <h3>What is known about it anyway</h3>
+  <p data-pid="24d217">Last-digit technique: <b>for every n ≥ 1 and b ≥ 1, 3↑ⁿb is odd. For b ≥ 2, 3↑↑b leaves remainder 3 on division by 4 and ends in the digit 7. So 3↑↑↑3 ends in 7.</b></p>
+  <pre class="lines" data-k="ember" data-label="7·then: the last-digit technique">
+\text{odd} \cdot \text{odd} = \text{odd},\ \ 3 \text{ odd} @@ 4i's even-or-odd line: (2a + 1)(2b + 1) = 2(2ab + a + b) + 1
+3^j \text{ is odd for every } j @@ induction on j; so each 3↑ⁿb with b ≥ 1 is a power of 3, odd
+3^{2i+1} = 9^i \cdot 3 \text{ leaves } 3 \text{ on division by } 4 @@ 9 leaves 1, so 9ⁱ leaves 1 (remainders multiply, 4i); times 3
+3\uparrow\uparrow b = 3^{\text{odd}} \text{ leaves } 3,\ \ \text{so it is } 3^{4j + 3} @@ the exponent 3↑↑(b − 1) is odd, and leaves 3 by the line above when b − 1 ≥ 1
+3^{4j+3} = 81^j \cdot 27 @@ 81 ends in 1, so 81ʲ ends in 1; times 27 ends in 7
+\htmlClass{new}{3\uparrow\uparrow\uparrow 3 = 3\uparrow\uparrow(3\uparrow\uparrow 3) \text{ ends in } 7} \quad \blacksquare @@ the tower's height, 3↑↑3, is at least 2
+  </pre>
+  <p data-pid="79bafd">Every claim about one digit of 3↑↑↑3 is decidable in 7b's sense. The number is fixed by recursion, and the digits of a fixed number can be found by 4h's method, so a search over a finite set (finite-search) answers it. No either-way principle is needed for it to be true or false. <b>Decidable means a method would answer it, not that anyone could carry the method out.</b> Some mathematicians deny that a number no one could ever write down is there at all; one argued so in the 1960s, and another argues so today. In September 2011 a logician, moved by such doubts, announced a proof that rung 4's arithmetic contradicts itself. Within days two others found the gap, and the proof was withdrawn.</p>
+
+  <h3>A number the arrows cannot reach</h3>
+  <p data-pid="3050c7">A rulebook machine works on a strip of cells, each holding 0 or 1, all 0 at the start. It has a head over one cell and n states, one of them the first. Its rulebook says, for each state and each mark under the head, what to write, which way to step, and which state to go to next, or to stop. Such machines were first described in 1936. With n states there are only finitely many rulebooks. Some stop after a while and some run for ever. A rulebook machine has the accepted name Turing machine.</p>
+  <p data-pid="05a88e">Busy-beaver technique: <b>for each n ≥ 1, among the rulebooks with n states that stop, there is a greatest number of steps taken before stopping.</b> It is named in 1962, and the ladder writes it BB(n), for busy beaver: BB(n) is not 3a's next of n.</p>
+  <pre class="lines" data-k="ember" data-label="7·then: the busy-beaver technique">
+\text{finitely many rulebooks with } n \text{ states} @@ each of 2n cases picks a mark, a way and a next state or stop: stages-multiply and counted-functions
+\text{each rulebook stops} \lor \text{it does not} @@ either-way, rung 7's principle; “stops” is not known to be decidable: the search over steps may never end
+\begin{aligned}&\text{the stopping ones form}\\ &\quad\text{a finite set, with a member}\end{aligned} @@ the sift of a finite set; the rulebook that stops at once is in it
+\begin{aligned}&\htmlClass{new}{BB(n) = \text{the greatest of their step counts}}\\ &\quad \blacksquare\end{aligned} @@ 4·stat's greatest-of-a-finite-set
+  </pre>
+  <p data-pid="a8ea1f">So BB(n) is a counting number, and the proof names no way to find it. The second line is the one arrows-name-numbers never needed. BB(1) = 1, BB(2) = 6, BB(3) = 21 and BB(4) = 107, the last found in 1983. In 2024 the bbchallenge project, mostly volunteers, proved BB(5) = 47 176 870, with the proof checked by the computer proof assistant Coq. In 2025 a six-state rulebook was shown to stop only after more than 2↑↑↑5 steps, so BB(6) is past that. And rulebooks with fewer than 750 states are known whose stopping the usual axioms of mathematics can neither prove nor refute. So for some n, BB(n) is a number no proof from those axioms will ever pin down. <b>Rung 7's either-way principle still says it has one value.</b></p>
+
+  <h3>Illegal moves</h3>
+  <pre class="lines" data-k="ember" data-label="7·then: tempting, and not allowed">
+3\uparrow\uparrow 3 = (3^3)^3\,? @@ a tower is worked from the top: 3^(3³) = 3²⁷, not 27³ = 19 683
+\text{too big to write} \Rightarrow \text{not a number}\,? @@ arrows-name-numbers proves it is one, and last-digit gives its last digit
+\text{decidable} \Rightarrow \text{someone can decide it}\,? @@ a method exists; carrying it out may be past every computer there will ever be
+\begin{aligned}&BB(n) \text{ is defined by}\\ &\quad\text{recursion like the arrows}\,?\end{aligned} @@ busy-beaver cites either-way; no repeating rule is known that produces it, and it is proved that none can for every n
+  </pre>
+</section>
+
+<section class="pic" id="pic">
+  <div class="eyebrow">The picture · arrows, and small busy beavers at work</div>
+  <div class="panels">
+    <div class="panel">
+      <div class="lbl">p↑ⁿb: the value, or how many digits</div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">p</span><input type="range" id="ka" min="2" max="4" step="1" value="3"><output id="oa"></output></div>
+      <div class="kn"><span class="m">arrows</span><input type="range" id="kn" min="1" max="3" step="1" value="2"><output id="on"></output></div>
+      <div class="kn"><span class="m">b</span><input type="range" id="kb" min="1" max="5" step="1" value="3"><output id="ob"></output></div>
+      <div class="cap">The name, and what can be said of it. Plum: its digits in full, when they fit. Ember: past that, how many digits it has, or how tall a tower it is.</div>
+    </div>
+    <div class="panel">
+      <div class="lbl">the champion rulebook with 2, 3 or 4 states, step by step</div>
+      <canvas id="cvL"></canvas>
+      <div class="kn"><span class="m">states</span><input type="range" id="km" min="2" max="4" step="1" value="2"><output id="om"></output></div>
+      <div class="kn"><span class="m">step</span><input type="range" id="kt" min="0" max="107" step="1" value="6"><output id="ot"></output></div>
+      <div class="cap">Each row is the strip after one more step, the newest at the bottom; ink cells hold 1. Plum: the head. The 3-state book shown writes the most 1s of its size, 6.</div>
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+</section>
+
+<section class="slides" id="sl1"><div class="eyebrow">The slides · arrows; arrows-name-numbers; towers worked top down; digits-of-a-power; 3↑↑4 sized; beyond the atoms; last-digit; decidable is not doable; a doubt, 2011; rulebooks; busy-beaver; BB(5), 2024; illegal moves · ← → keys work</div></section>
+
+<section class="sayback">
+  <div class="eyebrow">Say it back · then work it</div>
+  <h2>Questions</h2>
+  <div class="phkey"></div>
+  <ol>
+    <li><span class="qid">7·then.1</span><span class="gname">Arrows.</span><span class="gwhy">Do: build the page's pieces.</span>
+      <ol class="sub">
+        <li><span class="qid">7·then.1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="2\uparrow\uparrow 5,"></span> <span data-tex-inline="4\uparrow\uparrow 2"></span></span>Work out the first as a power of 2, and the second.</li><li><span class="givens"><span data-tex-inline="2\uparrow^n 2,\ n \ge 1"></span></span>Prove it is 4 for every such n.</li><li><span class="givens"><span data-tex-inline="3^{100}"></span></span>Bound its number of digits above and below.</li><li><span class="givens"><span data-tex-inline="\text{A on 0: write 1,}"></span> <span data-tex-inline="\text{step right, go to B;}"></span> <span data-tex-inline="\text{A on 1: write 1,}"></span> <span data-tex-inline="\text{step left, go to B;}"></span> <span data-tex-inline="\text{B on 0: write 1,}"></span> <span data-tex-inline="\text{step left, go to A;}"></span> <span data-tex-inline="\text{B on 1: write 1,}"></span> <span data-tex-inline="\text{step right, stop}"></span></span>Run this 2-state champion by hand, and count its steps and its 1s.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">7·then.2</span><span class="gname">From the size back.</span><span class="gwhy">Undo: run the page's techs backwards.</span>
+      <ol class="sub">
+        <li><span class="qid">7·then.2.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="2\uparrow\uparrow b = 65\,536"></span></span>Find b.</li><li><span class="givens"><span data-tex-inline="3\uparrow\uparrow 3,"></span> <span data-tex-inline="2\uparrow\uparrow 5"></span></span>Without writing either out, prove which is larger.</li><li><span class="givens"><span data-tex-inline="\text{a power of 3 with 40 digits}"></span></span>Bound its exponent above and below.</li><li><span class="givens"><span data-tex-inline="7\uparrow\uparrow 3"></span></span>As last-digit does, find its last digit, and prove it.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">7·then.3</span><span class="gname">Where it gives.</span><span class="gwhy">Bend: find where the techs stop working.</span>
+      <ol class="sub">
+        <li><span class="qid">7·then.3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="3\uparrow\uparrow 1,"></span> <span data-tex-inline="\text{last-digit’s proof needs } b \ge 2 \text{ for } 7"></span></span>Find its last digit.</li><li><span class="givens"><span data-tex-inline="(p^p)^p"></span></span>Find what goes wrong with towers worked from the bottom up.<br>Decide whether it is a new operation, or an old one.</li><li><span class="givens"><span data-tex-inline="\text{busy-beaver cites either-way}"></span></span>Write the line that would fail if you tried to prove it without, and find the hypothesis of 7b’s finite-search that the stopping question does not meet.</li><li><span class="givens"><span data-tex-inline="n = 1"></span></span>List its rulebooks, and find BB(1) with no either-way at all.<br>Find up to which n you could do the same.</li></ol></li>
+      </ol></li>
+    <li class="optgroup"><span class="qid">7·then.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder challenges that rely on your own making. The page is complete without these; the rung's star needs them.</span>
+      <ol class="sub">
+        <li class="opt"><span class="qid">7·then.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{For one state you can list every}"></span> <span data-tex-inline="\text{rulebook; past a few, you can}"></span> <span data-tex-inline="\text{only build and run.}"></span></span>Build giants of your own.<ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="2\uparrow\uparrow b,\ b \ge 1"></span></span>Prove it is even, and find its last digit for b from 3 on.</li><li>Write a 3-state rulebook of your own and run it from a blank strip.<br>Decide whether it stops, and prove it.</li><li><span class="givens"><span data-tex-inline="2\uparrow\uparrow 5,"></span> <span data-tex-inline="\text{one digit a millimetre},"></span> <span data-tex-inline="2^{10} = 1024 &gt; 10^3"></span></span>Estimate how long a strip it needs.</li></ol></li>
+        <li class="opt"><span class="qid">7·then.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{each arrow beats the one before:}"></span> <span data-tex-inline="3\uparrow\uparrow 3 \text{ is far past } 3\uparrow 3,"></span> <span data-tex-inline="3\uparrow^n n \text{ for every } n"></span></span>Find a single rule, made by repeating, that grows past all of these at once, or prove there is none.</li>
+        <li class="opt"><span class="qid">7·then.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{arrows-name-numbers: a name}"></span> <span data-tex-inline="\text{made with arrows gives a number}"></span></span>Decide whether every number is given by a short name.<br>Count the numbers that can be named with at most ten marks.</li>
+        <li class="opt"><span class="qid">7·then.4.4</span><span class="tagq">seam</span>One mathematician says the counting numbers end somewhere, though no one knows where; another said no one shall drive us from the paradise the founder of set theory made. Rung 7's either-way principle says BB(745) has a value no proof will find. <br>Which of them is the principle talking to? <br>What would it take to show one of them wrong?</li>
+      </ol></li>
+  </ol>
+  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
+</section>
+
+<nav class="nextrung"><a href="r07e.html">← 7e · proof by contradiction</a><a href="r07cb4.html">7·cb4 · the least member →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>A rulebook for every n?</h3>
+  <p>It has been proved that no single rulebook can work out BB(n) for every n. The proof is about rulebooks that decide whether other rulebooks stop, and it is a long way up the ladder. Nothing on this page leans on it.</p>
+  <h3>Who said it first</h3>
+  <p>The arrows are Donald Knuth’s (1976). Those who deny the unwritable numbers are ultrafinitists: Alexander Esenin-Volpin in the 1960s, and Doron Zeilberger today. The 2011 claim was Edward Nelson’s; Terence Tao and Daniel Tausk found the gap. Rulebook machines are Alan Turing’s (1936). BB(n) is Tibor Radó’s (1962), who also proved that no rulebook computes it; BB(4) was found by Allen Brady in 1983. The paradise line is David Hilbert’s, about Georg Cantor’s set theory.</p>
+  <h3>Accepted names</h3>
+  <p>p↑↑b is tetration, and the arrows are Knuth’s up-arrow notation. A rulebook machine is a Turing machine. BB(n) is the busy beaver number. The either-way principle is the law of excluded middle.</p>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+/* least and greatest of F.f on [lo, hi]: the ends, F's critical points inside, and a fine sample (exact between critical points for the functions used here) */
+function ext(F,lo,hi){ if(F.dir) return [0,1]; let m=Infinity,M=-Infinity; const t=x=>{ const v=F.f(x); if(v<m) m=v; if(v>M) M=v; };
+  t(lo); t(hi); (F.crit||[]).forEach(c=>{ if(c>lo&&c<hi) t(c); }); for(let k=1;k<64;k++) t(lo+(hi-lo)*k/64); return [m,M]; }
+function sums(F,pts){ let L=0,U=0; const ms=[],Ms=[]; for(let i=1;i<pts.length;i++){ const [m,M]=ext(F,pts[i-1],pts[i]), w=pts[i]-pts[i-1]; ms.push(m); Ms.push(M); L+=m*w; U+=M*w; } return {L,U,ms,Ms}; }
+const eq=(a,b,n)=>Array.from({length:n+1},(_,i)=>a+(b-a)*i/n);
+function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
+function boxes(P,pts,hs,stroke,fill,alpha){ const c=P.ctx; for(let i=1;i<pts.length;i++){ const a=pts[i-1],b=pts[i],h=hs[i-1]; c.globalAlpha=alpha; P.poly([[a,0],[b,0],[b,h],[a,h]],null,fill); c.globalAlpha=1; P.poly([[a,0],[b,0],[b,h],[a,h]],stroke,null,1.2); } }
+function dirDots(P,a,b){ const c=P.ctx; c.fillStyle=col('--ink'); for(let k=0;k<=300;k++){ const x=a+(b-a)*k/300; const y=(k%2)?0:1; c.fillRect(P.X(x)-1,P.Y(y)-1,2,2); } }
+/* shade between the graph of fn and the axis from lo to hi: above in pos colour, below in neg colour */
+function shade(P,fn,lo,hi,pos,neg,alpha){ if(hi<lo){ const t=lo; lo=hi; hi=t; } const c=P.ctx, N=300; c.globalAlpha=alpha==null?0.32:alpha;
+  for(let k=0;k<N;k++){ const x0=lo+(hi-lo)*k/N, x1=lo+(hi-lo)*(k+1)/N, xm=(x0+x1)/2, y=fn(xm); if(!isFinite(y)) continue; P.poly([[x0,0],[x1,0],[x1,fn(x1)],[x0,fn(x0)]],null,y>=0?pos:neg); }
+  c.globalAlpha=1; }
+function rangeOf(fn,lo,hi,pad){ let m=Infinity,M=-Infinity; for(let k=0;k<=400;k++){ const v=fn(lo+(hi-lo)*k/400); if(isFinite(v)){ if(v<m) m=v; if(v>M) M=v; } } if(m>0) m=0; if(M<0) M=0; const p=(M-m)*(pad==null?0.12:pad)||1; return [m-p,M+p]; }
+function chips(el,FN,get,setk,after){ Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===get()) b.className='on'; b.onclick=()=>{ setk(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+const Nw='\\htmlClass{new}';
+function gridFor(sp){ return sp>40?10:sp>16?4:sp>8?2:sp>3?1:sp>1.2?0.5:0.25; }
+function frame2(P,fn,lo,hi,pad){ const w=hi-lo; P.o.x=[lo-0.12*w,hi+0.08*w]; P.o.y=rangeOf(fn,lo,hi,pad==null?0.12:pad); const sx=P.o.x[1]-P.o.x[0], sy=P.o.y[1]-P.o.y[0]; let g=gridFor(sx); while(sy/g>24) g*=2; P.o.grid=g; }
+const num=(f,a,b,n)=>{ n=n||4000; const h=(b-a)/n; let s=0; for(let i=0;i<n;i++) s+=f(a+(i+0.5)*h)*h; return s; };
+/* axes with separate steps across and up */
+function axes2(P,gx,gy){ const c=P.ctx,o=P.o; c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ c.moveTo(P.X(x),P.Y(o.y[0])); c.lineTo(P.X(x),P.Y(o.y[1])); }
+  for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ c.moveTo(P.X(o.x[0]),P.Y(y)); c.lineTo(P.X(o.x[1]),P.Y(y)); } c.stroke();
+  c.strokeStyle=col('--muted'); c.lineWidth=1.3; c.beginPath(); if(o.y[0]<=0&&o.y[1]>=0){ c.moveTo(P.X(o.x[0]),P.Y(0)); c.lineTo(P.X(o.x[1]),P.Y(0)); } if(o.x[0]<=0&&o.x[1]>=0){ c.moveTo(P.X(0),P.Y(o.y[0])); c.lineTo(P.X(0),P.Y(o.y[1])); } c.stroke();
+  c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; const ly=Math.min(P.H-6,Math.max(12,P.Y(0)+14));
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ if(Math.abs(x)<1e-9) continue; c.fillText(+x.toFixed(6),P.X(x),ly); }
+  c.textAlign='right'; const lx=Math.max(32,Math.min(P.W-4,P.X(0)-5)); for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ if(Math.abs(y)<1e-9) continue; c.fillText(String(+y.toFixed(6)).replace('-','−'),lx,P.Y(y)+4); } }
+function nice(sp){ const raw=sp/6, p=Math.pow(10,Math.floor(Math.log10(raw))), m=raw/p; return (m<1.5?1:m<3.5?2:m<7.5?5:10)*p; }
+function arrow(P,x1,y1,x2,y2,colr,w){ P.line(x1,y1,x2,y2,colr,w||2.2); const c=P.ctx, X1=P.X(x1),Y1=P.Y(y1),X2=P.X(x2),Y2=P.Y(y2), L=Math.hypot(X2-X1,Y2-Y1); if(L<2) return; const ux=(X2-X1)/L, uy=(Y2-Y1)/L, h=9; c.fillStyle=col(colr); c.beginPath(); c.moveTo(X2,Y2); c.lineTo(X2-h*ux-0.5*h*uy,Y2-h*uy+0.5*h*ux); c.lineTo(X2-h*ux+0.5*h*uy,Y2-h*uy-0.5*h*ux); c.closePath(); c.fill(); }
+function fillA(P,pts,colr,alpha){ const c=P.ctx; c.globalAlpha=alpha==null?0.2:alpha; P.poly(pts,null,colr); c.globalAlpha=1; }
+const sq1=P=>Object.defineProperty(P.o,'aspect',{get:()=>1});
+function rightMark(P,qx,qy,ax,ay,bx,by,s,colr){ const la=Math.hypot(ax-qx,ay-qy), lb=Math.hypot(bx-qx,by-qy); if(!la||!lb) return; const u=[(ax-qx)/la*s,(ay-qy)/la*s], v=[(bx-qx)/lb*s,(by-qy)/lb*s]; P.poly([[qx+u[0],qy+u[1]],[qx+u[0]+v[0],qy+u[1]+v[1]],[qx+v[0],qy+v[1]]],colr||'--muted',null,1.2,false); }
+const dist=(a,b)=>Math.hypot(b[0]-a[0],b[1]-a[1]);
+const dotp=(u,v)=>u[0]*v[0]+u[1]*v[1];
+function clipBox(P,fn){ const c=P.ctx, [x0,x1]=P.o.x,[y0,y1]=P.o.y; c.save(); c.beginPath(); c.rect(P.X(x0),P.Y(y1),P.X(x1)-P.X(x0),P.Y(y0)-P.Y(y1)); c.clip(); fn(); c.restore(); }
+function lineABC(P,a,b,c,colr,w,dash){ const [x0,x1]=P.o.x,[y0,y1]=P.o.y; clipBox(P,()=>{ if(Math.abs(b)>1e-12){ P.line(x0,(c-a*x0)/b,x1,(c-a*x1)/b,colr,w,dash); } else if(Math.abs(a)>1e-12){ P.line(c/a,y0,c/a,y1,colr,w,dash); } }); }
+const ka=$('ka'),kn=$('kn'),kb=$('kb'),km=$('km'),kt=$('kt'),cvF=$('cvF'),cvL=$('cvL');
+const PF=plane(cvF,{x:[0,10],y:[0,10],grid:0,labels:0,draw:P=>drawF(P)});
+const PL=plane(cvL,{x:[0,10],y:[0,10],grid:0,labels:0,draw:P=>drawL(P)});
+const sep=s=>s.replace(/\B(?=(\d{3})+(?!\d))/g,' ');
+function arrowVal(a,n,b){ // returns BigInt or null if too big (more than 4000 digits)
+  const A=BigInt(a), LIM=13300n;
+  if(n===1) return A**BigInt(b);
+  if(b===0) return 1n;
+  let prev=arrowVal(a,n,b-1); if(prev===null) return null;
+  if(n===2){ if(prev>LIM) return null; return A**prev; }
+  // n===3: a↑↑prev
+  if(prev>6n) return null; let v=1n; for(let i=0n;i<prev;i++){ if(v>LIM) return null; v=A**v; } return v; }
+function towerHeight(a,n,b){ if(n===2) return BigInt(b); if(n===3&&b>=1){ const h=arrowVal(a,3,b-1); return h; } return null; }
+function describe(a,n,b){ const v=arrowVal(a,n,b), arr='↑'.repeat(n), name=a+arr+b;
+  if(v!==null){ const s=v.toString(); return {name,exact:s.length<=40?sep(s):null,digits:s.length,lines:s.length<=40?[name+' = '+sep(s)]:[name+' has '+sep(String(s.length))+' digits']}; }
+  // too big: a tower whose top exponent part is known
+  const h=towerHeight(a,n,b);
+  if(n===2){ // a↑↑b = a^(a↑↑(b-1)); digits ≈ (a↑↑(b-1))·log10 a
+    const e=arrowVal(a,2,b-1);
+    if(e!==null){ const es=e.toString(); if(es.length<16){ const d=Math.floor(Number(e)*Math.log10(a))+1; return {name,lines:[name+' = '+a+'^'+sep(es),'it has '+sep(String(d))+' digits']}; }
+      const lg=Math.log10(a)*Number('1e'+(es.length-1))*Number(es.slice(0,16))/Number('1e15'); const ex=Math.floor(Math.log10(Math.log10(a))+ (es.length-1)+Math.log10(Number(es.slice(0,16))/1e15)); const mant=Math.pow(10,(Math.log10(Math.log10(a))+(es.length-1)+Math.log10(Number(es.slice(0,16))/1e15))-ex);
+      return {name,lines:[name+' = '+a+'^('+a+'↑↑'+(b-1)+')','its digits number about '+mm(mant,2)+' × 10^'+ex]}; }
+    return {name,lines:[name+': a tower of '+b+' copies of '+a,'its count of digits is itself too long to write']}; }
+  if(h!==null) return {name,lines:[name+' = '+a+'↑↑'+sep(h.toString()),'a tower of '+sep(h.toString())+' copies of '+a]};
+  return {name,lines:[name+' = '+a+'↑↑('+a+'↑↑↑'+(b-1)+')','a tower too tall to write its height']}; }
+function drawF(P){ const a=+ka.value,n=+kn.value,b=+kb.value, d=describe(a,n,b);
+  P.text(d.name,5,8.6,'--ink','center',22);
+  d.lines.forEach((l,i)=>{ const col=(d.exact!=null&&i===0)?'--plum':(i===0?'--ink':'--ember'); const chunks=l.match(/.{1,34}/g)||[l]; chunks.forEach((c,j)=>P.text(c,5,6.6-1.1*(i*1.6+j),col,'center',14)); }); }
+const BOOKS={2:{A:['1RB','1LB'],B:['1LA','1RH']},3:{A:['1RB','1RH'],B:['0RC','1RB'],C:['1LC','1LA']},4:{A:['1RB','1LB'],B:['1LA','0LC'],C:['1RH','1LD'],D:['1RD','0RA']}};
+function run(m){ const R=BOOKS[m]; let t={},p=0,s='A'; const snaps=[{t:{},p:0,s:'A'}]; while(s!=='H'){ const r=R[s][t[p]||0]; t={...t}; t[p]=+r[0]; p+=r[1]==='R'?1:-1; s=r[2]; snaps.push({t,p,s}); } return snaps; }
+const RUNS={2:run(2),3:run(3),4:run(4)};
+function drawL(P){ const m=+km.value, S=RUNS[m], T=Math.min(+kt.value,S.length-1); let lo=0,hi=0; S.forEach(z=>{ lo=Math.min(lo,z.p,...Object.keys(z.t).map(Number)); hi=Math.max(hi,z.p,...Object.keys(z.t).map(Number)); });
+  const W=hi-lo+1, rows=S.length, cw=9.6/W, rh=Math.min(0.8,9.4/rows);
+  for(let i=0;i<=T;i++){ const z=S[i], y=9.8-(i+1)*rh;
+    for(let c=lo;c<=hi;c++){ const x=0.2+(c-lo)*cw; const one=z.t[c]===1; P.poly([[x,y],[x+cw*0.92,y],[x+cw*0.92,y+rh*0.85],[x,y+rh*0.85]],null,one?'--ink':'--grid'); }
+    const hx=0.2+(z.p-lo)*cw; P.poly([[hx,y],[hx+cw*0.92,y],[hx+cw*0.92,y+rh*0.85],[hx,y+rh*0.85]],'--plum',null,Math.max(1,Math.min(2.2,rh*4)),true); } }
+function read(){ const a=+ka.value,n=+kn.value,b=+kb.value, m=+km.value, S=RUNS[m]; kt.max=S.length-1; if(+kt.value>S.length-1) kt.value=S.length-1; const T=+kt.value, z=S[T];
+  [['oa',a],['on',n],['ob',b],['om',m],['ot',T]].forEach(([i,v])=>$(i).textContent=v);
+  const ones=Object.values(z.t).reduce((p,q)=>p+q,0), d=describe(a,n,b);
+  const vd=$('vdF'); vd.className='verdict';
+  vd.textContent='Left: '+d.lines.join('; ')+'. Right: after '+T+' of '+(S.length-1)+' steps, state '+(z.s==='H'?'stopped':z.s)+', '+ones+' ones on the strip.';
+  tex($('eqF'),R`S(${m}) \ge ${S.length-1},\ \ \text{ones } ${ones}`,true); }
+function all(){ read(); PF.redraw(); PL.redraw(); }
+[ka,kn,kb,km,kt].forEach(el=>el.addEventListener('input',all));
+window.__pic={set:(a,n,b,m,t)=>{ ka.value=a; kn.value=n; kb.value=b; km.value=m; kt.max=107; kt.value=t; all(); const S=RUNS[m], z=S[+kt.value]; return {lines:describe(a,n,b).lines,steps:S.length-1,ones:Object.values(z.t).reduce((p,q)=>p+q,0),state:z.s}; }};
+all();
+stepper('#sl1',[
+  {k:'ember',kl:'arrows',t:R`p\uparrow^{n+1}S(b) = p\uparrow^n\big(p\uparrow^{n+1}b\big)`,n:`Arrows, from 1976; start p↑ⁿ⁺¹0 = 1.`},
+  {k:'ember',kl:'arrows-name-numbers',t:R`${Nw}{p\uparrow^n b \in \mathbb N}`,n:`recursion, once for each arrow.`},
+  {k:'ember',kl:'towers worked top down',t:R`3\uparrow\uparrow 3 = 3^{3^3} = 3^{27}`,n:`7 625 597 484 987.`},
+  {k:'ember',kl:'digits-of-a-power',t:R`${Nw}{9^k \lt 10^k \lt 27^k}`,n:`3ᵐ has between about m/3 and m/2 digits.`},
+  {k:'ember',kl:'3↑↑4 sized',t:R`2.5 \text{ to } 3.8 \text{ trillion digits}`,n:`Six to ten times the way to the Moon.`},
+  {k:'ember',kl:'beyond the atoms',t:R`3\uparrow\uparrow 5`,n:`About 10⁸⁰ atoms will not hold its digits.`},
+  {k:'ember',kl:'last-digit',t:R`${Nw}{3\uparrow\uparrow\uparrow 3 \text{ ends in } 7}`,n:`Remainders on division by 4.`},
+  {k:'ember',kl:'decidable is not doable',t:R`\text{a method exists}`,n:`Not that anyone can run it.`},
+  {k:'ember',kl:'a doubt, 2011',t:R`\text{arithmetic inconsistent?}`,n:`Two others found the gap within days; withdrawn.`},
+  {k:'ember',kl:'rulebooks',t:R`(\text{state}, \text{mark}) \mapsto (\text{write}, \text{step}, \text{next})`,n:`Rulebook machines, 1936.`},
+  {k:'ember',kl:'busy-beaver',t:R`${Nw}{BB(n) \text{ exists, by either-way}}`,n:`Each book stops or does not.`},
+  {k:'ember',kl:'BB(5), 2024',t:R`BB(5) = 47\,176\,870`,n:`bbchallenge, checked in Coq.`},
+  {k:'ember',kl:'illegal',t:R`(3^3)^3 \ne 3^{3^3}`,n:`Top down.`}
+],{title:'The slides · arrows; arrows-name-numbers; towers worked top down; digits-of-a-power; 3↑↑4 sized; beyond the atoms; last-digit; decidable is not doable; a doubt, 2011; rulebooks; busy-beaver; BB(5), 2024; illegal moves · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

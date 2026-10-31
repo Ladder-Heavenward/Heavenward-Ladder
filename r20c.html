@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Slide, flip, turn</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+.chrow{display:grid;grid-template-columns:4.5em 1fr;gap:6px;align-items:center;font-size:.88rem}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r20b.html">← 20b distance-keepers form a group</a><a href="r20d.html">next: 20d all three keep distances →</a></p>
+  <div class="tags"><span class="tag proof">20c · proof</span></div>
+  <h1>Slide, flip, turn</h1>
+  <p>Three kinds of move do all the work of this rung. Slide everything the same way. Turn everything about the origin. Turn the plane over, so that a line stays where it is and everything else swaps sides. Each is written as a formula on pairs, and each is fixed by very little: a slide by where one point goes, a turn by where (1, 0) goes, a flip by its line.</p>
+  <p class="gesture">A slide adds the same amount across and the same amount up to every point. A turn about the origin is fixed by where it sends the point one step to the right, a point on the circle of radius one, and every other point follows by the same mixing of across and up. A flip across a line through the origin keeps the part of each point along the line and turns over the part across it. Across the floor, it turns over every height.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r18a.html">18a</a> (displacements, the dot product), <a href="r18d.html">18d</a> (equally far from two points), <a href="r20a.html">20a</a> (moves). <a href="r20d.html">20d</a> proves all three keep distances; <a href="r20e.html">20e</a> composes flips.</p></div>
+</header>
+
+<section class="class step" data-step="20c1">
+  <h2 class="sthead"><span class="stno">20c1</span>Slides</h2>
+  <p class="stands">Stands on 18a1 (displacements).</p>
+  <p class="eqline" data-pid="bf5a65">From here on, the slide by (h, k) is the move S<sub>h, k</sub>(x, y) = (x + h, y + k). Its accepted name is a translation.</p>
+  <p data-pid="240128"><b>A slide adds the same displacement to every point.</b> S<sub>h, k</sub> followed by S<sub>h′, k′</sub> is the slide by (h + h′, k + k′), so the slides are a part-group, and they turn about. A slide is fixed by where it sends any one point: if it sends P to Q, it is the slide by Q − P.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · slides · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">20c1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a slide sending (2, −1) to (5, 3)</span></span>Find the slide. <br>Find where it sends (0, 0) and (−3, 1).</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20c2">
+  <h2 class="sthead"><span class="stno">20c2</span>Turns about the origin</h2>
+  <p class="stands">Stands on 20c1 and 18a3 (the dot product, perpendicular).</p>
+  <p class="eqline" data-pid="596395">From here on, for a pair (a, b) with a² + b² = 1, the turn by (a, b) is the move R<sub>(a, b)</sub>(x, y) = (ax − by, bx + ay). It sends (1, 0) to (a, b) and (0, 1) to (−b, a), the point a quarter turn on from (a, b). Its accepted name is a rotation about the origin.</p>
+  <p data-pid="bab0dd"><b>A turn about the origin is fixed by where it sends (1, 0).</b> The rest of the plane follows: x copies of (a, b) and y copies of (−b, a). The quarter turn is R<sub>(0, 1)</sub>(x, y) = (−y, x), and the half turn R<sub>(−1, 0)</sub>(x, y) = (−x, −y). Rung 21 gives a and b their names.</p>
+  <pre class="lines" data-k="ember" data-label="this step: worked">
+R_{(0.6,\,0.8)}(5, 0) = (3, 4) @@ 5 copies of (0.6, 0.8)
+R_{(0.6,\,0.8)}(0, 5) = (-4, 3) @@ 5 copies of (−0.8, 0.6)
+R_{(0,1)}(R_{(0,1)}(x, y)) = R_{(0,1)}(-y, x) = (-x, -y) @@ two quarter turns are a half turn
+  </pre>
+  <p data-pid="4264d1">A turn is a move: R<sub>(a, −b)</sub> undoes R<sub>(a, b)</sub>, as 20j checks.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · turns · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · the flag slid, turned, and flipped</div>
+    <div class="chrow"><span class="lbl">move</span><div class="chips" id="chM"></div></div>
+    <div class="chrow"><span class="lbl" id="lp">which</span><div class="chips" id="chP"></div></div>
+    <div id="pl"></div>
+    <div class="cap">Ink: the flag. Ember: its image. Teal dashes: the flip’s line. A slide and a turn leave the flag reading the same way round; a flip makes it face the other way.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20c2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">the turn R sending (1, 0) to (0.6, 0.8)</span></span>Guess where R sends (3, 4), from a sketch. <br>Find R(3, 4).</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20c3">
+  <h2 class="sthead"><span class="stno">20c3</span>Flips</h2>
+  <p class="stands">Stands on 20c2 and 18d2 (equally far from two points).</p>
+  <p class="eqline" data-pid="4eb343">From here on, the flip across a line ℓ is the move F<sub>ℓ</sub> that leaves each point of ℓ where it is and sends each other point P to the point P′ for which ℓ is the line of points equally far from P and P′ (18d2). The flip across the floor y = 0 is F₀(x, y) = (x, −y). Its accepted name is a reflection.</p>
+  <p data-pid="f78a97">Flip-formula technique: <b>for the line through the origin along a unit displacement u, the flip is F(P) = 2(P · u)u − P.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the flip-formula technique">
+M = \tfrac12\big(P + F(P)\big) = (P \cdot u)\,u @@ the middle of P and F(P): a multiple of u, so on ℓ
+F(P) - P = 2\big((P \cdot u)u - P\big) @@ the displacement from P to F(P)
+\big((P \cdot u)u - P\big) \cdot u = P \cdot u - P \cdot u = 0 @@ u · u = 1: perpendicular to ℓ
+\htmlClass{new}{\ell \text{ is the line equally far from } P \text{ and } F(P)} \quad \blacksquare @@ 18d2: through the middle, at right angles; and P on ℓ gives F(P) = P
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: worked">
+u = (1, 0):\ \ F(x, y) = 2x(1, 0) - (x, y) = (x, -y) @@ the floor
+u = \tfrac{1}{\sqrt2}(1, 1):\ \ F(x, y) = (x + y)(1, 1) - (x, y) = (y, x) @@ the line y = x: swapping the entries is a flip
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · flips · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20c3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">u = (0.6, 0.8)</span></span>Find where the flip across the line along u sends (1, 0), (0.6, 0.8) and (−0.8, 0.6).</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20c4">
+  <h2 class="sthead"><span class="stno">20c4</span>Turns and flips about other points</h2>
+  <p class="stands">Stands on 20c1 to 20c3 and 20b (composing).</p>
+  <p data-pid="989ad1">To turn about a point C, slide C to the origin, turn, and slide back. To flip across a line through a point Q, slide Q to the origin, flip across the parallel line through the origin, and slide back. <b>Every turn and every flip is a slide, a move about the origin, and the slide undone.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: worked">
+\text{turn about } C \text{ by } (a, b):\ \ P \mapsto C + R_{(a,b)}(P - C) @@ slide by −C, turn, slide by C
+C = (1, 1),\ (a, b) = (0, 1):\ \ (3, 1) \mapsto (1, 1) + R_{(0,1)}(2, 0) = (1, 3) @@ a quarter turn about (1, 1)
+\text{flip across } y = 2:\ \ (x, y) \mapsto (x, 2) + F_0(x, y - 2) = (x, 4 - y) @@ slide down 2, flip over the floor, slide up 2
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · other points · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20c4.1</span><span class="ph undo">undo</span><span class="givens"><span class="gtx">a quarter turn about some point C sends (3, 0) to (1, 2)</span></span>Find C.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20c5">
+  <h2 class="sthead"><span class="stno">20c5</span>Illegal moves</h2>
+  <p class="stands">Stands on 20c1 to 20c4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+(x, y) \mapsto (ax - by,\ bx + ay) \text{ with } a^2 + b^2 \ne 1 \text{ is a turn}\,? @@ it turns and stretches by √(a² + b²) (20·cb8)
+F(P) = 2(P \cdot u)u - P \text{ for a line not through } O\,? @@ slide the line to O first (20c4)
+(x, y) \mapsto (y, x) \text{ is a quarter turn}\,? @@ it is the flip across y = x; the quarter turn is (−y, x)
+F(P) = 2(P \cdot u)u - P \text{ with } |u| \ne 1\,? @@ u must be a unit displacement, or divide by u · u
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20c5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="(x, y) \mapsto (3x - 4y,\ 4x + 3y)"></span></span>Find what this move does to lengths, and which turn it uses.</li><li><span class="givens"><span data-tex-inline="(x, y) \mapsto (y, x)"></span></span>Find whether it is a turn about the origin by any (a, b).</li><li><span class="givens"><span class="gtx">the flip across the upright line x = 3</span></span>Find its formula.</li><li><span class="givens"><span class="gtx">a turn R about the origin with R(R(P)) = P for every P</span></span>Find every such turn.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">20c.4.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">the line ax + by = c,  (a, b) ≠ (0, 0)</span></span>Build a formula for the flip across it. <br>Check it on y = x and on x = 3.</div>
+  <div class="chq"><span class="chid">20c.4.2</span><span class="tagq">edge</span>Find every move that is both a slide and a turn about some point. <br>Find every move that is both a flip and a turn about some point.</div>
+  <div class="chq"><span class="chid">20c.4.3</span><span class="tagq">converse</span><span class="givens"><span class="gtx">an isometry that keeps (0, 0) where it is</span></span>Every turn about the origin keeps it. Turn it round: find whether every such isometry is a turn about the origin.</div>
+  <div class="chq"><span class="chid">20c.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="F(P) = 2(P \cdot u)u - P"></span></span>Prove that F is a move by finding F ∘ F, without using 18d.</div>
+  <div class="chq"><span class="chid">20c.4.5</span><span class="tagq">seam</span>Suppose God had made the whole world, every star and stone, three feet to the east of where it is. A philosopher said nothing would be different, so the question has no answer, and space is only the order of things. A follower of Newton answered that the world would be in another place, so space is something in itself. Their letters were printed in 1717. <br>Would a world slid three feet be a different world? <br>What could tell the two apart?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r20b.html">← 20b · distance-keepers form a group</a><a href="r20d.html">20d · all three keep distances →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>Slides are translations, turns are rotations, flips are reflections, and a flip followed by a slide along its line is a glide reflection (20f meets it). The turn R<sub>(a, b)</sub> is usually written with an angle, which rung 21 builds.</p>
+  <h3>Who said it first</h3>
+  <p>In 20c.4.5, the philosopher is Gottfried Wilhelm Leibniz and the follower of Newton is Samuel Clarke: the Leibniz–Clarke correspondence (1715–16, printed 1717).</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+/* moves of the plane, drawn in SVG, for rung 20 */
+const V=c=>'var('+c+')';
+const FLAG=[[0,0],[0,3],[2,3],[2,2.4],[0.6,2.4],[0.6,1.8],[1.5,1.8],[1.5,1.2],[0.6,1.2],[0.6,0]];
+const M={
+  id:()=>p=>p,
+  slide:(h,k)=>p=>[p[0]+h,p[1]+k],
+  turn:(a,b)=>p=>[a*p[0]-b*p[1],b*p[0]+a*p[1]],
+  stretch:k=>p=>[k*p[0],k*p[1]],
+  flipU:(c,s)=>p=>{ const d=2*(p[0]*c+p[1]*s); return [d*c-p[0],d*s-p[1]]; },              /* across the line through O along (c, s), c² + s² = 1 */
+  flipAt:(q,c,s)=>p=>{ const x=p[0]-q[0],y=p[1]-q[1],d=2*(x*c+y*s); return [q[0]+d*c-x,q[1]+d*s-y]; },
+  turnAt:(q,a,b)=>p=>{ const x=p[0]-q[0],y=p[1]-q[1]; return [q[0]+a*x-b*y,q[1]+b*x+a*y]; },
+  then:(g,f)=>p=>g(f(p))                                                                    /* f first, then g */
+};
+const unit=(x,y)=>{ const r=Math.hypot(x,y); return [x/r,y/r]; };
+const fx=v=>(Math.abs(v)<5e-10?0:v);
+const show=(v,d)=>{ let s=fx(v).toFixed(d==null?2:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return (s==='-0'?'0':s).replace('-','−'); };
+/* shapes: {pts, c, fill, dash, w, open}; dots: {p, c, t}; lines: {p, d, c, dash} */
+function svgPlane(o){ const lo=o.lo==null?-6:o.lo, hi=o.hi==null?6:o.hi, S=300, X=x=>(x-lo)/(hi-lo)*S, Y=y=>S-(y-lo)/(hi-lo)*S;
+  let s='<svg viewBox="0 0 '+S+' '+S+'" style="width:100%;max-width:340px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  for(let g=Math.ceil(lo);g<=hi;g++){ s+='<line x1="'+X(g)+'" y1="0" x2="'+X(g)+'" y2="'+S+'" style="stroke:'+V('--grid')+';stroke-width:'+(g===0?1.6:0.6)+'"/><line x1="0" y1="'+Y(g)+'" x2="'+S+'" y2="'+Y(g)+'" style="stroke:'+V('--grid')+';stroke-width:'+(g===0?1.6:0.6)+'"/>'; }
+  (o.lines||[]).forEach(l=>{ const L=40; s+='<line x1="'+X(l.p[0]-L*l.d[0])+'" y1="'+Y(l.p[1]-L*l.d[1])+'" x2="'+X(l.p[0]+L*l.d[0])+'" y2="'+Y(l.p[1]+L*l.d[1])+'" style="stroke:'+V(l.c||'--teal')+';stroke-width:1.6;stroke-dasharray:'+(l.dash||'5 4')+'"/>'; });
+  (o.shapes||[]).forEach(z=>{ const pts=z.pts.map(p=>X(p[0]).toFixed(1)+','+Y(p[1]).toFixed(1)).join(' ');
+    s+='<'+(z.open?'polyline':'polygon')+' points="'+pts+'" style="fill:'+(z.fill?V(z.c):'none')+';fill-opacity:'+(z.fill?0.28:0)+';stroke:'+V(z.c)+';stroke-width:'+(z.w||2)+(z.dash?';stroke-dasharray:'+z.dash:'')+'"/>'; });
+  (o.dots||[]).forEach(d=>{ s+='<circle cx="'+X(d.p[0])+'" cy="'+Y(d.p[1])+'" r="4" style="fill:'+V(d.c||'--ink')+'"/>'+(d.t?'<text x="'+(X(d.p[0])+7)+'" y="'+(Y(d.p[1])-6)+'" style="fill:'+V(d.c||'--ink')+';font:12px IBM Plex Mono,monospace">'+d.t+'</text>':''); });
+  return s+'</svg>'; }
+function knob(id,lab,min,max,step,val){ return '<div class="kn"><span class="m">'+lab+'</span><input type="range" id="'+id+'" min="'+min+'" max="'+max+'" step="'+step+'" value="'+val+'"><output id="o'+id+'"></output></div>'; }
+function chipRow(el,keys,get,set,after){ el.innerHTML=''; keys.forEach(k=>{ const b=document.createElement('button'); b.type='button'; b.textContent=k; if(k===get()) b.className='on'; b.onclick=()=>{ set(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+
+const MV={'slide':{lab:'by',ch:{'(2, 1)':M.slide(2,1),'(−4, 0)':M.slide(-4,0),'(1, −5)':M.slide(1,-5)}},
+  'turn':{lab:'(1, 0) to',ch:{'(0.6, 0.8)':M.turn(0.6,0.8),'(0, 1)':M.turn(0,1),'(−1, 0)':M.turn(-1,0),'(−0.6, −0.8)':M.turn(-0.6,-0.8)}},
+  'flip':{lab:'along',ch:{'(1, 0)':M.flipU(1,0),'(0, 1)':M.flipU(0,1),'(0.71, 0.71)':M.flipU(Math.SQRT1_2,Math.SQRT1_2),'(0.6, 0.8)':M.flipU(0.6,0.8)}}};
+const UV={'(1, 0)':[1,0],'(0, 1)':[0,1],'(0.71, 0.71)':[Math.SQRT1_2,Math.SQRT1_2],'(0.6, 0.8)':[0.6,0.8]};
+let mk='turn', pk='(0.6, 0.8)';
+function draw(){ const f=MV[mk].ch[pk]; const lines=mk==='flip'?[{p:[0,0],d:UV[pk]}]:[];
+  $('pl').innerHTML=svgPlane({lo:-6,hi:6,shapes:[{pts:FLAG,c:'--ink',fill:true},{pts:FLAG.map(f),c:'--ember',fill:true}],lines,dots:[{p:[0,0],c:'--ink'}]});
+  const t=f([2,3]); const v=$('vd'); v.className='verdict'; v.textContent='The flag’s top corner (2, 3) goes to ('+show(t[0])+', '+show(t[1])+').'+(mk==='flip'?' The flag now faces the other way.':' The flag still reads the same way round.'); }
+function setM(){ $('lp').textContent=MV[mk].lab; chipRow($('chP'),Object.keys(MV[mk].ch),()=>pk,k=>pk=k,draw); }
+chipRow($('chM'),Object.keys(MV),()=>mk,k=>{ mk=k; pk=Object.keys(MV[k].ch)[0]; setM(); },draw); setM(); draw();
+window.__pic={set:(m,p)=>{ mk=m; pk=p; setM(); draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'slide',t:R`\htmlClass{new}{S_{h,k}(x, y) = (x + h, y + k)}`,n:`The same displacement everywhere.`}
+],{title:'The slides · slides · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'turn',t:R`\htmlClass{new}{R_{(a,b)}(x, y) = (ax - by,\ bx + ay)}`,n:`Fixed by where (1, 0) goes.`},
+  {k:'ember',kl:'quarter',t:R`(x, y) \mapsto (-y, x)`,n:`Twice: (−x, −y).`}
+],{title:'The slides · turns · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'flip',t:R`\htmlClass{new}{F(P) = 2(P \cdot u)u - P}`,n:`The line is equally far from P and F(P).`},
+  {k:'ember',kl:'y = x',t:R`(x, y) \mapsto (y, x)`,n:`Swapping is a flip.`}
+],{title:'The slides · flips · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'about C',t:R`P \mapsto C + R(P - C)`,n:`Slide, turn, slide back.`}
+],{title:'The slides · other points · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`(x, y) \mapsto (y, x)\ \text{is a flip}`,n:`Not a turn.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

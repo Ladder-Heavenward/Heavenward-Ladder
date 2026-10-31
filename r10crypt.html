@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>10·crypt · Is a huge number of keys enough?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.ctext{font-family:var(--mono);font-size:.8rem;line-height:1.25;overflow-x:auto;max-width:100%;white-space:pre;background:var(--card);border:1px solid var(--grid);border-radius:4px;padding:6px}
+.ctext .c{color:var(--muted)} .ctext .ok{color:var(--teal)} .ctext .no{color:var(--ember)}
+.swap{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:.88rem}
+.swap select{font-family:var(--mono);background:var(--card);color:var(--ink);border:1px solid var(--grid);border-radius:4px;padding:2px 4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r10bio.html">← 10·bio how fast can an enzyme go?</a><a href="r10logi.html">next: 10·logi how many trucks does a route need? →</a></p>
+  <div class="tags"><span class="tag crypt">10·crypt · cryptography</span></div>
+  <h1>Is a huge number of keys enough?</h1>
+  <p>Is a huge number of keys enough? 4·crypt's shift had 25 keys worth trying, and an attacker tried them all in a few minutes. The obvious repair is more keys. Let the key send each letter anywhere at all, so long as no two letters land on the same one. Then the keys number about four hundred million million million million, more than a machine trying a billion a second could finish in the age of the universe. For centuries, people who used such ciphers trusted them with their lives. It is hard to see why they were not, because the count is real. This page builds the cipher as a function and counts its keys. Then it proves that the key moves every letter's tally without changing it, and breaks the cipher from the tallies, without trying a single key.</p>
+  <p class="gesture">A key is a matching of the alphabet with itself; it encrypts letter by letter, and its inverse decrypts. There are twenty-six factorial keys. But each cipher letter’s tally is the tally of the plain letter it stands for, so the tallies, ranked against English, read the key off a letter at a time.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r04crypt.html">4·crypt</a> (the shift, the shifts-add and key-back techniques, trying every key), <a href="r04j.html">4j</a> (the arrangements technique: n!), <a href="r08phys.html">8·phys</a> (scientific form), <a href="r09c.html">9c</a> (one-to-one, bijections-compose), <a href="r09d.html">9d</a> (there-and-back, running-backwards), <a href="r09stat.html">9·stat</a> (the frequency function), <a href="r09crypt.html">9·crypt</a> (cipher, key, plain text, cipher text), <a href="r10f.html">10f</a> (a sequence heads to a limit). Later cryptography pages take several keys in turn (named by rung number only: 11·crypt).</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · the cipher, its keys, the tallies, the attack</div>
+
+  <h3>A key is a bijection</h3>
+  <p class="eqline" data-pid="d0d8fd">From here on, on this page, 𝒜 names the set of the 26 letters, and a text is a list of letters, a function from n to 𝒜 (9·cb4's lists). m names a plain text and c a cipher text, as on 9·crypt; m_i is the letter at place i.</p>
+  <p data-pid="7eaceb">A <b>substitution cipher</b> takes as its key a bijection g : 𝒜 → 𝒜 and encrypts letter by letter: c_i = g(m_i) at every place i. Decrypting is m_i = g⁻¹(c_i), by 9d's there-and-back. So the key that decrypts is the way back, g⁻¹, and it is again a bijection of 𝒜. The key must be a bijection. If it were not one-to-one, two letters would land on one, and the reader could not tell which was meant. The worked key below is the keyboard's top row, then the middle row, then the bottom row: A ↦ Q, B ↦ W, C ↦ E, and so on to Z ↦ M.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the keyboard key">
+\begin{aligned}&g:\ \text{ABCDEFGHIJKLM} \\ &\quad \mapsto \text{QWERTYUIOPASD},\\ &\quad \ \ \text{NOPQRSTUVWXYZ} \\ &\quad \mapsto \text{FGHJKLZXCVBNM}\end{aligned} @@ a bijection: each letter used once on the right
+g(\text{THE}) = \htmlClass{new}{\text{ZIT}} @@ letter by letter
+g^{-1}(\text{ZIT}) = \htmlClass{keep}{\text{THE}} @@ there-and-back: read the table from right to left (9d's swapped pairs)
+  </pre>
+
+  <h3>Counting the keys</h3>
+  <p data-pid="0e8798">Keys technique: <b>the substitution ciphers on 26 letters have exactly 26! keys.</b> A bijection g : 𝒜 → 𝒜 is fixed by its list g(A), g(B), …, g(Z), which uses each letter once. That list is an arrangement of 𝒜 (4j), and each arrangement is the list of exactly one bijection. By 4j's arrangements technique there are 26! of them. ∎</p>
+  <pre class="lines" data-k="teal" data-label="from 4j and 8·phys: how many">
+26! = 403\,291\,461\,126\,605\,635\,584\,000\,000 @@ 26 · 25 · ⋯ · 1
+\approx \htmlClass{new}{4.03 \times 10^{26}} @@ scientific form, 3 figures
+\tfrac{4.03 \times 10^{26}}{10^{9} \text{ per s}} \approx 4.03 \times 10^{17} \text{ s} \approx 1.3 \times 10^{10} \text{ years} @@ a year is about 3.16 × 10⁷ s; the universe is about 1.4 × 10¹⁰ years old
+  </pre>
+  <p data-pid="19eece">The shifts of 4·crypt are among these keys. With letters as 0 to 25, the shift by k sends x to the remainder of x + k on division by 26. There are 26 shifts, counting the shift by 0, which hides nothing. A shift by j after a shift by k is the shift by the remainder of j + k (4·crypt's shifts-add), and the shift by 26 − k undoes the shift by k (its key-back). So 26 of the 26! keys are shifts, and a shift is fixed by where it sends one letter. A general key is fixed only by where it sends 25 letters; the 26th has one place left.</p>
+
+  <h3>The tallies travel with the letters</h3>
+  <p data-pid="db0b0e">9·stat's frequency function gives each letter its tally in a text. Write f_m for the plain text's and f_c for the cipher text's, both as functions 𝒜 → ℕ, with tally 0 for a letter that does not appear.</p>
+  <p data-pid="77ef48">Tallies-travel technique: <b>for every letter x, the cipher text holds g(x) exactly as often as the plain text holds x: f_c(g(x)) = f_m(x).</b> So f_c = f_m ∘ g⁻¹.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the tallies-travel technique">
+c_i = g(x) \iff g(m_i) = g(x) @@ the cipher: c_i = g(m_i)
+\iff m_i = x @@ g is one-to-one (leftward: substitute for the expression)
+\{i : c_i = g(x)\} = \{i : m_i = x\} @@ Ext: the same places
+f_c(g(x)) = \htmlClass{keep}{f_m(x)} \quad \blacksquare @@ one set of places, one number of members (4j)
+  </pre>
+  <p data-pid="7f6bc1">The key moves every tally to a new letter. It cannot change the tallies themselves: the cipher text's list of tallies, put in order, is the plain text's. A bar chart of the cipher text is the plain text's bar chart with its labels shuffled. Whoever knows the plain text's chart can put the labels back.</p>
+
+  <h3>English has a chart</h3>
+  <p data-pid="a8d44a">Count the letters of a long stretch of English prose and share each tally by the total. The shares come out nearly the same from book to book: E about 12.7%, T 9.1%, A 8.2%, O 7.5%, I 7.0%, N 6.7%, down to Q and Z, each under 0.1%. <b>That is a law in the ladder's sense: a measured regularity, with a range and with exceptions.</b> Its range is long English prose. Short texts wander from it, lists and names wander further, and a novel of 1939 runs to some 50 000 words without a single E.</p>
+  <p data-pid="739fbc">Rung 10 gives the law its shape. Take one long text, and let a_n be the share of E among its first n letters: a sequence. The law guesses that such sequences head to about 12.7%, in 10f's sense. That is a guess about every n, and no finite text can prove it. What a text can show is how near it comes. In this page's passage about the Salinas River (402 letters), a_n is 10% at n = 50, 12% at 100, 13% at 200 and 13.9% at 402. Against a challenger's ε of 3 percentage points, it stays within ε of 12.7% from n = 54 on. Against an ε of 2, only from n = 341 on. Against an ε of 1, it never settles inside this passage. The attacker does not need the limit. She needs the top few letters in nearly the right order, and a few hundred letters give her that.</p>
+
+  <h3>Breaking it without a key</h3>
+  <p data-pid="cf3ffe">The attack runs the tallies-travel technique backwards. Tally the cipher text. Its most frequent letter is probably g(E), the next g(T) or g(A), and so on down. Guess g⁻¹ from the ranks, then mend the guess with words: THE is the commonest word, and a guess that turns ZIT into TNE wants N and H swapped.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the Salinas passage under the keyboard key">
+f_c:\ \ \text{T } 56,\ \text{Z } 35,\ \text{Q } 33,\ \text{K } 31,\ \text{F } 30,\ \text{I } 26,\ \ldots @@ the cipher text's top tallies
+\text{guess by rank:}\ \text{T} \to \text{E},\ \text{Z} \to \text{T},\ \text{Q} \to \text{A},\ \text{K} \to \text{O},\ \text{F} \to \text{I},\ \text{I} \to \text{N} @@ English's order E, T, A, O, I, N, S, H, R, …
+\text{ZITLQSOFQL} \mapsto \text{TNEHADRIAH} @@ E, T and A come out right; TNE looks like THE
+\text{I} \to \text{H},\ \text{O} \to \text{I},\ \ldots \Rightarrow \htmlClass{new}{\text{THESALINAS}} @@ mended by words, a letter at a time
+  </pre>
+  <p data-pid="dd6d3f">Each mended letter makes the next one easier, and the work never touches the 26! keys. It grows with the length of the text, not with the number of keys. <b>A huge number of keys guards against one attack only: trying them all.</b> A cipher is as strong as the cheapest attack on it, and here the cheapest attack uses the one thing the key cannot change.</p>
+  <p data-pid="d0330f">A shift falls faster still. One tally is enough: if the top letter of the cipher text is X, then E went to X, and the shift is the remainder of 23 − 4 = 19. A general key needs a tally for each letter, and the rare letters, Q, Z, J, X, are settled last, by words.</p>
+
+  <h3>Illegal moves</h3>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed">
+26! \text{ keys, so it takes } 10^{10} \text{ years to break}\,? @@ that is the time to try every key; the tally attack tries none
+\text{the top cipher letter is } g(\text{E})\,? @@ only probably: a law, not a technique. In a short text it may be g(T) or g(A)
+g \text{ sends A to B and B to B}\,? @@ not one-to-one: no g⁻¹, and the reader cannot tell A from B
+\begin{aligned}&\text{encrypting twice with}\\ &\quad\text{two keys is stronger}\,?\end{aligned} @@ h ∘ g is one bijection (bijections-compose): one key of the same kind
+f_c = f_m\,? @@ f_c = f_m ∘ g⁻¹: the tallies are the same numbers on different letters
+  </pre>
+
+  <h3>Running it backwards</h3>
+  <p data-pid="0cb89f">Handed g, decrypt with g⁻¹: read the key's table from right to left. Handed a cipher text and no key, tally it, rank the tallies against English, and mend the guess with common words. Handed two texts and asked whether one is a substitution of the other, compare the tallies first: if their ordered lists differ, no key joins them (tallies-travel, turned about). Handed a wish, a cipher whose tallies say nothing, change the cipher, not the count of keys: the tallies must stop travelling with the letters.</p>
+</section>
+
+<section class="pic" id="pic">
+  <div class="eyebrow">The picture · left: a share heading for English's, and a challenger's ε · right: the tally attack, by hand</div>
+  <div class="panels">
+    <div class="panel">
+      <div class="lbl">share of a letter among the first n letters of the Salinas passage</div>
+      <canvas id="cvS"></canvas>
+      <div class="chips" id="lch"></div>
+      <div class="kn"><span class="m">ε</span><input type="range" id="ke" min="0.5" max="6" step="0.5" value="3"><output id="oe"></output></div>
+      <div class="cap">Ink: the share a_n against n. Dashed gold: English's share, the law. Shaded: within ε of it. Teal from the n where the share enters the band and stays to the end of the passage; ember if it never settles there.</div>
+      <div class="verdict" id="vdS"></div>
+    </div>
+    <div class="panel">
+      <div class="chips" id="kch"></div>
+      <canvas id="cvT"></canvas>
+      <div class="swap"><span class="m">read cipher letter</span><select id="sa"></select><span class="m">as</span><select id="sb"></select><button id="rk">guess by rank</button></div>
+      <div class="ctext" id="ct"></div>
+      <div class="cap">Bars: the cipher text's tallies, most frequent first, each labelled with its cipher letter and, below, the plain letter it is now read as. Text: cipher letters in grey, and below them your reading, teal where right, ember where wrong. Choosing a reading swaps it with the letter that had it.</div>
+      <div class="verdict" id="vdT"></div>
+    </div>
+  </div>
+</section>
+
+<section class="slides" id="sl1"><div class="eyebrow">The slides · a key is a bijection; the keyboard key; 26! keys; the age of the universe; shifts among them; the tallies travel; English's chart; a share as a sequence; ε and the passage; guess by rank; mend by words; the cheapest attack; illegal moves · ← → keys work</div></section>
+
+<section class="sayback">
+  <div class="eyebrow">Say it back · then work it</div>
+  <h2>Questions</h2>
+  <div class="phkey"></div>
+  <ol>
+    <li><span class="qid">10·crypt.1</span><span class="gname">Keys and tallies.</span><span class="gwhy">Do: build the page's pieces.</span>
+      <ol class="sub">
+        <li><span class="qid">10·crypt.1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{An alphabet has the}"></span> <span data-tex-inline="\text{4\ letters A, B, C, D.}"></span></span>Find the number of substitution keys and the number of shifts.</li><li><span class="givens"><span data-tex-inline="\text{There are } 26! \text{ keys, and a}"></span> <span data-tex-inline="\text{machine tries } 10^{12} \text{ keys a}"></span> <span data-tex-inline="\text{second.}"></span></span>Find the years it takes to try them all, in scientific form to 2 figures.</li><li><span class="givens"><span data-tex-inline="\text{A shift sends WKH to}"></span> <span data-tex-inline="\text{THE.}"></span></span>Find the shift, and decrypt WXUORFN.</li><li><span class="givens"><span data-tex-inline="g:\ \text{ABCDEFG} \mapsto \text{QWERTYU},"></span> <span data-tex-inline="\text{HIJKLM} \mapsto \text{IOPASD},"></span> <span data-tex-inline="\text{NOPQRST} \mapsto \text{FGHJKLZ},"></span> <span data-tex-inline="\text{UVWXYZ} \mapsto \text{XCVBNM}"></span></span>Find g at TRACY, and its inverse at GKTUGF.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">10·crypt.2</span><span class="gname">From the tallies back.</span><span class="gwhy">Undo: run the page's techs backwards.</span>
+      <ol class="sub">
+        <li><span class="qid">10·crypt.2.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="g:\ \text{ABCDEFG} \mapsto \text{QWERTYU},"></span> <span data-tex-inline="\text{HIJKLM} \mapsto \text{IOPASD},"></span> <span data-tex-inline="\text{NOPQRST} \mapsto \text{FGHJKLZ},"></span> <span data-tex-inline="\text{UVWXYZ} \mapsto \text{XCVBNM}"></span></span>Find the way back, the inverse of g, at Q, W, E, R, T and Y.</li><li><span class="givens"><span data-tex-inline="\text{A plain text&#x27;s tallies are}"></span> <span data-tex-inline="\text{E 9, T 6, A 4, O 2, I 1.}"></span> <span data-tex-inline="\text{Its cipher text&#x27;s are K 2,}"></span> <span data-tex-inline="\text{P 9, R 1, V 6, X 4.}"></span></span>Find the key g at E, T, A, O and I.</li><li><span class="givens"><span data-tex-inline="\text{A shift&#x27;s cipher text has}"></span> <span data-tex-inline="\text{its top tally at J.}"></span> <span data-tex-inline="\text{Assume the top plain}"></span> <span data-tex-inline="\text{letter is E.}"></span></span>Find the shift and the decrypting shift.</li><li><span class="givens"><span data-tex-inline="\text{A plain text uses}"></span> <span data-tex-inline="\text{16\ letters, each with a}"></span> <span data-tex-inline="\text{different tally, and not}"></span> <span data-tex-inline="\text{the other 10.}"></span></span>How many keys give the same cipher text from it?</li></ol></li>
+      </ol></li>
+    <li><span class="qid">10·crypt.3</span><span class="gname">Where the attack bends.</span><span class="gwhy">Bend: find where the techs stop working.</span>
+      <ol class="sub">
+        <li><span class="qid">10·crypt.3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{In a plain text, S and O}"></span> <span data-tex-inline="\text{have the same tally.}"></span></span>What can the tallies of the cipher text not settle?</li><li><span class="givens"><span data-tex-inline="\text{The cipher text is}"></span> <span data-tex-inline="\text{MEETMEATNOON under}"></span> <span data-tex-inline="\text{some key.}"></span></span>What do its tallies give? <br>Find the cipher letters whose plain letters ranking cannot settle.</li><li><span class="givens"><span data-tex-inline="\text{Encrypt with a key } g \text{, then}"></span> <span data-tex-inline="\text{with a second key } h \text{.}"></span></span>Is the result a substitution cipher? <br>How many keys does the pair add?</li><li><span class="givens"><span data-tex-inline="\text{Let E go to any of three}"></span> <span data-tex-inline="\text{symbols, chosen afresh each}"></span> <span data-tex-inline="\text{time.}"></span></span>Is encrypting still a function on letters? <br>Is decrypting?</li></ol></li>
+      </ol></li>
+    <li class="optgroup"><span class="qid">10·crypt.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder challenges that rely on your own making. The page is complete without these; the rung's star needs them.</span>
+      <ol class="sub">
+        <li class="opt"><span class="qid">10·crypt.4.1</span><span class="tagq">build</span>Build ciphers of your own.<ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{Use 100 symbols, each}"></span> <span data-tex-inline="\text{letter getting as many as}"></span> <span data-tex-inline="\text{its share in percent,}"></span> <span data-tex-inline="\text{rounded, so that each}"></span> <span data-tex-inline="\text{symbol is used about}"></span> <span data-tex-inline="\text{equally often.}"></span></span>Find how many E gets, and what goes wrong for the letters under 0.5%.</li><li>Write two sentences of your own about a place you know, at least 150 letters. <br>Encrypt them with a key of your own, and break the result from its tallies. <br>Count the letters you got from ranks alone.</li><li><span class="givens"><span data-tex-inline="j \text{ and } k \text{ are shifts, from 0}"></span> <span data-tex-inline="\text{to 25.}"></span></span>Prove that the shift by j after the shift by k is the shift by the remainder of j plus k, and that the shift by 26 less k undoes the shift by k.</li><li><span class="givens"><span data-tex-inline="B = 10^{26}"></span></span>Find the least n for which an alphabet of n letters has more than B keys.</li></ol></li>
+        <li class="opt"><span class="qid">10·crypt.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{The plain text is the}"></span> <span data-tex-inline="\text{alphabet once, A to Z.}"></span></span>Find how much of the key the cipher text's tallies fix, and how much the cipher text fixes.</li>
+        <li class="opt"><span class="qid">10·crypt.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{Two texts of one length}"></span> <span data-tex-inline="\text{have the same ordered list}"></span> <span data-tex-inline="\text{of tallies.}"></span></span>Must one be a substitution of the other?</li>
+        <li class="opt"><span class="qid">10·crypt.4.4</span><span class="tagq">seam</span>A firm in Sacramento keeps its cipher's method secret, as well as its keys. A firm in Oakland publishes its method and keeps only its keys secret. Which firm's messages are safer?</li>
+      </ol></li>
+  </ol>
+  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
+</section>
+
+<nav class="nextrung"><a href="r10bio.html">← 10·bio · how fast can an enzyme go?</a><a href="r10logi.html">10·logi · how many trucks does a route need? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>The tally attack was first written down by the Arab philosopher al-Kindi, in Baghdad in the ninth century, in a treatise on deciphering secret messages. In 1586 the letters of Mary, Queen of Scots, written in a substitution cipher with extra symbols for common words, were broken by Thomas Phelippes; they helped send her to her death in 1587. Edgar Allan Poe's story “The Gold-Bug” (1843) walks a reader through the attack. The novel without an E is Ernest Vincent Wright's Gadsby (1939). The demand that a cipher stay safe when everything but the key is known was set out by Auguste Kerckhoffs in “La cryptographie militaire” (1883).</p>
+  <aside class="voice para"><p>Al-Kindi advised the reader to find a long plain text in the same language, count each letter in it, and then match the most frequent letter of the cipher text to the most frequent letter of the plain text, and so on down.</p><cite>al-Kindi, Risāla fī istikhrāj al-muʿammā (ninth century); paraphrase</cite></aside>
+  <p>Accepted names: a substitution cipher on one alphabet is a simple substitution or monoalphabetic cipher; a shift is a Caesar cipher; the set of keys is the key space; trying every key is a brute-force attack; the tally attack is frequency analysis. A cipher that gives a letter several symbols is a homophonic cipher. The demand in 10·crypt.4.4 is Kerckhoffs's principle.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="10·crypt: a worked “proof”, not allowed">
+\text{an attack must find } g @@ fine
+\text{finding } g \text{ means trying keys until one works} @@ not allowed: g can be read off the tallies, letter by letter (tallies-travel)
+\text{so } 26! \text{ keys make it safe} @@ false: the Salinas passage fell with no key tried
+  </pre>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const TXT="The Salinas River runs north up its long valley and reaches Monterey Bay between Marina and Castroville. For much of the year its bed looks dry, because the water runs under the sand and not over it, and people call it the river that runs upside down. The valley it drains grows much of the lettuce eaten in the country. In summer the trucks leave the fields every hour for the coolers in Salinas, where the heads are chilled within a few hours of being cut, and then loaded again for the long haul east.";
+const P=TXT.toUpperCase().replace(/[^A-Z]/g,''); const n=P.length;
+const ENS={A:8.2,B:1.5,C:2.8,D:4.3,E:12.7,F:2.2,G:2.0,H:6.1,I:7.0,J:0.15,K:0.77,L:4.0,M:2.4,N:6.7,O:7.5,P:1.9,Q:0.1,R:6.0,S:6.3,T:9.1,U:2.8,V:0.98,W:2.4,X:0.15,Y:2.0,Z:0.07};
+const ORD="ETAOINSHRDLCUMWFGYPBVKJXQZ";
+const AB="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+/* left: a share as a sequence */
+let let1='E'; const ke=$('ke');
+const PS=plane($('cvS'),{x:[0,n],y:[0,0.3],grid:0,labels:false,aspect:0.7,draw:P=>drawS(P)});
+function shares(ch){ const a=[]; let k=0; for(let i=0;i<n;i++){ if(P[i]===ch) k++; a.push(k/(i+1)); } return a; }
+function settle(a,L,e){ let N=null; for(let i=n-1;i>=0;i--){ if(Math.abs(a[i]-L)<e) N=i+1; else break; } return N; }
+function drawS(Q){ const c=Q.ctx, L=ENS[let1]/100, e=+ke.value/100, a=shares(let1), N=settle(a,L,e);
+  const top=Math.max(0.16,L*2.2); Q.o.y=[-0.01,top];
+  c.fillStyle=col('--gold'); c.globalAlpha=.15; c.fillRect(Q.X(0),Q.Y(Math.min(top,L+e)),Q.X(n)-Q.X(0),Q.Y(Math.max(0,L-e))-Q.Y(Math.min(top,L+e))); c.globalAlpha=1;
+  c.strokeStyle=col('--grid'); c.lineWidth=1; c.beginPath(); for(let x=100;x<=n;x+=100){ c.moveTo(Q.X(x),Q.Y(0)); c.lineTo(Q.X(x),Q.Y(top)); } c.stroke();
+  Q.line(0,0,n,0,'--muted',1.3); Q.line(0,L,n,L,'--gold',1.6,[7,4]);
+  c.strokeStyle=col('--ink'); c.lineWidth=1.8; c.beginPath(); a.forEach((v,i)=>{ const X=Q.X(i+1),Y=Q.Y(v); i?c.lineTo(X,Y):c.moveTo(X,Y); }); c.stroke();
+  if(N){ c.strokeStyle=col('--teal'); c.lineWidth=2.6; c.beginPath(); for(let i=N-1;i<n;i++){ const X=Q.X(i+1),Y=Q.Y(a[i]); i>N-1?c.lineTo(X,Y):c.moveTo(X,Y); } c.stroke(); Q.line(N,0,N,a[N-1],'--teal',1.2,[3,3]); Q.text('N = '+N,N,top*0.92,'--teal',N>n*0.7?'right':'left',12); }
+  c.font='11px IBM Plex Mono, monospace'; c.fillStyle=col('--muted'); c.textAlign='center'; for(let x=100;x<=n;x+=100) c.fillText(x,Q.X(x),Q.H-4);
+  c.textAlign='left'; c.fillText(let1+' '+(L*100).toFixed(1)+'%',Q.X(4),Q.Y(L)-5);
+  const vd=$('vdS'); vd.className='verdict '+(N?'win':'lose');
+  vd.textContent='Share of '+let1+' after all '+n+' letters: '+(a[n-1]*100).toFixed(1)+'%; English: '+(L*100).toFixed(1)+'%. '+(N?'Within ε = '+ke.value+' points from n = '+N+' to the end of the passage. The passage ends there; the law guesses about every n.':'Not within ε = '+ke.value+' points at the end of the passage: no threshold N inside it. A finite text cannot win or lose the game for every n.');
+  $('oe').textContent=ke.value+' pts'; }
+const lch=$('lch'); ['E','T','A','N','H','Z'].forEach(ch=>{ const b=document.createElement('button'); b.textContent=ch; if(ch===let1) b.className='on'; b.onclick=()=>{ let1=ch; [...lch.children].forEach(z=>z.classList.toggle('on',z===b)); PS.redraw(); }; lch.appendChild(b); });
+ke.addEventListener('input',()=>PS.redraw());
+/* right: the attack */
+const KEYS={kb:{lab:'keyboard key',k:'QWERTYUIOPASDFGHJKLZXCVBNM'},sh:{lab:'shift by 19',k:AB.slice(19)+AB.slice(0,19)},rn:{lab:'a fresh key',k:null}};
+let kk='kb', key=KEYS.kb.k, C='', guess={};
+function shuffleKey(){ const a=AB.split(''); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a.join(''); }
+function tallies(t){ const f={}; for(const ch of AB) f[ch]=0; for(const ch of t) f[ch]++; return f; }
+function encrypt(){ C=[...P].map(ch=>key[ch.charCodeAt(0)-65]).join(''); }
+function byRank(){ const f=tallies(C); const ord=AB.split('').sort((x,y)=>f[y]-f[x]||(x<y?-1:1)); guess={}; ord.forEach((ch,i)=>guess[ch]=ORD[i]); }
+const PT=plane($('cvT'),{x:[0,26],y:[0,1],grid:0,labels:false,aspect:0.55,draw:Q=>drawT(Q)});
+function truth(ch){ return AB[key.indexOf(ch)]; }
+function drawT(Q){ const c=Q.ctx, f=tallies(C), ord=AB.split('').sort((x,y)=>f[y]-f[x]||(x<y?-1:1)), mx=f[ord[0]]||1; Q.o.y=[-0.32,1.12];
+  ord.forEach((ch,i)=>{ const h=f[ch]/mx; const ok=guess[ch]===truth(ch); c.fillStyle=col(f[ch]?(ok?'--teal':'--ember'):'--grid'); c.globalAlpha=.75; c.fillRect(Q.X(i+0.15),Q.Y(h),Q.X(i+0.85)-Q.X(i+0.15),Q.Y(0)-Q.Y(h)); c.globalAlpha=1;
+    c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; c.fillStyle=col('--ink'); c.fillText(ch,Q.X(i+0.5),Q.Y(-0.1)); c.fillStyle=col(ok?'--teal':'--ember'); c.fillText(guess[ch]||'',Q.X(i+0.5),Q.Y(-0.24));
+    if(i<8&&f[ch]){ c.fillStyle=col('--muted'); c.fillText(f[ch],Q.X(i+0.5),Q.Y(h)-3); } }); }
+function drawText(){ const W=40; let h=''; let right=0; for(let i=0;i<n;i+=W){ const seg=C.slice(i,i+W); h+='<span class="c">'+seg+'</span>\n'; let line=''; for(let j=0;j<seg.length;j++){ const g=guess[seg[j]]||'?'; const ok=g===P[i+j]; if(ok) right++; line+='<span class="'+(ok?'ok':'no')+'">'+g+'</span>'; } h+=line+'\n'; }
+  $('ct').innerHTML=h; return right; }
+function fillSel(){ const sa=$('sa'), sb=$('sb'); const f=tallies(C); const ord=AB.split('').filter(ch=>f[ch]).sort((x,y)=>f[y]-f[x]||(x<y?-1:1)); const cur=sa.value;
+  sa.innerHTML=ord.map(ch=>'<option>'+ch+'</option>').join(''); if(ord.indexOf(cur)>=0) sa.value=cur; sb.innerHTML=AB.split('').map(ch=>'<option>'+ch+'</option>').join(''); sb.value=guess[sa.value]; }
+function all(){ PT.redraw(); const r=drawText(); const vd=$('vdT'); const f=tallies(C); const used=AB.split('').filter(ch=>f[ch]); const rk=used.filter(ch=>guess[ch]===truth(ch)).length;
+  vd.className='verdict '+(r===n?'win':'lose'); vd.textContent=(r===n?'Broken: every letter read right, and no key was tried. ':'')+rk+' of the '+used.length+' cipher letters in use are read right; '+r+' of '+n+' letters of text.'+(kk==='sh'?' A shift: once E is placed, every letter follows.':''); }
+$('sa').addEventListener('change',()=>{ $('sb').value=guess[$('sa').value]; });
+$('sb').addEventListener('change',()=>{ const a=$('sa').value, want=$('sb').value; const other=Object.keys(guess).find(ch=>guess[ch]===want); const old=guess[a]; guess[a]=want; if(other&&other!==a) guess[other]=old; all(); });
+$('rk').onclick=()=>{ byRank(); fillSel(); all(); };
+const kch=$('kch'); Object.keys(KEYS).forEach(k=>{ const b=document.createElement('button'); b.textContent=KEYS[k].lab; if(k===kk) b.className='on'; b.onclick=()=>{ kk=k; key=KEYS[k].k||shuffleKey(); [...kch.children].forEach(z=>z.classList.toggle('on',z===b)); encrypt(); byRank(); fillSel(); all(); }; kch.appendChild(b); });
+encrypt(); byRank(); fillSel(); all(); PS.redraw();
+window.__pic={read:()=>({S:$('vdS').textContent,T:$('vdT').textContent})};
+
+const N='\\htmlClass{new}', Kp='\\htmlClass{keep}';
+stepper('#sl1',[
+  {k:'teal',kl:'from 9c · a key is a bijection',t:R`g : \mathcal{A} \to \mathcal{A}`,n:`One-to-one, so the reader can run it back; c_i = g(m_i) at every place.`},
+  {k:'ember',kl:'the keyboard key',t:R`g(\text{THE}) = ${N}{\text{ZIT}}`,n:`A ↦ Q, B ↦ W, …, Z ↦ M: the keyboard's rows in order.`},
+  {k:'teal',kl:'from 4j · 26! keys',t:R`26! \approx ${N}{4.03 \times 10^{26}}`,n:`A key is an arrangement of the alphabet.`},
+  {k:'teal',kl:'from 8·phys · the age of the universe',t:R`\tfrac{4.03 \times 10^{26}}{10^9 \text{ per s}} \approx 1.3 \times 10^{10} \text{ years}`,n:`Trying every key is hopeless.`},
+  {k:'teal',kl:'from 4·crypt · shifts among them',t:R`x \mapsto x + k \ (\text{remainder by } 26)`,n:`26 of the 26! keys; one pair fixes a shift.`},
+  {k:'ember',kl:'the tallies travel',t:R`f_c(g(x)) = ${Kp}{f_m(x)}`,n:`g is one-to-one: the same places. The bars move; their heights do not.`},
+  {k:'ember',kl:'English’s chart',t:R`\text{E } 12.7\%,\ \text{T } 9.1\%,\ \text{A } 8.2\%,\ \ldots`,n:`A law: measured, with a range and exceptions.`},
+  {k:'ember',kl:'a share as a sequence',t:R`a_n = \tfrac{\text{E's among the first } n}{n}`,n:`The law guesses a_n heads to about 12.7%.`},
+  {k:'ember',kl:'ε and the passage',t:R`\varepsilon = 3:\ N = 54;\quad \varepsilon = 2:\ N = 341`,n:`At ε = 1 the passage never settles. A finite text cannot play for every n.`},
+  {k:'ember',kl:'guess by rank',t:R`\text{T} \to \text{E},\ \text{Z} \to \text{T},\ \text{Q} \to \text{A}`,n:`The top three are right; then TNE wants a swap.`},
+  {k:'ember',kl:'mend by words',t:R`\text{ZITLQSOFQL} \mapsto ${N}{\text{THESALINAS}}`,n:`A letter at a time; no key tried.`},
+  {k:'ember',kl:'the cheapest attack',t:R`\text{work} \sim \text{length of text, not } 26!`,n:`A huge number of keys guards against one attack only.`},
+  {k:'ember',kl:'illegal',t:R`f_c = f_m\,?`,n:`f_c = f_m ∘ g⁻¹: the same numbers on different letters.`}
+],{title:'The slides · a key is a bijection; the keyboard key; 26! keys; the age of the universe; shifts among them; the tallies travel; English’s chart; a share as a sequence; ε and the passage; guess by rank; mend by words; the cheapest attack; illegal moves · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

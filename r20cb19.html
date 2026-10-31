@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The square’s moves as turns and flips</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+.chrow{display:grid;grid-template-columns:4.5em 1fr;gap:6px;align-items:center;font-size:.88rem}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r20j.html">← 20j turns in coordinates</a><a href="r20cb9.html">next: 20·cb9 the inverse’s pairs, flipped →</a></p>
+  <div class="tags"><span class="tag then">20·cb19 · newsflash for 19f</span></div>
+  <h1>The square’s moves as turns and flips</h1>
+  <p>19f counted eight ways a square card fits its outline, by shuffling labels on its corners. It could not say what the moves were, only what they did to the labels. Now the moves are real. Four are turns about the centre. The other four, turning the card over in space, land every point exactly where a flip across a line in the plane sends it.</p>
+  <p class="gesture">With the square centred at the origin: the turns by nothing, a quarter, a half and three quarters, and the flips across the floor, the upright axis and the two diagonals. Turns are even, flips are odd.</p>
+  <div class="ready"><h3>What this calls back to, and what it stands on</h3><p>Calls back to <a href="r19f.html">19f</a> (symmetries by hand, turning a card over). Stands on <a href="r20j.html">20j</a> (turns as pairs), <a href="r20e.html">20e</a> (two flips), <a href="r20g.html">20g</a> (which way round), <a href="r19d.html">19d</a> (part-groups).</p></div>
+</header>
+
+<section class="class step" data-step="20·cb19.1">
+  <h2 class="sthead"><span class="stno">20·cb19.1</span>Four turns</h2>
+  <p class="stands">Stands on 19f2 (place-then-count) and 20j1 (a turn is a pair).</p>
+  <p data-pid="08f30c">Put the square’s corners at 1 = (1, 1), 2 = (−1, 1), 3 = (−1, −1), 4 = (1, −1), anticlockwise. <b>The four turns of 19f are the turns about the centre by (1, 0), (0, 1), (−1, 0) and (0, −1).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the quarter turn, checked on the corners">
+R_{(0,1)}(x, y) = (-y,\ x) @@ 20j1
+(1, 1) \mapsto (-1, 1),\ (-1, 1) \mapsto (-1, -1) @@ 1 to 2, 2 to 3
+(-1, -1) \mapsto (1, -1),\ (1, -1) \mapsto (1, 1) @@ 3 to 4, 4 to 1
+\htmlClass{new}{\text{the quarter turn is the shuffle } [2\ 3\ 4\ 1]} @@ as 19f found by hand
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · turns · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · the square’s eight moves, as moves of the plane</div>
+    <div class="chrow"><span class="lbl">move</span><div class="chips" id="chM"></div></div>
+    <div id="pl"></div>
+    <div class="cap">Ink: the square, corners 1 to 4 anticlockwise, with a flag inside to show which way round. Ember: the flag after the move. The verdict gives the shuffle of the corners.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">20·cb19.1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">the half turn,  (−1, 0)</span></span>Find where it sends each corner, and the shuffle it makes.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20·cb19.2">
+  <h2 class="sthead"><span class="stno">20·cb19.2</span>Turning over is a flip</h2>
+  <p class="stands">Stands on 19f3 (turning a card over) and 20c3 (flips).</p>
+  <p data-pid="323f9d"><b>Turning a flat card over about a line in its own plane lands every point where the flip across that line sends it.</b> A point on the card goes round the line in a half circle, at right angles to it, and comes down on the far side, as far from the line as it started.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the turn-over, as a flip">
+\text{about the floor: } (x, y) \mapsto (x, -y) @@ the point swings over the floor, the same distance on the far side
+\text{about } y = x:\ (x, y) \mapsto (y, x) @@ the flip across y = x (20c3)
+\htmlClass{new}{\text{a half turn in space} = \text{a flip in the plane}} @@ the card's face does not care how it got there
+  </pre>
+  <p data-pid="29fd8f">Seen from above the table, the flip reverses which way round (20g). Seen from space, it is a turn. Which way round a figure goes depends on which side you look from.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · flips · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20·cb19.2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">the flip across y = −x</span></span>Find where it sends each corner, and the shuffle it makes. <br>Find the line 19f turned the card over about to make it.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20·cb19.3">
+  <h2 class="sthead"><span class="stno">20·cb19.3</span>19f’s facts, as facts about moves</h2>
+  <p class="stands">Stands on 20e (two flips), 20g4 (odd and even flips) and 19d (part-groups).</p>
+  <p data-pid="f09256"><b>Every fact 19f found by shuffling labels is now a fact about moves of the plane.</b> Two flips across lines through the centre an eighth of a turn apart make a quarter turn (20e2). The turns are the even moves, a part-group of 4 inside 8 (19d). The flips are the odd moves, and no flip is a turn (20g4).</p>
+  <pre class="lines" data-k="ember" data-label="this step: two flips of the square make a turn">
+F_{y=x} \circ F_0:\ (x, y) \mapsto (x, -y) \mapsto (-y, x) @@ the floor first, then y = x
+= R_{(0,1)} @@ the quarter turn (20e2: the lines are an eighth of a turn apart)
+\htmlClass{new}{4 \mid 8:\ \text{the turns, inside all eight}} @@ 19d's count, on real moves
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · facts · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20·cb19.3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">the flip across the upright axis, then the flip across y = x</span></span>Find the move they make, and its shuffle. <br>Check it against 19f’s table.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">20·cb19.4.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">a regular hexagon with a corner at (1, 0)</span></span>Build its twelve moves as turns by pairs and flips across lines. <br>Find the pair of the smallest turn, using 20j.4.1.</div>
+  <div class="chq"><span class="chid">20·cb19.4.2</span><span class="tagq">edge</span><span class="givens"><span class="gtx">the rectangle with corners (±2, ±1)</span></span>Find its moves as turns and flips. <br>Find which of the square’s eight survive, and why.</div>
+  <div class="chq"><span class="chid">20·cb19.4.3</span><span class="tagq">converse</span>Each of the square’s moves is an isometry that keeps the square. Turn it round: prove every isometry that keeps the square is one of the eight.</div>
+  <div class="chq"><span class="chid">20·cb19.4.4</span><span class="tagq">reroute</span>Find the eight moves again from 20f: where can the corners 1 and 2 go, and how many moves does each choice allow?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r20j.html">← 20j · turns in coordinates</a><a href="r20cb9.html">20·cb9 · the inverse’s pairs, flipped →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The square's eight moves are the dihedral group of order 8, often written D₄ or D₈. The turns form the cyclic part-group of order 4.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+/* moves of the plane, drawn in SVG, for rung 20 */
+const V=c=>'var('+c+')';
+const FLAG=[[0,0],[0,3],[2,3],[2,2.4],[0.6,2.4],[0.6,1.8],[1.5,1.8],[1.5,1.2],[0.6,1.2],[0.6,0]];
+const M={
+  id:()=>p=>p,
+  slide:(h,k)=>p=>[p[0]+h,p[1]+k],
+  turn:(a,b)=>p=>[a*p[0]-b*p[1],b*p[0]+a*p[1]],
+  stretch:k=>p=>[k*p[0],k*p[1]],
+  flipU:(c,s)=>p=>{ const d=2*(p[0]*c+p[1]*s); return [d*c-p[0],d*s-p[1]]; },              /* across the line through O along (c, s), c² + s² = 1 */
+  flipAt:(q,c,s)=>p=>{ const x=p[0]-q[0],y=p[1]-q[1],d=2*(x*c+y*s); return [q[0]+d*c-x,q[1]+d*s-y]; },
+  turnAt:(q,a,b)=>p=>{ const x=p[0]-q[0],y=p[1]-q[1]; return [q[0]+a*x-b*y,q[1]+b*x+a*y]; },
+  then:(g,f)=>p=>g(f(p))                                                                    /* f first, then g */
+};
+const unit=(x,y)=>{ const r=Math.hypot(x,y); return [x/r,y/r]; };
+const fx=v=>(Math.abs(v)<5e-10?0:v);
+const show=(v,d)=>{ let s=fx(v).toFixed(d==null?2:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return (s==='-0'?'0':s).replace('-','−'); };
+/* shapes: {pts, c, fill, dash, w, open}; dots: {p, c, t}; lines: {p, d, c, dash} */
+function svgPlane(o){ const lo=o.lo==null?-6:o.lo, hi=o.hi==null?6:o.hi, S=300, X=x=>(x-lo)/(hi-lo)*S, Y=y=>S-(y-lo)/(hi-lo)*S;
+  let s='<svg viewBox="0 0 '+S+' '+S+'" style="width:100%;max-width:340px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  for(let g=Math.ceil(lo);g<=hi;g++){ s+='<line x1="'+X(g)+'" y1="0" x2="'+X(g)+'" y2="'+S+'" style="stroke:'+V('--grid')+';stroke-width:'+(g===0?1.6:0.6)+'"/><line x1="0" y1="'+Y(g)+'" x2="'+S+'" y2="'+Y(g)+'" style="stroke:'+V('--grid')+';stroke-width:'+(g===0?1.6:0.6)+'"/>'; }
+  (o.lines||[]).forEach(l=>{ const L=40; s+='<line x1="'+X(l.p[0]-L*l.d[0])+'" y1="'+Y(l.p[1]-L*l.d[1])+'" x2="'+X(l.p[0]+L*l.d[0])+'" y2="'+Y(l.p[1]+L*l.d[1])+'" style="stroke:'+V(l.c||'--teal')+';stroke-width:1.6;stroke-dasharray:'+(l.dash||'5 4')+'"/>'; });
+  (o.shapes||[]).forEach(z=>{ const pts=z.pts.map(p=>X(p[0]).toFixed(1)+','+Y(p[1]).toFixed(1)).join(' ');
+    s+='<'+(z.open?'polyline':'polygon')+' points="'+pts+'" style="fill:'+(z.fill?V(z.c):'none')+';fill-opacity:'+(z.fill?0.28:0)+';stroke:'+V(z.c)+';stroke-width:'+(z.w||2)+(z.dash?';stroke-dasharray:'+z.dash:'')+'"/>'; });
+  (o.dots||[]).forEach(d=>{ s+='<circle cx="'+X(d.p[0])+'" cy="'+Y(d.p[1])+'" r="4" style="fill:'+V(d.c||'--ink')+'"/>'+(d.t?'<text x="'+(X(d.p[0])+7)+'" y="'+(Y(d.p[1])-6)+'" style="fill:'+V(d.c||'--ink')+';font:12px IBM Plex Mono,monospace">'+d.t+'</text>':''); });
+  return s+'</svg>'; }
+function knob(id,lab,min,max,step,val){ return '<div class="kn"><span class="m">'+lab+'</span><input type="range" id="'+id+'" min="'+min+'" max="'+max+'" step="'+step+'" value="'+val+'"><output id="o'+id+'"></output></div>'; }
+function chipRow(el,keys,get,set,after){ el.innerHTML=''; keys.forEach(k=>{ const b=document.createElement('button'); b.type='button'; b.textContent=k; if(k===get()) b.className='on'; b.onclick=()=>{ set(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+
+const SQ=[[1,1],[-1,1],[-1,-1],[1,-1]];
+const FL=FLAG.map(p=>[p[0]*0.28-0.3,p[1]*0.28-0.45]);
+const r2=Math.SQRT1_2;
+const MV={'do nothing':M.id(),'quarter turn':M.turn(0,1),'half turn':M.turn(-1,0),'three-quarter turn':M.turn(0,-1),'flip: floor':M.flipU(1,0),'flip: upright':M.flipU(0,1),'flip: y = x':M.flipU(r2,r2),'flip: y = −x':M.flipU(r2,-r2)};
+let mk='quarter turn';
+function draw(){ const f=MV[mk];
+  const sh=SQ.map(p=>{ const q=f(p); return SQ.findIndex(s=>Math.abs(s[0]-q[0])<1e-9&&Math.abs(s[1]-q[1])<1e-9)+1; });
+  $('pl').innerHTML=svgPlane({lo:-2,hi:2,shapes:[{pts:SQ,c:'--ink'},{pts:FL,c:'--ink',fill:true},{pts:FL.map(f),c:'--ember',fill:true}],dots:SQ.map((p,i)=>({p,c:'--ink',t:String(i+1)}))});
+  const v=$('vd'); v.className='verdict'; v.textContent='Corners 1, 2, 3, 4 go to '+sh.join(', ')+': the shuffle ['+sh.join(' ')+']. '+(mk.startsWith('flip')?'Odd: the flag reads backwards.':'Even: the flag reads the same way round.'); }
+chipRow($('chM'),Object.keys(MV),()=>mk,k=>mk=k,draw); draw();
+window.__pic={set:k=>{ mk=k; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'four turns',t:R`\htmlClass{new}{(1, 0),\ (0, 1),\ (-1, 0),\ (0, -1)}`,n:`About the centre.`}
+],{title:'The slides · turns · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'turning over',t:R`\htmlClass{new}{\text{turn over} = \text{flip}}`,n:`Four lines through the centre.`}
+],{title:'The slides · flips · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'two flips',t:R`F_{y=x} \circ F_0 = R_{(0,1)}`,n:`The quarter turn.`}
+],{title:'The slides · facts · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A list stored in one function</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r23i.html">← 23i how many terms</a><a href="r23k.html">next: 23k expansions that diverge yet help →</a></p>
+  <div class="tags"><span class="tag tech">23j · technique</span></div>
+  <h1>A list stored in one function</h1>
+  <p>A list of numbers goes on forever, and a function is one thing. This step stores a whole list in one function. Each number of the list sits in front of a power, and the endless power sum is the function. Inside its reach the function can be handled like any other: added, multiplied, split into simpler pieces. Then the list is read back from the coefficients, which the function alone decides. Done to the rabbit counts, this turns a rule that builds each count from the two before into a formula that gives any count at once. And multiplying two such functions combines two lists exactly the way counting combines choices, so a counting question becomes a question about the number in front of one power.</p>
+  <p class="gesture">Put the numbers of a list in front of the powers, and the list becomes one function. Work on the function, then read the list back off it. Multiplying the functions counts the ways to combine choices.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r23e.html">23e</a> (a power sum is its own match), <a href="r23c.html">23c</a> (the reach), <a href="r15i.html">15i</a> (geometric sums), <a href="r09cb4.html">9·cb4</a> (the rabbit counts), <a href="r21bio.html">21·bio</a> (the ratio (1 + √5)/2), <a href="r17k.html">17k</a> (partial fractions), <a href="r04j.html">4j</a> (choosing). <a href="r23k.html">23k</a> computes with sums that wander, and proves the size of n!.</p></div>
+</header>
+
+<section class="class step" data-step="23j1">
+  <h2 class="sthead"><span class="stno">23j1</span>Storing a list</h2>
+  <p class="stands">Stands on 23e3 (a power sum is its own match), 23c2 (the reach) and 15i (the geometric sum).</p>
+  <p class="eqline" data-pid="cc2dec">From here on, the <i>storing function</i> of a list a₀, a₁, a₂, … is the power sum A(x) = Σ aₖxᵏ, wherever it settles. Accepted name: the generating function.</p>
+  <p data-pid="a63259">Read-back technique: <b>if the storing function of a list has reach above 0, the function alone gives back the list, aₖ = A⁽ᵏ⁾(0)/k!; so two lists whose storing functions agree near 0 are the same list.</b> That is 23e3's smooth-sum technique, used as a filing system.</p>
+  <pre class="lines" data-k="ember" data-label="this step: five lists stored">
+1, 1, 1, \ldots:\ \ \textstyle\sum x^k = \tfrac{1}{1-x}\ \ (|x| < 1) @@ the geometric sum (15i)
+1, r, r^2, \ldots:\ \ \textstyle\sum r^k x^k = \tfrac{1}{1-rx}\ \ (|x| < 1/|r|) @@ the same, with rx in place of x
+1, 2, 3, \ldots:\ \ \textstyle\sum (k+1)x^k = \tfrac{1}{(1-x)^2} @@ the slope of 1/(1 − x), term by term (23e3)
+0, a_0, a_1, \ldots:\ \ x\,A(x) @@ times x moves every number one place on
+\htmlClass{new}{a_1, a_2, a_3, \ldots:\ \ \tfrac{A(x) - a_0}{x}} \quad \blacksquare @@ take off the first number and divide by x: every number moves one place back
+  </pre>
+  <p data-pid="bce342">A list obeys a rule. Its storing function then obeys an equation. Solve the equation for the function, which is one unknown instead of endlessly many, and read the list back. The next footing does it to the rabbit counts.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · storing · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">23j1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="1,\ 3,\ 9,\ 27,\ \ldots"></span></span>Find its storing function and its reach.</li><li><span class="givens"><span data-tex-inline="\tfrac{1}{(1-x)^3}"></span></span>Find the first five numbers of the list it stores, by taking slopes of 1/(1 − x) term by term. <br>Find a formula for the kth number.</li><li><span class="givens"><span data-tex-inline="0,\ 1,\ 0,\ 1,\ 0,\ 1,\ \ldots"></span></span>Find its storing function and its reach.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="23j2">
+  <h2 class="sthead"><span class="stno">23j2</span>The rabbit counts in closed form</h2>
+  <p class="stands">Stands on 23j1, 9·cb4 (the rabbit counts), 21·bio (the ratio (1 + √5)/2), 8i (quadratics), 17k (partial fractions) and 4b (induction).</p>
+  <p data-pid="3c3e08">The rabbit counts F₀, F₁, F₂, … = 0, 1, 1, 2, 3, 5, 8, 13, … start at 0 and 1, and each is the sum of the two before (9·cb4). Write φ = (1 + √5)/2, the ratio 21·bio met in the sunflower, and ψ = (1 − √5)/2. Both are roots of t² = t + 1.</p>
+  <p data-pid="861592">Rabbit closed-form technique: <b>Fₙ = (φⁿ − ψⁿ)/√5 for every n.</b> Store the list, turn the rule into an equation, solve it, and read back.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the rabbit closed-form technique">
+F_n \le 2^n,\ \text{so } G(x) = \textstyle\sum F_k x^k \text{ settles for } |x| < \tfrac12 @@ induction (4b): Fₙ₊₂ ≤ 2ⁿ⁺¹ + 2ⁿ &lt; 2ⁿ⁺²; comparison with Σ(2|x|)ᵏ (22e1)
+G(x) - xG(x) - x^2G(x) = F_0 + (F_1 - F_0)x + \textstyle\sum_{k \ge 2}(F_k - F_{k-1} - F_{k-2})x^k @@ sums that settle add piece by piece (22d4); line up equal powers
+G(x)(1 - x - x^2) = x @@ F₀ = 0, F₁ = 1, and the rule makes every later bracket 0
+1 - x - x^2 = (1 - \varphi x)(1 - \psi x) @@ φ + ψ = 1 and φψ = −1 (8i)
+G(x) = \tfrac{x}{(1-\varphi x)(1-\psi x)} = \tfrac{1}{\sqrt5}\Big(\tfrac{1}{1-\varphi x} - \tfrac{1}{1-\psi x}\Big) @@ partial fractions (17k): φ − ψ = √5
+= \textstyle\sum \tfrac{\varphi^k - \psi^k}{\sqrt5}\,x^k @@ two geometric sums (23j1), for |x| &lt; ½
+\htmlClass{new}{F_n = \tfrac{\varphi^n - \psi^n}{\sqrt5}} \quad \blacksquare @@ read back (23j1): two storing functions agree near 0
+  </pre>
+  <p data-pid="aaece9">Whole numbers come out of square roots of 5. Since ψ ≈ −0.618, ψⁿ/√5 is under ½ in size and shrinks fast, so Fₙ is the whole number nearest φⁿ/√5. F₂₀ = 6765, and φ²⁰/√5 = 6765.00003. The ratio Fₙ₊₁/Fₙ heads to φ, which is why neighbouring rabbit counts appeared in 21·bio's spirals.</p>
+  <p data-pid="044869">The storing function also gives totals. G(0.1) = 0.1/(1 − 0.1 − 0.01) = 10/89 = 0.11235955…, and Σ Fₖ/10ᵏ is that number: its digits start 1, 1, 2, 3, 5, 8 before the carries blur them. The reach of G is 1/φ ≈ 0.618, where 1 − x − x² is first 0.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · rabbit counts · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">23j2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="a_0 = 0,\ \ a_1 = 1,\ \ a_{n+2} = a_{n+1} + 2a_n"></span></span>Find its storing function. <br>Split it into two geometric sums, and find a closed form for aₙ. <br>Find a₁₀ from the rule and from the closed form.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="23j3">
+  <h2 class="sthead"><span class="stno">23j3</span>Counting by multiplying</h2>
+  <p class="stands">Stands on 23j1, 23c2 (settling in size inside the reach), 22a2 (the climb technique), 22g3 (a sum that settles in size can be reordered), 10c (limits multiply) and 4j (choosing).</p>
+  <p data-pid="beee59">Product technique: <b>inside both reaches, A(x)B(x) = Σ cₙxⁿ with cₙ = a₀bₙ + a₁bₙ₋₁ + ⋯ + aₙb₀.</b> The number in front of xⁿ collects every way to split n into a part from A and a part from B.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the product technique">
+A(x)B(x) = \lim_N \Big(\textstyle\sum_{j \le N} a_j x^j\Big)\Big(\sum_{k \le N} b_k x^k\Big) @@ limits multiply (10c)
+\textstyle\sum_{j, k \le N} |a_j b_k x^{j+k}| \le \Big(\sum |a_j x^j|\Big)\Big(\sum |b_k x^k|\Big) @@ inside both reaches each settles in size (23c2)
+\text{every product } a_j b_k x^{j+k}, \text{ in one list, settles in size} @@ its running totals climb under that ceiling (22a2)
+\text{any order of that list has the same total} @@ 22g3
+\htmlClass{new}{A(x)B(x) = \textstyle\sum_n \Big(\sum_{j=0}^{n} a_j b_{n-j}\Big)x^n} \quad \blacksquare @@ taken square by square it gives AB; taken by j + k = n it gives Σcₙxⁿ
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: two counts by multiplying">
+(1+x)^m (1+x)^n = (1+x)^{m+n} @@ powers add
+\textstyle\sum_j \binom{m}{j}\binom{n}{r-j} = \binom{m+n}{r} @@ the choose numbers stand in front of the powers of 1 + x (4j); the product technique on xʳ
+\tfrac{1}{(1-x)(1-x^5)(1-x^{10})} = \Big(\textstyle\sum x^a\Big)\Big(\sum x^{5b}\Big)\Big(\sum x^{10c}\Big) @@ three geometric sums, |x| &lt; 1
+\htmlClass{new}{\text{the number in front of } x^n \text{ counts the } (a, b, c) \text{ with } a + 5b + 10c = n} \quad \blacksquare @@ each product x^(a + 5b + 10c) adds 1 to its power
+  </pre>
+  <p data-pid="5e9151">The first line counts committees. Three people chosen from 5 legislators from Oregon and 4 from Washington can hold 0, 1, 2 or 3 Oregonians, and 1·4 + 5·6 + 10·4 + 10·1 = 84 = 9·8·7/6. The second counts change: 10 cents is made from pennies, nickels and dimes in 4 ways (ten pennies, five pennies and a nickel, two nickels, one dime), and the number in front of x¹⁰ is 4.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · multiplying · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">23j3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="x + x^2 + x^3 + x^4 + x^5 + x^6"></span></span>It stores one fair die: one way to roll each face. Find the number of ways two dice total 7, as the number in front of x⁷ in its square. <br>Find the number of ways three dice total 10.</li><li><span class="givens"><span data-tex-inline="\tfrac{1}{(1-x)(1-x^5)(1-x^{10})}"></span></span>Find the number of ways to make 25 cents from pennies, nickels and dimes. <br>Find the number when quarters are allowed too, and the storing function that counts them.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="23j4">
+  <h2 class="sthead"><span class="stno">23j4</span>Illegal moves</h2>
+  <p class="stands">Stands on 23j1 to 23j3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+G(1) = \tfrac{1}{1 - 1 - 1} = -1, \text{ so } 0 + 1 + 1 + 2 + 3 + \cdots = -1\,? @@ 1 lies outside the reach 1/φ ≈ 0.618: there the sum wanders
+\text{the number in front of } x^n \text{ in } A(x)B(x) \text{ is } a_n b_n\,? @@ it collects every split: a₀bₙ + a₁bₙ₋₁ + ⋯ + aₙb₀
+A(0) = B(0), \text{ so the two lists are the same}\,? @@ agreeing at 0 fixes only the first number; read-back needs agreement near 0
+F_n = \tfrac{\varphi^n}{\sqrt5}\,? @@ ψⁿ/√5 is missing: small, not 0; φⁿ/√5 is never a whole number
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">23j4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="G(x) = \tfrac{x}{1 - x - x^2}"></span></span>Find the running totals of F₀ + F₁ + F₂ + ⋯ up to F₆. <br>Find G(1) from the formula, and the x where the storing function stops settling.</li><li><span class="givens"><span data-tex-inline="A(x) = B(x) = \tfrac{1}{1-x}"></span></span>Find aₙbₙ. <br>Find the number in front of xⁿ in A(x)B(x), and the list it belongs to.</li><li><span class="givens"><span data-tex-inline="A(x) = \tfrac{1}{1-x},\ \ B(x) = 1 + x"></span></span>Find A(0) and B(0). <br>Find the two lists, and the first place they differ.</li><li><span class="givens"><span data-tex-inline="\varphi^5/\sqrt5"></span></span>Find it to four places, and F₅. <br>Find whether φⁿ/√5 can ever be a whole number.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">23j.4.1</span><span class="tagq">build</span>A staircase has n stairs, climbed one or two stairs at a time. Build the rule for the number of ways to climb it, and its storing function. <br>Find the closed form, and the number of ways to climb 12 stairs.</div>
+  <div class="chq"><span class="chid">23j.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="G(x) = \tfrac{x}{1 - x - x^2}"></span></span>Find G(0.6) from the formula, and the running total of Σ Fₖ(0.6)ᵏ up to k = 50. <br>Find G(0.62) from the formula, and what the running totals do at x = 0.62.</div>
+  <div class="chq"><span class="chid">23j.4.3</span><span class="tagq">converse</span>Read-back says a storing function with reach above 0 decides its list. Turn it round. <br>Must every list have a storing function with reach above 0? Try aₖ = k!. <br>Is every smooth function near 0 the storing function of some list? Try 23f's function.</div>
+  <div class="chq"><span class="chid">23j.4.4</span><span class="tagq">reroute</span>Prove Fₙ = (φⁿ − ψⁿ)/√5 with no storing function: by induction, from φ² = φ + 1 and ψ² = ψ + 1. <br>Find what the storing function gave that the induction did not.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r23i.html">← 23i · how many terms</a><a href="r23k.html">23k · expansions that diverge yet help →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The storing function is the generating function (in full, the ordinary generating function). Read-back is the uniqueness of power series coefficients. The product technique is the Cauchy product of two series. The rabbit closed form is Binet's formula, and φ is the golden ratio. The committee count is Vandermonde's identity. Counting change by multiplying sums is the first example of counting partitions.</p>
+  <h3>Who said it first</h3>
+  <p>Abraham de Moivre stored lists in functions to solve rules like the rabbit rule in the 1720s, and found the closed form for the rabbit counts; Daniel Bernoulli found it too (1728), and Jacques Binet found it again in 1843, which is how it got his name. Leonhard Euler counted partitions by multiplying sums (1740s, in his Introductio of 1748). Pierre-Simon Laplace named them fonctions génératrices in 1812. The committee count is in Zhu Shijie's Jade Mirror of the Four Unknowns (1303), and Alexandre-Théophile Vandermonde published it in 1772.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'store',t:R`\htmlClass{new}{A(x) = \textstyle\sum a_k x^k}`,n:`Each number in front of its power.`},
+  {k:'ember',kl:'read back',t:R`a_k = \tfrac{A^{(k)}(0)}{k!}`,n:`The function decides the list.`}
+],{title:'The slides · storing · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'the rule',t:R`G(x)(1 - x - x^2) = x`,n:`The rule empties every later bracket.`},
+  {k:'ember',kl:'closed form',t:R`\htmlClass{new}{F_n = \tfrac{\varphi^n - \psi^n}{\sqrt5}}`,n:`Read back from two geometric sums.`}
+],{title:'The slides · rabbit counts · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'product',t:R`\htmlClass{new}{c_n = \textstyle\sum_{j=0}^{n} a_j b_{n-j}}`,n:`Every split of n.`},
+  {k:'ember',kl:'committees',t:R`\textstyle\sum_j \binom{m}{j}\binom{n}{r-j} = \binom{m+n}{r}`,n:`Read off (1 + x)^(m + n).`}
+],{title:'The slides · multiplying · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

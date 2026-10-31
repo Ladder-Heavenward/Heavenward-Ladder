@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Parity of shuffles</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+.btns{display:flex;flex-wrap:wrap;gap:6px}
+#row svg text{cursor:pointer}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r19d.html">← 19d a part’s size divides the whole’s</a><a href="r19concl.html">next: 19·∎ conclusion →</a></p>
+  <div class="tags"><span class="tag proof">19e · proof</span></div>
+  <h1>Parity of shuffles</h1>
+  <p>Every shuffle can be made from swaps, in many ways and with many lengths. [2 3 1] takes two swaps, or four, or ten; never three, never five. This step proves that each shuffle is either even or odd, once and for all. The proof counts something the swaps cannot hide: the pairs that are out of order.</p>
+  <p class="gesture">Every shuffle is a string of swaps. Doing one more swap changes the number of pairs out of order by an odd number. So every string for a shuffle has the parity of that number, and the even shuffles are half of Sₙ.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r19a.html">19a</a> (shuffles, swaps), <a href="r19d.html">19d</a> (copies, part-divides-whole), <a href="r04e.html">4e</a> (induction), <a href="r04i.html">4i</a> (even and odd). <a href="r19f.html">19f</a> sorts a square’s moves by parity; rung 41 needs the even shuffles.</p></div>
+</header>
+
+<section class="class step" data-step="19e1">
+  <h2 class="sthead"><span class="stno">19e1</span>Every shuffle is a string of swaps</h2>
+  <p class="stands">Stands on 19a (shuffles, swaps) and 4e (induction).</p>
+  <p data-pid="7a7d9d">Swaps-build-every-shuffle technique: <b>every shuffle of {1, …, n} is e or a string of swaps.</b> Put n back in its place with one swap; what is left moves only 1 to n − 1.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the swaps-build-every-shuffle technique">
+n = 1:\ \ \text{the only shuffle is } e @@ the base
+\sigma(n) = n:\ \ \sigma \text{ shuffles } \{1, \ldots, n - 1\} @@ the induction hypothesis gives its swaps
+\sigma(n) = m \ne n:\ \ s_{mn}\sigma(n) = n @@ do σ, then swap m and n
+s_{mn}\sigma = t_1 \cdots t_k \Rightarrow \htmlClass{new}{\sigma = s_{mn}t_1 \cdots t_k} \quad \blacksquare @@ a swap is its own inverse (19b4); induction on n (4e)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: worked">
+[2\ 3\ 1]:\ \ s_{13}[2\ 3\ 1] = [2\ 1\ 3] = s_{12} @@ σ(3) = 1: swap 1 and 3 after it
+[2\ 3\ 1] = s_{13}s_{12} @@ check: 1 ↦ 2 ↦ 2, 2 ↦ 1 ↦ 3, 3 ↦ 3 ↦ 1
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · swaps build · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">19e1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">[3 1 2]</span></span>Write it as a string of swaps. <br>Check your string.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="19e2">
+  <h2 class="sthead"><span class="stno">19e2</span>Pairs out of order</h2>
+  <p class="stands">Stands on 19e1.</p>
+  <p class="eqline" data-pid="213e6e">From here on, a pair of places i &lt; j is out of order in a shuffle σ when σ(i) &gt; σ(j): in the list, the bigger number comes first. Write N(σ) for the number of pairs out of order. Its accepted name is the number of inversions.</p>
+  <p data-pid="76bd35">e has no pair out of order. [2 3 1] has two: 2 before 1, and 3 before 1. s₁₃ = [3 2 1] has all three. <b>N(σ) counts how far the list is from sorted, one wrong pair at a time.</b></p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · out of order · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · five cards, every pair out of order drawn as an arc</div>
+    <div id="row"></div>
+    <div class="btns"><button type="button" id="mix">mix</button><button type="button" id="rst">sort</button></div>
+    <div class="cap">Tap two cards to swap them. Each arc joins a pair out of order. The swaps you make and the arcs on the table are always both even or both odd.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">19e2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">[3 1 4 2]</span></span>Guess N, then count it.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="19e3">
+  <h2 class="sthead"><span class="stno">19e3</span>One swap changes the count by an odd number</h2>
+  <p class="stands">Stands on 19e2.</p>
+  <p data-pid="16f997">Doing a swap sᵢⱼ first, then σ, gives σsᵢⱼ, whose list is σ’s list with the entries in places i and j exchanged.</p>
+  <p data-pid="7b4c28">Swap-is-odd technique: <b>exchanging two entries of a list changes the number of pairs out of order by an odd number.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the swap-is-odd technique">
+\text{neighbours } k, k + 1:\ \ \text{only the pair } (k, k + 1) \text{ changes} @@ every other place sees the same two numbers on the same side
+N \text{ changes by } \pm 1 @@ that one pair turns from in order to out, or back
+\text{places } i \lt j:\ \ (j - i) + (j - i - 1) \text{ neighbour exchanges} @@ walk the entry at i right to j, then the other back left to i
+2(j - i) - 1 \text{ is odd} \Rightarrow \htmlClass{new}{N \text{ changes by an odd number}} \quad \blacksquare @@ a sum of an odd count of ±1’s is odd (4i)
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · a swap is odd · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">19e3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">[4 1 3 2 5]</span></span>Count N. <br>Exchange the entries in places 1 and 4, and count N again.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="19e4">
+  <h2 class="sthead"><span class="stno">19e4</span>Even and odd, once and for all</h2>
+  <p class="stands">Stands on 19e1, 19e3 and 19d4 (part-divides-whole).</p>
+  <p data-pid="4ace1f">Parity technique: <b>every string of swaps for a shuffle σ is even in length when N(σ) is even, and odd when N(σ) is odd.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the parity technique">
+\sigma = t_1 t_2 \cdots t_m,\ \ \text{each } t \text{ a swap} @@ any string
+e,\ \ t_1,\ \ t_1t_2,\ \ \ldots,\ \ t_1 \cdots t_m @@ build σ one swap at a time, each done first
+N(e) = 0,\ \ \text{each step changes } N \text{ by an odd number} @@ swap-is-odd
+\htmlClass{new}{N(\sigma) \text{ and } m \text{ are both even or both odd}} \quad \blacksquare @@ after m odd changes from 0, N has the parity of m (4i)
+  </pre>
+  <p class="eqline" data-pid="24839b">From here on, a shuffle is even when it is a string of an even number of swaps, and odd otherwise. The even shuffles of {1, …, n} are written Aₙ. e is even, with no swaps.</p>
+  <p data-pid="0b1998">Half-are-even technique: <b>for n ≥ 2, Aₙ is a part-group of Sₙ with n!/2 members.</b> Strings of even length joined give even length, and a string reversed undoes it (19c3), so the part-group test passes. The odd shuffles are exactly the copy s₁₂Aₙ, so Sₙ is two copies of Aₙ.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · parity · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">19e4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">[2 3 4 1]</span></span>Find whether it is even or odd, by counting N. <br>Find a string of swaps for it, and check that the two agree.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="19e5">
+  <h2 class="sthead"><span class="stno">19e5</span>A puzzle that cannot be solved</h2>
+  <p class="stands">Stands on 19e4.</p>
+  <p data-pid="b89e34">A tray holds 15 numbered tiles and one gap, in a 4 by 4 grid. A move slides a tile next to the gap into it: a swap of that tile with the gap. Start with the tiles in order and the gap in the corner. Can you end with only 14 and 15 exchanged, and the gap back in the corner?</p>
+  <p data-pid="24a74a">Colour the grid like a chessboard. Each move takes the gap to a square of the other colour. To end in the corner it started in, the gap makes an even number of moves: an even number of swaps of 16 things. But 14 and 15 exchanged, all else home, is one swap: odd. <b>No sequence of moves can do it.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: worked">
+m \text{ moves, gap back home} \Rightarrow m \text{ even} @@ the gap changes colour each move
+\text{the result is a string of } m \text{ swaps: even} @@ parity
+s_{14\,15} \text{ is odd} \Rightarrow \htmlClass{new}{\text{unreachable}} \quad \blacksquare @@ one swap
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · the puzzle · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">19e5.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a 3 by 3 tray: 8 tiles, one gap in the corner</span></span>Find whether the tiles can end with only 7 and 8 exchanged and the gap home. <br>Find whether they can end with 6, 7 and 8 shuffled round as [7 8 6] on those three.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="19e6">
+  <h2 class="sthead"><span class="stno">19e6</span>Illegal moves</h2>
+  <p class="stands">Stands on 19e1 to 19e5.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{even} \iff \text{moves an even number of things}\,? @@ [2 3 1] moves three things and is even
+\text{order } 2 \Rightarrow \text{odd}\,? @@ [2 1 4 3] has order 2 and is even
+\text{the odd shuffles form a part-group}\,? @@ they do not hold e, and two odds make an even
+\text{count pairs in the swaps, not the list}\,? @@ N belongs to the shuffle's list; strings of swaps differ in length
+  </pre>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">19e6.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span class="gtx">a row of 5 cards in reverse order, only neighbouring cards exchanged</span></span>Find the fewest exchanges that sort it.</li><li><span class="givens"><span class="gtx">[2 1 4 3]</span></span>Find its order and its parity. <br>Find whether order decides parity.</li><li><span class="givens"><span class="gtx">the quarter turns of a square, as shuffles of its corners 1, 2, 3, 4 in order round it</span></span>Find which of them are even.</li><li><span class="givens"><span class="gtx">all the shuffles of ℕ that move only finitely many numbers</span></span>Find whether parity still makes sense for them, and which line of the proof needs checking.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">19e.4.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">the loops of a shuffle: 1 ↦ σ(1) ↦ σ(σ(1)) ↦ ⋯ back to 1</span></span>Build a test of parity that counts the loops of a shuffle instead of the pairs out of order. <br>Prove it agrees with the parity technique.</div>
+  <div class="chq"><span class="chid">19e.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="n \ge 3"></span></span>Prove that every even shuffle of {1, …, n} is a string of shuffles that each move exactly three things round in a loop.</div>
+  <div class="chq"><span class="chid">19e.4.3</span><span class="tagq">converse</span>Every string for one shuffle has one parity. Turn it round: if two strings of swaps have the same parity, find whether they make the same shuffle.</div>
+  <div class="chq"><span class="chid">19e.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="P = \prod_{i \lt j} (x_j - x_i)"></span></span>Shuffle the letters x₁, …, xₙ by σ and find what happens to P. <br>Prove the parity technique from it, without counting pairs out of order.</div>
+  <div class="chq"><span class="chid">19e.4.5</span><span class="tagq">seam</span>Around 1880 the sliding-tile puzzle swept America and Europe. A puzzle maker offered a large prize for undoing 14 and 15, knowing it could not be claimed. Two mathematicians published a proof that half of all arrangements cannot be reached, and the craze ended. <br>Is a proof that something cannot be done a discovery? <br>What does it give that a failed search never can?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r19d.html">← 19d · a part’s size divides the whole’s</a><a href="r19concl.html">19·∎ · conclusion →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>N(σ) is the number of inversions; the parity of a shuffle is its sign, +1 for even and −1 for odd, written sgn σ. Aₙ is the alternating group. A shuffle moving three things round a loop is a 3-cycle.</p>
+  <h3>Who said it first</h3>
+  <p>In 19e.4.5, the puzzle is the fifteen puzzle, made by Noyes Chapman in the 1870s and promoted by Sam Loyd, who claimed later to have offered $1000 for the 14–15 solution. The proof is by William Woolsey Johnson and William Edward Story, American Journal of Mathematics (1879).</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+let L=[1,2,3,4,5], pick=-1, swaps=0;
+const N=a=>{ let c=0; for(let i=0;i<a.length;i++) for(let j=i+1;j<a.length;j++) if(a[i]>a[j]) c++; return c; };
+const V=c=>'var('+c+')';
+function draw(){ const X=i=>30+i*56; let s='<svg viewBox="0 0 300 150" style="width:100%;max-width:360px;display:block">';
+  for(let i=0;i<5;i++) for(let j=i+1;j<5;j++) if(L[i]>L[j]){ const x1=X(i),x2=X(j),h=12+(x2-x1)*0.32; s+='<path d="M'+x1+',78 C'+x1+','+(78-h)+' '+x2+','+(78-h)+' '+x2+',78" style="fill:none;stroke:'+V('--ember')+';stroke-width:1.6;opacity:.75"/>'; }
+  for(let i=0;i<5;i++) s+='<g data-i="'+i+'"><rect x="'+(X(i)-20)+'" y="80" width="40" height="56" rx="6" style="fill:'+V('--card')+';stroke:'+V(i===pick?'--ember':'--ink')+';stroke-width:'+(i===pick?2.6:1.5)+'"/><text x="'+X(i)+'" y="115" text-anchor="middle" style="fill:'+V('--ink')+';font:600 18px IBM Plex Mono,monospace">'+L[i]+'</text></g>';
+  $('row').innerHTML=s+'</svg>';
+  $('row').querySelectorAll('g').forEach(g=>g.onclick=()=>{ const i=+g.dataset.i; if(pick<0){ pick=i; } else if(pick===i){ pick=-1; } else { const t=L[i]; L[i]=L[pick]; L[pick]=t; pick=-1; swaps++; } draw(); });
+  const n=N(L), v=$('vd'); v.className='verdict'+((n%2)===(swaps%2)?' win':' lose');
+  v.textContent='Pairs out of order: '+n+' ('+(n%2?'odd':'even')+'). Swaps made: '+swaps+' ('+(swaps%2?'odd':'even')+'). So this shuffle is '+(n%2?'odd':'even')+'.'; }
+$('mix').onclick=()=>{ for(let k=0;k<7;k++){ const i=Math.floor(Math.random()*5), j=Math.floor(Math.random()*5); if(i!==j){ const t=L[i]; L[i]=L[j]; L[j]=t; swaps++; } } pick=-1; draw(); };
+$('rst').onclick=()=>{ L=[1,2,3,4,5]; swaps=0; pick=-1; draw(); };
+draw();
+window.__pic={set:(a)=>{ L=a.slice(); swaps=0; draw(); return N(L); }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'swaps build',t:R`\htmlClass{new}{\sigma = s_{mn}t_1 \cdots t_k}`,n:`Put n home; the rest is smaller.`},
+  {k:'ember',kl:'worked',t:R`[2\ 3\ 1] = s_{13}s_{12}`,n:`Two swaps.`}
+],{title:'The slides · swaps build · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'pairs out of order',t:R`N([2\ 3\ 1]) = 2,\ \ N([3\ 2\ 1]) = 3`,n:`The bigger comes first.`}
+],{title:'The slides · out of order · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'neighbours',t:R`N \mapsto N \pm 1`,n:`Only one pair changes.`},
+  {k:'ember',kl:'far apart',t:R`\htmlClass{new}{2(j - i) - 1 \text{ neighbour swaps}}`,n:`Always odd.`}
+],{title:'The slides · a swap is odd · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'parity',t:R`\htmlClass{new}{N(\sigma) \text{ and } m}`,n:`Both even or both odd.`},
+  {k:'ember',kl:'half are even',t:R`|A_n| = \tfrac{n!}{2}`,n:`Sₙ = Aₙ and s₁₂Aₙ.`}
+],{title:'The slides · parity · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'the gap',t:R`m \text{ even}`,n:`It comes home on its own colour.`},
+  {k:'ember',kl:'the claim',t:R`\htmlClass{new}{s_{14\,15} \text{ unreachable}}`,n:`One swap is odd.`}
+],{title:'The slides · the puzzle · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'illegal',t:R`\text{even} \iff \text{moves an even number}\,?`,n:`No: [2 3 1].`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

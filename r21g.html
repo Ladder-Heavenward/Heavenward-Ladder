@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The slopes of sin and cos</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+.kn{font-size:.88rem}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r21f.html">← 21f sin h / h → 1</a><a href="r21concl.html">next: 21·∎ conclusion →</a></p>
+  <div class="tags"><span class="tag proof">21g · proof</span></div>
+  <h1>The slopes of sin and cos</h1>
+  <p>Now the circle can say how fast things change as you walk around it. At each moment the height is changing at a rate equal to the across, and the across is changing at a rate equal to minus the height. So sine and cosine chase each other: each one’s rate of change is the other, with a sign. Take the rate of change twice and you get back where you began, turned upside down. That is how a weight on a spring moves, and this step proves that sine and cosine are the only motions that do it.</p>
+  <p class="gesture">The rate of change of the sine is the cosine, and the rate of change of the cosine is minus the sine. Anything whose rate of change, taken twice, is minus itself is a mix of the two.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r21f.html">21f</a> (sin h / h → 1), <a href="r21d.html">21d</a> (the sum technique), <a href="r13b.html">13b</a> (slopes and continuity), <a href="r14d.html">14d</a> (zero slope means flat), <a href="r17f.html">17f</a> (a rule that fixes the future). The <a href="r21concl.html">conclusion</a> puts the rung together.</p></div>
+</header>
+
+<section class="class step" data-step="21g1">
+  <h2 class="sthead"><span class="stno">21g1</span>The slope of sin</h2>
+  <p class="stands">Stands on 21f3, 21f4 and 21d3 (the sum technique).</p>
+  <p data-pid="efffe0">Slope-of-sin technique: <b>for every θ, the slope of sin at θ is cos θ.</b> Split sin(θ + h) by the sum technique. One piece carries (cos h − 1)/h, which heads to 0. The other carries sin h / h, which heads to 1.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the slope-of-sin technique">
+\frac{\sin(\theta + h) - \sin\theta}{h} = \frac{\sin\theta\cos h + \cos\theta\sin h - \sin\theta}{h} @@ the sum technique (21d3)
+= \sin\theta \cdot \frac{\cos h - 1}{h} + \cos\theta \cdot \frac{\sin h}{h} @@ regroup
+\to \sin\theta \cdot 0 + \cos\theta \cdot 1 @@ the cosine-gap and sine-over-arc techniques (21f)
+\htmlClass{new}{\sin'\theta = \cos\theta} \quad \blacksquare
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · sin′ · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · the slope of sin, read off cos</div>
+    <div id="pl"></div>
+    <div class="kn"><span class="m">θ</span><input type="range" id="kt" min="-3.1" max="6.2" step="0.01" value="1"><output id="okt"></output></div>
+    <div class="cap">Ink: the graph of sin. Ember: its touching line at θ. Teal: the graph of cos, and its height at θ. The two numbers in the verdict agree.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">21g1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">θ = 0,  π/2,  π</span></span>Find the slope of sin at each. <br>Find the line that touches the graph of sin at 0.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21g2">
+  <h2 class="sthead"><span class="stno">21g2</span>The slope of cos</h2>
+  <p class="stands">Stands on 21g1 and 21e3 (the complement technique).</p>
+  <p data-pid="5e505b">Slope-of-cos technique: <b>for every θ, the slope of cos at θ is −sin θ.</b> Cos θ is sin(π/2 − θ), and the chain rule brings out a −1.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the slope-of-cos technique">
+\cos\theta = \sin(\tfrac{\pi}{2} - \theta) @@ the complement technique (21e3)
+\cos'\theta = \sin'(\tfrac{\pi}{2} - \theta) \cdot (-1) = \cos(\tfrac{\pi}{2} - \theta) \cdot (-1) @@ the chain rule; 21g1
+\htmlClass{new}{\cos'\theta = -\sin\theta} \quad \blacksquare @@ the complement technique again
+  </pre>
+  <p data-pid="1c0e3f">Both have slopes everywhere, so both are continuous everywhere (13b).</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · cos′ · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21g2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\sin 2\theta,\ \ \cos^2\theta"></span></span>Find the slope of each. <br>Find whether the two answers are related.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21g3">
+  <h2 class="sthead"><span class="stno">21g3</span>The slope of tan</h2>
+  <p class="stands">Stands on 21g1, 21g2, the quotient rule (13) and 21c4.</p>
+  <p data-pid="fe8338">Slope-of-tan technique: <b>wherever cos θ ≠ 0, the slope of tan at θ is sec² θ.</b> The quotient rule, then the circle technique on top.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the slope-of-tan technique">
+\tan'\theta = \frac{\cos\theta \cdot \cos\theta - \sin\theta \cdot (-\sin\theta)}{\cos^2\theta} @@ the quotient rule
+= \frac{1}{\cos^2\theta} @@ the circle technique (21c1)
+\htmlClass{new}{\tan'\theta = \sec^2\theta = 1 + \tan^2\theta} \quad \blacksquare @@ 21c4
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · tan′ · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21g3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">tan at θ = 0 and θ = π/4</span></span>Find its slope at each. <br>Find whether tan ever falls.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21g4">
+  <h2 class="sthead"><span class="stno">21g4</span>Twice changed, turned over</h2>
+  <p class="stands">Stands on 21g1, 21g2, 14d (zero slope means flat) and 17f (a rule that fixes the future).</p>
+  <p data-pid="c0c041">Swing technique: <b>if f″ = −f everywhere, then f(θ) = f(0) cos θ + f′(0) sin θ.</b> sin and cos both answer f″ = −f. For any answer f, the gap g = f − f(0) cos − f′(0) sin is an answer with g(0) = g′(0) = 0. Its energy g² + g′² has slope 0, so it stays 0.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the swing technique">
+\sin'' = \cos' = -\sin,\ \ \cos'' = -\sin' = -\cos @@ 21g1, 21g2
+g'' = -g,\ \ g(0) = 0,\ \ g'(0) = 0 @@ a difference of answers is an answer
+(g^2 + g'^2)' = 2gg' + 2g'g'' = 2gg' - 2g'g = 0 @@ the chain rule, then g″ = −g
+g^2 + g'^2 = g(0)^2 + g'(0)^2 = 0 @@ zero slope means flat (14d)
+\htmlClass{new}{g = 0,\ \ f = f(0)\cos + f'(0)\sin} \quad \blacksquare @@ squares that add to 0 are each 0
+  </pre>
+  <p data-pid="d9c569">As 17f found for growth, a rule about rates fixes the whole future from two numbers now: where the swing starts, and how fast.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · swing · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21g4.1</span><span class="ph undo">undo</span><span class="givens"><span data-tex-inline="f&#x27;&#x27; = -f,\ \ f(0) = 2,\ \ f&#x27;(0) = 3"></span></span>Find f. <br>Check that it answers all three conditions.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21g5">
+  <h2 class="sthead"><span class="stno">21g5</span>Illegal moves</h2>
+  <p class="stands">Stands on 21g1 to 21g4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\cos' = \sin\,? @@ −sin: cos falls as θ leaves 0
+\frac{d}{d\theta}\sin 2\theta = \cos 2\theta\,? @@ the chain rule: 2 cos 2θ
+\sin'\theta = \cos\theta \text{ with } \theta \text{ in degrees}\,? @@ in degrees the slope is (π/180) cos; arcs only
+f'' = -f \Rightarrow f = \sin\,? @@ every a cos + b sin; two starting numbers decide
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21g5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span class="gtx">the top of the graph of sin</span></span>Find its slope there, and where the tops are.</li><li><span class="givens"><span data-tex-inline="\int_0^\pi \sin\theta\,d\theta"></span></span>Find it.</li><li><span class="givens"><span data-tex-inline="f&#x27;&#x27; = -4f"></span></span>Find two answers, and guess every answer.</li><li><span class="givens"><span class="gtx">a weight on a spring with height y(t) = 3 cos t</span></span>Find its speed when it passes through 0.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">21g.4.1</span><span class="tagq">build</span>Build the slopes of sec, csc and cot from the slopes of sin and cos.</div>
+  <div class="chq"><span class="chid">21g.4.2</span><span class="tagq">edge</span>Find every θ where the slope of sin equals sin θ. <br>Find every θ where the slope of tan equals 1.</div>
+  <div class="chq"><span class="chid">21g.4.3</span><span class="tagq">converse</span>The slope of sin is cos. Turn it round: find every function whose slope is cos everywhere, and every one whose slope is cos and whose value at 0 is 0.</div>
+  <div class="chq"><span class="chid">21g.4.4</span><span class="tagq">reroute</span>Find the slope of sin on (−π/2, π/2) another way. The upward-arc technique says the function y ↦ ∫₀ʸ ds/√(1 − s²) undoes sin there. Use 13l’s inverse-slope technique.</div>
+  <div class="chq"><span class="chid">21g.4.5</span><span class="tagq">seam</span>A plucked string swings. One mathematician said its motion is a sum of simple swings, each a sine curve. Another said a string plucked into a sharp corner cannot be a sum of smooth sine curves. A third said neither knew what a function was. The quarrel ran for decades. <br>Can a sum of smooth curves make a corner? <br>What would you need to know to decide?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r21f.html">← 21f · sin h / h → 1</a><a href="r21concl.html">21·∎ · conclusion →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The derivatives of sine and cosine; f″ = −f is the equation of simple harmonic motion, and its answers are the harmonic oscillations. The quantity g² + g′² is the energy of the swing, kept by the motion.</p>
+  <h3>Who said it first</h3>
+  <p>In 21g.4.5, the vibrating-string controversy: Jean d'Alembert (1747), Leonhard Euler (1748) and Daniel Bernoulli (1753), with Lagrange later. It was settled, as far as it was, by Joseph Fourier (1807) and Peter Gustav Lejeune Dirichlet (1829), and it returns on rung 32.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+/* moves of the plane, drawn in SVG, for rung 20 */
+const V=c=>'var('+c+')';
+const FLAG=[[0,0],[0,3],[2,3],[2,2.4],[0.6,2.4],[0.6,1.8],[1.5,1.8],[1.5,1.2],[0.6,1.2],[0.6,0]];
+const M={
+  id:()=>p=>p,
+  slide:(h,k)=>p=>[p[0]+h,p[1]+k],
+  turn:(a,b)=>p=>[a*p[0]-b*p[1],b*p[0]+a*p[1]],
+  stretch:k=>p=>[k*p[0],k*p[1]],
+  flipU:(c,s)=>p=>{ const d=2*(p[0]*c+p[1]*s); return [d*c-p[0],d*s-p[1]]; },              /* across the line through O along (c, s), c² + s² = 1 */
+  flipAt:(q,c,s)=>p=>{ const x=p[0]-q[0],y=p[1]-q[1],d=2*(x*c+y*s); return [q[0]+d*c-x,q[1]+d*s-y]; },
+  turnAt:(q,a,b)=>p=>{ const x=p[0]-q[0],y=p[1]-q[1]; return [q[0]+a*x-b*y,q[1]+b*x+a*y]; },
+  then:(g,f)=>p=>g(f(p))                                                                    /* f first, then g */
+};
+const unit=(x,y)=>{ const r=Math.hypot(x,y); return [x/r,y/r]; };
+const fx=v=>(Math.abs(v)<5e-10?0:v);
+const show=(v,d)=>{ let s=fx(v).toFixed(d==null?2:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return (s==='-0'?'0':s).replace('-','−'); };
+/* shapes: {pts, c, fill, dash, w, open}; dots: {p, c, t}; lines: {p, d, c, dash} */
+function svgPlane(o){ const lo=o.lo==null?-6:o.lo, hi=o.hi==null?6:o.hi, S=300, X=x=>(x-lo)/(hi-lo)*S, Y=y=>S-(y-lo)/(hi-lo)*S;
+  let s='<svg viewBox="0 0 '+S+' '+S+'" style="width:100%;max-width:340px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  for(let g=Math.ceil(lo);g<=hi;g++){ s+='<line x1="'+X(g)+'" y1="0" x2="'+X(g)+'" y2="'+S+'" style="stroke:'+V('--grid')+';stroke-width:'+(g===0?1.6:0.6)+'"/><line x1="0" y1="'+Y(g)+'" x2="'+S+'" y2="'+Y(g)+'" style="stroke:'+V('--grid')+';stroke-width:'+(g===0?1.6:0.6)+'"/>'; }
+  (o.lines||[]).forEach(l=>{ const L=40; s+='<line x1="'+X(l.p[0]-L*l.d[0])+'" y1="'+Y(l.p[1]-L*l.d[1])+'" x2="'+X(l.p[0]+L*l.d[0])+'" y2="'+Y(l.p[1]+L*l.d[1])+'" style="stroke:'+V(l.c||'--teal')+';stroke-width:1.6;stroke-dasharray:'+(l.dash||'5 4')+'"/>'; });
+  (o.shapes||[]).forEach(z=>{ const pts=z.pts.map(p=>X(p[0]).toFixed(1)+','+Y(p[1]).toFixed(1)).join(' ');
+    s+='<'+(z.open?'polyline':'polygon')+' points="'+pts+'" style="fill:'+(z.fill?V(z.c):'none')+';fill-opacity:'+(z.fill?0.28:0)+';stroke:'+V(z.c)+';stroke-width:'+(z.w||2)+(z.dash?';stroke-dasharray:'+z.dash:'')+'"/>'; });
+  (o.dots||[]).forEach(d=>{ s+='<circle cx="'+X(d.p[0])+'" cy="'+Y(d.p[1])+'" r="4" style="fill:'+V(d.c||'--ink')+'"/>'+(d.t?'<text x="'+(X(d.p[0])+7)+'" y="'+(Y(d.p[1])-6)+'" style="fill:'+V(d.c||'--ink')+';font:12px IBM Plex Mono,monospace">'+d.t+'</text>':''); });
+  return s+'</svg>'; }
+function knob(id,lab,min,max,step,val){ return '<div class="kn"><span class="m">'+lab+'</span><input type="range" id="'+id+'" min="'+min+'" max="'+max+'" step="'+step+'" value="'+val+'"><output id="o'+id+'"></output></div>'; }
+function chipRow(el,keys,get,set,after){ el.innerHTML=''; keys.forEach(k=>{ const b=document.createElement('button'); b.type='button'; b.textContent=k; if(k===get()) b.className='on'; b.onclick=()=>{ set(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+
+let th=1; const e=$('kt'); e.addEventListener('input',()=>{ th=+e.value; draw(); });
+function draw(){ const S=[], C=[]; for(let x=-3.2;x<=6.4;x+=0.05){ S.push([x,Math.sin(x)]); C.push([x,Math.cos(x)]); }
+  const m=Math.cos(th), y0=Math.sin(th), T=[[th-1.5,y0-1.5*m],[th+1.5,y0+1.5*m]];
+  $('pl').innerHTML=svgPlane({lo:-3.2,hi:6.4,shapes:[{pts:C,c:'--teal',open:true,w:1.6},{pts:S,c:'--ink',open:true,w:2.4},{pts:T,c:'--ember',open:true,w:2.4},{pts:[[th,0],[th,m]],c:'--teal',open:true,w:3}],dots:[{p:[th,y0],c:'--ember'},{p:[th,m],c:'--teal'}]});
+  $('okt').textContent=show(th);
+  const h=1e-5, sl=(Math.sin(th+h)-Math.sin(th-h))/(2*h);
+  const v=$('vd'); v.className='verdict'; v.textContent='Chords of sin at θ = '+show(th)+' settle on '+sl.toFixed(4)+'; cos θ = '+m.toFixed(4)+'.'; }
+draw();
+window.__pic={set:k=>{ th=k; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'slope of sin',t:R`\htmlClass{new}{\sin^{\prime}\theta = \cos\theta}`,n:`Every θ.`}
+],{title:'The slides · sin′ · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'slope of cos',t:R`\htmlClass{new}{\cos^{\prime}\theta = -\sin\theta}`,n:`By the complement.`}
+],{title:'The slides · cos′ · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'slope of tan',t:R`\htmlClass{new}{\tan^{\prime}\theta = \sec^2\theta}`,n:`Where cos θ ≠ 0.`}
+],{title:'The slides · tan′ · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'the swing',t:R`\htmlClass{new}{f^{\prime\prime} = -f \Rightarrow f = f(0)\cos + f^{\prime}(0)\sin}`,n:`Energy stays put.`}
+],{title:'The slides · swing · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`\cos^{\prime} \ne \sin`,n:`Minus sin.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

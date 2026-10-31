@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>10a · The challenge and the answer</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:3fr 2fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+#cvA{touch-action:none;cursor:crosshair}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.5em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+table.tt.rounds td{font-family:var(--mono);font-size:.8rem;text-align:right}
+table.tt.rounds td.w{color:var(--teal)} table.tt.rounds td.l{color:var(--ember)}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r10.html">← 10 pushing the limit as close as you can imagine</a><a href="r10b.html">next: 10b a function can't head two ways →</a></p>
+  <div class="tags"><span class="tag proof">10a · proof</span></div>
+  <h1>The challenge and the answer</h1>
+  <p>This step writes down what “gets as close as you like” means, as one statement of every and some, and then wins the game three times. Two Greek letters come in, one for the challenger's gap and one for your answer. A neighbourhood of a point is defined with the point itself taken out. And the line for “a function heads to a value at an input” is laid down, with its marks. Then the first games: the linear function, where the answer undoes the step; squaring, where a first promise is needed to tame what is left over; and one over the input, where the first promise must also keep the inputs away from 0. Along the way, a technique that makes 9a's missing input harmless: the value at the point plays no part.</p>
+  <p class="gesture">For every gap they name around the value, you name a reach around the input such that every input within that reach, other than the input itself, lands its output in their gap.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r01e.html">1e</a> (every, some, their order, licensed-swap), <a href="r01d.html">1d</a> (⇒, free-if), <a href="r02b.html">2b</a> (the colon read “such that”), <a href="r04i.html">4i</a> (bounded everys and somes), <a href="r08b.html">8b</a> (min, three-way-order on ℝ), <a href="r08d.html">8d</a> (the rules for ℝ, order-and-arithmetic-agree, positive-reciprocal on ℚ), <a href="r08g.html">8g</a> (intervals), <a href="r08h.html">8h</a> (|x|, distance, displacement, size-of-a-product, size-of-a-negative, unpack-the-bars, triangle, the stretch), <a href="r09a.html">9a</a> (functions, dom f), <a href="r09e.html">9e</a> (the plane, columns and rows, the linear function). <a href="r10b.html">10b</a> proves at most one L passes; <a href="r10c.html">10c</a>–<a href="r10e.html">10e</a> build on these games; <a href="r10g.html">10g</a> plays them by hand; rung 11 asks when the limit is the value.</p></div>
+</header>
+
+<section class="class step" data-step="10a1">
+  <h2 class="sthead"><span class="stno">10a1</span>New marks on this rung</h2>
+  <p class="stands">Stands on 1e (every and some) and 9a1 (marks said first in words).</p>
+  <p data-pid="d99f80">Each mark below is said first in plain words. Each gets its own “from here on” line on the step named, before any proof uses it.</p>
+  <ul>
+    <li data-pid="a603dc">the gap the challenger names, a positive real: the small Greek letter epsilon, ε (10a)</li>
+    <li data-pid="cb1d11">the reach you answer with, a positive real: the small Greek letter delta, δ (10a)</li>
+    <li data-pid="dcb816">for every positive ε, for some positive δ: ∀ε &gt; 0 and ∃δ &gt; 0 (10a)</li>
+    <li data-pid="30f474">such that, after a some: a colon, as in ∃δ &gt; 0 : P (10a)</li>
+    <li data-pid="264dc6">f heads to L at w: lim_{x→w} f(x) = L, with x → w read “x heads to w”; also written f(x) → L as x → w (10a). Once at most one L is proved, lim_{x→w} f(x) alone names that L (10b)</li>
+    <li data-pid="456c19">the least of several reals: min(p, q, r), and longer lists (10c; 8b gave the least of two)</li>
+    <li data-pid="8d93ef">the functions made by adding, taking away, multiplying or dividing outputs, or by powers of outputs: f + g, f − g, fg, cf, f/g and fⁿ (10c)</li>
+    <li data-pid="b2ffee">heads to L from the right, or from the left: x → w⁺ and x → w⁻, where the small high + or − is part of the mark, never a power or a sign (10e)</li>
+    <li data-pid="7e2708">answers and limits on the left and on the right: δ⁻, δ⁺, L⁻ and L⁺ (10e, on that page)</li>
+    <li data-pid="6a6cf4">the inputs grow without bound, or fall without bound: x → ∞ and x → −∞, where ∞ is never a number (10f)</li>
+    <li data-pid="c7f9ac">a sequence heads to L: lim_{n→∞} a_n = L, or a_n → L (10f)</li>
+  </ul>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">10a1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">lim_{x→w} f(x) = L</span></span>Say it in words, reading x → w aloud. <br>Say why lim_{x→w} f(x) is not yet the name of a real.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10a2">
+  <h2 class="sthead"><span class="stno">10a2</span>Two letters, for two gaps</h2>
+  <p class="stands">Stands on 10a1, 1e (every and some) and 8h (distance).</p>
+  <p data-pid="eab27e">The game has two moves, and each move is a positive real. One is a gap named by the challenger: how near the outputs must come. The other is a reach named by you: how near the inputs must be. Any letters would do. Mathematicians have used the same two Greek letters since the nineteenth century, so the ladder takes them, one line each.</p>
+  <p class="eqline" data-pid="a11cd4">From here on, ε (the Greek letter epsilon, in its small form) names a positive real given as a challenge: how near the outputs must come. On this ladder ε always names a positive real, and its capital form is not used.</p>
+  <p class="eqline" data-pid="e1c0cf">From here on, δ (the Greek letter delta, in its small form) names a positive real given as an answer: how near the inputs must be. On this ladder δ always names a positive real. Its capital form is a different mark, and is not used here.</p>
+  <p data-pid="2bc918"><b>Both are names in 0a's sense, like any letter; the habit only tells you their job.</b> With low marks they name several of a kind: δ₁, δ₂ and δ₃ are three answers, as 3c's low marks allow. Each sign will want a condition on its letter, “positive”, so first a shorthand, the one 4i made for numbers, now with reals.</p>
+  <p class="eqline" data-pid="187301">From here on, ∀ε &gt; 0 P(ε) is short for ∀ε (ε ∈ ℝ ∧ 0 &lt; ε ⇒ P(ε)), and ∃δ &gt; 0 P(δ) is short for ∃δ (δ ∈ ℝ ∧ 0 &lt; δ ∧ P(δ)). Read them “for every positive ε” and “for some positive δ”. Likewise with any letter in place of ε or δ.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10a2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">∀ε > 0 ∃δ > 0 : P(ε, δ)</span></span>Write it with the shorthand unpacked. <br>Say which letter the challenger names, and which you answer with.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10a3">
+  <h2 class="sthead"><span class="stno">10a3</span>A neighbourhood, with the point taken out</h2>
+  <p class="stands">Stands on 10a2, 8h (the stretch) and 8g (intervals).</p>
+  <p data-pid="49d3cd">8h's stretch says that the reals within d of w, |x − w| &lt; d, are exactly the interval (w − d, w + d). <b>The game needs that interval with one real removed: w itself, because the claim is about w's neighbours, not about w.</b></p>
+  <p class="eqline" data-pid="dc257c">From here on, for a real a and a positive real δ, the neighbourhood of a of reach δ is the set {x ∈ ℝ : 0 &lt; |x − a| &lt; δ}. It is the interval (a − δ, a + δ) with a itself removed, which is (a − δ, a) ∪ (a, a + δ). Its accepted name is a punctured neighbourhood. And “f is defined near a” means that some neighbourhood of a is a part of dom f.</p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the neighbourhood, unpacked">
+0 \lt |x - a| \lt \delta @@ the condition of the line, for a real x
+|x - a| \lt \delta \;\Leftrightarrow\; \htmlClass{new}{a - \delta \lt x \lt a + \delta} @@ the stretch (8h, by unpack-the-bars)
+0 \lt |x - a| \;\Leftrightarrow\; \htmlClass{new}{x \ne a} @@ |p| = 0 only at p = 0 (8h); |p| ≥ 0; and x − a = 0 exactly when x = a (adding-keeps-answers)
+x \ne a \;\Leftrightarrow\; x \lt a \lor a \lt x @@ three-way-order on ℝ (8b): exactly one of x &lt; a, x = a, a &lt; x
+\begin{gathered}\{x : 0 \lt |x - a| \lt \delta\}\\ = \htmlClass{keep}{(a - \delta, a) \cup (a, a + \delta)}\end{gathered} @@ chase a member through the three lines; merge-membership (2c); same-members
+  </pre>
+  <p data-pid="9f7137">So “x is in the neighbourhood of w of reach δ” and “w − δ &lt; x &lt; w + δ and x ≠ w” are the same statement. For x ↦ x², every real is an input, so it is defined near every w. For x ↦ 1/x, defined on ℝ ∖ {0}, it is defined near every w ≠ 0, with reach |w|, and not near 0. 9a's H(x) = (x² − 1)/(x − 1), defined on ℝ ∖ {1}, is defined near 1: every neighbourhood of 1 leaves 1 out.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10a3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a = 1,  δ = ¼</span></span>Write the neighbourhood of 1 of reach ¼ as a union of two intervals. <br>Say whether 1 and 1.2 are in it.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10a4">
+  <h2 class="sthead"><span class="stno">10a4</span>The definition</h2>
+  <p class="stands">Stands on 10a2 and 10a3.</p>
+  <p data-pid="94314d">Here is the claim in plain words first. <b>f heads to L at w when, however small a gap anyone names around L, there is a neighbourhood of w in which f stays inside the gap.</b> And now the line, which says exactly that and nothing more.</p>
+  <p class="eqline" data-pid="c5f5eb">From here on, let f be a function whose inputs and outputs are reals, defined near a real w, and let L be a real. Then lim_{x→w} f(x) = L means: ∀ε &gt; 0 ∃δ &gt; 0 : ∀x ∈ dom f (0 &lt; |x − w| &lt; δ ⇒ |f(x) − L| &lt; ε). Read it “f heads to L at w”, or “the limit of f(x), as x heads to w, is L”. It may also be written f(x) → L as x → w. A real L for which it is true is a limit of f at w, and f has a limit at w when some real is one.</p>
+  <p class="eqline" data-pid="c2767b">From here on, lim, from the Latin limes, a boundary, is a mark read “the limit”. The whole of lim_{x→w} f(x) = L is one statement. Until 10b proves that at most one real L passes, lim_{x→w} f(x) is not used alone as the name of a real.</p>
+  <p class="eqline" data-pid="4519d5">From here on, x → w, read “x heads to w”, is part of the mark: it names the letter that runs through the inputs and the real it is near. It is not a statement, and nothing moves. This arrow is neither 4c's arrow in f : A → B nor 5·chem's “become” nor 1f's “gives” in a working; what stands on its two sides says which. The letter x is bound by the mark, as 1e's placeholders are bound, so lim_{t→w} f(t) = L says the same thing.
+</p>
+  <p class="eqline" data-pid="fe44fe">From here on, a colon after a some, as in ∃δ &gt; 0 : P, is read “such that”, as 2b's colon was read inside braces: there is a positive δ such that P. It adds nothing to the statement; it only marks where the some's condition begins.</p>
+  <p class="eqline" data-pid="e5d747">4c's colon in f : A → B and 5i's colon of a ratio keep their jobs; what stands on each side says which.</p>
+  <p data-pid="348194">Read the line from the right end, which is where the action is. |f(x) − L| &lt; ε: the output is within ε of L, a distance in 8h's sense around a displacement f(x) − L. In 9e's plane, the pair (x, f(x)) lies in one of the rows from L − ε to L + ε: call those rows the target. 0 &lt; |x − w| &lt; δ: the input is in the neighbourhood of w of reach δ. In the plane, the pair lies in one of the columns from w − δ to w + δ, the column at w left out: call those columns the window. The arrow is the promise: every pair of f in the window is in the target. ∀x ∈ dom f: for every input, so no input in the window escapes. ∃δ &gt; 0 : you can make such a promise with some positive reach. ∀ε &gt; 0: whatever positive gap the challenger names. Read in full, the line says this. For every positive ε there is a positive δ such that, for every input x, if x is in the neighbourhood of w of reach δ then f(x) is within ε of L. This is the form the line took in lectures in Berlin in the nineteenth century.</p>
+  <p data-pid="dd24a2">A well-known calculus book calls the limit perhaps the most important idea in calculus, and the hardest. It advises learning this definition word for word, like a poem, rather than carrying a vague version of it that lets false statements through.</p>
+  <p data-pid="49d745">Each piece earns its place. Why must δ be positive? A reach of 0 gives the condition 0 &lt; |x − w| &lt; 0, which no x meets. The if would then be so for every x by 1d's free-if, and every L at all would “win”. The window must hold inputs for the promise to say anything. Why must f be defined near w? For the same reason: if no input of f were near w, every promise would be kept with nothing in the window. Why the order ∀ε ∃δ? Because the challenger moves first and your δ may depend on their ε. Swap the signs, ∃δ ∀ε, and you would need one reach that works against every gap at once. Then for each x in that window, |f(x) − L| would be less than every positive real, and so 0. (Were it positive, the challenge ε = |f(x) − L| would give |f(x) − L| &lt; |f(x) − L|.) f would be exactly L on a neighbourhood of w. 1e's licensed-swap says the swapped sentence gives the true one, never back: ∃∀ is the stronger claim.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the sentence · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · left: the game, playable · right: round after round, the challenger halving the gap</div>
+    <div class="panel">
+      <div class="chips" role="group" aria-label="function" id="fch"></div>
+      <canvas id="cvA"></canvas>
+      <div class="kn">
+        <span class="m">ε</span><input type="range" id="ke" min="0.005" max="3" step="0.005"><output id="oe"></output>
+        <span class="m">δ</span><input type="range" id="kd" min="0.002" max="1.5" step="0.002"><output id="od"></output>
+        <span class="m">L</span><input type="range" id="kl" min="0" max="13" step="0.01"><output id="ol"></output>
+      </div>
+      <div class="chips"><button id="bh">challenger: halve ε</button><button id="br">answer with the recipe</button><button id="bb">largest δ that wins</button><button id="bz">reset</button></div>
+      <div class="cap">Gold rows: the target, outputs within ε of L. Grey columns: the window, inputs within δ of w, with the column at w left out (dotted). Inside the window the graph is teal where it lands in the target and ember where it escapes; a ringed ember dot is one escaping input. Hollow dots are pairs the function does not have. Drag a gold edge to change ε, a grey edge to change δ, the gold middle to change the claimed L.</div>
+      <div class="verdict" id="vd"></div>
+      <div class="eqbox" id="eqA"></div>
+    </div>
+    <div class="panel">
+      <div class="chips"><button id="bone">one δ for every ε</button></div>
+      <div class="tablewrap"><table class="tt rounds" id="tr"></table></div>
+      <div class="cap">Eight rounds: the challenger starts from your ε and halves it each round. Columns: the gap; the recipe's answer (only when L is the true limit); the largest reach that wins, found by testing the window. With “one δ for every ε” on, the third column instead plays the δ knob in every round: the swapped order ∃δ ∀ε, which loses as soon as the gap is small enough (except for a constant).</div>
+      <div class="eqbox" id="eqR"></div>
+    </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10a4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="g(x) = \sqrt{x} \text{ on } [0, \infty),"></span> <span data-tex-inline="\text{Strike “defined near } w \text{”}"></span> <span data-tex-inline="\text{from the definition.}"></span></span>Show that then every real would be a limit of g at −1.</li><li><span class="givens"><span data-tex-inline="\text{Keep “defined near } w \text{”, and}"></span> <span data-tex-inline="\text{allow } \delta = 0 \text{:}"></span> <span data-tex-inline="\exists \delta \ge 0"></span></span>By free-if, show that every function defined near w would then head to every real at w.</li><li><span class="givens"><span data-tex-inline="\text{Swap the signs, the rest}"></span> <span data-tex-inline="\text{unchanged:}"></span> <span data-tex-inline="\exists \delta &gt; 0\ \forall \varepsilon &gt; 0,"></span> <span data-tex-inline="h(x) = 3x + 1"></span></span>Find a function that is not constant and satisfies the swapped line at 2 with limit 5. <br>For each δ, name an ε that h loses at 2 with limit 7.</li><li><span class="givens"><span data-tex-inline="\text{Drop the } 0 &lt; \text{ from the}"></span> <span data-tex-inline="\text{window, leaving } |x - w| &lt; \delta \text{.}"></span> <span data-tex-inline="H(x) = \dfrac{x^2 - 1}{x - 1} \text{ for } x \ne 1,"></span> <span data-tex-inline="H(1) = 3"></span></span>Does H still head to 2 at 1? <br>Name the input and the ε that decide it.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10a5">
+  <h2 class="sthead"><span class="stno">10a5</span>The value at the point plays no part</h2>
+  <p class="stands">Stands on 10a4, 8b (min) and 9a (the hole).</p>
+  <p data-pid="d766d4">The 0 &lt; in 0 &lt; |x − w| keeps w out of the game. That is on purpose. Agreeing-near technique: <b>if f and g are defined near w and f(x) = g(x) for every x in some neighbourhood of w, of reach r, then lim_{x→w} f(x) = L exactly when lim_{x→w} g(x) = L.</b> First a small tech about 8b's min. Lesser-below-both technique: <b>for reals p and q, min(p, q) ≤ p and min(p, q) ≤ q; and if p and q are both positive, so is min(p, q).</b> By 8b's line, min(p, q) is p if p ≤ q and q if not. So in either case it is one of them, and is at most the other (three-way-order on ℝ turns ¬(p ≤ q) into q &lt; p). ∎</p>
+  <pre class="lines" data-k="ember" data-label="this step: the agreeing-near technique, one way (the other is the same with f and g exchanged)">
+\begin{gathered}\text{let } \varepsilon \gt 0;\ \text{call } \delta \gt 0 \text{ with}\\ 0 \lt |x - a| \lt \delta \Rightarrow |g(x) - L| \lt \varepsilon\end{gathered} @@ lim g = L: use the every at ε, then the some
+\delta' = \htmlClass{new}{\min(\delta, r)} \gt 0 @@ lesser-below-both: positive, and at most each
+\begin{gathered}0 \lt |x - a| \lt \delta' \;\Rightarrow\\ 0 \lt |x - a| \lt \delta \;\land\; 0 \lt |x - a| \lt r\end{gathered} @@ assume the left; at-most-is-a-partial-order on ℝ chains δ′ ≤ δ and δ′ ≤ r
+f(x) = g(x) @@ x is in the neighbourhood of reach r: the hypothesis
+|f(x) - L| = |g(x) - L| \lt \varepsilon @@ the swap axiom; the promise for g
+\lim_{x \to a} f(x) = L \quad \blacksquare @@ prove an if; speak of everything (x, then ε); ︿ the line
+  </pre>
+  <p data-pid="733cfb">So two functions that agree near w, except perhaps at w, have the same limits there.</p>
+  <p class="eqline" data-pid="e4cda8">From here on, a function has a hole at a when it is defined near a but a is not one of its inputs. 5e's hole, a splitting of the fractions with no fraction at the split, is another use of the word; what it is said of says which.</p>
+  <p data-pid="1211fa">That is what makes 9a's hole harmless. H(x) = (x² − 1)/(x − 1) on ℝ ∖ {1} agrees with x ↦ x + 1 on every neighbourhood of 1 (difference-of-squares read in ℝ, then cancel x − 1, which is not 0 there). So once the next section proves lim_{x→1} (x + 1) = 2, agreeing-near gives lim_{x→1} H(x) = 2. Give the function a stray value at 1: 3, by a separate case (7d's definition by cases). It still agrees with x + 1 on the neighbourhood, and the limit is still 2. The value at 1 is 3, the limit at 1 is 2, and nothing is wrong.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · the hole · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10a5.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">H(x) = (x² − 4)/(x − 2) on ℝ ∖ {2}</span></span>Find a function H agrees with on every neighbourhood of 2. <br>Say what agreeing-near will let you conclude once that function’s limit is known.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10a6">
+  <h2 class="sthead"><span class="stno">10a6</span>The first game: the linear function</h2>
+  <p class="stands">Stands on 10a4 and 9e (same-ratio).</p>
+  <p data-pid="97ce92">Line-limit technique: <b>for reals m, b and w, lim_{x→w} (mx + b) = mw + b.</b> The trick is the one this whole rung runs on: rewrite the output's distance until the input's distance appears inside it.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the line-limit technique, the case m ≠ 0">
+|(mx + b) - (ma + b)| = |\htmlClass{new}{mx - ma}| @@ the rule at x and at a; negative-of-a-sum, collect (8d)
+= |\htmlClass{new}{m(x - a)}| = |m|\,|x - a| @@ spread on ℝ backwards; size-of-a-product (8h): the displacement x − a appears
+\text{put } \htmlClass{new}{\delta = \tfrac{\varepsilon}{|m|}} \gt 0 @@ |m| positive since m ≠ 0; its reciprocal is positive (positive-reciprocal on ℚ), and so is the product (positive-product on ℝ)
+0 \lt |x - a| \lt \delta \;\Rightarrow\; |m|\,|x - a| \lt |m|\,\delta = \htmlClass{keep}{\varepsilon} @@ order-and-arithmetic-agree, multiplying by the positive |m|; reciprocal on ℝ
+|(mx + b) - (ma + b)| \lt \varepsilon \quad \blacksquare @@ the swap axiom; prove an if; speak of everything; for m = 0 the left is |b − b| = 0 &lt; ε, and any δ wins
+  </pre>
+  <p data-pid="e427f3">The linear function multiplies distances by |m| (9e's same-ratio, read with bars), so you must come |m| times nearer than the gap you were given. For 3x + 1 at 2, heading to 7, the answer is δ = ε/3. When the challenger names 0.6, you answer 0.2: at x = 2.15, which is within 0.2 of 2, the output is 7.45, within 0.6 of 7. If they name 0.003, you answer 0.001. You never run out of answers, and that is what the line claims. Two instances are used constantly. m = 1, b = 0 gives lim_{x→w} x = w, answered by δ = ε. And m = 0 gives a constant, lim_{x→w} b = b, where every δ wins because the output never moves.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · the linear function · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10a6.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{Let } P \text{ be “} f \text{ heads to } -3 \text{ at}"></span> <span data-tex-inline="\text{5”.}"></span></span>Write P as the full line, every sign with its condition; then with lim, and with the arrow mark.</li><li><span class="givens"><span data-tex-inline="\text{Let } N \text{ be the neighbourhood}"></span> <span data-tex-inline="\text{of } -2 \text{ of reach } \tfrac12 \text{.}"></span></span>Write N as a union of two intervals, and decide which of −1.6, −2 and −2.5 are in it.</li><li><span class="givens"><span data-tex-inline="\text{Let } P \text{ be } \lim_{x \to -1} (5 - 4x) = 9."></span> <span data-tex-inline="\varepsilon = 0.2"></span></span>Prove P one move per line, and answer the challenge ε.</li><li><span class="givens"><span data-tex-inline="f(x) = x^2,"></span> <span data-tex-inline="w = -3,"></span> <span data-tex-inline="\varepsilon = 0.7"></span></span>Using square-limit with a first promise of 1, answer the challenge ε for f at w.</li><li><span class="givens"><span data-tex-inline="\text{Let } P \text{ be } \lim_{x \to 4} 1/x = \tfrac14."></span> <span data-tex-inline="|x - 4| &lt; 1 \text{ (first promise)},"></span> <span data-tex-inline="\varepsilon = 0.01"></span></span>Prove P from the first promise. <br>Check the round ε with numbers.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10a7">
+  <h2 class="sthead"><span class="stno">10a7</span>The second game: x², and a first promise</h2>
+  <p class="stands">Stands on 10a6 and 8h (size of a product).</p>
+  <p data-pid="dded20">Square-limit technique: <b>for every real w, lim_{x→w} x² = w².</b> Expose the displacement: |x² − w²| = |x − w| · |x + w|, by difference-of-squares read in ℝ and size-of-a-product. But now what is left over, |x + w|, is not a constant. The tempting answer δ = ε/|x + w| is illegal. The line says ∃δ ∀x, so δ is named before any x is handed over, and a δ with x in it names nothing. You need a number at least as big as |x + w| for every x you might be handed, and with no limit on x there is none. So make a first promise.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the square-limit technique">
+|x^2 - a^2| = |x - a|\,\htmlClass{keep}{|x + a|} @@ difference-of-squares read in ℝ; size-of-a-product
+\begin{gathered}\htmlClass{new}{|x - a| \lt 1} \;\Rightarrow\\ |x + a| = |(x - a) + 2a| \le |x - a| + 2|a|\end{gathered} @@ the first promise; x + a = (x − a) + 2a; triangle and size-of-a-product (8h)
+|x + a| \lt \htmlClass{new}{1 + 2|a|} @@ order-and-arithmetic-agree: the leftover has a ceiling on this stretch
+\text{put } \htmlClass{new}{\delta = \min\!\big(1, \tfrac{\varepsilon}{1 + 2|a|}\big)} @@ both promises at once (lesser-below-both)
+\begin{gathered}0 \lt |x - a| \lt \delta \;\Rightarrow\\ |x^2 - a^2| \lt (1 + 2|a|)\,|x - a|\end{gathered} @@ δ ≤ 1 gives the ceiling; order-and-arithmetic-agree by the positive |x − a|
+|x^2 - a^2| \lt (1 + 2|a|)\,\tfrac{\varepsilon}{1 + 2|a|} = \varepsilon \quad \blacksquare @@ δ ≤ ε/(1 + 2|a|); order-and-arithmetic-agree; reciprocal on ℝ
+  </pre>
+  <p data-pid="c0e7b6">At w = 2, the answer is δ = min(1, ε/5). For small gaps ε/5 is the smaller: ε = 0.1 gives δ = 0.02, and at x = 2.019 the output is 4.076361, within 0.1 of 4. For big gaps 1 is: ε = 10 gives δ = 1. Why both? Drop the first promise and answer ε = 10 with ε/5 = 2. Then x = 3.9 is within 2 of 2, and 3.9² = 15.21, which is 11.21 from 4: the challenger wins. Out at 3.9 the leftover |x + 2| is 5.9, more than the 5 you counted on. The ceiling was only true inside the first promise, so the answer must keep both. The 1 is a convenience: any fixed positive first promise works, with its own ceiling.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · x² · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10a7.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">lim_{x→1} x² = 1,  first promise |x − 1| < 1</span></span>Find the ceiling on |x + 1| inside the first promise. <br>Write the recipe for δ, and answer the challenge ε = 0.3.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10a8">
+  <h2 class="sthead"><span class="stno">10a8</span>The third game: 1/x, and keeping off 0</h2>
+  <p class="stands">Stands on 10a7 and 8g (reciprocals turn order about).</p>
+  <p data-pid="cd7942">One-over-x-limit technique: <b>for every real w ≠ 0, lim_{x→w} 1/x = 1/w.</b> Here the leftover has no ceiling at all near 0, so the first promise has a second job: keep the inputs away from 0.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the one-over-x-limit technique">
+\left|\tfrac1x - \tfrac1a\right| = \tfrac{|a - x|}{|x|\,|a|} = |x - a| \cdot \htmlClass{keep}{\tfrac{1}{|x|\,|a|}} @@ one bottom (5g's fractions-of-rationals, read in ℝ); size-of-a-product; size-of-a-negative
+\htmlClass{new}{|x - a| \lt \tfrac{|a|}{2}} \;\Rightarrow\; |a| - |x| \le |a - x| \lt \tfrac{|a|}{2} @@ the first promise, half the distance from a to 0; the reverse form of triangle (8h)
+|x| \gt \tfrac{|a|}{2} \gt 0 \;\Rightarrow\; \tfrac{1}{|x|} \lt \tfrac{2}{|a|} @@ order-and-arithmetic-agree; x ≠ 0, so 1/x names a real; positive-reciprocal on ℚ read in ℝ
+\text{put } \htmlClass{new}{\delta = \min\!\big(\tfrac{|a|}{2}, \tfrac{a^2\varepsilon}{2}\big)} @@ both promises (lesser-below-both); |a|² = a² by size-squared
+\begin{gathered}0 \lt |x - a| \lt \delta \;\Rightarrow\; \left|\tfrac1x - \tfrac1a\right| \lt |x - a| \cdot \tfrac{2}{a^2}\\ \lt \tfrac{a^2\varepsilon}{2}\cdot\tfrac{2}{a^2} = \varepsilon \quad \blacksquare\end{gathered} @@ the ceiling, then the second promise; order-and-arithmetic-agree twice; reciprocal on ℝ
+  </pre>
+  <p data-pid="547cd0">Near 3 a simpler first promise does the job: |x − 3| &lt; 1 keeps x above 2, so 3|x| &gt; 6 and the leftover 1/(3|x|) is below 1/6. Then δ = min(1, 6ε) wins. Check a round: ε = 0.01 gives δ = 0.06, and at x = 2.95 the output 1/2.95 is about 0.338983, which is about 0.00565 from 1/3: inside the gap. Different first promises give different recipes, and both are honest; the technique's recipe gives min(3/2, 9ε/2) at 3. But near w = ½ the promise of 1 would let x be 0.001, where the leftover 1/(|x||w|) is 2000, or reach past 0 altogether. The technique's promise, half the distance to 0, never does. This is the first place the answer depends on where the inputs are heading as well as on the gap. Near 0 it must shrink, and at 0 there is no answer at all (10e shows why).</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · 1/x · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10a8.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">lim_{x→2} 1/x = ½,  first promise |x − 2| < 1</span></span>Find a floor for |x| inside the first promise. <br>Write the recipe for δ.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10a9">
+  <h2 class="sthead"><span class="stno">10a9</span>Illegal moves</h2>
+  <p class="stands">Stands on 10a1 to 10a8.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\delta = \tfrac{\varepsilon}{|x + 2|}\,? @@ the line is ∃δ ∀x: δ is named before x. A δ with x in it names nothing
+\delta = 0\,? @@ no x has 0 &lt; |x − a| &lt; 0, so the if is true by free-if and every L would win. δ is positive
+\text{drop the } 0 \lt @@ then the value at a counts: the hole with the stray value 3 at 1 would lose with L = 2 at x = 1 itself
+\exists \delta\ \forall \varepsilon\,? @@ the swapped order claims f is exactly L on a neighbourhood: true for constants, false for 3x + 1
+\text{“}\varepsilon = 0.1 \text{ and } 0.01 \text{ won, so proved”}\,? @@ two rounds prove two rounds. Speak of everything: let ε be anything positive
+\lim_{x \to 1} H(x) = H(1)\,? @@ H has no value at 1, and with the stray case H(1) = 3 against the limit 2. The value plays no part
+  </pre>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · the order · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10a9.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">“δ = ε/|x + 3| wins for x² at 3.”</span></span>Which illegal move is this? <br>Write a δ that names no x.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10a10">
+  <h2 class="sthead"><span class="stno">10a10</span>Running it backwards</h2>
+  <p class="stands">Stands on 10a1 to 10a8.</p>
+  <p data-pid="fa31f8">Handed a recipe and asked what it was for: δ = ε/7 wins every round for a linear function exactly when |m| ≤ 7, because the line needs |m| · ε/7 ≤ ε. Handed a δ that loses, find the x that escapes: it is where the leftover is largest, at the edge of the window furthest from the trouble. Handed a function with no value at w and asked for its limit, find a function that agrees with it near w and whose limit you have, then cite agreeing-near. Found upward; written downward.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10a10.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{A linear function&#x27;s every}"></span> <span data-tex-inline="\text{challenge at 3 was answered}"></span> <span data-tex-inline="\text{with } \delta = \varepsilon/7 \text{, and}"></span> <span data-tex-inline="\text{always won.}"></span></span>Find every step the function could have had.</li><li><span class="givens"><span data-tex-inline="\text{A recipe for } x^2 \text{ at some}"></span> <span data-tex-inline="w &gt; 0 \text{, from a first promise}"></span> <span data-tex-inline="\text{of 1, reads},"></span> <span data-tex-inline="\delta = \min(1, \varepsilon/9)."></span></span>Find w.</li><li><span class="givens"><span data-tex-inline="\text{A recipe for } 1/x \text{ near some}"></span> <span data-tex-inline="w &gt; 1 \text{, from a first promise}"></span> <span data-tex-inline="\text{of 1, reads},"></span> <span data-tex-inline="\delta = \min(1, 20\varepsilon)."></span> <span data-tex-inline="\text{The promise gave the}"></span> <span data-tex-inline="\text{ceiling } 1/(w(w - 1)) \text{.}"></span></span>Find w.</li><li>By cases, write a function whose limit at 2 is 5 and whose value at 2 is 0, and prove the limit.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">10a.4.1</span><span class="tagq">build</span>Build games of your own.<ol class="parts" type="a"><li>Write a fraction of polynomials with a hole at 3 whose limit at 3 is −2, and answer every ε for it straight from the line.</li><li><span class="givens"><span data-tex-inline="\text{Let } P \text{ be } \lim_{x \to w} x^3 = w^3."></span></span>Using a first promise of 1, prove P at every real w.</li><li>Prove agreeing-near's other direction, from f to g, one move per line.</li></ol></div>
+  <div class="chq"><span class="chid">10a.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="f(x) = 4,"></span> <span data-tex-inline="w = 7,"></span> <span data-tex-inline="\varepsilon = 10^{-9},"></span> <span data-tex-inline="g(x) = x,"></span> <span data-tex-inline="\text{Answer } g \text{ at any } w \text{ with}"></span> <span data-tex-inline="\delta = 2\varepsilon \text{.}"></span></span>Which δ answers ε for f at w? <br>Does the answer for g ever lose?</div>
+  <div class="chq"><span class="chid">10a.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{Line-limit: every linear}"></span> <span data-tex-inline="\text{function heads to its value}"></span> <span data-tex-inline="\text{at every } w \text{.}"></span> <span data-tex-inline="f \text{ heads to its value at}"></span> <span data-tex-inline="\text{every } w \text{.}"></span></span>Must f be linear?</div>
+  <div class="chq"><span class="chid">10a.4.4</span><span class="tagq">seam</span>A course on analysis from 1821 stated that a sum of endlessly many functions without jumps, heading to a value at every input, has no jump either. Five years later, a young reader remarked in a footnote that the technique seems to admit exceptions. Here is one for 0 ≤ x ≤ 1: (1 − x) + (x − x²) + (x² − x³) + ⋯. Each piece has no jump. The sum of the first n pieces is 1 − xⁿ, so the whole sum is 1 for every x below 1, and 0 at x = 1. It jumps at 1. <br>Was the course wrong? <br>Is there an order of its “for every” and “there is” on which its sentence is true?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r10.html">← 10 · pushing the limit as close as you can imagine</a><a href="r10b.html">10b · a function can't head two ways →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>The line’s form is the one Karl Weierstrass gave in his Berlin lectures. The calculus book is Michael Spivak’s. The 1821 course in 10a.4.4 is Augustin-Louis Cauchy’s Cours d’analyse, and the footnote is Niels Henrik Abel’s (1826).</p>
+  <aside class="voice para"><p>Spivak calls the limit perhaps the most important idea in calculus, and the hardest, and advises learning this definition word for word, like a poem, rather than carrying a vague version of it that lets false statements through.</p><cite>Spivak, Calculus, ch. 5</cite></aside>
+  <p>Accepted names: the line is the epsilon-delta definition of the limit; the neighbourhood with its point left out is a punctured neighbourhood (or deleted neighbourhood).</p>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=v=>{ if(!isFinite(v)) return '—'; const a=Math.abs(v); let s=a>=100?v.toFixed(1):a>=1?v.toFixed(3):a>=0.01?v.toFixed(4):v.toPrecision(3); if(s.indexOf('.')>=0&&s.indexOf('e')<0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+/* ---------- the functions ---------- */
+const FN={
+  line:{lab:'3x + 1 at 2',tex:'f(x) = 3x + 1',a:2,L:7,f:x=>3*x+1,x:[0.3,3.7],y:[1,13],emax:3,dmax:1.5,e0:0.6,d0:0.3,grid:1,rec:e=>e/3,rt:R`\delta = \tfrac{\varepsilon}{3}`},
+  sq:{lab:'x² at 2',tex:'f(x) = x^2',a:2,L:4,f:x=>x*x,x:[0.1,3.9],y:[-1,15],emax:10,dmax:1.8,e0:1,d0:0.3,grid:1,rec:e=>Math.min(1,e/5),rt:R`\delta = \min\big(1, \tfrac{\varepsilon}{5}\big)`},
+  inv:{lab:'1/x at 3',tex:R`f(x) = \tfrac{1}{x}`,a:3,L:1/3,f:x=>x===0?NaN:1/x,x:[0.2,5.8],y:[-0.15,1.3],emax:0.3,dmax:2.8,e0:0.05,d0:0.4,grid:0.5,rec:e=>Math.min(1,6*e),rt:R`\delta = \min(1, 6\varepsilon)`},
+  hole:{lab:'the hole, stray value 3',tex:R`f(x) = \tfrac{x^2 - 1}{x - 1}\ (x \ne 1),\ \ f(1) = 3`,a:1,L:2,f:x=>x===1?3:(x*x-1)/(x-1),x:[-0.7,2.7],y:[-0.5,4.5],emax:1.5,dmax:1.5,e0:0.5,d0:0.3,grid:1,hollow:[[1,2]],dots:[[1,3]],rec:e=>e,rt:R`\delta = \varepsilon`}
+};
+let key='line', F=FN.line, one=false; const S={e:0.6,d:0.3,L:7};
+const ke=$('ke'),kd=$('kd'),kl=$('kl');
+/* the referee: test the punctured window, both sides */
+function referee(e,d,L){ const N=1500; let worst=null,wv=-1;
+  for(const s of [-1,1]) for(let k=1;k<=N;k++){ const t=k<N?k/N:1-1e-9; const x=F.a+s*d*t; const v=F.f(x); if(!isFinite(v)) continue; const g=Math.abs(v-L); if(g>=e&&g>wv){ wv=g; worst=x; } }
+  if(worst===null) return {win:true};
+  const s0=Math.sign(worst-F.a)||1; for(const t of [0.9,0.8,0.95,0.7,0.6,0.5]){ const x=+(F.a+s0*d*t).toPrecision(4); const v=F.f(x); if(Math.abs(x-F.a)<d&&Math.abs(x-F.a)>0&&isFinite(v)&&Math.abs(v-L)>=e) return {win:false,x,fx:v}; }
+  return {win:false,x:worst,fx:F.f(worst)}; }
+function largest(e,L){ const cap=F.dmax; if(referee(e,cap,L).win) return cap; if(!referee(e,1e-6,L).win) return 0; let lo=1e-6,hi=cap; for(let i=0;i<40;i++){ const m=(lo+hi)/2; if(referee(e,m,L).win) lo=m; else hi=m; } return lo; }
+const fch=$('fch');
+Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===key) b.className='on'; b.onclick=()=>{ [...fch.children].forEach(z=>z.classList.toggle('on',z===b)); setF(k); }; fch.appendChild(b); });
+const cv=$('cvA'); let last=null, drag=null;
+const P=plane(cv,{x:FN.line.x,y:FN.line.y,grid:1,aspect:0.7,draw:P=>draw(P)});
+Object.defineProperty(P.o,'aspect',{get:()=>cv.clientWidth>560?0.62:0.85});
+function draw(P){ const e=S.e,d=S.d,L=S.L,c=P.ctx,a=F.a;
+  P.axes();
+  const xl=P.X(F.x[0]),xr=P.X(F.x[1]);
+  c.fillStyle=col('--gold'); c.globalAlpha=.18; c.fillRect(xl,P.Y(L+e),xr-xl,P.Y(L-e)-P.Y(L+e)); c.globalAlpha=1;
+  c.fillStyle=col('--ink'); c.globalAlpha=.07; c.fillRect(P.X(a-d),P.Y(F.y[1]),P.X(a+d)-P.X(a-d),P.Y(F.y[0])-P.Y(F.y[1])); c.globalAlpha=1;
+  P.line(F.x[0],L+e,F.x[1],L+e,'--gold',1.4,[6,4]); P.line(F.x[0],L-e,F.x[1],L-e,'--gold',1.4,[6,4]); P.line(F.x[0],L,F.x[1],L,'--gold',1.6);
+  P.line(a-d,F.y[0],a-d,F.y[1],'--muted',1.4,[6,4]); P.line(a+d,F.y[0],a+d,F.y[1],'--muted',1.4,[6,4]); P.line(a,F.y[0],a,F.y[1],'--muted',1,[2,4]);
+  const kind=(x,v)=>{ const dx=Math.abs(x-a); if(dx>=d||dx<1e-12) return 'plain'; return Math.abs(v-L)<e?'in':'out'; };
+  const colr={plain:'--ink',in:'--teal',out:'--ember'}, wid={plain:1.6,in:3,out:3};
+  let run=null; const flush=()=>{ if(run&&run.pts.length>1){ c.strokeStyle=col(colr[run.k]); c.lineWidth=wid[run.k]; c.globalAlpha=run.k==='plain'?.55:1; c.beginPath(); run.pts.forEach((p,i)=>i?c.lineTo(p[0],p[1]):c.moveTo(p[0],p[1])); c.stroke(); c.globalAlpha=1; } };
+  for(let px=xl;px<=xr;px+=0.5){ const x=P.IX(px); const v=(Math.abs(x-a)<1e-9)?NaN:F.f(x); if(!isFinite(v)||Math.abs(v)>1e3){ flush(); run=null; continue; }
+    const k=kind(x,v), pt=[px,P.Y(v)]; if(!run||run.k!==k){ if(run){ run.pts.push(pt); flush(); } run={k,pts:[pt]}; } else run.pts.push(pt); }
+  flush();
+  (F.hollow||[]).forEach(([hx,hy])=>{ c.fillStyle=col('--card'); c.strokeStyle=col('--ink'); c.lineWidth=2; c.beginPath(); c.arc(P.X(hx),P.Y(hy),5.5,0,7); c.fill(); c.stroke(); });
+  (F.dots||[]).forEach(([hx,hy])=>P.dot(hx,hy,'--ink',5));
+  c.font='12px IBM Plex Mono, monospace'; c.fillStyle=col('--gold'); c.textAlign='left'; c.fillText('L',xl+4,P.Y(L)-5); c.textAlign='right'; c.fillText('L + ε',xr-4,P.Y(L+e)-4);
+  c.fillStyle=col('--muted'); c.textAlign='center'; c.fillText('w',P.X(a)
+,P.Y(F.y[1])+14);
+  last=referee(e,d,L);
+  if(!last.win){ P.dot(last.x,last.fx,'--ember',6); c.strokeStyle=col('--ink'); c.lineWidth=1.5; c.beginPath(); c.arc(P.X(last.x),P.Y(last.fx),9,0,7); c.stroke(); }
+}
+function readout(){ const e=S.e,d=S.d,L=S.L,a=F.a,r=last||referee(e,d,L);
+  $('oe').textContent=fm(e); $('od').textContent=fm(d); $('ol').textContent=fm(L);
+  const v=$('vd');
+  if(r.win){ v.className='verdict win'; v.textContent='You win this round: every input within '+fm(d)+' of '+fm(a)+', other than '+fm(a)+', has its output within '+fm(e)+' of '+fm(L)+'. The challenger may name a smaller gap.'; }
+  else { v.className='verdict lose'; v.textContent='The challenger wins this round: x = '+fm(r.x)+' is within '+fm(d)+' of '+fm(a)+', but f(x) = '+fm(r.fx)+' is '+fm(Math.abs(r.fx-L))+' from '+fm(L)+', not less than '+fm(e)+'.'; }
+  tex($('eqA'),R`\begin{gathered}`+F.tex+R`\\ 0 \lt |x - ${fm(a)}| \lt ${fm(d)} \;\Rightarrow\; |f(x) - ${fm(L)}| \lt ${fm(e)}\ ?\\ \text{the recipe at this }\varepsilon\text{: } `+F.rt+R` = ${fm(F.rec(e))}\end{gathered}`,true);
+  rounds();
+}
+function rounds(){ const e0=S.e, L=S.L, d=S.d, truth=Math.abs(L-F.L)<1e-9;
+  let h='<tr><th>round</th><th>ε</th><th>recipe δ</th><th>'+(one?'your one δ':'largest δ')+'</th></tr>'; let lostAt=-1;
+  for(let k=0;k<8;k++){ const e=e0/Math.pow(2,k);
+    if(one){ const w=referee(e,d,L).win; if(!w&&lostAt<0) lostAt=k; h+=`<tr><td>${k+1}</td><td>${fm(e)}</td><td>${truth?fm(F.rec(e)):'—'}</td><td class="${w?'w':'l'}">${fm(d)} ${w?'wins':'loses'}</td></tr>`; }
+    else { const b=largest(e,L); h+=`<tr><td>${k+1}</td><td>${fm(e)}</td><td>${truth?fm(F.rec(e)):'—'}</td><td class="${b>0?'w':'l'}">${b>0?(b>=F.dmax?'≥ '+fm(F.dmax):fm(b)):'none'}</td></tr>`; } }
+  $('tr').innerHTML=h;
+  let s;
+  if(one) s=lostAt<0?R`\begin{gathered}\text{this one }\delta\text{ survived}\\ \text{all eight rounds}\end{gathered}`:R`\begin{gathered}\exists\delta\,\forall\varepsilon\text{ fails:}\\ \text{the gap }`+fm(e0/Math.pow(2,lostAt))+R`\text{ beats it}\end{gathered}`;
+  else s=truth?R`\begin{gathered}\forall\varepsilon\,\exists\delta\text{: an answer every round;}\\ \text{it shrinks as }\varepsilon\text{ does}\end{gathered}`:R`\begin{gathered}\text{the claimed }L\text{ is not the limit:}\\ \text{once the gap is small enough,}\\ \text{no }\delta\text{ wins}\end{gathered}`;
+  tex($('eqR'),s,true);
+}
+function sync(){ ke.value=S.e; kd.value=S.d; kl.value=S.L; }
+function all(){ P.o.x=F.x; P.o.y=F.y; P.o.grid=F.grid; P.redraw(); readout(); }
+function setF(k){ key=k; F=FN[k]; ke.max=F.emax; ke.min=F.emax/600; ke.step='any'; kd.max=F.dmax; kd.min=F.dmax/750; kd.step='any'; kl.min=F.y[0]; kl.max=F.y[1]; kl.step='any'; S.e=F.e0; S.d=F.d0; S.L=F.L; sync(); all(); }
+ke.addEventListener('input',()=>{ S.e=+ke.value; all(); }); kd.addEventListener('input',()=>{ S.d=+kd.value; all(); }); kl.addEventListener('input',()=>{ S.L=+kl.value; all(); });
+$('bh').onclick=()=>{ S.e=S.e/2; sync(); all(); };
+$('br').onclick=()=>{ S.d=Math.min(F.dmax,F.rec(S.e)); sync(); all(); };
+$('bb').onclick=()=>{ const b=largest(S.e,S.L); if(b>0){ S.d=b*0.999; sync(); } all(); if(b<=0){ $('vd').textContent+=' No reach wins this one: even the narrowest window lets an input escape.'; } };
+$('bz').onclick=()=>setF(key);
+$('bone').onclick=()=>{ one=!one; $('bone').classList.toggle('on',one); rounds(); };
+cv.addEventListener('pointerdown',ev=>{ const p=P.point(ev), e=S.e,d=S.d,L=S.L; const near=(u,v,t)=>Math.abs(u-v)<t;
+  if(near(p.py,P.Y(L+e),14)||near(p.py,P.Y(L-e),14)) drag='e'; else if(near(p.px,P.X(F.a+d),14)||near(p.px,P.X(F.a-d),14)) drag='d'; else if(near(p.py,P.Y(L),12)) drag='L';
+  else drag=Math.abs(P.Y(L+e)-p.py)<Math.abs(P.X(F.a+d)-p.px)?'e':'d';
+  cv.setPointerCapture&&cv.setPointerCapture(ev.pointerId); move(ev); });
+function move(ev){ if(!drag) return; const p=P.point(ev);
+  if(drag==='e') S.e=+Math.min(F.emax,Math.max(F.emax/600,Math.abs(p.y-S.L))).toPrecision(3);
+  if(drag==='d') S.d=+Math.min(F.dmax,Math.max(F.dmax/750,Math.abs(p.x-F.a))).toPrecision(3);
+  if(drag==='L') S.L=+Math.min(F.y[1],Math.max(F.y[0],p.y)).toPrecision(3);
+  sync(); all(); }
+cv.addEventListener('pointermove',move); ['pointerup','pointercancel'].forEach(t=>cv.addEventListener(t,()=>drag=null));
+setF('line');
+
+/* ---------- slides ---------- */
+const N='\\htmlClass{new}', K='\\htmlClass{keep}';
+stepper('#sl1',[
+  {k:'ember',kl:'the sentence · 1 of 5',t:R`${N}{|f(x) - L| \lt \varepsilon}`,n:`Start at the right end: the output is within ε of L. A distance (8h) around a displacement f(x) − L. In the plane: the pair is in the target rows.`},
+  {k:'ember',kl:'the sentence · 2 of 5',t:R`${N}{0 \lt |x - w| \lt \delta}`,n:`The input is in the neighbourhood of w of reach δ: within δ of w, and not w. In the plane: the window of columns, the column at w left out.`},
+  {k:'ember',kl:'the sentence · 3 of 5',t:R`\begin{gathered}${N}{\forall x \in \operatorname{dom} f}\,\big(0 \lt |x - w| \lt \delta\\ \Rightarrow ${K}{|f(x) - L| \lt \varepsilon}\big)\end{gathered}`,n:`The promise, for every input: every pair of f in the window is in the target.`},
+  {k:'ember',kl:'the sentence · 4 of 5',t:R`${N}{\exists \delta \gt 0} :\ ${K}{\forall x \in \operatorname{dom} f\,(\cdots)}`,n:`You can make the promise with some positive reach. The colon is read “such that”. Positive, so the window holds inputs.`},
+  {k:'ember',kl:'the sentence · 5 of 5',t:R`\begin{gathered}${N}{\forall \varepsilon \gt 0}\\ ${K}{\exists \delta \gt 0 : \forall x \in \operatorname{dom} f\,(\cdots)}\end{gathered}`,n:`Whatever positive gap they name. Every first, then some: they move, you answer, and your δ may depend on their ε. That is lim_{x→w} f(x) = L, whole.`}
+],{title:'The slides · the sentence · ← → keys work'});
+stepper('#sl2',[
+  {k:'teal',kl:'from 9a · the hole · 1 of 2',t:R`H(x) = \tfrac{x^2 - 1}{x - 1} = x + 1 \quad (x \ne 1)`,n:`difference-of-squares, then cancel x − 1, licensed because it is not 0 off 1. H has no value at 1.`},
+  {k:'ember',kl:'the hole · 2 of 2',t:R`\lim_{x \to 1} H(x) = \lim_{x \to 1}\,(x + 1) = ${N}{2}`,n:`agreeing-near: they agree on every neighbourhood of 1. line-limit gives 2. A stray value H(1) = 3 changes nothing: the value plays no part.`}
+],{title:'The slides · the hole · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'the linear function · 1 of 4',t:R`\lim_{x \to 1}\,(4x - 1) = 3\ ?`,n:`A new one. line-limit lets you write it, with m = 4: let us win the round by hand.`},
+  {k:'ember',kl:'the linear function · 2 of 4',t:R`\begin{gathered}|(4x - 1) - 3| = |${N}{4x - 4}|\\ = ${N}{4}\,|x - 1|\end{gathered}`,n:`Substitute for the expression; collect; spread on ℝ backwards; size-of-a-product. The input's displacement has appeared, times 4.`},
+  {k:'ember',kl:'the linear function · 3 of 4',t:R`4\,|x - 1| \lt \varepsilon \;\Leftarrow\; |x - 1| \lt ${N}{\tfrac{\varepsilon}{4}}`,n:`Multiply by ¼, a positive (order-and-arithmetic-agree). This is scratch work, done backwards from the goal.`},
+  {k:'ember',kl:'the linear function · 4 of 4',t:R`\delta = \tfrac{\varepsilon}{4}:\ \ \varepsilon = 0.2 \mapsto \delta = 0.05`,n:`Check one input: x = 1.04 is within 0.05 of 1, and 4(1.04) − 1 = 3.16, within 0.2 of 3. ✓`}
+],{title:'The slides · the linear function · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'x² · 1 of 5',t:R`|x^2 - 9| = |x - 3|\,${K}{|x + 3|}`,n:`x² at 3, heading to 9. difference-of-squares read in ℝ; size-of-a-product. The leftover |x + 3| is not a constant.`},
+  {k:'ember',kl:'x² · 2 of 5',t:R`\delta = \tfrac{\varepsilon}{|x + 3|}\ \ ${N}{\times}`,n:`Illegal: δ is named before x is handed over (∃δ ∀x). It may depend on ε and on the point 3, never on x.`},
+  {k:'ember',kl:'x² · 3 of 5',t:R`\begin{gathered}${N}{|x - 3| \lt 1} \Rightarrow 2 \lt x \lt 4\\ \Rightarrow |x + 3| \lt ${N}{7}\end{gathered}`,n:`A first promise, and a ceiling for the leftover on that stretch: 5 &lt; x + 3 &lt; 7.`},
+  {k:'ember',kl:'x² · 4 of 5',t:R`\begin{gathered}|x^2 - 9| \lt 7\,|x - 3| \lt \varepsilon\\ \Leftarrow\; |x - 3| \lt \tfrac{\varepsilon}{7}\end{gathered}`,n:`Inside the first promise the square behaves like a linear function with step 7.`},
+  {k:'ember',kl:'x² · 5 of 5',t:R`${N}{\delta = \min\!\big(1, \tfrac{\varepsilon}{7}\big)}`,n:`Both promises at once (lesser-below-both). square-limit's recipe at 3, where 1 + 2 · 3 = 7.`}
+],{title:'The slides · x² · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'1/x · 1 of 3',t:R`\left|\tfrac1x - 1\right| = |x - 1|\cdot ${K}{\tfrac{1}{|x|}}`,n:`1/x at 1, heading to 1. The leftover 1/|x| has no ceiling near 0, which is only 1 away.`},
+  {k:'ember',kl:'1/x · 2 of 3',t:R`${N}{|x - 1| \lt \tfrac12} \Rightarrow x \gt \tfrac12 \Rightarrow \tfrac{1}{|x|} \lt ${N}{2}`,n:`one-over-x-limit's first promise: half the distance to 0. A promise of 1 would let x be 0.001, where 1/|x| is 1000.`},
+  {k:'ember',kl:'1/x · 3 of 3',t:R`${N}{\delta = \min\!\big(\tfrac12, \tfrac{\varepsilon}{2}\big)}`,n:`Then 2|x − 1| &lt; ε. Check: ε = 0.1, δ = 0.05, x = 0.96: 1/x ≈ 1.0417, within 0.1 of 1. ✓`}
+],{title:'The slides · 1/x · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'the order',t:R`\exists\delta\,\forall\varepsilon \;\Rightarrow\; \forall\varepsilon\,\exists\delta,\ \ \text{never back}`,n:`1e's licensed-swap. The swapped order says f is exactly L on a neighbourhood; the true order lets your answer wait for their challenge.`}
+],{title:'The slides · the order · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

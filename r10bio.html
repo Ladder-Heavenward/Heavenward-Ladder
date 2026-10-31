@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>10·bio · How fast can an enzyme go?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+#cvM{touch-action:none;cursor:ew-resize}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:6em;text-align:right}
+table.tt td.l{text-align:left;font-family:var(--serif)}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r10g.html">← 10g playing the challenge game</a><a href="r10crypt.html">next: 10·crypt is a huge number of keys enough? →</a></p>
+  <div class="tags"><span class="tag bio">10·bio · biology</span></div>
+  <h1>How fast can an enzyme go?</h1>
+  <p>How fast can an enzyme go? Every living cell runs on enzymes. Give an enzyme more of the substance it works on and it works faster, but not without end. The rate climbs fast at first, then levels off toward a ceiling it never quite reaches. In 1913 two researchers in Berlin wrote down the function. Its ceiling is a limit far out in exactly 10f's sense, with a half-way point that biochemists measure in laboratories every day. This page builds the function from a picture of molecules. It proves the ceiling is a limit and is never reached, finds the half-way point, and works it with real enzymes and real numbers.</p>
+  <p class="gesture">The rate is the ceiling times the share of enzyme that is busy. That share is the amount of substance over the amount plus a fixed constant of the enzyme: it heads to 1 as the substance grows, never gets there, and is exactly one half when the amount equals the constant.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r05chem.html">5·chem</a> (molecule, chemical change, mole), <a href="r05i.html">5i</a> (units, per, constant of proportion), <a href="r05f.html">5f</a> (solving for one letter), <a href="r08phys.html">8·phys</a> (cell, front parts), <a href="r09e.html">9e</a> (the linear function, two-points-one-line), <a href="r10c.html">10c</a> (limits-divide, substitution), <a href="r10f.html">10f</a> (limits far out, far-out-too, rational-functions-far-out, swap-to-one-over-x, one-sided limits). Later science pages return to rates (named by rung number only: 13·chem).</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · the words, the experiment, the model, the limit, the numbers</div>
+
+  <h3>Enzymes, substrates, rates</h3>
+  <p data-pid="b21962">An <b>enzyme</b> is a large molecule, made by a living cell, that speeds up one particular chemical change (5·chem) without being used up itself. The substance it acts on is its <b>substrate</b>; what it turns the substrate into is the <b>product</b>. The enzymes of digestion, of breathing, of copying DNA are all of this kind, and each is fussy: one enzyme, one change, sometimes one substrate. Two more words, and a page-local line.</p>
+  <p data-pid="075fd6">The <b>concentration</b> of a dissolved substance is how much of it there is in each litre of solution, counted in 5·chem's moles. That is moles per litre, or, for the small amounts in cells, millimoles per litre, mmol/L (5i's milli, a thousandth). mmol/L is often written mM; this page does not, because 8·phys's M is mega. The <b>rate</b> of a reaction is how fast substrate becomes product: how much, per litre, per unit of time, in mmol/L per minute, say.</p>
+  <p class="eqline" data-pid="ec590e">From here on, on this page, s names the concentration of the substrate and v the rate at which an enzyme turns substrate into product, both quantities in 5i's sense; v is read as a function of s. Neither is a letter used for anything else here: 4c's function s does not appear on this page.</p>
+
+  <h3>Invertase, and a sugar that turns light</h3>
+  <p data-pid="f66130">Table sugar, sucrose, is two smaller sugars joined: glucose and fructose. The enzyme invertase, from yeast, splits it. Chemists could follow that change without stopping it, because of a property of the sugars themselves. Pass light through a special filter, so that it shakes in one direction only. A sucrose solution turns that direction one way. The half-and-half mixture of glucose and fructose that sucrose becomes turns it the other way. An instrument called a polarimeter reads the turn. As the reaction runs, the reading swings across. The product is called invert sugar for that reason, and the enzyme invertase.</p>
+  <p data-pid="e05e3e">In Berlin in 1912 and 1913, a German physician turned chemist worked with a Canadian physician who had crossed the Atlantic to work with him. They mixed a fixed amount of invertase with sucrose at five strengths: 333, 166.7, 83.3, 41.6 and 20.8 mmol/L, each half the one before. They kept the acidity fixed, and read the polarimeter as the minutes passed. From each run they took the starting rate, before the products could pile up and interfere. At the low strengths, doubling the sucrose nearly doubled the rate; at the high strengths, doubling it barely mattered. The rate was heading for a ceiling.</p>
+  <p data-pid="aeac6c">The pair argued that the rate of the splitting is at every moment proportional to the concentration of a compound of enzyme and sugar. That compound, they said, stands in a fixed balance with the free enzyme and the free sugar.</p>
+
+  <h3>The model: an enzyme must hold its substrate</h3>
+  <p data-pid="06299b">Their picture: an enzyme molecule grabs a substrate molecule, forming a pair. Then the pair either lets go, or the enzyme does its work and releases the product, ready to grab again. <b>Every enzyme molecule is either free or busy (holding a substrate).</b> The two workers assumed the grabbing and letting go are fast and balanced, so that a certain ratio stays fixed. Write E_free and E_busy for the concentrations of free and busy enzyme and E_total for all of it (4·comp's low marks with words). The two facts are E_total = E_free + E_busy and K · E_busy = E_free · s, for a fixed positive K. Chemists call K a dissociation constant: small K means the pair rarely comes apart. The rest is 5f's solving for one letter.</p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="teal" data-label="from 5f: solve for the busy enzyme">
+K\,E_{\text{busy}} = E_{\text{free}}\,s @@ the balance
+K\,E_{\text{busy}} = (\htmlClass{new}{E_{\text{total}} - E_{\text{busy}}})\,s @@ substitute for the expression: free is total less busy
+K\,E_{\text{busy}} + \htmlClass{new}{E_{\text{busy}}\,s} = E_{\text{total}}\,s @@ spread (spread on ℚ), then add E_busy · s to both sides (adding-keeps-answers)
+E_{\text{busy}}\,\htmlClass{new}{(K + s)} = E_{\text{total}}\,s @@ take out the common factor (spread on ℚ backwards)
+E_{\text{busy}} = \htmlClass{keep}{\tfrac{E_{\text{total}}\,s}{K + s}} @@ multiplying-keeps-answers by (K + s)⁻¹: K + s is positive, since K &gt; 0 and s ≥ 0
+  </pre>
+  <p data-pid="cb9777">Each busy enzyme turns substrate into product at a fixed rate, its turnover number k_cat. (The low mark “cat” is for catalysis, the chemists' word for speeding a change.) The turnover number is how many substrate molecules one busy enzyme converts each second. So v = k_cat · E_busy.</p>
+  <p class="eqline" data-pid="22bc81">From here on, on this page, V_max names k_cat · E_total, the rate if every enzyme were busy at once: the ceiling. And K_m names the constant K. Both are fixed positive quantities for a given enzyme, substrate and amount of enzyme. So v(s) = V_max · s/(K_m + s) for every s ≥ 0, and its graph is a graph in 9e's sense. The accepted name for K_m is the Michaelis constant, after one of the two workers who first wrote down this function.</p>
+  <p data-pid="fa2ccb">In 1925 two other workers reached the same function without assuming the grabbing is balanced, only that the amount of busy enzyme stays steady. In their version K_m is a mix of three rates rather than a pure measure of grip. The function is the same either way, so the mathematics below does not care which story you prefer.</p>
+
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · the middle of a change: the small thing not used up</div>
+    <p data-pid="1d64a1">6·chem met a principle of the second kind of care: things pass through a middle when they change, and some changes have two sides. Here is another part of the same principle. A change has a hill to climb on its way through the middle, and something small that is not used up can lower the hill.</p>
+    <p data-pid="e05f9b"><b>Look for the small, unconsumed thing that changed the rate; it is usually where the real explanation is.</b></p>
+    <p data-pid="28b6c5">The enzyme is that small thing. It grabs, works, lets go, and is ready to grab again. It ends the change as it began it. Yet with it the sugar splits in minutes, and without it the sugar sits. Leave it out of the story and the rates make no sense.</p>
+    <p class="bait" data-pid="59a7c6">Sucrose sits in a sugar bowl for years without splitting. A pinch of yeast in sugar water splits it within the hour. What did the yeast bring that the bowl never had?</p>
+  </aside>
+
+  <h3>The ceiling is a limit</h3>
+  <p data-pid="59aaa4">Ceiling technique: <b>lim_{s→∞} v(s) = V_max.</b> 10f's rational-functions-far-out does it at once: top and bottom both have degree 1 in s, with leading coefficients V_max and 1. Here it is by hand, one move per line, and then by the game, so that you see the threshold.</p>
+  <pre class="lines" data-k="teal" data-label="from 10f: divide by the greatest power">
+\tfrac{V_{\max}\,s}{K_m + s} = \tfrac{V_{\max}}{\htmlClass{new}{\frac{K_m}{s} + 1}} @@ times (1/s)/(1/s), which is 1 for s &gt; 0
+\tfrac{K_m}{s} \to \htmlClass{new}{0} \text{ as } s \to \infty @@ one-over-x-far-out and constant-factor (10f)
+v(s) \to \tfrac{V_{\max}}{0 + 1} = \htmlClass{keep}{V_{\max}} @@ far-out-too's limits-add and limits-divide: the bottom heads to 1, not 0
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this page: the threshold, by the game">
+V_{\max} - v(s) = \tfrac{V_{\max}(K_m + s) - V_{\max}\,s}{K_m + s} = \htmlClass{new}{\tfrac{V_{\max} K_m}{K_m + s}} @@ one bottom; collect. Positive for every s ≥ 0
+\tfrac{V_{\max} K_m}{K_m + s} \lt \varepsilon \;\Leftrightarrow\; V_{\max} K_m \lt \varepsilon\,(K_m + s) @@ multiplying-keeps-answers by the positive K_m + s (and back)
+\Leftrightarrow\; s \gt \tfrac{V_{\max} K_m}{\varepsilon} - K_m @@ multiplying-keeps-answers by 1/ε, then adding-keeps-answers
+\htmlClass{new}{N = K_m\,\tfrac{V_{\max} - \varepsilon}{\varepsilon}} @@ the threshold for ε &lt; V_max; for ε ≥ V_max, N = 0 serves, since 0 ≤ V_max − v(s) &lt; V_max
+  </pre>
+  <p data-pid="3767ac">And it never gets there. Never-reached technique: <b>v(s) &lt; V_max for every s ≥ 0</b>, by the first line above: V_max − v(s) = V_max K_m/(K_m + s), a positive over a positive. The enzyme is like the game's L: approached as nearly as you like, reached never. Put the challenger's gap as a share of the ceiling, ε = c · V_max with 0 &lt; c &lt; 1: then N = K_m (1 − c)/c. Within 10% of the ceiling needs s &gt; 9 K_m; within 5%, s &gt; 19 K_m; within 1%, s &gt; 99 K_m. Each further step costs about ten times as much substrate: the last few percent are ruinously expensive. The strongest solution of 1913, 333 mmol/L with K_m = 16.7 mmol/L, reached about 95% of their ceiling. Nobody measured the ceiling. It was inferred from the graph, as its limit.</p>
+
+  <h3>Half the ceiling, at K_m</h3>
+  <p data-pid="b3501d">Half-way technique: <b>for s ≥ 0, v(s) = ½ V_max exactly when s = K_m.</b> If s = K_m, v = V_max K_m/(2K_m) = ½ V_max (cancel K_m, not 0). Back: ½ V_max = V_max s/(K_m + s) gives K_m + s = 2s (multiplying-keeps-answers by 2(K_m + s)/V_max), so s = K_m (adding-keeps-answers). ∎ So K_m is read directly off the graph, as the concentration of half-saturation. Run it backwards for any share c of the ceiling: c = s/(K_m + s) gives s = K_m · c/(1 − c), for 0 ≤ c &lt; 1. At c = ½ that is K_m; at c = 0.9 it is 9 K_m. At c = 1 the line would divide by 0: that is never-reached, the limit refusing to be reached, seen from the other side.</p>
+  <p data-pid="510328">Measure the substrate in units of K_m, t = s/K_m, and the rate in units of V_max. Then v/V_max = t/(1 + t), the same function for every enzyme in the world. K_m is the enzyme's own unit of concentration: an enzyme with a small K_m is half busy at a trace of its substrate; one with a large K_m needs a flood.</p>
+
+  <h3>At the low end, nearly proportional</h3>
+  <p data-pid="2427ed">Low-end technique: <b>lim_{s→0⁺} v(s)/s = V_max/K_m.</b> For s &gt; 0, v(s)/s = V_max/(K_m + s) (cancel s, agreeing-near side by side). That heads to V_max/K_m by substitution and limits-divide, the bottom heading to K_m ≠ 0. ∎ So when the substrate is scarce, the rate is nearly proportional to it, with 5i's constant of proportion V_max/K_m. Divided by the amount of enzyme, that constant is k_cat/K_m, which biochemists call the specificity constant: how efficient an enzyme is when its substrate is scarce.</p>
+
+  <h3>Real enzymes, real numbers</h3>
+  <p data-pid="4fc7ca">The constants K_m below are standard measured values. Invertase with sucrose has the 1913 value, 16.7 mmol/L. The fitted ceiling of 1913, about 0.76 mmol/L per minute, was confirmed by a modern refit of the data. Hexokinase is the enzyme that starts the burning of glucose in the brain. Its textbook pair is 0.05 mmol/L for glucose and 1.5 mmol/L for fructose. Each share of the ceiling is one substitution, s/(K_m + s).</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>enzyme, substrate</th><th>K_m (mmol/L)</th><th>s (mmol/L)</th><th>v / V_max</th></tr>
+    <tr><td class="l">invertase, sucrose (1913)</td><td>16.7</td><td>20.8 · 41.6 · 83.3 · 166.7 · 333</td><td>0.555 · 0.714 · 0.833 · 0.909 · 0.952</td></tr>
+    <tr><td class="l">hexokinase, glucose</td><td>0.05</td><td>5 (blood) · 1 (brain, roughly)</td><td>0.990 · 0.952</td></tr>
+    <tr><td class="l">hexokinase, fructose</td><td>1.5</td><td>5, for comparison</td><td>0.769</td></tr>
+  </table></div>
+  <p data-pid="919655">With V_max ≈ 0.76 mmol/L per minute, the invertase rates were about 0.42, 0.54, 0.63, 0.69 and 0.72 mmol/L per minute. Doubling 20.8 to 41.6 raised the rate by a factor of about 1.29; doubling 166.7 to 333, by about 1.05. Hexokinase meets glucose at many times its K_m. Blood carries about 5 mmol/L, a hundred times K_m. Even in brain tissue, where the level is lower, roughly 1 to 2 mmol/L, it is twenty times K_m or more. So it runs at 95 to 99% of its ceiling. Doubling blood glucose from 5 to 10 mmol/L raises its rate by half a percent ((10/10.05)/(5/5.05) ≈ 1.005). <b>A saturated enzyme ignores the supply; its rate is set by how much enzyme there is.</b> The same enzyme offered fructose at 5 mmol/L is at 77%, because its K_m for fructose is thirty times larger.</p>
+
+  <h3>Reciprocals make a linear function</h3>
+  <p data-pid="ef208f">A graph levelling off toward an unreachable ceiling is hard to read a ceiling off. In 1934 two chemists took reciprocals of both sides. Flip, then split the top, then read the result as 9e's linear function in the new input u = 1/s.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the double reciprocal">
+\tfrac1v = \htmlClass{new}{\tfrac{K_m + s}{V_{\max}\,s}} @@ reciprocals of both sides (5b's reciprocal; both sides positive for s &gt; 0)
+= \tfrac{K_m}{V_{\max}\,s} + \tfrac{s}{V_{\max}\,s} @@ split over the two-term top (fractions-of-rationals iii backwards)
+= \htmlClass{keep}{\tfrac{K_m}{V_{\max}}}\cdot\tfrac1s + \htmlClass{keep}{\tfrac{1}{V_{\max}}} @@ cancel s in the second piece. With u = 1/s: the linear function, step K_m/V_max, start 1/V_max
+\lim_{s \to \infty} \tfrac{1}{v(s)} = \lim_{u \to 0^+}\big(\tfrac{K_m}{V_{\max}}\,u + \tfrac{1}{V_{\max}}\big) = \tfrac{1}{V_{\max}} @@ swap-to-one-over-x (10f), then substitution from the right. The ceiling's reciprocal is the start
+  </pre>
+  <p data-pid="a8e4eb"><b>So the limit far out, which no experiment reaches, has become an ordinary start of a linear function, read where u = 1/s is 0.</b> And the linear function is 0 at u = −1/K_m. Two measured pairs fix it, by 9e's two-points-one-line. (Modern laboratories fit the function itself to the data by computer. Taking reciprocals swells the errors of the slowest, least precise measurements. But the start of the linear function is still the clearest picture of what V_max is.) Note the legal move and the illegal one nearby. Flipping a single fraction is legal (5b). Flipping a sum term by term is not: 1/(K_m + s) is not 1/K_m + 1/s (try K_m = s = 1: one half against two). The column flips first, while the right side is one fraction, and only then splits the top.</p>
+
+  <h3>Where the model stops</h3>
+  <p data-pid="b696fb"><b>The function is a model, and knowing where it fails is part of using it.</b> The 1913 workers themselves found that the products slow invertase down, which is why they used starting rates. Some enzymes have graphs that rise slowly, then fast, then level off. Glucokinase in the liver is half busy at about 8 mmol/L of glucose. It responds most sharply right around blood-sugar levels, which suits its job of sensing them. No choice of K_m makes this page's function do that. And some enzymes slow down again at very high substrate, so the ceiling is a limit of the model, not of the test tube. Still, the function travels. A 1918 law for a gas sticking to a surface, and a 1949 law for bacteria growing on a scarce sugar, are the same function: a capacity, a half-way constant, and a limit never reached.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>step on this page</th><th>rung that licenses it</th></tr>
+    <tr><td class="l">the function from the balance</td><td class="l">5f (adding-keeps-answers, multiplying-keeps-answers), 5c (spread on ℚ)</td></tr>
+    <tr><td class="l">the ceiling as a limit</td><td class="l">10f (one-over-x-far-out, far-out-too, rational-functions-far-out)</td></tr>
+    <tr><td class="l">the threshold N</td><td class="l">10a's game read far out (10f); 8g's techs on an inequality</td></tr>
+    <tr><td class="l">never reached; half-way at K_m</td><td class="l">5b, 5f (cancel, solve)</td></tr>
+    <tr><td class="l">the low end V_max/K_m</td><td class="l">10a (agreeing-near), 10c (substitution, limits-divide), 10e (from the right)</td></tr>
+    <tr><td class="l">the double reciprocal</td><td class="l">5b (reciprocal), 5g (fractions-of-rationals), 9e (the linear function, two-points-one-line), 10f (swap-to-one-over-x)</td></tr>
+  </table></div>
+
+  <h3>Illegal moves</h3>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed">
+v(s) = V_{\max} \text{ for large enough } s\,? @@ never-reached: V_max − v(s) is positive at every s. The ceiling is a limit, never a value
+\tfrac{1}{K_m + s} = \tfrac{1}{K_m} + \tfrac1s\,? @@ at K_m = s = 1: ½ against 2. Flip one fraction, never a sum term by term
+\text{K}_m \text{ is where the rate is largest}\,? @@ there the rate is half the ceiling; it keeps climbing past K_m
+\text{double } s \Rightarrow \text{ double } v\,? @@ only nearly, and only far below K_m (low-end); at 333 mmol/L doubling gave about 5%
+\text{more enzyme raises } K_m\,? @@ V_max = k_cat · E_total grows with the enzyme; K_m, a property of the pair, does not
+  </pre>
+
+  <h3>Running it backwards</h3>
+  <p data-pid="ba3ed1">Handed a measured share of the ceiling at a known s, solve for K_m: c = s/(K_m + s) gives K_m = s(1 − c)/c. Handed two measured pairs (s, v), flip them into (1/s, 1/v) and find the linear function through both by two-points-one-line: its start is 1/V_max and its step K_m/V_max. Handed a wish (an enzyme that follows its supply in proportion), choose K_m well above the concentrations it will meet, and accept that it will run far below its ceiling.</p>
+</section>
+
+<section class="pic" id="pic">
+  <div class="eyebrow">The picture · left: the graph, its ceiling and a challenger's gap · right: the same enzyme as a linear function of reciprocals</div>
+  <div class="panels">
+    <div class="panel">
+      <div class="chips" role="group" aria-label="enzyme" id="ech"></div>
+      <div class="kn">
+        <span class="m">K_m</span><input type="range" id="kk" min="-2" max="2" step="any"><output id="ok"></output>
+        <span class="m">s</span><input type="range" id="ks" min="-3" max="3" step="any"><output id="os"></output>
+        <span class="m">ε, % of V_max</span><input type="range" id="ke" min="1" max="40" step="1" value="10"><output id="oe"></output>
+      </div>
+      <canvas id="cvM"></canvas>
+      <div class="cap">v as a share of V_max against s. Dashed gold: the ceiling V_max, approached and never reached. Dotted: half the ceiling, met at K_m. Ember: your s (drag on the picture). Shaded gold: the stretch s &gt; N, where v is within ε of the ceiling. For invertase, hollow dots are the five strengths of 1913, placed on the graph their constant gives. K_m and s move by powers of ten.</div>
+      <div class="eqbox" id="eqM"></div>
+    </div>
+    <div class="panel">
+      <canvas id="cvL"></canvas>
+      <div class="cap">V_max/v against u = 1/s, that is 1/v in units of 1/V_max: the linear function. Its start, at u = 0, is 1/V_max (gold): the ceiling, read as a value at 0. It is 0 at u = −1/K_m. Ember: your s.</div>
+      <div class="eqbox" id="eqL"></div>
+    </div>
+  </div>
+</section>
+
+<section class="slides" id="sl1"><div class="eyebrow">The slides · the function derived; its ceiling; never reached; half-way; the double reciprocal; one enzyme worked · ← → keys work</div></section>
+
+<section class="sayback">
+  <div class="eyebrow">Say it back · then work it</div>
+  <h2>Questions</h2>
+  <div class="phkey"></div>
+  <ol>
+    <li><span class="qid">10·bio.1</span><span class="gname">Reading the function.</span><span class="gwhy">Do: build the page's pieces.</span>
+      <ol class="sub">
+        <li><span class="qid">10·bio.1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="v(s) = \dfrac{V_{\max}\, s}{K_m + s}"></span></span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="K_m = 2\ \text{mmol/L},"></span> <span data-tex-inline="s = 2,\ 6,\ 18\ \text{mmol/L}"></span></span>Find the share of its ceiling the enzyme reaches at each s.</li><li><span class="givens"><span data-tex-inline="\text{invertase: } K_m = 16.7\ \text{mmol/L},"></span> <span data-tex-inline="s = 41.6\ \text{mmol/L},"></span> <span data-tex-inline="V_{\max} \approx 0.76\ \text{mmol/L per minute}"></span></span>Find invertase's share of its ceiling, and its rate.</li><li><span class="givens"><span data-tex-inline="\text{Half-way: for } s \ge 0 \text{,}"></span> <span data-tex-inline="v(s) = \tfrac12 V_{\max} \text{ exactly}"></span> <span data-tex-inline="\text{when } s = K_m \text{.}"></span></span>Prove half-way both ways, one move per line.</li><li><span class="givens"><span data-tex-inline="u = 1/s"></span></span>Derive 1/v as a linear function in u, naming the licence for each move.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">10·bio.2</span><span class="gname">From the rates back to the enzyme.</span><span class="gwhy">Undo: run the page's techs backwards.</span>
+      <ol class="sub">
+        <li><span class="qid">10·bio.2.1</span><span class="ph undo">undo</span><span class="givens"><span data-tex-inline="v(s) = \dfrac{V_{\max}\, s}{K_m + s}"></span></span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="K_m = 2\ \text{mmol/L},"></span> <span data-tex-inline="v = 0.8\, V_{\max}"></span></span>Find s, in mmol/L and in units of Kₘ.</li><li><span class="givens"><span data-tex-inline="v = 0.95\, V_{\max} \text{ at } s = 38\ \text{mmol/L}"></span></span>Find Kₘ.</li><li><span class="givens"><span data-tex-inline="\text{A double-reciprocal linear}"></span> <span data-tex-inline="\text{function has start 0.02}"></span> <span data-tex-inline="\text{L·min/mmol and step 0.1}"></span> <span data-tex-inline="\text{min.}"></span></span>Find the ceiling and Kₘ, with units.</li><li><span class="givens"><span data-tex-inline="v(1\ \text{mmol/L}) = 10,"></span> <span data-tex-inline="v(4\ \text{mmol/L}) = 20,"></span> <span data-tex-inline="\text{(the same units)}"></span></span>Find the linear function through the two pairs of reciprocals, then the ceiling and Kₘ, and check both measurements.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">10·bio.3</span><span class="gname">Where the model bends.</span><span class="gwhy">Bend: find where the techs stop working.</span>
+      <ol class="sub">
+        <li><span class="qid">10·bio.3.1</span><span class="ph bend">bend</span><span class="givens"><span data-tex-inline="v(s) = \dfrac{V_{\max}\, s}{K_m + s}"></span></span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{You double the amount of}"></span> <span data-tex-inline="\text{enzyme in the tube.}"></span></span>Find what happens to the ceiling, to Kₘ, and to the s at which the rate is half its ceiling.</li><li><span class="givens"><span data-tex-inline="\text{Blood glucose falls from 5}"></span> <span data-tex-inline="\text{to 2.5\ mmol/L.}"></span> <span data-tex-inline="\text{hexokinase: } K_m = 0.05\ \text{mmol/L},"></span> <span data-tex-inline="\text{another enzyme: } K_m = 50\ \text{mmol/L}"></span></span>Find by what percent each enzyme slows.</li><li><span class="givens"><span data-tex-inline="“\dfrac{1}{K_m + s} = \dfrac{1}{K_m} + \dfrac{1}{s}”"></span></span>Find numbers that refute it.</li><li><span class="givens"><span data-tex-inline="c = v/V_{\max},"></span> <span data-tex-inline="K_m = 2\ \text{mmol/L}"></span></span>Prove that no s at least 0 gives c equal to 1. <br>Find the s that gives c of 0.999.</li></ol></li>
+      </ol></li>
+    <li class="optgroup"><span class="qid">10·bio.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder challenges that rely on your own making. The page is complete without these; the rung's star needs them.</span>
+      <ol class="sub">
+        <li class="opt"><span class="qid">10·bio.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="v(s) = \dfrac{V_{\max}\, s}{K_m + s}"></span></span>Build enzymes of your own.<ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="t \mapsto \dfrac{t}{1 + t}"></span></span>Starting from it, write the function of an enzyme with a Kₘ and a ceiling of your own choosing, and check its half-way point.</li><li><span class="givens"><span data-tex-inline="v = 0.9\, V_{\max} \text{ at } s = 2\ \text{mmol/L}"></span></span>Choose Kₘ to fit.</li><li><span class="givens"><span data-tex-inline="\text{Let } P \text{ be } \lim_{s \to \infty} v(s) = V_{\max}."></span></span>Prove P by the game: given ε, name N, and write the forward proof.</li><li><span class="givens"><span data-tex-inline="\text{An enzyme should follow}"></span> <span data-tex-inline="\text{its substrate almost in}"></span> <span data-tex-inline="\text{proportion at about}"></span> <span data-tex-inline="\text{0.5\ mmol/L.}"></span></span>Give a Kₘ that keeps it below 10% of its ceiling there, and find the rate it gives up.</li></ol></li>
+        <li class="opt"><span class="qid">10·bio.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="v(s) = \dfrac{V_{\max}\, s}{K_m + s}"></span></span>Find v at 0, and its limit from the right at 0. <br>Are they the same?</li>
+        <li class="opt"><span class="qid">10·bio.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{Never-reached: the rate}"></span> <span data-tex-inline="\text{heads to its ceiling and}"></span> <span data-tex-inline="\text{never reaches it, rising}"></span> <span data-tex-inline="\text{all the way.}"></span> <span data-tex-inline="\text{A function on } [0, \infty) \text{ heads}"></span> <span data-tex-inline="\text{to a ceiling far out and}"></span> <span data-tex-inline="\text{never reaches it.}"></span></span>Must it rise all the way, a larger input always giving a larger value?</li>
+        <li class="opt"><span class="qid">10·bio.4.4</span><span class="tagq">seam</span>A chemist in Paris wrote down the same function for invertase in 1902 and 1903, a decade before the Berlin pair. They cited him, and argued that their measurements, made at fixed acidity and from starting rates, were the first clean enough to test it. Whose curve is it: the one who wrote the function, or the ones whose numbers made it believable?</li>
+      </ol></li>
+  </ol>
+  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
+</section>
+
+<nav class="nextrung"><a href="r10g.html">← 10g · playing the challenge game</a><a href="r10crypt.html">10·crypt · is a huge number of keys enough? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>The pair in Berlin were Leonor Michaelis and Maud Menten (1913). The 1925 workers were George Briggs and J. B. S. Haldane; the 1934 chemists were Hans Lineweaver and Dean Burk. The chemist in Paris in 10·bio.4.4 is Victor Henri. The 1918 law is Irving Langmuir’s, for a gas on a surface; the 1949 law is Jacques Monod’s, for bacterial growth.</p>
+  <aside class="voice para"><p>Michaelis and Menten argued that the rate of the splitting is at every moment proportional to the concentration of a compound of enzyme and sugar, and that this compound stands in a fixed balance with the free enzyme and the free sugar.</p><cite>Michaelis and Menten, “Die Kinetik der Invertinwirkung”, Biochemische Zeitschrift 49 (1913); see Johnson and Goody, Biochemistry 50 (2011), for a translation</cite></aside>
+  <p>Accepted names: v(s) = V_max · s/(K_m + s) is the Michaelis–Menten equation, and its graph the Michaelis–Menten curve; K_m is the Michaelis constant; the double reciprocal graph is the Lineweaver–Burk plot. Far-out-too is the limit laws read far out.</p>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const kk=$('kk'),ks=$('ks'),ke=$('ke');
+const PRE={inv:{lab:'invertase, sucrose (1913)',K:16.7,S:333,V:0.76,mm:[333,166.7,83.3,41.6,20.8]},hg:{lab:'hexokinase, glucose',K:0.05,S:5},hf:{lab:'hexokinase, fructose',K:1.5,S:5},own:{lab:'your own',K:2,S:2}};
+let pre='inv'; const ST={K:16.7,S:333};
+const L10=Math.log10;
+const fm=v=>{ const a=Math.abs(v); let s=a>=1000?v.toFixed(0):a>=100?v.toFixed(1):a>=1?v.toFixed(2):a>=0.01?v.toFixed(3):v.toPrecision(2); if(s.indexOf('.')>=0&&s.indexOf('e')<0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s; };
+const K=()=>ST.K, S=()=>ST.S, C=()=>(+ke.value)/100;
+const share=s=>s/(K()+s);
+function niceStep(span){ const r=span/5, p=Math.pow(10,Math.floor(Math.log10(r))), m=r/p; return (m<1.5?1:m<3.5?2:m<7.5?5:10)*p; }
+function axes2(P,xl,yl){ const c=P.ctx,o=P.o,gx=niceStep(o.x[1]-o.x[0]),gy=niceStep(o.y[1]-o.y[0]);
+  const dec=g=>Math.max(0,-Math.floor(Math.log10(g)+1e-9)), lab=(v,g)=>{ const s=v.toFixed(dec(g)); return /^-0\.?0*$/.test(s)?'0':s.replace('-','−'); };
+  c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1];x+=gx){ c.moveTo(P.X(x),P.Y(o.y[0])); c.lineTo(P.X(x),P.Y(o.y[1])); }
+  for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1];y+=gy){ c.moveTo(P.X(o.x[0]),P.Y(y)); c.lineTo(P.X(o.x[1]),P.Y(y)); }
+  c.stroke(); c.strokeStyle=col('--muted'); c.lineWidth=1.3; c.beginPath();
+  if(o.y[0]<=0&&o.y[1]>=0){ c.moveTo(P.X(o.x[0]),P.Y(0)); c.lineTo(P.X(o.x[1]),P.Y(0)); }
+  if(o.x[0]<=0&&o.x[1]>=0){ c.moveTo(P.X(0),P.Y(o.y[0])); c.lineTo(P.X(0),P.Y(o.y[1])); } c.stroke();
+  c.font='11px IBM Plex Mono, monospace'; c.fillStyle=col('--muted');
+  c.textAlign='center'; let k=0; for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1];x+=gx,k++){ if(Math.abs(x)<gx/1e6) continue; if(P.W<420&&k%2) continue; c.fillText(lab(x,gx),P.X(x),P.H-4); }
+  c.textAlign='left'; for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1];y+=gy){ if(Math.abs(y)<gy/1e6) continue; c.fillText(lab(y,gy),P.X(Math.max(o.x[0],0))+4,P.Y(y)-3); }
+  c.fillStyle=col('--muted'); c.textAlign='right'; c.fillText(xl,P.W-6,P.Y(Math.max(o.y[0],0))-6); c.textAlign='left'; c.fillText(yl,P.X(Math.max(o.x[0],0))+6,14); }
+const cm=$('cvM'), cl=$('cvL');
+const PM=plane(cm,{x:[0,10],y:[0,1],grid:0,labels:false,aspect:0.8,draw:P=>drawM(P)});
+const PL=plane(cl,{x:[-1,1],y:[0,1],grid:0,labels:false,aspect:0.8,draw:P=>drawL(P)});
+function frames(){ const k=K(), s=S(); let xmax=Math.max(12*k,s*1.15); if(PRE[pre].mm) xmax=Math.max(xmax,360);
+  PM.o.x=[-xmax*0.04,xmax]; PM.o.y=[-0.05,1.15];
+  const xr=Math.max(1/s*1.15,2.2/k), xl=-1.6/k; const yt=k*xr+1; PL.o.x=[xl,xr]; PL.o.y=[-yt*0.06,yt*1.12]; }
+function drawM(P){ const c=P.ctx, k=K(), e=C(), s=S(); axes2(P,'s (mmol/L)','v / V_max');
+  const Nn=k*(1-e)/e;
+  if(Nn<P.o.x[1]){ c.fillStyle=col('--gold'); c.globalAlpha=.16; c.fillRect(P.X(Math.max(Nn,0)),P.Y(1),P.X(P.o.x[1])-P.X(Math.max(Nn,0)),P.Y(1-e)-P.Y(1)); c.globalAlpha=1; P.line(Nn,0,Nn,1-e,'--gold',1.2,[3,3]); P.text('N',Nn,0.04,'--gold','center',12); }
+  P.line(0,1,P.o.x[1],1,'--gold',1.6,[7,4]); P.text('V_max',P.o.x[1]-(P.o.x[1]-P.o.x[0])*0.02,1.04,'--gold','right',12);
+  P.line(0,0.5,k,0.5,'--muted',1.2,[2,3]); P.line(k,0,k,0.5,'--muted',1.2,[2,3]); P.text('K_m',k,-0.035,'--muted','center',11);
+  P.fn(x=>x>=0?share(x):NaN,'--teal',2.6);
+  (PRE[pre].mm||[]).forEach(m=>{ const y=share(m); c.fillStyle=col('--card'); c.strokeStyle=col('--ink'); c.lineWidth=1.6; c.beginPath(); c.arc(P.X(m),P.Y(y),4.5,0,7); c.fill(); c.stroke(); });
+  P.line(s,0,s,share(s),'--ember',1.2,[3,3]); P.dot(s,share(s),'--ember',6); }
+function drawL(P){ const c=P.ctx, k=K(), s=S(); axes2(P,'u = 1/s','V_max / v');
+  P.fn(x=>k*x+1,'--teal',2.4);
+  P.dot(0,1,'--gold',5.5); P.text('1/V_max',0,1+(P.o.y[1]-P.o.y[0])*0.05,'--gold','left',12);
+  P.dot(-1/k,0,'--muted',4.5); P.text('−1/K_m',-1/k,(P.o.y[1]-P.o.y[0])*0.05,'--muted','center',11);
+  (PRE[pre].mm||[]).forEach(m=>{ const x=1/m, y=1/share(m); c.fillStyle=col('--card'); c.strokeStyle=col('--ink'); c.lineWidth=1.6; c.beginPath(); c.arc(P.X(x),P.Y(y),4.5,0,7); c.fill(); c.stroke(); });
+  P.dot(1/s,1/share(s),'--ember',6); }
+function readout(){ const k=K(), s=S(), sh=share(s), e=C(), Nn=k*(1-e)/e, V=PRE[pre].V;
+  $('ok').textContent=fm(k)+' mmol/L'; $('os').textContent=fm(s)+' mmol/L'; $('oe').textContent=(+ke.value)+'%';
+  const lines=[R`\tfrac{v}{V_{\max}} = \tfrac{s}{K_m + s} = \tfrac{${fm(s)}}{${fm(k)} + ${fm(s)}} = ${fm(sh)}`, R`s = ${fm(s/k)}\,K_m`];
+  if(V) lines.push(R`v \approx ${fm(V*sh)}\ \text{mmol/L per minute}\ (V_{\max} \approx ${V})`);
+  lines.push(R`\text{within } ${+ke.value}\%\text{ of the ceiling once}`); lines.push(R`s \gt N = K_m\tfrac{1 - c}{c} = ${fm(Nn)}\ \text{mmol/L} = ${fm(Nn/k)}\,K_m`);
+  tex($('eqM'),R`\begin{gathered}`+lines.join(R`\\ `)+R`\end{gathered}`,true);
+  tex($('eqL'),R`\begin{gathered}\tfrac{V_{\max}}{v} = ${fm(k)}\cdot u + 1\ \ (u = \tfrac1s)\\ u = ${fm(1/s)},\ \ \tfrac{V_{\max}}{v} = ${fm(1/sh)}\\ \text{start } 1 \leftrightarrow \tfrac{1}{V_{\max}};\ \text{zero at } u = -\tfrac{1}{K_m} = ${fm(-1/k)}\end{gathered}`,true); }
+function all(){ frames(); PM.redraw(); PL.redraw(); readout(); }
+function setPre(p){ pre=p; const q=PRE[p]; ST.K=q.K; ST.S=q.S; kk.value=L10(q.K); ks.value=L10(q.S); kk.disabled=(p!=='own'); all(); }
+const ech=$('ech'); Object.keys(PRE).forEach(k=>{ const b=document.createElement('button'); b.textContent=PRE[k].lab; if(k===pre) b.className='on'; b.onclick=()=>{ [...ech.children].forEach(z=>z.classList.toggle('on',z===b)); setPre(k); }; ech.appendChild(b); });
+kk.addEventListener('input',()=>{ ST.K=+Math.pow(10,+kk.value).toPrecision(3); all(); }); ks.addEventListener('input',()=>{ ST.S=+Math.pow(10,+ks.value).toPrecision(3); all(); }); ke.addEventListener('input',all);
+let dr=false; const dragS=ev=>{ const p=PM.point(ev); if(p.x>0){ ST.S=+Math.max(0.001,Math.min(1000,p.x)).toPrecision(3); ks.value=L10(ST.S); readout(); PM.redraw(); PL.redraw(); } };
+cm.addEventListener('pointerdown',ev=>{ dr=true; cm.setPointerCapture&&cm.setPointerCapture(ev.pointerId); dragS(ev); }); cm.addEventListener('pointermove',ev=>{ if(dr) dragS(ev); }); ['pointerup','pointercancel'].forEach(t=>cm.addEventListener(t,()=>{ if(dr){ dr=false; all(); } }));
+setPre('inv');
+
+/* ---------- slides ---------- */
+const N='\\htmlClass{new}', Kp='\\htmlClass{keep}';
+stepper('#sl1',[
+  {k:'teal',kl:'from 5f · the function · 1 of 4',t:R`\begin{gathered}E_{\text{total}} = E_{\text{free}} + E_{\text{busy}},\ \\\ K\,E_{\text{busy}} = E_{\text{free}}\,s\end{gathered}`,n:`Every enzyme is free or busy; the grab-and-release balance keeps a ratio fixed.`},
+  {k:'teal',kl:'from 5f · the function · 2 of 4',t:R`K\,E_{\text{busy}} = (${N}{E_{\text{total}} - E_{\text{busy}}})\,s`,n:`Substitute for the expression: free is total less busy.`},
+  {k:'teal',kl:'from 5f · the function · 3 of 4',t:R`E_{\text{busy}}\,${N}{(K + s)} = E_{\text{total}}\,s`,n:`Spread, gather the busy terms, take out the common factor.`},
+  {k:'teal',kl:'from 5f · the function · 4 of 4',t:R`v = k_{\text{cat}} E_{\text{busy}} = ${N}{\tfrac{V_{\max}\,s}{K_m + s}}`,n:`Divide by K + s, multiply by k_cat; name k_cat · E_total as V_max and K as K_m.`},
+  {k:'ember',kl:'the ceiling · 1 of 3',t:R`v = \tfrac{V_{\max}}{${N}{K_m/s} + 1}`,n:`Divide top and bottom by s, for s &gt; 0.`},
+  {k:'ember',kl:'the ceiling · 2 of 3',t:R`\tfrac{K_m}{s} \to 0 \text{ as } s \to \infty`,n:`one-over-x-far-out and constant-factor: far out, K_m/s is within any ε of 0 once s &gt; K_m/ε.`},
+  {k:'ember',kl:'the ceiling · 3 of 3',t:R`\lim_{s \to \infty} v(s) = \tfrac{V_{\max}}{0 + 1} = ${Kp}{V_{\max}}`,n:`far-out-too's limits-divide: the bottom heads to 1, not 0.`},
+  {k:'ember',kl:'never reached',t:R`V_{\max} - v(s) = ${N}{\tfrac{V_{\max} K_m}{K_m + s}} \gt 0`,n:`A positive over a positive, at every s (never-reached). Within ε once s &gt; K_m(V_max − ε)/ε.`},
+  {k:'ember',kl:'half-way · 1 of 3',t:R`\tfrac12 V_{\max} = \tfrac{V_{\max}\,s}{K_m + s}`,n:`At what s is the rate half its ceiling?`},
+  {k:'ember',kl:'half-way · 2 of 3',t:R`K_m + s = ${N}{2}s`,n:`multiplying-keeps-answers by 2(K_m + s)/V_max.`},
+  {k:'ember',kl:'half-way · 3 of 3',t:R`s = ${N}{K_m}`,n:`adding-keeps-answers. K_m is the concentration of half-saturation (half-way).`},
+  {k:'ember',kl:'the reciprocals · 1 of 3',t:R`\tfrac1v = \tfrac{K_m + s}{V_{\max}\,s}`,n:`Flip both sides: one fraction, so legal.`},
+  {k:'ember',kl:'the reciprocals · 2 of 3',t:R`= ${Kp}{\tfrac{K_m}{V_{\max}}}\cdot\tfrac1s + ${Kp}{\tfrac{1}{V_{\max}}}`,n:`Split over the top, cancel s. In u = 1/s: the linear function.`},
+  {k:'ember',kl:'the reciprocals · 3 of 3',t:R`u = \tfrac1s = 0:\ \ \tfrac1v = ${N}{\tfrac{1}{V_{\max}}}`,n:`swap-to-one-over-x: the limit far out has become the start of a linear function.`},
+  {k:'ember',kl:'one enzyme · 1 of 3',t:R`\begin{gathered}\text{hexokinase, glucose: }\\ K_m = 0.05,\ s = 5\ \text{mmol/L}\end{gathered}`,n:`Blood glucose is about 5 mmol/L: t = s/K_m = 100.`},
+  {k:'ember',kl:'one enzyme · 2 of 3',t:R`\tfrac{v}{V_{\max}} = \tfrac{t}{1 + t} = \tfrac{100}{101} \approx ${N}{0.990}`,n:`99% of the ceiling.`},
+  {k:'ember',kl:'one enzyme · 3 of 3',t:R`s \to 10:\ \ \tfrac{200}{201} \approx 0.995`,n:`Doubling the glucose adds half a percent. Saturated: the rate is set by how much enzyme there is.`}
+],{title:'The slides · the function derived; its ceiling; never reached; half-way; the double reciprocal; one enzyme worked · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

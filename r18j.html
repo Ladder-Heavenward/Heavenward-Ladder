@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Constructions with straightedge and compass</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:3fr 2fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+ol.moves{font-family:var(--mono);font-size:.8rem;margin:4px 0;padding-left:1.6em}
+ol.moves li.now{color:var(--ember)} ol.moves li.later{color:var(--muted)}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r18i.html">← 18i curves traced in time</a><a href="r18chem.html">next: 18·chem how much colour is in the glass? →</a></p>
+  <div class="tags"><span class="tag tech">18j · technique</span></div>
+  <h1>Constructions with straightedge and compass</h1>
+  <p>The Greeks drew with two tools: a straightedge with no marks on it, and a compass. This step lays down what the tools may do. It builds the constructions of Euclid's first book with them: the equilateral triangle, the midpoint, the perpendiculars, the bisected angle, the parallel, and the hexagon and the square in a circle. It checks each one in coordinates, by solving for the points where the lines and circles meet. Then it finds which points the tools can reach at all.</p>
+  <p class="gesture">A straightedge draws the line through two drawn points. A compass draws the circle with a drawn centre through a drawn point. New points are where drawn lines and circles meet. Every point the tools reach has coordinates built from the starting ones by adding, subtracting, multiplying, dividing and square roots.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r18c.html">18c</a> (two-descriptions-agree, line-through-two-points, two-lines-meet, parallel-through-a-point, nearest-point), <a href="r18d.html">18d</a> (circle-equation, perpendicular-bisector, line-meets-circle, two-circles-meet, the angle bisector), <a href="r18f.html">18f</a> (parallel-cut), <a href="r18h.html">18h</a> (diameter), <a href="r18a.html">18a</a> (distance-laws, right-triangle, part-of-the-way), <a href="r08i.html">8i</a> (quadratic-formula). <a href="r18chem.html">18·chem</a> takes the plane's lengths into a beam of light.</p></div>
+</header>
+
+<section class="class step" data-step="18j1">
+  <h2 class="sthead"><span class="stno">18j1</span>The rules of the game</h2>
+  <p class="stands">Stands on 18c (lines) and 18d (circles).</p>
+  <p class="eqline" data-pid="41df5e">From here on, a construction starts from some drawn points and makes moves of three kinds. Straightedge: draw the line through two drawn points. Compass: draw the circle whose centre is a drawn point, through another drawn point. Mark: a point where two drawn lines or circles meet is drawn. Nothing else is allowed. The straightedge has no marks on it. The compass closes when it is lifted, so it cannot carry a length from one place to another. A point reached this way has the accepted name constructible.</p>
+  <p data-pid="adbdd3">These are the rules of a game, not axioms: nothing new is assumed about the plane. Each construction claims that certain moves reach a certain point, and its proof is in coordinates. Most checks below use one device from 18c. For a displacement u = (u₁, u₂), write n = (−u₂, u₁). Then u · n = 0 by the dot technique, and |n| = |u| by distance-laws.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the rules · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">18j1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">drawn: A = (0, 0),  B = (2, 0)</span></span>Name the moves you may make. <br>Draw the circle with centre A through B, and find where it meets the line AB.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18j2">
+  <h2 class="sthead"><span class="stno">18j2</span>A triangle and a midpoint</h2>
+  <p class="stands">Stands on 18j1 and 18d (two-circles-meet, perpendicular-bisector).</p>
+  <p data-pid="53831a">Let A ≠ B be drawn. Write u = B − A, s = |u|, n = (−u₂, u₁) and M = (A + B)/2. Equilateral technique: <b>the circle with centre A through B and the circle with centre B through A meet at exactly two points, and each makes an equilateral triangle with A and B.</b> The two points are C = M ± (√3/2)n.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the equilateral technique">
+\text{both radii are } s = d(A, B),\ \ |s - s| \lt s \lt s + s @@ two-circles-meet: exactly two meeting points
+C - A = \tfrac12 u \pm \tfrac{\sqrt3}{2}n @@ adding-keeps-answers, with M − A = u/2
+|C - A|^2 = \tfrac14 s^2 + \tfrac34 s^2 = s^2 @@ right-triangle: u · n = 0 and |n| = s
+|C - B|^2 = s^2 @@ the same, with C − B = −u/2 ± (√3/2)n
+\htmlClass{new}{d(C, A) = d(C, B) = d(A, B)} \quad \blacksquare @@ so both points are on both circles, and two-circles-meet says there are no others
+  </pre>
+  <p data-pid="799001">Midpoint technique: <b>the line through the two points of equilateral is the perpendicular bisector of AB, and it meets AB at the midpoint.</b> Each of the two points is s from A and s from B, so both lie on the perpendicular bisector (perpendicular-bisector). By line-through-two-points, the line through them is that bisector. Their average is M, by part-of-the-way, and M is on the line AB.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · a triangle and a midpoint · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · a construction, move by move, checked in coordinates</div>
+    <div class="chips" id="pch"></div>
+    <div class="panels">
+    <div class="panel">
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">move</span><input type="range" id="ks" min="0" max="12" step="1" value="12"><output id="os"></output></div>
+      <div class="kn"><span class="m">Px</span><input type="range" id="kx" min="-5" max="5" step="0.1" value="1"><output id="ox"></output></div>
+      <div class="kn"><span class="m">Py</span><input type="range" id="ky" min="-5" max="5" step="0.1" value="3"><output id="oy"></output></div>
+      <div class="cap">Ink: drawn points and lines. Muted: drawn circles. Ember: the move just made. Plum: the result. The sliders move one starting point: B, P or A.</div>
+    </div>
+    <div class="panel">
+      <div class="lbl">the moves</div>
+      <ol class="moves" id="mv"></ol>
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18j2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">drawn: A = (0, 0),  B = (4, 0)</span></span>Construct the midpoint of AB, listing the moves. <br>Find the coordinates of every point marked.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18j3">
+  <h2 class="sthead"><span class="stno">18j3</span>Perpendiculars, bisected angles and parallels</h2>
+  <p class="stands">Stands on 18j2 and 18d (line-meets-circle).</p>
+  <p data-pid="8eb85f">Perpendicular technique: <b>through any drawn point P, on a drawn line ℓ or off it, the line perpendicular to ℓ can be constructed.</b> Let ℓ be drawn through Q and R. The moves are below. The idea in both cases is to find two points of ℓ equally far from P, and bisect the segment between them.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the perpendicular technique">
+\begin{aligned}&P \text{ on } \ell:\ \text{the circle centre } P \text{ through } Q \text{ }\\ &\quad \text{meets } \ell \text{ again at } Q' = 2P - Q\end{aligned} @@ line-meets-circle: the distance from P to ℓ is 0 &lt; |PQ|; Q′ is on ℓ, and d(P, Q′) = d(P, Q)
+\text{the bisector of } QQ' \text{ passes through } P = \tfrac{Q + Q'}{2} @@ midpoint; it is perpendicular to ℓ (perpendicular-bisector)
+\begin{aligned}&P \text{ off } \ell:\ \text{the circle centre } P \text{ through } Q \text{ }\\ &\quad \text{meets } \ell \text{ at } Q \text{ and at } Q'\end{aligned} @@ line-meets-circle; if it only touches at Q, then PQ is already perpendicular to ℓ
+\begin{aligned}&\htmlClass{new}{\text{the bisector of } QQ' \text{ passes through } P \text{ and }}\\ &\quad \htmlClass{new}{\text{is perpendicular to } \ell} \quad \blacksquare\end{aligned} @@ perpendicular-bisector: d(P, Q) = d(P, Q′); it meets ℓ at the foot of nearest-point
+  </pre>
+  <p data-pid="a998fd">Let A, B and C be drawn, with the rays from A through B and through C neither one ray nor opposite. Write r = |AB|, e₁ = (B − A)/r and e₂ = (C − A)/|C − A|. 18d called the line through A with direction e₁ + e₂ the angle bisector at A. Angle-bisector technique: <b>to bisect the angle at A, mark the point B′ on the ray through C with AB′ = AB, and bisect the segment from B to B′.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the angle-bisector technique">
+\begin{aligned}&\text{the circle centre } A \text{ through } B \text{ meets}\\ &\quad\text{the line through } A, C \text{ at } A \pm re_2\end{aligned} @@ line-meets-circle, with δ = 0; take B′ = A + re₂, on the ray
+d(A, B) = d(A, B') = r @@ so A is on the bisector of BB′ (perpendicular-bisector); B ≠ B′, since e₁ ≠ e₂
+\tfrac{B + B'}{2} = A + \tfrac r2(e_1 + e_2) \ne A @@ part-of-the-way; e₁ + e₂ ≠ 0, since the rays are not opposite
+\begin{aligned}&\htmlClass{new}{\text{the bisector of } BB' \text{ is the line through } A \text{ }}\\ &\quad \htmlClass{new}{\text{with direction } e_1 + e_2} \quad \blacksquare\end{aligned} @@ line-through-two-points: through A and the midpoint
+  </pre>
+  <p data-pid="48e5b4">Let a line ℓ be drawn through Q and R, and P be a drawn point off ℓ. Write r = |PQ| and e = (R − Q)/|R − Q|. Parallel technique: <b>three circles give the parallel to ℓ through P: the circle centre Q through P marks S on ℓ, and the circles centre S and centre P, both through Q, meet again at a point D, and the line through P and D is parallel to ℓ.</b> The four points Q, S, D, P have equal sides; the accepted name for such a figure is a rhombus.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the parallel technique">
+S = Q + re @@ line-meets-circle, with δ = 0: S is on ℓ, and d(Q, S) = r
+D = P + S - Q:\ \ d(D, S) = d(P, Q) = r,\ \ d(D, P) = d(S, Q) = r @@ distance-laws; so D is on both circles, whose radii are both r
+0 \lt d(S, P) \lt 2r @@ triangle in the plane, with equality only if Q were on the segment from S to P, which would put P on ℓ (equality-on-the-segment)
+\begin{aligned}&\text{the two circles meet at exactly } Q \text{ and } D,\\ &\quad \ \ D \ne Q\end{aligned} @@ two-circles-meet; D = Q would put P = 2Q − S on ℓ
+\htmlClass{new}{D - P = S - Q = re} \quad \blacksquare @@ so the line through P and D has ℓ's direction: it is the parallel (parallel-through-a-point)
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · perpendiculars and parallels · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18j3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">drawn: the line through (0, 0) and (4, 0),  P = (1, 3)</span></span>Construct the perpendicular from P to the line, listing the moves. <br>Find every point marked, and the foot.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18j4">
+  <h2 class="sthead"><span class="stno">18j4</span>Polygons in a circle</h2>
+  <p class="stands">Stands on 18j3.</p>
+  <p data-pid="a402c7">A polygon whose corners all lie on one circle, with all its sides equal, has the accepted name regular. Let a circle with centre O through A be drawn. Write w = A − O, r = |w| and n = (−w₂, w₁).</p>
+  <p data-pid="39556e">Hexagon technique: <b>stepping round the circle with the compass, each step a circle through the centre, gives six corners that close up into a regular hexagon.</b> The circle centre A through O meets the first circle at O + w/2 ± (√3/2)n, by equilateral with the triangle on OA. Each next step does the same from the corner just found. The six corners are O + w, O + w/2 + (√3/2)n, O − w/2 + (√3/2)n, O − w, O − w/2 − (√3/2)n and O + w/2 − (√3/2)n. Each is r from O, and each is r from the next, by right-triangle as in equilateral. The sixth step lands back on A. Every second corner gives the equilateral triangle in the circle, with side r√3.</p>
+  <p data-pid="9e49f1">Square technique: <b>the diameter through A and the diameter perpendicular to it meet the circle at the four corners of a square.</b> The line OA meets the circle again at A′ = O − w. Its perpendicular bisector passes through O with direction n, by perpendicular, and meets the circle at O ± n. The corners O ± w and O ± n have sides of length r√2, and (n − w) · (−w − n) = |w|² − |n|² = 0, so each corner is a right angle.</p>
+  <pre class="lines" data-k="ember" data-label="this step: worked">
+A = (0, 0),\ B = (6, 0):\ \ C = (3, \pm 3\sqrt3) @@ equilateral: n = (0, 6), C = (3, 0) ± (√3/2)(0, 6)
+P = (2, 5),\ \ell: y = 0 \text{ through } Q = (-2, 0),\ R = (4, 0) @@ perpendicular: the circle centre P through Q, (x − 2)² + (y − 5)² = 41, meets y = 0 again at Q′ = (6, 0); the bisector of QQ′ is x = 2
+\text{the same } P, \ell:\ \ S = (-2 + \sqrt{41}, 0),\ \ D = (2 + \sqrt{41}, 5) @@ parallel: D − P = S − Q, level
+O = (0, 0),\ A = (5, 0):\ \ (2.5,\ \pm 2.5\sqrt3),\ (-2.5,\ \pm 2.5\sqrt3),\ (-5, 0) @@ hexagon; the square's corners are (±5, 0) and (0, ±5)
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · polygons · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18j4.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{drawn: } A = (0, 0),"></span> <span data-tex-inline="B = (4, 2)"></span></span>Construct the equilateral triangles on AB, and find every third corner.</li><li><span class="givens"><span data-tex-inline="\text{drawn: } A = (0, 0),"></span> <span data-tex-inline="B = (3, 4),"></span> <span data-tex-inline="C = (6, 0)"></span></span>Bisect the angle at A between the rays through B and C. <br>List the moves, the coordinates of every point marked, and the bisector's equation.</li><li><span class="givens"><span data-tex-inline="\text{drawn: } P = (1, 5),"></span> <span data-tex-inline="\text{the line through } Q = (0, 1)"></span> <span data-tex-inline="\text{and } R = (6, 4)"></span></span>Construct the perpendicular from P to the line QR. <br>Find every point marked, the foot, and the distance from P to the line.</li><li><span class="givens"><span data-tex-inline="\text{drawn: the circle}"></span> <span data-tex-inline="\text{with centre } (0, 0)"></span> <span data-tex-inline="\text{through } A = (3, 4)"></span></span>Construct the regular hexagon in it with a corner at A, and find all six corners.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18j5">
+  <h2 class="sthead"><span class="stno">18j5</span>Which points the tools reach</h2>
+  <p class="stands">Stands on 18j4 and 8f (square-root).</p>
+  <p data-pid="10063e">Let K be a set of reals that holds 0 and 1, and holds g + h, g − h, gh and, for h ≠ 0, g/h whenever it holds g and h. Let every drawn point have both coordinates in K. Root-and-ratio technique: <b>each point the tools mark next has coordinates of the form p + q√k, with p, q and k in K.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the root-and-ratio technique">
+\text{the line through } (x_1, y_1), (x_2, y_2):\ \ (y_2 - y_1)x - (x_2 - x_1)y = c,\ \ c \in K @@ two-descriptions-agree, with c = (y₂ − y₁)x₁ − (x₂ − x₁)y₁
+\text{the circle: } x^2 + y^2 + Dx + Ey + F = 0,\ \ D, E, F \in K @@ circle-equation expanded, from a centre and a point in K
+\text{two lines: } x, y \in K @@ two-lines-meet: its formulas use only +, −, × and ÷
+\text{a line and a circle: } \alpha x^2 + \beta x + \gamma = 0,\ \ \alpha, \beta, \gamma \in K @@ solve the line for one letter and substitute; if the line is upright, swap the letters
+x = \tfrac{-\beta}{2\alpha} \pm \tfrac{1}{2\alpha}\sqrt{\beta^2 - 4\alpha\gamma} @@ quadratic-formula: p + q√k, with k = β² − 4αγ in K; y from the line
+\begin{aligned}&\htmlClass{new}{\text{two circles: subtract, and it is a line and a }}\\ &\quad \htmlClass{new}{\text{circle}} \quad \blacksquare\end{aligned} @@ as in two-circles-meet
+  </pre>
+  <p data-pid="9b3618">So, from (0, 0) and (1, 0), every coordinate the tools reach is built from 0 and 1 by +, −, ×, ÷ and square roots, taken finitely often. The converse is true too. Products and quotients come from parallel-cut, and square roots from one more construction. Square-root technique: <b>for k &gt; 0, the circle with diameter from (−1, 0) to (k, 0) meets the line x = 0 at (0, ±√k).</b> By diameter, its equation is (x + 1)(x − k) + y² = 0, and at x = 0 that is y² = k.</p>
+  <p data-pid="c275bf">So the tools reach exactly the numbers built by square roots. Is ∛2 one of them? A cube with twice the volume of a unit cube needs it as its side. In 1837 it was proved that the tools cannot reach ∛2 from 0 and 1, and that they cannot cut the angle of an equilateral triangle into three equal angles. The proof needs more algebra than this ladder has built, so here it is reported, not proved.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · which points · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18j5.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="A = (0, 0),"></span> <span data-tex-inline="C = (2 - \sqrt3,\ 1 + 2\sqrt3),"></span> <span data-tex-inline="\text{corners of an}"></span> <span data-tex-inline="\text{equilateral triangle}"></span></span>Find every possible third corner.</li><li><span class="givens"><span data-tex-inline="\text{a regular hexagon has}"></span> <span data-tex-inline="\text{neighbouring corners}"></span> <span data-tex-inline="(0, 0),\ (2, 0)"></span></span>Find every possible centre of its circle, and construct one.</li><li><span class="givens"><span data-tex-inline="\text{drawn: } A = (1, 2),"></span> <span data-tex-inline="M = (4, 3)"></span></span>Construct B with M the midpoint of AB, and find B.</li><li><span class="givens"><span data-tex-inline="\text{start: } (-1, 0), (0, 0), (3, 0),"></span> <span data-tex-inline="\text{end: } (0, \sqrt3)"></span></span>Find a construction from the start to the end, move by move.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18j6">
+  <h2 class="sthead"><span class="stno">18j6</span>Illegal moves</h2>
+  <p class="stands">Stands on 18j1 to 18j5.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\begin{aligned}&\text{open the compass to } |QR| \text{ and}\\ &\quad\text{draw that circle about } P\,?\end{aligned} @@ the compass closes when lifted; carrying a length must be built from the allowed moves
+\begin{aligned}&\text{mark 3 on the straightedge}\\ &\quad\text{and step it along}\,?\end{aligned} @@ the straightedge has no marks; equal steps come from circles
+\text{draw a circle through three points by eye}\,? @@ only a centre and a point; find the centre by two perpendicular bisectors
+\begin{aligned}&\text{cut the chord in three}\\ &\quad\text{to cut the angle in three}\,?\end{aligned} @@ for the right angle at (0, 0) between (1, 0) and (0, 1), the chord's thirds give openings 2/√5 and 4/5: unequal angles
+  </pre>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18j6.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{rays from } A \text{ that are opposite}"></span></span>Run angle-bisector on them, and find which step breaks and what the construction draws anyway.</li><li><span class="givens"><span data-tex-inline="O = (0, 0),"></span> <span data-tex-inline="P = (6, 3),"></span> <span data-tex-inline="U = (1, 0),"></span> <span data-tex-inline="V = (0, 1)"></span></span>With the tools, cut the segment OP into three equal parts. <br>Cut the chord UV into three equal parts, and join the cuts to O. <br>Find whether the three angles at O are equal.</li><li><span class="givens"><span data-tex-inline="\text{drawn: } P, Q, R;"></span> <span data-tex-inline="\text{the closing compass}"></span></span>Construct the circle with centre P and radius the length of QR.</li><li><span class="givens"><span data-tex-inline="\text{drawn: } (0, 0), (1, 0);"></span> <span data-tex-inline="S = (\sqrt2, 0),"></span> <span data-tex-inline="T = \big(0, \sqrt{1 + \sqrt2}\big)"></span></span>Construct S and T from the two drawn points alone. <br>Count the moves each takes.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">18j.4.1</span><span class="tagq">build</span>Choose and draw A, B and C of your own, with the rays from A through B and through C neither one ray nor opposite. <br>Construct the rays from A that cut the angle into four equal angles, listing the moves and the points they mark. <br>Prove the four angles equal.</div>
+  <div class="chq"><span class="chid">18j.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{drawn: } A, B"></span></span>The straightedge is off limits. <br>Construct the point C with B the midpoint of AC.</div>
+  <div class="chq"><span class="chid">18j.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{drawn: } (0, 0), (1, 0), (g, 0), (h, 0),"></span> <span data-tex-inline="g, h &gt; 0,"></span> <span data-tex-inline="\text{targets: } (gh, 0),\ (g/h, 0)"></span></span>Construct both targets.</div>
+  <div class="chq"><span class="chid">18j.4.4</span><span class="tagq">seam</span>With a straightedge carrying two marks, slid until the marks sit on a line and a circle, an ancient geometer cut any angle into three equal angles. A philosopher of his world is reported to have scolded friends who doubled the cube with instruments, for spoiling what is good in geometry. For two thousand years people tried to cut angles in three with the unmarked tools. In 1837 a proof showed that they cannot. The degrees axiom says the angle a third the size exists. <br>What did the proof of 1837 show?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r18i.html">← 18i · curves traced in time</a><a href="r18chem.html">18·chem · how much colour is in the glass? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>Let it be granted to draw a straight line from any point to any point, to extend a finite straight line continuously in a straight line, and to describe a circle with any centre and distance.</p><cite>Euclid, Elements, Book I, postulates 1 to 3 (about 300 BCE); paraphrase</cite></aside>
+  <p>Equilateral is Euclid's first proposition; carrying a length with a closing compass is his second, and 18j.3.1c is it. The bisected angle, the midpoint and the perpendiculars are his propositions 9 to 12, and the parallel through a point is his 31. The hexagon in a circle is Book IV, proposition 15.</p>
+  <p>In 18j.4.4, the geometer with the marked straightedge is Archimedes; the philosopher is Plato, as Plutarch tells it of Eudoxus, Archytas and Menaechmus. The proof of 1837 is Pierre Wantzel's. Carl Friedrich Gauss had shown in 1796, at nineteen, that the regular polygon with 17 sides can be constructed. Georg Mohr (1672) and Lorenzo Mascheroni (1797) showed that the compass alone reaches every constructible point, which 18j.4.2 begins.</p>
+  <p>Accepted names: the marked straightedge's move is a neusis; the three old problems are doubling the cube, trisecting the angle, and squaring the circle, the last shown impossible by Ferdinand von Lindemann in 1882.</p>
+  <pre class="lines" data-k="ember" data-label="a wrong proof, not allowed">
+\text{the chord from } (1, 0) \text{ to } (0, 1) \text{ is cut at } (\tfrac23, \tfrac13),\ (\tfrac13, \tfrac23) @@ part-of-the-way: three equal pieces
+\text{so the rays through the cuts cut the right angle in three} @@ not allowed: equal chords cut off equal angles only on one circle about the vertex (18f), and the cuts are not on one
+  </pre>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+/* least and greatest of F.f on [lo, hi]: the ends, F's critical points inside, and a fine sample (exact between critical points for the functions used here) */
+function ext(F,lo,hi){ if(F.dir) return [0,1]; let m=Infinity,M=-Infinity; const t=x=>{ const v=F.f(x); if(v<m) m=v; if(v>M) M=v; };
+  t(lo); t(hi); (F.crit||[]).forEach(c=>{ if(c>lo&&c<hi) t(c); }); for(let k=1;k<64;k++) t(lo+(hi-lo)*k/64); return [m,M]; }
+function sums(F,pts){ let L=0,U=0; const ms=[],Ms=[]; for(let i=1;i<pts.length;i++){ const [m,M]=ext(F,pts[i-1],pts[i]), w=pts[i]-pts[i-1]; ms.push(m); Ms.push(M); L+=m*w; U+=M*w; } return {L,U,ms,Ms}; }
+const eq=(a,b,n)=>Array.from({length:n+1},(_,i)=>a+(b-a)*i/n);
+function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
+function boxes(P,pts,hs,stroke,fill,alpha){ const c=P.ctx; for(let i=1;i<pts.length;i++){ const a=pts[i-1],b=pts[i],h=hs[i-1]; c.globalAlpha=alpha; P.poly([[a,0],[b,0],[b,h],[a,h]],null,fill); c.globalAlpha=1; P.poly([[a,0],[b,0],[b,h],[a,h]],stroke,null,1.2); } }
+function dirDots(P,a,b){ const c=P.ctx; c.fillStyle=col('--ink'); for(let k=0;k<=300;k++){ const x=a+(b-a)*k/300; const y=(k%2)?0:1; c.fillRect(P.X(x)-1,P.Y(y)-1,2,2); } }
+/* shade between the graph of fn and the axis from lo to hi: above in pos colour, below in neg colour */
+function shade(P,fn,lo,hi,pos,neg,alpha){ if(hi<lo){ const t=lo; lo=hi; hi=t; } const c=P.ctx, N=300; c.globalAlpha=alpha==null?0.32:alpha;
+  for(let k=0;k<N;k++){ const x0=lo+(hi-lo)*k/N, x1=lo+(hi-lo)*(k+1)/N, xm=(x0+x1)/2, y=fn(xm); if(!isFinite(y)) continue; P.poly([[x0,0],[x1,0],[x1,fn(x1)],[x0,fn(x0)]],null,y>=0?pos:neg); }
+  c.globalAlpha=1; }
+function rangeOf(fn,lo,hi,pad){ let m=Infinity,M=-Infinity; for(let k=0;k<=400;k++){ const v=fn(lo+(hi-lo)*k/400); if(isFinite(v)){ if(v<m) m=v; if(v>M) M=v; } } if(m>0) m=0; if(M<0) M=0; const p=(M-m)*(pad==null?0.12:pad)||1; return [m-p,M+p]; }
+function chips(el,FN,get,setk,after){ Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===get()) b.className='on'; b.onclick=()=>{ setk(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+const Nw='\\htmlClass{new}';
+function gridFor(sp){ return sp>40?10:sp>16?4:sp>8?2:sp>3?1:sp>1.2?0.5:0.25; }
+function frame2(P,fn,lo,hi,pad){ const w=hi-lo; P.o.x=[lo-0.12*w,hi+0.08*w]; P.o.y=rangeOf(fn,lo,hi,pad==null?0.12:pad); const sx=P.o.x[1]-P.o.x[0], sy=P.o.y[1]-P.o.y[0]; let g=gridFor(sx); while(sy/g>24) g*=2; P.o.grid=g; }
+const num=(f,a,b,n)=>{ n=n||4000; const h=(b-a)/n; let s=0; for(let i=0;i<n;i++) s+=f(a+(i+0.5)*h)*h; return s; };
+/* axes with separate steps across and up */
+function axes2(P,gx,gy){ const c=P.ctx,o=P.o; c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ c.moveTo(P.X(x),P.Y(o.y[0])); c.lineTo(P.X(x),P.Y(o.y[1])); }
+  for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ c.moveTo(P.X(o.x[0]),P.Y(y)); c.lineTo(P.X(o.x[1]),P.Y(y)); } c.stroke();
+  c.strokeStyle=col('--muted'); c.lineWidth=1.3; c.beginPath(); if(o.y[0]<=0&&o.y[1]>=0){ c.moveTo(P.X(o.x[0]),P.Y(0)); c.lineTo(P.X(o.x[1]),P.Y(0)); } if(o.x[0]<=0&&o.x[1]>=0){ c.moveTo(P.X(0),P.Y(o.y[0])); c.lineTo(P.X(0),P.Y(o.y[1])); } c.stroke();
+  c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; const ly=Math.min(P.H-6,Math.max(12,P.Y(0)+14));
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ if(Math.abs(x)<1e-9) continue; c.fillText(+x.toFixed(6),P.X(x),ly); }
+  c.textAlign='right'; const lx=Math.max(32,Math.min(P.W-4,P.X(0)-5)); for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ if(Math.abs(y)<1e-9) continue; c.fillText(String(+y.toFixed(6)).replace('-','−'),lx,P.Y(y)+4); } }
+function nice(sp){ const raw=sp/6, p=Math.pow(10,Math.floor(Math.log10(raw))), m=raw/p; return (m<1.5?1:m<3.5?2:m<7.5?5:10)*p; }
+function arrow(P,x1,y1,x2,y2,colr,w){ P.line(x1,y1,x2,y2,colr,w||2.2); const c=P.ctx, X1=P.X(x1),Y1=P.Y(y1),X2=P.X(x2),Y2=P.Y(y2), L=Math.hypot(X2-X1,Y2-Y1); if(L<2) return; const ux=(X2-X1)/L, uy=(Y2-Y1)/L, h=9; c.fillStyle=col(colr); c.beginPath(); c.moveTo(X2,Y2); c.lineTo(X2-h*ux-0.5*h*uy,Y2-h*uy+0.5*h*ux); c.lineTo(X2-h*ux+0.5*h*uy,Y2-h*uy-0.5*h*ux); c.closePath(); c.fill(); }
+function fillA(P,pts,colr,alpha){ const c=P.ctx; c.globalAlpha=alpha==null?0.2:alpha; P.poly(pts,null,colr); c.globalAlpha=1; }
+const sq1=P=>Object.defineProperty(P.o,'aspect',{get:()=>1});
+function rightMark(P,qx,qy,ax,ay,bx,by,s,colr){ const la=Math.hypot(ax-qx,ay-qy), lb=Math.hypot(bx-qx,by-qy); if(!la||!lb) return; const u=[(ax-qx)/la*s,(ay-qy)/la*s], v=[(bx-qx)/lb*s,(by-qy)/lb*s]; P.poly([[qx+u[0],qy+u[1]],[qx+u[0]+v[0],qy+u[1]+v[1]],[qx+v[0],qy+v[1]]],colr||'--muted',null,1.2,false); }
+const dist=(a,b)=>Math.hypot(b[0]-a[0],b[1]-a[1]);
+const dotp=(u,v)=>u[0]*v[0]+u[1]*v[1];
+function clipBox(P,fn){ const c=P.ctx, [x0,x1]=P.o.x,[y0,y1]=P.o.y; c.save(); c.beginPath(); c.rect(P.X(x0),P.Y(y1),P.X(x1)-P.X(x0),P.Y(y0)-P.Y(y1)); c.clip(); fn(); c.restore(); }
+function lineABC(P,a,b,c,colr,w,dash){ const [x0,x1]=P.o.x,[y0,y1]=P.o.y; clipBox(P,()=>{ if(Math.abs(b)>1e-12){ P.line(x0,(c-a*x0)/b,x1,(c-a*x1)/b,colr,w,dash); } else if(Math.abs(a)>1e-12){ P.line(c/a,y0,c/a,y1,colr,w,dash); } }); }
+const ks=$('ks'),kx=$('kx'),ky=$('ky'),cvF=$('cvF');
+const PF=plane(cvF,{x:[-8,8],y:[-7,7],grid:1,aspect:1,draw:P=>drawF(P)}); sq1(PF);
+const sub=(p,q)=>[p[0]-q[0],p[1]-q[1]], add=(p,q)=>[p[0]+q[0],p[1]+q[1]], mul=(k,p)=>[k*p[0],k*p[1]], nrm=p=>Math.hypot(p[0],p[1]);
+/* meeting points, solved as on the step */
+function LC(p,q,c,r){ const d=sub(q,p), f=sub(p,c), A=dotp(d,d), B=2*dotp(f,d), C=dotp(f,f)-r*r, D=B*B-4*A*C; if(D<-1e-9) return []; const s=Math.sqrt(Math.max(0,D)); return [add(p,mul((-B-s)/(2*A),d)),add(p,mul((-B+s)/(2*A),d))]; }
+function CC(c1,r1,c2,r2){ const d=nrm(sub(c2,c1)); if(d<1e-9||d>r1+r2+1e-9||d<Math.abs(r1-r2)-1e-9) return []; const a=(r1*r1-r2*r2+d*d)/(2*d), h=Math.sqrt(Math.max(0,r1*r1-a*a)), e=mul(1/d,sub(c2,c1)), m=add(c1,mul(a,e)), n=[-e[1],e[0]]; return [add(m,mul(h,n)),add(m,mul(-h,n))]; }
+function LL(p1,q1,p2,q2){ const a1=q1[1]-p1[1], b1=p1[0]-q1[0], c1=a1*p1[0]+b1*p1[1], a2=q2[1]-p2[1], b2=p2[0]-q2[0], c2=a2*p2[0]+b2*p2[1], D=a1*b2-a2*b1; return Math.abs(D)<1e-12?null:[(c1*b2-c2*b1)/D,(a1*c2-a2*c1)/D]; }
+const far=(pts,q)=>pts.slice().sort((u,v)=>nrm(sub(v,q))-nrm(sub(u,q)))[0];
+const pf=p=>'('+mm(p[0],3)+', '+mm(p[1],3)+')';
+/* each construction: a list of moves {t:'L'|'C'|'pt'|'poly', ...}, a text per move, and a check */
+const CON={
+  eq:{lab:'equilateral',P:[3,1],make:P=>{ const A=[-2,-1], B=P, r=nrm(sub(B,A)), X=CC(A,r,B,r); return {pts:{A,B},mv:[
+      {t:'C',c:A,r,s:'circle centre A through B'},{t:'C',c:B,r,s:'circle centre B through A'},
+      {t:'pt',p:X[0],n:'C',s:'mark C'},{t:'pt',p:X[1],n:'C′',s:'mark C′'},{t:'poly',v:[A,B,X[0]],s:'join A, B, C'}],
+      chk:X.length?'|CA| = '+mm(nrm(sub(X[0],A)),4)+', |CB| = '+mm(nrm(sub(X[0],B)),4)+', |AB| = '+mm(r,4)+'.':'',tx:X.length?R`C = M \pm \tfrac{\sqrt3}{2}n = ${pf(X[0])}`:''}; }},
+  mid:{lab:'midpoint',P:[3,1],make:P=>{ const A=[-2,-1], B=P, r=nrm(sub(B,A)), X=CC(A,r,B,r), M=X.length?LL(X[0],X[1],A,B):null; return {pts:{A,B},mv:[
+      {t:'C',c:A,r,s:'circle centre A through B'},{t:'C',c:B,r,s:'circle centre B through A'},
+      {t:'pt',p:X[0],n:'C',s:'mark C'},{t:'pt',p:X[1],n:'C′',s:'mark C′'},{t:'L',p:X[0],q:X[1],s:'line CC′'},{t:'L',p:A,q:B,s:'line AB'},{t:'pt',p:M,n:'M',s:'mark M',res:1}],
+      chk:M?'M = '+pf(M)+'; (A + B)/2 = '+pf(mul(0.5,add(A,B)))+'.':'',tx:R`M = \tfrac{A + B}{2}`}; }},
+  perp:{lab:'perpendicular',P:[1,3],make:P=>{ const Q=[-4,-2], Rr=[4,1], r=nrm(sub(P,Q)), m=LC(Q,Rr,P,r), Q2=far(m,Q), r2=nrm(sub(Q2,Q)), E=CC(Q,r2,Q2,r2), F=E.length?LL(E[0],E[1],Q,Rr):null;
+      const n=[Rr[1]-Q[1],Q[0]-Rr[0]], c=dotp(n,Q), Fn=sub(P,mul((dotp(n,P)-c)/dotp(n,n),n)); return {pts:{Q,R:Rr},mv:[
+      {t:'L',p:Q,q:Rr,s:'line ℓ through Q, R'},{t:'C',c:P,r,s:'circle centre P through Q'},{t:'pt',p:Q2,n:'Q′',s:'mark Q′'},
+      {t:'C',c:Q,r:r2,s:'circle centre Q through Q′'},{t:'C',c:Q2,r:r2,s:'circle centre Q′ through Q'},{t:'pt',p:E[0],n:'E',s:'mark E'},{t:'pt',p:E[1],n:'E′',s:'mark E′'},
+      {t:'L',p:E[0],q:E[1],s:'line EE′, through P'},{t:'pt',p:F,n:'F',s:'mark the foot F',res:1}],
+      chk:F?'F = '+pf(F)+'; nearest-point gives '+pf(Fn)+'.':'',tx:R`F = P - \tfrac{n \cdot P - c}{|n|^2}\,n`}; }},
+  bis:{lab:'angle bisector',P:[3,1],make:P=>{ const A=[-3,-2], C=[-1,4], B=P, r=nrm(sub(B,A)), e2=mul(1/nrm(sub(C,A)),sub(C,A)), B2=add(A,mul(r,e2)), r2=nrm(sub(B2,B)), E=CC(B,r2,B2,r2);
+      const e1=mul(1/r,sub(B,A)), w=add(e1,e2); return {pts:{A,B,C},mv:[
+      {t:'L',p:A,q:B,s:'line AB'},{t:'L',p:A,q:C,s:'line through A, C'},{t:'C',c:A,r,s:'circle centre A through B'},{t:'pt',p:B2,n:'B′',s:'mark B′ on the ray through C'},
+      {t:'C',c:B,r:r2,s:'circle centre B through B′'},{t:'C',c:B2,r:r2,s:'circle centre B′ through B'},{t:'pt',p:E[0],n:'E',s:'mark E'},{t:'pt',p:E[1],n:'E′',s:'mark E′'},{t:'L',p:E[0],q:E[1],s:'line EE′, through A',res:1}],
+      chk:E.length?'EE′ has direction '+pf(mul(1/nrm(sub(E[0],E[1])),sub(E[0],E[1])))+'; e₁ + e₂ scaled to length 1 is '+pf(mul(1/nrm(w),w))+' (or its opposite).':'',tx:R`e_1 + e_2`}; }},
+  par:{lab:'parallel',P:[1,3],make:P=>{ const Q=[-4,-2], Rr=[4,1], r=nrm(sub(P,Q)), m=LC(Q,Rr,Q,r), S=m.sort((u,v)=>nrm(sub(u,Rr))-nrm(sub(v,Rr)))[0], X=CC(S,r,P,r), D=far(X,Q); return {pts:{Q,R:Rr},mv:[
+      {t:'L',p:Q,q:Rr,s:'line ℓ through Q, R'},{t:'C',c:Q,r,s:'circle centre Q through P'},{t:'pt',p:S,n:'S',s:'mark S on ℓ'},
+      {t:'C',c:S,r,s:'circle centre S through Q'},{t:'C',c:P,r,s:'circle centre P through Q'},{t:'pt',p:D,n:'D',s:'mark D'},{t:'L',p:P,q:D,s:'line through P, D',res:1}],
+      chk:D?'D − P = '+pf(sub(D,P))+' and S − Q = '+pf(sub(S,Q))+'.':'',tx:R`D - P = S - Q`}; }},
+  hex:{lab:'hexagon',P:[4,1],make:P=>{ const O=[0,0], A=P, r=nrm(A); const cs=[A]; let prev=null, cur=A; const mv=[{t:'C',c:O,r,s:'circle centre O through A'}];
+      for(let i=1;i<6;i++){ const X=CC(cur,r,O,r); const nx=prev?far(X,prev):X.sort((u,v)=>(u[0]*A[1]-u[1]*A[0])-(v[0]*A[1]-v[1]*A[0]))[0]; mv.push({t:'C',c:cur,r,s:'circle centre '+'ABCDE'[i-1]+' through O'}); mv.push({t:'pt',p:nx,n:'BCDEF'[i-1],s:'mark '+'BCDEF'[i-1]}); prev=cur; cur=nx; cs.push(nx); }
+      mv.push({t:'poly',v:cs,s:'join the six corners',res:1}); const sides=cs.map((p,i)=>nrm(sub(cs[(i+1)%6],p)));
+      return {pts:{O,A},mv,chk:'Sides: '+sides.map(v=>mm(v,3)).join(', ')+'; r = '+mm(r,3)+'.',tx:R`O \pm a,\ \ O \pm \tfrac a2 \pm \tfrac{\sqrt3}{2}n`}; }},
+  sq:{lab:'square',P:[4,1],make:P=>{ const O=[0,0], A=P, r=nrm(A), A2=mul(-1,A), r2=2*r, E=CC(A,r2,A2,r2), N=LC(E[0],E[1],O,r);
+      return {pts:{O,A},mv:[{t:'C',c:O,r,s:'circle centre O through A'},{t:'L',p:O,q:A,s:'line OA'},{t:'pt',p:A2,n:'A′',s:'mark A′'},
+      {t:'C',c:A,r:r2,s:'circle centre A through A′'},{t:'C',c:A2,r:r2,s:'circle centre A′ through A'},{t:'pt',p:E[0],n:'E',s:'mark E'},{t:'pt',p:E[1],n:'E′',s:'mark E′'},{t:'L',p:E[0],q:E[1],s:'line EE′, through O'},
+      {t:'pt',p:N[0],n:'',s:'mark both points on the circle'},{t:'poly',v:[A,N[0],A2,N[1]],s:'join the four corners',res:1}],
+      chk:'Sides '+mm(nrm(sub(N[0],A)),3)+' = r√2 = '+mm(r*Math.SQRT2,3)+'; (n − w) · (−w − n) = '+mm(dotp(sub(N[0],A),sub(A2,N[0])),6)+'.',tx:R`O \pm a,\ \ O \pm n`}; }}
+};
+let key='eq';
+chips($('pch'),CON,()=>key,k=>{ key=k; const p=CON[k].P; kx.value=p[0]; ky.value=p[1]; ks.value=99; },all);
+function cur(){ const C=CON[key], P=[+kx.value,+ky.value]; return C.make(P); }
+function drawF(P){ const K=cur(), pp=[+kx.value,+ky.value], n=Math.min(+ks.value,K.mv.length); axes2(P,1,1);
+  clipBox(P,()=>K.mv.slice(0,n).forEach((m,i)=>{ const last=i===n-1, cl=last?'--ember':(m.res?'--plum':null);
+    if(m.t==='C'){ const pts=[]; for(let k=0;k<=200;k++){ const t=k/200*2*Math.PI; pts.push([m.c[0]+m.r*Math.cos(t),m.c[1]+m.r*Math.sin(t)]); } P.poly(pts,cl||'--muted',null,last?2:1.3,false); }
+    else if(m.t==='L'&&m.p&&m.q){ const d=sub(m.q,m.p); lineABC(P,d[1],-d[0],d[1]*m.p[0]-d[0]*m.p[1],cl||'--ink',last||m.res?2.2:1.4); }
+    else if(m.t==='poly'){ P.poly(m.v,cl||'--plum',null,2.6,true); } }));
+  K.mv.slice(0,n).forEach((m,i)=>{ if(m.t==='pt'&&m.p){ const last=i===n-1; P.dot(m.p[0],m.p[1],last?'--ember':(m.res?'--plum':'--ink'),4.5); if(m.n) P.text(m.n,m.p[0]+0.35,m.p[1]+0.4,'--ink','left',12); } });
+  Object.entries(K.pts).forEach(([s,p])=>{ P.dot(p[0],p[1],'--ink',5); P.text(s,p[0]+0.35,p[1]+0.4,'--ink','left',12); });
+  if(key==='perp'||key==='par'){ P.dot(pp[0],pp[1],'--ink',5); P.text('P',pp[0]+0.35,pp[1]+0.4,'--ink','left',12); } }
+function read(){ const K=cur(), N=K.mv.length; ks.max=N; if(+ks.value>N) ks.value=N; const n=+ks.value;
+  $('os').textContent=n+'/'+N; $('ox').textContent=mm(+kx.value,1); $('oy').textContent=mm(+ky.value,1);
+  const ol=$('mv'); ol.innerHTML=''; K.mv.forEach((m,i)=>{ const li=document.createElement('li'); li.textContent=m.s+(m.t==='pt'&&m.p&&m.n?' = '+pf(m.p):''); li.className=i===n-1?'now':(i>=n?'later':''); ol.appendChild(li); });
+  const vd=$('vdF'); vd.className='verdict'+(n===N?' win':''); vd.textContent=n===N?'Check: '+K.chk:'Move '+n+' of '+N+'. Slide to the end for the check.';
+  tex($('eqF'),K.tx||'',true); }
+function all(){ PF.redraw(); read(); }
+[ks,kx,ky].forEach(el=>el.addEventListener('input',all));
+window.__pic={set:(k,px,py)=>{ key=k; kx.value=px; ky.value=py; ks.value=99; all(); return cur().chk; }};
+all();
+stepper('#sl1',[
+  {k:'ember',kl:'the rules',t:R`\text{line through two drawn points; circle, centre through a point; mark meetings}`,n:`No marks on the straightedge; the compass closes.`}
+],{title:'The slides · the rules · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'equilateral',t:R`${Nw}{C = M \pm \tfrac{\sqrt3}{2}n}`,n:`Two circles of radius |AB|.`},
+  {k:'ember',kl:'midpoint',t:R`${Nw}{\tfrac{C + C'}{2} = M}`,n:`The line CC′ is the perpendicular bisector.`}
+],{title:'The slides · a triangle and a midpoint · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'perpendicular',t:R`${Nw}{Q' = 2P - Q}`,n:`Two points of ℓ equally far from P; bisect.`},
+  {k:'ember',kl:'angle-bisector',t:R`${Nw}{\tfrac{B + B'}{2} = A + \tfrac r2(e_1 + e_2)}`,n:`AB′ = AB on the other ray.`},
+  {k:'ember',kl:'parallel',t:R`${Nw}{D = P + S - Q}`,n:`Three circles; a rhombus.`}
+],{title:'The slides · perpendiculars and parallels · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'hexagon',t:R`${Nw}{O \pm a,\ O \pm \tfrac a2 \pm \tfrac{\sqrt3}{2}n}`,n:`Step round with circles through the centre.`},
+  {k:'ember',kl:'square',t:R`${Nw}{O \pm a,\ O \pm n}`,n:`Two perpendicular diameters.`},
+  {k:'ember',kl:'worked',t:R`D = (2 + \sqrt{41},\ 5)`,n:`The parallel to y = 0 through (2, 5).`}
+],{title:'The slides · polygons · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'root-and-ratio',t:R`${Nw}{p + q\sqrt k,\ \ p, q, k \in K}`,n:`Lines need + − × ÷; circles add a square root.`},
+  {k:'ember',kl:'square-root',t:R`${Nw}{(x + 1)(x - k) + y^2 = 0 \Rightarrow y^2 = k}`,n:`At x = 0.`}
+],{title:'The slides · which points · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'illegal',t:R`\text{carry } |QR| \text{ to } P\,?`,n:`Build it from the allowed moves first.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

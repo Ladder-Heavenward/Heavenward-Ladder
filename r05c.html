@@ -1,0 +1,493 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>5c · The rules of arithmetic</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.95rem;white-space:normal}
+@media (max-width:520px){.pic .eqbox{font-size:.82rem}}
+#cvR{touch-action:manipulation}
+#cvS{touch-action:manipulation;cursor:pointer}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+table.tt td.l{text-align:left;font-family:var(--serif)} table.tt td[data-tex-inline]{white-space:nowrap} @media (max-width:520px){table.tt td.l{min-width:9em}}
+.chips .m{min-width:3.4em}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r05b.html">← 5b fractions as ratios</a><a href="r05d.html">next: 5d zero, negatives, and the forbidden division →</a></p>
+  <div class="tags"><span class="tag proof">5c · proof</span></div>
+  <h1>The rules of arithmetic</h1>
+  <p>The fractions are built. This step proves twelve techniques for them, the twelve techniques of arithmetic: nine about adding and multiplying, three about which numbers are positive. Each is proved the same way. Write each fraction by a member, work the two sides out on pairs with the integer techniques that 5a carried over from rung 4, and cross-multiply. Along the way the fractions get negatives and subtraction, and a meaning for “positive” that does not depend on the member chosen. Then order: one fraction is less than another when the difference is positive. Any two compare. And, as for the counting numbers, whether one fraction is less than another can always be settled.</p>
+  <p class="gesture">To prove a rule for fractions: write each one by a member, compute both sides on pairs with the integer techniques, and cross-multiply. Only the class matters, so two different pairs on the same trail are the same fraction.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r05a.html">5a</a> (carry-over, member-with-a-0, same-class, ℕ-inside-ℤ, pair-is-the-difference, middle-swap, gap-in-ℕ) and <a href="r05b.html">5b</a> (cross-multiplying, scaling, honest-fractions, ℤ-inside-ℚ, reciprocal, no-zero-product on ℤ, cancel for times on ℤ), and through them on <a href="r04e.html">4e</a>–<a href="r04g.html">4g</a>. <a href="r05d.html">5d</a> takes the twelve techniques as its starting point and draws what they force. <a href="r05e.html">5e</a> uses the order rules. The technique pages 5f to 5i use the rules as their whole licence.</p></div>
+</header>
+
+<section class="class step" data-step="5c1">
+  <h2 class="sthead"><span class="stno">5c1</span>The twelve techniques of arithmetic</h2>
+  <p class="stands">Stands on 5b (the fractions, + and ·, reciprocals).</p>
+  <p data-pid="be2b72">Here is the destination, plain words first. In each, w, b and c are any rationals. Two marks in the table, the negative −w of a rational and the word positive, are defined in the sections below; the table is where those sections are going.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>name</th><th>in words</th><th>in symbols</th></tr>
+    <tr><td>Regroup for plus on ℚ</td><td class="l">brackets in a sum don't matter</td><td data-tex-inline="(w + b) + c = w + (b + c)"></td></tr>
+    <tr><td>Plus-zero on ℚ</td><td class="l">adding 0 changes nothing</td><td data-tex-inline="w + 0 = w,\ \ 0 + w = w"></td></tr>
+    <tr><td>Negative on ℚ</td><td class="l">every number has a negative that adds to it to give 0</td><td data-tex-inline="w + (-w) = 0,\ \ (-w) + w = 0"></td></tr>
+    <tr><td>Turn-about for plus on ℚ</td><td class="l">order in a sum doesn't matter</td><td data-tex-inline="w + b = b + w"></td></tr>
+    <tr><td>Regroup for times on ℚ</td><td class="l">brackets in a product don't matter</td><td data-tex-inline="(wb)c = w(bc)"></td></tr>
+    <tr><td>Times-one on ℚ</td><td class="l">multiplying by 1 changes nothing, and 1 isn't 0</td><td data-tex-inline="w \cdot 1 = w,\ \ 1 \cdot w = w,\ \ 1 \ne 0"></td></tr>
+    <tr><td>Reciprocal on ℚ</td><td class="l">every number other than 0 has a reciprocal</td><td data-tex-inline="w \ne 0 \Rightarrow w \cdot w^{-1} = 1,\ \ w^{-1} \cdot w = 1"></td></tr>
+    <tr><td>Turn-about for times on ℚ</td><td class="l">order in a product doesn't matter</td><td data-tex-inline="wb = bw"></td></tr>
+    <tr><td>Spread on ℚ</td><td class="l">times spreads over plus</td><td data-tex-inline="w(b + c) = wb + wc"></td></tr>
+    <tr><td>Three-way on ℚ</td><td class="l">every number is 0, positive, or the negative of a positive: exactly one</td><td data-tex-inline="w = 0,\ \ w \text{ positive},\ \ -w \text{ positive}"></td></tr>
+    <tr><td>Positive-sum on ℚ</td><td class="l">positive plus positive is positive</td><td data-tex-inline="w, b \text{ positive} \Rightarrow w + b \text{ positive}"></td></tr>
+    <tr><td>Positive-product on ℚ</td><td class="l">positive times positive is positive</td><td data-tex-inline="w, b \text{ positive} \Rightarrow wb \text{ positive}"></td></tr>
+  </table></div>
+  <p data-pid="dff6a7">The names follow rung 4’s: each is named after the rung 4 technique it extends, with “on ℚ” after it: regroup for plus, plus-zero, turn-about for plus, regroup for times, times-one (from one-changes-nothing), turn-about for times, and spread (from spread for times over plus). Where rung 4 had nothing to extend, the names are new: negative, reciprocal, the three-way split, and the two order rules positive-sum and positive-product. The list, in this order, is the one a well-known calculus book sets out at its start as the properties of numbers. There it is the starting point. Here it is a technique, twelve of them, about objects built on this ladder. By the end of this step ℚ obeys all twelve.</p>
+  <p data-pid="ce3f30">Two hundred years ago, a teacher of algebra laid down what he called the permanence of equivalent forms. Rules found to be true for whole numbers should be kept when the letters are allowed to stand for more general quantities. Later writers made permanence the guide for extending the number system.</p>
+  <p data-pid="40b2b3">This ladder does not assume permanence. <b>The negatives and the fractions were built from pairs, and whether the old rules survive the building is a question with an answer, proved below one rule at a time.</b></p>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">5c1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">(3/4)(2/5) = (2/5)(3/4); &nbsp; 3/4 + 0 = 3/4; &nbsp; 2(3 + 5) = 2 · 3 + 2 · 5.</span></span>Name the rule from the table that each line uses. <br>Which of the three ties adding to multiplying?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="5c2">
+  <h2 class="sthead"><span class="stno">5c2</span>Negatives and subtraction for fractions</h2>
+  <p class="stands">Stands on 5c1, 5a (negative-out on ℤ) and 5b (cross-multiplying).</p>
+  <p data-pid="084ff6">First, a negative for each fraction. Negate the numerator. Honest-negative technique: <b>if (p, q) ∼ (p′, q′), then (−p, q) ∼ (−p′, q′).</b></p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the honest-negative technique">
+pq' = qp' @@ given; ﹀ ∼
+(-p)q' = -(pq') @@ negative-out on ℤ (5a)
+\phantom{(-p)q'} = -(qp') @@ the given, by the swap axiom
+\phantom{(-p)q'} = -(p'q) = (-p')q = \htmlClass{new}{q(-p')} @@ turn-about for times on ℤ inside; negative-out on ℤ turned about; turn-about for times on ℤ
+(-p, q) \sim (-p', q') \quad \blacksquare @@ ︿ ∼
+  </pre>
+  <p class="eqline" data-pid="e34fb2">From here on, for a rational a = p/q, <span data-tex-inline="-a"></span> names <span data-tex-inline="(-p)/q"></span>. Read it “negative a”, or “minus a”. And for rationals a and b, <span data-tex-inline="a - b"></span> names <span data-tex-inline="a + (-b)"></span>, as on 5a: their difference.</p>
+  <p data-pid="5dea64">For an integer x read as x/1, −(x/1) = (−x)/1, so the new negative agrees with 5a's, and so does subtraction. So −(3/4) = (−3)/4, written −3/4.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the negative · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">5c2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="-\big(2/(-5)\big),\ \ 3/4 - 5/6"></span></span>Write each as one fraction. <br>Then give each the member with the least positive denominator.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="5c3">
+  <h2 class="sthead"><span class="stno">5c3</span>The adding rules</h2>
+  <p class="stands">Stands on 5c2 and the techniques of 4e carried to ℤ by 5a.</p>
+  <p data-pid="8a8621">Write w = p/q, b = r/s and c = t/u, by members, throughout. Order first. Turn-about for plus on ℚ: w + b = (ps + qr)/(qs), and b + w = (rq + sp)/(sq). Turn-about for times on ℤ turns rq into qr, sp into ps and sq into qs. Turn-about for plus on ℤ swaps the two parts of the numerator. The result is the same pair, so the same fraction. ∎ Brackets next.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the regroup technique for plus on ℚ">
+(w + b) + c = \tfrac{ps + qr}{qs} + \tfrac tu = \tfrac{(ps + qr)u + (qs)t}{(qs)u} @@ ﹀ + on ℚ, twice
+w + (b + c) = \tfrac pq + \tfrac{ru + st}{su} = \tfrac{p(su) + q(ru + st)}{q(su)} @@ ﹀ + on ℚ, twice
+(ps + qr)u + (qs)t = psu + qru + qst @@ spread on ℤ with turn-about for times on ℤ; regroup for times on ℤ in each part
+p(su) + q(ru + st) = psu + qru + qst @@ regroup for times on ℤ; spread on ℤ; regroup for times on ℤ, regroup for plus on ℤ
+(qs)u = q(su) @@ regroup for times on ℤ
+(w + b) + c = w + (b + c) \quad \blacksquare @@ the same numerator and the same denominator: one pair, one fraction (the swap axiom)
+  </pre>
+  <p data-pid="8a0dc8">Plus-zero on ℚ: w + 0 = p/q + 0/1 = (p · 1 + q · 0)/(q · 1) = p/q. That is by times-one on ℤ, times-zero on ℤ and plus-zero on ℤ. And 0 + w = w by turn-about for plus on ℚ. ∎ The negative:</p>
+  <pre class="lines" data-k="ember" data-label="this step: the negative technique on ℚ">
+w + (-w) = \tfrac pq + \tfrac{-p}{q} = \tfrac{pq + q(-p)}{qq} @@ ﹀ −; ﹀ + on ℚ
+\phantom{w + (-w)} = \tfrac{pq + (-(pq))}{qq} @@ turn-about for times on ℤ, then negative-out on ℤ, inside the numerator
+\phantom{w + (-w)} = \tfrac{0}{qq} @@ negative on ℤ
+\phantom{w + (-w)} = \htmlClass{new}{0} \quad \blacksquare @@ a fraction is 0 exactly when its numerator is (5b); (−w) + w = 0 by turn-about for plus on ℚ
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · the adding rules · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · a rule checked on pairs</div>
+    <div class="panel">
+      <div class="chips" role="group" aria-label="rule" id="rch"></div>
+      <div class="chips" role="group" aria-label="w" id="ach"><span class="m" style="color:var(--muted)">w =</span></div>
+      <div class="chips" role="group" aria-label="b" id="bch"><span class="m" style="color:var(--muted)">b =</span></div>
+      <div class="chips" role="group" aria-label="c" id="cch"><span class="m" style="color:var(--muted)">c =</span></div>
+      <div class="chips"><button id="ra">another member of w</button><button id="rb">of b</button><button id="rc">of c</button></div>
+      <canvas id="cvR"></canvas>
+      <div class="cap">Choose a rule and three fractions. Each side of the rule is worked out on pairs, from the members shown: ember for the left side's pair, teal for the right side's. The gold trail is their class; the ring marks its member with the least positive denominator. Different pairs, one trail: one fraction. Pairs with a negative denominator are drawn as (−p, −q), the same fraction.</div>
+      <div class="eqbox" id="eqR"></div>
+    </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">5c3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="w = 1/2,\ \ b = 2/3"></span></span>Work w + b and b + w on pairs. <br>Are they the same pair? Which rule says they must be one fraction?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="5c4">
+  <h2 class="sthead"><span class="stno">5c4</span>The multiplying rules</h2>
+  <p class="stands">Stands on 5c3 and 5b (the reciprocal technique).</p>
+  <p data-pid="fc50e0"><b>These are shorter, because the rule for · works on numerators and denominators separately.</b> Turn-about for times on ℚ: wb = (pr)/(qs) and bw = (rp)/(sq), the same pair by turn-about for times on ℤ twice. Regroup for times on ℚ: (wb)c = ((pr)t)/((qs)u) and w(bc) = (p(rt))/(q(su)), the same pair by regroup for times on ℤ twice. Times-one on ℚ: w · 1 = (p · 1)/(q · 1) = p/q by times-one on ℤ, and 1 · w by turn-about for times on ℚ. And 1 ≠ 0: 1/1 = 0/1 would need 1 · 1 = 1 · 0, which is 1 = 0 in ℤ, and times-one on ℤ says 1 ≠ 0 there. Reciprocal on ℚ: for w ≠ 0, w · w⁻¹ = 1 is 5b's reciprocal technique, and w⁻¹ · w = 1 follows by turn-about for times on ℚ. ∎ (all four)</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · the multiplying rules · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">5c4.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="w = 2/3"></span></span>Work w · w⁻¹ on pairs. <br>Which member of 1 does it give, and which rule names it 1?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="5c5">
+  <h2 class="sthead"><span class="stno">5c5</span>The spreading rule</h2>
+  <p class="stands">Stands on 5c3, 5c4 and 5b (scaling).</p>
+  <p data-pid="2a4e7f"><b>Spread on ℚ is the only rule that ties adding to multiplying.</b> It is also the only one where the two sides come out as different pairs. They are different members of one class, and 5b's scaling, which scales a member, shows it.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the spread technique on ℚ">
+w(b + c) = \tfrac pq \cdot \tfrac{ru + st}{su} = \tfrac{p(ru + st)}{q(su)} @@ ﹀ + on ℚ; ﹀ · on ℚ
+wb + wc = \tfrac{pr}{qs} + \tfrac{pt}{qu} = \tfrac{(pr)(qu) + (qs)(pt)}{(qs)(qu)} @@ ﹀ · on ℚ, twice; ﹀ + on ℚ
+\phantom{wb + wc} = \tfrac{\htmlClass{new}{q}\,(p(ru + st))}{\htmlClass{new}{q}\,(q(su))} @@ regroup for times on ℤ and turn-about for times on ℤ in each product; spread on ℤ turned about, twice
+\phantom{wb + wc} = \tfrac{p(ru + st)}{q(su)} @@ the scaling technique: q is a denominator, so q ≠ 0
+w(b + c) = wb + wc \quad \blacksquare @@ the techniques turn-about and chain
+  </pre>
+  <p data-pid="015259">So the nine rules of adding and multiplying are proved for the fractions. Not one was assumed. Each rests on a technique of the integers, which rests on a technique of rung 4, proved by induction from the next-one gesture.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · spread on ℚ · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">5c5.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="w = 1/2,\ \ b = 1/3,\ \ c = 1/4"></span></span>Work w(b + c) and wb + wc on pairs. <br>Show the two are one fraction, and name the factor that scales one into the other.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="5c6">
+  <h2 class="sthead"><span class="stno">5c6</span>Positive integers</h2>
+  <p class="stands">Stands on 5a (member-with-a-0, ℕ-inside-ℤ, gap-in-ℕ) and 4g (no-zero-product).</p>
+  <p data-pid="726091">The last three rules need a meaning for positive. Start with the integers, where 5a's member-with-a-0 has done most of the work.</p>
+  <p class="eqline" data-pid="a44e5c">From here on, for an integer x, the statement “x is <b>positive</b>” means x = n for some number n ≠ 0: in 5a's naming, x = [n, 0] with n ≠ 0.</p>
+  <p data-pid="ed4f9b">Three-way technique on ℤ: <b>for every integer x, exactly one of these is true: x = 0; x is positive; −x is positive.</b> Member-with-a-0 gives x = [n, 0] or x = [0, n] for exactly one number n. If n = 0, x = 0. If n ≠ 0, the first form makes x positive and the second makes −x = [n, 0] positive. At most one is true, since member-with-a-0's n is unique and both forms meet only at [0, 0]. ∎ The positive-sum technique on ℤ and positive-product on ℤ (positives are closed): <b>if x and y are positive, so are x + y and xy.</b> By ℕ-inside-ℤ, [m, 0] + [n, 0] = [m + n, 0] and [m, 0][n, 0] = [mn, 0]. Here m + n ≠ 0 by gap-in-ℕ, since m ≠ 0, and mn ≠ 0 by 4g's no-zero-product. ∎</p>
+  <p data-pid="b74088">One more technique, used three times below. Square-is-positive technique on ℤ: <b>if x ≠ 0, then xx is positive.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the square-is-positive technique on ℤ">
+x \ne 0:\ \ x = [m, 0] \ \lor\ x = [0, m],\ \ m \ne 0 @@ the member-with-a-0 technique; m = 0 would make x = 0
+[m, 0]\,[m, 0] = [mm, 0] @@ the ℕ-inside-ℤ technique
+[0, m]\,[0, m] = [0 \cdot 0 + mm,\ 0 \cdot m + m \cdot 0] = [mm, 0] @@ ﹀ · on ℤ; times-zero, zero-times, plus-zero, zero-plus
+mm \ne 0 @@ the no-zero-product technique (4g)
+xx = [mm, 0] \text{ is positive} \quad \blacksquare @@ reason by cases; ︿ positive
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · positive integers · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">5c6.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="[3, 8],\ [5, 5],\ [9, 2]"></span></span>For each, which of three-way's three is true? <br>Square [3, 8] and say why the square is positive.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="5c7">
+  <h2 class="sthead"><span class="stno">5c7</span>Positive fractions</h2>
+  <p class="stands">Stands on 5c6 and 5b (cross-multiplying).</p>
+  <p class="eqline" data-pid="1e12d7">From here on, for a rational a, the statement “a is <b>positive</b>” means a = p/q for some fraction pair (p, q) whose product pq is a positive integer.</p>
+  <p data-pid="87c47f">Why the product? A fraction p/q answers “what must q be multiplied by to make p?”. That answer should be positive when p and q are on the same side of 0, both positive or both the negative of a positive. pq says so in one integer. So 2/3 is positive, and so is (−2)/(−3), the same fraction. But a definition that says “for some member” must be checked against the other members, or a fraction could be positive by one member and not by another. Honest-positive technique: <b>if p/q = r/s and pq is positive, then rs is positive.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the honest-positive technique">
+pq \text{ positive},\ \ ps = qr @@ given; the cross-multiplying technique
+(rs)(qq) = (qr)(sq) @@ middle-swap (for ·), turn-about for times on ℤ inside
+\phantom{(rs)(qq)} = (\htmlClass{new}{ps})(sq) @@ the given, by the swap axiom
+\phantom{(rs)(qq)} = (pq)(ss) @@ turn-about for times on ℤ inside; middle-swap (for ·)
+(pq)(ss) \text{ positive} @@ square-is-positive on ℤ (s ≠ 0); positive-product on ℤ
+rs = 0 \ \lor\ rs \text{ positive} \ \lor\ -(rs) \text{ positive} @@ the three-way technique on ℤ
+\text{case } rs = 0:\ \ (rs)(qq) = 0,\ \text{yet positive};\ \ \bot @@ turn-about for times on ℤ, times-zero on ℤ; three-way on ℤ's exactly one; clash
+\text{case } -(rs) \text{ positive}:\ \ (-(rs))(qq) = -((rs)(qq)) \text{ positive};\ \ \bot @@ square-is-positive on ℤ (q ≠ 0), positive-product on ℤ; negative-out on ℤ; both y and −y positive, against three-way on ℤ
+\htmlClass{new}{rs \text{ positive}} \quad \blacksquare @@ the remaining option (the remaining-option technique, twice)
+  </pre>
+  <p data-pid="36b054">Notice the case split. It is on three-way on ℤ's three-way or, which is a proved statement, not on rung 7's principle that every statement is true or false. Every split in this step is of that kind.</p>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · positive fractions · ← → keys work</div></section>
+  <section class="pic" id="pic2">
+    <div class="eyebrow">The picture · which side of 0, member by member</div>
+    <div class="panel">
+      <div class="chips" role="group" aria-label="tap sets"><span class="m" style="color:var(--muted)">tap sets:</span><button data-ss="a" class="on">w</button><button data-ss="b">b</button></div>
+      <canvas id="cvS"></canvas>
+      <div class="cap">Fraction pairs (p, q) with entries from −6 to 6, top up, bottom across; the hatched column has denominator 0. Each dot is coloured by its product pq: teal positive, ember the negative of a positive, gold 0. Tap a dot to set w or b: its class is ringed, members with negative denominators included, and every member has the same colour (honest-positive). The readout compares w and b by the sign of b − w.</div>
+      <div class="eqbox" id="eqS"></div>
+    </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">5c7.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="(-2)/(-3),\ \ 4/(-7),\ \ 0/5"></span></span>Which are positive? <br>Use the product of numerator and denominator, and say which of three-way on ℤ's three it lands in.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="5c8">
+  <h2 class="sthead"><span class="stno">5c8</span>The three order rules</h2>
+  <p class="stands">Stands on 5c7 and 5c6 (three-way, positive-sum and positive-product on ℤ).</p>
+  <p data-pid="8b8e8d">Three-way on ℚ: <b>for every rational w, exactly one of w = 0, w positive, −w positive.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the three-way technique on ℚ">
+a = p/q @@ use the some
+pq = 0,\ \ pq \text{ positive},\ \ -(pq) \text{ positive}:\ \text{exactly one} @@ the three-way technique on ℤ, on the integer pq
+pq = 0 \;\Leftrightarrow\; p = 0 \;\Leftrightarrow\; a = 0 @@ no-zero-product on ℤ (q ≠ 0) and times-zero on ℤ; a fraction is 0 exactly when its numerator is
+pq \text{ positive} \;\Leftrightarrow\; a \text{ positive} @@ the definition; honest-positive for every member
+-a = (-p)/q,\ \ (-p)q = -(pq) @@ the negative's line; negative-out on ℤ
+-(pq) \text{ positive} \;\Leftrightarrow\; -a \text{ positive} @@ the definition, with honest-positive
+\text{exactly one of } a = 0,\ a \text{ positive},\ -a \text{ positive} \quad \blacksquare @@ the swap axiom, in each part of the first line
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: the techniques positive-sum on ℚ and positive-product on ℚ (positives are closed)">
+pq,\ rs \text{ positive} @@ given a = p/q and b = r/s positive; honest-positive: any members will do
+(ps + qr)(qs) = (ps)(qs) + (qr)(qs) @@ spread on ℤ with turn-about for times on ℤ
+\phantom{(ps + qr)(qs)} = (pq)(ss) + (rs)(qq) @@ middle-swap (for ·) and turn-about for times on ℤ, in each part
+\phantom{(ps + qr)(qs)} \text{ is positive} @@ square-is-positive on ℤ for ss and qq; positive-product on ℤ, twice; positive-sum on ℤ
+a + b = (ps + qr)/(qs) \text{ is positive} @@ ﹀ +; ︿ positive: <b>the positive-sum technique on ℚ</b>
+(pr)(qs) = (pq)(rs) \text{ is positive} @@ middle-swap (for ·); positive-product on ℤ
+ab = (pr)/(qs) \text{ is positive} \quad \blacksquare @@ ﹀ ·; ︿ positive: <b>the positive-product technique on ℚ</b>
+  </pre>
+  <p data-pid="629c93">All twelve techniques are proved. From here on, nothing about pairs is needed to do arithmetic with fractions: the twelve techniques are the whole licence, and 5d shows how much they carry.</p>
+  <section class="slides" id="sl7"><div class="eyebrow">The slides · the order rules · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">5c8.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="w = (-1)/(-2),\ \ b = 3/5"></span></span>Show w and b positive. <br>Then show w + b and wb positive by the product test, and name the rules that promised it.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="5c9">
+  <h2 class="sthead"><span class="stno">5c9</span>Order</h2>
+  <p class="stands">Stands on 5c8, 5c2 (subtraction) and 4g (less-is-adding).</p>
+  <p class="eqline" data-pid="7c0717">From here on, for rationals a and b, the statement <span data-tex-inline="a \lt b"></span> means b − a is positive. Read it “a is less than b”. 4g's line for ≤, &gt; and ≥ is read with this &lt;, and the order words of 4g are given the same meanings for rationals.</p>
+  <p data-pid="7bb797">Two checks that the line says what it should. First, w is positive exactly when 0 &lt; w. That is because w − 0 = w + (−0) = w + 0 = w (−0 = 0/1 = 0, and plus-zero on ℚ). Second, it agrees with 4g on the numbers. Order-agrees technique: <b>for numbers m and n, m &lt; n in 4g's sense exactly when m &lt; n as rationals.</b> If m &lt; n, less-is-adding gives n = m + c with c ≠ 0. Then n − m = [n, m] by pair-is-the-difference. That is [c, 0] by same-class, since n + 0 = m + c. So n − m is c, positive. Conversely, suppose n − m = [n, m] is positive. Then it is [k, 0] with k ≠ 0, so n = m + k by same-class, and m &lt; n by less-is-adding. ∎</p>
+  <p data-pid="4e6d93">Any two rationals compare. That needs one small technique from the rules alone, used again on 5d. One-negative technique: <b>if w + x = 0, then x = −w.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the one-negative technique, from the rules alone">
+a + x = 0 @@ given
+x = x + 0 = x + (a + (-a)) @@ plus-zero on ℚ; negative on ℚ
+\phantom{x} = (x + a) + (-a) @@ regroup for plus on ℚ, turned about
+\phantom{x} = (\htmlClass{new}{a + x}) + (-a) @@ turn-about for plus on ℚ, inside
+\phantom{x} = 0 + (-a) = \htmlClass{new}{-a} \quad \blacksquare @@ the given, by the swap axiom; plus-zero on ℚ
+  </pre>
+  <p data-pid="6dc52c">Any-two-compare technique on ℚ: <b>for rationals w and b, exactly one of w &lt; b, w = b, b &lt; w.</b> The rules give (b − w) + (w − b) = b + ((−w) + w) + (−b) = b + (−b) = 0, by regroup for plus on ℚ, negative on ℚ and plus-zero on ℚ. So w − b = −(b − w) by one-negative. Now three-way on ℚ on b − w: exactly one of b − w = 0, b − w positive, −(b − w) positive. The second is w &lt; b. The third is w − b positive, which is b &lt; w. And b − w = 0 exactly when b = w. If b − w = 0, then b = b + ((−w) + w) = (b − w) + w = 0 + w = w. And if b = w, then b − w = 0 by negative on ℚ. ∎</p>
+  <section class="slides" id="sl8"><div class="eyebrow">The slides · order · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">5c9.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="2/3,\ \ 5/8"></span></span>Which is less? <br>Subtract, and test the difference by its product.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="5c10">
+  <h2 class="sthead"><span class="stno">5c10</span>Order is settled</h2>
+  <p class="stands">Stands on 5c9, 4g (settled-order) and 1g.</p>
+  <p data-pid="db12d2">4g's settled-order technique said that for numbers, m &lt; n or not, and m = n or not, can always be decided. So 1g's techniques work both ways for statements built from them. The same goes for fractions. Settled-order technique on ℚ: <b>for rationals w and b, w = b ∨ w ≠ b, and w &lt; b ∨ ¬(w &lt; b).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the settled-order technique on ℚ">
+a = p/q,\ \ b = r/s @@ use the somes
+a = b \;\Leftrightarrow\; ps = qr @@ the cross-multiplying technique
+[e, f] = [g, h] \;\Leftrightarrow\; e + h = f + g @@ the same-class technique: a sameness of integers is a sameness of numbers
+\htmlClass{new}{a = b \ \lor\ a \ne b} @@ settled-order (4g) settles the sameness of numbers; carry it up through the two exactly-whens
+[e, f] \text{ positive} \;\Leftrightarrow\; f \lt e @@ [e, f] = [k, 0] with k ≠ 0 is e = f + k (same-class), which is f &lt; e (less-is-adding)
+a \text{ positive} \;\Leftrightarrow\; pq \text{ positive}:\ \text{settled} @@ honest-positive; the line above, with settled-order
+\htmlClass{new}{a \lt b \ \lor\ \neg(a \lt b)} \quad \blacksquare @@ a &lt; b is “b − a positive”, settled by the line above
+  </pre>
+  <p data-pid="8cbc49">So, from here on, sameness and order of rationals are settled in 1g's word. 1g's techniques may be used both ways for statements built from them with ¬, ∧, ∨ and ⇒. And a case split on “w &lt; b or not”, or on “w = 0 or not”, is licensed for rationals, as it was for numbers, before rung 7.</p>
+  <section class="slides" id="sl9"><div class="eyebrow">The slides · settled-order on ℚ · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">5c10.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="w, b, c \in \mathbb{Q},"></span> <span data-tex-inline="w &lt; b \iff b - w \text{ is positive}"></span></span>Prove each.<ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="w &lt; b \Rightarrow w + c &lt; b + c"></span></span></li><li><span class="givens"><span data-tex-inline="w &lt; b \land 0 &lt; c \Rightarrow wc &lt; bc"></span></span></li><li><span class="givens"><span data-tex-inline="w \neq 0 \Rightarrow 0 &lt; ww"></span></span></li><li><span class="givens"><span data-tex-inline="0 &lt; 1"></span></span></li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="5c11">
+  <h2 class="sthead"><span class="stno">5c11</span>Illegal moves</h2>
+  <p class="stands">Stands on 5c1 to 5c10.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+p/q \text{ positive} \Leftrightarrow p \text{ positive}\,? @@ (−2)/(−3) is 2/3, positive, with a numerator that is not. The test is the product pq, and honest-positive makes it the same for every member
+-a \text{ is not positive}\,? @@ −a is the negative of a: when a is the negative of a positive, −a is positive. −(−3/4) = 3/4
+p/q \lt r/s \Leftrightarrow ps \lt qr\,? @@ fails with a negative denominator: 1/(−1) &lt; 1/1, yet 1 · 1 &lt; (−1) · 1 fails. With positive denominators it is true; 5e proves it
+a \lt b \Rightarrow ac \lt bc\,? @@ with c = −1: 1 &lt; 2, yet −1 &lt; −2 fails. 5e proves it for positive c only
+a - (b - c) = a - b - c\,? @@ 5 − (3 − 1) = 3, and 5 − 3 − 1 = 1. Write a + (−(b + (−c))) and work out the negative of a sum first
+a \cdot a^{-1} = 1 \text{ for every } a\,? @@ reciprocal on ℚ says a ≠ 0. 0 has no reciprocal (5d)
+\text{the rules were assumed} @@ not here: each is a technique about fractions, proved on pairs. 5d is where they become the starting point
+  </pre>
+  <section class="slides" id="sl10"><div class="eyebrow">The slides · a fake, again · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">5c11.1</span><span class="ph bend">bend</span><span class="givens"><span data-tex-inline="w, b \in \mathbb{Q},"></span> <span data-tex-inline="w &lt; b,"></span> <span data-tex-inline="Q: ww &lt; bb"></span></span>Find exactly when Q is true, and prove it.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="5c12">
+  <h2 class="sthead"><span class="stno">5c12</span>Running it backwards</h2>
+  <p class="stands">Stands on 5c1 to 5c10.</p>
+  <p data-pid="99dadc">Wanting a rule for fractions: write each by a member, compute both sides on pairs, and if the pairs differ, cross-multiply or find the common factor and use scaling. Wanting to know whether a fraction is positive: multiply its numerator by its denominator and ask three-way on ℤ. Wanting to compare two fractions: subtract and ask whether the difference is positive. Wanting a case split on order: settled-order on ℚ licenses it. From here on, wanting any move with fractions: name the rule that licenses it, and check its small print. <b>Found upward; written downward.</b></p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">5c12.1</span><span class="ph undo">undo</span><span class="givens"><span data-tex-inline="w, b, c \in \mathbb{Q}"></span></span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="w &lt; b \Rightarrow -b &lt; -w"></span></span>Prove it.</li><li><span class="givens"><span data-tex-inline="w &lt; b \land c &lt; 0 \Rightarrow bc &lt; wc"></span></span>Prove it.</li><li><span class="givens"><span data-tex-inline="0 &lt; w &lt; b \Rightarrow b^{-1} &lt; w^{-1}"></span></span>Prove it.</li><li><span class="givens"><span data-tex-inline="-3/4,\ 5/(-7),\ -2/3,\ 7/(-10)"></span></span>Put them in order, least first.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">5c.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{on } \mathbb{Q} \times \mathbb{Q},\ m \text{ a counting number}:"></span> <span data-tex-inline="(w, b)(c, d) = (wc + mbd,\ wd + bc),"></span> <span data-tex-inline="(w, b) + (c, d) = (w + c, b + d),"></span> <span data-tex-inline="0 = (0, 0),\ 1 = (1, 0)"></span></span>Choose m so that every pair but (0, 0) has a reciprocal, and find the reciprocal.<br>Prove turn-about for times and spread for your product.<br>Find every pair of yours whose square is (m, 0).</div>
+  <div class="chq"><span class="chid">5c.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="G: 1 + 1 \neq 0"></span></span>From the twelve techniques alone, prove G.</div>
+  <div class="chq"><span class="chid">5c.4.3</span><span class="tagq">world</span><span class="givens"><span data-tex-inline="F = \{0, 1\},"></span> <span data-tex-inline="0 + 0 = 0,\ 0 + 1 = 1 + 0 = 1,"></span> <span data-tex-inline="1 + 1 = 0,"></span> <span data-tex-inline="1 \cdot 1 = 1,"></span> <span data-tex-inline="\text{every other product } 0"></span></span>Find which of the twelve techniques hold on F.<br>Settle whether a part of F can be called positive so that the last three are true.</div>
+  <div class="chq"><span class="chid">5c.4.4</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="w &lt; b \land c &lt; d \Rightarrow w + c &lt; b + d,"></span> <span data-tex-inline="w + c &lt; b + d"></span></span>Settle whether w must be less than b or c less than d.</div>
+  <div class="chq"><span class="chid">5c.4.5</span><span class="tagq">seam</span>The twelve techniques held, so the counting numbers’ techniques carried up to ℤ and to ℚ. <br>Must every new kind of number obey all twelve?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r05b.html">← 5b · fractions as ratios</a><a href="r05d.html">5d · zero, negatives, and the forbidden division →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>The list of twelve techniques, in this order, is the one Michael Spivak sets out at the start of his <i>Calculus</i> as the properties of numbers.</p>
+  <aside class="voice para"><p>George Peacock laid down what he called the permanence of equivalent forms: rules found to be true for whole numbers should be kept when the letters are allowed to stand for more general quantities. Hermann Hankel later made permanence the guiding principle for extending the number system.</p><cite>Peacock, A Treatise on Algebra (1830); Hankel, Theorie der complexen Zahlensysteme (1867)</cite></aside>
+  <h3>Accepted names</h3>
+  <p>A set of numbers whose adding and multiplying obey the first nine rules is called a <b>field</b>; one that obeys all twelve is an <b>ordered field</b>. So ℚ is an ordered field. The turn-about rules are the commutative laws, the regroup rules the associative laws, spread the distributive law, and three-way is trichotomy.</p>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper}=Rung;
+const R=String.raw;
+function size(cv,ar){ const d=window.devicePixelRatio||1, W=cv.clientWidth||300, H=Math.round(W/ar); cv.width=W*d; cv.height=H*d; cv.style.height=H+'px'; const c=cv.getContext('2d'); c.setTransform(d,0,0,d,0,0); return {c,W,H}; }
+const gcd=(a,b)=>{ a=Math.abs(a); b=Math.abs(b); while(b){ [a,b]=[b,a%b]; } return a; };
+const low=([p,q])=>{ const g=gcd(p,q)||1; let a=p/g,b=q/g; if(b<0){ a=-a; b=-b; } return [a,b]; };
+const fr=pt=>{ const [a,b]=low(pt); return b===1?String(a):(a<0?`-\\tfrac{${-a}}{${b}}`:`\\tfrac{${a}}{${b}}`); };
+const P=p=>`(${p[0]}, ${p[1]})`;
+const add=(x,y)=>[x[0]*y[1]+x[1]*y[0],x[1]*y[1]], mul=(x,y)=>[x[0]*y[0],x[1]*y[1]], neg=x=>[-x[0],x[1]], rec=x=>[x[1],x[0]];
+
+/* ---------- left: a rule on pairs ---------- */
+const OPTS=[[1,2],[-2,3],[3,4],[5,1],[0,1]], KS=[1,2,3,-1,-2];
+let A=[1,2],B=[-2,3],C=[3,4], kA=0,kB=0,kC=0, rule='QMD';
+const RULES={
+  QPC:{L:'w + b',R:'b + w',f:()=>[add(A,B),add(B,A)]},
+  QPA:{L:'(w + b) + c',R:'w + (b + c)',f:()=>[add(add(A,B),C),add(A,add(B,C))]},
+  QP0:{L:'w + 0',R:'w',f:()=>[add(A,[0,1]),A]},
+  QPN:{L:'w + (-w)',R:'0',f:()=>[add(A,neg(A)),[0,1]]},
+  QMC:{L:'wb',R:'bw',f:()=>[mul(A,B),mul(B,A)]},
+  QMA:{L:'(wb)c',R:'w(bc)',f:()=>[mul(mul(A,B),C),mul(A,mul(B,C))]},
+  QM1:{L:'w \\cdot 1',R:'w',f:()=>[mul(A,[1,1]),A]},
+  QMR:{L:'w \\cdot w^{-1}',R:'1',f:()=>A[0]===0?null:[mul(A,rec(A)),[1,1]]},
+  QMD:{L:'w(b + c)',R:'wb + wc',f:()=>[mul(A,add(B,C)),add(mul(A,B),mul(A,C))]}};
+const rch=document.getElementById('rch');
+Object.keys(RULES).forEach(k=>{ const b=document.createElement('button'); b.textContent=k; if(k===rule) b.className='on'; b.onclick=()=>{ rule=k; [...rch.querySelectorAll('button')].forEach(z=>z.classList.toggle('on',z===b)); drawR(); }; rch.appendChild(b); });
+function vchips(id,set,init){ const el=document.getElementById(id); OPTS.forEach((o,i)=>{ const b=document.createElement('button'); b.textContent=o[1]===1?String(o[0]):o[0]+'/'+o[1]; if(i===init) b.className='on'; b.onclick=()=>{ set(o); [...el.querySelectorAll('button')].forEach(z=>z.classList.toggle('on',z===b)); drawR(); }; el.appendChild(b); }); }
+vchips('ach',o=>{A=o.slice();kA=0;},0); vchips('bch',o=>{B=o.slice();kB=0;},1); vchips('cch',o=>{C=o.slice();kC=0;},2);
+const re=(x,k)=>{ const [a,b]=low(x); const m=KS[k]; return [a*m,b*m]; };
+document.getElementById('ra').onclick=()=>{ kA=(kA+1)%KS.length; A=re(A,kA); drawR(); };
+document.getElementById('rb').onclick=()=>{ kB=(kB+1)%KS.length; B=re(B,kB); drawR(); };
+document.getElementById('rc').onclick=()=>{ kC=(kC+1)%KS.length; C=re(C,kC); drawR(); };
+const cvR=document.getElementById('cvR');
+function drawR(){
+  const {c,W,H}=size(cvR,(cvR.clientWidth||300)<480?1.35:1.6); c.fillStyle=col('--card'); c.fillRect(0,0,W,H);
+  const Rl=RULES[rule]; const out=Rl.f();
+  const L=[`w = ${P(A)},\\ \\ b = ${P(B)},\\ \\ c = ${P(C)}`];
+  if(!out){ L.push(`\\htmlClass{new}{w = 0:\\ \\text{reciprocal on ℚ speaks only of } w \\ne 0}`,`\\text{0 has no reciprocal (5d)}`); tex(document.getElementById('eqR'),'\\begin{gathered}'+L.join('\\\\ ')+'\\end{gathered}',true);
+    c.fillStyle=col('--muted'); c.font='12px IBM Plex Mono, monospace'; c.textAlign='center'; c.fillText('no pair: w has no reciprocal',W/2,H/2); return; }
+  const [l,r]=out; const dr=p=>p[1]<0?[-p[0],-p[1]]:p; const l2=dr(l), r2=dr(r), lo=low(l);
+  const qmax=Math.max(l2[1],r2[1],lo[1])*1.15+0.5, pabs=Math.max(Math.abs(l2[0]),Math.abs(r2[0]),Math.abs(lo[0]),1)*1.15+0.5;
+  const X=q=>28+(W-40)*q/qmax, Y=p=>H/2-(H/2-16)*p/pabs;
+  c.strokeStyle=col('--grid'); c.lineWidth=1; c.beginPath(); c.moveTo(X(0),12); c.lineTo(X(0),H-12); c.moveTo(X(0),Y(0)); c.lineTo(W-8,Y(0)); c.stroke();
+  c.font='10.5px IBM Plex Mono, monospace'; c.fillStyle=col('--muted'); c.textAlign='left'; c.fillText('top ↑',X(0)+4,16); c.textAlign='right'; c.fillText('bottom →',W-8,Y(0)-6);
+  const same=l[0]*r[1]===l[1]*r[0];
+  if(same){ const far=Math.max(l2[1],r2[1]); c.strokeStyle=col('--gold'); c.lineWidth=2; c.setLineDash([6,4]); c.beginPath(); c.moveTo(X(0),Y(0)); c.lineTo(X(far*1.06),Y(lo[0]*far*1.06/lo[1])); c.stroke(); c.setLineDash([]);
+    c.strokeStyle=col('--gold'); c.lineWidth=2.5; c.beginPath(); c.arc(X(lo[1]),Y(lo[0]),9,0,7); c.stroke(); }
+  c.strokeStyle=col('--ember'); c.lineWidth=1.5; c.beginPath(); c.arc(X(0),Y(0),4,0,7); c.stroke();
+  const dot=(p,cl,rad)=>{ c.fillStyle=col(cl); c.beginPath(); c.arc(X(p[1]),Y(p[0]),rad,0,7); c.fill(); };
+  dot(l2,'--ember',6.5); dot(r2,'--teal',4.5);
+  c.fillStyle=col('--ink'); c.textAlign='left'; c.font='11px IBM Plex Mono, monospace';
+  L.push(`\\text{left: } ${Rl.L} = \\htmlClass{new}{${P(l)}}`); L.push(`\\text{right: } ${Rl.R} = \\htmlClass{keep}{${P(r)}}`);
+  L.push(l[0]===r[0]&&l[1]===r[1]?`\\text{the very same pair}`:`\\text{different pairs:}\\ \\ ${l[0]}\\cdot ${r[1]} ${same?'=':'\\ne'} ${l[1]}\\cdot ${r[0]}`);
+  L.push(same?`\\text{one fraction: } ${fr(l)}\\ \\ (\\text{${rule}})`:`\\htmlClass{new}{\\text{different fractions}}`);
+  tex(document.getElementById('eqR'),'\\begin{gathered}'+L.join('\\\\ ')+'\\end{gathered}',true);
+}
+
+/* ---------- right: which side of 0 ---------- */
+const cvS=document.getElementById('cvS'); const M=6; let SA=[2,3], SB=[-1,2], sslot='a', sgeo=null;
+document.querySelectorAll('[data-ss]').forEach(b=>b.onclick=()=>{ document.querySelectorAll('[data-ss]').forEach(x=>x.classList.toggle('on',x===b)); sslot=b.dataset.ss; });
+const sgn=n=>n>0?1:(n<0?-1:0);
+function drawS(){
+  const {c,W,H}=size(cvS,1.0); c.fillStyle=col('--card'); c.fillRect(0,0,W,H);
+  const pad=22, s=(Math.min(W,H)-2*pad)/(2*M); const X=q=>W/2+q*s, Y=p=>H/2-p*s; sgeo={X,Y,s};
+  c.save(); c.strokeStyle=col('--grid'); c.lineWidth=1; c.beginPath(); for(let y=Y(M)-s*.4;y<Y(-M)+s*.4;y+=7){ c.moveTo(X(0)-s*.35,y); c.lineTo(X(0)+s*.35,y+7); } c.stroke(); c.restore();
+  c.font='10.5px IBM Plex Mono, monospace'; c.fillStyle=col('--muted'); c.textAlign='center';
+  for(let q=-M;q<=M;q+=2) if(q) c.fillText(String(q),X(q),H-6); c.textAlign='right'; for(let p=-M;p<=M;p+=2) c.fillText(String(p),pad-6,Y(p)+4);
+  const inC=(pt,p,q)=>pt[0]*q===pt[1]*p;
+  for(let q=-M;q<=M;q++){ if(!q) continue; for(let p=-M;p<=M;p++){ const sg=sgn(p*q); c.fillStyle=sg>0?col('--teal'):(sg<0?col('--ember'):col('--gold')); c.globalAlpha=.55; c.beginPath(); c.arc(X(q),Y(p),2.8,0,7); c.fill(); c.globalAlpha=1;
+    if(inC(SA,p,q)){ c.strokeStyle=col('--ink'); c.lineWidth=1.6; c.beginPath(); c.arc(X(q),Y(p),6,0,7); c.stroke(); }
+    if(inC(SB,p,q)){ c.strokeStyle=col('--ink'); c.lineWidth=1.2; c.setLineDash([2,2]); c.beginPath(); c.arc(X(q),Y(p),8.5,0,7); c.stroke(); c.setLineDash([]); } } }
+  const big=(pt,lab)=>{ c.fillStyle=col('--ink'); c.beginPath(); c.arc(X(pt[1]),Y(pt[0]),4.5,0,7); c.fill(); c.font='bold 12px IBM Plex Mono, monospace'; c.textAlign='left'; c.fillText(lab,X(pt[1])+7,Y(pt[0])-7); };
+  big(SA,'w'); big(SB,'b');
+  const kind=pt=>{ const s=sgn(pt[0]*pt[1]); return s>0?'\\text{positive}':(s<0?'\\text{the negative of a positive}':'0'); };
+  const d=add(SB,neg(SA)); const ds=sgn(d[0]*d[1]);
+  const sl=pt=>pt[1]<0?`${pt[0]}/(${pt[1]})`:`${pt[0]}/${pt[1]}`;
+  const L=[`w = ${sl(SA)}:\\ \\ pq = ${SA[0]*SA[1]},\\ ${kind(SA)}`,`b = ${sl(SB)}:\\ \\ rs = ${SB[0]*SB[1]},\\ ${kind(SB)}`,
+    `b - w = ${P(d)}:\\ \\ ${d[0]*d[1]}`, ds>0?`\\htmlClass{keep}{w \\lt b}`:(ds<0?`\\htmlClass{new}{b \\lt w}`:`w = b`)];
+  tex(document.getElementById('eqS'),'\\begin{gathered}'+L.join('\\\\ ')+'\\end{gathered}',true);
+}
+cvS.addEventListener('pointerdown',e=>{ if(!sgeo) return; const Rc=cvS.getBoundingClientRect(), x=e.clientX-Rc.left, y=e.clientY-Rc.top; const {X,Y,s}=sgeo;
+  const q=Math.round((x-X(0))/s), p=Math.round((Y(0)-y)/s); if(!q||Math.abs(q)>M||Math.abs(p)>M) return; if(Math.hypot(X(q)-x,Y(p)-y)>s*.75) return;
+  if(sslot==='a') SA=[p,q]; else SB=[p,q]; drawS(); });
+new ResizeObserver(()=>{ drawR(); drawS(); }).observe(cvR);
+if(window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{ drawR(); drawS(); });
+drawR(); drawS();
+
+/* ---------- slides ---------- */
+const N='\\htmlClass{new}', K='\\htmlClass{keep}';
+const SYM={'≠':'$\\ne$','∈':'$\\in$','⇔':'$\\Leftrightarrow$','⊥':'$\\bot$','∀':'$\\forall$','∃':'$\\exists$','¬':'$\\neg$','∧':'$\\land$','∨':'$\\lor$','⇒':'$\\Rightarrow$','ℕ':'$\\mathbb N$','ℤ':'$\\mathbb Z$','ℚ':'$\\mathbb Q$','≤':'$\\le$','∼':'$\\sim$','·':'$\\cdot$','−':'$-$','′':"$'$"};
+const tx=r=>r.replace(/[≠∈⇔⊥∀∃¬∧∨⇒ℕℤℚ≤∼·−′]/gu,ch=>SYM[ch]);
+const col2=(...rows)=>'\\begin{aligned}'+rows.map(([l,r])=>'&'+l+' &&\\text{'+tx(r)+'}').join('\\\\ ')+'\\end{aligned}';
+stepper('#sl1',[
+  {k:'ember',kl:'the negative',t:R`-\tfrac pq = \tfrac{-p}{q}:\qquad -\tfrac34 = \tfrac{-3}{4}`,n:`Negate the numerator; honest by honest-negative. w − b is w + (−b), as on 5a.`}
+],{title:'The slides · the negative · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'the method',t:R`a = \tfrac pq,\ b = \tfrac rs,\ c = \tfrac tu`,n:`Write each fraction by a member. Work both sides of the rule out on pairs with 5a's integer techniques. Then cross-multiply, or see that the pairs are the very same.`},
+  {k:'ember',kl:'turn-about for plus on ℚ',t:R`\tfrac{ps + qr}{qs} = ${N}{\tfrac{rq + sp}{sq}}`,n:`turn-about for times on ℤ and turn-about for plus on ℤ: the same pair. Order in a sum doesn't matter.`},
+  {k:'ember',kl:'regroup for plus on ℚ',t:col2([`(ps + qr)u + (qs)t = psu + qru + qst`,'spread on ℤ, regroup for times on ℤ'],[`p(su) + q(ru + st) = psu + qru + qst`,'regroup for times on ℤ, spread on ℤ, regroup for plus on ℤ']),n:`∎ The numerators agree, and (qs)u = q(su). Brackets in a sum don't matter.`},
+  {k:'ember',kl:'negative on ℚ',t:R`\tfrac pq + \tfrac{-p}q = \tfrac{pq + (-(pq))}{qq} = \tfrac{0}{qq} = ${N}{0}`,n:`∎ A fraction is 0 exactly when its numerator is.`}
+],{title:'The slides · the adding rules · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'the multiplying rules',t:R`\tfrac{pr}{qs} = \tfrac{rp}{sq},\qquad \tfrac{(pr)t}{(qs)u} = \tfrac{p(rt)}{q(su)}`,n:`turn-about for times on ℚ and regroup for times on ℚ: numerators and denominators separately, by turn-about for times on ℤ and regroup for times on ℤ. times-one on ℚ by times-one on ℤ; reciprocal on ℚ is 5b's reciprocal.`}
+],{title:'The slides · the multiplying rules · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'spread on ℚ',t:R`ab + ac = \tfrac{${N}{q}\,(p(ru + st))}{${N}{q}\,(q(su))} = \tfrac{p(ru + st)}{q(su)} = a(b + c)`,n:`∎ The one rule where the sides come out as different pairs: a common factor q, removed by scaling.`}
+],{title:'The slides · spread on ℚ · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'positive integers',t:R`x \text{ positive} \;\Leftrightarrow\; x = [n, 0],\ n \ne 0`,n:`three-way on ℤ: exactly one of x = 0, x positive, −x positive, by member-with-a-0. positive-sum on ℤ, positive-product on ℤ: by ℕ-inside-ℤ with gap-in-ℕ and no-zero-product.`},
+  {k:'ember',kl:'square-is-positive on ℤ',t:R`[0, m][0, m] = [${N}{mm}, 0]`,n:`An integer other than 0, times itself, is positive, in both of member-with-a-0's cases.`}
+],{title:'The slides · positive integers · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'positive fractions',t:R`\tfrac pq \text{ positive} \;\Leftrightarrow\; ${N}{pq} \text{ positive}:\quad \tfrac{-2}{-3} \text{ positive}`,n:`The product of numerator and denominator decides. A top alone does not.`},
+  {k:'ember',kl:'honest-positive',t:col2([`(rs)(qq) = (pq)(ss)`,'middle-swap, the given, turn-about for times on ℤ'],[`(pq)(ss)\\ \\text{positive}`,'square-is-positive on ℤ; positive-product on ℤ'],[`${N}{rs\\ \\text{positive}}`,'three-way on ℤ: the other two cases clash']),n:`∎ Positive does not depend on the member. The split is on three-way on ℤ's proved three-way or.`},
+  {k:'ember',kl:'a fake',t:R`\tfrac{-2}{-3}:\ \text{numerator not positive, yet } ${N}{\tfrac{-2}{-3} = \tfrac23}`,n:`“Positive means positive numerator” fails: two members of one fraction would disagree. The product test is honest (honest-positive).`}
+],{title:'The slides · positive fractions · ← → keys work'});
+stepper('#sl7',[
+  {k:'ember',kl:'three-way on ℚ',t:R`pq = 0 \;|\; pq \text{ pos.} \;|\; -(pq) \text{ pos.}\quad\Rightarrow\quad a = 0 \;|\; a \text{ pos.} \;|\; ${N}{-a} \text{ pos.}`,n:`∎ three-way on ℤ on the integer pq, carried to the fraction p/q through honest-positive and negative-out on ℤ.`},
+  {k:'ember',kl:'positive-sum on ℚ',t:R`(ps + qr)(qs) = (pq)(ss) + (rs)(qq)`,n:`∎ Each part is positive (square-is-positive on ℤ, positive-product on ℤ), so the sum is (positive-sum on ℤ). positive-product on ℚ: (pr)(qs) = (pq)(rs).`}
+],{title:'The slides · the order rules · ← → keys work'});
+stepper('#sl8',[
+  {k:'ember',kl:'order',t:R`a \lt b \;\Leftrightarrow\; b - a \text{ positive}`,n:`order-agrees: on the numbers this agrees with 4g's less than. A rational is positive exactly when it is more than 0.`},
+  {k:'ember',kl:'one-negative',t:R`a + x = 0 \;\Rightarrow\; x = x + (a + (-a)) = (a + x) + (-a) = ${N}{-a}`,n:`∎ From the rules alone: a number's negative is the only number that adds to it to give 0.`},
+  {k:'ember',kl:'any-two-compare on ℚ',t:R`w - b = -(b - w):\quad w \lt b \;|\; w = b \;|\; b \lt w`,n:`∎ three-way on ℚ on b − w. Any two rationals compare, exactly one way.`},
+  {k:'ember',kl:'compare',t:R`\tfrac35 - \tfrac23 = \tfrac{9 - 10}{15} = \tfrac{-1}{15}:\quad ${N}{\tfrac35 \lt \tfrac23}`,n:`2/3 − 3/5 is 1/15, positive. The difference decides.`}
+],{title:'The slides · order · ← → keys work'});
+stepper('#sl9',[
+  {k:'ember',kl:'settled-order on ℚ',t:R`a = b \lor a \ne b,\qquad a \lt b \lor \neg(a \lt b)`,n:`∎ Every sameness of fractions comes down to a sameness of numbers, which settled-order settles. Case splits on order are licensed for fractions before rung 7.`}
+],{title:'The slides · settled-order on ℚ · ← → keys work'});
+stepper('#sl10',[
+  {k:'ember',kl:'a fake, again',t:R`1 \lt 2,\ \ c = -1:\quad -1 \lt -2\ ${N}{\text{fails}}`,n:`Multiplying both sides of < keeps the order only for a positive multiplier. 5e proves that version.`}
+],{title:'The slides · a fake, again · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

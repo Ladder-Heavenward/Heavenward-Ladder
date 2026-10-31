@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Can a computer try every route?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r22comp.html">← 22·comp does forgetting cost energy?</a><a href="r22nav.html">next: 22·nav can a flat map tell the truth? →</a></p>
+  <div class="tags"><span class="tag logi">22·logi · logistics</span></div>
+  <h1>Can a computer try every route?</h1>
+  <p>Can a computer try every route? A delivery van leaves its depot, calls at every stop on its list, and comes home. Which order of stops makes the drive shortest? With four stops a driver can try every order on the back of an envelope. With twenty, the orders are more than a fast computer can try in a lifetime. What makes it hard is that each new stop does not add to the work; it multiplies it. This page shows, with 4j’s counting and 22k’s ladder of growth, how many tours there are, and why trying them all soon outruns any machine. Then it shows a quick rule of thumb, always driving to the nearest stop not yet visited, that builds a tour at once. Last, it shows how to tell, without knowing the best tour, how far off the quick one can be.</p>
+  <p class="gesture">With the depot fixed, the stops can be put in order in a factorial number of ways, and each tour is counted twice, once each way round. Each extra stop multiplies the count by the new number of stops, so a machine a thousand times faster buys only two more stops. The nearest-stop rule takes about half the square of the stops in looks, and its tour can be well off the best. Every tour uses two links at every stop, so half the sum of each stop’s two shortest links is a floor under the best tour, and any tour found can be measured against that floor.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r04j.html">4j</a> (arrangements, doubled-sum), <a href="r22k.html">22k</a> (how fast things grow), <a href="r17comp.html">17·comp</a> (counting a method’s work) and <a href="r06logi.html">6·logi</a> (counting assignments). 38·logi finds the cheapest way to ship.</p></div>
+</header>
+
+<section class="class step" data-step="22logi1">
+  <h2 class="sthead"><span class="stno">22logi1</span>Counting the tours</h2>
+  <p class="stands">Stands on 4j (arrangements) and 6·logi (counting assignments).</p>
+  <p data-pid="a7ec3d">A van leaves its depot, calls at each of n stops once, and comes home. A tour is the order of the stops. Roads are taken to be the same length both ways.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the tour-count technique">
+\text{orders of the } n \text{ stops} = n! @@ arrangements (4j)
+\text{each order driven backwards is the same loop} @@ same roads, same length
+\text{no order is its own backwards, for } n \ge 3 @@ its first stop and its last would trade places
+\htmlClass{new}{\text{tours} = \tfrac{n!}{2}} \quad \blacksquare @@ the orders pair off, two to a tour
+  </pre>
+  <p data-pid="a39c22">Tour-count technique: <b>a depot and n stops, n at least 3, make n!/2 different tours.</b> Four stops make 12 tours. Six make 360. Ten make 1 814 400.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · tours · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">22·logi.1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a florist’s van in Bellingham with 8 stops,  then 12</span></span>Find the number of tours for each. <br>Find how many times more tours the 12 stops make.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22logi2">
+  <h2 class="sthead"><span class="stno">22logi2</span>Why the count outruns any computer</h2>
+  <p class="stands">Stands on 22·logi.1 and 22k (how fast things grow).</p>
+  <p data-pid="2f066a">Grant a computer that checks a billion tours a second, which is generous. 15 stops take it about 11 minutes. 20 stops take about 38 years. A computer running since the universe began, some 4.35 × 10¹⁷ seconds, would have finished every tour of 26 stops, but not of 27.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the one-more-stop technique">
+\tfrac{(n+1)!/2}{n!/2} = n + 1 @@ one more stop
+\tfrac{n!}{c^n} \text{ grows at least twice over at each step once } n \ge 2c @@ the next factor is (n + 1)/c ≥ 2: powers of c lose to factorials (22k)
+\tfrac{22!/2}{20!/2} = 21\cdot 22 = 462 < 1000 < 21\cdot 22\cdot 23 @@ from 20 stops
+\htmlClass{new}{\text{a machine } 1000 \text{ times faster buys two more stops}} \quad \blacksquare @@ at 20 stops; fewer as n grows
+  </pre>
+  <p data-pid="3e7058">One-more-stop technique: <b>each extra stop multiplies the tours by the new number of stops, so a faster machine buys only a stop or two.</b> Speed grows by factors; the count grows by a factor that itself keeps growing. No machine that tries every tour keeps up.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · growth · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22·logi.2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a computer checking 10⁹ tours a second</span></span>Find how long it takes for 18 stops. <br>Find the most stops it finishes in one day.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22logi3">
+  <h2 class="sthead"><span class="stno">22logi3</span>The nearest-stop rule</h2>
+  <p class="stands">Stands on 22·logi.2, 4j (doubled-sum) and 17·comp (counting a method’s work).</p>
+  <p data-pid="42a07a">A rule of thumb: from where you are, drive to the nearest stop not yet visited; when none is left, drive home. With n stops it looks at n links, then n − 1, and so on down to 1.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the nearest-stop rule, counted">
+n + (n - 1) + \cdots + 1 = \tfrac{n(n+1)}{2} @@ doubled-sum (4j)
+\htmlClass{new}{\text{looks} = \tfrac{n(n+1)}{2}} \quad \blacksquare @@ 20 stops: 210 looks, not 1.2 × 10¹⁸ tours
+  </pre>
+  <p data-pid="c78f4d">A bike courier works the street grid of downtown Portland, where a block is 200 feet. Its shop O is at (0, 0), and its six stops are A (0, −4), B (6, 5), C (2, 3), D (3, −1), E (0, 3) and F (4, −3), in blocks east and north. A link’s length is the blocks along the streets, east-west plus north-south.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the courier’s nearest-stop tour">
+O \to E \to C \to D \to F \to A \to B \to O @@ nearest each time: 3, then 2, 5, 3, 5
+3 + 2 + 5 + 3 + 5 + 15 + 11 = 44 @@ the last two links are long: A to B, and B home
+O \to A \to F \to D \to B \to C \to E \to O = 4 + 5 + 3 + 9 + 6 + 2 + 3 = 32 @@ the best of all 360 tours
+\htmlClass{new}{\tfrac{44}{32} = 1.375} @@ the quick tour is 37.5% longer
+  </pre>
+  <p data-pid="d96e1e">Nearest-stop rule: <b>the rule builds a tour in about half the square of the stops in looks, but it leaves the far stops for last and can come home long.</b> On stops scattered at random, it tends to run about a quarter over the best. There are layouts where it does far worse, and its worst grows, slowly, with the number of stops.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · nearest · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · the nearest stop, and the best tour</div>
+    <div class="kn"><span class="m">start</span><input type="range" id="ks" min="0" max="6" step="1" value="0"><output id="os"></output></div>
+    <div id="pl"></div>
+    <div class="cap">A courier’s shop, O, and six stops, in blocks east and north, the length of a link counted in blocks along the streets. Ember: the nearest-stop tour from the start you pick. Teal, dashed: the best tour, found by trying all 360.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22·logi.3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a shop O at (0, 0) and stops P (1, 2),  Q (3, 0),  R (−1, 1),  S (−3, 3),  in blocks east and north,  a link counted in blocks along the streets</span></span>Find the nearest-stop tour and its length. <br>Find the best of the 12 tours, and how much longer the nearest-stop tour is.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22logi4">
+  <h2 class="sthead"><span class="stno">22logi4</span>A floor under the best tour</h2>
+  <p class="stands">Stands on 22·logi.3.</p>
+  <p data-pid="dde094">The best tour of many stops cannot be found by trying. So how far off is a quick tour? Find a length that no tour can beat, and measure against that.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the two-links floor technique">
+\text{a tour enters and leaves each place once} @@ two links at every place, the depot too
+\text{tour} = \tfrac12\sum_{\text{places}} (\text{its two links}) @@ each link touches two places, so the sum counts it twice
+\text{its two links} \ge \text{its two shortest links} @@ two links from one place, to two other places
+\htmlClass{new}{\text{tour} \ge \tfrac12\sum_{\text{places}} (\text{two shortest links})} \quad \blacksquare @@ for every tour, so for the best
+  </pre>
+  <p data-pid="a5e6eb">Two-links floor technique: <b>every tour is at least half the sum, over the places, of each place’s two shortest links.</b> For the courier the floor is 28.5 blocks. So the nearest-stop tour of 44 is at most 44/28.5 ≈ 1.54 times the best, known without trying a single other tour. The best is 32, so the floor was 11% short of it.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · the floor · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22·logi.4.1</span><span class="ph undo">undo</span><span class="givens"><span class="gtx">a route planner’s tour of 52 km through 9 stops and a depot</span> <span class="gtx">the two shortest links of the 10 places summing to 84 km</span></span>Find the floor, and the most the tour can be over the best, as a share. <br>Find the floor that would show the planner’s tour is within 10% of the best.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22logi5">
+  <h2 class="sthead"><span class="stno">22logi5</span>Illegal moves</h2>
+  <p class="stands">Stands on 22·logi.1 to 22·logi.4.</p>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+n \text{ stops make } n! \text{ tours}\,? @@ each loop is counted once each way round: n!/2
+\text{a computer twice as fast handles twice the stops}\,? @@ one more stop multiplies the work by n + 1
+\text{nearest each time, so shortest in all}\,? @@ the far stops are left for last
+\text{the floor is } 28.5, \text{ so a tour of } 28.5 \text{ exists}\,? @@ the floor is under the best; it need not be met
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22·logi.5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span class="gtx">a route with one-way streets,  so that A to B can be longer than B to A</span></span>Find the number of tours of n stops, and the line of the tour-count technique that breaks.</li><li><span class="givens"><span class="gtx">a ferry whose fare makes the direct link from A to C dearer than going by way of B</span></span>Find whether the two-links floor still holds, and which of its lines it rests on.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">22·logi.6.1</span><span class="tagq">build</span>Build a layout of a shop and 4 stops on a street grid where the nearest-stop tour is at least a third longer than the best.</div>
+  <div class="chq"><span class="chid">22·logi.6.2</span><span class="tagq">edge</span>Find what the tour-count technique gives for 1 and for 2 stops besides the depot, and which line of its proof strains.</div>
+  <div class="chq"><span class="chid">22·logi.6.3</span><span class="tagq">converse</span>A tour is the best of all. Must its length meet the two-links floor? <br>A tour’s length meets the floor. Must it be the best?</div>
+  <div class="chq"><span class="chid">22·logi.6.4</span><span class="tagq">reroute</span>Count the tours a second way: seat the depot and the n stops round a ring, count the arrangements of n + 1 things, and find what to divide by.</div>
+  <div class="chq"><span class="chid">22·logi.6.5</span><span class="tagq">seam</span>Nobody has found a way to find the best tour of n stops in a number of steps below some fixed power of n, every time. Nobody has shown that there is no such way. <br>Is there one?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r22comp.html">← 22·comp · does forgetting cost energy?</a><a href="r22nav.html">22·nav · can a flat map tell the truth? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The question of the shortest tour is the travelling salesman problem, and trying every tour is brute force. The nearest-stop rule is the nearest-neighbour heuristic; a rule that gives a good tour fast, with no promise of the best, is a heuristic. The two-links floor is a lower bound of the kind called a relaxation; its stronger cousin, the one-tree bound, gives the Held–Karp bound. A distance counted along a street grid is the taxicab, or Manhattan, distance. Problems like this one, for which no method is known that is fast every time, are called NP-hard, and the question in 22·logi.6.5 is the P versus NP problem.</p>
+  <h3>Who said it first</h3>
+  <p>Karl Menger posed the messenger problem in Vienna in 1930, and noted that the nearest-stop rule does not give the best tour. George Dantzig, Ray Fulkerson and Selmer Johnson (1954) found the best tour through 49 cities of the United States, by floors and cuts rather than by trying. Daniel Rosenkrantz, Richard Stearns and Philip Lewis (1977) showed that the nearest-stop tour is never more than about half the log of the number of stops times the best, when no detour is shorter than the direct link, and that layouts exist where it is off by a factor that grows that way. David Applegate, Robert Bixby, Vašek Chvátal and William Cook found the best tour through all 24 978 towns of Sweden (2004) and through 85 900 points of a computer chip (2006).</p>
+  <p>In 22·logi.6.5, Kurt Gödel asked John von Neumann in a letter of 1956 whether such questions could be settled in steps that grow only like a power of their size, and seemed to hope so. Jack Edmonds (1965) took a power of the size as the meaning of a good method, and guessed that this problem has none. Stephen Cook (1971) and Richard Karp (1972) showed that a good method for it would give one for thousands of other problems at once. Since 2000 a prize of a million dollars has stood for either answer.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="22·logi: a worked “proof”, not allowed">
+20 \text{ stops take about } 38 \text{ years at } 10^9 \text{ tours a second} @@ fine
+\text{a machine } 40 \text{ times faster} @@ fine
+\text{so } 40 \text{ stops in about } 38 \text{ years} @@ not allowed: 40 stops make 40!/2 ≈ 4 × 10⁴⁷ tours, about 3 × 10²⁹ times as many as 20; 40 times the speed buys one stop
+  </pre>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+const V=c=>'var('+c+')';
+const P=[[0,0],[0,-4],[6,5],[2,3],[3,-1],[0,3],[4,-3]], NM=['O','A','B','C','D','E','F'];
+const d=(i,j)=>Math.abs(P[i][0]-P[j][0])+Math.abs(P[i][1]-P[j][1]);
+const L=t=>t.reduce((s,x,i)=>s+d(x,t[(i+1)%t.length]),0);
+function perms(a){ if(a.length<2) return [a]; const o=[]; a.forEach((x,i)=>perms(a.slice(0,i).concat(a.slice(i+1))).forEach(p=>o.push([x].concat(p)))); return o; }
+let best=null, tried=0; perms([1,2,3,4,5,6]).forEach(p=>{ if(p[0]>p[5]) return; tried++; const t=[0].concat(p), l=L(t); if(!best||l<best[0]) best=[l,t]; });
+let fl=0; for(let i=0;i<7;i++){ const ds=[]; for(let j=0;j<7;j++) if(j!==i) ds.push(d(i,j)); ds.sort((a,b)=>a-b); fl+=ds[0]+ds[1]; } fl/=2;
+function nn(s){ const t=[s], left=new Set([0,1,2,3,4,5,6]); left.delete(s); while(left.size){ const c=t[t.length-1]; let m=null; left.forEach(j=>{ if(m===null||d(c,j)<d(c,m)) m=j; }); t.push(m); left.delete(m); } return t; }
+function draw(){ const s=+$('ks').value; $('os').textContent=NM[s];
+  const X=x=>150+x*22, Y=y=>110-y*18;
+  let h='<svg viewBox="0 0 340 220" style="width:100%;max-width:400px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  for(let x=-6;x<=8;x++) h+='<line x1="'+X(x)+'" y1="'+Y(5.5)+'" x2="'+X(x)+'" y2="'+Y(-5.5)+'" style="stroke:'+V('--grid')+';stroke-width:.5"/>';
+  for(let y=-5;y<=5;y++) h+='<line x1="'+X(-6.5)+'" y1="'+Y(y)+'" x2="'+X(8.5)+'" y2="'+Y(y)+'" style="stroke:'+V('--grid')+';stroke-width:.5"/>';
+  const path=(t,st,off)=>{ let a=''; t.concat([t[0]]).forEach((i,k)=>{ if(k){ const p=P[t[k-1]], q=P[i]; a+='M'+(X(p[0])+off)+' '+(Y(p[1])+off)+'L'+(X(q[0])+off)+' '+(Y(p[1])+off)+'L'+(X(q[0])+off)+' '+(Y(q[1])+off); } }); return '<path d="'+a+'" style="fill:none;'+st+'"/>'; };
+  const g=nn(s), lg=L(g);
+  h+=path(best[1],'stroke:'+V('--teal')+';stroke-width:2;stroke-dasharray:5 3',-2)+path(g,'stroke:'+V('--ember')+';stroke-width:2.5',2);
+  P.forEach((p,i)=>{ h+='<circle cx="'+X(p[0])+'" cy="'+Y(p[1])+'" r="4" style="fill:'+(i===s?V('--ember'):V('--ink'))+'"/><text x="'+(X(p[0])+6)+'" y="'+(Y(p[1])-6)+'" style="font-size:11px;fill:'+V('--ink')+'">'+NM[i]+'</text>'; });
+  $('pl').innerHTML=h+'</svg>';
+  const v=$('vd'); v.className='verdict'+(lg===best[0]?' win':'');
+  v.textContent='Nearest-stop tour from '+NM[s]+': '+g.map(i=>NM[i]).join(' → ')+' → '+NM[s]+', '+lg+' blocks. Best of all '+tried+' tours: '+best[0]+' blocks. Floor: '+fm(fl,1)+' blocks. The quick tour is '+fm(100*(lg/best[0]-1),1)+'% over the best'+(lg===best[0]?': from here the rule finds the best.':'.'); }
+$('ks').oninput=draw; draw();
+window.__pic={set:(s)=>{ $('ks').value=s; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'orders',t:R`n!`,n:`Arrangements.`},
+  {k:'ember',kl:'each way',t:R`\htmlClass{new}{\tfrac{n!}{2}}`,n:`Halved.`}
+],{title:'The slides · tours · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'one more',t:R`\times (n+1)`,n:`Each stop.`},
+  {k:'ember',kl:'outrun',t:R`\htmlClass{new}{n! \gg c^n}`,n:`Speed buys a stop or two.`}
+],{title:'The slides · growth · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'looks',t:R`\htmlClass{new}{\tfrac{n(n+1)}{2}}`,n:`Fast.`},
+  {k:'ember',kl:'the cost',t:R`\tfrac{44}{32}`,n:`Far stops left for last.`}
+],{title:'The slides · nearest · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'two links',t:R`\text{tour} = \tfrac12\sum(\text{two links})`,n:`Each link counted twice.`},
+  {k:'ember',kl:'floor',t:R`\htmlClass{new}{\text{tour} \ge \tfrac12\sum(\text{two shortest})}`,n:`Measure against it.`}
+],{title:'The slides · the floor · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`n!\,?`,n:`Half that: n!/2.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

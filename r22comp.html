@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Does forgetting cost energy?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r22stat.html">← 22·stat how many misprints on a page?</a><a href="r22logi.html">next: 22·logi can a computer try every route? →</a></p>
+  <div class="tags"><span class="tag comp">22·comp · computing</span></div>
+  <h1>Does forgetting cost energy?</h1>
+  <p>Does forgetting cost energy? A computer gets warm. Some of that heat comes from wires that are not perfect, and better wires could cut it. But is there a part that no engineering can remove? A memory that is wiped clean has lost something. Before, it could have held either of two things; after, it holds one. Physicists had long tied heat to the number of ways the molecules of a body can sit. What makes it hard is that a bit is information and heat is energy, and for a long time nobody could see why one should cost the other. This page shows, with counting from rung 4, logs from rung 17 and 22k’s size of the factorials, how to count the ways a thing can sit in bits, why a gas that fills its room is a matter of counting, and why wiping a bit sends a least amount of heat into the room. Then it looks back at the gates of 4·comp, and finds which of them forget.</p>
+  <p class="gesture">The log of the number of ways a thing can sit adds when two things sit side by side, so it can be counted in bits, and a measured law ties heat to the same count. Choosing a share of many things can be done in a number of ways whose log is the count of things times a fixed fraction, by the size of the factorials. Squeezing a gas into half its room at a steady temperature turns a fixed amount of work into heat, and that heat is exactly what the lost ways are worth. A memory wiped clean loses ways in the same manner, so it must send heat into the room. A gate that sends two different inputs to the same output forgets, and pays.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r04comp.html">4·comp</a> (gates), <a href="r04j.html">4j</a> (stages-multiply, choosing-counts-parts), <a href="r17c.html">17c</a> (log-of-a-product), <a href="r17h.html">17h</a> (change of base), <a href="r17a.html">17a</a> (the log as an area), <a href="r15chem.html">15·chem</a> (the gas law; work as an area), <a href="r17crypt.html">17·crypt</a> (bits of a choice), <a href="r17phys.html">17·phys</a> (the fixed number k), <a href="r22k.html">22k</a> (the size of n!) and <a href="r05stat.html">5·stat</a> (expected value). 30·comp counts what a noisy line can carry.</p></div>
+</header>
+
+<section class="class step" data-step="22comp1">
+  <h2 class="sthead"><span class="stno">22comp1</span>Counting ways in bits</h2>
+  <p class="stands">Stands on 4j (stages-multiply), 17c (log-of-a-product), 17h (change of base) and 17·crypt (bits of a choice).</p>
+  <p data-pid="6d0d2c">17·crypt counted a password’s choices in bits. Physics counts the ways the molecules of a body can sit. If one thing can sit in W₁ ways and another in W₂, the two side by side can sit in W₁W₂ ways. A count that multiplies is awkward. Its log adds.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the ways-to-bits technique">
+W = W_1 W_2 @@ stages-multiply (4j): each way of the first with each way of the second
+\ln W = \ln W_1 + \ln W_2 @@ log-of-a-product (17c)
+\text{bits} = \log_2 W = \tfrac{\ln W}{\ln 2} @@ change of base (17h); n switches have W = 2ⁿ, so n bits
+\htmlClass{new}{S = k\ln W = (k\ln 2)\cdot \text{bits}} @@ the measured law; k ln 2 ≈ 9.57 × 10⁻²⁴ J/K for each bit
+  </pre>
+  <p data-pid="94e94e">A measured law ties the count to heat: a body that can sit in W equally likely ways has S = k ln W, with k = 1.380649 × 10⁻²³ J/K, 17·phys’s fixed number. Its accepted name is the body’s entropy. Ways-to-bits technique: <b>the log of the count of ways adds when things sit side by side, so the ways can be counted in bits, and each bit is worth k ln 2 of entropy.</b> A byte has 256 ways, which is 8 bits.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · bits · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">22·comp.1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a bike lock with 4 dials of 10 digits each</span> <span class="gtx">a byte</span></span>Find the bits of each, and of the two side by side. <br>Find the entropy of the lock’s ways in J/K.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22comp2">
+  <h2 class="sthead"><span class="stno">22comp2</span>The size of n! as the bridge</h2>
+  <p class="stands">Stands on 22·comp.1, 4j (choosing-counts-parts) and 22k (the size of n!).</p>
+  <p data-pid="ef099b">N switches with exactly k of them on can sit in N choose k ways (4j). Those factorials are far too large to write out. 22k gives their size: ln n! = n ln n − n + rₙ, where rₙ lies between 0 and ln n + 1. Write p = k/N for the share that is on.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the share-count technique">
+\ln\binom{N}{k} = \ln N! - \ln k! - \ln(N - k)! @@ choosing-counts-parts (4j)
+= N\ln N - k\ln k - (N - k)\ln(N - k) + r @@ the size of n! (22k); the −n parts cancel; |r| ≤ 2(ln N + 1)
+= -k\ln\tfrac{k}{N} - (N - k)\ln\tfrac{N - k}{N} + r @@ N ln N = k ln N + (N − k) ln N
+\htmlClass{new}{\log_2\binom{N}{k} = N\,h(p) + \tfrac{r}{\ln 2},\ \ h(p) = -p\log_2 p - (1 - p)\log_2(1 - p)} \quad \blacksquare @@ divide by ln 2 (17h)
+  </pre>
+  <p data-pid="76898e">Share-count technique: <b>a share p of N things can be chosen in about <span data-tex-inline="2^{N h(p)}"></span> ways, and the most ways sit at the half, where h is 1.</b> The error r is no bigger than a few times ln N, so for large N it hardly counts. For N = 1000 and k = 100 the exact count is 464.4 bits, and N h(0.1) is 469.0.</p>
+  <p data-pid="dc45f1">The count says how far a file can be squeezed. A file of a million bits, one in ten of them a 1, is one of about 2 to the 469 000 such files. There are fewer than 2ᵐ files shorter than m bits, so a squeeze that gives each such file its own shorter file needs about 469 000 bits. The file can be squeezed to about 47% of its length, and no further.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · shares · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · the ways to choose a share</div>
+    <div class="kn"><span class="m">N</span><input type="range" id="kN" min="0" max="6" step="1" value="3"><output id="oN"></output></div>
+    <div class="kn"><span class="m">p</span><input type="range" id="kp" min="0.01" max="0.99" step="0.01" value="0.2"><output id="op"></output></div>
+    <div id="pl"></div>
+    <div class="cap">Teal: <span data-tex-inline="\tfrac1N\log_2\binom{N}{k}"></span> for every share k/N. Ember: h(p), the same for every N. The dot is the share you picked.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22·comp.2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">N = 100 switches,  k = 20 of them on</span></span>Find the exact log₂ of N choose k, and N h(0.2). <br>Find how far apart they are, and whether the gap is within 2(ln N + 1)/ln 2. <br>Find about how many bits a squeezed copy of an 8 000 000-bit file with 1 bit in 5 a 1 must keep.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22comp3">
+  <h2 class="sthead"><span class="stno">22comp3</span>A gas that fills its room</h2>
+  <p class="stands">Stands on 22·comp.1, 15·chem (the gas law; work as an area) and 17a (the log as an area).</p>
+  <p data-pid="e8e639">N molecules of gas sit in a box at temperature T. The gas law of 15·chem, written for molecules, is pV = NkT. Squeeze it slowly into half its room, letting heat leave so the temperature stays fixed. A measured law, the second law of heat, says two things. Heat Q passed into a room at temperature T raises the room’s entropy by Q/T. And in anything that happens, the total entropy of a body and its room does not fall.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the squeeze technique">
+\text{work} = \int_{V/2}^{V}\tfrac{NkT}{v}\,dv = NkT\big(\ln V - \ln\tfrac V2\big) = NkT\ln 2 @@ work is the area under the pressure (15·chem); ln as an area (17a)
+\text{heat out} = NkT\ln 2 @@ at a fixed temperature the gas keeps its energy, so the work leaves as heat
+\text{the room gains } \tfrac{NkT\ln 2}{T} = Nk\ln 2 @@ the second law
+\htmlClass{new}{\text{the gas loses } k\ln 2^N = Nk\ln 2} \quad \blacksquare @@ each molecule’s choice of half is gone: W falls by 2ᴺ
+  </pre>
+  <p data-pid="0d236e">Squeeze technique: <b>halving a gas’s room at a fixed temperature turns NkT ln 2 of work into heat, and that heat over T is exactly the entropy the gas lost.</b> The squeeze lost N bits of ways, and the room took them as heat. A litre of air at 300 K and one atmosphere has pV ≈ 101.3 J, so halving it gives off about 70.2 J. It holds about 2.45 × 10²² molecules, so that is 2.45 × 10²² bits.</p>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · counting, by the trillion trillion</div>
+    <p data-pid="22d3a9">4j set beside counting a principle: random things in a crowd make smooth, steady patterns. One molecule can be anywhere in its box. A litre of air spreads evenly, and nothing pushes it to. Of the 2ᴺ ways to place N molecules in two halves, nearly all are close to even.</p>
+    <p data-pid="b48187"><b>One molecule can be anywhere; a crowd of them sits where the ways are most, and the ways are the law.</b></p>
+    <p data-pid="abd3c3">The second law is that counting, done for you. It does not say the gas cannot crowd into one half. It says how rarely: for 100 molecules, all in the left half at one glance has chance 2⁻¹⁰⁰, about 8 × 10⁻³¹. For a litre of air the chance, written as a decimal, starts with about 7 × 10²¹ zeros.</p>
+    <p class="bait" data-pid="fb78e5">A box holds 50 molecules. What share of the ways to place them in two halves puts exactly 25 in each? Is an even split the rule, or only the middle of a pile?</p>
+  </aside>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · the gas · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22·comp.3.1</span><span class="ph undo">undo</span><span class="givens"><span class="gtx">1 litre of air at 101 325 Pa and 300 K,  squeezed slowly at that temperature,  giving 35 J of heat to the room</span></span>Find the volume it ends at. <br>Find the entropy the room gained, in J/K and in bits.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22comp4">
+  <h2 class="sthead"><span class="stno">22comp4</span>Wiping a bit</h2>
+  <p class="stands">Stands on 22·comp.3 (the squeeze technique) and 22·comp.1.</p>
+  <p data-pid="51f9e1">Build a memory out of one molecule in a box, with a wall across the middle. The molecule on the left is 0; on the right, 1. To wipe the memory is to set it to 0, whatever it held, without looking.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the erasure technique">
+\text{take out the wall; push a piston from the right end to the middle} @@ whatever the bit was, the molecule is now on the left
+\text{work} = kT\ln 2 @@ the squeeze technique with N = 1
+\text{two ways become one: the memory loses } k\ln 2 @@ W falls from 2 to 1
+\htmlClass{new}{\text{heat into the room} \ge kT\ln 2} \quad \blacksquare @@ the second law: the room must gain at least k ln 2
+  </pre>
+  <p data-pid="baba66">Erasure technique: <b>wiping a bit clean, whatever it held, sends at least kT ln 2 of heat into the room.</b> The molecule is only a picture. Any memory whose two ways become one loses k ln 2, and the second law sends the bill to the room. At 300 K that is about 2.87 × 10⁻²¹ J a bit, so one watt could wipe at most about 3.5 × 10²⁰ bits a second. Today’s chips spend thousands of times more than that on each bit.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · wiping · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22·comp.4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a drive of 8 × 10¹² bits</span></span>Find the least heat to wipe it at 300 K, and at 4 K. <br>Find how many bits a second 1 W could wipe at 300 K.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22comp5">
+  <h2 class="sthead"><span class="stno">22comp5</span>Gates that forget</h2>
+  <p class="stands">Stands on 22·comp.4, 4·comp (gates) and 5·stat (expected value).</p>
+  <p data-pid="b445d0">A gate of 4·comp takes two bits in and gives one out. Feed it inputs whose four rows are equally likely. When an output comes from m rows, the gate has forgotten which of the m it was: log₂ m bits. On average that is the expected value of log₂ m.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the gate-loss technique">
+\text{AND}:\ 1 \text{ from } 1 \text{ row},\ 0 \text{ from } 3:\ \ \tfrac14\log_2 1 + \tfrac34\log_2 3 \approx 1.19 \text{ bits} @@ the table (4·comp); expected value (5·stat)
+\text{XOR}:\ \text{each output from } 2 \text{ rows}:\ \ \log_2 2 = 1 \text{ bit} @@ it keeps whether they differ, and forgets which
+\text{half adder}:\ (S, C) = (1, 0) \text{ from } 2 \text{ rows, the others from } 1:\ \ \tfrac12 \text{ bit} @@ it forgets which input was the 1
+\text{NOT}:\ \text{one row each}:\ 0 \text{ bits} @@ it can be run backwards
+\htmlClass{new}{\text{heat} \ge (\text{bits forgotten})\cdot kT\ln 2} \quad \blacksquare @@ the erasure technique, for each bit forgotten
+  </pre>
+  <p data-pid="f9bc56">Gate-loss technique: <b>a gate that sends two input rows to one output forgets, and pays at least kT ln 2 of heat for each bit it forgets.</b> A gate whose rows can be run backwards forgets nothing. The gate (A, B, C) ↦ (A, B, C ⊕ A · B) sends its 8 rows to 8 different outputs, so it forgets nothing. With C held at 0, its third wire gives A · B, and A and B ride along beside it.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · gates · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22·comp.5.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">the OR gate,  its four input rows equally likely</span></span>Find the bits it forgets on average, and the least heat a billion uses cost at 300 K. <br>Find the outputs of (A, B, C) ↦ (A, B, C ⊕ A · B) on all 8 rows.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22comp6">
+  <h2 class="sthead"><span class="stno">22comp6</span>Illegal moves</h2>
+  <p class="stands">Stands on 22·comp.1 to 22·comp.5.</p>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{ways side by side add}: W = W_1 + W_2\,? @@ ways multiply; their logs add
+\log_2\binom{N}{k} = N h(p) \text{ exactly}\,? @@ off by r/ln 2, a few times ln N
+\text{every gate pays } kT\ln 2 \text{ a use}\,? @@ only for the bits it forgets; NOT pays nothing
+\text{a gas fills its box because a force spreads it}\,? @@ the even splits outnumber the rest
+  </pre>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22·comp.6.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span class="gtx">an OR gate whose two inputs are always copies of one bit,  0 or 1 equally likely</span></span>Find the bits it forgets, and which line of the gate-loss technique has changed.</li><li><span class="givens"><span class="gtx">a memory bit known to hold 0,  set to 0</span></span>Find what the erasure technique’s count gives, and which of its lines breaks.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">22·comp.7.1</span><span class="tagq">build</span>Build a gate with three inputs and three outputs whose 8 rows go to 8 different outputs, and which, with its third input held at 0, gives the half adder’s sum and carry on two of its outputs.</div>
+  <div class="chq"><span class="chid">22·comp.7.2</span><span class="tagq">edge</span>Find the squeeze technique’s heat for a gas of one molecule. <br>Find what can go wrong with a pressure made of one molecule’s knocks.</div>
+  <div class="chq"><span class="chid">22·comp.7.3</span><span class="tagq">converse</span>A process sends kT ln 2 of heat into the room. Must it have wiped a bit?</div>
+  <div class="chq"><span class="chid">22·comp.7.4</span><span class="tagq">reroute</span>Find the share of the ways to place N molecules in two halves that put every molecule on the left. <br>Find the gas’s loss of entropy from that count alone, and check it against the squeeze technique’s heat over T.</div>
+  <div class="chq"><span class="chid">22·comp.7.5</span><span class="tagq">seam</span>A small being guards a door in a wall across a box of gas. It lets fast molecules through one way and slow ones the other, and the gas sorts itself into hot and cold with no work done. <br>Where is the cost paid: in looking, in remembering, or nowhere?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r22stat.html">← 22·stat · how many misprints on a page?</a><a href="r22logi.html">22·logi · can a computer try every route? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>S = k ln W is Boltzmann’s entropy formula, and W the number of microstates. The second law of heat is the second law of thermodynamics, and Q/T the Clausius entropy. h(p) is the binary entropy function, and the bits of a choice are its information entropy, or Shannon entropy; the share-count technique bounds lossless compression. The slow squeeze at fixed temperature is an isothermal compression. The erasure technique is Landauer’s principle, the one-molecule memory is the Szilard engine, and a gate whose rows can be run backwards is a reversible gate; the one on this page is the Toffoli gate, or controlled-controlled-not.</p>
+  <h3>Who said it first</h3>
+  <p>Rudolf Clausius named entropy in 1865, from heat over temperature. Ludwig Boltzmann tied it to counting the ways in the 1870s; Max Planck wrote it as S = k log W in 1900, and the formula is carved on Boltzmann’s grave in Vienna. Claude Shannon (1948) counted information in bits with the same h. Leo Szilard (1929) built the one-molecule engine on paper. Rolf Landauer, at IBM, argued in 1961 that wiping, not computing, is what must cost heat, and Charles Bennett (1973) showed that any computation can be done by gates that forget nothing. Tommaso Toffoli gave his gate in 1980. In 2012 a team in Lyon wiped a one-bit memory made of a glass bead held by laser light, and measured heat approaching kT ln 2.</p>
+  <p>In 22·comp.7.5, the small being is Maxwell’s demon (James Clerk Maxwell, 1867 in a letter, 1871 in print). Szilard (1929) and Léon Brillouin (1951) placed its cost in looking at the molecules. Bennett (1982) placed it in wiping the demon’s memory, after Landauer. John Earman and John Norton (1998 and 1999) argued that the wiping answer assumes the second law it is meant to save.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="22·comp: a worked “proof”, not allowed">
+\text{AND forgets } \tfrac34\log_2 3 + \tfrac14\log_2 1 \approx 1.19 \text{ bits} @@ fine
+\text{so a billion uses at 300 K cost at least } 10^9 \cdot kT\ln 2 \approx 2.9 \times 10^{-12} \text{ J} @@ not allowed: the bits forgotten, 1.19, were dropped
+\text{right: } 1.19 \cdot 10^9 \cdot 2.87 \times 10^{-21} \approx 3.4 \times 10^{-12} \text{ J} @@ heat for each bit forgotten
+  </pre>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+const V=c=>'var('+c+')';
+const NS=[10,20,50,100,200,500,1000];
+const lf=k=>{let s=0;for(let i=2;i<=k;i++)s+=Math.log(i);return s;};
+const lb=(n,k)=>(lf(n)-lf(k)-lf(n-k))/Math.LN2;
+const h=p=>(p<=0||p>=1)?0:-p*Math.log2(p)-(1-p)*Math.log2(1-p);
+function draw(){ const N=NS[+$('kN').value], p0=+$('kp').value, k=Math.round(p0*N), p=k/N; $('oN').textContent=N; $('op').textContent=fm(p0,2);
+  const X=t=>20+t*300, Y=v=>180-v*150;
+  let h1='<svg viewBox="0 0 340 200" style="width:100%;max-width:400px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  h1+='<line x1="20" y1="180" x2="320" y2="180" style="stroke:'+V('--grid')+'"/><line x1="20" y1="30" x2="320" y2="30" style="stroke:'+V('--grid')+';stroke-dasharray:3 3"/>';
+  let a='', b='';
+  for(let i=0;i<=200;i++){ const t=i/200; b+=(i?'L':'M')+X(t).toFixed(1)+' '+Y(h(t)).toFixed(1); }
+  for(let j=0;j<=N;j++){ a+=(j?'L':'M')+X(j/N).toFixed(1)+' '+Y(lb(N,j)/N).toFixed(1); }
+  h1+='<path d="'+b+'" style="fill:none;stroke:'+V('--ember')+';stroke-width:2"/><path d="'+a+'" style="fill:none;stroke:'+V('--teal')+';stroke-width:2"/>';
+  h1+='<circle cx="'+X(p)+'" cy="'+Y(lb(N,k)/N)+'" r="4" style="fill:'+V('--ink')+'"/>';
+  h1+='<text x="324" y="34" style="font-size:10px;fill:'+V('--ink')+'">1</text><text x="16" y="194" style="font-size:10px;fill:'+V('--ink')+'">0</text><text x="316" y="194" style="font-size:10px;fill:'+V('--ink')+'">1</text>';
+  $('pl').innerHTML=h1+'</svg>';
+  const ex=lb(N,k), ap=N*h(p), g=ap-ex, cap=2*(Math.log(N)+1)/Math.LN2, v=$('vd');
+  v.className='verdict'+(g/N<0.02?' win':'');
+  v.textContent='N = '+N+', k = '+k+'. Exact: '+fm(ex,2)+' bits. N h(k/N) = '+fm(ap,2)+' bits. Gap '+fm(g,2)+' bits, within the bound '+fm(cap,2)+'; per switch '+fm(g/N,4)+(g/N<0.02?': for large N the gap hardly counts.':'.'); }
+$('kN').oninput=draw; $('kp').oninput=draw; draw();
+window.__pic={set:(i,p)=>{ $('kN').value=i; $('kp').value=p; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'multiply',t:R`W = W_1W_2`,n:`Side by side.`},
+  {k:'ember',kl:'add',t:R`\ln W = \ln W_1 + \ln W_2`,n:`Logs.`},
+  {k:'ember',kl:'entropy',t:R`\htmlClass{new}{S = k\ln W}`,n:`k ln 2 a bit.`}
+],{title:'The slides · bits · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'choose',t:R`\ln\binom{N}{k}`,n:`Factorials.`},
+  {k:'ember',kl:'size',t:R`\ln n! \approx n\ln n - n`,n:`From 22k.`},
+  {k:'ember',kl:'share',t:R`\htmlClass{new}{N\,h(p)}`,n:`Bits of choosing a share.`}
+],{title:'The slides · shares · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'work',t:R`\int_{V/2}^{V}\tfrac{NkT}{v}\,dv`,n:`An area.`},
+  {k:'ember',kl:'heat',t:R`\htmlClass{new}{NkT\ln 2}`,n:`N bits, as heat.`}
+],{title:'The slides · the gas · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'two to one',t:R`W: 2 \to 1`,n:`k ln 2 lost.`},
+  {k:'ember',kl:'the bill',t:R`\htmlClass{new}{Q \ge kT\ln 2}`,n:`Paid to the room.`}
+],{title:'The slides · wiping · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'forget',t:R`\log_2 m`,n:`Of m rows, which?`},
+  {k:'ember',kl:'pay',t:R`\htmlClass{new}{\text{bits}\cdot kT\ln 2}`,n:`Run backwards, pay nothing.`}
+],{title:'The slides · gates · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'illegal',t:R`W_1 + W_2\,?`,n:`Ways multiply.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

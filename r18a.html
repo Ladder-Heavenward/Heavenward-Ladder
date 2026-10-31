@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Points, distance, the displacement pattern</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r18.html">← 18 drawing with numbers</a><a href="r18b.html">next: 18b the triangle inequality in the plane →</a></p>
+  <div class="tags"><span class="tag proof">18a · proof</span></div>
+  <h1>Points, distance, the displacement pattern</h1>
+  <p>Rung 9 drew pairs of reals as dots and said no shape was meant. This step gives the pairs a distance, and the shapes come with it. The distance from one pair to another is built from two of rung 5's displacement patterns, one for each coordinate. Then a second definition, a product of two displacements, says when they are perpendicular, and Pythagoras's technique is a line of algebra.</p>
+  <p class="gesture">The distance between two points is the square root of the square of their horizontal gap plus the square of their vertical gap. The dot of two arrows multiplies their horizontal parts and their vertical parts and adds. Two arrows are perpendicular when their dot is zero. The square of the length of a sum of arrows is the sum of their squared lengths plus twice their dot, so the squares add exactly when the arrows are perpendicular. The point a given fraction of the way from one point to another is the first plus that fraction of the arrow between them.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r05h.html">5h</a> (the displacement pattern, square-of-a-difference, square-of-a-sum), <a href="r08f.html">8f</a> (square-root, square-never-negative, powers-keep-order), <a href="r08h.html">8h</a> (|x|), <a href="r09e.html">9e</a> (pairs drawn), <a href="r15a.html">15</a> (area), <a href="r16j.html">16j</a> (prism). <a href="r18b.html">18b</a> proves the triangle inequality; <a href="r18c.html">18c</a> builds lines.</p></div>
+</header>
+
+<section class="class step" data-step="18a1">
+  <h2 class="sthead"><span class="stno">18a1</span>Points and displacements</h2>
+  <p class="stands">Stands on 8 (the reals) and 2e (pairs and products).</p>
+  <p class="eqline" data-pid="cbaed4">From here on, a point is a pair (x, y) of reals, and the plane is ℝ × ℝ, written ℝ². For points P = (x₁, y₁) and Q = (x₂, y₂), the displacement from P to Q is the pair Q − P = (x₂ − x₁, y₂ − y₁). Its accepted name is a vector; the plane with these coordinates has the accepted name the Cartesian plane.</p>
+  <p data-pid="33ed25">Displacements add and scale coordinate by coordinate: u + v = (u₁ + v₁, u₂ + v₂), tu = (tu₁, tu₂), and P + u is the point reached from P by u. So (Q − P) + (R − Q) = R − P: going from P to Q and then from Q to R is going from P to R. A displacement whose second coordinate is 0 has the accepted name horizontal, and one whose first is 0 vertical. These are 9e's row and column, now with their geometric names.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · points and displacements · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">18a1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">P = (1, 4),  Q = (6, 1)</span></span>Find the displacement from P to Q, and from Q to P. <br>Find the point P + 2(Q − P), and say where it sits.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18a2">
+  <h2 class="sthead"><span class="stno">18a2</span>Distance</h2>
+  <p class="stands">Stands on 18a1, 8f (square-root) and 5h (the displacement pattern).</p>
+  <p class="eqline" data-pid="e49484">From here on, the length of a displacement u is |u| = √(u₁² + u₂²), and the distance from P to Q is d(P, Q) = |Q − P| = √((x₂ − x₁)² + (y₂ − y₁)²). Its accepted name is the distance formula; the distance it gives is the Euclidean distance. d is an operator: carried out on two points, it produces one number, their distance. |u| is a name, for one number.</p>
+  <p data-pid="310354">Under the root are two displacement patterns, (x − h)² with h = x₁ and with h = y₁. The root exists by 8f's square-root, since a sum of squares is not negative (square-never-negative).</p>
+  <p data-pid="101db9">Distance-laws technique: <b>for all points P, Q and displacements u, and every real t: d(P, Q) ≥ 0, with d(P, Q) = 0 only when P = Q; d(P, Q) = d(Q, P); and |tu| = |t| |u|.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the distance-laws technique">
+d(P, Q) = \sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2} \ge 0 @@ a root is not negative (square-root)
+d = 0 \Rightarrow (x_2 - x_1)^2 + (y_2 - y_1)^2 = 0 @@ square both sides
+\Rightarrow x_2 = x_1,\ y_2 = y_1 @@ a sum of two squares is 0 only when both are (square-never-negative); a square is 0 only at 0
+(x_1 - x_2)^2 = (x_2 - x_1)^2 @@ square-of-a-difference both ways: so d(Q, P) = d(P, Q)
+\htmlClass{new}{|tu| = \sqrt{t^2(u_1^2 + u_2^2)} = |t|\,|u|} \quad \blacksquare @@ √(t²) = |t| (8h), and the root of a product
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · distance · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18a2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">P = (0, 0),  Q = (5, 12)</span></span>Before computing, say why d(P, Q) is more than 12 and less than 17. <br>Find it.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18a3">
+  <h2 class="sthead"><span class="stno">18a3</span>Perpendicular</h2>
+  <p class="stands">Stands on 18a2 and 4 (the rules of + and ·).</p>
+  <p class="eqline" data-pid="97ac79">From here on, u · v = u₁v₁ + u₂v₂ for displacements u and v. Its accepted name is the dot product. u and v are perpendicular, u ⊥ v, when u · v = 0. Three points P, Q, R make a right angle at Q when (P − Q) · (R − Q) = 0. The dot is an operator: carried out on two displacements, it produces a number. u ⊥ v is a statement.</p>
+  <p data-pid="57f7a4">(1, 0) · (0, 1) = 0, so horizontal and vertical are perpendicular. The rules of the dot product are rung 4's rules of + and ·, coordinate by coordinate: u · v = v · u, u · (v + w) = u · v + u · w, (tu) · v = t(u · v), and u · u = |u|². Together they are the dot technique.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · perpendicular · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18a3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">u = (2, 3),  v = (−3, 2),  w = (3, 2)</span></span>Find u · v and u · w. <br>Say which pair is perpendicular, and sketch all three.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18a4">
+  <h2 class="sthead"><span class="stno">18a4</span>The right triangle</h2>
+  <p class="stands">Stands on 18a3.</p>
+  <p data-pid="91f5c4">Right-triangle technique (Pythagoras'): <b>for all displacements u and v, |u + v|² = |u|² + |v|² + 2u · v. So |u + v|² = |u|² + |v|² exactly when u ⊥ v. In a triangle with a right angle at C, the squares of the two sides that meet at C add to the square of the side across from it; and if they add so, the angle at C is right.</b></p>
+  <p data-pid="d7f3a9">The word “square” now has three jobs, and they are related. Rung 4 made it a number times itself, x². A square, the shape, has four equal sides meeting at right angles, and its area is its side squared. And a carpenter's square is a tool for marking a right angle, the meeting this step defines by u · v = 0. They are one idea seen three ways. |u|² is u · u, a number squared. It is the area of the square built on u. And that square's corners are right angles, square in the carpenter's sense. From here on “square” may mean any of the three, and the sentence says which.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the right-triangle technique">
+|u + v|^2 = (u + v) \cdot (u + v) @@ the dot technique: u · u = |u|²
+= u \cdot u + 2\,u \cdot v + v \cdot v @@ the dot technique, twice; u · v = v · u
+= \htmlClass{new}{|u|^2 + |v|^2 + 2\,u \cdot v} @@ the dot technique
+|u + v|^2 = |u|^2 + |v|^2 \iff u \cdot v = 0 @@ take away |u|² + |v|² from both sides (5f's adding-keeps-answers)
+u = A - C,\ \ v = B - C,\ \ u - v = A - B @@ the sides at C, and the side across
+\begin{aligned}&\htmlClass{new}{a^2 + b^2 = c^2 \iff (A - C) \cdot (B - C) = 0}\\ &\quad \blacksquare\end{aligned} @@ the first lines with −v for v: |u − v|² = |u|² + |v|² − 2u · v
+  </pre>
+  <p data-pid="50aebe">The sides at the right angle have the accepted name the legs, and the side across from it the hypotenuse. The proof never looks at a figure: the technique works on real numbers, and the figure is its picture.</p>
+  <p data-pid="a7c3e1">13·eng held in trust that, for grades like the Cuesta Grade's, the rise per level metre and the rise per metre of road differ by less than a quarter of a percent. Right-triangle shows why. A road that rises g for each level metre runs √(1 + g²) metres along the road, and for g = 0.07 that is about 1.0025. So the two figures differ by less than a quarter of a percent, and that flag is closed.</p>
+  <pre class="lines" data-k="ember" data-label="this step: worked">
+d\big((1, 2), (4, 6)\big) = \sqrt{3^2 + 4^2} = 5 @@ the 3, 4, 5 triangle
+(1, 1), (4, 5), (8, 2):\ \ (1 - 4, 1 - 5) \cdot (8 - 4, 2 - 5) = -12 + 12 = 0 @@ a right angle at (4, 5); legs 5 and 5, hypotenuse √50
+\text{a plot } 120 \text{ m east and } 50 \text{ m north}:\ \ \sqrt{120^2 + 50^2} = 130 \text{ m} @@ a fence across it, corner to corner
+  </pre>
+  <p data-pid="4da1cf">A clay tablet from Babylon, about 1800 BCE, now called Plimpton 322, lists fifteen pairs of numbers that are the hypotenuse and a leg of right triangles with whole or fractional sides, among them 169 and 119, from the triangle 119, 120, 169.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · the right triangle · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · a distance and its two legs, and the dot product</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="lbl">P = (1, 1) to Q, with the squares on the legs</div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">Qx</span><input type="range" id="kx" min="-3" max="7" step="0.1" value="5"><output id="ox"></output></div>
+      <div class="kn"><span class="m">Qy</span><input type="range" id="ky" min="-3" max="7" step="0.1" value="4"><output id="oy"></output></div>
+      <div class="kn"><span class="m">t</span><input type="range" id="kt" min="0" max="1" step="0.01" value="0.5"><output id="ot"></output></div>
+      <div class="cap">Ink: PQ. Ember: the horizontal and vertical legs, with their squares. Plum: X = P + t(Q − P).</div>
+    </div>
+    <div class="panel">
+      <div class="lbl">u and v from one point, and u + v</div>
+      <canvas id="cvL"></canvas>
+      <div class="kn"><span class="m">u₁</span><input type="range" id="ku1" min="-4" max="4" step="0.5" value="3"><output id="ou1"></output></div>
+      <div class="kn"><span class="m">u₂</span><input type="range" id="ku2" min="-4" max="4" step="0.5" value="1"><output id="ou2"></output></div>
+      <div class="kn"><span class="m">v₁</span><input type="range" id="kv1" min="-4" max="4" step="0.5" value="-1"><output id="ov1"></output></div>
+      <div class="kn"><span class="m">v₂</span><input type="range" id="kv2" min="-4" max="4" step="0.5" value="3"><output id="ov2"></output></div>
+      <div class="cap">Ember: u. Teal: v, drawn from the end of u as well. Ink: u + v. The verdict compares |u + v|² with |u|² + |v|².</div>
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18a4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a ladder 13 m long, its foot 5 m from a wall</span></span>Guess, to the nearest metre, how high up the wall its top reaches. <br>Find the height by right-triangle.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18a5">
+  <h2 class="sthead"><span class="stno">18a5</span>Dividing a segment</h2>
+  <p class="stands">Stands on 18a4.</p>
+  <p data-pid="3888f7">Part-of-the-way technique: <b>for points P ≠ Q and 0 ≤ t ≤ 1, the point X = P + t(Q − P) has d(P, X) = t · d(P, Q) and d(X, Q) = (1 − t) · d(P, Q). With t = ½ it is the midpoint ((x₁ + x₂)/2, (y₁ + y₂)/2); with t = m/(m + n) it divides the way from P to Q in the ratio m : n.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the part-of-the-way technique">
+X - P = t(Q - P),\ \ Q - X = (1 - t)(Q - P) @@ the rules of + and scaling, coordinate by coordinate
+d(P, X) = |t|\,|Q - P| = t\,d(P, Q) @@ distance-laws; t ≥ 0
+\htmlClass{new}{d(X, Q) = (1 - t)\,d(P, Q)} \quad \blacksquare @@ distance-laws; 1 − t ≥ 0
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · dividing a segment · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18a5.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="P = (-2, 5),"></span> <span data-tex-inline="Q = (4, -3)"></span></span>Find the distance from P to Q.</li><li><span class="givens"><span data-tex-inline="A = (2, 1),"></span> <span data-tex-inline="B = (5, 5),"></span> <span data-tex-inline="C = (9, 2)"></span></span>Using the dot product, find whether the triangle ABC has a right angle, and at which corner.</li><li><span class="givens"><span data-tex-inline="P = (-1, 2),"></span> <span data-tex-inline="Q = (9, 7),"></span> <span data-tex-inline="t = \tfrac{2}{5}"></span></span>Find the point the fraction t of the way from P to Q.</li><li><span class="givens"><span data-tex-inline="A = (2, 1),"></span> <span data-tex-inline="B = (5, 5),"></span> <span data-tex-inline="C = (9, 2)"></span></span>Find the perimeter of the triangle ABC. <br>Find its area.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18a6">
+  <h2 class="sthead"><span class="stno">18a6</span>Squares, as shapes</h2>
+  <p class="stands">Stands on 18a5.</p>
+  <p data-pid="3b70aa">The points (0, 0), (s, 0), (s, s) and (0, s), for s &gt; 0, have four sides of length s and a right angle at each corner (the dot technique). That figure has the accepted name a square, and 5e's name for a number times itself is its area. Square's-area technique: <b>the region 0 ≤ x ≤ s, 0 ≤ y ≤ s has area ∫₀ˢ s dx = s², and the box with edges s has volume s³ (16j's prism); a rectangle with sides p and q along the axes has area pq.</b> The diagonal of the square has length √(s² + s²) = s√2, by right-triangle. So 5e's square and 13g's cube are now shapes, and their names were not chosen by accident.</p>
+  <aside class="voice para"><p data-pid="91d5ac">Descartes begins his Geometry by saying that any problem in geometry can be brought to such terms that, to solve it, one needs only to know the lengths of certain straight lines.</p><cite>René Descartes, La Géométrie (1637); paraphrase</cite></aside>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · squares · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18a6.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="P = (1, 2),"></span> <span data-tex-inline="Q = (6, y),"></span> <span data-tex-inline="d(P, Q) = 13"></span></span>Find Q.</li><li><span class="givens"><span data-tex-inline="E = (7, 2),"></span> <span data-tex-inline="M = (3, -1),"></span> <span data-tex-inline="\text{the midpoint of } EF"></span></span>Find F.</li><li><span class="givens"><span data-tex-inline="u = (3, k),"></span> <span data-tex-inline="v = (4, -6)"></span></span>Find every k for which u is perpendicular to v.</li><li><span class="givens"><span data-tex-inline="\text{a square has diagonal } 10"></span></span>Find its side and its area.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18a7">
+  <h2 class="sthead"><span class="stno">18a7</span>Points in space</h2>
+  <p class="stands">Stands on 18a4 (right-triangle) and 16j (a point of space is a triple).</p>
+  <p data-pid="3d0a01">16j laid down a point of space as a triple (x, y, z). The plane’s distance carries up into space by being used twice. To go from P = (x₁, y₁, z₁) to Q = (x₂, y₂, z₂), first cross the floor to R = (x₂, y₂, z₁), then climb straight up to Q. Across the floor, right-triangle gives d(P, R)² = (x₂ − x₁)² + (y₂ − y₁)².</p>
+  <p data-pid="3d0a02">The climb from R to Q changes only the height, and the walk from P to R changes everything but the height. So the two displacements meet at a right angle, and right-triangle, used a second time on the triangle P, R, Q, gives d(P, Q)² = d(P, R)² + (z₂ − z₁)².</p>
+  <p data-pid="3d0a03">From here on, the distance between points of space is d(P, Q) = √((x₂ − x₁)² + (y₂ − y₁)² + (z₂ − z₁)²). <b>Distance in space is the plane’s distance used twice.</b> Its laws are distance-laws, with one more displacement pattern under the root.</p>
+  <p data-pid="3d0a04">From here on, the sphere with centre C and radius r &gt; 0 is the set of points of space at distance r from C. With C = (a, b, c), a point (x, y, z) is on it exactly when (x − a)² + (y − b)² + (z − c)² = r². A ball, or the shell of a planet, is drawn with one line.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18a7.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">P = (1, 2, 3),  Q = (4, 6, 15)</span></span>Find d(P, Q) by the plane’s distance used twice: first across the floor, then up. <br>Find whether Q is on the sphere of radius 13 about P.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18a8">
+  <h2 class="sthead"><span class="stno">18a8</span>Illegal moves</h2>
+  <p class="stands">Stands on 18a1 to 18a7.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+d = |x_2 - x_1| + |y_2 - y_1|\,? @@ that is the distance along city blocks; this step's distance squares and roots
+\sqrt{a^2 + b^2} = a + b\,? @@ (a + b)² has the extra 2ab; √(3² + 4²) = 5, not 7
+u \perp v \iff u = v\,? @@ (1, 1) · (1, 1) = 2; perpendicular means the dot product is 0
+x \text{ in km},\ y \text{ in miles} @@ the formula needs one unit on both axes
+  </pre>
+  <section class="slides" id="sl8"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18a8.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="c(P, Q) = |x_2 - x_1| + |y_2 - y_1|"></span></span>Test each law of distance-laws on c. <br>Test right-triangle with c measuring the lengths.</li><li><span class="givens"><span data-tex-inline="A = (0, 0),"></span> <span data-tex-inline="B = (1, 1),"></span> <span data-tex-inline="C = (2, 2)"></span></span>Run right-triangle on A, B and C at each of the three points, and find whether they make a triangle.</li><li><span class="givens"><span data-tex-inline="P = (x_1, y_1, z_1),"></span> <span data-tex-inline="Q = (x_2, y_2, z_2)"></span></span>Build a distance and a dot product for triples, and run right-triangle's proof with them.</li><li><span class="givens"><span data-tex-inline="\text{map: 1 cm is 1 km east,}"></span> <span data-tex-inline="\text{and 1 cm is 2 km north;}"></span> <span data-tex-inline="\text{a place reads } (X, Y) \text{ in cm}"></span></span>Run the distance formula on two readings, and compare it with the distance on the ground. <br>Repair it.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">18a.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{map: 1 cm is 1 km east,}"></span> <span data-tex-inline="\text{and 1 cm is 2 km north;}"></span> <span data-tex-inline="\text{a place reads } (X, Y) \text{ in cm}"></span></span>Build a distance and a dot product of your own on the readings that give the ground's distances and right angles. <br>Prove right-triangle for yours, every line cited. <br>Test it on three places you know.</div>
+  <div class="chq"><span class="chid">18a.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="|x + y| \le |x| + |y| \text{ for reals,}"></span> <span data-tex-inline="T:\ |u + v| \le |u| + |v|"></span></span>Using right-triangle, prove T for displacements u and v, as far as you can take it.</div>
+  <div class="chq"><span class="chid">18a.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{a rule } D \text{ obeys every law}"></span> <span data-tex-inline="\text{of distance-laws}"></span></span>Find whether D must come from a dot product of its own, as the step's distance does.</div>
+  <div class="chq"><span class="chid">18a.4.4</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{hypotenuse } 25,"></span> <span data-tex-inline="\text{all sides whole}"></span></span>Find every right triangle with these sides.</div>
+  <div class="chq"><span class="chid">18a.4.5</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="A = (1, 2),"></span> <span data-tex-inline="B = (4, 6),"></span> <span data-tex-inline="\text{neighbouring corners}"></span> <span data-tex-inline="\text{of a square}"></span></span>Find every pair of the other two corners.</div>
+  <div class="chq"><span class="chid">18a.4.6</span><span class="tagq">seam</span>Descartes argued that the method of coordinates was the way to do geometry. Newton found his results with algebra and the calculus, then wrote the Principia in the style of Euclid's figures, and is reported to have called the algebraic way the analysis of bunglers. <br>Is a proof by coordinates a proof about the figure, or about pairs of numbers that happen to be drawn? <br>Does it matter which?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r18.html">← 18 · drawing with numbers</a><a href="r18b.html">18b · the triangle inequality in the plane →</a></nav>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+/* least and greatest of F.f on [lo, hi]: the ends, F's critical points inside, and a fine sample (exact between critical points for the functions used here) */
+function ext(F,lo,hi){ if(F.dir) return [0,1]; let m=Infinity,M=-Infinity; const t=x=>{ const v=F.f(x); if(v<m) m=v; if(v>M) M=v; };
+  t(lo); t(hi); (F.crit||[]).forEach(c=>{ if(c>lo&&c<hi) t(c); }); for(let k=1;k<64;k++) t(lo+(hi-lo)*k/64); return [m,M]; }
+function sums(F,pts){ let L=0,U=0; const ms=[],Ms=[]; for(let i=1;i<pts.length;i++){ const [m,M]=ext(F,pts[i-1],pts[i]), w=pts[i]-pts[i-1]; ms.push(m); Ms.push(M); L+=m*w; U+=M*w; } return {L,U,ms,Ms}; }
+const eq=(a,b,n)=>Array.from({length:n+1},(_,i)=>a+(b-a)*i/n);
+function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
+function boxes(P,pts,hs,stroke,fill,alpha){ const c=P.ctx; for(let i=1;i<pts.length;i++){ const a=pts[i-1],b=pts[i],h=hs[i-1]; c.globalAlpha=alpha; P.poly([[a,0],[b,0],[b,h],[a,h]],null,fill); c.globalAlpha=1; P.poly([[a,0],[b,0],[b,h],[a,h]],stroke,null,1.2); } }
+function dirDots(P,a,b){ const c=P.ctx; c.fillStyle=col('--ink'); for(let k=0;k<=300;k++){ const x=a+(b-a)*k/300; const y=(k%2)?0:1; c.fillRect(P.X(x)-1,P.Y(y)-1,2,2); } }
+/* shade between the graph of fn and the axis from lo to hi: above in pos colour, below in neg colour */
+function shade(P,fn,lo,hi,pos,neg,alpha){ if(hi<lo){ const t=lo; lo=hi; hi=t; } const c=P.ctx, N=300; c.globalAlpha=alpha==null?0.32:alpha;
+  for(let k=0;k<N;k++){ const x0=lo+(hi-lo)*k/N, x1=lo+(hi-lo)*(k+1)/N, xm=(x0+x1)/2, y=fn(xm); if(!isFinite(y)) continue; P.poly([[x0,0],[x1,0],[x1,fn(x1)],[x0,fn(x0)]],null,y>=0?pos:neg); }
+  c.globalAlpha=1; }
+function rangeOf(fn,lo,hi,pad){ let m=Infinity,M=-Infinity; for(let k=0;k<=400;k++){ const v=fn(lo+(hi-lo)*k/400); if(isFinite(v)){ if(v<m) m=v; if(v>M) M=v; } } if(m>0) m=0; if(M<0) M=0; const p=(M-m)*(pad==null?0.12:pad)||1; return [m-p,M+p]; }
+function chips(el,FN,get,setk,after){ Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===get()) b.className='on'; b.onclick=()=>{ setk(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+const Nw='\\htmlClass{new}';
+function gridFor(sp){ return sp>40?10:sp>16?4:sp>8?2:sp>3?1:sp>1.2?0.5:0.25; }
+function frame2(P,fn,lo,hi,pad){ const w=hi-lo; P.o.x=[lo-0.12*w,hi+0.08*w]; P.o.y=rangeOf(fn,lo,hi,pad==null?0.12:pad); const sx=P.o.x[1]-P.o.x[0], sy=P.o.y[1]-P.o.y[0]; let g=gridFor(sx); while(sy/g>24) g*=2; P.o.grid=g; }
+const num=(f,a,b,n)=>{ n=n||4000; const h=(b-a)/n; let s=0; for(let i=0;i<n;i++) s+=f(a+(i+0.5)*h)*h; return s; };
+/* axes with separate steps across and up */
+function axes2(P,gx,gy){ const c=P.ctx,o=P.o; c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ c.moveTo(P.X(x),P.Y(o.y[0])); c.lineTo(P.X(x),P.Y(o.y[1])); }
+  for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ c.moveTo(P.X(o.x[0]),P.Y(y)); c.lineTo(P.X(o.x[1]),P.Y(y)); } c.stroke();
+  c.strokeStyle=col('--muted'); c.lineWidth=1.3; c.beginPath(); if(o.y[0]<=0&&o.y[1]>=0){ c.moveTo(P.X(o.x[0]),P.Y(0)); c.lineTo(P.X(o.x[1]),P.Y(0)); } if(o.x[0]<=0&&o.x[1]>=0){ c.moveTo(P.X(0),P.Y(o.y[0])); c.lineTo(P.X(0),P.Y(o.y[1])); } c.stroke();
+  c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; const ly=Math.min(P.H-6,Math.max(12,P.Y(0)+14));
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ if(Math.abs(x)<1e-9) continue; c.fillText(+x.toFixed(6),P.X(x),ly); }
+  c.textAlign='right'; const lx=Math.max(32,Math.min(P.W-4,P.X(0)-5)); for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ if(Math.abs(y)<1e-9) continue; c.fillText(String(+y.toFixed(6)).replace('-','−'),lx,P.Y(y)+4); } }
+function nice(sp){ const raw=sp/6, p=Math.pow(10,Math.floor(Math.log10(raw))), m=raw/p; return (m<1.5?1:m<3.5?2:m<7.5?5:10)*p; }
+function arrow(P,x1,y1,x2,y2,colr,w){ P.line(x1,y1,x2,y2,colr,w||2.2); const c=P.ctx, X1=P.X(x1),Y1=P.Y(y1),X2=P.X(x2),Y2=P.Y(y2), L=Math.hypot(X2-X1,Y2-Y1); if(L<2) return; const ux=(X2-X1)/L, uy=(Y2-Y1)/L, h=9; c.fillStyle=col(colr); c.beginPath(); c.moveTo(X2,Y2); c.lineTo(X2-h*ux-0.5*h*uy,Y2-h*uy+0.5*h*ux); c.lineTo(X2-h*ux+0.5*h*uy,Y2-h*uy-0.5*h*ux); c.closePath(); c.fill(); }
+function fillA(P,pts,colr,alpha){ const c=P.ctx; c.globalAlpha=alpha==null?0.2:alpha; P.poly(pts,null,colr); c.globalAlpha=1; }
+const sq1=P=>Object.defineProperty(P.o,'aspect',{get:()=>1});
+function rightMark(P,qx,qy,ax,ay,bx,by,s,colr){ const la=Math.hypot(ax-qx,ay-qy), lb=Math.hypot(bx-qx,by-qy); if(!la||!lb) return; const u=[(ax-qx)/la*s,(ay-qy)/la*s], v=[(bx-qx)/lb*s,(by-qy)/lb*s]; P.poly([[qx+u[0],qy+u[1]],[qx+u[0]+v[0],qy+u[1]+v[1]],[qx+v[0],qy+v[1]]],colr||'--muted',null,1.2,false); }
+const dist=(a,b)=>Math.hypot(b[0]-a[0],b[1]-a[1]);
+const dotp=(u,v)=>u[0]*v[0]+u[1]*v[1];
+const kx=$('kx'),ky=$('ky'),kt=$('kt'),ku1=$('ku1'),ku2=$('ku2'),kv1=$('kv1'),kv2=$('kv2'),cvF=$('cvF'),cvL=$('cvL');
+const PF=plane(cvF,{x:[-4,8],y:[-4,8],grid:1,aspect:1,draw:P=>drawF(P)});
+const PL=plane(cvL,{x:[-8,8],y:[-8,8],grid:1,aspect:1,draw:P=>drawL(P)});
+sq1(PF); sq1(PL);
+const g=()=>({P:[1,1],Q:[+kx.value,+ky.value],t:+kt.value,u:[+ku1.value,+ku2.value],v:[+kv1.value,+kv2.value]});
+function drawF(P){ const {P:A,Q,t}=g(); axes2(P,1,1); const dx=Q[0]-A[0], dy=Q[1]-A[1];
+  fillA(P,[[A[0],A[1]],[Q[0],A[1]],[Q[0],A[1]-dx*Math.sign(dy||1)],[A[0],A[1]-dx*Math.sign(dy||1)]],'--ember',0.13);
+  fillA(P,[[Q[0],A[1]],[Q[0],Q[1]],[Q[0]+dy*Math.sign(dx||1),Q[1]],[Q[0]+dy*Math.sign(dx||1),A[1]]],'--ember',0.13);
+  P.line(A[0],A[1],Q[0],A[1],'--ember',2); P.line(Q[0],A[1],Q[0],Q[1],'--ember',2); if(dx&&dy) rightMark(P,Q[0],A[1],A[0],A[1],Q[0],Q[1],0.35);
+  P.line(A[0],A[1],Q[0],Q[1],'--ink',2.6); P.dot(A[0],A[1],'--ink',4.5); P.dot(Q[0],Q[1],'--ink',4.5); P.text('P',A[0]-0.35,A[1]-0.45,'--ink','center',12); P.text('Q',Q[0]+0.3,Q[1]+0.3,'--ink','center',12);
+  const X=[A[0]+t*dx,A[1]+t*dy]; P.dot(X[0],X[1],'--plum',5.5); }
+function drawL(P){ const {u,v}=g(); axes2(P,2,2); const s=[u[0]+v[0],u[1]+v[1]];
+  arrow(P,0,0,u[0],u[1],'--ember',2.4); arrow(P,0,0,v[0],v[1],'--teal',2.4); P.line(u[0],u[1],s[0],s[1],'--teal',1.4,[5,4]); arrow(P,0,0,s[0],s[1],'--ink',2.6);
+  if(Math.abs(dotp(u,v))<1e-9&&Math.hypot(...u)&&Math.hypot(...v)) rightMark(P,0,0,u[0],u[1],v[0],v[1],0.7,'--plum'); }
+function read(){ const {P:A,Q,t,u,v}=g(); $('ox').textContent=mm(Q[0],1); $('oy').textContent=mm(Q[1],1); $('ot').textContent=mm(t,2); [['ou1',u[0]],['ou2',u[1]],['ov1',v[0]],['ov2',v[1]]].forEach(([i,x])=>$(i).textContent=mm(x,1));
+  const d=dist(A,Q), dx=Q[0]-A[0], dy=Q[1]-A[1], X=[A[0]+t*dx,A[1]+t*dy], s=[u[0]+v[0],u[1]+v[1]], dp=dotp(u,v), L=dotp(s,s), Rr=dotp(u,u)+dotp(v,v);
+  const vd=$('vdF'); vd.className='verdict'+(Math.abs(dp)<1e-9?' win':'');
+  vd.textContent='PQ: legs '+mm(Math.abs(dx),1)+' and '+mm(Math.abs(dy),1)+', so d = √('+mm(dx*dx,2)+' + '+mm(dy*dy,2)+') ≈ '+mm(d,3)+'. X = ('+mm(X[0],2)+', '+mm(X[1],2)+'), '+mm(t*d,3)+' from P. Right panel: u · v = '+mm(dp,2)+'; |u + v|² = '+mm(L,2)+' and |u|² + |v|² = '+mm(Rr,2)+(Math.abs(dp)<1e-9?': equal, so u ⊥ v.':': they differ by 2u · v.');
+  tex($('eqF'),R`|u + v|^2 = ${mm(dotp(u,u),2)} + ${mm(dotp(v,v),2)} + 2(${mm(dp,2)}) = ${mm(L,2)}`,true); }
+function all(){ PF.redraw(); PL.redraw(); read(); }
+[kx,ky,kt,ku1,ku2,kv1,kv2].forEach(e=>e.addEventListener('input',all));
+window.__pic={set:(qx,qy,t,u1,u2,v1,v2)=>{ kx.value=qx; ky.value=qy; kt.value=t; ku1.value=u1; ku2.value=u2; kv1.value=v1; kv2.value=v2; all(); const {P:A,Q,u,v}=g(), s=[u[0]+v[0],u[1]+v[1]]; return {d:+dist(A,Q).toFixed(4),dot:dotp(u,v),lhs:dotp(s,s),rhs:dotp(u,u)+dotp(v,v)}; }};
+all();
+stepper('#sl1',[
+  {k:'ember',kl:'points',t:R`P = (x_1, y_1) \in \mathbb R^2`,n:`9e's pairs, now with a distance.`},
+  {k:'ember',kl:'displacements',t:R`Q - P = (x_2 - x_1,\ y_2 - y_1)`,n:`Add and scale coordinate by coordinate.`}
+],{title:'The slides · points and displacements · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'distance',t:R`d(P, Q) = \sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}`,n:`Two displacement patterns under one root.`},
+  {k:'ember',kl:'distance-laws',t:R`${Nw}{d \ge 0,\ \ d(P, Q) = d(Q, P),\ \ |tu| = |t|\,|u|}`,n:`0 only when P = Q.`}
+],{title:'The slides · distance · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'dot product',t:R`u \cdot v = u_1v_1 + u_2v_2`,n:`u ⊥ v when it is 0.`}
+],{title:'The slides · perpendicular · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'right-triangle',t:R`${Nw}{|u + v|^2 = |u|^2 + |v|^2 + 2\,u \cdot v}`,n:`The dot technique, three times.`},
+  {k:'ember',kl:'the converse',t:R`a^2 + b^2 = c^2 \iff \text{right angle at } C`,n:`Both ways, from one line.`},
+  {k:'ember',kl:'3, 4, 5',t:R`\sqrt{3^2 + 4^2} = 5`,n:`A fence 130 m across a 120 by 50 plot.`},
+  {k:'ember',kl:'Plimpton 322',t:R`119^2 + 120^2 = 169^2`,n:`Babylon, about 1800 BCE.`}
+],{title:'The slides · the right triangle · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'part-of-the-way',t:R`${Nw}{X = P + t(Q - P)}`,n:`t of the way; ½ the midpoint.`}
+],{title:'The slides · dividing a segment · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'squares',t:R`\text{area } s^2,\ \ \text{diagonal } s\sqrt2`,n:`5e's name, now a shape.`}
+],{title:'The slides · squares · ← → keys work'});
+stepper('#sl8',[
+  {k:'ember',kl:'illegal',t:R`\sqrt{a^2 + b^2} \ne a + b`,n:`3, 4 gives 5, not 7.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

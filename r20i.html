@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Moving graphs</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+.chrow{display:grid;grid-template-columns:4.5em 1fr;gap:6px;align-items:center;font-size:.88rem}.kn .m{font-family:var(--mono)}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r20concl.html">← 20·∎ conclusion</a><a href="r20j.html">next: 20j turns in coordinates →</a></p>
+  <div class="tags"><span class="tag tech">20i · technique</span></div>
+  <h1>Moving graphs</h1>
+  <p>A graph is a set of points, so every move of the plane moves it. The moved graph has an equation too, and finding it is a matter of one rule. A point is on the moved graph exactly when the move undone puts it back on the old one. So the equation changes the other way: to slide a graph right by three, take three from the input.</p>
+  <p class="gesture">A point is on the moved shape exactly when undoing the move puts it on the shape. To slide a graph across and up, take the across amount from the input and add the up amount to the output. To flip it over the floor, turn the output’s sign. Over the upright axis, turn the input’s sign. To pull it upright, multiply the output.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r20c.html">20c</a> (the moves), <a href="r20b.html">20b</a> (undoing), <a href="r09e.html">9e</a> (graphs). <a href="r20j.html">20j</a> writes turns as formulas.</p></div>
+</header>
+
+<section class="class step" data-step="20i1">
+  <h2 class="sthead"><span class="stno">20i1</span>The equation moves the other way</h2>
+  <p class="stands">Stands on 20b2 (undoing) and 20c (the moves).</p>
+  <p data-pid="3799ab">Undo-in-the-equation technique: <b>a point P is on the moved set g(S) exactly when g⁻¹(P) is on S.</b> So to find the equation of g(S), put the coordinates of g⁻¹(x, y) into the equation of S.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the undo-in-the-equation technique">
+P \in g(S) \iff P = g(Q) \text{ for some } Q \in S @@ what g(S) means
+\iff g^{-1}(P) \in S @@ Q = g⁻¹(P), the only choice (20b2)
+\htmlClass{new}{\text{the equation of } g(S) \text{ is the equation of } S \text{ at } g^{-1}(x, y)} \quad \blacksquare
+  </pre>
+  <p data-pid="896984">The move is put in undone. That is why the signs look backwards in everything below.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · undo · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">20i1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">the line y = 2x + 1, and the quarter turn g(x, y) = (−y, x)</span></span>Find g⁻¹(x, y). <br>Find the equation of the turned line, and check it at the image of (0, 1).</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20i2">
+  <h2 class="sthead"><span class="stno">20i2</span>Slides</h2>
+  <p class="stands">Stands on 20i1 and 20c1 (slides).</p>
+  <p data-pid="079d97">Graph-slide technique: <b>the graph of y = f(x), slid by (h, k), is the graph of y = f(x − h) + k.</b> The slide undone is (x, y) ↦ (x − h, y − k).</p>
+  <pre class="lines" data-k="ember" data-label="this step: the graph-slide technique">
+(x - h,\ y - k) \text{ on } y = f(x) @@ 20i1, with the slide undone
+y - k = f(x - h) @@ substitute
+\htmlClass{new}{y = f(x - h) + k} \quad \blacksquare @@ add k to both sides
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · slide · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · a graph, moved, and its new equation</div>
+    <div class="chrow"><span class="lbl">graph</span><div class="chips" id="chF"></div></div>
+    <div class="chrow"><span class="lbl">flip</span><div class="chips" id="chP"></div></div>
+    <div class="kn"><span class="m">h</span><input type="range" id="kh" min="-4" max="4" step="0.5" value="1"><output id="okh"></output></div>
+    <div class="kn"><span class="m">k</span><input type="range" id="kk" min="-4" max="4" step="0.5" value="-2"><output id="okk"></output></div>
+    <div class="kn"><span class="m">c</span><input type="range" id="kc" min="0.5" max="3" step="0.5" value="1"><output id="okc"></output></div>
+    <div id="pl"></div>
+    <div class="cap">Ink: the graph. Ember: the graph flipped, pulled upright by c, then slid by (h, k). The verdict gives its equation.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20i2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">y = x², slid by (3, −2)</span></span>Guess where its lowest point goes. <br>Find its equation, and check it at the image of (1, 1).</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20i3">
+  <h2 class="sthead"><span class="stno">20i3</span>Flips</h2>
+  <p class="stands">Stands on 20i1 and 20c3 (flips).</p>
+  <p data-pid="6ea507">Graph-flip technique: <b>flipped over the floor, y = f(x) becomes y = −f(x); flipped over the upright axis, it becomes y = f(−x).</b> Each flip undoes itself, so it goes into the equation as it is.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the graph-flip technique">
+\text{floor: } (x, -y) \text{ on } y = f(x) \Rightarrow -y = f(x) @@ 20i1; the floor flip undoes itself
+\htmlClass{new}{y = -f(x)} @@ multiply by −1
+\text{upright: } (-x, y) \text{ on } y = f(x) \Rightarrow \htmlClass{new}{y = f(-x)} \quad \blacksquare @@ likewise
+  </pre>
+  <p data-pid="dfb827">So 9e’s even functions, with f(−x) = f(x), are exactly those whose graphs the upright flip keeps. Its odd functions, with f(−x) = −f(x), are those whose graphs the half turn about (0, 0) keeps.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · flip · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20i3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">y = x³ − 3x</span></span>Find the equations of its flip over the upright axis and its flip over the floor. <br>Find what that says about its half turn about (0, 0).</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20i4">
+  <h2 class="sthead"><span class="stno">20i4</span>Pulls</h2>
+  <p class="stands">Stands on 20i1 and 20h3 (pulls).</p>
+  <p data-pid="4bd94d">Graph-pull technique: <b>pulled upright by c, y = f(x) becomes y = c f(x); pulled sideways by c, it becomes y = f(x / c).</b> Pulls are not isometries, but the rule of 20i1 works for any move that can be undone.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the graph-pull technique">
+(x, y) \mapsto (x, cy):\ \ (x, y/c) \text{ on } y = f(x) @@ undone: divide y by c
+\htmlClass{new}{y = c\,f(x)} @@ multiply by c
+(x, y) \mapsto (cx, y):\ \ \htmlClass{new}{y = f(x / c)} \quad \blacksquare @@ undone: divide x by c
+  </pre>
+  <p data-pid="2b3ec8">Together, y = c f(x − h) + k is y = f(x) pulled upright by c and then slid by (h, k). Every parabola y = a x² + bx + d is one of these, made from y = x².</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · pull · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20i4.1</span><span class="ph undo">undo</span><span class="givens"><span data-tex-inline="y = 2(x + 1)^2 - 3"></span></span>Find the moves that make it from y = x², in order. <br>Find its lowest point.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20i5">
+  <h2 class="sthead"><span class="stno">20i5</span>Illegal moves</h2>
+  <p class="stands">Stands on 20i1 to 20i4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{right by 3: } y = f(x + 3)\,? @@ x − 3: the move goes in undone
+\text{over the floor: } y = f(-x)\,? @@ that is the upright axis; the floor flips y
+\text{pull upright by 2: } y = f(x/2)\,? @@ that pulls sideways; upright is y = 2f(x)
+y = f(x) + k \text{ slides right}\,? @@ up by k
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20i5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="y = x^2 + 2x"></span></span>Find a slide of y = x² that gives it.</li><li><span class="givens"><span class="gtx">the circle x² + y² = 4, slid by (1, −2)</span></span>Find its equation.</li><li><span class="givens"><span class="gtx">y = |x|, flipped over the upright axis</span></span>Find its equation, and why it is the same graph.</li><li><span class="givens"><span class="gtx">the line y = 2x</span></span>Find every slide that keeps it.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">20i.4.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">y = x², turned by the quarter turn about (0, 0)</span></span>Build its equation. <br>Find whether the turned set is the graph of a function of x.</div>
+  <div class="chq"><span class="chid">20i.4.2</span><span class="tagq">edge</span>Find every function f whose graph is kept by the flip over the floor. <br>Then every f whose graph is kept by every slide (h, 0).</div>
+  <div class="chq"><span class="chid">20i.4.3</span><span class="tagq">converse</span>Every slide of a graph replaces x by x − h and y by y − k. Turn it round: replace x by 2x in an equation, and find whether that is a move of the plane, and which.</div>
+  <div class="chq"><span class="chid">20i.4.4</span><span class="tagq">reroute</span>Prove the graph-slide technique without 20i1: follow the point (a, f(a)) and find where it goes.</div>
+  <div class="chq"><span class="chid">20i.4.5</span><span class="tagq">seam</span>A geometer in 1637 turned every curve into an equation, and every question about curves into algebra. Seventy years later the most famous mathematician of his age wrote that equations are reckoning and have no proper place in geometry, and he wrote his great book in the old style of figures. <br>Is moving a graph by changing its equation geometry, or algebra? <br>Which shows you more?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r20concl.html">← 20·∎ · conclusion</a><a href="r20j.html">20j · turns in coordinates →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>Moving graphs is usually taught as transformations of functions: horizontal and vertical shifts, reflections in the axes, and vertical and horizontal stretches. Even and odd functions are as named on 9e.</p>
+  <h3>Who said it first</h3>
+  <p>In 20i.4.5, the geometer is René Descartes, La Géométrie (1637), and the critic is Isaac Newton, in Arithmetica Universalis (1707): “Equations are expressions of arithmetical computation, and properly have no place in geometry.” His Principia (1687) is written mostly in figures.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+/* moves of the plane, drawn in SVG, for rung 20 */
+const V=c=>'var('+c+')';
+const FLAG=[[0,0],[0,3],[2,3],[2,2.4],[0.6,2.4],[0.6,1.8],[1.5,1.8],[1.5,1.2],[0.6,1.2],[0.6,0]];
+const M={
+  id:()=>p=>p,
+  slide:(h,k)=>p=>[p[0]+h,p[1]+k],
+  turn:(a,b)=>p=>[a*p[0]-b*p[1],b*p[0]+a*p[1]],
+  stretch:k=>p=>[k*p[0],k*p[1]],
+  flipU:(c,s)=>p=>{ const d=2*(p[0]*c+p[1]*s); return [d*c-p[0],d*s-p[1]]; },              /* across the line through O along (c, s), c² + s² = 1 */
+  flipAt:(q,c,s)=>p=>{ const x=p[0]-q[0],y=p[1]-q[1],d=2*(x*c+y*s); return [q[0]+d*c-x,q[1]+d*s-y]; },
+  turnAt:(q,a,b)=>p=>{ const x=p[0]-q[0],y=p[1]-q[1]; return [q[0]+a*x-b*y,q[1]+b*x+a*y]; },
+  then:(g,f)=>p=>g(f(p))                                                                    /* f first, then g */
+};
+const unit=(x,y)=>{ const r=Math.hypot(x,y); return [x/r,y/r]; };
+const fx=v=>(Math.abs(v)<5e-10?0:v);
+const show=(v,d)=>{ let s=fx(v).toFixed(d==null?2:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return (s==='-0'?'0':s).replace('-','−'); };
+/* shapes: {pts, c, fill, dash, w, open}; dots: {p, c, t}; lines: {p, d, c, dash} */
+function svgPlane(o){ const lo=o.lo==null?-6:o.lo, hi=o.hi==null?6:o.hi, S=300, X=x=>(x-lo)/(hi-lo)*S, Y=y=>S-(y-lo)/(hi-lo)*S;
+  let s='<svg viewBox="0 0 '+S+' '+S+'" style="width:100%;max-width:340px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  for(let g=Math.ceil(lo);g<=hi;g++){ s+='<line x1="'+X(g)+'" y1="0" x2="'+X(g)+'" y2="'+S+'" style="stroke:'+V('--grid')+';stroke-width:'+(g===0?1.6:0.6)+'"/><line x1="0" y1="'+Y(g)+'" x2="'+S+'" y2="'+Y(g)+'" style="stroke:'+V('--grid')+';stroke-width:'+(g===0?1.6:0.6)+'"/>'; }
+  (o.lines||[]).forEach(l=>{ const L=40; s+='<line x1="'+X(l.p[0]-L*l.d[0])+'" y1="'+Y(l.p[1]-L*l.d[1])+'" x2="'+X(l.p[0]+L*l.d[0])+'" y2="'+Y(l.p[1]+L*l.d[1])+'" style="stroke:'+V(l.c||'--teal')+';stroke-width:1.6;stroke-dasharray:'+(l.dash||'5 4')+'"/>'; });
+  (o.shapes||[]).forEach(z=>{ const pts=z.pts.map(p=>X(p[0]).toFixed(1)+','+Y(p[1]).toFixed(1)).join(' ');
+    s+='<'+(z.open?'polyline':'polygon')+' points="'+pts+'" style="fill:'+(z.fill?V(z.c):'none')+';fill-opacity:'+(z.fill?0.28:0)+';stroke:'+V(z.c)+';stroke-width:'+(z.w||2)+(z.dash?';stroke-dasharray:'+z.dash:'')+'"/>'; });
+  (o.dots||[]).forEach(d=>{ s+='<circle cx="'+X(d.p[0])+'" cy="'+Y(d.p[1])+'" r="4" style="fill:'+V(d.c||'--ink')+'"/>'+(d.t?'<text x="'+(X(d.p[0])+7)+'" y="'+(Y(d.p[1])-6)+'" style="fill:'+V(d.c||'--ink')+';font:12px IBM Plex Mono,monospace">'+d.t+'</text>':''); });
+  return s+'</svg>'; }
+function knob(id,lab,min,max,step,val){ return '<div class="kn"><span class="m">'+lab+'</span><input type="range" id="'+id+'" min="'+min+'" max="'+max+'" step="'+step+'" value="'+val+'"><output id="o'+id+'"></output></div>'; }
+function chipRow(el,keys,get,set,after){ el.innerHTML=''; keys.forEach(k=>{ const b=document.createElement('button'); b.type='button'; b.textContent=k; if(k===get()) b.className='on'; b.onclick=()=>{ set(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+
+const FN={'y = x²':x=>x*x,'y = x³ − 3x':x=>x*x*x-3*x,'y = |x|':x=>Math.abs(x)};
+const FS={'y = x²':u=>'('+u+')²','y = x³ − 3x':u=>'('+u+')³ − 3('+u+')','y = |x|':u=>'|'+u+'|'};
+let fk='y = x²', pk='none', st={h:1,k:-2,c:1};
+['kh','kk','kc'].forEach(id=>{ const e=$(id); e.addEventListener('input',()=>{ st[id[1]]=+e.value; draw(); }); });
+function draw(){ const f=FN[fk], s1=pk==='upright axis'?-1:1, s2=pk==='floor'?-1:1, pts=[], im=[];
+  for(let X=-6;X<=6.001;X+=0.05){ const Y=f(X); if(Math.abs(Y)<40){ pts.push([X,Y]); im.push([s1*X+st.h, st.c*s2*Y+st.k]); } }
+  $('pl').innerHTML=svgPlane({lo:-6,hi:6,shapes:[{pts,c:'--ink',open:true},{pts:im,c:'--ember',open:true,w:2.6}]});
+  $('okh').textContent=show(st.h); $('okk').textContent=show(st.k); $('okc').textContent=show(st.c);
+  const u0=st.h===0?'x':'x '+(st.h>0?'− '+show(st.h):'+ '+show(-st.h)), u=s1<0?(st.h===0?'−x':'−('+u0+')'):u0;
+  let r=FS[fk](u); const cc=st.c*s2; if(cc!==1&&fk==='y = x³ − 3x') r='['+r+']'; r=(cc===1?'':cc===-1?'−':show(cc)+' · ')+r; if(st.k) r+=(st.k>0?' + ':' − ')+show(Math.abs(st.k));
+  const v=$('vd'); v.className='verdict'; v.textContent='The moved graph: y = '+r+'.'; }
+chipRow($('chF'),Object.keys(FN),()=>fk,k=>fk=k,draw);
+chipRow($('chP'),['none','floor','upright axis'],()=>pk,k=>pk=k,draw); draw();
+window.__pic={set:(f,p,h,k,c)=>{ fk=f; pk=p; st={h,k,c}; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'the rule',t:R`\htmlClass{new}{P \in g(S) \iff g^{-1}(P) \in S}`,n:`Put the undone move into the equation.`}
+],{title:'The slides · undo · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'graph slide',t:R`\htmlClass{new}{y = f(x - h) + k}`,n:`Right by h, up by k.`}
+],{title:'The slides · slide · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'graph flips',t:R`\htmlClass{new}{y = -f(x),\ \ y = f(-x)}`,n:`Over the floor, over the upright axis.`}
+],{title:'The slides · flip · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'graph pulls',t:R`\htmlClass{new}{y = c\,f(x),\ \ y = f(x/c)}`,n:`Upright, sideways.`}
+],{title:'The slides · pull · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`\text{right by 3} \ne x + 3`,n:`Undone: x − 3.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

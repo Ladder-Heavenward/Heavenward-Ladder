@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>10c · Limits add, multiply and divide</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+#cvW{touch-action:none;cursor:ew-resize}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4em;text-align:right}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r10b.html">← 10b a function can't head two ways</a><a href="r10d.html">next: 10d the squeeze →</a></p>
+  <div class="tags"><span class="tag proof">10c · proof</span></div>
+  <h1>Limits add, multiply and divide</h1>
+  <p>If one function heads to one value and another to a second, their sum heads to the sum of the values, their product to the product, and their quotient to the quotient, provided the second value is not 0. This step proves all three in full. The sum is quick: split the challenger's gap into two halves and give each function one. The product needs a trick you would not think of unless you were looking for it, adding and taking away the same amount, and an answer chosen as the least of three. The quotient needs a round of the game of its own, to keep the bottom away from 0 near the input. Then constants, powers and every polynomial follow. Substituting the input into a polynomial, or into a fraction of polynomials whose bottom is not 0 there, becomes a technique.</p>
+  <p class="gesture">Split the gap into budgets, one for each piece; rewrite the difference so that each piece has a factor you can make small; tame any factor that is not small with a first promise; answer with the least of the reaches.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r10a.html">10a</a> (the definition, lesser-below-both, line-limit, square-limit, one-over-x-limit), <a href="r10b.html">10b</a> (one-limit, the name lim), <a href="r08h.html">8h</a> (triangle and its reverse form, size-of-a-product, size-of-a-negative, unpack-the-bars), <a href="r08d.html">8d</a> (the rules for ℝ, order-and-arithmetic-agree, positive-reciprocal on ℚ), <a href="r08g.html">8g</a> (same-direction-add), <a href="r08f.html">8f</a> (powers of a real), <a href="r04c.html">4c</a> (rule-makes-a-function), <a href="r09g.html">9g</a> (polynomials, rational functions, Σ with real terms). <a href="r10d.html">10d</a> squeezes; <a href="r10f.html">10f</a> computes with these techniques on every line; rung 11 is built on them.</p></div>
+</header>
+
+<section class="class step" data-step="10c1">
+  <h2 class="sthead"><span class="stno">10c1</span>Functions made from functions</h2>
+  <p class="stands">Stands on 9b (composing), 4c (rule-makes-a-function) and 10a5 (lesser-below-both).</p>
+  <p data-pid="48e888">To say “the sum heads to L + M” there must be a function called the sum. 9b had composing. <b>This step needs the plainer ways of making functions: add the outputs, multiply them, divide them.</b></p>
+  <p class="eqline" data-pid="ad07a5">From here on, for functions f and g whose inputs and outputs are reals, and a real c: f + g, f − g and fg name the functions x ↦ f(x) + g(x), x ↦ f(x) − g(x) and x ↦ f(x)g(x), each on dom f ∩ dom g. cf names x ↦ c · f(x) on dom f. f/g names x ↦ f(x)/g(x) on {x ∈ dom f ∩ dom g : g(x) ≠ 0}. And for a number n, fⁿ names x ↦ (f(x))ⁿ on dom f, with 8f's powers of a real. The high n is a power of outputs: it is not 9·cb4's iterate, which carries a ring, and not 9d's f⁻¹. And fg is the product of outputs, never 9b's composite g ∘ f.</p>
+  <p data-pid="910e2d">Each is a function by 4c's rule-makes-a-function. If f and g are both defined near w, with reaches r_f and r_g, then f + g, f − g and fg are defined near w with reach min(r_f, r_g), by lesser-below-both. For f/g that is not enough, since g may be 0 near w; away-from-zero below supplies what is missing. One more line, because the product's answer is the least of three reaches.</p>
+  <p class="eqline" data-pid="c5bd55">From here on, min(p, q, r) is short for min(min(p, q), r), and a longer list likewise, one real at a time: the least of several. By lesser-below-both, used once for each min, it is at most each real of the list, and it is positive when they all are.</p>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">10c1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = √x,  g(x) = √(1 − x)</span></span>Find the domain of f + g. <br>Say whether f + g is defined near ½, and give a reach.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10c2">
+  <h2 class="sthead"><span class="stno">10c2</span>Limits add</h2>
+  <p class="stands">Stands on 10c1, 10a (the definition) and 8h (triangle).</p>
+  <p data-pid="db7fab">Limits-add technique: <b>if lim_{x→w} f(x) = L and lim_{x→w} g(x) = M, then lim_{x→w} (f + g)(x) = L + M.</b> In plain words: the challenger names a gap, and you give each function half of it, a budget. Each answers with its own reach, and you answer with the least. Then the triangle inequality adds the two halves back together.</p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the limits-add technique">
+\text{let } \varepsilon \gt 0;\ \ \htmlClass{new}{\tfrac{\varepsilon}{2}} \gt 0 @@ speak of everything; half a positive is positive
+\text{call } \delta_1:\ 0 \lt |x - a| \lt \delta_1 \Rightarrow |f(x) - L| \lt \tfrac{\varepsilon}{2} @@ lim f = L, at the gap ε/2
+\text{call } \delta_2:\ 0 \lt |x - a| \lt \delta_2 \Rightarrow |g(x) - M| \lt \tfrac{\varepsilon}{2} @@ lim g = M, at the gap ε/2
+\delta = \htmlClass{new}{\min(\delta_1, \delta_2, r)} @@ the least of several; r a reach on which f and g are both defined
+\text{assume } 0 \lt |x - a| \lt \delta @@ x is in all three windows (lesser-below-both, at-most-is-a-partial-order on ℝ)
+\begin{gathered}|(f + g)(x) - (L + M)|\\ = |\htmlClass{new}{(f(x) - L) + (g(x) - M)}|\end{gathered} @@ the line for f + g; negative-of-a-sum and middle-swap (8d): regroup
+\le |f(x) - L| + |g(x) - M| @@ triangle (8h)
+\lt \tfrac{\varepsilon}{2} + \tfrac{\varepsilon}{2} = \htmlClass{keep}{\varepsilon} \quad \blacksquare @@ both promises (same-direction-add); ½ + ½ = 1 (5e)
+  </pre>
+  <p data-pid="a637a6">Read it backwards and you see how it was invented. The total had to be under ε; the triangle inequality splits the total into two pieces; so give each piece half. That is the method of this whole step, and of 10g: start from the inequality you want, rewrite it into pieces you control, then choose the reach that controls them all.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · limits-add · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · left: the reaches on the input line, and the least of them · right: the budget at one input</div>
+    <div class="panel">
+      <div class="chips" role="group" aria-label="mode" id="mch"></div>
+      <div class="kn">
+        <span class="m">w</span><input type="range" id="ka" min="-2" max="2" step="0.5" value="1"><output id="oa"></output>
+        <span class="m">ε</span><input type="range" id="ke" min="-3" max="0.5" step="0.05" value="-1"><output id="oe"></output>
+      </div>
+      <canvas id="cvW"></canvas>
+      <div class="cap">Each reach is drawn as its window around w, on the input line (only order is meant): ember the first promise, teal and gold the budgets. The least of them, grey, is the answer. The windows differ greatly in size, so the picture starts zoomed to the answer; the chip shows all of every window. Drag the input x (the dot) anywhere inside the answer's window. The ε knob moves the power of ten: from a thousandth up to about 3.</div>
+      <div class="eqbox" id="eqW"></div>
+    </div>
+    <div class="panel">
+      <canvas id="cvB"></canvas>
+      <div class="cap">The budget at your x. Product: the top bar is |f(x)g(x) − LM|; below it the split's two pieces, each against its half of ε (the dashed mark). Reciprocal: |g(x)| against |M|/2 (away-from-zero), then |1/g(x) − 1/M| against ε. Teal: within budget.</div>
+      <div class="eqbox" id="eqB"></div>
+    </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10c2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = 2x,  g(x) = 5x,  w = 0,  ε = 0.1</span></span>Give each function half the budget, and find its reach. <br>Write δ for f + g.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10c3">
+  <h2 class="sthead"><span class="stno">10c3</span>Limits multiply: add and take away</h2>
+  <p class="stands">Stands on 10c2 and 8h (size of a product).</p>
+  <p data-pid="889835">Limits-multiply technique: <b>if lim_{x→w} f(x) = L and lim_{x→w} g(x) = M, then lim_{x→w} (fg)(x) = LM.</b> The difference f(x)g(x) − LM has no visible piece that is small. Make one, by adding and taking away the same amount, f(x)M. The middle pair is 0, so nothing changes but the look:</p>
+  <pre class="lines" data-k="ember" data-label="this step: the split">
+\begin{gathered}f(x)g(x) - LM\\ = f(x)g(x) \htmlClass{new}{- f(x)M + f(x)M} - LM\end{gathered} @@ add 0 in the form −f(x)M + f(x)M (negative on ℝ, plus-zero on ℝ)
+= \htmlClass{keep}{f(x)\,(g(x) - M)} + \htmlClass{keep}{M\,(f(x) - L)} @@ spread on ℝ backwards on each pair; turn-about for times on ℝ
+\begin{gathered}|f(x)g(x) - LM|\\ \le |f(x)|\,|g(x) - M| + |M|\,|f(x) - L|\end{gathered} @@ triangle; size-of-a-product
+  </pre>
+  <p data-pid="e16a0b">Now each piece is a product with a factor you can make small: |g(x) − M| and |f(x) − L|. The second piece is easy: its other factor |M| is fixed. The first is not: its other factor |f(x)| changes with x. Tame it with a first promise, as 10a tamed the leftover of x². Bounded-near technique: <b>if lim_{x→w} f(x) = L, then there is a reach δ₁ with |f(x)| &lt; |L| + 1 for every x in the neighbourhood of w of reach δ₁.</b> Challenge with ε = 1 and call the answer δ₁. In that window |f(x) − L| &lt; 1, and the reverse form of triangle gives |f(x)| − |L| ≤ |f(x) − L| &lt; 1. ∎</p>
+  <pre class="lines" data-k="ember" data-label="this step: the limits-multiply technique">
+\text{let } \varepsilon \gt 0 @@ speak of everything
+\text{call } \delta_1:\ \ |f(x)| \lt \htmlClass{new}{|L| + 1} @@ bounded-near: the first promise tames the wild factor
+\text{call } \delta_2:\ \ |g(x) - M| \lt \tfrac{\varepsilon}{2(|L| + 1)} @@ lim g = M at that gap: positive, since |L| + 1 &gt; 0
+\text{call } \delta_3:\ \ |f(x) - L| \lt \tfrac{\varepsilon}{2(|M| + 1)} @@ lim f = L at that gap: |M| + 1, never 0, even when M is 0
+\begin{gathered}\delta = \htmlClass{new}{\min(\delta_1, \delta_2, \delta_3, r)};\ \\\ \text{assume } 0 \lt |x - a| \lt \delta\end{gathered} @@ the least of several; r a reach on which f and g are defined
+|f(x)|\,|g(x) - M| \lt (|L| + 1) \cdot \tfrac{\varepsilon}{2(|L| + 1)} = \tfrac{\varepsilon}{2} @@ δ ≤ δ₁ and δ ≤ δ₂: multiply the two bounds (order-and-arithmetic-agree; non-negative factors)
+|M|\,|f(x) - L| \le |M| \cdot \tfrac{\varepsilon}{2(|M| + 1)} \lt \tfrac{\varepsilon}{2} @@ δ ≤ δ₃; |M| &lt; |M| + 1, so |M|/(|M| + 1) &lt; 1 (positive-reciprocal on ℚ read in ℝ, order-and-arithmetic-agree)
+|f(x)g(x) - LM| \lt \tfrac{\varepsilon}{2} + \tfrac{\varepsilon}{2} = \htmlClass{keep}{\varepsilon} \quad \blacksquare @@ the split's last line; same-direction-add
+  </pre>
+  <p data-pid="d94fc2">Look at what each reach did. δ₁ made a promise about f that had nothing to do with ε: it only made |f(x)| behave. δ₂ and δ₃ spent the budget, half each. But each half was divided by the size of the other factor, so that multiplying by that size gives back exactly ε/2. And the answer is the least of all of them, because every promise must be kept at once. Why |M| + 1 and not |M|? Because M may be 0, and ε/(2|M|) would then name nothing. Adding 1 costs nothing and keeps the bottom positive.</p>
+  <p data-pid="896644">A well-known calculus book puts all the arithmetic of this proof into a technique about reals alone. If x is within min(1, ε/(2(|y₀| + 1))) of x₀, and y is within ε/(2(|x₀| + 1)) of y₀, then xy is within ε of x₀y₀. The limit technique is then that one, the definition, and the least of the reaches.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · limits-multiply · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10c3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = x + 1 heads to 3 at 2</span></span>Find a ceiling on |f(x)| from the first promise |f(x) − 3| < 1. <br>Say why limits-multiply needs it before it spends ε.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10c4">
+  <h2 class="sthead"><span class="stno">10c4</span>Limits divide, when the bottom’s limit is not 0</h2>
+  <p class="stands">Stands on 10c3, 10b4 (sign-kept-near) and 10a8 (1/x).</p>
+  <p data-pid="f512a5">A quotient f/g is fg's cousin with 1/g in place of g. So the work is in 1/g, and it has two parts. First, g must stay away from 0 near w, or 1/g is not even defined there. Away-from-zero technique: <b>if lim_{x→w} g(x) = M and M ≠ 0, then there is a reach δ₁ with |g(x)| &gt; |M|/2 for every x in the neighbourhood of w of reach δ₁; in particular g(x) ≠ 0 there.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the away-from-zero technique">
+|M| \gt 0,\ \ \text{challenge with } \htmlClass{new}{\varepsilon = \tfrac{|M|}{2}} @@ M ≠ 0 (8h); half a positive
+\text{call } \delta_1:\ \ |g(x) - M| \lt \tfrac{|M|}{2} @@ lim g = M at that gap
+\begin{gathered}|M| - |g(x)| \le |M - g(x)|\\ = |g(x) - M| \lt \tfrac{|M|}{2}\end{gathered} @@ the reverse form of triangle; size-of-a-negative
+|g(x)| \gt |M| - \tfrac{|M|}{2} = \htmlClass{keep}{\tfrac{|M|}{2}} \gt 0 \quad \blacksquare @@ order-and-arithmetic-agree; so g(x) ≠ 0, since |0| = 0
+  </pre>
+  <p data-pid="a08155">This is 10b's sign-kept-near with sizes in place of signs. The second part is the game itself. Reciprocal-limit technique: <b>if lim_{x→w} g(x) = M and M ≠ 0, then lim_{x→w} (1/g)(x) = 1/M.</b> Here 1/g names the function x ↦ 1/g(x), the quotient of the constant 1 by g, defined near w by away-from-zero.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the reciprocal-limit technique">
+\left|\tfrac{1}{g(x)} - \tfrac{1}{M}\right| = \tfrac{|M - g(x)|}{|g(x)|\,|M|} = |g(x) - M| \cdot \htmlClass{keep}{\tfrac{1}{|g(x)|\,|M|}} @@ one bottom (fractions-of-rationals read in ℝ); size-of-a-product; size-of-a-negative. The leftover depends on g(x)
+\delta_1 \text{ from away-from-zero}:\ \ \tfrac{1}{|g(x)|} \lt \tfrac{2}{|M|} @@ |g(x)| &gt; |M|/2 &gt; 0, and positive-reciprocal on ℚ turns the order
+\text{so } \left|\tfrac{1}{g(x)} - \tfrac{1}{M}\right| \lt \htmlClass{new}{\tfrac{2}{M^2}}\,|g(x) - M| @@ order-and-arithmetic-agree; |M|·|M| = M² (size-squared)
+\text{call } \delta_2:\ \ |g(x) - M| \lt \htmlClass{new}{\tfrac{M^2\varepsilon}{2}} @@ lim g = M at that gap: positive since M ≠ 0 (square-never-negative, positive-product on ℝ)
+\begin{gathered}\delta = \min(\delta_1, \delta_2):\ \\\ \left|\tfrac{1}{g(x)} - \tfrac{1}{M}\right| \lt \tfrac{2}{M^2}\cdot\tfrac{M^2\varepsilon}{2} = \htmlClass{keep}{\varepsilon} \quad \blacksquare\end{gathered} @@ both promises; reciprocal on ℝ
+  </pre>
+  <p data-pid="751ff9">It is 10a's one-over-x-limit again, one level up. There the inputs x were kept away from 0 by a first promise; here the outputs g(x) are, by away-from-zero. Limits-divide technique: <b>if lim_{x→w} f(x) = L, lim_{x→w} g(x) = M and M ≠ 0, then lim_{x→w} (f/g)(x) = L/M.</b> For x near w, (f/g)(x) = f(x) · (1/g)(x) (5b's line for dividing, read in ℝ). So f/g agrees near w with the product f · (1/g). Limits-multiply with reciprocal-limit gives L · (1/M) = L/M, and 10a's agreeing-near carries it over. ∎ Limits-add, limits-subtract, limits-multiply, constant-factor, power-limit, reciprocal-limit and limits-divide together are the limit techniques. Their accepted name is the limit laws: the rules for limits of sums, products and quotients.</p>
+  <p data-pid="29bc06">The condition M ≠ 0 is not fussiness. When the bottom's limit is 0, the technique says nothing either way. (x² − 1)/(x − 1) has a bottom heading to 0 at 1, and still has a limit, 2, as 10a showed. 1/x has a bottom heading to 0 at 0 and has none, as 10e will show. The quotient technique is silent, and a 0/0 obtained by ignoring that silence is not an answer (10f).</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · limits-divide · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10c4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{Split limits-add&#x27;s budget}"></span> <span data-tex-inline="\text{unevenly: } \varepsilon/3 \text{ to } f \text{ and}"></span> <span data-tex-inline="2\varepsilon/3 \text{ to } g \text{.}"></span></span>Check that the column still closes, and find the condition every split must meet.</li><li><span class="givens"><span data-tex-inline="\text{A proof of limits-add}"></span> <span data-tex-inline="\text{gives each function the}"></span> <span data-tex-inline="\text{whole } \varepsilon \text{.}"></span></span>Find what its column proves instead, and repair it by changing only the first line.</li><li><span class="givens"><span data-tex-inline="h(x) = \dfrac{x^2 - 4}{x - 2},"></span> <span data-tex-inline="\text{Someone computes the limit}"></span> <span data-tex-inline="\text{of } h \text{ at 2 by limits-divide}"></span> <span data-tex-inline="\text{and writes 0/0.}"></span></span>Find the condition that failed. <br>By agreeing-near, find the limit.</li><li>Find f and g, with g heading to 0 at 1, for which f over g has a limit at 1; then a pair for which f over g heads to 5 there.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10c5">
+  <h2 class="sthead"><span class="stno">10c5</span>Constants, powers, polynomials</h2>
+  <p class="stands">Stands on 10c4, 4c (recursion) and 9g (polynomials).</p>
+  <p data-pid="fd1e12">Everything else follows by stacking these. Constants: a constant function heads to its value (line-limit with m = 0). Constant-factor technique: <b>lim_{x→w} (cf)(x) = cL when lim_{x→w} f(x) = L</b>, by limits-multiply with the constant c. Limits-subtract technique: <b>lim_{x→w} (f − g)(x) = L − M</b>, since f − g = f + (−1)g, by constant-factor and limits-add. Power-limit technique: <b>for every number n, lim_{x→w} fⁿ(x) = Lⁿ.</b> By 4b's induction on n: f⁰ is the constant 1, heading to 1 = L⁰; and f^S(n) = fⁿ · f heads to Lⁿ · L = L^S(n) by limits-multiply and the hypothesis. ∎ With f(x) = x, which heads to w by line-limit, power-limit gives lim_{x→w} xⁿ = wⁿ for every n. 10a's square-limit is the case n = 2, now with no first promise in sight, because limits-multiply carries it.</p>
+  <p data-pid="6aff71">Substitution technique: <b>for a polynomial p, lim_{x→w} p(x) = p(w), for every real w; and for a rational function p/q with q(w) ≠ 0, lim_{x→w} p(x)/q(x) = p(w)/q(w).</b> Write p(x) = Σ_{k≤n} a_k x^k (9g). Each term a_k x^k heads to a_k w^k, by power-limit and constant-factor. The sum heads to the sum of the limits, by limits-add and an induction on n with 9g's sum-one-more. So p heads to p(w). For p/q, limits-divide with q(w) ≠ 0. ∎</p>
+  <pre class="lines" data-k="ember" data-label="this step: substituting, with every licence named">
+\lim_{x \to 2} \tfrac{x^3 - 3x + 1}{x + 1} @@ the bottom at 2 is 3, not 0: substitution's second half applies
+= \tfrac{\htmlClass{new}{2^3 - 3 \cdot 2 + 1}}{\htmlClass{new}{2 + 1}} = \tfrac{3}{3} = \htmlClass{keep}{1} @@ substitute; arithmetic
+\begin{gathered}\lim_{x \to -1} (x^2 + 4x)(2x + 5)\\ = \lim_{x \to -1}(x^2 + 4x) \cdot \lim_{x \to -1}(2x + 5)\end{gathered} @@ limits-multiply, then the names (10b)
+= (1 - 4) \cdot 3 = \htmlClass{keep}{-9} @@ substitution on each factor
+  </pre>
+  <p data-pid="d524e0">“Just substitute” was a habit. It is now a technique, with a condition: the bottom's value at w is not 0. Rung 11 gives the functions for which substituting always works a name of their own.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · substitution · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10c5.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = 3x,"></span> <span data-tex-inline="g(x) = x^2,"></span> <span data-tex-inline="w = 1,"></span> <span data-tex-inline="\varepsilon = 0.2"></span></span>Using limits-add, with line-limit for f and square-limit for g, answer the challenge ε for f plus g at w.</li><li><span class="givens"><span data-tex-inline="f(x) = x + 2,"></span> <span data-tex-inline="g(x) = 3x - 1,"></span> <span data-tex-inline="w = 1,"></span> <span data-tex-inline="\varepsilon = 0.4"></span></span>Using limits-multiply, with line-limit for each piece, answer the challenge ε for f times g at w.</li><li><span class="givens"><span data-tex-inline="h(x) = \dfrac{(2x - 1)^2 (x + 1)}{x - 1}"></span></span>Find the limit of h at 3, naming each technique in the order used.</li><li><span class="givens"><span data-tex-inline="h(x) = \dfrac{x^4 - 3x^2 + x}{x^2 + 1}"></span></span>By substitution, find the limit of h at −2, checking its condition.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10c6">
+  <h2 class="sthead"><span class="stno">10c6</span>Illegal moves</h2>
+  <p class="stands">Stands on 10c1 to 10c5.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\text{give } f \text{ and } g \text{ each the whole } \varepsilon\,? @@ then the sum is within 2ε. Split the budget: ε/2 each
+\begin{aligned}&\text{limits-multiply with } \tfrac{\varepsilon}{2} \text{ each}\\ &\quad\text{and no first promise}\,?\end{aligned} @@ |f(x)||g(x) − M| has a factor that is not small; without bounded-near it has no ceiling
+\delta = \min(\delta_2, \delta_3)\,? @@ forgets δ₁: outside bounded-near's window, |f(x)| &lt; |L| + 1 was never promised
+\tfrac{\varepsilon}{2|M|} \text{ when } M = 0\,? @@ names nothing: dividing by 0. Use |M| + 1
+\text{limits-divide when } \lim g = 0\,? @@ the technique is silent: (x² − 1)/(x − 1) at 1 has a limit, 1/x at 0 has none
+\lim (f + g) \text{ exists, so } \lim f \text{ and } \lim g \text{ exist}\,? @@ |x|/x and −|x|/x add to 0 off 0, and 10e shows neither has a limit at 0
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10c6.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">“lim_{x→1} (x² − 1)/(x − 1) = lim (x² − 1) / lim (x − 1) = 0/0.”</span></span>Which illegal move is this? <br>Find the limit by another road.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10c7">
+  <h2 class="sthead"><span class="stno">10c7</span>Running it backwards</h2>
+  <p class="stands">Stands on 10c1 to 10c5.</p>
+  <p data-pid="28ef54">Handed a recipe such as min(1, ε/8, ε/4), read it: a first promise of 1, and two budgets, each a half of ε divided by the size of the other factor. Handed a limit of a combination, take it apart into the pieces the techniques know, check each condition (the bottom's limit not 0), and put it back. Handed a combination whose pieces have no limits, the techniques say nothing. Then you must play the game, or use the way round that 10d builds. Found upward; written downward.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10c7.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{A proof of limits-add for}"></span> <span data-tex-inline="\text{two linear functions}"></span> <span data-tex-inline="\text{answered with},"></span> <span data-tex-inline="\min(\varepsilon/6, \varepsilon/10)."></span></span>Find two linear functions it could have been for.</li><li><span class="givens"><span data-tex-inline="\lim f = 2,\ \lim g = -3 \text{ at } w,"></span> <span data-tex-inline="h = \dfrac{f^2 - fg}{g + 4}"></span></span>Find the limit of h at w, naming the techniques.</li><li><span class="givens"><span data-tex-inline="\deg p = 2,"></span> <span data-tex-inline="\lim_{x \to 1} p(x) = 4,"></span> <span data-tex-inline="\lim_{x \to 0} p(x) = 1,"></span> <span data-tex-inline="\lim_{x \to -1} p(x) = 2"></span></span>Find p.</li><li><span class="givens"><span data-tex-inline="\text{An answer for } 1/g \text{ at } w \text{ reads}"></span> <span data-tex-inline="\min(\delta_1, \delta_2) \text{,}"></span> <span data-tex-inline="\text{with } \delta_2 \text{ the reach for}"></span> <span data-tex-inline="|g(x) - M| &lt; 8\varepsilon \text{.}"></span></span>Find every M it could have been made for.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">10c.4.1</span><span class="tagq">build</span>Build the step's columns again, your own way.<ol class="parts" type="a"><li>Prove limits-subtract directly, as a column like limits-add's.</li><li><span class="givens"><span data-tex-inline="f \text{ heads to } L \text{ at } w \text{, and } c \text{ is}"></span> <span data-tex-inline="\text{a real.}"></span></span>Prove constant-factor directly: give the answer for every c but 0, and the answer for c equal to 0.</li><li><span class="givens"><span data-tex-inline="\text{Split } f(x)g(x) - LM \text{ by adding}"></span> <span data-tex-inline="\text{and taking away } L \cdot g(x) \text{.}"></span></span>Prove limits-multiply from this split, as far as the recipe it gives.</li><li>By induction on n, write substitution's proof out, one move per line, citing each move.</li></ol></div>
+  <div class="chq"><span class="chid">10c.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="g \to 0 \text{ at } w,"></span> <span data-tex-inline="g(x) \ne 0 \text{ near } w"></span></span>Does g over g have a limit at w? <br>Is limits-divide's condition met?</div>
+  <div class="chq"><span class="chid">10c.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{Limits-add: if } f \text{ and } g \text{ have}"></span> <span data-tex-inline="\text{limits at } w \text{, so does } f + g \text{.}"></span> <span data-tex-inline="f + g \text{ and } f \text{ have limits at } w \text{.}"></span></span>Must g? <br>If only the sum has a limit, must f?</div>
+  <div class="chq"><span class="chid">10c.4.4</span><span class="tagq">seam</span>A book of rules written in India in 628 gives zero divided by zero as zero. Five centuries later an Indian astronomer described a number divided by zero as a quantity that is not changed when anything is added to it or taken from it. <br>What do (x² − 4)/(x − 2), x/x and x²/x each say about 0/0 at the input where top and bottom both vanish? <br>Can either rule be defended?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r10b.html">← 10b · a function can't head two ways</a><a href="r10d.html">10d · the squeeze →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>The calculus book is Michael Spivak’s. The rules of 628 in 10c.4.4 are Brahmagupta’s; the astronomer five centuries later is Bhāskara II.</p>
+  <aside class="voice para"><p>Spivak puts all the arithmetic of this proof into a lemma about reals alone: if x is within min(1, ε/(2(|y₀| + 1))) of x₀ and y is within ε/(2(|x₀| + 1)) of y₀, then xy is within ε of x₀y₀. The limit technique is then the lemma, the definition, and the least of the reaches.</p><cite>Spivak, Calculus, ch. 5</cite></aside>
+  <p>Accepted names: the limit techniques are the limit laws (the sum, product and quotient laws, and so on); bounded-near says a function with a limit is locally bounded.</p>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=v=>{ if(!isFinite(v)) return '—'; const a=Math.abs(v); if(a!==0&&a<1e-3) return v.toExponential(2).replace('e-',' \\cdot 10^{-')+'}'; let s=a>=100?v.toFixed(1):a>=1?v.toFixed(3):v.toFixed(4); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const fp=v=>{ const a=Math.abs(v); if(a!==0&&a<1e-3) return v.toExponential(2); let s=a>=1?v.toFixed(3):v.toFixed(5); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s; };
+let mode='prod'; let xr=0.5; let zoom=true; // x as a fraction of the answer's reach, from -1 to 1
+const mch=$('mch');
+[['prod','product: (2x + 1) · x²'],['rec','reciprocal: 1/x²']].forEach(([k,t])=>{ const b=document.createElement('button'); b.textContent=t; if(k===mode) b.className='on'; b.onclick=()=>{ mode=k; [...mch.children].slice(0,2).forEach(z=>z.classList.toggle('on',z===b)); all(); }; mch.appendChild(b); });
+const zb=document.createElement('button'); zb.textContent='zoomed to the answer'; zb.className='on'; zb.onclick=()=>{ zoom=!zoom; zb.classList.toggle('on',zoom); zb.textContent=zoom?'zoomed to the answer':'all of every window'; all(); }; mch.appendChild(zb);
+const ka=$('ka'), ke=$('ke');
+const dF=e=>e/2;                       // LIN for f(x) = 2x + 1
+const dG=(e,a)=>Math.min(1,e/(1+2*Math.abs(a))); // SQH for g(x) = x^2
+function model(){ const a=+ka.value, e=Math.pow(10,+ke.value);
+  if(mode==='prod'){ const L=2*a+1, M=a*a; const d1=dF(1), d2=dG(e/(2*(Math.abs(L)+1)),a), d3=dF(e/(2*(Math.abs(M)+1))); const d=Math.min(d1,d2,d3);
+    return {a,e,L,M,ok:true,rs:[['\\delta_1',d1,'--ember','bounded-near: |f| < |L| + 1'],['\\delta_2',d2,'--teal','g within ε/(2(|L|+1))'],['\\delta_3',d3,'--gold','f within ε/(2(|M|+1))']],d}; }
+  const M=a*a; if(M===0) return {a,e,M,ok:false,rs:[],d:0};
+  const d1=dG(Math.abs(M)/2,a), d2=dG(M*M*e/2,a); return {a,e,M,ok:true,rs:[['\\delta_1',d1,'--ember','away-from-zero: |g| > |M|/2'],['\\delta_2',d2,'--teal','g within M²ε/2']],d:Math.min(d1,d2)}; }
+const cvW=$('cvW'), cvB=$('cvB');
+const PW=plane(cvW,{x:[0,1],y:[0,1],grid:0,labels:false,aspect:0.55,draw:P=>drawW(P)});
+const PB=plane(cvB,{x:[0,1],y:[0,1],grid:0,labels:false,aspect:0.55,draw:P=>drawB(P)});
+let Mo=null;
+function drawW(P){ const m=Mo, c=P.ctx; if(!m.ok){ P.text('M = 0: no reach keeps g away from 0',0.04,0.5,'--ember','left',13); return; }
+  const span=zoom?m.d*2.6:Math.max(...m.rs.map(r=>r[1]))*1.15; P.o.x=[m.a-span,m.a+span]; P.o.y=[0,1]; c.save(); c.beginPath(); c.rect(0,0,P.W,P.H); c.clip();
+  P.line(m.a-span,0.12,m.a+span,0.12,'--muted',1.3);
+  m.rs.forEach((r,i)=>{ const y=0.86-i*0.2; c.fillStyle=col(r[2]); c.globalAlpha=.25; c.fillRect(P.X(m.a-r[1]),P.Y(y+0.06),P.X(m.a+r[1])-P.X(m.a-r[1]),P.Y(y-0.06)-P.Y(y+0.06)); c.globalAlpha=1; P.line(m.a-r[1],y,m.a+r[1],y,r[2],2.5); P.text('δ'+({'1':'₁','2':'₂','3':'₃'})[r[0].slice(-1)]+' = '+fp(r[1])+(r[1]>span?'  (runs past the edges)':''),m.a-span*0.97,y+0.075,r[2],'left',11); });
+  const yd=0.86-m.rs.length*0.2; c.fillStyle=col('--ink'); c.globalAlpha=.12; c.fillRect(P.X(m.a-m.d),P.Y(yd+0.07),P.X(m.a+m.d)-P.X(m.a-m.d),P.Y(0.05)-P.Y(yd+0.07)); c.globalAlpha=1; P.line(m.a-m.d,yd,m.a+m.d,yd,'--ink',3);
+  P.line(m.a,0.03,m.a,0.97,'--muted',1,[2,4]);
+  const x=m.a+xr*m.d; P.dot(x,0.12,'--ember',6);
+  P.text('the answer δ = '+fp(m.d),m.a-span*0.97,yd+0.08,'--ink','left',11);
+  c.font='11px IBM Plex Mono, monospace'; c.fillStyle=col('--muted'); c.textAlign='center'; c.fillText('w',P.X(m.a),P.Y(0.0)-2); c.restore(); }
+function drawB(P){ const m=Mo, c=P.ctx; P.o.x=[0,1]; P.o.y=[0,1]; if(!m.ok){ return; }
+  const x=m.a+xr*m.d; const bar=(i,val,cap,cl,lab)=>{ const y=0.85-i*0.24, w=Math.min(1,val/cap)*0.62; c.fillStyle=col('--grid'); c.fillRect(P.X(0.3),P.Y(y+0.07),P.X(0.92)-P.X(0.3),P.Y(y-0.07)-P.Y(y+0.07)); c.fillStyle=col(val<cap?cl:'--ember'); c.fillRect(P.X(0.3),P.Y(y+0.07),P.X(0.3+w)-P.X(0.3),P.Y(y-0.07)-P.Y(y+0.07)); P.line(0.92,y-0.1,0.92,y+0.1,'--ink',1.5,[3,2]); P.text(lab,0.01,y-0.02,'--ink','left',11); };
+  if(mode==='prod'){ const f=2*x+1, g=x*x; const tot=Math.abs(f*g-m.L*m.M), p1=Math.abs(f)*Math.abs(g-m.M), p2=Math.abs(m.M)*Math.abs(f-m.L);
+    bar(0,tot,m.e,'--teal','|fg − LM|'); bar(1,p1,m.e/2,'--teal','|f||g − M|'); bar(2,p2,m.e/2,'--teal','|M||f − L|'); bar(3,Math.abs(f),Math.abs(m.L)+1,'--gold','|f| (bounded-near)');
+    m.vals={x,f,g,tot,p1,p2}; }
+  else { const g=x*x; const v=Math.abs(1/g-1/m.M); bar(0,Math.abs(m.M)/2,Math.abs(g),'--gold','|M|/2 < |g|'); bar(1,v,m.e,'--teal','|1/g − 1/M|'); bar(2,(2/(m.M*m.M))*Math.abs(g-m.M),m.e,'--teal','(2/M²)|g − M|'); m.vals={x,g,v}; } }
+function readout(){ const m=Mo; $('oa').textContent=m.a; $('oe').textContent=fp(m.e);
+  if(!m.ok){ tex($('eqW'),R`\begin{gathered}g(x) = x^2,\ \ w = 0,\ \ M = 0\\ \text{AWY and reciprocal-limit need } M \ne 0\end{gathered}`,true); tex($('eqB'),R`\text{no budget: } \tfrac{1}{x^2} \text{ has no limit at } 0`,true); return; }
+  const rs=m.rs.map(r=>`${r[0]} = ${fm(r[1])}`).join(R`,\ \ `);
+  const head=mode==='prod'?R`f(x) = 2x + 1 \to L = ${fm(m.L)},\ \ g(x) = x^2 \to M = ${fm(m.M)}`:R`g(x) = x^2 \to M = ${fm(m.M)},\ \ \tfrac{1}{g} \to ${fm(1/m.M)}`;
+  tex($('eqW'),R`\begin{gathered}${head}\\ ${rs}\\ \delta = \min = ${fm(m.d)},\ \ x = ${fp(m.vals.x)}\end{gathered}`,true);
+  const v=m.vals;
+  if(mode==='prod') tex($('eqB'),R`\begin{gathered}|f(x)g(x) - LM| = ${fm(v.tot)}\\ \le ${fm(v.p1)} + ${fm(v.p2)}\\ \lt \tfrac{\varepsilon}{2} + \tfrac{\varepsilon}{2} = ${fm(m.e)}\end{gathered}`,true);
+  else tex($('eqB'),R`\begin{gathered}|g(x)| = ${fm(Math.abs(v.g))} \gt \tfrac{|M|}{2} = ${fm(Math.abs(m.M)/2)}\\ \left|\tfrac{1}{g(x)} - \tfrac1M\right| = ${fm(v.v)} \lt \varepsilon = ${fm(m.e)}\end{gathered}`,true); }
+function all(){ Mo=model(); PW.redraw(); PB.redraw(); readout(); }
+ka.addEventListener('input',all); ke.addEventListener('input',all);
+let dr=false; cvW.addEventListener('pointerdown',e=>{ dr=true; cvW.setPointerCapture&&cvW.setPointerCapture(e.pointerId); mv(e); });
+function mv(e){ if(!dr||!Mo.ok) return; const p=PW.point(e); xr=Math.max(-0.999,Math.min(0.999,(p.x-Mo.a)/Mo.d)); if(Math.abs(xr)<0.01) xr=0.01; all(); }
+cvW.addEventListener('pointermove',mv); ['pointerup','pointercancel'].forEach(t=>cvW.addEventListener(t,()=>dr=false));
+all();
+
+/* ---------- slides ---------- */
+const N='\\htmlClass{new}', K='\\htmlClass{keep}';
+stepper('#sl1',[
+  {k:'ember',kl:'limits-add · 1 of 4',t:R`\text{budget: } ${N}{\tfrac{\varepsilon}{2}} \text{ to } f,\ \ ${N}{\tfrac{\varepsilon}{2}} \text{ to } g`,n:`Split the challenger's gap. Each function answers its half with its own reach.`},
+  {k:'ember',kl:'limits-add · 2 of 4',t:R`\delta = ${N}{\min(\delta_1, \delta_2, r)}`,n:`The least of several, so x is in every window, and f and g are both defined at it.`},
+  {k:'ember',kl:'limits-add · 3 of 4',t:R`\begin{gathered}|(f + g)(x) - (L + M)|\\ = |(f(x) - L) + (g(x) - M)|\end{gathered}`,n:`Regroup (negative-of-a-sum, middle-swap): the pieces you control appear.`},
+  {k:'ember',kl:'limits-add · 4 of 4',t:R`\le |f(x) - L| + |g(x) - M| \lt ${K}{\varepsilon}`,n:`triangle, then the two promises add to ε. ∎`}
+],{title:'The slides · limits-add · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'the split · 1 of 2',t:R`\begin{gathered}fg - LM = fg\\ ${N}{- fM + fM} - LM\end{gathered}`,n:`Add and take away the same amount, f(x)M. Nothing changes but the look.`},
+  {k:'ember',kl:'the split · 2 of 2',t:R`= ${K}{f\,(g - M)} + ${K}{M\,(f - L)}`,n:`Each piece now has a factor that can be made small. The other factor of the first, f(x), is wild.`},
+  {k:'ember',kl:'bounded-near',t:R`\begin{gathered}|f(x) - L| \lt 1\\ \Rightarrow |f(x)| \lt ${N}{|L| + 1}\end{gathered}`,n:`Challenge with 1 (reverse triangle). A first promise that tames the wild factor.`},
+  {k:'ember',kl:'limits-multiply · 1 of 3',t:R`|g(x) - M| \lt ${N}{\tfrac{\varepsilon}{2(|L| + 1)}}`,n:`Half the budget, divided by the ceiling of the factor it is multiplied by.`},
+  {k:'ember',kl:'limits-multiply · 2 of 3',t:R`|f(x) - L| \lt ${N}{\tfrac{\varepsilon}{2(|M| + 1)}}`,n:`The other half, divided by |M| + 1: never 0, even when M is.`},
+  {k:'ember',kl:'limits-multiply · 3 of 3',t:R`\begin{gathered}\delta = \min(\delta_1, \delta_2, \delta_3, r):\\ |fg - LM| \lt \tfrac{\varepsilon}{2} + \tfrac{\varepsilon}{2} = ${K}{\varepsilon}\end{gathered}`,n:`The least of all the reaches: every promise at once. ∎`}
+],{title:'The slides · limits-multiply · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'away-from-zero · 1 of 2',t:R`M \ne 0:\ \ \text{gap } ${N}{\tfrac{|M|}{2}}`,n:`Keep the bottom away from 0: challenge g with half its limit's size.`},
+  {k:'ember',kl:'away-from-zero · 2 of 2',t:R`|g(x)| \gt |M| - \tfrac{|M|}{2} = ${K}{\tfrac{|M|}{2}} \gt 0`,n:`Reverse triangle. So 1/g(x) names a real near w.`},
+  {k:'ember',kl:'reciprocal-limit · 1 of 3',t:R`\left|\tfrac{1}{g} - \tfrac1M\right| = |g - M|\cdot${K}{\tfrac{1}{|g||M|}}`,n:`One bottom; the leftover depends on g(x), so tame it.`},
+  {k:'ember',kl:'reciprocal-limit · 2 of 3',t:R`\tfrac{1}{|g(x)|} \lt \tfrac{2}{|M|} \;\Rightarrow\; \lt ${N}{\tfrac{2}{M^2}}\,|g - M|`,n:`away-from-zero's window gives the ceiling (positive-reciprocal on ℚ).`},
+  {k:'ember',kl:'reciprocal-limit · 3 of 3',t:R`|g - M| \lt ${N}{\tfrac{M^2 \varepsilon}{2}} \;\Rightarrow\; \lt ${K}{\varepsilon}`,n:`Then δ = min(δ₁, δ₂). It is 10a's one-over-x-limit one level up. ∎`},
+  {k:'ember',kl:'limits-divide',t:R`\tfrac{f}{g} = f \cdot \tfrac{1}{g} \to L \cdot \tfrac{1}{M} = ${K}{\tfrac{L}{M}}`,n:`limits-multiply with reciprocal-limit, then agreeing-near. The condition M ≠ 0 is the whole price.`}
+],{title:'The slides · limits-divide · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'power-limit',t:R`f^{S(n)} = f^n \cdot f \to L^n \cdot L = ${K}{L^{S(n)}}`,n:`Induction, with limits-multiply as the step and the constant 1 as the start.`},
+  {k:'ember',kl:'substitution',t:R`\lim_{x\to a} \textstyle\sum_{k \le n} a_k x^k = \sum_{k \le n} a_k a^k`,n:`power-limit and constant-factor on each term, limits-add and sum-one-more for the sum. Substitution is a technique.`},
+  {k:'ember',kl:'computed · 1 of 2',t:R`\lim_{x \to 2} \tfrac{x^3 - 3x + 1}{x + 1} = \tfrac{3}{3} = ${K}{1}`,n:`The bottom at 2 is 3, not 0, so substitution's second half applies.`},
+  {k:'ember',kl:'computed · 2 of 2',t:R`\begin{gathered}\lim_{x\to -1}(x^2 + 4x)(2x + 5)\\ = (-3)(3) = ${K}{-9}\end{gathered}`,n:`limits-multiply, then substitution on each factor.`}
+],{title:'The slides · substitution · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

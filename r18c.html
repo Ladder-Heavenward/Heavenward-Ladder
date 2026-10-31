@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lines</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r18b.html">← 18b the triangle inequality in the plane</a><a href="r18d.html">next: 18d circles →</a></p>
+  <div class="tags"><span class="tag proof">18c · proof</span></div>
+  <h1>Lines</h1>
+  <p>18b made the segment between two points: the points some fraction of the way, for fractions from zero to one. Let the fraction run over all the reals and the segment becomes a line. This step gives a line two descriptions, a point with a direction, and an equation fixing a weighted sum of the two coordinates, and proves they give the same sets. Then the facts Euclid took as postulates come out as techniques: one line through two points, and one parallel through a point off a line. The nearest point of a line is found by Pythagoras.</p>
+  <p class="gesture">The points reached from a start by any multiple of a direction are the points whose dot with the direction turned a quarter is the same as the start’s. Two lines meet once exactly when they are not parallel, which a cross product of their weights can test. Two lines are perpendicular when their slopes multiply to negative one. The distance from a point to a line is how far the point misses the line’s equation, divided by the length of the line’s weights.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r18a.html">18a</a> (the dot technique, right-triangle), <a href="r18b.html">18b</a> (segments), <a href="r05f.html">5f</a> (two unknowns, adding-keeps-answers, multiplying-keeps-answers), <a href="r09e.html">9e</a> (the linear function, column-test). <a href="r18d.html">18d</a> uses lines that cross; <a href="r18g.html">18g</a> works lines by hand.</p></div>
+</header>
+
+<section class="class step" data-step="18c1">
+  <h2 class="sthead"><span class="stno">18c1</span>Two descriptions</h2>
+  <p class="stands">Stands on 18a (displacements, the dot product).</p>
+  <p class="eqline" data-pid="cd4188">From here on, for a point P and a displacement v ≠ 0, the line through P with direction v is {P + tv : t ∈ ℝ}. Its accepted names: v is a direction vector, and X = P + tv is the line's parametric form. For reals A, B, C with (A, B) ≠ (0, 0), the set {(x, y) : Ax + By = C} is the line with equation Ax + By = C, and n = (A, B) is a normal of it.</p>
+  <p data-pid="82711b">Two-descriptions-agree technique: <b>the line through P with direction v is the set {X : n · X = n · P}, where n = (−v₂, v₁). Conversely, the set Ax + By = C is the line through any of its points with direction (−B, A), and it has points.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the two-descriptions-agree technique">
+n \cdot v = -v_2v_1 + v_1v_2 = 0 @@ n ⊥ v, and n ≠ 0 since v ≠ 0
+X = P + tv \Rightarrow n \cdot X = n \cdot P + t\,(n \cdot v) = n \cdot P @@ the dot technique
+n \cdot (X - P) = 0:\ \ w = X - P,\ \ s = \tfrac{w \cdot v}{|v|^2},\ \ z = w - sv @@ the other way: try to write w as a multiple of v
+z \cdot v = 0,\ \ z \cdot n = 0 @@ the choice of s; and w · n = 0, v · n = 0
+z_1v_1 + z_2v_2 = 0,\ \ -z_1v_2 + z_2v_1 = 0 \Rightarrow z_1|v|^2 = 0,\ z_2|v|^2 = 0 @@ times v₁ and −v₂, add; then times v₂ and v₁, add
+z = 0,\ \ X = P + sv @@ |v|² ≠ 0; so X is on the line
+b \ne 0:\ (0, \tfrac cb);\ \ b = 0:\ (\tfrac ca, 0) \quad \blacksquare @@ a point of ax + by = c; with v = (−b, a), n = (a, b) up to sign
+  </pre>
+  <p data-pid="b8342a">The third to sixth lines also prove a fact used again: in the plane, a displacement perpendicular to a non-zero n is a multiple of any one displacement perpendicular to n.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · two descriptions · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">18c1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">the line through (1, 1) with direction (2, 3)</span></span>Find its points at t = 0, 1 and −1. <br>Find an equation n · X = n · P for it, and check one of the points.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18c2">
+  <h2 class="sthead"><span class="stno">18c2</span>One line through two points</h2>
+  <p class="stands">Stands on 18c1 and 9e (linear functions).</p>
+  <p data-pid="66f4f5">Line-through-two-points technique: <b>through two different points P and Q there is exactly one line: the line through P with direction Q − P.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the line-through-two-points technique">
+P + 0(Q - P) = P,\ \ P + 1(Q - P) = Q @@ the line through P with direction Q − P holds both
+\text{a line } n \cdot X = c \text{ holding } P, Q \Rightarrow n \cdot (Q - P) = 0 @@ subtract the two equations (adding-keeps-answers)
+\Rightarrow n \text{ is a multiple of } (-(q_2 - p_2),\ q_1 - p_1) @@ the fact above, with the roles of n and v exchanged
+\begin{aligned}&\htmlClass{new}{\text{its equation is } n \cdot X = n \cdot P,\text{ the same set}}\\ &\quad \blacksquare\end{aligned} @@ multiplying-keeps-answers: a multiple of an equation has the same answers
+  </pre>
+  <p data-pid="8aec5e">If B ≠ 0, Ax + By = C is y = (−A/B)x + C/B: the graph of 9e's linear function, with slope m = −A/B. A direction (v₁, v₂) with v₁ ≠ 0 has slope v₂/v₁, so the line through (x₁, y₁) and (x₂, y₂) with x₁ ≠ x₂ has slope (y₂ − y₁)/(x₂ − x₁), as rung 13 found. If B = 0 the line is x = C/A, which is vertical and has no slope; it fails 9e's column test, so it is the graph of no function.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · through two points · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18c2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">P = (0, 2),  Q = (4, 4)</span></span>Guess the slope from a sketch, then find it. <br>Write the line as y = mx + b.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18c3">
+  <h2 class="sthead"><span class="stno">18c3</span>Lines that meet, and lines that do not</h2>
+  <p class="stands">Stands on 18c2 and 5f (adding-keeps-answers).</p>
+  <p class="eqline" data-pid="0d0acb">From here on, two different lines are parallel when they have no point in common. Its accepted name is the same.</p>
+  <p data-pid="4e98e8">Two-lines-meet technique: <b>let A₁x + B₁y = C₁ and A₂x + B₂y = C₂ be lines, and D = A₁B₂ − A₂B₁. If D ≠ 0 they have exactly one common point, x = (C₁B₂ − C₂B₁)/D, y = (A₁C₂ − A₂C₁)/D. If D = 0, their normals are multiples, and the lines are the same or parallel.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the two-lines-meet technique">
+b_2(a_1x + b_1y) - b_1(a_2x + b_2y) = b_2c_1 - b_1c_2 @@ multiplying-keeps-answers and adding-keeps-answers (5f): any common point satisfies this
+Dx = c_1b_2 - c_2b_1,\ \ Dy = a_1c_2 - a_2c_1 @@ likewise with a₂ and a₁
+D \ne 0:\ \text{one candidate, and it satisfies both} @@ substitute back; so exactly one point
+D = 0:\ \ (a_2, b_2) \cdot (-b_1, a_1) = 0 @@ so (a₂, b₂) is a multiple of (a₁, b₁), by the fact under two-descriptions-agree
+(a_2, b_2) = k(a_1, b_1):\ \ c_2 = kc_1 \text{ same line; else no common point} \quad \blacksquare @@ a common point would give c₂ = kc₁
+  </pre>
+  <p data-pid="69637b">Parallel-through-a-point technique: <b>for a line ℓ: Ax + By = C and a point P = (p₁, p₂) not on ℓ, exactly one line through P is parallel to ℓ: Ax + By = Ap₁ + Bp₂.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the parallel-through-a-point technique">
+ap_1 + bp_2 \ne c @@ P is not on ℓ
+ax + by = ap_1 + bp_2 \text{ holds } P,\ \text{has } D = 0,\ \text{differs from } \ell @@ so by two-lines-meet it is parallel to ℓ
+\text{another line through } P \text{ with } D = 0 \text{ has normal } k(a, b) @@ two-lines-meet; through P forces the same equation, by multiplying-keeps-answers
+\begin{aligned}&\htmlClass{new}{\text{every other line through } P \text{ has } D \ne 0 \text{ and }}\\ &\quad \htmlClass{new}{\text{meets } \ell} \quad \blacksquare\end{aligned} @@ two-lines-meet
+  </pre>
+  <p data-pid="af2190">Its accepted name is Playfair's axiom, after John Playfair's textbook of 1795, which put Euclid's fifth postulate in this form. On this ladder it is not an axiom. It is a technique about ℝ².</p>
+  <aside class="voice para"><p data-pid="e33ce3">Euclid's fifth postulate asks that, if a straight line falling on two straight lines makes the inner angles on one side together less than two right angles, then the two lines, if extended without end, meet on that side.</p><cite>Euclid, Elements, Book I, postulate 5 (about 300 BCE); paraphrase</cite></aside>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · lines that meet · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18c3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">x + 2y = 4,  2x + 4y = 3</span></span>Find D for the two lines. <br>Say whether they meet, and why.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18c4">
+  <h2 class="sthead"><span class="stno">18c4</span>Perpendicular lines, and the nearest point</h2>
+  <p class="stands">Stands on 18c3 and 18a (right-triangle).</p>
+  <p data-pid="a5f0d2">Perpendicular-lines technique: <b>the lines A₁x + B₁y = C₁ and A₂x + B₂y = C₂ have perpendicular directions exactly when A₁A₂ + B₁B₂ = 0. If neither is vertical, with slopes m₁ and m₂, that is m₁m₂ = −1.</b> The directions are (−B₁, A₁) and (−B₂, A₂), whose dot product is B₁B₂ + A₁A₂; with slopes the directions are (1, m₁) and (1, m₂), with dot product 1 + m₁m₂.</p>
+  <p data-pid="4ca0e4">Nearest-point technique: <b>for a point P₀ = (x₀, y₀) and a line ℓ: Ax + By = C with n = (A, B), the point F = P₀ − ((n · P₀ − C)/|n|²) n is on ℓ, P₀ − F is perpendicular to ℓ, F is the one nearest point of ℓ to P₀, and d(P₀, F) = |Ax₀ + By₀ − C|/√(A² + B²).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the nearest-point technique">
+n \cdot F = n \cdot P_0 - (n \cdot P_0 - c) = c @@ the dot technique; so F is on ℓ
+P_0 - F = \tfrac{n \cdot P_0 - c}{|n|^2}\,n \perp (X - F) \text{ for } X \in \ell @@ n · (X − F) = c − c = 0
+d(P_0, X)^2 = d(P_0, F)^2 + d(F, X)^2 \ge d(P_0, F)^2 @@ right-triangle; equal only when X = F (distance-laws)
+\htmlClass{new}{d(P_0, F) = \tfrac{|n \cdot P_0 - c|}{|n|}} \quad \blacksquare @@ distance-laws: |tn| = |t| |n|
+  </pre>
+  <p data-pid="8cd41e">F has the accepted name the foot of the perpendicular. The distance from a point to a line means d(P₀, F).</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · the nearest point · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · two lines and where they meet, and the nearest point</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="lbl">ℓ: x + 2y = 4, and m: Ax + y = C</div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">A</span><input type="range" id="ka" min="-3" max="3" step="0.1" value="1.5"><output id="oa"></output></div>
+      <div class="kn"><span class="m">C</span><input type="range" id="kc" min="-6" max="6" step="0.5" value="1"><output id="oc"></output></div>
+      <div class="cap">Ink: ℓ. Ember: m. Plum: where they meet, when D ≠ 0. At A = 0.5, D = 0: parallel, or the same line at C = 2.</div>
+    </div>
+    <div class="panel">
+      <div class="lbl">P₀ and its foot F on ℓ</div>
+      <canvas id="cvL"></canvas>
+      <div class="kn"><span class="m">x₀</span><input type="range" id="kx" min="-4" max="6" step="0.1" value="4"><output id="ox"></output></div>
+      <div class="kn"><span class="m">y₀</span><input type="range" id="ky" min="-4" max="6" step="0.1" value="4"><output id="oy"></output></div>
+      <div class="cap">Ink: ℓ. Plum: P₀. Ember: P₀F, perpendicular to ℓ. Dashed: P₀ to another point of ℓ, always longer.</div>
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18c4.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{normal } (2, 5),"></span> <span data-tex-inline="\text{through } (-1, 3)"></span></span>Find the line's equation and a direction.</li><li><span class="givens"><span data-tex-inline="x = 3 - 2t,"></span> <span data-tex-inline="y = 1 + 5t"></span></span>Turn this parametric form into an equation.</li><li><span class="givens"><span data-tex-inline="kx + 2y = 1,"></span> <span data-tex-inline="3x + (k - 1)y = 4"></span></span>Find every k for which the two lines are parallel.</li><li><span class="givens"><span data-tex-inline="O = (0, 0),"></span> <span data-tex-inline="F = (3, 4) \text{ is the foot}"></span> <span data-tex-inline="\text{of the perpendicular from } O"></span></span>Find the line.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18c5">
+  <h2 class="sthead"><span class="stno">18c5</span>Worked</h2>
+  <p class="stands">Stands on 18c1 to 18c4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: worked">
+(1, 2), (4, 6):\ \ v = (3, 4),\ n = (-4, 3):\ \ -4x + 3y = 2 @@ line-through-two-points and two-descriptions-agree; slope 4/3; x = 1 + 3t, y = 2 + 4t
+\text{perpendicular through } (1, 2):\ 3x + 4y = 11 @@ perpendicular-lines: slope −3/4
+(5, 0) \text{ to } -4x + 3y = 2:\ \ \tfrac{|-20 + 0 - 2|}{5} = 4.4 @@ nearest-point
+2x + y = 7,\ x - 3y = 0:\ \ D = -7,\ (3, 1) @@ two-lines-meet
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · worked · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18c5.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="P = (2, -1),"></span> <span data-tex-inline="Q = (5, 3)"></span></span>Write the line through P and Q in parametric form and as an equation, and find its slope.</li><li><span class="givens"><span data-tex-inline="2x + y = 7,"></span> <span data-tex-inline="x - 3y = 0"></span></span>Using two-lines-meet, find where the two lines meet.</li><li><span class="givens"><span data-tex-inline="P = (1, 4),"></span> <span data-tex-inline="\ell:\ 3x - 2y = 5"></span></span>Find the line through P parallel to the given line, and the line through P perpendicular to it.</li><li><span class="givens"><span data-tex-inline="P = (4, 1),"></span> <span data-tex-inline="\ell:\ 3x + 4y = 6"></span></span>Find the distance from P to the line, and the foot of the perpendicular.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18c6">
+  <h2 class="sthead"><span class="stno">18c6</span>Illegal moves</h2>
+  <p class="stands">Stands on 18c1 to 18c5.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+x = 3:\ \ m = \tfrac{\Delta y}{0}\,? @@ a vertical line has no slope; ax + by = c with b = 0 handles it
+m_1m_2 = -1 \text{ for a vertical and a level line}\,? @@ the vertical has no slope; use a₁a₂ + b₁b₂ = 0
+D = 0 \Rightarrow \text{parallel}\,? @@ or the same line, when the c's are in the same ratio
+\text{lines are parallel when they look it} @@ D decides, never the drawing
+  </pre>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18c6.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="x = 3"></span></span>Run the slope formula on this line. <br>Find a form of a line that has no trouble with it.</li><li><span class="givens"><span data-tex-inline="P + tv,"></span> <span data-tex-inline="Q + sw;"></span> <span data-tex-inline="\text{test case: } (1, 2) + t(2, 1),"></span> <span data-tex-inline="(5, 4) + s(-4, -2)"></span></span>Build a test, in P, v, Q and w, for whether the two forms give one line. <br>Run it on the test case.</li><li><span class="givens"><span data-tex-inline="x + y + z = 0 \text{ on triples}"></span></span>Find two points of the set whose displacements from the origin are not multiples of each other, and find whether the set is a line. <br>Write equations whose solutions are a line.</li><li><span class="givens"><span data-tex-inline="D = A_1B_2 - A_2B_1 = 0;"></span> <span data-tex-inline="2x + 4y = 6 \text{ with}"></span> <span data-tex-inline="x + 2y = 3 \text{ or } x + 2y = 4"></span></span>Find numbers that tell apart the two cases two-lines-meet leaves when D is zero. <br>Test them on both pairs.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">18c.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="P + tv,"></span> <span data-tex-inline="Q + sw,"></span> <span data-tex-inline="v, w \ne 0"></span></span>Build a test of your own, from the coordinates of P, v, Q and w alone, that finds whether they give one line, two parallel lines, or two lines meeting in exactly one point, and gives the point. <br>Prove it. <br>Run it on a pair of your choosing.</div>
+  <div class="chq"><span class="chid">18c.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="D = A_1B_2 - A_2B_1;"></span> <span data-tex-inline="\text{normals } (1, 0), (0, 1);"></span> <span data-tex-inline="(1, 0), (1, 1);"></span> <span data-tex-inline="(2, 0), (0, 3)"></span></span>Compute the size of D for each pair of normals. <br>Draw each pair from the origin with the figure they close up. <br>Find what the size of D might be measuring.</div>
+  <div class="chq"><span class="chid">18c.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="A_1x + B_1y = C_1,"></span> <span data-tex-inline="A_2x + B_2y = C_2,"></span> <span data-tex-inline="\text{no common point}"></span></span>Find whether their normals must be multiples.</div>
+  <div class="chq"><span class="chid">18c.4.4</span><span class="tagq">seam</span>For two thousand years mathematicians tried to prove Euclid's fifth postulate from the other four. Saccheri, in 1733, denied it and hunted for a contradiction; he found strange techniques and declared them repugnant to the nature of the straight line. Lobachevsky in 1829 and Bolyai in 1832 showed a geometry where it fails is as consistent as Euclid's. This step proved parallel-through-a-point from coordinates. <br>Did it prove Euclid's fifth postulate, or something else?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r18b.html">← 18b · the triangle inequality in the plane</a><a href="r18d.html">18d · circles →</a></nav>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+/* least and greatest of F.f on [lo, hi]: the ends, F's critical points inside, and a fine sample (exact between critical points for the functions used here) */
+function ext(F,lo,hi){ if(F.dir) return [0,1]; let m=Infinity,M=-Infinity; const t=x=>{ const v=F.f(x); if(v<m) m=v; if(v>M) M=v; };
+  t(lo); t(hi); (F.crit||[]).forEach(c=>{ if(c>lo&&c<hi) t(c); }); for(let k=1;k<64;k++) t(lo+(hi-lo)*k/64); return [m,M]; }
+function sums(F,pts){ let L=0,U=0; const ms=[],Ms=[]; for(let i=1;i<pts.length;i++){ const [m,M]=ext(F,pts[i-1],pts[i]), w=pts[i]-pts[i-1]; ms.push(m); Ms.push(M); L+=m*w; U+=M*w; } return {L,U,ms,Ms}; }
+const eq=(a,b,n)=>Array.from({length:n+1},(_,i)=>a+(b-a)*i/n);
+function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
+function boxes(P,pts,hs,stroke,fill,alpha){ const c=P.ctx; for(let i=1;i<pts.length;i++){ const a=pts[i-1],b=pts[i],h=hs[i-1]; c.globalAlpha=alpha; P.poly([[a,0],[b,0],[b,h],[a,h]],null,fill); c.globalAlpha=1; P.poly([[a,0],[b,0],[b,h],[a,h]],stroke,null,1.2); } }
+function dirDots(P,a,b){ const c=P.ctx; c.fillStyle=col('--ink'); for(let k=0;k<=300;k++){ const x=a+(b-a)*k/300; const y=(k%2)?0:1; c.fillRect(P.X(x)-1,P.Y(y)-1,2,2); } }
+/* shade between the graph of fn and the axis from lo to hi: above in pos colour, below in neg colour */
+function shade(P,fn,lo,hi,pos,neg,alpha){ if(hi<lo){ const t=lo; lo=hi; hi=t; } const c=P.ctx, N=300; c.globalAlpha=alpha==null?0.32:alpha;
+  for(let k=0;k<N;k++){ const x0=lo+(hi-lo)*k/N, x1=lo+(hi-lo)*(k+1)/N, xm=(x0+x1)/2, y=fn(xm); if(!isFinite(y)) continue; P.poly([[x0,0],[x1,0],[x1,fn(x1)],[x0,fn(x0)]],null,y>=0?pos:neg); }
+  c.globalAlpha=1; }
+function rangeOf(fn,lo,hi,pad){ let m=Infinity,M=-Infinity; for(let k=0;k<=400;k++){ const v=fn(lo+(hi-lo)*k/400); if(isFinite(v)){ if(v<m) m=v; if(v>M) M=v; } } if(m>0) m=0; if(M<0) M=0; const p=(M-m)*(pad==null?0.12:pad)||1; return [m-p,M+p]; }
+function chips(el,FN,get,setk,after){ Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===get()) b.className='on'; b.onclick=()=>{ setk(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+const Nw='\\htmlClass{new}';
+function gridFor(sp){ return sp>40?10:sp>16?4:sp>8?2:sp>3?1:sp>1.2?0.5:0.25; }
+function frame2(P,fn,lo,hi,pad){ const w=hi-lo; P.o.x=[lo-0.12*w,hi+0.08*w]; P.o.y=rangeOf(fn,lo,hi,pad==null?0.12:pad); const sx=P.o.x[1]-P.o.x[0], sy=P.o.y[1]-P.o.y[0]; let g=gridFor(sx); while(sy/g>24) g*=2; P.o.grid=g; }
+const num=(f,a,b,n)=>{ n=n||4000; const h=(b-a)/n; let s=0; for(let i=0;i<n;i++) s+=f(a+(i+0.5)*h)*h; return s; };
+/* axes with separate steps across and up */
+function axes2(P,gx,gy){ const c=P.ctx,o=P.o; c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ c.moveTo(P.X(x),P.Y(o.y[0])); c.lineTo(P.X(x),P.Y(o.y[1])); }
+  for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ c.moveTo(P.X(o.x[0]),P.Y(y)); c.lineTo(P.X(o.x[1]),P.Y(y)); } c.stroke();
+  c.strokeStyle=col('--muted'); c.lineWidth=1.3; c.beginPath(); if(o.y[0]<=0&&o.y[1]>=0){ c.moveTo(P.X(o.x[0]),P.Y(0)); c.lineTo(P.X(o.x[1]),P.Y(0)); } if(o.x[0]<=0&&o.x[1]>=0){ c.moveTo(P.X(0),P.Y(o.y[0])); c.lineTo(P.X(0),P.Y(o.y[1])); } c.stroke();
+  c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; const ly=Math.min(P.H-6,Math.max(12,P.Y(0)+14));
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ if(Math.abs(x)<1e-9) continue; c.fillText(+x.toFixed(6),P.X(x),ly); }
+  c.textAlign='right'; const lx=Math.max(32,Math.min(P.W-4,P.X(0)-5)); for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ if(Math.abs(y)<1e-9) continue; c.fillText(String(+y.toFixed(6)).replace('-','−'),lx,P.Y(y)+4); } }
+function nice(sp){ const raw=sp/6, p=Math.pow(10,Math.floor(Math.log10(raw))), m=raw/p; return (m<1.5?1:m<3.5?2:m<7.5?5:10)*p; }
+function arrow(P,x1,y1,x2,y2,colr,w){ P.line(x1,y1,x2,y2,colr,w||2.2); const c=P.ctx, X1=P.X(x1),Y1=P.Y(y1),X2=P.X(x2),Y2=P.Y(y2), L=Math.hypot(X2-X1,Y2-Y1); if(L<2) return; const ux=(X2-X1)/L, uy=(Y2-Y1)/L, h=9; c.fillStyle=col(colr); c.beginPath(); c.moveTo(X2,Y2); c.lineTo(X2-h*ux-0.5*h*uy,Y2-h*uy+0.5*h*ux); c.lineTo(X2-h*ux+0.5*h*uy,Y2-h*uy-0.5*h*ux); c.closePath(); c.fill(); }
+function fillA(P,pts,colr,alpha){ const c=P.ctx; c.globalAlpha=alpha==null?0.2:alpha; P.poly(pts,null,colr); c.globalAlpha=1; }
+const sq1=P=>Object.defineProperty(P.o,'aspect',{get:()=>1});
+function rightMark(P,qx,qy,ax,ay,bx,by,s,colr){ const la=Math.hypot(ax-qx,ay-qy), lb=Math.hypot(bx-qx,by-qy); if(!la||!lb) return; const u=[(ax-qx)/la*s,(ay-qy)/la*s], v=[(bx-qx)/lb*s,(by-qy)/lb*s]; P.poly([[qx+u[0],qy+u[1]],[qx+u[0]+v[0],qy+u[1]+v[1]],[qx+v[0],qy+v[1]]],colr||'--muted',null,1.2,false); }
+const dist=(a,b)=>Math.hypot(b[0]-a[0],b[1]-a[1]);
+const dotp=(u,v)=>u[0]*v[0]+u[1]*v[1];
+function clipBox(P,fn){ const c=P.ctx, [x0,x1]=P.o.x,[y0,y1]=P.o.y; c.save(); c.beginPath(); c.rect(P.X(x0),P.Y(y1),P.X(x1)-P.X(x0),P.Y(y0)-P.Y(y1)); c.clip(); fn(); c.restore(); }
+function lineABC(P,a,b,c,colr,w,dash){ const [x0,x1]=P.o.x,[y0,y1]=P.o.y; clipBox(P,()=>{ if(Math.abs(b)>1e-12){ P.line(x0,(c-a*x0)/b,x1,(c-a*x1)/b,colr,w,dash); } else if(Math.abs(a)>1e-12){ P.line(c/a,y0,c/a,y1,colr,w,dash); } }); }
+const ka=$('ka'),kc=$('kc'),kx=$('kx'),ky=$('ky'),cvF=$('cvF'),cvL=$('cvL');
+const PF=plane(cvF,{x:[-5,7],y:[-5,7],grid:1,aspect:1,draw:P=>drawF(P)}); sq1(PF);
+const PL=plane(cvL,{x:[-5,7],y:[-5,7],grid:1,aspect:1,draw:P=>drawL(P)}); sq1(PL);
+const L1=[1,2,4];
+const meet=(a,c)=>{ const D=L1[0]*1-a*L1[1]; if(Math.abs(D)<1e-9) return {D,pt:null,same:Math.abs(c-0.5*L1[2])<1e-9}; return {D,pt:[(L1[2]*1-c*L1[1])/D,(L1[0]*c-a*L1[2])/D]}; };
+const foot=(x0,y0)=>{ const [a,b,c]=L1, k=(a*x0+b*y0-c)/(a*a+b*b); return {F:[x0-k*a,y0-k*b],d:Math.abs(a*x0+b*y0-c)/Math.hypot(a,b)}; };
+function drawF(P){ const a=+ka.value, c=+kc.value; axes2(P,1,1); lineABC(P,...L1,'--ink',2.6); lineABC(P,a,1,c,'--ember',2.2,meet(a,c).same?[6,4]:[]); const m=meet(a,c); if(m.pt) P.dot(m.pt[0],m.pt[1],'--plum',5.5); }
+function drawL(P){ const x0=+kx.value, y0=+ky.value; axes2(P,1,1); lineABC(P,...L1,'--ink',2.6); const {F}=foot(x0,y0); const X=[F[0]+2.4,F[1]-1.2];
+  P.line(x0,y0,X[0],X[1],'--muted',1.4,[5,4]); P.dot(X[0],X[1],'--muted',3.5); P.line(x0,y0,F[0],F[1],'--ember',2.4); if(Math.hypot(x0-F[0],y0-F[1])>0.3) rightMark(P,F[0],F[1],x0,y0,X[0],X[1],0.35,'--ember'); P.dot(F[0],F[1],'--ember',4.5); P.dot(x0,y0,'--plum',5.5); P.text('F',F[0]-0.4,F[1]-0.45,'--ember','center',12); P.text('P₀',x0+0.4,y0+0.35,'--plum','center',12); }
+function read(){ const a=+ka.value, c=+kc.value, x0=+kx.value, y0=+ky.value; $('oa').textContent=mm(a,1); $('oc').textContent=mm(c,1); $('ox').textContent=mm(x0,1); $('oy').textContent=mm(y0,1);
+  const m=meet(a,c), f=foot(x0,y0); const vd=$('vdF'); vd.className='verdict';
+  vd.textContent='D = 1 · 1 − '+mm(a,1)+' · 2 = '+mm(m.D,2)+(m.pt?': one common point, ('+mm(m.pt[0],3)+', '+mm(m.pt[1],3)+').':(m.same?': the same line.':': parallel, no common point.'))+' Right: F = ('+mm(f.F[0],3)+', '+mm(f.F[1],3)+'), and P₀ is '+mm(f.d,3)+' from ℓ.';
+  tex($('eqF'),R`\tfrac{|x_0 + 2y_0 - 4|}{\sqrt{5}} = \tfrac{${mm(Math.abs(x0+2*y0-4),2)}}{\sqrt5} \approx ${mm(f.d,3)}`,true); }
+function all(){ PF.redraw(); PL.redraw(); read(); }
+[ka,kc,kx,ky].forEach(e=>e.addEventListener('input',all));
+window.__pic={set:(a,c,x0,y0)=>{ ka.value=a; kc.value=c; kx.value=x0; ky.value=y0; all(); const m=meet(a,c), f=foot(x0,y0); return {D:+m.D.toFixed(4),pt:m.pt&&m.pt.map(z=>+z.toFixed(4)),same:!!m.same,F:f.F.map(z=>+z.toFixed(4)),d:+f.d.toFixed(4)}; }};
+all();
+stepper('#sl1',[
+  {k:'ember',kl:'two descriptions',t:R`\{P + tv\}\ \ \text{and}\ \ ax + by = c`,n:`A direction, or a normal.`},
+  {k:'ember',kl:'two-descriptions-agree',t:R`${Nw}{\{P + tv\} = \{X : n \cdot X = n \cdot P\}}`,n:`n = (−v₂, v₁) ⊥ v.`}
+],{title:'The slides · two descriptions · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'line-through-two-points',t:R`${Nw}{\text{one line through } P \ne Q}`,n:`Euclid's first postulate, proved.`},
+  {k:'ember',kl:'slope',t:R`m = -\tfrac ab = \tfrac{v_2}{v_1}`,n:`None for x = c/a.`}
+],{title:'The slides · through two points · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'parallel',t:R`\text{different lines, no common point}`,n:`The definition.`},
+  {k:'ember',kl:'two-lines-meet',t:R`${Nw}{D = a_1b_2 - a_2b_1 \ne 0 \Rightarrow \text{one point}}`,n:`D = 0: the same, or parallel.`},
+  {k:'ember',kl:'parallel-through-a-point',t:R`${Nw}{ax + by = ap_1 + bp_2}`,n:`The one parallel through P.`}
+],{title:'The slides · lines that meet · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'perpendicular-lines',t:R`${Nw}{a_1a_2 + b_1b_2 = 0 \iff m_1m_2 = -1}`,n:`Directions (1, m).`},
+  {k:'ember',kl:'nearest-point',t:R`${Nw}{\tfrac{|ax_0 + by_0 - c|}{\sqrt{a^2 + b^2}}}`,n:`The foot, by right-triangle.`}
+],{title:'The slides · the nearest point · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'worked',t:R`-4x + 3y = 2;\ \ (5, 0) \text{ is } 4.4 \text{ away}`,n:`Through (1, 2) and (4, 6).`}
+],{title:'The slides · worked · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'illegal',t:R`x = 3:\ \text{no slope}`,n:`The equation form has no trouble.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>13·eng · How much power does a car need to climb?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+@media (max-width:520px){.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r13stat.html">← 13·stat which line fits the points best?</a><a href="r13econ.html">next: 13·econ what does one more cost? →</a></p>
+  <div class="tags"><span class="tag eng">13·eng · engineering</span></div>
+  <h1>How much power does a car need to climb?</h1>
+  <p>How much power does a car need to climb? Drive north out of San Luis Obispo on US 101 and the road climbs the Cuesta Grade. Cars keep their speed up it. Loaded trucks crawl in the slow lane. Every engine is sold with a number in horsepower, and every car on the grade spends part of it lifting itself, part pushing air aside and part on its tyres. The question is old: the unit was set by a maker of engines selling them against horses. It is hard because the power needed changes at every instant, with the speed and with the road. A total over a trip says little. This page builds power at an instant as a slope, the rate at which work is done. Then it counts what a climb at a steady speed takes, and finds by 13m's tangent steps how fast a truck can go.</p>
+  <p class="gesture">Power is the slope of the work done. A steady force on a thing moving at some speed delivers the force times the speed. Raising a mass takes its weight times how fast it rises. On a road that climbs, at a steady speed, with rolling and the air pulling back, the power needed is the speed times the sum of the lifting, the rolling and the air’s drag, which grows with the square of the speed. Its slope says what one more metre per second costs.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r12phys.html">12·phys</a> (force, the newton, weight, work as F · d), <a href="r07phys.html">7·phys</a> (energy, the joule, power and the watt, lifting takes m · g · h), <a href="r13phys.html">13·phys</a> (velocity as the slope of position, force sets the second slope), <a href="r13a.html">13a</a> (the slope as a limit), <a href="r13d.html">13d</a> (power for slopes, constant-factor for slopes, slopes-add, polynomial-slope), <a href="r13k.html">13k</a> (the tangent line) and <a href="r13m.html">13m</a> (the tangent step). <a href="r13econ.html">13·econ</a> asks what one more costs, in dollars.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · read it through, then work the picture and the slides</div>
+
+  <h3>Power at an instant</h3>
+  <p data-pid="c82620">7·phys built power as energy moved per second, in watts: 1 W = 1 J/s. A kettle's 1500 W is steady. A climbing car's is not. It changes as the road steepens and the driver presses down. So power needs the move rung 13 made for speed: from an average over a stretch of time to a value at an instant.</p>
+  <p class="eqline" data-pid="9873c4">From here on, on this page, W(t) is the work done, in joules, from the start up to the instant t. The average power from t to t + h is the chord slope (W(t + h) − W(t))/h. The power at the instant t is its limit as h → 0, the slope P(t) = W′(t), written dW/dt. Its unit is joules per second: watts.</p>
+  <p class="eqline" data-pid="2d6388">Page letters, said out loud. Slanted W(t) is work done (not 12·phys's weight, nor 7·phys's upright W for the watt). P is power (7·phys's letter). m a mass, g ≈ 9.8 m/s² and F a force keep 12·phys's meanings. x is position along the road and v = x′ the velocity, as on 13·phys. y is height. r is a road's rise per metre of road (not 13e's inside r). c and k are measured constants of a car, given below (not a constant function, nor 13d's k).</p>
+  <p data-pid="222a7f"><b>Power is how fast work is being done: the slope of the work.</b> A person of 70 kg who runs up 3 m of stairs in 4 s does 70 · 9.8 · 3 = 2058 J of lifting. That is an average of 514.5 W over the 4 s. At the steepest moment of the run it is more.</p>
+
+  <h3>Force times speed</h3>
+  <p data-pid="be0439">Force-times-speed technique: <b>a steady force pushing a thing along its motion delivers power equal to the force times the speed.</b> Precisely: let a force F that does not change act along the motion of a thing at position x(t). Then P(t) = F · v(t).</p>
+  <pre class="lines" data-k="ember" data-label="13·eng: the force-times-speed technique">
+W(t) = F\,\big(x(t) - x(0)\big) @@ 12·phys's work: force times the distance moved along it
+W(t) = F\,x(t) - F\,x(0) @@ spread (5h); F x(0) does not depend on t
+W'(t) = F\,x'(t) - 0 @@ slopes-add; constant-factor for slopes; a constant has slope 0 (13d)
+\htmlClass{new}{P(t) = F\,v(t)} \quad \blacksquare @@ v = x′ (13·phys)
+  </pre>
+  <p data-pid="b4f80f">When the force changes as the thing moves, work itself is a sum of many small pieces, and rung 16 builds it. Whether the same line, P = Fv at each instant, is true there too is rung 16's question. On this page every force is steady, or kept steady at a steady speed.</p>
+
+  <h3>The price of climbing</h3>
+  <p data-pid="5231e8">Lifting a mass m by a height h takes m · g · h joules (7·phys's line, used again on 12·phys). A car going uphill is lifting itself, a little at each instant.</p>
+  <p data-pid="19be2b">Climbing-power technique: <b>raising a mass m takes power mg times the rate at which its height grows.</b> Precisely: if a thing of mass m is at height y(t), the power spent lifting it is m · g · y′(t). On a road that rises r metres for each metre of road, at speed v, that is mgrv.</p>
+  <pre class="lines" data-k="ember" data-label="13·eng: the climbing-power technique">
+W(t) = mg\,\big(y(t) - y(0)\big) @@ the work of lifting from y(0) to y(t)
+W'(t) = mg\,y'(t) @@ constant-factor for slopes, slopes-add, as before
+y(t) = y(0) + r\,\big(x(t) - x(0)\big) @@ the road rises r metres per metre of road
+y'(t) = r\,v(t) \Rightarrow \htmlClass{new}{P_{\text{climb}} = mg\,r\,v} \quad \blacksquare @@ the same moves on y
+  </pre>
+  <p data-pid="71eed8">A road's rise per metre is its grade, often written as a percent. Road signs measure the metre level, not along the road. For grades like these the two figures differ by less than a quarter of a percent of the figure. That is held in trust here, and rung 18 shows why. The steep part of the Cuesta Grade rises about 7 m for every 100 m: r ≈ 0.07.</p>
+  <pre class="lines" data-k="ember" data-label="13·eng: a family car on the Cuesta Grade">
+m = 1500 \text{ kg},\ \ r = 0.07,\ \ v = 29 \text{ m/s} @@ 29 m/s is about 104 km/h, or 65 miles an hour
+P_{\text{climb}} = 1500 \cdot 9.8 \cdot 0.07 \cdot 29 \approx \htmlClass{new}{29\,800} \text{ W} @@ climbing-power: about 30 kW, just to rise
+  </pre>
+
+  <h3>Two laws that pull back</h3>
+  <p data-pid="c4dd91">A car on a level road at a steady speed still needs power. Two regularities, measured, take it. Each is a law: it works over a range, and fails outside it in a known way.</p>
+  <p class="eqline" data-pid="ffeef4">The rolling law: a tyre rolling on a hard road pulls back with a force of about c · mg, a fixed share of the weight. For car tyres on good pavement c is about 0.010 to 0.015; for a loaded truck's tyres, about 0.006; for a racing bicycle's, about 0.005. It works well at road speeds, and grows on soft ground and with soft tyres.</p>
+  <p class="eqline" data-pid="c232ca">The air law: the air pulls back on a moving car with a force of about k · v², growing with the square of the speed. For a family car k is about 0.3 to 0.4 kg/m; for a big truck, about 3 to 4 kg/m. It works well above walking pace, and fails for things so slow or small that the air flows round them smoothly. Both constants are measured by letting the car coast on a level road and watching it slow.</p>
+  <p data-pid="1c18f0">At a steady speed the velocity's slope is 0, so the force on the car adds to 0 (13·phys: force sets the second slope). The wheels push forward exactly as hard as everything pulls back. Each force is steady while the speed is, so force-times-speed prices each one.</p>
+  <p data-pid="d3c05a">Steady-climb technique: <b>at a steady speed v on a grade r, a car needs power P(v) = (mg(r + c) + kv²)v at its wheels.</b> Its slope is P′(v) = mg(r + c) + 3kv².</p>
+  <pre class="lines" data-k="ember" data-label="13·eng: the steady-climb technique">
+P(v) = mg\,r\,v + c\,mg\,v + kv^2 \cdot v @@ climbing-power; force-times-speed for the rolling law and the air law
+= \htmlClass{new}{\big(mg(r + c) + kv^2\big)\,v} @@ collect (5h)
+P'(v) = \htmlClass{new}{mg(r + c) + 3kv^2} \quad \blacksquare @@ polynomial-slope (13d), in the speed v
+  </pre>
+  <pre class="lines" data-k="ember" data-label="13·eng: the car on the grade, in full">
+c = 0.012,\ \ k = 0.36 \text{ kg/m} @@ a family car, within the laws' ranges
+\text{climb } 29\,841 + \text{rolling } 5116 + \text{air } 8780 \approx \htmlClass{new}{43\,700} \text{ W} @@ steady-climb at 29 m/s
+\tfrac{43\,700}{745.7} \approx 59 \text{ hp} @@ one horsepower is 745.7 W: see below
+\text{level road: } 5116 + 8780 \approx 13\,900 \text{ W} @@ r = 0: a third as much
+P'(29) = 1500 \cdot 9.8 \cdot 0.082 + 3 \cdot 0.36 \cdot 29^2 \approx 2114 \text{ W per m/s} @@ one more m/s up the grade costs about 2.1 kW (13k's nearby line)
+  </pre>
+  <p data-pid="f2bacd">On the grade, two thirds of the power goes into height. On the level, most of it goes into the air, and more so the faster the car goes: the air's share grows as v³. The engine must also make up what is lost between it and the wheels, roughly a tenth.</p>
+
+  <h3>How fast can a truck climb?</h3>
+  <p data-pid="c64ac7">A loaded truck may weigh about 36 000 kg, close to the United States' usual limit of 80 000 pounds on its highways. A big truck engine gives about 330 kW. On the same grade, with c = 0.006 and k = 3.6 kg/m, at what steady speed does the power needed equal what it has? That is P(v) = 330 000, a cubic in v. It has exactly one answer above 0, since P rises there (its slope is positive), starts at 0 and passes every bound. 12a's in-between-value says one exists. 13m's tangent step finds it.</p>
+  <pre class="lines" data-k="teal" data-label="from 13m: tangent steps for the truck's speed">
+f(v) = 36\,000 \cdot 9.8 \cdot 0.076\,v + 3.6v^3 - 330\,000 @@ the power needed less the power it has
+f'(v) = 26\,812.8 + 10.8v^2 @@ polynomial-slope
+v_0 = \tfrac{330\,000}{26\,812.8} \approx 12.31 @@ a first guess: set the air aside
+v_1 = v_0 - \tfrac{f(v_0)}{f'(v_0)} \approx 12.0716 @@ f(v₀) ≈ 6711: the air takes some; step back
+v_2 \approx \htmlClass{new}{12.0714} \text{ m/s} @@ f(v₁) ≈ 7.4: about 43 km/h
+  </pre>
+  <p data-pid="131e76">So the truck crawls up at about 43 km/h while cars keep 104. <b>The climb is priced by the kilogram, and a truck has far fewer watts per kilogram than a car.</b> The car has 40 W per kg of mass; the truck about 9. That is why steep grades have a lane for slow trucks.</p>
+
+  <h3>The horse that set the unit</h3>
+  <p data-pid="a1a213">In the 1780s a maker of steam engines sold them to brewers and mine owners, who drove their mills and pumps with horses. To say what an engine could do, he counted it in horses. He reckoned that a mill horse could keep up 33 000 foot-pounds a minute: enough to raise 33 000 pounds by one foot each minute. One foot is 0.3048 m, and a pound of force, the weight of a pound, is about 4.448 N.</p>
+  <pre class="lines" data-k="ember" data-label="13·eng: one horsepower in watts">
+33\,000 \cdot 0.3048 \cdot 4.448 \text{ J per } 60 \text{ s} @@ the foot-pounds, turned into newton-metres, which are joules (12·phys)
+\approx \tfrac{44\,742}{60} \approx \htmlClass{new}{745.7} \text{ W} @@ one horsepower
+  </pre>
+  <p data-pid="6d9679">A century later the unit of power was named after him: the watt. A strong person can give about a horsepower for a few seconds on a stair. A trained cyclist keeps up about 250 W, a third of one, for an hour. A horse can give far more than one for a few seconds, and about one over a working day.</p>
+
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · the middle of a change</div>
+    <p data-pid="ba5ed1">A car keeping a steady 29 m/s up the grade looks like nothing is happening to it. Its speed does not change. But it is rising at about 2 m every second, and fuel is burning to pay for it. The steady speed is not a lack of change. It is two changes in balance: the wheels push forward exactly as hard as height, tyres and air pull back.</p>
+    <p data-pid="187918"><b>Describe a change by its rates, not only by its before and after.</b></p>
+    <p data-pid="7b8599">Over a whole trip, the before and after can hide everything. A car that climbs the grade and comes back down ends where it began, at the same height and speed. The rates along the way say where the fuel went.</p>
+    <p class="bait" data-pid="67c2de">A car climbs the grade at a steady speed with its engine giving 44 kW. The same car rolls back down the other side at the same speed with its engine idle. At each instant, where is the power going?</p>
+  </aside>
+
+  <h3>Illegal moves</h3>
+  <pre class="lines" data-k="ember" data-label="13·eng: tempting, and not allowed">
+\text{power} = \tfrac{\text{work}}{\text{time}} \text{ at an instant}\,? @@ that is the average, a chord; the power at an instant is the slope
+\text{twice the speed, twice the power}\,? @@ the air's share grows as v³: on the level, 15 m/s to 30 m/s takes about 3.9 times the power
+P = mgh\,? @@ that is work, in joules; the power is mg times the rate of rising
+\text{a steady speed needs no power}\,? @@ it needs no net force; the wheels still push, and force-times-speed prices the push
+\text{force-times-speed for any force}\,? @@ proved here for a steady force; a changing force needs rung 16's work
+\begin{aligned}&\text{the engine's horsepower}\\ &\quad\text{all reaches the road}\,?\end{aligned} @@ roughly a tenth is lost between engine and wheels
+  </pre>
+
+  <h3>Running it backwards</h3>
+  <p data-pid="a42c2a">Handed a power and a speed, find the force: F = P/v. Handed an engine's power and a grade, find the speed it can keep: solve P(v) = P_max, by tangent steps or by halving. Handed a speed and a power on a known grade, find the grade: r = P/(mgv) − c − kv²/(mg). Handed foot-pounds, minutes or horsepower, turn them into joules, seconds and watts first.</p>
+</section>
+
+<section class="pic" id="pic">
+  <div class="eyebrow">The picture · the power a steady climb needs, split three ways, and the speed an engine can keep</div>
+  <div class="panels">
+    <div class="panel">
+      <div class="chips" id="vch"><button class="on" data-v="car">family car</button><button data-v="truck">loaded truck</button><button data-v="bike">cyclist</button></div>
+      <canvas id="cvP"></canvas>
+      <div class="kn"><span class="m">grade</span><input type="range" id="kr" min="-0.08" max="0.12" step="0.005" value="0.07"><output id="or"></output></div>
+      <div class="kn"><span class="m">speed</span><input type="range" id="kv" min="0" max="45" step="0.5" value="29"><output id="ov"></output></div>
+      <div class="cap">Across: the steady speed v. Up: the power needed at the wheels, stacked: ember for climbing, gold for the tyres, teal for the air. Plum: the most the engine gives. Ink dashed: the tangent line at your speed; its slope is P′(v). On a downhill grade the climbing share falls below 0.</div>
+    </div>
+    <div class="panel">
+      <div class="verdict" id="vd"></div>
+      <div class="eqbox" id="eq"></div>
+      <div class="chips"><button id="bt">tangent step toward the top speed</button><button id="bt0">first guess again</button></div>
+      <div class="eqbox" id="eqT"></div>
+      <div class="cap">The top speed on this grade is where the stack meets the plum line. The first guess sets the air aside; each press takes one tangent step, v − f(v)/f′(v), with f(v) = P(v) − P_max.</div>
+    </div>
+  </div>
+</section>
+
+<section class="slides" id="sl1"><div class="eyebrow">The slides · power at an instant; force-times-speed; climbing-power; the grade; the rolling law; the air law; steady-climb; the car on the grade; one more m/s; the truck by tangent steps; watts per kilogram; the horse; the middle of a change; illegal moves · ← → keys work</div></section>
+
+<section class="sayback">
+  <div class="eyebrow">Say it back · then work it</div>
+  <h2>Questions</h2>
+  <div class="phkey"></div>
+  <ol>
+    <li><span class="qid">13·eng.1</span><span class="gname">Watts at an instant.</span><span class="gwhy">Do: build the page's pieces.</span>
+      <ol class="sub">
+        <li><span class="qid">13·eng.1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{boat } 400\text{ kg, steady } 0.5\text{ m/s},"></span> <span data-tex-inline="\text{ramp rises } 1\text{ m per } 8\text{ m along it},"></span> <span data-tex-inline="\text{no friction}"></span></span>Find the power the lifting takes.</li><li><span class="givens"><span data-tex-inline="W(t) = 300t + 20t^2\text{ J}"></span></span>Find the pump's power at 5 s, and its average power over the first 5 s.</li><li><span class="givens"><span data-tex-inline="\text{car } 1500\text{ kg},"></span> <span data-tex-inline="6\% \text{ grade},"></span> <span data-tex-inline="v = 25\text{ m/s},"></span> <span data-tex-inline="c = 0.012,"></span> <span data-tex-inline="k = 0.36\text{ kg/m}"></span></span>Find the power for climbing, for the tyres and for the air, and the total in kW and in horsepower.</li><li><span class="givens"><span data-tex-inline="\text{the car of part c}"></span></span>Using the slope of its power at 25 m/s, estimate the power at 26 m/s, and compare with the true power there.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">13·eng.2</span><span class="gname">From the watts back.</span><span class="gwhy">Undo: run the page's techs backwards.</span>
+      <ol class="sub">
+        <li><span class="qid">13·eng.2.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{cyclist and bike } 80\text{ kg},"></span> <span data-tex-inline="250\text{ W at } 4\text{ m/s uphill},"></span> <span data-tex-inline="\text{tyres and air set aside}"></span></span>Find the grade.</li><li><span class="givens"><span data-tex-inline="\text{motor } 150\text{ hp},"></span> <span data-tex-inline="\text{kettle } 1.5\text{ kW}"></span></span>Find the motor's power in kW, and the kettle's in horsepower.</li><li><span class="givens"><span data-tex-inline="\text{the car of 13·eng.1.1c},"></span> <span data-tex-inline="60\text{ kW at the wheels},"></span> <span data-tex-inline="6\% \text{ grade},"></span> <span data-tex-inline="v_0 = 40\text{ m/s}"></span></span>By three tangent steps from v₀, find the steady speed it can keep.</li><li><span class="givens"><span data-tex-inline="\text{load } 50\text{ kg},"></span> <span data-tex-inline="\text{power } 1\text{ hp}"></span></span>Find how fast the load rises.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">13·eng.3</span><span class="gname">Where it gives.</span><span class="gwhy">Bend: find where the techs stop working.</span>
+      <ol class="sub">
+        <li><span class="qid">13·eng.3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{the car of 13·eng.1.1c},"></span> <span data-tex-inline="5\% \text{ grade downhill},"></span> <span data-tex-inline="\text{engine giving nothing}"></span></span>Find the steady speed at which it coasts.</li><li><span class="givens"><span data-tex-inline="\text{the car on a level road},"></span> <span data-tex-inline="v: 15 \to 30\text{ m/s}"></span></span>Find the factor by which the power grows, and the term that doubles and the term that grows 8 times.</li><li><span class="givens"><span data-tex-inline="\text{a car speeding up}"></span> <span data-tex-inline="\text{onto the freeway},"></span> <span data-tex-inline="\text{its push changing}"></span> <span data-tex-inline="\text{at every instant}"></span></span>Decide whether this page's lines give its power, and find the line that is missing.</li><li><span class="givens"><span data-tex-inline="\text{a car kept still on a hill}"></span> <span data-tex-inline="\text{by its engine},"></span> <span data-tex-inline="\text{clutch slipping: a force, no speed},"></span> <span data-tex-inline="\text{it burns fuel}"></span></span>By force-times-speed, find the power the engine puts into the car. <br>Find where the power goes.</li></ol></li>
+      </ol></li>
+    <li class="optgroup"><span class="qid">13·eng.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder challenges that rely on your own making. The page is complete without these; the rung's star needs them.</span>
+      <ol class="sub">
+        <li class="opt"><span class="qid">13·eng.4.1</span><span class="tagq">build</span>Choose a vehicle of your own: its mass, c, k, and the power at its wheels. <br>Find the steepest grade it can climb at 20 m/s. <br>Then find the fastest steady speed it can keep on a level road, by tangent steps from a speed you choose.</li>
+        <li class="opt"><span class="qid">13·eng.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{a grade steep enough downhill}"></span> <span data-tex-inline="\text{that } r + c &lt; 0"></span></span>Find the speeds at which the power falls below 0, and what a power below 0 is. <br>Find the speed at which its slope is 0, and whether any speed needs no power at all.</li>
+        <li class="opt"><span class="qid">13·eng.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="W'(t) = F \cdot v(t) \text{ at every instant},"></span> <span data-tex-inline="F \text{ fixed},"></span> <span data-tex-inline="W(0) = 0"></span></span>As far as you can take it, decide whether the work must be F times the distance gone since 0.</li>
+        <li class="opt"><span class="qid">13·eng.4.4</span><span class="tagq">seam</span>A maker of engines rated them by the horses they replaced, at 33 000 foot-pounds a minute. In 1993 two scientists measured a horse pulling at nearly 15 horsepower for a few seconds. Over a working day a horse keeps up about one. <br>How many horsepower is a horse?</li>
+      </ol></li>
+  </ol>
+  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
+</section>
+
+<nav class="nextrung"><a href="r13chem.html">← 13·chem · how fast is a chemical change going right now?</a><a href="r13econ.html">13·econ · what does one more cost? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>The maker of engines is James Watt, who settled on 33 000 foot-pounds a minute in the early 1780s. The unit named after him was proposed by William Siemens in 1882 and adopted by an international congress of electricians in 1889. The scientists of 13·eng.4.4 are R. D. Stevenson and R. J. Wassersug, “Horsepower from a horse”, Nature (1993), who used figures from a horse-pulling contest at a state fair.</p>
+  <aside class="voice para"><p>Stevenson and Wassersug report that a horse can reach a peak of nearly 15 horsepower over a few seconds, and that a person can briefly exceed one horsepower, while Watt's figure suits a horse working steadily for a long time.</p><cite>R. D. Stevenson and R. J. Wassersug, “Horsepower from a horse”, Nature 364 (1993); paraphrase</cite></aside>
+  <h3>Accepted names</h3>
+  <p>The rolling law's c is the rolling resistance coefficient. The air law's k is half the density of air times a measured drag figure of the car: its drag coefficient times its size seen from the front. The test that measures both by coasting is the coast-down test. The rise per metre of road is the grade; the power needed at the wheels, as a function of the speed, is the road load.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="13·eng: a worked “proof”, not allowed">
+W(t) = F(t)\,\big(x(t) - x(0)\big) @@ not allowed: 12·phys's work is for a steady force; a changing force's work is built on rung 16
+W'(t) = F(t)\,v(t) @@ not allowed either: constant-factor needs a constant; the product rule would add F′(t)(x(t) − x(0))
+\text{so } P = Fv \text{ for any force} @@ the conclusion is true, but this column does not prove it
+  </pre>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return 'none'; let s=v.toFixed(d==null?2:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s.replace('-','−'); };
+const g=9.8;
+const VEH={car:{m:1500,c:0.012,k:0.36,P:60000,vmax:45,name:'family car'},truck:{m:36000,c:0.006,k:3.6,P:330000,vmax:35,name:'loaded truck'},bike:{m:80,c:0.005,k:0.24,P:250,vmax:20,name:'cyclist'}};
+let V=VEH.car, vt=null;
+const kr=$('kr'),kv=$('kv');
+const parts=(v,r)=>({climb:V.m*g*r*v, roll:V.c*V.m*g*v, air:V.k*v*v*v});
+const Pv=(v,r)=>{ const p=parts(v,r); return p.climb+p.roll+p.air; };
+const dP=(v,r)=>V.m*g*(r+V.c)+3*V.k*v*v;
+function top(r){ let lo=0,hi=V.vmax*3; if(Pv(hi,r)<V.P) return null; for(let i=0;i<80;i++){ const m=(lo+hi)/2; if(Pv(m,r)<V.P) lo=m; else hi=m; } return (lo+hi)/2; }
+const PP=plane($('cvP'),{x:[0,45],y:[-1,1],grid:0,labels:0,aspect:0.78,draw:P=>draw(P)});
+function draw(P){ const r=+kr.value, v=+kv.value, vm=V.vmax; let yt=Math.max(V.P*1.35,Pv(vm,r)*0.6), yb=Math.min(0,parts(vm,r).climb*0.7); P.o.x=[-vm*0.08,vm]; P.o.y=[yb-yt*0.08,yt];
+  const sc=V.P>=1e4?1000:1, un=V.P>=1e4?' kW':' W';
+  const st=nice(yt/sc); for(let y=0;y<=yt/sc;y+=st){ P.line(0,y*sc,vm,y*sc,'--grid',1); P.text(fm(y,0)+un,0.5,y*sc+yt*0.012,'--muted','left',10); }
+  for(let y=-st;y*sc>yb;y-=st){ P.line(0,y*sc,vm,y*sc,'--grid',1); P.text(fm(y,0)+un,0.5,y*sc+yt*0.012,'--muted','left',10); }
+  P.line(0,0,vm,0,'--muted',1.3); for(let x=5;x<=vm;x+=5) P.text(x+' m/s',x,yb-yt*0.06,'--muted','center',10);
+  const N=200, c=P.ctx; const A=[],B=[],C=[];
+  for(let i=0;i<=N;i++){ const u=vm*i/N, p=parts(u,r); A.push([u,p.climb]); B.push([u,p.climb+p.roll]); C.push([u,p.climb+p.roll+p.air]); }
+  c.globalAlpha=.3; P.poly([[0,0]].concat(A,[[vm,0]]),null,'--ember'); P.poly(A.concat(B.slice().reverse()),null,'--gold'); P.poly(B.concat(C.slice().reverse()),null,'--teal'); c.globalAlpha=1;
+  P.poly(C,'--ink',null,2.2,false);
+  P.line(0,V.P,vm,V.P,'--plum',2,[6,4]);
+  const p=Pv(v,r), s=dP(v,r); P.line(Math.max(0,v-vm*0.25),p-s*Math.min(v,vm*0.25),Math.min(vm,v+vm*0.25),p+s*Math.min(vm-v,vm*0.25),'--ink',1.4,[4,4]);
+  P.dot(v,p,'--ember',5); if(vt!=null&&isFinite(vt)) P.dot(vt,Pv(vt,r),'--plum',5); }
+function nice(sp){ const raw=sp/5, q=Math.pow(10,Math.floor(Math.log10(raw))), m=raw/q; return (m<1.5?1:m<3.5?2:m<7.5?5:10)*q; }
+function read(){ const r=+kr.value, v=+kv.value, p=parts(v,r), tot=p.climb+p.roll+p.air, T=top(r);
+  $('or').textContent=fm(r*100,1)+'%'; $('ov').textContent=fm(v,1)+' m/s';
+  const vd=$('vd'); const ok=tot<=V.P; vd.className='verdict '+(ok?'win':'lose');
+  vd.textContent='The '+V.name+' at '+fm(v,1)+' m/s ('+fm(v*3.6,0)+' km/h) on '+fm(r*100,1)+'% needs '+fm(tot/1000,2)+' kW = '+fm(tot/745.7,1)+' hp at the wheels'+(tot<0?' (below 0: the brakes must take '+fm(-tot/1000,2)+' kW)':'')+'; it has '+fm(V.P/1000,2)+' kW. '+(ok?'It can keep this speed.':'It cannot keep this speed.')+(T!=null?' Top steady speed here: '+fm(T,2)+' m/s ('+fm(T*3.6,0)+' km/h).':'');
+  tex($('eq'),R`P = \underbrace{${fm(p.climb,0)}}_{\text{climb}} + \underbrace{${fm(p.roll,0)}}_{\text{tyres}} + \underbrace{${fm(p.air,0)}}_{\text{air}} = ${fm(tot,0)}\ \text{W},\ \ P'(v) = ${fm(dP(v,r),1)}\ \text{W per m/s}`,true);
+  PP.redraw(); }
+function guess(){ const r=+kr.value; vt=V.P/(V.m*g*(r+V.c)); if(!(vt>0)||!isFinite(vt)) vt=V.vmax; showT(); }
+function showT(){ const r=+kr.value; if(vt==null){ $('eqT').textContent=''; return; } const f=Pv(vt,r)-V.P; tex($('eqT'),R`v = ${fm(vt,5)},\ \ f(v) = ${fm(f,2)},\ \ f'(v) = ${fm(dP(vt,r),1)}`,true); PP.redraw(); }
+$('bt').onclick=()=>{ const r=+kr.value; if(vt==null) guess(); else { vt=vt-(Pv(vt,r)-V.P)/dP(vt,r); showT(); } };
+$('bt0').onclick=()=>guess();
+[kr,kv].forEach(el=>el.addEventListener('input',()=>{ vt=null; showT(); read(); }));
+document.querySelectorAll('#vch button').forEach(b=>b.onclick=()=>{ V=VEH[b.dataset.v]; document.querySelectorAll('#vch button').forEach(z=>z.classList.toggle('on',z===b)); kv.max=V.vmax; if(+kv.value>V.vmax) kv.value=V.vmax*0.6; vt=null; showT(); read(); });
+window.__pic={set:(veh,r,v)=>{ V=VEH[veh]; kv.max=V.vmax; kr.value=r; kv.value=v; read(); return {P:+Pv(v,r).toFixed(2),dP:+dP(v,r).toFixed(2),top:top(r)}; }};
+read();
+stepper('#sl1',[
+  {k:'ember',kl:'power at an instant',t:R`P(t) = W'(t) = \tfrac{dW}{dt}`,n:`The slope of the work done; average power is a chord.`},
+  {k:'ember',kl:'force-times-speed',t:R`\htmlClass{new}{P = F\,v}`,n:`A steady force; constant-factor for slopes.`},
+  {k:'ember',kl:'climbing-power',t:R`\htmlClass{new}{P_{\text{climb}} = mg\,y' = mg\,r\,v}`,n:`Lifting, a little at each instant.`},
+  {k:'ember',kl:'the grade',t:R`r \approx 0.07`,n:`The Cuesta Grade's steep part: 7 m up per 100 m of road.`},
+  {k:'ember',kl:'the rolling law',t:R`F \approx c\,mg,\ \ c \approx 0.010 \text{ to } 0.015`,n:`Measured, with a range.`},
+  {k:'ember',kl:'the air law',t:R`F \approx k\,v^2`,n:`Measured by coasting on a level road.`},
+  {k:'ember',kl:'steady-climb',t:R`\htmlClass{new}{P(v) = \big(mg(r + c) + kv^2\big)v}`,n:`Three pulls back, each priced by force-times-speed.`},
+  {k:'ember',kl:'the car on the grade',t:R`29\,841 + 5116 + 8780 \approx 43\,700\ \text{W}`,n:`About 59 hp at 29 m/s.`},
+  {k:'ember',kl:'one more m/s',t:R`P'(v) = mg(r + c) + 3kv^2`,n:`About 2.1 kW per m/s, up the grade.`},
+  {k:'teal',kl:'the truck by tangent steps',t:R`12.31 \to 12.0716 \to 12.0714`,n:`About 43 km/h: f(v) = P(v) − 330 000.`},
+  {k:'ember',kl:'watts per kilogram',t:R`40 \text{ W/kg against } 9`,n:`The climb is priced by the kilogram.`},
+  {k:'ember',kl:'the horse',t:R`33\,000\ \text{ft} \cdot \text{lb/min} \approx 745.7\ \text{W}`,n:`One horsepower; a century later, the watt.`},
+  {k:'ember',kl:'the middle of a change',t:R`v' = 0,\ \ y' \approx 2\ \text{m/s}`,n:`A steady speed is two changes in balance.`},
+  {k:'ember',kl:'illegal',t:R`P \ne mgh`,n:`That is work; power is its slope.`}
+],{title:'The slides · power at an instant; force-times-speed; climbing-power; the grade; the rolling law; the air law; steady-climb; the car on the grade; one more m/s; the truck by tangent steps; watts per kilogram; the horse; the middle of a change; illegal moves · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>2d · All the subsets</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:3fr 2fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.95rem;white-space:normal}
+.kd{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;align-items:center;font-family:var(--serif)}
+.kd button{font-family:var(--mono);font-size:.78rem;padding:2px 10px}
+.kd button.keep{border-color:var(--ember);color:var(--ember)}
+.pic .eqbox .katex{font-size:1em}
+@media (max-width:560px){#eq2 .katex{font-size:.9em}}
+.lst{font-family:var(--mono);font-size:.82rem;color:var(--muted);line-height:1.5}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r02c.html">← 2c gather and merge</a><a href="r02concl.html">next: 2·∎ conclusion →</a></p>
+  <div class="tags"><span class="tag proof">2d · proof</span></div>
+  <h1>All the subsets</h1>
+  <p>The last tool. From a set, the set of all its parts: every set you could make by keeping some of its members and dropping the rest, gathered into a set of their own. It is the tool whose result you cannot write down by tipping things out or picking things through. You have to run through every way of deciding, member by member, keep or drop. The step gives the tool its mark, and shows the keep-or-drop way of listing its result. Then it proves the techniques the rest of the ladder uses daily. The empty set is part of every set, and every set is part of itself, so both are always on the list. The tool respects inclusion. And it treats common members exactly, and merged members only by an inclusion.</p>
+  <p class="gesture">To list every subset, go through the members and decide each: keep or drop. Every way of deciding is a subset; every subset is a way of deciding. The empty set is the way that drops everything, the set itself the way that keeps everything.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r01b.html">1b</a> (when nothing is true, everything is permitted), <a href="r02a.html">2a</a> (⊆, the techniques self-part, chain for part of, double-inclusion), <a href="r02b.html">2b</a> (∅, the empty-set technique) and <a href="r02c.html">2c</a> (gather, ∪, ∩). <a href="r02e.html">2e</a> sifts products out of a power set of a power set; rung 3 and rung 4 build with it; the question of how fast the list grows is rung 4's.</p></div>
+</header>
+
+<section class="class step" data-step="2d1">
+  <h2 class="sthead"><span class="stno">2d1</span>All the subsets, as one set</h2>
+  <p class="stands">Stands on 2a9 (⊆) and 2b5 (axioms that say a set exists).</p>
+  <p data-pid="3165a8">2a said what it is for s to be a subset of u: every member of s is a member of u. Now gather all of them. A set may have subsets in great variety, and each of them is a thing, so the set of all of them is a set you should be able to ask for. By the power axiom, there is one:</p>
+  <div class="eqline" data-tex="\begin{aligned}&amp;\text{From here on, } \mathcal P(u) \text{ means: the set of }\\ &amp;\quad \text{all the subsets of } u\text{:}\qquad s \in \mathcal P(u) \;\\ &amp;\quad \Leftrightarrow\; s \subseteq u.\end{aligned}"></div>
+  <div class="eqline" data-tex="\begin{aligned}&amp;\textbf{Axiom Power:}\quad\\ &amp;\quad \text{for any set } u \text{ there is a set } \mathcal P(u).\end{aligned}"></div>
+  <p data-pid="8386ed">Its accepted name is the <b>power set</b> of u. The word “power” here is only a name, and means nothing beyond this line until a later rung gives it work of its own. Read 𝒫(u) as “the subsets of u” or “all the parts of u”. To use a membership in 𝒫(u), unpack it into ⊆ and then into the every-around-an-if. To make one, prove the inclusion and pack. There is nothing else to the mark. It is a name: 𝒫(u) names one set, built from u.</p>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">2d1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\text{Rex and Pip are pets.}"></span> <span data-tex-inline="\text{1. } \{\text{Pip}\} \subseteq \{\text{Rex}, \text{Pip}\}"></span> <span data-tex-inline="\text{2. } \{\text{Pip}\} \in \mathcal{P}(\{\text{Rex}, \text{Pip}\})"></span></span>Read row 1 back into English. <br>Name the tech that gets from row 1 to row 2. <br>Say in plain words why row 1 is so.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="2d2">
+  <h2 class="sthead"><span class="stno">2d2</span>Curly capitals, and collections</h2>
+  <p class="stands">Stands on 2d1 (𝒫) and 2a5 (sets of sets).</p>
+  <p data-pid="a6386f">A set whose members are themselves sets is called a <b>collection</b>. The mark 𝒫 is a capital P with a flourish, said “curly P”. It is the first of a family. The curly capitals, <span data-tex-inline="\mathcal A, \mathcal B, \mathcal C">𝒜, ℬ, 𝒞</span> and the rest, are said “curly A”, “curly B” and so on, as ∀ and ∃ were named for their shapes. They all behave the same way. <b>A curly capital names a set whose members are themselves sets.</b></p>
+  <p data-pid="b06eea">A curly letter is a name like any other letter. The curl only warns the reader what kind of thing is inside: sets, not cats. 𝒫(u) fits the family, since each of its members is a part of u. The difference is that 𝒫 is a mark that builds a collection from a set, while 𝒜 or ℬ simply names a collection you already have.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">2d2.1</span><span class="ph undo">undo</span><span class="givens"><span data-tex-inline="\text{Rex} \ne \text{Pip}"></span> <span data-tex-inline="\text{1. } s \in \mathcal{P}(\{\text{Pip}\})"></span> <span data-tex-inline="\text{2. } s \subseteq \{\text{Pip}\}"></span> <span data-tex-inline="\text{3. } \forall x\, (x \in s \Rightarrow x \in \{\text{Pip}\})"></span></span>Name the tech from row 1 to row 2, and from row 2 to row 3. <br>Say in plain words why Rex is not in s.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="2d3">
+  <h2 class="sthead"><span class="stno">2d3</span>Listing it: keep or drop</h2>
+  <p class="stands">Stands on 2d1 (𝒫) and 2a7 (the same-members axiom).</p>
+  <p data-pid="ed0e80">How do you write down 𝒫({cat, dog})? <b>Think of a subset as a way of deciding, for each member, whether it is in.</b> Go through the members in turn. Each decision so far gives a set. The next member comes back to every set you have made, kept and dropped.</p>
+  <p data-pid="a996f3">Start with no members decided. There is one way to decide nothing: the empty set. Now decide cat. Drop it, and you have ∅. Keep it, and you have {cat}.</p>
+  <p data-pid="72d50f">Now decide dog. Each set so far comes back twice: once without dog, and once with it. That gives ∅, {cat}, {dog} and {cat, dog}. Those are all the ways of keeping and dropping, and nothing else. So 𝒫({cat, dog}) = {∅, {cat}, {dog}, {cat, dog}}.</p>
+  <p data-pid="970b91">Why is that the whole list? Because a subset of {cat, dog} is fixed by the same-members axiom once you know, of cat and of dog, whether it is in. And those are exactly the decisions made. And why is every set on the list a subset? Because each was made by keeping only members of {cat, dog}.</p>
+  <p data-pid="cb4d23">Spelling the “exactly” out for a particular listed set is a case split on “cat ∈ s or cat ∉ s”. 1g's licence column allows that split for a set whose members are listed, since membership in it is settled.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · a power set listed · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · every subset of a set, laid out in levels</div>
+    <div class="panel">
+      <div class="chips" role="group" aria-label="the set u"><span class="m" style="color:var(--muted)">u =</span><button data-nn="0">∅</button><button data-nn="1">{p}</button><button data-nn="2">{p, q}</button><button data-nn="3" class="on">{p, q, r}</button><button data-nn="4">{p, q, r, s}</button></div>
+      <div class="cap">Every subset of u. Each level up has another member kept. Tap a subset: it lights up, with everything below it that it contains (teal) and everything above it that contains it (ember). The readout lists the subsets of whatever is lit, which is a power set of its own.</div>
+      <canvas id="cv2"></canvas>
+      <div class="eqbox" id="eq2"></div>
+      <div class="cap">Change u from {p, q} to {p, q, r} and watch every subset come back with and without r.</div>
+    </div>
+  </section>
+  <p data-pid="c082de">The picture lays the subsets out in levels. A set sits above the sets it is made from by keeping another member, with the empty set at the foot and the whole set at the top. Tap any subset, and the picture lights the subsets below it that it contains and the subsets above it that contain it.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">2d3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\{\text{Rex}, \text{Pip}\}"></span></span>List 𝒫({Rex, Pip}) by keep or drop, deciding Rex first. <br>Say why no subset is missing.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="2d4">
+  <h2 class="sthead"><span class="stno">2d4</span>Small power sets</h2>
+  <p class="stands">Stands on 2d3 (keep or drop) and 2b12 (∅).</p>
+  <p data-pid="6f576d">More, to see the pattern, each with its reason:</p>
+  <p data-pid="abd0ac"><span data-tex-inline="\mathcal P(\{\text{owl}\}) = \{\varnothing, \{\text{owl}\}\}"></span>: drop the owl or keep it.</p>
+  <p data-pid="0e96e6"><span data-tex-inline="\mathcal P(\varnothing) = \{\varnothing\}"></span>: nothing to decide, so the only subset is the one that drops everything, which is ∅ itself. Notice 𝒫(∅) is not empty: it has ∅ as a member.</p>
+  <p data-pid="27c021"><span data-tex-inline="\mathcal P(\{\varnothing\}) = \{\varnothing, \{\varnothing\}\}"></span>: the member being kept or dropped is the empty set itself. Drop it and you have ∅; keep it and you have {∅}.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · the power set of the empty set · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">2d4.1</span><span class="ph bend">bend</span><span class="givens"><span data-tex-inline="\mathcal P(\varnothing)"></span></span>How many members has 𝒫(∅)? <br>Is 𝒫(∅) the same set as ∅? Say why.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="2d5">
+  <h2 class="sthead"><span class="stno">2d5</span>The empty set is part of every set</h2>
+  <p class="stands">Stands on 2b12 (the empty-set technique), 1b (everything permitted) and 1h4 (an every with nothing to check).</p>
+  <p data-pid="a9db15">Whatever u is, 𝒫(u) has ∅ as a member and u as a member. That u is a member is 2a's self-part technique: u ⊆ u, so u ∈ 𝒫(u) by packing. That ∅ is a member needs a technique of its own:</p>
+  <p data-pid="1d8159">Empty-part technique: <b>the empty set is part of every set.</b></p>
+  <p data-pid="28b2cd">Its proof is the standard use of the tech “when nothing is true, everything is permitted”. Everything in ∅ is in b, because nothing is in ∅ that could fail to be: the if's hypothesis is never met. 2b held the empty-part technique in trust, and this step proves it, so that flag is closed. Proof. Let b be any set.</p>
+  <p data-pid="66921c">Let x be anything. Suppose x is in ∅, until we drop it. By the empty-set technique, x is not in ∅. That clashes with the supposition. When nothing is true, everything is permitted: so x is in b.</p>
+  <p data-pid="f01569">Drop the supposition: if x is in ∅, then x is in b. The line “x is in b” went with the supposition; the if is what leaves. Nothing was assumed about x, so this is true for everything. Pack ⊆: ∅ ⊆ b.</p>
+  <p data-pid="72e3ba">1h had the word for this: the every is true <i>vacuously</i>. There is no member of ∅ to check, so the check passes. People feel cheated by it when they meet it, and lean on it ever after. The whole keep-or-drop listing begins from the empty set, since the empty set is the way of dropping everything.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">2d5.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\varnothing \subseteq \{\text{Rex}\}"></span></span>Argue it in plain words, one sentence each with its reason. <br>Where does “everything is permitted” come in?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="2d6">
+  <h2 class="sthead"><span class="stno">2d6</span>Always on the list</h2>
+  <p class="stands">Stands on 2d5 (the empty-part technique) and 2a9 (the self-part technique).</p>
+  <p data-pid="0824e1">By the empty-part technique, ∅ ⊆ u. Pack 𝒫: ∅ is in 𝒫(u). By the self-part technique, u ⊆ u. Pack 𝒫 again: u is in 𝒫(u).</p>
+  <p data-pid="35c089">So 𝒫(u) is never empty, not even for u = ∅. When u has members, ∅ and u are among the members of 𝒫(u), and they differ: u has a member and ∅ does not, so a member of u is not a member of ∅, and they are not the same set.</p>
+  <p data-pid="132858">A founder of the subject asked a further question. Can the parts of a set all be matched, one each, with its members? Matching is not yet on the ladder; 4j builds it. The step's last challenge takes up what this step can say about it.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">2d6.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="u = \{\text{Rex}\}"></span></span>Name two members of 𝒫(u) that every power set has. <br>Say why they differ.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="2d7">
+  <h2 class="sthead"><span class="stno">2d7</span>How the list grows, said without counting</h2>
+  <p class="stands">Stands on 2d3 (keep or drop).</p>
+  <p data-pid="6fbb65">Look again at keep-or-drop. When the set gains another member, every subset you already had comes back as itself and as itself with the newcomer added. Nothing is lost, and every old subset comes back in a version without and a version with. Add a further member and the same happens again to the whole new list. That is why the lists 𝒫 makes grow so quickly. It is why 𝒫(𝒫(u)) is already too long to list by hand even for u = {cat, dog}: it has sixteen members, each a set of sets. How fast, as a matter of counting, is a question for rung 4. Here the fact is structural: <b>each member of u is an independent decision, and the subsets are the ways the decisions can come out.</b></p>
+  <p data-pid="085d14">Said here, not proved; the slides and the picture chase it. In marks, take a set u and a thing c not in u. The subsets of u ∪ {c} split into two kinds. Those that leave c out are exactly the subsets of u. Those that take c in are each a subset of u with c added. The split itself, “c ∈ s or c ∉ s” for an arbitrary s, is 1g's either-way, licensed when membership is settled. For the listed sets of this rung, it is.</p>
+  <section class="pic" id="pic2">
+    <div class="eyebrow">The picture · a subset, decided member by member</div>
+    <div class="panel">
+      <div class="cap">The set b = {owl, cat, bat}, and a newcomer you may add. Decide each member: keep or drop. The readout names the subset you have decided and says why it is in 𝒫(b).</div>
+      <div class="chips" role="group" aria-label="newcomer"><span class="m" style="color:var(--muted)">emu:</span><button id="emuOff" class="on">not in b</button><button id="emuOn">add emu to b</button></div>
+      <div class="kd" id="kd"></div>
+      <div class="eqbox" id="eq3"></div>
+      <div class="lst" id="lst"></div>
+    </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">2d7.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">b = {owl, cat}. The emu is added: b ∪ {emu}.</span></span>List the subsets of b. <br>Then list the subsets of b ∪ {emu} that take the emu in.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="2d8">
+  <h2 class="sthead"><span class="stno">2d8</span>The tool respects inclusion</h2>
+  <p class="stands">Stands on 2d1 (𝒫) and 2a10 (subsets chain).</p>
+  <p data-pid="9bd7c8">Power-keeps-parts technique: <b>if u is part of b, every part of u is a part of b.</b> In marks, 𝒫(u) ⊆ 𝒫(b). The argument is 2a’s chain technique, inside the shape of ⊆.</p>
+  <p data-pid="b4df5b">Let u and b be any sets, and suppose u ⊆ b. Let s be anything. Suppose s is in 𝒫(u), until we drop it. Unpack 𝒫: s ⊆ u. Chain that with u ⊆ b: s ⊆ b. Pack 𝒫: s is in 𝒫(b).</p>
+  <p data-pid="faccef">Drop the supposition: if s is in 𝒫(u), then s is in 𝒫(b). Nothing was assumed about s, so this is true for every s. Pack ⊆: 𝒫(u) ⊆ 𝒫(b).</p>
+  <p data-pid="8fbf24">The placeholder is called s because its values are sets; any letter would do. Run backwards, the power-keeps-parts technique also works: from 𝒫(u) ⊆ 𝒫(b), you may write u ⊆ b, because u ∈ 𝒫(u), so u ∈ 𝒫(b), so u ⊆ b. So u ⊆ b and 𝒫(u) ⊆ 𝒫(b) are interchangeable by techs. That is the kind of technique that lets you move a question about sets up to a question about their power sets, and back.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">2d8.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">{Pip} ⊆ {Rex, Pip}.</span></span>By power-keeps-parts, which set is part of which? <br>Name one member of the smaller power set and say why it is in the larger.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="2d9">
+  <h2 class="sthead"><span class="stno">2d9</span>Common parts, exactly</h2>
+  <p class="stands">Stands on 2d8 (power-keeps-parts) and 2c8 (∩).</p>
+  <p data-pid="3cf34e">The parts of what u and b share are exactly the parts shared by 𝒫(u) and 𝒫(b):</p>
+  <div class="eqline" data-tex="\mathcal P(u \cap b) = \mathcal P(u) \cap \mathcal P(b)"></div>
+  <p data-pid="42da04"><b>A set is part of both u and b exactly when it is part of their common members.</b> The proof chases a member, with 2c's habit of unpacking everything to joining words and a technique in the middle; the slides have it. For ∪ only an inclusion is true:</p>
+  <section class="slides" id="sl9"><div class="eyebrow">The slides · common parts exactly · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">2d9.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="u = \{\text{Rex}, \text{Pip}\},\;\; b = \{\text{Pip}, \text{Bo}\}"></span></span>Work out u ∩ b and 𝒫(u ∩ b). <br>Check that 𝒫(u) and 𝒫(b) share exactly those members.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="2d10">
+  <h2 class="sthead"><span class="stno">2d10</span>Merged parts, only by an inclusion</h2>
+  <p class="stands">Stands on 2d9 (common parts) and 1e (the counterexample technique).</p>
+  <div class="eqline" data-tex="\mathcal P(u) \cup \mathcal P(b) \subseteq \mathcal P(u \cup b)"></div>
+  <p data-pid="897a0a">A part of u is a part of u ∪ b (the power-keeps-parts technique with u ⊆ u ∪ b). That u ⊆ u ∪ b takes two lines. Take x in u. Then x is in u or in b, by adding an option, so x ∈ u ∪ b.</p>
+  <p data-pid="5f5181">The claim 𝒫(u ∪ b) = 𝒫(u) ∪ 𝒫(b) fails the other way, and here is the witness. Take u = {cat}, b = {dog}. Then {cat, dog} ⊆ u ∪ b, so it is in 𝒫(u ∪ b). But it is a part of neither u nor b, so it is in neither 𝒫(u) nor 𝒫(b), and so not in their union. The counterexample technique, and the sameness is dead. This failure is not a licence question like 2c's not-through; the sameness is simply not so, and a set on its own shows it.</p>
+  <section class="slides" id="sl10a"><div class="eyebrow">The slides · merged parts by inclusion only · ← → keys work</div></section>
+  <section class="slides" id="sl10b"><div class="eyebrow">The slides · the witness · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">2d10.1</span><span class="ph bend">bend</span><span class="givens"><span data-tex-inline="u = \{\text{Rex}\},\;\; b = \{\text{Pip}\}"></span></span>Find a member of 𝒫(u ∪ b) that is in neither 𝒫(u) nor 𝒫(b). <br>Which technique kills the sameness?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="2d11">
+  <h2 class="sthead"><span class="stno">2d11</span>In, and part of, again</h2>
+  <p class="stands">Stands on 2d6 (always on the list) and 2a12 (in and part of).</p>
+  <p data-pid="5c6959">Power sets are where 2a's distinction gets its exercise, because the members of 𝒫(u) are themselves sets, and most of them are also subsets of things. <b>Keep the test: ∈ asks “on the list?”, ⊆ asks “every member on the list?”.</b> The empty set is on the list, by the empty-part technique, and is a part of 𝒫(u) by the same technique, with 𝒫(u) in place of b. And u is always on the list.</p>
+  <div class="eqline" data-tex="\begin{aligned} &amp;\varnothing \in \mathcal P(u) &amp;&amp;\text{on the list}\\ &amp;\varnothing \subseteq \mathcal P(u) &amp;&amp;\text{empty-part}\\ &amp;u \in \mathcal P(u) &amp;&amp;\text{always} \end{aligned}"></div>
+  <p data-pid="1aac48">But <span data-tex-inline="u \subseteq \mathcal P(u)"></span> is true only when every member of u is itself a subset of u. For u = {cat} that fails (cat is not a set), and for u = {∅} it is true (∅ ⊆ {∅}). And a cat is not a subset of anything:</p>
+  <div class="eqline" data-tex="\begin{aligned} &amp;\{\text{cat}\} \in \mathcal P(\{\text{cat},\text{dog}\})\\ &amp;\text{cat} \notin \mathcal P(\{\text{cat},\text{dog}\}) \end{aligned}"></div>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">2d11.1</span><span class="ph bend">bend</span><span class="givens"><span data-tex-inline="\text{Rex and Pip are}"></span> <span data-tex-inline="\text{pets, not sets.}"></span> <span data-tex-inline="\text{1. } \{\text{Pip}\} \subseteq \{\text{Rex}, \text{Pip}\}"></span> <span data-tex-inline="\text{2. } \{\text{Pip}\} \in \mathcal{P}(\{\text{Rex}, \text{Pip}\})"></span> <span data-tex-inline="\text{3. Pip} \in \mathcal{P}(\{\text{Rex}, \text{Pip}\})"></span></span>Find the first row that does not follow. <br>Say in plain words what it would need before it.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="2d12">
+  <h2 class="sthead"><span class="stno">2d12</span>Illegal moves</h2>
+  <p class="stands">Stands on 2d1 to 2d11.</p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\mathcal P(a) = a\,? @@ the members of 𝒫(a) are the subsets of a, not the members of a. 𝒫({cat}) = {∅, {cat}}, and neither ∅ nor {cat} is a cat
+\mathcal P(\varnothing) = \varnothing\,? @@ ∅ ⊆ ∅ (the empty-part technique, or self-part), so ∅ ∈ 𝒫(∅): the power set of the empty set has a member. 𝒫(∅) = {∅}
+\mathcal P(a \cup b) = \mathcal P(a) \cup \mathcal P(b)\,? @@ only ⊇ is true. a = {cat}, b = {dog}: {cat, dog} is a subset of a ∪ b and of neither a nor b
+s \subseteq a \quad\text{so } s \in a\,? @@ 2a's confusion. s ⊆ a says s ∈ 𝒫(a), which is a different set from a
+\text{cat} \in \mathcal P(\{\text{cat},\text{dog}\})\,? @@ a member of 𝒫(a) is a subset of a, so a set. A cat is not a set, so not a subset, so not on the list; {cat} is
+\mathcal P(a) \subseteq \mathcal P(b) \quad\text{so } a \subseteq b\;\text{: allowed} @@ this one IS a move, by the power-keeps-parts technique run backwards (a ∈ 𝒫(a) ⊆ 𝒫(b)). Put here so you check rather than guess
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">2d12.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">“𝒫({Rex}) = {Rex}.”</span></span>Which illegal move is this? <br>Write 𝒫({Rex}) correctly.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="2d13">
+  <h2 class="sthead"><span class="stno">2d13</span>Running it backwards</h2>
+  <p class="stands">Stands on 2d1 to 2d10.</p>
+  <p data-pid="60c5ec">Wanting s ∈ 𝒫(u), you want s ⊆ u, so you open “let x be anything; suppose x ∈ s” and aim at x ∈ u. Wanting 𝒫(u) ⊆ 𝒫(b), you open “let s be anything; suppose s ∈ 𝒫(u)”, unpack, and need s ⊆ b. So you need u ⊆ b to chain with. Wanting the full list of 𝒫(u) for a listed u, run keep-or-drop. Then check by the same-members axiom that no way of deciding was missed and none written again. Wanting to refute a sameness between power sets, hunt for a set that is a part of one side's set and not of the other's. A power set's membership is an inclusion, so a witness is a set with a stray member. Found upward; written downward.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">2d13.1</span><span class="ph undo">undo</span><span class="givens"><span class="gtx">Wanted: {Rex} ∈ 𝒫({Rex, Pip}).</span></span>Working back from the goal, what must you prove first? <br>Write the opening and closing sentences of that argument.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <div class="chq"><span class="chid">2d.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{(i) } \mathcal{P}(u) \cap \mathcal{P}(b) = \{\varnothing\}"></span> <span data-tex-inline="\text{(ii) the members of } \mathcal{P}(c) \cap \mathcal{P}(d)"></span></span>Take sets u and b of things you know, with no member in common, and prove (i). <br>Then take sets c and d of things with a member in common, find (ii) in terms of what c and d share, and prove it.</div>
+  <div class="chq"><span class="chid">2d.4.2</span><span class="tagq">loop</span><span class="givens"><span data-tex-inline="u \text{ a set; } R \text{ a statement with}"></span> <span data-tex-inline="\text{gaps at both places.}"></span> <span data-tex-inline="\text{For } x \in u, \text{ the pick of } x \text{ is}"></span> <span data-tex-inline="\{y \in u : R(x, y)\}"></span> <span data-tex-inline="\text{(for this answer only).}"></span></span>Prove that some part of u is the pick of no member of u.</div>
+  <div class="chq"><span class="chid">2d.4.3</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{Wanted: a set } u \text{ with } \mathcal{P}(u) \subseteq u."></span></span>Find whether there is one, and prove your answer.</div>
+  <div class="chq"><span class="chid">2d.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="b \text{ any set.}"></span> <span data-tex-inline="\text{Off limits: when nothing is true,}"></span> <span data-tex-inline="\text{everything is permitted.}"></span> <span data-tex-inline="\text{Techniques already proved}"></span> <span data-tex-inline="\text{may be cited.}"></span> <span data-tex-inline="\text{Foot: } \varnothing \subseteq b"></span></span>Prove the foot.</div>
+  <div class="chq"><span class="chid">2d.4.5</span><span class="tagq">seam</span>From 2d.4.2: for every set u and every R, some d ⊆ u is {y ∈ u : R(x, y)} for no x ∈ u. Suppose u is a set that no listing can finish writing. <br>Does 2d.4.2 show that 𝒫(u) has more members than u, or only that no R reaches every part of u?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r02c.html">← 2c · gather and merge</a><a href="r02concl.html">2·∎ · conclusion →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>The founder who showed that the parts of a set outrun its members is Georg Cantor; the fact is Cantor’s theorem.</p>
+  <aside class="voice para"><p>Cantor showed in 1891 that the parts of a set can never all be matched, one each, with its members: whatever matching you try, some part is left out. He took this as a sign that there is no largest set.</p><cite>Cantor, “Über eine elementare Frage der Mannigfaltigkeitslehre” (1891); paraphrase</cite></aside>
+  <h3>Accepted names</h3>
+  <p>The power axiom is the axiom of power set.</p>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper}=Rung;
+const R=String.raw;
+
+/* ---------- left: the levels of a power set ---------- */
+const cv2=document.getElementById('cv2'); let n=3;
+const NAMES=['p','q','r','s']; let sel=null, boxes=[];
+function setName(mask,n){ const m=[]; for(let i=0;i<n;i++) if(mask>>i&1) m.push(NAMES[i]); return m.length?'{'+m.join(',')+'}':'∅'; }
+const TXs=m=>setName(m,n).replace('∅','\\varnothing').replace(/[{}]/g,x=>'\\'+x).replace(/,/g,',\\,');
+function size(cv,ar){ const d=window.devicePixelRatio||1, W=cv.clientWidth||300, H=Math.round(W/ar); cv.width=W*d; cv.height=H*d; cv.style.height=H+'px'; const c=cv.getContext('2d'); c.setTransform(d,0,0,d,0,0); return {c,W,H}; }
+function draw2(){
+  const {c,W,H}=size(cv2,1.25); c.fillStyle=col('--card'); c.fillRect(0,0,W,H);
+  const levels=[]; for(let k=0;k<=n;k++) levels.push([]);
+  for(let m=0;m<(1<<n);m++){ let k=0; for(let i=0;i<n;i++) k+=m>>i&1; levels[k].push(m); }
+  boxes=[]; const top=26, bot=H-26;
+  levels.forEach((Lv,k)=>{ const y=n?bot-(bot-top)*k/n:H/2; Lv.forEach((m,j)=>{ const x=W*(j+1)/(Lv.length+1); boxes.push({m,x,y}); }); });
+  const isSub=(p,q)=>(p&q)===p;
+  c.lineWidth=1; boxes.forEach(p=>boxes.forEach(q=>{ if(p.m!==q.m && isSub(p.m,q.m)){ let d=q.m^p.m; if(d&&!(d&(d-1))){ c.strokeStyle=col('--grid'); if(sel!==null && isSub(sel,p.m)) c.strokeStyle=col('--ember'); if(sel!==null && isSub(q.m,sel)) c.strokeStyle=col('--teal'); c.beginPath(); c.moveTo(p.x,p.y); c.lineTo(q.x,q.y); c.stroke(); } } }));
+  c.font=(n>=4?11:13)+'px IBM Plex Mono, monospace'; c.textAlign='center';
+  boxes.forEach(b=>{ const s=setName(b.m,n); const w=c.measureText(s).width+12; let fill=col('--sand'), ink=col('--ink');
+    if(sel!==null){ if(b.m===sel){ fill=col('--ink'); ink=col('--paper'); } else if(isSub(b.m,sel)){ fill=col('--teal'); ink='#fff'; } else if(isSub(sel,b.m)){ fill=col('--ember'); ink='#fff'; } }
+    c.fillStyle=fill; c.beginPath(); c.roundRect?c.roundRect(b.x-w/2,b.y-11,w,22,5):c.rect(b.x-w/2,b.y-11,w,22); c.fill(); c.fillStyle=ink; c.fillText(s,b.x,b.y+4); b.w=w; });
+  c.textAlign='left';
+  const S=sel===null?(1<<n)-1:sel; const subs=[]; for(let m=0;m<(1<<n);m++) if(isSub(m,S)) subs.push(m);
+  subs.sort((p,q)=>{ const k=x=>{let t=0; for(let i=0;i<n;i++) t+=x>>i&1; return t;}; return k(p)-k(q)||p-q; });
+  const kk=x=>{let t=0; for(let i=0;i<n;i++) t+=x>>i&1; return t;}; const lv=[]; subs.forEach(m=>{ (lv[kk(m)]=lv[kk(m)]||[]).push(TXs(m)); });
+  const rowsOut=[]; lv.filter(Boolean).forEach(L=>{ for(let i=0;i<L.length;i+=4) rowsOut.push(L.slice(i,i+4).join(',\\;')); }); const body=rowsOut.join(',\\\\ ');
+  tex(document.getElementById('eq2'),lv.filter(Boolean).length>2?`\\begin{gathered}\\mathcal P(${TXs(S)}) = \\{${body}\\}\\end{gathered}`:`\\mathcal P(${TXs(S)}) = \\{${subs.map(TXs).join(',\\;')}\\}`,true);
+}
+cv2.addEventListener('pointerdown',e=>{ const r=cv2.getBoundingClientRect(), x=e.clientX-r.left, y=e.clientY-r.top; const hit=boxes.find(b=>Math.abs(x-b.x)<b.w/2+2&&Math.abs(y-b.y)<13); sel=hit?(sel===hit.m?null:hit.m):null; draw2(); });
+document.querySelectorAll('[data-nn]').forEach(b=>b.onclick=()=>{ n=+b.dataset.nn; sel=null; document.querySelectorAll('[data-nn]').forEach(x=>x.classList.toggle('on',x===b)); draw2(); });
+new ResizeObserver(draw2).observe(cv2);
+if(window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change',draw2);
+draw2();
+
+/* ---------- right: keep or drop ---------- */
+const BASE=['owl','cat','bat']; let emu=false; let keep=new Set(['owl','bat']);
+const kd=document.getElementById('kd');
+function members(){ return emu?BASE.concat(['emu']):BASE; }
+function drawKD(){
+  kd.innerHTML=''; members().forEach(m=>{ const n=document.createElement('span'); n.textContent=m; const b=document.createElement('button'); b.type='button'; b.textContent=keep.has(m)?'keep':'drop'; b.className=keep.has(m)?'keep':''; b.onclick=()=>{ keep.has(m)?keep.delete(m):keep.add(m); drawKD(); }; kd.append(n,b); });
+  const ms=members(), s=ms.filter(m=>keep.has(m));
+  const Lx=L=>L.length?'\\{'+L.map(x=>'\\text{'+x+'}').join(',\\,')+'\\}':'\\varnothing';
+  tex(document.getElementById('eq3'),`\\begin{gathered} s = ${Lx(s)}\\\\ s \\subseteq b \\text{ (each kept member is in } b\\text{), so } s \\in \\mathcal P(b)\\end{gathered}`,true);
+  // list all subsets by keep-or-drop
+  let all=[[]]; ms.forEach(m=>{ all=all.concat(all.map(t=>t.concat([m]))); });
+  const lst=document.getElementById('lst'); lst.innerHTML='𝒫(b), by keep-or-drop: '+all.map(t=>'<span style="color:'+(t.every(x=>keep.has(x))&&t.length===s.length?'var(--ember)':'inherit')+'">'+(t.length?'{'+t.join(', ')+'}':'∅')+'</span>').join(' · ')+(emu?'<br>Every member without emu was on the old list; every member with emu is an old member with the newcomer added.':'');
+}
+document.getElementById('emuOff').onclick=()=>{ emu=false; keep.delete('emu'); document.getElementById('emuOff').classList.add('on'); document.getElementById('emuOn').classList.remove('on'); drawKD(); };
+document.getElementById('emuOn').onclick=()=>{ emu=true; document.getElementById('emuOn').classList.add('on'); document.getElementById('emuOff').classList.remove('on'); drawKD(); };
+drawKD();
+
+/* ---------- slides ---------- */
+const N='\\htmlClass{new}', K='\\htmlClass{keep}';
+const col2=(...rows)=>'\\begin{aligned}'+rows.map(([l,r])=>'&'+l+' &&\\text{'+r+'}').join('\\\\ ')+'\\end{aligned}';
+const T=s=>'\\text{'+s+'}';
+stepper('#sl3',[
+  {k:'ember',kl:'a power set listed',t:R`\mathcal P(\{\text{owl},\text{cat}\})\,?`,n:`Keep or drop, member by member. Start with the only way to decide nothing: ∅.`},
+  {k:'ember',kl:'a power set listed',t:R`\text{owl:}\quad \varnothing,\; ${N}{\{\text{owl}\}}`,n:`Drop the owl, or keep it. Each set so far comes back without, and again with.`},
+  {k:'ember',kl:'a power set listed',t:R`\text{cat:}\quad \varnothing,\; \{\text{owl}\},\; ${N}{\{\text{cat}\}},\; ${N}{\{\text{owl},\text{cat}\}}`,n:`The cat comes back to each. The list is complete: a subset is fixed by what it decides about owl and cat, and every decision has been made.`},
+  {k:'ember',kl:'a power set listed',t:R`\mathcal P(\{\text{owl},\text{cat}\}) = \{\varnothing, \{\text{owl}\}, \{\text{cat}\}, \{\text{owl},\text{cat}\}\}`,n:`∅ (the empty-part technique) and the set itself (the self-part technique) are on it, as they always are. ∎`}
+],{title:'The slides · a power set listed · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'the power set of the empty set',t:R`\mathcal P(\varnothing) \overset{?}{=} \{\varnothing\}`,n:`Work back from the claim: a sameness, so inclusions each way (the double-inclusion technique). The leftward one is short: ∅ ⊆ ∅ by the empty-part technique, so ∅ ∈ 𝒫(∅), and {∅}'s only member is in.`},
+  {k:'ember',kl:'the power set of the empty set',t:col2([R`\text{Take } s \text{, anything. Suppose } s \in \mathcal P(\varnothing).`,'supposed, for the rightward inclusion'],[R`\qquad \text{So } s \subseteq \varnothing.`,'unpack the power set'],[R`\qquad \text{And } \varnothing \subseteq s.`,'the empty-part technique'],[R`\qquad \text{So } ${N}{s = \varnothing}.`,'the double-inclusion technique'],[R`\qquad \text{So } s \in \{\varnothing\}.`,'pack the listing']),n:`The rightward one: a subset of ∅ is ∅, because ∅ is also a subset of it, and the double-inclusion technique closes the inclusions each way into a sameness.`},
+  {k:'ember',kl:'the power set of the empty set',t:R`${N}{\mathcal P(\varnothing) = \{\varnothing\}} \quad \blacksquare`,n:`∎ Nothing to decide, so exactly the way of deciding nothing. 𝒫(∅) has a member, and is not ∅; rung 3 will make much of exactly that difference.`}
+],{title:'The slides · the power set of the empty set · ← → keys work'});
+stepper('#sl9',[
+  {k:'ember',kl:'common parts exactly',t:R`\mathcal P(u \cap b) \overset{?}{=} \mathcal P(u) \cap \mathcal P(b)`,n:`Chase a member s. s ∈ 𝒫(u ∩ b) unpacks to s ⊆ u ∩ b, an every; so look at a member x of s inside it.`},
+  {k:'ember',kl:'common parts exactly',t:col2([R`s \in \mathcal P(u \cap b)`,'take s, anything'],[R`\text{exactly when every member of } s \text{ is in } u \cap b`,'unpack the power set and part of'],[R`\text{exactly when every member of } s \text{ is } ${N}{\text{in } u \text{ and in } b}`,'unpack the common part']),n:`Inside the every is an if: if x ∈ s, then x is in u and in b. An if with an and in its conclusion is 1g's two-ifs: an if each way.`},
+  {k:'ember',kl:'common parts exactly',t:col2([R`\text{exactly when, for every } x \text{: } ${N}{\text{if } x \in s \text{, then } x \in u \text{; and if } x \in s \text{, then } x \in b}`,'1g: two-ifs, both ways'],[R`\text{exactly when } ${N}{\text{every member of } s \text{ is in } u \text{, and every member of } s \text{ is in } b}`,'an every over an and is an and of everys (1e: use an every and keep, each way)']),n:`Split the and inside the every into an and of everys: both directions are techs of 1e and 1c.`},
+  {k:'ember',kl:'common parts exactly',t:col2([R`\text{exactly when } s \subseteq u \text{ and } s \subseteq b`,'pack part of'],[R`\text{exactly when } s \in \mathcal P(u) \text{ and } s \in \mathcal P(b)`,'pack the power set'],[R`\text{exactly when } s \in \mathcal P(u) \cap \mathcal P(b)`,'pack the common part'],[R`\text{So } ${N}{\mathcal P(u \cap b) = \mathcal P(u) \cap \mathcal P(b)}. \quad \blacksquare`,'speak of everything; same members']),n:`∎ Pack everything back up. The power set treats common members exactly.`}
+],{title:'The slides · common parts exactly · ← → keys work'});
+stepper('#sl10a',[
+  {k:'ember',kl:'merged parts by inclusion only',t:col2([R`\qquad \text{Suppose } s \in \mathcal P(u) \cup \mathcal P(b).`,'supposed, aiming at an inclusion'],[R`\qquad \text{So } s \in \mathcal P(u) \text{ or } s \in \mathcal P(b).`,'merge-membership'],[R`\qquad \text{Case } s \subseteq u \text{. And } u \subseteq u \cup b \text{, so } ${N}{s \subseteq u \cup b}.`,'by cases; u ⊆ u ∪ b, shown above; the chain technique for part of']),n:`For ∪ try the same and watch it give only an inclusion. A part of u is a part of u ∪ b, by chaining.`},
+  {k:'ember',kl:'merged parts by inclusion only',t:col2([R`\qquad \text{Case } s \subseteq b \text{: the same.}`,''],[R`\qquad \text{So in every case, } s \in \mathcal P(u \cup b).`,'by cases; pack the power set'],[R`\text{So } ${N}{\mathcal P(u) \cup \mathcal P(b) \subseteq \mathcal P(u \cup b)}. \quad \blacksquare`,'drop the supposition: an if; speak of everything; pack']),n:`∎ That is the inclusion. The other way would need: from s ⊆ u ∪ b, that s ⊆ u or s ⊆ b. No technique gives it, and the next slide shows why none could.`}
+],{title:'The slides · merged parts by inclusion only · ← → keys work'});
+stepper('#sl10b',[
+  {k:'ember',kl:'the witness',t:R`u = \{\text{cat}\},\; b = \{\text{dog}\}:\qquad ${N}{\{\text{cat},\text{dog}\}} \in \mathcal P(u \cup b)`,n:`{cat, dog} ⊆ {cat} ∪ {dog} by the self-part technique, since the union is {cat, dog}. So it is in the right side.`},
+  {k:'ember',kl:'the witness',t:R`\{\text{cat},\text{dog}\} \notin \mathcal P(u),\quad \{\text{cat},\text{dog}\} \notin \mathcal P(b)`,n:`But dog ∉ {cat}, so {cat, dog} is not a subset of u (the counterexample technique on the every); and cat ∉ {dog} likewise for b. So it is in neither power set.`},
+  {k:'ember',kl:'the witness',t:R`${N}{\neg\big(\mathcal P(u \cup b) \subseteq \mathcal P(u) \cup \mathcal P(b)\big)} \quad \blacksquare`,n:`Show an example; the counterexample technique. ∎ Not a licence question: the sameness is simply not so, and a set on its own shows it.`}
+],{title:'The slides · the witness · ← → keys work'});
+
+/* long worked lines: stack the note under the line instead of scrolling */
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

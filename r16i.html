@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>16i · Improper integrals</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r16h.html">← 16h substitution and parts by hand</a><a href="r16j.html">next: 16j volumes by cross sections →</a></p>
+  <div class="tags"><span class="tag tech">16i · technique</span></div>
+  <h1>Improper integrals</h1>
+  <p>Rung 15's integral needs a closed interval and a bounded function. The region under one over the square, from one onwards, has no right end: it runs off to the right forever. The region under one over the square root, from zero to one, has a bounded base but climbs forever at the left. Neither has an area in rung 15's sense. Each does have areas up to any finite cut, and 16c computes them in a line. This step asks what those areas do as the cut runs out to forever, or in to the bad point. Sometimes they settle on a number, and that number is taken as the area. Sometimes they grow past every bound. A short list of powers decides most cases, and a comparison decides the rest.</p>
+  <p class="gesture">Out to forever, the area is what the areas out to farther and farther ends close in on. Where the function climbs at an end, the area is what the areas stopping nearer and nearer that end close in on. For one over a power: out to forever, the area is finite exactly when the power is more than one; in to zero, exactly when it is less than one; the power one fails both ways. A smaller positive function under one with a finite area has one too.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r16c.html">16c</a> (area-is-a-change), <a href="r16d.html">16d</a> (substitution for areas), <a href="r16a.html">16a</a> (the area function), <a href="r16f.html">16f</a> (the table, no-power-for-1/x), <a href="r15e.html">15e</a> (smaller-function-smaller-area, interval-cut-in-two), <a href="r15i.html">15i</a> (the limit of a sequence, the harmonic sum), <a href="r10f.html">10f</a> (limits as x → ∞), <a href="r10e.html">10e</a> (one-sided limits), <a href="r08c.html">8c</a> (no-holes). <a href="r16phys.html">16·phys</a> uses an integral out to forever for the work to escape the Earth.</p></div>
+</header>
+
+<section class="class step" data-step="16i1">
+  <h2 class="sthead"><span class="stno">16i1</span>Out to forever, and in to a bad point</h2>
+  <p class="stands">Stands on 16c (area-is-a-change) and 10f (far out).</p>
+  <p class="eqline" data-pid="ec5e1e">From here on, if f is integrable on [a, b] for every b &gt; a, then ∫ₐ^∞ f(x) dx means lim_{b→∞} ∫ₐᵇ f(x) dx, when that limit exists. If f is integrable on [c, b] for every c in (a, b], then ∫ₐᵇ f(x) dx means lim_{c→a⁺} ∫_cᵇ f(x) dx, when it exists; the same at the right end. When the limit exists the integral converges; otherwise it diverges. Their accepted name is improper integrals. Each mark is a name, for that limit, when it exists.</p>
+  <pre class="lines" data-k="ember" data-label="two that converge">
+\textstyle\int_1^b x^{-2}\,dx = -\tfrac1x\Big|_1^b = 1 - \tfrac1b @@ negative-powers backwards; area-is-a-change
+\textstyle\int_1^\infty x^{-2}\,dx = \lim_{b \to \infty}\big(1 - \tfrac1b\big) = 1 @@ 10f: 1/b → 0 as b → ∞
+\textstyle\int_c^1 x^{-1/2}\,dx = 2x^{1/2}\Big|_c^1 = 2 - 2\sqrt{c} @@ fraction-power for slopes backwards; area-is-a-change
+\textstyle\int_0^1 x^{-1/2}\,dx = \lim_{c \to 0^+}(2 - 2\sqrt c) = 2 @@ √ is continuous at 0 from the right (10e, 11a)
+  </pre>
+  <p data-pid="39739f"><b>So a region that never ends can have area 1, and a region that climbs past every height can have area 2.</b> 16c.4.2's 1 was this second kind.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · out to forever · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · the area up to a cut, as the cut runs out</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="chips" id="fch"></div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">b</span><input type="range" id="kb" min="1.2" max="60" step="0.1" value="8"><output id="ob"></output></div>
+      <div class="cap">Teal: the region under x⁻ᵖ from 1 to the cut b.</div>
+    </div>
+    <div class="panel">
+      <div class="lbl">the area ∫₁ᵇ x⁻ᵖ dx against b</div>
+      <canvas id="cvA"></canvas>
+      <div class="cap">Ink: the area up to b. Gold: the number it settles on, when there is one. Plum: the knob's b.</div>
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">16i1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">∫₁ᵇ x⁻³ dx</span></span>Find it for every b > 1, and guess what it heads to as b grows. <br>Find ∫₁^∞ x⁻³ dx by the definition.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="16i2">
+  <h2 class="sthead"><span class="stno">16i2</span>The powers</h2>
+  <p class="stands">Stands on 16i1, 16f (the table, the missing entry) and 15i (geometric sums).</p>
+  <p data-pid="cf0116">Out-to-forever technique: <b>for rational p, ∫₁^∞ x⁻ᵖ dx converges when p &gt; 1, to 1/(p − 1), and diverges when p ≤ 1.</b></p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="the out-to-forever technique">
+p \ne 1:\ \ \textstyle\int_1^b x^{-p}\,dx = \tfrac{b^{1-p} - 1}{1 - p} @@ the table (16f); area-is-a-change
+p \gt 1:\ \ b^{1-p} = \tfrac{1}{b^{p-1}} \to 0,\ \ \text{limit } \tfrac{1}{p - 1} @@ 10f: a positive power of b passes every bound, so its reciprocal → 0
+p \lt 1:\ \ b^{1-p} \text{ passes every bound} @@ the same fact; the integral passes every bound: it diverges
+p = 1:\ \ \text{on } [k, k + 1],\ \tfrac1x \ge \tfrac{1}{k+1} @@ x ≤ k + 1 and order-and-arithmetic-agree
+\textstyle\int_1^{n+1} \tfrac{dx}{x} \ge \tfrac12 + \tfrac13 + \cdots + \tfrac{1}{n+1} @@ smaller-function-smaller-area on each piece; interval-cut-in-two to add them
+\tfrac11 + \tfrac12 + \cdots + \tfrac{1}{2^m} \ge 1 + \tfrac{m}{2} @@ grouping by doubling: induction on m (4b); the 2ᵐ terms from 1/(2ᵐ + 1) to 1/2ᵐ⁺¹ are each at least 1/2ᵐ⁺¹
+\text{so } \textstyle\int_1^{b} \tfrac{dx}{x} \text{ passes every bound} \quad \blacksquare @@ the area function rises, since 1/t &gt; 0 (split-in-any-order, smaller-function-smaller-area); take n + 1 = 2ᵐ, m large
+  </pre>
+  <p data-pid="7a7408">In-to-0 technique: <b>for rational p, ∫₀¹ x⁻ᵖ dx converges when p &lt; 1, to 1/(1 − p), and diverges when p ≥ 1.</b></p>
+  <pre class="lines" data-k="ember" data-label="the in-to-0 technique">
+p \ne 1:\ \ \textstyle\int_c^1 x^{-p}\,dx = \tfrac{1 - c^{1-p}}{1 - p} @@ the table; area-is-a-change
+p \lt 1:\ c^{1-p} \to 0;\ \ p \gt 1:\ c^{1-p} = \tfrac{1}{c^{p-1}} \text{ passes every bound} @@ powers near 0 (10e)
+p = 1:\ \ \textstyle\int_c^1 \tfrac{dx}{x} = \int_1^{1/c} \tfrac{dt}{t} @@ substitution for areas with t = 1/x: dt = −dx/x², so dx/x = −dt/t, and the ends 1/c and 1 swap back
+\text{which passes every bound as } c \to 0^+ \quad \blacksquare @@ out-to-forever's case p = 1, with b = 1/c
+  </pre>
+  <p data-pid="1e5629">So x⁻¹ sits exactly on the line: too much area out to forever, too much in to 0. 16f's missing entry is the same function.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · the powers · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16i2.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\int_1^\infty x^{-p}\,dx = 4"></span></span>Find p.</li><li><span class="givens"><span data-tex-inline="\int_0^1 x^{-p}\,dx = 3"></span></span>Find p.</li><li><span class="givens"><span data-tex-inline="\int_k^\infty x^{-2}\,dx = 0.05"></span></span>Find k.</li><li><span class="givens"><span data-tex-inline="f \ge 0,"></span> <span data-tex-inline="F(b) = \int_1^b f = 3 - \tfrac{3}{b^2}"></span></span>Find f, and its area from 1 out to forever.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="16i3">
+  <h2 class="sthead"><span class="stno">16i3</span>Comparison</h2>
+  <p class="stands">Stands on 16i2, 16a (the area function) and 8c (completeness).</p>
+  <p data-pid="214638">Comparison technique for areas: <b>if 0 ≤ f(x) ≤ g(x) for x ≥ u, both integrable on every [u, b], and ∫ᵤ^∞ g converges, then ∫ᵤ^∞ f converges, and is at most ∫ᵤ^∞ g.</b></p>
+  <pre class="lines" data-k="ember" data-label="the comparison technique for areas">
+F(b) = \textstyle\int_a^b f,\ \ G(b) = \int_a^b g @@ area functions from a (16a)
+F \text{ and } G \text{ are increasing};\ \ F(b) \le G(b) \le \textstyle\int_a^\infty g @@ f, g ≥ 0, so each area function rises (split-in-any-order); smaller-function-smaller-area; G increases to its limit
+L = \sup\{F(b) : b \ge a\} \text{ exists} @@ no-holes (8c): the values of F are bounded above
+\text{fix } \varepsilon;\ \text{some } b_0:\ F(b_0) \gt L - \varepsilon @@ L − ε is not an upper bound
+b \gt b_0 \Rightarrow L - \varepsilon \lt F(b_0) \le F(b) \le L @@ F increasing; L an upper bound
+\htmlClass{new}{\textstyle\int_a^\infty f = L \le \int_a^\infty g} \quad \blacksquare @@ 10f's line with threshold b₀; L ≤ ∫ₐ^∞ g since that is an upper bound too
+  </pre>
+  <pre class="lines" data-k="ember" data-label="comparison at work">
+\tfrac{1}{\sqrt{x^3 + 1}} \le x^{-3/2} \text{ for } x \ge 1 @@ x³ + 1 ≥ x³; √ and 1/ reverse the order (8d)
+\textstyle\int_1^\infty \tfrac{dx}{\sqrt{x^3 + 1}} \text{ converges, to at most } 2 @@ comparison for areas with out-to-forever, p = 3/2
+\tfrac{1}{x^2 + 1} \le \tfrac{1}{x^2} \text{ for } x \ge 1:\ \ \textstyle\int_1^\infty \tfrac{dx}{x^2 + 1} \le 1 @@ comparison for areas with out-to-forever, p = 2; its value is not in the table
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · comparison · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16i3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="I = \int_2^\infty x^{-3}\,dx"></span></span>Find I.</li><li><span class="givens"><span data-tex-inline="I = \int_0^8 x^{-2/3}\,dx"></span></span>Find I.</li><li><span class="givens"><span data-tex-inline="I = \int_0^\infty \tfrac{x}{(x^2 + 1)^2}\,dx"></span></span>Find I.</li><li><span class="givens"><span data-tex-inline="I = \int_1^\infty \tfrac{x}{x^3 + 2}\,dx"></span></span>Prove that I converges, or that it does not.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="16i4">
+  <h2 class="sthead"><span class="stno">16i4</span>Illegal moves</h2>
+  <p class="stands">Stands on 16i1 to 16i3.</p>
+  <pre class="lines" data-k="ember" data-label="tempting, and not allowed">
+\textstyle\int_{-1}^{1} x^{-2}\,dx = -\tfrac1x\Big|_{-1}^{1} = -2\,? @@ split at 0: ∫₀¹ x⁻² diverges by in-to-0, so the whole diverges
+\textstyle\int_{-\infty}^{\infty} x\,dx = \lim_{b \to \infty} \int_{-b}^{b} x\,dx = 0\,? @@ both halves must converge on their own; ∫₀^∞ x dx does not
+\textstyle\int_1^\infty \tfrac{dx}{x} \text{ converges, since } \tfrac1x \to 0\,? @@ out-to-forever: shrinking to 0 is not enough
+-\tfrac1x\Big|_1^\infty = -\tfrac{1}{\infty} + 1\,? @@ ∞ is not a number; write the limit as b → ∞
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16i4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\textstyle\int_{-2}^1 x^{-2}\,dx = -\tfrac1x\big|_{-2}^1 = -\tfrac32"></span></span>Find two signs that the line went wrong.<br>Prove the right verdict.</li><li><span class="givens"><span data-tex-inline="\int_{-b}^b x^3\,dx,"></span> <span data-tex-inline="\int_{-\infty}^{\infty} x^3\,dx"></span></span>Find the limit of the first as b grows.<br>Prove that the second converges, or that it does not.</li><li><span class="givens"><span data-tex-inline="f \ge 0"></span></span>Write each line of comparison for areas's proof that uses the given.</li><li><span class="givens"><span data-tex-inline="\int_1^b \tfrac{dx}{x},"></span> <span data-tex-inline="\int_1^b \tfrac{dx}{x^2}"></span></span>Using the step's bound, find a b with the first above 3.<br>Prove that no b puts the second above 1.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">16i.4.1</span><span class="tagq">build</span>Make a positive function of your own, not a power, whose area from 1 out to forever is finite.<br>Prove it, and bound that area, marking each line that needs the function positive.</div>
+  <div class="chq"><span class="chid">16i.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="L(b) = \int_1^b \tfrac{dx}{x},"></span> <span data-tex-inline="b &gt; 1"></span></span>Prove L(2b) = L(b) + L(2) for every b.<br>Find the least power of 2 for b with L(b) at least 10 L(2).</div>
+  <div class="chq"><span class="chid">16i.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="f \ge 0,"></span> <span data-tex-inline="\int_1^\infty f \text{ converges}"></span></span>Prove or refute: f(x) goes to 0 as x grows.</div>
+  <div class="chq"><span class="chid">16i.4.4</span><span class="tagq">seam</span><span class="givens"><span data-tex-inline="y = 1/x^2,"></span> <span data-tex-inline="x \ge 1,"></span> <span data-tex-inline="\text{area } 1"></span></span>In 1641 a solid was found that stretches out forever along the graph of 1/x and yet has a finite size. Philosophers had argued, since ancient Athens, that an endless thing could not be finished. One of them called the result madness. The region under the given graph is the flat version: endless, with area 1.<br>Is that region a finished thing with an area, or only a limit of areas that are each finished?<br>Does the difference matter, if the number is the same?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r16h.html">← 16h · substitution and parts by hand</a><a href="r16j.html">16j · volumes by cross sections →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>Hobbes wrote that to take Torricelli’s result in its plain sense, a solid endlessly long and yet of finite size, a man need not be a geometer or a logician; he would need to be mad.</p><cite>Hobbes, in his quarrel with Wallis; paraphrase</cite></aside>
+  <p>The solid of 1641 is Evangelista Torricelli’s, and its accepted name is Gabriel’s horn, or Torricelli’s trumpet. The philosophers’ doctrine goes back to Aristotle. The grouping of the sums 1 + ½ + ⅓ + … by doubling is Nicole Oresme’s.</p>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+/* least and greatest of F.f on [lo, hi]: the ends, F's critical points inside, and a fine sample (exact between critical points for the functions used here) */
+function ext(F,lo,hi){ if(F.dir) return [0,1]; let m=Infinity,M=-Infinity; const t=x=>{ const v=F.f(x); if(v<m) m=v; if(v>M) M=v; };
+  t(lo); t(hi); (F.crit||[]).forEach(c=>{ if(c>lo&&c<hi) t(c); }); for(let k=1;k<64;k++) t(lo+(hi-lo)*k/64); return [m,M]; }
+function sums(F,pts){ let L=0,U=0; const ms=[],Ms=[]; for(let i=1;i<pts.length;i++){ const [m,M]=ext(F,pts[i-1],pts[i]), w=pts[i]-pts[i-1]; ms.push(m); Ms.push(M); L+=m*w; U+=M*w; } return {L,U,ms,Ms}; }
+const eq=(a,b,n)=>Array.from({length:n+1},(_,i)=>a+(b-a)*i/n);
+function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
+function boxes(P,pts,hs,stroke,fill,alpha){ const c=P.ctx; for(let i=1;i<pts.length;i++){ const a=pts[i-1],b=pts[i],h=hs[i-1]; c.globalAlpha=alpha; P.poly([[a,0],[b,0],[b,h],[a,h]],null,fill); c.globalAlpha=1; P.poly([[a,0],[b,0],[b,h],[a,h]],stroke,null,1.2); } }
+function dirDots(P,a,b){ const c=P.ctx; c.fillStyle=col('--ink'); for(let k=0;k<=300;k++){ const x=a+(b-a)*k/300; const y=(k%2)?0:1; c.fillRect(P.X(x)-1,P.Y(y)-1,2,2); } }
+/* shade between the graph of fn and the axis from lo to hi: above in pos colour, below in neg colour */
+function shade(P,fn,lo,hi,pos,neg,alpha){ if(hi<lo){ const t=lo; lo=hi; hi=t; } const c=P.ctx, N=300; c.globalAlpha=alpha==null?0.32:alpha;
+  for(let k=0;k<N;k++){ const x0=lo+(hi-lo)*k/N, x1=lo+(hi-lo)*(k+1)/N, xm=(x0+x1)/2, y=fn(xm); if(!isFinite(y)) continue; P.poly([[x0,0],[x1,0],[x1,fn(x1)],[x0,fn(x0)]],null,y>=0?pos:neg); }
+  c.globalAlpha=1; }
+function rangeOf(fn,lo,hi,pad){ let m=Infinity,M=-Infinity; for(let k=0;k<=400;k++){ const v=fn(lo+(hi-lo)*k/400); if(isFinite(v)){ if(v<m) m=v; if(v>M) M=v; } } if(m>0) m=0; if(M<0) M=0; const p=(M-m)*(pad==null?0.12:pad)||1; return [m-p,M+p]; }
+function chips(el,FN,get,setk,after){ Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===get()) b.className='on'; b.onclick=()=>{ setk(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+const Nw='\\htmlClass{new}';
+function gridFor(sp){ return sp>40?10:sp>16?4:sp>8?2:sp>3?1:sp>1.2?0.5:0.25; }
+function frame2(P,fn,lo,hi,pad){ const w=hi-lo; P.o.x=[lo-0.12*w,hi+0.08*w]; P.o.y=rangeOf(fn,lo,hi,pad==null?0.12:pad); const sx=P.o.x[1]-P.o.x[0], sy=P.o.y[1]-P.o.y[0]; let g=gridFor(sx); while(sy/g>24) g*=2; P.o.grid=g; }
+const num=(f,a,b,n)=>{ n=n||4000; const h=(b-a)/n; let s=0; for(let i=0;i<n;i++) s+=f(a+(i+0.5)*h)*h; return s; };
+/* axes with separate steps across and up */
+function axes2(P,gx,gy){ const c=P.ctx,o=P.o; c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ c.moveTo(P.X(x),P.Y(o.y[0])); c.lineTo(P.X(x),P.Y(o.y[1])); }
+  for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ c.moveTo(P.X(o.x[0]),P.Y(y)); c.lineTo(P.X(o.x[1]),P.Y(y)); } c.stroke();
+  c.strokeStyle=col('--muted'); c.lineWidth=1.3; c.beginPath(); if(o.y[0]<=0&&o.y[1]>=0){ c.moveTo(P.X(o.x[0]),P.Y(0)); c.lineTo(P.X(o.x[1]),P.Y(0)); } if(o.x[0]<=0&&o.x[1]>=0){ c.moveTo(P.X(0),P.Y(o.y[0])); c.lineTo(P.X(0),P.Y(o.y[1])); } c.stroke();
+  c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; const ly=Math.min(P.H-6,Math.max(12,P.Y(0)+14));
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ if(Math.abs(x)<1e-9) continue; c.fillText(+x.toFixed(6),P.X(x),ly); }
+  c.textAlign='right'; const lx=Math.max(32,Math.min(P.W-4,P.X(0)-5)); for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ if(Math.abs(y)<1e-9) continue; c.fillText(String(+y.toFixed(6)).replace('-','−'),lx,P.Y(y)+4); } }
+function nice(sp){ const raw=sp/6, p=Math.pow(10,Math.floor(Math.log10(raw))), m=raw/p; return (m<1.5?1:m<3.5?2:m<7.5?5:10)*p; }
+const FN={ h:{lab:'p = ½',p:0.5}, one:{lab:'p = 1',p:1}, th:{lab:'p = 3/2',p:1.5}, two:{lab:'p = 2',p:2} };
+let key='one';
+const kb=$('kb'),cvF=$('cvF'),cvA=$('cvA');
+const A=(p,b)=>p===1?num(x=>1/x,1,b,6000):(Math.pow(b,1-p)-1)/(1-p);
+const PF=plane(cvF,{x:[0,10],y:[0,1.2],grid:1,aspect:0.8,draw:P=>drawF(P)});
+const PA=plane(cvA,{x:[0,62],y:[0,12],grid:10,aspect:0.8,draw:P=>drawA(P)});
+[[PF,cvF],[PA,cvA]].forEach(([P,cv])=>Object.defineProperty(P.o,'aspect',{get:()=>cv.clientWidth>480?0.75:0.9}));
+function drawF(P){ const p=FN[key].p, b=+kb.value, f=x=>Math.pow(x,-p); const R0=Math.max(4,b*1.1); P.o.x=[-R0*0.04,R0]; P.o.y=[-0.12,1.6]; P.o.grid=R0>40?10:R0>16?5:R0>8?2:1; P.axes();
+  shade(P,f,1,b,'--teal','--teal',0.34); curve(P,f,'--ink',2.6,Math.max(0.35,R0*0.01),R0); P.line(b,-0.12,b,1.6,'--ember',1.4,[]); }
+function drawA(P){ const p=FN[key].p, b=+kb.value; const top=p===0.5?14:p===1?5:p===1.5?2.4:1.2; P.o.y=[-top*0.06,top]; P.o.grid=10; P.axes();
+  for(let y=1;y<top;y+=(top>6?2:top>2?1:0.5)) P.text(String(y),-0.4,y,'--muted','right',11);
+  if(p>1) P.line(0,1/(p-1),62,1/(p-1),'--gold',1.6,[6,4]);
+  const c=P.ctx; c.strokeStyle=col('--ink'); c.lineWidth=2.4; c.beginPath(); for(let k=0;k<=240;k++){ const bb=1+59*k/240, v=A(p,bb); k?c.lineTo(P.X(bb),P.Y(v)):c.moveTo(P.X(bb),P.Y(v)); } c.stroke();
+  P.dot(b,A(p,b),'--plum',5); }
+function read(){ const p=FN[key].p, b=+kb.value, v=A(p,b); $('ob').textContent=mm(b,1);
+  const vd=$('vdF'); vd.className='verdict'+(p>1?' win':'');
+  vd.textContent='Area from 1 to '+mm(b,1)+': '+mm(v,4)+'. '+(p>1?'It settles on 1/(p − 1) = '+mm(1/(p-1),4)+'; the area left out beyond b is '+mm(1/(p-1)-v,4)+'.':p===1?'It keeps growing, more and more slowly, and passes every bound, as out-to-forever\'s harmonic sums show.':'It grows like a power of b, past every bound.');
+  tex($('eqF'),p===1?R`\textstyle\int_1^{${mm(b,1)}} \tfrac{dx}{x} \approx ${mm(v,4)}\ \ \text{(by sums; not in the table)}`:R`\textstyle\int_1^{${mm(b,1)}} x^{-${p===0.5?'1/2':p===1.5?'3/2':'2'}}\,dx = \tfrac{b^{1-p} - 1}{1 - p} = ${mm(v,4)}`,true); }
+function all(){ PF.redraw(); PA.redraw(); read(); }
+kb.addEventListener('input',all);
+chips($('fch'),FN,()=>key,k=>{ key=k; },all);
+window.__pic={set:(k,b)=>{ [...$('fch').children][Object.keys(FN).indexOf(k)].click(); kb.value=b; all(); const p=FN[k].p; return {A:+A(p,b).toFixed(5),num:+num(x=>Math.pow(x,-p),1,b,6000).toFixed(5),txt:$('vdF').textContent.slice(0,90)}; }};
+all();
+stepper('#sl1',[
+  {k:'ember',kl:'out to forever',t:R`\textstyle\int_a^\infty f = \lim_{b \to \infty}\int_a^b f`,n:`When the limit exists: converges.`},
+  {k:'ember',kl:'in to a bad point',t:R`\textstyle\int_0^1 f = \lim_{c \to 0^+}\int_c^1 f`,n:`The same, at an end where f climbs.`},
+  {k:'ember',kl:'area 1',t:R`\textstyle\int_1^\infty x^{-2}\,dx = 1`,n:`Endless, and finite.`},
+  {k:'ember',kl:'area 2',t:R`\textstyle\int_0^1 x^{-1/2}\,dx = 2`,n:`Unbounded, and finite.`}
+],{title:'The slides · out to forever · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'out-to-forever',t:R`${Nw}{\textstyle\int_1^\infty x^{-p}\,dx = \tfrac{1}{p - 1}},\ p \gt 1`,n:`Diverges for p ≤ 1.`},
+  {k:'ember',kl:'the harmonic sums',t:R`1 + \tfrac12 + \cdots + \tfrac{1}{2^m} \ge 1 + \tfrac m2`,n:`Grouped by doubling; so ∫₁ᵇ dx/x passes every bound.`},
+  {k:'ember',kl:'in-to-0',t:R`\textstyle\int_0^1 x^{-p}\,dx = \tfrac{1}{1 - p},\ p \lt 1`,n:`Diverges for p ≥ 1.`},
+  {k:'ember',kl:'t = 1/x',t:R`\textstyle\int_c^1 \tfrac{dx}{x} = \int_1^{1/c} \tfrac{dt}{t}`,n:`In to 0 is out to forever.`}
+],{title:'The slides · the powers · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'comparison for areas',t:R`0 \le f \le g \Rightarrow \textstyle\int f \le \int g`,n:`no-holes gives the limit.`}
+],{title:'The slides · comparison · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'illegal',t:R`\textstyle\int_{-1}^{1} x^{-2}\,dx \ne -2`,n:`It diverges.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

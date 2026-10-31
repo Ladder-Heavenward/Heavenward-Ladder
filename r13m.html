@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="ladder-cert" content="rung"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>13m · Homing in on a root with tangent lines, and how errors spread</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+#cvA,#cvB{touch-action:none}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.gs{border-collapse:collapse;font-family:var(--mono);font-size:.82rem;margin:4px auto;background:var(--card)}
+table.gs td,table.gs th{border:1px solid var(--grid);padding:3px 8px;text-align:right}
+table.gs th{color:var(--muted);font-weight:500}
+table.gs .ok{color:var(--teal)} table.gs .no{color:var(--muted)}
+@media (max-width:520px){table.gs{font-size:.72rem} table.gs td,table.gs th{padding:2px 4px}}
+.bench{font-size:1.15rem;font-weight:600;border-left:3px solid var(--ember);padding:6px 14px}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r13l.html">← 13l implicit slopes and the inverse dodge</a><a href="r13phys.html">next: 13·phys how fast is a falling stone going right now? →</a></p>
+  <div class="tags"><span class="tag tech">13m · technique</span></div>
+  <h1>Homing in on a root with tangent lines, and how errors spread</h1>
+  <p>13k's linearization stands in for a function near a point. This step gives it two jobs. The first: to find where a function is 0, find where its tangent line is 0 instead; that lands near, so do it again from there. For a polynomial the new error is a constant times the square of the old one, exactly. So the number of correct places roughly doubles at every step: this step proves it. The second job: you measured something, with an error, and put it through a formula. How large is the error in the answer? About the slope times the error in, and, for a power, the power times the error in as a part of the whole.</p>
+  <p class="gesture">From a guess, walk down the tangent line to where it is 0: the next guess is the old guess less its value divided by its slope. To carry a small error through a formula, multiply it by the formula's slope.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r13k.html">13k</a> (the tangent line, L, E(h), nearby-line-error), <a href="r12e.html">12e</a> (traps and bisection, halvings-width), <a href="r09g.html">9g</a> (factor), <a href="r13c.html">13c</a> (product for slopes), <a href="r13h.html">13h</a> (fraction-power for slopes, odd roots), <a href="r09cb4.html">9·cb4</a> (sequences by a start and a step) and <a href="r05h.html">5h</a> (square-of-a-difference). The measured formulas are given on the step. <a href="r13phys.html">13·phys</a> and <a href="r13chem.html">13·chem</a> carry measured numbers through formulas; rung 14 proves the doubling for functions that are not polynomials.</p></div>
+</header>
+
+<section class="class step" data-step="13m1">
+  <h2 class="sthead"><span class="stno">13m1</span>Walk down the tangent line</h2>
+  <p class="stands">Stands on 13k (the tangent line) and 12e (bisection).</p>
+  <p data-pid="4bae4f">Say it in words first. You want a real r with f(r) = 0, and you have a guess x₀ near it. You cannot solve f(x) = 0; that is the whole trouble. But you can solve “the tangent line at x₀ is 0”, because a linear function with a slope other than 0 is 0 at exactly one input. Near x₀ the line and the function are nearly the same (13k's nearby-line-error), so where the line is 0 should be near where the function is. Call it x₁, and do it again.</p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the tangent step">
+y - f(x_0) = f'(x_0)\,(x - x_0) @@ the tangent line at the guess (13k)
+0 - f(x_0) = f'(x_0)\,(\htmlClass{new}{x_1} - x_0) @@ where it is 0: put y = 0, and call that input x₁
+x_1 - x_0 = -\dfrac{f(x_0)}{f'(x_0)} @@ multiplying-keeps-answers by f′(x₀)⁻¹: licensed only when f′(x₀) ≠ 0; turn the sides about (T)
+x_1 = \htmlClass{keep}{x_0 - \dfrac{f(x_0)}{f'(x_0)}} @@ adding-keeps-answers
+  </pre>
+  <p class="eqline" data-pid="d7025d">From here on, in this step, for f with a slope other than 0 at x, N(x) names x − f(x)/f′(x), the tangent step from x (Newton's). The guesses x₀, x₁, x₂, ⋯ are 9·cb4's sequence with start x₀ and step N, for as long as no slope along the way is 0: xₙ₊₁ = N(xₙ).</p>
+  <p data-pid="20a616"><b>Read the step as: the new guess is the old guess less the value over the slope.</b> f(x₀)/f′(x₀) is how far along the line you must walk to lose all your value: the value, divided by how much value you lose per step of input.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the step · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · left: walk down the tangent lines to a zero · right: carry a measurement’s error through a formula</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="chips" id="fch"></div>
+      <canvas id="cvA"></canvas>
+      <div class="chips" id="bch"><button id="b1">one step →</button><button id="b6">six steps</button><button id="b0">clear</button></div>
+      <div class="cap">Drag across the picture to choose the first guess x₀ (teal dot). Each step: an ember tangent line from the graph down to the x-axis, then a dashed column back up to the graph. In the table, teal digits agree with the zero; grey ones do not yet.</div>
+      <div class="gw" id="tbl"></div>
+    </div>
+    <div class="panel">
+      <div class="chips" id="gch"></div>
+      <canvas id="cvB"></canvas>
+      <div class="kn">
+        <span class="m">x</span><input type="range" id="kx" min="0.5" max="4" step="0.05" value="2"><output id="ox"></output>
+        <span class="m">Δx</span><input type="range" id="kd" min="0.01" max="1" step="0.01" value="0.1"><output id="od"></output>
+      </div>
+      <div class="cap">Teal band: the measurement x ± Δx. Gold band, on the y-axis: where the true output lies, read through the graph. Ember band: the estimate, the slope times Δx either way. For small errors the two bands agree; push Δx up and the gold band goes lopsided.</div>
+      <div class="verdict" id="vd"></div>
+    </div>
+  </div>
+  <div class="eqbox" id="eq"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">13m1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = x^2 − 5,  x₀ = 2</span></span>Write the tangent line at x₀, and find where it is 0. <br>Check that this is N(2).</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13m2">
+  <h2 class="sthead"><span class="stno">13m2</span>√2 by the averaging step</h2>
+  <p class="stands">Stands on 13m1 and 5g (one bottom).</p>
+  <pre class="lines" data-k="ember" data-label="this step: the tangent step for x² − 2">
+N(x) = x - \dfrac{x^2 - 2}{2x} @@ f(x) = x² − 2, f′(x) = 2x (polynomial-slope)
+= \dfrac{2x^2 - x^2 + 2}{2x} @@ one bottom (5g)
+= \htmlClass{new}{\tfrac12\Big(x + \dfrac{2}{x}\Big)} @@ split: the halfway real between x and 2/x
+  </pre>
+  <p data-pid="e99c29">A Greek book on measuring, from the first century, finds a root of 720 this way. It takes 27, whose square is near 720, and divides 720 by 27 to get 26⅔. It takes the halfway number of the two, 26⅚, whose square differs from 720 by only a thirty-sixth. And it says that the same step, begun again from the new number, gives a closer one.</p>
+  <p data-pid="8d04ed">The averaging step (Heron's) is two thousand years older than the tangent step. If x is too large, then 2/x is too small, since their product is exactly 2. So √2 lies between them: take the halfway real. (161/6)² = 25921/36 = 720 + 1/36: the old book's “a thirty-sixth”, checked. Now run it from 1 in fractions, so nothing is rounded. A bar over digits, as in <span data-tex-inline="1.41\overline{6}"></span>, is 8·cb5's mark: the block under the bar repeats without end.</p>
+  <pre class="lines" data-k="ember" data-label="this step: four steps">
+x_1 = \tfrac12\big(1 + 2\big) = \tfrac32 = 1.5 @@ off by about 0.086
+x_2 = \tfrac12\big(\tfrac32 + \tfrac43\big) = \tfrac{17}{12} = 1.41\overline{6} @@ off by about 0.0025
+x_3 = \tfrac{577}{408} = 1.4142156\cdots @@ off by about 0.0000021
+x_4 = \tfrac{665857}{470832} = \htmlClass{new}{1.41421356237}469\cdots @@ off by about 0.0000000000016; √2 = 1.41421356237309⋯
+  </pre>
+  <p data-pid="db0063">Count the correct places: 1, 3, 6, 12. Each step roughly doubles them. Compare 12e's bisection: each halving buys about a third of a place. 12 places of √2 from the trap [1, 2] take 40 halvings, since 2⁴⁰ = 1 099 511 627 776 is the first power of 2 past 10¹² (halvings-width). The tangent step took four. <b>Bisection adds places; the tangent step multiplies them.</b></p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · the averaging step · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13m2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">N(x) = ½(x + 2/x),  x₀ = 2</span></span>Take two steps in fractions. <br>Say why the second guess is closer than the first.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13m3">
+  <h2 class="sthead"><span class="stno">13m3</span>Why the places double</h2>
+  <p class="stands">Stands on 13m2, 5h (square-of-a-difference) and 13c (product for slopes).</p>
+  <p data-pid="acc84b">For the averaging step the reason is one line of 5h's square-of-a-difference:</p>
+  <pre class="lines" data-k="ember" data-label="this step: the averaging step's error">
+N(x) - \sqrt2 = \dfrac{x^2 + 2}{2x} - \sqrt2 = \dfrac{x^2 - 2\sqrt2\,x + 2}{2x} @@ one bottom; (√2)² = 2
+= \htmlClass{new}{\dfrac{(x - \sqrt2)^2}{2x}} @@ square-of-a-difference turned about: the displacement pattern, squared
+  </pre>
+  <p data-pid="6bc137">The new error is the old error squared, divided by 2x, about 2.8 near √2. And for any x &gt; 0 it is never negative, so after the first step every guess is above √2. The same happens for every polynomial, and the proof is 9g's factor technique with 13c's product rule.</p>
+  <p data-pid="d51766">Polynomial-guess-error technique (Newton's): <b>for a polynomial, each new error is the old error squared, times a factor.</b> Precisely: let f be a polynomial with a zero r, and q the polynomial with f(x) = (x − r)q(x) (factor). Wherever f′(x) ≠ 0, N(x) − r = (x − r)² · q′(x)/f′(x).</p>
+  <pre class="lines" data-k="ember" data-label="this step: the polynomial-guess-error technique">
+N(x) - r = (x - r) - \dfrac{f(x)}{f'(x)} = \dfrac{(x - r)\,f'(x) - f(x)}{f'(x)} @@ the line for N; one bottom
+f'(x) = q(x) + (x - r)\,q'(x) @@ product for slopes on (x − r)q(x), with slope-of-a-line: (x − r)′ = 1
+(x - r)f'(x) - f(x) = (x - r)q(x) + (x - r)^2 q'(x) - (x - r)q(x) @@ substitute for the expression; spread on ℝ
+= \htmlClass{new}{(x - r)^2\,q'(x)} @@ negative on ℝ: the (x − r)q(x) cells cancel
+N(x) - r = \htmlClass{keep}{(x - r)^2 \cdot \dfrac{q'(x)}{f'(x)}} \quad \blacksquare @@ fractions-of-rationals
+  </pre>
+  <p data-pid="648959">For x² − 2 with r = √2, q is x + √2 and q′ is 1, which gives the averaging step's line. For x³ − 2 with c = ∛2, q is x² + cx + c² and q′ is 2x + c, so N(x) − c = (x − c)²(2x + c)/(3x²). And at r itself, product for slopes gives f′(r) = q(r) and f″(r) = 2q′(r), so near r the factor q′(x)/f′(x) heads to f″(r)/(2f′(r)): 13d's second slope sets the constant.</p>
+  <p data-pid="504cf9">Places-double technique: <b>once a guess is close enough, each new guess about doubles the number of correct places.</b> Precisely: Let f, r, q be as in polynomial-guess-error. Let d &gt; 0 be a distance. Suppose that on [r − d, r + d] there are bounds |q′(x)| ≤ C and |f′(x)| ≥ m &gt; 0. Here m is a bound, not a slope. Put K = C/m. Suppose |x₀ − r| ≤ d and K · |x₀ − r| ≤ ½. Then every guess xₙ lies in [r − d, r + d]. And K · |xₙ − r| ≤ (K · |x₀ − r|)^(2ⁿ).</p>
+  <pre class="lines" data-k="ember" data-label="this step: the places-double technique, by induction on n">
+e_n = |x_n - r| @@ a step name for the n-th error
+e_{n+1} = e_n^2 \cdot \dfrac{|q'(x_n)|}{|f'(x_n)|} \le \htmlClass{new}{K\,e_n^2} @@ polynomial-guess-error, size-of-a-product; the bounds are true since xₙ is in [r − d, r + d] (the hypothesis)
+e_{n+1} \le (K e_n)\,e_n \le \tfrac12 e_n \le d @@ K eₙ ≤ K e₀ ≤ ½ by the hypothesis; so xₙ₊₁ stays in [r − d, r + d]
+K e_{n+1} \le (K e_n)^2 \le \big((K e_0)^{2^n}\big)^2 = \htmlClass{keep}{(K e_0)^{2^{n+1}}} \quad \blacksquare @@ multiply by K; powers-keep-order; the hypothesis; power-of-a-power (2ⁿ · 2 = 2ⁿ⁺¹); induction
+  </pre>
+  <p data-pid="3f898c">For x² − 2 on [1, 2]: q′ = 1, so C = 1; f′(x) = 2x ≥ 2, so m = 2; K = ½. From x₀ = 3/2, K e₀ = ½ · 0.0858 ≈ 0.043, so K e₃ ≤ 0.043⁸, which is below 10⁻¹⁰. Three steps are guaranteed ten places, and the run above shows twelve. The exponent 2ⁿ is the doubling. For a function that is not a polynomial there is no factor to factor with. The same bound is true near a zero where the slope is not 0; that is held in trust until 14c proves it.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · places double · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13m3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">an error of 0.01,  K = ½</span></span>Bound the next error by K times the error squared. <br>Say how many correct places that gives.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13m4">
+  <h2 class="sthead"><span class="stno">13m4</span>Cube roots, and choosing the start</h2>
+  <p class="stands">Stands on 13m3.</p>
+  <p data-pid="978c80">For ∛2, f(x) = x³ − 2 and f′(x) = 3x², so N(x) = (2x + 2/x²)/3: a weighted halfway real of x, x and 2/x², whose product is 2. From 1: 4/3, then 91/72 ≈ 1.2639, then 1.25993⋯, then 1.2599210500⋯, against ∛2 = 1.2599210499⋯. The errors run about 0.073, 0.004, 0.000012, 0.00000000012: squaring, as polynomial-guess-error says. Starting from 1 wastes a step; from 5/4 you have eight places after two steps. <b>Choosing the start is part of the skill</b>, as choosing the base was on 13k.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13m4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = x^3 − 2,  x₀ = 1</span></span>Take one tangent step. <br>Check that it is 4/3.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13m5">
+  <h2 class="sthead"><span class="stno">13m5</span>The oldest working, and a later one</h2>
+  <p class="stands">Stands on 13m4 and 4j (two-term-power).</p>
+  <p data-pid="712f8a">The inventor of the tangent step described it in a manuscript written in 1669 and printed only in 1711, and he did not use slopes at all. His example was y³ − 2y − 5 = 0. He put in a guess plus a small unknown, and set aside every piece with its square or more.</p>
+  <pre class="lines" data-k="teal" data-label="from 13k: the linearization, as the 1669 manuscript worked it">
+y = 2 + p @@ 2 is close: 8 − 4 − 5 = −1
+(2 + p)^3 - 2(2 + p) - 5 = p^3 + 6p^2 + 10p - 1 @@ two-term-power (row 3 of 4j's table), then collect
+10p - 1 = 0 \;\Rightarrow\; p = 0.1,\ \ y = 2.1 @@ the pieces with p² or more set aside
+y = 2.1 + q:\ \ q^3 + 6.3q^2 + 11.23q + 0.061 = 0 @@ again, on the new equation
+q = -\dfrac{0.061}{11.23} \approx -0.0054,\ \ \htmlClass{new}{y \approx 2.0946} @@ the zero is 2.0945514⋯
+  </pre>
+  <p data-pid="e7941c">Read the line 10p − 1 with 13k's eyes. The −1 is f(2) and the 10 is f′(2) = 3 · 4 − 2. What the manuscript kept is f(2) + f′(2)p, the linearization, and solving it is one of N's steps: 2 − (−1)/10 = 2.1. What it set aside is the linearization's error E(p), which nearby-line-error controls in the limit. Nothing on this ladder is set aside for being small. A book of 1690 went back to the first equation with each improved guess, instead of building a new one. That is the loop as written above. In 1740 the method was stated for general equations, in the language of fluxions. Its accepted name is Newton’s method: the tangent step, taken again and again.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · the 1669 working · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13m5.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">y^2 = 5,  y = 2 + p</span></span>Expand, keep only the terms with no p and one p, and solve for p. <br>Compare with one averaging step from 2.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13m6">
+  <h2 class="sthead"><span class="stno">13m6</span>Where it fails</h2>
+  <p class="stands">Stands on 13m5.</p>
+  <p data-pid="1c37e8">12e's bisection could not fail once it held a trap: the trap always held a zero. The tangent step has no trap. It trusts the tangent line, and the tangent line can mislead in three ways.</p>
+  <pre class="lines" data-k="ember" data-label="this step: three failures">
+x^2 - 2 \text{ from } 0:\ \ f'(0) = 0 @@ a level tangent line is never 0: N(0) names nothing (nothing-times-0-is-1)
+x^2 - 2 \text{ from } 0.1:\ \ N(0.1) = \tfrac12(0.1 + 20) = 10.05 @@ nearly level: it lands far away (the averaging step recovers; most functions do not)
+x^3 - 2x + 2 \text{ from } 0:\ \ N(0) = 0 - \dfrac{2}{-2} = 1 @@ f(0) = 2, f′(0) = −2
+N(1) = 1 - \dfrac{1}{1} = \htmlClass{new}{0} @@ back where it started: 0, 1, 0, 1, ⋯ for ever. The zero is near −1.7693; from −2, N gives −1.8
+\sqrt[3]{x}:\ \ N(x) = x - \dfrac{x^{1/3}}{\frac13 x^{-2/3}} = x - 3x = \htmlClass{new}{-2x} @@ 13h's slope of the cube root (and its chain for x &lt; 0); fraction-exponent. From 1: −2, 4, −8, 16, every step twice as far
+  </pre>
+  <p data-pid="644a03">The cube root's only zero is 0, where it has no slope (13e). Every step doubles the distance and changes the side; no start but 0 itself works. <b>So the working rule is the engineers': trap first, then sharpen.</b> Bisect until the trap is small and the slope inside it is far from 0. Then hand over to the tangent step for the last places.</p>
+  <p data-pid="c3b89c">Running it backwards: given a step, find the equation it hunts. N(x) = ½(x + 5/x) has the same shape as the averaging step, so it hunts √5. A fixed point says it too: N(x) = x exactly when f(x)/f′(x) = 0, that is, f(x) = 0. Here x = ½(x + 5/x) gives 2x = x + 5/x, then x = 5/x, then x² = 5.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · where it fails · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13m6.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">f(x) = x^2 − 4,  x₀ = 0</span></span>Try one tangent step. <br>Say which line breaks, and pick a start that works.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13m7">
+  <h2 class="sthead"><span class="stno">13m7</span>The second job: how errors spread</h2>
+  <p class="stands">Stands on 13m6 and 13k (the linearization).</p>
+  <p data-pid="0a5d7c">Take as given that a body dropped from rest falls x = ½gt² metres in t seconds, with g ≈ 9.8 m/s². You time a fall at t = 2.0 s, and your stopwatch is good to 0.1 s either way. The distance is 4.9 · 4 = 19.6 m. How sure are you of it? Say it in words. An error in the measurement is a change Δt of input. The output changes by the slope times Δt, plus 13k's error E(Δt), which divided by Δt heads to 0.</p>
+  <pre class="lines" data-k="ember" data-label="this step: an error through a formula">
+x = 4.9\,t^2,\ \ t = 2.0,\ \ \Delta t = \pm 0.1 @@ the formula and the measurement, in metres and seconds
+x'(t) = 9.8\,t = 19.6 \ \text{m/s} @@ the slope at the measured input (power for slopes, constant-factor for slopes)
+\Delta x = \htmlClass{new}{19.6 \cdot 0.1} + E = 1.96 + E @@ 13k: the value here plus the slope times the change, plus the error
+x(2.1) = 21.609,\ \ x(1.9) = 17.689 @@ the ends: 2.009 above and 1.911 below 19.6
+E = 4.9\,(\Delta t)^2 = 0.049 @@ the cell with two Δt's (13g), the same either way
+  </pre>
+  <p data-pid="c2cfb8">So the distance is 19.6 m give or take about 2 m. The cell with two changes, 0.049, is small beside 1.96; that is when the estimate is good.</p>
+  <p class="eqline" data-pid="a300a5">From here on, the relative error of a measured value x with error Δx is Δx/x. It is the error as a part of the whole, often written as a percent (5g). Likewise Δy/y for an output.</p>
+  <p data-pid="be55de">So 0.1 s in 2.0 s is a relative error of a part in 20, or 5%; 1.96 m in 19.6 m is a part in 10, or 10%. The square doubled the relative error, and the slope says why. Tracking how an input's error spreads to an output is called propagation of error.</p>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · how errors spread · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13m7.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">x = 4.9t^2,  t = 1.0 ± 0.1</span></span>Estimate the error in x with the linearization. <br>Give both relative errors.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13m8">
+  <h2 class="sthead"><span class="stno">13m8</span>Relative errors through powers and products</h2>
+  <p class="stands">Stands on 13m7 and 13h (fraction-power for slopes).</p>
+  <p data-pid="8628d4">Relative-errors technique: <b>through a power, the relative error is multiplied by the power.</b> Precisely: let y = c · xⁿ with c ≠ 0, n a fraction and x &gt; 0. Then the ratio of relative errors (Δy/y)/(Δx/x) heads to n as Δx → 0. It is (Δy/Δx) · (x/y). Δy/Δx heads to c n x^(n−1) by fraction-power for slopes and constant-factor for slopes. Times x/(c xⁿ) that is n, by fraction-exponent. So a square doubles the relative error, a cube triples it, a square root halves it, and the constant c does not matter at all.</p>
+  <pre class="lines" data-k="ember" data-label="this step: relative-errors at work">
+P = \dfrac{V^2}{R},\ \ R = 4\ \Omega,\ \ V = 12.0 \pm 0.1\ \text{V} @@ given: a resistor of R ohms at V volts uses power P = V²/R watts; here P = 36 W
+\dfrac{\Delta V}{V} = \tfrac{0.1}{12} \approx 0.83\% \;\Rightarrow\; \dfrac{\Delta P}{P} \approx \htmlClass{new}{1.67\%} @@ relative-errors with n = 2: about ±0.6 W (12.1²/4 = 36.6025, 11.9²/4 = 35.4025)
+B = 70\,M^{3/4}:\ \ \dfrac{\Delta M}{M} = 4\% \;\Rightarrow\; \dfrac{\Delta B}{B} \approx \htmlClass{new}{3\%} @@ given: an animal of mass M kg uses energy at a rate B = 70M^(3/4); n = ¾; the 70 does not matter
+t = \sqrt{2x/g}:\ \ \dfrac{\Delta x}{x} = 2\% \;\Rightarrow\; \dfrac{\Delta t}{t} \approx \htmlClass{new}{1\%} @@ n = ½: a root halves the relative error
+  </pre>
+  <p data-pid="cea349">And for a product, product for slopes gives (uv)′/(uv) = u′/u + v′/v: the relative errors of the factors add. So a part in 48 of one factor and a part in 630 of the other give about a part in 45 of the product, since 1/48 + 1/630 ≈ 1/45. 13l's xy = 1 is the same fact turned round: y′/y = −1/x · 1. So x and 1/x carry equal and opposite relative errors (n = −1).</p>
+  <section class="slides" id="sl7"><div class="eyebrow">The slides · relative errors · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13m8.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = x^2 - 3,"></span> <span data-tex-inline="x_0 = 2"></span></span>Using the tangent step, put the step into the averaging step's shape, and take two steps from x₀ in fractions.</li><li><span class="givens"><span data-tex-inline="\text{target } \sqrt[3]{3},"></span> <span data-tex-inline="x_0 = \tfrac32"></span></span>Using the tangent step, take two steps from x₀ in fractions.</li><li><span class="givens"><span data-tex-inline="x^2 - 2 = 0,"></span> <span data-tex-inline="x_0 = 1.4"></span></span>Solve it the 1669 manuscript's way, from x₀, for one correction. <br>Compare with the averaging step's step from x₀.</li><li><span class="givens"><span data-tex-inline="x = 4.9t^2,"></span> <span data-tex-inline="t = 3.0 \pm 0.1\text{ s}"></span></span>Using the linearization, estimate the error in x, and check by computing x at both ends. <br>Give the relative errors.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13m9">
+  <h2 class="sthead"><span class="stno">13m9</span>Running it backwards</h2>
+  <p class="stands">Stands on 13m1 to 13m8.</p>
+  <p data-pid="f3f5aa">Running it backwards is the question an experimenter asks: how good must my measurement be? If the energy use B must be known to within 3%, the mass must be known to within 4%, because the power is ¾: divide the error you can bear by the power. If the fall's distance must be known to 1%, the time must be known to ½%.</p>
+  <section class="slides" id="sl8"><div class="eyebrow">The slides · backwards · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13m9.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="x_0 = 3,"></span> <span data-tex-inline="x_1 = 2,"></span> <span data-tex-inline="f(3) = 6"></span></span>Find f's slope at 3.</li><li><span class="givens"><span data-tex-inline="N(x) = \tfrac13\left(2x + \frac{10}{x^2}\right)"></span></span>Find the number this step is hunting, by finding where it leaves its input fixed.</li><li><span class="givens"><span data-tex-inline="f(x) = x^3 - 2x + 2,"></span> <span data-tex-inline="\text{a tangent step landed on } 1"></span></span>Find every start it could have come from.</li><li><span class="givens"><span data-tex-inline="y = 2 + p,"></span> <span data-tex-inline="p^3 + 6p^2 + 10p - 1 = 0"></span></span>Put p back in terms of y, and recover the manuscript's equation.</li><li><span class="givens"><span data-tex-inline="B = 70M^{3/4},"></span> <span data-tex-inline="B \text{ known to within } 1.5\%"></span></span>Find how precisely the mass M must be known.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13m10">
+  <h2 class="sthead"><span class="stno">13m10</span>Illegal moves</h2>
+  <p class="stands">Stands on 13m1 to 13m9.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+x_{n+1} = x_n - \dfrac{f'(x_n)}{f(x_n)}\,? @@ upside down: the walk is value over slope. For x² − 2 from 1 it gives 1 − 2/(−1) = 3, not 3/2
+\Delta x = (\Delta t)^2\,? @@ squaring the error: that is only the cell with two changes, 0.01 times 4.9. The slope carries the error: 1.96
+\dfrac{\Delta x}{x} = \Big(\dfrac{\Delta t}{t}\Big)^2\,? @@ 5% would become 0.25%. The power multiplies the relative error (relative-errors); it does not raise it
+\begin{aligned}&\text{the tangent step from}\\ &\quad\text{any start finds the zero}\,?\end{aligned} @@ x³ − 2x + 2 from 0 cycles; the cube root runs away. Trap first
+\Delta y = f'(x)\,\Delta x \text{ for a large } \Delta x\,? @@ the estimate is only as good as the linearization: for x = 4.9t² with Δt = 1, E = 4.9, not small beside 19.6
+  </pre>
+  <p data-pid="3aa258">That completes the rung's rules of slopes. Sums, products, quotients, powers with fractions and chains of any length each have a slope you can find, with a reason beside every line. The tangent line turns a slope into an estimate, and the tangent step turns the estimate into a zero. You can run each rule backwards, and you know where each one stops: at a joint whose pieces arrive with different slopes, at a discontinuity, and where the slope is 0.</p>
+  <p class="bench" data-pid="7fb8c0">Now you're a person who can use some calculus.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13m10.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{averaging step for } \sqrt2,"></span> <span data-tex-inline="x_0 = -1"></span></span>Find where the steps go, and which zero of the square less 2 each start leads to.</li><li><span class="givens"><span data-tex-inline="f(x) = x^2 - 2,"></span> <span data-tex-inline="x_0 = 0.01"></span></span>Take one step from x₀, and find the line of the step that 0 breaks.</li><li><span class="givens"><span data-tex-inline="f(x) = x^3 - 2x + 2,"></span> <span data-tex-inline="x_0 = 0"></span></span>Run three tangent steps, and find what happens and a start that reaches the zero.</li><li><span class="givens"><span data-tex-inline="\text{Claim: time out by } 2\%,"></span> <span data-tex-inline="\text{so } \tfrac12 gt^2 \text{ out by } 2\% \times 2\% = 0.04\%"></span></span>Find the slip, the right figure, and the cell of 13g's grid the claimed number measures.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">13m.4.1</span><span class="tagq">build</span>Choose a whole number of your own that is not a cube, and design the tangent step for its cube root in the averaging step’s shape. <br>Run two steps in fractions from a start you choose, and find a start from which no step can be taken.</div>
+  <div class="chq"><span class="chid">13m.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="f(x_0) = 0"></span></span>Run the tangent step from x₀, and find what it does.</div>
+  <div class="chq"><span class="chid">13m.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="f(r) = 0,"></span> <span data-tex-inline="f'(r) = 0,"></span> <span data-tex-inline="\text{e.g. } x^2 \text{ at } 0"></span></span>Decide whether the errors still square near r.</div>
+  <div class="chq"><span class="chid">13m.4.4</span><span class="tagq">seam</span>In 1879 a mathematician asked which zero the tangent step finds from each start, for x² − 1 and for cubics, when the starts may be any numbers of a wider kind than the reals. He solved the first and wrote that the cubic seemed very difficult. A century later computers drew the answer, and it was endlessly tangled. <br>How can so plain a step have so wild a map of where it ends?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r13l.html">← 13l · implicit slopes and the inverse dodge</a><a href="r13stat.html">13·stat · which line fits the points best? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>The averaging step is Heron’s, from his Metrica; the tangent step is Isaac Newton’s, from De analysi (written 1669, printed 1711). The book of 1690 is Joseph Raphson’s Analysis aequationum universalis, and the statement of 1740 is Thomas Simpson’s. The three-quarter-power law for an animal’s energy use, B = 70M^(3/4), is Kleiber’s law. The mathematician of question 13m.4.4 is Arthur Cayley.</p>
+  <aside class="voice para"><p>Heron, in the Metrica, finds a root of 720 by taking 27, whose square is near it, dividing 720 by 27 to get 26⅔, and taking the halfway number of the two, 26⅚, whose square differs from 720 by only a thirty-sixth; and he says that the same step, begun again from the new number, gives a closer one.</p><cite>Heron of Alexandria, Metrica I.8 (first century); paraphrased</cite></aside>
+  <p>Accepted names: the tangent step is Newton’s method, or the Newton–Raphson method; the averaging step is the Babylonian method, or Heron’s method.</p>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; const a=Math.abs(v); let s=d!=null?v.toFixed(d):(a>=100?v.toFixed(2):a>=1?v.toFixed(4):a>=0.0001?v.toFixed(5):v.toPrecision(3)); if(s.indexOf('.')>=0&&s.indexOf('e')<0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const cbrt=t=>t<0?-Math.cbrt(-t):Math.cbrt(t);
+const FN={
+  h2:{lab:'x² − 2',f:x=>x*x-2,d:x=>2*x,r:Math.SQRT2,x:[-1,3.2],y:[-3,8],x0:1},
+  c2:{lab:'x³ − 2',f:x=>x*x*x-2,d:x=>3*x*x,r:Math.cbrt(2),x:[-1,3],y:[-4,12],x0:1},
+  nw:{lab:'x³ − 2x − 5',f:x=>x*x*x-2*x-5,d:x=>3*x*x-2,r:2.0945514815423265,x:[-1,3.5],y:[-10,20],x0:2},
+  cy:{lab:'x³ − 2x + 2',f:x=>x*x*x-2*x+2,d:x=>3*x*x-2,r:-1.7692923542386314,x:[-2.6,2],y:[-6,8],x0:0},
+  cr:{lab:'∛x',f:x=>cbrt(x),d:x=>x===0?NaN:1/(3*Math.pow(Math.abs(x),2/3)),r:0,x:[-17,17],y:[-3,3],x0:1}
+};
+let fk='h2', X0=1, steps=[];
+const cvA=$('cvA');
+function run(n){ const F=FN[fk]; if(!steps.length) steps=[X0]; for(let i=0;i<n;i++){ const x=steps[steps.length-1], d=F.d(x); if(!isFinite(d)||d===0||!isFinite(x)||Math.abs(x)>1e6){ break; } steps.push(x-F.f(x)/d); } }
+function digits(v,r){ const s=v.toFixed(12), t=r.toFixed(12); let k=0; while(k<s.length&&s[k]===t[k]) k++; return [s.slice(0,k),s.slice(k)]; }
+const PA=plane(cvA,{x:[-1,3],y:[-3,8],grid:1,aspect:0.85,draw:P=>{ const F=FN[fk]; P.o.x=F.x; P.o.y=F.y; P.o.grid=(F.x[1]-F.x[0])>10?2:(F.y[1]-F.y[0])>12?2:1; P.axes(); P.fn(F.f,'--ink',2.4);
+  const S=steps.length?steps:[X0]; P.dot(S[0],0,'--teal',6);
+  for(let i=0;i+1<S.length;i++){ const x=S[i], y=F.f(x), x1=S[i+1]; P.line(x,0,x,y,'--muted',1.2,[4,4]); P.line(x,y,x1,0,'--ember',2); P.dot(x1,0,'--ember',4.5); P.dot(x,y,'--ink',3.5); } }});
+Object.defineProperty(PA.o,'aspect',{get:()=>cvA.clientWidth>560?0.8:0.9});
+function table(){ const F=FN[fk], S=steps.length?steps:[X0]; let h='<table class="gs"><tr><th>n</th><th>xₙ</th><th>|xₙ − r|</th></tr>';
+  S.forEach((v,i)=>{ const [a,b]=digits(v,F.r); h+='<tr><td>'+i+'</td><td><span class="ok">'+a+'</span><span class="no">'+b+'</span></td><td>'+(Math.abs(v-F.r)<1e-15?'0':Math.abs(v-F.r).toExponential(1))+'</td></tr>'; });
+  $('tbl').innerHTML=h+'</table>'; }
+/* errors through a formula */
+const GF={
+  fall:{lab:'4.9 t²',f:x=>4.9*x*x,d:x=>9.8*x,n:2,tx:'4.9\\,t^2',xl:'t'},
+  pw:{lab:'V²/4',f:x=>x*x/4,d:x=>x/2,n:2,tx:'V^2/4',xl:'V'},
+  rt:{lab:'√x',f:x=>Math.sqrt(x),d:x=>0.5/Math.sqrt(x),n:0.5,tx:'\\sqrt{x}',xl:'x'},
+  rc:{lab:'1/x',f:x=>1/x,d:x=>-1/(x*x),n:-1,tx:'1/x',xl:'x'},
+  kl:{lab:'70 M^(3/4)',f:x=>70*Math.pow(x,0.75),d:x=>52.5*Math.pow(x,-0.25),n:0.75,tx:'70\\,M^{3/4}',xl:'M'}
+};
+let gk='fall', XM=2, DX=0.1;
+const cvB=$('cvB'),kx=$('kx'),kd=$('kd');
+const PB=plane(cvB,{x:[0,5],y:[0,10],grid:1,aspect:0.85,draw:P=>{ const G=GF[gk]; P.o.x=[0,4.6]; let hi=G.f(4.6); if(G.n<0) hi=G.f(0.4); P.o.y=[Math.min(0,G.f(4.6)),hi*1.05]; const sp=P.o.y[1]-P.o.y[0]; P.o.grid=sp>60?20:sp>20?5:sp>6?1:0.5; P.axes(); P.fn(x=>x>0?G.f(x):NaN,'--ink',2.4);
+  const c=P.ctx, x=XM, y=G.f(x), lo=G.f(x-DX), hi2=G.f(x+DX), m=G.d(x);
+  c.fillStyle=col('--teal'); c.globalAlpha=.18; c.fillRect(P.X(x-DX),P.Y(P.o.y[1]),P.X(x+DX)-P.X(x-DX),P.Y(P.o.y[0])-P.Y(P.o.y[1])); c.globalAlpha=1;
+  const a=Math.min(lo,hi2), b=Math.max(lo,hi2); c.fillStyle=col('--gold'); c.globalAlpha=.35; c.fillRect(P.X(P.o.x[0]),P.Y(b),18,P.Y(a)-P.Y(b)); c.globalAlpha=1;
+  const ea=y-Math.abs(m)*DX, eb=y+Math.abs(m)*DX; c.fillStyle=col('--ember'); c.globalAlpha=.35; c.fillRect(P.X(P.o.x[0])+20,P.Y(eb),12,P.Y(ea)-P.Y(eb)); c.globalAlpha=1;
+  P.line(x-DX,y-m*DX,x+DX,y+m*DX,'--ember',2); P.dot(x,y,'--ink',5); }});
+Object.defineProperty(PB.o,'aspect',{get:()=>cvB.clientWidth>560?0.8:0.9});
+function read(){ const F=FN[fk], S=steps.length?steps:[X0], last=S[S.length-1];
+  const G=GF[gk], x=XM, y=G.f(x), m=G.d(x), lo=G.f(x-DX), hi=G.f(x+DX), est=Math.abs(m)*DX;
+  $('ox').textContent=fm(x,2); $('od').textContent=fm(DX,2);
+  tex($('eq'),R`\begin{gathered}\text{tangent steps: } x_0 = ${fm(S[0])},\ \ x_{${S.length-1}} = \htmlClass{new}{${fm(last)}},\ \ \text{zero } ${fm(F.r)}\\ y = ${G.tx}:\ \ ${G.xl} = ${fm(x,2)} \pm ${fm(DX,2)},\ \ y = ${fm(y)},\ \ \text{slope } ${fm(m)}\\ \text{estimate } \pm\,\htmlClass{keep}{${fm(est)}},\ \ \text{ends } ${fm(hi-y)},\ ${fm(lo-y)}\\ \dfrac{\Delta y / y}{\Delta ${G.xl} / ${G.xl}} = ${fm((est/Math.abs(y))/(DX/x))} \quad (n = ${fm(G.n)})\end{gathered}`,true);
+  const vd=$('vd'), lop=Math.abs(Math.abs(hi-y)-Math.abs(lo-y))/est;
+  vd.className='verdict '+(lop<0.1?'win':'lose');
+  vd.textContent='Relative error in: '+fm(100*DX/x)+'%; out, by the estimate: '+fm(100*est/Math.abs(y))+'%, the power '+fm(G.n)+' times (relative-errors). '+(lop<0.1?'The true ends sit nearly evenly around the value: the estimate is good.':'The true ends are lopsided by '+fm(100*lop)+'% of the estimate: the error is no longer small, and E has grown.'); }
+function all(){ PA.redraw(); table(); PB.redraw(); read(); }
+function chips(id,lib,cur,set){ const ch=$(id); Object.keys(lib).forEach(k=>{ const b=document.createElement('button'); b.textContent=lib[k].lab; if(k===cur) b.className='on'; b.onclick=()=>{ set(k); [...ch.children].forEach(z=>z.classList.toggle('on',z===b)); all(); }; ch.appendChild(b); }); }
+chips('fch',FN,fk,k=>{ fk=k; X0=FN[k].x0; steps=[]; }); chips('gch',GF,gk,k=>{ gk=k; });
+$('b1').onclick=()=>{ run(1); all(); }; $('b6').onclick=()=>{ run(6); all(); }; $('b0').onclick=()=>{ steps=[]; all(); };
+kx.oninput=()=>{ XM=+kx.value; all(); }; kd.oninput=()=>{ DX=+kd.value; all(); };
+let drag=false; cvA.addEventListener('pointerdown',e=>{ drag=true; cvA.setPointerCapture&&cvA.setPointerCapture(e.pointerId); mv(e); }); cvA.addEventListener('pointermove',mv); ['pointerup','pointercancel'].forEach(t=>cvA.addEventListener(t,()=>drag=false));
+function mv(e){ if(!drag) return; const q=PA.point(e); X0=Math.round(q.x*100)/100; steps=[]; all(); }
+window.__pic={set:(k,x0,n,g,x,dx)=>{ if(k){ fk=k; [...$('fch').children].forEach((b,i)=>b.classList.toggle('on',Object.keys(FN)[i]===k)); } if(x0!=null){ X0=x0; steps=[]; } if(n) run(n); if(g){ gk=g; [...$('gch').children].forEach((b,i)=>b.classList.toggle('on',Object.keys(GF)[i]===g)); } if(x!=null){ XM=x; kx.value=x; } if(dx!=null){ DX=dx; kd.value=dx; } all(); return {steps:steps.slice(),txt:$('vd').textContent}; }};
+all();
+
+/* ---------- slides ---------- */
+const N='\\htmlClass{new}', K='\\htmlClass{keep}';
+stepper('#sl1',[
+  {k:'ember',kl:'the step',t:R`0 - f(x_0) = f'(x_0)(x_1 - x_0) \;\Rightarrow\; ${N}{x_1 = x_0 - \dfrac{f(x_0)}{f'(x_0)}}`,n:`Where the tangent line is 0. multiplying-keeps-answers needs f′(x₀) ≠ 0.`}
+],{title:'The slides · the step · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'the averaging step',t:R`N(x) = ${N}{\tfrac12\Big(x + \dfrac2x\Big)}`,n:`For x² − 2. If x is too large, 2/x is too small; take the halfway real.`},
+  {k:'ember',kl:'four steps',t:R`\tfrac32,\ \tfrac{17}{12},\ \tfrac{577}{408},\ \tfrac{665857}{470832}`,n:`Correct places 1, 3, 6, 12. Bisection needs 40 halvings for 12.`}
+],{title:'The slides · the averaging step · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'the averaging step\'s error',t:R`N(x) - \sqrt2 = ${N}{\dfrac{(x - \sqrt2)^2}{2x}}`,n:`square-of-a-difference turned about. The error is squared at every step.`},
+  {k:'ember',kl:'polynomial-guess-error · 1 of 2',t:R`f'(x) = q(x) + (x - r)\,q'(x)`,n:`factor writes f = (x − r)q; product for slopes takes the slope.`},
+  {k:'ember',kl:'polynomial-guess-error · 2 of 2',t:R`N(x) - r = ${N}{(x - r)^2\,\dfrac{q'(x)}{f'(x)}}`,n:`The (x − r)q cells cancel. For every polynomial. ∎`},
+  {k:'ember',kl:'places-double',t:R`K e_{n+1} \le (K e_n)^2 \;\Rightarrow\; K e_n \le (K e_0)^{${N}{2^n}}`,n:`K = C/m from bounds on q′ and f′. The exponent 2ⁿ is the doubling. ∎`},
+  {k:'ember',kl:'places-double for √2',t:R`K = \tfrac12,\ \ K e_0 \approx 0.043 \;\Rightarrow\; K e_3 \le 0.043^8`,n:`Ten places guaranteed after three steps; the run shows twelve.`}
+],{title:'The slides · places double · ← → keys work'});
+stepper('#sl4',[
+  {k:'teal',kl:'the 1669 working · 1 of 2',t:R`(2 + p)^3 - 2(2 + p) - 5 = p^3 + 6p^2 + 10p - 1`,n:`De analysi, 1669. He set aside p² and p³.`},
+  {k:'teal',kl:'the 1669 working · 2 of 2',t:R`10p - 1 = 0 \;\Rightarrow\; y = 2.1`,n:`f(2) + f′(2)p: the linearization. One step of N. What he set aside is E.`}
+],{title:'The slides · the 1669 working · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'a level line',t:R`f'(0) = 0:\ \ N(0)\ \text{names nothing}`,n:`For x² − 2. From 0.1 it lands at 10.05.`},
+  {k:'ember',kl:'a cycle',t:R`x^3 - 2x + 2:\ \ 0 \to 1 \to ${N}{0}`,n:`The zero is near −1.7693; from −2 the step gives −1.8.`},
+  {k:'ember',kl:'a runaway',t:R`\sqrt[3]{x}:\ \ N(x) = ${N}{-2x}`,n:`1, −2, 4, −8, 16: no slope at the zero. Trap first, then sharpen.`}
+],{title:'The slides · where it fails · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'an error through a formula',t:R`\Delta x = 19.6 \cdot 0.1 + E = 1.96 + 0.049`,n:`x = 4.9t² at t = 2.0 ± 0.1. The slope carries the error; E is the cell with two changes.`}
+],{title:'The slides · how errors spread · ← → keys work'});
+stepper('#sl7',[
+  {k:'ember',kl:'relative-errors',t:R`\dfrac{\Delta y / y}{\Delta x / x} \to ${N}{n}`,n:`For y = c xⁿ: fraction-power for slopes, constant-factor for slopes, fraction-exponent. A square doubles, a root halves; c does not matter.`},
+  {k:'ember',kl:'products',t:R`\dfrac{(uv)'}{uv} = \dfrac{u'}{u} + \dfrac{v'}{v}`,n:`product for slopes: relative errors of factors add.`}
+],{title:'The slides · relative errors · ← → keys work'});
+stepper('#sl8',[
+  {k:'teal',kl:'backwards',t:R`\dfrac{\Delta B}{B} = 3\% \;\Leftarrow\; \dfrac{\Delta M}{M} = ${N}{4\%}`,n:`Divide the error you can bear by the power: here ¾.`}
+],{title:'The slides · backwards · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

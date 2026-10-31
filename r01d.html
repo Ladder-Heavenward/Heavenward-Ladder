@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>1d · If, and exactly when</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.ways{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+@media (max-width:420px){.ways{grid-template-columns:1fr}}
+.way{background:var(--sand);border:1px solid var(--grid);border-radius:6px;padding:8px 10px;display:grid;gap:3px;font-size:.92rem}
+.way .t{font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.way.out{opacity:.35;text-decoration:line-through}
+.way.live{border-color:var(--teal);box-shadow:inset 0 0 0 1px var(--teal)}
+.way.convict{border-color:var(--ember);box-shadow:inset 0 0 0 1px var(--ember)}
+.way.convict .t{color:var(--ember)} .way.live .t{color:var(--teal)}
+.pic .eqbox{font-size:.95rem;white-space:normal}
+.colm{display:grid;gap:3px;font-family:var(--serif);background:var(--sand);padding:8px 12px;border-radius:4px;min-height:40px}
+.ln{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 14px;align-items:baseline;font-size:.95rem}
+.ln .r{font-family:var(--mono);font-size:.74rem;color:var(--muted);text-align:right;max-width:26ch}
+.ln.in{padding-left:18px;border-left:2px solid var(--grid)}
+.ln.out .s{color:var(--teal)} .ln.new .s{color:var(--ember)}
+@media (max-width:560px){.ln{grid-template-columns:1fr}.ln .r{text-align:left;max-width:none}}
+.ifs{font-family:var(--mono);font-size:.8rem;color:var(--muted);display:grid;gap:2px}
+.knobs .knob{min-width:150px}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r01c.html">← 1c and, or</a><a href="r01e.html">next: 1e every and some →</a></p>
+  <div class="tags"><span class="tag proof">1d · proof</span></div>
+  <h1>If, and exactly when</h1>
+  <p>“If it rains, the street is wet.” That is a promise, and nearly everything proved on the ladder is a promise of this shape. This step gives “if” its mark and its techs: carry a promise through when its condition is met, and make a promise by supposing its condition and keeping it. It sets the ground floor's tech unpack beside an “if”, and shows why the two stay different techs. It proves the earliest techniques about “if”: that promises chain, and that a promise can be turned about with denials. It shows exactly where the turned-about form refuses to turn back, and builds “exactly when” as a promise each way. It ends with the illegal moves that convince more people than any others.</p>
+  <p class="gesture">Having “if it rains, the street is wet” and having rain, write that the street is wet. To earn a promise, suppose its condition for a while and reach its result. The if promises nothing when its condition fails; keep that in view and the classic mistakes cannot touch you.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r01b.html">1b</a> (¬, ⊥, suppositions, refute, clash) and <a href="r01c.html">1c</a> (∧, join, keep; ∨ and cases), and on 0c's unpack. <a href="r01e.html">1e</a> writes “every” around an “if”; <a href="r01f.html">1f</a> gives ⇒ its table and shows the table is forced by these techs; <a href="r01g.html">1g</a> is the rulebook for the if family; <a href="r01i.html">1i</a> turns prove-an-if into the commonest proof shape.</p></div>
+</header>
+
+<section class="class step" data-step="1d1">
+  <h2 class="sthead"><span class="stno">1d1</span>The word, then the mark</h2>
+  <p class="stands">Stands on 1c1 (and, and its mark).</p>
+  <p data-pid="2f2e8d">An “if” has a condition and a promise. “If it rains, the street is wet”: the condition is that it rains; the promise is that the street is wet. <b>The sentence says that whenever the condition is met the promise is kept.</b> It says nothing about days when the condition is not met. On a dry day the street may be wet (a street-cleaning truck went by and hosed it) or dry, and the sentence is not broken either way. The only way to break it is a day when it rains and the street stays dry. Here is the mark:</p>
+  <div class="eqline" data-tex="\begin{aligned}&amp;\text{From here on, } P\\ &amp;\quad \Rightarrow Q \text{ means: if } P \text{ is true}\\ &amp;\quad\text{then } Q \text{ is true. Whenever } P, \text{ also } Q.\end{aligned}"></div>
+  <p data-pid="93f0e3">P ⇒ Q is a statement, made of two. It is called a conditional, or an implication.</p>
+  <p data-pid="62228c">Read <span data-tex-inline="P \Rightarrow Q">P ⇒ Q</span> as “if P then Q” or “P implies Q”. P is the <b>hypothesis</b> (the condition) and Q the <b>conclusion</b> (the promise). Those are the names the ladder uses from here on.</p>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">1d1.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">“If it rains, the street is wet.”</span> <span class="gtx">(a) rain, wet street; (b) no rain, wet street; (c) rain, dry street; (d) no rain, dry street.</span></span>On which of these days is the sentence broken? <br>Say why each of the others leaves it standing.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="1d2">
+  <h2 class="sthead"><span class="stno">1d2</span>Other ways to say the same arrow</h2>
+  <p class="stands">Stands on 1d1 (the word, then the mark).</p>
+  <p data-pid="e26104">English has other ways of saying the same arrow. This step keeps to “if P then Q”, and takes three of the others one at a time.</p>
+  <p data-pid="e83b22">“Q whenever P.” “Q whenever P” is “if P then Q” with its halves swapped in the sentence: every time the condition is met, the promise is kept. The same condition and the same promise make the same arrow.</p>
+  <p data-pid="d79c32">“No P without Q.” The one way to break an if is a day with the condition and without the promise: rain, and a dry street. “No P without Q” forbids exactly that day and nothing else, so it is the same arrow. In marks it is <span data-tex-inline="\neg(P \land \neg Q)">¬(P ∧ ¬Q)</span>: never P and not-Q together.</p>
+  <p data-pid="7ae36a">“P only if Q.” Read it slowly, because it sounds as if it runs from Q to P. It says P never happens except alongside Q: it rains only if the street is wet. That is “no P without Q”, the phrasing just above, so it is the same arrow again, <span data-tex-inline="P \Rightarrow Q">P ⇒ Q</span>. 1g sets it beside the rest of the English phrasings.</p>
+  <p data-pid="8399d6">None of these says that P makes Q happen. <b>The arrow claims no cause; it claims only that P never comes without Q.</b> “If it is a cat, it is an animal” is a true if, and nothing in it is caused: being a cat does not make anything become an animal.</p>
+  <p data-pid="b91d8c">Long ago, two teachers of logic quarrelled over this very line. One said an “if” is false in one case only: when it starts from something so and ends at something not so. The other wanted more: that it could never start so and end not so, at any time. The ladder's arrow is the first teacher's: an if is false in one case only, the day it rains and the street is dry. The basement tells the rest of the quarrel.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">1d2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">(a) “Leo cheers whenever the team scores.”</span> <span class="gtx">(b) “No snow without cold.”</span> <span class="gtx">(c) “The gym is open only if a teacher is there.”</span></span>Write each as “if … then …”. <br>For (c), say which half is the condition.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="1d3">
+  <h2 class="sthead"><span class="stno">1d3</span>Carry an if through</h2>
+  <p class="stands">Stands on 1d1 (the word, then the mark).</p>
+  <p data-pid="54950c"><b>Carry an if through: from P and P ⇒ Q, you may write Q.</b> This uses an “if”.</p>
+  <p data-pid="276561">Carrying through is the tech everyone uses without noticing. Here it is, named.</p>
+  <p data-pid="2f1797">It rains. If it rains, the street is wet. So, carrying the if through, the street is wet.</p>
+  <p data-pid="68b225">The tech needs both sentences in hand. The if alone gives nothing: it is a promise, and a promise is kept only when its condition is met. The rain alone gives nothing either: without the promise, rain says nothing about streets.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">1d3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">If the bell rings, class is over.</span> <span class="gtx">The bell rings.</span></span>Write what carrying the if through gives, with its reason. <br>Which two sentences does it lean on?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="1d4">
+  <h2 class="sthead"><span class="stno">1d4</span>Prove an if</h2>
+  <p class="stands">Stands on 1d3 (carry an if through) and 1a3 (a supposition's report).</p>
+  <p data-pid="57b8cb"><b>Prove an if: suppose P; reach Q under that supposition; drop it; conclude P ⇒ Q.</b> This makes an “if”. It is the conclusion 1a drew for its reports, now a tech with a name. The supposition is 1a's, with 1a's rule: once it is dropped, what was said under it is gone, and what remains is the if, not P and not Q.</p>
+  <p data-pid="08c3e4">Proving an if is the tech with the supposition. Suppose the condition; under that supposition, reach the promise by whatever techs you have; drop it. Here the promise is widened with 1c's add-an-option, and the point is to watch the supposition start and end.</p>
+  <p data-pid="7faf13">Given: if it rains, the street is wet. Suppose, until we drop it, that it rains. Carry the if through: the street is wet. Add an option (1c): the street is wet or the gutter overflows. Now drop the supposition. What we keep is an if: if it rains, then the street is wet or the gutter overflows.</p>
+  <p data-pid="c83401">Once the supposition is dropped, you do not have “it rains”, and you do not have “the street is wet or the gutter overflows”. You have only the if that joins them. That is what a promise is: a statement about what follows, not a claim that anything has happened.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · carry through, and prove an if · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">1d4.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\text{Let } T \text{ be “the bus is late”,}"></span> <span data-tex-inline="B \text{ “Mia's bike has a flat”,}"></span> <span data-tex-inline="M \text{ “Mia is late for school”.}"></span> <span data-tex-inline="(T \lor B) \Rightarrow M"></span> <span data-tex-inline="\text{1. suppose } B"></span> <span data-tex-inline="\text{2. } T \lor B"></span> <span data-tex-inline="\text{3. } ?"></span> <span data-tex-inline="\text{Foot: } B \Rightarrow M"></span></span>Fill the missing sentence. <br>Then read the foot back into English.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="1d5">
+  <h2 class="sthead"><span class="stno">1d5</span>A mark and its meaning</h2>
+  <p class="stands">Stands on 1d4 (prove an if) and 1b7 (not the same thing as).</p>
+  <p data-pid="e835d7">The ladder's own marks are unpacked and packed like words. The line that brought in ≠ runs both ways. From x ≠ b you may write ¬(x = b), by unpack. From ¬(x = b) you may write x ≠ b, by pack. 1b did exactly this unpacking and packing.</p>
+  <p data-pid="71c741">The mark built at the end of this step, “exactly when”, is a promise each way between two statements. A “from here on” line makes the same two-way traffic between a mark and its meaning. The line makes that traffic by being laid down, not by being proved. That is why unpack stays a tech of its own, beside the if: an if must be earned, and a meaning is laid down.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">1d5.1</span><span class="ph bend">bend</span><span class="givens"><span data-tex-inline="m \ne l\text{: Mia is not Leo.}"></span> <span data-tex-inline="\neg(p = q)"></span></span>Write what unpack gives from the first, and what pack gives from the second. <br>Was either one proved? What let it in?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="1d6">
+  <h2 class="sthead"><span class="stno">1d6</span>Promises chain</h2>
+  <p class="stands">Stands on 1d4 (prove an if) and 0b7 (chain).</p>
+  <p data-pid="4c4bfe">In English: if it rains the street is wet; if the street is wet, Ann wears boots; so if it rains, Ann wears boots. Promises pass along a chain. Its medieval name is the <i>hypothetical syllogism</i>; here it is the chain technique for If.</p>
+  <p data-pid="916b04">Chain technique for If: <b>if P then Q, and if Q then R; so if P then R.</b> It needs two ifs, where the first one's promise is the second one's condition. The argument is prove-an-if wrapped around carry-through, used twice. It is this rung's version of 0b's chain technique.</p>
+  <p data-pid="a9d507">Start from P ⇒ Q and Q ⇒ R. Suppose, until we drop it, P. Carry the first if through: Q. Carry the second if through: R. Now drop the supposition. What we keep: P ⇒ R. A long chain is the technique made again on its own result, as in 0c.</p>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · promises chain · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">1d6.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">If Pip barks, Juno wakes.</span> <span class="gtx">If Juno wakes, Rex runs.</span></span>Argue “if Pip barks, Rex runs”, one sentence each with its reason.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="1d7">
+  <h2 class="sthead"><span class="stno">1d7</span>Turn and deny</h2>
+  <p class="stands">Stands on 1d6 (promises chain), 1b5 (refute) and 1a5 (suppositions inside suppositions).</p>
+  <p data-pid="876aad">Turn-and-deny technique for If: <b>from “if P then Q”, you may write “if not Q, then not P”.</b> It needs one if. The denials swap places and the arrow turns about. For example: from “if it rains, the street is wet”, you may conclude “if the street is not wet, it did not rain”.</p>
+  <p data-pid="556a81">Its argument is the rung's first supposition inside a supposition written out, so here it is in rain and street first. If it rains, the street is wet: that is given. Suppose, until we drop it, that the street is not wet. While that stands, suppose it rains as well. Carry the if through: the street is wet. That clashes with “the street is not wet”: totally false. Drop the inner supposition, by refute: it did not rain. Now drop the outer one. What we keep is an if: if the street is not wet, it did not rain.</p>
+  <p data-pid="bbb91f">Nothing in that argument used what rain or streets are. It is the same for any P and Q. Start from P ⇒ Q. Suppose, until we drop it, ¬Q. While that stands, suppose P as well. Carry the if through: Q. That clashes with ¬Q: totally false. Drop the second supposition, by refute: ¬P. Now drop the first one. What we keep is an if: ¬Q ⇒ ¬P.</p>
+  <section class="slides" id="sl7"><div class="eyebrow">The slides · the contrapositive · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">1d7.1</span><span class="ph undo">undo</span><span class="givens"><span data-tex-inline="\text{Let } T \text{ be “the bus is late”,}"></span> <span data-tex-inline="M \text{ “Mia is late for school”.}"></span> <span data-tex-inline="T \Rightarrow M,"></span> <span data-tex-inline="\neg M"></span> <span data-tex-inline="\text{Foot: } \neg T"></span></span>Read the foot back into English. <br>Name the tech that writes it, and say in plain words what has to be reached first, and how.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="1d8">
+  <h2 class="sthead"><span class="stno">1d8</span>Where the turn back stops</h2>
+  <p class="stands">Stands on 1d7 (turn and deny) and 1b12 (the step you cannot take).</p>
+  <p data-pid="4306b4">Now try to turn it back. From ¬Q ⇒ ¬P, can you get P ⇒ Q? Follow the same plan and watch where it stops.</p>
+  <p data-pid="d7c715">Start from ¬Q ⇒ ¬P. Aiming at Q, suppose P. While that stands, suppose ¬Q as well. Carry the if through: ¬P. That clashes with P: totally false. Drop the second supposition, by refute: ¬¬Q. And there it stops. To reach Q we need a step from ¬¬Q to Q. That is 1b's gap: no tech on this rung takes it.</p>
+  <p data-pid="37e708">So the contrapositive follows from the original by techs, and the original does not follow from the contrapositive, not on this rung. They will be made interchangeable on rung 7, where the gap is closed. Until then the licence runs only from the original to the contrapositive, and 1g's rulebook records which way. This is the same gap as 1b's, wearing an arrow. It is worth noticing how naturally the attempt ran into it: nothing was done wrong, the techs simply stop a step short.</p>
+  <section class="slides" id="sl8"><div class="eyebrow">The slides · the turn back, and where it stops · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">1d8.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">Given: if the street is not wet, it did not rain.</span></span>Argue toward “if it rains, the street is wet” as far as you can take it. <br>Say where you stop, and what step would be needed.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="1d9">
+  <h2 class="sthead"><span class="stno">1d9</span>Not, as an if</h2>
+  <p class="stands">Stands on 1d4 (prove an if) and 1b12 (the step you cannot take).</p>
+  <p data-pid="c7b793">“Ann is not at home” and “if Ann is at home, then totally false” say the same thing. Not-as-if technique: <b>“not P” and “if P, then the totally false” each give the other.</b> It needs one of the two, and gives the other. A denial is a promise of the totally false. This technique makes exact 1b's hearing of ¬P as “P leads to something totally false”.</p>
+  <p data-pid="ea0987">One way. Start from ¬P. Suppose P. That clashes with ¬P: totally false. Drop the supposition: P ⇒ ⊥.</p>
+  <p data-pid="78f0f9">The other way. Start from P ⇒ ⊥. Suppose P. Carry the if through: ⊥. Drop the supposition, by refute: ¬P.</p>
+  <p data-pid="d38dae">So ¬P and P ⇒ ⊥ are interchangeable by techs, in both directions. Refute is nothing but prove-an-if aimed at ⊥, while clash is carry-through aimed at ⊥. The ladder could have built ¬ out of ⇒ and ⊥; it built them separately because “not” comes earlier in speech.</p>
+  <section class="slides" id="sl9"><div class="eyebrow">The slides · not is an if to the totally false · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">1d9.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\neg(\text{the gym is open})"></span></span>Argue “if the gym is open, then totally false”, one sentence each with its reason. <br>Then argue back from that if to the given.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="1d10">
+  <h2 class="sthead"><span class="stno">1d10</span>Free ifs</h2>
+  <p class="stands">Stands on 1d9 (not, as an if) and 1b10 (when nothing is true, everything is permitted).</p>
+  <p data-pid="45c5bc">Next, a cheap if. Free-if technique: <b>a denied hypothesis, or a conclusion you have, makes any if free.</b> From ¬P you may write P ⇒ Q, for any Q. From Q you may write P ⇒ Q, for any P.</p>
+  <p data-pid="ca9ee4">From a denied hypothesis. Start from ¬P. Suppose P. That clashes with ¬P: totally false. Everything is permitted, so Q. Drop the supposition: P ⇒ Q. Any Q at all: “if it rains, the moon is made of cheese”, on a day it does not rain. The Q itself does not leave the supposition: it goes when the supposition is dropped. What leaves is only the if, and that if is empty. To carry it through you would need P, and P is what ¬P refuses.</p>
+  <p data-pid="50944f">From a conclusion you have. Start from Q. Suppose P. Q is still in hand. Drop the supposition: P ⇒ Q. Any P at all.</p>
+  <p data-pid="d3ea50">The free ifs sound like tricks and are not. A promise is only ever broken by its condition being met and its promise failing. If the condition cannot be met, or the promise is already kept, nothing can break it, and the techs say so. 1f will show that these techniques are exactly what forces the shape of the ⇒ table.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">1d10.1</span><span class="ph bend">bend</span><span class="givens"><span data-tex-inline="\text{“Kitten” means a young cat;}"></span> <span data-tex-inline="\text{a cat is a mammal; mammals breathe air.}"></span> <span data-tex-inline="\text{Let } W \text{ be “a breathes air”,}"></span> <span data-tex-inline="F \text{ “a is a mammal”,}"></span> <span data-tex-inline="L \text{ “a is a cat”,}"></span> <span data-tex-inline="S \text{ “a is a kitten”.}"></span> <span data-tex-inline="\text{1. suppose } W"></span> <span data-tex-inline="\text{2. \quad suppose } F"></span> <span data-tex-inline="\text{3. \quad\quad suppose } L"></span> <span data-tex-inline="\text{4. \quad\quad } S \Rightarrow L"></span> <span data-tex-inline="\text{5. \quad drop: } L \Rightarrow (S \Rightarrow L)"></span> <span data-tex-inline="\text{6. drop: } F \Rightarrow (L \Rightarrow (S \Rightarrow L))"></span> <span data-tex-inline="\text{7. drop: } W \Rightarrow (F \Rightarrow"></span> <span data-tex-inline="\quad (L \Rightarrow (S \Rightarrow L)))"></span> <span data-tex-inline="\text{8. therefore: } S \Rightarrow W"></span></span>Mark each sentence earned or not. <br>Reading W, F, L and S as any four statements, find a way things could be with sentence 7 so and sentence 8 not. <br>Then say in plain words what would earn sentence 8.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="1d11">
+  <h2 class="sthead"><span class="stno">1d11</span>Exactly when</h2>
+  <p class="stands">Stands on 1d4 (prove an if) and 1c2 (join, and keep either part).</p>
+  <p data-pid="3a963c">“The light is on exactly when the switch is up” promises in both directions. If the switch is up, the light is on. And if the light is on, the switch is up. Here is its mark, defined with 1c's ∧:</p>
+  <div class="eqline" data-tex="\begin{aligned}&amp;\text{From here on, } P \Leftrightarrow Q \text{ means: }\\ &amp;\quad  (P \Rightarrow Q) \land (Q \Rightarrow P). \text{ Read it “} P \text{ }\\ &amp;\quad \text{exactly when } Q\text{”, or “} P \text{ if and only }\\ &amp;\quad \text{if } Q\text{”.}\end{aligned}"></div>
+  <p data-pid="273c9c">P ⇔ Q is a statement, made of two. It is called a biconditional.</p>
+  <p data-pid="982a95">No new techs are needed, because the mark is defined in terms of marks that have theirs. To make P ⇔ Q, prove an if each way and join. To use it, keep the direction you need and carry it through.</p>
+  <p data-pid="495840">Using one. Given: the light is on exactly when the switch is up. Given: the switch is up. Unpack ⇔: if the light is on, the switch is up; and if the switch is up, the light is on. Keep the right part (1c): if the switch is up, the light is on. Carry it through: the light is on.</p>
+  <p class="aside" data-pid="110c35">Typing an answer, with no key for these marks? Write the words they are read as: <b>if P then Q</b> in place of P ⇒ Q, and <b>P exactly when Q</b> in place of P ⇔ Q. They mean the same thing, and the ladder reads them the same way.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">1d11.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">The bell rings exactly when it is noon.</span> <span class="gtx">The bell rings.</span></span>Argue “it is noon”, one sentence each with its reason.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="1d12">
+  <h2 class="sthead"><span class="stno">1d12</span>Making an exactly-when</h2>
+  <p class="stands">Stands on 1d11 (exactly when) and 1c3 (and turns about).</p>
+  <p data-pid="a3851f">Here is the making, written out. <b>An exactly-when comes out of two suppositions, one for each direction, joined after both have been dropped.</b> The first supposes the left side and reaches the right. Dropped, it leaves an if. The second supposes the right side and reaches the left. Dropped, it leaves the other if. Only then are the two ifs joined.</p>
+  <p data-pid="bb08cf">Take (P ∧ Q) ⇔ (Q ∧ P). First direction. Suppose P ∧ Q. Keep left: P. Keep right: Q. Join them the other way about: Q ∧ P. Drop the supposition: (P ∧ Q) ⇒ (Q ∧ P).</p>
+  <p data-pid="53694e">Second direction. Suppose Q ∧ P. Keep left: Q. Keep right: P. Join: P ∧ Q. Drop the supposition: (Q ∧ P) ⇒ (P ∧ Q).</p>
+  <p data-pid="5accc2">Now join the two ifs. Pack ⇔, which is what the mark means: (P ∧ Q) ⇔ (Q ∧ P).</p>
+  <p data-pid="29f3b2">The second supposition cannot use what was said under the first. When the first supposition was dropped, everything said under it went with it (1a's rule), and only the if it made remains. So each direction is earned on its own. That is also why the join waits until the end: the join needs two ifs that both stand, and each stands only once its supposition is dropped. For the light and the switch, each direction would be one promise, proved by supposing its own side.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">1d12.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">No given lines.</span></span>Argue (P ∨ Q) ⇔ (Q ∨ P), one direction at a time. <br>Say why the second direction cannot use what was said under the first.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="1d13">
+  <h2 class="sthead"><span class="stno">1d13</span>An exactly-when turns about and chains</h2>
+  <p class="stands">Stands on 1d12 (making an exactly-when) and 1d6 (promises chain).</p>
+  <p data-pid="250e4a">An exactly-when turns about for free: keep right, keep left, join, which is 1c's turn-about technique for And. “The light is on exactly when the switch is up” gives “the switch is up exactly when the light is on”, with no new tech. And it chains: the chain technique for If in each direction, then join. The slides do the chaining.</p>
+  <p data-pid="5ddd4b">From now on every “from here on, this mark means…” line may be read as an exactly-when between the mark and its meaning. It is the same two-way traffic that 1b's unpack and pack run on. Unpack is the exactly-when used one way, and pack is the same exactly-when used the other.</p>
+  <section class="slides" id="sl13"><div class="eyebrow">The slides · an exactly-when, chained · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">1d13.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">The gym is open exactly when the lights are on.</span> <span class="gtx">The lights are on exactly when a teacher is there.</span></span>Say in plain words how to earn “the gym is open exactly when a teacher is there”. <br>Which techs does each direction use?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="1d14">
+  <h2 class="sthead"><span class="stno">1d14</span>Illegal moves</h2>
+  <p class="stands">Stands on 1d3 to 1d13.</p>
+  <p data-pid="b38bb8">The if is the connective people most often misuse, and the misuses have names that are centuries old. Each is convicted the same way: a way things could be in which everything given is still true and the conclusion is false. Eight moves look like uses of this step and are not; the list below names all eight. Two of them matter most. Affirming the consequent goes from Q, and if P then Q, to P. Denying the hypothesis goes from not P, and if P then Q, to not Q.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+Q,\;\; P \Rightarrow Q,\;\text{ so } P\,? @@ affirming the consequent: “the street is wet; if it rained, the street is wet; so it rained.” The street-cleaning truck went by
+\neg P,\;\; P \Rightarrow Q,\;\text{ so } \neg Q\,? @@ denying the hypothesis: “it did not rain, so the street is not wet.” The street-cleaning truck again
+P \Rightarrow Q,\;\text{ so } Q \Rightarrow P\,? @@ turning the arrow about without the denials: “if it is a cat it is an animal, so if it is an animal it is a cat.” Rex is an animal and not a cat
+P \Rightarrow Q,\;\text{ so } P \text{ causes } Q\,? @@ reading a cause into the arrow: “if it is a cat, it is an animal” makes nothing happen. The arrow claims only that P never comes without Q
+P \Rightarrow Q,\;\text{ so } Q \text{ causes } P\,? @@ reading the cause the other way: a wet street does not make it rain. The arrow claims no cause in either direction
+P \Rightarrow Q,\;\text{ so } Q\,? @@ an if is not its conclusion: having the promise is not having the thing promised
+\begin{aligned}&\text{suppose } P; \dots Q; \text{ so } P \Rightarrow Q;\\ &\text{and } Q \text{ (from under it)}\,?\end{aligned} @@ a sentence said under the dropped supposition cited after the drop (1a's rule). Outside, you have the if and nothing else
+\begin{aligned}&\text{“You can have dessert if you finish}\\ &\quad\text{your dinner”, read as } \Leftrightarrow\,?\end{aligned} @@ an everyday if is often heard as a promise each way. The ladder's ⇒ promises only from hypothesis to conclusion; a ⇔ must be written
+  </pre>
+  <p data-pid="998b5b">The first two illegal moves are the ones to carry with you. Both are convicted by the same street-cleaning truck: a dry day with a wet street. Every given line is so on that day. The street is wet. The promise is kept: it was not broken. It did not rain. And the conclusions “it rained” and “the street is dry” both fail. The if never promised anything about dry days. Both mistakes consist in hearing a promise the if did not make. The picture lets you watch the truck do this.</p>
+  <section class="slides" id="sl14"><div class="eyebrow">The slides · refusals · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · left: the promise and the street-cleaning truck · right: find a proof of an if through the promises you have</div>
+    <div class="panels">
+      <div class="panel">
+        <div class="cap">Given: “if it rains, the street is wet”. The ways things could be are the cards; the way the promise forbids is struck out. Add a further line and see which ways remain (teal), what is forced, and which tempting conclusion is convicted (ember card).</div>
+        <div class="chips" role="group" aria-label="also given" id="hold"><span class="m" style="color:var(--muted)">also given:</span><button data-h="none" class="on">nothing</button><button data-h="rain">it rains</button><button data-h="norain">it does not rain</button><button data-h="wet">the street is wet</button><button data-h="dry">the street is not wet</button></div>
+        <div class="ways" id="ways"></div>
+        <div class="eqbox" id="verd1"></div>
+      </div>
+      <div class="panel">
+        <div class="cap">Promises you have (each an if). Choose a hypothesis and a conclusion; the bench looks for a chain and writes the proof as prove-an-if around carry-throughs, or says where it sticks.</div>
+        <div class="ifs" id="ifs"></div>
+        <div class="knobs">
+          <div class="knob"><label for="hyp">suppose</label><select id="hyp"></select></div>
+          <div class="knob"><label for="con">reach</label><select id="con"></select></div>
+        </div>
+        <div class="colm" id="colm"></div>
+        <div class="eqbox" id="verd2"></div>
+        <div class="cap">Try the chain forwards, then ask for it backwards (swap suppose and reach) and read why it sticks.</div>
+      </div>
+    </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">1d14.1</span><span class="ph bend">bend</span><span class="givens"><span data-tex-inline="\text{Let } T \text{ be “the bus is late”,}"></span> <span data-tex-inline="M \text{ “Mia is late for school”.}"></span> <span data-tex-inline="\text{Given: } T \Rightarrow M \text{ and } M"></span> <span data-tex-inline="\text{1. } T"></span> <span data-tex-inline="\text{2. } T \land M"></span></span>Mark each sentence earned or not. <br>Where the argument breaks, write what that sentence would need before it.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="1d15">
+  <h2 class="sthead"><span class="stno">1d15</span>Running it backwards</h2>
+  <p class="stands">Stands on 1d4 (prove an if) and 1a10 (reading the foot).</p>
+  <p data-pid="b09f91">Wanting “if it rains, the gutter overflows”, suppose rain and go looking for the gutter. The foot's outermost mark is the arrow, so the last move is prove an if, and the first sentence is the supposition of its hypothesis. Everything else happens under that supposition.</p>
+  <p data-pid="f9b993">Wanting P ⇒ Q, you know the argument's shape before anything else: suppose P, reach Q, drop the supposition. So the search moves under the supposition and asks how to reach Q with P in hand. Wanting Q itself, look for an if you have whose conclusion is Q, and then try to prove its hypothesis. Or look for a chain of ifs leading to Q from something you have. Wanting ¬P, 1b's plan applies. An if with hypothesis P is the usual source of the clash: suppose P, carry through to something denied. <b>Every proof shape in 1i begins with this reading of the goal's outermost mark.</b></p>
+  <section class="slides" id="sl15"><div class="eyebrow">The slides · backwards · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">1d15.1</span><span class="ph undo">undo</span><span class="givens"><span class="gtx">No given lines. “Kitten” means a young cat; a cat is an animal.</span> <span class="gtx">Foot: if Pip is a kitten, Pip is an animal.</span></span>Say the shape of the argument first: its first sentence and its last move. <br>Then fill in what goes under the supposition.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <div class="chq"><span class="chid">1d.4.1</span><span class="tagq">build</span>Take a rule at your house whose condition is built with an and or an or (the porch light comes on if someone is at the door or the alarm is set, say), write it in marks, and with no given lines prove an exactly-when between it and a form of it with the condition taken apart. <br>Then, given only its denial, argue in plain words toward its condition and toward the denial of its promise, each as far as you can take it.</div>
+  <div class="chq"><span class="chid">1d.4.2</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{Let } S \text{ be “the road}"></span> <span data-tex-inline="\text{is open”,}"></span> <span data-tex-inline="P \text{ “the snowplough is out”.}"></span> <span data-tex-inline="\neg\neg S \Rightarrow \neg P"></span> <span data-tex-inline="\text{Foot: } P \Rightarrow \neg S"></span></span>Prove the foot.</div>
+  <div class="chq"><span class="chid">1d.4.3</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\text{Let } O \text{ be “the rink}"></span> <span data-tex-inline="\text{is open for skating”,}"></span> <span data-tex-inline="F \text{ “the rink is frozen”.}"></span> <span data-tex-inline="O \Rightarrow F"></span> <span data-tex-inline="\text{Off limits: a supposition}"></span> <span data-tex-inline="\text{inside another.}"></span> <span data-tex-inline="\text{Foot: } \neg F \Rightarrow \neg O"></span></span>Prove the foot.</div>
+  <div class="chq"><span class="chid">1d.4.4</span><span class="tagq">loop</span><span class="givens"><span data-tex-inline="\text{A sign at a barbershop claims that a}"></span> <span data-tex-inline="\text{barber, } k, \text{ shaves a man exactly}"></span> <span data-tex-inline="\text{when that man does not}"></span> <span data-tex-inline="\text{shave himself.}"></span> <span data-tex-inline="\text{Given only, said of } k \text{ himself:}"></span> <span data-tex-inline="(k \text{ shaves } k) \Leftrightarrow \neg(k \text{ shaves } k)"></span> <span data-tex-inline="\text{Off limits: cases on whether}"></span> <span data-tex-inline="\text{he shaves himself.}"></span></span>Argue from the given line in plain words as far as you can take it, and find what that shows about the sign's claim.</div>
+  <div class="chq"><span class="chid">1d.4.5</span><span class="tagq">loop</span><span class="givens"><span data-tex-inline="\text{Let } M \text{ be “the moon is}"></span> <span data-tex-inline="\text{made of cheese”.}"></span> <span data-tex-inline="c \text{ unpacks to } c \Rightarrow M,"></span> <span data-tex-inline="c \Rightarrow M \text{ packs to } c."></span></span>Prove M. <br>Which step of your argument would you refuse, and what would refusing it cost?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r01c.html">← 1c · and, and the ors</a><a href="r01e.html">1e · every and some →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted name</h3>
+  <p>Carry an if through is what medieval logicians called <i>modus ponens</i>, the mode that puts: it puts the hypothesis in and takes the conclusion out.</p>
+  <h3>Other ways the same marks are written</h3>
+  <p>Mathematics writes some of these marks in more than one way, by subject and by century. Each one below means what the mark in this step means; know them on sight.</p>
+  <ul>
+    <li><span data-tex-inline="P \Rightarrow Q">P \Rightarrow Q</span> is also written P → Q, and in older books P ⊃ Q. Read it “if P then Q”, or “P implies Q”.</li>
+    <li><span data-tex-inline="P \Leftrightarrow Q">P \Leftrightarrow Q</span> is also written P ↔ Q, and said “P if and only if Q”, shortened to “P iff Q”.</li>
+    <li>Three relatives of <span data-tex-inline="P \Rightarrow Q">P \Rightarrow Q</span> have names: its <b>converse</b> <span data-tex-inline="Q \Rightarrow P">Q \Rightarrow P</span>, its <b>inverse</b> <span data-tex-inline="\neg P \Rightarrow \neg Q">\neg P \Rightarrow \neg Q</span>, and its <b>contrapositive</b> <span data-tex-inline="\neg Q \Rightarrow \neg P">\neg Q \Rightarrow \neg P</span>. Only the contrapositive follows from it, by this step's turn-and-deny technique for If; the converse and the inverse are the classic illegal moves.</li>
+  </ul>
+  <h3>Who said it first</h3>
+  <p>The two teachers were Philo the Dialectician and his teacher Diodorus Cronus; the poet was Callimachus. The ladder’s ⇒ is Philo’s if, and its accepted name is the material conditional.</p>
+  <aside class="voice para"><p>Philo said an “if” is false in one case only: when it starts from something so and ends at something not so. His teacher Diodorus wanted more, that it could never start so and end not so, at any time. The quarrel grew so loud that the poet Callimachus said even the crows on the rooftops were cawing about which ifs are true.</p><cite>Sextus Empiricus, Against the Logicians II.112–118 and Against the Grammarians I.309; paraphrase</cite></aside>
+
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,stepper}=Rung;
+
+/* ---------- left: the promise and the street-cleaning truck ---------- */
+const WAYS=[{id:'rw',rain:true,wet:true,t:'it rains, and the street is wet'},{id:'rd',rain:true,wet:false,t:'it rains, and the street stays dry'},{id:'nw',rain:false,wet:true,t:'no rain, and the street is wet (a street-cleaning truck went by and hosed it)'},{id:'nd',rain:false,wet:false,t:'no rain, and the street is dry'}];
+let hold='none';
+const HOLD={none:{f:()=>true,t:''},rain:{f:w=>w.rain,t:'it rains'},norain:{f:w=>!w.rain,t:'it does not rain'},wet:{f:w=>w.wet,t:'the street is wet'},dry:{f:w=>!w.wet,t:'the street is not wet'}};
+const TEMPT={wet:{bad:'so it rained',conv:'nw',name:'affirming the consequent'},norain:{bad:'so the street is not wet',conv:'nw',name:'denying the hypothesis'}};
+const FORCED={rain:{s:'the street is wet',why:'carry an if through'},dry:{s:'it does not rain',why:'the turn-and-deny technique for If, then carry through (or: assume rain, carry through, clash, refute)'}};
+function drawWays(){
+  const w=document.getElementById('ways'); w.innerHTML='';
+  const live=WAYS.filter(x=>!(x.rain&&!x.wet)&&HOLD[hold].f(x));
+  const tempt=TEMPT[hold];
+  WAYS.forEach(x=>{ const d=document.createElement('div'); const out=x.rain&&!x.wet; const isLive=live.includes(x); const conv=tempt&&tempt.conv===x.id;
+    d.className='way'+(out?' out':conv?' convict':isLive?' live':''); if(!out&&!isLive) d.style.opacity='.45';
+    d.innerHTML='<div class="t"></div><div></div>'; d.children[0].textContent=out?'forbidden by the promise':conv?'convicts the tempting step':isLive?'still possible':'ruled out by what you have'; d.children[1].textContent=x.t; w.appendChild(d); });
+  const v=document.getElementById('verd1'); let s;
+  if(hold==='none') s='With only the promise, the struck-out way is the only one forbidden. Every other way of the day keeps it; the promise says nothing about dry days.';
+  else { const f=FORCED[hold]; s='Also given “'+HOLD[hold].t+'”: '+(f?'forced: “'+f.s+'”, by '+f.why+'. Every remaining way agrees.':'nothing is forced. “'+tempt.bad+'” is '+tempt.name+', and the ember card convicts it: every given line is so there, and the conclusion fails.'); }
+  v.textContent=s;
+}
+document.querySelectorAll('[data-h]').forEach(b=>b.onclick=()=>{ hold=b.dataset.h; document.querySelectorAll('[data-h]').forEach(x=>x.classList.toggle('on',x===b)); drawWays(); });
+drawWays();
+
+/* ---------- right: chain finder ---------- */
+const IFS=[['it rains','the street is wet'],['a street-cleaning truck went by','the street is wet'],['the street is wet','the street is slippery'],['the street is slippery','Ann wears boots'],['Ann wears boots','Ann is late'],['Rex barks','the postman runs'],['the postman runs','Ann is late']];
+const ATOMS=[...new Set(IFS.flat())];
+const ifsEl=document.getElementById('ifs'); IFS.forEach(([a,b])=>{ const d=document.createElement('div'); d.textContent=a+'  ⇒  '+b; ifsEl.appendChild(d); });
+const hyp=document.getElementById('hyp'), con=document.getElementById('con');
+ATOMS.forEach(a=>{ hyp.add(new Option(a,a)); con.add(new Option(a,a)); }); hyp.value='it rains'; con.value='Ann wears boots';
+function path(a,b){ // BFS over ifs
+  const prev={}; prev[a]=null; const q=[a]; while(q.length){ const x=q.shift(); if(x===b) break; IFS.forEach(([p,c])=>{ if(p===x&&!(c in prev)){ prev[c]=x; q.push(c); } }); }
+  if(!(b in prev)) return null; const out=[]; let x=b; while(x!==null){ out.unshift(x); x=prev[x]; } return out; }
+function drawChain(){
+  const a=hyp.value, b=con.value; const col=document.getElementById('colm'), v=document.getElementById('verd2'); col.innerHTML='';
+  const add=(s,r,cls)=>{ const d=document.createElement('div'); d.className='ln '+(cls||''); d.innerHTML='<span class="s"></span><span class="r"></span>'; d.children[0].textContent=s; d.children[1].textContent=r; col.appendChild(d); };
+  if(a===b){ add('assume '+a,'assumed','in'); add(a,'the supposition itself','in'); add(a+' ⇒ '+a+'  ∎','prove an if','out'); v.textContent='A promise from a thing to itself costs nothing: assume it, it is in hand, close.'; return; }
+  const p=path(a,b);
+  if(p){ add('assume '+a,'assumed','in'); for(let i=1;i<p.length;i++) add(p[i],'carry an if through: “'+p[i-1]+' ⇒ '+p[i]+'”','in new'); add(a+' ⇒ '+b+'  ∎','prove an if','out'); v.textContent='Found: a chain of promises you have from the hypothesis to the conclusion. Prove-an-if wraps the carry-throughs; outside, you have only the if.'; }
+  else { add('assume '+a,'assumed','in'); const reach=new Set([a]); let grew=true; while(grew){ grew=false; IFS.forEach(([x,y])=>{ if(reach.has(x)&&!reach.has(y)){ reach.add(y); grew=true; } }); }
+    [...reach].filter(x=>x!==a).forEach(x=>add(x,'carry an if through','in'));
+    add('?','no promise you have leads on to “'+b+'”','in');
+    const back=IFS.filter(([x,y])=>y===b).map(([x])=>x);
+    v.textContent='Sticks. From “'+a+'” the promises carry you to '+([...reach].filter(x=>x!==a).map(x=>'“'+x+'”').join(', ')||'nothing')+', and none of those is “'+b+'”.'+(back.length?' The promises that end at “'+b+'” start from '+back.map(x=>'“'+x+'”').join(', ')+'; to use one of them backwards would be affirming the consequent.':''); }
+}
+hyp.onchange=drawChain; con.onchange=drawChain; drawChain();
+
+/* ---------- slides ---------- */
+const N='\\htmlClass{new}', K='\\htmlClass{keep}';
+const col2=(...rows)=>'\\begin{aligned}'+rows.map(([l,r])=>'&'+l+' &&\\text{'+r+'}').join('\\\\ ')+'\\end{aligned}';
+const T=s=>'\\text{'+s+'}';
+stepper('#sl4',[
+  {k:'ember',kl:'carry an if through',t:col2([T('It rains.'),'given'],[`${T('It rains')} \\Rightarrow ${T('the street is wet')}`,'given'],[`${N}{${T('So the street is wet.')}} \\quad \\blacksquare`,'so, carrying the if through']),n:`The using tech. We have the hypothesis and the promise; the conclusion is earned. Nothing about this needs thought, which is why it is the tech most often used without noticing.`},
+  {k:'ember',kl:'prove an if',t:col2([`${T('It rains')} \\Rightarrow ${T('the street is wet')}`,'given'],[`\\qquad ${N}{${T('Suppose it rains.')}}`,'supposed']),n:`The making tech. We want “it rains ⇒ (the street is wet ∨ the gutter overflows)”. An if is proved by supposing its hypothesis, so we suppose “it rains”.`},
+  {k:'ember',kl:'prove an if',t:col2([`${T('It rains')} \\Rightarrow ${T('the street is wet')}`,'given'],[`\\qquad ${T('Suppose it rains.')}`,'supposed'],[`\\qquad ${N}{${T('So the street is wet.')}}`,'carrying the if through'],[`\\qquad ${N}{${T('So the street is wet')} \\lor ${T('the gutter overflows')}}`,'add an option (1c)']),n:`While we suppose it, carry the given promise through, then widen with add-an-option. The conclusion wanted is now in hand, under the supposition.`},
+  {k:'ember',kl:'prove an if',t:col2([`${T('It rains')} \\Rightarrow ${T('the street is wet')}`,'given'],[`\\qquad ${T('Suppose it rains.')}`,'supposed'],[`\\qquad ${T('So the street is wet.')}`,'carry through'],[`\\qquad ${T('So the street is wet')} \\lor ${T('the gutter overflows')}`,'add an option'],[`${N}{${T('So it rains')} \\Rightarrow (${T('the street is wet')} \\lor ${T('the gutter overflows')})} \\quad \\blacksquare`,'prove an if: drop the supposition']),n:`Drop the supposition. ∎ Afterwards you have the if and nothing else: not that it rains, not that the street is wet. A promise is a statement about what follows.`}
+],{title:'The slides · carry through, and prove an if · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'the chain technique for If: promises chain',t:col2([`${T('We have ')}P \\Rightarrow Q`,'given'],[`${T('We have ')}Q \\Rightarrow R`,'given'],[`\\qquad ${T('Suppose ')} P`,'supposed'],[`\\qquad ${N}{${T('So ')}Q}`,'carry through'],[`\\qquad ${N}{${T('So ')}R}`,'carry through'],[`${N}{${T('So ')}P \\Rightarrow R} \\quad \\blacksquare`,'prove an if']),n:`Carry-through, then carry-through again, while supposing P; then prove the if. ∎ The hypothetical syllogism; a long chain is this made again on its own result.`}
+],{title:'The slides · promises chain · ← → keys work'});
+stepper('#sl7',[
+  {k:'ember',kl:'the turn-and-deny technique for If: the contrapositive',t:col2([`${T('We have ')}P \\Rightarrow Q`,'given'],[`\\qquad ${T('Suppose ')} \\neg Q`,'supposed'],[`\\qquad\\quad ${T('Suppose ')} P`,'supposed, again']),n:`From P ⇒ Q, get ¬Q ⇒ ¬P. The goal is an if, so suppose ¬Q. While we suppose it, the goal is ¬P, a denial, so suppose P too, aiming at ⊥. A supposition made while another stands.`},
+  {k:'ember',kl:'the turn-and-deny technique for If: the contrapositive',t:col2([`${K}{${T('We have ')}P \\Rightarrow Q}`,'given'],[`\\qquad ${T('Suppose ')} \\neg Q`,'supposed'],[`\\qquad\\quad ${T('Suppose ')} P`,'supposed, again'],[`\\qquad\\quad ${N}{${T('So ')}Q}`,'carry through'],[`\\qquad\\quad ${N}{${T('That clashes: ')}\\bot}`,'clash with ¬Q']),n:`The given if stands throughout, so it may be leaned on under both suppositions. Carry it through with P: Q. That clashes with ¬Q, supposed earlier and still standing.`},
+  {k:'ember',kl:'the turn-and-deny technique for If: the contrapositive',t:col2([`${T('We have ')}P \\Rightarrow Q`,'given'],[`\\qquad ${T('Suppose ')} \\neg Q`,'supposed'],[`\\qquad\\quad ${T('Suppose ')} P`,'supposed, again'],[`\\qquad\\quad ${T('So ')}Q`,'carry through'],[`\\qquad\\quad ${T('That clashes: ')}\\bot`,'clash'],[`\\qquad ${N}{${T('So ')}\\neg P}`,'refute'],[`${N}{${T('So ')}\\neg Q \\Rightarrow \\neg P} \\quad \\blacksquare`,'prove an if']),n:`Refute drops the later supposition: ¬P. Prove-an-if drops the earlier: ¬Q ⇒ ¬P. ∎ The latest supposition is dropped first, always.`}
+],{title:'The slides · the contrapositive · ← → keys work'});
+stepper('#sl8',[
+  {k:'ember',kl:'the turn back, and where it stops',t:col2([`${T('We have ')}\\neg Q \\Rightarrow \\neg P`,'given'],[`\\qquad ${T('Suppose ')} P`,'supposed'],[`\\qquad\\quad ${T('Suppose ')} \\neg Q`,'supposed, again'],[`\\qquad\\quad ${T('So ')}\\neg P`,'carry through'],[`\\qquad\\quad ${T('That clashes: ')}\\bot`,'clash with P'],[`\\qquad ${N}{${T('So ')}\\neg\\neg Q}`,'refute'],[`\\qquad ${N}{${T('So ')}Q}\\;?`,'no tech to Q']),n:`The same plan the other way: suppose P, aim at Q; suppose ¬Q, aim at ⊥. The clash comes, refute gives ¬¬Q, and there the techs stop. 1b's gap, wearing an arrow. Rung 7 closes it; until then the contrapositive follows from the original and not back.`}
+],{title:'The slides · the turn back, and where it stops · ← → keys work'});
+stepper('#sl9',[
+  {k:'ember',kl:'the not-as-if technique: not is an if to the totally false',t:col2([`${T('We have ')}\\neg P`,'given'],[`\\qquad ${T('Suppose ')} P`,'supposed'],[`\\qquad ${T('That clashes: ')}\\bot`,'clash'],[`${N}{${T('So ')}P \\Rightarrow \\bot}`,'prove an if']),n:`From ¬P, the promise “P leads to something totally false”. Refute was prove-an-if aimed at ⊥ all along.`},
+  {k:'ember',kl:'the not-as-if technique: not is an if to the totally false',t:col2([`${T('We have ')}P \\Rightarrow \\bot`,'given'],[`\\qquad ${T('Suppose ')} P`,'supposed'],[`\\qquad ${T('So ')}\\bot`,'carry through'],[`${N}{${T('So ')}\\neg P} \\quad \\blacksquare`,'refute']),n:`And back. ∎ Clash was carry-through aimed at ⊥. The marks ¬ and ⇒ with ⊥ say the same thing, in both directions, by techs alone; no gap here.`}
+],{title:'The slides · not is an if to the totally false · ← → keys work'});
+stepper('#sl13',[
+  {k:'ember',kl:'an exactly-when, chained',t:col2([`${T('We have ')}P \\Leftrightarrow Q`,'given'],[`${T('We have ')}Q \\Leftrightarrow R`,'given'],[`${N}{${T('So ')}(P \\Rightarrow Q) \\land (Q \\Rightarrow P)}`,'unpack ⇔'],[`${N}{${T('So ')}(Q \\Rightarrow R) \\land (R \\Rightarrow Q)}`,'unpack ⇔']),n:`From P ⇔ Q and Q ⇔ R, get P ⇔ R. The mark unpacks into ands of ifs; everything from here is 1c's keep and join and this step's chain for If.`},
+  {k:'ember',kl:'an exactly-when, chained',t:col2([`${T('So ')}(P \\Rightarrow Q) \\land (Q \\Rightarrow P)`,'unpacked'],[`${T('So ')}(Q \\Rightarrow R) \\land (R \\Rightarrow Q)`,'unpacked'],[`${N}{${T('So ')}P \\Rightarrow R}`,'keep left, keep left, chain for If'],[`${N}{${T('So ')}R \\Rightarrow P}`,'keep right, keep right, chain for If'],[`${N}{${T('So ')}(P \\Rightarrow R) \\land (R \\Rightarrow P)}`,'join'],[`${N}{${T('So ')}P \\Leftrightarrow R} \\quad \\blacksquare`,'pack ⇔']),n:`Each direction is a chain for If; join; pack. ∎ More than one tech is named in a row here for room; each is a tech you could cite on its own.`}
+],{title:'The slides · an exactly-when, chained · ← → keys work'});
+stepper('#sl14',[
+  {k:'ember',kl:'a refusal',t:col2([T('The street is wet.'),'given'],[`${T('It rains')} \\Rightarrow ${T('the street is wet')}`,'given'],[`${N}{${T('So it rains.')}}\\;?`,'affirming the consequent']),n:`Refused. Carry-through needs the hypothesis in hand, and what we have is the conclusion. The street-cleaning truck convicts it: a dry day, a wet street; both given sentences are so, and “it rains” fails.`},
+  {k:'ember',kl:'a refusal',t:col2([`\\neg(${T('it rains')})`,'given'],[`${T('It rains')} \\Rightarrow ${T('the street is wet')}`,'given'],[`${N}{${T('So ')}\\neg(${T('the street is wet')})}\\;?`,'denying the hypothesis']),n:`Refused by the same street-cleaning truck. The promise said nothing about dry days. What the techs do give from ¬P and P ⇒ Q is the free-if technique: P ⇒ anything, which is true and useless.`}
+],{title:'The slides · refusals · ← → keys work'});
+stepper('#sl15',[
+  {k:'ember',kl:'backwards',t:col2(['\\text{?}',''],[`${K}{${T('Rex barks')} \\Rightarrow ${T('Ann is late')}}`,'wanted']),n:`Given: Rex barks ⇒ the postman runs; the postman runs ⇒ Ann is late. Wanted: the if from barking to lateness. An if: so the argument begins by supposing “Rex barks” and must reach “Ann is late” while it stands.`},
+  {k:'ember',kl:'backwards',t:col2([`${T('Rex barks')} \\Rightarrow ${T('the postman runs')}`,'given'],[`${T('The postman runs')} \\Rightarrow ${T('Ann is late')}`,'given'],[`\\qquad ${T('Suppose Rex barks.')}`,'supposed'],[`\\qquad ${N}{${T('So the postman runs.')}}`,'carry through'],[`\\qquad ${N}{${T('So Ann is late.')}}`,'carry through'],[`${N}{${T('So Rex barks')} \\Rightarrow ${T('Ann is late')}} \\quad \\blacksquare`,'prove an if']),n:`While we suppose it, “Ann is late” is the conclusion of an if we have, so reach its hypothesis; that is the conclusion of another if we have, whose hypothesis is the supposition. Found from the end, said forwards. ∎`}
+],{title:'The slides · backwards · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

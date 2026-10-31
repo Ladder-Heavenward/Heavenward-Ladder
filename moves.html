@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reference</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.qm{max-width:1040px;margin:0 auto;display:grid;gap:22px}
+.qm .lead{max-width:68ch}
+.qm .tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.qm input[type=search]{flex:1 1 220px;min-width:0;font:inherit;padding:8px 10px;border:1px solid var(--grid);border-radius:6px;background:var(--card);color:var(--ink)}
+.qm .kinds button{font-family:var(--mono);font-size:.78rem;padding:5px 10px;border:1px solid var(--grid);border-radius:999px;background:var(--sand);color:var(--ink);cursor:pointer}
+.qm .kinds button.on{background:var(--teal);border-color:var(--teal);color:#fff}
+.qm .count{font-family:var(--mono);font-size:.8rem;color:var(--muted)}
+.qm h2{font-size:1.1rem;margin:0}
+.qm .step{display:grid;gap:8px}
+.qm .step>h3{font-family:var(--mono);font-size:.8rem;font-weight:500;color:var(--muted);margin:0;text-transform:none}
+.qm .step>h3 a{color:var(--teal);text-decoration:none}
+.qm .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px}
+.qm .mv{background:var(--card);border:1px solid var(--grid);border-radius:8px;padding:10px 12px;display:grid;gap:6px;min-width:0}
+.qm .mv b{font-weight:600}
+.qm .mv .acc{color:var(--muted);font-weight:400}
+.qm .mv .kd{font-family:var(--mono);font-size:.72rem;color:var(--muted)}
+.qm .mv .mt{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+.qm .mv .mw{font-size:.95rem}
+.qm .mv a{font-family:var(--mono);font-size:.75rem;color:var(--teal);text-decoration:none}
+.qm .empty,.qm .ahead{font-style:italic;color:var(--muted)}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head>
+<body>
+<div class="qm">
+  <p class="home"><a href="index.html">← the ladder</a></p>
+  <header style="display:grid;gap:8px">
+    <div class="eyebrow">Reference · every tech you have earned</div>
+    <h1>Reference</h1>
+    <p class="lead">Each card is one tech you have earned: its name, what it does in words, the line in symbols, and the step that built it. A tech lands here when you finish its step's questions. The ladder has shown you only its first few; most of what you can do is still ahead of you.</p>
+  </header>
+  <div class="tools">
+    <input type="search" id="q" placeholder="find a tech by name or word" aria-label="find a tech">
+    <span class="kinds" id="kinds"></span>
+    <span class="count" id="count"></span>
+  </div>
+  <main id="list"></main>
+  <p class="ahead" id="ahead"></p>
+</div>
+<script src="moves-data.js"></script>
+<script src="rung.js"></script>
+<script>
+(function(){
+'use strict';
+const M=window.LADDER_MOVES||{moves:[],apply:{}};
+const ALL=/[?&]all=1/.test(location.search);
+const KINDS=['axiom','technique','rewrite','rule','definition'];
+let kind='', q='';
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function localPages(){ try{ return JSON.parse(LS.getItem('pages:done')||'{}')||{}; }catch(e){ return {}; } }
+let pages=localPages();
+function earned(m){ return ALL||!!(pages[m.file]&&pages[m.file].v); }
+const kb=document.getElementById('kinds');
+kb.innerHTML=['all'].concat(KINDS).map(k=>'<button type="button" data-k="'+(k==='all'?'':k)+'"'+(k==='all'?' class="on"':'')+'>'+k+'</button>').join(' ');
+kb.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; kind=b.dataset.k; kb.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b)); draw(); };
+document.getElementById('q').addEventListener('input',e=>{ q=e.target.value.trim().toLowerCase(); draw(); });
+function card(m){
+  return '<div class="mv"><div><b>'+esc(m.name)+(m.accepted?' <span class="acc">('+esc(m.accepted)+')</span>':'')+'</b></div>'
+    +'<div class="kd">'+esc(m.kind)+'</div>'
+    +(m.tex?'<div class="mt" data-t="'+esc(m.tex)+'"></div>':'')
+    +'<div class="mw">'+esc(m.words)+'</div>'
+    +'<a href="'+esc(m.file)+'.html'+(m.pid?'#'+esc(m.pid):'')+'">built at '+esc(m.tag)+' →</a></div>';
+}
+function draw(){
+  const have=M.moves.filter(earned);
+  const shown=have.filter(m=>(!kind||m.kind===kind)&&(!q||(m.name+' '+m.words+' '+(m.accepted||'')).toLowerCase().includes(q)));
+  const list=document.getElementById('list');
+  if(!have.length){ list.innerHTML='<p class="empty">Nothing here yet. Finish the questions on a step and the techs it builds land here.</p>'; }
+  else if(!shown.length){ list.innerHTML='<p class="empty">No earned tech matches.</p>'; }
+  else {
+    let h='', cur='';
+    shown.forEach(m=>{ if(m.file!==cur){ if(cur) h+='</div></section>'; cur=m.file; h+='<section class="step"><h3><a href="'+esc(m.file)+'.html">'+esc(m.tag)+'</a></h3><div class="grid">'; } h+=card(m); });
+    list.innerHTML=h+'</div></section>';
+    if(window.katex) list.querySelectorAll('.mt').forEach(el=>{ try{ katex.render(el.dataset.t,el,{throwOnError:false,strict:false,trust:true}); }catch(e){ el.textContent=el.dataset.t; } });
+  }
+  document.getElementById('count').textContent=shown.length+' of '+have.length+' earned';
+  const left=M.moves.length-have.length;
+  document.getElementById('ahead').textContent=left>0?left+' more techs wait further up the ladder, and past them the ones nobody has found yet.':'';
+}
+draw();
+let tries=0; (function remote(){ if(window.MarksSync&&MarksSync.pages){ MarksSync.pages().then(p=>{ if(p&&typeof p==='object'){ Object.keys(p).forEach(k=>{ if(!pages[k]||(+p[k].t||0)>(+pages[k].t||0)) pages[k]=p[k]; }); draw(); } }).catch(()=>{}); } else if(++tries<10) setTimeout(remote,500); })();
+})();
+</script>
+<script src="app.js"></script></body>
+</html>

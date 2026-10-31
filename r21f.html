@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sin h / h → 1</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+.kn{font-size:.88rem}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r21e.html">← 21e flips and the complement</a><a href="r21g.html">next: 21g the slopes of sin and cos →</a></p>
+  <div class="tags"><span class="tag proof">21f · proof</span></div>
+  <h1>Sin h / h → 1</h1>
+  <p>Walk a very short way around the circle. The distance you walked along the curve and the height you rose are almost the same, and the shorter the walk, the closer they agree. This step proves it. The height is never more than the walk, and the walk is never more than the steepness of the line to where you stopped. Squeezed between those two, the height divided by the walk settles on exactly one. That one fact is what lets the next step find how fast the sine changes.</p>
+  <p class="gesture">For a tiny angle, the height is the arc: the sine of a small angle divided by the angle settles on one. It is fenced between the cosine and one, and the cosine settles on one as well.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r21a.html">21a</a> (the arc-length technique), <a href="r15e.html">15e</a> (a smaller function has a smaller area), <a href="r10d.html">10d</a> (the squeeze technique), <a href="r21c.html">21c</a> (tan). <a href="r21g.html">21g</a> finds the slopes.</p></div>
+</header>
+
+<section class="class step" data-step="21f1">
+  <h2 class="sthead"><span class="stno">21f1</span>The arc, measured upward</h2>
+  <p class="stands">Stands on 21a2 (the arc-length technique), 21e3 (the flip across y = x) and 21d1 (paths keep length).</p>
+  <p data-pid="c1715a">Upward-arc technique: <b>for 0 ≤ h &lt; π/2, h = ∫₀^{sin h} ds/√(1 − s²).</b> The flip across y = x carries the arc from (1, 0) to the point at h onto the arc from (0, 1) to (sin h, cos h). That is the graph of √(1 − s²) for s from 0 to sin h, and sin h &lt; 1, so the integral is proper.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the upward-arc technique">
+F(\text{arc from } (1, 0) \text{ to } P_h) = \text{arc from } (0, 1) \text{ to } (\sin h, \cos h) @@ F(x, y) = (y, x); lengths kept (21d1)
+\text{that arc} = \text{graph of } \sqrt{1 - s^2},\ 0 \le s \le \sin h @@ the upper half circle
+\htmlClass{new}{h = \int_0^{\sin h} \frac{ds}{\sqrt{1 - s^2}}} \quad \blacksquare @@ the arc-length technique (21a2)
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · upward · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">21f1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="h = \tfrac{\pi}{6}"></span></span>Write h as an integral by the upward-arc technique. <br>Compare it with the integral of 21a2.1.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21f2">
+  <h2 class="sthead"><span class="stno">21f2</span>Fences for a small arc</h2>
+  <p class="stands">Stands on 21f1 and 15e (the smaller-function-smaller-area technique).</p>
+  <p data-pid="285156">Small-arc technique: <b>for 0 ≤ h &lt; π/2, sin h ≤ h ≤ tan h.</b> On [0, sin h] the integrand is at least 1 and at most 1/√(1 − sin² h) = 1/cos h. Each fence is an area of a box.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the small-arc technique">
+0 \le s \le \sin h \Rightarrow 1 \le \frac{1}{\sqrt{1 - s^2}} \le \frac{1}{\sqrt{1 - \sin^2 h}} = \frac{1}{\cos h} @@ the bottom falls as s rises; cos h &gt; 0 here
+\int_0^{\sin h} 1\,ds \le h \le \int_0^{\sin h} \frac{ds}{\cos h} @@ smaller-function-smaller-area (15e)
+\htmlClass{new}{\sin h \le h \le \tan h} \quad \blacksquare @@ the boxes: sin h · 1 and sin h · (1/cos h)
+  </pre>
+  <p data-pid="27f029">So the height is never more than the walk, and the walk is never more than the height on the touching line (21c3).</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · fences · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · a short walk, its height, and its steepness</div>
+    <div id="pl"></div>
+    <div class="kn"><span class="m">h</span><input type="range" id="kh" min="0.01" max="1.4" step="0.01" value="0.8"><output id="okh"></output></div>
+    <div class="cap">Ink: the circle and the touching line x = 1. Teal: sin h, the height. Ember: the arc h. Plum: tan h, the height on the touching line. The verdict divides.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21f2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="h = 0.1"></span></span>Find fences for sin 0.1 from the small-arc technique and cos h = √(1 − sin² h). <br>Find how wide your fence is.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21f3">
+  <h2 class="sthead"><span class="stno">21f3</span>The squeeze</h2>
+  <p class="stands">Stands on 21f2, 10d (the squeeze technique) and 21e1 (reversal).</p>
+  <p data-pid="b711ad">Sine-over-arc technique: <b>sin h / h heads to 1 as h heads to 0.</b> Divide the fences by h and turn them over, and sin h / h sits between cos h and 1. Cos h heads to 1, because sin h ≤ h makes cos h = √(1 − sin² h) at least √(1 − h²).</p>
+  <pre class="lines" data-k="ember" data-label="this step: the sine-over-arc technique">
+0 < h < \tfrac{\pi}{2}:\ \ \cos h \le \frac{\sin h}{h} \le 1 @@ from h ≤ sin h / cos h and sin h ≤ h
+1 \ge \cos h \ge \sqrt{1 - h^2} \to 1 @@ sin² h ≤ h²
+\frac{\sin(-h)}{-h} = \frac{\sin h}{h} @@ reversal: sin is odd (21e1)
+\htmlClass{new}{\lim_{h \to 0} \frac{\sin h}{h} = 1} \quad \blacksquare @@ the squeeze technique (10d), from both sides
+  </pre>
+  <p data-pid="6bd9d7">In passing: sin h → 0 and cos h → 1 as h → 0. So sin and cos are continuous at 0.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · squeeze · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21f3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\lim_{h \to 0} \frac{\sin 3h}{h}"></span></span>Guess it, then find it with the sine-over-arc technique.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21f4">
+  <h2 class="sthead"><span class="stno">21f4</span>Its partner</h2>
+  <p class="stands">Stands on 21f3 and 21c1 (the circle technique).</p>
+  <p data-pid="111dd8">Cosine-gap technique: <b>(1 − cos h) / h heads to 0 as h heads to 0.</b> Multiply top and bottom by 1 + cos h. The top becomes sin² h.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the cosine-gap technique">
+\frac{1 - \cos h}{h} = \frac{1 - \cos^2 h}{h(1 + \cos h)} = \frac{\sin h}{h} \cdot \frac{\sin h}{1 + \cos h} @@ times (1 + cos h)/(1 + cos h); the circle technique
+\to 1 \cdot \frac{0}{2} @@ 21f3, and continuity at 0
+\htmlClass{new}{\lim_{h \to 0} \frac{1 - \cos h}{h} = 0} \quad \blacksquare
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · partner · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21f4.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\lim_{h \to 0} \frac{1 - \cos h}{h^2}"></span></span>Find it, by the same multiplying.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21f5">
+  <h2 class="sthead"><span class="stno">21f5</span>Illegal moves</h2>
+  <p class="stands">Stands on 21f1 to 21f4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\frac{\sin h}{h} \to \frac{\cos 0}{1} = 1 \text{ by 14i’s rule}\,? @@ circular: the rule needs the slope of sin at 0, which is this very limit
+\sin h = h \text{ for small } h\,? @@ near, never equal unless h = 0: sin h &lt; h for h &gt; 0
+\lim \frac{\sin h}{h} = \frac{\lim \sin h}{\lim h}\,? @@ 0/0: limits-divide needs a bottom limit other than 0
+\frac{\sin 3h}{h} = \sin 3\,? @@ sin is not a factor to cancel
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21f5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\frac{\sin h}{h},\ \ h = \pi"></span></span>Find its value.</li><li><span class="givens"><span data-tex-inline="\lim_{h \to 0} \frac{\tan h}{h}"></span></span>Find it.</li><li><span class="givens"><span data-tex-inline="\lim_{h \to 0} h\sin\tfrac{1}{h}"></span></span>Find it, by a squeeze.</li><li><span class="givens"><span class="gtx">angles measured in degrees: a degree is π/180 of an arc</span></span>Find the limit of the sine of d degrees divided by d, as d heads to 0.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">21f.4.1</span><span class="tagq">build</span>Build a fence for sin 0.01 no wider than one millionth.</div>
+  <div class="chq"><span class="chid">21f.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\sin h = h"></span></span>Find every h that answers it.</div>
+  <div class="chq"><span class="chid">21f.4.3</span><span class="tagq">converse</span>sin h / h heads to 1, and sin 0 = 0. Turn it round: if f(0) = 0 and f(h)/h heads to 1, must f have slope 1 at 0? Must f be sin?</div>
+  <div class="chq"><span class="chid">21f.4.4</span><span class="tagq">reroute</span>Prove sin h ≤ h ≤ tan h by areas instead: a triangle inside the slice of the disc, the slice, and a triangle outside it. Take as given that the slice of angle h has area h/2 (21n proves it).</div>
+  <div class="chq"><span class="chid">21f.4.5</span><span class="tagq">seam</span>A scientist claimed that a swinging weight on a string keeps the same time however wide it swings. Seventy years later another showed it is true only for small swings, where the height is nearly the arc, and found the one curve along which it is exactly true. <br>Which was the law of nature: the claim, the correction, or neither? <br>How small is a small swing?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r21e.html">← 21e · flips and the complement</a><a href="r21g.html">21g · the slopes of sin and cos →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The sine-over-arc technique is the fundamental trigonometric limit; sin h ≈ h for small h is the small-angle approximation. The squeeze technique is also called the sandwich or pinching theorem.</p>
+  <h3>Who said it first</h3>
+  <p>In 21f.4.5, the scientist is Galileo Galilei (letters of 1602, and the Dialogue, 1632), and the correction is Christiaan Huygens's Horologium Oscillatorium (1673): the swing keeps exact time along a cycloid, the tautochrone.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+/* moves of the plane, drawn in SVG, for rung 20 */
+const V=c=>'var('+c+')';
+const FLAG=[[0,0],[0,3],[2,3],[2,2.4],[0.6,2.4],[0.6,1.8],[1.5,1.8],[1.5,1.2],[0.6,1.2],[0.6,0]];
+const M={
+  id:()=>p=>p,
+  slide:(h,k)=>p=>[p[0]+h,p[1]+k],
+  turn:(a,b)=>p=>[a*p[0]-b*p[1],b*p[0]+a*p[1]],
+  stretch:k=>p=>[k*p[0],k*p[1]],
+  flipU:(c,s)=>p=>{ const d=2*(p[0]*c+p[1]*s); return [d*c-p[0],d*s-p[1]]; },              /* across the line through O along (c, s), c² + s² = 1 */
+  flipAt:(q,c,s)=>p=>{ const x=p[0]-q[0],y=p[1]-q[1],d=2*(x*c+y*s); return [q[0]+d*c-x,q[1]+d*s-y]; },
+  turnAt:(q,a,b)=>p=>{ const x=p[0]-q[0],y=p[1]-q[1]; return [q[0]+a*x-b*y,q[1]+b*x+a*y]; },
+  then:(g,f)=>p=>g(f(p))                                                                    /* f first, then g */
+};
+const unit=(x,y)=>{ const r=Math.hypot(x,y); return [x/r,y/r]; };
+const fx=v=>(Math.abs(v)<5e-10?0:v);
+const show=(v,d)=>{ let s=fx(v).toFixed(d==null?2:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return (s==='-0'?'0':s).replace('-','−'); };
+/* shapes: {pts, c, fill, dash, w, open}; dots: {p, c, t}; lines: {p, d, c, dash} */
+function svgPlane(o){ const lo=o.lo==null?-6:o.lo, hi=o.hi==null?6:o.hi, S=300, X=x=>(x-lo)/(hi-lo)*S, Y=y=>S-(y-lo)/(hi-lo)*S;
+  let s='<svg viewBox="0 0 '+S+' '+S+'" style="width:100%;max-width:340px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  for(let g=Math.ceil(lo);g<=hi;g++){ s+='<line x1="'+X(g)+'" y1="0" x2="'+X(g)+'" y2="'+S+'" style="stroke:'+V('--grid')+';stroke-width:'+(g===0?1.6:0.6)+'"/><line x1="0" y1="'+Y(g)+'" x2="'+S+'" y2="'+Y(g)+'" style="stroke:'+V('--grid')+';stroke-width:'+(g===0?1.6:0.6)+'"/>'; }
+  (o.lines||[]).forEach(l=>{ const L=40; s+='<line x1="'+X(l.p[0]-L*l.d[0])+'" y1="'+Y(l.p[1]-L*l.d[1])+'" x2="'+X(l.p[0]+L*l.d[0])+'" y2="'+Y(l.p[1]+L*l.d[1])+'" style="stroke:'+V(l.c||'--teal')+';stroke-width:1.6;stroke-dasharray:'+(l.dash||'5 4')+'"/>'; });
+  (o.shapes||[]).forEach(z=>{ const pts=z.pts.map(p=>X(p[0]).toFixed(1)+','+Y(p[1]).toFixed(1)).join(' ');
+    s+='<'+(z.open?'polyline':'polygon')+' points="'+pts+'" style="fill:'+(z.fill?V(z.c):'none')+';fill-opacity:'+(z.fill?0.28:0)+';stroke:'+V(z.c)+';stroke-width:'+(z.w||2)+(z.dash?';stroke-dasharray:'+z.dash:'')+'"/>'; });
+  (o.dots||[]).forEach(d=>{ s+='<circle cx="'+X(d.p[0])+'" cy="'+Y(d.p[1])+'" r="4" style="fill:'+V(d.c||'--ink')+'"/>'+(d.t?'<text x="'+(X(d.p[0])+7)+'" y="'+(Y(d.p[1])-6)+'" style="fill:'+V(d.c||'--ink')+';font:12px IBM Plex Mono,monospace">'+d.t+'</text>':''); });
+  return s+'</svg>'; }
+function knob(id,lab,min,max,step,val){ return '<div class="kn"><span class="m">'+lab+'</span><input type="range" id="'+id+'" min="'+min+'" max="'+max+'" step="'+step+'" value="'+val+'"><output id="o'+id+'"></output></div>'; }
+function chipRow(el,keys,get,set,after){ el.innerHTML=''; keys.forEach(k=>{ const b=document.createElement('button'); b.type='button'; b.textContent=k; if(k===get()) b.className='on'; b.onclick=()=>{ set(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+
+let h=0.8; const e=$('kh'); e.addEventListener('input',()=>{ h=+e.value; draw(); });
+function draw(){ const s=Math.sin(h), c=Math.cos(h), t=s/c, circ=[], arc=[]; for(let k=0;k<=120;k++){ const a=2*Math.PI*k/120; circ.push([Math.cos(a),Math.sin(a)]); }
+  for(let k=0;k<=40;k++){ const a=h*k/40; arc.push([Math.cos(a),Math.sin(a)]); }
+  $('pl').innerHTML=svgPlane({lo:-0.5,hi:1.6,shapes:[{pts:circ,c:'--ink',open:true},{pts:[[1,0],[1,Math.min(t,1.6)]],c:'--plum',open:true,w:3},{pts:[[c,0],[c,s]],c:'--teal',open:true,w:3},{pts:arc,c:'--ember',open:true,w:3},{pts:[[0,0],[1,t]],c:'--muted',open:true,dash:'3 3'}],lines:[{p:[1,0],d:[0,1],c:'--ink',dash:'2 3'}]});
+  $('okh').textContent=show(h);
+  const v=$('vd'); v.className='verdict'+(h<0.1?' win':''); v.textContent='sin h = '+s.toFixed(4)+' ≤ h = '+h.toFixed(4)+' ≤ tan h = '+t.toFixed(4)+'. sin h / h = '+(s/h).toFixed(5)+', and cos h = '+c.toFixed(5)+'.'; }
+draw();
+window.__pic={set:k=>{ h=k; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'upward arc',t:R`\htmlClass{new}{h = \int_0^{\sin h} \frac{ds}{\sqrt{1 - s^2}}}`,n:`Proper for h < π/2.`}
+],{title:'The slides · upward · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'small arc',t:R`\htmlClass{new}{\sin h \le h \le \tan h}`,n:`0 ≤ h < π/2.`}
+],{title:'The slides · fences · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'sine over arc',t:R`\htmlClass{new}{\lim_{h \to 0} \frac{\sin h}{h} = 1}`,n:`Between cos h and 1.`}
+],{title:'The slides · squeeze · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'cosine gap',t:R`\htmlClass{new}{\lim_{h \to 0} \frac{1 - \cos h}{h} = 0}`,n:`Times 1 + cos h.`}
+],{title:'The slides · partner · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`\tfrac{\sin h}{h} \not\to \text{by 14i}`,n:`Circular.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

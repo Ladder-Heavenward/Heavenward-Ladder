@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>11e · A joint doesn't break continuity</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+#cvJ{touch-action:none;cursor:ns-resize}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:3.5em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r11d.html">← 11d every polynomial is continuous</a><a href="r11concl.html">next: 11·∎ conclusion →</a></p>
+  <div class="tags"><span class="tag proof">11e · proof</span></div>
+  <h1>A joint doesn't break continuity</h1>
+  <p>Many functions are given in pieces: one formula on the left of an input, another on the right. Where the formula changes, does continuity survive? This step proves that it does exactly when the two pieces arrive at the same height and the function's value is that height. It names such a place a joint. At a joint the pieces may climb at quite different rates: the size of a number falls on the left of 0 and climbs on the right, and is continuous at 0 all the same. Then the step turns to sequences: a continuous function carries every sequence of inputs heading to an input into a sequence of outputs heading to its value there. That costs nothing. The converse is also true, and the step says exactly what it costs.</p>
+  <p class="gesture">Where the formula changes, look at the two pieces arriving. Same height, and the value is that height: continuous, whatever rates the pieces climb at. Different heights: no value can save it.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r11a.html">11a</a> (the definition, continuity-unpacked, continuous-both-ways, the step u), <a href="r11c.html">11c</a> (chain-at-an-edge: |x| as √(x²)), <a href="r10e.html">10e</a> (one-sided limits, two-sides-agree, the glued f, agreeing-near side by side), <a href="r10f.html">10f</a> (sequence limits, one-over-n, cut-offs), <a href="r10g.html">10g</a> (not-heading-to: the challenger's strategy), <a href="r09e.html">9e</a> (the linear function, its step, same-ratio), <a href="r08h.html">8h</a> (|x|, the reverse form of triangle), <a href="r08e.html">8e</a> (everyday-counting-passes), <a href="r07d.html">7d</a> (not-not-out, not-every, negated-if forward; definitions by cases), <a href="r06a.html">6a</a> (the choosing axiom), <a href="r06b.html">6b</a> (listed choosing, named). <a href="r11f.html">11f</a> sorts the places where a formula changes into joints and breaks; <a href="r11chem.html">11·chem</a> heats a pan through four joints; rung 13 asks what different rates at a joint cost.</p></div>
+</header>
+
+<section class="class step" data-step="11e1">
+  <h2 class="sthead"><span class="stno">11e1</span>Where the formula changes</h2>
+  <p class="stands">Stands on 10e (sides), 10a5 (agreeing-near) and 11a5 (continuous-both-ways).</p>
+  <p data-pid="c2e9af">10e glued two formulas at 1: x² on the left, 2x − 1 on the right, and the stray value 5 at 1. Both pieces head to 1 at 1, so the function heads to 1 there (two-sides-agree), and its value is 5: discontinuous at 1. Change the value at 1 to 1, and it lands where it was headed. The pieces arrived at the same height; the value had to be that height too. In general:</p>
+  <p data-pid="583ea2">Glued-functions technique: <b>let f be a function with w as an input, equal to g on some interval (w − r, w) and to h on (w, w + r). Then f is continuous at w exactly when lim_{x→w⁻} g(x) = f(w) = lim_{x→w⁺} h(x).</b> A function given by different formulas on different pieces of its domain is called piecewise defined.</p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the glued-functions technique">
+\lim_{x \to a^-} f(x) = \lim_{x \to a^-} g(x) @@ agreeing-near side by side (10e): f and g agree on (a − r, a); either both limits exist and are equal, or neither exists
+\lim_{x \to a^+} f(x) = \lim_{x \to a^+} h(x) @@ the same, on (a, a + r)
+f \text{ continuous at } a \;\Leftrightarrow\; \text{from the left} \land \text{from the right} @@ continuous-both-ways (11a)
+\Leftrightarrow\; \htmlClass{keep}{\lim_{x \to a^-} g(x)} = \htmlClass{new}{f(a)} = \htmlClass{keep}{\lim_{x \to a^+} h(x)} \quad \blacksquare @@ 11a's one-sided lines, read through the two lines above
+  </pre>
+  <p data-pid="3f3147">The commonest case has continuous pieces with the value given by one of them, as “g for x ≤ w, h for x &gt; w”. Then lim_{x→w⁻} g(x) = g(w) and lim_{x→w⁺} h(x) = h(w) (continuity, from each side), f(w) = g(w), and glued-functions says: <b>f is continuous at w exactly when g(w) = h(w).</b> At every other input near w, f agrees with one piece on a whole neighbourhood, so it is continuous wherever that piece is (agreeing-near). Continuous pieces, glued where their heights match, make a continuous function.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · glued-functions · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · left: glue two climbing pieces at w · right: the sequence test</div>
+    <div class="panel">
+      <canvas id="cvJ"></canvas>
+      <div class="kn">
+        <span class="m">left rate</span><input type="range" id="km1" min="-3" max="3" step="0.5" value="-1"><output id="om1"></output>
+        <span class="m">right rate</span><input type="range" id="km2" min="-3" max="3" step="0.5" value="1"><output id="om2"></output>
+        <span class="m">left arrives</span><input type="range" id="kh1" min="-2" max="2" step="0.25" value="0"><output id="oh1"></output>
+        <span class="m">right arrives</span><input type="range" id="kh2" min="-2" max="2" step="0.25" value="0"><output id="oh2"></output>
+        <span class="m">ε</span><input type="range" id="kej" min="0.05" max="1" step="0.05" value="0.4"><output id="oej"></output>
+      </div>
+      <div class="chips" id="vch"><button class="on" data-v="L">value from the left piece</button><button data-v="R">value from the right piece</button></div>
+      <div class="cap">The joint is at w = 0. Teal: the left piece, for x &lt; 0; gold: the right piece, for x &gt; 0. Drag up and down on either half of the picture to move where that piece arrives. The filled dot is the value at 0; a hollow dot is a piece arriving somewhere else. The grey window is the largest reach that wins the game at 0 for the gold-banded ε, or none.</div>
+      <div class="verdict" id="vdJ"></div>
+    </div>
+    <div class="panel">
+      <div class="lbl">the function, at w</div>
+      <div class="chips" id="sfc"></div>
+      <div class="lbl">the sequence, heading to w</div>
+      <div class="chips" id="ssc"></div>
+      <canvas id="cvS"></canvas>
+      <div class="cap">Across: the term number n, from 0 to 23. Up: the output f(x_n). The gold band is within 0.2 of the value f(w). Teal terms are inside the band from the first n after which all are; ember terms are outside. The readout says whether the outputs head to f(w), and what that does and does not prove.</div>
+      <div class="verdict" id="vdS"></div>
+      <div class="eqbox" id="eqS"></div>
+    </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">11e1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = x + 2 for x ≤ 1,  f(x) = x² + 2 for x > 1</span></span>Find the heights arriving from each side at 1, and the value there. <br>Decide whether f is continuous at 1, citing glued-functions.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="11e2">
+  <h2 class="sthead"><span class="stno">11e2</span>Joints, and rates</h2>
+  <p class="stands">Stands on 11e1 and 9e (same-ratio).</p>
+  <p data-pid="1216a7">A place where the formula changes and continuity survives needs a name, and so does the thing that may differ there.</p>
+  <p class="eqline" data-pid="0b3a60">From here on, let a function f be given by one formula just left of an input a and by another just right of it. Then a is a joint of f when the two pieces arrive at the same height and f lands there: lim_{x→a⁻} f(x) = f(a) = lim_{x→a⁺} f(x). At a joint the left and right pieces need not climb at the same rate.</p>
+  <p class="eqline" data-pid="c7e2d4">From here on, a joint where the two pieces climb at different rates is a corner. How sharp a corner is, its angle, is measured once angles are built (rung 21).</p>
+  <p class="eqline" data-pid="ab5442">From here on, the rate of a linear function x ↦ mx + b is its step m: how much the output changes per step of the input, in 9e's words for m. Same-ratio showed it is the same ratio (f(s) − f(t))/(s − t) between any two inputs. A piece of a function that agrees with a linear function climbs at that kind's rate.</p>
+  <div class="dividend"><span class="lbl">The = dividend</span>A rate is a sameness: the same change per step, wherever you take the step. Same-ratio's ratio between any two inputs = the ratio between any other two, and that = is the one from 0b, now running along a whole line.</div>
+  <p class="eqline" data-pid="2b59fd">This is a new job for the word. 5i's rate, an amount of one kind compared with an amount of another, and 10·bio's rate of a reaction keep their meanings. When a linear function's inputs and outputs carry units, its rate is a rate in 5i's sense too.</p>
+  <p data-pid="4e9309">By glued-functions and continuous-both-ways, a joint is an input where the function is continuous. That is principle 5 in its general form: a joint doesn't break continuity. The rates of the two pieces play no part in glued-functions's column. <b>Continuity asks how the pieces arrive, never how they climb.</b></p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · joints and rates · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">11e2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = 2x for x ≤ 3,  f(x) = 9 − x for x > 3</span></span>Decide whether 3 is a joint of f. <br>Find the rate of each piece.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="11e3">
+  <h2 class="sthead"><span class="stno">11e3</span>|x| at 0</h2>
+  <p class="stands">Stands on 11e2, 8h (triangle) and 11c3 (chain-at-an-edge).</p>
+  <p data-pid="a9ee31">Size-is-continuous technique: <b>|x| is continuous at every real; at 0 it has a joint whose pieces climb at the rates −1 and 1.</b> Three roads, each complete.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the size-is-continuous technique, directly from the game">
+\text{let } \varepsilon \gt 0;\ \ \delta = \htmlClass{new}{\varepsilon} @@ continuity-unpacked, at any real a
+\big|\,|x| - |a|\,\big| \le |x - a| @@ the reverse form of triangle (8h), and size-of-a-negative for its other side
+|x - a| \lt \delta \;\Rightarrow\; \big|\,|x| - |a|\,\big| \lt \htmlClass{keep}{\varepsilon} \quad \blacksquare @@ at-most-is-a-partial-order on ℝ. At a = 0 this reads: |x| &lt; ε whenever |x| &lt; ε
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: the size-is-continuous technique at 0, as a glued function">
+|x| = -x \ (x \lt 0),\ \ x\ (x \ge 0) @@ 8h's line, by cases
+\lim_{x\to 0^-}(-x) = 0,\ \ \lim_{x \to 0^+} x = 0,\ \ |0| = 0 @@ lines-are-continuous from each side; the value
+0 \text{ is a joint: continuous at } 0 @@ glued-functions: both pieces arrive at 0, and the value is 0
+\text{rates: } \htmlClass{new}{-1} \text{ on the left},\ \ \htmlClass{new}{1} \text{ on the right} @@ the steps of −x and x: each step left of 0 lowers the output by 1, each step right raises it by 1
+  </pre>
+  <p data-pid="984523">The third road is 11c's: |x| = √(x²), by chain-at-an-edge at 0. Three proofs, and the second says the most. The pieces meet at the same height, 0. On the left the output falls by 1 for every step across; on the right it climbs by 1. None of that troubles continuity. It is the plainest corner, and the plainest example of the rung's fifth principle. What the difference in rates does cost is a different question, with a different answer, on rung 13.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · |x| · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">11e3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">|x| at 0,  ε = 0.01</span></span>Answer the challenge by the first road. <br>Say what the second road shows that the first does not.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="11e4">
+  <h2 class="sthead"><span class="stno">11e4</span>More joints, and a place that is not one</h2>
+  <p class="stands">Stands on 11e3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: joints by glued-functions">
+f(x) = 2x + 1\ (x \le 1),\ \ 4 - x\ (x \gt 1) @@ two linear functions; the value at 1 from the left piece
+2 \cdot 1 + 1 = 3 = 4 - 1 @@ the pieces' values at 1 agree: glued-functions, continuous. A joint, with rates 2 and −1
+g(x) = 2x + 1\ (x \le 1),\ \ x + 3\ (x \gt 1) @@ the same left piece, a different right one
+3 \ne \htmlClass{new}{4} @@ the right piece arrives at 4: glued-functions fails. Not a joint; 11f calls it a jump
+|x - 2| + |x + 1| = -2x + 1,\ \ 3,\ \ 2x - 1 @@ on (−∞, −1), [−1, 2], (2, ∞): 8h's line on each bar, by cases
+\text{at } -1:\ 3 = 3;\ \ \text{at } 2:\ 3 = 3 @@ two joints, with rates −2, 0, 2 on the three stretches. Continuous at every real (also by size-is-continuous, continuous-after-continuous, continuous-sums)
+  </pre>
+  <p data-pid="0a1595"><b>Whether a place where the formula changes is a joint depends only on the heights arriving and the value.</b> Writing a function as one formula does not hide its joints: |x − 2| + |x + 1| is one formula with two joints. And splitting a function into pieces does not create breaks: a polynomial given as “itself on the left, itself on the right” has a joint, trivially, wherever you choose to cut it.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · more joints · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">11e4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = x \text{ for } x &lt; 0,"></span> <span data-tex-inline="f(x) = x \text{ for } x \ge 0"></span></span>Decide whether 0 is a joint of f, and whether f has a break there.</li><li><span class="givens"><span data-tex-inline="F(x) = |x|/x,"></span> <span data-tex-inline="G(x) = x \cdot |x|"></span></span>Decide whether F and G are continuous, and what each does where its formula changes.</li><li><span class="givens"><span data-tex-inline="F(x) = |x|/x \text{ for } x \ne 0,"></span> <span data-tex-inline="F \text{ is given any value at 0.}"></span></span>With sequences heading to 0, prove that F is discontinuous at 0.</li><li><span class="givens"><span data-tex-inline="“f(1/S(n)) \to f(0),"></span> <span data-tex-inline="\text{so } f \text{ is continuous at } 0.”"></span></span>Find an f for which the premise is true and the conclusion is false.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="11e5">
+  <h2 class="sthead"><span class="stno">11e5</span>Sequences go through</h2>
+  <p class="stands">Stands on 11e4, 10f (sequences) and 11c (chains).</p>
+  <p data-pid="eb5738">10f's line says what it means for a sequence of reals to head to a value. Continuity carries such sequences along. Sequences-go-through technique: <b>if f is continuous at w, and x is a sequence of inputs of f with x_n → w, then f(x_n) → f(w).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the sequences-go-through technique">
+\text{let } \varepsilon \gt 0;\ \text{call } \delta @@ continuity-unpacked for f at a
+\text{call } N:\ n \ge N \Rightarrow |x_n - a| \lt \htmlClass{keep}{\delta} @@ x_n → a, challenged with the gap δ (10f's sequence line)
+n \ge N \;\Rightarrow\; |f(x_n) - f(a)| \lt \htmlClass{keep}{\varepsilon} \quad \blacksquare @@ x_n is an input of f within δ of a: continuity-unpacked's promise. So f(x_n) → f(a)
+  </pre>
+  <p data-pid="0651de">It is 11c's chain again, with a sequence as the inside function: the outside answers ε with δ, and the sequence answers δ with a threshold. No either-way principle, no axiom. You have met its use without its name. The cut-offs of √2, 1, 1.4, 1.41, 1.414, ⋯, head to √2 (10f's cut-offs). Squaring is continuous (lines-are-continuous, continuous-products). So their squares, 1, 1.96, 1.9881, 1.999396, ⋯, head to (√2)² = 2.</p>
+  <p data-pid="949b1c">Turned about by turn-and-deny, sequences-go-through is a refutation tool. One sequence of inputs heading to w whose outputs
+ do not head to f(w) shows f is discontinuous at w. For 11a's step u at 0, x_n = −1/S(n) heads to 0 (10f's one-over-n and constant-factor), u(x_n) = 0 for every n, and 0 does not head to u(0) = 1. For q at any w, a sequence of fractions and a sequence of irrationals, both heading to w, have outputs 1 and 0 forever. They cannot both head to q(w). But one sequence that passes proves nothing: u(1/S(n)) = 1 heads to u(0).</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · sequences-go-through · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">11e5.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = x^2 + 1 \text{ for } x &lt; 1,"></span> <span data-tex-inline="f(x) = 3x - 1 \text{ for } x \ge 1"></span></span>By glued-functions, decide whether f is continuous at 1.</li><li><span class="givens"><span data-tex-inline="f(x) = \max(x, 0)"></span></span>Write f in two pieces, and find its joint and the rates on each side.</li><li><span class="givens"><span data-tex-inline="f(x) = |x - 3|,"></span> <span data-tex-inline="\delta = \varepsilon"></span></span>Show that f is continuous at 3 with this δ.</li><li><span class="givens"><span data-tex-inline="f \text{ is continuous at 0, with}"></span> <span data-tex-inline="f(0) = 5 \text{.}"></span> <span data-tex-inline="x_n = 1/S(n)"></span></span>Find where the values of f along this sequence head, and cite the techniques that give it.</li><li><span class="givens"><span data-tex-inline="u(x) = 0 \text{ for } x &lt; 0,\ 1 \text{ for } x \ge 0"></span></span>Run sequence-test-back's column for u at 0, as far as naming a member of each of its sets by a formula. <br>Did you need the axiom?</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="11e6">
+  <h2 class="sthead"><span class="stno">11e6</span>The test, the other way, and what it costs</h2>
+  <p class="stands">Stands on 11e5, rung 7 (the either-way principle), rung 6 (choice) and 10g (the challenger’s sentence).</p>
+  <p data-pid="bce0ad">Sequence-test-back technique: <b>for f defined near w with w an input, if f(x_n) → f(w) for every sequence x of inputs of f with x_n → w, then f is continuous at w.</b> The proof is by contradiction proper, and two lines in it lean on principles the ladder chose rather than proved.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the sequence-test-back technique">
+\text{suppose } \neg(f \text{ continuous at } a) @@ a supposition for contradiction (7e)
+\exists \varepsilon \gt 0\ \forall \delta \gt 0\ \exists x \in \operatorname{dom} f\ (|x - a| \lt \delta \land \varepsilon \le |f(x) - f(a)|) @@ continuity-unpacked denied by 10g's not-heading-to techs: not-every, not-some, negated-if forward, three-way-order on ℝ. <span class="hl-new">Rung 7's either-way principle</span>
+\text{call such } \varepsilon @@ use a some
+A_n = \{x \in \operatorname{dom} f : |x - a| \lt \tfrac{1}{S(n)} \land \varepsilon \le |f(x) - f(a)|\} @@ a sift of dom f, one for each number n; non-empty, by the line above with δ = 1/S(n)
+\mathcal A = \{A_n : n \in \mathbb N\} @@ 2g's shorthand, a sift of 𝒫(ℝ): a collection of non-empty sets
+\text{call } c,\ \text{a choosing function for } \mathcal A @@ <span class="hl-new">the choosing axiom</span> (6a): one bad input from each of endlessly many windows, with no rule
+x_n = \htmlClass{new}{c(A_n)} @@ a sequence of inputs of f, by rule-makes-a-function (4c)
+x_n \to a @@ |x_n − a| &lt; 1/S(n); given ε′, everyday-counting-passes gives N ≠ 0 with 1/N &lt; ε′; for n ≥ N, 1/S(n) &lt; 1/N (positive-reciprocal on ℚ)
+f(x_n) \to f(a) @@ the hypothesis, used with this sequence
+|f(x_{N'}) - f(a)| \lt \varepsilon \text{ for some } N' @@ the line above, at the gap ε
+\varepsilon \le |f(x_{N'}) - f(a)|;\ \ \bot @@ x_N′ ∈ A_N′; clash (three-way-order on ℝ: ε ≤ p is ¬(p &lt; ε))
+f \text{ continuous at } a \quad \blacksquare @@ refute: ¬¬(continuous); <span class="hl-new">not-not-out, rung 7's either-way principle</span>
+  </pre>
+  <p data-pid="380a36">Say which, with care. Three lines are marked. The second line and the last are rung 7's either-way principle. Turning “not continuous” into the challenger's strategy needs not-every (10g used the principle there too), and the proof ends with not-not out. The line that calls c is a move cited to the choosing axiom, made on a collection of endlessly many sets with no rule to pick from them. On this ladder the either-way principle itself came from Choice, through 7c's choice-gives-either-way, so every marked line rests on Choice in the end. But the two kinds of use are not alike, and the difference matters.</p>
+  <p data-pid="1765f8"><b>The choosing is the essential cost.</b> Set theorists have built worlds in which every statement is true or false, so rung 7's either-way principle is true, but Choice is false. In some of them there is a function on the reals that passes every sequence test at a point and is still discontinuous there. In those worlds the line sequence-test-back would write is false for that function, so no proof from the either-way principle alone can exist. What sequence-test-back needs is less than the full axiom. It needs only choosing from a collection in bijection with ℕ, of sets of reals: the listed choosing that 6b named. Set theorists have shown that, given the rest, sequence-test-back for every function on the reals is exactly as strong as that much choice. That a proof of this technique leans on the choosing axiom was noticed early in the century before this one. A survey of 1918 listed it among the axiom's uses in analysis.</p>
+  <p data-pid="bc00f9">A modern survey of what fails without the choosing axiom gathers this case among many. Given the other axioms, “sequentially continuous at every point” and “continuous” agree for all functions on the reals exactly when listed choosing is true for sets of reals.</p>
+  <p data-pid="6ca909">And when a rule can do the picking, no axiom is needed. For a particular function you can usually name the bad inputs: for u at 0 the sequence −1/S(n) was given by a formula, and the refutation of continuity used no choice at all. The axiom is spent only on the technique about every function, where nobody can say in advance where the bad inputs lie.</p>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · sequence-test-back · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">11e6.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">“f is not continuous at w”</span></span>Write the challenger’s strategy it unpacks to. <br>Say which line of sequence-test-back’s column picks an input for each n, and what that picking costs.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="11e7">
+  <h2 class="sthead"><span class="stno">11e7</span>Illegal moves</h2>
+  <p class="stands">Stands on 11e1 to 11e6.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\text{the formula changes at } a, \text{ so } a \text{ is a break}\,? @@ |x| at 0: a joint, continuous (size-is-continuous)
+\begin{aligned}&\text{continuous at a joint, so the}\\ &\quad\text{pieces climb at the same rate}\,?\end{aligned} @@ |x|: rates −1 and 1. Continuity asks heights, not rates
+\text{the pieces meet, so continuous}\,? @@ the value must be that height too: 10e's glued f with f(1) = 5
+\text{one formula, so no joint}\,? @@ |x − 2| + |x + 1| is one formula with two joints
+u\big(\tfrac{1}{S(n)}\big) \to u(0), \text{ so } u \text{ is continuous at } 0\,? @@ one sequence that passes proves nothing; −1/S(n) fails
+\begin{aligned}&\text{sequence-test-back by the}\\ &\quad\text{either-way principle alone}\,?\end{aligned} @@ there are worlds with the either-way principle and without enough choice where sequence-test-back is false
+\begin{aligned}&\text{sequence-test-back with } x_n \text{ “some}\\ &\quad\text{bad input in each window”}\,?\end{aligned} @@ “some” names nothing: 1e's use a some calls one input per call. Endlessly many calls need the axiom
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">11e7.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">“u(1/S(n)) heads to u(0), so u is continuous at 0.”</span></span>Which illegal move is this? <br>Find a sequence that refutes the conclusion.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="11e8">
+  <h2 class="sthead"><span class="stno">11e8</span>Running it backwards</h2>
+  <p class="stands">Stands on 11e1 to 11e6.</p>
+  <p data-pid="5ab9de">Handed a function in pieces, find where the formula changes, compute the heights arriving from each side and the value, and decide by glued-functions: a joint, or not. Handed a joint, read off the rates if the pieces are linear functions, and expect them to differ. Handed a claim of continuity to refute, look for one sequence of inputs heading to the point whose outputs go elsewhere. Handed a proof that uses every sequence, ask where it picks, and whether a rule could pick instead. Found upward; written downward.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">11e8.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = 5 - x \text{ left of } 2,"></span> <span data-tex-inline="f(x) = kx \text{ right of } 2,"></span> <span data-tex-inline="f \text{ is continuous at 2.}"></span></span>Find k.</li><li><span class="givens"><span data-tex-inline="\text{A continuous function is}"></span> <span data-tex-inline="\text{linear with rate 3 left of}"></span> <span data-tex-inline="\text{1 and rate −2 right of 1,}"></span> <span data-tex-inline="\text{and its value at 1 is 4.}"></span></span>Write both pieces.</li><li><span class="givens"><span data-tex-inline="\text{The cut-offs of } \sqrt{3} \text{:}"></span> <span data-tex-inline="1, 1.7, \cdots"></span></span>Write the first five and their squares, by hand. <br>Find where the squares head, and cite the techniques that give it.</li><li><span class="givens"><span data-tex-inline="f(x) = |2x - 1| + |x|"></span></span>Write f in pieces, find its joints, and give the rate on each stretch.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">11e.4.1</span><span class="tagq">build</span>Build joints of your own.<ol class="parts" type="a"><li>Build a continuous function with three joints, made of linear functions whose rates are 1, −1, 2 and −2 from left to right.</li><li>State sequence-test-back from the right, with sequences from the right and continuity from the right, and write the lines of its column that change.</li><li>Write a false proof of sequence-test-back that never mentions a choosing function, and find the line where it quietly makes endlessly many picks.</li></ol></div>
+  <div class="chq"><span class="chid">11e.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="x_n = w \text{ for every } n"></span></span>What does sequences-go-through give for this sequence? <br>Does it need continuity at all?</div>
+  <div class="chq"><span class="chid">11e.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{Glued-functions: if the}"></span> <span data-tex-inline="\text{pieces arrive at the same}"></span> <span data-tex-inline="\text{height and } f \text{ lands there, } f"></span> <span data-tex-inline="\text{is continuous at } w \text{.}"></span> <span data-tex-inline="f \text{ is continuous at } w \text{.}"></span></span>Must the pieces arrive at the same height?</div>
+  <div class="chq"><span class="chid">11e.4.4</span><span class="tagq">seam</span>A survey of 1918 listed sequence-test-back's road, from sequences back to continuity, among the places where analysts had used the choosing axiom without saying so. Should a proof about one function at one input be allowed to make endlessly many picks? <br>Which of rung 7's camps would accept sequence-test-back?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r11d.html">← 11d · every polynomial is continuous</a><a href="r11concl.html">11·∎ · conclusion →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>The choice axiom is Ernst Zermelo’s. The survey of 1918 is Wacław Sierpiński’s; the modern survey is Horst Herrlich’s. q is Dirichlet’s function.</p>
+  <aside class="voice para"><p>Herrlich's survey of what fails without the axiom of choice gathers this case among many: given the other axioms, “sequentially continuous at every point” and “continuous” agree for all functions on the reals exactly when countable choice is true for sets of reals.</p><cite>Herrlich, Axiom of Choice, Lecture Notes in Mathematics 1876 (2006), ch. 4</cite></aside>
+  <p>Accepted names: sequences-go-through and sequence-test-back together are the sequential criterion for continuity; a function given by different formulas on different pieces of its domain is piecewise defined.</p>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=v=>{ if(v===null||!isFinite(v)) return '—'; const a=Math.abs(v); let s=a>=100?v.toFixed(1):a>=1?v.toFixed(3):a>=0.001?v.toFixed(4):v.toPrecision(2); if(s.indexOf('.')>=0&&s.indexOf('e')<0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+/* ---------- left: the joint ---------- */
+const km1=$('km1'),km2=$('km2'),kh1=$('kh1'),kh2=$('kh2'),kej=$('kej'); let vside='L';
+const cvJ=$('cvJ');
+const PJ=plane(cvJ,{x:[-2,2],y:[-3,3],grid:1,aspect:0.8,draw:P=>drawJ(P)});
+Object.defineProperty(PJ.o,'aspect',{get:()=>cvJ.clientWidth>560?0.75:0.9});
+const st=()=>({m1:+km1.value,m2:+km2.value,h1:+kh1.value,h2:+kh2.value,e:+kej.value});
+const fJ=(x,s)=>x<0?s.h1+s.m1*x:(x>0?s.h2+s.m2*x:(vside==='L'?s.h1:s.h2));
+function okJ(d,s){ const v=fJ(0,s); const N=600; for(let k=1;k<=N;k++){ for(const g of [-1,1]){ const x=g*d*k/N; if(!(Math.abs(fJ(x,s)-v)<s.e)) return false; } } return true; }
+function bigJ(s){ if(okJ(2,s)) return 2; if(!okJ(1e-7,s)) return 0; let lo=1e-7,hi=2; for(let i=0;i<40;i++){ const m=(lo+hi)/2; if(okJ(m,s)) lo=m; else hi=m; } return lo; }
+let DJ=0;
+function drawJ(P){ const c=P.ctx, s=st(); P.axes(); const v=fJ(0,s); DJ=bigJ(s);
+  c.fillStyle=col('--gold'); c.globalAlpha=.18; c.fillRect(P.X(-2),P.Y(v+s.e),P.X(2)-P.X(-2),P.Y(v-s.e)-P.Y(v+s.e)); c.globalAlpha=1;
+  if(DJ>0){ c.fillStyle=col('--ink'); c.globalAlpha=.08; c.fillRect(P.X(-DJ),P.Y(3),P.X(DJ)-P.X(-DJ),P.Y(-3)-P.Y(3)); c.globalAlpha=1; P.line(-DJ,-3,-DJ,3,'--muted',1.2,[5,4]); P.line(DJ,-3,DJ,3,'--muted',1.2,[5,4]); }
+  P.line(-2,s.h1-2*s.m1,0,s.h1,'--teal',3); P.line(0,s.h2,2,s.h2+2*s.m2,'--gold',3);
+  [[s.h1,'--teal'],[s.h2,'--gold']].forEach(([h,cl])=>{ if(Math.abs(h-v)>1e-9){ c.fillStyle=col('--card'); c.strokeStyle=col(cl); c.lineWidth=2.2; c.beginPath(); c.arc(P.X(0),P.Y(h),5.5,0,7); c.fill(); c.stroke(); } });
+  P.dot(0,v,'--ink',5.5);
+  c.font='11px IBM Plex Mono, monospace'; c.fillStyle=col('--teal'); c.textAlign='left'; c.fillText('rate '+fm(s.m1),P.X(-1.95),P.Y(s.h1-1.6*s.m1)-8); c.fillStyle=col('--gold'); c.textAlign='right'; c.fillText('rate '+fm(s.m2),P.X(1.95),P.Y(s.h2+1.6*s.m2)-8); }
+function readJ(){ const s=st(); ['m1','m2','h1','h2'].forEach(k=>$('o'+k).textContent=fm(s[k])); $('oej').textContent=fm(s.e);
+  const vd=$('vdJ'); const v=fJ(0,s);
+  if(Math.abs(s.h1-s.h2)<1e-9){ vd.className='verdict win'; vd.textContent='Both pieces arrive at '+fm(s.h1)+', and the value is '+fm(v)+': 0 is a joint (glued-functions), so continuous at 0, with rates '+fm(s.m1)+' on the left and '+fm(s.m2)+' on the right'+(s.m1===s.m2?' (the same rate: the formula does not really change)':'')+'. Largest winning δ: '+(DJ>=2?'≥ 2':fm(DJ))+'.'; }
+  else { vd.className='verdict lose'; vd.textContent='The pieces arrive at '+fm(s.h1)+' and '+fm(s.h2)+': no limit at 0 (two-sides-differ), so no value can make it continuous. A jump of size '+fm(Math.abs(s.h2-s.h1))+'. It is continuous from the '+(vside==='L'?'left':'right')+' only. '+(DJ>0?'This ε is large enough to be won (δ = '+fm(DJ)+'); shrink ε below '+fm(Math.abs(s.h2-s.h1)/2)+'.':'No δ wins at this ε.'); } }
+function allJ(){ PJ.redraw(); readJ(); }
+[km1,km2,kh1,kh2,kej].forEach(z=>z.addEventListener('input',allJ));
+[...$('vch').children].forEach(b=>b.onclick=()=>{ vside=b.dataset.v; [...$('vch').children].forEach(z=>z.classList.toggle('on',z===b)); allJ(); });
+let drJ=false; cvJ.addEventListener('pointerdown',e=>{ drJ=true; cvJ.setPointerCapture&&cvJ.setPointerCapture(e.pointerId); mvJ(e); });
+function mvJ(e){ if(!drJ) return; const p=PJ.point(e); const h=Math.round(Math.max(-2,Math.min(2,p.y-(p.x>0?(+km2.value)*p.x:0)))*4)/4; if(p.x>=0) kh2.value=h; else kh1.value=Math.round(Math.max(-2,Math.min(2,p.y-(+km1.value)*p.x))*4)/4; allJ(); }
+cvJ.addEventListener('pointermove',mvJ); ['pointerup','pointercancel'].forEach(t=>cvJ.addEventListener(t,()=>drJ=false));
+
+/* ---------- right: the sequence test ---------- */
+const S2=Math.SQRT2;
+const FS={
+  abs:{lab:'|x| at 0',a:0,f:(x,k)=>Math.abs(x),cont:true,rat:true},
+  u:{lab:'u at 0',a:0,f:(x,k)=>x>=0?1:0,cont:false},
+  xq0:{lab:'x · q(x) at 0',a:0,f:(x,k)=>k==='f'?x:0,cont:true},
+  xqh:{lab:'x · q(x) at ½',a:0.5,f:(x,k)=>k==='f'?x:0,cont:false},
+  q:{lab:'q at ½',a:0.5,f:(x,k)=>k==='f'?1:0,cont:false}
+};
+const SQ={
+  r:{lab:'w + 1/S(n)',x:(a,n)=>a+1/(n+1),k:'f'},
+  l:{lab:'w − 1/S(n)',x:(a,n)=>a-1/(n+1),k:'f'},
+  alt:{lab:'w + (−1)ⁿ/S(n)',x:(a,n)=>a+(n%2?-1:1)/(n+1),k:'f'},
+  irr:{lab:'w + √2/S(n) (irrational)',x:(a,n)=>a+S2/(n+1),k:'i'}
+};
+let fk='u', sk='l';
+const cvS=$('cvS');
+const PS=plane(cvS,{x:[-1,24],y:[-0.5,1.5],grid:0,labels:false,aspect:0.6,draw:P=>drawS(P)});
+Object.defineProperty(PS.o,'aspect',{get:()=>cvS.clientWidth>560?0.55:0.7});
+const EPS=0.2;
+let SR=null;
+function seqInfo(){ const F=FS[fk], Sq=SQ[sk]; const v=F.f(F.a,'f'); const ys=[]; for(let n=0;n<24;n++){ const x=Sq.x(F.a,n); ys.push(F.f(x,Sq.k)); }
+  // does it head to v? decide from the formula: tail values
+  const far=F.f(Sq.x(F.a,100000),Sq.k), far2=F.f(Sq.x(F.a,100001),Sq.k); const heads=Math.abs(far-v)<1e-3&&Math.abs(far2-v)<1e-3;
+  let N=null; if(heads){ N=0; for(let n=0;n<24;n++) if(!(Math.abs(ys[n]-v)<EPS)) N=n+1; } return {v,ys,heads,N}; }
+function drawS(P){ const c=P.ctx; SR=seqInfo(); const lo=Math.min(-0.3,...SR.ys,SR.v)-0.2, hi=Math.max(1.2,...SR.ys,SR.v)+0.2; P.o.y=[lo,hi];
+  c.fillStyle=col('--gold'); c.globalAlpha=.18; c.fillRect(P.X(-1),P.Y(SR.v+EPS),P.X(24)-P.X(-1),P.Y(SR.v-EPS)-P.Y(SR.v+EPS)); c.globalAlpha=1; P.line(-1,SR.v,24,SR.v,'--gold',1.5,[6,4]);
+  P.line(-1,0,24,0,'--muted',1); c.font='11px IBM Plex Mono, monospace'; c.fillStyle=col('--muted'); c.textAlign='left'; c.fillText('f(a) = '+fm(SR.v),P.X(-0.8),P.Y(SR.v)-6); c.textAlign='right'; c.fillText('n →',P.X(23.8),P.Y(lo)-4);
+  SR.ys.forEach((y,n)=>{ const inn=SR.heads&&n>=SR.N; P.dot(n,y,inn?'--teal':(Math.abs(y-SR.v)<EPS?'--muted':'--ember'),4); }); }
+function readS(){ const F=FS[fk], r=SR; const vd=$('vdS');
+  if(r.heads){ vd.className='verdict win'; vd.textContent='These outputs head to f(w) = '+fm(r.v)+' (all within '+EPS+' from n = '+r.N+' on). '+(F.cont?'As sequences-go-through promises for a continuous function.':'But one sequence that passes proves nothing: try another.'); }
+  else { vd.className='verdict lose'; vd.textContent='These outputs do not head to f(w) = '+fm(r.v)+'. One such sequence is enough: sequences-go-through turned about, '+F.lab.split(' at ')[0]+' is discontinuous at '+fm(F.a)+'.'; }
+  tex($('eqS'),R`\begin{gathered}x_n = ${SQ[sk].lab.replace('√2','\\sqrt2').replace(' (irrational)','').replace('(−1)ⁿ','(-1)^n').replace('−','-')},\ \ w = ${fm(F.a)}\\ f(x_0), f(x_1), f(x_2) = ${r.ys.slice(0,3).map(fm).join(',\\ ')},\ \cdots\end{gathered}`,true); }
+function chips(id,lib,cur,set){ const ch=$(id); Object.keys(lib).forEach(k=>{ const b=document.createElement('button'); b.textContent=lib[k].lab; if(k===cur) b.className='on'; b.onclick=()=>{ set(k); [...ch.children].forEach(z=>z.classList.toggle('on',z===b)); allS(); }; ch.appendChild(b); }); }
+chips('sfc',FS,fk,k=>fk=k); chips('ssc',SQ,sk,k=>sk=k);
+function allS(){ PS.redraw(); readS(); }
+window.__pic={joint:(m1,m2,h1,h2,e,vs)=>{ km1.value=m1; km2.value=m2; kh1.value=h1; kh2.value=h2; kej.value=e; vside=vs||'L'; [...$('vch').children].forEach(z=>z.classList.toggle('on',z.dataset.v===vside)); allJ(); return {DJ,txt:$('vdJ').textContent}; },
+  seq:(f,s)=>{ fk=f; sk=s; [['sfc',FS,f],['ssc',SQ,s]].forEach(([id,lib,k])=>[...$(id).children].forEach((z,i)=>z.classList.toggle('on',Object.keys(lib)[i]===k))); allS(); return $('vdS').textContent; }};
+allJ(); allS();
+
+/* ---------- slides ---------- */
+const N='\\htmlClass{new}', K='\\htmlClass{keep}';
+stepper('#sl1',[
+  {k:'ember',kl:'glued-functions · 1 of 2',t:R`\begin{gathered}\lim_{x\to a^-} f = \lim_{x \to a^-} g\\ \lim_{x\to a^+} f = \lim_{x \to a^+} h\end{gathered}`,n:`agreeing-near side by side: f agrees with g just left of the point and with h just right.`},
+  {k:'ember',kl:'glued-functions · 2 of 2',t:R`\begin{gathered}\text{continuous at } a \;\Leftrightarrow\\ \lim_{x \to a^-} g(x) = ${N}{f(a)} = \lim_{x \to a^+} h(x)\end{gathered}`,n:`continuous-both-ways: continuous exactly when continuous from each side. ∎`},
+  {k:'ember',kl:'continuous pieces',t:R`\begin{gathered}g(a) = h(a)\\ \;\Leftrightarrow\; \text{continuous at } a\end{gathered}`,n:`With g and h continuous at the point, and the value from one of them.`}
+],{title:'The slides · glued-functions · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'a joint',t:R`\begin{gathered}\lim_{x\to a^-} f(x) = ${N}{f(a)}\\ = \lim_{x\to a^+} f(x)\end{gathered}`,n:`Where the formula changes and the pieces arrive at one height, the value. They need not climb at the same rate.`},
+  {k:'ember',kl:'rate',t:R`x \mapsto mx + b:\ \ \text{rate } ${N}{m}`,n:`How much the output changes per step of the input (9e, same-ratio).`}
+],{title:'The slides · joints and rates · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'|x| · the game',t:R`\begin{gathered}\big|\,|x| - |a|\,\big| \le |x - a|\\ \delta = ${N}{\varepsilon}\end{gathered}`,n:`The reverse form of triangle. Continuous at every real, with one recipe.`},
+  {k:'ember',kl:'|x| · the glue',t:R`-x \to 0 \leftarrow x;\ \ |0| = 0`,n:`Both pieces arrive at 0, the value. A joint.`},
+  {k:'ember',kl:'|x| · the rates',t:R`\text{left } ${N}{-1},\ \ \text{right } ${N}{1}`,n:`Different rates, continuous all the same. Rung 13 asks what the difference costs.`}
+],{title:'The slides · |x| · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'a joint, again',t:R`\begin{gathered}2x + 1\ (x \le 1)\\ 4 - x\ (x \gt 1)\\ 3 = 3\end{gathered}`,n:`Continuous at 1; rates 2 and −1.`},
+  {k:'ember',kl:'not a joint',t:R`\begin{gathered}2x + 1\ (x \le 1)\\ x + 3\ (x \gt 1)\\ 3 \ne ${N}{4}\end{gathered}`,n:`The pieces arrive at different heights: a jump (11f).`},
+  {k:'ember',kl:'one formula, two joints',t:R`\begin{gathered}|x - 2| + |x + 1|:\\ -2x + 1,\ \ 3,\ \ 2x - 1\end{gathered}`,n:`Joints at −1 and 2; rates −2, 0, 2.`}
+],{title:'The slides · more joints · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'sequences-go-through',t:R`\begin{gathered}\varepsilon \to \delta \to N:\\ n \ge N \Rightarrow |f(x_n) - f(a)| \lt ${K}{\varepsilon}\end{gathered}`,n:`The outside answers ε with δ; the sequence answers δ with a threshold. No either-way principle, no axiom. ∎`},
+  {k:'ember',kl:'sequences-go-through used',t:R`\begin{gathered}1, 1.4, 1.41, \cdots \to \sqrt2\\ \Rightarrow\; 1, 1.96, 1.9881, \cdots \to ${K}{2}\end{gathered}`,n:`cut-offs, then squaring is continuous.`},
+  {k:'ember',kl:'sequences-go-through turned about',t:R`u\big(-\tfrac{1}{S(n)}\big) = 0 \not\to 1 = u(0)`,n:`One sequence whose outputs go elsewhere refutes continuity at 0.`}
+],{title:'The slides · sequences-go-through · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'sequence-test-back · 1 of 3',t:R`\begin{gathered}\exists \varepsilon\ \forall \delta\ \exists x:\\ |x - a| \lt \delta \land \varepsilon \le |f(x) - f(a)|\end{gathered}`,n:`Not continuous, turned into the challenger's strategy: not-every and negated-if forward, rung 7's either-way principle.`},
+  {k:'ember',kl:'sequence-test-back · 2 of 3',t:R`x_n = ${N}{c(A_n)}`,n:`One bad input from each window 1/S(n): a choice function, the choice axiom.`},
+  {k:'ember',kl:'sequence-test-back · 3 of 3',t:R`\begin{gathered}x_n \to a,\ \ f(x_n) \not\to f(a)\\ \bot\end{gathered}`,n:`Against the hypothesis. Refute, then not-not-out, rung 7's either-way principle. ∎`},
+  {k:'ember',kl:'the cost',t:R`\begin{gathered}\text{the either-way principle: not enough}\\ \text{countable choice: enough}\end{gathered}`,n:`Worlds with the either-way principle and without enough choice have functions that pass every sequence test and are discontinuous. A rule that picks needs no axiom.`}
+],{title:'The slides · sequence-test-back · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

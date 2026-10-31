@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A power sum is rebuilt from one point</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+.cl-lock{display:none;border-left:3px solid var(--gold);background:var(--sand);padding:10px 14px;border-radius:0 4px 4px 0;max-width:66ch}
+body.cl-locked .cl-lock{display:block} body.cl-locked .cl-body{display:none}
+.cl-lock button{margin-top:6px;font-size:.8rem}
+.claim{border:1px solid var(--grid);border-left:4px solid var(--teal);background:var(--card);border-radius:0 6px 6px 0;padding:10px 16px;max-width:66ch}
+.claim p{margin:.4em 0}
+ul.cl-adds{max-width:66ch;padding-left:1.1em} ul.cl-adds li{margin:.5em 0}
+ul.cl-adds .cl-w{display:none;color:var(--muted);font-style:italic}
+ul.cl-adds li.cl-wait .cl-t{display:none} ul.cl-adds li.cl-wait .cl-w{display:inline}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r23g.html">← 23g two famous proofs</a><a href="r23h.html">next: 23h polynomials that hug a curve, by hand →</a></p>
+  <div class="tags"><span class="tag concl">23·∎ · conclusion</span></div>
+  <h1>A power sum is rebuilt from one point</h1>
+  <p class="gesture">Inside its reach, a power sum is rebuilt from its centre: its coefficients are its slopes there over factorials, and its slopes and areas come term by term. The growth function, the waves and the logarithm are such sums. A smooth function need not be.</p>
+  <div class="ready"><h3>What this stands on</h3><p>The survey of <a href="r23.html">rung 23</a>, and its proof steps: <a href="r23a.html">23a</a> to <a href="r23g.html">23g</a>. It opens once 23g is ticked, and it gains a line each time you finish a step or annex after it.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The conclusion · the rung's claim, in full, and its proof</div>
+  <div class="cl-lock"><p>This page opens once every question on <a href="r23g.html">23g two famous proofs</a> is ticked. The claim below is proved from the steps of this rung, so it waits for them.</p><button type="button" class="cl-peek">reviewing the ladder? open it anyway</button></div>
+  <div class="cl-body">
+  <h3>What the rung set out to show</h3>
+  <p data-pid="e51248">The survey of rung 23 asked how much one point can tell about a smooth function. <b>Inside its reach, a power sum is rebuilt from its centre: its coefficients are its slopes there over factorials, and it may be taken apart term by term.</b> Many functions are such sums. Not every smooth function is one.</p>
+  <p data-pid="41899f"><a href="r23a.html">23a</a> built the one polynomial that matches each count of slopes. <a href="r23b.html">23b</a> measured its error. <a href="r23c.html">23c</a> found the reach of an endless power sum. <a href="r23d.html">23d</a> found the settling that keeps curves whole. <a href="r23e.html">23e</a> took power sums apart term by term. <a href="r23f.html">23f</a> found the smooth function that refuses. <a href="r23g.html">23g</a> used the sums to show e and π are not fractions. This page puts the claim together.</p>
+  <h3>The claim, in full</h3>
+  <div class="claim">
+  <p data-pid="8ac4c7"><b>A power sum is rebuilt from its centre inside its reach; e, sin, cos and ln(1 + x) are such sums; and smooth alone is not enough.</b></p>
+  <p data-pid="f49c7f">If f has n slopes at a, Tₙ(x) = Σₖ₌₀ⁿ f⁽ᵏ⁾(a)(x − a)ᵏ/k! is the only polynomial of degree at most n matching them, and f(x) − Tₙ(x) = f⁽ⁿ⁺¹⁾(c)(x − a)ⁿ⁺¹/(n + 1)! for some c between a and x.</p>
+  <p data-pid="9b77a8">eˣ = Σ xᵏ/k!, sin x = Σ (−1)ᵏx²ᵏ⁺¹/(2k + 1)! and cos x = Σ (−1)ᵏx²ᵏ/(2k)! for every real x; ln(1 + x) = Σ (−1)ᵏ⁺¹xᵏ/k for −1 &lt; x ≤ 1; arctan x = Σ (−1)ᵏx²ᵏ⁺¹/(2k + 1) for |x| ≤ 1.</p>
+  <p data-pid="951791">Every power sum Σ cₖ(x − a)ᵏ has a reach R: it settles in size where |x − a| &lt; R and wanders where |x − a| &gt; R. If |cₖ₊₁/cₖ| → L, then R = 1/L.</p>
+  <p data-pid="1f6285">Inside the reach it settles everywhere at once on each [a − r, a + r] with r &lt; R, its total f is smooth, f′ and ∫f are found term by term, and cₖ = f⁽ᵏ⁾(a)/k!.</p>
+  <p data-pid="e70b00">e^(−1/x²), with 0 at 0, is smooth and has every slope 0 at 0, so it is not rebuilt from 0.</p>
+  <p data-pid="0df387">e and π are not fractions.</p>
+  </div>
+  <h3>The proof</h3>
+  <p data-pid="814d46">Each part below is a technique already proved on a step of this rung. The proof cites them by name and joins them.</p>
+  <pre class="lines" data-k="ember" data-label="matching and its error">
+p^{(k)}(a) = k!\,c_k @@ the slopes of a power of (x − a) (23a)
+T_n \text{ is the only match} @@ the match technique (23a)
+\htmlClass{new}{f - T_n = \tfrac{f^{(n+1)}(c)}{(n+1)!}(x-a)^{n+1}} \quad \blacksquare @@ the match-error technique (23b)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="which functions are their sums">
+|R_n(x)| \le \tfrac{K|x-a|^{n+1}}{(n+1)!} \to 0 @@ the error-ceiling technique (23b) and 22h2
+e^x,\ \sin,\ \cos \text{ are their sums everywhere} @@ 23b2
+\htmlClass{new}{\ln(1+x),\ \arctan x \text{ from the finite geometric sum}} \quad \blacksquare @@ 23e4
+  </pre>
+  <pre class="lines" data-k="ember" data-label="the reach, and term by term">
+\text{settles at } x_0 \Rightarrow \text{settles in size nearer } a @@ the reach technique (23c)
+R = \sup\{|x - a| : \text{settles}\},\ \ R = 1/L @@ the reach-of-a-sum and reach-by-ratio techniques (23c)
+\text{settles everywhere at once inside } R;\ \text{continuous} @@ the at-once comparison and kept-continuity techniques (23d)
+\htmlClass{new}{f' = \textstyle\sum k c_k (x-a)^{k-1},\ \ c_k = \tfrac{f^{(k)}(a)}{k!}} \quad \blacksquare @@ the same-reach, term-by-term and smooth-sum techniques (23e)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="the limits of the claim">
+f^{(n)}(0) = 0 \text{ for every } n,\ f(x) = e^{-1/x^2} > 0 \text{ for } x \ne 0 @@ the flat-point technique (23f)
+\htmlClass{new}{\text{smooth} \not\Rightarrow \text{rebuilt}} \quad \blacksquare @@ its matching sum is 0 (23f)
+\htmlClass{new}{e \ne \tfrac pq,\ \ \pi \ne \tfrac ab} \quad \blacksquare @@ the not-a-fraction techniques (23g)
+  </pre>
+  <p data-pid="f8d9b9">So the survey’s title holds for every function given by a power sum, and for the functions this ladder has met so far. It fails for e^(−1/x²). A smooth function is rebuilt from one point exactly when it is a power sum near that point.</p>
+  <h3>What the rest of the rung adds</h3>
+  <p data-pid="7dc3a0">Each step and annex after the proof steps adds a line to the claim. A line appears here once you have finished its page.</p>
+  <ul class="cl-adds">
+    <li data-after="r23h" data-pid="cc1d99"><b><a href="r23h.html">23h polynomials that hug a curve, by hand</a></b>: <span class="cl-t">the sums for eˣ, sin, cos and ln(1 + x) by hand, the binomial sum for (1 + x)^a with any power, and new sums built from old.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r23i" data-pid="a2b2c8"><b><a href="r23i.html">23i how many terms</a></b>: <span class="cl-t">error bounds by hand: how many terms give six places of e and of sin 0.1.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r23j" data-pid="44f23b"><b><a href="r23j.html">23j a list stored in one function</a></b>: <span class="cl-t">a list as the coefficients of a power sum: the rabbit sequence in closed form, and counting by multiplying sums.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r23k" data-pid="9ca9f1"><b><a href="r23k.html">23k expansions that diverge yet help</a></b>: <span class="cl-t">sums that wander can still compute, if cut at the right term; and n! ~ √(2πn)(n/e)ⁿ, proved.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r23l" data-pid="ae2931"><b><a href="r23l.html">23l numerical integration</a></b>: <span class="cl-t">trapezoids and parabolas, with errors that shrink like h² and h⁴.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r23phys" data-pid="4d7ec4"><b><a href="r23phys.html">23·phys how does a lens bend light?</a></b>: <span class="cl-t">light takes the quickest path, and sin θ ≈ θ for small angles is what makes a lens focus.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r23eng" data-pid="283da3"><b><a href="r23eng.html">23·eng what makes an engine powerful?</a></b>: <span class="cl-t">power is torque times the rate of turning, and the most torque and the most power come at different speeds.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r23nav" data-pid="1f7786"><b><a href="r23nav.html">23·nav how far away is the horizon?</a></b>: <span class="cl-t">the horizon from height h is about √(2Rh) away, once a tiny term is dropped.</span><span class="cl-w">its line appears when you finish it.</span></li>
+  </ul>
+  <p data-pid="c3d2e8">That is the power sum, rebuilt. Every calculator key that gives a sine or a logarithm is running one of its sums. You have only just begun to see how much one point can hold.</p>
+  </div>
+</section>
+
+<nav class="nextrung"><a href="r23g.html">← 23g · two famous proofs</a><a href="r23h.html">23h · polynomials that hug a curve, by hand →</a></nav>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+  const need="r23g";
+  let p={}; try{ p=JSON.parse(LS.getItem('pages:done')||'{}')||{}; }catch(e){}
+  let peek=false; try{ peek=sessionStorage.getItem('cl:peek')==='1'; }catch(e){}
+  const done=k=>!!(p[k]&&p[k].v);
+  function apply(){
+    const open=peek||done(need);
+    document.body.classList.toggle('cl-locked',!open);
+    document.querySelectorAll('ul.cl-adds li[data-after]').forEach(li=>li.classList.toggle('cl-wait',!(peek||done(li.dataset.after))));
+    if(open&&done(need)){ const me=(location.pathname.split('/').pop()||'').replace(/\.html?$/,'');
+      if(window.MarksSync&&MarksSync.reportPage) MarksSync.reportPage(me,true,true,true,false);
+      else { try{ p[me]={v:true,a:true,o:true,h:false,t:Date.now()}; LS.setItem('pages:done',JSON.stringify(p)); }catch(e){} } }
+  }
+  const b=document.querySelector('.cl-peek'); if(b) b.addEventListener('click',()=>{ peek=true; try{ sessionStorage.setItem('cl:peek','1'); }catch(e){} apply(); });
+  apply();
+  try{ if(window.MarksSync&&MarksSync.pages) MarksSync.pages().then(q=>{ if(q){ p=Object.assign({},p,q); apply(); } },()=>{}); }catch(e){}
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

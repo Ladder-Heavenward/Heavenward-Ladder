@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>4·crypt · Can a shifted alphabet keep a secret?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+table.tt td.l{text-align:left;font-family:var(--serif)} @media (max-width:520px){table.tt td.l{min-width:7em}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%;min-width:0} .kn output{font-family:var(--mono);font-size:.82rem;min-width:3em;text-align:right}
+.kn label{font-family:var(--mono);font-size:.8rem;color:var(--muted)}
+.tin{display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-family:var(--mono);font-size:.85rem}
+.tin input{width:16em;max-width:100%}
+.strip{display:grid;grid-template-columns:repeat(13,minmax(0,1fr));gap:2px;font-family:var(--mono);font-size:.8rem;text-align:center}
+.strip div{border:1px solid var(--grid);border-radius:3px;padding:2px 0;background:var(--card);min-width:0;line-height:1.25}
+.strip div b{display:block;color:var(--ember);font-weight:500}
+.strip div.hit{border-color:var(--ember)}
+.outw{font-family:var(--mono);font-size:1.05rem;letter-spacing:.06em;word-break:break-all;color:var(--ink);padding:6px 8px;border-left:3px solid var(--ember);background:var(--sand);border-radius:0 4px 4px 0}
+.tries{font-family:var(--mono);font-size:.8rem;max-height:330px;overflow-y:auto;border:1px solid var(--grid);border-radius:4px;background:var(--card)}
+.tries div{display:grid;grid-template-columns:3.2em 1fr;gap:6px;padding:1px 6px;cursor:pointer;word-break:break-all}
+.tries div:nth-child(odd){background:var(--sand)}
+.tries div.on{color:var(--ember);font-weight:500}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r04stat.html">← 4·stat what can counting alone say about a list?</a><a href="r05.html">next: 5 making room to undo →</a></p>
+  <div class="tags"><span class="tag crypt">4·crypt · cryptography</span></div>
+  <h1>Can a shifted alphabet keep a secret?</h1>
+  <p>Can a shifted alphabet keep a secret? As long as messages have been carried by people who could be caught, senders have wanted words that only the right reader can read. The oldest trick on record moves every letter a fixed number of places along the alphabet: the letter a is written as d, b as e, and so on. The reader who knows the number slides back and reads. What makes the question hard is that a secret is not something you can check on the page. It is a question about a reader who does not know the number, and about what that reader can do. This page turns letters into the numbers 0 to 25, so that the slide is 4i's division with remainder. It proves every slide can be undone, and counts the keys. Then it counts the work an enemy must do to try them all.</p>
+  <p class="gesture">Number the letters from 0 to 25, the letter a as 0 and z as 25. To shift by a key, add the key and keep the remainder by 26. To undo it, shift by whatever brings the key up to 26. There are 26 shifts, and one of them changes nothing, so an enemy who tries all 25 others is sure to find the message.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r04c.html">4c</a> (functions), <a href="r04g.html">4g</a> (order, less-is-adding), <a href="r04h.html">4h</a> (numerals, lists, split-by-a-base, one-split), <a href="r04i.html">4i</a> (division-with-remainder, divides, the greatest common divisor) and <a href="r04j.html">4j</a> (matchings, arrangements, factorials, stages-multiply). Later cryptography pages build on the shift.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · read it through, then work the picture and the slides</div>
+
+  <h3>Letters as numbers</h3>
+  <p class="eqline" data-pid="305650">From here on, on this page, the letters of the alphabet name numbers, in order: a names 0, b names 1, c names 2, and so on to z, which names 25. So a letter is a number less than 26, a member of the set 26.</p>
+  <p data-pid="76bafd">A message is a list of letters, 4h's list with letters for entries. Spaces and stops are left as they are. A message is written in small letters, and its secret form in capitals, so the two are never confused: salinas is a message, VDOLQDV a secret text.</p>
+
+  <h3>Counting on, and starting again past z</h3>
+  <p class="eqline" data-pid="c1dc77">From here on, on this page, for a number k and a letter p, shift<sub>k</sub>(p) names the remainder of p + k by 26. Division-with-remainder gives it, and one-split makes it the only one. The number k is the key.</p>
+  <p data-pid="9da1b8">Shifting a message shifts each letter, one at a time. With key 3, s is 18, and 18 + 3 = 21, which is v. Most letters just count on. The letters near the end run past z, and the remainder sends them back to the start.</p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="teal" data-label="from 4i: division with remainder, once for each letter">
+\text{s} = 18,\ \ 18 + 3 = 26 \cdot 0 + 21 @@ the remainder is 21: v
+\text{a} = 0,\ \ 0 + 3 = 26 \cdot 0 + 3 @@ d
+\text{y} = 24,\ \ 24 + 3 = 27 = 26 \cdot 1 + \htmlClass{new}{1} @@ past z: the remainder is 1, which is b
+\text{shift}_3(\text{yolo}) = \text{BROR} @@ one letter at a time
+\text{shift}_3(\text{salinas}) = \text{VDOLQDV} @@ the same, for each of the seven letters
+  </pre>
+  <p data-pid="74f915"><b>To shift a letter by k, count on k places, and past z start again at the letter a.</b> A remainder by 26 is always less than 26, so the answer is always a letter.</p>
+
+  <h3>Every shift can be undone</h3>
+  <p data-pid="d102ed">Shifting twice is shifting once. Shifts-add technique: <b>shifting by k and then by m is shifting by the remainder of k + m by 26.</b> Let p be a letter. Let k and m be numbers. Let r be the remainder of k + m by 26.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the shifts-add technique">
+p + k = 26q + s,\ \ s \lt 26 @@ division-with-remainder; s = shift_k(p)
+s + m = 26q' + t,\ \ t \lt 26 @@ division-with-remainder; t = shift_m(s)
+k + m = 26q'' + r,\ \ r \lt 26 @@ division-with-remainder; r as named
+p + r = 26q''' + u,\ \ u \lt 26 @@ division-with-remainder; u = shift_r(p)
+p + k + m = 26q + s + m = 26(q + q') + t @@ the first two lines; regroup, and the spread technique
+p + k + m = p + r + 26q'' = 26(q''' + q'') + u @@ the third and fourth lines, the same way
+\htmlClass{new}{t = u} \quad \blacksquare @@ one-split, with base 26: one number has one remainder
+  </pre>
+  <p data-pid="045414">Undoing a shift is one more shift. Key-back technique: <b>the key back from k is the j with k + j = 26.</b> For every letter p, shift<sub>j</sub>(shift<sub>k</sub>(p)) = p. Here k is less than 26, so less-is-adding gives such a j.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the key-back technique">
+\text{shift}_j(\text{shift}_k(p)) = \text{shift}_r(p) @@ shifts-add, with r the remainder of k + j by 26
+26 = 26 \cdot 1 + 0,\ \ \text{so } r = 0 @@ k + j = 26; one-split
+p + 0 = 26 \cdot 0 + p,\ \ p \lt 26 @@ p is a letter
+\htmlClass{new}{\text{shift}_j(\text{shift}_k(p)) = p} \quad \blacksquare @@ one-split: the remainder of p by 26 is p
+  </pre>
+  <p data-pid="9ab505">So the key back from 3 is 23, and shift<sub>23</sub>(VDOLQDV) = salinas. The key back from 13 is 13 itself: the same shift locks and unlocks. Key-back also says that a shift is a matching of the letters with themselves, in 4j's sense. Two letters never land on the same letter, since shifting both back would give back two different letters from one. And every letter c is landed on, by shift<sub>j</sub>(c). So a shift loses nothing. The reader who knows k reads the message exactly.</p>
+
+  <h3>How many keys?</h3>
+  <p data-pid="e44c97">Key 0 changes nothing: shift<sub>0</sub>(p) = p. Key 26 changes nothing either, and key 29 does what key 3 does, since only the remainder of the key by 26 matters (shifts-add with m = 0). Two keys below 26 give two different shifts, since shift<sub>k</sub>(0) = k. So there are exactly 26 shifts, and one of them leaves the message as it was. <b>A shift has 25 keys that change anything.</b></p>
+  <p data-pid="8a2768">Now take the enemy's side. You have a secret text and know a shift made it, but not the key. You do not need the key. Try every key back, from 1 to 25, and read. Here is a secret text from Castroville, where many of the country's artichokes are grown.</p>
+  <pre class="lines" data-k="ember" data-label="this page: trying every key back">
+\text{DUWLFKRNHV} @@ the secret text
+\text{shift}_1:\ \text{evxmglsoiw} @@ not a word
+\text{shift}_2:\ \text{fwynhmtpjx} @@ not a word
+\text{shift}_{22}:\ \text{zqshbgnjdr} @@ keys back 3 to 22 read no word either
+\text{shift}_{23}:\ \htmlClass{new}{\text{artichokes}} @@ a word: the key was 3, since 3 + 23 = 26
+\text{shift}_{24},\ \text{shift}_{25}:\ \text{bsujdiplft},\ \text{ctvkejqmgu} @@ not words; only one key back reads
+  </pre>
+  <p data-pid="f3fed8">By hand, a key takes a minute or so, and all 25 take under thirty minutes. A computer does them faster than you can blink. <b>An enemy who knows a shift was used has only 25 keys to try, and trying them all always finds the message.</b> The lock is the number of keys, and 25 is too small to hide behind.</p>
+
+  <h3>A bigger lock, and why size is not enough</h3>
+  <p data-pid="e1c294">A shift is one kind of matching of the alphabet with itself. Any matching can serve as a key: write the alphabet in a scrambled order, and send each letter to the one below it. Such a key is an arrangement of the 26 letters, so by 4j's arrangements technique there are 26! of them.</p>
+  <pre class="lines" data-k="teal" data-label="from 4j: arrangements, and the count of keys">
+26! = 26 \cdot 25 \cdot 24 \cdots 2 \cdot 1 @@ arrangements: 26 choices for a's partner, then 25, and so on
+= \htmlClass{new}{403\,291\,461\,126\,605\,635\,584\,000\,000} @@ a number of 27 digits
+1\,000\,000\,000 \text{ keys a second} @@ a fast computer
+\text{about } 12\,800 \text{ million years} @@ to try them all; the 25 shifts take less time than a blink
+  </pre>
+  <p data-pid="bc828c">That is a lock no one can open by trying keys. Yet a scrambled alphabet is broken every week by people doing puzzles in newspapers. They do not try keys. They count letters, and the box below says why that works. A big number of keys is needed for a lock, and it is not enough.</p>
+
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · counting</div>
+    <p data-pid="503be9">Nobody can say which letter comes next in a sentence. Yet count the letters of a long stretch of ordinary English, and the tallies make a pile with a steady shape. In 1000 letters, e comes about 120 to 130 times, t about 90, the letters a and o about 80 each, and z perhaps once. A shift moves the whole pile along by the key and keeps its shape. So in a long secret text made by a shift, the most common letter is very likely e, moved on. One count replaces 25 tries.</p>
+    <p data-pid="395c3c"><b>The spread is part of the answer, not noise around it.</b></p>
+    <p data-pid="5adc1c">The count is not a proof that any one message reads this way, and a short message can break the pattern. A long one almost never does. The shape of the pile is what the counting gives you.</p>
+    <p class="bait" data-pid="c72146">A secret text of 60 letters, made by a shift, holds X nine times and no other letter more than five times. Which key back would you try first?</p>
+  </aside>
+
+  <h3>Illegal moves</h3>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed">
+\text{shift}_3(\text{y}) = 27\,? @@ 27 is no letter: keep the remainder by 26, which is 1, so b
+\text{the key back from } 3 \text{ is } 3\,? @@ shifting by 3 again is shifting by 6 (shifts-add); the key back is 23
+\text{shift}_9(\text{shift}_5(p)) = \text{shift}_{45}(p)\,? @@ keys add, they do not multiply: shift by 14
+26 \text{ keys, so } 26 \text{ tries}\,? @@ key 0 changes nothing, and key 26 is key 0: 25 tries
+\text{shift}_{30} \text{ is a new key}\,? @@ only the remainder of the key by 26 matters: it is key 4
+\begin{aligned}&\text{so many keys that no one can}\\ &\quad\text{try them all, so the secret is safe}\,?\end{aligned} @@ a scrambled alphabet has 26! keys and falls to counting letters
+  </pre>
+
+  <h3>Which rung each step uses</h3>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>step</th><th>the mathematics</th><th>from</th></tr>
+    <tr><td class="l">a letter shifted</td><td class="l">division with remainder by 26</td><td><a href="r04i.html">4i</a></td></tr>
+    <tr><td class="l">the answer is one letter</td><td class="l">one-split</td><td><a href="r04h.html">4h</a></td></tr>
+    <tr><td class="l">the key back</td><td class="l">less-is-adding; shifts-add</td><td><a href="r04g.html">4g</a>, this page</td></tr>
+    <tr><td class="l">a shift loses nothing</td><td class="l">matchings</td><td><a href="r04j.html">4j</a></td></tr>
+    <tr><td class="l">counting scrambled keys</td><td class="l">arrangements, factorials</td><td><a href="r04j.html">4j</a></td></tr>
+    <tr><td class="l">the shape of English</td><td class="l">tallies, counting</td><td><a href="r04j.html">4j</a></td></tr>
+  </table></div>
+</section>
+
+<section class="pic" id="pic">
+  <div class="eyebrow">The picture · left: shift a message of your own · right: an enemy tries every key back</div>
+  <div class="panels">
+    <div class="panel">
+      <div class="tin"><label for="tin">message</label><input type="text" id="tin" maxlength="80" value="meet me at the wharf"></div>
+      <div class="kn"><label for="kk">key k</label><input type="range" id="kk" min="0" max="25" step="1" value="3"><output id="ok"></output></div>
+      <div class="strip" id="strip"></div>
+      <div class="cap">Each box is a letter, with its number; under it, in ember, the letter it is shifted to. Letters past z start again at the letter a.</div>
+      <div class="outw" id="out1"></div>
+      <div class="eqbox" id="eq1"></div>
+    </div>
+    <div class="panel">
+      <div class="chips" role="group" aria-label="secret text" id="sch"></div>
+      <div class="lbl">every key back, from 1 to 25; tap a row</div>
+      <div class="tries" id="tries"></div>
+      <div class="verdict" id="vd"></div>
+    </div>
+  </div>
+</section>
+
+<section class="slides" id="sl1"><div class="eyebrow">The slides · letters as numbers; past z; shifts-add; key-back; counting the keys; trying them all; the scrambled alphabet; illegal moves · ← → keys work</div></section>
+
+<section class="sayback">
+  <div class="eyebrow">Say it back · then work it</div>
+  <h2>Questions</h2>
+  <div class="phkey"></div>
+  <ol>
+    <li><span class="qid">4·crypt.1</span><span class="gname">Shifting.</span><span class="gwhy">Do: build the page's pieces.</span>
+      <ol class="sub">
+        <li><span class="qid">4·crypt.1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="a = 0,\ b = 1,\ \ldots,\ z = 25,"></span> <span data-tex-inline="\text{shift}_k(p): \text{the remainder of } p + k \text{ by } 26"></span></span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{big sur}"></span></span>Shift it by key 10.</li><li><span class="givens"><span data-tex-inline="\text{keys } 10 \text{ and } 13"></span></span>Find the key back from each.</li><li><span class="givens"><span data-tex-inline="\text{shift}_{15}(\text{shift}_{19}(p))"></span></span>Find the one key below 26 that does the same.</li><li><span class="givens"><span data-tex-inline="\text{RTSYJWJD:}"></span> <span data-tex-inline="\text{a place name, shifted}"></span></span>Find the key and the place.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">4·crypt.2</span><span class="gname">From the secret back.</span><span class="gwhy">Undo: run the page's techs backwards.</span>
+      <ol class="sub">
+        <li><span class="qid">4·crypt.2.1</span><span class="ph undo">undo</span><span class="givens"><span data-tex-inline="a = 0,\ b = 1,\ \ldots,\ z = 25,"></span> <span data-tex-inline="\text{shift}_k(p): \text{the remainder of } p + k \text{ by } 26"></span></span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{shift}_k(\text{m}) = \text{X}"></span></span>Find k below 26.</li><li><span class="givens"><span data-tex-inline="\text{shift}_m(\text{shift}_8(p)) = \text{shift}_3(p)"></span></span>Find m below 26.</li><li><span class="givens"><span data-tex-inline="k = 17,"></span> <span data-tex-inline="\text{secret text JLIW}"></span></span>Find the message.</li><li><span class="givens"><span data-tex-inline="\text{shift}_k(\text{a}) = \text{A}"></span></span>Find k below 26, and what it does to the other letters.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">4·crypt.3</span><span class="gname">Multiplying instead.</span><span class="gwhy">Bend: find where the techs stop working.</span>
+      <ol class="sub">
+        <li><span class="qid">4·crypt.3.1</span><span class="ph bend">bend</span><span class="givens"><span data-tex-inline="a = 0,\ \ldots,\ z = 25,"></span> <span data-tex-inline="\text{mul}_m(p): \text{the remainder of } m \cdot p \text{ by } 26"></span></span><ol class="parts" type="a"><li>Find mul₂ at the letters a and n, and settle whether a reader can always undo mul₂.</li><li>Settle whether mul₃ is a matching of 26 with itself, and find an m for which mul<sub>m</sub> undoes mul₃ at every letter.</li><li>Find every m less than 26 for which mul<sub>m</sub> is a matching of 26 with itself.</li><li><span class="givens"><span data-tex-inline="\text{a space as a 27th letter;}"></span> <span data-tex-inline="\text{remainders by } 27 \text{ in place of } 26"></span></span>Count the shifts that change anything.<br>Count the m less than 27 for which the remainder of m times p by 27 is a matching.</li></ol></li>
+      </ol></li>
+    <li class="optgroup"><span class="qid">4·crypt.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder challenges that rely on your own making. The page is complete without these; the rung's star needs them.</span>
+      <ol class="sub">
+        <li class="opt"><span class="qid">4·crypt.4.1</span><span class="tagq">build</span>Make a key of your own, a matching of the 26 letters with themselves that is no shift; lock a sentence of your own with it, and write the key that unlocks it.<br>Count the matchings of a 4-letter alphabet with itself that send no letter to itself.</li>
+        <li class="opt"><span class="qid">4·crypt.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{DIFFS: an English word, shifted}"></span></span>Try every key back, and count the messages it could have been.</li>
+        <li class="opt"><span class="qid">4·crypt.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="j, k &lt; 26,"></span> <span data-tex-inline="\text{shift}_j(\text{shift}_k(p)) = p"></span> <span data-tex-inline="\text{for one letter } p"></span></span>Settle whether the sum of k and j must be 0 or 26.</li>
+        <li class="opt"><span class="qid">4·crypt.4.4</span><span class="tagq">world</span>Count the letters of 200 letters of English text of your own choosing, and settle whether the four most common are e, t, a and o.</li>
+        <li class="opt"><span class="qid">4·crypt.4.5</span><span class="tagq">seam</span>A Roman writer: a great general wrote his secret letters with each letter moved three places on. His enemies seem never to have read them. Was the secret kept by the shift, or by the enemy not knowing a shift was used?<br>Is a lock that works only while its design is hidden a lock?</li>
+      </ol></li>
+  </ol>
+  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
+</section>
+
+<nav class="nextrung"><a href="r04comp.html">← 4·comp · can a row of switches add?</a><a href="r05.html">5 · making room to undo →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>If he had anything secret to say, he wrote it in cipher, changing the order of the letters so that not a word could be made out. Whoever wishes to read it must put the fourth letter of the alphabet, d, for the letter a, and so with the others.</p><cite>Suetonius, Life of the Deified Julius, 56 (about 121); paraphrase</cite></aside>
+  <p>The general of 4·crypt.4.5 is Julius Caesar. Suetonius says Augustus used a shift of one. Counting letters to break a cipher was described first by al-Kindi, in Baghdad, in the ninth century. In 1883 Auguste Kerckhoffs wrote that a military cipher must not need to be secret, and must be able to fall into enemy hands without harm. A shift by 13, which undoes itself, was used on the early internet from about 1982 to hide the answers to riddles and the ends of stories.</p>
+  <h3>Accepted names</h3>
+  <p>A shift is a <b>Caesar cipher</b>, and the shift by 13 is <b>ROT13</b>. The message is the <b>plaintext</b> and the secret text the <b>ciphertext</b>. Writing the secret is <b>encryption</b>, and reading it with the key is <b>decryption</b>. Trying every key is a <b>brute-force attack</b>, and the set of all keys is the <b>key space</b>. A scrambled alphabet is a <b>substitution cipher</b>, and breaking one by counting letters is <b>frequency analysis</b>. Taking remainders by 26 is arithmetic <b>modulo 26</b>. Kerckhoffs's rule is <b>Kerckhoffs's principle</b>, and its opposite is called <b>security through obscurity</b>.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="4·crypt: a worked “proof”, not allowed">
+\text{shift}_k \text{ and shift}_m \text{ are two locks} @@ fine
+\text{so shifting by both is twice as hard to break} @@ not allowed: shifts-add makes the two one shift, by the remainder of k + m
+\text{so } 25 \cdot 25 = 625 \text{ keys to try} @@ false: still 25
+  </pre>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,stepper}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const A='abcdefghijklmnopqrstuvwxyz';
+const Nw='\\htmlClass{new}';
+const sh=(s,k)=>[...s.toLowerCase()].map(c=>{ const i=A.indexOf(c); return i<0?c:A[(i+k)%26]; }).join('');
+/* left: shift a message */
+const tin=$('tin'), kk=$('kk'), strip=$('strip');
+for(let i=0;i<26;i++){ const d=document.createElement('div'); d.id='s'+i; strip.appendChild(d); }
+function draw1(){ const k=+kk.value; $('ok').textContent=k; const msg=tin.value.toLowerCase(); const used=new Set([...msg].filter(c=>A.includes(c)));
+  for(let i=0;i<26;i++){ const d=$('s'+i); d.innerHTML=A[i]+' '+i+'<b>'+A[(i+k)%26].toUpperCase()+'</b>'; d.classList.toggle('hit',used.has(A[i])); }
+  const out=sh(msg,k).toUpperCase(); $('out1').textContent=out||'(type a message)';
+  const j=(26-k)%26; const c=[...msg].find(x=>A.includes(x));
+  let L=[`\\text{key } ${k},\\ \\text{key back } ${j}`+(k?`:\\ ${k} + ${j} = 26`:`:\\ \\text{key 0 changes nothing}`)];
+  if(c){ const p=A.indexOf(c), s=p+k; L.push(`\\text{${c}} = ${p},\\ \\ ${p} + ${k} = ${s} = 26 \\cdot ${Math.floor(s/26)} + ${Nw}{${s%26}}`); const w=msg.split(/\s+/).find(x=>/[a-z]/.test(x)).replace(/[^a-z]/g,''); L.push(`\\text{shift}_{${j}}(\\text{${sh(w,k).toUpperCase()}}) = \\text{${w}}`); }
+  tex($('eq1'),'\\begin{gathered}'+L.join('\\\\ ')+'\\end{gathered}',true); }
+tin.addEventListener('input',draw1); kk.addEventListener('input',draw1);
+/* right: try every key back */
+const SECRETS={a:{lab:'DUWLFKRNHV',t:'DUWLFKRNHV'},b:{lab:'JVRJZUV',t:'JVRJZUV'},c:{lab:'UWAA TIVLQVO',t:'UWAA TIVLQVO'},d:{lab:'DIFFS',t:'DIFFS'}};
+let sk='a', pick=null;
+Object.keys(SECRETS).forEach(k=>{ const b=document.createElement('button'); b.textContent=SECRETS[k].lab; if(k===sk) b.className='on'; b.onclick=()=>{ sk=k; pick=null; [...$('sch').children].forEach(z=>z.classList.toggle('on',z===b)); draw2(); }; $('sch').appendChild(b); });
+function draw2(){ const S=SECRETS[sk].t, box=$('tries'); box.innerHTML='';
+  for(let j=1;j<26;j++){ const d=document.createElement('div'); d.innerHTML='<span>'+j+'</span><span>'+sh(S,j)+'</span>'; if(j===pick) d.className='on'; d.onclick=()=>{ pick=j; draw2(); }; box.appendChild(d); }
+  const vd=$('vd'); if(pick){ const k=(26-pick)%26; vd.textContent='Key back '+pick+' reads '+sh(S,pick)+'. If that is the message, the key was '+k+', since '+k+' + '+pick+' = 26.'; } else vd.textContent='Read down the list for a reading in English. Tap it to see which key made the secret text.'; }
+window.__pic={set:(m,k,s,j)=>{ tin.value=m; kk.value=k; draw1(); [...$('sch').children][Object.keys(SECRETS).indexOf(s)].click(); pick=j; draw2(); return {out:sh(m,k).toUpperCase(), read:sh(SECRETS[s].t,j)}; }};
+draw1(); draw2();
+stepper('#sl1',[
+  {k:'ember',kl:'letters as numbers',t:R`\text{a} = 0,\ \text{b} = 1,\ \dots,\ \text{z} = 25`,n:`A letter is a member of the set 26.`},
+  {k:'teal',kl:'past z',t:R`\text{y}:\ 24 + 3 = 26 \cdot 1 + ${Nw}{1}`,n:`The remainder by 26 is 1, which is b (4i).`},
+  {k:'ember',kl:'a message shifted',t:R`\text{shift}_3(\text{salinas}) = ${Nw}{\text{VDOLQDV}}`,n:`One letter at a time.`},
+  {k:'ember',kl:'shifts-add',t:R`\text{shift}_m(\text{shift}_k(p)) = \text{shift}_r(p)`,n:`r is the remainder of k + m by 26. The proof ends with one-split.`},
+  {k:'ember',kl:'key-back',t:R`\text{from } k + j = 26,\ \text{ write } ${Nw}{\text{shift}_j(\text{shift}_k(p)) = p}`,n:`The key back from 3 is 23; from 13 it is 13.`},
+  {k:'ember',kl:'a shift loses nothing',t:R`\text{shift}_k \text{ is a matching of } 26 \text{ with itself}`,n:`No two letters land together, and every letter is landed on (4j).`},
+  {k:'ember',kl:'counting the keys',t:R`26 \text{ shifts},\ ${Nw}{25} \text{ that change anything}`,n:`shift₀(p) = p, and shiftₖ(0) = k tells the others apart.`},
+  {k:'ember',kl:'trying them all',t:R`\text{shift}_{23}(\text{DUWLFKRNHV}) = ${Nw}{\text{artichokes}}`,n:`24 keys back read nonsense; one reads English. The key was 3.`},
+  {k:'teal',kl:'the scrambled alphabet',t:R`26! = 403\,291\,461\,126\,605\,635\,584\,000\,000`,n:`Arrangements (4j). At a thousand million keys a second, about 12 800 million years.`},
+  {k:'ember',kl:'counting letters',t:R`\text{e: about } 120 \text{ to } 130 \text{ in } 1000`,n:`A shift moves the pile of tallies along and keeps its shape.`},
+  {k:'ember',kl:'illegal',t:R`\text{shift}_9(\text{shift}_5(p)) \ne \text{shift}_{45}(p)`,n:`Keys add: shift by 14.`},
+  {k:'ember',kl:'illegal',t:R`\text{two shifts} \ne 625 \text{ keys}`,n:`Two shifts are one shift. Still 25 keys.`}
+],{title:'The slides · letters as numbers; past z; shifts-add; key-back; counting the keys; trying them all; the scrambled alphabet; illegal moves · ← → keys work'});
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

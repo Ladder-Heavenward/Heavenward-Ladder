@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>15g · Sums and Σ by hand</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r15concl.html">← 15·∎ conclusion</a><a href="r15h.html">next: 15h Sums of thin strips by hand →</a></p>
+  <div class="tags"><span class="tag tech">15g · technique</span></div>
+  <h1>Sums and Σ by hand</h1>
+  <p>Every lower and upper sum of this rung is a sum of many terms, and 15d could finish its squeeze only because 4j’s doubled-sum adds every number up to a given one in one line. The area under the square needs the squares added, and the area under the cube the cubes. This step gives the tools. There are the rules that let such sums be taken apart and shifted. There is one trick that adds many sums at once by making almost every term cancel. And there are the three formulas for the sums of whole numbers, of their squares and of their cubes.</p>
+  <p class="gesture">A sum comes apart over adding and lets constants out. Its counting can be shifted. A sum of differences of a list collapses to its last term less its first. And that collapse, run on the gaps between neighbouring cubes and between neighbouring fourth powers, hands over the sums of squares and of cubes.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r04j.html">4j</a> (Σ, sum-of-none, sum-one-more, doubled-sum), <a href="r04g.html">4g</a> (induction), <a href="r15a.html">15a</a> (Σᵢ₌₁ⁿ), <a href="r15d.html">15d</a> (the sums for x, squeezed-for-every-n), <a href="r09g.html">9g</a> (two different factors, two-factors), <a href="r05h.html">5h</a> (square-of-a-sum, square-of-a-difference). <a href="r15h.html">15h</a> uses sum-of-squares and sum-of-cubes for the areas under x² and x³; <a href="r15i.html">15i</a> uses collapsing-sum for the geometric sum.</p></div>
+</header>
+
+<section class="class step" data-step="15g1">
+  <h2 class="sthead"><span class="stno">15g1</span>Taking a sum apart</h2>
+  <p class="stands">Stands on 4j (Σ, sum-of-none) and 15a (Σ from 1 to n).</p>
+  <p class="eqline" data-pid="4b6090">From here on, for whole p ≤ q, Σᵢ₌ₚ^q t(i) is t(p) + t(p + 1) + ⋯ + t(q), the Σ over the i with p ≤ i ≤ q. When p &gt; q it is the empty sum, 0. The letter i is a dummy, like x in ∫.</p>
+  <p data-pid="5fe318">Sums-are-linear technique: <b>Σᵢ₌₁ⁿ (s(i) + t(i)) = Σᵢ₌₁ⁿ s(i) + Σᵢ₌₁ⁿ t(i), and Σᵢ₌₁ⁿ c · t(i) = c Σᵢ₌₁ⁿ t(i), for any number c. In particular Σᵢ₌₁ⁿ c = nc.</b> Each is proved by induction on n with sum-one-more. The base n = 0 is 0 = 0 + 0 and 0 = c · 0. The step adds s(n + 1) + t(n + 1) to both sides and regroups (regroup for plus on ℝ, turn-about for plus on ℝ). Or it adds c · t(n + 1) and spreads (spread on ℝ).</p>
+  <p data-pid="a3988f"><b>Shifting the index changes the names, not the sum:</b> Σᵢ₌₁ⁿ t(i − 1) = Σⱼ₌₀ⁿ⁻¹ t(j), with j = i − 1 term for term. And a sum splits where you like: Σᵢ₌₁ⁿ = Σᵢ₌₁ᵏ + Σᵢ₌ₖ₊₁ⁿ, so a sum that starts late is a difference of two that start at 1.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · taking a sum apart · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">15g1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">Σᵢ₌₁¹⁰ (3i + 2)</span></span>Split it by sums-are-linear. <br>Find it with doubled-sum.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15g2">
+  <h2 class="sthead"><span class="stno">15g2</span>The collapse</h2>
+  <p class="stands">Stands on 15g1 and 4b (induction).</p>
+  <p data-pid="78ca26">Collapsing-sum technique: <b>for any list u₀, u₁, …, uₙ, Σᵢ₌₁ⁿ (uᵢ − uᵢ₋₁) = uₙ − u₀.</b> Its accepted name is a telescoping sum.</p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the collapsing-sum technique">
+n = 0:\ \ \textstyle\sum_{i=1}^{0} = 0 = a_0 - a_0 @@ sum-of-none: the empty sum
+\text{suppose } \textstyle\sum_{i=1}^{n} (a_i - a_{i-1}) = a_n - a_0 @@ the hypothesis
+\textstyle\sum_{i=1}^{n+1} (a_i - a_{i-1}) = (a_n - a_0) + (a_{n+1} - a_n) @@ sum-one-more
+\htmlClass{new}{= a_{n+1} - a_0} \quad \blacksquare @@ the aₙ cancel (negative-of-a-sum, regroup for plus on ℝ); induction (4g)
+  </pre>
+  <p data-pid="7dc62a">15a's widths adding to xₙ − x₀ was collapsing-sum with uᵢ = xᵢ. So was 15a.4.4's gap for an increasing function. The trick is to see a term as a difference: then the sum costs nothing.</p>
+  <pre class="lines" data-k="teal" data-label="from 9g: a fraction split into a difference">
+\tfrac{1}{i(i + 1)} = \tfrac1i - \tfrac{1}{i + 1} @@ two-factors (9g): two different factors
+\textstyle\sum_{i=1}^{n} \tfrac{1}{i(i+1)} = \sum_{i=1}^{n} \Big(\tfrac1i - \tfrac{1}{i+1}\Big) @@ the same terms
+= 1 - \tfrac{1}{n + 1} @@ collapsing-sum with aᵢ = −1/(i + 1), read backwards
+\tfrac12 + \tfrac16 + \tfrac{1}{12} + \cdots + \tfrac{1}{9900} = \htmlClass{new}{\tfrac{99}{100}} @@ n = 99
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · collapsing-sum · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · terms as bars, the running total, and the formula</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="chips" id="fch"></div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">n</span><input type="range" id="kn" min="1" max="30" step="1" value="8"><output id="on"></output></div>
+      <div class="cap">Teal bars: the terms t(1), …, t(n). Ink dots: the running total after each term. Gold: the formula's value at each n. They agree at every n shown, which is evidence; the proof is above.</div>
+    </div>
+    <div class="panel">
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15g2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">Σᵢ₌₁⁵ (i² − (i − 1)²)</span></span>Find it by collapsing-sum. <br>Check by adding the five terms.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15g3">
+  <h2 class="sthead"><span class="stno">15g3</span>Odd numbers, squares and cubes</h2>
+  <p class="stands">Stands on 15g2 and 4j (two-term-power).</p>
+  <p data-pid="f0acc4">Odd-numbers-make-squares technique: <b>the first n odd numbers add to n²: Σᵢ₌₁ⁿ (2i − 1) = n².</b> Each odd number is a difference of squares: i² − (i − 1)² = 2i − 1, by square-of-a-difference (5h). So collapsing-sum with uᵢ = i² gives n² − 0² = n². ∎ So 1 + 3 + 5 + 7 = 16.</p>
+  <p data-pid="22e4ca">Sum-of-squares technique: <b>Σᵢ₌₁ⁿ i² = n(n + 1)(2n + 1)/6.</b> 15d.4.1 held this sum in trust. The column below proves it, and that flag is closed.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the sum-of-squares technique, by the collapse">
+(i + 1)^3 - i^3 = 3i^2 + 3i + 1 @@ two-term-power (4j), or square-of-a-sum twice
+\textstyle\sum_{i=1}^{n} \big((i + 1)^3 - i^3\big) = (n + 1)^3 - 1 @@ collapsing-sum with aᵢ = (i + 1)³
+(n + 1)^3 - 1 = 3\textstyle\sum i^2 + 3 \cdot \tfrac{n(n+1)}{2} + n @@ sums-are-linear; doubled-sum
+3\textstyle\sum i^2 = (n + 1)^3 - (n + 1) - \tfrac{3n(n+1)}{2} = (n + 1)\big(n^2 + 2n - \tfrac{3n}{2}\big) @@ collect; take out n + 1 (spread on ℝ)
+\htmlClass{new}{\textstyle\sum_{i=1}^{n} i^2 = \tfrac{n(n + 1)(2n + 1)}{6}} \quad \blacksquare @@ n² + n/2 = n(2n + 1)/2; divide by 3
+  </pre>
+  <p data-pid="db4003">Sum-of-cubes technique: <b>Σᵢ₌₁ⁿ i³ = (n(n + 1)/2)², the square of doubled-sum's sum.</b> The same collapse works with (i + 1)⁴ − i⁴ = 4i³ + 6i² + 4i + 1. It gives (n + 1)⁴ − 1 = 4Σi³ + 6Σi² + 4Σi + n, and the algebra leaves n²(n + 1)²/4 (15g.4.4).</p>
+  <pre class="lines" data-k="ember" data-label="this step: the formulas at work">
+\textstyle\sum_{i=1}^{20} (3i^2 - 2i + 1) = 3 \cdot 2870 - 2 \cdot 210 + 20 @@ sums-are-linear; sum-of-squares (20 · 21 · 41/6 = 2870); doubled-sum
+= \htmlClass{new}{8210} @@ 8610 − 420 + 20
+\textstyle\sum_{i=5}^{12} i = \sum_{i=1}^{12} i - \sum_{i=1}^{4} i = 78 - 10 = 68 @@ split, then doubled-sum twice
+\textstyle\sum_{i=1}^{10} i^3 = 55^2 = 3025 @@ sum-of-cubes
+  </pre>
+  <p data-pid="398eb1">One early mathematician found that the ratio came out one third plus a little for the squares at one, two, three and more terms. He wrote that he would take it as established by induction, by which he meant by trying cases, and went on to the cubes and beyond.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · squares and cubes · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15g3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="S = \sum_{i=1}^{15} (2i^2 + 5)"></span></span>Find S.</li><li><span class="givens"><span data-tex-inline="S = \sum_{i=10}^{30} i^2"></span></span>Find S.</li><li><span class="givens"><span data-tex-inline="S_n = \sum_{i=1}^{n} \frac{1}{(i + 1)(i + 2)};"></span> <span data-tex-inline="n = 48"></span></span>Find the sum in closed form for every n, and its value at the given n.</li><li><span class="givens"><span data-tex-inline="S = \sum_{i=1}^{6} i^3"></span></span>Find S by the step's formula, and check it by adding by hand.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15g4">
+  <h2 class="sthead"><span class="stno">15g4</span>Two areas paid</h2>
+  <p class="stands">Stands on 15g3 and 15d (squeezed-for-every-n).</p>
+  <p data-pid="f181b8">In the column below, ∓ is 8i's ± turned about: ⅓ ∓ 1/(2n) reads ⅓ − 1/(2n) for the first sum and ⅓ + 1/(2n) for the second. Like ±, it only packs two lines into one.</p>
+  <pre class="lines" data-k="teal" data-label="from 15d: x² on [0, 1], with sum-of-squares proved">
+L_n = \tfrac{1}{n^3}\textstyle\sum_{j=0}^{n-1} j^2 = \tfrac{(n - 1)n(2n - 1)}{6n^3} @@ sum-of-squares at n − 1; heights at the left ends
+U_n = \tfrac{n(n + 1)(2n + 1)}{6n^3} @@ sum-of-squares at n
+U_n - L_n = \tfrac1n,\ \ |I - \tfrac13| \le \tfrac1n @@ expand both: ⅓ ∓ 1/(2n) + 1/(6n²)
+\htmlClass{new}{\textstyle\int_0^1 x^2\,dx = \tfrac13} @@ squeezed-for-every-n; integrable by continuous-is-integrable (15f)
+\textstyle\int_0^1 x^3\,dx = \tfrac14 @@ the same with sum-of-cubes: Uₙ = (n + 1)²/(4n²)
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · two areas paid · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15g4.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\sum_{i=1}^{n} i = 210"></span></span>Find n.</li><li><span class="givens"><span data-tex-inline="\sum_{i=1}^{n} (2i - 1) = 144"></span></span>Find n, and name the technique of this step that settles it.</li><li><span class="givens"><span data-tex-inline="7 + 10 + 13 + \cdots + 64"></span></span>Write the sum in sigma form, and add it.</li><li><span class="givens"><span data-tex-inline="\sum_{i=1}^{n} t(i) = n^3 \text{ for every } n"></span></span>Find t.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15g5">
+  <h2 class="sthead"><span class="stno">15g5</span>Illegal moves</h2>
+  <p class="stands">Stands on 15g1 to 15g4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\textstyle\sum s(i)\,t(i) = \sum s(i) \cdot \sum t(i)\,? @@ 1·1 + 2·2 = 5, while (1 + 2)(1 + 2) = 9
+\textstyle\sum_{i=1}^{n} c = c\,? @@ n copies of c: nc
+\textstyle\sum_{i=1}^{n} i^2 = \big(\sum_{i=1}^{n} i\big)^2\,? @@ that is sum-of-cubes, for cubes; for n = 2, 1 + 4 = 5, not 9
+\textstyle\sum_{i=5}^{12} i = \sum_{i=1}^{12} i - \sum_{i=1}^{5} i\,? @@ that takes away the 5 too; stop the second sum at 4
+\text{true for } n \le 10, \text{ so for every } n\,? @@ see 15g.3.1c, and the closer
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15g5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{Claim: } \sum_{i=1}^{n} i^2 ="></span> <span data-tex-inline="\sum_{i=1}^{n} i \cdot \sum_{i=1}^{n} i"></span></span>Find the first n where the claim fails, and the line of sums-are-linear it misreads.</li><li><span class="givens"><span data-tex-inline="S_n = \sum_{i=1}^{n} \big(\sqrt{i} - \sqrt{i - 1}\big)"></span></span>Use collapsing-sum to find the sum, and the list for which it works.</li><li><span class="givens"><span data-tex-inline="n^2 + n + 41 \text{ is prime}"></span> <span data-tex-inline="\text{for } n = 0, 1, \ldots, 39"></span></span>Prove or refute: it is prime for every n.</li><li><span class="givens"><span data-tex-inline="\sum_{i=1}^{n} \frac{1}{i(i + 1)} = 1 - \frac{1}{n + 1}"></span></span>Find what, if anything, the sum with no last term could mean.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">15g.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{Bend collapsed } \sum \big(\sqrt{i} - \sqrt{i - 1}\big)."></span> <span data-tex-inline="u_i - u_{i-1} \text{ a polynomial in } i"></span></span>Choose a list u of your own whose differences are a polynomial in i, and use collapsing-sum to sum that polynomial from one to n in closed form.<br>Check your total with sums-are-linear and the step's formulas.</div>
+  <div class="chq"><span class="chid">15g.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="n = 0"></span></span>Put the given n in sum-of-squares and sum-of-cubes, and decide whether they agree with sum-of-none.</div>
+  <div class="chq"><span class="chid">15g.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="t(1), t(2), \ldots \text{ any list;}"></span> <span data-tex-inline="\text{wanted: } u_0, u_1, \ldots \text{ with}"></span> <span data-tex-inline="t(i) = u_i - u_{i-1}"></span></span>Collapsing-sum turns a list into a sum of its differences. Decide whether the wanted list always exists, and how many there are.</div>
+  <div class="chq"><span class="chid">15g.4.4</span><span class="tagq">loop</span><span class="givens"><span data-tex-inline="(i + 1)^4 - i^4"></span></span>Using collapsing-sum on the given difference, prove sum-of-cubes.</div>
+  <div class="chq"><span class="chid">15g.4.5</span><span class="tagq">loop</span><span class="givens"><span data-tex-inline="J = \int_0^b x^2\, dx,\ b &gt; 0"></span></span>Using sum-of-squares, find J.</div>
+  <div class="chq"><span class="chid">15g.4.6</span><span class="tagq">seam</span><span class="givens"><span data-tex-inline="2^{2^n} + 1 \text{ for } n = 0, \ldots, 4"></span></span>In 1656 one mathematician took his formulas for sums as established once enough cases agreed, and called that induction. A second wrote back that cases prove nothing, and asked for proofs. The second, though, believed every number of the given form is prime, having checked the given cases. In 1732 a third found that 641 divides the next one. <br>Is agreement in many cases a reason to believe a formula? <br>When does checking turn into proving?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r15concl.html">← 15·∎ · conclusion</a><a href="r15h.html">15h · Sums of thin strips by hand →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>Wallis, having found that the ratio came out one third plus a little for the squares at one, two, three and more terms, wrote that he would take it as established by induction, by which he meant by trying cases, and went on to the cubes and beyond.</p><cite>Wallis, Arithmetica infinitorum (1656), Propositions 19 to 21; paraphrase</cite></aside>
+  <p>In the closer, the formulas by cases are John Wallis’s (1656); the demand for proofs, and the numbers 2^(2ⁿ) + 1, are Pierre de Fermat’s; the factor 641 is Leonhard Euler’s (1732).</p>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const FN={
+  one:{lab:'Σ i',t:i=>i,F:n=>n*(n+1)/2,tx:R`\tfrac{n(n+1)}{2}`,code:'GS'},
+  sq:{lab:'Σ i²',t:i=>i*i,F:n=>n*(n+1)*(2*n+1)/6,tx:R`\tfrac{n(n+1)(2n+1)}{6}`,code:'SSQ'},
+  cu:{lab:'Σ i³',t:i=>i**3,F:n=>(n*(n+1)/2)**2,tx:R`\left(\tfrac{n(n+1)}{2}\right)^2`,code:'SCU'},
+  odd:{lab:'Σ (2i − 1)',t:i=>2*i-1,F:n=>n*n,tx:R`n^2`,code:'OSQ'},
+  tel:{lab:'Σ 1/(i(i + 1))',t:i=>1/(i*(i+1)),F:n=>1-1/(n+1),tx:R`1 - \tfrac{1}{n+1}`,code:'TEL'}
+};
+let key='sq',F=FN.sq;
+const kn=$('kn'),cvF=$('cvF');
+const PF=plane(cvF,{x:[0,1],y:[0,1],grid:1,aspect:0.8,draw:P=>draw(P)});
+Object.defineProperty(PF.o,'aspect',{get:()=>cvF.clientWidth>480?0.7:0.9});
+function draw(P){ const n=+kn.value, top=F.F(n); P.o.x=[-0.5,n+1]; P.o.y=[-top*0.06,top*1.1]; P.o.grid=n>15?5:1; P.axes();
+  const c=P.ctx; let run=0;
+  for(let i=1;i<=n;i++){ const v=F.t(i); c.globalAlpha=0.35; P.poly([[i-0.4,0],[i+0.4,0],[i+0.4,v],[i-0.4,v]],null,'--teal'); c.globalAlpha=1; run+=v; P.dot(i,run,'--ink',3.2); P.line(i-0.45,F.F(i),i+0.45,F.F(i),'--gold',1.6,[]); } }
+function read(){ const n=+kn.value; let run=0; for(let i=1;i<=n;i++) run+=F.t(i); $('on').textContent=n;
+  const vd=$('vdF'); vd.className='verdict win'; vd.textContent='Added term by term: '+mm(run,6)+'. By '+F.code+': '+mm(F.F(n),6)+'.';
+  tex($('eqF'),R`\begin{gathered}\textstyle\sum_{i=1}^{${n}} ${key==='tel'?R`\tfrac{1}{i(i+1)}`:(key==='odd'?R`(2i - 1)`:(key==='one'?'i':(key==='sq'?'i^2':'i^3')))} = ${F.tx}\big|_{n=${n}} = ${mm(F.F(n),6)}\end{gathered}`,true); }
+function all(){ PF.redraw(); read(); }
+kn.addEventListener('input',all);
+const fch=$('fch');
+Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===key) b.className='on'; b.onclick=()=>{ key=k; F=FN[k]; [...fch.children].forEach(z=>z.classList.toggle('on',z===b)); all(); }; fch.appendChild(b); });
+window.__pic={set:(k,n)=>{ [...fch.children][Object.keys(FN).indexOf(k)].click(); kn.value=n; all(); return {txt:$('vdF').textContent}; }};
+all();
+/* ---------- slides ---------- */
+const Nw='\\htmlClass{new}';
+stepper('#sl1',[
+  {k:'ember',kl:'from p to q',t:R`\textstyle\sum_{i=p}^{q} t(i)`,n:`Empty, 0, when p &gt; q. i is a dummy.`},
+  {k:'ember',kl:'sums-are-linear',t:R`\textstyle\sum (s + t) = \sum s + \sum t,\ \ \sum ct = c\sum t`,n:`And Σ c = nc. Induction with sum-one-more.`},
+  {k:'ember',kl:'shift and split',t:R`\textstyle\sum_{i=1}^{n} t(i - 1) = \sum_{j=0}^{n-1} t(j)`,n:`A late start is a difference of two sums.`}
+],{title:'The slides · taking a sum apart · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'collapsing-sum',t:R`${Nw}{\textstyle\sum_{i=1}^{n} (a_i - a_{i-1}) = a_n - a_0}`,n:`Everything in between cancels.`},
+  {k:'teal',kl:'from 9g · a difference',t:R`\textstyle\sum \tfrac{1}{i(i+1)} = 1 - \tfrac{1}{n+1}`,n:`two-factors turns each term into a difference.`}
+],{title:'The slides · collapsing-sum · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'sum-of-squares',t:R`${Nw}{\textstyle\sum i^2 = \tfrac{n(n+1)(2n+1)}{6}}`,n:`Collapse (i + 1)³ − i³ = 3i² + 3i + 1.`},
+  {k:'ember',kl:'sum-of-cubes',t:R`\textstyle\sum i^3 = \left(\tfrac{n(n+1)}{2}\right)^2`,n:`Collapse (i + 1)⁴ − i⁴.`},
+  {k:'ember',kl:'at work',t:R`\textstyle\sum_{i=1}^{20} (3i^2 - 2i + 1) = 8210`,n:`sums-are-linear, sum-of-squares, doubled-sum.`}
+],{title:'The slides · squares and cubes · ← → keys work'});
+stepper('#sl4',[
+  {k:'teal',kl:'from 15d · paid',t:R`\textstyle\int_0^1 x^2 = \tfrac13,\ \ \int_0^1 x^3 = \tfrac14`,n:`sum-of-squares and sum-of-cubes close the squeeze.`}
+],{title:'The slides · two areas paid · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`\textstyle\sum st \ne \sum s \sum t`,n:`Σ does not pass through products.`}
+],{title:'The slides · illegal · ← → keys work'});
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

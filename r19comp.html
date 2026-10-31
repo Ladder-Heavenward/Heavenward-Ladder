@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How many ways can a puzzle cube be scrambled?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r19crypt.html">← 19·crypt can a letter ever stand for itself?</a><a href="r20.html">next: 20 moving the plane →</a></p>
+  <div class="tags"><span class="tag comp">19·comp · computing</span></div>
+  <h1>How many ways can a puzzle cube be scrambled?</h1>
+  <p>How many ways can a puzzle cube be scrambled? The puzzle is a cube cut into three layers each way, with a colour on each face. Any face can be twisted a quarter turn, and a few twists scramble the colours. Getting them back takes most people hours, or forever. People asked how many scrambles there are, whether every scramble can be solved, and how many twists it takes. What makes it hard is that the twists do not turn about: twist the right face and then the top, and you get something different from the top and then the right. And the count is too large to list: a computer trying a billion scrambles a second would need over a thousand years. This page reads each twist as a shuffle of the stickers, so 19’s moves combine and undo. It counts the ways to put the pieces back by hand. It finds three things that no string of twists can change, so most of those ways can never be reached. Then it shows the small change made by doing one twist, then another, then undoing the first, then undoing the second, which is what solvers build on.</p>
+  <p class="gesture">A twist moves some stickers and leaves the rest, so it is a shuffle, and twists combine and undo as 19 says. Pull the cube apart and put it back any way, and there are about five hundred million million million ways. But every twist keeps three things: the shuffles of the corners and of the edges are both even or both odd; the corners’ twists add to whole turns; and an even number of edges sit the wrong way round. So only one way in twelve can be reached by twisting. Two strings of twists that share one moved piece, done and undone in turn, change at most three pieces.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r19a.html">19a</a> (shuffles; groups), <a href="r19b.html">19b</a> (one inverse; order), <a href="r19c.html">19c</a> (socks and shoes; turn-about-undo), <a href="r19d.html">19d</a> (copies-same-size, copies-never-overlap, part-divides-whole), <a href="r19e.html">19e</a> (parity) and <a href="r04j.html">4j</a> (counting). Rung 20 moves the plane itself.</p></div>
+</header>
+
+<section class="class step" data-step="19comp1">
+  <h2 class="sthead"><span class="stno">19comp1</span>A twist is a shuffle of the stickers</h2>
+  <p class="stands">Stands on 19a (shuffles; groups) and 19b (order).</p>
+  <p data-pid="26650d">The cube has 54 stickers, nine on each face. Its pieces are of three kinds. Each of the 8 corners carries 3 stickers, each of the 12 edges carries 2, and each of the 6 centres carries 1. The centres only turn in place, so they fix which colour belongs on which face. Name the faces by where they sit: Up, Down, Front, Back, Left, Right.</p>
+  <p data-pid="7beb6c">From here on, on this page, R is a quarter turn of the right face, clockwise as you look at that face; likewise U, D, F, B and L. R′ is R undone, a quarter turn the other way. A string of twists is read in the order done: R U means R first, then U. As a product in 19a’s sense, that string is UR.</p>
+  <p data-pid="bd3128">A twist sends each sticker to one place and no two to the same place, so <b>a twist is a shuffle of the 54 stickers.</b> Strings of twists are shuffles too (shuffles-compose), every one can be undone, and doing nothing is the empty string. So the strings of twists form a group, a part of the shuffles of the 54 stickers.</p>
+  <pre class="lines" data-k="ember" data-label="this page: one twist">
+R:\ \ 5 \text{ loops of } 4 \text{ stickers} @@ the 8 non-centre stickers of the face in two loops; 12 side stickers in three
+R^4 = e,\ \ R^2 \ne e @@ each loop of 4 comes back after 4 steps, not before
+\text{order of } R = 4,\ \ R' = R^3 @@ order (19b); one-answer (19b) with R⁴ = e
+\text{the undo of } R\ U \text{ is } U'\ R' @@ socks and shoes (19c): the last twist done is the first undone
+\htmlClass{new}{R\,U \text{ has order } 105} \quad \blacksquare @@ found by following the stickers: loops of 15, 7, 7 and 3; 105 is the least number that 15, 7 and 3 all divide
+  </pre>
+  <p data-pid="e012d8">So a string of twists done over and over comes back to the start, as 19b’s order-exists says it must in a finite group. R U takes 105 rounds. Some strings take 1260.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · one twist · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">19·comp.1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a quarter turn moves 4 corners in one loop and 4 edges in one loop</span></span>Find the order of a quarter turn, and of a half turn. <br>Write the undo of R U F as a string of quarter turns.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="19comp2">
+  <h2 class="sthead"><span class="stno">19comp2</span>Putting the pieces back</h2>
+  <p class="stands">Stands on 19·comp.1 and 4j (counting).</p>
+  <p data-pid="25852c">Pull the cube apart, and put it back together any way at all. Count the ways in stages (4j). Each corner piece can go in any corner place, and then sit three ways round. Each edge piece can go in any edge place, and then sit two ways round. The centres stay put.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the take-apart count">
+8! = 40\,320 @@ the corners into the corner places
+3^8 = 6561 @@ each corner, three ways round
+12! = 479\,001\,600 @@ the edges into the edge places
+2^{12} = 4096 @@ each edge, two ways round
+\htmlClass{new}{8! \cdot 3^8 \cdot 12! \cdot 2^{12} = 519\,024\,039\,293\,878\,272\,000} @@ stages multiply: about 5.2 × 10²⁰
+  </pre>
+  <p data-pid="f74ffc">Take-apart count: <b>a cube pulled apart can be put back in 8! · 3⁸ · 12! · 2¹² ways, about 5.2 × 10²⁰.</b> Every twisted cube is one of these. The question is how many of them twisting can reach.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · counting · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">19·comp.2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a 2 by 2 by 2 cube: 8 corners, no edges, no centres</span></span>Count the ways to put it back after pulling it apart. <br>Count them again with one corner held fixed in its place and its way round.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="19comp3">
+  <h2 class="sthead"><span class="stno">19comp3</span>Three things no twist changes</h2>
+  <p class="stands">Stands on 19·comp.2, 19e (parity) and 19d (copies).</p>
+  <p data-pid="b3279e">Each twist changes the cube a great deal. Three things it never changes.</p>
+  <p data-pid="fd9eeb">First, parity. A quarter turn moves 4 corner pieces round a loop of 4 places and 4 edge pieces round a loop of 4. A loop of 4 is 3 swaps, so each is odd (19e).</p>
+  <pre class="lines" data-k="ember" data-label="this page: the parity rule">
+\text{each quarter turn: an odd shuffle of corners, an odd one of edges} @@ a loop of 4 is 3 swaps (19e)
+\text{each quarter turn changes both parities at once} @@ parity (19e): odd after even is odd, odd after odd is even
+\htmlClass{new}{\text{the corner shuffle and the edge shuffle are always both even or both odd}} \quad \blacksquare @@ induction on the number of quarter turns (4b); at the start both are e
+  </pre>
+  <p data-pid="9455f4">Second, the corners’ twists. Every corner has one sticker of the Up or Down colour. Count a corner’s twist in thirds of a turn: 0 if that sticker faces Up or Down, 1 if it sits a third of a turn clockwise from there, 2 if two thirds. Then add the twists of all 8 corners.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the twist rule">
+U,\ D:\ \ \text{every Up or Down sticker stays facing Up or Down} @@ the total is unchanged
+R,\ L,\ F,\ B:\ \ \text{the four corners moved gain } 1, 2, 1, 2 \text{ thirds} @@ followed sticker by sticker
+1 + 2 + 1 + 2 = 6 \text{ thirds} = 2 \text{ whole turns} @@ the total gains a whole number of turns
+\htmlClass{new}{\text{the total twist is always a whole number of turns}} \quad \blacksquare @@ induction on the number of quarter turns; at the start it is 0
+  </pre>
+  <p data-pid="bd8d00">Third, the edges’ ways round. Give each edge place a first face: Up or Down if it touches one, otherwise Front or Back. Give each edge piece a first sticker in the same way, from its home place. An edge sits the right way round when its first sticker is on its place’s first face.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the way-round rule">
+U,\ D,\ R,\ L:\ \ \text{every first sticker lands on a first face} @@ R sends Up to Back, Back to Down, Down to Front, Front to Up
+F,\ B:\ \ \text{all four edges moved change their way round} @@ F sends Up to Right: a first face to one that is not
+\htmlClass{new}{\text{the number of edges the wrong way round is always even}} \quad \blacksquare @@ each twist changes it by 0 or 4; at the start it is 0
+  </pre>
+  <p data-pid="cceee0">Now count what is left. The positions reached by twisting form a part-group G of all the ways of putting the cube back. Doing a pull-apart change a after the twists gives the copy aG, and copies-same-size and copies-never-overlap (19d) split all the ways into copies of G, each of one size. The three rules can take 3 · 2 · 2 = 12 different sets of values, and pull-apart changes reach every one. Ways with different values never lie in one copy, since twisting keeps the values. So there are at least 12 copies.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the reachable count">
+\text{at least } 12 \text{ copies of } G,\ \text{all of size } |G| @@ the three rules: 3 twist totals, 2 parities, 2 counts of wrong-way edges
+|G| \le \tfrac{519\,024\,039\,293\,878\,272\,000}{12} @@ copies-never-overlap: the copies share nothing
+\htmlClass{new}{|G| \le 43\,252\,003\,274\,489\,856\,000} @@ about 4.3 × 10¹⁹
+  </pre>
+  <p data-pid="555ea0">Reach count: <b>no string of twists reaches more than one way in twelve of putting the cube back.</b> Solvers’ methods show that every way meeting the three rules can be reached, so the count is exactly 43 252 003 274 489 856 000. That half is held in trust here: it needs the tools of the next footing, used with care on every case.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · three rules · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">19·comp.3.1</span><span class="ph undo">undo</span><span class="givens"><span class="gtx">a cube pulled apart and put back with two edges swapped, one corner twisted a third, and everything else in its place</span></span>Find which of the three rules it breaks. <br>Find the fewest further changes of the same kinds that make it solvable.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="19comp4">
+  <h2 class="sthead"><span class="stno">19comp4</span>Do, do, undo, undo</h2>
+  <p class="stands">Stands on 19·comp.1, 19c (socks and shoes; turn-about-undo) and 19a (shuffles).</p>
+  <p data-pid="32c259">Do a string x, then a string y, then undo x, then undo y. In time order it is x, y, x⁻¹, y⁻¹. As a product it is C = y⁻¹x⁻¹yx.</p>
+  <pre class="lines" data-k="ember" data-label="this page: what C measures">
+C = y^{-1}x^{-1}\,y\,x = (xy)^{-1}(yx) @@ socks and shoes (19c): (xy)⁻¹ = y⁻¹x⁻¹
+C = e \iff yx = xy @@ one-answer (19b): (xy)⁻¹(yx) = e exactly when yx = xy
+\htmlClass{new}{C \text{ undoes nothing extra exactly when } x \text{ and } y \text{ turn about}} \quad \blacksquare @@ so C measures how far they fail to
+  </pre>
+  <p data-pid="199fe5">Small-change technique: <b>if x and y each move some places, and exactly one place p is moved by both, then C moves at most three places: p, x⁻¹(p) and y⁻¹(p).</b> Here a place is where a piece sits, and moving a piece includes turning it.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the small-change technique">
+q \text{ moved by neither}:\ \ C(q) = q @@ each of x, y, x⁻¹, y⁻¹ leaves q
+q \text{ moved by } x,\ q \ne p,\ x(q) \ne p:\ \ y \text{ leaves } x(q),\ x^{-1} \text{ brings it to } q,\ y^{-1} \text{ leaves } q @@ x moves only its own places, and p is the only one y shares
+q \text{ moved by } y,\ q \ne p,\ y(q) \ne p:\ \ x \text{ leaves } q,\ y \text{ sends it to } y(q),\ x^{-1} \text{ leaves it},\ y^{-1} \text{ brings it back} @@ the same, with x and y exchanged
+\htmlClass{new}{\text{only } p,\ x^{-1}(p),\ y^{-1}(p) \text{ can move}} \quad \blacksquare @@ x(q) = p means q = x⁻¹(p); y(q) = p means q = y⁻¹(p)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this page: two small changes on the cube">
+x = R'\ D'\ R,\ \ y = U @@ x moves many pieces, but only one of the Up layer: the Up-Front-Right corner
+x,\ y,\ x^{-1},\ y^{-1}:\ \ R'\ D'\ R\ \ U\ \ R'\ D\ R\ \ U' @@ eight quarter turns
+\htmlClass{new}{\text{three corners go round a loop; nothing else moves}} @@ small-change, with p the Up-Front-Right place
+x = R'\ D'\ R\ D\ R'\ D'\ R\ D,\ \ y = U @@ x turns the Up-Front-Right corner in its place, and of the Up layer moves nothing else
+\htmlClass{new}{\text{two corners turned in place, the opposite ways; nothing else moves}} @@ here two of the three places coincide
+  </pre>
+  <p data-pid="8b8f8b">Solvers build on these. Put the pieces of the first layers in by hand, where there is room to spare. In the last layer every twist would wreck what is done, so use do, do, undo, undo: a loop of three pieces, or two corners turned in place, and nothing else touched. With enough such tools every way meeting the three rules can be solved.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · do, do, undo, undo · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">19·comp.4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">shuffles of {1, 2, 3, 4, 5};  x = [2 3 1 4 5];  y = [1 2 4 5 3]</span></span>Find C = y⁻¹x⁻¹yx as a list. <br>Find the places it moves, and check them against p, x⁻¹(p), y⁻¹(p).</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="19comp5">
+  <h2 class="sthead"><span class="stno">19comp5</span>Illegal moves</h2>
+  <p class="stands">Stands on 19·comp.1 to 19·comp.4.</p>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{the undo of } R\ U \text{ is } R'\ U'\,? @@ socks and shoes: U′ first, then R′
+\text{every way of putting it back can be twisted to solved}\,? @@ one in twelve: three rules no twist changes
+\text{one corner turned a third, all else solved, is one twist away}\,? @@ the twist total would be a third: never reached
+R\ U\ R'\ U' \text{ moves at most three pieces}\,? @@ R and U share three pieces, not one: it moves seven
+\text{order of } R\ U = \text{order of } R \times \text{order of } U\,? @@ 105, not 16: R and U do not turn about
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">19·comp.5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span class="gtx">x = [2 3 1 4 5];  y = [1 3 4 2 5]</span></span>Find C = y⁻¹x⁻¹yx, and the places x and y both move. <br>Find the line of the small-change technique that fails.</li><li><span class="givens"><span class="gtx">R U R′ U′</span></span>Find the pieces R and U both move. <br>Find how many pieces the string moves, and its order.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">19·comp.6.1</span><span class="tagq">build</span>Build a string of twists that moves three edges round a loop and nothing else, from a do, do, undo, undo with y = U. <br>Check it with the small-change technique. <br>Find whether all three edges can be in the Up layer.</div>
+  <div class="chq"><span class="chid">19·comp.6.2</span><span class="tagq">edge</span><span class="givens"><span class="gtx">x = U,  y = D</span></span>Find C, and what the small-change technique says when x and y share no moved place.</div>
+  <div class="chq"><span class="chid">19·comp.6.3</span><span class="tagq">converse</span>If x and y share no moved place, then C = e. Turn it round: if C = e, must x and y share no moved place?</div>
+  <div class="chq"><span class="chid">19·comp.6.4</span><span class="tagq">edge</span><span class="givens"><span class="gtx">a 2 by 2 by 2 cube, one corner held fixed</span></span>Find which of the three rules still hold for it, and how many of its ways of putting back twisting can reach at most.</div>
+  <div class="chq"><span class="chid">19·comp.6.5</span><span class="tagq">seam</span>In 2010 a team used about thirty-five years of computer time, spread across many machines, to show that every scramble of the cube can be solved in 20 face turns or fewer, and that some need all 20. No person has checked every case, and no person could. <br>Is a result that no one can check by hand proved?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r19crypt.html">← 19·crypt · can a letter ever stand for itself?</a><a href="r20.html">20 · moving the plane →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The puzzle is the 3 × 3 × 3 twisting puzzle cube; its pieces are cubies, and the twists in letters are Singmaster notation. Do, do, undo, undo is a commutator, written [x, y]; a string of the form x y x⁻¹ is a conjugate. The positions reached by twisting form the cube group, a part-group of index 12 in the group of all reassemblies. A loop of three pieces is a 3-cycle; a corner turned in place is a twisted corner, and an edge the wrong way round is a misoriented edge. The fewest turns that solve every scramble is called God’s number.</p>
+  <h3>Who said it first</h3>
+  <p>The puzzle was made in 1974 by a professor of architecture in Budapest, to show his students how the pieces of a solid could move. David Singmaster wrote its letters, R, U, F and the rest, in 1979, and the first solving methods by commutators. In 19·comp.6.5, the team is Tomas Rokicki, Herbert Kociemba, Morley Davidson and John Dethridge (2010). A computer proof first split mathematicians in 1976, when Kenneth Appel and Wolfgang Haken showed that four colours suffice for every map by checking nearly two thousand cases on a machine.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="19·comp: a worked “proof”, not allowed">
+\text{the cube put back with one corner turned a third} @@ fine
+\text{every twist is a shuffle, so some string of twists undoes it} @@ not allowed: the shuffle that undoes it need not be one the twists can make
+\text{so it can be solved by twisting} @@ false: its twist total is a third of a turn, and twisting keeps whole turns
+  </pre>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'R',t:R`5 \text{ loops of } 4`,n:`A shuffle of 54 stickers.`},
+  {k:'ember',kl:'order',t:R`\htmlClass{new}{R^4 = e}`,n:`R′ = R³.`},
+  {k:'ember',kl:'undo',t:R`(R\,U)^{-1}:\ U'\ R'`,n:`Socks and shoes.`}
+],{title:'The slides · one twist · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'stages',t:R`8! \cdot 3^8 \cdot 12! \cdot 2^{12}`,n:`Places, then ways round.`},
+  {k:'ember',kl:'total',t:R`\htmlClass{new}{\approx 5.2 \times 10^{20}}`,n:`Pulled apart and put back.`}
+],{title:'The slides · counting · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'parity',t:R`\htmlClass{new}{\text{corners and edges: same parity}}`,n:`Each quarter turn is odd on both.`},
+  {k:'ember',kl:'twist',t:R`\htmlClass{new}{\text{whole turns}}`,n:`1 + 2 + 1 + 2 = 6 thirds.`},
+  {k:'ember',kl:'way round',t:R`\htmlClass{new}{\text{an even number wrong}}`,n:`F and B change four.`},
+  {k:'ember',kl:'count',t:R`\tfrac{5.2 \times 10^{20}}{12} \approx 4.3 \times 10^{19}`,n:`Twelve copies.`}
+],{title:'The slides · three rules · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'C',t:R`\htmlClass{new}{C = (xy)^{-1}(yx)}`,n:`e exactly when they turn about.`},
+  {k:'ember',kl:'small change',t:R`\htmlClass{new}{p,\ x^{-1}(p),\ y^{-1}(p)}`,n:`One shared place, three moved.`},
+  {k:'ember',kl:'on the cube',t:R`R'\ D'\ R\ \ U\ \ R'\ D\ R\ \ U'`,n:`Three corners round a loop.`}
+],{title:'The slides · do, do, undo, undo · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`(R\,U)^{-1} = R'\ U'\,?`,n:`U′ then R′.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

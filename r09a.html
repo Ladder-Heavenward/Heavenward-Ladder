@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>9a · A function is its pairs</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+#cvF,#cvD{touch-action:manipulation;cursor:pointer}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r09.html">← 9 making functions</a><a href="r09b.html">next: 9b composing, and brackets don't matter →</a></p>
+  <div class="tags"><span class="tag proof">9a · proof</span></div>
+  <h1>A function is its pairs</h1>
+  <p>4c built a function to do one job: defining by repeating. Here the same definition becomes the whole story. A function from one set to another is a set of pairs, each with its left entry in the first set and its right entry in the second. Each member of the first set is the left entry of exactly one of them. That sentence fixes which inputs a function has and which outputs it uses. It fixes when two functions are the same. And it says nothing at all about formulas. The step proves each of those. It ends with the diagonal argument (Cantor's): most functions have no formula that could ever be written down.</p>
+  <p class="gesture">Each input appears in exactly one pair. The pairs fix the inputs and the outputs used; the same pairs make the same function, however the function was described.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r02a.html">2a</a> (same-members, double-inclusion), <a href="r02c.html">2c</a> (⋃), <a href="r02e.html">2e</a> (pairs, equal-pairs, products, relations), <a href="r02g.html">2g</a> (the shorthand {t(y) : y ∈ s}), <a href="r04c.html">4c</a> (function, f : A → B, f(x), ↦, rule-makes-a-function, same-outputs), <a href="r04j.html">4j</a> (counted-functions), <a href="r07b.html">7b</a> (⟦P⟧), <a href="r07d.html">7d</a> (definitions by cases, every-mark-is-a-bit), <a href="r08a.html">8a</a> (rational and irrational reals, hole-is-no-fraction's-cut), <a href="r08f.html">8f</a> (hole's-cut-is-√2). <a href="r09b.html">9b</a> chains functions; <a href="r09c.html">9c</a> asks the two promises of outputs; <a href="r09d.html">9d</a> turns the pairs around; <a href="r09e.html">9e</a> draws them.</p></div>
+</header>
+
+<section class="class step" data-step="9a1">
+  <h2 class="sthead"><span class="stno">9a1</span>New marks on this rung</h2>
+  <p class="stands">Stands on 1f (a stroke makes a second name) and 1e (every and some).</p>
+  <p data-pid="825319">Each mark below is said first in plain words. Each gets its own “from here on” line on the step named, before any proof uses it.</p>
+  <ul>
+    <li data-pid="45cacb">there is exactly one x with P(x): ∃!x P(x), where the ! is part of the mark and never a factorial (9a)</li>
+    <li data-pid="63a2e3">the inputs and the outputs of a set of pairs, its domain and its range: dom f and ran f (9a)</li>
+    <li data-pid="ceb1a2">g after f, the function that does f and then g: g ∘ f, read “g after f”; longer chains without brackets, h ∘ g ∘ f (9b)</li>
+    <li data-pid="cf74c4">the function on A that changes nothing, the identity on A: id_A (9b)</li>
+    <li data-pid="4bacb9">f with its pairs swapped, f run backwards: f⁻¹, read “f inverse”, where the high −1 is one mark and not a reciprocal (9d)</li>
+    <li data-pid="e51032">f kept to a part D of its inputs: f|_D, read “f restricted to D” (9d)</li>
+    <li data-pid="169ac1">a sum of reals by 4j’s Σ, now with real terms: Σ_{i&lt;n} t(i) and Σ_{k≤n} (9g)</li>
+    <li data-pid="aad86d">a sequence and its terms, a function on ℕ with its value at n written with a low mark: u_n, and u₀, u₁, u₂, ⋯ (9·cb4)</li>
+    <li data-pid="87b134">g done n times, its n-th iterate: g^∘n, a ring in the high place and never a power (9·cb4)</li>
+    <li data-pid="a9b3c9">on the optional pages only: the kilocalorie, kcal (9·bio)</li>
+  </ul>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">9a1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">∃!x P(x)</span></span>Say the mark in words. <br>Write the two claims it makes.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="9a2">
+  <h2 class="sthead"><span class="stno">9a2</span>4c’s definition, and what “exactly one” says</h2>
+  <p class="stands">Stands on 9a1, 4c (functions as sets of pairs) and 2e (equal pairs).</p>
+  <p data-pid="7509eb">4c's line reads: f is a function from A to B when three things are true. f ⊆ A × B. Every member of A is paired by f with something (every input has an output). And nothing is paired with two things (no input has two). It is written f : A → B, with f(x) naming the one thing paired with x. Nothing in this step replaces those lines. What it adds is a mark for “exactly one”, so that the two parts can be said as one, and then the consequences.</p>
+  <p class="eqline" data-pid="8e5a5e">From here on, ∃!x P(x) means ∃x P(x) ∧ ∀x ∀y (P(x) ∧ P(y) ⇒ x = y). Read it “there is exactly one x with P(x)”. The ! is part of the mark: it is not 4j's factorial n!. ∃!x ∈ a P(x) is short for ∃!x (x ∈ a ∧ P(x)), as 4a's shorthand. Like 1e's ∃, the mark ∃! makes a statement: it is packed shorthand for the some and the at-most-one written out above.</p>
+  <p data-pid="8a19d4">The first half is 1e's some; the second says any two things that pass are the same thing. <b>So “exactly one” is a some joined to an at-most-one, and it is used by keeping either part.</b> One-output technique: <b>for f ⊆ A × B, these three say the same thing: (i) every input has an output and no input has two; (ii) ∀x ∈ A ∃!y ((x, y) ∈ f); (iii) each member of A is the left entry of exactly one member of f.</b> (i) and (ii) are the same lines regrouped. ∃! unpacks into the some and the at-most-one, and 1e's techs pass an every through an and. The step from (ii) to (iii) is where pairs earn their keep:</p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the one-output technique, (ii) to (iii)">
+a \in A;\ \ \text{call } b \text{ with } (a, b) \in f @@ (ii), keep the some; a member of f with left entry a
+p, p' \in f \text{ with left entry } a @@ assume, to show at most one member
+p = (a, c),\ \ p' = (a, c') @@ f ⊆ A × B: each member is a pair, ﹀ ×
+c = c' @@ (ii), keep the at-most-one part
+\htmlClass{new}{p = p'} @@ the swap axiom: (a, c) = (a, c′) from c = c′
+\text{back: } (a, c), (a, c') \in f \Rightarrow (a, c) = (a, c') @@ (iii)'s at-most-one: two members with left entry a are one member
+c = c' \quad \blacksquare @@ equal-pairs (2e): equal pairs, equal parts; that is (ii)'s at-most-one
+  </pre>
+  <p data-pid="88303f">The way back needed equal-pairs: two pairs with the same left entry that are the same pair have the same right entry. That is why 2e proved equal pairs have equal parts before anything else. Form (iii) is the one in this rung's title: each input appears in exactly one pair.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · exactly one · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">9a2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">A = {1, 2, 3},  f = {(1, w), (2, w), (3, z)}</span></span>Show each input has exactly one output, half by half. <br>Say which half a further pair (1, z) would break.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="9a3">
+  <h2 class="sthead"><span class="stno">9a3</span>Domain, codomain, range</h2>
+  <p class="stands">Stands on 9a2 and 2c (merge).</p>
+  <p data-pid="988cf6">A set of pairs carries its own entries inside it. The pair (x, y) is {{x}, {x, y}}, so x is in {x}, which is in the pair, which is in f. Two unions, ⋃⋃f, gather every entry of every member of f. That gives a set to sift the inputs and the outputs from.</p>
+  <p class="eqline" data-pid="1128ad">From here on, for a set of pairs f, dom f names {x ∈ ⋃⋃f : ∃y ((x, y) ∈ f)} and ran f names {y ∈ ⋃⋃f : ∃x ((x, y) ∈ f)}. Read them “the domain of f” and “the range of f”. When f : A → B, A is the domain of f, and every member of A is an input. B is a codomain of f: a set the outputs are allowed to land in.</p>
+  <p data-pid="d6ded2">Pairs-fix-the-inputs technique: <b>if f : A → B, then dom f = A, and ran f = {f(x) : x ∈ A} ⊆ B.</b> The set {f(x) : x ∈ A} is 2g's shorthand, sifted from B.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the pairs-fix-the-inputs technique, the domain part">
+x \in A \Rightarrow (x, f(x)) \in f @@ 4c's line for f(x)
+x \in \{x\} \in (x, f(x)) \in f,\ \text{so } x \in \textstyle\bigcup\bigcup f @@ 2e's line for the pair; 2c's ⋃ twice, show an example each time
+\htmlClass{new}{x \in \operatorname{dom} f} @@ ︿ the sift: ∃y, with f(x) as the example
+x \in \operatorname{dom} f:\ \ \text{call } y,\ (x, y) \in f \subseteq A \times B @@ ﹀; use the some
+(x, y) = (u, v),\ u \in A;\ \ \text{so } x = u \in A @@ ﹀ × (2e), then equal-pairs
+\htmlClass{keep}{\operatorname{dom} f = A} \quad \blacksquare @@ an inclusion each way: double-inclusion (2a)
+  </pre>
+  <p data-pid="77aa50">The range part is the same chase with the right entries. y ∈ ran f gives (x, y) ∈ f for some x. So x ∈ A by the domain part, and y = f(x) by 4c's line. And f(x) ∈ B is 4c's fact. So the domain of a function is a fact about its pairs, and so is its range. The codomain is not. Codomain technique: <b>if f : A → B and B ⊆ B′, then f : A → B′; and f : A → ran f.</b> The first: f ⊆ A × B ⊆ A × B′, and the two promises speak only of inputs. The second: f ⊆ A × ran f by pairs-fix-the-inputs, and the promises are unchanged. <b>So a codomain is a choice, made when you write f : A → B, and the same set of pairs has many of them.</b> The range is the least: every codomain contains it. 9c's word “onto” depends on that choice, and you will see why it is worth keeping.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · dom and ran · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">9a3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f : {1, 2, 3} → ℕ,  f(x) = 2x</span></span>Find dom f and ran f. <br>Say why ran f is a part of the codomain and not all of it.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="9a4">
+  <h2 class="sthead"><span class="stno">9a4</span>Same pairs, same function</h2>
+  <p class="stands">Stands on 9a3 and 2a (same-members).</p>
+  <p data-pid="e58d7b">A function is a set, so by 2a's same-members axiom two functions are the same exactly when they have the same members. For functions that comes out as a test you can run. Equal-functions technique: <b>for f : A → B and g : C → D, f = g exactly when A = C and f(x) = g(x) for every x ∈ A.</b> 4c's same-outputs was the leftward half, for functions with the same A and B. Equal-functions needs no shared codomain, and goes both ways.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the equal-functions technique">
+f = g \Rightarrow A = \operatorname{dom} f = \operatorname{dom} g = C @@ rightward: pairs-fix-the-inputs twice; the swap axiom at the middle
+f = g \Rightarrow f(a) = g(a) @@ the swap axiom on the name “f(a)”; a was anything
+A = C,\ \forall a\ f(a) = g(a);\ \ p \in f @@ leftward: assume; chase a member of f
+p = (a, b),\ a \in A,\ b = f(a) @@ f ⊆ A × B; 4c's line for f(a)
+b = g(a),\ \text{so } p = (a, g(a)) \in g @@ the hypothesis; a ∈ C by A = C; 4c's line for g
+\htmlClass{new}{f = g} \quad \blacksquare @@ the same chase from g to f; then same-members (2a)
+  </pre>
+  <p data-pid="00a228"><b>So a function is fixed by its inputs and its values, and by nothing else.</b> How the values were found does not enter. That is the licence for every rewrite you will ever make to a formula: you are choosing another description of the same pairs. Take F, G : ℝ → ℝ with F(x) = x² and G(x) = (x + 1)² − 2x − 1. By 5h's square-of-a-sum read in ℝ, (x + 1)² = x² + 2x + 1, and collecting leaves x², at every real x. Same domain, same values: F = G, by equal-functions.</p>
+  <p data-pid="109a00">And the test cuts the other way. Let H : ℝ ∖ {1} → ℝ with H(x) = (x² − 1)/(x − 1), and J : ℝ → ℝ with J(x) = x + 1. Factoring the top by difference-of-squares gives (x − 1)(x + 1). Cancelling x − 1 is honest wherever x − 1 ≠ 0, so H(x) = J(x) at every input H has. But 1 ∈ dom J and 1 ∉ dom H. So by pairs-fix-the-inputs the domains differ, and H ≠ J: J has the pair (1, 2) and H has no pair with left entry 1. The cancellation was legal at every x but one, and that one is exactly the input H lacks. Likewise x ↦ x² on ℝ and x ↦ x² on [0, ∞) are two functions with one formula: different domains, different pairs. A formula is not a function until its inputs are named.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · the equal-functions technique · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">9a4.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="A = \{1, 2, 3\},"></span> <span data-tex-inline="B = \{w, z\},"></span> <span data-tex-inline="f = \{(1, w), (2, w), (3, z)\},"></span> <span data-tex-inline="g = \{(1, w), (2, z)\},"></span> <span data-tex-inline="h = \{(1, w), (1, z), (2, w), (3, w)\}"></span></span>Decide which of f, g and h are functions from A to B. <br>For each that is not, name the input that breaks a promise.</li><li><span class="givens"><span data-tex-inline="f = \{(x, x \cdot x) : x \in \mathbb{Z},\ -2 \le x \le 2\}"></span></span>Find the domain and the range of f.</li><li><span class="givens"><span data-tex-inline="F(x) = (x - 1)(x + 1) + 1 \text{ on } \mathbb{R},"></span> <span data-tex-inline="G(x) = x^2 \text{ on } \mathbb{R}"></span></span>By equal-functions, prove that F and G are one function.</li><li><span class="givens"><span data-tex-inline="H(x) = \dfrac{x^3 - x}{x^2 - 1},"></span> <span data-tex-inline="H \text{ is defined where } x^2 \ne 1 \text{.}"></span> <span data-tex-inline="I(x) = x \text{ on } \mathbb{R}"></span></span>Find every real at which H and I differ.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="9a5">
+  <h2 class="sthead"><span class="stno">9a5</span>No formula is required</h2>
+  <p class="stands">Stands on 9a4, 4j (counted functions) and 7d8 (definition by cases).</p>
+  <p data-pid="3c40c4">For about a century after 1748, “function” meant “formula”. A textbook of that year defined a function of a varying quantity as an expression put together in any way from that quantity and from numbers or fixed quantities. The definition you are using says nothing of the kind, and here are four functions that show what that freedom buys.</p>
+  <p data-pid="353e57">First, any pairing at all. By 4j's counted-functions, a set with 3 members has 2³ = 8 functions to 2 = {0, 1}. One of them is {(cat, 1), (dog, 0), (owl, 1)}. There is nothing to compute: the function is the list. Second, a function on the reals defined by cases. Let q : ℝ → ℝ take x to 1 if x is rational (8a's word: x = r* for some fraction r), and to 0 if not. 7d's licence to define by cases on any statement makes this name honest, and rule-makes-a-function makes it a function. So q(7/5) = 1, and q(√2) = 0, since √2 is irrational (hole's-cut-is-√2 and hole-is-no-fraction's-cut). This function was given in 1829 as an example of what a function might be. Between any two reals there is a fraction (fraction-between), and an irrational too. (Take r + √2/n, for a fraction r between them and n large by everyday-counting-passes. It is irrational, or √2 would be a fraction.) So its values jump back and forth in every stretch of the line, however short. Third, a function nobody can evaluate. Let c : ℝ → 2 take every real to ⟦G⟧, 7b's mark of the two-primes guess G (Goldbach's). By every-mark-is-a-bit, ⟦G⟧ is 0 or 1. So c is a function with exactly one output at each input, the same output everywhere, and no one alive can tell you what it is.</p>
+  <p data-pid="7a493f">Fourth, and strongest: most functions have no formula at all. Let 𝒟 name the set of functions from ℕ to 2, sifted from 𝒫(ℕ × 2) by 4c's condition (6a's curly capitals: a collection of sets). Imagine a list of members of 𝒟, one for each number. It is a function F : ℕ → 𝒟, with F(n) the member listed at n. Diagonal technique: <b>for every F : ℕ → 𝒟 there is a d ∈ 𝒟 with d ≠ F(n) for every number n.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the diagonal technique (Cantor's)">
+d(n) = 1 \text{ if } F(n)(n) = 0,\ \ d(n) = 0 \text{ if not} @@ a definition by cases on a decidable statement: F(n)(n) ∈ 2, so “= 0” is decidable by settled-order (7d's licence would allow any statement; none is needed)
+d \in \mathcal D @@ rule-makes-a-function: each d(n) is in 2
+n \in \mathbb N;\ \ \text{assume } \htmlClass{new}{d = F(n)} @@ to refute: suppose d is the function listed at n
+d(n) = F(n)(n) @@ the swap axiom, at the input n
+F(n)(n) = 0:\ \ d(n) = 1 \ne 0 @@ the first case: next-never-empty gives 1 ≠ 0
+F(n)(n) = 1:\ \ d(n) = 0 \ne 1 @@ the second case, by the listing of 2 = {0, 1}
+\bot;\ \ \htmlClass{keep}{d \ne F(n)} \quad \blacksquare @@ clash in each case; refute; n was anything
+  </pre>
+  <p data-pid="df4865">d differs from the function listed at 0 at the input 0, from the one listed at 1 at the input 1, and so on down the diagonal of the table of values. <b>No list indexed by the counting numbers holds every function from ℕ to 2.</b> No case split on an undecided statement was used; the column is constructive. Now the moral, said in words. A formula is a finite string of marks drawn from a finite stock, so formulas can be listed one per number. List the shortest first, and strings of the same length in the order of their marks, as 6c listed its descriptions. Put at n the function the n-th formula names, if it names a member of 𝒟, and the function with every value 0 otherwise. Diagonal hands you a d no formula names. The ladder makes “formula” exact only much later; the argument needs no more than “a finite string of marks”. Its accepted name is Cantor’s diagonal argument, for the diagonal of the table it reads.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · no formula is required · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · left: a set of pairs, drawn two ways · right: the diagonal (Cantor’s)</div>
+    <div class="panel">
+      <div class="chips" role="group" aria-label="presets" id="fch"></div>
+      <canvas id="cvF"></canvas>
+      <div class="cap">Top: the inputs A on the left, the allowed outputs B on the right; an arc for each pair. Bottom: the same pairs in 2g's grid, a row for each input, a column for each output. Tap a cell of the grid, or an input and then an output, to add or remove that pair. A row turns teal when its input has exactly one output, ember when it has none or two. Outputs used are ringed gold: they make up the range.</div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+    <div class="panel">
+      <canvas id="cvD"></canvas>
+      <div class="chips" role="group" aria-label="diagonal" id="dch"></div>
+      <div class="cap">Each row is a function F(n) from ℕ to 2, its values at the inputs 0 to 7 (the rest of each row, and the rows past 5, are off the step). Tap a value to switch it. Gold: the diagonal values F(n)(n). The ember row d switches each diagonal value, so it differs from row n at input n. Try to make d one of the rows: copy it in, and d changes.</div>
+      <div class="eqbox" id="eqD"></div>
+    </div>
+  </section>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · connections, not families</div>
+    <p data-pid="15a0d0">A family name is an average. “Oak” covers every oak that ever grew, and no single oak is the average oak. The same wood is a tree, a plank and a fire: its family name stays put, and what it does changes. This step defines a function the second way, by what it does. A function is its pairs, what it does to each input, and not its formula or its name. x ↦ (x + 1)² − 2x and x ↦ x² + 1, on ℝ, are written differently and have the same pairs. They are one function.</p>
+    <p data-pid="4c8002"><b>Define a thing twice: by its family, and by what it does to whatever passes through it.</b></p>
+    <p data-pid="0ae097">A claim about cases you have not seen needs both. The family says what to expect; the connections say where the expectation is met.</p>
+    <p class="bait" data-pid="5183ad">“Squaring” on ℕ and “squaring” on ℤ share a name and a formula. Are they the same function?</p>
+  </aside>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · the universe, again</div>
+    <p data-pid="4983dc">3b counted the cells of the universe: finite at every tick, and never done. Now count something else: what the cells are doing. Number the cells in the order they arrive, 0, 1, 2, and so on. Give each cell one of two states, 0 or 1, hot or cold. A whole history of the universe is then a function from ℕ to 2. It is a member of 𝒟.</p>
+    <p data-pid="ef2883">The diagonal technique says no list holds every member of 𝒟. So no list holds every history. <b>The cells can be counted, though they never stop; the ways they can turn out cannot be counted at all.</b></p>
+    <p data-pid="8dd368">A triangle shows the same split. Cut it into three corner triangles and throw out the middle. Cut each corner the same way, and again, forever. At each stage the pieces are finite: 3, then 9, then 27. The stages can be counted. But a point of the finished figure is an endless list of choices: which corner, then which corner of that, and on. That is a function from ℕ to 3, and the diagonal runs on those just as well. The pieces at each stage are counted; the points are past counting.</p>
+    <p data-pid="cf5982">The universe runs both ways at once. Its extent is finite and calculable at every tick, and it never stops. Its variety of states can be described, by the rule that makes each next one, and it can never be counted. That is why 0c's ledger keeps totals: stuff, push and order. Totals can be estimated. The arrangements outrun every count.</p>
+    <p class="bait" data-pid="9666f8">At every stage the triangle has finitely many pieces, and there are only as many stages as numbers. Where do the extra points come from?</p>
+  </aside>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">9a5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="R = \{(x, y) \in \mathbb{R} \times \mathbb{R} : y \cdot y = x\},"></span> <span data-tex-inline="A = [0, \infty)"></span></span>Decide whether R is a function from A to the reals. <br>Find a part of the reals that, as the set of outputs, makes the same condition a function from A.</li><li><span class="givens"><span data-tex-inline="S = \{(x, y) \in \mathbb{R} \times \mathbb{R} : x = y \cdot y\}"></span></span>Decide whether S is a function from the reals to the reals.</li><li><span class="givens"><span data-tex-inline="q(x) = 1 \text{ at every fraction } x,"></span> <span data-tex-inline="q(x) = 0 \text{ at every irrational } x,"></span> <span data-tex-inline="r \text{ is a fraction and } x \text{ a}"></span> <span data-tex-inline="\text{real.}"></span> <span data-tex-inline="\text{Let } P \text{ be } q(r + \sqrt{2}) = 0."></span> <span data-tex-inline="\text{Let } Q \text{ be } q(x + r) = q(x)."></span></span>Prove P for every r, and Q for every x and r.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="9a6">
+  <h2 class="sthead"><span class="stno">9a6</span>Illegal moves</h2>
+  <p class="stands">Stands on 9a1 to 9a5.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\{(1, 4), (1, 6)\} \text{ is a function}\,? @@ the input 1 has two outputs: (ii)'s at-most-one fails, so “f(1)” names nothing
+\{(1, 4), (3, 0)\} : \{1, 2, 3\} \to \mathbb R\,? @@ the input 2 has no output: a set of pairs, a function from {1, 3}, not from {1, 2, 3}
+\{(1, 4), (2, 4)\} \text{ is not a function}\,? @@ it is one: two inputs may share an output. The promises speak only of inputs
+f(5) \text{ for } f : \{1, 2, 3\} \to \mathbb R\,? @@ 4c's line names f(x) only for x in the domain
+\tfrac{x^2 - 1}{x - 1} \text{ and } x + 1 \text{ are one function}\,? @@ different domains (pairs-fix-the-inputs): one lacks the input 1
+\text{a function is a formula}\,? @@ q, c and diagonal's d: functions with no formula, or none anyone can evaluate
+\text{the pairs fix the codomain}\,? @@ codomain: they fix the domain and the range; a codomain is chosen
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">9a6.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">{(1, 4), (1, 6)}</span></span>Is it a function? Say which promise fails. <br>Mend it in two different ways.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="9a7">
+  <h2 class="sthead"><span class="stno">9a7</span>Running it backwards</h2>
+  <p class="stands">Stands on 9a1 to 9a5.</p>
+  <p data-pid="e53f7d">Wanting to show a set of pairs is a function from A to B: check it is a part of A × B. Then for each input find an output. Then show any two outputs of one input are the same. Wanting to refute it: one input with no output, or one with two. Wanting f = g: compare domains (pairs-fix-the-inputs), then values at an arbitrary input (equal-functions). Wanting f ≠ g: one input in one domain and not the other, or one input with different values. Wanting a function with no formula: list some and run the diagonal. Found upward; written downward.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">9a7.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="A = \{\text{cat}, \text{dog}, \text{owl}\},"></span> <span data-tex-inline="B = \{0, 1\}"></span></span>Count the functions from A to B that take cat to 1.</li><li><span class="givens"><span data-tex-inline="A = \{\text{cat}, \text{dog}, \text{owl}\},"></span> <span data-tex-inline="B = \{0, 1\}"></span></span>Count the functions from A to B whose range is B.</li><li><span class="givens"><span data-tex-inline="f \text{ and } g \text{ are sets of pairs.}"></span></span>Prove that the domain of their union is the union of their domains.</li><li>Find sets of pairs f and g, each a function, whose union is not.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">9a.4.1</span><span class="tagq">build</span>Build diagonals of your own.<ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="F(n)(k) = 1 \text{ when } n \mid k,"></span> <span data-tex-inline="F(n)(k) = 0 \text{ otherwise},"></span> <span data-tex-inline="\text{Let } d \text{ be the diagonal of } F."></span></span>Find the first six values of d.</li><li><span class="givens"><span data-tex-inline="F : \mathbb{N} \to \mathcal{P}(\mathbb{N}),"></span> <span data-tex-inline="D = \{n \in \mathbb{N} : n \notin F(n)\}"></span></span>Prove that D is a value of F at no number.</li><li><span class="givens"><span data-tex-inline="A \text{ is any set.}"></span> <span data-tex-inline="F : A \to \mathcal{P}(A)"></span></span>Prove that some part of A is a value of F at no member of A.</li></ol></div>
+  <div class="chq"><span class="chid">9a.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="A = \varnothing,"></span> <span data-tex-inline="B = \{0, 1\},"></span> <span data-tex-inline="C = \{0\}"></span></span>Count the functions from A to B. <br>Count the functions from C to A.</div>
+  <div class="chq"><span class="chid">9a.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{If } f : A \to B \text{, then}"></span> <span data-tex-inline="\operatorname{dom} f = A \text{.}"></span> <span data-tex-inline="f \subseteq A \times B,"></span> <span data-tex-inline="\operatorname{dom} f = A"></span></span>Is f a function from A to B?</div>
+  <div class="chq"><span class="chid">9a.4.4</span><span class="tagq">seam</span>A plucked string has a sharp bend where the finger held it. Is its shape a function? <br>Is it one formula?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r09.html">← 9 · making functions</a><a href="r09b.html">9b · composing, and brackets don't matter →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>The textbook of 1748 is Euler’s. The function q, 1 on the rationals and 0 elsewhere, is Dirichlet’s, from 1829. The diagonal argument is Georg Cantor’s, from 1891. 6c’s listed descriptions follow Kurt Gödel.</p>
+  <aside class="voice para"><p>Euler defined a function of a varying quantity as an expression put together in any way from that quantity and from numbers or fixed quantities. The definition served for a century and still describes what most people picture.</p><cite>Euler, Introductio in analysin infinitorum (1748), vol. I, ch. 1, §4</cite></aside>
+  <aside class="voice para"><p>Cantor showed that from any list of endless sequences of two letters one can write down a sequence that differs from the first at its first place, from the second at its second place, and so on, so that it appears nowhere in the list. He drew from it that some collections are too large to be counted off one by one.</p><cite>Cantor, “Über eine elementare Frage der Mannigfaltigkeitslehre”, Jahresbericht der Deutschen Mathematiker-Vereinigung 1 (1891)</cite></aside>
+  <p data-pid="be3bbe">The triangle with its middles thrown out, forever, is Sierpiński’s triangle (Wacław Sierpiński, 1915). The cell size and tick are the Planck length and Planck time.</p>
+  <aside class="voice para"><p>Spivak opens his chapter on functions by calling the idea the most important in mathematics, offers “a rule” as a first description, and shows functions no reasonable rule produces. By the chapter's end he replaces “rule” by the definition used here: a collection of pairs in which no two different pairs have the same first member.</p><cite>Spivak, Calculus, ch. 3</cite></aside>
+  <p>Accepted names: the function q is the Dirichlet function; the diagonal technique is Cantor’s diagonal argument; the two-primes guess is Goldbach’s conjecture.</p>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper}=Rung;
+const R=String.raw;
+function size(cv,H){ const dp=window.devicePixelRatio||1, W=cv.clientWidth||300; cv.width=W*dp; cv.height=H*dp; cv.style.height=H+'px'; const c=cv.getContext('2d'); c.setTransform(dp,0,0,dp,0,0); return {c,W}; }
+/* ---------- left: a set of pairs ---------- */
+const A=['cat','dog','owl','ant'], B=['0','1','2'];
+let P=new Set(['cat|1','dog|0','owl|1','ant|2']); let pickA=null;
+const PRE=[['a function',['cat|1','dog|0','owl|1','ant|2']],['two outputs',['cat|1','dog|0','dog|2','owl|1','ant|2']],['a gap',['cat|1','owl|1','ant|2']],['one output for all',['cat|0','dog|0','owl|0','ant|0']],['clear',[]]];
+const fch=document.getElementById('fch');
+PRE.forEach(([lab,s],i)=>{ const b=document.createElement('button'); b.textContent=lab; if(i===0) b.className='on'; b.onclick=()=>{ P=new Set(s); pickA=null; [...fch.children].forEach(z=>z.classList.toggle('on',z===b)); drawF(); }; fch.appendChild(b); });
+const cvF=document.getElementById('cvF');
+let geo={};
+function drawF(){
+  const W0=cvF.clientWidth||300, H=350; const {c}=size(cvF,H); c.fillStyle=col('--card'); c.fillRect(0,0,W0,H);
+  c.font='12px IBM Plex Mono, monospace';
+  const xa=Math.min(110,W0*0.28), xb=W0-Math.min(110,W0*0.28), ya=i=>24+i*34, yb=j=>41+j*34;
+  geo={xa,xb,ya,yb,W0};
+  const outs=a=>B.filter(b=>P.has(a+'|'+b));
+  const used=new Set([...P].map(s=>s.split('|')[1]));
+  // arcs
+  [...P].forEach(s=>{ const [a,b]=s.split('|'); const i=A.indexOf(a), j=B.indexOf(b); const ok=outs(a).length===1;
+    c.strokeStyle=ok?col('--teal'):col('--ember'); c.lineWidth=2; c.beginPath(); c.moveTo(xa+8,ya(i)); c.bezierCurveTo((xa+xb)/2,ya(i),(xa+xb)/2,yb(j),xb-8,yb(j)); c.stroke(); });
+  A.forEach((a,i)=>{ const n=outs(a).length; c.beginPath(); c.arc(xa,ya(i),6,0,7); c.fillStyle=n===1?col('--teal'):col('--ember'); c.fill(); if(pickA===a){ c.strokeStyle=col('--ink'); c.lineWidth=2; c.beginPath(); c.arc(xa,ya(i),10,0,7); c.stroke(); }
+    c.fillStyle=col('--ink'); c.textAlign='right'; c.fillText(a,xa-12,ya(i)+4); });
+  B.forEach((b,j)=>{ c.beginPath(); c.arc(xb,yb(j),6,0,7); c.fillStyle=col('--muted'); c.fill(); if(used.has(b)){ c.strokeStyle=col('--gold'); c.lineWidth=2.2; c.beginPath(); c.arc(xb,yb(j),10,0,7); c.stroke(); }
+    c.fillStyle=col('--ink'); c.textAlign='left'; c.fillText(b,xb+14,yb(j)+4); });
+  c.fillStyle=col('--muted'); c.textAlign='center'; c.fillText('A',xa,ya(3)+28); c.fillText('B',xb,ya(3)+28);
+  // grid
+  const gy=196, cw=Math.min(54,(W0-90)/3), gx=W0/2-1.5*cw+20, rh=30;
+  geo.gx=gx; geo.gy=gy; geo.cw=cw; geo.rh=rh;
+  B.forEach((b,j)=>{ c.fillStyle=col('--muted'); c.textAlign='center'; c.fillText(b,gx+j*cw+cw/2,gy-6); });
+  A.forEach((a,i)=>{ const n=outs(a).length; c.fillStyle=n===1?col('--teal'):col('--ember'); c.globalAlpha=.12; c.fillRect(gx,gy+i*rh,3*cw,rh); c.globalAlpha=1;
+    c.fillStyle=col('--ink'); c.textAlign='right'; c.fillText(a,gx-8,gy+i*rh+rh/2+4);
+    B.forEach((b,j)=>{ c.strokeStyle=col('--grid'); c.lineWidth=1; c.strokeRect(gx+j*cw,gy+i*rh,cw,rh); if(P.has(a+'|'+b)){ c.beginPath(); c.arc(gx+j*cw+cw/2,gy+i*rh+rh/2,6,0,7); c.fillStyle=n===1?col('--teal'):col('--ember'); c.fill(); } }); });
+  // readout
+  const pairs=A.flatMap(a=>outs(a).map(b=>`(\\text{${a}}, ${b})`));
+  const L=[pairs.length?`f = \\{${pairs.join(', ')}\\}`:R`f = \varnothing`];
+  const none=A.filter(a=>outs(a).length===0), two=A.filter(a=>outs(a).length>1);
+  if(!none.length&&!two.length){ L.push(R`\htmlClass{keep}{f : A \to B}\ \ \text{(each input in exactly one pair)}`); }
+  else { if(none.length) L.push(`\\text{no output: } ${none.map(a=>`\\text{${a}}`).join(', ')}`); if(two.length) L.push(`\\text{two outputs: } ${two.map(a=>`\\text{${a}}`).join(', ')}`); L.push(R`\htmlClass{new}{\text{not a function from } A \text{ to } B}`); }
+  const dom=A.filter(a=>outs(a).length>0), ran=B.filter(b=>used.has(b));
+  L.push(`\\operatorname{dom} f = \\{${dom.map(a=>`\\text{${a}}`).join(', ')}\\},\\ \\ \\operatorname{ran} f = \\{${ran.join(', ')}\\}`);
+  tex(document.getElementById('eqF'),'\\begin{gathered}'+L.join('\\\\ ')+'\\end{gathered}',true);
+}
+cvF.addEventListener('pointerdown',e=>{ const Rc=cvF.getBoundingClientRect(), px=e.clientX-Rc.left, py=e.clientY-Rc.top; const g=geo;
+  if(py>=g.gy){ const i=Math.floor((py-g.gy)/g.rh), j=Math.floor((px-g.gx)/g.cw); if(i>=0&&i<A.length&&j>=0&&j<B.length){ const k=A[i]+'|'+B[j]; P.has(k)?P.delete(k):P.add(k); pickA=null; drawF(); } return; }
+  for(let i=0;i<A.length;i++){ if(Math.hypot(px-g.xa,py-g.ya(i))<18){ pickA=pickA===A[i]?null:A[i]; drawF(); return; } }
+  for(let j=0;j<B.length;j++){ if(Math.hypot(px-g.xb,py-g.yb(j))<18&&pickA){ const k=pickA+'|'+B[j]; P.has(k)?P.delete(k):P.add(k); pickA=null; drawF(); return; } } });
+new ResizeObserver(drawF).observe(cvF);
+/* ---------- right: the diagonal ---------- */
+const NR=6, NC=8;
+let T=[[0,1,1,0,1,0,0,1],[1,0,1,0,0,1,1,0],[0,0,0,1,1,1,0,0],[1,1,1,1,1,1,1,1],[0,1,0,1,0,1,0,1],[1,0,0,1,0,0,1,0]];
+const dv=()=>T.map((r,n)=>1-r[n]);
+const cvD=document.getElementById('cvD'); let gd={};
+function drawD(){
+  const W0=cvD.clientWidth||300, H=250; const {c}=size(cvD,H); c.fillStyle=col('--card'); c.fillRect(0,0,W0,H);
+  const lx=58, cw=Math.min(34,(W0-lx-26)/NC), rh=28, y0=26; gd={lx,cw,rh,y0};
+  c.font='12px IBM Plex Mono, monospace'; c.textAlign='center'; c.fillStyle=col('--muted');
+  for(let j=0;j<NC;j++) c.fillText(j,lx+j*cw+cw/2,y0-8); c.fillText('⋯',lx+NC*cw+10,y0-8);
+  const d=dv();
+  for(let i=0;i<=NR;i++){ const y=y0+i*rh+(i===NR?10:0), row=i<NR?T[i]:null;
+    c.textAlign='right'; c.fillStyle=i<NR?col('--ink'):col('--ember'); c.fillText(i<NR?`F(${i})`:'d',lx-8,y+rh/2+4);
+    for(let j=0;j<NC;j++){ const x=lx+j*cw; c.strokeStyle=col('--grid'); c.lineWidth=1; c.strokeRect(x,y,cw,rh);
+      let v, show=true; if(i<NR) v=row[j]; else { if(j<NR) v=d[j]; else show=false; }
+      const diag=i<NR&&i===j; if(diag){ c.strokeStyle=col('--gold'); c.lineWidth=2.4; c.strokeRect(x+2,y+2,cw-4,rh-4); }
+      if(i===NR&&j<NR){ c.fillStyle=col('--ember'); c.globalAlpha=.15; c.fillRect(x,y,cw,rh); c.globalAlpha=1; }
+      c.textAlign='center'; c.fillStyle=i===NR?col('--ember'):(diag?col('--gold'):col('--ink')); c.font=(diag||i===NR?'600 ':'')+'13px IBM Plex Mono, monospace'; c.fillText(show?v:'?',x+cw/2,y+rh/2+5); c.font='12px IBM Plex Mono, monospace'; }
+    c.fillStyle=col('--muted'); c.fillText('⋯',lx+NC*cw+10,y+rh/2+4); }
+  c.fillStyle=col('--muted'); c.textAlign='left'; c.fillText('⋮ rows past 5',lx,y0+NR*rh+6);
+  const L=[`d = ${d.join('')}\\cdots`];
+  L.push(d.map((v,n)=>`d(${n}) \\ne F(${n})(${n})`).slice(0,3).join(',\\ ')+R`,\ \ldots`);
+  const same=T.findIndex(r=>r.slice(0,NR).every((v,j)=>v===d[j]));
+  L.push(same>=0?`\\text{row ${same} agrees with d on 0–5, except at } ${same}?\\ \\text{impossible}`:R`\htmlClass{keep}{d \ne F(n) \text{ for every row } n}\ \ \text{(diagonal)}`);
+  tex(document.getElementById('eqD'),'\\begin{gathered}'+L.join('\\\\ ')+'\\end{gathered}',true);
+}
+const dch=document.getElementById('dch');
+for(let k=0;k<3;k++){ const b=document.createElement('button'); b.textContent=`copy d into row ${k}`; b.onclick=()=>{ const d=dv(); for(let j=0;j<NR;j++) T[k][j]=d[j]; drawD(); }; dch.appendChild(b); }
+cvD.addEventListener('pointerdown',e=>{ const Rc=cvD.getBoundingClientRect(), px=e.clientX-Rc.left, py=e.clientY-Rc.top; const g=gd; const i=Math.floor((py-g.y0)/g.rh), j=Math.floor((px-g.lx)/g.cw); if(i>=0&&i<NR&&j>=0&&j<NC){ T[i][j]=1-T[i][j]; drawD(); } });
+new ResizeObserver(drawD).observe(cvD);
+if(window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{ drawF(); drawD(); });
+drawF(); drawD();
+
+/* ---------- slides ---------- */
+const N='\\htmlClass{new}', K='\\htmlClass{keep}';
+stepper('#sl1',[
+  {k:'teal',kl:'from 4c',t:R`f : A \to B:\ \ f \subseteq A \times B,\ \text{every input has an output, none has two}`,n:`4c's line. The two promises speak of inputs only.`},
+  {k:'ember',kl:'exactly one',t:R`${N}{\exists! x\, P(x)}:\ \ \exists x\, P(x) \land \forall x \forall y\,(P(x) \land P(y) \Rightarrow x = y)`,n:`A some, joined to an at-most-one. Used by keeping either part.`},
+  {k:'ember',kl:'the one-output technique',t:R`\forall x \in A\ \exists! y\ ((x, y) \in f)`,n:`4c's two parts, as one. Equivalently: each input is the left entry of exactly one member of f. The way back uses equal-pairs.`}
+],{title:'The slides · exactly one · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'dom and ran',t:R`\operatorname{dom} f = \{x \in \textstyle\bigcup\bigcup f : \exists y\,((x, y) \in f)\}`,n:`The entries of the pairs, gathered by two unions, then sifted. ran f the same with right entries.`},
+  {k:'ember',kl:'the pairs-fix-the-inputs technique',t:R`f : A \to B \;\Rightarrow\; ${N}{\operatorname{dom} f = A},\ \ \operatorname{ran} f = \{f(x) : x \in A\}`,n:`The pairs fix the inputs and the outputs used.`},
+  {k:'ember',kl:'the codomain technique',t:R`f : A \to B,\ B \subseteq B' \;\Rightarrow\; f : A \to B'`,n:`The codomain is chosen, not fixed by the pairs. And always f : A → ran f.`}
+],{title:'The slides · dom and ran · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'the equal-functions technique',t:R`f = g \;\Leftrightarrow\; A = C \land \forall x \in A\ (f(x) = g(x))`,n:`Rightward by pairs-fix-the-inputs and the swap axiom; leftward by chasing a pair, then same-members.`},
+  {k:'ember',kl:'a rewrite',t:R`(x + 1)^2 - 2x - 1 = x^2 \text{ for every real } x`,n:`Same domain, same values: one function, two descriptions.`},
+  {k:'ember',kl:'a cancel',t:R`H(x) = \tfrac{x^2 - 1}{x - 1} \text{ on } \mathbb R \setminus \{1\},\ \ J(x) = x + 1 \text{ on } \mathbb R`,n:`They agree wherever H has an input. But 1 ∈ dom J, 1 ∉ dom H: ${'H ≠ J'}, by pairs-fix-the-inputs.`}
+],{title:'The slides · the equal-functions technique · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'any pairing',t:R`\{(\text{cat}, 1), (\text{dog}, 0), (\text{owl}, 1)\}`,n:`One of the 2³ = 8 functions from a set of three to 2 (counted-functions). Nothing to compute.`},
+  {k:'ember',kl:'rational or not',t:R`q(x) = 1 \text{ if } x \text{ is rational},\ \ 0 \text{ if not}`,n:`A definition by cases (7d). q(7/5) = 1, q(√2) = 0.`},
+  {k:'ember',kl:'unknown value',t:R`c(x) = [\![G]\!] \text{ for every real } x`,n:`A function to 2, by every-mark-is-a-bit: one output, the same everywhere, which nobody can name.`},
+  {k:'ember',kl:'the diagonal',t:R`d(n) = 1 \text{ if } F(n)(n) = 0,\ \ 0 \text{ if not}`,n:`Built from any list F : ℕ → 𝒟.`},
+  {k:'ember',kl:'the diagonal technique',t:R`d = F(n) \Rightarrow d(n) = F(n)(n) \Rightarrow ${N}{\bot}`,n:`d differs from F(n) at n. No list holds every function from ℕ to 2.`},
+  {k:'ember',kl:'the moral',t:R`\text{formulas can be listed} \;\Rightarrow\; \text{some } d \text{ has no formula}`,n:`A formula is a finite string of marks; list them shortest first. diagonal gives a function none of them names.`}
+],{title:'The slides · no formula is required · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>13i · Products and quotients</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+#cvA,#cvB{touch-action:none}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r13h.html">← 13h powers, constants and sums</a><a href="r13j.html">next: 13j the chain rule by hand →</a></p>
+  <div class="tags"><span class="tag tech">13i · technique</span></div>
+  <h1>Products and quotients</h1>
+  <p>13c proved the product rule from 5h's grid of cells, and 13f built the quotient rule from it and the chain rule. This step makes both rules quick in the hands. The product rule is the two one-change cells: each function times the other's slope, added. Three factors give three such cells. The quotient rule is bottom times the top's slope, less top times the bottom's slope, over the bottom squared, and its order and its square both have reasons you can see. Then three roads to one quotient's slope, which check each other; the slips that look like rules; and answers read backwards to the product or quotient that made them.</p>
+  <p class="gesture">For a product, each function times the other's slope, added. For a quotient, bottom times top's slope less top times bottom's slope, over the bottom squared. Its sign is the top's.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r13c.html">13c</a> (product for slopes, the one-change cells, the leftover cell), <a href="r13f.html">13f</a> (reciprocal for slopes, quotient for slopes), <a href="r13h.html">13h</a> (the power rule for every fraction, splitting a quotient), <a href="r13d.html">13d</a> (polynomial-slope, constant-factor for slopes, slopes-add), <a href="r13e.html">13e</a> (chain for slopes, 1/(x² + 1)), <a href="r10c.html">10c</a> (f g and f/g as functions), <a href="r05g.html">5g</a> (fractions-of-rationals, one bottom), <a href="r08f.html">8f</a> (square-never-negative). <a href="r13j.html">13j</a> puts chains inside products; <a href="r13l.html">13l</a> takes the “multiply up” road further.</p></div>
+</header>
+
+<section class="class step" data-step="13i1">
+  <h2 class="sthead"><span class="stno">13i1</span>Each times the other’s slope</h2>
+  <p class="stands">Stands on 13c (product for slopes) and 13d (polynomial-slope).</p>
+  <p class="eqline" data-pid="c23c16">Page letters, said out loud. In this step u, v and w name functions whose inputs and outputs are reals, each with a slope at the input in hand. 13e's w was its helper, on that step only; here w is a third factor.</p>
+  <p data-pid="593b58">13c split the new product of u and v at x + h into four cells. There is the old product u v, two one-change cells Δu · v and u · Δv, and the leftover cell Δu · Δv. Divided by h, the one-change cells head to u′v and uv′. The leftover cell goes to 0 in the limit, because a slope means no gap. So product for slopes: (uv)′ = u′v + uv′.</p>
+  <p data-pid="07335d">One popular calculus book reads the rule as two separate experiments. Keep the first factor fixed while the second changes. Then keep the second fixed while the first changes, and add the two results.</p>
+  <p data-pid="1b5cf0">That is the two one-change cells in words: each cell changes one factor and keeps the other at its old value. Here it is on work you can check by expanding.</p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the product rule in use">
+y = (x^2 + 1)(x^3 - 2) @@ u = x² + 1, v = x³ − 2
+u' = 2x,\ \ v' = 3x^2 @@ polynomial-slope (13d)
+y' = \htmlClass{new}{2x\,(x^3 - 2)} + \htmlClass{new}{(x^2 + 1)\,3x^2} @@ product for slopes: u′ times v, plus u times v′
+= 2x^4 - 4x + 3x^4 + 3x^2 = 5x^4 + 3x^2 - 4x @@ expand by the grid of cells; collect
+y = x^5 + x^3 - 2x^2 - 2 \;\Rightarrow\; y' = \htmlClass{keep}{5x^4 + 3x^2 - 4x} @@ the check: multiply out first, then polynomial-slope. They agree
+y = \sqrt{x}\,(x + 4),\ \ \text{at } 4 @@ a root as one factor (x > 0)
+y'(4) = \dfrac{1}{2\sqrt4}\cdot 8 + \sqrt4 \cdot 1 = 2 + 2 = \htmlClass{new}{4} @@ product for slopes with slope-of-√ and slope-of-a-line. Check: x^(3/2) + 4x^(1/2) has slope (3/2) · 2 + 2 · ½ = 4 at 4 (fraction-power for slopes)
+  </pre>
+  <p data-pid="51769f">When you can multiply out, do, and use it as a check. The rule earns its keep when you cannot: when a factor is a root, a fraction, or, on 13j, a chain.</p>
+  <p data-pid="4a5332">The tempting rule, (uv)′ = u′v′, keeps the one cell that vanishes and throws away both that stay, as 13c said. Test it on 3x: 0 · 1 = 0 instead of 3. On x · x: 1 · 1 = 1 instead of 2x. A rule that fails on 3x is not a rule. Two smaller slips: dropping a cell, and a factor taken twice. Dropping a cell writes u′v alone, which is right only when v is a constant, constant-factor for slopes's case. A factor taken twice writes u′v′ + uv′. <b>Say the gesture as you write: this one, times that one's slope.</b> Each factor appears once plain and once as a slope.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · product for slopes · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · left: a product or quotient, with its tangent line · right: the pieces of its slope, and the slope itself</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="chips" id="fch"></div>
+      <canvas id="cvA"></canvas>
+      <div class="kn">
+        <span class="m">x₀</span><input type="range" id="kx" min="-3" max="3" step="0.05" value="0.5"><output id="ox"></output>
+      </div>
+      <div class="cap">Ink: y = u · v or u / v. Ember: its tangent line at x₀, with the dot at (x₀, y(x₀)). Drag on either picture to move x₀.</div>
+    </div>
+    <div class="panel">
+      <canvas id="cvB"></canvas>
+      <div class="cap">For a product: teal u′ · v and gold u · v′, the two one-change cells' limits, and ink their sum, the slope y′. For a quotient: teal the top u′v − uv′, gold the bottom v², which never falls below 0, and ink their quotient y′. The ink crosses 0 exactly where the teal does.</div>
+      <div class="verdict" id="vd"></div>
+    </div>
+  </div>
+  <div class="eqbox" id="eq"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">13i1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">y = (x + 3)(x^2 − 1)</span></span>Find y′(2) by product for slopes. <br>Check by multiplying out first.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13i2">
+  <h2 class="sthead"><span class="stno">13i2</span>Three factors</h2>
+  <p class="stands">Stands on 13i1.</p>
+  <p data-pid="586897">Three-factors technique: <b>if u, v and w have slopes at x, then (uvw)′ = u′vw + uv′w + uvw′.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the three-factors technique">
+uvw = u\,(vw) @@ regroup for times on ℝ, input by input; equal-functions: the same function
+(uvw)' = u'\,(vw) + u\,(vw)' @@ product for slopes, with vw as the second factor (it has a slope, by product for slopes)
+= u'vw + u\,(\htmlClass{new}{v'w + vw'}) @@ product for slopes again, inside
+= \htmlClass{keep}{u'vw + uv'w + uvw'} \quad \blacksquare @@ spread on ℝ
+  </pre>
+  <p data-pid="ded4f9">In the grid of cells, (u + Δu)(v + Δv)(w + Δw) has eight cells, as 13g's cube did. One has no change, three have one change, three have two, and one has three. Divided by h, only the three one-change cells stay: each changes one factor and keeps the other two. With u = v = w = x it is 13g's 3x² again. Worked: x(x + 1)(x + 2) at 1 has slope 1 · 2 · 3 + 1 · 1 · 3 + 1 · 2 · 1 = 6 + 3 + 2 = 11. Multiplied out it is x³ + 3x² + 2x, with slope 3 + 6 + 2 = 11.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · three factors · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13i2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">y = x(x − 1)(x − 2)</span></span>Find y′(3) by three-factors. <br>Say which of the eight cells each term comes from.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13i3">
+  <h2 class="sthead"><span class="stno">13i3</span>The quotient rule</h2>
+  <p class="stands">Stands on 13i2 and 13f (quotient for slopes).</p>
+  <p data-pid="0605ac">13f's quotient for slopes: where v(x) ≠ 0, (u/v)′ = (u′v − uv′)/v².</p>
+  <p data-pid="775dc5">Said in words, the order runs like this. Multiply the bottom by the slope of the top, then the top by the slope of the bottom. Take the second from the first, and divide by the square of the bottom.</p>
+  <p data-pid="084093">The order matters because taking away cannot be turned about. A check catches a reversed order. 1/x has slope −1/x² (slope-of-one-over-x). With u = 1 and v = x the rule gives (0 · x − 1 · 1)/x² = −1/x². Reverse the order in the top and you get +1/x². Yet every chord of 1/x whose two inputs s and t lie on one side of 0 has the negative slope −1/(st).</p>
+  <pre class="lines" data-k="ember" data-label="this step: the quotient rule in use">
+y = \dfrac{2x + 3}{3x + 2} \quad (x \ne -\tfrac23) @@ top u = 2x + 3, bottom v = 3x + 2
+u' = 2,\ \ v' = 3 @@ slope-of-a-line
+y' = \dfrac{\htmlClass{new}{(3x + 2)\cdot 2 - (2x + 3)\cdot 3}}{(3x + 2)^2} @@ quotient for slopes: bottom times top's slope, less top times bottom's slope, over the bottom squared
+= \dfrac{6x + 4 - 6x - 9}{(3x + 2)^2} = \htmlClass{new}{\dfrac{-5}{(3x + 2)^2}} @@ the x's cancel in the top; leave the bottom squared
+  </pre>
+  <p data-pid="63ba93">Quotient-slope-sign technique: <b>the slope of a quotient has the sign of the top of the quotient rule.</b> Precisely: where v(x) ≠ 0, the slope of u/v at x is positive exactly when u′v − uv′ is positive there. It is negative exactly when that is negative, and 0 exactly when it is 0. The bottom v(x)² is positive, by 8f's square-never-negative and 5d's zero-product read in ℝ, since v(x) ≠ 0. And dividing by a positive real keeps the sign (8d's order-and-arithmetic-agree, positive-reciprocal on ℚ). So (2x + 3)/(3x + 2) has a negative slope at every input, on each side of −⅔, without exception. You can say that before drawing anything.</p>
+  <p data-pid="018b58">When the top is a constant, the rule shortens to 13f's reciprocal for slopes: (c/v)′ = −c v′/v². So 3/(x² + 1) has slope −3 · 2x/(x² + 1)² = −6x/(x² + 1)². The first product of the full rule, (x² + 1) · 0, was always going to vanish.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · the quotient rule · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13i3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">y = (x − 1)/(x + 1)</span></span>Find y′ by quotient for slopes. <br>Use quotient-slope-sign to say where it is positive.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13i4">
+  <h2 class="sthead"><span class="stno">13i4</span>Three roads to one slope</h2>
+  <p class="stands">Stands on 13i3.</p>
+  <p data-pid="326b07">Take y = x/(x² + 1). <b>Every road below was proved from the one definition, so they cannot disagree, and that makes each a check on the others.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: three roads">
+\begin{aligned}&\text{road 1 (quotient for }\\ &\quad \text{slopes):}\ \ \dfrac{(x^2 + 1)\cdot 1 - x \cdot 2x}{(x^2 + 1)^2} \\ &\quad = \htmlClass{new}{\dfrac{1 - x^2}{(x^2 + 1)^2}}\end{aligned} @@ bottom times top's slope, less top times bottom's slope, over the bottom squared
+\begin{aligned}&\text{road 2 (product for slopes, reciprocal for}\\ &\quad\text{slopes):}\ \ 1\cdot\dfrac{1}{x^2 + 1} + x \cdot \dfrac{-2x}{(x^2 + 1)^2}\end{aligned} @@ y = x · (1/(x² + 1)); reciprocal for slopes for the second factor, as 13e found by naming the inside r
+= \dfrac{(x^2 + 1) - 2x^2}{(x^2 + 1)^2} = \htmlClass{keep}{\dfrac{1 - x^2}{(x^2 + 1)^2}} @@ one bottom (5g): the same
+\text{road 3 (multiply up):}\ \ y\,(x^2 + 1) = x @@ multiplying-keeps-answers: true at every input, since x² + 1 ≠ 0
+y'\,(x^2 + 1) + y \cdot 2x = 1 @@ product for slopes on the left (y has a slope: road 1 proved it), slope-of-a-line on the right; slopes-decided-near: equal functions, equal slopes
+y' = \dfrac{1 - 2xy}{x^2 + 1} = \dfrac{1 - \frac{2x^2}{x^2 + 1}}{x^2 + 1} = \htmlClass{keep}{\dfrac{1 - x^2}{(x^2 + 1)^2}} @@ solve for y′ (adding-keeps-answers, multiplying-keeps-answers); substitute for the expression y = x/(x² + 1); fractions-of-rationals
+  </pre>
+  <p data-pid="775861">At 0 the slope is 1, at 1 it is 0, at 2 it is −3/25. Quotient-slope-sign reads the signs off the top 1 − x² alone: positive between −1 and 1, negative outside.</p>
+  <p data-pid="535e8c">The third road deserves its caution. Multiplying up and taking slopes of both sides needs y to have a slope first: product for slopes's hypotheses ask for it. Here road 1 had already proved it. The third road recomputes a slope known to exist; it never proves that one exists. 13l makes this same caution the licence for its method.</p>
+  <p data-pid="8e271f">Every road checks every other. Take x⁵/x², which is x³ for x ≠ 0 (8i's whole-exponent):</p>
+  <pre class="lines" data-k="ember" data-label="this step: a check three ways">
+\Big(\dfrac{x^5}{x^2}\Big)' = \dfrac{x^2 \cdot 5x^4 - x^5 \cdot 2x}{x^4} = \dfrac{3x^6}{x^4} = \htmlClass{new}{3x^2} @@ quotient for slopes; collect the top; whole-exponent
+\big(x^5 \cdot x^{-2}\big)' = 5x^4 \cdot x^{-2} + x^5 \cdot (-2x^{-3}) = 5x^2 - 2x^2 = \htmlClass{keep}{3x^2} @@ product for slopes with negative-powers
+(x^3)' = \htmlClass{keep}{3x^2} @@ power for slopes, after whole-exponent. Three roads, one slope
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · three roads · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13i4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">y = 1/(x^2 + 4)</span></span>Find y′(1) by quotient for slopes and by reciprocal for slopes. <br>Check that the two roads agree.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13i5">
+  <h2 class="sthead"><span class="stno">13i5</span>Choosing the road</h2>
+  <p class="stands">Stands on 13i1 to 13i4.</p>
+  <p data-pid="8d2058"><b>Before reaching for the quotient rule, ask whether the fraction can be made a sum.</b> If the bottom is a single power of x, split it, as 13h did: (x³ − 5x + 2)/x² = x − 5x⁻¹ + 2x⁻², slope 1 + 5x⁻² − 4x⁻³. If the top is a constant, use reciprocal for slopes. If the bottom is a sum, splitting is illegal (5g: the reciprocal of a sum is not the sum of the reciprocals), and you need the rule. The roads always agree; picking the short one is the manipulating part.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13i5.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = x^3(2x - 1),"></span> <span data-tex-inline="g(x) = \sqrt{x} \cdot (x + 5)"></span></span>Using product for slopes, find f's slope at 1 and g's slope at 4. <br>Check the first by multiplying out.</li><li><span class="givens"><span data-tex-inline="f(x) = x(x - 1)(x + 3)"></span></span>Using three-factors, find f's slope at 2, and check it by multiplying out.</li><li><span class="givens"><span data-tex-inline="f(x) = \frac{x + 1}{x - 1},"></span> <span data-tex-inline="g(x) = \frac{x^2 - 1}{x^2 + 1}"></span></span>Using quotient for slopes, find each slope, simplifying the tops. <br>Using quotient-slope-sign, find where each slope is positive.</li><li><span class="givens"><span data-tex-inline="f(x) = \frac{x^3 - 5x + 2}{x^2}"></span></span>Find f's slope by splitting and by quotient for slopes, and compare the two at 1.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13i6">
+  <h2 class="sthead"><span class="stno">13i6</span>Illegal moves</h2>
+  <p class="stands">Stands on 13i1 to 13i5.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+(uv)' = u'v'\,? @@ 3x: 0 · 1 = 0, not 3. It keeps only the leftover cell, the one that vanishes
+\big(x^2(x + 1)\big)' = 2x \cdot 1\,? @@ the same slip. True slope 2x(x + 1) + x² = 3x² + 2x: at 2, 16, not 4
+\Big(\dfrac{u}{v}\Big)' = \dfrac{u'}{v'}\,? @@ x²/x is x, slope 1; the slip gives 2x
+\dfrac{uv' - u'v}{v^2}\,? @@ the order reversed: right size, wrong sign. 1/x would climb
+\dfrac{u'v - uv'}{v}\,? @@ the square forgotten. For 1/x it gives −1/x, which is −½ at 2, not −¼
+\dfrac{x^2 + 1}{x^2} = 1\,? @@ the bottom divides the whole top. Split: 1 + x⁻², slope −2x⁻³
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13i6.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = x \cdot (1 - x)^2"></span></span>By algebra, find the inputs where the two one-change cells cancel, and the slope there.</li><li><span class="givens"><span data-tex-inline="\text{slip: } \frac{u'v - uv'}{v}"></span></span>Find a v for which the slip gives the right answer at every input, and one where it fails.</li><li><span class="givens"><span data-tex-inline="\text{Claim: } \frac{x^2 + 4}{x^2} = 4,"></span> <span data-tex-inline="\text{so the slope is } 0"></span></span>Find the line that breaks, repair it by splitting, and give the slope at 2.</li><li><span class="givens"><span data-tex-inline="f(x) = \frac{3}{x^2 + 1}"></span></span>Show that quotient for slopes's first product vanishes, and find the slope that makes it vanish.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13i7">
+  <h2 class="sthead"><span class="stno">13i7</span>Running it backwards</h2>
+  <p class="stands">Stands on 13i1 to 13i5.</p>
+  <p data-pid="a712a6">A product-rule answer has a signature: two terms, each with one factor plain and one factor's slope. Each factor is plain in one term and a slope in the other. Read 2x(x³ + 1) + x² · 3x². 2x is the slope of x², standing beside x³ + 1. 3x² is the slope of x³ + 1, standing beside x². So it is the slope of x²(x³ + 1). A quotient answer's signature is the squared bottom and the minus sign. In (x · 2 − (2x − 1) · 1)/x² the bottom is x and the top 2x − 1, so it came from (2x − 1)/x. But (2x − 1)/x = 2 − 1/x, and −1/x has the same slope: running backwards finds the function only up to a lift. Rung 16 reads product answers backwards on purpose.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · backwards · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13i7.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{a slope:}"></span> <span data-tex-inline="\tfrac12 x^{-1/2} \cdot (x^2 + 1) + \sqrt{x} \cdot 2x"></span></span>Find the product, and its slope at 1.</li><li><span class="givens"><span data-tex-inline="\text{a slope:}"></span> <span data-tex-inline="2 \cdot x \cdot x^2 + 2x \cdot 1 \cdot x^2"></span> <span data-tex-inline="+ 2x \cdot x \cdot 2x"></span></span>Find the three factors.</li><li><span class="givens"><span data-tex-inline="\text{a quotient-rule answer:}"></span> <span data-tex-inline="\frac{(x^2 + 1) \cdot 1 - x \cdot 2x}{(x^2 + 1)^2}"></span></span>Find the quotient, and where its slope is 0.</li><li><span class="givens"><span data-tex-inline="y'(x - 1) + y = 3x^2,"></span> <span data-tex-inline="y \text{ defined off } 1"></span></span>Find every such y that lifting can build.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">13i.4.1</span><span class="tagq">build</span>Build a quotient of your own, neither top nor bottom constant and the bottom never 0, whose slope is 0 at exactly one input. <br>Find that input by quotient for slopes, and the sign of the slope on each side by quotient-slope-sign.</div>
+  <div class="chq"><span class="chid">13i.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{three factors, one the constant } 1"></span></span>Decide whether three-factors reduces to product for slopes.</div>
+  <div class="chq"><span class="chid">13i.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="u' &gt; 0,"></span> <span data-tex-inline="v' &gt; 0 \text{ at every input}"></span></span>Decide whether the product must have positive slope everywhere. <br>Decide whether the quotient must.</div>
+  <div class="chq"><span class="chid">13i.4.4</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{the false rule } (uv)' = u'v'"></span></span>Find u and v, neither constant, and an input where the false rule is right by accident.</div>
+  <div class="chq"><span class="chid">13i.4.5</span><span class="tagq">seam</span>The first paper on the calculus, of 1684, gave the product and quotient rules in six pages with no proofs. Two brothers who learned the calculus from it called it an enigma rather than an explanation. <br>Should a new method be published before it can be proved?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r13h.html">← 13h · powers, constants and sums</a><a href="r13j.html">13j · the chain rule by hand →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>The popular book is Silvanus P. Thompson’s Calculus Made Easy. In question 13i.4.5 the paper is Gottfried Wilhelm Leibniz’s Nova methodus, and the brothers are Jacob and Johann Bernoulli.</p>
+  <aside class="voice para"><p>Thompson reads the rule as two separate experiments: keep the first factor fixed while the second changes, then keep the second fixed while the first changes, and add the two results.</p><cite>Thompson, Calculus Made Easy, 2nd ed. (1914), ch. VI</cite></aside>
+  <aside class="voice para"><p>Thompson spells out the order: multiply the bottom by the slope of the top, then the top by the slope of the bottom, take the second from the first, and divide by the square of the bottom.</p><cite>Thompson, Calculus Made Easy, 2nd ed. (1914), ch. VI</cite></aside>
+  <p>Accepted names: subtraction is not commutative.</p>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; const a=Math.abs(v); let s=d!=null?v.toFixed(d):(a>=100?v.toFixed(2):a>=1?v.toFixed(4):a>=0.0001?v.toFixed(5):v.toPrecision(3)); if(s.indexOf('.')>=0&&s.indexOf('e')<0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const FN={
+  p1:{lab:'x · (1 − x)²',q:false,ut:'x',vt:'(1 - x)^2',u:x=>x,du:x=>1,v:x=>(1-x)*(1-x),dv:x=>-2*(1-x),y:[-3,3]},
+  p2:{lab:'(x² + 1) · (3 − x)',q:false,ut:'x^2 + 1',vt:'3 - x',u:x=>x*x+1,du:x=>2*x,v:x=>3-x,dv:x=>-1,y:[-6,10]},
+  q1:{lab:'(2x + 3)/(3x + 2)',q:true,ut:'2x + 3',vt:'3x + 2',u:x=>2*x+3,du:x=>2,v:x=>3*x+2,dv:x=>3,y:[-4,6]},
+  q2:{lab:'x/(x² + 1)',q:true,ut:'x',vt:'x^2 + 1',u:x=>x,du:x=>1,v:x=>x*x+1,dv:x=>2*x,y:[-1.2,1.2]},
+  q3:{lab:'(x² + 1)/(x − 1)',q:true,ut:'x^2 + 1',vt:'x - 1',u:x=>x*x+1,du:x=>2*x,v:x=>x-1,dv:x=>1,y:[-8,10]}
+};
+let fk='p1', X0=0.5;
+const kx=$('kx'),cvA=$('cvA'),cvB=$('cvB');
+const Fv=x=>{ const F=FN[fk]; return F.q?(F.v(x)===0?NaN:F.u(x)/F.v(x)):F.u(x)*F.v(x); };
+const pieces=x=>{ const F=FN[fk]; if(F.q){ const T=F.du(x)*F.v(x)-F.u(x)*F.dv(x), B=F.v(x)*F.v(x); return {a:T,b:B,s:B===0?NaN:T/B}; } const a=F.du(x)*F.v(x), b=F.u(x)*F.dv(x); return {a,b,s:a+b}; };
+function x0(){ const F=FN[fk]; let x=X0; if(F.q&&Math.abs(F.v(x))<0.08){ x+=0.1; } return x; }
+const PA=plane(cvA,{x:[-3,3],y:[-3,3],grid:1,aspect:0.85,draw:P=>{ const F=FN[fk]; P.o.y=F.y; P.axes(); P.fn(Fv,'--ink',2.4); const x=x0(), y=Fv(x), m=pieces(x).s; if(isFinite(m)) P.line(-3,y+m*(-3-x),3,y+m*(3-x),'--ember',2); P.dot(x,y,'--ember',5.5); }});
+Object.defineProperty(PA.o,'aspect',{get:()=>cvA.clientWidth>560?0.8:0.9});
+const PB=plane(cvB,{x:[-3,3],y:[-6,6],grid:1,aspect:0.85,draw:P=>{ const F=FN[fk];
+  let lo=0,hi=0; for(let k=0;k<=240;k++){ const t=-3+6*k/240, p=pieces(t); [p.a,p.b,p.s].forEach(v=>{ if(isFinite(v)&&Math.abs(v)<40){ lo=Math.min(lo,v); hi=Math.max(hi,v); } }); }
+  const pad=(hi-lo)*0.08+0.5; P.o.y=[Math.max(lo-pad,-12),Math.min(hi+pad,12)]; P.o.grid=(P.o.y[1]-P.o.y[0])>12?2:1; P.axes();
+  P.fn(t=>pieces(t).a,'--teal',2.2); P.fn(t=>pieces(t).b,'--gold',2.2,F.q?[6,4]:null); P.fn(t=>pieces(t).s,'--ink',2.4);
+  const x=x0(), p=pieces(x); P.dot(x,p.a,'--teal',4.5); P.dot(x,p.b,'--gold',4.5); P.dot(x,p.s,'--ink',5.5); }});
+Object.defineProperty(PB.o,'aspect',{get:()=>cvB.clientWidth>560?0.8:0.9});
+function read(){ const F=FN[fk], x=x0(), p=pieces(x), h=0.001, ch=(Fv(x+h)-Fv(x))/h; $('ox').textContent=fm(x,2);
+  let lines;
+  if(F.q){ const r2=F.du(x)/F.v(x)+F.u(x)*(-F.dv(x)/(F.v(x)*F.v(x))); const yv=Fv(x), r3=(F.du(x)-yv*F.dv(x))/F.v(x);
+    lines=R`y = \dfrac{${F.ut}}{${F.vt}},\ \ x_0 = ${fm(x,2)}\\ \text{quotient for slopes: } \dfrac{\htmlClass{keep}{${fm(p.a)}}}{${fm(p.b)}} = \htmlClass{new}{${fm(p.s)}}\\ \text{product for slopes, reciprocal for slopes: } ${fm(r2)}\qquad \text{multiply up: } ${fm(r3)}\\ \text{one chord slope, } h = 0.001:\ ${fm(ch)}`; }
+  else { lines=R`y = (${F.ut})\,(${F.vt}),\ \ x_0 = ${fm(x,2)}\\ u'v = \htmlClass{keep}{${fm(p.a)}},\ \ uv' = ${fm(p.b)}\\ y' = \htmlClass{new}{${fm(p.s)}}\qquad \text{one chord slope, } h = 0.001:\ ${fm(ch)}`; }
+  tex($('eq'),R`\begin{gathered}${lines}\end{gathered}`,true);
+  const vd=$('vd');
+  if(Math.abs(p.s)<0.02){ vd.className='verdict win'; vd.textContent=F.q?'The top is (about) 0 here, so the slope is 0: quotient-slope-sign. The bottom squared is '+fm(p.b)+', positive as always.':'The two cells cancel here: u′v and uv′ are equal and opposite, and the slope of the product is (about) 0.'; }
+  else { vd.className='verdict'; vd.textContent=F.q?'The top is '+fm(p.a)+' and the bottom squared '+fm(p.b)+' > 0, so the slope '+fm(p.s)+' has the top\'s sign (quotient-slope-sign).':'Each times the other\'s slope: '+fm(p.a)+' and '+fm(p.b)+', which add to the slope '+fm(p.s)+'. The leftover cell left nothing behind.'; } }
+function all(){ PA.redraw(); PB.redraw(); read(); }
+(function(){ const ch=$('fch'); Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===fk) b.className='on'; b.onclick=()=>{ fk=k; [...ch.children].forEach(z=>z.classList.toggle('on',z===b)); all(); }; ch.appendChild(b); }); })();
+kx.oninput=()=>{ X0=+kx.value; all(); };
+let drag=false; [cvA,cvB].forEach(cv=>{ cv.addEventListener('pointerdown',e=>{ drag=cv; cv.setPointerCapture&&cv.setPointerCapture(e.pointerId); mv(e); }); cv.addEventListener('pointermove',mv); ['pointerup','pointercancel'].forEach(t=>cv.addEventListener(t,()=>drag=false)); });
+function mv(e){ if(!drag) return; const P=drag===cvA?PA:PB; const q=P.point(e); X0=Math.max(-3,Math.min(3,Math.round(q.x*20)/20)); kx.value=X0; all(); }
+window.__pic={set:(k,x)=>{ if(k){ fk=k; [...$('fch').children].forEach((b,i)=>b.classList.toggle('on',Object.keys(FN)[i]===k)); } if(x!=null){ X0=x; kx.value=x; } all(); const p=pieces(x0()); return {x:x0(),a:p.a,b:p.b,s:p.s,txt:$('vd').textContent}; }};
+all();
+
+/* ---------- slides ---------- */
+const N='\\htmlClass{new}', K='\\htmlClass{keep}';
+stepper('#sl1',[
+  {k:'teal',kl:'from 13c: product for slopes',t:R`(uv)' = ${N}{u'v} + ${N}{uv'}`,n:`The two one-change cells, in the limit. The leftover cell goes to 0.`},
+  {k:'ember',kl:'in use',t:R`\big((x^2 + 1)(x^3 - 2)\big)' = 2x(x^3 - 2) + (x^2 + 1)3x^2`,n:`Each times the other's slope.`},
+  {k:'ember',kl:'checked',t:R`= 5x^4 + 3x^2 - 4x = (x^5 + x^3 - 2x^2 - 2)'`,n:`Multiply out first, then polynomial-slope. Same answer.`},
+  {k:'ember',kl:'with a root',t:R`\big(\sqrt x\,(x + 4)\big)'(4) = 2 + 2 = ${N}{4}`,n:`slope-of-√ and slope-of-a-line inside product for slopes. Check by fraction-power for slopes on x^(3/2) + 4x^(1/2).`},
+  {k:'ember',kl:'the tempting rule',t:R`(3x)' \ne 0 \cdot 1`,n:`u′v′ keeps only the leftover cell. 3x has slope 3.`}
+],{title:'The slides · product for slopes · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'three-factors',t:R`(uvw)' = ${N}{u'vw + uv'w + uvw'}`,n:`u(vw), then product for slopes twice. Three one-change cells.`},
+  {k:'ember',kl:'three-factors in use',t:R`\big(x(x + 1)(x + 2)\big)'(1) = 6 + 3 + 2 = ${N}{11}`,n:`Multiplied out: x³ + 3x² + 2x, slope 3 + 6 + 2 = 11.`}
+],{title:'The slides · three factors · ← → keys work'});
+stepper('#sl3',[
+  {k:'teal',kl:'from 13f: quotient for slopes',t:R`\Big(\dfrac uv\Big)' = \dfrac{u'v - uv'}{v^2}`,n:`Bottom times top's slope, less top times bottom's, over the bottom squared.`},
+  {k:'ember',kl:'the order',t:R`\Big(\dfrac1x\Big)' = \dfrac{0 \cdot x - 1 \cdot 1}{x^2} = ${N}{-\dfrac{1}{x^2}}`,n:`Reverse the top and 1/x would climb. Every chord of 1/x with both inputs on one side of 0 falls.`},
+  {k:'ember',kl:'in use, again',t:R`\Big(\dfrac{2x + 3}{3x + 2}\Big)' = ${N}{\dfrac{-5}{(3x + 2)^2}}`,n:`The x's cancel in the top.`},
+  {k:'ember',kl:'quotient-slope-sign',t:R`v(x)^2 \gt 0 \;\Rightarrow\; \text{sign of } y' = \text{sign of } (u'v - uv')`,n:`square-never-negative and zero-product: the bottom squared is positive. So (2x + 3)/(3x + 2) falls at every input.`}
+],{title:'The slides · the quotient rule · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'road 1',t:R`\Big(\dfrac{x}{x^2 + 1}\Big)' = \dfrac{1 - x^2}{(x^2 + 1)^2}`,n:`quotient for slopes.`},
+  {k:'ember',kl:'road 2',t:R`\dfrac{1}{x^2 + 1} + x\cdot\dfrac{-2x}{(x^2 + 1)^2}`,n:`product for slopes with reciprocal for slopes. One bottom: the same.`},
+  {k:'ember',kl:'road 3',t:R`y(x^2 + 1) = x \;\Rightarrow\; y'(x^2 + 1) + 2xy = 1`,n:`Multiply up; product for slopes on both sides. Needs y to have a slope first: road 1 proved it.`},
+  {k:'ember',kl:'the check',t:R`y'(0) = 1,\ \ y'(1) = 0,\ \ y'(2) = ${N}{-\tfrac{3}{25}}`,n:`quotient-slope-sign: positive between −1 and 1, negative outside.`},
+  {k:'ember',kl:'x⁵/x² three ways',t:R`\dfrac{3x^6}{x^4} = 5x^2 - 2x^2 = ${N}{3x^2}`,n:`quotient for slopes, product for slopes with negative-powers, and power for slopes on x³. One slope.`}
+],{title:'The slides · three roads · ← → keys work'});
+stepper('#sl5',[
+  {k:'teal',kl:'backwards · 1 of 2',t:R`2x(x^3 + 1) + x^2\cdot 3x^2 \;\Leftarrow\; ${N}{x^2(x^3 + 1)}`,n:`Each factor plain once and as a slope once.`},
+  {k:'teal',kl:'backwards · 2 of 2',t:R`\dfrac{x\cdot 2 - (2x - 1)\cdot 1}{x^2} \;\Leftarrow\; \dfrac{2x - 1}{x}`,n:`The squared bottom and the minus sign. 2 − 1/x and −1/x share the slope: up to a lift.`}
+],{title:'The slides · backwards · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

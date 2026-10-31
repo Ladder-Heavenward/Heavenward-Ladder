@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>13·stat · Which line fits the points best?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r13chem.html">← 13·chem how fast is a chemical change going right now?</a><a href="r13eng.html">next: 13·eng how much power does a car need to climb? →</a></p>
+  <div class="tags"><span class="tag stat">13·stat · statistics</span></div>
+  <h1>Which line fits the points best?</h1>
+  <p>Which line fits the points best? 8·stat measured whether two lists rise together and proved the measure never passes 1. It did not say by how much one rises when the other does. For that, draw the pairs as points and put a line through them. But the points never lie on one line, so which line? 8·stat chose the mean as the best middle because it makes the squared misses least. Choose the line the same way: the one whose squared misses, measured straight up and down, add to the least. This page finds that line, proves there is exactly one, checks it with slopes, and then shows four lists that have the same best line and nothing else in common.</p>
+  <p class="gesture">Among all lines, take the one whose squared misses, measured up and down, add to the least. Its slope is how the two lists vary together over how the first list varies alone. It passes through the point of the two means, its misses add to 0, and its slope is the correlation scaled by the ratio of the two spreads. The share of the second list’s spread that the line accounts for is the correlation squared.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r08stat.html">8·stat</a> (squared-misses, dot-bound for lists, r), <a href="r09e.html">9e</a> (linear functions), <a href="r08i.html">8i</a> (completing the square), <a href="r13d.html">13d</a> (power for slopes, slopes-add, constant-factor for slopes, polynomial-slope), <a href="r13a.html">13a</a> (slope-of-a-line). <a href="r14a.html">14a</a> proves why the slope came out 0 at the best line.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · read it through, then work the picture and the slides</div>
+
+  <h3>Misses straight up and down</h3>
+  <p class="eqline" data-pid="1aebf4">From here on, take paired data (x₀, y₀), …, (x₍ₙ₋₁₎, y₍ₙ₋₁₎) and a line y = a + bx. The fitted value at xᵢ is ŷᵢ = a + bxᵢ, read “y hat sub i”: the small roof marks a value worked out from the line, not measured. The miss is eᵢ = yᵢ − ŷᵢ. Later the same roof marks the best a and b: â and b̂. The miss has the accepted name the residual. Write S(a, b) = Σᵢ eᵢ² for the total squared miss, and Sₓₓ = Σᵢ(xᵢ − x̄)², Sₓᵧ = Σᵢ(xᵢ − x̄)(yᵢ − ȳ), Sᵧᵧ = Σᵢ(yᵢ − ȳ)². Assume the xᵢ are not all equal, so Sₓₓ &gt; 0. The working on this page writes the intercept as a. The prose writes it as k: the line is y = k + bx, the best intercept is k̂, and the total squared miss is S(k, b).</p>
+  <p data-pid="afbf33"><b>The misses are measured straight up and down, along y, because the question is how well x tells y.</b> That choice treats x as known exactly and puts all the error in y. Measuring the other way, along x, gives another line; 13·stat.3.1 asks how different.</p>
+
+  <h3>The one best line</h3>
+  <p data-pid="5b38a6">Best-line technique (least squares): <b>S(k, b) is least for exactly one line, with b̂ = Sₓᵧ/Sₓₓ and k̂ = ȳ − b̂x̄. The line passes through (x̄, ȳ), and b̂ = r · σ_y/σ_x.</b> Its accepted name is the least squares line, or the regression line of y on x.</p>
+  <pre class="lines" data-k="ember" data-label="13·stat: the best-line technique">
+\text{fix } b:\ \ e_i = (y_i - bx_i) - a @@ the misses of the list zᵢ = yᵢ − bxᵢ from the single number a
+S(a, b) = \textstyle\sum_i (z_i - \bar z)^2 + n(\bar z - a)^2 @@ 8·stat's squared-misses, with c = a
+\text{least in } a \iff a = \bar z = \bar y - b\bar x @@ so the line passes through (x̄, ȳ)
+\textstyle\sum_i (z_i - \bar z)^2 = \sum_i \big((y_i - \bar y) - b(x_i - \bar x)\big)^2 = S_{yy} - 2bS_{xy} + b^2S_{xx} @@ 5h, added over i
+= S_{xx}\big(b - \tfrac{S_{xy}}{S_{xx}}\big)^2 + S_{yy} - \tfrac{S_{xy}^2}{S_{xx}} @@ completing the square in b (8i); Sₓₓ &gt; 0
+\htmlClass{new}{\text{least exactly at } \hat b = \tfrac{S_{xy}}{S_{xx}},\ \hat a = \bar y - \hat b\bar x} \quad \blacksquare @@ a square is least only at 0 (square-never-negative); one a, one b
+  </pre>
+  <p data-pid="efc4fd">Since r = Sₓᵧ/√(SₓₓSᵧᵧ) and σₓ = √(Sₓₓ/n), σ_y = √(Sᵧᵧ/n), the slope is b̂ = r · σ_y/σₓ. So a correlation of 0.6 says: one σₓ more in x goes with 0.6 of a σ_y more in y, on average. A scientist found in 1886 that children of very tall parents are tall, but on average less far from the mean than their parents. He called it regression towards mediocrity. It is this factor r, below 1 by 8·stat's correlation-bound, and the name regression stuck to the line.</p>
+
+  <h3>The check by slopes</h3>
+  <p data-pid="871e08">The page found the line without slopes. Rung 13's slopes give a second look. With k set to ȳ − bx̄, the total squared miss is a polynomial in b, Q(b) = Sₓₓb² − 2Sₓᵧb + Sᵧᵧ. By polynomial-slope its slope is Q′(b) = 2Sₓₓb − 2Sₓᵧ, which is 0 at exactly b̂, negative below it and positive above it. In the same way, the slope of S in k, with b kept fixed, is −2Σᵢeᵢ, which is 0 exactly at the best k. <b>So at the best line both slopes are 0.</b> That is not a coincidence, but its reason is rung 14's.</p>
+
+  <h3>What the misses do</h3>
+  <p data-pid="62ff2f">Residuals technique: <b>Σᵢ eᵢ = 0 and Σᵢ xᵢeᵢ = 0. And Sᵧᵧ = Σᵢ(ŷᵢ − ȳ)² + Σᵢ eᵢ², with Σᵢ(ŷᵢ − ȳ)² = r²Sᵧᵧ.</b></p>
+  <pre class="lines" data-k="ember" data-label="13·stat: the residuals technique">
+e_i = (y_i - \bar y) - \hat b(x_i - \bar x) @@ best-line: â = ȳ − b̂x̄
+\textstyle\sum_i e_i = 0 - \hat b \cdot 0 = 0 @@ deviations add to 0 (8·stat)
+\textstyle\sum_i (x_i - \bar x)e_i = S_{xy} - \hat bS_{xx} = 0 @@ the definition of b̂; and Σxᵢeᵢ = Σ(xᵢ − x̄)eᵢ + x̄Σeᵢ
+\hat y_i - \bar y = \hat b(x_i - \bar x),\ \ \textstyle\sum_i (\hat y_i - \bar y)e_i = 0 @@ the last two lines
+S_{yy} = \textstyle\sum_i \big((\hat y_i - \bar y) + e_i\big)^2 = \sum (\hat y_i - \bar y)^2 + \sum e_i^2 @@ 5h; the cross term is 0
+\htmlClass{new}{\textstyle\sum_i (\hat y_i - \bar y)^2 = \hat b^2S_{xx} = \tfrac{S_{xy}^2}{S_{xx}} = r^2S_{yy}} \quad \blacksquare @@ the definition of r
+  </pre>
+  <p data-pid="def9bb">So the spread of y splits into a part the line accounts for and a part it misses, and r² is the share accounted for. It has the accepted name the coefficient of determination, R². A plot of the residuals against x, the residual plot, is the first thing to look at after fitting: if the line is right, it should show no pattern.</p>
+  <pre class="lines" data-k="ember" data-label="13·stat: worked">
+x: 1, 2, 3, 4, 5;\ \ y: 3, 5, 4, 8, 10 @@ 8·stat's pairs; x̄ = 3, ȳ = 6
+S_{xx} = 10,\ \ S_{xy} = 6 + 1 + 0 + 2 + 8 = 17,\ \ S_{yy} = 34 @@ deviations −2, −1, 0, 1, 2 and −3, −1, −2, 2, 4
+\hat b = 1.7,\ \ \hat a = 6 - 5.1 = 0.9 @@ best-line: y = 0.9 + 1.7x
+e: 0.4,\ 0.7,\ -2,\ 0.3,\ 0.6 @@ residuals: they add to 0, and Σxᵢeᵢ = 0.4 + 1.4 − 6 + 1.2 + 3 = 0
+r^2 = \tfrac{17^2}{10 \cdot 34} = \tfrac{289}{340} = 0.85 @@ r ≈ 0.922, as 8·stat.1.1d finds
+  </pre>
+
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · counting: the spread of a prediction</div>
+    <p data-pid="8104f6">4j found that the spread of a crowd is part of the answer, 4·stat wrote the pile down, 8·stat gave a list its σ, and 9·stat drew the pile as a function. A fitted line is a prediction about a crowd of points, and its residuals are its spread. The line y = 0.9 + 1.7x is the middle. The misses 0.4, 0.7, −2, 0.3, 0.6 are how far the crowd wanders from it, and r² = 0.85 is the share of the wandering the line accounts for.</p>
+    <p data-pid="ae522d"><b>A prediction about a crowd states its spread; a prediction with no spread is a claim about one point in disguise.</b></p>
+    <p data-pid="995549">The four lists of 1973 below share one line and one r. Only their misses tell them apart. Reported as a line alone, all four say the same thing. Reported with their residuals, they are four different crowds.</p>
+    <p class="bait" data-pid="0dacae">A line fitted to children's heights from age 2 to 10 predicts 140 cm at 10, and the residuals at 10 run from −9 cm to +8 cm. A school orders its desks for ten-year-olds from the line alone. What happens in the classroom?</p>
+  </aside>
+
+  <h3>A model, and what is packed in it</h3>
+  <p data-pid="99a55a">The worked line y = 0.9 + 1.7x stands for a lot. It holds five pairs, what x and y measure, the stretch of x from 1 to 5, the best k and b, and the misses. Give that bundle one name, and it can be carried around whole. <b>A model is a name that holds a bundle of facts, and using it starts by unpacking them.</b> Its accepted name is a model; this one is a linear model, or a fitted line.</p>
+  <p data-pid="40d041">The unpack is 0c's unpack ﹀: the name gives way to what it stands for. Write out the data it was fitted on. Write what x and y measure, and in what units. Write the stretch of x it was fitted on. Only then do the techniques have their material. A prediction from the model is ŷ at some x, and it is worth something only inside the stretch.</p>
+  <p data-pid="850d4f">From here on, a block of questions may open with a model. Every question in the block that needs one uses that same model. Your first move is to unpack it.</p>
+  <h3>What the line does not say</h3>
+  <p data-pid="75f78c">In 1973 a statistician published four lists of eleven pairs each. All four have x̄ = 9, ȳ = 7.5, the same r, about 0.816, and the same best line, y = 3 + 0.5x. Drawn, they could hardly differ more. One is a fair cloud about a line, one a clean curve, and one a line with a single far point. The last is a stack at x = 8 with one point at x = 19 that fixes the whole slope. <b>The numbers of this page are the same for all four, so no number of this page can tell them apart.</b> Only a picture can.</p>
+  <p data-pid="2b8332">Nor does the line say what happens beyond the data: a line through the heights of children aged 2 to 10 predicts adults four metres tall. Nor does it say that x makes y happen, any more than r did in 8·stat.</p>
+
+  <h3>Illegal moves</h3>
+  <pre class="lines" data-k="ember" data-label="13·stat: tempting, and not allowed">
+\hat b = \tfrac{\bar y}{\bar x}\,? @@ that is the line through (0, 0) and (x̄, ȳ); the best line need not pass through (0, 0)
+\begin{aligned}&\text{the line of } x \text{ on } y \text{ is}\\ &\quad\text{the same line, solved for } x\,?\end{aligned} @@ its slope is r σₓ/σ_y; the two agree only when r = ±1
+R^2 = 0.95 \Rightarrow \text{the line is right}\,? @@ the four lists' second has R² ≈ 0.67 and is an exact curve; look at the residual plot
+\text{fit at } x = 30 \text{ from data on } 1 \text{ to } 5\,? @@ the line says nothing out there
+  </pre>
+</section>
+
+<section class="pic" id="pic">
+  <div class="eyebrow">The picture · try a line, and four lists with one best line</div>
+  <div class="panels">
+    <div class="panel">
+      <div class="lbl">8 Douglas fir saplings: age in years, height in m (made up for this page)</div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">intercept k</span><input type="range" id="ka" min="-2" max="2" step="0.05" value="0.5"><output id="oa"></output></div>
+      <div class="kn"><span class="m">slope b</span><input type="range" id="kb" min="0" max="1.2" step="0.01" value="0.6"><output id="ob"></output></div>
+      <div class="cap">Ember: your line, with its misses straight up and down. Dashed plum: the best line. The verdict compares your total squared miss with the least.</div>
+    </div>
+    <div class="panel">
+      <div class="lbl">Four lists with one best line, 1973</div>
+      <canvas id="cvL"></canvas>
+      <div class="kn"><span class="m">list</span><input type="range" id="kq" min="1" max="4" step="1" value="1"><output id="oq"></output></div>
+      <div class="cap">Ink: the eleven pairs. Plum: the best line, the same for all four. Teal: the residuals, drawn below.</div>
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+</section>
+
+<section class="slides" id="sl1"><div class="eyebrow">The slides · residuals; the total squared miss; best-line; through the means; b = rσ_y/σₓ; regression to the mean; the check by slopes; residuals; R²; worked; four lists, one line; illegal moves · ← → keys work</div></section>
+
+<section class="sayback">
+  <div class="eyebrow">Say it back · then work it</div>
+  <h2>Questions</h2>
+  <div class="phkey"></div>
+  <div class="model"><span class="mname">Model · the pea shoots</span><span class="givens"><span data-tex-inline="x: \text{weeks since planting},"></span> <span data-tex-inline="y: \text{height in cm},"></span> <span data-tex-inline="(0, 1),\ (1, 3),\ (2, 2),\ (3, 6),"></span> <span data-tex-inline="\text{fitted by best-line.}"></span></span></div>
+  <ol>
+    <li><span class="qid">13·stat.1</span><span class="gname">Lines.</span><span class="gwhy">Do: build the page's pieces.</span>
+      <ol class="sub">
+        <li><span class="qid">13·stat.1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li>Unpack the model, and find its line.</li><li>Find the model's residuals, and check both lines of residuals on them.</li><li>Find R squared for the model.</li><li><span class="givens"><span data-tex-inline="x \in \{1.5, 20\}"></span></span>Predict y at each x, and find which prediction the model can vouch for.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">13·stat.2</span><span class="gname">From the line back.</span><span class="gwhy">Undo: run the page's techs backwards.</span>
+      <ol class="sub">
+        <li><span class="qid">13·stat.2.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{best line } y = 4 + 2x,"></span> <span data-tex-inline="\bar{x} = 3"></span></span>Find the mean of y.</li><li><span class="givens"><span data-tex-inline="r = 0.5,"></span> <span data-tex-inline="\sigma_x = 2,"></span> <span data-tex-inline="\sigma_y = 6"></span></span>Find the best slope.</li><li><span class="givens"><span data-tex-inline="S_{xx} = 20,"></span> <span data-tex-inline="S_{yy} = 45,"></span> <span data-tex-inline="R^2 = 0.8"></span></span>Find the two possible slopes.</li><li><span class="givens"><span data-tex-inline="\text{best line } y = 2x"></span></span>Write four pairs with this best line whose residuals are not all 0.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">13·stat.3</span><span class="gname">Where it gives.</span><span class="gwhy">Bend: find where the techs stop working.</span>
+      <ol class="sub">
+        <li><span class="qid">13·stat.3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{three pairs with one } x"></span></span>Run best-line's working, and find the line that breaks. <br>Find every k and b that make the squared misses least.</li><li><span class="givens"><span data-tex-inline="\text{the worked pairs}"></span></span>Find the best line of x on y, and compare it with the best line of y on x. <br>Find when they agree.</li><li><span class="givens"><span data-tex-inline="\text{misses measured by size,}"></span> <span data-tex-inline="\text{not size squared}"></span></span>With three points, decide whether there is still exactly one best line.</li><li><span class="givens"><span data-tex-inline="\text{the fourth of this page\textquoteright s four lists}"></span></span>Find the single point that decides the slope, and what happens to the line if it is removed.</li></ol></li>
+      </ol></li>
+    <li class="optgroup"><span class="qid">13·stat.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder challenges that rely on your own making. The page is complete without these; the rung's star needs them.</span>
+      <ol class="sub">
+        <li class="opt"><span class="qid">13·stat.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{best line } y = 1 + 2x"></span></span>Make a list of five pairs of your own, not all on one line, with this best line, and check both lines of residuals on it. <br>Then add one sixth pair that alone turns the best slope below 0.</li>
+        <li class="opt"><span class="qid">13·stat.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="y = k + bx + cx^2 \text{ by least squares}"></span></span>Decide whether completing squares one at a time still finds k, b and c. <br>At the best choice, keeping two fixed, take the slope of the squared misses in the third, and decide whether each of the three slopes is 0.</li>
+        <li class="opt"><span class="qid">13·stat.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\textstyle\sum e_i = 0,"></span> <span data-tex-inline="\textstyle\sum x_i e_i = 0"></span></span>Prove or refute that a line whose residuals meet both conditions must be the best line.</li>
+        <li class="opt"><span class="qid">13·stat.4.4</span><span class="tagq">seam</span>A scientist saw the sons of tall fathers come back towards the mean and called it a law of heredity. The same arithmetic makes the fathers of tall sons come back towards the mean too. <br>Was that law about families, or about arithmetic? <br>Build fathers and sons in which no height is passed on, and test it.</li>
+      </ol></li>
+  </ol>
+  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
+</section>
+
+<nav class="nextrung"><a href="r13m.html">← 13m · Homing in on a root with tangent lines, and how errors spread</a><a href="r13phys.html">13·phys · how fast is a falling stone going right now? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>The scientist of 1886, who saw tall parents’ children come back towards the mean and called it a law of heredity, was Francis Galton. The four lists of 1973 are Francis Anscombe’s; their accepted name is Anscombe’s quartet.</p>
+  <aside class="voice para"><p>A computer should make both calculations and graphs. Both sorts of output should be studied; each will contribute to understanding.</p><cite>Francis Anscombe, “Graphs in statistical analysis”, The American Statistician 27 (1973); paraphrase</cite></aside>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+/* least and greatest of F.f on [lo, hi]: the ends, F's critical points inside, and a fine sample (exact between critical points for the functions used here) */
+function ext(F,lo,hi){ if(F.dir) return [0,1]; let m=Infinity,M=-Infinity; const t=x=>{ const v=F.f(x); if(v<m) m=v; if(v>M) M=v; };
+  t(lo); t(hi); (F.crit||[]).forEach(c=>{ if(c>lo&&c<hi) t(c); }); for(let k=1;k<64;k++) t(lo+(hi-lo)*k/64); return [m,M]; }
+function sums(F,pts){ let L=0,U=0; const ms=[],Ms=[]; for(let i=1;i<pts.length;i++){ const [m,M]=ext(F,pts[i-1],pts[i]), w=pts[i]-pts[i-1]; ms.push(m); Ms.push(M); L+=m*w; U+=M*w; } return {L,U,ms,Ms}; }
+const eq=(a,b,n)=>Array.from({length:n+1},(_,i)=>a+(b-a)*i/n);
+function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
+function boxes(P,pts,hs,stroke,fill,alpha){ const c=P.ctx; for(let i=1;i<pts.length;i++){ const a=pts[i-1],b=pts[i],h=hs[i-1]; c.globalAlpha=alpha; P.poly([[a,0],[b,0],[b,h],[a,h]],null,fill); c.globalAlpha=1; P.poly([[a,0],[b,0],[b,h],[a,h]],stroke,null,1.2); } }
+function dirDots(P,a,b){ const c=P.ctx; c.fillStyle=col('--ink'); for(let k=0;k<=300;k++){ const x=a+(b-a)*k/300; const y=(k%2)?0:1; c.fillRect(P.X(x)-1,P.Y(y)-1,2,2); } }
+/* shade between the graph of fn and the axis from lo to hi: above in pos colour, below in neg colour */
+function shade(P,fn,lo,hi,pos,neg,alpha){ if(hi<lo){ const t=lo; lo=hi; hi=t; } const c=P.ctx, N=300; c.globalAlpha=alpha==null?0.32:alpha;
+  for(let k=0;k<N;k++){ const x0=lo+(hi-lo)*k/N, x1=lo+(hi-lo)*(k+1)/N, xm=(x0+x1)/2, y=fn(xm); if(!isFinite(y)) continue; P.poly([[x0,0],[x1,0],[x1,fn(x1)],[x0,fn(x0)]],null,y>=0?pos:neg); }
+  c.globalAlpha=1; }
+function rangeOf(fn,lo,hi,pad){ let m=Infinity,M=-Infinity; for(let k=0;k<=400;k++){ const v=fn(lo+(hi-lo)*k/400); if(isFinite(v)){ if(v<m) m=v; if(v>M) M=v; } } if(m>0) m=0; if(M<0) M=0; const p=(M-m)*(pad==null?0.12:pad)||1; return [m-p,M+p]; }
+function chips(el,FN,get,setk,after){ Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===get()) b.className='on'; b.onclick=()=>{ setk(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+const Nw='\\htmlClass{new}';
+function gridFor(sp){ return sp>40?10:sp>16?4:sp>8?2:sp>3?1:sp>1.2?0.5:0.25; }
+function frame2(P,fn,lo,hi,pad){ const w=hi-lo; P.o.x=[lo-0.12*w,hi+0.08*w]; P.o.y=rangeOf(fn,lo,hi,pad==null?0.12:pad); const sx=P.o.x[1]-P.o.x[0], sy=P.o.y[1]-P.o.y[0]; let g=gridFor(sx); while(sy/g>24) g*=2; P.o.grid=g; }
+const num=(f,a,b,n)=>{ n=n||4000; const h=(b-a)/n; let s=0; for(let i=0;i<n;i++) s+=f(a+(i+0.5)*h)*h; return s; };
+/* axes with separate steps across and up */
+function axes2(P,gx,gy){ const c=P.ctx,o=P.o; c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ c.moveTo(P.X(x),P.Y(o.y[0])); c.lineTo(P.X(x),P.Y(o.y[1])); }
+  for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ c.moveTo(P.X(o.x[0]),P.Y(y)); c.lineTo(P.X(o.x[1]),P.Y(y)); } c.stroke();
+  c.strokeStyle=col('--muted'); c.lineWidth=1.3; c.beginPath(); if(o.y[0]<=0&&o.y[1]>=0){ c.moveTo(P.X(o.x[0]),P.Y(0)); c.lineTo(P.X(o.x[1]),P.Y(0)); } if(o.x[0]<=0&&o.x[1]>=0){ c.moveTo(P.X(0),P.Y(o.y[0])); c.lineTo(P.X(0),P.Y(o.y[1])); } c.stroke();
+  c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; const ly=Math.min(P.H-6,Math.max(12,P.Y(0)+14));
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ if(Math.abs(x)<1e-9) continue; c.fillText(+x.toFixed(6),P.X(x),ly); }
+  c.textAlign='right'; const lx=Math.max(32,Math.min(P.W-4,P.X(0)-5)); for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ if(Math.abs(y)<1e-9) continue; c.fillText(String(+y.toFixed(6)).replace('-','−'),lx,P.Y(y)+4); } }
+function nice(sp){ const raw=sp/6, p=Math.pow(10,Math.floor(Math.log10(raw))), m=raw/p; return (m<1.5?1:m<3.5?2:m<7.5?5:10)*p; }
+function arrow(P,x1,y1,x2,y2,colr,w){ P.line(x1,y1,x2,y2,colr,w||2.2); const c=P.ctx, X1=P.X(x1),Y1=P.Y(y1),X2=P.X(x2),Y2=P.Y(y2), L=Math.hypot(X2-X1,Y2-Y1); if(L<2) return; const ux=(X2-X1)/L, uy=(Y2-Y1)/L, h=9; c.fillStyle=col(colr); c.beginPath(); c.moveTo(X2,Y2); c.lineTo(X2-h*ux-0.5*h*uy,Y2-h*uy+0.5*h*ux); c.lineTo(X2-h*ux+0.5*h*uy,Y2-h*uy-0.5*h*ux); c.closePath(); c.fill(); }
+function fillA(P,pts,colr,alpha){ const c=P.ctx; c.globalAlpha=alpha==null?0.2:alpha; P.poly(pts,null,colr); c.globalAlpha=1; }
+const sq1=P=>Object.defineProperty(P.o,'aspect',{get:()=>1});
+function rightMark(P,qx,qy,ax,ay,bx,by,s,colr){ const la=Math.hypot(ax-qx,ay-qy), lb=Math.hypot(bx-qx,by-qy); if(!la||!lb) return; const u=[(ax-qx)/la*s,(ay-qy)/la*s], v=[(bx-qx)/lb*s,(by-qy)/lb*s]; P.poly([[qx+u[0],qy+u[1]],[qx+u[0]+v[0],qy+u[1]+v[1]],[qx+v[0],qy+v[1]]],colr||'--muted',null,1.2,false); }
+const dist=(a,b)=>Math.hypot(b[0]-a[0],b[1]-a[1]);
+const dotp=(u,v)=>u[0]*v[0]+u[1]*v[1];
+function clipBox(P,fn){ const c=P.ctx, [x0,x1]=P.o.x,[y0,y1]=P.o.y; c.save(); c.beginPath(); c.rect(P.X(x0),P.Y(y1),P.X(x1)-P.X(x0),P.Y(y0)-P.Y(y1)); c.clip(); fn(); c.restore(); }
+function lineABC(P,a,b,c,colr,w,dash){ const [x0,x1]=P.o.x,[y0,y1]=P.o.y; clipBox(P,()=>{ if(Math.abs(b)>1e-12){ P.line(x0,(c-a*x0)/b,x1,(c-a*x1)/b,colr,w,dash); } else if(Math.abs(a)>1e-12){ P.line(c/a,y0,c/a,y1,colr,w,dash); } }); }
+const ka=$('ka'),kb=$('kb'),kq=$('kq'),cvF=$('cvF'),cvL=$('cvL');
+const AX=[1,2,3,4,5,6,7,8], AY=[0.3,0.9,1.2,2.1,2.4,3.2,3.5,4.6];
+const X1=[10,8,13,9,11,14,6,4,12,7,5], X4=[8,8,8,8,8,8,8,19,8,8,8];
+const QS={1:[X1,[8.04,6.95,7.58,8.81,8.33,9.96,7.24,4.26,10.84,4.82,5.68]],2:[X1,[9.14,8.14,8.74,8.77,9.26,8.10,6.13,3.10,9.13,7.26,4.74]],3:[X1,[7.46,6.77,12.74,7.11,7.81,8.84,6.08,5.39,8.15,6.42,5.73]],4:[X4,[6.58,5.76,7.71,8.84,8.47,7.04,5.25,12.50,5.56,7.91,6.89]]};
+const PF=plane(cvF,{x:[0,9],y:[-0.8,5.6],grid:1,draw:P=>drawF(P)});
+const PL=plane(cvL,{x:[2,20],y:[-4.5,14],grid:0,labels:0,draw:P=>drawL(P)});
+function fit(x,y){ const n=x.length, mx=x.reduce((p,q)=>p+q,0)/n, my=y.reduce((p,q)=>p+q,0)/n; let sxx=0,sxy=0,syy=0; for(let i=0;i<n;i++){ const a=x[i]-mx,b=y[i]-my; sxx+=a*a; sxy+=a*b; syy+=b*b; } const b=sxy/sxx; return {a:my-b*mx,b,r:sxy/Math.sqrt(sxx*syy),mx,my,sxx,syy}; }
+const S=(x,y,a,b)=>x.reduce((s,xi,i)=>s+(y[i]-a-b*xi)**2,0);
+function drawF(P){ const a=+ka.value,b=+kb.value, f=fit(AX,AY); axes2(P,1,1);
+  P.line(0,f.a,9,f.a+9*f.b,'--plum',2,[6,4]);
+  AX.forEach((x,i)=>{ P.line(x,AY[i],x,a+b*x,'--ember',1.6); P.dot(x,AY[i],'--ink',5); });
+  clipBox(P,()=>P.line(0,a,9,a+9*b,'--ember',2.4)); }
+function drawL(P){ const [x,y]=QS[+kq.value], f=fit(x,y);
+  P.line(2,0,20,0,'--muted',1); P.line(2,3,20,3,'--grid',1); for(let t=4;t<=20;t+=4){ P.text(String(t),t,2.2,'--muted','center',10); }
+  for(let t=4;t<=14;t+=2) P.text(String(t),2.6,t,'--muted','center',10);
+  P.line(2,f.a+2*f.b,20,f.a+20*f.b,'--plum',2.2);
+  x.forEach((xi,i)=>{ P.dot(xi,y[i],'--ink',5); const e=y[i]-f.a-f.b*xi; P.line(xi,0,xi,e,'--teal',2); P.dot(xi,e,'--teal',3); });
+  P.text('residuals',3.6,-3.6,'--teal','left',11); }
+function read(){ const a=+ka.value,b=+kb.value, f=fit(AX,AY), q=+kq.value, [x,y]=QS[q], g=fit(x,y);
+  $('oa').textContent=mm(a,2); $('ob').textContent=mm(b,2); $('oq').textContent=['','I','II','III','IV'][q];
+  const vd=$('vdF'); vd.className='verdict';
+  vd.textContent='Left: your line has total squared miss '+mm(S(AX,AY,a,b),3)+'; the best, y = '+mm(f.a,3)+' + '+mm(f.b,3)+'x, has '+mm(S(AX,AY,f.a,f.b),3)+'. Right: list '+['','I','II','III','IV'][q]+': x̄ = '+mm(g.mx,2)+', ȳ = '+mm(g.my,2)+', best line y = '+mm(g.a,2)+' + '+mm(g.b,3)+'x, r = '+mm(g.r,3)+'.';
+  tex($('eqF'),R`\hat b = \tfrac{S_{xy}}{S_{xx}} = ${mm(f.b,3)},\ \ \hat k = \bar y - \hat b\bar x = ${mm(f.a,3)}`,true); }
+function all(){ PF.redraw(); PL.redraw(); read(); }
+[ka,kb,kq].forEach(el=>el.addEventListener('input',all));
+window.__pic={set:(a,b,q)=>{ ka.value=a; kb.value=b; kq.value=q; all(); const f=fit(AX,AY), g=fit(...QS[q]); return {best:[+f.a.toFixed(4),+f.b.toFixed(4)],Sbest:+S(AX,AY,f.a,f.b).toFixed(4),Syou:+S(AX,AY,a,b).toFixed(4),q:[+g.a.toFixed(3),+g.b.toFixed(3),+g.r.toFixed(3)]}; }};
+all();
+stepper('#sl1',[
+  {k:'ember',kl:'residuals',t:R`e_i = y_i - (a + bx_i)`,n:`Misses straight up and down.`},
+  {k:'ember',kl:'the total squared miss',t:R`S(a, b) = \textstyle\sum_i e_i^2`,n:`The total squared miss.`},
+  {k:'ember',kl:'best-line',t:R`${Nw}{\hat b = \tfrac{S_{xy}}{S_{xx}},\ \ \hat a = \bar y - \hat b\bar x}`,n:`squared-misses in the intercept, then completing the square in b.`},
+  {k:'ember',kl:'through the means',t:R`\bar y = \hat a + \hat b\bar x`,n:`The point (x̄, ȳ) is on it.`},
+  {k:'ember',kl:'b = rσ_y/σₓ',t:R`\hat b = r\,\tfrac{\sigma_y}{\sigma_x}`,n:`One σₓ more, r σ_y more.`},
+  {k:'ember',kl:"regression to the mean",t:R`|r| \le 1`,n:`Back towards the mean, 1886.`},
+  {k:'ember',kl:'the check by slopes',t:R`Q'(b) = 2S_{xx}b - 2S_{xy}`,n:`0 at b̂; the reason is rung 14's.`},
+  {k:'ember',kl:'residuals',t:R`${Nw}{\textstyle\sum e_i = 0,\ \sum x_ie_i = 0}`,n:`The misses balance.`},
+  {k:'ember',kl:'R²',t:R`S_{yy} = \textstyle\sum(\hat y_i - \bar y)^2 + \sum e_i^2`,n:`The share accounted for is r².`},
+  {k:'ember',kl:'worked',t:R`y = 0.9 + 1.7x`,n:`R² = 0.85.`},
+  {k:'ember',kl:"four lists, one line",t:R`y = 3 + 0.5x,\ \ r \approx 0.816`,n:`Same numbers, four pictures.`},
+  {k:'ember',kl:'illegal',t:R`\hat b \ne \bar y / \bar x`,n:`The line need not pass through (0, 0).`}
+],{title:'The slides · residuals; the total squared miss; best-line; through the means; b = rσ_y/σₓ; regression to the mean; the check by slopes; residuals; R²; worked; four lists, one line; illegal moves · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

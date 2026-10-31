@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>7·logi · Can these meetings fit in three rooms?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+table.tt td.l{text-align:left;font-family:var(--serif)} @media (max-width:520px){table.tt td.l{min-width:5.5em}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%;min-width:0} .kn output{font-family:var(--mono);font-size:.82rem;min-width:3.6em;text-align:right}
+.kn label{font-family:var(--mono);font-size:.8rem;color:var(--muted)}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+canvas{width:100%;display:block;border-radius:4px}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r07crypt.html">← 7·crypt can I prove I know a secret without telling it?</a><a href="floor1concl.html">next: F1·∎ what the logic floor shows →</a></p>
+  <div class="tags"><span class="tag logi">7·logi · logistics</span></div>
+  <h1>Can these meetings fit in three rooms?</h1>
+  <p>Can these meetings fit in three rooms? Anyone who has run a library, a school, a hospital's operating theatres or an airport's gates has stared at a list of bookings and asked it. Each booking holds a room from when it starts until it ends. The question looks like a puzzle of shuffling: try this meeting here, that one there, and start again when something clashes. With a handful of meetings the shuffling works. With thirty it would take longer than anyone has, since every meeting could go in any room. What makes it easy, once you see it, is a single number: the most meetings going on at any one moment. If that number is four, no shuffling can save three rooms, and a short argument by refutation says why. If it is three, a plain rule that hands out rooms in order of starting time always gets by with three. The page proves both, and finds that the hard search was settled all along.</p>
+  <p class="gesture">Write each meeting as the stretch of time from its start up to its end. At each start, count the meetings going on. The largest of those counts is the most going on at any moment. No schedule uses fewer rooms than that, since meetings going on together need rooms of their own. To use exactly that many, take the meetings in order of start, and give each the lowest numbered room that is free when it starts.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r07e.html">7e</a> (proof by contradiction, refutation, and the test for a proof in costume), <a href="r07b.html">7b</a> (finite-search), <a href="r06logi.html">6·logi</a> (no-room; picking in turn), <a href="r04j.html">4j</a> (greatest-member, counted-functions), <a href="r04g.html">4g</a> (order, any-two-compare) and <a href="r05c.html">5c</a> (order on the fractions). Later logistics pages count routes and lines of waiting trucks.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · read it through, then work the picture and the slides</div>
+
+  <h3>Meetings as stretches of time</h3>
+  <p data-pid="818099">Say a library in Bellingham has three meeting rooms. Here are Monday's bookings.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>meeting</th><th>who</th><th>starts</th><th>ends</th></tr>
+    <tr><td>A</td><td class="l">a tenants' group</td><td>09:00</td><td>10:30</td></tr>
+    <tr><td>B</td><td class="l">a book club</td><td>09:30</td><td>11:00</td></tr>
+    <tr><td>C</td><td class="l">a class on tax forms</td><td>10:00</td><td>12:00</td></tr>
+    <tr><td>D</td><td class="l">a job interview</td><td>10:15</td><td>10:45</td></tr>
+    <tr><td>E</td><td class="l">a chess club</td><td>11:00</td><td>12:30</td></tr>
+    <tr><td>F</td><td class="l">a language exchange</td><td>11:30</td><td>13:00</td></tr>
+    <tr><td>G</td><td class="l">a board meeting</td><td>12:00</td><td>13:00</td></tr>
+    <tr><td>H</td><td class="l">a writing group</td><td>12:30</td><td>14:00</td></tr>
+  </table></div>
+  <p class="eqline" data-pid="fbbc99">From here on, on this page, a time is written as hours and minutes since midnight, 09:30, and read as that many minutes, 570. A meeting from s to e is <b>going on</b> at a time t when s ≤ t &lt; e: it holds its room from its start up to, but not including, its end.</p>
+  <p data-pid="d7b68b">So a meeting ending at 11:00 and one starting at 11:00 can share a room. A room holds one meeting at a time: two meetings in one room are never going on at the same time. That is the whole of the rule.</p>
+
+  <h3>The most at once, found at a start</h3>
+  <p data-pid="14ea18">At 10:15, A, B, C and D are all going on. Four at once. There are endless moments in a day, since a time can be any fraction of a minute. Which ones need checking? Only the starts. Busiest-start technique: <b>the most meetings going on at any moment is reached at the start of one of them.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the busiest-start technique">
+\text{at } t,\ \text{the meetings } M_1, \ldots, M_w \text{ are going on} @@ any moment, and the meetings going on then
+s = \text{the latest of their starts} @@ greatest-member (4j): a finite set of numbers with a member
+s_i \le s \le t \lt e_i \text{ for each } i @@ s is the greatest start; s is one of the starts, each at most t
+\htmlClass{new}{\text{all } w \text{ are going on at } s} \quad \blacksquare @@ each started by s and ends after it
+  </pre>
+  <p data-pid="4febd3">So a day of n meetings has n moments worth checking. At each start, count the meetings going on. That is 7b's finite-search: a look through finitely many cases, each settled by comparing numbers (4g's any-two-compare). For Monday the starts give these counts.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>start</th><th>09:00</th><th>09:30</th><th>10:00</th><th>10:15</th><th>11:00</th><th>11:30</th><th>12:00</th><th>12:30</th></tr>
+    <tr><th>going on</th><td>1</td><td>2</td><td>3</td><td>4</td><td>2</td><td>3</td><td>3</td><td>3</td></tr>
+  </table></div>
+
+  <h3>Four at once will not fit in three</h3>
+  <p data-pid="fafe42">Room-count technique: <b>if w meetings are going on at one moment, no schedule fits them into fewer than w rooms.</b> The statement wanted is a denial, so 7e's refutation does it.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the room-count technique">
+\text{suppose a schedule puts them in fewer than } w \text{ rooms} @@ to be refuted
+\text{each of the } w \text{ has a room} @@ a schedule gives every meeting a room
+\text{no two of them share a room} @@ they are going on together, and a room holds one at a time
+\text{a matching of the } w \text{ with a part of the rooms} @@ different meetings, different rooms (4j)
+\htmlClass{new}{\text{a collision with no-room}} \quad \blacksquare @@ no-room (6·logi): w members cannot match a part of fewer
+  </pre>
+  <p data-pid="a6eb6a">On Monday, A, B, C and D go on together at 10:15. So Monday's bookings do not fit in three rooms, however they are shuffled. The interview has to move. Notice what kind of proof that was. 7e's test: the statement wanted is a denial, and the supposition was refuted, so no rung seven was used. The question had a settled answer all along.</p>
+
+  <h3>A rule that uses exactly that many</h3>
+  <p data-pid="42705c">Move the interview to 13:00 to 13:30. Now the counts at the starts are at most 3. Does that mean three rooms will do? A count is not a schedule. Here is a rule that makes one. First-free-room rule: take the meetings in order of start; give each the lowest numbered room that is free at its start, opening a new room only when every open room is busy.</p>
+  <pre class="lines" data-k="teal" data-label="the first-free-room rule, on Monday with D moved">
+A\ 09{:}00 \to 1,\ \ B\ 09{:}30 \to 2,\ \ C\ 10{:}00 \to 3 @@ each finds every open room busy
+E\ 11{:}00 \to 1,\ \ F\ 11{:}30 \to 2 @@ A ended 10:30; B ended 11:00
+G\ 12{:}00 \to 3,\ \ H\ 12{:}30 \to 1,\ \ D\ 13{:}00 \to 2 @@ C ended 12:00; E ended 12:30; F ended 13:00
+\htmlClass{new}{3 \text{ rooms}} @@ the most going on at once is 3
+  </pre>
+  <p data-pid="93a1f4">First-free-room technique: <b>the first-free-room rule never opens more rooms than the most meetings going on at once.</b> With the room-count technique, it uses exactly that many.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the first-free-room technique">
+\text{the rule opens room } r \text{ for a meeting } M \text{ starting at } s @@ any room it ever opens
+\text{rooms } 1, \ldots, r - 1 \text{ are all busy at } s @@ that is when the rule opens a new room
+\text{each holds a meeting that started by } s \text{ and ends after } s @@ meetings are taken in order of start
+r \text{ meetings going on at } s @@ those r − 1, and M
+\htmlClass{new}{r \le w} \quad \blacksquare @@ w is the most going on at any moment
+  </pre>
+  <p data-pid="db40af">It is 6·logi's picking in turn, with an order that makes it work. There, picking down the board could strand a job. Here, picking in order of start never strands a meeting, because a meeting that finds every room busy proves the rooms were needed.</p>
+
+  <h3>The search nobody needs to run</h3>
+  <p data-pid="1f3f2e">Could a computer just try every schedule? Give each of n meetings one of 3 rooms: by counted-functions (4j), there are 3ⁿ ways. For Monday's 8 meetings that is 6561. For a conference centre's 30 bookings it is 205 891 132 094 649, which at a billion tries a second is more than two days. The answer is settled either way, by 7b's finite-search, so the either-way principle is never needed. But nobody wants to wait for it. The busiest-start technique checks 30 starts, and the first-free-room rule writes the schedule in one pass. <b>The most meetings going on at once is the number of rooms needed, no more and no fewer.</b></p>
+  <p data-pid="20789b">7e's test says more. In the first-free-room proof the supposition, if you write it as one, is used once, at the end. So the proof is direct underneath: every room the rule opens comes with a moment when that many meetings are going on. The rule hands you the crowded moment as well as the schedule. Gates at Sea-Tac, beds on a hospital ward and trucks at a loading dock are scheduled by rules of this shape every day.</p>
+
+  <h3>Illegal moves</h3>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed">
+\begin{aligned}&8 \text{ meetings, } 3 \text{ rooms:}\\ &\quad\text{it cannot fit}\,?\end{aligned} @@ rooms are reused; count the meetings going on at one moment, not all day
+\begin{aligned}&A \text{ ends at } 10{:}30, \text{ so it is}\\ &\quad\text{going on at } 10{:}30\,?\end{aligned} @@ s ≤ t &lt; e: a meeting is not going on at its end
+\begin{aligned}&\text{check every minute of the}\\ &\quad\text{day for the most at once}\,?\end{aligned} @@ busiest-start: only the starts need checking
+\begin{aligned}&\text{the rule opened } 4 \text{ rooms, so}\\ &\quad\text{a cleverer schedule uses } 3\,?\end{aligned} @@ it opened room 4 only with 4 meetings going on: room-count forbids 3
+\begin{aligned}&\text{at most } 3 \text{ at each start, but}\\ &\quad 4 \text{ at some minute between}\,?\end{aligned} @@ busiest-start: the most at once is reached at a start
+  </pre>
+
+  <h3>Which rung each step uses</h3>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>step</th><th>the mathematics</th><th>from</th></tr>
+    <tr><td class="l">going on at a time</td><td class="l">order on the fractions; any-two-compare</td><td><a href="r05c.html">5c</a>, <a href="r04g.html">4g</a></td></tr>
+    <tr><td class="l">the busiest moment at a start</td><td class="l">greatest-member</td><td><a href="r04j.html">4j</a></td></tr>
+    <tr><td class="l">only the starts to check</td><td class="l">finite-search</td><td><a href="r07b.html">7b</a></td></tr>
+    <tr><td class="l">four will not fit in three</td><td class="l">refutation; no-room</td><td><a href="r07e.html">7e</a>, <a href="r06logi.html">6·logi</a></td></tr>
+    <tr><td class="l">the first-free-room rule</td><td class="l">picking in turn, in order of start</td><td><a href="r06logi.html">6·logi</a></td></tr>
+    <tr><td class="l">every schedule, tried</td><td class="l">counted-functions</td><td><a href="r04j.html">4j</a></td></tr>
+  </table></div>
+</section>
+
+<section class="pic" id="pic">
+  <div class="eyebrow">The picture · left: Monday's bookings, scanned and scheduled · right: a day of your own</div>
+  <div class="panels">
+    <div class="panel">
+      <div class="chips" role="group" aria-label="day" id="dch"></div>
+      <div class="kn"><label for="kt">time</label><input type="range" id="kt" min="540" max="840" step="5" value="615"><output id="ot"></output></div>
+      <canvas id="cv1"></canvas>
+      <div class="cap">One bar per meeting, from its start up to its end. The upright mark is the time on the slider; ember bars are going on then. Bars are tinted by the room the first-free-room rule gives them; the number at a bar's left is its room.</div>
+      <div class="verdict" id="vd1"></div>
+      <div class="eqbox" id="eq1"></div>
+    </div>
+    <div class="panel">
+      <div class="kn"><label for="kn">meetings</label><input type="range" id="kn" min="3" max="30" step="1" value="12"><output id="on"></output></div>
+      <div class="chips" role="group" aria-label="new" id="nch"></div>
+      <canvas id="cv2"></canvas>
+      <div class="cap">A day of random bookings from 08:00 to 18:00, each 30 min to 3 h, taken in order of start. The small number just before each bar is the count going on at its start; the largest is boxed.</div>
+      <div class="eqbox" id="eq2"></div>
+    </div>
+  </div>
+</section>
+
+<section class="slides" id="sl1"><div class="eyebrow">The slides · meetings as stretches of time; going on; the busiest start; four at 10:15; room-count; the first-free-room rule; the technique; the search nobody runs; illegal moves · ← → keys work</div></section>
+
+<section class="sayback">
+  <div class="eyebrow">Say it back · then work it</div>
+  <h2>Questions</h2>
+  <div class="phkey"></div>
+  <ol>
+    <li><span class="qid">7·logi.1</span><span class="gname">Rooms, counted.</span><span class="gwhy">Do: build the page's pieces.</span>
+      <ol class="sub">
+        <li><span class="qid">7·logi.1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\text{a meeting from } s \text{ to } e \text{ is going on at } t"></span> <span data-tex-inline="\text{when } s \le t \lt e;"></span> <span data-tex-inline="\text{a room holds one meeting at a time}"></span></span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="08{:}00\text{–}09{:}30,\ 08{:}30\text{–}10{:}00,\ 09{:}00\text{–}09{:}45,"></span> <span data-tex-inline="09{:}30\text{–}11{:}00,\ 09{:}45\text{–}10{:}30,\ 10{:}00\text{–}11{:}30"></span></span>Find the most meetings going on at once, and a moment when it happens.</li><li><span class="givens"><span data-tex-inline="\text{the meetings of part a}"></span></span>Write the schedule the first-free-room rule makes.</li><li><span class="givens"><span data-tex-inline="\text{meetings of } 1 \text{ h each, starting at } 09{:}00"></span> <span data-tex-inline="\text{and every } 20 \text{ min after, the last at } 12{:}00"></span></span>Find the fewest rooms that hold them.</li><li><span class="givens"><span data-tex-inline="\text{the meetings of part a}, 3 \text{ rooms}"></span></span>Find how many ways there are to give each meeting a room, clashes and all.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">7·logi.2</span><span class="gname">From the rooms back.</span><span class="gwhy">Undo: run the page's techs backwards.</span>
+      <ol class="sub">
+        <li><span class="qid">7·logi.2.1</span><span class="ph undo">undo</span><span class="givens"><span data-tex-inline="\text{a meeting from } s \text{ to } e \text{ is going on at } t"></span> <span data-tex-inline="\text{when } s \le t \lt e;"></span> <span data-tex-inline="\text{a room holds one meeting at a time}"></span></span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{the first-free-room rule opens}"></span> <span data-tex-inline="\text{a 4th room at } 14{:}00"></span></span>Find the fewest meetings going on at 14:00.</li><li><span class="givens"><span data-tex-inline="\text{a day's meetings fit in } 3 \text{ rooms};"></span> <span data-tex-inline="\text{an added meeting } 10{:}00\text{–}10{:}30 \text{ makes them not fit}"></span></span>Find what must be true at some moment from 10:00 up to 10:30.</li><li><span class="givens"><span data-tex-inline="3 \text{ rooms, open } 08{:}00\text{–}17{:}00;"></span> <span data-tex-inline="\text{every meeting lasts } 90 \text{ min}"></span></span>Find the most meetings the rooms can hold in a day.</li><li><span class="givens"><span data-tex-inline="\text{every meeting lasts } 1 \text{ h};"></span> <span data-tex-inline="\text{the fewest rooms that hold them is } 4"></span></span>Find what must be true of the starts.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">7·logi.3</span><span class="gname">Where the count lies.</span><span class="gwhy">Bend: find where the techs stop working.</span>
+      <ol class="sub">
+        <li><span class="qid">7·logi.3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{desk shifts, the same every day:}"></span> <span data-tex-inline="22{:}00\text{–}06{:}00,\ 05{:}00\text{–}14{:}00,\ 13{:}00\text{–}23{:}00;"></span> <span data-tex-inline="\text{a shift keeps one desk, every day}"></span></span>Find the most shifts going on at once.<br>Find the fewest desks that hold them.</li><li><span class="givens"><span data-tex-inline="\text{rooms of } 10, 10 \text{ and } 40 \text{ seats};"></span> <span data-tex-inline="09{:}00\text{–}10{:}00 \text{ for } 30 \text{ people},"></span> <span data-tex-inline="09{:}00\text{–}10{:}00 \text{ for } 25 \text{ people}"></span></span>Decide whether they fit.</li><li><span class="givens"><span data-tex-inline="\text{a meeting holds its room up to and including its end};"></span> <span data-tex-inline="09{:}00\text{–}10{:}00,\ 10{:}00\text{–}11{:}00,\ 11{:}00\text{–}12{:}00"></span></span>Find the fewest rooms that hold them.</li><li><span class="givens"><span data-tex-inline="\text{taken in this order: } 15{:}00\text{–}16{:}00,"></span> <span data-tex-inline="12{:}00\text{–}13{:}00,\ 14{:}00\text{–}16{:}00,\ 12{:}00\text{–}15{:}00;"></span> <span data-tex-inline="\text{each gets the lowest room with no clash}"></span></span>Find the rooms used, and the most going on at once.</li></ol></li>
+      </ol></li>
+    <li class="optgroup"><span class="qid">7·logi.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder challenges that rely on your own making. The page is complete without these; the rung's star needs them.</span>
+      <ol class="sub">
+        <li class="opt"><span class="qid">7·logi.4.1</span><span class="tagq">build</span>Build a schedule of your own.<ol class="parts" type="a"><li>Take a real week of something you share: a kitchen, a car, a court, a computer. Write the bookings as stretches of time, and find the most going on at once.</li><li>Run the first-free-room rule on it, and find the crowded moment it hands you.</li><li><span class="givens"><span data-tex-inline="\text{the shifts of 7·logi.3.1a}"></span></span>Design a rule for shifts that repeat every day, and find the most desks it can need when at most w shifts are going on at once.</li></ol></li>
+        <li class="opt"><span class="qid">7·logi.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{four meetings, every two of which}"></span> <span data-tex-inline="\text{are going on together at some moment}"></span></span>Decide whether all four must be going on at one moment.</li>
+        <li class="opt"><span class="qid">7·logi.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{a list of meetings fits in } w \text{ rooms}"></span> <span data-tex-inline="\text{and in no fewer}"></span></span>Decide whether some moment must have w meetings going on.</li>
+        <li class="opt"><span class="qid">7·logi.4.4</span><span class="tagq">seam</span>A meeting holds its room from 09:00 up to, but not including, 10:00. <br>What is the last moment it holds the room?</li>
+      </ol></li>
+  </ol>
+  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
+</section>
+
+<nav class="nextrung"><a href="r07crypt.html">← 7·crypt · can I prove I know a secret without telling it?</a><a href="floor1concl.html">F1·∎ · what the logic floor shows →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>Meetings as stretches of time, and the graph that joins two when they clash, were studied by György Hajós (1957) and in a paper by Paul Gilmore and Alan Hoffman (1964). That the rooms needed equal the most going on at once is part of the theory of perfect graphs that Claude Berge began around 1960. The first-free-room rule, in order of start, is a greedy rule from the textbooks of the 1970s. The last instant of a stretch with no last instant was argued over by Aristotle in his Physics, and by the schoolmen of the fourteenth century, Walter Burley and William of Ockham among them, as the problem of first and last instants.</p>
+  <h3>Accepted names</h3>
+  <p>A stretch of time from s up to, but not including, e is a <b>half-open interval</b>. The problem is <b>interval scheduling</b>, or <b>interval partitioning</b>. The most going on at once is the <b>depth</b> of the list. The graph that joins clashing meetings is an <b>interval graph</b>, and giving rooms is <b>colouring</b> it. The first-free-room rule is a <b>greedy algorithm</b>. That depth is enough says interval graphs are <b>perfect</b>. That every two clashing stretches all share a moment is the simplest case of <b>Helly's theorem</b> (Eduard Helly, 1913).</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="7·logi: a worked “proof”, not allowed">
+\text{at no start are more than } 3 \text{ going on} @@ fine: checked at each start
+\text{so give each meeting room } 1, 2 \text{ or } 3 \text{ by its place in the list, in turns} @@ a rule that ignores the times
+\text{so } 3 \text{ rooms hold them} @@ not allowed: a count is not a schedule; turns by list place can put two that clash in one room
+  </pre>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const Nw='\\htmlClass{new}';
+function sizeH(cv,H){ const dp=window.devicePixelRatio||1, W=cv.clientWidth||300; cv.width=W*dp; cv.height=H*dp; cv.style.height=H+'px'; const c=cv.getContext('2d'); c.setTransform(dp,0,0,dp,0,0); return {c,W}; }
+const hm=m=>String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0');
+const on=(M,t)=>M.filter(x=>x.s<=t&&t<x.e);
+function first(M){ const S=M.slice().sort((a,b)=>a.s-b.s||a.e-b.e); const ends=[]; S.forEach(x=>{ let r=ends.findIndex(e=>e<=x.s); if(r<0){ r=ends.length; ends.push(0); } ends[r]=x.e; x.room=r+1; }); return ends.length; }
+function busiest(M){ let best=0,at=null; M.forEach(x=>{ const k=on(M,x.s).length; if(k>best){ best=k; at=x.s; } }); return {best,at}; }
+const TINT=['--ember','--teal','--plum','--ink','--muted'];
+
+/* ---------- left: Monday ---------- */
+const BASE=[['A',540,630],['B',570,660],['C',600,720],['D',615,645],['E',660,750],['F',690,780],['G',720,780],['H',750,840]];
+let day=0;
+function monday(){ return BASE.map(([n,s,e])=>({n,s:(day===1&&n==='D')?780:s,e:(day===1&&n==='D')?810:e})); }
+[['as booked',0],['D moved to 13:00',1]].forEach(([lab,v])=>{ const b=document.createElement('button'); b.textContent=lab; if(v===day) b.className='on'; b.onclick=()=>{ day=v; [...$('dch').children].forEach(x=>x.classList.toggle('on',x===b)); draw1(); }; $('dch').appendChild(b); });
+const kt=$('kt'); kt.oninput=draw1;
+function bars(cv,M,t0,t1,now,H){ const {c,W}=sizeH(cv,H); c.fillStyle=col('--card'); c.fillRect(0,0,W,H);
+  const S=M.slice().sort((a,b)=>a.s-b.s); const rh=Math.min(18,(H-26)/S.length), x=t=>34+(W-44)*(t-t0)/(t1-t0);
+  c.font='10px IBM Plex Mono, monospace';
+  for(let h=Math.ceil(t0/60)*60;h<=t1;h+=60){ c.strokeStyle=col('--grid'); c.lineWidth=1; c.beginPath(); c.moveTo(x(h),4); c.lineTo(x(h),H-14); c.stroke(); c.fillStyle=col('--muted'); c.textAlign='center'; c.fillText(String(h/60),x(h),H-3); }
+  S.forEach((m,i)=>{ const y=6+i*rh; const go=now!=null&&m.s<=now&&now<m.e;
+    c.fillStyle=go?col('--ember'):col(TINT[(m.room-1)%TINT.length]); c.globalAlpha=go?1:0.35; c.fillRect(x(m.s),y,Math.max(2,x(m.e)-x(m.s)),rh-3); c.globalAlpha=1;
+    c.fillStyle=col('--ink'); c.textAlign='left'; c.fillText((m.n?m.n+' ':'')+m.room,2,y+rh-6); });
+  if(now!=null){ c.strokeStyle=col('--ink'); c.lineWidth=1.5; c.beginPath(); c.moveTo(x(now),2); c.lineTo(x(now),H-14); c.stroke(); }
+  return {c,W,x,rh,S}; }
+function draw1(){ const M=monday(), rooms=first(M), t=+kt.value; $('ot').textContent=hm(t);
+  bars($('cv1'),M,540,840,t,190);
+  const g=on(M,t), b=busiest(M), vd=$('vd1');
+  if(b.best>3){ vd.className='verdict lose'; vd.textContent=`At ${hm(b.at)}, ${b.best} meetings are going on at once. No schedule fits them in 3 rooms (room-count).`; }
+  else { vd.className='verdict win'; vd.textContent=`At most ${b.best} going on at any start, and the first-free-room rule uses ${rooms} rooms.`; }
+  const L=[R`\text{going on at } ${hm(t).replace(':','{:}')}:\ ${g.length?g.map(m=>m.n).join(', '):R`\text{none}`}\ (${g.length})`,
+    R`\text{most at once: } ${Nw}{${b.best}} \text{ at } ${hm(b.at).replace(':','{:}')}`,R`\text{first-free-room: } ${rooms} \text{ rooms}`];
+  tex($('eq1'),'\\begin{gathered}'+L.join('\\\\ ')+'\\end{gathered}',true);
+}
+new ResizeObserver(()=>draw1()).observe($('cv1'));
+
+/* ---------- right: a day of your own ---------- */
+const kn=$('kn'); let mine=[];
+function fresh(){ const n=+kn.value; mine=[]; for(let i=0;i<n;i++){ const len=30+15*Math.floor(Math.random()*11); const s=480+15*Math.floor(Math.random()*((1080-len-480)/15+1)); mine.push({n:'',s,e:s+len}); } }
+kn.oninput=()=>{ fresh(); draw2(); };
+[['new day',()=>fresh()]].forEach(([lab,f])=>{ const b=document.createElement('button'); b.textContent=lab; b.onclick=()=>{ f(); draw2(); }; $('nch').appendChild(b); });
+function draw2(){ $('on').textContent=kn.value; const rooms=first(mine), b=busiest(mine);
+  const H=Math.max(150,mine.length*12+30); const {c,x,rh,S}=bars($('cv2'),mine,480,1080,null,H);
+  S.forEach((m,i)=>{ const k=on(mine,m.s).length; const y=6+i*rh; c.fillStyle=col('--ink'); c.font='9px IBM Plex Mono, monospace'; c.textAlign='right'; c.fillText(String(k),x(m.s)-2,y+rh-6);
+    if(k===b.best&&m.s===b.at){ c.strokeStyle=col('--ink'); c.lineWidth=1.5; c.strokeRect(x(m.s)-10,y-1,10,rh-1); } });
+  const L=[R`\text{most at once: } ${Nw}{${b.best}}`,R`\text{first-free-room: } ${rooms} \text{ rooms}`,
+    R`\text{a search of every way into } ${b.best} \text{ rooms: } ${b.best}^{${mine.length}} \approx ${Math.pow(b.best,mine.length).toExponential(2).replace(/e\+?(\d+)/,'\\cdot 10^{$1}')}`];
+  tex($('eq2'),'\\begin{gathered}'+L.join('\\\\ ')+'\\end{gathered}',true);
+}
+new ResizeObserver(()=>draw2()).observe($('cv2'));
+if(window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{ draw1(); draw2(); });
+fresh(); draw1(); draw2();
+window.__pic={mon:(d)=>{ day=d; draw1(); const M=monday(); return {rooms:first(M),most:busiest(M),M}; }};
+
+/* ---------- slides ---------- */
+stepper('#sl1',[
+  {k:'ember',kl:'meetings as stretches of time',t:R`s \le t \lt e`,n:`A meeting from s to e is going on at t: from its start up to, but not including, its end.`},
+  {k:'ember',kl:'the busiest start',t:R`s_i \le s \le t \lt e_i`,n:`Take the latest start among the meetings going on at t: all of them are going on there too.`},
+  {k:'ember',kl:'the busiest start',t:R`${Nw}{\text{check only the starts}}`,n:`n meetings, n moments to check: a finite search (7b).`},
+  {k:'ember',kl:'four at 10:15',t:R`A, B, C, D \text{ at } 10{:}15`,n:`Monday's busiest start: four going on at once.`},
+  {k:'ember',kl:'room-count',t:R`${Nw}{w \text{ at once} \Rightarrow \text{at least } w \text{ rooms}}`,n:`A refutation, with 6·logi's no-room. No rung 7 needed: the statement is a denial.`},
+  {k:'teal',kl:'the first-free-room rule',t:R`A \to 1,\ B \to 2,\ C \to 3,\ E \to 1,\ F \to 2,\ G \to 3,\ H \to 1,\ D \to 2`,n:`D moved to 13:00. In order of start, each takes the lowest room free when it starts.`},
+  {k:'ember',kl:'the first-free-room technique',t:R`\text{room } r \text{ opened at } s \Rightarrow r \text{ going on at } s`,n:`So the rule never opens more than w rooms.`},
+  {k:'ember',kl:'exactly w',t:R`${Nw}{\text{rooms needed} = w}`,n:`Room-count gives at least w; the rule gives at most w.`},
+  {k:'teal',kl:'the search nobody runs',t:R`3^{30} = 205\,891\,132\,094\,649`,n:`Every way to put 30 meetings in 3 rooms. Settled, by finite-search, and far too slow.`},
+  {k:'ember',kl:'illegal',t:R`8 \text{ meetings} \gt 3 \text{ rooms}\,?`,n:`Rooms are reused. Count the meetings going on at one moment, not all day.`}
+],{title:'The slides · meetings as stretches of time; going on; the busiest start; four at 10:15; room-count; the first-free-room rule; the technique; the search nobody runs; illegal moves · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>16·nav · Where am I now?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r16econ.html">← 16·econ who gains from a trade, and how much?</a><a href="r16bio.html">next: 16·bio how much of a dose is still in the blood? →</a></p>
+  <div class="tags"><span class="tag nav">16·nav · navigation</span></div>
+  <h1>Where am I now?</h1>
+  <p>Where am I now? For most of the history of the sea, a ship out of sight of land had no way to see its place. Its crew could measure only how fast it was going, and for how long. So they asked the question every watch, and answered it by adding up: so many knots for so many hours from the last place they were sure of. What makes it hard is that the adding never corrects itself. A small error in the speed is added in again every hour, and a ship can be sure of its sums and miles from where they say. This page reads the old method as 16c: the place is the area under the speed. Then it proves how fast an error in speed, or in the push of the engines, grows into an error in place.</p>
+  <p class="gesture">The place now is the place at the start plus the area under the speed since. If the measured speed is always within a bound of the true one, the place is within that bound times the hours. If the measured push is within a bound of the true one, the place is within half that bound times the square of the hours. An unseen current moves the ship by its speed times the hours, and the log never shows it.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r16c.html">16c</a> (area-is-a-change), <a href="r16then.html">16·then</a> (net-change), <a href="r16a.html">16a</a> (area-bound), <a href="r16b.html">16b</a> (area-slope), <a href="r15e.html">15e</a> (areas-add, smaller-function-smaller-area), <a href="r15h.html">15h</a> (sums of thin strips), <a href="r16phys.html">16·phys</a> (position from velocity, velocity from acceleration). <a href="r18nav.html">18·nav</a> puts the coast on a grid; rung 21 carries a heading forward as an arrow.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · read it through, then work the picture and the slides</div>
+
+  <h3>Place from speed</h3>
+  <p data-pid="fd927c">At sea, distance is counted in nautical miles, and speed in knots. A knot is one nautical mile an hour, and a nautical mile is 1852 m. Let a boat keep one course, a line drawn on the chart from its start. Let s(t) be its distance along that line after t hours, and v(t) its speed.</p>
+  <p data-pid="44a861">Dead-reckoning technique: <b>where you are is where you started, plus the area under your speed.</b> If v is continuous on [0, T], then s(T) = s(0) + ∫₀ᵀ v(t) dt. It is net-change (16·then), with Q = s. Its accepted name is dead reckoning.</p>
+  <p data-pid="afba81">Out of Monterey harbour, the course to Santa Cruz runs about 22 nautical miles across the bay. A navigator reads the log every half hour and writes the speed in the logbook.</p>
+  <pre class="lines" data-k="ember" data-label="16·nav: Monterey to Santa Cruz, by the logbook">
+\text{knots, read each half hour from } t = 0:\ 6.8,\ 7.4,\ 7.9,\ 7.6,\ 7.2,\ 6.9,\ 7.0 @@ seven readings over 3 hours
+\text{left sum}: 0.5\,(6.8 + 7.4 + 7.9 + 7.6 + 7.2 + 6.9) = 21.9 \text{ nmi} @@ strip sums (15h): each half hour at its first reading
+\text{right sum}: 0.5\,(7.4 + 7.9 + 7.6 + 7.2 + 6.9 + 7.0) = 22.0 \text{ nmi} @@ each half hour at its last reading
+s(3) - s(0) \approx 22 \text{ nmi} @@ dead-reckoning: the boat should be off Santa Cruz
+  </pre>
+  <p data-pid="cfc7de">The old log was a board on a long line. Thrown over the stern, the board stayed put in the water while the line ran out. Knots tied along the line at equal spacing were counted as they ran out over a sand-glass of a few seconds. The spacing was set so that the number of knots counted was the speed in nautical miles an hour, which is why the unit is called a knot.</p>
+
+  <h3>Errors that grow</h3>
+  <p data-pid="9a285f">A log never reads the true speed. Its reading u(t) differs from the true v(t) by a little: weed on the line, a gust, a sea running under the stern. Write e(T) for the error in place after T hours: the reckoned place less the true one.</p>
+  <p data-pid="b73f5e">Speed-error technique: <b>a steady doubt in speed becomes a doubt in place that grows with the time run.</b> Let u and v be continuous on [0, T], with the same start. Let |u(t) − v(t)| ≤ M for every t there. Then |e(T)| ≤ MT.</p>
+  <pre class="lines" data-k="ember" data-label="16·nav: the speed-error technique">
+e(T) = \big(s(0) + \textstyle\int_0^T u\big) - \big(s(0) + \int_0^T v\big) @@ dead-reckoning, once with the log and once with the truth
+= \textstyle\int_0^T \big(u(t) - v(t)\big)\,dt @@ areas-add (15e)
+\htmlClass{new}{|e(T)| \le M\,T} \quad \blacksquare @@ area-bound (16a), with |u − v| ≤ M on [0, T]
+  </pre>
+  <p data-pid="1b3adb">The bound grows with T and nothing in the sums pulls it back. A log that reads 0.2 knots high may put the boat 0.2 nautical miles out after an hour, which no one would notice. After a day it may be 4.8 out. A fix, a place seen and measured, from a landmark, a star or a satellite, starts the sums again from a sure place.</p>
+  <p data-pid="014c30">Worse, the log measures the water flowing past the boat, not the ground beneath it. A current carries the water and the boat together, and the log does not see it. A current of c knots along the course for T hours moves the boat cT that no reckoning shows. A current across the course does the same sideways. The boat's distance across the line is its own area: ∫₀ᵀ c(t) dt, the area under the current's speed across.</p>
+  <pre class="lines" data-k="ember" data-label="16·nav: a current the log does not see">
+\text{a current of } 0.5 \text{ kn along the course, } 10 \text{ h} @@ the log reads speed through the water
+e(10) = -\textstyle\int_0^{10} 0.5\,dt = -5 \text{ nmi} @@ dead-reckoning: the true speed is u + 0.5; the boat is 5 nmi further on than reckoned
+\text{a current of } 0.4 \text{ kn across the course, } 5 \text{ h}:\ 2 \text{ nmi off the line} @@ the across distance is ∫₀⁵ 0.4 dt
+  </pre>
+
+  <h3>Run backwards twice</h3>
+  <p data-pid="53ce1d">A submarine or an airliner can carry an instrument that feels its own push, its acceleration, with no log and no window. Its speed is the area under the acceleration, and its place is the area under the speed: 16·phys's two steps. Then the doubt is run backwards twice.</p>
+  <p data-pid="ea5fc4">Doubled-error technique: <b>run backwards twice, a small doubt grows with the square of the time.</b> Let the measured and true accelerations be continuous on [0, T], within M of each other, with speed and place right at the start. Then the speed is out by at most Mt at each time t, and the place by at most MT²/2.</p>
+  <pre class="lines" data-k="ember" data-label="16·nav: the doubled-error technique">
+e_v(t) = \textstyle\int_0^t (a_m - a) @@ dead-reckoning one step down: the speed's error, with e_v(0) = 0
+-Mt \le e_v(t) \le Mt @@ area-bound (16a)
+e(T) = \textstyle\int_0^T e_v(t)\,dt @@ dead-reckoning again: the place's error, with e(0) = 0
+\htmlClass{new}{-\tfrac{MT^2}{2} \le e(T) \le \tfrac{MT^2}{2}} \quad \blacksquare @@ smaller-function-smaller-area (15e); ∫₀ᵀ Mt dt = MT²/2 (the table)
+  </pre>
+  <p data-pid="e23de6">Let the push be measured to within 0.001 m/s², about a ten-thousandth of the pull of the Earth. After an hour, 3600 s, the place may be out by ½ · 0.001 · 3600² = 6480 m, about 3.5 nautical miles. After ten hours the bound is a hundred times that. So such instruments are reset by fixes too, often.</p>
+
+  <h3>Honda Point, 1923</h3>
+  <p data-pid="022d42">On the evening of 8 September 1923, fourteen destroyers of the United States Navy steamed south along the Central Coast at 20 knots, in fog, bound for San Diego. Their place came from dead reckoning. Near Point Arguello they turned east, believing they had passed it and were entering the Santa Barbara Channel. They had not. They were north of their reckoning, and the turn took them onto the rocks at Honda Point. Seven destroyers were lost, and 23 sailors died.</p>
+  <p data-pid="cb265d">At 20 knots, a doubt of half a knot, from the log or from a current, grows to several nautical miles over a day's run. That is the width of the passage they were aiming for.</p>
+
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · the middle of a change</div>
+    <p data-pid="58a9cf">Dead reckoning is this principle put to work. A navigator out of sight of land never sees the boat's place change. She sees only its rate, on the log, and adds it up. Every instant of the passage is a middle between the last sure place and the next one, and it is described by a speed. The before and after are found from the middle, not the other way round. The price is that every doubt in the rate is added up too.</p>
+    <p data-pid="039f8d"><b>Describe a change by its rates, not only by its before and after.</b></p>
+    <p data-pid="a9f490">A fix measures a before or an after. Reckoning fills the middle. A navigator needs both, and trusts neither alone for long.</p>
+    <p class="bait" data-pid="8915ef">A boat lies at anchor for an hour in a tidal current of 1 knot. Its log, which counts the water flowing past, reads 1 knot all hour. How far has the boat moved?</p>
+  </aside>
+
+  <h3>Illegal moves</h3>
+  <pre class="lines" data-k="ember" data-label="16·nav: tempting, and not allowed">
+\text{the log reads speed over the ground}\,? @@ through the water; a current adds its own, unseen
+|e(T)| \le MT, \text{ so } e(T) = MT\,? @@ at most; errors of both signs may cancel
+\text{a doubt of } 0.1 \text{ kn is too small to matter}\,? @@ after 30 h it may be 3 nmi
+\text{a doubt in the push grows with the time}\,? @@ with the square of the time (doubled-error)
+\text{the left sum is where the boat is}\,? @@ an estimate; the speed may rise and fall between readings
+  </pre>
+</section>
+
+<section class="pic" id="pic">
+  <div class="eyebrow">The picture · a logbook added up, and a doubt that grows</div>
+  <div class="panels">
+    <div class="panel">
+      <div class="lbl">knots against hours: Monterey to Santa Cruz</div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">current along</span><input type="range" id="kc" min="-1" max="1" step="0.05" value="0"><output id="oc"></output></div>
+      <div class="cap">Ink: the log's readings, joined. Ember boxes: the left sum, the navigator's reckoning. Teal: the speed over the ground, the log plus the current set by the knob.</div>
+    </div>
+    <div class="panel">
+      <div class="lbl">the greatest error in place, nautical miles, against hours</div>
+      <canvas id="cvE"></canvas>
+      <div class="kn"><span class="m">log doubt M</span><input type="range" id="km" min="0" max="1" step="0.05" value="0.2"><output id="om"></output></div>
+      <div class="kn"><span class="m">push doubt</span><input type="range" id="kp" min="0" max="10" step="0.5" value="2"><output id="op"></output></div>
+      <div class="kn"><span class="m">hours run T</span><input type="range" id="kT" min="1" max="24" step="0.5" value="10"><output id="oT"></output></div>
+      <div class="cap">Teal: MT, from a doubt in the log. Plum: MT²/2, from a doubt in the push. However small the push doubt, the plum curve passes the teal line in the end.</div>
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+</section>
+
+<section class="slides" id="sl1"><div class="eyebrow">The slides · knots and nautical miles; dead-reckoning; the logbook; left and right sums; the old log; speed-error; a day's doubt; the fix; a current unseen; across the course; doubled-error; a ten-thousandth of g; Honda Point; the middle of a change; illegal moves · ← → keys work</div></section>
+
+<section class="sayback">
+  <div class="eyebrow">Say it back · then work it</div>
+  <h2>Questions</h2>
+  <div class="phkey"></div>
+  <ol>
+    <li><span class="qid">16·nav.1</span><span class="gname">Place from speed.</span><span class="gwhy">Do: build the page's pieces.</span>
+      <ol class="sub">
+        <li><span class="qid">16·nav.1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{each half hour from } t = 0:"></span> <span data-tex-inline="6.0,\ 6.4,\ 7.0,\ 7.2,\ 6.6 \text{ knots}"></span></span>Find the left and right sums for the distance run.</li><li><span class="givens"><span data-tex-inline="v(t) = 20 - 4t \text{ knots},"></span> <span data-tex-inline="0 \le t \le 3"></span></span>Find the distance run, and the time at which the boat has run 30 nmi.</li><li><span class="givens"><span data-tex-inline="\text{log reads } 3\% \text{ high throughout},"></span> <span data-tex-inline="\text{reckoning: } 40 \text{ nmi}"></span></span>Find how far the boat ran, and how far out the reckoning is.</li><li><span class="givens"><span data-tex-inline="\text{current across the course},"></span> <span data-tex-inline="0.6 \text{ knots for } 7 \text{ hours}"></span></span>Find how far off the course line the boat is.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">16·nav.2</span><span class="gname">From the place back.</span><span class="gwhy">Undo: run the page's techs backwards.</span>
+      <ol class="sub">
+        <li><span class="qid">16·nav.2.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="v(t) = kt(4 - t) \text{ knots},"></span> <span data-tex-inline="24 \text{ nmi in the first } 3 \text{ hours}"></span></span>Find k.</li><li><span class="givens"><span data-tex-inline="\text{after } 5 \text{ hours},"></span> <span data-tex-inline="\text{reckoning: } 30 \text{ nmi}"></span> <span data-tex-inline="\text{along the course},"></span> <span data-tex-inline="\text{fix: } 31.5 \text{ nmi},"></span> <span data-tex-inline="\text{a steady current along the course}"></span></span>Find the current's strength and which way it ran.</li><li><span class="givens"><span data-tex-inline="s(t) = 6t + t^2 - t^3/6 \text{ nmi}"></span></span>Find the speed at every t, and when it is greatest.</li><li><span class="givens"><span data-tex-inline="\text{passage of } 8 \text{ hours},"></span> <span data-tex-inline="\text{reckoning sure within } 1 \text{ nmi}"></span></span>Find how close the log must be to the true speed.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">16·nav.3</span><span class="gname">Where it gives.</span><span class="gwhy">Bend: find where the techs stop working.</span>
+      <ol class="sub">
+        <li><span class="qid">16·nav.3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{log } 0.3 \text{ knots high for } 4 \text{ h},"></span> <span data-tex-inline="\text{then } 0.3 \text{ knots low for } 4 \text{ h}"></span></span>Find the error in place at 4 and at 8 hours, and the bound speed-error gives at each.</li><li><span class="givens"><span data-tex-inline="\text{read on the hour: } 8,\ 8,\ 8 \text{ knots}"></span></span>Prove or refute, for those 2 hours: the boat could have run 20 nmi; it could have run 12.</li><li><span class="givens"><span data-tex-inline="\text{push out by } 0.01 \text{ m/s}^2"></span></span>Find the bound on the error in place after 10 minutes and after 10 hours.</li><li><span class="givens"><span data-tex-inline="|e(T)| \le MT"></span></span>Find every log error for which the bound is reached exactly.</li></ol></li>
+      </ol></li>
+    <li class="optgroup"><span class="qid">16·nav.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder challenges that rely on your own making. The page is complete without these; the rung's star needs them.</span>
+      <ol class="sub">
+        <li class="opt"><span class="qid">16·nav.4.1</span><span class="tagq">build</span>Make up a log error of your own for a 6-hour run out of Monterey: the log's reading less the true speed, never more than 0.5 knots in size, and changing sign at least once.<br>Find the error in place at the end, and the largest error a 0.5-knot doubt allows.</li>
+        <li class="opt"><span class="qid">16·nav.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="c(t) = 1.5(1 - t/3) \text{ knots},"></span> <span data-tex-inline="0 \le t \le 6,"></span> <span data-tex-inline="\text{along the course, unseen}"></span></span>Find when the reckoning is worst, and how wrong it is at 6 hours.</li>
+        <li class="opt"><span class="qid">16·nav.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{log and true speed continuous},"></span> <span data-tex-inline="\text{reckoned place} = \text{true place}"></span> <span data-tex-inline="\text{at every instant}"></span></span>Prove or refute: the log was right at every instant.</li>
+        <li class="opt"><span class="qid">16·nav.4.4</span><span class="tagq">seam</span>In 1923 a squadron's navigator, steaming in fog, had his own reckoning and, new in that service, bearings radioed from a station ashore. The bearings put the ships north of where he reckoned. Such stations were new, and had been wrong before. His reckoning had served him for years. He kept to his reckoning, and the ships ran aground. <br>When a careful reckoning and a new instrument disagree, which should be trusted?</li>
+      </ol></li>
+  </ol>
+  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
+</section>
+
+<nav class="nextrung"><a href="r16econ.html">← 16·econ · who gains from a trade, and how much?</a><a href="r16bio.html">16·bio · how much of a dose is still in the blood? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>Bourne described the log: a piece of board with a line fastened to it, let fall over the stern so that it stays where it falls, the line let run out while a sand-glass or a counted time passes, and the length run out measured to give how far the ship goes in an hour.</p><cite>William Bourne, A Regiment for the Sea (1574); paraphrase</cite></aside>
+  <p>Knots tied along the line came into use later, with a sand-glass timed to match their spacing. The nautical mile of 1852 m was agreed internationally in 1929.</p>
+  <p>In 16·nav.4.4, the navigator of the squadron was Lieutenant Commander Donald T. Hunter, aboard the flagship Delphy, under Captain Edward H. Watson. The bearings came from the radio direction-finding station at Point Arguello. A naval court found the squadron's commander and its navigator to blame; the losses at Honda Point remain the largest peacetime loss of ships in the history of the United States Navy.</p>
+  <p>Accepted names: dead reckoning (sometimes said to come from "deduced reckoning", a story with no early evidence); the chip log, or common log; set and drift for a current's direction and speed; inertial navigation for the instrument that feels its own push.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="16·nav: a worked “proof”, not allowed">
+\text{the log is within } 0.2 \text{ kn of the speed through the water} @@ fine
+\text{so after } 10 \text{ h the place is within } 2 \text{ nmi} @@ not allowed: speed-error needs the true speed, over the ground; a current is not in the log
+\text{the boat is safe if the rocks are } 3 \text{ nmi off} @@ false: a current of 0.5 kn adds 5 nmi in 10 h
+  </pre>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '–'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+const Nw='\\htmlClass{new}';
+function axes2(P,gx,gy){ const c=P.ctx,o=P.o; c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ c.moveTo(P.X(x),P.Y(o.y[0])); c.lineTo(P.X(x),P.Y(o.y[1])); }
+  for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ c.moveTo(P.X(o.x[0]),P.Y(y)); c.lineTo(P.X(o.x[1]),P.Y(y)); } c.stroke();
+  c.strokeStyle=col('--muted'); c.lineWidth=1.3; c.beginPath(); if(o.y[0]<=0&&o.y[1]>=0){ c.moveTo(P.X(o.x[0]),P.Y(0)); c.lineTo(P.X(o.x[1]),P.Y(0)); } if(o.x[0]<=0&&o.x[1]>=0){ c.moveTo(P.X(0),P.Y(o.y[0])); c.lineTo(P.X(0),P.Y(o.y[1])); } c.stroke();
+  c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; const ly=Math.min(P.H-6,Math.max(12,P.Y(0)+14));
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ if(Math.abs(x)<1e-9) continue; c.fillText(+x.toFixed(6),P.X(x),ly); }
+  c.textAlign='right'; const lx=Math.max(32,Math.min(P.W-4,P.X(0)-5)); for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ if(Math.abs(y)<1e-9) continue; c.fillText(String(+y.toFixed(6)).replace('-','−'),lx,P.Y(y)+4); } }
+function nice(sp){ const raw=sp/6, p=Math.pow(10,Math.floor(Math.log10(raw))), m=raw/p; return (m<1.5?1:m<3.5?2:m<7.5?5:10)*p; }
+const RD=[6.8,7.4,7.9,7.6,7.2,6.9,7.0];
+const kc=$('kc'),km=$('km'),kp=$('kp'),kT=$('kT'),cvF=$('cvF'),cvE=$('cvE');
+const lin=t=>{ const i=Math.min(5,Math.floor(t/0.5)), f=(t-0.5*i)/0.5; return RD[i]+(RD[i+1]-RD[i])*f; };
+const PF=plane(cvF,{x:[-0.2,3.2],y:[0,10],grid:0,draw:P=>drawF(P)}); Object.defineProperty(PF.o,'aspect',{get:()=>cvF.clientWidth>480?0.7:0.85});
+const PE=plane(cvE,{x:[0,24],y:[0,10],grid:0,draw:P=>drawE(P)}); Object.defineProperty(PE.o,'aspect',{get:()=>cvE.clientWidth>480?0.7:0.85});
+function drawF(P){ axes2(P,0.5,1); const c=P.ctx, cur=+kc.value;
+  for(let i=0;i<6;i++){ const a=0.5*i,b=a+0.5,h=RD[i]; c.globalAlpha=0.22; P.poly([[a,0],[b,0],[b,h],[a,h]],null,'--ember'); c.globalAlpha=1; P.poly([[a,0],[b,0],[b,h],[a,h]],'--ember',null,1.1); }
+  P.poly(RD.map((v,i)=>[0.5*i,v]),'--ink',null,2.4,false); RD.forEach((v,i)=>P.dot(0.5*i,v,'--ink',3.5));
+  if(Math.abs(cur)>1e-9) P.poly(RD.map((v,i)=>[0.5*i,v+cur]),'--teal',null,2,false); }
+const bM=()=>+km.value, bA=()=>+kp.value*1e-5*3600*3600/1852; /* push doubt, in hundred-thousandths of a m/s², → nmi per h² */
+function drawE(P){ const T=+kT.value, M=bM(), A=bA(); const top=Math.max(1,M*T,A*T*T/2)*1.15; P.o.x=[0,T]; P.o.y=[0,top]; axes2(P,nice(T),nice(top));
+  P.fn(t=>M*t,'--teal',2.4); P.fn(t=>A*t*t/2,'--plum',2.4); P.dot(T,M*T,'--teal',4.5); P.dot(T,A*T*T/2,'--plum',4.5); }
+function read(){ const cur=+kc.value, T=+kT.value, M=bM(), A=bA(); $('oc').textContent=mm(cur,2)+' kn'; $('om').textContent=mm(M,2)+' kn'; $('op').textContent=mm(+kp.value*1e-5,6)+' m/s²'; $('oT').textContent=mm(T,1)+' h';
+  const left=0.5*RD.slice(0,6).reduce((a,b)=>a+b,0), right=0.5*RD.slice(1).reduce((a,b)=>a+b,0);
+  const vd=$('vdF'); vd.className='verdict';
+  vd.textContent='Reckoned: left sum '+mm(left,2)+' nmi, right sum '+mm(right,2)+' nmi. With the current, the boat is '+mm(3*Math.abs(cur),2)+' nmi '+(cur>=0?'further on':'short')+'. After '+mm(T,1)+' h: a log doubt of '+mm(M,2)+' kn gives at most '+mm(M*T,2)+' nmi; a push doubt of '+mm(+kp.value*1e-5,6)+' m/s² gives at most '+mm(A*T*T/2,2)+' nmi.';
+  tex($('eqF'),R`|e(${mm(T,1)})| \le ${mm(M,2)} \cdot ${mm(T,1)} = ${mm(M*T,2)},\qquad \tfrac{M T^2}{2} \approx ${mm(A*T*T/2,2)} \text{ nmi}`,true); }
+function all(){ PF.redraw(); PE.redraw(); read(); }
+[kc,km,kp,kT].forEach(el=>el.addEventListener('input',all));
+window.__pic={set:(c,M,p,T)=>{ kc.value=c; km.value=M; kp.value=p; kT.value=T; all(); return {lin:+(M*T).toFixed(4),quad:+(bA()*T*T/2).toFixed(4)}; }};
+all();
+stepper('#sl1',[
+  {k:'ember',kl:'knots and nautical miles',t:R`1 \text{ kn} = 1 \text{ nmi/h},\ \ 1 \text{ nmi} = 1852 \text{ m}`,n:`The units of the sea.`},
+  {k:'ember',kl:'dead-reckoning',t:R`${Nw}{s(T) = s(0) + \textstyle\int_0^T v\,dt}`,n:`net-change, with Q = s.`},
+  {k:'ember',kl:'the logbook',t:R`6.8,\ 7.4,\ 7.9,\ 7.6,\ 7.2,\ 6.9,\ 7.0`,n:`Knots, each half hour, Monterey to Santa Cruz.`},
+  {k:'ember',kl:'left and right sums',t:R`21.9 \text{ and } 22.0 \text{ nmi}`,n:`Off Santa Cruz.`},
+  {k:'ember',kl:'the old log',t:R`\text{knots counted} = \text{knots}`,n:`A board, a line, a sand-glass.`},
+  {k:'ember',kl:'speed-error',t:R`${Nw}{|e(T)| \le MT}`,n:`area-bound on ∫(u − v).`},
+  {k:'ember',kl:'a day’s doubt',t:R`0.2 \cdot 24 = 4.8 \text{ nmi}`,n:`Nothing in the sums pulls it back.`},
+  {k:'ember',kl:'the fix',t:R`\text{a sure place: start again}`,n:`A landmark, a star, a satellite.`},
+  {k:'ember',kl:'a current unseen',t:R`0.5 \text{ kn} \times 10 \text{ h} = 5 \text{ nmi}`,n:`The log counts water, not ground.`},
+  {k:'ember',kl:'across the course',t:R`\textstyle\int_0^5 0.4\,dt = 2 \text{ nmi}`,n:`Its own area.`},
+  {k:'ember',kl:'doubled-error',t:R`${Nw}{|e(T)| \le \tfrac{MT^2}{2}}`,n:`Run backwards twice.`},
+  {k:'ember',kl:'a ten-thousandth of g',t:R`\tfrac12 \cdot 0.001 \cdot 3600^2 = 6480 \text{ m}`,n:`In one hour.`},
+  {k:'ember',kl:'Honda Point',t:R`20 \text{ kn, fog, reckoning}`,n:`Seven destroyers lost, 1923.`},
+  {k:'ember',kl:'the middle of a change',t:R`\text{rates, not only before and after}`,n:`Reckoning fills the middle; a fix measures the ends.`},
+  {k:'ember',kl:'illegal',t:R`\text{log speed} \ne \text{ground speed}`,n:`A current is not in the log.`}
+],{title:'The slides · knots and nautical miles; dead-reckoning; the logbook; left and right sums; the old log; speed-error; a day’s doubt; the fix; a current unseen; across the course; doubled-error; a ten-thousandth of g; Honda Point; the middle of a change; illegal moves · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

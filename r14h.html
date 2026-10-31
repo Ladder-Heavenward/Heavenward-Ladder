@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>14h · Optimising</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:3.5em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r14g.html">← 14g the bend and sketching</a><a href="r14i.html">next: 14i When top and bottom both vanish, and growth races →</a></p>
+  <div class="tags"><span class="tag tech">14h · technique</span></div>
+  <h1>Optimising</h1>
+  <p>A ferry sets a fare, a shop decides how much to order, a driver picks a speed. Each wants the most of something or the least of something else, and each choice pulls two ways. A higher fare brings more money per ticket and fewer tickets. A bigger order costs fewer orders and more shelf. Write the thing to make best as a function of the one choice, and find the interval of choices that make sense. Then the last three steps do the rest: 14a's candidates on a closed interval, or 14f's single critical point on any interval. The work is in the writing. Once the function is on the step, finding its best is a few lines.</p>
+  <p class="gesture">Name the choice. Write the goal as a function of it, using every condition to remove other unknowns. Find the interval of sensible choices. Then compare candidates (candidates) or use a single critical point (one-critical-point), and check the answer means something.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r14a.html">14a</a> (candidates), <a href="r14f.html">14f</a> (first-test, second-test, one-critical-point), <a href="r14g.html">14g</a> (sketching), <a href="r13f.html">13f</a> (quotient for slopes), <a href="r13h.html">13h</a> (fraction-power for slopes), <a href="r08g.html">8g</a> (means). <a href="r14bio.html">14·bio</a> and <a href="r14chem.html">14·chem</a> find a least energy and a best size; rung 29's physics turns “least” into a law.</p></div>
+</header>
+
+<section class="class step" data-step="14h1">
+  <h2 class="sthead"><span class="stno">14h1</span>The steps</h2>
+  <p class="stands">Stands on 14a (candidates) and 14f (the tests).</p>
+  <p data-pid="e69659">First, say in words what is to be made greatest or least, and what is chosen. Second, name the choice with one letter and write the goal as a function of it. If the goal depends on more than one unknown, use the problem's conditions to write the others in terms of the choice. Third, find the interval of choices that make sense: prices are not negative, speeds lie between limits, an order is more than nothing. Fourth, find the best. On a closed interval, compare the candidates (candidates). On any interval, a single critical point that is a bottom is the least (one-critical-point), and one that is a top the greatest. Fifth, answer the question asked, with units, and check it: is it a whole number when it must be, and does it lie in the interval?</p>
+  <p data-pid="3915b8">Accepted name: optimisation, and the best value is the optimum.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the steps · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">14h1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a rectangle with perimeter 20 and greatest area</span></span>Say in words what is made greatest and what is chosen. <br>Write the goal as a function of one letter, with its interval.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="14h2">
+  <h2 class="sthead"><span class="stno">14h2</span>Two parts that pull apart</h2>
+  <p class="stands">Stands on 14h1, 14f (one-critical-point) and 8g (means).</p>
+  <p data-pid="5a1dca">Many costs have one part that falls as the choice grows and one that rises. When the parts are k/x and mx, the answer has a shape worth knowing.</p>
+  <p data-pid="1895fb">Equal-parts technique: <b>for positive reals k and m, the function k/x + mx on (0, ∞) has its least value 2√(km), at x = √(k/m), and there the two parts are equal: k/x = mx.</b></p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the equal-parts technique">
+f(x) = \tfrac{a}{x} + bx,\ \ f'(x) = -\tfrac{a}{x^2} + b @@ quotient for slopes (13f), slope-of-a-line; continuous on (0, ∞)
+f'(x) = 0 \;\Leftrightarrow\; x^2 = \tfrac{a}{b} \;\Leftrightarrow\; x = \sqrt{a/b} @@ the only critical point in (0, ∞)
+f''(x) = \tfrac{2a}{x^3} \gt 0 @@ second-test: a bottom
+\htmlClass{new}{\tfrac{a}{x} = bx} \text{ at } x = \sqrt{a/b},\ \ f = 2\sqrt{ab} @@ one-critical-point: the least value on (0, ∞); a/x = b·x is the line x² = a/b again ∎
+  </pre>
+  <p data-pid="3d48a6"><b>At the best choice, the falling part and the rising part cost the same.</b> A shop that finds its ordering costs well above its shelf costs is ordering too little.</p>
+  <pre class="lines" data-k="teal" data-label="from 8g: the means, from one function">
+x + \tfrac1x \ge 2 \text{ for } x \gt 0,\ \text{equal only at } 1 @@ equal-parts with a = b = 1
+x = \sqrt{s/t} \text{ for positive } s, t:\ \ \sqrt{\tfrac st} + \sqrt{\tfrac ts} \ge 2 @@ the line above
+\htmlClass{new}{\tfrac{s + t}{2} \ge \sqrt{st}} @@ multiply by √(st)/2: the halfway mean is at least the root of the product, as 8g found
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · equal-parts · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · left: the goal as a function of the choice · right: its two parts</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="chips" id="fch"></div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">choice</span><input type="range" id="kx" min="0" max="1000" step="1" value="300"><output id="ox"></output></div>
+      <div class="cap">Ink: the goal on its interval of sensible choices. Gold rings: the candidates (ends and critical points). Teal dot: the best. Plum dot: the choice set by the knob.</div>
+      <div class="verdict" id="vdF"></div>
+    </div>
+    <div class="panel">
+      <div class="lbl">the parts that pull apart</div>
+      <canvas id="cvS"></canvas>
+      <div class="cap">Plum: the part that falls as the choice grows; gold: the part that rises; ink: their sum. For k/x + mx the two parts cross at the best choice.</div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14h2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = 9/x + 4x on (0, ∞)</span></span>Find the best x and the least value by equal-parts. <br>Check that the two parts are equal there.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="14h3">
+  <h2 class="sthead"><span class="stno">14h3</span>Worked: the order that costs least</h2>
+  <p class="stands">Stands on 14h2.</p>
+  <p data-pid="a5b230">A writer for factory managers in 1913 asked how many parts to make or buy at a time. Order Q items at a time and run through D in a year, so there are D/Q orders, each with a fixed cost K. Between orders, the stock falls steadily from Q to 0. So on average Q/2 items sit on the shelf, each costing h to hold for a year.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the economic order quantity">
+T(Q) = \tfrac{KD}{Q} + \tfrac{h}{2}Q \text{ on } (0, \infty) @@ the goal: yearly cost, in dollars
+\text{a store in Eureka: } D = 1800 \text{ bags},\ K = \$25,\ h = \$1 @@ the numbers
+Q = \sqrt{\tfrac{2KD}{h}} = \sqrt{90000} = \htmlClass{new}{300} @@ equal-parts with a = KD = 45000 and b = h/2 = ½
+T(300) = 150 + 150 = \$300 @@ ordering costs and shelf costs equal, as equal-parts says
+  </pre>
+  <p data-pid="72acbb">Its accepted name is the economic order quantity. Six orders a year, every two months.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · best order · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14h3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">K = 10 dollars an order,  D = 500 a year,  h = 1 dollar</span></span>Find the best order size Q. <br>Find how many orders a year that makes.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="14h4">
+  <h2 class="sthead"><span class="stno">14h4</span>Worked: the fare that brings in most</h2>
+  <p class="stands">Stands on 14h3 and 14a (candidates).</p>
+  <pre class="lines" data-k="ember" data-label="this step: a price on a closed interval">
+q = 2000 - 50p \text{ tickets a day at fare } p \text{ dollars},\ 0 \le p \le 40 @@ a ferry's count: fewer riders at a higher fare
+R(p) = p\,q = 2000p - 50p^2 @@ the goal: money in, dollars a day
+R'(p) = 2000 - 100p = 0 \text{ at } p = 20 @@ polynomial-slope; inside [0, 40]
+R(0) = 0,\ \ R(20) = 20000,\ \ R(40) = 0 @@ candidates: the candidates
+\text{fare } \htmlClass{new}{\$20},\ 1000 \text{ riders},\ \$20\,000 \text{ a day} @@ the greatest
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · the fare · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14h4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">q = 600 − 20p riders,  0 ≤ p ≤ 30</span></span>Write the takings R(p). <br>Find the fare that brings in most, checking the ends.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="14h5">
+  <h2 class="sthead"><span class="stno">14h5</span>Worked: the speed that costs least, and the wrong goal</h2>
+  <p class="stands">Stands on 14h4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: a speed between limits">
+C(v) = \tfrac{2000}{v} + 0.2v \text{ cents per km},\ \ 40 \le v \le 110 @@ a driver paid 2000 cents an hour, so 2000/v a kilometre; fuel 0.2v a kilometre
+C'(v) = -\tfrac{2000}{v^2} + 0.2 = 0 \text{ at } v = 100 @@ equal-parts's critical point, inside [40, 110]
+C(40) = 58,\ \ C(100) = 40,\ \ C(110) \approx 40.18 @@ candidates
+\text{least: } 40 \text{ cents per km at } 100 \text{ km/h} @@ wages and fuel 20 cents each
+  </pre>
+  <p data-pid="c6aa7e">The same costs per hour are 2000 + 0.2v², least at the slowest speed allowed. That answers a different question, the cost of an hour on the road, when the trip is a fixed distance. <b>Writing the goal is the step where problems go wrong.</b></p>
+  <p data-pid="b667af">The 1913 article told factory managers that the number of parts to make at one time is a balance. On one side is the interest tied up in stock; on the other, the cost of setting up each run. A formula, not the foreman's habit, should strike it.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · the speed · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14h5.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="x + y = 16,"></span> <span data-tex-inline="x &gt; 0,\ y &gt; 0"></span></span>Find the greatest value of the product of x and y, and prove it is the greatest.</li><li><span class="givens"><span data-tex-inline="\text{sales: } 900 - 30p \text{ blocks a week}"></span> <span data-tex-inline="\text{at } p \text{ dollars a block,}"></span> <span data-tex-inline="0 \le p \le 30"></span></span>A creamery in Tillamook sells cheese. Find the price that brings in the most money, and how much.</li><li><span class="givens"><span data-tex-inline="D = 2400 \text{ tubes a year,}"></span> <span data-tex-inline="K = \$30 \text{ an order,}"></span> <span data-tex-inline="h = \$0.40 \text{ a tube a year}"></span></span>A bike shop in Chico orders tubes. Find the order size with the least yearly cost, and that cost.</li><li><span class="givens"><span data-tex-inline="f(x) = x^2 + 16/x \text{ on } (0, \infty)"></span></span>Find the least value of f, and prove it is the least.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="14h6">
+  <h2 class="sthead"><span class="stno">14h6</span>Illegal moves</h2>
+  <p class="stands">Stands on 14h1 to 14h5.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\text{the critical point is the answer}\,? @@ check it is in the interval: the van limited to [40, 90] is cheapest at 90
+\text{forget the ends}\,? @@ a cost that falls on the whole interval is least at its right end
+\text{a bottom when a top was wanted}\,? @@ check the sign of f″, or compare values
+\text{the answer can be any real}\,? @@ fares in whole dollars: compare the two whole numbers beside the critical point
+\text{least cost per hour}\,? @@ the trip is so many kilometres: cost per kilometre is the goal
+  </pre>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14h6.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{cost per hour: } 2000 + 0.2v^2 \text{ cents,}"></span> <span data-tex-inline="40 \le v \le 110,"></span> <span data-tex-inline="w = 100\ \text{km/h}"></span></span>Find the speed v that makes the van's cost per hour least.<br>Decide by the cost per kilometre which makes the trip cheaper, that speed or w.</li><li><span class="givens"><span data-tex-inline="\text{cost per hour: } 2000 + 0.2v^2 \text{ cents,}"></span> <span data-tex-inline="40 \le v \le 90"></span></span>Find the van's cheapest speed per kilometre.</li><li><span class="givens"><span data-tex-inline="\text{count: } 910 - 30p,"></span> <span data-tex-inline="p \text{ in whole dollars}"></span></span>Find the creamery's best price.</li><li><span class="givens"><span data-tex-inline="f(x) = x(10 - x) \text{ on } [0, \infty)"></span></span>Decide whether f has a greatest value, and whether it has a least value.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="14h7">
+  <h2 class="sthead"><span class="stno">14h7</span>Running it backwards</h2>
+  <p class="stands">Stands on 14h1 to 14h5.</p>
+  <p data-pid="1eaf48">Handed a best choice and asked what the problem's numbers must have been, set the slope of the goal to 0 at that choice and solve for the unknown number. Handed an answer, check it against the interval, the units, and whether the best was a top or a bottom. Handed a cost of the shape k/x + mx, check that the two parts are equal at the claimed best. Found upward; written downward.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14h7.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="D = 1000,\ h = 2,"></span> <span data-tex-inline="\text{best order: } 100 \text{ units}"></span></span>Find the order cost K.</li><li><span class="givens"><span data-tex-inline="\text{demand: } k - 40p,"></span> <span data-tex-inline="\text{best price: } \$12"></span></span>Find k.</li><li><span class="givens"><span data-tex-inline="\text{cost: } k/v + 0.5v \text{ on } (0, \infty),"></span> <span data-tex-inline="\text{cheapest speed: } 80\ \text{km/h}"></span></span>Find k and the least cost.</li><li><span class="givens"><span data-tex-inline="T'(Q) = 0 \text{ at the best order } Q"></span></span>Prove that at the best order the yearly ordering cost equals the yearly shelf cost.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">14h.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{The van kept } 40 \le v \le 90."></span> <span data-tex-inline="\text{Cost: } k/x + mx,"></span> <span data-tex-inline="\text{best } x \text{ on } (0, \infty):\ 5,"></span> <span data-tex-inline="\text{least value: } 20"></span></span>Make such a cost of your own.<br>Choose an interval of allowed x that leaves out the best x, and find the best x there, with a proof.</div>
+  <div class="chq"><span class="chid">14h.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{Case one: } K = 0."></span> <span data-tex-inline="\text{Case two: } h = 0."></span></span>In each case, run the best-order formula and the yearly cost, and decide whether the cost has a least value.</div>
+  <div class="chq"><span class="chid">14h.4.3</span><span class="tagq">world</span><span class="givens"><span data-tex-inline="\text{current: } u\ \text{km/h},"></span> <span data-tex-inline="\text{speed through water: } v\ \text{km/h},"></span> <span data-tex-inline="E(v) = C \cdot \frac{v^3}{v - u},\ v &gt; u"></span></span>A sockeye salmon swims up the Fraser against the current. A model of the energy it spends to gain one kilometre upstream is E, for a constant C. <br>Find the speed that spends least.<br>Decide whether a salmon would do better to swim at twice the current.</div>
+  <div class="chq"><span class="chid">14h.4.4</span><span class="tagq">seam</span>In 1662 a mathematician derived the law of how light bends from air into water from one principle: light takes the path of least time. A defender of a rival answered that this is a principle of purpose, not of physics. Light cannot choose, and cannot know in advance which path is quickest. <br>Can a law of nature say that something is least? <br>What would the defender accept as an explanation?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r14g.html">← 14g · the bend and sketching</a><a href="r14i.html">14i · When top and bottom both vanish, and growth races →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>Harris told factory managers that the number of parts to make at one time is a balance between the interest tied up in stock and the cost of setting up each run, and that a formula, not the foreman's habit, should strike it.</p><cite>Harris, “How many parts to make at once”, Factory, The Magazine of Management (1913); paraphrase</cite></aside>
+  <p>The writer of 1913 is Ford Whitman Harris, and the best-order formula is often called Harris’s formula, or the Wilson formula. The closer’s principle of least time is Pierre de Fermat’s (1662); the answer is Claude Clerselier’s, defending René Descartes.</p>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?3:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=v=>fm(v).replace('-','−');
+/* goal = fall + rise; best known exactly; want: min or max */
+const FN={
+  eoq:{lab:'order size Q',unit:'dollars a year',tex:R`T(Q) = \tfrac{45000}{Q} + \tfrac12 Q`,lo:50,hi:900,fall:x=>45000/x,rise:x=>x/2,want:'min',best:300,ends:false,y:[0,1000],xl:'Q'},
+  van:{lab:'speed v',unit:'cents per km',tex:R`C(v) = \tfrac{2000}{v} + 0.2v`,lo:40,hi:110,fall:x=>2000/x,rise:x=>0.2*x,want:'min',best:100,ends:true,y:[0,65],xl:'v'},
+  far:{lab:'fare p',unit:'dollars a day',tex:R`R(p) = p(2000 - 50p)`,lo:0,hi:40,fall:x=>-50*x*x,rise:x=>2000*x,want:'max',best:20,ends:true,y:[-1000,22000],xl:'p'},
+  sum:{lab:'split of 10',unit:'',tex:R`x(10 - x)`,lo:0,hi:10,fall:x=>-x*x,rise:x=>10*x,want:'max',best:5,ends:true,y:[-2,28],xl:'x'}
+};
+let key='eoq',F=FN.eoq;
+const g=x=>F.fall(x)+F.rise(x);
+const cvF=$('cvF'),cvS=$('cvS'),kx=$('kx');
+const X=()=>{ const x=F.lo+(F.hi-F.lo)*(+kx.value)/1000; const st=(F.hi-F.lo)>100?5:((F.hi-F.lo)>20?0.5:0.1); return Math.round(x/st)*st; };
+const PF=plane(cvF,{x:[0,1],y:[0,1],grid:1,aspect:0.8,draw:P=>drawF(P)});
+const PS=plane(cvS,{x:[0,1],y:[0,1],grid:1,aspect:0.8,draw:P=>drawS(P)});
+[[PF,cvF],[PS,cvS]].forEach(([P,cv])=>Object.defineProperty(P.o,'aspect',{get:()=>cv.clientWidth>480?0.75:0.9}));
+function curve(P,fn,colr,w,lo,hi){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); }
+function grid(P){ const w=F.hi-F.lo, h=P.o.y[1]-P.o.y[0]; const nice=v=>{ const p=Math.pow(10,Math.floor(Math.log10(v))); const m=v/p; return (m<2?1:(m<5?2:5))*p; }; return nice(Math.max(w,h)/6); }
+function drawF(P){ const w=F.hi-F.lo; P.o.x=[F.lo-0.05*w,F.hi+0.05*w]; P.o.y=F.y; P.o.grid=grid(P); P.axes();
+  curve(P,g,'--ink',2.6,F.lo,F.hi);
+  const cand=F.ends?[F.lo,F.best,F.hi]:[F.best]; cand.forEach(t=>{ const c=P.ctx; c.strokeStyle=col('--gold'); c.lineWidth=2.2; c.beginPath(); c.arc(P.X(t),P.Y(g(t)),8,0,7); c.stroke(); });
+  P.dot(F.best,g(F.best),'--teal',6); const x=X(); P.dot(x,g(x),'--plum',5); }
+function drawS(P){ const w=F.hi-F.lo; let lo=0,hi=0; for(let k=0;k<=300;k++){ const t=F.lo+w*k/300; [F.fall(t),F.rise(t),g(t)].forEach(v=>{ lo=Math.min(lo,v); hi=Math.max(hi,v); }); } if(key==='eoq'){ hi=Math.min(hi,1000); }
+  const pad=0.08*(hi-lo); P.o.x=[F.lo-0.05*w,F.hi+0.05*w]; P.o.y=[lo-pad,hi+pad]; P.o.grid=grid(P); P.axes();
+  curve(P,F.fall,'--plum',2.2,F.lo,F.hi); curve(P,F.rise,'--gold',2.2,F.lo,F.hi); curve(P,g,'--ink',1.6,F.lo,F.hi);
+  const x=X(); P.line(x,P.o.y[0],x,P.o.y[1],'--muted',0.8,[3,4]); }
+function read(){ const x=X(); $('ox').textContent=F.xl+' = '+mm(x); const vd=$('vdF'); const b=g(F.best), v=g(x);
+  const gap=F.want==='min'?v-b:b-v;
+  vd.className='verdict '+(Math.abs(gap)<1e-9?'win':''); vd.textContent=(F.want==='min'?'Least ':'Greatest ')+mm(b)+(F.unit?' '+F.unit:'')+' at '+F.xl+' = '+mm(F.best)+'. At '+F.xl+' = '+mm(x)+': '+mm(v)+(Math.abs(gap)<1e-9?', the best.':', '+mm(gap)+' '+(F.want==='min'?'more':'less')+'.');
+  tex($('eqF'),R`\begin{gathered}${F.tex}\\ \text{parts at } ${mm(x)}:\ ${mm(F.fall(x))},\ ${mm(F.rise(x))}\\ \text{at the best: } ${mm(F.fall(F.best))},\ ${mm(F.rise(F.best))}\end{gathered}`,true); }
+function all(){ PF.redraw(); PS.redraw(); read(); }
+kx.addEventListener('input',all);
+const fch=$('fch');
+Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===key) b.className='on'; b.onclick=()=>{ key=k; F=FN[k]; [...fch.children].forEach(z=>z.classList.toggle('on',z===b)); all(); }; fch.appendChild(b); });
+window.__pic={set:(k,x)=>{ [...fch.children][Object.keys(FN).indexOf(k)].click(); kx.value=x; all(); return {x:X(),txt:$('vdF').textContent}; }};
+all();
+
+/* ---------- slides ---------- */
+const Nw='\\htmlClass{new}';
+stepper('#sl1',[
+  {k:'ember',kl:'the steps',t:R`\text{goal} \cdot \text{choice} \cdot f(x) \cdot \text{interval} \cdot \text{best} \cdot \text{check}`,n:`The work is in writing f. Then candidates or one-critical-point.`}
+],{title:'The slides · the steps · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'equal-parts',t:R`\tfrac{a}{x} + bx \ge ${Nw}{2\sqrt{ab}}`,n:`Least at x = √(k/m): one critical point, f″ &gt; 0, one-critical-point.`},
+  {k:'ember',kl:'equal parts',t:R`\tfrac{a}{x} = bx \text{ at the best}`,n:`The falling part and the rising part cost the same there.`},
+  {k:'teal',kl:'from 8g · the means',t:R`\tfrac{s + t}{2} \ge \sqrt{st}`,n:`x + 1/x ≥ 2 with x = √(s/t).`}
+],{title:'The slides · equal-parts · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'best order, 1913',t:R`Q = \sqrt{\tfrac{2KD}{h}}`,n:`D = 1800, K = $25, h = $1: Q = 300; $150 ordering, $150 shelf.`}
+],{title:'The slides · best order · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'the fare',t:R`R(p) = 2000p - 50p^2`,n:`On [0, 40]: candidates 0, 20, 40. Best $20, 1000 riders, $20 000 a day.`},
+  {k:'ember',kl:'whole numbers',t:R`p^* = 15.17 \;\Rightarrow\; \text{compare } 15, 16`,n:`When the choice must be whole, test the neighbours.`}
+],{title:'The slides · the fare · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'the speed',t:R`C(v) = \tfrac{2000}{v} + 0.2v`,n:`On [40, 110]: least 40 cents per km at 100 km/h.`},
+  {k:'ember',kl:'the wrong goal',t:R`2000 + 0.2v^2 \text{ per hour}`,n:`Least at the slowest speed: the cost of an hour, not of the trip.`}
+],{title:'The slides · the speed · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'illegal',t:R`\text{critical point} \ne \text{answer}`,n:`Check the interval, the ends, top or bottom, and units.`}
+],{title:'The slides · illegal · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fixed points, stability and the start of chaos</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+.kn{font-size:.88rem}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r24j.html">← 24j the logistic equation solved</a><a href="r24l.html">next: 24l solutions as power series →</a></p>
+  <div class="tags"><span class="tag tech">24k · technique</span></div>
+  <h1>Fixed points, stability and the start of chaos</h1>
+  <p>A rule that gives the rate from the present state alone, and never looks at the clock, has resting places: states where the rate is zero, so that a quantity put there stays there. A cup at room temperature, a population at its ceiling, a ball at the bottom of a bowl. Some of these resting places hold. Nudge the quantity off, and it comes back. Others fall apart at the smallest nudge, like a ball balanced on the top of a hill. This step shows that one number decides which: the slope of the rule at the resting place. Then it turns a knob in the rule and watches resting places appear, merge and vanish. Last it goes back to the yearly logistic rule of the last step and turns its knob up. The single resting place splits into a swing between two values, then four, then eight, faster and faster, until the run never repeats at all. The doublings come at a pace that seems to be the same for every rule of this shape, a number found by computing, not by proof.</p>
+  <p class="gesture">A resting place of a rule holds when the rule's slope there is negative and falls apart when it is positive. Turning a knob in the rule can make resting places appear in pairs, meet, and vanish. The yearly logistic rule, turned up, swings between two values, then four, then eight, and then never repeats, though every step is fixed. The doublings crowd together at a pace that looks the same for many rules.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r24d.html">24d</a> (tame rules, the drift technique), <a href="r24j.html">24j</a> (the logistic walk), <a href="r22h.html">22h</a> (rules fed their own answers; where a rule does not settle), <a href="r14c.html">14c</a> (the mean value technique), <a href="r21d.html">21d</a> (the double technique). <a href="r24l.html">24l</a> solves rules by power sums.</p></div>
+</header>
+
+<section class="class step" data-step="24k1">
+  <h2 class="sthead"><span class="stno">24k1</span>Resting places that hold</h2>
+  <p class="stands">Stands on 24d1 (tame rules), 24d3 (the drift technique), 12a4 (the sign-kept-near-an-input technique), 14c (the mean value technique) and 24a3 (the own-rate technique).</p>
+  <p class="eqline" data-pid="d33d04">From here on, a rule y′ = F(y) that does not involve x <i>looks only at the state</i>. A <i>resting place</i> of it is a y* with F(y*) = 0; the constant y = y* is then a solution, 24f3's resting line. It <i>holds</i> when every solution that starts near enough to y* stays near it and heads to it, and <i>falls apart</i> when solutions starting near it, but not at it, leave. Accepted name: an autonomous equation, an equilibrium, stable and unstable.</p>
+  <p data-pid="eaf2d8">Sign-of-slope technique: <b>let F have a continuous slope near a resting place y*. If F′(y*) &lt; 0, the place holds: some window around y* and some m &gt; 0 give |y(t) − y*| ≤ |y(0) − y*|·e^(−mt) for every solution starting in the window and every t ≥ 0. If F′(y*) &gt; 0, the place falls apart.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the sign-of-slope technique">
+F'(y^*) < 0:\ \ F' \le -m \text{ on } W = [y^* - \delta,\ y^* + \delta],\ \ m = -\tfrac12 F'(y^*) @@ the sign is kept near an input (12a4), for F′ + m
+F(y) = F'(c)\,(y - y^*) \text{ for } y \in W @@ the mean value technique (14c), with F(y*) = 0
+u = y - y^*:\ \ (u^2)' = 2u\,F(y) = 2F'(c)\,u^2 \le -2m\,u^2 \text{ while } y \in W @@ the chain rule (13e)
+\big(u^2e^{2mt}\big)' = \big((u^2)' + 2m\,u^2\big)e^{2mt} \le 0 @@ the product rule, as in 24a3
+u(t)^2 \le u(0)^2e^{-2mt}, \text{ so } y \text{ never leaves } W @@ a slope at most 0 never climbs (14c)
+\htmlClass{new}{|y(t) - y^*| \le |y(0) - y^*|\,e^{-mt} \text{ for every } t \ge 0} \quad \blacksquare @@ it stays bounded, so it never runs off (24e); with F′(y*) &gt; 0 the same lines, turned, give |u| ≥ |u(0)|e^(mt) while y is in W
+  </pre>
+  <p data-pid="ac5eea">Near a holding place the departure shrinks roughly like e^(F′(y*)t), so 1/|F′(y*)| is its time scale. The logistic rule has F′(P) = r(1 − 2P/K): F′(0) = r &gt; 0, so the empty state P = 0 falls apart, and F′(K) = −r &lt; 0, so the ceiling holds, with time scale 1/r. Between two neighbouring resting places F keeps one sign (12a6), so a solution there climbs or falls the whole way to one of them. The resting places and the signs between them tell the whole story, without a formula.</p>
+  <p data-pid="1133e0">When F′(y*) = 0 the technique is silent. y′ = −y³ holds at 0, y′ = y³ falls apart there, and y′ = y² does both: from below it climbs to 0, from above it runs off.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · holding · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">24k1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="y&#x27; = y(y - 1)(y - 3)"></span></span>Find every resting place, the slope of the rule at each, and which hold. <br>Find where the solution heads from y(0) = 0.5, from y(0) = 2, and from y(0) = 4.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24k2">
+  <h2 class="sthead"><span class="stno">24k2</span>Turning a knob</h2>
+  <p class="stands">Stands on 24k1 and 14c (the mean value technique).</p>
+  <p data-pid="62d173">Most rules carry a number that can be turned: a growth rate, a catch, a temperature. Turn it, and the resting places move. Mostly they move smoothly, and keep holding or falling apart. But where a resting place's slope passes through 0, something new can happen.</p>
+  <p data-pid="695830">Fold technique: <b>for y′ = a − y², when a &gt; 0 there are two resting places, √a holding and −√a falling apart; at a = 0 they meet; and when a &lt; 0 there is none, and every solution falls past every floor.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the fold technique">
+a - y^2 = 0 \iff y^2 = a @@ the resting places
+a > 0:\ y^* = \pm\sqrt a,\ \ F'(\pm\sqrt a) = \mp 2\sqrt a @@ the slope of a − y² is −2y
+\sqrt a \text{ holds},\ -\sqrt a \text{ falls apart} @@ the sign-of-slope technique (24k1)
+a = 0:\ y^* = 0,\ F'(0) = 0 @@ the two have met; the technique is silent there
+a < 0:\ y' = a - y^2 \le a < 0,\ \ y(t) \le y(0) + at @@ the mean value technique (14c)
+\htmlClass{new}{\text{as } a \text{ falls through } 0, \text{ a holding place and a falling-apart place meet and vanish}} \quad \blacksquare @@ the lines above
+  </pre>
+  <p data-pid="75fe5f">A fish stock that grows by the logistic rule and loses a steady catch H a year obeys P′ = rP(1 − P/K) − H. Its resting places are the two roots of a quadratic, and they meet when H = rK/4. A catch a little below that leaves a stock that holds. A catch a little above leaves none, and the stock falls to nothing, however large it started. A small turn of the knob, a sudden change in what happens: 24·then reads this as a fishery.</p>
+  <p data-pid="8212f7">Two other shapes come up again and again. In y′ = ay − y², the resting places 0 and a cross at a = 0 and swap which one holds. In y′ = ay − y³, the one resting place 0 holds for a &lt; 0; for a &gt; 0 it falls apart and two new holding places ±√a appear beside it, like the prongs of a fork. A ruler pressed end to end does this: past a certain push, straight falls apart, and it bows to one side or the other.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24k2.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="y&#x27; = ay - y^3"></span></span>Find the resting places and their slopes for a = −1 and for a = 4, and which hold.</li><li><span class="givens"><span data-tex-inline="P&#x27; = 0.4P\big(1 - \tfrac{P}{1000}\big) - H"></span></span>Find the resting places for H = 60 and H = 100, and whether there are any for H = 120. <br>Find which resting place holds when H = 60.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24k3">
+  <h2 class="sthead"><span class="stno">24k3</span>The yearly rule doubles</h2>
+  <p class="stands">Stands on 24j4 (the logistic walk), 22h3 (the pull-together technique), 22h4 (where a rule does not settle) and 13e (the chain rule).</p>
+  <p data-pid="a1fc0a">From here on g(x) = ax(1 − x), with 0 &lt; a ≤ 4, which sends [0, 1] into itself, since its largest value is a/4. It is 24j4's yearly logistic rule, written in x. A point g leaves alone is a <i>fixed point</i>, and two points p ≠ q with g(p) = q and g(q) = p make a <i>cycle of two</i>. A cycle of two is a pair of fixed points of g∘g, so 22h4 decides whether it pulls: by the slope of g∘g there.</p>
+  <p data-pid="812a85">Two-cycle technique: <b>for 1 &lt; a &lt; 3 the fixed point 1 − 1/a pulls nearby starts in; past a = 3 it pushes, and a cycle of two appears, at p, q = ((a + 1) ± √((a + 1)(a − 3)))/(2a); the cycle pulls nearby starts in for 3 &lt; a &lt; 1 + √6 ≈ 3.449, and pushes past it.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the two-cycle technique">
+g(L) = L \iff L = 0 \text{ or } L = 1 - \tfrac1a;\ \ g'(1 - \tfrac1a) = a\big(1 - 2 + \tfrac2a\big) = 2 - a @@ g′(x) = a(1 − 2x)
+|2 - a| < 1 \iff 1 < a < 3 @@ 22h4: below 1 in size pulls, above 1 pushes
+g(g(x)) - x = -x\,(ax - a + 1)\,\big(a^2x^2 - a(a + 1)x + (a + 1)\big) @@ multiply out; the fixed points are factors, since they are left alone by g∘g too
+p + q = \tfrac{a + 1}{a},\ \ pq = \tfrac{a + 1}{a^2},\ \ p, q \text{ real and different} \iff (a + 1)(a - 3) > 0 @@ the quadratic formula (8i) on the last factor
+(g \circ g)'(p) = g'(q)\,g'(p) = a^2\big(1 - 2(p + q) + 4pq\big) = -a^2 + 2a + 4 @@ the chain rule (13e); g(p) = q
+\htmlClass{new}{|-a^2 + 2a + 4| < 1 \iff 3 < a < 1 + \sqrt6} \quad \blacksquare @@ the value is 1 at a = 3 and falls to −1 where a² − 2a − 5 = 0
+  </pre>
+  <p data-pid="5116f7">At a = 3.2 this gives p = 0.7995 and q = 0.5130, the two threads 22h4 found by running the rule, and the slope of g∘g there is 0.16: the cycle pulls hard. The step where a fixed point stops pulling, with its slope passing −1, and a cycle of twice the length appears beside it, is a doubling. Past 1 + √6 the cycle of two does the same: it pushes, and a cycle of four appears.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · doubling · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24k3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="g(x) = 3.3\,x(1 - x)"></span></span>Find the fixed point other than 0, and the slope of g there. <br>Find the cycle of two, and the slope of g∘g on it. <br>Find x₁ to x₄ from x₀ = 0.5, to four places, and where the run heads.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24k4">
+  <h2 class="sthead"><span class="stno">24k4</span>Doubling without end, and then chaos</h2>
+  <p class="stands">Stands on 24k3, 21d4 (the double technique), 4g (induction), 12a6 (the intermediate value technique) and 24d3 (the drift technique).</p>
+  <p data-pid="bec097">Turn a past 1 + √6 and the cycle of four appears, then eight at about 3.5441, sixteen at 3.5644, then 3.5688, 3.5697, each doubling closer to the last. They crowd at about 3.5699, and past it most runs never repeat. At a = 4 the run can be written down, and it shows what never repeating means.</p>
+  <p data-pid="4c1ad0">Angle-doubling technique: <b>for g(x) = 4x(1 − x) and x₀ = sin²θ₀, the run is xₙ = sin²(2ⁿθ₀).</b> Every x₀ in [0, 1] is sin²θ₀ for some θ₀ in [0, π/2], since sin² climbs from 0 to 1 there without a break.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the angle-doubling technique">
+4\sin^2\theta\,(1 - \sin^2\theta) = 4\sin^2\theta\cos^2\theta = (2\sin\theta\cos\theta)^2 @@ cos² + sin² = 1, the circle technique (21)
+= \sin^2 2\theta @@ the double technique (21d4)
+\htmlClass{new}{x_n = \sin^2(2^n\theta_0)} \quad \blacksquare @@ induction (4g): each step doubles the angle
+\theta_0 \text{ and } \theta_0 + \varepsilon \text{ give angles } 2^n\varepsilon \text{ apart after } n \text{ steps} @@ the line above, twice
+  </pre>
+  <p data-pid="a80b75">So the rule is fixed, and every run is fixed by its start, and still the run cannot be foreseen. Know x₀ to ten places, so θ₀ to about 10⁻¹⁰. After n steps the angle is known to about 2ⁿ·10⁻¹⁰, and 2³³ is about 8.6 × 10⁹: after some thirty-three steps the angle is not known at all. Starts at 0.3 and 0.3 + 10⁻¹⁰ are more than 0.1 apart by step 31. The map is tame, |g(x) − g(y)| ≤ 4|x − y|, so a gap can grow at most fourfold a step, as the drift technique bounds the drift of a tame rule; the angle shows the gap really does grow, about doubling each step. And the run hides cycles of every length: from sin²(π/7) it returns after three steps (0.1883, 0.6113, 0.9505, 0.1883), since eight times π/7 is a half turn more than π/7.</p>
+  <p data-pid="72ebea">Now the number the doublings share. Write aₖ for the k-th doubling: 3, 3.4495, 3.5441, 3.5644, 3.5688, 3.5697. The ratios of neighbouring gaps, (aₖ − aₖ₋₁)/(aₖ₊₁ − aₖ), come out 4.751, 4.656, 4.668, 4.6687, 4.6691, and computed further they agree to more and more places, near 4.6692. Do the same for the rule x ↦ a·sin(πx), or for any rule with one smooth hump, and the same number appears.</p>
+  <p data-pid="94787f">That this number is shared, and that the ratios settle at it, is not proved on this ladder. It is a guess, and its basis is stated: the doublings of a handful of rules, computed to many places, and one ratio that every one of them approaches. Many cases, one rule, and the variation from case to case is the kind a rule predicts: it is a guess by induction under the case with predictable variation. It is used, and it is labelled.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · chaos · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · where the yearly rule x ↦ a·x(1 − x) ends up, for each a</div>
+    <div id="pl"></div>
+    <div class="kn"><span class="m">a</span><input type="range" id="kn" min="280" max="400" step="1" value="320"><output id="okn"></output></div>
+    <div id="pr"></div>
+    <div class="cap">Top: for each a from 2.8 to 4, the values the run visits after it has settled into its pattern (ink dots), and the knob's a (ember line). Bottom: the run itself for the knob's a, x₀ = 0.5, forty steps.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24k4.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="g(x) = 4x(1 - x),\ \ x_0 = \sin^2\tfrac{\pi}{10}"></span></span>Find x₁ to x₃ by the angle-doubling technique, to four places; check them by the rule. <br>Find the cycle of two, as sin² of two angles, and check it against the two-cycle technique at a = 4. <br>Find the fixed point other than 0 as sin² of an angle.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24k5">
+  <h2 class="sthead"><span class="stno">24k5</span>Illegal moves</h2>
+  <p class="stands">Stands on 24k1 to 24k4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+F(y^*) = 0, \text{ so solutions near } y^* \text{ head to it}\,? @@ only if F′(y*) &lt; 0; with F′(y*) &gt; 0 they leave
+F'(y^*) = 0, \text{ so the resting place holds}\,? @@ the sign-of-slope technique is silent; y′ = y³ falls apart there, y′ = −y³ holds
+\text{the rule is fixed, so the run can be forecast as far as wanted}\,? @@ a fixed run from a start known to ten places is lost after some 33 steps at a = 4
+\text{the doubling ratios settle at } 4.6692, \text{ proved}\,? @@ computed and seen across many rules: a labelled guess here
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24k5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="y&#x27; = y(1 - y)"></span></span>Find the resting places and the slope at each. <br>Find where solutions from y(0) = 0.01 and y(0) = −0.01 head.</li><li><span class="givens"><span data-tex-inline="y&#x27; = y^3,\ \ y&#x27; = -y^3,\ \ y&#x27; = y^2"></span></span>Find the slope of each at 0. <br>Find, for each, what solutions starting at 0.1 and at −0.1 do.</li><li><span class="givens"><span data-tex-inline="g(x) = 4x(1 - x),\ \ x_0 = 0.3"></span></span>Find x₁ to x₃ from x₀ = 0.3 and from x₀ = 0.3001. <br>Find the gap after each step, and how many steps a start known to four places can be trusted.</li><li><span class="givens"><span class="gtx">the first five doublings: 3, 3.449490, 3.544090, 3.564407, 3.568759</span></span>Find the three ratios of neighbouring gaps. <br>Find what these numbers show, and what they do not.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">24k.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="g(x) = 4x(1 - x)"></span></span>Build a cycle of three from an angle: find θ₀ with 8θ₀ a half turn less than θ₀, or more. <br>Find the three points, and check them by the rule.</div>
+  <div class="chq"><span class="chid">24k.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="g(x) = 3x(1 - x)"></span></span>At a = 3 the fixed point's slope is −1, and 22h4 is silent. Find the run from x₀ = 0.5 and its gap to 2/3 after 10, 100, 1000 and 10 000 steps. <br>Find whether the fixed point pulls, and how slowly.</div>
+  <div class="chq"><span class="chid">24k.4.3</span><span class="tagq">converse</span>The sign-of-slope technique: a negative slope makes a resting place hold. Turn it round: if a resting place holds, must the slope there be negative? <br>Find an example either way.</div>
+  <div class="chq"><span class="chid">24k.4.4</span><span class="tagq">reroute</span>Find the cycle of two without multiplying out g(g(x)). Write g(p) = q and g(q) = p, subtract, and divide by p − q to find p + q; then add to find pq.</div>
+  <div class="chq"><span class="chid">24k.4.5</span><span class="tagq">seam</span>In 1814 a mathematician imagined an intellect that knew every force in nature and the position of every thing at one instant. For it, nothing would be uncertain, and the future, like the past, would be present to its eyes. 24d says a tame rule fixes the future. This step shows a tame rule whose future, though fixed, is lost from any start known to finitely many places. <br>Did the intellect need anything that this step shows cannot be had? Is a future that is fixed the same as a future that can be known?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r24j.html">← 24j · the logistic equation solved</a><a href="r24l.html">24l · solutions as power series →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A resting place is an equilibrium, or steady state; holding is (asymptotic) stability, and the sign-of-slope technique is linear stability analysis in one dimension. The picture of resting places and arrows on a line is a phase line. A change in the resting places as a knob turns is a bifurcation: the fold is a saddle-node bifurcation, the swap a transcritical bifurcation, the fork a pitchfork bifurcation, and a doubling a period-doubling (flip) bifurcation. The ratio near 4.6692 is the Feigenbaum constant δ = 4.669201609…; the crowding point near 3.5699 is the onset of chaos. Losing the start's digits at a fixed rate is sensitive dependence on initial conditions, and the rate (here ln 2 a step) is a Lyapunov exponent.</p>
+  <h3>Who said it first</h3>
+  <p>Henri Poincaré studied how solutions change as a knob turns in the 1880s, and gave bifurcation its name. Robert May urged in 1976 that the logistic map's wildness be taught to every student. Mitchell Feigenbaum, computing the doublings on a hand calculator in 1975, found the ratio, and then found the same number for the sine map; Pierre Coullet and Charles Tresser found it at the same time. Oscar Lanford proved in 1982, with a computer whose every step was boxed, that the shared constant exists. Edward Lorenz found in 1961 that rounding a weather model's start to three places changed its forecast completely. Pierre-Simon Laplace described the all-knowing intellect in his Essai philosophique sur les probabilités (1814).</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+/* sequence and sum plots for rungs 22 on: plot({xlo,xhi,ylo,yhi,series:[{pts,c,dots,open,w}],h:[{y,c,dash,t}]}) */
+const V=c=>'var('+c+')';
+function plot(o){ const W=320,H=220,P=26, X=x=>P+(x-o.xlo)/(o.xhi-o.xlo)*(W-P-6), Y=y=>H-P-(y-o.ylo)/(o.yhi-o.ylo)*(H-P-8);
+  let s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;max-width:380px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  s+='<line x1="'+P+'" y1="'+Y(Math.max(o.ylo,Math.min(o.yhi,0)))+'" x2="'+W+'" y2="'+Y(Math.max(o.ylo,Math.min(o.yhi,0)))+'" style="stroke:'+V('--grid')+';stroke-width:1.4"/>';
+  s+='<line x1="'+P+'" y1="0" x2="'+P+'" y2="'+(H-P)+'" style="stroke:'+V('--grid')+';stroke-width:1.4"/>';
+  (o.ticks||[]).forEach(t=>{ s+='<text x="2" y="'+(Y(t)+4)+'" style="font-size:10px;fill:'+V('--ink')+'">'+t+'</text>'; });
+  (o.h||[]).forEach(l=>{ s+='<line x1="'+P+'" y1="'+Y(l.y)+'" x2="'+W+'" y2="'+Y(l.y)+'" style="stroke:'+V(l.c||'--teal')+';stroke-width:1.4;stroke-dasharray:'+(l.dash||'5 4')+'"/>'; if(l.t) s+='<text x="'+(W-4)+'" y="'+(Y(l.y)-4)+'" text-anchor="end" style="font-size:10px;fill:'+V(l.c||'--teal')+'">'+l.t+'</text>'; });
+  (o.series||[]).forEach(q=>{ const pts=q.pts.filter(p=>isFinite(p[1])&&p[1]>=o.ylo-1e9);
+    if(q.open) s+='<polyline points="'+pts.map(p=>X(p[0])+','+Y(Math.max(o.ylo,Math.min(o.yhi,p[1])))).join(' ')+'" style="fill:none;stroke:'+V(q.c||'--ink')+';stroke-width:'+(q.w||1.6)+'"/>';
+    if(q.dots!==false) pts.forEach(p=>{ if(p[1]>=o.ylo&&p[1]<=o.yhi) s+='<circle cx="'+X(p[0])+'" cy="'+Y(p[1])+'" r="'+(q.r||2.4)+'" style="fill:'+V(q.c||'--ink')+'"/>'; }); });
+  return s+'</svg>'; }
+
+let ak=320; const e=$('kn'); e.addEventListener('input',()=>{ ak=+e.value; draw(); });
+const dia=[]; for(let i=0;i<=240;i++){ const a=2.8+1.2*i/240; let x=0.5; for(let k=0;k<400;k++) x=a*x*(1-x); for(let k=0;k<48;k++){ x=a*x*(1-x); dia.push([a,x]); } }
+function draw(){ const a=ak/100;
+  $('pl').innerHTML=plot({xlo:2.8,xhi:4,ylo:0,yhi:1,ticks:[0,0.5,1],series:[{pts:dia,c:'--ink',r:0.55},{pts:[[a,0],[a,1]],c:'--ember',open:true,dots:false,w:1.4}]});
+  const run=[]; let x=0.5; for(let n=0;n<=40;n++){ run.push([n,x]); x=a*x*(1-x); }
+  $('pr').innerHTML=plot({xlo:0,xhi:40,ylo:0,yhi:1,ticks:[0,0.5,1],series:[{pts:run,c:'--teal',open:true,w:1.2,r:1.8}]});
+  $('okn').textContent=a.toFixed(2);
+  let y=0.5; for(let k=0;k<4000;k++) y=a*y*(1-y); const o=[y]; for(let k=0;k<64;k++){ y=a*y*(1-y); o.push(y); }
+  let p=0; for(const q of [1,2,4,8,16,32,64]){ if(Math.abs(o[q]-o[0])<1e-6){ p=q; break; } }
+  const v=$('vd'); v.className='verdict'; v.textContent='a = '+a.toFixed(2)+': '+(p===1?'the run settles at '+o[0].toFixed(4)+'.':p?'the run settles into a cycle of '+p+'.':'no cycle of length up to 64: the run does not repeat.'); }
+draw();
+window.__pic={set:j=>{ ak=j; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'resting place',t:R`F(y^*) = 0`,n:`A constant solution.`},
+  {k:'ember',kl:'the slope decides',t:R`\htmlClass{new}{F^{\prime}(y^*) < 0 \Rightarrow |y - y^*| \le |y_0 - y^*|e^{-mt}}`,n:`It holds.`},
+  {k:'ember',kl:'or not',t:R`F^{\prime}(y^*) > 0`,n:`It falls apart.`}
+],{title:'The slides · holding · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'the fixed point',t:R`g^{\prime}\big(1 - \tfrac1a\big) = 2 - a`,n:`Pulls for 1 < a < 3.`},
+  {k:'ember',kl:'the cycle',t:R`p, q = \tfrac{(a + 1) \pm \sqrt{(a + 1)(a - 3)}}{2a}`,n:`Born at a = 3.`},
+  {k:'ember',kl:'it pulls',t:R`\htmlClass{new}{|{-a^2} + 2a + 4| < 1 \iff 3 < a < 1 + \sqrt6}`,n:`Then it doubles again.`}
+],{title:'The slides · doubling · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'a = 4',t:R`\htmlClass{new}{x_n = \sin^2(2^n\theta_0)}`,n:`The angle doubles.`},
+  {k:'ember',kl:'forgetting',t:R`\varepsilon \mapsto 2^n\varepsilon`,n:`Ten places last some 33 steps.`},
+  {k:'ember',kl:'the shared ratio',t:R`\tfrac{a_k - a_{k-1}}{a_{k+1} - a_k} \to 4.6692\ldots\ ?`,n:`Seen, not proved.`}
+],{title:'The slides · chaos · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

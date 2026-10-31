@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Moving the plane</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r19comp.html">← 19·comp how many ways can a puzzle cube be scrambled?</a><a href="r20a.html">next: 20a isometries and similarities →</a></p>
+  <div class="tags"><span class="tag theory">Rung 20 · theory</span></div>
+  <h1>Moving the plane</h1>
+  <p>Rung 18 built the plane, with distances. Rung 19 built the algebra of moves. This rung puts them together. Some moves of the plane keep every distance: you can slide a drawing, turn it, or flip it over, and nothing in it changes size. Euclid proved his triangles equal by laying one on top of another, but he never said what moving a figure is. Here the moves come first. Every move that keeps distances turns out to be made of flips, at most three of them, and whether the count is even or odd decides whether a figure still reads the same way round. Then the rung turns the idea around: a geometry is a choice of moves, and the facts of that geometry are exactly what those moves leave unchanged. In this section we’ll teach you what it means to say that a geometry is what its moves keep, and what you can do because you know it.</p>
+  <p class="gesture">A move that keeps every distance can always be made by flipping the plane over a line, at most three times. Two flips make a turn or a slide, so turns and slides keep a figure the same way round, and an odd number of flips leaves it backwards. Each family of moves keeps some facts and loses others, and the bigger the family, the fewer facts it keeps.</p>
+  <div class="ready"><h3>The steps, in order</h3><div class="thline"><a href="r20a.html">20a Isometries and similarities</a>: moves that keep distance, and moves that keep shape.<details class="stidx"><summary>5 footings</summary><ol><li><a href="r20a.html#20a1"><span class="sn">20a1</span>New marks on this rung</a></li><li><a href="r20a.html#20a2"><span class="sn">20a2</span>Moves that keep distances</a></li><li><a href="r20a.html#20a3"><span class="sn">20a3</span>Moves that keep shape</a></li><li><a href="r20a.html#20a4"><span class="sn">20a4</span>All circles are similar</a></li><li><a href="r20a.html#20a5"><span class="sn">20a5</span>Illegal moves</a></li></ol></details></div>
+<div class="thline"><a href="r20b.html">20b Distance-keepers form a group</a>: combine, undo, and the symmetries of a figure.<details class="stidx"><summary>5 footings</summary><ol><li><a href="r20b.html#20b1"><span class="sn">20b1</span>Two in a row</a></li><li><a href="r20b.html#20b2"><span class="sn">20b2</span>Undoing</a></li><li><a href="r20b.html#20b3"><span class="sn">20b3</span>The group</a></li><li><a href="r20b.html#20b4"><span class="sn">20b4</span>Moves that keep a figure</a></li><li><a href="r20b.html#20b5"><span class="sn">20b5</span>Illegal moves</a></li></ol></details></div>
+<div class="thline"><a href="r20c.html">20c Slide, flip, turn</a>: three kinds of move, written as formulas.<details class="stidx"><summary>5 footings</summary><ol><li><a href="r20c.html#20c1"><span class="sn">20c1</span>Slides</a></li><li><a href="r20c.html#20c2"><span class="sn">20c2</span>Turns about the origin</a></li><li><a href="r20c.html#20c3"><span class="sn">20c3</span>Flips</a></li><li><a href="r20c.html#20c4"><span class="sn">20c4</span>Turns and flips about other points</a></li><li><a href="r20c.html#20c5"><span class="sn">20c5</span>Illegal moves</a></li></ol></details></div>
+<div class="thline"><a href="r20d.html">20d All three keep distances</a>: and congruent, defined at last.<details class="stidx"><summary>5 footings</summary><ol><li><a href="r20d.html#20d1"><span class="sn">20d1</span>Slides</a></li><li><a href="r20d.html#20d2"><span class="sn">20d2</span>Turns</a></li><li><a href="r20d.html#20d3"><span class="sn">20d3</span>Flips</a></li><li><a href="r20d.html#20d4"><span class="sn">20d4</span>Congruent, defined</a></li><li><a href="r20d.html#20d5"><span class="sn">20d5</span>Illegal moves</a></li></ol></details></div>
+<div class="thline"><a href="r20e.html">20e Two flips</a>: crossing lines make a turn, parallel lines a slide.<details class="stidx"><summary>5 footings</summary><ol><li><a href="r20e.html#20e1"><span class="sn">20e1</span>A flip, written out</a></li><li><a href="r20e.html#20e2"><span class="sn">20e2</span>Lines that cross make a turn</a></li><li><a href="r20e.html#20e3"><span class="sn">20e3</span>Parallel lines make a slide</a></li><li><a href="r20e.html#20e4"><span class="sn">20e4</span>Every turn and every slide is two flips</a></li><li><a href="r20e.html#20e5"><span class="sn">20e5</span>Illegal moves</a></li></ol></details></div>
+<div class="thline"><a href="r20f.html">20f Every isometry is at most three flips</a>: and Euclid’s tests for triangles, earned.<details class="stidx"><summary>5 footings</summary><ol><li><a href="r20f.html#20f1"><span class="sn">20f1</span>Three points fix a point</a></li><li><a href="r20f.html#20f2"><span class="sn">20f2</span>An isometry is fixed by three points</a></li><li><a href="r20f.html#20f3"><span class="sn">20f3</span>Three flips are enough</a></li><li><a href="r20f.html#20f4"><span class="sn">20f4</span>Euclid’s tests, earned from the moves</a></li><li><a href="r20f.html#20f5"><span class="sn">20f5</span>Illegal moves</a></li></ol></details></div>
+<div class="thline"><a href="r20g.html">20g Handedness</a>: which way round, and odd and even flips.<details class="stidx"><summary>5 footings</summary><ol><li><a href="r20g.html#20g1"><span class="sn">20g1</span>Which way round</a></li><li><a href="r20g.html#20g2"><span class="sn">20g2</span>Slides and turns keep it</a></li><li><a href="r20g.html#20g3"><span class="sn">20g3</span>Flips change the sign</a></li><li><a href="r20g.html#20g4"><span class="sn">20g4</span>Odd and even flips</a></li><li><a href="r20g.html#20g5"><span class="sn">20g5</span>Illegal moves</a></li></ol></details></div>
+<div class="thline"><a href="r20h.html">20h Sorting geometries by the moves they keep</a>: more moves, fewer facts. Then the techniques:<details class="stidx"><summary>5 footings</summary><ol><li><a href="r20h.html#20h1"><span class="sn">20h1</span>What each family keeps</a></li><li><a href="r20h.html#20h2"><span class="sn">20h2</span>Families inside families</a></li><li><a href="r20h.html#20h3"><span class="sn">20h3</span>A geometry is a choice of moves</a></li><li><a href="r20h.html#20h4"><span class="sn">20h4</span>Each geometry sorts figures</a></li><li><a href="r20h.html#20h5"><span class="sn">20h5</span>Illegal moves</a></li></ol></details></div>
+<div class="thline"><a href="r20i.html">20i Moving graphs</a>.<details class="stidx"><summary>5 footings</summary><ol><li><a href="r20i.html#20i1"><span class="sn">20i1</span>The equation moves the other way</a></li><li><a href="r20i.html#20i2"><span class="sn">20i2</span>Slides</a></li><li><a href="r20i.html#20i3"><span class="sn">20i3</span>Flips</a></li><li><a href="r20i.html#20i4"><span class="sn">20i4</span>Pulls</a></li><li><a href="r20i.html#20i5"><span class="sn">20i5</span>Illegal moves</a></li></ol></details></div>
+<div class="thline"><a href="r20j.html">20j Turns in coordinates</a>. Then the call backs:<details class="stidx"><summary>5 footings</summary><ol><li><a href="r20j.html#20j1"><span class="sn">20j1</span>A turn is a pair</a></li><li><a href="r20j.html#20j2"><span class="sn">20j2</span>Turns combine by a rule for pairs</a></li><li><a href="r20j.html#20j3"><span class="sn">20j3</span>Undoing a turn</a></li><li><a href="r20j.html#20j4"><span class="sn">20j4</span>Turn and stretch</a></li><li><a href="r20j.html#20j5"><span class="sn">20j5</span>Illegal moves</a></li></ol></details></div>
+<div class="thline"><a href="r20cb19.html">20·cb19 The square’s moves as turns and flips</a>, <a href="r20cb9.html">20·cb9 The inverse’s pairs, flipped</a>, <a href="r20cb8.html">20·cb8 Numbers that turn</a>.</div>
+<div class="thline"><a href="r20phys.html">20·phys Does light take the shortest path?</a></div>
+<div class="thline"><a href="r20crypt.html">20·crypt Can a guessed word break the machine?</a></div>
+<div class="thline"><a href="r20chem.html">20·chem Can a molecule be left-handed?</a></div>
+<div class="thline"><a href="r20nav.html">20·nav Which way is the ship facing after its turns?</a></div></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · read it through, then go to 20a</div>
+
+  <h3>What it means to say it</h3>
+  <p data-pid="d4fddc">Until now a geometry has been a place: points, lines, circles, distances. This rung says a geometry is also a way of moving around in that place. Choose the moves you allow, and you have chosen which facts matter. If you may slide, turn and flip, then size matters and position does not: two triangles with the same sides are the same triangle in two places. If you may also stretch, then only shape matters: every circle is the same as every other.</p>
+  <p data-pid="4d09c6">Notice what this changes. Euclid held “lay one figure on the other” in trust. Here the move is a function, built from formulas, and its keeping of distance is proved. The old tests for equal triangles stop being axioms and become things you can check.</p>
+
+  <h3>Where it comes from</h3>
+  <p data-pid="0eb8d9">Euclid’s first proof of equal triangles moved one onto another, around 300 BC, and readers argued for two thousand years about whether that was allowed. Jacques Peletier objected in 1557. David Hilbert, in 1899, took side-angle-side as an axiom instead. Immanuel Kant, in 1768, pointed out that a left and a right hand match in every length and still cannot be swapped. Felix Klein, in 1872, proposed that each geometry is the study of what a group of moves keeps, and that sorted all the geometries of his time into one family tree.</p>
+
+  <h3>The principles, in plain words</h3>
+  <p data-pid="258238">The rung proves five things, each from the ones before.</p>
+  <p data-pid="cf5178">First, the moves that keep every distance form a group, and so do the moves that keep shape. Two such moves in a row make another, and each can be undone.</p>
+  <p data-pid="7fd76c">Second, slides, turns and flips all keep distances, and two figures are called congruent when one of these moves carries one onto the other.</p>
+  <p data-pid="d5ae8c">Third, two flips make a turn or a slide, and every move that keeps distances is made of at most three flips. A move is decided by where it sends three corners of a triangle.</p>
+  <p data-pid="cfb7d0">Fourth, a figure’s corners go round one way or the other. Slides and turns keep that way round; each flip reverses it. So an even number of flips can never equal an odd number.</p>
+  <p data-pid="ce23a0">Fifth, a geometry is a group of moves, and its facts are what those moves keep. A bigger group keeps fewer facts.</p>
+
+  <h3>What follows</h3>
+  <p data-pid="720c3c">A graph can be moved by changing its equation, and the change always runs backwards: to slide a graph right, take away from x. A turn about the centre is just a pair of numbers, and two turns combine by a rule for pairs. That rule completes an old foreclosure: the quarter turn done twice is the half turn, so in the plane there is a number whose square is minus one.</p>
+
+  <h3>What you can do because you know it</h3>
+  <p data-pid="ba9eff">You can write any slide, turn or flip as a formula and prove it keeps distances. You can find the flips that carry one triangle onto a congruent copy, and prove the old tests for congruent and similar triangles. You can tell whether a move keeps a figure the same way round. You can move a graph and find its new equation, combine turns as pairs, and solve equations that have no answer on the line.</p>
+  <p data-pid="804026">That is the geometry of moves. Klein spent a lifetime on it and called his own work a beginning, and you have only just begun.</p>
+  <p data-pid="a5848b">And 20·chem asks whether a molecule can be left-handed: it reads a carbon from one of its neighbours, where turns keep the way round and a mirror reverses it, and shows why a living body can tell the two hands of a drug apart. And 20·nav asks which way a ship faces after its turns: headings add, starting again past 360, the ship's place and facing are one move of the plane, and a voyage is its orders composed, in an order that matters.</p>
+
+  <h3>What it costs</h3>
+  <p data-pid="5944c8">Nothing new is laid down. The rung spends 18’s plane and distances, 19’s groups, rung 9’s functions and their undoing, and 8i’s quadratics. At the end of the rung you will know what it means to say that a geometry is what its moves keep, and what you can do because you know it.</p>
+</section>
+
+<nav class="nextrung"><a href="r19comp.html">← 19·comp · how many ways can a puzzle cube be scrambled?</a><a href="r20a.html">20a · isometries and similarities →</a></nav>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+Rung.ready(()=>{});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

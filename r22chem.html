@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Does the order of adding change a crystal's energy?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+.btns{display:flex;flex-wrap:wrap;gap:6px}#rw svg,#pl svg{width:100%;max-width:360px;display:block;margin:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r22nav.html">← 22·nav can a flat map tell the truth?</a><a href="r22crypt.html">next: 22·crypt can two files have the same fingerprint? →</a></p>
+  <div class="tags"><span class="tag chem">22·chem · chemistry</span></div>
+  <h1>Does the order of adding change a crystal's energy?</h1>
+  <p>Does the order of adding change a crystal’s energy? Table salt is a crystal of charged atoms. Each sodium carries one charge and each chlorine the opposite one, and they are packed so that every atom sits among neighbours of the other kind. Opposite charges pull together and like charges push apart. Chemists wanted the energy that holds such a crystal together, because it says how hard the crystal is to melt, or to pull apart in water. To find it, they added up the pull and the push on one atom from every other atom in the crystal, near and far. What makes it hard is that there are endlessly many atoms, and their pulls and pushes nearly cancel. The total then depends on the order of adding, and a careless order gives a wrong answer, or none. This page shows, with rung twenty-two’s sums whose signs alternate and rung seventeen’s log as an area, that a single row of such atoms has a total, what the total is, how reordering the very same terms changes it, and why the order that matches a real crystal adds the atoms in shells, nearest first.</p>
+  <p class="gesture">Along a row, the neighbours of one atom take turns: the nearest two pull, the next two push, the next two pull, each pair weaker than the last. So the energy is an endless sum whose signs alternate and whose terms shrink, and it settles. Its total is twice the log of two, found by fencing the partial sums between areas under one over x. Added in another order, the same terms settle somewhere else. Gathering two pulling shells for every pushing one gives a bigger total, and one for every two gives a smaller one. Every such order gathers pieces of the crystal whose charge grows without bound. A real crystal is close to neutral, piece by piece, and every order that keeps it so gives the shell by shell total.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r22g.html">22g</a> (the bracket technique; the reorder technique), <a href="r22d.html">22d</a> (the grouping technique: 1 + ½ + ⅓ + ⋯ passes every ceiling), <a href="r17a.html">17a</a> (the log as an area), <a href="r17c.html">17c</a> (log-of-a-quotient), <a href="r15h.html">15h</a> (sums of thin strips), <a href="r15i.html">15i</a> (geometric sums), <a href="r06chem.html">6·chem</a> (charges handed over) and <a href="r14chem.html">14·chem</a> (the energy of a joined pair). 25·chem asks why a reaction stops halfway.</p></div>
+</header>
+
+<section class="class step" data-step="22chem1">
+  <h2 class="sthead"><span class="stno">22chem1</span>A row of alternating charges</h2>
+  <p class="stands">Stands on 22d (the partial-sum technique), 22g (the bracket technique) and 6·chem (charges handed over).</p>
+  <p class="eqline" data-pid="2f8870">From here on, on this page, a charged row is a straight row of atoms, a apart, whose charges take turns: +e, −e, +e, −e, and so on without end in both directions.</p>
+  <p data-pid="117871">A measured law gives the energy of two charges q₁ and q₂ at distance r: K q₁ q₂ / r, with Ke² = 1.44 eV·nm. A negative energy is a pull; a positive one, a push. Pick one atom, of charge +e. Its shell n is the two atoms at distance na, one on each side. They carry −e when n is odd and +e when n is even.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the row technique">
+\text{shell } n:\ \ 2 \cdot \tfrac{K e \cdot (\mp e)}{na} = -\tfrac{2Ke^2}{a} \cdot \tfrac{(-1)^{n+1}}{n} @@ the measured law, two atoms; odd shells pull
+U = -\tfrac{2Ke^2}{a}\left(1 - \tfrac12 + \tfrac13 - \tfrac14 + \cdots\right) @@ the shells, nearest first
+\text{signs alternate, sizes } \tfrac1n \text{ fall to } 0 @@ the bracket technique (22g)
+\htmlClass{new}{S_{n+1} \text{ and } S_n \text{ fence the total, and the bracket settles}} \quad \blacksquare @@ S_n: the first n terms
+  </pre>
+  <p data-pid="859178">Row technique: <b>the energy of one atom in a charged row is −2Ke²/a times 1 − ½ + ⅓ − ¼ + ⋯, a sum that settles between any two partial sums in a row.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the bracket, fenced">
+S_1 = 1,\ \ S_2 = 0.5,\ \ S_3 \approx 0.8333,\ \ S_4 \approx 0.5833 @@ up, down, up, down, closing in
+S_{10} \approx 0.6456,\ \ S_{11} \approx 0.7365 @@ the next term is 1/11
+\htmlClass{new}{0.6456 \le 1 - \tfrac12 + \tfrac13 - \cdots \le 0.7365} @@ the row technique
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the row · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">22·chem.1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a charged row of sodium and chlorine,  a = 0.282 nm,  Ke² = 1.44 eV·nm</span></span>Find the fence on the bracket from S₅ and S₆, and the range of energies it gives. <br>Find how many shells make the fence narrower than 0.01.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22chem2">
+  <h2 class="sthead"><span class="stno">22chem2</span>Its total is twice the log of two</h2>
+  <p class="stands">Stands on 22·chem.1, 15h (sums of thin strips), 17a (the log as an area) and 17c (log-of-a-quotient).</p>
+  <p data-pid="37bde7">Write Hₙ = 1 + ½ + ⋯ + 1/n. Take the first 2n terms of the bracket, and turn them into a stretch of Hₙ’s terms that the log can fence.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the total technique">
+S_{2n} = H_{2n} - 2\left(\tfrac12 + \tfrac14 + \cdots + \tfrac1{2n}\right) @@ add every term, then take the even ones off twice
+= H_{2n} - H_n = \tfrac1{n+1} + \tfrac1{n+2} + \cdots + \tfrac1{2n} @@ 2 · 1/(2j) = 1/j
+\int_{n+1}^{2n+1}\tfrac{dx}{x} \le \tfrac1{n+1} + \cdots + \tfrac1{2n} \le \int_{n}^{2n}\tfrac{dx}{x} @@ each 1/j is a strip of width 1; 1/x falls (15h)
+\ln\tfrac{2n+1}{n+1} \le S_{2n} \le \ln 2 @@ the log as an area (17a); log-of-a-quotient (17c)
+\htmlClass{new}{1 - \tfrac12 + \tfrac13 - \cdots = \ln 2} \quad \blacksquare @@ (2n + 1)/(n + 1) → 2; and S₂ₙ₊₁ − S₂ₙ = 1/(2n + 1) → 0
+  </pre>
+  <p data-pid="f1c42f">Total technique: <b>the bracket totals ln 2, so one atom of a charged row has energy −2 ln 2 · Ke²/a.</b> For table salt’s spacing, Ke²/a = 1.44 / 0.282 ≈ 5.11 eV, and the energy is about −1.386 × 5.11 ≈ −7.08 eV.</p>
+  <p data-pid="670852">The same fences, from pm to qm, give 1/(pm + 1) + ⋯ + 1/(qm) between ln((qm + 1)/(pm + 1)) and ln(q/p). So H<sub>qm</sub> − H<sub>pm</sub> heads to ln(q/p), for any whole p and q. The next step needs this.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · the total · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22·chem.2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">the fences of the total technique,  n = 10</span> <span class="gtx">a charged row of potassium and chlorine,  a = 0.315 nm,  Ke² = 1.44 eV·nm</span></span>Find both fences, and S₂₀. <br>Find the energy of one atom of the potassium row.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22chem3">
+  <h2 class="sthead"><span class="stno">22chem3</span>The same terms, another total</h2>
+  <p class="stands">Stands on 22·chem.2, 22d (the grouping technique) and 22g (the reorder technique).</p>
+  <p data-pid="807e38">Make every term positive and the bracket becomes 1 + ½ + ⅓ + ⋯, which passes every ceiling (22d’s grouping technique). So the bracket settles only by taking turns, and 22g’s reorder technique says such a sum can be reordered to total anything. For the row, a reorder is an order of gathering the shells.</p>
+  <p data-pid="4aca90">Gather in blocks: p pulling shells, the nearest not yet taken, then q pushing shells, the nearest not yet taken, and again. After m blocks, the pulling shells taken are 1, 3, …, 2pm − 1 and the pushing shells 2, 4, …, 2qm.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the block-order technique">
+\text{pulls} = 1 + \tfrac13 + \cdots + \tfrac1{2pm - 1} = H_{2pm} - \tfrac12 H_{pm} @@ every term to 2pm, less the even ones
+\text{pushes} = \tfrac12 + \tfrac14 + \cdots + \tfrac1{2qm} = \tfrac12 H_{qm} @@ take ½ out
+\text{pulls} - \text{pushes} = (H_{2pm} - H_{pm}) + \tfrac12 (H_{pm} - H_{qm}) @@ regroup a finite sum
+\htmlClass{new}{\to \ln 2 + \tfrac12 \ln\tfrac{p}{q}} \quad \blacksquare @@ 22·chem.2, twice; inside a block the partial sums move by at most p + q terms, each heading to 0
+  </pre>
+  <p data-pid="76b37f">Block-order technique: <b>gathering p pulling shells for every q pushing shells gives the total ln 2 + ½ ln(p/q), not ln 2.</b> One pull for two pushes gives ½ ln 2. Two pulls for one push give (3/2) ln 2. One pull for four pushes gives 0: no energy at all, from the very same atoms.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · reordered · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22·chem.3.1</span><span class="ph undo">undo</span><span class="givens"><span class="gtx">the charged row of table salt,  Ke²/a = 5.11 eV</span> <span class="gtx">an order of gathering in blocks of p pulling and q pushing shells,  energy −9.00 eV</span></span>Find p/q. <br>Find whole p and q whose ratio is within 1% of it.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22chem4">
+  <h2 class="sthead"><span class="stno">22chem4</span>Why shell by shell</h2>
+  <p class="stands">Stands on 22·chem.3 and 22·chem.2.</p>
+  <p data-pid="374a89">Each order of gathering builds the row piece by piece: the centre atom and the shells taken so far. A pulling shell adds −2e and a pushing shell +2e. So a piece holding u pulling and v pushing shells has charge e(1 − 2u + 2v).</p>
+  <pre class="lines" data-k="ember" data-label="this page: the charge of the pieces">
+\text{shell by shell}:\ \ u - v \in \{0, 1\},\ \text{charge } +e \text{ or } -e @@ at every stage
+p : q \text{ blocks}:\ \ \text{charge} = e\,(1 - 2pm + 2qm) \text{ after } m \text{ blocks} @@ it passes every bound unless p = q
+\text{pulls} - \text{pushes} = (H_{2u} - H_u) + \tfrac12 (H_u - H_v) @@ as in 22·chem.3, with u pulls and v pushes taken
+|u - v| \le C \Rightarrow |H_u - H_v| \le \tfrac{C}{\min(u, v)} \to 0 @@ at most C terms, each at most 1/min(u, v)
+\htmlClass{new}{\text{bounded charge} \Rightarrow \text{total} = \ln 2} \quad \blacksquare @@ H₂ᵤ − Hᵤ → ln 2 (22·chem.2)
+  </pre>
+  <p data-pid="a0c314">Neutral-piece technique: <b>every order of gathering whose pieces keep a bounded charge gives the same total, ln 2.</b> A real crystal is grown, or cut, in pieces that are neutral but for a few charges at the surface. So the shell by shell total is the crystal’s energy. The lopsided orders describe pieces with huge charge, which no crystal on a shelf carries.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · neutral · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · one row, three orders of gathering</div>
+    <div class="btns"><button type="button" id="o11">shell by shell</button><button type="button" id="o12">one pull, two pushes</button><button type="button" id="o21">two pulls, one push</button></div>
+    <div class="kn"><span class="m">shells taken</span><input type="range" id="ks" min="1" max="90" step="1" value="12"><output id="os"></output></div>
+    <div id="rw"></div>
+    <div id="pl"></div>
+    <div class="cap">Top: the centre atom and twelve shells each way; filled atoms are gathered (ember −e, teal +e). Below: pulls less pushes, stage by stage, with the levels ½ ln 2, ln 2 and (3/2) ln 2 dashed.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22·chem.4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a piece of the charged row: the centre atom, the pulling shells 1, 3, …, 9 and the pushing shells 2, 4, …, 20</span></span>Find its charge, and its sum of pulls less pushes. <br>Find the charge after 50 blocks of one pull and two pushes, and the total that order heads to.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22chem5">
+  <h2 class="sthead"><span class="stno">22chem5</span>Illegal moves</h2>
+  <p class="stands">Stands on 22·chem.1 to 22·chem.4.</p>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{the terms head to } 0, \text{ so every order gives one total}\,? @@ only when the sizes’ sum settles; here it is 1 + ½ + ⅓ + ⋯
+U = -\tfrac{Ke^2}{a}\ln 2\,? @@ each shell holds two atoms: the 2 stays
+\tfrac1{n+1} + \cdots + \tfrac1{2n} \ge n \cdot \tfrac1{2n} = \tfrac12,\ \text{so the total is } \tfrac12\,? @@ a fence is not a total; the areas close in on ln 2
+\text{a lopsided order is just as good a crystal}\,? @@ its pieces’ charge passes every bound
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22·chem.5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span class="gtx">a row of atoms all of charge +e,  a apart</span></span>Find the energy sum of one atom, shell by shell. <br>Find which line of the row technique breaks.</li><li><span class="givens"><span class="gtx">the charged row,  gathered three pulling shells for every pushing shell</span></span>Find the total, and the charge of the piece after 10 blocks.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">22·chem.6.1</span><span class="tagq">build</span>Build an order of gathering the charged row’s shells, in blocks of whole p and q, whose total is within 0.01 of 0.5.</div>
+  <div class="chq"><span class="chid">22·chem.6.2</span><span class="tagq">edge</span>Gather every pushing shell, nearest first, before any pulling shell. <br>Find what the partial sums do, and whether every shell is ever gathered.</div>
+  <div class="chq"><span class="chid">22·chem.6.3</span><span class="tagq">converse</span>An order of gathering the charged row’s shells gives the total ln 2. <br>Must every piece it gathers have a bounded charge?</div>
+  <div class="chq"><span class="chid">22·chem.6.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="1 - x + x^2 - \cdots + (-x)^{n-1} = \tfrac{1 - (-x)^n}{1 + x}"></span></span>Find 1 − ½ + ⅓ − ⋯ = ln 2 again by taking the area under each side from 0 to 1.</div>
+  <div class="chq"><span class="chid">22·chem.6.5</span><span class="tagq">seam</span>A sum’s total can depend on the order of adding. A crystal’s energy cannot depend on the order in which anyone adds. For decades, books found the energy of a salt crystal by adding the atoms in balls of growing radius about one atom, and printed the total. Much later it was proved that the ball by ball sum does not settle at all. <br>Was the printed number the crystal’s energy?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r22nav.html">← 22·nav · can a flat map tell the truth?</a><a href="r22crypt.html">22·crypt · can two files have the same fingerprint? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The charged row is a one-dimensional ionic crystal, and the measured law is Coulomb’s law, with K the Coulomb constant. The number multiplying Ke²/a, here 2 ln 2, is the Madelung constant; for the salt crystal in three directions it is about 1.7476. The bracket is the alternating harmonic series. A sum that settles only because of its signs converges conditionally, and the block-order technique is a worked case of the Riemann rearrangement theorem. The neutral-piece technique is the idea behind Evjen’s method, and the modern way to sum a crystal is Ewald summation.</p>
+  <h3>Who said it first</h3>
+  <p>Peter Gustav Lejeune Dirichlet showed in 1837 that the alternating harmonic series, reordered two positive terms to one negative, totals (3/2) ln 2; Bernhard Riemann proved (written 1854, published 1867) that such a sum can be reordered to total anything. Erwin Madelung computed the energy of ionic crystals in 1918, and Paul Peter Ewald found a sum that settles quickly in 1921. H. M. Evjen (1932) warned that the sums in use did not settle, and summed in neutral blocks. In 22·chem.6.5, David Borwein, Jonathan Borwein and Keith Taylor proved in 1985 that the ball by ball sum for salt does not settle.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="22·chem: a worked “proof”, not allowed">
+1 - \tfrac12 + \tfrac13 - \tfrac14 + \cdots = \ln 2 @@ fine
+= (1 + \tfrac13 - \tfrac12) + (\tfrac15 + \tfrac17 - \tfrac14) + \cdots @@ not allowed: this takes the same terms in another order
+\text{so this total is } \ln 2 \text{ too} @@ false: it is (3/2) ln 2
+  </pre>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+const V=c=>'var('+c+')';
+const show=(v,d)=>{ let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s.replace('-','−'); };
+let P=1,Q=1,st=12;
+function order(p,q,N){ const o=[]; let a=1,b=2; while(o.length<N){ for(let i=0;i<p&&o.length<N;i++){o.push(a);a+=2;} for(let i=0;i<q&&o.length<N;i++){o.push(b);b+=2;} } return o; }
+function draw(){ const o=order(P,Q,90), took=new Set(o.slice(0,st)); let sums=[], s=0; o.forEach(n=>{ s+=(n%2?1:-1)/n; sums.push(s); });
+  let u=0,v=0; o.slice(0,st).forEach(n=>{ if(n%2) u++; else v++; });
+  let h='<svg viewBox="0 0 360 60"><line x1="6" y1="30" x2="354" y2="30" style="stroke:'+V('--grid')+'"/>';
+  for(let k=-12;k<=12;k++){ const x=180+k*14, n=Math.abs(k), neg=n%2===1, g=(n===0)||took.has(n), c=neg?'--ember':'--teal';
+    h+='<circle cx="'+x+'" cy="30" r="'+(n===0?7:5.5)+'" style="fill:'+(g?V(c):V('--card'))+';stroke:'+V(c)+';stroke-width:1.4"/>'; }
+  $('rw').innerHTML=h+'</svg>';
+  const W=360,H=170,X=i=>8+i*(W-16)/89,Yv=y=>H-10-(y-0.2)/(1.2)*(H-20);
+  let g='<svg viewBox="0 0 '+W+' '+H+'" style="background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  [0.5,1,1.5].forEach(f=>{ const y=Yv(f*Math.LN2); g+='<line x1="0" y1="'+y+'" x2="'+W+'" y2="'+y+'" style="stroke:'+V('--grid')+';stroke-dasharray:4 3"/>'; });
+  g+='<polyline points="'+sums.map((y,i)=>X(i).toFixed(1)+','+Yv(Math.max(0.2,Math.min(1.4,y))).toFixed(1)).join(' ')+'" style="fill:none;stroke:'+V('--ink')+';stroke-width:1.2"/>';
+  g+='<circle cx="'+X(st-1)+'" cy="'+Yv(Math.max(0.2,Math.min(1.4,sums[st-1])))+'" r="4" style="fill:'+V('--ember')+'"/>';
+  $('pl').innerHTML=g+'</svg>'; $('os').textContent=st;
+  const lim=Math.LN2+0.5*Math.log(P/Q), v_=$('vd'); v_.className='verdict';
+  v_.textContent=st+' shells taken: '+u+' pulling, '+v+' pushing. The piece’s charge is '+((1-2*u+2*v)>0?'+':'')+show(1-2*u+2*v,0)+'e. Pulls less pushes: '+show(sums[st-1])+'. This order heads to ln 2 + ½ ln('+P+'/'+Q+') = '+show(lim)+', and the energy to '+show(-2*lim,4)+' Ke²/a.'; }
+[['o11',1,1],['o12',1,2],['o21',2,1]].forEach(([id,p,q])=>{ $(id).onclick=()=>{ P=p; Q=q; draw(); }; });
+$('ks').addEventListener('input',()=>{ st=+$('ks').value; draw(); });
+draw();
+window.__pic={set:(p,q,s)=>{ P=p; Q=q; if(s) st=s; $('ks').value=st; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'shell n',t:R`-\tfrac{2Ke^2}{a}\cdot\tfrac{(-1)^{n+1}}{n}`,n:`Odd shells pull.`},
+  {k:'ember',kl:'the bracket',t:R`\htmlClass{new}{1 - \tfrac12 + \tfrac13 - \cdots}`,n:`Fenced by Sₙ and Sₙ₊₁.`}
+],{title:'The slides · the row · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'S₂ₙ',t:R`H_{2n} - H_n`,n:`The even terms, taken off twice.`},
+  {k:'ember',kl:'fenced',t:R`\ln\tfrac{2n+1}{n+1} \le S_{2n} \le \ln 2`,n:`Areas under 1/x.`},
+  {k:'ember',kl:'the total',t:R`\htmlClass{new}{\ln 2}`,n:`U = −2 ln 2 · Ke²/a.`}
+],{title:'The slides · the total · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'blocks',t:R`p \text{ pulls},\ q \text{ pushes}`,n:`Nearest untaken first.`},
+  {k:'ember',kl:'total',t:R`\htmlClass{new}{\ln 2 + \tfrac12\ln\tfrac{p}{q}}`,n:`p = q gives ln 2.`}
+],{title:'The slides · reordered · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'charge',t:R`e\,(1 - 2u + 2v)`,n:`u pulls, v pushes.`},
+  {k:'ember',kl:'bounded',t:R`\htmlClass{new}{|u - v| \le C \Rightarrow \ln 2}`,n:`Shell by shell is one such order.`}
+],{title:'The slides · neutral · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`\text{any order}\,?`,n:`Only when the sizes’ sum settles.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

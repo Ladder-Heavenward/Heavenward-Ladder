@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Which numbers never escape?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r25econ.html">← 25·econ why do some countries grow richer?</a><a href="floor5.html">next: the statistics floor →</a></p>
+  <div class="tags"><span class="tag now">25·now · research front</span></div>
+  <h1>Which numbers never escape?</h1>
+  <p>Which numbers never escape? Take a number c of the plane. Start at 0, square, add c, and do it again with the answer, and again, for ever. For some c the answers run off past every bound. For others they stay near home for ever, settling, or circling, or wandering without rest. Sort every c in the plane into those two kinds, and mark the ones that stay. In 1980 computers first drew the marked set well, and the picture was a shock: a heart-shaped body with round buds, buds on the buds, hairs and spirals and tiny copies of the whole, at every scale anyone has looked. What makes the question hard is that no run can be watched for ever, and every picture is made of small squares, each holding endlessly many c. This page shows, with rung twenty-five’s sizes of products and roots in pairs and rung twenty-four’s states that hold, where the set lies, why a run that passes 2 has escaped for good, how the heart and its first bud are drawn exactly, why a picture cannot settle what the set looks like, what was proved in 1982, and what is still open.</p>
+  <p class="gesture">On the line, the set is the stretch from minus two to one quarter, and past one quarter the run climbs because the rule’s own resting points have left the line as a flipped pair. In the plane, once a run passes two in size it can only grow, since squaring then outruns adding. Inside the heart a resting point pulls the run in, and the border of the heart is drawn by turning. Inside the first bud a cycle of two pulls instead. A picture tests each square once, at one point, for a few hundred steps, and so it proves only escapes. The set was proved to be in one piece. Whether it is in one piece close up, near every point, nobody yet knows.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r25c.html">25c</a> (the size of a product; the plane-triangle technique), <a href="r25e.html">25e</a> (roots in pairs), <a href="r25f.html">25f</a> (maps of the plane), <a href="r21cb20.html">21·cb20</a> (out and round), <a href="r24k.html">24k</a> (fixed points and their stability), <a href="r22h.html">22h</a> (rules fed their own answers), <a href="r24now.html">24·now</a> (boxes that prove) and <a href="r21a.html">21a</a> (the cloud). Rung 26 makes growth and turning one function.</p></div>
+</header>
+
+<section class="class step" data-step="25now1">
+  <h2 class="sthead"><span class="stno">25now1</span>On the line first</h2>
+  <p class="stands">Stands on 22h (rules fed their own answers), 25e (roots in pairs) and 4b (induction).</p>
+  <p data-pid="65bbd8">Write z₀ = 0 and z_(n+1) = z_n² + c. From here on, on this page, the run of c is z₀, z₁, z₂, and so on, and c stays home when its run has a ceiling on its size. With c = 1 the run is 0, 1, 2, 5, 26, and it escapes. With c = −1 it is 0, −1, 0, −1, and stays home. With c = i it is 0, i, −1 + i, −i, −1 + i, −i, and circles for ever. Start on the line, with c real.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the line technique">
+z_{n+1} - z_n = z_n^2 - z_n + c = \big(z_n - \tfrac12\big)^2 + c - \tfrac14 @@ complete the square (8i)
+c \gt \tfrac14 \Rightarrow z_{n+1} - z_n \ge c - \tfrac14 \gt 0 @@ each step climbs at least this much; the run escapes
+z^2 - z + c = 0:\ z = \tfrac{1 \pm \sqrt{1 - 4c}}{2},\ \text{a flipped pair when } c \gt \tfrac14 @@ the rule’s resting points leave the line (25e)
+-2 \le c \le \tfrac14:\ \ z \in [-\beta, \beta] \Rightarrow z^2 + c \in [c, \beta] \subseteq [-\beta, \beta],\ \ \beta = \tfrac{1 + \sqrt{1 - 4c}}{2} @@ β² + c = β; and β ≥ −c when −2 ≤ c ≤ ¼
+\htmlClass{new}{\text{on the line, } c \text{ stays home exactly for } -2 \le c \le \tfrac14} \quad \blacksquare @@ 0 is in [−β, β]; and c &lt; −2 escapes at once, as |z₁| = |c| &gt; 2 (25·now.2)
+  </pre>
+  <p data-pid="12091d">Line technique: <b>a real c stays home exactly when it lies from −2 to ¼, and past ¼ the run climbs because the rule’s resting points have become a flipped pair off the line.</b> The last line leans on the next footing for c below −2. 24k found doublings along this stretch for the logistic rule. Here they are again: z ↦ z² + c is the logistic rule with its variable slid and stretched.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the line · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">25·now.1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="c = -1 + i"></span> <span data-tex-inline="c = -i"></span></span>Find z₁, z₂ and z₃ for each. <br>Find which of them stays home, and how its run moves.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="25now2">
+  <h2 class="sthead"><span class="stno">25now2</span>Past 2, gone for good</h2>
+  <p class="stands">Stands on 25c (the size of a product; the plane-triangle technique) and 4b (induction).</p>
+  <p data-pid="f7aec3">Rung 25 gave two facts about sizes: |zw| = |z||w|, and |a + b| ≥ |a| − |b|. They are all a run needs.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the escape technique">
+|z| \gt 2,\ \ |z| \ge |c| @@ the run is out past 2, and past |c|
+|z^2 + c| \ge |z^2| - |c| = |z|^2 - |c| @@ the triangle technique; the size of a product (25c)
+\ge |z|^2 - |z| = |z|\,(|z| - 1) @@ |c| ≤ |z|
+|z| = 2 + \varepsilon \Rightarrow |z_{n+1}| \ge (1 + \varepsilon)\,|z_n| \text{ and } |z_{n+1}| \gt 2 + \varepsilon @@ and so still past |c|
+\htmlClass{new}{|z_{n + k}| \ge (1 + \varepsilon)^k\,|z_n|:\ \text{the run escapes}} \quad \blacksquare @@ induction on k (4b); (1 + ε)ᵏ passes every ceiling
+  </pre>
+  <p data-pid="09d67f">Escape technique: <b>if c stays home, then |c| ≤ 2 and every z_n of its run has |z_n| ≤ 2; one step past 2 proves escape.</b> For |c| > 2, z₁ = c is already past 2 and past |c|. For |c| ≤ 2, a run that passes 2 is past |c| too. So the whole set lies in the disc of size 2 about 0, and a computer may stop any run the moment it passes 2.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · escape · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">25·now.2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="c = 1 + i"></span> <span data-tex-inline="c = 0.3"></span></span>Find the first step at which each run passes 2 in size. <br>Find a step after which each run is certainly past 1000.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="25now3">
+  <h2 class="sthead"><span class="stno">25now3</span>The heart and its first bud</h2>
+  <p class="stands">Stands on 25·now.2, 24k (fixed points and their stability), 25c (the size of a product), 25f (maps of the plane) and 21·cb20 (out and round).</p>
+  <p data-pid="7bc19f">24k found that a resting point of a rule fed its own answers pulls nearby runs in when the rule’s slope there is less than 1 in size. In the plane the same holds: near a resting point z, the gap to it is multiplied by about 2z each step, and by the size of a product its size is multiplied by |2z|. A resting point of z ↦ z² + c is a root of z² − z + c, and in the plane there are always two.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the heart-and-bud technique">
+z^2 + c = z,\ \ |2z| \lt 1 @@ a resting point that pulls
+c = z - z^2,\ \ z = \tfrac12(\cos\theta + i\sin\theta) @@ the border: |2z| = 1, written out and round (21·cb20)
+c = \tfrac12(\cos\theta + i\sin\theta) - \tfrac14(\cos 2\theta + i\sin 2\theta) @@ multiply-and-add: the turn doubles
+(z^2 + c)^2 + c - z = (z^2 - z + c)(z^2 + z + c + 1) @@ multiply out: a cycle of two solves the second factor
+\htmlClass{new}{\text{a two-cycle pulls when } |2z_1 \cdot 2z_2| = |4(c + 1)| \lt 1,\ \text{ that is } |c + 1| \lt \tfrac14} \quad \blacksquare @@ z₁z₂ = c + 1, the product of the roots; the size of a product (25c)
+  </pre>
+  <p data-pid="a3b423">Heart-and-bud technique: <b>the c whose resting point pulls fill a heart whose border is drawn by turning z round a circle of size ½; the c whose cycle of two pulls fill the disc of size ¼ about −1.</b> The heart meets the line at ¼ (θ = 0) and at −¾ (θ = π). The bud touches it at −¾. Every bud has buds of its own, without end.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · heart · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · the squares that have not yet escaped</div>
+    <div class="kn"><span class="m">steps</span><input type="range" id="kn" min="1" max="200" step="1" value="12"><output id="on"></output></div>
+    <canvas id="cv" width="300" height="240" style="width:100%;max-width:440px;display:block;margin:auto;border:1px solid var(--grid);border-radius:4px"></canvas>
+    <div class="cap">The plane from −2.2 to 0.8 across and −1.2 to 1.2 up, in 300 by 240 squares. Ink: squares whose middle has not passed 2 in the chosen number of steps. Ember: the heart’s border. Teal: the border of the first bud.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">25·now.3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="c = -0.5"></span> <span data-tex-inline="c = -1.1"></span></span>Find, for c = −0.5, both resting points and which one pulls. <br>Find, for c = −1.1, the cycle of two and the size of its two-step slope.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="25now4">
+  <h2 class="sthead"><span class="stno">25now4</span>A picture cannot settle it</h2>
+  <p class="stands">Stands on 25·now.2, 24·now (boxes that prove) and 21a (the cloud).</p>
+  <p data-pid="97ec2b">A picture tests one c in each small square, for N steps. If that run passes 2, that one c is proved to escape. If it does not, nothing is proved, even about that c: it may pass 2 at step N + 1. At c = ¼ + ε the run takes about π/√ε steps to escape, so c = 0.2501 survives 300 steps and still escapes.</p>
+  <pre class="lines" data-k="ember" data-label="this page: what a square shows">
+\text{the middle passes 2 by step } N \Rightarrow \text{that } c \text{ escapes} @@ the escape technique: proved
+\text{the middle stays under 2 for } N \text{ steps} \Rightarrow\ ? @@ nothing, for any N
+c = 0.2501:\ \text{under 2 for } 300 \text{ steps, then escapes at step } 312 @@ about π/√0.0001 ≈ 314
+\htmlClass{new}{\text{a picture proves escapes, and never proves staying home}}
+  </pre>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · the cloud</div>
+    <p data-pid="30df1d">21a said that every measured value is a fence, and 24·now’s boxes reported only what held at every point of a box. A square of the picture is a box of endlessly many c. Its colour is a fact about one of them, after N steps.</p>
+    <p data-pid="ff8aa1"><b>A picture made of tested points proves only what was tested, and a square is not its middle.</b></p>
+    <p data-pid="d082ab">So a black square says neither that its c stay home nor even that its middle does. A thread of the set thinner than a square may run through a white square and never be drawn. To prove anything about the set from a computer, the computer must work with whole boxes, as 24·now’s did, and report only what holds for every c in them.</p>
+    <p class="bait" data-pid="9c77d5">A picture at 200 steps shows a small black speck, apart from the body, with white squares all round it. Which of these could you report: the speck is part of the set; some c near the speck escape; the speck is cut off from the body?</p>
+  </aside>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · picture · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">25·now.4.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="c = 0.26"></span></span>Find the step at which the run passes 2, by computer or by the estimate π/√ε. <br>Find how many steps a picture needs to show c = 0.26 as escaping.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="25now5">
+  <h2 class="sthead"><span class="stno">25now5</span>What is proved, and what is open</h2>
+  <p class="stands">Stands on 25·now.1 to 25·now.4, 24·now (what is proved, and what is open) and 0c (guesses by case).</p>
+  <p data-pid="6f6ff3"><b>The set is proved to be in one piece; whether it is in one piece close up, near every one of its points, is open.</b></p>
+  <ul>
+    <li data-pid="43c681">Proved, 1982. The set is in one piece: no speck of it is cut off from the body, however the pictures look. The proof builds a map of the plane that straightens the set’s outside into the outside of a disc.</li>
+    <li data-pid="e604dc">Proved, 1991 and 1998. Its border is as rough as a curve in the plane can be: on a measure of roughness built much higher up the ladder, it scores 2, as much as a solid patch.</li>
+    <li data-pid="adf462">Measured, not proved. Its area is about 1.506, found by counting squares and by sums. No proof pins even the second figure.</li>
+    <li data-pid="da0e32">Open. Whether it is in one piece close up. A set can be in one piece and fail this: a comb of upright teeth at 1, ½, ⅓, and so on, with a spine along the floor and one more tooth at 0. Near the middle of the tooth at 0, every small disc holds bits of other teeth, cut off from it inside that disc. Proved since the 1990s at every point of the border except those where the set holds smaller copies of itself, inside copies, without end. Proved at some of those since, and open at the rest.</li>
+    <li data-pid="5d518f">What it would give. If the set is in one piece close up, then every c inside it lies in a heart or a bud of its own, where some cycle pulls. On the line, the same claim was proved in 1997 (24·now).</li>
+  </ul>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · open · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">25·now.5.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">the comb: the teeth x = 1/n for n = 1, 2, 3, …, and x = 0, each from y = 0 to y = 1, and the floor from x = 0 to x = 1</span></span>Find a path inside the comb from (0, ½) to (1, ½). <br>Find why no path inside the comb from (0, ½) to (1/n, ½) stays within ¼ of (0, ½).</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="25now6">
+  <h2 class="sthead"><span class="stno">25now6</span>Illegal moves</h2>
+  <p class="stands">Stands on 25·now.1 to 25·now.5.</p>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{under 2 for 1000 steps, so } c \text{ stays home}\,? @@ under 2 so far proves nothing
+|z^2 + c| \le |z|^2 + |c| \text{, so the run grows}\,? @@ a ceiling cannot show growth; the floor |z|² − |c| does
+\text{the picture shows specks apart, so the set is in pieces}\,? @@ proved in one piece; a thread can be thinner than a square
+|z_1| = |c| \le 2 \text{, so } c \text{ stays home}\,? @@ c = 1 + i has |c| ≈ 1.41 and escapes
+  </pre>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">25·now.6.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="c = 0.2501"></span></span>Find whether it stays home, and how the picture at 300 steps shows it.</li><li><span class="givens"><span data-tex-inline="c = -2"></span></span>Find its run, and whether it stays home.</li><li><span class="givens"><span data-tex-inline="c = -0.75 + 0.1i"></span></span>Find whether it lies in the heart, the bud, or neither.</li><li><span class="givens"><span data-tex-inline="c = 2i"></span></span>Find whether its run passes 2, and when.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">25·now.7.1</span><span class="tagq">build</span>Build every c whose run returns to 0 after exactly three steps. <br>Find which one is real, and where the other two lie in the picture.</div>
+  <div class="chq"><span class="chid">25·now.7.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="c = \tfrac14"></span></span>Find whether c = ¼ stays home, and what its run does. <br>Find why c a little above ¼ takes so many steps to escape.</div>
+  <div class="chq"><span class="chid">25·now.7.3</span><span class="tagq">converse</span>Every c whose resting point pulls stays home. Turn it round: if c stays home, must one of its resting points pull?</div>
+  <div class="chq"><span class="chid">25·now.7.4</span><span class="tagq">reroute</span>Prove that the set is its own flip across the line, z ↦ z̄, without a picture.</div>
+  <div class="chq"><span class="chid">25·now.7.5</span><span class="tagq">seam</span>The first good pictures showed small specks floating apart from the body. One reader held they were separate islands, and the set is in pieces. Another held that threads too thin to draw join them all. <br>Who is right, and could any screen have settled it?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r25econ.html">← 25·econ · why do some countries grow richer?</a><a href="floor5.html">the statistics floor →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The set is the Mandelbrot set; the run of 0 is the critical orbit, and z ↦ z² + c the quadratic family. The heart is the main cardioid and the bud the period-2 bulb; the escape technique is the escape radius 2. A resting point that pulls is attracting, and a c with a cycle that pulls is hyperbolic. In one piece is connected; in one piece close up is locally connected, and the open question is the MLC conjecture. What it would give is the density of hyperbolicity. The roughness is Hausdorff dimension. The map of 1982 is a Riemann map, conformal, of the outside of the set onto the outside of a disc. The comb is the comb space.</p>
+  <h3>Who said it first</h3>
+  <p>Pierre Fatou and Gaston Julia studied rules fed their own answers in the plane in 1917–20, without pictures. Robert Brooks and Peter Matelski drew the set in 1978; Benoit Mandelbrot drew it better in 1980 and made it famous. Adrien Douady and John Hubbard proved it in one piece in 1982 and named it after Mandelbrot. Mitsuhiro Shishikura proved its border has dimension 2 (announced 1991, published 1998). Jean-Christophe Yoccoz proved it in one piece close up at many points in the early 1990s; Mikhail Lyubich, Jeremy Kahn and Dzmitry Dudko have extended it since. In 25·now.7.5, Mandelbrot at first took the specks for islands, or for dirt on the printout; Douady and Hubbard proved they are joined.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="25·now: a worked “proof”, not allowed">
+c = 1 + i:\ z_1 = 1 + i,\ |z_1| \approx 1.41 @@ fine
+z_2 = (1 + i)^2 + 1 + i = 1 + 3i,\ |z_2| \approx 3.16 @@ fine
+|z_3| \le |z_2|^2 + |c| \approx 11.4 \text{, so the run escapes} @@ not allowed: a ceiling shows nothing; the escape technique gives it, since |z₂| > 2 and |z₂| ≥ |c|
+  </pre>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim()||'#888';
+function draw(){ const N=+$('kn').value; $('on').textContent=N; const cv=$('cv'), g=cv.getContext('2d'), W=300, H=240, x0=-2.2, x1=0.8, y0=-1.2, y1=1.2;
+  g.fillStyle=css('--card'); g.fillRect(0,0,W,H); g.fillStyle=css('--ink'); let cnt=0;
+  for(let j=0;j<H;j++){ const ci=y1-(j+0.5)/H*(y1-y0); for(let i=0;i<W;i++){ const cr=x0+(i+0.5)/W*(x1-x0); let zr=0, zi=0, n=0;
+      for(;n<N;n++){ const t=zr*zr-zi*zi+cr; zi=2*zr*zi+ci; zr=t; if(zr*zr+zi*zi>4) break; }
+      if(n===N){ g.fillRect(i,j,1,1); cnt++; } } }
+  const X=x=>(x-x0)/(x1-x0)*W, Y=y=>(y1-y)/(y1-y0)*H;
+  g.lineWidth=1.6; g.strokeStyle=css('--ember'); g.beginPath();
+  for(let k=0;k<=200;k++){ const th=2*Math.PI*k/200; const cr=0.5*Math.cos(th)-0.25*Math.cos(2*th), ci=0.5*Math.sin(th)-0.25*Math.sin(2*th); if(k) g.lineTo(X(cr),Y(ci)); else g.moveTo(X(cr),Y(ci)); }
+  g.stroke(); g.strokeStyle=css('--teal'); g.beginPath(); g.arc(X(-1),Y(0),0.25/(x1-x0)*W,0,2*Math.PI); g.stroke();
+  const area=cnt*((x1-x0)/W)*((y1-y0)/H);
+  const v=$('vd'); v.className='verdict';
+  v.textContent='After '+N+' steps, '+cnt+' squares have not escaped at their middle, covering about '+fm(area,3)+'. More steps can only shrink this. It is not a bound on the set’s area, since a square is not its middle.'; }
+$('kn').oninput=draw; draw();
+window.__pic={set:(n)=>{ $('kn').value=n; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'climb',t:R`z_{n+1} - z_n = (z_n - \tfrac12)^2 + c - \tfrac14`,n:`Past ¼, always up.`},
+  {k:'ember',kl:'home',t:R`\htmlClass{new}{-2 \le c \le \tfrac14}`,n:`Exactly these stay.`}
+],{title:'The slides · the line · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'grow',t:R`|z^2 + c| \ge |z|(|z| - 1)`,n:`Squaring outruns adding.`},
+  {k:'ember',kl:'disc',t:R`\htmlClass{new}{|z_n| \gt 2 \Rightarrow \text{escape}}`,n:`The set lies in |c| ≤ 2.`}
+],{title:'The slides · escape · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'pull',t:R`|2z| \lt 1`,n:`A resting point that holds.`},
+  {k:'ember',kl:'heart',t:R`c = z - z^2,\ |z| = \tfrac12`,n:`Drawn by turning.`},
+  {k:'ember',kl:'bud',t:R`\htmlClass{new}{|c + 1| \lt \tfrac14}`,n:`A cycle of two.`}
+],{title:'The slides · heart · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'escape',t:R`|z_n| \gt 2`,n:`Proved out.`},
+  {k:'ember',kl:'stay',t:R`\htmlClass{new}{\text{under 2 for } N \text{ steps} \Rightarrow\ ?}`,n:`Nothing proved.`}
+],{title:'The slides · picture · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'proved',t:R`\text{one piece}`,n:`1982.`},
+  {k:'ember',kl:'open',t:R`\htmlClass{new}{\text{one piece close up?}}`,n:`Nobody knows.`}
+],{title:'The slides · open · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'illegal',t:R`\text{the picture proves}\,?`,n:`Only escapes.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

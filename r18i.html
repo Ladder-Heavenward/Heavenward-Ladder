@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Curves traced in time</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r18h.html">← 18h circles and conics</a><a href="r18j.html">next: 18j constructions with straightedge and compass →</a></p>
+  <div class="tags"><span class="tag tech">18i · technique</span></div>
+  <h1>Curves traced in time</h1>
+  <p>Until now a curve has been a set of points, given by an equation. This step lets a point move. At each time it is at a point, with a horizontal and a vertical coordinate that both change with time. Rung 13 gives the slopes of each coordinate, and the chain technique turns them into the slope of the curve. 18a's distance gives the point's speed. And the length of a curve, which Euclid never defined, comes out as rung 16's area under the speed.</p>
+  <p class="gesture">The path’s slope is the vertical speed over the horizontal speed, wherever the horizontal speed is not zero. The second slope is the slope’s rate of change in time, divided by the horizontal speed. Speed is the square root of the sum of the squared horizontal and vertical speeds. The way travelled is the area under the speed, and the length of a graph is the area under the square root of one plus its squared slope.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r18a.html">18a</a> (distance-laws), <a href="r18b.html">18b</a> (triangle in the plane), <a href="r18c.html">18c</a> (parametric form), <a href="r13e.html">13e</a> (chain technique for slopes), <a href="r13l.html">13l</a> (inverse-slope), <a href="r14c.html">14c</a> (average-slope), <a href="r14d.html">14d</a> (slope-sign-order), <a href="r15f.html">15f</a> (evenly-continuous), <a href="r15h.html">15h</a> (narrow-strips), <a href="r16d.html">16d</a> (substitution for areas). <a href="r18cb13.html">18·cb13</a> finds slopes of curves given only by equations.</p></div>
+</header>
+
+<section class="class step" data-step="18i1">
+  <h2 class="sthead"><span class="stno">18i1</span>A point that moves</h2>
+  <p class="stands">Stands on 9 (functions) and 18a (points).</p>
+  <p class="eqline" data-pid="52b28b">From here on, a path is a function P from an interval I of times to points: P(t) = (x(t), y(t)), where x and y are functions from I to ℝ. Its trace is the set of points it passes, {P(t) : t ∈ I}. The accepted name for a path is a parametric curve, with t its parameter, as for 18c's line X = P + tv.</p>
+  <p data-pid="c648d4">A path is more than its trace. It says when the point is where, in what order, and how often. On [−1, 1], the paths t ↦ (t, t²) and t ↦ (t³, t⁶) have one trace, an arc of y = x², passed at different speeds. To find the equation of a trace, take t out. From x = t² and y = t³ comes y² = x³, with x ≥ 0.</p>
+  <pre class="lines" data-k="ember" data-label="this step: worked">
+x = 12t,\ \ y = 16t - 4.9t^2 @@ a stone thrown, the air neglected, in metres and seconds; t = x/12 gives y = (4/3)x − 4.9x²/144, a parabola
+x = \tfrac{1 - t^2}{1 + t^2},\ \ y = \tfrac{2t}{1 + t^2} @@ (1 − t²)² + (2t)² = (1 + t²)²: the trace is on the circle x² + y² = 1
+t = \tfrac{y}{1 + x} @@ takes t back out: every point of that circle except (−1, 0) is reached, once
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · a path · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">18i1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">P(t) = (2t, t²),  t from 0 to 3</span></span>Find where the point is at t = 0, 1, 2 and 3. <br>Find an equation in x and y alone for its trace.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18i2">
+  <h2 class="sthead"><span class="stno">18i2</span>Slopes of a path</h2>
+  <p class="stands">Stands on 18i1, 13 (slopes) and 13l (the inverse dodge).</p>
+  <p data-pid="e892a9">The pair P′(t) = (x′(t), y′(t)) says how fast each coordinate is changing at t. Its accepted name is the velocity at t. It is a displacement of 18a: the move the point would make in one unit of time, if it kept those rates.</p>
+  <p data-pid="5e6980">Path-slope technique. Let x and y have slopes at every t of an open interval I. Let x′(t) be above 0 at every t of I, or below 0 at every t of I. <b>Then the trace over I is the graph of a function F, and F′(x(t)) = y′(t)/x′(t).</b> In the marks: dy/dx = (dy/dt)/(dx/dt).</p>
+  <pre class="lines" data-k="ember" data-label="this step: the path-slope technique">
+x \text{ is increasing on } I,\ \text{or decreasing} @@ slope-sign-order
+x(I) \text{ is an interval } J @@ slope-means-no-gap: x is continuous; in-between-value
+T: J \to I \text{ runs } x \text{ backwards},\ \ T'(x(t)) = \tfrac{1}{x'(t)} @@ inverse-slope
+(x(t), y(t)) = \big(u,\ y(T(u))\big) \text{ with } u = x(t) @@ so the trace is the graph of F = y ∘ T
+\begin{aligned}&\htmlClass{new}{F'(x(t)) = y'(T(x(t)))\cdot T'(x(t)) = \tfrac{y'(t)}{x'(t)}} \quad\\ &\quad \blacksquare\end{aligned} @@ chain technique for slopes, with T(x(t)) = t
+  </pre>
+  <p data-pid="d3cacf">The marks dy/dt and dx/dt seem to cancel like fractions. 13e warned that dy/dx is not a quotient, and it still is not. The cancelling is the chain technique, proved; it is not a tech on fractions.</p>
+  <p data-pid="5d3add">Where x′(t) = 0 and y′(t) ≠ 0, exchange the letters: near there the trace is a graph of x in terms of y, with dx/dy = 0, so it runs straight up and down. Where y′(t) = 0 and x′(t) ≠ 0, it runs level. Where both are 0 the point stops, and the trace can do anything. The trace of (t², t³) has a sharp point at (0, 0), with the accepted name a cusp; the trace of (t³, t⁶) is smooth there.</p>
+  <p data-pid="0f4ac0">Second-slope technique. Let x and y have second slopes at every t of an open interval I, with x′ above 0 throughout or below 0 throughout. <b>The second slope of the trace is the slope of y′/x′ in t, divided by x′.</b> In the marks: d²y/dx² = (d/dt (dy/dx))/(dx/dt) = (x′y″ − y′x″)/x′³. Proof: the path t ↦ (x(t), y′(t)/x′(t)) traces the graph of F′, so path-slope applies to it; the quotient technique for slopes gives the last form. Its sign says where the trace bends up (bends-up).</p>
+  <pre class="lines" data-k="ember" data-label="this step: worked">
+x = 12t,\ y = 16t - 4.9t^2:\ \ \tfrac{dy}{dx} = \tfrac{16 - 9.8t}{12} @@ path-slope: level at t = 16/9.8 ≈ 1.633 s, the top, 13.06 m up
+\tfrac{d^2y}{dx^2} = \tfrac{-9.8}{12}\cdot\tfrac{1}{12} = -\tfrac{4.9}{72} @@ second-slope: below 0 everywhere, so it bends down; y = (4/3)x − 4.9x²/144 agrees
+x = t^2,\ y = t^3:\ \ \tfrac{dy}{dx} = \tfrac{3t}{2},\ \ \tfrac{d^2y}{dx^2} = \tfrac{3/2}{2t} = \tfrac{3}{4t} @@ for t ≠ 0: the upper half bends up, the lower half bends down
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · slopes of a path · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18i2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">P(t) = (2t, t²)</span></span>Find the velocity at t = 1, and the slope of the trace there. <br>Check the slope against the trace y = x²/4.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18i3">
+  <h2 class="sthead"><span class="stno">18i3</span>Speed</h2>
+  <p class="stands">Stands on 18i2 and 18a (distance).</p>
+  <p data-pid="a48907">Speed technique. Let x and y have slopes at t. <b>The distance covered per unit of time, d(P(t + h), P(t))/|h|, heads to √(x′(t)² + y′(t)²) as h heads to 0.</b> That number has the accepted name the speed at t, and it is |P′(t)|.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the speed technique">
+\tfrac{d(P(t + h), P(t))}{|h|} = \sqrt{\Big(\tfrac{x(t + h) - x(t)}{h}\Big)^2 + \Big(\tfrac{y(t + h) - y(t)}{h}\Big)^2} @@ distance-laws: |h| = √(h²) goes inside the root
+\htmlClass{new}{\longrightarrow \sqrt{x'(t)^2 + y'(t)^2}} \quad \blacksquare @@ each chord slope heads to the slope; sums, squares and the root keep where things head (root-continuity)
+  </pre>
+  <p data-pid="9c9dc3">The stone's speed is √(144 + (16 − 9.8t)²). It is least, 12 m/s, at the top, where it moves level.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · speed · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18i3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">P(t) = (3t, 4t)</span></span>Guess its speed from how far it goes in one unit of time. <br>Find it by speed.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18i4">
+  <h2 class="sthead"><span class="stno">18i4</span>How far it goes</h2>
+  <p class="stands">Stands on 18i3, 14c (average-slope) and 15 (integrals).</p>
+  <p data-pid="8878a7">How long is a curve? Euclid measured only straight segments, so build the length from them. Take a path P on [r, w] and a partition r = t₀ &lt; t₁ &lt; … &lt; tₙ = w. Its chord sum is the sum of the distances d(P(tᵢ₋₁), P(tᵢ)). Adding a point to the partition never lowers the chord sum: one chord becomes two, and triangle in the plane says two are at least as long as one. From here on, the length of the path on [r, w] is the least upper bound of its chord sums, when they have an upper bound (8c).</p>
+  <p data-pid="e3c7ce">Distance-travelled technique. Let x′ and y′ be continuous on [r, w]. <b>The length of the path on [r, w] is the area under its speed, ∫ᵣʷ √(x′² + y′²) dt.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the distance-travelled technique">
+d(P(t_{i-1}), P(t_i)) = \Delta_i \sqrt{x'(s_i)^2 + y'(u_i)^2} @@ average-slope, on x and on y apart: some sᵢ, uᵢ between tᵢ₋₁ and tᵢ; Δᵢ = tᵢ − tᵢ₋₁
+\Big|\sqrt{p^2 + q^2} - \sqrt{p^2 + q'^2}\Big| \le |q - q'| @@ triangle in the plane, on (p, q) = (p, q′) + (0, q − q′), and the other way round
+|y'(u_i) - y'(s_i)| \lt \varepsilon \text{ when every } \Delta_i \lt \delta @@ evenly-continuous, for y′ on [a, b]
+\Big|\text{chord sum} - \textstyle\sum v(s_i)\,\Delta_i\Big| \lt \varepsilon(b - a) @@ v = √(x′² + y′²); add the bounds of the last two lines over i
+\Big|\textstyle\sum v(s_i)\,\Delta_i - \int_a^b v\Big| \lt \varepsilon \text{ for every partition fine enough} @@ narrow-strips: v is continuous (root-continuity), and the sᵢ are tags
+\begin{aligned}&\htmlClass{new}{\text{every chord sum} \le \textstyle\int_a^b v,\ \text{and fine ones are }}\\ &\quad \htmlClass{new}{\text{within } \varepsilon(b - a + 1)} \quad \blacksquare\end{aligned} @@ any partition refines to a fine one, no shorter; ε was any number above 0
+  </pre>
+  <p data-pid="e482d6">The length counts every pass. The path t ↦ (t², 0) on [−1, 1] runs from (1, 0) to (0, 0) and back. Its length is ∫|2t| dt = 2, though its trace is a segment of length 1. When a path passes each point of its trace once, its length is the length of the trace.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · how far it goes · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · a point that moves, and the area under its speed</div>
+    <div class="chips" id="pch"></div>
+    <div class="panels">
+    <div class="panel">
+      <div class="lbl">the trace, the point at time t, and chords</div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">t</span><input type="range" id="kt" min="0" max="1" step="0.002" value="0.4"><output id="ot"></output></div>
+      <div class="kn"><span class="m">chords</span><input type="range" id="kn" min="1" max="40" step="1" value="4"><output id="on"></output></div>
+      <div class="cap">Muted: the trace. Plum: the chords of an equal partition of the whole time. Ember: the point P(t) and its velocity P′(t), drawn from P(t) and shortened to fit.</div>
+    </div>
+    <div class="panel">
+      <div class="lbl">the speed against time, and the area under it so far</div>
+      <canvas id="cvL"></canvas>
+      <div class="cap">Ink: the speed √(x′² + y′²). Teal: the area under it from the start to t, the way travelled so far.</div>
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18i4.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="P(t) = (t^2 - 1,\ t^3 - 3t)"></span></span>Take t out: find an equation in x and y alone that the trace satisfies.</li><li><span class="givens"><span data-tex-inline="x(t) = t^3,"></span> <span data-tex-inline="y(0) = 1,"></span> <span data-tex-inline="\dfrac{dy}{dx} = 2t \ (t \ne 0)"></span></span>Find y as a function of t.</li><li><span class="givens"><span data-tex-inline="A = (1, 2),"></span> <span data-tex-inline="B = (7, 10),"></span> <span data-tex-inline="\text{time } 2 \text{ s, constant speed}"></span></span>Find a path that runs along the segment AB in the given time at a constant speed, and find the speed.</li><li><span class="givens"><span data-tex-inline="f(0) = 0,"></span> <span data-tex-inline="f^\prime \text{ continuous}, \ f^\prime \ge 0,"></span> <span data-tex-inline="\text{the graph of } f \text{ on } [0, s]"></span> <span data-tex-inline="\text{has length}"></span> <span data-tex-inline="\dfrac{e^s - e^{-s}}{2} \ (s \ge 0)"></span></span>Find f.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18i5">
+  <h2 class="sthead"><span class="stno">18i5</span>The length of a graph</h2>
+  <p class="stands">Stands on 18i4.</p>
+  <p data-pid="e052ca">Graph-length technique. Let f′ be continuous on [r, w]. <b>The length of the graph of f from r to w is ∫ᵣʷ √(1 + f′(x)²) dx.</b> It is distance-travelled for the path x = t, y = f(t), which passes each point once. Its accepted name is arc length.</p>
+  <pre class="lines" data-k="ember" data-label="this step: worked">
+y = x^{3/2} \text{ on } [0, 4]:\ \ \textstyle\int_0^4 \sqrt{1 + \tfrac94 x}\,dx @@ graph-length; f′ = (3/2)x^{1/2}
+= \tfrac{8}{27}\Big[\big(1 + \tfrac94 x\big)^{3/2}\Big]_0^4 = \tfrac{8}{27}\big(10\sqrt{10} - 1\big) \approx 9.073 @@ substitution for areas, with u = 1 + 9x/4
+y = \tfrac{e^x + e^{-x}}{2}:\ \ 1 + f'(x)^2 = f(x)^2 @@ f′ = (eˣ − e⁻ˣ)/2, and 1 + (e²ˣ − 2 + e⁻²ˣ)/4 = (e²ˣ + 2 + e⁻²ˣ)/4
+\text{from } -1 \text{ to } 1:\ \ \textstyle\int_{-1}^{1} f = e - e^{-1} \approx 2.350 @@ graph-length; the shape of a hanging chain, with the accepted name catenary
+\begin{aligned}&\text{the stone:}\ \ \textstyle\int_0^{16/4.9} \sqrt{144 + (16 - 9.8t)^2}\,dt\\ &\quad \approx 48.80 \text{ m}\end{aligned} @@ ½(u√(u² + 144) + 144 ln(u + √(u² + 144))) has slope √(u² + 144): check it; the stone lands 39.18 m away
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · graph-length · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18i5.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="P(t) = (t^2 - 1,\ t^3 - 3t),"></span> <span data-tex-inline="t = 2"></span></span>Find the slope of the trace at t, and the points where the trace runs level or straight up and down.</li><li><span class="givens"><span data-tex-inline="P(t) = (t^2 - 1,\ t^3 - 3t),"></span> <span data-tex-inline="t = 2"></span></span>Find how fast the slope changes against x at t, and whether the trace bends up or down there.</li><li><span class="givens"><span data-tex-inline="(3t^2,\ 2t^3),"></span> <span data-tex-inline="0 \le t \le 1"></span></span>Find the length of the path.</li><li><span class="givens"><span data-tex-inline="y = \dfrac{x^2}{2} - \dfrac{\ln x}{4},"></span> <span data-tex-inline="1 \le x \le e"></span></span>Find the length of the graph.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18i6">
+  <h2 class="sthead"><span class="stno">18i6</span>Illegal moves</h2>
+  <p class="stands">Stands on 18i1 to 18i5.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\tfrac{dy}{dx} = \tfrac{dy/dt}{dx/dt} \text{ because the } dt\text{s cancel}\,? @@ dy/dx is not a fraction (13e); path-slope's proof is the chain technique
+\text{length} = \textstyle\int_a^b (x' + y')\,dt\,? @@ the speed is √(x′² + y′²): the two rates combine as the sides of a right triangle
+\begin{aligned}&\text{the length of } (t^2, 0) \text{ on } [\\ &\quad -1, 1] \text{ is } d(P(-1), P(1)) = 0\,?\end{aligned} @@ that is how far it ended up, not how far it went; distance-travelled gives 2
+\tfrac{d^2y}{dx^2} = \tfrac{y''}{x''}\,? @@ for (t², t³) that gives 3t; second-slope gives 3/(4t)
+  </pre>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18i6.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="P(t) = (t^2 - 1,\ t^3 - 3t),"></span> <span data-tex-inline="Q = (2, 0)"></span></span>Find the two times the path passes Q, and the slope at each. <br>Find whether the trace has one slope at Q.</li><li><span class="givens"><span data-tex-inline="(t^2,\ t^3),"></span> <span data-tex-inline="(t^3,\ t^6),"></span> <span data-tex-inline="t = 0"></span></span>Find whether either trace has a slope at the origin.</li><li><span class="givens"><span data-tex-inline="(t, t),"></span> <span data-tex-inline="(t^2, t^2),"></span> <span data-tex-inline="(4t(1 - t),\ 4t(1 - t)),"></span> <span data-tex-inline="0 \le t \le 1"></span></span>Compare the lengths of the three paths, and the lengths of their traces.</li><li><span class="givens"><span data-tex-inline="(1, -1), (\tfrac12, \tfrac12),"></span> <span data-tex-inline="(\tfrac13, -\tfrac13), (\tfrac14, \tfrac14), \ldots"></span> <span data-tex-inline="\text{and } (0, 0),"></span> <span data-tex-inline="0 \le x \le 1"></span></span>Join the points in order by segments, and find whether the result is the graph of a continuous function on that interval. <br>Find whether it has a length.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">18i.4.1</span><span class="tagq">build</span>Choose a graph of your own, and build two paths along it: one that passes each point once, and one that runs out to the far end and back. <br>Find both lengths, the length of the trace, and the slope at one point from each path. <br>Find which agree.</div>
+  <div class="chq"><span class="chid">18i.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="P(t) = \Big(\dfrac{1 - t^2}{1 + t^2},\ \dfrac{2t}{1 + t^2}\Big),"></span> <span data-tex-inline="0 \le t \le 1,"></span> <span data-tex-inline="n = 4"></span></span>Find its speed. <br>Trap its length between a lower and an upper sum with n equal strips.</div>
+  <div class="chq"><span class="chid">18i.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{a path on } [r, w],"></span> <span data-tex-inline="\text{continuous slopes,}"></span> <span data-tex-inline="\text{speed never } 0"></span></span>Find a new timing of the same trace, in the same order, whose speed is one throughout.</div>
+  <div class="chq"><span class="chid">18i.4.4</span><span class="tagq">seam</span>In 1637 a great geometer wrote that the ratio between straight lines and curved ones is not known, and that he believed it could not be known by people. Within about twenty years three others had found the exact length of arcs of y² = x³. This step defines a length as a least upper bound of chord sums. <br>Was he wrong?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r18h.html">← 18h · circles and conics</a><a href="r18j.html">18j · constructions with straightedge and compass →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>The ratio between straight and curved lines is not known, and I believe cannot be known by men; so nothing exact and certain can be concluded from it.</p><cite>René Descartes, La Géométrie, second book (1637); paraphrase</cite></aside>
+  <p>In 18i.4.4, the geometer is René Descartes. William Neile found the length of an arc of y² = x³ in 1657, Hendrik van Heuraet published a general method in 1659, and Pierre de Fermat had one too. Christiaan Huygens and Gottfried Wilhelm Leibniz found the catenary's equation in 1691, answering a challenge of Jakob Bernoulli; Galileo had guessed the hanging chain was a parabola.</p>
+  <p>Accepted names: a path is a parametric curve; path-slope is the parametric derivative; finding a length is rectification, and a path with a length is rectifiable.</p>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+/* least and greatest of F.f on [lo, hi]: the ends, F's critical points inside, and a fine sample (exact between critical points for the functions used here) */
+function ext(F,lo,hi){ if(F.dir) return [0,1]; let m=Infinity,M=-Infinity; const t=x=>{ const v=F.f(x); if(v<m) m=v; if(v>M) M=v; };
+  t(lo); t(hi); (F.crit||[]).forEach(c=>{ if(c>lo&&c<hi) t(c); }); for(let k=1;k<64;k++) t(lo+(hi-lo)*k/64); return [m,M]; }
+function sums(F,pts){ let L=0,U=0; const ms=[],Ms=[]; for(let i=1;i<pts.length;i++){ const [m,M]=ext(F,pts[i-1],pts[i]), w=pts[i]-pts[i-1]; ms.push(m); Ms.push(M); L+=m*w; U+=M*w; } return {L,U,ms,Ms}; }
+const eq=(a,b,n)=>Array.from({length:n+1},(_,i)=>a+(b-a)*i/n);
+function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
+function boxes(P,pts,hs,stroke,fill,alpha){ const c=P.ctx; for(let i=1;i<pts.length;i++){ const a=pts[i-1],b=pts[i],h=hs[i-1]; c.globalAlpha=alpha; P.poly([[a,0],[b,0],[b,h],[a,h]],null,fill); c.globalAlpha=1; P.poly([[a,0],[b,0],[b,h],[a,h]],stroke,null,1.2); } }
+function dirDots(P,a,b){ const c=P.ctx; c.fillStyle=col('--ink'); for(let k=0;k<=300;k++){ const x=a+(b-a)*k/300; const y=(k%2)?0:1; c.fillRect(P.X(x)-1,P.Y(y)-1,2,2); } }
+/* shade between the graph of fn and the axis from lo to hi: above in pos colour, below in neg colour */
+function shade(P,fn,lo,hi,pos,neg,alpha){ if(hi<lo){ const t=lo; lo=hi; hi=t; } const c=P.ctx, N=300; c.globalAlpha=alpha==null?0.32:alpha;
+  for(let k=0;k<N;k++){ const x0=lo+(hi-lo)*k/N, x1=lo+(hi-lo)*(k+1)/N, xm=(x0+x1)/2, y=fn(xm); if(!isFinite(y)) continue; P.poly([[x0,0],[x1,0],[x1,fn(x1)],[x0,fn(x0)]],null,y>=0?pos:neg); }
+  c.globalAlpha=1; }
+function rangeOf(fn,lo,hi,pad){ let m=Infinity,M=-Infinity; for(let k=0;k<=400;k++){ const v=fn(lo+(hi-lo)*k/400); if(isFinite(v)){ if(v<m) m=v; if(v>M) M=v; } } if(m>0) m=0; if(M<0) M=0; const p=(M-m)*(pad==null?0.12:pad)||1; return [m-p,M+p]; }
+function chips(el,FN,get,setk,after){ Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===get()) b.className='on'; b.onclick=()=>{ setk(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+const Nw='\\htmlClass{new}';
+function gridFor(sp){ return sp>40?10:sp>16?4:sp>8?2:sp>3?1:sp>1.2?0.5:0.25; }
+function frame2(P,fn,lo,hi,pad){ const w=hi-lo; P.o.x=[lo-0.12*w,hi+0.08*w]; P.o.y=rangeOf(fn,lo,hi,pad==null?0.12:pad); const sx=P.o.x[1]-P.o.x[0], sy=P.o.y[1]-P.o.y[0]; let g=gridFor(sx); while(sy/g>24) g*=2; P.o.grid=g; }
+const num=(f,a,b,n)=>{ n=n||4000; const h=(b-a)/n; let s=0; for(let i=0;i<n;i++) s+=f(a+(i+0.5)*h)*h; return s; };
+/* axes with separate steps across and up */
+function axes2(P,gx,gy){ const c=P.ctx,o=P.o; c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ c.moveTo(P.X(x),P.Y(o.y[0])); c.lineTo(P.X(x),P.Y(o.y[1])); }
+  for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ c.moveTo(P.X(o.x[0]),P.Y(y)); c.lineTo(P.X(o.x[1]),P.Y(y)); } c.stroke();
+  c.strokeStyle=col('--muted'); c.lineWidth=1.3; c.beginPath(); if(o.y[0]<=0&&o.y[1]>=0){ c.moveTo(P.X(o.x[0]),P.Y(0)); c.lineTo(P.X(o.x[1]),P.Y(0)); } if(o.x[0]<=0&&o.x[1]>=0){ c.moveTo(P.X(0),P.Y(o.y[0])); c.lineTo(P.X(0),P.Y(o.y[1])); } c.stroke();
+  c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; const ly=Math.min(P.H-6,Math.max(12,P.Y(0)+14));
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ if(Math.abs(x)<1e-9) continue; c.fillText(+x.toFixed(6),P.X(x),ly); }
+  c.textAlign='right'; const lx=Math.max(32,Math.min(P.W-4,P.X(0)-5)); for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ if(Math.abs(y)<1e-9) continue; c.fillText(String(+y.toFixed(6)).replace('-','−'),lx,P.Y(y)+4); } }
+function nice(sp){ const raw=sp/6, p=Math.pow(10,Math.floor(Math.log10(raw))), m=raw/p; return (m<1.5?1:m<3.5?2:m<7.5?5:10)*p; }
+function arrow(P,x1,y1,x2,y2,colr,w){ P.line(x1,y1,x2,y2,colr,w||2.2); const c=P.ctx, X1=P.X(x1),Y1=P.Y(y1),X2=P.X(x2),Y2=P.Y(y2), L=Math.hypot(X2-X1,Y2-Y1); if(L<2) return; const ux=(X2-X1)/L, uy=(Y2-Y1)/L, h=9; c.fillStyle=col(colr); c.beginPath(); c.moveTo(X2,Y2); c.lineTo(X2-h*ux-0.5*h*uy,Y2-h*uy+0.5*h*ux); c.lineTo(X2-h*ux+0.5*h*uy,Y2-h*uy-0.5*h*ux); c.closePath(); c.fill(); }
+function fillA(P,pts,colr,alpha){ const c=P.ctx; c.globalAlpha=alpha==null?0.2:alpha; P.poly(pts,null,colr); c.globalAlpha=1; }
+const sq1=P=>Object.defineProperty(P.o,'aspect',{get:()=>1});
+function rightMark(P,qx,qy,ax,ay,bx,by,s,colr){ const la=Math.hypot(ax-qx,ay-qy), lb=Math.hypot(bx-qx,by-qy); if(!la||!lb) return; const u=[(ax-qx)/la*s,(ay-qy)/la*s], v=[(bx-qx)/lb*s,(by-qy)/lb*s]; P.poly([[qx+u[0],qy+u[1]],[qx+u[0]+v[0],qy+u[1]+v[1]],[qx+v[0],qy+v[1]]],colr||'--muted',null,1.2,false); }
+const dist=(a,b)=>Math.hypot(b[0]-a[0],b[1]-a[1]);
+const dotp=(u,v)=>u[0]*v[0]+u[1]*v[1];
+function clipBox(P,fn){ const c=P.ctx, [x0,x1]=P.o.x,[y0,y1]=P.o.y; c.save(); c.beginPath(); c.rect(P.X(x0),P.Y(y1),P.X(x1)-P.X(x0),P.Y(y0)-P.Y(y1)); c.clip(); fn(); c.restore(); }
+function lineABC(P,a,b,c,colr,w,dash){ const [x0,x1]=P.o.x,[y0,y1]=P.o.y; clipBox(P,()=>{ if(Math.abs(b)>1e-12){ P.line(x0,(c-a*x0)/b,x1,(c-a*x1)/b,colr,w,dash); } else if(Math.abs(a)>1e-12){ P.line(c/a,y0,c/a,y1,colr,w,dash); } }); }
+const kt=$('kt'),kn=$('kn'),cvF=$('cvF'),cvL=$('cvL');
+const ch=t=>(Math.exp(t)+Math.exp(-t))/2, sh=t=>(Math.exp(t)-Math.exp(-t))/2;
+const FN={
+  stone:{lab:'stone',a:0,b:16/4.9,x:t=>12*t,y:t=>16*t-4.9*t*t,dx:t=>12,dy:t=>16-9.8*t,box:[-4,44,-3,20],tx:R`(12t,\ 16t - 4.9t^2)`},
+  cusp:{lab:'(t², t³)',a:-1.3,b:1.3,x:t=>t*t,y:t=>t*t*t,dx:t=>2*t,dy:t=>3*t*t,box:[-1,3,-2.4,2.4],tx:R`(t^2,\ t^3)`},
+  loop:{lab:'(t² − 1, t³ − 3t)',a:-2.1,b:2.1,x:t=>t*t-1,y:t=>t*t*t-3*t,dx:t=>2*t,dy:t=>3*t*t-3,box:[-2,4,-4,4],tx:R`(t^2 - 1,\ t^3 - 3t)`},
+  circ:{lab:'circle',a:-3,b:3,x:t=>(1-t*t)/(1+t*t),y:t=>2*t/(1+t*t),dx:t=>-4*t/((1+t*t)*(1+t*t)),dy:t=>2*(1-t*t)/((1+t*t)*(1+t*t)),box:[-1.5,1.5,-1.5,1.5],tx:R`\big(\tfrac{1 - t^2}{1 + t^2},\ \tfrac{2t}{1 + t^2}\big)`},
+  chain:{lab:'chain',a:-1.5,b:1.5,x:t=>t,y:ch,dx:t=>1,dy:sh,box:[-2,2,-0.5,3],tx:R`\big(t,\ \tfrac{e^t + e^{-t}}{2}\big)`}
+};
+let key='stone';
+chips($('pch'),FN,()=>key,k=>{ key=k; },all);
+const PF=plane(cvF,{x:[-4,44],y:[-3,20],grid:1,aspect:1,draw:P=>drawF(P)}); sq1(PF);
+const PL=plane(cvL,{x:[0,4],y:[0,30],grid:1,aspect:0.8,draw:P=>drawL(P)});
+const sp=(F,t)=>Math.hypot(F.dx(t),F.dy(t));
+const tNow=F=>F.a+(F.b-F.a)*(+kt.value);
+function chordSum(F,n){ let s=0; for(let i=1;i<=n;i++){ const t0=F.a+(F.b-F.a)*(i-1)/n, t1=F.a+(F.b-F.a)*i/n; s+=Math.hypot(F.x(t1)-F.x(t0),F.y(t1)-F.y(t0)); } return s; }
+function drawF(P){ const F=FN[key], [x0,x1,y0,y1]=F.box; P.o.x=[x0,x1]; P.o.y=[y0,y1]; const g=nice(Math.max(x1-x0,y1-y0)); axes2(P,g,g);
+  const tr=[]; for(let i=0;i<=600;i++){ const t=F.a+(F.b-F.a)*i/600; tr.push([F.x(t),F.y(t)]); } clipBox(P,()=>P.poly(tr,'--muted',null,1.6,false));
+  const n=+kn.value, ch=[]; for(let i=0;i<=n;i++){ const t=F.a+(F.b-F.a)*i/n; ch.push([F.x(t),F.y(t)]); } clipBox(P,()=>{ P.poly(ch,'--plum',null,2,false); ch.forEach(p=>P.dot(p[0],p[1],'--plum',3)); });
+  const t=tNow(F), X=[F.x(t),F.y(t)], v=[F.dx(t),F.dy(t)], sc=0.25*Math.max(x1-x0,y1-y0)/Math.max(1,Math.hypot(v[0],v[1]));
+  clipBox(P,()=>arrow(P,X[0],X[1],X[0]+sc*v[0],X[1]+sc*v[1],'--ember',2.2)); P.dot(X[0],X[1],'--ember',5.5); }
+function drawL(P){ const F=FN[key]; let M=0; for(let i=0;i<=400;i++){ M=Math.max(M,sp(F,F.a+(F.b-F.a)*i/400)); }
+  P.o.x=[F.a-(F.b-F.a)*0.06,F.b+(F.b-F.a)*0.03]; P.o.y=[-M*0.08,M*1.12]; axes2(P,nice(F.b-F.a),nice(M));
+  shade(P,t=>sp(F,t),F.a,tNow(F),'--teal','--teal',0.35); curve(P,t=>sp(F,t),'--ink',2.2,F.a,F.b); }
+function read(){ const F=FN[key], t=tNow(F), n=+kn.value; $('ot').textContent=mm(t,3); $('on').textContent=n;
+  const L=num(t=>sp(F,t),F.a,F.b,6000), sofar=num(t=>sp(F,t),F.a,t,6000), C=chordSum(F,n), v=sp(F,t), dx=F.dx(t), dy=F.dy(t);
+  const sl=Math.abs(dx)>1e-9?'dy/dx = '+mm(dy/dx,3):(Math.abs(dy)>1e-9?'straight up and down':'stopped');
+  const vd=$('vdF'); vd.className='verdict'+(Math.abs(C-L)<0.01*L?' win':'');
+  vd.textContent='At t = '+mm(t,3)+': speed '+mm(v,3)+', '+sl+'. Way travelled so far '+mm(sofar,3)+'. Chord sum with '+n+' chords '+mm(C,4)+'; the whole length is '+mm(L,4)+'.';
+  tex($('eqF'),R`P(t) = ${F.tx},\ \ \int \sqrt{x'^2 + y'^2}\,dt = ${mm(L,4)}`,true); }
+function all(){ PF.redraw(); PL.redraw(); read(); }
+[kt,kn].forEach(el=>el.addEventListener('input',all));
+window.__pic={set:(k,tt,n)=>{ key=k; kt.value=tt; kn.value=n; all(); const F=FN[k]; return {L:+num(t=>sp(F,t),F.a,F.b,20000).toFixed(4),C:+chordSum(F,n).toFixed(4)}; }};
+all();
+stepper('#sl1',[
+  {k:'ember',kl:'a path',t:R`P(t) = (x(t),\ y(t)),\ \ t \in I`,n:`The trace is the set of points it passes.`}
+],{title:'The slides · a path · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'velocity',t:R`P'(t) = (x'(t),\ y'(t))`,n:`The move in one unit of time, at those rates.`},
+  {k:'ember',kl:'path-slope',t:R`${Nw}{\tfrac{dy}{dx} = \tfrac{dy/dt}{dx/dt}}`,n:`x′ of one sign; inverse-slope, then the chain technique.`},
+  {k:'ember',kl:'not a fraction',t:R`F = y \circ T`,n:`The cancelling is the chain technique.`},
+  {k:'ember',kl:'second-slope',t:R`${Nw}{\tfrac{d^2y}{dx^2} = \tfrac{x'y'' - y'x''}{x'^3}}`,n:`Path-slope again, on (x, y′/x′).`}
+],{title:'The slides · slopes of a path · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'speed',t:R`${Nw}{|P'(t)| = \sqrt{x'^2 + y'^2}}`,n:`Distance per unit of time, in the limit.`}
+],{title:'The slides · speed · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'chord sums',t:R`\textstyle\sum d(P(t_{i-1}), P(t_i))`,n:`Never lowered by refining; the length is their least upper bound.`},
+  {k:'ember',kl:'distance-travelled',t:R`${Nw}{\textstyle\int_a^b \sqrt{x'^2 + y'^2}\,dt}`,n:`Average-slope on each chord; evenly-continuous; narrow-strips.`}
+],{title:'The slides · how far it goes · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'graph-length',t:R`${Nw}{\textstyle\int_a^b \sqrt{1 + f'^2}\,dx}`,n:`The path x = t.`},
+  {k:'ember',kl:'worked',t:R`\textstyle\int_{-1}^{1} \tfrac{e^x + e^{-x}}{2}\,dx = e - e^{-1}`,n:`The hanging chain: 1 + f′² = f².`}
+],{title:'The slides · graph-length · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'illegal',t:R`\textstyle\int (x' + y')\,dt\,?`,n:`Rates combine as the sides of a right triangle.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

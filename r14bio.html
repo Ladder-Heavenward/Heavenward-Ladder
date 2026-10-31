@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>14·bio · Why are cells so small?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r14chem.html">← 14·chem how far apart do two joined atoms sit?</a><a href="r14econ.html">next: 14·econ how much should a factory make? →</a></p>
+  <div class="tags"><span class="tag bio">14·bio · biology</span></div>
+  <h1>Why are cells so small?</h1>
+  <p>Why are cells so small? A drop of food colouring in still water spreads, with no stirring, because its molecules are knocked about at random by the water's. Oxygen gets into a living cell the same way. Over the width of a cell this is fast: a few hundredths of a second. Over the length of an arm it takes years. So anything that lives on oxygen arriving this way alone must keep every part of itself close to its skin. This page finds how close, by asking where the oxygen inside a living sheet is least, and when that least value reaches 0.</p>
+  <p class="gesture">The time to spread grows with the square of the distance. Inside a sheet that uses oxygen, the oxygen is least at the middle, a bottom where its slope is 0. The sheet can be no thicker than the distance at which that bottom reaches 0.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r14a.html">14a</a> (flat-top), <a href="r14d.html">14d</a> (positive-but-finitely), <a href="r14e.html">14e</a> (an antiderivative, + C), <a href="r14f.html">14f</a> (second-test), <a href="r13d.html">13d</a> (power for slopes, f″), <a href="r05chem.html">5·chem</a> (the mole), <a href="r08phys.html">8·phys</a> (sizes, the micrometre), <a href="r14chem.html">14·chem</a> (molecules in motion). The curve inside the sheet is given here as a premise, held in trust; the basement says where it is derived.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · read it through, then work the picture and the slides</div>
+
+  <h3>How far a random walk gets</h3>
+  <p data-pid="518f55">A single oxygen molecule in water is struck many billions of times a second and goes nowhere in particular. Watch a great many of them leave one place together, and the typical distance they have spread grows with time, but not in proportion to it. The rule was found in 1905 and checked with grains seen under a microscope. It is a physical premise on this page, held in trust:</p>
+  <p class="eqline" data-pid="10100e">x² = 2Dt: after time t, the typical distance x along one line satisfies x² = 2Dt, where D is a constant for the molecule and the liquid. Its accepted name is the diffusion coefficient.</p>
+  <p data-pid="679086">For oxygen in water near 20 °C, D ≈ 2 × 10⁻⁹ m²/s. Turned around, the time to spread a distance x is t = x²/(2D).</p>
+  <div class="tablewrap"><table class="tt">
+  <tr><th class="l">distance</th><th>time, t = x²/(2D)</th><th class="l">for scale</th></tr>
+  <tr><td class="l">10 µm</td><td>0.025 s</td><td class="l">about the width of a red blood cell</td></tr>
+  <tr><td class="l">100 µm</td><td>2.5 s</td><td class="l">the thickness of a sheet of paper</td></tr>
+  <tr><td class="l">1 mm</td><td>250 s, about 4 minutes</td><td class="l">a Pacific chorus frog's egg</td></tr>
+  <tr><td class="l">1 cm</td><td>25 000 s, about 7 hours</td><td class="l">a banana slug's thickness, roughly</td></tr>
+  <tr><td class="l">1 m</td><td>2.5 × 10⁸ s, about 8 years</td><td class="l">a person</td></tr>
+  </table></div>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this page: what each extra micrometre costs">
+t(x) = \tfrac{x^2}{2D} @@ the premise, turned around
+t'(x) = \htmlClass{new}{\tfrac{x}{D}} @@ power for slopes (13d), constant-factor for slopes
+t'(10\ \mu\text{m}) = 0.005\ \text{s}/\mu\text{m},\ \ t'(1\ \text{mm}) = 0.5\ \text{s}/\mu\text{m} @@ a hundred times farther out, each step costs a hundred times more
+\tfrac{x}{t} = \tfrac{2D}{x} @@ the average speed over the whole trip falls as the trip grows
+  </pre>
+  <p data-pid="da730e">Walking at a steady pace, every metre costs the same. Spreading, every micrometre costs more than the last. <b>There is no speed of diffusion, only a time for each distance.</b></p>
+
+  <h3>Oxygen inside a living sheet</h3>
+  <p data-pid="3d0871">Take a flat sheet of living tissue, thickness 2L. It is bathed on both faces in water holding oxygen at c₀ moles per cubic metre (about 0.27 mol/m³ in water at 20 °C that is open to the air). Measure x from the middle of the sheet, so the faces are at x = −L and x = L. Every part of the tissue uses oxygen at the same rate, q moles per cubic metre each second. Once the oxygen has settled, its concentration at x is, as a second physical premise, held in trust,</p>
+  <p class="eqline" data-pid="144817">c(x) = c₀ − (q/(2D)) (L² − x²), for −L ≤ x ≤ L.</p>
+  <p data-pid="44c847">At both faces, x² = L², and c = c₀: the sheet matches the water outside. Where is the oxygen least?</p>
+  <pre class="lines" data-k="ember" data-label="this page: the bottom of the oxygen">
+c'(x) = \tfrac{q}{D}\,x @@ power for slopes, constant-factor for slopes: c₀ and L² are constants
+c'(x) = 0 \;\Leftrightarrow\; x = 0 @@ flat-top: the only input worth testing inside
+c' \lt 0 \text{ on } [-L, 0),\ \ c' \gt 0 \text{ on } (0, L] @@ positive-but-finitely (14d): c falls to the middle and rises after
+c''(x) = \tfrac{q}{D} \gt 0 @@ second-test (14f): a bottom, and the curve bends up everywhere
+c(0) = \htmlClass{new}{c_0 - \tfrac{qL^2}{2D}} @@ the least oxygen in the sheet, at its middle
+  </pre>
+  <p data-pid="fda024"><b>The middle is the worst place in the sheet, and it gets worse as the sheet gets thicker:</b> c(0) falls as L grows. The sheet stays supplied all through only while c(0) ≥ 0.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the thickest sheet">
+c_0 - \tfrac{qL^2}{2D} \ge 0 \;\Leftrightarrow\; L^2 \le \tfrac{2Dc_0}{q} @@ order-and-arithmetic-agree (8d): q and D are positive
+\htmlClass{new}{L_{\max} = \sqrt{2Dc_0/q}} @@ squares-keep-order on ℚ (8a): squares keep order from 0 up; the greatest half-thickness
+L_{\max} = \sqrt{\tfrac{2 \cdot 2 \times 10^{-9} \cdot 0.27}{0.01}} \approx 3.3 \times 10^{-4}\ \text{m} @@ q = 0.01 mol/(m³·s), a modest demand
+  </pre>
+  <p data-pid="f076ba">About a third of a millimetre each side of the middle: a sheet well under a millimetre thick. Flatworms that live on oxygen soaking in from the water are this thin, however long and wide they grow. A blade of bull kelp off the Mendocino coast is thin for the same reason.</p>
+
+  <h3>The time to arrive, the time to run out</h3>
+  <p data-pid="07e4a9">Put L_max back into the first premise. The time for oxygen to spread from a face to the middle of the thickest sheet is</p>
+  <p class="eqline" data-pid="56c89a">t = L_max²/(2D) = (2Dc₀/q)/(2D) = c₀/q.</p>
+  <p data-pid="b01919">And c₀/q is the time the tissue would take to use up the oxygen it holds, if the supply stopped. <b>The thickest sheet is the one where the time for oxygen to arrive equals the time for it to be used.</b> D has dropped out.</p>
+  <p data-pid="606aae">One biologist argued that for every kind of animal there is a most convenient size, and that a change of size forces a change of form. A large animal must grow lungs, gills or folded guts that a small one does without. The small one is mostly near its surface.</p>
+
+  <h3>A ball-shaped cell</h3>
+  <p data-pid="c6906e">Ball, centre and radius are geometry words, and the ladder builds them at rung 18. Here they mean only this. Take a cell that is the same in every direction from one middle point, its centre. Let r be the distance from the centre, and R the distance from the centre to the skin, its radius. For such a cell the settled oxygen is, as a physical premise of the same kind,</p>
+  <p class="eqline" data-pid="6c04b8">c(r) = c₀ − (q/(6D)) (R² − r²), for 0 ≤ r ≤ R,</p>
+  <p data-pid="7b7311">the sheet's curve with a 6 where the sheet had a 2. <b>The same techs give the least value at the centre and the greatest radius R_max = √(6Dc₀/q).</b> A bacterium uses oxygen fast, near 10 mol/(m³·s): R_max is then about 18 µm, and the bacterium itself is about 1 µm. A frog's egg, which uses oxygen slowly, can be about a millimetre across.</p>
+
+  <h3>Which rung licenses each step</h3>
+  <div class="tablewrap"><table class="tt">
+  <tr><th class="l">step</th><th class="l">licence</th></tr>
+  <tr><td class="l">x² = 2Dt; the curve inside the sheet</td><td class="l">physical premises</td></tr>
+  <tr><td class="l">the slopes t′ and c′</td><td class="l">13d's power for slopes; constant-factor for slopes, slopes-add</td></tr>
+  <tr><td class="l">the middle is the only place to test</td><td class="l">14a's flat-top</td></tr>
+  <tr><td class="l">c falls, then rises</td><td class="l">14d's positive-but-finitely</td></tr>
+  <tr><td class="l">a bottom, bending up</td><td class="l">14f's second-test</td></tr>
+  <tr><td class="l">the thickest sheet</td><td class="l">8d's order-and-arithmetic-agree; 8a's squares-keep-order on ℚ</td></tr>
+  </table></div>
+
+  <h3>Illegal moves</h3>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed">
+\text{twice as far, twice as long}\,? @@ four times as long: t grows with x²
+\text{diffusion speed} = 2D/x \text{ for every } x\,? @@ at tiny x this exceeds any real molecule's speed; the premise is true only over many collisions
+c(0) \lt 0 \text{, so the core holds negative oxygen}\,? @@ the premise failed first: a part with no oxygen cannot use it at rate q
+\text{double } q,\ \text{half } L_{\max}\,? @@ L_max shrinks by √2, not by 2
+  </pre>
+</section>
+
+<section class="pic" id="pic">
+  <div class="eyebrow">The picture · left: the oxygen across the sheet or cell · right: the least oxygen against the thickness</div>
+  <div class="panels">
+    <div class="panel">
+      <div class="chips" id="fch"></div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">L (µm)</span><input type="range" id="kL" min="10" max="1000" step="5" value="200"><output id="oL"></output></div>
+      <div class="kn"><span class="m">q</span><input type="range" id="kq" min="0.001" max="0.05" step="0.001" value="0.01"><output id="oq"></output></div>
+      <div class="cap">Ink: c across the tissue, from face to face, in thousandths of a mol/m³ (grid lines every 0.1 mol/m³ up the side). Gold dashed: 0. Teal dot: the bottom, at the middle. Where the curve dips below gold, the premise has failed: that part has run out.</div>
+      <div class="verdict" id="vdF"></div>
+    </div>
+    <div class="panel">
+      <div class="lbl">c at the middle (thousandths of a mol/m³) against L (µm)</div>
+      <canvas id="cvS"></canvas>
+      <div class="cap">Plum: c₀ − qL²/(2D) for the sheet, or c₀ − qL²/(6D) for the ball. Plum dot: the chosen L. Teal dot: L_max, where the middle just runs out.</div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+</section>
+
+<section class="slides" id="sl1"><div class="eyebrow">The slides · the random walk; the cost of a micrometre; the sheet; its bottom; the bend; the thickest sheet; arrive and run out; the ball; illegal moves · ← → keys work</div></section>
+
+<section class="sayback">
+  <div class="eyebrow">Say it back · then work it</div>
+  <h2>Questions</h2>
+  <div class="phkey"></div>
+  <ol>
+    <li><span class="qid">14·bio.1</span><span class="gname">Times and bottoms.</span><span class="gwhy">Do: build the page's pieces.</span>
+      <ol class="sub">
+        <li><span class="qid">14·bio.1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="D = 2 \times 10^{-9}\ \text{m}^2/\text{s},"></span> <span data-tex-inline="x = 50\ \mu\text{m} \text{ and } x = 5\ \text{mm}"></span></span>Find the time for oxygen to spread each distance x.</li><li><span class="givens"><span data-tex-inline="t(x) = x^2/(2D),"></span> <span data-tex-inline="D = 2 \times 10^{-9}\ \text{m}^2/\text{s},"></span> <span data-tex-inline="x = 100\ \mu\text{m} \text{ and } x = 2\ \text{mm}"></span></span>Find the slope of t at each x, in seconds per micrometre.</li><li><span class="givens"><span data-tex-inline="c_0 = 0.27,\ q = 0.01,"></span> <span data-tex-inline="L = 200\ \mu\text{m},\ D = 2 \times 10^{-9}"></span></span>For this sheet, find c at both faces and at the middle, and show that the middle is the bottom.</li><li><span class="givens"><span data-tex-inline="c_0 = 0.27,\ q = 0.04,"></span> <span data-tex-inline="D = 2 \times 10^{-9}"></span></span>Find the thickest sheet these allow.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">14·bio.2</span><span class="gname">From the sheet back to its numbers.</span><span class="gwhy">Undo: run the page's techs backwards.</span>
+      <ol class="sub">
+        <li><span class="qid">14·bio.2.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="x = 40\ \mu\text{m} \text{ in } t = 2\ \text{s}"></span></span>A dye spreads the given typical distance in the given time. Find its D.</li><li><span class="givens"><span data-tex-inline="L = 300\ \mu\text{m},\ c_0 = 0.27,"></span> <span data-tex-inline="D = 2 \times 10^{-9}"></span></span>The middle of a sheet just runs out at this L. Find q.</li><li><span class="givens"><span data-tex-inline="c'(x) = qx/D,"></span> <span data-tex-inline="c(L) = c_0"></span></span>Find c at every x inside the sheet.</li><li><span class="givens"><span data-tex-inline="L = 200\ \mu\text{m},\ c_0 = 0.27,"></span> <span data-tex-inline="D = 2 \times 10^{-9},"></span> <span data-tex-inline="c(0) = 0.07\ \text{mol/m}^3"></span></span>Find q.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">14·bio.3</span><span class="gname">Where the model gives.</span><span class="gwhy">Bend: find where the techs stop working.</span>
+      <ol class="sub">
+        <li><span class="qid">14·bio.3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="c_0 = 0.27,\ q = 0.01,"></span> <span data-tex-inline="L = 500\ \mu\text{m},\ D = 2 \times 10^{-9}"></span></span>Find c at the middle.<br>Find the page's premise that fails in this sheet, and the thickest sheet for which it is true.</li><li><span class="givens"><span data-tex-inline="x^2 = 2Dt,\ \text{so } x/t = 2D/x;"></span> <span data-tex-inline="\text{molecule's speed between}"></span> <span data-tex-inline="\text{collisions: a few hundred m/s}"></span></span>An oxygen molecule in water moves at the given speed between collisions. Find the distance below which the premise must fail.</li><li><span class="givens"><span data-tex-inline="\text{blood speed: } 0.1\ \text{m/s},"></span> <span data-tex-inline="d = 1\ \text{m}"></span></span>A Chinook salmon's blood moves through its body at roughly the given speed. Compare the time to carry oxygen the distance d this way with the time to spread it.<br>Find where in the salmon diffusion must still do the work.</li><li><span class="givens"><span data-tex-inline="\text{Case one: } q \text{ doubles.}"></span> <span data-tex-inline="\text{Case two: } c_0 \text{ times } 5."></span></span>In each case, find the factor by which the thickest sheet changes. Case two is water under pure oxygen.</li></ol></li>
+      </ol></li>
+    <li class="optgroup"><span class="qid">14·bio.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder challenges that rely on your own making. The page is complete without these; the rung's star needs them.</span>
+      <ol class="sub">
+        <li class="opt"><span class="qid">14·bio.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{Bend's sheet: } L = 500\ \mu\text{m}."></span> <span data-tex-inline="\text{A ball of radius } R:"></span> <span data-tex-inline="c(r) = c_0 - \tfrac{q}{6D}(R^2 - r^2)"></span></span>Choose a demand q of your own, and find the thickest sheet it allows.<br>For the ball, show that c is least at the centre, and find its largest R.<br>Compare that R with the sheet's thickest.</li>
+        <li class="opt"><span class="qid">14·bio.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="q = 0"></span></span>For a tissue with no demand, such as the heartwood at the core of a coast redwood, find c at the middle, and the thickest sheet.</li>
+        <li class="opt"><span class="qid">14·bio.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{Thickness under } 2L_{\max}:"></span> <span data-tex-inline="\text{oxygen soaking in suffices.}"></span></span>Decide whether a living thing thicker than that must have gills, lungs, or blood that moves, and find what else it could do.</li>
+        <li class="opt"><span class="qid">14·bio.4.4</span><span class="tagq">world</span><span class="givens"><span data-tex-inline="q = 0.005\ \text{mol/(m}^3 \cdot \text{s)},"></span> <span data-tex-inline="c_0 = 0.27,\ D = 2 \times 10^{-9}\ \text{m}^2/\text{s},"></span> <span data-tex-inline="\text{chorus frog egg: } 1.3\ \text{mm across}"></span></span>A frog's egg uses oxygen at the given rate. Find its largest radius, and compare it with a Pacific chorus frog's egg.</li>
+        <li class="opt"><span class="qid">14·bio.4.5</span><span class="tagq">seam</span><span class="givens"><span data-tex-inline="L_{\max} \text{ grows as } \sqrt{c_0}."></span></span>In 1917 a naturalist argued that the forms of living things are set by physics, as a soap film's is. The followers of the theory of evolution answered that forms are set by history: what an animal's ancestors were, and what survived. Insects carry air inward through fine tubes, and diffusion does the last part. About 300 million years ago there were insects like dragonflies with wings about 70 cm across, when the air may have held half again as much oxygen as now. <br>Does the given line explain why they were large, and why none are now? <br>Is a living thing's size physics, or history?</li>
+      </ol></li>
+  </ol>
+  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
+</section>
+
+<nav class="nextrung"><a href="r14chem.html">← 14·chem · how far apart do two joined atoms sit?</a><a href="r14econ.html">14·econ · how much should a factory make? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Where the two premises are earned</h3>
+  <p>Both premises on this page come from the lab. The spreading rule, x² = 2Dt, is derived on 30n from many molecules each moving at random, and that closes its flag. The curve inside the sheet is derived much higher up, from the oxygen’s own motion, and that closes the other. This page needs only what the two premises say.</p>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>Haldane argued that for every kind of animal there is a most convenient size, and that a change of size forces a change of form: a large animal must grow lungs, gills or folded guts that a small one does without, because the small one is mostly near its surface.</p><cite>Haldane, “On being the right size” (1926); paraphrase</cite></aside>
+  <p>The rule x² = 2Dt is Albert Einstein’s (1905), and Jean Perrin checked it with grains seen under a microscope. In the closer, the naturalist of 1917 is D’Arcy Thompson, in On Growth and Form, and the theory of evolution is Charles Darwin’s.</p>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?3:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const D=2e-9, C0=0.27;
+/* k is 2 for the sheet, 6 for the ball; lengths in µm on screen, metres inside */
+const FN={sheet:{lab:'a sheet, thickness 2L',k:2,w:'the middle of the sheet',past:L=>'deeper than '+L+' µm from a face, this tissue cannot be supplied by soaking alone'},ball:{lab:'a ball-shaped cell, radius L',k:6,w:'the centre of the cell',past:L=>'a cell of radius more than '+L+' µm cannot be supplied by soaking alone'}};
+let key='sheet',F=FN.sheet;
+const kL=$('kL'),kq=$('kq'),cvF=$('cvF'),cvS=$('cvS');
+const L=()=>+kL.value, q=()=>+kq.value;
+const cmid=Lu=>C0-q()*(Lu*1e-6)**2/(F.k*D);
+const Lmax=()=>Math.sqrt(F.k*D*C0/q())*1e6;
+const c=x=>C0-q()*((L()*1e-6)**2-(x*1e-6)**2)/(F.k*D);
+const PF=plane(cvF,{x:[0,1],y:[0,1],grid:1,aspect:0.8,draw:P=>drawF(P)});
+const PS=plane(cvS,{x:[0,1],y:[0,1],grid:1,aspect:0.8,draw:P=>drawS(P)});
+[[PF,cvF],[PS,cvS]].forEach(([P,cv])=>Object.defineProperty(P.o,'aspect',{get:()=>cv.clientWidth>480?0.75:0.9}));
+function curve(P,fn,colr,w,lo,hi,dash){ const cx=P.ctx; cx.strokeStyle=col(colr); cx.lineWidth=w; cx.setLineDash(dash||[]); cx.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?cx.lineTo(P.X(t),P.Y(v)):cx.moveTo(P.X(t),P.Y(v)); pen=true; } cx.stroke(); cx.setLineDash([]); }
+const nice=v=>{ const p=Math.pow(10,Math.floor(Math.log10(v))); const m=v/p; return (m<2?1:(m<5?2:5))*p; };
+const Y=v=>1000*v; /* canvas in mmol/m³ so one grid serves both axes */
+function drawF(P){ const Lu=L(), lo=Math.min(0,Y(cmid(Lu))); P.o.x=[-Lu*1.1,Lu*1.1]; P.o.y=[lo-50,320]; P.o.grid=Math.min(100,nice(Lu/2)); P.axes();
+  P.line(-Lu*1.1,0,Lu*1.1,0,'--gold',1.3,[6,4]);
+  P.line(-Lu,lo-50,-Lu,320,'--grid',1,[2,3]); P.line(Lu,lo-50,Lu,320,'--grid',1,[2,3]);
+  curve(P,x=>Y(c(x)),'--ink',2.6,-Lu,Lu); P.dot(0,Y(c(0)),'--teal',6); P.dot(-Lu,Y(C0),'--ink',4); P.dot(Lu,Y(C0),'--ink',4); }
+function drawS(P){ const top=Math.max(1000,Lmax()*1.3); P.o.x=[-0.12*top,1.05*top]; const lo=Math.max(Math.min(-100,Y(cmid(top))),-400); P.o.y=[lo,320]; P.o.grid=100; P.axes();
+  P.line(0,0,top,0,'--gold',1.3,[6,4]);
+  curve(P,u=>Y(cmid(u)),'--plum',2.6,0,top); const Lm=Lmax(); if(Lm<=top) P.dot(Lm,0,'--teal',6); P.dot(L(),Math.max(lo,Y(cmid(L()))),'--plum',5); }
+function read(){ const Lu=L(), m=cmid(Lu), Lm=Lmax(), vd=$('vdF'); $('oL').textContent=mm(Lu,0); $('oq').textContent=mm(q(),3);
+  if(m>=0.0005){ vd.className='verdict win'; vd.textContent='Supplied all through. The least oxygen, at '+F.w+', is '+mm(m)+' mol/m³; L could grow to '+mm(Lm,0)+' µm.'; }
+  else if(m>-0.0005){ vd.className='verdict win'; vd.textContent='Just supplied: at '+F.w+' the oxygen has reached 0. This L is L_max, about '+mm(Lm,0)+' µm.'; }
+  else { vd.className='verdict lose'; vd.textContent='The formula gives '+mm(m)+' mol/m³ at '+F.w+': below 0, so the premise has failed. The core has run out: '+F.past(mm(Lm,0))+'.'; }
+  tex($('eqF'),R`\begin{gathered}c(0) = 0.27 - \tfrac{${mm(q(),3)}\,L^2}{${F.k}D} = ${mm(m)}\\ L_{\max} = \sqrt{${F.k}Dc_0/q} \approx ${mm(Lm,0)}\ \mu\text{m}\\ \tfrac{c_0}{q} = ${mm(C0/q(),1)}\ \text{s: the time to run out}\end{gathered}`,true); }
+function all(){ PF.redraw(); PS.redraw(); read(); }
+kL.addEventListener('input',all); kq.addEventListener('input',all);
+const fch=$('fch');
+Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===key) b.className='on'; b.onclick=()=>{ key=k; F=FN[k]; [...fch.children].forEach(z=>z.classList.toggle('on',z===b)); all(); }; fch.appendChild(b); });
+window.__pic={set:(k,Lu,qq)=>{ [...fch.children][Object.keys(FN).indexOf(k)].click(); kL.value=Lu; kq.value=qq; all(); return {L:L(),q:q(),mid:+cmid(L()).toFixed(4),Lmax:Math.round(Lmax()),txt:$('vdF').textContent}; }};
+all();
+/* ---------- slides ---------- */
+const Nw='\\htmlClass{new}';
+stepper('#sl1',[
+  {k:'ember',kl:'the random walk',t:R`x^2 = 2Dt`,n:`A physical premise, found in 1905. D ≈ 2 × 10⁻⁹ m²/s for oxygen in water.`},
+  {k:'ember',kl:'the time',t:R`t = \tfrac{x^2}{2D}`,n:`10 µm: 0.025 s. 1 mm: 4 minutes. 1 m: 8 years.`},
+  {k:'ember',kl:'the cost of a micrometre',t:R`t'(x) = ${Nw}{\tfrac{x}{D}}`,n:`power for slopes. Each step costs more the farther out it is.`},
+  {k:'ember',kl:'the sheet',t:R`c(x) = c_0 - \tfrac{q}{2D}(L^2 - x^2)`,n:`A second premise. c = c₀ at both faces.`},
+  {k:'ember',kl:'its bottom',t:R`c'(x) = \tfrac{q}{D}x = 0 \;\Leftrightarrow\; x = 0`,n:`flat-top, then positive-but-finitely: falls to the middle, rises after.`},
+  {k:'ember',kl:'the bend',t:R`c'' = \tfrac{q}{D} \gt 0`,n:`second-test: a bottom, bending up everywhere.`},
+  {k:'ember',kl:'the least oxygen',t:R`c(0) = c_0 - \tfrac{qL^2}{2D}`,n:`Worse as the sheet thickens.`},
+  {k:'ember',kl:'the thickest sheet',t:R`${Nw}{L_{\max} = \sqrt{2Dc_0/q}}`,n:`About 0.33 mm for q = 0.01: flatworms, kelp blades.`},
+  {k:'ember',kl:'arrive and run out',t:R`\tfrac{L_{\max}^2}{2D} = \tfrac{c_0}{q}`,n:`The time to arrive equals the time to be used. D drops out.`},
+  {k:'ember',kl:'the ball',t:R`R_{\max} = \sqrt{6Dc_0/q}`,n:`A 6 for the sheet's 2. A bacterium: about 18 µm allowed, 1 µm used.`},
+  {k:'ember',kl:'illegal',t:R`2x \not\Rightarrow 2t`,n:`Twice as far takes four times as long.`}
+],{title:'The slides · the random walk; the cost of a micrometre; the sheet; its bottom; the bend; the thickest sheet; arrive and run out; the ball; illegal moves · ← → keys work'});
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

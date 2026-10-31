@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>4·comp · Can a row of switches add?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.95rem;white-space:normal}
+@media (max-width:520px){.pic .eqbox{font-size:.82rem}}
+.circ{width:100%;height:auto;display:block;touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.circ text{font-family:var(--mono);fill:var(--ink)}
+.circ .w{fill:none;stroke-width:2.6;stroke-linejoin:round;stroke-linecap:round}
+.circ .w1{stroke:var(--ember)} .circ .w0{stroke:var(--muted);opacity:.55} .circ .ww{stroke:var(--grid);stroke-dasharray:4 4}
+.circ .g{fill:var(--card);stroke:var(--ink);stroke-width:1.8}
+.circ .g.act{stroke:var(--ember);stroke-width:2.6}
+.circ .pin{cursor:pointer}
+.circ .pin circle,.circ .pin rect{stroke-width:2}
+.circ .on1{fill:var(--ember);stroke:var(--ember)} .circ .on0{fill:var(--sand);stroke:var(--muted)}
+.circ .t1{fill:#fff;font-weight:600} .circ .t0{fill:var(--ink)}
+.circ .lab{font-size:13px;fill:var(--muted)}
+.circ .small{font-size:11px;fill:var(--muted)}
+.circ .dot{fill:var(--ember)} .circ .dot0{fill:var(--muted)}
+#tt1 td.cur{background:var(--sand);color:var(--ember);font-weight:600}
+#tt1 th.o{color:var(--teal)}
+.bitkey{font-family:var(--mono);font-size:.78rem;color:var(--muted);display:flex;gap:14px;flex-wrap:wrap}
+.bitkey i{display:inline-block;width:22px;height:3px;vertical-align:middle;margin-right:5px;border-radius:2px}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r04j.html">← 4j counting choices</a><a href="r04stat.html">next: 4·stat what can counting alone say about a list? →</a></p>
+  <div class="tags"><span class="tag comp">4·comp · computing</span></div>
+  <h1>Can a row of switches add?</h1>
+  <p>Can a row of switches add? On 1f each joining word was a machine on paper: feed in T or F, read off T or F. 1f also said that an early algebra of logic wrote those marks with the two marks that rung 3 would bring in as names. 3a promised that this page would show the two uses agree. It does, in a line: the mark of a statement is a set, and it is the set 0 or the set 1. Then the machines are built out of switches, and a handful of them, chained, add numbers written in twos. That is not a figure of speech: the device you are reading this on adds with circuits that descend from the one built below.</p>
+  <p class="gesture">Write T as 1 and F as 0 and every table is arithmetic on 0 and 1. Adding two bits is itself a table: the sum bit says “exactly one”, the carry says “both”. So a chain of small machines, each passing its carry to the next, adds numbers of any length.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r01f.html">1f</a> (tables, the recipe from a column), <a href="r01g.html">1g</a> (the rulebook, not-through), <a href="r02b.html">2b</a> (sifting), <a href="r04f.html">4f</a> (the techniques of + and ·), <a href="r04h.html">4h</a> (numerals in twos, columns) and <a href="r04j.html">4j</a> (2ⁿ rows). <a href="r04stat.html">4·stat</a> counts data and chances.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · read it through, then work the picture and the slides</div>
+
+  <h3>The marks of statements are the numbers 0 and 1</h3>
+  <p data-pid="6bb53e">A statement has no number. But it does pick out a set: sift the set 1 = {0} by the statement, and you keep 0 when the statement is true and nothing when it is false.</p>
+  <p class="eqline" data-pid="887d89">From here on, for a statement P, <span data-tex-inline="\llbracket P \rrbracket"></span> names the set <span data-tex-inline="\{x \in 1 : P\}"></span>. Read it “the mark of P”.</p>
+  <p class="eqline" data-pid="c7375b">Here “mark” is the old algebra's word, said of a set. From here on, “the mark of P” names this set. 0a's mark, a written sign such as ∈ or ∎, keeps its meaning, and what the word is said of says which.</p>
+  <p data-pid="07387a">If P is true, x ∈ ⟦P⟧ ⇔ x ∈ 1, so ⟦P⟧ = 1 by same-members. If ¬P is true, a member of ⟦P⟧ would bring P with it and clash, so ⟦P⟧ has no members and is ∅, which is 0. So for a settled statement, one whose row you can find, the mark is 0 or 1, and it is the row: T is 1 and F is 0. Marks technique (Boole's): <b>for settled statements P and Q,</b></p>
+  <div class="eqline" data-tex="\begin{aligned}&amp;\llbracket P \land Q \rrbracket = \llbracket P \rrbracket \cdot \llbracket Q \rrbracket,\qquad \llbracket \neg P \rrbracket + \llbracket P \rrbracket\\ &amp;\quad = 1,\qquad \llbracket P \lor Q \rrbracket + \llbracket P \rrbracket \cdot \llbracket Q \rrbracket = \llbracket P \rrbracket + \llbracket Q \rrbracket\end{aligned}"></div>
+  <p data-pid="e35e51">Each is checked row by row, the rows given by settledness. Here is the last one, which is the subtle one.</p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this page: the marks technique, the or line, checked on every row">
+\text{row TT}:\ \ 1 + 1 \cdot 1 = 1 + 1 @@ P ∨ Q is true; one-changes-nothing: both sides are 1 + 1
+\text{row TF}:\ \ 1 + 1 \cdot 0 = 1 + 0 @@ times-zero, plus-zero: both sides are 1
+\text{row FT}:\ \ 1 + 0 \cdot 1 = 0 + 1 @@ zero-times, plus-zero, zero-plus: both sides are 1
+\text{row FF}:\ \ 0 + 0 \cdot 0 = 0 + 0 @@ ¬(P ∨ Q) by neither: both sides are 0
+\htmlClass{new}{\llbracket P \lor Q \rrbracket + \llbracket P \rrbracket \cdot \llbracket Q \rrbracket = \llbracket P \rrbracket + \llbracket Q \rrbracket} \quad \blacksquare @@ reason by cases, on the settled P and Q
+  </pre>
+  <p data-pid="fb7c66">The product of the marks is “and”. The sum of the marks counts how many are true, so “or” falls short of the sum by exactly the overlap, P · Q, on the row where both are true. A mark times itself is itself, 0 · 0 = 0 and 1 · 1 = 1, which is the say-it-again technique P ∧ P = P. That is the agreement 3a promised. The marks the old algebra fixed by tables and the sets named 0 and 1 obey the same techniques, because the marks are the sets. For a statement nobody has settled, ⟦P⟧ is still a set, a part of 1, but nobody can say whether it is 0 or 1; rung 7 settles every statement. The accepted name for this algebra of marks is Boolean algebra.</p>
+  <p data-pid="5ecbbb">The inventor of that algebra proposed a system of signs whose symbols admit only the values 0 and 1. He said that its rules, axioms and processes would be exactly those of logic.</p>
+  <p class="eqline" data-pid="d53a2d">From here on, on this page, the letters A, B, C, … name marks, each 0 or 1. A joining word between marks names the mark of the statement it joins: A ∧ B is ⟦A = 1 ∧ B = 1⟧, ¬A is ⟦¬(A = 1)⟧, A ∨ B is ⟦A = 1 ∨ B = 1⟧.</p>
+  <p class="eqline" data-pid="5dd0d5">On this page these capitals name marks, not statements (0a's habit) and not sets, and S, the sum bit below, is not 3a's S(x), which this page does not use. Between statements, ∧, ∨ and ¬ keep their meanings from 1b and 1c; between marks they are this shorthand.</p>
+
+  <h3>Switches and wires</h3>
+  <p data-pid="8528bd">Some plain words first, because the machines are made of them. A <b>wire</b> is a path along which electricity can flow, as it flows to a lamp to light it. A wire is <b>on</b> when electricity is flowing along it and <b>off</b> when it is not; this page writes on as 1 and off as 0. A <b>switch</b> is a part that either lets electricity through (it is <b>closed</b>) or stops it (it is <b>open</b>). A <b>relay</b> is a switch that is closed by electricity flowing in another wire, so that one wire can work another. Nothing more about electricity is needed.</p>
+  <p class="eqline" data-pid="a0ee36">From here on, closed and open are also said of switches, as the electricians say them. 4c's closed set of pairs and 1b's opening of a supposition keep their meanings; what the word is said of says which.</p>
+  <p data-pid="06861a">A student's thesis made the point that a network of switches and these marks are the same object. Two switches one after the other let electricity through only when both are closed. Two side by side, each on its own path, let it through when either is. So every network of switches can be written as an expression. The expression can be simplified by the techniques, and the simpler expression is a cheaper network that does the same job. Among the thesis's worked examples was an adder for numbers written in twos.</p>
+  <p data-pid="5c7eaa">A twist worth knowing, because it shows the techniques do not care about labels. The thesis wrote 0 for a closed switch and 1 for an open one, recording whether a path blocks the electricity. So in it, switches one after the other were + and side by side were ·, the other way about from here. Swap 0 and 1 everywhere and “and” trades places with “or”: that is 1g's not-through, in a new setting.</p>
+
+  <h3>Gates</h3>
+  <p data-pid="71ec7d">A <b>gate</b> is a machine with input wires and one output wire whose output is fixed by its inputs according to a table. This page uses five, each a table from 1f or built from them; in the pictures each gate's symbol carries its name.</p>
+  <ul>
+    <li><b>NOT</b>: one input, turned about. ¬A + A = 1.</li>
+    <li><b>AND</b>: 1 only when both inputs are 1. Its mark is A · B.</li>
+    <li><b>OR</b>: 1 when at least one input is 1. (A ∨ B) + A · B = A + B.</li>
+    <li><b>XOR</b>: 1 when exactly one input is 1.</li>
+    <li><b>NAND</b>: 0 only when both inputs are 1.</li>
+  </ul>
+  <p class="eqline" data-pid="c6f5f3">1c built the exclusive or for statements. On 0 and 1, <span data-tex-inline="A \oplus B"></span> is 1 when exactly one of A and B is 1. Read it “A exclusive or B”. And nand(A, B) is 0 only when both are 1:</p>
+  <div class="eqline" data-tex="\begin{aligned} &amp;A \oplus B =\\ &amp;\quad\llbracket (A = 1 \lor B = 1) \land \neg(A = 1 \land B = 1) \rrbracket\\[4pt] &amp;\mathrm{nand}(A, B) =\\ &amp;\quad\llbracket \neg(A = 1 \land B = 1) \rrbracket \end{aligned}"></div>
+  <p data-pid="a1628d">XOR is 1f's exactly-when turned about: it says the inputs differ. Its sameness needs the overlap twice, since on the row where both are 1 it gives 0 and the sum gives 2. A claim about marks is checked by running every row.</p>
+  <pre class="lines" data-k="ember" data-label="this page: XOR's sameness, checked on every row">
+(A \oplus B) + 2 \cdot A \cdot B \overset{?}{=} A + B @@ the claim
+A = 0,\ B = 0:\ \ 0 + 0 = 0 + 0 @@ neither: XOR gives 0
+A = 1,\ B = 0:\ \ 1 + 0 = 1 + 0 @@ exactly one: XOR gives 1
+A = 0,\ B = 1:\ \ 1 + 0 = 0 + 1 @@ exactly one: XOR gives 1
+A = 1,\ B = 1:\ \ 0 + \htmlClass{new}{2} = 1 + 1 @@ both: XOR gives 0, and the overlap counted twice makes up the 2. Every row agrees
+  </pre>
+  <p data-pid="830c6c">And NAND's: nand(A, B) + A · B = 1, on every row.</p>
+
+  <h3>Adding two bits is a table</h3>
+  <p data-pid="f8212d">Add two bits A and B. The answer is 0, 1 or 2, and in twos 2 is 10₂, a numeral of two bits. Call its left bit the <b>carry</b> C and its right bit the <b>sum bit</b> S. Then the arithmetic fact is A + B = 2 · C + S, and the four rows show that both columns are gates already built. A circuit that adds two bits this way, giving a carry and a sum bit, is called a half adder.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>A</th><th>B</th><th>A + B</th><th>C (the twos)</th><th>S (the ones)</th></tr>
+    <tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+    <tr><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td></tr>
+    <tr><td>1</td><td>0</td><td>1</td><td>0</td><td>1</td></tr>
+    <tr><td>1</td><td>1</td><td>2 = 10₂</td><td>1</td><td>0</td></tr>
+  </table></div>
+  <p data-pid="fc8a83">The carry column is AND and the sum column is XOR. So one XOR gate and one AND gate, fed the same two wires, make a <b>two-bit adder</b>. And it can be checked by the techniques instead of the rows, which is the move this page repeats. Two-bit-adder technique: <b>A + B = 2 · (A · B) + (A ⊕ B)</b>. The right side is (A ⊕ B) + 2 · A · B by turn-about for plus, which is A + B by XOR's sameness. The machine's outputs, read as a numeral in twos, are the sum.</p>
+
+  <h3>Three bits in, two out: the full adder</h3>
+  <p data-pid="c0a748">In a column of a longer sum there are three bits to add: a bit of each number, and the carry coming in from the column to the right. Three bits add to at most 3 = 11₂, still two bits out. So the job is a machine with</p>
+  <div class="eqline" data-tex="A + B + C_{\text{in}} = 2 \cdot C_{\text{out}} + S"></div>
+  <p data-pid="6c6ea6">(the low marks “in” and “out” are parts of the names). You could build it from its 2³ = 8 rows, but there is a nicer road: two two-bit adders and one OR. The first adds A and B, giving a sum bit p and a carry g. The second adds p and the incoming carry, giving the final sum bit S and a carry q. Then C<sub>out</sub> = g ∨ q. Full-adder technique: <b>two two-bit adders and an OR gate add three bits, with A + B + C<sub>in</sub> = 2 · (g ∨ q) + S.</b> Its proof is two-bit-adder used twice and substituted into itself.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the full-adder technique, the full adder, proved by substituting">
+A + B + C_{\text{in}} = (\htmlClass{new}{2 \cdot g + p}) + C_{\text{in}} @@ two-bit-adder on A and B: A + B = 2 · g + p; the swap axiom
+\phantom{A + B + C_{\text{in}}} = 2 \cdot g + (\htmlClass{keep}{p + C_{\text{in}}}) @@ regroup for plus
+\phantom{A + B + C_{\text{in}}} = 2 \cdot g + (\htmlClass{new}{2 \cdot q + S}) @@ two-bit-adder on p and C_in
+\phantom{A + B + C_{\text{in}}} = 2 \cdot (\htmlClass{new}{g + q}) + S @@ regroup for plus; spread for times over plus turned about
+\phantom{A + B + C_{\text{in}}} = 2 \cdot (g \lor q) + S \quad \blacksquare @@ g and q are never both 1, so g · q = 0 and OR's sameness gives g ∨ q = g + q
+  </pre>
+  <p data-pid="b8c729">The last line needs its reason. OR's sameness is (g ∨ q) + g · q = g + q, so g ∨ q is g + q exactly when g · q = 0. And it is: if g = 1 then A and B are both 1, so their sum bit p is 0, so q = p · C<sub>in</sub> = 0. The two carries cannot both fire, and that licenses the OR gate. (It also means an XOR gate would do the same job there, since XOR and OR differ only on the row where both inputs are 1.) Toggle the inputs in the left picture and watch the carry out. It is 1 exactly when at least two of the three inputs are 1. <b>The carry is a majority vote.</b></p>
+
+  <h3>Four bits: the carry ripples</h3>
+  <p data-pid="4c030e">Now chain them. Line up four full adders, one per place, the ones on the right. Each place's carry out is wired into the next place's carry in, exactly as a carry moves left in 4h's columns. The carry into the ones place is 0; the carry out of the last place becomes a fifth bit of the answer. This is a <b>ripple-carry adder</b>, named for what the right picture shows: the twos place cannot finish until the ones place has. Count the ones place as place 0. Write Sₖ for the sum bit of place k, and cₖ for the carry into place k, so c₀ = 0. Here is 6 + 7, place by place.</p>
+  <pre class="lines" data-k="ember" data-label="this page: four full adders in a chain">
+A = 0110_2 = 6,\ \ B = 0111_2 = 7 @@ line up the places; the carry into the ones place is 0
+\text{ones}:\ 0 + 1 + 0 = \htmlClass{new}{01_2} @@ S₀ = 1, carry 0
+\text{twos}:\ 1 + 1 + 0 = \htmlClass{new}{10_2} @@ S₁ = 0, carry 1
+\text{fours}:\ 1 + 1 + \htmlClass{keep}{1} = \htmlClass{new}{11_2} @@ the carried 1 arrives (teal): S₂ = 1, carry 1
+\text{eights}:\ 0 + 0 + \htmlClass{keep}{1} = \htmlClass{new}{01_2} @@ S₃ = 1, carry 0
+A + B = 01101_2 = 8 + 4 + 1 = 13 @@ read the sum bits, the carry out on the left: 6 + 7 = 13
+  </pre>
+  <p data-pid="ea8991">Why it works, and not just for 6 and 7: every place obeys full-adder's sameness, and the places are worth powers of 2. Take two places and write A = 2 · A₁ + A₀ and B = 2 · B₁ + B₀ (4h's reading rule in twos). Multiply the twos place's sameness by 2 and add it to the ones place's sameness. The carry c₁ appears as 2 · c₁ on both sides: produced by the ones place and used by the twos place, worth the same to each. Cancel for plus cancels it. What is left is A + B + c₀ = 4 · c₂ + 2 · S₁ + S₀: the numbers on the left, the three-bit numeral c₂S₁S₀ on the right. Each further place adds one line and one more carry that cancels the same way, which is an induction on the number of places. Ripple technique: <b>full adders chained place by place, each carry out wired to the next carry in, add two numerals in twos of any length, and the last carry out is the top bit of the sum.</b></p>
+  <p data-pid="bd753a">Four bits name numbers up to 15, so a sum of two of them can need five bits. 9 + 8 = 17 = 10001₂, and the final carry out is 1. A machine that keeps only four bits would report 0001, which is 1. That is <b>overflow</b>, a real source of real mistakes. The fifth bit is how the machine says it happened.</p>
+
+  <h3>One gate is enough</h3>
+  <p data-pid="d2c9c6">Five kinds of gate is four more than needed: everything can be built from NAND alone.</p>
+  <pre class="lines" data-k="ember" data-label="this page: NOT and AND out of NAND">
+\mathrm{nand}(A, A) + A \cdot A = 1 @@ NAND's sameness, with the same wire fed into both inputs
+\mathrm{nand}(A, A) + \htmlClass{new}{A} = 1 @@ A · A = A, since A is 0 or 1
+\mathrm{nand}(A, A) = \neg A @@ ¬A + A = 1 too; cancel for plus cancels A: a NOT is one NAND
+\neg n + n = 1 = A \cdot B + n,\ \ n = \mathrm{nand}(A, B) @@ NOT's sameness, with n for A; NAND's sameness, with turn-about for plus
+\neg n = \htmlClass{new}{A \cdot B} = A \land B @@ cancel for plus cancels n: a NAND after a NAND is an AND, two in all
+  </pre>
+  <p data-pid="3cc5a6">OR comes from not-through: A ∨ B = ¬(¬A ∧ ¬B) = nand(¬A, ¬B) = nand(nand(A, A), nand(B, B)), three NANDs. Marks are settled, so 1g's techniques may be used both ways here. Once NOT, AND and OR can be built, every table can be (the last section shows how), so NAND alone is <b>universal</b>. A logic with a single joining word was published in 1913, and the same thing had been noticed decades earlier in notes never published. Factories noticed for their own reason: one kind of gate, made in vast numbers, is cheaper than five kinds.</p>
+
+  <h3>Running it backwards: from a table to a circuit</h3>
+  <p data-pid="3792c0">The designer's real job runs the other way. Someone hands over a column (“light the warning lamp when at least two of the three sensors fire”) and wants a circuit. 1f's recipe: for each row where the output is 1, write the and of that row's inputs, with a not on each input that is 0 in that row. Then join them with or. Take the full adder's carry out, which is 1 on the rows 011, 101, 110 and 111 (writing C for C<sub>in</sub>, and A · B for A ∧ B):</p>
+  <pre class="lines" data-k="teal" data-label="from 1f and 1g: a column back to a circuit, then the techniques">
+\neg A \cdot B \cdot C \lor A \cdot \neg B \cdot C \lor A \cdot B \cdot \neg C \lor A \cdot B \cdot C @@ one and for each row with a 1
+= \neg A \cdot B \cdot C \lor A \cdot \neg B \cdot C \lor \htmlClass{new}{A \cdot B} @@ the last two differ only in C: A · B · (¬C ∨ C) = A · B (1g's spread, either-way for a settled mark, units)
+= \htmlClass{new}{A \cdot B \lor B \cdot C \lor A \cdot C} @@ the same move twice more, borrowing A · B · C, which A · B absorbs (1g's absorb, say-it-again)
+  </pre>
+  <p data-pid="aaab64">“At least two of three” is A · B ∨ B · C ∨ A · C: three ANDs and an OR. It is a different circuit from the two-adders-and-an-OR version, and it computes the same table: <b>two circuits, one column, as two names can name one number.</b> Choosing between them is engineering (fewer gates, or a shorter path for the signal). Proving they agree is rewriting by the rulebook, or checking 2³ rows.</p>
+
+  <h3>Illegal moves</h3>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed">
+S = A \lor B\,? @@ right on three rows, wrong on the fourth: 1 + 1 has sum bit 0. OR and XOR differ on exactly the row that carries
+10_2 = 10\,? @@ 10₂ is 2. A numeral's value depends on its base
+0110_2 \oplus 0111_2 = 0001_2 \text{ as } 6 + 7\,? @@ XOR place by place is adding without carrying: it gives 1, not 13. The carries must ripple
+\text{the inputs from } S = 1,\ C = 0 @@ they were 0 and 1, or 1 and 0: adding forgets the order, so the machine cannot be run backwards to one answer
+g \lor q = g + q \text{ for any marks}\,? @@ only when g · q = 0. For g = q = 1 the left is 1 and the right is 2
+\llbracket P \rrbracket = 0 \lor \llbracket P \rrbracket = 1 \text{ for every } P\,? @@ only for settled P; for a statement nobody has settled, the mark is a part of 1 not yet known to be either. Rung 7
+  </pre>
+  <p class="aside" data-pid="c0ff33">Math used on this page: sifting (2b) for the mark of a statement; tables (1f) and the neither technique (1c) for the rows; the techniques of + and · (4f) and cancelling (4e's cancel for plus) in every sameness; numerals in twos and columns (4h); 2ⁿ rows (4j); not-through and the other techniques (1g) for NAND and the recipe; induction (4b) for “any number of places”.</p>
+</section>
+
+<section class="pic" id="pic">
+  <div class="eyebrow">The picture · left: one circuit at a time, every wire live · right: a four-bit ripple-carry adder</div>
+  <div class="panels">
+    <div class="panel">
+      <div class="chips" role="group" aria-label="circuit"><span class="m" style="color:var(--muted)">circuit:</span><button data-c="not">NOT</button><button data-c="and">AND</button><button data-c="or">OR</button><button data-c="xor">XOR</button><button data-c="nand">NAND</button><button data-c="two">two-bit adder</button><button data-c="full" class="on">full adder</button></div>
+      <svg id="sv1" class="circ" role="img" aria-label="a logic circuit with tappable inputs"></svg>
+      <div class="bitkey"><span><i style="background:var(--ember)"></i>wire on (1)</span><span><i style="background:var(--muted);opacity:.55"></i>wire off (0)</span></div>
+      <div class="cap">Tap an input on the left to turn it on or off. The table lists every row; the row now set is marked. Teal column heads are outputs. The readout checks the circuit's sameness on that row.</div>
+      <div class="tablewrap"><table class="tt" id="tt1"></table></div>
+      <div class="eqbox" id="eq1"></div>
+    </div>
+    <div class="panel">
+      <div class="chips" role="group" aria-label="examples"><span class="m" style="color:var(--muted)">try:</span><button data-ex="6,7">6 + 7</button><button data-ex="9,8">9 + 8</button><button data-ex="15,1">15 + 1</button><button data-ex="5,10">5 + 10</button><button data-ex="0,0">clear</button><button id="replay">ripple again</button></div>
+      <svg id="sv2" class="circ" role="img" aria-label="a four-bit ripple carry adder with tappable bits"></svg>
+      <div class="cap">Tap any bit of A (top row) or B (second row), or the carry in at the far right. Each box is a full adder like the one on the left. The carries settle one place at a time, right to left: an ember box is the place now working, a dashed wire a carry not yet known. Under the sums, what each place is worth.</div>
+      <div class="eqbox" id="eq2"></div>
+    </div>
+  </div>
+</section>
+
+<section class="slides" id="sl1"><div class="eyebrow">The slides · the mark of a statement, twos both ways, the two-bit adder, the full adder by substitution, why the ripple adds, NAND, a column back to a circuit · ← → keys work</div></section>
+
+<section class="sayback">
+  <div class="eyebrow">Say it back · then work it</div>
+  <h2>Questions</h2>
+  <div class="phkey"></div>
+  <ol>
+    <li><span class="qid">4·comp.1</span><span class="gname">An adder from one gate.</span><span class="gwhy">Do: build the page's pieces.</span>
+      <ol class="sub">
+        <li><span class="qid">4·comp.1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\text{full adder: inputs } A, B, C,"></span> <span data-tex-inline="\text{outputs } S, C_{\text{out}},"></span> <span data-tex-inline="A + B + C = 2 \cdot C_{\text{out}} + S"></span></span>Build a full adder from nand gates only, and count its gates.<br>Prove it adds, row by row or by the marks of statements.</li>
+      </ol></li>
+    <li><span class="qid">4·comp.2</span><span class="gname">An output, run backwards.</span><span class="gwhy">Undo: run the page's techs backwards.</span>
+      <ol class="sub">
+        <li><span class="qid">4·comp.2.1</span><span class="ph undo">undo</span><span class="givens"><span data-tex-inline="\text{two-place ripple adder},"></span> <span data-tex-inline="c_0 = 0,"></span> <span data-tex-inline="S_1 = 0,\ S_0 = 1,\ c_2 = 1"></span></span>Find every pair of inputs A₁A₀ and B₁B₀ that gives this, and prove the list is complete.</li>
+      </ol></li>
+    <li><span class="qid">4·comp.3</span><span class="gname">The wrong carry.</span><span class="gwhy">Bend: find where the techs stop working.</span>
+      <ol class="sub">
+        <li><span class="qid">4·comp.3.1</span><span class="ph bend">bend</span><span class="givens"><span data-tex-inline="\text{two-bit adder,}"></span> <span data-tex-inline="\text{carry } A \lor B \text{ in place of } A \land B"></span></span>Find the inputs for which this adder's total differs from the sum of A and B, and by how much.</li>
+      </ol></li>
+    <li class="optgroup"><span class="qid">4·comp.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder challenges that rely on your own making. The page is complete without these; the rung's star needs them.</span>
+      <ol class="sub">
+        <li class="opt"><span class="qid">4·comp.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{inputs } A_1, A_0, B_1, B_0;"></span> <span data-tex-inline="\text{output } 1 \text{ exactly when}"></span> <span data-tex-inline="A_1A_0 &lt; B_1B_0 \text{ in twos}"></span></span>Design such a circuit, and prove it on every row.</li>
+        <li class="opt"><span class="qid">4·comp.4.2</span><span class="tagq">loop</span><span class="givens"><span data-tex-inline="\text{a not gate fed back into its own input:}"></span> <span data-tex-inline="A = \lnot A"></span></span>Find every mark that meets it.<br>Do the same for a ring of two not gates and for a ring of three, and find which rings can stay still.</li>
+        <li class="opt"><span class="qid">4·comp.4.3</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="(A \oplus B) + 2 \cdot A \cdot B = A + B,"></span> <span data-tex-inline="G: (A \oplus B) \oplus B = A"></span></span>From the first alone, and without tables, prove G.</li>
+        <li class="opt"><span class="qid">4·comp.4.4</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{two-place ripple adder},"></span> <span data-tex-inline="\text{inputs } 3 \text{ and } 1,"></span> <span data-tex-inline="c_2 \text{ thrown away},"></span> <span data-tex-inline="Z: 3 + 1 = 0"></span></span>Find what S₁ and S₀ show.<br>Find a reading of Z that this adder makes true, or prove there is none.</li>
+        <li class="opt"><span class="qid">4·comp.4.5</span><span class="tagq">seam</span>“two and two make four” Is its “and” the and-sign of rung 1?</li>
+      </ol></li>
+  </ol>
+  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
+</section>
+
+<nav class="nextrung"><a href="r04stat.html">← 4·stat · what can counting alone say about a list?</a><a href="r04crypt.html">4·crypt · can a shifted alphabet keep a secret? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>The early algebra of logic, and the marks 0 and 1 for statements, are George Boole’s. The student whose thesis turned switches into marks is Claude Shannon (1937). The logic with a single joining word is Henry Sheffer’s (1913); Charles Sanders Peirce had noticed the same thing decades earlier in notes he never published. The not-through techniques are De Morgan’s.</p>
+  <aside class="voice para"><p>Boole proposed a system of signs whose symbols admit only the values 0 and 1, and said that its laws, axioms and processes would be exactly those of logic.</p><cite>Boole, An Investigation of the Laws of Thought (1854), ch. II; paraphrase</cite></aside>
+  <aside class="voice para"><p>Claude Shannon's point was that a network of switches and Boole's marks are the same object. Two switches one after the other let electricity through only when both are closed; two side by side, each on its own path, let it through when either is. So every network of switches can be written as an expression, the expression can be simplified by the techniques, and the simpler expression is a cheaper network that does the same job. Among his worked examples was an adder for numbers written in twos.</p><cite>Shannon, A Symbolic Analysis of Relay and Switching Circuits, master's thesis, MIT, 1937; published 1938; paraphrase</cite></aside>
+  <h3>The liar box, as a timer</h3>
+  <p data-pid="d2edab"><a href="r00a.html">0a</a> set one sentence aside: “this sentence is false”. If it is so, it is not, and if it is not, it is. Built in wires, it is a not gate whose output is fed back into its own input: A = ¬A. No mark meets that sameness. 1 gives ¬1 = 0, and 0 gives ¬0 = 1. As a sameness to be settled once, it has no answer.</p>
+  <p data-pid="2e7bcf">A real gate is not instant. It takes a moment, a few billionths of a second, to answer a change at its input. So the looped gate answers its own answer a moment late: 1, then 0, then 1, then 0, for as long as the power is on. It never settles, and it is not stuck either. It keeps time.</p>
+  <p data-pid="17d1ba"><b>The liar box stands to so-or-not-so as a cycle: it is so and not so in turn, a moment each.</b></p>
+  <p data-pid="abaf2b">This is 0c's ledger cutting the other way. A description whose books do not balance is wrong, however carefully each sentence was deduced. And a sentence with no single mark, read once, can still have a steady pattern, read over time. A ring of an odd number of not gates is one of the plainest clocks a circuit can have.</p>
+
+  <h3>The truth-teller box, as a memory</h3>
+  <p data-pid="e59711">The liar has a twin: “this sentence is true”. If it is so, it is so, and if it is not, it is not. Built in wires, it is a gate that passes its input on unchanged, fed back into its own input: A = A. Both marks meet that sameness. As a sameness to be settled once, it has two answers, and nothing in the logic picks one.</p>
+  <p data-pid="7d2fa8">So the wires pick. At the moment the power comes on, the loop sits balanced between 0 and 1, and the faint noise in any circuit tips it one way. Then it stays there. Its answer is set by its history, not by its logic.</p>
+  <p data-pid="de1257"><b>The truth-teller box stands to so-or-not-so as a memory: it is whichever it was last made to be, for as long as the power is on.</b></p>
+  <p data-pid="f846f5">The liar fits no mark and keeps time; the truth-teller fits every mark and keeps a value. <a href="r05d.html">5d</a> meets the same pair in dividing by 0: 1/0 has no answer, and 0/0 has every answer.</p>
+
+  <h3>Accepted names</h3>
+  <p>Working with statements through their marks is called Boolean algebra, after Boole. NAND is also called the Sheffer stroke.</p>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,stepper}=Rung;
+const R=String.raw;
+const NS='http://www.w3.org/2000/svg';
+function el(tag,attrs,parent){ const e=document.createElementNS(NS,tag); for(const k in attrs) e.setAttribute(k,attrs[k]); if(parent) parent.appendChild(e); return e; }
+function txt(s,x,y,cls,parent,anchor){ const t=el('text',{x,y,class:cls||'','text-anchor':anchor||'middle'},parent); t.textContent=s; return t; }
+
+/* ---------- gates ---------- */
+const GW=46, GH=34;
+function pinsOf(g){ const n=g.in.length;
+  const ins= n===1?[[g.x,g.y+GH/2]]:[[g.x,g.y+9],[g.x,g.y+GH-9]];
+  return {ins,out:[g.x+GW+(g.t==='nand'?8:0),g.y+GH/2]}; }
+function drawGate(svg,g,act){
+  const {x,y}=g, w=GW, h=GH, cls='g'+(act?' act':'');
+  if(g.t==='and'||g.t==='nand'){ el('path',{d:`M${x} ${y}H${x+w-17}A17 17 0 0 1 ${x+w-17} ${y+h}H${x}Z`,class:cls},svg); if(g.t==='nand') el('circle',{cx:x+w+4,cy:y+h/2,r:4,class:cls},svg); }
+  else if(g.t==='or'||g.t==='xor'){ el('path',{d:`M${x} ${y}Q${x+w*.6} ${y} ${x+w} ${y+h/2}Q${x+w*.6} ${y+h} ${x} ${y+h}Q${x+11} ${y+h/2} ${x} ${y}Z`,class:cls},svg);
+    if(g.t==='xor') el('path',{d:`M${x-7} ${y}Q${x+4} ${y+h/2} ${x-7} ${y+h}`,class:cls,style:'fill:none'},svg); }
+  else if(g.t==='not'){ el('path',{d:`M${x} ${y}L${x+w-8} ${y+h/2}L${x} ${y+h}Z`,class:cls},svg); el('circle',{cx:x+w-4,cy:y+h/2,r:4,class:cls},svg); }
+  txt(g.t.toUpperCase(),x+(g.t==='not'?14:(g.t==='or'||g.t==='xor')?22:19),y+h/2+3.5,'small',svg);
+}
+const EV={not:a=>1-a[0],and:a=>a[0]&a[1],or:a=>a[0]|a[1],xor:a=>a[0]^a[1],nand:a=>1-(a[0]&a[1])};
+const one=(t)=>({vb:[360,150],ins:t==='not'?{A:[30,75]}:{A:[30,40],B:[30,110]},
+  gates:[{t,x:150,y:58,in:t==='not'?['A']:['A','B'],out:'Y'}],
+  wires:t==='not'?[{s:'A',to:[0,0],vx:100},{s:'Y',out:'Y',vx:280}]:[{s:'A',to:[0,0],vx:110},{s:'B',to:[0,1],vx:110},{s:'Y',out:'Y',vx:280}],
+  outs:{Y:[320,75]},order:t==='not'?['A']:['A','B'],outOrder:['Y'],
+  eq:t==='not'?(v)=>`\\neg A + A = 1:\\quad ${v.Y} + ${v.A} = 1`:
+     t==='and'?(v)=>`A \\land B = A \\cdot B:\\quad ${v.Y} = ${v.A}\\cdot ${v.B}`:
+     t==='or'?(v)=>`(A \\lor B) + A \\cdot B = A + B:\\quad ${v.Y} + ${v.A*v.B} = ${v.A} + ${v.B}`:
+     t==='xor'?(v)=>`(A \\oplus B) + 2 \\cdot A \\cdot B = A + B:\\quad ${v.Y} + ${2*v.A*v.B} = ${v.A} + ${v.B}`:
+     (v)=>`\\mathrm{nand}(A,B) + A \\cdot B = 1:\\quad ${v.Y} + ${v.A*v.B} = 1`});
+const CIR={not:one('not'),and:one('and'),or:one('or'),xor:one('xor'),nand:one('nand'),
+  two:{vb:[360,190],ins:{A:[30,50],B:[30,140]},
+    gates:[{t:'xor',x:160,y:20,in:['A','B'],out:'S'},{t:'and',x:160,y:120,in:['A','B'],out:'C'}],
+    wires:[{s:'A',to:[0,0],vx:100},{s:'A',to:[1,0],vx:100},{s:'B',to:[0,1],vx:122},{s:'B',to:[1,1],vx:122},{s:'S',out:'S',vx:280},{s:'C',out:'C',vx:280}],
+    outs:{S:[320,37],C:[320,137]},order:['A','B'],outOrder:['C','S'],
+    eq:(v)=>`A + B = 2 \\cdot C + S:\\quad ${v.A} + ${v.B} = 2\\cdot ${v.C} + ${v.S}`},
+  full:{vb:[400,215],ins:{A:[24,28],B:[24,82],Ci:[24,128]},
+    gates:[{t:'xor',x:112,y:40,in:['A','B'],out:'p'},{t:'and',x:112,y:165,in:['A','B'],out:'g'},
+           {t:'xor',x:228,y:40,in:['p','Ci'],out:'S'},{t:'and',x:228,y:110,in:['p','Ci'],out:'q'},{t:'or',x:312,y:150,in:['q','g'],out:'Co'}],
+    wires:[{s:'A',to:[0,0],vx:68},{s:'A',to:[1,0],vx:68},{s:'B',to:[0,1],vx:88},{s:'B',to:[1,1],vx:88},
+           {s:'p',to:[2,0],vx:190},{s:'p',to:[3,0],vx:190},{s:'Ci',to:[2,1],vx:206},{s:'Ci',to:[3,1],vx:206},
+           {s:'q',to:[4,0],vx:294},{s:'g',to:[4,1],vx:294},{s:'S',out:'S',vx:340},{s:'Co',out:'Co',vx:372}],
+    outs:{S:[382,57],Co:[382,167]},order:['A','B','Ci'],outOrder:['Co','S'],labels:{p:[172,49],g:[214,176],q:[280,121]},
+    eq:(v)=>`A + B + C_{\\text{in}} = 2 \\cdot C_{\\text{out}} + S:\\quad ${v.A} + ${v.B} + ${v.Ci} = 2\\cdot ${v.Co} + ${v.S}`}
+};
+const NAME={A:'A',B:'B',Ci:'C in',Y:'out',S:'S',C:'C',Co:'C out'};
+let cur='full'; const IN={A:1,B:0,Ci:1};
+const sv1=document.getElementById('sv1');
+function evalC(C){ const v={}; C.order.forEach(k=>v[k]=IN[k]); C.gates.forEach(g=>{ v[g.out]=EV[g.t](g.in.map(n=>v[n])); }); return v; }
+function srcPoint(C,s){ if(C.ins[s]) return C.ins[s]; const g=C.gates.find(g=>g.out===s); return pinsOf(g).out; }
+function draw1(){
+  const C=CIR[cur]; sv1.innerHTML=''; sv1.setAttribute('viewBox',`0 0 ${C.vb[0]} ${C.vb[1]}`);
+  const v=evalC(C); const fan={}; C.wires.forEach(w=>fan[w.s]=(fan[w.s]||0)+1);
+  C.wires.forEach(w=>{ const [sx,sy]=srcPoint(C,w.s); let tx,ty; if(w.out){ [tx,ty]=C.outs[w.out]; tx-=14; } else { const p=pinsOf(C.gates[w.to[0]]).ins[w.to[1]]; tx=p[0]+(C.gates[w.to[0]].t==='or'||C.gates[w.to[0]].t==='xor'?6:0); ty=p[1]; }
+    const x0=C.ins[w.s]?sx+14:sx;
+    el('path',{d:`M${x0} ${sy}H${w.vx}V${ty}H${tx}`,class:'w '+(v[w.s]?'w1':'w0')},sv1);
+    if(fan[w.s]>1) el('circle',{cx:w.vx,cy:sy,r:3.2,class:v[w.s]?'dot':'dot0'},sv1); });
+  C.gates.forEach(g=>drawGate(sv1,g,false));
+  if(C.labels) for(const k in C.labels){ const [x,y]=C.labels[k]; txt(k+' = '+v[k],x,y,'lab',sv1,'start'); }
+  for(const k in C.ins){ const [x,y]=C.ins[k]; const gp=el('g',{class:'pin',tabindex:0,role:'button','aria-label':'turn '+NAME[k]+' on or off'},sv1);
+    el('circle',{cx:x,cy:y,r:13,class:v[k]?'on1':'on0'},gp); txt(v[k],x,y+4.5,v[k]?'t1':'t0',gp); txt(NAME[k],x+(k==='Ci'?2:0),y-17,'lab',gp,'start');
+    const flip=()=>{ IN[k]^=1; draw1(); }; gp.addEventListener('click',flip); gp.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); flip(); } }); }
+  for(const k in C.outs){ const [x,y]=C.outs[k]; el('circle',{cx:x,cy:y,r:13,class:v[k]?'on1':'on0'},sv1); txt(v[k],x,y+4.5,v[k]?'t1':'t0',sv1); txt(NAME[k],x,y-17,'lab',sv1,'end'); }
+  const tt=document.getElementById('tt1'); const n=C.order.length; let h='<tr>'+C.order.map(k=>`<th>${NAME[k]}</th>`).join('')+C.outOrder.map(k=>`<th class="o">${NAME[k]}</th>`).join('')+'</tr>';
+  for(let r=0;r<(1<<n);r++){ const save={...IN}; C.order.forEach((k,i)=>IN[k]=(r>>(n-1-i))&1); const w=evalC(C); const isCur=C.order.every(k=>save[k]===IN[k]); Object.assign(IN,save);
+    h+='<tr>'+C.order.map(k=>`<td${isCur?' class="cur"':''}>${w[k]}</td>`).join('')+C.outOrder.map(k=>`<td${isCur?' class="cur"':''}>${w[k]}</td>`).join('')+'</tr>'; }
+  tt.innerHTML=h;
+  tex(document.getElementById('eq1'),'\\begin{gathered}'+C.eq(v).replace(':\\quad','\\\\')+'\\end{gathered}',true);
+}
+document.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{ cur=b.dataset.c; document.querySelectorAll('[data-c]').forEach(x=>x.classList.toggle('on',x===b)); draw1(); });
+draw1();
+
+/* ---------- right: four-bit ripple adder ---------- */
+const sv2=document.getElementById('sv2'); sv2.setAttribute('viewBox','0 0 400 290');
+const A=[0,1,1,0], B=[1,1,1,0];
+let cin=0, settled=4, timer=null;
+const X=i=>62+(3-i)*84;
+function compute(){ const S=[],C=[cin]; for(let i=0;i<4;i++){ const t=A[i]+B[i]+C[i]; S[i]=t&1; C[i+1]=t>>1; } return {S,C}; }
+function val(bits){ return bits.reduce((s,b,i)=>s+b*(1<<i),0); }
+function bitstr(bits){ return bits.slice().reverse().join(''); }
+function draw2(){
+  sv2.innerHTML=''; const {S,C}=compute();
+  txt('A',12,40,'lab',sv2,'start'); txt('B',12,84,'lab',sv2,'start');
+  for(let i=0;i<4;i++){ const x=X(i);
+    el('path',{d:`M${x-16} ${50}V${136}`,class:'w '+(A[i]?'w1':'w0')},sv2);
+    el('path',{d:`M${x+16} ${94}V${136}`,class:'w '+(B[i]?'w1':'w0')},sv2);
+    const known=settled>i;
+    el('path',{d:`M${x} ${182}V${214}`,class:'w '+(known?(S[i]?'w1':'w0'):'ww')},sv2);
+    const cinKnown=settled>=i; const cx0=i===0?378:X(i-1)-25;
+    el('path',{d:`M${cx0} 159H${x+25}`,class:'w '+(cinKnown?(C[i]?'w1':'w0'):'ww')},sv2);
+    if(i>0) txt('c'+i,(cx0+x+25)/2,151,'small',sv2);
+    const act=settled===i;
+    el('rect',{x:x-25,y:136,width:50,height:46,rx:5,class:'g'+(act?' act':'')},sv2); txt('full',x,155,'small',sv2); txt('adder',x,168,'small',sv2);
+    [[A,i,x-16,36,'A'],[B,i,x+16,80,'B']].forEach(([arr,j,bx,by,nm])=>{ const gp=el('g',{class:'pin',tabindex:0,role:'button','aria-label':'turn bit '+j+' of '+nm+' on or off'},sv2);
+      el('rect',{x:bx-14,y:by-14,width:28,height:28,rx:5,class:arr[j]?'on1':'on0'},gp); txt(arr[j],bx,by+5,arr[j]?'t1':'t0',gp);
+      const flip=()=>{ arr[j]^=1; start(); }; gp.addEventListener('click',flip); gp.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); flip(); } }); });
+    el('circle',{cx:x,cy:228,r:13,class:known?(S[i]?'on1':'on0'):'on0'},sv2); txt(known?S[i]:'?',x,232.5,known&&S[i]?'t1':'t0',sv2);
+    txt('S'+i,x+20,214,'small',sv2,'start'); txt('×'+(1<<i),x,262,'small',sv2);
+  }
+  const coKnown=settled>=4; const x3=X(3)-25;
+  el('path',{d:`M${x3} 159H18V214`,class:'w '+(coKnown?(C[4]?'w1':'w0'):'ww')},sv2);
+  el('circle',{cx:18,cy:228,r:13,class:coKnown?(C[4]?'on1':'on0'):'on0'},sv2); txt(coKnown?C[4]:'?',18,232.5,coKnown&&C[4]?'t1':'t0',sv2);
+  txt('×16',18,262,'small',sv2); txt('carry out',18,282,'small',sv2,'start');
+  const gp=el('g',{class:'pin',tabindex:0,role:'button','aria-label':'turn the carry in on or off'},sv2);
+  el('circle',{cx:384,cy:159,r:11,class:cin?'on1':'on0'},gp); txt(cin,384,163,cin?'t1':'t0',gp); txt('c0',384,140,'small',gp);
+  const fl=()=>{ cin^=1; start(); }; gp.addEventListener('click',fl); gp.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); fl(); } });
+  const a=val(A), b=val(B), tot=a+b+cin;
+  let t=`A = ${bitstr(A)}_2 = ${a},\\quad B = ${bitstr(B)}_2 = ${b}${cin?',\\quad c_0 = 1':''}`;
+  if(sv2.clientWidth<520) t=`A = ${bitstr(A)}_2 = ${a}\\\\ B = ${bitstr(B)}_2 = ${b}${cin?'\\\\ c_0 = 1':''}`;
+  if(settled<4) t+=`\\\\ \\text{rippling: place ${settled} is working}`;
+  else { t+=`\\\\ A + B${cin?' + 1':''} = ${C[4]}${bitstr(S)}_2 = ${tot}`; if(C[4]) t+=`\\\\ \\text{overflow: four bits alone say } ${bitstr(S)}_2 = ${val(S)}`; }
+  tex(document.getElementById('eq2'),`\\begin{gathered}${t}\\end{gathered}`,true);
+}
+function start(){ clearInterval(timer); settled=0; draw2(); timer=setInterval(()=>{ settled++; draw2(); if(settled>=4) clearInterval(timer); },420); }
+document.querySelectorAll('[data-ex]').forEach(b=>b.onclick=()=>{ const [a,c]=b.dataset.ex.split(',').map(Number); for(let i=0;i<4;i++){ A[i]=(a>>i)&1; B[i]=(c>>i)&1; } cin=0; start(); });
+document.getElementById('replay').onclick=start;
+draw2();
+if(window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{draw1();draw2();});
+
+/* ---------- slides ---------- */
+const N='\\htmlClass{new}', K='\\htmlClass{keep}';
+stepper('#sl1',[
+  {k:'ember',kl:'the mark of a statement',t:R`\llbracket P \rrbracket = \{x \in 1 : P\}`,n:`Sift the set 1 = {0} by P. If P is true, the sift is 1 (same-members); if ¬P, it has no members, so it is 0. For a settled P the mark is its row: T is 1, F is 0.`},
+  {k:'ember',kl:'the marks technique',t:R`\llbracket P \land Q \rrbracket = ${N}{\llbracket P \rrbracket \cdot \llbracket Q \rrbracket},\qquad \llbracket \neg P \rrbracket + \llbracket P \rrbracket = 1`,n:`Checked row by row: 1 · 1 = 1, 1 · 0 = 0 · 1 = 0 · 0 = 0. The product of marks is “and”, and 3a's promise is kept: the marks are the sets 0 and 1.`},
+  {k:'ember',kl:'the marks technique',t:R`\llbracket P \lor Q \rrbracket + \llbracket P \rrbracket \cdot \llbracket Q \rrbracket = \llbracket P \rrbracket + \llbracket Q \rrbracket`,n:`The sum of the marks counts how many are true; “or” falls short of it by the overlap, on the row where both are true.`},
+  {k:'teal',kl:'from 4h · reading in twos',t:R`10110_2 = (((1 \cdot 2 + 0) \cdot 2 + 1) \cdot 2 + 1) \cdot 2 + 0 = ${N}{22}`,n:`4h's reading rule with 2: 1, 2, 5, 11, 22. Each place is worth twice the one to its right: 16 + 4 + 2.`},
+  {k:'teal',kl:'from 4h · writing in twos',t:R`22 = 2 \cdot 11 + ${N}{0},\ \ 11 = 2 \cdot 5 + ${N}{1},\ \ 5 = 2 \cdot 2 + ${N}{1}`,n:`Split by 2 again and again; the remainders are the bits, the last bit first.`},
+  {k:'teal',kl:'from 4h · writing in twos',t:R`2 = 2 \cdot 1 + ${N}{0},\ \ 1 = 2 \cdot 0 + ${N}{1}:\quad 22 = ${N}{10110_2}`,n:`Read the remainders from the last split back. It matches the reading, as an undo should.`},
+  {k:'ember',kl:'XOR',t:R`(A \oplus B) + 2 \cdot A \cdot B = A + B`,n:`Exactly one. On the row 1, 1 XOR gives 0 and the overlap counted twice makes up the 2. Checked on all four rows.`},
+  {k:'ember',kl:'the two-bit adder',t:R`A + B = 2 \cdot C + S,\qquad C = ${N}{A \cdot B},\ \ S = ${N}{A \oplus B}`,n:`Read the columns off the four rows: the carry is AND, the sum bit is XOR.`},
+  {k:'ember',kl:'the two-bit-adder technique',t:R`2 \cdot (A \cdot B) + (A \oplus B) = (A \oplus B) + 2 \cdot A \cdot B = ${N}{A + B}`,n:`∎ Turn-about for plus, then XOR's sameness. The machine's outputs, read as a numeral in twos, are the sum.`},
+  {k:'ember',kl:'the full adder',t:R`A + B + C_{\text{in}} = (2 \cdot g + p) + C_{\text{in}} = 2 \cdot g + ${K}{(p + C_{\text{in}})}`,n:`The first two-bit adder on A and B: sum bit p, carry g. Then regroup for plus.`},
+  {k:'ember',kl:'the full adder',t:R`= 2 \cdot g + ${N}{(2 \cdot q + S)} = 2 \cdot (${N}{g + q}) + S`,n:`The second two-bit adder on p and C_in: sum bit S, carry q. Then spread for times over plus turned about.`},
+  {k:'ember',kl:'the full-adder technique',t:R`g = 1 \Rightarrow p = 0 \Rightarrow ${N}{q = 0}`,n:`∎ The carries never both fire, so g · q = 0 and g + q = g ∨ q: OR is licensed. Two two-bit adders and an OR gate.`},
+  {k:'ember',kl:'the ripple · why it adds',t:R`A_0 + B_0 + c_0 = 2 \cdot c_1 + S_0`,n:`Two places are enough to see it. The ones place's full adder: c₀ the carry in, c₁ the carry it passes on.`},
+  {k:'ember',kl:'the ripple · why it adds',t:R`${N}{2} \cdot (A_1 + B_1 + c_1) = ${N}{2} \cdot (2 \cdot c_2 + S_1)`,n:`The twos place's full adder, each side times 2, the worth of its place (the swap axiom).`},
+  {k:'ember',kl:'the ripple · why it adds',t:R`A + B + c_0 + ${K}{2 \cdot c_1} = ${K}{2 \cdot c_1} + 4 \cdot c_2 + 2 \cdot S_1 + S_0`,n:`Add the two lines and regroup (regroup for plus, turn-about for plus, spread for times over plus), with A = 2 · A₁ + A₀ and B = 2 · B₁ + B₀ by 4h's reading rule. The carry 2 · c₁ is on both sides.`},
+  {k:'ember',kl:'the ripple technique',t:R`A + B + c_0 = ${N}{4 \cdot c_2 + 2 \cdot S_1 + S_0}`,n:`∎ Cancel for plus cancels 2 · c₁. Left: the two numbers; right: the numeral c₂S₁S₀. Each further place adds a line and a carry that cancels: an induction.`},
+  {k:'ember',kl:'NAND · NOT',t:R`\mathrm{nand}(A, A) + A = 1 = \neg A + A \;\Rightarrow\; ${N}{\mathrm{nand}(A, A) = \neg A}`,n:`The same wire fed into both inputs; A · A = A for a mark; cancel for plus cancels A.`},
+  {k:'ember',kl:'NAND · OR',t:R`A \lor B = \neg(\neg A \land \neg B) = ${N}{\mathrm{nand}(\mathrm{nand}(A,A),\, \mathrm{nand}(B,B))}`,n:`Not-through (1g), licensed both ways because marks are settled. Three NANDs make an OR; NAND alone is universal.`},
+  {k:'teal',kl:'from 1f · a column back to a circuit',t:R`\text{out} = 1 \text{ on the rows } (A, B) = (0, 1),\ (1, 0)`,n:`Someone hands over a column. Build it by rows instead of guessing.`},
+  {k:'teal',kl:'from 1f · a column back to a circuit',t:R`${N}{\neg A \cdot B} \;\lor\; ${N}{A \cdot \neg B}`,n:`One and per row with a 1, a not on each input that is 0 in that row; then join with or.`},
+  {k:'teal',kl:'from 1f · a column back to a circuit',t:R`\neg A \cdot B + A \cdot \neg B + 2 \cdot A \cdot B = (\neg A + A) \cdot B + A \cdot (\neg B + B) = ${N}{A + B}`,n:`The two rows are never both 1, so the or is plain +. Add 2 · A · B and regroup: this is XOR's sameness. Five gates found what one gate does.`},
+  {k:'ember',kl:'a fake',t:R`0110_2 \oplus 0111_2 = 0001_2\ \ ?`,n:`XOR place by place is adding without carrying: 1, not 6 + 7 = 13. The carries must ripple.`}
+],{title:'The slides · the mark of a statement, twos both ways, the two-bit adder, the full adder by substitution, why the ripple adds, NAND, a column back to a circuit · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

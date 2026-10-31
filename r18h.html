@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Circles and conics</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r18g.html">← 18g lines in coordinates</a><a href="r18i.html">next: 18i curves traced in time →</a></p>
+  <div class="tags"><span class="tag tech">18h · technique</span></div>
+  <h1>Circles and conics</h1>
+  <p>18d proved what a circle is, and 18e what the other conics are. This step works them by hand. It finds a circle from what you know about it. It finds the one number that every line through a point shares with a circle, and from it the length of a touching line. It sorts any equation of the second degree with no xy term into its conic. It finds the lines that touch a conic by a double root. And it finds how near and how far a planet comes to the sun.</p>
+  <p class="gesture">Complete the squares to find a centre, or to sort a conic. From any point, every line that meets a circle twice cuts two lengths whose product is the same, the gap between the squared distance to the centre and the squared radius. A touching segment from outside is the square root of that same product. A line touches a conic where the meeting equation has a double root. On an ellipse, the distance to a focus runs between two bounds set by its long half-width and how stretched it is.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r18d.html">18d</a> (circle-equation, circle-through-three, line-meets-circle, two-circles-meet), <a href="r18e.html">18e</a> (parabola, ellipse, hyperbola, one-family), <a href="r18a.html">18a</a> (distance-laws, right-triangle, the dot technique), <a href="r18c.html">18c</a> (two-descriptions-agree, nearest-point), <a href="r08i.html">8i</a> (completing the square, quadratic-formula, the discriminant). <a href="r18i.html">18i</a> traces these curves in time; <a href="r18j.html">18j</a> draws touching lines with a compass; <a href="r18cb13.html">18·cb13</a> finds their slopes.</p></div>
+</header>
+
+<section class="class step" data-step="18h1">
+  <h2 class="sthead"><span class="stno">18h1</span>A circle from what you know</h2>
+  <p class="stands">Stands on 18d (circle-equation) and 18a (part-of-the-way).</p>
+  <p class="eqline" data-pid="2a0952">Circle-equation (18d) turns x² + y² + Dx + Ey + F = 0 into a centre and a radius. So finding a circle means finding D, E and F. Given the centre and radius, expand (x − a)² + (y − b)² = r². Given three points, each point gives one equation of the first degree in D, E and F; solve the three. Circle-through-three says there is exactly one answer when the points are not collinear.</p>
+  <p data-pid="10c0cb">Given the ends of a diameter, there is a shorter way. Let A and B be points, A ≠ B. Diameter technique: <b>the circle with diameter AB is the set of points X with (X − A) · (X − B) = 0.</b> In coordinates, with A = (p₁, p₂) and B = (t₁, t₂), it is (x − p₁)(x − t₁) + (y − p₂)(y − t₂) = 0.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the diameter technique">
+M = \tfrac{A + B}{2},\ \ w = \tfrac{B - A}{2} @@ the midpoint (part-of-the-way); then A = M − w and B = M + w
+(X - A)\cdot(X - B) = \big((X - M) + w\big)\cdot\big((X - M) - w\big) @@ adding-keeps-answers
+= |X - M|^2 - |w|^2 @@ the dot technique: the two cross terms cancel
+\begin{aligned}&\htmlClass{new}{(X - A)\cdot(X - B) = 0 \iff d(X, M) }\\ &\quad \htmlClass{new}{= \tfrac12 d(A, B)} \quad \blacksquare\end{aligned} @@ both distances are not negative (powers-keep-order); |w| = ½ d(A, B) (distance-laws)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: worked">
+x^2 + y^2 - 10x + 4y + 13 = 0:\ \ (x - 5)^2 + (y + 2)^2 = 16 @@ circle-equation: centre (5, −2), radius 4
+\text{through } (0, 0), (6, 0), (0, 8):\ \ F = 0,\ 36 + 6D = 0,\ 64 + 8E = 0 @@ D = −6, E = −8: centre (3, 4), radius 5
+\text{diameter from } (-1, 2) \text{ to } (5, 6):\ \ (x + 1)(x - 5) + (y - 2)(y - 6) = 0 @@ diameter: x² + y² − 4x − 8y + 7 = 0; centre (2, 4), radius √13
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · a circle from what you know · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">18h1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">A = (1, 2),  B = (7, 10),  the ends of a diameter</span></span>Find the centre and the radius. <br>Write the circle, and check that (1, 10) is on it.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18h2">
+  <h2 class="sthead"><span class="stno">18h2</span>One product for every line through a point</h2>
+  <p class="stands">Stands on 18h1 and 18d (line-meets-circle).</p>
+  <p data-pid="a6388a">Take a circle with centre O and radius r. Take a point P, and let d = d(P, O). Draw any line through P that meets the circle twice, at A and B. The lengths d(P, A) and d(P, B) change as the line turns about P. Their product does not.</p>
+  <p data-pid="58aecc">Same-product technique: <b>every line through P that meets the circle at A and B has d(P, A) · d(P, B) = |d² − r²|.</b> When P is outside the circle, A and B lie on the same side of P. When P is inside, they lie on opposite sides.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the same-product technique">
+X = P + se,\ \ |e| = 1 @@ two-descriptions-agree, with the direction scaled to length 1 (as in line-meets-circle)
+|X - O|^2 = d^2 + 2s\,(P - O)\cdot e + s^2 @@ right-triangle, with u = P − O and v = se; |e| = 1
+X \text{ on the circle} \iff s^2 + 2\beta s + \gamma = 0 @@ the definition, squared; β = (P − O) · e and γ = d² − r²
+s = -\beta \pm \sqrt{\beta^2 - \gamma} @@ quadratic-formula; two meeting points, so β² − γ &gt; 0
+s_1 s_2 = \beta^2 - (\beta^2 - \gamma) = \gamma @@ the difference of squares
+\htmlClass{new}{d(P, A)\,d(P, B) = |s_1|\,|s_2| = |d^2 - r^2|} \quad \blacksquare @@ distance-laws: d(P, P + se) = |s|; γ &gt; 0 outside, so the roots share a sign, and γ &lt; 0 inside
+  </pre>
+  <p data-pid="2b28d3">The number d² − r² has the accepted name the power of the point P. Inside the circle, same-product says that two chords crossing at P cut each other into pieces with equal products.</p>
+  <p data-pid="eab44c">Now let P be outside, and let a line through P touch the circle at T. Touching-length technique: <b>the touching segment from P has length d(P, T) = √(d² − r²).</b> Line-meets-circle says the touching line is perpendicular to the radius OT. So right-triangle gives d² = r² + d(P, T)². Same-product says the same thing: the meeting equation has one root, so s₁ = s₂ and s₁² = d² − r².</p>
+  <p data-pid="cc0ffe">How many touching lines are there, and where do they touch? Two-touching-lines technique: <b>from a point P outside a circle, exactly two lines touch the circle, and they touch it where it meets the circle with diameter OP.</b> Put O at (0, 0) and P = (p₁, p₂). Then both touching points lie on the line p₁x + p₂y = r², and the line touching at T = (t₁, t₂) is t₁x + t₂y = r².</p>
+  <pre class="lines" data-k="ember" data-label="this step: the two-touching-lines technique">
+\text{the line through } P, T \text{ touches at } T \iff T \text{ on the circle},\ (T - O)\cdot(T - P) = 0 @@ line-meets-circle one way; the other way, T is then the foot from O (nearest-point), at distance r
+\begin{aligned}&\iff T \text{ on the circle and}\\ &\quad\text{on the circle with diameter } OP\end{aligned} @@ diameter, with A = O and B = P
+M = \tfrac{O + P}{2}:\ \ d(O, M) = \tfrac d2 \text{ and } \big|r - \tfrac d2\big| \lt \tfrac d2 \lt r + \tfrac d2 @@ part-of-the-way; the left inequality is true since 0 &lt; r &lt; d
+\text{the two circles meet at exactly two points} @@ two-circles-meet
+|X|^2 = r^2 \text{ and } |X|^2 - P \cdot X = 0 \Rightarrow P \cdot X = r^2 @@ O = (0, 0): the second circle is diameter's equation expanded; subtract
+\htmlClass{new}{\text{the line touching at } T \text{ is } T \cdot X = r^2} \quad \blacksquare @@ two-descriptions-agree: its normal is T − O, and T · T = r² puts T on it
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: worked">
+x^2 + y^2 = 25,\ \ P = (7, 1):\ \ d(P, T) = \sqrt{50 - 25} = 5 @@ touching-length
+7x + y = 25 \text{ and } x^2 + y^2 = 25:\ \ x^2 - 7x + 12 = 0 @@ two-touching-lines: T = (3, 4) and (4, −3)
+3x + 4y = 25,\ \ 4x - 3y = 25 @@ the touching lines; both pass through P = (7, 1)
+\text{the line through } O, P:\ \ d(P, A)\,d(P, B) = (\sqrt{50} - 5)(\sqrt{50} + 5) = 25 @@ same-product: d(P, T)² again
+  </pre>
+  <p data-pid="d4c379">The sea's edge is a touching line. Treat the Earth as a ball of radius R, about 6371 km. Cut it through its centre and your eye, a height h above the sea. The cut is a circle, your eye is a point at distance d = R + h from its centre, and your line of sight to the sea's edge touches the circle. By touching-length, the sea's edge is √((R + h)² − R²) = √(2Rh + h²) away, if light went straight. From the top of Mount Diablo, 1173 m up, that is about 122 km.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · one product · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · one product through a point, and the ends of an orbit</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="lbl">x² + y² = 25, a point P, and a line through P</div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">Px</span><input type="range" id="kx" min="-9" max="9" step="0.1" value="7"><output id="ox"></output></div>
+      <div class="kn"><span class="m">Py</span><input type="range" id="ky" min="-9" max="9" step="0.1" value="1"><output id="oy"></output></div>
+      <div class="kn"><span class="m">slope</span><input type="range" id="km" min="-4" max="4" step="0.05" value="0.3"><output id="om"></output></div>
+      <div class="cap">Ink: the circle. Ember: the line through P, meeting it at A and B. Dashed plum: the circle with diameter OP. Teal: the two touching lines, when P is outside.</div>
+    </div>
+    <div class="panel">
+      <div class="lbl">an ellipse with α = 5, a focus F, and a point P on it</div>
+      <canvas id="cvL"></canvas>
+      <div class="kn"><span class="m">e</span><input type="range" id="ke" min="0" max="0.95" step="0.01" value="0.6"><output id="oe"></output></div>
+      <div class="kn"><span class="m">x</span><input type="range" id="kp" min="-5" max="5" step="0.05" value="1"><output id="op"></output></div>
+      <div class="cap">Plum: the ellipse. Ember: the segment from P to the focus F = (c, 0). Teal: the nearest and farthest points, at α(1 − e) and α(1 + e).</div>
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18h2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">x² + y² = 25,  P = (13, 0)</span></span>Guess from a sketch whether the touching length from P is more or less than 13. <br>Find it by touching-length.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18h3">
+  <h2 class="sthead"><span class="stno">18h3</span>Sorting an equation of the second degree</h2>
+  <p class="stands">Stands on 18h2, 18e (the conics) and 8i (completing the square).</p>
+  <p data-pid="3e612d">Take Ax² + Cy² + Dx + Ey + F = 0, with A and C not both 0. Sorting technique: <b>complete both squares, and the signs of A and C say which conic the equation is.</b> Write h = −D/(2A) when A ≠ 0, k = −E/(2C) when C ≠ 0, and K = Ah² + Ck² − F.</p>
+  <p data-pid="c134c3">A and C of one sign. Then A(x − h)² + C(y − k)² = K. If K has their sign too, it is an ellipse with centre (h, k), and a circle when A = C. If K = 0, it is the one point (h, k). Otherwise it holds no point.</p>
+  <p data-pid="b550d9">A and C of opposite signs. If K ≠ 0, it is a hyperbola with centre (h, k). If K = 0, it is two lines crossing at (h, k).</p>
+  <p data-pid="3d8427">C = 0 and E ≠ 0. Then y is a quadratic in x, and its graph is a parabola (18e). If E = 0 too, there is no y in it, and it is two upright lines, one, or none. With A = 0, exchange x and y.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the sorting technique">
+A(x - h)^2 + C(y - k)^2 = K @@ completing the square twice (8i); the constants Ah² + Ck² cross to the right
+A\cdot C \gt 0,\ \tfrac{K}{A} \gt 0:\ \ \tfrac{(x - h)^2}{K/A} + \tfrac{(y - k)^2}{K/C} = 1 @@ divide by K; ellipse, moved by (h, k): moving keeps distances (parabola's last line)
+A\cdot C \lt 0,\ K \ne 0:\ \ \text{one denominator is below } 0 @@ hyperbola, moved; it opens along the axis whose denominator is above 0
+A\cdot C \lt 0,\ K = 0:\ \ \sqrt{|A|}\,(x - h) = \pm\sqrt{|C|}\,(y - k) @@ the difference of squares: two lines
+\htmlClass{new}{C = 0,\ E \ne 0:\ \ y = -\tfrac{A}{E}x^2 - \tfrac{D}{E}x - \tfrac{F}{E}} \quad \blacksquare @@ parabola: every quadratic's graph; exchanging x and y keeps distances (18e), so the larger denominator, or the other letter, can take x's place
+  </pre>
+  <p data-pid="00742c">The cases that are a point, lines or nothing have the accepted name degenerate conics. Equations with an xy term are conics too, tilted; they are not sorted here.</p>
+  <pre class="lines" data-k="ember" data-label="this step: worked">
+4x^2 + 9y^2 - 16x + 54y + 61 = 0:\ \ 4(x - 2)^2 + 9(y + 3)^2 = 36 @@ sorting: an ellipse, a = 3, b = 2, c = √5; foci (2 ± √5, −3), e = √5/3
+x^2 - 4y^2 + 4x + 8y - 4 = 0:\ \ \tfrac{(x + 2)^2}{4} - (y - 1)^2 = 1 @@ a hyperbola, a = 2, b = 1, c = √5; foci (−2 ± √5, 1); asymptotes y − 1 = ±(x + 2)/2
+y^2 - 8x - 6y + 25 = 0:\ \ (y - 3)^2 = 8(x - 2) @@ a parabola opening along x: 4p = 8; vertex (2, 3), focus (4, 3), directrix x = 0
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · sorting · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18h3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="2x^2 + 2y^2 - 8x + 12y - 6 = 0"></span></span>Find the set, with its centre and radius if it is a circle.</li><li><span class="givens"><span data-tex-inline="A = (1, 7),"></span> <span data-tex-inline="B = (8, 6),"></span> <span data-tex-inline="C = (1, -1)"></span></span>Find the circle through A, B and C.</li><li><span class="givens"><span data-tex-inline="P = (5, 10),"></span> <span data-tex-inline="(x - 4)^2 + (y - 3)^2 = 25"></span></span>Find the touching length from P to the circle, the two touching points, and the two touching lines.</li><li><span class="givens"><span data-tex-inline="9x^2 + 4y^2 - 36x + 8y + 4 = 0"></span></span>Sort it, and find its centre, its foci and its eccentricity.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18h4">
+  <h2 class="sthead"><span class="stno">18h4</span>Touching a conic: the double root</h2>
+  <p class="stands">Stands on 18h3 and 8i (the discriminant).</p>
+  <p data-pid="ac41a7">For a circle, a touching line is one that meets it once. For a parabola that fails: the line x = 2 meets x² = 4y once, at (2, 1), and crosses it there. So for conics the hand method looks at the meeting equation instead. From here on, a line touches a conic at P when substituting the line into the conic leaves an equation of the second degree with a double root at P. For a circle this is the old meaning. There the meeting equation is s² + 2βs + γ = 0, always of the second degree, and it has one root exactly when the line meets once.</p>
+  <p data-pid="63c66f">Double-root technique: <b>to find the lines of slope m that touch a conic, substitute y = mx + q and set the discriminant to 0.</b> If the equation left has no x² term, the line meets at most once and touches nowhere.</p>
+  <pre class="lines" data-k="ember" data-label="this step: worked">
+x^2 = 4y,\ \text{the line through } (2, 1):\ \ x^2 - 4mx - 4(1 - 2m) = 0 @@ q = 1 − 2m; discriminant 16m² − 32m + 16 = 16(m − 1)²
+m = 1:\ \ y = x - 1 @@ double-root: x² − 4x + 4 = (x − 2)²
+\tfrac{x^2}{25} + \tfrac{y^2}{9} = 1:\ \ (9 + 25m^2)x^2 + 50mqx + 25q^2 - 225 = 0 @@ discriminant 0 ⟺ q² = 25m² + 9; slope 1: y = x ± √34
+\tfrac{x^2}{16} - \tfrac{y^2}{9} = 1:\ \ (9 - 16m^2)x^2 - 32mqx - 16q^2 - 144 = 0 @@ discriminant 0 ⟺ q² = 16m² − 9; slope 1: y = x ± √7; slopes ±¾ (the asymptotes' slopes) leave no x² term, and touch nowhere
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · double root · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18h4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">x² = 4y,  lines of slope 1</span></span>Put y = x + q, and find the q that gives a double root. <br>Find the touching point.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18h5">
+  <h2 class="sthead"><span class="stno">18h5</span>Nearest and farthest from a focus</h2>
+  <p class="stands">Stands on 18h4 and 18e (ellipse).</p>
+  <p data-pid="bcd726">Take the ellipse x²/α² + y²/b² = 1 with α &gt; c &gt; 0, focus F₂ = (c, 0), and e = c/α. Orbit-ends technique: <b>on an ellipse, the distance to a focus is least, α(1 − e), at the near end of the long axis, and greatest, α(1 + e), at the far end.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the orbit-ends technique">
+d(P, F_2) = a - \tfrac ca x = a - ex @@ ellipse, the converse's lines
+-a \le x \le a @@ ellipse: y²/b² ≥ 0
+a - ea \le a - ex \le a + ea @@ order-and-arithmetic-agree: times e &gt; 0 keeps the order; negative-reverses-order for the minus
+\htmlClass{new}{\text{least at } x = a,\ \text{greatest at } x = -a} \quad \blacksquare @@ (a, 0) and (−a, 0) are on the ellipse, and only they reach the ends
+  </pre>
+  <p data-pid="2727aa">Run backwards: if the least distance is q and the greatest is Q, then α = (q + Q)/2 and e = (Q − q)/(Q + q). A measured law (Kepler's first, 1609) says that each planet moves on an ellipse with the sun at one focus. Its range is the planets and the comets that return; its regular exceptions are small, such as Mercury's ellipse slowly turning about the sun, explained only in 1915.</p>
+  <pre class="lines" data-k="ember" data-label="this step: worked">
+\text{Earth: } a \approx 149.6 \text{ million km},\ e \approx 0.0167 @@ orbit-ends: nearest about 147.1, farthest about 152.1 million km; nearest in early January
+\text{a comet at } 0.59 \text{ and } 35.1 \text{ times Earth's } a @@ run backwards: a ≈ 17.8, e ≈ 0.967 (Halley's)
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · orbit ends · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18h5.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="F_1 = (-1, 2),"></span> <span data-tex-inline="F_2 = (5, 2),"></span> <span data-tex-inline="\text{through } (2, 6)"></span></span>Find the ellipse's equation.</li><li><span class="givens"><span data-tex-inline="x^2 + y^2 = 25,"></span> <span data-tex-inline="\text{touching length from } P = 12,"></span> <span data-tex-inline="\text{P on } x + y = 17"></span></span>Find P.</li><li><span class="givens"><span data-tex-inline="\text{nearest } 0.586,"></span> <span data-tex-inline="\text{farthest } 35.1,"></span> <span data-tex-inline="\text{in Earth's } \alpha;\ \text{sun at a focus}"></span></span>Find the comet's α and its eccentricity.</li><li><span class="givens"><span data-tex-inline="P = (1, 2),"></span> <span data-tex-inline="x^2 + y^2 = 30,"></span> <span data-tex-inline="\text{a line through } P"></span> <span data-tex-inline="\text{meets it at } A, B,"></span> <span data-tex-inline="d(P, A) = 4"></span></span>Find the distance from P to B.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18h6">
+  <h2 class="sthead"><span class="stno">18h6</span>Illegal moves</h2>
+  <p class="stands">Stands on 18h1 to 18h5.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+x^2 + y^2 - 4x + 6y + 20 = 0 \text{ has radius } \sqrt{20}\,? @@ circle-equation: (x − 2)² + (y + 3)² = −7, no point at all
+d(P, T) = d - r\,? @@ d − r is the way to the nearest point of the circle; touching-length gives √(d² − r²), which is longer
+x = 2 \text{ meets } x^2 = 4y \text{ once, so it touches}\,? @@ substituting leaves y = 1, of the first degree: it crosses (double-root)
+\tfrac{x^2}{9} - \tfrac{y^2}{16} = -1 \text{ opens left and right}\,? @@ it is y²/16 − x²/9 = 1: the branches open up and down
+  </pre>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18h6.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="x^2 - 4y^2 - 2x - 8y - 3 = 0"></span></span>Sort it.</li><li><span class="givens"><span data-tex-inline="\text{circle: centre } O, \text{ radius } r,"></span> <span data-tex-inline="\text{P on the circle}"></span></span>Run same-product and touching-length at P, and find every line through P that meets the circle once.</li><li><span class="givens"><span data-tex-inline="x^2 - y^2 = 1"></span></span>Find every line that meets it exactly once. <br>Find which of them touch it.</li><li><span class="givens"><span data-tex-inline="\text{nearest distance } q \text{ fixed,}"></span> <span data-tex-inline="e \to 1"></span></span>Find what happens to α and to the farthest distance. <br>Find what the path heads towards.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">18h.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="Ax^2 + Cy^2 + Dx + Ey + F = 0,"></span> <span data-tex-inline="AC &lt; 0"></span></span>Choose your own coefficients, with both squares to complete, and sort the equation. <br>If it is a conic, choose a slope m, and find every line of slope m that touches it. <br>Find every line that meets it exactly once without touching.</div>
+  <div class="chq"><span class="chid">18h.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="r &gt; 0,"></span> <span data-tex-inline="P = (p_1, p_2) \ne (0, 0),"></span> <span data-tex-inline="\ell(P):\ p_1x + p_2y = r^2"></span></span>Prove that Q is on the line of P exactly when P is on the line of Q. <br>Find where the line of P lies when P is inside the circle of radius r about the origin.</div>
+  <div class="chq"><span class="chid">18h.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{lines } AB \text{ and } CD \text{ cross at } P,"></span> <span data-tex-inline="\text{P outside both segments,}"></span> <span data-tex-inline="\text{A, B, C, D not all on one line,}"></span> <span data-tex-inline="d(P, A)\, d(P, B)"></span> <span data-tex-inline="= d(P, C)\, d(P, D)"></span></span>Find whether A, B, C and D must lie on one circle.</div>
+  <div class="chq"><span class="chid">18h.4.4</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{eye } 2 \text{ m above the sea}"></span> <span data-tex-inline="\text{at Monterey,}"></span> <span data-tex-inline="\text{Earth a ball of radius } 6371 \text{ km,}"></span> <span data-tex-inline="\text{light straight}"></span></span>Find how far away the sea's edge is. <br>Find how high you must climb to see twice as far.</div>
+  <div class="chq"><span class="chid">18h.4.5</span><span class="tagq">seam</span>For fourteen centuries astronomers built each planet's path from circles riding on circles, and the paths matched the sky. <br>Then a measurer's tables put Mars 8 sixtieths of a degree, about a quarter of the moon's width, from where the best circles said. One astronomer threw the circles out for an ellipse with the sun at a focus. His most famous colleague never accepted it. Enough circles riding on circles can follow almost any closed path. <br>Was the ellipse found in the sky, or chosen?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r18g.html">← 18g · lines in coordinates</a><a href="r18i.html">18i · curves traced in time →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>Euclid has same-product in Book III, propositions 35 and 36 (about 300 BCE): for two chords crossing inside a circle, and for a cutting line and a touching line from outside. Jakob Steiner named d² − r² the power of the point in 1826. Apollonius of Perga, around 200 BCE, found the touching lines of every conic in his Conics. René Descartes, in La Géométrie (1637), found the line at right angles to a curve by asking when a circle meets the curve in a double root; double-root is the same idea with a line.</p>
+  <p>In 18h.4.5, the circles riding on circles are Ptolemy's (about the year 150), kept by Nicolaus Copernicus in 1543 with the sun at the middle. The measurer is Tycho Brahe, the astronomer is Johannes Kepler (Astronomia nova, 1609), and the colleague who never accepted ellipses is Galileo Galilei. Isaac Newton, in 1687, derived the ellipse from a force falling off as the square of the distance.</p>
+  <p>Accepted names: same-product is the intersecting chords theorem inside and the secant theorem outside, and touching-length the tangent–secant theorem. The nearest and farthest points of an orbit about the sun are its perihelion and aphelion. The measured law that each planet moves on an ellipse with the sun at one focus is Kepler's first law.</p>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+/* least and greatest of F.f on [lo, hi]: the ends, F's critical points inside, and a fine sample (exact between critical points for the functions used here) */
+function ext(F,lo,hi){ if(F.dir) return [0,1]; let m=Infinity,M=-Infinity; const t=x=>{ const v=F.f(x); if(v<m) m=v; if(v>M) M=v; };
+  t(lo); t(hi); (F.crit||[]).forEach(c=>{ if(c>lo&&c<hi) t(c); }); for(let k=1;k<64;k++) t(lo+(hi-lo)*k/64); return [m,M]; }
+function sums(F,pts){ let L=0,U=0; const ms=[],Ms=[]; for(let i=1;i<pts.length;i++){ const [m,M]=ext(F,pts[i-1],pts[i]), w=pts[i]-pts[i-1]; ms.push(m); Ms.push(M); L+=m*w; U+=M*w; } return {L,U,ms,Ms}; }
+const eq=(a,b,n)=>Array.from({length:n+1},(_,i)=>a+(b-a)*i/n);
+function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
+function boxes(P,pts,hs,stroke,fill,alpha){ const c=P.ctx; for(let i=1;i<pts.length;i++){ const a=pts[i-1],b=pts[i],h=hs[i-1]; c.globalAlpha=alpha; P.poly([[a,0],[b,0],[b,h],[a,h]],null,fill); c.globalAlpha=1; P.poly([[a,0],[b,0],[b,h],[a,h]],stroke,null,1.2); } }
+function dirDots(P,a,b){ const c=P.ctx; c.fillStyle=col('--ink'); for(let k=0;k<=300;k++){ const x=a+(b-a)*k/300; const y=(k%2)?0:1; c.fillRect(P.X(x)-1,P.Y(y)-1,2,2); } }
+/* shade between the graph of fn and the axis from lo to hi: above in pos colour, below in neg colour */
+function shade(P,fn,lo,hi,pos,neg,alpha){ if(hi<lo){ const t=lo; lo=hi; hi=t; } const c=P.ctx, N=300; c.globalAlpha=alpha==null?0.32:alpha;
+  for(let k=0;k<N;k++){ const x0=lo+(hi-lo)*k/N, x1=lo+(hi-lo)*(k+1)/N, xm=(x0+x1)/2, y=fn(xm); if(!isFinite(y)) continue; P.poly([[x0,0],[x1,0],[x1,fn(x1)],[x0,fn(x0)]],null,y>=0?pos:neg); }
+  c.globalAlpha=1; }
+function rangeOf(fn,lo,hi,pad){ let m=Infinity,M=-Infinity; for(let k=0;k<=400;k++){ const v=fn(lo+(hi-lo)*k/400); if(isFinite(v)){ if(v<m) m=v; if(v>M) M=v; } } if(m>0) m=0; if(M<0) M=0; const p=(M-m)*(pad==null?0.12:pad)||1; return [m-p,M+p]; }
+function chips(el,FN,get,setk,after){ Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===get()) b.className='on'; b.onclick=()=>{ setk(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+const Nw='\\htmlClass{new}';
+function gridFor(sp){ return sp>40?10:sp>16?4:sp>8?2:sp>3?1:sp>1.2?0.5:0.25; }
+function frame2(P,fn,lo,hi,pad){ const w=hi-lo; P.o.x=[lo-0.12*w,hi+0.08*w]; P.o.y=rangeOf(fn,lo,hi,pad==null?0.12:pad); const sx=P.o.x[1]-P.o.x[0], sy=P.o.y[1]-P.o.y[0]; let g=gridFor(sx); while(sy/g>24) g*=2; P.o.grid=g; }
+const num=(f,a,b,n)=>{ n=n||4000; const h=(b-a)/n; let s=0; for(let i=0;i<n;i++) s+=f(a+(i+0.5)*h)*h; return s; };
+/* axes with separate steps across and up */
+function axes2(P,gx,gy){ const c=P.ctx,o=P.o; c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ c.moveTo(P.X(x),P.Y(o.y[0])); c.lineTo(P.X(x),P.Y(o.y[1])); }
+  for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ c.moveTo(P.X(o.x[0]),P.Y(y)); c.lineTo(P.X(o.x[1]),P.Y(y)); } c.stroke();
+  c.strokeStyle=col('--muted'); c.lineWidth=1.3; c.beginPath(); if(o.y[0]<=0&&o.y[1]>=0){ c.moveTo(P.X(o.x[0]),P.Y(0)); c.lineTo(P.X(o.x[1]),P.Y(0)); } if(o.x[0]<=0&&o.x[1]>=0){ c.moveTo(P.X(0),P.Y(o.y[0])); c.lineTo(P.X(0),P.Y(o.y[1])); } c.stroke();
+  c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; const ly=Math.min(P.H-6,Math.max(12,P.Y(0)+14));
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ if(Math.abs(x)<1e-9) continue; c.fillText(+x.toFixed(6),P.X(x),ly); }
+  c.textAlign='right'; const lx=Math.max(32,Math.min(P.W-4,P.X(0)-5)); for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ if(Math.abs(y)<1e-9) continue; c.fillText(String(+y.toFixed(6)).replace('-','−'),lx,P.Y(y)+4); } }
+function nice(sp){ const raw=sp/6, p=Math.pow(10,Math.floor(Math.log10(raw))), m=raw/p; return (m<1.5?1:m<3.5?2:m<7.5?5:10)*p; }
+function arrow(P,x1,y1,x2,y2,colr,w){ P.line(x1,y1,x2,y2,colr,w||2.2); const c=P.ctx, X1=P.X(x1),Y1=P.Y(y1),X2=P.X(x2),Y2=P.Y(y2), L=Math.hypot(X2-X1,Y2-Y1); if(L<2) return; const ux=(X2-X1)/L, uy=(Y2-Y1)/L, h=9; c.fillStyle=col(colr); c.beginPath(); c.moveTo(X2,Y2); c.lineTo(X2-h*ux-0.5*h*uy,Y2-h*uy+0.5*h*ux); c.lineTo(X2-h*ux+0.5*h*uy,Y2-h*uy-0.5*h*ux); c.closePath(); c.fill(); }
+function fillA(P,pts,colr,alpha){ const c=P.ctx; c.globalAlpha=alpha==null?0.2:alpha; P.poly(pts,null,colr); c.globalAlpha=1; }
+const sq1=P=>Object.defineProperty(P.o,'aspect',{get:()=>1});
+function rightMark(P,qx,qy,ax,ay,bx,by,s,colr){ const la=Math.hypot(ax-qx,ay-qy), lb=Math.hypot(bx-qx,by-qy); if(!la||!lb) return; const u=[(ax-qx)/la*s,(ay-qy)/la*s], v=[(bx-qx)/lb*s,(by-qy)/lb*s]; P.poly([[qx+u[0],qy+u[1]],[qx+u[0]+v[0],qy+u[1]+v[1]],[qx+v[0],qy+v[1]]],colr||'--muted',null,1.2,false); }
+const dist=(a,b)=>Math.hypot(b[0]-a[0],b[1]-a[1]);
+const dotp=(u,v)=>u[0]*v[0]+u[1]*v[1];
+function clipBox(P,fn){ const c=P.ctx, [x0,x1]=P.o.x,[y0,y1]=P.o.y; c.save(); c.beginPath(); c.rect(P.X(x0),P.Y(y1),P.X(x1)-P.X(x0),P.Y(y0)-P.Y(y1)); c.clip(); fn(); c.restore(); }
+function lineABC(P,a,b,c,colr,w,dash){ const [x0,x1]=P.o.x,[y0,y1]=P.o.y; clipBox(P,()=>{ if(Math.abs(b)>1e-12){ P.line(x0,(c-a*x0)/b,x1,(c-a*x1)/b,colr,w,dash); } else if(Math.abs(a)>1e-12){ P.line(c/a,y0,c/a,y1,colr,w,dash); } }); }
+const kx=$('kx'),ky=$('ky'),km=$('km'),ke=$('ke'),kp=$('kp'),cvF=$('cvF'),cvL=$('cvL');
+const PF=plane(cvF,{x:[-10,10],y:[-10,10],grid:1,aspect:1,draw:P=>drawF(P)}); sq1(PF);
+const PL=plane(cvL,{x:[-10,8],y:[-7,7],grid:1,aspect:1,draw:P=>drawL(P)}); sq1(PL);
+const R0=5, AE=5;
+function circ(P,cx,cy,r,colr,w,dash){ const pts=[]; for(let i=0;i<=240;i++){ const t=i/240*2*Math.PI; pts.push([cx+r*Math.cos(t),cy+r*Math.sin(t)]); } P.ctx.setLineDash(dash||[]); P.poly(pts,colr,null,w||2,false); P.ctx.setLineDash([]); }
+function meetF(p,m){ const L=Math.hypot(1,m), e=[1/L,m/L], b=dotp(p,e), g=dotp(p,p)-R0*R0, D=b*b-g; if(D<=1e-12) return {e,b,g,s:null}; const r=Math.sqrt(D); return {e,b,g,s:[-b-r,-b+r]}; }
+function touchPts(p){ const d2=dotp(p,p); if(d2<=R0*R0+1e-9) return null; const d=Math.sqrt(d2), f=R0*R0/d2, h=R0*Math.sqrt(d2-R0*R0)/d2; return [[f*p[0]-h*p[1],f*p[1]+h*p[0]],[f*p[0]+h*p[1],f*p[1]-h*p[0]]]; }
+function drawF(P){ const p=[+kx.value,+ky.value], m=+km.value; axes2(P,1,1); circ(P,0,0,R0,'--ink',2.4);
+  circ(P,p[0]/2,p[1]/2,Math.hypot(p[0],p[1])/2,'--plum',1.3,[5,4]);
+  const T=touchPts(p); if(T){ clipBox(P,()=>T.forEach(t=>{ lineABC(P,t[0],t[1],R0*R0,'--teal',1.6); })); T.forEach(t=>{ P.dot(t[0],t[1],'--teal',4.5); }); }
+  clipBox(P,()=>lineABC(P,-m,1,p[1]-m*p[0],'--ember',1.8));
+  const q=meetF(p,m); if(q.s){ q.s.forEach((s,i)=>{ const X=[p[0]+s*q.e[0],p[1]+s*q.e[1]]; P.dot(X[0],X[1],'--ember',5); P.text(i?'B':'A',X[0]+0.5,X[1]+0.6,'--ember','center',12); }); }
+  P.dot(0,0,'--ink',4); P.text('O',-0.6,-0.7,'--ink','center',12); P.dot(p[0],p[1],'--ink',5); P.text('P',p[0]+0.5,p[1]+0.6,'--ink','center',12); }
+function ell(e){ const c=AE*e, b=Math.sqrt(AE*AE-c*c); return {c,b}; }
+function drawL(P){ const e=+ke.value, x=+kp.value, {c,b}=ell(e); axes2(P,1,1);
+  const pts=[]; for(let i=0;i<=240;i++){ const t=i/240*2*Math.PI; pts.push([AE*Math.cos(t),b*Math.sin(t)]); } P.poly(pts,'--plum',null,2.4,false);
+  const y=b*Math.sqrt(Math.max(0,1-x*x/(AE*AE))); P.line(c,0,x,y,'--ember',2.2);
+  P.dot(c,0,'--ink',5); P.text('F',c,-0.8,'--ink','center',12); P.dot(-c,0,'--muted',4);
+  P.dot(AE,0,'--teal',5); P.dot(-AE,0,'--teal',5); P.line(c,0,AE,0,'--teal',2.6); P.line(c,0,-AE,0,'--teal',1.2,[4,4]);
+  P.dot(x,y,'--plum',5.5); P.text('P',x+0.4,y+0.6,'--plum','center',12); }
+function read(){ const p=[+kx.value,+ky.value], m=+km.value, e=+ke.value, x=+kp.value, {c,b}=ell(e);
+  $('ox').textContent=mm(p[0],1); $('oy').textContent=mm(p[1],1); $('om').textContent=mm(m,2); $('oe').textContent=mm(e,2); $('op').textContent=mm(x,2);
+  const q=meetF(p,m), pw=q.g; let L;
+  if(q.s){ const a=Math.abs(q.s[0]), bb=Math.abs(q.s[1]); L='Left: PA · PB = '+mm(a,3)+' × '+mm(bb,3)+' = '+mm(a*bb,3)+', and |d² − r²| = '+mm(Math.abs(pw),3)+'.'; }
+  else L='Left: this line misses the circle; turn it.';
+  if(pw>1e-9) L+=' P is outside: the touching length is √(d² − r²) = '+mm(Math.sqrt(pw),3)+'.'; else if(pw<-1e-9) L+=' P is inside: no line through P touches.'; else L+=' P is on the circle.';
+  const y=b*Math.sqrt(Math.max(0,1-x*x/(AE*AE))), dF=Math.hypot(x-c,y);
+  const vd=$('vdF'); vd.className='verdict'; vd.textContent=L+' Right: d(P, F) = '+mm(dF,3)+' = α − ex; it runs from '+mm(AE*(1-e),3)+' to '+mm(AE*(1+e),3)+'.';
+  tex($('eqF'),R`d(P, F) = 5 - ${mm(e,2)}\cdot(${mm(x,2)}) = ${mm(AE-e*x,3)}`,true); }
+function all(){ PF.redraw(); PL.redraw(); read(); }
+[kx,ky,km,ke,kp].forEach(el=>el.addEventListener('input',all));
+window.__pic={set:(px,py,m,e,x)=>{ kx.value=px; ky.value=py; km.value=m; ke.value=e; kp.value=x; all(); const q=meetF([px,py],m), {c,b}=ell(e), y=b*Math.sqrt(Math.max(0,1-x*x/25));
+  return {prod:q.s?+(Math.abs(q.s[0]*q.s[1])).toFixed(4):null,pow:+q.g.toFixed(4),T:touchPts([px,py]),dF:+Math.hypot(x-c,y).toFixed(4)}; }};
+all();
+stepper('#sl1',[
+  {k:'ember',kl:'diameter',t:R`${Nw}{(X - A)\cdot(X - B) = |X - M|^2 - |w|^2}`,n:`On the circle exactly when it is 0.`}
+],{title:'The slides · a circle from what you know · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'same-product',t:R`${Nw}{d(P, A)\,d(P, B) = |d^2 - r^2|}`,n:`The product of the roots of s² + 2βs + γ is γ.`},
+  {k:'ember',kl:'touching-length',t:R`${Nw}{d(P, T) = \sqrt{d^2 - r^2}}`,n:`A double root; or right-triangle at T.`},
+  {k:'ember',kl:'two-touching-lines',t:R`${Nw}{P \cdot X = r^2;\ \ T \cdot X = r^2}`,n:`The touching points are on the circle with diameter OP.`},
+  {k:'ember',kl:'worked',t:R`P = (7, 1):\ \ T = (3, 4),\ (4, -3)`,n:`3x + 4y = 25 and 4x − 3y = 25.`},
+  {k:'ember',kl:'the sea’s edge',t:R`\sqrt{2Rh + h^2}`,n:`About 122 km from 1173 m up.`}
+],{title:'The slides · one product · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'sorting',t:R`${Nw}{A(x - h)^2 + C(y - k)^2 = K}`,n:`One sign: ellipse. Opposite: hyperbola. One 0: parabola.`},
+  {k:'ember',kl:'worked, sorted',t:R`4(x - 2)^2 + 9(y + 3)^2 = 36`,n:`α = 3, b = 2, foci (2 ± √5, −3).`}
+],{title:'The slides · sorting · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'double-root',t:R`${Nw}{q^2 = a^2m^2 + b^2}`,n:`The touching lines of an ellipse, slope m.`}
+],{title:'The slides · double root · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'orbit-ends',t:R`${Nw}{a(1 - e) \le d(P, F) \le a(1 + e)}`,n:`Earth: 147.1 to 152.1 million km.`}
+],{title:'The slides · orbit ends · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'illegal',t:R`d(P, T) = d - r\,?`,n:`That is the nearest point, not the touching length.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

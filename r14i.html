@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="ladder-cert" content="rung"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>14i · When top and bottom both vanish, and growth races</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:3.5em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r14h.html">← 14h optimising</a><a href="r14stat.html">next: 14·stat which guess makes the data most likely? →</a></p>
+  <div class="tags"><span class="tag tech">14i · technique</span></div>
+  <h1>When top and bottom both vanish, and growth races</h1>
+  <p>10f found limits of fractions whose top and bottom both head to 0 by factoring, or by multiplying by a partner. It asked whether such a limit needs a rule of its own. Take an input where both top and bottom are 0. Near it, 13k’s linearizations say each is about its slope times the step away. So the fraction should be about the ratio of the two slopes. The “about” needs a technique. 14c's average-slope, run on two functions at once, gives the fraction exactly as a ratio of slopes, at one input in between, with nothing left over. Then the limit of the fraction is the limit of the ratio of slopes, when that exists. The same idea compares how fast two functions grow far out.</p>
+  <p class="gesture">Run level-ends on a mix of the two functions built to have equal ends. It gives an input where the ratio of the two changes equals the ratio of the two slopes. When both functions start at 0, the fraction is a ratio of slopes at some input in between, and that input is dragged along as the step shrinks.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r14b.html">14b</a> (level-ends), <a href="r14c.html">14c</a> (average-slope), <a href="r13k.html">13k</a> (linearization), <a href="r13e.html">13e</a> (chain for slopes), <a href="r10f.html">10f</a> (limits far out, swap-to-one-over-x, rational-functions-far-out), <a href="r10e.html">10e</a> (one-sided limits, two-sides-agree), <a href="r10a.html">10a</a> (the limit's line), <a href="r04f.html">4f</a> (plus-zero), <a href="r04b.html">4b</a> (induction). Rung 17's races between powers and the growing functions it builds are run with this step's rule.</p></div>
+</header>
+
+<section class="class step" data-step="14i1">
+  <h2 class="sthead"><span class="stno">14i1</span>Two functions at once</h2>
+  <p class="stands">Stands on 14c (average-slope) and 14b (level-ends).</p>
+  <p data-pid="cd048e">Two-function average-slope technique (Cauchy's): <b>let f and g be continuous on [α, β] with slopes at every input of (α, β), and let g′ be 0 at no input of (α, β). Then g(β) ≠ g(α), and for some c with α &lt; c &lt; β,</b></p>
+  <p class="eqline" data-pid="ffab8c">(f(β) − f(α))/(g(β) − g(α)) = f′(c)/g′(c).</p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the two-function average-slope technique">
+g(b) \ne g(a) @@ level-ends (14b) refuted: equal ends would give g′ = 0 inside
+h(x) = f(x)\,(g(b) - g(a)) - g(x)\,(f(b) - f(a)) @@ the helper
+h(a) = f(a)g(b) - g(a)f(b) = h(b) @@ multiply out both; the cross terms cancel
+\text{call } c:\ h'(c) = f'(c)(g(b) - g(a)) - g'(c)(f(b) - f(a)) = 0 @@ <span class="hl-new">level-ends</span>: h is continuous with a slope inside (slopes-add, constant-factor for slopes)
+\htmlClass{new}{\tfrac{f(b) - f(a)}{g(b) - g(a)} = \tfrac{f'(c)}{g'(c)}} \quad \blacksquare @@ divide by g′(c)(g(b) − g(a)), neither 0
+  </pre>
+  <p data-pid="af2443">Its accepted name is the extended mean value theorem, from lectures of 1823. With g(x) = x it is average-slope. Read as a motion, let f and g be the two positions of a point moving in the plane. Then some instant has the ratio of the two velocities equal to the ratio of the two total changes.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · two functions · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · left: f/g and f′/g′ near α · right: the two functions and their linearizations</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="chips" id="fch"></div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">x − α</span><input type="range" id="kx" min="-1000" max="1000" step="1" value="500"><output id="ox"></output></div>
+      <div class="cap">Ink: f(x)/g(x), with a hole at α. Plum dashed: f′(x)/g′(x). Gold row: the limit L. Plum dot: two-function average-slope's c for the chosen x, where f′/g′ equals f/g at x.</div>
+      <div class="verdict" id="vdF"></div>
+    </div>
+    <div class="panel">
+      <div class="lbl">f and g, both through 0 at α</div>
+      <canvas id="cvS"></canvas>
+      <div class="cap">Plum: f; gold: g; dashed: their tangent lines at α. Near α each is close to its tangent line, so the ratio is close to the ratio of slopes.</div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">14i1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = x^2,  g(x) = x on [0, 2]</span></span>Find (f(2) − f(0))/(g(2) − g(0)). <br>Find the c with f′(c)/g′(c) equal to it.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="14i2">
+  <h2 class="sthead"><span class="stno">14i2</span>The rule</h2>
+  <p class="stands">Stands on 14i1, 10f (limits of fractions) and 10e (two-sides-agree).</p>
+  <p class="eqline" data-pid="b689bd">From here on, a limit of f(x)/g(x) as x → α, where f(x) → 0 and g(x) → 0, is said to have the form 0/0. Its accepted name is an indeterminate form: the form alone does not decide the limit. Here 0/0 is a name, of a kind of limit, not a division, which would name nothing.</p>
+  <p data-pid="b3c94b">Slope-ratio technique (L'Hôpital's rule): <b>let f and g have slopes at every input of a punctured neighbourhood of α, with g′ 0 at none of them. Let f(x) → 0 and g(x) → 0 as x → α. If f′(x)/g′(x) → L as x → α, then f(x)/g(x) → L.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the slope-ratio technique · from the right">
+F(\alpha) = 0,\ F = f \text{ elsewhere};\ \ G \text{ likewise} @@ fill the hole: F and G are continuous at α (10b's limit is the value)
+\text{given } \varepsilon \gt 0,\ \text{call } \delta:\ 0 \lt |t - \alpha| \lt \delta \Rightarrow \left|\tfrac{f'(t)}{g'(t)} - L\right| \lt \varepsilon @@ the hypothesis, read by 10a's line
+\alpha \lt x \lt \alpha + \delta:\ \ \tfrac{f(x)}{g(x)} = \tfrac{F(x) - F(\alpha)}{G(x) - G(\alpha)} = \tfrac{f'(c)}{g'(c)} @@ <span class="hl-new">two-function average-slope</span> on [α, x], with α &lt; c &lt; x
+0 \lt c - \alpha \lt \delta,\ \ \text{so } \left|\tfrac{f(x)}{g(x)} - L\right| \lt \varepsilon @@ c is dragged along with x: the same δ works
+\htmlClass{new}{\lim_{x \to \alpha^+} \tfrac{f(x)}{g(x)} = L} @@ the line of a one-sided limit (10e)
+  </pre>
+  <p data-pid="8f8809">From the left the same lines run on [x, α], and two-sides-agree (10e) joins the two sides. ∎ The version far out follows by swap-to-one-over-x (10f). Put x = 1/t. By chain for slopes, f(1/t) has slope −f′(1/t)/t², and likewise g, so the ratio of the two slopes is f′(1/t)/g′(1/t). Then slope-ratio at 0 from the right gives: if f, g → 0 as x → ∞ and f′/g′ → L, then f/g → L.</p>
+  <pre class="lines" data-k="teal" data-label="from 10f: a limit 10f factored, and one it could not">
+\lim_{x \to 2} \tfrac{x^3 - 8}{x - 2} = \lim \tfrac{3x^2}{1} = 12 @@ slope-ratio; 10f's factoring (x² + 2x + 4) agrees
+\lim_{x \to 0} \tfrac{\sqrt{1 + x} - 1}{x} = \lim \tfrac{1/(2\sqrt{1 + x})}{1} = \tfrac12 @@ slope-ratio; root-slope and chain for slopes for the top's slope
+\lim_{x \to 0} \tfrac{\sqrt{1 + x} - 1 - x/2}{x^2} @@ 0/0: 13k's linearization error over x²
+= \lim \tfrac{\frac12(1 + x)^{-1/2} - \frac12}{2x} @@ slope-ratio: still 0/0
+= \lim \tfrac{-\frac14(1 + x)^{-3/2}}{2} = \htmlClass{new}{-\tfrac18} @@ slope-ratio again: the error is about −x²/8
+  </pre>
+  <p data-pid="a723d1">The third limit says more than 14g did. 14g proved that √(1 + x) lies below its tangent line 1 + x/2. This says by how much, near 0: about x²/8, which is half of |f″(0)| = ¼ times x². That half is not an accident, and rung 22 says why.</p>
+  <p data-pid="fab2fc">The history 10f told is settled in one line. The rule was found by one man and sent in letters under a contract, and printed by another in 1696 with thanks in the preface. Its proof, the one above, came more than a century later, after the two-function average-slope. <b>A 0/0 limit does not need a rule of its own: it needs average-slope, twice over.</b></p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · slope-ratio · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14i2.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\lim_{x \to 1} \frac{x^5 - 1}{x^3 - 1}"></span></span>Find the limit by the rule, and check it by factoring.</li><li><span class="givens"><span data-tex-inline="\lim_{x \to 0} \frac{\sqrt{1 + 3x} - 1}{x}"></span></span>Find the limit.</li><li><span class="givens"><span data-tex-inline="\lim_{x \to 0} \frac{\sqrt{4 + x} - 2 - x/4}{x^2}"></span></span>Find the limit.</li><li><span class="givens"><span data-tex-inline="f(x) = x^3,\ g(x) = x^2,"></span> <span data-tex-inline="I = [1, 2]"></span></span>Find the c that two-function average-slope promises for f and g on I.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="14i3">
+  <h2 class="sthead"><span class="stno">14i3</span>Growth races</h2>
+  <p class="stands">Stands on 14i2 and 10f (one-over-x-far-out).</p>
+  <p class="eqline" data-pid="51be13">From here on, for f and g with positive values far out, g outgrows f when f(x)/g(x) → 0 as x → ∞. Then f is said to be negligible next to g far out; its accepted mark is f = o(g), read “f is little-o of g”. The whole mark f = o(g) is a statement with two gaps; o(g) names nothing on its own.</p>
+  <p data-pid="f6f3f7">Among powers the race is decided by the exponent. For fractions p &lt; q, x^p/x^q = 1/x^(q − p) → 0 (10f's one-over-x-far-out, with fraction-power for slopes's powers), so x^q outgrows x^p. A polynomial is outgrown by every power above its degree. A polynomial of degree n and one of degree m tie when n = m, in the sense that their ratio heads to the ratio of leading coefficients (rational-functions-far-out). <b>The rule earns its keep in races where algebra cannot rewrite the ratio.</b> Those begin when functions that are not built from powers join the field.</p>
+  <pre class="lines" data-k="ember" data-label="this step: a race far out, by the rule">
+\lim_{x \to \infty} x\left(\sqrt{x^2 + 1} - x\right) @@ a product of something growing and something shrinking
+= \lim_{x \to \infty} \tfrac{\sqrt{x^2 + 1} - x}{1/x} @@ 0/0 far out: √(x² + 1) − x = 1/(√(x² + 1) + x) → 0
+= \lim_{t \to 0^+} \tfrac{\sqrt{1 + t^2} - 1}{t^2} @@ swap-to-one-over-x: x = 1/t, and √(1/t² + 1) = √(1 + t²)/t for t &gt; 0
+= \lim \tfrac{t/\sqrt{1 + t^2}}{2t} = \htmlClass{new}{\tfrac12} @@ slope-ratio; chain for slopes for the top
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · races · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14i3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">x^2 and x^3 far out</span></span>Decide which outgrows the other. <br>Write the answer with little-o.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="14i4">
+  <h2 class="sthead"><span class="stno">14i4</span>Illegal moves</h2>
+  <p class="stands">Stands on 14i1 to 14i3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\lim_{x \to 0} \tfrac{x + 1}{x + 2} = \lim \tfrac11 = 1\,? @@ not 0/0: the limit is ½, by 10f's techniques
+\tfrac{f}{g} \to \left(\tfrac{f}{g}\right)'\,? @@ the rule takes f′/g′, not the slope of the quotient
+\tfrac{x^2 - 4}{(x - 2)^2}:\ \tfrac{2x}{2(x - 2)} \to \tfrac22\,? @@ the second fraction is no longer 0/0: it passes every bound on the right of 2
+f'/g' \text{ has no limit, so } f/g \text{ has none}\,? @@ the rule is silent then; another road may still find the limit
+0^0 \text{ form, so the limit is } 1\,? @@ x⁰ → 1 as x → 0⁺, and 0^x → 0: the form does not decide
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14i4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{Claim, by the rule:}"></span> <span data-tex-inline="\lim_{x \to 0} \frac{x + 1}{x + 2} = 1"></span></span>Find the limit, and the check the claim skipped.</li><li><span class="givens"><span data-tex-inline="\lim_{x \to 2} \frac{x^2 - 4}{(x - 2)^2}"></span></span>Apply the rule, checking the form at each step, and find what happens on each side of the input.</li><li><span class="givens"><span data-tex-inline="x &gt; 0;"></span> <span data-tex-inline="x^0 \text{ and } 0^x"></span></span>Find both, and what each heads to as x heads to zero from above.<br>Prove or refute: the form zero to the zero fixes a limit.</li><li><span class="givens"><span data-tex-inline="\lim_{x \to 1} \frac{x^3 - 3x + 2}{(x - 1)^2}"></span></span>Find the limit by the rule, and check it by factoring.<br>Find how many times you needed the rule, and where that count comes from in the factored top and bottom.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="14i5">
+  <h2 class="sthead"><span class="stno">14i5</span>Running it backwards</h2>
+  <p class="stands">Stands on 14i1 to 14i3.</p>
+  <p data-pid="a48128">Handed a limit of a fraction, check its form first: if it is not 0/0, 10f's techniques decide it. If it is, take slopes of the top and bottom separately, and try the limit of their ratio. If that is 0/0 again, repeat, checking the form each time. Far out, swap x for 1/t. Handed a race, write the ratio and find its limit. Handed a claimed value of a 0/0 limit, it may hide a linearization: the first slopes of top and bottom often say it at once. Found upward; written downward.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14i5.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\lim_{x \to 3} \frac{x^2 + Ax + B}{x - 3} = 7"></span></span>Find A and B.</li><li><span class="givens"><span data-tex-inline="\lim_{x \to 0} \frac{\sqrt{1 + kx} - 1}{x} = 5"></span></span>Find k.</li><li><span class="givens"><span data-tex-inline="f(0) = 0,"></span> <span data-tex-inline="f'(0) \text{ exists}"></span></span>Show, straight from 13a and without the rule, that f divided by x heads to the slope of f at zero as x heads to zero.</li><li><span class="givens"><span data-tex-inline="\lim_{x \to \infty} x\big(\sqrt{x^2 + c} - x\big) = 3"></span></span>Find c.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">14i.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\lim_{x \to 1} \frac{x^3 - 3x + 2}{(x - 1)^2} \text{ took the rule twice.}"></span> <span data-tex-inline="c = 1,\ L = 4"></span></span>Make a limit of your own at c, of the form zero over zero, that needs the rule exactly twice and whose value is L, checking the form at each step.<br>Check the value another way.</div>
+  <div class="chq"><span class="chid">14i.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{Case one: } g(x) = x."></span> <span data-tex-inline="\text{Case two: } f = g."></span></span>In each case, run two-function average-slope, and find which technique, if any, it becomes.</div>
+  <div class="chq"><span class="chid">14i.4.3</span><span class="tagq">loop</span><span class="givens"><span data-tex-inline="\text{Claim: } 2^n &gt; n^2"></span> <span data-tex-inline="\text{for every whole } n \ge 5"></span></span>Prove the claim by induction.</div>
+  <div class="chq"><span class="chid">14i.4.4</span><span class="tagq">loop</span><span class="givens"><span data-tex-inline="2^n \text{ against } n^{10},\ n \text{ whole};"></span> <span data-tex-inline="n = 10 \text{ and } n = 50"></span></span>Find who leads at each given n.<br>Decide whether the leader ever changes for good, and from which n.<br>Find what it would take to race them over every real x instead.</div>
+  <div class="chq"><span class="chid">14i.4.5</span><span class="tagq">seam</span><span class="givens"><span data-tex-inline="\text{4f: } x^0 = 1 \text{ for every } x,"></span> <span data-tex-inline="0 \text{ included.}"></span> <span data-tex-inline="\text{The form in dispute: } 0^0."></span></span>A textbook of 1821 listed the form among those with no fixed value. In the 1830s one mathematician argued that it must be one. Another published a proof that a power whose base and exponent both head to zero must head to one. <br>Find what x to the zero and zero to the x head to as x heads to zero from above. <br>Was the proof right? <br>Should the form be one?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r14h.html">← 14h · optimising</a><a href="r14stat.html">14·stat · which guess makes the data most likely? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>The two-function average-slope technique is Augustin-Louis Cauchy’s, from his lectures of 1823; its accepted name is Cauchy’s mean value theorem. The slope-ratio rule is Johann Bernoulli’s, sent to Guillaume de l’Hôpital in letters under a contract and printed in l’Hôpital’s Analyse des infiniment petits (1696), with thanks to the Bernoullis in the preface. It is known as L’Hôpital’s rule. In the closer, the textbook of 1821 is Cauchy’s Cours d’analyse; the 1830s argument is Guglielmo Libri’s, and the proof is August Möbius’s.</p>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?3:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=v=>fm(v).replace('-','−');
+const FN={
+  cu:{lab:'(x³ − 8)/(x − 2) at 2',tex:R`\tfrac{x^3 - 8}{x - 2}`,a:2,w:1,f:x=>x**3-8,g:x=>x-2,df:x=>3*x*x,dg:x=>1,L:12},
+  rt:{lab:'(√(1 + x) − 1)/x at 0',tex:R`\tfrac{\sqrt{1 + x} - 1}{x}`,a:0,w:0.9,f:x=>Math.sqrt(1+x)-1,g:x=>x,df:x=>0.5/Math.sqrt(1+x),dg:x=>1,L:0.5},
+  q5:{lab:'(x⁵ − 1)/(x³ − 1) at 1',tex:R`\tfrac{x^5 - 1}{x^3 - 1}`,a:1,w:0.8,f:x=>x**5-1,g:x=>x**3-1,df:x=>5*x**4,dg:x=>3*x*x,L:5/3}
+};
+let key='cu',F=FN.cu;
+const cvF=$('cvF'),cvS=$('cvS'),kx=$('kx');
+const H=()=>{ let h=F.w*(+kx.value)/1000; h=Math.round(h*200)/200; if(Math.abs(h)<0.005) h=h<0?-0.005:0.005; return h; };
+function cOf(x){ const a=F.a; const r=F.f(x)/F.g(x); let lo=Math.min(a,x),hi=Math.max(a,x); const q=t=>F.df(t)/F.dg(t)-r; const n=400; let best=null; let pt=lo+(hi-lo)/n, pv=q(pt); for(let k=2;k<n;k++){ const t=lo+(hi-lo)*k/n, v=q(t); if(pv*v<=0){ let l=pt,rr=t; for(let i=0;i<60;i++){ const m=(l+rr)/2; if(q(l)*q(m)<=0) rr=m; else l=m; } best=(l+rr)/2; break; } pt=t; pv=v; } return best; }
+const PF=plane(cvF,{x:[0,1],y:[0,1],grid:1,aspect:0.8,draw:P=>drawF(P)});
+const PS=plane(cvS,{x:[0,1],y:[0,1],grid:1,aspect:0.8,draw:P=>drawS(P)});
+[[PF,cvF],[PS,cvS]].forEach(([P,cv])=>Object.defineProperty(P.o,'aspect',{get:()=>cv.clientWidth>480?0.75:0.9}));
+function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; if(Math.abs(t-F.a)<1e-6){ pen=false; continue; } const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
+function rng(fns,lo,hi){ let a=1e9,b=-1e9; for(let k=0;k<=300;k++){ const t=lo+(hi-lo)*k/300; if(Math.abs(t-F.a)<1e-6) continue; fns.forEach(fn=>{ const v=fn(t); if(isFinite(v)){ a=Math.min(a,v); b=Math.max(b,v); } }); } const p=0.1*(b-a+1e-9); return [a-p,b+p]; }
+function drawF(P){ const lo=F.a-F.w, hi=F.a+F.w; const q=x=>F.f(x)/F.g(x), d=x=>F.df(x)/F.dg(x);
+  P.o.x=[lo,hi]; P.o.y=rng([q,d],lo,hi); P.o.grid=(P.o.y[1]-P.o.y[0])>10?2:((P.o.y[1]-P.o.y[0])>2?0.5:0.1); P.axes();
+  P.line(lo,F.L,hi,F.L,'--gold',1.3,[5,4]); curve(P,q,'--ink',2.6,lo,hi); curve(P,d,'--plum',2,lo,hi,[6,4]);
+  const c=P.ctx; c.fillStyle=col('--card'); c.strokeStyle=col('--ink'); c.lineWidth=2; c.beginPath(); c.arc(P.X(F.a),P.Y(F.L),5,0,7); c.fill(); c.stroke();
+  const x=F.a+H(); P.dot(x,q(x),'--ink',5); const cc=cOf(x); if(cc!==null){ P.dot(cc,d(cc),'--plum',5); P.line(cc,q(x),x,q(x),'--plum',1,[2,3]); } }
+function drawS(P){ const lo=F.a-F.w, hi=F.a+F.w; P.o.x=[lo,hi]; P.o.y=rng([F.f,F.g],lo,hi); P.o.grid=(P.o.y[1]-P.o.y[0])>10?2:((P.o.y[1]-P.o.y[0])>2?0.5:0.25); P.axes();
+  const c=P.ctx; const draw=(fn,cl)=>{ c.strokeStyle=col(cl); c.lineWidth=2.4; c.beginPath(); for(let k=0;k<=400;k++){ const t=lo+(hi-lo)*k/400; k?c.lineTo(P.X(t),P.Y(fn(t))):c.moveTo(P.X(t),P.Y(fn(t))); } c.stroke(); };
+  draw(F.f,'--plum'); draw(F.g,'--gold'); P.line(lo,F.df(F.a)*(lo-F.a),hi,F.df(F.a)*(hi-F.a),'--plum',1.2,[5,4]); P.line(lo,F.dg(F.a)*(lo-F.a),hi,F.dg(F.a)*(hi-F.a),'--gold',1.2,[5,4]);
+  const x=F.a+H(); P.line(x,P.o.y[0],x,P.o.y[1],'--muted',0.8,[3,4]); }
+function read(){ const h=H(), x=F.a+h; $('ox').textContent=mm(h); const q=F.f(x)/F.g(x), cc=cOf(x); const vd=$('vdF');
+  vd.className='verdict win'; vd.textContent='At x = '+mm(x)+': f/g = '+mm(q)+(cc!==null?', and f′/g′ has that value at c = '+mm(cc)+', between a and x.':'.')+' As x → '+mm(F.a)+', both head to '+mm(F.L)+'.';
+  tex($('eqF'),R`\begin{gathered}${F.tex}\\ \tfrac{f(${mm(x)})}{g(${mm(x)})} = ${mm(q)} = \tfrac{f'(c)}{g'(c)},\ c = ${mm(cc)}\\ L = \tfrac{f'(${mm(F.a)})}{g'(${mm(F.a)})} = ${mm(F.L)}\end{gathered}`,true); }
+function all(){ PF.redraw(); PS.redraw(); read(); }
+kx.addEventListener('input',all);
+const fch=$('fch');
+Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===key) b.className='on'; b.onclick=()=>{ key=k; F=FN[k]; [...fch.children].forEach(z=>z.classList.toggle('on',z===b)); all(); }; fch.appendChild(b); });
+window.__pic={set:(k,v)=>{ [...fch.children][Object.keys(FN).indexOf(k)].click(); kx.value=v; all(); return {txt:$('vdF').textContent}; }};
+all();
+
+/* ---------- slides ---------- */
+const Nw='\\htmlClass{new}';
+stepper('#sl1',[
+  {k:'ember',kl:'two-function average-slope',t:R`\tfrac{f(b) - f(a)}{g(b) - g(a)} = ${Nw}{\tfrac{f'(c)}{g'(c)}}`,n:`f, g continuous on [α, β], slopes inside, g′ never 0 inside.`},
+  {k:'ember',kl:'its helper',t:R`h = f\,(g(b) - g(a)) - g\,(f(b) - f(a))`,n:`h(α) = h(β): level-ends gives h′(c) = 0. ∎`}
+],{title:'The slides · two functions · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'0/0',t:R`f \to 0,\ \ g \to 0`,n:`An indeterminate form: the form alone does not decide the limit.`},
+  {k:'ember',kl:'slope-ratio',t:R`\tfrac{f'}{g'} \to L \;\Rightarrow\; ${Nw}{\tfrac{f}{g} \to L}`,n:`Slopes near α, g′ never 0 there.`},
+  {k:'ember',kl:'c dragged along',t:R`\tfrac{f(x)}{g(x)} = \tfrac{f'(c)}{g'(c)},\ \ a \lt c \lt x`,n:`two-function average-slope on [α, x], with the holes filled by 0. The δ for f′/g′ works for f/g.`},
+  {k:'ember',kl:'far out',t:R`x = \tfrac1t:\ \ \tfrac{-f'(1/t)/t^2}{-g'(1/t)/t^2}`,n:`swap-to-one-over-x and chain for slopes: the same rule as x → ∞.`},
+  {k:'teal',kl:'from 10f · factored',t:R`\tfrac{x^3 - 8}{x - 2} \to 12`,n:`3x²/1 at 2. The factoring agrees.`},
+  {k:'teal',kl:'from 10f · a root',t:R`\tfrac{\sqrt{1 + x} - 1}{x} \to \tfrac12`,n:`The top's slope 1/(2√(1 + x)) at 0.`},
+  {k:'ember',kl:'twice',t:R`\tfrac{\sqrt{1 + x} - 1 - x/2}{x^2} \to ${Nw}{-\tfrac18}`,n:`The linearization's error is about −x²/8: half of f″(0) times x².`},
+  {k:'ember',kl:'the rule\'s history',t:R`1696 \to 1823`,n:`The rule found by one man, printed in another's book, proved in 1823.`}
+],{title:'The slides · slope-ratio · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'races',t:R`\tfrac{f}{g} \to 0:\ \ f = o(g)`,n:`g outgrows f. Among powers, the exponent decides.`},
+  {k:'ember',kl:'a race by the rule',t:R`x\left(\sqrt{x^2 + 1} - x\right) \to \tfrac12`,n:`swap-to-one-over-x, then slope-ratio.`}
+],{title:'The slides · races · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'illegal',t:R`\tfrac{x + 1}{x + 2} \text{ at } 0 \text{ is not } 0/0`,n:`Check the form first. Its limit is ½.`}
+],{title:'The slides · illegal · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

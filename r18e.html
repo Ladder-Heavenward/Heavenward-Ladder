@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Conics by distances</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r18d.html">← 18d circles</a><a href="r18concl.html">next: 18·∎ conclusion →</a></p>
+  <div class="tags"><span class="tag proof">18e · proof</span></div>
+  <h1>Conics by distances</h1>
+  <p>A circle keeps one distance fixed. Three other curves keep a relation between two distances fixed: a distance to a point against a distance to a line, or two distances to two points, added or subtracted. This step proves that each is given by an equation of the second degree, and that the graph of every quadratic since rung 9 is one of them. Then it proves that all three are one family, sorted by one number.</p>
+  <p class="gesture">Equally far from a point and a line gives a parabola. A fixed sum of distances to two points gives an ellipse. A fixed difference of distances to two points gives a hyperbola. And a fixed ratio between the distance to a point and the distance to a line gives all three, as the ratio is one, less than one or more than one.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r18a.html">18a</a> (distance-laws, part-of-the-way), <a href="r18b.html">18b</a> (triangle in the plane, equality-on-the-segment), <a href="r18c.html">18c</a> (nearest-point), <a href="r18d.html">18d</a> (circle-equation, perpendicular-bisector), <a href="r08f.html">8f</a> (powers-keep-order), <a href="r08i.html">8i</a> (completing the square), <a href="r10f.html">10f</a> (asymptotes). <a href="r18h.html">18h</a> works conics by hand and follows a planet; <a href="r18i.html">18i</a> traces them in time; <a href="r18cb13.html">18·cb13</a> finds their slopes.</p></div>
+</header>
+
+<section class="class step" data-step="18e1">
+  <h2 class="sthead"><span class="stno">18e1</span>One point and one line</h2>
+  <p class="stands">Stands on 18c (nearest-point) and 9 (graphs of quadratics).</p>
+  <p class="eqline" data-pid="8bf5f3">For a real p ≠ 0, take the point F = (0, p) and the line ℓ: y = −p. Parabola technique: <b>the set {P : d(P, F) = d(P, ℓ)} is the set of (x, y) with x² = 4py. So for k ≠ 0, the graph of y = kx² is this set with p = 1/(4k), and the graph of every y = k(x − h)² + m is it moved by the displacement (h, m).</b> Its accepted name is the parabola, with F its focus, ℓ its directrix, (0, 0) its vertex and the line x = 0 its axis.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the parabola technique">
+d(P, \ell) = |y + p| @@ nearest-point, with a = 0, b = 1, c = −p
+d(P, F) = |y + p| \iff x^2 + (y - p)^2 = (y + p)^2 @@ distance-laws; both sides not negative, so squaring loses nothing (powers-keep-order)
+\iff x^2 = 4py @@ adding-keeps-answers: the y² and p² cancel, and −2py moves across
+y = kx^2 \iff x^2 = 4 \cdot \tfrac{1}{4k} \cdot y @@ divide by k ≠ 0
+\htmlClass{new}{d(P + w, Q + w) = d(P, Q)} \quad \blacksquare @@ distance-laws: the differences of coordinates do not change; so moving by w = (h, m) carries the parabola to the graph of y = k(x − h)² + m
+  </pre>
+  <p data-pid="895042">So the curves drawn as graphs of quadratics since rung 9, and called by no name there, have a point and a line hidden in them. Exchanging x and y also keeps every distance (distance-laws is symmetric in the two places), so y² = 4px is a parabola too, opening along the x axis, with focus (p, 0) and directrix x = −p.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · one point and one line · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">18e1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">F = (0, 1),  the line y = −1</span></span>Guess the lowest point of the curve from F and the line. <br>Write the equation, and check that (2, 1) is on it.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18e2">
+  <h2 class="sthead"><span class="stno">18e2</span>Two points, added</h2>
+  <p class="stands">Stands on 18e1 and 18a (distance).</p>
+  <p data-pid="c05073">For reals α &gt; c ≥ 0, take F₁ = (−c, 0), F₂ = (c, 0), and b = √(α² − c²). Ellipse technique: <b>the set {P : d(P, F₁) + d(P, F₂) = 2α} is the set of (x, y) with x²/α² + y²/b² = 1. On it, d(P, F₂) = α − (c/α)x and d(P, F₁) = α + (c/α)x.</b> Its accepted name is the ellipse, with F₁ and F₂ its foci, (0, 0) its centre, and the segments from (−α, 0) to (α, 0) and from (0, −b) to (0, b) its major and minor axes. When c = 0 the two foci are one point and the ellipse is the circle of radius α.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the ellipse technique, the set lies on the curve">
+d_1 + d_2 = 2a \Rightarrow d_1^2 = 4a^2 - 4a\,d_2 + d_2^2 @@ d₁ = 2a − d₂; square both sides (an implication, so no check needed going this way)
+d_1^2 - d_2^2 = (x + c)^2 - (x - c)^2 = 4cx @@ distance-laws: the y² cancels
+a\,d_2 = a^2 - cx @@ the two lines together, divided by 4
+a^2\big((x - c)^2 + y^2\big) = (a^2 - cx)^2 @@ square again
+(a^2 - c^2)x^2 + a^2y^2 = a^2(a^2 - c^2) @@ expand; the −2a²cx cancels
+\tfrac{x^2}{a^2} + \tfrac{y^2}{b^2} = 1 @@ divide by a²b² &gt; 0
+  </pre>
+  <p data-pid="413b11">Squaring can gain points, as squaring x = −2 gains x = 2. So the converse needs its own proof, and it gives the two distances outright.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the ellipse technique, the curve lies in the set">
+\tfrac{x^2}{a^2} + \tfrac{y^2}{b^2} = 1 \Rightarrow |x| \le a @@ y²/b² ≥ 0
+d_2^2 = x^2 - 2cx + c^2 + b^2 - \tfrac{b^2}{a^2}x^2 @@ distance-laws, with y² = b² − (b²/a²)x²
+= \tfrac{c^2}{a^2}x^2 - 2cx + a^2 = \big(a - \tfrac{c}{a}x\big)^2 @@ b² + c² = a², so 1 − b²/a² = c²/a²
+a - \tfrac{c}{a}x \ge a - c \gt  0 \Rightarrow d_2 = a - \tfrac{c}{a}x @@ |x| ≤ a and c &lt; a; powers-keep-order takes the root
+\htmlClass{new}{d_1 = a + \tfrac{c}{a}x,\ \ d_1 + d_2 = 2a} \quad \blacksquare @@ the same with −c for c
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · two points, added · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · one focus and one line, and two foci</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="lbl">F = (0, 0), ℓ: x = −4; d(P, F) = e · d(P, ℓ)</div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">e</span><input type="range" id="ke" min="0.2" max="2" step="0.05" value="0.5"><output id="oe"></output></div>
+      <div class="kn"><span class="m">x of P</span><input type="range" id="kx" min="-6" max="10" step="0.1" value="2"><output id="ox"></output></div>
+      <div class="cap">Ink: the line ℓ. Plum: the curve of one-family. Ember: P on its upper half, with its distances to F and to ℓ. Slide e through 1 and watch the curve open.</div>
+    </div>
+    <div class="panel">
+      <div class="lbl">foci (±c, 0); the number α</div>
+      <canvas id="cvL"></canvas>
+      <div class="kn"><span class="m">α</span><input type="range" id="ka" min="0.5" max="6" step="0.1" value="4"><output id="oa"></output></div>
+      <div class="kn"><span class="m">c</span><input type="range" id="kc" min="0" max="6" step="0.1" value="3"><output id="oc"></output></div>
+      <div class="kn"><span class="m">s</span><input type="range" id="ks" min="-3" max="3" step="0.05" value="0.6"><output id="os"></output></div>
+      <div class="cap">Plum: the ellipse when α &gt; c, the hyperbola and its dashed asymptotes when α &lt; c. Ember and teal: the distances from P to the two foci. The knob s moves P along the curve.</div>
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18e2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">F₁ = (−4, 0),  F₂ = (4, 0),  distances adding to 10</span></span>Find where the curve crosses each axis, thinking only of the two distances. <br>Write the equation.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18e3">
+  <h2 class="sthead"><span class="stno">18e3</span>Two points, subtracted</h2>
+  <p class="stands">Stands on 18e2.</p>
+  <p data-pid="5c1b29">For reals 0 &lt; α &lt; c, keep F₁ = (−c, 0) and F₂ = (c, 0), and take b = √(c² − α²). Hyperbola technique: <b>the set {P : |d(P, F₁) − d(P, F₂)| = 2α} is the set of (x, y) with x²/α² − y²/b² = 1. It has two parts: on the part with x ≥ α, d(P, F₁) − d(P, F₂) = 2α, and on the part with x ≤ −α, d(P, F₂) − d(P, F₁) = 2α.</b> Its accepted name is the hyperbola, with F₁ and F₂ its foci and its two parts its branches.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the hyperbola technique">
+d_1 = d_2 \pm 2a \Rightarrow \pm a\,d_2 = cx - a^2 @@ square, and subtract d₂² as in ellipse
+(a^2 - c^2)x^2 + a^2y^2 = a^2(a^2 - c^2) @@ square again: ellipse's line, letter for letter
+\tfrac{x^2}{a^2} - \tfrac{y^2}{b^2} = 1 @@ now a² − c² = −b² &lt; 0: divide by −a²b²
+\text{converse: } d_2^2 = \big(\tfrac{c}{a}x - a\big)^2,\ \ d_1^2 = \big(\tfrac{c}{a}x + a\big)^2 @@ as in ellipse, with y² = (b²/a²)x² − b² and b² − c² = −a²
+|x| \ge a \Rightarrow \big|\tfrac{c}{a}x\big| \ge c \gt  a @@ x²/a² = 1 + y²/b² ≥ 1
+\begin{aligned}&\htmlClass{new}{x \ge a:\ d_1 - d_2 = 2a;\ \ x \le -a:\ d_2 - d_1 }\\ &\quad \htmlClass{new}{= 2a} \quad \blacksquare\end{aligned} @@ powers-keep-order takes the roots: (c/a)x ± a has the sign of x
+  </pre>
+  <p data-pid="5d3a49">So one equation came out of both proofs, and the sign of α² − c² sorted the curve. Far out along a branch the hyperbola runs beside two lines. On the upper right, y = (b/α)√(x² − α²), and the gap to the line y = (b/α)x is (b/α)(x − √(x² − α²)) = (b/α) · α²/(x + √(x² − α²)), which heads to 0 as x grows. So the lines y = ±(b/α)x are its asymptotes, in the sense of 10f carried over to lines that are not level.</p>
+  <aside class="voice para"><p data-pid="ae5a0e">Let the square on the line drawn to the diameter be equal to the rectangle laid alongside the upright side, and call the section a parabola. Where the square falls short of that rectangle, call it an ellipse; where it exceeds it, call it a hyperbola.</p><cite>Apollonius of Perga, Conics, Book I, propositions 11 to 13 (about 200 BCE); paraphrase</cite></aside>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · two points, subtracted · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18e3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">F₁ = (−5, 0),  F₂ = (5, 0),  distances differing by 8</span></span>Find where the curve crosses the x axis, and write the equation. <br>Say whether it crosses the y axis, and why.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18e4">
+  <h2 class="sthead"><span class="stno">18e4</span>One number for all three</h2>
+  <p class="stands">Stands on 18e1 to 18e3.</p>
+  <p data-pid="5da62e">One-family technique: <b>for a point F, a vertical or horizontal line ℓ not through F, and a real e &gt; 0, the set {P : d(P, F) = e · d(P, ℓ)} is a parabola when e = 1, an ellipse when e &lt; 1, and a hyperbola when e &gt; 1. Conversely, every ellipse or hyperbola written as in this step, with c &gt; 0, is such a set, with e = c/α, F = F₂ and ℓ the line x = α²/c.</b> The number e has the accepted name eccentricity, and ℓ is a directrix. A circle has eccentricity 0, and no directrix. A slanted ℓ is left for rung 19, which turns the plane.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the one-family technique">
+F = (0, 0),\ \ \ell: x = -k,\ k \gt  0 @@ slide F to (0, 0), and exchange coordinates if ℓ is horizontal; distances are kept (parabola's last line)
+x^2 + y^2 = e^2(x + k)^2 \iff (1 - e^2)x^2 - 2e^2kx + y^2 = e^2k^2 @@ distance-laws, nearest-point; both sides not negative (powers-keep-order)
+e = 1:\ \ y^2 = 2k\big(x + \tfrac{k}{2}\big) @@ a parabola, by parabola with x and y exchanged
+e \ne 1:\ \ (1 - e^2)(x - h)^2 + y^2 = \tfrac{e^2k^2}{1 - e^2},\ \ h = \tfrac{e^2k}{1 - e^2} @@ complete the square (8i)
+e \lt 1:\ \tfrac{(x - h)^2}{A^2} + \tfrac{y^2}{B^2} = 1;\ \ e \gt 1:\ \tfrac{(x - h)^2}{A^2} - \tfrac{y^2}{B^2} = 1 @@ divide by e²k²/(1 − e²), positive for e &lt; 1 and negative for e &gt; 1; A = ek/|1 − e²|, B² = e²k²/|1 − e²|: ellipse's equation, or hyperbola's, moved to centre (h, 0)
+\htmlClass{new}{\text{converse: } d_2 = a - \tfrac{c}{a}x = \tfrac{c}{a}\big(\tfrac{a^2}{c} - x\big)} \quad \blacksquare @@ ellipse; on the ellipse x ≤ a &lt; a²/c, so the bracket is d(P, ℓ) by nearest-point; hyperbola the same, branch by branch
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · one number · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18e4.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="F = (0, 3),"></span> <span data-tex-inline="\text{directrix } y = -3,"></span> <span data-tex-inline="P = (6, 3)"></span></span>Find whether P is on the parabola. <br>Write its equation.</li><li><span class="givens"><span data-tex-inline="\dfrac{x^2}{\alpha^2} + \dfrac{y^2}{b^2} = 1,"></span> <span data-tex-inline="\text{foci } (\pm 3, 0),"></span> <span data-tex-inline="\text{through } (0, 4)"></span></span>Find α.</li><li><span class="givens"><span data-tex-inline="F_1 = (-5, 0),"></span> <span data-tex-inline="F_2 = (5, 0),"></span> <span data-tex-inline="|d(P, F_1) - d(P, F_2)| = 6"></span></span>Find the equation of the set of such P.</li><li><span class="givens"><span data-tex-inline="F = (0, 0),"></span> <span data-tex-inline="\text{directrix } x = -2,"></span> <span data-tex-inline="\text{through } (2, 0)"></span></span>Find the eccentricity, and name the conic.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18e5">
+  <h2 class="sthead"><span class="stno">18e5</span>The three, worked</h2>
+  <p class="stands">Stands on 18e4.</p>
+  <p data-pid="e8b40d">Moved so its vertex is at (0, 0) and its axis is the x axis, the curve of one-family has the equation y² = 2ℓx − (1 − e²)x², with ℓ = ek. The square y² equals the rectangle 2ℓx when e = 1, falls short of it when e &lt; 1, and exceeds it when e &gt; 1. The length 2ℓ, the chord through the focus at right angles to the axis, has the accepted name the latus rectum, Latin for Apollonius's upright side.</p>
+  <pre class="lines" data-k="ember" data-label="this step: worked">
+y = \tfrac18 x^2:\ \ x^2 = 4 \cdot 2 \cdot y @@ parabola: focus (0, 2), directrix y = −2
+\text{foci } (\pm 4, 0),\ \text{sum } 10:\ \ \tfrac{x^2}{25} + \tfrac{y^2}{9} = 1 @@ ellipse: a = 5, b = √(25 − 16) = 3; e = 4/5
+9x^2 - 16y^2 = 144:\ \ \tfrac{x^2}{16} - \tfrac{y^2}{9} = 1 @@ hyperbola: c = 5, foci (±5, 0), asymptotes y = ±3x/4, e = 5/4
+d(P, (0, 0)) = \tfrac12\, d(P, \{x = -6\}):\ \ \tfrac{(x - 2)^2}{16} + \tfrac{y^2}{12} = 1 @@ one-family: (3/4)x² − 3x + y² = 9; centre (2, 0), a = 4, c = 2, foci (0, 0) and (4, 0)
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · worked · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18e5.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="y = 3x^2"></span></span>Find the focus and the directrix.</li><li><span class="givens"><span data-tex-inline="F_1 = (-3, 0),"></span> <span data-tex-inline="F_2 = (3, 0),"></span> <span data-tex-inline="d(P, F_1) + d(P, F_2) = 10"></span></span>Write the equation of the ellipse.</li><li><span class="givens"><span data-tex-inline="\dfrac{x^2}{9} - \dfrac{y^2}{16} = 1"></span></span>Find the foci and the asymptotes.</li><li><span class="givens"><span data-tex-inline="\dfrac{x^2}{169} + \dfrac{y^2}{25} = 1"></span></span>Find the eccentricity and the directrices.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18e6">
+  <h2 class="sthead"><span class="stno">18e6</span>Illegal moves</h2>
+  <p class="stands">Stands on 18e1 to 18e5.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\sqrt{u} + \sqrt{v} = 2a \Rightarrow u + v = 4a^2\,? @@ (√u + √v)² = u + 2√(uv) + v; ellipse moves one root across first
+\tfrac{x^2}{4} + \tfrac{y^2}{9} = 1 \text{ has its foci on the } x \text{ axis}\,? @@ here the larger number is under y²: foci (0, ±√5)
+x^2 - y^2 = 0 \text{ is a hyperbola}\,? @@ it is (x − y)(x + y) = 0, the two lines y = ±x: its asymptotes alone
+\begin{aligned}&\text{squared, so the curve}\\ &\quad\text{and the set are equal}\,?\end{aligned} @@ squaring gains points; each converse was proved separately
+  </pre>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18e6.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{foci } F_1, F_2,"></span> <span data-tex-inline="d(F_1, F_2) = 2c"></span></span>Find the points whose distances to the foci add to exactly the distance between the foci. <br>Find the points whose distances add to less.</li><li><span class="givens"><span data-tex-inline="F_{1,2} = (\pm c, 0),"></span> <span data-tex-inline="|d(P, F_1) - d(P, F_2)| = 2\alpha"></span></span>Find the set when α is zero. <br>Find it when α equals c.</li><li>Run the squaring step of parabola's proof and of ellipse's proof, and find why the first lost nothing and the second needed a converse.</li><li><span class="givens"><span data-tex-inline="c(P, Q) = |x_2 - x_1| + |y_2 - y_1|,"></span> <span data-tex-inline="F_1 = (-2, 0),"></span> <span data-tex-inline="F_2 = (2, 0),"></span> <span data-tex-inline="c(P, F_1) + c(P, F_2) = 6"></span></span>Draw the set. <br>Find whether it is given by an equation of the second degree.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">18e.4.1</span><span class="tagq">build</span>Choose two foci of your own that do not lie on a line parallel to an axis, and a sum larger than the distance between them. <br>Find the equation of the points whose distances to your foci add to your sum, and the term in it that the step's ellipse lacks. <br>Show that the squaring added no points.</div>
+  <div class="chq"><span class="chid">18e.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="d(P, F) = e \cdot d(P, \ell),"></span> <span data-tex-inline="k = d(F, \ell),"></span> <span data-tex-inline="e \to 0,\ \ ek = r"></span></span>Find what the set comes to. <br>Find whether a circle has a directrix after all.</div>
+  <div class="chq"><span class="chid">18e.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="Ax^2 + Cy^2 + Dx + Ey + F = 0"></span></span>Find whether every such equation gives a conic. <br>Find every other kind of set it can give.</div>
+  <div class="chq"><span class="chid">18e.4.4</span><span class="tagq">seam</span>Apollonius made these curves by cutting a cone with a plane, and this step made them from distances in a flat plane, with no cone anywhere. <br>Are they the same curves? <br>What would you need, beyond pairs of numbers, even to ask?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r18d.html">← 18d · circles</a><a href="r18concl.html">18·∎ · conclusion →</a></nav>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+/* least and greatest of F.f on [lo, hi]: the ends, F's critical points inside, and a fine sample (exact between critical points for the functions used here) */
+function ext(F,lo,hi){ if(F.dir) return [0,1]; let m=Infinity,M=-Infinity; const t=x=>{ const v=F.f(x); if(v<m) m=v; if(v>M) M=v; };
+  t(lo); t(hi); (F.crit||[]).forEach(c=>{ if(c>lo&&c<hi) t(c); }); for(let k=1;k<64;k++) t(lo+(hi-lo)*k/64); return [m,M]; }
+function sums(F,pts){ let L=0,U=0; const ms=[],Ms=[]; for(let i=1;i<pts.length;i++){ const [m,M]=ext(F,pts[i-1],pts[i]), w=pts[i]-pts[i-1]; ms.push(m); Ms.push(M); L+=m*w; U+=M*w; } return {L,U,ms,Ms}; }
+const eq=(a,b,n)=>Array.from({length:n+1},(_,i)=>a+(b-a)*i/n);
+function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
+function boxes(P,pts,hs,stroke,fill,alpha){ const c=P.ctx; for(let i=1;i<pts.length;i++){ const a=pts[i-1],b=pts[i],h=hs[i-1]; c.globalAlpha=alpha; P.poly([[a,0],[b,0],[b,h],[a,h]],null,fill); c.globalAlpha=1; P.poly([[a,0],[b,0],[b,h],[a,h]],stroke,null,1.2); } }
+function dirDots(P,a,b){ const c=P.ctx; c.fillStyle=col('--ink'); for(let k=0;k<=300;k++){ const x=a+(b-a)*k/300; const y=(k%2)?0:1; c.fillRect(P.X(x)-1,P.Y(y)-1,2,2); } }
+/* shade between the graph of fn and the axis from lo to hi: above in pos colour, below in neg colour */
+function shade(P,fn,lo,hi,pos,neg,alpha){ if(hi<lo){ const t=lo; lo=hi; hi=t; } const c=P.ctx, N=300; c.globalAlpha=alpha==null?0.32:alpha;
+  for(let k=0;k<N;k++){ const x0=lo+(hi-lo)*k/N, x1=lo+(hi-lo)*(k+1)/N, xm=(x0+x1)/2, y=fn(xm); if(!isFinite(y)) continue; P.poly([[x0,0],[x1,0],[x1,fn(x1)],[x0,fn(x0)]],null,y>=0?pos:neg); }
+  c.globalAlpha=1; }
+function rangeOf(fn,lo,hi,pad){ let m=Infinity,M=-Infinity; for(let k=0;k<=400;k++){ const v=fn(lo+(hi-lo)*k/400); if(isFinite(v)){ if(v<m) m=v; if(v>M) M=v; } } if(m>0) m=0; if(M<0) M=0; const p=(M-m)*(pad==null?0.12:pad)||1; return [m-p,M+p]; }
+function chips(el,FN,get,setk,after){ Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===get()) b.className='on'; b.onclick=()=>{ setk(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+const Nw='\\htmlClass{new}';
+function gridFor(sp){ return sp>40?10:sp>16?4:sp>8?2:sp>3?1:sp>1.2?0.5:0.25; }
+function frame2(P,fn,lo,hi,pad){ const w=hi-lo; P.o.x=[lo-0.12*w,hi+0.08*w]; P.o.y=rangeOf(fn,lo,hi,pad==null?0.12:pad); const sx=P.o.x[1]-P.o.x[0], sy=P.o.y[1]-P.o.y[0]; let g=gridFor(sx); while(sy/g>24) g*=2; P.o.grid=g; }
+const num=(f,a,b,n)=>{ n=n||4000; const h=(b-a)/n; let s=0; for(let i=0;i<n;i++) s+=f(a+(i+0.5)*h)*h; return s; };
+/* axes with separate steps across and up */
+function axes2(P,gx,gy){ const c=P.ctx,o=P.o; c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ c.moveTo(P.X(x),P.Y(o.y[0])); c.lineTo(P.X(x),P.Y(o.y[1])); }
+  for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ c.moveTo(P.X(o.x[0]),P.Y(y)); c.lineTo(P.X(o.x[1]),P.Y(y)); } c.stroke();
+  c.strokeStyle=col('--muted'); c.lineWidth=1.3; c.beginPath(); if(o.y[0]<=0&&o.y[1]>=0){ c.moveTo(P.X(o.x[0]),P.Y(0)); c.lineTo(P.X(o.x[1]),P.Y(0)); } if(o.x[0]<=0&&o.x[1]>=0){ c.moveTo(P.X(0),P.Y(o.y[0])); c.lineTo(P.X(0),P.Y(o.y[1])); } c.stroke();
+  c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; const ly=Math.min(P.H-6,Math.max(12,P.Y(0)+14));
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ if(Math.abs(x)<1e-9) continue; c.fillText(+x.toFixed(6),P.X(x),ly); }
+  c.textAlign='right'; const lx=Math.max(32,Math.min(P.W-4,P.X(0)-5)); for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ if(Math.abs(y)<1e-9) continue; c.fillText(String(+y.toFixed(6)).replace('-','−'),lx,P.Y(y)+4); } }
+function nice(sp){ const raw=sp/6, p=Math.pow(10,Math.floor(Math.log10(raw))), m=raw/p; return (m<1.5?1:m<3.5?2:m<7.5?5:10)*p; }
+function arrow(P,x1,y1,x2,y2,colr,w){ P.line(x1,y1,x2,y2,colr,w||2.2); const c=P.ctx, X1=P.X(x1),Y1=P.Y(y1),X2=P.X(x2),Y2=P.Y(y2), L=Math.hypot(X2-X1,Y2-Y1); if(L<2) return; const ux=(X2-X1)/L, uy=(Y2-Y1)/L, h=9; c.fillStyle=col(colr); c.beginPath(); c.moveTo(X2,Y2); c.lineTo(X2-h*ux-0.5*h*uy,Y2-h*uy+0.5*h*ux); c.lineTo(X2-h*ux+0.5*h*uy,Y2-h*uy-0.5*h*ux); c.closePath(); c.fill(); }
+function fillA(P,pts,colr,alpha){ const c=P.ctx; c.globalAlpha=alpha==null?0.2:alpha; P.poly(pts,null,colr); c.globalAlpha=1; }
+const sq1=P=>Object.defineProperty(P.o,'aspect',{get:()=>1});
+function rightMark(P,qx,qy,ax,ay,bx,by,s,colr){ const la=Math.hypot(ax-qx,ay-qy), lb=Math.hypot(bx-qx,by-qy); if(!la||!lb) return; const u=[(ax-qx)/la*s,(ay-qy)/la*s], v=[(bx-qx)/lb*s,(by-qy)/lb*s]; P.poly([[qx+u[0],qy+u[1]],[qx+u[0]+v[0],qy+u[1]+v[1]],[qx+v[0],qy+v[1]]],colr||'--muted',null,1.2,false); }
+const dist=(a,b)=>Math.hypot(b[0]-a[0],b[1]-a[1]);
+const dotp=(u,v)=>u[0]*v[0]+u[1]*v[1];
+function clipBox(P,fn){ const c=P.ctx, [x0,x1]=P.o.x,[y0,y1]=P.o.y; c.save(); c.beginPath(); c.rect(P.X(x0),P.Y(y1),P.X(x1)-P.X(x0),P.Y(y0)-P.Y(y1)); c.clip(); fn(); c.restore(); }
+function lineABC(P,a,b,c,colr,w,dash){ const [x0,x1]=P.o.x,[y0,y1]=P.o.y; clipBox(P,()=>{ if(Math.abs(b)>1e-12){ P.line(x0,(c-a*x0)/b,x1,(c-a*x1)/b,colr,w,dash); } else if(Math.abs(a)>1e-12){ P.line(c/a,y0,c/a,y1,colr,w,dash); } }); }
+const ke=$('ke'),kx=$('kx'),ka=$('ka'),kc=$('kc'),ks=$('ks'),cvF=$('cvF'),cvL=$('cvL');
+const PF=plane(cvF,{x:[-8,12],y:[-10,10],grid:1,aspect:1,draw:P=>drawF(P)}); sq1(PF);
+const PL=plane(cvL,{x:[-9,9],y:[-9,9],grid:1,aspect:1,draw:P=>drawL(P)}); sq1(PL);
+const K=4, g=(e,x)=>e*e*(x+K)*(x+K)-x*x;
+function eccPts(e){ const xs=[]; for(let x=-8;x<=12.0001;x+=0.02) xs.push(x); const A=e*e-1,B=8*e*e,C=16*e*e;
+  if(Math.abs(A)<1e-9) xs.push(-C/B); else { const D=B*B-4*A*C; if(D>=0){ xs.push((-B+Math.sqrt(D))/(2*A)); xs.push((-B-Math.sqrt(D))/(2*A)); } }
+  xs.sort((p,q)=>p-q); const runs=[]; let cur=[]; xs.forEach(x=>{ const v=g(e,x); if(v>=-1e-7){ cur.push([x,Math.sqrt(Math.max(0,v))]); } else if(cur.length){ runs.push(cur); cur=[]; } }); if(cur.length) runs.push(cur); return runs; }
+function drawF(P){ const e=+ke.value, x=+kx.value; axes2(P,1,1); lineABC(P,1,0,-K,'--ink',2.4);
+  clipBox(P,()=>eccPts(e).forEach(r=>{ P.poly(r,'--plum',null,2.4,false); P.poly(r.map(([u,v])=>[u,-v]),'--plum',null,2.4,false); }));
+  P.dot(0,0,'--ink',4.5); P.text('F',0.5,-0.7,'--ink','center',12); P.text('ℓ',-K-0.6,8.8,'--ink','center',12);
+  const v=g(e,x); if(v>=0 && v<96){ const y=Math.sqrt(v); P.line(0,0,x,y,'--ember',2); P.line(-K,y,x,y,'--teal',2,[5,4]); P.dot(x,y,'--ember',5.5); P.text('P',x+0.5,y+0.5,'--ember','center',12); } }
+function conic(a,c){ return a>c+1e-9?{k:'E',b:Math.sqrt(a*a-c*c)}:(a<c-1e-9?{k:'H',b:Math.sqrt(c*c-a*a)}:{k:'D',b:0}); }
+function ptS(a,c,s){ const q=conic(a,c); if(q.k==='E') return [a*(1-s*s)/(1+s*s),2*q.b*s/(1+s*s)]; if(q.k==='H'&&Math.abs(1-s*s)>0.04) return [a*(1+s*s)/(1-s*s),2*q.b*s/(1-s*s)]; return null; }
+function drawL(P){ const a=+ka.value, c=+kc.value, s=+ks.value, q=conic(a,c); axes2(P,1,1);
+  clipBox(P,()=>{ if(q.k==='E'){ const pts=[]; for(let i=0;i<=240;i++){ const t=i/240*2*Math.PI; pts.push([a*Math.cos(t),q.b*Math.sin(t)]); } P.poly(pts,'--plum',null,2.4,false); }
+    else if(q.k==='H'){ [1,-1].forEach(sg=>{ const pts=[]; for(let i=0;i<=200;i++){ const t=-3.2+6.4*i/200; pts.push([sg*a*Math.cosh(t),q.b*Math.sinh(t)]); } P.poly(pts,'--plum',null,2.4,false); });
+      lineABC(P,q.b,-a,0,'--muted',1.3,[6,4]); lineABC(P,q.b,a,0,'--muted',1.3,[6,4]); }
+    else { P.line(a,0,9,0,'--plum',3); P.line(-a,0,-9,0,'--plum',3); } });
+  P.dot(-c,0,'--ink',4.5); P.dot(c,0,'--ink',4.5); P.text('F₁',-c,-0.8,'--ink','center',12); P.text('F₂',c,-0.8,'--ink','center',12);
+  const X=ptS(a,c,s); if(X && Math.abs(X[0])<9 && Math.abs(X[1])<9){ P.line(-c,0,X[0],X[1],'--ember',2); P.line(c,0,X[0],X[1],'--teal',2); P.dot(X[0],X[1],'--plum',5.5); P.text('P',X[0]+0.5,X[1]+0.5,'--plum','center',12); } }
+function read(){ const e=+ke.value, x=+kx.value, a=+ka.value, c=+kc.value, s=+ks.value, q=conic(a,c);
+  [['oe',e,2],['ox',x,1],['oa',a,1],['oc',c,1],['os',s,2]].forEach(([i,v,n])=>$(i).textContent=mm(v,n));
+  const v=g(e,x), nm=Math.abs(e-1)<1e-9?'a parabola':(e<1?'an ellipse':'a hyperbola');
+  const L=v>=0?'Left: '+nm+'; d(P, F) = '+mm(Math.hypot(x,Math.sqrt(v)),3)+' and d(P, ℓ) = '+mm(x+K,3)+', ratio '+mm(e,2)+'.':'Left: '+nm+'; no point of it has x = '+mm(x,1)+'.';
+  const X=ptS(a,c,s); let Rt;
+  if(q.k==='D') Rt='α = c: the two rays beyond the foci, not a curve of hyperbola.';
+  else if(!X) Rt='P has gone off along the branch; move s away from ±1.';
+  else { const d1=Math.hypot(X[0]+c,X[1]), d2=Math.hypot(X[0]-c,X[1]); Rt=q.k==='E'?'d₁ + d₂ = '+mm(d1,3)+' + '+mm(d2,3)+' = '+mm(d1+d2,3)+' = 2a.':'|d₁ − d₂| = |'+mm(d1,3)+' − '+mm(d2,3)+'| = '+mm(Math.abs(d1-d2),3)+' = 2a.'; }
+  const vd=$('vdF'); vd.className='verdict'; vd.textContent=L+' Right: '+Rt;
+  if(q.k==='D') tex($('eqF'),R`a = c = ${mm(a,1)}`,true);
+  else tex($('eqF'),R`\tfrac{x^2}{${mm(a*a,2)}} ${q.k==='E'?'+':'-'} \tfrac{y^2}{${mm(q.b*q.b,2)}} = 1,\ \ e = \tfrac{c}{a} = ${mm(c/a,3)}`,true); }
+function all(){ PF.redraw(); PL.redraw(); read(); }
+[ke,kx,ka,kc,ks].forEach(el=>el.addEventListener('input',all));
+window.__pic={set:(e,x,a,c,s)=>{ ke.value=e; kx.value=x; ka.value=a; kc.value=c; ks.value=s; all(); const X=ptS(a,c,s), v=g(e,x);
+  return {y:v>=0?+Math.sqrt(v).toFixed(4):null,dF:v>=0?+Math.hypot(x,Math.sqrt(v)).toFixed(4):null,dl:x+K,kind:conic(a,c).k,P:X&&X.map(z=>+z.toFixed(4)),d1:X&&+Math.hypot(X[0]+c,X[1]).toFixed(4),d2:X&&+Math.hypot(X[0]-c,X[1]).toFixed(4)}; }};
+all();
+stepper('#sl1',[
+  {k:'ember',kl:'parabola',t:R`${Nw}{d(P, F) = d(P, \ell) \iff x^2 = 4py}`,n:`Focus (0, p), directrix y = −p.`},
+  {k:'ember',kl:'every quadratic',t:R`y = k(x - h)^2 + m:\ \ p = \tfrac{1}{4k}`,n:`Moving keeps distances.`}
+],{title:'The slides · one point and one line · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'ellipse',t:R`${Nw}{d_1 + d_2 = 2a \iff \tfrac{x^2}{a^2} + \tfrac{y^2}{b^2} = 1}`,n:`b² = α² − c².`},
+  {k:'ember',kl:'its converse',t:R`d_2 = a - \tfrac{c}{a}x,\ \ d_1 = a + \tfrac{c}{a}x`,n:`Squaring gains points; this rules them out.`}
+],{title:'The slides · two points, added · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'hyperbola',t:R`${Nw}{|d_1 - d_2| = 2a \iff \tfrac{x^2}{a^2} - \tfrac{y^2}{b^2} = 1}`,n:`b² = c² − α²; two branches.`},
+  {k:'ember',kl:'asymptotes',t:R`y = \pm\tfrac{b}{a}x`,n:`The gap heads to 0.`}
+],{title:'The slides · two points, subtracted · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'one-family',t:R`${Nw}{d(P, F) = e\,d(P, \ell)}`,n:`e = 1, e &lt; 1, e &gt; 1.`}
+],{title:'The slides · one number · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'vertex form',t:R`y^2 = 2\ell x - (1 - e^2)x^2`,n:`ℓ = ek; 2ℓ is the latus rectum.`},
+  {k:'ember',kl:'worked',t:R`\tfrac{(x - 2)^2}{16} + \tfrac{y^2}{12} = 1`,n:`e = ½, directrix x = −6.`}
+],{title:'The slides · worked · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'illegal',t:R`x^2 - y^2 = 0`,n:`Two lines, not a hyperbola.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

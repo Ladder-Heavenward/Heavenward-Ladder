@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Angles standing on arcs</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r21p.html">← 21p related rates</a><a href="r21r.html">next: 21r curves by turning and reach →</a></p>
+  <div class="tags"><span class="tag tech">21q · technique</span></div>
+  <h1>Angles standing on arcs</h1>
+  <p>Pick two points on a circle and a third anywhere else on its rim, and join the third to the other two. The angle it makes never changes as it moves along the rim, so long as it stays on the same side. This step proves that, and finds the angle: half the angle the same two points make at the centre. From it come the right angle in every half circle, the rule for four points on one circle, and the one circle that fits snugly inside any triangle.</p>
+  <p class="gesture">An angle at the rim is half the angle at the centre on the same arc, so every angle on that arc is the same. An angle in a half circle is right. Four corners on one circle have opposite angles adding to a half turn. Every triangle holds one circle that touches all three sides.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r18f.html">18f</a> (equal sides, equal angles; the angle sum), <a href="r21j.html">21j</a> (the angle sum is π), <a href="r18cb13.html">18·cb13</a> (the tangent meets the radius at a right angle). <a href="r21r.html">21r</a> draws curves by turn and reach.</p></div>
+</header>
+
+<section class="class step" data-step="21q1">
+  <h2 class="sthead"><span class="stno">21q1</span>Rim and centre</h2>
+  <p class="stands">Stands on 18f (equal-sides-equal-angles, the angle sum) and 21j2 (180° = π).</p>
+  <p data-pid="ba4434">Let A and B be on a circle with centre O, and P on the rim, on the far side of the line AB from the short arc AB. Rim-half-centre technique: <b>the angle APB at the rim is half the angle AOB at the centre.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the rim-half-centre technique, with O inside the angle APB">
+OA = OB = OP @@ radii
+\angle OPA = \angle OAP = a,\ \ \angle OPB = \angle OBP = b @@ equal-sides-equal-angles (18f), twice
+\angle AOP = \pi - 2a,\ \ \angle BOP = \pi - 2b @@ the angle sum (18f, with 180° = π by 21j2)
+\angle AOB = 2\pi - (\pi - 2a) - (\pi - 2b) = 2(a + b) @@ the three angles at O make a whole turn
+\htmlClass{new}{\angle AOB = 2\,\angle APB} \quad \blacksquare @@ ∠APB = a + b; with O outside, subtract instead of add
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · rim · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · one arc, many rim angles</div>
+    <div class="kn"><span class="m">B</span><input type="range" id="kb" min="0.3" max="3.0" step="0.01" value="2"><output id="okb"></output></div>
+    <div class="kn"><span class="m">P</span><input type="range" id="kp" min="0" max="6.28" step="0.01" value="4.2"><output id="okp"></output></div>
+    <div id="pl"></div>
+    <div class="cap">A sits at arc 0 and B at the arc you choose. Teal: the angle at the centre. Ember: the angle at P on the rim. Slide P round: on the far side its angle stays put.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">21q1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">A and B on a circle, with angle AOB = 1.2 at the centre</span></span>Find the angle APB for P on the rim on the far side of AB. <br>Find it for Q on the short arc AB.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21q2">
+  <h2 class="sthead"><span class="stno">21q2</span>One arc, one angle; the half circle</h2>
+  <p class="stands">Stands on 21q1.</p>
+  <p data-pid="e9ff1a">Same-arc technique: <b>all rim angles standing on one arc, from the same side, are equal; and an angle standing on a half circle is right.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the same-arc technique">
+\angle APB = \tfrac12\angle AOB = \angle AQB @@ rim-half-centre, for P and Q on the same side
+AB \text{ a diameter} \Rightarrow \angle AOB = \pi @@ A, O, B in a line
+\htmlClass{new}{\angle APB = \tfrac{\pi}{2}} \quad \blacksquare @@ half of π: the angle in a half circle is right
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · same arc · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21q2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a triangle in a circle, one side a diameter of length 10, another side 6</span></span>Find the third side. <br>Find the area of the triangle.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21q3">
+  <h2 class="sthead"><span class="stno">21q3</span>Four corners on one circle</h2>
+  <p class="stands">Stands on 21q1.</p>
+  <p data-pid="ea7eb8">Four-on-a-circle technique: <b>if A, B, C, D lie in that order round a circle, then the angles at A and C add to π, and so do the angles at B and D.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the four-on-a-circle technique">
+\angle DAB = \tfrac12 \cdot \text{centre angle on arc } BCD @@ rim-half-centre
+\angle BCD = \tfrac12 \cdot \text{centre angle on arc } DAB @@ the same, from the other side
+\text{the two centre angles add to } 2\pi @@ the two arcs make the whole circle
+\htmlClass{new}{\angle A + \angle C = \pi} \quad \blacksquare @@ half of 2π; likewise B and D
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · four · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21q3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">A, B, C, D in order on a circle,  angle A = 2π/5,  angle B = π/3</span></span>Find the angles at C and D.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21q4">
+  <h2 class="sthead"><span class="stno">21q4</span>The circle inside</h2>
+  <p class="stands">Stands on 18·cb13 (tangent-meets-radius), 18f (three sides; the angle sum) and 18g (triangle-area).</p>
+  <p data-pid="b3e737">Incircle technique: <b>the three lines halving a triangle’s angles meet in one point I, and the circle about I that touches one side touches all three; its radius r makes the area r times half the perimeter.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the incircle technique">
+X \text{ on the line halving angle } A \iff X \text{ is equally far from } AB \text{ and } AC @@ two right triangles with a shared side and equal angles are congruent (18f)
+I = \text{where the halving lines at } A \text{ and } B \text{ meet} @@ then I is equally far from all three sides
+I \text{ is on the halving line at } C @@ equally far from CA and CB
+\text{the circle about } I \text{ of radius } r \text{ touches each side at the foot from } I @@ tangent-meets-radius (18·cb13)
+\htmlClass{new}{\text{area} = \tfrac12 ar + \tfrac12 br + \tfrac12 cr = r \cdot \tfrac{a + b + c}{2}} \quad \blacksquare @@ three triangles with apex I, heights r
+  </pre>
+  <p data-pid="8c0a18">From here on, this is the incircle, and I its centre.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · incircle · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21q4.1</span><span class="ph undo">undo</span><span class="givens"><span class="gtx">the triangle with sides 3, 4, 5</span></span>Find the radius of its incircle. <br>Find where the incircle touches the side of length 5.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21q5">
+  <h2 class="sthead"><span class="stno">21q5</span>Illegal moves</h2>
+  <p class="stands">Stands on 21q1 to 21q4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\angle APB = \angle AOB\,? @@ half of it
+\text{every rim angle on chord } AB \text{ is equal}\,? @@ only from one side; from the other it is π minus it
+\text{any four points have } \angle A + \angle C = \pi\,? @@ only four on one circle
+\text{the incircle’s centre is where the middles of the sides meet}\,? @@ where the angles are halved
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21q5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span class="gtx">a rim angle of π/2 standing on a chord of length 6</span></span>Find the radius of the circle.</li><li><span class="givens"><span class="gtx">a parallelogram with its four corners on one circle</span></span>Find what kind of parallelogram it must be.</li><li><span class="givens"><span class="gtx">a rim angle of π/6 on a chord AB of a circle of radius 4</span></span>Find the length of AB.</li><li><span class="givens"><span class="gtx">two rim angles on one chord, from opposite sides, one of them π/5</span></span>Find the other.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">21q.4.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">a segment AB</span></span>Build every point P with angle APB = π/3, on one side of AB.</div>
+  <div class="chq"><span class="chid">21q.4.2</span><span class="tagq">edge</span>Slide P along the rim toward A. Find what the angle APB tends to, and which line PA tends to.</div>
+  <div class="chq"><span class="chid">21q.4.3</span><span class="tagq">converse</span>An angle standing on a diameter is right. Turn it round: prove that if angle APB = π/2, then P is on the circle with diameter AB.</div>
+  <div class="chq"><span class="chid">21q.4.4</span><span class="tagq">reroute</span>Prove rim-half-centre with arcs: put A, B, P at arcs α, β, γ on the circle of radius 1, find the directions of the chords PA and PB, as 21k.4.4 found the direction of a chord’s midpoint, and subtract.</div>
+  <div class="chq"><span class="chid">21q.4.5</span><span class="tagq">seam</span>Builders and scribes had used the right angle in a half circle for a long time before anyone proved it. The first known proof of it is credited by legend to a merchant who, it is said, gave thanks with a sacrifice when he found it. <br>What did the proof add, if everyone already used the rule?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r21p.html">← 21p · related rates</a><a href="r21r.html">21r · curves by turning and reach →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The rim angle is the inscribed angle and the centre angle the central angle; rim-half-centre is the inscribed angle theorem. The angle in a half circle is right by Thales’ theorem. Four points on one circle make a cyclic quadrilateral. The point I is the incentre.</p>
+  <h3>Who said it first</h3>
+  <p>In 21q.4.5, the merchant is Thales of Miletus (sixth century BC), as told by Diogenes Laertius, who credits the story to Pamphila. The rim-half-centre technique is Euclid, Elements III.20 and III.21; four on a circle is III.22.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+/* moves of the plane, drawn in SVG, for rung 20 */
+const V=c=>'var('+c+')';
+const FLAG=[[0,0],[0,3],[2,3],[2,2.4],[0.6,2.4],[0.6,1.8],[1.5,1.8],[1.5,1.2],[0.6,1.2],[0.6,0]];
+const M={
+  id:()=>p=>p,
+  slide:(h,k)=>p=>[p[0]+h,p[1]+k],
+  turn:(a,b)=>p=>[a*p[0]-b*p[1],b*p[0]+a*p[1]],
+  stretch:k=>p=>[k*p[0],k*p[1]],
+  flipU:(c,s)=>p=>{ const d=2*(p[0]*c+p[1]*s); return [d*c-p[0],d*s-p[1]]; },              /* across the line through O along (c, s), c² + s² = 1 */
+  flipAt:(q,c,s)=>p=>{ const x=p[0]-q[0],y=p[1]-q[1],d=2*(x*c+y*s); return [q[0]+d*c-x,q[1]+d*s-y]; },
+  turnAt:(q,a,b)=>p=>{ const x=p[0]-q[0],y=p[1]-q[1]; return [q[0]+a*x-b*y,q[1]+b*x+a*y]; },
+  then:(g,f)=>p=>g(f(p))                                                                    /* f first, then g */
+};
+const unit=(x,y)=>{ const r=Math.hypot(x,y); return [x/r,y/r]; };
+const fx=v=>(Math.abs(v)<5e-10?0:v);
+const show=(v,d)=>{ let s=fx(v).toFixed(d==null?2:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return (s==='-0'?'0':s).replace('-','−'); };
+/* shapes: {pts, c, fill, dash, w, open}; dots: {p, c, t}; lines: {p, d, c, dash} */
+function svgPlane(o){ const lo=o.lo==null?-6:o.lo, hi=o.hi==null?6:o.hi, S=300, X=x=>(x-lo)/(hi-lo)*S, Y=y=>S-(y-lo)/(hi-lo)*S;
+  let s='<svg viewBox="0 0 '+S+' '+S+'" style="width:100%;max-width:340px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  for(let g=Math.ceil(lo);g<=hi;g++){ s+='<line x1="'+X(g)+'" y1="0" x2="'+X(g)+'" y2="'+S+'" style="stroke:'+V('--grid')+';stroke-width:'+(g===0?1.6:0.6)+'"/><line x1="0" y1="'+Y(g)+'" x2="'+S+'" y2="'+Y(g)+'" style="stroke:'+V('--grid')+';stroke-width:'+(g===0?1.6:0.6)+'"/>'; }
+  (o.lines||[]).forEach(l=>{ const L=40; s+='<line x1="'+X(l.p[0]-L*l.d[0])+'" y1="'+Y(l.p[1]-L*l.d[1])+'" x2="'+X(l.p[0]+L*l.d[0])+'" y2="'+Y(l.p[1]+L*l.d[1])+'" style="stroke:'+V(l.c||'--teal')+';stroke-width:1.6;stroke-dasharray:'+(l.dash||'5 4')+'"/>'; });
+  (o.shapes||[]).forEach(z=>{ const pts=z.pts.map(p=>X(p[0]).toFixed(1)+','+Y(p[1]).toFixed(1)).join(' ');
+    s+='<'+(z.open?'polyline':'polygon')+' points="'+pts+'" style="fill:'+(z.fill?V(z.c):'none')+';fill-opacity:'+(z.fill?0.28:0)+';stroke:'+V(z.c)+';stroke-width:'+(z.w||2)+(z.dash?';stroke-dasharray:'+z.dash:'')+'"/>'; });
+  (o.dots||[]).forEach(d=>{ s+='<circle cx="'+X(d.p[0])+'" cy="'+Y(d.p[1])+'" r="4" style="fill:'+V(d.c||'--ink')+'"/>'+(d.t?'<text x="'+(X(d.p[0])+7)+'" y="'+(Y(d.p[1])-6)+'" style="fill:'+V(d.c||'--ink')+';font:12px IBM Plex Mono,monospace">'+d.t+'</text>':''); });
+  return s+'</svg>'; }
+function knob(id,lab,min,max,step,val){ return '<div class="kn"><span class="m">'+lab+'</span><input type="range" id="'+id+'" min="'+min+'" max="'+max+'" step="'+step+'" value="'+val+'"><output id="o'+id+'"></output></div>'; }
+function chipRow(el,keys,get,set,after){ el.innerHTML=''; keys.forEach(k=>{ const b=document.createElement('button'); b.type='button'; b.textContent=k; if(k===get()) b.className='on'; b.onclick=()=>{ set(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+
+let bA=2, pA=4.2;
+$('kb').addEventListener('input',()=>{ bA=+$('kb').value; draw(); });
+$('kp').addEventListener('input',()=>{ pA=+$('kp').value; draw(); });
+const pt=t=>[Math.cos(t),Math.sin(t)];
+const ang=(V,X,Y)=>{ const u=[X[0]-V[0],X[1]-V[1]], w=[Y[0]-V[0],Y[1]-V[1]]; return Math.acos(Math.max(-1,Math.min(1,(u[0]*w[0]+u[1]*w[1])/Math.hypot(...u)/Math.hypot(...w)))); };
+function draw(){ const C=[]; for(let t=0;t<=6.3;t+=0.03) C.push(pt(t));
+  const A=pt(0), B=pt(bA), P=pt(pA), O=[0,0], far=pA>bA&&pA<2*Math.PI, onAB=Math.abs(pA)<0.02||Math.abs(pA-bA)<0.02||Math.abs(pA-6.28)<0.02;
+  $('pl').innerHTML=svgPlane({lo:-1.5,hi:1.5,shapes:[{pts:C,c:'--ink',open:true},{pts:[A,O,B],c:'--teal',open:true,w:2},{pts:[A,P,B],c:'--ember',open:true,w:2.4}],dots:[{p:A,c:'--ink',t:'A'},{p:B,c:'--ink',t:'B'},{p:P,c:'--ember',t:'P'},{p:O,c:'--teal',t:'O'}]});
+  $('okb').textContent=show(bA); $('okp').textContent=show(pA);
+  const v=$('vd'); v.className='verdict';
+  if(onAB){ v.textContent='P sits on A or B: there is no angle there.'; return; }
+  const cA=ang(O,A,B), rA=ang(P,A,B);
+  v.textContent='Centre angle AOB = '+show(cA)+'. Rim angle APB = '+show(rA)+(far?', half the centre angle.':', on the short arc: π minus half the centre angle, '+show(Math.PI-cA/2)+'.'); }
+draw();
+window.__pic={set:(b,p)=>{ bA=b; pA=p; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'rim and centre',t:R`\htmlClass{new}{\angle AOB = 2\angle APB}`,n:`The rim angle is half.`}
+],{title:'The slides · rim · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'same arc',t:R`\htmlClass{new}{\angle APB = \tfrac{\pi}{2} \text{ on a diameter}}`,n:`The half-circle angle.`}
+],{title:'The slides · same arc · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'four on a circle',t:R`\htmlClass{new}{\angle A + \angle C = \pi}`,n:`Opposite angles.`}
+],{title:'The slides · four · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'incircle',t:R`\htmlClass{new}{\text{area} = r \cdot \tfrac{a + b + c}{2}}`,n:`The halving lines meet.`}
+],{title:'The slides · incircle · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`\angle APB \ne \angle AOB`,n:`Half.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

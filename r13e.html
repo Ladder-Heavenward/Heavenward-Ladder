@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>13e · The chain rule</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:3fr 2fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+#cvL{width:100%;display:block;border-radius:6px}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r13d.html">← 13d the power rule</a><a href="r13f.html">next: 13f a joint has no slope →</a></p>
+  <div class="tags"><span class="tag proof">13e · proof</span></div>
+  <h1>The chain rule</h1>
+  <p>In a chain, the inside's output is the outside's input. Name the inside, as 9f and 11c did. Change the input a little: the inside changes at its own rate, and the outside changes in turn, at its rate taken where the inside stands. Rates through a chain multiply. The obvious proof divides by the inside’s change, which can be 0 when the input’s change is not. This step builds a helper function that never divides by it, and proves the rule with every line cited. Then comes the d-mark for the slope, read as one mark; the slope of the square root; and what the rule says about a function and its undoing.</p>
+  <p class="gesture">Name the inside and the place it stands. Let a helper be the outside’s chord slope from that place, or its slope when the change is 0. Then the chain’s chord slope is the helper times the inside’s chord slope, and both head where they should.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r13a.html">13a</a> (the slope, Δ, slope-of-a-line, slopes-decided-near, slope-of-x³, slope-of-one-over-x), <a href="r13b.html">13b</a> (slope-means-no-gap, change-heads-to-0, slope-at-0-only), <a href="r13c.html">13c</a> and <a href="r13d.html">13d</a> (the rules), <a href="r11c.html">11c</a> (the chain, r and r₀, limit-passes-inside), <a href="r11a.html">11a</a> (continuity, continuity-unpacked), <a href="r09f.html">9f</a> (taking a chain apart; composite-domain; substitute for the expression), <a href="r09d.html">9d</a> (undoing; odd powers and their roots), <a href="r10f.html">10f</a> (root-limit, the conjugate), <a href="r08i.html">8i</a> (fractional powers, odd roots), <a href="r07d.html">7d</a> (definitions by cases), <a href="r10c.html">10c</a> (limits-multiply, limits-divide). <a href="r13f.html">13f</a> builds the quotient rule from this rule and the product rule; 13j works chains by hand; 13l asks when an undoing has a slope.</p></div>
+</header>
+
+<section class="class step" data-step="13e1">
+  <h2 class="sthead"><span class="stno">13e1</span>Rates through a chain</h2>
+  <p class="stands">Stands on 9f (taking a chain apart from the outside) and 13a (slopes).</p>
+  <p data-pid="eb51c5">Take y = (2x + 1)³. Taken apart from the outside, 9f's way, the last operation is cubing. So the outside is f(r) = r³ and the inside is r = g(x) = 2x + 1. At x = 1 the inside stands at r₀ = g(1) = 3. The inside's rate is 2 (slope-of-a-line): each step of x moves r by 2. The outside's rate, taken where the inside stands, is 3 · 3² = 27 (slope-of-x³): each step of r near 3 moves y by about 27. <b>Two rates in a row should multiply</b>: 27 · 2 = 54. Check by expanding: (2x + 1)³ = 8x³ + 12x² + 6x + 1 (4j's binomial technique, read in ℝ). Its slope at 1 is 24 + 24 + 6 = 54 by polynomial-slope. They agree.</p>
+  <p data-pid="15a047">The obvious proof says the same thing with changes. Write Δr = g(p + h) − g(p) and Δy = f(r₀ + Δr) − f(r₀). Then Δy/h = (Δy/Δr) · (Δr/h), the outside's chord slope times the inside's. Let h head to 0, and the two head to f′(r₀) and g′(p). It is almost right.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · rates multiply · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · three order lines: a step h of x, carried by the inside to Δr, carried by the outside to Δy</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="lbl">inside r = g(x)</div><div class="chips" id="gch"></div>
+      <div class="lbl">outside y = f(r)</div><div class="chips" id="fch"></div>
+      <canvas id="cvL"></canvas>
+      <div class="kn">
+        <span class="m">p</span><input type="range" id="ka" min="-1" max="2" step="0.1" value="1"><output id="oa"></output>
+        <span class="m">|h|</span><input type="range" id="kh" min="-3" max="0" step="0.01" value="-0.5"><output id="oh"></output>
+      </div>
+      <div class="chips" id="hch"><button class="on" data-s="1">h &gt; 0</button><button data-s="-1">h &lt; 0</button><button id="birr">h irrational</button></div>
+    </div>
+    <div class="panel">
+      <div class="cap">Three order lines, each drawn around where it starts, all to one scale. Grey on the x-line: the step h. Teal on the r-line: the inside's change Δr. Ember on the y-line: the outside's change Δy. Each ratio of neighbouring steps is a chord slope. Shrink h and the two ratios head to g′(p) and f′(r₀). With the inside x² · q(x) at 0, press “h irrational”: Δr is 0, the cancelling breaks, and the helper's value w(0) = f′(r₀) stands in.</div>
+      <div class="verdict" id="vd"></div>
+      <div class="eqbox" id="eq"></div>
+    </div>
+  </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">13e1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">y = (x + 2)^2,  x = 1</span></span>Name the inside and the outside, and where the inside stands. <br>Find the outside’s slope there, the inside’s slope at 1, and their product. <br>Check by expanding y.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13e2">
+  <h2 class="sthead"><span class="stno">13e2</span>Where the obvious proof breaks</h2>
+  <p class="stands">Stands on 13e1 and 13b (change-heads-to-0).</p>
+  <p data-pid="285312">It divides by Δr. <b>That is licensed only if Δr ≠ 0 for every small h ≠ 0, and nothing promises that.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: where dividing by Δr fails">
+g(x) = 2:\ \ \Delta r = 2 - 2 = \htmlClass{new}{0} \text{ for every } h @@ a constant inside: the cancelling column divides by 0 at every h
+g(x) = x^2 q(x) \text{ at } 0:\ \ \Delta r = h^2 q(h) @@ 13b's slope-at-0-only: g has slope 0 at 0. q is 9a's function
+\Delta r = \htmlClass{new}{0} \text{ at every irrational } h @@ q is 0 there; and every window around 0 holds irrationals (everyday-counting-passes, 8e)
+\dfrac{\Delta y}{\Delta r} \text{ names nothing at those } h @@ 5d's nothing-times-0-is-1. No rearrangement of the cancelling column is licensed
+  </pre>
+  <p data-pid="84d69e">The rule's answer is still right in both cases. With the constant inside, f ∘ g is constant and its slope is 0 = f′(2) · 0. Now take f(r) = r² + r and g(x) = x²q(x) at 0. Then f ∘ g is x⁴q(x) + x²q(x), since q(x)² = q(x), its values being 0 and 1. Its chord slope at 0 is h³q(h) + h q(h), squeezed to 0 by |h|³ + |h| (squeezed-to-0). And the rule gives f′(0) · g′(0) = 1 · 0 = 0. The rule is fine. The proof needs mending.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · where it breaks · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13e2.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">g(x) = (x − 1)^2,  p = 1</span></span>Find Δr for small h. <br>Say whether the obvious proof may divide by it.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13e3">
+  <h2 class="sthead"><span class="stno">13e3</span>The helper</h2>
+  <p class="stands">Stands on 13e2 and 11f (mending a gap with one value).</p>
+  <p data-pid="225d56">The mend comes from a well-known modern calculus book. Stop dividing by the inside's change. Instead, build a function that is the outside's chord slope when the change is not 0, and the outside's slope when it is.</p>
+  <p class="eqline" data-pid="494522">Page letters, said out loud. In this step R names a reach of f around r₀: f is defined on (r₀ − R, r₀ + R). k names a change of the outside's input, any real with |k| &lt; R, 0 included. And w names the helper, defined below. r keeps the learner's job from 9f: the inside's output.</p>
+  <p data-pid="bcf9ed">Helper technique: <b>let f have a slope at r₀, and be defined on (r₀ − R, r₀ + R). Let w(k) = (f(r₀ + k) − f(r₀))/k when 0 &lt; |k| &lt; R, and w(0) = f′(r₀). Then (i) w is continuous at 0, and (ii) f(r₀ + k) − f(r₀) = w(k) · k for every k with |k| &lt; R.</b> The definition is by cases on k = 0 or not, which three-way-order on ℝ settles: 7d's definitions by cases.</p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the helper technique">
+w \text{ is defined on } (-R, R),\ \ 0 \text{ an input} @@ the two cases cover every k with |k| &lt; R (three-way-order on ℝ)
+0 \lt |k| \lt R \;\Rightarrow\; w(k) = \dfrac{f(r_0 + k) - f(r_0)}{k} @@ the first case: w agrees with f's chord slope at r₀ off 0
+\lim_{k \to 0} w(k) = f'(r_0) = \htmlClass{new}{w(0)} @@ agreeing-near (10a) and 13a's line for f′(r₀); then the second case
+\text{(i)}\ \ w \text{ is continuous at } 0 @@ 11a's line: 0 is an input, w is defined near 0, the limit is the value
+k \ne 0:\ \ f(r_0 + k) - f(r_0) = w(k) \cdot k @@ multiply the first case by k: regroup for times on ℝ, reciprocal on ℝ
+k = 0:\ \ f(r_0) - f(r_0) = 0 = w(0) \cdot 0 @@ negative on ℝ; anything-times-zero
+\text{(ii)}\ \ f(r_0 + k) - f(r_0) = \htmlClass{new}{w(k) \cdot k} \text{ for every } |k| \lt R \quad \blacksquare @@ reasoning by cases on k = 0 ∨ k ≠ 0 (three-way-order on ℝ: rung 7's either-way principle)
+  </pre>
+  <p data-pid="48c555">No line divided by k where k might be 0. The helper's value at 0 was chosen to be the one value that makes it continuous there, as 11f's mending chose a value; that is all (i) says.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · the helper · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13e3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(r) = r^3,  r₀ = 1</span></span>Build the helper w for every k other than 0, and simplify it. <br>Say what w(0) must be.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13e4">
+  <h2 class="sthead"><span class="stno">13e4</span>The proof, every line cited</h2>
+  <p class="stands">Stands on 13e3.</p>
+  <p data-pid="e321c0">Chain technique for slopes (the chain rule): <b>rates through a chain multiply, the outside's taken where the inside stands, the inside's taken at p.</b> Precisely: let g have a slope at p, and let f have a slope at r₀ = g(p). Then f ∘ g has a slope at p, and (f ∘ g)′(p) = f′(g(p)) · g′(p).</p>
+  <pre class="lines" data-k="ember" data-label="this step: the chain technique for slopes">
+\text{call } R:\ f \text{ defined on } (r_0 - R, r_0 + R) @@ the hypothesis on f, by 13a's line; the helper w of helper for this R
+\begin{gathered}\text{call } \delta_0:\ |x - a| \lt \delta_0 \Rightarrow\\ x \in \operatorname{dom} g \land |g(x) - r_0| \lt R\end{gathered} @@ g is continuous at a (slope-means-no-gap, 13b); continuity-unpacked (11a) with ε = R; then the lesser with g's reach (lesser-below-both)
+f \circ g \text{ is defined on } (a - \delta_0, a + \delta_0) @@ g(x) lies in f's interval there: 9f's composite-domain
+\begin{gathered}0 \lt |h| \lt \delta_0:\ \ \Delta r = g(a + h) - g(a)\\ |\Delta r| \lt R\end{gathered} @@ 13a's Δ, written before the inside's letter
+\begin{gathered}(f \circ g)(a + h) - (f \circ g)(a)\\ = f(r_0 + \Delta r) - f(r_0)\end{gathered} @@ substitute for the expression: g(a + h) = r₀ + Δr (adding-keeps-answers), g(a) = r₀
+= \htmlClass{new}{w(\Delta r) \cdot \Delta r} @@ helper (ii), with k = Δr. Nothing is divided by Δr
+\dfrac{(f \circ g)(a + h) - (f \circ g)(a)}{h} = w(\Delta r) \cdot \dfrac{\Delta r}{h} @@ multiply by h⁻¹ (regroup for times on ℝ); h ≠ 0
+\dfrac{\Delta r}{h} \to \htmlClass{keep}{g'(a)} @@ the hypothesis on g
+\Delta r \to 0 @@ change-heads-to-0 (13b): g has a slope at a
+w(\Delta r) \to w(0) = \htmlClass{keep}{f'(r_0)} @@ limit-passes-inside (11c): the inside h ↦ Δr heads to 0, w is continuous at 0 (helper i), and w(Δr) is defined for 0 &lt; |h| &lt; δ₀
+\begin{gathered}(f \circ g)'(a) = f'(r_0) \cdot g'(a)\\ = \htmlClass{new}{f'(g(a)) \cdot g'(a)} \quad \blacksquare\end{gathered} @@ limits-multiply (10c), agreeing-near; substitute for the expression r₀ = g(a)
+  </pre>
+  <p data-pid="4fa948">Look at what each hypothesis paid for. The slope of g paid twice. It paid for Δr/h heading to the inside's slope. And through change-heads-to-0 it paid for Δr heading to 0, which is what lets the helper be read at a change heading to 0. The slope of f paid once, for the helper's continuity at 0. And the cancelling has gone: Δr appears as a factor, never as a bottom.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · chain for slopes · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13e4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">the column of chain for slopes</span></span>Find the line that needs Δr heading to 0. <br>Say which hypothesis pays for it.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13e5">
+  <h2 class="sthead"><span class="stno">13e5</span>Name the inside r</h2>
+  <p class="stands">Stands on 13e4, 13c (product for slopes) and 8i (the conjugate).</p>
+  <p data-pid="84b0b8">In use, the rule is three moves. Name the inside r and find where it stands, r₀. Take the outside's slope as though r were the input, at r₀. Multiply by the inside's slope, and substitute for the expression.</p>
+  <pre class="lines" data-k="ember" data-label="this step: chains, link by link">
+y = (2x + 1)^3:\ \ r = 2x + 1,\ \ y = r^3 @@ take the chain apart from the outside (9f)
+\text{at } x = 1:\ \ r_0 = 3,\ \ g'(1) = 2,\ \ f'(3) = 3 \cdot 3^2 = 27 @@ slope-of-a-line; slope-of-x³ at r₀
+(f \circ g)'(1) = 27 \cdot 2 = \htmlClass{new}{54} @@ chain for slopes; agrees with polynomial-slope on the expanded cubic
+y = \dfrac{1}{x^2 + 1}:\ \ r = x^2 + 1,\ \ y = \dfrac1r @@ the outside is 1/r, defined at every r ≠ 0, and r ≥ 1 here (square-never-negative)
+\text{slope at } x:\ \ -\dfrac{1}{r^2}\cdot 2x = \htmlClass{new}{-\dfrac{2x}{(x^2 + 1)^2}} @@ slope-of-one-over-x at r, times slope-of-x²; substitute for the expression r = x² + 1
+\text{at } 1:\ \ -\dfrac{2}{4} = -\tfrac12 @@ substitute for the expression x = 1
+  </pre>
+  <p data-pid="0477da">The second chain needs no knowledge of what a quotient's slope is, only 1/r's. That is one reason 13f builds the quotient rule from this rule.</p>
+  <p data-pid="46029f">The square root's slope comes directly from the definition, with 8i's conjugate.</p>
+  <p data-pid="1b8084">Slope-of-√ technique: <b>at every y &gt; 0, √ has slope 1/(2√y).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the slope-of-√ technique">
+0 \lt |h| \lt y:\ \ \dfrac{\sqrt{y + h} - \sqrt{y}}{h} @@ √ is defined on (0, 2y), an open interval around y
+= \dfrac{(\sqrt{y + h} - \sqrt{y})(\sqrt{y + h} + \sqrt{y})}{h\,(\sqrt{y + h} + \sqrt{y})} @@ multiply top and bottom by the conjugate (8i), which is positive
+= \dfrac{(y + h) - y}{h\,(\sqrt{y + h} + \sqrt{y})} @@ difference-of-squares (5h), and √t · √t = t (8f's line)
+= \htmlClass{new}{\dfrac{1}{\sqrt{y + h} + \sqrt{y}}} @@ cancel h (fractions-of-rationals i); h ≠ 0
+\to \dfrac{1}{\sqrt y + \sqrt y} = \htmlClass{keep}{\dfrac{1}{2\sqrt{y}}} \quad \blacksquare @@ root-limit (10f): √(y + h) → √y as h → 0; limits-add, limits-divide
+  </pre>
+  <p data-pid="79f65a">So (x^{1/2})′ = ½ x^{−1/2} for x &gt; 0, with 8i's fractional powers: x^{1/2} = √x and x^{−1/2} = 1/√x. 13d said its induction could not reach the power ½; this road does, and the formula has power for slopes's shape. A chain: √(x² + 1) at 2 has r₀ = 5, outside slope 1/(2√5), inside slope 4, so its slope is 4/(2√5) = 2/√5 ≈ 0.894.</p>
+  <p data-pid="146675">And 13d's displaced-slopes is a chain: f(x − s) has the inside x − s, whose slope is 1, so its slope at p is f′(p − s) · 1.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · name the inside · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13e5.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="y = (3x - 1)^4,"></span> <span data-tex-inline="x = 1"></span></span>Using chain for slopes, find the slope of y at x, naming the inside and the input where the outside's rate is taken.</li><li><span class="givens"><span data-tex-inline="f(r) = r^2,"></span> <span data-tex-inline="r_0 = 3"></span></span>Build the helper w for every nonzero k, simplify it, and check that giving it f's slope at 3 as its value at 0 makes it continuous at 0.</li><li><span class="givens"><span data-tex-inline="y = r^3,"></span> <span data-tex-inline="r = x^2 + 1"></span></span>Using chain for slopes, find the slope of y in x, and its value at x equal to 1.</li><li><span class="givens"><span data-tex-inline="f(x) = \sqrt{4x + 1},"></span> <span data-tex-inline="g(x) = 1/\sqrt{x}"></span></span>Using chain for slopes, find the slope of f at 2, and of g at 4 as a chain with the inside the root of x.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13e6">
+  <h2 class="sthead"><span class="stno">13e6</span>The d-mark</h2>
+  <p class="stands">Stands on 13e5.</p>
+  <p data-pid="544ae9">One of the two inventors wrote the slope of y with respect to x as dy/dx. Call it the d-mark. It makes the chain rule look like arithmetic. The ladder keeps the mark and gives it its meaning.</p>
+  <p class="eqline" data-pid="48a864">From here on, when y names the outputs of a function f of x, as in y = f(x), dy/dx names f′, and dy/dx at x₀ names f′(x₀). Read it “d y d x”. <b>It is one mark, written as a fraction for history's sake.</b> d is not a name, dy and dx name nothing on their own, and the bar is not 5b's dividing. dy/dx means the limit of the chord slopes Δy/Δx, never a quotient of two numbers. With other letters it is read the same way: dr/dx, dy/dr.</p>
+  <p class="eqline" data-pid="57ac13">Reuses, said out loud. The letter d has named things before: 4i's divisor d in d ∣ n, 12·phys's distance d, and others in their own steps. Inside dy/dx it is part of the mark and names nothing. The slash and the bar have been 5b's dividing and 5·cb2's quotient set a/∼. In dy/dx they are neither, and what stands around them says which, as 5·cb2 said of its own slash.</p>
+  <p data-pid="bcf27d">In d-marks the chain rule reads</p>
+  <div class="eqline" data-tex="\dfrac{dy}{dx} = \dfrac{dy}{dr} \cdot \dfrac{dr}{dx},"></div>
+  <p data-pid="ea1a0f">with dy/dr taken at r₀ = g(x₀) and dr/dx at x₀. It looks like cancelling dr. It is not: dy/dr and dr/dx are single marks, and the line that licenses it is chain for slopes, whose proof never divided by Δr. The resemblance is why the marks are worth keeping: they remember the rule for you. It is also why they need watching: they remember a proof that is wrong.</p>
+  <p data-pid="9265cc">The other inventor marked a flowing quantity's rate with a dot over its letter, and the English kept his dots for a century. The Continent kept the d, which made rules like this one easy to see. The quarrel between their followers, over who had found the method first, lasted longer than either man.</p>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · the d-mark · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13e6.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">y = r^2,  r = 3x + 1</span></span>Find dy/dr, dr/dx and dy/dx. <br>Say where dy/dr is taken when x = 0.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13e7">
+  <h2 class="sthead"><span class="stno">13e7</span>Undoing a function</h2>
+  <p class="stands">Stands on 13e6 and 9d (functions that undo each other).</p>
+  <p data-pid="8ba46e">Undoing's-slope technique: <b>let f have a slope at x₀, and let g undo f near x₀: g(f(x)) = x for every x in some open interval around x₀. If g has a slope at y₀ = f(x₀), then g′(y₀) · f′(x₀) = 1.</b> In d-marks: dx/dy · dy/dx = 1.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the undoing's-slope technique">
+(g \circ f)'(x_0) = g'(f(x_0)) \cdot f'(x_0) @@ chain for slopes, with f the inside and g the outside
+g \circ f \text{ agrees with } x \mapsto x \text{ on an open interval around } x_0 @@ the hypothesis
+(g \circ f)'(x_0) = \htmlClass{keep}{1} @@ slopes-decided-near (13a) and slope-of-a-line: x ↦ x has slope 1
+g'(y_0) \cdot f'(x_0) = \htmlClass{new}{1} \quad \blacksquare @@ the swap axiom; y₀ = f(x₀)
+  </pre>
+  <p data-pid="cf0221">So neither slope is 0, and g′(y₀) = 1/f′(x₀) (5d's nothing-times-0-is-1 and reciprocal, read in ℝ). Check it on 9d's pair, x² kept to (0, ∞) and √: at x₀ = 3, the slope of x² is 6, and the slope of √ at 9 is 1/(2 · 3) = 1/6 by slope-of-√. Their product is 1.</p>
+  <p data-pid="88cac1">Turned about, undoing's-slope refutes. x³ has slope 0 at 0 (slope-of-x³), and ∛ undoes it everywhere (9d's odd powers, 8i's odd roots). If ∛ had a slope at 0, undoing's-slope would give ∛′(0) · 0 = 1, that is 0 = 1 (anything-times-zero): totally false. So ∛ has no slope at 0. Undoing's-slope assumes that g has a slope; when g has one is a harder question, and 13l asks it.</p>
+  <section class="slides" id="sl8"><div class="eyebrow">The slides · undoing’s slope · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13e7.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = x^3 + x,  f(1) = 2</span></span>Let g undo f. If g has a slope at 2, find it by undoing’s-slope. <br>Say why the slope of f at 1 may not be 0.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13e8">
+  <h2 class="sthead"><span class="stno">13e8</span>Illegal moves</h2>
+  <p class="stands">Stands on 13e1 to 13e7.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+(f \circ g)'(a) = f'(a)\, g'(a)\,? @@ the outside's slope at the wrong place. (2x + 1)³ at 1: 3 · 2 = 6, but the slope is 54: take f′ at r₀ = 3
+(f \circ g)' = f' \circ g'\,? @@ (2x + 1)³ at 1: f′(g′(1)) = f′(2) = 12, not 54
+\big((2x + 1)^3\big)' = 3(2x + 1)^2\,? @@ forgets the inside's rate: 27 at 1, not 54
+\dfrac{dy}{dx} = \dfrac{dy}{dr}\cdot\dfrac{dr}{dx} \text{ “because the } dr \text{ cancel”}\,? @@ dr names nothing; the licence is chain for slopes, whose proof never divides by Δr
+\dfrac{\Delta y}{h} = \dfrac{\Delta y}{\Delta r}\cdot \dfrac{\Delta r}{h} \text{ for every small } h\,? @@ fails wherever Δr = 0: a constant inside, or x² q(x) at every irrational h
+g'(y_0) = \dfrac{1}{f'(x_0)} \text{ for any undoing}\,? @@ ∛ at 0: x³ has slope 0 there, and ∛ has none. undoing's-slope needs g's slope as a hypothesis
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13e8.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{slip: the outside\textquoteright s slope}"></span> <span data-tex-inline="\text{taken at } p \text{ instead of at } r_0"></span></span>Find a chain where the slip gives the right answer at every p, and one where it fails.</li><li><span class="givens"><span data-tex-inline="\Delta r = 0 \text{ for every } h"></span></span>Find every inside g this is true for. <br>Find the slope chain for slopes gives then, and the line of its column that handles it.</li><li><span class="givens"><span data-tex-inline="\text{Claim: } \frac{\Delta y}{h} = \frac{\Delta y}{\Delta r} \cdot \frac{\Delta r}{h},"></span> <span data-tex-inline="\text{so the chain rule is proved}"></span></span>Find an inside and an h that break this line.</li><li><span class="givens"><span data-tex-inline="x^2 \text{ has slope } 0 \text{ at } 0,"></span> <span data-tex-inline="\sqrt{x^2} = x \text{ for } x \ge 0"></span></span>Run undoing's-slope turned about on the root at 0, as far as you can take it, and find the hypothesis that is not met. <br>Repair the argument so that it shows the root has no slope at 0.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13e9">
+  <h2 class="sthead"><span class="stno">13e9</span>Running it backwards</h2>
+  <p class="stands">Stands on 13e1 to 13e7.</p>
+  <p data-pid="6cfaef">Handed the slope 3(x² − 4)² · 2x, read it as an outside's slope at r times an inside's slope. The inside's slope 2x belongs to r = x² − 4, and 3r² is the slope of r³, so the chain was (x² − 4)³. Handed a chain, take it apart from the outside, find where the inside stands, and multiply the two rates. Handed an undoing, check undoing's-slope's hypotheses before dividing by a slope. Found upward; written downward.</p>
+  <section class="slides" id="sl7"><div class="eyebrow">The slides · backwards · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13e9.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{a chain-rule answer:}"></span> <span data-tex-inline="5(x^2 + 1)^4 \cdot 2x"></span></span>Find the inside r, the outside as a function of r, and y.</li><li><span class="givens"><span data-tex-inline="w(k) = 12 + 6k + k^2"></span> <span data-tex-inline="\text{for } k \ne 0"></span></span>Find an outside f and an input of it that this helper could belong to, and what the helper's value at 0 must be.</li><li><span class="givens"><span data-tex-inline="\frac{dy}{dx} = 12 \text{ at } x = 2,"></span> <span data-tex-inline="r = 3x - 1"></span></span>Find the outside's rate, and the input of the outside at which it is taken.</li><li><span class="givens"><span data-tex-inline="f(x) = 3x - 6,"></span> <span data-tex-inline="g \text{ undoes } f,"></span> <span data-tex-inline="x_0 = 2"></span></span>Find g, and check undoing's-slope at x₀.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">13e.4.1</span><span class="tagq">build</span>Build a chain of your own whose inside g has a slope at 0 and whose inside change is 0 at endlessly many h near 0, though g is not constant near 0. <br>Find the chain's slope at 0 by chain for slopes, and the line of its column that handles those h.</div>
+  <div class="chq"><span class="chid">13e.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="f(r) = r \text{ (outside);}"></span> <span data-tex-inline="g(x) = x \text{ (inside)}"></span></span>Using chain for slopes, find the slope it gives with the identity as the outside, and with the identity as the inside.</div>
+  <div class="chq"><span class="chid">13e.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="f \circ g \text{ has a slope at } p"></span></span>Decide whether g must have one at p. <br>Decide whether f must have one at the value of g at p.</div>
+  <div class="chq"><span class="chid">13e.4.4</span><span class="tagq">seam</span>One inventor wrote a dot over a letter for its rate. The other wrote dy/dx, which looks like a fraction and nearly behaves like one. British mathematicians kept the dots for a century, out of loyalty. Then three Cambridge students founded the Analytical Society in 1812 to bring in the d-marks, joking that they stood for pure d-ism against the dot-age of the university. <br>Does a notation do mathematics, or only record it?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r13d.html">← 13d · the power rule</a><a href="r13f.html">13f · a joint has no slope →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>The helper is from Michael Spivak’s Calculus. The d-mark is Gottfried Wilhelm Leibniz’s; the dots are Isaac Newton’s. The Cambridge students of question 13e.4.4 were Charles Babbage, John Herschel and George Peacock. 9a’s function q is Dirichlet’s function.</p>
+  <aside class="voice para"><p>Spivak builds the helper as a function of h: the outside's chord slope across the inside's change when that change is not 0, and the outside's slope when it is. That function is this step's w(Δr). He stresses that the outer slope must be taken at g(p), where the inside has got to, and warns that Leibniz's notation makes the rule look like the cancelling of fractions, which hides exactly the case the helper handles.</p><cite>Spivak, Calculus, ch. 10</cite></aside>
+  <p>Accepted names: the d-mark is Leibniz notation, and the dot is Newton’s notation; the chain technique for slopes is the chain rule.</p>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; const a=Math.abs(v); let s=d!=null?v.toFixed(d):(a>=1000?v.toFixed(1):a>=1?v.toFixed(4):a>=0.0001?v.toFixed(6):v.toPrecision(3)); if(s.indexOf('.')>=0&&s.indexOf('e')<0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const pa=v=>v<0?'('+fm(v)+')':fm(v);
+const IN={
+  sq:{lab:'x²',tx:'x^2',g:(x,ir)=>x*x,d:x=>2*x},
+  lin:{lab:'2x + 1',tx:'2x + 1',g:(x,ir)=>2*x+1,d:x=>2},
+  con:{lab:'2',tx:'2',g:(x,ir)=>2,d:x=>0},
+  xq:{lab:'x² · q(x), at 0',tx:'x^2 q(x)',g:(x,ir)=>x===0?0:(ir?0:x*x),d:x=>0,only0:true}
+};
+const OUT={
+  cube:{lab:'r³',tx:'r^3',c:s=>`(${s})^3`,f:r=>r*r*r,d:r=>3*r*r,ok:r=>true},
+  rec:{lab:'1/r',tx:R`\tfrac1r`,c:s=>R`\dfrac{1}{${s}}`,f:r=>1/r,d:r=>-1/(r*r),ok:r=>r!==0},
+  sqrt:{lab:'√r',tx:R`\sqrt r`,c:s=>R`\sqrt{${s}}`,f:r=>Math.sqrt(r),d:r=>0.5/Math.sqrt(r),ok:r=>r>0},
+  quad:{lab:'r² + r',tx:'r^2 + r',c:s=>`(${s})^2 + ${s}`,f:r=>r*r+r,d:r=>2*r+1,ok:r=>true}
+};
+let gi='lin', fo='cube', A=1, S=1, LH=-0.5, IR=false;
+const ka=$('ka'),kh=$('kh'),cv=$('cvL');
+const hv=()=>S*Math.pow(10,LH);
+function state(){ const G=IN[gi],Fo=OUT[fo]; const a=G.only0?0:A, h=hv();
+  const ir=G.only0&&IR; const r0=G.g(a,false), r1=G.g(a+h,ir), dr=r1-r0;
+  const okr=Fo.ok(r0)&&(fo!=='sqrt'||r1>=0)&&(fo!=='rec'||r1!==0);
+  const y0=okr?Fo.f(r0):NaN, y1=okr?Fo.f(r1):NaN, dy=y1-y0;
+  return {G,Fo,a,h,r0,r1,dr,y0,y1,dy,okr,ir}; }
+function nice(span){ const p=Math.pow(10,Math.floor(Math.log10(span/4))); const r=span/4/p; return p*(r>=5?5:r>=2?2:1); }
+function tl(v,g){ const dec=Math.max(0,-Math.floor(Math.log10(g))); const s=(Math.round(v/g)*g).toFixed(dec); return s==='-0'?'0':String(+s); }
+function size(){ const d=window.devicePixelRatio||1, W=cv.clientWidth, H=Math.round(W/(W>500?1.7:1.2)); cv.width=W*d; cv.height=H*d; cv.style.height=H+'px'; const c=cv.getContext('2d'); c.setTransform(d,0,0,d,0,0); return {c,W,H}; }
+function draw(){ const st=state(); const {c,W,H}=size(); c.fillStyle=col('--card'); c.fillRect(0,0,W,H);
+  const span=Math.max(Math.abs(st.h),Math.abs(st.dr)||0,isFinite(st.dy)?Math.abs(st.dy):0,1e-9)*2.4;
+  const L=40,Rr=W-12,mid=(L+Rr)/2,sc=(Rr-L)/span;
+  const lines=[{y:H*0.2,lab:'x',v0:st.a,v1:st.a+st.h,cl:'--muted',nm:'h'},{y:H*0.52,lab:'r',v0:st.r0,v1:st.r1,cl:'--teal',nm:'Δr'},{y:H*0.84,lab:'y',v0:st.y0,v1:st.y1,cl:'--ember',nm:'Δy'}];
+  const px=(Ln,v)=>mid+(v-Ln.v0)*sc-(Ln.v1-Ln.v0)*sc/2;
+  c.lineWidth=1; c.strokeStyle=col('--grid'); c.setLineDash([3,3]);
+  for(let i=0;i<2;i++){ const a=lines[i],b=lines[i+1]; if(!isFinite(b.v0)) continue; c.beginPath(); c.moveTo(px(a,a.v0),a.y); c.lineTo(px(b,b.v0),b.y); c.moveTo(px(a,a.v1),a.y); c.lineTo(px(b,b.v1),b.y); c.stroke(); }
+  c.setLineDash([]);
+  lines.forEach(Ln=>{ c.strokeStyle=col('--muted'); c.lineWidth=1.2; c.beginPath(); c.moveTo(L,Ln.y); c.lineTo(Rr,Ln.y); c.stroke();
+    c.fillStyle=col('--muted'); c.textAlign='left'; c.font='italic 15px "Source Serif 4", serif'; c.fillText(Ln.lab,10,Ln.y+5);
+    if(!isFinite(Ln.v0)){ c.font='11px IBM Plex Mono, monospace'; c.fillText('no value: the outside cannot take r₀',L+6,Ln.y-8); return; }
+    c.font='10px IBM Plex Mono, monospace'; const lo=Ln.v0-(mid-L)/sc-(Ln.v1-Ln.v0)/2, hi=lo+(Rr-L)/sc; const g=nice((hi-lo)*Math.max(1,360/(Rr-L)));
+    c.textAlign='center'; for(let i=Math.ceil(lo/g);i*g<=hi;i++){ const t=i*g, X=px(Ln,t); if(X<L+8) continue; c.beginPath(); c.moveTo(X,Ln.y-4); c.lineTo(X,Ln.y+4); c.stroke(); c.fillText(tl(t,g),X,Ln.y+16); }
+    const a=px(Ln,Ln.v0),b=px(Ln,Ln.v1); c.strokeStyle=col(Ln.cl); c.lineWidth=7; c.lineCap='round'; c.beginPath(); c.moveTo(a,Ln.y); c.lineTo(Math.abs(b-a)<0.5?a+0.5:b,Ln.y); c.stroke(); c.lineCap='butt';
+    c.fillStyle=col('--ink'); c.beginPath(); c.arc(a,Ln.y,4.5,0,7); c.fill();
+    c.fillStyle=col(Ln.cl); c.font='12px IBM Plex Mono, monospace'; c.fillText(Ln.nm+' = '+fm(Ln.v1-Ln.v0),Math.min(Rr-50,Math.max(L+50,(a+b)/2)),Ln.y-12); }); }
+function read(){ const st=state(); $('oa').textContent=fm(st.a,1); $('oh').textContent=fm(Math.abs(st.h)); ka.disabled=!!st.G.only0;
+  const vd=$('vd'), G=st.G, Fo=st.Fo;
+  if(!Fo.ok(st.r0)){ vd.className='verdict lose'; vd.textContent='The outside has no slope at r₀ = '+fm(st.r0)+' (it is not even '+(fo==='sqrt'?'defined near it':'defined there')+'): chain for slopes\'s hypothesis on f fails, and the rule says nothing. Choose another p or another pair.'; tex($('eq'),R`r_0 = g(${fm(st.a,1)}) = ${fm(st.r0)}`,true); return; }
+  const inner=st.dr/st.h, d1=G.d(st.a), d2=Fo.d(st.r0);
+  let mid;
+  if(st.dr===0){ mid=R`\tfrac{\Delta y}{\Delta r} = \tfrac00\ \text{names nothing}\\ w(\Delta r) = w(0) = f'(r_0) = ${fm(d2)}\\ \tfrac{\Delta y}{h} = w(0)\cdot\tfrac{\Delta r}{h} = ${fm(d2)} \cdot 0 = ${fm(st.dy/st.h)}`;
+    vd.className='verdict lose'; vd.textContent='Here Δr = 0 with h ≠ 0: the cancelling column would divide by 0. The helper does not: w(0) = f′(r₀), and the chain\'s chord slope is w(0) · 0 = 0, exactly as chain for slopes\'s column says.'; }
+  else { const outer=st.dy/st.dr; mid=R`\tfrac{\Delta r}{h} = \htmlClass{keep}{${fm(inner)}},\ \ w(\Delta r) = \tfrac{\Delta y}{\Delta r} = \htmlClass{new}{${fm(outer)}}\\ \tfrac{\Delta y}{h} = w(\Delta r)\cdot\tfrac{\Delta r}{h} = ${fm(outer*inner)}`;
+    vd.className='verdict win'; vd.textContent='As h shrinks, the inside\'s chord slope heads to g′(p) = '+fm(d1)+' and the outside\'s, from r₀, to f′(r₀) = '+fm(d2)+'. Their product, the chain\'s chord slope, heads to '+fm(d1*d2)+'.'; }
+  tex($('eq'),R`\begin{gathered}y = ${Fo.c(G.tx)}\\ p = ${fm(st.a,1)},\ \ h = ${st.ir?R`\text{irrational, near } `:''}${fm(st.h)}\\ r_0 = ${fm(st.r0)},\ \ \Delta r = ${fm(st.dr)}\\ ${mid}\\ h \to 0:\ \ g'(p) = ${fm(d1)},\ \ f'(r_0) = ${fm(d2)}\\ (f \circ g)'(p) = \htmlClass{new}{${fm(d1*d2)}}\end{gathered}`,true); }
+function all(){ draw(); read(); }
+function chips(id,lib,cur,set){ const ch=$(id); Object.keys(lib).forEach(k=>{ const b=document.createElement('button'); b.textContent=lib[k].lab; if(k===cur) b.className='on'; b.onclick=()=>{ set(k); [...ch.children].forEach(z=>z.classList.toggle('on',z===b)); all(); }; ch.appendChild(b); }); }
+chips('gch',IN,gi,k=>gi=k); chips('fch',OUT,fo,k=>fo=k);
+ka.oninput=()=>{ A=+ka.value; all(); }; kh.oninput=()=>{ LH=+kh.value; all(); };
+$('hch').querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{ S=+b.dataset.s; $('hch').querySelectorAll('[data-s]').forEach(z=>z.classList.toggle('on',z===b)); all(); });
+$('birr').onclick=()=>{ IR=!IR; $('birr').classList.toggle('on',IR); all(); };
+new ResizeObserver(()=>draw()).observe(cv);
+if(window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change',draw);
+window.__pic={set:(g,f,a,h,ir)=>{ if(g){ gi=g; [...$('gch').children].forEach((b,i)=>b.classList.toggle('on',Object.keys(IN)[i]===g)); } if(f){ fo=f; [...$('fch').children].forEach((b,i)=>b.classList.toggle('on',Object.keys(OUT)[i]===f)); } if(a!=null){ A=a; ka.value=a; } if(h!=null){ S=h<0?-1:1; LH=Math.log10(Math.abs(h)); kh.value=LH; $('hch').querySelectorAll('[data-s]').forEach(z=>z.classList.toggle('on',+z.dataset.s===S)); } if(ir!=null){ IR=!!ir; $('birr').classList.toggle('on',IR); } all(); const st=state(); return {r0:st.r0,dr:st.dr,dy:st.dy,txt:$('vd').textContent}; }};
+all();
+
+/* ---------- slides ---------- */
+const N='\\htmlClass{new}', K='\\htmlClass{keep}';
+stepper('#sl1',[
+  {k:'ember',kl:'rates multiply',t:R`\begin{gathered}y = (2x + 1)^3\\ r = 2x + 1,\ \ r_0 = 3\\ 27 \cdot 2 = ${N}{54}\end{gathered}`,n:`The outside's rate at r₀ (slope-of-x³), times the inside's (slope-of-a-line). polynomial-slope on the expanded cubic agrees.`},
+  {k:'ember',kl:'the obvious proof',t:R`\dfrac{\Delta y}{h} = \dfrac{\Delta y}{\Delta r} \cdot \dfrac{\Delta r}{h}`,n:`Almost right. It divides by Δr.`}
+],{title:'The slides · rates multiply · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'where it breaks',t:R`\begin{gathered}g(x) = 2:\ \Delta r = 0\\ g(x) = x^2 q(x):\ \Delta r = ${N}{0}\\ \text{at every irrational } h\end{gathered}`,n:`Δr can be 0 while h is not, in every window around the input. The rule's answer is still right; the proof is not.`}
+],{title:'The slides · where it breaks · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'the helper',t:R`w(k) = \begin{cases} \dfrac{f(r_0 + k) - f(r_0)}{k} & k \ne 0\\[4pt] ${N}{f'(r_0)} & k = 0\end{cases}`,n:`The outside's chord slope off 0; its slope at 0. A definition by cases (7d), decidable by three-way-order on ℝ.`},
+  {k:'ember',kl:'helper (i)',t:R`\lim_{k \to 0} w(k) = f'(r_0) = w(0)`,n:`agreeing-near and the definition of f′(r₀): w is continuous at 0.`},
+  {k:'ember',kl:'helper (ii)',t:R`f(r_0 + k) - f(r_0) = ${N}{w(k)\cdot k}`,n:`For k ≠ 0, multiply by k; for k = 0, both sides are 0. Every |k| &lt; R. ∎`}
+],{title:'The slides · the helper · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'chain for slopes · 1 of 5',t:R`\begin{gathered}(f \circ g)(p + h) - (f \circ g)(p)\\ = f(r_0 + \Delta r) - f(r_0)\end{gathered}`,n:`Substitute for the expression: g(p + h) = r₀ + Δr. Defined for 0 &lt; |h| &lt; δ₀, by continuity of g (slope-means-no-gap, continuity-unpacked).`},
+  {k:'ember',kl:'chain for slopes · 2 of 5',t:R`= ${N}{w(\Delta r)\cdot\Delta r}`,n:`helper (ii), with k = Δr. Nothing is divided by Δr.`},
+  {k:'ember',kl:'chain for slopes · 3 of 5',t:R`\dfrac{\Delta(f \circ g)}{h} = w(\Delta r)\cdot\dfrac{\Delta r}{h}`,n:`Multiply by h⁻¹.`},
+  {k:'ember',kl:'chain for slopes · 4 of 5',t:R`\begin{gathered}\tfrac{\Delta r}{h} \to ${K}{g'(a)},\ \ \Delta r \to 0\\ w(\Delta r) \to w(0) = ${K}{f'(r_0)}\end{gathered}`,n:`The hypothesis on g; change-heads-to-0; limit-passes-inside (11c), since w is continuous at 0.`},
+  {k:'ember',kl:'chain for slopes · 5 of 5',t:R`(f \circ g)'(a) = ${N}{f'(g(a))\cdot g'(a)}`,n:`limits-multiply. Rates through a chain multiply. ∎`}
+],{title:'The slides · chain for slopes · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'with r · 1/(x² + 1)',t:R`\begin{gathered}r = x^2 + 1,\ \ y = \tfrac1r\\ -\dfrac{1}{r^2}\cdot 2x = ${N}{-\dfrac{2x}{(x^2 + 1)^2}}\end{gathered}`,n:`slope-of-one-over-x at r, times slope-of-x²; substitute for the expression. At 1: −½.`},
+  {k:'ember',kl:'slope-of-√ · 1 of 2',t:R`\dfrac{\sqrt{y + h} - \sqrt y}{h} = ${N}{\dfrac{1}{\sqrt{y + h} + \sqrt y}}`,n:`The conjugate (8i), difference-of-squares, then cancel h.`},
+  {k:'ember',kl:'slope-of-√ · 2 of 2',t:R`\to ${N}{\dfrac{1}{2\sqrt y}}`,n:`root-limit, limits-add, limits-divide. So (x^{1/2})′ = ½ x^{−1/2} for x &gt; 0: power for slopes's shape, by another road. ∎`}
+],{title:'The slides · name the inside · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'the d-mark',t:R`\dfrac{dy}{dx} = \dfrac{dy}{dr}\cdot\dfrac{dr}{dx}`,n:`One mark each, never a quotient. dy/dr at r₀, dr/dx at x₀. It looks like cancelling; the licence is chain for slopes.`}
+],{title:'The slides · the d-mark · ← → keys work'});
+stepper('#sl7',[
+  {k:'teal',kl:'backwards',t:R`3(x^2 - 4)^2\cdot 2x \;\Leftarrow\; ${N}{(x^2 - 4)^3}`,n:`2x is the inside's slope for r = x² − 4; 3r² is r³'s.`}
+],{title:'The slides · backwards · ← → keys work'});
+stepper('#sl8',[
+  {k:'ember',kl:'undoing\'s-slope',t:R`g'(y_0)\cdot f'(x_0) = ${N}{1}`,n:`chain for slopes on g ∘ f, which agrees with x near x₀ (slopes-decided-near, slope-of-a-line). dx/dy · dy/dx = 1, when both slopes exist.`},
+  {k:'ember',kl:'undoing\'s-slope checked',t:R`(x^2)'(3)\cdot \dfrac{1}{2\sqrt9} = 6 \cdot \tfrac16 = 1`,n:`9d's pair, x² kept to (0, ∞) and √.`},
+  {k:'ember',kl:'undoing\'s-slope turned about',t:R`\begin{gathered}\text{(slope of } \sqrt[3]{x} \text{ at } 0) \cdot 0 = 1\\ \bot\end{gathered}`,n:`x³ has slope 0 at 0, so ∛ has no slope there. Whether an undoing has a slope is 13l's question.`}
+],{title:'The slides · undoing’s slope · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

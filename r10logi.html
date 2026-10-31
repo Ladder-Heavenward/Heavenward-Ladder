@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>10·logi · How many trucks does a route need?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:5.5em;text-align:right}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r10crypt.html">← 10·crypt is a huge number of keys enough?</a><a href="r10econ.html">next: 10·econ can interest added more often grow without end? →</a></p>
+  <div class="tags"><span class="tag logi">10·logi · logistics</span></div>
+  <h1>How many trucks does a route need?</h1>
+  <p>How many trucks does a route need? Every summer morning in the Salinas Valley, crews cut lettuce in the fields, and trucks carry it to the coolers in Salinas, where it is chilled within hours of being cut. Too few trucks, and cut lettuce wilts in the sun. Too many, and drivers sit idle and are paid to wait. The question is hard because nothing about it stays still: trucks leave at odd times, some trips run long, and a jam at the cooler backs up into the fields. This page proves one exact fact about any queue at all: the number of items in it, on average, is how often they arrive times how long each one stays. It proves the fact for a day by counting, and for the long run by rung 10's limits. Then it counts the trucks, and shows why one slow step fills the whole line.</p>
+  <p class="gesture">Count the item-hours two ways: hour by hour, adding how many are waiting, and item by item, adding how long each stays. Divide by the hours: the average number waiting is the arrivals per hour times the average stay. Trucks on the road are trips per hour times hours per trip. And the line can pass on no more per hour than its slowest step: past that, the queue passes every bound.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r04j.html">4j</a> (the separate-piles technique, the number of members, Σ), <a href="r05i.html">5i</a> (rates, units, per), <a href="r09cb4.html">9·cb4</a> (sequences), <a href="r10c.html">10c</a> (limits-add, limits-multiply, constant-factor), <a href="r10d.html">10d</a> (the squeeze), <a href="r10f.html">10f</a> (a sequence heads to a limit, one-over-n, passing-every-bound). Later logistics pages balance stock against orders (named by rung number only: 14·logi).</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · a day counted two ways, the long run, the trucks, the slow step</div>
+
+  <h3>A queue, counted by the hour</h3>
+  <p data-pid="2f3a07">Logistics is the work of getting things where they are needed, when they are needed. Its first object is the <b>queue</b>, read broadly: any place where items arrive, stay a while, and leave. A cooler holding pallets is one; so is a dock holding trucks, or a road holding the trucks on it.</p>
+  <p class="eqline" data-pid="45b44d">From here on, on this page, time is counted in whole hours, 0, 1, 2, …, and the queue is looked at once in each hour. Item j arrives at hour a_j and leaves at hour d_j, with a_j ≤ d_j. It is in the queue at the hours a_j, a_j + 1, …, d_j − 1, and its <b>stay</b> is W_j = d_j − a_j hours. N(t) names the number of items in the queue at hour t.</p>
+  <p data-pid="d9dd0e">A pair (j, t) with item j in the queue at hour t is an <b>item-hour</b>. A truck that waits three hours at a dock makes three item-hours there.</p>
+  <p data-pid="095b61">Item-hours technique: <b>if every item that is ever in the queue during hours 0 to T − 1 arrives and leaves within those hours, then Σ_{t&lt;T} N(t) = Σ_j W_j.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the item-hours technique">
+H = \{(j, t) : \text{item } j \text{ is in the queue at hour } t\} @@ a finite set: finitely many items, hours below T
+H \text{ by hours: } \htmlClass{new}{\textstyle\sum_{t \lt T} N(t)} \text{ members} @@ the pairs at hour t are N(t), and different hours share none (separate-piles, 4j)
+H \text{ by items: } \htmlClass{new}{\textstyle\sum_j W_j} \text{ members} @@ the pairs of item j are its W_j hours, all below T by the supposition; different items share none
+\textstyle\sum_{t \lt T} N(t) = \htmlClass{keep}{\sum_j W_j} \quad \blacksquare @@ one set has one number of members (4j)
+  </pre>
+  <p data-pid="8e5d33">Now share both sides out. Let A be the number of items. The average number in the queue over the window is L = (1/T) Σ N(t). The arrivals per hour are λ = A/T. The average stay is W = (1/A) Σ W_j. Here λ is the Greek letter lambda, in its small form: on this page it names arrivals per hour, and its capital form is not used.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the queue identity">
+L = \tfrac1T \textstyle\sum_{t \lt T} N(t) = \tfrac1T \sum_j W_j @@ item-hours
+= \tfrac{A}{T} \cdot \tfrac1A \textstyle\sum_j W_j @@ times A/A, which is 1 when A ≠ 0
+= \htmlClass{keep}{\lambda\,W} @@ arrivals per hour times the average stay
+  </pre>
+  <p data-pid="47677f">Queue identity: <b>on average, the number of items waiting equals how often they arrive times how long each stays.</b> You may use it for any queue that starts and ends a window empty, whatever the order of arrivals, whatever the spread of stays, whoever is served first. Check the units by 5i: items per hour times hours is items.</p>
+  <pre class="lines" data-k="ember" data-label="this page: a cooler's afternoon">
+\text{pallets in, } 4 \text{ hours, empty to empty: } N = 3, 5, 6, 4, 2, 0 @@ six looks, hours 0 to 5, a model
+\textstyle\sum N(t) = 20 \text{ pallet-hours} @@ by hours
+10 \text{ pallets, stays } 1, 2, 2, 2, 2, 2, 3, 2, 2, 2 @@ by items: 20 pallet-hours, the same
+L = \tfrac{20}{6},\ \ \lambda = \tfrac{10}{6} \text{ per hour},\ \ W = 2 \text{ hours} @@ L = λW: 10/3 = (5/3) · 2
+  </pre>
+
+  <h3>The long run</h3>
+  <p data-pid="d8daba">A cooler that runs day and night never starts a window empty and ends it empty. Then the item-hours inside the window fall short of the stays: items still in the queue at the end have hours to come. Rung 10 says how much that matters: in the long run, nothing.</p>
+  <p data-pid="ee48db">For each T, let L_T be the average number in the queue over hours 0 to T − 1, let λ_T be the arrivals per hour over those hours, and let W_T be the average full stay of the items that arrived in them. These are three sequences (9·cb4), and 10f says what it means for each to head to a limit.</p>
+  <p data-pid="9de2c4">Long-run technique: <b>if the queue never holds more than M items, no item stays more than S hours, λ_T → λ and W_T → W, then L_T → λW.</b> Suppose also the queue is empty at hour 0.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the long-run technique">
+\textstyle\sum_{\text{arrived} \lt T} W_j - \sum_{t \lt T} N(t) = \text{the hours still to come} @@ item-hours, with the pairs at hours T and after left out
+0 \le \text{hours still to come} \le \htmlClass{new}{M\,S} @@ at most M items are in the queue at hour T, each with at most S hours left
+0 \le \lambda_T W_T - L_T \le \tfrac{MS}{T} @@ divide by T, as in the queue identity
+\tfrac{MS}{T} \to 0 @@ one-over-n and constant-factor (10f, 10c)
+\lambda_T W_T - L_T \to 0 @@ the squeeze, far out (10d, 10f), between 0 and MS/T
+L_T = \lambda_T W_T - (\lambda_T W_T - L_T) \to \htmlClass{keep}{\lambda W - 0} \quad \blacksquare @@ limits-multiply, then limits-subtract
+  </pre>
+  <p data-pid="6a8f18">The bounds M and S are not decoration. A queue that grows without end has no M, and then L_T need not head anywhere; the slow step below makes one.</p>
+
+  <h3>The trucks</h3>
+  <p data-pid="8c617e">Read the road as the queue and the trucks as its items. A truck arrives when it sets out on a trip, and leaves when it is back and free. Its stay is the hours per trip: the drive out, the loading, the drive back, the unloading, and any waiting between. So the average number of trucks on the road is the trips started per hour times the hours per trip.</p>
+  <p data-pid="fa86af">Truck-count technique: <b>a route needs at least (trips per day) × (hours per trip) ÷ (hours each truck works a day) trucks.</b> Each truck gives at most its working hours to the road each day, and the route uses trips × hours-per-trip truck-hours: the item-hours technique, counted by trucks and by trips.</p>
+  <pre class="lines" data-k="ember" data-label="this page: lettuce from Soledad to Salinas">
+\text{about } 40 \text{ km each way; a trip of } 2.5 \text{ hours} @@ drive both ways, load in the field, unload at the cooler: a model
+\begin{aligned}&\text{crews fill } 6 \text{ loads an hour}\\ &\quad\text{for } 10 \text{ hours: } 60 \text{ trips}\end{aligned} @@ λ = 6 trips per hour over the working day
+L = 6 \times 2.5 = \htmlClass{new}{15} \text{ trucks on the road} @@ the queue identity
+\tfrac{60 \times 2.5}{10} = \htmlClass{keep}{15} \text{ trucks, at the least} @@ truck-count; a sixteenth for the one that breaks down
+  </pre>
+  <p data-pid="09c1c3">Two things change the count, and the identity says by how much. More loads an hour raise λ, and the trucks rise in proportion. Longer trips raise W, and the trucks rise in proportion too. A half-hour wait at the cooler, on every trip, adds 6 × 0.5 = 3 trucks, bought only to stand in a line.</p>
+
+  <h3>Why a slow step fills the whole line</h3>
+  <p data-pid="6020dd">A line is a chain of steps that every item passes in turn: loading, driving, unloading, cooling. Write μ for the most items a step can pass on in an hour, its <b>capacity</b>, and D(n) for the items that have left the last step by hour n. Here μ is the Greek letter mu, in its small form: on this page it names a capacity per hour, and its capital form is not used.</p>
+  <p data-pid="5613c0">Slowest-step technique: <b>a line passes on no more items an hour than its slowest step: D(n) ≤ μ_min · n.</b> Every item that leaves the line has passed the slowest step, which passes on at most μ_min an hour. ∎ Speeding up any other step does not change the bound.</p>
+  <p data-pid="1707b4">Now let items arrive at λ an hour, steadily, with λ &gt; μ_min. By hour n, about λn have arrived and at most μ_min · n have left. So at least (λ − μ_min) · n are still in the line. That is a sequence that passes every bound (10f): for any number B, past n = B/(λ − μ_min) the line holds more than B. They pile up before the slow step, then fill the steps before it, back to the field. By the queue identity, read backwards, a line that keeps growing makes every item stay longer: W = L/λ grows with it.</p>
+  <pre class="lines" data-k="ember" data-label="this page: a cooler that is too slow">
+\lambda = 6 \text{ loads an hour},\ \ \mu_{\text{cooler}} = 5 @@ the cooler is the slowest step; a model
+\text{line at hour } n \ge (6 - 5)\,n = n @@ one more truck waiting each hour
+\text{hour } 10:\ \ \htmlClass{new}{10} \text{ trucks waiting} @@ the last load of the day waits about 2 hours (10 ahead, 5 an hour)
+\tfrac{D(n)}{n} \to \htmlClass{keep}{5} @@ the cooler's pace, whatever the trucks or the crews do
+  </pre>
+  <p data-pid="503cc2">When λ ≤ μ_min and arrivals are steady, the line settles instead, and D(n)/n heads to λ: the line passes on what it is given. Real arrivals are not steady, and a line near its capacity wobbles badly. That is why planners leave room above λ; the basement says a little more.</p>
+
+  <h3>Illegal moves</h3>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed">
+L = \lambda W \text{ over a window that ends full}\,? @@ only nearly: the hours still to come are missing; it is true in the long run (long-run)
+\text{trucks needed} = \text{trips per day}\,? @@ units: trips per day times hours per trip, over working hours per truck
+\text{a faster truck clears the cooler's queue}\,? @@ slowest-step: the cooler sets the pace; faster trucks only arrive sooner to wait
+\text{average stay} = \tfrac{\text{items}}{\text{arrivals per hour}} \text{ at one hour}\,? @@ L and λ are averages over the window, not one hour's look
+\lambda \gt \mu_{\min} \text{, but the queue settles}\,? @@ at least (λ − μ_min)n wait at hour n: it passes every bound
+  </pre>
+
+  <h3>Running it backwards</h3>
+  <p data-pid="49869b">Handed any two of L, λ and W, find the third: W = L/λ, λ = L/W. Handed a fleet and a trip time, find the most trips a day: trucks × working hours ÷ hours per trip. Handed a line whose output per hour has settled, look for the step whose capacity matches it: that is the slow step. Handed a wish, a shorter wait, shorten the stay or slow the arrivals; nothing else in the identity moves.</p>
+</section>
+
+<section class="pic" id="pic">
+  <div class="eyebrow">The picture · left: a day at a dock, counted by hours and by trucks · right: a line with a slow step</div>
+  <div class="panels">
+    <div class="panel">
+      <div class="lbl">trucks at a loading dock, one look an hour</div>
+      <canvas id="cvD"></canvas>
+      <div class="kn"><span class="m">arrivals per hour</span><input type="range" id="kl" min="1" max="8" step="1" value="4"><output id="ol"></output></div>
+      <div class="kn"><span class="m">longest stay</span><input type="range" id="kw" min="1" max="6" step="1" value="3"><output id="ow"></output></div>
+      <div class="chips"><button id="nd">a new day</button></div>
+      <div class="cap">Arrivals come for 10 hours, a different number each hour around the knob's value; each truck stays from 1 hour to the longest stay. Bars: N(t), the trucks at the dock at hour t; plum after the last arrival. The day runs until the dock is empty. Dashed teal: L.</div>
+      <div class="eqbox" id="eqD"></div>
+    </div>
+    <div class="panel">
+      <div class="lbl">loads waiting in a line of three steps, by hour</div>
+      <canvas id="cvL"></canvas>
+      <div class="kn"><span class="m">loads arriving per hour</span><input type="range" id="ka" min="1" max="10" step="0.5" value="6"><output id="oa"></output></div>
+      <div class="kn"><span class="m">loading capacity</span><input type="range" id="k1" min="1" max="12" step="0.5" value="8"><output id="o1"></output></div>
+      <div class="kn"><span class="m">trucks' capacity</span><input type="range" id="k2" min="1" max="12" step="0.5" value="7"><output id="o2"></output></div>
+      <div class="kn"><span class="m">cooler capacity</span><input type="range" id="k3" min="1" max="12" step="0.5" value="5"><output id="o3"></output></div>
+      <div class="cap">Bars: the loads waiting before loading (ember), before the trucks (plum) and before the cooler (gold), stacked, at each hour 1 to 40. Teal: D(n)/n, the loads out per hour so far, which heads to the least of the arrivals and the capacities. Dashed gold: that least value.</div>
+      <div class="verdict" id="vdL"></div>
+    </div>
+  </div>
+</section>
+
+<section class="slides" id="sl1"><div class="eyebrow">The slides · a queue; item-hours; counted two ways; the queue identity; a cooler's afternoon; the long run; the trucks; lettuce to Salinas; a wait costs trucks; the slowest step; passing every bound; illegal moves · ← → keys work</div></section>
+
+<section class="sayback">
+  <div class="eyebrow">Say it back · then work it</div>
+  <h2>Questions</h2>
+  <div class="phkey"></div>
+  <ol>
+    <li><span class="qid">10·logi.1</span><span class="gname">Counting the queue.</span><span class="gwhy">Do: build the page's pieces.</span>
+      <ol class="sub">
+        <li><span class="qid">10·logi.1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{Five trucks at a dock in}"></span> <span data-tex-inline="\text{Stockton arrive at hours}"></span> <span data-tex-inline="\text{0, 0, 1, 2, 4 and leave at}"></span> <span data-tex-inline="\text{hours 2, 3, 2, 5, 6.}"></span></span>Find N at each hour from 0 to 5, and both sides of item-hours.</li><li><span class="givens"><span data-tex-inline="\text{Five trucks at a dock in}"></span> <span data-tex-inline="\text{Stockton arrive at hours}"></span> <span data-tex-inline="\text{0, 0, 1, 2, 4 and leave at}"></span> <span data-tex-inline="\text{hours 2, 3, 2, 5, 6.}"></span></span>Over hours 0 to 5, find L, λ and W, and check the queue identity.</li><li><span class="givens"><span data-tex-inline="\text{A route from the Port of}"></span> <span data-tex-inline="\text{Oakland to a warehouse in}"></span> <span data-tex-inline="\text{Tracy runs 40 trips a day.}"></span> <span data-tex-inline="\text{A trip takes 4.5\ hours,}"></span> <span data-tex-inline="\text{and a truck works 10\ hours}"></span> <span data-tex-inline="\text{a day.}"></span></span>Find the least number of trucks.</li><li><span class="givens"><span data-tex-inline="\text{A cooler in Salinas takes}"></span> <span data-tex-inline="\text{in 30 pallets an hour and}"></span> <span data-tex-inline="\text{holds 75 on average.}"></span></span>Find the average stay, in minutes.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">10·logi.2</span><span class="gname">From the count back.</span><span class="gwhy">Undo: run the page's techs backwards.</span>
+      <ol class="sub">
+        <li><span class="qid">10·logi.2.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{A fleet of 12 trucks works}"></span> <span data-tex-inline="\text{10\ hours a day on 3-hour}"></span> <span data-tex-inline="\text{trips.}"></span></span>Find the most trips a day.</li><li><span class="givens"><span data-tex-inline="\text{A queue starts and ends}"></span> <span data-tex-inline="\text{empty,}"></span> <span data-tex-inline="N = 2, 4, 4, 3, 1, 0 \text{ over hours } 0 \text{ to } 5,"></span> <span data-tex-inline="\text{and 7 items passed through.}"></span></span>Find the average stay.</li><li><span class="givens"><span data-tex-inline="\text{A line&#x27;s output has}"></span> <span data-tex-inline="\text{settled at 45 loads an}"></span> <span data-tex-inline="\text{hour.}"></span> <span data-tex-inline="\text{Its steps have capacities}"></span> <span data-tex-inline="\text{60, 45 and 50, and arrivals}"></span> <span data-tex-inline="\text{are 70 an hour.}"></span></span>Name the slow step, and find how many more loads wait after 8 hours than at the start.</li><li><span class="givens"><span data-tex-inline="\text{Trucks on a route average}"></span> <span data-tex-inline="\text{9 on the road, and trips}"></span> <span data-tex-inline="\text{average 1.5\ hours.}"></span></span>Find the trips started per hour.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">10·logi.3</span><span class="gname">Where the count bends.</span><span class="gwhy">Bend: find where the techs stop working.</span>
+      <ol class="sub">
+        <li><span class="qid">10·logi.3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{Five trucks arrive at}"></span> <span data-tex-inline="\text{hours 0, 0, 1, 2, 4 and}"></span> <span data-tex-inline="\text{leave at hours 2, 3, 2, 5,}"></span> <span data-tex-inline="\text{6.}"></span> <span data-tex-inline="\text{The window stops after}"></span> <span data-tex-inline="\text{hour 3.}"></span></span>Find both sides of item-hours, and the gap.</li><li><span class="givens"><span data-tex-inline="\text{A route has trips of}"></span> <span data-tex-inline="\text{2\ hours and trips of}"></span> <span data-tex-inline="\text{5\ hours, 3 an hour of each.}"></span></span>Find the trucks on the road, and the average stay.</li><li><span class="givens"><span data-tex-inline="\text{Crews fill 6 loads an}"></span> <span data-tex-inline="\text{hour, and a trip takes}"></span> <span data-tex-inline="\text{2.5\ hours, 1.5 of them on}"></span> <span data-tex-inline="\text{the road.}"></span> <span data-tex-inline="\text{The trucks are made 20\%}"></span> <span data-tex-inline="\text{faster on the road.}"></span></span>Find the trucks needed with the cooler able to take 6 loads an hour, and with it able to take 5.</li><li><span class="givens"><span data-tex-inline="\lambda = \mu_{\min},"></span> <span data-tex-inline="\text{The arrivals are steady.}"></span></span>What does the line do? <br>What if the arrivals come in bursts with the same average?</li></ol></li>
+      </ol></li>
+    <li class="optgroup"><span class="qid">10·logi.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder challenges that rely on your own making. The page is complete without these; the rung's star needs them.</span>
+      <ol class="sub">
+        <li class="opt"><span class="qid">10·logi.4.1</span><span class="tagq">build</span>Build routes and logs of your own.<ol class="parts" type="a"><li>Choose a real route near you between two towns. <br>Estimate a trip's hours and a day's trips, and find the fleet. <br>Then find the trucks bought by a 20-minute wait at one end.</li><li><span class="givens"><span data-tex-inline="L = 2,"></span> <span data-tex-inline="W = 3"></span></span>Build a log of 6 items, starting and ending empty, with this L and W over a window you choose.</li><li><span class="givens"><span data-tex-inline="\lambda &gt; \mu_{\min},"></span> <span data-tex-inline="B \text{ is any bound.}"></span></span>Prove that there is an hour past which the line holds more than B items.</li><li>Prove the long-run technique for yourself, every line cited.</li></ol></li>
+        <li class="opt"><span class="qid">10·logi.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{A truck is waved through a}"></span> <span data-tex-inline="\text{gate and gone within the}"></span> <span data-tex-inline="\text{hour: it arrives and leaves}"></span> <span data-tex-inline="\text{at the same hour.}"></span></span>Does the queue identity count it? <br>What does it do to L, λ and W?</li>
+        <li class="opt"><span class="qid">10·logi.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="L = \lambda W \text{ exactly, over some window}"></span></span>Must the queue have been empty at both ends of the window?</li>
+        <li class="opt"><span class="qid">10·logi.4.4</span><span class="tagq">seam</span>A warehouse in Tracy keeps two days of goods on hand, so that no slow step ever stops its trucks. A warehouse in Lathrop keeps a few hours' worth, so that nothing sits waiting. Which is better run?</li>
+      </ol></li>
+  </ol>
+  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
+</section>
+
+<nav class="nextrung"><a href="r10crypt.html">← 10·crypt · is a huge number of keys enough?</a><a href="r10econ.html">10·econ · can interest added more often grow without end? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Unsteady arrivals</h3>
+  <p>How badly a line near its capacity wobbles when arrivals come at random is a question about chance, and the ladder takes it up with the statistics rungs. Nothing on this page leans on it.</p>
+  <h3>Who said it first</h3>
+  <p>Queueing as mathematics began with Agner Krarup Erlang, who worked out in Copenhagen from 1909 how many lines a telephone exchange needed. Philip Morse noticed in 1958 that L = λW was true in every queue he had solved, and challenged his readers to find one where it failed. John Little proved it in 1961 for queues that run forever, by a long-run argument. Shaler Stidham gave the short proof by counting item-hours in 1974. The slow step that sets a whole line's pace was made the centre of a method of running factories by Eliyahu Goldratt, in the novel The Goal (1984). The just-in-time way of running a line, with little stock, grew at Toyota in Japan from the 1950s under Taiichi Ohno.</p>
+  <aside class="voice para"><p>Little began by noting that the formula L = λW had been used for years as something everyone believed, and set out to prove that it is true under very general conditions.</p><cite>John D. C. Little, “A Proof for the Queuing Formula: L = λW”, Operations Research 9 (1961); paraphrase</cite></aside>
+  <p>Accepted names: the queue identity is Little's law, though on this ladder it is a technique: it is proved, not measured. The slow step is the bottleneck, and its capacity the line's throughput. Item-hours are a kind of person-hours or truck-hours. The two ways of running a warehouse in 10·logi.4.4 are called just-in-time and just-in-case.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="10·logi: a worked “proof”, not allowed">
+\text{the trucks wait at the cooler} @@ fine
+\text{so buy faster trucks} @@ not allowed: the cooler is the slowest step, and D(n) ≤ μ_cooler · n whatever the trucks do
+\text{and the waiting stops} @@ false: the trucks arrive sooner and wait longer; the line still grows by λ − μ_cooler an hour
+  </pre>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ let s=(+v).toFixed(d==null?2:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s; };
+let seed=7; const rnd=()=>{ seed=(seed*16807)%2147483647; return (seed-1)/2147483646; };
+/* left: a day at the dock */
+const kl=$('kl'),kw=$('kw'); let day=[];
+function makeDay(){ const lam=+kl.value, S=+kw.value; day=[]; for(let t=0;t<10;t++){ const k=Math.max(0,Math.round(lam+(rnd()-0.5)*lam)); for(let i=0;i<k;i++){ const w=1+Math.floor(rnd()*S); day.push({a:t,d:t+w}); } } }
+const PD=plane($('cvD'),{x:[0,16],y:[0,10],grid:0,labels:false,aspect:0.62,draw:Q=>drawD(Q)});
+function stats(){ const T=Math.max(1,...day.map(j=>j.d)); const N=[]; for(let t=0;t<T;t++) N.push(day.filter(j=>j.a<=t&&t<j.d).length); const sN=N.reduce((a,b)=>a+b,0), sW=day.reduce((a,j)=>a+j.d-j.a,0); return {T,N,sN,sW,A:day.length}; }
+function drawD(Q){ const c=Q.ctx, s=stats(), mx=Math.max(4,...s.N); Q.o.x=[-0.5,s.T+0.5]; Q.o.y=[-mx*0.12,mx*1.15];
+  c.strokeStyle=col('--grid'); c.lineWidth=1; c.beginPath(); for(let y=0;y<=mx;y+=Math.max(1,Math.round(mx/5))){ c.moveTo(Q.X(-0.5),Q.Y(y)); c.lineTo(Q.X(s.T+0.5),Q.Y(y)); } c.stroke();
+  s.N.forEach((v,t)=>{ c.fillStyle=col(t<10?'--ember':'--plum'); c.globalAlpha=.7; c.fillRect(Q.X(t-0.38),Q.Y(v),Q.X(t+0.38)-Q.X(t-0.38),Q.Y(0)-Q.Y(v)); c.globalAlpha=1; c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; c.fillText(t,Q.X(t),Q.Y(0)+13); if(v) c.fillText(v,Q.X(t),Q.Y(v)-3); });
+  const L=s.sN/s.T, lam=s.A/s.T, W=s.A?s.sW/s.A:0; Q.line(-0.5,L,s.T+0.5,L,'--teal',1.6,[6,4]); Q.text('L',s.T+0.3,L+mx*0.03,'--teal','right',12);
+  tex($('eqD'),R`\begin{gathered}\textstyle\sum_t N(t) = ${s.sN},\ \ \sum_j W_j = ${s.sW}\ \ (${s.A}\text{ trucks},\ T = ${s.T})\\ L = \tfrac{${s.sN}}{${s.T}} \approx ${fm(L)},\quad \lambda W = \tfrac{${s.A}}{${s.T}}\cdot\tfrac{${s.sW}}{${s.A}} \approx ${fm(lam)} \times ${fm(W)} = ${fm(lam*W)}\end{gathered}`,true);
+  $('ol').textContent=kl.value+' an hour'; $('ow').textContent=kw.value+' h'; }
+function newDay(){ makeDay(); PD.redraw(); }
+[kl,kw].forEach(el=>el.addEventListener('input',newDay)); $('nd').onclick=newDay;
+/* right: a line of three steps */
+const ka=$('ka'),k1=$('k1'),k2=$('k2'),k3=$('k3'); const H=40;
+function runLine(){ const lam=+ka.value, mu=[+k1.value,+k2.value,+k3.value]; const q=[0,0,0]; const rows=[]; let out=0; const rate=[];
+  for(let t=1;t<=H;t++){ q[0]+=lam; let pass=Math.min(q[0],mu[0]); q[0]-=pass; q[1]+=pass; pass=Math.min(q[1],mu[1]); q[1]-=pass; q[2]+=pass; pass=Math.min(q[2],mu[2]); q[2]-=pass; out+=pass; rows.push(q.slice()); rate.push(out/t); }
+  return {rows,rate,lim:Math.min(lam,...mu),mu,lam}; }
+const PL=plane($('cvL'),{x:[0,H],y:[0,10],grid:0,labels:false,aspect:0.62,draw:Q=>drawL(Q)});
+function drawL(Q){ const c=Q.ctx, r=runLine(); const tot=r.rows.map(q=>q[0]+q[1]+q[2]); const mx=Math.max(12,...tot, r.lam*1.2); Q.o.x=[-1,H+1]; Q.o.y=[-mx*0.06,mx*1.1];
+  c.strokeStyle=col('--grid'); c.lineWidth=1; c.beginPath(); for(let x=10;x<=H;x+=10){ c.moveTo(Q.X(x),Q.Y(0)); c.lineTo(Q.X(x),Q.Y(mx)); } c.stroke();
+  const shades=['--ember','--plum','--gold'];
+  r.rows.forEach((q,i)=>{ let base=0; q.forEach((v,k)=>{ if(v>0){ c.fillStyle=col(shades[k]); c.globalAlpha=.55; c.fillRect(Q.X(i+1-0.4),Q.Y(base+v),Q.X(i+1+0.4)-Q.X(i+1-0.4),Q.Y(base)-Q.Y(base+v)); c.globalAlpha=1; } base+=v; }); });
+  Q.line(-1,r.lim,H+1,r.lim,'--gold',1.6,[7,4]);
+  c.strokeStyle=col('--teal'); c.lineWidth=2.4; c.beginPath(); r.rate.forEach((v,i)=>{ const X=Q.X(i+1),Y=Q.Y(v); i?c.lineTo(X,Y):c.moveTo(X,Y); }); c.stroke();
+  c.font='11px IBM Plex Mono, monospace'; c.fillStyle=col('--muted'); c.textAlign='center'; for(let x=10;x<=H;x+=10) c.fillText(x,Q.X(x),Q.H-4);
+  ['oa','o1','o2','o3'].forEach((id,k)=>$(id).textContent=[ka,k1,k2,k3][k].value+' / h');
+  const names=['loading','the trucks','the cooler']; const slow=r.mu.indexOf(Math.min(...r.mu)); const vd=$('vdL'); const last=tot[H-1];
+  if(r.lam>Math.min(...r.mu)){ vd.className='verdict lose'; vd.textContent='Slowest step: '+names[slow]+', '+fm(r.mu[slow])+' an hour, below the '+fm(r.lam)+' arriving. After '+H+' hours '+fm(last,1)+' loads wait, at least ('+fm(r.lam)+' − '+fm(r.mu[slow])+') × n at hour n: it passes every bound. Loads out per hour head to '+fm(r.lim)+'.'; }
+  else { vd.className='verdict win'; vd.textContent='Every step can pass on the '+fm(r.lam)+' arriving each hour. The line settles, and loads out per hour head to '+fm(r.lim)+', the arrivals. Slowest step: '+names[slow]+', with room to spare of '+fm(r.mu[slow]-r.lam)+' an hour.'; } }
+[ka,k1,k2,k3].forEach(el=>el.addEventListener('input',()=>PL.redraw()));
+makeDay(); PD.redraw(); PL.redraw();
+window.__pic={read:()=>({D:$('eqD').textContent,L:$('vdL').textContent})};
+
+const N='\\htmlClass{new}', Kp='\\htmlClass{keep}';
+stepper('#sl1',[
+  {k:'ember',kl:'a queue',t:R`\text{arrive at } a_j,\ \text{leave at } d_j,\ \ W_j = d_j - a_j`,n:`One look an hour; N(t) items at hour t.`},
+  {k:'ember',kl:'item-hours',t:R`H = \{(j, t) : j \text{ in the queue at } t\}`,n:`A truck that waits three hours makes three item-hours.`},
+  {k:'teal',kl:'from 4j · counted two ways',t:R`\textstyle\sum_t N(t) = ${Kp}{\sum_j W_j}`,n:`By hours or by items: one set, one number of members.`},
+  {k:'ember',kl:'the queue identity',t:R`L = \tfrac{A}{T}\cdot\tfrac1A\textstyle\sum_j W_j = ${N}{\lambda W}`,n:`For a window that starts and ends empty.`},
+  {k:'ember',kl:'a cooler’s afternoon',t:R`\tfrac{20}{6} = \tfrac{10}{6} \times 2`,n:`20 pallet-hours, by hours and by pallets.`},
+  {k:'teal',kl:'from 10f · the long run',t:R`0 \le \lambda_T W_T - L_T \le \tfrac{MS}{T} \to 0`,n:`The squeeze far out, then limits-multiply: L_T → λW.`},
+  {k:'ember',kl:'the trucks',t:R`\text{trucks on the road} = \text{trips per hour} \times \text{hours per trip}`,n:`The road is the queue.`},
+  {k:'ember',kl:'lettuce to Salinas',t:R`6 \times 2.5 = ${N}{15}`,n:`60 trips in a 10-hour day; a sixteenth truck for breakdowns.`},
+  {k:'ember',kl:'a wait costs trucks',t:R`6 \times 0.5 = 3`,n:`Half an hour at the cooler, every trip, buys three trucks to stand in line.`},
+  {k:'ember',kl:'the slowest step',t:R`D(n) \le \mu_{\min}\,n`,n:`Every item passes the slowest step.`},
+  {k:'teal',kl:'from 10f · passing every bound',t:R`(\lambda - \mu_{\min})\,n`,n:`Past n = B/(λ − μ_min) the line holds more than B.`},
+  {k:'ember',kl:'illegal',t:R`\text{faster trucks}`,n:`They arrive sooner to wait: the cooler sets the pace.`}
+],{title:'The slides · a queue; item-hours; counted two ways; the queue identity; a cooler’s afternoon; the long run; the trucks; lettuce to Salinas; a wait costs trucks; the slowest step; passing every bound; illegal moves · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="ladder-cert" content="rung"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>9·cb4 · Recursion revisited: sequences</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+#cvR,#cvD{touch-action:manipulation;cursor:pointer}
+.chips .lab{font-family:var(--mono);font-size:.8rem;color:var(--muted);margin-right:2px}
+table.tt td.l{text-align:left;font-family:var(--serif)}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r09stat.html">← 9·stat what does a list of data look like?</a><a href="r09crypt.html">next: 9·crypt can a code be truly unbreakable? →</a></p>
+  <div class="tags"><span class="tag then">9·cb4 · newsflash for 4c</span></div>
+  <h1>Recursion revisited: sequences</h1>
+  <p>4c proved the principle every later definition by repeating has leaned on: a start and a step fix exactly one function on the counting numbers. It had to be proved with the bare definition of a function, because the theory of functions did not exist yet. Now it does. A sequence is a function on the counting numbers. The recursion principle becomes a sentence about two chains of functions agreeing. And repeating a function a given number of times turns out to be the one gesture behind adding, multiplying and powers. With rung 7's either-way principle in hand, the page ends with something 4c could not prove. A sequence of numbers that never goes up must, at some point, stand still for ever, though nobody may be able to say when.</p>
+  <p class="gesture">A start and a step give exactly one sequence: each term is the step done to the term before, so any term is the step done that many times to the start. Adding, multiplying and powers are the steps “next one”, “add a number” and “times a number”, each done again and again.</p>
+  <div class="ready"><h3>What this calls back to, and what it stands on</h3><p>Calls back to <a href="r04c.html">4c</a> (recursion, the function s, same-outputs, closed sets, the layers and their catch), with <a href="r04e.html">4e</a> and <a href="r04f.html">4f</a> (adding, multiplying and powers by recursion), <a href="r04h.html">4h</a> (counted-recursion, lists, low marks, the dots). Stands on <a href="r04g.html">4g</a> (next-is-not-past, any-two-compare), <a href="r07cb4.html">7·cb4</a> (least-member-for-any-set), <a href="r07d.html">7d</a> (definitions by cases), <a href="r09a.html">9a</a> (equal-functions, ran), <a href="r09b.html">9b</a> (composite-is-a-function, regroup for composing, identity). Rung 10 asks where sequences of reals are headed.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · read it through, then work the picture and the slides</div>
+  <p data-pid="7ab979">An old book of arithmetic set a puzzle about rabbits. A pair is put in an enclosure. Each month every pair old enough bears a new pair, and a new pair is old enough after a month. How many pairs are there after a year? Each month’s count is found from the two before it.</p>
+  <h3>A sequence is a function on ℕ</h3>
+  <p class="eqline" data-pid="295911">From here on, a sequence of members of A is a function a : ℕ → A. Its value at n is its n-th term, written a_n with 4h's low mark, as 4h wrote the entries of a list. When a sequence is in hand it may be written a₀, a₁, a₂, ⋯. The dots stand for its terms, which the function supplies, as 4h's dots did for a list. They are writing for a sequence already given, never a tool that makes one.</p>
+  <p class="eqline" data-pid="0f6877">From here on, “term” is also said of a sequence. 5h's terms of a sum, the pieces joined by +, keep their meaning.</p>
+  <p data-pid="04e17c"><b>A list stops; a sequence does not</b>: 4h's lists were functions on {1, ⋯, k}, and a sequence is a function on all of ℕ. You have met many. 4c's s is the sequence 1, 2, 3, ⋯ (its n-th term is S(n)). 4c's d is 0, 2, 4, ⋯. 4j's running sums are sequences, and so are 8f's powers of a real. 8·cb5's endless decimal was a sequence of digits counted from 1. 9c's words apply to sequences as to any function. s is one-to-one; the sequence cat, dog, cat, dog, ⋯ of 4c is not, and its range is {cat, dog}.</p>
+
+  <h3>The recursion principle, in this rung's language</h3>
+  <p data-pid="db7c11">4c's recursion says: for a set A, a member p of A and a function g : A → A, there is exactly one f : ℕ → A with f(0) = p and f(S(n)) = g(f(n)) for every number n. Read the second condition with 9b's ring. On the left, f(S(n)) is f after s, at n. On the right, g(f(n)) is g after f, at n. So the condition says two chains of functions agree at every input. Recursion-restated technique: <b>for p ∈ A and g : A → A there is exactly one sequence f : ℕ → A with f(0) = p and f ∘ s = g ∘ f.</b></p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="teal" data-label="from 4c: recursion, read with 9b's ring">
+f \circ s = g \circ f @@ the claim about the step, as a sameness of functions ℕ → A
+\;\Leftrightarrow\; \forall n \in \mathbb N\ \ (f \circ s)(n) = (g \circ f)(n) @@ equal-functions (9a): both have domain ℕ
+\;\Leftrightarrow\; \forall n \in \mathbb N\ \ \htmlClass{new}{f(S(n)) = g(f(n))} @@ composite-is-a-function (9b) on each side; s(n) = S(n)
+\begin{aligned}&\text{so recursion-restated is recursion,}\\ &\quad\text{word for word} \quad \blacksquare\end{aligned} @@ existence and uniqueness both carried; 4c's same-outputs was equal-functions's leftward half
+  </pre>
+  <p data-pid="294219">Two roads from n agree. Go up a step with s, then read the term with f. Or read the term with f, then take a step with g. You land on the same member of A. <b>That is all “defining by repeating” ever meant</b>, and recursion-restated says it in one line.</p>
+
+  <p data-pid="3919d0">A sequence whose step adds the same amount d each time, u_(n+1) = u_n + d, is called arithmetic, and d its common difference. One whose step multiplies by the same amount r, u_(n+1) = u_n · r, is called geometric, and r its common ratio. Given by its start and step, a sequence is said to be defined recursively, by a recurrence; given by a formula in n, explicitly.</p>
+  <h3>Doing a function n times</h3>
+  <p data-pid="fb3230">The step g is applied once per number. Gather the repetitions into functions of their own.</p>
+  <p class="eqline" data-pid="e1c12e">From here on, for g : A → A and a number n, g^∘n names the n-th iterate of g. It is the function A → A fixed by recursion on the set of functions from A to A (a sift of 𝒫(A × A)), with start g^∘0 = id_A and step g^∘S(n) = g ∘ g^∘n. Read it “g done n times”. The ring in the high place marks an iterate, not 4f's power: g^∘2 is g ∘ g, and never g times g.</p>
+  <p data-pid="637c2c">The step h ↦ g ∘ h is a function on that set by composite-is-a-function and rule-makes-a-function, so recursion applies. Sequence-is-the-iterates technique: <b>the sequence of recursion-restated is n ↦ g^∘n(p).</b> By induction: at 0, g^∘0(p) = id_A(p) = p = f(0). If g^∘n(p) = f(n), then g^∘S(n)(p) = g(g^∘n(p)) = g(f(n)) = f(S(n)), by composite-is-a-function and the hypothesis. ∎ Iterates obey 4f's techniques for powers, with ∘ in place of times. Iterates-turn-about technique: <b>g ∘ g^∘m = g^∘m ∘ g.</b> Iterates-add technique: <b>g^∘(m + n) = g^∘m ∘ g^∘n.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the iterates-add technique, the step">
+g^{\circ(m + S(n))} = g^{\circ S(m + n)} @@ 4e's plus-a-next: m + S(n) = S(m + n)
+\phantom{g^{\circ(m + S(n))}} = g \circ g^{\circ(m + n)} @@ the iterate's step
+\phantom{g^{\circ(m + S(n))}} = g \circ (g^{\circ m} \circ g^{\circ n}) @@ the induction hypothesis
+\phantom{g^{\circ(m + S(n))}} = (\htmlClass{new}{g \circ g^{\circ m}}) \circ g^{\circ n} @@ regroup for composing (9b)
+\phantom{g^{\circ(m + S(n))}} = (\htmlClass{new}{g^{\circ m} \circ g}) \circ g^{\circ n} @@ iterates-turn-about
+\phantom{g^{\circ(m + S(n))}} = g^{\circ m} \circ (g \circ g^{\circ n}) = \htmlClass{keep}{g^{\circ m} \circ g^{\circ S(n)}} \quad \blacksquare @@ regroup for composing; the iterate's step. Base n = 0: identity and plus-zero
+  </pre>
+  <p data-pid="372024">Iterates-turn-about is a short induction of the same kind (base identity on both sides; step regroup for composing and the hypothesis). Iterates-multiply technique: <b>(g^∘m)^∘n = g^∘(m · n)</b>, by induction on n with iterates-add and 4f's times-a-next. These are 4f's powers-add-their-counts and power-of-a-power, with ∘ for times and iterates for powers. Brackets in a chain don't matter, so each proof is 4f's, word for word.</p>
+
+  <h3>The ladder of operations is one gesture</h3>
+  <p data-pid="8a2a31">4e defined p + q as f_p(q), the sequence with start p and step s. 4f defined p · q with start 0 and step y ↦ y + p, and p^q with start 1 and step y ↦ y · p. By sequence-is-the-iterates, each is an iterate run on its start. Ladder-of-operations technique: <b>for numbers p and n, with t_p(y) = y + p and m_p(y) = y · p on ℕ: p + n = s^∘n(p), p · n = t_p^∘n(0), and p^n = m_p^∘n(1).</b> Each defining sequence of rung 4 is the one recursion-restated gives for its start and step (uniqueness). Sequence-is-the-iterates names its terms. ∎</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>operation</th><th>start</th><th>step done n times</th><th>so</th></tr>
+    <tr><td class="l">adding n to p</td><td class="l">p</td><td class="l">s, the next one</td><td class="l">p + n = s^∘n(p)</td></tr>
+    <tr><td class="l">p times n</td><td class="l">0</td><td class="l">t_p, “add p”</td><td class="l">p · n = t_p^∘n(0)</td></tr>
+    <tr><td class="l">p to the power n</td><td class="l">1</td><td class="l">m_p, “times p”</td><td class="l">pⁿ = m_p^∘n(1)</td></tr>
+  </table></div>
+  <p data-pid="e18d00"><b>Each rung of the ladder is the rung below, done n times, and each starts at the do-nothing of the operation it repeats</b>: 4f's table, now one sentence. And the techniques come along. Iterates-add at g = s says s^∘(m + n)(p) = s^∘m(s^∘n(p)). That is (p + n) + m = p + (m + n), once turn-about for plus turns m + n about. 4c named a function by the sequence it lists; this page names the gesture that makes it.</p>
+  <p data-pid="87272f">Two cautions from 4c stand. The step must be a function from a set to itself. S is not a function (no set holds all its pairs: 2f's no-set-of-all-sets), though its restriction s to ℕ is. And the layers V_k of 3c, with step x ↦ 𝒫(x), are a sequence only if some set A holds every layer and 𝒫 of each of its members. No line of the ladder supplies one. Each layer can be built, as far along as you like. All of them as one sequence needs an axiom the ladder names only as history.</p>
+
+  <h3>With every statement true or false</h3>
+  <p data-pid="f08662">4h let a step split into cases only on a decidable statement, so that the rule named one thing. 7d lifted the restriction: a step may now split on any statement. Let G be the two-primes guess (7c; Goldbach's), and g(n) = S(n) if G, n if ¬G. Recursion-restated gives a sequence from 0: it is 0, 1, 2, ⋯ if G is true, and 0, 0, 0, ⋯ if not. It is a perfectly good function, by 9a, and nobody can tell you its third term.</p>
+  <p data-pid="882ff6">The either-way principle also proves something about sequences of numbers that rung 4 could not. First, what rung 4 could. No-endless-descent technique: <b>there is no sequence of numbers with u_S(n) &lt; u_n for every n.</b> Suppose one. Prove by induction on k that k ≤ u_n for every n. At 0 it is 4g's 0 ≤ u_n. And if k ≤ u_S(n) &lt; u_n, then S(k) ≤ u_n by next-is-not-past. Take k = S(u₀): S(u₀) ≤ u₀, against u₀ &lt; S(u₀). Refute. ∎ No either-way was used: a refutation, as 7e said of every descent. The descents on 4i and on 7e were this technique in costume.</p>
+  <p data-pid="d5572c">Now let the sequence merely never go up. Never-rising-stands-still technique: <b>if u_S(n) ≤ u_n for every n, there is an N with u_n = u_N for every n ≥ N.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the never-rising-stands-still technique">
+\operatorname{ran} a = \{a_n : n \in \mathbb N\},\ \ a_0 \in \operatorname{ran} a @@ 9a's range: a set of numbers with a member
+\text{call } m \text{ its least member};\ \ m = a_N \text{ for some } N @@ least-member-for-any-set (7·cb4), which leans on either-way; ﹀ ran
+n \ge N \Rightarrow a_n \le a_N @@ induction from N: each step never goes up (chain for less for ≤)
+n \ge N \Rightarrow a_N = m \le a_n @@ m is least in ran a, and a_n ∈ ran a
+\htmlClass{new}{a_n = a_N} \text{ for every } n \ge N \quad \blacksquare @@ any-two-compare: ≤ both ways is sameness; the call closes
+  </pre>
+  <p data-pid="184f75">The column cannot be made to name N. Let u_n be 1 if every even number from 4 up to 2n + 4 is a sum of two primes, and 0 otherwise. Each term is decidable, by 4i's bounded-some. The sequence never rises: once a counterexample appears, every later term is 0. Never-rising-stands-still says it stands still from some N on. If the two-primes guess is true it stands still at 1 from N = 0. If false, it drops to 0 at the first counterexample and stays. Which, and where, nobody knows. 7·cb4's least member had the same character: the either-way principle gives existence without an address. And never-rising-stands-still is about numbers. The never-rising sequence of reals 1, ½, ⅓, ⋯ never stands still, since 1/S(n) ≠ 1/S(S(n)). Where such a sequence of reals is headed is the question rung 10 makes exact.</p>
+
+  <h3>Illegal moves</h3>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed">
+\text{a sequence is a list}\,? @@ a list has a length (4h); a sequence is a function on all of ℕ
+g^{\circ 2}(x) = g(x) \cdot g(x)\,? @@ the iterate is g ∘ g. With g(x) = x + 1: g(g(2)) = 4, and g(2) · g(2) = 9
+\begin{aligned}&\text{the layers form a sequence}\\ &\quad\text{by recursion-restated}\,?\end{aligned} @@ recursion-restated needs a set A with x ↦ 𝒫(x) a function on it; the ladder supplies none (4c's catch)
+\text{never-rising-stands-still, so here is the } N\,? @@ least-member-for-any-set gives the least value without an address; the two-primes sequence has no known N
+\text{no endless descent in } \mathbb Z\,? @@ −1, −2, −3, ⋯ descends for ever: no-endless-descent's base used 0 ≤ a, which fails in ℤ
+\text{never rising, so standing still, for reals}\,? @@ 1, ½, ⅓, ⋯ never stands still. never-rising-stands-still needs least members, which ℕ has
+  </pre>
+
+  <h3>Running it backwards</h3>
+  <p data-pid="69397c">Handed a sequence: ask whether each term depends only on the one before. If so, name the start and the step, and recursion-restated and sequence-is-the-iterates say it is n ↦ g^∘n(p). cat, cat, dog has no step, as 4c said. Handed a technique about iterates: prove it as 4f proved its technique about powers, with regroup for composing where 4f used regroup for times. Handed a sequence of numbers that never rises: never-rising-stands-still says it stands still, and least-member-for-any-set is the reason. If it strictly falls, no-endless-descent says it cannot go on. Found upward; written downward.</p>
+</section>
+
+<section class="pic" id="pic">
+  <div class="eyebrow">The picture · left: a start, a step, and two roads that agree · right: sequences of numbers that never rise</div>
+  <div class="panels">
+    <div class="panel">
+      <div class="chips" id="rch"></div>
+      <canvas id="cvR"></canvas>
+      <div class="cap">The terms f(0) to f(9) of the sequence fixed by the start and step chosen. Tap a term f(n). Teal: the road up first, from n to S(n), then across by f. Gold: the road across first, by f, then a step g. Both land on f(S(n)) (recursion-restated). The readout gives the term as g done n times to the start (sequence-is-the-iterates) and, for the counting numbers, which operation of rung 4 it is (ladder-of-operations).</div>
+      <div class="eqbox" id="eqR"></div>
+    </div>
+    <div class="panel">
+      <div class="chips" id="dch"></div>
+      <canvas id="cvD"></canvas>
+      <div class="cap">Twelve terms of a sequence of numbers, as columns of dots. Tap a term to take 1 off it; later terms drop with it, so the sequence never rises. The least value is ringed gold, and from the first term holding it the sequence stands still (never-rising-stands-still). “strictly falling” asks each term to be smaller than the last: the row runs out of numbers (no-endless-descent).</div>
+      <div class="eqbox" id="eqD"></div>
+    </div>
+  </div>
+</section>
+
+<section class="slides" id="sl1"><div class="eyebrow">The slides · a sequence; recursion-restated; two roads; iterates; sequence-is-the-iterates; iterates-turn-about and iterates-add; iterates-multiply; the ladder of operations; the caution; a step by cases; no-endless-descent; never-rising-stands-still; no address · ← → keys work</div></section>
+
+<section class="sayback">
+  <div class="eyebrow">Say it back · then work it</div>
+  <h2>Questions</h2>
+  <div class="phkey"></div>
+  <ol>
+    <li><span class="qid">9·cb4.1</span><span class="gname">Sequences, run.</span><span class="gwhy">Do: build the page's pieces.</span>
+      <ol class="sub">
+        <li><span class="qid">9·cb4.1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="u_0 = 3,"></span> <span data-tex-inline="u_{n+1} = 2u_n - 1"></span></span>Find the first five terms, and a formula for the n-th.</li><li><span class="givens"><span data-tex-inline="g(x) = 2x"></span></span>Find the n-th iterate of g.</li><li><span class="givens"><span data-tex-inline="\text{arithmetic},"></span> <span data-tex-inline="u_0 = 7,"></span> <span data-tex-inline="d = -3"></span></span>Find the term at 10.</li><li><span class="givens"><span data-tex-inline="\text{geometric},"></span> <span data-tex-inline="u_0 = 5,"></span> <span data-tex-inline="r = \tfrac12"></span></span>Find the term at 4.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">9·cb4.2</span><span class="gname">From terms back to steps.</span><span class="gwhy">Undo: run the page's techs backwards.</span>
+      <ol class="sub">
+        <li><span class="qid">9·cb4.2.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="g^{\circ 3}(x) = 8x + 7"></span></span>Find g.</li><li><span class="givens"><span data-tex-inline="1, 4, 13, 40, \cdots"></span></span>Find the start and a step.</li><li><span class="givens"><span data-tex-inline="\text{arithmetic},"></span> <span data-tex-inline="u_3 = 10,"></span> <span data-tex-inline="u_7 = 22"></span></span>Find the sequence.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">9·cb4.3</span><span class="gname">Where steps and descent stop.</span><span class="gwhy">Bend: find where the techs stop working.</span>
+      <ol class="sub">
+        <li><span class="qid">9·cb4.3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li>Find three numbers that no sequence fixed by a start and a step can have as its first three terms.</li><li>Find a never-rising sequence of numbers, and its N.</li><li>Find a strictly falling sequence of integers, and the line of no-endless-descent's proof that breaks for it.</li></ol></li>
+      </ol></li>
+    <li class="optgroup"><span class="qid">9·cb4.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder challenges that rely on your own making. The page is complete without these; the rung's star needs them.</span>
+      <ol class="sub">
+        <li class="opt"><span class="qid">9·cb4.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{A start and a step fix a}"></span> <span data-tex-inline="\text{sequence.}"></span> <span data-tex-inline="L(x) = mx + b \text{ on } \mathbb{R}"></span></span>Build the formula for the sequence with step L.<ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="m \ne 1,"></span> <span data-tex-inline="\text{Let } P \text{ be } L^{\circ n}(x) = m^n x + b\,\dfrac{m^n - 1}{m - 1}."></span></span>By induction, prove P for every number n.</li><li><span class="givens"><span data-tex-inline="m \ne 1,"></span> <span data-tex-inline="\text{Let } c \text{ be the real with } L(c) = c."></span></span>Find c, and write the n-th iterate at x, less c, in terms of x less c.</li><li><span class="givens"><span data-tex-inline="m = 1"></span></span>Find the n-th iterate of L.</li></ol></li>
+        <li class="opt"><span class="qid">9·cb4.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="g : A \to A"></span></span>What is the 0-th iterate of g? <br>What is the n-th iterate of the identity on A?</li>
+        <li class="opt"><span class="qid">9·cb4.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="g^{\circ(m + n)} = g^{\circ m} \circ g^{\circ n},"></span> <span data-tex-inline="g^{\circ 2} = \mathrm{id}_A"></span></span>Must g be the identity on A?</li>
+        <li class="opt"><span class="qid">9·cb4.4.4</span><span class="tagq">seam</span>Halve a number if it is even; otherwise triple it and add one. Does every start reach 1?</li>
+      </ol></li>
+  </ol>
+  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
+</section>
+
+<nav class="nextrung"><a href="r09stat.html">← 9·stat · what does a list of data look like?</a><a href="r09cb8.html">9·cb8 · pairs that square to −1 →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>The old book with the rabbit puzzle is Fibonacci’s Liber Abaci, and the counts it gives are the Fibonacci numbers. The descent on 4i is Fermat’s; the one on 7e is Tennenbaum’s.</p>
+  <aside class="voice para"><p>Fibonacci set a puzzle about rabbits. A pair is put in an enclosure; each month every pair old enough bears a new pair, and a new pair is old enough after a month. How many pairs are there after a year? Each month’s count is found from the two before it.</p><cite>Fibonacci, Liber Abaci (1202), ch. 12; paraphrase</cite></aside>
+  <p>Accepted names: no-endless-descent is the method of infinite descent; the two-primes guess is Goldbach’s conjecture.</p>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper}=Rung;
+const R=String.raw;
+function size(cv,H){ const dp=window.devicePixelRatio||1, W=cv.clientWidth||300; cv.width=W*dp; cv.height=H*dp; cv.style.height=H+'px'; const c=cv.getContext('2d'); c.setTransform(dp,0,0,dp,0,0); return {c,W}; }
+const fmt=v=>typeof v==='string'?v:(Number.isInteger(v)?String(v):String(Math.round(v*1000)/1000));
+/* ---------- left: start and step ---------- */
+const PRE=[
+  {lab:'ℕ: start 3, step s',a:3,g:x=>x+1,gt:'s',it:n=>`s^{\\circ ${n}}(3) = 3 + ${n}`},
+  {lab:'ℕ: start 0, add 4',a:0,g:x=>x+4,gt:'t_4',it:n=>`t_4^{\\circ ${n}}(0) = 4 \\cdot ${n}`},
+  {lab:'ℕ: start 1, times 2',a:1,g:x=>x*2,gt:'m_2',it:n=>`m_2^{\\circ ${n}}(1) = 2^{${n}}`},
+  {lab:'cat, dog, owl: turn about',a:'cat',g:x=>({cat:'dog',dog:'owl',owl:'cat'})[x],gt:'g',it:n=>`g^{\\circ ${n}}(\\text{cat})`},
+  {lab:'ℝ: start 0, x ↦ x/2 + 1',a:0,g:x=>x/2+1,gt:'g',it:n=>`g^{\\circ ${n}}(0)`}];
+let pi=0, sel=4;
+const rch=document.getElementById('rch');
+PRE.forEach((P,i)=>{ const b=document.createElement('button'); b.textContent=P.lab; if(i===pi) b.className='on'; b.onclick=()=>{ pi=i; [...rch.children].forEach(z=>z.classList.toggle('on',z===b)); drawR(); }; rch.appendChild(b); });
+const cvR=document.getElementById('cvR'); let gr={};
+function terms(P,k){ const t=[P.a]; for(let i=1;i<k;i++) t.push(P.g(t[i-1])); return t; }
+function drawR(){
+  const P=PRE[pi], W0=cvR.clientWidth||300, H=170; const {c}=size(cvR,H); c.fillStyle=col('--card'); c.fillRect(0,0,W0,H);
+  const N=10, cw=(W0-20)/N, y1=34, y2=110; gr={cw};
+  const T=terms(P,N+1);
+  c.font='12px IBM Plex Mono, monospace'; c.textAlign='center';
+  for(let n=0;n<N;n++){ const x=10+n*cw+cw/2; c.fillStyle=col('--muted'); c.fillText(n,x,y1);
+    c.strokeStyle=col('--grid'); c.lineWidth=1; c.strokeRect(10+n*cw+2,y2-16,cw-4,28);
+    c.fillStyle=n===sel?col('--ember'):col('--ink'); c.font=(n===sel?'600 ':'')+'12px IBM Plex Mono, monospace'; c.fillText(fmt(T[n]),x,y2+3); c.font='12px IBM Plex Mono, monospace'; }
+  c.textAlign='left'; c.fillStyle=col('--muted'); c.fillText('n',2,y1-14); c.fillText('f(n)',2,y2-22);
+  if(sel<N-1){ const x0=10+sel*cw+cw/2, x1=10+(sel+1)*cw+cw/2;
+    // teal: up first (n -> S(n)) then across by f
+    c.strokeStyle=col('--teal'); c.lineWidth=2.2; c.beginPath(); c.moveTo(x0,y1+6); c.quadraticCurveTo((x0+x1)/2,y1-10,x1,y1+6); c.stroke(); c.beginPath(); c.moveTo(x1,y1+10); c.lineTo(x1,y2-18); c.stroke();
+    // gold: across first then g
+    c.strokeStyle=col('--gold'); c.beginPath(); c.moveTo(x0,y1+10); c.lineTo(x0,y2-18); c.stroke(); c.beginPath(); c.moveTo(x0+4,y2+14); c.quadraticCurveTo((x0+x1)/2,y2+40,x1-4,y2+14); c.stroke();
+    c.fillStyle=col('--teal'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; c.fillText('s',(x0+x1)/2,y1-6); c.fillStyle=col('--gold'); c.fillText(P.gt,(x0+x1)/2,y2+42); }
+  const L=[`f(${sel}) = ${P.it(sel)} = ${typeof T[sel]==='string'?`\\text{${T[sel]}}`:fmt(T[sel])}`];
+  if(sel<N-1){ const v=T[sel+1]; const vs=typeof v==='string'?`\\text{${v}}`:fmt(v); L.push(`(f \\circ s)(${sel}) = f(${sel+1}) = ${vs}`); L.push(`(${P.gt.replace('t_4','t_4').replace('m_2','m_2')} \\circ f)(${sel}) = ${P.gt}(${typeof T[sel]==='string'?`\\text{${T[sel]}}`:fmt(T[sel])}) = \\htmlClass{keep}{${vs}}`); }
+  tex(document.getElementById('eqR'),'\\begin{gathered}'+L.join('\\\\ ')+'\\end{gathered}',true);
+}
+cvR.addEventListener('pointerdown',e=>{ const Rc=cvR.getBoundingClientRect(); const n=Math.floor((e.clientX-Rc.left-10)/gr.cw); if(n>=0&&n<10){ sel=n; drawR(); } });
+new ResizeObserver(drawR).observe(cvR);
+/* ---------- right: descents ---------- */
+let D=[9,9,8,8,8,6,4,4,4,4,4,4], strict=false;
+const dch=document.getElementById('dch');
+[['never rising',false],['strictly falling',true]].forEach(([t,v])=>{ const b=document.createElement('button'); b.textContent=t; if(v===strict) b.className='on'; b.onclick=()=>{ strict=v; [...dch.children].slice(0,2).forEach(z=>z.classList.toggle('on',z===b)); if(strict) D=[6,5,4,3,2,1,0]; else D=[9,9,8,8,8,6,4,4,4,4,4,4]; drawD(); }; dch.appendChild(b); });
+const rs=document.createElement('button'); rs.textContent='start again at 9'; rs.onclick=()=>{ D=strict?[9,8,7,6,5,4,3,2,1,0]:Array(12).fill(9); drawD(); }; dch.appendChild(rs);
+const cvD=document.getElementById('cvD'); let gd={};
+function drawD(){
+  const W0=cvD.clientWidth||300, H=220; const {c}=size(cvD,H); c.fillStyle=col('--card'); c.fillRect(0,0,W0,H);
+  const N=12, cw=(W0-20)/N, base=H-34, dh=Math.min(16,(H-60)/10); gd={cw};
+  const m=Math.min(...D), Nst=D.indexOf(m);
+  c.font='11px IBM Plex Mono, monospace'; c.textAlign='center';
+  for(let n=0;n<N;n++){ const x=10+n*cw+cw/2; c.fillStyle=col('--muted'); c.fillText(n,x,H-14);
+    if(n>=D.length){ c.fillStyle=col('--ember'); c.fillText('–',x,base-6); continue; }
+    for(let k=0;k<D[n];k++){ c.beginPath(); c.arc(x,base-6-k*dh,Math.min(5,dh/2-1),0,7); c.fillStyle=(n>=Nst&&!strict)?col('--teal'):col('--ink'); c.fill(); }
+    c.fillStyle=col('--ink'); c.fillText(D[n],x,base-10-D[n]*dh);
+    if(!strict&&n===Nst){ c.strokeStyle=col('--gold'); c.lineWidth=2; c.strokeRect(x-cw/2+2,base-14-D[n]*dh-8,cw-4,D[n]*dh+16); } }
+  const L=[`u = ${D.join(', ')}${strict?'':', \\ldots'}`];
+  if(strict){ L.push(D.length<N?`\\text{after } u_{${D.length-1}} = ${D[D.length-1]}\\text{, no smaller number: the row stops}`:R`\text{falling}`); L.push(R`\htmlClass{new}{\text{no endless strictly falling sequence (no-endless-descent)}}`); }
+  else { L.push(`\\text{least value } ${m} = u_{${Nst}}`); L.push(`\\htmlClass{keep}{u_n = ${m} \\text{ for every } n \\ge ${Nst}}\\ \\text{(never-rising-stands-still)}`); }
+  tex(document.getElementById('eqD'),'\\begin{gathered}'+L.join('\\\\ ')+'\\end{gathered}',true);
+}
+cvD.addEventListener('pointerdown',e=>{ const Rc=cvD.getBoundingClientRect(); const n=Math.floor((e.clientX-Rc.left-10)/gd.cw); if(n<0||n>=D.length) return;
+  if(strict){ if(D[n]>0){ D[n]--; for(let k=n+1;k<D.length;k++){ if(D[k]>=D[k-1]) D[k]=D[k-1]-1; } D=D.filter((v,k)=>v>=0); } }
+  else { if(D[n]>0){ D[n]--; for(let k=n+1;k<D.length;k++) D[k]=Math.min(D[k],D[k-1]); } }
+  drawD(); });
+new ResizeObserver(drawD).observe(cvD);
+if(window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{ drawR(); drawD(); });
+drawR(); drawD();
+
+/* ---------- slides ---------- */
+const N='\\htmlClass{new}', K='\\htmlClass{keep}';
+stepper('#sl1',[
+  {k:'ember',kl:'a sequence',t:R`u : \mathbb N \to A,\ \ n \mapsto u_n`,n:`A function on all of ℕ. A list stops; a sequence does not.`},
+  {k:'teal',kl:'from 4c',t:R`f(0) = p,\ \ f(S(n)) = g(f(n))`,n:`recursion: a start and a step fix exactly one f.`},
+  {k:'ember',kl:'the recursion-restated technique',t:R`f(0) = p,\ \ ${N}{f \circ s = g \circ f}`,n:`equal-functions and composite-is-a-function turn the step into a sameness of two chains.`},
+  {k:'ember',kl:'two roads',t:R`(f \circ s)(n) = f(S(n)) = g(f(n)) = (g \circ f)(n)`,n:`Up a step then read the term; or read the term then take a step: the same member of A.`},
+  {k:'ember',kl:'iterates',t:R`g^{\circ 0} = \mathrm{id}_A,\ \ g^{\circ S(n)} = g \circ g^{\circ n}`,n:`g done n times, by recursion on the functions A → A. Never g times g.`},
+  {k:'ember',kl:'the sequence-is-the-iterates technique',t:R`f(n) = ${N}{g^{\circ n}(p)}`,n:`The sequence of recursion-restated is the iterates run on the start.`},
+  {k:'ember',kl:'the techniques iterates-turn-about, iterates-add',t:R`g^{\circ(m + n)} = g^{\circ m} \circ g^{\circ n}`,n:`By induction, with regroup for composing and iterates-turn-about (g ∘ g^∘m = g^∘m ∘ g). 4f's powers-add-their-counts with ∘ for times.`},
+  {k:'ember',kl:'the iterates-multiply technique',t:R`(g^{\circ m})^{\circ n} = g^{\circ(m \cdot n)}`,n:`4f's power-of-a-power, the same way.`},
+  {k:'ember',kl:'the ladder-of-operations technique',t:R`p + n = s^{\circ n}(p),\ \ p \cdot n = t_p^{\circ n}(0),\ \ p^n = m_p^{\circ n}(1)`,n:`Each operation of rung 4 is the one below, done n times, from its do-nothing.`},
+  {k:'ember',kl:'the caution',t:R`x \mapsto \mathcal P(x) \text{ is a function on no set holding every layer}`,n:`recursion-restated needs g : A → A. 4c's catch stands, as S is not a function but s is.`},
+  {k:'ember',kl:'a step by cases',t:R`g(n) = S(n) \text{ if } G,\ \ n \text{ if } \lnot G`,n:`7d licenses it. The sequence is 0, 1, 2, ⋯ or 0, 0, 0, ⋯; nobody knows which.`},
+  {k:'ember',kl:'the no-endless-descent technique',t:R`u_{S(n)} \lt u_n \text{ for all } n \;\Rightarrow\; ${N}{\bot}`,n:`Induction gives k ≤ u_n for every k; k = S(u₀) clashes. No either-way.`},
+  {k:'ember',kl:'the never-rising-stands-still technique',t:R`u_{S(n)} \le u_n \;\Rightarrow\; \exists N\ \forall n \ge N\ (u_n = u_N)`,n:`The least value of ran u, by least-member-for-any-set, which leans on either-way; then any-two-compare.`},
+  {k:'ember',kl:'no address',t:R`u_n = 1 \text{ if every even number from 4 to } 2n + 4 \text{ splits, else } 0`,n:`Never rises; stands still by never-rising-stands-still; where, and at what, depends on the two-primes guess.`},
+  {k:'ember',kl:'only numbers',t:R`1, \tfrac12, \tfrac13, \cdots`,n:`Never rises, never stands still: never-rising-stands-still needs least members. Rung 10 asks where it is headed.`}
+],{title:'The slides · a sequence; recursion-restated; two roads; iterates; sequence-is-the-iterates; iterates-turn-about and iterates-add; iterates-multiply; the ladder of operations; the caution; a step by cases; no-endless-descent; never-rising-stands-still; no address · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

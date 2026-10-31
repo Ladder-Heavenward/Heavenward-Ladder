@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>13d · The power rule</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:3.6em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.climb{border-collapse:collapse;width:100%;font-size:.86rem}
+table.climb td,table.climb th{border-bottom:1px solid var(--grid);padding:4px 5px;text-align:right}
+table.climb th{color:var(--muted);font-family:var(--mono);font-size:.74rem;font-weight:400}
+table.climb tr.on td{background:var(--sand)} table.climb tr.on td:first-child{box-shadow:inset 3px 0 0 var(--ember)}
+@media (max-width:520px){table.climb{font-size:.74rem} table.climb td,table.climb th{padding:3px 2px}}
+#cvP{touch-action:none}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r13c.html">← 13c the product rule</a><a href="r13e.html">next: 13e the chain rule →</a></p>
+  <div class="tags"><span class="tag proof">13d · proof</span></div>
+  <h1>The power rule</h1>
+  <p>A power is the power before it times the input once more: that is how rung 4 defined powers, and 8f read the definition for reals. So the product rule climbs from each power to the next, and induction climbs every counting number at once. The slope of the input to a whole power is the power times the input to the power one less. Then the small rules: a constant has slope 0, slopes add, a constant factor comes out. With them every polynomial has a slope at every real, given by another polynomial, which has a slope of its own: the slope of the slope. Last, two techniques about the graph read in pairs: lifting it changes no slope, and displacing its input displaces its slopes.</p>
+  <p class="gesture">Write the next power as the last one times the input. Let the product rule add one more power each climb. Let induction do every climb at once. Then add slopes term by term.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r13c.html">13c</a> (product for slopes), <a href="r13a.html">13a</a> (the slope, slope-of-a-line, slope-of-x², slope-of-x³, the formula convention), <a href="r04b.html">4b</a> (induction, the shape of a proof by induction, zero-or-a-next), <a href="r04e.html">4e</a> (plus-one), <a href="r08f.html">8f</a> (powers of a real: power-zero, power-of-a-next), <a href="r10c.html">10c</a> (limits-add, limits-subtract, constant-factor), <a href="r09g.html">9g</a> (polynomials, Σ with real terms, sum-one-more), <a href="r04j.html">4j</a> (sum-of-none, sum-one-more), <a href="r09e.html">9e</a> (the displacement read in pairs), <a href="r08d.html">8d</a> (the naming line and the rules for ℝ). <a href="r13e.html">13e</a> and <a href="r13f.html">13f</a> use these rules freely; rung 14 reads the slope of the slope.</p></div>
+</header>
+
+<section class="class step" data-step="13d1">
+  <h2 class="sthead"><span class="stno">13d1</span>Climbing the powers</h2>
+  <p class="stands">Stands on 13c (product for slopes), 4b (induction) and 8f (powers of reals).</p>
+  <p data-pid="e95258">8f read rung 4's powers for reals: x⁰ = 1, and x to the next power is x to the power before times x, by power-of-a-next. As functions, x ↦ x^{S(m)} · x is 10c's product of x ↦ x^{S(m)} with x ↦ x. It has the same values as x ↦ x^{S(S(m))}, so by 9a's equal-functions they are one function. That is a product, and 13c has a rule for products.</p>
+  <p data-pid="be2f69">Power technique for slopes (the power rule): <b>the slope of x to a whole power is that power times x to one less.</b> Precisely: for every number m, x^{S(m)} has a slope at every real w, and it is S(m) · w^m. In its usual form: for every number n ≥ 1, (xⁿ)′ = n x^{n−1}. Here n − 1 names the number m with S(m) = n (4b's zero-or-a-next: a number other than 0 is a next one). And n in front is the real it names by 8d's naming line.</p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the power technique for slopes, by induction (4b's shape)">
+\varphi(m):\ \ \forall w \in \mathbb{R}\ \ (x^{S(m)})'(w) = S(m)\cdot w^m @@ name the condition first. The letter φ is 2b's “any condition”
+\text{base: } x^{S(0)} = x^1 = x @@ power-one (4f), read for reals (8f)
+(x)'(w) = 1 = 1 \cdot w^0 @@ slope-of-a-line (13a), step 1; power-zero; times-one on ℝ; 1 names S(0) (3a)
+\text{step: let } m \in \mathbb{N};\ \ \text{assume } \varphi(m);\ \ \text{let } w \in \mathbb{R} @@ the induction hypothesis
+x^{S(S(m))} = \htmlClass{new}{x^{S(m)} \cdot x} @@ power-of-a-next for powers of a real; equal-functions: one function
+(x^{S(m)} \cdot x)'(w) = \htmlClass{keep}{S(m)\, w^m} \cdot w + w^{S(m)} \cdot 1 @@ product for slopes (13c), with the hypothesis for the first factor and slope-of-a-line for the second
+= S(m)\, w^{S(m)} + w^{S(m)} @@ regroup for times on ℝ, power-of-a-next; times-one on ℝ
+= \big(S(m) + 1\big)\, w^{S(m)} @@ spread on ℝ turned about (collect like terms, 5h)
+= \htmlClass{new}{S(S(m))\, w^{S(m)}} @@ plus-one (4e): S(m) + 1 = S(S(m)), carried to reals by the naming line
+\varphi(S(m));\ \ \text{so } \forall m \in \mathbb{N}\ \varphi(m) \quad \blacksquare @@ speak of everything (a); prove an if; induction (4b)
+  </pre>
+  <p data-pid="c016e8">Look at the step as 13c's cells. x^{S(S(m))} is x^{S(m)} times x. The cell x^{S(m)} · Δx, divided by h, is w^{S(m)}: one more power, contributed by the new factor x. The cell Δ(x^{S(m)}) · x, divided by h, heads to S(m)w^m · w = S(m)w^{S(m)}: all the old ones, carried up. And the leftover cell goes to 0 in the limit, as it always does. So each climb adds one more w^{S(m)}. Two climbs give 13a's slope-of-x², three give slope-of-x³, and the induction gives them all.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the power rule, used">
+(x^2)' = 2x,\ \ (x^3)' = 3x^2 @@ power for slopes with m = 1 and m = 2: agrees with slope-of-x² and slope-of-x³
+(x^4)' = 4x^3,\ \ \ (x^5)'(2) = 5 \cdot 2^4 = \htmlClass{new}{80} @@ power for slopes with m = 3 and m = 4
+\dfrac{(2.001)^5 - 32}{0.001} \approx 80.08 @@ one chord slope near 2, for comparison: a little above 80
+  </pre>
+  <p data-pid="400ff5">The induction climbs the numbers, so it proves the rule for whole powers only. It says nothing about x^{1/2}: ½ is not a number, there is no rung of ℕ for the induction to stand on, and the shape of the formula is no licence. 13e finds the slope of √x by another road, and 13f the slopes of the negative powers.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · power for slopes · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · left: the powers climbed, one product rule at a time · right: a polynomial and its slopes</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="kn">
+        <span class="m">n</span><input type="range" id="kn" min="1" max="8" step="1" value="3"><output id="on"></output>
+        <span class="m">w</span><input type="range" id="ka" min="-2" max="2" step="0.1" value="1.5"><output id="oa"></output>
+      </div>
+      <table class="climb" id="tcl"></table>
+      <div class="cap">Each row is one climb of the induction at the input w. The new factor's cell, divided by h, gives one more wⁿ⁻¹; the old power's cell gives all the earlier ones, carried up. Their sum is power for slopes's n wⁿ⁻¹. The last column is one chord slope, at h = 0.001, for comparison. The ember row is your n.</div>
+      <div class="eqbox" id="eqC"></div>
+    </div>
+    <div class="panel">
+      <canvas id="cvP"></canvas>
+      <div class="kn">
+        <span class="m">a₃</span><input type="range" id="c3" min="-2" max="2" step="0.5" value="1"><output id="o3"></output>
+        <span class="m">a₂</span><input type="range" id="c2" min="-3" max="3" step="0.5" value="0"><output id="o2"></output>
+        <span class="m">a₁</span><input type="range" id="c1" min="-3" max="3" step="0.5" value="-3"><output id="o1"></output>
+        <span class="m">a₀</span><input type="range" id="c0" min="-3" max="3" step="0.5" value="1"><output id="o0"></output>
+        <span class="m">lift k</span><input type="range" id="kk" min="-3" max="3" step="0.5" value="0"><output id="ok"></output>
+        <span class="m">displace s</span><input type="range" id="ks" min="-2" max="2" step="0.5" value="0"><output id="os"></output>
+      </div>
+      <div class="chips" id="pch"><button class="on" id="b2">show the second slope</button><button id="bp">x³ − 3x + 1</button></div>
+      <div class="cap">Ink: g(x) = p(x − s) + k. Ember: its slope function g′. Teal dashed: its second slope g″. Gold: the tangent line at x₀; drag across the picture to move x₀. Change k and only the ink moves; change s and all three move together.</div>
+      <div class="eqbox" id="eqP"></div>
+    </div>
+  </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">13d1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">(x^6)′ at 1 and at −1</span></span>Find both by power for slopes. <br>Say why the two answers are negatives of each other.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13d2">
+  <h2 class="sthead"><span class="stno">13d2</span>Constants, sums, and a constant factor</h2>
+  <p class="stands">Stands on 13d1 and 10c (limit techniques).</p>
+  <p data-pid="b07518">Three small rules, each a limit technique of 10c read on chord slopes.</p>
+  <p data-pid="c4957e">Constant-has-slope-0 technique: <b>for a real c, the constant function c has slope 0 at every real.</b> It is slope-of-a-line with step 0: every chord slope is (c − c)/h = 0.</p>
+  <p data-pid="5d3a1f">Slopes-add technique: <b>if f and g have slopes at w, then f + g and f − g have slopes at w, and slopes add.</b> Precisely: (f + g)′(w) = f′(w) + g′(w) and (f − g)′(w) = f′(w) − g′(w). Its accepted name is the sum rule (with the difference rule).</p>
+  <pre class="lines" data-k="ember" data-label="this step: the slopes-add technique">
+\dfrac{(f + g)(a + h) - (f + g)(a)}{h} @@ 10c's line for f + g, on the lesser of the two reaches
+= \dfrac{\big(f(a + h) - f(a)\big) + \big(g(a + h) - g(a)\big)}{h} @@ negative-of-a-sum and middle-swap (5a, 5e), read in ℝ: the middle swap
+= \htmlClass{new}{\dfrac{f(a + h) - f(a)}{h} + \dfrac{g(a + h) - g(a)}{h}} @@ spread on ℝ with h⁻¹
+\to f'(a) + g'(a) \quad \blacksquare @@ limits-add (10c); the differences the same way with limits-subtract and negative-of-a-sum
+  </pre>
+  <p data-pid="3a200d">Constant-factor technique for slopes: <b>if f has a slope at w and c is a real, then (cf)′(w) = c f′(w).</b> The chord slope of cf is c times the chord slope of f (spread on ℝ, regroup for times on ℝ), and 10c's constant-factor sends it to c f′(w). 13c's second check reached the same rule by product for slopes and constant-has-slope-0. In particular (−f)′ = −f′, and adding a constant k changes no slope: (f + k)′(w) = f′(w) + 0, by slopes-add and constant-has-slope-0. Call that lifting technique. Its accepted name is the constant multiple rule.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · three small rules · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13d2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f′(2) = 4,  g′(2) = −1</span></span>Find (3f − g + 10)′(2). <br>Name the rule used at each move.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13d3">
+  <h2 class="sthead"><span class="stno">13d3</span>Every polynomial</h2>
+  <p class="stands">Stands on 13d1 and 13d2.</p>
+  <p data-pid="df7f24">Polynomial-slope technique: <b>every polynomial has a slope at every real, found term by term.</b> Precisely: take a number n and reals a₀, ⋯, a_n, and let p(x) = Σ_{k≤n} a_k x^k. Then p has a slope at every real, and p′(x) = Σ_{k&lt;n} S(k) a_{S(k)} x^k, that is a₁ + 2a₂x + ⋯ + n a_n x^{n−1}. The name echoes 10c's substitution, the limit of a polynomial; here it is the slope.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the polynomial-slope technique, by induction on n">
+\text{base } n = 0:\ \ p(x) = a_0,\ \ p'(x) = 0 = \textstyle\sum_{k \lt 0} \cdots @@ constant-has-slope-0; sum-of-none (4j, read with real terms on 9g): an empty sum is 0
+\text{step: assume it for } n,\ \text{every list } a_0, \cdots, a_n @@ the hypothesis, for every list of n + 1 coefficients
+\textstyle\sum_{k \le S(n)} a_k x^k = \sum_{k \le n} a_k x^k + \htmlClass{new}{a_{S(n)}\, x^{S(n)}} @@ sum-one-more: split off the last term
+\text{slope} = \textstyle\sum_{k \lt n} S(k)\, a_{S(k)}\, x^k + \htmlClass{new}{a_{S(n)}\, S(n)\, x^n} @@ slopes-add; the hypothesis; constant-factor for slopes and power for slopes
+= \textstyle\sum_{k \lt S(n)} S(k)\, a_{S(k)}\, x^k \quad \blacksquare @@ sum-one-more again, with turn-about for times on ℝ; induction (4b)
+  </pre>
+  <p data-pid="0174ba">So the slope function of a polynomial is a polynomial. Suppose n ≥ 1 and a_n ≠ 0. Then its leading coefficient n · a_n is not 0 (zero-product: n names a real other than 0, by 8d's naming line). So p′ has degree n − 1 (9g's words). Every polynomial is differentiable, in 13a's word.</p>
+  <pre class="lines" data-k="ember" data-label="this step: polynomial-slope, used">
+p(x) = x^3 - 3x + 1 @@ 12b's and 12c's polynomial
+p'(x) = 3x^2 - 3 @@ polynomial-slope: 3 · x² from x³ (power for slopes), −3 from −3x (slope-of-a-line), 0 from 1 (constant-has-slope-0)
+p'(1) = 0,\ \ p'(-1) = 0,\ \ p'(2) = \htmlClass{new}{9} @@ substitute for the expression
+q(x) = 2x^3 - x + 5,\ \ q'(x) = 6x^2 - 1,\ \ q'(-1) = 5 @@ polynomial-slope
+(x - 3)^2 = x^2 - 6x + 9,\ \ \text{slope } 2x - 6 @@ square-of-a-difference, then polynomial-slope. The next section reaches it another way
+  </pre>
+  <p data-pid="449122">One of the two inventors published these rules first, in a short paper of 1684 in the Acta Eruditorum. It gave the differences of sums, products, quotients and powers, stated with no proofs, in his d-marks. Readers complained the paper was a riddle. This step and the last have proved the ones for sums, constants, products and whole powers from 13a's definition, each once.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · polynomial-slope · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13d3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{the slope of } x^3 \text{ is } 3x^2"></span></span>Using product for slopes, run the induction step by hand to the slope of the fourth power, naming each move.</li><li><span class="givens"><span data-tex-inline="p(x) = 4x^3 - 7x^2 + 2x - 9"></span></span>Find p's slope at 2, naming the rule for each term.</li><li><span class="givens"><span data-tex-inline="p(x) = x^4 - 4x^3 + 4x^2"></span></span>Find p's slope function, and every input where it is 0.</li><li><span class="givens"><span data-tex-inline="p(x) = 2x^4 - x^3 + 5x"></span></span>Find p's second slope function, and its values at minus 1 and at one half.</li><li><span class="givens"><span data-tex-inline="f(x) = (x + 1)^3"></span></span>Find f's slope at 2 by displaced-slopes from the cube. <br>Find it again by expanding with 4j's binomial technique and polynomial-slope.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13d4">
+  <h2 class="sthead"><span class="stno">13d4</span>The slope of the slope</h2>
+  <p class="stands">Stands on 13d3.</p>
+  <p data-pid="a49a43">A slope function is a function, and it may have slopes of its own.</p>
+  <p class="eqline" data-pid="de837e">From here on, for a function f, <b>f″ names (f′)′: the slope of the slope</b>, the derivative of f′, on the inputs at which f′ has a slope. Read it “f double prime”. It is called the second derivative of f, and f″(a) the second derivative of f at a. The two primes are one mark, written as 13a's prime twice. For a function given by a formula, (formula)″ is read the same way.</p>
+  <pre class="lines" data-k="ember" data-label="this step: second slopes">
+p(x) = x^3 - 3x + 1:\ \ p'(x) = 3x^2 - 3,\ \ \htmlClass{new}{p''(x) = 6x} @@ polynomial-slope twice
+p''(1) = 6,\ \ p''(-1) = -6,\ \ p''(0) = 0 @@ substitute for the expression
+(x^2)'' = (2x)' = 2 @@ slope-of-x², then slope-of-a-line
+(mx + b)'' = (m)' = 0 @@ slope-of-a-line, then constant-has-slope-0: a linear function's slope never changes, so its second slope is 0
+(x^n)'' = n(n - 1)\, x^{n - 2}\ \ (n \ge 2) @@ power for slopes twice, with constant-factor for slopes
+  </pre>
+  <p data-pid="34c9ed">What the second slope says about a graph is rung 14's question. Here it is only a slope of a slope, computed by the same rules.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · the second slope · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13d4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">p(x) = x^4 − 6x^2</span></span>Find p′ and p″. <br>Find every input where p″ is 0.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13d5">
+  <h2 class="sthead"><span class="stno">13d5</span>Lifting the graph, and displacing the input</h2>
+  <p class="stands">Stands on 13d3 and 9e (pairs moved up and across).</p>
+  <p data-pid="324575">9e read two changes of a function in pairs. f(x) + k has the pair (u, v + k) exactly when f has (u, v). f(x − s) has the pair (u + s, v) exactly when f has (u, v). Slopes follow the second and ignore the first.</p>
+  <p data-pid="230e81">The lifting technique, above: f(x) + k has the same slope as f at every input where f has one. The chords are lifted along with the graph and keep their slopes: the k cancels in every rise. Adding k to every output is called a vertical shift of the graph.</p>
+  <p data-pid="9a5294">Displaced-slopes technique: <b>for a fixed real s, let g(x) = f(x − s). If f has a slope at w − s, then g has a slope at w, and g′(w) = f′(w − s).</b> Passing from f(x) to f(x − s) is called a horizontal shift of the graph by s; rung 20 makes both shifts moves of the plane.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the displaced-slopes technique">
+f \text{ defined on } (a - s - r,\ a - s + r) \;\Rightarrow\; g \text{ defined on } (a - r, a + r) @@ x − s is in f's interval exactly when x is in g's (adding-keeps-answers, read in ℝ)
+\dfrac{g(a + h) - g(a)}{h} = \dfrac{f(\htmlClass{new}{(a - s) + h}) - f(a - s)}{h} @@ substitute for the expression: (a + h) − s = (a − s) + h, by regroup for plus on ℝ and turn-about for plus on ℝ
+\text{the chord slope of } g \text{ at } a = \text{the chord slope of } f \text{ at } a - s @@ the same real, at every h with 0 &lt; |h| &lt; r
+g'(a) = \htmlClass{keep}{f'(a - s)} \quad \blacksquare @@ the same limit
+  </pre>
+  <p data-pid="4ae877">So (x − 3)² has slope 2(w − 3) at w: slope-of-x² at w − 3. That agrees with polynomial-slope's 2w − 6 above, as it must. Read in pairs: the slope function of f(x − s) has the pair (u + s, m) exactly when f′ has (u, m). The displacement pattern x − s rides along unchanged, from the function to its slopes. Rung 20 studies such changes of a whole picture; here they are techniques about pairs.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · lifting and displacing · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13d5.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">g(x) = (x − 1)^3 + 4</span></span>Find g′(3) by displaced-slopes and lifting. <br>Check by expanding g and using polynomial-slope.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13d6">
+  <h2 class="sthead"><span class="stno">13d6</span>Illegal moves</h2>
+  <p class="stands">Stands on 13d1 to 13d5.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+(x^n)' = n x^n\,? @@ x² at 3: 18, but the slope is 6. The power comes down by one
+(x^n)' = x^{n - 1}\,? @@ x² at 3: 3, but the slope is 6. The old power comes out in front
+(5)' = 5\,? @@ a constant has slope 0 (constant-has-slope-0): all its chords are level
+(x^{1/2})' = \tfrac12 x^{-1/2} \text{ by power for slopes}\,? @@ power for slopes climbs ℕ only. The formula turns out right (13e), but this licence does not reach it
+(cf)' = c' f' = 0\,? @@ (3x²)′ at 1 is 6, not 0. A constant factor comes out whole (constant-factor for slopes); 13c's tempting rule again
+(f + 3)' = f' + 3\,? @@ lifting changes no slope (lifting)
+\big(f(x - 3)\big)'(a) = f'(a)\,? @@ (x − 3)² at 3 has slope 0, not 6. The slope is displaced too (displaced-slopes)
+  </pre>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · the tempting forms · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13d6.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = x^{1/2}"></span></span>Try to reach f's slope by power for slopes's induction, finding the number m the step would need and the part of 4b's shape that has nothing to stand on.</li><li><span class="givens"><span data-tex-inline="\text{slopes-add: } f + g \text{ has a slope}"></span> <span data-tex-inline="\text{where } f \text{ and } g \text{ both do}"></span></span>Find f and g with no slope at 0 whose sum has one.</li><li><span class="givens"><span data-tex-inline="f'' = 0 \text{ everywhere}"></span></span>Using polynomial-slope, find every polynomial f this is true for, and prove the list complete.</li><li><span class="givens"><span data-tex-inline="p(x) = a_3x^3 + a_2x^2 + a_1x + a_0,"></span> <span data-tex-inline="a_3 \ne 0"></span></span>Find the condition on the coefficients under which p's slope function is never 0.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13d7">
+  <h2 class="sthead"><span class="stno">13d7</span>Running it backwards</h2>
+  <p class="stands">Stands on 13d1 to 13d5.</p>
+  <p data-pid="2ef978">Handed a slope function, find a function that has it. p′(x) = 3x² + 4x − 1 is the slope function of x³ + 2x² − x, by polynomial-slope read backwards. Raise each power by one and divide by the new power. Adding any constant gives another with the same slopes (lifting); whether those are all is rung 14's question. Handed a slope at a displaced input, undo the displacement: (x + 2)³ has slope 3(w + 2)² at w, by displaced-slopes with s = −2. Found upward; written downward.</p>
+  <section class="slides" id="sl7"><div class="eyebrow">The slides · backwards · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13d7.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{a line of a column:}"></span> <span data-tex-inline="6w^5 \cdot w + w^6 \cdot 1 = 7w^6"></span></span>Find the power whose slope was being found, the induction hypothesis, and the line of 8f's powers used.</li><li><span class="givens"><span data-tex-inline="f'(1) = 3,"></span> <span data-tex-inline="g'(1) = -2;"></span> <span data-tex-inline="f + g,"></span> <span data-tex-inline="f - g,"></span> <span data-tex-inline="5f,"></span> <span data-tex-inline="2f - 3g + 7"></span></span>Find the slope at 1 of each of the four combinations.</li><li><span class="givens"><span data-tex-inline="p \text{ of degree } 3,"></span> <span data-tex-inline="p'(x) = 6x^2 - 6x,"></span> <span data-tex-inline="p(0) = 5"></span></span>Find p, and decide whether another polynomial fits.</li><li><span class="givens"><span data-tex-inline="g(x) = f(x - 2) + 5,"></span> <span data-tex-inline="g'(4) = 7"></span></span>Find the slope of f you now know.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">13d.4.1</span><span class="tagq">build</span>Choose two inputs of your own. <br>Build a polynomial of degree 3 whose slope is 0 at those two inputs and nowhere else, and whose value at 0 is 1, checking its slope function by polynomial-slope. <br>Then change only its x term so that its slope is never 0.</div>
+  <div class="chq"><span class="chid">13d.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="m = 0"></span></span>Run power for slopes at m, and find the slope it gives the first power. <br>Decide whether it can give a slope for the zeroth power.</div>
+  <div class="chq"><span class="chid">13d.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="f' \text{ a polynomial}"></span></span>Prove or refute that f must be a polynomial.</div>
+  <div class="chq"><span class="chid">13d.4.4</span><span class="tagq">seam</span>An astronomer, buying wine for his wedding in 1613, saw the merchant measure every barrel with one rod pushed through the bung hole, whatever its shape, and thought it a swindle. His book on wine barrels (1615) found that the Austrian barrels were shaped so nearly the best for their rod reading that a small change of shape changed the volume hardly at all. <br>Was it the coopers’ skill, or their luck? <br>What does a slope of 0 have to do with it?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r13c.html">← 13c · the product rule</a><a href="r13e.html">13e · the chain rule →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>The paper of 1684 is Gottfried Wilhelm Leibniz’s “Nova methodus”. The astronomer of question 13d.4.4 is Johannes Kepler, whose book on wine barrels is the Nova stereometria doliorum vinariorum (1615).</p>
+  <aside class="voice para"><p>Leibniz’s first paper on the calculus gave the rule for powers in a line: the change of x to a power n is n times x to the power one less, times the change of x. He gave almost no proof, and readers complained the paper was a riddle.</p><cite>Leibniz, “Nova methodus pro maximis et minimis” (1684); paraphrase</cite></aside>
+  <p>Accepted names: f″, the slope of the slope, is the second derivative.</p>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; const a=Math.abs(v); let s=d!=null?v.toFixed(d):(a>=1000?v.toFixed(1):a>=1?v.toFixed(3):a>=0.001?v.toFixed(5):v.toPrecision(3)); if(s.indexOf('.')>=0&&s.indexOf('e')<0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+/* ---------- left: the climb ---------- */
+const kn=$('kn'),ka=$('ka');
+function climb(){ const n=+kn.value,a=+ka.value; $('on').textContent=n; $('oa').textContent=fm(a,1);
+  const t=s=>{ const sp=document.createElement('span'); tex(sp,s,false); return sp.outerHTML; };
+  let h=`<tr><th>power</th><th>new factor's cell</th><th>old power's cell</th><th>slope</th><th>chord at h = 0.001</th></tr>`;
+  for(let k=1;k<=8;k++){ const nf=k===1?NaN:Math.pow(a,k-1), op=k===1?NaN:(k-1)*Math.pow(a,k-2)*a, sl=k*Math.pow(a,k-1), ch=(Math.pow(a+0.001,k)-Math.pow(a,k))/0.001;
+    h+=`<tr class="${k===n?'on':''}"><td>${t('x^{'+k+'}')}</td><td>${k===1?'base':fm(nf)}</td><td>${k===1?'(slope-of-a-line)':fm(op)}</td><td>${fm(sl)}</td><td>${fm(ch)}</td></tr>`; }
+  $('tcl').innerHTML=h;
+  const m=n-1;
+  tex($('eqC'),n===1?R`(x)'(${fm(a,1)}) = 1 = 1 \cdot ${fm(a,1)}^0\ \ \text{(the base: slope-of-a-line)}`:R`\begin{gathered}x^{${n}} = x^{${m}} \cdot x\\ (x^{${n}})'(${fm(a,1)}) = \underbrace{${m} \cdot ${fm(a,1)}^{${m-1}} \cdot ${fm(a,1)}}_{\text{old power's cell}} + \underbrace{${fm(a,1)}^{${m}} \cdot 1}_{\text{new factor's cell}}\\ = ${m}\cdot ${fm(Math.pow(a,m))} + ${fm(Math.pow(a,m))} = \htmlClass{new}{${n} \cdot ${fm(Math.pow(a,m))}} = ${fm(n*Math.pow(a,m))}\end{gathered}`,true); }
+[kn,ka].forEach(z=>z.addEventListener('input',climb));
+/* ---------- right: a polynomial and its slopes ---------- */
+const C=[$('c0'),$('c1'),$('c2'),$('c3')], kk=$('kk'), ks=$('ks'), cvP=$('cvP'); let X0=1.2, SH2=true;
+const co=()=>C.map(z=>+z.value);
+const p=(x,c)=>c[0]+c[1]*x+c[2]*x*x+c[3]*x*x*x, dp=(x,c)=>c[1]+2*c[2]*x+3*c[3]*x*x, ddp=(x,c)=>2*c[2]+6*c[3]*x;
+const PP=plane(cvP,{x:[-3,3],y:[-6,6],grid:1,aspect:0.85,draw:P=>{ const c=co(), k=+kk.value, s=+ks.value; P.axes();
+  if(SH2) P.fn(x=>ddp(x-s,c),'--teal',1.8,[6,4]);
+  P.fn(x=>dp(x-s,c),'--ember',2.2);
+  P.fn(x=>p(x-s,c)+k,'--ink',2.6);
+  const y0=p(X0-s,c)+k, m=dp(X0-s,c); P.line(-3,y0+m*(-3-X0),3,y0+m*(3-X0),'--gold',1.6);
+  P.line(X0,-6,X0,6,'--muted',1,[2,4]); P.dot(X0,y0,'--ink',5); P.dot(X0,m,'--ember',5); if(SH2) P.dot(X0,ddp(X0-s,c),'--teal',4.5); }});
+Object.defineProperty(PP.o,'aspect',{get:()=>cvP.clientWidth>560?0.85:0.95});
+const sgn=(v,first)=>{ if(v===0) return ''; const a=fm(Math.abs(v)); return (v<0?(first?'-':' - '):(first?'':' + '))+a; };
+function poly(c){ const t=[[c[3],'x^3'],[c[2],'x^2'],[c[1],'x'],[c[0],'']]; let s=''; t.forEach(([v,x])=>{ if(v===0) return; const first=s===''; let a=Math.abs(v); let num=(a===1&&x)?'':fm(a); s+=(v<0?(first?'-':' - '):(first?'':' + '))+num+x; }); return s||'0'; }
+function readP(){ const c=co(),k=+kk.value,s=+ks.value; ['0','1','2','3'].forEach((i,j)=>$('o'+i).textContent=fm(c[j])); $('ok').textContent=fm(k); $('os').textContent=fm(s);
+  const d=[c[1],2*c[2],3*c[3],0], dd=[2*c[2],6*c[3],0,0];
+  const inner=s===0?'x':R`x ${s<0?'+':'-'} ${fm(Math.abs(s))}`;
+  tex($('eqP'),R`\begin{gathered}p(x) = ${poly(c)}\\ p'(x) = ${poly(d)},\ \ \ p''(x) = ${poly(dd)}\\ g(x) = p(${inner})${k===0?'':(k<0?' - ':' + ')+fm(Math.abs(k))},\ \ \ g'(x) = p'(${inner})\\ x_0 = ${fm(X0,2)}:\ \ g(x_0) = ${fm(p(X0-s,c)+k)}\\ g'(x_0) = \htmlClass{new}{${fm(dp(X0-s,c))}},\ \ g''(x_0) = ${fm(ddp(X0-s,c))}\end{gathered}`,true); }
+function allP(){ PP.redraw(); readP(); }
+[...C,kk,ks].forEach(z=>z.addEventListener('input',allP));
+$('b2').onclick=()=>{ SH2=!SH2; $('b2').classList.toggle('on',SH2); allP(); };
+$('bp').onclick=()=>{ [0,1,2,3].forEach(i=>C[i].value=[1,-3,0,1][i]); kk.value=0; ks.value=0; allP(); };
+let dn=false; cvP.addEventListener('pointerdown',e=>{ dn=true; cvP.setPointerCapture&&cvP.setPointerCapture(e.pointerId); mvP(e); });
+function mvP(e){ if(!dn) return; X0=Math.max(-3,Math.min(3,Math.round(PP.point(e).x*20)/20)); allP(); }
+cvP.addEventListener('pointermove',mvP); ['pointerup','pointercancel'].forEach(t=>cvP.addEventListener(t,()=>dn=false));
+window.__pic={climb:(n,a)=>{ kn.value=n; ka.value=a; climb(); return $('tcl').querySelector('tr.on').textContent; },
+  poly:(c,k,s,x0)=>{ [0,1,2,3].forEach(i=>C[i].value=c[i]); kk.value=k; ks.value=s; X0=x0; allP(); const cc=co(); return {g:p(X0-s,cc)+k,d:dp(X0-s,cc),dd:ddp(X0-s,cc)}; }};
+climb(); allP();
+
+/* ---------- slides ---------- */
+const N='\\htmlClass{new}', K='\\htmlClass{keep}';
+stepper('#sl1',[
+  {k:'ember',kl:'power for slopes · the condition',t:R`\varphi(m):\ \forall w\ \ (x^{S(m)})'(w) = S(m)\, w^m`,n:`Name the condition first (4b's shape).`},
+  {k:'ember',kl:'power for slopes · base',t:R`(x)'(w) = 1 = 1 \cdot w^0`,n:`x¹ = x; slope-of-a-line; power-zero.`},
+  {k:'ember',kl:'power for slopes · step 1 of 4',t:R`x^{S(S(m))} = ${N}{x^{S(m)} \cdot x}`,n:`power-of-a-next for powers of a real. A power is the last one times x: a product.`},
+  {k:'ember',kl:'power for slopes · step 2 of 4',t:R`\begin{gathered}(x^{S(m)} \cdot x)'(w)\\ = ${K}{S(m)\,w^m}\cdot w + w^{S(m)} \cdot 1\end{gathered}`,n:`product for slopes, with the hypothesis for the first factor and slope-of-a-line for the second.`},
+  {k:'ember',kl:'power for slopes · step 3 of 4',t:R`\begin{gathered}= S(m)\,w^{S(m)} + w^{S(m)}\\ = (S(m) + 1)\,w^{S(m)}\end{gathered}`,n:`power-of-a-next; collect like terms.`},
+  {k:'ember',kl:'power for slopes · step 4 of 4',t:R`= ${N}{S(S(m))\, w^{S(m)}}`,n:`plus-one. That is φ(S(m)). By induction, every number m. ∎`},
+  {k:'ember',kl:'the cells of a climb',t:R`\begin{gathered}\text{new factor: } w^{S(m)}\\ \text{old power: } S(m)\,w^{S(m)}\end{gathered}`,n:`Each climb adds one more power. The leftover cell goes to 0, as always.`},
+  {k:'ember',kl:'used',t:R`(x^5)'(2) = 5 \cdot 2^4 = ${N}{80}`,n:`One chord slope at h = 0.001 is about 80.08.`}
+],{title:'The slides · power for slopes · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'constant-has-slope-0',t:R`\dfrac{c - c}{h} = 0`,n:`A constant has slope 0: slope-of-a-line with step 0.`},
+  {k:'ember',kl:'slopes-add',t:R`\begin{gathered}\dfrac{\Delta(f + g)}{h} = \dfrac{\Delta f}{h} + \dfrac{\Delta g}{h}\\ \to f'(a) + ${N}{g'(a)}\end{gathered}`,n:`middle-swap, then limits-add (10c). Differences the same way.`},
+  {k:'ember',kl:'constant-factor for slopes',t:R`\dfrac{\Delta(cf)}{h} = c\,\dfrac{\Delta f}{h} \to ${N}{c\,f'(a)}`,n:`constant-factor (10c). A constant factor comes out.`}
+],{title:'The slides · three small rules · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'polynomial-slope',t:R`\Big(\sum_{k \le n} a_k x^k\Big)' = \sum_{k \lt n} S(k)\,a_{S(k)}\,x^k`,n:`Induction on n: sum-one-more splits off the last term; slopes-add, constant-factor for slopes, power for slopes. A polynomial's slope function is a polynomial.`},
+  {k:'ember',kl:'polynomial-slope used',t:R`(x^3 - 3x + 1)' = ${N}{3x^2 - 3}`,n:`0 at 1 and at −1; 9 at 2.`}
+],{title:'The slides · polynomial-slope · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'the second slope',t:R`f'' = (f')',\ \ (x^3 - 3x + 1)'' = ${N}{6x}`,n:`A slope function has slopes of its own. Rung 14 reads them.`}
+],{title:'The slides · the second slope · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'lifting',t:R`(f + k)' = f' + 0 = f'`,n:`slopes-add and constant-has-slope-0: lifting changes no slope; the k cancels in every rise.`},
+  {k:'ember',kl:'displaced-slopes · 1 of 2',t:R`\begin{gathered}\dfrac{g(w + h) - g(w)}{h}\\ = \dfrac{f((w - s) + h) - f(w - s)}{h}\end{gathered}`,n:`g(x) = f(x − s): substitute for the expression. The same chord slope as f at w − s.`},
+  {k:'ember',kl:'displaced-slopes · 2 of 2',t:R`g'(w) = ${N}{f'(w - s)}`,n:`The same limit. (x − 3)² has slope 2(w − 3). ∎`}
+],{title:'The slides · lifting and displacing · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'the tempting forms',t:R`(x^2)'(3):\ \ n x^n = 18,\ \ x^{n - 1} = 3,\ \ ${N}{6}`,n:`The power comes down by one, and the old power comes out in front.`}
+],{title:'The slides · the tempting forms · ← → keys work'});
+stepper('#sl7',[
+  {k:'teal',kl:'backwards',t:R`\begin{gathered}p'(x) = 3x^2 + 4x - 1\\ \Leftarrow\; p(x) = ${N}{x^3 + 2x^2 - x}\end{gathered}`,n:`Raise each power by one, divide by the new power. Any constant may be added (lifting).`}
+],{title:'The slides · backwards · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

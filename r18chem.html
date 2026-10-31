@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>18·chem · How much colour is in the glass?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r18j.html">← 18j constructions with straightedge and compass</a><a href="r18cb13.html">next: 18·cb13 slopes of circles and curves given by equations →</a></p>
+  <div class="tags"><span class="tag chem">18·chem · chemistry</span></div>
+  <h1>How much colour is in the glass?</h1>
+  <p>How much colour is in the glass? Hold a glass of grape juice up to a window. Some of the light gets through and some does not, and the colour you see is what is left. A chemist turns that into a measurement: shine light of one wavelength through a sample, and compare what comes out with what went in. The less gets through, the more of the coloured substance is dissolved. This page builds the rule that links the two, from rung 17's exponential. Then it asks what happens when the sample sits in a round tube, so that each ray crosses a different length of liquid. Each path is a chord of a circle, and 18d already knows its length.</p>
+  <p class="gesture">Absorbance counts powers of ten in how much the light is dimmed. In a dilute solution, absorbance is in proportion to the path the light takes and to the concentration. Across a round tube, a ray that misses the centre crosses a path twice the square root of the radius squared less its distance from the centre squared. Several paths read together give less than their average absorbance.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r17f.html">17f</a> (proportional-slope), <a href="r17g.html">17g</a> (log-base-p, real-exponent), <a href="r17chem.html">17·chem</a> (log₁₀ scales), <a href="r17phys.html">17·phys</a> (wavelength), <a href="r18d.html">18d</a> (line-meets-circle, chord), <a href="r08f.html">8f</a> (powers-keep-order, square-never-negative), <a href="r13chem.html">13·chem</a> (concentration). <a href="r18cb13.html">18·cb13</a> takes slopes of circles; <a href="r18nav.html">18·nav</a> uses similar triangles to read maps.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · read it through, then work the picture and the slides</div>
+
+  <h3>Light in, light out</h3>
+  <p class="eqline" data-pid="47419e">An instrument shines light of one wavelength into a sample. Call the amount of light going in I₀ and the amount coming out I. Each is measured in the same unit, so only their ratio matters. The fraction let through, T = I/I₀, has the accepted name transmittance. The absorbance is A = log₁₀(I₀/I) = −log₁₀ T. The instrument has the accepted name spectrophotometer.</p>
+  <p data-pid="c45c09">Why a log? Because of what happens when two samples stand in a row. If the first lets through a fraction T₁ and the second T₂, together they let through T₁T₂. <b>Fractions let through multiply, so absorbances add.</b> That is 17c's log-of-a-product, for log₁₀ (17g's log-base-p).</p>
+  <pre class="lines" data-k="ember" data-label="18·chem: worked">
+T = 0.50 \Rightarrow A = -\log_{10} 0.50 \approx 0.301 @@ half the light through
+\text{two such samples in a row}:\ T = 0.25,\ \ A \approx 0.602 @@ the fractions multiply; the absorbances add
+A = 2 \Rightarrow T = 10^{-2} = 0.01 @@ one percent through: undo the log (17h)
+  </pre>
+
+  <h3>The thin-layer law</h3>
+  <p data-pid="99338d">Now let the light travel a distance x into a liquid holding one coloured substance at concentration c, in mol/L. Call what is left of the light I(x). Measurement shows a regularity, for a dilute solution and one wavelength. Each thin layer takes away the same small fraction of whatever light reaches it. That fraction is in proportion to the layer's thickness and to c. In marks: I′(x) = −kcI(x), for a number k that belongs to the substance and the wavelength. Thin-layer law: <b>in a clear, dilute solution, light of one wavelength fades at a rate in proportion to how much light is left and to how much colour is dissolved.</b> It is a law: measured, with a range. Its range is set out in the box below.</p>
+  <p data-pid="be7458">Absorbance technique (the Beer–Lambert law): <b>if the thin-layer law is true along a path of length ℓ, then the absorbance is A = εℓc, with ε = k / ln 10.</b> The number ε has the accepted name the molar absorption coefficient, in L/(mol·cm).</p>
+  <pre class="lines" data-k="ember" data-label="18·chem: the absorbance technique">
+I'(x) = -kc\,I(x) @@ the thin-layer law, for x from 0 to ℓ
+I(x) = I_0\,e^{-kcx} @@ proportional-slope (17f), with the constant −kc; I(0) = I₀
+\tfrac{I_0}{I(\ell)} = e^{kc\ell} @@ real-exponent: 1/e^(−y) = e^y
+\log_{10}\tfrac{I_0}{I(\ell)} = \tfrac{kc\ell}{\ln 10} @@ log-base-p: log₁₀ y = ln y / ln 10, and ln e^y = y
+\htmlClass{new}{A = \varepsilon \ell c},\ \ \varepsilon = \tfrac{k}{\ln 10} \quad \blacksquare @@ name the constant
+  </pre>
+  <p data-pid="92f49b">So the absorbance is a straight line in c through 0, and a straight line in ℓ through 0. Double the path or double the colour, and the absorbance doubles. The light let through does not halve: it is squared, since T = 10<sup>−A</sup>.</p>
+  <pre class="lines" data-k="ember" data-label="18·chem: two substances, measured">
+\text{NADH at } 340 \text{ nm}:\ \varepsilon = 6220 \text{ L/(mol·cm)} @@ a molecule every living cell uses to carry energy; its absorbance is how many enzyme tests are read
+A = 0.311,\ \ell = 1.00 \text{ cm}:\ \ c = \tfrac{0.311}{6220} = 5.0 \times 10^{-5} \text{ mol/L} @@ absorbance technique, solved for c: 50 µmol/L
+\text{permanganate at } 525 \text{ nm}:\ \varepsilon \approx 2400 \text{ L/(mol·cm)} @@ the deep purple of KMnO₄
+1.0 \times 10^{-4} \text{ mol/L},\ 1 \text{ cm}:\ A = 0.24,\ T \approx 0.58;\ \ 2 \text{ cm}:\ A = 0.48,\ T \approx 0.33 @@ A doubles; T is squared, 0.58² ≈ 0.33
+  </pre>
+
+  <h3>Reading a well</h3>
+  <p data-pid="8a48f7">The Salinas Valley grows much of the country's lettuce, and decades of fertilizer have reached its groundwater as nitrate. Many wells there test above the drinking-water limit of 10 mg/L of nitrate nitrogen. A common test turns the nitrate into a pink dye and reads its absorbance near 543 nm. The lab does not look up ε. It reads standards of known strength in the same cell, draws the line through them, and reads the unknown off the line. That line is the absorbance technique, with εℓ measured all at once; its accepted name is a calibration curve.</p>
+  <p data-pid="5cd2e9">Every reading is taken against a blank: the same cell, filled with the same water and the same dye-making chemicals, but no nitrate. The glass walls, the water and the chemicals all take some light. The blank's reading is set to A = 0, so what is left is the nitrate's share. That works because absorbances add.</p>
+  <pre class="lines" data-k="ember" data-label="18·chem: a calibration">
+\begin{aligned}&\text{standards } 0,\ 2,\ 5,\ 10 \text{ mg/L read } 0.000,\\ &\quad \ 0.081,\ 0.203,\ 0.405\end{aligned} @@ a straight line through 0, slope 0.0405 per mg/L
+\text{a well reads } 0.567 \Rightarrow \tfrac{0.567}{0.0405} = 14 \text{ mg/L} @@ above the limit of 10
+  </pre>
+
+  <h3>The path across a round tube</h3>
+  <p data-pid="f5f0a1">A square cell has flat, parallel walls, 1.00 cm apart inside. Every ray that comes in straight crosses exactly 1.00 cm of liquid. Older classroom instruments, and many field kits, take round tubes instead. Seen from above, the inside of the tube is a circle of radius r. A ray is a line. It passes the centre at some distance d, and the liquid it crosses is a chord.</p>
+  <p data-pid="4d77ca">Chord technique: <b>a ray that passes the centre of a round tube of inner radius r at distance d crosses a path ℓ(d) = 2√(r² − d²) of liquid when d &lt; r, and none when d ≥ r.</b></p>
+  <pre class="lines" data-k="ember" data-label="18·chem: the chord technique">
+\begin{aligned}&\text{the ray is a line at}\\ &\quad\text{distance } d \text{ from the centre } O\end{aligned} @@ the tube's inside, from above, is the circle of radius r about O
+d \lt r:\ \text{it meets the circle at } F \pm \sqrt{r^2 - d^2}\,e @@ line-meets-circle (18d), with F the foot of the perpendicular and |e| = 1
+\htmlClass{new}{\ell(d) = 2\sqrt{r^2 - d^2}} @@ distance-laws: the two points differ by 2√(r² − d²) e
+d = r:\ \text{one point};\ \ d \gt r:\ \text{none} \quad \blacksquare @@ line-meets-circle: a tangent line crosses no liquid, and a ray past it misses
+  </pre>
+  <p data-pid="66176c">The longest path is the one through the centre, 2r. A ray that slips a little off centre loses very little. Small-slip technique: <b>for a slip of u = d/r, with 0 ≤ u ≤ 1, the path falls short of 2r by a fraction between u²/2 and u².</b></p>
+  <pre class="lines" data-k="ember" data-label="18·chem: the small-slip technique">
+\tfrac{\ell(d)}{2r} = \sqrt{1 - u^2} @@ chord technique; take r out of the root
+\big(1 - \tfrac{u^2}{2}\big)^2 = 1 - u^2 + \tfrac{u^4}{4} \ge 1 - u^2 @@ square-of-a-difference (5h); square-never-negative
+\sqrt{1 - u^2} \le 1 - \tfrac{u^2}{2} @@ powers-keep-order (8f), both sides not negative
+s = 1 - u^2 \in [0, 1] \Rightarrow s^2 \le s \Rightarrow s \le \sqrt{s} @@ multiply s ≤ 1 by s ≥ 0; then powers-keep-order
+\htmlClass{new}{\tfrac{u^2}{2} \le 1 - \tfrac{\ell(d)}{2r} \le u^2} \quad \blacksquare @@ the two lines, taken from 1
+  </pre>
+  <pre class="lines" data-k="ember" data-label="18·chem: a tube 1.2 cm across">
+r = 0.60,\ d = 0.06:\ \ \ell = 2\sqrt{0.36 - 0.0036} \approx 1.194 \text{ cm} @@ a slip of a tenth of the radius: half a percent short
+r = 0.60,\ d = 0.30:\ \ \ell = 2\sqrt{0.27} \approx 1.039 \text{ cm} @@ a slip of half the radius: 13% short
+  </pre>
+
+  <h3>Many paths, one reading</h3>
+  <p data-pid="0880e1">A real beam is not one ray. It is a band of rays, each crossing its own chord, and the detector adds up the light they let through. It cannot add absorbances. So what does it read? Take the simplest case: two rays carrying equal light, with absorbances A₁ and A₂ along their paths.</p>
+  <p data-pid="7066d8">Two-ray technique: <b>two rays read together give an absorbance no more than the average of their own, and equal to it only when the two are equal.</b> In marks: −log₁₀((10<sup>−A₁</sup> + 10<sup>−A₂</sup>)/2) ≤ (A₁ + A₂)/2.</p>
+  <pre class="lines" data-k="ember" data-label="18·chem: the two-ray technique">
+u = 10^{-a_1},\ v = 10^{-a_2}:\ \ \text{light out} = \tfrac{u + v}{2} @@ each ray carries half the light in; the detector adds what comes out
+(\sqrt u - \sqrt v)^2 \ge 0 \Rightarrow \tfrac{u + v}{2} \ge \sqrt{uv} @@ square-never-negative; square-of-a-difference
+\sqrt{uv} = 10^{-\frac{a_1 + a_2}{2}} @@ real-exponent: powers of 10 multiply by adding exponents
+\htmlClass{new}{A_{\text{read}} = -\log_{10}\tfrac{u + v}{2} \le \tfrac{a_1 + a_2}{2}} @@ log₁₀ rises (log-base-p), so −log₁₀ turns order about
+\text{equal} \iff \sqrt u = \sqrt v \iff a_1 = a_2 \quad \blacksquare @@ a square is 0 only at 0; 10ˣ is one-to-one
+  </pre>
+  <pre class="lines" data-k="ember" data-label="18·chem: a ray at the centre and one at d = 0.48 cm, r = 0.60">
+\text{paths } 1.20 \text{ and } 0.72 \text{ cm, average } 0.96 @@ chord technique
+\varepsilon c = 0.25 \text{ per cm}:\ \ A_{\text{read}} \approx 0.236 \text{ against } 0.240 @@ 2% low
+\varepsilon c = 1 \text{ per cm}:\ \ A_{\text{read}} \approx 0.897 \text{ against } 0.960 @@ 7% low
+\varepsilon c = 3 \text{ per cm}:\ \ A_{\text{read}} \approx 2.45 \text{ against } 2.88 @@ 15% low: the darker the sample, the more the short path wins
+  </pre>
+  <p data-pid="1ac4c1">So a round tube with a wide beam does not give a straight line in c. At low c the reading sits close to the line. As c grows, the reading falls further below it, and never above. The two-ray technique says which way the error runs before a single sample is read.</p>
+
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · laws with a known exception rate</div>
+    <p data-pid="a1aa6d">The thin-layer law is a measured rule, and it comes with its range. It is true for dilute solutions, roughly below 0.01 mol/L. It is true for light of one wavelength, in a clear liquid that scatters nothing, with every ray crossing the same path. Past each edge it fails, and in a known direction. Crowded molecules change one another's colour. A band of wavelengths, or a band of paths, mixes strong and weak absorbers, and the two-ray technique shows that the mix reads low. Above about A = 2, so little light gets through that stray light inside the instrument swamps it, and the reading flattens.</p>
+    <p data-pid="87893c"><b>State the rule, its range, and the direction it fails past the edge.</b></p>
+    <p data-pid="4af026">Nearly every way this law fails makes the reading fall below the straight line. A chemist who sees a reading above the line looks for a mistake, not a new law.</p>
+    <p class="bait" data-pid="2dc862">A sample reads A = 0.50, and the same sample made twice as strong reads 1.00. Made ten times as strong, it reads 3.4. Which way did the reading leave the line, and would you change the law or the sample?</p>
+  </aside>
+
+  <h3>Illegal moves</h3>
+  <pre class="lines" data-k="ember" data-label="18·chem: tempting, and not allowed">
+T = 50\% \text{ in } 1 \text{ cm, so } 0\% \text{ in } 2 \text{ cm}\,? @@ the fractions multiply: 25%
+c \text{ doubles, so } T \text{ halves}\,? @@ A doubles and T is squared: 0.5 becomes 0.25, and 0.9 becomes 0.81
+A = 4 \text{ is four times as dark as } A = 1\,? @@ it lets through 10³ = 1000 times less light
+\begin{aligned}&\text{reading} = \text{the average}\\ &\quad\text{absorbance of the beam's rays}\,?\end{aligned} @@ two-ray: the reading is lower, unless every ray crosses the same path
+\text{the path across a round tube is } 2r\,? @@ only for the ray through the centre; at distance d it is 2√(r² − d²)
+  </pre>
+</section>
+
+<section class="pic" id="pic">
+  <div class="eyebrow">The picture · a band of rays across a round tube, and what the instrument reads</div>
+  <div class="panels">
+    <div class="panel">
+      <div class="lbl">the tube from above, r = 0.60 cm; the beam goes left to right</div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">centre</span><input type="range" id="ko" min="0" max="0.6" step="0.01" value="0"><output id="oo"></output></div>
+      <div class="kn"><span class="m">width</span><input type="range" id="kw" min="0.02" max="1.2" step="0.02" value="1.2"><output id="ow"></output></div>
+      <div class="cap">Plum band: the beam, its centre at the knob's distance from the tube's centre. Ember: the part of each ray inside the liquid, a chord 2√(r² − d²). Muted: where a ray misses the liquid.</div>
+    </div>
+    <div class="panel">
+      <div class="lbl">absorbance read against εc, per cm</div>
+      <canvas id="cvL"></canvas>
+      <div class="kn"><span class="m">εc</span><input type="range" id="kc" min="0.05" max="4" step="0.05" value="2"><output id="oc"></output></div>
+      <div class="cap">Teal dashed: A = εc · 2r, the line a chemist expects from the diameter. Muted: the average of the rays' own absorbances. Ember: what the detector reads, −log₁₀ of the average light let through.</div>
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+</section>
+
+<section class="slides" id="sl1"><div class="eyebrow">The slides · transmittance and absorbance; absorbances add; the thin-layer law; the absorbance technique; NADH; path and colour; a well near Salinas; the blank; the chord technique; the small-slip technique; the two-ray technique; reading low; the law's edge; illegal moves · ← → keys work</div></section>
+
+<section class="sayback">
+  <div class="eyebrow">Say it back · then work it</div>
+  <h2>Questions</h2>
+  <div class="phkey"></div>
+  <ol>
+    <li><span class="qid">18·chem.1</span><span class="gname">Colour through glass.</span><span class="gwhy">Do: build the page's pieces.</span>
+      <ol class="sub">
+        <li><span class="qid">18·chem.1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="T = 0.20,"></span> <span data-tex-inline="\ell = 1.00 \text{ cm},"></span> <span data-tex-inline="\ell_2 = 2.50 \text{ cm}"></span></span>Find A. <br>Find T for the same solution in a cell of the second length.</li><li><span class="givens"><span data-tex-inline="\varepsilon = 6220 \text{ L/(mol·cm)},"></span> <span data-tex-inline="\ell = 1.00 \text{ cm},"></span> <span data-tex-inline="A = 0.435"></span></span>Find c for this NADH sample.</li><li><span class="givens"><span data-tex-inline="r = 0.50 \text{ cm},"></span> <span data-tex-inline="d = 0,\ 0.20,\ 0.40 \text{ cm}"></span></span>Find the path in the round tube for a ray at each offset d.</li><li><span class="givens"><span data-tex-inline="r = 0.50 \text{ cm},"></span> <span data-tex-inline="\varepsilon c = 2.0 \text{ per cm},"></span> <span data-tex-inline="d_1 = 0,\ d_2 = 0.30 \text{ cm},"></span> <span data-tex-inline="\text{equal light in each ray}"></span></span>Find each ray's absorbance, their average, and the reading of the two together.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">18·chem.2</span><span class="gname">From the reading back.</span><span class="gwhy">Undo: run the page's techs backwards.</span>
+      <ol class="sub">
+        <li><span class="qid">18·chem.2.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\varepsilon = 2400 \text{ L/(mol·cm)},"></span> <span data-tex-inline="\ell = 1.00 \text{ cm},"></span> <span data-tex-inline="A = 0.30"></span></span>Find c and T for this permanganate.</li><li><span class="givens"><span data-tex-inline="r = 0.60 \text{ cm},"></span> <span data-tex-inline="\text{path } 0.96 \text{ cm}"></span></span>Find how far from the centre the ray passed.</li><li><span class="givens"><span data-tex-inline="\text{standards } 0, 4, 8 \text{ mg/L}"></span> <span data-tex-inline="\text{read } 0.000, 0.162, 0.324;"></span> <span data-tex-inline="\text{well near Gonzales: } 0.729;"></span> <span data-tex-inline="\text{limit } 10 \text{ mg/L}"></span></span>Find the well's nitrate nitrogen, and whether it is above the limit.</li><li><span class="givens"><span data-tex-inline="\text{two rays, equal light in,}"></span> <span data-tex-inline="T_{\text{both}} = 0.10,"></span> <span data-tex-inline="T_1 = 0.15"></span></span>Find what the other ray lets through, and its absorbance.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">18·chem.3</span><span class="gname">Where it gives.</span><span class="gwhy">Bend: find where the techs stop working.</span>
+      <ol class="sub">
+        <li><span class="qid">18·chem.3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{red wine: } A = 2.9 \text{ in } 10 \text{ mm};"></span> <span data-tex-inline="\text{labs read } 1 \text{ mm}"></span> <span data-tex-inline="\text{and multiply by } 10"></span></span>Find the fraction of the light that gets through. <br>Find what the short cell buys, and what it assumes.</li><li><span class="givens"><span data-tex-inline="\text{the absorbance technique:}"></span> <span data-tex-inline="\text{every ray crosses one path}"></span></span>Test the assumption in a square cell with the light coming in straight, and in a round tube.</li><li><span class="givens"><span data-tex-inline="\text{round tube of radius } r,"></span> <span data-tex-inline="d = r,"></span> <span data-tex-inline="d &gt; r"></span></span>Find the path a ray crosses at each offset. <br>Find what such a ray does to the reading of a wide beam.</li><li><span class="givens"><span data-tex-inline="\ell_1 &gt; \ell_2,"></span> <span data-tex-inline="\text{equal light in,}"></span> <span data-tex-inline="c \to \infty"></span></span>Find what the reading of the two rays comes close to. <br>Find what that does to the shape of the reading against c.</li></ol></li>
+      </ol></li>
+    <li class="optgroup"><span class="qid">18·chem.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder challenges that rely on your own making. The page is complete without these; the rung's star needs them.</span>
+      <ol class="sub">
+        <li class="opt"><span class="qid">18·chem.4.1</span><span class="tagq">build</span>Build a reading of your own for a wide beam through a round tube: choose r, εc, and five rays carrying equal light at offsets from the centre out beyond r, one of them passing outside the liquid. <br>Find each ray's absorbance, the reading of all five together, and their average absorbance. <br>Find which is smaller, and what the outside ray did.</li>
+        <li class="opt"><span class="qid">18·chem.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{round tube: every ray through}"></span> <span data-tex-inline="\text{the centre crosses } 2r"></span></span>Find a tube shape other than a circle whose width, between two parallel lines that just touch it, is the same in every direction, or show there is none.</li>
+        <li class="opt"><span class="qid">18·chem.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{two rays, equal light in,}"></span> <span data-tex-inline="\text{read the average}"></span> <span data-tex-inline="\text{of their absorbances}"></span></span>Find whether they must have crossed equal paths.</li>
+        <li class="opt"><span class="qid">18·chem.4.4</span><span class="tagq">seam</span>In 1729 a French scientist found that light fades by equal fractions through equal thicknesses. In 1760 a Swiss-born scientist wrote the rule in the form of a log, and cited him. In 1852 a German scientist added the concentration, and wrote his rule as a fraction let through, never as an absorbance. The rule is called by the last two names. <br>Whose law is it?</li>
+      </ol></li>
+  </ol>
+  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
+</section>
+
+<nav class="nextrung"><a href="r18j.html">← 18j · constructions with straightedge and compass</a><a href="r18cb13.html">18·cb13 · slopes of circles and curves given by equations →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>Bouguer reported that light loses equal fractions of itself in passing through equal thicknesses of the same transparent matter, so that the losses go on in a progression of multiplying, not of adding.</p><cite>Pierre Bouguer, Essai d’optique sur la gradation de la lumière (1729); paraphrase</cite></aside>
+  <p>In 18·chem.4.4, the scientist of 1729 is Pierre Bouguer, the one of 1760 is Johann Heinrich Lambert, in his Photometria, and the one of 1852 is August Beer. Many books now say the Beer–Lambert law, some the Bouguer–Lambert–Beer law.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="18·chem: a worked “proof”, not allowed">
+\text{a beam's rays have absorbances } a_1, a_2 @@ fine
+A_{\text{read}} = \tfrac{a_1 + a_2}{2} @@ not allowed: the detector averages the light, 10^(−aᵢ), not the absorbances
+\text{so a round tube reads as a cell of the average path} @@ false: two-ray shows it reads less, and less again as c grows
+  </pre>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '–'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+const Nw='\\htmlClass{new}';
+function axes2(P,gx,gy){ const c=P.ctx,o=P.o; c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ c.moveTo(P.X(x),P.Y(o.y[0])); c.lineTo(P.X(x),P.Y(o.y[1])); }
+  for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ c.moveTo(P.X(o.x[0]),P.Y(y)); c.lineTo(P.X(o.x[1]),P.Y(y)); } c.stroke();
+  c.strokeStyle=col('--muted'); c.lineWidth=1.3; c.beginPath(); if(o.y[0]<=0&&o.y[1]>=0){ c.moveTo(P.X(o.x[0]),P.Y(0)); c.lineTo(P.X(o.x[1]),P.Y(0)); } if(o.x[0]<=0&&o.x[1]>=0){ c.moveTo(P.X(0),P.Y(o.y[0])); c.lineTo(P.X(0),P.Y(o.y[1])); } c.stroke();
+  c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; const ly=Math.min(P.H-6,Math.max(12,P.Y(0)+14));
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ if(Math.abs(x)<1e-9) continue; c.fillText(+x.toFixed(6),P.X(x),ly); }
+  c.textAlign='right'; const lx=Math.max(32,Math.min(P.W-4,P.X(0)-5)); for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ if(Math.abs(y)<1e-9) continue; c.fillText(String(+y.toFixed(6)).replace('-','−'),lx,P.Y(y)+4); } }
+function fillA(P,pts,colr,alpha){ const c=P.ctx; c.globalAlpha=alpha==null?0.2:alpha; P.poly(pts,null,colr); c.globalAlpha=1; }
+const sq1=P=>Object.defineProperty(P.o,'aspect',{get:()=>1});
+const r=0.6;
+const ko=$('ko'),kw=$('kw'),kc=$('kc'),cvF=$('cvF'),cvL=$('cvL');
+const PF=plane(cvF,{x:[-0.9,0.9],y:[-0.9,0.9],grid:0.2,aspect:1,draw:P=>drawF(P)}); sq1(PF);
+const PL=plane(cvL,{x:[-0.25,4.1],y:[-0.25,5.2],grid:1,aspect:0.8,draw:P=>drawL(P)});
+Object.defineProperty(PL.o,'aspect',{get:()=>cvL.clientWidth>480?0.75:0.9});
+const path=d=>Math.abs(d)<r?2*Math.sqrt(r*r-d*d):0;
+function rays(n){ const o=+ko.value, w=+kw.value, out=[]; for(let i=0;i<n;i++){ out.push(o-w/2+w*(i+0.5)/n); } return out; }
+function reading(ec,ds){ let s=0; ds.forEach(d=>{ s+=Math.pow(10,-ec*path(d)); }); return -Math.log10(s/ds.length); }
+const avgPath=ds=>ds.reduce((a,d)=>a+path(d),0)/ds.length;
+function drawF(P){ axes2(P,0.2,0.2); const o=+ko.value, w=+kw.value;
+  fillA(P,[[-0.9,o-w/2],[0.9,o-w/2],[0.9,o+w/2],[-0.9,o+w/2]],'--plum',0.12);
+  P.circle(0,0,r,null,0,'--sand'); P.circle(0,0,r,'--ink',2.2);
+  rays(9).forEach(d=>{ if(d<-0.9||d>0.9) return; P.line(-0.9,d,0.9,d,'--muted',1); if(Math.abs(d)<r){ const h=Math.sqrt(r*r-d*d); P.line(-h,d,h,d,'--ember',2.4); } });
+  P.dot(0,0,'--ink',3); }
+function drawL(P){ axes2(P,1,1); const ds=rays(61), lb=avgPath(ds);
+  curve(P,e=>e*2*r,'--teal',1.8,0,4.1,[6,4]); curve(P,e=>e*lb,'--muted',1.6,0,4.1); curve(P,e=>reading(e,ds),'--ember',2.6,0.001,4.1);
+  const e=+kc.value; P.dot(e,reading(e,ds),'--ember',5); }
+function read(){ const o=+ko.value, w=+kw.value, e=+kc.value; $('oo').textContent=mm(o,2)+' cm'; $('ow').textContent=mm(w,2)+' cm'; $('oc').textContent=mm(e,2);
+  const ds=rays(61), lb=avgPath(ds), Ar=reading(e,ds), Ad=e*2*r, Aa=e*lb; const vd=$('vdF');
+  vd.className='verdict'+(Aa-Ar<0.01*Aa?' win':' lose');
+  vd.textContent='Average path '+mm(lb,3)+' cm against 1.2 cm through the centre. At εc = '+mm(e,2)+': expected '+mm(Ad,3)+', average of the rays '+mm(Aa,3)+', read '+mm(Ar,3)+(Aa>0?' ('+mm(100*(1-Ar/Aa),1)+'% below the average).':'.');
+  tex($('eqF'),R`A_{\text{read}} = -\log_{10}\Big(\tfrac1n\textstyle\sum 10^{-\varepsilon c\,\ell(d_i)}\Big) \approx ${mm(Ar,3)} \le ${mm(Aa,3)}`,true); }
+function all(){ PF.redraw(); PL.redraw(); read(); }
+[ko,kw,kc].forEach(el=>el.addEventListener('input',all));
+window.__pic={set:(o,w,e)=>{ ko.value=o; kw.value=w; kc.value=e; all(); const ds=rays(61); return {avg:+avgPath(ds).toFixed(4),read:+reading(e,ds).toFixed(4)}; }};
+all();
+stepper('#sl1',[
+  {k:'ember',kl:'transmittance and absorbance',t:R`T = \tfrac{I}{I_0},\ \ A = -\log_{10} T`,n:`The fraction through, and its log.`},
+  {k:'ember',kl:'absorbances add',t:R`T_1T_2 \Rightarrow A_1 + A_2`,n:`log-of-a-product.`},
+  {k:'ember',kl:'the thin-layer law',t:R`I' = -kc\,I`,n:`Measured, with a range.`},
+  {k:'ember',kl:'the absorbance technique',t:R`${Nw}{A = \varepsilon \ell c}`,n:`proportional-slope, then log-base-p.`},
+  {k:'ember',kl:'NADH',t:R`\tfrac{0.311}{6220} = 5.0 \times 10^{-5}\ \text{mol/L}`,n:`At 340 nm, in 1 cm.`},
+  {k:'ember',kl:'path and colour',t:R`A \times 2 \Rightarrow T^2`,n:`Absorbance doubles; the light through is squared.`},
+  {k:'ember',kl:'a well near Salinas',t:R`\tfrac{0.567}{0.0405} = 14\ \text{mg/L}`,n:`Read off the calibration line.`},
+  {k:'ember',kl:'the blank',t:R`A_{\text{blank}} \to 0`,n:`Glass and water take their share; absorbances add.`},
+  {k:'ember',kl:'the chord technique',t:R`${Nw}{\ell(d) = 2\sqrt{r^2 - d^2}}`,n:`line-meets-circle.`},
+  {k:'ember',kl:'the small-slip technique',t:R`${Nw}{\tfrac{u^2}{2} \le 1 - \tfrac{\ell}{2r} \le u^2}`,n:`A tenth off centre: half a percent.`},
+  {k:'ember',kl:'the two-ray technique',t:R`${Nw}{-\log_{10}\tfrac{10^{-a_1} + 10^{-a_2}}{2} \le \tfrac{a_1 + a_2}{2}}`,n:`The detector adds light, not absorbance.`},
+  {k:'ember',kl:'reading low',t:R`0.236,\ 0.897,\ 2.45 \text{ against } 0.24,\ 0.96,\ 2.88`,n:`The darker, the further below.`},
+  {k:'ember',kl:'the law’s edge',t:R`\text{dilute, one wavelength, one path}`,n:`Past the edge, below the line.`},
+  {k:'ember',kl:'illegal',t:R`A = 4 \ne 4 \times (A = 1)`,n:`A thousand times less light.`}
+],{title:'The slides · transmittance and absorbance; absorbances add; the thin-layer law; the absorbance technique; NADH; path and colour; a well near Salinas; the blank; the chord technique; the small-slip technique; the two-ray technique; reading low; the law’s edge; illegal moves · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The triangle inequality in the plane</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r18a.html">← 18a points, distance, the displacement pattern</a><a href="r18c.html">next: 18c lines →</a></p>
+  <div class="tags"><span class="tag proof">18b · proof</span></div>
+  <h1>The triangle inequality in the plane</h1>
+  <p>Rung 8’s triangle technique took its name from geometry and promised the geometry later: on the line, the size of a sum is never more than the sum of the sizes. This step proves the plane's version. Going from one point to another by way of a third is never shorter than going straight, and it is exactly as short only when the third lies on the way. The proof needs one inequality about the dot product, found by asking when a square of rung 8 can be zero. With it, “straight” stops being a word about pictures: the segment between two points is the set of points that cost nothing extra.</p>
+  <p class="gesture">The size of the dot of two arrows is never more than their lengths multiplied, with equality only when one is a multiple of the other. So a detour is never shorter than the straight way, and it is equal exactly when the stop lies on the segment.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r18a.html">18a</a> (distance-laws, the dot technique, right-triangle, part-of-the-way), <a href="r08i.html">8i</a> (completing the square), <a href="r08f.html">8f</a> (square-never-negative, powers-keep-order), <a href="r08h.html">8h</a> (triangle). <a href="r18c.html">18c</a> builds lines from segments; <a href="r18d.html">18d</a> uses the equality case.</p></div>
+</header>
+
+<section class="class step" data-step="18b1">
+  <h2 class="sthead"><span class="stno">18b1</span>How large a dot product can be</h2>
+  <p class="stands">Stands on 18a (the dot product) and 5h (completing the square).</p>
+  <p data-pid="47d74c">Dot-bound technique: <b>for all displacements u and v, |u · v| ≤ |u| |v|. The two sides are equal exactly when one of u, v is a multiple of the other.</b> Its accepted name is the Cauchy–Schwarz inequality.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the dot-bound technique">
+v = 0:\ \ |u \cdot 0| = 0 = |u|\,|0| @@ and 0 = 0 · u, a multiple: the claim is true
+v \ne 0:\ \ q(t) = |u - tv|^2 \ge 0 \text{ for every real } t @@ a length squared (square-never-negative)
+q(t) = |u|^2 - 2t\,(u \cdot v) + t^2|v|^2 @@ right-triangle with −tv; the dot technique
+t_0 = \tfrac{u \cdot v}{|v|^2}:\ \ q(t_0) = |u|^2 - \tfrac{(u \cdot v)^2}{|v|^2} \ge 0 @@ completing the square in t (8i); |v|² &gt; 0 by distance-laws
+(u \cdot v)^2 \le |u|^2|v|^2 \Rightarrow \htmlClass{new}{|u \cdot v| \le |u|\,|v|} @@ multiply by |v|²; roots keep order (powers-keep-order)
+\text{equality} \iff q(t_0) = 0 \iff u = t_0 v @@ distance-laws: a length is 0 only for 0; and if u = sv, both sides are |s| |v|² \quad \blacksquare
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: checked">
+u = (1, 2),\ v = (3, 4):\ \ u \cdot v = 11,\ \ |u|\,|v| = \sqrt5 \cdot 5 \approx 11.18 @@ close: they point nearly the same way
+u = (2, 1),\ v = (-1, 2):\ \ u \cdot v = 0 \le \sqrt5\sqrt5 @@ perpendicular: as far from equal as possible
+u = (1, 2),\ v = (-2, -4):\ \ u \cdot v = -10,\ \ |u|\,|v| = 10 @@ equality: v = −2u
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · dot-bound · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">18b1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">u = (3, 4),  v = (4, 3)</span></span>Guess whether u · v is close to |u| |v|, from the way the two point. <br>Find both, and check dot-bound.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18b2">
+  <h2 class="sthead"><span class="stno">18b2</span>The triangle inequality</h2>
+  <p class="stands">Stands on 18b1 and 18a (right-triangle).</p>
+  <p data-pid="a4e275">Triangle technique in the plane: <b>for all displacements u and v, |u + v| ≤ |u| + |v|. So for all points P, Q, R, d(P, R) ≤ d(P, Q) + d(Q, R).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the triangle technique in the plane">
+|u + v|^2 = |u|^2 + |v|^2 + 2\,u \cdot v @@ right-triangle
+\le |u|^2 + |v|^2 + 2|u|\,|v| = (|u| + |v|)^2 @@ dot-bound: u · v ≤ |u · v| ≤ |u| |v|; square-of-a-sum
+|u + v| \le |u| + |v| @@ both are not negative, so the roots keep the order (powers-keep-order)
+u = Q - P,\ v = R - Q:\ \ \htmlClass{new}{d(P, R) \le d(P, Q) + d(Q, R)} \quad \blacksquare @@ u + v = R − P (18a)
+  </pre>
+  <p data-pid="de175f">With v on one axis and u on the same axis, this is rung 8's triangle, so triangle is the special case where the three points lie on a row. Now the name is earned, and the flag 8h opened for it is closed.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · the triangle inequality · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · the detour through Q, and the square that cannot go below 0</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="lbl">P = (0, 0) to R = (6, 4), by way of Q</div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">Qx</span><input type="range" id="kx" min="-2" max="8" step="0.1" value="2"><output id="ox"></output></div>
+      <div class="kn"><span class="m">Qy</span><input type="range" id="ky" min="-2" max="8" step="0.1" value="4"><output id="oy"></output></div>
+      <div class="cap">Ink: the straight way PR. Ember: the way through Q. Plum: Q. Put Q on the ink and the two lengths agree.</div>
+    </div>
+    <div class="panel">
+      <div class="lbl">q(t) = |u − tv|² against t, v = (3, 1)</div>
+      <canvas id="cvL"></canvas>
+      <div class="kn"><span class="m">u₁</span><input type="range" id="ku1" min="-4" max="4" step="0.5" value="1"><output id="ou1"></output></div>
+      <div class="kn"><span class="m">u₂</span><input type="range" id="ku2" min="-4" max="4" step="0.5" value="2"><output id="ou2"></output></div>
+      <div class="cap">Ink: q, a square in t that never goes below 0. Plum: its lowest point, at t₀ = u · v/|v|². It touches 0 exactly when u is a multiple of v.</div>
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18b2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">P = (0, 0),  Q = (3, 4),  R = (3, 0)</span></span>Find d(P, R), and the trip from P to Q to R. <br>Say how much the detour through Q costs.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18b3">
+  <h2 class="sthead"><span class="stno">18b3</span>When the detour costs nothing</h2>
+  <p class="stands">Stands on 18b2 and 18a (part-of-the-way).</p>
+  <p class="eqline" data-pid="725d7a">From here on, for points P and R, the set {P + t(R − P) : 0 ≤ t ≤ 1} is the segment from P to R, written PR. PR is a name, for one set of points. Its accepted name is a line segment, and P and R are its endpoints. Three points are collinear when one lies on the segment between the other two; three points that are not collinear make a triangle.</p>
+  <p data-pid="6718a9">Equality-on-the-segment technique: <b>d(P, R) = d(P, Q) + d(Q, R) exactly when Q is on the segment PR.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the equality-on-the-segment technique">
+Q \in PR \Rightarrow \text{equality} @@ part-of-the-way: t · d + (1 − t) · d = d
+\text{equality} \Rightarrow u \cdot v = |u|\,|v| @@ triangle in the plane's second line, read as an equality
+u = 0:\ Q = P,\ \ t = 0 @@ on the segment
+u \ne 0:\ v = su,\ s \ge 0 @@ dot-bound's equality case; s ≥ 0 since u · v = s|u|² ≥ 0
+R - P = u + v = (1 + s)u @@ so Q − P = u = (R − P)/(1 + s)
+\htmlClass{new}{Q = P + t(R - P),\ \ t = \tfrac{1}{1 + s} \in (0, 1]} \quad \blacksquare @@ on the segment
+  </pre>
+  <p data-pid="e855e9">So the segment PR is exactly the set of points through which the trip from P to R costs no more than going straight. A broken path P, Q₁, …, Qₙ, R is at least d(P, R) long, by triangle in the plane and induction on n. Rung 8 said the line ℝ was a straight line in name only; this is what the name means.</p>
+  <pre class="lines" data-k="ember" data-label="this step: worked">
+(1, 2), (4, 6), (10, 14):\ \ 5 + 10 = 15 @@ collinear: (4, 6) is ⅓ of the way
+(0, 0), (3, 2), (6, 8):\ \ \sqrt{13} + \sqrt{45} \approx 10.31 \gt 10 @@ a triangle; the detour costs 0.31
+\text{sides } 4 \text{ and } 9:\ \ 5 \lt \text{third side} \lt 13 @@ triangle in the plane three ways round, strict for a triangle
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · segments · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18b3.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="d(P, Q) = 3,"></span> <span data-tex-inline="d(Q, R) = 4,"></span> <span data-tex-inline="d(P, R) = 7"></span></span>Find Q in terms of P and R.</li><li><span class="givens"><span data-tex-inline="u = (3, 4),"></span> <span data-tex-inline="u \cdot v = |u|\,|v| = 50"></span></span>Find v.</li><li><span class="givens"><span data-tex-inline="\text{a triangle has sides } 4 \text{ and } 9"></span></span>Find every length its third side can have.</li><li><span class="givens"><span data-tex-inline="A = (k, 1),"></span> <span data-tex-inline="B = (2, 3),"></span> <span data-tex-inline="C = (4, 7)"></span></span>Find every k for which A, B and C are collinear.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18b4">
+  <h2 class="sthead"><span class="stno">18b4</span>What even a donkey knows</h2>
+  <p class="stands">Stands on 18b3.</p>
+  <aside class="voice para"><p data-pid="c13005">Proclus reports that the Epicureans mocked Euclid's proof that two sides of a triangle together are longer than the third, saying the thing is plain even to a donkey, which goes straight to its hay and not round two sides. He answers that what is plain to the senses still needs a reason to be known.</p><cite>Proclus, Commentary on the First Book of Euclid's Elements, on I.20 (5th century); paraphrase</cite></aside>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · the donkey · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18b4.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="u = (2, -1),"></span> <span data-tex-inline="v = (3, 5)"></span></span>Check dot-bound for u and v.</li><li><span class="givens"><span data-tex-inline="A = (1, 2),"></span> <span data-tex-inline="B = (4, 6),"></span> <span data-tex-inline="C = (10, 14)"></span></span>Using equality-on-the-segment, find whether A, B and C are collinear, and if they are, which point is between and what fraction of the way.</li><li><span class="givens"><span data-tex-inline="A = (0, 0),"></span> <span data-tex-inline="B = (5, 0),"></span> <span data-tex-inline="C = (1, 3)"></span></span>Find the sides of the triangle ABC. <br>Check triangle in the plane three ways round.</li><li><span class="givens"><span data-tex-inline="P = (0, 0),"></span> <span data-tex-inline="S = (3, 2),"></span> <span data-tex-inline="Q = (6, 8)"></span> <span data-tex-inline="\text{ in km}"></span></span>Find how much farther the way from P to Q by S is than the straight way.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18b5">
+  <h2 class="sthead"><span class="stno">18b5</span>Illegal moves</h2>
+  <p class="stands">Stands on 18b1 to 18b4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+|u + v| = |u| + |v|\,? @@ only when v is a non-negative multiple of u, or u = 0
+t_0 = \tfrac{u \cdot v}{|v|^2} \text{ when } v = 0\,? @@ the proof handles v = 0 first, for this reason
+u \cdot v \le |u|\,|v| \Rightarrow u \cdot v \ge -|u|\,|v|\,? @@ that needs dot-bound's absolute value, not the one-sided form
+\text{collinear} \iff \text{the points look in line} @@ checked by equality-on-the-segment or by multiples, never by the drawing
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18b5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="c(P, Q) = |x_2 - x_1| + |y_2 - y_1|"></span></span>Test triangle in the plane for c. <br>Find whether the straight way is the only shortest one for c.</li><li><span class="givens"><span data-tex-inline="\text{dot-bound's proof,}"></span> <span data-tex-inline="\text{without its first line}"></span></span>Run the proof without its first line, and find where it fails.</li><li><span class="givens"><span data-tex-inline="u = (u_1, u_2, u_3),"></span> <span data-tex-inline="v = (v_1, v_2, v_3)"></span></span>Run dot-bound's proof for u and v, and find which line changes.</li><li><span class="givens"><span data-tex-inline="T:\ |u + v + w| \le |u| + |v| + |w|"></span></span>Using triangle in the plane, prove T. <br>Find when it is an equality.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">18b.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="P = (0, 0),"></span> <span data-tex-inline="R = (4, 2)"></span></span>Choose a distance on pairs other than this step's, and prove triangle in the plane for it. <br>With your distance, find every Q for which the way from P to R by Q is as short as the straight way. <br>Compare that set with the segment PR.</div>
+  <div class="chq"><span class="chid">18b.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="u = (1, 2),"></span> <span data-tex-inline="v \ne 0,"></span> <span data-tex-inline="r(v) = \dfrac{u \cdot v}{|u|\,|v|}"></span></span>Find every v at which r is least, every v at which it is greatest, and every v at which it is zero. <br>Test whether r adds for two openings side by side.</div>
+  <div class="chq"><span class="chid">18b.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="d(P, R) &lt; d(P, Q) + d(Q, R)"></span></span>Find whether P, Q and R must make a triangle.</div>
+  <div class="chq"><span class="chid">18b.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\text{a broken path } P, Q_1, \ldots, Q_n, R,"></span> <span data-tex-inline="n \ge 0"></span></span>By induction on n, prove that the broken path is at least as long as the distance from P to R.</div>
+  <div class="chq"><span class="chid">18b.4.5</span><span class="tagq">seam</span>The Epicureans said a donkey knows that two sides of a triangle are longer than the third, so proving it is a waste. Euclid proved it, and Proclus defended him. This step proved it again, from a definition of distance. <br>Should the obvious be proved? <br>What would be lost if it were not, and what was gained when it was?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r18a.html">← 18a · points, distance, the displacement pattern</a><a href="r18c.html">18c · lines →</a></nav>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+/* least and greatest of F.f on [lo, hi]: the ends, F's critical points inside, and a fine sample (exact between critical points for the functions used here) */
+function ext(F,lo,hi){ if(F.dir) return [0,1]; let m=Infinity,M=-Infinity; const t=x=>{ const v=F.f(x); if(v<m) m=v; if(v>M) M=v; };
+  t(lo); t(hi); (F.crit||[]).forEach(c=>{ if(c>lo&&c<hi) t(c); }); for(let k=1;k<64;k++) t(lo+(hi-lo)*k/64); return [m,M]; }
+function sums(F,pts){ let L=0,U=0; const ms=[],Ms=[]; for(let i=1;i<pts.length;i++){ const [m,M]=ext(F,pts[i-1],pts[i]), w=pts[i]-pts[i-1]; ms.push(m); Ms.push(M); L+=m*w; U+=M*w; } return {L,U,ms,Ms}; }
+const eq=(a,b,n)=>Array.from({length:n+1},(_,i)=>a+(b-a)*i/n);
+function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
+function boxes(P,pts,hs,stroke,fill,alpha){ const c=P.ctx; for(let i=1;i<pts.length;i++){ const a=pts[i-1],b=pts[i],h=hs[i-1]; c.globalAlpha=alpha; P.poly([[a,0],[b,0],[b,h],[a,h]],null,fill); c.globalAlpha=1; P.poly([[a,0],[b,0],[b,h],[a,h]],stroke,null,1.2); } }
+function dirDots(P,a,b){ const c=P.ctx; c.fillStyle=col('--ink'); for(let k=0;k<=300;k++){ const x=a+(b-a)*k/300; const y=(k%2)?0:1; c.fillRect(P.X(x)-1,P.Y(y)-1,2,2); } }
+/* shade between the graph of fn and the axis from lo to hi: above in pos colour, below in neg colour */
+function shade(P,fn,lo,hi,pos,neg,alpha){ if(hi<lo){ const t=lo; lo=hi; hi=t; } const c=P.ctx, N=300; c.globalAlpha=alpha==null?0.32:alpha;
+  for(let k=0;k<N;k++){ const x0=lo+(hi-lo)*k/N, x1=lo+(hi-lo)*(k+1)/N, xm=(x0+x1)/2, y=fn(xm); if(!isFinite(y)) continue; P.poly([[x0,0],[x1,0],[x1,fn(x1)],[x0,fn(x0)]],null,y>=0?pos:neg); }
+  c.globalAlpha=1; }
+function rangeOf(fn,lo,hi,pad){ let m=Infinity,M=-Infinity; for(let k=0;k<=400;k++){ const v=fn(lo+(hi-lo)*k/400); if(isFinite(v)){ if(v<m) m=v; if(v>M) M=v; } } if(m>0) m=0; if(M<0) M=0; const p=(M-m)*(pad==null?0.12:pad)||1; return [m-p,M+p]; }
+function chips(el,FN,get,setk,after){ Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===get()) b.className='on'; b.onclick=()=>{ setk(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+const Nw='\\htmlClass{new}';
+function gridFor(sp){ return sp>40?10:sp>16?4:sp>8?2:sp>3?1:sp>1.2?0.5:0.25; }
+function frame2(P,fn,lo,hi,pad){ const w=hi-lo; P.o.x=[lo-0.12*w,hi+0.08*w]; P.o.y=rangeOf(fn,lo,hi,pad==null?0.12:pad); const sx=P.o.x[1]-P.o.x[0], sy=P.o.y[1]-P.o.y[0]; let g=gridFor(sx); while(sy/g>24) g*=2; P.o.grid=g; }
+const num=(f,a,b,n)=>{ n=n||4000; const h=(b-a)/n; let s=0; for(let i=0;i<n;i++) s+=f(a+(i+0.5)*h)*h; return s; };
+/* axes with separate steps across and up */
+function axes2(P,gx,gy){ const c=P.ctx,o=P.o; c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ c.moveTo(P.X(x),P.Y(o.y[0])); c.lineTo(P.X(x),P.Y(o.y[1])); }
+  for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ c.moveTo(P.X(o.x[0]),P.Y(y)); c.lineTo(P.X(o.x[1]),P.Y(y)); } c.stroke();
+  c.strokeStyle=col('--muted'); c.lineWidth=1.3; c.beginPath(); if(o.y[0]<=0&&o.y[1]>=0){ c.moveTo(P.X(o.x[0]),P.Y(0)); c.lineTo(P.X(o.x[1]),P.Y(0)); } if(o.x[0]<=0&&o.x[1]>=0){ c.moveTo(P.X(0),P.Y(o.y[0])); c.lineTo(P.X(0),P.Y(o.y[1])); } c.stroke();
+  c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; const ly=Math.min(P.H-6,Math.max(12,P.Y(0)+14));
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ if(Math.abs(x)<1e-9) continue; c.fillText(+x.toFixed(6),P.X(x),ly); }
+  c.textAlign='right'; const lx=Math.max(32,Math.min(P.W-4,P.X(0)-5)); for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ if(Math.abs(y)<1e-9) continue; c.fillText(String(+y.toFixed(6)).replace('-','−'),lx,P.Y(y)+4); } }
+function nice(sp){ const raw=sp/6, p=Math.pow(10,Math.floor(Math.log10(raw))), m=raw/p; return (m<1.5?1:m<3.5?2:m<7.5?5:10)*p; }
+function arrow(P,x1,y1,x2,y2,colr,w){ P.line(x1,y1,x2,y2,colr,w||2.2); const c=P.ctx, X1=P.X(x1),Y1=P.Y(y1),X2=P.X(x2),Y2=P.Y(y2), L=Math.hypot(X2-X1,Y2-Y1); if(L<2) return; const ux=(X2-X1)/L, uy=(Y2-Y1)/L, h=9; c.fillStyle=col(colr); c.beginPath(); c.moveTo(X2,Y2); c.lineTo(X2-h*ux-0.5*h*uy,Y2-h*uy+0.5*h*ux); c.lineTo(X2-h*ux+0.5*h*uy,Y2-h*uy-0.5*h*ux); c.closePath(); c.fill(); }
+function fillA(P,pts,colr,alpha){ const c=P.ctx; c.globalAlpha=alpha==null?0.2:alpha; P.poly(pts,null,colr); c.globalAlpha=1; }
+const sq1=P=>Object.defineProperty(P.o,'aspect',{get:()=>1});
+function rightMark(P,qx,qy,ax,ay,bx,by,s,colr){ const la=Math.hypot(ax-qx,ay-qy), lb=Math.hypot(bx-qx,by-qy); if(!la||!lb) return; const u=[(ax-qx)/la*s,(ay-qy)/la*s], v=[(bx-qx)/lb*s,(by-qy)/lb*s]; P.poly([[qx+u[0],qy+u[1]],[qx+u[0]+v[0],qy+u[1]+v[1]],[qx+v[0],qy+v[1]]],colr||'--muted',null,1.2,false); }
+const dist=(a,b)=>Math.hypot(b[0]-a[0],b[1]-a[1]);
+const dotp=(u,v)=>u[0]*v[0]+u[1]*v[1];
+const kx=$('kx'),ky=$('ky'),ku1=$('ku1'),ku2=$('ku2'),cvF=$('cvF'),cvL=$('cvL');
+const A=[0,0], C=[6,4], V=[3,1];
+const PF=plane(cvF,{x:[-3,9],y:[-3,9],grid:1,aspect:1,draw:P=>drawF(P)}); sq1(PF);
+const PL=plane(cvL,{x:[-3,3],y:[-4,30],grid:1,aspect:0.8,draw:P=>drawL(P)});
+Object.defineProperty(PL.o,'aspect',{get:()=>cvL.clientWidth>480?0.75:0.9});
+const g=()=>({Q:[+kx.value,+ky.value],u:[+ku1.value,+ku2.value]});
+function drawF(P){ const {Q}=g(); axes2(P,1,1); P.line(A[0],A[1],C[0],C[1],'--ink',2.6); P.line(A[0],A[1],Q[0],Q[1],'--ember',2); P.line(Q[0],Q[1],C[0],C[1],'--ember',2);
+  P.dot(A[0],A[1],'--ink',4.5); P.dot(C[0],C[1],'--ink',4.5); P.dot(Q[0],Q[1],'--plum',5.5); P.text('P',A[0]-0.4,A[1]-0.5,'--ink','center',12); P.text('R',C[0]+0.4,C[1]+0.3,'--ink','center',12); P.text('Q',Q[0]+0.35,Q[1]+0.35,'--plum','center',12); }
+function drawL(P){ const {u}=g(), vv=dotp(V,V), uv=dotp(u,V), uu=dotp(u,u), q=t=>uu-2*t*uv+t*t*vv, t0=uv/vv; P.o.x=[Math.min(-3,t0-2),Math.max(3,t0+2)]; const top=Math.max(30,uu*1.3); P.o.y=[-0.12*top,top]; axes2(P,1,nice(P.o.y[1]));
+  curve(P,q,'--ink',2.6,P.o.x[0],P.o.x[1]); P.dot(t0,q(t0),'--plum',5.5); }
+function read(){ const {Q,u}=g(); $('ox').textContent=mm(Q[0],1); $('oy').textContent=mm(Q[1],1); $('ou1').textContent=mm(u[0],1); $('ou2').textContent=mm(u[1],1);
+  const a=dist(A,Q), b=dist(Q,C), c=dist(A,C), uv=dotp(u,V), lu=Math.hypot(...u), lv=Math.hypot(...V), m=dotp(u,u)-uv*uv/dotp(V,V);
+  const vd=$('vdF'); vd.className='verdict'+(a+b-c<1e-9?' win':'');
+  vd.textContent='Through Q: '+mm(a,3)+' + '+mm(b,3)+' = '+mm(a+b,3)+' against straight '+mm(c,3)+(a+b-c<1e-9?': equal, so Q is on the segment PR.':'; the detour costs '+mm(a+b-c,3)+'.')+' Right: u · v = '+mm(uv,2)+', |u| |v| = '+mm(lu*lv,3)+'; the lowest value of q is '+mm(m,3)+(Math.abs(m)<1e-9?', so u is a multiple of v.':'.');
+  tex($('eqF'),R`|u \cdot v| = ${mm(Math.abs(uv),2)} \le |u|\,|v| = ${mm(lu*lv,3)}`,true); }
+function all(){ PF.redraw(); PL.redraw(); read(); }
+[kx,ky,ku1,ku2].forEach(e=>e.addEventListener('input',all));
+window.__pic={set:(qx,qy,u1,u2)=>{ kx.value=qx; ky.value=qy; ku1.value=u1; ku2.value=u2; all(); const {Q,u}=g(); return {via:+(dist(A,Q)+dist(Q,C)).toFixed(4),straight:+dist(A,C).toFixed(4),uv:dotp(u,V),bound:+(Math.hypot(...u)*Math.hypot(...V)).toFixed(4),qmin:+(dotp(u,u)-dotp(u,V)**2/dotp(V,V)).toFixed(4)}; }};
+all();
+stepper('#sl1',[
+  {k:'ember',kl:'q(t) ≥ 0',t:R`q(t) = |u - tv|^2 \ge 0`,n:`A length squared.`},
+  {k:'ember',kl:'completing the square',t:R`q(t_0) = |u|^2 - \tfrac{(u \cdot v)^2}{|v|^2}`,n:`t₀ = u · v/|v|² (8i).`},
+  {k:'ember',kl:'dot-bound',t:R`${Nw}{|u \cdot v| \le |u|\,|v|}`,n:`Equal only for multiples.`},
+  {k:'ember',kl:'three checks',t:R`11 \le 11.18,\ \ 0 \le 5,\ \ 10 = 10`,n:`Near, perpendicular, opposite.`}
+],{title:'The slides · dot-bound · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'triangle in the plane',t:R`${Nw}{|u + v| \le |u| + |v|}`,n:`right-triangle, then dot-bound, then roots.`},
+  {k:'ember',kl:'triangle as a case',t:R`|a + b| \le |a| + |b|`,n:`Rung 8's name, earned.`}
+],{title:'The slides · the triangle inequality · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'segments',t:R`PR = \{P + t(R - P) : 0 \le t \le 1\}`,n:`Collinear; a triangle.`},
+  {k:'ember',kl:'equality-on-the-segment',t:R`${Nw}{d(P, R) = d(P, Q) + d(Q, R) \iff Q \in PR}`,n:`dot-bound's equality, with s ≥ 0.`},
+  {k:'ember',kl:'broken paths',t:R`d(P, R) \le \textstyle\sum d(Q_{i}, Q_{i+1})`,n:`triangle in the plane and induction.`},
+  {k:'ember',kl:'worked',t:R`\sqrt{13} + \sqrt{45} \approx 10.31 \gt 10`,n:`A detour of 0.31.`}
+],{title:'The slides · segments · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'the donkey',t:R`\text{Euclid, twentieth proposition}`,n:`Proclus against the Epicureans.`}
+],{title:'The slides · the donkey · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`v = 0:\ \text{no } t_0`,n:`Handled first.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

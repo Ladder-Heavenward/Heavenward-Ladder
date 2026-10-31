@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="ladder-cert" content="rung"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>15i · Geometric sums</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r15h.html">← 15h Sums of thin strips by hand</a><a href="r15chem.html">next: 15·chem why does a squeezed gas push back? →</a></p>
+  <div class="tags"><span class="tag tech">15i · technique</span></div>
+  <h1>Geometric sums</h1>
+  <p>15h found the area under each power up to the cube, each from its own sum of powers, and the sums get harder as the power grows. Around 1640 a way was found to do every power at once: the shrinking cut (Fermat's). Instead of equal pieces, it cuts the interval at points that shrink by a fixed factor toward 0, so that the boxes' areas shrink by a fixed factor too. A sum whose terms are each a fixed multiple of the one before has a short formula, the first in this step. The second asks what such a sum becomes when it never stops.</p>
+  <p class="gesture">Multiply a geometric sum by one less its factor, and it collapses to two terms. When the factor is smaller than one in size, its powers head to 0, and the endless sum has a total. Cut the interval at points that shrink by a fixed factor, and the boxes under any power form a geometric sum. Its total, as the factor heads to 1, is the area.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r15g.html">15g</a> (collapsing-sum, sums-are-linear), <a href="r15h.html">15h</a> (the pattern for xᵏ), <a href="r15f.html">15f</a> (continuous-is-integrable), <a href="r15e.html">15e</a> (interval-cut-in-two), <a href="r10f.html">10f</a> (far out), <a href="r10b.html">10b</a> (limits-keep-order), <a href="r08e.html">8e</a> (everyday-counting-passes), <a href="r08cb5.html">8·cb5</a> (endless decimals, endless-decimal, repeating-decimal), <a href="r11d.html">11d</a> (polynomials are continuous), <a href="r04g.html">4g</a> (induction). Rung 22 asks which other endless sums have totals.</p></div>
+</header>
+
+<section class="class step" data-step="15i1">
+  <h2 class="sthead"><span class="stno">15i1</span>The finite sum</h2>
+  <p class="stands">Stands on 9h (the geometric sum) and 15g (collapsing-sum).</p>
+  <p data-pid="2a4ba5">The finite-ratio-sum technique (the geometric sum, first met at <a href="r09h.html">9h</a>): <b>for r ≠ 1 and whole n ≥ 1, Σᵢ₌₀ⁿ⁻¹ rⁱ = 1 + r + ⋯ + rⁿ⁻¹ = (1 − rⁿ)/(1 − r).</b> Its accepted name is the sum of a finite geometric series; r is its ratio.</p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the finite-ratio-sum technique">
+(1 - r)\textstyle\sum_{i=0}^{n-1} r^i = \sum_{i=0}^{n-1} (r^i - r^{i+1}) @@ sums-are-linear, spreading (spread on ℝ)
+= 1 - r^n @@ <span class="hl-new">collapsing-sum (15g)</span>, with aᵢ = −rⁱ: a sum of differences collapses
+\htmlClass{new}{\textstyle\sum_{i=0}^{n-1} r^i = \tfrac{1 - r^n}{1 - r}} \quad \blacksquare @@ divide by 1 − r ≠ 0 (positive-reciprocal)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: finite-ratio-sum at work">
+1 + 2 + 4 + \cdots + 512 = \tfrac{1 - 2^{10}}{1 - 2} = 1023 @@ r = 2, n = 10
+1 + \tfrac14 + \tfrac{1}{16} + \cdots + \tfrac{1}{4^{n-1}} = \tfrac43\big(1 - \tfrac{1}{4^n}\big) @@ r = ¼
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the finite sum · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">15i1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">1 − 2 + 4 − 8 + 16 − 32</span></span>Find it with finite-ratio-sum. <br>Check by adding the six terms.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15i2">
+  <h2 class="sthead"><span class="stno">15i2</span>When rⁿ shrinks</h2>
+  <p class="stands">Stands on 15i1, 10f (far out) and 4b (induction).</p>
+  <p class="eqline" data-pid="ecd90c">From here on, a list s₁, s₂, s₃, … heads to L when for every ε &gt; 0 there is N such that every n ≥ N has |sₙ − L| &lt; ε. This is 10f's far out, read on the whole numbers. Accepted names: the sequence converges to L, written lim sₙ = L; a list that heads to no number diverges.</p>
+  <p data-pid="bea5e5">Power-of-one-plus technique (Bernoulli's): <b>for h ≥ 0 and whole n, (1 + h)ⁿ ≥ 1 + nh.</b> By induction. n = 0 gives 1 ≥ 1. And (1 + h)ⁿ⁺¹ ≥ (1 + nh)(1 + h) = 1 + (n + 1)h + nh² ≥ 1 + (n + 1)h, by order-and-arithmetic-agree with 1 + h &gt; 0 and nh² ≥ 0.</p>
+  <p data-pid="40a64d">Small-powers-vanish technique: <b>if |r| &lt; 1, then rⁿ heads to 0.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the small-powers-vanish technique">
+r = 0: \text{ every } r^n = 0 \text{ for } n \ge 1 @@ nothing to show
+0 \lt |r| \lt 1:\ \ \tfrac{1}{|r|} = 1 + h,\ \ h \gt 0 @@ positive-reciprocal; order-and-arithmetic-agree
+\tfrac{1}{|r|^n} = (1 + h)^n \ge 1 + nh \gt nh @@ power-of-one-plus
+|r^n - 0| = |r|^n \lt \tfrac{1}{nh} @@ positive-reciprocal, reciprocals turn the order about for positives
+\text{fix } \varepsilon;\ \text{call } N:\ \tfrac1N \lt \varepsilon h @@ everyday-counting-passes (8e)
+n \ge N \;\Rightarrow\; |r^n| \lt \tfrac{1}{nh} \le \tfrac{1}{Nh} \lt \varepsilon \quad \blacksquare @@ order-and-arithmetic-agree, twice
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · when rⁿ shrinks · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15i2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">r = ½,  ε = 0.001</span></span>Find an N past which every rⁿ is within ε of 0, using power-of-one-plus. <br>Find the least such N by computing.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15i3">
+  <h2 class="sthead"><span class="stno">15i3</span>The endless sum</h2>
+  <p class="stands">Stands on 15i1 and 15i2.</p>
+  <p class="eqline" data-pid="518359">From here on, for a list a₀, a₁, a₂, …, the endless sum Σᵢ₌₀^∞ aᵢ is the number its partial sums sₙ = Σᵢ₌₀ⁿ⁻¹ aᵢ head to, when they head to one. Accepted names: a series; its partial sums; the series converges, and its sum is that number, or it diverges. The mark Σᵢ₌₀^∞ aᵢ is a name, for that number, when there is one.</p>
+  <p data-pid="a3a757">Endless-ratio-sum technique: <b>if |r| &lt; 1, then Σᵢ₌₀^∞ c rⁱ = c/(1 − r). If |r| ≥ 1 and c ≠ 0, the series diverges.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the endless-ratio-sum technique">
+s_n = a\tfrac{1 - r^n}{1 - r} @@ finite-ratio-sum, sums-are-linear
+\Big|s_n - \tfrac{a}{1 - r}\Big| = \tfrac{|a|}{|1 - r|}\,|r|^n @@ the difference is −a rⁿ/(1 − r)
+\text{heads to } 0 @@ small-powers-vanish, scaled by a constant
+\htmlClass{new}{\textstyle\sum_{i=0}^{\infty} a r^i = \tfrac{a}{1 - r}} @@ the definition
+|r| \ge 1:\ \ |a r^n| \ge |a| \text{ for every } n @@ powers-keep-order: so sₙ₊₁ − sₙ never shrinks below |a|, and the sₙ cannot settle within |a|/2 of any number
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · the endless sum · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15i3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">6 − 2 + ⅔ − ⋯ endlessly, ratio −⅓</span></span>Find the total with endless-ratio-sum. <br>Find s₃, and how far it is from the total.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15i4">
+  <h2 class="sthead"><span class="stno">15i4</span>Decimals and an old remainder</h2>
+  <p class="stands">Stands on 15i3 and 8·cb5 (endless decimals).</p>
+  <pre class="lines" data-k="teal" data-label="from 8·cb5: an endless decimal is an endless sum">
+0.999\ldots = \tfrac{9}{10}\big(1 + \tfrac{1}{10} + \tfrac{1}{100} + \cdots\big) @@ endless-decimal: the decimal names the number its truncations head to
+= \tfrac{9}{10} \cdot \tfrac{1}{1 - 1/10} = 1 @@ endless-ratio-sum with r = 1/10
+0.272727\ldots = \tfrac{27}{100} \cdot \tfrac{1}{1 - 1/100} = \tfrac{27}{99} = \tfrac{3}{11} @@ repeating-decimal: a repeating decimal is a fraction, and here is which
+\tfrac12 + \tfrac14 + \tfrac18 + \cdots = \tfrac12 \cdot \tfrac{1}{1 - 1/2} = 1 @@ halves without end, and a total
+  </pre>
+  <p data-pid="0d22a2">An ancient mathematician found the region between the graph of y = x² and one of its chords to be a certain figure inside it times 1 + ¼ + ¼² + ⋯. He had no endless sums. He proved instead that 1 + ¼ + ⋯ + ¼ⁿ⁻¹ + ⅓ · ¼ⁿ⁻¹ = 4/3 for every n. So the remainder after any number of terms is exactly a third of the last term. Then he showed the area could be neither more nor less than 4/3 of the figure.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · decimals · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15i4.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{an endless geometric sum:}"></span> <span data-tex-inline="\text{first term } 5,\ \text{total } 20"></span></span>Find its ratio r.</li><li><span class="givens"><span data-tex-inline="1 + 3 + 9 + \cdots + 3^{n-1} = 3280"></span></span>Find n.</li><li><span class="givens"><span data-tex-inline="x = 0.1222\ldots"></span></span>Write x as a fraction.</li><li><span class="givens"><span data-tex-inline="\text{dropped from } 2\ \text{m;}"></span> <span data-tex-inline="\text{each rise: } \tfrac34 \text{ of the fall}"></span></span>A ball is dropped on a gym floor in Tacoma. Find how far it travels, down and up, before it comes to rest.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15i5">
+  <h2 class="sthead"><span class="stno">15i5</span>The shrinking cut: every power at once</h2>
+  <p class="stands">Stands on 15i1 to 15i4, 15c (gap-closes) and 15h (exact areas).</p>
+  <p data-pid="fd88a4">Area-under-a-power technique: <b>for every whole k ≥ 0 and b &gt; 0, ∫₀ᵇ xᵏ dx = bᵏ⁺¹/(k + 1).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the area-under-a-power technique · the cut">
+0 \lt q \lt 1;\ \ \text{points } 0 \lt bq^N \lt \cdots \lt bq^2 \lt bq \lt b @@ a partition of [0, b] with N + 1 pieces
+\text{the piece } [bq^{i+1}, bq^i]:\ \ \text{width } bq^i(1 - q) @@ i from 0 to N − 1; the first piece [0, bq^N] apart
+\text{its upper box: } (bq^i)^k \cdot bq^i(1 - q) = b^{k+1}(1 - q)\,(q^{k+1})^i @@ xᵏ increasing on [0, ∞) (powers-keep-order): greatest at the right end
+\text{its lower box: } q^k \text{ times that} @@ least at the left end, bqⁱ⁺¹
+U = b^{k+1}(1 - q)\tfrac{1 - q^{(k+1)N}}{1 - q^{k+1}} + (bq^N)^{k+1} @@ finite-ratio-sum with ratio qᵏ⁺¹; the first piece's box
+L \ge q^k\, b^{k+1}(1 - q)\tfrac{1 - q^{(k+1)N}}{1 - q^{k+1}} @@ the first piece's lower box is 0
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: the area-under-a-power technique · letting N, then q, go">
+\tfrac{1 - q}{1 - q^{k+1}} = \tfrac{1}{1 + q + \cdots + q^k} @@ finite-ratio-sum read backwards
+\text{as } N \text{ grows: } q^{(k+1)N} \to 0,\ \ (bq^N)^{k+1} \to 0 @@ small-powers-vanish
+\tfrac{q^k\,b^{k+1}}{1 + q + \cdots + q^k} \le \textstyle\int_0^b x^k\,dx \le \tfrac{b^{k+1}}{1 + q + \cdots + q^k} @@ L ≤ ∫ ≤ U for every N (continuous-is-integrable); bounds kept in the limit (as limits-keep-order, 10b)
+\text{as } q \to 1:\ \ 1 + q + \cdots + q^k \to k + 1,\ \ q^k \to 1 @@ polynomials are continuous (11d); k + 1 terms, each heading to 1
+\htmlClass{new}{\textstyle\int_0^b x^k\,dx = \tfrac{b^{k+1}}{k + 1}} \quad \blacksquare @@ squeezed between two bounds with the same limit (squeeze, 10d)
+  </pre>
+  <p data-pid="852318">No sum of kth powers was needed. The pieces were unequal on purpose: their widths shrink by q, their heights by qᵏ, and their boxes by qᵏ⁺¹. <b>So the boxes make a geometric sum whatever k is.</b> 15h's pattern goes on for every whole power, and by interval-cut-in-two, ∫ᵤᵛ xᵏ dx = (vᵏ⁺¹ − uᵏ⁺¹)/(k + 1) for 0 ≤ u &lt; v.</p>
+  <p data-pid="fe2ca5">The finder of the shrinking cut wrote that he had found the areas of all the curves of the form yᵏ proportional to xᵐ. He divided the line into parts in continued proportion, so that the boxes inside the region and the boxes over it form a progression whose sum can be found.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · the shrinking cut · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · left: partial sums heading to c/(1 − r) · right: the shrinking cut under xᵏ</div>
+    <div class="panels">
+    <div class="panel">
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">r</span><input type="range" id="kr" min="-1.1" max="1.1" step="0.05" value="0.5"><output id="or"></output></div>
+      <div class="cap">Ink dots: the partial sums s₁, s₂, … of 1 + r + r² + ⋯. Gold: 1/(1 − r), when |r| &lt; 1.</div>
+      <div class="verdict" id="vdF"></div>
+    </div>
+    <div class="panel">
+      <div class="chips" id="kch"></div>
+      <canvas id="cvS"></canvas>
+      <div class="kn"><span class="m">q</span><input type="range" id="kq" min="0.3" max="0.95" step="0.01" value="0.7"><output id="oq"></output></div>
+      <div class="cap">The cut at 1, q, q², …, q¹² on [0, 1]. Teal: the lower boxes; ember: the upper boxes. Their totals squeeze ∫₀¹ xᵏ = 1/(k + 1), tighter as q nears 1.</div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15i5.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="S = 3 + 6 + 12 + \cdots + 3 \cdot 2^9"></span></span>Find S.</li><li><span class="givens"><span data-tex-inline="S = 3 + \tfrac34 + \tfrac{3}{16} + \cdots \text{ endlessly}"></span></span>Find S.</li><li><span class="givens"><span data-tex-inline="x = 0.363636\ldots"></span></span>Write x as a fraction.</li><li><span class="givens"><span data-tex-inline="0.9^n &lt; 0.01"></span></span>Using power-of-one-plus, find an n that fits.<br>Find the least such n by computing, and compare.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15i6">
+  <h2 class="sthead"><span class="stno">15i6</span>Illegal moves</h2>
+  <p class="stands">Stands on 15i1 to 15i5.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+1 + 2 + 4 + \cdots = \tfrac{1}{1 - 2} = -1\,? @@ endless-ratio-sum needs |r| &lt; 1; the partial sums pass every bound
+1 - 1 + 1 - \cdots = \tfrac12\,? @@ r = −1: the partial sums are 1, 0, 1, 0, … and head to nothing
+\textstyle\sum_{i=1}^{\infty} r^i = \tfrac{1}{1 - r}\,? @@ starting at i = 1 leaves out the 1: r/(1 − r)
+\text{a partition with endlessly many points}\,? @@ the shrinking cut stops at bq^N and treats [0, bq^N] as one piece
+0.999\ldots \lt 1\,? @@ the number it names is the limit of its truncations, which is 1
+  </pre>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15i6.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="1 + 2 + 4 + \cdots"></span></span>Find the partial sums, what endless-ratio-sum's formula gives, and which hypothesis of endless-ratio-sum fails.</li><li><span class="givens"><span data-tex-inline="1 - 1 + 1 - \cdots"></span></span>Find the partial sums, and what endless-ratio-sum's formula gives.</li><li><span class="givens"><span data-tex-inline="r = 1"></span></span>Put r into finite-ratio-sum and endless-ratio-sum, and find the partial sums.</li><li>Try to run the shrinking cut all the way down to zero with endlessly many pieces, and find the line of the step's definitions it breaks.<br>Find what the proof does instead, and what it costs.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">15i.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{Bend's } 1 + 2 + 4 + \cdots \text{ has ratio } 2."></span> <span data-tex-inline="\text{Total } 6,\ \text{ratio below } 0;"></span> <span data-tex-inline="\text{within } 0.01"></span></span>Make an endless geometric sum of your own with the given total and ratio.<br>Find how many terms bring its partial sum within the given distance of the total, and on which side of the total each partial sum falls.</div>
+  <div class="chq"><span class="chid">15i.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="S = \sum_{i=0}^{\infty} c \cdot 0^i"></span></span>Find S, and the convention about zero to the zero that your answer uses.</div>
+  <div class="chq"><span class="chid">15i.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="1 + \tfrac12 + \tfrac13 + \tfrac14 + \cdots"></span></span>If an endless sum has a total, its terms head to zero. <br>Prove or refute the converse: if its terms head to zero, it has a total. Try the given sum.</div>
+  <div class="chq"><span class="chid">15i.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\text{Claim: for every } n \ge 1,"></span> <span data-tex-inline="1 + \tfrac14 + \cdots + \big(\tfrac14\big)^{n-1}"></span> <span data-tex-inline="+ \tfrac13 \big(\tfrac14\big)^{n-1} = \tfrac43"></span></span>Prove the remainder identity in the claim.</div>
+  <div class="chq"><span class="chid">15i.4.5</span><span class="tagq">seam</span><span class="givens"><span data-tex-inline="1 - 1 + 1 - 1 + \cdots = \tfrac12"></span> <span data-tex-inline="\tfrac{1}{1 - r} \text{ at } r = -1"></span></span>In 1703 a monk and mathematician wrote the first given line. In 1713 one of the inventors of the calculus agreed: the partial sums are one and zero equally often, so one half is the fair value. Later, the greatest calculator of the century used one half freely, from the second given line. In 1821 a textbook said a series that does not head to a number has no sum at all. <br>Who was right? <br>Is a sum something a series has, or something you give it?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r15h.html">← 15h · Sums of thin strips by hand</a><a href="r15stat.html">15·stat · how likely is landing in a range? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>Fermat wrote that he had found the areas of all the curves of the form yᵏ proportional to xᵐ, by dividing the line into parts in continued proportion, so that the inscribed and circumscribed figures form a progression whose sum can be found.</p><cite>Fermat, Treatise on quadratures (about 1658, printed 1679); paraphrase</cite></aside>
+  <p>The remainder identity is Archimedes’, from his Quadrature of the Parabola. Power-of-one-plus is Bernoulli’s inequality. In the closer, the monk is Guido Grandi (1703), the inventor is Gottfried Leibniz (1713), the calculator is Leonhard Euler, and the textbook of 1821 is Augustin-Louis Cauchy’s Cours d’analyse.</p>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+/* least and greatest of F.f on [lo, hi]: the ends, F's critical points inside, and a fine sample (exact between critical points for the functions used here) */
+function ext(F,lo,hi){ if(F.dir) return [0,1]; let m=Infinity,M=-Infinity; const t=x=>{ const v=F.f(x); if(v<m) m=v; if(v>M) M=v; };
+  t(lo); t(hi); (F.crit||[]).forEach(c=>{ if(c>lo&&c<hi) t(c); }); for(let k=1;k<64;k++) t(lo+(hi-lo)*k/64); return [m,M]; }
+function sums(F,pts){ let L=0,U=0; const ms=[],Ms=[]; for(let i=1;i<pts.length;i++){ const [m,M]=ext(F,pts[i-1],pts[i]), w=pts[i]-pts[i-1]; ms.push(m); Ms.push(M); L+=m*w; U+=M*w; } return {L,U,ms,Ms}; }
+const eq=(a,b,n)=>Array.from({length:n+1},(_,i)=>a+(b-a)*i/n);
+function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
+function boxes(P,pts,hs,stroke,fill,alpha){ const c=P.ctx; for(let i=1;i<pts.length;i++){ const a=pts[i-1],b=pts[i],h=hs[i-1]; c.globalAlpha=alpha; P.poly([[a,0],[b,0],[b,h],[a,h]],null,fill); c.globalAlpha=1; P.poly([[a,0],[b,0],[b,h],[a,h]],stroke,null,1.2); } }
+function dirDots(P,a,b){ const c=P.ctx; c.fillStyle=col('--ink'); for(let k=0;k<=300;k++){ const x=a+(b-a)*k/300; const y=(k%2)?0:1; c.fillRect(P.X(x)-1,P.Y(y)-1,2,2); } }
+const kr=$('kr'),kq=$('kq'),cvF=$('cvF'),cvS=$('cvS');
+let K=2; const NP=24, NC=12;
+const PF=plane(cvF,{x:[0,1],y:[0,1],grid:1,aspect:0.8,draw:P=>drawF(P)});
+const PS=plane(cvS,{x:[0,1],y:[0,1],grid:1,aspect:0.8,draw:P=>drawS(P)});
+[[PF,cvF],[PS,cvS]].forEach(([P,cv])=>Object.defineProperty(P.o,'aspect',{get:()=>cv.clientWidth>480?0.75:0.9}));
+const ps=r=>{ const s=[]; let t=0,p=1; for(let n=1;n<=NP;n++){ t+=p; p*=r; s.push(t); } return s; };
+function drawF(P){ const r=+kr.value, s=ps(r); let lo=Math.min(0,...s), hi=Math.max(1,...s); if(Math.abs(r)<1){ lo=Math.min(lo,1/(1-r)); hi=Math.max(hi,1/(1-r)); } hi=Math.min(hi,30); lo=Math.max(lo,-30); const pad=(hi-lo)*0.08; P.o.x=[-1,NP+1]; P.o.y=[lo-pad,hi+pad]; P.o.grid=hi-lo>12?5:1; P.axes();
+  if(Math.abs(r)<1) P.line(0,1/(1-r),NP,1/(1-r),'--gold',1.4,[6,4]); s.forEach((v,i)=>{ if(v>=lo-pad&&v<=hi+pad) P.dot(i+1,v,'--ink',3.4); }); }
+function cut(q){ const pts=[0]; for(let i=NC;i>=0;i--) pts.push(Math.pow(q,i)); return pts; }
+function drawS(P){ const q=+kq.value; P.o.x=[-0.08,1.08]; P.o.y=[-0.08,1.1]; P.o.grid=0.25; P.axes(); const F={f:x=>Math.pow(x,K)}; const p=cut(q), S=sums(F,p);
+  boxes(P,p,S.ms,'--teal','--teal',0.28); boxes(P,p,S.Ms,'--ember',null,0); curve(P,F.f,'--ink',2.6,0,1); }
+function read(){ const r=+kr.value, q=+kq.value; $('or').textContent=mm(r,2); $('oq').textContent=mm(q,2); const s=ps(r), vd=$('vdF');
+  if(Math.abs(r)<1){ vd.className='verdict win'; vd.textContent='|r| < 1: s₂₄ = '+mm(s[NP-1])+', heading to 1/(1 − r) = '+mm(1/(1-r))+'; the gap is |r|²⁴/|1 − r| = '+(Math.abs(r)**NP/Math.abs(1-r)).toPrecision(2).replace('e-','×10^−')+'.'; }
+  else { vd.className='verdict lose'; vd.textContent=(Math.abs(r+1)<1e-9?'r = −1: the partial sums go 1, 0, 1, 0, … and head to no number.':(Math.abs(r-1)<1e-9?'r = 1: the partial sums are 1, 2, 3, …, passing every bound.':'|r| ≥ 1: each new term is at least 1 in size, and the partial sums settle on no number.')); }
+  const F={f:x=>Math.pow(x,K)}, S=sums(F,cut(q)), den=Array.from({length:K+1},(_,i)=>q**i).reduce((a,b)=>a+b,0);
+  tex($('eqF'),R`\begin{gathered}k = ${K},\ q = ${mm(q,2)}:\ \ L = ${mm(S.L)},\ U = ${mm(S.U)}\\ \tfrac{q^k}{1 + q + \cdots + q^k} = ${mm(q**K/den)} \le \textstyle\int_0^1 x^{${K}} \le \tfrac{1}{1 + \cdots + q^k} = ${mm(1/den)}\\ \tfrac{1}{k + 1} = ${mm(1/(K+1))}\end{gathered}`,true); }
+function all(){ PF.redraw(); PS.redraw(); read(); }
+kr.addEventListener('input',all); kq.addEventListener('input',all);
+const kch=$('kch');
+[1,2,3,5].forEach(k=>{ const b=document.createElement('button'); b.textContent='x'+({1:'',2:'²',3:'³',5:'⁵'})[k]; if(k===K) b.className='on'; b.onclick=()=>{ K=k; [...kch.children].forEach(z=>z.classList.toggle('on',z===b)); all(); }; kch.appendChild(b); });
+window.__pic={set:(r,q,k)=>{ if(k) [...kch.children][[1,2,3,5].indexOf(k)].click(); kr.value=r; kq.value=q; all(); const F={f:x=>Math.pow(x,K)}, S=sums(F,cut(+kq.value)); return {r:+kr.value,s:+ps(+kr.value)[NP-1].toFixed(5),L:+S.L.toFixed(5),U:+S.U.toFixed(5),txt:$('vdF').textContent}; }};
+all();
+/* ---------- slides ---------- */
+const Nw='\\htmlClass{new}';
+stepper('#sl1',[
+  {k:'ember',kl:'finite-ratio-sum',t:R`${Nw}{\textstyle\sum_{i=0}^{n-1} r^i = \tfrac{1 - r^n}{1 - r}}`,n:`Multiply by 1 − r; collapsing-sum collapses it.`},
+  {k:'ember',kl:'at work',t:R`1 + 2 + \cdots + 512 = 1023`,n:`r = 2, n = 10.`}
+],{title:'The slides · the finite sum · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'heads to L',t:R`\forall \varepsilon\ \exists N\ \forall n \ge N:\ |s_n - L| \lt \varepsilon`,n:`10f's far out, on whole numbers.`},
+  {k:'ember',kl:'power-of-one-plus',t:R`(1 + h)^n \ge 1 + nh`,n:`By induction.`},
+  {k:'ember',kl:'small-powers-vanish',t:R`|r| \lt 1 \Rightarrow r^n \to 0`,n:`1/|r| = 1 + h; power-of-one-plus; everyday-counting-passes.`}
+],{title:'The slides · when rⁿ shrinks · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'the endless sum',t:R`\textstyle\sum_{i=0}^{\infty} a_i = \lim s_n`,n:`A series converges when its partial sums head to a number.`},
+  {k:'ember',kl:'endless-ratio-sum',t:R`${Nw}{\textstyle\sum a r^i = \tfrac{a}{1 - r}},\ \ |r| \lt 1`,n:`Diverges when |r| ≥ 1, c ≠ 0.`}
+],{title:'The slides · the endless sum · ← → keys work'});
+stepper('#sl4',[
+  {k:'teal',kl:'from 8·cb5 · decimals',t:R`0.999\ldots = 1,\ \ 0.\overline{27} = \tfrac{3}{11}`,n:`An endless decimal is an endless geometric sum.`},
+  {k:'ember',kl:'the old remainder',t:R`\textstyle\sum_{i \lt n} 4^{-i} + \tfrac13 4^{-(n-1)} = \tfrac43`,n:`A remainder, exactly, at every n.`}
+],{title:'The slides · decimals · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'the shrinking cut',t:R`b, bq, bq^2, \ldots, bq^N`,n:`Boxes shrink by qᵏ⁺¹: a geometric sum for every k.`},
+  {k:'ember',kl:'N, then q',t:R`\tfrac{q^k b^{k+1}}{1 + \cdots + q^k} \le \textstyle\int \le \tfrac{b^{k+1}}{1 + \cdots + q^k}`,n:`small-powers-vanish as N grows; continuity as q → 1.`},
+  {k:'ember',kl:'area-under-a-power',t:R`${Nw}{\textstyle\int_0^b x^k\,dx = \tfrac{b^{k+1}}{k + 1}}`,n:`Every whole k at once.`}
+],{title:'The slides · the shrinking cut · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'illegal',t:R`1 + 2 + 4 + \cdots \ne -1`,n:`|r| &lt; 1 is the hypothesis.`}
+],{title:'The slides · illegal · ← → keys work'});
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

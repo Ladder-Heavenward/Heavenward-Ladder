@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Steps that add, steps that multiply</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r09g.html">← 9g polynomials and rational functions</a><a href="r09phys.html">next: 9·phys where will a rolling ball be, and when? →</a></p>
+  <div class="tags"><span class="tag tech">9h · technique</span></div>
+  <h1>Steps that add, steps that multiply</h1>
+  <p>A function on the counting numbers can be built step by step, as 4c’s definitions by repeating built them: a start, and a step. Two kinds of step are simpler than all the others. In one, each step adds the same amount: a salary that rises by a fixed sum each year, a stack of bricks laid one course at a time. In the other, each step multiplies by the same factor: money at interest, a culture of cells dividing, the energy passed from one feeding level of a food web to the next. This step gives each kind its formula and tells them apart from a table. It builds either one from two readings, and adds up a run of steps that multiply.</p>
+  <p class="gesture">Steps that add: each term is the start plus the step added that many times. Steps that multiply: each term is the start times the factor that many times over. Tell them apart by differences and by ratios. A percent change per step is a factor of one plus the percent. And a run of steps that multiply adds up by one short formula, whenever the factor is not 1.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r04c.html">4c</a> (recursion, definitions by repeating), <a href="r04b.html">4b</a> (induction), <a href="r04j.html">4j</a> (Σ), <a href="r08i.html">8i</a> (whole-exponent techniques, fraction-exponent techniques, roots), <a href="r05g.html">5g</a> (fractions), <a href="r09e.html">9e</a> (graphs). <a href="r09phys.html">9·phys</a> meets steps that add in falling bodies.</p></div>
+</header>
+
+<section class="class step" data-step="9h1">
+  <h2 class="sthead"><span class="stno">9h1</span>Two kinds of step</h2>
+  <p class="stands">Stands on 4b (induction), 4c (recursion) and 8i (powers).</p>
+  <p data-pid="8b5b42">Steps-that-add technique: <b>if f : ℕ → ℝ has f(n + 1) = f(n) + d for every n, then f(n) = f(0) + nd for every n.</b></p>
+  <p data-pid="6fc615">Steps-that-multiply technique: <b>if f : ℕ → ℝ has f(n + 1) = b · f(n) for every n, then f(n) = f(0)bⁿ for every n.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the techniques steps-that-add and steps-that-multiply">
+f(0) = f(0) + 0 \cdot d,\ \ f(0) = f(0)\,b^0 @@ the base case; b⁰ = 1 (8i)
+f(n) = f(0) + nd \Rightarrow f(n + 1) = f(0) + nd + d = f(0) + (n + 1)d @@ the step, for steps-that-add
+f(n) = f(0)b^n \Rightarrow f(n + 1) = b\,f(0)b^n = f(0)b^{n+1} @@ the step, for steps-that-multiply; whole-exponent techniques (8i)
+\htmlClass{new}{f(n) = f(0) + nd,\ \ f(n) = f(0)\,b^n} \quad \blacksquare @@ induction (4b)
+  </pre>
+  <p data-pid="da98e5">A run with steps that add has the accepted name arithmetic sequence, and d is its common difference. A run with steps that multiply is a geometric sequence, and b is its common ratio. In a model, f(0) is the starting amount; d is the change per step; b is the factor per step.</p>
+  <pre class="lines" data-k="ember" data-label="this step: two tables">
+n:\ 0, 1, 2, 3 \quad f:\ 40, 52, 64, 76 @@ differences 12, 12, 12: steps that add, d = 12
+n:\ 0, 1, 2, 3 \quad g:\ 40, 60, 90, 135 @@ ratios 1.5, 1.5, 1.5: steps that multiply, b = 1.5
+n:\ 0, 1, 2, 3 \quad h:\ 40, 50, 70, 100 @@ neither: differences 10, 20, 30, ratios 1.25, 1.4, 1.43
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · two kinds of step · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">9h1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f: 5, 8, 11, 14  and  g: 2, 6, 18, 54, at n = 0, 1, 2, 3</span></span>Name the kind of each, and find its d or its b. <br>Write each formula.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="9h2">
+  <h2 class="sthead"><span class="stno">9h2</span>Percent per step</h2>
+  <p class="stands">Stands on 9h1 and 5g (percent).</p>
+  <p data-pid="62e423"><b>A change of r per step, written as a percent, multiplies by 1 + r</b>: a 7% rise is a factor 1.07, a 20% fall is a factor 0.8. Interest of r a year can be added m times a year, each time on the amount so far. That has the accepted name compound interest: after t years, P(1 + r/m)<sup>mt</sup>.</p>
+  <pre class="lines" data-k="ember" data-label="this step: worked">
+\$1000 \text{ at } 5\% \text{ a year, } 10 \text{ years}:\ \ 1000 \cdot 1.05^{10} \approx \$1628.89 @@ steps-that-multiply with b = 1.05
+\text{added monthly}:\ \ 1000\,(1 + \tfrac{0.05}{12})^{120} \approx \$1647.01 @@ 120 steps, each a factor 1 + 0.05/12
+100 \cdot 1.07^{n} \ge 200:\ \ n = 11 @@ try n: 1.07¹⁰ ≈ 1.967, 1.07¹¹ ≈ 2.105
+-20\%\text{ then }+20\% \Rightarrow 0.8 \cdot 1.2 = 0.96 @@ factors multiply; a 4% loss overall
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · percent · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">9h2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">A town of 12 000 grows 4% a year.</span></span>Write the factor per year. <br>Find the population after 3 years.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="9h3">
+  <h2 class="sthead"><span class="stno">9h3</span>From two readings</h2>
+  <p class="stands">Stands on 9h1 and 8f (roots).</p>
+  <pre class="lines" data-k="ember" data-label="this step: building either kind">
+f(2) = 60,\ f(4) = 540 @@ two readings, two steps apart
+\text{adding}:\ \ 2d = 480,\ d = 240,\ f(0) = -420 @@ steps-that-add at n = 2 and n = 4, subtract
+\text{multiplying}:\ \ b^2 = 9,\ b = 3,\ f(0) = \tfrac{60}{9} = \tfrac{20}{3} @@ steps-that-multiply, divide; b &gt; 0 (8i's root)
+  </pre>
+  <p data-pid="b9de51"><b>Two readings fit either kind. A third tells which, if either.</b></p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · two readings · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">9h3.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(1) = 20,"></span> <span data-tex-inline="f(3) = 45,"></span> <span data-tex-inline="\text{The steps multiply by a}"></span> <span data-tex-inline="\text{positive } b \text{.}"></span></span>Find b and the value at 0.</li><li><span class="givens"><span data-tex-inline="f(1) = 20,"></span> <span data-tex-inline="f(3) = 45,"></span> <span data-tex-inline="\text{The steps add } d \text{.}"></span></span>Find d and the value at 0.</li><li><span class="givens"><span data-tex-inline="\text{An account grew from \$2000}"></span> <span data-tex-inline="\text{to \$2205 in 2\ years at one}"></span> <span data-tex-inline="\text{yearly rate.}"></span></span>Find the rate.</li><li><span class="givens"><span data-tex-inline="1 + b + b^2 + b^3 = 40,"></span> <span data-tex-inline="b \text{ is a whole number.}"></span></span>Find b.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="9h4">
+  <h2 class="sthead"><span class="stno">9h4</span>Adding up steps that multiply</h2>
+  <p class="stands">Stands on 9h1 and 4j (Σ).</p>
+  <p data-pid="79e2e4">Ratio-sum technique: <b>for b ≠ 1 and whole n ≥ 1, Σ_{i&lt;n} bⁱ = 1 + b + ⋯ + bⁿ⁻¹ = (bⁿ − 1)/(b − 1).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the ratio-sum technique">
+S = 1 + b + \cdots + b^{n-1} @@ 4j's Σ
+bS = b + b^2 + \cdots + b^n @@ each term times b
+bS - S = b^n - 1 @@ every term but bⁿ and 1 appears in both and cancels
+\htmlClass{new}{S = \tfrac{b^n - 1}{b - 1}} \quad \blacksquare @@ b ≠ 1, divide (5g)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: worked">
+1 + 2 + 4 + \cdots + 2^{63} = 2^{64} - 1 \approx 1.8 \cdot 10^{19} @@ grains on a chessboard, one then doubling on each square
+1 + \tfrac12 + \cdots + \tfrac{1}{2^9} = \tfrac{1 - 2^{-10}}{1 - \tfrac12} \approx 1.998 @@ ratio-sum with b = ½
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · ratio-sum · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">9h4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">1 + 3 + 9 + ⋯ + 3⁶</span></span>Find the sum by ratio-sum. <br>Check it by adding the terms.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="9h5">
+  <h2 class="sthead"><span class="stno">9h5</span>Energy up a food web</h2>
+  <p class="stands">Stands on 9h1 and 9h2.</p>
+  <p data-pid="d03806">Plants fix energy from sunlight; the total is gross primary production, GPP. They spend some of it living, R. What is left, NPP = GPP − R, is net primary production, the energy the next feeding level can eat. These amounts are counted in kilojoules per square metre a year, kJ/m²: a kilojoule is a fixed amount of energy, and this step only compares such amounts, so their ratios are all it uses. <b>Each level up a food chain keeps only a fraction of the energy of the level below, often about a tenth.</b> That fraction has the accepted name the 10% rule. A poison that is stored and not shed does the opposite: each level up concentrates it by a factor. Its accepted name is biomagnification. Its amount is counted in parts per million, ppm: how many parts of the poison in a million parts of the living tissue, by weight.</p>
+  <pre class="lines" data-k="ember" data-label="this step: feeding levels">
+\text{GPP} = 20\,000,\ R = 12\,000 \Rightarrow \text{NPP} = 8000 \text{ kJ/m}^2 \text{ a year} @@ a salt marsh near Tomales Bay, a model
+E(k) = 8000 \cdot 0.1^k @@ steps-that-multiply with b = 0.1; level 0 the plants
+E(3) = 8 \text{ kJ/m}^2 @@ a fourth level gets a thousandth
+c(k) = 0.002 \cdot 10^k \text{ ppm} @@ a stored poison, a factor 10 per level; c(4) = 20 ppm
+  </pre>
+  <p data-pid="723ab1">An early ecologist described a lake as a chain of feeding levels, each taking its energy from the one below. He found that each level used only a small part of what the level below it had gathered, with most lost at every step.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · energy up a food web · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · adding against multiplying, and a run of multiplying steps added up</div>
+    <div class="panel">
+      <div class="lbl">f(n) = 10 + nd and g(n) = 10bⁿ, for n = 0 to 20</div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">d</span><input type="range" id="kd" min="0" max="20" step="0.5" value="5"><output id="od"></output></div>
+      <div class="kn"><span class="m">b</span><input type="range" id="kb" min="0.5" max="1.4" step="0.01" value="1.15"><output id="ob"></output></div>
+      <div class="cap">Teal: steps that add. Ember: steps that multiply. Both start at 10.</div>
+    </div>
+    <div class="panel">
+      <div class="lbl">1 + b + ⋯ + bⁿ⁻¹, for n = 1 to 20</div>
+      <canvas id="cvL"></canvas>
+      <div class="cap">Ink dots: the sums, one more term each. Plum: (bⁿ − 1)/(b − 1) at n = 20.</div>
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">9h5.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f: 7, 11, 15, 19,"></span> <span data-tex-inline="g: 3, 6, 12, 24,"></span> <span data-tex-inline="\text{at } n = 0, 1, 2, 3"></span></span>Name each kind, and write its formula.</li><li><span class="givens"><span data-tex-inline="\text{A used car loses 15\% of}"></span> <span data-tex-inline="\text{its value each year, from}"></span> <span data-tex-inline="\text{\$18 000.}"></span></span>Find its value after 4 years.</li><li><span class="givens"><span data-tex-inline="S = 3 + 6 + 12 + \cdots + 3 \cdot 2^9"></span></span>By ratio-sum, find S.</li><li><span class="givens"><span data-tex-inline="\text{A food chain near Lodi has}"></span> <span data-tex-inline="\text{NPP 6000 kJ/m² a year at}"></span> <span data-tex-inline="\text{the plants.}"></span> <span data-tex-inline="\text{Use the 10\% rule.}"></span></span>Find how much reaches the third level up.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="9h6">
+  <h2 class="sthead"><span class="stno">9h6</span>Illegal moves</h2>
+  <p class="stands">Stands on 9h1 to 9h5.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+-20\% \text{ then } +20\% = 0\%\,? @@ factors 0.8 and 1.2 multiply to 0.96
+5\% \text{ a year for } 10 \text{ years} = 50\%\,? @@ that is steps that add; 1.05¹⁰ ≈ 1.63, a 63% rise
+\text{two readings fit } f(0)b^n \Rightarrow \text{it multiplies}\,? @@ they fit f(0) + nd too
+1 + b + \cdots + b^{n-1} = \tfrac{b^n - 1}{b - 1} \text{ at } b = 1\,? @@ the bottom is 0; at b = 1 the sum is n
+  </pre>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · illegal moves · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">9h6.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(0) = 1,"></span> <span data-tex-inline="f(n + 1) = -2 f(n)"></span></span>Find its first five values. <br>Can a percent change give it?</li><li><span class="givens"><span data-tex-inline="\text{A price falls 10\% a year.}"></span></span>Does it ever reach 0?</li><li><span class="givens"><span data-tex-inline="f(n) = 10 + 20n,"></span> <span data-tex-inline="g(n) = 10 \cdot 1.15^n"></span></span>Find the n at which g first passes f.</li><li><span class="givens"><span data-tex-inline="\text{A table&#x27;s ratios are 1.20,}"></span> <span data-tex-inline="\text{1.21, 1.19.}"></span></span>Is it steps that multiply? <br>What would you need to decide?</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">9h.4.1</span><span class="tagq">build</span>Build runs of your own.<ol class="parts" type="a"><li>Find something near you that changes by a fixed amount each step, and something that changes by a fixed factor. <br>Write both formulas, and find the first step at which the factor run is ahead, if it ever is.</li><li><span class="givens"><span data-tex-inline="S = 1 + 1.05 + 1.05^2 + \cdots + 1.05^9"></span></span>Find S. <br>What does it count, for someone saving $1 at the end of each year at 5%?</li><li>By induction, prove ratio-sum, every line cited.</li><li><span class="givens"><span data-tex-inline="E(k) = 8000 \cdot 0.1^k,"></span> <span data-tex-inline="\text{kJ/m² a year at level } k"></span></span>Find the first level at which the energy is below 1 kJ per square metre.</li></ol></div>
+  <div class="chq"><span class="chid">9h.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{A table holds the powers}"></span> <span data-tex-inline="2^0, 2^1, \cdots, 2^{10} \text{ beside}"></span> <span data-tex-inline="\text{their exponents } 0, 1, \cdots, 10 \text{.}"></span></span>Multiply two numbers from the column of powers, and find what happens in the column of exponents. <br>What could a table like this be used for?</div>
+  <div class="chq"><span class="chid">9h.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="f(n + 2) - f(n + 1) = f(n + 1) - f(n),"></span> <span data-tex-inline="\text{for every } n"></span></span>Must f be steps that add?</div>
+  <div class="chq"><span class="chid">9h.4.4</span><span class="tagq">seam</span>An early ecologist's lake passed on a small part of its energy at each level. Later ecologists measured many food webs and found the fraction ranges from about 2% to over 20%, with 10% a rough average. <br>Is the 10% rule a law of nature, a summary of measurements, or a convenience for teaching? <br>What would each mean for the formula E(k) = E(0) · 0.1ᵏ?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r09g.html">← 9g · polynomials and rational functions</a><a href="r09stat.html">9·stat · what does a list of data look like? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>The early ecologist of the lake is Raymond Lindeman.</p>
+  <aside class="voice para"><p>Lindeman described a lake as a chain of feeding levels, each taking its energy from the one below, and found that each level used only a small part of what the level below it had gathered, with most lost at every step.</p><cite>Raymond Lindeman, The trophic-dynamic aspect of ecology (1942); paraphrase</cite></aside>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '–'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+/* least and greatest of F.f on [lo, hi]: the ends, F's critical points inside, and a fine sample (exact between critical points for the functions used here) */
+function ext(F,lo,hi){ if(F.dir) return [0,1]; let m=Infinity,M=-Infinity; const t=x=>{ const v=F.f(x); if(v<m) m=v; if(v>M) M=v; };
+  t(lo); t(hi); (F.crit||[]).forEach(c=>{ if(c>lo&&c<hi) t(c); }); for(let k=1;k<64;k++) t(lo+(hi-lo)*k/64); return [m,M]; }
+function sums(F,pts){ let L=0,U=0; const ms=[],Ms=[]; for(let i=1;i<pts.length;i++){ const [m,M]=ext(F,pts[i-1],pts[i]), w=pts[i]-pts[i-1]; ms.push(m); Ms.push(M); L+=m*w; U+=M*w; } return {L,U,ms,Ms}; }
+const eq=(a,b,n)=>Array.from({length:n+1},(_,i)=>a+(b-a)*i/n);
+function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
+function boxes(P,pts,hs,stroke,fill,alpha){ const c=P.ctx; for(let i=1;i<pts.length;i++){ const a=pts[i-1],b=pts[i],h=hs[i-1]; c.globalAlpha=alpha; P.poly([[a,0],[b,0],[b,h],[a,h]],null,fill); c.globalAlpha=1; P.poly([[a,0],[b,0],[b,h],[a,h]],stroke,null,1.2); } }
+function dirDots(P,a,b){ const c=P.ctx; c.fillStyle=col('--ink'); for(let k=0;k<=300;k++){ const x=a+(b-a)*k/300; const y=(k%2)?0:1; c.fillRect(P.X(x)-1,P.Y(y)-1,2,2); } }
+/* shade between the graph of fn and the axis from lo to hi: above in pos colour, below in neg colour */
+function shade(P,fn,lo,hi,pos,neg,alpha){ if(hi<lo){ const t=lo; lo=hi; hi=t; } const c=P.ctx, N=300; c.globalAlpha=alpha==null?0.32:alpha;
+  for(let k=0;k<N;k++){ const x0=lo+(hi-lo)*k/N, x1=lo+(hi-lo)*(k+1)/N, xm=(x0+x1)/2, y=fn(xm); if(!isFinite(y)) continue; P.poly([[x0,0],[x1,0],[x1,fn(x1)],[x0,fn(x0)]],null,y>=0?pos:neg); }
+  c.globalAlpha=1; }
+function rangeOf(fn,lo,hi,pad){ let m=Infinity,M=-Infinity; for(let k=0;k<=400;k++){ const v=fn(lo+(hi-lo)*k/400); if(isFinite(v)){ if(v<m) m=v; if(v>M) M=v; } } if(m>0) m=0; if(M<0) M=0; const p=(M-m)*(pad==null?0.12:pad)||1; return [m-p,M+p]; }
+function chips(el,FN,get,setk,after){ Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===get()) b.className='on'; b.onclick=()=>{ setk(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+const Nw='\\htmlClass{new}';
+function gridFor(sp){ return sp>40?10:sp>16?4:sp>8?2:sp>3?1:sp>1.2?0.5:0.25; }
+function frame2(P,fn,lo,hi,pad){ const w=hi-lo; P.o.x=[lo-0.12*w,hi+0.08*w]; P.o.y=rangeOf(fn,lo,hi,pad==null?0.12:pad); const sx=P.o.x[1]-P.o.x[0], sy=P.o.y[1]-P.o.y[0]; let g=gridFor(sx); while(sy/g>24) g*=2; P.o.grid=g; }
+const num=(f,a,b,n)=>{ n=n||4000; const h=(b-a)/n; let s=0; for(let i=0;i<n;i++) s+=f(a+(i+0.5)*h)*h; return s; };
+/* axes with separate steps across and up */
+function axes2(P,gx,gy){ const c=P.ctx,o=P.o; c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ c.moveTo(P.X(x),P.Y(o.y[0])); c.lineTo(P.X(x),P.Y(o.y[1])); }
+  for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ c.moveTo(P.X(o.x[0]),P.Y(y)); c.lineTo(P.X(o.x[1]),P.Y(y)); } c.stroke();
+  c.strokeStyle=col('--muted'); c.lineWidth=1.3; c.beginPath(); if(o.y[0]<=0&&o.y[1]>=0){ c.moveTo(P.X(o.x[0]),P.Y(0)); c.lineTo(P.X(o.x[1]),P.Y(0)); } if(o.x[0]<=0&&o.x[1]>=0){ c.moveTo(P.X(0),P.Y(o.y[0])); c.lineTo(P.X(0),P.Y(o.y[1])); } c.stroke();
+  c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; const ly=Math.min(P.H-6,Math.max(12,P.Y(0)+14));
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ if(Math.abs(x)<1e-9) continue; c.fillText(+x.toFixed(6),P.X(x),ly); }
+  c.textAlign='right'; const lx=Math.max(32,Math.min(P.W-4,P.X(0)-5)); for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ if(Math.abs(y)<1e-9) continue; c.fillText(String(+y.toFixed(6)).replace('-','−'),lx,P.Y(y)+4); } }
+function nice(sp){ const raw=sp/6, p=Math.pow(10,Math.floor(Math.log10(raw))), m=raw/p; return (m<1.5?1:m<3.5?2:m<7.5?5:10)*p; }
+const kd=$('kd'),kb=$('kb'),cvF=$('cvF'),cvL=$('cvL');
+const PF=plane(cvF,{x:[-1.5,21],y:[0,10],grid:1,aspect:0.8,draw:P=>drawF(P)});
+const PL=plane(cvL,{x:[-1.5,21],y:[0,10],grid:1,aspect:0.8,draw:P=>drawL(P)});
+[[PF,cvF],[PL,cvL]].forEach(([P,cv])=>Object.defineProperty(P.o,'aspect',{get:()=>cv.clientWidth>480?0.75:0.9}));
+const S=(b,n)=>{ let s=0; for(let i=0;i<n;i++) s+=Math.pow(b,i); return s; };
+function drawF(P){ const d=+kd.value, b=+kb.value; const top=Math.min(Math.max(10+20*d,10*Math.pow(b,20),12)*1.08,2000); P.o.y=[-0.08*top,top]; axes2(P,5,nice(top));
+  for(let n=0;n<=20;n++){ P.dot(n,10+n*d,'--teal',3.5); const g=10*Math.pow(b,n); if(g<=top) P.dot(n,g,'--ember',3.5); } }
+function drawL(P){ const b=+kb.value; const top=Math.min(Math.max(S(b,20),2)*1.1,3000); P.o.y=[-0.08*top,top]; axes2(P,5,nice(top));
+  for(let n=1;n<=20;n++){ const s=S(b,n); if(s<=top) P.dot(n,s,'--ink',3.5); } const g=Math.abs(b-1)<1e-9?20:(Math.pow(b,20)-1)/(b-1); if(g<=top) P.dot(20,g,'--plum',6); }
+function read(){ const d=+kd.value, b=+kb.value; $('od').textContent=mm(d,1); $('ob').textContent=mm(b,2);
+  let pass=null; for(let n=1;n<=200;n++){ if(10*Math.pow(b,n)>10+n*d){ pass=n; break; } }
+  const g=Math.abs(b-1)<1e-9?20:(Math.pow(b,20)-1)/(b-1); const vd=$('vdF'); vd.className='verdict';
+  vd.textContent='After 20 steps: adding gives '+mm(10+20*d,1)+', multiplying gives '+mm(10*Math.pow(b,20),2)+'. '+(pass?'The multiplying run is ahead from n = '+pass+' on.':'With b ≤ 1 the multiplying run never passes a run that adds d ≥ 0.')+' The sum of 20 terms is '+mm(S(b,20),3)+'.';
+  tex($('eqF'),Math.abs(b-1)<1e-9?R`1 + 1 + \cdots + 1 = 20`:R`1 + ${mm(b,2)} + \cdots + ${mm(b,2)}^{19} = \tfrac{${mm(b,2)}^{20} - 1}{${mm(b,2)} - 1} \approx ${mm(g,3)}`,true); }
+function all(){ PF.redraw(); PL.redraw(); read(); }
+kd.addEventListener('input',all); kb.addEventListener('input',all);
+window.__pic={set:(d,b)=>{ kd.value=d; kb.value=b; all(); return {sum:+S(b,20).toFixed(4),geo:+((Math.pow(b,20)-1)/(b-1)).toFixed(4),txt:$('vdF').textContent.slice(0,80)}; }};
+all();
+stepper('#sl1',[
+  {k:'ember',kl:'steps-that-add',t:R`${Nw}{f(n) = f(0) + nd}`,n:`Induction on the step.`},
+  {k:'ember',kl:'steps-that-multiply',t:R`${Nw}{f(n) = f(0)\,b^n}`,n:`Induction on the step.`},
+  {k:'ember',kl:'two tables',t:R`40, 52, 64\ \ \text{vs}\ \ 40, 60, 90`,n:`Differences agree; ratios agree.`}
+],{title:'The slides · two kinds of step · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'percent',t:R`+7\% \Rightarrow b = 1.07`,n:`A factor 1 + r.`},
+  {k:'ember',kl:'compound',t:R`P\,(1 + \tfrac{r}{m})^{mt}`,n:`m steps a year.`},
+  {k:'ember',kl:'down and up',t:R`0.8 \cdot 1.2 = 0.96`,n:`Factors multiply.`}
+],{title:'The slides · percent · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'two readings',t:R`b^2 = \tfrac{540}{60}`,n:`The ratio fixes b.`}
+],{title:'The slides · two readings · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'ratio-sum',t:R`${Nw}{\textstyle\sum_{i<n} b^i = \tfrac{b^n - 1}{b - 1}}`,n:`bS − S.`},
+  {k:'ember',kl:'chessboard',t:R`2^{64} - 1`,n:`Grains, doubling.`}
+],{title:'The slides · ratio-sum · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'NPP',t:R`\text{NPP} = \text{GPP} - R`,n:`What the next level can eat.`},
+  {k:'ember',kl:'10% rule',t:R`E(k) = E(0) \cdot 0.1^k`,n:`Steps that multiply, down.`},
+  {k:'ember',kl:'biomagnification',t:R`c(k) = c(0) \cdot 10^k`,n:`Steps that multiply, up.`},
+  {k:'ember',kl:'the lake',t:R`1942`,n:`A lake's feeding levels.`}
+],{title:'The slides · energy up a food web · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'illegal',t:R`-20\%,\ +20\% \ne 0\%`,n:`0.96.`}
+],{title:'The slides · illegal moves · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

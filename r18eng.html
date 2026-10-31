@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>18·eng · Why are bridges built from triangles?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r18cb16.html">← 18·cb16 a cone, cut by a plane</a><a href="r18econ.html">next: 18·econ how much do buyers flinch? →</a></p>
+  <div class="tags"><span class="tag eng">18·eng · engineering</span></div>
+  <h1>Why are bridges built from triangles?</h1>
+  <p>Why are bridges built from triangles? Look at a railway bridge, a crane's arm or the frame under a roof, and you see triangles, rarely a four-sided shape on its own. Carpenters knew the trick long before anyone could say why it worked: nail a slanting board across a gate, and it stops sagging. The question became urgent in the nineteenth century, when railways needed long, light bridges and some of the first ones fell. What makes it hard is that a frame is many bars at once, each pushing or pulling on the others, and a guess about one bar changes all the rest. This page shows, with 18f's three-sides technique, that a triangle cannot change its shape without changing a side, while a four-sided frame can. Then it finds the force in every bar, one joint at a time, from triangles similar to the bars themselves.</p>
+  <p class="gesture">Three bars fix a triangle. A frame built from a triangle, adding each new joint with two bars, keeps its shape, with three fewer bars than twice the joints. A bar under tension pulls on each end along its own length: its force is a scaled copy of the bar. At each pin the forces add to (0, 0).</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r18f.html">18f</a> (three-sides, similar-triangles, parallel-cut), <a href="r18a.html">18a</a> (distance-laws, part-of-the-way, displacements), <a href="r18b.html">18b</a> (equality-on-the-segment), <a href="r18d.html">18d</a> (two-circles-meet), <a href="r18c.html">18c</a> (two-lines-meet), <a href="r12a.html">12a</a> (in-between-value), <a href="r04b.html">4b</a> (induction), <a href="r16eng.html">16·eng</a> (bending, and why a beam's middle does little). Rung 20 asks which moves of the plane keep every distance: the moves a rigid frame is allowed.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · read it through, then work the picture and the slides</div>
+
+  <h3>A frame of bars and pins</h3>
+  <p data-pid="79c3e7">A frame is a set of joints, points of the plane, and a set of bars, each joining two joints. A bar keeps its length. A pin lets the bars at a joint turn freely there. A frame keeps its shape if every placement of its joints with the same bar lengths is congruent to the first: the whole frame may be moved, but not bent. Its accepted name is a rigid frame; a frame built this way to carry loads is a truss.</p>
+  <p data-pid="f1b3cb">Rigid-triangle technique: <b>a triangle of three bars cannot change its shape without changing a side.</b> If two placements of a triangle of bars have the same three bar lengths, then they are congruent. It is 18f's three-sides technique, carried out on bars.</p>
+  <p data-pid="ed32a1">Four bars in a ring do not keep their shape. Put A = (0, 0) and B = (1, 0), with every bar of length 1. For any p with −1 &lt; p &lt; 1, put D = (p, √(1 − p²)) and C = B + (D − A).</p>
+  <pre class="lines" data-k="ember" data-label="18·eng: four bars rack">
+d(A, B) = 1,\ \ d(A, D) = \sqrt{p^2 + 1 - p^2} = 1 @@ distance-laws (18a)
+d(B, C) = d(A, D) = 1,\ \ d(D, C) = d(A, B) = 1 @@ C − B = D − A and C − D = B − A: the parallelogram technique (18f)
+d(A, C) = \sqrt{(1 + p)^2 + 1 - p^2} = \sqrt{2 + 2p} @@ the diagonal changes as p does
+\begin{aligned}&\htmlClass{new}{\text{every bar keeps its length, and the shape }}\\ &\quad \htmlClass{new}{\text{changes}} \quad \blacksquare\end{aligned} @@ at p = 0 a square; near p = ±1 nearly flat
+  </pre>
+  <p data-pid="c23e6b">Its accepted name is racking. A gate racks, a bookcase without a back racks, and a barn whose walls have no braces leans more each year. Add one bar from A to C. Its length must stay √2, so 2 + 2p = 2 and p = 0. The square is two triangles now, and it keeps its shape.</p>
+
+  <h3>Building frames that keep their shape</h3>
+  <p data-pid="9d0353">Add-a-joint technique: <b>a frame grown from a triangle, one joint and two bars at a time, keeps its shape.</b> Start from a triangle of bars. Add a new joint, joined by two new bars to two joints already placed, and not in line with them. Repeat. Then the frame cannot move except as a whole, and it has b = 2j − 3 bars for j joints.</p>
+  <pre class="lines" data-k="ember" data-label="18·eng: the add-a-joint technique">
+\text{the first triangle keeps its shape} @@ rigid-triangle; fix it in place, and only the rest can move
+\text{a new joint } X \text{ with bars to } P \text{ and } Q:\ d(X, P) = r,\ d(X, Q) = s @@ the two bar lengths
+X \text{ is on two circles with different centres} @@ two-circles-meet (18d): at most two such points, a positive distance apart
+\begin{aligned}&\text{a coordinate of } X \text{ takes}\\ &\quad\text{at most two values as the frame moves}\end{aligned} @@ the points are fixed once P and Q are
+\text{so it cannot change at all} @@ in-between-value (12a): a continuous coordinate that changed would pass through every value between
+\htmlClass{new}{b = 3 + 2(j - 3) = 2j - 3} \quad \blacksquare @@ induction (4b) on the joints added: three bars, then two for each joint past three
+  </pre>
+  <p data-pid="7eb6bb">The count goes the other way too, as a rule of thumb. Each joint has two coordinates, so j joints have 2j. Moving the whole frame uses 3 of them: slide across, slide up, turn. Each bar fixes one length. So a frame with fewer than 2j − 3 bars always has a way to move. A frame with 2j − 3 bars may still move, if they are badly placed. Its accepted name is Maxwell's rule.</p>
+
+  <h3>The force in a bar</h3>
+  <p data-pid="d12e04">Two measured laws carry forces into the plane. A force has a size and a direction, and two forces on one pin add as displacements add: their parts across and their parts up add separately. A pin at rest has its forces adding to (0, 0). Their accepted names are the parallelogram of forces and equilibrium. A bar pinned at both ends, and loaded only at its pins, pushes or pulls only along its own length. A pull is a tension, and a push is a compression, written here as a negative tension.</p>
+  <p data-pid="d2b295">Bar-force technique: <b>the force a bar puts on its end is a scaled copy of the bar itself.</b> Let a bar run from P to Q, with length ℓ and tension T. Then the force it puts on P is (T/ℓ)(Q − P). Its part across is T · (run/ℓ), and its part up is T · (rise/ℓ). So the force, its two parts, and the bar's run and rise make similar triangles, with scale factor T/ℓ.</p>
+  <pre class="lines" data-k="ember" data-label="18·eng: the bar-force technique">
+\text{a pull of size } |T| \text{ along the bar, toward } Q @@ the bar law
+u = \tfrac{1}{\ell}(Q - P),\ \ |u| = 1 @@ distance-laws: |tu| = |t| |u| with t = 1/ℓ
+\htmlClass{new}{F = T\,u = \tfrac{T}{\ell}(Q - P)} \quad \blacksquare @@ the force of size |T| along u; T &lt; 0 pushes P away from Q
+\text{the run and rise of } F \text{ are } \tfrac{T}{\ell} \text{ times the bar's} @@ part-of-the-way (18a), or parallel-cut (18f) with t = T/ℓ: similar triangles
+  </pre>
+
+  <h3>A roof frame, one joint at a time</h3>
+  <p data-pid="a2b636">Joint technique: <b>at every pin, the pushes and pulls add to nothing.</b> Write it as two equations at each joint, one for the parts across and one for the parts up. Solve joint by joint, starting where only two bars are unknown. Its accepted name is the method of joints.</p>
+  <p data-pid="ff26ad">A hay barn near Lodi has roof frames of two rafters and a tie. The span is 8 m and the rise 2 m: A = (0, 0), B = (8, 0), peak C = (4, 2). Each rafter is √(4² + 2²) = √20 ≈ 4.47 m. Put a load of 10 kN at the peak, from the roof above. The walls push A and B up, with 5 kN each by the balance of the frame.</p>
+  <pre class="lines" data-k="ember" data-label="18·eng: the barn's roof frame">
+\text{at } C:\ \ T_{AC}\,\tfrac{(-4, -2)}{\sqrt{20}} + T_{BC}\,\tfrac{(4, -2)}{\sqrt{20}} + (0, -10) = (0, 0) @@ bar-force for each rafter; the load; the joint technique
+T_{AC} = T_{BC},\ \ -\tfrac{4}{\sqrt{20}}\,T_{AC} = 10 \Rightarrow T_{AC} = -\tfrac{10\sqrt{20}}{4} \approx -11.2 \text{ kN} @@ the parts across cancel; the parts up carry the load: both rafters in compression
+\text{at } A:\ \ T_{AC}\,\tfrac{(4, 2)}{\sqrt{20}} + T_{AB}\,(1, 0) + (0, 5) = (0, 0) @@ the rafter, the tie, the wall
+T_{AB} = -\tfrac{4}{\sqrt{20}}\,T_{AC} = 10 \text{ kN} @@ the parts across: the tie pulls, in tension
+\htmlClass{new}{\tfrac{\text{tie}}{\text{half the load}} = \tfrac{\text{half the span}}{\text{rise}} = \tfrac{4}{2}} @@ similar-triangles (18f): the force triangle at A is the rafter's run-and-rise triangle, scaled
+  </pre>
+  <p data-pid="eb0455">So the tie pulls with P · s/(2h), for a load P at the peak, half-span s and rise h. A flat roof needs a strong tie: halve the rise, and the tie's pull doubles. Many houses in the Central Valley built since the 1960s have roofs carried by factory-made wooden frames of this kind, joined by toothed steel plates.</p>
+
+  <h3>A bridge of triangles</h3>
+  <p data-pid="6357a5">A small footbridge truss has joints A = (0, 0), C = (8, 0), E = (16, 0) along the bottom and B = (4, 3), D = (12, 3) along the top, in metres. Its seven bars are AB, BC, CD, DE along the slants, AC, CE along the bottom and BD along the top. Every slant is a 3-4-5 triangle: run 4, rise 3, length 5. A load of 60 kN hangs at C. A holds the bridge by a pin; E rests on a roller that can only push up.</p>
+  <pre class="lines" data-k="ember" data-label="18·eng: the footbridge, by joints">
+j = 5,\ b = 7 = 2 \cdot 5 - 3 @@ grown from ABC by D (bars to B, C) and E (to C, D): add-a-joint
+\text{supports}: 30 \text{ kN up at } A \text{ and at } E @@ the balance of the whole bridge; the load is in the middle
+\text{at } A:\ \ T_{AB}\,(\tfrac45, \tfrac35) + T_{AC}\,(1, 0) + (0, 30) = (0, 0) @@ bar-force; the joint technique
+T_{AB} = -50,\ \ T_{AC} = 40 @@ up: 3/5 T_AB = −30; across: T_AC = −4/5 T_AB
+\text{at } B:\ \ T_{AB}\,(-\tfrac45, -\tfrac35) + T_{BC}\,(\tfrac45, -\tfrac35) + T_{BD}\,(1, 0) = (0, 0) @@ the bars from B to A, to C, to D
+T_{BC} = 50,\ \ T_{BD} = -80 @@ up: 30 − 3/5 T_BC = 0; across: 40 + 40 + T_BD = 0
+\htmlClass{new}{\text{slants } \mp 50,\ \text{bottom } +40,\ \text{top } -80 \text{ kN}} @@ D and E by the same steps; C checks: 3/5 (50 + 50) = 60
+  </pre>
+  <p data-pid="2d3dcc">The top bar is squeezed hardest and the bottom bars pulled, just as a beam's top face is squeezed and its bottom face stretched in 16·eng. A truss is a beam with its middle taken out. In a beam the wood near the middle of the depth barely works. In a truss every bar works at its full push or pull, and the slants carry the load from the bottom to the top.</p>
+  <p data-pid="4121df">In Sacramento, the I Street Bridge of 1911 carries trains and cars across the river on steel trusses of this kind, and the lattice arm of a building crane is the same idea stood on end.</p>
+
+  <h3>Illegal moves</h3>
+  <pre class="lines" data-k="ember" data-label="18·eng: tempting, and not allowed">
+\begin{aligned}&\text{a four-bar frame keeps its}\\ &\quad\text{shape if its bars are strong}\,?\end{aligned} @@ it racks with every bar at full length: strength is not the point
+2j - 3 \text{ bars, so it keeps its shape}\,? @@ the count is needed, not enough: badly placed bars still move
+\text{the force in a slant is the load}\,? @@ the load is only its part up; the slant carries load · ℓ/rise
+\text{a bar pushes across, if the load is across}\,? @@ a pinned bar pushes or pulls only along itself
+\text{an extra bar always makes it safer}\,? @@ then the joint equations no longer fix the forces; they depend on how each bar stretches
+  </pre>
+</section>
+
+<section class="pic" id="pic">
+  <div class="eyebrow">The picture · a truss solved joint by joint, and a frame that racks</div>
+  <div class="panels">
+    <div class="panel">
+      <div class="lbl">a 24 m truss of 3-4-5 triangles, forces in kN</div>
+      <canvas id="cvT"></canvas>
+      <div class="chips" id="jch"></div>
+      <div class="kn"><span class="m">load</span><input type="range" id="kP" min="0" max="120" step="5" value="60"><output id="oP"></output></div>
+      <div class="cap">Teal: bars in tension, pulled. Ember: bars in compression, pushed. Thicker bars carry more. The left end is pinned; the right end rests on a roller.</div>
+    </div>
+    <div class="panel">
+      <div class="lbl">four bars of length 1, and an optional fifth</div>
+      <canvas id="cvQ"></canvas>
+      <div class="chips" id="qch"></div>
+      <div class="kn"><span class="m">lean p</span><input type="range" id="kp" min="-0.9" max="0.9" step="0.01" value="0.35"><output id="op"></output></div>
+      <div class="cap">Ink: the four bars, each of length 1 at every lean. Dashed: the diagonal AC, of length √(2 + 2p). With the fifth bar chosen, AC must stay √2.</div>
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+</section>
+
+<section class="slides" id="sl1"><div class="eyebrow">The slides · bars and pins; rigid-triangle; four bars rack; one more bar; add-a-joint; counting; forces add; bar-force; the joint technique; the barn roof; the tie; the footbridge; top squeezed, bottom pulled; a beam with its middle taken out; illegal moves · ← → keys work</div></section>
+
+<section class="sayback">
+  <div class="eyebrow">Say it back · then work it</div>
+  <h2>Questions</h2>
+  <div class="phkey"></div>
+  <ol>
+    <li><span class="qid">18·eng.1</span><span class="gname">Bars and joints.</span><span class="gwhy">Do: build the page's pieces.</span>
+      <ol class="sub">
+        <li><span class="qid">18·eng.1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{roof frame: two rafters, a tie,}"></span> <span data-tex-inline="\text{span } 10 \text{ m, rise } 2.5 \text{ m,}"></span> <span data-tex-inline="\text{load } 12 \text{ kN at the peak}"></span></span>Find the force in each rafter and in the tie.</li><li><span class="givens"><span data-tex-inline="\text{a frame with } 8 \text{ joints}"></span></span>Find the fewest bars it must have to keep its shape. <br>Sketch one grown by add-a-joint.</li><li><span class="givens"><span data-tex-inline="P = (0, 0),"></span> <span data-tex-inline="Q = (4, 3) \text{ m},"></span> <span data-tex-inline="\text{tension } 10 \text{ kN}"></span></span>Find the force the bar from P to Q puts on P, and on Q.</li><li><span class="givens"><span data-tex-inline="\text{the page's footbridge,}"></span> <span data-tex-inline="\text{load } 60 \text{ kN moved from } C \text{ to } B"></span></span>Find the force in every bar.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">18·eng.2</span><span class="gname">From the forces back.</span><span class="gwhy">Undo: run the page's techs backwards.</span>
+      <ol class="sub">
+        <li><span class="qid">18·eng.2.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{pin at } (0, 0),"></span> <span data-tex-inline="\text{load } (0, -9) \text{ kN},"></span> <span data-tex-inline="\text{bars to } (-4, 3) \text{ and } (4, 0)"></span></span>Find the tension in each bar.</li><li><span class="givens"><span data-tex-inline="\text{roof frame: span } 12 \text{ m,}"></span> <span data-tex-inline="\text{load } 10 \text{ kN at the peak,}"></span> <span data-tex-inline="\text{tie } 15 \text{ kN}"></span></span>Find the rise.</li><li><span class="givens"><span data-tex-inline="\text{pin at } (0, 0),"></span> <span data-tex-inline="\text{bars to } (3, 4) \text{ and } (-3, 4),"></span> <span data-tex-inline="\text{each in tension } 10 \text{ kN, one load}"></span></span>Find the load.</li><li><span class="givens"><span data-tex-inline="\text{a four-bar ring } A, B, C, D,"></span> <span data-tex-inline="\text{a five-bar ring}"></span></span>Find the single bars that make the four-bar ring keep its shape. <br>Add any one bar to the five-bar ring, and find a way the frame can still move.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">18·eng.3</span><span class="gname">Where it gives.</span><span class="gwhy">Bend: find where the techs stop working.</span>
+      <ol class="sub">
+        <li><span class="qid">18·eng.3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{roof frame: half-span } s,"></span> <span data-tex-inline="\text{rise } h, \text{ load } P \text{ at the peak,}"></span> <span data-tex-inline="h \to 0"></span></span>Find what happens to the tie.</li><li><span class="givens"><span data-tex-inline="A = (0, 0),"></span> <span data-tex-inline="B = (1, 0),"></span> <span data-tex-inline="C = (1, 1),"></span> <span data-tex-inline="D = (0, 1),"></span> <span data-tex-inline="\text{bars: the four sides and } AC,"></span> <span data-tex-inline="\text{A pinned,}"></span> <span data-tex-inline="\text{B on a roller pushing up,}"></span> <span data-tex-inline="\text{push } P \text{ at } D"></span></span>Find whether AC is pulled or pushed when the push acts to the right. <br>Find it when the push acts to the left.</li><li><span class="givens"><span data-tex-inline="\text{bar triangles } ABC, DEF,"></span> <span data-tex-inline="\text{bars } AD, BE, CF \text{ of one length,}"></span> <span data-tex-inline="\text{all parallel}"></span></span>Count the bars, and find whether the frame keeps its shape.</li><li><span class="givens"><span data-tex-inline="\text{the frame of (b),}"></span> <span data-tex-inline="\text{plus the bar } BD"></span></span>Find whether the joint technique can still find the forces.</li></ol></li>
+      </ol></li>
+    <li class="optgroup"><span class="qid">18·eng.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder challenges that rely on your own making. The page is complete without these; the rung's star needs them.</span>
+      <ol class="sub">
+        <li class="opt"><span class="qid">18·eng.4.1</span><span class="tagq">build</span>Design a frame of your own for a footbridge near Missoula: at least five joints, grown by add-a-joint, on a pin and a roller, with one load. <br>Find every bar's force, and mark the bar you would make thickest. <br>Add one bar of your choice, run the joint technique again, and write the first equation it cannot settle.</li>
+        <li class="opt"><span class="qid">18·eng.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="AB = 3,"></span> <span data-tex-inline="BC = 4,"></span> <span data-tex-inline="AC = 7,"></span> <span data-tex-inline="\text{B between A and C on one line}"></span></span>Find whether the frame can change its shape. <br>Hang a load straight down from B, and find whether the joint technique can balance it.</li>
+        <li class="opt"><span class="qid">18·eng.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{a frame that keeps its shape}"></span></span>Find whether every such frame is grown by add-a-joint.</li>
+        <li class="opt"><span class="qid">18·eng.4.4</span><span class="tagq">seam</span>Through the nineteenth century, American bridge builders joined their trusses with pins, so that every bar could turn at its ends, as this page assumes. European builders riveted their joints stiff. A stiff joint makes the bars bend a little as the truss sags, and in 1880 an engineer showed how to compute the extra stresses, and found them sometimes large. <br>Are this page's forces the forces in a riveted bridge?</li>
+      </ol></li>
+  </ol>
+  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
+</section>
+
+<nav class="nextrung"><a href="r18cb16.html">← 18·cb16 · a cone, cut by a plane</a><a href="r18econ.html">18·econ · how much do buyers flinch? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>Whipple set out to find, for every member of a bridge truss, the strain it must bear, by resolving the weights at each joint along the members that meet there, so that each member could be made just strong enough for its work.</p><cite>Squire Whipple, A Work on Bridge Building (1847); paraphrase</cite></aside>
+  <p>Simon Stevin's wreath of balls on a slope (1586) led him to the triangle of forces. Herman Haupt's General Theory of Bridge Construction (1851) did for American practice what Whipple began. James Clerk Maxwell gave the counting rule in 1864. In 18·eng.4.4, the engineer of 1880 is Heinrich Manderla, whose prize essay on secondary stresses settled how to compute them; the American preference for pins lasted until about 1900.</p>
+  <p>Accepted names: truss; chord (the top and bottom bars), web (the slants and uprights); the Warren truss (James Warren and Willoughby Monzani, 1848), the Pratt truss (Thomas and Caleb Pratt, 1844), the Howe truss (William Howe, 1840); a two-force member (a bar loaded only at its pins); statically determinate (b = 2j − 3, with the joint technique enough) and statically indeterminate (more bars than that); infinitesimal flexibility, for 18·eng.4.2.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="18·eng: a worked “proof”, not allowed">
+\text{the footbridge's slant } AB \text{ carries } A\text{'s } 30 \text{ kN} @@ fine
+T_{AB} = -30 \text{ kN} @@ not allowed: 30 kN is only the part up; bar-force gives 3/5 |T_AB| = 30
+\text{a bar rated for } 40 \text{ kN will do} @@ false: |T_AB| = 50 kN
+  </pre>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '–'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+function chips(el,FN,get,setk,after){ Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===get()) b.className='on'; b.onclick=()=>{ setk(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+const Nw='\\htmlClass{new}';
+/* the truss: bottom joints 0,2,4,6 at x = 0, 8, 16, 24; top joints 1,3,5 at x = 4, 12, 20, height 3 */
+const JT=[[0,0],[4,3],[8,0],[12,3],[16,0],[20,3],[24,0]];
+const BT=[[0,2],[2,4],[4,6],[1,3],[3,5],[0,1],[1,2],[2,3],[3,4],[4,5],[5,6]];
+const SUP=[[0,0],[0,1],[6,1]]; /* joint, 0 = across, 1 = up */
+function gauss(A,b){ const n=b.length; A=A.map(r=>r.slice()); b=b.slice();
+  for(let i=0;i<n;i++){ let p=i; for(let r=i+1;r<n;r++) if(Math.abs(A[r][i])>Math.abs(A[p][i])) p=r; [A[i],A[p]]=[A[p],A[i]]; [b[i],b[p]]=[b[p],b[i]];
+    for(let r=0;r<n;r++){ if(r===i) continue; const f=A[r][i]/A[i][i]; if(!f) continue; for(let c=i;c<n;c++) A[r][c]-=f*A[i][c]; b[r]-=f*b[i]; } }
+  return b.map((v,i)=>v/A[i][i]); }
+function solveT(lj,P){ const n=2*JT.length, m=BT.length+SUP.length; const A=Array.from({length:n},()=>new Array(m).fill(0)), b=new Array(n).fill(0);
+  BT.forEach(([p,q],k)=>{ const dx=JT[q][0]-JT[p][0], dy=JT[q][1]-JT[p][1], l=Math.hypot(dx,dy); A[2*p][k]+=dx/l; A[2*p+1][k]+=dy/l; A[2*q][k]-=dx/l; A[2*q+1][k]-=dy/l; });
+  SUP.forEach(([j,d],k)=>{ A[2*j+d][BT.length+k]=1; }); b[2*lj+1]=P; return gauss(A,b); }
+const LJ={j1:{lab:'top 4 m',j:1},j2:{lab:'bottom 8 m',j:2},j3:{lab:'top 12 m',j:3},j4:{lab:'bottom 16 m',j:4},j5:{lab:'top 20 m',j:5}};
+let lk='j2';
+const QM={four:{lab:'four bars'},five:{lab:'with AC'}};
+let qk='four';
+const kP=$('kP'),kp=$('kp'),cvT=$('cvT'),cvQ=$('cvQ');
+const PT=plane(cvT,{x:[-2,26],y:[-4,7],grid:0,labels:false,draw:P=>drawT(P)}); Object.defineProperty(PT.o,'aspect',{get:()=>11/28*1.15});
+const PQ=plane(cvQ,{x:[-1.2,2.2],y:[-0.4,1.4],grid:0,labels:false,draw:P=>drawQ(P)}); Object.defineProperty(PQ.o,'aspect',{get:()=>1.8/3.4*1.1});
+let X=null;
+function drawT(P){ const Pl=+kP.value; X=solveT(LJ[lk].j,Pl); let mx=1; BT.forEach((_,k)=>mx=Math.max(mx,Math.abs(X[k])));
+  BT.forEach(([p,q],k)=>{ const T=X[k], w=1.2+6*Math.abs(T)/mx; P.line(JT[p][0],JT[p][1],JT[q][0],JT[q][1],Math.abs(T)<1e-6?'--muted':(T>0?'--teal':'--ember'),w);
+    const mxp=(JT[p][0]+JT[q][0])/2, myp=(JT[p][1]+JT[q][1])/2; const fl=JT[p][1]===JT[q][1], sx=fl?0:((JT[q][1]-JT[p][1])*(JT[q][0]-JT[p][0])>0?-0.9:0.9); P.text(mm(T,0),mxp+sx,myp+(fl?(JT[p][1]?0.45:-0.85):0.1),'--ink','center',10); });
+  JT.forEach(([x,y])=>P.dot(x,y,'--ink',3.5));
+  P.poly([[0,0],[-0.9,-1.4],[0.9,-1.4]],'--ink',null,1.4); P.circle(24,-0.7,0.6,'--ink',1.4); P.line(22.8,-1.4,25.2,-1.4,'--ink',1.4);
+  const j=JT[LJ[lk].j]; if(Pl>0){ P.line(j[0],j[1],j[0],j[1]-2.6,'--plum',2.4); P.poly([[j[0],j[1]-2.9],[j[0]-0.4,j[1]-2.2],[j[0]+0.4,j[1]-2.2]],'--plum','--plum',1); P.text(Pl+' kN',j[0]+0.5,j[1]-2.4,'--plum','left',11); } }
+function quad(){ const p=qk==='five'?0:+kp.value, A=[0,0], B=[1,0], D=[p,Math.sqrt(1-p*p)], C=[1+p,D[1]]; return {p,A,B,C,D}; }
+function drawQ(P){ const {p,A,B,C,D}=quad(), ok=qk==='five';
+  P.line(A[0],A[1],C[0],C[1],ok?'--teal':'--muted',ok?2.6:1.4,ok?[]:[5,4]);
+  [[A,B],[B,C],[C,D],[D,A]].forEach(([u,v])=>P.line(u[0],u[1],v[0],v[1],'--ink',2.6));
+  [['A',A],['B',B],['C',C],['D',D]].forEach(([n,q])=>{ P.dot(q[0],q[1],'--ink',4); P.text(n,q[0]+(n==='A'||n==='D'?-0.08:0.08),q[1]+(q[1]>0.5?0.08:-0.14),'--ink',n==='A'||n==='D'?'right':'left',12); }); }
+function read(){ $('oP').textContent=kP.value+' kN'; const q=quad(); $('op').textContent=mm(+kp.value,2);
+  let mi=0; BT.forEach((_,k)=>{ if(Math.abs(X[k])>Math.abs(X[mi])) mi=k; }); const nm=k=>{ const n=['A','B','C','D','E','F','G']; return n[BT[k][0]]+n[BT[k][1]]; };
+  const ac=Math.sqrt(2+2*(+kp.value)); const vd=$('vdF');
+  vd.className='verdict '+(qk==='five'?'win':'lose');
+  vd.textContent='Truss: supports '+mm(X[BT.length+1],1)+' kN at the pin and '+mm(X[BT.length+2],1)+' kN at the roller. The hardest-working bar is '+nm(mi)+', in '+(X[mi]>0?'tension':'compression')+', '+mm(Math.abs(X[mi]),1)+' kN. Frame: '+(qk==='five'?'with AC fixed at √2, the lean must be 0: two triangles keep their shape.':'at lean '+mm(+kp.value,2)+' every bar is still 1 long, and AC is '+mm(ac,3)+': it racks.');
+  tex($('eqF'),qk==='five'?R`d(A, C) = \sqrt{2 + 2p} = \sqrt 2 \iff p = 0`:R`d(A, C) = \sqrt{2 + 2\cdot(${mm(+kp.value,2)})} \approx ${mm(ac,3)}`,true); }
+function all(){ PT.redraw(); PQ.redraw(); read(); }
+[kP,kp].forEach(el=>el.addEventListener('input',all));
+chips($('jch'),LJ,()=>lk,k=>{ lk=k; },all);
+chips($('qch'),QM,()=>qk,k=>{ qk=k; },all);
+window.__pic={set:(k,P)=>{ [...$('jch').children][Object.keys(LJ).indexOf(k)].click(); kP.value=P; all(); return X.map(v=>+v.toFixed(3)); }};
+all();
+stepper('#sl1',[
+  {k:'ember',kl:'bars and pins',t:R`\text{joints, bars of fixed length, free to turn}`,n:`A frame keeps its shape if every placement is congruent.`},
+  {k:'ember',kl:'rigid-triangle',t:R`${Nw}{\text{three bar lengths fix a triangle}}`,n:`18f’s three-sides, as bars.`},
+  {k:'ember',kl:'four bars rack',t:R`D = (p, \sqrt{1 - p^2}),\ \ C = B + D - A`,n:`Every bar 1 long, for every p.`},
+  {k:'ember',kl:'one more bar',t:R`d(A, C) = \sqrt{2 + 2p} = \sqrt 2 \iff p = 0`,n:`Two triangles keep their shape.`},
+  {k:'ember',kl:'add-a-joint',t:R`${Nw}{\text{two bars to two placed joints}}`,n:`two-circles-meet, then in-between-value.`},
+  {k:'ember',kl:'counting',t:R`b = 2j - 3`,n:`Needed; not enough if badly placed.`},
+  {k:'ember',kl:'forces add',t:R`\text{across and up, separately}`,n:`A pin at rest: (0, 0).`},
+  {k:'ember',kl:'bar-force',t:R`${Nw}{F = \tfrac{T}{\ell}(Q - P)}`,n:`A scaled copy of the bar.`},
+  {k:'ember',kl:'the joint technique',t:R`${Nw}{\textstyle\sum F = (0, 0) \text{ at each pin}}`,n:`Start where two bars are unknown.`},
+  {k:'ember',kl:'the barn roof',t:R`T_{AC} \approx -11.2,\ \ T_{AB} = 10 \text{ kN}`,n:`Rafters pushed, tie pulled.`},
+  {k:'ember',kl:'the tie',t:R`\text{tie} = \tfrac{Ps}{2h}`,n:`Similar triangles: halve the rise, double the pull.`},
+  {k:'ember',kl:'the footbridge',t:R`\mp 50,\ +40,\ -80 \text{ kN}`,n:`Slants, bottom, top.`},
+  {k:'ember',kl:'top squeezed, bottom pulled',t:R`T_{BD} = -80,\ \ T_{AC} = 40`,n:`As in a beam.`},
+  {k:'ember',kl:'a beam with its middle taken out',t:R`\text{every bar at full push or pull}`,n:`16·eng’s idle middle, removed.`},
+  {k:'ember',kl:'illegal',t:R`T \ne \text{its part up}`,n:`The slant carries load · ℓ/rise.`}
+],{title:'The slides · bars and pins; rigid-triangle; four bars rack; one more bar; add-a-joint; counting; forces add; bar-force; the joint technique; the barn roof; the tie; the footbridge; top squeezed, bottom pulled; a beam with its middle taken out; illegal moves · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

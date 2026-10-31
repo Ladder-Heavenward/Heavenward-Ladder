@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>16d · Substitution</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r16c.html">← 16c evaluating by antiderivatives</a><a href="r16e.html">next: 16e parts →</a></p>
+  <div class="tags"><span class="tag proof">16d · proof</span></div>
+  <h1>Substitution</h1>
+  <p>16c turned every rule for slopes into a rule for areas, at least in principle: find a function with the right slope. Rung 13's chain rule is the rule for slopes of a function inside a function. Its slope is the outside's slope, taken at the inside, times the inside's slope. Read backwards, any integrand of that shape has an antiderivative at once. This step proves the backwards reading, with the ends of the integral moved to where the inside sends them. It also sets up a bookkeeping that does the moving almost by itself.</p>
+  <p class="gesture">Name the inside function by a new letter. By the chain rule, the area under the outside taken at the inside, times the inside’s slope, is the area under the outside alone between the inside’s values at the two ends. The new letter’s small change is the inside’s slope times the old letter’s small change, and the ends move with the new letter.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r16c.html">16c</a> (area-is-a-change, the bar, the indefinite integral), <a href="r16b.html">16b</a> (antiderivative-exists), <a href="r13e.html">13e</a> (chain for slopes, name the inside r, dy/dx as one mark), <a href="r15f.html">15f</a> (continuous-is-integrable), <a href="r15e.html">15e</a> (the convention for reversed ends, areas-scale), <a href="r11b.html">11b</a> and <a href="r11c.html">11c</a> (products and chains of continuous functions). <a href="r16e.html">16e</a> runs the product rule backwards; <a href="r16h.html">16h</a> practises both.</p></div>
+</header>
+
+<section class="class step" data-step="16d1">
+  <h2 class="sthead"><span class="stno">16d1</span>The chain rule, backwards</h2>
+  <p class="stands">Stands on 13e (the chain rule), 16b (antiderivative-exists) and 16c (area-is-a-change).</p>
+  <p data-pid="7aa789">Substitution technique for areas: <b>let g have a slope at every point of [v, w], with g′ continuous there, and let f be continuous on an interval J that holds every value of g on [v, w]. Then ∫ᵥʷ f(g(x)) g′(x) dx = ∫_{g(v)}^{g(w)} f(r) dr.</b></p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the substitution technique for areas">
+\text{call } F \text{ an antiderivative of } f \text{ on } J @@ antiderivative-exists (16b)
+(F \circ g)'(x) = F'(g(x)) \cdot g'(x) = f(g(x)) \cdot g'(x) @@ chain for slopes (13e), with the inside r = g(x)
+f(g(x)) \cdot g'(x) \text{ is continuous on } [a, b] @@ 11c for the chain f(g(x)); 11b for the product; g′ continuous by hypothesis
+\textstyle\int_a^b f(g(x))\,g'(x)\,dx = F(g(b)) - F(g(a)) @@ area-is-a-change (16c) on [a, b], with G = F ∘ g
+\textstyle\int_{g(a)}^{g(b)} f(r)\,dr = F(g(b)) - F(g(a)) @@ area-is-a-change on the interval between g(a) and g(b), inside J; if g(b) &lt; g(a), 15e's convention turns both sides over
+\htmlClass{new}{\textstyle\int_a^b f(g(x))\,g'(x)\,dx = \int_{g(a)}^{g(b)} f(r)\,dr} \quad \blacksquare @@ the two lines have the same right side
+  </pre>
+  <p data-pid="2d6395">Without ends, the same lines say: ∫ f(g(x)) g′(x) dx = F(g(x)) + C. Its accepted name is integration by substitution, or the change of variables; another is u-substitution, after the letter often used for the inside. On this ladder u is 11a's step, so the inside keeps 13e's name, r.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · backwards · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">16d1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">(x² + 3)⁴</span></span>Find its slope by the chain rule. <br>Read that line backwards: name every antiderivative of 8x(x² + 3)³.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="16d2">
+  <h2 class="sthead"><span class="stno">16d2</span>The bookkeeping in d's</h2>
+  <p class="stands">Stands on 16d1 and 13e (dy/dx as one mark).</p>
+  <p class="eqline" data-pid="dda6a4">From here on, in a substitution, the line r = g(x), dr = g′(x) dx is a reminder of substitution for areas, not a statement about numbers. It says that wherever g′(x) dx sits next to a function of g(x), it may be traded for dr, and the ends traded for the values of r there.</p>
+  <p data-pid="560c77">13e read dy/dx as one mark, not a fraction. The line dr = g′(x) dx looks like that mark multiplied out. It is not: no number dr or dx has been defined. <b>But substitution for areas says the trade it suggests always gives the right answer, under its hypotheses.</b> That is why these marks have lasted.</p>
+  <pre class="lines" data-k="ember" data-label="this step: three substitutions">
+\textstyle\int_0^1 2x(x^2 + 1)^3\,dx:\ \ r = x^2 + 1,\ dr = 2x\,dx @@ x = 0 gives r = 1; x = 1 gives r = 2
+= \textstyle\int_1^2 r^3\,dr = \tfrac{r^4}{4}\Big|_1^2 = \tfrac{16 - 1}{4} = \tfrac{15}{4} @@ substitution for areas; area-is-a-change with power for slopes
+\textstyle\int_0^4 x\sqrt{x^2 + 9}\,dx:\ \ r = x^2 + 9,\ dr = 2x\,dx,\ x\,dx = \tfrac12 dr @@ areas-scale: a constant factor moves across; r runs from 9 to 25
+= \tfrac12 \textstyle\int_9^{25} r^{1/2}\,dr = \tfrac12 \cdot \tfrac23 r^{3/2}\Big|_9^{25} = \tfrac13(125 - 27) = \tfrac{98}{3} @@ fraction-power for slopes (13h)
+\textstyle\int_0^1 (1 - x)^5\,dx:\ \ r = 1 - x,\ dr = -dx @@ r runs from 1 down to 0
+= \textstyle\int_1^0 r^5\,(-dr) = \int_0^1 r^5\,dr = \tfrac16 @@ areas-scale, then 15e's convention for the reversed ends
+  </pre>
+  <p data-pid="d7f59e">Straight-inside technique: <b>if F′ = f and k ≠ 0, then ∫ f(kx + m) dx = (1/k) F(kx + m) + C.</b> It is substitution for areas with r = kx + m and dr = k dx, divided through by k.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · bookkeeping · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · the area in x and the area in r are the same number</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="chips" id="fch"></div>
+      <div class="lbl">f(g(x)) · g′(x) against x, from v to w</div>
+      <canvas id="cvX"></canvas>
+      <div class="kn"><span class="m">b</span><input type="range" id="kb" min="0.1" max="1" step="0.01" value="1"><output id="ob"></output></div>
+      <div class="cap">The knob moves the right end b as a share of the chip's interval. Teal counts plus, plum minus.</div>
+    </div>
+    <div class="panel">
+      <div class="lbl">f(r) against r, from g(v) to g(w)</div>
+      <canvas id="cvR"></canvas>
+      <div class="cap">The same area, read in r. When g falls, the ends come in the other order and 15e's convention turns the sign.</div>
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16d2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">∫₀¹ (2x + 1)³ dx</span></span>Bound it by the least and greatest height on [0, 1]. <br>Find it with straight-inside, and check it sits inside your bounds.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="16d3">
+  <h2 class="sthead"><span class="stno">16d3</span>Odd and even</h2>
+  <p class="stands">Stands on 16d2.</p>
+  <p class="eqline" data-pid="c3d396">From here on, f is even when f(−x) = f(x) for every x in its domain, and odd when f(−x) = −f(x). The names come from the powers: x² and x⁴ are even, x and x³ odd.</p>
+  <p data-pid="7435e4">Odd-and-even-areas technique: <b>if f is continuous on [−p, p], then ∫₋ₚᵖ f = 0 when f is odd, and ∫₋ₚᵖ f = 2∫₀ᵖ f when f is even.</b></p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · odd and even · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16d3.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="r = x^2 + 1,"></span> <span data-tex-inline="\text{after it: } \int_1^5 r^{-2}\,dr"></span></span>Find the integral in x that the substitution started from, with its ends.</li><li><span class="givens"><span data-tex-inline="\int f(x)\,dx = \tfrac{(3x - 1)^6}{18} + C"></span></span>Find f.</li><li><span class="givens"><span data-tex-inline="g \text{ a straight line},"></span> <span data-tex-inline="\int_0^1 g'(x)(g(x))^2\,dx = \int_2^5 r^2\,dr"></span></span>Find g.</li><li><span class="givens"><span data-tex-inline="f \text{ even},"></span> <span data-tex-inline="\int_{-3}^3 f = 10"></span></span>Find the integral of f from 0 to 3, and from −3 to 0.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="16d4">
+  <h2 class="sthead"><span class="stno">16d4</span>Why the halves cancel or double</h2>
+  <p class="stands">Stands on 16d3 and 15e (interval-cut-in-two).</p>
+  <pre class="lines" data-k="ember" data-label="this step: the odd-and-even-areas technique">
+\textstyle\int_{-p}^{0} f(x)\,dx:\ \ r = -x,\ dr = -dx @@ x = −p gives r = p; x = 0 gives r = 0
+= \textstyle\int_p^0 f(-r)\,(-dr) = \int_0^p f(-r)\,dr @@ substitution for areas with g(x) = −x; areas-scale; the convention
+\text{odd: } \textstyle\int_0^p f(-r)\,dr = -\int_0^p f,\ \ \text{so } \int_{-p}^{p} f = -\int_0^p f + \int_0^p f = 0 @@ areas-scale; split-in-any-order (16a)
+\text{even: } \textstyle\int_0^p f(-r)\,dr = \int_0^p f,\ \ \text{so } \int_{-p}^{p} f = 2\int_0^p f \quad \blacksquare @@ split-in-any-order
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16d4.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="I = \int_0^1 3x^2(x^3 + 1)^4\,dx"></span></span>Find I.</li><li><span class="givens"><span data-tex-inline="f(x) = x(x^2 - 4)^5"></span></span>Find every antiderivative of f.</li><li><span class="givens"><span data-tex-inline="I = \int_2^6 \sqrt{2x - 3}\,dx"></span></span>Find I.</li><li><span class="givens"><span data-tex-inline="I = \int_{-2}^2 (x^5 - 4x^3 + x)\,dx"></span></span>Find I without an antiderivative.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="16d5">
+  <h2 class="sthead"><span class="stno">16d5</span>Illegal moves</h2>
+  <p class="stands">Stands on 16d1 to 16d4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\textstyle\int_0^1 2x(x^2 + 1)^3\,dx = \int_0^1 r^3\,dr\,? @@ the ends belong to x; for r they are g(0) = 1 and g(1) = 2
+\textstyle\int (x^2 + 1)^3\,dx = \tfrac{(x^2 + 1)^4}{4} + C\,? @@ no 2x is there to become dr; the slope of the guess is 2x(x² + 1)³. Expand instead
+\textstyle\int (x^2 + 1)^3\,dx = \int r^3\,\tfrac{dr}{2x}\,? @@ two letters for one variable; substitution for areas has no such line
+\textstyle\int_{-1}^{1} x^{-3}\,dx = 0 \text{ by odd-and-even-areas}\,? @@ x⁻³ is not continuous on [−1, 1]; it has no integral there
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16d5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="I = \int_0^2 x(x^2 + 1)^2\,dx,"></span> <span data-tex-inline="r = x^2 + 1"></span></span>Someone substitutes and keeps the ends 0 and 2.<br>Find what they get, and find I.</li><li><span class="givens"><span data-tex-inline="I = \int_{-1}^1 x^2\,dx,"></span> <span data-tex-inline="r = x^2,"></span> <span data-tex-inline="dx = dr/(2x)"></span></span>Run the substitution on I as far as you can take it, and write the line where it breaks.<br>Find I another way.</li><li><span class="givens"><span data-tex-inline="I = \int_{-1}^2 2x \cdot x^2\,dx,"></span> <span data-tex-inline="r = x^2"></span></span>Find I by substitution for areas with r, and again by an antiderivative in x.<br>Prove or refute: substitution for areas is true here, though the inside falls and rises.</li><li><span class="givens"><span data-tex-inline="I = \int_{-1}^1 x^{-1}\,dx"></span></span>Write the hypothesis of odd-and-even-areas that I breaks.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">16d.4.1</span><span class="tagq">build</span>Make up an integral over [−1, 2] of the shape an outer function of an inside g times the slope of g, with g falling and then rising there, that becomes a power of r when r = g(x).<br>Find it in r, with the ends r gives, and check it in x.</div>
+  <div class="chq"><span class="chid">16d.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="I = \int_{-1}^1 f(|x|) \cdot (|x|)'\,dx"></span></span>Substitution for areas asks for a continuous slope of the inside, and the size of x has no slope at 0.<br>Find I, and compare it with what substitution for areas would give.</div>
+  <div class="chq"><span class="chid">16d.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\int_v^w h(x)\,dx = \int_{g(v)}^{g(w)} f(r)\,dr,"></span> <span data-tex-inline="\text{for every } v, w,"></span> <span data-tex-inline="P(x) = f(g(x))\,g'(x)"></span></span>Prove or refute: h = P.</div>
+  <div class="chq"><span class="chid">16d.4.4</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="I = \int_0^3 x\sqrt{x + 1}\,dx"></span></span>The x in front of the root is not the inside's slope.<br>Find I.</div>
+  <div class="chq"><span class="chid">16d.4.5</span><span class="tagq">seam</span>Cambridge kept one inventor's dotted letters for rates for a hundred years after his death, out of loyalty. The rest of Europe used the other inventor's d's. In 1812 three students founded a society to bring in the d's. They joked that they stood for pure d-ism against the dot-age of the university. Substitution for areas is a technique about functions; dr = g′(x) dx is only marks. <br>Can a notation be right or wrong, or only easier? <br>Did the d's find anything the dots could not?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r16c.html">← 16c · evaluating by antiderivatives</a><a href="r16e.html">16e · parts →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>Leibniz wrote to a correspondent that the art of finding is helped most by signs that express the inmost nature of a thing briefly and as if painted, for then the labour of thinking is wonderfully reduced.</p><cite>Leibniz, letter to Tschirnhaus (1678); paraphrase</cite></aside>
+  <p>The d’s, and the bookkeeping with them, are Leibniz’s; the dotted letters are Newton’s. In 16d.4.5, the three students were Charles Babbage, John Herschel and George Peacock, and their society was the Analytical Society.</p>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+/* least and greatest of F.f on [lo, hi]: the ends, F's critical points inside, and a fine sample (exact between critical points for the functions used here) */
+function ext(F,lo,hi){ if(F.dir) return [0,1]; let m=Infinity,M=-Infinity; const t=x=>{ const v=F.f(x); if(v<m) m=v; if(v>M) M=v; };
+  t(lo); t(hi); (F.crit||[]).forEach(c=>{ if(c>lo&&c<hi) t(c); }); for(let k=1;k<64;k++) t(lo+(hi-lo)*k/64); return [m,M]; }
+function sums(F,pts){ let L=0,U=0; const ms=[],Ms=[]; for(let i=1;i<pts.length;i++){ const [m,M]=ext(F,pts[i-1],pts[i]), w=pts[i]-pts[i-1]; ms.push(m); Ms.push(M); L+=m*w; U+=M*w; } return {L,U,ms,Ms}; }
+const eq=(a,b,n)=>Array.from({length:n+1},(_,i)=>a+(b-a)*i/n);
+function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
+function boxes(P,pts,hs,stroke,fill,alpha){ const c=P.ctx; for(let i=1;i<pts.length;i++){ const a=pts[i-1],b=pts[i],h=hs[i-1]; c.globalAlpha=alpha; P.poly([[a,0],[b,0],[b,h],[a,h]],null,fill); c.globalAlpha=1; P.poly([[a,0],[b,0],[b,h],[a,h]],stroke,null,1.2); } }
+function dirDots(P,a,b){ const c=P.ctx; c.fillStyle=col('--ink'); for(let k=0;k<=300;k++){ const x=a+(b-a)*k/300; const y=(k%2)?0:1; c.fillRect(P.X(x)-1,P.Y(y)-1,2,2); } }
+/* shade between the graph of fn and the axis from lo to hi: above in pos colour, below in neg colour */
+function shade(P,fn,lo,hi,pos,neg,alpha){ if(hi<lo){ const t=lo; lo=hi; hi=t; } const c=P.ctx, N=300; c.globalAlpha=alpha==null?0.32:alpha;
+  for(let k=0;k<N;k++){ const x0=lo+(hi-lo)*k/N, x1=lo+(hi-lo)*(k+1)/N, xm=(x0+x1)/2, y=fn(xm); if(!isFinite(y)) continue; P.poly([[x0,0],[x1,0],[x1,fn(x1)],[x0,fn(x0)]],null,y>=0?pos:neg); }
+  c.globalAlpha=1; }
+function rangeOf(fn,lo,hi,pad){ let m=Infinity,M=-Infinity; for(let k=0;k<=400;k++){ const v=fn(lo+(hi-lo)*k/400); if(isFinite(v)){ if(v<m) m=v; if(v>M) M=v; } } if(m>0) m=0; if(M<0) M=0; const p=(M-m)*(pad==null?0.12:pad)||1; return [m-p,M+p]; }
+function chips(el,FN,get,setk,after){ Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===get()) b.className='on'; b.onclick=()=>{ setk(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+const Nw='\\htmlClass{new}';
+function gridFor(sp){ return sp>40?10:sp>16?4:sp>8?2:sp>3?1:sp>1.2?0.5:0.25; }
+function frame2(P,fn,lo,hi,pad){ const w=hi-lo; P.o.x=[lo-0.12*w,hi+0.08*w]; P.o.y=rangeOf(fn,lo,hi,pad==null?0.12:pad); const sx=P.o.x[1]-P.o.x[0], sy=P.o.y[1]-P.o.y[0]; let g=gridFor(sx); while(sy/g>24) g*=2; P.o.grid=g; }
+const num=(f,a,b,n)=>{ n=n||4000; const h=(b-a)/n; let s=0; for(let i=0;i<n;i++) s+=f(a+(i+0.5)*h)*h; return s; };
+const FN={
+  A:{lab:'2x(x² + 1)³',h:x=>2*x*(x*x+1)**3,g:x=>x*x+1,f:r=>r**3,F:r=>r**4/4,a:0,B:1,ht:'2x(x^2 + 1)^3',ft:'r^3',gt:'x^2 + 1'},
+  Bq:{lab:'x√(x² + 9)',h:x=>x*Math.sqrt(x*x+9),g:x=>x*x+9,f:r=>Math.sqrt(r)/2,F:r=>Math.pow(r,1.5)/3,a:0,B:4,ht:'x\\sqrt{x^2 + 9}',ft:'\\tfrac12\\sqrt{r}',gt:'x^2 + 9'},
+  C:{lab:'(1 − x)⁵',h:x=>(1-x)**5,g:x=>1-x,f:r=>-(r**5),F:r=>-(r**6)/6,a:0,B:1,ht:'(1 - x)^5',ft:'(-r^5)',gt:'1 - x'},
+  D:{lab:'2x · x² on [−1, 2]',h:x=>2*x*x*x,g:x=>x*x,f:r=>r,F:r=>r*r/2,a:-1,B:2,ht:'2x \\cdot x^2',ft:'r',gt:'x^2'}
+};
+let key='A';
+const kb=$('kb'),cvX=$('cvX'),cvR=$('cvR');
+const bnow=()=>{ const S=FN[key]; return S.a+(+kb.value)*(S.B-S.a); };
+const PX=plane(cvX,{x:[0,1],y:[0,1],grid:1,aspect:0.8,draw:P=>drawX(P)});
+const PR=plane(cvR,{x:[0,1],y:[0,1],grid:1,aspect:0.8,draw:P=>drawR(P)});
+[[PX,cvX],[PR,cvR]].forEach(([P,cv])=>Object.defineProperty(P.o,'aspect',{get:()=>cv.clientWidth>480?0.75:0.9}));
+function frame(P,fn,lo,hi){ const w=hi-lo; P.o.x=[lo-0.12*w,hi+0.08*w]; P.o.y=rangeOf(fn,lo,hi,0.12); const sx=P.o.x[1]-P.o.x[0], sy=P.o.y[1]-P.o.y[0]; let g=gridFor(sx); while(sy/g>24) g*=2; P.o.grid=g; }
+function rRange(S){ let lo=Infinity,hi=-Infinity; for(let k=0;k<=400;k++){ const v=S.g(S.a+(S.B-S.a)*k/400); if(v<lo) lo=v; if(v>hi) hi=v; } return [lo,hi]; }
+function drawX(P){ const S=FN[key], b=bnow(); frame(P,S.h,S.a,S.B); P.axes(); shade(P,S.h,S.a,b,'--teal','--plum',0.34); curve(P,S.h,'--ink',2.6,S.a,S.B); P.line(b,P.o.y[0],b,P.o.y[1],'--ember',1.6,[]); }
+function drawR(P){ const S=FN[key], b=bnow(), [lo,hi]=rRange(S); frame(P,S.f,lo,hi); P.axes(); const ra=S.g(S.a), rb=S.g(b); shade(P,S.f,ra,rb,'--teal','--plum',0.34); curve(P,S.f,'--ink',2.6,lo,hi);
+  P.line(ra,P.o.y[0],ra,P.o.y[1],'--muted',1.2,[4,4]); P.line(rb,P.o.y[0],rb,P.o.y[1],'--ember',1.6,[]); }
+function read(){ const S=FN[key], b=bnow(), ra=S.g(S.a), rb=S.g(b), ix=num(S.h,S.a,b), ir=S.F(rb)-S.F(ra); $('ob').textContent=mm(b,2);
+  const vd=$('vdF'); vd.className='verdict win';
+  let msg='In x: '+mm(ix,4)+'. In r, from '+mm(ra,3)+' to '+mm(rb,3)+': '+mm(ir,4)+'.';
+  if(rb<ra) msg+=' Here r runs downwards, so ∫ from '+mm(ra,3)+' to '+mm(rb,3)+' is minus the area from '+mm(rb,3)+' up to '+mm(ra,3)+'.';
+  vd.textContent=msg;
+  tex($('eqF'),R`\begin{gathered}r = ${S.gt}\\ \textstyle\int_{${mm(S.a,2)}}^{${mm(b,2)}} ${S.ht}\,dx = \int_{${mm(ra,3)}}^{${mm(rb,3)}} ${S.ft}\,dr = ${mm(ir,4)}\end{gathered}`,true); }
+function all(){ PX.redraw(); PR.redraw(); read(); }
+kb.addEventListener('input',all);
+chips($('fch'),FN,()=>key,k=>{ key=k; },all);
+window.__pic={set:(k,s)=>{ [...$('fch').children][Object.keys(FN).indexOf(k)].click(); kb.value=s; all(); const S=FN[k], b=bnow(); return {b:+b.toFixed(4),ix:+num(S.h,S.a,b).toFixed(5),ir:+(S.F(S.g(b))-S.F(S.g(S.a))).toFixed(5),txt:$('vdF').textContent.slice(0,120)}; }};
+all();
+stepper('#sl1',[
+  {k:'ember',kl:'backwards',t:R`(F(g(x)))' = f(g(x))\,g'(x)`,n:`chain for slopes, with F′ = f.`},
+  {k:'ember',kl:'substitution for areas',t:R`${Nw}{\textstyle\int_a^b f(g(x))\,g'(x)\,dx = \int_{g(a)}^{g(b)} f(r)\,dr}`,n:`area-is-a-change on both sides.`},
+  {k:'ember',kl:'the ends',t:R`x = a \mapsto r = g(a)`,n:`The ends follow r.`}
+],{title:'The slides · backwards · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'bookkeeping',t:R`r = g(x),\ \ dr = g'(x)\,dx`,n:`A reminder of substitution for areas, not numbers.`},
+  {k:'ember',kl:'a square root',t:R`\tfrac12\textstyle\int_9^{25} r^{1/2}\,dr = \tfrac{98}{3}`,n:`A constant factor moves across.`},
+  {k:'ember',kl:'a falling inside',t:R`\textstyle\int_1^0 r^5(-dr) = \tfrac16`,n:`The convention turns the ends.`},
+  {k:'ember',kl:'straight-inside',t:R`\textstyle\int f(kx + m)\,dx = \tfrac1k F(kx + m) + C`,n:`A straight inside.`}
+],{title:'The slides · bookkeeping · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'odd and even',t:R`f(-x) = -f(x),\ \ f(-x) = f(x)`,n:`Named after the powers.`},
+  {k:'ember',kl:'odd-and-even-areas',t:R`\textstyle\int_{-p}^{p} f = 0 \text{ or } 2\int_0^p f`,n:`substitution for areas with r = −x.`}
+],{title:'The slides · odd and even · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`\textstyle\int (x^2 + 1)^3\,dx \ne \tfrac{(x^2 + 1)^4}{4} + C`,n:`No 2x to become dr.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

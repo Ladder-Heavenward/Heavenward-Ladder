@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Symmetries by hand</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+.btns{display:flex;flex-wrap:wrap;gap:6px}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r19concl.html">← 19·∎ conclusion</a><a href="r19chem.html">next: 19·chem which moves leave a molecule unchanged? →</a></p>
+  <div class="tags"><span class="tag tech">19f · technique</span></div>
+  <h1>Symmetries by hand</h1>
+  <p>A square card, put back in its outline, can sit eight ways. A triangle, six. A rectangle that is not a square, four. This step counts the moves that leave a figure looking the same, by hand: label the corners, ask where one corner can go, and see that the rest is forced. The moves are a group, and everything this rung proved about groups can be checked on them.</p>
+  <p class="gesture">A symmetry of a polygon, with its corners numbered in order round it, is a shuffle of the corners that keeps neighbours neighbours. The first corner can go to any corner, and its neighbour then to one of two; the rest is forced. So a regular polygon has twice as many symmetries as corners.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r19a.html">19a</a> to <a href="r19e.html">19e</a>, and <a href="r18a.html">18a</a> (points in space). <a href="r20.html">20</a> puts these moves on the plane itself, and 20·cb19 sees them again.</p></div>
+</header>
+
+<section class="class step" data-step="19f1">
+  <h2 class="sthead"><span class="stno">19f1</span>Shuffles that keep neighbours</h2>
+  <p class="stands">Stands on 19a (shuffles, groups) and 19d1 (the part-group test).</p>
+  <p class="eqline" data-pid="705e91">From here on, on this step, label the corners of a polygon 1, …, n in order round it; 1 and n are neighbours. A symmetry of the polygon is a shuffle of its corners that sends every two neighbours to two neighbours. Its accepted name is a symmetry of the polygon, as a figure of points; rung 20 builds that version.</p>
+  <p data-pid="3db537">Symmetries-form-a-group technique: <b>the symmetries of a polygon form a part-group of the shuffles of its corners.</b> e keeps everything. Two neighbour-keepers in a row keep neighbours. And a neighbour-keeper matches the n neighbour pairs with themselves, one-to-one, so it is onto them too (4j), and its undo keeps neighbours.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · neighbours · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">19f1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a square with corners 1, 2, 3, 4 in order round it</span></span>Find which of [2 1 4 3], [2 4 3 1] and [1 4 3 2] are symmetries.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="19f2">
+  <h2 class="sthead"><span class="stno">19f2</span>Count by where one corner goes</h2>
+  <p class="stands">Stands on 19f1 and 4j (stages multiply).</p>
+  <p data-pid="f43271">Place-then-count technique: <b>a regular polygon with n corners, n ≥ 3, has exactly 2n symmetries.</b> Corner 1 can be sent to any of the n corners. Corner 2, its neighbour, must go to one of the two neighbours of wherever 1 went. Then corner 3 must go to the other neighbour of corner 2’s place, and so on round: nothing is left to choose.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the place-then-count technique">
+1 \mapsto k:\ \ n \text{ choices} @@ any corner
+2 \mapsto k \pm 1:\ \ 2 \text{ choices} @@ a neighbour of k, since 1 and 2 are neighbours
+i + 1 \mapsto \text{the neighbour of } i\text{'s place not yet used} @@ forced, by induction round the polygon (4e)
+\htmlClass{new}{n \cdot 2 = 2n \text{ symmetries}} \quad \blacksquare @@ stages multiply (4j); each choice does give a symmetry
+  </pre>
+  <p data-pid="cce1d7">A triangle has 6: every shuffle of three corners, since in a triangle every two corners are neighbours. A square has 8 of the 24 shuffles of its corners.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · count · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">19f2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a regular pentagon,  a regular hexagon</span></span>Guess how many symmetries each has, then count them.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="19f3">
+  <h2 class="sthead"><span class="stno">19f3</span>Turning a card over</h2>
+  <p class="stands">Stands on 19f2 and 18a7 (points in space).</p>
+  <p data-pid="f97736">Cut a square of card and draw its outline on the table. Four of its symmetries are turns of the card on the table: a quarter turn, a half turn, three quarters, and doing nothing. The other four need the card lifted. Pick it up, turn it over by half a turn about a line through its middle, and lay it back in the outline. <b>Every symmetry of the square is a turn: four on the table, and four half turns in space.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the square’s eight moves, corners 1, 2, 3, 4 round it">
+e,\ \ [2\ 3\ 4\ 1],\ \ [3\ 4\ 1\ 2],\ \ [4\ 1\ 2\ 3] @@ turns on the table: none, a quarter, a half, three quarters
+[2\ 1\ 4\ 3],\ \ [4\ 3\ 2\ 1] @@ turned over about a line through the middles of two opposite sides
+[1\ 4\ 3\ 2],\ \ [3\ 2\ 1\ 4] @@ turned over about a line through two opposite corners: those two stay
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · turning over · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · a square card, turned on the table and turned over</div>
+    <div id="sq"></div>
+    <div class="btns"><button type="button" id="bq">quarter turn</button><button type="button" id="bf">turn over, about the upright line</button><button type="button" id="b0">start again</button></div>
+    <div class="cap">The places are fixed; the card moves. Sand: the card is face down. Every place the card can reach is one of the eight symmetries; try to find a ninth.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">19f3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a square card, corners 1, 2, 3, 4 round it</span></span>Find the line to turn it over about, so that 2 and 4 stay where they are. <br>Find the shuffle that move makes.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="19f4">
+  <h2 class="sthead"><span class="stno">19f4</span>The rung’s techniques, checked on the square</h2>
+  <p class="stands">Stands on 19f3, 19a6, 19d4 and 19e4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: checked">
+q = [2\ 3\ 4\ 1],\ \ f = [2\ 1\ 4\ 3]:\ \ qf = [3\ 2\ 1\ 4],\ \ fq = [1\ 4\ 3\ 2] @@ not turn-about (19a6)
+\{e, q, q^2, q^3\}:\ \ 4 \mid 8 @@ the turns on the table, a part-group (part-divides-whole)
+\{e, [1\ 4\ 3\ 2]\}:\ \ 2 \mid 8 @@ the moves that keep corner 1 in place
+q \text{ odd},\ \ q^2 \text{ even},\ \ f \text{ even},\ \ [1\ 4\ 3\ 2] \text{ odd} @@ N = 3, 4, 2, 3 (19e)
+  </pre>
+  <p data-pid="e5ae5e"><b>Every technique of this rung can be watched at work on eight moves of a card.</b> The square’s moves are not turn-about, their parts divide their size, and the even ones among them are half.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · checked · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">19f4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">the square’s eight moves</span></span>Find which of them are even. <br>Find whether the even ones form a part-group, and its size.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="19f5">
+  <h2 class="sthead"><span class="stno">19f5</span>Fewer symmetries</h2>
+  <p class="stands">Stands on 19f2.</p>
+  <p data-pid="ecae6c">A figure that is not regular has fewer. A rectangle that is not a square keeps its long sides long, so corner 1 can go anywhere, but its neighbour along the long side must stay along a long side: 4 × 1 = 4. A pinwheel with four bent blades can be turned on the table but not turned over, since its blades would then bend the other way: 4. The letter S has 2: do nothing, and a half turn on the table.</p>
+  <p data-pid="653846"><b>The fewer moves a figure has, the less of it looks alike.</b> A figure with only e looks different from every side.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · fewer · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">19f5.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span class="gtx">a rhombus that is not a square</span></span>Count its symmetries.</li><li><span class="givens"><span class="gtx">the letter Z, drawn with straight strokes</span></span>Count its symmetries, among turns on the page and turns over in space.</li><li><span class="givens"><span class="gtx">a regular hexagon with its corners coloured red and blue in turn</span></span>Count the symmetries that keep colours.</li><li><span class="givens"><span class="gtx">a square card with a picture on one face only</span></span>Count the symmetries that keep the picture face up.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="19f6">
+  <h2 class="sthead"><span class="stno">19f6</span>Illegal moves</h2>
+  <p class="stands">Stands on 19f1 to 19f5.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{a symmetry is any shuffle of the corners}\,? @@ it must keep neighbours: the square has 8 of 24
+\text{every symmetry is a turn on the table}\,? @@ four of the square’s need the card turned over
+\text{the count is } n!\,? @@ only for n = 3, where every two corners are neighbours
+\text{turning over is a shuffle of the table}\,? @@ it moves the card through space; rung 20 says what it does to the plane
+  </pre>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">19f6.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span class="gtx">a cube, its 8 corners</span></span>Count the turns of the cube in space that put it back in its box, with place-then-count.</li><li><span class="givens"><span class="gtx">a square, its moves as shuffles of its 4 sides</span></span>Find whether the count changes.</li><li><span class="givens"><span class="gtx">a circle</span></span>Find what place-then-count says, and which line fails.</li><li><span class="givens"><span class="gtx">a regular tetrahedron: 4 corners, each two joined</span></span>Count its turns in space, and find their parity as shuffles of the corners.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">19f.4.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">the square’s eight moves</span></span>Build their full table. <br>Find every part-group in it.</div>
+  <div class="chq"><span class="chid">19f.4.2</span><span class="tagq">edge</span><span class="givens"><span class="gtx">a “polygon” of 2 corners, joined both ways round</span></span>Find what place-then-count says for it, and what is true. <br>Find the line of the technique that needs n ≥ 3.</div>
+  <div class="chq"><span class="chid">19f.4.3</span><span class="tagq">converse</span><span class="givens"><span class="gtx">a square,  an even shuffle of its corners</span></span>Find whether every even shuffle of the corners is a symmetry.</div>
+  <div class="chq"><span class="chid">19f.4.4</span><span class="tagq">reroute</span>Count the square’s moves a second way: find the part-group of moves that keep corner 1 in place, and use part-divides-whole with its copies.</div>
+  <div class="chq"><span class="chid">19f.4.5</span><span class="tagq">seam</span>A palace in Spain is often said to hold every kind of repeating pattern a flat wall can have. A geometer went to count and found far fewer; others counted again and found all of them. The two sides counted different things: shapes alone, or shapes with their colours. <br>When a pattern’s colours break a symmetry its shapes have, does the symmetry count?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r19concl.html">← 19·∎ · conclusion</a><a href="r19chem.html">19·chem · which moves leave a molecule unchanged? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The symmetries of a regular n-gon form the dihedral group, written D_n or D_{2n}. The count by where one corner goes is the orbit-stabiliser theorem: the number of places corner 1 can reach, times the number of moves that keep it fixed. The repeating patterns of a flat wall fall into 17 kinds, the wallpaper groups.</p>
+  <h3>Who said it first</h3>
+  <p>In 19f.4.5, the palace is the Alhambra in Granada. Branko Grünbaum, “What symmetry groups are present in the Alhambra?” (2006), counted strictly and found fewer than all 17 kinds; counts that read the patterns differently, by Rafael Pérez-Gómez and José María Montesinos among others, found all 17.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+const V=c=>'var('+c+')';
+const q=[2,3,4,1], f=[2,1,4,3];
+const cmp=(a,b)=>b.map(x=>a[x-1]);
+let s=[1,2,3,4], up=true, seen=new Set(['1,2,3,4']), hist=[];
+const P=[[70,30],[190,30],[190,150],[70,150]];
+function draw(){ let h='<svg viewBox="0 0 260 180" style="width:100%;max-width:300px;display:block;margin:auto">';
+  h+='<rect x="70" y="30" width="120" height="120" style="fill:'+V(up?'--card':'--sand')+';stroke:'+V('--ink')+';stroke-width:2"/>';
+  h+='<rect x="64" y="24" width="132" height="132" style="fill:none;stroke:'+V('--grid')+';stroke-dasharray:4 4"/>';
+  for(let c=1;c<=4;c++){ const p=P[s[c-1]-1]; h+='<circle cx="'+p[0]+'" cy="'+p[1]+'" r="14" style="fill:'+V('--ember')+'"/><text x="'+p[0]+'" y="'+(p[1]+5)+'" text-anchor="middle" style="fill:'+V('--paper')+';font:600 14px IBM Plex Mono,monospace">'+c+'</text>'; }
+  h+='<line x1="130" y1="12" x2="130" y2="168" style="stroke:'+V('--teal')+';stroke-dasharray:3 5"/>';
+  $('sq').innerHTML=h+'</svg>';
+  const v=$('vd'); v.className='verdict'+(seen.size===8?' win':'');
+  v.textContent='Corner 1 is in place '+s[0]+', and the card is face '+(up?'up':'down')+'. As a shuffle: ['+s.join(' ')+']. Different moves found: '+seen.size+' of 8.'+(hist.length?' Moves done: '+hist.slice(-8).join(', ')+'.':''); }
+function go(m,lab){ s=cmp(m,s); if(m===f) up=!up; seen.add(s.join()); hist.push(lab); draw(); }
+$('bq').onclick=()=>go(q,'quarter'); $('bf').onclick=()=>go(f,'over'); $('b0').onclick=()=>{ s=[1,2,3,4]; up=true; hist=[]; draw(); };
+draw();
+window.__pic={set:(ms)=>{ s=[1,2,3,4]; up=true; ms.forEach(x=>go(x==='q'?q:f,x)); return s.join(' '); }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'a symmetry',t:R`\{i, i + 1\} \mapsto \text{neighbours}`,n:`Shuffles that keep neighbours.`}
+],{title:'The slides · neighbours · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'place then count',t:R`\htmlClass{new}{2n}`,n:`Corner 1 anywhere; its neighbour one of two.`},
+  {k:'ember',kl:'square',t:R`8 \text{ of } 24`,n:`Triangle: all 6.`}
+],{title:'The slides · count · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'on the table',t:R`e,\ q,\ q^2,\ q^3`,n:`Four turns.`},
+  {k:'ember',kl:'in space',t:R`[2\ 1\ 4\ 3],\ [4\ 3\ 2\ 1],\ [1\ 4\ 3\ 2],\ [3\ 2\ 1\ 4]`,n:`Four half turns.`}
+],{title:'The slides · turning over · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'not turn-about',t:R`qf \ne fq`,n:`A card shows it.`},
+  {k:'ember',kl:'parts',t:R`4 \mid 8,\ \ 2 \mid 8`,n:`Turns; keeping corner 1.`}
+],{title:'The slides · checked · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'rectangle',t:R`4`,n:`Long stays long.`},
+  {k:'ember',kl:'pinwheel',t:R`4`,n:`Turns only.`},
+  {k:'ember',kl:'the letter S',t:R`2`,n:`A half turn.`}
+],{title:'The slides · fewer · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'illegal',t:R`n!\,?`,n:`Only for triangles.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

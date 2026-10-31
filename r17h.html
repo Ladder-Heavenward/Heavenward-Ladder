@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Logs and exponents by hand</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r17concl.html">← 17·∎ conclusion</a><a href="r17i.html">next: 17i slopes of e and ln →</a></p>
+  <div class="tags"><span class="tag tech">17h · technique</span></div>
+  <h1>Logs and exponents by hand</h1>
+  <p>17a to 17g built ln, exp and pˣ and proved their techniques. This step is about using them. It rewrites an expression in the form a question wants, and solves an equation whose unknown sits in an exponent. It reads the graph of a power or a logarithm off its base and its shifts. And it builds an exponential from two measurements. It ends with the machine that put these techniques in every engineer's pocket for three hundred years: two rulers marked in logs, slid along each other.</p>
+  <p class="gesture">To free an exponent, take a log of both sides. To free a log, raise its base to both sides. Change base by dividing by the logarithm of the new base. Check that every answer is in the domain: logs only of positive numbers. When you divide by a log less than 0, the inequality turns.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r17g.html">17g</a> (real-exponent, log-base-p), <a href="r17c.html">17c</a> (log-of-a-product, log-of-a-quotient, log-of-a-power), <a href="r17a.html">17a</a> (log-rises), <a href="r17e.html">17e</a> (exp), <a href="r08d.html">8d</a> (order), <a href="r08i.html">8i</a> (the quadratic formula). <a href="r17j.html">17j</a> uses these techs on growth and decay.</p></div>
+</header>
+
+<section class="class step" data-step="17h1">
+  <h2 class="sthead"><span class="stno">17h1</span>Changing base, and rewriting</h2>
+  <p class="stands">Stands on 17g (log-base-p) and 17c (the laws of logs).</p>
+  <p data-pid="b320ff">Change-of-base technique: <b>for p, s &gt; 0, both ≠ 1, and x &gt; 0: logₚ x = logₛ x / logₛ p. In particular logₚ s · logₛ p = 1.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the change-of-base technique">
+\log_a x = \tfrac{\ln x}{\ln a},\ \ \log_b x = \tfrac{\ln x}{\ln b} @@ log-base-p (17g), twice
+\tfrac{\log_b x}{\log_b a} = \tfrac{\ln x / \ln b}{\ln a / \ln b} = \tfrac{\ln x}{\ln a} @@ ln b ≠ 0
+\htmlClass{new}{\log_a x = \tfrac{\log_b x}{\log_b a}} \quad \blacksquare @@ with x = b: logₐ b · log_b a = 1
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: rewriting">
+\log_{10} 6 = \log_{10} 2 + \log_{10} 3 \approx 0.3010 + 0.4771 = 0.7782 @@ log-of-a-product for log₁₀ (log-base-p)
+\log_2 7 = \tfrac{\ln 7}{\ln 2} \approx \tfrac{1.9459}{0.6931} \approx 2.8074 @@ change-of-base with b = e
+8^{2/3} = (2^3)^{2/3} = 2^2 = 4 @@ real-exponent; write both in one base
+\tfrac{9^x}{3^{x+1}} = \tfrac{3^{2x}}{3^{x+1}} = 3^{x-1} @@ real-exponent
+\tfrac12\ln 25 - \ln 10 = \ln 5 - \ln 10 = \ln\tfrac12 @@ log-of-a-power, log-of-a-quotient
+e^{\,\ln 3 + 2\ln x} = 3x^2 @@ adding-becomes-multiplying; exp undoes ln; x &gt; 0
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · changing base · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">17h1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">log₂ 10,  log₁₀ 2 ≈ 0.3010</span></span>Guess log₂ 10 from 2³ = 8 and 2⁴ = 16. <br>Find it by change-of-base.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17h2">
+  <h2 class="sthead"><span class="stno">17h2</span>Equations and inequalities</h2>
+  <p class="stands">Stands on 17h1 and 17a (log-rises).</p>
+  <pre class="lines" data-k="ember" data-label="this step: solving">
+3^{x+1} = 5^x \iff (x + 1)\ln 3 = x\ln 5 @@ take ln of both sides; ln is one to one (log-rises)
+\iff x = \tfrac{\ln 3}{\ln 5 - \ln 3} \approx 2.1507 @@ collect x
+e^{2x} - 5e^x + 6 = 0 \iff (e^x - 2)(e^x - 3) = 0 @@ a quadratic in u = eˣ (8i)
+\iff x = \ln 2 \text{ or } x = \ln 3 @@ eˣ = 2 or eˣ = 3
+\log_2 x + \log_2(x - 2) = 3 \Rightarrow x(x - 2) = 8 \Rightarrow x = 4 @@ log-of-a-product, then raise 2 to both sides; x = −2 has no log
+0.9^n \lt 0.01 \iff n\ln 0.9 \lt \ln 0.01 \iff n \gt \tfrac{\ln 0.01}{\ln 0.9} \approx 43.7 @@ ln 0.9 &lt; 0, so dividing turns the order (8d); n ≥ 44
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · equations · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17h2.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="27^{2/3},"></span> <span data-tex-inline="4^x \cdot 8^{1 - x},"></span> <span data-tex-inline="\log_3 54 - \log_3 2"></span></span>Simplify each.</li><li><span class="givens"><span data-tex-inline="2^{3x - 1} = 7"></span></span>Solve for x.</li><li><span class="givens"><span data-tex-inline="e^{2x} - 7e^x + 12 = 0"></span></span>Solve for x.</li><li><span class="givens"><span data-tex-inline="0.8^n &lt; 0.05"></span></span>Find the least whole n that fits.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17h3">
+  <h2 class="sthead"><span class="stno">17h3</span>Graphs</h2>
+  <p class="stands">Stands on 17h2 and 17g (the exponent techniques).</p>
+  <p data-pid="2881d1">The graph of pˣ for p &gt; 1 rises through (0, 1) and (1, p). It approaches the line y = 0 as x → −∞ without reaching it. <b>A line approached this way has the accepted name asymptote.</b> For 0 &lt; p &lt; 1 the graph is that of (1/p)ˣ run the other way along x, since pˣ = (1/p)⁻ˣ. logₚ x has the swapped pairs (9d). It passes through (1, 0) and (p, 1), and approaches the line x = 0 as x → 0⁺. e<sup>x − h</sup> + k is eˣ slid h along and k up, with its asymptote at y = k. ln(x − h) is defined only for x &gt; h.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · graphs · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17h3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">y = 2ˣ and y = log₂ x</span></span>Find three points on each, and say how the two lists of points are related. <br>Find the line each graph approaches, and from which side.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17h4">
+  <h2 class="sthead"><span class="stno">17h4</span>From two measurements</h2>
+  <p class="stands">Stands on 17h3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: building an exponential">
+y = A b^t,\ \ y(2) = 800,\ \ y(5) = 1200 @@ a town near Turlock, people in year t
+\tfrac{y(5)}{y(2)} = b^3 = 1.5 \Rightarrow b = 1.5^{1/3} \approx 1.1447 @@ A cancels in the ratio
+A = \tfrac{800}{b^2} \approx 610.5 @@ y(2) = Ab²
+y \approx 610.5 \cdot 1.1447^t = 610.5\,e^{0.1352t} @@ b = e^(ln b), ln b ≈ 0.1352 (17g)
+\begin{aligned}&\text{each year it grows by a factor } 1.1447,\\ &\quad \ \text{about } 14.5\%\end{aligned} @@ the percent growth is b − 1
+  </pre>
+  <p data-pid="4b3481"><b>Two points fix a straight line by their difference and an exponential by their ratio.</b> A third measurement tests which, if either, the data follow.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · two measurements · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17h4.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="y = Ab^t,"></span> <span data-tex-inline="\text{through } (0, 5) \text{ and } (2, 45)"></span></span>Find A and b.</li><li><span class="givens"><span data-tex-inline="\text{year } 1: 400,"></span> <span data-tex-inline="\text{year } 4: 250"></span></span>A salmon count on a creek near Olympia gave these numbers.<br>Find an exponential through both, and its yearly percent change.</li><li><span class="givens"><span data-tex-inline="x = \tfrac{\ln 5}{\ln 2}"></span></span>Write an equation with no logs in it that x solves.</li><li><span class="givens"><span data-tex-inline="y = \log_p x,"></span> <span data-tex-inline="\text{through } (9, 2)"></span></span>Find p.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17h5">
+  <h2 class="sthead"><span class="stno">17h5</span>Two rulers</h2>
+  <p class="stands">Stands on 17h4 and 17c (log-of-a-product).</p>
+  <p data-pid="76d3e1">Mark a ruler so that the number x sits at distance log₁₀ x from its left end: 1 at 0, 10 at 1, 2 at 0.301. Slide a second, identical ruler along it until its 1 sits over p on the first. Then q on the second sits over the point at distance log p + log q = log(pq) on the first, which is marked pq. <b>A product is read off by adding two lengths.</b> Its accepted name is the slide rule.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · two rulers · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · two rulers marked in logs, and an exponent set free</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="lbl">two log scales: slide the lower one</div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">p</span><input type="range" id="ka" min="1" max="10" step="0.01" value="2"><output id="oa"></output></div>
+      <div class="kn"><span class="m">q</span><input type="range" id="kb" min="1" max="10" step="0.01" value="3"><output id="ob"></output></div>
+      <div class="cap">Upper ruler fixed; lower ruler slid so its 1 sits under p. Ember cursor: q on the lower ruler, over pq on the upper. Each ruler runs over two lengths of ten, 1 to 100, so every product of two numbers from 1 to 10 is on it.</div>
+    </div>
+    <div class="panel">
+      <div class="lbl">pˣ against a level c: where they meet is logₚ c</div>
+      <canvas id="cvL"></canvas>
+      <div class="kn"><span class="m">c</span><input type="range" id="kc" min="0.1" max="8" step="0.01" value="5"><output id="oc"></output></div>
+      <div class="cap">Ember: pˣ, with p from the first knob. Dashed: the level c. Plum: x = ln c / ln p.</div>
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17h5.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a ruler with x marked at log₁₀ x from the 1</span></span>Find where 2, 3 and 6 sit. <br>Say how sliding one such ruler along another multiplies 2 by 3.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17h6">
+  <h2 class="sthead"><span class="stno">17h6</span>Illegal moves</h2>
+  <p class="stands">Stands on 17h1 to 17h5.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\log_2 x + \log_2(x - 2) = 3 \Rightarrow x = -2\,? @@ log₂(−2) has no value: check the domain
+\tfrac{\ln a}{\ln b} = \ln\tfrac{a}{b}\,? @@ log-of-a-quotient is about the log of a quotient, not a quotient of logs
+0.9^n \lt 0.01 \iff n \lt 43.7\,? @@ ln 0.9 &lt; 0: dividing by it turns the order
+2^x + 2^x = 4^x\,? @@ 2 · 2ˣ = 2ˣ⁺¹; 4ˣ = 2²ˣ
+  </pre>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17h6.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\ln(x - 1) + \ln(x + 1) = \ln 3"></span></span>Solve for x, checking each root against the logs' domain.</li><li><span class="givens"><span data-tex-inline="2^x = -4,"></span> <span data-tex-inline="2^x = x"></span></span>Prove that each has a solution, or that it has none.</li><li><span class="givens"><span data-tex-inline="\text{times } 0, 1, 2, 3:"></span> <span data-tex-inline="\text{first: } 3, 6, 12, 24,"></span> <span data-tex-inline="\text{second: } 3, 6, 9, 12"></span></span>Find which list is exponential.</li><li><span class="givens"><span data-tex-inline="\text{x sits at } \log_{10} x \text{ from the 1}"></span></span>A slide rule is marked this way.<br>Find where 0.1, 0.01 and 0.001 sit, and where 0 would sit.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">17h.4.1</span><span class="tagq">build</span>Make up an equation of your own with the unknown in two exponents on different bases, and solve it.<br>Then make up a log equation of your own with a root you must throw away, and solve it.</div>
+  <div class="chq"><span class="chid">17h.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{rule } 25 \text{ cm long},"></span> <span data-tex-inline="\text{cursor placed to } 0.2 \text{ mm}"></span></span>Find how many decimal places of a reading from the slide rule you can trust.</div>
+  <div class="chq"><span class="chid">17h.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="f(xy) = f(x) + f(y),"></span> <span data-tex-inline="f(10) = 1"></span></span>Prove or refute: f is the log to base 10.</div>
+  <div class="chq"><span class="chid">17h.4.4</span><span class="tagq">seam</span>A teacher showed his pupils a log rule bent into a ring, around 1630. One of them published such a ring rule in 1630 and sold it. The teacher called it theft. The pupil said he had worked it out himself from a single log scale that was already in print. <br>If two people can reach the same device from the same published idea, what does it mean to have invented it?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r17concl.html">← 17·∎ · conclusion</a><a href="r17i.html">17i · slopes of e and ln →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>Oughtred complained in print that a former pupil had taken his circular rule of proportion, made it public as his own invention, and sold it, when he himself had shown it to him years before.</p><cite>William Oughtred, An Apologeticall Epistle (1633); paraphrase</cite></aside>
+  <p>In 17h.4.4, the teacher is William Oughtred, the pupil Richard Delamain, and the single log scale already in print is Edmund Gunter’s.</p>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+/* least and greatest of F.f on [lo, hi]: the ends, F's critical points inside, and a fine sample (exact between critical points for the functions used here) */
+function ext(F,lo,hi){ if(F.dir) return [0,1]; let m=Infinity,M=-Infinity; const t=x=>{ const v=F.f(x); if(v<m) m=v; if(v>M) M=v; };
+  t(lo); t(hi); (F.crit||[]).forEach(c=>{ if(c>lo&&c<hi) t(c); }); for(let k=1;k<64;k++) t(lo+(hi-lo)*k/64); return [m,M]; }
+function sums(F,pts){ let L=0,U=0; const ms=[],Ms=[]; for(let i=1;i<pts.length;i++){ const [m,M]=ext(F,pts[i-1],pts[i]), w=pts[i]-pts[i-1]; ms.push(m); Ms.push(M); L+=m*w; U+=M*w; } return {L,U,ms,Ms}; }
+const eq=(a,b,n)=>Array.from({length:n+1},(_,i)=>a+(b-a)*i/n);
+function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
+function boxes(P,pts,hs,stroke,fill,alpha){ const c=P.ctx; for(let i=1;i<pts.length;i++){ const a=pts[i-1],b=pts[i],h=hs[i-1]; c.globalAlpha=alpha; P.poly([[a,0],[b,0],[b,h],[a,h]],null,fill); c.globalAlpha=1; P.poly([[a,0],[b,0],[b,h],[a,h]],stroke,null,1.2); } }
+function dirDots(P,a,b){ const c=P.ctx; c.fillStyle=col('--ink'); for(let k=0;k<=300;k++){ const x=a+(b-a)*k/300; const y=(k%2)?0:1; c.fillRect(P.X(x)-1,P.Y(y)-1,2,2); } }
+/* shade between the graph of fn and the axis from lo to hi: above in pos colour, below in neg colour */
+function shade(P,fn,lo,hi,pos,neg,alpha){ if(hi<lo){ const t=lo; lo=hi; hi=t; } const c=P.ctx, N=300; c.globalAlpha=alpha==null?0.32:alpha;
+  for(let k=0;k<N;k++){ const x0=lo+(hi-lo)*k/N, x1=lo+(hi-lo)*(k+1)/N, xm=(x0+x1)/2, y=fn(xm); if(!isFinite(y)) continue; P.poly([[x0,0],[x1,0],[x1,fn(x1)],[x0,fn(x0)]],null,y>=0?pos:neg); }
+  c.globalAlpha=1; }
+function rangeOf(fn,lo,hi,pad){ let m=Infinity,M=-Infinity; for(let k=0;k<=400;k++){ const v=fn(lo+(hi-lo)*k/400); if(isFinite(v)){ if(v<m) m=v; if(v>M) M=v; } } if(m>0) m=0; if(M<0) M=0; const p=(M-m)*(pad==null?0.12:pad)||1; return [m-p,M+p]; }
+function chips(el,FN,get,setk,after){ Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===get()) b.className='on'; b.onclick=()=>{ setk(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+const Nw='\\htmlClass{new}';
+function gridFor(sp){ return sp>40?10:sp>16?4:sp>8?2:sp>3?1:sp>1.2?0.5:0.25; }
+function frame2(P,fn,lo,hi,pad){ const w=hi-lo; P.o.x=[lo-0.12*w,hi+0.08*w]; P.o.y=rangeOf(fn,lo,hi,pad==null?0.12:pad); const sx=P.o.x[1]-P.o.x[0], sy=P.o.y[1]-P.o.y[0]; let g=gridFor(sx); while(sy/g>24) g*=2; P.o.grid=g; }
+const num=(f,a,b,n)=>{ n=n||4000; const h=(b-a)/n; let s=0; for(let i=0;i<n;i++) s+=f(a+(i+0.5)*h)*h; return s; };
+/* axes with separate steps across and up */
+function axes2(P,gx,gy){ const c=P.ctx,o=P.o; c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ c.moveTo(P.X(x),P.Y(o.y[0])); c.lineTo(P.X(x),P.Y(o.y[1])); }
+  for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ c.moveTo(P.X(o.x[0]),P.Y(y)); c.lineTo(P.X(o.x[1]),P.Y(y)); } c.stroke();
+  c.strokeStyle=col('--muted'); c.lineWidth=1.3; c.beginPath(); if(o.y[0]<=0&&o.y[1]>=0){ c.moveTo(P.X(o.x[0]),P.Y(0)); c.lineTo(P.X(o.x[1]),P.Y(0)); } if(o.x[0]<=0&&o.x[1]>=0){ c.moveTo(P.X(0),P.Y(o.y[0])); c.lineTo(P.X(0),P.Y(o.y[1])); } c.stroke();
+  c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; const ly=Math.min(P.H-6,Math.max(12,P.Y(0)+14));
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ if(Math.abs(x)<1e-9) continue; c.fillText(+x.toFixed(6),P.X(x),ly); }
+  c.textAlign='right'; const lx=Math.max(32,Math.min(P.W-4,P.X(0)-5)); for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ if(Math.abs(y)<1e-9) continue; c.fillText(String(+y.toFixed(6)).replace('-','−'),lx,P.Y(y)+4); } }
+function nice(sp){ const raw=sp/6, p=Math.pow(10,Math.floor(Math.log10(raw))), m=raw/p; return (m<1.5?1:m<3.5?2:m<7.5?5:10)*p; }
+const ka=$('ka'),kb=$('kb'),kc=$('kc'),cvF=$('cvF'),cvL=$('cvL');
+const L10=Math.log10;
+const PF=plane(cvF,{x:[-0.08,2.08],y:[0,1],grid:0,aspect:0.8,draw:P=>drawF(P)});
+const PL=plane(cvL,{x:[-3.2,3.2],y:[-1,8.5],grid:1,aspect:0.8,draw:P=>drawL(P)});
+Object.defineProperty(PF.o,'aspect',{get:()=>cvF.clientWidth>480?0.5:0.62});
+Object.defineProperty(PL.o,'aspect',{get:()=>cvL.clientWidth>480?0.75:0.9});
+function scale(P,off,y0,dir,colr){ const ticks=[]; for(let d=0;d<2;d++){ for(let t=10;t<20;t++) ticks.push([d+L10(t/10),t/10,d,t%10===0]); for(let t=4;t<20;t++) ticks.push([d+L10(t/2),t/2,d,t%2===0]); } ticks.push([2,1,2,true]);
+  P.poly([[off,y0],[off+2,y0],[off+2,y0+0.22*dir],[off,y0+0.22*dir]],'--muted',null,1);
+  ticks.forEach(([u,k,d,major])=>{ const x=off+u; if(x<-0.08||x>2.08) return; P.line(x,y0,x,y0+(major?0.09:0.045)*dir,colr,major?1.4:0.8);
+    if(major&&[1,2,3,5].includes(k)) P.text(String(k*Math.pow(10,d)),x,y0+0.15*dir,colr,'center',10); }); }
+function drawF(P){ const a=+ka.value, b=+kb.value, la=L10(a); P.ctx.clearRect(0,0,9999,9999);
+  scale(P,0,0.55,1,'--ink'); scale(P,la,0.52,-1,'--teal'); const x=la+L10(b); P.line(x,0.1,x,0.95,'--ember',2); P.dot(la,0.53,'--teal',4);
+  P.text('fixed',1,0.92,'--muted','center',10); P.text('slid by log p',la+1,0.08,'--teal','center',10); }
+function drawL(P){ const a=+ka.value, c=+kc.value; axes2(P,1,1); P.line(-3.2,c,3.2,c,'--muted',1.4,[6,4]); curve(P,x=>Math.pow(a,x),'--ember',2.6,-3.2,3.2);
+  if(Math.abs(a-1)>0.004){ const x=Math.log(c)/Math.log(a); if(Math.abs(x)<3.2) P.dot(x,c,'--plum',5); } }
+function read(){ const a=+ka.value, b=+kb.value, c=+kc.value; $('oa').textContent=mm(a,2); $('ob').textContent=mm(b,2); $('oc').textContent=mm(c,2);
+  const ab=a*b, x=Math.abs(a-1)>0.004?Math.log(c)/Math.log(a):null; const vd=$('vdF'); vd.className='verdict';
+  vd.textContent='log '+mm(a,2)+' + log '+mm(b,2)+' = '+mm(L10(a),4)+' + '+mm(L10(b),4)+' = '+mm(L10(ab),4)+', the mark for '+mm(ab,3)+'. '+(x===null?'With p = 1, pˣ = 1 for every x: no log to base 1.':'On the right, '+mm(a,2)+'ˣ = '+mm(c,2)+' at x = ln '+mm(c,2)+' / ln '+mm(a,2)+' ≈ '+mm(x,4)+(Math.abs(x)>=3.2?', off the picture.':'.'));
+  tex($('eqF'),x===null?R`\log_{10} ${mm(a,2)} + \log_{10} ${mm(b,2)} = \log_{10} ${mm(ab,3)}`:R`\begin{gathered}\log_{10} ${mm(a,2)} + \log_{10} ${mm(b,2)} = \log_{10} ${mm(ab,3)}\\ \log_{${mm(a,2)}} ${mm(c,2)} = \tfrac{\ln ${mm(c,2)}}{\ln ${mm(a,2)}} \approx ${mm(x,4)}\end{gathered}`,true); }
+function all(){ PF.redraw(); PL.redraw(); read(); }
+[ka,kb,kc].forEach(e=>e.addEventListener('input',all));
+window.__pic={set:(a,b,c)=>{ ka.value=a; kb.value=b; kc.value=c; all(); return {pos:+(L10(a)+L10(b)).toFixed(5),prod:+L10(a*b).toFixed(5),x:+(Math.log(c)/Math.log(a)).toFixed(5),check:+Math.pow(a,Math.log(c)/Math.log(a)).toFixed(5)}; }};
+all();
+stepper('#sl1',[
+  {k:'ember',kl:'change-of-base',t:R`${Nw}{\log_a x = \tfrac{\log_b x}{\log_b a}}`,n:`Both are ln x over a ln.`},
+  {k:'ember',kl:'rewriting',t:R`\log_2 7 = \tfrac{\ln 7}{\ln 2} \approx 2.8074`,n:`change-of-base with b = e.`},
+  {k:'ember',kl:'one base',t:R`\tfrac{9^x}{3^{x+1}} = 3^{x-1}`,n:`9 = 3².`}
+],{title:'The slides · changing base · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'an exponent freed',t:R`3^{x+1} = 5^x \Rightarrow x = \tfrac{\ln 3}{\ln 5 - \ln 3}`,n:`ln of both sides.`},
+  {k:'ember',kl:'a quadratic in eˣ',t:R`e^{2x} - 5e^x + 6 = 0`,n:`eˣ = 2 or 3.`},
+  {k:'ember',kl:'the domain',t:R`\log_2 x + \log_2(x - 2) = 3 \Rightarrow x = 4`,n:`x = −2 has no log.`},
+  {k:'ember',kl:'the order turns',t:R`0.9^n \lt 0.01 \iff n \gt 43.7`,n:`ln 0.9 < 0.`}
+],{title:'The slides · equations · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'graphs',t:R`a^x \to 0 \text{ as } x \to -\infty`,n:`An asymptote at y = 0, for p > 1.`}
+],{title:'The slides · graphs · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'two measurements',t:R`b^3 = \tfrac{1200}{800}`,n:`The ratio fixes b.`}
+],{title:'The slides · two measurements · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'the slide rule',t:R`\log a + \log b = \log ab`,n:`Add lengths, multiply numbers.`},
+  {k:'ember',kl:'who invented it',t:R`1630`,n:`Who invented it?`}
+],{title:'The slides · two rulers · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'illegal',t:R`\tfrac{\ln a}{\ln b} \ne \ln\tfrac{a}{b}`,n:`A quotient of logs.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

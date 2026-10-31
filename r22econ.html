@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How far does one dollar of spending go?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r22crypt.html">← 22·crypt can two files have the same fingerprint?</a><a href="r22phys.html">next: 22·phys does a bouncing ball ever stop? →</a></p>
+  <div class="tags"><span class="tag econ">22·econ · economics</span></div>
+  <h1>How far does one dollar of spending go?</h1>
+  <p>How far does one dollar of spending go? When a mill in Port Angeles pays its crews, the wages do not stop there. A sawyer buys groceries. The grocer pays a clerk. The clerk pays rent, and the landlord hires a roofer. The same dollar keeps moving from hand to hand. In the early 1930s, with about a quarter of American workers out of a job, people asked whether a government that spends one dollar starts more than one dollar of spending. What makes it hard is that the rounds never end. Each one is smaller than the last, but there is no last one. This page shows, with 15i’s endless ratio sums and 22e’s geometric yardstick, what the whole chain of rounds adds up to, where the money goes when it stops moving, and what happens when the share spent changes from round to round.</p>
+  <p class="gesture">Each person who receives a dollar spends part of it nearby. The rest leaks away, into savings, into taxes, or into goods made far off. If the part spent is the same at every round, the rounds form an endless ratio sum, and its total is one over the part that leaks. Every cent of the first dollar ends in some leak, so the leaks add up to exactly the dollar. If the part spent changes from round to round but stays under a ceiling, the geometric yardstick still caps the total.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r15i.html">15i</a> (finite and endless ratio sums), <a href="r22d.html">22d</a> (a sum is where its partial sums settle), <a href="r22e.html">22e</a> (compare with a geometric sum), <a href="r22a.html">22a</a> (a climb under a ceiling arrives) and <a href="r15econ.html">15·econ</a> (the ledger of a loan). 27·econ follows the rounds through every industry at once.</p></div>
+</header>
+
+<section class="class step" data-step="22econ1">
+  <h2 class="sthead"><span class="stno">22econ1</span>Round after round</h2>
+  <p class="stands">Stands on 15i (finite-ratio-sum, endless-ratio-sum) and 22d (a sum is where its partial sums settle).</p>
+  <p data-pid="237031">A dollar is spent at a shop. The shop’s owners and workers receive it. Suppose each person who receives money spends a fixed share c of it nearby, with 0 ≤ c &lt; 1. Round 0 is the first dollar. Round 1 is c, round 2 is c², and round k is cᵏ. The spending after n rounds is a partial sum, and the whole chain is the endless sum (22d).</p>
+  <pre class="lines" data-k="ember" data-label="this page: the round technique">
+s_n = 1 + c + c^2 + \cdots + c^{n-1} = \tfrac{1 - c^n}{1 - c} @@ finite-ratio-sum (15i)
+c^n \to 0 @@ 0 ≤ c &lt; 1: small-powers-vanish (15i)
+\htmlClass{new}{1 + c + c^2 + \cdots = \tfrac{1}{1 - c}} \quad \blacksquare @@ endless-ratio-sum (15i): the total is where the sₙ settle (22d)
+  </pre>
+  <p data-pid="070ff5">Round technique: <b>if every round spends the same share c of the round before, one first dollar becomes 1/(1 − c) dollars of spending in all.</b> Its accepted name is the multiplier.</p>
+  <pre class="lines" data-k="ember" data-label="this page: c = 0.8, round by round">
+1,\ 0.8,\ 0.64,\ 0.512,\ 0.4096,\ \ldots @@ each round 0.8 of the last
+s_5 = \tfrac{1 - 0.8^5}{0.2} = 5\,(1 - 0.32768) = 3.3616 @@ after five rounds, two thirds of the way
+\htmlClass{new}{\tfrac{1}{1 - 0.8} = 5} @@ the whole chain
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · rounds · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · the rounds of one dollar</div>
+    <div class="kn"><span class="m">c</span><input type="range" id="kc" min="0" max="0.95" step="0.01" value="0.8"><output id="oc"></output></div>
+    <div id="pl"></div>
+    <div class="cap">Ember bars: each round’s spending, cᵏ, for the first 20 rounds. Ink: the running total sₙ. Teal dashes: the whole chain, 1/(1 − c).</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">22·econ.1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="c = 0.75"></span></span>Find the total spending from one dollar. <br>Find the spending after four rounds, and its share of the total.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22econ2">
+  <h2 class="sthead"><span class="stno">22econ2</span>Where the dollar leaks</h2>
+  <p class="stands">Stands on 22·econ.1 and 15·econ (the ledger).</p>
+  <p data-pid="057576">The share not spent nearby leaks out of the chain. Of each dollar received, a share s is saved, a share t goes in taxes, and a share m buys goods made far away. What is left is spent nearby. Write L = s + t + m for the whole leak.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the leak technique">
+c = 1 - L @@ every cent is spent nearby, or leaks
+\htmlClass{new}{\tfrac{1}{1 - c} = \tfrac{1}{L}} \quad \blacksquare @@ the round technique
+  </pre>
+  <p data-pid="a3202f">Leak technique: <b>the total is one over the share that leaks at each round.</b> A small town leaks more than a country, because more of what it buys is made somewhere else. Suppose a household in Forks, on the Olympic Peninsula, saves 0.05 of each new dollar, pays 0.15 in taxes, and spends 0.50 on goods made outside the town. Then L = 0.70, and the town sees 1/0.7 ≈ 1.43 dollars of spending from each dollar. For the United States as a whole, rough shares are s = 0.05, t = 0.25 and m = 0.15. Then L = 0.45, and the total is about 2.2.</p>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · the ledger</div>
+    <p data-pid="22169d">15·econ kept a loan’s ledger: every line paid for, and the books closing at 0. Keep the dollar’s ledger the same way. At round k, cᵏ is received and L cᵏ leaks. The leaks over all rounds add to L(1 + c + c² + ⋯) = L/(1 − c) = L/L = 1.</p>
+    <p data-pid="3110d6"><b>Every cent of the first dollar ends, in full, in some leak.</b></p>
+    <p data-pid="a3e593">So the leaks split the dollar. A share s/L of it ends in savings, t/L in taxes, and m/L in far-off tills. The 5 dollars of spending that c = 0.8 gives are not 5 dollars of new money. They are one dollar, changing hands five times on average.</p>
+    <p class="bait" data-pid="e003ba">In Forks, how much of the first dollar ends in taxes? If the tax share rose to 0.25, would the town’s tax office end up with more of that dollar, or less?</p>
+  </aside>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · leaks · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22·econ.2.1</span><span class="ph undo">undo</span><span class="givens"><span class="gtx">a county where one new dollar becomes 2.5 dollars of spending in all</span> <span data-tex-inline="s = 0.1"></span></span>Find the share that leaks at each round, and the share spent nearby. <br>Find how much of the first dollar ends in savings.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22econ3">
+  <h2 class="sthead"><span class="stno">22econ3</span>Shares that change</h2>
+  <p class="stands">Stands on 22·econ.1, 22e (compare with a geometric sum) and 22a (a climb under a ceiling arrives).</p>
+  <p data-pid="6ff0f7">Real rounds differ. The shop owner may save more than the clerk, and the clerk more than the roofer. Let each round be a share cₖ of the round before, with every cₖ between b and c, where 0 ≤ b ≤ c &lt; 1. Round k is then aₖ = c₀c₁⋯cₖ₋₁, a product of k shares.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the between-shares technique">
+b^k \le a_k \le c^k @@ k factors, each between b and c, all ≥ 0
+a_0 + a_1 + \cdots + a_{n-1} \le \tfrac{1}{1 - c} @@ terms never negative: the partial sums rise, under the yardstick’s total
+\text{the partial sums settle} @@ a climb under a ceiling arrives (22a)
+\htmlClass{new}{\tfrac{1}{1 - b} \le \textstyle\sum_k a_k \le \tfrac{1}{1 - c}} \quad \blacksquare @@ compare with a geometric sum, on both sides (22e)
+  </pre>
+  <p data-pid="a78ece">Between-shares technique: <b>if every round spends between b and c of the round before, the total lies between 1/(1 − b) and 1/(1 − c).</b> Shares anywhere from 0.5 to 0.7 give a total between 2 and about 3.33. The bracket is as wide as the guesses about the shares.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · bracket · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22·econ.3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">shares that alternate: 0.8, 0.6, 0.8, 0.6, …</span></span>Find a bracket for the total by the between-shares technique. <br>Find the exact total, taking the rounds in pairs.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22econ4">
+  <h2 class="sthead"><span class="stno">22econ4</span>A tax cut starts one round later</h2>
+  <p class="stands">Stands on 22·econ.1 and 15i (sums-are-linear).</p>
+  <p data-pid="abb9e8">A government can spend a dollar itself, or cut a household’s taxes by a dollar. The spent dollar is round 0, at full size. The tax cut hands the household a dollar, and it spends only c of it. So the tax cut’s chain starts at c. A tax raised to pay for spending runs the same chain backwards.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the balanced technique">
+\text{spend a dollar}:\ 1 + c + c^2 + \cdots = \tfrac{1}{1 - c} @@ the round technique
+\text{cut taxes by a dollar}:\ c + c^2 + \cdots = \tfrac{c}{1 - c} @@ the same chain without round 0
+\text{spend a dollar raised by a dollar of tax}:\ \tfrac{1}{1 - c} - \tfrac{c}{1 - c} @@ the tax takes away a tax cut’s chain (sums-are-linear)
+\htmlClass{new}{= \tfrac{1 - c}{1 - c} = 1} \quad \blacksquare @@ whatever c is
+  </pre>
+  <p data-pid="4e7e7f">Balanced technique: <b>a dollar spent and paid for by a dollar of tax adds exactly one dollar of spending, whatever share is spent.</b> Only round 0 survives. Every later round of the spending is cancelled by a round the tax took away.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · tax cut · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22·econ.4.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="c = 0.8"></span></span>Find the total from a one-dollar tax cut. <br>Find the tax cut that gives as much spending as one dollar spent.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22econ5">
+  <h2 class="sthead"><span class="stno">22econ5</span>Illegal moves</h2>
+  <p class="stands">Stands on 22·econ.1 to 22·econ.4.</p>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{total} = \tfrac{1}{c}\,? @@ one over the leak: 1/(1 − c)
+\text{the rounds never end, so the total passes every bound}\,? @@ rounds that shrink by a fixed share below 1 settle (15i)
+\text{the rounds shrink, so the total settles}\,? @@ shrinking is not enough (22d); shrinking by a share below a fixed c is
+c = 1:\ \text{total} = \tfrac{1}{0}\,? @@ nothing leaks; sₙ = n passes every bound
+\text{5 dollars of spending is 5 dollars of new money}\,? @@ it is one dollar, changing hands
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22·econ.5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="c = 1"></span></span>Find the spending after n rounds. <br>Find which line of the round technique breaks.</li><li><span class="givens"><span class="gtx">rounds 1 to 10 each 0.9 of the round before, every later round 0.5 of the round before</span></span>Find the total.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">22·econ.6.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">a town you know</span></span>Build shares s, t and m for its households, with a reason for each. <br>Find its total, and the leak that matters most.</div>
+  <div class="chq"><span class="chid">22·econ.6.2</span><span class="tagq">edge</span>Let c head toward 1. <br>Find what the total does, and how many rounds it takes to reach half of it.</div>
+  <div class="chq"><span class="chid">22·econ.6.3</span><span class="tagq">converse</span>A chain of rounds has total 4. Must every round spend 0.75 of the round before?</div>
+  <div class="chq"><span class="chid">22·econ.6.4</span><span class="tagq">reroute</span>Find the total a second way: after round 0, the rest of the chain is c times a chain just like the whole one, so T = 1 + cT. Solve for T. <br>Find what this skips that the round technique proves, and test it on c = 2.</div>
+  <div class="chq"><span class="chid">22·econ.6.5</span><span class="tagq">seam</span>In a slump, a government borrows a dollar and spends it. One reader holds that the dollar starts a new chain, and spending rises by 1/(1 − c). Another holds that the lender would have spent or lent that dollar anyway, so its chain was already running. Does the borrowed dollar start a new chain?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r22crypt.html">← 22·crypt · can two files have the same fingerprint?</a><a href="r22phys.html">22·phys · does a bouncing ball ever stop? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The total 1/(1 − c) is the multiplier, and c is the marginal propensity to consume. The shares s, t and m are the marginal propensities to save, to pay in tax and to import; together they are leakages. The first dollar spent is an injection. The balanced technique is the balanced-budget multiplier. A multiplier for one town or county is a local multiplier. When a government’s borrowing takes the place of private spending, that is crowding out.</p>
+  <h3>Who said it first</h3>
+  <p>Richard Kahn (1931) counted the jobs that one new public-works job starts, round after round, as a ratio sum. John Maynard Keynes made it a multiplier of spending in the General Theory (1936). Trygve Haavelmo (1945) found the balanced-budget multiplier of 1. In 22·econ.6.5, the British Treasury’s view of 1929 held that public spending only moves money that would have been spent anyway; Kahn and Keynes answered it, and Robert Barro (1974) reopened the question with households who save for the taxes to come. Measured national multipliers vary widely, mostly between about one half and two. Enrico Moretti (2010) found that each new high-tech job in an American city brings about five more local jobs.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="22·econ: a worked “proof”, not allowed">
+c = 0.8 @@ fine
+\text{total} = \tfrac{1}{0.8} = 1.25 @@ not allowed: the total is one over the leak, 1/(1 − 0.8)
+\text{so a dollar spent adds a quarter more} @@ false: it adds 4 dollars more, 5 in all
+  </pre>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+const V=c=>'var('+c+')';
+function draw(){ const c=+$('kc').value; $('oc').textContent=fm(c,2);
+  const W=340,H=200,ox=30,oy=180,N=20,T=1/(1-c), top=Math.max(T,2)*1.08, sy=v=>oy-v/top*165, bw=(W-ox-10)/N;
+  let h='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;max-width:420px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  h+='<line x1="'+ox+'" y1="'+oy+'" x2="'+W+'" y2="'+oy+'" style="stroke:'+V('--grid')+'"/><line x1="'+ox+'" y1="'+oy+'" x2="'+ox+'" y2="10" style="stroke:'+V('--grid')+'"/>';
+  h+='<line x1="'+ox+'" y1="'+sy(T)+'" x2="'+W+'" y2="'+sy(T)+'" style="stroke:'+V('--teal')+';stroke-width:1.5;stroke-dasharray:5 4"/>';
+  h+='<text x="'+(ox-4)+'" y="'+(sy(T)+4)+'" text-anchor="end" style="font:10px var(--mono);fill:'+V('--teal')+'">'+fm(T,2)+'</text>';
+  h+='<text x="'+(ox-4)+'" y="'+(sy(1)+4)+'" text-anchor="end" style="font:10px var(--mono);fill:'+V('--muted')+'">1</text>';
+  let s=0, pts=[];
+  for(let k=0;k<N;k++){ const a=Math.pow(c,k); s+=a; const x=ox+k*bw;
+    h+='<rect x="'+(x+2)+'" y="'+sy(a)+'" width="'+(bw-4)+'" height="'+(oy-sy(a))+'" style="fill:'+V('--ember')+';fill-opacity:.55"/>';
+    pts.push((x+bw/2)+','+sy(s)); }
+  h+='<polyline points="'+pts.join(' ')+'" style="fill:none;stroke:'+V('--ink')+';stroke-width:1.6"/>';
+  $('pl').innerHTML=h+'</svg>';
+  const s5=(1-Math.pow(c,5))/(1-c), n90=c===0?1:Math.ceil(Math.log(10)/Math.log(1/c)-1e-9);
+  const v=$('vd'); v.className='verdict';
+  v.textContent='c = '+fm(c,2)+'. Leak '+fm(1-c,2)+'. Total '+fm(T,2)+(T===1?' dollar':' dollars')+'. After 5 rounds: '+fm(s5,2)+', '+fm(100*s5/T,1)+'% of the total. Rounds to reach 90%: '+n90+'.'; }
+$('kc').oninput=draw; draw();
+window.__pic={set:(c)=>{ $('kc').value=c; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'a round',t:R`c^k`,n:`Each round c of the last.`},
+  {k:'ember',kl:'the total',t:R`\htmlClass{new}{\tfrac{1}{1 - c}}`,n:`The whole chain.`}
+],{title:'The slides · rounds · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'the leak',t:R`L = s + t + m`,n:`Saved, taxed, sent away.`},
+  {k:'ember',kl:'the total',t:R`\htmlClass{new}{\tfrac{1}{L}}`,n:`One over the leak.`}
+],{title:'The slides · leaks · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'between',t:R`b^k \le a_k \le c^k`,n:`Each share in [b, c].`},
+  {k:'ember',kl:'the total',t:R`\htmlClass{new}{\tfrac{1}{1 - b} \le \sum a_k \le \tfrac{1}{1 - c}}`,n:`The yardstick, both ways.`}
+],{title:'The slides · bracket · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'a tax cut',t:R`\tfrac{c}{1 - c}`,n:`No round 0.`},
+  {k:'ember',kl:'balanced',t:R`\htmlClass{new}{\tfrac{1}{1-c} - \tfrac{c}{1-c} = 1}`,n:`Whatever c is.`}
+],{title:'The slides · tax cut · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`\tfrac{1}{c}\,?`,n:`One over the leak.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

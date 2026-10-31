@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>15e · Areas add, scale, split</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r15d.html">← 15d the area under x</a><a href="r15f.html">next: 15f every continuous curve has an area →</a></p>
+  <div class="tags"><span class="tag proof">15e · proof</span></div>
+  <h1>Areas add, scale, split</h1>
+  <p>15d found the area under the plainest line by a column of sums. The area under three times the input, plus two, would need another column, and every new function another. This step proves the rules that save the columns. The integral of a sum is the sum of the integrals. A constant factor comes out. An interval cut in two gives two integrals that add. A smaller function has a smaller integral. Each rule is proved on the boxes, one piece at a time, and then passed to the integral by gap-closes. Along the way the integral learns to count a function below the axis as negative.</p>
+  <p class="gesture">On each piece, the least of a sum is at least the sum of the leasts, so the sums sandwich. A constant factor multiplies every height, and a negative one swaps least for greatest. A partition with the cut point in it splits into two. Heights in order give sums in order. The integral inherits all four.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r15c.html">15c</a> (integrable, gap-closes, exactly-one-between), <a href="r15b.html">15b</a> (common refinement, refining-tightens), <a href="r15d.html">15d</a> (∫ᵤᵛ x dx, squeezed-for-every-n), <a href="r08c.html">8c</a> (sup, inf), <a href="r08d.html">8d</a> (order-and-arithmetic-agree), <a href="r08g.html">8g</a> (negative-reverses-order, same-direction-add), <a href="r08h.html">8h</a> (unpack-the-bars, the triangle inequality). <a href="r15f.html">15f</a> uses interval-cut-in-two and smaller-function-smaller-area; <a href="r15h.html">15h</a> computes with all four.</p></div>
+</header>
+
+<section class="class step" data-step="15e1">
+  <h2 class="sthead"><span class="stno">15e1</span>Adding</h2>
+  <p class="stands">Stands on 15c (integrable, gap-closes) and 8g (same-direction-add).</p>
+  <p data-pid="614388">Areas-add technique: <b>if f and g are integrable on [u, v], so is f + g, and ∫ᵤᵛ (f + g) = ∫ᵤᵛ f + ∫ᵤᵛ g.</b> (From here on, the dx may be left off when the letter is clear.)</p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the areas-add technique">
+f(x) + g(x) \ge m_i(f) + m_i(g) \text{ on the } i\text{-th piece} @@ same-direction-add (8g): each is at least its inf
+m_i(f + g) \ge m_i(f) + m_i(g),\ \ M_i(f + g) \le M_i(f) + M_i(g) @@ greatest-lower-bound: a lower bound is at most the inf; no-holes likewise
+L(f, P) + L(g, P) \le L(f + g, P) \le U(f + g, P) \le U(f, P) + U(g, P) @@ order-and-arithmetic-agree with Δxᵢ &gt; 0; add over i; lower-below-upper
+\text{fix } \varepsilon;\ \text{call } P \text{ with both gaps} \lt \tfrac{\varepsilon}{2} @@ gap-closes for f and for g, then the common refinement (refining-tightens)
+U(f + g, P) - L(f + g, P) \lt \varepsilon @@ the line before last, and same-direction-add
+f + g \text{ is integrable} @@ gap-closes
+\textstyle\int (f + g) \text{ and } \int f + \int g \text{ both lie in } [L(f, P) + L(g, P),\ U(f, P) + U(g, P)] @@ each integral lies between its sums
+|\textstyle\int (f + g) - (\int f + \int g)| \lt \varepsilon \text{ for every } \varepsilon \gt 0 @@ two numbers in a window of width less than ε
+\htmlClass{new}{\textstyle\int (f + g) = \int f + \int g} \quad \blacksquare @@ a difference smaller than every positive ε is 0: take ε to be the difference itself (three-way-order on ℝ)
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · areas-add · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · y = x − k on [0, 2]: area above, area below, and a cut at c</div>
+    <div class="panels">
+    <div class="panel">
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">k</span><input type="range" id="kk" min="0" max="2" step="0.05" value="0.5"><output id="ok"></output></div>
+      <div class="kn"><span class="m">c</span><input type="range" id="kc" min="0" max="2" step="0.05" value="1.5"><output id="oc"></output></div>
+      <div class="cap">Teal: where x − k ≥ 0, the area under f⁺. Ember: where x − k &lt; 0; its area is counted by the region under f⁻, which has the same heights above the axis. Plum line: the cut at c, splitting [0, 2] for interval-cut-in-two.</div>
+    </div>
+    <div class="panel">
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">15e1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">∫₀¹ x dx = ½,  ∫₀¹ 1 dx = 1</span></span>Find ∫₀¹ (x + 1) dx by areas-add. <br>Say why x + 1 is integrable.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15e2">
+  <h2 class="sthead"><span class="stno">15e2</span>Scaling</h2>
+  <p class="stands">Stands on 15e1.</p>
+  <p data-pid="7fef05">Areas-scale technique: <b>if f is integrable on [u, v] and c is a number, then cf is integrable and ∫ᵤᵛ cf = c ∫ᵤᵛ f.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the areas-scale technique">
+c \ge 0:\ \ m_i(cf) = c\,m_i(f),\ \ M_i(cf) = c\,M_i(f) @@ order-and-arithmetic-agree: multiplying by c ≥ 0 keeps every bound a bound
+L(cf, P) = c\,L(f, P),\ \ U(cf, P) = c\,U(f, P) @@ spread for times over plus over the sum
+c \lt 0:\ \ m_i(cf) = c\,M_i(f),\ \ M_i(cf) = c\,m_i(f) @@ <span class="hl-new">negative-reverses-order (8g)</span>: a negative factor turns the order about, so the least becomes the greatest
+L(cf, P) = c\,U(f, P),\ \ U(cf, P) = c\,L(f, P) @@ the boxes over f become the boxes under cf
+U(cf, P) - L(cf, P) = |c|\,(U(f, P) - L(f, P)) @@ either case
+\htmlClass{new}{\textstyle\int_a^b cf = c \int_a^b f} \quad \blacksquare @@ gap-closes for integrable; the sup and the inf pass through the factor, swapping when c &lt; 0
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · areas-scale · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15e2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">∫₀² x dx = 2</span></span>Find ∫₀² 5x dx and ∫₀² (−x) dx. <br>Say which case of the proof each uses.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15e3">
+  <h2 class="sthead"><span class="stno">15e3</span>Splitting</h2>
+  <p class="stands">Stands on 15e2 and 15b (refinement).</p>
+  <p data-pid="9404b0">Interval-cut-in-two technique: <b>if u &lt; c &lt; v, then f is integrable on [u, v] exactly when it is integrable on [u, c] and on [c, v], and then ∫ᵤᵛ f = ∫ᵤᶜ f + ∫ᶜᵛ f.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the interval-cut-in-two technique">
+\begin{aligned}&P \text{ a partition of } [a,\\ &\quad b] \text{ with } c \text{ among its points}\end{aligned} @@ any partition gains c by refinement, and refining-tightens only tightens it
+P = P_1 \cup P_2,\ \ P_1 \text{ on } [a, c],\ P_2 \text{ on } [c, b] @@ the points up to c, and from c on
+L(f, P) = L(f, P_1) + L(f, P_2),\ \ U \text{ likewise} @@ the same pieces, summed in two runs
+\text{gap on } [a, b] = \text{gap on } [a, c] + \text{gap on } [c, b] @@ both gaps are never negative, so one is small exactly when both are
+\text{integrable on } [a, b] \;\Leftrightarrow\; \text{on both halves} @@ gap-closes, each way
+\htmlClass{new}{\textstyle\int_a^b f = \int_a^c f + \int_c^b f} \quad \blacksquare @@ both sides lie in [L(f, P), U(f, P)] for every such P; ε as in areas-add
+  </pre>
+  <p class="eqline" data-pid="05a84d">From here on, ∫ₐᵃ f = 0, and for a &lt; b, ∫ᵇₐ f = −∫ₐᵇ f. Then interval-cut-in-two is true for any three points a, b, c of an interval where f is integrable, in any order.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · interval-cut-in-two · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15e3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">∫₀³ f = 10,  ∫₀¹ f = 4</span></span>Find ∫₁³ f. <br>Find ∫₃¹ f, citing the convention.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15e4">
+  <h2 class="sthead"><span class="stno">15e4</span>Order</h2>
+  <p class="stands">Stands on 15e3.</p>
+  <p data-pid="f44c75">Smaller-function-smaller-area technique: <b>if f and g are integrable on [u, v] and f(x) ≤ g(x) for every x there, then ∫ᵤᵛ f ≤ ∫ᵤᵛ g. In particular, if m ≤ f(x) ≤ M on [u, v], then m(v − u) ≤ ∫ᵤᵛ f ≤ M(v − u).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the smaller-function-smaller-area technique">
+g - f \ge 0 \text{ on } [a, b] @@ the hypothesis
+m_i(g - f) \ge 0,\ \ L(g - f, P) \ge 0 @@ 0 is a lower bound; order-and-arithmetic-agree
+\textstyle\int (g - f) \ge 0 @@ the integral is the sup of the lower sums, and one of them is ≥ 0
+\textstyle\int g - \int f \ge 0 @@ areas-add, with areas-scale at c = −1
+\htmlClass{new}{\textstyle\int f \le \int g} \quad \blacksquare @@ order-and-arithmetic-agree; the second claim is the first with constants, ∫ₐᵇ m = m(b − a) (15c)
+  </pre>
+  <p data-pid="b7d4b5">One mathematician proposed that a figure traced in the plane be given a sign by the direction of its tracing, so that an area counts positive one way round and negative the other. Only then, he argued, do the formulas for adding and cutting figures work without exceptions.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · order · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15e4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">1 ≤ f(x) ≤ 3 on [0, 2]</span></span>Bound ∫₀² f from both sides. <br>Name the technique.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15e5">
+  <h2 class="sthead"><span class="stno">15e5</span>Below the axis</h2>
+  <p class="stands">Stands on 15e4.</p>
+  <p data-pid="4215c6">15a's region was defined only for f ≥ 0. For an f that takes both signs, the integral still exists when f is integrable, and the rules say what it counts.</p>
+  <p class="eqline" data-pid="cc2c26">From here on, the positive part of f is f⁺(x) = f(x) where f(x) ≥ 0 and 0 elsewhere; the negative part is f⁻(x) = −f(x) where f(x) &lt; 0 and 0 elsewhere. Then f = f⁺ − f⁻, and both parts are never negative. f⁺ and f⁻ are names, each for a function.</p>
+  <p data-pid="a40f42">Parts-integrable technique: <b>if f is integrable on [u, v], so are f⁺ and f⁻, and ∫ᵤᵛ f = ∫ᵤᵛ f⁺ − ∫ᵤᵛ f⁻.</b> On any piece, two values of f⁺ are never further apart than the matching values of f. They are equal, or one is 0 and the other is no more than the gap. So Mᵢ(f⁺) − mᵢ(f⁺) ≤ Mᵢ(f) − mᵢ(f), and the gap test passes for f⁺ whenever it passes for f. Then f⁻ = f⁺ − f, and areas-add and areas-scale give the rest.</p>
+  <p data-pid="eba7ab"><b>So ∫ᵤᵛ f is the area under f⁺, above the axis, minus the area under f⁻, which measures the part below the axis.</b> Its accepted name is the signed area, or net area. The area between the graph and the axis, both parts counted positive, is ∫ᵤᵛ f⁺ + ∫ᵤᵛ f⁻.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · below the axis · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15e5.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\int_0^3 f = 7,\ \int_0^1 f = 2;"></span> <span data-tex-inline="J = \int_1^3 f"></span></span>Find J.</li><li><span class="givens"><span data-tex-inline="\int_0^5 (f + 2) = 18;"></span> <span data-tex-inline="J = \int_0^5 f"></span></span>Find J.</li><li><span class="givens"><span data-tex-inline="\int_0^2 (x - k)\, dx = 0"></span></span>Find k, and show that the graph of x minus k then has equal areas above and below the axis.</li><li><span class="givens"><span data-tex-inline="\int_3^1 f = 4;"></span> <span data-tex-inline="J = \int_1^3 (2f - 1)"></span></span>Find J.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15e6">
+  <h2 class="sthead"><span class="stno">15e6</span>Worked: no new sums</h2>
+  <p class="stands">Stands on 15e1 to 15e5 and 15d (area under x).</p>
+  <pre class="lines" data-k="ember" data-label="this step: the rules at work">
+\textstyle\int_0^2 (3x + 2)\,dx = 3\int_0^2 x\,dx + \int_0^2 2\,dx @@ areas-add, areas-scale
+= 3 \cdot 2 + 2 \cdot 2 = \htmlClass{new}{10} @@ 15d: (2² − 0²)/2; 15c: a constant
+\textstyle\int_{-1}^{0} x\,dx = -\tfrac12 @@ sums as in 15d.3.1a: Lₙ = −½ − 1/(2n), Uₙ = −½ + 1/(2n)
+\textstyle\int_{-1}^{2} x\,dx = -\tfrac12 + 2 = \tfrac32 = \tfrac{2^2 - (-1)^2}{2} @@ interval-cut-in-two: 15d's formula is true for a &lt; 0 too
+\textstyle\int_0^2 (x - 1)\,dx = 2 - 2 = 0 @@ areas-add, areas-scale: signed area 0
+\text{area between: } \tfrac12 + \tfrac12 = 1 @@ the part below, on [0, 1], counted by f⁻, and the part above, on [1, 2]
+  </pre>
+  <pre class="lines" data-k="teal" data-label="from 15d: a bound with no sums at all">
+0 \le x^2 \le x \text{ on } [0, 1] @@ powers-keep-order (8f): x · x ≤ x · 1 for 0 ≤ x ≤ 1
+0 \le \textstyle\int_0^1 x^2\,dx \le \int_0^1 x\,dx = \tfrac12 @@ smaller-function-smaller-area, if x² is integrable (15f says it is)
+  </pre>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · no new sums · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15e6.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="J = \int_0^4 (5 - 2x)\, dx"></span></span>Find J, naming each rule.</li><li><span class="givens"><span data-tex-inline="f(x) = x \text{ on } [0, 2],"></span> <span data-tex-inline="f(x) = 2 \text{ on } (2, 4]"></span></span>Find the integral of f over its whole domain.</li><li><span class="givens"><span data-tex-inline="J = \int_{-2}^{3} x\, dx"></span></span>Find J.</li><li><span class="givens"><span data-tex-inline="f(x) = 5 - 2x \text{ on } [0, 4]"></span></span>Find the signed area, and the area between the graph and the axis.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15e7">
+  <h2 class="sthead"><span class="stno">15e7</span>Illegal moves</h2>
+  <p class="stands">Stands on 15e1 to 15e6.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\textstyle\int fg = \int f \cdot \int g\,? @@ on [0, 1], ∫ x · x = ⅓, not ½ · ½
+\textstyle\int |f| = |\int f|\,? @@ ∫₀² |x − 1| dx = 1, while |∫₀² (x − 1) dx| = 0
+\textstyle\int_0^2 (x - 1)\,dx = 0, \text{ so no area}\,? @@ that is the signed area; the area between is 1
+\textstyle\int_b^a f = \int_a^b f\,? @@ by the convention it is the negative
+\text{f + g integrable} \Rightarrow \text{f and g are}\,? @@ q + (1 − q) = 1 (15c.3.1a)
+  </pre>
+  <section class="slides" id="sl7"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15e7.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="A = \int_u^v |f|,\ B = \big|\int_u^v f\big|"></span></span>Prove or refute: A and B are always equal.<br>Find which is always at least the other, and prove it from smaller-function-smaller-area.</li><li><span class="givens"><span data-tex-inline="A = \int_u^v fg,\ B = \int_u^v f \cdot \int_u^v g;"></span> <span data-tex-inline="\text{try } f = g = 1 \text{ on } [0, 2]"></span></span>Prove or refute: A and B are always equal.</li><li><span class="givens"><span data-tex-inline="c &lt; 0"></span></span>In areas-scale's proof for negative c, find what goes wrong if the lower sum of c times f is taken to be c times the lower sum of f.</li><li><span class="givens"><span data-tex-inline="f(x) &lt; g(x) \text{ at every } x \text{ of } [u, v]"></span></span>Decide whether the proof of smaller-function-smaller-area gives that the integral of f is strictly less than that of g, and find what it does give.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">15e.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{Bend compared } \int |f| \text{ with } \big|\int f\big|."></span> <span data-tex-inline="f \text{ on } [0, 4],\ \text{never } 0,\ \int_0^4 f = 0;"></span> <span data-tex-inline="A = \int_0^4 |f|,\ B = \big|\int_0^4 f\big|"></span></span>Make such an f of your own.<br>Find A and B.</div>
+  <div class="chq"><span class="chid">15e.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{Claim: } \int_u^v f = \int_u^c f + \int_c^v f,"></span> <span data-tex-inline="u &lt; v &lt; c"></span></span>Using the two conventions, prove the claim, with c outside the interval as given.</div>
+  <div class="chq"><span class="chid">15e.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\int_u^v f = \int_u^v g"></span> <span data-tex-inline="\text{for every } [u, v] \text{ inside } [0, 1]"></span></span>Prove or refute: f and g agree at every input.</div>
+  <div class="chq"><span class="chid">15e.4.4</span><span class="tagq">seam</span><span class="givens"><span data-tex-inline="\int_{-1}^{1} x\, dx = 0"></span></span>In the oldest geometry book that has come down whole, and for two thousand years after, an area was a magnitude, and a magnitude is never negative. In 1827 one mathematician gave areas a sign by the direction a figure is traced, and said the formulas come out right only that way. In this step the given line is true. <br>Is the region between the graph of x and the axis, over that interval, of no area? <br>Is a negative area an area, or a bookkeeping device?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r15d.html">← 15d · the area under x</a><a href="r15f.html">15f · every continuous curve has an area →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>Möbius proposed that a figure traced in the plane be given a sign by the direction of its tracing, so that an area counts positive one way round and negative the other, and argued that only then do the formulas for adding and cutting figures work without exceptions.</p><cite>Möbius, Der barycentrische Calcul (1827); paraphrase</cite></aside>
+  <p>The oldest geometry book of the closer is Euclid’s Elements; the signed areas are August Möbius’s.</p>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+/* least and greatest of F.f on [lo, hi]: the ends, F's critical points inside, and a fine sample (exact between critical points for the functions used here) */
+function ext(F,lo,hi){ if(F.dir) return [0,1]; let m=Infinity,M=-Infinity; const t=x=>{ const v=F.f(x); if(v<m) m=v; if(v>M) M=v; };
+  t(lo); t(hi); (F.crit||[]).forEach(c=>{ if(c>lo&&c<hi) t(c); }); for(let k=1;k<64;k++) t(lo+(hi-lo)*k/64); return [m,M]; }
+function sums(F,pts){ let L=0,U=0; const ms=[],Ms=[]; for(let i=1;i<pts.length;i++){ const [m,M]=ext(F,pts[i-1],pts[i]), w=pts[i]-pts[i-1]; ms.push(m); Ms.push(M); L+=m*w; U+=M*w; } return {L,U,ms,Ms}; }
+const eq=(a,b,n)=>Array.from({length:n+1},(_,i)=>a+(b-a)*i/n);
+function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
+function boxes(P,pts,hs,stroke,fill,alpha){ const c=P.ctx; for(let i=1;i<pts.length;i++){ const a=pts[i-1],b=pts[i],h=hs[i-1]; c.globalAlpha=alpha; P.poly([[a,0],[b,0],[b,h],[a,h]],null,fill); c.globalAlpha=1; P.poly([[a,0],[b,0],[b,h],[a,h]],stroke,null,1.2); } }
+function dirDots(P,a,b){ const c=P.ctx; c.fillStyle=col('--ink'); for(let k=0;k<=300;k++){ const x=a+(b-a)*k/300; const y=(k%2)?0:1; c.fillRect(P.X(x)-1,P.Y(y)-1,2,2); } }
+const kk=$('kk'),kc=$('kc'),cvF=$('cvF');
+const K=()=>+kk.value, C=()=>+kc.value;
+/* ∫ from u to v of (x − k), from 15d's formula and 15c's constants, with ADD and SCL */
+const I=(u,v)=>(v*v-u*u)/2-K()*(v-u);
+const pos=(u,v)=>{ const k=K(); const lo=Math.max(u,k); return v>lo?I(lo,v):0; };
+const neg=(u,v)=>{ const k=K(); const hi=Math.min(v,k); return hi>u?-I(u,hi):0; };
+const PF=plane(cvF,{x:[0,1],y:[0,1],grid:1,aspect:0.8,draw:P=>draw(P)});
+Object.defineProperty(PF.o,'aspect',{get:()=>cvF.clientWidth>480?0.7:0.9});
+function draw(P){ P.o.x=[-0.3,2.3]; P.o.y=[-2.3,2.3]; P.o.grid=0.5; P.axes(); const k=K(), c=P.ctx;
+  c.globalAlpha=0.3; if(k<2) P.poly([[Math.max(0,k),0],[2,0],[2,2-k],[Math.max(0,k),Math.max(0,k)-k]],null,'--teal'); if(k>0) P.poly([[0,0],[Math.min(2,k),0],[Math.min(2,k),Math.min(2,k)-k],[0,-k]],null,'--ember'); c.globalAlpha=1;
+  curve(P,x=>x-k,'--ink',2.6,0,2); P.line(C(),-2.3,C(),2.3,'--plum',2,[5,4]); P.dot(k,0,'--ink',4); }
+function read(){ const k=K(), cc=C(); $('ok').textContent=mm(k,2); $('oc').textContent=mm(cc,2);
+  const S=I(0,2), A=pos(0,2), B=neg(0,2), L=I(0,cc), Rr=I(cc,2);
+  const vd=$('vdF'); vd.className='verdict'+(Math.abs(S)<1e-9?' win':'');
+  vd.textContent='Above: '+mm(A)+'. Below: '+mm(B)+'. Signed area ∫₀² (x − k) dx = '+mm(A)+' − '+mm(B)+' = '+mm(S)+'; area between graph and axis '+mm(A+B)+'.'+(Math.abs(S)<1e-9?' The two parts balance: signed area 0.':'');
+  tex($('eqF'),R`\begin{gathered}\textstyle\int_0^2 (x - ${mm(k,2)})\,dx = 2 - 2(${mm(k,2)}) = ${mm(S)}\\ \textstyle\int_0^{${mm(cc,2)}} = ${mm(L)},\ \ \int_{${mm(cc,2)}}^{2} = ${mm(Rr)}\\ ${mm(L)} + ${mm(Rr)} = ${mm(L+Rr)}\ \ \text{(interval-cut-in-two)}\end{gathered}`,true); }
+function all(){ PF.redraw(); read(); }
+kk.addEventListener('input',all); kc.addEventListener('input',all);
+window.__pic={set:(k,c)=>{ kk.value=k; kc.value=c; all(); return {S:+I(0,2).toFixed(5),A:+pos(0,2).toFixed(5),B:+neg(0,2).toFixed(5),L:+I(0,C()).toFixed(5),R:+I(C(),2).toFixed(5),txt:$('vdF').textContent}; }};
+all();
+/* ---------- slides ---------- */
+const Nw='\\htmlClass{new}';
+stepper('#sl1',[
+  {k:'ember',kl:'areas-add',t:R`${Nw}{\textstyle\int (f + g) = \int f + \int g}`,n:`On each piece, the inf of a sum is at least the sum of the infs.`}
+],{title:'The slides · areas-add · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'areas-scale',t:R`${Nw}{\textstyle\int cf = c\int f}`,n:`For c &lt; 0 the lower boxes of cf are c times the upper boxes of f.`}
+],{title:'The slides · areas-scale · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'interval-cut-in-two',t:R`${Nw}{\textstyle\int_a^b = \int_a^c + \int_c^b}`,n:`Put c among the points; the sum runs in two parts.`},
+  {k:'ember',kl:'conventions',t:R`\textstyle\int_a^a = 0,\ \ \int_b^a = -\int_a^b`,n:`Then interval-cut-in-two is true in any order.`}
+],{title:'The slides · interval-cut-in-two · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'smaller-function-smaller-area',t:R`f \le g \;\Rightarrow\; ${Nw}{\textstyle\int f \le \int g}`,n:`And m(v − u) ≤ ∫ f ≤ M(v − u).`}
+],{title:'The slides · order · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'the parts',t:R`f = f^+ - f^-`,n:`Both never negative.`},
+  {k:'ember',kl:'parts-integrable',t:R`\textstyle\int f = \int f^+ - \int f^-`,n:`The positive part's gaps are no wider than f's.`},
+  {k:'ember',kl:'signed area',t:R`\text{above} - \text{below}`,n:`Net area. The area between counts both as positive.`}
+],{title:'The slides · below the axis · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'no new sums',t:R`\textstyle\int_0^2 (3x + 2)\,dx = 10`,n:`areas-add, areas-scale, 15d, 15c.`},
+  {k:'teal',kl:'from 15d · a bound',t:R`0 \le \textstyle\int_0^1 x^2 \le \tfrac12`,n:`smaller-function-smaller-area, with x² ≤ x on [0, 1]. That x² is integrable is held in trust until 15f.`}
+],{title:'The slides · no new sums · ← → keys work'});
+stepper('#sl7',[
+  {k:'ember',kl:'illegal',t:R`\textstyle\int fg \ne \int f \int g`,n:`Products do not come apart.`}
+],{title:'The slides · illegal · ← → keys work'});
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

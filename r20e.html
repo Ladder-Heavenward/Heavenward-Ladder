@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Two flips</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+.chrow{display:grid;grid-template-columns:4.5em 1fr;gap:6px;align-items:center;font-size:.88rem}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r20d.html">← 20d all three keep distances</a><a href="r20f.html">next: 20f every isometry is at most three flips →</a></p>
+  <div class="tags"><span class="tag proof">20e · proof</span></div>
+  <h1>Two flips</h1>
+  <p>Stand between two mirrors that meet in a corner and you see yourself turned, not flipped. Stand between two that face each other and you see yourself shifted, again and again. This step proves both. Two flips across lines that cross make a turn about the crossing; two flips across parallel lines make a slide. And every turn and every slide can be made this way, so the flips build the other two kinds.</p>
+  <p class="gesture">Flipping across the floor and then across a tilted line through the origin is the turn by twice the tilt. Flipping across two parallel lines is the slide by twice the gap between them. Every turn and every slide is two flips.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r20c.html">20c</a> (the three moves), <a href="r20d.html">20d</a> (they keep distances), <a href="r19c.html">19c</a> (socks and shoes). <a href="r20f.html">20f</a> builds every isometry from flips.</p></div>
+</header>
+
+<section class="class step" data-step="20e1">
+  <h2 class="sthead"><span class="stno">20e1</span>A flip, written out</h2>
+  <p class="stands">Stands on 20c3 (the flip formula).</p>
+  <p data-pid="cba2f6">Take the line through the origin along u = (c, s), with c² + s² = 1. Write the flip formula out, coordinate by coordinate. <b>A flip through the origin is fixed by the pair (c² − s², 2cs).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the flip through the origin, written out">
+F_u(x, y) = 2(cx + sy)(c, s) - (x, y) @@ the flip formula (20c3)
+= \big((2c^2 - 1)x + 2cs\,y,\ \ 2cs\,x + (2s^2 - 1)y\big) @@ share out
+= \big((c^2 - s^2)x + 2cs\,y,\ \ 2cs\,x - (c^2 - s^2)y\big) @@ 1 = c² + s²
+  </pre>
+  <p data-pid="201237">So with p = c² − s² and q = 2cs, F_u(x, y) = (px + qy, qx − py). Compare the turn by (p, q): (px − qy, qx + py). The two differ only in the sign of y.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · written out · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">20e1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="u = (0.6,\ 0.8)"></span></span>Find p and q, and write F_u(x, y) out. <br>Find F_u(1, 0) and F_u(0, 1).</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20e2">
+  <h2 class="sthead"><span class="stno">20e2</span>Lines that cross make a turn</h2>
+  <p class="stands">Stands on 20e1 and 19c1 (socks-and-shoes).</p>
+  <p data-pid="16aa5a">Crossing-flips technique: <b>two flips across lines that cross at a point make a turn about that point.</b> For the floor and then the line along u = (c, s), it is the turn by (c² − s², 2cs).</p>
+  <pre class="lines" data-k="ember" data-label="this step: the crossing-flips technique">
+F_u(F_0(x, y)) = F_u(x, -y) @@ the floor first
+= (px - qy,\ qx + py) @@ 20e1, with −y for y
+= R_{(p,q)}(x, y),\ \ p^2 + q^2 = (c^2 + s^2)^2 = 1 @@ a turn, by (c² − s², 2cs)
+F_v \circ F_u = (F_v \circ F_0) \circ (F_0 \circ F_u) @@ F₀ ∘ F₀ does nothing; regroup
+F_0 \circ F_u = (F_u \circ F_0)^{-1} @@ socks-and-shoes: each flip undoes itself (20c.4.4)
+\htmlClass{new}{F_v \circ F_u = R_v \circ R_u^{-1}} \quad \blacksquare @@ R_u⁻¹ is the turn by (p, −q); and a turn by (p, q) after one by (p′, q′) is the turn by (pp′ − qq′, qp′ + pq′), whose squares add to (p² + q²)(p′² + q′²) = 1
+\text{about another crossing point} @@ slide it to O, flip twice, slide back (20c4)
+  </pre>
+  <p data-pid="27f4e2">Rung 21 shows that the turn by (c² − s², 2cs) is the turn by twice the angle from the floor to u. For now it is enough that it is a turn.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · crossing · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · two flips, one after the other</div>
+    <div class="chrow"><span class="lbl">lines</span><div class="chips" id="chL"></div></div>
+    <div id="pl"></div>
+    <div class="cap">Ink: the flag. Dashed: after the first flip, across the teal line. Ember: after the second, across the plum line. Crossing lines turn the flag; parallel lines slide it.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20e2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">the flip over the floor, then the flip across the line along (0.8, 0.6)</span></span>Guess whether they make a turn or a slide. <br>Find it, and where it sends (1, 0).</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20e3">
+  <h2 class="sthead"><span class="stno">20e3</span>Parallel lines make a slide</h2>
+  <p class="stands">Stands on 20e2 and 20c4 (moves about other points).</p>
+  <p data-pid="b0ae1b">Parallel-flips technique: <b>two flips across parallel lines make a slide, at right angles to the lines, by twice the gap between them.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the parallel-flips technique">
+y = 0,\ \ y = d:\ \ (x, y) \mapsto (x, -y) \mapsto (x, 2d - (-y)) @@ the floor, then the line y = d: (x, y) ↦ (x, 2d − y) (20c4)
+= (x, y + 2d) @@ a slide by (0, 2d)
+\htmlClass{new}{\text{a slide by twice the gap}} \quad \blacksquare @@ any two parallel lines: slide and turn the picture so they are y = 0 and y = d (20b)
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · parallel · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20e3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">the flips across x = 1 and then x = 4</span></span>Find the move they make. <br>Find the move they make in the other order.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20e4">
+  <h2 class="sthead"><span class="stno">20e4</span>Every turn and every slide is two flips</h2>
+  <p class="stands">Stands on 20e2 and 20e3.</p>
+  <p data-pid="f1c602">Two-flips technique: <b>every turn and every slide is two flips.</b> For a slide by v, take two lines at right angles to v, half of |v| apart. For the turn by (a, b) about the origin, take the floor and the line along (c, s) with c² − s² = a and 2cs = b.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the two-flips technique, for turns">
+a \ne -1:\ \ c = \sqrt{\tfrac{1 + a}{2}},\ \ s = \tfrac{b}{2c} @@ then c² − s² = (1 + a)/2 − b²/(2(1 + a)) = a, using b² = 1 − a²
+2cs = b,\ \ c^2 + s^2 = \tfrac{1 + a}{2} + \tfrac{1 - a}{2} = 1 @@ so u = (c, s) is a unit displacement
+a = -1:\ \ (c, s) = (0, 1) @@ the half turn: the floor, then the upright axis
+\htmlClass{new}{R_{(a,b)} = F_u \circ F_0} \quad \blacksquare @@ crossing-flips
+  </pre>
+  <p data-pid="359609">The floor was a free choice. Any line through the origin can be the first flip, with the second turned on from it.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · every turn · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20e4.1</span><span class="ph undo">undo</span><span class="givens"><span class="gtx">the quarter turn about the origin, (x, y) ↦ (−y, x)</span></span>Find two flips that make it, with the floor first. <br>Check them.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20e5">
+  <h2 class="sthead"><span class="stno">20e5</span>Illegal moves</h2>
+  <p class="stands">Stands on 20e1 to 20e4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+F_v \circ F_u = F_u \circ F_v\,? @@ the two orders give a turn and its undo
+\text{two flips make a flip}\,? @@ a turn or a slide; it takes a third to flip again (20g)
+\text{parallel flips slide by the gap}\,? @@ by twice the gap
+\text{the turn by } (c, s) \text{ itself}\,? @@ by (c² − s², 2cs): the line along (c, s) is half way
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20e5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span class="gtx">the flip across one line, done twice</span></span>Find the move.</li><li><span class="givens"><span class="gtx">the floor then y = x,  and y = x then the floor</span></span>Find both moves, and how they are related.</li><li><span class="givens"><span class="gtx">flips across three lines through the origin, one after another</span></span>Find which kind of move they make.</li><li><span class="givens"><span class="gtx">flips across two lines that cross at (1, 1)</span></span>Find which kind of move they make, and the one point it keeps.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">20e.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="(x, y) \mapsto (x + 1,\ -y)"></span></span>Build this move from flips. <br>Find the fewest flips that do it.</div>
+  <div class="chq"><span class="chid">20e.4.2</span><span class="tagq">edge</span>Find every pair of lines through the origin whose two flips make the half turn. <br>Find every pair whose flips make the quarter turn.</div>
+  <div class="chq"><span class="chid">20e.4.3</span><span class="tagq">converse</span>Every turn is two flips. Turn it round: find whether every move made of two flips is a turn.</div>
+  <div class="chq"><span class="chid">20e.4.4</span><span class="tagq">reroute</span>Prove crossing-flips by composing the two formulas of 20e1 directly, without socks-and-shoes.</div>
+  <div class="chq"><span class="chid">20e.4.5</span><span class="tagq">seam</span>A mirror on the wall seems to swap your left and right, but not your head and feet. Philosophers and scientists have argued over why for two thousand years, and in the last century the argument was taken up again in print. <br>Does a mirror swap left and right? <br>If not, what does it swap?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r20d.html">← 20d · all three keep distances</a><a href="r20f.html">20f · every isometry is at most three flips →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The two-flips facts are often stated as: the product of two reflections in intersecting lines is a rotation by twice the angle between them; in parallel lines, a translation by twice the distance between them.</p>
+  <h3>Who said it first</h3>
+  <p>In 20e.4.5, the old version is in Plato's Timaeus and Lucretius; modern rounds include Martin Gardner, The Ambidextrous Universe (1964), Ned Block, “Why do mirrors reverse right/left but not up/down?” (1974), and Richard Gregory, Mirrors in Mind (1997).</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+/* moves of the plane, drawn in SVG, for rung 20 */
+const V=c=>'var('+c+')';
+const FLAG=[[0,0],[0,3],[2,3],[2,2.4],[0.6,2.4],[0.6,1.8],[1.5,1.8],[1.5,1.2],[0.6,1.2],[0.6,0]];
+const M={
+  id:()=>p=>p,
+  slide:(h,k)=>p=>[p[0]+h,p[1]+k],
+  turn:(a,b)=>p=>[a*p[0]-b*p[1],b*p[0]+a*p[1]],
+  stretch:k=>p=>[k*p[0],k*p[1]],
+  flipU:(c,s)=>p=>{ const d=2*(p[0]*c+p[1]*s); return [d*c-p[0],d*s-p[1]]; },              /* across the line through O along (c, s), c² + s² = 1 */
+  flipAt:(q,c,s)=>p=>{ const x=p[0]-q[0],y=p[1]-q[1],d=2*(x*c+y*s); return [q[0]+d*c-x,q[1]+d*s-y]; },
+  turnAt:(q,a,b)=>p=>{ const x=p[0]-q[0],y=p[1]-q[1]; return [q[0]+a*x-b*y,q[1]+b*x+a*y]; },
+  then:(g,f)=>p=>g(f(p))                                                                    /* f first, then g */
+};
+const unit=(x,y)=>{ const r=Math.hypot(x,y); return [x/r,y/r]; };
+const fx=v=>(Math.abs(v)<5e-10?0:v);
+const show=(v,d)=>{ let s=fx(v).toFixed(d==null?2:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return (s==='-0'?'0':s).replace('-','−'); };
+/* shapes: {pts, c, fill, dash, w, open}; dots: {p, c, t}; lines: {p, d, c, dash} */
+function svgPlane(o){ const lo=o.lo==null?-6:o.lo, hi=o.hi==null?6:o.hi, S=300, X=x=>(x-lo)/(hi-lo)*S, Y=y=>S-(y-lo)/(hi-lo)*S;
+  let s='<svg viewBox="0 0 '+S+' '+S+'" style="width:100%;max-width:340px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  for(let g=Math.ceil(lo);g<=hi;g++){ s+='<line x1="'+X(g)+'" y1="0" x2="'+X(g)+'" y2="'+S+'" style="stroke:'+V('--grid')+';stroke-width:'+(g===0?1.6:0.6)+'"/><line x1="0" y1="'+Y(g)+'" x2="'+S+'" y2="'+Y(g)+'" style="stroke:'+V('--grid')+';stroke-width:'+(g===0?1.6:0.6)+'"/>'; }
+  (o.lines||[]).forEach(l=>{ const L=40; s+='<line x1="'+X(l.p[0]-L*l.d[0])+'" y1="'+Y(l.p[1]-L*l.d[1])+'" x2="'+X(l.p[0]+L*l.d[0])+'" y2="'+Y(l.p[1]+L*l.d[1])+'" style="stroke:'+V(l.c||'--teal')+';stroke-width:1.6;stroke-dasharray:'+(l.dash||'5 4')+'"/>'; });
+  (o.shapes||[]).forEach(z=>{ const pts=z.pts.map(p=>X(p[0]).toFixed(1)+','+Y(p[1]).toFixed(1)).join(' ');
+    s+='<'+(z.open?'polyline':'polygon')+' points="'+pts+'" style="fill:'+(z.fill?V(z.c):'none')+';fill-opacity:'+(z.fill?0.28:0)+';stroke:'+V(z.c)+';stroke-width:'+(z.w||2)+(z.dash?';stroke-dasharray:'+z.dash:'')+'"/>'; });
+  (o.dots||[]).forEach(d=>{ s+='<circle cx="'+X(d.p[0])+'" cy="'+Y(d.p[1])+'" r="4" style="fill:'+V(d.c||'--ink')+'"/>'+(d.t?'<text x="'+(X(d.p[0])+7)+'" y="'+(Y(d.p[1])-6)+'" style="fill:'+V(d.c||'--ink')+';font:12px IBM Plex Mono,monospace">'+d.t+'</text>':''); });
+  return s+'</svg>'; }
+function knob(id,lab,min,max,step,val){ return '<div class="kn"><span class="m">'+lab+'</span><input type="range" id="'+id+'" min="'+min+'" max="'+max+'" step="'+step+'" value="'+val+'"><output id="o'+id+'"></output></div>'; }
+function chipRow(el,keys,get,set,after){ el.innerHTML=''; keys.forEach(k=>{ const b=document.createElement('button'); b.type='button'; b.textContent=k; if(k===get()) b.className='on'; b.onclick=()=>{ set(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+
+const LP={'floor, then (0.8, 0.6)':[[[0,0],[1,0]],[[0,0],[0.8,0.6]]],'floor, then y = x':[[[0,0],[1,0]],[[0,0],[Math.SQRT1_2,Math.SQRT1_2]]],
+  'floor, then upright':[[[0,0],[1,0]],[[0,0],[0,1]]],'x = 1, then x = 4':[[[1,0],[0,1]],[[4,0],[0,1]]],'y = −1, then y = 1':[[[0,-1],[1,0]],[[0,1],[1,0]]]};
+let lk='floor, then (0.8, 0.6)';
+function draw(){ const [A,B]=LP[lk]; const f1=M.flipAt(A[0],A[1][0],A[1][1]), f2=M.flipAt(B[0],B[1][0],B[1][1]);
+  $('pl').innerHTML=svgPlane({lo:-7,hi:7,shapes:[{pts:FLAG,c:'--ink',fill:true},{pts:FLAG.map(f1),c:'--muted',dash:'4 3'},{pts:FLAG.map(p=>f2(f1(p))),c:'--ember',fill:true}],lines:[{p:A[0],d:A[1]},{p:B[0],d:B[1],c:'--plum'}]});
+  const o=f2(f1([0,0])), e=f2(f1([1,0])); const cross=Math.abs(A[1][0]*B[1][1]-A[1][1]*B[1][0])>1e-9;
+  const v=$('vd'); v.className='verdict'; v.textContent=(cross?'The lines cross: a turn. ':'The lines are parallel: a slide. ')+'(0, 0) goes to ('+show(o[0])+', '+show(o[1])+') and (1, 0) to ('+show(e[0])+', '+show(e[1])+'). The flag reads the same way round.'; }
+chipRow($('chL'),Object.keys(LP),()=>lk,k=>lk=k,draw); draw();
+window.__pic={set:k=>{ lk=k; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'a flip',t:R`\htmlClass{new}{F_u(x, y) = (px + qy,\ qx - py)}`,n:`p = c² − s², q = 2cs.`}
+],{title:'The slides · written out · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'crossing flips',t:R`\htmlClass{new}{F_u \circ F_0 = R_{(c^2 - s^2,\ 2cs)}}`,n:`A turn about the crossing.`}
+],{title:'The slides · crossing · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'parallel flips',t:R`\htmlClass{new}{(x, y) \mapsto (x, y + 2d)}`,n:`Twice the gap.`}
+],{title:'The slides · parallel · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'two flips',t:R`\htmlClass{new}{R_{(a,b)} = F_u \circ F_0}`,n:`c² − s² = a, 2cs = b.`}
+],{title:'The slides · every turn · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`F_vF_u \ne F_uF_v`,n:`A turn and its undo.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>15·econ · What is a payment next year worth today?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r15chem.html">← 15·chem why does a squeezed gas push back?</a><a href="r15eng.html">next: 15·eng how hard does water push on a dam? →</a></p>
+  <div class="tags"><span class="tag econ">15·econ · economics</span></div>
+  <h1>What is a payment next year worth today?</h1>
+  <p>What is a payment next year worth today? Less than the same payment now: money in hand can be lent out and come back with interest. People have argued about how much less for as long as there has been lending. Every loan, lease, pension and lottery prize turns on it. It is hard for two reasons. A deal is a stream of payments spread over years, and a stream is many numbers at once. And the rate that turns later money into money now is a guess about the years to come. This page shows that interest is a step that multiplies, so a stream of equal payments is 15i's geometric sum. Then it runs the sum backwards to find the true rate hidden in a deal.</p>
+  <p class="gesture">At a yearly rate, money grows by the factor one plus the rate each year, so a payment due later is worth itself divided by that factor once for each year. A run of equal payments is worth a geometric sum of such pieces now. Equal payments forever are worth one payment divided by the rate. A deal's true rate is the rate at which its payments are worth its price; halving traps it.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r15i.html">15i</a> (finite-ratio-sum, endless-ratio-sum, small-powers-vanish, power-of-one-plus), <a href="r15g.html">15g</a> (sums-are-linear), <a href="r12a.html">12a</a> (in-between-value), <a href="r12e.html">12e</a> (halving-traps), <a href="r11b.html">11b</a> (continuous sums and quotients), <a href="r08f.html">8f</a> (powers-keep-order), <a href="r04b.html">4b</a> (induction), <a href="r14econ.html">14·econ</a> (a plant's books). <a href="r15stat.html">15·stat</a> reads chance as an area; rung 17 lets interest be added every instant.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · read it through, then work the picture and the slides</div>
+
+  <h3>Interest is a step that multiplies</h3>
+  <p data-pid="25bacd">A credit union in Salinas pays a rate i a year on savings: each year it adds i times what is in the account. Start with B₀ dollars, and write Bₙ for the balance after n years.</p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this page: interest that multiplies">
+B_{n+1} = B_n + iB_n = (1 + i)B_n @@ a year's interest is i times what is there
+\htmlClass{new}{B_n = (1 + i)^n B_0} @@ induction (4b)
+1000 \cdot 1.04^{10} \approx 1480.24 @@ $1000 at 4% for ten years
+(1 + i)^n \ge 1 + ni @@ power-of-one-plus (15i): interest on interest never loses to interest on the start alone
+  </pre>
+  <p data-pid="30b0f1">A bank that quotes 6% a year and adds it monthly adds 0.5% each month. After a year, 1.005¹² ≈ 1.0617: the account has grown 6.17%, not 6%. Power-of-one-plus says this always happens, since (1 + i/12)¹² ≥ 1 + i. The 6% has the accepted name the annual percentage rate; the 6.17% is the effective annual rate.</p>
+
+  <h3>Money later, counted now</h3>
+  <p data-pid="9551e1">What is $1000 due in a year worth today? The amount V that, saved at i, grows to $1000 in a year: V(1 + i) = 1000. Run the multiplying step backwards.</p>
+  <pre class="lines" data-k="ember" data-label="this page: present value">
+V(1 + i)^n = A @@ V now grows to A in n years
+\htmlClass{new}{V = \tfrac{A}{(1 + i)^n} = A(1 + i)^{-n}} @@ divide by (1 + i)ⁿ, positive
+\tfrac{10\,000}{1.05^{6}} \approx 7462.15 @@ $10 000 due in 6 years, at 5%
+  </pre>
+  <p data-pid="0fd8a0"><b>A payment A due in n years is worth A/(1 + i)ⁿ today.</b> Its accepted name is the present value, and i is then called the discount rate. Present values are amounts on the same day, so they add. The price of a stream of payments is the sum of their present values.</p>
+
+  <h3>A stream of equal payments: 15i's sum</h3>
+  <p data-pid="a01d23">A loan of L is paid back by n equal payments M, one at the end of each month, at a monthly rate j. The loan is fair when the payments are worth L today. Write v = 1/(1 + j).</p>
+  <pre class="lines" data-k="ember" data-label="this page: what equal payments are worth">
+V = \textstyle\sum_{k=1}^{n} M v^k = Mv\sum_{k=0}^{n-1} v^k @@ sums-are-linear (15g)
+= Mv\,\tfrac{1 - v^n}{1 - v} @@ finite-ratio-sum (15i), ratio v ≠ 1
+\htmlClass{new}{V = M\,\tfrac{1 - (1 + j)^{-n}}{j}} @@ v/(1 − v) = 1/j
+M = \tfrac{Lj}{1 - (1 + j)^{-n}} @@ set V = L and solve for M
+  </pre>
+  <p data-pid="fcc4b8">A $600 000 loan for a house in Salinas, over 30 years at 6% a year, has n = 360 and j = 0.005. Then M ≈ $3597.30 a month. The 360 payments add to about $1 295 029, so about $695 029 of it is interest. The first payment is mostly interest: 0.005 × 600 000 = $3000 of it, and only $597.30 comes off the loan.</p>
+  <p data-pid="a27364">Payments that never stop have an endless sum. If |v| &lt; 1, endless-ratio-sum gives it a total.</p>
+  <pre class="lines" data-k="ember" data-label="this page: payments forever">
+\textstyle\sum_{k=1}^{\infty} A(1 + i)^{-k} = \tfrac{A}{1 + i}\cdot\tfrac{1}{1 - \frac{1}{1 + i}} @@ endless-ratio-sum, ratio 1/(1 + i) &lt; 1 for i &gt; 0
+\htmlClass{new}{= \tfrac{A}{i}} @@ $5000 a year forever, at 4%: $125 000
+  </pre>
+  <p data-pid="7d8064">Payments that grow make a geometric sum too. In November 2022, a Powerball jackpot won in California was offered two ways. One was about $2.04 billion in 30 yearly payments, the first at once and each 5% bigger than the last. The other was about $997.6 million in cash. The first payment A solves A(1.05³⁰ − 1)/0.05 ≈ 2.04 billion, so A ≈ $30.7 million. At a rate i, the 30 payments are worth A(1 − r³⁰)/(1 − r) today, with r = 1.05/(1 + i). At i = 5%, r = 1 and they are worth 30A ≈ $921 million, less than the cash. The two offers are worth the same at a rate near 4.4% a year.</p>
+
+  <h3>The true rate of a deal</h3>
+  <p data-pid="71ecad">A dealer in Salinas sells a $20 000 pickup for $2000 down and 48 monthly payments of $450. That lends the buyer $18 000. At what monthly rate j are 48 payments of $450 worth $18 000? Write A(j) = Σₖ₌₁⁴⁸ (1 + j)⁻ᵏ. The rate solves 450 A(j) = 18 000, that is, A(j) = 40.</p>
+  <pre class="lines" data-k="ember" data-label="this page: trapping the true rate">
+A \text{ is continuous on } [0, 0.01] @@ continuous sums and quotients (11b)
+A \text{ falls as } j \text{ rises} @@ powers-keep-order: each (1 + j)⁻ᵏ falls; so at most one rate works
+A(0) = 48 \gt 40,\ \ A(0.01) \approx 37.97 \lt 40 @@ in-between-value (12a): some j in between has A(j) = 40
+A(0.005) \approx 42.58,\ \ A(0.0075) \approx 40.19 @@ halving-traps (12e): the trap is [0.0075, 0.01]
+A(0.00875) \approx 39.06,\ \ A(0.008125) \approx 39.62 @@ the trap is [0.0075, 0.008125]
+\text{ten halvings}:\ \ \htmlClass{new}{j \approx 0.0077} @@ the trap is less than 0.00001 wide
+(1.0077)^{12} \approx 1.0964 @@ about 9.6% a year
+  </pre>
+  <p data-pid="b3fe4c"><b>A deal's true rate is the rate at which its payments are worth its price.</b> Its accepted name is the internal rate of return. On a loan, the 12j ≈ 9.24% is the rate lenders in the United States must print, the annual percentage rate.</p>
+
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · the ledger</div>
+    <p data-pid="b6c82e">0c set beside the first proofs a second kind of care, the ledger: every line is paid for, and nothing is claimed that was not paid for. A loan is a ledger. Each month the lender adds interest, jB, and takes off a payment, M: B₍ₖ₊₁₎ = (1 + j)Bₖ − M. The books close at 0 after the last payment exactly when the payments are worth the loan today.</p>
+    <p data-pid="6feab7"><b>A description whose books don't balance is wrong, even when every sentence in it is true.</b></p>
+    <p data-pid="8e8058">“No interest” is a sentence. The ledger asks where the interest went. Often it is inside the price, and the cash price shows it.</p>
+    <p class="bait" data-pid="9f7095">A furniture store in Marina sells a $1200 sofa for 12 monthly payments of $100, “with no interest”, or for $1100 cash. Where on the ledger is the interest?</p>
+  </aside>
+
+  <h3>Which rung licenses each step</h3>
+  <div class="tablewrap"><table class="tt">
+  <tr><th class="l">step</th><th class="l">licence</th></tr>
+  <tr><td class="l">interest each year or month</td><td class="l">a premise: the bank's terms</td></tr>
+  <tr><td class="l">Bₙ = (1 + i)ⁿB₀</td><td class="l">4b's induction</td></tr>
+  <tr><td class="l">compounding beats simple interest</td><td class="l">15i's power-of-one-plus</td></tr>
+  <tr><td class="l">equal payments, growing payments</td><td class="l">15g's sums-are-linear; 15i's finite-ratio-sum</td></tr>
+  <tr><td class="l">payments forever</td><td class="l">15i's endless-ratio-sum</td></tr>
+  <tr><td class="l">one true rate, and finding it</td><td class="l">8f's powers-keep-order; 12a's in-between-value; 12e's halving-traps</td></tr>
+  </table></div>
+
+  <h3>Illegal moves</h3>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed">
+\$1200 \text{ for } \$1100 \text{ cash: } \tfrac{100}{1100} \approx 9\%\,? @@ the balance falls each month; the true rate is near 17.7% a year
+\text{add payments made in different years}\,? @@ bring each to today first, then add
+6\% \text{ a year as } 0.5\% \text{ a month gives } 6\%\,? @@ 1.005¹² ≈ 1.0617
+\tfrac{1000}{1.05^2} = 1000(1 - 2 \cdot 0.05)\,? @@ 1/1.05² ≈ 0.907, not 0.9
+\begin{aligned}&\text{payments growing faster}\\ &\quad\text{than } i \text{, forever, have a price}\,?\end{aligned} @@ ratio at least 1: endless-ratio-sum says the sum has no total
+  </pre>
+</section>
+
+<section class="pic" id="pic">
+  <div class="eyebrow">The picture · left: a house loan, year by year · right: trapping the pickup deal's true rate</div>
+  <div class="panels">
+    <div class="panel">
+      <div class="lbl">a $600 000 loan: each year's payments, split into interest and loan paid off</div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">rate % a year</span><input type="range" id="ki" min="1" max="12" step="0.25" value="6"><output id="oi"></output></div>
+      <div class="kn"><span class="m">years</span><input type="range" id="kn" min="5" max="40" step="1" value="30"><output id="on"></output></div>
+      <div class="cap">Each bar is one year's 12 payments. Ember: the part that is interest. Teal: the part that pays the loan down. Plum: the balance, with the top of the panel as the whole loan. It closes at 0, as the ledger says it must.</div>
+      <div class="verdict" id="vdF"></div>
+    </div>
+    <div class="panel">
+      <div class="lbl">what 48 payments are worth against the monthly rate j</div>
+      <canvas id="cvS"></canvas>
+      <div class="kn"><span class="m">payment M</span><input type="range" id="kM" min="380" max="560" step="5" value="450"><output id="oM"></output></div>
+      <div class="chips" id="fch"></div>
+      <div class="cap">Ink: M·A(j), the payments' worth today. Gold dashed: the $18 000 lent. Plum band: the trap, which holds the true rate. Each halving keeps the half where the curve crosses gold.</div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+</section>
+
+<section class="slides" id="sl1"><div class="eyebrow">The slides · the multiplying step; compounding; present value; equal payments; the house loan; forever; growing payments; the true rate; halving; the ledger; illegal moves · ← → keys work</div></section>
+
+<section class="sayback">
+  <div class="eyebrow">Say it back · then work it</div>
+  <h2>Questions</h2>
+  <div class="phkey"></div>
+  <ol>
+    <li><span class="qid">15·econ.1</span><span class="gname">Worth now, worth later.</span><span class="gwhy">Do: build the page's pieces.</span>
+      <ol class="sub">
+        <li><span class="qid">15·econ.1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\$5000 \text{ at } 4.5\% \text{ a year,}"></span> <span data-tex-inline="10 \text{ years}"></span></span>Find the balance.</li><li><span class="givens"><span data-tex-inline="\$10\,000 \text{ due in } 6 \text{ years},"></span> <span data-tex-inline="5\% \text{ a year}"></span></span>Find the present value.</li><li><span class="givens"><span data-tex-inline="L = \$400\,000,"></span> <span data-tex-inline="\text{monthly for } 30 \text{ years},"></span> <span data-tex-inline="j = 0.55\% \text{ a month}"></span></span>Find the monthly payment that clears the loan.</li><li><span class="givens"><span data-tex-inline="\$3000 \text{ a year forever,}"></span> <span data-tex-inline="\text{the first a year from now,}"></span> <span data-tex-inline="4\% \text{ a year}"></span></span>Find the present value.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">15·econ.2</span><span class="gname">From the payments back to the rate.</span><span class="gwhy">Undo: run the page's techs backwards.</span>
+      <ol class="sub">
+        <li><span class="qid">15·econ.2.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\$2000 \to \$2662 \text{ in } 3 \text{ years}"></span></span>Find the rate.</li><li><span class="givens"><span data-tex-inline="M = \$386.66,\ 60 \text{ months},"></span> <span data-tex-inline="j = 0.5\% \text{ a month}"></span></span>Find the loan these payments clear.</li><li><span class="givens"><span data-tex-inline="48 \text{ payments of } \$450"></span> <span data-tex-inline="\text{repay } \$18\,000"></span></span>Trap the monthly rate between two numbers a thousandth apart.</li><li><span class="givens"><span data-tex-inline="\$8000 \text{ a year forever,}"></span> <span data-tex-inline="\text{for } \$200\,000"></span></span>Find the fund's rate.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">15·econ.3</span><span class="gname">Where the sums give.</span><span class="gwhy">Bend: find where the techs stop working.</span>
+      <ol class="sub">
+        <li><span class="qid">15·econ.3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="2\% \text{ a month, sold as } 24\% \text{ a year}"></span></span>Find the rate the card charges for a whole year.</li><li><span class="givens"><span data-tex-inline="\$1000 \text{ a year, forever,}"></span> <span data-tex-inline="\text{growing } 5\% \text{ a year;}"></span> <span data-tex-inline="\text{rate } 4\%"></span></span>Find what it is worth today.</li><li><span class="givens"><span data-tex-inline="\text{pay } \$100 \text{ now,}"></span> <span data-tex-inline="\text{receive } \$230 \text{ in a year,}"></span> <span data-tex-inline="\text{pay } \$132 \text{ in two years}"></span></span>Find every true rate of the deal.</li><li><span class="givens"><span data-tex-inline="\text{Guess: money at } r\% \text{ doubles}"></span> <span data-tex-inline="\text{in about } 72/r \text{ years;}"></span> <span data-tex-inline="r = 1,\ 8,\ 36"></span></span>Test the guess at each given r by powers.</li></ol></li>
+      </ol></li>
+    <li class="optgroup"><span class="qid">15·econ.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder challenges that rely on your own making. The page is complete without these; the rung's star needs them.</span>
+      <ol class="sub">
+        <li class="opt"><span class="qid">15·econ.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{Bend's card: } 2\% \text{ a month.}"></span> <span data-tex-inline="B_0 = L,\ B_{k+1} = 1.02B_k - M;"></span> <span data-tex-inline="\text{Claim: } B_k = 1.02^k L - M\tfrac{1.02^k - 1}{0.02}"></span></span>Make a loan of your own on such a card, an amount L and a number n of monthly payments, and find the payment M that clears it.<br>Prove the claim by induction.</li>
+        <li class="opt"><span class="qid">15·econ.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="M = \frac{Lj}{1 - (1 + j)^{-n}},\ j \ne 0"></span></span>Find what M heads to as j heads to zero.</li>
+        <li class="opt"><span class="qid">15·econ.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="B_0 = L,\ B_{k+1} = (1 + j)B_k - M,"></span> <span data-tex-inline="j &gt; 0;"></span> <span data-tex-inline="n \text{ payments of } M"></span> <span data-tex-inline="\text{worth exactly } L \text{ today}"></span></span>Prove or refute: the balance after n payments is zero. Your build's ledger is one case.</li>
+        <li class="opt"><span class="qid">15·econ.4.4</span><span class="tagq">seam</span>In 1928 an economist called it ethically indefensible to count later enjoyments as worth less than earlier ones. In 2006 a government report on the climate counted later harm at about 1.4% a year. An economist's reply the next year argued for a rate near what invested money earns, nearer 4 or 5%. A harm of $1 trillion a hundred years from now is worth about $249 billion today at 1.4%, and about $12 billion at 4.5%. <br>Is a payment to people not yet born worth less than one to us?</li>
+      </ol></li>
+  </ol>
+  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
+</section>
+
+<nav class="nextrung"><a href="r15chem.html">← 15·chem · why does a squeezed gas push back?</a><a href="r15eng.html">15·eng · how hard does water push on a dam? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>Ramsey wrote that to count later enjoyments as worth less than earlier ones is a practice that is ethically indefensible, and that it arises merely from a weakness of the imagination.</p><cite>Frank Ramsey, “A mathematical theory of saving” (1928); paraphrase</cite></aside>
+  <p>Leonardo of Pisa’s Liber Abaci (1202) already worked out what payments to come were worth, for merchants. Richard Witt printed tables of compound interest in London in 1613, and Edmond Halley priced annuities paid for life in 1693. Irving Fisher’s The Theory of Interest (1930) set the rate as a price between now and later. In 15·econ.4.4, the report of 2006 is Nicholas Stern’s, for the British government, and the reply of 2007 is William Nordhaus’s.</p>
+  <p>Accepted names: compound interest; present value; discount rate and discounting; an annuity for equal payments; amortisation for paying a loan down; a perpetuity for payments forever; the effective annual rate; the annual percentage rate (APR); the internal rate of return. The guess of 15·econ.3.1(d) is the rule of 72.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="15·econ: a worked “proof”, not allowed">
+12 \times \$100 = \$1200 \text{ against } \$1100 \text{ cash} @@ fine
+\text{interest } \$100 \text{ on } \$1100 \text{ for a year: about } 9\% @@ not allowed: only the first month owes the whole $1100; the balance falls each month
+\text{so the sofa costs about } 9\% \text{ a year} @@ false: 100 A(j) = 1100 at j ≈ 1.36% a month, about 17.7% a year
+  </pre>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '?'; let s=v.toFixed(d==null?2:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const grp=v=>{ const s=Math.round(v).toString(); return s.replace(/\B(?=(\d{3})+(?!\d))/g,' ').replace('-','−'); };
+const LOAN=600000, LENT=18000, N=48;
+const ki=$('ki'),kn=$('kn'),kM=$('kM'),cvF=$('cvF'),cvS=$('cvS');
+const jm=()=>+ki.value/1200, yrs=()=>+kn.value, Mp=()=>+kM.value;
+const pay=()=>{ const j=jm(), n=12*yrs(); return LOAN*j/(1-Math.pow(1+j,-n)); };
+function ledger(){ const j=jm(), M=pay(); let B=LOAN; const rows=[], bal=[[0,B]];
+  for(let y=0;y<yrs();y++){ let I=0,Pp=0; for(let m=0;m<12;m++){ const i=B*j; I+=i; Pp+=M-i; B=B*(1+j)-M; } rows.push([I,Pp]); bal.push([y+1,Math.max(0,B)]); }
+  return {M,rows,bal,last:B}; }
+const A=j=>{ let s=0; for(let k=1;k<=N;k++) s+=Math.pow(1+j,-k); return s; };
+let trap=[0,0.02], steps=0;
+const PF=plane(cvF,{x:[0,30],y:[0,1],grid:0,aspect:0.8,draw:P=>drawF(P)});
+const PS=plane(cvS,{x:[0,0.02],y:[14000,27000],grid:0,aspect:0.8,draw:P=>drawS(P)});
+[[PF,cvF],[PS,cvS]].forEach(([P,cv])=>Object.defineProperty(P.o,'aspect',{get:()=>cv.clientWidth>480?0.75:0.9}));
+function frame(P,gx,gy,y0){ const c=P.ctx; c.strokeStyle=col('--grid'); c.lineWidth=1; c.beginPath();
+  for(let x=P.o.x[0];x<=P.o.x[1]+1e-12;x+=gx){ c.moveTo(P.X(x),P.Y(P.o.y[0])); c.lineTo(P.X(x),P.Y(P.o.y[1])); }
+  for(let y=Math.ceil(P.o.y[0]/gy)*gy;y<=P.o.y[1]+1e-9;y+=gy){ c.moveTo(P.X(P.o.x[0]),P.Y(y)); c.lineTo(P.X(P.o.x[1]),P.Y(y)); } c.stroke();
+  P.line(P.o.x[0],y0,P.o.x[1],y0,'--muted',1.3); }
+function labels(P,gx,gy,fx,fy){ const c=P.ctx; c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center';
+  for(let x=P.o.x[0]+gx;x<P.o.x[1]-gx*0.05;x+=gx) c.fillText(fx(x),P.X(x),P.Y(P.o.y[0])+14);
+  c.textAlign='left'; for(let y=Math.ceil(P.o.y[0]/gy)*gy;y<=P.o.y[1]+1e-9;y+=gy){ if(Math.abs(y-P.o.y[0])<1e-9||y>P.o.y[1]-(P.o.y[1]-P.o.y[0])*0.05) continue; c.fillText(fy(y),P.X(P.o.x[0])+3,P.Y(y)-3); } }
+let LG=null;
+function drawF(P){ const S=LG||ledger(); const top=12*S.M*1.08; P.o.x=[0,yrs()]; P.o.y=[0,top]; frame(P,5,top/4,0);
+  S.rows.forEach(([I,Pp],y)=>{ P.poly([[y+0.1,0],[y+0.9,0],[y+0.9,Pp],[y+0.1,Pp]],null,'--teal'); P.poly([[y+0.1,Pp],[y+0.9,Pp],[y+0.9,Pp+I],[y+0.1,Pp+I]],null,'--ember'); });
+  const c=P.ctx; c.strokeStyle=col('--plum'); c.lineWidth=2.4; c.beginPath(); S.bal.forEach(([x,b],i)=>{ const yy=top*b/LOAN; i?c.lineTo(P.X(x),P.Y(yy)):c.moveTo(P.X(x),P.Y(yy)); }); c.stroke(); labels(P,5,top/4,x=>x,y=>'$'+Math.round(y/1000)+'k'); }
+function drawS(P){ frame(P,0.0025,2000,14000); labels(P,0.005,2000,x=>+x.toFixed(3),y=>(y/1000)+'k');
+  P.poly([[trap[0],P.o.y[0]],[trap[1],P.o.y[0]],[trap[1],P.o.y[1]],[trap[0],P.o.y[1]]],null,'rgba(140,90,160,0.18)');
+  P.line(0,LENT,0.02,LENT,'--gold',1.4,[6,4]); P.fn(j=>Mp()*A(j),'--ink',2.6);
+  P.dot(trap[0],Mp()*A(trap[0]),'--plum',4); P.dot(trap[1],Mp()*A(trap[1]),'--plum',4); }
+function solve(){ let lo=0,hi=0.05; if(Mp()*A(hi)>LENT||Mp()*A(0)<LENT) return null; for(let k=0;k<60;k++){ const m=(lo+hi)/2; if(Mp()*A(m)>LENT) lo=m; else hi=m; } return lo; }
+function read(){ LG=ledger(); const S=LG, vd=$('vdF'); $('oi').textContent=mm(+ki.value,2)+'%'; $('on').textContent=yrs(); $('oM').textContent='$'+Mp();
+  const tot=S.M*12*yrs(), first=S.rows[0];
+  vd.className='verdict win'; vd.textContent='Payment $'+S.M.toFixed(2)+' a month. In all $'+grp(tot)+', of which $'+grp(tot-LOAN)+' is interest. The first year is '+mm(100*first[0]/(first[0]+first[1]),0)+'% interest. The balance after the last payment: $'+mm(Math.abs(S.last)<0.005?0:S.last,2)+'.';
+  const js=solve(); const w=trap[1]-trap[0];
+  tex($('eqF'),R`\begin{gathered}\text{trap } [${mm(trap[0],6)},\ ${mm(trap[1],6)}],\ \text{width } ${mm(w,6)}\ \ (${steps}\ \text{halvings})\\ ${js===null?R`\text{no rate in } [0, 0.05] \text{ for this } M`:R`j \approx ${mm(js,5)},\ \ 12j \approx ${mm(1200*js,2)}\%,\ \ (1 + j)^{12} - 1 \approx ${mm(100*(Math.pow(1+js,12)-1),2)}\%`}\end{gathered}`,true); }
+function all(){ read(); PF.redraw(); PS.redraw(); }
+ki.addEventListener('input',all); kn.addEventListener('input',all); kM.addEventListener('input',()=>{ trap=[0,0.02]; steps=0; all(); });
+const fch=$('fch');
+const bH=document.createElement('button'); bH.textContent='halve the trap'; bH.onclick=()=>{ const m=(trap[0]+trap[1])/2; const v=Mp()*A(m); if((Mp()*A(trap[0])-LENT)*(v-LENT)<=0) trap=[trap[0],m]; else trap=[m,trap[1]]; steps++; all(); }; fch.appendChild(bH);
+const bR=document.createElement('button'); bR.textContent='start over'; bR.onclick=()=>{ trap=[0,0.02]; steps=0; all(); }; fch.appendChild(bR);
+window.__pic={set:(rate,y,M,h)=>{ ki.value=rate; kn.value=y; kM.value=M; trap=[0,0.02]; steps=0; for(let k=0;k<(h||0);k++) bH.onclick(); all(); return {pay:+pay().toFixed(2),trap:trap.slice(),txt:$('vdF').textContent}; }};
+all();
+/* ---------- slides ---------- */
+const Nw='\\htmlClass{new}';
+stepper('#sl1',[
+  {k:'ember',kl:'the multiplying step',t:R`B_{n+1} = (1 + i)B_n,\ \ ${Nw}{B_n = (1 + i)^n B_0}`,n:`Induction. $1000 at 4% for ten years: $1480.24.`},
+  {k:'ember',kl:'compounding',t:R`(1 + i)^n \ge 1 + ni`,n:`power-of-one-plus. 6% added monthly is 6.17% a year.`},
+  {k:'ember',kl:'present value',t:R`${Nw}{V = A(1 + i)^{-n}}`,n:`The amount now that grows to A. Present values add.`},
+  {k:'ember',kl:'equal payments',t:R`V = M\,\tfrac{1 - (1 + j)^{-n}}{j}`,n:`finite-ratio-sum with ratio 1/(1 + j).`},
+  {k:'ember',kl:'the house loan',t:R`M = \tfrac{600\,000 \cdot 0.005}{1 - 1.005^{-360}} \approx 3597.30`,n:`About $695 029 of interest over 30 years.`},
+  {k:'ember',kl:'forever',t:R`\textstyle\sum_{k=1}^{\infty} A(1 + i)^{-k} = \tfrac{A}{i}`,n:`endless-ratio-sum. $5000 a year at 4%: $125 000.`},
+  {k:'ember',kl:'growing payments',t:R`A\,\tfrac{1 - r^{30}}{1 - r},\ \ r = \tfrac{1.05}{1 + i}`,n:`The 2022 jackpot: the cash and the payments agree near 4.4%.`},
+  {k:'ember',kl:'the true rate',t:R`450\,A(j) = 18\,000`,n:`A falls as j rises, so one rate at most; in-between-value says one exists.`},
+  {k:'ember',kl:'halving',t:R`j \approx 0.0077`,n:`halving-traps. About 9.6% a year.`},
+  {k:'ember',kl:'the ledger',t:R`B_{k+1} = (1 + j)B_k - M`,n:`The books close at 0 when the payments are worth the loan.`},
+  {k:'ember',kl:'illegal',t:R`\tfrac{100}{1100} \ne \text{the rate}`,n:`The sofa's true rate is near 17.7% a year.`}
+],{title:'The slides · the multiplying step; compounding; present value; equal payments; the house loan; forever; growing payments; the true rate; halving; the ledger; illegal moves · ← → keys work'});
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

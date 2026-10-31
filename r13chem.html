@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>13·chem · How fast is a chemical change going right now?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+#cvA,#cvB{touch-action:none}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l,table.tt th.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r13phys.html">← 13·phys how fast is a falling stone going right now?</a><a href="r13stat.html">next: 13·stat which line fits the points best? →</a></p>
+  <div class="tags"><span class="tag chem">13·chem · chemistry</span></div>
+  <h1>How fast is a chemical change going right now?</h1>
+  <p>How fast is a chemical change going right now? A chemical change is a motion too, only what moves is the amount of each substance. 10·bio measured an enzyme's rate and 11·chem heated a pan at a steady rate; both said “rate” before rung 13 could say what a rate at an instant is. Here it can. The rate at which a substance is used up is the slope of its concentration, with a minus sign. The balanced change ties the rates of all its substances into one rate of reaction. And a table of readings, taken at instants, gives chords that close in on that slope. From the slopes the data reveal how the rate depends on what is left, without any function this ladder has not built. Last, 10·bio's enzyme and 11·chem's pan, read again as slopes.</p>
+  <p class="gesture">The rate of a reaction is how fast a concentration changes: its slope against time, with a minus sign for anything used up. That slope is divided by its coefficient in the balanced change, so that every substance reports the same rate.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r05chem.html">5·chem</a> (atoms, balanced changes, coefficients, the mole), <a href="r10bio.html">10·bio</a> (concentration, rate, the enzyme's rate, low-end), <a href="r11chem.html">11·chem</a> (the heating curve's pieces, heat held, Δ), <a href="r13a.html">13a</a> (chord slopes and the slope) and <a href="r13e.html">13e</a> (the d-mark, chain for slopes). It also stands on <a href="r13f.html">13f</a> (quotient for slopes, a joint has no slope), <a href="r13i.html">13i</a> (quotient-slope-sign), <a href="r13k.html">13k</a> (the linearization), <a href="r13phys.html">13·phys</a> (the same idea for motion), <a href="r05i.html">5i</a> (units, per). The promises of 10·bio and 11·chem to this page are kept here; rung 17 builds the function behind the concentration curve below.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · read it through, then work the picture and the slides</div>
+
+  <h3>The reaction and its table</h3>
+  <p data-pid="749215">Dinitrogen pentoxide, N₂O₅, is a white solid that turns straight to a gas when warmed. As a gas it falls apart on its own into nitrogen dioxide and oxygen. Counting atoms as 5·chem taught, the balanced change is</p>
+  <div class="eqline" data-tex="2\,\mathrm{N_2O_5} \to 4\,\mathrm{NO_2} + \mathrm{O_2}"></div>
+  <p data-pid="979671">(4 nitrogen and 10 oxygen on the left; 4 nitrogen and 8 + 2 = 10 oxygen on the right). It became a classic of the study of reaction rates after two chemists measured it carefully in 1921. Near 45 °C it goes at a steady, well-behaved pace that is easy to follow over tens of minutes.</p>
+  <p class="eqline" data-pid="e64924">From here on, on the chemistry pages, <b>a chemical formula in square brackets, as in [N₂O₅], names the concentration of that substance as a function of the time t</b>, in seconds. Concentration is 10·bio's word: how much of it per litre, here in mol/L. Read [N₂O₅] as “the concentration of N₂O₅”. A reuse, said out loud: square brackets have named 2e's class [x], 5a's [a, b], and 8g's and 12a's closed intervals [c, d]. Here a chemical formula stands inside, never a letter for a number or a pair of numbers, and that says which. mol/L is also written M; 10·bio explained why this ladder does not (8·phys's M is mega).</p>
+  <p data-pid="4dae89">Here is a table of the kind a laboratory produces. These numbers were not measured. They were computed from the behaviour this reaction is known to follow, with one constant of 5.0 × 10⁻⁴ per second, about the size measured for N₂O₅ near 45 °C. They start from 0.0200 mol/L, and are rounded to three figures as a laboratory table would be. So they behave as real readings would, without the scatter. The function behind them needs a kind of function rung 17 builds; this page uses only the readings.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th class="l">t (s)</th><td>0</td><td>300</td><td>600</td><td>900</td><td>1200</td><td>1500</td><td>1800</td><td>2400</td><td>3000</td></tr>
+    <tr><th class="l">[N₂O₅] (mol/L)</th><td>0.0200</td><td>0.0172</td><td>0.0148</td><td>0.0128</td><td>0.0110</td><td>0.00945</td><td>0.00813</td><td>0.00602</td><td>0.00446</td></tr>
+  </table></div>
+  <p data-pid="c3e072">Read it before doing anything. The concentration falls, and falls more slowly as time goes on: 0.0028 used in the first 300 s, 0.0024 in the next, 0.0020 in the next. The chords are getting less steep. That is a statement about slopes, and the rest of the page makes it exact.</p>
+
+  <h3>Average rate: a chord</h3>
+  <p data-pid="8cf6fa">The average rate of use over a stretch of time is the amount used divided by the time taken. With 11·chem's Δ, Δ[N₂O₅] is the concentration at the end less the concentration at the start: a displacement, negative for a substance being used up. So <b>the average rate of use is the chord slope with its sign turned about</b>, because chemists want a rate of use to be a positive number.</p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this page: an average rate from the table">
+\text{average rate of use} = -\dfrac{\Delta[\mathrm{N_2O_5}]}{\Delta t} @@ the chord slope, its sign turned about
+= -\dfrac{0.0148 - 0.0200}{600 - 0} @@ two rows of the table: 0 s and 600 s
+= -\dfrac{\htmlClass{new}{-0.0052}}{600} @@ the displacement is negative: N₂O₅ is being used up
+\approx \htmlClass{keep}{8.7 \times 10^{-6}}\ \text{mol/L per s} @@ units by 5i's per: mol/L divided by s
+  </pre>
+  <p data-pid="fd08c8">Over the next 600 s, from 600 to 1200, the same reckoning gives (0.0148 − 0.0110)/600 ≈ 6.3 × 10⁻⁶ mol/L per s. The reaction slowed. An average rate belongs to a stretch of time, not to an instant, and it changes with the stretch.</p>
+
+  <h3>The rate at an instant: a slope</h3>
+  <p class="eqline" data-pid="c6daec">From here on, <b>the rate of change of [A] at the instant t is its slope</b>, written d[A]/dt. That is 13e's d-mark, read as one mark, with [A] naming the outputs and t the input. For a substance being used up it is negative, and its rate of use is −d[A]/dt. Its unit is mol/L per s.</p>
+  <p data-pid="ae4ff2">From a table you cannot take a true limit, but you can take narrower chords. Two habits make it work. First, centre the chord on the instant, a reading before and one after. A chord from 600 forward to 1200 leans toward the flatter part and comes out too small. A centred chord's two halves err in opposite directions and nearly cancel. Second, do not go too narrow with rounded readings. Here are finer readings around 600 s from the same run, to four figures.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th class="l">t (s)</th><td>500</td><td>550</td><td>590</td><td>600</td><td>610</td><td>650</td><td>700</td></tr>
+    <tr><th class="l">[N₂O₅] (mol/L)</th><td>0.01558</td><td>0.01519</td><td>0.01489</td><td>0.01482</td><td>0.01474</td><td>0.01445</td><td>0.01409</td></tr>
+  </table></div>
+  <pre class="lines" data-k="ember" data-label="this page: centred chords closing in at 600 s">
+\dfrac{0.0172 - 0.0128}{900 - 300} \approx 7.33 \times 10^{-6} @@ 300 s each side, from the first table
+\dfrac{0.01558 - 0.01409}{700 - 500} = 7.45 \times 10^{-6} @@ 100 s each side
+\dfrac{0.01519 - 0.01445}{650 - 550} = 7.40 \times 10^{-6} @@ 50 s each side
+\dfrac{0.01489 - 0.01474}{610 - 590} = \htmlClass{new}{7.5 \times 10^{-6}} @@ 10 s each side: the top is only 0.00015, so the last rounded figure now swings the answer
+  </pre>
+  <p data-pid="bc7ba4">The chords settle near 7.4 × 10⁻⁶ mol/L per s, and the behaviour the numbers came from gives about 7.41 × 10⁻⁶. The narrowest chord wobbles because its top is the difference of two nearly equal rounded readings. That is the laboratory's version of the limit: narrow enough to see the slope, not so narrow that the rounding takes over. On paper, chemists do the same by drawing the tangent line to a plotted curve with a ruler and reading its slope from two points far apart on the line.</p>
+
+  <h3>One reaction, one rate</h3>
+  <p data-pid="4f00cb">While N₂O₅ disappears, NO₂ and O₂ appear. Atoms are neither made nor lost (5·chem's ledger). So for every 2 mol of N₂O₅ used up, 4 mol of NO₂ and 1 mol of O₂ are made, over every stretch, however short. Divide each change by its coefficient and the three agree; divide by the time and take the limit, and the three slopes agree too. That common number is the rate of reaction.</p>
+  <p class="eqline" data-pid="91b5d1">From here on, the rate of the reaction 2 N₂O₅ → 4 NO₂ + O₂ at the instant t is −½ d[N₂O₅]/dt, which is also ¼ d[NO₂]/dt and d[O₂]/dt. <b>It is each substance's slope divided by its coefficient, with a minus sign for those used up.</b> 10·bio's “rate” was this, for the enzyme's change of substrate into product.</p>
+  <pre class="lines" data-k="ember" data-label="this page: three slopes, one rate, at 600 s">
+-\dfrac{d[\mathrm{N_2O_5}]}{dt} \approx 7.41 \times 10^{-6} @@ N₂O₅ used, per litre per second
+\text{rate} = \tfrac12 \cdot 7.41 \times 10^{-6} \approx \htmlClass{new}{3.70 \times 10^{-6}} \ \text{mol/L per s} @@ divide by its coefficient, 2
+\dfrac{d[\mathrm{NO_2}]}{dt} = 4 \cdot 3.70 \times 10^{-6} \approx 1.48 \times 10^{-5} @@ NO₂ appears four times as fast as the reaction runs
+\dfrac{d[\mathrm{O_2}]}{dt} \approx 3.70 \times 10^{-6} @@ O₂, coefficient 1: at the reaction's own rate
+  </pre>
+  <p data-pid="f68924">Without the coefficients, “how fast is this reaction?” has three answers, one per substance. With them it has one. (In the gas some NO₂ pairs up into N₂O₄; a careful study allows for that. The bookkeeping above is the part that never changes.)</p>
+
+  <h3>Reading a concentration curve</h3>
+  <p data-pid="5aa463">Draw the readings in 9e's plane, time across and concentration up, and the curve tells its story through its slopes. Its slope is negative everywhere: by 13k's slope-sign-near the concentration is lower just after each instant than at it. The slope is less steep later: the rate of use shrinks as the reactant runs low. And the linearization (13k) predicts, near the point where it is drawn and nowhere else.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the linearization on a concentration curve">
+[\mathrm{N_2O_5}](700) \text{ is about } 0.01482 - 7.41 \times 10^{-6} \cdot 100 = 0.01408 @@ near: the value plus the slope times the step; the table says 0.01409
+[\mathrm{N_2O_5}](2000) \text{ “is about” } 0.0200 - 1.00 \times 10^{-5} \cdot 2000 = \htmlClass{new}{0} @@ far: the line at 0 s, 2000 s away. The behaviour behind the table gives about 0.0074
+  </pre>
+  <p data-pid="38e8c9">The rate at 0 s is 1.00 × 10⁻⁵ mol/L per s. If it stayed so, 0.0200 mol/L would be gone in 2000 s; the table still shows 0.00813 at 1800 s. <b>The rate falls because it depends on how much is left.</b></p>
+
+  <h3>What the slopes reveal: first-order behaviour, from the data</h3>
+  <p data-pid="d81283">Divide each rate of use by the concentration at that instant, using centred chords from the first table. At 300 s, (0.0200 − 0.0148)/600 ÷ 0.0172 ≈ 5.0 × 10⁻⁴ per second. At 600 s, 7.33 × 10⁻⁶ ÷ 0.0148 ≈ 5.0 × 10⁻⁴. At 1500 s, (0.0110 − 0.00813)/600 ÷ 0.00945 ≈ 5.1 × 10⁻⁴. The ratio stays put while the rate and the concentration both fall by more than half. So <b>the data say that the rate of use is directly proportional to the amount left</b>, 5i's words: −d[N₂O₅]/dt = k · [N₂O₅], with k about 5.0 × 10⁻⁴ per second. A reaction whose rate is directly proportional to one concentration is called first order, and k its rate constant. A line giving a rate from concentrations, like this one, is called a rate law. Units check (5i): mol/L per s divided by mol/L is per second.</p>
+  <p data-pid="540be5">Read chemically, it says the molecules behave as if each had the same chance per second of falling apart, regardless of the others: twice as many molecules, twice as many falling apart each second. A chemist wrote down the same shape of rule in 1850, for sugar breaking down in acid. It was the first time a reaction's rate was measured and tied by a rule to the amount left.</p>
+  <p data-pid="08f242">One more thing the readings show. The concentration halves, from 0.0200 to 0.0100, between 1200 and 1500 s: read by the nearby chord, at about 1390 s. From 600 s, it halves from 0.0148 to 0.0074 between 1800 and 2400 s: about 1410 s later. The same time, about 23 minutes, at each stage, within what the readings can show. A function whose slope is always proportional to its value is not a polynomial, since a polynomial's slope has lower degree (13d's polynomial-slope). That function waits for rung 17, which writes this curve's formula and proves the halving time is the same at every stage.</p>
+
+  <h3>An enzyme's rate, as slopes</h3>
+  <p data-pid="a60664">10·bio's enzyme turns substrate into product at the rate v(s) = V_max · s/(K_m + s) when the substrate's concentration is s. <b>That rate is a slope</b>: v is −d[S]/dt at the instant the substrate stands at s, the rate of use of the substrate. And v, as a function of s, has a slope of its own.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the slope of the enzyme's rate">
+v(s) = \dfrac{V_{\max}\, s}{K_m + s} @@ 10·bio's line; V_max and K_m fixed for the enzyme
+v'(s) = \dfrac{V_{\max}(K_m + s) - V_{\max}\, s}{(K_m + s)^2} = \htmlClass{new}{\dfrac{V_{\max} K_m}{(K_m + s)^2}} @@ quotient for slopes (13f): bottom times top's slope, less top times bottom's slope, over the bottom squared
+v'(s) \gt 0 @@ quotient-slope-sign (13i): the top V_max K_m is positive. More substrate, faster, at every s
+v'(0) = \dfrac{V_{\max}}{K_m} @@ 10·bio's low-end: lim v(s)/s, which is the chord slope (v(h) − v(0))/h since v(0) = 0. low-end was a slope all along
+v'(K_m) = \dfrac{V_{\max}}{4K_m} @@ at the half-way strength, a quarter of the slope at 0
+  </pre>
+  <p data-pid="6d23f7">For 10·bio's invertase, K_m = 16.7 mmol/L and V_max ≈ 0.76 mmol/L per minute, so v′(0) ≈ 0.046 per minute and v′(K_m) ≈ 0.011 per minute. Far out the slope heads to 0, the ceiling of 10·bio's ceiling seen as a slope. Read the substrate's concentration over time with this: −d[S]/dt = V_max [S]/(K_m + [S]). The slide writes “far above” as ≫ and “far below” as ≪. They are a loose comparison with no exact line, and nothing is proved from them, so they need no earning. When [S] is far above K_m the rate of use is nearly V_max, hardly depending on what is left, which is called zero order. When [S] is far below K_m the rate is nearly (V_max/K_m) · [S], directly proportional to what is left: first order, as N₂O₅, with rate constant V_max/K_m. At [S] = 1.67 mmol/L, a tenth of K_m, v ≈ 0.069 mmol/L per minute, and v/[S] ≈ 0.041 per minute, near V_max/K_m ≈ 0.046.</p>
+
+  <h3>A pan of water, as slopes</h3>
+  <p data-pid="b9d39c">11·chem drew the temperature T of 100 g of ice, heated to steam, against the heat put in, Q, as five climbing pieces with rates of about 4.78, 0, 2.39, 0 and 4.98 °C per kJ. Those rates are slopes, by 13a's slope-of-a-line on each piece. And at the four joints there is no slope, by 13f's joint-slopes, since the pieces arrive with different slopes. Now heat the pan with 11·chem's 500 W heater, so that Q = 0.5t kJ with t in seconds. The temperature against time is a chain, T(Q(t)), and 13e's chain for slopes multiplies the rates. On the water piece, dT/dt = dT/dQ · dQ/dt ≈ 2.39 · 0.5 ≈ 1.20 °C per second. On the ice it is about 2.39 °C per second; on the steam, about 2.49; while it melts or boils, 0. And take 11·chem's heat held, H, against T. On the water piece H = 37.58 + 0.418T kJ, whose slope dH/dT is 0.418 kJ per °C, which is m · c = 100 g · 4.18 J/(g · °C). <b>The specific heat capacity is the slope of the heat held per gram.</b> At 0 °C and 100 °C, H jumps, so there it has no slope (13b's slope-means-no-gap turned about).</p>
+
+  <h3>Which rung licenses each step</h3>
+  <div class="tablewrap"><table class="tt">
+    <tr><th class="l">step</th><th class="l">licence</th></tr>
+    <tr><td class="l">average rate as a chord slope, sign turned about</td><td class="l">13a's chord slope; 11·chem's Δ; 5i's per</td></tr>
+    <tr><td class="l">rate at an instant, d[A]/dt</td><td class="l">13a's slope; 13e's mark</td></tr>
+    <tr><td class="l">one rate for the reaction</td><td class="l">5·chem's coefficients; 10c's constant-factor on the chords</td></tr>
+    <tr><td class="l">predicting near an instant</td><td class="l">13k's linearization and nearby-line-error</td></tr>
+    <tr><td class="l">first-order behaviour</td><td class="l">5i's direct proportion, read off the data</td></tr>
+    <tr><td class="l">the enzyme's slope</td><td class="l">13f's quotient for slopes; 13i's quotient-slope-sign; 10·bio's low-end</td></tr>
+    <tr><td class="l">heating against time</td><td class="l">13e's chain for slopes; 13a's slope-of-a-line; 13f's joint-slopes</td></tr>
+  </table></div>
+
+  <h3>Illegal moves</h3>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed">
+\text{rate} = \dfrac{d[\mathrm{N_2O_5}]}{dt} \approx -7.4 \times 10^{-6}\,? @@ the minus sign forgotten: that says the reaction runs backwards. Rate of use: −d[N₂O₅]/dt
+\text{“the rate is } 7.41 \times 10^{-6}\text{”}\,? @@ of what? Of N₂O₅'s use, twice the reaction's rate; NO₂ appears four times as fast
+\text{the rate at } 0 \text{ s lasts for ever}\,? @@ the linearization far from its point: it predicts 0 at 2000 s; about 0.0074 remains
+\dfrac{0.01482 - 0.01482}{600 - 600}\,? @@ no chord through one instant: 0/0 names nothing. Narrow, centred, but two readings
+\dfrac{0.0148 - 0.0110}{600} \text{ as the rate at } 600\,? @@ a forward chord leans toward the flatter part: 6.3 × 10⁻⁶, against about 7.4 × 10⁻⁶
+  </pre>
+</section>
+
+<section class="pic" id="pic">
+  <div class="eyebrow">The picture · left: the three concentrations, with a chord and a tangent line at the instant you choose · right: rate of use against concentration</div>
+  <div class="panels">
+    <div class="panel">
+      <canvas id="cvA"></canvas>
+      <div class="kn">
+        <span class="m">t</span><input type="range" id="kt" min="0" max="3000" step="10" value="600"><output id="ot"></output>
+        <span class="m">half-width</span><input type="range" id="kw" min="10" max="600" step="10" value="300"><output id="ow"></output>
+      </div>
+      <div class="chips" id="cch"><button class="on" data-c="0">chord centred on t</button><button data-c="1">chord forward from t</button></div>
+      <div class="cap">Ink: [N₂O₅], with the table's readings as dots. Plum: [NO₂]. Gold: [O₂]. Ember: the tangent lines at t; their slopes are the rates of change. Teal: a chord on the N₂O₅ curve; its slope is an average rate. Shrink the chord and its slope closes in on the tangent line's; switch to a forward chord and watch it lag. Drag on the picture to move t. (The picture computes from the unrounded behaviour, so its chords differ a little from the rounded table's.)</div>
+    </div>
+    <div class="panel">
+      <div class="chips" id="rch"><button class="on" data-r="0">N₂O₅</button><button data-r="1">an enzyme (10·bio)</button></div>
+      <canvas id="cvB"></canvas>
+      <div class="cap">Each dot is one instant: across, how much is left; up, how fast it is being used. For N₂O₅, grey dots are the table's instants and the ember dot is yours; they lie on one linear function through 0, whose slope is k: first order. For the enzyme, the rate against the substrate's strength levels off toward V_max; its slope at 0 is V_max/K_m (teal), and far out it is nearly 0. In this panel the t knob sets the substrate's strength s, from 0 to 120 mmol/L, and the ember line is the slope there.</div>
+      <div class="verdict" id="vd"></div>
+    </div>
+  </div>
+  <div class="eqbox" id="eq"></div>
+</section>
+
+<section class="slides" id="sl1"><div class="eyebrow">The slides · the change; [A]; an average rate; d[A]/dt; centred chords; one rate; the linearization; first order from data; the enzyme's slope; the pan by the chain rule · ← → keys work</div></section>
+
+<section class="sayback">
+  <div class="eyebrow">Say it back · then work it</div>
+  <h2>Questions</h2>
+  <div class="phkey"></div>
+  <ol>
+    <li><span class="qid">13·chem.1</span><span class="gname">Rates, read from the table.</span><span class="gwhy">Do: build the page's pieces.</span>
+      <ol class="sub">
+        <li><span class="qid">13·chem.1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{first table,}"></span> <span data-tex-inline="1200\text{ s to } 1800\text{ s}"></span></span>Find the average rate of use of the first reactant over the stretch, with units, one move per line.</li><li><span class="givens"><span data-tex-inline="\text{first table, at } 1200\text{ s;}"></span> <span data-tex-inline="-\frac{d[\mathrm{N_2O_5}]}{dt} = k[\mathrm{N_2O_5}],"></span> <span data-tex-inline="k = 5.0 \times 10^{-4}\text{ s}^{-1}"></span></span>Estimate the rate of use with a chord centred on the instant, from 900 s to 1500 s. <br>Estimate it again with the rate law, and compare.</li><li><span class="givens"><span data-tex-inline="\mathrm{NO_2} \text{ appears at}"></span> <span data-tex-inline="2.0 \times 10^{-5}\text{ mol/L per s}"></span></span>Find how fast oxygen appears, how fast the reactant is used, and the rate of the reaction.</li><li><span class="givens"><span data-tex-inline="\text{first table;}"></span> <span data-tex-inline="\text{at } 900\text{ s and } 2400\text{ s,}"></span> <span data-tex-inline="\text{for } 2400\text{ s use } 1800 \text{ and } 3000\text{ s}"></span></span>With centred chords, compute the rate divided by the concentration at each instant.</li><li><span class="givens"><span data-tex-inline="\text{hexokinase with glucose,}"></span> <span data-tex-inline="K_m = 0.05\text{ mmol/L};"></span> <span data-tex-inline="s \in \{0, 0.05, 5\}\text{ mmol/L}"></span></span>Find the slope of the rate divided by its ceiling at each s.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">13·chem.2</span><span class="gname">From the rate back to the amounts.</span><span class="gwhy">Undo: run the page's techs backwards.</span>
+      <ol class="sub">
+        <li><span class="qid">13·chem.2.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{a } 300\text{ s stretch,}"></span> <span data-tex-inline="\text{average rate of use}"></span> <span data-tex-inline="4.0 \times 10^{-6}\text{ mol/L per s},"></span> <span data-tex-inline="\text{ended at } 0.0080\text{ mol/L}"></span></span>Find the concentration at its start.</li><li><span class="givens"><span data-tex-inline="2\mathrm{H_2O_2} \to 2\mathrm{H_2O} + \mathrm{O_2},"></span> <span data-tex-inline="\mathrm{O_2} \text{ at } 1.5 \times 10^{-4}\text{ mol/L per s}"></span></span>Find how fast hydrogen peroxide is used, and write the rate of the reaction three ways.</li><li><span class="givens"><span data-tex-inline="\text{first order,}"></span> <span data-tex-inline="k = 2.0 \times 10^{-3}\text{ s}^{-1},"></span> <span data-tex-inline="\text{used at } 3.0 \times 10^{-5}\text{ mol/L per s}"></span></span>Find the concentration at that instant.</li><li><span class="givens"><span data-tex-inline="\text{a tangent line through}"></span> <span data-tex-inline="(200\text{ s}, 0.0190\text{ mol/L}),"></span> <span data-tex-inline="(1000\text{ s}, 0.0110\text{ mol/L})"></span></span>Find the rate of use it gives, and decide whether either point must lie on the curve.</li><li><span class="givens"><span data-tex-inline="\text{rate slope } 0.02 \text{ per min at } s = 0,"></span> <span data-tex-inline="V_{\max} = 0.5\text{ mmol/L per min}"></span></span>Find the enzyme's K_m.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">13·chem.3</span><span class="gname">Where a chord is a poor witness.</span><span class="gwhy">Bend: find where the techs stop working.</span>
+      <ol class="sub">
+        <li><span class="qid">13·chem.3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{first table;}"></span> <span data-tex-inline="\text{from } 0 \text{ to } 3000\text{ s}"></span></span>Compute the average rate over the stretch, and compare it with a chord centred on 1500 s. <br>Find which way the long chord errs.</li><li><span class="givens"><span data-tex-inline="\mathrm{N_2O_5} \to 2\mathrm{NO_2} + \tfrac12\mathrm{O_2}"></span></span>Find which of the three slopes change, and whether the rate of the reaction does.</li><li><span class="givens"><span data-tex-inline="\text{rate of use } k \cdot [A] \cdot [A]"></span></span>Find what doubling the amount of A does to the rate, and what the rate divided by that amount does as it falls.</li><li><span class="givens"><span data-tex-inline="200\text{ g of water, not } 100\text{ g,}"></span> <span data-tex-inline="\text{the same } 500\text{ W heater}"></span></span>Using chain for slopes, find what happens to the water's warming per unit of heat and per second.</li></ol></li>
+      </ol></li>
+    <li class="optgroup"><span class="qid">13·chem.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder challenges that rely on your own making. The page is complete without these; the rung's star needs them.</span>
+      <ol class="sub">
+        <li class="opt"><span class="qid">13·chem.4.1</span><span class="tagq">build</span>Take a balanced change of your own with at least three different coefficients, and write its rate of reaction as a chain of equal slopes, signs and coefficients right. <br>Invent one slope and fill in the others. <br>Then double every coefficient, and find which slopes change and whether the rate of the reaction does.</li>
+        <li class="opt"><span class="qid">13·chem.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="[\mathrm{N_2O_5}] = 0"></span></span>Find the rate of the reaction at that instant.</li>
+        <li class="opt"><span class="qid">13·chem.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{halving time the same}"></span> <span data-tex-inline="\text{at every stage}"></span></span>As far as slopes go, decide whether the reaction must be first order.</li>
+        <li class="opt"><span class="qid">13·chem.4.4</span><span class="tagq">world</span><span class="givens"><span data-tex-inline="\text{curves from } 0.0200"></span> <span data-tex-inline="\text{and from } 0.0100\text{ mol/L}"></span></span>Using the rate law and slopes alone, compare the two curves at matching concentrations. <br>Find what that gives their halving times, as far as you can take it.</li>
+        <li class="opt"><span class="qid">13·chem.4.5</span><span class="tagq">seam</span>The law of mass action (1864) read a reaction’s rate off its balanced equation: two molecules of N₂O₅ in the equation, so the rate as [N₂O₅] times [N₂O₅]. The readings on this page say the rate goes as [N₂O₅] alone. <br>Can a balanced equation fix how fast a reaction goes? <br>What is the equation a record of?</li>
+      </ol></li>
+  </ol>
+  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
+</section>
+
+<nav class="nextrung"><a href="r13phys.html">← 13·phys · how fast is a falling stone going right now?</a><a href="r13eng.html">13·eng · how much power does a car need to climb? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>The 1921 measurements of N₂O₅ were made by Farrington Daniels and Eldridge Johnston. The 1850 study of sugar in acid was Ludwig Wilhelmy’s. The ledger of atoms is Antoine Lavoisier’s. The enzyme’s rate is Leonor Michaelis and Maud Menten’s (1913); the d-mark is Gottfried Wilhelm Leibniz’s. The law of mass action is Cato Guldberg and Peter Waage’s (1864). The spending money picture below is from Silvanus P. Thompson’s Calculus Made Easy.</p>
+  <h3>Accepted names</h3>
+  <p>The enzyme’s rate v(s) = V_max · s/(K_m + s) is the Michaelis–Menten equation.</p>
+  <aside class="voice para"><p>Thompson notes that if you are spending money, the rate of spending is the slope of what you have with a minus sign in front, because what you have is going down, not up.</p><cite>Thompson, Calculus Made Easy, 2nd ed. (1914), ch. VIII</cite></aside>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; const a=Math.abs(v); let s; if(d!=null) s=v.toFixed(d); else if(a!==0&&a<0.001){ const e=Math.floor(Math.log10(a)); const m=v/Math.pow(10,e); return m.toFixed(2)+' \\times 10^{'+e+'}'; } else s=a>=100?v.toFixed(0):a>=1?v.toFixed(3):v.toFixed(5); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const SUP={'-':'⁻','0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹'};
+const fmt=v=>fm(v).replace(/ \\times 10\^\{(-?\d+)\}/,(m,e)=>' × 10'+[...e].map(c=>SUP[c]).join(''));
+const K=5e-4, A0=0.02;
+const A=t=>A0*Math.exp(-K*t), dA=t=>-K*A(t);
+const NO2=t=>2*(A0-A(t)), O2=t=>0.5*(A0-A(t));
+const TB=[[0,0.0200],[300,0.0172],[600,0.0148],[900,0.0128],[1200,0.0110],[1500,0.00945],[1800,0.00813],[2400,0.00602],[3000,0.00446]];
+let T=600, W=300, FW=0, RM=0;
+const kt=$('kt'),kw=$('kw'),cvA=$('cvA'),cvB=$('cvB');
+const PA=plane(cvA,{x:[0,3200],y:[0,0.04],grid:0,aspect:0.85,draw:P=>{ P.o.x=[0,3200]; P.o.y=[0,0.036]; P.axes();
+  const c=P.ctx; c.strokeStyle=col('--grid'); c.lineWidth=1; c.beginPath(); for(let x=500;x<=3000;x+=500){ c.moveTo(P.X(x),P.Y(0)); c.lineTo(P.X(x),P.Y(0.036)); } for(let y=0.005;y<=0.0355;y+=0.005){ c.moveTo(P.X(0),P.Y(y)); c.lineTo(P.X(3200),P.Y(y)); } c.stroke();
+  c.fillStyle=col('--muted'); c.font='10px IBM Plex Mono, monospace'; c.textAlign='center'; for(let x=500;x<=3000;x+=500) c.fillText(x+' s',P.X(x),P.H-4); c.textAlign='left'; for(let y=0.01;y<=0.0355;y+=0.01) c.fillText(y.toFixed(2),2,P.Y(y)-2);
+  P.fn(NO2,'--plum',2.2); P.fn(O2,'--gold',2.2); P.fn(A,'--ink',2.4); TB.forEach(([t,v])=>P.dot(t,v,'--ink',3.2));
+  const t1=FW?T:T-W, t2=T+W; P.line(t1,A(t1),t2,A(t2),'--teal',2.4); P.dot(t1,A(t1),'--teal',4); P.dot(t2,A(t2),'--teal',4);
+  [[A,dA],[NO2,t=>-2*dA(t)],[O2,t=>-0.5*dA(t)]].forEach(([f,d])=>{ const y=f(T), m=d(T); P.line(T-700,y-700*m,T+700,y+700*m,'--ember',1.6); P.dot(T,y,'--ember',4.5); }); }});
+Object.defineProperty(PA.o,'aspect',{get:()=>cvA.clientWidth>560?0.8:0.9});
+const VM=0.76, KM=16.7;
+const PB=plane(cvB,{x:[0,0.022],y:[0,1.2e-5],grid:0,aspect:0.85,draw:P=>{ const c=P.ctx;
+  if(!RM){ P.o.x=[0,0.022]; P.o.y=[0,1.2e-5]; P.axes(); c.strokeStyle=col('--grid'); c.lineWidth=1; c.beginPath(); for(let x=0.005;x<=0.021;x+=0.005){ c.moveTo(P.X(x),P.Y(0)); c.lineTo(P.X(x),P.Y(1.2e-5)); } c.stroke();
+    c.fillStyle=col('--muted'); c.font='10px IBM Plex Mono, monospace'; c.textAlign='center'; for(let x=0.005;x<=0.021;x+=0.005) c.fillText(x.toFixed(3),P.X(x),P.H-4); c.textAlign='left'; c.fillText('rate of use',P.X(0)+4,P.Y(1.15e-5));
+    P.line(0,0,0.022,K*0.022,'--muted',1.4,[5,4]); TB.forEach(([t])=>P.dot(A(t),K*A(t),'--grid',4.5)); P.dot(A(T),K*A(T),'--ember',6); }
+  else { P.o.x=[0,120]; P.o.y=[0,0.9]; P.axes(); c.strokeStyle=col('--grid'); c.lineWidth=1; c.beginPath(); for(let x=20;x<=120;x+=20){ c.moveTo(P.X(x),P.Y(0)); c.lineTo(P.X(x),P.Y(0.9)); } c.stroke();
+    c.fillStyle=col('--muted'); c.font='10px IBM Plex Mono, monospace'; c.textAlign='center'; for(let x=20;x<=120;x+=20) c.fillText(x+'',P.X(x),P.H-4); c.textAlign='left'; c.fillText('v, mmol/L per min',P.X(0)+4,P.Y(0.86));
+    P.line(0,VM,120,VM,'--gold',1.6,[6,5]); P.fn(s=>VM*s/(KM+s),'--ink',2.4); P.line(0,0,0.85/(VM/KM),0.85,'--teal',1.8); const s=Math.max(0.5,T/25); const v=VM*s/(KM+s), m=VM*KM/((KM+s)*(KM+s)); P.line(s-25,v-25*m,s+25,v+25*m,'--ember',1.8); P.dot(s,v,'--ember',5.5); } }});
+Object.defineProperty(PB.o,'aspect',{get:()=>cvB.clientWidth>560?0.8:0.9});
+function read(){ const t1=FW?T:T-W, t2=T+W, ch=-(A(t2)-A(t1))/(t2-t1), tr=-dA(T);
+  $('ot').textContent=T+' s'; $('ow').textContent=W+' s';
+  let extra=''; if(RM){ const s=Math.max(0.5,T/25), v=VM*s/(KM+s), m=VM*KM/((KM+s)*(KM+s)); extra=R`\\ \text{enzyme: } s = ${fm(s,1)},\ \ v = ${fm(v,3)},\ \ v'(s) = ${fm(m,4)} \text{ per min}`; }
+  tex($('eq'),R`\begin{gathered}t = ${T}\ \text{s}:\ \ [\mathrm{N_2O_5}] = ${fm(A(T))},\ \ -\tfrac{d[\mathrm{N_2O_5}]}{dt} = \htmlClass{new}{${fm(tr)}}\\ \text{chord } ${t1}\text{–}${t2}\ \text{s}:\ \ \htmlClass{keep}{${fm(ch)}}\qquad \text{rate of reaction} = ${fm(tr/2)}\\ \text{rate} \div [\mathrm{N_2O_5}] = ${fm(tr/A(T))} \text{ per s}${extra}\end{gathered}`,true);
+  const vd=$('vd'), err=Math.abs(ch-tr)/tr;
+  vd.className='verdict '+(err<0.01?'win':'lose');
+  vd.textContent='The '+(FW?'forward':'centred')+' chord gives '+fmt(ch)+' mol/L per s against the slope '+fmt(tr)+': off by '+(100*err).toFixed(err<0.01?2:1)+'%. '+(FW?'A forward chord leans toward the flatter part: always too small here.':'A centred chord\'s halves nearly cancel: shrink it and it closes in fast.'); }
+function all(){ PA.redraw(); PB.redraw(); read(); }
+kt.oninput=()=>{ T=+kt.value; all(); }; kw.oninput=()=>{ W=+kw.value; all(); };
+$('cch').querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{ FW=+b.dataset.c; $('cch').querySelectorAll('[data-c]').forEach(z=>z.classList.toggle('on',z===b)); all(); });
+$('rch').querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>{ RM=+b.dataset.r; $('rch').querySelectorAll('[data-r]').forEach(z=>z.classList.toggle('on',z===b)); all(); });
+let drag=false; cvA.addEventListener('pointerdown',e=>{ drag=true; cvA.setPointerCapture&&cvA.setPointerCapture(e.pointerId); mv(e); }); cvA.addEventListener('pointermove',mv); ['pointerup','pointercancel'].forEach(t=>cvA.addEventListener(t,()=>drag=false));
+function mv(e){ if(!drag) return; const q=PA.point(e); T=Math.max(0,Math.min(3000,Math.round(q.x/10)*10)); kt.value=T; all(); }
+window.__pic={set:(t,w,fw,rm)=>{ if(t!=null){ T=t; kt.value=t; } if(w!=null){ W=w; kw.value=w; } if(fw!=null){ FW=fw; $('cch').querySelectorAll('[data-c]').forEach(z=>z.classList.toggle('on',+z.dataset.c===fw)); } if(rm!=null){ RM=rm; $('rch').querySelectorAll('[data-r]').forEach(z=>z.classList.toggle('on',+z.dataset.r===rm)); } all(); return {txt:$('vd').textContent}; }};
+all();
+
+/* ---------- slides ---------- */
+const N='\\htmlClass{new}', Kk='\\htmlClass{keep}';
+stepper('#sl1',[
+  {k:'ember',kl:'the change',t:R`2\,\mathrm{N_2O_5} \to 4\,\mathrm{NO_2} + \mathrm{O_2}`,n:`4 N and 10 O on each side (5·chem).`},
+  {k:'ember',kl:'[A]',t:R`[\mathrm{N_2O_5}](t)\ \text{in mol/L}`,n:`A formula in square brackets names its concentration, as a function of time. Not 2e's class, nor an interval.`},
+  {k:'ember',kl:'average rate',t:R`-\dfrac{0.0148 - 0.0200}{600} \approx ${N}{8.7 \times 10^{-6}}`,n:`A chord slope with its sign turned about. mol/L per s.`},
+  {k:'ember',kl:'slower later',t:R`600 \text{ to } 1200:\ \ 6.3 \times 10^{-6}`,n:`An average rate belongs to a stretch, and changes with it.`},
+  {k:'ember',kl:'at an instant',t:R`-\dfrac{d[\mathrm{N_2O_5}]}{dt}`,n:`13e's mark, with [A] for the outputs and t for the input. The rate of use.`},
+  {k:'ember',kl:'centred chords',t:R`7.33,\ 7.45,\ 7.40,\ ${N}{7.5} \;(\times 10^{-6})`,n:`300, 100, 50, 10 s each side. The last wobbles: two nearly equal rounded readings.`},
+  {k:'ember',kl:'one rate',t:R`-\tfrac12\dfrac{d[\mathrm{N_2O_5}]}{dt} = \tfrac14\dfrac{d[\mathrm{NO_2}]}{dt} = \dfrac{d[\mathrm{O_2}]}{dt}`,n:`Each slope over its coefficient, minus for what is used. At 600 s: 3.70 × 10⁻⁶.`},
+  {k:'ember',kl:'the linearization',t:R`0.01482 - 7.41\times 10^{-6}\cdot 100 = 0.01408`,n:`Near: the table says 0.01409. From 0 s to 2000 s it says 0, against about 0.0074.`},
+  {k:'ember',kl:'first order',t:R`\dfrac{\text{rate}}{[\mathrm{N_2O_5}]} \approx ${N}{5.0 \times 10^{-4}} \text{ per s}`,n:`At 300, 600, 1500 s alike. The rate is directly proportional to what is left (5i), read off the data.`},
+  {k:'ember',kl:'halving',t:R`\text{about } 1390 \text{ s},\ \ \text{about } 1410 \text{ s}`,n:`From 0 s and from 600 s: the same, within the readings. Rung 17 proves it is the same at every stage.`},
+  {k:'ember',kl:'the enzyme\'s slope',t:R`v'(s) = ${N}{\dfrac{V_{\max} K_m}{(K_m + s)^2}}`,n:`quotient for slopes; positive by quotient-slope-sign. v′(0) = V_max/K_m is 10·bio's low-end, a slope all along.`},
+  {k:'ember',kl:'zero and first order',t:R`[S] \gg K_m:\ \text{rate} \approx V_{\max};\quad [S] \ll K_m:\ \text{rate} \approx \tfrac{V_{\max}}{K_m}[S]`,n:`Far above K_m the rate hardly depends on what is left; far below, it is proportional.`},
+  {k:'ember',kl:'the pan',t:R`\dfrac{dT}{dt} = \dfrac{dT}{dQ}\cdot\dfrac{dQ}{dt} \approx 2.39 \cdot 0.5 = ${N}{1.20}`,n:`°C per second on the water piece, by chain for slopes with the 500 W heater. 0 while it melts or boils.`},
+  {k:'teal',kl:'backwards',t:R`\dfrac{dH}{dT} = 0.418 = m\cdot c`,n:`11·chem's heat held: its slope is the heat capacity of the pan's water. No slope where H jumps.`}
+],{title:'The slides · the change; [A]; an average rate; d[A]/dt; centred chords; one rate; the linearization; first order from data; the enzyme\'s slope; the pan by the chain rule · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

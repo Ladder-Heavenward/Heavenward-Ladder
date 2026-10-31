@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Distance-keepers form a group</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+.btns{display:flex;flex-wrap:wrap;gap:6px}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r20a.html">← 20a isometries and similarities</a><a href="r20c.html">next: 20c slide, flip, turn →</a></p>
+  <div class="tags"><span class="tag proof">20b · proof</span></div>
+  <h1>Distance-keepers form a group</h1>
+  <p>Rung 19 asked three things of a family of moves: that two in a row make one, that each can be undone, and that doing nothing is one of them. This step checks them for the moves that keep distances. They pass, and so do the similarities. From now on everything rung 19 proved about groups is true of the moves of the plane.</p>
+  <p class="gesture">If two moves keep distances, so does one done after the other, so does the do-nothing move, and so does the move that undoes either. So the isometries form a group; the similarities form a group too, with factors that multiply, and the isometries are a part-group of it.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r20a.html">20a</a> (isometries, similarities), <a href="r19a.html">19a</a> (groups), <a href="r19d.html">19d</a> (the part-group test). <a href="r20c.html">20c</a> names the basic moves; <a href="r20h.html">20h</a> sorts geometries by these groups.</p></div>
+</header>
+
+<section class="class step" data-step="20b1">
+  <h2 class="sthead"><span class="stno">20b1</span>Two in a row</h2>
+  <p class="stands">Stands on 20a2 and 19a2 (shuffles-compose).</p>
+  <p data-pid="58d670">Compose-keeps technique: <b>an isometry done after an isometry is an isometry.</b> Each keeps every distance, so the two together do.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the compose-keeps technique">
+g \circ f \text{ is a move} @@ shuffles-compose (19a2), for shuffles of ℝ²
+d(g(f(P)), g(f(Q))) = d(f(P), f(Q)) @@ g keeps distances, at the points f(P) and f(Q)
+= d(P, Q) @@ f keeps distances
+\htmlClass{new}{g \circ f \text{ is an isometry}} \quad \blacksquare
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: worked">
+f(x, y) = (y, x),\ \ g(x, y) = (x + 2, y) @@ two isometries (20a2.1; a slide)
+(g \circ f)(x, y) = (y + 2, x),\ \ (f \circ g)(x, y) = (y, x + 2) @@ different moves: the order matters
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · compose · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">20b1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="f(x, y) = (-x, y)"></span> <span data-tex-inline="g(x, y) = (x, y + 3)"></span></span>Find g ∘ f and f ∘ g. <br>Check that each keeps the distance from (0, 0) to (1, 2).</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20b2">
+  <h2 class="sthead"><span class="stno">20b2</span>Undoing</h2>
+  <p class="stands">Stands on 20b1 and 9d (running backwards).</p>
+  <p data-pid="42a188">Undo-keeps technique: <b>the undo of an isometry is an isometry.</b> Put f⁻¹(P) and f⁻¹(Q) into f, which keeps their distance, and you get P and Q back.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the undo-keeps technique">
+f^{-1} \text{ is a move} @@ f is one-to-one and onto, so it runs backwards (9d)
+d(f^{-1}P, f^{-1}Q) = d(f(f^{-1}P), f(f^{-1}Q)) @@ f keeps distances
+= d(P, Q) @@ f ∘ f⁻¹ does nothing
+\htmlClass{new}{f^{-1} \text{ is an isometry}} \quad \blacksquare
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · undo · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20b2.1</span><span class="ph undo">undo</span><span class="givens"><span data-tex-inline="f(x, y) = (1 - y,\ x)"></span></span>Find f⁻¹. <br>Check that f⁻¹ undoes f from both sides.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20b3">
+  <h2 class="sthead"><span class="stno">20b3</span>The group</h2>
+  <p class="stands">Stands on 20b1, 20b2, 19a4 (groups) and 19d1 (the part-group test).</p>
+  <p data-pid="611f52">Isometries-form-a-group technique: <b>the isometries of the plane form a group under composing.</b> Composing regroups (9b), the do-nothing move keeps every distance, and 20b1 and 20b2 do the rest.</p>
+  <p data-pid="492af2">Similarities-form-a-group technique: <b>the similarities form a group, and their factors multiply.</b> If f has factor k and g has factor k′, then g ∘ f has factor k′k and f⁻¹ has factor 1/k. The isometries are its part-group of factor 1.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the similarities-form-a-group technique">
+d(gfP, gfQ) = k'\,d(fP, fQ) = k'k\,d(P, Q) @@ factor k′k
+d(f^{-1}P, f^{-1}Q) = \tfrac{1}{k}\,d(f f^{-1}P, f f^{-1}Q) = \tfrac{1}{k}\,d(P, Q) @@ factor 1/k
+\htmlClass{new}{\text{the similarities form a group}} \quad \blacksquare @@ regroup for composing; e has factor 1
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · the group · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20b3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f a similarity with factor 2,  g one with factor 3</span></span>Find the factors of g ∘ f, f ∘ g, f⁻¹ and (g ∘ f)⁻¹.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20b4">
+  <h2 class="sthead"><span class="stno">20b4</span>Moves that keep a figure</h2>
+  <p class="stands">Stands on 20b3 and 19f (symmetries by hand).</p>
+  <p class="eqline" data-pid="34db89">From here on, a symmetry of a set S of points is an isometry f with f(S) = S. This is the version of 19f’s symmetries built on the plane itself.</p>
+  <p data-pid="8942af">Symmetries-of-a-figure technique: <b>the symmetries of any figure form a part-group of the isometries.</b> If f(S) = S and g(S) = S then g(f(S)) = S, and f⁻¹(S) = S. A figure is more regular the bigger its part-group.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the symmetries of the segment from (−1, 0) to (1, 0)">
+(x, y) \mapsto (x, y),\ \ (-x, -y) @@ do nothing; the half turn about O
+(x, y) \mapsto (x, -y),\ \ (-x, y) @@ two moves that turn the plane over, which 20c names
+\text{four, and } (-x, -y) = \text{the other two, one after the other} @@ a part-group of 4
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · figures · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · two moves, in both orders</div>
+    <div id="pl"></div>
+    <div class="btns"><button type="button" id="b1">f, then g</button><button type="button" id="b2">g, then f</button></div>
+    <div class="cap">f turns the plane over the upright axis, (x, y) ↦ (−x, y); g slides it right 3. Ink: the flag. Dashed: after the first move. Ember: after both. The two orders put the flag in two places, and both keep every length.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20b4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">the circle of radius 1 about (0, 0)</span></span>Find four different symmetries of it. <br>Guess whether it has finitely many, and give a reason.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20b5">
+  <h2 class="sthead"><span class="stno">20b5</span>Illegal moves</h2>
+  <p class="stands">Stands on 20b1 to 20b4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{factor } 2 \text{ then factor } 3 = \text{factor } 5\,? @@ factors multiply: 6
+\text{isometries are turn-about}\,? @@ 20b1’s worked pair: the order matters
+f \text{ keeps distances} \not\Rightarrow f^{-1} \text{ does}\,? @@ it always does (undo-keeps)
+\text{every closed family of moves is a group}\,? @@ the slides by (n, 0) for n in ℕ are closed, with no undo for (1, 0)
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20b5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span class="gtx">the similarities with factor 2 or ½</span></span>Find whether they form a group.</li><li><span class="givens"><span class="gtx">the moves of the plane that keep the area of every triangle</span></span>Find whether they form a group, and one of them that is not an isometry.</li><li><span class="givens"><span class="gtx">the isometries that keep the point (0, 0) where it is</span></span>Find whether they form a part-group, and one that is not a turn.</li><li><span class="givens"><span class="gtx">the isometries that send (0, 0) to (1, 0)</span></span>Find whether they form a part-group.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">20b.4.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">a triangle with three equal sides, centred at (0, 0)</span></span>Build its group of symmetries, with a formula for each. <br>Check that it matches S₃.</div>
+  <div class="chq"><span class="chid">20b.4.2</span><span class="tagq">edge</span>Find a figure whose symmetries are exactly do-nothing and the half turn about a point. <br>Find one whose only symmetry is do-nothing.</div>
+  <div class="chq"><span class="chid">20b.4.3</span><span class="tagq">converse</span><span class="givens"><span class="gtx">a family of isometries closed under composing</span></span>Find whether it must be a group when it is finite, and when it is not.</div>
+  <div class="chq"><span class="chid">20b.4.4</span><span class="tagq">reroute</span>Prove that the isometries form a group from the fact that the similarities do, with the part-group test.</div>
+  <div class="chq"><span class="chid">20b.4.5</span><span class="tagq">seam</span>A ship has its planks replaced one by one until none of the first is left. An old writer asked whether it is the same ship. Two thousand years later a philosopher added a twist: what if someone gathered the old planks and built them into a ship again? An isometry moves every point of a triangle somewhere else. <br>Is the moved triangle the same triangle? <br>What would “the same” have to mean for the answer to be yes?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r20a.html">← 20a · isometries and similarities</a><a href="r20c.html">20c · slide, flip, turn →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The group of isometries of the plane is the Euclidean group, written E(2) or Isom(ℝ²). The symmetries of a figure are its symmetry group.</p>
+  <h3>Who said it first</h3>
+  <p>In 20b.4.5, the old writer is Plutarch, Life of Theseus (about 100 CE); the philosopher is Thomas Hobbes, De Corpore (1655).</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+/* moves of the plane, drawn in SVG, for rung 20 */
+const V=c=>'var('+c+')';
+const FLAG=[[0,0],[0,3],[2,3],[2,2.4],[0.6,2.4],[0.6,1.8],[1.5,1.8],[1.5,1.2],[0.6,1.2],[0.6,0]];
+const M={
+  id:()=>p=>p,
+  slide:(h,k)=>p=>[p[0]+h,p[1]+k],
+  turn:(a,b)=>p=>[a*p[0]-b*p[1],b*p[0]+a*p[1]],
+  stretch:k=>p=>[k*p[0],k*p[1]],
+  flipU:(c,s)=>p=>{ const d=2*(p[0]*c+p[1]*s); return [d*c-p[0],d*s-p[1]]; },              /* across the line through O along (c, s), c² + s² = 1 */
+  flipAt:(q,c,s)=>p=>{ const x=p[0]-q[0],y=p[1]-q[1],d=2*(x*c+y*s); return [q[0]+d*c-x,q[1]+d*s-y]; },
+  turnAt:(q,a,b)=>p=>{ const x=p[0]-q[0],y=p[1]-q[1]; return [q[0]+a*x-b*y,q[1]+b*x+a*y]; },
+  then:(g,f)=>p=>g(f(p))                                                                    /* f first, then g */
+};
+const unit=(x,y)=>{ const r=Math.hypot(x,y); return [x/r,y/r]; };
+const fx=v=>(Math.abs(v)<5e-10?0:v);
+const show=(v,d)=>{ let s=fx(v).toFixed(d==null?2:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return (s==='-0'?'0':s).replace('-','−'); };
+/* shapes: {pts, c, fill, dash, w, open}; dots: {p, c, t}; lines: {p, d, c, dash} */
+function svgPlane(o){ const lo=o.lo==null?-6:o.lo, hi=o.hi==null?6:o.hi, S=300, X=x=>(x-lo)/(hi-lo)*S, Y=y=>S-(y-lo)/(hi-lo)*S;
+  let s='<svg viewBox="0 0 '+S+' '+S+'" style="width:100%;max-width:340px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  for(let g=Math.ceil(lo);g<=hi;g++){ s+='<line x1="'+X(g)+'" y1="0" x2="'+X(g)+'" y2="'+S+'" style="stroke:'+V('--grid')+';stroke-width:'+(g===0?1.6:0.6)+'"/><line x1="0" y1="'+Y(g)+'" x2="'+S+'" y2="'+Y(g)+'" style="stroke:'+V('--grid')+';stroke-width:'+(g===0?1.6:0.6)+'"/>'; }
+  (o.lines||[]).forEach(l=>{ const L=40; s+='<line x1="'+X(l.p[0]-L*l.d[0])+'" y1="'+Y(l.p[1]-L*l.d[1])+'" x2="'+X(l.p[0]+L*l.d[0])+'" y2="'+Y(l.p[1]+L*l.d[1])+'" style="stroke:'+V(l.c||'--teal')+';stroke-width:1.6;stroke-dasharray:'+(l.dash||'5 4')+'"/>'; });
+  (o.shapes||[]).forEach(z=>{ const pts=z.pts.map(p=>X(p[0]).toFixed(1)+','+Y(p[1]).toFixed(1)).join(' ');
+    s+='<'+(z.open?'polyline':'polygon')+' points="'+pts+'" style="fill:'+(z.fill?V(z.c):'none')+';fill-opacity:'+(z.fill?0.28:0)+';stroke:'+V(z.c)+';stroke-width:'+(z.w||2)+(z.dash?';stroke-dasharray:'+z.dash:'')+'"/>'; });
+  (o.dots||[]).forEach(d=>{ s+='<circle cx="'+X(d.p[0])+'" cy="'+Y(d.p[1])+'" r="4" style="fill:'+V(d.c||'--ink')+'"/>'+(d.t?'<text x="'+(X(d.p[0])+7)+'" y="'+(Y(d.p[1])-6)+'" style="fill:'+V(d.c||'--ink')+';font:12px IBM Plex Mono,monospace">'+d.t+'</text>':''); });
+  return s+'</svg>'; }
+function knob(id,lab,min,max,step,val){ return '<div class="kn"><span class="m">'+lab+'</span><input type="range" id="'+id+'" min="'+min+'" max="'+max+'" step="'+step+'" value="'+val+'"><output id="o'+id+'"></output></div>'; }
+function chipRow(el,keys,get,set,after){ el.innerHTML=''; keys.forEach(k=>{ const b=document.createElement('button'); b.type='button'; b.textContent=k; if(k===get()) b.className='on'; b.onclick=()=>{ set(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+
+const f=p=>[-p[0],p[1]], g=p=>[p[0]+3,p[1]];
+let ord=1;
+function draw(){ const m=ord===1?(p=>g(f(p))):(p=>f(g(p))); const mid=ord===1?FLAG.map(f):FLAG.map(g);
+  $('pl').innerHTML=svgPlane({lo:-6,hi:6,shapes:[{pts:FLAG,c:'--ink',fill:true},{pts:mid,c:'--muted',dash:'4 3'},{pts:FLAG.map(m),c:'--ember',fill:true}],lines:[{p:[0,0],d:[0,1],c:'--teal'}]});
+  const v=$('vd'); v.className='verdict'; v.textContent=ord===1?'f, then g: (x, y) ↦ (3 − x, y). The flag faces left, its foot at (3, 0).':'g, then f: (x, y) ↦ (−x − 3, y). The flag faces left, its foot at (−3, 0): a different move.'; }
+$('b1').onclick=()=>{ ord=1; draw(); }; $('b2').onclick=()=>{ ord=2; draw(); }; draw();
+window.__pic={set:o=>{ ord=o; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'compose keeps',t:R`\htmlClass{new}{d(gfP, gfQ) = d(P, Q)}`,n:`Two in a row.`}
+],{title:'The slides · compose · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'undo keeps',t:R`\htmlClass{new}{d(f^{-1}P, f^{-1}Q) = d(P, Q)}`,n:`Put them back through f.`}
+],{title:'The slides · undo · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'isometries',t:R`\htmlClass{new}{\text{a group}}`,n:`Compose, undo, do nothing.`},
+  {k:'ember',kl:'similarities',t:R`k^{\prime}k,\ \ 1/k`,n:`Factors multiply.`}
+],{title:'The slides · the group · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'symmetries',t:R`\htmlClass{new}{f(S) = S}`,n:`A part-group for every figure.`}
+],{title:'The slides · figures · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`2 \cdot 3 \ne 2 + 3`,n:`Factors multiply.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

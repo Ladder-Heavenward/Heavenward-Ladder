@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Does light take the shortest path?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r20cb8.html">← 20·cb8 numbers that turn</a><a href="r20crypt.html">next: 20·crypt can a guessed word break the machine? →</a></p>
+  <div class="tags"><span class="tag phys">20·phys · physics</span></div>
+  <h1>Does light take the shortest path?</h1>
+  <p>Does light take the shortest path? A ray of sunlight off a still pond bounces at a point you can find with a ruler, and a straw in a glass of water looks broken at the surface. Two thousand years ago it was noticed that a bounce off a flat mirror takes the shortest path that touches the mirror. Then came the broken straw. A bent path is not the shortest, so the old rule seemed to fail. What makes it hard is that light travels at different speeds in air and in water, and the shortest path and the quickest path are no longer the same. This page shows, with 20’s flips and 14’s slopes, that the bounce is the shortest path, that the bend is the quickest, and that one rule gives both.</p>
+  <p class="gesture">Flip the target across the mirror, and the shortest bouncing path becomes a straight line: the bounce makes equal angles. Two mirrors at right angles make a half turn, and send every ray straight back. Where light changes speed, the quickest path bends so that the run over the length, divided by the speed, is the same on both sides.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r20c.html">20c</a> (flips), <a href="r20d.html">20d</a> (flips keep distances), <a href="r20e.html">20e</a> (two flips make a turn), <a href="r18b.html">18b</a> (the triangle technique; equality-on-the-segment), <a href="r14a.html">14a</a> (the candidates technique) and <a href="r14d.html">14d</a> (slope-sign-order). 21 names the run over the length.</p></div>
+</header>
+
+<section class="class step" data-step="20phys1">
+  <h2 class="sthead"><span class="stno">20phys1</span>A flip finds the shortest bounce</h2>
+  <p class="stands">Stands on 20c (flips), 20d (flips keep distances) and 18b (the triangle technique; equality-on-the-segment).</p>
+  <p data-pid="b2207c">A ray leaves A, touches a flat mirror at P, and reaches B, with A and B on the same side. Which P makes the path shortest? Flip B across the mirror’s line, to B′. Every point P of the line is kept by the flip, so P is as far from B′ as from B.</p>
+  <p data-pid="f7f5d7">Flip-the-target technique: <b>the shortest path from A to the mirror to B touches the mirror where the segment AB′ crosses it.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the flip-the-target technique">
+d(P, B) = d(P, B') @@ the flip keeps distances (20d) and keeps P
+d(A, P) + d(P, B) = d(A, P) + d(P, B') \ge d(A, B') @@ the triangle technique (18b)
+\text{equal exactly when } P \text{ is on the segment } AB' @@ equality-on-the-segment (18b)
+\htmlClass{new}{P = AB' \cap \text{mirror}} \quad \blacksquare @@ A and B′ are on opposite sides, so the segment crosses the line
+  </pre>
+  <p data-pid="a6ff5f">At that P, the ray in and the ray out make equal angles with the mirror, since the flip carries the ray out onto the straight continuation of the ray in. That is how light is seen to bounce. <b>The bounce that light makes is the shortest path that touches the mirror.</b></p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the bounce · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · slide the bounce point along the mirror</div>
+    <div id="pl"></div>
+    <div class="kn"><span class="m">P at x =</span><input type="range" id="kx" min="0" max="8" step="0.1" value="3"><output id="ox"></output></div>
+    <div class="cap">Ember: the path from A to P to B. Dashed teal: B flipped across the mirror to B′, and the segment AB′. The path is shortest where P sits on AB′.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">20·phys.1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="A = (0, 3),\ \ B = (8, 1)"></span> <span class="gtx">a mirror along the x-axis</span></span>Find the point P where the ray bounces, and the length of its path.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20phys2">
+  <h2 class="sthead"><span class="stno">20phys2</span>Two mirrors make a half turn</h2>
+  <p class="stands">Stands on 20·phys.1 and 20e (two flips make a turn).</p>
+  <p data-pid="3c1553">Put two mirrors at right angles, along the x-axis and the y-axis, and send a ray at the corner. It bounces off one mirror, then the other. Each bounce flips the ray’s direction across its mirror.</p>
+  <pre class="lines" data-k="ember" data-label="this page: a corner sends light back">
+(a, b) \mapsto (a, -b) @@ the bounce off the x-axis flips the direction
+(a, -b) \mapsto (-a, -b) @@ the bounce off the y-axis
+\htmlClass{new}{(a, b) \mapsto (-a, -b)} \quad \blacksquare @@ two flips across lines at right angles: a half turn (20e)
+  </pre>
+  <p data-pid="b3118a">Corner technique: <b>two mirrors at right angles send every ray back the way it came, whatever its direction.</b> The reflectors on a bicycle and at the edge of a road are made of tiny corners, in three mirrors, so that a car’s headlight comes back to the driver.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · corners · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20·phys.2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">mirrors along both axes,  a ray coming in with direction (−2, −5)</span></span>Find its direction after both bounces. <br>Find the turn the two flips make.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20phys3">
+  <h2 class="sthead"><span class="stno">20phys3</span>The quickest path bends</h2>
+  <p class="stands">Stands on 20·phys.1, 14a (the candidates technique) and 14d (slope-sign-order).</p>
+  <p data-pid="3dfd85">Light runs at speed v₁ in air and a slower v₂ in water. Put the surface along the x-axis, A = (0, a) above it and B = (d, −b) below, and let the ray cross at (x, 0). Write ℓ₁ and ℓ₂ for the two lengths of the path.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the time, and its slope">
+T(x) = \frac{\sqrt{a^2 + x^2}}{v_1} + \frac{\sqrt{b^2 + (d - x)^2}}{v_2} @@ time is length over speed, on each side
+T'(x) = \frac{x}{v_1 \ell_1} - \frac{d - x}{v_2 \ell_2} @@ the chain rule
+T' \text{ rises from below } 0 \text{ to above } 0 \text{ on } [0, d] @@ each fraction x/ℓ₁ rises with x, and (d − x)/ℓ₂ falls
+\htmlClass{new}{\frac{x / \ell_1}{v_1} = \frac{(d - x)/\ell_2}{v_2}} \quad \blacksquare @@ the one input with T′ = 0 is the least (14a, 14d)
+  </pre>
+  <p data-pid="faa801">x/ℓ₁ is the ray’s run along the surface over its length, above; (d − x)/ℓ₂ the same below. Bend technique: <b>the quickest path bends so that the run over the length, divided by the speed, is the same on both sides.</b> When the speeds are equal, the ratios are equal, and the path is straight: quickest and shortest agree.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · bending · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20·phys.3.1</span><span class="ph undo">undo</span><span class="givens"><span class="gtx">a ray from air into glass,  run over length 0.5 in air,  0.33 in glass</span></span>Find how many times faster light runs in air than in glass.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20phys4">
+  <h2 class="sthead"><span class="stno">20phys4</span>A broken straw, and light that cannot leave</h2>
+  <p class="stands">Stands on 20·phys.3.</p>
+  <p data-pid="5acee5">Light runs about 1.33 times faster in air than in water. So the run over the length in air is 1.33 times that in water.</p>
+  <pre class="lines" data-k="ember" data-label="this page: into the water, and out of it">
+\text{in air } 0.8 \Rightarrow \text{in water } 0.8 / 1.33 \approx 0.60 @@ the bend: the ray steepens going in
+\text{in water } r \Rightarrow \text{in air } 1.33\,r @@ the same rule, from below
+1.33\,r \le 1 \Rightarrow r \le 0.75 @@ a run is never longer than its length
+\htmlClass{new}{r \gt 0.75:\ \text{no path out}} @@ the light bounces back into the water
+  </pre>
+  <p data-pid="c67d00"><b>Past a certain slant, light inside water has no quickest way out, so it stays in.</b> A glass thread carries light round a bend this way, bouncing off its own walls, and so do the fibres that carry phone calls under the sea.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · out of the water · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20·phys.4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">water, speed ratio 1.33</span></span>Find the run over the length in water of a ray entering from air at 0.9. <br>Find the largest run over the length in water that still lets a ray out.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20phys5">
+  <h2 class="sthead"><span class="stno">20phys5</span>Illegal moves</h2>
+  <p class="stands">Stands on 20·phys.1 to 20·phys.4.</p>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{the bounce is at the point of the mirror nearest } A\,? @@ it is where AB′ crosses the mirror
+\text{the quickest path is the shortest}\,? @@ only when the speeds are equal
+\tfrac{\text{angle in}}{\text{angle out}} = \tfrac{v_1}{v_2}\,? @@ the rule is for run over length, not for angles
+\text{flip } A \text{ and } B \text{ both}\,? @@ flipping both leaves them on one side: flip one
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20·phys.5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span class="gtx">A and B on opposite sides of the mirror’s line</span></span>Find the shortest path from A to the line to B, and whether flipping is needed.</li><li><span class="givens"><span data-tex-inline="v_1 = v_2"></span></span>Find what the bend technique gives.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">20·phys.6.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">a room with walls along x = 0 and y = 0,  A = (2, 1),  B = (1, 3)</span></span>Build the shortest path from A to one wall, then the other, then B, by flipping B twice. <br>Find its length, and which wall it touches first.</div>
+  <div class="chq"><span class="chid">20·phys.6.2</span><span class="tagq">edge</span>Let A sit on the mirror. Find what the flip-the-target technique gives, and whether a bounce happens.</div>
+  <div class="chq"><span class="chid">20·phys.6.3</span><span class="tagq">converse</span>A path from air to water obeys the bend technique at its crossing. Must it be the quickest?</div>
+  <div class="chq"><span class="chid">20·phys.6.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="A = (0, 3),\ \ B = (8, 1)"></span></span>Find the bounce point of 20·phys.1.1 again, as the least value of a length, with no flip.</div>
+  <div class="chq"><span class="chid">20·phys.6.5</span><span class="tagq">seam</span>Light reaching the water cannot know where it is headed. How can it take the quickest path to a place it has not yet reached?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r20cb8.html">← 20·cb8 · numbers that turn</a><a href="r20crypt.html">20·crypt · can a guessed word break the machine? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>Equal angles at a mirror is the law of reflection. The bend technique is the law of refraction, Snell’s law, usually written with sines (rung 21) and the refractive index n = c/v: n₁ sin θ₁ = n₂ sin θ₂. Light trapped inside is total internal reflection, beyond the critical angle. A corner of mirrors is a corner reflector, or retroreflector. That light takes the quickest path is Fermat’s principle of least time.</p>
+  <h3>Who said it first</h3>
+  <p>Hero of Alexandria (first century) showed that the bounce is the shortest path, by this page’s flip. Ibn Sahl (984) stated the law of refraction; Willebrord Snell (1621) and René Descartes (1637) found it again. Pierre de Fermat (1662) derived it from least time. In 20·phys.6.5, Claude Clerselier, defending Descartes, answered him that light cannot choose, having no knowledge of where it is going. Three centuries later, Richard Feynman’s sum over paths gave one answer: light, in a sense, tries every path. Corner reflectors left on the Moon in 1969 still return laser pulses fired from Earth.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="20·phys: a worked “proof”, not allowed">
+A = (0, 3),\ B = (8, 1),\ \text{mirror the x-axis} @@ fine
+P = (4, 0),\ \text{halfway} @@ not allowed: the bounce is where AB′ crosses, not the midpoint
+\text{length } 5 + \sqrt{17} \approx 9.12 @@ longer than √80 ≈ 8.94: not the path light takes
+  </pre>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+/* moves of the plane, drawn in SVG, for rung 20 */
+const V=c=>'var('+c+')';
+const FLAG=[[0,0],[0,3],[2,3],[2,2.4],[0.6,2.4],[0.6,1.8],[1.5,1.8],[1.5,1.2],[0.6,1.2],[0.6,0]];
+const M={
+  id:()=>p=>p,
+  slide:(h,k)=>p=>[p[0]+h,p[1]+k],
+  turn:(a,b)=>p=>[a*p[0]-b*p[1],b*p[0]+a*p[1]],
+  stretch:k=>p=>[k*p[0],k*p[1]],
+  flipU:(c,s)=>p=>{ const d=2*(p[0]*c+p[1]*s); return [d*c-p[0],d*s-p[1]]; },              /* across the line through O along (c, s), c² + s² = 1 */
+  flipAt:(q,c,s)=>p=>{ const x=p[0]-q[0],y=p[1]-q[1],d=2*(x*c+y*s); return [q[0]+d*c-x,q[1]+d*s-y]; },
+  turnAt:(q,a,b)=>p=>{ const x=p[0]-q[0],y=p[1]-q[1]; return [q[0]+a*x-b*y,q[1]+b*x+a*y]; },
+  then:(g,f)=>p=>g(f(p))                                                                    /* f first, then g */
+};
+const unit=(x,y)=>{ const r=Math.hypot(x,y); return [x/r,y/r]; };
+const fx=v=>(Math.abs(v)<5e-10?0:v);
+const show=(v,d)=>{ let s=fx(v).toFixed(d==null?2:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return (s==='-0'?'0':s).replace('-','−'); };
+/* shapes: {pts, c, fill, dash, w, open}; dots: {p, c, t}; lines: {p, d, c, dash} */
+function svgPlane(o){ const lo=o.lo==null?-6:o.lo, hi=o.hi==null?6:o.hi, S=300, X=x=>(x-lo)/(hi-lo)*S, Y=y=>S-(y-lo)/(hi-lo)*S;
+  let s='<svg viewBox="0 0 '+S+' '+S+'" style="width:100%;max-width:340px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  for(let g=Math.ceil(lo);g<=hi;g++){ s+='<line x1="'+X(g)+'" y1="0" x2="'+X(g)+'" y2="'+S+'" style="stroke:'+V('--grid')+';stroke-width:'+(g===0?1.6:0.6)+'"/><line x1="0" y1="'+Y(g)+'" x2="'+S+'" y2="'+Y(g)+'" style="stroke:'+V('--grid')+';stroke-width:'+(g===0?1.6:0.6)+'"/>'; }
+  (o.lines||[]).forEach(l=>{ const L=40; s+='<line x1="'+X(l.p[0]-L*l.d[0])+'" y1="'+Y(l.p[1]-L*l.d[1])+'" x2="'+X(l.p[0]+L*l.d[0])+'" y2="'+Y(l.p[1]+L*l.d[1])+'" style="stroke:'+V(l.c||'--teal')+';stroke-width:1.6;stroke-dasharray:'+(l.dash||'5 4')+'"/>'; });
+  (o.shapes||[]).forEach(z=>{ const pts=z.pts.map(p=>X(p[0]).toFixed(1)+','+Y(p[1]).toFixed(1)).join(' ');
+    s+='<'+(z.open?'polyline':'polygon')+' points="'+pts+'" style="fill:'+(z.fill?V(z.c):'none')+';fill-opacity:'+(z.fill?0.28:0)+';stroke:'+V(z.c)+';stroke-width:'+(z.w||2)+(z.dash?';stroke-dasharray:'+z.dash:'')+'"/>'; });
+  (o.dots||[]).forEach(d=>{ s+='<circle cx="'+X(d.p[0])+'" cy="'+Y(d.p[1])+'" r="4" style="fill:'+V(d.c||'--ink')+'"/>'+(d.t?'<text x="'+(X(d.p[0])+7)+'" y="'+(Y(d.p[1])-6)+'" style="fill:'+V(d.c||'--ink')+';font:12px IBM Plex Mono,monospace">'+d.t+'</text>':''); });
+  return s+'</svg>'; }
+function knob(id,lab,min,max,step,val){ return '<div class="kn"><span class="m">'+lab+'</span><input type="range" id="'+id+'" min="'+min+'" max="'+max+'" step="'+step+'" value="'+val+'"><output id="o'+id+'"></output></div>'; }
+function chipRow(el,keys,get,set,after){ el.innerHTML=''; keys.forEach(k=>{ const b=document.createElement('button'); b.type='button'; b.textContent=k; if(k===get()) b.className='on'; b.onclick=()=>{ set(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+
+function draw(){ const x=+$('kx').value; $('ox').textContent=show(x,1);
+  const A=[0,3], B=[8,1], Bf=[8,-1], P=[x,0];
+  const L=Math.hypot(P[0]-A[0],P[1]-A[1])+Math.hypot(B[0]-P[0],B[1]-P[1]);
+  $('pl').innerHTML=svgPlane({lo:-2,hi:9,
+    lines:[{p:[0,0],d:[1,0],c:'--ink',dash:'1 0'}],
+    shapes:[{pts:[A,Bf],c:'--teal',dash:'5 4',open:true},{pts:[A,P,B],c:'--ember',w:2.5,open:true}],
+    dots:[{p:A,t:'A'},{p:B,t:'B'},{p:Bf,c:'--teal',t:'B′'},{p:P,c:'--ember',t:'P'}]});
+  const best=Math.abs(x-6)<0.05;
+  $('vd').className='verdict'+(best?' win':''); $('vd').textContent='P = ('+show(x,1)+', 0). The path is '+show(L,3)+' long; the straight line AB′ is √80 ≈ 8.944.'+(best?' P is on AB′: this is the bounce light makes.':''); }
+$('kx').oninput=draw; draw();
+window.__pic={set:(x)=>{ $('kx').value=x; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'flip the target',t:R`\htmlClass{new}{P = AB^{\prime} \cap L}`,n:`A straight line to the flipped target.`},
+  {k:'ember',kl:'equal angles',t:R`\text{in} = \text{out}`,n:`The flip carries one to the other.`}
+],{title:'The slides · the bounce · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'two flips',t:R`\htmlClass{new}{(a, b) \mapsto (-a, -b)}`,n:`A half turn: straight back.`}
+],{title:'The slides · corners · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'the slope of the time',t:R`T^{\prime}(x) = \tfrac{x}{v_1 \ell_1} - \tfrac{d - x}{v_2 \ell_2}`,n:`Zero at one place.`},
+  {k:'ember',kl:'bend',t:R`\htmlClass{new}{\tfrac{\text{run}/\text{length}}{v}\ \text{the same}}`,n:`Quickest, not shortest.`}
+],{title:'The slides · bending · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'in',t:R`0.8 \to 0.60`,n:`Steeper.`},
+  {k:'ember',kl:'trapped',t:R`\htmlClass{new}{r > 0.75}`,n:`No path out.`}
+],{title:'The slides · out of the water · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`\text{quickest} = \text{shortest}\,?`,n:`Only at one speed.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

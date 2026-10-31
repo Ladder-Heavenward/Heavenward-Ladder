@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Multiply lengths, add angles</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r21cb18.html">← 21·cb18 a city is two turns</a><a href="r21then.html">next: 21·then why is summer warmer than winter? →</a></p>
+  <div class="tags"><span class="tag then">21·cb20 · newsflash for 20·cb8</span></div>
+  <h1>Multiply lengths, add angles</h1>
+  <p>18f built the quarter turn, whose square is negative one, and halved it again and again to measure angles. 20·cb8 found that every pair of the plane multiplies by turning. Now that an angle also has an arc, the rule behind that multiplying can be said in one breath: lengths multiply and angles add. From it come all the powers of a turn and all the ways to split a whole turn into equal parts. Last comes this rung’s claim: turning by an angle is raising the quarter turn to a power.</p>
+  <p class="gesture">Write each number of the plane by how far out it is and how far round. Then multiplying two of them multiplies the distances and adds the turns. The equal parts of a whole turn sit at the corners of a regular shape. Turning by any angle is the quarter turn raised to a power.</p>
+  <div class="ready"><h3>What this calls back to, and what it stands on</h3><p>Calls back to <a href="r20cb8.html">20·cb8</a> (numbers that turn) and <a href="r18f.html">18f</a> (i, halving, sizes). Stands on <a href="r21r.html">21r</a> (turn and reach), <a href="r21d.html">21d</a> (the sum technique), <a href="r04b.html">4b</a> (induction), <a href="r21j.html">21j</a> (sizes are arcs).</p></div>
+</header>
+
+<section class="class step" data-step="21·cb20.1">
+  <h2 class="sthead"><span class="stno">21·cb20.1</span>Out and round</h2>
+  <p class="stands">Stands on 20·cb8 (a + bi, the size |z|) and 21r1 (turn and reach).</p>
+  <p data-pid="c7df6f">Out-and-round technique: <b>every pair z ≠ 0 is r(cos θ + i sin θ), with r = |z| and θ its turn, fixed up to whole turns.</b> This is the turn-and-reach technique, written with i.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the out-and-round technique">
+z = a + bi = (a, b) @@ 20·cb8
+(a, b) = (r\cos\theta,\ r\sin\theta),\ \ r = \sqrt{a^2 + b^2} = |z| @@ turn and reach (21r1)
+\htmlClass{new}{z = r(\cos\theta + i\sin\theta)} \quad \blacksquare @@ a + bi with a = r cos θ, b = r sin θ
+  </pre>
+  <p class="eqline" data-pid="e65278">From here on, θ is the turn of z, and r(cos θ + i sin θ) its out-and-round form.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · out and round · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · powers of the quarter turn, and the equal parts of a turn</div>
+    <div class="kn"><span class="m">t</span><input type="range" id="kt" min="0" max="4" step="0.01" value="0.5"><output id="okt"></output></div>
+    <div class="kn"><span class="m">n</span><input type="range" id="kn" min="2" max="12" step="1" value="6"><output id="okn"></output></div>
+    <div id="pl"></div>
+    <div class="cap">Ember: the point i to the power t, at t quarter turns. Teal: the n numbers whose n-th power is 1, at the corners of a regular shape.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">21·cb20.1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="1 + i\sqrt3,\ \ -2i,\ \ -3"></span></span>Find the out-and-round form of each.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21·cb20.2">
+  <h2 class="sthead"><span class="stno">21·cb20.2</span>Lengths multiply, angles add</h2>
+  <p class="stands">Stands on 21·cb20.1, 20j2 (the pair product), 21d3 (the sum technique) and 4b (induction).</p>
+  <p data-pid="af1386">Multiply-and-add technique: <b>multiplying two pairs multiplies their lengths and adds their turns; so the n-th power of cos θ + i sin θ is cos nθ + i sin nθ.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the multiply-and-add technique">
+(\cos\alpha + i\sin\alpha)(\cos\beta + i\sin\beta) @@ the pair product (20j2), with i² = −1
+= (\cos\alpha\cos\beta - \sin\alpha\sin\beta) + i(\sin\alpha\cos\beta + \cos\alpha\sin\beta) @@ share out
+= \cos(\alpha + \beta) + i\sin(\alpha + \beta) @@ the sum technique (21d3)
+\htmlClass{new}{r(\cos\alpha + i\sin\alpha) \cdot s(\cos\beta + i\sin\beta) = rs(\cos(\alpha + \beta) + i\sin(\alpha + \beta))} \quad \blacksquare @@ the numbers r and s come out front
+(\cos\theta + i\sin\theta)^n = \cos n\theta + i\sin n\theta @@ induction on n (4b), one more factor each step
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · multiply · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21·cb20.2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="(1 + i)^8,\ \ (\cos\tfrac{\pi}{12} + i\sin\tfrac{\pi}{12})^6"></span></span>Guess where each lands. <br>Find each.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21·cb20.3">
+  <h2 class="sthead"><span class="stno">21·cb20.3</span>Equal parts of a turn</h2>
+  <p class="stands">Stands on 21·cb20.2 and 21b3 (whole turns).</p>
+  <p data-pid="e3ac6f">Equal-parts technique: <b>the numbers whose n-th power is 1 are cos(2πk/n) + i sin(2πk/n) for k = 0, 1, …, n − 1: n of them, at the corners of a regular n-sided shape.</b> Every pair w ≠ 0 has exactly n n-th roots in the same way.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the equal-parts technique">
+z^n = 1,\ z = r(\cos\theta + i\sin\theta) \Rightarrow r^n(\cos n\theta + i\sin n\theta) = 1 @@ multiply-and-add
+r^n = 1 \Rightarrow r = 1 @@ lengths: r &gt; 0
+n\theta = 2\pi k @@ turns: cos nθ = 1, sin nθ = 0 only at whole turns (21b)
+\htmlClass{new}{z = \cos\tfrac{2\pi k}{n} + i\sin\tfrac{2\pi k}{n},\ \ k = 0, \ldots, n - 1} \quad \blacksquare @@ k and k + n give the same point
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · parts · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21·cb20.3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="z^3 = 1,\ \ z^4 = -16"></span></span>Find every answer to each.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21·cb20.4">
+  <h2 class="sthead"><span class="stno">21·cb20.4</span>An angle is a power of i</h2>
+  <p class="stands">Stands on 21·cb20.2, 18f3 (halving), 18f4 (size), 21j2 (sizes are arcs) and 4b (induction).</p>
+  <p data-pid="0f48c3">18f made iᵗ by halving i and multiplying, and measured an angle by the power it reaches. Now that power gets its coordinates. Quarter-power technique: <b>iᵗ = cos(πt/2) + i sin(πt/2): the turn of t quarter turns is the point πt/2 round the circle.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the quarter-power technique">
+i = \cos\tfrac{\pi}{2} + i\sin\tfrac{\pi}{2} @@ the point at arc π/2 is (0, 1) (21b)
+\big(\cos\tfrac{\pi}{2^{n+2}} + i\sin\tfrac{\pi}{2^{n+2}}\big)^2 = \cos\tfrac{\pi}{2^{n+1}} + i\sin\tfrac{\pi}{2^{n+1}} @@ multiply-and-add doubles the angle; both numbers on the left are at least 0
+i^{1/2^n} = \cos\tfrac{\pi}{2^{n+1}} + i\sin\tfrac{\pi}{2^{n+1}} @@ so the left is the half (halving, 18f3); induction (4b) on n
+i^{k/2^n} = \cos\tfrac{k\pi}{2^{n+1}} + i\sin\tfrac{k\pi}{2^{n+1}} @@ multiply-and-add, k times
+\htmlClass{new}{i^t = \cos\tfrac{\pi t}{2} + i\sin\tfrac{\pi t}{2},\ \ i^s \cdot i^t = i^{s + t}} \quad \blacksquare @@ for every size t: an angle of t quarter turns has arc πt/2 (sizes are arcs, 21j2); turns add (multiply-and-add)
+  </pre>
+  <p data-pid="b7b13d">So 18f’s size, 21a’s arc and this call back’s turn are one number in three units: θ radians is t = 2θ/π quarter turns. Past a half turn the same formula carries on round the circle. The snag is the choice. iᵖ has q different q-th roots, and the rule picks one. So (i⁴)^{1/4} = 1^{1/4} = 1, while i^{4 · 1/4} = i.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · powers of i · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21·cb20.4.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="i^{1/3},\ \ i^{2.5}"></span></span>Find each, as a + bi. <br>Find the power of i that turns by π/3 radians.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">21·cb20.5.1</span><span class="tagq">build</span>Build the formulas for cos 3θ and sin 3θ by cubing cos θ + i sin θ two ways: by multiply-and-add, and by sharing out.</div>
+  <div class="chq"><span class="chid">21·cb20.5.2</span><span class="tagq">edge</span>Find when (iˢ)ᵗ = iˢᵗ holds, and give the smallest example where it fails.</div>
+  <div class="chq"><span class="chid">21·cb20.5.3</span><span class="tagq">converse</span>A number of length 1 with a turn of 2πk/n has n-th power 1. Turn it round: prove that if zⁿ = 1 then |z| = 1, using lengths alone.</div>
+  <div class="chq"><span class="chid">21·cb20.5.4</span><span class="tagq">reroute</span>Prove that the n numbers with n-th power 1 add to 0, for n ≥ 2, with 15i’s geometric sum instead of a picture (it holds for pairs, by the same lines).</div>
+  <div class="chq"><span class="chid">21·cb20.5.5</span><span class="tagq">seam</span>For two centuries the square roots of negative numbers were called “imaginary” and used with suspicion, even by those who got right answers with them. Then three people, separately, drew them as points of the plane that multiply by turning. <br>Did the drawing make them real? <br>Were they real all along, or is “real” the wrong question?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r21cb18.html">← 21·cb18 · a city is two turns</a><a href="r21then.html">21·then · why is summer warmer than winter? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The pairs a + bi are the complex numbers, and |z| is their absolute value. The turn θ is the argument of z, and r(cos θ + i sin θ) its polar form, often written r cis θ. Multiply-and-add for powers is de Moivre’s formula; the numbers with zⁿ = 1 are the n-th roots of unity. The value of iᵗ chosen here is its principal value.</p>
+  <h3>Who said it first</h3>
+  <p>The power formula is in Abraham de Moivre’s work (1707, 1722) and in Leonhard Euler’s Introductio (1748). In 21·cb20.5.5, the three are Caspar Wessel (1799), Jean-Robert Argand (1806) and Carl Friedrich Gauss (1831), who gave them the name “complex” and said that if +1, −1 and √−1 had been called direct, inverse and lateral units, there would have been no mystery.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+/* moves of the plane, drawn in SVG, for rung 20 */
+const V=c=>'var('+c+')';
+const FLAG=[[0,0],[0,3],[2,3],[2,2.4],[0.6,2.4],[0.6,1.8],[1.5,1.8],[1.5,1.2],[0.6,1.2],[0.6,0]];
+const M={
+  id:()=>p=>p,
+  slide:(h,k)=>p=>[p[0]+h,p[1]+k],
+  turn:(a,b)=>p=>[a*p[0]-b*p[1],b*p[0]+a*p[1]],
+  stretch:k=>p=>[k*p[0],k*p[1]],
+  flipU:(c,s)=>p=>{ const d=2*(p[0]*c+p[1]*s); return [d*c-p[0],d*s-p[1]]; },              /* across the line through O along (c, s), c² + s² = 1 */
+  flipAt:(q,c,s)=>p=>{ const x=p[0]-q[0],y=p[1]-q[1],d=2*(x*c+y*s); return [q[0]+d*c-x,q[1]+d*s-y]; },
+  turnAt:(q,a,b)=>p=>{ const x=p[0]-q[0],y=p[1]-q[1]; return [q[0]+a*x-b*y,q[1]+b*x+a*y]; },
+  then:(g,f)=>p=>g(f(p))                                                                    /* f first, then g */
+};
+const unit=(x,y)=>{ const r=Math.hypot(x,y); return [x/r,y/r]; };
+const fx=v=>(Math.abs(v)<5e-10?0:v);
+const show=(v,d)=>{ let s=fx(v).toFixed(d==null?2:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return (s==='-0'?'0':s).replace('-','−'); };
+/* shapes: {pts, c, fill, dash, w, open}; dots: {p, c, t}; lines: {p, d, c, dash} */
+function svgPlane(o){ const lo=o.lo==null?-6:o.lo, hi=o.hi==null?6:o.hi, S=300, X=x=>(x-lo)/(hi-lo)*S, Y=y=>S-(y-lo)/(hi-lo)*S;
+  let s='<svg viewBox="0 0 '+S+' '+S+'" style="width:100%;max-width:340px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  for(let g=Math.ceil(lo);g<=hi;g++){ s+='<line x1="'+X(g)+'" y1="0" x2="'+X(g)+'" y2="'+S+'" style="stroke:'+V('--grid')+';stroke-width:'+(g===0?1.6:0.6)+'"/><line x1="0" y1="'+Y(g)+'" x2="'+S+'" y2="'+Y(g)+'" style="stroke:'+V('--grid')+';stroke-width:'+(g===0?1.6:0.6)+'"/>'; }
+  (o.lines||[]).forEach(l=>{ const L=40; s+='<line x1="'+X(l.p[0]-L*l.d[0])+'" y1="'+Y(l.p[1]-L*l.d[1])+'" x2="'+X(l.p[0]+L*l.d[0])+'" y2="'+Y(l.p[1]+L*l.d[1])+'" style="stroke:'+V(l.c||'--teal')+';stroke-width:1.6;stroke-dasharray:'+(l.dash||'5 4')+'"/>'; });
+  (o.shapes||[]).forEach(z=>{ const pts=z.pts.map(p=>X(p[0]).toFixed(1)+','+Y(p[1]).toFixed(1)).join(' ');
+    s+='<'+(z.open?'polyline':'polygon')+' points="'+pts+'" style="fill:'+(z.fill?V(z.c):'none')+';fill-opacity:'+(z.fill?0.28:0)+';stroke:'+V(z.c)+';stroke-width:'+(z.w||2)+(z.dash?';stroke-dasharray:'+z.dash:'')+'"/>'; });
+  (o.dots||[]).forEach(d=>{ s+='<circle cx="'+X(d.p[0])+'" cy="'+Y(d.p[1])+'" r="4" style="fill:'+V(d.c||'--ink')+'"/>'+(d.t?'<text x="'+(X(d.p[0])+7)+'" y="'+(Y(d.p[1])-6)+'" style="fill:'+V(d.c||'--ink')+';font:12px IBM Plex Mono,monospace">'+d.t+'</text>':''); });
+  return s+'</svg>'; }
+function knob(id,lab,min,max,step,val){ return '<div class="kn"><span class="m">'+lab+'</span><input type="range" id="'+id+'" min="'+min+'" max="'+max+'" step="'+step+'" value="'+val+'"><output id="o'+id+'"></output></div>'; }
+function chipRow(el,keys,get,set,after){ el.innerHTML=''; keys.forEach(k=>{ const b=document.createElement('button'); b.type='button'; b.textContent=k; if(k===get()) b.className='on'; b.onclick=()=>{ set(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+
+let t=0.5, n=6;
+$('kt').addEventListener('input',()=>{ t=+$('kt').value; draw(); });
+$('kn').addEventListener('input',()=>{ n=+$('kn').value; draw(); });
+function draw(){ const C=[], A=[]; for(let s=0;s<=6.3;s+=0.03) C.push([Math.cos(s),Math.sin(s)]);
+  const th=Math.PI*t/2; for(let s=0;s<=th+1e-9;s+=0.01) A.push([Math.cos(s),Math.sin(s)]);
+  const R=[]; for(let k=0;k<n;k++) R.push([Math.cos(2*Math.PI*k/n),Math.sin(2*Math.PI*k/n)]);
+  const z=[Math.cos(th),Math.sin(th)];
+  $('pl').innerHTML=svgPlane({lo:-1.5,hi:1.5,shapes:[{pts:C,c:'--grid',open:true},{pts:R,c:'--teal',w:1.6},{pts:A,c:'--ember',open:true,w:3}],dots:R.map((p,k)=>({p,c:'--teal'})).concat([{p:z,c:'--ember',t:'iᵗ'}])});
+  $('okt').textContent=show(t); $('okn').textContent=String(n);
+  const v=$('vd'); v.className='verdict'; v.textContent='i to the '+show(t)+' = '+show(z[0])+(z[1]<0?' − ':' + ')+show(Math.abs(z[1]))+'i: '+show(t)+' quarter turns, '+show(th)+' radians, '+show(90*t)+'°. The '+n+' numbers with '+n+'-th power 1 are '+show(360/n)+'° apart.'; }
+draw();
+window.__pic={set:(a,b)=>{ t=a; n=b; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'out and round',t:R`\htmlClass{new}{z = r(\cos\theta + i\sin\theta)}`,n:`r = |z|.`}
+],{title:'The slides · out and round · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'lengths and turns',t:R`\htmlClass{new}{(\cos\theta + i\sin\theta)^n = \cos n\theta + i\sin n\theta}`,n:`Multiply lengths, add turns.`}
+],{title:'The slides · multiply · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'equal parts',t:R`\htmlClass{new}{z^n = 1 \iff z = \cos\tfrac{2\pi k}{n} + i\sin\tfrac{2\pi k}{n}}`,n:`n corners.`}
+],{title:'The slides · parts · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'an angle is a power of i',t:R`\htmlClass{new}{i^t = \cos\tfrac{\pi t}{2} + i\sin\tfrac{\pi t}{2}}`,n:`Turns add, so exponents add.`}
+],{title:'The slides · powers of i · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

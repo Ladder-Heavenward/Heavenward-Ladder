@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Building the solution by repeated integration</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+.kn{font-size:.88rem}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r24a.html">← 24a a rule and a start</a><a href="r24c.html">next: 24c a map that shrinks has one fixed point →</a></p>
+  <div class="tags"><span class="tag proof">24b · proof</span></div>
+  <h1>Building the solution by repeated integration</h1>
+  <p>A rule on rates says what the slope is. The sixteenth rung says that a function is its starting value plus the area under its slope. Put those together and the rule becomes a statement about areas: the solution equals its start plus the area under the rule applied to itself. That sounds circular, but it suggests a way to build an answer. Start with a guess, the flat line at the starting value. Put the guess into the rule, take the area, and get a better guess. Do it again. For the rule of the growth function, the guesses are exactly the matching polynomials of the last rung, closing in on the answer.</p>
+  <p class="gesture">A rule with a start is the same as a statement about areas: the solution is its start plus the area under the rule applied to itself. Feed a guess in, take the area, and repeat. The guesses close in on the solution.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r24a.html">24a</a> (a rule and a start), <a href="r16b.html">16b</a> (its slope is the height), <a href="r16c.html">16c</a> (evaluating by antiderivatives), <a href="r11c.html">11c</a> (continuous after continuous), <a href="r23d.html">23d</a> (settling everywhere at once), <a href="r23e.html">23e</a> (areas, term by term). <a href="r24c.html">24c</a> shows why the guesses must close in.</p></div>
+</header>
+
+<section class="class step" data-step="24b1">
+  <h2 class="sthead"><span class="stno">24b1</span>The rule as an area</h2>
+  <p class="stands">Stands on 24a2, 16b (the slope of an area function), 16c (evaluating by antiderivatives) and 11c (continuous after continuous).</p>
+  <p data-pid="a19dae">Area-form technique: <b>let F be continuous on a rectangle and y continuous on an interval I holding x₀, with its points in the rectangle. Then y solves y′ = F(x, y) with y(x₀) = y₀ exactly when y(x) = y₀ + ∫ₓ₀ˣ F(t, y(t)) dt for every x in I.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the area-form technique">
+t \mapsto F(t, y(t)) \text{ is continuous on } I @@ continuous after continuous (11c)
+y' = F(x, y),\ y(x_0) = y_0 \Rightarrow y(x) - y_0 = \int_{x_0}^{x} y'(t)\,dt = \int_{x_0}^{x} F(t, y(t))\,dt @@ evaluating by antiderivatives (16c)
+y(x) = y_0 + \int_{x_0}^{x} F(t, y(t))\,dt \Rightarrow y'(x) = F(x, y(x)) @@ the slope of an area function is the height (16b)
+\htmlClass{new}{y(x_0) = y_0 + 0 = y_0} \quad \blacksquare @@ an area from x₀ to x₀ is 0
+  </pre>
+  <p data-pid="516605">The area form has two gifts. It holds the start inside it, so the rule and its start are one equation. And it asks only that y be continuous: a slope is no longer assumed, it is produced.</p>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">24b1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="y&#x27; = x^2 + y^2,\ y(1) = 2"></span></span>Write the rule and its start as one area form. <br>Find what the area form gives at x = 1, and the slope it gives at every x. <br>Find the slope at the start, and the tangent line's value at x = 1.1.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24b2">
+  <h2 class="sthead"><span class="stno">24b2</span>Feed the guess back in</h2>
+  <p class="stands">Stands on 24b1 and 4c (recursion).</p>
+  <p class="eqline" data-pid="b22855">From here on, the <i>repeated integration</i> for y′ = F(x, y), y(x₀) = y₀ is the list of functions with y₀(x) = y₀ and yₙ₊₁(x) = y₀ + ∫ₓ₀ˣ F(t, yₙ(t)) dt.</p>
+  <pre class="lines" data-k="ember" data-label="this step: y&#x27; = y, y(0) = 1">
+y_0(x) = 1 @@ the flat line at the start
+y_1(x) = 1 + \int_0^x 1\,dt = 1 + x @@ feed y₀ in
+y_2(x) = 1 + \int_0^x (1 + t)\,dt = 1 + x + \tfrac{x^2}{2} @@ feed y₁ in
+y_n(x) = 1 + x + \tfrac{x^2}{2!} + \cdots + \tfrac{x^n}{n!} \Rightarrow y_{n+1}(x) = 1 + \int_0^x y_n = 1 + x + \cdots + \tfrac{x^{n+1}}{(n+1)!} @@ integrate term by term: ∫₀ˣ tᵏ/k! dt = xᵏ⁺¹/(k + 1)!
+\htmlClass{new}{y_n = T_n,\ \text{the matching polynomial of } e^x \text{ at } 0} \quad \blacksquare @@ induction (4g)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: y&#x27; = x + y, y(0) = 0">
+y_0 = 0,\ \ y_1 = \int_0^x t\,dt = \tfrac{x^2}{2} @@ F(t, 0) = t
+y_2 = \int_0^x \big(t + \tfrac{t^2}{2}\big)dt = \tfrac{x^2}{2} + \tfrac{x^3}{6} @@ feed y₁ in
+\htmlClass{new}{y_n = \tfrac{x^2}{2!} + \cdots + \tfrac{x^{n+1}}{(n+1)!} \to e^x - x - 1} \quad \blacksquare @@ the same induction; the sum for eˣ less its first two pieces (23b2)
+  </pre>
+  <p data-pid="a1db7c">Check the last one in the rule: (eˣ − x − 1)′ = eˣ − 1, and x + (eˣ − x − 1) = eˣ − 1. It starts at 0. So the guesses settled on a solution. By 24a3's kind of argument (look at the gap between two solutions) it is the only one.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · repeated integration · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · guesses closing in on the solution of y′ = y, y(0) = 1</div>
+    <div id="pl"></div>
+    <div class="kn"><span class="m">rounds</span><input type="range" id="kn" min="0" max="8" step="1" value="2"><output id="okn"></output></div>
+    <div class="cap">Ink: eˣ. Teal: the guesses y₀, y₁, …, yₙ, each the area of the one before, plus 1. Each round hugs the curve over a wider stretch.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24b2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="y&#x27; = 2xy,\ y(0) = 1"></span></span>Run three rounds of repeated integration from the flat line. <br>Guess the solution from the pattern, and check it in the rule and the start.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24b3">
+  <h2 class="sthead"><span class="stno">24b3</span>Why the guesses settle, for y′ = y</h2>
+  <p class="stands">Stands on 24b2, 23d4 (the at-once comparison technique) and 23e1 (the area-at-once technique).</p>
+  <pre class="lines" data-k="ember" data-label="this step: the guesses settle everywhere at once, and their limit solves the rule">
+|y_{n+1}(x) - y_n(x)| = \tfrac{|x|^{n+1}}{(n+1)!} \le \tfrac{r^{n+1}}{(n+1)!} \text{ on } [-r, r] @@ 24b2
+\textstyle\sum \tfrac{r^{n+1}}{(n+1)!} \text{ settles} @@ the ratio test (22e2)
+y_n \to y \text{ everywhere at once on } [-r, r] @@ y_n = y₀ + Σ (y_{k+1} − y_k); the at-once comparison technique (23d4)
+\int_0^x y_n \to \int_0^x y @@ the area-at-once technique (23e1)
+\htmlClass{new}{y(x) = 1 + \int_0^x y(t)\,dt} \quad \blacksquare @@ let n grow on both sides of yₙ₊₁ = 1 + ∫₀ˣ yₙ
+  </pre>
+  <p data-pid="30f0b9">That is the whole plan of the next two steps, seen once on an easy rule. The gaps between guesses shrink like a factorial, so the guesses crowd and settle all at once, and the area form passes to the limit. 24c finds the general reason the gaps shrink. 24d runs the plan for every tame rule.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24b3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="y&#x27; = 2xy,\ y(0) = 1"></span> <span class="gtx">on [−1, 1]</span></span>Find a ceiling for the gap between the nth and the (n + 1)th guesses. <br>Prove that the guesses settle everywhere at once. <br>Find how many rounds put a guess within 0.001 of the solution at every x.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24b4">
+  <h2 class="sthead"><span class="stno">24b4</span>Illegal moves</h2>
+  <p class="stands">Stands on 24b1 to 24b3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+y_{n+1}(x) = y_0 + \int_{x_0}^{x} F(t, y_{n+1}(t))\,dt\,? @@ feed in the last guess, not the one being built
+y_{n+1}(x) = \int_{x_0}^{x} F(t, y_n(t))\,dt\,? @@ the start y₀ must be added each round
+\text{the guesses settle at each point, so the limit solves the rule}\,? @@ passing the area to the limit needs settling everywhere at once (23e1)
+\text{repeated integration gives a formula for every rule}\,? @@ it gives guesses; most rules have no formula, and the guesses are how the solution is known
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24b4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="y&#x27; = y,\ y(0) = 1"></span></span>Write the line's round for y₁, with y₁ inside the area. <br>Find whether it tells you what y₁ is, and which equation it really is.</li><li><span class="givens"><span data-tex-inline="y&#x27; = y,\ y(0) = 1"></span></span>Run four rounds from y₀ = 1 without adding the start each time. <br>Find where these guesses settle, and which rule and start the limit solves.</li><li><span class="givens"><span data-tex-inline="f_n(x) = nx(1 - x^2)^n"></span> <span class="gtx">on [0, 1]</span></span>Find where fₙ(x) settles at each x. <br>Check that −n(1 − x²)ⁿ⁺¹/(2(n + 1)) has slope fₙ. Find ∫₀¹ fₙ, and where those areas settle. <br>Find whether the areas head to the area of the limit.</li><li><span class="givens"><span data-tex-inline="y&#x27; = x^2 + y^2,\ y(0) = 0"></span></span>Run two rounds of repeated integration. <br>Find whether the guesses look like the matching polynomials of any function built so far, and what they give you anyway.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">24b.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="y&#x27; = y + 1,\ y(0) = 0"></span></span>Build the guesses from the flat line at 0, and again from the first guess y₀(x) = x². <br>Find a formula for the nth guess in each run, and prove both settle at the same function. <br>Check that function in the rule and the start.</div>
+  <div class="chq"><span class="chid">24b.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="y&#x27; = y^2,\ y(0) = 1"></span></span>Find y₁ and y₂. <br>Find the pieces of each guess that later rounds leave alone, and guess the function they build. <br>Find the x where those pieces can settle, and what that warns about how far the guesses reach.</div>
+  <div class="chq"><span class="chid">24b.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="y&#x27; = x^2 + y^2"></span></span>24b1 turns a solution into an area form. Turn it round, and ask more: take a continuous y that obeys the area form, with no slope assumed. <br>Prove that y has a slope, and that its slope is continuous. <br>Find y″ in terms of x and y, and whether y has slopes of every order.</div>
+  <div class="chq"><span class="chid">24b.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="y&#x27; = y,\ y(0) = 1"></span></span>Prove that the guesses settle everywhere at once on [−r, r] at eˣ, by the match-error technique instead of the comparison test. <br>Find how many rounds its ceiling needs to put a guess within 0.001 of eˣ at every x in [−2, 2], and how many are truly needed.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r24a.html">← 24a · a rule and a start</a><a href="r24c.html">24c · a map that shrinks has one fixed point →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The area form is the integral equation of the initial value problem; repeated integration is Picard iteration, or the method of successive approximations.</p>
+  <h3>Who said it first</h3>
+  <p>Joseph Liouville used successive approximations in 1838 for a special case, and Émile Picard made them a general method in 1890. Ernst Lindelöf sharpened the conditions in 1894.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+/* sequence and sum plots for rungs 22 on: plot({xlo,xhi,ylo,yhi,series:[{pts,c,dots,open,w}],h:[{y,c,dash,t}]}) */
+const V=c=>'var('+c+')';
+function plot(o){ const W=320,H=220,P=26, X=x=>P+(x-o.xlo)/(o.xhi-o.xlo)*(W-P-6), Y=y=>H-P-(y-o.ylo)/(o.yhi-o.ylo)*(H-P-8);
+  let s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;max-width:380px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  s+='<line x1="'+P+'" y1="'+Y(Math.max(o.ylo,Math.min(o.yhi,0)))+'" x2="'+W+'" y2="'+Y(Math.max(o.ylo,Math.min(o.yhi,0)))+'" style="stroke:'+V('--grid')+';stroke-width:1.4"/>';
+  s+='<line x1="'+P+'" y1="0" x2="'+P+'" y2="'+(H-P)+'" style="stroke:'+V('--grid')+';stroke-width:1.4"/>';
+  (o.ticks||[]).forEach(t=>{ s+='<text x="2" y="'+(Y(t)+4)+'" style="font-size:10px;fill:'+V('--ink')+'">'+t+'</text>'; });
+  (o.h||[]).forEach(l=>{ s+='<line x1="'+P+'" y1="'+Y(l.y)+'" x2="'+W+'" y2="'+Y(l.y)+'" style="stroke:'+V(l.c||'--teal')+';stroke-width:1.4;stroke-dasharray:'+(l.dash||'5 4')+'"/>'; if(l.t) s+='<text x="'+(W-4)+'" y="'+(Y(l.y)-4)+'" text-anchor="end" style="font-size:10px;fill:'+V(l.c||'--teal')+'">'+l.t+'</text>'; });
+  (o.series||[]).forEach(q=>{ const pts=q.pts.filter(p=>isFinite(p[1])&&p[1]>=o.ylo-1e9);
+    if(q.open) s+='<polyline points="'+pts.map(p=>X(p[0])+','+Y(Math.max(o.ylo,Math.min(o.yhi,p[1])))).join(' ')+'" style="fill:none;stroke:'+V(q.c||'--ink')+';stroke-width:'+(q.w||1.6)+'"/>';
+    if(q.dots!==false) pts.forEach(p=>{ if(p[1]>=o.ylo&&p[1]<=o.yhi) s+='<circle cx="'+X(p[0])+'" cy="'+Y(p[1])+'" r="'+(q.r||2.4)+'" style="fill:'+V(q.c||'--ink')+'"/>'; }); });
+  return s+'</svg>'; }
+
+let n=2; const e=$('kn'); e.addEventListener('input',()=>{ n=+e.value; draw(); });
+function fact(k){ let r=1; for(let i=2;i<=k;i++) r*=i; return r; }
+function draw(){ const pts=[], ser=[]; for(let i=0;i<=160;i++){ const x=-2+4*i/160; pts.push([x,Math.exp(x)]); }
+  for(let m=0;m<=n;m++){ const q=[]; for(let i=0;i<=160;i++){ const x=-2+4*i/160; let s=0; for(let k=0;k<=m;k++) s+=Math.pow(x,k)/fact(k); q.push([x,s]); } ser.push({pts:q,c:'--teal',open:true,dots:false,w:m===n?2:1}); }
+  $('pl').innerHTML=plot({xlo:-2,xhi:2,ylo:-1,yhi:7.5,ticks:[0,2,4,6],series:[{pts,c:'--ink',open:true,dots:false,w:2.4}].concat(ser)});
+  $('okn').textContent=n; let s=0; for(let k=0;k<=n;k++) s+=Math.pow(2,k)/fact(k);
+  const v=$('vd'); v.className='verdict'; v.textContent='after '+n+' rounds: y'+n+'(2) = '+s.toFixed(4)+', and e² = '+Math.exp(2).toFixed(4)+'.'; }
+draw();
+window.__pic={set:j=>{ n=j; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'feed back',t:R`\htmlClass{new}{y_{n+1}(x) = y_0 + \int_{x_0}^{x} F(t, y_n(t))\,dt}`,n:`Start with the flat line.`},
+  {k:'ember',kl:'for y′ = y',t:R`y_n = T_n \to e^x`,n:`The matching polynomials.`}
+],{title:'The slides · repeated integration · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>16c · Evaluating by antiderivatives</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r16b.html">← 16b its slope is the height</a><a href="r16d.html">next: 16d substitution →</a></p>
+  <div class="tags"><span class="tag proof">16c · proof</span></div>
+  <h1>Evaluating by antiderivatives</h1>
+  <p>16b showed that the slope of the area function of an unbroken function is the function itself. Any other function with that slope will do as well, and rung 14 says two such functions differ by a constant. That gives the area between two ends as the change in that other function between them, with no sums. This step proves it twice. The first proof is three lines from 16b and rung 14. The second skips 16b altogether. On each piece of a partition, rung 14’s mean value technique puts the other function’s change at the height somewhere on the piece times the piece’s width. So its total change sits between every lower sum and every upper sum. The second proof asks less of the function. Then the step turns the technique on rung 15's hard-won areas, and gets each in one line.</p>
+  <p class="gesture">If a function’s slope is the height on a closed interval, and the height has an integral there, then the area is that function’s value at the right end less its value at the left. Proof one: the area function and that function differ by a constant. Proof two: average-slope on each piece, the changes add up by collapsing-sum, and the total lies between the lower and upper sums of every partition.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r16b.html">16b</a> (area-slope, antiderivative-exists), <a href="r16a.html">16a</a> (the area function), <a href="r14c.html">14c</a> (average-slope), <a href="r14e.html">14e</a> (same-slopes, all-antiderivatives, antiderivative), <a href="r15c.html">15c</a> (exactly-one-between, ∫), <a href="r15a.html">15a</a> (L, U, mᵢ, Mᵢ), <a href="r15g.html">15g</a> (collapsing-sum), <a href="r15i.html">15i</a> (area-under-a-power), <a href="r13d.html">13d</a> (power for slopes, polynomial-slope), <a href="r13h.html">13h</a> (fraction-power for slopes), <a href="r13f.html">13f</a> (negative-powers). <a href="r16d.html">16d</a> and <a href="r16e.html">16e</a> run two more rules of slopes backwards.</p></div>
+</header>
+
+<section class="class step" data-step="16c1">
+  <h2 class="sthead"><span class="stno">16c1</span>The second fundamental technique, from the first</h2>
+  <p class="stands">Stands on 16b (antiderivative-exists) and 14e (same slopes, same shape lifted).</p>
+  <p data-pid="fadf03">Area-is-a-change technique (the fundamental theorem of calculus, second part): <b>if f is continuous on [p, q] and G is an antiderivative of f on [p, q], then ∫ₚ^q f(x) dx = G(q) − G(p).</b></p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the area-is-a-change technique">
+F(x) = \textstyle\int_a^x f(t)\,dt \text{ is an antiderivative of } f \text{ on } [a, b] @@ antiderivative-exists (16b)
+F = G + C \text{ for some real } C @@ all-antiderivatives (14e)
+0 = F(a) = G(a) + C,\ \ C = -G(a) @@ ∫ₐᵃ f = 0 (15e)
+\htmlClass{new}{\textstyle\int_a^b f = F(b) = G(b) - G(a)} \quad \blacksquare @@ the same line at b
+  </pre>
+  <p class="eqline" data-pid="bad94c">From here on, G(x)|ₐᵇ, also written [G(x)]ₐᵇ, means G(b) − G(a). The bar is an operator: carried out on G, it produces that number. Its accepted name is the fundamental theorem of calculus, second part, or the evaluation theorem.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · area-is-a-change · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">16c1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">∫₁³ 2x dx</span></span>Guess it from the graph: the average height times the width. <br>Find it with area-is-a-change and the bar.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="16c2">
+  <h2 class="sthead"><span class="stno">16c2</span>The same, from the boxes</h2>
+  <p class="stands">Stands on 16c1, 14c (average-slope) and 15c (exactly-one-between).</p>
+  <p data-pid="076b2a">Change-for-any-integrable technique: <b>if f is integrable on [p, q], and G is continuous on [p, q] with G′(x) = f(x) for every x in (p, q), then ∫ₚ^q f(x) dx = G(q) − G(p).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the change-for-any-integrable technique">
+\text{take any partition } P:\ a = x_0 \lt x_1 \lt \cdots \lt x_n = b @@ 15a
+\text{on each piece, some } t_i \in (x_{i-1}, x_i):\ G(x_i) - G(x_{i-1}) = G'(t_i)\,\Delta x_i @@ average-slope (14c): G is continuous on the piece and has a slope inside it
+= f(t_i)\,\Delta x_i,\ \ m_i\,\Delta x_i \le f(t_i)\,\Delta x_i \le M_i\,\Delta x_i @@ G′ = f inside; mᵢ ≤ f(tᵢ) ≤ Mᵢ (15a); Δxᵢ &gt; 0
+\textstyle\sum_{i=1}^{n} \big(G(x_i) - G(x_{i-1})\big) = G(b) - G(a) @@ collapsing-sum (15g)
+L(f, P) \le G(b) - G(a) \le U(f, P) @@ add the n lines (sum-one-more, induction)
+\text{this is true for every } P @@ P was any partition
+\htmlClass{new}{\textstyle\int_a^b f = G(b) - G(a)} \quad \blacksquare @@ exactly-one-between (15c): f is integrable, and the number sits between every L and every U
+  </pre>
+  <p data-pid="bd2ce8">Nothing here asked f to be continuous, and nothing asked for 16b. It asked for G's slope to be f at every point inside, and for f to have an area. The second of those is not automatic, as the seam question below asks you to weigh.</p>
+  <p data-pid="3d823d">In 1881 a function was described with a slope at every point, its slope never more than a fixed bound. Yet the slope is so broken up, on a set of points spread through every stretch, that 15c's sums for it never close in on any number.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · from the boxes · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · every lower and upper sum against one change in G</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="chips" id="fch"></div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">n</span><input type="range" id="kn" min="1" max="24" step="1" value="4"><output id="on"></output></div>
+      <div class="cap">The graph of f with the lower boxes (teal) and upper boxes (ember outline) for n equal pieces. Plum dots: on each piece, the point tᵢ that average-slope promises, where f(tᵢ) times the width is G's change on that piece.</div>
+    </div>
+    <div class="panel">
+      <div class="lbl">G, with its chord on each piece</div>
+      <canvas id="cvG"></canvas>
+      <div class="cap">Ink: G. Plum: the chords between the cut points; each chord's slope is f(tᵢ). The chord rises add up to G(q) − G(p).</div>
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16c2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">G(x) = x³ on [0, 2]</span></span>Find G(2) − G(0). <br>Say what every lower sum and every upper sum of 3x² on [0, 2] must do, without finding one.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="16c3">
+  <h2 class="sthead"><span class="stno">16c3</span>The indefinite integral</h2>
+  <p class="stands">Stands on 16c1 and 16c2.</p>
+  <p class="eqline" data-pid="8298a4">From here on, ∫ f(x) dx = G(x) + C is written with no ends on the ∫. It says that the antiderivatives of f on the interval in view are exactly the functions G + C, one for each real C (all-antiderivatives). Its accepted name is the indefinite integral of f; C is the constant of integration. 15c's ∫ₐᵇ is then called the definite integral.</p>
+  <p data-pid="5013b3"><b>The two are different kinds of thing.</b> ∫ₚ^q f(x) dx is one number. ∫ f(x) dx is a whole family of functions. Area-is-a-change is the bridge: pick any member G of the family, and the number is G(q) − G(p); the C cancels.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · the indefinite integral · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16c3.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\int_0^b x^2\,dx = 9,"></span> <span data-tex-inline="b &gt; 0"></span></span>Find b.</li><li><span class="givens"><span data-tex-inline="G' = f \text{, continuous},"></span> <span data-tex-inline="G(1) = 4,"></span> <span data-tex-inline="\int_1^5 f = 10"></span></span>Find G(5).</li><li><span class="givens"><span data-tex-inline="\int_0^k (2x - 3)\,dx = 0,"></span> <span data-tex-inline="k &gt; 0"></span></span>Find k.</li><li><span class="givens"><span data-tex-inline="\int f(x)\,dx = x^4 - x + C"></span></span>Find f, and its integral from 0 to 1.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="16c4">
+  <h2 class="sthead"><span class="stno">16c4</span>Rung 15's areas, in one line each</h2>
+  <p class="stands">Stands on 16c1 to 16c3, 15d and 15i.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the squeezed areas, again">
+\textstyle\int_0^1 x\,dx = \tfrac{x^2}{2}\Big|_0^1 = \tfrac12 @@ (x²/2)′ = x (power for slopes, constant-factor for slopes); area-is-a-change. 15d took a whole step
+\textstyle\int_0^b x^k\,dx = \tfrac{x^{k+1}}{k+1}\Big|_0^b = \tfrac{b^{k+1}}{k+1} @@ power for slopes; area-is-a-change. 15i's area-under-a-power, with its ratio cut
+\textstyle\int_1^3 \tfrac{dV}{V^2} = -\tfrac1V\Big|_1^3 = \tfrac23 @@ negative-powers (13f): (−V⁻¹)′ = V⁻²; area-is-a-change. The same lines on [p, q] with 0 &lt; p &lt; q give 1/p − 1/q: the inverse-square-area technique, with no collapse
+\textstyle\int_1^4 \sqrt{x}\,dx = \tfrac23 x^{3/2}\Big|_1^4 = \tfrac23(8 - 1) = \tfrac{14}{3} @@ fraction-power for slopes (13h): (x^{3/2})′ = (3/2)x^{1/2}
+\textstyle\int_1^2 (3x^2 - 4x + 1)\,dx = (x^3 - 2x^2 + x)\Big|_1^2 = 2 - 0 = 2 @@ polynomial-slope (13d)
+  </pre>
+  <p data-pid="b48e33">Each line is the same two moves: name a function with the right slope, then subtract. <b>The hard part has moved.</b> Rung 15's hard part was a sum; now it is finding G.</p>
+  <p data-pid="289bb1">Inverse-square-area technique: <b>for 0 &lt; p &lt; q, ∫ₚ^q dx/x² = 1/p − 1/q.</b> The third line above proves it on any such [p, q]. −1/x has slope x⁻² there (negative-powers, 13f). 1/x² is continuous there, since p &gt; 0. So area-is-a-change gives (−1/q) − (−1/p).</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · rung 15 again · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16c4.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="I = \int_0^2 (x^3 + x)\,dx"></span></span>Find I with no sums.</li><li><span class="givens"><span data-tex-inline="I = \int_1^8 \sqrt[3]{x}\,dx"></span></span>Find I with no sums.</li><li><span class="givens"><span data-tex-inline="I = \int_2^4 x^{-3}\,dx"></span></span>Find I with no sums.</li><li><span class="givens"><span data-tex-inline="f(x) = 6x^2 - 2x + 5"></span></span>Find every antiderivative of f.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="16c5">
+  <h2 class="sthead"><span class="stno">16c5</span>Illegal moves</h2>
+  <p class="stands">Stands on 16c1 to 16c4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\textstyle\int_{-1}^{1} \tfrac{dx}{x^2} = -\tfrac1x\Big|_{-1}^{1} = -2\,? @@ 1/x² is not bounded on [−1, 1], so it has no integral there (15c), and −1/x has no value at 0
+G(x) = x + u(x):\ \ \textstyle\int_{-1}^{1} 1\,dx = G(1) - G(-1) = 3\,? @@ G jumps at 0: it is not continuous on [−1, 1], so change-for-any-integrable does not apply; the area is 2
+\textstyle\int_a^b f = G(a) - G(b)\,? @@ the far end first: F(b) = G(b) − G(a)
+\textstyle\int_0^1 x\,dx = \tfrac{x^2}{2} + C\,? @@ a definite integral is one number; the C cancels
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16c5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\textstyle\int_{-2}^2 x^{-2}\,dx = -\tfrac1x\big|_{-2}^2 = -1"></span></span>Write the hypothesis this line broke.</li><li><span class="givens"><span data-tex-inline="G(x) = |x|,"></span> <span data-tex-inline="f = -1 \text{ on } [-1, 0),"></span> <span data-tex-inline="f = 1 \text{ on } [0, 2]"></span></span>Find the integral of f over [−1, 2] by areas, and compare it with G(2) − G(−1).<br>Write the hypothesis of change-for-any-integrable that G breaks on [−1, 2].</li><li><span class="givens"><span data-tex-inline="u \text{ the step, on } [-1, 1]"></span></span>Prove or refute: some G has slope u at every point of (−1, 1).<br>Find the integral of u over [−1, 1].</li><li><span class="givens"><span data-tex-inline="u \text{ the step},"></span> <span data-tex-inline="G(x) = x + u(x)"></span></span>Write the hypothesis of average-slope that G breaks on the piece of change-for-any-integrable's proof that holds 0.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">16c.4.1</span><span class="tagq">build</span>Make an f of your own on [0, 2] that is one polynomial on [0, 1) and another on [1, 2], with a jump at 1.<br>Find its integral over [0, 2] with no sums, writing beside each piece the hypotheses you checked.<br>Prove or refute: one G, continuous on [0, 2], does it in a single line.</div>
+  <div class="chq"><span class="chid">16c.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="G(x) = \sqrt x \text{ on } [0, 1],"></span> <span data-tex-inline="G'(x) = \tfrac{1}{2\sqrt x} \text{ on } (0, 1)"></span></span>Run change-for-any-integrable on the integral of the slope of G over [0, 1] as far as you can take it, and write the hypothesis it lacks.<br>Is the answer 1 still worth something?</div>
+  <div class="chq"><span class="chid">16c.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\int_p^q f = G(q) - G(p)"></span> <span data-tex-inline="\text{for one pair } p, q"></span></span>Prove or refute: G is an antiderivative of f.</div>
+  <div class="chq"><span class="chid">16c.4.4</span><span class="tagq">seam</span>The function of 1881 has a slope everywhere, bounded, and that slope has no area in rung 15's sense. So change-for-any-integrable cannot be used on it. In 1902 a new integral was built, under which every bounded slope has an area and area-is-a-change is true again. Others said rung 15's integral was the right one, and the slope of 1881 a monster. <br>Is the integral the sum of the boxes, or the undoing of the slope? <br>When the two come apart, which should keep the name?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r16b.html">← 16b · its slope is the height</a><a href="r16d.html">16d · substitution →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>Volterra described a function with a slope at every point, its slope never more than a fixed bound, and yet the slope so broken up, on a set of points spread through every stretch, that Riemann’s sums for it never close in on any number.</p><cite>Volterra, Sui principii del calcolo integrale (1881); paraphrase</cite></aside>
+  <p>The new integral of 1902 is Henri Lebesgue’s. 15i’s ratio cut is Fermat’s, from around 1640.</p>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+/* least and greatest of F.f on [lo, hi]: the ends, F's critical points inside, and a fine sample (exact between critical points for the functions used here) */
+function ext(F,lo,hi){ if(F.dir) return [0,1]; let m=Infinity,M=-Infinity; const t=x=>{ const v=F.f(x); if(v<m) m=v; if(v>M) M=v; };
+  t(lo); t(hi); (F.crit||[]).forEach(c=>{ if(c>lo&&c<hi) t(c); }); for(let k=1;k<64;k++) t(lo+(hi-lo)*k/64); return [m,M]; }
+function sums(F,pts){ let L=0,U=0; const ms=[],Ms=[]; for(let i=1;i<pts.length;i++){ const [m,M]=ext(F,pts[i-1],pts[i]), w=pts[i]-pts[i-1]; ms.push(m); Ms.push(M); L+=m*w; U+=M*w; } return {L,U,ms,Ms}; }
+const eq=(a,b,n)=>Array.from({length:n+1},(_,i)=>a+(b-a)*i/n);
+function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
+function boxes(P,pts,hs,stroke,fill,alpha){ const c=P.ctx; for(let i=1;i<pts.length;i++){ const a=pts[i-1],b=pts[i],h=hs[i-1]; c.globalAlpha=alpha; P.poly([[a,0],[b,0],[b,h],[a,h]],null,fill); c.globalAlpha=1; P.poly([[a,0],[b,0],[b,h],[a,h]],stroke,null,1.2); } }
+function dirDots(P,a,b){ const c=P.ctx; c.fillStyle=col('--ink'); for(let k=0;k<=300;k++){ const x=a+(b-a)*k/300; const y=(k%2)?0:1; c.fillRect(P.X(x)-1,P.Y(y)-1,2,2); } }
+/* shade between the graph of fn and the axis from lo to hi: above in pos colour, below in neg colour */
+function shade(P,fn,lo,hi,pos,neg,alpha){ if(hi<lo){ const t=lo; lo=hi; hi=t; } const c=P.ctx, N=300; c.globalAlpha=alpha==null?0.32:alpha;
+  for(let k=0;k<N;k++){ const x0=lo+(hi-lo)*k/N, x1=lo+(hi-lo)*(k+1)/N, xm=(x0+x1)/2, y=fn(xm); if(!isFinite(y)) continue; P.poly([[x0,0],[x1,0],[x1,fn(x1)],[x0,fn(x0)]],null,y>=0?pos:neg); }
+  c.globalAlpha=1; }
+function rangeOf(fn,lo,hi,pad){ let m=Infinity,M=-Infinity; for(let k=0;k<=400;k++){ const v=fn(lo+(hi-lo)*k/400); if(isFinite(v)){ if(v<m) m=v; if(v>M) M=v; } } if(m>0) m=0; if(M<0) M=0; const p=(M-m)*(pad==null?0.12:pad)||1; return [m-p,M+p]; }
+function chips(el,FN,get,setk,after){ Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===get()) b.className='on'; b.onclick=()=>{ setk(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+const Nw='\\htmlClass{new}';
+function gridFor(sp){ return sp>40?10:sp>16?4:sp>8?2:sp>3?1:sp>1.2?0.5:0.25; }
+function frame2(P,fn,lo,hi,pad){ const w=hi-lo; P.o.x=[lo-0.12*w,hi+0.08*w]; P.o.y=rangeOf(fn,lo,hi,pad==null?0.12:pad); const sx=P.o.x[1]-P.o.x[0], sy=P.o.y[1]-P.o.y[0]; let g=gridFor(sx); while(sy/g>24) g*=2; P.o.grid=g; }
+const num=(f,a,b,n)=>{ n=n||4000; const h=(b-a)/n; let s=0; for(let i=0;i<n;i++) s+=f(a+(i+0.5)*h)*h; return s; };
+const FN={
+  sq:{lab:'x² on [0, 2]',f:x=>x*x,G:x=>x*x*x/3,a:0,b:2,ft:'x^2',gt:'\\tfrac{x^3}{3}'},
+  rt:{lab:'√x on [1, 4]',f:x=>Math.sqrt(x),G:x=>2/3*Math.pow(x,1.5),a:1,b:4,ft:'\\sqrt{x}',gt:'\\tfrac23 x^{3/2}'},
+  poly:{lab:'3x² − 4x + 1 on [0, 2]',f:x=>3*x*x-4*x+1,G:x=>x*x*x-2*x*x+x,a:0,b:2,ft:'(3x^2 - 4x + 1)',gt:'(x^3 - 2x^2 + x)',crit:[2/3]},
+  inv:{lab:'1/x² on [1, 3]',f:x=>1/(x*x),G:x=>-1/x,a:1,b:3,ft:'\\tfrac{1}{x^2}',gt:'\\left(-\\tfrac1x\\right)'}
+};
+let key='poly';
+const kn=$('kn'),cvF=$('cvF'),cvG=$('cvG');
+/* the MVT point on [lo, hi]: where f is nearest the chord slope of G, on a fine grid inside */
+function mvt(S,lo,hi){ const s=(S.G(hi)-S.G(lo))/(hi-lo); let best=lo, bd=Infinity; for(let k=1;k<2000;k++){ const t=lo+(hi-lo)*k/2000, d=Math.abs(S.f(t)-s); if(d<bd){ bd=d; best=t; } } return best; }
+const PF=plane(cvF,{x:[0,2],y:[0,4],grid:1,aspect:0.8,draw:P=>drawF(P)});
+const PG=plane(cvG,{x:[0,2],y:[0,4],grid:1,aspect:0.8,draw:P=>drawG(P)});
+[[PF,cvF],[PG,cvG]].forEach(([P,cv])=>Object.defineProperty(P.o,'aspect',{get:()=>cv.clientWidth>480?0.75:0.9}));
+function frame(P,fn,S){ const w=S.b-S.a; P.o.x=[S.a-0.12*w,S.b+0.08*w]; P.o.y=rangeOf(fn,S.a,S.b,0.12); const sp=P.o.y[1]-P.o.y[0]; P.o.grid=sp>8?2:sp>2.5?1:sp>1.2?0.5:0.25; }
+function drawF(P){ const S=FN[key]; frame(P,S.f,S); P.axes(); const p=eq(S.a,S.b,+kn.value), Su=sums(S,p);
+  boxes(P,p,Su.ms,'--teal','--teal',0.28); boxes(P,p,Su.Ms,'--ember',null,0); curve(P,S.f,'--ink',2.6,S.a,S.b);
+  for(let i=1;i<p.length;i++){ const t=mvt(S,p[i-1],p[i]); P.dot(t,S.f(t),'--plum',4); } }
+function drawG(P){ const S=FN[key]; frame(P,S.G,S); P.axes(); const p=eq(S.a,S.b,+kn.value);
+  curve(P,S.G,'--ink',2.6,S.a,S.b); for(let i=1;i<p.length;i++){ P.line(p[i-1],S.G(p[i-1]),p[i],S.G(p[i]),'--plum',1.8,[]); P.dot(p[i],S.G(p[i]),'--plum',3); } P.dot(S.a,S.G(S.a),'--plum',3); }
+function read(){ const S=FN[key], n=+kn.value, p=eq(S.a,S.b,n), Su=sums(S,p), d=S.G(S.b)-S.G(S.a); $('on').textContent=n;
+  const vd=$('vdF'); vd.className='verdict'+(Su.U-Su.L<0.05?' win':'');
+  vd.textContent='L = '+mm(Su.L,4)+' ≤ G(q) − G(p) = '+mm(d,4)+' ≤ U = '+mm(Su.U,4)+'. Every n gives the same middle number.';
+  tex($('eqF'),R`\begin{gathered}\textstyle\int_{${S.a}}^{${S.b}} ${S.ft}\,dx = ${S.gt}\Big|_{${S.a}}^{${S.b}} = ${mm(d,4)}\\ L = ${mm(Su.L,4)},\ \ U = ${mm(Su.U,4)}\end{gathered}`,true); }
+function all(){ PF.redraw(); PG.redraw(); read(); }
+kn.addEventListener('input',all);
+chips($('fch'),FN,()=>key,k=>{ key=k; },all);
+window.__pic={set:(k,n)=>{ [...$('fch').children][Object.keys(FN).indexOf(k)].click(); kn.value=n; all(); const S=FN[k], p=eq(S.a,S.b,n), Su=sums(S,p); let ok=true; for(let i=1;i<p.length;i++){ const t=mvt(S,p[i-1],p[i]); const lhs=S.G(p[i])-S.G(p[i-1]), rhs=S.f(t)*(p[i]-p[i-1]); if(Math.abs(lhs-rhs)>1e-3) ok=false; } return {L:+Su.L.toFixed(5),U:+Su.U.toFixed(5),d:+(S.G(S.b)-S.G(S.a)).toFixed(5),mvtOK:ok}; }};
+all();
+stepper('#sl1',[
+  {k:'ember',kl:'area-is-a-change',t:R`F = G + C,\ \ C = -G(a)`,n:`antiderivative-exists gives F; all-antiderivatives gives the constant.`},
+  {k:'ember',kl:'the bar',t:R`${Nw}{G(x)\Big|_a^b = G(b) - G(a)}`,n:`The fundamental technique, second part.`}
+],{title:'The slides · area-is-a-change · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'change-for-any-integrable · one piece',t:R`G(x_i) - G(x_{i-1}) = f(t_i)\,\Delta x_i`,n:`average-slope on the piece.`},
+  {k:'ember',kl:'change-for-any-integrable · bounds',t:R`m_i\,\Delta x_i \le f(t_i)\,\Delta x_i \le M_i\,\Delta x_i`,n:`f(tᵢ) is a value on the piece.`},
+  {k:'ember',kl:'change-for-any-integrable · total',t:R`L(f, P) \le G(b) - G(a) \le U(f, P)`,n:`collapsing-sum collapses the sum of changes.`},
+  {k:'ember',kl:'change-for-any-integrable · exactly-one-between',t:R`${Nw}{\textstyle\int_a^b f = G(b) - G(a)}`,n:`One number between every L and U.`}
+],{title:'The slides · from the boxes · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'the indefinite integral',t:R`\textstyle\int f(x)\,dx = G(x) + C`,n:`A family of functions, not a number.`}
+],{title:'The slides · the indefinite integral · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'15d again',t:R`\tfrac{x^2}{2}\Big|_0^1 = \tfrac12`,n:`One line.`},
+  {k:'ember',kl:'15i again',t:R`\tfrac{x^{k+1}}{k+1}\Big|_0^b`,n:`power for slopes read backwards.`},
+  {k:'ember',kl:'one over a square',t:R`-\tfrac1V\Big|_1^3 = \tfrac23`,n:`negative-powers read backwards.`}
+],{title:'The slides · rung 15 again · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`\textstyle\int_{-1}^{1} x^{-2}\,dx \ne -2`,n:`No integral there, and −1/x is not defined at 0.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

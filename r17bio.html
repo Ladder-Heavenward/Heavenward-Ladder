@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>17·bio · Can a population double forever?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r17chem.html">← 17·chem how sour is it, and how long until half is gone?</a><a href="r17phys.html">next: 17·phys is light a dot or a flow? →</a></p>
+  <div class="tags"><span class="tag bio">17·bio · biology</span></div>
+  <h1>Can a population double forever?</h1>
+  <p>Can a population double forever? A population with food and room to spare grows at a rate proportional to its size: each animal or cell adds young at its own pace, whatever the others do. That is 17j's equation, and its answer doubles on a fixed clock forever. No real population does that for long. This page adds the simplest brake: a rate that shrinks as the population nears what its place can hold. It solves the new equation with 17k's split, and reads off the moment of fastest growth.</p>
+  <p class="gesture">Unchecked, a population grows at a rate fixed by its size, and grows by a fixed factor in equal times. With a ceiling, growth slows by the share of room already taken. The logarithm of the ratio between those living and the room left then climbs in a straight line, and the population climbs an S toward the ceiling. Growth is fastest when the population is half the ceiling.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r17j.html">17j</a> (equal-steps-equal-factors, doubling-time), <a href="r17k.html">17k</a> (straight-factors), <a href="r17b.html">17b</a> (area-under-1/x), <a href="r17f.html">17f</a> (proportional-slope), <a href="r14e.html">14e</a> (same-slopes), <a href="r08i.html">8i</a> (completing the square). <a href="r17then.html">17·then</a> straightens these curves.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · read it through, then work the picture and the slides</div>
+
+  <h3>Unchecked</h3>
+  <p data-pid="5d6612">Suppose each member of a population adds, on average, r new members per unit time. Then P′ = rP, and P = P₀e<sup>rt</sup> by proportional-slope. r has the accepted name the intrinsic rate of increase. The population doubles every ln 2 / r (doubling-time).</p>
+  <pre class="lines" data-k="ember" data-label="17·bio: unchecked">
+\text{a bacterium dividing every } 20 \text{ min}:\ \ P = P_0 \cdot 2^{3t} @@ t in hours; 17j
+P(24) = P_0 \cdot 2^{72} \approx 4.7 \times 10^{21}\,P_0 @@ from one cell of about 10⁻¹² g, some 4700 tonnes in a day, if nothing stopped it
+  </pre>
+
+  <h3>A ceiling</h3>
+  <p class="eqline" data-pid="32a85f">Let the rate per member fall in a straight line from r, when P is small, to 0 when P reaches K: P′ = rP(1 − P/K). K has the accepted name carrying capacity; the equation is the logistic equation.</p>
+  <p data-pid="9425e3">Logistic-solution technique: <b>if P′ = rP(1 − P/K) and 0 &lt; P₀ &lt; K, then, while 0 &lt; P &lt; K, P(t) = K/(1 + Ce<sup>−rt</sup>) with C = (K − P₀)/P₀.</b></p>
+  <pre class="lines" data-k="ember" data-label="17·bio: the logistic-solution technique">
+G(t) = \ln P - \ln(K - P) @@ both have values: 0 &lt; P &lt; K
+G' = \Big(\tfrac1P + \tfrac{1}{K - P}\Big)P' = \tfrac{K}{P(K - P)}\,P' @@ slope-of-log and chain for slopes; 17k's split read backwards
+= \tfrac{K}{P(K - P)} \cdot \tfrac{rP(K - P)}{K} = r @@ the equation
+G = rt + \ln\tfrac{P_0}{K - P_0} @@ same-slopes (14e); t = 0 fixes the constant
+\tfrac{P}{K - P} = \tfrac{e^{rt}}{C} \Rightarrow \htmlClass{new}{P = \tfrac{K}{1 + Ce^{-rt}}} \quad \blacksquare @@ exp of both sides; solve for P
+  </pre>
+  <p data-pid="e7196a">Fastest-growth technique: <b>along the logistic curve, P′ is greatest when P = K/2, which happens at t = ln C / r.</b></p>
+  <pre class="lines" data-k="ember" data-label="17·bio: the fastest-growth technique">
+P' = \tfrac{r}{K}P(K - P) = \tfrac{r}{K}\Big(\tfrac{K^2}{4} - \big(P - \tfrac{K}{2}\big)^2\Big) @@ completing the square (8i)
+\text{greatest at } P = \tfrac{K}{2},\ \ P' = \tfrac{rK}{4} @@ a square is never negative (square-never-negative, 8f)
+Ce^{-rt} = 1 \iff t = \tfrac{\ln C}{r} \quad \blacksquare @@ P = K/2 in logistic-solution
+  </pre>
+  <pre class="lines" data-k="ember" data-label="17·bio: Roosevelt elk">
+K = 5000,\ P_0 = 500,\ r = 0.3 \text{ per year} @@ a herd on the Olympic Peninsula, a model
+C = 9,\ \ P(10) = \tfrac{5000}{1 + 9e^{-3}} \approx 3453 @@ logistic-solution
+\text{fastest growth at } t = \tfrac{\ln 9}{0.3} \approx 7.3 \text{ years, } 375 \text{ elk a year} @@ fastest-growth: rK/4
+  </pre>
+  <p data-pid="27effd">Many things set K: food, nesting sites, predators, disease. <b>A K that falls, when a forest is cut or a river dammed, drags the population down with it.</b> A population above K shrinks, since then P′ &lt; 0. Two species that share a food each lower the other's ceiling.</p>
+  <p data-pid="ddcc60">In 1845 a Belgian mathematician proposed that the obstacles to a population's growth increase in proportion to the excess of the population over a certain size. He named the curve that results the logistic, and fitted it to the censuses of France, Belgium and Essex.</p>
+
+  <h3>Illegal moves</h3>
+  <pre class="lines" data-k="ember" data-label="17·bio: tempting, and not allowed">
+\text{logistic growth is fastest at the start}\,? @@ at P = K/2; the start is slow when P₀ is small
+P \to K \Rightarrow P = K \text{ at some time}\,? @@ Ce^(−rt) &gt; 0 for every t: it is approached, not reached
+\text{fit to a few years, the curve gives } K\,? @@ early on the logistic and the exponential look alike; K is barely seen
+P_0 \gt K \Rightarrow \text{logistic-solution fails}\,? @@ the same steps work with ln(P − K); P falls toward K from above
+  </pre>
+</section>
+
+<section class="pic" id="pic">
+  <div class="eyebrow">The picture · exponential and logistic, and the rate against the size</div>
+  <div class="panels">
+    <div class="panel">
+      <div class="lbl">P against years, K = 5000</div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">r</span><input type="range" id="kr" min="0.05" max="1" step="0.01" value="0.3"><output id="or"></output></div>
+      <div class="kn"><span class="m">P₀</span><input type="range" id="kP" min="50" max="4900" step="10" value="500"><output id="oP"></output></div>
+      <div class="kn"><span class="m">t</span><input type="range" id="kt" min="0" max="40" step="0.1" value="10"><output id="ot"></output></div>
+      <div class="cap">Ink: the logistic curve. Dashed ember: P₀e<sup>rt</sup>, which starts the same. Dashed: K. Plum: the knob's t. Teal: the moment of fastest growth.</div>
+    </div>
+    <div class="panel">
+      <div class="lbl">P′ against P: the rate of growth against the size</div>
+      <canvas id="cvL"></canvas>
+      <div class="cap">Ink: rP(1 − P/K), a hill with its top at K/2. Dashed ember: rP, the unchecked rate. Plum: the population at the knob's t.</div>
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+</section>
+
+<section class="slides" id="sl1"><div class="eyebrow">The slides · unchecked; a day of bacteria; the ceiling; logistic-solution's G; G′ = r; logistic-solution; fastest-growth; the elk; what sets K; the logistic, named; illegal moves · ← → keys work</div></section>
+
+<section class="sayback">
+  <div class="eyebrow">Say it back · then work it</div>
+  <h2>Questions</h2>
+  <div class="phkey"></div>
+  <ol>
+    <li><span class="qid">17·bio.1</span><span class="gname">Populations.</span><span class="gwhy">Do: build the page's pieces.</span>
+      <ol class="sub">
+        <li><span class="qid">17·bio.1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{doubles every } 90 \text{ minutes}"></span></span>Find r per hour for the yeast, and the factor in 12 hours.</li><li><span class="givens"><span data-tex-inline="K = 1200,"></span> <span data-tex-inline="P_0 = 200,"></span> <span data-tex-inline="r = 0.4 \text{ a year}"></span></span>Find P(5).</li><li><span class="givens"><span data-tex-inline="K = 1200,"></span> <span data-tex-inline="P_0 = 200,"></span> <span data-tex-inline="r = 0.4 \text{ a year}"></span></span>Find when growth is fastest, and how fast it is then.</li><li><span class="givens"><span data-tex-inline="P = \dfrac{K}{1 + Ce^{-rt}},"></span> <span data-tex-inline="P' = rP\big(1 - \tfrac PK\big)"></span></span>Prove by its slope that P satisfies the equation.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">17·bio.2</span><span class="gname">From the curve back.</span><span class="gwhy">Undo: run the page's techs backwards.</span>
+      <ol class="sub">
+        <li><span class="qid">17·bio.2.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="P = \dfrac{800}{1 + 15e^{-0.5t}}"></span></span>Find K, r and the starting population.</li><li><span class="givens"><span data-tex-inline="\text{fastest growth: } 60 \text{ a year},"></span> <span data-tex-inline="\text{at } P = 400,"></span> <span data-tex-inline="\text{logistic}"></span></span>Find K and r.</li><li><span class="givens"><span data-tex-inline="90 \text{ in } 1972,"></span> <span data-tex-inline="3500 \text{ in } 2008,"></span> <span data-tex-inline="r \text{ steady},"></span> <span data-tex-inline="K \text{ far above}"></span></span>Sea otters off Vancouver Island numbered so.<br>Find r.</li><li><span class="givens"><span data-tex-inline="P = \tfrac34 K"></span></span>Find the fraction of its fastest rate at which the population is growing.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">17·bio.3</span><span class="gname">Where it gives.</span><span class="gwhy">Bend: find where the techs stop working.</span>
+      <ol class="sub">
+        <li><span class="qid">17·bio.3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="P_0 = 6000,"></span> <span data-tex-inline="\text{above } K"></span></span>Find what the model predicts for the elk.</li><li><span class="givens"><span data-tex-inline="\text{a } K \text{ that never changes},"></span> <span data-tex-inline="\text{a rate that falls in a straight line},"></span> <span data-tex-inline="\text{young that breed at once}"></span></span>Find which assumption of the logistic is least likely for elk.</li><li><span class="givens"><span data-tex-inline="\text{a fit over the first five years},"></span> <span data-tex-inline="\text{gives } r \text{ well and } K \text{ badly}"></span></span>Build two logistic curves with one r and starting population and different K that stay within 5% of each other for five years.</li><li><span class="givens"><span data-tex-inline="u = 1/P"></span></span>Solve the logistic again with u, and find the page whose equation u satisfies.</li></ol></li>
+      </ol></li>
+    <li class="optgroup"><span class="qid">17·bio.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder challenges that rely on your own making. The page is complete without these; the rung's star needs them.</span>
+      <ol class="sub">
+        <li class="opt"><span class="qid">17·bio.4.1</span><span class="tagq">build</span>Make a population of your own that starts above its ceiling.<br>Solve the logistic for it, as the page did below the ceiling, and find its limit as t grows.</li>
+        <li class="opt"><span class="qid">17·bio.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{logistic curve},"></span> <span data-tex-inline="\text{time from } K/2 \text{ back to } K/4,"></span> <span data-tex-inline="\text{time from } K/2 \text{ on to } 3K/4"></span></span>Prove or refute: the two times are equal.</li>
+        <li class="opt"><span class="qid">17·bio.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{rises in an S},"></span> <span data-tex-inline="\text{from near } 0 \text{ to near a ceiling}"></span></span>Prove or refute: a population with the given curve obeys the logistic equation.</li>
+        <li class="opt"><span class="qid">17·bio.4.4</span><span class="tagq">world</span><span class="givens"><span data-tex-inline="P' = rP\big(1 - \tfrac PK\big) - H"></span></span>A fishery off Monterey takes H fish a year from a stock so.<br>Find the H for which a steady stock exists, and the largest such H.</li>
+        <li class="opt"><span class="qid">17·bio.4.5</span><span class="tagq">seam</span>In 1920 two biologists fitted the logistic curve to the United States censuses from 1790 to 1910. They found it fit closely, called it a law of population growth, and gave a ceiling near 197 million. The country passed that in 1968 and kept going. <br>Was the fit wrong, or the claim? <br>What would a law of population growth have to do that a close fit does not?</li>
+      </ol></li>
+  </ol>
+  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
+</section>
+
+<nav class="nextrung"><a href="r17chem.html">← 17·chem · how sour is it, and how long until half is gone?</a><a href="r17phys.html">17·phys · is light a dot or a flow? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>Verhulst proposed that the obstacles to a population’s growth increase in proportion to the excess of the population over a certain size, and named the curve that results the logistic, fitting it to the censuses of France, Belgium and Essex.</p><cite>Pierre-François Verhulst, Recherches mathématiques sur la loi d’accroissement de la population (1845); paraphrase</cite></aside>
+  <p>In 17·bio.4.5, the two biologists are Raymond Pearl and Lowell Reed.</p>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+/* least and greatest of F.f on [lo, hi]: the ends, F's critical points inside, and a fine sample (exact between critical points for the functions used here) */
+function ext(F,lo,hi){ if(F.dir) return [0,1]; let m=Infinity,M=-Infinity; const t=x=>{ const v=F.f(x); if(v<m) m=v; if(v>M) M=v; };
+  t(lo); t(hi); (F.crit||[]).forEach(c=>{ if(c>lo&&c<hi) t(c); }); for(let k=1;k<64;k++) t(lo+(hi-lo)*k/64); return [m,M]; }
+function sums(F,pts){ let L=0,U=0; const ms=[],Ms=[]; for(let i=1;i<pts.length;i++){ const [m,M]=ext(F,pts[i-1],pts[i]), w=pts[i]-pts[i-1]; ms.push(m); Ms.push(M); L+=m*w; U+=M*w; } return {L,U,ms,Ms}; }
+const eq=(a,b,n)=>Array.from({length:n+1},(_,i)=>a+(b-a)*i/n);
+function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
+function boxes(P,pts,hs,stroke,fill,alpha){ const c=P.ctx; for(let i=1;i<pts.length;i++){ const a=pts[i-1],b=pts[i],h=hs[i-1]; c.globalAlpha=alpha; P.poly([[a,0],[b,0],[b,h],[a,h]],null,fill); c.globalAlpha=1; P.poly([[a,0],[b,0],[b,h],[a,h]],stroke,null,1.2); } }
+function dirDots(P,a,b){ const c=P.ctx; c.fillStyle=col('--ink'); for(let k=0;k<=300;k++){ const x=a+(b-a)*k/300; const y=(k%2)?0:1; c.fillRect(P.X(x)-1,P.Y(y)-1,2,2); } }
+/* shade between the graph of fn and the axis from lo to hi: above in pos colour, below in neg colour */
+function shade(P,fn,lo,hi,pos,neg,alpha){ if(hi<lo){ const t=lo; lo=hi; hi=t; } const c=P.ctx, N=300; c.globalAlpha=alpha==null?0.32:alpha;
+  for(let k=0;k<N;k++){ const x0=lo+(hi-lo)*k/N, x1=lo+(hi-lo)*(k+1)/N, xm=(x0+x1)/2, y=fn(xm); if(!isFinite(y)) continue; P.poly([[x0,0],[x1,0],[x1,fn(x1)],[x0,fn(x0)]],null,y>=0?pos:neg); }
+  c.globalAlpha=1; }
+function rangeOf(fn,lo,hi,pad){ let m=Infinity,M=-Infinity; for(let k=0;k<=400;k++){ const v=fn(lo+(hi-lo)*k/400); if(isFinite(v)){ if(v<m) m=v; if(v>M) M=v; } } if(m>0) m=0; if(M<0) M=0; const p=(M-m)*(pad==null?0.12:pad)||1; return [m-p,M+p]; }
+function chips(el,FN,get,setk,after){ Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===get()) b.className='on'; b.onclick=()=>{ setk(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+const Nw='\\htmlClass{new}';
+function gridFor(sp){ return sp>40?10:sp>16?4:sp>8?2:sp>3?1:sp>1.2?0.5:0.25; }
+function frame2(P,fn,lo,hi,pad){ const w=hi-lo; P.o.x=[lo-0.12*w,hi+0.08*w]; P.o.y=rangeOf(fn,lo,hi,pad==null?0.12:pad); const sx=P.o.x[1]-P.o.x[0], sy=P.o.y[1]-P.o.y[0]; let g=gridFor(sx); while(sy/g>24) g*=2; P.o.grid=g; }
+const num=(f,a,b,n)=>{ n=n||4000; const h=(b-a)/n; let s=0; for(let i=0;i<n;i++) s+=f(a+(i+0.5)*h)*h; return s; };
+/* axes with separate steps across and up */
+function axes2(P,gx,gy){ const c=P.ctx,o=P.o; c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ c.moveTo(P.X(x),P.Y(o.y[0])); c.lineTo(P.X(x),P.Y(o.y[1])); }
+  for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ c.moveTo(P.X(o.x[0]),P.Y(y)); c.lineTo(P.X(o.x[1]),P.Y(y)); } c.stroke();
+  c.strokeStyle=col('--muted'); c.lineWidth=1.3; c.beginPath(); if(o.y[0]<=0&&o.y[1]>=0){ c.moveTo(P.X(o.x[0]),P.Y(0)); c.lineTo(P.X(o.x[1]),P.Y(0)); } if(o.x[0]<=0&&o.x[1]>=0){ c.moveTo(P.X(0),P.Y(o.y[0])); c.lineTo(P.X(0),P.Y(o.y[1])); } c.stroke();
+  c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; const ly=Math.min(P.H-6,Math.max(12,P.Y(0)+14));
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ if(Math.abs(x)<1e-9) continue; c.fillText(+x.toFixed(6),P.X(x),ly); }
+  c.textAlign='right'; const lx=Math.max(32,Math.min(P.W-4,P.X(0)-5)); for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ if(Math.abs(y)<1e-9) continue; c.fillText(String(+y.toFixed(6)).replace('-','−'),lx,P.Y(y)+4); } }
+function nice(sp){ const raw=sp/6, p=Math.pow(10,Math.floor(Math.log10(raw))), m=raw/p; return (m<1.5?1:m<3.5?2:m<7.5?5:10)*p; }
+const kr=$('kr'),kP=$('kP'),kt=$('kt'),cvF=$('cvF'),cvL=$('cvL');
+const K=5000;
+const PF=plane(cvF,{x:[-2.5,41],y:[-350,6200],grid:1,aspect:0.8,draw:P=>drawF(P)});
+const PL=plane(cvL,{x:[-350,6200],y:[0,1],grid:1,aspect:0.8,draw:P=>drawL(P)});
+[[PF,cvF],[PL,cvL]].forEach(([P,cv])=>Object.defineProperty(P.o,'aspect',{get:()=>cv.clientWidth>480?0.75:0.9}));
+const st=()=>{ const r=+kr.value, P0=+kP.value, C=(K-P0)/P0; return {r,P0,C,P:t=>K/(1+C*Math.exp(-r*t))}; };
+function drawF(P){ const {r,P0,C,P:f}=st(), t=+kt.value; axes2(P,5,1000); P.line(-2.5,K,41,K,'--muted',1.4,[6,4]); curve(P,s=>{ const v=P0*Math.exp(r*s); return v>6200?NaN:v; },'--ember',1.8,0,41,[6,4]); curve(P,f,'--ink',2.6,0,41);
+  if(C>1){ const tm=Math.log(C)/r; if(tm<=41) P.dot(tm,K/2,'--teal',5); } P.dot(t,f(t),'--plum',5); }
+function drawL(P){ const {r,P:f}=st(), t=+kt.value, top=Math.max(r*K/4*1.6,r*1000); P.o.y=[-0.2*top,top]; axes2(P,1000,nice(top*1.08)); curve(P,p=>r*p,'--ember',1.6,0,6200,[6,4]); curve(P,p=>r*p*(1-p/K),'--ink',2.6,0,5400); const p=f(t); P.dot(p,r*p*(1-p/K),'--plum',5); P.dot(K/2,r*K/4,'--teal',4); }
+function read(){ const {r,P0,C,P:f}=st(), t=+kt.value; $('or').textContent=mm(r,2); $('oP').textContent=P0; $('ot').textContent=mm(t,1);
+  const p=f(t), rate=r*p*(1-p/K); const vd=$('vdF'); vd.className='verdict';
+  vd.textContent='C = (K − P₀)/P₀ = '+mm(C,3)+'. At t = '+mm(t,1)+', P ≈ '+mm(p,0)+', growing '+mm(rate,1)+' a year; unchecked it would be '+mm(P0*Math.exp(r*t),0)+'. '+(C>1?'Fastest, '+mm(r*K/4,0)+' a year, at t = ln C / r ≈ '+mm(Math.log(C)/r,2)+'.':'P₀ ≥ K/2: it is past its fastest from the start.');
+  tex($('eqF'),R`P(t) = \tfrac{5000}{1 + ${mm(C,3)}\,e^{-${mm(r,2)}t}},\ \ P(${mm(t,1)}) \approx ${mm(p,0)}`,true); }
+function all(){ PF.redraw(); PL.redraw(); read(); }
+[kr,kP,kt].forEach(e=>e.addEventListener('input',all));
+window.__pic={set:(r,P0,t)=>{ kr.value=r; kP.value=P0; kt.value=t; all(); const {C,P:f}=st(), h=1e-4, d=(f(t+h)-f(t-h))/(2*h), p=f(t); return {P:+p.toFixed(3),slope:+d.toFixed(4),law:+(r*p*(1-p/K)).toFixed(4),tm:C>1?+(Math.log(C)/r).toFixed(4):null}; }};
+all();
+stepper('#sl1',[
+  {k:'ember',kl:'unchecked',t:R`P' = rP \Rightarrow P = P_0e^{rt}`,n:`proportional-slope.`},
+  {k:'ember',kl:'a day',t:R`2^{72} \approx 4.7 \times 10^{21}`,n:`If nothing stopped it.`},
+  {k:'ember',kl:'the ceiling',t:R`P' = rP\big(1 - \tfrac{P}{K}\big)`,n:`The logistic equation.`},
+  {k:'ember',kl:"logistic-solution's G",t:R`G = \ln P - \ln(K - P)`,n:`17k's split, backwards.`},
+  {k:'ember',kl:'G′ = r',t:R`G' = \tfrac{K}{P(K - P)}P' = r`,n:`So G = rt + G(0).`},
+  {k:'ember',kl:'logistic-solution',t:R`${Nw}{P = \tfrac{K}{1 + Ce^{-rt}}}`,n:`C = (K − P₀)/P₀.`},
+  {k:'ember',kl:'fastest-growth',t:R`${Nw}{P' \le \tfrac{rK}{4}}`,n:`Equal at P = K/2, t = ln C / r.`},
+  {k:'ember',kl:'the elk',t:R`P(10) \approx 3453`,n:`K = 5000, P₀ = 500, r = 0.3.`},
+  {k:'ember',kl:'what sets K',t:R`P \gt K \Rightarrow P' \lt 0`,n:`Food, room, predators.`},
+  {k:'ember',kl:'the logistic',t:R`1845`,n:`The logistic, named.`},
+  {k:'ember',kl:'illegal',t:R`P \to K,\ P \ne K`,n:`Approached, not reached.`}
+],{title:'The slides · unchecked; a day of bacteria; the ceiling; logistic-solution’s G; G′ = r; logistic-solution; fastest-growth; the elk; what sets K; the logistic, named; illegal moves · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,498 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>4e · Adding</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.95rem;white-space:normal}
+@media (max-width:520px){.pic .eqbox{font-size:.82rem}}
+#cvB{touch-action:manipulation}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+.first{border:2px solid var(--ember);border-radius:6px;padding:12px 14px;display:grid;gap:8px}
+.first .lbl{font-family:var(--mono);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ember)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r04d.html">← 4d completing the proof</a><a href="r04f.html">next: 4f multiplying and powers →</a></p>
+  <div class="tags"><span class="tag proof">4e · proof</span></div>
+  <h1>Adding</h1>
+  <p>The ground floor said that a thing is the same as itself. Everything since has been building the means to say, and prove, that one and three make four. This step does it. First it defines adding by repeating the next-one gesture, with 4c's technique doing the work. Adding 0 changes nothing, and adding the next one after a number is taking the next one after what adding that number gave. Then it unfolds one plus three, name by name, until four stands at the foot of the column. Then it proves the techniques of adding, each by induction. The order of the numbers added does not matter. The brackets do not matter. And a number added to both sides of a sameness can be taken away again.</p>
+  <p class="gesture">To add one number to another, start at the first and take the next one once for each step from 0 up to the second. Written as a start and a step: a number plus 0 is that number, and a number plus the next one after a second number is the next one after their sum.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r03a.html">3a</a> (the names 0 to 4), <a href="r04a.html">4a</a> (ℕ, the different-nexts technique), <a href="r04b.html">4b</a> (the induction technique, zero-or-a-next) and <a href="r04c.html">4c</a> (the recursion technique, the function s, chains). <a href="r04f.html">4f</a> builds multiplying out of adding; <a href="r04g.html">4g</a> reads order off adding; 4h names the sums past four.</p></div>
+</header>
+
+<section class="class step" data-step="4e1">
+  <h2 class="sthead"><span class="stno">4e1</span>Adding, in words</h2>
+  <p class="stands">Stands on 4c1 (defining by repeating) and 4c8 (the recursion technique).</p>
+  <p data-pid="cf7d54">To add three to one, start at one and take the next one, and again, and again: two, three, four.</p>
+  <p data-pid="fe517e">That is the whole idea, and the trouble with it is “and again, and again”. It does not say when to stop unless you already know how adding three goes, which is the very thing being defined.</p>
+  <p data-pid="2ab99f">The way out is the one 4c built. <b>Say what adding does when nothing is added, and say how adding the next one after b relates to adding b:</b></p>
+  <ul>
+    <li>Adding 0 to p gives p.</li>
+    <li>Adding the next one after b to p gives the next one after (p with b added).</li>
+  </ul>
+  <p data-pid="248a41">For a fixed p, that is a start, p, and a step, the next-one rule. And 4c's recursion technique says a start and a step fix exactly one function on the numbers.</p>
+  <p data-pid="66de8a">Example: adding 2 to 5. Adding 0 to 5 gives 5. Adding 1, the next one after 0, gives the next one after 5, which is 6. Adding 2, the next one after 1, gives the next one after 6, which is 7.</p>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">4e1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">“Adding 0 to p gives p. Adding the next one after b to p gives the next one after (p with b added).”</span></span>By these words, what is 7 with 0 added? <br>What is 7 with 1 added? Say which line of the words you use.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4e2">
+  <h2 class="sthead"><span class="stno">4e2</span>The definition</h2>
+  <p class="stands">Stands on 4e1, 4c8 (the recursion technique), 4c6 (the function s) and 3c (the low mark).</p>
+  <p data-pid="70a5da">Fix a number p. Use recursion with A = ℕ, start p, and step s (4c's function n ↦ S(n)). It gives exactly one function from ℕ to ℕ. That function has the value p at 0 and, at each S(n), the next one after its value at n.</p>
+  <p data-pid="54d25a">That function goes with p, and a different p gives a different function. So its name must carry the number it starts at. 3c's low mark does that.</p>
+  <p class="eqline" data-pid="35c868">From here on, a low mark may be a letter as well as a numeral: <span data-tex-inline="f_a"></span> is a name that carries a, as <span data-tex-inline="V_k"></span> carried k.</p>
+  <p class="eqline" data-pid="ab34a4">From here on, for numbers a and b, <span data-tex-inline="a + b"></span> names <span data-tex-inline="f_a(b)"></span>, where <span data-tex-inline="f_a : \mathbb N \to \mathbb N"></span> is the one function with these two lines, for every number n:</p>
+  <div class="eqline" data-tex="\begin{aligned} &amp;f_a(0) = a\\ &amp;f_a(S(n)) = S(f_a(n)) \end{aligned}"></div>
+  <p data-pid="85a613">Read it “a plus b”; a + b is the <b>sum</b> of a and b.</p>
+  <p data-pid="7bb363">Example: f₃ starts at 3. So f₃(0) = 3, f₃(1) = S(f₃(0)) = 4, and 3 + 1 names f₃(1).</p>
+  <p data-pid="9e30eb">A schoolteacher of the century before last wrote a textbook of arithmetic in which adding is defined by exactly this pair of lines. Every technique of adding and multiplying is proved from them by induction. It seems nobody had done so before. A generation later another writer put the same pair of lines at the head of his arithmetic.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4e2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f₂ : ℕ → ℕ, the function that names 2 + b.</span></span>Write f₂(0) and f₂(S(n)) as its two lines. <br>Which number does 2 + 0 name, and by which line?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4e3">
+  <h2 class="sthead"><span class="stno">4e3</span>Three techniques from the definition</h2>
+  <p class="stands">Stands on 4e2 (the definition of +), 4c (the function s) and 4b7 (zero-or-a-next).</p>
+  <p data-pid="450cc7">The name is honest because recursion says exactly one function fits. What the line gives you to cite are its two defining lines and a third line, each a technique.</p>
+  <ul>
+    <li data-pid="8db637">Plus-zero technique: <b>adding 0 changes nothing.</b> In marks: p + 0 = p.</li>
+    <li data-pid="0f93f0">Plus-a-next technique: <b>adding the next one after b gives the next one after the sum with b.</b> In marks: p + S(b) = S(p + b).</li>
+    <li data-pid="5fb71f">Sums-are-numbers technique: <b>the sum of two numbers is a number.</b></li>
+  </ul>
+  <p data-pid="546566">Example: 5 + 0 = 5, by plus-zero. 5 + S(0) = S(5 + 0), by plus-a-next.</p>
+  <p data-pid="fb94af">Plan for the column: unpack + into f<sub>a</sub>, use f<sub>a</sub>'s start or step, then pack + back.</p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: techniques plus-zero (plus zero), plus-a-next (plus a next) and sums-are-numbers (a sum is a number)">
+a + 0 = f_a(0) @@ ﹀ +
+\phantom{a + 0} = a @@ f<sub>a</sub>'s start: <b>the plus-zero technique</b>, a + 0 = a
+a + S(b) = f_a(S(b)) @@ ﹀ +
+\phantom{a + S(b)} = s(f_a(b)) @@ f<sub>a</sub>'s step, from recursion
+\phantom{a + S(b)} = S(f_a(b)) @@ s(m) = S(m), 4c
+\phantom{a + S(b)} = S(a + b) @@ ︿ + inside: <b>the plus-a-next technique</b>, a + S(b) = S(a + b)
+a + b = f_a(b) \in \mathbb N @@ f<sub>a</sub> takes ℕ to ℕ: <b>the sums-are-numbers technique</b>, a sum of numbers is a number
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · the definition, and plus-zero and plus-a-next · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4e3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="p, b \in \mathbb{N},"></span> <span data-tex-inline="p + b = 0"></span></span>Here is the argument in plain words. b is 0 or a next one. Suppose b is 0: then p + 0 = p, so p = 0. Suppose instead b is S(m): then p + S(m) = S(p + m), a next one, and 0 is nobody’s next, so this case cannot happen. So p and b are both 0.<br>Write it as a column, one sentence to a row, each with its reason.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4e4">
+  <h2 class="sthead"><span class="stno">4e4</span>One plus three is four</h2>
+  <p class="stands">Stands on 4e3 (plus-zero, plus-a-next), 3a (the names 0 to 4) and 4c (the chain convention).</p>
+  <p data-pid="d2c60a">Here it is. Each line makes one move. It unpacks a name into the next one of the name before, or uses plus-a-next or plus-zero, or packs a name back.</p>
+  <p data-pid="23bcf2">The chain convention of 4c is in force. Each line beginning with = says that 1 + 3 is the same as what follows, by the chain technique with the line before it.</p>
+  <div class="first">
+  <div class="lbl">The ladder's earliest arithmetic</div>
+  <pre class="lines" data-k="ember" data-label="this step: 1 + 3 = 4, a move to each line">
+1 + 3 = 1 + \htmlClass{new}{S(2)} @@ 3 names S(2) (3a); the swap axiom
+\phantom{1 + 3} = \htmlClass{new}{S(1 + 2)} @@ the plus-a-next technique, with a = 1 and b = 2
+\phantom{1 + 3} = S(1 + \htmlClass{new}{S(1)}) @@ 2 names S(1); the swap axiom, inside
+\phantom{1 + 3} = S(\htmlClass{new}{S(1 + 1)}) @@ the plus-a-next technique, with b = 1, inside
+\phantom{1 + 3} = S(S(1 + \htmlClass{new}{S(0)})) @@ 1 names S(0), at the right-hand 1 only
+\phantom{1 + 3} = S(S(\htmlClass{new}{S(1 + 0)})) @@ the plus-a-next technique, with b = 0, inside
+\phantom{1 + 3} = S(S(S(\htmlClass{new}{1}))) @@ the plus-zero technique, inside
+\phantom{1 + 3} = S(S(\htmlClass{new}{2})) @@ 2 names S(1)
+\phantom{1 + 3} = S(\htmlClass{new}{3}) @@ 3 names S(2)
+\phantom{1 + 3} = \htmlClass{new}{4} \quad \blacksquare @@ 4 names S(3)
+  </pre>
+  </div>
+  <p data-pid="7a929a">Read the lines down and you see the definition at work. Plus-a-next moves the next-one gesture out of the right-hand number and wraps it around the sum, again and again, until nothing is left to add. Then plus-zero closes the sum, and the names are packed back up.</p>
+  <p data-pid="111660">Read them up and you see where each line came from. Nothing in the column is a matter of “everyone knows”. <b>Every line stands on a definition or a name, and every definition and name stands on the steps below this one, down to a thing being the same as itself.</b></p>
+  <p data-pid="309776">The same moves give 2 + 2 = 4, 3 + 1 = 4 and 0 + 4 = 4; the slides and the picture do them. Adding a number past 4 works the same way and ends in a name like S(S(4)); 4h gives such numbers short names.</p>
+  <section class="slides" id="sl4a"><div class="eyebrow">The slides · 1 + 3 = 4 · ← → keys work</div></section>
+  <section class="slides" id="sl4b"><div class="eyebrow">The slides · 2 + 2 = 4 · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · the unfolding machine, a move per press</div>
+    <div class="panel">
+      <div class="chips" role="group" aria-label="p" id="ach"><span class="m" style="color:var(--muted)">p =</span></div>
+      <div class="chips" role="group" aria-label="b" id="bch"><span class="m" style="color:var(--muted)">b =</span></div>
+      <div class="chips"><button id="step1">next move</button><button id="stepAll">all moves</button><button id="restart">start again</button></div>
+      <div class="cap">Each press makes exactly one move of the column above: unpack a name, plus-a-next, plus-zero, or pack a name. The newest line is orange; its reason is beside it. Try p = 1, b = 3.</div>
+      <div class="eqbox" id="eqU"></div>
+    </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4e4.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="2 + 1"></span></span>Unfold 2 + 1, one move to a line, with the reason beside each. <br>Which number stands at the foot?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4e5">
+  <h2 class="sthead"><span class="stno">4e5</span>Adding one is taking the next one</h2>
+  <p class="stands">Stands on 4e3 (plus-zero, plus-a-next) and 3a (1 names S(0)).</p>
+  <p data-pid="088006">The line 3 + 1 = 4 needs only a short column, because adding 1 is a short story every time.</p>
+  <p data-pid="823cd0">Plus-one technique: <b>adding one is taking the next one.</b> In marks: for every number n, n + 1 = S(n).</p>
+  <p data-pid="c7fde3">Plan: unpack 1 into S(0), use plus-a-next, then plus-zero.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the plus-one technique, n + 1 = S(n)">
+n + 1 = n + \htmlClass{new}{S(0)} @@ 1 names S(0)
+\phantom{n + 1} = S(n + 0) @@ the plus-a-next technique
+\phantom{n + 1} = \htmlClass{new}{S(n)} \quad \blacksquare @@ the plus-zero technique, inside
+  </pre>
+  <p class="eqline" data-pid="708b04">From here on, <span data-tex-inline="n + 1"></span> may be written for <span data-tex-inline="S(n)"></span>, and the other way about: the plus-one technique says they name the same number. It is not a new mark; it is a proved sameness, and writing one for the other is a move cited to the swap axiom.</p>
+  <p data-pid="519d70">So 3 + 1 = S(3) = 4. The step of every induction may be written “from n to n + 1”, as it is usually written.</p>
+  <p data-pid="27c1f6">4c's doubling function gets its shorter description too: d(n) = n + n, for every number n, by induction.</p>
+  <section class="slides" id="sl5a"><div class="eyebrow">The slides · the plus-one technique · ← → keys work</div></section>
+  <section class="slides" id="sl5b"><div class="eyebrow">The slides · doubling · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4e5.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">d(0) = 0, d(S(n)) = S(S(d(n))), from 4c16.</span></span>Show d(0) = 0 + 0. <br>Suppose d(n) = n + n. Which techniques would you need to reach d(n + 1) = (n + 1) + (n + 1)?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4e6">
+  <h2 class="sthead"><span class="stno">4e6</span>Zero on the left</h2>
+  <p class="stands">Stands on 4e3 (plus-zero, plus-a-next) and 4b (the induction technique).</p>
+  <p data-pid="06d7dc">Plus-zero says p + 0 = p. It does not say 0 + p = p. That is a different statement, with 0 on the other side, and it needs its own proof.</p>
+  <p data-pid="f26ff2">Every technique we now take for granted has to be earned, just as when the ladder adopted the equal sign. 0b had to build, and 0c to prove, the turning about of a sameness. Here the same care is owed to adding. This is the earliest technique of adding, and the earliest induction of the arithmetic.</p>
+  <p data-pid="f64989">Zero-plus technique: <b>0 added to a number, on the left, gives that number.</b> In marks: 0 + p = p.</p>
+  <p data-pid="0409e9">Example: 0 + 1 = 0 + S(0) = S(0 + 0) = S(0) = 1.</p>
+  <p data-pid="c6fa8a">Plan: induct on the number. The base is plus-zero with 0. The step uses plus-a-next and the hypothesis.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the zero-plus technique, 0 + a = a">
+\varphi(a):\ \ 0 + a = a @@ the condition, with its gap at a
+0 + 0 = 0 @@ the plus-zero technique, with a = 0: the base
+\text{let } a \in \mathbb N;\ \ \text{assume } 0 + a = a @@ the step opens: the induction hypothesis
+\qquad 0 + S(a) = S(0 + a) @@ the plus-a-next technique
+\qquad \phantom{0 + S(a)} = S(\htmlClass{keep}{a}) @@ the hypothesis, inside (the swap axiom)
+\htmlClass{new}{\forall a \in \mathbb N\;\; 0 + a = a} \quad \blacksquare @@ prove an if; speak of everything; the induction technique
+  </pre>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · the zero-plus technique · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4e6.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">“0 + a = a, by plus-zero.”</span></span>Why is plus-zero the wrong reason? <br>Name the right technique, and what its proof needed that plus-zero did not.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4e7">
+  <h2 class="sthead"><span class="stno">4e7</span>The next one on the left</h2>
+  <p class="stands">Stands on 4e6 (zero-plus), 4e3 (plus-a-next) and 4b (induction).</p>
+  <p data-pid="b4d678">Plus-a-next moves the next-one gesture out of the right-hand number. Its partner moves it out of the left.</p>
+  <p data-pid="1be998">Next-on-the-left technique for plus: <b>adding to the next one after a number gives the next one after the sum.</b> In marks: S(p) + b = S(p + b).</p>
+  <p data-pid="821dc7">Example: S(2) + 1 = 3 + 1 = 4, and S(2 + 1) = S(3) = 4.</p>
+  <p data-pid="24a21e">Plan: keep the left-hand number fixed and induct on b, the number plus-a-next can act on.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the next-on-the-left technique for plus, S(a) + b = S(a + b)">
+\text{let } a \in \mathbb N;\ \ \varphi(b):\ S(a) + b = S(a + b) @@ a kept fixed; the gap at b
+S(a) + 0 = S(a) = S(a + 0) @@ plus-zero; plus-zero inside, turned about: the base
+\text{let } b \in \mathbb N;\ \ \text{assume } S(a) + b = S(a + b) @@ the step opens
+\qquad S(a) + S(b) = S(S(a) + b) @@ the plus-a-next technique
+\qquad \phantom{S(a) + S(b)} = S(\htmlClass{keep}{S(a + b)}) @@ the hypothesis, inside
+\qquad \phantom{S(a) + S(b)} = S(\htmlClass{new}{a + S(b)}) @@ the plus-a-next technique inside, turned about
+\htmlClass{new}{\forall b \in \mathbb N\;\; S(a) + b = S(a + b)} \quad \blacksquare @@ the induction technique; a was any number
+  </pre>
+  <section class="slides" id="sl7"><div class="eyebrow">The slides · the next-on-the-left technique for plus · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4e7.1</span><span class="ph bend">bend</span><span class="givens"><span data-tex-inline="S(a) + b = S(a + b)"></span></span>Which letter does the proof induct on? <br>Say why inducting on the other letter would leave plus-a-next nothing to act on.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4e8">
+  <h2 class="sthead"><span class="stno">4e8</span>The order does not matter</h2>
+  <p class="stands">Stands on 4e6 (zero-plus), 4e7 (next-on-the-left for plus) and 4b (induction).</p>
+  <p data-pid="881e0f">With zero-plus and next-on-the-left for plus in hand, the order of the numbers added does not matter.</p>
+  <p data-pid="1e6b1b">Turn-about technique for plus: <b>a sum is the same in either order.</b> In marks: p + b = b + p. The accepted word for this is commutative, from the Latin commutare, “to exchange”.</p>
+  <p data-pid="65c239">Example: 1 + 3 = 4, as 4e4 unfolded, and 3 + 1 = 4, as 4e5 gave.</p>
+  <p data-pid="c2f3f0">Plan: keep a fixed and induct on b. The base needs zero-plus. The step needs next-on-the-left.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the turn-about technique for plus, a + b = b + a">
+\text{let } a \in \mathbb N;\ \ \varphi(b):\ a + b = b + a @@ a kept fixed
+a + 0 = a = 0 + a @@ the plus-zero technique; the zero-plus technique, turned about: the base
+\text{let } b \in \mathbb N;\ \ \text{assume } a + b = b + a @@ the step opens
+\qquad a + S(b) = S(a + b) @@ the plus-a-next technique
+\qquad \phantom{a + S(b)} = S(\htmlClass{keep}{b + a}) @@ the hypothesis, inside
+\qquad \phantom{a + S(b)} = \htmlClass{new}{S(b) + a} @@ the next-on-the-left technique for plus, turned about
+\htmlClass{new}{\forall b \in \mathbb N\;\; a + b = b + a} \quad \blacksquare @@ the induction technique; a was any number
+  </pre>
+  <p data-pid="350b2e">Look at what the base needed: zero-plus. Try to prove turn-about for plus without proving zero-plus before it. The base is 0 + p = p, which is zero-plus, so you would be proving it inside turn-about for plus anyway.</p>
+  <p data-pid="65b4d5"><b>Techniques come in a pecking order, and finding which earlier technique a proof needs is most of the work.</b></p>
+  <section class="slides" id="sl8"><div class="eyebrow">The slides · the turn-about technique for plus · ← → keys work</div></section>
+  <section class="pic" id="pic2">
+    <div class="eyebrow">The picture · a technique checked as rows of beads</div>
+    <div class="panel">
+      <div class="chips" role="group" aria-label="technique" id="lch"></div>
+      <div class="cap">Each row of beads is a side of the technique, built by its definition: gold for p, ember for b, teal for the steps the next-one gesture adds. The two sides of a technique name the same number when both rows have the same beads, for every p and b; the fake's two sides never do. The p and b are the unfolding machine's, in 4e4.</div>
+      <canvas id="cvB"></canvas>
+      <div class="eqbox" id="eqB"></div>
+    </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4e8.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="a + b = b + a"></span></span>Write the base of the induction, with a reason for each =. <br>Which technique does the step use last, and turned which way?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4e9">
+  <h2 class="sthead"><span class="stno">4e9</span>The brackets do not matter</h2>
+  <p class="stands">Stands on 4e3 (plus-zero, plus-a-next) and 4b (induction).</p>
+  <p data-pid="1a0d70">Next, the brackets. Regroup technique for plus: <b>in a sum of three numbers, which pair is added first does not change the sum.</b> In marks: (p + b) + c = p + (b + c). The accepted word for this is associative, from the Latin associare, “to join together”.</p>
+  <p data-pid="0be37e">Example: (1 + 1) + 2 = 2 + 2 = 4, and 1 + (1 + 2) = 1 + 3 = 4.</p>
+  <p data-pid="1b63b9">Plan: keep the first two numbers fixed and induct on the third, where plus-a-next acts.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the regroup technique for plus, (a + b) + c = a + (b + c)">
+\text{let } a, b \in \mathbb N;\ \ \varphi(c):\ (a + b) + c = a + (b + c) @@ a and b kept fixed
+(a + b) + 0 = a + b = a + (b + 0) @@ the plus-zero technique; plus-zero inside, turned about: the base
+\text{let } c \in \mathbb N;\ \ \text{assume } (a + b) + c = a + (b + c) @@ the step opens
+\qquad (a + b) + S(c) = S((a + b) + c) @@ the plus-a-next technique
+\qquad \phantom{(a + b) + S(c)} = S(\htmlClass{keep}{a + (b + c)}) @@ the hypothesis, inside
+\qquad \phantom{(a + b) + S(c)} = a + S(b + c) @@ the plus-a-next technique, turned about
+\qquad \phantom{(a + b) + S(c)} = a + \htmlClass{new}{(b + S(c))} @@ the plus-a-next technique inside, turned about
+\htmlClass{new}{\forall c \in \mathbb N\;\; (a + b) + c = a + (b + c)} \quad \blacksquare @@ the induction technique; a and b were any numbers
+  </pre>
+  <p class="eqline" data-pid="041360">From here on, a sum written without brackets, <span data-tex-inline="a + b + c"></span>, names <span data-tex-inline="(a + b) + c"></span>; by the regroup technique for plus it is the same number as <span data-tex-inline="a + (b + c)"></span>, so either reading may be used.</p>
+  <section class="slides" id="sl9"><div class="eyebrow">The slides · the regroup technique for plus · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4e9.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a = 1, b = 2.</span></span>Write the base of regroup for these: (1 + 2) + 0 = 1 + (2 + 0), with a reason for each =. <br>In the step, how many times is plus-a-next used?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4e10">
+  <h2 class="sthead"><span class="stno">4e10</span>Taking away again</h2>
+  <p class="stands">Stands on 4e3 (plus-a-next), 4a13 (different-nexts), 4e8 (turn-about for plus) and 4b (induction).</p>
+  <p data-pid="4a81cd">Last, cancelling. Cancel technique for plus: <b>if sums agree after adding the same number, they agreed before.</b> In marks: p + c = b + c ⇒ p = b.</p>
+  <p data-pid="89b88c">Example: if p + 2 = 5 + 2, then p = 5.</p>
+  <p data-pid="be23a7">Plan: keep a and b fixed and induct on c. The step is where 4a's different-nexts comes in: different numbers have different next ones, so sameness of the next ones carries back to sameness of the numbers.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the cancel technique for plus, a + c = b + c ⇒ a = b">
+\text{let } a, b \in \mathbb N;\ \ \varphi(c):\ a + c = b + c \Rightarrow a = b @@ a and b kept fixed
+a + 0 = b + 0 \Rightarrow a = b @@ plus-zero on each side; the techniques turn-about and chain; prove an if: the base
+\text{let } c \in \mathbb N;\ \ \text{assume } \varphi(c) @@ the step opens
+\qquad \text{assume } a + S(c) = b + S(c) @@ aiming at φ(S(c))
+\qquad S(a + c) = S(b + c) @@ the plus-a-next technique, on each side
+\qquad a + c = b + c @@ the different-nexts technique
+\qquad \htmlClass{new}{a = b} @@ carry the hypothesis through
+\htmlClass{new}{\forall c \in \mathbb N\;\; (a + c = b + c \Rightarrow a = b)} \quad \blacksquare @@ prove an if; speak of everything; the induction technique
+  </pre>
+  <p data-pid="29ccf3">With turn-about for plus, cancelling works on the left as well: c + p = c + b gives p + c = b + c, and so p = b. These techniques have accepted names, given in the basement.</p>
+  <p data-pid="d592bc">A later author wrote a whole book that builds the numbers and their techniques in this style, technique by technique. He told the students who read it to forget the arithmetic they had learned at school, since they had not really learned it. In his preface he records that, at the last minute, a younger mathematician showed him a much simpler proof that adding exists, and that he used it.</p>
+  <section class="slides" id="sl10"><div class="eyebrow">The slides · the cancel technique for plus · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4e10.1</span><span class="ph bend">bend</span><span class="givens"><span data-tex-inline="p, b \in \mathbb{N},"></span> <span data-tex-inline="p + p = b + b"></span></span>Take a column to the sameness of p and b by cancelling a number added to both sides, as far as you can take it, and write the line it needs next.<br>By induction on p, prove that p and b are the same.<br>Find where the step breaks if your hypothesis keeps b fixed from the start.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4e11">
+  <h2 class="sthead"><span class="stno">4e11</span>Illegal moves</h2>
+  <p class="stands">Stands on 4e1 to 4e10.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+S(a + b) = S(a) + S(b)\,? @@ false: with a = b = 1, the left is S(2) = 3 and the right is 2 + 2 = 4. The truth is S(a) + b = S(a + b) (next-on-the-left for plus) and a + S(b) = S(a + b) (plus-a-next): the next-one gesture comes out of either side alone, not both
+a + S(b) = S(a) + S(b)\,? @@ adding the next one to both numbers is not a tech. plus-a-next moves S out of the right-hand number and around the sum; it does not copy it
+2 + 1 = 4\,? @@ wrong arithmetic. Unfold 2 + 1 by plus-a-next and plus-zero, and the foot is S(2), which is 3. The line claims one thing under two names, where there are two things: you have rendered your equals false. Every swap it licenses now carries a falsehood, and the chain technique would give 3 = 4
+0 + a = a,\ \text{by plus-zero} @@ the right fact, the wrong reason: plus-zero is a + 0 = a. The reason is zero-plus, which needed its own induction
+a + c = b + d \Rightarrow a = b\,? @@ cancelling needs the same number on both sides: 1 + 3 = 2 + 2 and 1 ≠ 2. cancel for plus, with c = d, is the licence
+1 + 3 = 4,\ \text{because everyone knows it} @@ 0c's rule: “everyone knows” is a wish, not a reason. The column above is the reason
+\{1\} + 1 @@ + is defined for numbers. {1} is not a number (4a), so the mark means nothing there
+a + b + c + d @@ regroup for plus settles a + b + c. Longer sums are settled by using regroup for plus again, step by step; each regrouping is a line with its reason
+  </pre>
+  <section class="slides" id="sl11"><div class="eyebrow">The slides · a fake · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4e11.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">“S(1 + 1) = S(1) + S(1).”</span></span>Which illegal move is this? <br>Work out each side, and say what the next-one gesture may come out of.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4e12">
+  <h2 class="sthead"><span class="stno">4e12</span>Running it backwards</h2>
+  <p class="stands">Stands on 4e1 to 4e10.</p>
+  <p data-pid="9c84bb">Given a sum, unfold. Unpack the right-hand name, use plus-a-next, and repeat until plus-zero applies. Then pack the names.</p>
+  <p data-pid="edb6bc">Given a result and a number added, ask what the other must be. Which b has 1 + b = 4? Unfolding 1 + 3 shows that 3 does.</p>
+  <p data-pid="cc22fb">Is it the only one? Suppose 1 + b = 4 and 1 + b′ = 4. Then 1 + b = 1 + b′, so b + 1 = b′ + 1 by turn-about for plus, and b = b′ by cancel for plus. So exactly one number takes 1 to 4, and it is 3.</p>
+  <p data-pid="a12566">That is the question a later mark will answer in general. On this rung it is answered case by case: find the number, and cite cancel for plus for “no other”.</p>
+  <p data-pid="17fe15">Wanting a technique, you find the earlier techniques its step needs, and prove those before it. Then induct on the right-hand letter, because that is where plus-a-next can act. Found upward; written downward.</p>
+  <section class="slides" id="sl12"><div class="eyebrow">The slides · backwards · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4e12.1</span><span class="ph undo">undo</span><span class="givens"><span data-tex-inline="b \in \mathbb{N},"></span> <span data-tex-inline="E: 1 + b = 4,"></span> <span data-tex-inline="F: 4 + b = 1"></span></span>Here is the argument for F in plain words. If b is 0, then 4 + b = 4, which is not 1. If b is S(m), then 4 + S(m) = S(4 + m), and 1 = S(0), so 4 + m = 0 by different-nexts, and then 4 = 0 by 4e3.1, which is false. So no b meets F.<br>Write it as a column.<br>Then argue for E the same way in plain words, find every b that meets it, and write that as a column too.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">4e.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{Adding keeps}"></span> <span data-tex-inline="p + 0 = p,"></span> <span data-tex-inline="0 + p = p,"></span> <span data-tex-inline="p + b = b + p,"></span> <span data-tex-inline="(p + b) + c = p + (b + c),"></span> <span data-tex-inline="p + c = b + c \Rightarrow p = b."></span></span>Define an operation of your own on numbers, other than adding, by a start and a step in the right-hand number, give it a mark by a “from here on” line, and compute it at two named numbers, one move per line.<br>Of the laws adding keeps, prove one your operation keeps, and refute one it breaks, with names.</div>
+  <div class="chq"><span class="chid">4e.4.2</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\text{Unfolding the } 3 \text{ earns}"></span> <span data-tex-inline="1 + 3 = 4,"></span> <span data-tex-inline="\text{one move per line.}"></span></span>Earn it by a shorter column, and list what that column leans on that the unfolding does not.</div>
+  <div class="chq"><span class="chid">4e.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="0 + 0 = 0,"></span> <span data-tex-inline="1 + 1 = 2,"></span> <span data-tex-inline="2 + 2 = 4"></span></span>Settle whether some number added to itself gives 3.</div>
+  <div class="chq"><span class="chid">4e.4.4</span><span class="tagq">world</span><span class="givens"><span data-tex-inline="\text{a start } 0,"></span> <span data-tex-inline="\text{a one-to-one next } S"></span> <span data-tex-inline="\text{that never gives } 0,"></span> <span data-tex-inline="p + 0 = p,"></span> <span data-tex-inline="p + S(b) = S(p + b),"></span> <span data-tex-inline="\text{for all things } p, b."></span></span>Build such a world in which some two things do not turn about under adding. Not everything need be reached from the start.</div>
+  <div class="chq"><span class="chid">4e.4.5</span><span class="tagq">seam</span>1 + 3 = 4 is earned from the names, plus-zero and plus-a-next. A lunchbox holds a plum, and then three more. <br>Has the column said anything about the lunchbox? <br>If a careful count of the lunchbox ever gave a number other than 4, which would be wrong: the count, the column, or reading the column as a count?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r04d.html">← 4d · completing the proof</a><a href="r04f.html">4f · multiplying and powers →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>The schoolteacher, in Stettin, is Hermann Grassmann; the writer a generation later is Giuseppe Peano. The author of the whole book is Edmund Landau, and the younger mathematician with the simpler proof is László Kalmár.</p>
+  <aside class="voice para"><p>Hermann Grassmann, a schoolteacher in Stettin, wrote a textbook of arithmetic in which adding is defined by exactly this pair of lines and every technique of adding and multiplying is proved from them by induction. It seems nobody had done so before. Peano, a generation later, put the same pair of lines at the head of his arithmetic.</p><cite>Grassmann, Lehrbuch der Arithmetik für höhere Lehranstalten (1861); Peano, Arithmetices principia (1889)</cite></aside>
+  <aside class="voice para"><p>Edmund Landau wrote a whole book that builds the numbers and their techniques in this style, technique by technique, and told the students who read it to forget the arithmetic they had learned at school, since they had not really learned it. In his preface he records that, at the last minute, László Kalmár showed him a much simpler proof that adding exists, and that he used it.</p><cite>Landau, Grundlagen der Analysis (1930), the prefaces</cite></aside>
+  <h3>Accepted names</h3>
+  <p>Turn-about for plus is the commutative law of addition; regroup for plus, the associative law; cancel for plus, the cancellation law.</p>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper}=Rung;
+const R=String.raw;
+function size(cv,ar){ const d=window.devicePixelRatio||1, W=cv.clientWidth||300, H=Math.round(W/ar); cv.width=W*d; cv.height=H*d; cv.style.height=H+'px'; const c=cv.getContext('2d'); c.setTransform(d,0,0,d,0,0); return {c,W,H}; }
+const nameOf=v=>{ if(v<=4) return String(v); let s='4'; for(let i=4;i<v;i++) s='S('+s+')'; return s; };
+
+/* ---------- left: the unfolding machine for + ---------- */
+let A=1, B=3;
+const num=k=>({t:'n',k}), Sx=x=>({t:'S',x}), add=(a,b)=>({t:'+',a,b});
+function show(e,hl){ const w=s=>hl&&hl.node===e?'\\htmlClass{new}{'+s+'}':s;
+  if(e.t==='n') return w(String(e.k)); if(e.t==='S') return w('S('+show(e.x,hl)+')'); return w(show(e.a,hl)+' + '+show(e.b,hl)); }
+function findAdd(e,par){ if(e.t==='+') return {node:e,par}; if(e.t==='S') return findAdd(e.x,e); return null; }
+function stepOnce(e){ // returns {e, reason, node} or null
+  const f=findAdd(e,null);
+  const replace=(old,nu)=>{ if(old===e) return nu; (function rec(x){ if(x.t==='S'){ if(x.x===old){ x.x=nu; return true; } return rec(x.x); } if(x.t==='+'){ if(x.a===old){x.a=nu;return true;} if(x.b===old){x.b=nu;return true;} } return false; })(e); return e; };
+  if(f){ const s=f.node;
+    if(s.b.t==='n'&&s.b.k>0){ const nu=Sx(num(s.b.k-1)); s.b=nu; return {e,reason:`${s.b.x.k+1} names S(${s.b.x.k})`,node:nu}; }
+    if(s.b.t==='S'){ const nu=Sx(add(s.a,s.b.x)); const e2=replace(s,nu); return {e:e2,reason:'the plus-a-next technique',node:nu}; }
+    if(s.b.t==='n'&&s.b.k===0){ const nu=s.a; const e2=replace(s,nu); return {e:e2,reason:'the plus-zero technique',node:nu}; } }
+  // pack the innermost S(num k) with k+1 ≤ 4
+  let target=null; (function rec(x,p){ if(x.t==='S'){ if(x.x.t==='n'&&x.x.k<4) target={x,p}; else rec(x.x,x); } })(e,null);
+  if(target){ const nu=num(target.x.x.k+1); const e2=replace(target.x,nu); return {e:e2,reason:`${nu.k} names S(${nu.k-1})`,node:nu}; }
+  return null;
+}
+let cur, hist;
+function restart(){ cur=add(num(A),num(B)); hist=[{tex:show(cur),reason:'the sum to unfold'}]; drawU(); }
+function clone(e){ return JSON.parse(JSON.stringify(e)); }
+function one(){ const c=clone(cur); const r=stepOnce(c); if(!r) return false; cur=r.e; hist.push({tex:show(cur,{node:r.node}),reason:r.reason}); return true; }
+function drawU(){
+  const L=hist.slice(-7); const first=hist[0].tex;
+  let rows=L.map((h,i)=>{ const isFirst=(hist.length-L.length+i)===0; return (isFirst?'':'= ')+h.tex+'\\quad\\text{'+h.reason+'}'; });
+  if(hist.length>7) rows.unshift('\\vdots');
+  const done=!stepOnce(clone(cur));
+  if(done) rows.push(`\\htmlClass{keep}{${A} + ${B} = ${show(cur)}}\\ \\ \\blacksquare`);
+  tex(document.getElementById('eqU'),`\\begin{gathered}${rows.join('\\\\ ')}\\end{gathered}`,true);
+  document.getElementById('step1').disabled=done; document.getElementById('stepAll').disabled=done;
+}
+function chips(id,get,set){ const el=document.getElementById(id); [0,1,2,3,4].forEach(k=>{ const b=document.createElement('button'); b.textContent=String(k); if(k===get()) b.className='on'; b.onclick=()=>{ set(k); [...el.querySelectorAll('button')].forEach(z=>z.classList.toggle('on',z===b)); restart(); drawB(); }; el.appendChild(b); }); }
+chips('ach',()=>A,k=>A=k); chips('bch',()=>B,k=>B=k);
+document.getElementById('step1').onclick=()=>{ one(); drawU(); };
+document.getElementById('stepAll').onclick=()=>{ while(one()); drawU(); };
+document.getElementById('restart').onclick=restart;
+restart();
+
+/* ---------- right: a law as rows of beads ---------- */
+const LAWS=[
+  {id:'pc',lab:'p + b = b + p',L:(a,b)=>[['g',a],['e',b]],Rr:(a,b)=>[['e',b],['g',a]],lt:'p + b',rt:'b + p',ok:true,why:'the turn-about technique for plus'},
+  {id:'pl',lab:'S(p) + b = S(p + b)',L:(a,b)=>[['g',a],['t',1],['e',b]],Rr:(a,b)=>[['g',a],['e',b],['t',1]],lt:'S(p) + b',rt:'S(p + b)',ok:true,why:'the next-on-the-left technique for plus'},
+  {id:'pz',lab:'0 + p = p',L:(a,b)=>[['g',a]],Rr:(a,b)=>[['g',a]],lt:'0 + p',rt:'p',ok:true,why:'the zero-plus technique'},
+  {id:'fk',lab:'S(p + b) = S(p) + S(b) ?',L:(a,b)=>[['g',a],['e',b],['t',1]],Rr:(a,b)=>[['g',a],['t',1],['e',b],['t',1]],lt:'S(p + b)',rt:'S(p) + S(b)',ok:false,why:'an extra bead on the right: never-its-own-next'}];
+let li=0; const lch=document.getElementById('lch');
+LAWS.forEach((Lw,i)=>{ const b=document.createElement('button'); b.textContent=Lw.lab; if(i===li) b.className='on'; b.onclick=()=>{ li=i; [...lch.querySelectorAll('button')].forEach(z=>z.classList.toggle('on',z===b)); drawB(); }; lch.appendChild(b); });
+const cvB=document.getElementById('cvB');
+function drawB(){
+  const {c,W,H}=size(cvB,(cvB.clientWidth||300)<480?1.6:2.4); c.fillStyle=col('--card'); c.fillRect(0,0,W,H);
+  const Lw=LAWS[li]; const left=Lw.L(A,B), right=Lw.Rr(A,B);
+  const cnt=x=>x.reduce((s,[k,n])=>s+n,0); const nl=cnt(left), nr=cnt(right);
+  const maxN=Math.max(nl,nr,1), lx=W<480?94:112, r=Math.min(10,(W-lx-12)/(maxN*2.6));
+  const colr=k=>k==='g'?col('--gold'):(k==='e'?col('--ember'):col('--teal'));
+  c.font=(W<480?'10.5px':'12px')+' IBM Plex Mono, monospace'; c.textBaseline='middle';
+  const row=(beads,y,lab)=>{ c.fillStyle=col('--ink'); c.textAlign='left'; c.fillText(lab,6,y); let x=lx+r; beads.forEach(([k,n])=>{ for(let i=0;i<n;i++){ c.beginPath(); c.arc(x,y,r,0,7); c.fillStyle=colr(k); c.fill(); x+=r*2.6; } x+=r*.8; }); if(!cnt(beads)){ c.fillStyle=col('--muted'); c.fillText('no beads',lx,y); } };
+  row(left,H*.32,Lw.lt); row(right,H*.7,Lw.rt);
+  const same=nl===nr;
+  const sub=(s)=>s.replace(/\bp\b/g,String(A)).replace(/\bb\b/g,String(B));
+  let t=`${sub(Lw.lt)} = ${nameOf(nl)}\\\\ ${sub(Lw.rt)} = ${nameOf(nr)}\\\\ `;
+  t+= same? `\\htmlClass{keep}{\\text{the same number here}}\\\\ \\text{for every } p, b\\text{: ${Lw.why}}` : `\\htmlClass{new}{\\text{different numbers}}\\\\ \\text{${Lw.why}}`;
+  tex(document.getElementById('eqB'),`\\begin{gathered}${t}\\end{gathered}`,true);
+}
+new ResizeObserver(drawB).observe(cvB);
+if(window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change',drawB);
+drawB();
+
+/* ---------- slides ---------- */
+const N='\\htmlClass{new}', K='\\htmlClass{keep}';
+const SYM={'≠':'$\\ne$','∈':'$\\in$','∉':'$\\notin$','⇔':'$\\Leftrightarrow$','⊆':'$\\subseteq$','∅':'$\\varnothing$','⊥':'$\\bot$','∀':'$\\forall$','∃':'$\\exists$','¬':'$\\neg$','∧':'$\\land$','∨':'$\\lor$','⇒':'$\\Rightarrow$','ℕ':'$\\mathbb N$','φ':'$\\varphi$','↦':'$\\mapsto$'};
+const tx=r=>r.replace(/[≠∈∉⇔⊆∅⊥∀∃¬∧∨⇒ℕφ↦]/gu,ch=>SYM[ch]);
+const col2=(...rows)=>'\\begin{aligned}'+rows.map(([l,r])=>'&'+l+' &&\\text{'+tx(r)+'}').join('\\\\ ')+'\\end{aligned}';
+stepper('#sl3',[
+  {k:'ember',kl:'the definition',t:R`\begin{gathered}f_p(0) = p,\qquad f_p(S(n)) = ${N}{S(f_p(n))}\\ p + b = f_p(b)\end{gathered}`,n:`For each number p, recursion with start p and step s gives exactly one f_p. The low mark carries p. The sum p + b is the value of f_p at b.`},
+  {k:'ember',kl:'plus-zero and plus-a-next',t:R`p + 0 = p\qquad\qquad p + S(b) = ${N}{S(p + b)}`,n:`The defining lines, as techniques. Plus-a-next moves the next-one gesture out of the right-hand number and around the sum. Sums-are-numbers: a sum of numbers is a number.`}
+],{title:'The slides · the definition, and plus-zero and plus-a-next · ← → keys work'});
+stepper('#sl4a',[
+  {k:'ember',kl:'1 + 3 = 4',t:col2([`1 + 3 = 1 + ${N}{S(2)}`,'3 names S(2)'],[`= ${N}{S(1 + 2)}`,'the plus-a-next technique']),n:`The ladder's earliest arithmetic. Unpack the right-hand name, then plus-a-next.`},
+  {k:'ember',kl:'1 + 3 = 4',t:col2([`= S(1 + ${N}{S(1)})`,'2 names S(1)'],[`= S(${N}{S(1 + 1)})`,'the plus-a-next technique, inside']),n:`The same pair of moves again, a level in. Each move inside the S(…) is cited to the swap axiom.`},
+  {k:'ember',kl:'1 + 3 = 4',t:col2([`= S(S(1 + ${N}{S(0)}))`,'1 names S(0), the right-hand 1'],[`= S(S(${N}{S(1 + 0)}))`,'the plus-a-next technique, inside']),n:`And again. Only the right-hand 1 is unpacked: the left-hand number is never touched.`},
+  {k:'ember',kl:'1 + 3 = 4',t:col2([`= S(S(S(${N}{1})))`,'the plus-zero technique, inside'],[`= S(S(${N}{2}))`,'2 names S(1)']),n:`Nothing is left to add: plus-zero closes the sum. Now the names are packed back up.`},
+  {k:'ember',kl:'1 + 3 = 4',t:col2([`= S(${N}{3})`,'3 names S(2)'],[`= ${N}{4} \\quad \\blacksquare`,'4 names S(3)']),n:`∎ One and three make four. Every line stands on a definition or a name, and every definition on the pages below, down to a thing being the same as itself.`}
+],{title:'The slides · 1 + 3 = 4 · ← → keys work'});
+stepper('#sl4b',[
+  {k:'ember',kl:'2 + 2 = 4',t:R`2 + 2 = S(2 + 1) = S(S(2 + 0)) = S(S(2)) = S(3) = ${N}{4}`,n:`Written as a chain, with the unpacking of 2 and 1 done silently: 2 + S(1), plus-a-next; 2 + S(0), plus-a-next; plus-zero; then the names. On paper, write every move.`}
+],{title:'The slides · 2 + 2 = 4 · ← → keys work'});
+stepper('#sl5a',[
+  {k:'ember',kl:'the plus-one technique',t:R`n + 1 = n + S(0) = S(n + 0) = ${N}{S(n)}`,n:`∎ Adding one is taking the next one. From here on n + 1 may be written for S(n). So 3 + 1 = S(3) = 4 in two moves.`}
+],{title:'The slides · the plus-one technique · ← → keys work'});
+stepper('#sl5b',[
+  {k:'ember',kl:'doubling',t:R`d(0) = 0 + 0,\qquad d(S(n)) = S(S(n + n)) = ${N}{S(n) + S(n)}`,n:`4c's doubling function is n ↦ n + n: base by plus-zero; step by plus-a-next and next-on-the-left for plus. Same start, same step, so by recursion they are the same function.`}
+],{title:'The slides · doubling · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'the zero-plus technique',t:col2([`0 + 0 = 0`,'plus-zero: the base'],[`0 + S(p) = S(0 + p) = S(${K}{p})`,'plus-a-next; the hypothesis']),n:`∎ Plus-zero says p + 0 = p; 0 + p = p is a different statement and needs its own induction.`}
+],{title:'The slides · the zero-plus technique · ← → keys work'});
+stepper('#sl7',[
+  {k:'ember',kl:'the next-on-the-left technique for plus',t:col2([`S(p) + 0 = S(p) = S(p + 0)`,'plus-zero, on each side: the base'],[`S(p) + S(b) = S(${K}{S(p) + b})`,'plus-a-next'],[`= S(S(p + b)) = S(${N}{p + S(b)})`,'hypothesis; plus-a-next']),n:`∎ The partner of plus-a-next: the next-one gesture comes out of the left-hand number too.`}
+],{title:'The slides · the next-on-the-left technique for plus · ← → keys work'});
+stepper('#sl8',[
+  {k:'ember',kl:'the turn-about technique for plus',t:col2([`p + 0 = p = 0 + p`,'plus-zero; zero-plus: the base'],[`p + S(b) = S(${K}{p + b}) = S(b + p) = ${N}{S(b) + p}`,'plus-a-next; hypothesis; next-on-the-left for plus']),n:`∎ The order of the numbers added does not matter. The base needed zero-plus, the step needed next-on-the-left for plus: techniques come in a pecking order.`}
+],{title:'The slides · the turn-about technique for plus · ← → keys work'});
+stepper('#sl9',[
+  {k:'ember',kl:'the regroup technique for plus',t:col2([`(p + b) + S(c) = S((p + b) + c)`,'plus-a-next'],[`= S(${K}{p + (b + c)})`,'hypothesis'],[`= p + S(b + c) = p + ${N}{(b + S(c))}`,'plus-a-next turned about, then plus-a-next inside']),n:`∎ The brackets do not matter. Base: (p + b) + 0 = p + b = p + (b + 0). From here on p + b + c may be written without brackets.`}
+],{title:'The slides · the regroup technique for plus · ← → keys work'});
+stepper('#sl10',[
+  {k:'ember',kl:'the cancel technique for plus',t:col2([`p + S(c) = b + S(c)`,'assumed'],[`S(p + c) = S(b + c)`,'plus-a-next, each side'],[`p + c = b + c;\\ \\ ${N}{p = b}`,'the different-nexts technique; the hypothesis']),n:`∎ Cancelling. Different-nexts carries sameness of next ones back to sameness of the numbers, one step at a time.`}
+],{title:'The slides · the cancel technique for plus · ← → keys work'});
+stepper('#sl11',[
+  {k:'ember',kl:'a fake',t:R`S(1 + 1) = 3\qquad S(1) + S(1) = ${N}{4}`,n:`S(p + b) = S(p) + S(b) is false. The next-one gesture comes out of either side alone (plus-a-next or next-on-the-left for plus), not both. In general the right side has an extra bead, and never-its-own-next says no number is its own next.`},
+  {k:'ember',kl:'a fake',t:R`1 + 3 = 2 + 2,\qquad 1 \ne 2`,n:`Cancelling needs the same number on both sides. p + c = b + d gives nothing about p and b on its own.`}
+],{title:'The slides · a fake · ← → keys work'});
+stepper('#sl12',[
+  {k:'ember',kl:'backwards',t:R`1 + b = 4:\quad b = ${N}{3},\ \text{and only } 3`,n:`Find it by unfolding 1 + 3. Only one: 1 + b = 1 + b′ gives b + 1 = b′ + 1 (turn-about for plus), so b = b′ (cancel for plus). A later mark answers this question in general.`}
+],{title:'The slides · backwards · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

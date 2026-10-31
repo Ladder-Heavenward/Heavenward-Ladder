@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>10b · A function can't head two ways</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:3fr 2fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+#cvT{touch-action:none;cursor:crosshair} #cvL{touch-action:none;cursor:ew-resize}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4em;text-align:right}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r10a.html">← 10a the challenge and the answer</a><a href="r10c.html">next: 10c limits add, multiply and divide →</a></p>
+  <div class="tags"><span class="tag proof">10b · proof</span></div>
+  <h1>A function can't head two ways</h1>
+  <p>10a wrote “the function heads to this value here” as a whole statement, and refused, for now, to let “the limit” stand alone as a name. A name is honest only when exactly one thing fits it (4c). This step proves that at most one real fits: if a function heads to two values at one input, the two are the same. The proof challenges both claims with one gap, half the distance between the two values. It finds an input whose output would have to be within that gap of both, and 8h's triangle inequality forbids that. With that, “the limit” becomes a name. Two more techniques come from the same half-distance idea: limits keep order, and a function heading to a positive value is positive near the input.</p>
+  <p class="gesture">Challenge both claims with half the distance between them. Answer both with the lesser reach. One input in that window would sit within the gap of each value, and no real can.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r10a.html">10a</a> (the definition, lesser-below-both, line-limit), <a href="r08h.html">8h</a> (triangle in its distance form, size-of-a-negative, unpack-the-bars), <a href="r08b.html">8b</a> (three-way-order on ℝ, min), <a href="r08d.html">8d</a> (order-and-arithmetic-agree), <a href="r07d.html">7d</a> (not-not-out), <a href="r07e.html">7e</a> (proof by contradiction), <a href="r04c.html">4c</a> (a name needs exactly one), <a href="r09a.html">9a</a> (∃!). <a href="r10c.html">10c</a> computes limits as names; <a href="r10e.html">10e</a> uses one-limit to show a function has no limit; <a href="r10g.html">10g</a> refutes claims; rung 12 leans on the sign kept near w.</p></div>
+</header>
+
+<section class="class step" data-step="10b1">
+  <h2 class="sthead"><span class="stno">10b1</span>Why “the limit” needs a proof</h2>
+  <p class="stands">Stands on 10a (the definition), 4c (names) and 9a1 (∃!).</p>
+  <p data-pid="6aa951">4c's rule for names: <b>a description names a thing only when exactly one thing fits it.</b> In 9a's mark, that is ∃!, a some joined to an at-most-one. “The limit of f at w” has two halves to earn. The some can fail: 10d and 10e meet functions with no limit at all, and then the phrase names nothing. The at-most-one cannot fail, and this step proves it. It is the honest licence for every later line that computes with lim_{x→w} f(x) as if it were a real, as 10c does on every line.</p>
+  <p data-pid="14510f">Is it obvious? It seems so: how could the outputs crowd around 7 and around 7.5 at once? But the definition never says the outputs crowd around anything. It is a promise game, and a proof that one function cannot win two different games is a statement about every gap and every reach. So prove it, from the line and nothing else.</p>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">10b1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">“the limit of f at w”</span></span>Name the two halves a description must earn before it names one thing. <br>Say which half this step proves.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10b2">
+  <h2 class="sthead"><span class="stno">10b2</span>Two targets that cannot share a member</h2>
+  <p class="stands">Stands on 10b1 and 8h (triangle, distance).</p>
+  <p data-pid="bcd823">The whole proof rests on a tech about reals that has nothing to do with functions. Two targets, each of half-width ε, around values L and M: if ε is at most half the distance between L and M, no real sits in both. Two-targets technique: <b>for reals L, M and y, and a positive ε with 2ε ≤ |L − M|, it is not so that |y − L| &lt; ε and |y − M| &lt; ε.</b></p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the two-targets technique">
+|y - L| \lt \varepsilon \;\land\; |y - M| \lt \varepsilon @@ assume, to refute
+|L - M| \le |L - y| + |y - M| @@ triangle in its distance form (8h), with y in the middle
+|L - y| = |y - L| @@ size-of-a-negative (8h): distance is the same both ways
+|L - M| \lt \htmlClass{new}{\varepsilon + \varepsilon} = 2\varepsilon @@ keep each part; same-direction-add (8g) on the two promises; at-most-is-a-partial-order on ℝ chains ≤ then &lt;
+|L - M| \lt 2\varepsilon \le |L - M| @@ the hypothesis 2ε ≤ |L − M|
+\htmlClass{keep}{|L - M| \lt |L - M|} \quad \bot @@ at-most-is-a-partial-order on ℝ: &lt; then ≤ gives &lt;; and ¬(p &lt; p) (8a's order on ℝ)
+\neg\big(|y - L| \lt \varepsilon \land |y - M| \lt \varepsilon\big) \quad \blacksquare @@ refute (1b): the supposition closes
+  </pre>
+  <p data-pid="346d4d">In the plane of 9e: the target rows around L and the target rows around M share no row. On the line of 8a: the interval (L − ε, L + ε) and the interval (M − ε, M + ε) share no real, by 8h's stretch. Why ½? Because the half-widths add. Take L = 1 and M = 4: with ε = 1.5 the intervals are (−0.5, 2.5) and (2.5, 5.5), which share nothing, since 2.5 is in neither. With ε = 3, the challenge of the whole distance, they are (−2, 4) and (1, 7), and 2.5 is in both: |2.5 − 1| = 1.5 &lt; 3 and |2.5 − 4| = 1.5 &lt; 3. Any ε up to half the distance keeps them apart, and half is the largest that does.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · two targets · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10b2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">L = 0,  M = 3,  ε = 1</span></span>Write both targets as intervals. <br>Say why they share no real, citing two-targets.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10b3">
+  <h2 class="sthead"><span class="stno">10b3</span>At most one limit</h2>
+  <p class="stands">Stands on 10b2, 10a5 (lesser-below-both) and 7e (proof by contradiction).</p>
+  <p data-pid="8df272">One-limit technique: <b>if f is defined near w, lim_{x→w} f(x) = L and lim_{x→w} f(x) = M, then L = M.</b> In plain words: challenge both claims with half the distance between L and M. Each answers with its own reach. Take the least of the two answers and of a reach on which f is defined, and look at one input in that window. Its output must be within the gap of L and within the gap of M, and two-targets says no real is. Its accepted name is the uniqueness of limits.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the one-limit technique">
+L \ne M @@ assume, for contradiction (7e)
+\varepsilon = \tfrac12\,|L - M| \gt 0 @@ L − M ≠ 0 (adding-keeps-answers), so |L − M| &gt; 0 (8h); half a positive is positive (positive-product on ℝ)
+\begin{gathered}\text{call } \delta_1 \text{ for } L,\ \ \delta_2 \text{ for } M,\\ r \text{ with every } x \text{ near } a \text{ in } \operatorname{dom} f\end{gathered} @@ the two lines at this ε (use an every, use a some, twice); “defined near a” (use a some)
+\delta = \htmlClass{new}{\min(\min(\delta_1, \delta_2), r)} \gt 0 @@ lesser-below-both twice: positive, and at most each of δ₁, δ₂, r
+x = a + \tfrac{\delta}{2}:\ \ 0 \lt |x - a| = \tfrac{\delta}{2} \lt \delta @@ the half of a positive is positive and less than it (order-and-arithmetic-agree: δ − δ/2 = δ/2 &gt; 0)
+x \in \operatorname{dom} f @@ δ ≤ r: x is in the neighbourhood of reach r
+|f(x) - L| \lt \varepsilon \;\land\; |f(x) - M| \lt \varepsilon @@ δ ≤ δ₁ and δ ≤ δ₂: carry each promise through at x; join
+\bot @@ two-targets with y = f(x): 2ε = |L − M|
+\neg(L \ne M),\ \text{so } \htmlClass{keep}{L = M} \quad \blacksquare @@ refute; not-not-out (7d)
+  </pre>
+  <p data-pid="179ebf">Three things in that column are worth slowing down for. The least of the answers: each promise is kept only in its own window, so the input must be in both. Lesser-below-both makes the lesser reach do that. The input itself: the definition promises something about inputs in the window, so the proof must produce one. The input the column picks, δ/2 to the right of w, is in the window and, because δ ≤ r, in the domain. That is why “defined near w” is in the hypothesis. A function with no inputs near w would win
+ every game with nothing in the window (10a.3.1a), and then every real would be a limit. And the last line: the column refutes L ≠ M, which gives ¬¬(L = M). Rung 7's not-not-out turns that into L = M. This is proof by contradiction proper, and here the either-way principle enters, through not-not-out.</p>
+  <p data-pid="058fe3">A well-known calculus book proves, before it lets itself write “the limit”, that a function cannot approach two different numbers near w. It remarks that the notation would otherwise be meaningless, and that the proof is a matter of choosing ε to be half the distance between them.</p>
+  <p class="eqline" data-pid="68a329">From here on, when f has a limit at a, lim_{x→a} f(x) names it: the one real L with lim_{x→a} f(x) = L (the one-limit technique). Read it “the limit of f(x) as x heads to a”. When f has no limit at a, lim_{x→a} f(x) names nothing, and a line that uses it as a name must first show that the limit exists. That closes the flag 10a opened when it kept this name back.</p>
+  <p data-pid="57c0b1">So lim_{x→2} (3x + 1) is 7, by line-limit, and it may now be written in a chain: lim_{x→2} (3x + 1) + 1 = 7 + 1 = 8. And one-limit is a refutation machine: since 3x + 1 heads to 7 at 2, it does not head to 7.5 there, for if it did one-limit would make 7 = 7.5. Every limit you prove refutes every other value at once.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · one-limit · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · left: two claims for one function, challenged with one gap · right: two targets on the line, and one real</div>
+    <div class="panel">
+      <div class="chips" role="group" aria-label="function" id="fch"></div>
+      <canvas id="cvT"></canvas>
+      <div class="kn">
+        <span class="m">L</span><input type="range" id="kL" step="any"><output id="oL"></output>
+        <span class="m">M</span><input type="range" id="kM" step="any"><output id="oM"></output>
+        <span class="m">k</span><input type="range" id="kk" min="0.1" max="1.2" step="0.05" value="0.5"><output id="ok"></output>
+      </div>
+      <div class="cap">The knob k sets the gap: ε = k · |L − M|. Gold rows: the target around L. Teal rows: the target around M. Where they overlap, ember. Each claim answers with the largest reach that wins at this ε (found by testing the window); grey: the window of the lesser answer (or of the one answer, when only one claim can answer). The ember dot is the input δ/2 to the right of w, and its output. Drag up and down on the picture to move M.</div>
+      <div class="eqbox" id="eqT"></div>
+    </div>
+    <div class="panel">
+      <canvas id="cvL"></canvas>
+      <div class="cap">The line, with L, M and the two targets of half-width ε (gold and teal). Drag the ember real y along the line. The readout checks whether y is within ε of L, of M, and runs two-targets's column with your numbers.</div>
+      <div class="eqbox" id="eqL"></div>
+    </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10b3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="L = -1,"></span> <span data-tex-inline="M = 2,"></span> <span data-tex-inline="\varepsilon = 1.5,"></span> <span data-tex-inline="y = 0.5"></span></span>Write both targets as intervals, and run two-targets's column with y.</li><li><span class="givens"><span data-tex-inline="\text{Someone claims } 3x + 1 \text{ heads}"></span> <span data-tex-inline="\text{to both 7 and 8 at 2.}"></span></span>Run one-limit's column on the claim in numbers, as far as the input it picks, and find how far that input's output lies from 8.</li><li><span class="givens"><span data-tex-inline="A = \lim_{x \to 3} (2 - 5x),"></span> <span data-tex-inline="B = \lim_{x \to -1} x^2"></span></span>Compute A and B, each by its technique, and write one chain that uses both as names of reals.</li><li><span class="givens"><span data-tex-inline="f(x) = 3x - 2,"></span> <span data-tex-inline="\lim_{x \to 1} f(x) = 1"></span></span>As sign-kept-near's column does, from line-limit's answer at ε one half, find a reach on which f stays above one half.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10b4">
+  <h2 class="sthead"><span class="stno">10b4</span>Limits keep order</h2>
+  <p class="stands">Stands on 10b3 and 8d (order and arithmetic agree).</p>
+  <p data-pid="7dc27f">The same half-distance gap proves more. Limits-keep-order technique: <b>if f and g are defined near w, f(x) ≤ g(x) for every x in some neighbourhood of w, lim_{x→w} f(x) = L and lim_{x→w} g(x) = M, then L ≤ M.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the limits-keep-order technique">
+M \lt L @@ assume, for contradiction: by three-way-order on ℝ, ¬(L ≤ M) is M &lt; L
+\varepsilon = \tfrac{L - M}{2} \gt 0 @@ order-and-arithmetic-agree: L − M positive; halve it
+\begin{gathered}\text{an } x \text{ in every window:}\\ |f(x) - L| \lt \varepsilon,\ \ |g(x) - M| \lt \varepsilon,\\ f(x) \le g(x)\end{gathered} @@ as in one-limit: the least of the three reaches and the reach of the hypothesis; x = a + δ/2
+g(x) \lt M + \varepsilon = \htmlClass{new}{\tfrac{L + M}{2}} = L - \varepsilon \lt f(x) @@ unpack-the-bars (8h) unpacks each distance; collect (8d)
+g(x) \lt f(x) \le g(x) \quad \bot @@ at-most-is-a-partial-order on ℝ; ¬(p &lt; p)
+L \le M \quad \blacksquare @@ refute; three-way-order on ℝ turns ¬(M &lt; L) into L ≤ M
+  </pre>
+  <p data-pid="687637">The middle line is the picture: the halfway real (L + M)/2 separates the two targets, g's below it and f's above it. So f's outputs would sit above g's, against f ≤ g. Notice what limits-keep-order does not say. Strict order is not kept: −|x| &lt; |x| at every x ≠ 0, yet both head to 0 at 0. The order of outputs survives into the limits only as ≤.</p>
+  <p data-pid="9284c8">And with a constant on one side it says: a function heading to a positive value cannot be at most 0 near w. Turned to say what it does, that is the next technique. Sign-kept-near technique: <b>if lim_{x→w} f(x) = L and L &gt; 0, then f(x) &gt; L/2 &gt; 0 for every x in some neighbourhood of w.</b> Challenge with ε = L/2 and call the answer δ: in that window, |f(x) − L| &lt; L/2, so by unpack-the-bars f(x) &gt; L − L/2 = L/2. ∎ Likewise, L &lt; 0 gives f(x) &lt; L/2 &lt; 0 near w. A limit that is not 0 decides the sign of the outputs near the input; rung 12 leans on this.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · limits-keep-order · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10b4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) ≤ 3x + 1 near 2,  lim_{x→2} f(x) = L</span></span>Find a bound on L, citing limits-keep-order. <br>Say whether f(x) < 3x + 1 near 2 would give L < 7.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10b5">
+  <h2 class="sthead"><span class="stno">10b5</span>A second road, and what the either-way principle is doing</h2>
+  <p class="stands">Stands on 10b4, 8b (comparing gives either way) and 4g (at most).</p>
+  <p data-pid="1df869">Limits-keep-order gives one-limit again, by a road that never mentions half the distance. Suppose f heads to L and to M at w. Near w, f(x) ≤ f(x), so limits-keep-order with f on both sides gives L ≤ M; and, reading the two claims the other way round, M ≤ L. By 8a's at-most-is-a-partial-order on ℝ, ≤ on the line is antisymmetric (double-inclusion on the cuts), so L = M. The two roads share their engine. Limits-keep-order's own column refuted M &lt; L with the same kind of gap. It closed with three-way-order on ℝ, which on the line rests on 8b's comparison, and so on rung 7's either-way principle. <b>Neither road avoids the either-way principle.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: one-limit by limits-keep-order">
+f(x) \le f(x) \text{ near } a @@ 4g's ≤ read on the line: every real is at most itself (at-most-is-a-partial-order on ℝ)
+L \le M @@ limits-keep-order, with f → L as the lower and f → M as the upper
+M \le L @@ limits-keep-order again, the claims exchanged
+\htmlClass{keep}{L = M} \quad \blacksquare @@ at-most-is-a-partial-order on ℝ: ≤ is antisymmetric on ℝ (8a, double-inclusion)
+  </pre>
+  <p data-pid="d8f6e7">Why does the either-way principle keep turning up? Because sameness of reals is not decidable by looking. 8b's comparing-gives-either-way showed that if any two reals compare, every statement is true or false. A column that ends “so L = M” for any reals L and M has to pass through that principle somewhere, here as not-not-out or as three-way-order on ℝ. What the column proves without it is weaker and still useful: ¬(L ≠ M), that the two values cannot differ. On this ladder, with rung 7 in hand, the two say the same thing.</p>
+  <p data-pid="cb93ad">Limits-keep-order is also a tool for computing. If f(x) ≤ x² near 0 and f has a limit at 0, the limit is at most 0 (limits-keep-order with g(x) = x², which heads to 0 by square-limit, 10a). If moreover f(x) ≥ −x², the limit is at least 0, so it is 0. That last step needed the limit to exist; 10d builds a way to prove that it exists, from the trap alone.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10b5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{Strike “} f \text{ is defined near } w"></span> <span data-tex-inline="\text{” from the limit line and}"></span> <span data-tex-inline="\text{from one-limit.}"></span></span>Find a function and a real w at which the function heads to every real. <br>Find the line of one-limit's column that can no longer be written.</li><li>Find two functions, the first below the second at every input but 0, whose limits at 0 are equal. <br>Find the line of limits-keep-order's column that a proof of strict order would need.</li><li><span class="givens"><span data-tex-inline="\text{Sign-kept-near, with } L = 0"></span></span>Find a function heading to 0 at 0 whose outputs take both signs in every neighbourhood of 0.</li><li><span class="givens"><span data-tex-inline="“\lim_{x \to 0} x^2 = \lim_{x \to 0} x^4,"></span> <span data-tex-inline="\text{so } x^2 = x^4.”"></span></span>Find an input that refutes the conclusion, and write what does follow.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10b6">
+  <h2 class="sthead"><span class="stno">10b6</span>Illegal moves</h2>
+  <p class="stands">Stands on 10b1 to 10b5.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\text{“the limit is unique, so it exists”}\,? @@ ∃! is a some and an at-most-one; one-limit is only the second. 1/x at 0 has none (10e)
+\varepsilon = |L - M|\,? @@ the targets overlap: with L = 1, M = 4, 2.5 is within 3 of both. No clash
+x = a\,? @@ a is not in any neighbourhood of a; the promise says nothing there, and f may have no value there
+\text{take } \delta_1 \text{ and hope}\,? @@ the input must be in both windows: take the least of the reaches
+f(x) \lt g(x) \text{ near } a \;\Rightarrow\; \lim f \lt \lim g\,? @@ −|x| &lt; |x| near 0, both limits 0. limits-keep-order keeps only ≤
+\lim_{x \to 0} \tfrac1x = \lim_{x \to 0} \tfrac1x \text{ by the self-sameness axiom}\,? @@ the name names nothing until a limit exists; the self-sameness axiom needs a name of a thing
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10b6.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">“With ε = |L − M| the two targets share no real.”</span></span>Which illegal move is this? <br>Find a real in both targets for L = 0 and M = 2.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10b7">
+  <h2 class="sthead"><span class="stno">10b7</span>Running it backwards</h2>
+  <p class="stands">Stands on 10b1 to 10b5.</p>
+  <p data-pid="d06b88">Handed two claimed limits, find the gap that separates them: any ε up to half their distance; the proof's last line then needs an input in both windows. Handed a claim you suspect is wrong, look for a value you can prove instead: one proof and one-limit refute every other value. Handed an inequality between outputs near w, limits-keep-order passes it to the limits, as ≤. Found upward; written downward.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10b7.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{Two targets of half-width}"></span> <span data-tex-inline="\text{0.4 share no real.}"></span></span>Find every value the distance between their centres can have.</li><li><span class="givens"><span data-tex-inline="f \text{ is positive on a}"></span> <span data-tex-inline="\text{neighbourhood of 4 and has}"></span> <span data-tex-inline="\text{a limit there.}"></span></span>Can the limit be negative? <br>Can it be 0? <br>Build an example for each yes.</li><li><span class="givens"><span data-tex-inline="f(x) \le 5 \text{ near } w \text{, and } f \text{ has a}"></span> <span data-tex-inline="\text{limit at } w \text{.}"></span></span>Prove that the limit is at most 5.</li><li><span class="givens"><span data-tex-inline="f(x) = 5 \text{ for } x \ne 2,"></span> <span data-tex-inline="f(2) = 0,"></span> <span data-tex-inline="f \text{ heads to 5 at 2.}"></span></span>In one line from one-limit, prove that f does not head to 0 at 2.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">10b.4.1</span><span class="tagq">build</span>Build the step's techniques again, in your own columns.<ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="L &lt; 0"></span></span>State and prove sign-kept-near for this L, one move per line.</li><li><span class="givens"><span data-tex-inline="|y - L| &lt; \varepsilon,"></span> <span data-tex-inline="|y - M| &lt; \varepsilon"></span></span>Prove two-targets turned about: L and M lie less than twice ε apart.</li><li><span class="givens"><span data-tex-inline="f(x) = x^2,"></span> <span data-tex-inline="w = 2,"></span> <span data-tex-inline="L = 4.2"></span></span>Without one-limit, refute the limit line for f at w with L.</li><li>Prove one-limit by the step's second road, one move per line, citing each move.</li></ol></div>
+  <div class="chq"><span class="chid">10b.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="2\varepsilon = |L - M|"></span></span>Find the real halfway between L and M. <br>Decide whether it is in either target.</div>
+  <div class="chq"><span class="chid">10b.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{Limits-keep-order: } f \le g"></span> <span data-tex-inline="\text{near } w \text{ gives } \lim f \le \lim g \text{.}"></span> <span data-tex-inline="\lim f \le \lim g \text{ at } w"></span></span>Must f be at most g near w?</div>
+  <div class="chq"><span class="chid">10b.4.4</span><span class="tagq">seam</span>An article “Limite” in a French encyclopedia (1765) calls a quantity the limit of another when the second can come nearer to it than any given quantity, however small, without ever passing it. <br>On that reading, does x head to 0 at 0? <br>Does x · q(x), with 9a’s q? <br>Which reading should a limit have?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r10a.html">← 10a · the challenge and the answer</a><a href="r10c.html">10c · limits add, multiply and divide →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>The calculus book is Michael Spivak’s. The article in 10b.4.4 is Jean le Rond d’Alembert’s, in the Encyclopédie of Diderot and d’Alembert.</p>
+  <aside class="voice para"><p>Spivak proves, before he lets himself write “the limit”, that a function cannot approach two different numbers near w; he remarks that the notation would otherwise be meaningless, and that his proof is a matter of choosing ε to be half the distance between them.</p><cite>Spivak, Calculus, ch. 5</cite></aside>
+  <p>Accepted names: one-limit is the uniqueness of limits; limits-keep-order is the order limit theorem; sign-kept-near is the sign-preserving property of limits; the either-way principle is the law of excluded middle.</p>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=v=>{ if(!isFinite(v)) return '—'; const a=Math.abs(v); let s=a>=100?v.toFixed(1):a>=1?v.toFixed(3):a>=0.01?v.toFixed(4):v.toPrecision(3); if(s.indexOf('.')>=0&&s.indexOf('e')<0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const FN={
+  line:{lab:'3x + 1 at 2',tex:'f(x) = 3x + 1',a:2,L:7,M:8,f:x=>3*x+1,x:[0.6,3.4],y:[2,12],dmax:1.4,grid:1},
+  sq:{lab:'x² at 1',tex:'f(x) = x^2',a:1,L:1,M:1.6,f:x=>x*x,x:[-0.3,2.3],y:[-0.5,4.5],dmax:1.2,grid:0.5},
+  hole:{lab:'the hole, stray value 3',tex:R`f(x) = \tfrac{x^2 - 1}{x - 1}\ (x \ne 1),\ \ f(1) = 3`,a:1,L:2,M:3,f:x=>x===1?3:(x*x-1)/(x-1),x:[-0.3,2.3],y:[0,4.5],dmax:1.2,grid:0.5,hollow:[[1,2]],dots:[[1,3]]}
+};
+let key='line', F=FN.line; const S={L:7,M:8,y:7.4};
+const kL=$('kL'),kM=$('kM'),kk=$('kk');
+function referee(e,d,L){ const N=1200; for(const s of [-1,1]) for(let k=1;k<=N;k++){ const t=k<N?k/N:1-1e-9; const x=F.a+s*d*t; const v=F.f(x); if(!isFinite(v)) continue; if(Math.abs(v-L)>=e) return false; } return true; }
+function largest(e,L){ const cap=F.dmax; if(referee(e,cap,L)) return cap; if(!referee(e,1e-7,L)) return 0; let lo=1e-7,hi=cap; for(let i=0;i<40;i++){ const m=(lo+hi)/2; if(referee(e,m,L)) lo=m; else hi=m; } return lo; }
+const fch=$('fch');
+Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===key) b.className='on'; b.onclick=()=>{ [...fch.children].forEach(z=>z.classList.toggle('on',z===b)); setF(k); }; fch.appendChild(b); });
+const cvT=$('cvT');
+const PT=plane(cvT,{x:FN.line.x,y:FN.line.y,grid:1,aspect:0.7,draw:P=>drawT(P)});
+Object.defineProperty(PT.o,'aspect',{get:()=>cvT.clientWidth>560?0.62:0.85});
+let info={};
+function drawT(P){ const c=P.ctx, L=S.L, M=S.M, e=+kk.value*Math.abs(L-M), a=F.a;
+  P.axes(); const xl=P.X(F.x[0]),xr=P.X(F.x[1]);
+  const band=(v,cl)=>{ c.fillStyle=col(cl); c.globalAlpha=.16; c.fillRect(xl,P.Y(v+e),xr-xl,P.Y(v-e)-P.Y(v+e)); c.globalAlpha=1; P.line(F.x[0],v,F.x[1],v,cl,1.5); P.line(F.x[0],v+e,F.x[1],v+e,cl,1,[5,4]); P.line(F.x[0],v-e,F.x[1],v-e,cl,1,[5,4]); };
+  band(L,'--gold'); band(M,'--teal');
+  const lo=Math.max(L-e,M-e), hi=Math.min(L+e,M+e);
+  if(lo<hi){ c.fillStyle=col('--ember'); c.globalAlpha=.25; c.fillRect(xl,P.Y(hi),xr-xl,P.Y(lo)-P.Y(hi)); c.globalAlpha=1; }
+  const dL=e>0?largest(e,L):0, dM=e>0?largest(e,M):0, d=Math.min(dL,dM);
+  const dw=d>0?d:Math.max(dL,dM); if(dw>0){ c.fillStyle=col('--ink'); c.globalAlpha=.08; c.fillRect(P.X(a-dw),P.Y(F.y[1]),P.X(a+dw)-P.X(a-dw),P.Y(F.y[0])-P.Y(F.y[1])); c.globalAlpha=1; P.line(a-dw,F.y[0],a-dw,F.y[1],'--muted',1.2,[5,4]); P.line(a+dw,F.y[0],a+dw,F.y[1],'--muted',1.2,[5,4]); }
+  P.line(a,F.y[0],a,F.y[1],'--muted',1,[2,4]);
+  P.fn(x=>Math.abs(x-a)<1e-9?NaN:F.f(x),'--ink',2);
+  (F.hollow||[]).forEach(([hx,hy])=>{ c.fillStyle=col('--card'); c.strokeStyle=col('--ink'); c.lineWidth=2; c.beginPath(); c.arc(P.X(hx),P.Y(hy),5.5,0,7); c.fill(); c.stroke(); });
+  (F.dots||[]).forEach(([hx,hy])=>P.dot(hx,hy,'--ink',5));
+  const dx=d>0?d:Math.max(dL,dM), x=a+dx/2, fx=F.f(x); if(dx>0) P.dot(x,fx,'--ember',6);
+  c.font='12px IBM Plex Mono, monospace'; c.textAlign='left'; c.fillStyle=col('--gold'); c.fillText('L',xl+4,P.Y(L)-4); c.fillStyle=col('--teal'); c.fillText('M',xl+18,P.Y(M)-4);
+  info={L,M,e,dL,dM,d,x,fx};
+}
+function readT(){ const {L,M,e,dL,dM,d,x,fx}=info;
+  $('oL').textContent=fm(L); $('oM').textContent=fm(M); $('ok').textContent=fm(+kk.value);
+  const lines=[F.tex, R`\varepsilon = ${fm(+kk.value)}\,|L - M| = ${fm(e)}`, R`2\varepsilon ${2*e<=Math.abs(L-M)+1e-12?R`\le`:R`\gt`} |L - M| = ${fm(Math.abs(L-M))}`];
+  if(Math.abs(L-M)<1e-12) lines.push(R`L = M\text{: one claim, nothing to separate}`);
+  else { lines.push(R`\text{claim }L\text{: }${dL>0?R`\delta_1 = `+fm(dL):R`\text{no reach wins}`}`); lines.push(R`\text{claim }M\text{: }${dM>0?R`\delta_2 = `+fm(dM):R`\text{no reach wins}`}`);
+    if(d>0){ lines.push(R`x = a + \tfrac{\delta}{2} = ${fm(x)},\ \ f(x) = ${fm(fx)}`); lines.push(R`|f(x) - L| = ${fm(Math.abs(fx-L))},\ \ |f(x) - M| = ${fm(Math.abs(fx-M))}`); lines.push(R`\text{both} \lt ${fm(e)}`); lines.push(R`\text{the targets overlap: no clash,}\\ \text{as two-targets allows}`); }
+    else if(2*e<=Math.abs(L-M)+1e-12) lines.push(R`\text{at most one claim can answer: one-limit}`);
+    else lines.push(R`\text{the targets overlap, but a claim still fails}`); }
+  tex($('eqT'),R`\begin{gathered}`+lines.join(R`\\ `)+R`\end{gathered}`,true); }
+/* right: the line */
+const cvL=$('cvL');
+const PL=plane(cvL,{x:[0,10],y:[-1,1],grid:0,labels:false,aspect:0.36,draw:P=>drawL(P)});
+function drawL(P){ const c=P.ctx, L=S.L, M=S.M, e=+kk.value*Math.abs(L-M);
+  const lo=Math.min(L,M)-2.2*Math.max(e,0.3), hi=Math.max(L,M)+2.2*Math.max(e,0.3); P.o.x=[lo,hi];
+  const yv=S.y;
+  P.line(lo,0,hi,0,'--muted',1.3);
+  const seg=(v,cl,yy)=>{ c.fillStyle=col(cl); c.globalAlpha=.22; c.fillRect(P.X(v-e),P.Y(yy+0.13),P.X(v+e)-P.X(v-e),P.Y(yy-0.13)-P.Y(yy+0.13)); c.globalAlpha=1; [v-e,v+e].forEach(t=>{ c.strokeStyle=col(cl); c.lineWidth=2; c.beginPath(); c.arc(P.X(t),P.Y(yy),4.5,0,7); c.fillStyle=col('--card'); c.fill(); c.stroke(); }); P.dot(v,yy,cl,4.5); };
+  seg(L,'--gold',0.3); seg(M,'--teal',-0.3);
+  c.font='12px IBM Plex Mono, monospace'; c.textAlign='center'; c.fillStyle=col('--gold'); c.fillText('L = '+fm(L),P.X(L),P.Y(0.62)); c.fillStyle=col('--teal'); c.fillText('M = '+fm(M),P.X(M),P.Y(-0.75));
+  P.line(yv,-0.5,yv,0.5,'--ember',1.5,[3,3]); P.dot(yv,0,'--ember',6);
+  const inL=Math.abs(yv-L)<e, inM=Math.abs(yv-M)<e;
+  const ls=[R`y = ${fm(yv)},\ \ \varepsilon = ${fm(e)}`, R`|y - L| = ${fm(Math.abs(yv-L))}\ ${inL?R`\lt`:R`\ge`}\ \varepsilon,\ \ |y - M| = ${fm(Math.abs(yv-M))}\ ${inM?R`\lt`:R`\ge`}\ \varepsilon`];
+  if(inL&&inM) ls.push(R`|L - M| = ${fm(Math.abs(L-M))} \le ${fm(Math.abs(yv-L)+Math.abs(yv-M))} \lt 2\varepsilon = ${fm(2*e)}`+(2*e<=Math.abs(L-M)+1e-12?R`\ \bot`:R`\text{: no clash}`));
+  else ls.push(R`\text{not in both targets}`);
+  tex($('eqL'),R`\begin{gathered}`+ls.join(R`\\ `)+R`\end{gathered}`,true); }
+function all(){ PT.o.x=F.x; PT.o.y=F.y; PT.o.grid=F.grid; PT.redraw(); readT(); PL.redraw(); }
+function setF(k){ key=k; F=FN[k]; kL.min=kM.min=F.y[0]; kL.max=kM.max=F.y[1]; S.L=F.L; S.M=F.M; S.y=(F.L+F.M)/2+0.1*(F.M-F.L); kL.value=S.L; kM.value=S.M; all(); }
+kL.addEventListener('input',()=>{ S.L=+kL.value; all(); }); kM.addEventListener('input',()=>{ S.M=+kM.value; all(); }); kk.addEventListener('input',all);
+let dT=false; cvT.addEventListener('pointerdown',e=>{ dT=true; cvT.setPointerCapture&&cvT.setPointerCapture(e.pointerId); mvT(e); });
+function mvT(e){ if(!dT) return; const p=PT.point(e); S.M=+Math.max(F.y[0],Math.min(F.y[1],p.y)).toPrecision(3); kM.value=S.M; all(); }
+cvT.addEventListener('pointermove',mvT); ['pointerup','pointercancel'].forEach(t=>cvT.addEventListener(t,()=>dT=false));
+let dL2=false; cvL.addEventListener('pointerdown',e=>{ dL2=true; cvL.setPointerCapture&&cvL.setPointerCapture(e.pointerId); mvL(e); });
+function mvL(e){ if(!dL2) return; const p=PL.point(e); S.y=+p.x.toPrecision(4); PL.redraw(); }
+cvL.addEventListener('pointermove',mvL); ['pointerup','pointercancel'].forEach(t=>cvL.addEventListener(t,()=>dL2=false));
+setF('line');
+
+/* ---------- slides ---------- */
+const N='\\htmlClass{new}', K='\\htmlClass{keep}';
+stepper('#sl1',[
+  {k:'ember',kl:'two-targets · 1 of 4',t:R`\begin{gathered}2\varepsilon \le |L - M|,\\ |y - L| \lt \varepsilon,\ \ |y - M| \lt \varepsilon\ ?\end{gathered}`,n:`Can one real be within ε of two values whose distance is at least 2ε? Assume it, to refute.`},
+  {k:'ember',kl:'two-targets · 2 of 4',t:R`|L - M| \le |L - y| + |y - M|`,n:`8h's triangle in its distance form, with y in the middle. size-of-a-negative makes |L − y| the same as |y − L|.`},
+  {k:'ember',kl:'two-targets · 3 of 4',t:R`|L - M| \lt ${N}{2\varepsilon} \le |L - M|`,n:`The two promises add (same-direction-add); then the hypothesis.`},
+  {k:'ember',kl:'two-targets · 4 of 4',t:R`|L - M| \lt |L - M|\quad ${N}{\bot}`,n:`Nothing is less than itself. Refute: no real is in both targets.`},
+  {k:'ember',kl:'why half · 1 of 2',t:R`\begin{gathered}L = 1,\ M = 4,\ \varepsilon = ${N}{3}:\\ y = 2.5\end{gathered}`,n:`With the whole distance as the gap, 2.5 is within 3 of both: the targets (−2, 4) and (1, 7) overlap.`},
+  {k:'ember',kl:'why half · 2 of 2',t:R`\begin{gathered}\varepsilon = ${N}{1.5}:\\ (-0.5, 2.5) \cap (2.5, 5.5) = \varnothing\end{gathered}`,n:`Half the distance: they share nothing. Half is the largest gap that keeps them apart.`}
+],{title:'The slides · two targets · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'one-limit · 1 of 7',t:R`\begin{gathered}\lim_{x\to a} f(x) = L,\ \ \lim_{x\to a} f(x) = M,\\ ${N}{L \ne M}\end{gathered}`,n:`Assume the two claims, and, for contradiction, that the values differ.`},
+  {k:'ember',kl:'one-limit · 2 of 7',t:R`\varepsilon = ${N}{\tfrac12 |L - M|} \gt 0`,n:`One challenge for both claims: half the distance. Positive because L − M ≠ 0.`},
+  {k:'ember',kl:'one-limit · 3 of 7',t:R`\delta_1,\ \delta_2,\ r`,n:`Each claim answers this ε with its own reach; r is a reach on which f is defined.`},
+  {k:'ember',kl:'one-limit · 4 of 7',t:R`\delta = ${N}{\min(\min(\delta_1, \delta_2), r)}`,n:`The least, so that an input in this window is in all three (lesser-below-both).`},
+  {k:'ember',kl:'one-limit · 5 of 7',t:R`x = a + \tfrac{\delta}{2}`,n:`An input in the window and in dom f. The proof must produce one: the promise only speaks of inputs.`},
+  {k:'ember',kl:'one-limit · 6 of 7',t:R`\begin{gathered}|f(x) - L| \lt \varepsilon,\\ |f(x) - M| \lt \varepsilon\quad ${N}{\bot}\end{gathered}`,n:`Both promises, at x; two-targets with y = f(x) and 2ε = |L − M|.`},
+  {k:'ember',kl:'one-limit · 7 of 7',t:R`\neg(L \ne M)\ \Rightarrow\ ${K}{L = M}`,n:`Refute, then rung 7's not-not-out. The one place on this rung the either-way principle is needed.`},
+  {k:'ember',kl:'the name',t:R`\lim_{x \to 2}\,(3x + 1) + 1 = 7 + 1 = 8`,n:`With one-limit, the limit, when it exists, may be used as the name of a real, in chains like any other.`},
+  {k:'ember',kl:'a refutation for free',t:R`\begin{gathered}\lim_{x\to 2} (3x + 1) = 7 \;\Rightarrow\\ \neg\big(\lim_{x\to 2} (3x + 1) = 7.5\big)\end{gathered}`,n:`If it headed to 7.5 too, one-limit would give 7 = 7.5. One proof refutes every other value.`}
+],{title:'The slides · one-limit · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'limits-keep-order · 1 of 3',t:R`\begin{gathered}f \le g \text{ near } a,\ \ f \to L,\ g \to M,\\ ${N}{M \lt L}\ ?\end{gathered}`,n:`Assume the limits come out in the wrong order, for contradiction.`},
+  {k:'ember',kl:'limits-keep-order · 2 of 3',t:R`\begin{gathered}\varepsilon = \tfrac{L - M}{2}:\\ g(x) \lt ${N}{\tfrac{L + M}{2}} \lt f(x)\end{gathered}`,n:`At an input in every window: the halfway real separates the two targets.`},
+  {k:'ember',kl:'limits-keep-order · 3 of 3',t:R`\begin{gathered}g(x) \lt f(x) \le g(x)\ \ \bot\\ \Rightarrow\ \ ${K}{L \le M}\end{gathered}`,n:`Refute; three-way-order on ℝ. Strict order is not kept: −|x| &lt; |x| near 0, both limits 0.`},
+  {k:'ember',kl:'sign-kept-near · 1 of 2',t:R`L \gt 0:\ \ \varepsilon = ${N}{\tfrac{L}{2}}`,n:`Challenge with half the value.`},
+  {k:'ember',kl:'sign-kept-near · 2 of 2',t:R`\begin{gathered}|f(x) - L| \lt \tfrac{L}{2}\\ \Rightarrow\; f(x) \gt ${K}{\tfrac{L}{2}} \gt 0\end{gathered}`,n:`unpack-the-bars. A limit that is not 0 decides the sign of the outputs near the input.`}
+],{title:'The slides · limits-keep-order · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

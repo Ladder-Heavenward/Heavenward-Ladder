@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Growth and decay</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r17i.html">← 17i slopes of e and ln</a><a href="r17k.html">next: 17k partial fractions into logs →</a></p>
+  <div class="tags"><span class="tag tech">17j · technique</span></div>
+  <h1>Growth and decay</h1>
+  <p>17f proved that a quantity whose rate of change is a fixed multiple of its size is its start times an exponential, and nothing else. That one fact describes money at interest, a culture of cells with room to spare, a sample of radium, a cup of coffee cooling toward the room. This step reads the multiple and the start in each, and finds doubling times and half-lives. It tells a quantity that grows by equal steps from one that grows by equal factors. And it asks how long an exponential can last.</p>
+  <p class="gesture">A rate fixed by size makes a start times an exponential. Equal steps in time multiply the quantity by the same factor. The doubling time, or the half-life, is the logarithm of two divided by the rate. A fixed percent each period is a rate equal to the logarithm of one plus that percent. A cooling body closes the gap to the room’s temperature by a fixed factor in equal times.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r17f.html">17f</a> (proportional-slope), <a href="r17h.html">17h</a> (solving), <a href="r17e.html">17e</a> (e-as-a-limit), <a href="r17g.html">17g</a> (real-exponent), <a href="r17d.html">17d</a> (log-loses-to-powers). <a href="r17chem.html">17·chem</a> dates rocks with it; <a href="r17bio.html">17·bio</a> asks what stops it.</p></div>
+</header>
+
+<section class="class step" data-step="17j1">
+  <h2 class="sthead"><span class="stno">17j1</span>Equal steps, equal factors</h2>
+  <p class="stands">Stands on 17f (proportional-slope) and 17e (adding-becomes-multiplying).</p>
+  <p data-pid="c6a11e">Equal-steps-equal-factors technique: <b>let y have a slope at every t, with y(0) ≠ 0. Then y = y₀e<sup>kt</sup> if and only if, for every step h, y(t + h)/y(t) is the same for all t. That factor is e<sup>kh</sup>. A linear y = y₀ + mt is the one for which y(t + h) − y(t) is the same for all t; that step is mh.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the equal-steps-equal-factors technique, one way">
+\tfrac{y(t + h)}{y(t)} = \tfrac{y_0 e^{kt}e^{kh}}{y_0 e^{kt}} = e^{kh} @@ adding-becomes-multiplying (17e)
+y(t + h) - y(t) = mh \text{ for } y = y_0 + mt @@ the same for every t
+  </pre>
+  <p data-pid="8ad13b">The other way, from the factors to the form, takes a slope. Suppose y(t + h)/y(t) is one number c(h) for every t. Then (y(t + h) − y(t))/h = y(t)(c(h) − 1)/h. At t = 0 the left side tends to y′(0), so (c(h) − 1)/h tends to k = y′(0)/y(0). Then at every t, y′ = ky, and proportional-slope gives the form. <b>So a table of readings at equal steps is exponential if its ratios agree, and linear if its differences agree.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: two tables">
+t:\ 0, 1, 2, 3 \quad y:\ 50, 60, 72, 86.4 @@ ratios 1.2, 1.2, 1.2: exponential, 20% a step
+t:\ 0, 1, 2, 3 \quad y:\ 50, 60, 70, 80 @@ differences 10, 10, 10: linear, 10 a step
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · equal steps, equal factors · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · equal factors against equal steps, and a cup cooling to the room</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="lbl">100(1 + r)ᵗ and 100 + 100rt, t in years</div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">r</span><input type="range" id="kr" min="0.01" max="0.3" step="0.005" value="0.1"><output id="or"></output></div>
+      <div class="cap">Ember: growth by r of the amount each year. Teal: growth by r of the start each year. Both start at 100 and agree at t = 1. Dots: the doubling times.</div>
+    </div>
+    <div class="panel">
+      <div class="lbl">T = A + (90 − A)e<sup>−kt</sup>, °C against minutes</div>
+      <canvas id="cvL"></canvas>
+      <div class="kn"><span class="m">k</span><input type="range" id="kk" min="0.01" max="0.3" step="0.001" value="0.0673"><output id="ok"></output></div>
+      <div class="kn"><span class="m">A</span><input type="range" id="kA" min="-5" max="35" step="0.5" value="20"><output id="oA"></output></div>
+      <div class="cap">Ink: the cup. Dashed: the room, A. Plum: where the difference from the room has halved, at ln 2 / k.</div>
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">17j1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">t: 0, 1, 2, 3 and y: 10, 15, 22.5, 33.75</span></span>Find whether the steps or the factors are equal, and write a formula. <br>Guess y at t = 6, then compute it.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17j2">
+  <h2 class="sthead"><span class="stno">17j2</span>Reading k</h2>
+  <p class="stands">Stands on 17j1 and 17h (equations with exponents).</p>
+  <p data-pid="a32c5a">Doubling-time technique: <b>if y = y₀e<sup>kt</sup> with k &gt; 0, then y doubles every ln 2 / k, whatever t it starts from. If k &lt; 0, y halves every ln 2 / |k|.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the doubling-time technique">
+e^{kT} = 2 \iff T = \tfrac{\ln 2}{k} @@ equal-steps-equal-factors with h = T; 17h
+e^{kT} = \tfrac12 \iff T = \tfrac{-\ln 2}{k} = \tfrac{\ln 2}{|k|} \quad \blacksquare @@ ln ½ = −ln 2 (log-of-a-quotient)
+  </pre>
+  <p data-pid="32f97e">The doubling time has the accepted name doubling time; the halving time, for a decaying quantity, has the accepted name half-life. A quantity that grows by a fixed percent r each period has y = y₀(1 + r)ᵗ = y₀e<sup>kt</sup> with k = ln(1 + r), a little less than r. For small r, ln 2 / ln(1 + r) ≈ 0.693/r: the doubling time in periods is about 70 divided by the percent.</p>
+  <pre class="lines" data-k="ember" data-label="this step: worked">
+\text{cells double every 20 min:}\ \ k = \tfrac{\ln 2}{1/3} = 3\ln 2 \approx 2.079 \text{ per hour} @@ doubling-time read backwards
+3\% \text{ a year:}\ \ T = \tfrac{\ln 2}{\ln 1.03} \approx 23.4 \text{ years};\ \ \tfrac{70}{3} \approx 23.3 @@ the rule of 70
+\$1000 \text{ at } 5\% \text{ for } 10 \text{ years:}\ \ 1000e^{0.5} \approx \$1648.72 \text{ continuously};\ \ 1000 \cdot 1.05^{10} \approx \$1628.89 \text{ yearly} @@ A′ = rA gives e^(rt); (1 + r/n)^(nt) → e^(rt) as in 17e
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · reading k · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17j2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a quantity growing 7% a year, continuously</span></span>Guess its doubling time by the rule of 70. <br>Find it by doubling-time, with ln 2 ≈ 0.693.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17j3">
+  <h2 class="sthead"><span class="stno">17j3</span>Cooling</h2>
+  <p class="stands">Stands on 17j2 and 17f (proportional-slope).</p>
+  <p data-pid="1f7c1a">The law of cooling (Newton's): <b>an object's temperature T changes at a rate proportional to its difference from the room's</b>, T′ = −k(T − A), k &gt; 0.</p>
+  <pre class="lines" data-k="ember" data-label="this step: cooling">
+u = T - A:\ \ u' = T' = -ku @@ A is a constant
+u = u_0 e^{-kt},\ \ T = A + (T_0 - A)e^{-kt} @@ proportional-slope (17f)
+T_0 = 90,\ A = 20,\ T(5) = 70:\ \ e^{-5k} = \tfrac{50}{70} \Rightarrow k = \tfrac{\ln 1.4}{5} \approx 0.0673 @@ coffee in a Portland kitchen, °C and minutes
+T = 40:\ \ e^{-kt} = \tfrac{20}{70} \Rightarrow t = \tfrac{\ln 3.5}{k} \approx 18.6 \text{ min} @@ 17h
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · cooling · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17j3.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="y = 250\,e^{0.03t}"></span></span>Find y at 0, the factor it grows by each year, and its yearly percent growth.</li><li><span class="givens"><span data-tex-inline="\text{doubles every } 8 \text{ hours}"></span></span>Find k, and the factor the quantity grows by in a day.</li><li><span class="givens"><span data-tex-inline="\$5000 \text{ to } \$6000,"></span> <span data-tex-inline="\text{in } 4 \text{ years},"></span> <span data-tex-inline="\text{continuous interest}"></span></span>Find the loan's rate.</li><li><span class="givens"><span data-tex-inline="80,\ 60,\ 46\,^\circ\text{C},"></span> <span data-tex-inline="\text{at } t = 0, 10, 20 \text{ min}"></span></span>Find the room's temperature for the cooling cup.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17j4">
+  <h2 class="sthead"><span class="stno">17j4</span>Food and people</h2>
+  <p class="stands">Stands on 17j3.</p>
+  <p data-pid="7fa7ac">A writer of 1798 argued that a population, when unchecked, increases in a geometrical ratio. The food to feed it can at best increase in an arithmetical ratio. So, he said, the power of population is indefinitely greater than the power of the earth to produce subsistence.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · food and people · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17j4.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{at equal steps:}"></span> <span data-tex-inline="400,\ 300,\ 225,\ 168.75"></span></span>Prove the readings linear or exponential, and write a formula.</li><li><span class="givens"><span data-tex-inline="k = -0.04 \text{ per day}"></span></span>Find the half-life of the sample.</li><li><span class="givens"><span data-tex-inline="18\,000 \text{ people},"></span> <span data-tex-inline="2.5\% \text{ a year},"></span> <span data-tex-inline="P = 18\,000\,e^{kt}"></span></span>Find k for a town near Salem, and when it reaches 25 000.</li><li><span class="givens"><span data-tex-inline="\text{soup at } 95\,^\circ\text{C},"></span> <span data-tex-inline="\text{fridge at } 5\,^\circ\text{C},"></span> <span data-tex-inline="65\,^\circ\text{C after } 10 \text{ min}"></span></span>Soup is set in a fridge in Eugene.<br>Find when it is at 20 °C.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17j5">
+  <h2 class="sthead"><span class="stno">17j5</span>Illegal moves</h2>
+  <p class="stands">Stands on 17j1 to 17j4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+5\% \text{ a year} \Rightarrow y = y_0 e^{0.05t}\,? @@ that is 5% added continuously; 5% once a year is k = ln 1.05 ≈ 0.0488
+\text{half-life } 10 \Rightarrow \text{gone after } 20\,? @@ a quarter is left after 20; it never reaches 0
+\text{ratios } 1.2, 1.2, 1.25 \Rightarrow \text{exponential}\,? @@ the ratios must agree; readings with error agree only nearly, and then it is a judgement
+T = T_0 e^{-kt} \text{ for cooling}\,? @@ that cools to 0, not to the room: T − A decays, not T
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17j5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{the picture's left panel},"></span> <span data-tex-inline="\text{the curves agree at } t = 1"></span></span>Find which is larger before 1 and after.<br>Prove or refute: the linear one catches up.</li><li><span class="givens"><span data-tex-inline="10^{50} \text{ atoms in the Earth},"></span> <span data-tex-inline="20 \text{ minutes a doubling}"></span></span>Find how many doublings take one cell past the atoms in the Earth, and how long that is.</li><li><span class="givens"><span data-tex-inline="\text{rate} \propto \text{number who have heard}"></span></span>A rumor in Bellingham spreads this way.<br>Find what the model predicts after a long time, and what is missing.</li><li><span class="givens"><span data-tex-inline="\text{equal factors}"></span> <span data-tex-inline="\text{over each whole year},"></span> <span data-tex-inline="\text{not over each half year}"></span></span>Build a quantity with the given, or prove none exists.<br>Prove or refute: such a quantity is exponential.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">17j.4.1</span><span class="tagq">build</span>Make up a quantity of your own that grows by a fixed percent a year.<br>Find its k, its doubling time, and the doubling time the rule of 70 gives, and how far apart the two are.</div>
+  <div class="chq"><span class="chid">17j.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{food: a fixed amount}"></span> <span data-tex-inline="\text{more each year},"></span> <span data-tex-inline="\text{people: a fixed percent}"></span> <span data-tex-inline="\text{more each year}"></span></span>Prove or refute: the people pass the food, whatever the numbers.</div>
+  <div class="chq"><span class="chid">17j.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{readings at equal steps},"></span> <span data-tex-inline="\text{ratios that agree}"></span></span>Prove or refute: the quantity between the readings is exponential.</div>
+  <div class="chq"><span class="chid">17j.4.4</span><span class="tagq">seam</span>The writer of 1798 set a quantity that multiplies against one that adds, and concluded that misery must check the first. Since 1798 the world's food has grown faster than its people. <br>Was his mathematics wrong, or his model? <br>Which part of an argument like his can be checked by proof, and which only by the world?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r17i.html">← 17i · slopes of e and ln</a><a href="r17k.html">17k · partial fractions into logs →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>Malthus argued that a population, when unchecked, increases in a geometrical ratio, while the food to feed it can at best increase in an arithmetical ratio, so that the power of population is indefinitely greater than the power of the earth to produce subsistence.</p><cite>Thomas Malthus, An Essay on the Principle of Population (1798); paraphrase</cite></aside>
+  <p>The law of cooling is Isaac Newton’s (1701).</p>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+/* least and greatest of F.f on [lo, hi]: the ends, F's critical points inside, and a fine sample (exact between critical points for the functions used here) */
+function ext(F,lo,hi){ if(F.dir) return [0,1]; let m=Infinity,M=-Infinity; const t=x=>{ const v=F.f(x); if(v<m) m=v; if(v>M) M=v; };
+  t(lo); t(hi); (F.crit||[]).forEach(c=>{ if(c>lo&&c<hi) t(c); }); for(let k=1;k<64;k++) t(lo+(hi-lo)*k/64); return [m,M]; }
+function sums(F,pts){ let L=0,U=0; const ms=[],Ms=[]; for(let i=1;i<pts.length;i++){ const [m,M]=ext(F,pts[i-1],pts[i]), w=pts[i]-pts[i-1]; ms.push(m); Ms.push(M); L+=m*w; U+=M*w; } return {L,U,ms,Ms}; }
+const eq=(a,b,n)=>Array.from({length:n+1},(_,i)=>a+(b-a)*i/n);
+function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
+function boxes(P,pts,hs,stroke,fill,alpha){ const c=P.ctx; for(let i=1;i<pts.length;i++){ const a=pts[i-1],b=pts[i],h=hs[i-1]; c.globalAlpha=alpha; P.poly([[a,0],[b,0],[b,h],[a,h]],null,fill); c.globalAlpha=1; P.poly([[a,0],[b,0],[b,h],[a,h]],stroke,null,1.2); } }
+function dirDots(P,a,b){ const c=P.ctx; c.fillStyle=col('--ink'); for(let k=0;k<=300;k++){ const x=a+(b-a)*k/300; const y=(k%2)?0:1; c.fillRect(P.X(x)-1,P.Y(y)-1,2,2); } }
+/* shade between the graph of fn and the axis from lo to hi: above in pos colour, below in neg colour */
+function shade(P,fn,lo,hi,pos,neg,alpha){ if(hi<lo){ const t=lo; lo=hi; hi=t; } const c=P.ctx, N=300; c.globalAlpha=alpha==null?0.32:alpha;
+  for(let k=0;k<N;k++){ const x0=lo+(hi-lo)*k/N, x1=lo+(hi-lo)*(k+1)/N, xm=(x0+x1)/2, y=fn(xm); if(!isFinite(y)) continue; P.poly([[x0,0],[x1,0],[x1,fn(x1)],[x0,fn(x0)]],null,y>=0?pos:neg); }
+  c.globalAlpha=1; }
+function rangeOf(fn,lo,hi,pad){ let m=Infinity,M=-Infinity; for(let k=0;k<=400;k++){ const v=fn(lo+(hi-lo)*k/400); if(isFinite(v)){ if(v<m) m=v; if(v>M) M=v; } } if(m>0) m=0; if(M<0) M=0; const p=(M-m)*(pad==null?0.12:pad)||1; return [m-p,M+p]; }
+function chips(el,FN,get,setk,after){ Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===get()) b.className='on'; b.onclick=()=>{ setk(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+const Nw='\\htmlClass{new}';
+function gridFor(sp){ return sp>40?10:sp>16?4:sp>8?2:sp>3?1:sp>1.2?0.5:0.25; }
+function frame2(P,fn,lo,hi,pad){ const w=hi-lo; P.o.x=[lo-0.12*w,hi+0.08*w]; P.o.y=rangeOf(fn,lo,hi,pad==null?0.12:pad); const sx=P.o.x[1]-P.o.x[0], sy=P.o.y[1]-P.o.y[0]; let g=gridFor(sx); while(sy/g>24) g*=2; P.o.grid=g; }
+const num=(f,a,b,n)=>{ n=n||4000; const h=(b-a)/n; let s=0; for(let i=0;i<n;i++) s+=f(a+(i+0.5)*h)*h; return s; };
+/* axes with separate steps across and up */
+function axes2(P,gx,gy){ const c=P.ctx,o=P.o; c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ c.moveTo(P.X(x),P.Y(o.y[0])); c.lineTo(P.X(x),P.Y(o.y[1])); }
+  for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ c.moveTo(P.X(o.x[0]),P.Y(y)); c.lineTo(P.X(o.x[1]),P.Y(y)); } c.stroke();
+  c.strokeStyle=col('--muted'); c.lineWidth=1.3; c.beginPath(); if(o.y[0]<=0&&o.y[1]>=0){ c.moveTo(P.X(o.x[0]),P.Y(0)); c.lineTo(P.X(o.x[1]),P.Y(0)); } if(o.x[0]<=0&&o.x[1]>=0){ c.moveTo(P.X(0),P.Y(o.y[0])); c.lineTo(P.X(0),P.Y(o.y[1])); } c.stroke();
+  c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; const ly=Math.min(P.H-6,Math.max(12,P.Y(0)+14));
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ if(Math.abs(x)<1e-9) continue; c.fillText(+x.toFixed(6),P.X(x),ly); }
+  c.textAlign='right'; const lx=Math.max(32,Math.min(P.W-4,P.X(0)-5)); for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ if(Math.abs(y)<1e-9) continue; c.fillText(String(+y.toFixed(6)).replace('-','−'),lx,P.Y(y)+4); } }
+function nice(sp){ const raw=sp/6, p=Math.pow(10,Math.floor(Math.log10(raw))), m=raw/p; return (m<1.5?1:m<3.5?2:m<7.5?5:10)*p; }
+const kr=$('kr'),kk=$('kk'),kA=$('kA'),cvF=$('cvF'),cvL=$('cvL');
+const PF=plane(cvF,{x:[-1.5,30],y:[-60,1050],grid:1,aspect:0.8,draw:P=>drawF(P)});
+const PL=plane(cvL,{x:[-4,62],y:[-12,100],grid:1,aspect:0.8,draw:P=>drawL(P)});
+[[PF,cvF],[PL,cvL]].forEach(([P,cv])=>Object.defineProperty(P.o,'aspect',{get:()=>cv.clientWidth>480?0.75:0.9}));
+function drawF(P){ const r=+kr.value, T=Math.log(2)/Math.log(1+r); axes2(P,5,100); curve(P,t=>100+100*r*t,'--teal',2.4,0,30); curve(P,t=>100*Math.pow(1+r,t),'--ember',2.6,0,30);
+  for(let j=1;j*T<=30&&100*Math.pow(2,j)<=1050;j++) P.dot(j*T,100*Math.pow(2,j),'--ember',4); P.dot(1,100+100*r,'--plum',4); }
+function drawL(P){ const k=+kk.value, A=+kA.value, T=t=>A+(90-A)*Math.exp(-k*t), h=Math.log(2)/k; axes2(P,10,10); P.line(-4,A,62,A,'--muted',1.4,[6,4]); curve(P,T,'--ink',2.6,0,62); if(h<=62) P.dot(h,T(h),'--plum',5); P.dot(0,90,'--ink',4); }
+function read(){ const r=+kr.value, k=+kk.value, A=+kA.value; $('or').textContent=mm(100*r,1)+'%'; $('ok').textContent=mm(k,4); $('oA').textContent=mm(A,1);
+  const T2=Math.log(2)/Math.log(1+r), h=Math.log(2)/k; const vd=$('vdF'); vd.className='verdict';
+  vd.textContent='At '+mm(100*r,1)+'% a year, k = ln '+mm(1+r,3)+' ≈ '+mm(Math.log(1+r),4)+', doubling every '+mm(T2,2)+' years (70/'+mm(100*r,1)+' ≈ '+mm(70/(100*r),2)+'). After 30 years: '+mm(100*Math.pow(1+r,30),0)+' against '+mm(100+3000*r,0)+'. The cup\u2019s difference from '+mm(A,1)+' °C halves every '+mm(h,2)+' min.';
+  tex($('eqF'),R`\begin{gathered}T_2 = \tfrac{\ln 2}{\ln ${mm(1+r,3)}} \approx ${mm(T2,2)}\\ T(t) = ${mm(A,1)} + ${mm(90-A,1)}\,e^{-${mm(k,4)}t}\end{gathered}`,true); }
+function all(){ PF.redraw(); PL.redraw(); read(); }
+[kr,kk,kA].forEach(e=>e.addEventListener('input',all));
+window.__pic={set:(r,k,A)=>{ kr.value=r; kk.value=k; kA.value=A; all(); const T=t=>A+(90-A)*Math.exp(-k*t); return {T2:+(Math.log(2)/Math.log(1+r)).toFixed(4),T5:+T(5).toFixed(3),t40:+(Math.log((90-A)/(40-A))/k).toFixed(3)}; }};
+all();
+stepper('#sl1',[
+  {k:'ember',kl:'equal-steps-equal-factors',t:R`${Nw}{\tfrac{y(t + h)}{y(t)} = e^{kh}}`,n:`Equal steps, equal factors.`},
+  {k:'ember',kl:'two tables',t:R`50, 60, 72, 86.4 \ \text{vs}\ 50, 60, 70, 80`,n:`Ratios agree; differences agree.`}
+],{title:'The slides · equal steps, equal factors · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'doubling-time',t:R`${Nw}{T = \tfrac{\ln 2}{k}}`,n:`From any start.`},
+  {k:'ember',kl:'half-life',t:R`T_{1/2} = \tfrac{\ln 2}{|k|}`,n:`k < 0.`},
+  {k:'ember',kl:'percent to k',t:R`(1 + r)^t = e^{t\ln(1 + r)}`,n:`k = ln(1 + r) < r.`},
+  {k:'ember',kl:'rule of 70',t:R`T \approx \tfrac{70}{100r}`,n:`ln 2 ≈ 0.693.`},
+  {k:'ember',kl:'continuous',t:R`1000e^{0.5} \approx 1648.72`,n:`5% for 10 years.`}
+],{title:'The slides · reading k · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'cooling',t:R`T' = -k(T - A)`,n:`The difference decays.`},
+  {k:'ember',kl:'the coffee',t:R`T = 20 + 70e^{-0.0673t}`,n:`40 °C at 18.6 min.`}
+],{title:'The slides · cooling · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'food and people',t:R`\text{geometric vs arithmetic}`,n:`1798.`}
+],{title:'The slides · food and people · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`5\% \ne e^{0.05t}`,n:`Unless added continuously.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

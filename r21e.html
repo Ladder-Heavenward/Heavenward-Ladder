@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Flips and the complement</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+.chrow{display:grid;grid-template-columns:4.5em 1fr;gap:6px;align-items:center;font-size:.88rem}.kn{font-size:.88rem}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r21d.html">← 21d the sum formulas from turns</a><a href="r21f.html">next: 21f sin h / h → 1 →</a></p>
+  <div class="tags"><span class="tag proof">21e · proof</span></div>
+  <h1>Flips and the complement</h1>
+  <p>Flip the circle over the floor, and a walk anticlockwise becomes the same walk clockwise. The across stays the same, and the up changes sign. Flip it across the diagonal, and east and north trade places, so the cosine of an angle becomes the sine of what is left of the quarter turn. These flips give, almost for free, how cosine and sine behave when an angle is reversed, taken away from a quarter turn or a half turn, or pushed on by a half turn.</p>
+  <p class="gesture">Reversing an angle keeps its cosine and changes the sign of its sine. The cosine of an angle is the sine of what is left of the quarter turn. Each rule of this kind is a flip of the circle.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r21d.html">21d</a> (turning adds arcs), <a href="r20g.html">20g</a> (flips reverse which way round), <a href="r20c.html">20c</a> (flips), <a href="r09e.html">9e</a> (even and odd functions). <a href="r21f.html">21f</a> looks at tiny angles.</p></div>
+</header>
+
+<section class="class step" data-step="21e1">
+  <h2 class="sthead"><span class="stno">21e1</span>Reversing an angle</h2>
+  <p class="stands">Stands on 21d1 (paths keep length) and 20g3 (flips reverse which way round).</p>
+  <p data-pid="7fe639">Reversal technique: <b>cos(−θ) = cos θ and sin(−θ) = −sin θ.</b> The flip over the floor carries the arc of length θ from (1, 0) to an arc of the same length from (1, 0). It reverses which way round, so the image arc runs clockwise: it ends at the point at −θ.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the reversal technique">
+F_0(P_\theta) = P_{-\theta} @@ same length (21d1), the other way round (20g3)
+F_0(\cos\theta, \sin\theta) = (\cos\theta, -\sin\theta) @@ F₀(x, y) = (x, −y)
+\htmlClass{new}{\cos(-\theta) = \cos\theta,\ \ \sin(-\theta) = -\sin\theta} \quad \blacksquare
+  </pre>
+  <p data-pid="24674d">In 9e’s words: cos is even and sin is odd. Then tan(−θ) = −tan θ: tan is odd too.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · reversing · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · flip the point at θ</div>
+    <div class="chrow"><span class="lbl">move</span><div class="chips" id="chM"></div></div>
+    <div id="pl"></div>
+    <div class="kn"><span class="m">θ</span><input type="range" id="kt" min="0" max="6.28" step="0.01" value="0.5"><output id="okt"></output></div>
+    <div class="cap">Ink: the circle, and the line of the flip dashed. Teal: the point at θ. Ember: where the move sends it. The verdict names the ember point’s arc.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">21e1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">θ = −π/6,  θ = −π/4</span></span>Find cos θ, sin θ and tan θ for each.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21e2">
+  <h2 class="sthead"><span class="stno">21e2</span>Differences</h2>
+  <p class="stands">Stands on 21e1 and 21d3 (the sum technique).</p>
+  <p data-pid="ec6412">Difference technique: <b>cos(A − B) = cos A cos B + sin A sin B, and sin(A − B) = sin A cos B − cos A sin B.</b> Write A − B as A + (−B) and use the reversal technique on −B.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the difference technique">
+\cos(A + (-B)) = \cos A\cos(-B) - \sin A\sin(-B) @@ the sum technique (21d3)
+\htmlClass{new}{\cos(A - B) = \cos A\cos B + \sin A\sin B} @@ reversal
+\htmlClass{new}{\sin(A - B) = \sin A\cos B - \cos A\sin B} \quad \blacksquare @@ the same, for sin
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · differences · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21e2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\tfrac{\pi}{12} = \tfrac{\pi}{3} - \tfrac{\pi}{4}"></span></span>Find cos(π/12) and sin(π/12) exactly.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21e3">
+  <h2 class="sthead"><span class="stno">21e3</span>The complement</h2>
+  <p class="stands">Stands on 21e1, 21b4 (the flip across y = x) and 20g3.</p>
+  <p data-pid="47da73">Complement technique: <b>cos(π/2 − θ) = sin θ and sin(π/2 − θ) = cos θ.</b> The flip across y = x swaps (1, 0) and (0, 1), keeps lengths and reverses which way round. So the arc of length θ anticlockwise from (1, 0) goes to the arc of length θ clockwise from (0, 1), which ends at the point at π/2 − θ.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the complement technique">
+F(x, y) = (y, x),\ \ F(1, 0) = (0, 1) = P_{\pi/2} @@ the flip across y = x (20·cb9)
+F(P_\theta) = P_{\pi/2 - \theta} @@ θ back from π/2
+F(\cos\theta, \sin\theta) = (\sin\theta, \cos\theta) @@ swap
+\htmlClass{new}{\cos(\tfrac{\pi}{2} - \theta) = \sin\theta,\ \ \sin(\tfrac{\pi}{2} - \theta) = \cos\theta} \quad \blacksquare
+  </pre>
+  <p data-pid="40f6b8">The co in cosine is this: the cosine of θ is the sine of the complement, what θ lacks of a quarter turn.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · complement · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21e3.1</span><span class="ph undo">undo</span><span class="givens"><span data-tex-inline="\sin\theta = \cos\tfrac{\pi}{5},\ \ 0 \le \theta \le \tfrac{\pi}{2}"></span></span>Find θ.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21e4">
+  <h2 class="sthead"><span class="stno">21e4</span>Half turns</h2>
+  <p class="stands">Stands on 21e1, 21d2 (turning adds arcs) and 20c (flips and turns).</p>
+  <p data-pid="dd0ee0">Half-turn technique: <b>cos(π − θ) = −cos θ and sin(π − θ) = sin θ; cos(θ + π) = −cos θ and sin(θ + π) = −sin θ.</b> The first pair is the flip across the upright axis. The second is the half turn, which by 21d2 adds π to every arc.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the half-turn technique">
+F_{\text{up}}(x, y) = (-x, y),\ \ F_{\text{up}}(P_\theta) = P_{\pi - \theta} @@ it swaps (1, 0) and (−1, 0), reversing
+R_{(-1, 0)}(x, y) = (-x, -y) = R_\pi,\ \ R_\pi(P_\theta) = P_{\theta + \pi} @@ (cos π, sin π) = (−1, 0); 21d2
+\htmlClass{new}{\tan(\theta + \pi) = \frac{-\sin\theta}{-\cos\theta} = \tan\theta} \quad \blacksquare @@ tan repeats every half turn
+  </pre>
+  <p data-pid="be4388">So every arc’s cos and sin can be read from an arc in the first quarter, up to signs that the quarter fixes (21c2). The first-quarter arc is called the reference angle.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · half turns · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21e4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">θ = 5π/6,  θ = 7π/6,  θ = 2π/3</span></span>Find cos 5π/6, sin 7π/6 and tan 2π/3, each from an arc in the first quarter.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21e5">
+  <h2 class="sthead"><span class="stno">21e5</span>Illegal moves</h2>
+  <p class="stands">Stands on 21e1 to 21e4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\sin(-\theta) = \sin\theta\,? @@ sin is odd: the flip over the floor changes the up
+\cos(\tfrac{\pi}{2} - \theta) = \cos\theta - \tfrac{\pi}{2}\,? @@ cos is not subtracted through; it is sin θ
+\sin\theta = \sin\varphi \Rightarrow \theta = \varphi\,? @@ also φ = π − θ, and whole turns
+\tan(\theta + \pi) = -\tan\theta\,? @@ both coordinates change sign, so their ratio does not
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21e5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span class="gtx">sin on [0, π]</span></span>Find whether it takes any value twice.</li><li><span class="givens"><span data-tex-inline="\cos(\theta - \tfrac{\pi}{2})"></span></span>Write it with sin or cos of θ alone.</li><li><span class="givens"><span data-tex-inline="\cos\theta = \cos\tfrac{\pi}{5}"></span></span>Find every θ in [0, 2π) that answers it.</li><li><span class="givens"><span data-tex-inline="\sin(\theta + \tfrac{\pi}{2})"></span></span>Write it with cos θ, and say what it means for the graphs of sin and cos.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">21e.4.1</span><span class="tagq">build</span>Build a table of cos(θ + kπ/2) and sin(θ + kπ/2) for k = 0, 1, 2, 3, each in terms of cos θ or sin θ. <br>Prove each entry with a move.</div>
+  <div class="chq"><span class="chid">21e.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\sin\theta = \sin\varphi"></span></span>Find every θ that answers it, for a given φ.</div>
+  <div class="chq"><span class="chid">21e.4.3</span><span class="tagq">converse</span>cos is even and sin is odd. Turn it round: find whether tan, sec, cot and csc are even or odd, and find a function of θ built from cos and sin that is neither.</div>
+  <div class="chq"><span class="chid">21e.4.4</span><span class="tagq">reroute</span>Prove the complement technique with the difference technique instead of the flip.</div>
+  <div class="chq"><span class="chid">21e.4.5</span><span class="tagq">seam</span>For fifteen centuries a sine was a length: half a chord, in a circle of some chosen radius, often ten million units so the tables could avoid fractions. In the 1740s a mathematician took the radius to be 1 and treated the sine of an arc as a number, a function of the arc. <br>Is a sine a length or a number? <br>What changed when the circle’s size stopped mattering?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r21d.html">← 21d · the sum formulas from turns</a><a href="r21f.html">21f · sin h / h → 1 →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The reversal technique says cosine is even and sine odd; π/2 − θ is the complement of θ and π − θ its supplement; the cofunction identities are cos(π/2 − θ) = sin θ and its partners. The first-quarter arc is the reference angle.</p>
+  <h3>Who said it first</h3>
+  <p>The word cosine is Edmund Gunter's co.sinus (1620), the sine of the complement. In 21e.4.5, Regiomontanus's tables (1460s) used a radius of 60 000 and later ones 10 000 000; Leonhard Euler's Introductio in analysin infinitorum (1748) set the radius to 1 and made sine and cosine functions.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+/* moves of the plane, drawn in SVG, for rung 20 */
+const V=c=>'var('+c+')';
+const FLAG=[[0,0],[0,3],[2,3],[2,2.4],[0.6,2.4],[0.6,1.8],[1.5,1.8],[1.5,1.2],[0.6,1.2],[0.6,0]];
+const M={
+  id:()=>p=>p,
+  slide:(h,k)=>p=>[p[0]+h,p[1]+k],
+  turn:(a,b)=>p=>[a*p[0]-b*p[1],b*p[0]+a*p[1]],
+  stretch:k=>p=>[k*p[0],k*p[1]],
+  flipU:(c,s)=>p=>{ const d=2*(p[0]*c+p[1]*s); return [d*c-p[0],d*s-p[1]]; },              /* across the line through O along (c, s), c² + s² = 1 */
+  flipAt:(q,c,s)=>p=>{ const x=p[0]-q[0],y=p[1]-q[1],d=2*(x*c+y*s); return [q[0]+d*c-x,q[1]+d*s-y]; },
+  turnAt:(q,a,b)=>p=>{ const x=p[0]-q[0],y=p[1]-q[1]; return [q[0]+a*x-b*y,q[1]+b*x+a*y]; },
+  then:(g,f)=>p=>g(f(p))                                                                    /* f first, then g */
+};
+const unit=(x,y)=>{ const r=Math.hypot(x,y); return [x/r,y/r]; };
+const fx=v=>(Math.abs(v)<5e-10?0:v);
+const show=(v,d)=>{ let s=fx(v).toFixed(d==null?2:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return (s==='-0'?'0':s).replace('-','−'); };
+/* shapes: {pts, c, fill, dash, w, open}; dots: {p, c, t}; lines: {p, d, c, dash} */
+function svgPlane(o){ const lo=o.lo==null?-6:o.lo, hi=o.hi==null?6:o.hi, S=300, X=x=>(x-lo)/(hi-lo)*S, Y=y=>S-(y-lo)/(hi-lo)*S;
+  let s='<svg viewBox="0 0 '+S+' '+S+'" style="width:100%;max-width:340px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  for(let g=Math.ceil(lo);g<=hi;g++){ s+='<line x1="'+X(g)+'" y1="0" x2="'+X(g)+'" y2="'+S+'" style="stroke:'+V('--grid')+';stroke-width:'+(g===0?1.6:0.6)+'"/><line x1="0" y1="'+Y(g)+'" x2="'+S+'" y2="'+Y(g)+'" style="stroke:'+V('--grid')+';stroke-width:'+(g===0?1.6:0.6)+'"/>'; }
+  (o.lines||[]).forEach(l=>{ const L=40; s+='<line x1="'+X(l.p[0]-L*l.d[0])+'" y1="'+Y(l.p[1]-L*l.d[1])+'" x2="'+X(l.p[0]+L*l.d[0])+'" y2="'+Y(l.p[1]+L*l.d[1])+'" style="stroke:'+V(l.c||'--teal')+';stroke-width:1.6;stroke-dasharray:'+(l.dash||'5 4')+'"/>'; });
+  (o.shapes||[]).forEach(z=>{ const pts=z.pts.map(p=>X(p[0]).toFixed(1)+','+Y(p[1]).toFixed(1)).join(' ');
+    s+='<'+(z.open?'polyline':'polygon')+' points="'+pts+'" style="fill:'+(z.fill?V(z.c):'none')+';fill-opacity:'+(z.fill?0.28:0)+';stroke:'+V(z.c)+';stroke-width:'+(z.w||2)+(z.dash?';stroke-dasharray:'+z.dash:'')+'"/>'; });
+  (o.dots||[]).forEach(d=>{ s+='<circle cx="'+X(d.p[0])+'" cy="'+Y(d.p[1])+'" r="4" style="fill:'+V(d.c||'--ink')+'"/>'+(d.t?'<text x="'+(X(d.p[0])+7)+'" y="'+(Y(d.p[1])-6)+'" style="fill:'+V(d.c||'--ink')+';font:12px IBM Plex Mono,monospace">'+d.t+'</text>':''); });
+  return s+'</svg>'; }
+function knob(id,lab,min,max,step,val){ return '<div class="kn"><span class="m">'+lab+'</span><input type="range" id="'+id+'" min="'+min+'" max="'+max+'" step="'+step+'" value="'+val+'"><output id="o'+id+'"></output></div>'; }
+function chipRow(el,keys,get,set,after){ el.innerHTML=''; keys.forEach(k=>{ const b=document.createElement('button'); b.type='button'; b.textContent=k; if(k===get()) b.className='on'; b.onclick=()=>{ set(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+
+const r2=Math.SQRT1_2;
+const MV={'flip: floor':{f:p=>[p[0],-p[1]],l:{p:[0,0],d:[1,0]},a:t=>-t,n:'−θ'},'flip: y = x':{f:p=>[p[1],p[0]],l:{p:[0,0],d:[r2,r2]},a:t=>Math.PI/2-t,n:'π/2 − θ'},'flip: upright':{f:p=>[-p[0],p[1]],l:{p:[0,0],d:[0,1]},a:t=>Math.PI-t,n:'π − θ'},'half turn':{f:p=>[-p[0],-p[1]],l:null,a:t=>t+Math.PI,n:'θ + π'}};
+let mk='flip: floor', th=0.5; const e=$('kt'); e.addEventListener('input',()=>{ th=+e.value; draw(); });
+function draw(){ const m=MV[mk], P=[Math.cos(th),Math.sin(th)], Q=m.f(P), circ=[]; for(let k=0;k<=120;k++){ const a=2*Math.PI*k/120; circ.push([Math.cos(a),Math.sin(a)]); }
+  $('pl').innerHTML=svgPlane({lo:-1.4,hi:1.4,shapes:[{pts:circ,c:'--ink',open:true}],lines:m.l?[m.l]:[],dots:[{p:P,c:'--teal',t:'θ'},{p:Q,c:'--ember',t:m.n}]});
+  $('okt').textContent=show(th);
+  const a=m.a(th); const v=$('vd'); v.className='verdict'; v.textContent='The point at θ = '+show(th)+' is ('+show(P[0],3)+', '+show(P[1],3)+'). Its image is ('+show(Q[0],3)+', '+show(Q[1],3)+'), the point at '+m.n+' = '+show(a)+': ('+show(Math.cos(a),3)+', '+show(Math.sin(a),3)+').'; }
+chipRow($('chM'),Object.keys(MV),()=>mk,k=>mk=k,draw); draw();
+window.__pic={set:(k,t)=>{ mk=k; th=t; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'reversal',t:R`\htmlClass{new}{\cos(-\theta) = \cos\theta,\ \ \sin(-\theta) = -\sin\theta}`,n:`The flip over the floor.`}
+],{title:'The slides · reversing · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'differences',t:R`\htmlClass{new}{\cos(A - B) = \cos A\cos B + \sin A\sin B}`,n:`A + (−B).`}
+],{title:'The slides · differences · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'complement',t:R`\htmlClass{new}{\cos(\tfrac{\pi}{2} - \theta) = \sin\theta}`,n:`The flip across y = x.`}
+],{title:'The slides · complement · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'supplement',t:R`\htmlClass{new}{\sin(\pi - \theta) = \sin\theta}`,n:`The upright flip.`},
+  {k:'ember',kl:'half turn',t:R`\cos(\theta + \pi) = -\cos\theta`,n:`Both signs change.`}
+],{title:'The slides · half turns · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`\sin(-\theta) \ne \sin\theta`,n:`sin is odd.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

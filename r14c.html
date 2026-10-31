@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>14c · The mean value technique</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:3.5em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r14b.html">← 14b Level ends, a level point between</a><a href="r14d.html">next: 14d zero slope means flat →</a></p>
+  <div class="tags"><span class="tag proof">14c · proof</span></div>
+  <h1>The mean value technique</h1>
+  <p>In 14b's picture, tilting a function by a straight line broke its equal ends, and the level-ends inputs did not move. At each of them the tilted function’s slope was the tilt, the slope of the tilted chord. Run that backwards. Hand it any function, continuous on a closed interval with a slope inside, and untilt it: subtract the chord through its two ends. What is left has equal ends, so level-ends finds an input inside with slope 0, and there the function's own slope is the chord's slope. Every chord has a tangent line beside it with the same slope. This is the technique rung 14 is built around, because it turns a fact about slopes at single inputs into a fact about two inputs far apart.</p>
+  <p class="gesture">Subtract the chord from the function. What is left is zero at both ends. Level-ends gives an input inside where what is left has slope 0. There the function’s own slope is the chord’s slope, so the change across the interval is that slope times the interval’s width.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r14b.html">14b</a> (level-ends), <a href="r14a.html">14a</a> (flat-top), <a href="r13a.html">13a</a> (chord, slope, slope-of-a-line), <a href="r13d.html">13d</a> (slopes-add, constant-factor for slopes, constant-has-slope-0, polynomial-slope, f″), <a href="r13b.html">13b</a> (slope-means-no-gap), <a href="r13h.html">13h</a> (root-slope), <a href="r13m.html">13m</a> (the tangent step N, polynomial-guess-error, places-double), <a href="r11b.html">11b</a> (continuous-sums). <a href="r14d.html">14d</a> uses it to prove that zero slope means flat; <a href="r14i.html">14i</a> builds a version for two functions.</p></div>
+</header>
+
+<section class="class step" data-step="14c1">
+  <h2 class="sthead"><span class="stno">14c1</span>The technique, every line cited</h2>
+  <p class="stands">Stands on 14b (level-ends) and 13a (the chord’s slope).</p>
+  <p data-pid="e0295e">Average-slope technique (the mean value technique): <b>if f is continuous on [α, β] and has a slope at every input of (α, β), then for some c with α &lt; c &lt; β,</b></p>
+  <p class="eqline" data-pid="480bfd">f′(c) = (f(β) − f(α))/(β − α), that is, f(β) − f(α) = f′(c) · (β − α).</p>
+  <p data-pid="760422">Its accepted name is the mean value theorem, since “mean” is an old word for an average and the chord's slope is the average rate of change over [α, β].</p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the average-slope technique">
+m = \tfrac{f(b) - f(a)}{b - a} @@ the chord's slope (13a); b − a is not 0
+\htmlClass{new}{h(x) = f(x) - f(a) - m(x - a)} @@ the helper: f with the chord taken away
+h(a) = 0,\ \ h(b) = f(b) - f(a) - m(b - a) = 0 @@ the second by the first line, multiplied out
+h \text{ continuous on } [a, b] @@ continuous-sums (11b): f less a linear function, side by side at the ends
+h'(x) = f'(x) - m \text{ for } a \lt x \lt b @@ slopes-add, slope-of-a-line, constant-has-slope-0: the chord part has slope m
+\text{call } c \in (a, b):\ h'(c) = 0 @@ <span class="hl-new">level-ends (14b)</span>
+f'(c) = m \quad \blacksquare @@ the line above, with h′(c) = f′(c) − m
+  </pre>
+  <p data-pid="9dfe05">Where each hypothesis was spent: all three in level-ends, which needs them for h. h inherits them from f because a chord is continuous and has slope m everywhere. Rung 7's either-way principle and no-holes: inside level-ends, in highest-and-lowest, and nowhere new. Like level-ends, the technique names no c.</p>
+  <pre class="lines" data-k="teal" data-label="an example: the instant for x(t) = t³">
+x(t) = t^3 \text{ on } [0, 2] @@ metres and seconds; a position given as an example
+m = \tfrac{8 - 0}{2} = 4 @@ the chord slope: on average, 4 metres each second
+3c^2 = 4,\ \ c = \tfrac{2}{\sqrt3} \approx 1.15 @@ the slope 3c² (power for slopes) meets the chord slope; average-slope says such a c had to be there
+  </pre>
+  <p data-pid="ed7b64">The second form, f(β) − f(α) = f′(c)(β − α), is the one used most. <b>It says the change over a stretch is a slope times the length of the stretch, for some slope the function really has inside.</b> Know something about every slope inside, and you know the same thing about the change.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · average-slope · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · left: f, its chord and the inputs c · right: the helper h, f with the chord taken away</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="chips" id="fch"></div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">α</span><input type="range" id="ka" min="0" max="1000" step="1" value="0"><output id="oa"></output></div>
+      <div class="kn"><span class="m">β</span><input type="range" id="kb" min="0" max="1000" step="1" value="1000"><output id="ob"></output></div>
+      <div class="cap">Ink: f. Gold dashed: the chord from α to β. Plum: the tangent line at each c inside where f′(c) is the chord's slope. Move α and β to see each chord find its c.</div>
+      <div class="verdict" id="vdF"></div>
+    </div>
+    <div class="panel">
+      <div class="lbl">h(x) = f(x) − f(α) − m(x − α)</div>
+      <canvas id="cvS"></canvas>
+      <div class="cap">Plum: the helper on [α, β]. It is 0 at both ends, so level-ends applies, and its level points are the same inputs c.</div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">14c1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = x^2 on [1, 3]</span></span>Find the chord’s slope. <br>Find the c that average-slope promises.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="14c2">
+  <h2 class="sthead"><span class="stno">14c2</span>A bound on the slope bounds the change</h2>
+  <p class="stands">Stands on 14c1 and 13h (root-slope, difference-of-powers).</p>
+  <p data-pid="430d7c">Slope-bound technique: <b>suppose f is continuous on [α, β], has a slope at every input of (α, β), and |f′(x)| ≤ K for every x in (α, β). Then |f(y) − f(x)| ≤ K · |y − x| for every x and y in [α, β].</b> Take x &lt; y. f is continuous on [x, y] with a slope inside, so average-slope gives c between them with f(y) − f(x) = f′(c)(y − x). Take sizes (size-of-a-product, 8h), and |f′(c)| ≤ K. For x = y both sides are 0. ∎ The one-sided forms are proved the same way. f′ ≤ K inside gives f(y) − f(x) ≤ K(y − x) for x &lt; y. And f′ ≥ k gives the change at least k(y − x).</p>
+  <pre class="lines" data-k="ember" data-label="this step: a root, pinned by its slopes">
+f(x) = \sqrt{x} \text{ on } [100, 101] @@ continuous (root-is-continuous, 11a), slope 1/(2√x) for x &gt; 0 (root-slope, 13h)
+\sqrt{101} - 10 = \tfrac{1}{2\sqrt c},\ \ 100 \lt c \lt 101 @@ average-slope
+10 \lt \sqrt c \lt \sqrt{101} \lt 11 @@ powers-keep-order (8f) turned back: √c ≥ 11 would give c ≥ 121
+\tfrac{1}{22} \lt \sqrt{101} - 10 \lt \tfrac{1}{20} @@ reciprocals turn the order about (positive-reciprocal on ℚ read in ℝ)
+\htmlClass{new}{10.045 \lt \sqrt{101} \lt 10.05} @@ 1/22 ≈ 0.0455, so the left is at least 10.045
+  </pre>
+  <p data-pid="51f44c">Two bounds from one technique, without a single square root worked out. 12e's bisection, starting from [10, 11], would take eight halvings to get as close.</p>
+  <pre class="lines" data-k="teal" data-label="from 13h: powers, squeezed">
+0 \lt x \lt y:\ \ y^n - x^n = n c^{n-1}(y - x) @@ average-slope on [x, y] for xⁿ, power for slopes; x &lt; c &lt; y
+n x^{n-1}(y - x) \lt y^n - x^n \lt n y^{n-1}(y - x) @@ c^(n−1) lies between x^(n−1) and y^(n−1) when n ≥ 2 (powers-keep-order, 8f)
+  </pre>
+  <p data-pid="c804ae">13h's difference-of-powers wrote yⁿ − xⁿ as (y − x) times a sum of n terms, each between x^(n−1) and y^(n−1). Average-slope says the sum is n times one power c^(n−1). Both roads give the squeeze.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · slope-bound · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14c2.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = x^3,"></span> <span data-tex-inline="I = [0, 3]"></span></span>Find every c that average-slope promises for f on I.</li><li><span class="givens"><span data-tex-inline="f(x) = 1/x,"></span> <span data-tex-inline="I = [1, 4]"></span></span>Find every c that average-slope promises for f on I.</li><li><span class="givens"><span data-tex-inline="f(x) = x^2,"></span> <span data-tex-inline="I = [\alpha, \beta],\ \alpha &lt; \beta"></span></span>Find every c that average-slope promises for f on I.</li><li><span class="givens"><span data-tex-inline="\text{Claim: } 6 + \tfrac{1}{13} &lt; \sqrt{37} &lt; 6 + \tfrac{1}{12}"></span></span>Prove the claim using average-slope.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="14c3">
+  <h2 class="sthead"><span class="stno">14c3</span>The average speed is a speed</h2>
+  <p class="stands">Stands on 14c2 and 13d (slopes).</p>
+  <p class="eqline" data-pid="ea7746">From here on, for a position x(t) with a slope at the instant t, its velocity there is that slope, v(t) = x′(t). Its average velocity over [t₁, t₂] is the chord slope (x(t₂) − x(t₁))/(t₂ − t₁). Speed is the size of the velocity, |v(t)|.</p>
+  <p data-pid="cb447a">A natural premise about a body whose speed only grows says this: it covers a stretch of time at an average velocity between its speeds at the start and the end. 9·phys took it as a premise. 13·phys held it in trust for every such motion, and held in trust that some instant has the average velocity. Here both are proved, and those flags are closed. Let x(t) be a position with a velocity v(t) at every instant of [t₁, t₂], so x is continuous there (slope-means-no-gap). Average-slope gives an instant c strictly inside with</p>
+  <p class="eqline" data-pid="780e22">(x(t₂) − x(t₁))/(t₂ − t₁) = v(c), for some t₁ &lt; c &lt; t₂.</p>
+  <p data-pid="34a123">If the speed only grows, in 13l's words if v is increasing, then t₁ &lt; c &lt; t₂ gives v(t₁) &lt; v(c) &lt; v(t₂). <b>The premise is true for every such motion.</b> For steady gain of speed it is true with c the halfway instant. Take x(t) = ½gt² + v₀t with g &gt; 0, so v(t) = gt + v₀ (polynomial-slope). Its average velocity over [t₁, t₂] is ½g(t₁ + t₂) + v₀, which is v at (t₁ + t₂)/2.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · the average speed · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14c3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">x(t) = t^2 metres,  t from 1 to 3 seconds</span></span>Find the average velocity. <br>Find the instant at which the velocity equals it.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="14c4">
+  <h2 class="sthead"><span class="stno">14c4</span>The tangent step, for any function</h2>
+  <p class="stands">Stands on 14c3 and 13m (the tangent step).</p>
+  <p data-pid="799df6">13m proved a bound for the tangent step N(x) = x − f(x)/f′(x) (Newton's), near a zero r where the slope is not 0. The error after the step is at most a constant times the square of the old error, so the correct places roughly double. Its proof factored a polynomial at r, by factor, and said that a function which is not a polynomial would have to wait. Average-slope replaces the factoring.</p>
+  <p data-pid="5990b7">Places-double-for-any-function technique: <b>suppose f has a slope at every input of [r − d, r + d], and f′ has a slope at every input of it too. Suppose f(r) = 0, and there are bounds |f″(x)| ≤ C and |f′(x)| ≥ m &gt; 0 there (m a bound, not a slope). Put K = C/m. If |x − r| ≤ d, then K · |N(x) − r| ≤ (K · |x − r|)².</b> So 13m's places-double can be used as written, with C bounding f″ in place of q′.</p>
+  <p class="eqline" data-pid="c5ecaf">From here on, ξ (the Greek letter xi) and η (eta) may name an input that a technique promises without saying which, as c does in average-slope. They are only letters, like c, and claim nothing.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the places-double-for-any-function technique">
+f(x) = f(x) - f(r) = f'(\xi)(x - r) @@ <span class="hl-new">average-slope</span> on the stretch from r to x, ξ strictly between (for x = r all is 0)
+N(x) - r = (x - r) - \tfrac{f'(\xi)(x - r)}{f'(x)} @@ the tangent step, with f(x) replaced
+= (x - r) \cdot \tfrac{f'(x) - f'(\xi)}{f'(x)} @@ one bottom (fractions-of-rationals read in ℝ)
+f'(x) - f'(\xi) = f''(\eta)(x - \xi) @@ <span class="hl-new">average-slope again</span>, for f′, which is continuous by slope-means-no-gap; η between ξ and x
+|x - \xi| \le |x - r| @@ ξ is between r and x
+|N(x) - r| \le |x - r|^2 \cdot \tfrac{C}{m} @@ the bounds on |f″| and |f′|, size-of-a-product (8h)
+K\,|N(x) - r| \le (K\,|x - r|)^2 \quad \blacksquare @@ multiply by K = C/m
+  </pre>
+  <p data-pid="ff76df">Every step of 13m that came after this bound goes through unchanged. That includes the condition K · |x₀ − r| ≤ ½, which keeps each guess inside [r − d, r + d]. That closes what 13m and 13·comp held in trust for functions that are not polynomials.</p>
+  <p data-pid="196cf9">One builder of the calculus worked from series, without limits. He proved that the change of a function over a stretch lies between the least and the greatest of its slopes on the stretch, times the length. He used it to bound the error of breaking off a series.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · places double · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14c4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = x^2 − 2,  r = √2</span></span>Write f(x) as f′(ξ)(x − r), naming where ξ lies. <br>Say what ξ is for this f.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="14c5">
+  <h2 class="sthead"><span class="stno">14c5</span>Illegal moves</h2>
+  <p class="stands">Stands on 14c1 to 14c4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+c = \tfrac{a + b}{2}\,? @@ true for x², false for x³ on [0, 2]: c = 2/√3, not 1
+\text{the chord is the tangent line at } c\,? @@ same slope, different lines: for x³ on [−1, 1], the chord is y = x and the tangent at 1/√3 is not
+\text{a slope at every input but one is enough}\,? @@ |x| on [−1, 2]: chord slope ⅓, slopes only ±1
+\begin{aligned}&\text{continuous on } [a,\\ &\quad b] \text{ is not needed if defined}\,?\end{aligned} @@ 1/x on [−1, 1]: chord slope 1, every slope negative
+f(b) - f(a) = f'(a)(b - a)\,? @@ that is 13k's linearization, which has an error; average-slope moves the slope to c to remove it
+\text{average-slope tells you } c\,? @@ it says c exists, through level-ends and highest-and-lowest
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14c5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = |x| \text{ on } [-1, 2]"></span></span>Find the chord's slope and every slope f has, and the hypothesis of average-slope that fails.</li><li><span class="givens"><span data-tex-inline="f(x) = 1/x \text{ on } [-1, 1]"></span></span>Find the chord's slope and the sign of every slope f has, and the hypothesis of average-slope that fails.</li><li><span class="givens"><span data-tex-inline="\text{Claim: } f(\beta) - f(\alpha) ="></span> <span data-tex-inline="f'\big(\tfrac{\alpha + \beta}{2}\big) \cdot (\beta - \alpha)"></span></span>Refute the claim with a cubic.</li><li><span class="givens"><span data-tex-inline="f(x) = x^3 \text{ on } [-1, 1],"></span> <span data-tex-inline="\text{average-slope gives } 3c^2 = 1"></span></span>Decide whether the chord is the tangent line at c, and find both lines.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="14c6">
+  <h2 class="sthead"><span class="stno">14c6</span>Running it backwards</h2>
+  <p class="stands">Stands on 14c1 to 14c4.</p>
+  <p data-pid="4d6154">Handed two values of a function and asked about some slope between, divide the change by the step. <b>Average-slope says some slope inside is exactly that.</b> Handed bounds on every slope and asked how far a value can move, multiply the bound by the step (slope-bound). Handed a number hard to compute, find a function and a stretch where it is a change and the slopes are easy, and pin it between two bounds. Handed a proof that needs a factoring, look for an average-slope that replaces it. Found upward; written downward.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14c6.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f \text{ is continuous on } [1, 5],"></span> <span data-tex-inline="f' \text{ exists on } (1, 5),"></span> <span data-tex-inline="f'(x) \le 2 \text{ there,}"></span> <span data-tex-inline="f(1) = 3"></span></span>Find the largest value f can take at the right end, and make an f that reaches it.</li><li><span class="givens"><span data-tex-inline="f(x) = x^3 - kx \text{ on } [0, 2],"></span> <span data-tex-inline="\text{chord slope } 1"></span></span>Find k, and then every c that average-slope promises.</li><li><span class="givens"><span data-tex-inline="f(x) = x^2 \text{ on } [1, b],"></span> <span data-tex-inline="\text{average-slope gives } c = 3"></span></span>Find b.</li><li><span class="givens"><span data-tex-inline="f \text{ is continuous on } [0, 2],"></span> <span data-tex-inline="f' \text{ exists on } (0, 2),"></span> <span data-tex-inline="f'(x) \le 3 \text{ there,}"></span> <span data-tex-inline="f(0) = 0,\ f(2) = 6"></span></span>Find the value of f midway.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">14c.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="f(x) = |x| \text{ on } [-1, 2]"></span></span>Make a polynomial of your own with the same values as f at the ends, and exactly two inputs inside where its slope equals its chord's, and find them.</div>
+  <div class="chq"><span class="chid">14c.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{Case one: } f(\alpha) = f(\beta)."></span> <span data-tex-inline="\text{Case two: } f \text{ is linear.}"></span></span>In each case, find the chord's slope and every c that average-slope promises.</div>
+  <div class="chq"><span class="chid">14c.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="f(x) = x^3,"></span> <span data-tex-inline="c = 0"></span></span>Prove or refute: every tangent's slope is some chord's slope. Try f at c.</div>
+  <div class="chq"><span class="chid">14c.4.4</span><span class="tagq">world</span><span class="givens"><span data-tex-inline="\text{Olympia scale: } 13{:}00."></span> <span data-tex-inline="\text{Centralia scale, } 48\ \text{km south: } 13{:}30."></span> <span data-tex-inline="\text{Limit: } 90\ \text{km/h}."></span></span>A truck's log shows it passed a scale near Olympia and then one near Centralia, along I-5. The driver says he never broke the limit. <br>Find what you can prove, and what you need to assume.</div>
+  <div class="chq"><span class="chid">14c.4.5</span><span class="tagq">seam</span>In 1884 a young mathematician wrote that the proofs of this technique in the textbooks of the day assumed more than the technique stated. An older one answered in their defence, and the two argued it out in print. Suppose a proof assumes, without saying so, that the slope function is continuous, and every function an engineer meets has a continuous slope. <br>Does the proof prove the technique? <br>Was the quarrel worth having?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r14b.html">← 14b · Level ends, a level point between</a><a href="r14d.html">14d · zero slope means flat →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>Lagrange, building the calculus from series without limits, proved that the change of a function over a stretch lies between the least and the greatest of its slopes on the stretch, times the length. He used it to bound the error of breaking off a series.</p><cite>Lagrange, Théorie des fonctions analytiques (1797); paraphrase</cite></aside>
+  <p>Some books call the mean value technique Lagrange’s theorem. The tangent step is Newton’s method (or the Newton–Raphson method). The closer’s quarrel is Giuseppe Peano’s with Philippe Gilbert, in 1884.</p>
+  <p>Accepted names: the average-slope technique is the mean value theorem; the chord’s slope is the average rate of change.</p>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?3:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=v=>fm(v).replace('-','−');
+const FN={
+  cu:{lab:'x³ on [−1, 2]',tex:R`x^3`,lo:-1,hi:2,f:x=>x*x*x,df:x=>3*x*x,y:[-1.6,8.6]},
+  rt:{lab:'√x on [0, 4]',tex:R`\sqrt{x}`,lo:0,hi:4,f:x=>Math.sqrt(Math.max(0,x)),df:x=>x>0?0.5/Math.sqrt(x):null,y:[-0.3,2.3]},
+  wv:{lab:'x³ − 3x on [−2, 2]',tex:R`x^3 - 3x`,lo:-2,hi:2,f:x=>x*x*x-3*x,df:x=>3*x*x-3,y:[-2.6,2.6]},
+  ab:{lab:'|x| on [−1, 2]',tex:R`|x|`,lo:-1,hi:2,f:x=>Math.abs(x),df:x=>x===0?null:Math.sign(x),y:[-0.4,2.4],kink:0}
+};
+let key='cu',F=FN.cu;
+const cvF=$('cvF'),cvS=$('cvS'),ka=$('ka'),kb=$('kb');
+function ends(){ let a=F.lo+(F.hi-F.lo)*(+ka.value)/1000, b=F.lo+(F.hi-F.lo)*(+kb.value)/1000; a=Math.round(a*20)/20; b=Math.round(b*20)/20; if(b<a){ const t=a; a=b; b=t; } if(b-a<0.1) b=Math.min(F.hi,a+0.1), a=Math.min(a,b-0.1); return [a,b]; }
+function cs(a,b,m){ const out=[]; const n=4000; let px=null,pv=null; let all0=true; for(let k=1;k<n;k+=40){ const d=F.df(a+(b-a)*k/n); if(d===null||Math.abs(d-m)>1e-9){ all0=false; break; } } if(all0) return 'all'; for(let k=1;k<n;k++){ const x=a+(b-a)*k/n; const d=F.df(x); if(d===null){ px=null; continue; } const v=d-m; if(Math.abs(v)<1e-12) out.push(x); else if(px!==null&&pv*v<0&&!(F.kink!==undefined&&px<F.kink&&F.kink<=x)){ let l=px,r=x; for(let i=0;i<60;i++){ const mid=(l+r)/2, dm=F.df(mid)-m; if((F.df(l)-m)*dm<=0) r=mid; else l=mid; } out.push((l+r)/2); } px=x; pv=v; } const u=[]; out.forEach(z=>{ if(!u.some(w=>Math.abs(w-z)<1e-4)) u.push(z); }); return u; }
+const PF=plane(cvF,{x:[-1,2],y:[-1,8],grid:1,aspect:0.8,draw:P=>drawF(P)});
+const PS=plane(cvS,{x:[-1,2],y:[-1,1],grid:1,aspect:0.8,draw:P=>drawS(P)});
+[[PF,cvF],[PS,cvS]].forEach(([P,cv])=>Object.defineProperty(P.o,'aspect',{get:()=>cv.clientWidth>480?0.75:0.9}));
+function curve(P,fn,colr,w,lo,hi){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)||Math.abs(v)>1e6){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); }
+function drawF(P){ const w=F.hi-F.lo; P.o.x=[F.lo-0.08*w,F.hi+0.08*w]; P.o.y=F.y; P.o.grid=(F.y[1]-F.y[0])>6?2:0.5; P.axes();
+  const [a,b]=ends(), m=(F.f(b)-F.f(a))/(b-a);
+  curve(P,F.f,'--muted',1.4,F.lo,F.hi); curve(P,F.f,'--ink',2.6,a,b);
+  P.line(a,F.f(a),b,F.f(b),'--gold',1.6,[6,4]); P.dot(a,F.f(a),'--gold',5); P.dot(b,F.f(b),'--gold',5);
+  const L=0.18*w; const CC=cs(a,b,m); (CC==='all'?[]:CC).forEach(c=>{ P.line(c-L,F.f(c)-m*L,c+L,F.f(c)+m*L,'--plum',2.2,[]); P.dot(c,F.f(c),'--plum',5); }); }
+function drawS(P){ const [a,b]=ends(), m=(F.f(b)-F.f(a))/(b-a); const h=x=>F.f(x)-F.f(a)-m*(x-a);
+  let lo=0,hi=0; for(let k=0;k<=400;k++){ const v=h(a+(b-a)*k/400); lo=Math.min(lo,v); hi=Math.max(hi,v); } const pad=Math.max(0.1,0.2*(hi-lo));
+  P.o.x=[a-0.08*(b-a),b+0.08*(b-a)]; P.o.y=[lo-pad,hi+pad]; P.o.grid=(hi-lo)>3?1:((hi-lo)>0.8?0.25:0.1); P.axes();
+  curve(P,h,'--plum',2.6,a,b); P.dot(a,0,'--gold',5); P.dot(b,0,'--gold',5);
+  const CC=cs(a,b,m); (CC==='all'?[]:CC).forEach(c=>{ const L=0.1*(b-a); P.line(c-L,h(c),c+L,h(c),'--ink',1.6,[]); P.dot(c,h(c),'--plum',5); }); }
+function read(){ const [a,b]=ends(); $('oa').textContent=mm(a); $('ob').textContent=mm(b); const m=(F.f(b)-F.f(a))/(b-a); const C=cs(a,b,m); const vd=$('vdF');
+  const kinkIn=(F.kink!==undefined&&a<F.kink&&F.kink<b);
+  if(C==='all'){ vd.className='verdict win'; vd.textContent='Chord slope '+mm(m)+', and the slope is '+mm(m)+' at every input inside: every input is a c.'; }
+  else if(C.length){ vd.className='verdict win'; vd.textContent='Chord slope '+mm(m)+'. Slope '+mm(m)+' at c = '+C.map(z=>mm(z)).join(' and ')+'.'; }
+  else if(kinkIn){ vd.className='verdict lose'; vd.textContent='Chord slope '+mm(m)+', and |x| has only the slopes −1 and 1: no c. The hypothesis that fails is a slope at every input inside, at 0.'; }
+  else { vd.className='verdict'; vd.textContent='Chord slope '+mm(m)+'.'; }
+  tex($('eqF'),R`\begin{gathered}${F.tex} \text{ on } [${mm(a)}, ${mm(b)}]\\ m = \tfrac{f(b) - f(a)}{b - a} = ${mm(m)}\\ ${C==='all'?R`f'(c) = m \text{ at every } c`:C.length?R`f'(c) = m \text{ at } c = ${C.map(z=>mm(z)).join(',\\ ')}`:R`\text{no } c`}\end{gathered}`,true); }
+function all(){ PF.redraw(); PS.redraw(); read(); }
+[ka,kb].forEach(k=>k.addEventListener('input',all));
+const fch=$('fch');
+Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===key) b.className='on'; b.onclick=()=>{ key=k; F=FN[k]; [...fch.children].forEach(z=>z.classList.toggle('on',z===b)); ka.value=0; kb.value=1000; all(); }; fch.appendChild(b); });
+window.__pic={set:(k,a,b)=>{ [...fch.children][Object.keys(FN).indexOf(k)].click(); ka.value=a; kb.value=b; all(); return {e:ends(),txt:$('vdF').textContent}; }};
+ka.value=333; kb.value=1000;
+all();
+
+/* ---------- slides ---------- */
+const Nw='\\htmlClass{new}';
+stepper('#sl1',[
+  {k:'ember',kl:'average-slope',t:R`f'(c) = \tfrac{f(b) - f(a)}{b - a},\ \ a \lt c \lt b`,n:`Continuous on [α, β], a slope inside. Every chord has a tangent line with its slope.`},
+  {k:'ember',kl:'the helper',t:R`${Nw}{h(x) = f(x) - f(a) - m(x - a)}`,n:`f with the chord taken away.`},
+  {k:'ember',kl:'its ends',t:R`h(a) = 0 = h(b)`,n:`The second because m is the chord's slope.`},
+  {k:'ember',kl:'level-ends',t:R`h'(c) = f'(c) - m = 0`,n:`h is continuous with a slope inside: level-ends. ∎`},
+  {k:'teal',kl:'an example · the instant',t:R`t^3 \text{ on } [0, 2]:\ \ 3c^2 = 4`,n:`c = 2/√3: the instant average-slope promised.`},
+  {k:'ember',kl:'the second form',t:R`f(b) - f(a) = f'(c)\,(b - a)`,n:`The change is a slope times the step, for a slope f really has inside.`}
+],{title:'The slides · average-slope · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'slope-bound',t:R`|f'| \le K \;\Rightarrow\; |f(y) - f(x)| \le K\,|y - x|`,n:`average-slope on [x, y], then sizes.`},
+  {k:'ember',kl:'√101',t:R`\tfrac{1}{22} \lt \sqrt{101} - 10 \lt \tfrac{1}{20}`,n:`The slope 1/(2√c) with 10 &lt; √c &lt; 11. So 10.045 &lt; √101 &lt; 10.05.`},
+  {k:'teal',kl:'from 13h · powers',t:R`n x^{n-1}(y - x) \lt y^n - x^n \lt n y^{n-1}(y - x)`,n:`For 0 &lt; x &lt; y and n ≥ 2: difference-of-powers's sum is n times one power.`}
+],{title:'The slides · slope-bound · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'the average speed',t:R`\tfrac{x(t_2) - x(t_1)}{t_2 - t_1} = v(c)`,n:`If v is increasing, v(t₁) &lt; v(c) &lt; v(t₂): the premise, proved.`}
+],{title:'The slides · the average speed · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'places-double-for-any-function · first average-slope',t:R`f(x) = f'(\xi)(x - r)`,n:`Replaces 13m's factoring by factor.`},
+  {k:'ember',kl:'places-double-for-any-function · second average-slope',t:R`N(x) - r = (x - r)\,\tfrac{f''(\eta)(x - \xi)}{f'(x)}`,n:`So K|N(x) − r| ≤ (K|x − r|)², with K = C/m. ∎`}
+],{title:'The slides · places double · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`c \ne \tfrac{a + b}{2} \text{ in general}`,n:`x³ on [0, 2]: c = 2/√3. And the chord is not the tangent line: same slope only.`}
+],{title:'The slides · illegal · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

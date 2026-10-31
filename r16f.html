@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>16f · The table run backwards</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r16concl.html">← 16·∎ conclusion</a><a href="r16g.html">next: 16g definite integrals and areas →</a></p>
+  <div class="tags"><span class="tag tech">16f · technique</span></div>
+  <h1>The table run backwards</h1>
+  <p>Every slope rung 13 found is, read the other way, an antiderivative. Rung 13 built a table. It holds the slope of a constant, of a whole power, of a fractional power, of a sum, of a constant times a function, and of a function of a straight line. This step turns the table round, so that an integral can be looked up instead of worked out. It also checks every entry the one way that never fails, by taking the slope of the answer. Two warnings come with the table. An antiderivative is only promised on an interval, so a gap in the domain lets the constant change across the gap. And one entry is missing: no power has slope one over the input.</p>
+  <p class="gesture">Read rung 13’s slopes backwards. The undone power is the power one higher, divided by that higher power, plus any constant, for every fractional power but negative one. Sums and constant factors pass through. Check by taking the slope. Pin down the constant with one known value.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r16c.html">16c</a> (area-is-a-change, the indefinite integral), <a href="r16d.html">16d</a> (straight-inside), <a href="r16b.html">16b</a> (antiderivative-exists), <a href="r14e.html">14e</a> (all-antiderivatives, same-slopes), <a href="r13d.html">13d</a> (power for slopes, slopes-add, constant-factor for slopes, constant-has-slope-0), <a href="r13f.html">13f</a> (negative-powers), <a href="r13h.html">13h</a> (fraction-power for slopes). <a href="r16g.html">16g</a> uses the table to find areas and averages.</p></div>
+</header>
+
+<section class="class step" data-step="16f1">
+  <h2 class="sthead"><span class="stno">16f1</span>The table</h2>
+  <p class="stands">Stands on 13d (the power rule) and 16c (the indefinite integral).</p>
+  <pre class="lines" data-k="ember" data-label="the table: rung 13's slopes, read backwards">
+\textstyle\int k\,dx = kx + C @@ constant-has-slope-0, slope-of-a-line (13a): (kx)′ = k
+\textstyle\int x^n\,dx = \tfrac{x^{n+1}}{n+1} + C,\ \ n = 0, 1, 2, \ldots @@ power for slopes (13d), constant-factor for slopes
+\textstyle\int x^{-n}\,dx = \tfrac{x^{1-n}}{1-n} + C,\ \ n = 2, 3, \ldots,\ x \gt 0 \text{ or } x \lt 0 @@ negative-powers (13f)
+\textstyle\int x^{p/q}\,dx = \tfrac{x^{p/q + 1}}{p/q + 1} + C,\ \ \tfrac pq \ne -1,\ x \gt 0 @@ fraction-power for slopes (13h)
+\textstyle\int (f + g) = \int f + \int g,\ \ \int kf = k\int f @@ slopes-add, constant-factor for slopes (13d): antiderivatives-add-and-scale below
+\textstyle\int f(kx + m)\,dx = \tfrac1k F(kx + m) + C,\ \ k \ne 0 @@ straight-inside (16d)
+  </pre>
+  <p data-pid="a41464">Antiderivatives-add-and-scale technique: <b>if F and G are antiderivatives of f and g on an interval I, and k is real, then F + G is an antiderivative of f + g, and kF one of kf, on I.</b> The proof is one line each: (F + G)′ = F′ + G′ by slopes-add, and (kF)′ = kF′ by constant-factor for slopes.</p>
+  <p class="eqline" data-pid="5b8ede">From here on, to check an antiderivative is to take the slope of the answer and compare it with the integrand. Its accepted name is checking by differentiation. It never fails, because taking slopes is a fixed procedure and finding antiderivatives is not.</p>
+  <pre class="lines" data-k="ember" data-label="the table at work">
+\textstyle\int (4x^3 - 6x + 7)\,dx = x^4 - 3x^2 + 7x + C @@ antiderivatives-add-and-scale; power for slopes backwards three times. Check: 4x³ − 6x + 7
+\textstyle\int \tfrac{dx}{\sqrt{x}} = \int x^{-1/2}\,dx = 2x^{1/2} + C,\ x \gt 0 @@ fraction-power for slopes with p/q = −½. Check: 2 · ½x^{−1/2}
+\textstyle\int (5 - 2x)^4\,dx = -\tfrac{(5 - 2x)^5}{10} + C @@ straight-inside with k = −2. Check: −5(5 − 2x)⁴(−2)/10
+\textstyle\int \tfrac{x^3 + 1}{x^2}\,dx = \int (x + x^{-2})\,dx = \tfrac{x^2}{2} - \tfrac1x + C,\ x \gt 0 @@ split the fraction first (rung 3's division); negative-powers
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the table · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">16f1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = x^5 - 3x^2 + 2"></span></span>Find every antiderivative of f, and check it by its slope.</li><li><span class="givens"><span data-tex-inline="f(x) = x^{2/3},"></span> <span data-tex-inline="x &gt; 0"></span></span>Find every antiderivative of f.</li><li><span class="givens"><span data-tex-inline="f(x) = (3x + 1)^{-3},"></span> <span data-tex-inline="x &gt; -\tfrac13"></span></span>Find every antiderivative of f.</li><li><span class="givens"><span data-tex-inline="f(x) = \tfrac{x^2 - 1}{\sqrt x},"></span> <span data-tex-inline="x &gt; 0"></span></span>Find every antiderivative of f.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="16f2">
+  <h2 class="sthead"><span class="stno">16f2</span>One value pins the constant</h2>
+  <p class="stands">Stands on 16f1 and 14e (+ C).</p>
+  <p class="eqline" data-pid="4fe1a4">From here on, a demand G′ = f on an interval together with one value G(x₀) = y₀ is called an initial value problem; the value is its initial condition.</p>
+  <pre class="lines" data-k="ember" data-label="an initial value problem">
+G'(x) = 3x^2 - 2,\ \ G(1) = 5 @@ the demand and the condition
+G(x) = x^3 - 2x + C @@ the table; all-antiderivatives: every answer has this form
+5 = 1 - 2 + C,\ \ C = 6 @@ the condition
+G(x) = x^3 - 2x + 6 @@ the only answer on ℝ, by all-antiderivatives
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · initial value · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · the whole family of antiderivatives, and the one an initial condition picks</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="chips" id="fch"></div>
+      <div class="lbl">the integrand f</div>
+      <canvas id="cvF"></canvas>
+      <div class="cap">The function whose antiderivatives are drawn on the right.</div>
+    </div>
+    <div class="panel">
+      <div class="lbl">G + C for C = −3, −2, …, 3, and the one through (x₀, y₀)</div>
+      <canvas id="cvG"></canvas>
+      <div class="kn"><span class="m">x₀</span><input type="range" id="kx" min="0.5" max="2" step="0.05" value="1"><output id="ox"></output></div>
+      <div class="kn"><span class="m">y₀</span><input type="range" id="ky" min="-3" max="3" step="0.1" value="1"><output id="oy"></output></div>
+      <div class="cap">Grey: the family, every member lifted from the next by 1. Ember: the member through the plum point. On x⁻², the family on x &lt; 0 is drawn separately, with C = 0 there: the point picks only the right-hand half.</div>
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16f2.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="G'(x) = 6x^2 + 4x,"></span> <span data-tex-inline="G(0) = -3"></span></span>Find G.</li><li><span class="givens"><span data-tex-inline="G'(x) = x^{-1/2},"></span> <span data-tex-inline="G(4) = 1,"></span> <span data-tex-inline="x &gt; 0"></span></span>Find G.</li><li><span class="givens"><span data-tex-inline="\int f(x)\,dx = (2x - 1)^6 + C"></span></span>Find f.</li><li><span class="givens"><span data-tex-inline="v(t) = -9.8t \text{ m/s},"></span> <span data-tex-inline="h(0) = 120 \text{ m}"></span></span>A stone falls from a ledge on Mount Diablo with velocity v, at height h above the ground.<br>Find h at every t.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="16f3">
+  <h2 class="sthead"><span class="stno">16f3</span>A gap in the domain</h2>
+  <p class="stands">Stands on 16f2 and 14d (zero slope means flat, on an interval).</p>
+  <pre class="lines" data-k="ember" data-label="two intervals, two constants">
+G(x) = -\tfrac1x \ (x \lt 0),\ \ G(x) = -\tfrac1x + 1 \ (x \gt 0) @@ defined on both sides of 0, not at 0
+G'(x) = x^{-2} \text{ at every } x \ne 0 @@ negative-powers on each side
+G \ne -\tfrac1x + C \text{ for any one } C @@ all-antiderivatives is about one interval; the domain here is two
+  </pre>
+  <p data-pid="e00dc5">So <b>"∫ x⁻² dx = −1/x + C" is true on x &gt; 0 and on x &lt; 0, each with its own C.</b> Most books write one C and leave the interval to the reader.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · a gap · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16f3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">G(x) = −1/x + 3 for x > 0,  G(x) = −1/x − 2 for x < 0</span></span>Find G′ on each side. <br>Say why one “+ C” cannot describe G.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="16f4">
+  <h2 class="sthead"><span class="stno">16f4</span>The missing entry</h2>
+  <p class="stands">Stands on 16f1, 7e (proof by contradiction) and 16b (antiderivative-exists).</p>
+  <p data-pid="664e4c">The power line, with n = 1, would give ∫ x⁻¹ dx = x⁰/0. That is no function. The table has no entry for 1/x, and none can be added from powers.</p>
+  <p data-pid="3f4925">No-power-for-1/x technique: <b>there is no real c and rational r with (c xʳ)′ = 1/x for every x &gt; 0.</b></p>
+  <pre class="lines" data-k="ember" data-label="the no-power-for-1/x technique">
+\text{suppose } c\,r\,x^{r-1} = x^{-1} \text{ for every } x \gt 0 @@ for contradiction (7e); fraction-power for slopes for the slope
+c\,r\,x^r = 1 \text{ for every } x \gt 0 @@ multiply by x
+x = 1:\ \ c\,r = 1 @@ 1ʳ = 1
+x^r = 1 \text{ for every } x \gt 0;\ \ x = 2:\ \ 2^{p/q} = 1,\ \text{so } 2^p = 1 @@ r = p/q; raise to the q-th power (13h)
+p = 0,\ r = 0,\ c\,r = 0 \ne 1;\ \ \bot \quad \blacksquare @@ 2ᵖ &gt; 1 for p ≥ 1 and &lt; 1 for p ≤ −1 (8d, 4f); then refute
+  </pre>
+  <p data-pid="d4844b">Yet 1/x is continuous on x &gt; 0, so antiderivative-exists hands it an antiderivative there: its area function from 1, ∫₁ˣ dt/t. That function exists, has slope 1/x, and is not c xʳ for any c and r. It is not in the table. That gap stays open until rung 17, which names this function.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · the missing entry · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16f4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">F(x) = ∫₁ˣ dt/t,  x > 0</span></span>Bound F(2) by a lower and an upper sum with one piece, then with two. <br>Find F(1), and say whether F rises or falls.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="16f5">
+  <h2 class="sthead"><span class="stno">16f5</span>Illegal moves</h2>
+  <p class="stands">Stands on 16f1 to 16f4.</p>
+  <pre class="lines" data-k="ember" data-label="tempting, and not allowed">
+\textstyle\int x^{-1}\,dx = \tfrac{x^0}{0} + C\,? @@ r = −1 is the one exponent the power line leaves out
+\textstyle\int (x^2 + 1)^2\,dx = \tfrac{(x^2 + 1)^3}{3} + C\,? @@ check by the slope: 2x(x² + 1)², not (x² + 1)². Expand first
+\textstyle\int x^3\,dx = \tfrac{x^4}{4}\,? @@ the C: x⁴/4 is one antiderivative, not all of them
+\textstyle\int \tfrac{x^3 + 1}{x^2}\,dx = \tfrac{x^4/4 + x}{x^3/3} + C\,? @@ no quotient rule for antiderivatives; split the fraction first
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16f5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="G'(x) = x^{-2} \text{ for } x \ne 0,"></span> <span data-tex-inline="G(-1) = 2,"></span> <span data-tex-inline="G(1) = 0"></span></span>Find G.<br>Prove or refute: G is one formula with one constant on all its inputs.</li><li><span class="givens"><span data-tex-inline="\text{Claim: } \int (2x + 3)^3\,dx = \tfrac{(2x + 3)^4}{4} + C"></span></span>Check the claim by its slope, and find the right antiderivative.</li><li><span class="givens"><span data-tex-inline="f(x) = x^{-1},"></span> <span data-tex-inline="x &gt; 0"></span></span>Run the power line on f, and write where it breaks.<br>Find an antiderivative of f, and prove it is one.</li><li><span class="givens"><span data-tex-inline="G(x) = \tfrac23 x^{3/2},"></span> <span data-tex-inline="x \ge 0"></span></span>Prove or refute: G has slope the square root of x on the whole given stretch, with the slope from one side at 0.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">16f.4.1</span><span class="tagq">build</span>Make up a slope of your own, a sum of three powers of x, one of them negative, so that it has no value at 0.<br>Find the G with that slope away from 0 that is 0 at −1 and at 1, and check it by its slope.<br>Is it one formula with one constant?</div>
+  <div class="chq"><span class="chid">16f.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="I_r = \int_1^2 x^r\,dx = \tfrac{2^{r+1} - 1}{r + 1},"></span> <span data-tex-inline="r \ne -1"></span></span>Work the formula out for r = −0.9, −0.99 and −0.999, and for r = −1.1, −1.01 and −1.001.<br>Compare them with the lower and upper sums of 1/x on [1, 2] with 4 equal pieces.</div>
+  <div class="chq"><span class="chid">16f.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="G' = H' \text{ at every } x \ne 0"></span></span>Prove or refute: G − H is constant.</div>
+  <div class="chq"><span class="chid">16f.4.4</span><span class="tagq">seam</span><span class="givens"><span data-tex-inline="A(x) = \int_0^x \tfrac{dt}{\sqrt{1 - t^4}}"></span></span>Two of the first workers in the calculus hoped that every integral of a fraction of polynomials could be written with the functions they knew. In 1835 it was proved that some integrals of functions built only from powers and roots cannot be written that way. The area function A is one. It cannot be written with powers and roots, nor with any of the other standard functions of calculus. Antiderivative-exists says it exists all the same.<br>Does writing A down count as knowing the answer?<br>What would?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r16concl.html">← 16·∎ · conclusion</a><a href="r16g.html">16g · definite integrals and areas →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>In 16f.4.4, the two who hoped were Gottfried Leibniz and Johann Bernoulli; the proof of 1835 is Joseph Liouville’s.</p>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+/* least and greatest of F.f on [lo, hi]: the ends, F's critical points inside, and a fine sample (exact between critical points for the functions used here) */
+function ext(F,lo,hi){ if(F.dir) return [0,1]; let m=Infinity,M=-Infinity; const t=x=>{ const v=F.f(x); if(v<m) m=v; if(v>M) M=v; };
+  t(lo); t(hi); (F.crit||[]).forEach(c=>{ if(c>lo&&c<hi) t(c); }); for(let k=1;k<64;k++) t(lo+(hi-lo)*k/64); return [m,M]; }
+function sums(F,pts){ let L=0,U=0; const ms=[],Ms=[]; for(let i=1;i<pts.length;i++){ const [m,M]=ext(F,pts[i-1],pts[i]), w=pts[i]-pts[i-1]; ms.push(m); Ms.push(M); L+=m*w; U+=M*w; } return {L,U,ms,Ms}; }
+const eq=(a,b,n)=>Array.from({length:n+1},(_,i)=>a+(b-a)*i/n);
+function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
+function boxes(P,pts,hs,stroke,fill,alpha){ const c=P.ctx; for(let i=1;i<pts.length;i++){ const a=pts[i-1],b=pts[i],h=hs[i-1]; c.globalAlpha=alpha; P.poly([[a,0],[b,0],[b,h],[a,h]],null,fill); c.globalAlpha=1; P.poly([[a,0],[b,0],[b,h],[a,h]],stroke,null,1.2); } }
+function dirDots(P,a,b){ const c=P.ctx; c.fillStyle=col('--ink'); for(let k=0;k<=300;k++){ const x=a+(b-a)*k/300; const y=(k%2)?0:1; c.fillRect(P.X(x)-1,P.Y(y)-1,2,2); } }
+/* shade between the graph of fn and the axis from lo to hi: above in pos colour, below in neg colour */
+function shade(P,fn,lo,hi,pos,neg,alpha){ if(hi<lo){ const t=lo; lo=hi; hi=t; } const c=P.ctx, N=300; c.globalAlpha=alpha==null?0.32:alpha;
+  for(let k=0;k<N;k++){ const x0=lo+(hi-lo)*k/N, x1=lo+(hi-lo)*(k+1)/N, xm=(x0+x1)/2, y=fn(xm); if(!isFinite(y)) continue; P.poly([[x0,0],[x1,0],[x1,fn(x1)],[x0,fn(x0)]],null,y>=0?pos:neg); }
+  c.globalAlpha=1; }
+function rangeOf(fn,lo,hi,pad){ let m=Infinity,M=-Infinity; for(let k=0;k<=400;k++){ const v=fn(lo+(hi-lo)*k/400); if(isFinite(v)){ if(v<m) m=v; if(v>M) M=v; } } if(m>0) m=0; if(M<0) M=0; const p=(M-m)*(pad==null?0.12:pad)||1; return [m-p,M+p]; }
+function chips(el,FN,get,setk,after){ Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===get()) b.className='on'; b.onclick=()=>{ setk(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+const Nw='\\htmlClass{new}';
+function gridFor(sp){ return sp>40?10:sp>16?4:sp>8?2:sp>3?1:sp>1.2?0.5:0.25; }
+function frame2(P,fn,lo,hi,pad){ const w=hi-lo; P.o.x=[lo-0.12*w,hi+0.08*w]; P.o.y=rangeOf(fn,lo,hi,pad==null?0.12:pad); const sx=P.o.x[1]-P.o.x[0], sy=P.o.y[1]-P.o.y[0]; let g=gridFor(sx); while(sy/g>24) g*=2; P.o.grid=g; }
+const num=(f,a,b,n)=>{ n=n||4000; const h=(b-a)/n; let s=0; for(let i=0;i<n;i++) s+=f(a+(i+0.5)*h)*h; return s; };
+/* axes with separate steps across and up */
+function axes2(P,gx,gy){ const c=P.ctx,o=P.o; c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ c.moveTo(P.X(x),P.Y(o.y[0])); c.lineTo(P.X(x),P.Y(o.y[1])); }
+  for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ c.moveTo(P.X(o.x[0]),P.Y(y)); c.lineTo(P.X(o.x[1]),P.Y(y)); } c.stroke();
+  c.strokeStyle=col('--muted'); c.lineWidth=1.3; c.beginPath(); if(o.y[0]<=0&&o.y[1]>=0){ c.moveTo(P.X(o.x[0]),P.Y(0)); c.lineTo(P.X(o.x[1]),P.Y(0)); } if(o.x[0]<=0&&o.x[1]>=0){ c.moveTo(P.X(0),P.Y(o.y[0])); c.lineTo(P.X(0),P.Y(o.y[1])); } c.stroke();
+  c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; const ly=Math.min(P.H-6,Math.max(12,P.Y(0)+14));
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ if(Math.abs(x)<1e-9) continue; c.fillText(+x.toFixed(6),P.X(x),ly); }
+  c.textAlign='right'; const lx=Math.max(32,Math.min(P.W-4,P.X(0)-5)); for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ if(Math.abs(y)<1e-9) continue; c.fillText(String(+y.toFixed(6)).replace('-','−'),lx,P.Y(y)+4); } }
+function nice(sp){ const raw=sp/6, p=Math.pow(10,Math.floor(Math.log10(raw))), m=raw/p; return (m<1.5?1:m<3.5?2:m<7.5?5:10)*p; }
+const FN={
+  cub:{lab:'3x² − 2',f:x=>3*x*x-2,G:x=>x**3-2*x,lo:-2,hi:2.2,ft:'3x^2 - 2',gt:'x^3 - 2x'},
+  lin:{lab:'2x − 1',f:x=>2*x-1,G:x=>x*x-x,lo:-2,hi:2.2,ft:'2x - 1',gt:'x^2 - x'},
+  rt:{lab:'1/√x',f:x=>x>0?1/Math.sqrt(x):NaN,G:x=>x>0?2*Math.sqrt(x):NaN,lo:0,hi:4,ft:'x^{-1/2}',gt:'2x^{1/2}'},
+  inv:{lab:'x⁻²',f:x=>x!==0?1/(x*x):NaN,G:x=>x!==0?-1/x:NaN,lo:-3,hi:3,ft:'x^{-2}',gt:'-\\tfrac1x',gap:true}
+};
+let key='cub';
+const kx=$('kx'),ky=$('ky'),cvF=$('cvF'),cvG=$('cvG');
+const PF=plane(cvF,{x:[-2,2],y:[-2,2],grid:1,aspect:0.8,draw:P=>drawF(P)});
+const PG=plane(cvG,{x:[-2,2],y:[-6,6],grid:1,aspect:0.8,draw:P=>drawG(P)});
+[[PF,cvF],[PG,cvG]].forEach(([P,cv])=>Object.defineProperty(P.o,'aspect',{get:()=>cv.clientWidth>480?0.75:0.9}));
+function drawF(P){ const S=FN[key]; P.o.x=[S.lo-0.2,S.hi+0.2]; P.o.y=S.gap?[-0.5,6]:S.lo===0?[-0.5,4]:rangeOf(S.f,S.lo,S.hi,0.1); P.o.grid=1; P.axes();
+  if(S.gap){ curve(P,S.f,'--ink',2.6,S.lo,-0.35); curve(P,S.f,'--ink',2.6,0.35,S.hi); } else curve(P,S.f,'--ink',2.6,S.lo===0?0.06:S.lo,S.hi); }
+function drawG(P){ const S=FN[key], x0=+kx.value, y0=+ky.value, C=y0-S.G(x0); P.o.x=[S.lo-0.2,S.hi+0.2]; P.o.y=[-7,7]; P.o.grid=1; P.axes();
+  const seg=(fn,colr,w)=>{ if(S.gap){ curve(P,fn,colr,w,S.lo,-0.12); curve(P,fn,colr,w,0.12,S.hi); } else curve(P,fn,colr,w,S.lo===0?0.001:S.lo,S.hi); };
+  for(let k=-3;k<=3;k++) seg(x=>S.G(x)+k,'--grid',1.6);
+  if(S.gap){ curve(P,x=>S.G(x)+C,'--ember',2.8,0.12,S.hi); curve(P,x=>S.G(x),'--muted',2,S.lo,-0.12); }
+  else seg(x=>S.G(x)+C,'--ember',2.8);
+  P.dot(x0,y0,'--plum',5.5); }
+function read(){ const S=FN[key], x0=+kx.value, y0=+ky.value, C=y0-S.G(x0); $('ox').textContent=mm(x0,2); $('oy').textContent=mm(y0,1);
+  const vd=$('vdF'); vd.className='verdict win';
+  vd.textContent='The member through ('+mm(x0,2)+', '+mm(y0,1)+') has C = '+mm(C,4)+'. Its slope at every point'+(S.gap?' with x > 0':'')+' is f there; so is every grey curve\'s.'+(S.gap?' On x < 0 a different C is free to choose.':'');
+  tex($('eqF'),R`\begin{gathered}\textstyle\int ${S.ft}\,dx = ${S.gt} + C\\ G(${mm(x0,2)}) = ${mm(y0,1)}:\ \ C = ${mm(C,4)}\end{gathered}`,true); }
+function all(){ PF.redraw(); PG.redraw(); read(); }
+kx.addEventListener('input',all); ky.addEventListener('input',all);
+chips($('fch'),FN,()=>key,k=>{ key=k; },all);
+window.__pic={set:(k,x0,y0)=>{ [...$('fch').children][Object.keys(FN).indexOf(k)].click(); kx.value=x0; ky.value=y0; all(); const S=FN[k], C=y0-S.G(x0); const h=1e-5, sl=(S.G(x0+0.3+h)-S.G(x0+0.3-h))/(2*h); return {C:+C.toFixed(5),slopeOK:Math.abs(sl-S.f(x0+0.3))<1e-4}; }};
+all();
+stepper('#sl1',[
+  {k:'ember',kl:'the table',t:R`\textstyle\int x^r\,dx = \tfrac{x^{r+1}}{r+1} + C,\ \ r \ne -1`,n:`power for slopes, negative-powers and fraction-power for slopes read backwards.`},
+  {k:'ember',kl:'antiderivatives-add-and-scale',t:R`\textstyle\int (f + g) = \int f + \int g`,n:`slopes-add and constant-factor for slopes.`},
+  {k:'ember',kl:'the check',t:R`\big(x^4 - 3x^2 + 7x\big)' = 4x^3 - 6x + 7`,n:`Take the slope of the answer.`},
+  {k:'ember',kl:'a root',t:R`\textstyle\int x^{-1/2}\,dx = 2x^{1/2} + C`,n:`On x > 0.`},
+  {k:'ember',kl:'a straight inside',t:R`\textstyle\int (5 - 2x)^4\,dx = -\tfrac{(5 - 2x)^5}{10} + C`,n:`straight-inside with k = −2.`}
+],{title:'The slides · the table · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'initial value',t:R`G' = 3x^2 - 2,\ G(1) = 5:\ \ C = 6`,n:`One value pins the constant.`}
+],{title:'The slides · initial value · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'a gap',t:R`-\tfrac1x \text{ and } -\tfrac1x + 1`,n:`Two intervals, two constants.`}
+],{title:'The slides · a gap · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'the missing entry',t:R`\textstyle\int x^{-1}\,dx = \tfrac{x^0}{0}\,?`,n:`No function.`},
+  {k:'ember',kl:'no-power-for-1/x',t:R`(c\,x^r)' \ne \tfrac1x`,n:`No power has slope 1/x; antiderivative-exists still gives an antiderivative.`}
+],{title:'The slides · the missing entry · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`\textstyle\int (x^2 + 1)^2\,dx \ne \tfrac{(x^2 + 1)^3}{3} + C`,n:`Check by the slope.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

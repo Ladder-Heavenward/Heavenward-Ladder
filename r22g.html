@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Signs that alternate, and sums that can be rearranged</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r22f.html">← 22f sums against areas</a><a href="r22concl.html">next: 22·∎ a total is where the running totals settle →</a></p>
+  <div class="tags"><span class="tag proof">22g · proof</span></div>
+  <h1>Signs that alternate, and sums that can be rearranged</h1>
+  <p>Some sums take a step up, then a step down, then up again, each step smaller than the last. Such a sum settles even when the sizes of its steps alone would wander, because each step undoes part of the one before. But a sum that settles only because its signs take turns is fragile. Change the order of its pieces and it can be made to settle anywhere you like, or to wander. A sum that settles in size is safe: any order gives the same total.</p>
+  <p class="gesture">When the signs take turns and the pieces shrink to nothing, the sum settles, and the running totals bracket the total. A sum that settles but not in size can be reordered to reach any total. A sum that settles in size gives the same total in every order.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r22e.html">22e</a> (settling in size), <a href="r22f.html">22f</a> (the harmonic gap), <a href="r22c.html">22c</a> (crowding), <a href="r22d.html">22d</a> (running totals). <a href="r22h.html">22h</a> collects the techniques for sequences.</p></div>
+</header>
+
+<section class="class step" data-step="22g1">
+  <h2 class="sthead"><span class="stno">22g1</span>Steps that take turns</h2>
+  <p class="stands">Stands on 22d1 (running totals), 22a2 (the climb and fall techniques) and 22b (threads).</p>
+  <p data-pid="0b4712">Bracket technique: <b>if bₙ falls and heads to 0, then b₁ − b₂ + b₃ − b₄ + ⋯ settles, and its total lies between any two running totals in a row.</b> The even running totals climb, the odd ones fall, and the gap between them is one piece.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the bracket technique">
+s_{2m+2} = s_{2m} + (b_{2m+1} - b_{2m+2}) \ge s_{2m} @@ bₙ falls: the even totals climb
+s_{2m+1} = s_{2m-1} - (b_{2m} - b_{2m+1}) \le s_{2m-1} @@ the odd totals fall
+s_2 \le s_{2m} \le s_{2m+1} \le s_1 @@ s₂ₘ₊₁ − s₂ₘ = b₂ₘ₊₁ ≥ 0
+s_{2m} \to L,\ s_{2m+1} \to L' @@ the climb and fall techniques (22a2)
+L' - L = \lim b_{2m+1} = 0 @@ bₙ heads to 0
+\htmlClass{new}{s_n \to L, \text{ and } L \text{ lies between } s_n \text{ and } s_{n+1}} \quad \blacksquare @@ both threads settle at L (22b1)
+  </pre>
+  <p data-pid="ce85ff">So 1 − ½ + ⅓ − ¼ + ⋯ settles, though 1 + ½ + ⅓ + ⋯ wanders (22d3). Its total is ln 2. The even running total s₂ₙ is 1 + ½ + ⋯ + 1/(2n), less twice ½ + ¼ + ⋯ + 1/(2n), which is H₂ₙ − Hₙ. By the harmonic gap (22f4), that is (H₂ₙ − ln 2n) − (Hₙ − ln n) + ln 2, which heads to γ − γ + ln 2. The bracket gives an error bound for free: stop after n pieces, and you are off by less than the next piece.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · bracket · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">22g1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="1 - \tfrac12 + \tfrac13 - \tfrac14 + \cdots"></span></span>Find s₉ and s₁₀, as fractions and as decimals. <br>Find the bracket they put round the total, and its width. <br>Check that ln 2 ≈ 0.6931 lies inside, and that s₉ is off by less than the tenth piece.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22g2">
+  <h2 class="sthead"><span class="stno">22g2</span>Settling in size, or settling only by taking turns</h2>
+  <p class="stands">Stands on 22e4 (settling in size) and 22g1.</p>
+  <p data-pid="fc3071">A sum that settles in size settles (22e4). A sum can settle without settling in size, as 1 − ½ + ⅓ − ⋯ does. Call that settling <b>only by taking turns</b>.</p>
+  <pre class="lines" data-k="ember" data-label="this step: splitting a sum into its gains and losses">
+a_n^+ = \max(a_n, 0),\ \ a_n^- = \max(-a_n, 0) @@ the gains and the losses
+a_n = a_n^+ - a_n^-,\ \ |a_n| = a_n^+ + a_n^- @@ each piece is one or the other
+\textstyle\sum |a_n| \text{ settles} \Rightarrow \sum a_n^+,\ \sum a_n^- \text{ settle} @@ comparison (22e1): each is at most |aₙ|
+\textstyle\sum a_n \text{ settles},\ \sum |a_n| \text{ wanders} \Rightarrow \sum a_n^+,\ \sum a_n^- \text{ both wander} @@ if one settled, the other would be ∑aₙ⁺ − ∑aₙ (22d4), and ∑|aₙ| would settle
+\htmlClass{new}{\text{settling only by taking turns: the gains and the losses each pass every ceiling}} \quad \blacksquare @@ the two lines before
+  </pre>
+  <p data-pid="ae80dc">That last line is the whole trouble. Such a sum is a tug of war between two endless supplies, gains and losses, each big enough to pull anywhere. Only the order of the pieces keeps them balanced.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22g2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="1 - \tfrac12 + \tfrac13 - \tfrac14 + \cdots"></span></span>Write a₁⁺ to a₄⁺ and a₁⁻ to a₄⁻. <br>Find the losses among the first 2m pieces as half of a running total of 1 + ½ + ⅓ + ⋯, and whether they pass every ceiling. <br>Find why the gains pass every ceiling too.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22g3">
+  <h2 class="sthead"><span class="stno">22g3</span>Any total you like</h2>
+  <p class="stands">Stands on 22g2.</p>
+  <p data-pid="0611b6">Reorder technique: <b>if Σ aₙ settles only by taking turns, then for any number T some reordering of its pieces settles at T.</b> Every piece is used exactly once; only the order changes.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the reorder technique">
+\text{take gains until the running total first passes } T @@ possible: the gains pass every ceiling (22g2)
+\text{take losses until it first drops below } T @@ possible: so do the losses
+\text{repeat, always taking the next unused gain or loss} @@ each pile is used in its own order, so no piece is missed
+|\text{total} - T| \le \text{the last piece taken} @@ each switch overshoots by at most one piece
+\text{the pieces head to } 0 @@ ∑aₙ settles (22d2)
+\htmlClass{new}{\text{the reordered sum settles at } T} \quad \blacksquare @@ the overshoot heads to 0
+  </pre>
+  <p data-pid="18a57c">Taking two gains for each loss in 1 − ½ + ⅓ − ¼ + ⋯ gives 1 + ⅓ − ½ + ⅕ + ⅐ − ¼ + ⋯, which settles at (3/2) ln 2. Same pieces, a total half again as big. And a sum that settles in size cannot be pulled like this: every reordering of it has the same total. A sum written down is a set of pieces and an order, and the order is part of the arithmetic.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · reorder · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22g3.1</span><span class="ph make">make</span><span class="givens"><span data-tex-inline="1 - \tfrac12 + \tfrac13 - \tfrac14 + \cdots"></span> <span class="gtx">T = 0</span></span>Reorder its pieces by the reorder technique, aiming at T. <br>List the first ten pieces of the new order, with their running totals. <br>Find the piece that comes next, and why no piece is ever skipped.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22g4">
+  <h2 class="sthead"><span class="stno">22g4</span>Illegal moves</h2>
+  <p class="stands">Stands on 22g1 to 22g3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+1 - 1 + 1 - 1 + \cdots = (1-1) + (1-1) + \cdots = 0\,? @@ the pieces do not head to 0; the running totals take turns between 1 and 0 and wander
+\textstyle\sum \tfrac{(-1)^n}{n} \text{ settles, so } \sum \tfrac{1}{n} \text{ settles}\,? @@ settling only by taking turns is not settling in size
+\text{the pieces take turns and shrink, so the sum settles}\,? @@ the pieces must fall in size and head to 0; 1 − ¼ + ⅓ − ⅛ + ⅕ − ⋯ wanders
+\textstyle\sum a_n \text{ settles, so every reordering has the same total}\,? @@ only when it settles in size (22g3)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22g4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="1 - 1 + 1 - 1 + \cdots"></span></span>Find s₁ to s₆. <br>Find the total of (1 − 1) + (1 − 1) + ⋯ and of 1 + (−1 + 1) + (−1 + 1) + ⋯, and what the two groupings show.</li><li><span class="givens"><span data-tex-inline="\textstyle\sum \tfrac{(-1)^{n+1}}{n},\ \ \sum \tfrac1n"></span></span>Find what makes the first settle, and what the second does. <br>Find the two words that hide the difference.</li><li><span class="givens"><span data-tex-inline="1 - \tfrac14 + \tfrac13 - \tfrac18 + \tfrac15 - \tfrac1{16} + \cdots"></span></span>Find whether the sizes of its pieces fall. <br>Find s₂ₘ as its gains less its losses, and whether it passes every ceiling.</li><li><span class="givens"><span data-tex-inline="1 + \tfrac13 - \tfrac12 + \tfrac15 + \tfrac17 - \tfrac14 + \cdots"></span></span>Find its first six running totals, and those of 1 − ½ + ⅓ − ¼ + ⋯. <br>Find what the old order lacks that would have kept its total fixed.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">22g.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="1 - \tfrac12 + \tfrac13 - \tfrac14 + \cdots"></span></span>Build a reordering of its pieces whose running totals pass every ceiling. <br>Prove that every piece is used exactly once.</div>
+  <div class="chq"><span class="chid">22g.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="2 - \tfrac32 + \tfrac43 - \tfrac54 + \cdots"></span></span>The sizes 1 + 1/n fall, but not to 0. <br>Find where the even running totals settle, and where the odd ones settle. <br>Find whether the sum settles.</div>
+  <div class="chq"><span class="chid">22g.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="2 - \tfrac14 + \tfrac29 - \tfrac1{16} + \tfrac2{25} - \cdots"></span></span>The bracket technique asks that the sizes fall. Turn it round: must the sizes fall for a sum whose signs take turns to settle? <br>Find whether these sizes fall, and whether this sum settles.</div>
+  <div class="chq"><span class="chid">22g.4.4</span><span class="tagq">reroute</span>Prove that 1 − ½ + ⅓ − ¼ + ⋯ settles without the bracket. Group it in pairs, 1/(2k − 1) − 1/(2k), and compare the pairs with a p-sum. <br>Find why the odd running totals settle at the same place.</div>
+  <div class="chq"><span class="chid">22g.4.5</span><span class="tagq">seam</span><span class="givens"><span data-tex-inline="1 - 1 + 1 - 1 + \cdots"></span></span>On this rung a total is where the running totals settle, and these take turns between 1 and 0. A monk who wrote this sum in 1703 gave it the total ½, and one of the inventors of the calculus agreed. In 1826 a young mathematician wrote that sums with no total are an invention of the devil, and a shame to base any proof on. Late in that century others took the averages of the running totals instead, and built rules that give the usual total to every sum that settles. <br>Find the average of the first n running totals, and where it settles. <br>Is ½ the total of this sum, or the answer to another question? <br>If a rule agrees with the usual total wherever there is one, may it give totals where there are none?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r22f.html">← 22f · sums against areas</a><a href="r22concl.html">22·∎ · a total is where the running totals settle →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The bracket technique is the alternating series test (Leibniz test), with its remainder estimate. Settling in size is absolute convergence; settling only by taking turns is conditional convergence. The reorder technique is the Riemann rearrangement theorem; the other half, that a sum settling in size has one total in every order, is Dirichlet's theorem. 1 − 1 + 1 − ⋯ is Grandi's series.</p>
+  <h3>Who said it first</h3>
+  <p>Gottfried Leibniz stated the test in letters of 1713–1714. Guido Grandi wrote in 1703 that 1 − 1 + 1 − ⋯ was ½, and drew a theological lesson from it. Peter Gustav Lejeune Dirichlet showed in 1837 that order can matter, and Bernhard Riemann proved in 1854 (published 1868) that a conditionally convergent sum can be reordered to any total. In 22g.4.5, the monk is Grandi, the inventor of the calculus Leibniz (1713), and the young mathematician Niels Henrik Abel, in a letter of 1826; the averages of running totals are Cesàro summation (Ernesto Cesàro, 1890).</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'evens climb, odds fall',t:R`s_2 \le s_4 \le \cdots \le s_3 \le s_1`,n:`The gap is one piece.`},
+  {k:'ember',kl:'the bound',t:R`\htmlClass{new}{|L - s_n| \le b_{n+1}}`,n:`Off by less than the next piece.`}
+],{title:'The slides · bracket · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'turns only',t:R`\htmlClass{new}{\text{reorder} \to \text{any } T}`,n:`The gains and losses each pass every ceiling.`},
+  {k:'ember',kl:'in size',t:R`\textstyle\sum |a_n| \text{ settles} \Rightarrow \text{every order, one total}`,n:`Order cannot matter.`}
+],{title:'The slides · reorder · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

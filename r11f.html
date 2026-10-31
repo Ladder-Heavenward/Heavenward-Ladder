@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="ladder-cert" content="floor:2"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>11f · Finding the breaks</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+#cvK,#cvH{touch-action:none}
+#cvK{cursor:ns-resize} #cvH{cursor:pointer}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:3.5em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r11concl.html">← 11·∎ conclusion</a><a href="r11chem.html">next: 11·chem why does boiling water stop getting hotter? →</a></p>
+  <div class="tags"><span class="tag tech">11f · technique</span></div>
+  <h1>Finding the breaks</h1>
+  <p>11a to 11e proved that most of any function built from formulas is continuous: polynomials everywhere, quotients wherever the bottom is not 0, chains wherever the links are, pieces wherever they arrive at one height. So the places where a function can fail to land where it was headed are few, and you can list them before looking. This step is the field guide. It names the places a break can hide, the three kinds of break, and what each kind allows. A removable break can be mended by choosing one value; a jump or an endless break cannot.</p>
+  <p class="gesture">List the suspects; at each, find the limit from the left, the limit from the right and the value; name the break by what fails; mend it only if the two sides agree.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r11a.html">11a</a> (continuity, one-sided and on intervals, the step u), <a href="r11b.html">11b</a> (continuous-sums, continuous-products, continuous-quotients), <a href="r11c.html">11c</a> (continuous-after-continuous, chain-at-an-edge), <a href="r11d.html">11d</a> (polynomials-are-continuous, rational-functions-are-continuous), <a href="r11e.html">11e</a> (glued-functions, joints, rates), <a href="r10e.html">10e</a> (one-sided limits, two-sides-agree, two-sides-differ, jumps and their size), <a href="r10f.html">10f</a> (factor and cancel, passes every bound, passing-every-bound), <a href="r10a.html">10a</a> (holes, agreeing-near), <a href="r10b.html">10b</a> (one-limit), <a href="r09d.html">9d</a> (restriction), <a href="r08e.html">8e</a> (counting-passes-any-real), <a href="r07cb4.html">7·cb4</a> (least-member-for-any-set). <a href="r11chem.html">11·chem</a> finds a jump in a pan of water; rung 12 needs “no break on the whole interval”.</p></div>
+</header>
+
+<section class="class step" data-step="11f1">
+  <h2 class="sthead"><span class="stno">11f1</span>Breaks, and where they hide</h2>
+  <p class="stands">Stands on 11a (continuity), 11b (quotients) and 11e (glued functions).</p>
+  <p data-pid="05d59e">11a's definition asks about inputs. A picture of a graph shows gaps at reals that are not inputs too: 1/x at 0, |x|/x at 0, 9a's H at 1. The field guide needs one word for all of them.</p>
+  <p class="eqline" data-pid="83c9db">From here on, f has a break at a real a when f is defined near a and is not continuous at a: either a is an input and f is discontinuous there, or a is not an input, so that f has a hole at a in 10a's second meaning. 11a, 11b and 11e used the word ahead of this line, each time pointing here; this is its line.</p>
+  <p data-pid="8632d6">So 1/x is continuous (11b's one-over-x-is-continuous) and has a break at 0; u is not continuous and has a break at its input 0. <b>The word says where a picture tears, whether or not the tear is at an input.</b> By the techniques of 11b to 11e, for a function built from formulas a break can only be at one of a few kinds of place, the suspects:</p>
+  <ul>
+    <li>where the bottom of a fraction is 0 (continuous-quotients covers every other input of a quotient);</li>
+    <li>where a function given in pieces changes formula, including where an absolute value changes sign (glued-functions decides these);</li>
+    <li>where a chain's inside reaches the edge of the outside's domain, as the inside of a root reaching 0 (chain-at-an-edge decides these, one side at a time).</li>
+  </ul>
+  <p data-pid="877998">Everywhere else the earlier steps have already done the work. That turns “where is this continuous?” from a question about every real into a short list.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · suspects · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">11f1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = (x + 1)/(x² − 1),  g(x) = |x − 2| + 1/x</span></span>List the suspects of each. <br>Say why every other real needs no check.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="11f2">
+  <h2 class="sthead"><span class="stno">11f2</span>Three kinds of break, each with its line</h2>
+  <p class="stands">Stands on 11f1, 10e (sides) and 10f (passing every bound).</p>
+  <p data-pid="90ec52">At a suspect w, compute three things: the limit from the left, the limit from the right, and the value f(w), if there is one. The kind of break is read off from them.</p>
+  <p class="eqline" data-pid="002692">From here on, a break of f at a is removable when f has a limit at a: lim_{x→a} f(x) exists, and either a is not an input or the limit is not f(a).</p>
+  <p class="eqline" data-pid="ec4d9d">From here on, a break of f at a is a jump when both one-sided limits exist and differ: lim_{x→a⁻} f(x) ≠ lim_{x→a⁺} f(x). Its size is 10e's |L⁺ − L⁻|.</p>
+  <p class="eqline" data-pid="fcfc1a">From here on, a break of f at a is endless when, as x → a⁺ or as x → a⁻, f(x) passes every bound or passes below every bound (10f's lines).</p>
+  <p data-pid="4ee3ff">A break is also called a discontinuity, and the three kinds are called removable, jump and infinite discontinuities: an endless break is an infinite discontinuity. Mending is called removing the discontinuity.</p>
+  <p class="eqline" data-pid="f03fef">Endless is said here of a break. 8·cb5's endless decimal keeps its meaning.</p>
+  <p data-pid="f3a1f6"><b>No break is of two kinds.</b> A removable break has a limit, so its sides agree (two-sides-agree): not a jump. An endless break has a side with no limit (10f's passing-every-bound, side by side), so it is neither removable nor a jump. And some breaks are of none of the three kinds. 9a's q, at every real, has sides that settle nowhere and stay bounded; so does x · q(x) at every w ≠ 0. The field guide names the three kinds that formulas make, and leaves the wild ones as what they are.</p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: a hunt, start to finish">
+f(x) = \tfrac{x^2 - x - 2}{x^2 - 4} @@ suspects: the bottom is 0 at 2 and at −2 (difference-of-squares, zero-product). Everywhere else continuous (rational-functions-are-continuous)
+= \tfrac{\htmlClass{new}{(x - 2)}(x + 1)}{\htmlClass{new}{(x - 2)}(x + 2)} @@ factor top and bottom (5h's sum-and-product, difference-of-squares)
+x \to 2:\ \ \tfrac{x + 1}{x + 2} \to \htmlClass{keep}{\tfrac34} @@ cancel where x ≠ 2 (agreeing-near), then substitute (rational-functions-are-continuous): both sides head to ¾
+2 \notin \operatorname{dom} f:\ \ \text{removable} @@ a hole with a limit. Mend it with the value ¾ (below)
+x \to -2:\ \ \text{top} \to -1,\ \ \text{bottom} \to 0 @@ the cancelled form near −2; a nonzero top over a bottom heading to 0 (10f)
+x \to -2^+:\ \tfrac{-1}{\text{small positive}} \text{ passes below every bound} @@ x + 2 &gt; 0 just right of −2, x + 1 &lt; 0
+x \to -2^-:\ \tfrac{-1}{\text{small negative}} \text{ passes every bound} @@ x + 2 &lt; 0 just left: \htmlClass{new}{an endless break}
+  </pre>
+  <p data-pid="c88424">Note the order of moves. Cancelling at 2 tells you the two sides agree; it does not make f continuous at 2. f still has no value at 2, and cancelling does not give it one. The cancelled expression (x + 1)/(x + 2) is a different function, which agrees with f wherever f is defined and also has a value at 2.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · the kinds · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · left: close a joint · right: hunt the breaks in a whole function</div>
+    <div class="panel">
+      <div class="lbl">left piece (x &lt; 1), plus k</div>
+      <div class="chips" id="lpc"></div>
+      <div class="lbl">right piece (x &gt; 1)</div>
+      <div class="chips" id="rpc"></div>
+      <canvas id="cvK"></canvas>
+      <div class="kn">
+        <span class="m">k</span><input type="range" id="kk" min="-3" max="3" step="0.25" value="0"><output id="okk"></output>
+        <span class="m">c</span><input type="range" id="kc" min="-2" max="5" step="0.25" value="1"><output id="okc"></output>
+      </div>
+      <div class="lbl">f(1) is</div>
+      <div class="chips" id="vpc"></div>
+      <div class="cap">Drag up and down on the picture to slide the left piece (k). Teal: the left piece; gold: the right piece. Hollow dots: the ends that are not the value; the filled dot is f(1). An ember line marks a jump between the arrivals.</div>
+      <div class="verdict" id="vdK"></div>
+    </div>
+    <div class="panel">
+      <div class="chips" id="hfc"></div>
+      <canvas id="cvH"></canvas>
+      <div class="chips" id="hsc"></div>
+      <div class="cap">The suspects are marked on the x-axis. Tap one, on the picture or on the chips, to see its left limit, right limit and value, and the kind of break. Graph pieces passing every bound are cut off at the picture's edge; hollow dots are where a side heads without a value there.</div>
+      <div class="verdict" id="vdH"></div>
+      <div class="eqbox" id="eqH"></div>
+    </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">11f2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = (x − 3)/(x² − 9)</span></span>Find the limits from each side at 3 and at −3. <br>Name the kind of each break.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="11f3">
+  <h2 class="sthead"><span class="stno">11f3</span>Mending a removable break</h2>
+  <p class="stands">Stands on 11f2, 9d4 (keeping part of the inputs) and 10b (one limit).</p>
+  <p class="eqline" data-pid="842b67">From here on, when f has a removable break at a with lim_{x→a} f(x) = L, the function mended at a is (f|_D) ∪ {(a, L)}, where D = dom f ∖ {a}: f with its value at a replaced by L, or given the value L if it had none (9d's restriction, then 2c's Pairing and Union). To mend f at a is to pass to that function.</p>
+  <p data-pid="084e79">Mended-function technique: <b>if f has a removable break at w with limit L, the function mended at w is continuous at w; it is continuous wherever f was; and L is the only value at w that makes a function agreeing with f off w continuous at w.</b> The mended function agrees with f on every neighbourhood of w with w left out, so it heads to L (agreeing-near), and its value is L: continuous. At any other input b where f was continuous, the two agree on the neighbourhood of b of reach |b − w| (agreeing-near again). And a function agreeing with f off w heads to L at w, so if it is continuous at w its value is the limit, L (one-limit). ∎</p>
+  <p data-pid="60f80b">A jump or an endless break cannot be mended by any value. The second demand of 11a, a limit, fails (two-sides-differ; passing-every-bound), and no value at a single input changes a limit (agreeing-near). So the kind of break says what can be done. For the hunt above: mend f at 2 with ¾; leave −2 alone.</p>
+  <pre class="lines" data-k="ember" data-label="this step: mending, and what cannot be mended">
+H(x) = \tfrac{x^2 - 1}{x - 1}:\ \text{mend at } 1 \text{ with } \htmlClass{new}{2} @@ removable: 9a's H heads to 2 at 1. The mended function is x + 1 on ℝ (equal-functions)
+H_3:\ \text{the value } 3 \text{ at } 1 \text{ replaced by } 2 @@ 11a's stray value: removable, mended by the same L
+u \text{ at } 0:\ \ 0 \text{ and } 1 \text{ from the sides} @@ a jump of size 1: no value mends it. u(0) = 1 makes it continuous from the right only
+\tfrac{1}{x} \text{ at } 0:\ \text{endless on each side} @@ no limit: no value mends it, and 1/x is continuous all the same (one-over-x-is-continuous)
+  </pre>
+  <p data-pid="ad2401">An older usage called a function continuous when one formula gave it everywhere, and discontinuous when it was pieced together from several. Later work wrote some pieced functions as a single formula, and the old line began to dissolve.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · mending · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">11f3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = (x² − 25)/(x − 5)</span></span>Mend f at 5. <br>Say why no other value at 5 makes it continuous.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="11f4">
+  <h2 class="sthead"><span class="stno">11f4</span>Functions in pieces</h2>
+  <p class="stands">Stands on 11f3, 11e (glued functions) and 8e (counting passes any real).</p>
+  <p data-pid="95bd2c"><b>A function given in pieces is continuous inside each piece, and the only suspects are where the formula changes.</b> At each, glued-functions (11e) decides: the left limit comes from the left formula, the right limit from the right formula, the value from whichever formula claims the input.</p>
+  <pre class="lines" data-k="ember" data-label="this step: closing a joint with a parameter">
+f(x) = x^2 + \htmlClass{new}{k}\ (x \lt 1),\ \ 3x - 1\ (x \ge 1) @@ one suspect: 1. The right formula claims the input 1
+\lim_{x \to 1^-} f(x) = 1 + k @@ the left formula is a polynomial: substitute (polynomials-are-continuous, side by side)
+\lim_{x \to 1^+} f(x) = 2 = f(1) @@ the right formula, also the value
+1 + k = 2 \;\Leftrightarrow\; \htmlClass{keep}{k = 1} @@ glued-functions: a joint exactly when the heights agree
+k \ne 1:\ \text{a jump of size } |1 - k| @@ continuous from the right, since the right formula gives the value
+  </pre>
+  <p data-pid="c34823">Changing k changes every output of the left piece by the same amount, so its arrival height moves while its rate of change does not. You are moving the left piece's arrival until it meets the right piece's. The picture lets you do exactly that. With two unknowns the same method gives one condition, so many answers. For f(x) = mx + 1 left of 2 and x² − b from 2 on, a joint at 2 needs 2m + 1 = 4 − b. Then (m, b) = (1, 1), (0, 3) and (3/2, 0) all close it. A second condition of another kind would pin down one pair; rung 13 supplies the usual one.</p>
+  <p data-pid="d5e09e">The round-down is a staircase of pieces, one for each integer. It rests on one technique about reals. Floor technique: <b>for every real x there is exactly one integer n with n ≤ x &lt; n + 1.</b> The column below finds such an n, with counting-passes-any-real and a least number. Its last line shows that no second integer fits.</p>
+  <p class="eqline" data-pid="d03f51">From here on, for a real x, ⌊x⌋ names the one integer n with n ≤ x &lt; n + 1 (the floor technique). Read it “the floor of x”: x rounded down, the greatest integer not above x. So ⌊2.7⌋ = 2, ⌊−0.5⌋ = −1 and ⌊3⌋ = 3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the floor technique">
+-x \lt M,\ \ M \in \mathbb N @@ counting-passes-any-real (8e), for the real −x; so x + M &gt; 0 (order-and-arithmetic-agree)
+k \text{ the least number with } x + M \lt k @@ counting-passes-any-real gives some number above x + M; least-member-for-any-set (7·cb4) gives the least
+k \ne 0;\ \ k - 1 \le x + M \lt k @@ x + M &gt; 0; k − 1 is a number (zero-or-a-next) and not above x + M, or it would be less than the least
+n = (k - 1) - M:\ \ \htmlClass{keep}{n \le x \lt n + 1} @@ order-and-arithmetic-agree: take M from each part. n is an integer
+n \le x \lt n' + 1 \text{ and } n' \le x \lt n + 1 \Rightarrow n = n' @@ n &lt; n′ + 1 gives n ≤ n′ for integers (4g's next-is-not-past, read in ℤ), and back; at-most-is-a-partial-order on ℝ's antisymmetry ∎
+  </pre>
+  <p data-pid="a3a523">⌊x⌋ agrees with the constant n − 1 on (n − 1, n) and with n on [n, n + 1). So at every integer n its limit from the left is n − 1, its limit from the right is n, and its value is n: a jump of size 1, continuous from the right. At every real that is not an integer it agrees with a constant on a neighbourhood: continuous. ⌊x⌋ is continuous on each [n, n + 1) and not on any interval that holds an integer and reals below it.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · pieces · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">11f4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="F(x) = \dfrac{x - 1}{(x - 1)^2},"></span> <span data-tex-inline="G(x) = \dfrac{(x - 1)^2}{x - 1}"></span></span>Find the kind of break that F has at 1, and the kind that G has.</li><li><span class="givens"><span data-tex-inline="f(x) = mx + 1 \text{ for } x &lt; 2,"></span> <span data-tex-inline="f(x) = x^2 - b \text{ for } x \ge 2"></span></span>Find every pair m and b that makes 2 a joint.</li><li><span class="givens"><span data-tex-inline="u(x) = 0 \text{ for } x &lt; 0,\ 1 \text{ for } x &gt; 0,"></span> <span data-tex-inline="\text{A student gives } u \text{ the value}"></span> <span data-tex-inline="\tfrac12 \text{ at 0 “to split the}"></span> <span data-tex-inline="\text{difference”.}"></span></span>Find what kind of break u now has at 0, and prove that no value at 0 makes it continuous there.</li><li><span class="givens"><span data-tex-inline="“\dfrac{x^2 - 1}{|x| - 1} \text{ has a break at } 0,"></span> <span data-tex-inline="\text{because } |x| \text{ changes},"></span> <span data-tex-inline="\text{formula there.}”"></span></span>Refute it with a computation.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="11f5">
+  <h2 class="sthead"><span class="stno">11f5</span>Absolute values in fractions, and the edge of a domain</h2>
+  <p class="stands">Stands on 11f4 and 11c3 (chain-at-an-edge).</p>
+  <pre class="lines" data-k="ember" data-label="this step: split by sides, then name the break">
+\tfrac{x^2 - 9}{|x - 3|} \text{ near } 3 @@ the inside x − 3 changes sign at 3: a suspect, and 3 is not an input
+x \gt 3:\ \ \tfrac{(x - 3)(x + 3)}{\htmlClass{new}{x - 3}} = x + 3 \to \htmlClass{new}{6} @@ |x − 3| = x − 3 on the right (8h); cancel; substitute
+x \lt 3:\ \ \tfrac{(x - 3)(x + 3)}{\htmlClass{new}{-(x - 3)}} = -(x + 3) \to \htmlClass{new}{-6} @@ |x − 3| = −(x − 3) on the left
+\text{a jump of size } |6 - (-6)| = 12 @@ no value mends it
+\sqrt{x - 1} \text{ at } 1 @@ not defined near 1: no inputs on the left, so not a break, and two-sided continuity is not asked
+\lim_{x \to 1^+} \sqrt{x - 1} = 0 = \sqrt{1 - 1} @@ chain-at-an-edge's round on one side, or root-at-0 with the displacement x − 1: continuous from the right; so continuous on [1, ∞)
+  </pre>
+  <p data-pid="1d58dd"><b>So at the edge of a domain the right question is one-sided, and for a root the answer is usually yes.</b> That is the form rung 12 needs: “continuous on [c, d]” checks the ends from the inside only (11a).</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · sides and edges · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">11f5.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = √(4 − x)</span></span>Decide whether f is continuous at 4, and from which side. <br>Say whether f has a break at 4.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="11f6">
+  <h2 class="sthead"><span class="stno">11f6</span>A whole hunt, with one invented move</h2>
+  <p class="stands">Stands on 11f1 to 11f5 and 8h (size-squared).</p>
+  <p data-pid="f8de8a">f(x) = (x² − 1)/(|x| − 1). The suspects: where the bottom is 0, at 1 and −1; and where the absolute value changes formula, at 0. One invented move makes the whole thing plain: x² = |x|² for every x (8h's size-squared, or two-negatives for negatives).</p>
+  <pre class="lines" data-k="ember" data-label="this step: three suspects at once">
+\tfrac{x^2 - 1}{|x| - 1} = \tfrac{\htmlClass{new}{|x|^2} - 1}{|x| - 1} @@ x² = |x|²: a licensed rewrite you will not find in a list of techs
+= \tfrac{\htmlClass{new}{(|x| - 1)(|x| + 1)}}{|x| - 1} @@ difference-of-squares, with |x| playing the letter
+= \htmlClass{keep}{|x| + 1} \quad (|x| \ne 1) @@ cancel, at every input: the inputs are the reals other than 1 and −1
+x = \pm 1:\ \text{both sides head to } 2,\ \text{no value} @@ two removable breaks; mend both with 2
+x = 0:\ \text{a joint of } |x| + 1 @@ pieces −x + 1 and x + 1 arrive at 1, the value: rates −1 and 1. Not a break (11e)
+  </pre>
+  <p data-pid="a9012c">Three suspects, two holes, and one joint that was never a break. <b>The right rewrite turned three calculations into one.</b></p>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · invented move · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">11f6.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = \dfrac{x^2 - 5x + 6}{x^2 - 4}"></span></span>Hunt the breaks of f, mending where you can.</li><li><span class="givens"><span data-tex-inline="f(x) = \lfloor x \rfloor"></span></span>Decide whether f is continuous at 2 and at 2.5, and from which sides.</li><li><span class="givens"><span data-tex-inline="f(x) = \dfrac{x^2 - cx}{|x - 2|}"></span></span>Find every c for which f has a jump at 2, the jump's size, and the kind of break at 2 for every other c.</li><li><span class="givens"><span data-tex-inline="f(x) = \dfrac{\sqrt{x} - 2}{x - 4}"></span></span>With the conjugate, mend f at 4.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="11f7">
+  <h2 class="sthead"><span class="stno">11f7</span>Endless breaks, side by side</h2>
+  <p class="stands">Stands on 11f2 and 10f (passing every bound).</p>
+  <p data-pid="cce5a0">At an endless break, the two sides can go the same way or opposite ways, and the count of factors on the bottom decides. 1/(x − 1)² passes every bound on both sides of 1: the square is positive on each side. 1/(x − 1) passes every bound on the right of 1 and below every bound on the left. And take (x − 1)/(x³ − x), whose bottom is x(x − 1)(x + 1). It has a removable break at 1 (it heads to ½: cancel, then substitute). It has endless breaks at 0 and −1, each with its sides going opposite ways. <b>Cancelling first is what tells a hole from an endless break.</b> A factor that cancels completely leaves a hole. A factor left on the bottom, with a top that is not 0 there, leaves an endless break.</p>
+  <section class="slides" id="sl7"><div class="eyebrow">The slides · endless sides · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">11f7.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = 1/(x − 2),  g(x) = 1/(x − 2)²</span></span>Say what each does on each side of 2. <br>Say what the count of factors on the bottom decided.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="11f8">
+  <h2 class="sthead"><span class="stno">11f8</span>Careful words</h2>
+  <p class="stands">Stands on 11f1 to 11f7.</p>
+  <p data-pid="9865b2">Three functions, three verdicts, all honest. 1/x is continuous, and has an endless break at 0, a real that is not an input. |x|/x is continuous, and has a jump at 0, also not an input. u is not continuous, because its jump is at its input 0. In everyday use a break is called a discontinuity even at a real that is not an input. So “1/x has a discontinuity at 0” is said, and means “1/x has a break at 0”. Read by 11a's line, which asks only at inputs, 1/x is still continuous, and both say the same about the picture: no value at 0 could mend it.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">11f8.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">|x|/x</span></span>Is it continuous? Does it have a break at 0? <br>Say why both answers are honest.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="11f9">
+  <h2 class="sthead"><span class="stno">11f9</span>Illegal mends</h2>
+  <p class="stands">Stands on 11f1 to 11f8.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\text{cancel, then call it continuous}\,? @@ (x² − 4)/(x − 2) has no value at 2: a removable break. The cancelled x + 2 is the mend, a different function
+\text{give a jump a value in the middle}\,? @@ the limit still fails (two-sides-differ): a value fixes only a value that disagrees with a limit that exists
+\text{a value at the joint proves continuity}\,? @@ the pieces example has f(1) = 2 for every k: a value is the first demand, not all three
+\text{mend an endless break with a large value}\,? @@ no limit, so no value works (passing-every-bound)
+\text{mend with the value of one side}\,? @@ for a jump, either side's value makes it continuous from that side only
+\tfrac{1}{x} \text{ is discontinuous at } 0\,? @@ 0 is not an input: 1/x is continuous, with an endless break at 0
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">11f9.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">“1/x has an endless break at 0; give it the value 0 there and it is mended.”</span></span>Which illegal move is this? <br>Say which demand of 11a still fails.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="11f10">
+  <h2 class="sthead"><span class="stno">11f10</span>Running it backwards: breaks to order</h2>
+  <p class="stands">Stands on 11f1 to 11f8.</p>
+  <p data-pid="da6634">To build a function with given breaks, place each with the factor or the piece that makes it. Say you want a hole at 1 heading to 4, and an endless break at −2. Put x − 1 on top and bottom for the hole, and x + 2 on the bottom only for the endless break. Then put a constant c on top, chosen so that the cancelled form c/(x + 2) is 4 at 1: c = 12. So 12(x − 1)/((x − 1)(x + 2)) = (12x − 12)/(x² + x − 2). A jump needs pieces or an absolute value: (3/2) · |x − 2|/(x − 2) is −3/2 on the left of 2 and 3/2 on the right, a jump of size 3 at 2. Every break of the three kinds you can name, you can now build.</p>
+  <section class="slides" id="sl8"><div class="eyebrow">The slides · to order · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">11f10.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{A rational function has a}"></span> <span data-tex-inline="\text{removable break at 4, where}"></span> <span data-tex-inline="\text{it heads to 7, and no other}"></span> <span data-tex-inline="\text{break.}"></span></span>Write one, and the value that mends it.</li><li><span class="givens"><span data-tex-inline="f(x) = 2x + k \text{ left of } 1,"></span> <span data-tex-inline="f(x) = 3x - 1 \text{ right of } 1,"></span> <span data-tex-inline="f \text{ jumps by 2 at 1, the left}"></span> <span data-tex-inline="\text{arriving higher.}"></span></span>Find k.</li><li><span class="givens"><span data-tex-inline="f \text{ jumps at 0 from } -2 \text{ on the}"></span> <span data-tex-inline="\text{left to 5 on the right, and}"></span> <span data-tex-inline="f(0) = 5 \text{.}"></span> <span data-tex-inline="s(x) = |x|/x"></span></span>Write f as one formula using s, with the value at 0 given separately.</li><li><span class="givens"><span data-tex-inline="m(x) = \dfrac{x + 3}{x + 2},"></span> <span data-tex-inline="m(2) = \tfrac54,"></span> <span data-tex-inline="m \text{ mends an original with a}"></span> <span data-tex-inline="\text{removable break at 2.}"></span></span>Write a possible original, expanded.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">11f.4.1</span><span class="tagq">build</span>Build breaks to order.<ol class="parts" type="a"><li>Build one function with exactly three breaks: a removable break at 0 heading to 1, a jump of size 3 at 2, and an endless break at 4.</li><li>Make an endless break at −1 that passes every bound on the right and below every bound on the left.</li><li>Write a function that is continuous and has exactly two breaks, one a jump and one endless, and prove all three claims.</li><li>Write a rational function with a removable break at 1 and endless breaks at 0 and 3.</li></ol></div>
+  <div class="chq"><span class="chid">11f.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="f(x) = \sqrt{x - 1}"></span></span>By this step's line, does f have a break at 1?</div>
+  <div class="chq"><span class="chid">11f.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{Mended-function: a}"></span> <span data-tex-inline="\text{removable break can be}"></span> <span data-tex-inline="\text{mended.}"></span> <span data-tex-inline="\text{No value at } w \text{ makes } f"></span> <span data-tex-inline="\text{continuous there.}"></span></span>Must the break be a jump or endless?</div>
+  <div class="chq"><span class="chid">11f.4.4</span><span class="tagq">seam</span>A great philosopher wrote that nature makes no leaps, and built his calculus on it. In 1913 a model of the atom had its electron jump between levels with nothing in between. Is nature continuous? <br>Could any measurement tell a jump from a very steep joint?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r11concl.html">← 11·∎ · conclusion</a><a href="r11chem.html">11·chem · why does boiling water stop getting hotter? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>The older usage is Leonhard Euler’s; the single formulas for pieced functions are Joseph Fourier’s series. q is Dirichlet’s function. In 11f.4.4, the philosopher is Gottfried Wilhelm Leibniz, and the model of 1913 is Niels Bohr’s.</p>
+  <aside class="voice para"><p>Euler called a function continuous when one formula gave it everywhere, and discontinuous when it was pieced together from several. Fourier’s series later wrote some pieced functions as a single formula, and the line Euler drew began to dissolve.</p><cite>Euler, Introductio in analysin infinitorum (1748), vol. II; Fourier, Théorie analytique de la chaleur (1822); paraphrase</cite></aside>
+  <p>Accepted names: a break is a discontinuity (including, loosely, a point outside the domain); the three kinds are removable, jump and infinite discontinuities; ⌊x⌋ is the floor function.</p>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=v=>{ if(v===null||v===undefined||!isFinite(v)) return '—'; const a=Math.abs(v); let s=a>=100?v.toFixed(1):a>=1?v.toFixed(3):a>=0.001?v.toFixed(4):v.toPrecision(2); if(s.indexOf('.')>=0&&s.indexOf('e')<0) s=s.replace(/0+$/,'').replace(/\.$/,''); return (s==='-0'?'0':s).replace(/^-/,'−'); };
+function mkChips(id,lib,cur,set,after){ const ch=$(id); Object.keys(lib).forEach(k=>{ const b=document.createElement('button'); b.textContent=lib[k].lab; if(k===cur) b.className='on'; b.onclick=()=>{ set(k); [...ch.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; ch.appendChild(b); }); }
+/* ---------- left: close a joint at 1 ---------- */
+const LP={sq:{lab:'x²',f:x=>x*x},lin:{lab:'2x',f:x=>2*x},half:{lab:'x/2 + 1',f:x=>x/2+1}};
+const RP={a:{lab:'3x − 1',f:x=>3*x-1},b:{lab:'4 − x',f:x=>4-x},c:{lab:'x² + 1',f:x=>x*x+1}};
+const VP={R:{lab:'the right formula'},L:{lab:'the left formula'},C:{lab:'my own c'},N:{lab:'nothing'}};
+let lk='sq', rk='a', vk='R';
+const kk=$('kk'), kc=$('kc');
+const cvK=$('cvK');
+const PK=plane(cvK,{x:[-0.5,2.5],y:[-2,6],grid:1,aspect:0.8,draw:P=>drawK(P)});
+Object.defineProperty(PK.o,'aspect',{get:()=>cvK.clientWidth>560?0.75:0.9});
+function arr(){ const k=+kk.value; const Lm=LP[lk].f(1)+k, Lp=RP[rk].f(1); const v=vk==='R'?Lp:vk==='L'?Lm:vk==='C'?+kc.value:null; return {k,Lm,Lp,v}; }
+function drawK(P){ const c=P.ctx, s=arr(); P.axes();
+  P.fn(x=>x<1?LP[lk].f(x)+s.k:NaN,'--teal',3); P.fn(x=>x>1?RP[rk].f(x):NaN,'--gold',3);
+  if(Math.abs(s.Lm-s.Lp)>1e-9) P.line(1,s.Lm,1,s.Lp,'--ember',2.5);
+  [[s.Lm,'--teal'],[s.Lp,'--gold']].forEach(([h,cl])=>{ if(s.v===null||Math.abs(h-s.v)>1e-9){ c.fillStyle=col('--card'); c.strokeStyle=col(cl); c.lineWidth=2.2; c.beginPath(); c.arc(P.X(1),P.Y(h),5.5,0,7); c.fill(); c.stroke(); } });
+  if(s.v!==null) P.dot(1,s.v,'--ink',5.5); }
+function readK(){ const s=arr(); $('okk').textContent=fm(s.k); $('okc').textContent=fm(+kc.value); const vd=$('vdK');
+  const kind=Math.abs(s.Lm-s.Lp)<1e-9?(s.v===null?'removable break: no value; mend with '+fm(s.Lm):(Math.abs(s.v-s.Lm)<1e-9?'joint':'removable break: the value '+fm(s.v)+' is not the limit '+fm(s.Lm)+'; mend with '+fm(s.Lm))):'jump of size '+fm(Math.abs(s.Lp-s.Lm));
+  const head='left arrives at '+fm(s.Lm)+', right at '+fm(s.Lp)+', f(1) '+(s.v===null?'none':'= '+fm(s.v))+'. ';
+  if(kind==='joint'){ vd.className='verdict win'; vd.textContent=head+'A joint: continuous at 1 (glued-functions).'; }
+  else if(kind.startsWith('jump')){ const side=s.v===null?'':(Math.abs(s.v-s.Lp)<1e-9?' Continuous from the right only.':(Math.abs(s.v-s.Lm)<1e-9?' Continuous from the left only.':'')); vd.className='verdict lose'; vd.textContent=head+'A '+kind+': no value at 1 can mend it.'+side; }
+  else { vd.className='verdict lose'; vd.textContent=head+'A '+kind+'.'; } }
+function allK(){ PK.redraw(); readK(); }
+mkChips('lpc',LP,lk,k=>lk=k,allK); mkChips('rpc',RP,rk,k=>rk=k,allK); mkChips('vpc',VP,vk,k=>vk=k,allK);
+[kk,kc].forEach(z=>z.addEventListener('input',allK));
+let drK=false,y0=0,k0=0; cvK.addEventListener('pointerdown',e=>{ drK=true; cvK.setPointerCapture&&cvK.setPointerCapture(e.pointerId); y0=PK.point(e).y; k0=+kk.value; });
+cvK.addEventListener('pointermove',e=>{ if(!drK) return; const y=PK.point(e).y; kk.value=Math.round(Math.max(-3,Math.min(3,k0+(y-y0)))*4)/4; allK(); }); ['pointerup','pointercancel'].forEach(t=>cvK.addEventListener(t,()=>drK=false));
+/* ---------- right: hunt ---------- */
+const INF=Infinity;
+const HF={
+  A:{lab:'(x² − x − 2)/(x² − 4)',f:x=>(x*x-x-2)/(x*x-4),x:[-4.5,4.5],y:[-5,5],sus:[{a:-2,Lm:INF,Lp:-INF,v:null},{a:2,Lm:0.75,Lp:0.75,v:null}]},
+  B:{lab:'(x² − 9)/|x − 3|',f:x=>(x*x-9)/Math.abs(x-3),x:[-1,7],y:[-10,12],sus:[{a:3,Lm:-6,Lp:6,v:null}]},
+  C:{lab:'⌊x⌋',f:x=>Math.floor(x),x:[-2.6,2.6],y:[-3.5,3],step:true,sus:[-2,-1,0,1,2].map(n=>({a:n,Lm:n-1,Lp:n,v:n}))},
+  D:{lab:'(x − 1)/(x³ − x)',f:x=>(x-1)/(x*x*x-x),x:[-3,3],y:[-6,6],sus:[{a:-1,Lm:INF,Lp:-INF,v:null},{a:0,Lm:-INF,Lp:INF,v:null},{a:1,Lm:0.5,Lp:0.5,v:null}]},
+  E:{lab:'(x² − 1)/(|x| − 1)',f:x=>(x*x-1)/(Math.abs(x)-1),x:[-3,3],y:[-0.5,4.5],sus:[{a:-1,Lm:2,Lp:2,v:null},{a:0,Lm:1,Lp:1,v:1,joint:true},{a:1,Lm:2,Lp:2,v:null}]}
+};
+let hk='A', si=0;
+const cvH=$('cvH');
+const PH=plane(cvH,{x:[-4.5,4.5],y:[-5,5],grid:1,aspect:0.8,draw:P=>drawH(P)});
+Object.defineProperty(PH.o,'aspect',{get:()=>cvH.clientWidth>560?0.75:0.9});
+function drawH(P){ const c=P.ctx,F=HF[hk]; P.o.x=F.x; P.o.y=F.y; P.o.grid=(F.y[1]-F.y[0])>12?2:1; P.axes();
+  // graph: split at suspects
+  const cuts=F.sus.map(s=>s.a).concat(F.step?[]:[]); let pen=false; c.strokeStyle=col('--ember'); c.lineWidth=2.6; c.beginPath(); let prevSeg=null;
+  for(let px=P.X(F.x[0]);px<=P.X(F.x[1]);px+=0.5){ const x=P.IX(px); const seg=cuts.filter(a=>x>a).length; const v=F.f(x); if(!isFinite(v)||v>F.y[1]+50||v<F.y[0]-50||seg!==prevSeg||cuts.some(a=>Math.abs(x-a)<1e-9)){ pen=false; } prevSeg=seg; if(!isFinite(v)) continue; const sy=P.Y(Math.max(F.y[0]-2,Math.min(F.y[1]+2,v))); if(!pen){ c.moveTo(px,sy); pen=true; } else c.lineTo(px,sy); }
+  c.stroke();
+  F.sus.forEach((s,i)=>{ const on=i===si; // marker on axis
+    const y0=P.Y(Math.max(F.y[0],Math.min(F.y[1],0))); c.fillStyle=col(on?'--gold':'--muted'); c.beginPath(); c.moveTo(P.X(s.a),y0-2); c.lineTo(P.X(s.a)-6,y0+10); c.lineTo(P.X(s.a)+6,y0+10); c.closePath(); c.fill();
+    [s.Lm,s.Lp].forEach(h=>{ if(isFinite(h)&&(s.v===null||Math.abs(h-s.v)>1e-9)){ c.fillStyle=col('--card'); c.strokeStyle=col('--ink'); c.lineWidth=2; c.beginPath(); c.arc(P.X(s.a),P.Y(h),5,0,7); c.fill(); c.stroke(); } });
+    if(s.v!==null) P.dot(s.a,s.v,'--ink',5);
+    if(on){ c.strokeStyle=col('--gold'); c.lineWidth=1.2; c.setLineDash([4,4]); c.beginPath(); c.moveTo(P.X(s.a),P.Y(F.y[0])); c.lineTo(P.X(s.a),P.Y(F.y[1])); c.stroke(); c.setLineDash([]); } }); }
+const side=h=>h===INF?R`\text{passes every bound}`:(h===-INF?R`\text{passes below every bound}`:fm(h));
+function readH(){ const F=HF[hk], s=F.sus[si]; const vd=$('vdH'); let kind,cls='lose';
+  if(s.joint){ kind='Not a break: both sides arrive at '+fm(s.Lm)+', the value. A joint, with rates −1 and 1 (11e).'; cls='win'; }
+  else if(!isFinite(s.Lm)||!isFinite(s.Lp)) kind='An endless break: '+(s.Lm===s.Lp?'both sides the same way.':'the sides go opposite ways.')+' No value mends it.';
+  else if(s.Lm!==s.Lp) kind='A jump of size '+fm(Math.abs(s.Lp-s.Lm))+'. No value mends it.'+(s.v!==null&&s.v===s.Lp?' Continuous from the right.':'');
+  else kind='A removable break: both sides head to '+fm(s.Lm)+(s.v===null?', and there is no value':'')+'. Mend with '+fm(s.Lm)+' (mended-function).';
+  vd.className='verdict '+cls; vd.textContent='At '+fm(s.a)+': '+kind;
+  tex($('eqH'),R`\begin{gathered}x \to ${fm(s.a).replace('−','-')}^-:\ ${side(s.Lm).replace('−','-')}\\ x \to ${fm(s.a).replace('−','-')}^+:\ ${side(s.Lp).replace('−','-')}\\ \text{value: } ${s.v===null?R`\text{none}`:fm(s.v).replace('−','-')}\end{gathered}`,true);
+  const hs=$('hsc'); hs.innerHTML=''; F.sus.forEach((t,i)=>{ const b=document.createElement('button'); b.textContent='at '+fm(t.a); if(i===si) b.className='on'; b.onclick=()=>{ si=i; allH(); }; hs.appendChild(b); }); }
+function allH(){ PH.redraw(); readH(); }
+mkChips('hfc',HF,hk,k=>{ hk=k; si=0; },allH);
+cvH.addEventListener('pointerdown',e=>{ const p=PH.point(e); const F=HF[hk]; let best=0,bd=1e9; F.sus.forEach((s,i)=>{ const d=Math.abs(s.a-p.x); if(d<bd){ bd=d; best=i; } }); si=best; allH(); });
+window.__pic={joint:(l,r,v,k,c)=>{ lk=l; rk=r; vk=v; kk.value=k; if(c!==undefined) kc.value=c; [['lpc',LP,l],['rpc',RP,r],['vpc',VP,v]].forEach(([id,lib,key])=>[...$(id).children].forEach((z,i)=>z.classList.toggle('on',Object.keys(lib)[i]===key))); allK(); return $('vdK').textContent; },
+  hunt:(f,i)=>{ hk=f; si=i; [...$('hfc').children].forEach((z,j)=>z.classList.toggle('on',Object.keys(HF)[j]===f)); allH(); return $('vdH').textContent; }};
+allK(); allH();
+
+/* ---------- slides ---------- */
+const N='\\htmlClass{new}', K='\\htmlClass{keep}';
+stepper('#sl1',[
+  {k:'ember',kl:'a break',t:R`\begin{gathered}\text{defined near } a,\\ \text{not continuous at } a\end{gathered}`,n:`Either discontinuous at an input, or a hole (10a's second meaning). 1/x is continuous and has a break at 0.`},
+  {k:'ember',kl:'the suspects',t:R`\begin{gathered}\text{a bottom is } 0;\\ \text{the formula changes};\\ \text{the edge of a domain}\end{gathered}`,n:`Everywhere else, 11b to 11e have done the work.`}
+],{title:'The slides · suspects · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'hunt · 1 of 3',t:R`\begin{gathered}\tfrac{x^2 - x - 2}{x^2 - 4}\\ = \tfrac{${N}{(x - 2)}(x + 1)}{${N}{(x - 2)}(x + 2)}\end{gathered}`,n:`Factor. Suspects 2 and −2.`},
+  {k:'ember',kl:'hunt · 2 of 3',t:R`x \to 2:\ \ \tfrac{x + 1}{x + 2} \to ${K}{\tfrac34}`,n:`Both sides agree; no value at 2: removable.`},
+  {k:'ember',kl:'hunt · 3 of 3',t:R`x \to -2^{\pm}:\ \ \tfrac{-1}{\text{small}}`,n:`Passes every bound on the left, below every bound on the right: endless.`},
+  {k:'ember',kl:'the kinds',t:R`\text{removable};\ \ \text{jump};\ \ \text{endless}`,n:`A limit; two settled sides that differ; a side that passes every bound. No break is of two kinds; q's are of none.`}
+],{title:'The slides · the kinds · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'mended-function',t:R`(f|_D) \cup \{(a, ${N}{L})\}`,n:`Continuous at the point; continuous wherever f was; and L is the only value that works (one-limit).`},
+  {k:'ember',kl:'not mendable',t:R`u \text{ at } 0;\ \ \tfrac1x \text{ at } 0`,n:`No limit: no value can supply one (two-sides-differ, passing-every-bound; agreeing-near).`}
+],{title:'The slides · mending · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'joint · 1 of 2',t:R`\begin{gathered}\lim_{x \to 1^-}(x^2 + k) = 1 + ${N}{k}\\ \lim_{x \to 1^+}(3x - 1) = 2\end{gathered}`,n:`Each side from its own formula; the right formula gives the value.`},
+  {k:'ember',kl:'joint · 2 of 2',t:R`1 + k = 2 \;\Leftrightarrow\; ${K}{k = 1}`,n:`glued-functions. Otherwise a jump of size |1 − k|.`},
+  {k:'ember',kl:'floor',t:R`n \le x \lt n + 1:\ \ n = ${N}{\lfloor x \rfloor}`,n:`counting-passes-any-real, then the least number above x + M (least-member-for-any-set). Exactly one such integer.`},
+  {k:'ember',kl:'the staircase',t:R`\begin{gathered}\lfloor x \rfloor \text{ at } n:\\ \text{left } n - 1,\ \text{right } n,\ \text{value } n\end{gathered}`,n:`A jump of size 1 at every integer; continuous from the right.`}
+],{title:'The slides · pieces · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'a jump by sides',t:R`\begin{gathered}\tfrac{x^2 - 9}{|x - 3|}:\\ \text{left } -6,\ \ \text{right } 6\end{gathered}`,n:`Split at 3, cancel each side: a jump of size 12.`},
+  {k:'ember',kl:'the edge',t:R`\lim_{x \to 1^+}\sqrt{x - 1} = 0 = \sqrt{1 - 1}`,n:`Not a break (not defined near 1); continuous from the right; continuous on [1, ∞).`}
+],{title:'The slides · sides and edges · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'invented move',t:R`\begin{gathered}\tfrac{x^2 - 1}{|x| - 1} = \tfrac{${N}{|x|^2} - 1}{|x| - 1}\\ = ${K}{|x| + 1}\end{gathered}`,n:`x² = |x|². Removable at ±1 (mend with 2); a joint at 0.`}
+],{title:'The slides · invented move · ← → keys work'});
+stepper('#sl7',[
+  {k:'ember',kl:'endless sides',t:R`\begin{gathered}\tfrac{1}{(x - 1)^2}:\ \text{above every bound},\\ \text{on both sides}\\ \tfrac{1}{x - 1}:\ \text{below on the left},\\ \text{above on the right}\end{gathered}`,n:`For a fully cancelled fraction whose top is not 0 at the input: an even count of the factor on the bottom sends both sides the same way, an odd count opposite ways.`}
+],{title:'The slides · endless sides · ← → keys work'});
+stepper('#sl8',[
+  {k:'ember',kl:'to order',t:R`\tfrac{12(x - 1)}{(x - 1)(x + 2)}`,n:`A hole at 1 heading to 12/3 = 4, and an endless break at −2.`},
+  {k:'ember',kl:'a jump to order',t:R`\tfrac32 \cdot \tfrac{|x - 2|}{x - 2}`,n:`−3/2 on the left of 2, 3/2 on the right: a jump of size 3.`}
+],{title:'The slides · to order · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>17·chem · How sour is it, and how long until half is gone?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r17k.html">← 17k partial fractions into logs</a><a href="r17bio.html">next: 17·bio can a population double forever? →</a></p>
+  <div class="tags"><span class="tag chem">17·chem · chemistry</span></div>
+  <h1>How sour is it, and how long until half is gone?</h1>
+  <p>How sour is it, and how long until half is gone? Chemistry meets the log twice. Acidity runs over a range so wide, from a strong acid to a strong base about a hundred trillion times, that it is measured on a scale of logs. And take a sample in which each molecule or nucleus falls apart at random, with the same chance each second as every other. It shrinks at a rate proportional to what is left: 17f's equation, with a minus sign. This page reads both, and solves the two simplest laws of how fast a reaction runs. It uses the steady decay of atoms to date a bone, a sea floor and a meteorite.</p>
+  <p class="gesture">The acidity scale counts powers of ten in the amount of free hydrogen, with the sign turned. When a reaction runs at a rate fixed by how much is left, what is left shrinks by a fixed factor in equal times, and the half-life never changes. When it runs at a rate fixed by the square of what is left, one over what is left climbs in a straight line, and each half-life is longer than the last. Radioactive decay shrinks by a fixed factor in equal times, so the logarithm of how much has gone tells the age. A buffer’s acidity is the acid’s own mark plus the logarithm of the ratio of its two forms. A chain reaction multiplies by the same factor in each generation.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r17f.html">17f</a> (proportional-slope), <a href="r17j.html">17j</a> (doubling-time), <a href="r17g.html">17g</a> (log-base-p), <a href="r17h.html">17h</a> (solving), <a href="r13e.html">13e</a> (chain for slopes), <a href="r14e.html">14e</a> (same-slopes), <a href="r15chem.html">15·chem</a> (concentrations), <a href="r17b.html">17b</a> (area-under-1/x), <a href="r08i.html">8i</a> (completing the square), <a href="r09h.html">9h</a> (steps-that-multiply), <a href="r15i.html">15i</a> (small-powers-vanish). <a href="r17then.html">17·then</a> straightens these curves on log paper.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · read it through, then work the picture and the slides</div>
+
+  <h3>The pH scale</h3>
+  <p class="eqline" data-pid="feef2a">For a solution in water with hydrogen ion concentration [H⁺] in mol/L, pH = −log₁₀[H⁺]. Its accepted name is the pH; pOH = −log₁₀[OH⁻] likewise.</p>
+  <p data-pid="1e28ab">Tenfold technique: <b>multiplying [H⁺] by 10 lowers the pH by exactly 1; and in water at 25 °C, where [H⁺][OH⁻] = 1.0 × 10⁻¹⁴, pH + pOH = 14.</b></p>
+  <pre class="lines" data-k="ember" data-label="17·chem: the tenfold technique">
+-\log_{10}(10[\text{H}^+]) = -1 - \log_{10}[\text{H}^+] @@ log-of-a-product for log₁₀ (log-base-p)
+-\log_{10}([\text{H}^+][\text{OH}^-]) = -\log_{10} 10^{-14} = 14 @@ the measured product; log-of-a-power
+\htmlClass{new}{\text{pH} + \text{pOH} = 14} \quad \blacksquare @@ log-of-a-product splits the left side
+  </pre>
+  <pre class="lines" data-k="ember" data-label="17·chem: worked">
+[\text{H}^+] = 0.0025 \Rightarrow \text{pH} = -\log_{10} 0.0025 \approx 2.60 @@ a strong acid, fully given up
+\text{pH} = 8.3 \Rightarrow [\text{H}^+] = 10^{-8.3} \approx 5.0 \times 10^{-9} @@ seawater off Florence; undo the log (17h)
+\text{pH } 4 \text{ against pH } 6 @@ 100 times the [H⁺], not 1.5 times
+  </pre>
+
+  <h3>Weak acids and buffers</h3>
+  <p data-pid="471ed7">A strong acid gives up all its H⁺ in water. A weak acid HA gives up only some. The reaction runs both ways until the amounts stop changing, and a double arrow says so: HA ⇌ H⁺ + A⁻. Measurement shows that, at a given temperature, the number [H⁺][A⁻]/[HA] then settles at the same value K<sub>a</sub> whatever the starting mix. This is the acid's acid dissociation constant, its accepted name; pK<sub>a</sub> = −log₁₀ K<sub>a</sub>. A⁻ has the accepted name the conjugate base of HA. A mix of a weak acid and its conjugate base has the accepted name a buffer.</p>
+  <p data-pid="5b94ff">Buffer-equation technique (the Henderson–Hasselbalch equation): <b>in such a solution, pH = pK<sub>a</sub> + log₁₀([A⁻]/[HA]). So pH = pK<sub>a</sub> exactly when [A⁻] = [HA].</b></p>
+  <pre class="lines" data-k="ember" data-label="17·chem: the buffer-equation technique">
+K_a = [\text{H}^+]\cdot\tfrac{[\text{A}^-]}{[\text{HA}]} @@ the measured constant
+-\log_{10} K_a = -\log_{10}[\text{H}^+] - \log_{10}\tfrac{[\text{A}^-]}{[\text{HA}]} @@ log-of-a-product for log₁₀ (log-base-p)
+\htmlClass{new}{\text{pH} = \text{p}K_a + \log_{10}\tfrac{[\text{A}^-]}{[\text{HA}]}} \quad \blacksquare @@ rearrange; log₁₀ 1 = 0 gives the second claim
+  </pre>
+  <p data-pid="923606">Buffer technique: <b>let a buffer hold acid at m and base at n mol/L, and add strong acid at x mol/L, so m becomes m + x and n becomes n − x. The pH changes at the rate −(1/m + 1/n)/ln 10 per unit x at x = 0. For a fixed total m + n = c, that rate is smallest in size when m = n.</b></p>
+  <pre class="lines" data-k="ember" data-label="17·chem: the buffer technique">
+\text{pH}(x) = \text{p}K_a + \tfrac{1}{\ln 10}\big(\ln(b - x) - \ln(a + x)\big) @@ buffer-equation; log-base-p
+\text{pH}'(0) = -\tfrac{1}{\ln 10}\Big(\tfrac1b + \tfrac1a\Big) @@ area-under-1/x and chain for slopes
+\tfrac1a + \tfrac1b = \tfrac{c}{ab},\ \ ab = \tfrac{c^2}{4} - \big(a - \tfrac c2\big)^2 @@ completing the square (8i)
+\begin{aligned}&\htmlClass{new}{ab \text{ is largest, the rate smallest, at } a = b }\\ &\quad \htmlClass{new}{= \tfrac c2} \quad \blacksquare\end{aligned} @@ a square is never negative
+  </pre>
+  <pre class="lines" data-k="ember" data-label="17·chem: acetic acid">
+K_a = 1.8 \times 10^{-5},\ \ \text{p}K_a \approx 4.74 @@ the acid of vinegar
+0.10\ \text{M alone}:\ [\text{H}^+]^2 \approx K_a \cdot 0.10,\ \ \text{pH} \approx 2.87 @@ so little is given up that [HA] stays near 0.10 and [A⁻] = [H⁺]
+0.10\ \text{M acid},\ 0.10\ \text{M acetate} + 0.01\ \text{M HCl}:\ \ 4.74 + \log_{10}\tfrac{0.09}{0.11} \approx 4.66 @@ buffer-equation: the same HCl in pure water would take the pH from 7 to 2
+  </pre>
+
+  <h3>Titration</h3>
+  <p data-pid="de9eda">To find how much acid a sample holds, add base of known concentration until it has all reacted, H⁺ + OH⁻ → H₂O, reading the pH as you go. Its accepted name is titration. The point where the base added exactly matches the acid at the start is the equivalence point. <b>On the log scale of pH, the last drops before it and the first after it make a cliff.</b></p>
+  <pre class="lines" data-k="ember" data-label="17·chem: 50 mL of 0.10 M HCl, with 0.10 M NaOH">
+49.9\ \text{mL}:\ [\text{H}^+] = \tfrac{0.0050 - 0.00499}{0.0999} \approx 1.0 \times 10^{-4},\ \text{pH} \approx 4.0 @@ moles of acid left over the total volume
+50.0\ \text{mL}:\ \text{pH} = 7.0 @@ only water's own ions
+50.1\ \text{mL}:\ [\text{OH}^-] \approx 1.0 \times 10^{-4},\ \text{pH} \approx 10.0 @@ tenfold: pH = 14 − pOH
+\text{a weak acid, half the base added}:\ \text{pH} = \text{p}K_a @@ buffer-equation: half the HA has become A⁻; this is how K_a is measured
+  </pre>
+
+  <h3>Acid in rain and in the sea</h3>
+  <p data-pid="71e1e3">Clean rain is slightly acid, near pH 5.6, from carbon dioxide dissolved out of the air. Sulfur dioxide and oxides of nitrogen, from burning coal and from engines, make sulfuric and nitric acid in clouds: its accepted name is acid rain. Rain at pH 4.2 carries 10<sup>1.4</sup> ≈ 25 times the H⁺ of clean rain. It leaches calcium from soils and acidifies lakes. The surface ocean has fallen from about pH 8.2 before 1750 to about 8.1 now, as it takes up carbon dioxide. That is 10<sup>0.1</sup> ≈ 1.26 times the H⁺, and its accepted name is ocean acidification. The extra H⁺ binds the carbonate that shells are built from. In 2007 and 2008, corrosive upwelled water killed most of the oyster larvae in hatcheries on the Oregon coast.</p>
+
+  <h3>How fast a reaction runs</h3>
+  <p data-pid="38a842">For a reaction using up A, the rate is −[A]′. When it is k[A], the reaction is first order; when k[A]², second order. These are their accepted names, and k is the rate constant. The time for [A] to fall to half is written t₁/₂, read “t half”.</p>
+  <p data-pid="de1577">First-order technique: <b>if [A]′ = −k[A], then [A] = [A]₀e<sup>−kt</sup> and the half-life is ln 2 / k, the same at every start.</b> It is proportional-slope and doubling-time. This is the curve 13·chem's readings followed, and its halving time is the same at every stage, as those readings suggested; that flag is closed.</p>
+  <p data-pid="3a7948">Second-order technique: <b>if [A]′ = −k[A]² with [A] &gt; 0, then 1/[A] = 1/[A]₀ + kt, and the half-life from [A]₀ is 1/(k[A]₀).</b></p>
+  <pre class="lines" data-k="ember" data-label="17·chem: the second-order technique">
+\Big(\tfrac{1}{[A]}\Big)' = -\tfrac{[A]'}{[A]^2} = -\tfrac{-k[A]^2}{[A]^2} = k @@ chain for slopes (13e) on 1/u
+\tfrac{1}{[A]} = \tfrac{1}{[A]_0} + kt @@ same-slopes (14e): same slope as kt; t = 0 fixes the constant
+\tfrac{2}{[A]_0} = \tfrac{1}{[A]_0} + kt_{1/2} \Rightarrow \htmlClass{new}{t_{1/2} = \tfrac{1}{k[A]_0}} \quad \blacksquare @@ [A] = [A]₀/2
+  </pre>
+  <pre class="lines" data-k="ember" data-label="17·chem: two reactions">
+k = 6.2 \times 10^{-4}\ \text{s}^{-1},\ \text{first order}:\ \ t_{1/2} = \tfrac{\ln 2}{k} \approx 1118 \text{ s} @@ first-order
+k = 0.50\ \text{L/(mol·s)},\ [A]_0 = 0.20:\ \ t_{1/2} = 10 \text{ s};\ \ [A](30) = \tfrac{1}{5 + 15} = 0.05 @@ second-order; each half-life doubles the last
+  </pre>
+
+  <h3>Atoms that fall apart</h3>
+  <p data-pid="cab6d2">Each unstable nucleus has the same chance of decaying in each short time, whatever its age. So the count N of them falls at a rate in proportion to N: N′ = −λN. Here λ, the small Greek letter lambda, is that fixed rate for each nucleus. Its accepted name is the decay constant.</p>
+  <p data-pid="ea8c38">Dating technique: <b>let a sample of N₀ unstable nuclei decay as N = N₀e<sup>−λt</sup>, with half-life T = ln 2 / λ. Then the time since it held N₀ is t = (T / ln 2) · ln(N₀/N). If each decay leaves one daughter nucleus D, and none was there at the start, t = (T / ln 2) · ln(1 + D/N).</b></p>
+  <pre class="lines" data-k="ember" data-label="17·chem: the dating technique">
+\tfrac{N_0}{N} = e^{\lambda t} \Rightarrow t = \tfrac{1}{\lambda}\ln\tfrac{N_0}{N} @@ 17h; λ = ln 2 / T
+N_0 = N + D \Rightarrow \tfrac{N_0}{N} = 1 + \tfrac{D}{N} \quad \blacksquare @@ every lost parent is a daughter
+  </pre>
+  <pre class="lines" data-k="ember" data-label="17·chem: three ages">
+\text{a bone with } 30\% \text{ of living carbon-14},\ T = 5730 \text{ y}:\ \ t \approx 5730 \cdot \tfrac{\ln(1/0.3)}{\ln 2} \approx 9950 \text{ y} @@ dating; the atmosphere's carbon-14 is taken as steady
+\begin{aligned}&\text{Juan de Fuca sea floor},\ 100 \text{ km}\\ &\quad\text{from the ridge, about } 3.3 \text{ million y}\end{aligned} @@ ages measured by decay rise steadily away from the ridge: the floor spreads, about 3 cm a year
+\text{a meteorite with } \tfrac{\text{Pb-206}}{\text{U-238}} \approx 1.03,\ T = 4.468 \times 10^9 \text{ y}:\ \ t \approx 4.56 \times 10^9 \text{ y} @@ dating with D/N; the age of the solar system
+  </pre>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · two sizes of truth, far apart</div>
+    <p data-pid="cbf573">1e set two sizes of truth beside every and some. 5·chem's mole and 5·bio's 3 : 1 lived at the size of the crowd. Here the two sizes sit as far apart as they ever have. One carbon-14 nucleus has the same chance of decaying in the next second whatever its age, and nothing anyone knows says when it will. The crowd has a half-life of 5730 years, steady enough to date a bone ten thousand years old.</p>
+    <p data-pid="501279"><b>Don't carry a crowd-truth down to the one: a half-life says nothing about when any one nucleus will go.</b></p>
+    <p data-pid="1ad7e6">The bridge is λ. It is one nucleus's chance per unit of time, and it is also the crowd's rate in proportion to its size. One number is said at both sizes, and it means something different at each.</p>
+    <p class="bait" data-pid="626d56">A sample holds exactly two carbon-14 nuclei. How long until only one is left?</p>
+  </aside>
+
+  <h3>Kinds of decay, and energy from the nucleus</h3>
+  <p data-pid="78aac8">A nucleus is made of protons and neutrons. The number of protons, Z, fixes the element and has the accepted name the atomic number. The total, A, has the accepted name the mass number, so carbon-14 has A = 14 and Z = 6. Kinds of the same element with different A have the accepted name isotopes. An unstable nucleus decays in one of a few ways. Alpha decay throws out a helium nucleus, so A falls by 4 and Z by 2: U-238 becomes Th-234. Beta decay turns a neutron into a proton and throws out an electron, so Z rises by 1 and A stays: C-14 becomes N-14. Gamma decay throws out only energy, as light. Each is first order, so dating applies to all of them.</p>
+  <p data-pid="9341f9">Splitting a heavy nucleus has the accepted name fission; joining light ones, fusion. One fission of U-235 by a slow neutron gives off about 3.2 × 10⁻¹¹ J and two or three new neutrons.</p>
+  <p data-pid="9905d1">Fission-chain technique: <b>if each fission leads, on average, to k further fissions, then generation g holds N₀kᵍ fissions. They die out when k &lt; 1, stay steady when k = 1, and grow without bound when k &gt; 1.</b> It is 9h's steps-that-multiply with b = k, and 15i's small-powers-vanish for k &lt; 1.</p>
+  <pre class="lines" data-k="ember" data-label="17·chem: nuclear power">
+\tfrac{3.2 \times 10^{-11}\ \text{J}}{235 \times 1.66 \times 10^{-27}\ \text{kg}} \approx 8.2 \times 10^{13}\ \text{J/kg} @@ coal gives about 2.4 × 10⁷ J/kg: over three million times less
+k = 1 \text{ kept by rods that soak up neutrons} @@ fission-chain: a reactor runs at k = 1; a bomb needs k &gt; 1
+\text{Pu-239},\ T = 24{,}100\ \text{y}:\ \ 2^{-10000/24100} \approx 0.75 @@ three quarters still there after ten thousand years: the waste problem
+  </pre>
+  <p data-pid="2a7330">A nuclear plant gives off no carbon dioxide while it runs. Its costs are the waste, the mining, and the risk of an accident. The Trojan plant on the Columbia near Rainier, Oregon, ran from 1976 to 1992; the Humboldt Bay plant near Eureka from 1963 to 1976. Fusion powers the Sun, but no plant on Earth has yet run on it.</p>
+  <p data-pid="c417a1">The physicist who first explained these decays told of lecturing on the age of the Earth with the most famous physicist of the day in the audience. That man had set a limit on the Earth's age, on the condition that no new source of heat be found. The lecturer got past the limit by noting that radium was exactly such a source. At which, he said, the old man beamed.</p>
+
+  <h3>Illegal moves</h3>
+  <pre class="lines" data-k="ember" data-label="17·chem: tempting, and not allowed">
+\text{pH } 3 \text{ is twice as acidic as pH } 6\,? @@ it is 10³ = 1000 times the [H⁺]
+\text{a second-order half-life is fixed}\,? @@ it is 1/(k[A]₀), and grows as [A] falls
+\text{after two half-lives nothing is left}\,? @@ a quarter is left
+\text{carbon-14 dates a rock } 10^9 \text{ y old}\,? @@ after 175 000 half-lives none is left to count; use a nucleus with a long half-life
+  </pre>
+</section>
+
+<section class="pic" id="pic">
+  <div class="eyebrow">The picture · two ways to run down, and a clock made of atoms</div>
+  <div class="panels">
+    <div class="panel">
+      <div class="lbl">[A] against seconds: first order and second order</div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">[A]₀</span><input type="range" id="kA" min="0.05" max="1" step="0.01" value="0.5"><output id="oA"></output></div>
+      <div class="cap">Ember: first order, k = ln 2 / 10 per second. Teal: second order, k = 0.2 L/(mol·s). Dots: each successive half. At [A]₀ = 0.5 both first halve at 10 s.</div>
+    </div>
+    <div class="panel">
+      <div class="lbl">what is left, N/N₀, against half-lives</div>
+      <canvas id="cvL"></canvas>
+      <div class="chips" id="fch"></div>
+      <div class="kn"><span class="m">left</span><input type="range" id="kf" min="0.01" max="0.99" step="0.01" value="0.3"><output id="of"></output></div>
+      <div class="cap">Ink: 2<sup>−t/T</sup>. Plum: the fraction the knob sets, and the age it gives.</div>
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+</section>
+
+<section class="slides" id="sl1"><div class="eyebrow">The slides · pH; tenfold; pH + pOH; first order; first-order's half-life; second order; second-order; dating; a bone; a sea floor; a meteorite; the age of the Earth; illegal moves · ← → keys work</div></section>
+
+<section class="sayback">
+  <div class="eyebrow">Say it back · then work it</div>
+  <h2>Questions</h2>
+  <div class="phkey"></div>
+  <ol>
+    <li><span class="qid">17·chem.1</span><span class="gname">pH and half-lives.</span><span class="gwhy">Do: build the page's pieces.</span>
+      <ol class="sub">
+        <li><span class="qid">17·chem.1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="0.050 \text{ M acetic acid},"></span> <span data-tex-inline="\text{buffer: } 0.10 \text{ M acid}"></span> <span data-tex-inline="\text{with } 0.050 \text{ M acetate},"></span> <span data-tex-inline="\mathrm{p}K_a = 4.74"></span></span>Find the pH of the acid alone, and of the buffer.</li><li><span class="givens"><span data-tex-inline="\text{first order},"></span> <span data-tex-inline="\text{half-life } 40 \text{ min}"></span></span>Find k, and the fraction left after 2 hours.</li><li><span class="givens"><span data-tex-inline="\text{second order},"></span> <span data-tex-inline="k = 0.8 \text{ L/(mol s)},"></span> <span data-tex-inline="[A]_0 = 0.25"></span></span>Find the concentration at 10 s, and the first two half-lives.</li><li><span class="givens"><span data-tex-inline="62\% \text{ of living carbon-14}"></span></span>Find the age of wood from a site near Nanaimo.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">17·chem.2</span><span class="gname">From the clock back.</span><span class="gwhy">Undo: run the page's techs backwards.</span>
+      <ol class="sub">
+        <li><span class="qid">17·chem.2.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\mathrm{pH} = 5.2"></span></span>Find the hydrogen ion concentration of a rain sample near Tacoma.</li><li><span class="givens"><span data-tex-inline="0.80 \text{ to } 0.10 \text{ in } 60 \text{ s},"></span> <span data-tex-inline="\text{first order}"></span></span>Find k.</li><li><span class="givens"><span data-tex-inline="\text{weak acid, strong base},"></span> <span data-tex-inline="\text{halfway to equivalence:},"></span> <span data-tex-inline="\mathrm{pH} = 4.20"></span></span>Find the acid constant.</li><li><span class="givens"><span data-tex-inline="\text{Pb-206/U-238} = 0.5"></span></span>Find the age of the rock.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">17·chem.3</span><span class="gname">Where it gives.</span><span class="gwhy">Bend: find where the techs stop working.</span>
+      <ol class="sub">
+        <li><span class="qid">17·chem.3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\mathrm{pH} &lt; 0"></span></span>Find whether a pH can be so, and what it would mean.</li><li><span class="givens"><span data-tex-inline="\text{some lead there at the start},"></span> <span data-tex-inline="\text{not known}"></span></span>Dating assumed no daughter at the start.<br>Find what happens to the age.</li><li><span class="givens"><span data-tex-inline="\text{air's carbon-14 near doubled},"></span> <span data-tex-inline="\text{for a time after the 1950s},"></span> <span data-tex-inline="\text{a 1965 leaf}"></span></span>Carbon-14 dating assumes the air's carbon-14 was always as it is now.<br>Find what the given does to the leaf's age.</li><li><span class="givens"><span data-tex-inline="\text{acid plus base: } 0.20 \text{ M in all},"></span> <span data-tex-inline="0.02 \text{ M of strong acid added}"></span></span>Using buffer's rate, find the mix whose pH moves least, and check it against a lopsided mix.<br>Find the pH after 0.25 M of strong acid on an even mix of 0.10 M each.</li></ol></li>
+      </ol></li>
+    <li class="optgroup"><span class="qid">17·chem.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder challenges that rely on your own making. The page is complete without these; the rung's star needs them.</span>
+      <ol class="sub">
+        <li class="opt"><span class="qid">17·chem.4.1</span><span class="tagq">build</span>Dating took no daughter at the start.<br>Make a mineral of your own that held some daughter when it formed: choose a half-life, today's daughter to parent ratio, and the starting daughter as a share of today's parent.<br>Find its age, and how far off it is if the starting daughter is ignored.</li>
+        <li class="opt"><span class="qid">17·chem.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{first and second order},"></span> <span data-tex-inline="\text{the same starting concentration},"></span> <span data-tex-inline="\text{the same first half-life}"></span></span>Find which reaction has more left after a long time.</li>
+        <li class="opt"><span class="qid">17·chem.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{the same half-life from every start}"></span></span>Prove or refute: the reaction is first order.</li>
+        <li class="opt"><span class="qid">17·chem.4.4</span><span class="tagq">world</span><span class="givens"><span data-tex-inline="50 \text{ km out: } 1.7 \text{ million years},"></span> <span data-tex-inline="100 \text{ km out: } 3.3 \text{ million years}"></span></span>Basalt from the Juan de Fuca ridge is so old.<br>Find the spreading rate in cm a year.</li>
+        <li class="opt"><span class="qid">17·chem.4.5</span><span class="tagq">world</span><span class="givens"><span data-tex-inline="k = 1.001 \text{ per generation},"></span> <span data-tex-inline="\text{a generation every } 0.1 \text{ s}"></span></span>Find how long the reactor's rate takes to double.<br>Then find it for k = 1.01.</li>
+        <li class="opt"><span class="qid">17·chem.4.6</span><span class="tagq">seam</span>In 1862 a leading physicist computed how long a hot Earth would take to cool to its present state. He got between 20 and 400 million years, later narrowing it toward 20 to 40. Geologists and naturalists wanted far more. Radioactivity, found after his estimate, heats the Earth from within and gave clocks reading thousands of millions of years. His mathematics was sound. <br>Was he wrong? <br>What is a calculation worth when one of its assumptions is a source nobody knew existed?</li>
+      </ol></li>
+  </ol>
+  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
+</section>
+
+<nav class="nextrung"><a href="r17then.html">← 17·then · can a bending curve be straightened?</a><a href="r17bio.html">17·bio · can a population double forever? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>Rutherford recalled that, lecturing on the age of the Earth with Kelvin in the audience, he got past Kelvin’s limit by noting that Kelvin had set it on the condition that no new source of heat be found, and that radium was exactly such a source; at which the old man beamed.</p><cite>Ernest Rutherford, as recounted in A. S. Eve, Rutherford (1939); paraphrase</cite></aside>
+  <p>In 17·chem.4.6, the physicist of 1862 is William Thomson, Lord Kelvin, and the naturalist who wanted far more was Charles Darwin. The buffer equation is Lawrence Henderson’s and Karl Hasselbalch’s.</p>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+/* least and greatest of F.f on [lo, hi]: the ends, F's critical points inside, and a fine sample (exact between critical points for the functions used here) */
+function ext(F,lo,hi){ if(F.dir) return [0,1]; let m=Infinity,M=-Infinity; const t=x=>{ const v=F.f(x); if(v<m) m=v; if(v>M) M=v; };
+  t(lo); t(hi); (F.crit||[]).forEach(c=>{ if(c>lo&&c<hi) t(c); }); for(let k=1;k<64;k++) t(lo+(hi-lo)*k/64); return [m,M]; }
+function sums(F,pts){ let L=0,U=0; const ms=[],Ms=[]; for(let i=1;i<pts.length;i++){ const [m,M]=ext(F,pts[i-1],pts[i]), w=pts[i]-pts[i-1]; ms.push(m); Ms.push(M); L+=m*w; U+=M*w; } return {L,U,ms,Ms}; }
+const eq=(a,b,n)=>Array.from({length:n+1},(_,i)=>a+(b-a)*i/n);
+function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
+function boxes(P,pts,hs,stroke,fill,alpha){ const c=P.ctx; for(let i=1;i<pts.length;i++){ const a=pts[i-1],b=pts[i],h=hs[i-1]; c.globalAlpha=alpha; P.poly([[a,0],[b,0],[b,h],[a,h]],null,fill); c.globalAlpha=1; P.poly([[a,0],[b,0],[b,h],[a,h]],stroke,null,1.2); } }
+function dirDots(P,a,b){ const c=P.ctx; c.fillStyle=col('--ink'); for(let k=0;k<=300;k++){ const x=a+(b-a)*k/300; const y=(k%2)?0:1; c.fillRect(P.X(x)-1,P.Y(y)-1,2,2); } }
+/* shade between the graph of fn and the axis from lo to hi: above in pos colour, below in neg colour */
+function shade(P,fn,lo,hi,pos,neg,alpha){ if(hi<lo){ const t=lo; lo=hi; hi=t; } const c=P.ctx, N=300; c.globalAlpha=alpha==null?0.32:alpha;
+  for(let k=0;k<N;k++){ const x0=lo+(hi-lo)*k/N, x1=lo+(hi-lo)*(k+1)/N, xm=(x0+x1)/2, y=fn(xm); if(!isFinite(y)) continue; P.poly([[x0,0],[x1,0],[x1,fn(x1)],[x0,fn(x0)]],null,y>=0?pos:neg); }
+  c.globalAlpha=1; }
+function rangeOf(fn,lo,hi,pad){ let m=Infinity,M=-Infinity; for(let k=0;k<=400;k++){ const v=fn(lo+(hi-lo)*k/400); if(isFinite(v)){ if(v<m) m=v; if(v>M) M=v; } } if(m>0) m=0; if(M<0) M=0; const p=(M-m)*(pad==null?0.12:pad)||1; return [m-p,M+p]; }
+function chips(el,FN,get,setk,after){ Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===get()) b.className='on'; b.onclick=()=>{ setk(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+const Nw='\\htmlClass{new}';
+function gridFor(sp){ return sp>40?10:sp>16?4:sp>8?2:sp>3?1:sp>1.2?0.5:0.25; }
+function frame2(P,fn,lo,hi,pad){ const w=hi-lo; P.o.x=[lo-0.12*w,hi+0.08*w]; P.o.y=rangeOf(fn,lo,hi,pad==null?0.12:pad); const sx=P.o.x[1]-P.o.x[0], sy=P.o.y[1]-P.o.y[0]; let g=gridFor(sx); while(sy/g>24) g*=2; P.o.grid=g; }
+const num=(f,a,b,n)=>{ n=n||4000; const h=(b-a)/n; let s=0; for(let i=0;i<n;i++) s+=f(a+(i+0.5)*h)*h; return s; };
+/* axes with separate steps across and up */
+function axes2(P,gx,gy){ const c=P.ctx,o=P.o; c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ c.moveTo(P.X(x),P.Y(o.y[0])); c.lineTo(P.X(x),P.Y(o.y[1])); }
+  for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ c.moveTo(P.X(o.x[0]),P.Y(y)); c.lineTo(P.X(o.x[1]),P.Y(y)); } c.stroke();
+  c.strokeStyle=col('--muted'); c.lineWidth=1.3; c.beginPath(); if(o.y[0]<=0&&o.y[1]>=0){ c.moveTo(P.X(o.x[0]),P.Y(0)); c.lineTo(P.X(o.x[1]),P.Y(0)); } if(o.x[0]<=0&&o.x[1]>=0){ c.moveTo(P.X(0),P.Y(o.y[0])); c.lineTo(P.X(0),P.Y(o.y[1])); } c.stroke();
+  c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; const ly=Math.min(P.H-6,Math.max(12,P.Y(0)+14));
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ if(Math.abs(x)<1e-9) continue; c.fillText(+x.toFixed(6),P.X(x),ly); }
+  c.textAlign='right'; const lx=Math.max(32,Math.min(P.W-4,P.X(0)-5)); for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ if(Math.abs(y)<1e-9) continue; c.fillText(String(+y.toFixed(6)).replace('-','−'),lx,P.Y(y)+4); } }
+function nice(sp){ const raw=sp/6, p=Math.pow(10,Math.floor(Math.log10(raw))), m=raw/p; return (m<1.5?1:m<3.5?2:m<7.5?5:10)*p; }
+const kA=$('kA'),kf=$('kf'),cvF=$('cvF'),cvL=$('cvL');
+const FN={c14:{lab:'carbon-14',T:5730,u:'y'},u238:{lab:'uranium-238',T:4.468e9,u:'y'},rn:{lab:'radon-222',T:3.82,u:'days'}};
+let key='c14';
+const k1=Math.LN2/10, k2=0.2;
+const PF=plane(cvF,{x:[-3,62],y:[-0.08,1.05],grid:1,aspect:0.8,draw:P=>drawF(P)});
+const PL=plane(cvL,{x:[-0.4,7.2],y:[-0.08,1.08],grid:1,aspect:0.8,draw:P=>drawL(P)});
+[[PF,cvF],[PL,cvL]].forEach(([P,cv])=>Object.defineProperty(P.o,'aspect',{get:()=>cv.clientWidth>480?0.75:0.9}));
+function drawF(P){ const A0=+kA.value; axes2(P,10,0.1); curve(P,t=>A0*Math.exp(-k1*t),'--ember',2.6,0,62); curve(P,t=>1/(1/A0+k2*t),'--teal',2.6,0,62);
+  for(let j=1;j<=6;j++){ const t=10*j; if(t<=62) P.dot(t,A0*Math.pow(2,-j),'--ember',4); }
+  let t=0,a=A0; for(let j=1;j<=6;j++){ t+=1/(k2*a); a/=2; if(t<=62) P.dot(t,a,'--teal',4); } }
+function drawL(P){ const f=+kf.value, n=Math.log(1/f)/Math.LN2; axes2(P,1,0.1); curve(P,s=>Math.pow(2,-s),'--ink',2.6,0,7.2); for(let j=1;j<=7;j++) P.dot(j,Math.pow(2,-j),'--muted',3);
+  P.line(-0.4,f,n,f,'--plum',1.2,[4,4]); P.line(n,-0.08,n,f,'--plum',1.2,[4,4]); P.dot(n,f,'--plum',5); }
+function big(v){ if(v>=1e6) return mm(v/1e9,3)+' thousand million'; return mm(v,v<100?2:0); }
+function read(){ const A0=+kA.value, f=+kf.value; $('oA').textContent=mm(A0,2); $('of').textContent=mm(100*f,0)+'%';
+  const F=FN[key], n=Math.log(1/f)/Math.LN2, t=n*F.T, h2=1/(k2*A0); const vd=$('vdF'); vd.className='verdict';
+  vd.textContent='First order halves every 10 s from any start; second order first halves at 1/(k[A]₀) = '+mm(h2,2)+' s here, and each half takes twice the last. On the right: '+mm(100*f,0)+'% of the '+F.lab+' left is '+mm(n,3)+' half-lives, about '+big(t)+' '+F.u+'.';
+  tex($('eqF'),R`t = \tfrac{T}{\ln 2}\ln\tfrac{N_0}{N} = \tfrac{${F.T>=1e6?mm(F.T/1e9,3)+'\\times 10^9':mm(F.T,2)}}{\ln 2}\,\ln\tfrac{1}{${mm(f,2)}} \approx ${mm(n,3)}\,T`,true); }
+function all(){ PF.redraw(); PL.redraw(); read(); }
+kA.addEventListener('input',all); kf.addEventListener('input',all);
+chips($('fch'),FN,()=>key,k=>{ key=k; },all);
+window.__pic={set:(k,A0,f)=>{ [...$('fch').children][Object.keys(FN).indexOf(k)].click(); kA.value=A0; kf.value=f; all(); return {age:+(Math.log(1/f)/Math.LN2*FN[k].T).toPrecision(5),h2:+(1/(k2*A0)).toFixed(4)}; }};
+all();
+stepper('#sl1',[
+  {k:'ember',kl:'pH',t:R`\text{pH} = -\log_{10}[\text{H}^+]`,n:`A scale of logs.`},
+  {k:'ember',kl:'tenfold',t:R`[\text{H}^+] \times 10 \Rightarrow \text{pH} - 1`,n:`log-of-a-product for log₁₀.`},
+  {k:'ember',kl:'pH + pOH',t:R`${Nw}{\text{pH} + \text{pOH} = 14}`,n:`At 25 °C.`},
+  {k:'ember',kl:'first order',t:R`[A]' = -k[A]`,n:`proportional-slope.`},
+  {k:'ember',kl:'first-order',t:R`${Nw}{t_{1/2} = \tfrac{\ln 2}{k}}`,n:`From any start.`},
+  {k:'ember',kl:'second order',t:R`[A]' = -k[A]^2`,n:`Look at 1/[A].`},
+  {k:'ember',kl:'second-order',t:R`${Nw}{\tfrac{1}{[A]} = \tfrac{1}{[A]_0} + kt}`,n:`Half-life 1/(k[A]₀).`},
+  {k:'ember',kl:'dating',t:R`${Nw}{t = \tfrac{T}{\ln 2}\ln\big(1 + \tfrac{D}{N}\big)}`,n:`Parents lost are daughters made.`},
+  {k:'ember',kl:'a bone',t:R`30\% \Rightarrow 9950 \text{ y}`,n:`Carbon-14.`},
+  {k:'ember',kl:'a sea floor',t:R`3.3 \times 10^6 \text{ y at } 100 \text{ km}`,n:`Juan de Fuca.`},
+  {k:'ember',kl:'a meteorite',t:R`4.56 \times 10^9 \text{ y}`,n:`Lead from uranium.`},
+  {k:'ember',kl:'the age of the Earth',t:R`20\text{–}400 \times 10^6 \text{ y}\,?`,n:`No source of heat within.`},
+  {k:'ember',kl:'illegal',t:R`\text{pH } 3 \ne 2 \times \text{pH } 6`,n:`A thousand times.`}
+],{title:'The slides · pH; tenfold; pH + pOH; first order; first-order’s half-life; second order; second-order; dating; a bone; a sea floor; a meteorite; the age of the Earth; illegal moves · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

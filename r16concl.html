@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>16·∎ · Area and slope undo each other</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.cl-lock{display:none;border-left:3px solid var(--gold);background:var(--sand);padding:10px 14px;border-radius:0 4px 4px 0;max-width:66ch}
+body.cl-locked .cl-lock{display:block} body.cl-locked .cl-body{display:none}
+.cl-lock button{margin-top:6px;font-size:.8rem}
+.claim{border:1px solid var(--grid);border-left:4px solid var(--teal);background:var(--card);border-radius:0 6px 6px 0;padding:10px 16px;max-width:66ch}
+.claim p{margin:.4em 0}
+ul.cl-adds{max-width:66ch;padding-left:1.1em} ul.cl-adds li{margin:.5em 0}
+ul.cl-adds .cl-w{display:none;color:var(--muted);font-style:italic}
+ul.cl-adds li.cl-wait .cl-t{display:none} ul.cl-adds li.cl-wait .cl-w{display:inline}
+pre.lines{white-space:pre-wrap;overflow-wrap:anywhere;max-width:100%}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r16e.html">← 16e parts</a><a href="r16f.html">next: 16f the table run backwards →</a></p>
+  <div class="tags"><span class="tag concl">16·∎ · conclusion</span></div>
+  <h1>Area and slope undo each other</h1>
+  <p class="gesture">Let the right end of an area move, and the area so far has the height of the graph as its slope. Turned round, the area under a slope is the change in the function from end to end.</p>
+  <div class="ready"><h3>What this stands on</h3><p>The survey of <a href="r16.html">rung 16</a>, and its proof steps: <a href="r16a.html">16a</a> (the area function), <a href="r16b.html">16b</a> (its slope is the height), <a href="r16c.html">16c</a> (evaluating by antiderivatives), <a href="r16d.html">16d</a> (substitution), <a href="r16e.html">16e</a> (parts). It opens once 16e is ticked, and it gains a line each time you finish a step or annex after it.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The conclusion · the rung's claim, in full, and its proof</div>
+  <div class="cl-lock"><p>This page opens once every question on <a href="r16e.html">16e parts</a> is ticked. The claim below is proved from the steps of this rung, so it waits for them.</p><button type="button" class="cl-peek">reviewing the ladder? open it anyway</button></div>
+  <div class="cl-body">
+  <h3>What the rung set out to show</h3>
+  <p data-pid="cfdb72">The survey of rung 16 promised that rung 14's open question and rung 15's are one. Given a slope, what was the function? And how is an area found without a page of sums? <a href="r16a.html">16a</a> defined the area function F(x) = ∫ₛˣ f(t) dt, with t as a stand-in letter, and proved that it never jumps. <a href="r16b.html">16b</a> proved area-slope: where f is continuous, F′ = f. So every continuous function has an antiderivative.</p>
+  <p data-pid="368c06"><a href="r16c.html">16c</a> proved area-is-a-change: an area is the change, end to end, of any function with the right slope. It proved it twice, once from 16b and once from the boxes with average-slope. <a href="r16d.html">16d</a> ran the chain rule backwards as substitution, and <a href="r16e.html">16e</a> ran the product rule backwards as parts. This page states both directions of the undoing in one claim, and proves it from those steps.</p>
+  <h3>The claim, in full</h3>
+  <div class="claim">
+  <p data-pid="9e618d"><b>Take the area to a moving end and then its slope, and you get the height back; take a slope and then its area, and you get the change from end to end.</b></p>
+  <p data-pid="a2e9a4">Let f be continuous on an interval I, let s be in I, and let F(x) = ∫ₛˣ f(t) dt.</p>
+  <p data-pid="d7b016">Then F has a slope at every x in I, from one side at an end of I, and F′(x) = f(x).</p>
+  <p data-pid="05c704">Let f be continuous on [p, q], and let G′ = f at every input of [p, q]. Then ∫ₚ^q f(x) dx = G(q) − G(p).</p>
+  <p data-pid="e49233">The second part is true also when f is only integrable on [p, q], if G is continuous on [p, q] and G′ = f inside it.</p>
+  <div class="eqline" data-tex="\dfrac{d}{dx}\int_a^x f(t)\,dt = f(x)"></div>
+  <div class="eqline" data-tex="\int_a^b G&#x27;(x)\,dx = G(b) - G(a)"></div>
+  </div>
+  <h3>The proof</h3>
+  <p data-pid="1c21ab">The first part is 16b's area-slope, at a point c inside I. f is integrable on every closed interval inside I by continuous-is-integrable (15f), so F is defined.</p>
+  <pre class="lines" data-k="ember" data-label="the first part: the slope of the area is the height">
+\text{call } \delta:\ |t - c| \lt \delta \Rightarrow |f(t) - f(c)| \lt \tfrac{\varepsilon}{2} @@ fix ε > 0; f is continuous at c (11a); shrink δ so the stretch lies in I
+0 \lt |h| \lt \delta:\ \ F(c + h) - F(c) = \textstyle\int_c^{c+h} f(t)\,dt @@ split-in-any-order (16a)
+\tfrac{F(c+h) - F(c)}{h} - f(c) = \tfrac1h \textstyle\int_c^{c+h} \big(f(t) - f(c)\big)\,dt @@ the integral of a constant (15c); areas-add and areas-scale (15e)
+\Big|\tfrac{F(c+h) - F(c)}{h} - f(c)\Big| \le \tfrac{\varepsilon}{2} \lt \varepsilon @@ area-bound (16a) on the stretch, where |t − c| < δ; divide by |h|
+\htmlClass{new}{F'(c) = f(c)} \quad \blacksquare @@ 13a's line for the slope: area-slope (16b). At an end, h of one sign only (13f)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="the second part: the area under a slope is the change">
+F \text{ is an antiderivative of } f \text{ on } [a, b] @@ the first part: antiderivative-exists (16b)
+F = G + C \text{ for some real } C @@ all-antiderivatives (14e): same slopes on an interval, same shape lifted
+0 = F(a) = G(a) + C @@ ∫ₐᵃ f = 0 (15e)
+\htmlClass{new}{\textstyle\int_a^b f = F(b) = G(b) - G(a)} \quad \blacksquare @@ the same line at b, with C = −G(a): area-is-a-change (16c)
+  </pre>
+  <p data-pid="815b2e">The second part asks less than continuity. 16c's second road reaches it from the boxes, and never uses the first part. Take any partition P of [p, q].</p>
+  <pre class="lines" data-k="ember" data-label="the second part again, for any f with an area">
+G(x_i) - G(x_{i-1}) = f(t_i)\,\Delta x_i,\ \ t_i \in (x_{i-1}, x_i) @@ average-slope (14c) on each piece; G′ = f inside
+m_i\,\Delta x_i \le G(x_i) - G(x_{i-1}) \le M_i\,\Delta x_i @@ mᵢ ≤ f(tᵢ) ≤ Mᵢ (15a); Δxᵢ > 0
+L(f, P) \le G(b) - G(a) \le U(f, P) @@ add the n lines; collapsing-sum (15g)
+\htmlClass{new}{\textstyle\int_a^b f = G(b) - G(a)} \quad \blacksquare @@ P was any partition; exactly-one-between (15c): change-for-any-integrable
+  </pre>
+  <p data-pid="ef1eed">Read through the second part, every rule for slopes becomes a rule for areas. 16d did it for the chain rule. Here is the product rule, as 16e did it, for f and g whose slopes are continuous on [p, q].</p>
+  <pre class="lines" data-k="ember" data-label="what the undoing turns round: the product rule">
+(fg)' = f'g + fg' \text{ on } [a, b] @@ product for slopes (13c)
+\textstyle\int_a^b f'g + \int_a^b fg' = fg\Big|_a^b @@ the second part with G = fg; areas-add (15e)
+\htmlClass{new}{\textstyle\int_a^b fg' = fg\Big|_a^b - \int_a^b f'g} \quad \blacksquare @@ take ∫ f′g from both sides: parts for areas (16e)
+  </pre>
+  <p data-pid="4cc399">Neither part is free at its edge. At a jump of f the first part can fail: the step u's area function from 0 has a joint there and no slope. And the second part needs f to have an area. A function described in 1881 has a slope everywhere, never past a fixed bound, and still no area under its slope.</p>
+  <h3>What the rest of the rung adds</h3>
+  <p data-pid="421480">Each step and annex after the proof steps adds a line to the claim. A line appears here once you have finished its page.</p>
+  <ul class="cl-adds">
+    <li data-after="r16f" data-pid="49b8c6"><b><a href="r16f.html">16f the table run backwards</a></b>: <span class="cl-t">It turns rung 13's table of slopes round into a table of antiderivatives, checks each entry by taking the slope of the answer, and marks the one entry no power fills: 1/x.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r16g" data-pid="0b9541"><b><a href="r16g.html">16g definite integrals and areas</a></b>: <span class="cl-t">It finds the area between two graphs as the integral of the top less the bottom, the total area by cutting where the graph crosses the axis, and averages by antiderivatives.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r16h" data-pid="a2ecf7"><b><a href="r16h.html">16h substitution and parts by hand</a></b>: <span class="cl-t">It practises choosing between substitution and parts, and ends with a tech that expresses an integral through a smaller one of its kind, so a whole list of areas comes from one line.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r16i" data-pid="aa1f28"><b><a href="r16i.html">16i improper integrals</a></b>: <span class="cl-t">It lets an end run out to forever, or in to a point where the graph climbs without bound, and asks whether the areas up to a cut settle on a number.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r16j" data-pid="656604"><b><a href="r16j.html">16j volumes by cross sections</a></b>: <span class="cl-t">It takes a volume as the integral of the areas of its slices. Equal slices give equal volumes, and a mass comes from a density that changes from slice to slice.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r16phys" data-pid="b9030d"><b><a href="r16phys.html">16·phys how far did it go, if you only know how fast?</a></b>: <span class="cl-t">It runs velocity, acceleration and force backwards. A force added up over time is the change in momentum, and added up over distance the change in kinetic energy.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r16cb12" data-pid="0ef5bb"><b><a href="r16cb12.html">16·cb12 floating and sinking</a></b>: <span class="cl-t">It adds up the push of water with depth to get the pressure under a column, and proves the buoyancy technique: the push up is the weight of the water pushed aside.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r16then" data-pid="f59578"><b><a href="r16then.html">16·then how much has piled up, if you only know the rate?</a></b>: <span class="cl-t">It reads a total change as the area under its rate, keeps a lake's books from what flows in and out, and estimates totals from readings taken once an hour.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r16eng" data-pid="185e7b"><b><a href="r16eng.html">16·eng where will a loaded beam crack?</a></b>: <span class="cl-t">A load can be run backwards twice, shear as the area under the load and bending as the area under the shear, so area-and-slope finds where a beam bends most and why joists stand on edge.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r16econ" data-pid="644b83"><b><a href="r16econ.html">16·econ who gains from a trade, and how much?</a></b>: <span class="cl-t">The gain from trade is the area between two curves, and area-slope shows that trading the market's quantity makes it greatest and that a tax destroys exactly the area over the trades it stops.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r16nav" data-pid="607591"><b><a href="r16nav.html">16·nav where am I now?</a></b>: <span class="cl-t">A place is the area under a speed, and area-bound proves why reckoning drifts: a doubt in speed grows like the time, and a doubt in push like its square.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r16bio" data-pid="3012ad"><b><a href="r16bio.html">16·bio how much of a dose is still in the blood?</a></b>: <span class="cl-t">It reads the amount of a dose the body took up as the clearance times the area under the blood level, and shows that two pills with one area can differ in how high and how long.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r16logi" data-pid="e594c2"><b><a href="r16logi.html">16·logi how much is in the tank right now?</a></b>: <span class="cl-t">It reads a tank's level as its start plus the area under inflow less outflow, and proves the tank never runs dry exactly when it starts with its deepest dip.</span><span class="cl-w">its line appears when you finish it.</span></li>
+  </ul>
+  <p data-pid="cab9a3">Slope and area were built from different parts, and they turned out to undo each other. You have only just started to use that.</p>
+  </div>
+</section>
+
+<nav class="nextrung"><a href="r16e.html">← 16e · parts</a><a href="r16f.html">16f · the table run backwards →</a></nav>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+  const need="r16e";
+  let p={}; try{ p=JSON.parse(LS.getItem('pages:done')||'{}')||{}; }catch(e){}
+  let peek=false; try{ peek=sessionStorage.getItem('cl:peek')==='1'; }catch(e){}
+  const done=k=>!!(p[k]&&p[k].v);
+  function apply(){
+    const open=peek||done(need);
+    document.body.classList.toggle('cl-locked',!open);
+    document.querySelectorAll('ul.cl-adds li[data-after]').forEach(li=>li.classList.toggle('cl-wait',!(peek||done(li.dataset.after))));
+    if(open&&done(need)){ const me=(location.pathname.split('/').pop()||'').replace(/\.html?$/,'');
+      if(window.MarksSync&&MarksSync.reportPage) MarksSync.reportPage(me,true,true,true,false);
+      else { try{ p[me]={v:true,a:true,o:true,h:false,t:Date.now()}; LS.setItem('pages:done',JSON.stringify(p)); }catch(e){} } }
+  }
+  const b=document.querySelector('.cl-peek'); if(b) b.addEventListener('click',()=>{ peek=true; try{ sessionStorage.setItem('cl:peek','1'); }catch(e){} apply(); });
+  apply();
+  try{ if(window.MarksSync&&MarksSync.pages) MarksSync.pages().then(q=>{ if(q){ p=Object.assign({},p,q); apply(); } },()=>{}); }catch(e){}
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

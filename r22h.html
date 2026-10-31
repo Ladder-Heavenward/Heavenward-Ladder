@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sequences by hand</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r22concl.html">← 22·∎ a total is where the running totals settle</a><a href="r22i.html">next: 22i testing sums by hand →</a></p>
+  <div class="tags"><span class="tag tech">22h · technique</span></div>
+  <h1>Sequences by hand</h1>
+  <p>Most sequences you meet are made from functions you already know, so the tools for limits from the tenth rung work on them almost unchanged. A few sequences come up so often that it pays to know where they head by heart: a fraction raised to higher and higher powers, the nth root of n, a power of n against a power of a fixed number. And some sequences are made by feeding each answer back into a rule. Those settle when the rule pulls neighbours closer together, and the place they settle is a number the rule leaves alone.</p>
+  <p class="gesture">Limits of functions far out give limits of sequences. A handful of standard sequences are worth knowing by heart. A rule fed its own answers settles when it pulls neighbours closer, and it settles at a point the rule does not move.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r10f.html">10f</a> (computing limits), <a href="r11e.html">11e</a> (sequences through continuous functions), <a href="r22a.html">22a</a> (settling by a rule), <a href="r22c.html">22c</a> (crowding), <a href="r09cb4.html">9·cb4</a> (recursion as sequences). <a href="r22i.html">22i</a> does the same for sums.</p></div>
+</header>
+
+<section class="class step" data-step="22h1">
+  <h2 class="sthead"><span class="stno">22h1</span>From functions to sequences</h2>
+  <p class="stands">Stands on 10f (limits far out), 10c (limits add, multiply and divide) and 11e (sequences go through).</p>
+  <p data-pid="563a01">Far-out technique for sequences: <b>if f(x) heads to L as x heads past every bound, then f(n) heads to L.</b> The window "x &gt; M" contains every n &gt; M. So 10c's sum, product and quotient techniques, and 10f's factor-and-cancel and conjugate, all work on sequences. And 11e: if aₙ heads to a and g is continuous at a, then g(aₙ) heads to g(a).</p>
+  <pre class="lines" data-k="ember" data-label="this step: two by hand">
+\tfrac{3n^2 + 1}{n^2 - 5} = \tfrac{3 + 1/n^2}{1 - 5/n^2} @@ divide top and bottom by n² (10f)
+\to \tfrac{3 + 0}{1 - 0} = 3 @@ 1/n² heads to 0; the quotient technique (10c)
+\sqrt{n+1} - \sqrt{n} = \tfrac{1}{\sqrt{n+1} + \sqrt{n}} @@ the conjugate (10f)
+\htmlClass{new}{\sqrt{n+1} - \sqrt{n} \to 0} \quad \blacksquare @@ the bottom passes every bound
+  </pre>
+  <p data-pid="0e2f5b">The far-out technique only runs one way. f(n) can settle while f(x) does not: sin(πx) heads nowhere as x grows, but sin(πn) is 0 for every n.</p>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">22h1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\dfrac{2n^2 - n}{5n^2 + 4}"></span></span>Find where it heads.</li><li><span class="givens"><span data-tex-inline="\sqrt{n^2 + n} - n"></span></span>Find where it heads.</li><li><span class="givens"><span data-tex-inline="\cos\dfrac{\pi n}{3n + 1}"></span></span>Find where it heads, and the technique that carries the limit inside.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22h2">
+  <h2 class="sthead"><span class="stno">22h2</span>Sequences to know by heart</h2>
+  <p class="stands">Stands on 15i2 (rⁿ shrinks), 22e2 (the ratio test) and the two-term-power technique (4j).</p>
+  <p data-pid="1be20f">Standard-sequences technique: <b>for |r| &lt; 1, rⁿ → 0; n^(1/n) → 1; for a &gt; 0, a^(1/n) → 1; for any power k and |r| &lt; 1, nᵏrⁿ → 0; for any x, xⁿ/n! → 0.</b> The first is 15i2. The rest are below.</p>
+  <pre class="lines" data-k="ember" data-label="this step: n^(1/n) heads to 1">
+n^{1/n} = 1 + h_n,\ h_n \ge 0 @@ n ≥ 1, so its root is at least 1
+n = (1 + h_n)^n \ge \tfrac{n(n-1)}{2}h_n^2 @@ one piece of the two-term-power expansion (4j); the rest are not negative
+0 \le h_n \le \sqrt{\tfrac{2}{n-1}} @@ divide and take roots, for n ≥ 2
+\htmlClass{new}{n^{1/n} \to 1} \quad \blacksquare @@ the squeeze (10d)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: the last two">
+\tfrac{(n+1)^k |r|^{n+1}}{n^k |r|^n} = (1 + \tfrac1n)^k |r| \to |r| < 1 @@ the ratio of neighbours
+\tfrac{|x|^{n+1}/(n+1)!}{|x|^n/n!} = \tfrac{|x|}{n+1} \to 0 @@ the same for xⁿ/n!
+\htmlClass{new}{n^k r^n \to 0,\ \ x^n/n! \to 0} \quad \blacksquare @@ ratio test (22e2): the sums settle, so their pieces head to 0 (22d2)
+  </pre>
+  <p data-pid="fec5e5">Read together, these say powers of n lose to powers of a fixed number, and both lose to n!. 22k makes that a ranking.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22h2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="n^2(0.9)^n,\ \ 5^{1/n},\ \ (2n)^{1/n},\ \ \tfrac{100^n}{n!}"></span></span>Find where each heads, and the sequence to know by heart that decides it. <br>Find every n at which 100ⁿ/n! is largest.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22h3">
+  <h2 class="sthead"><span class="stno">22h3</span>Rules fed their own answers</h2>
+  <p class="stands">Stands on 22a4 (settling by a rule), 22c2 (the crowd technique), 14c (the mean value technique) and 15i (geometric sums).</p>
+  <p data-pid="94a055">Pull-together technique: <b>if g sends an interval I into itself, and |g(x) − g(y)| ≤ k|x − y| on I for one k &lt; 1, then from any start in I, sₙ₊₁ = g(sₙ) settles, at the only L in I with g(L) = L.</b> By 14c it is enough that |g'| ≤ k on I.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the pull-together technique">
+|s_{n+1} - s_n| \le k|s_n - s_{n-1}| \le \cdots \le k^n|s_1 - s_0| @@ apply the pull n times
+|s_m - s_n| \le (k^n + \cdots + k^{m-1})|s_1 - s_0| \le \tfrac{k^n}{1-k}|s_1 - s_0| @@ m &gt; n: add the steps; the geometric sum (15i)
+s_n \text{ crowds, so settles at some } L @@ kⁿ → 0; the crowd technique (22c2)
+L = \lim g(s_n) = g(L) @@ g is continuous, since it pulls (11e)
+g(L') = L' \Rightarrow |L - L'| \le k|L - L'| \Rightarrow L = L' @@ k &lt; 1
+\htmlClass{new}{s_n \to L,\ g(L) = L,\ \text{and } L \text{ is the only one}} \quad \blacksquare @@ the lines above
+  </pre>
+  <p data-pid="54a5fc">Two rules to try by hand. sₙ₊₁ = (sₙ + 2/sₙ)/2 sends [1, 2] into itself with |g'| ≤ ½, so it settles at the L with L = (L + 2/L)/2, which is √2; from s₀ = 1 the third step is right to five places. And sₙ₊₁ = cos sₙ sends [0, 1] into itself with |g'| = |sin x| ≤ sin 1 &lt; 0.85, so it settles at the one x with cos x = x, about 0.7391. A calculator pressed over and over finds it.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · pull together · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22h3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="s_{n+1} = \tfrac12\big(s_n + \tfrac{3}{s_n}\big),\ \ s_0 = 2"></span></span>Find s₁, s₂ and s₃. <br>Find an interval the rule sends into itself, and a k below 1 for it. <br>Find where the run settles, and why there.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22h4">
+  <h2 class="sthead"><span class="stno">22h4</span>Where a rule does not settle</h2>
+  <p class="stands">Stands on 22h3 and 22b (threads).</p>
+  <p data-pid="fee5ca">A point g leaves alone is not always a place the sequence settles. Near such a point L, the slope g'(L) decides. If |g'(L)| &lt; 1, starts near L are pulled in. If |g'(L)| &gt; 1, they are pushed away.</p>
+  <pre class="lines" data-k="ember" data-label="this step: sₙ₊₁ = 3.2 sₙ(1 − sₙ), from s₀ = 0.5">
+L = 3.2L(1 - L) \Rightarrow L = 0 \text{ or } L = 0.6875 @@ the points g leaves alone
+g'(x) = 3.2 - 6.4x,\ \ g'(0.6875) = -1.2 @@ the slope there is more than 1 in size: it pushes
+0.5,\ 0.8,\ 0.512,\ 0.7995,\ 0.5129,\ 0.7995,\ 0.5130,\ \ldots @@ the run, to four places
+\htmlClass{new}{\text{two threads settle, near } 0.5130 \text{ and } 0.7995; \text{ the sequence wanders}} \quad \blacksquare @@ two threads with different limits (22b3)
+  </pre>
+  <p data-pid="39f75f">Turn the 3.2 up and the cycle of two splits into four, then eight, and past about 3.57 the run never repeats at all. A rule as short as this one can wander forever without passing any ceiling.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22h4.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="s_{n+1} = 2.5\,s_n(1 - s_n),\ \ s_0 = 0.5"></span></span>Find the points g leaves alone, and the slope of g at each. <br>Find s₁ to s₄, to four places. <br>Find where the run settles, and which point pushes.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22h5">
+  <h2 class="sthead"><span class="stno">22h5</span>Illegal moves</h2>
+  <p class="stands">Stands on 22h1 to 22h4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\sin(\pi n) \to 0, \text{ so } \sin(\pi x) \to 0 \text{ as } x \text{ grows}\,? @@ the far-out technique runs one way only
+(1 + \tfrac1n)^n \to 1^\infty = 1\,? @@ the base and the power move together; 17e: it heads to e
+L = g(L) \text{ has a solution, so } s_{n+1} = g(s_n) \text{ settles there}\,? @@ 22h4: the point can push away
+n^{1/n} = \sqrt[n]{n} \to \sqrt[\infty]{\infty}\,? @@ ∞ is no number to put in a root; squeeze instead
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22h5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span class="gtx">x = n + ½, for n = 0, 1, 2, 3</span></span>Find sin(πx) at each. <br>Find whether sin(πx) heads to 0 as x grows.</li><li><span class="givens"><span data-tex-inline="\big(1 + \tfrac1n\big)^n"></span></span>Find it at n = 1, 10 and 100, to four places. <br>Find whether it heads to 1, and what moves besides the base.</li><li><span class="givens"><span data-tex-inline="s_{n+1} = s_n^2"></span></span>Find every L with L = L². <br>Find s₁ to s₄ from s₀ = 2, and from s₀ = 0.9. <br>Find which of the two points pulls and which pushes.</li><li><span class="givens"><span data-tex-inline="n^{1/n}"></span></span>Find it at n = 10, 100 and 1000, to three places. <br>Find the bound the squeeze puts on hₙ at n = 100.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">22h.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="x = e^{-x}"></span></span>Build a rule sₙ₊₁ = g(sₙ) that settles at its one answer from every start in [0, 1]. <br>Find an interval and a k for the pull-together technique. <br>Find how many steps from s₀ = 0 bring the run within 0.0005 of the answer.</div>
+  <div class="chq"><span class="chid">22h.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="g(x) = x + \tfrac1x \text{ on } [1, \infty)"></span></span>Prove |g(x) − g(y)| &lt; |x − y| for every two different x and y. <br>Find s₁ to s₄ from s₀ = 1, and whether the run settles. <br>Find which part of the pull-together technique fails.</div>
+  <div class="chq"><span class="chid">22h.4.3</span><span class="tagq">converse</span>22h4: a slope below 1 in size at L pulls nearby starts in. Turn it round: if every start near L is pulled in, must |g′(L)| be below 1? <br>Find what sₙ₊₁ = sin sₙ does from s₀ = 1, and the slope of sin at the point it leaves alone. <br>Find what sₙ₊₁ = sₙ + sₙ² does from s₀ = 0.1.</div>
+  <div class="chq"><span class="chid">22h.4.4</span><span class="tagq">reroute</span>Prove n^(1/n) → 1 without the two-term power. Use ln x ≤ x − 1 (17a) on √n to show ln n &lt; 2√n. <br>Then carry the limit of (ln n)/n through exp.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r22concl.html">← 22·∎ · a total is where the running totals settle</a><a href="r22i.html">22i · testing sums by hand →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The pull-together technique is the contraction mapping principle (Banach fixed-point theorem, here on an interval). A point g leaves alone is a fixed point; attracting when |g′(L)| &lt; 1, repelling when it is more than 1. The rule 3.2s(1 − s) is the logistic map; the splitting into 2, 4, 8 is period doubling, and the run that never repeats is called chaos. The square-root rule is the Babylonian method, a case of Newton's method.</p>
+  <h3>Who said it first</h3>
+  <p>The square-root rule is on Old Babylonian tablets and was written out by Heron of Alexandria. Stefan Banach proved the pull-together principle in full in 1922. Robert May drew attention to the logistic map in 1976, and Mitchell Feigenbaum found in 1975 that the doublings come at a rate that is the same for a whole family of rules.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'the pull',t:R`|g(x) - g(y)| \le k|x - y|,\ k < 1`,n:`On an interval g keeps.`},
+  {k:'ember',kl:'settles',t:R`\htmlClass{new}{s_{n+1} = g(s_n) \to L = g(L)}`,n:`The only point g leaves alone.`}
+],{title:'The slides · pull together · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

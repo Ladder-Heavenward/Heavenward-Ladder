@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Separating the variables</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r24concl.html">← 24·∎ a tame rule fixes the future</a><a href="r24g.html">next: 24g the integrating factor →</a></p>
+  <div class="tags"><span class="tag tech">24f · technique</span></div>
+  <h1>Separating the variables</h1>
+  <p>The proof steps of this rung promise that a tame rule with a start has one solution. They do not hand you a formula for it. This step finds formulas for a large family of rules by hand: the rules whose slope is a piece that depends only on the input times a piece that depends only on the height. Put everything about the height on one side and everything about the input on the other, take the area of each side, and the two areas must agree. The answer is checked by putting it back into the rule, and when the rule is tame that check also proves it is the only answer. One warning comes with the method. To part the two sides you divide by the height piece, and where that piece is zero you have divided by nothing. The flat solutions that live there are lost, unless you look for them on purpose.</p>
+  <p class="gesture">When the slope is an input piece times a height piece, part them and take the area of each side. Check the answer by putting it back. Look on purpose for the flat solutions where the height piece is zero, because parting the sides loses them.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r24a.html">24a</a> (a rule and a start), <a href="r24d.html">24d</a> (the drift technique), <a href="r24e.html">24e</a> (many futures, and run-off), <a href="r16c.html">16c</a> (evaluating by antiderivatives), <a href="r13e.html">13e</a> (the chain rule), <a href="r14e.html">14e</a> (same slopes). <a href="r24g.html">24g</a> solves the rules that are straight in y.</p></div>
+</header>
+
+<section class="class step" data-step="24f1">
+  <h2 class="sthead"><span class="stno">24f1</span>Parting the letters</h2>
+  <p class="stands">Stands on 24a2 (a rule and a start), 16b (the slope of an area is the height), 13e (the chain rule) and 14e (same slopes).</p>
+  <p data-pid="a84dcd">A rule <i>parts</i> when its slope is an input piece times a height piece: y′ = g(x)h(y). y′ = xy² parts, with g(x) = x and h(y) = y². y′ = x + y does not.</p>
+  <p data-pid="210551">Side-by-side technique: <b>let g be continuous on an interval holding x₀, and h continuous and never 0 on an interval K holding y₀; then a function y with values in K solves y′ = g(x)h(y), y(x₀) = y₀ exactly when ∫ from y₀ to y(x) of ds/h(s) equals ∫ from x₀ to x of g(t) dt, at every x.</b> Write H(y) for the left area and G(x) for the right one.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the side-by-side technique">
+H'(y) = \tfrac{1}{h(y)} \text{ on } K,\ \ G'(x) = g(x) @@ the slope of an area is the height (16b)
+y' = g(x)h(y) \Rightarrow \big(H(y(x))\big)' = \tfrac{y'(x)}{h(y(x))} = g(x) = G'(x) @@ the chain rule (13e); h(y(x)) ≠ 0, since y stays in K
+H(y(x)) - G(x) \text{ is constant, and } 0 \text{ at } x_0 @@ same slopes (14e); H(y₀) = 0 = G(x₀)
+H(y(x)) = G(x) \Rightarrow \tfrac{y'(x)}{h(y(x))} = g(x) \Rightarrow y' = g(x)h(y) @@ back again: slopes of both sides; 1/h never 0, so H has an undoing with a slope (13e)
+\htmlClass{new}{y' = g(x)h(y),\ y(x_0) = y_0 \iff H(y(x)) = G(x)} \quad \blacksquare @@ both ways
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: y&#x27; = xy², y(0) = 1">
+h(y) = y^2 \ne 0 \text{ on } K = (0, \infty),\ \ y_0 = 1 \in K @@ the technique applies
+\int_1^{y} \tfrac{ds}{s^2} = 1 - \tfrac1y,\ \ \int_0^x t\,dt = \tfrac{x^2}{2} @@ evaluating by antiderivatives (16c)
+1 - \tfrac1y = \tfrac{x^2}{2} \Rightarrow y = \tfrac{2}{2 - x^2} @@ the side-by-side technique; solve for y
+\htmlClass{new}{y = \tfrac{2}{2 - x^2} \text{ on } -\sqrt2 < x < \sqrt2} \quad \blacksquare @@ the interval holding 0 where y stays in K
+  </pre>
+  <p data-pid="d6f1e8">The hand shorthand is dy/h(y) = g(x) dx, then an area sign on each side. It works because dy/dx behaves as one mark through the chain rule (13e); the technique above is what licenses it. The solution runs off at ±√2, as 24e's y′ = y² did at 1: parting the letters can find a run-off that the existence technique could only warn of.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · side by side · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">24f1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="y&#x27; = y\cos x,\ \ y(0) = 2"></span></span>Find the solution, and the interval holding 0 on which it lives.</li><li><span class="givens"><span data-tex-inline="y&#x27; = 1 + y^2,\ \ y(0) = 0"></span></span>Find the solution, and the interval holding 0 on which it lives.</li><li><span class="givens"><span data-tex-inline="y&#x27; = e^{x - y},\ \ y(0) = 1"></span></span>Part the rule into an input piece and a height piece. <br>Find the solution, and the interval holding 0 on which it lives.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24f2">
+  <h2 class="sthead"><span class="stno">24f2</span>Put it back</h2>
+  <p class="stands">Stands on 24f1, 24a1 (what a solution is), 24d3 (the drift technique) and 12b (bounded on a closed interval).</p>
+  <p data-pid="581082">A formula found by hand can carry a slip. The cure is the definition of a solution itself.</p>
+  <p data-pid="56cd92">Put-back technique: <b>if a formula y has a slope at every x of an interval I holding x₀, makes y′ = F(x, y) true at every x of I, and has y(x₀) = y₀, it is a solution on I; and if F is tame on every rectangle, every solution with the same start agrees with it wherever both live.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the put-back technique">
+y \text{ is a solution on } I \text{ with the start } (x_0, y_0) @@ the definition of a solution and a start (24a1, 24a2)
+z \text{ another solution, } x_1 \text{ in both intervals} @@ any other solution, from the same start
+y, z \text{ are bounded on the stretch from } x_0 \text{ to } x_1 @@ continuous on a closed interval (12b): both stay in one rectangle
+|y(x) - z(x)| \le 0 \cdot e^{L|x - x_0|} = 0 @@ the drift technique (24d3) on that rectangle, with equal starts
+\htmlClass{new}{z = y \text{ wherever both live}} \quad \blacksquare @@ every x₁ in both intervals
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: checking y = 2/(2 − x²)">
+y' = \tfrac{4x}{(2 - x^2)^2},\ \ xy^2 = x \cdot \tfrac{4}{(2 - x^2)^2} @@ the chain rule; the rule's right side
+y' = xy^2 \text{ at every } x \text{ in } (-\sqrt2, \sqrt2),\ \ y(0) = 1 @@ the rule and the start hold
+|xy^2 - xz^2| = |x|\,|y + z|\,|y - z| \le 2pB\,|y - z| \text{ when } |x| \le p,\ |y|, |z| \le B @@ tame on every rectangle, with L = 2pB
+\htmlClass{new}{y = \tfrac{2}{2 - x^2} \text{ is the one solution from } (0, 1)} \quad \blacksquare @@ the put-back technique
+  </pre>
+  <p data-pid="2c200b">For a rule that parts, tameness is easy to test: if g is continuous and h has a continuous slope, then on a rectangle |g| has a ceiling and so does |h′| (12b), and the mean value technique (14c) gives an L. Putting back takes a minute and catches every slip of sign and every lost constant.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24f2.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="y&#x27; = 3x^2 y,\ \ y(0) = 3,\ \ y = 3e^{x^3}"></span></span>Put it back, and find the interval on which it is a solution. <br>Find an L that makes the rule tame on the rectangle |x| ≤ 2, |y| ≤ 100.</li><li><span class="givens"><span data-tex-inline="y&#x27; = 2xy^2,\ \ y(0) = -1,\ \ y = \tfrac{1}{x^2 - 1}"></span></span>Put it back. Find where the rule fails, and where the start holds. <br>Find the right solution by the side-by-side technique, and the interval on which it lives.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24f3">
+  <h2 class="sthead"><span class="stno">24f3</span>The solutions a separation loses</h2>
+  <p class="stands">Stands on 24f1, 24f2, 24e1 (the many-futures technique) and 12a (in-between values).</p>
+  <p data-pid="1b0aae">The side-by-side technique asks for h(y) ≠ 0. Where h(c) = 0, the flat line y = c has slope 0, and so does g(x)h(c). So the flat line solves the rule, and the technique, having divided by h(y), never meets it.</p>
+  <p data-pid="1b6f94">Resting-line technique: <b>if h(c) = 0, the flat line y = c solves y′ = g(x)h(y); and if the rule is tame on every rectangle, no solution that starts off the line c ever touches it.</b> So a solution from a start between two neighbouring zeros of h stays strictly between them, and there the division was honest.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the resting-line technique">
+y = c \Rightarrow y' = 0 = g(x)h(c) @@ flat; h(c) = 0: the line is a solution
+y(x_1) = c \text{ for some } x_1 @@ suppose a solution touches the line
+y \text{ and the line } c \text{ share the start } (x_1, c) @@ both are solutions through it
+y = c \text{ wherever } y \text{ lives, so } y(x_0) = c @@ the put-back technique (24f2), from (x₁, c)
+\htmlClass{new}{y(x_0) \ne c \Rightarrow y(x) \ne c \text{ at every } x} \quad \blacksquare @@ turned about; with in-between values (12a), y stays on one side
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: y&#x27; = 1 − y², y(0) = 0">
+h(y) = 1 - y^2 = 0 \text{ at } y = \pm1 @@ two resting lines, lost by parting
+-1 < y(x) < 1 \text{ at every } x @@ the resting-line technique: the start 0 lies between them, and 1 − y² is tame
+\int_0^y \tfrac{ds}{1 - s^2} = \tfrac12 \ln\tfrac{1+y}{1-y} = x @@ split into straight factors (17k); the side-by-side technique
+\htmlClass{new}{y = \tfrac{e^{2x} - 1}{e^{2x} + 1} \text{ on the whole line}} \quad \blacksquare @@ solve for y; it heads to 1 and never reaches it
+  </pre>
+  <p data-pid="d14d99">Written with a constant, the family is y = (Ae^(2x) − 1)/(Ae^(2x) + 1) with A &gt; 0. A = 0 gives the line −1 back, by luck. No A gives the line 1. Which flat lines a formula happens to hold depends on how its constant was written, so never trust the formula to hold them: find the zeros of h and list their lines separately.</p>
+  <p data-pid="6190de">Without tameness the second half fails. 24e1's y′ = √|y| has h(0) = 0, and its solutions rest on the line 0 and leave it whenever they like. There the side-by-side technique finds each growing piece, and the flat piece, but not where one hands over to the other.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · resting lines · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24f3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="h&#x27; = -0.2\sqrt{h},\ \ h(0) = 4"></span></span>The height h of water in a draining tank is in metres and t in minutes. Find h by the side-by-side technique, and when the tank is empty. <br>Find the resting line, and the solution for every t ≥ 0.</li><li><span class="givens"><span data-tex-inline="h&#x27; = -0.2\sqrt{h},\ \ h(30) = 0"></span></span>Find two solutions with this start, one empty since t = 20 and one empty since t = 25, and the height each had at t = 0. <br>Find which part of the resting-line technique fails, and why.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24f4">
+  <h2 class="sthead"><span class="stno">24f4</span>Illegal moves</h2>
+  <p class="stands">Stands on 24f1 to 24f3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+y' = y^2 \Rightarrow -\tfrac1y = x + C, \text{ so every solution is } y = -\tfrac{1}{x + C}\,? @@ dividing by y² lost the resting line y = 0 (24f3)
+\tfrac{dy}{y} = dx \Rightarrow \ln y = x + C \Rightarrow y = e^{x + C} > 0\,? @@ the area under 1/y is ln|y| (17b); and y = 0 is a resting line
+y' = x + y \Rightarrow \int \tfrac{dy}{x + y} = \int dx\,? @@ x + y is not an input piece times a height piece; the left area still holds x
+y = \tfrac{2}{2 - x^2} \text{ solves } y' = xy^2,\ y(0) = 1 \text{ for every } x \ne \pm\sqrt2\,? @@ a solution lives on one interval holding the start; the outer pieces start from no point of it (24e)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24f4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="y&#x27; = y^2,\ \ y(0) = 0"></span></span>Find a C that makes −1/(x + C) meet this start, if there is one. <br>Find the solution from this start.</li><li><span class="givens"><span data-tex-inline="y&#x27; = y,\ \ y(0) = -3"></span></span>Find what ln y = x + C gives at the start. <br>Find the solution, and the step that should have read ln|y|.</li><li><span class="givens"><span data-tex-inline="y&#x27; = x + y"></span></span>Find whether the slope can be written as an input piece times a height piece, testing at (0, 0), (1, 0), (0, 1) and (1, 1). <br>Find which of y = −x − 1 and y = eˣ − x − 1 solve it.</li><li><span class="givens"><span data-tex-inline="y&#x27; = xy^2,\ \ y(0) = 1"></span></span>Find y = 2/(2 − x²) at x = 2 and its slope there. <br>Find whether that point lies on the solution from (0, 1), and why.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">24f.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="y&#x27; = \dfrac{1 + y^2}{1 + x^2},\ \ y(0) = 1"></span></span>Build the solution by the side-by-side technique. <br>Turn it into a formula with no arctan, using the sum formula for tan (21d). <br>Find the interval on which it lives, and put it back.</div>
+  <div class="chq"><span class="chid">24f.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="y&#x27; = -\dfrac{x}{y},\ \ y(0) = 2"></span></span>Find the solution by the side-by-side technique, and the interval on which it lives. <br>Find what the solution and its slope do as x heads to 2. <br>This solution neither runs off nor has many futures, yet it ends. Find what ends it.</div>
+  <div class="chq"><span class="chid">24f.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="y&#x27; = y\ln y"></span></span>The resting-line technique: a tame rule never lets a solution touch a resting line. Turn it round: if no solution from a start off c ever touches c, must the rule be tame near c? <br>Show h(y) = y ln y is not tame near 0, taking h(0) = 0. <br>Solve from y(0) = ½ by putting u = ln y, and find whether the solution ever reaches 0.</div>
+  <div class="chq"><span class="chid">24f.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="y&#x27; = y\cos x"></span></span>Solve it without parting the letters: multiply any solution by e^(−sin x) and show the product has slope 0, as in 24a3. <br>Find which solution the side-by-side technique missed, and whether this route misses it.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r24concl.html">← 24·∎ · a tame rule fixes the future</a><a href="r24g.html">24g · the integrating factor →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>Parting the letters is separation of variables, and a rule that parts is a separable equation. The put-back technique is checking by substitution, with uniqueness from the Picard–Lindelöf theorem. A resting line is an equilibrium (or constant, or stationary) solution. The draining rule is Torricelli's law. The rule in the converse challenge is the standard example that a rule need not be Lipschitz for its solutions to stay apart; the sharp test, that the area of 1/h must pass every ceiling as y heads to c, is Osgood's condition.</p>
+  <h3>Who said it first</h3>
+  <p>Gottfried Leibniz found the method in 1691, in a letter to Christiaan Huygens. Johann Bernoulli gave it the name "separation of the indeterminates" in 1694. William Osgood proved his condition in 1898.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'the rule parts',t:R`y^{\prime} = g(x)\,h(y),\ \ h(y_0) \ne 0`,n:`An input piece times a height piece.`},
+  {k:'ember',kl:'two areas',t:R`\htmlClass{new}{\int_{y_0}^{y} \tfrac{ds}{h(s)} = \int_{x_0}^{x} g(t)\,dt}`,n:`Then solve for y.`}
+],{title:'The slides · side by side · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'a zero of h',t:R`h(c) = 0 \Rightarrow y = c \text{ solves it}`,n:`Lost by parting.`},
+  {k:'ember',kl:'never touched',t:R`\htmlClass{new}{y(x_0) \ne c \Rightarrow y(x) \ne c}`,n:`When the rule is tame.`}
+],{title:'The slides · resting lines · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Can one digit of π be found alone?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r22phys.html">← 22·phys does a bouncing ball ever stop?</a><a href="r23.html">next: 23 a smooth function is rebuilt from one point →</a></p>
+  <div class="tags"><span class="tag now">22·now · research front</span></div>
+  <h1>Can one digit of π be found alone?</h1>
+  <p>Can one digit of π be found alone? To learn the millionth decimal digit of π, people work out all the digits before it. There are ways to aim at one decimal digit alone, but they are slower than working out the whole run. In 1995 a computer search turned up a sum for π that does something new. In base sixteen, it gives a digit far out without the digits before it, using almost no memory. What makes it surprising is that π is one fixed number, and each of its digits seems to depend on all of it at once. This page shows, with 15i’s endless ratio sums and 22e’s geometric yardstick, how such a sum is proved, how it peels off a far digit, why every digit it gives is read from a fence that must be checked, and what is still unknown. Nobody knows whether a sum like it exists for base ten. Nobody knows whether the digits of π are spread evenly, in any base.</p>
+  <p class="gesture">The sum has terms that shrink by a factor of sixteen, and each term is four small fractions. Multiply π by sixteen again and again, and its digits slide left past the point. In the sum, that multiplying touches only small whole numbers, and only their remainders on division matter. The terms left over shrink so fast that the geometric yardstick caps them. The result is a fence around the fraction part, and a digit is read off it wherever the whole fence agrees. The sum was found by a computer’s search and only then proved by hand, term by term, through an area.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r15i.html">15i</a> (finite and endless ratio sums), <a href="r22d.html">22d</a> (a sum is where its partial sums settle), <a href="r22e.html">22e</a> (compare with a geometric sum), <a href="r16d.html">16d</a> (substitution), <a href="r17k.html">17k</a> (partial fractions), <a href="r17i.html">17i</a> (∫g′/g = ln|g|), <a href="r21m.html">21m</a> (the slope of arctan), <a href="r21a.html">21a</a> (π, and the cloud), <a href="r11f.html">11f</a> (the whole part ⌊x⌋) and <a href="r04i.html">4i</a> (division with remainder). Rung 23 proves that π is not a fraction.</p></div>
+</header>
+
+<section class="class step" data-step="22now1">
+  <h2 class="sthead"><span class="stno">22now1</span>A digit far out</h2>
+  <p class="stands">Stands on 8·cb5 (endless decimals), 11f (the whole part) and 4i (division with remainder).</p>
+  <p data-pid="f2b4a1">In base sixteen each place is a sixteenth of the place before. The digits run 0 to 9, then A, B, C, D, E, F for ten to fifteen. In base sixteen, π = 3.243F6A8885A308D3… . Write frac x for x − ⌊x⌋, the part of x after the point, and δₙ for the digit in place n after the point.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the shift technique">
+\pi = 3 + \tfrac{\delta_1}{16} + \tfrac{\delta_2}{16^2} + \tfrac{\delta_3}{16^3} + \cdots @@ the digits as an endless sum (8·cb5, in base sixteen)
+16^d\pi = \text{a whole number} + \tfrac{\delta_{d+1}}{16} + \tfrac{\delta_{d+2}}{16^2} + \cdots @@ multiply by 16ᵈ: the first d digits pass the point
+\operatorname{frac}(16^d\pi) = \tfrac{\delta_{d+1}}{16} + \tfrac{\delta_{d+2}}{16^2} + \cdots @@ the rest lies in [0, 1)
+\htmlClass{new}{\delta_{d+1} = \lfloor 16\,\operatorname{frac}(16^d\pi) \rfloor} \quad \blacksquare @@ times 16: δ_{d+1} plus a part in [0, 1)
+  </pre>
+  <p data-pid="a2202a">Shift technique: <b>the digit in place d + 1 is the whole part of sixteen times the fraction part of 16ᵈπ.</b> So a far digit needs only frac(16ᵈπ), and only roughly. It does not need the digits before it, if frac(16ᵈπ) can be reached some other way.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · shift · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">22·now.1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\pi = 3.243\text{F}6\text{A}88\ldots \text{ in base sixteen}"></span></span>Find frac(16²π) in base sixteen, to four places. <br>Find δ₃ by the shift technique.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22now2">
+  <h2 class="sthead"><span class="stno">22now2</span>A sum, taken through an area</h2>
+  <p class="stands">Stands on 15i (finite-ratio-sum), 16c (antiderivatives), 17b (∫dx/x), 22d and 22e (compare with a geometric sum).</p>
+  <p data-pid="e68540">First a smaller sum, with the same moves. The area under 1/(1 − x) from 0 to ½ is ln 2. Split 1/(1 − x) into a ratio sum and a leftover, and take the area of each piece.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the term-by-term technique">
+\tfrac{1}{1 - x} = 1 + x + \cdots + x^{n-1} + \tfrac{x^n}{1 - x} @@ finite-ratio-sum (15i), for x ≠ 1
+\int_0^{1/2}\tfrac{dx}{1 - x} = \textstyle\sum_{k=1}^{n}\tfrac{1}{k\,2^k} + \int_0^{1/2}\tfrac{x^n}{1 - x}\,dx @@ the area of xᵏ⁻¹ from 0 to ½ is (½)ᵏ/k (16c)
+\ln 2 = \big[-\ln(1 - x)\big]_0^{1/2} @@ ∫g′/g = ln|g| (17i)
+0 \le \int_0^{1/2}\tfrac{x^n}{1 - x}\,dx \le \tfrac12 \cdot 2 \cdot \big(\tfrac12\big)^n @@ on [0, ½], xⁿ ≤ (½)ⁿ and 1/(1 − x) ≤ 2: width times greatest height
+\htmlClass{new}{\ln 2 = \textstyle\sum_{k=1}^{\infty}\tfrac{1}{k\,2^k}} \quad \blacksquare @@ the leftover heads to 0 (15i): the partial sums settle on ln 2 (22d)
+  </pre>
+  <p data-pid="9ab9fb">Term-by-term technique: <b>split the function into a ratio sum and a leftover, take the area of each piece, and show that the leftover’s area heads to 0.</b> The leftover is capped by a geometric sum, 22e’s yardstick, so it vanishes fast. Twenty terms give ln 2 to within a millionth.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · term by term · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22·now.2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">the term-by-term technique, on the area under 1/(1 − x) from 0 to ⅓</span></span>Find the endless sum it gives, and the number the sum equals. <br>Find how many terms bring the leftover under 10⁻⁶.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22now3">
+  <h2 class="sthead"><span class="stno">22now3</span>The sum for π</h2>
+  <p class="stands">Stands on 22·now.2, 16d (substitution), 17k (partial fractions), 17i (∫g′/g = ln|g|) and 21m (arctan′ = 1/(1 + u²)).</p>
+  <p data-pid="6acb8e">The same moves, with 1/(1 − x⁸) on [0, 1/√2]. For j = 1, 2, …, 8, the area of x^(8k + j − 1) from 0 to 1/√2 is (1/√2)^(8k + j)/(8k + j), and (1/√2)⁸ = 1/16. The leftover is at most 16⁻ⁿ times a fixed number, since x⁸ ≤ 1/16 there.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the digit sum">
+\int_0^{1/\sqrt2}\tfrac{x^{j-1}}{1 - x^8}\,dx = \tfrac{1}{(\sqrt2)^j}\textstyle\sum_{k=0}^{\infty}\tfrac{1}{16^k\,(8k + j)} @@ term by term, as for ln 2
+\textstyle\sum_{k=0}^{\infty}\tfrac{1}{16^k}\Big(\tfrac{4}{8k+1} - \tfrac{2}{8k+4} - \tfrac{1}{8k+5} - \tfrac{1}{8k+6}\Big) = \int_0^{1/\sqrt2}\tfrac{4\sqrt2 - 8x^3 - 4\sqrt2\,x^4 - 8x^5}{1 - x^8}\,dx @@ j = 1, 4, 5, 6, each times (√2)ʲ; sums-are-linear
+= \int_0^1 \tfrac{16(y - 1)}{(y^2 - 2)(y^2 - 2y + 2)}\,dy @@ y = √2 x (16d); top and bottom share (y² + 2)(y² + 2y + 2)
+= \int_0^1 \Big(\tfrac{4y}{y^2 - 2} - \tfrac{4(y - 1)}{(y - 1)^2 + 1} + \tfrac{4}{(y - 1)^2 + 1}\Big)\,dy @@ partial fractions (17k); y² − 2y + 2 = (y − 1)² + 1
+= \Big[\,2\ln|y^2 - 2| - 2\ln\big((y - 1)^2 + 1\big) + 4\arctan(y - 1)\Big]_0^1 @@ ∫g′/g = ln|g| (17i); arctan′ u = 1/(1 + u²) (21m)
+\htmlClass{new}{= 0 - \big(2\ln 2 - 2\ln 2 - \pi\big) = \pi} \quad \blacksquare @@ arctan 0 = 0, arctan(−1) = −π/4
+  </pre>
+  <p data-pid="288b1e">Digit-sum technique (the BBP formula): <b>π is an endless sum whose terms shrink by a factor of sixteen, each made of four small fractions.</b> These lines are not how it was found. A computer was set to hunt for whole numbers a₁, …, a₈ that make Σ 16⁻ᵏ Σⱼ aⱼ/(8k + j) agree with π to many places. It found 4, 0, 0, −2, −1, −1, 0, 0. A match to many places is a guess. The column above is what made it a technique.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · digit sum · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22·now.3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">the digit sum’s first two terms, k = 0 and k = 1</span></span>Find their total to six places, and how far it is from π. <br>Find a cap on all the later terms together, by the geometric yardstick.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22now4">
+  <h2 class="sthead"><span class="stno">22now4</span>Peeling off a far digit</h2>
+  <p class="stands">Stands on 22·now.1, 22·now.3, 4i (division with remainder) and 22e (compare with a geometric sum).</p>
+  <p data-pid="4e309d">Write Sⱼ = Σ 1/(16ᵏ(8k + j)), so π = 4S₁ − 2S₄ − S₅ − S₆. The shift technique needs frac(16ᵈπ). Split each 16ᵈSⱼ at k = d.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the peeling technique">
+16^d S_j = \textstyle\sum_{k=0}^{d}\tfrac{16^{d-k}}{8k + j} + \sum_{k=d+1}^{\infty}\tfrac{16^{d-k}}{8k + j} @@ split at k = d
+16^{d-k} = q\,(8k + j) + \rho_k,\ \ 0 \le \rho_k \lt 8k + j @@ division with remainder (4i)
+\operatorname{frac}\tfrac{16^{d-k}}{8k + j} = \operatorname{frac}\tfrac{\rho_k}{8k + j} @@ the whole number q drops out
+0 \lt \textstyle\sum_{k=d+1}^{\infty}\tfrac{16^{d-k}}{8k + j} \lt \tfrac{1}{8d + j}\big(\tfrac{1}{16} + \tfrac{1}{16^2} + \cdots\big) = \tfrac{1}{15\,(8d + j)} @@ the geometric yardstick (22e)
+\htmlClass{new}{\operatorname{frac}(16^d\pi) = \operatorname{frac}\big(4F_1 - 2F_4 - F_5 - F_6\big),\ \ F_j = \operatorname{frac}(16^d S_j)} \quad \blacksquare @@ whole multiples of whole parts drop out
+  </pre>
+  <p data-pid="f8c29c">The remainders ρₖ need no huge number. To get the remainder of 16²ᵉ, square the remainder of 16ᵉ and take its remainder again. So 16 to the power of a million takes about twenty squarings, and no number along the way passes (8k + j)². The tail is added term by term until what is left falls below the width wanted.</p>
+  <p data-pid="ba4d38">Peeling technique: <b>the digits of π past place d need only remainders of powers of sixteen and a short tail, never the digits before.</b> The work grows a little faster than d, and the memory hardly grows at all.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · peel · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · peel a digit</div>
+    <div class="kn"><span class="m">d</span><input type="range" id="kd" min="0" max="10" step="1" value="0"><output id="od"></output></div>
+    <div id="pl" class="cap"></div>
+    <div class="cap">The knob picks d. The page peels sixteen hex digits from place d + 1 on, in ordinary computer arithmetic, from about four times d remainders. Far out, the digits past the tenth or so are rounding, not π.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22·now.4.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="d = 5"></span> <span data-tex-inline="j = 1"></span> <span data-tex-inline="k = 1"></span></span>Find ρ₁, the remainder of 16⁵⁻¹ on division by 9, by squaring, without writing out 16⁴. <br>Find the cap on the tail of 16⁵S₁.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22now5">
+  <h2 class="sthead"><span class="stno">22now5</span>A digit is read from a fence</h2>
+  <p class="stands">Stands on 22·now.4 and 21a (the cloud).</p>
+  <p data-pid="e15e53">A computer adds in its own arithmetic, keeping about sixteen decimal figures. Each of the 4d remainder fractions rounds a little. So frac(16ᵈπ) comes out as x, with a width w on each side.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the fence technique">
+\operatorname{frac}(16^d\pi) \in [x - w,\ x + w] @@ the computed value, and its width
+\tfrac{i}{16} \le x - w \ \text{ and } \ x + w \lt \tfrac{i + 1}{16} @@ the whole fence inside one sixteenth
+\htmlClass{new}{\delta_{d+1} = i} \quad \blacksquare @@ the shift technique, at every point of the fence
+  </pre>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · the cloud</div>
+    <p data-pid="80a053">21a said that every value of π is a fence. The peeling technique keeps that promise in a new way. It never gives π, only frac(16ᵈπ) with a width. At place one million, a run in ordinary arithmetic gives 26C65E52CB31…, and the true digits there are 26C65E52CB45… . Ten digits are right; the rest are rounding.</p>
+    <p data-pid="3c1ad9"><b>Report only the digits on which the whole fence agrees.</b></p>
+    <p data-pid="8c5b03">A fence that straddles a boundary gives no digit at all, however narrow it is. Near a run like …FFFF… or …0000…, a far narrower fence is needed. So record runs of π, now past a hundred trillion decimal digits, are checked by peeling hex digits near their end with sums of this kind, and comparing.</p>
+    <p class="bait" data-pid="1e4f49">Two runs at the same place, with widths 10⁻¹⁰ and 10⁻¹², agree on eight hex digits and then part. Which digits would you publish?</p>
+  </aside>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · fence · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22·now.5.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\operatorname{frac}(16^d\pi) = 0.62490 \pm 0.00002"></span></span>Find which of δ_{d+1}, δ_{d+2} are certain, and their values.</li><li><span class="givens"><span data-tex-inline="\operatorname{frac}(16^d\pi) = 0.62500 \pm 0.00002"></span></span>Find which are certain.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22now6">
+  <h2 class="sthead"><span class="stno">22now6</span>What is proved, and what is open</h2>
+  <p class="stands">Stands on 22·now.1 to 22·now.5, and 0c (guesses by case).</p>
+  <p data-pid="98ac18">The research front here is close to the ground. Some of it is proved, some of it is ruled out, and some of it is plainly open. <b>The sum and its base-sixteen digits are proved; a base-ten sum and the even spread of π’s digits are not.</b></p>
+  <ul>
+    <li data-pid="c99cc1">Proved. The digit sum (1995, in print 1997), and with it the peeling technique for base sixteen, and so for base two, since each hex digit is four binary digits. Sums of the same kind are known for ln 2, for π², and for many other numbers.</li>
+    <li data-pid="cc7627">Ruled out. A 2004 paper showed that no sum from one natural family of this kind, the family the known base-sixteen sums belong to, gives π in base ten. Whether some sum of another kind does is open.</li>
+    <li data-pid="716688">Open. Whether π is normal: whether each digit, and each string of digits, turns up equally often in the long run. Trillions of digits look evenly spread, in base ten and in base sixteen. A count of cases proves no rule (0c), and no proof is known in any base.</li>
+    <li data-pid="50fed1">A bridge, 2001. Run the peeling one place at a time: x₀ = 0, and xₙ = frac(16xₙ₋₁ + (120n² − 89n + 16)/(512n⁴ − 1024n³ + 712n² − 206n + 21)). Then ⌊16xₙ⌋ gives the hex digits of π, as far as anyone has checked. It was shown that if the xₙ spread evenly over [0, 1), then π is normal in base sixteen. That plain-looking hypothesis is open too.</li>
+  </ul>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · open · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22·now.6.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">the first 40 hex digits of π after the point: 243F6A8885A308D313198A2E03707344A4093822</span></span>Find how often the digit 8 appears, and how often an even spread predicts. <br>Find what the count proves about π.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22now7">
+  <h2 class="sthead"><span class="stno">22now7</span>Illegal moves</h2>
+  <p class="stands">Stands on 22·now.1 to 22·now.6.</p>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{the digit sum peels off the millionth decimal digit}\,? @@ it peels base-sixteen digits; base ten is open
+\text{the computer matched } \pi \text{ to many places, so the sum is proved}\,? @@ a match is a guess; the column proves it
+\textstyle\int\sum = \sum\int \text{ always}\,? @@ only once the leftover’s area heads to 0
+\text{a value with width } 10^{-12} \text{ gives all its digits}\,? @@ only those on which the whole fence agrees
+\text{trillions of digits look even, so } \pi \text{ is normal}\,? @@ cases prove no rule (0c); it is open
+  </pre>
+  <section class="slides" id="sl7"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22·now.7.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span class="gtx">the term-by-term technique, on the area under 1/(1 − x) from 0 to 1</span></span>Find which line breaks, and what the sum does.</li><li><span class="givens"><span class="gtx">the peeling technique in base ten: 10ᵈπ, with the same digit sum</span></span>Find which line breaks.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">22·now.8.1</span><span class="tagq">build</span>Build, by the term-by-term technique on the area under 1/(1 − x²) from 0 to ½, an endless sum for ln 3. <br>Find how many terms give it to within 10⁻⁶.</div>
+  <div class="chq"><span class="chid">22·now.8.2</span><span class="tagq">edge</span>Suppose frac(16ᵈπ) were exactly 9/16. How narrow a fence would read δ_{d+1}? <br>Can that happen at any d?</div>
+  <div class="chq"><span class="chid">22·now.8.3</span><span class="tagq">converse</span>A number’s base-sixteen digits can each be found alone. Can its base-two digits? Its base-four digits? Its base-ten digits?</div>
+  <div class="chq"><span class="chid">22·now.8.4</span><span class="tagq">reroute</span>Find a cap on the digit sum’s terms from k = n on a second way: cap each bracket by 4/(8k + 1), then use the geometric yardstick. <br>Compare it with the leftover cap from the area.</div>
+  <div class="chq"><span class="chid">22·now.8.5</span><span class="tagq">seam</span>The digit sum agreed with π to thousands of places before anyone proved it. One reader holds that the match already made it known, as a law is known from measurement. Another holds that nothing was known until the column was written. Was the sum known before its proof?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r22phys.html">← 22·phys · does a bouncing ball ever stop?</a><a href="r23.html">23 · a smooth function is rebuilt from one point →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>Base sixteen is hexadecimal, and its digits hex digits. The digit sum is the BBP formula; sums of its kind are BBP-type formulas. The peeling technique is digit extraction, and a method that gives digits one at a time with little memory is a spigot algorithm. Squaring and taking remainders is fast exponentiation, or square-and-multiply. The computer’s hunt for whole numbers is an integer relation search, by an algorithm called PSLQ. A number whose digit strings all turn up equally often is normal. The field that finds by computer and then proves is experimental mathematics.</p>
+  <h3>Who said it first</h3>
+  <p>Simon Plouffe found the sum in 1995 with a search program by Helaman Ferguson and David Bailey, working with Peter Borwein; Bailey, Borwein and Plouffe published it in 1997. The sum ln 2 = Σ 1/(k 2ᵏ) is centuries old. Fabrice Bellard (1997) found a faster sum of the same kind; Colin Percival’s project PiHex (2000) used it to find the quadrillionth binary digit of π. David Bailey and Richard Crandall (2001) built the bridge from π’s normality to the sequence xₙ. Jonathan Borwein, Will Galway and David Borwein (2004) ruled out the natural family of base-ten sums. In 22·now.8.5, Arthur Jaffe and Frank Quinn (1993) asked for clear labels on unproved mathematics, and Doron Zeilberger (1993) argued that a proof checked to near certainty by computer may be worth more than its cost.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="22·now: a worked “proof”, not allowed">
+\operatorname{frac}(16^{999\,999}\pi) \approx 0.15146436234790 @@ fine: ordinary arithmetic
+\text{in base sixteen: } 0.26\text{C}65\text{E}52\text{CB}3190 @@ not allowed: the width is near 10⁻¹², about ten hex digits
+\text{so the digits from place } 10^6 \text{ are } 26\text{C}65\text{E}52\text{CB}3190 @@ false: they are 26C65E52CB4593…
+  </pre>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+const HX='0123456789ABCDEF', PI16='243F6A8885A308D313198A2E03707344A4093822';
+function mp(b,e,m){ if(m===1) return 0; let r=1; b%=m; while(e>0){ if(e&1) r=(r*b)%m; b=(b*b)%m; e=Math.floor(e/2);} return r; }
+function S(j,d){ let s=0; for(let k=0;k<=d;k++){ const m=8*k+j; s=(s+mp(16,d-k,m)/m)%1; }
+  let t=0; for(let k=d+1;k<=d+30;k++){ const x=Math.pow(16,d-k)/(8*k+j); if(x<1e-17) break; t+=x; } return (s+t)%1; }
+function peel(d){ let x=(4*S(1,d)-2*S(4,d)-S(5,d)-S(6,d))%1; if(x<0) x+=1; let o=''; for(let i=0;i<16;i++){ x*=16; const q=Math.floor(x); o+=HX[q]; x-=q; } return o; }
+const DS=[0,1,2,5,10,20,100,1000,10000,100000,999999];
+function draw(){ const D=DS[+$('kd').value]; $('od').textContent=D.toLocaleString('en-US');
+  const t0=performance.now(), h=peel(D), ms=performance.now()-t0;
+  $('pl').textContent='places '+(D+1).toLocaleString('en-US')+' on:  '+h;
+  let msg='Peeled from '+(4*(D+1)).toLocaleString('en-US')+' remainders in '+Math.max(1,Math.round(ms))+' ms.';
+  if(D+16<=PI16.length){ const tr=PI16.slice(D,D+16); let n=0; while(n<16&&h[n]===tr[n]) n++; msg+=' The true digits are '+tr+': the first '+n+' agree.'; }
+  else if(D===999999) msg+=' The true digits are 26C65E52CB4593…: the first ten agree.';
+  else msg+=' Read from a fence: trust about the first ten.';
+  const v=$('vd'); v.className='verdict'; v.textContent=msg; }
+$('kd').oninput=draw; draw();
+window.__pic={set:(i)=>{ $('kd').value=i; draw(); return $('pl').textContent+' | '+$('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'shift',t:R`16^d\pi`,n:`d digits pass the point.`},
+  {k:'ember',kl:'read',t:R`\htmlClass{new}{\delta_{d+1} = \lfloor 16\,\operatorname{frac}(16^d\pi)\rfloor}`,n:`Only the part after the point.`}
+],{title:'The slides · shift · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'split',t:R`\tfrac{1}{1-x} = \textstyle\sum_{k \lt n} x^k + \tfrac{x^n}{1-x}`,n:`A ratio sum and a leftover.`},
+  {k:'ember',kl:'the sum',t:R`\htmlClass{new}{\ln 2 = \sum \tfrac{1}{k\,2^k}}`,n:`The leftover heads to 0.`}
+],{title:'The slides · term by term · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'term k',t:R`\tfrac{1}{16^k}\big(\tfrac{4}{8k+1} - \tfrac{2}{8k+4} - \tfrac{1}{8k+5} - \tfrac{1}{8k+6}\big)`,n:`Four small fractions.`},
+  {k:'ember',kl:'total',t:R`\htmlClass{new}{= \pi}`,n:`Through an area.`}
+],{title:'The slides · digit sum · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'remainders',t:R`\operatorname{frac}\tfrac{16^{d-k}}{8k+j} = \operatorname{frac}\tfrac{\rho_k}{8k+j}`,n:`Whole parts drop out.`},
+  {k:'ember',kl:'tail',t:R`\htmlClass{new}{\lt \tfrac{1}{15(8d+j)}}`,n:`The yardstick.`}
+],{title:'The slides · peel · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'fence',t:R`[x - w,\ x + w]`,n:`Computed, with a width.`},
+  {k:'ember',kl:'read',t:R`\htmlClass{new}{\text{inside one sixteenth}}`,n:`Then the digit is certain.`}
+],{title:'The slides · fence · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'proved',t:R`\text{base sixteen, base two}`,n:`Peeled.`},
+  {k:'ember',kl:'open',t:R`\htmlClass{new}{\text{base ten; normality}}`,n:`No proof either way.`}
+],{title:'The slides · open · ← → keys work'});
+stepper('#sl7',[
+  {k:'ember',kl:'illegal',t:R`\int\sum = \sum\int\,?`,n:`Only with the leftover capped.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

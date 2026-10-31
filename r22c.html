@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Settling without knowing where</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r22b.html">← 22b every bounded sequence has a settling thread</a><a href="r22d.html">next: 22d a sum is where its partial sums settle →</a></p>
+  <div class="tags"><span class="tag proof">22c · proof</span></div>
+  <h1>Settling without knowing where</h1>
+  <p>To prove a list settles, it seems you must first know where. You name the limit, then show the terms come within any distance of it. But often the limit is exactly what you do not know. This step finds a way round. Look only at the terms themselves: if, far enough along, every two of them sit as close together as anyone demands, the list settles. You never have to name the place. The catch is the one from the eighth rung again. On the line with no holes this works. On the fractions alone, terms can crowd together around a hole and settle nowhere.</p>
+  <p class="gesture">If, far enough along, every two terms are as close as anyone demands, the list settles. You can prove it without knowing the limit. It works only on a line with no holes, which is why the line had to be built first.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r22b.html">22b</a> (the halving technique for sequences), <a href="r22a.html">22a</a> (settles), <a href="r08h.html">8h</a> (the triangle technique), <a href="r08cb5.html">8·cb5</a> (decimals). <a href="r22d.html">22d</a> turns endless sums into sequences.</p></div>
+</header>
+
+<section class="class step" data-step="22c1">
+  <h2 class="sthead"><span class="stno">22c1</span>Crowding</h2>
+  <p class="stands">Stands on 22a1 (settles) and 10a (the challenge and the answer).</p>
+  <p class="eqline" data-pid="c86f37">From here on, a sequence s crowds when for every ε &gt; 0 there is N such that every m, n ≥ N have |sₘ − sₙ| &lt; ε.</p>
+  <p data-pid="3a243e">Compare the two sentences. "Settles" says each term far out is near some L. "Crowds" says every two terms far out are near each other. No L appears in it. A challenge ε is answered by a place N, and past N the terms huddle within ε of one another.</p>
+  <p data-pid="76c5ef">Settle-crowd technique: <b>a sequence that settles crowds.</b> If sₙ → L, take N with |sₙ − L| &lt; ε/2 for n ≥ N. Then for m, n ≥ N, the triangle technique gives |sₘ − sₙ| ≤ |sₘ − L| + |L − sₙ| &lt; ε.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · crowding · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">22c1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="s_n = \tfrac1n,\ \ \varepsilon = 0.01"></span></span>Find an N with |sₘ − sₙ| < ε for every m, n ≥ N. <br>Check it on s₁₀₀ and s₁₀₀₀, and on s₁₀₁ and s₁₀₀₀. <br>Find whether N − 1 would also do.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22c2">
+  <h2 class="sthead"><span class="stno">22c2</span>Crowding is enough</h2>
+  <p class="stands">Stands on 22c1, 22b3 (the gathering technique) and 8h (the triangle technique).</p>
+  <p data-pid="438431">Crowd technique: <b>on the line with no holes, a sequence that crowds settles.</b> The proof never names the limit in advance. It borrows one from 22b and then shows the whole sequence follows.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the crowd technique">
+\varepsilon = 1:\ |s_n - s_N| < 1 \text{ for } n \ge N @@ crowding, with the challenge 1
+|s_n| \le \max(|s_1|, \dots, |s_{N-1}|, |s_N| + 1) @@ so s has a floor and a ceiling
+s_{k(j)} \to c \text{ for some thread} @@ 22b2
+|s_n - c| \le |s_n - s_{k(j)}| + |s_{k(j)} - c| @@ the triangle technique (8h), for any j
+\text{far out, each part} < \tfrac{\varepsilon}{2} @@ crowding for the first; the thread settles for the second; k(j) ≥ j
+\htmlClass{new}{s_n \to c} \quad \blacksquare @@ so the whole sequence settles where its thread does
+  </pre>
+  <p data-pid="b73cac">Put with 22c1: <b>on the reals, a sequence settles exactly when it crowds.</b> One sentence is about a place; the other is about the terms alone. That second sentence is the one you can check when the place is unknown.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · enough · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22c2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="s_n = 1 + \tfrac14 + \tfrac19 + \cdots + \tfrac{1}{n^2}"></span></span>Show 1/k² < 1/(k − 1) − 1/k for k ≥ 2. <br>Show sₙ − sₘ < 1/m − 1/n when n > m. <br>Find an N that answers the challenge ε = 0.001, and conclude that s settles, without naming where.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22c3">
+  <h2 class="sthead"><span class="stno">22c3</span>Where the line has holes</h2>
+  <p class="stands">Stands on 22c2, 22a3 and 8·cb5 (decimals).</p>
+  <p data-pid="dc57a7">The crowd technique borrowed a gathering point from 22b, and 22b borrowed the climb technique, which borrowed the least upper bound. Remove the least upper bound and the chain breaks. On the fractions alone, crowding is not enough.</p>
+  <pre class="lines" data-k="ember" data-label="this step: a crowd with nowhere to go">
+t_n = \text{the decimal of } \sqrt2 \text{ cut after } n \text{ places} @@ fractions
+m, n \ge N:\ |t_m - t_n| < 10^{-N} @@ they agree in the first N places
+(t_n) \text{ crowds} @@ 10⁻ᴺ &lt; ε far enough out (8, counting passes any real)
+t_n \to \sqrt2 \notin \mathbb{Q} @@ 22a3
+\htmlClass{new}{\text{in } \mathbb{Q},\ \text{crowding does not mean settling}} \quad \blacksquare @@ the limit is a hole
+  </pre>
+  <div class="dividend"><span class="lbl">The = dividend</span>Crowding is about the arrangement of the terms among themselves. Settling is about the series heading somewhere. On the line with no holes, the = between "crowds" and "settles" holds. On the fractions it fails, and the failure is exactly a hole.</div>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22c3.1</span><span class="ph bend">bend</span><span class="givens"><span data-tex-inline="s_1 = 1,\ \ s_{n+1} = \tfrac12\big(s_n + \tfrac{2}{s_n}\big)"></span></span>Write the first four terms as fractions. <br>Show that from the second term on it falls, with floor √2. (Hint: s²ₙ₊₁ − 2 = ((s²ₙ − 2)/(2sₙ))².) <br>Find where it settles in ℝ, and whether it crowds. <br>Find whether it settles in ℚ.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22c4">
+  <h2 class="sthead"><span class="stno">22c4</span>Illegal moves</h2>
+  <p class="stands">Stands on 22c1 to 22c3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+|s_{n+1} - s_n| \to 0 \Rightarrow s \text{ crowds}\,? @@ √n: next terms close up, yet √(4n) − √n = √n passes every bound
+\text{crowds} \Rightarrow \text{settles, on any line}\,? @@ only where the line has no holes: the decimals of √2 in ℚ
+s \text{ crowds} \Rightarrow s \text{ climbs or falls}\,? @@ (−1)ⁿ/n crowds and does neither
+\text{to show it settles, first find the limit}\,? @@ crowding shows it without the limit
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22c4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="s_n = \ln n"></span></span>Show that next terms close up: sₙ₊₁ − sₙ → 0. <br>Show that it does not crowd.</li><li><span class="givens"><span class="gtx">1, 1.7, 1.73, 1.732, …, the decimal of √3 cut after n places</span></span>Show it crowds. <br>Find whether it settles in ℚ, given that √3 is not a fraction.</li><li><span class="givens"><span data-tex-inline="s_n = \tfrac{(-1)^n}{2^n}"></span></span>Show it crowds. <br>Find whether it climbs or falls from any place on.</li><li><span class="givens"><span data-tex-inline="s_n = \tfrac{1}{1!} + \tfrac{1}{2!} + \cdots + \tfrac{1}{n!}"></span></span>Show it crowds, using 1/k! ≤ 1/2ᵏ⁻¹. <br>Find whether you needed to know its limit.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">22c.4.1</span><span class="tagq">build</span>Build a crowding sequence of fractions that settles nowhere in ℚ, using no root and no real that is not a fraction. <br>Prove that it crowds, and that its limit in ℝ is not a fraction.</div>
+  <div class="chq"><span class="chid">22c.4.2</span><span class="tagq">edge</span>Let |sₙ₊₁ − sₙ| ≤ 1/2ⁿ for every n. Prove that s crowds. <br>Find whether |sₙ₊₁ − sₙ| ≤ 1/n for every n is enough.</div>
+  <div class="chq"><span class="chid">22c.4.3</span><span class="tagq">converse</span>The crowd technique fails on the fractions. Turn the settle-crowd technique round to the fractions: if a sequence of fractions settles at a fraction, must it crowd? <br>Find what that proof used, and whether ℚ has it.</div>
+  <div class="chq"><span class="chid">22c.4.4</span><span class="tagq">reroute</span>Prove the crowd technique without 22b. Let aₙ be the greatest lower bound of the terms from n on. Show that (aₙ) climbs with a ceiling, and that s settles where (aₙ) does.</div>
+  <div class="chq"><span class="chid">22c.4.5</span><span class="tagq">seam</span>In 1872 two mathematicians built the line with no holes, and a third built it in the same year by yet another road. One made each real a cut of the fractions. Another made each real a crowding sequence of fractions, with two crowds counted the same when their difference heads to 0. An older colleague answered all of them that only the whole numbers are given, and everything else is human work. <br>Is √2 a cut, a crowd, or neither? <br>If two buildings give the same line, which one is the real number?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r22b.html">← 22b · every bounded sequence has a settling thread</a><a href="r22d.html">22d · a sum is where its partial sums settle →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A crowding sequence is a Cauchy sequence, and the crowd technique is the Cauchy criterion (or the statement that ℝ is complete: every Cauchy sequence converges). A line on which every Cauchy sequence converges is called complete; rung 15c met the word. One way to build the reals is to take crowding sequences of fractions as the numbers themselves.</p>
+  <h3>Who said it first</h3>
+  <p>Bernard Bolzano stated the criterion in 1817, and Augustin-Louis Cauchy used it in his Cours d’analyse (1821), though neither could prove crowding is enough without a built line of reals. Georg Cantor and Charles Méray (1872) built the reals from crowding sequences of fractions, the same year Dedekind built them from cuts (rung 8). The two constructions give the same line. In 22c.4.5, the older colleague is Leopold Kronecker: “God made the whole numbers; all else is the work of man” (reported by Heinrich Weber from an 1886 lecture).</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'crowds',t:R`\htmlClass{new}{\forall\varepsilon>0\ \exists N\ \forall m,n \ge N\ |s_m - s_n| < \varepsilon}`,n:`No limit named.`}
+],{title:'The slides · crowding · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'bounded',t:R`|s_n| \le \max(\dots, |s_N| + 1)`,n:`From ε = 1.`},
+  {k:'ember',kl:'settles',t:R`\htmlClass{new}{\text{crowds} \Leftrightarrow \text{settles}}`,n:`On ℝ.`}
+],{title:'The slides · enough · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

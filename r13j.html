@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>13j · The chain rule by hand</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+#cvI,#cvO,#cvW{touch-action:none}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r13i.html">← 13i products and quotients</a><a href="r13k.html">next: 13k the tangent line and the nearby line →</a></p>
+  <div class="tags"><span class="tag tech">13j · technique</span></div>
+  <h1>The chain rule by hand</h1>
+  <p>Most functions are built in layers: something is done to the input, and then something else is done to the result. 13e proved that rates through a chain multiply, the outside's taken where the inside stands. This step makes the moves automatic. Find the last thing done, and give a name to what it was done to. Take the outside’s slope as if that name were the input. Multiply by the inside's slope. Substitute for the expression. Then come a displacement and a multiple inside, chains of three links, and chains inside products. Last come the wrong moves everyone makes, by name, and the rule run backwards.</p>
+  <p class="gesture">Find the last thing done, and give a name to what it was done to. Take the outside’s slope there, and multiply by the inside’s slope. Substitute back, so the answer speaks only of the input.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r13e.html">13e</a> (chain for slopes, name the inside r, dy/dx, the d-mark form), <a href="r09f.html">9f</a> (taking a chain apart from the outside; r and s; substitute for the expression), <a href="r09b.html">9b</a> (regroup for composing), <a href="r13h.html">13h</a> (the power rule for every fraction), <a href="r13i.html">13i</a> (product for slopes, quotient for slopes) and <a href="r13d.html">13d</a> (displaced-slopes, polynomial-slope). <a href="r13k.html">13k</a> and <a href="r13l.html">13l</a> use chains everywhere; rung 16 runs the rule backwards on purpose.</p></div>
+</header>
+
+<section class="class step" data-step="13j1">
+  <h2 class="sthead"><span class="stno">13j1</span>The dodge, and your letter</h2>
+  <p class="stands">Stands on 13e (chain for slopes) and 9f (taking a chain apart).</p>
+  <p data-pid="178c92">One popular calculus book calls it a dodge. When an expression is too tangled to take directly, write a single letter for the tangled inside. Then the outside becomes something you can manage at once. Its example is the power three halves of a sum, and its letter is u.</p>
+  <p data-pid="97fbd8">That book writes u; this ladder writes r, as 9f and 11c did and 13e proved with. The gesture is what matters. Once the inside has a one-letter name, the outside is a plain power, root or reciprocal of that letter, which 13h already handles. Two slopes, one product, and the letter goes back to being what it stood for.</p>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">13j1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">y = (4x − 1)^5</span></span>Name the tangled inside with one letter. <br>Write y as a plain power of that letter.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13j2">
+  <h2 class="sthead"><span class="stno">13j2</span>Where to cut: the last thing done</h2>
+  <p class="stands">Stands on 13j1 and 4h (order of operations).</p>
+  <p data-pid="b39feb">9f's test never fails. Imagine putting a number in for x and working out the value by hand, in 4h's order of operations. <b>The last thing you do is the outside; whatever it was done to is the inside, r.</b></p>
+  <ul>
+    <li>(x² + 1)³: square x, add 1, then cube. Outside r³, inside r = x² + 1.</li>
+    <li>√(x³ + 8): cube, add 8, then root. Outside √r = r^(1/2), inside r = x³ + 8.</li>
+    <li>1/(3x + 2)²: the last two steps, square and then one over, are together the power −2. Outside r⁻², inside r = 3x + 2.</li>
+    <li>x²(x + 1)³: the last thing done is multiply. The outside is a product, so product for slopes comes first, and a chain turns up only inside one factor.</li>
+    <li>x³ + 1: the last thing done is add. No chain at all: 13h.</li>
+  </ul>
+  <p data-pid="27b5f1">The tempting illegal move is cutting in the wrong place. In x²(x + 1)³, calling x²(x + 1) the inside and cubing it describes another function. The question is never “what is in a bracket?” but “what was done last?”</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · where to cut · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13j2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">√(x^2 + 1),  (x^2 + 1)^{−1},  x^2 + 1^3</span></span>For each, find the last thing done. <br>Say which one is not a chain at all.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13j3">
+  <h2 class="sthead"><span class="stno">13j3</span>The four moves</h2>
+  <p class="stands">Stands on 13j2.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the four moves">
+y = (x^2 + 1)^3 @@ last thing done: cube
+\htmlClass{new}{r = x^2 + 1},\ \ y = r^3 @@ name the inside r; the outside is now a plain power
+\text{outside's slope at } r:\ \ \htmlClass{new}{3r^2} @@ power for slopes, as if r were the input
+\text{inside's slope:}\ \ \htmlClass{new}{2x} @@ polynomial-slope
+y' = 3r^2 \cdot 2x @@ chain for slopes (13e): rates through a chain multiply
+= \htmlClass{keep}{6x\,(x^2 + 1)^2} @@ substitute for the expression: r is x² + 1
+x^6 + 3x^4 + 3x^2 + 1 \;\Rightarrow\; 6x^5 + 12x^3 + 6x = 6x\,(x^2 + 1)^2 @@ the check: 4j's table, row 1 3 3 1 (two-term-power), then polynomial-slope, then factor. They agree
+  </pre>
+  <p data-pid="0f274d">The last move matters as much as the others. An answer may not contain a letter the question did not have: r was your name for x² + 1, and the question asked about x. For (x² + 1)¹⁰⁰, or a root, or one over a bracket, there is no expanding to check by; the chain is the only road.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · four moves · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · left: the inside hands its change to the outside · right: the true slope against a wrong move</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="lbl">inside r = g(x)</div><div class="chips" id="gch"></div>
+      <div class="lbl">outside y = f(r)</div><div class="chips" id="fch"></div>
+      <canvas id="cvI"></canvas>
+      <canvas id="cvO"></canvas>
+      <div class="kn">
+        <span class="m">x₀</span><input type="range" id="kx" min="-2" max="2" step="0.05" value="1"><output id="ox"></output>
+        <span class="m">h</span><input type="range" id="kh" min="0.02" max="1" step="0.01" value="0.5"><output id="oh"></output>
+      </div>
+      <div class="cap">Top: the inside, r against x. The step h (grey) makes the change Δr (teal). Bottom: the outside, y against r. The same Δr, laid along the r axis, is its step, and makes the change Δy (ember). The teal change is handed from one to the other: that is the chain.</div>
+    </div>
+    <div class="panel">
+      <div class="lbl">wrong move</div><div class="chips" id="wch"></div>
+      <canvas id="cvW"></canvas>
+      <div class="cap">Ember: the true slope function of the chain, f′(g(x)) · g′(x). Gold dashed: the wrong move you chose, computed for this inside and outside. The dot marks x₀. Look for where the wrong curve meets the true one by accident.</div>
+      <div class="verdict" id="vd"></div>
+    </div>
+  </div>
+  <div class="eqbox" id="eq"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13j3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">y = (x^3 − 2)^4</span></span>Run the four moves, one per line. <br>Make sure no r is left in the answer.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13j4">
+  <h2 class="sthead"><span class="stno">13j4</span>Where each rate is taken</h2>
+  <p class="stands">Stands on 13j3 and 13e (the d-mark).</p>
+  <p data-pid="8cf452">A train of gears is the picture to keep. Two meshed gears turn at a fixed ratio. In a train each gear drives the next, so the ratios multiply: 2 turns for 1, then 3 for 1, is 6 for 1. Say the inside r turns 2 for each 1 of x, and the outside y turns 12 for each 1 of r near where r stands. Then y turns 24 for each 1 of x. <b>Rates through a chain multiply; they do not add, because the second gear is driven by the first.</b> Unlike gears, a chain's rates change from place to place, and that is the one thing to watch. The outside's rate is taken where the inside has got to, at r₀, not at x. For (x² + 1)³ at x = 1, the inside stands at r₀ = 2. So the outside's rate is 3 · 2² = 12, not 3 · 1². Times the inside's rate 2, the slope is 24.</p>
+  <p data-pid="893a8a">In d-marks, 13e's line is dy/dx = dy/dr · dr/dx, with dy/dr at r₀ and dr/dx at x₀. It looks like cancelling dr, and that is a fine memory aid. It is not the proof: chain for slopes's proof never divided by Δr.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · where it is taken · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13j4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">y = (x^2 + 2)^3,  x = 1</span></span>Find where the inside stands, the outside’s rate there, and the inside’s rate at 1. <br>Multiply them, like gears.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13j5">
+  <h2 class="sthead"><span class="stno">13j5</span>A displacement and a multiple inside</h2>
+  <p class="stands">Stands on 13j4 and 13d (displaced-slopes).</p>
+  <p data-pid="1ad596">The plainest insides are x − c, for a fixed real c, and kx. 13d's displaced-slopes was the first: x − c has slope 1, so f(x − c) has slope f′(x − c) · 1, and the displacement pattern rides through untouched. The second is new.</p>
+  <p data-pid="ef541b">Multiple-inside technique: <b>for a real k ≠ 0 and g(x) = f(kx), if f has a slope at kw then g has one at w, and g′(w) = k · f′(kw).</b> It is chain for slopes with the inside kx, whose slope is k by slope-of-a-line. Read in pairs (9e): when f's slope function has the pair (b, m), g's has the pair (b/k, km).</p>
+  <pre class="lines" data-k="ember" data-label="this step: a multiple inside">
+\big((2x)^3\big)' = 3(2x)^2 \cdot \htmlClass{new}{2} = 24x^2 @@ multiple-inside with k = 2. Check: (2x)³ = 8x³ (power-of-a-product), whose slope is 24x²
+\big((2x - 3)^2\big)' = 2(2x - 3)\cdot\htmlClass{new}{2} = 4(2x - 3) @@ inside 2x − 3, slope 2: multiple-inside and displaced-slopes together. 13h's (2x − 3)² answered
+\big((1 - x)^3\big)' = 3(1 - x)^2 \cdot (\htmlClass{new}{-1}) = -3(1 - x)^2 @@ k = −1: the minus sign is the inside's slope
+  </pre>
+  <p data-pid="8c01b6">So a displacement inside changes where the slope is read, and a multiple inside multiplies it. Neither is a picture of moving anything; both are chain for slopes with a linear function inside.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · multiple-inside · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13j5.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">(3x)^4,  (x − 5)^4</span></span>Find each slope function. <br>Check the first by power-of-a-product.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13j6">
+  <h2 class="sthead"><span class="stno">13j6</span>A root and a reciprocal</h2>
+  <p class="stands">Stands on 13j5 and 13h (fraction-power for slopes).</p>
+  <pre class="lines" data-k="ember" data-label="this step: two more chains">
+y = \sqrt{2x + 1},\ \ r = 2x + 1,\ \ y = r^{1/2} @@ last thing done: the root
+y' = \tfrac12 r^{-1/2} \cdot 2 = \htmlClass{new}{\dfrac{1}{\sqrt{2x + 1}}} @@ slope-of-√ (or fraction-power for slopes) at r, times slope-of-a-line; substitute for the expression
+y'(4) = \dfrac{1}{\sqrt9} = \htmlClass{keep}{\tfrac13} @@ at x = 4 the inside stands at 9
+y = \dfrac{1}{(3x + 2)^2} = (3x + 2)^{-2} @@ rewrite into a power first (13h)
+y' = -2r^{-3}\cdot 3 = \htmlClass{new}{\dfrac{-6}{(3x + 2)^3}} @@ negative-powers at r, times 3; substitute for the expression
+  </pre>
+  <p data-pid="6c9a6b">A check with chords: √(2x + 1) has the whole-number values 1, 3 and 5 at 0, 4 and 12. The chord from 0 to 4 has slope (3 − 1)/4 = ½. The chord from 4 to 12 has slope (5 − 3)/8 = ¼. The slope at 4, ⅓, lies between them. That it must, for a function like this one, is rung 14's question; here it is a check. And the reciprocal by quotient for slopes the long way: (0 − 1 · 2(3x + 2) · 3)/(3x + 2)⁴, then cancel one 3x + 2. Same answer, longer road.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · a root and a reciprocal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13j6.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">y = √(4x + 1),  z = 1/(x + 3)^2</span></span>Find y′(2) and z′(−1). <br>Check y′(2) against the chord from 0 to 6.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13j7">
+  <h2 class="sthead"><span class="stno">13j7</span>Chains of three</h2>
+  <p class="stands">Stands on 13j6.</p>
+  <p data-pid="c270b8">A chain can have more links. Peel from the outside in. The last thing done gives the outside and its inside r. Then ask what was done last inside r, and name that one's inside s, as 9f did. <b>Every link contributes a rate, each taken where its own input stands, and they all multiply.</b></p>
+  <p data-pid="d76cb6">Chains-of-three technique: <b>three rates through a chain of three multiply.</b> Precisely: let k have a slope at w, g have one at s₀ = k(w), and f have one at r₀ = g(s₀). Then f ∘ g ∘ k has a slope at w, and it is f′(r₀) · g′(s₀) · k′(w). By 9b's regroup for composing, f ∘ g ∘ k = f ∘ (g ∘ k). Use chain for slopes on g ∘ k, then chain for slopes again with g ∘ k as the inside. In d-marks, dy/dx = dy/dr · dr/ds · ds/dx.</p>
+  <pre class="lines" data-k="ember" data-label="this step: a chain of three">
+y = \big((2x + 1)^2 + 1\big)^3 @@ last: cube. Inside that: add 1 to a square. Inside that: 2x + 1
+s = 2x + 1,\ \ r = s^2 + 1,\ \ y = r^3 @@ name the links from the inside out
+\text{at } x = 0:\ \ s_0 = 1,\ \ r_0 = 2 @@ where each input stands
+\dfrac{dy}{dr} = 3r_0^2 = 12,\ \ \dfrac{dr}{ds} = 2s_0 = 2,\ \ \dfrac{ds}{dx} = 2 @@ one rate per link, each at its own place
+y'(0) = 12 \cdot 2 \cdot 2 = \htmlClass{new}{48} @@ chains-of-three
+  </pre>
+  <p data-pid="366493">The illegal move here is skipping a link: multiplying the outside's rate by the innermost rate and forgetting the middle one, 12 · 2 = 24 instead of 48. Count the layers before you start; you need one rate per layer.</p>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · chains of three · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13j7.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">y = √((x^2 + 1)^3)</span></span>Name all the links, outside in. <br>Find y′(0) and y′(1).</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13j8">
+  <h2 class="sthead"><span class="stno">13j8</span>Chains inside products</h2>
+  <p class="stands">Stands on 13j7 and 13i (product for slopes).</p>
+  <pre class="lines" data-k="ember" data-label="this step: a product with a chain in one factor">
+y = x^2 (x + 1)^3 @@ last thing done: multiply. product for slopes first
+y' = 2x\,(x + 1)^3 + x^2 \cdot \htmlClass{new}{3(x + 1)^2 \cdot 1} @@ product for slopes; the second factor's slope by chain for slopes (inside x + 1, slope 1)
+y'(1) = 2 \cdot 8 + 1 \cdot 3 \cdot 4 = \htmlClass{keep}{28} @@ substitute for the expression. Check: x⁵ + 3x⁴ + 3x³ + x² has slope 5 + 12 + 9 + 2 = 28 at 1
+  </pre>
+  <section class="slides" id="sl7"><div class="eyebrow">The slides · in a product · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13j8.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="(5 - 2x)^4,"></span> <span data-tex-inline="\sqrt{x^3 + 8},"></span> <span data-tex-inline="\frac{3}{(x^2 - 1)^5},"></span> <span data-tex-inline="\frac{1}{\sqrt{1 + x}}"></span></span>Split each into an inside r and an outside as a function of r, by finding the last thing done.</li><li><span class="givens"><span data-tex-inline="f(x) = \sqrt{x^2 + 9},"></span> <span data-tex-inline="g(x) = (2 - x^3)^5"></span></span>Using chain for slopes, find f's slope at 4 and g's slope at 1, one move per line, writing where the inside stands each time.</li><li><span class="givens"><span data-tex-inline="(x + 2)^6,"></span> <span data-tex-inline="(5x)^2,"></span> <span data-tex-inline="(1 - x)^3"></span></span>Using multiple-inside, find each slope function.</li><li><span class="givens"><span data-tex-inline="y = \left(1 + (x^2 + 1)^2\right)^2"></span></span>Using chains-of-three, find y's slope at 1.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13j9">
+  <h2 class="sthead"><span class="stno">13j9</span>The gallery of wrong chain moves</h2>
+  <p class="stands">Stands on 13j1 to 13j8.</p>
+  <p data-pid="e5a549">Each of these has been made by every learner, including those who later wrote the books. All are about y = (x² + 1)³, whose true slope is 6x(x² + 1)². The picture plots each one against the truth.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+3(x^2 + 1)^2\,? @@ forgot the inside's rate. Right only where the inside's slope is 1: at x = ½ here
+3x^2 \cdot 2x\,? @@ the outside's rate taken at x, not at r₀. At 1: 6, not 24
+3(2x)^2\,? @@ the inside's rate put inside the outside's slope, instead of multiplied on
+3(x^2 + 1)^2 + 2x\,? @@ rates added. Gears do not add
+3r^2 \cdot 2x\,? @@ a letter left in. Not wrong as a step; not an answer until r is substituted back
+\big(x^2(x + 1)\big)' \text{ by chain for slopes}\,? @@ a product, not a chain: product for slopes. And (x + 1)² hides a forgotten rate (its inside's slope is 1), which (2x + 1)² exposes
+  </pre>
+  <section class="slides" id="sl8"><div class="eyebrow">The slides · gallery · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13j9.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="(x + 1)^3(x - 1),"></span> <span data-tex-inline="\left((x + 1)(x - 1)\right)^3,"></span> <span data-tex-inline="x^3 + (x - 1)^3,"></span> <span data-tex-inline="(x^3)^2"></span></span>Decide which are chains, which are products or sums, and which are both. <br>For the last, compare the chain with rewriting first.</li><li><span class="givens"><span data-tex-inline="f(x) = x^3;"></span> <span data-tex-inline="\text{three answers for}"></span> <span data-tex-inline="\text{the slope of } f(2x):"></span> <span data-tex-inline="2f'(x),"></span> <span data-tex-inline="f'(2x),"></span> <span data-tex-inline="2f'(2x)"></span></span>Compute all three at 1, and the true slope of f of 2x at 1.</li><li><span class="givens"><span data-tex-inline="y = \left((2x + 1)^2 + 1\right)^3,"></span> <span data-tex-inline="\text{slip: } y' = 3\left((2x + 1)^2 + 1\right)^2 \cdot 2"></span></span>Find the skipped link, and the factor the slip is off by at 0.</li><li><span class="givens"><span data-tex-inline="\text{slope function: } (x^3 - 1)^4"></span></span>Try the backward reading on it, with nothing beside it, and find what is missing and a road that still works.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13j10">
+  <h2 class="sthead"><span class="stno">13j10</span>Running it backwards</h2>
+  <p class="stands">Stands on 13j1 to 13j8.</p>
+  <p data-pid="2c9c56">A chain-rule answer is an outside's rate, written in terms of the inside, times the inside's rate. So read 5(3x − 1)⁴ · 3: the 3 at the end is the slope of 3x − 1, and 5r⁴ is the slope of r⁵. It came from (3x − 1)⁵, or that plus any constant.</p>
+  <p data-pid="0abb9d">Harder: given a slope, build a function. Take x(x² + 1)². Guess the inside from the bracket, r = x² + 1, whose slope is 2x. Is 2x standing beside the bracket? Almost: x is, half of it. A constant factor can be supplied, by constant-factor for slopes. The slope of (x² + 1)³ is 6x(x² + 1)², so the slope of ⅙(x² + 1)³ is x(x² + 1)². But suppose the inside's slope is missing a changing factor, as in (x² + 1)² with no x beside it. Then it cannot be conjured the way ⅙ was: 1/x is not a constant and will not ride. There, expand and go term by term instead: x⁴ + 2x² + 1 comes from x⁵/5 + 2x³/3 + x.</p>
+  <p data-pid="a018ea">One more thing running backwards shows. 4x(x² − 3) is the slope of (x² − 3)², by the chain. Expand the slope instead, 4x³ − 12x, and undo it term by term: x⁴ − 6x². Two answers? Expand the first: x⁴ − 6x² + 9. They differ by 9, a lift, which no slope can see (lifting). Rung 16 builds this backward reading into a method.</p>
+  <section class="slides" id="sl9"><div class="eyebrow">The slides · backwards · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13j10.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="r^{-1} \text{ with } r = x^2 + 4;"></span> <span data-tex-inline="5r^{3/2} \text{ with } r = 1 - x"></span></span>Put each together as one expression in x.</li><li><span class="givens"><span data-tex-inline="\text{a chain-rule answer:}"></span> <span data-tex-inline="\frac{3x^2}{2\sqrt{x^3 + 2}}"></span></span>Split it into an outer rate and an inner rate, and recover y.</li><li><span class="givens"><span data-tex-inline="\text{slope function: } -4(3 - x)^3,"></span> <span data-tex-inline="f(x) = x^4"></span></span>Find a function that has this slope function, and write it as f of a multiple of x less a constant, naming both.</li><li><span class="givens"><span data-tex-inline="\text{a three-link answer:}"></span> <span data-tex-inline="\frac{1}{2\sqrt{r}} \cdot 3s^2 \cdot 2,"></span> <span data-tex-inline="s = 2x - 1,"></span> <span data-tex-inline="r = s^3 + 4"></span></span>Write y as one expression in x.</li><li><span class="givens"><span data-tex-inline="8(2x + 1)^3,"></span> <span data-tex-inline="\frac{x}{\sqrt{x^2 + 1}},"></span> <span data-tex-inline="x^2(x^3 - 1)^4"></span></span>Find a function with each slope function, and check each forward.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">13j.4.1</span><span class="tagq">build</span>Build a chain of three links of your own, no link a linear function, and find its slope at 1 by chains-of-three. <br>Then drop the middle link's rate, as a slip would, and find the factor the slip is off by at 1.</div>
+  <div class="chq"><span class="chid">13j.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="f(x) = x^2,"></span> <span data-tex-inline="k = 1,"></span> <span data-tex-inline="k = -1"></span></span>Using multiple-inside, find what each k gives.</div>
+  <div class="chq"><span class="chid">13j.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{a chain of three has a slope at } w"></span></span>Prove or refute that each link must have one where it is taken.</div>
+  <div class="chq"><span class="chid">13j.4.4</span><span class="tagq">seam</span>Run every clock k times as fast, and multiple-inside multiplies every speed you measure by the same k. One inventor of the calculus believed that there is one absolute time, flowing evenly of itself. The other, in letters with a defender of the first (1715–1716), argued that time is nothing but the order of events. <br>Could any slope ever pick out the true clock?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r13i.html">← 13i · products and quotients</a><a href="r13k.html">13k · the tangent line and the nearby line →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>The dodge is Silvanus P. Thompson’s, in Calculus Made Easy. In question 13j.4.4 absolute time is Isaac Newton’s; time as the order of events is Gottfried Wilhelm Leibniz’s, in his correspondence with Samuel Clarke.</p>
+  <aside class="voice para"><p>Thompson calls it a dodge: when an expression is too tangled to take directly, write a single letter for the tangled inside, and the outside becomes something you can manage at once. His example is the power three halves of a sum, and his letter is u.</p><cite>Thompson, Calculus Made Easy, 2nd ed. (1914), ch. IX</cite></aside>
+  <aside class="voice para"><p>Thompson ends the chapter by noting that the same process extends to three or more links, one rate for each.</p><cite>Thompson, Calculus Made Easy, 2nd ed. (1914), ch. IX</cite></aside>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; const a=Math.abs(v); let s=d!=null?v.toFixed(d):(a>=100?v.toFixed(2):a>=1?v.toFixed(4):a>=0.0001?v.toFixed(5):v.toPrecision(3)); if(s.indexOf('.')>=0&&s.indexOf('e')<0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const IN={a:{lab:'x² + 1',tx:'x^2 + 1',g:x=>x*x+1,d:x=>2*x},b:{lab:'2x + 1',tx:'2x + 1',g:x=>2*x+1,d:x=>2},c:{lab:'x + 1',tx:'x + 1',g:x=>x+1,d:x=>1},e:{lab:'3 − x',tx:'3 - x',g:x=>3-x,d:x=>-1}};
+const OUT={a:{lab:'r²',tx:s=>`(${s})^2`,f:r=>r*r,d:r=>2*r,ok:r=>true},b:{lab:'r³',tx:s=>`(${s})^3`,f:r=>r*r*r,d:r=>3*r*r,ok:r=>true},c:{lab:'√r',tx:s=>R`\sqrt{${s}}`,f:r=>r>=0?Math.sqrt(r):NaN,d:r=>r>0?0.5/Math.sqrt(r):NaN,ok:r=>r>0},d:{lab:'1/r',tx:s=>R`\dfrac{1}{${s}}`,f:r=>r!==0?1/r:NaN,d:r=>r!==0?-1/(r*r):NaN,ok:r=>r!==0}};
+const WR=[{lab:'none'},{lab:'forgot inner rate',w:(G,F,x)=>F.d(G.g(x))},{lab:'outer rate at x',w:(G,F,x)=>F.d(x)*G.d(x)},{lab:'inner rate put inside',w:(G,F,x)=>F.d(G.d(x))},{lab:'rates added',w:(G,F,x)=>F.d(G.g(x))+G.d(x)}];
+let gi='a', fo='b', wi=1, X=1, H=0.5;
+const kx=$('kx'),kh=$('kh');
+const G=()=>IN[gi], Fo=()=>OUT[fo];
+const tru=x=>Fo().d(G().g(x))*G().d(x);
+const PI=plane($('cvI'),{x:[-2.5,2.5],y:[-2,6],grid:1,aspect:0.55,draw:P=>{ const g=G(); let lo=0,hi=1; for(let k=0;k<=100;k++){ const v=g.g(-2.5+5*k/100); lo=Math.min(lo,v); hi=Math.max(hi,v); } P.o.y=[lo-0.5,hi+0.5]; P.o.grid=(hi-lo)>10?2:1; P.axes(); P.fn(g.g,'--ink',2.2);
+  const r0=g.g(X), r1=g.g(X+H); P.line(X,r0,X+H,r0,'--muted',2.4); P.line(X+H,r0,X+H,r1,'--teal',3.2); P.dot(X,r0,'--ink',4.5); P.dot(X+H,r1,'--teal',4.5); }});
+const PO=plane($('cvO'),{x:[-2,6],y:[-2,6],grid:1,aspect:0.55,draw:P=>{ const g=G(), f=Fo(); const r0=g.g(X), r1=g.g(X+H); const lo=Math.min(r0,r1), hi=Math.max(r0,r1), sp=Math.max(hi-lo,0.5);
+  P.o.x=[lo-sp*1.2,hi+sp*1.2]; let ylo=Infinity,yhi=-Infinity; for(let k=0;k<=80;k++){ const v=f.f(P.o.x[0]+(P.o.x[1]-P.o.x[0])*k/80); if(isFinite(v)&&Math.abs(v)<1e4){ ylo=Math.min(ylo,v); yhi=Math.max(yhi,v);} } if(!isFinite(ylo)){ylo=-1;yhi=1;} const py=(yhi-ylo)*0.1+0.3; P.o.y=[ylo-py,yhi+py];
+  const span=Math.max(P.o.x[1]-P.o.x[0],P.o.y[1]-P.o.y[0]); P.o.grid=span>40?10:span>12?2:span>4?1:0.5; P.axes(); P.fn(f.f,'--ink',2.2);
+  const y0=f.f(r0), y1=f.f(r1); if(isFinite(y0)&&isFinite(y1)){ P.line(r0,y0,r1,y0,'--teal',3.2); P.line(r1,y0,r1,y1,'--ember',3.2); P.dot(r0,y0,'--ink',4.5); P.dot(r1,y1,'--ember',4.5); } }});
+[PI,PO].forEach(P=>Object.defineProperty(P.o,'aspect',{get:()=>$('cvI').clientWidth>560?0.5:0.6}));
+const PW=plane($('cvW'),{x:[-2.5,2.5],y:[-10,10],grid:1,aspect:0.85,draw:P=>{ const g=G(), f=Fo(), W=WR[wi];
+  let lo=0,hi=0; for(let k=0;k<=200;k++){ const x=-2.5+5*k/200; [tru(x),W.w?W.w(g,f,x):NaN].forEach(v=>{ if(isFinite(v)&&Math.abs(v)<200){ lo=Math.min(lo,v); hi=Math.max(hi,v);} }); }
+  const pad=(hi-lo)*0.08+0.5; P.o.y=[Math.max(lo-pad,-60),Math.min(hi+pad,60)]; const span=P.o.y[1]-P.o.y[0]; P.o.grid=span>60?20:span>24?5:span>10?2:1; P.axes();
+  if(W.w) P.fn(x=>W.w(g,f,x),'--gold',2.4,[6,5]); P.fn(tru,'--ember',2.4); P.dot(X,tru(X),'--ember',5.5); if(W.w) P.dot(X,W.w(g,f,X),'--gold',4.5); }});
+Object.defineProperty(PW.o,'aspect',{get:()=>$('cvW').clientWidth>560?0.8:0.9});
+function read(){ const g=G(), f=Fo(), r0=g.g(X), r1=g.g(X+H), dr=r1-r0, y0=f.f(r0), y1=f.f(r1), dy=y1-y0;
+  $('ox').textContent=fm(X,2); $('oh').textContent=fm(H,2);
+  const vd=$('vd');
+  if(!f.ok(r0)||!isFinite(y1)){ tex($('eq'),R`r_0 = g(${fm(X,2)}) = ${fm(r0)}`,true); vd.className='verdict lose'; vd.textContent='The outside has no slope at r₀ = '+fm(r0)+', or the step leaves its domain: choose another x₀ or a smaller h. chain for slopes\'s hypothesis on the outside fails here.'; return; }
+  const gd=g.d(X), fd=f.d(r0);
+  tex($('eq'),R`\begin{gathered}y = ${f.tx(g.tx)},\ \ x_0 = ${fm(X,2)},\ \ r_0 = ${fm(r0)}\\ \tfrac{\Delta r}{h} = \htmlClass{keep}{${fm(dr/H)}},\ \ \tfrac{\Delta y}{\Delta r} = \htmlClass{new}{${dr===0?'\\text{none}':fm(dy/dr)}},\ \ \tfrac{\Delta y}{h} = ${fm(dy/H)}\\ h \to 0:\ \ g'(x_0) = ${fm(gd)},\ \ f'(r_0) = ${fm(fd)},\ \ \text{slope} = ${fm(gd*fd)}\end{gathered}`,true);
+  const W=WR[wi]; if(!W.w){ vd.className='verdict'; vd.textContent='The true slope at x₀ is '+fm(gd*fd)+': the outside\'s rate '+fm(fd)+' at r₀ times the inside\'s rate '+fm(gd)+'. Choose a wrong move to compare.'; return; }
+  const wv=W.w(g,f,X), gap=Math.abs(wv-gd*fd);
+  vd.className='verdict '+(gap<1e-6?'win':'lose');
+  vd.textContent='At x₀ the true slope is '+fm(gd*fd)+' and “'+W.lab+'” gives '+fm(wv)+(gap<1e-6?': they meet here, by accident. Move x₀ and they part.':': off by '+fm(gap)+'.'); }
+function all(){ PI.redraw(); PO.redraw(); PW.redraw(); read(); }
+function chips(id,lib,cur,set){ const ch=$(id); const keys=Array.isArray(lib)?lib.map((_,i)=>i):Object.keys(lib); keys.forEach(k=>{ const b=document.createElement('button'); b.textContent=lib[k].lab; if(k===cur) b.className='on'; b.onclick=()=>{ set(k); [...ch.children].forEach(z=>z.classList.toggle('on',z===b)); all(); }; ch.appendChild(b); }); }
+chips('gch',IN,gi,k=>gi=k); chips('fch',OUT,fo,k=>fo=k); chips('wch',WR,wi,k=>wi=k);
+kx.oninput=()=>{ X=+kx.value; all(); }; kh.oninput=()=>{ H=+kh.value; all(); };
+let drag=false; const cvW=$('cvW'); cvW.addEventListener('pointerdown',e=>{ drag=true; cvW.setPointerCapture&&cvW.setPointerCapture(e.pointerId); mv(e); }); cvW.addEventListener('pointermove',mv); ['pointerup','pointercancel'].forEach(t=>cvW.addEventListener(t,()=>drag=false));
+function mv(e){ if(!drag) return; const q=PW.point(e); X=Math.max(-2,Math.min(2,Math.round(q.x*20)/20)); kx.value=X; all(); }
+window.__pic={set:(g,f,w,x,h)=>{ if(g){ gi=g; [...$('gch').children].forEach((b,i)=>b.classList.toggle('on',Object.keys(IN)[i]===g)); } if(f){ fo=f; [...$('fch').children].forEach((b,i)=>b.classList.toggle('on',Object.keys(OUT)[i]===f)); } if(w!=null){ wi=w; [...$('wch').children].forEach((b,i)=>b.classList.toggle('on',i===w)); } if(x!=null){ X=x; kx.value=x; } if(h!=null){ H=h; kh.value=h; } all(); return {r0:G().g(X),slope:tru(X),txt:$('vd').textContent}; }};
+all();
+
+/* ---------- slides ---------- */
+const N='\\htmlClass{new}', K='\\htmlClass{keep}';
+stepper('#sl1',[
+  {k:'ember',kl:'where to cut',t:R`(x^2 + 1)^3:\ \ \text{square, add 1, } ${N}{\text{cube}}`,n:`The last thing done is the outside. What it was done to is r.`}
+],{title:'The slides · where to cut · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'four moves · 1',t:R`r = x^2 + 1,\ \ y = r^3`,n:`Name the inside r. The outside is a plain power.`},
+  {k:'ember',kl:'four moves · 2',t:R`3r^2 \quad\text{and}\quad 2x`,n:`The outside's slope at r; the inside's slope.`},
+  {k:'ember',kl:'four moves · 3',t:R`y' = 3r^2 \cdot 2x = ${N}{6x(x^2 + 1)^2}`,n:`Multiply (chain for slopes), then substitute for the expression. No r in the answer.`}
+],{title:'The slides · four moves · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'where it is taken',t:R`x = 1:\ \ r_0 = 2,\ \ 3 \cdot 2^2 \cdot 2 = ${N}{24}`,n:`The outside's rate at r₀ = 2, not at 1. Gear ratios multiply (gear-train).`}
+],{title:'The slides · where it is taken · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'multiple-inside',t:R`\big(f(kx)\big)' = ${N}{k}\,f'(kx)`,n:`chain for slopes with the inside kx, slope k. (2x)³ = 8x³: 24x².`},
+  {k:'ember',kl:'13h answered',t:R`\big((2x - 3)^2\big)' = 2(2x - 3)\cdot ${N}{2}`,n:`A displacement and a multiple together: displaced-slopes and multiple-inside.`}
+],{title:'The slides · multiple-inside · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'a root',t:R`\big(\sqrt{2x + 1}\big)'(4) = \dfrac{1}{\sqrt9} = ${N}{\tfrac13}`,n:`Between the chords ½ (0 to 4) and ¼ (4 to 12). Why it must be is rung 14's question.`},
+  {k:'ember',kl:'a reciprocal',t:R`\big((3x + 2)^{-2}\big)' = ${N}{\dfrac{-6}{(3x + 2)^3}}`,n:`negative-powers at r, times 3. quotient for slopes the long way agrees.`}
+],{title:'The slides · a root and a reciprocal · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'chains-of-three',t:R`\dfrac{dy}{dx} = \dfrac{dy}{dr}\cdot\dfrac{dr}{ds}\cdot\dfrac{ds}{dx}`,n:`regroup for composing, then chain for slopes twice. One rate per link, each at its own place.`},
+  {k:'ember',kl:'three links',t:R`\big(((2x + 1)^2 + 1)^3\big)'(0) = 12 \cdot 2 \cdot 2 = ${N}{48}`,n:`s₀ = 1, r₀ = 2. Skipping the middle link gives 24.`}
+],{title:'The slides · chains of three · ← → keys work'});
+stepper('#sl7',[
+  {k:'ember',kl:'in a product',t:R`\big(x^2(x + 1)^3\big)'(1) = 16 + 12 = ${N}{28}`,n:`product for slopes first; chain for slopes inside the second factor. Multiplied out: 5 + 12 + 9 + 2.`}
+],{title:'The slides · in a product · ← → keys work'});
+stepper('#sl8',[
+  {k:'ember',kl:'gallery',t:R`3(x^2 + 1)^2,\ \ 3x^2 \cdot 2x,\ \ 3(2x)^2,\ \ 3(x^2 + 1)^2 + 2x`,n:`Forgot the inner rate; outer rate at x; inner rate put inside; rates added. The truth: 6x(x² + 1)².`}
+],{title:'The slides · gallery · ← → keys work'});
+stepper('#sl9',[
+  {k:'teal',kl:'backwards · 1 of 3',t:R`5(3x - 1)^4\cdot 3 \;\Leftarrow\; ${N}{(3x - 1)^5}`,n:`3 is the inside's slope; 5r⁴ is r⁵'s.`},
+  {k:'teal',kl:'backwards · 2 of 3',t:R`x(x^2 + 1)^2 \;\Leftarrow\; ${N}{\tfrac16(x^2 + 1)^3}`,n:`Half of the inside's slope stands by; supply the constant (constant-factor for slopes).`},
+  {k:'teal',kl:'backwards · 3 of 3',t:R`(x^2 - 3)^2 \;\text{and}\; x^4 - 6x^2`,n:`Both have slope 4x(x² − 3). They differ by 9: a lift.`}
+],{title:'The slides · backwards · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

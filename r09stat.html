@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>9·stat · What does a list of data look like?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r09bio.html">← 9·bio is a cow just a big mouse?</a><a href="r09cb4.html">next: 9·cb4 recursion revisited →</a></p>
+  <div class="tags"><span class="tag stat">9·stat · statistics</span></div>
+  <h1>What does a list of data look like?</h1>
+  <p>What does a list of data look like? 4·stat's tallies, 5·stat's middles and 8·stat's spread were all numbers worked out from a list. Rung 9 says a function is its pairs, and a tally table is exactly that: each value paired with how often it comes. So data can be drawn, the way any function is drawn. A drawing shows at a glance what the numbers took a page to say: where the middle is, and how wide the spread is. It shows whether one side trails off further than the other, and whether there is one bump or two. This page draws data three ways and asks what each drawing can hide.</p>
+  <p class="gesture">The tally of each value is a function, and its values add up to the length of the list. A histogram counts the values in each of a row of equal bins. The running total counts the values at or below each point: it never goes down, climbs from nothing to the whole list, and jumps by the tally at each value. The median is where the running total first reaches half the list. Data that looks the same flipped about a centre has both its mean and its median at that centre.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r09a.html">9a</a> (a function is its pairs), <a href="r09e.html">9e</a> (graphs), <a href="r04stat.html">4·stat</a> (tallies-add-up), <a href="r05stat.html">5·stat</a> (shift-and-stretch, sorting, the median and quartiles), <a href="r08stat.html">8·stat</a> (σ). <a href="r13stat.html">13·stat</a> fits a line to paired data.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · read it through, then work the picture and the slides</div>
+
+  <h3>The tally function</h3>
+  <p class="eqline" data-pid="e759ff">From here on, for data x₀, …, x₍ₙ₋₁₎, its frequency function is f: V → ℕ, where V is the set of values that appear and f(v) is the tally of v. By 9a it is a function: each value has exactly one tally. Frequency technique: <b>Σᵥ f(v) = n, x̄ = (1/n) Σᵥ v f(v), and σ² = (1/n) Σᵥ (v − x̄)² f(v). Two lists with the same frequency function have the same mean, median, quartiles, range, modes and σ.</b> The sums are tallies-add-up and 5·stat's grouping, done once for each value. The median and quartiles come from the sorted list, which by sorting is fixed by the tallies alone.</p>
+  <p data-pid="63c959">Drawn with a column of dots over each value, one dot for each time it comes, f has the accepted name a dot plot. Drawn as bars, with heights f(v), it is a bar chart of frequencies. The order the values came in is lost either way. <b>Frequency says that none of 5·stat's or 8·stat's numbers needed it.</b></p>
+
+  <h3>Bins</h3>
+  <p data-pid="fcd605">When the values are many and seldom repeat, such as lengths to the millimetre, each value's tally is 0 or 1 and the dot plot is a comb. So the line is cut into bins of one width w, starting at a point s: [s, s + w), [s + w, s + 2w), and so on. Each holds its left end and not its right. The count of a bin is how many values fall in it. The bars of those counts, side by side, have the accepted name a histogram.</p>
+  <p data-pid="ffa028">Bins technique: <b>every value falls in exactly one bin, so the bin counts add to n. Joining two neighbouring bins into one gives a bin whose count is the sum of theirs.</b> For the first part, the value x is in the bin numbered by the whole part of (x − s)/w, and in no other, since the bins share no point. The second is separate-piles. So halving the width can only split each bar in two, never move a value to a far bin. But a new start s, or a new width that is not a half, can change the picture's shape.</p>
+
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · the cloud: what the instrument did</div>
+    <p data-pid="5693d3">8·phys found that a measurement carries the width of its instrument, and 8·eng took the tool's own width off before trusting a reading. A histogram is an instrument too. Change the width w or the start s, and the same 40 trout make one bump, or two. The fish did not change. The bins did.</p>
+    <p data-pid="0dd7a3"><b>Measuring changes what you measure; say what your instrument did to the thing.</b></p>
+    <p data-pid="d29084">4j, 4·stat and 8·stat read a crowd by the shape of its pile. Here the pile itself is drawn by a choice. The bins technique keeps the counts honest: every value lands in exactly one bin. It cannot make the shape honest. That part is yours: try more than one width, and say which one you used.</p>
+    <p class="bait" data-pid="52b9c8">Two reports on the same 40 trout show histograms, one with one bump and one with two. Does the river hold one kind of trout or two? What would you ask each report's author?</p>
+  </aside>
+
+  <h3>The running total</h3>
+  <p class="eqline" data-pid="e166d0">From here on, the running total of the data is the function F: ℝ → ℕ with F(x) the number of values at most x. Its accepted name is the cumulative frequency, and F(x)/n is the empirical distribution function. Its graph is sometimes called an ogive.</p>
+  <p data-pid="d21b3d">Running-total technique: <b>F never goes down: s ≤ t gives F(s) ≤ F(t). F(x) = 0 for x below the least value and F(x) = n from the greatest value on. At each value v, F(v) − F(u) = f(v), where u is the next value below v that appears, or F(v) = f(v) when v is the least. So F and f each fix the other.</b> If s ≤ t, every value at most s is at most t. So the first set is a part of the second (4j's counting of parts). The rest is tallies-add-up, said one value at a time.</p>
+  <p data-pid="e51fe7"><b>So the median can be read off F's graph.</b> When n is odd, the median is the least value v with F(v) ≥ (n + 1)/2. When n is even, it is the mean of the least v with F(v) ≥ n/2 and the least v with F(v) ≥ n/2 + 1. The quartiles are read the same way off the two halves.</p>
+  <pre class="lines" data-k="ember" data-label="9·stat: worked">
+3, 7, 7, 8, 12, 12, 12, 15 @@ n = 8
+f: 3 \mapsto 1,\ 7 \mapsto 2,\ 8 \mapsto 1,\ 12 \mapsto 3,\ 15 \mapsto 1 @@ frequency: 1 + 2 + 1 + 3 + 1 = 8
+F(3) = 1,\ F(7) = 3,\ F(8) = 4,\ F(12) = 7,\ F(15) = 8 @@ running-total: each step up is a tally
+\text{median } \tfrac{8 + 12}{2} = 10 @@ F first reaches 4 at 8, and first reaches 5 at 12
+  </pre>
+
+  <h3>Shape</h3>
+  <p data-pid="b56c30">A list is symmetric about c when sending every value x to 2c − x, as far from c on the other side, gives a list with the same frequency function. Symmetric-centre technique: <b>if a list is symmetric about c, its mean and its median are both c.</b> By shift-and-stretch with p = −1 and b = 2c, the sent list has mean 2c − x̄. By frequency the two lists have the same mean, so x̄ = 2c − x̄ and x̄ = c. The median of the sent list is 2c − m, since sending the sorted list turns its order about, end for end. Frequency makes that m too.</p>
+  <p data-pid="a2cae1">A list whose histogram trails off further on the right than the left has the accepted name skewed right, and the other way, skewed left. One bump makes it unimodal, two bumps bimodal. These words are read off a picture and have no single line that settles them. A common rule says that a right skew pulls the mean above the median, since a few large values drag the mean (5·stat's hot tub). It is often true and not always. The list 2, 2, 3, 3, 3, 6, 6, 6, 8, 9, 15 reaches 9 above its median of 6 and only 4 below it, so it trails off to the right. Yet its mean, 63/11 ≈ 5.73, is below the median. <b>Checking with numbers beats trusting the rule.</b></p>
+  <p data-pid="891d0b">A statistician of the last century put it this way: the greatest value of a picture is when it forces us to notice what we never expected to see.</p>
+
+  <h3>Illegal moves</h3>
+  <pre class="lines" data-k="ember" data-label="9·stat: tempting, and not allowed">
+\text{the tallest bar of a histogram is the mode}\,? @@ it is the fullest bin; the most common single value may sit in another
+\text{bins of different widths, drawn by count}\,? @@ a wide bin then looks fuller than it is; draw by count per unit of width
+F(x) \text{ is the number of values equal to } x\,? @@ at most x; the tally is the jump (running-total)
+\begin{aligned}&\text{a histogram with one bump:}\\ &\quad\text{the mean is at the top of it}\,?\end{aligned} @@ symmetric-centre needs the list to be symmetric; a lopsided bump has its mean off the peak
+  </pre>
+</section>
+
+<section class="pic" id="pic">
+  <div class="eyebrow">The picture · one list, binned two ways, and its running total</div>
+  <div class="panels">
+    <div class="panel">
+      <div class="lbl">40 trout lengths in cm (made up for this page)</div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">width w</span><input type="range" id="kw" min="1" max="12" step="0.5" value="4"><output id="ow"></output></div>
+      <div class="kn"><span class="m">start s</span><input type="range" id="ka" min="0" max="6" step="0.5" value="0"><output id="oa"></output></div>
+      <div class="cap">Ink: the histogram. Dots under the axis: the 40 values. Plum: the mean. Teal: the median. Change w and s and watch one bump become two, or two become one.</div>
+    </div>
+    <div class="panel">
+      <div class="lbl">the running total F(x) of the same list</div>
+      <canvas id="cvL"></canvas>
+      <div class="kn"><span class="m">x</span><input type="range" id="kx" min="5" max="60" step="0.5" value="30"><output id="ox"></output></div>
+      <div class="cap">Ink: the steps of F. Ember: the reading at x. Teal: where F first reaches 20 and 21, which gives the median; muted: the quartiles.</div>
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+</section>
+
+<section class="slides" id="sl1"><div class="eyebrow">The slides · the tally function; frequency; dot plots; bins; bins; the running total; running-total; the median off the graph; symmetric-centre; skew; the rule that fails; illegal moves · ← → keys work</div></section>
+
+<section class="sayback">
+  <div class="eyebrow">Say it back · then work it</div>
+  <h2>Questions</h2>
+  <div class="phkey"></div>
+  <ol>
+    <li><span class="qid">9·stat.1</span><span class="gname">Drawings.</span><span class="gwhy">Do: build the page's pieces.</span>
+      <ol class="sub">
+        <li><span class="qid">9·stat.1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="L = 2, 5, 5, 3, 2, 5, 9, 3, 5"></span></span>Write the frequency function of L, and draw its dot plot.</li><li><span class="givens"><span data-tex-inline="L = 2, 5, 5, 3, 2, 5, 9, 3, 5"></span></span>By frequency, find the mean of L from its frequency function alone.</li><li><span class="givens"><span data-tex-inline="L = 2, 5, 5, 3, 2, 5, 9, 3, 5"></span></span>Write the running total of L as a table, and draw its graph as steps.</li><li><span class="givens"><span data-tex-inline="M = 12, 15, 21, 22, 24, 28,"></span> <span data-tex-inline="\quad 33, 35, 36, 38, 39, 47,"></span> <span data-tex-inline="w = 10,"></span> <span data-tex-inline="s = 10 \text{ or } s = 5"></span></span>Bin M with both starts. <br>Find a feature one histogram shows and the other hides.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">9·stat.2</span><span class="gname">From the drawing back.</span><span class="gwhy">Undo: run the page's techs backwards.</span>
+      <ol class="sub">
+        <li><span class="qid">9·stat.2.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="F(1) = 2,\ F(4) = 5,"></span> <span data-tex-inline="F(6) = 9,\ F(10) = 10,"></span> <span data-tex-inline="F \text{ is a running total and}"></span> <span data-tex-inline="\text{jumps nowhere else.}"></span></span>Write the list in order.</li><li><span class="givens"><span data-tex-inline="F(1) = 2,\ F(4) = 5,"></span> <span data-tex-inline="F(6) = 9,\ F(10) = 10,"></span> <span data-tex-inline="F \text{ is a running total and}"></span> <span data-tex-inline="\text{jumps nowhere else.}"></span></span>Find the list's median and quartiles from F alone.</li><li><span class="givens"><span data-tex-inline="w = 5,"></span> <span data-tex-inline="s = 0,"></span> <span data-tex-inline="\text{The bars of a histogram}"></span> <span data-tex-inline="\text{are 3, 7, 0, 2.}"></span></span>Find the stretch that must hold the least value, and the one that must hold the greatest.</li><li><span class="givens"><span data-tex-inline="\text{A list is symmetric about}"></span> <span data-tex-inline="\text{7 and holds 2, 5 and 13.}"></span></span>Find which other values it must hold.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">9·stat.3</span><span class="gname">Where it gives.</span><span class="gwhy">Bend: find where the techs stop working.</span>
+      <ol class="sub">
+        <li><span class="qid">9·stat.3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="w = 5,"></span> <span data-tex-inline="s = 0"></span></span>Find two different lists with the same histogram and different means.</li><li><span class="givens"><span data-tex-inline="\text{Frequency: the order of}"></span> <span data-tex-inline="\text{the data is lost.}"></span></span>Name a question about a week of rain that the frequency function cannot answer.</li><li><span class="givens"><span data-tex-inline="\text{A list&#x27;s mean and median}"></span> <span data-tex-inline="\text{are both } c \text{.}"></span></span>Must it be symmetric about c?</li><li><span class="givens"><span data-tex-inline="\text{The trout lengths of the}"></span> <span data-tex-inline="\text{page&#x27;s picture}"></span></span>Find a width for which they look like one bump, and one for which they look like two. <br>Which is the truth?</li></ol></li>
+      </ol></li>
+    <li class="optgroup"><span class="qid">9·stat.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder challenges that rely on your own making. The page is complete without these; the rung's star needs them.</span>
+      <ol class="sub">
+        <li class="opt"><span class="qid">9·stat.4.1</span><span class="tagq">build</span>Build data of your own.<ol class="parts" type="a"><li>Find a list whose histogram looks symmetric for one choice of bins and skewed for another.</li><li>Time 30 waits at a crosswalk or a bus stop in Olympia, or wherever you are. <br>Draw the histogram and the running total, and read off the median.</li><li>Make a list that is skewed right and has its mean below its median.</li><li>Prove that the running total never goes down, every line cited.</li></ol></li>
+        <li class="opt"><span class="qid">9·stat.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{The bins grow narrower and}"></span> <span data-tex-inline="\text{the data more, and each bar}"></span> <span data-tex-inline="\text{is scaled so that the areas}"></span> <span data-tex-inline="\text{of all the bars add to 1.}"></span></span>Find what the area over a stretch then counts. <br>Does the outline head anywhere?</li>
+        <li class="opt"><span class="qid">9·stat.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{Running-total: every}"></span> <span data-tex-inline="\text{running total climbs in}"></span> <span data-tex-inline="\text{steps from 0 to } n \text{.}"></span></span>Is every function that climbs in whole steps from 0 to n the running total of some list? <br>Which conditions must it meet?</li>
+        <li class="opt"><span class="qid">9·stat.4.4</span><span class="tagq">seam</span>A nurse's diagrams of deaths in the Crimean War, in 1858, moved Parliament where tables of the same numbers had not. Is a drawing of data an argument, or only a picture of one? <br>Can a drawing lie when every number in it is true?</li>
+      </ol></li>
+  </ol>
+  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
+</section>
+
+<nav class="nextrung"><a href="r09h.html">← 9h · steps that add, steps that multiply</a><a href="r09cb4.html">9·cb4 · recursion revisited: sequences →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>The statistician is John Tukey. The nurse of 9·stat.4.4 is Florence Nightingale.</p>
+  <aside class="voice para"><p>The greatest value of a picture is when it forces us to notice what we never expected to see.</p><cite>John Tukey, Exploratory Data Analysis (1977), preface; paraphrase</cite></aside>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '–'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+/* least and greatest of F.f on [lo, hi]: the ends, F's critical points inside, and a fine sample (exact between critical points for the functions used here) */
+function ext(F,lo,hi){ if(F.dir) return [0,1]; let m=Infinity,M=-Infinity; const t=x=>{ const v=F.f(x); if(v<m) m=v; if(v>M) M=v; };
+  t(lo); t(hi); (F.crit||[]).forEach(c=>{ if(c>lo&&c<hi) t(c); }); for(let k=1;k<64;k++) t(lo+(hi-lo)*k/64); return [m,M]; }
+function sums(F,pts){ let L=0,U=0; const ms=[],Ms=[]; for(let i=1;i<pts.length;i++){ const [m,M]=ext(F,pts[i-1],pts[i]), w=pts[i]-pts[i-1]; ms.push(m); Ms.push(M); L+=m*w; U+=M*w; } return {L,U,ms,Ms}; }
+const eq=(a,b,n)=>Array.from({length:n+1},(_,i)=>a+(b-a)*i/n);
+function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
+function boxes(P,pts,hs,stroke,fill,alpha){ const c=P.ctx; for(let i=1;i<pts.length;i++){ const a=pts[i-1],b=pts[i],h=hs[i-1]; c.globalAlpha=alpha; P.poly([[a,0],[b,0],[b,h],[a,h]],null,fill); c.globalAlpha=1; P.poly([[a,0],[b,0],[b,h],[a,h]],stroke,null,1.2); } }
+function dirDots(P,a,b){ const c=P.ctx; c.fillStyle=col('--ink'); for(let k=0;k<=300;k++){ const x=a+(b-a)*k/300; const y=(k%2)?0:1; c.fillRect(P.X(x)-1,P.Y(y)-1,2,2); } }
+/* shade between the graph of fn and the axis from lo to hi: above in pos colour, below in neg colour */
+function shade(P,fn,lo,hi,pos,neg,alpha){ if(hi<lo){ const t=lo; lo=hi; hi=t; } const c=P.ctx, N=300; c.globalAlpha=alpha==null?0.32:alpha;
+  for(let k=0;k<N;k++){ const x0=lo+(hi-lo)*k/N, x1=lo+(hi-lo)*(k+1)/N, xm=(x0+x1)/2, y=fn(xm); if(!isFinite(y)) continue; P.poly([[x0,0],[x1,0],[x1,fn(x1)],[x0,fn(x0)]],null,y>=0?pos:neg); }
+  c.globalAlpha=1; }
+function rangeOf(fn,lo,hi,pad){ let m=Infinity,M=-Infinity; for(let k=0;k<=400;k++){ const v=fn(lo+(hi-lo)*k/400); if(isFinite(v)){ if(v<m) m=v; if(v>M) M=v; } } if(m>0) m=0; if(M<0) M=0; const p=(M-m)*(pad==null?0.12:pad)||1; return [m-p,M+p]; }
+function chips(el,FN,get,setk,after){ Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===get()) b.className='on'; b.onclick=()=>{ setk(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+const Nw='\\htmlClass{new}';
+function gridFor(sp){ return sp>40?10:sp>16?4:sp>8?2:sp>3?1:sp>1.2?0.5:0.25; }
+function frame2(P,fn,lo,hi,pad){ const w=hi-lo; P.o.x=[lo-0.12*w,hi+0.08*w]; P.o.y=rangeOf(fn,lo,hi,pad==null?0.12:pad); const sx=P.o.x[1]-P.o.x[0], sy=P.o.y[1]-P.o.y[0]; let g=gridFor(sx); while(sy/g>24) g*=2; P.o.grid=g; }
+const num=(f,a,b,n)=>{ n=n||4000; const h=(b-a)/n; let s=0; for(let i=0;i<n;i++) s+=f(a+(i+0.5)*h)*h; return s; };
+/* axes with separate steps across and up */
+function axes2(P,gx,gy){ const c=P.ctx,o=P.o; c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ c.moveTo(P.X(x),P.Y(o.y[0])); c.lineTo(P.X(x),P.Y(o.y[1])); }
+  for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ c.moveTo(P.X(o.x[0]),P.Y(y)); c.lineTo(P.X(o.x[1]),P.Y(y)); } c.stroke();
+  c.strokeStyle=col('--muted'); c.lineWidth=1.3; c.beginPath(); if(o.y[0]<=0&&o.y[1]>=0){ c.moveTo(P.X(o.x[0]),P.Y(0)); c.lineTo(P.X(o.x[1]),P.Y(0)); } if(o.x[0]<=0&&o.x[1]>=0){ c.moveTo(P.X(0),P.Y(o.y[0])); c.lineTo(P.X(0),P.Y(o.y[1])); } c.stroke();
+  c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; const ly=Math.min(P.H-6,Math.max(12,P.Y(0)+14));
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ if(Math.abs(x)<1e-9) continue; c.fillText(+x.toFixed(6),P.X(x),ly); }
+  c.textAlign='right'; const lx=Math.max(32,Math.min(P.W-4,P.X(0)-5)); for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ if(Math.abs(y)<1e-9) continue; c.fillText(String(+y.toFixed(6)).replace('-','−'),lx,P.Y(y)+4); } }
+function nice(sp){ const raw=sp/6, p=Math.pow(10,Math.floor(Math.log10(raw))), m=raw/p; return (m<1.5?1:m<3.5?2:m<7.5?5:10)*p; }
+function arrow(P,x1,y1,x2,y2,colr,w){ P.line(x1,y1,x2,y2,colr,w||2.2); const c=P.ctx, X1=P.X(x1),Y1=P.Y(y1),X2=P.X(x2),Y2=P.Y(y2), L=Math.hypot(X2-X1,Y2-Y1); if(L<2) return; const ux=(X2-X1)/L, uy=(Y2-Y1)/L, h=9; c.fillStyle=col(colr); c.beginPath(); c.moveTo(X2,Y2); c.lineTo(X2-h*ux-0.5*h*uy,Y2-h*uy+0.5*h*ux); c.lineTo(X2-h*ux+0.5*h*uy,Y2-h*uy-0.5*h*ux); c.closePath(); c.fill(); }
+function fillA(P,pts,colr,alpha){ const c=P.ctx; c.globalAlpha=alpha==null?0.2:alpha; P.poly(pts,null,colr); c.globalAlpha=1; }
+const sq1=P=>Object.defineProperty(P.o,'aspect',{get:()=>1});
+function rightMark(P,qx,qy,ax,ay,bx,by,s,colr){ const la=Math.hypot(ax-qx,ay-qy), lb=Math.hypot(bx-qx,by-qy); if(!la||!lb) return; const u=[(ax-qx)/la*s,(ay-qy)/la*s], v=[(bx-qx)/lb*s,(by-qy)/lb*s]; P.poly([[qx+u[0],qy+u[1]],[qx+u[0]+v[0],qy+u[1]+v[1]],[qx+v[0],qy+v[1]]],colr||'--muted',null,1.2,false); }
+const dist=(a,b)=>Math.hypot(b[0]-a[0],b[1]-a[1]);
+const dotp=(u,v)=>u[0]*v[0]+u[1]*v[1];
+function clipBox(P,fn){ const c=P.ctx, [x0,x1]=P.o.x,[y0,y1]=P.o.y; c.save(); c.beginPath(); c.rect(P.X(x0),P.Y(y1),P.X(x1)-P.X(x0),P.Y(y0)-P.Y(y1)); c.clip(); fn(); c.restore(); }
+function lineABC(P,a,b,c,colr,w,dash){ const [x0,x1]=P.o.x,[y0,y1]=P.o.y; clipBox(P,()=>{ if(Math.abs(b)>1e-12){ P.line(x0,(c-a*x0)/b,x1,(c-a*x1)/b,colr,w,dash); } else if(Math.abs(a)>1e-12){ P.line(c/a,y0,c/a,y1,colr,w,dash); } }); }
+const kw=$('kw'),ka=$('ka'),kx=$('kx'),cvF=$('cvF'),cvL=$('cvL');
+const D=[10,10,10,13,13,14,15,15,15,15,16,17,17,17,17,17,18,18,18,19,20,20,32,33,34,34,34,34,35,35,36,38,39,39,40,40,40,43,43,46];
+const N=D.length, MEAN=D.reduce((a,b)=>a+b,0)/N, MED=(D[19]+D[20])/2, Q1=(D[9]+D[10])/2, Q3=(D[29]+D[30])/2;
+const PF=plane(cvF,{x:[4,56],y:[-3,20],grid:0,labels:0,draw:P=>drawF(P)});
+const PL=plane(cvL,{x:[4,56],y:[-4,44],grid:0,labels:0,draw:P=>drawL(P)});
+function bins(w,a){ let s=a; while(s>D[0]) s-=w; const B=[]; for(let x=s;x<=D[N-1];x+=w){ B.push({lo:x,hi:x+w,c:D.filter(v=>v>=x-1e-9&&v<x+w-1e-9).length}); } return B; }
+const F=x=>D.filter(v=>v<=x+1e-9).length;
+function axis(P,y0){ P.line(4,y0,56,y0,'--ink',1.3); for(let t=10;t<=50;t+=10){ P.line(t,y0-0.3,t,y0+0.3,'--ink',1.2); } }
+function drawF(P){ const w=+kw.value,a=+ka.value, B=bins(w,a), top=Math.max(...B.map(b=>b.c)); P.o.y=[-top*0.55,top*1.2];
+  axis(P,0); for(let t=10;t<=50;t+=10) P.text(String(t),t,-top*0.5,'--muted','center',11);
+  B.forEach(b=>{ if(b.c) P.poly([[b.lo,0],[b.hi,0],[b.hi,b.c],[b.lo,b.c]],'--ink','--sand',1.4,true); if(b.c) P.text(String(b.c),(b.lo+b.hi)/2,b.c+top*0.05,'--ink','center',10); });
+  const seen={}; D.forEach(v=>{ seen[v]=(seen[v]||0)+1; P.dot(v,-top*0.06*seen[v],'--muted',2.5); });
+  P.line(MEAN,0,MEAN,top*1.1,'--plum',2.2,[5,4]); P.line(MED,0,MED,top*1.1,'--teal',2.2,[5,4]); }
+function drawL(P){ const x=+kx.value; axis(P,0); for(let t=10;t<=50;t+=10) P.text(String(t),t,-2.6,'--muted','center',11);
+  for(let k=0;k<=40;k+=10){ P.line(4,k,56,k,'--grid',1); P.text(String(k),5.2,k+0.8,'--muted','left',10); }
+  const xs=[4,...[...new Set(D)],56]; let prev=4, h=0; [...new Set(D)].forEach(v=>{ P.line(prev,h,v,h,'--ink',2.2); h=F(v); prev=v; P.dot(v,h,'--ink',3); }); P.line(prev,h,56,h,'--ink',2.2);
+  P.line(MED,0,MED,21,'--teal',1.6,[5,4]); P.line(4,20,MED,20,'--teal',1.2,[5,4]); P.line(Q1,0,Q1,10,'--muted',1.2,[4,4]); P.line(Q3,0,Q3,30,'--muted',1.2,[4,4]);
+  P.line(x,0,x,F(x),'--ember',2); P.line(4,F(x),x,F(x),'--ember',1.6); P.dot(x,F(x),'--ember',5); }
+function read(){ const w=+kw.value,a=+ka.value,x=+kx.value, B=bins(w,a); $('ow').textContent=mm(w,1); $('oa').textContent=mm(a,1); $('ox').textContent=mm(x,1);
+  const peaks=B.filter((b,i)=>b.c>0&&(i===0||B[i-1].c<b.c)&&(i===B.length-1||B[i+1].c<=b.c)).length;
+  const vd=$('vdF'); vd.className='verdict';
+  vd.textContent='Left: '+B.filter(b=>b.c).length+' non-empty bins, counts adding to '+B.reduce((s,b)=>s+b.c,0)+', '+peaks+(peaks===1?' bump':' bumps')+'; mean '+mm(MEAN,3)+', median '+MED+'. Right: F('+mm(x,1)+') = '+F(x)+' of 40; quartiles '+Q1+' and '+Q3+'.';
+  tex($('eqF'),R`F(${mm(x,1)}) = \#\{i : x_i \le ${mm(x,1)}\} = ${F(x)}`,true); }
+function all(){ PF.redraw(); PL.redraw(); read(); }
+[kw,ka,kx].forEach(el=>el.addEventListener('input',all));
+window.__pic={set:(w,a,x)=>{ kw.value=w; ka.value=a; kx.value=x; all(); const B=bins(w,a); return {counts:B.map(b=>b.c),sum:B.reduce((s,b)=>s+b.c,0),F:F(x),med:MED,mean:MEAN,q1:Q1,q3:Q3}; }};
+all();
+stepper('#sl1',[
+  {k:'ember',kl:'the tally function',t:R`f: V \to \mathbb N`,n:`Each value paired with its tally.`},
+  {k:'ember',kl:'frequency',t:R`${Nw}{\textstyle\sum_v f(v) = n,\ \ \bar x = \tfrac1n\sum_v v f(v)}`,n:`The order is lost; none of the numbers needed it.`},
+  {k:'ember',kl:'dot plots',t:R`\text{a column of dots over each value}`,n:`A bar chart of frequencies.`},
+  {k:'ember',kl:'bins',t:R`[s + kw,\ s + (k + 1)w)`,n:`Left end in, right end out.`},
+  {k:'ember',kl:'bins',t:R`${Nw}{\text{each value in exactly one bin}}`,n:`Joined bins add.`},
+  {k:'ember',kl:'the running total',t:R`F(x) = \text{the number of } i \text{ with } x_i \le x`,n:`Cumulative frequency.`},
+  {k:'ember',kl:'running-total',t:R`${Nw}{s \le t \Rightarrow F(s) \le F(t)}`,n:`From 0 to n; each jump a tally.`},
+  {k:'ember',kl:'the median off the graph',t:R`\text{where } F \text{ first reaches half}`,n:`And the quartiles off the halves.`},
+  {k:'ember',kl:'symmetric-centre',t:R`${Nw}{\text{symmetric about } c \Rightarrow \bar x = m = c}`,n:`shift-and-stretch with p = −1.`},
+  {k:'ember',kl:'skew',t:R`\text{the long side}`,n:`Read off the picture.`},
+  {k:'ember',kl:'the rule that fails',t:R`2, 2, 3, 3, 3, 6, 6, 6, 8, 9, 15`,n:`Trails right; mean below median.`},
+  {k:'ember',kl:'illegal',t:R`\text{tallest bar} \ne \text{mode}`,n:`A bin is not a value.`}
+],{title:'The slides · the tally function; frequency; dot plots; bins; bins; the running total; running-total; the median off the graph; symmetric-centre; skew; the rule that fails; illegal moves · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

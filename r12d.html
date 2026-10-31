@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>12d · Why having no holes matters</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal}
+@media (max-width:520px){.pic .eqbox{font-size:.78rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.5em;text-align:right}
+table.tt.rep td{text-align:left;font-family:var(--serif);font-size:.92rem} table.tt.rep td.ok{color:var(--teal);font-weight:600} table.tt.rep td.no{color:var(--ember);font-weight:600}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r12c.html">← 12c the highest-and-lowest technique</a><a href="r12concl.html">next: 12·∎ conclusion →</a></p>
+  <div class="tags"><span class="tag proof">12d · proof</span></div>
+  <h1>Why having no holes matters</h1>
+  <p>12a, 12b and 12c each cited rung 8's no-holes at one line. Was it needed, or would the fractions have done? This step runs the three techniques in a world with only the fractions, and watches them fail. Take the square of the input less 2, on the fractions from 1 to 2. It is continuous in the same sense, with fractions everywhere. It is negative one at 1 and 2 at 2, and it is never 0. Replay 12a's proof there, and every line goes through but the one that took a least upper bound. Then comes a step that is continuous on the fractions because it steps across the hole. Last comes a bounded continuous function on the fractions with no greatest value, whose failure leads back to the same hole.</p>
+  <p class="gesture">Parse every line again with fractions in place of reals. The techs of arithmetic, order and the challenge game all survive. The least upper bound does not. And every failure of the three techniques falls through the hole where the square root of 2 would be.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r12a.html">12a</a> (in-between-value and its column), <a href="r12b.html">12b</a> (bounded-on-a-closed-interval and its column), <a href="r12c.html">12c</a> (highest-and-lowest and its column), <a href="r05e.html">5e</a> (no-fraction-squares-to-2, no-greatest-below), <a href="r05c.html">5c</a> (the twelve techniques, any-two-compare on ℚ, settled-order on ℚ), <a href="r08a.html">8a</a> (the hole's heap, hole's-heap-is-a-cut, no-least-above, hole's-step, squares-keep-order on ℚ), <a href="r08c.html">8c</a> (no-least-fraction-bound), <a href="r08d.html">8d</a> (no-holes-system: ℚ obeys the twelve techniques, with holes), <a href="r08f.html">8f</a> (hole's-cut-is-√2), <a href="r08h.html">8h</a> (|x|, size-of-a-product, unpack-the-bars, triangle), <a href="r11a.html">11a</a> (continuity-unpacked), <a href="r05h.html">5h</a> (difference-of-squares). <a href="r12e.html">12e</a> traps √2 by halving, and its traps close on nothing over the fractions.</p></div>
+</header>
+
+<section class="class step" data-step="12d1">
+  <h2 class="sthead"><span class="stno">12d1</span>A world with only the fractions</h2>
+  <p class="stands">Stands on 8d (ℚ is a regular number system), 10a (the game) and 5e (fractions).</p>
+  <p data-pid="c72b10">8d proved that ℚ is a regular number system: it obeys the twelve techniques. Everything rung 8 built for the reals from the twelve techniques and comparison alone can be carried out for fractions by the same columns. 8h's |x|, with size-of-a-product, unpack-the-bars and triangle, is among it. The columns go through because ℚ obeys the rules (5c) and any two fractions compare (any-two-compare on ℚ). <b>What ℚ lacks is having no holes</b> (8d's no-holes-system, by 8c's no-least-fraction-bound). So read the challenge game with fractions everywhere.</p>
+  <p class="eqline" data-pid="759f30">From here on, in this step, take a set D of fractions and a function f from D to ℚ. f is continuous over ℚ at a ∈ D when this is true. For every positive fraction ε there is a positive fraction δ such that every x ∈ D with |x − a| &lt; δ has |f(x) − f(a)| &lt; ε. And f is continuous over ℚ on D when it is so at every member of D. It is 11a's continuity-unpacked with every real replaced by a fraction. 12b's “bounded” and 12c's “greatest value” are read over ℚ the same way, with fractions for bounds and values.</p>
+  <p class="eqline" data-pid="f03b74">Reuses, said out loud, for this step only. 10a's ε and δ always named positive reals; here they name positive fractions. Since 8d's naming line lets a fraction name a real, 10a's lines are still so of them. 8h's |a| was said of a real. For a fraction r, |r| here names r if 0 ≤ r and −r if r &lt; 0, a fraction, which names the same real as 8h's |r| through the naming line. H names 8a's hole's heap, as 8c's no-least-fraction-bound did (not 9a's function H). s names a step function (not 4c's next-one function s, nor 12a's candidate s). And h names a reciprocal (not 10f's or 12e's h).</p>
+  <p data-pid="b8836d">The stretch of this step is D = {x ∈ ℚ : 1 ≤ x ≤ 2}, the fractions from 1 to 2, ends kept. It is the closed interval [1, 2] with its irrationals taken out.</p>
+  <p data-pid="41ecde">Continuous-over-ℚ technique: <b>f(x) = x² − 2 is continuous over ℚ on D.</b></p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the continuous-over-ℚ technique">
+\text{let } a \in D,\ \text{a fraction } \varepsilon \gt 0;\ \ \delta = \htmlClass{new}{\tfrac{\varepsilon}{4}} @@ a fraction, positive (5e's keep-order for times on ℚ)
+|f(x) - f(a)| = |x^2 - a^2| = |x - a|\,|x + a| @@ difference-of-squares (5h); size-of-a-product, for fractions by 8h's column
+|x + a| = x + a \le 4 @@ 1 ≤ x, a ≤ 2 in D: x + a positive, at most 2 + 2 (keep-order for plus on ℚ)
+|x - a| \lt \delta \;\Rightarrow\; |f(x) - f(a)| \lt 4\delta = \htmlClass{keep}{\varepsilon} \quad \blacksquare @@ keep-order for times on ℚ: multiply by the positive |x − a| (or 0 &lt; ε when x = a)
+  </pre>
+  <p data-pid="af082f">No real number was mentioned: the input the game is played at, x, ε, δ and every output are fractions. The game is played and won entirely inside ℚ.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · over ℚ · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">12d1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = 3x + 1 on D</span></span>Answer every fraction challenge ε with a fraction window δ. <br>Say why no real number was needed.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="12d2">
+  <h2 class="sthead"><span class="stno">12d2</span>The intermediate value technique fails over ℚ</h2>
+  <p class="stands">Stands on 12d1, 12a5 (the proof) and 8c (no-least-fraction-bound).</p>
+  <p data-pid="80e310">No-in-between-over-ℚ technique: <b>f(x) = x² − 2 is continuous over ℚ on D, f(1) = −1 &lt; 0 &lt; 2 = f(2), and f has no zero in D.</b> Continuous-over-ℚ, arithmetic, and 5e's no-fraction-squares-to-2: no fraction squares to 2. ∎</p>
+  <p data-pid="2c88f1">Over ℚ, then, a continuous function can go from below 0 to above it and skip 0. Which line of 12a's proof broke? Replay it with fractions in place of reals, line by line.</p>
+  <div class="tablewrap"><table class="tt rep">
+    <tr><th>12a's line</th><th>over ℚ, on D</th></tr>
+    <tr><td>A = {x ∈ D : x² − 2 &lt; 0}</td><td class="ok">Separation: a set of fractions</td></tr>
+    <tr><td>1 ∈ A, and 2 is an upper bound of A</td><td class="ok">f(1) = −1; x ≤ 2 on D</td></tr>
+    <tr><td>σ = sup A, by no-holes</td><td class="no">fails: no least fractional upper bound (no-least-fraction-bound-on-D below)</td></tr>
+    <tr><td>the three-way split of f(σ)</td><td class="ok">Any-two-compare on ℚ (5c), decidable by settled-order on ℚ without the either-way principle</td></tr>
+    <tr><td>Sign-kept-near-an-input at σ</td><td class="ok">the same column, from continuous-over-ℚ</td></tr>
+    <tr><td>“not an upper bound” gives a member beyond</td><td class="ok">for fractions, by not-every, or a search</td></tr>
+    <tr><td>x = min(σ + δ/2, b)</td><td class="ok">8b's min for fractions</td></tr>
+  </table></div>
+  <p data-pid="bc5260">One line fails, and it is the line that cited rung 8. Here is why it fails, with a recipe for beating any fractional upper bound.</p>
+  <p data-pid="734867">No-least-fraction-bound-on-D technique: <b>A = {x ∈ D : x² &lt; 2} has fractional upper bounds and no least one: every fractional upper bound u of A has a smaller one, u′ = (u² + 2)/(2u).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the no-least-fraction-bound-on-D technique">
+u \ge 1 \gt 0 @@ 1 ∈ A and u is an upper bound
+u^2 \ne 2 @@ no-fraction-squares-to-2 (5e)
+\neg(u^2 \lt 2) @@ else no-greatest-below (5e) gives s &gt; u with s² &lt; 2, and s &lt; 2 (squares-keep-order on ℚ), so s ∈ A past u: clash
+u^2 \gt 2 @@ any-two-compare on ℚ
+u' = \htmlClass{new}{\tfrac{u^2 + 2}{2u}},\ \ u - u' = \tfrac{u^2 - 2}{2u} \gt 0 @@ a fraction built by + · and reciprocals; fractions-of-rationals (5g); positive-product on ℚ
+u'^2 - 2 = \htmlClass{new}{\Big(\tfrac{u^2 - 2}{2u}\Big)^2} \gt 0 @@ square-of-a-sum, collect, square-of-a-difference backwards; positive, since a square of a fraction is 0 or positive (5e) and u² ≠ 2
+x \in A \;\Rightarrow\; x \lt u' @@ if u′ ≤ x then u′² ≤ x² &lt; 2 (squares-keep-order on ℚ): clash with the line above; any-two-compare on ℚ
+u' \text{ is an upper bound of } A,\ \ u' \lt u \quad \blacksquare @@ so u is not least
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: beating upper bounds, run">
+\tfrac32:\ \ 3^2 - 2 \cdot 2^2 = 1 @@ 9 &gt; 8: an upper bound
+\tfrac{17}{12}:\ \ 289 - 288 = 1 @@ (9/4 + 2)/3 = 17/12: smaller, still above
+\tfrac{577}{408}:\ \ 332929 - 332928 = 1 @@ the next step; 577/408 ≈ 1.4142157
+\tfrac{665857}{470832}:\ \ \text{again } 1 @@ the fractions creep down on a place where no fraction is
+  </pre>
+  <p data-pid="99acd2">That is 8c's no-least-fraction-bound once more, now with a recipe: each step is the average of u and 2/u. Call it the averaging step. Over the reals the creeping stops at a number, √2, which is sup A by 8f's hole's-cut-is-√2, and there f is 0. Over the fractions it stops nowhere. No-least-fraction-bound-on-D's column needs no either-way principle at all: every comparison in it is between fractions, and settled-order on ℚ settles those.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · no in-between over ℚ · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · left: the hole at √2 · right: a top that is not there, and a step that is continuous</div>
+    <div class="panel">
+      <canvas id="cvH"></canvas>
+      <div class="kn">
+        <span class="m">bottoms up to</span><input type="range" id="kq" min="2" max="300" step="1" value="40"><output id="oq"></output>
+        <span class="m">zoom</span><input type="range" id="kz" min="0" max="6" step="0.25" value="0.5"><output id="oz"></output>
+      </div>
+      <div class="chips"><button id="bbeat">beat u: u → (u² + 2)/(2u)</button><button id="bu0">u = 3/2</button></div>
+      <div class="cap">x² − 2 drawn only at fractions p/q, with q up to the knob, near √2. Ember dots: x² &lt; 2, members of A. Teal: x² &gt; 2, upper bounds. The hollow ring on the x-axis is where the zero would be: no fraction is there, at any zoom. Gold: the current fractional upper bound u.</div>
+      <div class="eqbox" id="eqH"></div>
+    </div>
+    <div class="panel">
+      <div class="chips" id="rch"><button class="on" data-r="top">no greatest value</button><button data-r="step">a continuous step</button></div>
+      <canvas id="cvR"></canvas>
+      <div class="kn" id="kfr"><span class="m">fraction a</span><input type="range" id="ka" min="0" max="10" step="1" value="0"><output id="oa"></output></div>
+      <div class="chips" id="bimp"><button id="bbetter">a better fraction</button><button id="bc0">c = 3/2</button></div>
+      <div class="cap" id="capR"></div>
+      <div class="eqbox" id="eqR"></div>
+    </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">12d2.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = x^2 - 3 \text{ on } D"></span></span>Show that f is continuous over the fractions on D, answering every fraction challenge with a fraction window, and that it changes sign on D. <br>Prove that it has no zero in D.</li><li><span class="givens"><span data-tex-inline="u \mapsto \frac{u^2 + 2}{2u},"></span> <span data-tex-inline="u_0 = \tfrac32"></span></span>Take two steps of the map by hand, and check by comparing squares that each is a fractional upper bound of A.</li><li><span class="givens"><span data-tex-inline="g(x) = -(x^2 - 2)^2,"></span> <span data-tex-inline="h(x) = \frac{1}{(x^2 - 2)^2},"></span> <span data-tex-inline="x \in \{\tfrac32, \tfrac{17}{12}\}"></span></span>Compute g and h exactly at each x.</li><li><span class="givens"><span data-tex-inline="q(x) = x^2 - 2,"></span> <span data-tex-inline="r = \tfrac{577}{408}"></span></span>Find the value of q at r exactly, and decide whether r is a zero of q.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="12d3">
+  <h2 class="sthead"><span class="stno">12d3</span>A step that is continuous over ℚ</h2>
+  <p class="stands">Stands on 12d2, 8a (the hole’s heap) and 11a7 (the step u).</p>
+  <p data-pid="54083c">It gets stranger. <b>Over ℚ, even a step is continuous, if it steps across the hole.</b> Let H = {r ∈ ℚ : r &lt; 0 ∨ r² &lt; 2}, 8a's hole's heap. Let s(x) = −1 for x ∈ H, and s(x) = 1 for every other fraction x (7d's definition by cases; for fractions the case is decidable).</p>
+  <p data-pid="945c64">Hole-makes-a-step technique: <b>s is continuous over ℚ at every fraction. It takes the values −1 and 1, and no value between.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the hole-makes-a-step technique">
+\text{let } a \in \mathbb Q;\ \ a \in H \lor a \notin H @@ decidable for fractions: settled-order on ℚ and settled-join (7b), no either-way principle
+\text{case } a \in H:\ \ \text{call } t \in H,\ a \lt t;\ \ \delta = t - a @@ H is a cut (8a's hole's-heap-is-a-cut) with no greatest member: cut (iv). For a ≥ 0, 8a's hole's-step step gives t; for a &lt; 0, t = 0 will do
+\qquad |x - a| \lt \delta \Rightarrow x \lt t \Rightarrow x \in H \Rightarrow s(x) = -1 = s(a) @@ unpack-the-bars; cut (iii): closed downward
+\text{case } a \notin H:\ \ a \gt 0,\ a^2 \gt 2;\ \ \text{call } t,\ 0 \lt t \lt a,\ t^2 \gt 2;\ \ \delta = a - t @@ no-fraction-squares-to-2; 8a's no-least-above (or no-least-fraction-bound-on-D's u′)
+\qquad |x - a| \lt \delta \Rightarrow x \gt t \gt 0 \Rightarrow x^2 \gt t^2 \gt 2 \Rightarrow s(x) = 1 = s(a) @@ unpack-the-bars; squares-keep-order on ℚ
+|s(x) - s(a)| = 0 \lt \varepsilon \text{ for every } \varepsilon \quad \blacksquare @@ one δ wins every round: s is constant on a window around every fraction
+  </pre>
+  <p data-pid="687e78">Over the reals, the same step, −1 below √2 and 1 from √2 on, is not continuous at √2: it is 11a's step u moved to √2. Over the fractions √2 is not an input. Every fraction sits on one side of the hole, with a whole window of fractions around it on the same side. Nothing between −1 and 1 is taken, not even 0, and the step is continuous.</p>
+  <p data-pid="4982f5">The same column works for any set S of fractions with a member and a fractional upper bound but no least one. Let the step be 1 at the fractional upper bounds of S and −1 elsewhere. It is continuous over ℚ and skips everything between. So take a regular number system, and ask every continuous function on a closed interval to take every value between its end values. That forces every set with a member and an upper bound to have a least one. <b>The intermediate value technique and no-holes are two faces of one property.</b></p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · hole-makes-a-step · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">12d3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{over the reals:}"></span> <span data-tex-inline="s(x) = -1 \text{ for } x &lt; \sqrt2,"></span> <span data-tex-inline="s(x) = 1 \text{ for } x \ge \sqrt2"></span></span>Find where s is discontinuous, and which demand of 11a fails there.</li><li><span class="givens"><span data-tex-inline="\text{Between two fractions}"></span> <span data-tex-inline="\text{is another,}"></span> <span data-tex-inline="\text{so the fractions have no holes,}"></span> <span data-tex-inline="\text{so in-between-value}"></span> <span data-tex-inline="\text{is true over } \mathbb{Q}."></span></span>Find the false step.</li><li><span class="givens"><span data-tex-inline="\text{over } \mathbb{Q}:"></span> <span data-tex-inline="g(x) = -(x^2 - 2)^2 \text{ on } D"></span></span>Run 12c's column on g, and find the first line that cannot be written, then the line beneath it in 12b's column.</li><li><span class="givens"><span data-tex-inline="\text{over } \mathbb{Q}:"></span> <span data-tex-inline="f(x) = x^2 - 4"></span> <span data-tex-inline="\text{on the fractions from 1 to 3}"></span></span>Decide whether f has a zero there, and find which of in-between-value's supports it did not need.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="12d4">
+  <h2 class="sthead"><span class="stno">12d4</span>No greatest value over ℚ</h2>
+  <p class="stands">Stands on 12d3, 12c (highest-and-lowest) and 12b (bounded).</p>
+  <p data-pid="6461b3">No-highest-over-ℚ technique: <b>g(x) = −(x² − 2)² is continuous over ℚ on D and bounded there, and it has no greatest value on D.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the no-highest-over-ℚ technique">
+g(a) - g(x) = (x^2 - a^2)(x^2 + a^2 - 4) @@ difference-of-squares (5h) on (x² − 2)² − (a² − 2)²
+|x^2 + a^2 - 4| \le 4,\ \ |x^2 - a^2| \le 4|x - a| @@ 1 ≤ x², a² ≤ 4 on D; continuous-over-ℚ's line
+|x - a| \lt \tfrac{\varepsilon}{16} \Rightarrow |g(x) - g(a)| \lt \varepsilon @@ size-of-a-product: continuous over ℚ on D, with δ = ε/16
+-4 \le g(x) \le 0 @@ −1 ≤ x² − 2 ≤ 2, so (x² − 2)² ≤ 4; square-never-negative for fractions
+\text{let } c \in D:\ \ g(c) \lt 0 @@ c² ≠ 2 (no-fraction-squares-to-2), so (c² − 2)² is positive
+c' = \htmlClass{new}{\tfrac{c^2 + 2}{2c}} \in D @@ c′² &gt; 2 &gt; 1 and c′ &gt; 0, so c′ &gt; 1; c′ = c/2 + 1/c ≤ 1 + 1 = 2
+|c'^2 - 2| = |c^2 - 2| \cdot \tfrac{|c^2 - 2|}{4c^2} \le \tfrac12 |c^2 - 2| @@ no-least-fraction-bound-on-D's line; |c² − 2| ≤ 2 and 4c² ≥ 4 on D
+g(c') \ge \tfrac14 g(c) \gt g(c) \quad \blacksquare @@ square the line above (squares-keep-order on ℚ); g(c) &lt; 0: no input of D reaches a greatest value
+  </pre>
+  <p data-pid="b5c3b1">So the fraction c′ always beats c, and the values creep up on 0 without reaching it: g(3/2) = −1/16, g(17/12) = −1/20736, g(577/408) = −1/27 710 263 296. Here the sup over ℚ exists. 0 is a fraction, and it is the least fractional upper bound of the values, since each step at least quarters the gap and 4ⁿ passes every bound. So 12c's first block survives. Which line breaks? The supposition “never reached” is true. The trick's function h(x) = 1/(0 − g(x)) = 1/(x² − 2)² is continuous over ℚ on D, by the same columns. The next line, “bounded-on-a-closed-interval for h”, fails. h(3/2) = 16, h(17/12) = 20736, h(577/408) = 27 710 263 296. Each averaging step multiplies h by at least 4, so h passes every bound on D.</p>
+  <p data-pid="e4d829">And inside bounded-on-a-closed-interval's own proof, the line that fails is again the least upper bound. The inputs up to which h is bounded are exactly the fractions of D with x² &lt; 2. Below the hole, the gap 2 − t² stays at least 2 − x². Past it, 8a's hole's-step brings fractions from below as near the hole as you like, each step cutting the gap |t² − 2| to at most 2/9 of itself. That set is A once more, with no least fractional upper bound. <b>Three techniques, one line, one hole.</b></p>
+  <p data-pid="449529">The builder of the cuts of rung 8 said it this way. The fractions have gaps. Every gap is a splitting of the fractions into a lower and an upper class, with no fraction producing it. The line’s having no such gaps is the essence of continuity.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · no-highest-over-ℚ · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">12d4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">g(x) = −(x² − 2)² on D,  c = 3/2</span></span>Find g(c), and a fraction c′ in D with g(c′) > g(c). <br>Say which number the values creep toward, and why no input of D reaches it.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="12d5">
+  <h2 class="sthead"><span class="stno">12d5</span>Illegal moves</h2>
+  <p class="stands">Stands on 12d1 to 12d4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+x^2 - 2 \text{ is not continuous over } \mathbb Q\,? @@ continuous-over-ℚ: one δ = ε/4 wins every round, with fractions only
+\text{the fractions are crowded, so no holes}\,? @@ between any two another (5e's another-between), yet A has no least fractional upper bound
+\tfrac{577}{408} \text{ is a zero, near enough}\,? @@ 577² − 2 · 408² = 1, not 0. Near is not equal
+\text{a step can never be continuous}\,? @@ over ℚ, s is continuous at every fraction: its step is in the hole
+\text{no-highest-over-ℚ fails at the sup line}\,? @@ sup over ℚ of g's values is 0, a fraction; it is bounded-on-a-closed-interval for h that fails, inside it at σ = sup B
+\text{so the twelve techniques are to blame}\,? @@ ℚ obeys all twelve (5c). Only no-holes is missing (no-holes-system)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">12d5.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">“s is continuous over ℚ at every fraction, so it takes every value between −1 and 1.”</span></span>Which illegal move is this? <br>Name a value it skips, and the hole it steps across.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="12d6">
+  <h2 class="sthead"><span class="stno">12d6</span>Running it backwards</h2>
+  <p class="stands">Stands on 12d1 to 12d4.</p>
+  <p data-pid="0d7df5">Handed a technique of this rung and asked whether it needs no-holes, read it over ℚ and look for a counterexample at a hole. It may be a polynomial with fraction coefficients whose sign changes across an irrational zero. Or it may be a function whose top sits at an irrational input. Handed a proof, find the line that took a least upper bound: that is the line the counterexample breaks. Found upward; written downward.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">12d6.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{continuous-over-}\mathbb{Q}"></span> <span data-tex-inline="\text{answered } \delta = \varepsilon/4 \text{ on } D"></span></span>Find where the 4 came from, and what it would be on the fractions from 0 to 3.</li><li><span class="givens"><span data-tex-inline="\tfrac{99}{70} \text{ handed as a fractional}"></span> <span data-tex-inline="\text{upper bound of } A"></span></span>Check it, and find a smaller one.</li><li><span class="givens"><span data-tex-inline="\text{knob at } \tfrac32,"></span> <span data-tex-inline="\text{the window for } s \text{ had } \delta = \tfrac{1}{12}"></span></span>Find the fraction t that made the window, and check s on it.</li><li><span class="givens"><span data-tex-inline="g(x) = -(x^2 - 2)^2 \text{ on } D"></span></span>Find the least upper bound of g's values on D, proving it is an upper bound and that nothing below it is one. <br>Decide whether an input in D reaches it.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">12d.4.1</span><span class="tagq">build</span>Choose a whole number k from 5 to 8 that is not a square. <br>From your k, build a function on the fractions from 1 to 3, continuous over the fractions, that changes sign there and has no fraction zero, and prove it has none. <br>Then, from your k, build one on those fractions, continuous over the fractions and bounded there, with no greatest value.</div>
+  <div class="chq"><span class="chid">12d.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{over } \mathbb{Q}:"></span> <span data-tex-inline="f(x) = x \text{ on } D"></span></span>Decide whether f is continuous on D, and whether it has a greatest value there.</div>
+  <div class="chq"><span class="chid">12d.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="N \text{ an ordered number system,}"></span> <span data-tex-inline="\text{every continuous } f \text{ on } N"></span> <span data-tex-inline="\text{takes every value}"></span> <span data-tex-inline="\text{between two of its values}"></span></span>Prove or refute that every bounded set in N must have a least upper bound.</div>
+  <div class="chq"><span class="chid">12d.4.4</span><span class="tagq">seam</span>A mathematician of the 1800s, it is reported, said that God made the whole numbers and all else is the work of man. He doubted that irrational numbers exist at all. Every measurement ever made is a fraction. <br>Does physics need in-between-value, or only what is true over the fractions?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r12c.html">← 12c · the highest-and-lowest technique</a><a href="r12concl.html">12·∎ · conclusion →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>Dedekind says that the fractions form a domain that is not continuous: they have gaps, and every gap is a splitting of the fractions into a lower and an upper class with no fraction producing it; and he takes the line's having no such gaps as the essence of continuity.</p><cite>Dedekind, Continuity and Irrational Numbers (1872), §III–IV, after Beman (1901)</cite></aside>
+  <p>The averaging step, u to the average of u and 2/u, is Heron’s rule for square roots (13m). The mathematician of question 12d.4.4 is Leopold Kronecker.</p>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?3:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const R2=Math.SQRT2;
+const gcd=(a,b)=>{ while(b){ [a,b]=[b,a%b]; } return a; };
+const bg=(a,b)=>{ a=a<0n?-a:a; b=b<0n?-b:b; while(b){ [a,b]=[b,a%b]; } return a; };
+const red=([p,q])=>{ const g=bg(p,q); return [p/g,q/g]; };
+const heron=([p,q])=>red([p*p+2n*q*q,2n*p*q]);
+const hd=([p,q])=>red([2n*p+2n*q,p+2n*q]); // (2r+2)/(r+2) for r = p/q
+const val=([p,q])=>Number(p)/Number(q);
+const big=s=>{ s=s.toString(); return s.length>12?s.slice(0,4)+'⋯'+'\\,('+s.length+'\\text{ digits})':s.replace(/\B(?=(\d{3})+(?!\d))/g,'\\,'); };
+/* ---------- left: the hole ---------- */
+const kq=$('kq'),kz=$('kz'),cH=$('cvH'); let U=[3n,2n];
+const PH=plane(cH,{x:[1,2],y:[-1,1],grid:0,labels:false,aspect:0.8,draw:P=>drawH(P)});
+Object.defineProperty(PH.o,'aspect',{get:()=>cH.clientWidth>480?0.8:0.9});
+function win(){ const w=0.5*Math.pow(10,-(+kz.value)); return [R2-w,R2+w,w]; }
+function drawH(P){ const c=P.ctx,[x0,x1,w]=win(),Q=+kq.value,yh=Math.max(4*w*R2,1e-12)*1.15; P.o.x=[x0,x1]; P.o.y=[-yh,yh];
+  c.strokeStyle=col('--muted'); c.lineWidth=1.3; c.beginPath(); c.moveTo(P.X(x0),P.Y(0)); c.lineTo(P.X(x1),P.Y(0)); c.stroke();
+  P.fn(x=>x*x-2,'--grid',1.2,[3,4]);
+  for(let q=1;q<=Q;q++){ const p0=Math.ceil(x0*q),p1=Math.floor(x1*q); for(let p=p0;p<=p1;p++){ if(gcd(p,q)!==1) continue; const x=p/q; const neg=p*p<2*q*q; P.dot(x,x*x-2,neg?'--ember':'--teal',Math.max(1.8,4.5-q/30)); } }
+  c.strokeStyle=col('--ink'); c.lineWidth=2; c.fillStyle=col('--card'); c.beginPath(); c.arc(P.X(R2),P.Y(0),7,0,7); c.fill(); c.stroke();
+  const u=val(U); if(u>=x0&&u<=x1){ P.line(u,-yh,u,yh,'--gold',1.8); P.dot(u,u*u-2,'--gold',6); } else { c.fillStyle=col('--gold'); c.font='12px IBM Plex Mono, monospace'; c.textAlign='right'; c.fillText(u>x1?'u is off to the right →':'u is off to the left',P.W-6,16); c.textAlign='left'; }
+  c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='left'; c.fillText(fm(x0,7),4,P.H-4); c.textAlign='right'; c.fillText(fm(x1,7),P.W-4,P.H-4); c.textAlign='left'; }
+function readH(){ const Q=+kq.value; $('oq').textContent=Q; const [x0,x1,w]=win(); $('oz').textContent='±'+w.toPrecision(2);
+  let lo=[1,1],hi=[2,1]; for(let q=1;q<=Q;q++){ const pl=Math.floor(R2*q),ph=pl+1; if(pl/q>lo[0]/lo[1]) lo=[pl,q]; if(ph/q<hi[0]/hi[1]) hi=[ph,q]; }
+  const [up,uq]=U, d=up*up-2n*uq*uq;
+  tex($('eqH'),R`\begin{gathered}\text{nearest with } q \le ${Q}:\\ \tfrac{${lo[0]}}{${lo[1]}} \lt \text{the hole} \lt \tfrac{${hi[0]}}{${hi[1]}}\\ u = \tfrac{${big(up)}}{${big(uq)}}\\ p^2 - 2q^2 = ${d}\ \gt 0\text{: an upper bound}\end{gathered}`,true); }
+function allH(){ PH.redraw(); readH(); }
+[kq,kz].forEach(k=>k.addEventListener('input',allH));
+$('bbeat').onclick=()=>{ U=heron(U); if(U[0]>10n**40n) U=[3n,2n]; allH(); };
+$('bu0').onclick=()=>{ U=[3n,2n]; allH(); };
+/* ---------- right: the top that is not there; the continuous step ---------- */
+let rm='top', C=[3n,2n];
+const cR=$('cvR'), ka=$('ka');
+const FR=[]; for(let q=1;q<=12;q++) for(let p=q;p<=2*q;p++) if(gcd(p,q)===1) FR.push([p,q]); FR.sort((a,b)=>a[0]/a[1]-b[0]/b[1]);
+ka.max=FR.length-1; ka.value=FR.findIndex(([p,q])=>p===7&&q===5);
+const PR=plane(cR,{x:[0.95,2.05],y:[-1.5,1.5],grid:0.25,labels:false,aspect:0.8,draw:P=>drawR(P)});
+Object.defineProperty(PR.o,'aspect',{get:()=>cR.clientWidth>480?0.8:0.9});
+const inH=([p,q])=>p*p<2n*q*q; // p,q positive here
+function drawR(P){ const c=P.ctx;
+  if(rm==='top'){ P.o.x=[0.95,2.05]; P.o.y=[-4.4,0.5]; P.o.grid=0.5; P.axes();
+    P.fn(x=>-((x*x-2)**2),'--grid',1.2,[3,4]);
+    for(let q=1;q<=40;q++) for(let p=q;p<=2*q;p++){ if(gcd(p,q)!==1) continue; const x=p/q; P.dot(x,-((x*x-2)**2),'--teal',Math.max(1.6,3.8-q/14)); }
+    c.strokeStyle=col('--ink'); c.lineWidth=2; c.fillStyle=col('--card'); c.beginPath(); c.arc(P.X(R2),P.Y(0),6,0,7); c.fill(); c.stroke();
+    P.line(0.95,0,2.05,0,'--gold',1.4,[6,4]);
+    [[0,'0'],[-1,'−1'],[-2,'−2'],[-3,'−3'],[-4,'−4']].forEach(([y,t])=>P.text(t,0.96,y+0.06,'--muted','left',11)); [1,1.25,1.5,1.75,2].forEach(t=>P.text(String(t),t,-4.3,'--muted','center',11));
+    const x=val(C); P.dot(x,-((x*x-2)**2),'--ember',6); c.strokeStyle=col('--ember'); c.lineWidth=2; c.beginPath(); c.arc(P.X(x),P.Y(-((x*x-2)**2)),10,0,7); c.stroke(); }
+  else { P.o.x=[0.95,2.05]; P.o.y=[-1.6,1.6]; P.o.grid=0.25; P.axes();
+    const a=FR[+ka.value], A=[BigInt(a[0]),BigInt(a[1])], av=a[0]/a[1];
+    let t,dl; if(inH(A)){ t=hd(A); dl=val(t)-av; } else { t=heron(A); dl=av-val(t); }
+    c.fillStyle=col('--ink'); c.globalAlpha=.08; c.fillRect(P.X(av-dl),P.Y(1.6),P.X(av+dl)-P.X(av-dl),P.Y(-1.6)-P.Y(1.6)); c.globalAlpha=1;
+    P.line(av-dl,-1.6,av-dl,1.6,'--muted',1.2,[5,4]); P.line(av+dl,-1.6,av+dl,1.6,'--muted',1.2,[5,4]);
+    for(let q=1;q<=40;q++) for(let p=q;p<=2*q;p++){ if(gcd(p,q)!==1) continue; const x=p/q; const lowr=p*p<2*q*q; P.dot(x,lowr?-1:1,lowr?'--ember':'--teal',Math.max(1.6,3.8-q/14)); }
+    c.strokeStyle=col('--ink'); c.lineWidth=2; c.fillStyle=col('--card'); [-1,1].forEach(y=>{ c.beginPath(); c.arc(P.X(R2),P.Y(y),5,0,7); c.fill(); c.stroke(); });
+    [[1,'1'],[0,'0'],[-1,'−1']].forEach(([y,t])=>P.text(t,0.96,y+0.07,'--muted','left',11)); [1,1.25,1.5,1.75,2].forEach(t=>P.text(String(t),t,-1.5,'--muted','center',11));
+    P.dot(av,inH(A)?-1:1,'--gold',6.5); P.dot(val(t),inH(A)?-1:1,'--plum',4.5); } }
+function readR(){ const vis=rm==='step'; $('kfr').style.display=vis?'':'none'; $('bimp').style.display=vis?'none':'';
+  if(rm==='top'){ $('capR').textContent='Teal dots: g(x) = −(x² − 2)² at fractions with bottoms up to 40. The gold dashed row is 0, the sup of the values over ℚ; the hollow ring is where an input would reach it, at √2, which is no fraction. Ember: the current fraction c. “A better fraction” takes c to (c² + 2)/(2c), and g climbs; h(c) is the trick’s reciprocal 1/(c² − 2)².';
+    const [p,q]=C, d=p*p-2n*q*q, den=q**4n, num=d*d;
+    tex($('eqR'),R`\begin{gathered}c = \tfrac{${big(p)}}{${big(q)}}\\ g(c) = -\tfrac{${big(num)}}{${big(den)}}\\ h(c) = \tfrac{1}{(c^2 - 2)^2} = ${num===1n?big(den):R`\tfrac{${big(den)}}{${big(num)}}`}\\ \text{a better fraction always exists (no-highest-over-ℚ)}\end{gathered}`,true); }
+  else { const a=FR[+ka.value], A=[BigInt(a[0]),BigInt(a[1])]; $('oa').textContent=a[0]+'/'+a[1];
+    $('capR').textContent='Dots: the step s at fractions with bottoms up to 40, ember −1 below the hole, teal 1 above it; the hollow rings are where √2 would be. Gold: the fraction chosen by the knob (bottoms up to 12). Plum: the fraction t that hole\'s-step (below the hole) or the averaging step (above it) supplies, and the grey window of reach δ around a, inside which s does not change.';
+    let t,d,how; if(inH(A)){ t=hd(A); d=[t[0]*A[1]-A[0]*t[1],t[1]*A[1]]; how=R`a \in H:\ t = \tfrac{2a + 2}{a + 2}\ (\text{HD})`; } else { t=heron(A); d=[A[0]*t[1]-t[0]*A[1],t[1]*A[1]]; how=R`a \notin H:\ t = \tfrac{a^2 + 2}{2a}\ (\text{averaging})`; }
+    d=red(d);
+    tex($('eqR'),R`\begin{gathered}a = \tfrac{${a[0]}}{${a[1]}},\ \ s(a) = ${inH(A)?'-1':'1'}\\ ${how} = \tfrac{${t[0]}}{${t[1]}}\\ \delta = \tfrac{${d[0]}}{${d[1]}}:\ s \text{ is } ${inH(A)?'-1':'1'} \text{ on the window}\end{gathered}`,true); } }
+function allR(){ PR.redraw(); readR(); }
+ka.addEventListener('input',allR);
+$('bbetter').onclick=()=>{ C=heron(C); if(C[0]>10n**30n) C=[3n,2n]; allR(); };
+$('bc0').onclick=()=>{ C=[3n,2n]; allR(); };
+[...$('rch').children].forEach(b=>b.onclick=()=>{ rm=b.dataset.r; [...$('rch').children].forEach(z=>z.classList.toggle('on',z===b)); allR(); });
+window.__pic={beat:n=>{ for(let i=0;i<n;i++) $('bbeat').click(); return U.map(String); },mode:(m,ai)=>{ [...$('rch').children].find(b=>b.dataset.r===m).click(); if(ai!=null){ ka.value=FR.findIndex(([p,q])=>p===ai[0]&&q===ai[1]); allR(); } return $('eqR').textContent.slice(0,120); },better:n=>{ for(let i=0;i<n;i++) $('bbetter').click(); return C.map(String); }};
+allH(); allR();
+
+/* ---------- slides ---------- */
+const Nw='\\htmlClass{new}';
+stepper('#sl1',[
+  {k:'ember',kl:'over ℚ',t:R`\begin{gathered}\varepsilon, \delta \text{ positive fractions}:\\ x \in D,\ |x - a| \lt \delta \Rightarrow |f(x) - f(a)| \lt \varepsilon\end{gathered}`,n:`11a's continuity-unpacked with fractions everywhere: continuous over ℚ.`},
+  {k:'ember',kl:'continuous-over-ℚ',t:R`|x^2 - a^2| = |x - a||x + a| \le 4|x - a|`,n:`On D both inputs are at most 2, so the sum is at most 4. So δ = ε/4, a fraction. ∎`}
+],{title:'The slides · over ℚ · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'no-in-between-over-ℚ',t:R`f(1) = -1 \lt 0 \lt 2 = f(2),\ \ x^2 \ne 2`,n:`Continuous over ℚ, a change of sign, no zero: no-fraction-squares-to-2. The technique fails over ℚ.`},
+  {k:'ember',kl:'the replay',t:R`\sigma = \sup A\ \ ${Nw}{\text{fails}};\ \text{every other line survives}`,n:`Separation, the bounds, any-two-compare on ℚ for the split, sign-kept-near-an-input, not-every, min: all fine with fractions.`},
+  {k:'ember',kl:'no-least-fraction-bound-on-D · 1 of 3',t:R`u \text{ an upper bound} \;\Rightarrow\; u^2 \gt 2`,n:`u² ≠ 2 by no-fraction-squares-to-2; u² &lt; 2 is refuted by no-greatest-below.`},
+  {k:'ember',kl:'no-least-fraction-bound-on-D · 2 of 3',t:R`u' = ${Nw}{\tfrac{u^2 + 2}{2u}},\ \ u - u' = \tfrac{u^2 - 2}{2u} \gt 0`,n:`A smaller fraction: the average of u and 2/u.`},
+  {k:'ember',kl:'no-least-fraction-bound-on-D · 3 of 3',t:R`u'^2 - 2 = \Big(\tfrac{u^2 - 2}{2u}\Big)^2 \gt 0`,n:`Still an upper bound. So no fractional upper bound is least. ∎ No either-way principle used.`},
+  {k:'ember',kl:'the run',t:R`\tfrac32 \to \tfrac{17}{12} \to \tfrac{577}{408} \to \tfrac{665857}{470832}`,n:`Each has p² − 2q² = 1. Over ℝ the creeping stops at √2 = sup A (hole's-cut-is-√2).`}
+],{title:'The slides · no in-between over ℚ · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'hole-makes-a-step · the step',t:R`s(x) = -1\ (x \in H),\ \ 1\ (x \notin H)`,n:`H is 8a's hole's heap: below the hole, or negative.`},
+  {k:'ember',kl:'hole-makes-a-step · below',t:R`a \in H:\ t = \tfrac{2a+2}{a+2} \in H,\ \ \delta = t - a`,n:`Cut (iv) and (iii): the whole window is in H.`},
+  {k:'ember',kl:'hole-makes-a-step · above',t:R`a \notin H:\ t = \tfrac{a^2+2}{2a},\ \ \delta = a - t`,n:`t² &gt; 2, so the whole window is above the hole. Continuous at every fraction; −1 and 1, nothing between. ∎`},
+  {k:'ember',kl:'two faces',t:R`\text{IVT for all continuous } f \;\Leftrightarrow\; \text{completeness}`,n:`Any set with no least upper bound gives such a step. In an ordered field the two say the same.`}
+],{title:'The slides · hole-makes-a-step · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'no-highest-over-ℚ · 1 of 2',t:R`g(x) = -(x^2 - 2)^2:\ \ -4 \le g \le 0`,n:`Continuous over ℚ on D (δ = ε/16) and bounded.`},
+  {k:'ember',kl:'no-highest-over-ℚ · 2 of 2',t:R`|c'^2 - 2| \le \tfrac12|c^2 - 2| \;\Rightarrow\; g(c') \gt g(c)`,n:`The averaging step always finds a better fraction: no greatest value. ∎`},
+  {k:'ember',kl:'where 12c breaks',t:R`h(x) = \tfrac{1}{(x^2 - 2)^2}:\ 16,\ 20736,\ 27710263296,\ \cdots`,n:`sup g = 0 exists over ℚ; the line that fails is bounded-on-a-closed-interval for h.`},
+  {k:'ember',kl:'where 12b breaks',t:R`B = \{x \in D : x^2 \lt 2\} = A`,n:`Inside bounded-on-a-closed-interval, σ = sup B has no fractional value. Three techniques, one line, one hole.`}
+],{title:'The slides · no-highest-over-ℚ · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Every bounded sequence has a settling thread</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r22a.html">← 22a a climb under a ceiling arrives</a><a href="r22c.html">next: 22c settling without knowing where →</a></p>
+  <div class="tags"><span class="tag proof">22b · proof</span></div>
+  <h1>Every bounded sequence has a settling thread</h1>
+  <p>A list of numbers kept between a floor and a ceiling need not settle. It can bounce between two values forever. But pick the right terms out of it, in order, and you can always find a thread that does settle. This step proves it by the same trick the twelfth rung used to trap a root: cut the room in half, keep a half that still holds endlessly many terms, and cut again. The halves shrink to a single point, and a thread of terms follows them in. Nobody needs to know the point in advance. The halving finds it.</p>
+  <p class="gesture">Keeping only some of the terms, in their order, gives a thread. Every list kept between a floor and a ceiling has a thread that settles. Halving finds it, half by half, without ever knowing where it will land.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r22a.html">22a</a> (the climb technique), <a href="r12e.html">12e</a> (halving a trap), <a href="r03c.html">3c</a> (the endless set), <a href="r06b.html">6b</a> (finitely many picks). <a href="r22c.html">22c</a> settles a sequence without naming its limit.</p></div>
+</header>
+
+<section class="class step" data-step="22b1">
+  <h2 class="sthead"><span class="stno">22b1</span>Threads</h2>
+  <p class="stands">Stands on 9·cb4 (sequences) and 9b (composing).</p>
+  <p class="eqline" data-pid="af89f2">From here on, a thread of a sequence s is s ∘ k, where k : ℕ → ℕ climbs strictly: k(1) &lt; k(2) &lt; k(3) &lt; …. Its terms are s_{k(1)}, s_{k(2)}, s_{k(3)}, …: some of the terms of s, kept in their order. Accepted name: a subsequence.</p>
+  <p data-pid="ab0d99">Thread technique: <b>if a sequence settles at L, every thread of it settles at L.</b> A strict climb of whole numbers has k(j) ≥ j, by induction. So once n ≥ N keeps sₙ within ε of L, every j ≥ N keeps s_{k(j)} within ε too.</p>
+  <p data-pid="9944a5">Read backwards, the thread technique is a test for wandering. Two threads that settle at different places, or one thread that wanders, show that the whole sequence wanders. The terms of (−1)ⁿ split into the even thread, all 1, and the odd thread, all −1.</p>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">22b1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="s_n = (-1)^n + \tfrac1n"></span></span>Write the first three terms of its even thread and of its odd thread. <br>Find where each thread settles. <br>Find what that shows about s.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22b2">
+  <h2 class="sthead"><span class="stno">22b2</span>The halving technique for sequences</h2>
+  <p class="stands">Stands on 22b1, 12e (halving a trap), 3c (endless sets) and 22a2 (the climb technique).</p>
+  <p data-pid="b6abcd">Halving technique for sequences: <b>every sequence with a floor and a ceiling has a thread that settles.</b> Let every term lie in [a, b]. Call an interval <i>crowded</i> when endlessly many n have sₙ in it. [a, b] is crowded: every n does.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the halving technique for sequences">
+[a_j, b_j] \text{ crowded},\ m = \tfrac{a_j + b_j}{2} @@ start with [a₁, b₁] = [a, b]
+\text{one of } [a_j, m],\ [m, b_j] \text{ is crowded} @@ if each held only finitely many n, so would their union (3c, 4j)
+[a_{j+1}, b_{j+1}] = \text{the left crowded half if it is crowded, else the right} @@ a rule, so no choosing is spent
+b_j - a_j = \tfrac{b - a}{2^{j-1}} @@ halved each time, as in 12e
+k(j+1) = \text{the least } n > k(j) \text{ with } s_n \in [a_{j+1}, b_{j+1}] @@ exists: endlessly many such n
+a_j \uparrow,\ b_j \downarrow,\ a_j \le b_j @@ nested halves
+a_j \to c,\ b_j \to c @@ the climb and fall techniques (22a); their gap heads to 0
+a_j \le s_{k(j)} \le b_j @@ each thread term lies in its half
+\htmlClass{new}{s_{k(j)} \to c} \quad \blacksquare @@ squeezed between aⱼ and bⱼ (10)
+  </pre>
+  <p data-pid="9ee131">Notice the line that says "a rule". At each stage the halving takes the left half if it is crowded. No pick is ever made freely, so 6's choosing axiom is not spent. The thread is built by a recipe from s alone.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · halving · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22b2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="s_n = (-1)^n\big(1 - \tfrac1n\big)"></span> <span class="gtx">start from [−1, 1], with k(1) = 1</span></span>Run three halvings by the left-half rule, and name each crowded half you keep. <br>Find the first three terms of the thread. <br>Find where the thread settles.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22b3">
+  <h2 class="sthead"><span class="stno">22b3</span>Every bounded sequence clusters</h2>
+  <p class="stands">Stands on 22b2.</p>
+  <p class="eqline" data-pid="2fb13a">From here on, a real c is a gathering point of a sequence s when some thread of s settles at c. Accepted names: a cluster point, an accumulation point, or a limit point of the sequence.</p>
+  <p data-pid="ae37f3">Gathering technique: <b>a sequence with a floor and a ceiling has a gathering point, and it settles exactly when it has only one.</b> The first half is 22b2. For the second, suppose s has one gathering point c but does not settle at c. Then some ε has endlessly many terms at least ε from c. Those terms make a thread with a floor and a ceiling. By 22b2 it has a thread that settles, at a point at least ε from c. That is a second gathering point.</p>
+  <pre class="lines" data-k="ember" data-label="this step: one gathering point means it settles">
+s \text{ bounded, one gathering point } c,\ s_n \not\to c @@ suppose (7e)
+\exists \varepsilon > 0:\ |s_n - c| \ge \varepsilon \text{ for endlessly many } n @@ turn-about for ∀ and ∃ on the definition of settles
+\text{those terms form a bounded thread} @@ 22b1
+\text{it has a thread settling at some } d,\ |d - c| \ge \varepsilon @@ 22b2; staying ε away survives the limit
+\htmlClass{new}{d \ne c \text{ is a second gathering point}} \quad \blacksquare @@ a thread of a thread is a thread: contradiction
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22b3.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="s_n = \cos\tfrac{n\pi}{2}"></span></span>Find every gathering point. <br>Find whether it settles.</li><li><span class="givens"><span data-tex-inline="s_n = 2 + \tfrac{(-1)^n}{n}"></span></span>Find every gathering point. <br>Find whether it settles.</li><li><span class="givens"><span class="gtx">sₙ = the last digit of n</span></span>Find every gathering point. <br>Find whether it settles.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22b4">
+  <h2 class="sthead"><span class="stno">22b4</span>Illegal moves</h2>
+  <p class="stands">Stands on 22b1 to 22b3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{a thread settles} \Rightarrow \text{the sequence settles}\,? @@ the even thread of (−1)ⁿ settles; the sequence wanders
+s_n \text{ has no ceiling} \Rightarrow \text{no thread settles}\,? @@ 1, 1, 2, 1, 3, 1, … has the thread 1, 1, 1, …
+s_{2n},\ s_{2n+1} \text{ each settle} \Rightarrow s \text{ settles}\,? @@ only if both settle at the same place
+\text{halving picks the half freely}\,? @@ it takes the left half when it can: a rule, so no choice is spent
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22b4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span class="gtx">sₙ = 1 when n is a square, 0 otherwise</span></span>Find a thread that settles, and another that settles somewhere else. <br>Find what the first illegal line overlooked.</li><li><span class="givens"><span class="gtx">sₙ = n when n is even, 1/n when n is odd</span></span>Find a thread that settles. <br>Find why having no ceiling does not forbid one.</li><li><span class="givens"><span data-tex-inline="s_n = (-1)^n \tfrac{n}{n+1}"></span></span>Find where its even thread and its odd thread settle. <br>Find the extra condition that would make the whole sequence settle.</li><li><span class="givens"><span data-tex-inline="s_n = (-1)^n"></span></span>Find whether both halves of [−1, 1] are crowded. <br>Find what a free pick at every stage would spend, and why the left-half rule spends nothing.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">22b.4.1</span><span class="tagq">build</span>Build a sequence, kept between 0 and 1, for which every real in [0, 1] is a gathering point. <br>Prove it, by building the settling thread for any c.</div>
+  <div class="chq"><span class="chid">22b.4.2</span><span class="tagq">edge</span><span class="givens"><span class="gtx">a sequence with a floor and a ceiling</span></span>Can its gathering points have no largest? <br>Prove your answer.</div>
+  <div class="chq"><span class="chid">22b.4.3</span><span class="tagq">converse</span>Every bounded sequence has a settling thread. Turn it round: if every thread of s has a thread of its own that settles, must s have a floor and a ceiling?</div>
+  <div class="chq"><span class="chid">22b.4.4</span><span class="tagq">reroute</span>Prove the halving technique for sequences another way. Call sₙ a peak when no later term is bigger. Show that every sequence has a thread that climbs or a thread that falls, then use 22a. <br>Check that your thread is built by a rule, with no free picks.</div>
+  <div class="chq"><span class="chid">22b.4.5</span><span class="tagq">seam</span>Many textbook proofs of this step say: pick any term in the crowded half, and do it again, endlessly. In 1890 one mathematician refused to let a proof make endlessly many free picks. Others later showed that his critics, and the books of analysis, made such picks everywhere without noticing. A catalogue of the results that rest on them filled a long paper. <br>Are endlessly many free picks a proof, or a promise? <br>If a rule can replace the picks, was anything lost by picking?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r22a.html">← 22a · a climb under a ceiling arrives</a><a href="r22c.html">22c · settling without knowing where →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A thread is a subsequence. The halving technique for sequences is the Bolzano–Weierstrass theorem; a gathering point is a cluster point (or subsequential limit). The largest and smallest gathering points of a bounded sequence are its limit superior and limit inferior, written lim sup and lim inf.</p>
+  <h3>Who said it first</h3>
+  <p>Bernard Bolzano proved the halving argument in 1817, in a paper on the in-between value of rung 12. Karl Weierstrass taught it in his Berlin lectures from the 1860s, and it reached print through his students. In the choosing battle of 6b, the bill came due here: many textbook proofs of this step pick a term from each half freely, which spends countably many free picks; the left-half rule avoids that. In 22b.4.5, the refusal is Giuseppe Peano’s (1890); Ernst Zermelo (1908) showed that his critics used such picks, and Wacław Sierpiński (1918) catalogued the analysis that rests on them.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'crowded',t:R`[a_j, b_j] \text{ holds } s_n \text{ for endlessly many } n`,n:`Keep a crowded half.`},
+  {k:'ember',kl:'thread',t:R`\htmlClass{new}{s_{k(j)} \to c}`,n:`Squeezed.`}
+],{title:'The slides · halving · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

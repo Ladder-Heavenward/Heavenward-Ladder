@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Solutions as power series</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+.kn{font-size:.88rem}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r24k.html">← 24k fixed points, stability and the start of chaos</a><a href="r24then.html">next: 24·then how fast does a hot drink cool? →</a></p>
+  <div class="tags"><span class="tag tech">24l · technique</span></div>
+  <h1>Solutions as power series</h1>
+  <p>The last rung rebuilt a smooth function from one point as a power sum without end, and showed that such a sum may be taken apart term by term. That gives one more way to solve a rule on rates. Guess that the solution is a power sum with unknown coefficients, put the guess into the rule piece by piece, and ask each power to balance. The rule turns into a recipe for the coefficients, each from the ones before. If the sum the recipe builds reaches anywhere at all, it is a solution. This works even when the solution has no formula, and that is when it matters most. Two rules found this way have solutions so useful that they carry names: one describes the pull of a planet that is not quite round, the other the shape of a beaten drum. The second has a point where the rule itself breaks down, and there a plain power sum is not enough, though a power of x times one is.</p>
+  <p class="gesture">Guess a power sum, put it into the rule term by term, and balance each power. The rule becomes a recipe for the coefficients, and the sum it builds is a solution wherever it reaches. For the rule of a planet's shape the recipe can stop, and the solution is a polynomial. At a point where the rule breaks down, try a power of x times a power sum, and the lowest power says which power to try.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r23e.html">23e</a> (the term-by-term and smooth-sum techniques), <a href="r23c.html">23c</a> (the reach), <a href="r24d.html">24d</a> (tame rules fix the future), <a href="r24g.html">24g</a> (the integrating factor), <a href="r09g.html">9g</a> (the same-coefficients technique). <a href="r24then.html">24·then</a> asks how fast a hot drink cools.</p></div>
+</header>
+
+<section class="class step" data-step="24l1">
+  <h2 class="sthead"><span class="stno">24l1</span>A power sum that obeys the rule</h2>
+  <p class="stands">Stands on 23e3 (the term-by-term and smooth-sum techniques), 23c3 (the reach-by-ratio technique), 24d2 (the existence technique) and 24d3 (the drift technique).</p>
+  <p data-pid="93217a">Sum-solves technique: <b>put y = Σ cₖ(x − a)ᵏ into a rule, take its slopes term by term, and ask each power of (x − a) to balance. If the coefficients obey the recipe that results, and the sum has reach R &gt; 0, then the sum solves the rule on |x − a| &lt; R.</b> Two power sums with the same total near a have the same coefficients, by the smooth-sum technique, so balancing each power is not only enough but needed.</p>
+  <pre class="lines" data-k="ember" data-label="this step: y′ = 1 + 2xy, y(0) = 0">
+y = \textstyle\sum c_k x^k,\ \ y' = \sum (k + 1)\,c_{k+1}x^k @@ the term-by-term technique (23e3), inside the reach
+1 + 2xy = 1 + \textstyle\sum_{k \ge 1} 2c_{k-1}x^k @@ multiply each piece by 2x and shift the count
+c_0 = 0,\ \ c_1 = 1,\ \ (k + 1)\,c_{k+1} = 2c_{k-1} \ (k \ge 1) @@ the start; then balance the power x⁰, and each xᵏ
+c_{2m} = 0,\ \ c_{2m+1} = \tfrac{2^m}{1\cdot 3\cdot 5\cdots(2m + 1)} @@ induction (4g): c₂ = 0, c₃ = 2/3, c₅ = 4/15, c₇ = 8/105
+\Big|\tfrac{c_{2m+3}\,x^{2m+3}}{c_{2m+1}\,x^{2m+1}}\Big| = \tfrac{2x^2}{2m + 3} \to 0 @@ the ratio of neighbouring pieces, for every x
+\htmlClass{new}{y = x + \tfrac23x^3 + \tfrac4{15}x^5 + \tfrac8{105}x^7 + \cdots \text{ solves the rule on the whole line}} \quad \blacksquare @@ the reach has no ceiling (23c3); the rule is tame on every bounded strip, so it is the only solution (24d3)
+  </pre>
+  <p data-pid="6c13b5">The integrating factor of 24g solves the same rule as y = e^(x²)·∫₀ˣ e^(−t²) dt. That is correct, and it is not a formula you can work out: the area under e^(−t²) has no antiderivative made from the usual functions. The sum works it out. At x = 1, four pieces give 2.0095 and enough pieces give 2.0301. The area under e^(−t²), a bell-shaped curve, is one that the chances of this floor will need, and this is one way it is computed.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · a sum that obeys · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">24l1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="y&#x27; = x + y,\ \ y(0) = 1"></span></span>Find the recipe for the coefficients, and c₀ to c₅. <br>Find the reach of the sum. <br>Find the function the sum adds up to, and check it in the rule.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24l2">
+  <h2 class="sthead"><span class="stno">24l2</span>The rule of the planets' shapes</h2>
+  <p class="stands">Stands on 24l1, 23c3 (the reach-by-ratio technique) and 23e3 (the term-by-term technique).</p>
+  <p data-pid="c48cb0">A planet that spins bulges at its middle, and the pull it exerts is not quite that of a ball. Split that pull into parts by latitude, and each part obeys the rule (1 − x²)y″ − 2xy′ + n(n + 1)y = 0, with x the sine of the latitude and n a whole number. Its coefficients are not constant, so 24h's trial of e^(rx) fails. A power sum does not.</p>
+  <p data-pid="b930af">Stopping-sum technique: <b>for (1 − x²)y″ − 2xy′ + n(n + 1)y = 0, power sums about 0 obey cₖ₊₂ = (k − n)(k + n + 1)cₖ/((k + 2)(k + 1)). When n is a whole number, the sum of powers with the same evenness as n stops at xⁿ and is a polynomial; a sum of the other evenness that does not stop has reach 1.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the stopping-sum technique">
+y'' = \textstyle\sum (k + 2)(k + 1)\,c_{k+2}x^k,\ \ x^2y'' = \sum k(k - 1)\,c_kx^k,\ \ xy' = \sum k\,c_kx^k @@ term by term (23e3), each sum written by its power xᵏ
+(k + 2)(k + 1)\,c_{k+2} - \big(k(k - 1) + 2k - n(n + 1)\big)c_k = 0 @@ balance xᵏ (24l1)
+k(k + 1) - n(n + 1) = (k - n)(k + n + 1) @@ multiply out both sides
+c_{k+2} = \tfrac{(k - n)(k + n + 1)}{(k + 2)(k + 1)}\,c_k @@ the recipe: c₀ fixes the even powers, c₁ the odd ones
+k = n:\ c_{n+2} = 0, \text{ so } c_{n+4} = c_{n+6} = \cdots = 0 @@ the top factor vanishes once, and every later coefficient is a multiple of it
+\htmlClass{new}{\text{for whole } n \text{ one solution is a polynomial of degree } n;\ \ \big|\tfrac{c_{k+2}x^{k+2}}{c_kx^k}\big| \to x^2 \text{ for the other}} \quad \blacksquare @@ the ratio of neighbouring pieces; the reach-by-ratio technique (23c3) in x²
+  </pre>
+  <p data-pid="2b6cfe">n = 2, c₀ = 1: c₂ = (0 − 2)(0 + 3)/2 = −3, and then nothing. So y = 1 − 3x² solves the rule; scaled to be 1 at x = 1 it is (3x² − 1)/2. That polynomial is the shape of the earth's bulge in its pull: the earth's gravity, measured from orbit, is mostly a ball's, plus a small multiple of (3x² − 1)/2. The sum of the other evenness reaches only to x = ±1, the poles, where the rule's first coefficient 1 − x² is 0. That is not a coincidence, and the next footing looks at such points.</p>
+  <p data-pid="fe5496">Every solution is a mix A·(even sum) + B·(odd sum), with A and B fixed by y(0) and y′(0). That a rule of the second order is fixed by those two numbers is 24d carried over to pairs of functions, and this page holds it in trust.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · stopping sums · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24l2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="(1 - x^2)y&#x27;&#x27; - 2xy&#x27; + 20y = 0"></span></span>Find n, and the polynomial solution with c₀ = 1. <br>Find the multiple of it that equals 1 at x = 1, and check that it solves the rule.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24l3">
+  <h2 class="sthead"><span class="stno">24l3</span>A point where the rule breaks down, and the drum</h2>
+  <p class="stands">Stands on 24l1, 24l2, 17 (powers with real exponents) and 23c3 (the reach-by-ratio technique).</p>
+  <p data-pid="feb9f9">Write a second-order rule as y″ + P(x)y′ + Q(x)y = 0. Where P and Q are power sums about a, the sums of 24l1 work. Where P or Q passes every bound, as 1/x does at 0, the point is a <i>bad point</i> of the rule, and solutions may have no power sum there at all. When the badness is mild, a power of x times a power sum does.</p>
+  <p data-pid="f5ed6a">Starting-power technique: <b>for x²y″ + x·p(x)y′ + q(x)y = 0 with p and q power sums about 0, try y = xˢ Σ cₖxᵏ with c₀ ≠ 0. The lowest power, xˢ, balances only if s(s − 1) + p(0)s + q(0) = 0.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the starting-power technique, on 4x²y″ + 4xy′ + (4x² − 1)y = 0">
+y = \textstyle\sum c_kx^{k+s},\ \ xy' = \sum (k + s)\,c_kx^{k+s},\ \ x^2y'' = \sum (k + s)(k + s - 1)\,c_kx^{k+s} @@ the slope of a real power (17), term by term, for x &gt; 0
+\text{lowest power } x^s:\ \ 4s(s - 1) + 4s - 1 = 4s^2 - 1 = 0 @@ only c₀ reaches it; c₀ ≠ 0; here p(0) = 1, q(0) = −1/4
+s = \tfrac12 \text{ or } s = -\tfrac12 @@ two starting powers
+\big(4(k + s)^2 - 1\big)c_k + 4c_{k-2} = 0 @@ balance x^{k+s}; take c₁ = 0
+s = \tfrac12:\ c_k = -\tfrac{c_{k-2}}{k(k + 1)} \Rightarrow y = x^{1/2}\big(1 - \tfrac{x^2}{3!} + \tfrac{x^4}{5!} - \cdots\big) @@ 4(k + ½)² − 1 = 4k(k + 1)
+\htmlClass{new}{y = \tfrac{\sin x}{\sqrt x} \text{ and, from } s = -\tfrac12,\ y = \tfrac{\cos x}{\sqrt x}} \quad \blacksquare @@ the sums of sin and cos (23a3), divided by √x
+  </pre>
+  <p data-pid="a5c4cd">Neither solution has a power sum about 0. One heads to 0 there like √x, and the other passes every bound. The rule is the drum's rule in disguise. A round drumhead struck in its middle rings in shapes y(r), with r the distance from the centre, and they obey x²y″ + xy′ + x²y = 0 with x proportional to r. There p(0) = 1 and q(0) = 0, so s² = 0: only one starting power, and only one power sum: y = 1 − x²/4 + x⁴/64 − x⁶/2304 + ⋯, with cₖ = −cₖ₋₂/k². The second solution needs ln x beside its sum, and passes every bound at the centre, so a drum, which is finite at its centre, rings only in the first.</p>
+  <p data-pid="b887ae">The rim cannot move, so the rim must sit where the sum is 0. The sum is first 0 at x = 2.405, then at 5.520 and 8.654. The pitches of the drum go as those numbers, and 5.520/2.405 = 2.295 is not a whole number. A string's overtones are 2, 3, 4 times its lowest pitch, which is why it sounds like a note. A drum's are not, which is why it thuds.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · a bad point · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · the drum's solution, and the polynomials that hug it</div>
+    <div id="pl"></div>
+    <div class="kn"><span class="m">pieces</span><input type="range" id="kn" min="1" max="12" step="1" value="3"><output id="okn"></output></div>
+    <div class="cap">Ink: the drum's solution 1 − x²/4 + x⁴/64 − ⋯, summed far enough to be exact on the picture. Teal: the first few pieces of the sum. Teal dashes: 0. The rim of a drum sits at a place where the ink curve crosses 0.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24l3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="2x^2y&#x27;&#x27; + 3xy&#x27; - (1 + x)y = 0"></span></span>Find the two starting powers. <br>Find the recipe for the coefficients, and c₁ to c₃ for each starting power, with c₀ = 1.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24l4">
+  <h2 class="sthead"><span class="stno">24l4</span>Illegal moves</h2>
+  <p class="stands">Stands on 24l1 to 24l3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\textstyle\sum c_kx^k \text{ obeys the recipe, so it solves the rule everywhere}\,? @@ only inside its reach; the other sum of 24l2 reaches only to ±1
+y'' = \textstyle\sum k(k - 1)\,c_kx^{k-2}, \text{ so balance } c_k \text{ against } c_k\,? @@ write every sum by the same power xᵏ before balancing; the indices shift
+\text{every rule has a power-sum solution about every point}\,? @@ at a bad point solutions can behave like x^(1/2) or x^(−1/2), or need ln x
+\text{the starting-power equation has two roots, so there are two sums}\,? @@ a double root (the drum, s² = 0) gives only one; the second needs ln x
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24l4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="(1 - x^2)y&#x27;&#x27; - 2xy&#x27; + 6y = 0"></span></span>Find the odd sum with c₁ = 1, to the x⁷ piece. <br>Find its reach, and whether it can be used at x = 2.</li><li><span class="givens"><span data-tex-inline="y&#x27;&#x27; = y"></span></span>Write y″ as a sum by the power xᵏ, and find the recipe. <br>Find what goes wrong if cₖ is balanced against cₖ instead.</li><li><span class="givens"><span data-tex-inline="x^2y&#x27;&#x27; - 2y = 0"></span></span>Find every s with y = xˢ a solution. <br>Find whether either solution has a power sum about 0.</li><li><span class="givens"><span data-tex-inline="x^2y&#x27;&#x27; + xy&#x27; + x^2y = 0"></span></span>Find the starting powers. <br>Find c₂, c₄ and c₆ with c₀ = 1, and how many sums of the form xˢΣcₖxᵏ the technique gives.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">24l.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="y&#x27;&#x27; = xy"></span></span>Build the two power-sum solutions about 0, with (c₀, c₁) = (1, 0) and (0, 1), to the x⁷ piece. <br>Find the recipe's step, and the reach of each sum.</div>
+  <div class="chq"><span class="chid">24l.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="y&#x27; = y^2,\ \ y(0) = 1"></span></span>Find the power-sum solution by balancing each power; the product of two sums is 23h4's. <br>Find its reach, and what the run-off of 24e2 has to do with it.</div>
+  <div class="chq"><span class="chid">24l.4.3</span><span class="tagq">converse</span>The sum-solves technique: a sum whose coefficients obey the recipe, and which has a reach, solves the rule. Turn it round: if the rule has a solution near 0, must its power sum about 0 add up to it near 0? <br>Use 23f's function e^(−1/x²), or find another way, to answer it.</div>
+  <div class="chq"><span class="chid">24l.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="y&#x27; = y,\ \ y(0) = 1"></span></span>Find the power-sum solution by balancing powers, and compare it with 24b's repeated integration. <br>Find which coefficients each method knows after three rounds.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r24k.html">← 24k · fixed points, stability and the start of chaos</a><a href="r24then.html">24·then · how fast does a hot drink cool? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>Solving by a guessed power sum is the power series method; a point where the coefficients are power sums is an ordinary point, and a bad point is a singular point, regular when the badness is as mild as this page allows. The starting-power technique is the method of Frobenius, and the starting-power equation is the indicial equation. The rule of 24l1 has the solution e^(x²)·∫₀ˣ e^(−t²) dt, a relative of Dawson's function and of the error function. The rule of the planets' shapes is Legendre's equation, and its polynomials, scaled to be 1 at x = 1, are the Legendre polynomials P₀, P₁, P₂ = (3x² − 1)/2, …; the earth's bulge term in its gravity is called J₂. The rule of the drum is Bessel's equation of order 0, and its finite solution is the Bessel function J₀; 4x²y″ + 4xy′ + (4x² − 1)y = 0 is Bessel's equation of order ½. The functions of the sky and of the drum are called special functions.</p>
+  <h3>Who said it first</h3>
+  <p>Isaac Newton solved rules on rates by power sums in his Method of Fluxions (1671). Adrien-Marie Legendre found his polynomials in 1782, studying the pull of a planet that is not a ball. Daniel Bernoulli met the drum's sum in 1732, in a hanging chain, and Leonhard Euler met it in the drum in 1764; Friedrich Wilhelm Bessel studied it in full in 1824, in the motion of the planets. Georg Frobenius gave the starting-power method in 1873.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+/* sequence and sum plots for rungs 22 on: plot({xlo,xhi,ylo,yhi,series:[{pts,c,dots,open,w}],h:[{y,c,dash,t}]}) */
+const V=c=>'var('+c+')';
+function plot(o){ const W=320,H=220,P=26, X=x=>P+(x-o.xlo)/(o.xhi-o.xlo)*(W-P-6), Y=y=>H-P-(y-o.ylo)/(o.yhi-o.ylo)*(H-P-8);
+  let s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;max-width:380px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  s+='<line x1="'+P+'" y1="'+Y(Math.max(o.ylo,Math.min(o.yhi,0)))+'" x2="'+W+'" y2="'+Y(Math.max(o.ylo,Math.min(o.yhi,0)))+'" style="stroke:'+V('--grid')+';stroke-width:1.4"/>';
+  s+='<line x1="'+P+'" y1="0" x2="'+P+'" y2="'+(H-P)+'" style="stroke:'+V('--grid')+';stroke-width:1.4"/>';
+  (o.ticks||[]).forEach(t=>{ s+='<text x="2" y="'+(Y(t)+4)+'" style="font-size:10px;fill:'+V('--ink')+'">'+t+'</text>'; });
+  (o.h||[]).forEach(l=>{ s+='<line x1="'+P+'" y1="'+Y(l.y)+'" x2="'+W+'" y2="'+Y(l.y)+'" style="stroke:'+V(l.c||'--teal')+';stroke-width:1.4;stroke-dasharray:'+(l.dash||'5 4')+'"/>'; if(l.t) s+='<text x="'+(W-4)+'" y="'+(Y(l.y)-4)+'" text-anchor="end" style="font-size:10px;fill:'+V(l.c||'--teal')+'">'+l.t+'</text>'; });
+  (o.series||[]).forEach(q=>{ const pts=q.pts.filter(p=>isFinite(p[1])&&p[1]>=o.ylo-1e9);
+    if(q.open) s+='<polyline points="'+pts.map(p=>X(p[0])+','+Y(Math.max(o.ylo,Math.min(o.yhi,p[1])))).join(' ')+'" style="fill:none;stroke:'+V(q.c||'--ink')+';stroke-width:'+(q.w||1.6)+'"/>';
+    if(q.dots!==false) pts.forEach(p=>{ if(p[1]>=o.ylo&&p[1]<=o.yhi) s+='<circle cx="'+X(p[0])+'" cy="'+Y(p[1])+'" r="'+(q.r||2.4)+'" style="fill:'+V(q.c||'--ink')+'"/>'; }); });
+  return s+'</svg>'; }
+
+let m=3; const e=$('kn'); e.addEventListener('input',()=>{ m=+e.value; draw(); });
+const J=(x,N)=>{ let c=1, s=1; for(let k=1;k<=N;k++){ c*=-x*x/(4*k*k); s+=c; } return s; };
+function draw(){ const pts=[], pp=[]; for(let i=0;i<=160;i++){ const x=10*i/160; pts.push([x,J(x,40)]); pp.push([x,J(x,m-1)]); }
+  $('pl').innerHTML=plot({xlo:0,xhi:10,ylo:-1,yhi:1.2,ticks:[-1,0,1],h:[{y:0,c:'--teal'}],series:[{pts,c:'--ink',open:true,dots:false,w:2.4},{pts:pp,c:'--teal',open:true,dots:false,w:1.6}]});
+  $('okn').textContent=m; const v=$('vd'); const z=2.404825557695773; const val=J(z,m-1);
+  v.className='verdict'+(Math.abs(val)<0.001?' win':''); v.textContent=m+' piece'+(m>1?'s':'')+': at x = 2.405, where the drum\'s solution is 0, the sum so far gives '+val.toFixed(5)+'.'; }
+draw();
+window.__pic={set:j=>{ m=j; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'guess',t:R`y = \textstyle\sum c_k x^k`,n:`Unknown coefficients.`},
+  {k:'ember',kl:'balance',t:R`(k + 1)\,c_{k+1} = 2c_{k-1}`,n:`Each power, from y′ = 1 + 2xy.`},
+  {k:'ember',kl:'solved',t:R`\htmlClass{new}{y = x + \tfrac23x^3 + \tfrac4{15}x^5 + \cdots}`,n:`Wherever it reaches.`}
+],{title:'The slides · a sum that obeys · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'the recipe',t:R`c_{k+2} = \tfrac{(k - n)(k + n + 1)}{(k + 2)(k + 1)}\,c_k`,n:`Balance each power.`},
+  {k:'ember',kl:'it stops',t:R`\htmlClass{new}{k = n \Rightarrow c_{n+2} = 0}`,n:`A polynomial.`},
+  {k:'ember',kl:'n = 2',t:R`\tfrac12(3x^2 - 1)`,n:`The shape of the bulge.`}
+],{title:'The slides · stopping sums · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'try',t:R`y = x^s\textstyle\sum c_kx^k`,n:`A power times a sum.`},
+  {k:'ember',kl:'the lowest power',t:R`\htmlClass{new}{s(s - 1) + p(0)\,s + q(0) = 0}`,n:`It picks s.`},
+  {k:'ember',kl:'the drum',t:R`1 - \tfrac{x^2}{4} + \tfrac{x^4}{64} - \cdots,\ \ 0 \text{ at } 2.405`,n:`The rim sits at a zero.`}
+],{title:'The slides · a bad point · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

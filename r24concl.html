@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A tame rule fixes the future</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+.cl-lock{display:none;border-left:3px solid var(--gold);background:var(--sand);padding:10px 14px;border-radius:0 4px 4px 0;max-width:66ch}
+body.cl-locked .cl-lock{display:block} body.cl-locked .cl-body{display:none}
+.cl-lock button{margin-top:6px;font-size:.8rem}
+.claim{border:1px solid var(--grid);border-left:4px solid var(--teal);background:var(--card);border-radius:0 6px 6px 0;padding:10px 16px;max-width:66ch}
+.claim p{margin:.4em 0}
+ul.cl-adds{max-width:66ch;padding-left:1.1em} ul.cl-adds li{margin:.5em 0}
+ul.cl-adds .cl-w{display:none;color:var(--muted);font-style:italic}
+ul.cl-adds li.cl-wait .cl-t{display:none} ul.cl-adds li.cl-wait .cl-w{display:inline}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r24e.html">← 24e when the future is not fixed</a><a href="r24f.html">next: 24f separating the variables →</a></p>
+  <div class="tags"><span class="tag concl">24·∎ · conclusion</span></div>
+  <h1>A tame rule fixes the future</h1>
+  <p class="gesture">A tame rule on rates, with a start, has exactly one solution near the start, built by feeding guesses back into an area. Nearby starts drift apart no faster than a growth function. Without tameness, one start can have many futures.</p>
+  <div class="ready"><h3>What this stands on</h3><p>The survey of <a href="r24.html">rung 24</a>, and its proof steps: <a href="r24a.html">24a</a> to <a href="r24e.html">24e</a>. It opens once 24e is ticked, and it gains a line each time you finish a step or annex after it.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The conclusion · the rung's claim, in full, and its proof</div>
+  <div class="cl-lock"><p>This page opens once every question on <a href="r24e.html">24e when the future is not fixed</a> is ticked. The claim below is proved from the steps of this rung, so it waits for them.</p><button type="button" class="cl-peek">reviewing the ladder? open it anyway</button></div>
+  <div class="cl-body">
+  <h3>What the rung set out to show</h3>
+  <p data-pid="ac5a29">The survey of rung 24 asked whether a rule on a function’s rates, with a start, picks out one function. <b>When the rule is tame, exactly one solution passes through the start, and it is the settled end of repeated integration.</b> Without tameness, a start can have many futures.</p>
+  <p data-pid="901cb9"><a href="r24a.html">24a</a> said what a solution is and solved growth at its own rate. <a href="r24b.html">24b</a> turned the rule into an area and fed guesses back in. <a href="r24c.html">24c</a> measured gaps between functions and proved a shrinking map has one fixed point. <a href="r24d.html">24d</a> showed the area map shrinks for a tame rule, and bounded the drift. <a href="r24e.html">24e</a> found the rules that break the claim. This page puts the claim together.</p>
+  <h3>The claim, in full</h3>
+  <div class="claim">
+  <p data-pid="84c128"><b>A tame rule on rates, with a start, has exactly one solution near the start; nearby starts drift apart no faster than e^(L|x − x₀|); and without tameness the future need not be fixed.</b></p>
+  <p data-pid="b89173">Let F be continuous on R = [x₀ − a, x₀ + a] × [y₀ − b, y₀ + b], with |F| ≤ M there and |F(x, y) − F(x, z)| ≤ L|y − z|. Choose h ≤ a with hM ≤ b and hL &lt; 1. Then y′ = F(x, y), y(x₀) = y₀ has exactly one solution on [x₀ − h, x₀ + h], and the guesses yₙ₊₁(x) = y₀ + ∫ₓ₀ˣ F(t, yₙ(t)) dt settle everywhere at once to it.</p>
+  <p data-pid="723f45">Two solutions of the same tame rule satisfy |y(x) − z(x)| ≤ |y(x₀) − z(x₀)|·e^(L|x − x₀|).</p>
+  <p data-pid="f8be16">y′ = √|y|, y(0) = 0 has a different solution for every c ≥ 0. y′ = y², y(0) = 1 has y = 1/(1 − x), which no solution carries past x = 1.</p>
+  </div>
+  <h3>The proof</h3>
+  <p data-pid="2409c3">Each part below is a technique already proved on a step of this rung. The proof cites them by name and joins them.</p>
+  <pre class="lines" data-k="ember" data-label="the rule as a fixed point">
+y' = ky,\ y(x_0) = A \iff y = Ae^{k(x-x_0)} @@ the own-rate technique (24a)
+y' = F(x,y),\ y(x_0)=y_0 \iff y = y_0 + \int_{x_0}^{x} F(t,y(t))\,dt @@ the area-form technique (24b)
+\htmlClass{new}{y = Ty} \quad \blacksquare @@ a solution is what the area map T leaves unchanged (24b)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="the map shrinks, so it has one fixed point">
+\|Tf - Tg\| \le hL\,\|f - g\|,\ \ hL < 1 @@ tameness and the largest gap (24c, 24d)
+\text{crowding functions settle to a continuous } f @@ the function-crowd technique (24c)
+\htmlClass{new}{\text{exactly one solution on } [x_0-h,\,x_0+h]} \quad \blacksquare @@ the shrinking-map and existence techniques (24c, 24d)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="how far two starts drift">
+|y(x) - z(x)| \le |y(x_0)-z(x_0)| + L\left|\int_{x_0}^{x} |y-z|\,dt\right| @@ the area form and tameness (24d)
+\htmlClass{new}{|y(x) - z(x)| \le |y(x_0)-z(x_0)|\,e^{L|x-x_0|}} \quad \blacksquare @@ the drift technique (24d)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="the limits of the claim">
+\sqrt{|y|} \text{ is not tame at } 0 @@ its slope in y passes every ceiling (24e)
+\htmlClass{new}{\text{one start, endlessly many futures}} \quad \blacksquare @@ the many-futures technique (24e)
+\htmlClass{new}{y = \tfrac{1}{1-x} \text{ ends at } x = 1} \quad \blacksquare @@ the run-off technique (24e)
+  </pre>
+  <p data-pid="94aff4">So the survey’s title holds for every tame rule, near its start. The first counterexample shows tameness cannot be dropped. The second shows that “near its start” cannot be dropped either.</p>
+  <h3>What the rest of the rung adds</h3>
+  <p data-pid="5eb74f">Each step and annex after the proof steps adds a line to the claim. A line appears here once you have finished its page.</p>
+  <ul class="cl-adds">
+    <li data-after="r24f" data-pid="1f33ba"><b><a href="r24f.html">24f separating the variables</a></b>: <span class="cl-t">rules whose letters part, integrated side by side, checked by putting the answer back, and the solutions a separation loses.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r24g" data-pid="74e667"><b><a href="r24g.html">24g the integrating factor</a></b>: <span class="cl-t">rules straight in y, solved with one multiplying factor.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r24h" data-pid="342780"><b><a href="r24h.html">24h the two model equations</a></b>: <span class="cl-t">steady growth and steady swinging, and every second-order rule with constant numbers in front, by trying e^(rx).</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r24i" data-pid="bdf978"><b><a href="r24i.html">24i slope fields and stepping forward</a></b>: <span class="cl-t">walking the slope field in small steps, the error of each step and of the walk, and rules no small step can tame.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r24j" data-pid="275d71"><b><a href="r24j.html">24j the logistic equation solved</a></b>: <span class="cl-t">growth with a ceiling, solved in closed form from every start, with the forecast it gives and where it fails.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r24k" data-pid="878c38"><b><a href="r24k.html">24k fixed points, stability and the start of chaos</a></b>: <span class="cl-t">steady states that hold or fall apart, and a simple map that doubles its period on its way to chaos.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r24l" data-pid="1d6650"><b><a href="r24l.html">24l solutions as power series</a></b>: <span class="cl-t">a power sum that obeys the rule, and the functions of the sky and the drum.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r24then" data-pid="691e59"><b><a href="r24then.html">24·then how fast does a hot drink cool?</a></b>: <span class="cl-t">cooling, decay, charging and growth, all as rules on rates.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r24phys" data-pid="053d66"><b><a href="r24phys.html">24·phys why does a pendulum keep time?</a></b>: <span class="cl-t">springs and small swings share one rule, and its period does not depend on the size of the swing.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r24bio" data-pid="343fe4"><b><a href="r24bio.html">24·bio how does a cell keep time?</a></b>: <span class="cl-t">genes that switch each other off make a switch with two steady states, and a clock.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r24eng" data-pid="820298"><b><a href="r24eng.html">24·eng how does a thermostat hold a room steady?</a></b>: <span class="cl-t">a heater pushing back against a leak, and the gap that never quite closes.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r24now" data-pid="96382e"><b><a href="r24now.html">24·now can chaos be proved?</a></b>: <span class="cl-t">the weather model’s butterfly, proved to exist by a computer whose every step is boxed.</span><span class="cl-w">its line appears when you finish it.</span></li>
+  </ul>
+  <p data-pid="e48eae">That is the rule on rates, solved. Every forecast of a planet, a fever or a market starts here. You have only just begun to see how much a rate can fix.</p>
+  </div>
+</section>
+
+<nav class="nextrung"><a href="r24e.html">← 24e · when the future is not fixed</a><a href="r24f.html">24f · separating the variables →</a></nav>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+  const need="r24e";
+  let p={}; try{ p=JSON.parse(LS.getItem('pages:done')||'{}')||{}; }catch(e){}
+  let peek=false; try{ peek=sessionStorage.getItem('cl:peek')==='1'; }catch(e){}
+  const done=k=>!!(p[k]&&p[k].v);
+  function apply(){
+    const open=peek||done(need);
+    document.body.classList.toggle('cl-locked',!open);
+    document.querySelectorAll('ul.cl-adds li[data-after]').forEach(li=>li.classList.toggle('cl-wait',!(peek||done(li.dataset.after))));
+    if(open&&done(need)){ const me=(location.pathname.split('/').pop()||'').replace(/\.html?$/,'');
+      if(window.MarksSync&&MarksSync.reportPage) MarksSync.reportPage(me,true,true,true,false);
+      else { try{ p[me]={v:true,a:true,o:true,h:false,t:Date.now()}; LS.setItem('pages:done',JSON.stringify(p)); }catch(e){} } }
+  }
+  const b=document.querySelector('.cl-peek'); if(b) b.addEventListener('click',()=>{ peek=true; try{ sessionStorage.setItem('cl:peek','1'); }catch(e){} apply(); });
+  apply();
+  try{ if(window.MarksSync&&MarksSync.pages) MarksSync.pages().then(q=>{ if(q){ p=Object.assign({},p,q); apply(); } },()=>{}); }catch(e){}
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

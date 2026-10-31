@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Endless sums can have totals</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="floor5.html">← F5 statistics floor</a><a href="r22a.html">next: 22a a climb under a ceiling arrives →</a></p>
+  <div class="tags"><span class="tag theory">Rung 22 · theory</span></div>
+  <h1>Endless sums can have totals</h1>
+  <p>Rung 15 added up a shrinking fraction forever and found the total was a plain number. This rung asks when that can happen at all. A list of numbers that goes on forever may close in on one number, or may never make up its mind. The rung finds out what it takes for a list to close in, and why the answer depends on the line of numbers having no holes. Then it turns to endless sums, where the list is the running total. Some endless sums have totals, some grow past every number, and some have a total that changes when you add their pieces in a different order. By the end you can test a sum, say how close a few of its pieces bring you, count rare events with one, and say which of two growing quantities wins.</p>
+  <p class="gesture">A list that goes on forever can close in on one number, and on a line with no holes it does whenever its members crowd together. An endless sum has a total when its running totals close in. A small set of tests decides which sums do, and each test also says how much is left over.</p>
+  <div class="ready"><h3>The steps, in order</h3><p><a href="r22a.html">22a A climb under a ceiling arrives</a>: settling, and the first way to prove it.<br><a href="r22b.html">22b Every bounded sequence has a settling thread</a>: halving, again.<br><a href="r22c.html">22c Settling without knowing where</a>: crowding, and why the fractions fail.<br><a href="r22d.html">22d A sum is where its partial sums settle</a>: the total, and a sum that never stops growing.<br><a href="r22e.html">22e Compare with a geometric sum</a>: comparison, ratio and root.<br><a href="r22f.html">22f Sums against areas</a>: the p-sums and the harmonic gap.<br><a href="r22g.html">22g Signs that alternate, and sums that can be rearranged</a>: when order changes the total. Then the techniques:<br><a href="r22h.html">22h Sequences by hand</a>.<br><a href="r22i.html">22i Testing sums by hand</a>.<br><a href="r22j.html">22j From counting to rare events</a>.<br><a href="r22k.html">22k How fast things grow</a>.<br><a href="r22l.html">22l Splitting the work, counted</a>. Then the annexes:<br><a href="r22stat.html">22·stat How many misprints on a page?</a>, <a href="r22comp.html">22·comp Does forgetting cost energy?</a>, <a href="r22logi.html">22·logi Can a computer try every route?</a>, <a href="r22nav.html">22·nav Can a flat map tell the truth?</a>, <a href="r22chem.html">22·chem Does the order of adding change a crystal’s energy?</a>, <a href="r22crypt.html">22·crypt Can two files have the same fingerprint?</a>, <a href="r22econ.html">22·econ How far does one dollar of spending go?</a>, <a href="r22phys.html">22·phys Does a bouncing ball ever stop?</a>, <a href="r22now.html">22·now Can one digit of π be found alone?</a>.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · read it through, then go to 22a</div>
+
+  <h3>What it means to say it</h3>
+  <p data-pid="3c707b">A sequence is a list with a first member, a second, a third, and no last. It settles at a number when, however near you demand, all but the first few members are that near. That is the challenge and answer of rung 10, played on a list instead of a function.</p>
+  <p data-pid="1dcfd3">An endless sum is a sequence in disguise. Add the first piece, then the first two, then the first three: the running totals make a list. <b>The sum has a total when that list settles, and the total is where it settles.</b> Nothing is added up forever. A total is a claim about the running totals, every one of which is finite.</p>
+
+  <h3>Where it comes from</h3>
+  <p data-pid="934930">Zeno of Elea made endless sums into a puzzle about a runner who never arrives. Archimedes summed one, a quarter and a sixteenth and so on, to measure a slice of a parabola. Nicole Oresme showed around 1350 that one plus a half plus a third and so on grows past every number. For three hundred years after, the great calculators used endless sums freely, and sometimes got nonsense. Bernard Bolzano and Augustin-Louis Cauchy, in the 1810s and 1820s, gave the definitions this rung uses, and Richard Dedekind supplied the line with no holes that makes them work.</p>
+
+  <h3>The principles, in plain words</h3>
+  <p data-pid="ae472f">The rung proves seven things, each from the ones before.</p>
+  <p data-pid="fbf52e">First, a list that only climbs, and never passes some ceiling, settles at its lowest ceiling.</p>
+  <p data-pid="105341">Second, every list that stays between a floor and a ceiling has a thread, a list of some of its members in order, that settles.</p>
+  <p data-pid="39a584">Third, a list settles exactly when its members crowd together, far out. On the fractions alone this fails.</p>
+  <p data-pid="844038">Fourth, an endless sum settles exactly when its running totals do. Its pieces must head to nothing, and that is not enough.</p>
+  <p data-pid="61d8bf">Fifth, a sum of pieces that are never negative settles if it stays below a sum that does, and a sum that shrinks like a power of a fixed fraction does.</p>
+  <p data-pid="4a5293">Sixth, a sum whose pieces come from a falling curve settles exactly when the area under the curve does.</p>
+  <p data-pid="f2106d">Seventh, a sum whose signs take turns settles when its pieces shrink to nothing in size. If it settles only because of the turns, putting its pieces in another order can give any total at all.</p>
+  <p data-pid="54a5c8"><b>Anexact, yet rigorous.</b> Beside the proofs, the annexes carry boxes of the second kind of care, the kind that measures how wrong it might be instead of proving. 22·stat carries <i>counting and the triangle</i>, to rare events. 22·comp carries it again, counting by the trillion trillion. 22·econ carries <i>the ledger</i>: the leaks add to exactly the first dollar. 22·phys carries <i>laws with an exception rate</i>: a law that promises endlessly many bounces in a moment has been read past its range. And 22·now carries <i>the cloud</i>: report only the digits on which the whole fence agrees.</p>
+
+  <h3>What follows</h3>
+  <p data-pid="b76f5e">With those seven, the techniques compute. Limits of lists come from limits of functions, and a rule fed its own answers settles when it pulls neighbours closer. Each test for sums comes with a fence round what is left over. When many tries each have a small chance, the chance of seeing a given count needs only the average, and the chances add to one because the growth function of rung 17 is an endless sum. Logs, powers, powers of a fixed number and factorials are ranked by how fast they grow. A recipe that splits its work in half and joins the halves costs about n times the number of halvings.</p>
+  <p data-pid="663f9c">The annexes carry the sums out of the rung. 22·stat asks how many misprints fall on a page, and finds that one number, the expected count, fixes the whole pattern of clean pages, one-slip pages and so on. 22·comp asks whether forgetting costs energy, and counts the ways a memory can sit to find that wiping one bit sends a least amount of heat into the room. 22·logi asks whether a computer can try every route, and finds that the count of tours outruns any machine, so a quick rule must be judged against a floor instead. 22·nav asks whether a flat map can tell the truth, and finds that the map that keeps every compass heading builds each latitude from endlessly many thin strips, which pass every ceiling near the pole. 22·chem asks whether the order of adding changes a crystal’s energy, and finds that it does, so the crystal itself must say the order. 22·crypt asks whether two files can share a fingerprint, and finds a match comes after about the square root of the number of codes. 22·econ asks how far one dollar of spending goes, when each person who receives it spends a share and the rest leaks away. 22·phys asks whether a bouncing ball ever stops, when endlessly many bounces add up to a finite time. And 22·now asks whether one digit of π can be found alone, by a sum found in 1995 that gives digits in base sixteen without the ones before them.</p>
+
+  <h3>What you can do because you know it</h3>
+  <p data-pid="778edb">You can decide whether a sum has a total, and say to how many places a few of its pieces fix it. You can find where a rule fed its own answers will land, or show that it never will. You can count rare events, from misprints to calls on a line, and rank the cost of two recipes before running either one.</p>
+  <p data-pid="605a94">This is where the statistics floor begins. Chance itself is coming, and when it arrives it will be a total of endlessly many pieces.</p>
+
+  <h3>What it costs</h3>
+  <p data-pid="85dbe1">Nothing new is laid down. The rung spends rung 8’s line with no holes at every turn, rung 10’s challenge and answer, rung 15’s geometric sums, rung 16’s areas out to forever, and rung 17’s logs and exponents. The halving of 22b is done so that no choice is spent. At the end of the rung you will know what it means to say that an endless sum has a total, and what you can do because you know it.</p>
+</section>
+
+<nav class="nextrung"><a href="floor5.html">← F5 · statistics floor</a><a href="r22a.html">22a · a climb under a ceiling arrives →</a></nav>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+Rung.ready(()=>{});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

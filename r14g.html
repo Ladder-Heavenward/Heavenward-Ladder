@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>14g · The bend and sketching</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:3.5em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r14f.html">← 14f crest and trough</a><a href="r14h.html">next: 14h optimising →</a></p>
+  <div class="tags"><span class="tag tech">14g · technique</span></div>
+  <h1>The bend and sketching</h1>
+  <p>14d read the sign of the slope across an interval and learned whether the function climbs. Read the sign of the slope of the slope the same way, and 14d says whether the slope climbs. A function whose slope keeps climbing turns its tangent line more and more steeply up as it goes, so it bends up. It lies above each of its tangent lines, and each of its chords lies above it. 13k asked which way a function bends away from its tangent lines. 13j checked on one example that the slope at an input lies between the slopes of the chords on either side. Both are one technique, and average-slope proves it in two lines. Then the signs of the slope and of the slope of the slope together give the shape of a graph from a handful of numbers.</p>
+  <p class="gesture">A positive slope of the slope makes the slope climb. Then a chord’s slope, being the slope at some input between its ends, is below the slopes to its right and above those to its left. So the graph lies above its tangent lines and below its chords.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r14f.html">14f</a> (first-test, second-test), <a href="r14d.html">14d</a> (slope-sign-order), <a href="r14c.html">14c</a> (average-slope), <a href="r14a.html">14a</a> (critical point), <a href="r13k.html">13k</a> (tangent line, linearization), <a href="r13j.html">13j</a> (chain for slopes), <a href="r13l.html">13l</a> (implicit slopes, branch), <a href="r13d.html">13d</a> (f″), <a href="r09g.html">9g</a> (leading-term). <a href="r14h.html">14h</a> sketches before it optimises; rung 22 measures how far a function bends from its tangent line.</p></div>
+</header>
+
+<section class="class step" data-step="14g1">
+  <h2 class="sthead"><span class="stno">14g1</span>Bending up and bending down</h2>
+  <p class="stands">Stands on 14c (average-slope), 14d (slope-sign-order) and 13k (the tangent line).</p>
+  <p class="eqline" data-pid="ea0744">From here on, f bends up on an interval I when, for any two inputs a &lt; b of I, every x with a &lt; x &lt; b has f(x) below the chord from a to b. That is, f(x) &lt; f(a) + m(x − a), with m the chord's slope. f bends down on I when every such f(x) is above the chord. Their accepted names are concave up and concave down; some books say convex and concave. An input c is an inflection point of f when f is continuous at c, and for some reach δ, f bends one way on (c − δ, c) and the other way on (c, c + δ). Its accepted name is point of inflection.</p>
+  <p data-pid="66c8bc">Bends-up technique: <b>if f has a slope at every input of an interval I and f′ is increasing on I, then f bends up on I. And for every p in I, f(x) &gt; f(p) + f′(p)(x − p) for every x ≠ p in I: the graph lies above each tangent line. With f′ decreasing, f bends down and lies below each tangent line.</b></p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the bends-up technique · above the tangent line">
+g(x) = f(x) - f(a) - f'(a)(x - a) @@ the gap above the tangent line at a (13k)
+g(a) = 0,\ \ g'(x) = f'(x) - f'(a) @@ slopes-add, slope-of-a-line
+x \lt a:\ g'(x) \lt 0;\ \ x \gt a:\ g'(x) \gt 0 @@ f′ increasing
+g \text{ decreasing up to } a,\ \text{increasing after} @@ <span class="hl-new">slope-sign-order (14d)</span> on each side, ends included
+\htmlClass{new}{g(x) \gt 0 \text{ for } x \ne a} @@ g(a) = 0 is the least value, reached only at a
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: the bends-up technique · below the chord">
+a \lt x \lt b:\ \ \tfrac{f(x) - f(a)}{x - a} = f'(\xi_1),\ \ a \lt \xi_1 \lt x @@ <span class="hl-new">average-slope (14c)</span> on [a, x]
+\tfrac{f(b) - f(x)}{b - x} = f'(\xi_2),\ \ x \lt \xi_2 \lt b @@ average-slope on [x, b]
+\htmlClass{new}{\tfrac{f(x) - f(a)}{x - a} \lt f'(x) \lt \tfrac{f(b) - f(x)}{b - x}} @@ f′ increasing and ξ₁ &lt; x &lt; ξ₂
+f(x) \lt f(a) + m(x - a) \quad \blacksquare @@ the left chord is less steep than the whole chord, whose slope m is a weighted middle of the two (8g's order on fractions)
+  </pre>
+  <p data-pid="255775">The middle line is 13j's check, proved: the slope at an input lies between the slopes of the chords on either side. For a function that bends down, the order turns about. With 14d's slope-sign-order, the second slope decides: f″ &gt; 0 on I makes f′ increasing, so f bends up; f″ &lt; 0 makes it bend down.</p>
+  <pre class="lines" data-k="teal" data-label="from 13j: the check, now a technique">
+f(x) = \sqrt{2x + 1},\ \ f'(x) = (2x + 1)^{-1/2} @@ 13j: chain for slopes with root-slope
+f''(x) = -(2x + 1)^{-3/2} \lt 0 \text{ for } x \gt -\tfrac12 @@ chain for slopes again: f bends down
+\tfrac12 \gt f'(4) = \tfrac13 \gt \tfrac14 @@ bends-up, turned about: the left chord (0 to 4) is steeper than the slope, the right chord (4 to 12) less steep
+  </pre>
+  <p data-pid="768ec0">And 13k's question has its answer. 1 + x/2, the linearization of √(1 + x) at 0, lies above √(1 + x) everywhere else, because √(1 + x) bends down. <b>The error of a linearization has the sign of f″.</b></p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · bends-up · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · left: f, a tangent line and a chord · right: f′ and f″</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="chips" id="fch"></div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">x</span><input type="range" id="kx" min="0" max="1000" step="1" value="300"><output id="ox"></output></div>
+      <div class="kn"><span class="m">chord half-width</span><input type="range" id="kh" min="0.05" max="1.5" step="0.05" value="0.6"><output id="oh"></output></div>
+      <div class="cap">Ink: f. Plum: the tangent line at x. Gold dashed: the chord from x − w to x + w. Along the bottom, teal where f″ &gt; 0 (bends up) and ember where f″ &lt; 0 (bends down). Gold rings: inflection points.</div>
+      <div class="verdict" id="vdF"></div>
+    </div>
+    <div class="panel">
+      <div class="lbl">plum f′ · gold dashed f″</div>
+      <canvas id="cvS"></canvas>
+      <div class="cap">Where f″ is above 0, f′ climbs; where f′ has a top or bottom, f has an inflection point.</div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">14g1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = x^2,  a = 0,  b = 2,  x = 1</span></span>Find the chord’s value at 1 and f(1). <br>Say which is higher, and what bends-up promises.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="14g2">
+  <h2 class="sthead"><span class="stno">14g2</span>Where the bend turns</h2>
+  <p class="stands">Stands on 14g1 and 13d (the second slope).</p>
+  <p data-pid="ddcf5c">If f″ is negative just left of c and positive just right, f bends down then up, so c is an inflection point. x³ at 0 is the plainest: f″ = 6x changes sign at 0. <b>But f″(c) = 0 is not enough.</b> x⁴ has f″(0) = 0 and f″ = 12x² ≥ 0 on both sides. So x⁴ bends up on all of ℝ (its slope 4x³ is increasing, by odd-powers-keep-order) and has no inflection point.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the bend of a cubic">
+f(x) = x^3 - 3x^2 - 9x + 5 @@ a polynomial
+f'(x) = 3(x - 3)(x + 1),\ \ f''(x) = 6(x - 1) @@ polynomial-slope twice
+f'' \lt 0 \text{ on } (-\infty, 1),\ \ f'' \gt 0 \text{ on } (1, \infty) @@ bends down, then up
+\text{inflection point } 1,\ f(1) = -6 @@ the sign of f″ changes there
+\text{top } -1 \text{ (value } 10),\ \ \text{bottom } 3 \text{ (value } -22) @@ second-test: f″(−1) = −12, f″(3) = 12
+  </pre>
+  <p data-pid="0ac8a5">Every cubic has exactly one inflection point, at the zero of its f″, which is linear. And it is halfway between the cubic's top and bottom when it has them, since f″'s zero is the middle of f′'s two zeros.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · inflection · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14g2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = x^3 + 3x^2</span></span>Find f″ and where it changes sign. <br>Name the inflection point.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="14g3">
+  <h2 class="sthead"><span class="stno">14g3</span>Sketching, by the numbers</h2>
+  <p class="stands">Stands on 14g2 and 14f (the first test).</p>
+  <p data-pid="5eb1f5">The steps, in order. Find where f is defined. Find its zeros, where it is easy. Find f′, factor it, and read its sign between the critical points: tops, bottoms and where f climbs or falls. Find f″ and read its sign: where f bends up or down, and the inflection points. Read what f does for inputs of large size: for a polynomial the leading term decides (9g's leading-term). <b>Mark the points, then join them obeying every sign.</b></p>
+  <pre class="lines" data-k="teal" data-label="from 12c: a fraction, sketched">
+f(x) = \tfrac{x}{1 + x^2} @@ defined on ℝ; zero only at 0; f(−x) = −f(x)
+f'(x) = \tfrac{1 - x^2}{(1 + x^2)^2} @@ quotient for slopes: bottom at −1 (value −½), top at 1 (value ½), as 12c found by hand
+f''(x) = \tfrac{2x(x^2 - 3)}{(1 + x^2)^3} @@ quotient for slopes and chain for slopes; sign of 2x(x − √3)(x + √3)
+\text{inflection points } -\sqrt3,\ 0,\ \sqrt3 @@ f″ changes sign at each: −, +, −, + from the left
+|x| \text{ large}:\ |f(x)| \le \tfrac{1}{|x|} @@ |x|/(1 + x²) &lt; |x|/x²: it heads to 0 at both ends
+  </pre>
+  <p data-pid="0b0e0b">Read backwards, the same rules sketch f′ from f. Where f climbs, f′ is above 0. At a top or bottom with a slope, f′ is 0. Where f bends up, f′ is climbing. At an inflection point, f′ has a top or a bottom. So reading a graph of f′ gives the tops and bottoms of f at its zeros, and the inflection points of f at its own tops and bottoms.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · sketching · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14g3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = 2x^3 - 9x^2 + 12x"></span></span>Find where f bends up and where it bends down, and its inflection point.</li><li><span class="givens"><span data-tex-inline="f(x) = x^4 - 4x^3"></span></span>Sketch f by the step's steps.</li><li><span class="givens"><span data-tex-inline="f(x) = x^3,\ c = 1;"></span> <span data-tex-inline="x &gt; 0,\ x \ne 1"></span></span>Using the step's gap g, show that f lies above its tangent line at c at every such x.</li><li><span class="givens"><span data-tex-inline="f(x) = x^3 \text{ on } [1, 3],"></span> <span data-tex-inline="c = 2"></span></span>Show that the slope of f at c lies between the slopes of the two chords from the ends to c.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="14g4">
+  <h2 class="sthead"><span class="stno">14g4</span>Bends of a solution set</h2>
+  <p class="stands">Stands on 14g3 and 13l (slopes of both sides).</p>
+  <p data-pid="7c7a41">13l found slopes on a branch of a solution set from the equation itself. <b>The second slope comes the same way.</b> Take the branch of x² + 4y² = 8 through (2, 1). There 2x + 8y·y′ = 0, so y′ = −x/(4y), which is 0 where x = 0: a level tangent, at (0, ±√2). Take the slope of y′ = −x/(4y) by quotient for slopes, with y′ substituted: y″ = −(4y − 4xy′)/(16y²) = −(4y² + x²)/(16y³) = −8/(16y³) = −1/(2y³). On the upper branch y &gt; 0, so y″ &lt; 0: it bends down, and (0, √2) is a top. Where y = 0 the slope formula divides by 0, and the branch has no slope there.</p>
+  <p data-pid="e3fead">The first textbook of the calculus gave a whole section to the points where a curve changes its bending. It found them where the second difference of the ordinate vanishes or becomes infinite.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · a solution set · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14g4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">x^2 + y^2 = 25,  the branch through (3, 4)</span></span>Find y′ and then y″ by taking slopes of both sides. <br>Say which way the branch bends.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="14g5">
+  <h2 class="sthead"><span class="stno">14g5</span>Illegal moves</h2>
+  <p class="stands">Stands on 14g1 to 14g4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+f''(c) = 0, \text{ so an inflection point}\,? @@ x⁴ at 0: bends up on both sides
+\text{bends up, so } f'' \gt 0 \text{ everywhere}\,? @@ x⁴ bends up on ℝ, and f″(0) = 0
+\text{bends up, so climbs}\,? @@ x² bends up and falls on (−∞, 0)
+\begin{aligned}&\text{the plot shows one bottom, so there is one}\,\\ &\quad ?\end{aligned} @@ x⁴ − 0.02x² looks like x⁴ on [−2, 2]; it has bottoms at ±0.1 and a top at 0
+\text{a top of } f' \text{ is a top of } f\,? @@ it is an inflection point of f
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14g5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = x^4 - 4x^3,"></span> <span data-tex-inline="f''(0) = 0,\ f''(2) = 0"></span></span>Decide which of the two inputs are inflection points.</li><li><span class="givens"><span data-tex-inline="f(x) = 1/x,"></span> <span data-tex-inline="\text{bends down on } (-\infty, 0),"></span> <span data-tex-inline="\text{bends up on } (0, \infty)"></span></span>Decide whether f has an inflection point at zero.</li><li><span class="givens"><span data-tex-inline="f(x) = x^4 - 0.02x^2,"></span> <span data-tex-inline="\text{inputs } -2, -1, 0, 1, 2"></span></span>Sketch f from its values at the given inputs, and count the bottoms of your sketch.<br>Find every bottom f has.</li><li><span class="givens"><span data-tex-inline="f(x) = x^4"></span></span>Show by bends-up that f bends up on the whole real line.<br>Find its second slope at zero, and decide whether a positive second slope everywhere is needed for bending up.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="14g6">
+  <h2 class="sthead"><span class="stno">14g6</span>Running it backwards</h2>
+  <p class="stands">Stands on 14g1 to 14g4.</p>
+  <p data-pid="654692">Handed a graph and asked for f′, mark where f is level, climbing and falling, and where it bends each way, then draw f′ obeying those marks. Handed f′ and asked for f, do the reverse, and pick the lift from one known value (14e). Handed a claim that a function lies above or below a line, check whether the line is a tangent and read the sign of f″. Handed a plot as evidence, ask what the numbers say between the plotted points. Found upward; written downward.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14g6.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f \text{ is continuous on } \mathbb{R};"></span> <span data-tex-inline="f' &gt; 0 \text{ on } (-\infty, 1) \text{ and } (4, \infty),"></span> <span data-tex-inline="f' &lt; 0 \text{ on } (1, 4);"></span> <span data-tex-inline="f'' &lt; 0 \text{ on } (-\infty, 2.5),"></span> <span data-tex-inline="f'' &gt; 0 \text{ on } (2.5, \infty)"></span></span>Sketch one such f, and name its top, bottom and inflection point.</li><li><span class="givens"><span data-tex-inline="f(x) = kx^3 + bx^2,"></span> <span data-tex-inline="\text{inflection point at } 1,"></span> <span data-tex-inline="c = 0"></span></span>Find b in terms of k, and the sign of k for which c is a top.</li><li><span class="givens"><span data-tex-inline="f''(x) = 6x - 2,"></span> <span data-tex-inline="f'(0) = 1,\ f(0) = 0"></span></span>Find f and its inflection point.</li><li><span class="givens"><span data-tex-inline="f' \text{ has a strict top at } 2,"></span> <span data-tex-inline="\text{climbing before, falling after}"></span></span>Find what f does at that input.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">14g.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="x^4 - 4x^3 \text{ has } f'' = 0 \text{ at } 0 \text{ and } 2."></span> <span data-tex-inline="f'' = 0 \text{ at exactly } -1 \text{ and } 1."></span></span>Make a polynomial f of your own with that second slope, an inflection point at one of the two inputs and not at the other.<br>Find where it bends up and where it bends down.</div>
+  <div class="chq"><span class="chid">14g.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="f(x) = mx + b"></span></span>Decide by the step's line whether f bends up, bends down, or neither.</div>
+  <div class="chq"><span class="chid">14g.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="f' \text{ exists everywhere,}"></span> <span data-tex-inline="f \text{ lies above each of its tangent lines}"></span></span>Prove or refute: the slope of f is increasing.</div>
+  <div class="chq"><span class="chid">14g.4.4</span><span class="tagq">seam</span>A plot drawn by a machine at a thousand inputs shows two bottoms and one top. In 1976 two mathematicians proved the four colour technique with a computer checking more cases than any person could. Some mathematicians said that no one had seen the proof. <br>Is the plot a proof of what it shows? <br>Is a proof that no person has parsed a proof? <br>What would make either one count?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r14f.html">← 14f · crest and trough</a><a href="r14h.html">14h · optimising →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>L'Hôpital's book gave a whole section to the points where a curve changes its bending, and found them where the second difference of the ordinate vanishes or becomes infinite.</p><cite>L'Hôpital, Analyse des infiniment petits (1696), section 4; paraphrase</cite></aside>
+  <p>The four colour proof of 1976 is Kenneth Appel’s and Wolfgang Haken’s; its accepted name is the four colour theorem.</p>
+  <p>Accepted names: bending up is concave up and bending down is concave down; which way a function bends is its concavity.</p>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?3:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=v=>fm(v).replace('-','−');
+const r3=Math.sqrt(3);
+const FN={
+  cu:{lab:'x³ − 3x² − 9x + 5',tex:R`x^3 - 3x^2 - 9x + 5`,lo:-3,hi:5,f:x=>x**3-3*x*x-9*x+5,d1:x=>3*x*x-6*x-9,d2:x=>6*x-6,y:[-30,20],inf:[1]},
+  fr:{lab:'x/(1 + x²)',tex:R`\tfrac{x}{1 + x^2}`,lo:-5,hi:5,f:x=>x/(1+x*x),d1:x=>(1-x*x)/((1+x*x)**2),d2:x=>2*x*(x*x-3)/((1+x*x)**3),y:[-0.8,0.8],inf:[-r3,0,r3]},
+  q4:{lab:'x⁴',tex:R`x^4`,lo:-1.6,hi:1.6,f:x=>x**4,d1:x=>4*x**3,d2:x=>12*x*x,y:[-0.6,6.6],inf:[]},
+  rt:{lab:'√(2x + 1)',tex:R`\sqrt{2x + 1}`,lo:-0.5,hi:12,f:x=>Math.sqrt(Math.max(0,2*x+1)),d1:x=>x>-0.5?1/Math.sqrt(2*x+1):NaN,d2:x=>x>-0.5?-Math.pow(2*x+1,-1.5):NaN,y:[-0.5,5.5],inf:[]}
+};
+let key='cu',F=FN.cu;
+const cvF=$('cvF'),cvS=$('cvS'),kx=$('kx'),kh=$('kh');
+const X=()=>{ let x=F.lo+(F.hi-F.lo)*(+kx.value)/1000; x=Math.round(x*100)/100; if(key==='rt') x=Math.max(x,-0.45); return x; };
+const PF=plane(cvF,{x:[-3,5],y:[-30,20],grid:1,aspect:0.8,draw:P=>drawF(P)});
+const PS=plane(cvS,{x:[-3,5],y:[-30,20],grid:1,aspect:0.8,draw:P=>drawS(P)});
+[[PF,cvF],[PS,cvS]].forEach(([P,cv])=>Object.defineProperty(P.o,'aspect',{get:()=>cv.clientWidth>480?0.75:0.9}));
+function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=700;k++){ const t=lo+(hi-lo)*k/700; const v=fn(t); if(!isFinite(v)||Math.abs(v)>1e6){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
+function band(P){ const c=P.ctx; const n=300; for(let k=0;k<n;k++){ const t0=F.lo+(F.hi-F.lo)*k/n, t1=F.lo+(F.hi-F.lo)*(k+1)/n, d=F.d2((t0+t1)/2); if(!isFinite(d)) continue; c.fillStyle=col(Math.abs(d)<1e-9?'--gold':(d>0?'--teal':'--ember')); c.fillRect(P.X(t0),P.Y(P.o.y[0])-7,P.X(t1)-P.X(t0)+0.5,6); } }
+function drawF(P){ P.o.x=[F.lo,F.hi]; P.o.y=F.y; P.o.grid=(F.y[1]-F.y[0])>20?10:((F.y[1]-F.y[0])>3?1:0.25); P.axes(); band(P);
+  curve(P,F.f,'--ink',2.6,F.lo,F.hi);
+  const x=X(), s=F.d1(x), L=0.25*(F.hi-F.lo); P.line(x-L,F.f(x)-s*L,x+L,F.f(x)+s*L,'--plum',2,[]); P.dot(x,F.f(x),'--plum',5);
+  const w=+kh.value, a=Math.max(F.lo,x-w), b=Math.min(F.hi,x+w); P.line(a,F.f(a),b,F.f(b),'--gold',1.6,[6,4]); P.dot(a,F.f(a),'--gold',4); P.dot(b,F.f(b),'--gold',4);
+  F.inf.forEach(t=>{ const c=P.ctx; c.strokeStyle=col('--gold'); c.lineWidth=2.2; c.beginPath(); c.arc(P.X(t),P.Y(F.f(t)),8,0,7); c.stroke(); }); }
+function drawS(P){ let lo=0,hi=0; for(let k=0;k<=400;k++){ const t=F.lo+(F.hi-F.lo)*k/400; [F.d1(t),F.d2(t)].forEach(v=>{ if(isFinite(v)){ lo=Math.min(lo,v); hi=Math.max(hi,v); } }); } lo=Math.max(lo,-40); hi=Math.min(hi,40); const pad=0.1*(hi-lo+0.1);
+  P.o.x=[F.lo,F.hi]; P.o.y=[lo-pad,hi+pad]; P.o.grid=(hi-lo)>20?10:((hi-lo)>3?1:0.25); P.axes();
+  curve(P,F.d1,'--plum',2.4,F.lo,F.hi); curve(P,F.d2,'--gold',2,F.lo,F.hi,[6,4]); const x=X(); P.dot(x,F.d1(x),'--plum',5); }
+function read(){ const x=X(); $('ox').textContent=mm(x); $('oh').textContent=mm(+kh.value); const d2=F.d2(x), vd=$('vdF');
+  const w=+kh.value, a=Math.max(F.lo,x-w), b=Math.min(F.hi,x+w), mL=(F.f(x)-F.f(a))/(x-a), mR=(F.f(b)-F.f(x))/(b-x), s=F.d1(x);
+  const above=F.f(x)<F.f(a)+(F.f(b)-F.f(a))/(b-a)*(x-a);
+  if(Math.abs(d2)<1e-9){ vd.className='verdict'; vd.textContent='f″('+mm(x)+') = 0. '+(F.inf.some(t=>Math.abs(t-x)<1e-6)?'The sign of f″ changes here: an inflection point.':'The sign of f″ does not change here: no inflection point.'); }
+  else if(d2>0){ vd.className='verdict win'; vd.textContent='f″ = '+mm(d2)+' > 0: bending up. Left chord '+mm(mL)+' < slope '+mm(s)+' < right chord '+mm(mR)+(above?'; the chord lies above f(x).':'.'); }
+  else { vd.className='verdict lose'; vd.textContent='f″ = '+mm(d2)+' < 0: bending down. Left chord '+mm(mL)+' > slope '+mm(s)+' > right chord '+mm(mR)+'.'; }
+  tex($('eqF'),R`\begin{gathered}${F.tex}\\ f'(${mm(x)}) = ${mm(s)},\ \ f''(${mm(x)}) = ${mm(d2)}\\ \text{chords: } ${mm(mL)},\ ${mm(mR)}\end{gathered}`,true); }
+function all(){ PF.redraw(); PS.redraw(); read(); }
+[kx,kh].forEach(k=>k.addEventListener('input',all));
+const fch=$('fch');
+Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===key) b.className='on'; b.onclick=()=>{ key=k; F=FN[k]; [...fch.children].forEach(z=>z.classList.toggle('on',z===b)); all(); }; fch.appendChild(b); });
+window.__pic={set:(k,x,h)=>{ [...fch.children][Object.keys(FN).indexOf(k)].click(); kx.value=x; kh.value=h; all(); return {x:X(),txt:$('vdF').textContent}; }};
+all();
+
+/* ---------- slides ---------- */
+const Nw='\\htmlClass{new}';
+stepper('#sl1',[
+  {k:'ember',kl:'bends up',t:R`a \lt x \lt b:\ \ f(x) \lt f(a) + m(x - a)`,n:`Below every chord. Accepted name: concave up. Bends down: above every chord.`},
+  {k:'ember',kl:'bends-up',t:R`f' \text{ increasing} \;\Rightarrow\; ${Nw}{\text{bends up}}`,n:`And the graph lies above each tangent line.`},
+  {k:'ember',kl:'above the tangent line',t:R`g = f - f(a) - f'(a)(x - a),\ \ g' = f' - f'(a)`,n:`g′ negative left of p, positive right: g ≥ 0, with 0 only at p (slope-sign-order).`},
+  {k:'ember',kl:'below the chord',t:R`\tfrac{f(x) - f(a)}{x - a} = f'(\xi_1) \lt f'(x) \lt f'(\xi_2)`,n:`average-slope twice, then f′ increasing.`},
+  {k:'teal',kl:'from 13j · the check',t:R`\tfrac12 \gt \tfrac13 \gt \tfrac14`,n:`√(2x + 1) bends down (f″ &lt; 0): chord, slope, chord, turned about.`},
+  {k:'teal',kl:'from 13k · the error\'s sign',t:R`\sqrt{1 + x} \lt 1 + \tfrac{x}{2},\ \ x \ne 0`,n:`It bends down, so it lies below its tangent line.`}
+],{title:'The slides · bends-up · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'inflection',t:R`f'' \text{ changes sign at } c`,n:`Bends one way, then the other. x³ at 0.`},
+  {k:'ember',kl:'not enough',t:R`(x^4)''(0) = 0,\ \ 12x^2 \ge 0`,n:`x⁴ bends up on ℝ: no inflection point.`},
+  {k:'ember',kl:'a cubic',t:R`f'' = 6(x - 1)`,n:`x³ − 3x² − 9x + 5: inflection at 1, halfway between the top at −1 and the bottom at 3.`}
+],{title:'The slides · inflection · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'sketching',t:R`\text{domain} \cdot \text{zeros} \cdot f' \cdot f'' \cdot \text{ends}`,n:`Mark the points; join them obeying every sign.`},
+  {k:'teal',kl:'from 12c · a fraction',t:R`\tfrac{x}{1 + x^2}:\ \ \pm1,\ \ 0,\ \pm\sqrt3`,n:`Top and bottom at ±1; inflection points at 0 and ±√3; heads to 0 at both ends.`},
+  {k:'ember',kl:'f′ from f',t:R`\text{top of } f' \;\leftrightarrow\; \text{inflection of } f`,n:`Zeros of f′ at tops and bottoms; f′ climbing where f bends up.`}
+],{title:'The slides · sketching · ← → keys work'});
+stepper('#sl4',[
+  {k:'teal',kl:'from 13l · a solution set',t:R`x^2 + 4y^2 = 8:\ \ y'' = -\tfrac{1}{2y^3}`,n:`Upper branch bends down; (0, √2) is a top.`}
+],{title:'The slides · a solution set · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`\text{a plot} \not\Rightarrow \text{one bottom}`,n:`x⁴ − 0.02x²: bottoms at ±0.1, invisible at this scale.`}
+],{title:'The slides · illegal · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

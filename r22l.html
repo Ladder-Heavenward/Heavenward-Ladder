@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Splitting the work, counted</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r22k.html">← 22k how fast things grow</a><a href="r22stat.html">next: 22·stat how many misprints on a page? →</a></p>
+  <div class="tags"><span class="tag tech">22l · technique</span></div>
+  <h1>Splitting the work, counted</h1>
+  <p>Merge sort cut a list in half, sorted each half the same way, and zipped the halves together. Its cost was counted on the seventeenth rung, but only for lists whose length is a power of two, and only for that one recipe. Many good recipes work the same way: cut the job into smaller copies of itself, solve the copies, and pay something to cut and to join. This step counts the cost of every recipe of that kind at once. Picture the work laid out in levels, the whole job at the top and the smallest pieces at the bottom. Either the top level costs the most, or every level costs the same, or the bottom wins. Then it counts merge sort for lists of any length, and shows that no sort that only compares can do much better.</p>
+  <p class="gesture">A recipe that splits its work has a cost given by its own smaller costs. Lay the work out in levels and add them: the top wins, every level ties, or the bottom wins. Merge sort is a tie, so it costs about the length times the number of halvings, and no sort that only compares does much better.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r17comp.html">17·comp</a> (merge sort, first counted), <a href="r22k.html">22k</a> (O, ~ and ≪), <a href="r15i.html">15i</a> (geometric sums), <a href="r04g.html">4g</a> (strong induction), <a href="r17g.html">17g</a> (the log to any base). <a href="r22stat.html">22·stat</a> puts the rare events of 22j to work on misprints and help lines.</p></div>
+</header>
+
+<section class="class step" data-step="22l1">
+  <h2 class="sthead"><span class="stno">22l1</span>Unrolling a split</h2>
+  <p class="stands">Stands on 17·comp (the merge-count technique), 4b (induction), 17g4 (the log to any base) and 9·cb4 (recursion as sequences).</p>
+  <p data-pid="9792c3">A rule that gives a cost at size n from the cost at a smaller size is a recursion, as in 4c and 9·cb4. Here the size halves at each call. 17·comp met one: M(2n) = 2M(n) + 2n − 1. Take the plainest of its kind, T(n) = 2T(n/2) + n: two halves solved the same way, and n steps to cut and join.</p>
+  <p data-pid="07bfe4">Unrolling technique: <b>if T(1) = c and T(n) = 2T(n/2) + n at every power of 2 from 2 on, then T(n) = n log₂ n + cn at every power of 2.</b> Divide by n and the halving becomes a plain count: one more for each doubling.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the unrolling technique">
+n = 2^k,\ \ S(k) = T(2^k)/2^k @@ name the cost per item at size 2ᵏ
+T(2^k) = 2T(2^{k-1}) + 2^k @@ the rule at n = 2ᵏ, for k ≥ 1
+S(k) = S(k-1) + 1 @@ divide both sides by 2ᵏ
+S(k) = S(0) + k = c + k @@ add 1, k times: induction on k (4b)
+\htmlClass{new}{T(n) = n\log_2 n + cn} \quad \blacksquare @@ multiply back by 2ᵏ = n; k = log₂ n (17g4)
+  </pre>
+  <p data-pid="4d4ed9">S(k) = S(k − 1) + 1 is the rule x ↦ x + 1 fed its own answers, as in 9·cb4. The same division works on 17·comp's rule: M(2ᵏ)/2ᵏ rises by 1 − 1/2ᵏ at each doubling, and adding those back gives n log₂ n − n + 1. The −1 at each merge changes only the part that grows like n. The n log₂ n is the n steps of joining, paid once at each of the log₂ n levels.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · unrolling · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">22l1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="T(1) = 1,\ \ T(n) = 2T(n/2) + 3n"></span> <span data-tex-inline="H(1) = 1,\ \ H(n) = H(n/2) + 1"></span></span>Unroll T to find T(n) at every power of 2. <br>Check your answer at n = 8 by running the rule. <br>Unroll H the same way, and find H(1 048 576).</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22l2">
+  <h2 class="sthead"><span class="stno">22l2</span>Three ways a split can go</h2>
+  <p class="stands">Stands on 22l1, 15i1 (the finite geometric sum), 15i3 (the endless sum), 17g (powers and logs) and 22k1 (~).</p>
+  <p data-pid="b43062">A recipe that cuts a job of size n into a smaller copies of size n/b, solves each copy the same way, and spends nᵈ steps to cut and to join, has the accepted name a divide and conquer recipe. Its cost obeys T(n) = aT(n/b) + nᵈ. Lay the work out in levels: the whole job is level 0, its a pieces are level 1, their pieces level 2, down to pieces of size 1.</p>
+  <p data-pid="ae02b1">Master technique: <b>let a ≥ 1, b ≥ 2 and d ≥ 0, let T(1) = c ≥ 0 and T(n) = aT(n/b) + nᵈ at powers of b, and let r = a/bᵈ; then along the powers of b, T(n) ~ nᵈ/(1 − r) if r &lt; 1, T(n) ~ nᵈ log_b n if r = 1, and T(n) ~ (c + 1/(r − 1)) n^(log_b a) if r &gt; 1.</b> r is how much each level costs beside the one above it.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the master technique, by levels">
+\text{level } j:\ a^j \text{ pieces, each of size } n/b^j @@ each cut makes a pieces, b times smaller
+\text{work at level } j = a^j\big(\tfrac{n}{b^j}\big)^d = n^d r^j @@ the joining cost of each piece, added; r = a/bᵈ
+T(n) = c\,a^k + n^d(1 + r + \cdots + r^{k-1}),\ \ n = b^k @@ levels 0 to k − 1, then aᵏ pieces of size 1 at cost c each
+a^k = n^{\log_b a} @@ both are exp(ln a · ln n / ln b) (17g)
+r < 1:\ \ T(n) \sim \tfrac{n^d}{1 - r} @@ the sum heads to 1/(1 − r) (15i3), and c aᵏ/nᵈ = c rᵏ heads to 0
+r = 1:\ \ T(n) = n^d(\log_b n + c) \sim n^d\log_b n @@ every level costs nᵈ, and there are k = log_b n levels
+r > 1:\ \ T(n) = \big(c + \tfrac{1}{r - 1}\big)a^k - \tfrac{n^d}{r - 1} @@ the finite sum is (rᵏ − 1)/(r − 1) (15i1), and nᵈrᵏ = aᵏ
+\htmlClass{new}{r > 1:\ \ T(n) \sim \big(c + \tfrac{1}{r - 1}\big)n^{\log_b a}} \quad \blacksquare @@ nᵈ/aᵏ = r⁻ᵏ heads to 0
+  </pre>
+  <ul>
+    <li data-pid="66919d">Merge sort: a = 2, b = 2, d = 1, so r = 1. Every level costs n, and there are log₂ n levels: n log₂ n, as 22l1 found.</li>
+    <li data-pid="ed8a06">Looking up a name in a sorted list: check the middle, keep one half. T(n) = T(n/2) + 1, so a = 1, b = 2, d = 0, r = 1. The cost is log₂ n: about 20 looks in a list of a million names.</li>
+    <li data-pid="a933e0">Multiplying two n-digit numbers the school way takes n² products of single digits. Cut each number into halves: (x·10ᵐ + y)(u·10ᵐ + v) = xu·10²ᵐ + ((x + y)(u + v) − xu − yv)·10ᵐ + yv. That is three products of half size, not four, plus some adding. So a = 3, b = 2, d = 1, r = 3/2, and the bottom wins: about n^(log₂ 3), close to n^1.585. At 1024 digits, 3¹⁰ = 59 049 digit products against 1 048 576.</li>
+  </ul>
+  <p data-pid="9e430e">Which case holds is a contest between two numbers: a, how many pieces each cut makes, and bᵈ, how much cheaper the joining gets at each level down. The work at the top is nᵈ. The number of pieces at the bottom is n^(log_b a). Whichever is larger in rank (22k2) sets the cost, and when they tie, the levels add.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · master · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22l2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="T(n) = 3T(n/2) + n,\ \ T(n) = 2T(n/2) + n^2,\ \ T(n) = 4T(n/2) + n^2,\ \ T(n) = 8T(n/2) + n^2"></span></span>Each has T(1) = 1 and runs on powers of 2. <br>For each, find r, which of the three cases holds, and how T grows. <br>For the first, find T(1024) exactly from the level sum, and compare it with 1024².</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22l3">
+  <h2 class="sthead"><span class="stno">22l3</span>Every n, not only powers of two</h2>
+  <p class="stands">Stands on 17·comp (merging s items with t takes at most s + t − 1 comparisons), 4g12 (strong induction) and 22l1.</p>
+  <p data-pid="d83e50">17·comp proved its count for powers of 2 only. A list of 7 splits into 3 and 4, and the halves are uneven. Let W(n) be the most comparisons merge sort makes on any list of n items. For n ≥ 2, the halves have n₁ and n₂ items, with n₁ ≤ n₂ ≤ n₁ + 1 and n₁ + n₂ = n. Sorting the halves costs at most W(n₁) + W(n₂), and the merge at most n − 1. So W(1) = 0 and W(n) ≤ W(n₁) + W(n₂) + n − 1. Let L(n) be the number of halvings that bring n down to 1: the least k with n ≤ 2ᵏ.</p>
+  <p data-pid="5b98ff">Halvings technique: <b>for every n ≥ 1, merge sort makes at most n·L(n) comparisons, and n·L(n) &lt; n log₂ n + n.</b> The proof leans on every smaller size at once, so it is a strong induction.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the halvings technique">
+W(1) = 0 = 1 \cdot L(1) @@ one item needs no comparison, and no halving
+n \ge 2,\ k = L(n):\ \ n_1 \le n_2 \le 2^{k-1} @@ n₂ is n/2 or (n + 1)/2, and an odd n ≤ 2ᵏ is at most 2ᵏ − 1
+L(n_1) \le k - 1,\ \ L(n_2) \le k - 1 @@ each half fits in 2ᵏ⁻¹
+W(n) \le n_1(k - 1) + n_2(k - 1) + n - 1 = nk - 1 @@ strong induction (4g12): the claim at every smaller size; n₁ + n₂ = n
+2^{k-1} < n \Rightarrow k < \log_2 n + 1 @@ k is the least with n ≤ 2ᵏ, so 2ᵏ⁻¹ is too small
+\htmlClass{new}{W(n) \le n\,L(n) < n\log_2 n + n} \quad \blacksquare @@ the last two lines
+  </pre>
+  <p data-pid="cfc77f">So merge sort is O(n log n) for every n, not only at powers of 2. At n = 1000, ten halvings bring 1000 down to 1, and the bound is 10 000. Running the rule with equals in place of at most gives 8977. Both are about n log₂ n, which at n = 1000 is about 9966.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · halvings · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22l3.1</span><span class="ph undo">undo</span><span class="givens"><span data-tex-inline="W(1) = 0,\ \ W(n) \le W(n_1) + W(n_2) + n - 1"></span></span>Run the rule with equals in place of at most, to find bounds on W(3), W(5), W(6) and W(12). Check each against n·L(n). <br>A job allows 1000 comparisons on every list. Find the longest list the halvings technique promises merge sort can sort inside that.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22l4">
+  <h2 class="sthead"><span class="stno">22l4</span>No sort does much better</h2>
+  <p class="stands">Stands on 4j (n! orders), 22k3 (the factorial-fence technique), 22l3 and 10d (the squeeze).</p>
+  <p data-pid="cc1877">Merge sort is fast. Could some cleverer sort be faster by more than a fixed factor? Count what a sort can learn. A sort that learns about the items only by comparing two of them gets a yes or a no each time. The answers so far decide what it does next.</p>
+  <p data-pid="57779c">Answer-count technique: <b>a sort that learns only by comparing makes at least log₂ n! comparisons on some list of n different items, and log₂ n! ~ n log₂ n.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the answer-count technique">
+\text{at most } m \text{ comparisons on every list} @@ suppose it, for some m
+\text{the runs fork at most } m \text{ times deep: at most } 2^m \text{ ends} @@ each answer is yes or no
+\text{two lists that get the same answers get the same moves} @@ the sort learns nothing else about the items
+\text{the } n! \text{ orders of } n \text{ different items need } n! \text{ different moves} @@ one rearrangement sorts only one order (4j)
+2^m \ge n! \Rightarrow m \ge \log_2 n! @@ log₂ rises (17g4)
+n\log_2\tfrac{n}{e} + \log_2 e \le \log_2 n! \le n\log_2 n @@ the factorial fence (22k3); n! ≤ nⁿ
+\htmlClass{new}{\log_2 n! \le W(n) < n\log_2 n + n,\ \text{so } W(n) \sim n\log_2 n} \quad \blacksquare @@ merge sort is such a sort; 22l3; divide by n log₂ n and squeeze (10d)
+  </pre>
+  <p data-pid="a2a04b">This is the full answer to why 17·comp's merge sort costs about n log₂ n. It never costs more than n log₂ n + n. And no sort that only compares can promise less than log₂ n!, which grows alike. With a million items, every such sort makes about 18.5 million comparisons on some list, merge sort makes at most about 19.0 million, and selection sort makes 500 billion.</p>
+  <p data-pid="b5bba9">The answer count is a different kind of proof from the others on this step. It does not count one recipe. It counts every recipe at once, including the ones nobody has thought of yet, by counting what they could possibly learn.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · answer count · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22l4.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="n = 5,\ \ n = 1000"></span></span>For 5 different items, find the fewest comparisons a sort can promise on every list, by the answer count. Compare with the bound on W(5) from 22l3. <br>For 1000 items, use the fence of 22k3 to find a number of comparisons no comparing sort can promise to beat, and compare it with 1000·L(1000).</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22l5">
+  <h2 class="sthead"><span class="stno">22l5</span>Illegal moves</h2>
+  <p class="stands">Stands on 22l1 to 22l4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+T(n) = 2T(n/2) + n: \text{ each level costs } n \text{ and there are } n \text{ levels, so } n^2\,? @@ there are log₂ n levels, not n
+T(n) = 2T(n/2) + n\log_2 n \text{ costs } n\log_2 n,\ \text{by the master technique}\,? @@ n log₂ n is not a power nᵈ; by levels it is ½ n log₂² n
+T(n) = 4T(n/4) + n \text{ is lower in rank than } 2T(n/2) + n\,? @@ both tie: n log₄ n is half of n log₂ n, the same rank
+\text{merge sort makes about } n\log_2 n \text{ comparisons on every list}\,? @@ that is the most; on a sorted list it makes ½ n log₂ n
+\text{every comparing sort makes at least } \log_2 n! \text{ comparisons on every list}\,? @@ on some list; insertion sort makes n − 1 on a sorted one
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22l5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="T(1) = 0,\ \ T(n) = 2T(n/2) + n"></span></span>Count the levels for n = 16, and find T(16) both by the rule and by the tempting line.</li><li><span class="givens"><span data-tex-inline="T(1) = 0,\ \ T(n) = 2T(n/2) + n\log_2 n"></span></span>Find T(8) by the rule and by adding the levels, and find how T grows.</li><li><span class="givens"><span data-tex-inline="T(1) = U(1) = 0,\ \ T(n) = 4T(n/4) + n,\ \ U(n) = 2U(n/2) + n"></span></span>Find T(4096) and U(4096), and find how T(n)/U(n) behaves as n grows.</li><li><span class="givens"><span data-tex-inline="1, 2, 3, 4, 5, 6, 7, 8"></span></span>Run merge sort on this list, already in order, and count the comparisons. Compare with W(8) = 17.</li><li><span class="givens"><span data-tex-inline="1, 2, 3, 4, 5, 6, 7, 8"></span></span>Run insertion sort on the same list, and count the comparisons. Compare with log₂ 8!.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">22l.4.1</span><span class="tagq">build</span>Build a recipe that finds both the largest and the smallest of n numbers by splitting the list in halves. <br>Write the recurrence for its comparisons, solve it at powers of 2, and compare it with finding each one separately.</div>
+  <div class="chq"><span class="chid">22l.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="T(n) = aT(n/b) + n^d,\ \ r = a/b^d"></span></span>Let r rise toward 1 from below. <br>Find what the master technique's nᵈ/(1 − r) does, and how that squares with nᵈ log_b n at r = 1.</div>
+  <div class="chq"><span class="chid">22l.4.3</span><span class="tagq">converse</span>Along the powers of 2, T(n) ~ n log₂ n. <br>Must T obey T(n) = 2T(n/2) + n?</div>
+  <div class="chq"><span class="chid">22l.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="T(1) = c,\ \ T(n) = 2T(n/2) + n"></span></span>Prove T(n) = n log₂ n + cn at powers of 2 again, by induction on k straight from the claim, without dividing by 2ᵏ.</div>
+  <div class="chq"><span class="chid">22l.4.5</span><span class="tagq">seam</span>A leading mathematician held that multiplying two n-digit numbers needs about n² digit products, whatever the method, and ran a seminar to prove it. Within a week a student in it found the three-product split of 22l2. For sorting, the answer count of 22l4 settles how fast any comparing sort can be. For multiplying, no count like it is known. <br>Was the belief in n² a reasonable one to hold, and what kind of evidence could have settled it?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r22k.html">← 22k · how fast things grow</a><a href="r22stat.html">22·stat · how many misprints on a page? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A rule like T(n) = 2T(n/2) + n is a recurrence relation, or recurrence. Unrolling it is the iteration method; laying the work out in levels draws a recursion tree. The master technique is the master theorem. The answer count is the information-theoretic (or decision-tree) lower bound for comparison sorting. Looking up a name by halves is binary search. The three-product split is Karatsuba multiplication.</p>
+  <h3>Who said it first</h3>
+  <p>John von Neumann wrote out merge sort in 1945, and John Mauchly described binary search in 1946. In 1960 Andrey Kolmogorov conjectured that multiplication needs about n² digit products; Anatoly Karatsuba, a student in his seminar, found the three-product split within a week, published in 1962 (22l.4.5). Jon Bentley, Dorothea Haken and James Saxe gave a general method for such recurrences in 1980, and the name master theorem spread from the textbook of Thomas Cormen, Charles Leiserson and Ronald Rivest (1990). The log₂ n! bound for sorting was known by the 1950s; Lester Ford and Selmer Johnson (1959) built a sort that comes close to it for small n.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'per item',t:R`S(k) = T(2^k)/2^k,\ \ S(k) = S(k-1) + 1`,n:`Divide out the doubling.`},
+  {k:'ember',kl:'unrolled',t:R`\htmlClass{new}{T(n) = n\log_2 n + cn}`,n:`At powers of 2: n per level, log₂ n levels.`}
+],{title:'The slides · unrolling · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'levels',t:R`\text{level } j \text{ costs } n^d r^j,\ \ r = a/b^d`,n:`A geometric sum down the levels.`},
+  {k:'ember',kl:'three cases',t:R`\htmlClass{new}{r<1:\ n^d;\ \ r=1:\ n^d\log_b n;\ \ r>1:\ n^{\log_b a}}`,n:`Top wins, levels tie, bottom wins.`}
+],{title:'The slides · master · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'halvings',t:R`L(n) = \text{least } k \text{ with } n \le 2^k`,n:`Each half needs one fewer.`},
+  {k:'ember',kl:'any n',t:R`\htmlClass{new}{W(n) \le n\,L(n) < n\log_2 n + n}`,n:`By strong induction.`}
+],{title:'The slides · halvings · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'answers',t:R`2^m \ge n!`,n:`m yes-or-no answers tell apart at most 2ᵐ orders.`},
+  {k:'ember',kl:'the best',t:R`\htmlClass{new}{W(n) \sim \log_2 n! \sim n\log_2 n}`,n:`Merge sort is within a lower-order part of the best.`}
+],{title:'The slides · answer count · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`\text{levels} = \log_b n,\ \text{not } n`,n:`And the answer count speaks of some list, not every list.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

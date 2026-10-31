@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>16a · The area function</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r16.html">← 16 running change backwards</a><a href="r16b.html">next: 16b its slope is the height →</a></p>
+  <div class="tags"><span class="tag proof">16a · proof</span></div>
+  <h1>The area function</h1>
+  <p>Rung 15 gave each integrable function on each closed interval one number. Keep the left end still and let the right end move, and those numbers become a function: the area so far, as a function of where the edge has reached. This step defines it, settles a letter clash it causes, and proves the first fact about it. The area function never jumps, even when the function under it does. A bound on the height is a bound on how fast the area can change.</p>
+  <p class="gesture">The area function measures the area from a fixed start out to a moving edge. It splits at any point, taken in any order. If the height never passes a bound, the area between two edges is at most that bound times the distance between them. So the area function never jumps.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r15c.html">15c</a> (integrable, ∫, the integrand), <a href="r15e.html">15e</a> (interval-cut-in-two, smaller-function-smaller-area, parts-integrable, ∫ₚᵖ f = 0, and swapping the ends changes the sign), <a href="r15d.html">15d</a> (∫ x dx), <a href="r15i.html">15i</a> (area-under-a-power), <a href="r12b.html">12b</a> (bounded-both-ways), <a href="r11a.html">11a</a> (continuous, the step u), <a href="r08h.html">8h</a> (unpack-the-bars), <a href="r00a.html">0a</a> (names). <a href="r16b.html">16b</a> asks what the slope of the area function is.</p></div>
+</header>
+
+<section class="class step" data-step="16a1">
+  <h2 class="sthead"><span class="stno">16a1</span>New marks on this rung</h2>
+  <p class="stands">Stands on 9a1 (marks said first in words).</p>
+  <p data-pid="727db9">Each mark below is said first in plain words. Each gets its own “from here on” line on the step named, before any proof uses it.</p>
+  <ul>
+    <li data-pid="99b386">the area so far, from a fixed end s to a moving end x, with t as the stand-in letter that names no number: ∫ₛˣ f(t) dt (16a)</li>
+    <li data-pid="ac331d">the change in G from p to q, that is G(q) − G(p): G(x)|ₚ^q, also written [G(x)]ₚ^q (16c)</li>
+    <li data-pid="860795">every function whose slope is f, all at once, one for each real C: ∫ f(x) dx = G(x) + C, an integral sign with no ends (16c)</li>
+    <li data-pid="b78b3e">the trade in a substitution, a reminder and not a claim about numbers: r = g(x), dr = g′(x) dx (16d)</li>
+    <li data-pid="44e7fa">the area out to forever, as the limit of the areas up to a cut q: ∫ₚ^∞ f(x) dx; and an area in to a bad end, as a limit of areas from a cut c (16i)</li>
+    <li data-pid="c28d12">a point of space, three reals in order: (x, y, z) (16j)</li>
+    <li data-pid="15503d">a solid's density, its mass per unit volume, written with the small Greek letter rho: ρ (16j)</li>
+    <li data-pid="720d42">on 16·phys only, energy in units sized for one particle: the electronvolt, eV, and a million of them, MeV</li>
+  </ul>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">16a1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">∫ₛˣ f(t) dt,  G(x)|ₚ^q,  ∫ f(x) dx = G(x) + C</span></span>Say each mark in words. <br>Name the step that lays each one down.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="16a2">
+  <h2 class="sthead"><span class="stno">16a2</span>A stand-in letter</h2>
+  <p class="stands">Stands on 16a1 and 15c (the sign ∫).</p>
+  <p data-pid="f35952">In ∫ₚ^q f(x) dx, the letter x names no number. 15c's sums use the values of f on each piece. The integral is one number made from all of them. x only says which slot of f is being run through. Writing ∫ₚ^q f(t) dt or ∫ₚ^q f(z) dz says the same thing and names the same number. <b>The letter can be swapped for any letter not already in use.</b></p>
+  <p class="eqline" data-pid="999ebc">From here on, the letter after d in an integral is a stand-in letter: it names no number outside the integral. Its accepted name is the variable of integration, or the dummy variable.</p>
+  <p data-pid="08b96d">That matters as soon as an end of the integral is itself a letter. In ∫ₛˣ f(x) dx the one letter x would be asked to do two jobs. It would be the fixed right end, and it would also run from s up to that end. 0a's rule is that a name names one thing at a time, so the inside letter is changed: ∫ₛˣ f(t) dt.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · a stand-in letter · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16a2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">∫₀² t² dt  and  ∫₀² x² dx</span></span>Say whether they are the same number, and why. <br>Name a letter that could not replace t in ∫₀ˣ t² dt.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="16a3">
+  <h2 class="sthead"><span class="stno">16a3</span>The area function</h2>
+  <p class="stands">Stands on 16a2 and 15e (interval-cut-in-two, the conventions).</p>
+  <p class="eqline" data-pid="0f60ca">From here on, if f is integrable on every closed interval inside an interval I, and s is in I, the area function of f from s is the function F on I with F(x) = ∫ₛˣ f(t) dt. F is a name, for a function, and F(x) packs the integral from s to x. Its accepted name is an integral function, or an accumulation function. It is sometimes also named the indefinite integral, a name 16c gives to something else.</p>
+  <p data-pid="3f7105">For x &gt; s this is rung 15's area, counted negative where f is below the axis. For x = s it is 0. For x &lt; s it is −∫ₓˢ f(t) dt, by 15e's convention. To work with it across all three cases, interval-cut-in-two is needed in every order.</p>
+  <p data-pid="73ff4d">Split-in-any-order technique: <b>if f is integrable on every closed interval inside I, then for any p, q, r in I, ∫ₚ^q f = ∫ₚ^r f + ∫ᵣ^q f.</b></p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the split-in-any-order technique">
+\text{swap } p, q:\ \text{both sides change sign} @@ 15e's convention on each of the three integrals; so take p ≤ q
+p = q:\ \ 0 = \textstyle\int_p^r f + \int_r^p f @@ 15e's convention, both ways round
+p \lt r \lt q:\ \text{interval-cut-in-two as it stands} @@ interval-cut-in-two (15e); parts-integrable for the pieces
+r \lt p \lt q:\ \textstyle\int_r^q = \int_r^p + \int_p^q,\ \text{so } \int_p^q = \int_p^r + \int_r^q @@ interval-cut-in-two on [r, q]; then 15e's convention for ∫ᵣᵖ
+p \lt q \lt r:\ \textstyle\int_p^r = \int_p^q + \int_q^r,\ \text{so } \int_p^q = \int_p^r + \int_r^q @@ interval-cut-in-two on [p, r]; then the convention for ∫_q^r
+r = p \text{ or } r = q:\ \text{one term is } 0 \quad \blacksquare @@ ∫ₚᵖ f = 0
+  </pre>
+  <p data-pid="e1eb40">So F(y) − F(x) = ∫ₓʸ f(t) dt for any x and y in I, whichever is larger and wherever s sits. The change in the area function between two points is the integral between them, and nothing else.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · the area function · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · the area so far, and the function it makes</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="chips" id="fch"></div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">x</span><input type="range" id="kx" min="-2" max="2" step="0.01" value="1.2"><output id="ox"></output></div>
+      <div class="kn"><span class="m">s</span><input type="range" id="ka" min="-2" max="2" step="0.5" value="0"><output id="oa"></output></div>
+      <div class="cap">Teal: the region from s to x where f is above the axis, counted plus. Plum: where f is below, counted minus. If x is left of s, every part counts the other way.</div>
+    </div>
+    <div class="panel">
+      <div class="lbl">F(x), the area so far, against x</div>
+      <canvas id="cvA"></canvas>
+      <div class="cap">Ink: F, drawn solid from s to x. Gold: the lines of slope M and −M through (x, F(x)), with M the largest |f| on the picture; area-never-jumps says F never leaves the region between them.</div>
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16a3.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(t) = k \text{ for every } t,"></span> <span data-tex-inline="F(x) = \int_0^x f(t)\,dt,"></span> <span data-tex-inline="F(4) = -10"></span></span>Find k.</li><li><span class="givens"><span data-tex-inline="F(x) = \int_0^x f(t)\,dt,"></span> <span data-tex-inline="F(2) = 5,"></span> <span data-tex-inline="F(7) = 1"></span></span>Find the integral of f from 2 to 7, and from 7 to 2.</li><li><span class="givens"><span data-tex-inline="F(x) = \int_s^x f(t)\,dt,"></span> <span data-tex-inline="F(3) = 0,"></span> <span data-tex-inline="F(x) \ne 0 \text{ for } x \ne 3"></span></span>Find s.</li><li><span class="givens"><span data-tex-inline="G(x) = \int_1^x f(t)\,dt,"></span> <span data-tex-inline="H(x) = \int_4^x f(t)\,dt,"></span> <span data-tex-inline="\int_1^4 f = 6"></span></span>Find G − H.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="16a4">
+  <h2 class="sthead"><span class="stno">16a4</span>A bound on the height bounds the change</h2>
+  <p class="stands">Stands on 16a3, 15e (smaller-function-smaller-area) and 11a (continuity).</p>
+  <p data-pid="0e4d4f">Area-bound technique: <b>if f is integrable on [p, q] and |f(t)| ≤ M for every t there, then |∫ₚ^q f| ≤ M(q − p).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the area-bound technique">
+-M \le f(t) \le M \text{ on } [p, q] @@ unpack-the-bars (8h)
+-M(q - p) \le \textstyle\int_p^q f \le M(q - p) @@ smaller-function-smaller-area (15e), its second form, with m = −M
+|\textstyle\int_p^q f| \le M(q - p) \quad \blacksquare @@ unpack-the-bars
+  </pre>
+  <p data-pid="89d15d">Area-never-jumps technique: <b>if f is integrable on [b₁, b₂] and s is in [b₁, b₂], the area function F of f from s is continuous on [b₁, b₂]. In fact, if |f| ≤ M there, |F(y) − F(x)| ≤ M|y − x| for all x and y in [b₁, b₂].</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the area-never-jumps technique">
+\text{some } M \text{ has } |f(t)| \le M \text{ on } [b_1, b_2] @@ 15c: integrable means bounded, then unpack-the-bars
+x \lt y:\ \ F(y) - F(x) = \textstyle\int_x^y f(t)\,dt @@ split-in-any-order
+|F(y) - F(x)| \le M(y - x) @@ area-bound on [x, y]; parts-integrable
+\text{fix } x, \varepsilon \gt 0;\ \ \delta = \tfrac{\varepsilon}{M + 1} @@ M + 1 &gt; 0, so δ &gt; 0
+|y - x| \lt \delta \Rightarrow |F(y) - F(x)| \le M|y - x| \lt (M + 1)\delta = \varepsilon @@ the bound, either order; order-and-arithmetic-agree
+\htmlClass{new}{F \text{ is continuous at every } x \text{ of } [b_1, b_2]} \quad \blacksquare @@ 11a's line; from one side at b₁ and b₂
+  </pre>
+  <p data-pid="c2cada">The bound M is one number for the whole interval, so a single δ serves every x at once: the area function is even uniformly continuous, in 15f's sense. And nothing was asked of f but an area. f may jump; F cannot.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · a bound on the height · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16a4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(t) = 2 − t on [0, 4]</span></span>Find an M with |f(t)| ≤ M on [0, 4], and bound |∫₀⁴ f| by area-bound. <br>Guess ∫₀⁴ f from the graph, then check it.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="16a5">
+  <h2 class="sthead"><span class="stno">16a5</span>Three area functions</h2>
+  <p class="stands">Stands on 16a3, 16a4 and 15h (exact areas).</p>
+  <pre class="lines" data-k="ember" data-label="this step: area functions worked out">
+f(t) = k:\ \ F(x) = \textstyle\int_a^x k\,dt = k(x - a) @@ 15c: a constant's sums are all k(x − a); for x &lt; a the convention
+f(t) = t,\ a = 0,\ x \ge 0:\ \ F(x) = \tfrac{x^2}{2} @@ 15d with b = x
+f(t) = t^2,\ a = 0,\ x \ge 0:\ \ F(x) = \tfrac{x^3}{3} @@ 15i's area-under-a-power with k = 2
+f = u \text{ on } [-1, 1],\ a = 0:\ \ F(x) = \begin{cases} 0 & x \le 0 \\ x & x \gt 0 \end{cases} @@ x &gt; 0: u = 1 on [0, x]; x &lt; 0: F(x) = −∫ₓ⁰ u, and on [x, 0] u is 0 but at 0, so the upper sums' last piece shrinks (everyday-counting-passes)
+  </pre>
+  <p data-pid="a014cd">The step u jumps at 0; its area function from 0 does not. It has a joint at 0, the shape of 13f's joints: arriving at the same height, leaving at a different rate. <b>Going from f to F has made things smoother: a jump has become a joint.</b></p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · three area functions · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16a5.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(t) = 3"></span></span>Find the area function of f from 2, and its values at 5 and at −1.</li><li><span class="givens"><span data-tex-inline="f(t) = t,"></span> <span data-tex-inline="x \ge 0"></span></span>Find the area function of f from 1.</li><li><span class="givens"><span data-tex-inline="\int_0^x x^2\,dx"></span></span>Rewrite the given so that it means what it was meant to.</li><li><span class="givens"><span data-tex-inline="|f| \le 4 \text{ on } [0, 10],"></span> <span data-tex-inline="F(x) = \int_0^x f(t)\,dt"></span></span>Find how far apart F(3) and F(3.25) can be.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="16a6">
+  <h2 class="sthead"><span class="stno">16a6</span>Illegal moves</h2>
+  <p class="stands">Stands on 16a1 to 16a5.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+F(x) = \textstyle\int_a^x f(x)\,dx\,? @@ one letter for the end and for the stand-in: 0a's rule
+F(x) \ge 0 \text{ always}\,? @@ for x &lt; a, or where f &lt; 0, F counts negative
+f \text{ jumps at } c, \text{ so } F \text{ jumps at } c\,? @@ area-never-jumps: F is continuous wherever f has an area
+\textstyle\int_p^q f = \int_p^r f + \int_r^q f \text{ needs } p \lt r \lt q\,? @@ split-in-any-order: any order, once the convention is in place
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16a6.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="u \text{ the step},"></span> <span data-tex-inline="f = 1 - u \text{ on } [-1, 1]"></span></span>Find the area function of f from 0, and the place where it has a joint.</li><li><span class="givens"><span data-tex-inline="q \text{ is 10d's Dirichlet function}"></span></span>Find a lower and an upper sum of q on [0, 1] for one partition.<br>What does “the area function of q from 0” name?</li><li><span class="givens"><span data-tex-inline="f(t) = 1/t^2 \text{ on } (0, 1],"></span> <span data-tex-inline="s = 1"></span></span>Run area-never-jumps's proof on the area function of f from s as far as you can take it, and write the line where its bound fails.</li><li><span class="givens"><span data-tex-inline="F(x) = \int_s^x f(t)\,dt,"></span> <span data-tex-inline="y &lt; x &lt; s,"></span> <span data-tex-inline="F(y) - F(x) = \int_x^y f"></span></span>Someone proved split-in-any-order only for its middle point between the ends, and then wrote the last given.<br>Write the line of the step they skipped.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">16a.4.1</span><span class="tagq">build</span>Make an f of your own on [0, 4] with jumps at 1 and at 3, and find its area function F from 2 on all of [0, 4].<br>By area-never-jumps, find one bound on how far F can move per unit of input there.<br>Find each joint of F, with its slopes from each side.</div>
+  <div class="chq"><span class="chid">16a.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="g \text{ continuous on } [0, 1]"></span></span>Prove or refute: g is the area function of something.</div>
+  <div class="chq"><span class="chid">16a.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\int_0^x f(t)\,dt = 0 \text{ for every } x"></span></span>Prove or refute: f is 0 at every t.</div>
+  <div class="chq"><span class="chid">16a.4.4</span><span class="tagq">seam</span>One of the two inventors of the calculus thought of an area as made by a line sweeping across, growing in time as the edge moves. The other wrote it as ∫, a sum of endlessly many thin strips, finished all at once. The quarrel between their followers ran through the eighteenth century. <br>In this step, is F(x) something that grows, or a list of finished numbers, one for each x? <br>Does it matter, if both give the same F?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r16.html">← 16 · running change backwards</a><a href="r16b.html">16b · its slope is the height →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>Mathematical quantities, Newton wrote, are not made of very small parts, but described by a continued motion: lines by the motion of points, surfaces by the motion of lines, and so on, as they are actually generated in nature and seen in the motion of bodies.</p><cite>Newton, Tractatus de quadratura curvarum (1704), introduction; paraphrase</cite></aside>
+  <p>In 16a.4.4, the sweeping line is Newton’s; the sum of strips, ∫, is Leibniz’s.</p>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+/* least and greatest of F.f on [lo, hi]: the ends, F's critical points inside, and a fine sample (exact between critical points for the functions used here) */
+function ext(F,lo,hi){ if(F.dir) return [0,1]; let m=Infinity,M=-Infinity; const t=x=>{ const v=F.f(x); if(v<m) m=v; if(v>M) M=v; };
+  t(lo); t(hi); (F.crit||[]).forEach(c=>{ if(c>lo&&c<hi) t(c); }); for(let k=1;k<64;k++) t(lo+(hi-lo)*k/64); return [m,M]; }
+function sums(F,pts){ let L=0,U=0; const ms=[],Ms=[]; for(let i=1;i<pts.length;i++){ const [m,M]=ext(F,pts[i-1],pts[i]), w=pts[i]-pts[i-1]; ms.push(m); Ms.push(M); L+=m*w; U+=M*w; } return {L,U,ms,Ms}; }
+const eq=(a,b,n)=>Array.from({length:n+1},(_,i)=>a+(b-a)*i/n);
+function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
+function boxes(P,pts,hs,stroke,fill,alpha){ const c=P.ctx; for(let i=1;i<pts.length;i++){ const a=pts[i-1],b=pts[i],h=hs[i-1]; c.globalAlpha=alpha; P.poly([[a,0],[b,0],[b,h],[a,h]],null,fill); c.globalAlpha=1; P.poly([[a,0],[b,0],[b,h],[a,h]],stroke,null,1.2); } }
+function dirDots(P,a,b){ const c=P.ctx; c.fillStyle=col('--ink'); for(let k=0;k<=300;k++){ const x=a+(b-a)*k/300; const y=(k%2)?0:1; c.fillRect(P.X(x)-1,P.Y(y)-1,2,2); } }
+/* shade between the graph of fn and the axis from lo to hi: above in pos colour, below in neg colour */
+function shade(P,fn,lo,hi,pos,neg,alpha){ if(hi<lo){ const t=lo; lo=hi; hi=t; } const c=P.ctx, N=300; c.globalAlpha=alpha==null?0.32:alpha;
+  for(let k=0;k<N;k++){ const x0=lo+(hi-lo)*k/N, x1=lo+(hi-lo)*(k+1)/N, xm=(x0+x1)/2, y=fn(xm); if(!isFinite(y)) continue; P.poly([[x0,0],[x1,0],[x1,fn(x1)],[x0,fn(x0)]],null,y>=0?pos:neg); }
+  c.globalAlpha=1; }
+function rangeOf(fn,lo,hi,pad){ let m=Infinity,M=-Infinity; for(let k=0;k<=400;k++){ const v=fn(lo+(hi-lo)*k/400); if(isFinite(v)){ if(v<m) m=v; if(v>M) M=v; } } if(m>0) m=0; if(M<0) M=0; const p=(M-m)*(pad==null?0.12:pad)||1; return [m-p,M+p]; }
+function chips(el,FN,get,setk,after){ Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===get()) b.className='on'; b.onclick=()=>{ setk(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+const Nw='\\htmlClass{new}';
+function gridFor(sp){ return sp>40?10:sp>16?4:sp>8?2:sp>3?1:sp>1.2?0.5:0.25; }
+function frame2(P,fn,lo,hi,pad){ const w=hi-lo; P.o.x=[lo-0.12*w,hi+0.08*w]; P.o.y=rangeOf(fn,lo,hi,pad==null?0.12:pad); const sx=P.o.x[1]-P.o.x[0], sy=P.o.y[1]-P.o.y[0]; let g=gridFor(sx); while(sy/g>24) g*=2; P.o.grid=g; }
+const num=(f,a,b,n)=>{ n=n||4000; const h=(b-a)/n; let s=0; for(let i=0;i<n;i++) s+=f(a+(i+0.5)*h)*h; return s; };
+const FN={
+  t:{lab:'t',f:t=>t,G:x=>x*x/2,M:2,tex:'t'},
+  t2:{lab:'t²',f:t=>t*t,G:x=>x*x*x/3,M:4,tex:'t^2'},
+  hill:{lab:'1 − t²',f:t=>1-t*t,G:x=>x-x*x*x/3,M:3,tex:'(1 - t^2)'},
+  u:{lab:'step u',f:t=>t<0?0:1,G:x=>Math.max(x,0),M:1,tex:'u(t)',step:true}
+};
+let key='hill';
+const kx=$('kx'),ka=$('ka'),cvF=$('cvF'),cvA=$('cvA');
+const F=x=>FN[key].G(x)-FN[key].G(+ka.value);
+const PF=plane(cvF,{x:[-2.3,2.3],y:[-3.5,4.5],grid:1,aspect:0.8,draw:P=>drawF(P)});
+const PA=plane(cvA,{x:[-2.3,2.3],y:[-3,3],grid:1,aspect:0.8,draw:P=>drawA(P)});
+[[PF,cvF],[PA,cvA]].forEach(([P,cv])=>Object.defineProperty(P.o,'aspect',{get:()=>cv.clientWidth>480?0.75:0.9}));
+function drawF(P){ const S=FN[key]; P.o.y=rangeOf(S.f,-2.3,2.3); P.axes(); const a=+ka.value,x=+kx.value;
+  shade(P,S.f,a,x,'--teal','--plum',0.34);
+  if(S.step){ P.line(-2.3,0,0,0,'--ink',2.6); P.line(0,1,2.3,1,'--ink',2.6); P.dot(0,1,'--ink',3.5); }
+  else curve(P,S.f,'--ink',2.6,-2.3,2.3);
+  P.line(a,P.o.y[0],a,P.o.y[1],'--muted',1.2,[4,4]); P.line(x,P.o.y[0],x,P.o.y[1],'--ember',1.8,[]); }
+function drawA(P){ const S=FN[key], a=+ka.value, x=+kx.value; P.o.y=rangeOf(F,-2.3,2.3,0.2); P.axes();
+  const Fx=F(x), M=S.M; P.line(-2.3,Fx+M*(-2.3-x),2.3,Fx+M*(2.3-x),'--gold',1.3,[6,4]); P.line(-2.3,Fx-M*(-2.3-x),2.3,Fx-M*(2.3-x),'--gold',1.3,[6,4]);
+  curve(P,F,'--muted',1.4,-2.3,2.3,[3,4]); curve(P,F,'--ink',2.6,Math.min(a,x),Math.max(a,x)); P.dot(a,0,'--muted',3.5); P.dot(x,Fx,'--ember',5); }
+function read(){ const S=FN[key], a=+ka.value, x=+kx.value, v=F(x); $('ox').textContent=mm(x,2); $('oa').textContent=mm(a,1);
+  const vd=$('vdF'); vd.className='verdict';
+  let msg='F('+mm(x,2)+') = '+mm(v,3)+(x<a?': x is left of s, so the area counts with the other sign.':x===a?': the area from s to s is 0.':'.');
+  if(S.step) msg+=' f jumps at 0; F does not: it has a joint there.';
+  vd.textContent=msg;
+  tex($('eqF'),R`\begin{gathered}F(x) = \textstyle\int_{${mm(a,1)}}^{x} ${S.tex}\,dt\\ F(${mm(x,2)}) = ${mm(v,3)},\ \ M = ${S.M}\end{gathered}`,true); }
+function all(){ PF.redraw(); PA.redraw(); read(); }
+kx.addEventListener('input',all); ka.addEventListener('input',all);
+chips($('fch'),FN,()=>key,k=>{ key=k; },all);
+/* numeric check of F against a fine Riemann sum */
+window.__pic={set:(k,x,a)=>{ [...$('fch').children][Object.keys(FN).indexOf(k)].click(); kx.value=x; ka.value=a; all(); return {F:+F(x).toFixed(5),num:+num(FN[k].f,a,x).toFixed(5),txt:$('vdF').textContent}; }};
+all();
+stepper('#sl1',[
+  {k:'ember',kl:'the stand-in letter',t:R`\textstyle\int_a^b f(x)\,dx = \int_a^b f(t)\,dt`,n:`The letter after d names no number outside.`}
+],{title:'The slides · a stand-in letter · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'the area function',t:R`${Nw}{F(x) = \textstyle\int_a^x f(t)\,dt}`,n:`The end moves; the stand-in letter is changed so it does not clash.`},
+  {k:'ember',kl:'split-in-any-order',t:R`\textstyle\int_p^q = \int_p^r + \int_r^q`,n:`Any order: interval-cut-in-two plus 15e's convention.`},
+  {k:'ember',kl:'the change',t:R`F(y) - F(x) = \textstyle\int_x^y f(t)\,dt`,n:`Wherever s sits.`}
+],{title:'The slides · the area function · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'area-bound',t:R`|f| \le M \Rightarrow |\textstyle\int_p^q f| \le M(q - p)`,n:`smaller-function-smaller-area with m = −M.`},
+  {k:'ember',kl:'area-never-jumps',t:R`${Nw}{|F(y) - F(x)| \le M|y - x|}`,n:`So F is continuous, with δ = ε/(M + 1).`}
+],{title:'The slides · a bound on the height · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'three area functions',t:R`k(x - a),\ \ \tfrac{x^2}{2},\ \ \tfrac{x^3}{3}`,n:`From 15c, 15d and 15i.`},
+  {k:'ember',kl:'the step',t:R`f = u:\ F(x) = 0 \text{ or } x`,n:`A jump in f; a joint in F.`}
+],{title:'The slides · three area functions · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`\textstyle\int_a^x f(x)\,dx`,n:`One name for two things.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

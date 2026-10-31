@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Can a guessed word break the machine?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r20phys.html">← 20·phys does light take the shortest path?</a><a href="r20chem.html">next: 20·chem can a molecule be left-handed? →</a></p>
+  <div class="tags"><span class="tag crypt">20·crypt · cryptography</span></div>
+  <h1>Can a guessed word break the machine?</h1>
+  <p>Can a guessed word break the machine? 19·crypt’s machine has about a hundred and sixty billion billion settings, far too many to try. But messages are not random. A weather station sends a forecast at six every morning, and the forecast says the word WEATHER somewhere near the start. Codebreakers called such a guess a crib. What makes it hard is that a crib gives a few letters, while the key is a setting of wheels and a board of pairs. This page shows, with 19·crypt’s algebra and 7e’s proof by contradiction, that a crib rules out places without trying a setting, that a loop in the crib makes the board cancel, and that every wrong setting then refutes itself.</p>
+  <p class="gesture">A crib cannot sit where any of its letters meets itself. Where a crib’s pairs form a loop, the board cancels from the loop’s shuffle, so a setting can be tested with no board at all. Guess where one letter is plugged, follow what it forces, and a wrong setting reaches a clash.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r19crypt.html">19·crypt</a> (through-and-back; no-self; self-undo), <a href="r19c.html">19c</a> (socks and shoes), <a href="r07e.html">7e</a> (proof by contradiction) and <a href="r04j.html">4j</a> (counting). Rung 22 and the statistics floor ask how likely a wrong setting is to survive by luck.</p></div>
+</header>
+
+<section class="class step" data-step="20crypt1">
+  <h2 class="sthead"><span class="stno">20crypt1</span>Where a crib can sit</h2>
+  <p class="stands">Stands on 19·crypt.3 (the no-self technique).</p>
+  <p data-pid="321a00">Write the crib under the secret text, and slide it along. At each place, the crib claims that the machine sent each crib letter to the secret letter above it. By no-self, the machine never sends a letter to itself.</p>
+  <p data-pid="22548a">Crib-place technique: <b>a crib cannot sit at any place where one of its letters lies under the same letter.</b> Each such place is ruled out without trying a single setting.</p>
+  <pre class="lines" data-k="ember" data-label="this page: sliding WEATHER under XWHAEQTRB">
+\begin{smallmatrix} X & W & H & A & E & Q & T \\ W & E & A & T & H & E & R \end{smallmatrix} @@ place 1: no letter meets itself, so it stays
+\begin{smallmatrix} W & H & A & E & Q & T & R \\ W & E & A & T & H & E & R \end{smallmatrix} @@ place 2: W over W, A over A, R over R
+\htmlClass{new}{\text{place 2 is ruled out}} \quad \blacksquare @@ no-self (19·crypt.3)
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · places · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">20·crypt.1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">secret text XWHAEQTRB,  crib WEATHER</span></span>Find every place the crib can sit, of the three. <br>Guess what share of places a 7-letter crib rules out, if the secret letters were random.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20crypt2">
+  <h2 class="sthead"><span class="stno">20crypt2</span>A loop makes the board cancel</h2>
+  <p class="stands">Stands on 20·crypt.1, 19·crypt.2 (through-and-back) and 19c (socks and shoes).</p>
+  <p data-pid="de0dd8">Number the letters of a placed crib 1, 2, 3, …. At letter i the machine’s shuffle is Eᵢ = P Mᵢ P, where P is the board and Mᵢ the wheels with the bounce wheel at that letter. P swaps pairs, so P P = e.</p>
+  <p data-pid="e44e4b">Suppose the crib pairs A with E at letter 1, E with T at letter 2, and T with A at letter 3. Then A goes to E, to T, and back to A: a loop. Loop technique: <b>round a loop in the crib, the board cancels, and the wheels alone keep the letter P(A).</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the loop technique">
+E_3 E_2 E_1\,A = A @@ round the loop
+P M_3 P\, P M_2 P\, P M_1 P\,A = A @@ through-and-back, at each letter
+P M_3 M_2 M_1 P\,A = A @@ P P = e, twice
+\htmlClass{new}{M_3 M_2 M_1\,(P A) = P A} \quad \blacksquare @@ apply P to both sides
+  </pre>
+  <p data-pid="d7e0c1">The board had 1.5 × 10¹⁴ settings. Round a loop, it has none: only the letter P(A) is unknown, and it has 26 values.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · the loop · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20·crypt.2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a crib pairing R–N at letter 4,  N–O at letter 6,  O–R at letter 9,  and N–G at letter 2</span></span>Find the loop, and the shuffle of wheels that must keep P(R). <br>Find which pair is not in the loop.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20crypt3">
+  <h2 class="sthead"><span class="stno">20crypt3</span>Every wrong setting refutes itself</h2>
+  <p class="stands">Stands on 20·crypt.2 and 7e (proof by contradiction).</p>
+  <p data-pid="80f221">Choose a setting of the wheels, so every Mᵢ is known. Guess P(A) = x. The crib then forces more of the board: at letter 1, P M₁ P A = E gives P(E) = M₁ x. Follow the crib letter by letter, writing down every pair of the board it forces.</p>
+  <p data-pid="50d04d">Clash technique: <b>if a guess forces one letter to be plugged to two different letters, the guess is refuted; if all 26 guesses are, the setting is.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the clash technique">
+\text{assume the setting, and } P(A) = x @@ aiming to refute
+P(E) = M_1 x,\ \ P(T) = M_2 M_1 x,\ \dots @@ forced by the crib, letter by letter
+P(L) = y \text{ and } P(L) = z,\ \ y \ne z @@ the board plugs each letter to one
+\bot,\ \ \text{so } P(A) \ne x @@ refute (7e)
+\htmlClass{new}{\text{all } 26 \text{ refuted} \Rightarrow \text{the setting is wrong}} \quad \blacksquare @@ refute the setting, the same way
+  </pre>
+  <p data-pid="acc445">A wrong setting does not need to be tried on the message. It throws itself out. The machines that hunted settings this way ran through every turn of the wheels and stopped only where no clash appeared. A stop was not a proof of the right setting, only a setting that survived; it was then tried by hand.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · clashes · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20·crypt.3.1</span><span class="ph undo">undo</span><span class="givens"><span class="gtx">at one setting, the guess P(A) = Q forces P(K) = D and, later, P(K) = F</span></span>Find what is refuted. <br>Find what must still be checked before the setting itself is refuted.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20crypt4">
+  <h2 class="sthead"><span class="stno">20crypt4</span>The work, counted</h2>
+  <p class="stands">Stands on 20·crypt.3, 19·crypt.4 (the settings) and 4j (counting).</p>
+  <pre class="lines" data-k="ember" data-label="this page: what is left to check">
+60 \cdot 26^3 = 1\,054\,560 @@ wheel orders and starting turns: the board is gone
+1\,054\,560 \cdot 26 \approx 2.7 \times 10^{7} @@ one guess for P(A) at each
+\htmlClass{new}{\tfrac{1.6 \times 10^{20}}{2.7 \times 10^{7}} \approx 6 \times 10^{12}} @@ how many times less work the loop leaves
+  </pre>
+  <p data-pid="02a02b"><b>A guessed word does not find the key; it lets every wrong key refute itself, fast.</b> A machine that ran through the 17 576 turns of one wheel order in about twenty minutes covers all 60 orders in twenty hours; a few dozen such machines finish within the hour.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · the count · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20·crypt.4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">wheels chosen in order from a box of 8,  one machine checking 17 576 turns in 20 minutes</span></span>Find the hours one machine needs for every wheel order. <br>Find how many machines finish it in 2 hours.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20crypt5">
+  <h2 class="sthead"><span class="stno">20crypt5</span>Illegal moves</h2>
+  <p class="stands">Stands on 20·crypt.1 to 20·crypt.4.</p>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{no clash, so this is the key}\,? @@ a survivor is not a proof; it may survive by luck
+\text{the board cancels for any crib}\,? @@ only round a loop, where P P meets P P
+\text{one refuted guess refutes the setting}\,? @@ all 26 guesses must fall
+\text{a crib can sit where one letter matches}\,? @@ no-self rules that place out
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20·crypt.5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span class="gtx">a crib with no loops</span></span>Find whether the loop technique can be used, and what is left of the board.</li><li><span class="givens"><span class="gtx">a setting where no guess for P(A) clashes</span></span>Find what is proved, and what is not.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">20·crypt.6.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">the crib pairs of 20·crypt.2.1</span></span>Build a second loop by adding one more pair to the crib, and write the two shuffles the wheels must satisfy.</div>
+  <div class="chq"><span class="chid">20·crypt.6.2</span><span class="tagq">edge</span>Find what the loop technique says for a loop of length 1: a crib letter paired with itself.</div>
+  <div class="chq"><span class="chid">20·crypt.6.3</span><span class="tagq">converse</span>A setting survives every guess but one. Must it be the key?</div>
+  <div class="chq"><span class="chid">20·crypt.6.4</span><span class="tagq">reroute</span>Show the board cancels round the loop by 19·crypt’s self-undo and socks and shoes, without writing Eᵢ = P Mᵢ P.</div>
+  <div class="chq"><span class="chid">20·crypt.6.5</span><span class="tagq">seam</span>The breakers never learned the key from the machine. They learned it from the people: their habits, their greetings, the weather at six. <br>Is a code broken by its mathematics, or by its users?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r20phys.html">← 20·phys · does light take the shortest path?</a><a href="r20chem.html">20·chem · can a molecule be left-handed? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A guessed word is a crib. The pairs of a placed crib, drawn as letters joined by numbered links, make the menu; its loops are closures. The machines that ran through the settings were the bombes, and a setting that survived was a stop. The clash technique runs on what is now called a contradiction search, and the board cancelling is a conjugate cancelling.</p>
+  <h3>Who said it first</h3>
+  <p>Marian Rejewski’s team built the first bomba in Warsaw (1938). Alan Turing designed the British bombe (1939–40) around cribs, and Gordon Welchman added the diagonal board, which carried each forced plug both ways and made clashes come faster. Weather reports, which repeated the same words daily, were among the best cribs. In 20·crypt.6.5, the British also counted on operators’ habits: lazy settings, repeated greetings, and the rule that no letter was its own secret.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="20·crypt: a worked “proof”, not allowed">
+\text{the bombe stopped at setting } s @@ fine
+\text{so } s \text{ is the key} @@ not allowed: a stop survived the clash test; it is a guess, not a proof
+\text{decode the whole day with } s @@ check first: wrong stops are common
+  </pre>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'crib place',t:R`\htmlClass{new}{\text{no letter over itself}}`,n:`Ruled out untried.`}
+],{title:'The slides · places · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'round the loop',t:R`\htmlClass{new}{M_3 M_2 M_1 (PA) = PA}`,n:`The board cancels.`}
+],{title:'The slides · the loop · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'clash',t:R`\htmlClass{new}{P(L) = y,\ P(L) = z,\ y \ne z}`,n:`The guess falls.`},
+  {k:'ember',kl:'the setting',t:R`26 \text{ guesses fall}`,n:`Then it falls.`}
+],{title:'The slides · clashes · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'left',t:R`\htmlClass{new}{60 \cdot 26^3 \cdot 26}`,n:`About 2.7 × 10⁷.`},
+  {k:'ember',kl:'saved',t:R`\approx 6 \times 10^{12}`,n:`Times less work.`}
+],{title:'The slides · the count · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`\text{no clash} \Rightarrow \text{key}\,?`,n:`Survived, not proved.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

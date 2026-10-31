@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>16·bio · How much of a dose is still in the blood?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input,.kn select{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r16nav.html">← 16·nav where am I now?</a><a href="r16logi.html">next: 16·logi how much is in the tank right now? →</a></p>
+  <div class="tags"><span class="tag bio">16·bio · biology</span></div>
+  <h1>How much of a dose is still in the blood?</h1>
+  <p>How much of a dose is still in the blood? A pill is swallowed, and over the next hour or so the drug soaks from the gut into the blood. All the while the liver and the kidneys are taking it out again. Nobody can see inside the body's books. A nurse can draw blood and measure how much drug is in each litre, but only now and then, and only as a level, never as an amount. What a doctor wants is how much of the dose the body took up at all, how much is still in it now, and how long the level stays where it helps without harming. The hard part is that the drug is coming in and going out at the same time, at rates nobody measures. This page finds the amount taken up as the area under the curve of blood level against time, by running a rate backwards. From a table of samples, thin strips estimate that area, and the samples leave a tail behind them. And two pills with the same area turn out not to do the same thing.</p>
+  <p class="gesture">The body clears the drug at a rate in proportion to its level in the blood. So the amount cleared up to any hour is that fixed proportion times the area under the level so far. Run to the end, everything taken up is cleared, so the amount taken up is the proportion times the whole area. Samples give the area by thin strips, and the time after the last sample adds a tail. Stretch a level curve so that it lasts longer and rises less high, and its area stays the same. So the area tells how much was taken up, but not how high the level went or for how long.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r16then.html">16·then</a> (net-change), <a href="r16c.html">16c</a> (area-is-a-change), <a href="r16d.html">16d</a> (substitution, straight-inside), <a href="r16i.html">16i</a> (out-to-forever), <a href="r15e.html">15e</a> (areas-add, areas-scale), <a href="r15h.html">15h</a> (sums of thin strips), <a href="r13i.html">13i</a> (the quotient rule), <a href="r14f.html">14f</a> (crest and trough), <a href="r12e.html">12e</a> (bisection). <a href="r17chem.html">17·chem</a> meets rates of clearing again, with logs.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · read it through, then work the picture and the slides</div>
+
+  <h3>The body's books</h3>
+  <p data-pid="ddf0fd">From here on, on this page, C(t) is the level of the drug in the blood, in milligrams a litre, t hours after the pill. Q(t) is the amount of drug in the body, in milligrams, and a(t) the rate at which it comes in from the gut, in milligrams an hour.</p>
+  <p data-pid="fa915f">The law, measured, with a range: the body clears the drug at a rate in proportion to its level, Cl · C(t) milligrams an hour. The fixed number Cl, in litres an hour, is the clearance. The law holds for most drugs at ordinary doses. It fails where the liver works flat out: alcohol, past a drink or so, is cleared at about a fixed amount an hour, whatever its level.</p>
+  <p data-pid="d84113">Dose-area technique: <b>the amount the body took up is the clearance times the whole area under the blood level.</b> Precisely: let Q(0) = 0, let a and C be continuous, and let Q′ = a − Cl · C. Let the amount taken up head to F · D as t grows, where D is the dose and F the share that reaches the blood, and let Q head to 0. Then F · D = Cl · ∫₀^∞ C(t) dt.</p>
+  <pre class="lines" data-k="ember" data-label="16·bio: the dose-area technique">
+Q(T) = Q(0) + \textstyle\int_0^T \big(a(t) - Cl \cdot C(t)\big)\,dt @@ net-change (16·then), with Q′ = a − Cl·C
+\textstyle\int_0^T a = Q(T) + Cl \int_0^T C @@ Q(0) = 0; areas-add, areas-scale (15e): what came in is what is still there plus what went out
+T \to \infty:\ \ \textstyle\int_0^T a \to F \cdot D,\ \ Q(T) \to 0 @@ the hypotheses: the dose is taken up and cleared in the end
+\htmlClass{new}{F \cdot D = Cl \cdot \textstyle\int_0^\infty C(t)\,dt} \quad \blacksquare @@ so the areas up to T head to F·D/Cl: the improper integral (16i)
+  </pre>
+  <p data-pid="3cb8d1">Its accepted name is the area under the curve, AUC. The units check: milligram hours a litre, times litres an hour, is milligrams. F is the bioavailability. Morphine swallowed as a pill reaches the blood at roughly a third of the dose, since the liver breaks much of it down on the way in.</p>
+  <h3>A pill, worked</h3>
+  <p data-pid="ec3974">A model of one pill: C(t) = 8t/(1 + t)³ mg/L, with clearance Cl = 5 L/h. The level starts at 0, rises, and falls away.</p>
+  <pre class="lines" data-k="ember" data-label="16·bio: the area under one pill">
+\textstyle\int_0^\infty \frac{8t}{(1 + t)^3}\,dt = 8 \int_1^\infty \frac{u - 1}{u^3}\,du @@ substitution (16d) with u = 1 + t, so du = dt; the ends 0 and ∞ go to 1 and ∞
+= 8\Big(\textstyle\int_1^\infty u^{-2}\,du - \int_1^\infty u^{-3}\,du\Big) @@ areas-add (15e)
+= 8\big(1 - \tfrac12\big) = \htmlClass{new}{4} \text{ mg·h/L} @@ out-to-forever (16i): 1/(p − 1) at p = 2 and at p = 3
+F \cdot D = 5 \cdot 4 = \htmlClass{new}{20} \text{ mg} @@ dose-area; if the pill held 25 mg, F = 0.8
+  </pre>
+  <p data-pid="2a424e">How much is still in? The antiderivative of (u − 1)/u³ is −1/u + 1/(2u²), so the area up to T is 4(1 − 1/(1 + T))². At T = 3 that is 4 · (3/4)² = 2.25 mg·h/L. The body has cleared 5 · 2.25 = 11.25 mg of the 20 it will take up. The other 8.75 mg is still in the body, or still in the gut on its way in. The books cannot tell those two apart without a(t).</p>
+  <pre class="lines" data-k="ember" data-label="16·bio: the peak">
+C'(t) = \tfrac{8(1 + t)^3 - 8t \cdot 3(1 + t)^2}{(1 + t)^6} = \tfrac{8(1 - 2t)}{(1 + t)^4} @@ the quotient rule (13i); cancel (1 + t)²
+C' \gt 0 \text{ on } [0, \tfrac12),\ \ C' \lt 0 \text{ after} @@ the sign of 1 − 2t
+C(\tfrac12) = \tfrac{4}{27/8} = \tfrac{32}{27} \approx \htmlClass{new}{1.19} \text{ mg/L} @@ crest (14f): the highest level, half an hour in
+  </pre>
+  <h3>From a table of samples</h3>
+  <p data-pid="6bffec">A lab cannot draw a curve. It draws blood at set times. Here are samples of the model above, to three figures, as a lab would take them. Each strip takes the average of the levels at its two ends, the averaged strip sum: the left and right sums of 15h, halved and added.</p>
+  <pre class="lines" data-k="ember" data-label="16·bio: ten samples">
+t:\ 0,\ 0.5,\ 1,\ 1.5,\ 2,\ 3,\ 4,\ 6,\ 8,\ 12 \text{ h} @@ closer together where the level changes fast
+C:\ 0,\ 1.185,\ 1,\ 0.768,\ 0.593,\ 0.375,\ 0.256,\ 0.140,\ 0.088,\ 0.044 @@ mg/L
+\textstyle\sum \Delta t_i\, \tfrac{C_{i-1} + C_i}{2} \approx \htmlClass{new}{3.31} \text{ mg·h/L} @@ the averaged strip sum to 12 h; the true area to 12 h is about 3.41
+\text{tail: } C \approx \tfrac{k}{t^2},\ k = 0.044 \cdot 144 \approx 6.34;\ \ \textstyle\int_{12}^\infty \tfrac{k}{t^2}\,dt = \tfrac{k}{12} \approx 0.53 @@ a guess at the shape after the last sample; out-to-forever (16i)
+\text{total} \approx 3.31 + 0.53 = 3.84 \text{ mg·h/L} @@ against 4: the strips cut the peak short, and the tail is a guess
+  </pre>
+  <p data-pid="f76eee">The last sample is not the end. After 12 hours the level is small, but it goes on for a long time, and here the time after the last sample holds about a seventh of the whole area. Every lab report of an area says how it filled in that tail.</p>
+  <h3>Same area, different pill</h3>
+  <p data-pid="e98ba6">Stretched-curve technique: <b>stretch a level curve to last k times longer and stand k times lower, and its area stays the same.</b> Precisely: for k > 0 let C_k(t) = (1/k) C(t/k). Then ∫₀^∞ C_k = ∫₀^∞ C, and C_k reaches its highest level k times later and k times lower.</p>
+  <pre class="lines" data-k="ember" data-label="16·bio: the stretched-curve technique">
+\textstyle\int_0^T \tfrac1k C\big(\tfrac tk\big)\,dt = \int_0^{T/k} C(s)\,ds @@ straight-inside (16d), s = t/k, so dt = k ds
+\htmlClass{new}{\textstyle\int_0^\infty C_k = \int_0^\infty C} \quad \blacksquare @@ as T heads to ∞, so does T/k (16i)
+C_k(k t_0) = \tfrac1k C(t_0) @@ the crest moves from t₀ to kt₀, and stands k times lower
+  </pre>
+  <p data-pid="13de30">A slow-release pill of the same drug is made to dissolve slowly. Model it as k = 2: C₂(t) = 2t/(1 + t/2)³. Same area, 4 mg·h/L, so the same 20 mg taken up. Its crest is 32/54 ≈ 0.59 mg/L, an hour in. Now let the drug help above 0.5 mg/L and harm above 1 mg/L.</p>
+  <pre class="lines" data-k="ember" data-label="16·bio: two pills, one area">
+C(t) = 1 \iff 8t = (1 + t)^3 \iff (t - 1)(t^2 + 4t - 1) = 0 @@ the quick pill at the harmful level
+t = \sqrt5 - 2 \approx 0.236 \text{ and } t = 1 @@ the quick pill is above 1 mg/L for about 46 minutes
+C(t) = 0.5 \text{ at } t \approx 0.08 \text{ and } 2.35 @@ bisection (12e) on 16t − (1 + t)³: above 0.5 mg/L for about 2.27 h
+C_2(t) = 0.5 \iff C(t/2) = 1 \iff t = 2(\sqrt5 - 2) \text{ or } t = 2 @@ the slow pill is above 0.5 mg/L from 0.47 h to 2 h, and never above 1
+  </pre>
+  <p data-pid="be9904">The quick pill helps for longer, and harms for three quarters of an hour. The slow pill never harms, and helps for about an hour and a half. The area cannot tell them apart. It says how much was taken up, not how high or when.</p>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · the ledger, closed at the end</div>
+    <p data-pid="487444">0c's ledger, again. 16·then kept a lake's books by the second. A body keeps a drug's books the same way, but nobody can read its columns. The blood level is the one window. The dose-area technique closes the books at the end, when everything taken up has gone out through the clearance, and only then.</p>
+    <p data-pid="24e9d0"><b>Every milligram taken up is still in the body, or has left it.</b></p>
+    <p data-pid="6ef580">Before the end, the books have a column nobody measures: what is still in the gut. After the end, the area alone says what came in. A drug that also leaves by the breath, or hides in fat for weeks, has another column, and a clearance read from the blood alone will miss it.</p>
+    <p class="bait" data-pid="19af0b">A dose goes straight into a vein, so all of it enters at once. Twelve hours later, the clearance times the area so far comes to 70% of the dose. Where is the other 30%?</p>
+  </aside>
+  <h3>Illegal moves</h3>
+  <pre class="lines" data-k="ember" data-label="16·bio: tempting, and not allowed">
+\textstyle\int_0^\infty C \text{ is the amount taken up}\,? @@ times the clearance: mg·h/L times L/h is mg
+\text{same area, same effect}\,? @@ the quick pill is above 1 mg/L for 46 minutes; the slow one never
+\text{the area is done at the last sample}\,? @@ here the tail after 12 h holds about 0.59 of the 4 mg·h/L
+\text{the higher peak took up more}\,? @@ the quick peak is twice the slow one; both took up 20 mg
+\text{the body clears a fixed amount each hour}\,? @@ in proportion to the level, for most drugs: Cl·C(t)
+  </pre>
+</section>
+
+<section class="pic" id="pic">
+  <div class="eyebrow">The picture · one area, two pills, and a table with a tail</div>
+  <div class="panels">
+    <div class="panel">
+      <div class="lbl">mg/L against hours: the quick pill and a stretched one</div>
+      <canvas id="cvA"></canvas>
+      <div class="kn"><span class="m">stretch k</span><input type="range" id="kk" min="1" max="4" step="0.25" value="2"><output id="ok"></output></div>
+      <div class="kn"><span class="m">hours T</span><input type="range" id="kT" min="0" max="24" step="0.25" value="3"><output id="oT"></output></div>
+      <div class="cap">Ink: the quick pill. Teal: the pill stretched k times, shaded up to T. The sand band runs from 0.5 to 1 mg/L, where the drug helps; above it, it harms.</div>
+      <div class="verdict" id="vdA"></div>
+    </div>
+    <div class="panel">
+      <div class="lbl">samples every h hours, averaged strips, and the tail</div>
+      <canvas id="cvS"></canvas>
+      <div class="kn"><span class="m">every h</span><input type="range" id="kh" min="0.25" max="4" step="0.25" value="1"><output id="oh"></output></div>
+      <div class="kn"><span class="m">last sample</span><input type="range" id="kL" min="4" max="24" step="1" value="12"><output id="oL"></output></div>
+      <div class="cap">Ember: the averaged strips through the samples of the quick pill. Plum: the tail guessed as k/t² after the last sample.</div>
+      <div class="verdict" id="vdS"></div>
+      <div class="eqbox" id="eqS"></div>
+    </div>
+  </div>
+</section>
+
+<section class="slides" id="sl1"><div class="eyebrow">The slides · the books; dose-area; units; one pill; still in; the peak; samples; the tail; stretched-curve; two pills; the ledger; illegal moves · ← → keys work</div></section>
+
+<section class="sayback">
+  <div class="eyebrow">Say it back · then work it</div>
+  <h2>Questions</h2>
+  <div class="phkey"></div>
+  <ol>
+    <li><span class="qid">16·bio.1</span><span class="gname">The area, and what it holds.</span><span class="gwhy">Do: build the page's pieces.</span>
+      <ol class="sub">
+        <li><span class="qid">16·bio.1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="C(t) = \tfrac{6t}{(1 + t)^3} \text{ mg/L},"></span> <span data-tex-inline="Cl = 4 \text{ L/h}"></span></span>Find the whole area, and the amount taken up.</li><li><span class="givens"><span data-tex-inline="t = 0,\ 1,\ 2,\ 4,\ 8 \text{ h},"></span> <span data-tex-inline="C:\ 0,\ 2.0,\ 1.6,\ 0.9,\ 0.3 \text{ mg/L}"></span></span>Find the averaged strip sum to 8 h.</li><li><span class="givens"><span class="gtx">50 mg straight into a vein at t = 0;</span> <span data-tex-inline="C(t) = \tfrac{10}{(1 + t)^2} \text{ mg/L}"></span></span>Find the whole area and the clearance.</li><li><span class="givens"><span data-tex-inline="C(t) = \tfrac{8t}{(1 + t)^3} \text{ mg/L},"></span> <span data-tex-inline="Cl = 5 \text{ L/h}"></span></span>Find the amount cleared in the first 2 hours.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">16·bio.2</span><span class="gname">From the area back.</span><span class="gwhy">Undo: run the page's techs backwards.</span>
+      <ol class="sub">
+        <li><span class="qid">16·bio.2.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="D = 40 \text{ mg},"></span> <span data-tex-inline="Cl = 6 \text{ L/h},"></span> <span data-tex-inline="\textstyle\int_0^\infty C = 5 \text{ mg·h/L}"></span></span>Find the share of the dose that reached the blood.</li><li><span class="givens"><span data-tex-inline="C(t) = \tfrac{kt}{(1 + t)^3},"></span> <span data-tex-inline="Cl = 5 \text{ L/h},"></span> <span data-tex-inline="30 \text{ mg taken up}"></span></span>Find k.</li><li><span class="givens"><span data-tex-inline="C_B(t) = \tfrac13 C_A\big(\tfrac t3\big),"></span> <span class="gtx">C<sub>A</sub> peaks at 1.2 mg/L at 0.5 h;</span> <span data-tex-inline="\textstyle\int_0^\infty C_A = 4"></span></span>Find B's peak, when it comes, and B's whole area.</li><li><span class="givens"><span data-tex-inline="C(t) = \tfrac{8t}{(1 + t)^3}"></span></span>Find the hour by which 90% of the whole area has passed.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">16·bio.3</span><span class="gname">Where it gives.</span><span class="gwhy">Bend: find where the techs stop working.</span>
+      <ol class="sub">
+        <li><span class="qid">16·bio.3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span class="gtx">cleared at a fixed 7 g/h while any is left;</span> <span class="gtx">day 1: C falls in a straight line from 0.8 g/L to 0 over 4 h;</span> <span class="gtx">day 2: from 0.4 g/L to 0 over 2 h</span></span>Find the area under each day's level, and the clearance dose-area would need each day.<br>Can one clearance serve both?</li><li><span class="givens"><span data-tex-inline="C(t) = \tfrac{8t}{(1 + t)^3},"></span> <span data-tex-inline="\text{samples at } 0,\ 1,\ 2,\ 3 \text{ h}"></span></span>Find the averaged strip sum to 3 h, and the true area to 3 h.<br>Which way is the sum off, and on which strip?</li><li><span class="givens"><span data-tex-inline="C_A(t) = \tfrac{8t}{(1 + t)^3},"></span> <span data-tex-inline="C_B(t) = \tfrac{2t}{(1 + t/2)^3}"></span></span>Prove or refute: of the two, the one with the lower peak spends longer above 0.6 mg/L.</li><li><span class="givens"><span data-tex-inline="C(t) = \tfrac{8t}{(1 + t)^3} + 0.1 \text{ mg/L},"></span> <span class="gtx">a drip that never stops</span></span>Find the whole area.<br>Which hypothesis of dose-area fails?</li></ol></li>
+      </ol></li>
+    <li class="optgroup"><span class="qid">16·bio.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder challenges that rely on your own making. The page is complete without these; the rung's star needs them.</span>
+      <ol class="sub">
+        <li class="opt"><span class="qid">16·bio.4.1</span><span class="tagq">build</span>Make two level curves of your own with the same whole area, one with a crest above 1 mg/L and one below.<br>Find each one's area, crest, and hours above 0.5 mg/L.</li>
+        <li class="opt"><span class="qid">16·bio.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\textstyle\int_0^\infty C = 4 \text{ mg·h/L per pill},"></span> <span data-tex-inline="Cl = 5 \text{ L/h},"></span> <span class="gtx">one pill every 6 h for weeks</span></span>Prove or refute: the average level over a long time comes to 2/3 mg/L.</li>
+        <li class="opt"><span class="qid">16·bio.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{two level curves},"></span> <span data-tex-inline="\text{the same whole area},"></span> <span data-tex-inline="\text{the same crest at the same hour}"></span></span>Prove or refute: the curves are the same.</li>
+        <li class="opt"><span class="qid">16·bio.4.4</span><span class="tagq">seam</span>A copy of a medicine is approved when its area and its crest, measured in volunteers, come out within 80% to 125% of the original's. For a few drugs the helpful and harmful levels lie close together, and some doctors hold that this is too loose for them. Others hold that the area and the crest already tell all that matters.<br>Do the area and the crest tell all that matters about a pill?</li>
+      </ol></li>
+  </ol>
+  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
+</section>
+
+<nav class="nextrung"><a href="r16nav.html">← 16·nav · where am I now?</a><a href="r16logi.html">16·logi · how much is in the tank right now? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>Dost stated that the area under the blood-level curve is the same whatever way a dose enters the blood, so long as all of it enters and the body clears it at a rate in proportion to its level; so the areas of two ways of giving a drug compare the amounts that reached the blood.</p><cite>Friedrich Hartmut Dost, Der Blutspiegel (1953); paraphrase</cite></aside>
+  <p>Torsten Teorell, in two papers of 1937, first described a drug's passage through the body as amounts flowing between compartments at rates in proportion to their levels. Dost's book of 1953 named the field pharmacokinetics and set out the law of corresponding areas, now often called Dost's law.</p>
+  <p>Accepted names: the area under the curve (AUC); clearance (CL); bioavailability (F); the peak level and its time (Cmax and tmax); the range between the helpful and harmful levels, the therapeutic window. A drug cleared at a fixed amount an hour, as alcohol is past small amounts, is said to follow zero-order elimination; one cleared in proportion to its level, first-order. Much of a swallowed drug lost in the liver before it reaches the rest of the body is the first-pass effect.</p>
+  <p>In 16·bio.4.4, the rule is bioequivalence: the 90% confidence range of the ratio of the copy's AUC and Cmax to the original's must fall within 80% to 125%. Health Canada narrows the AUC range to 90% to 112% for a short list of critical dose drugs, among them warfarin and cyclosporine.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="16·bio: a worked “proof”, not allowed">
+\text{pill A: } \textstyle\int_0^{12} C = 3.0;\ \ \text{pill B: } \int_0^{12} C = 3.4 @@ fine: both read from samples to 12 h
+\text{so B delivers more of the drug} @@ not allowed: the tails after 12 h are not counted, and a slow pill keeps more of its area in the tail
+\text{switch every patient to B} @@ false, until both areas are taken to the end
+  </pre>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '–'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+const Nw='\\htmlClass{new}';
+function axes2(P,gx,gy){ const c=P.ctx,o=P.o; c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ c.moveTo(P.X(x),P.Y(o.y[0])); c.lineTo(P.X(x),P.Y(o.y[1])); }
+  for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ c.moveTo(P.X(o.x[0]),P.Y(y)); c.lineTo(P.X(o.x[1]),P.Y(y)); } c.stroke();
+  c.strokeStyle=col('--muted'); c.lineWidth=1.3; c.beginPath(); if(o.y[0]<=0&&o.y[1]>=0){ c.moveTo(P.X(o.x[0]),P.Y(0)); c.lineTo(P.X(o.x[1]),P.Y(0)); } if(o.x[0]<=0&&o.x[1]>=0){ c.moveTo(P.X(0),P.Y(o.y[0])); c.lineTo(P.X(0),P.Y(o.y[1])); } c.stroke();
+  c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; const ly=Math.min(P.H-6,Math.max(12,P.Y(0)+14));
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ if(Math.abs(x)<1e-9) continue; c.fillText(+x.toFixed(6),P.X(x),ly); }
+  c.textAlign='right'; const lx=Math.max(32,Math.min(P.W-4,P.X(0)-5)); for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ if(Math.abs(y)<1e-9) continue; c.fillText(String(+y.toFixed(6)).replace('-','−'),lx,P.Y(y)+4); } }
+function nice(sp){ const raw=sp/6, p=Math.pow(10,Math.floor(Math.log10(raw))), m=raw/p; return (m<1.5?1:m<3.5?2:m<7.5?5:10)*p; }
+const kk=$('kk'),kT=$('kT'),kh=$('kh'),kL=$('kL'),cvA=$('cvA'),cvS=$('cvS');
+const C=t=>t<=0?0:8*t/Math.pow(1+t,3), Ck=(t,k)=>C(t/k)/k, area=T=>4*Math.pow(1-1/(1+T),2);
+const PA=plane(cvA,{x:[0,12],y:[0,1.4],grid:0,draw:P=>drawA(P)}); Object.defineProperty(PA.o,'aspect',{get:()=>cvA.clientWidth>480?0.7:0.85});
+const PS=plane(cvS,{x:[0,24],y:[0,1.4],grid:0,draw:P=>drawS(P)}); Object.defineProperty(PS.o,'aspect',{get:()=>cvS.clientWidth>480?0.7:0.85});
+function above(f,lev,T){ let s=0; const n=4000; for(let i=0;i<n;i++){ const t=(i+0.5)*T/n; if(f(t)>lev) s+=T/n; } return s; }
+function drawA(P){ const k=+kk.value, T=+kT.value; axes2(P,2,0.25); const c=P.ctx;
+  c.globalAlpha=0.35; P.poly([[0,0.5],[12,0.5],[12,1],[0,1]],null,'--sand'); c.globalAlpha=1;
+  const pts=[[0,0]]; for(let i=0;i<=200;i++){ const t=Math.min(T,12)*i/200; pts.push([t,Ck(t,k)]); } pts.push([Math.min(T,12),0]);
+  c.globalAlpha=0.25; P.poly(pts,null,'--teal'); c.globalAlpha=1;
+  P.fn(t=>C(t),'--ink',2.2); P.fn(t=>Ck(t,k),'--teal',2.4); }
+function drawS(P){ const h=+kh.value, Lt=+kL.value; axes2(P,4,0.25); const c=P.ctx;
+  for(let t=0;t<Lt-1e-9;t+=h){ const u=Math.min(Lt,t+h); c.globalAlpha=0.2; P.poly([[t,0],[u,0],[u,C(u)],[t,C(t)]],null,'--ember'); c.globalAlpha=1; P.poly([[t,0],[u,0],[u,C(u)],[t,C(t)]],'--ember',null,1); }
+  const kt=C(Lt)*Lt*Lt; P.fn(t=>t>=Lt?kt/(t*t):NaN,'--plum',2); P.fn(t=>C(t),'--ink',1.4,[4,4]);
+  for(let t=0;t<=Lt+1e-9;t+=h) P.dot(t,C(t),'--ink',3); }
+function read(){ const k=+kk.value, T=+kT.value, h=+kh.value, Lt=+kL.value;
+  $('ok').textContent=mm(k,2); $('oT').textContent=mm(T,2)+' h'; $('oh').textContent=mm(h,2)+' h'; $('oL').textContent=Lt+' h';
+  const so=area(T/k), help=above(t=>Ck(t,k),0.5,60*k), harm=above(t=>Ck(t,k),1,60*k);
+  const vA=$('vdA'); vA.className='verdict '+(harm>0?'lose':'win');
+  vA.textContent='Stretched '+mm(k,2)+' times: crest '+mm(32/27/k,3)+' mg/L at '+mm(k/2,2)+' h; whole area 4 mg·h/L. Up to '+mm(T,2)+' h: area '+mm(so,3)+', cleared '+mm(5*so,2)+' of 20 mg. Above 0.5 mg/L for '+mm(help,2)+' h; above 1 mg/L for '+mm(harm,2)+' h.';
+  let s=0; for(let t=0;t<Lt-1e-9;t+=h){ const u=Math.min(Lt,t+h); s+=(u-t)*(C(t)+C(u))/2; }
+  const tail=C(Lt)*Lt; const vS=$('vdS'); vS.className='verdict';
+  vS.textContent='Strips to '+Lt+' h: '+mm(s,3)+' (true '+mm(area(Lt),3)+'). Tail guess: '+mm(tail,3)+' (true '+mm(4-area(Lt),3)+'). Total '+mm(s+tail,3)+' against 4.';
+  tex($('eqS'),R`\textstyle\sum \Delta t\,\tfrac{C_{i-1}+C_i}{2} + \tfrac{k}{${Lt}} \approx ${mm(s,3)} + ${mm(tail,3)} = ${mm(s+tail,3)}`,true); }
+function all(){ PA.redraw(); PS.redraw(); read(); }
+[kk,kT,kh,kL].forEach(el=>el.addEventListener('input',all));
+window.__pic={set:(k,T,h,L)=>{ kk.value=k; kT.value=T; kh.value=h; kL.value=L; all(); return {so:+area(T/k).toFixed(4),harm:+above(t=>Ck(t,k),1,60*k).toFixed(3)}; }};
+all();
+stepper('#sl1',[
+  {k:'ember',kl:'the books',t:R`Q' = a - Cl \cdot C`,n:`In from the gut, out by the clearance.`},
+  {k:'ember',kl:'dose-area',t:R`${Nw}{F \cdot D = Cl \textstyle\int_0^\infty C}`,n:`net-change, run to the end.`},
+  {k:'ember',kl:'units',t:R`\tfrac{\text{mg·h}}{\text{L}} \cdot \tfrac{\text{L}}{\text{h}} = \text{mg}`,n:`Area times clearance is an amount.`},
+  {k:'ember',kl:'one pill',t:R`\textstyle\int_0^\infty \frac{8t}{(1+t)^3}\,dt = 4`,n:`substitution, then out-to-forever.`},
+  {k:'ember',kl:'still in',t:R`20 - 5 \cdot 2.25 = 8.75 \text{ mg}`,n:`At 3 h: in the body, or in the gut.`},
+  {k:'ember',kl:'the peak',t:R`C(\tfrac12) = \tfrac{32}{27}`,n:`The quotient rule; crest.`},
+  {k:'ember',kl:'samples',t:R`\textstyle\sum \Delta t\,\tfrac{C_{i-1} + C_i}{2} \approx 3.31`,n:`Averaged strips to 12 h.`},
+  {k:'ember',kl:'the tail',t:R`\tfrac{k}{12} \approx 0.53`,n:`The last sample is not the end.`},
+  {k:'ember',kl:'stretched-curve',t:R`${Nw}{\textstyle\int C_k = \int C}`,n:`k times longer, k times lower.`},
+  {k:'ember',kl:'two pills',t:R`0.236 \le t \le 1:\ C \gt 1`,n:`The quick pill harms; the slow one never does.`},
+  {k:'ember',kl:'the ledger',t:R`\text{in} = \text{still there} + \text{gone out}`,n:`Closed at the end.`},
+  {k:'ember',kl:'illegal',t:R`\text{same area} \ne \text{same effect}`,n:`The area says how much, not how high or when.`}
+],{title:'The slides · the books; dose-area; units; one pill; still in; the peak; samples; the tail; stretched-curve; two pills; the ledger; illegal moves · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Every polynomial splits in ℂ</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+.cl-lock{display:none;border-left:3px solid var(--gold);background:var(--sand);padding:10px 14px;border-radius:0 4px 4px 0;max-width:66ch}
+body.cl-locked .cl-lock{display:block} body.cl-locked .cl-body{display:none}
+.cl-lock button{margin-top:6px;font-size:.8rem}
+.claim{border:1px solid var(--grid);border-left:4px solid var(--teal);background:var(--card);border-radius:0 6px 6px 0;padding:10px 16px;max-width:66ch}
+.claim p{margin:.4em 0}
+ul.cl-adds{max-width:66ch;padding-left:1.1em} ul.cl-adds li{margin:.5em 0}
+ul.cl-adds .cl-w{display:none;color:var(--muted);font-style:italic}
+ul.cl-adds li.cl-wait .cl-t{display:none} ul.cl-adds li.cl-wait .cl-w{display:inline}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r25d.html">← 25d every polynomial has a root</a><a href="r25e.html">next: 25e roots in pairs →</a></p>
+  <div class="tags"><span class="tag concl">25·∎ · conclusion</span></div>
+  <h1>Every polynomial splits in ℂ</h1>
+  <p class="gesture">ℂ is a field with no order. Its size multiplies and obeys the triangle. Every polynomial that is not constant has a root there, and splits into one line factor for each power.</p>
+  <div class="ready"><h3>What this stands on</h3><p>The survey of <a href="r25.html">rung 25</a>, and its proof steps: <a href="r25a.html">25a</a> to <a href="r25d.html">25d</a>. It opens once 25d is ticked, and it gains a line each time you finish a step or annex after it.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The conclusion · the rung's claim, in full, and its proof</div>
+  <div class="cl-lock"><p>This page opens once every question on <a href="r25d.html">25d every polynomial has a root</a> is ticked. The claim below is proved from the steps of this rung, so it waits for them.</p><button type="button" class="cl-peek">reviewing the ladder? open it anyway</button></div>
+  <div class="cl-body">
+  <h3>What the rung set out to show</h3>
+  <p data-pid="149534">The survey of rung 25 asked whether the new numbers find every root. <b>Every polynomial that is not constant, with complex numbers in front, has a root in ℂ and splits there into line factors.</b> The price is order: ℂ has none.</p>
+  <p data-pid="839556"><a href="r25a.html">25a</a> joined the three pictures of ℂ and proved the flip keeps arithmetic. <a href="r25b.html">25b</a> showed no order fits. <a href="r25c.html">25c</a> proved sizes multiply and obey the triangle. <a href="r25d.html">25d</a> found a root of every polynomial. This page puts the claim together.</p>
+  <h3>The claim, in full</h3>
+  <div class="claim">
+  <p data-pid="7a25f2"><b>ℂ is a field with no order, with a size that multiplies and obeys the triangle, in which every polynomial of degree n ≥ 1 splits into n line factors.</b></p>
+  <p data-pid="36c7f8">ℝ sits inside ℂ as the floor, and the flip z ↦ z̄ keeps sums and products, with z z̄ = |z|².</p>
+  <p data-pid="8c6dd5">No choice of positives in ℂ obeys the three-way, positive-sum and positive-product techniques.</p>
+  <p data-pid="5cde16">|zw| = |z||w| and |z + w| ≤ |z| + |w| for all z, w in ℂ.</p>
+  <p data-pid="023053">If p(z) = a₀ + ⋯ + aₙzⁿ with n ≥ 1 and aₙ ≠ 0, then p(z) = aₙ(z − r₁)⋯(z − rₙ) for some r₁, …, rₙ in ℂ, and p has no other roots.</p>
+  </div>
+  <h3>The proof</h3>
+  <p data-pid="fd1f7e">Each part below is a technique already proved on a step of this rung. The proof cites them by name and joins them.</p>
+  <pre class="lines" data-k="ember" data-label="one system, and its flip">
+a \mapsto (a,0) \text{ keeps } +,\ \cdot,\ 0,\ 1 @@ the floor-inside technique (25a)
+\htmlClass{new}{\overline{zw} = \overline{z}\,\overline{w},\ \ z\overline{z} = |z|^2} \quad \blacksquare @@ the flip technique (25a)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="no order">
+x \ne 0 \Rightarrow x^2 \text{ positive, in any order} @@ positive-product and two negatives (25b)
+\htmlClass{new}{i^2 = -1 \text{ and } 1 \text{ both positive: no order}} \quad \blacksquare @@ the no-order technique (25b)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="size">
+|zw|^2 = (z\overline{z})(w\overline{w}) @@ the product-size technique (25c)
+\htmlClass{new}{|z+w| \le |z| + |w|} \quad \blacksquare @@ the plane-triangle technique (25c)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="every root">
+|z| \ge R \Rightarrow |p(z)| \ge \tfrac12|a_n||z|^n @@ the far-out technique (25d)
+|p(z_0)| \le |p(z)| \text{ for all } z @@ the lowest-size technique (25d)
+p(z_0) \ne 0 \Rightarrow \text{some } |p(z)| < |p(z_0)| @@ the push-down technique (25d)
+\htmlClass{new}{p = a_n(z - r_1)\cdots(z - r_n)} \quad \blacksquare @@ the root technique (25d)
+  </pre>
+  <p data-pid="d6ef53">So the survey’s title holds for every polynomial with complex numbers in front. The search for roots, begun with the quadratic formula, needs no new numbers past ℂ.</p>
+  <h3>What the rest of the rung adds</h3>
+  <p data-pid="36c1e1">Each step and annex after the proof steps adds a line to the claim. A line appears here once you have finished its page.</p>
+  <ul class="cl-adds">
+    <li data-after="r25e" data-pid="2235bc"><b><a href="r25e.html">25e roots in pairs</a></b>: <span class="cl-t">real polynomials have their roots in mirrored pairs, and split into real lines and quadratics; partial fractions, finished.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r25f" data-pid="a897a3"><b><a href="r25f.html">25f maps of the plane</a></b>: <span class="cl-t">z ↦ az + b turns, stretches and slides; z ↦ 1/z sends circles and lines to circles and lines.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r25cb7" data-pid="dec369"><b><a href="r25cb7.html">25·cb7 batteries</a></b>: <span class="cl-t">a cell’s voltage, its free energy, and electrolysis by counted charge.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r25chem" data-pid="6d3dc3"><b><a href="r25chem.html">25·chem why does a reaction stop halfway?</a></b>: <span class="cl-t">the balance of a reaction, found by solving a quadratic, and why a pushed balance pushes back.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r25eng" data-pid="73e96d"><b><a href="r25eng.html">25·eng why do stone arches stand?</a></b>: <span class="cl-t">a hanging chain, turned upside down, is an arch that only pushes.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r25econ" data-pid="821f87"><b><a href="r25econ.html">25·econ why do some countries grow richer?</a></b>: <span class="cl-t">a steady state that holds, and why saving more raises output but not its growth.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r25now" data-pid="feba99"><b><a href="r25now.html">25·now which numbers never escape?</a></b>: <span class="cl-t">the set of c for which z ↦ z² + c stays bounded from 0, and the question about it still open.</span><span class="cl-w">its line appears when you finish it.</span></li>
+  </ul>
+  <p data-pid="854f8f">That is every root, found. Every rung from here on computes in ℂ without a second thought. You have only just begun to see how much a quarter turn can hold.</p>
+  </div>
+</section>
+
+<nav class="nextrung"><a href="r25d.html">← 25d · every polynomial has a root</a><a href="r25e.html">25e · roots in pairs →</a></nav>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+  const need="r25d";
+  let p={}; try{ p=JSON.parse(LS.getItem('pages:done')||'{}')||{}; }catch(e){}
+  let peek=false; try{ peek=sessionStorage.getItem('cl:peek')==='1'; }catch(e){}
+  const done=k=>!!(p[k]&&p[k].v);
+  function apply(){
+    const open=peek||done(need);
+    document.body.classList.toggle('cl-locked',!open);
+    document.querySelectorAll('ul.cl-adds li[data-after]').forEach(li=>li.classList.toggle('cl-wait',!(peek||done(li.dataset.after))));
+    if(open&&done(need)){ const me=(location.pathname.split('/').pop()||'').replace(/\.html?$/,'');
+      if(window.MarksSync&&MarksSync.reportPage) MarksSync.reportPage(me,true,true,true,false);
+      else { try{ p[me]={v:true,a:true,o:true,h:false,t:Date.now()}; LS.setItem('pages:done',JSON.stringify(p)); }catch(e){} } }
+  }
+  const b=document.querySelector('.cl-peek'); if(b) b.addEventListener('click',()=>{ peek=true; try{ sessionStorage.setItem('cl:peek','1'); }catch(e){} apply(); });
+  apply();
+  try{ if(window.MarksSync&&MarksSync.pages) MarksSync.pages().then(q=>{ if(q){ p=Object.assign({},p,q); apply(); } },()=>{}); }catch(e){}
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

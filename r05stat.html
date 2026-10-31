@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>5·stat · Where is the middle of a list?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r05bio.html">← 5·bio why do peas come three to one?</a><a href="r05cb2.html">next: 5·cb2 classes of equal pairs →</a></p>
+  <div class="tags"><span class="tag stat">5·stat · statistics</span></div>
+  <h1>Where is the middle of a list?</h1>
+  <p>Where is the middle of a list? 4·stat could say which value of a list comes most often and how far apart its ends are. It could not say where the list's middle is, because the most natural middle, sharing the total out evenly, is a division, and divisions waited for rung 5. Now every division by a number other than 0 has an answer. This page finds two middles, the mean and the median, and asks when they disagree. Then it uses the mean to price a gamble. And it uses fractions to answer a question that most people, doctors included, get wrong: given that a test came back positive, what is the chance you have the disease? In this section we'll teach you what the middle of a list is, and what you can do because you know it.</p>
+  <p class="gesture">The mean is the total shared out evenly: add the values and divide by how many there are. The median is the middle of the sorted list. The mean always lies between the least and the greatest value; one wild value can drag it, while the median stays put. The expected value of a gamble is the mean of its payouts over equally likely cases. The chance of one thing given another is the count of cases with both, over the count of cases with the second.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r04stat.html">4·stat</a> (tallies, greatest-of-a-finite-set, chance), <a href="r05b.html">5b</a> (fractions), <a href="r05c.html">5c</a> (the order of fractions), <a href="r05f.html">5f</a> (adding-keeps-answers, multiplying-keeps-answers), <a href="r05g.html">5g</a> (decimals, percent), <a href="r04g.html">4g</a> (least-member). <a href="r08stat.html">8·stat</a> measures how far a list spreads from its middle; <a href="r05bio.html">5·bio</a> reads chances of peas the same way.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · read it through, then work the picture and the slides</div>
+
+  <h3>The mean</h3>
+  <p class="eqline" data-pid="c3f92e">From here on, for data x₀, …, x₍ₙ₋₁₎ of rationals with n ≠ 0, the mean is x̄ = (x₀ + ⋯ + x₍ₙ₋₁₎)/n, written with Σ as (Σᵢ xᵢ)/n. Its everyday name is the average. It is the one number that, put in every place instead of the values, keeps the total: n · x̄ = Σᵢ xᵢ.</p>
+  <p data-pid="76ba19">Mean-between technique: <b>the mean of data lies between its least value and its greatest, and equals either one only when all the values are equal.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the mean-between technique">
+\ell \le x_i \le g \text{ for each } i @@ ℓ least, g greatest (least-member, 4·stat's greatest-of-a-finite-set)
+n\ell \le \textstyle\sum_i x_i \le ng @@ add n such inequalities, one place at a time (5c: adding keeps order), by induction on n
+\ell \le \bar x \le g @@ divide by n &gt; 0, which keeps order (5c)
+\htmlClass{new}{\bar x = \ell \Rightarrow \text{every } x_i = \ell} \quad \blacksquare @@ if some xᵢ &gt; ℓ, that place makes the sum strictly greater than nℓ; the same at g
+  </pre>
+  <p data-pid="b7d757">Shift-and-stretch technique: <b>if each value x is replaced by rx + b, for rationals r and b, the mean becomes r x̄ + b.</b> Σᵢ(rxᵢ + b) = r Σᵢ xᵢ + nb, by 5c's rules and induction; divide by n. So the mean of temperatures in degrees Celsius, turned into Fahrenheit, is the Fahrenheit of the mean.</p>
+
+  <h3>The median</h3>
+  <p data-pid="4e672b">Sorting technique: <b>for every list of rationals there is a list with the same tally for every value whose values never go down: y₀ ≤ y₁ ≤ ⋯ ≤ y₍ₙ₋₁₎. There is only one such list.</b> By induction on n: put first a place holding the least value, then the rest of the list sorted. Two sorted lists with the same tallies agree place by place, by comparing their first places and then the rest. Its accepted name is the list sorted in order.</p>
+  <p class="eqline" data-pid="26c000">From here on, the median of data with sorted list y is y₍ₘ₎ when n = 2m + 1, and (y₍ₘ₋₁₎ + y₍ₘ₎)/2 when n = 2m with m ≥ 1. Median-halves technique: <b>at least half of the values are at most the median, and at least half are at least it.</b> In the odd case, y₀ to y₍ₘ₎ are m + 1 values, more than n/2. In the even case, y₀ to y₍ₘ₋₁₎ are m values, at most the median, since the median lies between y₍ₘ₋₁₎ and y₍ₘ₎ (5e).</p>
+  <p data-pid="f1c48f">The median of the lower half of the sorted list, leaving out the middle value when n is odd, is the first quartile Q₁. The median of the upper half is the third quartile Q₃, and the median itself is Q₂. Other books split the halves in slightly other ways, and get slightly other quartiles; this ladder uses this one. The least value, Q₁, the median, Q₃ and the greatest value have the accepted name the five-number summary, and Q₃ − Q₁ is the interquartile range, or IQR. A statistician in the 1970s drew the five numbers as a box from Q₁ to Q₃, with a line at the median and whiskers out to the ends: the box plot. He flagged a value more than 1.5 · IQR beyond the box as an outlier.</p>
+  <pre class="lines" data-k="ember" data-label="this page: worked">
+80, 95, 102, 110, 118, 125, 131, 140, 160 @@ nine winter power bills in Redding, in dollars, sorted
+\text{median } 118;\ \ Q_1 = \tfrac{95 + 102}{2} = 98.5,\ \ Q_3 = \tfrac{131 + 140}{2} = 135.5 @@ m = 4; the halves leave out y₄
+\bar x = \tfrac{1061}{9} \approx 117.9 @@ close to the median: the bills are spread evenly
+160 \to 520:\ \ \bar x = \tfrac{1421}{9} \approx 157.9,\ \ \text{median } 118 @@ one bill with a hot tub drags the mean above eight of the nine; IQR 37, and 520 &gt; 135.5 + 55.5: an outlier
+  </pre>
+
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · two sizes of truth</div>
+    <p data-pid="aa7fcb">1e set two sizes of truth beside every and some, and 2a met them again: a set is its members, and a member is not the set. The mean lives at the size of the crowd. The nine bills average about $117.90, and no household paid that. Mean-between says the mean sits among the values, not that it is one of them.</p>
+    <p data-pid="78bc42"><b>Say which size your statement lives at: the average household is a fact about the crowd, not about any household in it.</b></p>
+    <p data-pid="a6c1d2">The median is a crowd-statement too, of another kind. One bill of $520 drags the mean above eight of the nine, and leaves the median at $118. The two numbers answer two questions about one crowd, and the hot tub shows which question each one answers. 4·stat's tally table kept the crowd's shape; these numbers each keep one fact about it.</p>
+    <p class="bait" data-pid="065ede">A town's mean household income goes up when one very rich family moves in. Did anyone in the town get richer?</p>
+  </aside>
+
+  <h3>The price of a gamble</h3>
+  <p class="eqline" data-pid="f4dcd5">From here on, when n cases are taken to be equally likely and k of them give an event A, the chance of A is the fraction k/n, written P(A). This is 4·stat's chance, k of n, now written as a fraction (5b). It lies between 0 and 1, since 0 ≤ k ≤ n.</p>
+  <p class="eqline" data-pid="9e2dc9">From here on, suppose n cases are taken as equally likely, and each case c brings a payout X(c), a rational. Then the expected value of X, written E X, is the mean of the payouts over the n cases. It is what the gamble is worth on average, case for case.</p>
+  <p data-pid="146386">Expected-values-add technique: <b>E(X + Y) = E X + E Y, and E(rX + b) = r E X + b. Grouping the cases by payout, E X is the sum over the payouts v of v times the chance that X = v.</b> The first two are shift-and-stretch and the rule that a sum of sums can be added in either order (5c, by induction). For the third, the cases with X = v form a pile of size k, contributing kv to the total, and kv/n = v · (k/n).</p>
+  <pre class="lines" data-k="ember" data-label="this page: worked">
+\text{one die: } \tfrac{1 + 2 + 3 + 4 + 5 + 6}{6} = \tfrac72 @@ the mean over 6 cases
+\text{two dice, the total: } \tfrac72 + \tfrac72 = 7 @@ expected-values-add, without listing the 36 cases
+\text{pay } 1,\ \text{win } 5 \text{ on a total of } 7 @@ chance 6/36 = 1/6: E = 5 · 1/6 − 1 = −1/6 per play
+  </pre>
+
+  <h3>Chance given that</h3>
+  <p class="eqline" data-pid="247880">From here on, take events A and B among equally likely cases, with B holding at least one case. The chance of A given B, written P(A | B), is the number of cases in both A and B over the number in B. It is the chance of A when the cases are cut down to those in B.</p>
+  <p data-pid="a6c8b6">Chance-product technique: <b>P(A and B) = P(B) · P(A | B).</b> With k cases in both, j in B and n in all, k/n = (j/n)(k/j), by 5b's rules. Turned-chance technique (Bayes'): <b>if A and B each hold a case, P(B | A) = P(A | B) · P(B) / P(A).</b> Chance-product twice, with A and B in each order, gives P(A) · P(B | A) = P(B) · P(A | B), and P(A) ≠ 0. The accepted name for the chance of A given B is a conditional probability: a chance under a condition.</p>
+  <pre class="lines" data-k="ember" data-label="this page: worked">
+\begin{aligned}&1000 \text{ tanoaks; } 20 \text{ infected}\\ &\quad\text{with sudden oak death}\end{aligned} @@ in a stand in Marin, say
+\begin{aligned}&\text{the test flags } 18 \text{ of the } 20,\\ &\quad \ \text{and } 49 \text{ of the } 980 \text{ healthy}\end{aligned} @@ it catches 9 in 10, and wrongly flags 1 healthy tree in 20
+P(\text{infected} \mid \text{flagged}) = \tfrac{18}{18 + 49} = \tfrac{18}{67} \approx 0.27 @@ chance-product's count; turned-chance gives the same: (9/10)(20/1000)/(67/1000)
+  </pre>
+  <p data-pid="d6ddcf">So a flagged tree is still more likely healthy than not. Most people asked guess nine in ten, because they hear how often the test catches the disease and forget how many healthy trees there are to flag.</p>
+
+  <h3>Illegal moves</h3>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed">
+\text{the mean is one of the values}\,? @@ the mean of 1 and 2 is 3/2, which is neither
+\text{the median of } 3, 9, 1 \text{ is } 9\,? @@ sort first: 1, 3, 9, so 3
+P(A \mid B) = P(B \mid A)\,? @@ 18/20 against 18/67: turned-chance says how they differ
+\text{a gamble with } E X \gt 0 \text{ always wins}\,? @@ it wins on average over the cases; any one play can lose
+  </pre>
+</section>
+
+<section class="pic" id="pic">
+  <div class="eyebrow">The picture · a box plot that stays put while the mean moves, and a test that flags</div>
+  <div class="panels">
+    <div class="panel">
+      <div class="lbl">nine power bills; the largest set by hand</div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">last bill</span><input type="range" id="kb" min="140" max="600" step="5" value="160"><output id="ob"></output></div>
+      <div class="cap">Dots: the bills. Ink: the box plot, whiskers to the fences or the ends. Plum: the median. Ember: the mean. A ring marks an outlier.</div>
+    </div>
+    <div class="panel">
+      <div class="lbl">1000 trees, sorted twice: infected or not, flagged or not</div>
+      <canvas id="cvL"></canvas>
+      <div class="kn"><span class="m">infected</span><input type="range" id="ki" min="5" max="300" step="5" value="20"><output id="oi"></output></div>
+      <div class="kn"><span class="m">caught /10</span><input type="range" id="ks" min="5" max="10" step="1" value="9"><output id="os"></output></div>
+      <div class="kn"><span class="m">false /100</span><input type="range" id="kf" min="0" max="30" step="1" value="5"><output id="of"></output></div>
+      <div class="cap">Left column: infected trees; right: healthy. Plum: flagged and infected. Ember: flagged and healthy. Of all flagged trees, the plum share is P(infected | flagged).</div>
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+</section>
+
+<section class="slides" id="sl1"><div class="eyebrow">The slides · the mean; mean-between; shift-and-stretch; sorting; the median; median-halves; quartiles and the box plot; expected value; expected-values-add; chance given that; chance-product; turned-chance; the oak test; illegal moves · ← → keys work</div></section>
+
+<section class="sayback">
+  <div class="eyebrow">Say it back · then work it</div>
+  <h2>Questions</h2>
+  <div class="phkey"></div>
+  <ol>
+    <li><span class="qid">5·stat.1</span><span class="gname">Middles.</span><span class="gwhy">Do: build the page's pieces.</span>
+      <ol class="sub">
+        <li><span class="qid">5·stat.1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="L: 12, 7, 3, 14, 9, 7, 30, 11"></span></span>Find the mean and the median of L.</li><li>Find the five-number summary and the IQR of L, and every outlier, if there is one.</li><li><span class="givens"><span data-tex-inline="\text{a spinner pays } 0, 2 \text{ or } 10"></span> <span data-tex-inline="\text{in } 5, 4 \text{ and } 1 \text{ of } 10"></span> <span data-tex-inline="\text{equally likely cases}"></span></span>Find its expected value.</li><li><span class="givens"><span data-tex-inline="200 \text{ students};\ 120 \text{ ride a bus},"></span> <span data-tex-inline="45 \text{ of those late}"></span> <span data-tex-inline="\text{at least once a week};"></span> <span data-tex-inline="20 \text{ of the other } 80 \text{ late}"></span></span>Find the chance a bus rider is late, and the chance a late student rides a bus.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">5·stat.2</span><span class="gname">From the middle back.</span><span class="gwhy">Undo: run the page's techs backwards.</span>
+      <ol class="sub">
+        <li><span class="qid">5·stat.2.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{four tests average } 82"></span></span>Find the fifth score that makes the average 85.</li><li><span class="givens"><span data-tex-inline="\text{five values},"></span> <span data-tex-inline="\text{median } 10,\ \text{mean } 20"></span></span>Write one such list.</li><li><span class="givens"><span data-tex-inline="\text{a game costs } 3,"></span> <span data-tex-inline="\text{pays } 12 \text{ on a win}"></span></span>Find the chance of winning that makes it fair, with expected value 0.</li><li><span class="givens"><span data-tex-inline="P(A \mid B) = 1/4,"></span> <span data-tex-inline="P(B) = 2/5,\ P(A) = 1/5"></span></span>Find the chance of B given A.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">5·stat.3</span><span class="gname">Where it gives.</span><span class="gwhy">Bend: find where the techs stop working.</span>
+      <ol class="sub">
+        <li><span class="qid">5·stat.3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{mean-between’s proof}"></span> <span data-tex-inline="\text{divides by } n"></span></span>Find the mean of a list with no values.</li><li>Settle whether shift-and-stretch, which works for the mean, works for the median, for the IQR and for the range.</li><li>Find a list where the mean and the median are far apart, and one where every value is a mode.</li><li><span class="givens"><span data-tex-inline="\text{the oak test}"></span></span>Find what happens to the chance a flagged tree is infected as the false flags go to 0, and as infected trees grow common.</li></ol></li>
+      </ol></li>
+    <li class="optgroup"><span class="qid">5·stat.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder challenges that rely on your own making. The page is complete without these; the rung's star needs them.</span>
+      <ol class="sub">
+        <li class="opt"><span class="qid">5·stat.4.1</span><span class="tagq">build</span>Choose ten listings of rents in Modesto or in Portland, find their mean and median, then raise the highest rent by 1000 and find both again.<br>Design a raffle for a school fundraiser in Missoula, with price, prizes and number of tickets, so that its expected value per ticket is the negative of half the price.</li>
+        <li class="opt"><span class="qid">5·stat.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{The mean keeps the total.}"></span></span>Find a middle that keeps the product, so that putting it in every place gives the same product, for 2 and 8, and for 1 and 2.<br>Settle whether it is always a fraction.</li>
+        <li class="opt"><span class="qid">5·stat.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="P(A \mid B) = P(A)"></span></span>Settle whether the chance of B given A must then be the chance of B.</li>
+        <li class="opt"><span class="qid">5·stat.4.4</span><span class="tagq">world</span>Make up a test of your own for a rare condition, and show with a count of 1000 that a positive result is still more likely wrong than right.</li>
+        <li class="opt"><span class="qid">5·stat.4.5</span><span class="tagq">seam</span>The turned-chance technique turns how likely the evidence is, given a cause, into how likely the cause is, given the evidence. Its first publisher offered it to answer a philosopher who said no number of sunrises proves the sun will rise tomorrow. Was the philosopher answered?<br>What chance does the technique need before it can start?</li>
+      </ol></li>
+  </ol>
+  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
+</section>
+
+<nav class="nextrung"><a href="r05i.html">← 5i · ratio, proportion and units</a><a href="r05cb2.html">5·cb2 · classes of equal pairs →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>The turned-chance technique is from Thomas Bayes’s essay, published in 1763, after his death, by Richard Price, who offered it as an answer to David Hume on the sunrise. The box plot is John Tukey’s, from 1977.</p>
+  <h3>Accepted names</h3>
+  <p>The turned-chance technique is Bayes’ theorem, or Bayes’ rule. The chance of A given B is a conditional probability.</p>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '–'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+/* least and greatest of F.f on [lo, hi]: the ends, F's critical points inside, and a fine sample (exact between critical points for the functions used here) */
+function ext(F,lo,hi){ if(F.dir) return [0,1]; let m=Infinity,M=-Infinity; const t=x=>{ const v=F.f(x); if(v<m) m=v; if(v>M) M=v; };
+  t(lo); t(hi); (F.crit||[]).forEach(c=>{ if(c>lo&&c<hi) t(c); }); for(let k=1;k<64;k++) t(lo+(hi-lo)*k/64); return [m,M]; }
+function sums(F,pts){ let L=0,U=0; const ms=[],Ms=[]; for(let i=1;i<pts.length;i++){ const [m,M]=ext(F,pts[i-1],pts[i]), w=pts[i]-pts[i-1]; ms.push(m); Ms.push(M); L+=m*w; U+=M*w; } return {L,U,ms,Ms}; }
+const eq=(a,b,n)=>Array.from({length:n+1},(_,i)=>a+(b-a)*i/n);
+function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
+function boxes(P,pts,hs,stroke,fill,alpha){ const c=P.ctx; for(let i=1;i<pts.length;i++){ const a=pts[i-1],b=pts[i],h=hs[i-1]; c.globalAlpha=alpha; P.poly([[a,0],[b,0],[b,h],[a,h]],null,fill); c.globalAlpha=1; P.poly([[a,0],[b,0],[b,h],[a,h]],stroke,null,1.2); } }
+function dirDots(P,a,b){ const c=P.ctx; c.fillStyle=col('--ink'); for(let k=0;k<=300;k++){ const x=a+(b-a)*k/300; const y=(k%2)?0:1; c.fillRect(P.X(x)-1,P.Y(y)-1,2,2); } }
+/* shade between the graph of fn and the axis from lo to hi: above in pos colour, below in neg colour */
+function shade(P,fn,lo,hi,pos,neg,alpha){ if(hi<lo){ const t=lo; lo=hi; hi=t; } const c=P.ctx, N=300; c.globalAlpha=alpha==null?0.32:alpha;
+  for(let k=0;k<N;k++){ const x0=lo+(hi-lo)*k/N, x1=lo+(hi-lo)*(k+1)/N, xm=(x0+x1)/2, y=fn(xm); if(!isFinite(y)) continue; P.poly([[x0,0],[x1,0],[x1,fn(x1)],[x0,fn(x0)]],null,y>=0?pos:neg); }
+  c.globalAlpha=1; }
+function rangeOf(fn,lo,hi,pad){ let m=Infinity,M=-Infinity; for(let k=0;k<=400;k++){ const v=fn(lo+(hi-lo)*k/400); if(isFinite(v)){ if(v<m) m=v; if(v>M) M=v; } } if(m>0) m=0; if(M<0) M=0; const p=(M-m)*(pad==null?0.12:pad)||1; return [m-p,M+p]; }
+function chips(el,FN,get,setk,after){ Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===get()) b.className='on'; b.onclick=()=>{ setk(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+const Nw='\\htmlClass{new}';
+function gridFor(sp){ return sp>40?10:sp>16?4:sp>8?2:sp>3?1:sp>1.2?0.5:0.25; }
+function frame2(P,fn,lo,hi,pad){ const w=hi-lo; P.o.x=[lo-0.12*w,hi+0.08*w]; P.o.y=rangeOf(fn,lo,hi,pad==null?0.12:pad); const sx=P.o.x[1]-P.o.x[0], sy=P.o.y[1]-P.o.y[0]; let g=gridFor(sx); while(sy/g>24) g*=2; P.o.grid=g; }
+const num=(f,a,b,n)=>{ n=n||4000; const h=(b-a)/n; let s=0; for(let i=0;i<n;i++) s+=f(a+(i+0.5)*h)*h; return s; };
+/* axes with separate steps across and up */
+function axes2(P,gx,gy){ const c=P.ctx,o=P.o; c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ c.moveTo(P.X(x),P.Y(o.y[0])); c.lineTo(P.X(x),P.Y(o.y[1])); }
+  for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ c.moveTo(P.X(o.x[0]),P.Y(y)); c.lineTo(P.X(o.x[1]),P.Y(y)); } c.stroke();
+  c.strokeStyle=col('--muted'); c.lineWidth=1.3; c.beginPath(); if(o.y[0]<=0&&o.y[1]>=0){ c.moveTo(P.X(o.x[0]),P.Y(0)); c.lineTo(P.X(o.x[1]),P.Y(0)); } if(o.x[0]<=0&&o.x[1]>=0){ c.moveTo(P.X(0),P.Y(o.y[0])); c.lineTo(P.X(0),P.Y(o.y[1])); } c.stroke();
+  c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; const ly=Math.min(P.H-6,Math.max(12,P.Y(0)+14));
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ if(Math.abs(x)<1e-9) continue; c.fillText(+x.toFixed(6),P.X(x),ly); }
+  c.textAlign='right'; const lx=Math.max(32,Math.min(P.W-4,P.X(0)-5)); for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ if(Math.abs(y)<1e-9) continue; c.fillText(String(+y.toFixed(6)).replace('-','−'),lx,P.Y(y)+4); } }
+function nice(sp){ const raw=sp/6, p=Math.pow(10,Math.floor(Math.log10(raw))), m=raw/p; return (m<1.5?1:m<3.5?2:m<7.5?5:10)*p; }
+function arrow(P,x1,y1,x2,y2,colr,w){ P.line(x1,y1,x2,y2,colr,w||2.2); const c=P.ctx, X1=P.X(x1),Y1=P.Y(y1),X2=P.X(x2),Y2=P.Y(y2), L=Math.hypot(X2-X1,Y2-Y1); if(L<2) return; const ux=(X2-X1)/L, uy=(Y2-Y1)/L, h=9; c.fillStyle=col(colr); c.beginPath(); c.moveTo(X2,Y2); c.lineTo(X2-h*ux-0.5*h*uy,Y2-h*uy+0.5*h*ux); c.lineTo(X2-h*ux+0.5*h*uy,Y2-h*uy-0.5*h*ux); c.closePath(); c.fill(); }
+function fillA(P,pts,colr,alpha){ const c=P.ctx; c.globalAlpha=alpha==null?0.2:alpha; P.poly(pts,null,colr); c.globalAlpha=1; }
+const sq1=P=>Object.defineProperty(P.o,'aspect',{get:()=>1});
+function rightMark(P,qx,qy,ax,ay,bx,by,s,colr){ const la=Math.hypot(ax-qx,ay-qy), lb=Math.hypot(bx-qx,by-qy); if(!la||!lb) return; const u=[(ax-qx)/la*s,(ay-qy)/la*s], v=[(bx-qx)/lb*s,(by-qy)/lb*s]; P.poly([[qx+u[0],qy+u[1]],[qx+u[0]+v[0],qy+u[1]+v[1]],[qx+v[0],qy+v[1]]],colr||'--muted',null,1.2,false); }
+const dist=(a,b)=>Math.hypot(b[0]-a[0],b[1]-a[1]);
+const dotp=(u,v)=>u[0]*v[0]+u[1]*v[1];
+function clipBox(P,fn){ const c=P.ctx, [x0,x1]=P.o.x,[y0,y1]=P.o.y; c.save(); c.beginPath(); c.rect(P.X(x0),P.Y(y1),P.X(x1)-P.X(x0),P.Y(y0)-P.Y(y1)); c.clip(); fn(); c.restore(); }
+function lineABC(P,a,b,c,colr,w,dash){ const [x0,x1]=P.o.x,[y0,y1]=P.o.y; clipBox(P,()=>{ if(Math.abs(b)>1e-12){ P.line(x0,(c-a*x0)/b,x1,(c-a*x1)/b,colr,w,dash); } else if(Math.abs(a)>1e-12){ P.line(c/a,y0,c/a,y1,colr,w,dash); } }); }
+const kb=$('kb'),ki=$('ki'),ks=$('ks'),kf=$('kf'),cvF=$('cvF'),cvL=$('cvL');
+const BASE=[80,95,102,110,118,125,131,140];
+const PF=plane(cvF,{x:[50,620],y:[-1,4],grid:0,labels:0,draw:P=>drawF(P)});
+const PL=plane(cvL,{x:[-0.05,1.05],y:[-0.08,1.08],grid:0,labels:0,draw:P=>drawL(P)});
+const med=a=>{ const n=a.length, m=Math.floor(n/2); return n%2?a[m]:(a[m-1]+a[m])/2; };
+function five(L){ const y=[...L].sort((p,q)=>p-q), n=y.length, m=Math.floor(n/2); const lo=y.slice(0,m), hi=y.slice(n%2?m+1:m);
+  const q1=med(lo), q3=med(hi), iqr=q3-q1, mean=y.reduce((a,b)=>a+b,0)/n; return {y,min:y[0],max:y[n-1],q1,q2:med(y),q3,iqr,mean,fl:q1-1.5*iqr,fh:q3+1.5*iqr}; }
+function drawF(P){ const f=five([...BASE,+kb.value]), hiX=Math.max(200,f.max*1.08); P.o.x=[60,hiX]; const st=hiX>350?100:25; for(let x=Math.ceil(60/st)*st;x<=hiX;x+=st){ P.line(x,-0.2,x,-0.05,'--muted',1); P.text('$'+x,x,-0.6,'--muted','center',11); } P.line(60,0,hiX,0,'--muted',1);
+  const inn=f.y.filter(v=>v>=f.fl&&v<=f.fh), wl=Math.min(...inn), wh=Math.max(...inn);
+  P.poly([[f.q1,1.4],[f.q3,1.4],[f.q3,2.6],[f.q1,2.6]],'--ink',null,2,true); P.line(f.q2,1.4,f.q2,2.6,'--plum',3);
+  P.line(wl,2,f.q1,2,'--ink',1.6); P.line(f.q3,2,wh,2,'--ink',1.6); P.line(wl,1.7,wl,2.3,'--ink',1.6); P.line(wh,1.7,wh,2.3,'--ink',1.6);
+  f.y.forEach((v,i)=>{ const out=v<f.fl||v>f.fh; P.dot(v,0.6,'--ink',4); });
+  f.y.filter(v=>v<f.fl||v>f.fh).forEach(v=>{ P.dot(v,2,'--ember',7); P.dot(v,2,'--card',4); });
+  P.line(f.mean,0.3,f.mean,3.3,'--ember',2.2,[5,4]); P.text('mean',f.mean,3.6,'--ember','center',11); P.text('median',f.q2,1.05,'--plum','center',11); }
+function bayes(){ const inf=+ki.value, s=+ks.value/10, fp=+kf.value/100, tp=inf*s, fpn=(1000-inf)*fp; return {inf,s,fp,tp,fpn,post:tp/(tp+fpn)}; }
+function drawL(P){ const b=bayes(), w=b.inf/1000;
+  P.poly([[0,0],[w,0],[w,1],[0,1]],'--ink',null,1.4,true); P.poly([[w,0],[1,0],[1,1],[w,1]],'--ink',null,1.4,true);
+  fillA(P,[[0,1-b.s],[w,1-b.s],[w,1],[0,1]],'--plum',0.75); fillA(P,[[w,1-b.fp],[1,1-b.fp],[1,1],[w,1]],'--ember',0.6);
+  P.text('infected '+b.inf,Math.max(w/2,0.09),-0.045,'--ink','center',11); P.text('healthy '+(1000-b.inf),(1+w)/2,-0.045,'--ink','center',11); P.text('flagged',(1+w)/2,1.035,'--ember','center',11); }
+function frac(p,q){ const g=(a,b)=>b?g(b,a%b):a; const d=g(p,q)||1; return (p/d)+'/'+(q/d); }
+function read(){ const f=five([...BASE,+kb.value]), b=bayes(); $('ob').textContent='$'+kb.value; $('oi').textContent=b.inf; $('os').textContent=ks.value; $('of').textContent=kf.value;
+  const vd=$('vdF'); vd.className='verdict';
+  const tp=Math.round(b.tp*100)/100, fpn=Math.round(b.fpn*100)/100;
+  vd.textContent='Left: mean $'+mm(f.mean,1)+', median $'+f.q2+', IQR '+f.iqr+(f.max>f.fh?'; the last bill is an outlier.':'; no outlier.')+' Right: flagged and infected '+mm(tp,2)+', flagged and healthy '+mm(fpn,2)+', so P(infected | flagged) ≈ '+mm(b.post,3)+'.';
+  tex($('eqF'),R`P(\text{inf} \mid \text{flag}) = \tfrac{${mm(tp,2)}}{${mm(tp,2)} + ${mm(fpn,2)}} \approx ${mm(b.post,3)}`,true); }
+function all(){ PF.redraw(); PL.redraw(); read(); }
+[kb,ki,ks,kf].forEach(el=>el.addEventListener('input',all));
+window.__pic={set:(bill,inf,s,fp)=>{ kb.value=bill; ki.value=inf; ks.value=s; kf.value=fp; all(); const f=five([...BASE,bill]), b=bayes(); return {mean:+f.mean.toFixed(3),med:f.q2,q1:f.q1,q3:f.q3,out:f.max>f.fh,post:+b.post.toFixed(4)}; }};
+all();
+stepper('#sl1',[
+  {k:'ember',kl:'the mean',t:R`\bar x = \tfrac{1}{n}\textstyle\sum_i x_i`,n:`The total, shared out evenly.`},
+  {k:'ember',kl:'mean-between',t:R`${Nw}{\ell \le \bar x \le g}`,n:`Equal to an end only if all are equal.`},
+  {k:'ember',kl:'shift-and-stretch',t:R`${Nw}{\overline{ax + b} = a\bar x + b}`,n:`Celsius to Fahrenheit.`},
+  {k:'ember',kl:'sorting',t:R`${Nw}{y_0 \le y_1 \le \dots \le y_{n-1}}`,n:`One sorted list, same tallies.`},
+  {k:'ember',kl:'the median',t:R`y_m \ \text{ or } \ \tfrac{y_{m-1} + y_m}{2}`,n:`n = 2m + 1, or n = 2m.`},
+  {k:'ember',kl:'median-halves',t:R`${Nw}{\text{at least half on each side}}`,n:`The median halves the list.`},
+  {k:'ember',kl:'quartiles and the box plot',t:R`\min,\ Q_1,\ Q_2,\ Q_3,\ \max`,n:`Outliers past 1.5 · IQR.`},
+  {k:'ember',kl:'expected value',t:R`E X = \text{the mean payout}`,n:`Over equally likely cases.`},
+  {k:'ember',kl:'expected-values-add',t:R`${Nw}{E(X + Y) = EX + EY}`,n:`Two dice: 7.`},
+  {k:'ember',kl:'chance given that',t:R`P(A \mid B) = \tfrac{\#(A \text{ and } B)}{\#B}`,n:`Cut the cases down to B.`},
+  {k:'ember',kl:'chance-product',t:R`${Nw}{P(A \text{ and } B) = P(B)\,P(A \mid B)}`,n:`The product rule.`},
+  {k:'ember',kl:'turned-chance',t:R`${Nw}{P(B \mid A) = \tfrac{P(A \mid B)\,P(B)}{P(A)}}`,n:`The turned-chance technique.`},
+  {k:'ember',kl:'the oak test',t:R`\tfrac{18}{18 + 49} \approx 0.27`,n:`Not nine in ten.`},
+  {k:'ember',kl:'illegal',t:R`P(A \mid B) = P(B \mid A)\,?`,n:`18/20 against 18/67.`}
+],{title:'The slides · the mean; mean-between; shift-and-stretch; sorting; the median; median-halves; quartiles and the box plot; expected value; expected-values-add; chance given that; chance-product; turned-chance; the oak test; illegal moves · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

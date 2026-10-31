@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>What limits an engine’s work per turn?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r19bio.html">← 19·bio why not just burn the sugar?</a><a href="r19crypt.html">next: 19·crypt can a letter ever stand for itself? →</a></p>
+  <div class="tags"><span class="tag eng">19·eng · engineering</span></div>
+  <h1>What limits an engine’s work per turn?</h1>
+  <p>What limits an engine’s work per turn? A car engine burns fuel in a cylinder, and the hot gas pushes a piston. The same piston must then push the spent gas out and squeeze fresh air in, and that costs work too. Early engine builders drew the pressure in the cylinder against its volume on a moving card, and found that the work per turn was the area of a loop. What makes it hard is that the gas heats as it is squeezed and cools as it expands, so its pressure follows no straight line. This page shows, with 15’s areas and 17g’s real powers, why the work per turn is the area of a loop, and why the share of the fuel’s heat that becomes work is capped by how hard the engine squeezes.</p>
+  <p class="gesture">Work done by a gas is the area under its pressure against its volume. Squeezed too fast for heat to leave, air keeps its pressure times a fixed power of its volume the same. Over a full loop the work is the area enclosed, and for the four strokes of a car engine the share of heat turned to work grows with how many times the air is squeezed.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r15a.html">15</a> (area; the area between two curves), <a href="r17a.html">17a</a> (ln as an area), <a href="r17g.html">17g</a> (real powers; the real power rule), <a href="r16c.html">16</a> (areas by undoing slopes), <a href="r19bio.html">19·bio</a> (the work to crowd a gas) and <a href="r18eng.html">18·eng</a>. Rung 21 measures the turning of the crank that the piston drives.</p></div>
+</header>
+
+<section class="class step" data-step="19eng1">
+  <h2 class="sthead"><span class="stno">19eng1</span>Work as an area</h2>
+  <p class="stands">Stands on 15 (area) and 19·bio.4 (the work to crowd a gas).</p>
+  <p data-pid="391f3f">A gas at pressure P pushes on a piston of area A with force P · A. Move the piston a short way dx, and the work is P · A · dx = P · dV, where dV is the change in volume. Add the short ways up, and the work is an area. <b>The work a gas does is the area under its pressure, drawn against its volume.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: two ways to push">
+P \text{ fixed}:\ \ W = P\,(V_2 - V_1) @@ the area of a rectangle
+P = \tfrac{nRT}{V},\ T \text{ fixed}:\ \ W = nRT \ln \tfrac{V_2}{V_1} @@ the measured gas law; ln as an area (17a), as on 19·bio
+\htmlClass{new}{W = \int_{V_1}^{V_2} P\,dV} \quad \blacksquare @@ positive when the gas expands; negative when it is squeezed
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · work · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">19·eng.1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a gas at a fixed 2 × 10⁵ Pa expanding from 0.3 L to 0.5 L</span> <span class="gtx">a gas at 10⁵ Pa and 0.5 L squeezed to 0.05 L at a fixed temperature</span></span>Find the work in each, with its sign.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="19eng2">
+  <h2 class="sthead"><span class="stno">19eng2</span>Squeezed too fast to cool</h2>
+  <p class="stands">Stands on 19·eng.1, 17g (real powers; the real power rule) and 16 (areas by undoing slopes).</p>
+  <p data-pid="361c99">Squeeze air fast, and its heat has no time to leave; it gets hot. A measured law says that then P · V^γ stays fixed, with γ ≈ 1.4 for air. Since PV = nRT, the temperature changes too. Write r = V₁/V₂ for how many times the air is squeezed. Its accepted name is the compression ratio.</p>
+  <p data-pid="822d8f">Fast-squeeze technique: <b>air squeezed r times without losing heat ends r^0.4 times hotter, and r^1.4 times the pressure.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the fast-squeeze technique">
+P_2 V_2^{\gamma} = P_1 V_1^{\gamma} \Rightarrow \tfrac{P_2}{P_1} = r^{\gamma} @@ the measured law; real powers (17g)
+T = \tfrac{PV}{nR} \Rightarrow \tfrac{T_2}{T_1} = r^{\gamma} \cdot \tfrac{1}{r} = r^{\gamma - 1} @@ the gas law at both ends
+\htmlClass{new}{\tfrac{T_2}{T_1} = r^{0.4},\ \ \tfrac{P_2}{P_1} = r^{1.4}} \quad \blacksquare @@ with γ = 1.4
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this page: why a diesel needs no spark">
+r = 18,\ \ T_1 = 300 \text{ K} @@ a diesel squeezes its air about 18 times
+18^{0.4} = e^{0.4 \ln 18} \approx e^{1.156} \approx 3.18 @@ real powers (17g)
+\htmlClass{new}{T_2 \approx 950 \text{ K}} @@ hot enough to light the fuel sprayed in, with no spark
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · fast squeeze · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">19·eng.2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="r = 10,\ \ T_1 = 300 \text{ K},\ \ \gamma = 1.4"></span></span>Find the temperature and the pressure ratio at the end of the squeeze.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="19eng3">
+  <h2 class="sthead"><span class="stno">19eng3</span>A loop’s area is the work per turn</h2>
+  <p class="stands">Stands on 19·eng.1 and 15 (the area between two curves).</p>
+  <p data-pid="ad7628">An engine returns to where it started every turn, as a move that comes back (19b). Its gas goes out along a high curve, pushing hard, and comes back along a low one, pushed gently. Loop technique: <b>the work in one turn is the area inside the loop.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the loop technique">
+W_{\text{out}} = \int_{V_2}^{V_1} P_{\text{high}}\,dV,\ \ W_{\text{back}} = -\int_{V_2}^{V_1} P_{\text{low}}\,dV @@ work done by the gas, then on it
+W = \int_{V_2}^{V_1} (P_{\text{high}} - P_{\text{low}})\,dV @@ the two areas, subtracted
+\htmlClass{new}{W = \text{the area inside the loop}} \quad \blacksquare @@ the area between two curves (15)
+  </pre>
+  <p data-pid="9deb56">A loop that goes out and comes back along the same curve has no inside, so it does no work. A loop at one fixed temperature does exactly that: out and back on the curve PV = nRT. So an engine can turn heat into work only by being hotter in some part of its turn than in another.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · loops · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · the four-stroke loop, pressure against volume</div>
+    <div id="pv"></div>
+    <div class="kn"><span class="m">squeeze r</span><input type="range" id="kr" min="2" max="20" step="0.5" value="8"><output id="or"></output></div>
+    <div class="cap">Teal: the fast squeeze, then the fast expansion, each keeping P·V^1.4 fixed. Ember: the fuel burns at the top, the spent gas leaves at the bottom. The shaded loop is the work per turn; its share of the heat burned in is 1 − r^(−0.4).</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">19·eng.3.1</span><span class="ph undo">undo</span><span class="givens"><span class="gtx">an engine running 25 loops a second</span></span>Find the loop area that gives 60 kW. <br>Find it again for 50 loops a second.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="19eng4">
+  <h2 class="sthead"><span class="stno">19eng4</span>The four strokes, and their limit</h2>
+  <p class="stands">Stands on 19·eng.2 and 19·eng.3.</p>
+  <p data-pid="b91fd2">A car engine’s loop has four legs. Squeeze the air fast, from V₁ to V₂ = V₁/r. Burn the fuel at the top, so the pressure jumps with the volume fixed. Let the hot gas expand fast, back to V₁. Let the spent heat out, at V₁. A measured law says that heat taken in or let out at a fixed volume is proportional to the change in temperature.</p>
+  <p data-pid="872a7f">Squeeze-ratio technique: <b>the share of the fuel’s heat that the four strokes turn into work is 1 − r^(−0.4), whatever the fuel.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the squeeze-ratio technique">
+T_2 = T_1\,r^{0.4},\ \ T_3 = T_4\,r^{0.4} @@ fast-squeeze, for the squeeze and for the expansion run backwards
+T_3 - T_2 = r^{0.4}\,(T_4 - T_1) @@ subtract; share out (5h)
+\eta = \frac{\text{heat in} - \text{heat out}}{\text{heat in}} = 1 - \frac{T_4 - T_1}{T_3 - T_2} @@ the work is what is not let out
+\htmlClass{new}{\eta = 1 - r^{-0.4}} \quad \blacksquare @@ the temperatures cancel
+  </pre>
+  <p data-pid="8507eb">With r = 10, η = 1 − 10^(−0.4) ≈ 0.60. A real car does about half as well, since its gas leaks heat, and none of its legs is as clean as the page’s. The cap rises with r but never reaches 1. A petrol engine cannot squeeze much past r = 10 or 12, since the fuel would light before the spark. A diesel, which wants it to, runs near 18.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · four strokes · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">19·eng.4.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="r = 8,\ \ r = 12"></span></span>Find the cap η for each. <br>Find the r that gives η = 0.5.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="19eng5">
+  <h2 class="sthead"><span class="stno">19eng5</span>Illegal moves</h2>
+  <p class="stands">Stands on 19·eng.1 to 19·eng.4.</p>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+W = P \cdot V\,? @@ work is the area under P as V changes: a product only when P is fixed
+\tfrac{T_2}{T_1} = r\,? @@ that would need the pressure fixed; the fast squeeze gives r^0.4
+\text{a hotter fuel gives a higher cap}\,? @@ the temperatures cancel: only r is left
+\text{a big enough squeeze gives } \eta = 1\,? @@ r^(−0.4) is never 0
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">19·eng.5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="r = 1"></span></span>Find the cap, and the shape of the loop.</li><li><span class="givens"><span class="gtx">a gas whose fast squeeze keeps P·V fixed: γ = 1</span></span>Find the cap, and say which engine this is.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">19·eng.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="T_1 = 300 \text{ K}"></span></span>Build a petrol engine whose air stays below 700 K at the end of the squeeze, with the largest cap you can. <br>Find its r and its cap.</div>
+  <div class="chq"><span class="chid">19·eng.6.2</span><span class="tagq">edge</span>Let r grow without bound. Find what happens to the cap, and to the temperature at the end of the squeeze.</div>
+  <div class="chq"><span class="chid">19·eng.6.3</span><span class="tagq">converse</span>Two engines have loops of the same area. Must they have the same cap?</div>
+  <div class="chq"><span class="chid">19·eng.6.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="r = 10,\ \ T_1 = 300 \text{ K},\ \ T_3 = 2000 \text{ K}"></span></span>Find the work of one loop as the work of the expansion minus the work of the squeeze, each by an area under C·V^(−1.4), for one mole with heat at fixed volume 2.5R per kelvin. <br>Check that it is η times the heat in.</div>
+  <div class="chq"><span class="chid">19·eng.6.5</span><span class="tagq">seam</span>The first theory of engines said heat is a fluid that falls from hot to cold through the engine, as water falls through a mill wheel, and is never used up. Its rival said some of the heat is used up as work. <br>Does an engine use up heat, or only let it fall?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r19bio.html">← 19·bio · why not just burn the sugar?</a><a href="r19crypt.html">19·crypt · can a letter ever stand for itself? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The fast squeeze is adiabatic, the fixed-temperature one isothermal; γ is the heat capacity ratio. The drawing of pressure against volume is a PV diagram, or an indicator diagram when drawn by the engine itself. The four strokes are the Otto cycle (intake and exhaust left out), and η is the thermal efficiency. The cap on any engine running between a hot and a cold temperature is the Carnot efficiency, 1 − T_cold/T_hot. A fuel that lights too early knocks.</p>
+  <h3>Who said it first</h3>
+  <p>James Watt and John Southern built the indicator (about 1796), a pencil moved by the cylinder’s pressure on a card moved by the piston, and kept it a trade secret. Sadi Carnot (1824) found the cap on engines while holding that heat is a fluid, caloric. Émile Clapeyron (1834) drew Carnot’s argument as a loop. In 19·eng.6.5, the rival view was James Joule’s (1845): heat and work trade at a fixed rate. Rudolf Clausius (1850) and William Thomson kept Carnot’s cap and dropped the fluid. Nikolaus Otto built the four-stroke engine in 1876; Rudolf Diesel’s engine of 1893 lit its fuel by squeezing alone.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="19·eng: a worked “proof”, not allowed">
+r = 10,\ T_1 = 300 \text{ K} @@ fine
+T_2 = 300 \cdot 10 = 3000 \text{ K} @@ not allowed: that is a squeeze at fixed pressure; the fast squeeze gives r^0.4
+\text{the air melts the cylinder} @@ false: it reaches about 750 K
+  </pre>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+const V=c=>'var('+c+')';
+function draw(){ const r=+$('kr').value; $('or').textContent=r;
+  const g=1.4, V1=1, V2=1/r, P1=1, P2=Math.pow(r,g), P3=P2*1.9, P4=P3/Math.pow(r,g);
+  const W=300,H=240, Pm=P3*1.08, X=v=>30+(v)*(W-45), Y=p=>H-25-(p/Pm)*(H-40);
+  let s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;max-width:360px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  s+='<line x1="30" y1="'+(H-25)+'" x2="'+(W-10)+'" y2="'+(H-25)+'" style="stroke:'+V('--ink')+'"/><line x1="30" y1="10" x2="30" y2="'+(H-25)+'" style="stroke:'+V('--ink')+'"/>';
+  s+='<text x="'+(W-14)+'" y="'+(H-10)+'" text-anchor="end" style="fill:'+V('--ink')+';font:11px IBM Plex Mono,monospace">V</text><text x="36" y="20" style="fill:'+V('--ink')+';font:11px IBM Plex Mono,monospace">P</text>';
+  const N=60, up=[], dn=[];
+  for(let i=0;i<=N;i++){ const v=V2+(V1-V2)*i/N; up.push([v,P3*Math.pow(V2/v,g)]); dn.push([v,P1*Math.pow(V1/v,g)]); }
+  const pts=up.concat(dn.slice().reverse()).map(p=>X(p[0]).toFixed(1)+','+Y(p[1]).toFixed(1)).join(' ');
+  s+='<polygon points="'+pts+'" style="fill:'+V('--teal')+';fill-opacity:.18;stroke:none"/>';
+  const pl=a=>a.map(p=>X(p[0]).toFixed(1)+','+Y(p[1]).toFixed(1)).join(' ');
+  s+='<polyline points="'+pl(up)+'" style="fill:none;stroke:'+V('--teal')+';stroke-width:2"/><polyline points="'+pl(dn)+'" style="fill:none;stroke:'+V('--teal')+';stroke-width:2"/>';
+  s+='<line x1="'+X(V2)+'" y1="'+Y(P2)+'" x2="'+X(V2)+'" y2="'+Y(P3)+'" style="stroke:'+V('--ember')+';stroke-width:3"/><line x1="'+X(V1)+'" y1="'+Y(P4)+'" x2="'+X(V1)+'" y2="'+Y(P1)+'" style="stroke:'+V('--ember')+';stroke-width:3"/>';
+  $('pv').innerHTML=s+'</svg>';
+  const eta=1-Math.pow(r,-0.4), T2=300*Math.pow(r,0.4);
+  $('vd').className='verdict'; $('vd').textContent='Squeezed '+r+' times: air at 300 K ends at '+Math.round(T2)+' K, and the cap is 1 − '+r+'^(−0.4) ≈ '+eta.toFixed(3)+'.'+(r>12&&r<14?' A petrol engine’s fuel would light early here.':'')+(r>=14?' Diesel country: the squeeze alone lights the fuel.':''); }
+$('kr').oninput=draw; draw();
+window.__pic={set:(r)=>{ $('kr').value=r; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'an area',t:R`\htmlClass{new}{W = \int P\,dV}`,n:`Under the pressure, against the volume.`}
+],{title:'The slides · work · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'hotter',t:R`\htmlClass{new}{T_2 = T_1\,r^{0.4}}`,n:`Heat has no time to leave.`},
+  {k:'ember',kl:'diesel',t:R`r = 18:\ 950 \text{ K}`,n:`No spark.`}
+],{title:'The slides · fast squeeze · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'per turn',t:R`\htmlClass{new}{W = \text{area inside}}`,n:`High curve out, low curve back.`},
+  {k:'ember',kl:'one temperature',t:R`W = 0`,n:`No inside.`}
+],{title:'The slides · loops · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'the cap',t:R`\htmlClass{new}{\eta = 1 - r^{-0.4}}`,n:`Whatever the fuel.`},
+  {k:'ember',kl:'r = 10',t:R`\eta \approx 0.60`,n:`A real car: about half that.`}
+],{title:'The slides · four strokes · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`\eta = 1\,?`,n:`Never, for any r.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

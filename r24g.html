@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The integrating factor</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r24f.html">← 24f separating the variables</a><a href="r24h.html">next: 24h the two model equations →</a></p>
+  <div class="tags"><span class="tag tech">24g · technique</span></div>
+  <h1>The integrating factor</h1>
+  <p>Many rules on rates say that a quantity changes by a push from outside, less a share of itself. Salt in a tank rises with the brine poured in and falls with the share that drains out. A rule like that is straight in the height: the height appears once, multiplied by something that may depend on the input, and never squared or inside a root. Such a rule usually does not part, so the last step cannot solve it. One trick does. Multiply the whole rule by a growth function chosen so that the left side becomes the slope of a single product. Then one area finishes the job. The trick is the same one that proved growth at its own rate has one solution, and it proves just as much here: one solution, and it lasts as long as the rule makes sense. Every solution is then one solution plus a fading copy of the start.</p>
+  <p class="gesture">A rule straight in the height is solved by multiplying it by one growth function, which turns the left side into the slope of a product. One area then gives the only solution, on the whole stretch where the rule makes sense. Every solution is one solution plus a solution of the rule with no push.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r24a.html">24a</a> (the own-rate technique), <a href="r24f.html">24f</a> (separating, and putting back), <a href="r13c.html">13c</a> (the product rule), <a href="r16b.html">16b</a> and <a href="r16c.html">16c</a> (areas and antiderivatives), <a href="r14d.html">14d</a> (zero slope means flat). <a href="r24h.html">24h</a> solves the two model equations.</p></div>
+</header>
+
+<section class="class step" data-step="24g1">
+  <h2 class="sthead"><span class="stno">24g1</span>A factor that makes a product</h2>
+  <p class="stands">Stands on 24a3 (the own-rate technique), 13c (the product rule), 16b (the slope of an area is the height), 16c (evaluating by antiderivatives) and 17f (exp is its own slope).</p>
+  <p data-pid="35308d">A rule is <i>straight in y</i> when it can be written y′ + p(x)y = q(x): y appears once, times a function of x alone, and y′ appears alone. y′ + 2xy = x is straight in y. y′ = xy² is not.</p>
+  <p data-pid="78a464">Multiplying-factor technique: <b>let p and q be continuous on an open interval J holding x₀, and P(x) = ∫ from x₀ to x of p; then y′ + p(x)y = q(x), y(x₀) = y₀ has exactly one solution on the whole of J, y(x) = e^(−P(x))(y₀ + ∫ from x₀ to x of e^(P(t))q(t) dt).</b> The factor is μ = e^P. Accepted name: the integrating factor.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the multiplying-factor technique">
+\mu = e^{P},\ \ \mu' = p\,\mu,\ \ \mu > 0,\ \ \mu(x_0) = 1 @@ the chain rule; P′ = p (16b); P(x₀) = 0
+(\mu y)' = \mu y' + p\mu y = \mu\,(y' + py) @@ the product rule (13c)
+y \text{ solves the rule} \Rightarrow (\mu y)' = \mu q \Rightarrow \mu(x)y(x) - y_0 = \int_{x_0}^{x} \mu q @@ evaluating by antiderivatives (16c)
+y = e^{-P}\big(y_0 + \textstyle\int_{x_0}^{x} e^{P}q\big) \text{ on } J @@ divide by μ, never 0: any solution is this one
+\mu y = y_0 + \textstyle\int_{x_0}^{x} \mu q \Rightarrow \mu(y' + py) = (\mu y)' = \mu q,\ \ y(x_0) = y_0 @@ the slope of an area is the height (16b): this one is a solution
+\htmlClass{new}{\text{exactly one solution on the whole of } J} \quad \blacksquare @@ the two lines above
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: y&#x27; + 2xy = x, y(0) = 0">
+P = x^2,\ \ \mu = e^{x^2} @@ p = 2x
+(e^{x^2}y)' = xe^{x^2} @@ the factor makes a product
+e^{x^2}y = \int_0^x te^{t^2}\,dt = \tfrac12\big(e^{x^2} - 1\big) @@ substitution (16d); the start gives 0 at x = 0
+\htmlClass{new}{y = \tfrac12\big(1 - e^{-x^2}\big) \text{ on the whole line}} \quad \blacksquare @@ divide by e^{x²}; put back: y′ = xe^{−x²} and x − 2xy = xe^{−x²}
+  </pre>
+  <p data-pid="2665b0">This is 24a3's proof with a push added: there k was constant and q was 0. No tameness was asked for and no "for a while" was needed. A straight rule fixes its solution on every stretch where p and q are continuous.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · multiplying factor · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">24g1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="y&#x27; + 3y = 6,\ \ y(0) = 0"></span></span>Find the factor, the solution, and the value it heads to as x grows.</li><li><span class="givens"><span data-tex-inline="y&#x27; - y = e^{2x},\ \ y(0) = 3"></span></span>Find the factor and the solution. Put it back.</li><li><span class="givens"><span data-tex-inline="y&#x27; + (\cos x)\,y = \cos x,\ \ y(0) = 0"></span></span>Find the factor and the solution. Find the greatest value the solution reaches.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24g2">
+  <h2 class="sthead"><span class="stno">24g2</span>By hand, and where the solution lives</h2>
+  <p class="stands">Stands on 24g1, 12b (bounded on a closed interval) and 24e2 (the run-off technique).</p>
+  <p data-pid="83b21f">The recipe: write the rule as y′ + p(x)y = q(x), dividing by whatever stands in front of y′. Find P and the factor e^P. Write (e^P y)′ = e^P q. Take the area, use the start, divide by e^P. Put the answer back.</p>
+  <p data-pid="513bd7">Whole-stretch technique: <b>a solution of a straight rule lives on the whole open interval J holding x₀ on which p and q are continuous; it can run off only at an end of J.</b> Unlike y′ = y², it never runs off inside J.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the whole-stretch technique">
+y = e^{-P}\big(y_0 + \textstyle\int_{x_0}^{x} e^{P}q\big) \text{ is defined and continuous on } J @@ the multiplying-factor technique (24g1); P and the area are continuous on J
+\text{on each closed } [x_0, x_1] \subset J,\ y \text{ is bounded} @@ bounded on a closed interval (12b)
+\htmlClass{new}{y \text{ passes no ceiling inside } J} \quad \blacksquare @@ a run-off, as in 24e2, can come only at an end
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: xy&#x27; + 2y = x², y(1) = 1">
+y' + \tfrac{2}{x}\,y = x,\ \ J = (0, \infty) @@ divide by x; p = 2/x breaks at 0, and J must hold the start 1
+P = 2\ln x,\ \ \mu = x^2,\ \ (x^2y)' = x^3 @@ e^{2 ln x} = x² for x &gt; 0 (17e)
+x^2 y = 1 + \tfrac{x^4 - 1}{4} @@ the area from 1 to x; the start gives 1
+\htmlClass{new}{y = \tfrac{x^2}{4} + \tfrac{3}{4x^2} \text{ on } (0, \infty)} \quad \blacksquare @@ it runs off at 0, the end of J where p breaks
+  </pre>
+  <p data-pid="617c65">Dividing by what stands in front of y′ is not a formality. That function was x, and at x = 0 the rule reads 2y = 0: it has no slope in it at all. The solution cannot cross that line, and the technique says so by giving a J that stops there.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24g2.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span class="gtx">a 1000-litre tank holds 20 kg of salt; brine with 0.1 kg of salt a litre flows in at 10 litres a minute, and the mixed water drains at 10 litres a minute</span></span>Find the rule for the salt S(t), in kg after t minutes, and its solution. <br>Find S at 60 minutes, and the value S heads to.</li><li><span class="givens"><span class="gtx">the same tank, draining at only 5 litres a minute, so it holds 1000 + 5t litres</span></span>Find the rule for S, and its factor. <br>Find S(t), and the salt and its share of a litre when the tank holds 2000 litres.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24g3">
+  <h2 class="sthead"><span class="stno">24g3</span>One solution plus the rule with no push</h2>
+  <p class="stands">Stands on 24g1, 14d (zero slope means flat) and 24f2 (the put-back technique).</p>
+  <p data-pid="fefb81">Call y′ + p(x)y = 0 the <i>bare rule</i> of y′ + p(x)y = q(x): the same rule with the push q taken away.</p>
+  <p data-pid="953d3b">One-plus-bare technique: <b>if yₚ solves y′ + py = q on J, the solutions on J are exactly yₚ + Ce^(−P), one for each real C.</b> Any one solution, however it was found, gives all the others.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the one-plus-bare technique">
+y \text{ solves the rule} \Rightarrow u = y - y_p \text{ solves } u' + pu = q - q = 0 @@ subtract the two rules
+(e^{P}u)' = e^{P}(u' + pu) = 0 @@ the factor, as in 24g1
+e^{P}u = C \Rightarrow y = y_p + Ce^{-P} @@ zero slope means flat (14d)
+(y_p + Ce^{-P})' + p\,(y_p + Ce^{-P}) = q - pCe^{-P} + pCe^{-P} = q @@ put back: every C gives a solution
+\htmlClass{new}{\text{the solutions are exactly } y_p + Ce^{-P}} \quad \blacksquare @@ both ways
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: y&#x27; + y = sin x">
+y_p = a\sin x + b\cos x \Rightarrow y_p' + y_p = (a - b)\sin x + (a + b)\cos x @@ try a swing of the same period (21g)
+a - b = 1,\ a + b = 0 \Rightarrow a = \tfrac12,\ b = -\tfrac12 @@ match the sin and cos parts
+y = \tfrac12(\sin x - \cos x) + Ce^{-x} @@ the one-plus-bare technique, with P = x
+\htmlClass{new}{|y - y_p| = |C|e^{-x} \to 0} \quad \blacksquare @@ every solution forgets its start and settles into one swing
+  </pre>
+  <p data-pid="d99045">Two things are worth seeing. Guessing yₚ is honest: the put-back technique checks it, and the one-plus-bare technique does the rest. And when p is a positive constant, the bare part fades like e^(−px), so after a while the start no longer shows. A room heated and cooled on a daily cycle, a circuit driven by an alternating push, a tank fed a varying brine: each settles into the rhythm of its push.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · one plus bare · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24g3.1</span><span class="ph make">make</span><span class="givens"><span data-tex-inline="y&#x27; + 2y = 3\cos x"></span></span>Find a solution of the form a cos x + b sin x. <br>Find every solution, and the one with y(0) = 0. <br>Find the x past which that solution stays within 0.01 of the swing.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24g4">
+  <h2 class="sthead"><span class="stno">24g4</span>Illegal moves</h2>
+  <p class="stands">Stands on 24g1 to 24g3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+y' + 2y = x \Rightarrow (e^{2x}y)' = x\,? @@ the factor multiplies the push too: (e^{2x}y)′ = xe^{2x}
+y' + 2xy = x \Rightarrow \mu = e^{2x}\,? @@ the factor is e to an antiderivative of p: e^{x²}
+xy' + y = 1 \Rightarrow p = 1\,? @@ divide by x first: p = 1/x, q = 1/x, and only on x &gt; 0 or on x &lt; 0
+e^{x^2}y = \int xe^{x^2}\,dx = \tfrac12 e^{x^2} \Rightarrow y = \tfrac12 \text{ is every solution}\,? @@ the constant of the area was dropped: y = ½ + Ce^{−x²}
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24g4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="y&#x27; + 2y = x,\ \ y(0) = 0"></span></span>Find what the wrong line gives for y, and put it back. <br>Find the solution.</li><li><span class="givens"><span data-tex-inline="y&#x27; + 2xy = x"></span></span>Find the slope of e^(2x)y when y′ + 2xy = x, and whether it is a slope of one product. <br>Find the right factor.</li><li><span class="givens"><span data-tex-inline="xy&#x27; + y = 1,\ \ y(1) = 3"></span></span>Find the solution and the interval J on which it lives. <br>Find what the wrong p gives, and put it back.</li><li><span class="givens"><span data-tex-inline="y&#x27; + 2xy = x,\ \ y(0) = 0"></span></span>Find whether y = ½ meets the start. <br>Find the solution that does.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">24g.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="y&#x27; + y = xy^2,\ \ y(0) = 1"></span></span>This rule is not straight in y. Build a straight rule for u = 1/y, solve it with a factor, and turn back to y. <br>Find the interval on which the solution lives, and put it back.</div>
+  <div class="chq"><span class="chid">24g.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="xy&#x27; + 2y = x^2"></span></span>The number in front of y′ is 0 at x = 0. Find every solution on (0, ∞) and every solution on (−∞, 0). <br>Find every solution on the whole line, and how many pass through (0, 0) and through (0, 1).</div>
+  <div class="chq"><span class="chid">24g.4.3</span><span class="tagq">converse</span>The one-plus-bare technique: the solutions of a straight rule are yₚ + Cu, with u never 0. Turn it round: if the solutions of y′ = F(x, y) are exactly yₚ + Cu for every real C, with u never 0, and every point (x, y) lies on one of them, must the rule be straight in y? <br>Prove your answer, and find p and q.</div>
+  <div class="chq"><span class="chid">24g.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="y&#x27; + ky = b,\ \ k \ne 0"></span></span>Solve it twice: by the side-by-side technique (24f1) and by the multiplying-factor technique. <br>Find the solution the side-by-side technique loses, and the C that gives it back in the other.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r24f.html">← 24f · separating the variables</a><a href="r24h.html">24h · the two model equations →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A rule straight in y is a linear first-order differential equation. The multiplying factor is the integrating factor; the bare rule is the homogeneous equation; yₚ is a particular solution, and yₚ + Ce^(−P) the general solution. The fading bare part is the transient, and the swing left over is the steady state. The rule in the build challenge is a Bernoulli equation.</p>
+  <h3>Who said it first</h3>
+  <p>Jakob Bernoulli posed the rule of the build challenge in 1695. Gottfried Leibniz reduced it to a straight rule in 1696, and Johann Bernoulli solved straight first-order rules in general in 1697. Leonhard Euler made multiplying factors a general method in the 1730s and in his textbook on integration of 1768.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'the rule',t:R`y^{\prime} + p(x)\,y = q(x)`,n:`Straight in y.`},
+  {k:'ember',kl:'the factor',t:R`\mu = e^{P},\ \ (\mu y)^{\prime} = \mu q`,n:`The left side becomes one slope.`},
+  {k:'ember',kl:'the solution',t:R`\htmlClass{new}{y = e^{-P}\big(y_0 + \textstyle\int_{x_0}^{x} e^{P}q\big)}`,n:`The only one, on all of J.`}
+],{title:'The slides · multiplying factor · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'the bare rule',t:R`u^{\prime} + pu = 0 \Rightarrow u = Ce^{-P}`,n:`The push taken away.`},
+  {k:'ember',kl:'every solution',t:R`\htmlClass{new}{y = y_p + Ce^{-P}}`,n:`One solution, plus the bare ones.`}
+],{title:'The slides · one plus bare · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

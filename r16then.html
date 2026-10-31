@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="ladder-cert" content="floor:3"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>16·then · How much has piled up, if you only know the rate?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r16cb12.html">← 16·cb12 floating and sinking</a><a href="r16eng.html">next: 16·eng where will a loaded beam crack? →</a></p>
+  <div class="tags"><span class="tag then">16·then · newsflash</span></div>
+  <h1>How much has piled up, if you only know the rate?</h1>
+  <p>How much has piled up, if you only know the rate? Most things that are measured are measured as rates: litres a second past a gauge, millimetres of rain an hour, cars a minute through a toll, people a year into a county. What is wanted is usually a total: how much water is in the lake, how much rain fell, how many cars came through. 16c says the total change is the area under the rate. This page uses that one fact to keep a lake's books, and to find when the lake is fullest. It estimates a total from readings taken once an hour. And it settles, with rain gauges and a river, an argument that ran for two thousand years: where rivers come from.</p>
+  <p class="gesture">The water in the lake now is the water at the start plus the area under its rate of change since. With a rate in and a rate out, the rate of change is the one less the other. The lake is fullest where that difference changes from positive to negative. From readings, a sum of boxes stands in for the integral.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r16c.html">16c</a> (area-is-a-change), <a href="r16b.html">16b</a> (area-slope), <a href="r16g.html">16g</a> (net and total, averages, reading an area function), <a href="r15h.html">15h</a> (sums of thin strips), <a href="r14f.html">14f</a> (first-test), <a href="r14a.html">14a</a> (candidates). <a href="r17.html">Rung 17</a> names the area function 16f left without one.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · read it through, then work the picture and the slides</div>
+
+  <h3>The books balance</h3>
+  <p data-pid="ab9da3">Net-change technique: <b>if Q has a continuous slope Q′ on [0, T], then Q(T) = Q(0) + ∫₀ᵀ Q′(t) dt.</b> It is area-is-a-change with G = Q. Its accepted name is the net change theorem.</p>
+  <pre class="lines" data-k="ember" data-label="16·then: a lake's day">
+\text{in}(t) = 300 + 2t(24 - t),\ \ \text{out}(t) = 450 \quad (\text{m}^3/\text{s},\ t \text{ in hours}) @@ a model: a storm's inflow that peaks at noon; a dam letting out a steady flow
+V'(t) = \text{in}(t) - \text{out}(t) = 2t(24 - t) - 150 @@ what comes in less what goes out, in m³/s
+\textstyle\int_0^{24} V'(t)\,dt = 2\big(12t^2 - \tfrac{t^3}{3}\big)\Big|_0^{24} - 150 \cdot 24 = 4608 - 3600 = 1008 @@ the table; area-is-a-change. Units: m³/s times hours
+1008 \cdot 3600 \approx 3.63 \times 10^6 \text{ m}^3 @@ an hour is 3600 s: the lake gains about 3.6 million cubic metres
+  </pre>
+
+  <h3>When is the lake fullest?</h3>
+  <pre class="lines" data-k="ember" data-label="16·then: the crest">
+V'(t) = 0 \iff t^2 - 24t + 75 = 0 \iff t = 12 \pm \sqrt{69} @@ 8i's quadratic formula; √69 ≈ 8.31
+V' \lt 0 \text{ on } [0, 3.69),\ \ V' \gt 0 \text{ on } (3.69, 20.31),\ \ V' \lt 0 \text{ after} @@ the sign of the quadratic between and outside its zeros
+\text{trough at } t \approx 3.69,\ \text{crest at } t \approx 20.31 @@ first-test (14f)
+\text{fullest over } [0, 24]: \text{ at } 20.31 \text{ or at an end} @@ candidates (14a): compare V(20.31) with V(0) and V(24)
+  </pre>
+  <p data-pid="ed824b"><b>The lake is fullest not when the inflow peaks, at noon, but when the inflow, falling again, drops back to the outflow.</b> Until then more is still coming in than going out.</p>
+
+  <h3>From readings</h3>
+  <pre class="lines" data-k="ember" data-label="16·then: a gauge read every hour">
+\begin{aligned}&\text{rain at a gauge near Tracy, mm/h, read}\\ &\quad\text{on the hour:\ } 0,\ 2,\ 5,\ 9,\ 6,\ 3,\ 1\end{aligned} @@ seven readings, t = 0 to 6 h
+\text{left sum: } (0 + 2 + 5 + 9 + 6 + 3) \cdot 1 = 25 \text{ mm} @@ 15h's strip sum, each hour's height at its start
+\text{right sum: } (2 + 5 + 9 + 6 + 3 + 1) \cdot 1 = 26 \text{ mm} @@ each hour's height at its end
+\text{between them, if the rate rose then fell once} @@ strip-sum-between (15h) needs the least and greatest on each hour; the readings only suggest them
+  </pre>
+  <p data-pid="8b0665">With readings alone, no technique pins the total down: the rain could have spiked between readings. What net-change gives is the meaning of the number. <b>The depth of rain that fell is the area under the rate, and every way of estimating it is a way of estimating that area.</b></p>
+  <p data-pid="963d8c">In 1674 a careful measurer took the rain and snow that fell over three years on the upper basin of the Seine. He worked out how much water that made over the whole basin. He found it about six times what the river carried away in the same time. That was enough, he concluded, to feed the river and the springs, with plenty lost to the air and the plants.</p>
+
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · the ledger, at every instant</div>
+    <p data-pid="820139">0c's ledger, again, now with a slope. 5·chem closed the stuff column of a reaction, 7·phys closed charge at a junction, 11·chem closed heat in a box, 14·phys closed momentum in a crash, and 15·econ closed a loan. Each was a before and an after. A lake's books are kept every second. The change in water is what comes in less what goes out, and the net-change technique adds the seconds up.</p>
+    <p data-pid="c0b702"><b>What piled up is the area under in less out; when the books don't close, something was left out of the story.</b></p>
+    <p data-pid="7ad575">The 1674 measurer above ran the same books on a whole river basin, and they did not close: six times the river's water fell as rain. He did not doubt the books. He went looking for where the rest went, and found the air and the plants.</p>
+    <p class="bait" data-pid="40a319">A reservoir's inflow and outflow gauges read true all summer, yet the lake ends the summer 2 million cubic metres lower than the books say. Where could the water have gone?</p>
+  </aside>
+
+  <h3>Illegal moves</h3>
+  <pre class="lines" data-k="ember" data-label="16·then: tempting, and not allowed">
+\text{the lake is fullest when the inflow peaks}\,? @@ fullest where in − out changes from + to −
+\textstyle\int_0^{24} V'\,dt = V(24)\,? @@ it is V(24) − V(0): the change, not the amount
+1008 \text{ m}^3\,? @@ the rate was per second and the time in hours: multiply by 3600
+\text{left sum} \le \text{total} \le \text{right sum, always}\,? @@ only if the rate never falls; here it rises and falls
+  </pre>
+</section>
+
+<section class="pic" id="pic">
+  <div class="eyebrow">The picture · what comes in, what goes out, and what is kept</div>
+  <div class="panels">
+    <div class="panel">
+      <div class="lbl">in and out, m³/s, against hours</div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">t</span><input type="range" id="kt" min="0" max="24" step="0.05" value="12"><output id="ot"></output></div>
+      <div class="kn"><span class="m">out</span><input type="range" id="ko" min="300" max="600" step="10" value="450"><output id="oo"></output></div>
+      <div class="cap">Ink: the inflow. Dashed: the outflow, set by the second knob. Teal: where more comes in than goes out, so the lake gains; plum: where it loses. Shaded up to the first knob's hour.</div>
+    </div>
+    <div class="panel">
+      <div class="lbl">the change in the lake, millions of m³, against hours</div>
+      <canvas id="cvV"></canvas>
+      <div class="cap">Ink: V(t) − V(0), the area so far, times 3600. Dots: where in = out, the lake's trough and crest.</div>
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+</section>
+
+<section class="slides" id="sl1"><div class="eyebrow">The slides · net-change; in less out; the day's total; the units; the crest; fullest is not the peak; readings; left and right sums; the Seine; illegal moves · ← → keys work</div></section>
+
+<section class="sayback">
+  <div class="eyebrow">Say it back · then work it</div>
+  <h2>Questions</h2>
+  <div class="phkey"></div>
+  <ol>
+    <li><span class="qid">16·then.1</span><span class="gname">Totals from rates.</span><span class="gwhy">Do: build the page's pieces.</span>
+      <ol class="sub">
+        <li><span class="qid">16·then.1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{in: } 40 + 6t \text{ a minute},"></span> <span data-tex-inline="\text{out: } 30 + 9t \text{ a minute},"></span> <span data-tex-inline="0 \le t \le 10"></span></span>Find the change in the number of cars parked in the Oakland garage.</li><li><span class="givens"><span data-tex-inline="\text{in: } 40 + 6t \text{ a minute},"></span> <span data-tex-inline="\text{out: } 30 + 9t \text{ a minute},"></span> <span data-tex-inline="0 \le t \le 10"></span></span>Find when, in those 10 minutes, the garage is fullest.</li><li><span class="givens"><span data-tex-inline="\text{growth rate } 1200 + 30t \text{ people a year}"></span></span>Find the growth of a county near Salem over its first 10 years.</li><li><span class="givens"><span data-tex-inline="\text{on the hour: } 4,\ 7,\ 7,\ 3,\ 0 \text{ mm/h}"></span></span>Find the left and right sums for the rain.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">16·then.2</span><span class="gname">From the total back.</span><span class="gwhy">Undo: run the page's techs backwards.</span>
+      <ol class="sub">
+        <li><span class="qid">16·then.2.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="V(0) = 500 \text{ L},"></span> <span data-tex-inline="V(8) = 380 \text{ L}"></span></span>Find the average rate of change of the tank, and the integral of the rate over [0, 8] that net-change ties it to.</li><li><span class="givens"><span data-tex-inline="\text{the page's lake},"></span> <span data-tex-inline="\text{a steady outflow over } 24 \text{ hours}"></span></span>Find the steady outflow that would leave the lake where it started.</li><li><span class="givens"><span data-tex-inline="r(t) = kt^2,"></span> <span data-tex-inline="[0, 3],"></span> <span data-tex-inline="\text{total } 36"></span></span>Find k.</li><li><span class="givens"><span data-tex-inline="V(t) = 2t^3 - 15t^2 + 24t + 100,"></span> <span data-tex-inline="\text{thousand m}^3"></span></span>Find the lake's net inflow rate, and when it is 0.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">16·then.3</span><span class="gname">Where it gives.</span><span class="gwhy">Bend: find where the techs stop working.</span>
+      <ol class="sub">
+        <li><span class="qid">16·then.3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{the page's lake},"></span> <span data-tex-inline="\text{Claim: fullest at noon,},"></span> <span data-tex-inline="\text{when the inflow peaks}"></span></span>Refute the claim with the lake's stored volume.</li><li><span class="givens"><span data-tex-inline="\text{hourly gauge readings: } 0,\ 0,\ 0,\ 0"></span></span>Prove or refute: no rain fell.</li><li><span class="givens"><span data-tex-inline="5 \text{ L/s for } 10 \text{ s},"></span> <span data-tex-inline="\text{then the valve shuts at once}"></span></span>Net-change asked for a continuous rate.<br>Find the total in the tank, and the page that lets net-change give it.</li><li><span class="givens"><span data-tex-inline="\text{rate in litres a minute},"></span> <span data-tex-inline="\text{time in seconds}"></span></span>Find the unit of the integral, and put it right.</li></ol></li>
+      </ol></li>
+    <li class="optgroup"><span class="qid">16·then.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder challenges that rely on your own making. The page is complete without these; the rung's star needs them.</span>
+      <ol class="sub">
+        <li class="opt"><span class="qid">16·then.4.1</span><span class="tagq">build</span>Make up a rate in and a rate out of your own for a tank near Modesto, in litres a minute over an hour, so that the rate in peaks before the tank is fullest.<br>Find the net change over the hour, and when the tank is fullest.</li>
+        <li class="opt"><span class="qid">16·then.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{the page's lake}"></span></span>Prove or refute: the lake could be fuller at the start than at the crest.</li>
+        <li class="opt"><span class="qid">16·then.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{two lakes},"></span> <span data-tex-inline="\text{the same net inflow}"></span> <span data-tex-inline="\text{over every hour}"></span></span>Prove or refute: they hold the same amount.</li>
+        <li class="opt"><span class="qid">16·then.4.4</span><span class="tagq">seam</span>Before 1674 the usual answer, from the ancient philosophers to the scholars of that century, was that springs and rivers are fed from below. Seawater was drawn up through the earth, or air turned to water in caverns. Rain, it was said, could never be enough. The measurer of 1674 added up the rain and showed it was more than enough. <br>Does showing that rain is enough prove that rivers come from rain? <br>What else would you want to measure?</li>
+      </ol></li>
+  </ol>
+  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
+</section>
+
+<nav class="nextrung"><a href="r16cb12.html">← 16·cb12 · floating and sinking</a><a href="r16phys.html">16·phys · how far did it go, if you only know how fast? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>Perrault measured the rain and snow that fell over three years on the upper basin of the Seine, worked out how much water that made over the whole basin, and found it about six times what the river carried away in the same time: enough, he concluded, to feed the river and the springs, with plenty lost to the air and the plants.</p><cite>Pierre Perrault, De l’origine des fontaines (1674); paraphrase</cite></aside>
+  <p>In 16·then.4.4, the answer from below runs from Aristotle to Descartes and Athanasius Kircher.</p>
+  <h3>Accepted names</h3>
+  <p>15h’s strip sums are Riemann sums, after Bernhard Riemann.</p>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+/* least and greatest of F.f on [lo, hi]: the ends, F's critical points inside, and a fine sample (exact between critical points for the functions used here) */
+function ext(F,lo,hi){ if(F.dir) return [0,1]; let m=Infinity,M=-Infinity; const t=x=>{ const v=F.f(x); if(v<m) m=v; if(v>M) M=v; };
+  t(lo); t(hi); (F.crit||[]).forEach(c=>{ if(c>lo&&c<hi) t(c); }); for(let k=1;k<64;k++) t(lo+(hi-lo)*k/64); return [m,M]; }
+function sums(F,pts){ let L=0,U=0; const ms=[],Ms=[]; for(let i=1;i<pts.length;i++){ const [m,M]=ext(F,pts[i-1],pts[i]), w=pts[i]-pts[i-1]; ms.push(m); Ms.push(M); L+=m*w; U+=M*w; } return {L,U,ms,Ms}; }
+const eq=(a,b,n)=>Array.from({length:n+1},(_,i)=>a+(b-a)*i/n);
+function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
+function boxes(P,pts,hs,stroke,fill,alpha){ const c=P.ctx; for(let i=1;i<pts.length;i++){ const a=pts[i-1],b=pts[i],h=hs[i-1]; c.globalAlpha=alpha; P.poly([[a,0],[b,0],[b,h],[a,h]],null,fill); c.globalAlpha=1; P.poly([[a,0],[b,0],[b,h],[a,h]],stroke,null,1.2); } }
+function dirDots(P,a,b){ const c=P.ctx; c.fillStyle=col('--ink'); for(let k=0;k<=300;k++){ const x=a+(b-a)*k/300; const y=(k%2)?0:1; c.fillRect(P.X(x)-1,P.Y(y)-1,2,2); } }
+/* shade between the graph of fn and the axis from lo to hi: above in pos colour, below in neg colour */
+function shade(P,fn,lo,hi,pos,neg,alpha){ if(hi<lo){ const t=lo; lo=hi; hi=t; } const c=P.ctx, N=300; c.globalAlpha=alpha==null?0.32:alpha;
+  for(let k=0;k<N;k++){ const x0=lo+(hi-lo)*k/N, x1=lo+(hi-lo)*(k+1)/N, xm=(x0+x1)/2, y=fn(xm); if(!isFinite(y)) continue; P.poly([[x0,0],[x1,0],[x1,fn(x1)],[x0,fn(x0)]],null,y>=0?pos:neg); }
+  c.globalAlpha=1; }
+function rangeOf(fn,lo,hi,pad){ let m=Infinity,M=-Infinity; for(let k=0;k<=400;k++){ const v=fn(lo+(hi-lo)*k/400); if(isFinite(v)){ if(v<m) m=v; if(v>M) M=v; } } if(m>0) m=0; if(M<0) M=0; const p=(M-m)*(pad==null?0.12:pad)||1; return [m-p,M+p]; }
+function chips(el,FN,get,setk,after){ Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===get()) b.className='on'; b.onclick=()=>{ setk(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+const Nw='\\htmlClass{new}';
+function gridFor(sp){ return sp>40?10:sp>16?4:sp>8?2:sp>3?1:sp>1.2?0.5:0.25; }
+function frame2(P,fn,lo,hi,pad){ const w=hi-lo; P.o.x=[lo-0.12*w,hi+0.08*w]; P.o.y=rangeOf(fn,lo,hi,pad==null?0.12:pad); const sx=P.o.x[1]-P.o.x[0], sy=P.o.y[1]-P.o.y[0]; let g=gridFor(sx); while(sy/g>24) g*=2; P.o.grid=g; }
+const num=(f,a,b,n)=>{ n=n||4000; const h=(b-a)/n; let s=0; for(let i=0;i<n;i++) s+=f(a+(i+0.5)*h)*h; return s; };
+/* axes with separate steps across and up */
+function axes2(P,gx,gy){ const c=P.ctx,o=P.o; c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ c.moveTo(P.X(x),P.Y(o.y[0])); c.lineTo(P.X(x),P.Y(o.y[1])); }
+  for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ c.moveTo(P.X(o.x[0]),P.Y(y)); c.lineTo(P.X(o.x[1]),P.Y(y)); } c.stroke();
+  c.strokeStyle=col('--muted'); c.lineWidth=1.3; c.beginPath(); if(o.y[0]<=0&&o.y[1]>=0){ c.moveTo(P.X(o.x[0]),P.Y(0)); c.lineTo(P.X(o.x[1]),P.Y(0)); } if(o.x[0]<=0&&o.x[1]>=0){ c.moveTo(P.X(0),P.Y(o.y[0])); c.lineTo(P.X(0),P.Y(o.y[1])); } c.stroke();
+  c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; const ly=Math.min(P.H-6,Math.max(12,P.Y(0)+14));
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ if(Math.abs(x)<1e-9) continue; c.fillText(+x.toFixed(6),P.X(x),ly); }
+  c.textAlign='right'; const lx=Math.max(32,Math.min(P.W-4,P.X(0)-5)); for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ if(Math.abs(y)<1e-9) continue; c.fillText(String(+y.toFixed(6)).replace('-','−'),lx,P.Y(y)+4); } }
+function nice(sp){ const raw=sp/6, p=Math.pow(10,Math.floor(Math.log10(raw))), m=raw/p; return (m<1.5?1:m<3.5?2:m<7.5?5:10)*p; }
+const kt=$('kt'),ko=$('ko'),cvF=$('cvF'),cvV=$('cvV');
+const inn=t=>300+2*t*(24-t);
+const out=()=>+ko.value;
+const d=t=>inn(t)-out();
+const Vc=t=>3600*(24*t*t-2*t*t*t/3+(300-out())*t)/1e6;
+const zeros=()=>{ const c=300-out(); /* 48t − 2t² + c = 0 → t² − 24t − c/2 = 0 */ const D=576+2*c; if(D<0) return []; const r=Math.sqrt(D)/2*1; const a=12-Math.sqrt(D)/2, b=12+Math.sqrt(D)/2; return [a,b].filter(z=>z>=0&&z<=24); };
+const PF=plane(cvF,{x:[-1,25],y:[0,650],grid:0,aspect:0.8,draw:P=>drawF(P)});
+const PV=plane(cvV,{x:[-1,25],y:[-5,5],grid:0,aspect:0.8,draw:P=>drawV(P)});
+[[PF,cvF],[PV,cvV]].forEach(([P,cv])=>Object.defineProperty(P.o,'aspect',{get:()=>cv.clientWidth>480?0.75:0.9}));
+function drawF(P){ const t=+kt.value; P.o.y=[0,680]; axes2(P,4,100);
+  const c=P.ctx, N=240; c.globalAlpha=0.34; for(let k=0;k<N;k++){ const t0=t*k/N, t1=t*(k+1)/N; if(t1<=t0) continue; const m=(t0+t1)/2; P.poly([[t0,out()],[t1,out()],[t1,inn(t1)],[t0,inn(t0)]],null,d(m)>=0?'--teal':'--plum'); } c.globalAlpha=1;
+  curve(P,inn,'--ink',2.6,0,24); P.line(0,out(),24,out(),'--muted',2,[6,4]); P.line(t,0,t,680,'--ember',1.4,[]); }
+function drawV(P){ const t=+kt.value; let lo=0,hi=0; for(let k=0;k<=240;k++){ const v=Vc(24*k/240); if(v<lo) lo=v; if(v>hi) hi=v; } const pad=(hi-lo)*0.12||1; P.o.y=[lo-pad,hi+pad]; axes2(P,4,nice(hi-lo+2*pad));
+  curve(P,Vc,'--muted',1.4,0,24,[3,4]); curve(P,Vc,'--ink',2.6,0,t); zeros().forEach(z=>P.dot(z,Vc(z),'--gold',5)); P.dot(t,Vc(t),'--ember',5); }
+function read(){ const t=+kt.value; $('ot').textContent=mm(t,2)+' h'; $('oo').textContent=out()+' m³/s';
+  const z=zeros(); const vd=$('vdF'); vd.className='verdict';
+  let msg='By hour '+mm(t,2)+' the lake has changed by '+mm(Vc(t),3)+' million m³. Right now '+(d(t)>=0?'more comes in than goes out, by ':'more goes out than comes in, by ')+mm(Math.abs(d(t)),1)+' m³/s.';
+  if(z.length===2) msg+=' Trough at '+mm(z[0],2)+' h, crest at '+mm(z[1],2)+' h.'; else if(z.length===0) msg+=' In and out never balance: the lake only '+(out()<300?'gains.':'loses.');
+  vd.textContent=msg;
+  tex($('eqF'),R`\begin{gathered}V(${mm(t,2)}) - V(0) = 3600\textstyle\int_0^{${mm(t,2)}} \big(2s(24 - s) - ${out()-300}\big)\,ds\\ = ${mm(Vc(t)*1e6,0)} \text{ m}^3\end{gathered}`,true); }
+function all(){ PF.redraw(); PV.redraw(); read(); }
+kt.addEventListener('input',all); ko.addEventListener('input',all);
+window.__pic={set:(t,o)=>{ kt.value=t; ko.value=o; all(); return {V:+Vc(t).toFixed(5),num:+(3600*num(d,0,t)/1e6).toFixed(5),z:zeros().map(x=>+x.toFixed(3))}; }};
+all();
+stepper('#sl1',[
+  {k:'ember',kl:'net-change',t:R`${Nw}{Q(T) = Q(0) + \textstyle\int_0^T Q'(t)\,dt}`,n:`area-is-a-change with G = Q.`},
+  {k:'ember',kl:'in less out',t:R`V' = \text{in} - \text{out}`,n:`The lake's books.`},
+  {k:'ember',kl:'the day',t:R`\textstyle\int_0^{24} V'\,dt = 1008`,n:`In m³/s times hours.`},
+  {k:'ember',kl:'the units',t:R`1008 \cdot 3600 \approx 3.6 \times 10^6 \text{ m}^3`,n:`An hour is 3600 s.`},
+  {k:'ember',kl:'the crest',t:R`t = 12 \pm \sqrt{69}`,n:`Where in = out.`},
+  {k:'ember',kl:'fullest',t:R`t \approx 20.31,\ \text{not } 12`,n:`Fullest when the inflow falls back to the outflow.`},
+  {k:'ember',kl:'readings',t:R`0,\ 2,\ 5,\ 9,\ 6,\ 3,\ 1`,n:`Hourly rain, mm/h.`},
+  {k:'ember',kl:'left and right',t:R`25 \text{ and } 26 \text{ mm}`,n:`Strip sums standing in for the area.`},
+  {k:'ember',kl:'the Seine',t:R`\text{rain} \approx 6 \times \text{the river}`,n:`Enough, and more.`},
+  {k:'ember',kl:'illegal',t:R`\textstyle\int_0^{24} V' \ne V(24)`,n:`The change, not the amount.`}
+],{title:'The slides · net-change; in less out; the day\'s total; the units; the crest; fullest is not the peak; readings; left and right sums; the Seine; illegal moves · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

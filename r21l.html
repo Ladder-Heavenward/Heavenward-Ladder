@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The slope of sine by hand</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r21k.html">← 21k identities</a><a href="r21m.html">next: 21m running trig backwards →</a></p>
+  <div class="tags"><span class="tag tech">21l · technique</span></div>
+  <h1>The slope of sine by hand</h1>
+  <p>Rung 13 gave rules for the slope of a function built from others: one inside another, two multiplied, one divided by another. Those rules never cared which functions they were given. This step hands them the sine, the cosine and the tangent, and finds the highest points, the lowest points and the bends of curves built from them.</p>
+  <p class="gesture">The rules for slopes work on the circle’s coordinates exactly as on any other function. With them you can find where a curve made of waves is highest, lowest or flattest, and which way it bends.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r21g.html">21g</a> (the slopes of sin, cos and tan), <a href="r13e.html">13e</a> and <a href="r13i.html">13i</a> (the chain, product and quotient rules), <a href="r14a.html">14a</a> and <a href="r14g.html">14g</a> (tops, bottoms and bends). <a href="r21m.html">21m</a> runs the functions backwards.</p></div>
+</header>
+
+<section class="class step" data-step="21l1">
+  <h2 class="sthead"><span class="stno">21l1</span>One inside another</h2>
+  <p class="stands">Stands on 21g (slopes of sin and cos) and 13e (the chain rule).</p>
+  <p data-pid="deda51">Trig-chain technique: <b>the slope of sin(g(x)) is cos(g(x)) times g′(x), and the slope of cos(g(x)) is −sin(g(x)) times g′(x).</b> The outside is the circle’s coordinate, the inside anything with a slope.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the trig-chain technique, three times">
+(\sin x^2)' = \cos(x^2) \cdot 2x @@ inside x², slope 2x
+(\sin^2 x)' = ((\sin x)^2)' = 2\sin x \cdot \cos x = \sin 2x @@ inside sin x, outside squaring; doubles (21d4)
+\htmlClass{new}{(\cos^3 2x)' = 3\cos^2 2x \cdot (-\sin 2x) \cdot 2} \quad \blacksquare @@ three layers: cube, cos, times 2
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · chain · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">21l1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\sin(3x + 1),\ \ \cos\sqrt{x},\ \ \sin^3 x"></span></span>Find the slope of each.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21l2">
+  <h2 class="sthead"><span class="stno">21l2</span>Products and quotients</h2>
+  <p class="stands">Stands on 21l1, 21g3 (the slope of tan) and 13i (products and quotients).</p>
+  <p data-pid="8341a4">Trig-quotient technique: <b>sec′ = sec · tan, csc′ = −csc · cot and cot′ = −csc², each by the quotient rule on 1 / cos, 1 / sin and cos / sin.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the trig-quotient technique, and a product">
+\big(\tfrac{1}{\cos x}\big)' = \tfrac{0 \cdot \cos x - 1 \cdot (-\sin x)}{\cos^2 x} = \tfrac{\sin x}{\cos^2 x} @@ the quotient rule
+\htmlClass{new}{\sec' x = \sec x\tan x} \quad \blacksquare @@ sin x / cos² x = (1 / cos x)(sin x / cos x)
+(x\sin x)' = \sin x + x\cos x @@ the product rule
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · quotients · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21l2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="x^2\cos x,\ \ \dfrac{\sin x}{x},\ \ \tan x\sec x"></span></span>Find the slope of each.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21l3">
+  <h2 class="sthead"><span class="stno">21l3</span>Highest and lowest</h2>
+  <p class="stands">Stands on 21l1, 21k4 (every answer) and 14a (a slope at a top is 0).</p>
+  <p data-pid="d50105">Trig-peaks technique: <b>on a closed stretch, a wave-built function is highest or lowest at an end or where its slope is 0; every-answer finds the zeros of the slope.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the trig-peaks technique, on f(x) = x + 2 cos x over [0, 2π]">
+f'(x) = 1 - 2\sin x = 0 \iff \sin x = \tfrac12 @@ slope of cos (21g)
+x = \tfrac{\pi}{6},\ \tfrac{5\pi}{6} @@ every-answer (21k4), inside [0, 2π]
+f(0) = 2,\ f(\tfrac{\pi}{6}) = \tfrac{\pi}{6} + \sqrt3,\ f(\tfrac{5\pi}{6}) = \tfrac{5\pi}{6} - \sqrt3,\ f(2\pi) = 2\pi + 2 @@ check the flats and the ends
+\htmlClass{new}{\text{highest } 2\pi + 2 \text{ at } 2\pi;\ \text{lowest } \tfrac{5\pi}{6} - \sqrt3 \text{ at } \tfrac{5\pi}{6}} \quad \blacksquare @@ 5π/6 − √3 ≈ 0.886 &lt; 2
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · peaks · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21l3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="f(x) = \sin x + \cos x,\ \ 0 \le x \le 2\pi"></span></span>Guess where it is highest. <br>Find its highest and lowest values, and where.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21l4">
+  <h2 class="sthead"><span class="stno">21l4</span>Which way it bends</h2>
+  <p class="stands">Stands on 21l1 and 14g (bends up and down).</p>
+  <p data-pid="cf47e3">Sine-bend technique: <b>the sine bends down where it is above the floor and up where it is below, since its second slope is −sin.</b> It changes its bend exactly where it crosses the floor.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the sine-bend technique">
+(\sin x)'' = (\cos x)' = -\sin x @@ 21g, twice
+\sin x > 0 \Rightarrow (\sin x)'' < 0 @@ bends down above the floor
+\htmlClass{new}{(\sin kx)'' = -k^2\sin kx} \quad \blacksquare @@ the chain rule twice: a squeezed wave bends k² times as hard
+  </pre>
+  <p data-pid="c03845">So a wave squeezed to half its period bends four times as sharply.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · bends · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21l4.1</span><span class="ph undo">undo</span><span class="givens"><span class="gtx">a function with f″ = −9f,  f(0) = 0,  f′(0) = 6</span></span>Find one such function. <br>Find its period and amplitude.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21l5">
+  <h2 class="sthead"><span class="stno">21l5</span>Illegal moves</h2>
+  <p class="stands">Stands on 21l1 to 21l4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+(\sin x^2)' = \cos 2x\,? @@ cos(x²) · 2x: the outside keeps its inside
+(\sin^2 x)' = \cos^2 x\,? @@ 2 sin x cos x: the square is the outside
+(\sin 3x)' = \cos 3x\,? @@ 3 cos 3x: the inside’s slope is 3
+\text{slope } 0 \Rightarrow \text{highest}\,? @@ also a low, or neither; and an end may beat them all
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21l5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="y = \sin x\cos x"></span></span>Find its slope two ways: by the product rule, and by doubles first.</li><li><span class="givens"><span data-tex-inline="y = x - \sin x"></span></span>Find every x where its slope is 0. <br>Find whether it is ever falling.</li><li><span class="givens"><span data-tex-inline="y = \sin(\sin x)"></span></span>Find its slope at x = 0.</li><li><span class="givens"><span data-tex-inline="y = \tan x"></span></span>Find where it bends up.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">21l.4.1</span><span class="tagq">build</span>Build a function made from sin and cos that is 0 at x = 0, has slope 0 at x = 0, and is highest at x = π.</div>
+  <div class="chq"><span class="chid">21l.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="y = x + k\sin x"></span></span>Find every k for which it never falls.</div>
+  <div class="chq"><span class="chid">21l.4.3</span><span class="tagq">converse</span>A function with f″ = −f bends down wherever it is above the floor. Turn it round: if a function bends down exactly where it is above the floor, must f″ = −f?</div>
+  <div class="chq"><span class="chid">21l.4.4</span><span class="tagq">reroute</span>Find the slope of tan x by writing it as sin x · (cos x)⁻¹ and using the product rule and the chain rule. <br>Check it against 21g.</div>
+  <div class="chq"><span class="chid">21l.4.5</span><span class="tagq">seam</span>A light ray goes from a lamp in the air to a fish in the water, and bends where it enters. One thinker explained the bend by light going faster in water. A rival said light takes the quickest route, and must therefore be slower in water. Both gave the same rule for the bend. <br>How can two opposite pictures give the same rule? <br>What measurement would decide between them?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r21k.html">← 21k · identities</a><a href="r21m.html">21m · running trig backwards →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The chain, product and quotient rules keep their names here. The second slope is the second derivative; “bends down” and “bends up” are concave down and concave up, and a place where the bend changes is a point of inflection.</p>
+  <h3>Who said it first</h3>
+  <p>In 21l.4.5, the first explanation is René Descartes’s, Dioptrics (1637); the quickest-route rule is Pierre de Fermat’s (1662), worked out with the method of slopes. Léon Foucault measured light in water in 1850 and found it slower.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'trig chain',t:R`\htmlClass{new}{(\sin g)' = \cos g \cdot g'}`,n:`Outside, then inside.`}
+],{title:'The slides · chain · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'trig quotients',t:R`\htmlClass{new}{\sec' = \sec\tan,\ \ \cot' = -\csc^2}`,n:`By the quotient rule.`}
+],{title:'The slides · quotients · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'trig peaks',t:R`\htmlClass{new}{f' = 0 \text{ or an end}}`,n:`Every answer, then compare.`}
+],{title:'The slides · peaks · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'sine bend',t:R`\htmlClass{new}{(\sin kx)'' = -k^2\sin kx}`,n:`Down above the floor.`}
+],{title:'The slides · bends · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`(\sin x^2)' \ne \cos 2x`,n:`The outside keeps its inside.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

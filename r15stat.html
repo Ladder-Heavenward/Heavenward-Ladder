@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>15·stat · How likely is landing in a range?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r15econ.html">← 15·econ what is a payment next year worth today?</a><a href="r16.html">next: 16 · running change backwards →</a></p>
+  <div class="tags"><span class="tag stat">15·stat · statistics</span></div>
+  <h1>How likely is landing in a range?</h1>
+  <p>How likely is landing in a range? 4·stat's chance counted equally likely cases: two heads in 6 of the 16 ways four coins can fall. That works when the cases can be listed. A wait for a bus, a length of trout, the sum of two readings: these land anywhere in an interval, and the cases cannot be listed. Each single value is so unlikely that its chance must be 0, and yet some value always happens. 9·stat drew such data as a histogram and asked, among its Make questions, where its outline heads as the bins grow narrow. This page makes the bins narrow, and finds that the bars' total over a range heads to an area. So the chance of landing in a range is read as the area over it, and rung 15's areas start doing statistics.</p>
+  <p class="gesture">Draw each bar so that its area is the share of the data in its bin. As the bins grow narrow, the bars’ tops head to a curve. The chance of landing in a range is then the area under the curve over that range; the curve is never negative, and its whole area is 1. The running total, the area from the left end up to a point, is the share at or below that point, and the chance of a range is the running total at its right end less the total at its left.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r09stat.html">9·stat</a> (bins, running-total, frequency), <a href="r04stat.html">4·stat</a> (chance over equally likely cases), <a href="r04j.html">4j</a> (counting), <a href="r15a.html">15a</a> (a box's area), <a href="r15c.html">15c</a> (integrable, ∫), <a href="r15e.html">15e</a> (areas-add, interval-cut-in-two, smaller-function-smaller-area), <a href="r15h.html">15h</a> (narrow-strips), <a href="r15i.html">15i</a> (area-under-a-power), <a href="r12a.html">12a</a> (in-between-value), <a href="r14logi.html">14·logi</a> (a spread of sales). Rung 16 finds these areas faster; rung 30 proves why the bars settle.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · read it through, then work the picture and the slides</div>
+
+  <h3>Bars that are areas</h3>
+  <p data-pid="726223">9·stat drew a histogram with bars as tall as their counts. Draw each bar instead at height count/(n · w), for n values in bins of width w. A bar is a box, so its area is its height times its width (15a): count/n, the share of the data in its bin. The counts add to n (bins), so the areas add to 1. The share of the data in a range made of whole bins is the area of the bars over it (areas-add). Its accepted name is a density histogram.</p>
+  <pre class="lines" data-k="ember" data-label="this page: a density histogram">
+\text{height} = \tfrac{\text{count}}{n w} @@ n values, bins of width w
+\text{area} = \text{height} \cdot w = \tfrac{\text{count}}{n} @@ a box's area (15a): the bin's share of the data
+\text{the areas add to } 1 @@ bins (9·stat): the counts add to n
+  </pre>
+  <p data-pid="8656d2"><b>Draw each bar so that its area, not its height, is its share of the data.</b> Then bins of different widths can stand side by side honestly, which 9·stat warned they could not when drawn by count.</p>
+
+  <h3>Making the bars thin</h3>
+  <p data-pid="cd3430">Take two random numbers from 0 up to 1, and add them. With one decimal place each, a number is one of 0, 0.1, …, 0.9. Take all 100 pairs as equally likely, as 4·stat took the 36 throws of two dice. A sum of s tenths comes from s + 1 pairs when s ≤ 9, and from 19 − s pairs when s ≥ 9. Bin the sums by tenths, w = 0.1, and draw density bars.</p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this page: the sum of two random numbers">
+\text{one place: height at } x = \tfrac{s}{10} \text{ is } \tfrac{s + 1}{100 \cdot 0.1} = x + 0.1 @@ for s ≤ 9: count over nw
+\text{m places: height at } x \text{ is } x + 10^{-m} \text{ for } x \lt 1 @@ 10²ᵐ pairs, s + 1 of them with sum s · 10⁻ᵐ, bins 10⁻ᵐ wide
+\text{and } 2 - x - 10^{-m} \text{ for } x \ge 1 @@ the same count, from the other end
+\htmlClass{new}{f(x) = x \text{ on } [0, 1],\ \ f(x) = 2 - x \text{ on } [1, 2]} @@ the bars' tops come within 10⁻ᵐ of this curve
+  </pre>
+  <p data-pid="e5c7ad">The bars over a range [u, v] are a strip sum of a curve that lies within 10⁻ᵐ of f. As the bins narrow, narrow-strips (15h) says strip sums of the continuous f head to ∫ᵤᵛ f(x) dx. The extra 10⁻ᵐ adds at most 10⁻ᵐ(v − u + 2 · 10⁻ᵐ) to the bars' area, which heads to 0 too. So the chance counted over the pairs heads to the area.</p>
+  <pre class="lines" data-k="ember" data-label="this page: a chance as an area">
+\textstyle\int_{0.5}^{1} x\,dx = \tfrac{1^2 - 0.5^2}{2} = 0.375 @@ area-under-a-power (15i), on [0.5, 1]
+\text{one place: pairs with sum } 0.5 \text{ to } 0.9 \text{: } 6 + 7 + 8 + 9 + 10 = 40 @@ 40 of 100: the counted chance, coarse
+\begin{aligned}&\text{m places: the counted}\\ &\quad\text{chance heads to } 0.375\end{aligned} @@ narrow-strips
+  </pre>
+  <p data-pid="d874ba"><b>The chance of landing in a range is the area over it.</b></p>
+
+  <h3>A curve as a model of chance</h3>
+  <p class="eqline" data-pid="967b6a">From here on, a density on [c, d] is a function f, integrable on [c, d], with f(x) ≥ 0 there and ∫ᶜᵈ f(x) dx = 1. A quantity lands by f when, for c ≤ a ≤ b ≤ d, its chance of landing in [a, b] is ∫ₐᵇ f(x) dx. Accepted names: a probability density function; the quantity is a continuous random variable.</p>
+  <p data-pid="023e45">The tent f above was counted. For a real quantity, which f it follows is not proved. It is a guess, checked against a histogram, the way 4·stat took cases as equally likely and checked them against tallies.</p>
+  <p data-pid="974e73">Range-chance technique: <b>let f be a density on [c, d]. Every range in [c, d] has a chance from 0 to 1. Two ranges that meet only at an end have chances that add. A single value has chance 0.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the range-chance technique">
+0 \le \textstyle\int_a^b f @@ smaller-function-smaller-area (15e): f ≥ 0
+\textstyle\int_c^d f = \int_c^a f + \int_a^b f + \int_b^d f @@ interval-cut-in-two (15e), twice
+\textstyle\int_a^b f \le \int_c^d f = 1 @@ the other two pieces are at least 0
+\textstyle\int_a^b f + \int_b^e f = \int_a^e f @@ interval-cut-in-two: ranges meeting at b add
+f \le M \text{ on } [c, d] @@ integrable means bounded (15c)
+\textstyle\int_a^{a + w} f \le Mw \text{ for every } w \gt 0 @@ smaller-function-smaller-area
+\htmlClass{new}{\text{the chance of exactly } a \text{ is } 0} \quad \blacksquare @@ it is at most every Mw; and ∫ₐᵃ f = 0 (15e)
+  </pre>
+  <p data-pid="1e1b07">So [u, v] and the range without its ends have the same chance. A height of f is not a chance. A density can be taller than 1 where it is narrow: f = 3 on [0, ⅓] is a density.</p>
+
+  <h3>The area so far</h3>
+  <p class="eqline" data-pid="2abcfe">From here on, the running total of a density f on [c, d] is F(x) = ∫ᶜˣ f(t) dt, for c ≤ x ≤ d. It is the chance of landing at most x: 9·stat's running total, divided by n, read as an area. Accepted name: the cumulative distribution function. F is a name, for a function.</p>
+  <p data-pid="75fe70">Area-so-far technique: <b>F starts at 0 and ends at 1, never goes down, and has no gaps. The chance of [u, v] is F(v) − F(u). Some m has F(m) = ½.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the area-so-far technique">
+F(c) = 0,\ \ F(d) = 1 @@ ∫ᶜᶜ f = 0 (15e); f is a density
+F(b) = F(a) + \textstyle\int_a^b f @@ interval-cut-in-two
+F(b) - F(a) = \textstyle\int_a^b f \ge 0 @@ smaller-function-smaller-area: F never goes down
+0 \le F(b) - F(a) \le M(b - a) @@ f ≤ M: F is continuous, by the squeeze (10d)
+F(c) \lt \tfrac12 \lt F(d) \;\Rightarrow\; \htmlClass{new}{F(m) = \tfrac12} \text{ for some } m @@ in-between-value (12a) ∎
+  </pre>
+  <p data-pid="0c2d05">For the tent, F(x) = x²/2 on [0, 1], and F(x) = 1 − (2 − x)²/2 on [1, 2], by area-under-a-power on each piece. The chance of [0.5, 1.5] is F(1.5) − F(0.5) = 0.875 − 0.125 = 0.75. The m with F(m) = ½ is 1, the median.</p>
+
+  <h3>A bus stop in Salinas</h3>
+  <p data-pid="2418ab">A bus comes every 20 minutes, and a rider arrives without the timetable. A guess: the wait lands by f = 1/20 on [0, 20]. The chance of waiting more than 15 minutes is ∫ from 15 to 20 of 1/20, which is ¼.</p>
+  <p data-pid="4a858e">Now the rider changes to a second bus, also every 20 minutes, and the two waits add. Scale the tent by 20: the total lands by f(x) = x/400 on [0, 20] and (40 − x)/400 on [20, 40]. The scaling is safe: on a range [A, B] inside [0, 20], the tent's area over [A/20, B/20] and this f's area over [A, B] both come to (B² − A²)/800, by area-under-a-power.</p>
+  <pre class="lines" data-k="ember" data-label="this page: two waits">
+\textstyle\int_{30}^{40} \tfrac{40 - x}{400}\,dx = \tfrac{1}{400}\Big(400 - \tfrac{40^2 - 30^2}{2}\Big) @@ areas-add, areas-scale, area-under-a-power
+= \tfrac{50}{400} = \htmlClass{new}{\tfrac18} @@ more than half an hour in all, about one trip in 8
+  </pre>
+  <p data-pid="8dcad6">One wait is as likely short as long. Two waits added are likeliest near 20 minutes, and seldom either very short or very long.</p>
+
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · counting</div>
+    <p data-pid="6fe16b">4j set beside counting a principle of the second kind of care: random things in a crowd make smooth, steady patterns. One rider's total wait can be anything from 0 to 40 minutes. A thousand riders' waits pile into a tent, and the tent was counted before anyone waited.</p>
+    <p data-pid="f60ad1"><b>The spread is part of the answer, not noise around it.</b></p>
+    <p data-pid="a97652">“About 20 minutes” is the middle. The tent says how often the middle misses, and by how much: one trip in 8 waits more than half an hour.</p>
+    <p class="bait" data-pid="737ef4">A rider says the second bus “always” makes her wait half an hour. Of her last 40 trips, 11 waited that long. Is that the tent, or something else?</p>
+  </aside>
+
+  <h3>Which rung licenses each step</h3>
+  <div class="tablewrap"><table class="tt">
+  <tr><th class="l">step</th><th class="l">licence</th></tr>
+  <tr><td class="l">bars as areas</td><td class="l">15a's box area; 9·stat's bins</td></tr>
+  <tr><td class="l">the tent, from pairs</td><td class="l">4·stat's chance; 4j's counting</td></tr>
+  <tr><td class="l">bars head to the area</td><td class="l">15h's narrow-strips</td></tr>
+  <tr><td class="l">which curve a real quantity follows</td><td class="l">a guess, checked against data</td></tr>
+  <tr><td class="l">range-chance</td><td class="l">15e's smaller-function-smaller-area, interval-cut-in-two</td></tr>
+  <tr><td class="l">area-so-far, a median</td><td class="l">15e; 10d's squeeze; 12a's in-between-value</td></tr>
+  <tr><td class="l">the areas themselves</td><td class="l">15i's area-under-a-power; 15e's areas-add, areas-scale</td></tr>
+  </table></div>
+
+  <h3>Illegal moves</h3>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed">
+f(1) = 1 \text{, so the chance of exactly } 1 \text{ is } 1\,? @@ a height is not a chance; one value has chance 0
+\text{a density never passes } 1\,? @@ f = 3 on [0, ⅓] is a density; only areas stay at most 1
+\text{chance of } [a, b] = f(b) - f(a)\,? @@ that is F(b) − F(a), the running total
+\text{chance } 0 \text{, so it cannot happen}\,? @@ every value has chance 0, and one of them happens
+\begin{aligned}&\text{bars drawn by count, with}\\ &\quad\text{bins of different widths}\,?\end{aligned} @@ draw count/(nw), so that area is share
+  </pre>
+</section>
+
+<section class="pic" id="pic">
+  <div class="eyebrow">The picture · left: bars made thin, against a curve · right: the running total, and the area so far</div>
+  <div class="panels">
+    <div class="panel">
+      <div class="chips" id="fch"></div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">values n</span><input type="range" id="kn" min="0" max="6" step="1" value="2"><output id="on"></output></div>
+      <div class="kn"><span class="m">bin width w</span><input type="range" id="kw" min="0" max="5" step="1" value="1"><output id="ow"></output></div>
+      <div class="kn"><span class="m">from u</span><input type="range" id="ka" min="0" max="2" step="0.05" value="0.5"><output id="oa"></output></div>
+      <div class="kn"><span class="m">to v</span><input type="range" id="kb" min="0" max="2" step="0.05" value="1"><output id="ob"></output></div>
+      <div class="cap">Bars: count/(nw), drawn from simulated values. Plum bars: the bins inside [u, v]. Ink: the curve f. Teal: the area under f over [u, v].</div>
+      <div class="verdict" id="vdF"></div>
+    </div>
+    <div class="panel">
+      <div class="lbl">the share at most x, against x</div>
+      <canvas id="cvS"></canvas>
+      <div class="cap">Plum steps: the share of the simulated values at most x. Ink: F, the area so far. Teal: F(v) − F(u), the chance of [u, v].</div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+</section>
+
+<section class="slides" id="sl1"><div class="eyebrow">The slides · bars as areas; two random numbers; the bars made thin; the tent; a chance as an area; a density; range-chance; one value; the area so far; the bus; illegal moves · ← → keys work</div></section>
+
+<section class="sayback">
+  <div class="eyebrow">Say it back · then work it</div>
+  <h2>Questions</h2>
+  <div class="phkey"></div>
+  <ol>
+    <li><span class="qid">15·stat.1</span><span class="gname">Chances as areas.</span><span class="gwhy">Do: build the page's pieces.</span>
+      <ol class="sub">
+        <li><span class="qid">15·stat.1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f = 1/20 \text{ on } [0, 20];"></span> <span data-tex-inline="J = [5, 12]"></span></span>A wait lands by the density f. Find the chance it lands in J.</li><li><span class="givens"><span data-tex-inline="f(x) = x \text{ on } [0, 1],"></span> <span data-tex-inline="f(x) = 2 - x \text{ on } [1, 2];"></span> <span data-tex-inline="J = [0.3, 1.2]"></span></span>The sum of two random numbers lands by the tent f. Find its chance of landing in J.</li><li><span class="givens"><span data-tex-inline="f(x) = 6x(1 - x) \text{ on } [0, 1];"></span> <span data-tex-inline="J = [0.2, 0.4]"></span></span>Show that f is a density, and find the chance of J.</li><li><span class="givens"><span data-tex-inline="40 \text{ steelhead, in cm;}"></span> <span data-tex-inline="\text{bins of } w = 5 \text{ from } 50;"></span> <span data-tex-inline="\text{counts: } 4, 10, 16, 8, 2;"></span> <span data-tex-inline="J = [55, 65)"></span></span>Steelhead from the Carmel River are measured and binned as given. Find the density bars' heights, and the share in J.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">15·stat.2</span><span class="gname">From the chance back to the curve.</span><span class="gwhy">Undo: run the page's techs backwards.</span>
+      <ol class="sub">
+        <li><span class="qid">15·stat.2.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = kx \text{ on } [0, 4] \text{ is a density}"></span></span>Find k.</li><li><span class="givens"><span data-tex-inline="F(x) = x^3 \text{ on } [0, 1];"></span> <span data-tex-inline="J = [\tfrac12, 1]"></span></span>A density has running total F. Find the chance of J, and the median.</li><li><span class="givens"><span data-tex-inline="f = 1/T \text{ on } [0, T];"></span> <span data-tex-inline="\text{chance of passing } 9\ \text{min: } \tfrac14"></span></span>A wait lands by f. Find T.</li><li><span class="givens"><span data-tex-inline="\text{the tent on } [0, 2];"></span> <span data-tex-inline="\text{chance of at most } x: \tfrac14"></span></span>Find x.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">15·stat.3</span><span class="gname">Where the areas give.</span><span class="gwhy">Bend: find where the techs stop working.</span>
+      <ol class="sub">
+        <li><span class="qid">15·stat.3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = 2x \text{ on } [0, 1];"></span> <span data-tex-inline="c = 0.5,\ J = [c, c + w]"></span></span>A quantity lands by f. Find its chance of landing at exactly c, and in J.</li><li><span class="givens"><span data-tex-inline="60 \text{ values: } 30 \text{ in } [0, 10),"></span> <span data-tex-inline="30 \text{ in } [10, 40)"></span></span>Find the density bars' heights, and which bin looks fuller when the bars are drawn by count.</li><li><span class="givens"><span data-tex-inline="f = 3 \text{ on } [0, \tfrac13],"></span> <span data-tex-inline="f = 0 \text{ on } (\tfrac13, 1];"></span> <span data-tex-inline="J = [0, \tfrac13]"></span></span>Decide whether f is a density on its interval, and find the chance of J.</li><li><span class="givens"><span data-tex-inline="g(x) = 1.5 - x \text{ on } [0, 2];"></span> <span data-tex-inline="J = [1.5, 2]"></span></span>Find the integral of g over its interval, and decide whether g is a density.<br>Find the integral of g over J.</li></ol></li>
+      </ol></li>
+    <li class="optgroup"><span class="qid">15·stat.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder challenges that rely on your own making. The page is complete without these; the rung's star needs them.</span>
+      <ol class="sub">
+        <li class="opt"><span class="qid">15·stat.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{Bend's } 1.5 - x \text{ on } [0, 2]."></span> <span data-tex-inline="J = [0, \tfrac12]"></span></span>Make a density of your own on the same interval: a polynomial that is zero at both ends and never below zero between.<br>Find its chance of J, and its median.</li>
+        <li class="opt"><span class="qid">15·stat.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="q(x) = 2 \text{ at fractions,}"></span> <span data-tex-inline="q(x) = 1 \text{ elsewhere, on } [0, 1];"></span> <span data-tex-inline="J = [0, \tfrac12]"></span></span>Decide whether q gives a chance for J.</li>
+        <li class="opt"><span class="qid">15·stat.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="F(x) = \sqrt{x} \text{ on } [0, 1]"></span></span>The running total of a density starts at zero, ends at one, never goes down, and has no gaps. F does all four. <br>Prove or refute: F is the running total of some density.</li>
+        <li class="opt"><span class="qid">15·stat.4.4</span><span class="tagq">seam</span>In 1928 a mathematician argued that a chance is the share of a long run of trials, and nothing else. In 1931 another argued that a chance is how strongly a person expects something, and that chances do not exist apart from people. A rider is told her chance of waiting more than half an hour is one in eight. <br>Is that a fact about the buses, about many riders, or about what she knows?</li>
+      </ol></li>
+  </ol>
+  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
+</section>
+
+<nav class="nextrung"><a href="r15i.html">← 15i · geometric sums</a><a href="r15chem.html">15·chem · why does a squeezed gas push back? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>Simpson argued that astronomers should take the mean of many observations rather than trust one careful one. To show it, he supposed each error lands anywhere in a range, likelier the smaller it is, by a curve rising in a straight line to the middle and falling the same way, and he found by areas the chance that the mean errs by more than a given amount.</p><cite>Thomas Simpson, “On the advantage of taking the mean of a number of observations” (1756–1757); paraphrase</cite></aside>
+  <p>Abraham de Moivre first read a chance as an area under a curve, in 1733, for the counts of many coins. Karl Pearson named the histogram in his lectures of 1891. In 15·stat.4.4, the mathematician of 1928 is Richard von Mises, in Wahrscheinlichkeit, Statistik und Wahrheit, and the one of 1931 is Bruno de Finetti, who later wrote that probability does not exist.</p>
+  <p>Accepted names: the density histogram; a probability density function; the cumulative distribution function for F; the uniform distribution for the bus's 1/20; a continuous random variable. That the shares in a long run settle near the chances is the law of large numbers.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="15·stat: a worked “proof”, not allowed">
+f(x) = 6x(1 - x),\ \ f(0.5) = 1.5 @@ fine
+\text{so the chance of } 0.5 \text{ is } 1.5 @@ not allowed: a height is not a chance
+\text{chances can pass } 1 @@ false: every range has chance at most 1 (range-chance); the chance of 0.5 is 0
+  </pre>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '?'; let s=v.toFixed(d==null?3:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+function rng(seed){ return ()=>{ seed|=0; seed=seed+0x6D2B79F5|0; let t=Math.imul(seed^seed>>>15,1|seed); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+const NS=[50,200,1000,3000,10000,30000,100000], WS=[0.5,0.25,0.1,0.05,0.02,0.01];
+const MODELS={
+  one:{lab:'one wait',c:0,d:1,f:x=>(x>=0&&x<=1)?1:0,F:x=>Math.min(1,Math.max(0,x)),draw:u=>u(),tex:R`f(x) = 1 \text{ on } [0, 1]`},
+  two:{lab:'two waits added',c:0,d:2,f:x=>x<0||x>2?0:(x<=1?x:2-x),F:x=>x<=0?0:x>=2?1:(x<=1?x*x/2:1-(2-x)*(2-x)/2),draw:u=>u()+u(),tex:R`f(x) = x \text{ on } [0, 1],\ 2 - x \text{ on } [1, 2]`},
+  mid:{lab:'middle of three',c:0,d:1,f:x=>(x>=0&&x<=1)?6*x*(1-x):0,F:x=>x<=0?0:x>=1?1:3*x*x-2*x*x*x,draw:u=>{ const a=[u(),u(),u()].sort((p,q)=>p-q); return a[1]; },tex:R`f(x) = 6x(1 - x) \text{ on } [0, 1]`}
+};
+let key='two',Mo=MODELS.two, data=[];
+const kn=$('kn'),kw=$('kw'),ka=$('ka'),kb=$('kb'),cvF=$('cvF'),cvS=$('cvS');
+const n=()=>NS[+kn.value], w=()=>WS[+kw.value];
+function sim(){ const u=rng(11+Object.keys(MODELS).indexOf(key)); data=[]; for(let i=0;i<n();i++) data.push(Mo.draw(u)); data.sort((p,q)=>p-q); }
+const ab=()=>{ let a=Math.min(+ka.value,Mo.d), b=Math.min(+kb.value,Mo.d); if(b<a){ const t=a; a=b; b=t; } return [a,b]; };
+const PF=plane(cvF,{x:[0,2],y:[0,2],grid:0,aspect:0.8,draw:P=>drawF(P)});
+const PS=plane(cvS,{x:[0,2],y:[0,1.1],grid:0,aspect:0.8,draw:P=>drawS(P)});
+[[PF,cvF],[PS,cvS]].forEach(([P,cv])=>Object.defineProperty(P.o,'aspect',{get:()=>cv.clientWidth>480?0.75:0.9}));
+function frame(P,gx,gy){ const c=P.ctx; c.strokeStyle=col('--grid'); c.lineWidth=1; c.beginPath();
+  for(let x=0;x<=P.o.x[1]+1e-9;x+=gx){ c.moveTo(P.X(x),P.Y(P.o.y[0])); c.lineTo(P.X(x),P.Y(P.o.y[1])); }
+  for(let y=0;y<=P.o.y[1]+1e-9;y+=gy){ c.moveTo(P.X(P.o.x[0]),P.Y(y)); c.lineTo(P.X(P.o.x[1]),P.Y(y)); } c.stroke();
+  P.line(P.o.x[0],0,P.o.x[1],0,'--muted',1.3); P.line(0,P.o.y[0],0,P.o.y[1],'--muted',1.3);
+  c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; for(let x=gx;x<=P.o.x[1]+1e-9;x+=gx) c.fillText(+x.toFixed(2),P.X(x),P.Y(0)+14); }
+let share=0;
+function bars(){ const W=w(), nb=Math.round((Mo.d-Mo.c)/W), cnt=new Array(nb).fill(0); data.forEach(v=>{ let i=Math.floor((v-Mo.c)/W); if(i>=nb) i=nb-1; cnt[i]++; }); return {W,nb,cnt}; }
+function drawF(P){ P.o.x=[0,Mo.d]; P.o.y=[0,key==='mid'?1.9:(key==='one'?1.6:1.4)]; frame(P,Mo.d/4,0.5);
+  const {W,nb,cnt}=bars(), [a,b]=ab();
+  P.poly([[a,0],...Array.from({length:101},(_,k)=>{ const x=a+(b-a)*k/100; return [x,Mo.f(x)]; }),[b,0]],null,'rgba(42,140,130,0.28)');
+  for(let i=0;i<nb;i++){ const x0=Mo.c+i*W, h=cnt[i]/(n()*W); const inside=x0>=a-1e-9&&x0+W<=b+1e-9; P.poly([[x0,0],[x0+W,0],[x0+W,h],[x0,h]],inside?'--plum':'--muted',inside?'rgba(140,90,160,0.25)':null,1); }
+  P.fn(x=>(x<Mo.c||x>Mo.d)?NaN:Mo.f(x),'--ink',2.4); P.line(a,0,a,P.o.y[1],'--teal',1.2,[4,3]); P.line(b,0,b,P.o.y[1],'--teal',1.2,[4,3]); }
+function drawS(P){ P.o.x=[0,Mo.d]; frame(P,Mo.d/4,0.25); const [a,b]=ab(); const c=P.ctx;
+  c.strokeStyle=col('--plum'); c.lineWidth=1.6; c.beginPath(); c.moveTo(P.X(0),P.Y(0)); const N=data.length, step=Math.max(1,Math.floor(N/400));
+  for(let i=0;i<N;i+=step){ c.lineTo(P.X(data[i]),P.Y(i/N)); c.lineTo(P.X(data[i]),P.Y((i+step)/N)); } c.lineTo(P.X(Mo.d),P.Y(1)); c.stroke();
+  P.fn(x=>Mo.F(x),'--ink',2.4);
+  P.line(a,Mo.F(a),P.o.x[1],Mo.F(a),'--teal',1,[3,3]); P.line(b,Mo.F(b),P.o.x[1],Mo.F(b),'--teal',1,[3,3]); P.line(P.o.x[1]*0.97,Mo.F(a),P.o.x[1]*0.97,Mo.F(b),'--teal',4); }
+function read(){ const [a,b]=ab(), vd=$('vdF'); $('on').textContent=n(); $('ow').textContent=w(); $('oa').textContent=mm(+ka.value,2); $('ob').textContent=mm(+kb.value,2);
+  let k=0; data.forEach(v=>{ if(v>=a&&v<=b) k++; }); share=k/n(); const area=Mo.F(b)-Mo.F(a);
+  const gap=Math.abs(share-area);
+  vd.className='verdict '+(gap<0.01?'win':'lose'); vd.textContent=k+' of the '+n()+' values land in ['+mm(a,2)+', '+mm(b,2)+']: a share of '+mm(share,3)+'. The area over it is '+mm(area,4)+'. '+(gap<0.01?'Close: the bars have settled near the area.':'Not yet close: more values, and the share settles near the area.');
+  tex($('eqF'),R`\begin{gathered}${Mo.tex}\\ F(${mm(b,2)}) - F(${mm(a,2)}) = ${mm(Mo.F(b),4)} - ${mm(Mo.F(a),4)} = ${mm(area,4)}\end{gathered}`,true); }
+function all(){ read(); PF.redraw(); PS.redraw(); }
+kn.addEventListener('input',()=>{ sim(); all(); }); [kw,ka,kb].forEach(k=>k.addEventListener('input',all));
+const fch=$('fch');
+Object.keys(MODELS).forEach(k=>{ const b=document.createElement('button'); b.textContent=MODELS[k].lab; if(k===key) b.className='on'; b.onclick=()=>{ key=k; Mo=MODELS[k]; [...fch.children].forEach(z=>z.classList.toggle('on',z===b)); sim(); all(); }; fch.appendChild(b); });
+window.__pic={set:(k,ni,wi,a,b)=>{ [...fch.children][Object.keys(MODELS).indexOf(k)].click(); kn.value=ni; kw.value=wi; ka.value=a; kb.value=b; sim(); all(); return {share,area:Mo.F(Math.min(b,Mo.d))-Mo.F(Math.min(a,Mo.d)),txt:$('vdF').textContent}; }};
+sim(); all();
+/* ---------- slides ---------- */
+const Nw='\\htmlClass{new}';
+stepper('#sl1',[
+  {k:'ember',kl:'bars as areas',t:R`\text{height} = \tfrac{\text{count}}{nw}`,n:`Then each bar's area is its share of the data, and the areas add to 1.`},
+  {k:'ember',kl:'two random numbers',t:R`s + 1 \text{ pairs give sum } \tfrac{s}{10}`,n:`100 pairs taken as equally likely, as two dice were.`},
+  {k:'ember',kl:'the bars made thin',t:R`\text{height at } x = x + 10^{-m}`,n:`With m decimal places the tops come within 10⁻ᵐ of a curve.`},
+  {k:'ember',kl:'the tent',t:R`${Nw}{f(x) = x \text{ on } [0, 1],\ 2 - x \text{ on } [1, 2]}`,n:`Counted, not measured.`},
+  {k:'ember',kl:'a chance as an area',t:R`\textstyle\int_{0.5}^{1} x\,dx = 0.375`,n:`narrow-strips: the bars' total heads to the area.`},
+  {k:'ember',kl:'a density',t:R`f \ge 0,\ \ \textstyle\int_c^d f = 1`,n:`Which curve a real quantity follows is a guess, checked against data.`},
+  {k:'ember',kl:'range-chance',t:R`0 \le \textstyle\int_a^b f \le 1`,n:`Ranges meeting at an end add.`},
+  {k:'ember',kl:'one value',t:R`\textstyle\int_a^{a+w} f \le Mw`,n:`So exactly u has chance 0.`},
+  {k:'ember',kl:'the area so far',t:R`F(x) = \textstyle\int_c^x f,\ \ F(b) - F(a)`,n:`Never goes down, no gaps, and a median by in-between-value.`},
+  {k:'ember',kl:'the bus',t:R`\textstyle\int_{30}^{40} \tfrac{40 - x}{400}\,dx = \tfrac18`,n:`Two 20-minute buses: one trip in 8 waits over half an hour.`},
+  {k:'ember',kl:'illegal',t:R`f(a) \ne \text{a chance}`,n:`A height is not a chance; a density may pass 1.`}
+],{title:'The slides · bars as areas; two random numbers; the bars made thin; the tent; a chance as an area; a density; range-chance; one value; the area so far; the bus; illegal moves · ← → keys work'});
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

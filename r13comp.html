@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>13·comp · How does a calculator find a root?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+@media (max-width:520px){.eqline{font-size:.9rem}}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.log{font-family:var(--mono);font-size:.78rem;max-height:16em;overflow:auto}
+.log table.tt{font-size:.78rem}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r13econ.html">← 13·econ what does one more cost?</a><a href="r13nav.html">next: 13·nav how fast is the tide rising? →</a></p>
+  <div class="tags"><span class="tag comp">13·comp · computing</span></div>
+  <h1>How does a calculator find a root?</h1>
+  <p>How does a calculator find a root? Press the square root key and ten digits appear at once. Ask a financial calculator what interest a loan charges, and it finds the root of an equation that no formula solves. Yet the machine knows nothing a person does not. It adds, multiplies, compares, and does it again. 12e's halving and 13m's tangent steps are recipes of exactly that kind. The trouble is that each has a flaw. Halving never fails, but it is slow. Tangent steps are fast, but they can fly off, or cycle for ever. And the machine cannot look at a picture to see which is happening. This page writes both as programs, counts what each step buys, and builds the program real calculators use: both at once.</p>
+  <p class="gesture">Halving keeps a trap and buys one bit of the answer per step: each step halves the width of the trap. A tangent step walks down the tangent line from the guess to where the line is 0; near a zero where the slope is not 0, it doubles the correct places. Far from one it can fly off. A safe program keeps the trap, takes the tangent step when it lands inside, and halves whenever the trap has not halved. The trap still halves each round, and the end game is the tangent step's.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r12e.html">12e</a> (trap, middle-of-a-trap, halvings-width, trap-from-its-bits, halving-traps), <a href="r13m.html">13m</a> (the tangent step, polynomial-guess-error, places-double, where it fails), <a href="r12a.html">12a</a> (in-between-value), <a href="r12d.html">12d</a> (the fractions' holes), <a href="r12comp.html">12·comp</a> (a machine reading one step at a time), <a href="r13d.html">13d</a> (polynomial-slope) and <a href="r05h.html">5h</a> (square-of-a-difference). Rung 14 proves the doubling for functions that are not polynomials.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · read it through, then work the picture and the slides</div>
+
+  <h3>Programs</h3>
+  <p class="eqline" data-pid="9a7609">From here on, on this page, a program is a numbered list of instructions that a machine carries out in order. The machine has a few named boxes, each holding one number. An instruction may work out a value from the boxes, put it in a box, compare two values, or send the machine to another numbered instruction. The mark x ← v means: put the value v in the box named x, so that x names v from then on. The mark is an operator: a statement that, carried out, makes x name v. Going back to an earlier instruction is a loop. 12·comp's machine had no boxes at all, only states. A program with boxes can count.</p>
+  <p data-pid="b0e868">A calculator's boxes hold numbers with a fixed count of digits. A pocket calculator keeps about ten significant digits. A computer's standard numbers keep 53 binary digits, about 16 decimal ones. <b>So between 1 and 2 a machine holds only finitely many numbers, and the line it works on has holes.</b> 12d showed what holes do: in-between-value can fail. A program must notice when its trap has closed on a hole.</p>
+
+  <h3>The halving program</h3>
+  <pre class="lines" data-k="teal" data-label="from 12e: bisection, as a program">
+\text{1. } c \leftarrow a,\ \ d \leftarrow b @@ given: f(a) and f(b) of opposite signs, so [a, b] is a trap
+\text{2. } m \leftarrow (c + d)/2 @@ the middle (8h)
+\text{3. if } m = c \text{ or } m = d,\ \text{stop: report } [c, d] @@ no machine number between: the trap has closed on neighbours
+\text{4. if } f(m) = 0,\ \text{stop: report } m @@ middle-of-a-trap: the middle is a zero
+\text{5. if } f(m) \text{ has the sign of } f(c),\ c \leftarrow m;\ \text{otherwise } d \leftarrow m @@ middle-of-a-trap: keep the half that is still a trap
+\text{6. go to 2} @@ the loop
+  </pre>
+  <p data-pid="418753">By 12e's halvings-width, n passes leave a trap of width (q − p)/2ⁿ. Each pass decides one binary digit of where the zero is, as trap-from-its-bits says. <b>Halving buys one bit of the answer per step, whatever the function, as long as it has a trap.</b> Ten bits are about three decimal places, since 2¹⁰ = 1024 ≈ 10³.</p>
+  <pre class="lines" data-k="ember" data-label="13·comp: what halving costs">
+2^{33} = 8\,589\,934\,592 \lt 10^{10} \le 2^{34} @@ 10 places of √2 from [1, 2] take 34 halvings (halvings-width)
+\begin{aligned}&2^{52}:\ \text{the standard numbers}\\ &\quad\text{between } 1 \text{ and } 2 \text{ are spaced } 2^{-52}\end{aligned} @@ so halving [1, 2] stops at instruction 3 after 52 passes
+  </pre>
+
+  <h3>The tangent program</h3>
+  <pre class="lines" data-k="teal" data-label="from 13m: tangent steps, as a program">
+\text{1. } x \leftarrow x_0 @@ a first guess
+\text{2. if } f'(x) = 0,\ \text{stop: no step} @@ a level tangent line is never 0 (13m)
+\text{3. } x \leftarrow x - f(x)/f'(x) @@ the tangent step N(x)
+\begin{aligned}&\text{4. if } x \text{ stopped changing,}\\ &\quad\text{stop: report } x;\ \text{otherwise go to 2}\end{aligned} @@ the machine's numbers are finite: “stopped changing” is a test it can make
+  </pre>
+  <p data-pid="28ea0b">13m proved, for a polynomial, that once a guess is close enough each step about doubles the correct places. The same is held in trust here for every function this page uses, until 14c proves it in general. From 3/2, the tangent step finds 12 places of √2 in three steps, where halving takes 40. <b>Halving adds places at a fixed pace; the tangent step multiplies them.</b></p>
+  <p data-pid="520735">Many computer chips divide this way. To find 1/k, hunt the zero of f(x) = 1/x − k. Its tangent step needs no division at all, only multiplying and taking away.</p>
+  <p data-pid="cc0b4b">Reciprocal-step technique: <b>for f(x) = 1/x − k, the tangent step is x(2 − kx), and its new error is −k times the old error squared.</b> Precisely: for k ≠ 0 and x = 1/k + e, with x ≠ 0, N(x) = x(2 − kx) = 1/k − ke².</p>
+  <pre class="lines" data-k="ember" data-label="13·comp: the reciprocal-step technique">
+f(x) = \tfrac1x - a,\ \ f'(x) = -\tfrac{1}{x^2} @@ slope-of-one-over-x (13a); a constant has slope 0
+N(x) = x - \dfrac{1/x - a}{-1/x^2} = x + x^2\big(\tfrac1x - a\big) @@ the tangent step; dividing by −1/x² is multiplying by −x²
+= \htmlClass{new}{x(2 - ax)} @@ spread and collect (5h): no division left
+x = \tfrac1a + e:\ \ x(2 - ax) = \big(\tfrac1a + e\big)(1 - ae) @@ 2 − a(1/a + e) = 1 − ae
+= \tfrac1a - e + e - ae^2 = \htmlClass{new}{\tfrac1a - ae^2} \quad \blacksquare @@ spread (5h)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="13·comp: a chip finds 1/7">
+x_0 = 0.1 @@ error about 0.043
+x_1 = 0.1(2 - 0.7) = 0.13 @@ error 0.0129 = 7 · 0.043² (reciprocal-step)
+x_2 = 0.1417,\ \ x_3 = 0.14284777,\ \ x_4 = 0.1428571422\cdots @@ errors about 0.0012, 0.0000094, 0.0000000006: the places double
+  </pre>
+
+  <h3>Where each one fails</h3>
+  <p data-pid="19caec">Halving needs a trap to start, and a function continuous on it. Handed x² on [−1, 1], it cannot start: both ends are positive, though 0 is a zero. Handed a function with a jump, it closes on the jump and reports a zero that is not there. But given a true trap, it never fails.</p>
+  <p data-pid="29430f">The tangent step needs nothing to start but a guess, and 13m showed three ways it can mislead. On x³ − 2x + 2 from 0 it goes 0, 1, 0, 1 for ever. On the cube root it doubles its distance at every step. Near a level tangent it lands far away. A machine running the tangent program alone cannot see any of this. It only sees numbers that keep changing.</p>
+
+  <h3>The safe program: both at once</h3>
+  <p data-pid="7c6b0a">13m ended with the engineers' working rule: trap first, then sharpen. A program can do both at every round, and let the trap judge the tangent step. Start from a trap [p, q].</p>
+  <pre class="lines" data-k="ember" data-label="13·comp: the safe program">
+\text{1. } c \leftarrow p,\ \ d \leftarrow q @@ a trap
+\text{2. } w \leftarrow d - c;\ \ x \leftarrow \text{the end of } [c, d] \text{ where } |f| \text{ is smaller} @@ the width now, and the best guess so far
+\text{3. if } f'(x) \ne 0,\ t \leftarrow x - f(x)/f'(x);\ \text{if } c \lt t \lt d,\ \text{split the trap at } t @@ the tangent step, kept only if it lands strictly inside
+\begin{aligned}&\text{4. otherwise split}\\ &\quad\text{the trap at its middle}\end{aligned} @@ the step flew off: halve instead
+\text{5. if } d - c \gt w/2,\ \text{split the trap at its middle} @@ the round did not halve the trap: halve it once more
+\begin{aligned}&\text{6. stop if the trap has closed on }\\ &\quad \text{neighbours, or } f \text{ is } 0 \text{ at a split; }\\ &\quad \text{otherwise go to 2}\end{aligned} @@ to split at s: if f(s) has the sign of f(c), c ← s; otherwise d ← s
+  </pre>
+  <p data-pid="9ae880">Safe-step technique: <b>the safe program's trap always holds a zero, and it at least halves every round.</b> Precisely: if [p, q] is a trap and no split lands on a zero, then after n rounds [c, d] is a trap of width at most (q − p)/2ⁿ.</p>
+  <pre class="lines" data-k="ember" data-label="13·comp: the safe-step technique">
+c \lt s \lt d,\ f(s) \ne 0 \Rightarrow [c, s] \text{ or } [s, d] \text{ is a trap} @@ middle-of-a-trap's argument, at any point strictly inside (12e: any split point inside a trap is licensed)
+\text{each split keeps a trap} @@ the tangent split is made only when c &lt; t &lt; d; a middle is always strictly inside
+\text{after a round, } d - c \le w/2 @@ either the round already halved it, or instruction 5 halves it (halvings-width, one step)
+\text{after } n \text{ rounds},\ d - c \le \htmlClass{new}{(q - p)/2^n} \quad \blacksquare @@ induction on n (4b)
+  </pre>
+  <p data-pid="dae5e3">So the safe program is never slower than halving by more than a factor of two in tests of f. And once the best guess is close, the tangent steps take over, and the places double. The trap's far end may lag behind. The answer to report is the best guess x, with the trap as its guarantee.</p>
+  <pre class="lines" data-k="ember" data-label="13·comp: the safe program on 13m's cycle, x³ − 2x + 2 from the trap [−2, 1]">
+x = 1:\ t = 1 - \tfrac{1}{1} = 0,\ f(0) = 2 \Rightarrow [-2, 0];\ \text{halve at } -1 \Rightarrow [-2, -1] @@ round 1: the step that cycled lands inside, but the trap did not halve
+x = -2:\ t = -2 - \tfrac{-2}{10} = -1.8,\ f = -0.232 \Rightarrow [-1.8, -1];\ \text{halve} \Rightarrow [-1.8, -1.4] @@ round 2
+x = -1.8:\ t \approx -1.7699482,\ f \approx -0.0049 @@ round 3: the trap becomes [−1.76995, −1.58497] after one more halving
+t \approx -1.769292663,\ \ \text{then } \htmlClass{new}{-1.7692923542} @@ rounds 4 and 5: f about −0.0000023, then −0.0000000000005. The cycle never starts
+  </pre>
+
+  <h3>The interest on a loan</h3>
+  <p data-pid="590b67">A car loan of $20 000 is repaid in 60 monthly payments of $386.66. What does it charge each month? If the monthly rate is i, the lender's formula for the payment gives (1 + i)⁶⁰(20 000i − 386.66) + 386.66 = 0. That is a polynomial of degree 61, and no formula solves it. It also has the useless zero i = 0. Financial calculators have had a key for this since the 1970s.</p>
+  <pre class="lines" data-k="ember" data-label="13·comp: the safe program finds the rate">
+f(0.001) \approx -2.66,\ \ f(0.02) \approx 430 @@ a trap that leaves out the zero at 0
+x = 0.001:\ t \approx -0.00027 \notin [0.001, 0.02] @@ the tangent step heads for the useless zero; the trap refuses it: halve
+\begin{aligned}&\text{rounds 3 to 6}:\ 0.0051039,\ 0.0050028,\\ &\quad \ 0.00500036,\ \htmlClass{new}{0.0050003557}\end{aligned} @@ tangent steps inside the trap, each kept
+12 \times 0.50\% \approx 6.0\% \text{ a year} @@ the rate the lender quoted
+  </pre>
+
+  <h3>Illegal moves</h3>
+  <pre class="lines" data-k="ember" data-label="13·comp: tempting, and not allowed">
+\begin{aligned}&\text{the tangent step is}\\ &\quad\text{faster, so use it alone}\,?\end{aligned} @@ on x³ − 2x + 2 from 0 it never arrives; the trap is what makes it safe
+\begin{aligned}&\text{halving found a trap of width } 10^{-12},\\ &\quad \text{ so there is a zero in it}\,?\end{aligned} @@ only if f is continuous there; on a jump the traps close on no zero
+\text{keep halving until the width is } 0\,? @@ the machine's numbers have holes; stop when the middle is an end
+\begin{aligned}&\text{the guesses stopped changing, so } f(x)\\ &\quad = 0\,?\end{aligned} @@ the machine's f(x) is rounded too; report the trap
+f(m) \text{ has the sign of } f(d) \Rightarrow d \leftarrow m,\ \text{then } c \leftarrow m\,? @@ one box changes per split: the half kept must still be a trap
+  </pre>
+
+  <h3>Running it backwards</h3>
+  <p data-pid="1c0122">Handed a final trap and the first one, read off how many halvings were run, and each choice, by trap-from-its-bits. Handed a step x ← x(2 − kx), find what it hunts: its fixed points are 0 and 1/k. Handed the number of places wanted, count the halvings by halvings-width, then count the tangent steps by doubling.</p>
+</section>
+
+<section class="pic" id="pic">
+  <div class="eyebrow">The picture · halving, tangent steps and the safe program, run one step at a time</div>
+  <div class="panels">
+    <div class="panel">
+      <div class="chips" id="fch"><button class="on" data-f="sq">x² − 2 on [1, 2]</button><button data-f="cyc">x³ − 2x + 2 on [−2, 1]</button><button data-f="cube">cube root on [−1, 2]</button><button data-f="loan">the loan on [0.001, 0.02]</button></div>
+      <canvas id="cv"></canvas>
+      <div class="chips"><button id="bh">halve</button><button id="bt">tangent step</button><button id="bs">safe round</button><button id="br">start again</button></div>
+      <div class="cap">Ink: the function, drawn over the present trap and a little beyond. Teal band: the trap. Ember: the best guess, with its tangent line dashed. A tangent step that leaves the picture has flown off. The picture zooms to the trap as it shrinks.</div>
+    </div>
+    <div class="panel">
+      <div class="verdict" id="vd"></div>
+      <div class="log" id="log"></div>
+      <div class="cap">Each row is one step. The error is the distance from the true zero, and the places count how many decimal places of the zero the guess has right.</div>
+    </div>
+  </div>
+</section>
+
+<section class="slides" id="sl1"><div class="eyebrow">The slides · a program; the machine's numbers; the halving program; one bit per step; the tangent program; reciprocal-step; where each fails; the safe program; safe-step; the cycle caught; the loan; illegal moves · ← → keys work</div></section>
+
+<section class="sayback">
+  <div class="eyebrow">Say it back · then work it</div>
+  <h2>Questions</h2>
+  <div class="phkey"></div>
+  <ol>
+    <li><span class="qid">13·comp.1</span><span class="gname">Programs that hunt.</span><span class="gwhy">Do: build the page's pieces.</span>
+      <ol class="sub">
+        <li><span class="qid">13·comp.1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = x^2 - 3,"></span> <span data-tex-inline="\text{trap } [1, 2]"></span></span>Run the halving program for five passes, writing each trap and each bit.</li><li><span class="givens"><span data-tex-inline="f(x) = x^2 - 3,"></span> <span data-tex-inline="x_0 = 2"></span></span>Run the tangent program for three steps, and count the correct places at each.</li><li><span class="givens"><span data-tex-inline="\text{trap } [1, 2],"></span> <span data-tex-inline="\text{width below } 10^{-12}"></span></span>Find how many halvings guarantee it.</li><li><span class="givens"><span data-tex-inline="f(x) = x^3 - 2x + 2,"></span> <span data-tex-inline="\text{trap } [-2, 1]"></span></span>Run the first two rounds of the safe program, writing every split.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">13·comp.2</span><span class="gname">From the answer back to the run.</span><span class="gwhy">Undo: run the page's techs backwards.</span>
+      <ol class="sub">
+        <li><span class="qid">13·comp.2.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{began } [0, 4],"></span> <span data-tex-inline="\text{ended } [2.75, 2.875]"></span></span>Find how many passes the halving program ran, and which half it kept at each.</li><li><span class="givens"><span data-tex-inline="x \leftarrow x(2 - kx),"></span> <span data-tex-inline="\text{guesses head to } 0.0625"></span></span>Find k.</li><li><span class="givens"><span data-tex-inline="\text{a tangent step from } 2 \text{ to } 2.5,"></span> <span data-tex-inline="f(2) = -3"></span></span>Find f's slope at 2.</li><li><span class="givens"><span data-tex-inline="8 \text{ significant digits,}"></span> <span data-tex-inline="\text{trap } [1, 2]"></span></span>Find how many halvings run before the middle is no new number.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">13·comp.3</span><span class="gname">Where it gives.</span><span class="gwhy">Bend: find where the techs stop working.</span>
+      <ol class="sub">
+        <li><span class="qid">13·comp.3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = x^2,"></span> <span data-tex-inline="x_0 = 1"></span></span>Run tangent steps, and find how fast they close in. <br>Write the step as a formula in x, and find what it multiplies the guess by.</li><li><span class="givens"><span data-tex-inline="f(x) = \sqrt[3]{x},"></span> <span data-tex-inline="\text{trap } [-1, 2]"></span></span>Run two rounds of the safe program, and decide whether it fails as the tangent steps alone do.</li><li><span class="givens"><span data-tex-inline="u(x) = 0 \text{ for } x &lt; 0,"></span> <span data-tex-inline="u(x) = 1 \text{ for } x \ge 0,"></span> <span data-tex-inline="f = u - \tfrac12 \text{ on } [-1, 1]"></span></span>Run halving on f, and find what the program reports and whether it is a zero.</li><li><span class="givens"><span data-tex-inline="\text{a tangent step lands exactly}"></span> <span data-tex-inline="\text{on an end of the trap;}"></span> <span data-tex-inline="\text{the safe program halves instead}"></span></span>Find the trap a split there would leave.</li></ol></li>
+      </ol></li>
+    <li class="optgroup"><span class="qid">13·comp.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder challenges that rely on your own making. The page is complete without these; the rung's star needs them.</span>
+      <ol class="sub">
+        <li class="opt"><span class="qid">13·comp.4.1</span><span class="tagq">build</span>Choose a function of your own with a zero inside a trap, where tangent steps from one end of the trap leave it. <br>Write the safe program for it as numbered instructions, and run it until the trap’s ends agree to four places.</li>
+        <li class="opt"><span class="qid">13·comp.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{spacing } 2^{-52} \text{ in } [1, 2],"></span> <span data-tex-inline="f(x) = x^2 - 2,"></span> <span data-tex-inline="\text{neighbours } c &lt; d,"></span> <span data-tex-inline="f(c) &lt; 0 &lt; f(d)"></span></span>Decide whether there is a machine number whose square is 2. <br>Find what the program should report.</li>
+        <li class="opt"><span class="qid">13·comp.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{tangent-step guesses } x_n \to r,"></span> <span data-tex-inline="f, f' \text{ continuous at } r,"></span> <span data-tex-inline="f'(r) \ne 0"></span></span>Prove or refute that r must be a zero of f.</li>
+        <li class="opt"><span class="qid">13·comp.4.4</span><span class="tagq">seam</span>In 1994 a mathematician found that a new chip divided wrongly, from the fourth significant digit on, for a few rare pairs of numbers. Its maker said a typical user would meet the error once in 27 000 years. A rival maker reckoned once every 24 days for a busy spreadsheet. The chip was replaced at a cost of about $475 million. <br>Is a method that is almost always right a method?</li>
+      </ol></li>
+  </ol>
+  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
+</section>
+
+<nav class="nextrung"><a href="r13econ.html">← 13·econ · what does one more cost?</a><a href="r13nav.html">13·nav · how fast is the tide rising? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>Programs that keep a trap and take a faster step inside it are T. J. Dekker's (1969) and Richard Brent's (1973). William Kahan built one into the SOLVE key of a pocket calculator, the HP-34C, in 1979; it took steps along chords, a cousin of the tangent step that needs no slope. The standard binary numbers of computers, with 53 binary digits, were fixed in 1985 by a standard Kahan led. The mathematician of 13·comp.4.4 is Thomas Nicely, who met the error while summing reciprocals of primes; the chip was Intel's Pentium, whose division used a table with five missing entries, not tangent steps.</p>
+  <aside class="voice para"><p>Kahan explains that a root-finder on a calculator must never give up silently: when it cannot find a zero it should say so, and say what it found instead.</p><cite>William Kahan, “Personal calculator has key to solve any equation f(x) = 0”, Hewlett-Packard Journal (December 1979); paraphrase</cite></aside>
+  <h3>Accepted names</h3>
+  <p>The halving program is the bisection method; the tangent program is Newton's method, or the Newton–Raphson method. A program that keeps a trap and steps inside it is a safeguarded or hybrid method; the best known is Brent's method. The machine's numbers are floating-point numbers, and the gap after 1 is the machine epsilon. A box is a variable, and x ← v is an assignment.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="13·comp: a worked “proof”, not allowed">
+\text{each tangent step lands inside the trap} @@ not allowed: on x³ − 2x + 2 from 0 the step goes to 1, outside [−2, −1]
+\text{so the safe program never needs to halve} @@ false: instruction 4 is what catches the fly-off
+\text{so it is always as fast as the tangent step} @@ false: far from the zero it can be as slow as halving
+  </pre>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return 'none'; const s=v.toPrecision(d||8); return (+s).toString().replace('-','−'); };
+const cbrt=x=>x<0?-Math.cbrt(-x):Math.cbrt(x);
+const FN={
+  sq:{f:x=>x*x-2, d:x=>2*x, a:1, b:2, r:Math.SQRT2},
+  cyc:{f:x=>x*x*x-2*x+2, d:x=>3*x*x-2, a:-2, b:1, r:-1.7692923542386314},
+  cube:{f:cbrt, d:x=>x===0?Infinity:1/(3*Math.pow(Math.abs(x),2/3)), a:-1, b:2, r:0},
+  loan:{f:i=>Math.pow(1+i,60)*(20000*i-386.66)+386.66, d:i=>60*Math.pow(1+i,59)*(20000*i-386.66)+Math.pow(1+i,60)*20000, a:0.001, b:0.02, r:0.005000355690670473}
+};
+let F=FN.sq, c, d, fc, fd, x, rows, stopped;
+function reset(){ c=F.a; d=F.b; fc=F.f(c); fd=F.f(d); x=Math.abs(fc)<=Math.abs(fd)?c:d; rows=[]; stopped=''; draw(); }
+function places(e){ if(e===0) return '16+'; const p=Math.floor(-Math.log10(Math.abs(e)/0.5)); return String(Math.max(0,p)); }
+function split(s){ const fs=F.f(s); if(fs===0){ stopped='a split landed on a zero'; c=d=s; fc=fd=0; return; } if((fs<0)===(fc<0)){ c=s; fc=fs; } else { d=s; fd=fs; } }
+function best(){ return Math.abs(fc)<=Math.abs(fd)?c:d; }
+function closed(){ const m=(c+d)/2; return m===c||m===d; }
+function log(kind,val){ const e=val-F.r; rows.push([kind,val,c,d,e]); }
+function halve(){ if(stopped) return; if(closed()){ stopped='the trap has closed on neighbouring machine numbers'; return; } split((c+d)/2); x=best(); log('halve',x); draw(); }
+function tangent(){ if(stopped) return; const s=F.d(x); if(!s||!isFinite(s)){ log('no step',x); draw(); return; } x=x-F.f(x)/s; log('tangent',x); if(x>c&&x<d) split(x); draw(); }
+function safe(){ if(stopped) return; if(closed()){ stopped='the trap has closed on neighbouring machine numbers'; draw(); return; } const w=d-c; x=best(); const s=F.d(x); let t=null, how='';
+  if(s&&isFinite(s)) t=x-F.f(x)/s;
+  if(t!==null&&t>c&&t<d){ split(t); how='tangent kept'; } else { split((c+d)/2); how='tangent out: halve'; }
+  if(!stopped&&d-c>w/2){ split((c+d)/2); how+=', halve'; }
+  x=best(); log('safe ('+how+')',x); draw(); }
+const P=plane($('cv'),{x:[0,1],y:[-1,1],grid:0,labels:0,aspect:0.72,draw:Pl=>pic(Pl)});
+function pic(Pl){ const w=Math.max(d-c,1e-12), lo=c-w*0.6, hi=d+w*0.6; let m=Infinity,M=-Infinity; for(let k=0;k<=200;k++){ const v=F.f(lo+(hi-lo)*k/200); if(isFinite(v)){ m=Math.min(m,v); M=Math.max(M,v); } } m=Math.min(m,0); M=Math.max(M,0); const pad=(M-m)*0.12||1;
+  Pl.o.x=[lo,hi]; Pl.o.y=[m-pad,M+pad]; const cx=Pl.ctx;
+  cx.globalAlpha=.16; Pl.poly([[c,Pl.o.y[0]],[d,Pl.o.y[0]],[d,Pl.o.y[1]],[c,Pl.o.y[1]]],null,'--teal'); cx.globalAlpha=1;
+  Pl.line(lo,0,hi,0,'--muted',1.3); Pl.fn(F.f,'--ink',2.2);
+  const s=F.d(x), fx=F.f(x); if(isFinite(s)&&x>=lo&&x<=hi){ Pl.line(lo,fx+s*(lo-x),hi,fx+s*(hi-x),'--ember',1.4,[5,4]); }
+  if(x>=lo&&x<=hi) Pl.dot(x,fx,'--ember',5);
+  Pl.text('['+fm(c,10)+', '+fm(d,10)+']',lo+(hi-lo)*0.02,Pl.o.y[1]-(Pl.o.y[1]-Pl.o.y[0])*0.07,'--teal','left',11); }
+function draw(){ P.redraw(); const e=x-F.r, vd=$('vd'); const off=!(x>=c-1e-15&&x<=d+1e-15);
+  vd.className='verdict '+(off?'lose':'win');
+  vd.textContent=(stopped?'Stopped: '+stopped+'. ':'')+'Trap ['+fm(c,12)+', '+fm(d,12)+'], width '+fm(d-c,3)+'. Best guess '+fm(x,12)+(off?', outside the trap: the tangent step flew off.':', error '+fm(Math.abs(e),3)+', '+places(e)+' places right.');
+  let h='<table class="tt"><tr><th>#</th><th>step</th><th>guess</th><th>width</th><th>places</th></tr>'; rows.forEach((r,i)=>{ h+='<tr><td>'+(i+1)+'</td><td class="l">'+r[0]+'</td><td>'+fm(r[1],12)+'</td><td>'+fm(r[3]-r[2],3)+'</td><td>'+places(r[4])+'</td></tr>'; }); h+='</table>'; $('log').innerHTML=h; }
+$('bh').onclick=halve; $('bt').onclick=tangent; $('bs').onclick=safe; $('br').onclick=reset;
+document.querySelectorAll('#fch button').forEach(b=>b.onclick=()=>{ F=FN[b.dataset.f]; document.querySelectorAll('#fch button').forEach(z=>z.classList.toggle('on',z===b)); reset(); });
+window.__pic={run:(k,steps)=>{ F=FN[k]; reset(); steps.split('').forEach(s=>({h:halve,t:tangent,s:safe})[s]()); return {c,d,x,rows:rows.map(r=>[r[0],r[1]])}; }};
+reset();
+stepper('#sl1',[
+  {k:'ember',kl:'a program',t:R`x \leftarrow v`,n:`Numbered instructions, boxes that hold numbers, and loops.`},
+  {k:'ember',kl:"the machine's numbers",t:R`2^{-52}`,n:`Finitely many between 1 and 2: the line has holes.`},
+  {k:'teal',kl:'the halving program',t:R`m \leftarrow \tfrac{c + d}{2};\ \text{keep the trap}`,n:`Stop when the middle is an end.`},
+  {k:'ember',kl:'one bit per step',t:R`\tfrac{b - a}{2^n}`,n:`34 halvings for 10 places of √2.`},
+  {k:'teal',kl:'the tangent program',t:R`x \leftarrow x - \tfrac{f(x)}{f'(x)}`,n:`The places double, once close.`},
+  {k:'ember',kl:'reciprocal-step',t:R`\htmlClass{new}{x(2 - ax) = \tfrac1a - ae^2}`,n:`A chip divides with no division.`},
+  {k:'ember',kl:'where each fails',t:R`0, 1, 0, 1, \cdots`,n:`Halving needs a trap; the tangent step can fly off or cycle.`},
+  {k:'ember',kl:'the safe program',t:R`c \lt t \lt d\ ?\ \text{split at } t : \text{halve}`,n:`And halve again if the round did not halve the trap.`},
+  {k:'ember',kl:'safe-step',t:R`\htmlClass{new}{d - c \le \tfrac{q - p}{2^n}}`,n:`A trap always, and at least halving.`},
+  {k:'ember',kl:'the cycle caught',t:R`-1.8 \to -1.76995 \to -1.7692923542`,n:`x³ − 2x + 2 from the trap [−2, 1].`},
+  {k:'ember',kl:'the loan',t:R`i \approx 0.0050004`,n:`About 6% a year; the useless zero at 0 is kept out.`},
+  {k:'ember',kl:'illegal',t:R`\text{width} \to 0\,?`,n:`Stop when the middle is an end.`}
+],{title:'The slides · a program; the machine\'s numbers; the halving program; one bit per step; the tangent program; reciprocal-step; where each fails; the safe program; safe-step; the cycle caught; the loan; illegal moves · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

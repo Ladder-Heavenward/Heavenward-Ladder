@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>15·∎ · Area is squeezed between every estimate</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.cl-lock{display:none;border-left:3px solid var(--gold);background:var(--sand);padding:10px 14px;border-radius:0 4px 4px 0;max-width:66ch}
+body.cl-locked .cl-lock{display:block} body.cl-locked .cl-body{display:none}
+.cl-lock button{margin-top:6px;font-size:.8rem}
+.claim{border:1px solid var(--grid);border-left:4px solid var(--teal);background:var(--card);border-radius:0 6px 6px 0;padding:10px 16px;max-width:66ch}
+.claim p{margin:.4em 0}
+ul.cl-adds{max-width:66ch;padding-left:1.1em} ul.cl-adds li{margin:.5em 0}
+ul.cl-adds .cl-w{display:none;color:var(--muted);font-style:italic}
+ul.cl-adds li.cl-wait .cl-t{display:none} ul.cl-adds li.cl-wait .cl-w{display:inline}
+pre.lines{white-space:pre-wrap;overflow-wrap:anywhere;max-width:100%}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r15f.html">← 15f every continuous curve has an area</a><a href="r15g.html">next: 15g sums and Σ by hand →</a></p>
+  <div class="tags"><span class="tag concl">15·∎ · conclusion</span></div>
+  <h1>Area is squeezed between every estimate</h1>
+  <p class="gesture">Boxes under a graph give too little, boxes over it give too much, and every too-little sits below every too-much. For a continuous function exactly one number is left between them, and that number is the area.</p>
+  <div class="ready"><h3>What this stands on</h3><p>The survey of <a href="r15.html">rung 15</a>, and its proof steps: <a href="r15a.html">15a</a> (partitions, lower and upper sums (area of a rectangle built here as length times width)), <a href="r15b.html">15b</a> (every under-estimate is below every over-estimate), <a href="r15c.html">15c</a> (integrable, and the sign ∫), <a href="r15d.html">15d</a> (the area under x, worked to the end), <a href="r15e.html">15e</a> (areas add, scale, split), <a href="r15f.html">15f</a> (every continuous curve has an area). It opens once 15f is ticked, and it gains a line each time you finish a step or annex after it.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The conclusion · the rung's claim, in full, and its proof</div>
+  <div class="cl-lock"><p>This page opens once every question on <a href="r15f.html">15f every continuous curve has an area</a> is ticked. The claim below is proved from the steps of this rung, so it waits for them.</p><button type="button" class="cl-peek">reviewing the ladder? open it anyway</button></div>
+  <div class="cl-body">
+  <h3>What the rung set out to show</h3>
+  <p data-pid="0e2de4">The survey of rung 15 promised to build area where no earlier rung gave a number: cut the interval, stand boxes under the graph and over it, and find the one number caught between. <a href="r15a.html">15a</a> laid down the three area axioms, cut the interval into a partition, and defined the lower sum L(f, P) and the upper sum U(f, P). It proved boxes-trap-the-area: any area obeying the axioms lies between them. <a href="r15b.html">15b</a> proved that a finer cut only tightens both, so every lower sum is below every upper sum.</p>
+  <p data-pid="37354b"><a href="r15c.html">15c</a> took the sup of the lower sums and the inf of the upper sums. It called f integrable when they meet, wrote ∫ for the common value, and gave the gap-closes test. <a href="r15d.html">15d</a> squeezed the first area, ∫₀¹ x dx = ½. <a href="r15e.html">15e</a> proved that areas add, scale and split, and that a smaller function has a smaller area. <a href="r15f.html">15f</a> found one width that serves a continuous function on a whole closed interval, and with it proved that every such function is integrable.</p>
+  <h3>The claim, in full</h3>
+  <div class="claim">
+  <p data-pid="c20c20"><b>For a function continuous on a closed interval, exactly one number lies above every lower sum and below every upper sum, and any area the region under it has must be that number.</b></p>
+  <p data-pid="1cd594">Let f be continuous on [u, v].</p>
+  <p data-pid="8757c4">For any two partitions P and Q of [u, v], L(f, P) ≤ U(f, Q).</p>
+  <p data-pid="a3e54f">f is integrable: the sup of its lower sums equals the inf of its upper sums. That number is ∫ᵤᵛ f(x) dx.</p>
+  <p data-pid="17d894">If a number A has L(f, P) ≤ A ≤ U(f, P) for every partition P, then A = ∫ᵤᵛ f(x) dx.</p>
+  <p data-pid="c7f618">If also f ≥ 0, and the region under f has an area obeying the three area axioms, then that area is ∫ᵤᵛ f(x) dx.</p>
+  </div>
+  <h3>The proof</h3>
+  <p data-pid="028bf8">The first part needs no continuity. It needs only that f is bounded on [u, v], which 12b's bounded-both-ways gives, so that every mᵢ and Mᵢ exists.</p>
+  <pre class="lines" data-k="ember" data-label="the first part: every under-estimate is below every over-estimate">
+R = \text{the common refinement of } P \text{ and } Q @@ 15b: every point of P and of Q, in increasing order
+L(f, P) \le L(f, R) @@ refining-tightens (15b): a smaller piece has an inf at least as large
+L(f, R) \le U(f, R) @@ lower-below-upper (15a)
+U(f, R) \le U(f, Q) @@ refining-tightens, with R refining Q
+\htmlClass{new}{L(f, P) \le U(f, Q)} \quad \blacksquare @@ the three lines chained: every-lower-below-every-upper
+  </pre>
+  <p data-pid="7841e2">So the lower sums are bounded above and the upper sums below, and completeness gives the sup of the one and the inf of the other. The sup is at most the inf, by lower-at-most-upper. The second part shows they meet.</p>
+  <pre class="lines" data-k="ember" data-label="the second part: the squeeze closes">
+\text{fix } \varepsilon \gt 0;\ \ \eta = \tfrac{\varepsilon}{2(b - a)} @@ the gap allowed on each piece
+\text{call } \delta:\ |s - t| \lt \delta \Rightarrow |f(s) - f(t)| \lt \eta @@ evenly-continuous (15f): one width for the whole closed interval
+P = \text{the equal partition with } \tfrac{b - a}{n} \lt \delta @@ everyday-counting-passes (8e) finds such an n
+M_i - m_i \lt \eta \text{ on every piece} @@ highest-and-lowest (12c) on each piece: both are values of f at inputs closer than δ
+U(f, P) - L(f, P) \lt \eta\,(b - a) \lt \varepsilon @@ order-and-arithmetic-agree; the widths add to b − a
+\htmlClass{new}{\sup_P L(f, P) = \inf_Q U(f, Q)} \quad \blacksquare @@ gap-closes (15c): f is integrable, and the common value is ∫ₐᵇ f(x) dx
+  </pre>
+  <p data-pid="abb390">The integral itself lies between every lower and every upper sum: it is the sup of the one and the inf of the other. The third part says nothing else does.</p>
+  <pre class="lines" data-k="ember" data-label="the third part: exactly one number between">
+A \ge L(f, P) \text{ and } A \le U(f, P) \text{ for every } P @@ the hypothesis
+A \ge \sup_P L(f, P) @@ A is an upper bound of the lower sums, and the sup is the least (no-holes, 8c)
+A \le \inf_Q U(f, Q) @@ A is a lower bound of the upper sums, and the inf is the greatest (greatest-lower-bound)
+\htmlClass{new}{A = \textstyle\int_a^b f(x)\,dx} \quad \blacksquare @@ the second part: both bounds are the integral; three-way-order on ℝ. This is exactly-one-between (15c)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="the fourth part: the area">
+A = \text{the area of the region under } f \text{ on } [a, b] @@ the hypothesis: f ≥ 0, and the area obeys the three area axioms
+L(f, P) \le A \le U(f, P) \text{ for every } P @@ boxes-trap-the-area (15a): box-area, side-by-side and inside-no-more
+\htmlClass{new}{A = \textstyle\int_a^b f(x)\,dx} \quad \blacksquare @@ the third part
+  </pre>
+  <p data-pid="2874f1">The three axioms never said which number the area is. They only said it sits between the boxes, and the squeeze leaves it one place to sit. For 10d's q the squeeze fails: every lower sum is 0 and every upper sum is 1, and the axioms leave the area undecided.</p>
+  <h3>What the rest of the rung adds</h3>
+  <p data-pid="451cd9">Each step and annex after the proof steps adds a line to the claim. A line appears here once you have finished its page.</p>
+  <ul class="cl-adds">
+    <li data-after="r15g" data-pid="455370"><b><a href="r15g.html">15g sums and Σ by hand</a></b>: <span class="cl-t">It gives Σ its rules and the sum that collapses, then the sums of whole numbers, of their squares and of their cubes, which the squeezes for x² and x³ need.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r15h" data-pid="c7abe7"><b><a href="r15h.html">15h sums of thin strips by hand</a></b>: <span class="cl-t">It shows that a sum using any height from each piece lands between the lower and upper sums, so it closes in on the same number. With 15g's formulas it finds the areas under x² and x³ exactly.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r15i" data-pid="5eeebc"><b><a href="r15i.html">15i geometric sums</a></b>: <span class="cl-t">It cuts at points that shrink by a fixed factor, so the boxes shrink by a fixed factor too, and finds the area under every whole power at once. Then it asks when such a sum, never stopping, has a total.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r15chem" data-pid="b67b24"><b><a href="r15chem.html">15·chem why does a squeezed gas push back?</a></b>: <span class="cl-t">It states the law that ties a gas's pressure, volume and temperature, reads it again for the pressure across a membrane, and finds the work a gas does pushing out as the area under its pressure curve.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r15econ" data-pid="16a536"><b><a href="r15econ.html">15·econ what is a payment next year worth today?</a></b>: <span class="cl-t">15i's geometric sums price loans, annuities and payments forever, and in-between-value with halving traps the one true rate hidden in a deal.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r15eng" data-pid="ec3f31"><b><a href="r15eng.html">15·eng how hard does water push on a dam?</a></b>: <span class="cl-t">It traps the push of still water between strip sums, so the push is an area, and places the whole push one third of the way up, which is why dams thicken toward the bottom.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r15phys" data-pid="31fd23"><b><a href="r15phys.html">15·phys where is the balance point of a shape?</a></b>: <span class="cl-t">It finds the balance point of a plate as one area shared by another, and shows that pieces combine by weighted averages and that a plate can balance on a point that is not on it.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r15stat" data-pid="6aa826"><b><a href="r15stat.html">15·stat how likely is landing in a range?</a></b>: <span class="cl-t">a histogram whose bars are drawn as areas heads to a curve as the bins narrow, so the chance of landing in a range is the area over it, and the running total is the area so far.</span><span class="cl-w">its line appears when you finish it.</span></li>
+  </ul>
+  <p data-pid="61ec86">That is the first area you have measured from nothing but boxes and a squeeze. It is an early step, and a sound one to stand on.</p>
+  </div>
+</section>
+
+<nav class="nextrung"><a href="r15f.html">← 15f · every continuous curve has an area</a><a href="r15g.html">15g · sums and Σ by hand →</a></nav>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+  const need="r15f";
+  let p={}; try{ p=JSON.parse(LS.getItem('pages:done')||'{}')||{}; }catch(e){}
+  let peek=false; try{ peek=sessionStorage.getItem('cl:peek')==='1'; }catch(e){}
+  const done=k=>!!(p[k]&&p[k].v);
+  function apply(){
+    const open=peek||done(need);
+    document.body.classList.toggle('cl-locked',!open);
+    document.querySelectorAll('ul.cl-adds li[data-after]').forEach(li=>li.classList.toggle('cl-wait',!(peek||done(li.dataset.after))));
+    if(open&&done(need)){ const me=(location.pathname.split('/').pop()||'').replace(/\.html?$/,'');
+      if(window.MarksSync&&MarksSync.reportPage) MarksSync.reportPage(me,true,true,true,false);
+      else { try{ p[me]={v:true,a:true,o:true,h:false,t:Date.now()}; LS.setItem('pages:done',JSON.stringify(p)); }catch(e){} } }
+  }
+  const b=document.querySelector('.cl-peek'); if(b) b.addEventListener('click',()=>{ peek=true; try{ sessionStorage.setItem('cl:peek','1'); }catch(e){} apply(); });
+  apply();
+  try{ if(window.MarksSync&&MarksSync.pages) MarksSync.pages().then(q=>{ if(q){ p=Object.assign({},p,q); apply(); } },()=>{}); }catch(e){}
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

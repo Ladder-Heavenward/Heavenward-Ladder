@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>15·chem · Why does a squeezed gas push back?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r15i.html">← 15i geometric sums</a><a href="r15econ.html">next: 15·econ what is a payment next year worth today? →</a></p>
+  <div class="tags"><span class="tag chem">15·chem · chemistry</span></div>
+  <h1>Why does a squeezed gas push back?</h1>
+  <p>Why does a squeezed gas push back? Squeeze a gas into half the room and it pushes back twice as hard. Warm it and it pushes harder still. For most gases, most of the time, one short law ties pressure, volume, temperature and the amount of gas together. The same law, read for sugar or salt dissolved in water, gives the pressure that drives water across the skin of a cell. The law is not quite right, and the way it fails says something about molecules. This page states the law, corrects it, and then asks rung 15's question of it: how much work does a gas do as it pushes a piston out? The answer is the area under its pressure curve.</p>
+  <p class="gesture">For an ideal gas, pressure times volume is fixed by the amount and the temperature. The corrected law adjusts the volume for the room the molecules take, and the pressure for their pull on each other. The work of an expanding gas is the area under its pressure, read against volume. The area under one over the volume squared comes out exactly by a collapse, and the area under one over the volume only by squeezing.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r15c.html">15c</a> (∫, exactly-one-between), <a href="r15e.html">15e</a> (areas-add, areas-scale, interval-cut-in-two), <a href="r15g.html">15g</a> (collapsing-sum), <a href="r15h.html">15h</a> (strip sums, readings), <a href="r15a.html">15a</a> (area of a box), <a href="r14chem.html">14·chem</a> (the pull between molecules), <a href="r14bio.html">14·bio</a> (molecules in motion), <a href="r05chem.html">5·chem</a> (the mole), <a href="r11chem.html">11·chem</a> (heat, kelvin), <a href="r13chem.html">13·chem</a> (concentration). Later pages return to the area under 1/V.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · read it through, then work the picture and the slides</div>
+
+  <h3>Pressure</h3>
+  <p class="eqline" data-pid="36c7f6">From here on, the pressure on a flat wall is the force pressing on it divided by its area (15a's box-area axiom for a box-shaped wall): p = F/A, in newtons per square metre. Its accepted name is pressure; the unit is the pascal, Pa = N/m². Two other units are common. The bar is 10⁵ Pa. The atmosphere, 1 atm = 101 325 Pa, is the air's pressure at sea level on an average day.</p>
+  <p data-pid="4f48d8">At the summit of Mount Shasta, 4322 m up, the air's pressure is about 0.60 atm. The air above a square metre at sea level weighs about 101 kN; at the summit, about 61 kN.</p>
+
+  <h3>The ideal gas law</h3>
+  <p data-pid="aacb77">Three measured laws, each a physical premise. The pressure-volume law (Boyle's), 1662: at a fixed temperature, p times V stays the same as a fixed amount of gas is squeezed or let out. The volume-temperature law (Charles's and Gay-Lussac's), around 1787 and 1802: at a fixed pressure, V is proportional to the temperature counted from absolute zero, in kelvin (11·chem). The equal-volumes law (Avogadro's), 1811: equal volumes of any gases, at the same pressure and temperature, hold equal numbers of molecules. Together:</p>
+  <p class="eqline" data-pid="60985a">pV = nRT, with n the amount in moles (5·chem), T in kelvin, and R = 8.314 J/(mol·K), or 0.08314 L·bar/(mol·K). Its accepted name is the ideal gas law; R is the gas constant, and a gas that obeys the law exactly is an ideal gas.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the law at work">
+V = \tfrac{nRT}{p} = \tfrac{1 \cdot 8.314 \cdot 273.15}{101\,325} \approx 0.0224\ \text{m}^3 @@ one mole at 0 °C and 1 atm: 22.4 L
+p = \tfrac{nRT}{V} = \tfrac{1 \cdot 0.08314 \cdot 300}{1.0} \approx 24.9\ \text{bar} @@ one mole of CO₂ held in 1 L at 300 K, if it were ideal
+  </pre>
+
+  <h3>The correction for real molecules</h3>
+  <p data-pid="57a64a">In 1873 a physicist argued that the law fails for two reasons a chemist could see. The molecules take up room themselves, so the room they have to move in is less than V. And they pull on each other, as 14·chem's curve said they do when they are not too close, so the pressure on the wall is less than it would be. His corrected law:</p>
+  <p class="eqline" data-pid="60329e">(p + a n²/V²)(V − nb) = nRT, or p = nRT/(V − nb) − a n²/V². For CO₂, a ≈ 3.64 L²·bar/mol² and b ≈ 0.0427 L/mol.</p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this page: CO₂ in 1 L, both ways">
+\text{ideal: } p = 24.9\ \text{bar} @@ above
+\tfrac{nRT}{V - nb} = \tfrac{24.94}{1 - 0.0427} \approx 26.05 @@ less room: a higher pressure
+\tfrac{a n^2}{V^2} = 3.64 @@ the pull between molecules: a lower one
+\text{corrected: } p \approx \htmlClass{new}{22.4\ \text{bar}} @@ the measured value is close to this; the ideal law is about 11% high
+  </pre>
+  <p data-pid="94da20">The maker of the corrected law argued that the gas and the liquid are not two different kinds of matter, but one, with the same molecules of the same size pulling on each other in the same way. A single equation, with the room the molecules take and their mutual pull put in, should describe both.</p>
+
+  <h3>Work is an area</h3>
+  <p data-pid="9155f5">A second physical premise. When a gas pushes a piston out slowly, so that its pressure stays the same throughout it, consider the work it does as its volume goes from V₁ to V₂. It is W = ∫ p dV, with p as a function of V. Its accepted name is the pressure–volume work. At a fixed pressure it is a box, p(V₂ − V₁). <b>In general it is the area under the gas's curve in the p–V plane.</b></p>
+  <p data-pid="edf49b">The two parts of the corrected law's p ask for two areas: one under 1/(V − nb), one under 1/V². The second comes out exactly.</p>
+  <p data-pid="61f2d8">Inverse-square-area technique: <b>for 0 &lt; u &lt; v, ∫ᵤᵛ dx/x² = 1/u − 1/v.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the inverse-square-area technique">
+\text{on } [x_{i-1}, x_i]:\ \ \tfrac{1}{x_i^2} \le \tfrac{1}{x_{i-1}x_i} \le \tfrac{1}{x_{i-1}^2} @@ order-and-arithmetic-agree: x_{i−1} ≤ x_i, all positive
+\tfrac{1}{x_{i-1}x_i}\,\Delta x_i = \tfrac{1}{x_{i-1}} - \tfrac{1}{x_i} @@ Δxᵢ = xᵢ − xᵢ₋₁; divide through
+L \le \textstyle\sum \Big(\tfrac{1}{x_{i-1}} - \tfrac{1}{x_i}\Big) \le U @@ 1/x² is decreasing: mᵢ = 1/xᵢ², Mᵢ = 1/xᵢ₋₁²
+\textstyle\sum \Big(\tfrac{1}{x_{i-1}} - \tfrac{1}{x_i}\Big) = \tfrac1a - \tfrac1b @@ <span class="hl-new">collapsing-sum (15g)</span>, for every partition
+\htmlClass{new}{\textstyle\int_a^b \tfrac{dx}{x^2} = \tfrac1a - \tfrac1b} \quad \blacksquare @@ exactly-one-between (15c), with 1/x² integrable by continuous-is-integrable (15f)
+  </pre>
+  <pre class="lines" data-k="teal" data-label="from 14·chem: what the pull costs, as work">
+W_{\text{pull}} = \textstyle\int_{V_1}^{V_2} \tfrac{a n^2}{V^2}\,dV = a n^2\Big(\tfrac{1}{V_1} - \tfrac{1}{V_2}\Big) @@ areas-scale; inverse-square-area
+\text{CO}_2,\ 1\ \text{mol},\ 1\ \text{L} \to 2\ \text{L}:\ \ 3.64 \cdot \tfrac12 = 1.82\ \text{L·bar} @@ 1 L·bar = 10⁻³ m³ · 10⁵ Pa = 100 J
+= \htmlClass{new}{182\ \text{J}} @@ work the gas does not do on the piston, because its molecules hold on to each other
+  </pre>
+  <p data-pid="fab4df">The first area, under nRT/V for an ideal gas at a fixed temperature, has no formula on the ladder yet. <b>It can be squeezed.</b> For ∫₁² dV/V, ten equal pieces give a lower sum of 0.6688 and an upper sum of 0.7188. So the work of one mole of ideal gas doubling its volume at 300 K is between 0.6688 and 0.7188 times RT = 2494 J: between about 1668 J and 1793 J.</p>
+
+  <h3>Osmotic pressure</h3>
+  <p data-pid="572c18">A membrane that lets water through but not sugar, set between pure water and sugar water, lets the water move toward the sugar. <b>The flow stops only if the sugar side is pressed with an extra pressure Π.</b> Π is a Greek capital letter, the chemists' usual name for this pressure. Here it is only a letter, and claims nothing. A botanist measured Π in 1877 with membranes of copper ferrocyanide laid inside clay pots. In 1887 a chemist saw that those numbers obeyed the gas law, a third physical premise:</p>
+  <p class="eqline" data-pid="26b1c1">Π = cRT, with c the concentration of dissolved particles, in moles per cubic metre (13·chem's concentration, times 1000 from mol/L). Its accepted name is osmotic pressure.</p>
+  <pre class="lines" data-k="ember" data-label="this page: osmotic pressures">
+\text{blood: } c \approx 300\ \text{mol/m}^3,\ T = 310\ \text{K} @@ the dissolved particles in blood plasma, at 37 °C
+\Pi \approx 300 \cdot 8.314 \cdot 310 \approx 7.7 \times 10^5\ \text{Pa} \approx 7.6\ \text{atm} @@ a drip of 0.9% salt water matches it
+\text{seawater: } c \approx 1100\ \text{mol/m}^3,\ T = 288\ \text{K} @@ the salt splits into two kinds of particle in the water
+\Pi \approx 2.6 \times 10^6\ \text{Pa} \approx \htmlClass{new}{26\ \text{atm}} @@ the least pressure that pushes fresh water out of seawater through a membrane
+  </pre>
+  <p data-pid="ab8009">A sockeye salmon leaving the Strait of Georgia for the Fraser River crosses from water at about 26 atm of osmotic pressure to water at nearly none. Its gills must stop pumping salt out and start pumping it in.</p>
+
+  <h3>Which rung licenses each step</h3>
+  <div class="tablewrap"><table class="tt">
+  <tr><th class="l">step</th><th class="l">licence</th></tr>
+  <tr><td class="l">pV = nRT; the corrected law; Π = cRT</td><td class="l">physical premises, from measurement</td></tr>
+  <tr><td class="l">work as ∫ p dV</td><td class="l">a physical premise; 15c's ∫</td></tr>
+  <tr><td class="l">the area under 1/x²</td><td class="l">Inverse-square-area: 15g's collapsing-sum, 15c's exactly-one-between, 15f's continuous-is-integrable</td></tr>
+  <tr><td class="l">the pull's work, from V₁ to V₂</td><td class="l">15e's areas-scale</td></tr>
+  <tr><td class="l">bounds for the area under 1/V</td><td class="l">15a's lower and upper sums; 15h's strip-sum-between</td></tr>
+  <tr><td class="l">moles, kelvin, concentration</td><td class="l">5·chem, 11·chem, 13·chem</td></tr>
+  </table></div>
+
+  <h3>Illegal moves</h3>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed">
+T \text{ in } {}^\circ\text{C in } pV = nRT\,? @@ in kelvin: at 0 °C the law would give V = 0
+W = p\,(V_2 - V_1) \text{ when } p \text{ changes}\,? @@ that is a box; a changing p needs the area under its curve
+\textstyle\int_a^b \tfrac{dx}{x^2} = \tfrac1b - \tfrac1a\,? @@ backwards: the area is positive, and 1/a &gt; 1/b
+c \text{ in mol/L in } \Pi = cRT \text{ with } R = 8.314\,? @@ in mol/m³ with R in J/(mol·K); 1 mol/L = 1000 mol/m³
+\text{the corrected law is true for every } V\,? @@ below 304 K its curve for CO₂ wiggles; there the gas is turning to liquid (15·chem.3.1a)
+  </pre>
+</section>
+
+<section class="pic" id="pic">
+  <div class="eyebrow">The picture · one mole of CO₂ in the p–V plane, and the work as an area</div>
+  <div class="panels">
+    <div class="panel">
+      <div class="chips" id="fch"></div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">T (K)</span><input type="range" id="kT" min="260" max="400" step="2" value="300"><output id="oT"></output></div>
+      <div class="kn"><span class="m">V₁ (L)</span><input type="range" id="k1" min="0.1" max="2" step="0.05" value="1"><output id="o1"></output></div>
+      <div class="kn"><span class="m">V₂ (L)</span><input type="range" id="k2" min="0.15" max="4" step="0.05" value="2"><output id="o2"></output></div>
+      <div class="cap">Ink: the chosen law's pressure against volume, in bar. Dashed: the other law. Teal: the area from V₁ to V₂, the work, in L·bar (one L·bar is 100 J).</div>
+    </div>
+    <div class="panel">
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+</section>
+
+<section class="slides" id="sl1"><div class="eyebrow">The slides · pressure; three laws; pV = nRT; 22.4 L; the corrected law; CO₂ both ways; work as an area; inverse-square-area by the collapse; the pull's work; the area under 1/V squeezed; osmotic pressure; blood and seawater; illegal moves · ← → keys work</div></section>
+
+<section class="sayback">
+  <div class="eyebrow">Say it back · then work it</div>
+  <h2>Questions</h2>
+  <div class="phkey"></div>
+  <ol>
+    <li><span class="qid">15·chem.1</span><span class="gname">Pressures and areas.</span><span class="gwhy">Do: build the page's pieces.</span>
+      <ol class="sub">
+        <li><span class="qid">15·chem.1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="n = 0.50\ \text{mol},"></span> <span data-tex-inline="T = 25\ {}^\circ\text{C},\ p = 1.0\ \text{bar}"></span></span>Find the volume of this ideal gas.</li><li><span class="givens"><span data-tex-inline="n = 2.0\ \text{mol of CO}_2,"></span> <span data-tex-inline="V = 1.0\ \text{L},\ T = 350\ \text{K}"></span></span>Find the pressure by the ideal law and by the corrected law.</li><li><span class="givens"><span data-tex-inline="J = \int_1^3 \frac{dV}{V^2};"></span> <span data-tex-inline="1\ \text{mol of CO}_2,\ 1\ \text{L} \to 3\ \text{L}"></span></span>Find J, and the work the pull of the gas costs over the given growth.</li><li><span class="givens"><span data-tex-inline="c = 0.10\ \text{mol/L},\ T = 20\ {}^\circ\text{C}"></span></span>Find the osmotic pressure of sugar water at this concentration and temperature, in atm.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">15·chem.2</span><span class="gname">From the pressure back.</span><span class="gwhy">Undo: run the page's techs backwards.</span>
+      <ol class="sub">
+        <li><span class="qid">15·chem.2.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="T = 300\ \text{K},\ p = 2.0\ \text{bar},"></span> <span data-tex-inline="V = 3.0\ \text{L}"></span></span>Find how many moles the gas sample holds.</li><li><span class="givens"><span data-tex-inline="\Pi = 2.6 \times 10^5\ \text{Pa},\ T = 288\ \text{K}"></span></span>Water from a marsh near the Sacramento–San Joaquin Delta shows this osmotic pressure. Find its concentration of dissolved particles in moles per litre.</li><li><span class="givens"><span data-tex-inline="p = 1.5\ \text{bar, fixed};"></span> <span data-tex-inline="W = 300\ \text{J}"></span></span>Find by how many litres the gas grew.</li><li><span class="givens"><span data-tex-inline="\int_k^2 \frac{dx}{x^2} = 0.3"></span></span>Find k.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">15·chem.3</span><span class="gname">Where the laws give.</span><span class="gwhy">Bend: find where the techs stop working.</span>
+      <ol class="sub">
+        <li><span class="qid">15·chem.3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="T = 280\ \text{K}"></span></span>In the picture, at the given T, find a stretch of V where the corrected law's p rises as V grows.<br>Squeeze such a gas a little there, and find whether its p rises or falls, and what the gas then does.</li><li><span class="givens"><span data-tex-inline="V \to nb"></span></span>Find what each law's p heads to as V shrinks toward nb, and which is closer to what a gas does.</li><li><span class="givens"><span data-tex-inline="W = \int p\, dV"></span></span>The premise asks for a slow push. Find what might go wrong if the piston is pulled out fast.</li><li><span class="givens"><span data-tex-inline="f(V) = 1/V;"></span> <span data-tex-inline="[1, 2] \text{ and } [2, 4],\ 10 \text{ equal pieces}"></span></span>Compare the lower and upper sums of f on the two intervals.<br>Prove what you find for every number of equal pieces.</li></ol></li>
+      </ol></li>
+    <li class="optgroup"><span class="qid">15·chem.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder challenges that rely on your own making. The page is complete without these; the rung's star needs them.</span>
+      <ol class="sub">
+        <li class="opt"><span class="qid">15·chem.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{Bend: } p \text{ rose with } V \text{ at } 280\ \text{K}."></span> <span data-tex-inline="T &gt; 304\ \text{K}"></span></span>Choose an amount of carbon dioxide, a temperature above the given one and a starting volume of your own, and find both laws' pressures there.<br>Double the volume slowly, and find the pull's work and the ideal law's work from the page's sums.<br>Find what share of the second is the first.</li>
+        <li class="opt"><span class="qid">15·chem.4.2</span><span class="tagq">edge</span>Find what the corrected law becomes when both its constants are zero, and when only b is.</li>
+        <li class="opt"><span class="qid">15·chem.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="pV = nRT"></span></span>An ideal gas obeys the pressure-volume law at every temperature. <br>Prove or refute: a gas that obeys the pressure-volume law at every temperature obeys the given law.</li>
+        <li class="opt"><span class="qid">15·chem.4.4</span><span class="tagq">world</span><span class="givens"><span data-tex-inline="\Pi = \Pi_0 V_0 / V,"></span> <span data-tex-inline="\Pi_0 = 2.6 \times 10^6\ \text{Pa},\ V_0 = 2\ \text{m}^3,"></span> <span data-tex-inline="W = \int_1^2 \Pi\, dV"></span></span>Removing one cubic metre of fresh water from two of seawater concentrates what is left, with brine volume V. The least work is W. <br>Bound it with four equal pieces, in joules and in kilowatt-hours.</li>
+        <li class="opt"><span class="qid">15·chem.4.5</span><span class="tagq">seam</span>The corrected law's b is the room the molecules themselves take up, and from it chemists in the 1870s estimated how big a molecule is. A leading chemist and a leading physicist believed, until about 1908, that molecules were a useful fiction: the gas laws tie pressures, volumes and temperatures together, and need nothing behind them. <br>Does a correction term that makes a law fit better show that the thing it describes exists? <br>If b fits, are molecules real?</li>
+      </ol></li>
+  </ol>
+  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
+</section>
+
+<nav class="nextrung"><a href="r15stat.html">← 15·stat · how likely is landing in a range?</a><a href="r15econ.html">15·econ · what is a payment next year worth today? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>Van der Waals argued that the gas and the liquid are not two different kinds of matter, but one, with the same molecules of the same size pulling on each other in the same way; and that a single equation, with the room the molecules take and their mutual pull put in, should describe both.</p><cite>van der Waals, Over de continuiteit van den gas- en vloeistoftoestand (1873); paraphrase</cite></aside>
+  <p>The pressure-volume law is Robert Boyle’s (1662); the volume-temperature law is Jacques Charles’s and Joseph Louis Gay-Lussac’s; the equal-volumes law is Amedeo Avogadro’s (1811). The corrected law is Johannes van der Waals’s (1873). The membranes of 1877 are Wilhelm Pfeffer’s, and Jacobus van ’t Hoff read his numbers as the gas law in 1887; the accepted name of Π = cRT is van ’t Hoff’s law. The corrected law’s accepted name is the van der Waals equation, and its two constants are the van der Waals constants. In the closer, the chemist and the physicist are Wilhelm Ostwald and Ernst Mach.</p>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+/* least and greatest of F.f on [lo, hi]: the ends, F's critical points inside, and a fine sample (exact between critical points for the functions used here) */
+function ext(F,lo,hi){ if(F.dir) return [0,1]; let m=Infinity,M=-Infinity; const t=x=>{ const v=F.f(x); if(v<m) m=v; if(v>M) M=v; };
+  t(lo); t(hi); (F.crit||[]).forEach(c=>{ if(c>lo&&c<hi) t(c); }); for(let k=1;k<64;k++) t(lo+(hi-lo)*k/64); return [m,M]; }
+function sums(F,pts){ let L=0,U=0; const ms=[],Ms=[]; for(let i=1;i<pts.length;i++){ const [m,M]=ext(F,pts[i-1],pts[i]), w=pts[i]-pts[i-1]; ms.push(m); Ms.push(M); L+=m*w; U+=M*w; } return {L,U,ms,Ms}; }
+const eq=(a,b,n)=>Array.from({length:n+1},(_,i)=>a+(b-a)*i/n);
+function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
+function boxes(P,pts,hs,stroke,fill,alpha){ const c=P.ctx; for(let i=1;i<pts.length;i++){ const a=pts[i-1],b=pts[i],h=hs[i-1]; c.globalAlpha=alpha; P.poly([[a,0],[b,0],[b,h],[a,h]],null,fill); c.globalAlpha=1; P.poly([[a,0],[b,0],[b,h],[a,h]],stroke,null,1.2); } }
+function dirDots(P,a,b){ const c=P.ctx; c.fillStyle=col('--ink'); for(let k=0;k<=300;k++){ const x=a+(b-a)*k/300; const y=(k%2)?0:1; c.fillRect(P.X(x)-1,P.Y(y)-1,2,2); } }
+const Rg=0.08314, A=3.64, Bv=0.0427;
+const FN={ vdw:{lab:'corrected'}, ideal:{lab:'ideal'} };
+let key='vdw';
+const kT=$('kT'),k1=$('k1'),k2=$('k2'),cvF=$('cvF');
+const pI=V=>Rg*(+kT.value)/V, pW=V=>Rg*(+kT.value)/(V-Bv)-A/(V*V);
+const P_=()=>key==='vdw'?pW:pI, Q_=()=>key==='vdw'?pI:pW;
+const mid=(f,a,b,n)=>{ let s=0; const h=(b-a)/n; for(let i=0;i<n;i++) s+=f(a+(i+0.5)*h); return s*h; };
+const PF=plane(cvF,{x:[0,1],y:[0,1],grid:1,aspect:0.8,draw:P=>draw(P)});
+Object.defineProperty(PF.o,'aspect',{get:()=>cvF.clientWidth>480?0.75:0.95});
+const S=20; /* the canvas plots p/20, so one grid serves litres across and 10 bar up */
+function draw(P){ P.o.x=[-0.25,4.2]; P.o.y=[-0.6,4]; P.o.grid=0.5; P.o.labels=false; P.axes(); const c=P.ctx;
+  const v1=Math.min(+k1.value,+k2.value), v2=Math.max(+k1.value,+k2.value), f=P_();
+  const pts=[[v1,0]]; for(let k=0;k<=200;k++){ const V=v1+(v2-v1)*k/200; pts.push([V,Math.max(-0.6,Math.min(4,f(V)/S))]); } pts.push([v2,0]);
+  c.globalAlpha=0.3; P.poly(pts,null,'--teal'); c.globalAlpha=1;
+  const clip=g=>V=>{ const y=g(V)/S; return (y>4||y<-0.6)?NaN:y; };
+  curve(P,clip(Q_()),'--muted',1.4,0.06,4.2,[5,4]); curve(P,clip(f),'--ink',2.6,0.06,4.2);
+  for(let y=1;y<=4;y++) P.text(String(y*S)+' bar',0.03,y+0.05,'--muted','left',10);
+  for(let x=1;x<=4;x++) P.text(x+' L',x,-0.35,'--muted','center',10); }
+function read(){ const T=+kT.value, a1=+k1.value, a2=+k2.value; $('oT').textContent=T; $('o1').textContent=mm(a1,2); $('o2').textContent=mm(a2,2);
+  const v1=Math.min(a1,a2), v2=Math.max(a1,a2), sg=a2>=a1?1:-1, f=P_();
+  const W=sg*mid(f,v1,v2,4000); const pull=sg*A*(1/v1-1/v2);
+  let wig=false; for(let V=0.06;V<1;V+=0.002){ if(pW(V+0.002)>pW(V)+1e-9){ wig=true; break; } }
+  const vd=$('vdF'); vd.className='verdict'+(key==='vdw'&&wig?' lose':'');
+  vd.textContent='Work from '+mm(a1,2)+' L to '+mm(a2,2)+' L: about '+mm(W,3)+' L·bar = '+mm(W*100,0)+' J ('+FN[key].lab+').'+(key==='vdw'?' Of the ideal-like push, the pull takes back exactly '+mm(pull,3)+' L·bar by inverse-square-area.':'')+(key==='vdw'&&wig?' At '+T+' K the curve rises somewhere as V grows: there the gas is turning to liquid, and the equation no longer describes it.':'');
+  tex($('eqF'),key==='vdw'?R`\begin{gathered}p = \tfrac{RT}{V - b} - \tfrac{a}{V^2}\\ W \approx ${mm(W,3)}\ \text{L·bar}\\ \textstyle\int_{${mm(a1,2)}}^{${mm(a2,2)}} \tfrac{a}{V^2}\,dV = a\left(\tfrac{1}{${mm(a1,2)}} - \tfrac{1}{${mm(a2,2)}}\right) = ${mm(pull,3)}\end{gathered}`:R`\begin{gathered}p = \tfrac{RT}{V}\\ W = RT\textstyle\int_{${mm(a1,2)}}^{${mm(a2,2)}} \tfrac{dV}{V} \approx ${mm(W,3)}\ \text{L·bar}\\ \text{a squeeze; no formula yet}\end{gathered}`,true); }
+function all(){ PF.redraw(); read(); }
+[kT,k1,k2].forEach(k=>k.addEventListener('input',all));
+const fch=$('fch');
+Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===key) b.className='on'; b.onclick=()=>{ key=k; [...fch.children].forEach(z=>z.classList.toggle('on',z===b)); all(); }; fch.appendChild(b); });
+window.__pic={set:(k,T,v1,v2)=>{ [...fch.children][Object.keys(FN).indexOf(k)].click(); kT.value=T; k1.value=v1; k2.value=v2; all(); return {p1:+P_()(+k1.value).toFixed(3),txt:$('vdF').textContent}; }};
+all();
+/* ---------- slides ---------- */
+const Nw='\\htmlClass{new}';
+stepper('#sl1',[
+  {k:'ember',kl:'pressure',t:R`p = \tfrac{F}{A}`,n:`Pascals; bar; atmospheres.`},
+  {k:'ember',kl:'three laws',t:R`\text{pressure–volume},\ \text{volume–temperature},\ \text{equal volumes}`,n:`Physical premises, from measurement.`},
+  {k:'ember',kl:'the ideal gas law',t:R`pV = nRT`,n:`R = 8.314 J/(mol·K). T in kelvin.`},
+  {k:'ember',kl:'22.4 L',t:R`V = \tfrac{RT}{p} \approx 0.0224\ \text{m}^3`,n:`One mole at 0 °C and 1 atm.`},
+  {k:'ember',kl:'the corrected law',t:R`p = \tfrac{nRT}{V - nb} - \tfrac{a n^2}{V^2}`,n:`Room for the molecules; their pull. 1873.`},
+  {k:'ember',kl:'CO₂ in 1 L',t:R`24.9 \text{ against } ${Nw}{22.4}\ \text{bar}`,n:`The ideal law is about 11% high.`},
+  {k:'ember',kl:'work',t:R`W = \textstyle\int_{V_1}^{V_2} p\,dV`,n:`A premise: an area in the p–V plane.`},
+  {k:'ember',kl:'inverse-square-area',t:R`${Nw}{\textstyle\int_a^b \tfrac{dx}{x^2} = \tfrac1a - \tfrac1b}`,n:`1/(xᵢ₋₁xᵢ) is between the heights; collapsing-sum collapses it.`},
+  {k:'teal',kl:'from 14·chem · the pull',t:R`a n^2\left(\tfrac{1}{V_1} - \tfrac{1}{V_2}\right) = 182\ \text{J}`,n:`CO₂, 1 L to 2 L.`},
+  {k:'ember',kl:'under 1/V',t:R`0.6688 \le \textstyle\int_1^2 \tfrac{dV}{V} \le 0.7188`,n:`Squeezed with ten pieces; no formula yet.`},
+  {k:'ember',kl:'osmotic pressure',t:R`\Pi = cRT`,n:`Clay-pot membranes, 1877; the gas law for solutions, 1887.`},
+  {k:'ember',kl:'blood, seawater',t:R`7.6\ \text{atm},\ \ 26\ \text{atm}`,n:`A salt drip matches the first; a desalting membrane must beat the second.`},
+  {k:'ember',kl:'illegal',t:R`T \text{ in kelvin}`,n:`Never in °C in pV = nRT.`}
+],{title:'The slides · pressure; three laws; pV = nRT; 22.4 L; the corrected law; CO₂ both ways; work as an area; inverse-square-area by the collapse; the pull\'s work; the area under 1/V squeezed; osmotic pressure; blood and seawater; illegal moves · ← → keys work'});
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

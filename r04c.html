@@ -1,0 +1,608 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>4c · Defining by repeating</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.95rem;white-space:normal}
+@media (max-width:520px){.pic .eqbox{font-size:.82rem}}
+#cvR,#cvG{touch-action:manipulation;cursor:pointer}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r04b.html">← 4b induction</a><a href="r04d.html">next: 4d completing the proof →</a></p>
+  <div class="tags"><span class="tag proof">4c · proof</span></div>
+  <h1>Defining by repeating</h1>
+  <p>Induction proves a statement about every number from a base and a step. This step does the same for definitions: it shows that a starting value and a rule for the next value fix exactly one thing at every number. First it has to say what that thing is. A function, on this ladder, is a set of pairs in which each input is paired with exactly one output; the step gives functions their marks and two small techniques. Then the recursion principle. For any set, any starting member and any step from the set to itself, there is exactly one function on the numbers that starts there and takes the step each time. The proof builds the function as the smallest closed set of pairs, the way 4a built the numbers as the smallest inductive set. Then it checks by induction that it really is a function. Last, what the principle can and cannot do, worked on a doubling, a cat and a dog, and the layers of 3c.</p>
+  <p class="gesture">Say where to start and how to take each step. The pairs you are forced to have, starting from the start and taking the step, form a function on the numbers, and no other function starts there and takes that step.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r02d.html">2d</a> (𝒫), <a href="r02e.html">2e</a> (pairs, the equal-pairs technique, ×), <a href="r02g.html">2g</a> (set-builder shorthand), <a href="r03c.html">3c</a> (the layers), <a href="r04a.html">4a</a> (ℕ, zero-is-a-number, next-of-a-number, different-nexts) and <a href="r04b.html">4b</a> (the induction technique, proof by induction). <a href="r04e.html">4e</a> defines adding with this step's technique, and <a href="r04f.html">4f</a> multiplying and powers; rung 9 builds the full theory of functions.</p></div>
+</header>
+
+<section class="class step" data-step="4c1">
+  <h2 class="sthead"><span class="stno">4c1</span>Defining by repeating, in words</h2>
+  <p class="stands">Stands on 4b (induction) and 2b (naming ∅ once one fits).</p>
+  <p data-pid="4cff21">Here is the kind of definition this step is for: “Adding 0 to a number changes nothing; adding the next one after b is taking the next one after what adding b gave.” It says what happens at 0. And it says how to get the answer at the next one from the answer at this one. It feels like enough. From 0 you get to 1, from 1 to 2, and on, so every number gets an answer.</p>
+  <p data-pid="ccb0e8">But “and on” is the dots again, and the ladder does not accept dots as a reason. <b>A definition is a line that gives a name to a thing, and a name is honest only when exactly one thing fits.</b> 2b named ∅ only after the one-empty-set technique showed there was exactly one empty set, and 4a named ℕ only after whichever-inductive-set.</p>
+  <p data-pid="918476">So two questions need answers before anything can be defined by repeating. What kind of thing is being defined? And is there exactly one such thing that starts where you say and steps as you say? The first is answered with pairs. The second is a technique, proved with induction.</p>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">4c1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">“Adding 0 to a number changes nothing; adding the next one after b is taking the next one after what adding b gave.”</span></span>By these words, what is adding 1 to 2? <br>Say each step, and which half of the words it uses.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4c2">
+  <h2 class="sthead"><span class="stno">4c2</span>A function is its pairs</h2>
+  <p class="stands">Stands on 2e (pairs, ×, relations) and 1e (every, some).</p>
+  <p data-pid="90d09c">Think of a rule that hands each thing in one set a thing in another: each person in a household and their mother; each number and its next one. Whatever the rule is, it leaves a trace: the pairs (input, output), a pair for each input. The ladder takes the trace as the thing itself, as 2e took a relation to be nothing but its pairs. A pair of words, to begin with: in a pair (x, y) belonging to such a set, x is the <b>input</b> and y the <b>output</b>.</p>
+  <p class="eqline" data-pid="1d64cf">From here on, the statement “f is a function from A to B” means: <span data-tex-inline="f \subseteq A \times B"></span>, and every member of A is paired by f with exactly one thing:</p>
+  <div class="eqline" data-tex="\begin{aligned} &amp;\forall x \in A\;\exists y\,((x, y) \in f)\\ &amp;\forall x\,\forall y\,\forall z\,\big((x, y) \in f \land (x, z) \in f\\ &amp;\qquad \Rightarrow y = z\big) \end{aligned}"></div>
+  <div class="dividend"><span class="lbl">The = dividend</span>Doing a verb is a function: double it, square it, paint it red. The last clause says that if x goes in twice, the same thing comes out both times, y = z. That is 0b's mark, carried through the verb: the same in, the same out.</div>
+  <p data-pid="97ded3">Both parts have names that will be used as reasons: <b>every input has an output</b>, and <b>no input has two</b>. Together they make “exactly one”.</p>
+  <p data-pid="293b05">Some examples, with A = {cat, dog} and B = {owl, bat}. The set {(cat, owl), (dog, owl)} is a function from A to B: each input has exactly one output, and two inputs sharing an output is allowed. The set {(cat, owl)} is not: dog has no output. The set {(cat, owl), (cat, bat), (dog, bat)} is not: cat has both owl and bat. Each failure is a witness against a part, by 1e's counterexample technique.</p>
+  <p data-pid="f7e1ba">The accepted name for A, the set the inputs come from, is the domain of f.</p>
+  <section class="slides" id="sl2a"><div class="eyebrow">The slides · a function · ← → keys work</div></section>
+  <section class="slides" id="sl2b"><div class="eyebrow">The slides · the cases · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4c2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">A = {Rex, Pip}, B = {cat, owl}.</span></span>Is {(Rex, cat), (Pip, cat)} a function from A to B? <br>Is {(Rex, cat), (Rex, owl)}? Say which part fails, if one does.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4c3">
+  <h2 class="sthead"><span class="stno">4c3</span>The marks f : A → B and f(x)</h2>
+  <p class="stands">Stands on 4c2.</p>
+  <p data-pid="894967">The arrow says it shorter:</p>
+  <p class="eqline" data-pid="922630">From here on, the statement <span data-tex-inline="f : A \to B"></span> means: f is a function from A to B. Read it “f takes A to B”.</p>
+  <p data-pid="f6705f">The arrow → has a new job here; it is not 1d's ⇒, which joins statements. Its job from 1f, “gives” between pieces of a working, still stands in worked lines and slides. After f : it stands between a set and a set, and what stands on its sides says which. The colon in f : A → B is part of this mark: 2b's colon inside braces, read “such that”, keeps its job.</p>
+  <p data-pid="4b2df0">Now take an input x ∈ A. Its output exists and is the only one, so it can be named.</p>
+  <p class="eqline" data-pid="d6d4a7">From here on, when <span data-tex-inline="f : A \to B"></span> and <span data-tex-inline="x \in A"></span>, <span data-tex-inline="f(x)"></span> names the one thing that f pairs with x: <span data-tex-inline="f(x) = y \;\Leftrightarrow\; (x, y) \in f"></span>. Read it “f of x”, or “the value of f at x”.</p>
+  <p data-pid="d953df">So (x, f(x)) ∈ f always, and f(x) ∈ B.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · the marks · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4c3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f = {(Rex, cat), (Pip, owl)}, a function from {Rex, Pip} to {cat, owl}.</span></span>What is f(Pip)? <br>Write the line for f(Pip) as a membership.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4c4">
+  <h2 class="sthead"><span class="stno">4c4</span>Three jobs for brackets</h2>
+  <p class="stands">Stands on 4c3, 0a (P(x)), 3a (S(x)) and 2f12 (no set of all sets).</p>
+  <p data-pid="7182a9">Notice the jobs brackets now do on the ladder. In P(x), from 0a, they mark a statement with x in its gap. In S(x), from 3a, they hold the set a mark acts on. In f(x) they hold an input of a function, and f(x) names a thing.</p>
+  <p data-pid="53bae7">S acts on any set, and only on sets: 3a built x ∪ {x} for a set x, so a cat, which is not a set, has no next one.</p>
+  <p data-pid="fc6dad">S is not a function in this sense. There is no set of all the pairs (x, S(x)), since its inputs would make a set of all sets, which 2f's no-set-of-all-sets forbids. What there is, is a function that agrees with S on the numbers, built in 4c6.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4c4.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">P(Rex), S(2) and f(Rex).</span></span>What does each pair of brackets hold? <br>Which of the three is a statement?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4c5">
+  <h2 class="sthead"><span class="stno">4c5</span>Rules make functions</h2>
+  <p class="stands">Stands on 4c3, 2g7 (the shorthand) and 2e5 (equal-pairs).</p>
+  <p data-pid="d45f2e">Most functions on this rung come from a rule written with marks, like “the next one after n”. A mark for the rule itself:</p>
+  <p class="eqline" data-pid="da9fb0">From here on, <span data-tex-inline="x \mapsto t(x)"></span> means: the rule that takes each x to t(x), where t(x) is a name written with x in it. Read it “x goes to t(x)”.</p>
+  <p data-pid="345ef0"><b>A rule is a way of writing, not a set.</b> The mark x ↦ t(x) is an operator, a statement that produces t(x) when it is carried out on x. What turns it into a set is 2g's shorthand: the pairs {(x, t(x)) : x ∈ A}, short for a sift of A × B.</p>
+  <p data-pid="8549e7">Rule-makes-a-function technique: <b>a rule that gives a member of B for every member of A makes a function from A to B.</b> In marks: if t(x) names a member of B for every x ∈ A, then {(x, t(x)) : x ∈ A} is a function from A to B whose value at x is t(x).</p>
+  <p data-pid="48e4ca">The plan: the set of pairs is a sift of A × B, and then each part of “function” is checked.</p>
+  <p data-pid="106185">Suppose t(x) names a member of B for every x in A. Written out, F is a sift of A × B: the pairs p with p = (x, t(x)) for some x in A. A sift is a part of what it sifts, so F is a part of A × B.</p>
+  <p data-pid="5404c4">Every input has an output. Take x in A. Then t(x) is in B, so (x, t(x)) is in A × B. With x as the example, pack the sift: (x, t(x)) is in F.</p>
+  <p data-pid="a53c7c">No input has two. Suppose (x, y) and (x, z) are both in F. Unpack the sift for the first: (x, y) = (x′, t(x′)) for some x′ in A. By equal-pairs, x = x′ and y = t(x′). Swap: y = t(x). The same moves for z give z = t(x). Turn that about and chain: y = z.</p>
+  <p data-pid="0ca866">Join the parts and pack “function”: F takes A to B, and its value at x is t(x).</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · the rule-makes-a-function technique · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4c5.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">The rule x ↦ {x}, on A = {Rex, Pip}.</span></span>Write the set of pairs it makes. <br>Name a set B it is a function to.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4c6">
+  <h2 class="sthead"><span class="stno">4c6</span>The function s</h2>
+  <p class="stands">Stands on 4c5, 4a8 (next-of-a-number), 4a13 (different-nexts) and 4a14 (the endless mark).</p>
+  <p data-pid="934f51">Apply it to the next-one rule on the numbers. The next-of-a-number technique says S(n) is a number whenever n is, so rule-makes-a-function gives a function, and the ladder names it s:</p>
+  <div class="eqline" data-tex="\begin{gathered}s = \{(n, S(n)) : n \in \mathbb N\},\\ s : \mathbb N \to \mathbb N,\qquad s(n) = S(n).\end{gathered}"></div>
+  <p data-pid="fc8452">It is the rule n ↦ S(n), made a set. 4a said that the founder's matching of the run with a part of itself (Dedekind's) would become an object in this step, and here it is. s pairs each number with its next one. No two inputs share an output (the different-nexts technique). And no input has output 0 (the next-never-empty technique). ℕ is matched, member for member, with a part of itself that leaves 0 out.</p>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · the function s · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4c6.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">s = {(n, S(n)) : n ∈ ℕ}.</span></span>Work out s(2) and s(s(0)). <br>Is S a function? Is s? Say why each.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4c7">
+  <h2 class="sthead"><span class="stno">4c7</span>Same outputs, same function</h2>
+  <p class="stands">Stands on 4c3 and 2a (double-inclusion).</p>
+  <p data-pid="7d19fa">Another small technique.</p>
+  <p data-pid="8a2cd7">Same-outputs technique: <b>two functions from A to B that give the same output at every input are the same function.</b></p>
+  <p data-pid="c2b4b5">It is the same-members axiom for functions, and it is how the uniqueness part of every definition by repeating is closed.</p>
+  <p data-pid="c0d2cc">Suppose f and h both take A to B, and f(x) = h(x) for every x in A. Chase a member: suppose p is in f. f is a part of A × B, so p is a pair (x, y) with x in A.</p>
+  <p data-pid="0bcdab">The line for f(x) says y = f(x). The given every says f(x) = h(x). Chain them: y = h(x). By the line for h(x), (x, y) is in h, so p is in h. And p was anything, so f is a part of h.</p>
+  <p data-pid="a9f9d2">The same moves, turned about, make h a part of f. By the double-inclusion technique, f = h.</p>
+  <section class="slides" id="sl7"><div class="eyebrow">The slides · the same-outputs technique · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4c7.1</span><span class="ph undo">undo</span><span class="givens"><span class="gtx">f, h : {Rex, Pip} → {cat, owl}. f(Rex) = h(Rex) = cat. f(Pip) = h(Pip) = owl. Wanted: f = h.</span></span>Which technique gives the goal? <br>What did you have to check, and how many checks?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4c8">
+  <h2 class="sthead"><span class="stno">4c8</span>The recursion technique</h2>
+  <p class="stands">Stands on 4c3 (functions) and 4b (induction).</p>
+  <p data-pid="c81d8a">In words, the recursion technique: <b>take any set A, any member u of A, and any function g from A to itself. There is exactly one function f from the numbers to A with f(0) = u and, for every number n, f(S(n)) = g(f(n)).</b></p>
+  <p data-pid="1bdeb5">The start says where f begins; the step g says how to get each value from the one before. From here on, “step” also names the function g of a definition by repeating. 4b's step of an induction, a statement, keeps its name there, and what the step belongs to says which.</p>
+  <p data-pid="396b3d">Its accepted name is the recursion theorem, and defining by repeating is called definition by recursion.</p>
+  <div class="eqline" data-tex="\begin{aligned}&\textbf{Recursion technique:}\\ &\text{from } A \text{ a set},\ \ a \in A,\ \ g : A \to A,\\ &\text{you may write: exactly one } f : \mathbb N \to A \text{ has}\\ &\quad f(0) = a\\ &\quad \land\; \forall n \in \mathbb N\;\; f(S(n)) = g(f(n))\end{aligned}"></div>
+  <p data-pid="638af9">Example: A = {cat, dog}, the start is cat, and g swaps cat and dog. Then f(0) = cat, f(1) = dog and f(2) = cat.</p>
+  <section class="slides" id="sl8"><div class="eyebrow">The slides · the recursion technique · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4c8.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">A = {Rex, Pip}; start Pip; the step g swaps Rex and Pip.</span></span>Work out f(0), f(1), f(2) and f(3). <br>Name the line you use at each.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4c9">
+  <h2 class="sthead"><span class="stno">4c9</span>Why existence is the hard part</h2>
+  <p class="stands">Stands on 4c8 and 4a1 (cargo).</p>
+  <p data-pid="d0f7f5">“Exactly one” is a pair of claims, as always: there is such an f, and any such f and f′ are the same set. Uniqueness is an induction and same-outputs. Existence is the harder part, because it asks for a set, and the defining lines only say what the set must do. The defining lines are not a set any more than the step part of “inductive” was.</p>
+  <p data-pid="a655d4">And there is a real chance of failure. Try the same lines on an inductive set I that carries cargo, in place of ℕ. They fix f(0), f(1), f(2) and so on along the run, and they say nothing at all about f({1}): {1} is no number's next, so no line reaches it. On I, the lines leave inputs without outputs. On ℕ, 4a's sift guarantees there is nothing for the lines to miss, and the proof below is where that guarantee is cashed.</p>
+  <p data-pid="75f105">One founder of the subject was the earliest to see that a definition by repeating needs a proof, and to give one. His technique says that a start and a step determine exactly one mapping of the number series. He proved it by building the mapping out of partial pieces, and checking by induction that they fit together.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4c9.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">On an inductive I holding {1}: f(0) = cat and f(S(x)) = g(f(x)).</span></span>What do these lines say f({1}) is? <br>Which part of “function” do they leave unearned?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4c10">
+  <h2 class="sthead"><span class="stno">4c10</span>Closed sets of pairs</h2>
+  <p class="stands">Stands on 4c9, 2d (𝒫) and 2b (sift).</p>
+  <p data-pid="79f6d3">Fix A, u and g. The f you want is a set of pairs from ℕ × A. It must hold (0, u). And whenever it holds a pair (n, y), meaning f(n) = y, it must hold the pair (S(n), g(y)), meaning f(S(n)) = g(f(n)). Give the property a name:</p>
+  <p class="eqline" data-pid="614141">From here on, a set of pairs <span data-tex-inline="h \subseteq \mathbb N \times A"></span> is <b>closed</b> (for a and g) when <span data-tex-inline="(0, a) \in h"></span> and h is closed under <span data-tex-inline="(n, y) \mapsto (S(n), g(y))"></span>:</p>
+  <div class="eqline" data-tex="\forall n\,\forall y\,\big((n, y) \in h \Rightarrow (S(n), g(y)) \in h\big)"></div>
+  <p data-pid="e5e383">“h is closed” is a statement about h.</p>
+  <p data-pid="cd9846">“Closed” is to sets of pairs what “inductive” was to sets: a base part and a step part. (Inside h every y is a member of A, so g(y) makes sense.) Gather the closed ones into a set, by sifting all the subsets of ℕ × A, 2d's tool:</p>
+  <div class="eqline" data-tex="C = \{h \in \mathcal P(\mathbb N \times A) : h \text{ is closed}\}"></div>
+  <p data-pid="a10a81">C has a member: ℕ × A itself. It holds (0, u), by zero-is-a-number and u ∈ A. And if (n, y) ∈ ℕ × A, then n is a number and y ∈ A. So S(n) is a number (next-of-a-number), and g(y) ∈ A (g takes A to A), and (S(n), g(y)) ∈ ℕ × A. Every pair is allowed, so nothing is missing. ℕ × A is far too big to be a function, of course, the way an inductive set with cargo was too big to be the numbers. So do what 4a did: keep the pairs that are in every closed set. That is, intersect them all.</p>
+  <div class="eqline" data-tex="f = \{p \in \mathbb N \times A : \forall h\,(h \in C \Rightarrow p \in h)\}"></div>
+  <section class="slides" id="sl10a"><div class="eyebrow">The slides · closed · ← → keys work</div></section>
+  <section class="slides" id="sl10b"><div class="eyebrow">The slides · C and the intersection · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4c10.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">A = {cat, dog}; start cat; g swaps cat and dog.</span></span>Is {(0, cat)} closed? <br>Is {(0, cat), (1, dog)}? Name the missing pair in each that fails.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4c11">
+  <h2 class="sthead"><span class="stno">4c11</span>The smallest closed set</h2>
+  <p class="stands">Stands on 4c10 and 4a9 (the smallest inductive set).</p>
+  <p data-pid="da3b27">The opening technique about f is the counterpart of 4a's smallest-inductive-set.</p>
+  <p data-pid="422f5f">Smallest-closed-set technique: <b>f is closed, and f is a part of every closed set of pairs.</b> In marks: f is closed, and f ⊆ h for every closed h.</p>
+  <p data-pid="996885">f is a part of every closed set. Let h be closed, so h is in C, and let p be in f. Unpack the sift: p is in every member of C. Use that with h: p is in h. So f is a part of h, just as lies-below put ℕ inside every inductive set.</p>
+  <p data-pid="eb265f">f holds the starting pair. (0, u) is in ℕ × A, since 0 is a number and u is in A. And every closed h holds (0, u): that is its base part. So (0, u) is in every member of C. Pack the sift: (0, u) is in f.</p>
+  <p data-pid="a4c262">f takes the step. Suppose (n, y) is in f. Then (S(n), g(y)) is in ℕ × A, as it was for ℕ × A above. Now take any closed h. (n, y) is in h, since f is a part of h. And h’s step part puts (S(n), g(y)) in h. So (S(n), g(y)) is in every member of C. Pack the sift: it is in f.</p>
+  <p data-pid="12f384">Last, f is a sift of ℕ × A, so a part of it. So f is a closed set of pairs from ℕ × A: f is in C, the smallest of them.</p>
+  <section class="slides" id="sl11"><div class="eyebrow">The slides · the smallest-closed-set technique · ← → keys work</div></section>
+  <section class="pic" id="pic2">
+    <div class="eyebrow">The picture · closed sets of pairs, and the smallest one</div>
+    <div class="panel">
+      <div class="cap">Pairs (n, y) for inputs 0 to 4 and y in {cat, dog, owl}, using the left panel's start and step for the animals. Tap cells to build a set of pairs h. The readout says whether h is closed as far as the grid shows, and names a missing pair.</div>
+      <div class="chips"><button id="gAll">all of ℕ × A</button><button id="gF">the smallest closed set</button><button id="gClear">empty</button></div>
+      <canvas id="cvG"></canvas>
+      <div class="eqbox" id="eqG"></div>
+    </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4c11.1</span><span class="ph undo">undo</span><span class="givens"><span data-tex-inline="(n, y) \in f"></span></span>Show (S(n), g(y)) ∈ f. <br>Name the step that uses “every closed h”.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4c12">
+  <h2 class="sthead"><span class="stno">4c12</span>Where each pair comes from</h2>
+  <p class="stands">Stands on 4c11 and 4b7 (zero-or-a-next).</p>
+  <p data-pid="cee844">The next technique is the counterpart of 4b's zero-or-a-next.</p>
+  <p data-pid="368640">Where-each-pair-comes-from technique: <b>every pair of f is the starting pair, or was made by the step from a pair of f.</b></p>
+  <p data-pid="0fa530">Its proof is the trick that proved induction, done on pairs: sift f by the property, show the sift is closed, and smallest-closed-set puts f inside the sift.</p>
+  <p data-pid="3f57ba">Sift f by the property, and call the sift f′: the pairs of f that are the starting pair (0, u), or are (S(m), g(w)) for some pair (m, w) of f. A sift of f is a part of f, so f′ is a part of ℕ × A.</p>
+  <p data-pid="d8f262">f′ holds the starting pair. (0, u) is in f, by smallest-closed-set, and it is the starting pair, so it passes by the first option.</p>
+  <p data-pid="62466b">f′ takes the step. Suppose (n, y) is in f′. Then (n, y) is in f, and smallest-closed-set puts (S(n), g(y)) in f. It was made by the step from a pair of f, namely (n, y), so it passes by the second option. It is in f′.</p>
+  <p data-pid="463f9f">So f′ is closed, and f′ is in C. Smallest-closed-set says f is a part of every member of C, so f is a part of f′. Every pair of f passes.</p>
+  <section class="slides" id="sl12"><div class="eyebrow">The slides · the where-each-pair-comes-from technique · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4c12.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">Start cat, g swaps cat and dog. Is (0, dog) ∈ f?</span></span>Which option of where-each-pair-comes-from would it need? <br>Say why each option fails.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4c13">
+  <h2 class="sthead"><span class="stno">4c13</span>f is a function</h2>
+  <p class="stands">Stands on 4c12, 4b (induction) and 4a13 (different-nexts).</p>
+  <p data-pid="ade606">Now both parts of “function”, each by induction on the input. Every input has an output: φ(n) is ∃y ((n, y) ∈ f). The base is (0, u) ∈ f. The step: if (n, y) ∈ f then (S(n), g(y)) ∈ f, by smallest-closed-set, so S(n) has an output too. The induction technique closes it.</p>
+  <section class="slides" id="sl13a"><div class="eyebrow">The slides · every input has an output · ← → keys work</div></section>
+  <p data-pid="d0e423">No input has two outputs: ψ(n) is ∀y ∀z ((n, y) ∈ f ∧ (n, z) ∈ f ⇒ y = z). This is where different-nexts earns its place.</p>
+  <p data-pid="758980">Base: suppose (0, y) ∈ f. Where-each-pair-comes-from says (0, y) is (0, u), so y = u by equal-pairs. Or it is (S(m), g(w)), so 0 = S(m), which clashes with next-never-empty, and everything permitted gives y = u as well. The same for z, so y = z.</p>
+  <p data-pid="6a96ef">Let n be a number, and suppose ψ(n): f pairs input n with at most one output. That is the induction hypothesis. Now suppose (S(n), y) and (S(n), z) are both in f.</p>
+  <p data-pid="456908">Ask where (S(n), y) came from. By where-each-pair-comes-from, it is the starting pair (0, u), or it is (S(m), g(w)) for some pair (m, w) of f. If it is the starting pair, equal-pairs gives S(n) = 0, which clashes with next-never-empty, and the clash permits everything. Otherwise, call them m and w. Equal-pairs gives S(n) = S(m) and y = g(w). By different-nexts, n = m. So (n, w) is in f, and y = g(w).</p>
+  <p data-pid="795d92">The same moves for z give a pair (n, w′) of f with z = g(w′). Both w and w′ are outputs of f at input n, so the hypothesis says w = w′. Then y = g(w) = g(w′) = z.</p>
+  <p data-pid="a4d82b">So ψ(S(n)). With the base, the induction technique gives ψ(n) for every number n.</p>
+  <section class="slides" id="sl13b"><div class="eyebrow">The slides · no input has two: base · ← → keys work</div></section>
+  <section class="slides" id="sl13c"><div class="eyebrow">The slides · no input has two: step · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4c13.1</span><span class="ph bend">bend</span><span class="givens"><span data-tex-inline="\text{Rex, Pip, Bo:}"></span> <span data-tex-inline="\text{different pets,}"></span> <span data-tex-inline="T = \{\text{Rex}, \text{Pip}, \text{Bo}\},"></span> <span data-tex-inline="r = \{(\text{Rex}, \text{Pip}),"></span> <span data-tex-inline="(\text{Rex}, \text{Bo}),"></span> <span data-tex-inline="(\text{Pip}, \text{Rex}),"></span> <span data-tex-inline="(\text{Bo}, \text{Rex})\}."></span> <span data-tex-inline="h \subseteq \mathbb{N} \times T \text{ is closed when}"></span> <span data-tex-inline="(0, \text{Rex}) \in h \text{ and}"></span> <span data-tex-inline="(n, y) \in h \land y \mathrel{r} z \Rightarrow (S(n), z) \in h."></span> <span data-tex-inline="s: \text{the pairs in every closed set.}"></span></span>List the pairs of s at inputs 0, 1 and 2.<br>Say which part of “function” s fails, with a witness.<br>Say in plain words where the step's argument that the smallest closed set is a function breaks for s.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4c14">
+  <h2 class="sthead"><span class="stno">4c14</span>One-to-one is what it needs</h2>
+  <p class="stands">Stands on 4c13.</p>
+  <p data-pid="a11910">Look at the sentence that says n = m. Pairs with input S(n) each came from a pair with some input m. Different-nexts says that m can only be n, so both came from pairs with input n, and the hypothesis says those agree. If different numbers had the same next one, different values could arrive at the same input from different directions, and f would not be a function. <b>One-to-one is exactly what definition by repeating needs.</b></p>
+  <p data-pid="502867">So f : ℕ → A. The defining lines follow from smallest-closed-set and the line for f(x). (0, u) ∈ f, so <b>f(0) = u</b>. For a number n, (n, f(n)) ∈ f, so (S(n), g(f(n))) ∈ f by the step part, so <b>f(S(n)) = g(f(n))</b>.</p>
+  <section class="slides" id="sl14"><div class="eyebrow">The slides · the defining lines · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4c14.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">Suppose, against different-nexts, that two numbers had the same next one.</span></span>Where would the proof that no input has two break? <br>Say what could arrive at one input.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4c15">
+  <h2 class="sthead"><span class="stno">4c15</span>Exactly one</h2>
+  <p class="stands">Stands on 4c13, 4c7 (same-outputs) and 4b (induction).</p>
+  <p data-pid="8cf03e">Suppose f and f′ both take ℕ to A, both start at u and both take the step g. Then f(n) = f′(n) for every number n, by induction. The base is f(0) = u = f′(0). The step is f(S(n)) = g(f(n)) = g(f′(n)) = f′(S(n)), where the middle move is the swap axiom with the hypothesis f(n) = f′(n). Then same-outputs says f = f′. That finishes recursion.</p>
+  <p data-pid="ee55d7">A habit of writing goes with it. A chain q = b = c says q = b and b = c, so q = c by the chain technique, as 0b's chains did. And a chain may run on over several lines, each beginning with =: each says that the left side of the first line is the same as what follows.</p>
+  <p data-pid="694d45"><b>From here on, to define a function on the numbers it is enough to give its start and its step, citing recursion.</b> The function that recursion gives may then be named, since exactly one fits.</p>
+  <p data-pid="1537f0">That closes a flag the ladder has carried since 0a. 0a's language loop, a thing said in terms of itself, was stepped around on 0a and 0b and every step since, until this one. A definition by repeating is said in terms of itself, and here it is safe: each value is built from the one before, and the first from a start that is given. A loop with no start, like Ann of Ann, still fixes nothing, because no start is given for it.</p>
+  <section class="slides" id="sl15"><div class="eyebrow">The slides · uniqueness · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4c15.1</span><span class="ph undo">undo</span><span class="givens"><span class="gtx">f and f′ both start at cat and step by g.</span></span>Show f(1) = f′(1) as one chain. <br>Name the reason at each =.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4c16">
+  <h2 class="sthead"><span class="stno">4c16</span>Worked: doubling</h2>
+  <p class="stands">Stands on 4c15 (recursion).</p>
+  <p data-pid="cc9906">Inside the numbers, to begin with. Start at 0; step n ↦ S(S(n)), a function from ℕ to ℕ by rule-makes-a-function, with next-of-a-number for each S. Recursion gives exactly one d : ℕ → ℕ with d(0) = 0 and d(S(n)) = S(S(d(n))). Its values, a move at a time:</p>
+  <p data-pid="f6ccbb">d(1) is d(S(0)), since 1 names S(0). d’s step, with n = 0, makes that S(S(d(0))). d’s start makes it S(S(0)). And S(0) is 1 and S(1) is 2, so d(1) = 2.</p>
+  <p data-pid="80bff5">d(2) is d(S(1)), since 2 names S(1). d’s step makes that S(S(d(1))), which is S(S(2)), by what was just found. By the names 3 and 4, d(2) = 4.</p>
+  <p data-pid="529d6b">And d(3) = S(S(4)), and so on. 4e gives this function a shorter description.</p>
+  <section class="slides" id="sl16"><div class="eyebrow">The slides · doubling · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4c16.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\text{Rex} \neq \text{Pip},"></span> <span data-tex-inline="T = \{\text{Rex}, \text{Pip}\},"></span> <span data-tex-inline="g : T \to T,"></span> <span data-tex-inline="g(\text{Rex}) = \text{Pip},"></span> <span data-tex-inline="g(\text{Pip}) = \text{Rex},"></span> <span data-tex-inline="k : \mathbb{N} \to T,"></span> <span data-tex-inline="k(0) = \text{Rex},"></span> <span data-tex-inline="k(S(n)) = g(k(n)),"></span> <span data-tex-inline="d : \mathbb{N} \to \mathbb{N},"></span> <span data-tex-inline="d(0) = 0,"></span> <span data-tex-inline="d(S(n)) = S(S(d(n)))"></span></span>Work out k(d(1)) and k(d(2)), naming the tech at each =.<br>Say in plain words why k(d(S(n))) is Rex whenever k(d(n)) is, and what that gives by induction.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4c17">
+  <h2 class="sthead"><span class="stno">4c17</span>Worked: the cat and the dog</h2>
+  <p class="stands">Stands on 4c15 (recursion).</p>
+  <p data-pid="f80b60">The next definition steps through a set of everyday things. Let A = {cat, dog}, start at cat, and take for g the function {(cat, dog), (dog, cat)}, which swaps them. Recursion gives exactly one f with f(0) = cat and f(S(n)) = g(f(n)): f(1) = g(cat) = dog, f(2) = g(dog) = cat, f(3) = dog, f(4) = cat. The cat and the dog take turns at the window, at every number, and the turns are a set of pairs.</p>
+  <p data-pid="034e8a">The left picture lets you build your own start and step and watch the function they make.</p>
+  <section class="slides" id="sl17"><div class="eyebrow">The slides · cat and dog · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · a start and a step make a function</div>
+    <div class="panel">
+      <div class="chips" role="group" aria-label="the set A" id="ach"><span class="m" style="color:var(--muted)">A =</span><button data-a="pets" class="on">{cat, dog, owl}</button><button data-a="num">ℕ</button></div>
+      <div class="chips" role="group" aria-label="start" id="sch"></div>
+      <div class="chips" role="group" aria-label="step" id="gch"></div>
+      <div class="cap">The dots are the members of A. Teal arcs: the step g, from each member to its output. Ember: the start u. Under each member are the inputs n with f(n) equal to it. Change the start or the step and the whole function changes with it.</div>
+      <canvas id="cvR"></canvas>
+      <div class="eqbox" id="eqR"></div>
+    </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4c17.1</span><span class="ph undo">undo</span><span class="givens"><span data-tex-inline="\text{Rex} \neq \text{Pip},"></span> <span data-tex-inline="V = \{\text{Rex}, \text{Pip}\},"></span> <span data-tex-inline="h : \mathbb{N} \to V,"></span> <span data-tex-inline="h(0) = h(1) = \text{Rex},"></span> <span data-tex-inline="h(2) = h(3) = \text{Pip},"></span> <span data-tex-inline="h(S(S(S(S(n))))) = h(n)"></span></span>Say in plain words why no start and step on V make h.<br>Find a set A of pairs with a pet as left entry, a start in A and a step from A to A, whose function has at each of 0, 1, 2, 3 and 4 a pair with h's value there as left entry.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4c18">
+  <h2 class="sthead"><span class="stno">4c18</span>The layers, and what they need</h2>
+  <p class="stands">Stands on 4c15 (recursion) and 3c (the layers).</p>
+  <p data-pid="fb4f1b">The last is the one rung 3 asked for. 3c built its layers by a start and a step: V₀ = ∅, and V<sub>S(k)</sub> = 𝒫(V<sub>k</sub>), the next layer all the subsets of the layer below. It worked them out each in its turn, and wanted “the layer for every entry” as an object. As a recursion: start ∅, step x ↦ 𝒫(x). Recursion asks for a set A, a start u ∈ A, and a step g : A → A. The start is ∅. The step is the rule x ↦ 𝒫(x). Rule-makes-a-function makes it a function from A to A, provided A holds 𝒫(x) whenever it holds x. So everything turns on A: a set that holds ∅ and holds all the subsets of each of its members.</p>
+  <p data-pid="c8b5bf">Given such an A, recursion hands you exactly one V : ℕ → A with V(0) = ∅ and V(S(k)) = 𝒫(V(k)). Its values are 3c's layers: V(0) = ∅ = V₀, V(1) = 𝒫(∅) = V₁, and so on, line by line, as far as you write. The layers become a set of pairs, and “the layer for k” is V(k), for every number k at once.</p>
+  <p data-pid="ce0386">And here is the catch, stated plainly. No line of the ladder supplies such an A. ℕ will not do, nor 𝒫(ℕ). 3c's layer V₃ = {0, 1, {1}, 2} has the member {1}, which is not a number, so V₃ is not a part of ℕ, and later layers stray further.</p>
+  <p data-pid="1fed8f">This is not a case of nobody having found the right A yet. If such an A existed, then V would exist. Merging all its values would give a set holding every set of 3c's layered world. Axioms of the ladder's kind cannot prove that such a set exists. That is known, but its proof is not on this rung, and nothing here leans on it.</p>
+  <p data-pid="0af445"><b>Recursion is the tool 3c asked for; it needs a set to work in, and for the layers the ladder cannot supply one.</b></p>
+  <p data-pid="1cc0a4">Early in the century before this one, two logicians each saw that, from the first list of axioms for sets, collections of this kind could not be shown to be sets. Each proposed an extra axiom, now called replacement. Roughly, it says: when a rule is applied to every member of a set, the results form a set. Much later it was shown again, by a new method, that the sets of 3c's layered world cannot be proved to form a set from the first list alone.</p>
+  <p data-pid="923048">What induction does give, without any A, is a statement about every layer. For every number k, there is a set of pairs that starts with (0, ∅) and takes the step x ↦ 𝒫(x) up to k. The proof is an induction on k, adding a pair at each step with gather and merge. So 3c's “as far as you like” becomes “for every k”, a technique. That closes the flag 3c opened when it argued one layer at a time. “All the layers as an object” is a different thing, and it needs an axiom the ladder has not laid down. This rung does not lay it down; the arithmetic of 4e and 4f lives inside ℕ, where recursion has all it needs.</p>
+  <section class="slides" id="sl18a"><div class="eyebrow">The slides · no step makes it · ← → keys work</div></section>
+  <section class="slides" id="sl18b"><div class="eyebrow">The slides · the layers · ← → keys work</div></section>
+  <section class="slides" id="sl18c"><div class="eyebrow">The slides · the catch · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4c18.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">The layers, start ∅, step x ↦ 𝒫(x).</span></span>Why will ℕ not do as the set A? <br>Name a layer and a member of it that shows this.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4c19">
+  <h2 class="sthead"><span class="stno">4c19</span>Illegal moves</h2>
+  <p class="stands">Stands on 4c1 to 4c18.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+f(S(n)) = g(f(S(n))) @@ a step must use the value before, f(n), not the value being defined. This line is a condition f may or may not meet, not a definition; recursion does not apply
+\text{define } f \text{ on } I \text{ by } f(0) = a,\ f(S(x)) = g(f(x)) @@ cargo is never reached: f({1}) is not fixed by these lines. recursion is a technique about ℕ
+S : \mathbb N \to \mathbb N\,? @@ S is a mark on any set, not a set of pairs. The function is s = {(n, S(n)) : n ∈ ℕ}; s(n) and S(n) name the same number
+f(x) \text{ for } x \notin A @@ the line for f(x) names a value only for an input. f({1}) means nothing when f takes ℕ to A
+\{(\text{cat}, \text{owl}), (\text{cat}, \text{bat})\} : \{\text{cat}\} \to B @@ cat has both owl and bat as outputs. A relation, not a function
+\text{start and step in words, with no set } A @@ recursion needs A, and g : A → A. The layers show what happens when no A is to be had
+f(0) = a,\ g \text{ given, so } f(2) = g(a) @@ a step short: f(1) = g(a), and f(2) = g(g(a)). Unfold with a move to each line
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4c19.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">“f(0) = a, and g is given, so f(2) = g(a).”</span></span>Which illegal move is this? <br>Write f(1) and f(2) correctly.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4c20">
+  <h2 class="sthead"><span class="stno">4c20</span>Running it backwards</h2>
+  <p class="stands">Stands on 4c1 to 4c18.</p>
+  <p data-pid="e812b6">Given a function on the numbers, can you find a start and step that make it? The start is f(0). A step g must have g(f(n)) = f(S(n)) for every n. So wherever a value repeats, the values after its repeats must agree.</p>
+  <p data-pid="5e0f9f">Example: the values cat, dog, cat, dog have the step that swaps them. The values cat, cat, dog have none. g(cat) would have to be cat (from inputs 0 and 1) and dog (from inputs 1 and 2), and no input has two outputs.</p>
+  <p data-pid="ccabfb">So not every function on the numbers is made by a start and a step. Recursion makes exactly the ones whose next value depends only on the value before.</p>
+  <p data-pid="6be54c">Wanting to show that a definition and another give the same function, you show the same start and the same step, and cite the recursion technique's uniqueness. Or you show the values agree by induction and cite same-outputs. Found upward; written downward.</p>
+  <section class="slides" id="sl20"><div class="eyebrow">The slides · backwards · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4c20.1</span><span class="ph undo">undo</span><span class="givens"><span class="gtx">Values Rex, Rex, Pip, at inputs 0, 1, 2.</span></span>Can any start and step make a function with these values? <br>Say what g(Rex) would have to be.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <div class="chq"><span class="chid">4c.4.1</span><span class="tagq">build</span>Pick a set A, a start u in A, and a step giving each member of A exactly one member of A; check that the step is a function from A to A, and compute at 0, 1, 2, 3 and 4 the function the start and step define.<br>Change only the step so the values settle, each value from some input on being the one before, and prove by induction that they stay settled.</div>
+  <div class="chq"><span class="chid">4c.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{Rex} \neq \text{Pip},"></span> <span data-tex-inline="T = \{\text{Rex}, \text{Pip}\}"></span></span>Find every function from the empty set to T, then every function from T to the empty set.</div>
+  <div class="chq"><span class="chid">4c.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="r \in R,"></span> <span data-tex-inline="m : R \to R,"></span> <span data-tex-inline="\text{for every set } A,\ u \in A,\ g : A \to A,"></span> <span data-tex-inline="\text{exactly one } f : R \to A \text{ has } f(r) = u"></span> <span data-tex-inline="\text{and } \forall x \in R\; f(m(x)) = g(f(x))."></span></span>Prove that m takes no member of R to r.</div>
+  <div class="chq"><span class="chid">4c.4.4</span><span class="tagq">seam</span>Defining the layers by a start and a step needs a set A with ∅ ∈ A ∧ ∀x ∈ A 𝒫(x) ∈ A; no line of the ladder supplies one. <br>Should the ladder lay down an axiom that does? <br>Weigh what it buys against what it commits you to.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r04b.html">← 4b · induction</a><a href="r04d.html">4d · completing the proof →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>The founder who first proved that a definition by repeating works, and whose matching of ℕ with a part of itself s makes an object, is Richard Dedekind. The two logicians who proposed replacement are Abraham Fraenkel and Thoralf Skolem; the first list of axioms is Ernst Zermelo’s; the new proof about the layered world is Adrian Mathias’s.</p>
+  <aside class="voice para"><p>Dedekind was the earliest to see that a definition by repeating needs a proof, and to give one. His technique of definition by induction says that a start and a step determine exactly one mapping of the number series; he proved it by building the mapping out of partial pieces and checking by complete induction that they fit together.</p><cite>Dedekind, Was sind und was sollen die Zahlen? (1888), §126, trans. Beman, 1901</cite></aside>
+  <aside class="voice para"><p>Abraham Fraenkel and Thoralf Skolem each saw, early in the century before this one, that from Zermelo's axioms collections of this kind could not be shown to be sets, and each proposed an extra axiom, now called replacement. Roughly, it says: when a rule is applied to every member of a set, the results form a set. That the sets of 3c's layered world cannot be proved to form a set from Zermelo's axioms alone was shown again, by a new method, by Adrian Mathias.</p><cite>Fraenkel, “Zu den Grundlagen der Cantor-Zermeloschen Mengenlehre” (1922); Skolem, “Einige Bemerkungen zur axiomatischen Begründung der Mengenlehre” (1922); Mathias, “Slim models of Zermelo set theory”, Journal of Symbolic Logic (2001)</cite></aside>
+  <h3>Accepted names</h3>
+  <p>The set A in f : A → B is the domain of f. The recursion technique is the recursion theorem; the extra axiom is the axiom schema of replacement, and with it Zermelo’s list becomes Zermelo–Fraenkel set theory.</p>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper}=Rung;
+const R=String.raw;
+function size(cv,ar){ const d=window.devicePixelRatio||1, W=cv.clientWidth||300, H=Math.round(W/ar); cv.width=W*d; cv.height=H*d; cv.style.height=H+'px'; const c=cv.getContext('2d'); c.setTransform(d,0,0,d,0,0); return {c,W,H}; }
+const NAMES=['0','1','2','3','4','S(4)','S(S(4))','S(S(S(4)))','S(S(S(S(4))))'];
+
+/* ---------- state ---------- */
+const PETS=['cat','dog','owl'];
+let mode='pets', petA=0, petG=[1,0,2];          // start cat; step swaps cat and dog, keeps owl
+let numA=0, numG='s';
+const NG={s:{lab:'n ↦ S(n)',f:n=>n+1,tex:'S(n)'},ss:{lab:'n ↦ S(S(n))',f:n=>n+2,tex:'S(S(n))'},id:{lab:'n ↦ n',f:n=>n,tex:'n'},z:{lab:'n ↦ 0',f:n=>0,tex:'0'}};
+const INPUTS=5; // inputs 0..4 shown
+function values(){ const v=[]; if(mode==='pets'){ let y=petA; for(let n=0;n<INPUTS;n++){ v.push(y); y=petG[y]; } } else { let y=numA; for(let n=0;n<INPUTS;n++){ v.push(y); y=NG[numG].f(y); } } return v; }
+const nm=k=>NAMES[k]||('k'+k);
+
+/* ---------- chips ---------- */
+const sch=document.getElementById('sch'), gch=document.getElementById('gch');
+function buildChips(){
+  sch.innerHTML='<span class="m" style="color:var(--muted)">start u =</span>'; gch.innerHTML='<span class="m" style="color:var(--muted)">step g:</span>';
+  if(mode==='pets'){
+    PETS.forEach((p,i)=>{ const b=document.createElement('button'); b.textContent=p; if(i===petA) b.className='on'; b.onclick=()=>{ petA=i; buildChips(); drawAll(); }; sch.appendChild(b); });
+    PETS.forEach((p,i)=>{ const b=document.createElement('button'); b.textContent=p+' ↦ '+PETS[petG[i]]; b.title='tap to change this output'; b.onclick=()=>{ petG[i]=(petG[i]+1)%3; buildChips(); drawAll(); }; gch.appendChild(b); });
+  } else {
+    [0,1,2].forEach(k=>{ const b=document.createElement('button'); b.textContent=String(k); if(k===numA) b.className='on'; b.onclick=()=>{ numA=k; buildChips(); drawAll(); }; sch.appendChild(b); });
+    Object.keys(NG).forEach(id=>{ const b=document.createElement('button'); b.textContent=NG[id].lab; if(id===numG) b.className='on'; b.onclick=()=>{ numG=id; buildChips(); drawAll(); }; gch.appendChild(b); });
+  }
+}
+document.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{ mode=b.dataset.a; document.querySelectorAll('[data-a]').forEach(x=>x.classList.toggle('on',x===b)); buildChips(); drawAll(); });
+
+/* ---------- left: the function a start and step make ---------- */
+const cvR=document.getElementById('cvR');
+function drawR(){
+  const {c,W,H}=size(cvR,W0(cvR)<480?1.25:1.7); c.fillStyle=col('--card'); c.fillRect(0,0,W,H);
+  const v=values();
+  const members= mode==='pets'? PETS.map((p,i)=>({lab:p,i})) : [...Array(7)].map((_,k)=>({lab:nm(k),i:k}));
+  const nM=members.length+(mode==='pets'?0:1), y0=H*.52, pad=W<480?22:30;
+  const xOf=i=>pad+(W-2*pad)*(nM===1?.5:i/(nM-1));
+  const g=i=> mode==='pets'? petG[i] : NG[numG].f(i);
+  c.lineWidth=1.6;
+  // step arcs
+  members.forEach(m=>{ const j=g(m.i); if(j>=nM) { // off the drawn range
+      c.strokeStyle=col('--teal'); c.beginPath(); c.moveTo(xOf(m.i),y0-8); c.lineTo(xOf(m.i)+10,y0-24); c.stroke(); return; }
+    const x1=xOf(m.i), x2=xOf(j); c.strokeStyle=col('--teal'); c.fillStyle=col('--teal');
+    if(j===m.i){ c.beginPath(); c.arc(x1,y0-16,9,0,7); c.stroke(); return; }
+    const h=Math.min(H*.36, 18+Math.abs(x2-x1)*.28); const mx=(x1+x2)/2;
+    c.beginPath(); c.moveTo(x1,y0-8); c.quadraticCurveTo(mx,y0-8-h*1.6,x2,y0-8); c.stroke();
+    const ang=Math.atan2((y0-8)-(y0-8-h*1.6),x2-mx); c.beginPath(); c.moveTo(x2,y0-8); c.lineTo(x2-9*Math.cos(ang-.4),y0-8-9*Math.sin(ang-.4)); c.lineTo(x2-9*Math.cos(ang+.4),y0-8-9*Math.sin(ang+.4)); c.closePath(); c.fill(); });
+  // members
+  c.font=(W<480?'10px':'11.5px')+' IBM Plex Mono, monospace'; c.textAlign='center'; c.textBaseline='middle';
+  const start= mode==='pets'? petA : numA;
+  members.forEach(m=>{ const x=xOf(m.i); c.beginPath(); c.arc(x,y0,7,0,7); c.fillStyle= m.i===start? col('--ember') : col('--gold'); c.fill();
+    c.fillStyle=col('--ink'); c.fillText(m.lab, x, y0+(m.i%2&&W<480&&mode!=='pets'?30:18));
+    const ins=v.map((y,n)=>y===m.i?n:null).filter(x=>x!==null);
+    if(ins.length){ c.fillStyle=col('--ember'); c.fillText(ins.map(nm).join(','),x,y0+(W<480&&mode!=='pets'?48:36)); } });
+  if(mode!=='pets'){ const x=xOf(7); c.fillStyle=col('--muted'); c.fillText('⋯',x,y0); const ins=v.map((y,n)=>y>6?n:null).filter(x=>x!==null); if(ins.length){ c.fillStyle=col('--ember'); c.fillText(ins.map(nm).join(','),x,y0+(W<480?48:36)); } }
+  c.fillStyle=col('--muted'); c.textAlign='left'; c.fillText('inputs 0 to 4 shown in ember',6,H-10);
+  // readout
+  let lines=[]; const show=y=> mode==='pets'? '\\text{'+PETS[y]+'}' : nm(y);
+  lines.push(`f(0) = ${show(v[0])}`);
+  for(let n=1;n<INPUTS;n++) lines.push(`f(${nm(n)}) = g(f(${nm(n-1)})) = ${show(v[n])}`);
+  lines.push(`\\htmlClass{keep}{\\text{exactly one such } f\\text{: recursion}}`);
+  tex(document.getElementById('eqR'),`\\begin{gathered}${lines.join('\\\\ ')}\\end{gathered}`,true);
+}
+function W0(cv){ return cv.clientWidth||300; }
+
+/* ---------- right: closed sets of pairs ---------- */
+const cvG=document.getElementById('cvG');
+let H=new Set(); // keys "n,y"
+function smallest(){ const s=new Set(); let y=petA; for(let n=0;n<INPUTS;n++){ s.add(n+','+y); y=petG[y]; } return s; }
+let geoG=null;
+function drawG(){
+  const {c,W,H:Hh}=size(cvG,W0(cvG)<480?1.5:2.0); c.fillStyle=col('--card'); c.fillRect(0,0,W,Hh);
+  const lx=W<480?42:54, top=22, cw=(W-lx-8)/INPUTS, ch=(Hh-top-8)/3;
+  geoG={lx,top,cw,ch};
+  c.font=(W<480?'10.5px':'12px')+' IBM Plex Mono, monospace'; c.textAlign='center'; c.textBaseline='middle';
+  for(let n=0;n<INPUTS;n++){ c.fillStyle=col('--muted'); c.fillText(nm(n),lx+cw*(n+.5),top-11); }
+  const fset=smallest(); const miss=missing();
+  PETS.forEach((p,y)=>{ c.fillStyle=col('--muted'); c.textAlign='left'; c.fillText(p,6,top+ch*(y+.5)); c.textAlign='center';
+    for(let n=0;n<INPUTS;n++){ const x=lx+cw*n, yy=top+ch*y, k=n+','+y; c.strokeStyle=col('--grid'); c.lineWidth=1; c.strokeRect(x+1,yy+1,cw-2,ch-2);
+      if(H.has(k)){ c.fillStyle=col('--teal'); c.globalAlpha=.85; c.fillRect(x+4,yy+4,cw-8,ch-8); c.globalAlpha=1; }
+      if(fset.has(k)){ c.strokeStyle=col('--ember'); c.lineWidth=2; c.beginPath(); c.arc(x+cw/2,yy+ch/2,Math.min(cw,ch)*.3,0,7); c.stroke(); }
+      if(miss&&miss.key===k){ c.strokeStyle=col('--ember'); c.setLineDash([4,3]); c.lineWidth=2; c.strokeRect(x+3,yy+3,cw-6,ch-6); c.setLineDash([]); } } });
+  let t;
+  const fs=[...fset].map(k=>{ const [n,y]=k.split(','); return `(${nm(+n)},\\text{${PETS[+y]}})`; });
+  if(!H.size) t='h = \\varnothing\\text{: holds no start pair}\\\\ \\text{not closed}';
+  else if(miss) t=`\\text{not closed: missing}\\\\ \\htmlClass{new}{${miss.tex}}\\\\ \\text{${miss.why}}`;
+  else t=`\\htmlClass{keep}{\\text{closed, as far as the grid shows}}\\\\ ${[...H].every(k=>fset.has(k))&&H.size===fset.size?'\\text{and it is the smallest: }f':'\\text{rings: the pairs of } f\\text{, in every closed set}'}`;
+  t+='\\\\ \\text{ringed: } '+fs.slice(0,3).join(',')+'\\\\ '+fs.slice(3).join(',');
+  tex(document.getElementById('eqG'),`\\begin{gathered}${t}\\end{gathered}`,true);
+}
+function missing(){
+  const st='0,'+petA; if(!H.has(st)) return {key:st,tex:`(0,\\text{${PETS[petA]}})`,why:'every closed set holds the start pair'};
+  for(let n=0;n<INPUTS-1;n++) for(let y=0;y<3;y++){ if(H.has(n+','+y)){ const k=(n+1)+','+petG[y]; if(!H.has(k)) return {key:k,tex:`(${nm(n+1)},\\text{${PETS[petG[y]]}})`,why:`the step from (${nm(n)}, ${PETS[y]}) needs it`}; } }
+  return null;
+}
+cvG.addEventListener('pointerdown',e=>{ if(!geoG) return; const r=cvG.getBoundingClientRect(), x=e.clientX-r.left, y=e.clientY-r.top; const n=Math.floor((x-geoG.lx)/geoG.cw), yy=Math.floor((y-geoG.top)/geoG.ch); if(n<0||n>=INPUTS||yy<0||yy>2) return; const k=n+','+yy; H.has(k)?H.delete(k):H.add(k); drawG(); });
+document.getElementById('gAll').onclick=()=>{ H=new Set(); for(let n=0;n<INPUTS;n++) for(let y=0;y<3;y++) H.add(n+','+y); drawG(); };
+document.getElementById('gF').onclick=()=>{ H=smallest(); drawG(); };
+document.getElementById('gClear').onclick=()=>{ H=new Set(); drawG(); };
+
+function drawAll(){ drawR(); drawG(); }
+buildChips();
+new ResizeObserver(drawR).observe(cvR); new ResizeObserver(drawG).observe(cvG);
+if(window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change',drawAll);
+drawAll();
+
+/* ---------- slides ---------- */
+const N='\\htmlClass{new}', K='\\htmlClass{keep}';
+const SYM={'≠':'$\\ne$','∈':'$\\in$','∉':'$\\notin$','⋃':'$\\bigcup$','⇔':'$\\Leftrightarrow$','⊆':'$\\subseteq$','∅':'$\\varnothing$','∪':'$\\cup$','⊥':'$\\bot$','∀':'$\\forall$','∃':'$\\exists$','¬':'$\\neg$','∧':'$\\land$','∨':'$\\lor$','⇒':'$\\Rightarrow$','ℕ':'$\\mathbb N$','φ':'$\\varphi$','ψ':'$\\psi$','𝒫':'$\\mathcal P$','↦':'$\\mapsto$','×':'$\\times$'};
+const tx=r=>r.replace(/[≠∈∉⋃⇔⊆∅∪⊥∀∃¬∧∨⇒ℕφψ𝒫↦×]/gu,ch=>SYM[ch]);
+const col2=(...rows)=>'\\begin{aligned}'+rows.map(([l,r])=>'&'+l+' &&\\text{'+tx(r)+'}').join('\\\\ ')+'\\end{aligned}';
+const PW=s=>'\\text{'+tx(s.replace(/[{}]/g,c=>'\\'+c)).replace(/[×↦𝒫′ψ]/gu,c=>({'×':'$\\times$','↦':'$\\mapsto$','𝒫':'$\\mathcal P$','′':"$'$",'ψ':'$\\psi$'})[c])+'}';
+const PN=s=>N+'{'+PW(s)+'}', PK=s=>K+'{'+PW(s)+'}';
+stepper('#sl2a',[
+  {k:'ember',kl:'a function',t:R`\begin{gathered}f \subseteq A \times B\\ \forall x \in A\;${N}{\exists y}\,((x,y) \in f)\\ (x,y),(x,z) \in f \Rightarrow ${N}{y = z}\end{gathered}`,n:`Every input has an output; no input has two. A function is nothing but its pairs, as a relation was on 2e.`}
+],{title:'The slides · a function · ← → keys work'});
+stepper('#sl2b',[
+  {k:'ember',kl:'the cases',t:R`\begin{gathered}\{(\text{cat},\text{owl}),(\text{dog},\text{owl})\}:\ \text{yes}\\ \{(\text{cat},\text{owl})\}:\ ${N}{\text{no}}\\ \{(\text{cat},\text{owl}),(\text{cat},\text{bat}),(\text{dog},\text{bat})\}:\ ${N}{\text{no}}\end{gathered}`,n:`From {cat, dog} to {owl, bat}. Sharing an output is fine. A missing output (dog) or an extra one (cat) is a witness against a part.`}
+],{title:'The slides · the cases · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'the marks',t:R`f : A \to B\qquad\qquad f(x) = y \;\Leftrightarrow\; (x, y) \in f`,n:`The arrow says “function from A to B”. f(x) names the one output at x; the name is honest because exactly one thing fits, as with ∅ and ℕ.`}
+],{title:'The slides · the marks · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'the rule-makes-a-function technique',t:R`\text{from } x \mapsto t(x),\ \ t(x) \in B,\ \text{ write } \{(x, t(x)) : x \in A\} : A \to B`,n:`A rule written with marks becomes a function by 2g's shorthand, a sift of A × B. Every input gets its output t(x), and the equal-pairs technique stops any other.`}
+],{title:'The slides · the rule-makes-a-function technique · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'the function s',t:R`s = \{(n, S(n)) : n \in \mathbb N\},\qquad s(n) = S(n)`,n:`n ↦ S(n), made a set by rule-makes-a-function and next-of-a-number. Different inputs, different outputs (different-nexts); no output 0 (next-never-empty). The founder's matching of ℕ with a part of itself, now an object.`}
+],{title:'The slides · the function s · ← → keys work'});
+stepper('#sl7',[
+  {k:'ember',kl:'the same-outputs technique',t:col2([PW('Suppose f(x) = h(x) at every input x.'),'given'],[PW('Let p = (x, y) be a pair in f.'),'chase a pair'],[PW('Then y = f(x), so y = h(x).'),'reading f(x); the given every'],[PW('So p ∈ h.'),'reading h(x)'],[PN('The same is true the other way, so f = h.'),'each way; double-inclusion']),n:`∎ Functions with the same outputs at every input are the same set: the same-members axiom, for functions.`}
+],{title:'The slides · the same-outputs technique · ← → keys work'});
+stepper('#sl8',[
+  {k:'ember',kl:'the recursion technique',t:R`\begin{gathered}\text{from } a \in A,\ g : A \to A,\ \text{ write: exactly one}\\ f : \mathbb N \to A,\ \ f(0) = a,\ \ f(S(n)) = ${N}{g(f(n))}\end{gathered}`,n:`A start and a step fix exactly one function on the numbers. Uniqueness is an induction; existence needs a set, and the lines alone are not a set.`}
+],{title:'The slides · the recursion technique · ← → keys work'});
+stepper('#sl10a',[
+  {k:'ember',kl:'closed',t:R`(0, a) \in h\;\;\land\;\; (n, y) \in h \Rightarrow ${N}{(S(n), g(y))} \in h`,n:`A set of pairs from ℕ × A is closed when it holds the start pair and the step never leads out of it: a base part and a step part, as with “inductive”.`}
+],{title:'The slides · closed · ← → keys work'});
+stepper('#sl10b',[
+  {k:'ember',kl:'C and the intersection',t:col2([PW('Let C hold the closed subsets of ℕ × A.'),'2d\'s 𝒫, sifted'],[PW('ℕ × A is itself closed, so it is in C.'),'zero-is-a-number, next-of-a-number, g takes A to A'],[PN('Let f hold the pairs that are in every closed set.'),'a sift of ℕ × A']),n:`The closed sets are gathered by sifting all the subsets of ℕ × A. ℕ × A is one of them, too big to be a function. Keep what every closed set holds.`}
+],{title:'The slides · C and the intersection · ← → keys work'});
+stepper('#sl11',[
+  {k:'ember',kl:'the smallest-closed-set technique',t:R`f \text{ is closed};\qquad \text{from } h \text{ closed, write } ${N}{f \subseteq h}`,n:`∎ The smallest closed set, as ℕ was the smallest inductive set: each closed set holds the start pair and carries every pair it holds forward, so f does too.`}
+],{title:'The slides · the smallest-closed-set technique · ← → keys work'});
+stepper('#sl12',[
+  {k:'ember',kl:'the where-each-pair-comes-from technique',t:R`\text{from } p \in f,\ \text{ write } p = (0, a) \;\lor\; ${N}{p = (S(m), g(w))},\ (m, w) \in f`,n:`∎ Every pair of f is the start pair or came by the step. Sift f by this, show the sift is closed, and smallest-closed-set puts f inside it: 4b's zero-or-a-next, for pairs.`}
+],{title:'The slides · the where-each-pair-comes-from technique · ← → keys work'});
+stepper('#sl13a',[
+  {k:'ember',kl:'every input has an output',t:R`(0, a) \in f;\qquad (n, y) \in f \Rightarrow (S(n), g(y)) \in f`,n:`By induction on n: φ(n) is ∃y ((n, y) ∈ f). Base: the start pair. Step: the step part of smallest-closed-set.`}
+],{title:'The slides · every input has an output · ← → keys work'});
+stepper('#sl13b',[
+  {k:'ember',kl:'no input has two: base',t:col2([PW('Suppose (0, y) ∈ f.'),'supposed'],[PW('If it is the start pair, then y = a.'),'where-each-pair-comes-from, first case; equal-pairs'],[PW('If it came by the step, then 0 = S(m). That clashes.'),'the other case; equal-pairs; next-never-empty'],[PN('So y = a.'),'by cases']),n:`A pair of f with input 0 can only be the start pair: the step never lands on input 0, since 0 is nobody's next.`}
+],{title:'The slides · no input has two: base · ← → keys work'});
+stepper('#sl13c',[
+  {k:'ember',kl:'no input has two: step',t:col2([PW('Suppose (S(n), y) ∈ f.'),'supposed'],[PW('It came by the step, from some (m, w) ∈ f.'),'where-each-pair-comes-from'],[PW('So S(n) = S(m), and y = g(w).'),'equal-pairs'],[PN('So n = m, and (n, w) ∈ f.'),'the different-nexts technique'],[PW('Likewise, suppose (S(n), z) ∈ f.'),'supposed'],[PW('Then z = g(w′), with (n, w′) ∈ f.'),'the same moves']),n:`Both pairs with input S(n) came by the step from pairs with input n, because S is one-to-one.`},
+  {k:'ember',kl:'no input has two: step',t:col2([PK('So w = w′.'),'the induction hypothesis ψ(n)'],[PW('So y = g(w) = g(w′) = z.'),'swap; turn-about; chain']),n:`∎ The hypothesis makes the earlier values agree, so the later ones agree. If different numbers shared a next one, this would fail: one-to-one is what defining by repeating needs.`}
+],{title:'The slides · no input has two: step · ← → keys work'});
+stepper('#sl14',[
+  {k:'ember',kl:'the defining lines',t:R`\begin{gathered}(0, a) \in f \Rightarrow f(0) = a\\ (n, f(n)) \in f \Rightarrow (S(n), g(f(n))) \in f\\ \Rightarrow ${N}{f(S(n)) = g(f(n))}\end{gathered}`,n:`With f a function, the start pair and the step part of smallest-closed-set read off as the defining lines, through the line for f(x).`}
+],{title:'The slides · the defining lines · ← → keys work'});
+stepper('#sl15',[
+  {k:'ember',kl:'uniqueness',t:col2([PW('Base: f(0) = a = f′(0).'),'the start'],[PN('Step: suppose f(n) = f′(n).'),'supposed: the induction hypothesis'],[PW('Then f(S(n)) = g(f(n)) = g(f′(n)) = f′(S(n)).'),'the steps; the hypothesis'],[PW('So f and f′ agree at every number.'),'the induction technique'],[PW('So f = f′.'),'the same-outputs technique']),n:`∎ Recursion is proved. From here on a start and a step define a function, and it may be named.`}
+],{title:'The slides · uniqueness · ← → keys work'});
+stepper('#sl16',[
+  {k:'ember',kl:'doubling',t:col2([PW('d(1) is d(S(0)), which is S(S(d(0))).'),'1 names S(0); the step'],[PN('That is S(S(0)), which is 2.'),'the start; the names'],[PN('d(2) is S(S(d(1))), which is S(S(2)), which is 4.'),'the step; the names']),n:`Start 0, step n ↦ S(S(n)). Each value comes from the one before, one move to each row. 4e gives this function a shorter description.`}
+],{title:'The slides · doubling · ← → keys work'});
+stepper('#sl17',[
+  {k:'ember',kl:'cat and dog',t:R`f(0) = \text{cat},\ f(1) = \text{dog},\ f(2) = \text{cat},\ f(3) = \text{dog},\ f(4) = ${N}{\text{cat}}`,n:`A = {cat, dog}, start cat, step swaps them. They take turns at the window at every number, and the turns are a set of pairs.`}
+],{title:'The slides · cat and dog · ← → keys work'});
+stepper('#sl18a',[
+  {k:'ember',kl:'no step makes it',t:R`\text{cat},\ \text{cat},\ \text{dog}:\quad g(\text{cat}) = \text{cat}\ \text{ and }\ g(\text{cat}) = ${N}{\text{dog}}`,n:`Running it backwards. A step needs g(f(n)) = f(S(n)) for every n, and here cat would need both cat and dog as outputs. Not every function on the numbers comes from a start and a step.`}
+],{title:'The slides · no step makes it · ← → keys work'});
+stepper('#sl18b',[
+  {k:'ember',kl:'the layers',t:R`V(0) = \varnothing,\qquad V(S(k)) = ${N}{\mathcal P(V(k))}`,n:`Start ∅, step x ↦ 𝒫(x). Recursion would give exactly one V, with V(k) = 3c's layer Vₖ for every k, provided a set A holds ∅ and the subsets of each of its members.`}
+],{title:'The slides · the layers · ← → keys work'});
+stepper('#sl18c',[
+  {k:'ember',kl:'the catch',t:R`V_3 = \{0, 1, ${N}{\{1\}}, 2\} \not\subseteq \mathbb N`,n:`ℕ will not do as A, nor 𝒫(ℕ). No line of the ladder supplies an A, and none can: the merged values of V would be 3c's whole world as a set, which axioms of this kind cannot prove exists. Replacement is the axiom that would.`}
+],{title:'The slides · the catch · ← → keys work'});
+stepper('#sl20',[
+  {k:'ember',kl:'backwards',t:R`\text{a function on } \mathbb N \text{ wanted, with } f(0) \text{ and } f(S(n)) \text{ given}`,n:`Name A, the start u and the step g; check u ∈ A and g : A → A; cite recursion. The function exists, is a set, and may be named. 4e and 4f do exactly this, with A = ℕ.`}
+],{title:'The slides · backwards · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

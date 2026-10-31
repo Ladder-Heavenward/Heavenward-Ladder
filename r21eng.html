@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How does a crank turn a wheel into a push?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r21bio.html">← 21·bio why do sunflower seeds spiral?</a><a href="floor4concl.html">next: F4·∎ what the geometry floor shows →</a></p>
+  <div class="tags"><span class="tag eng">21·eng · engineering</span></div>
+  <h1>How does a crank turn a wheel into a push?</h1>
+  <p>How does a crank turn a wheel into a push? A wheel turns round and round, but a pump needs a push in a straight line, back and forth. An arm fixed to the wheel’s axle, with a rod hung from its end, does the change. Saws, pumps and engines have used it for close to two thousand years. What makes it hard is that the end of the arm goes round at a steady speed, while the far end of the rod does not move steadily at all. It speeds up, slows down, and stops dead at each end of its stroke. This page shows, with the cos and sin of rung 21, where the piston is for each angle of the crank, how fast it moves, why it pauses at each end, and what the rod adds to a plain back and forth.</p>
+  <p class="gesture">The end of the crank goes round a circle. The piston sits where the rod, of fixed length, reaches the piston’s line. So the piston’s place is the crank’s along part plus a root that the rod adds. Its speed is the crank end’s speed times the sine of the angle, times a factor near one. At each end of the stroke the sine is zero, the crank end moves straight across the piston’s line, and the piston stops.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r21b.html">21b</a> (cos and sin as coordinates), <a href="r21c.html">21c</a> (the circle technique), <a href="r21g.html">21g</a> (the slopes of sin and cos), <a href="r21j.html">21j</a> (radians), <a href="r21h.html">21h</a> (the triangle: a motion split into parts), <a href="r21m.html">21m</a> (arccos), <a href="r21q.html">21q</a> (tangent square to radius) and <a href="r18a.html">18a</a> (distance). 27·phys turns the push back into a turn.</p></div>
+</header>
+
+<section class="class step" data-step="21eng1">
+  <h2 class="sthead"><span class="stno">21eng1</span>Where the piston is</h2>
+  <p class="stands">Stands on 21b (cos and sin as coordinates), 18a (distance) and 21c (the circle technique).</p>
+  <p data-pid="c44109">A crank is an arm of length r fixed to an axle. Its end, the pin, goes round a circle. A rod of length l, longer than r, joins the pin to the piston, which can only slide along one line through the axle. Put the axle at the origin and the piston’s line along the x-axis. With the crank at angle θ, the pin is at (r cos θ, r sin θ) (21b), and the piston at (x, 0).</p>
+  <pre class="lines" data-k="ember" data-label="this page: the place technique">
+(x - r\cos\theta)^2 + (r\sin\theta)^2 = l^2 @@ the rod’s length, by distance (18a)
+x - r\cos\theta = \sqrt{l^2 - r^2\sin^2\theta} @@ the piston on the far side of the pin; l &gt; r keeps the root real
+\htmlClass{new}{x(\theta) = r\cos\theta + \sqrt{l^2 - r^2\sin^2\theta}} \quad \blacksquare @@ add r cos θ
+x(0) = l + r,\ \ x(\pi) = l - r @@ the two ends: a stroke of 2r
+  </pre>
+  <p data-pid="e0fc9b">Place technique: <b>the piston sits at r cos θ + √(l² − r² sin² θ), and moves 2r from end to end.</b> The 12.9-litre diesel in many trucks built by Kenworth, of Kirkland, Washington, has a stroke of 162 mm, so r = 81 mm. Take a rod of l = 260 mm, a little over three times the crank.</p>
+  <pre class="lines" data-k="ember" data-label="this page: a quarter turn">
+x(90^\circ) = \sqrt{260^2 - 81^2} = \sqrt{61\,039} \approx 247.06 \text{ mm} @@ cos 90° = 0, sin 90° = 1
+\text{mid-stroke} = \tfrac{341 + 179}{2} = 260 \text{ mm} @@ the ends, l + r and l − r
+\htmlClass{new}{\text{at a quarter turn the piston is } 12.94 \text{ mm past the middle}} @@ toward the axle
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · place · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · turn the crank</div>
+    <div class="kn"><span class="m">θ</span><input type="range" id="kt" min="0" max="360" step="1" value="60"><output id="ot"></output></div>
+    <div id="pl"></div>
+    <div class="cap">Ink: the circle of the pin, r = 81 mm. Ember: the crank and the rod, l = 260 mm. Teal: the piston on its line, and dashed, where a slot would put it. Speeds at 1500 turns a minute.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">21·eng.1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">r = 81 mm,  l = 260 mm</span></span>Find x at 60° and at 120°. <br>Find the crank angle at which the piston is at mid-stroke.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21eng2">
+  <h2 class="sthead"><span class="stno">21eng2</span>How fast the piston moves</h2>
+  <p class="stands">Stands on 21·eng.1, 21g (the slopes of sin and cos), 21j (radians) and the chain rule.</p>
+  <p data-pid="6be3e9">Let the crank turn at a steady ω radians a second, so θ = ωt. Take the slope of x in t.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the speed technique">
+x = r\cos\theta + (l^2 - r^2\sin^2\theta)^{1/2} @@ 21·eng.1
+x' = -r\omega\sin\theta + \tfrac{-2r^2\sin\theta\cos\theta\,\omega}{2\sqrt{l^2 - r^2\sin^2\theta}} @@ the slopes of sin and cos (21g) and the chain rule, in radians (21j)
+\htmlClass{new}{x' = -r\omega\sin\theta\,\Big(1 + \tfrac{r\cos\theta}{\sqrt{l^2 - r^2\sin^2\theta}}\Big)} \quad \blacksquare @@ take out −rω sin θ
+  </pre>
+  <p data-pid="4fd45d">Speed technique: <b>the piston’s speed is the pin’s speed rω, times sin θ, times a factor near 1 that the rod adds.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: 1500 turns a minute">
+\omega = 1500 \cdot \tfrac{2\pi}{60} = 50\pi \approx 157.08 \text{ rad/s} @@ a turn is 2π radians
+r\omega = 0.081 \times 157.08 \approx 12.72 \text{ m/s} @@ the pin’s speed
+x'(90^\circ) \approx -12.72 \text{ m/s} @@ cos 90° = 0: the factor is 1
+\htmlClass{new}{\text{on average}: \tfrac{2 \times 0.162 \text{ m}}{0.04 \text{ s}} = 8.1 \text{ m/s}} @@ two strokes a turn, a turn every 0.04 s
+  </pre>
+  <p data-pid="c5911b">The piston is fastest a little before the quarter turn, near 74°, at about 13.3 m/s. The rod’s factor is above 1 there, since cos θ is positive.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · speed · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21·eng.2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">r = 81 mm,  l = 260 mm,  1500 turns a minute</span></span>Find the piston’s speed at 60° and at 120°. <br>Find which of the two is faster, and the line of the speed technique that decides it.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21eng3">
+  <h2 class="sthead"><span class="stno">21eng3</span>Why the piston pauses at each end</h2>
+  <p class="stands">Stands on 21·eng.2, 21q (tangent square to radius), 21c (the circle technique) and 21m (arccos).</p>
+  <p data-pid="3bc2cf">At θ = 0 and θ = π, sin θ = 0, so x′ = 0. There the crank lies along the piston’s line, and the pin moves square to the crank (21q), straight across the line. None of its motion is along the line, so the piston stops.</p>
+  <p data-pid="cad36f">Pause technique: <b>the piston stops at each end of its stroke, because there the pin moves straight across the piston’s line.</b> Near the far end it is slow, and in the middle quick. The rod makes the two halves of the stroke take different shares of the turn.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the far half is quicker">
+r\cos\theta + \sqrt{l^2 - r^2\sin^2\theta} = l @@ the piston at mid-stroke
+(l - r\cos\theta)^2 = l^2 - r^2 + r^2\cos^2\theta @@ square both sides; sin² θ = 1 − cos² θ (21c)
+\cos\theta = \tfrac{r}{2l} = \tfrac{81}{520} \approx 0.1558 @@ the l² and r² cos² θ cancel
+\htmlClass{new}{\theta \approx 81.0^\circ:\ \text{far half in } 81^\circ,\ \text{near half in } 99^\circ} @@ arccos (21m); the same on the way back
+  </pre>
+  <p data-pid="2c6d88">The pause is why an engine carries a heavy wheel: at each end a push on the piston gives no turn, and the wheel carries the crank through. An oil pump in the Kern County fields nods its head several times a minute. At each end of its stroke the long rod down the well comes to rest gently, not with a jerk.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · pause · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21·eng.3.1</span><span class="ph undo">undo</span><span class="givens"><span class="gtx">an oil pump with a crank of r = 0.5 m,  its rod reaching mid-stroke after 85° of turn</span></span>Find the rod length l. <br>Find the shares of the turn spent on each half of the stroke.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21eng4">
+  <h2 class="sthead"><span class="stno">21eng4</span>A slot instead of a rod</h2>
+  <p class="stands">Stands on 21·eng.1, 21h (the triangle: a motion split into parts) and 21i (around the circle).</p>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · the triangle: a motion split into parts</div>
+    <p data-pid="4c3780">The pin moves round its circle at speed rω. Split that motion along the piston’s line and across it: −rω sin θ along, and rω cos θ across. A rod passes on the along part, and some of the across part too, through its tilt.</p>
+    <p data-pid="7ad884"><b>Split a slanted change into parts along directions you choose, and say which directions you chose.</b></p>
+    <p data-pid="617376">A slotted yoke, a bar with a slot square to the piston’s line that the pin slides in, passes on the along part only. Then x = r cos θ exactly, and the piston swings like 21i’s wave.</p>
+    <p class="bait" data-pid="df3e6e">Turn the yoke’s slot so that it is no longer square to the piston’s line. Which part of the pin’s motion does the piston take now, and along which directions did you split it?</p>
+  </aside>
+  <pre class="lines" data-k="ember" data-label="this page: the rod against the slot">
+x_{\text{slot}} = r\cos\theta @@ the along part only: a wave of amplitude r (21i)
+x_{\text{rod}} - (l + r\cos\theta) = \sqrt{l^2 - r^2\sin^2\theta} - l @@ 21·eng.1, measured from the slot’s middle
+= -\tfrac{r^2\sin^2\theta}{l + \sqrt{l^2 - r^2\sin^2\theta}} @@ times the sum over the sum
+\htmlClass{new}{\text{at most } \tfrac{r^2}{l + \sqrt{l^2 - r^2}} = \tfrac{6561}{507.06} \approx 12.94 \text{ mm, at a quarter turn}} @@ largest where sin² θ = 1
+  </pre>
+  <p data-pid="5eb5e3">Slot technique: <b>with a slot the piston swings exactly as r cos θ, and a rod pulls it toward the axle by at most r²/(l + √(l² − r²)), less as the rod grows.</b> A long rod makes the crank nearly a slot.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · the slot · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21·eng.4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">r = 81 mm</span></span>Find the shortest rod that keeps the rod’s pull toward the axle under 5 mm. <br>Find the pull at 45° with that rod.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21eng5">
+  <h2 class="sthead"><span class="stno">21eng5</span>Illegal moves</h2>
+  <p class="stands">Stands on 21·eng.1 to 21·eng.4.</p>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+x = r\cos\theta + l\,? @@ only with a slot; a rod gives r cos θ + √(l² − r² sin² θ)
+\text{at a quarter turn the piston is at mid-stroke}\,? @@ past it, by l − √(l² − r²)
+x' = -r\omega\sin\theta\,? @@ the slot’s speed; the rod multiplies it by 1 + r cos θ/√(l² − r² sin² θ)
+\text{in degrees, the slope of } \sin\theta \text{ is } \cos\theta\,? @@ only in radians; in degrees it is π/180 times the cosine (21j)
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21·eng.5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span class="gtx">a rod as long as the crank,  l = r</span></span>Find x at a quarter turn, and what the machine does there.</li><li><span class="givens"><span class="gtx">θ in degrees,  the crank at 9000° a second</span></span>Find the speed at 90° with the slope of sin taken as cos, and which line of the tempting column it breaks.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">21·eng.6.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">a pump whose piston must move 0.6 m end to end,  and reach mid-stroke within 2° of a quarter turn</span></span>Build r and the shortest l that does it.</div>
+  <div class="chq"><span class="chid">21·eng.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="l \lt r"></span></span>Find where the place technique breaks, and what the crank does there.</div>
+  <div class="chq"><span class="chid">21·eng.6.3</span><span class="tagq">converse</span>A piston pauses at each end of its stroke. Must it be driven by a crank and rod?</div>
+  <div class="chq"><span class="chid">21·eng.6.4</span><span class="tagq">reroute</span>Find the speed technique again by tied rates (21p): take the slope in t of (x − r cos θ)² + r² sin² θ = l², without solving for x first.</div>
+  <div class="chq"><span class="chid">21·eng.6.5</span><span class="tagq">seam</span>The crank turned grindstones and saws for many centuries. When a steam engine first used one to turn its push into a turn, that use was patented, and the engine’s maker built a ring of gears around it rather than pay. <br>Can an old shape, put to a new use, be owned?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r21bio.html">← 21·bio · why do sunflower seeds spiral?</a><a href="floor4concl.html">F4·∎ · what the geometry floor shows →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The crank, rod and piston together are a slider-crank mechanism; the rod is the connecting rod, the pin the crankpin, and the piston’s pin the wrist pin or gudgeon pin. The two ends of the stroke are top dead centre and bottom dead centre. l/r is the rod ratio. The slot is a Scotch yoke, and the rod’s pull is the second-order term of the piston’s motion. The heavy wheel is a flywheel. The average piston speed, 8.1 m/s here, is the mean piston speed. An oil pump of this kind is a pumpjack, or nodding donkey.</p>
+  <h3>Who said it first</h3>
+  <p>A stone carving at Hierapolis, in what is now Turkey, shows a water-driven sawmill with a crank and rod from the third century. Ismail al-Jazari (1206) drew a crank and rod in a water-raising machine. In 21·eng.6.5, James Pickard patented the crank for steam engines in 1780, and James Watt built the sun-and-planet gear (1781) to go round it; Watt argued that the crank was as old as the foot-driven lathe. The patent ran out in 1794, and engines took the crank back.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="21·eng: a worked “proof”, not allowed">
+r = 81,\ l = 260,\ \theta = 90^\circ @@ fine
+x = r\cos\theta + l = 260 @@ not allowed: that is the slot’s place; the rod gives √(260² − 81²)
+\text{so the piston is at mid-stroke} @@ false: it is at 247.06 mm, 12.94 mm past the middle
+  </pre>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+const V=c=>'var('+c+')';
+const r=81, l=260, w=50*Math.PI;
+const X=t=>r*Math.cos(t)+Math.sqrt(l*l-r*r*Math.sin(t)**2);
+const XP=t=>-r*w*Math.sin(t)*(1+r*Math.cos(t)/Math.sqrt(l*l-r*r*Math.sin(t)**2))/1000;
+function draw(){ const d=+$('kt').value, t=d*Math.PI/180; $('ot').textContent=d+'°';
+  const S=1.0, ox=60, oy=110, sx=v=>ox+v*0.62, sy=v=>oy-v*0.62;
+  const P=[r*Math.cos(t), r*Math.sin(t)], x=X(t), xs=l+r*Math.cos(t);
+  let h='<svg viewBox="0 0 340 220" style="width:100%;max-width:400px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  h+='<line x1="0" y1="'+oy+'" x2="340" y2="'+oy+'" style="stroke:'+V('--grid')+';stroke-width:1"/>';
+  h+='<circle cx="'+sx(0)+'" cy="'+sy(0)+'" r="'+(r*0.62)+'" style="fill:none;stroke:'+V('--ink')+';stroke-width:1.2"/>';
+  h+='<rect x="'+(sx(xs)-9)+'" y="'+(oy-14)+'" width="18" height="28" style="fill:none;stroke:'+V('--teal')+';stroke-dasharray:4 3"/>';
+  h+='<rect x="'+(sx(x)-9)+'" y="'+(oy-14)+'" width="18" height="28" style="fill:'+V('--teal')+';fill-opacity:.3;stroke:'+V('--teal')+';stroke-width:2"/>';
+  h+='<line x1="'+sx(0)+'" y1="'+sy(0)+'" x2="'+sx(P[0])+'" y2="'+sy(P[1])+'" style="stroke:'+V('--ember')+';stroke-width:4"/>';
+  h+='<line x1="'+sx(P[0])+'" y1="'+sy(P[1])+'" x2="'+sx(x)+'" y2="'+oy+'" style="stroke:'+V('--ember')+';stroke-width:2.5"/>';
+  h+='<circle cx="'+sx(P[0])+'" cy="'+sy(P[1])+'" r="4" style="fill:'+V('--ink')+'"/><circle cx="'+sx(0)+'" cy="'+sy(0)+'" r="3" style="fill:'+V('--ink')+'"/>';
+  $('pl').innerHTML=h+'</svg>';
+  const sp=XP(t), v=$('vd'); v.className='verdict'+(Math.abs(sp)<0.05?' win':'');
+  v.textContent='θ = '+d+'°. Piston at x = '+fm(x,2)+' mm, '+mm(x-l,2)+' mm from mid-stroke; a slot would put it at '+fm(xs,2)+' mm. Speed '+fm(Math.abs(sp),2)+' m/s'+(Math.abs(sp)<0.05?': the piston pauses.':', '+(sp<0?'toward the axle.':'away from the axle.')); }
+$('kt').oninput=draw; draw();
+window.__pic={set:(d)=>{ $('kt').value=d; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'the rod',t:R`(x - r\cos\theta)^2 + r^2\sin^2\theta = l^2`,n:`Distance.`},
+  {k:'ember',kl:'the piston',t:R`\htmlClass{new}{x = r\cos\theta + \sqrt{l^2 - r^2\sin^2\theta}}`,n:`A stroke of 2r.`}
+],{title:'The slides · place · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'slope',t:R`\htmlClass{new}{x^{\prime} = -r\omega\sin\theta\,(1 + \dots)}`,n:`The rod’s factor.`},
+  {k:'ember',kl:'the pin',t:R`r\omega`,n:`About 12.72 m/s.`}
+],{title:'The slides · speed · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'stop',t:R`\htmlClass{new}{\sin\theta = 0 \Rightarrow x^{\prime} = 0}`,n:`The pin moves across.`},
+  {k:'ember',kl:'halves',t:R`\cos\theta = \tfrac{r}{2l}`,n:`Mid-stroke, past the quarter turn.`}
+],{title:'The slides · pause · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'slot',t:R`x = r\cos\theta`,n:`The along part only.`},
+  {k:'ember',kl:'the rod’s pull',t:R`\htmlClass{new}{\tfrac{r^2\sin^2\theta}{l + \sqrt{l^2 - r^2\sin^2\theta}}}`,n:`Largest at a quarter turn.`}
+],{title:'The slides · the slot · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`x = r\cos\theta + l\,?`,n:`Only with a slot.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

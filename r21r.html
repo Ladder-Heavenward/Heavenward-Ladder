@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Curves by turning and reach</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+.chrow{display:grid;grid-template-columns:4.5em 1fr;gap:6px;align-items:center;font-size:.88rem}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r21q.html">← 21q angles standing on arcs</a><a href="r21cb18.html">next: 21·cb18 a city is two turns →</a></p>
+  <div class="tags"><span class="tag tech">21r · technique</span></div>
+  <h1>Curves by turning and reach</h1>
+  <p>A lighthouse beam and a radar screen find a point the way a person giving directions does: face this way, then go this far. That is a second way to name every point of the plane, by how far round and how far out. Curves that are tangled in across-and-up coordinates come out simple this way: flowers with three or four petals, hearts, spirals. This step draws them, finds their slopes, and finds the area each one sweeps.</p>
+  <p class="gesture">Every point can be named by how far round to turn and how far out to go. Curves named this way include petals, hearts and spirals. The area a turning reach sweeps out is the total of thin slices, each a sliver of a disc.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r21b.html">21b</a> (cos and sin as coordinates), <a href="r18i.html">18i</a> (curves traced in time), <a href="r21n.html">21n</a> (the slice of a disc). <a href="r21cb18.html">21·cb18</a> names a point on the globe by two turns.</p></div>
+</header>
+
+<section class="class step" data-step="21r1">
+  <h2 class="sthead"><span class="stno">21r1</span>A point by turn and reach</h2>
+  <p class="stands">Stands on 21b (cos and sin as coordinates) and 21m2 (arctan).</p>
+  <p class="eqline" data-pid="f657e7">From here on, the point with reach r and turn θ is (r cos θ, r sin θ). The pair (r, θ) are its polar coordinates; r may be negative, which reaches backwards.</p>
+  <p data-pid="99a632">Turn-and-reach technique: <b>every point other than the origin has reach r = √(x² + y²) and a turn θ with cos θ = x/r and sin θ = y/r; the turn is fixed up to whole turns.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the turn-and-reach technique">
+r = \sqrt{x^2 + y^2} > 0 @@ distance from the origin (18a)
+(\tfrac{x}{r}, \tfrac{y}{r}) \text{ is on the circle of radius } 1 @@ its squares add to 1
+\htmlClass{new}{(x, y) = (r\cos\theta,\ r\sin\theta)} \quad \blacksquare @@ that point is at some arc θ (21b), and θ + 2πk too
+x > 0:\ \theta = \arctan\tfrac{y}{x};\ \ x < 0:\ \theta = \arctan\tfrac{y}{x} + \pi @@ arctan only answers on the right half (21m2)
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · polar · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · a reach that changes as it turns</div>
+    <div class="chrow"><span class="lbl">curve</span><div class="chips" id="chC"></div></div>
+    <div class="kn"><span class="m">θ</span><input type="range" id="kt" min="0" max="6.28" step="0.02" value="6.28"><output id="okt"></output></div>
+    <div id="pl"></div>
+    <div class="cap">Ember: the curve traced as the turn runs from 0 to θ. Teal: the reach at θ. The verdict gives the area swept so far, ½∫ r² dθ, counting twice what is swept twice.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">21r1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="(r, \theta) = (2, \tfrac{2\pi}{3}),\ \ (x, y) = (-3, -3)"></span></span>Find the across-and-up coordinates of the first. <br>Find a turn and reach for the second.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21r2">
+  <h2 class="sthead"><span class="stno">21r2</span>Curves by turn and reach</h2>
+  <p class="stands">Stands on 21r1, 21k (identities) and 18h (circles).</p>
+  <p data-pid="882c0d">Polar-graph technique: <b>the graph of r = f(θ) is every point (f(θ) cos θ, f(θ) sin θ); to compare it with an across-and-up equation, multiply through by r and put r² = x² + y², r cos θ = x, r sin θ = y.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the polar-graph technique, on r = 2a cos θ">
+r = 2a\cos\theta \Rightarrow r^2 = 2a\,r\cos\theta @@ multiply by r (this adds only the origin, already on the curve)
+x^2 + y^2 = 2ax @@ r² = x² + y², r cos θ = x
+\htmlClass{new}{(x - a)^2 + y^2 = a^2} \quad \blacksquare @@ complete the square: the circle of radius |a| about (a, 0), through the origin
+  </pre>
+  <p data-pid="2f7bec">From here on, r = cos kθ is a rose: k petals when k is odd, 2k when k is even. r = 1 + b cos θ is a limaçon, with a dent when b < 1, a cusp (a heart, the cardioid) when b = 1, and an inner loop when b > 1. r = cθ is a spiral.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · graphs · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21r2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="r = 4\sin\theta"></span></span>Guess its shape. <br>Find its across-and-up equation, and its centre and radius.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21r3">
+  <h2 class="sthead"><span class="stno">21r3</span>Slopes of turning curves</h2>
+  <p class="stands">Stands on 21r2 and 18i (curves traced in time).</p>
+  <p data-pid="fa745e">Polar-slope technique: <b>trace r = f(θ) in time with θ as the time; then dy/dx = (dy/dθ)/(dx/dθ), where dx/dθ ≠ 0.</b> And (a cos t, b sin t) traces the oval x²/a² + y²/b² = 1.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the polar-slope technique">
+x = f(\theta)\cos\theta,\ \ y = f(\theta)\sin\theta @@ the curve in time (18i)
+\tfrac{dx}{d\theta} = f'\cos\theta - f\sin\theta,\ \ \tfrac{dy}{d\theta} = f'\sin\theta + f\cos\theta @@ the product rule (13i)
+\htmlClass{new}{\frac{dy}{dx} = \frac{f'\sin\theta + f\cos\theta}{f'\cos\theta - f\sin\theta}} \quad \blacksquare @@ dy/dx = (dy/dt)/(dx/dt) (18i)
+\big(\tfrac{a\cos t}{a}\big)^2 + \big(\tfrac{b\sin t}{b}\big)^2 = 1 @@ the oval of 18e, traced by the circle technique
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · slopes · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21r3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="r = 1 + \cos\theta"></span></span>Find the slope of its touching line at θ = π/2. <br>Find the point there.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21r4">
+  <h2 class="sthead"><span class="stno">21r4</span>The area a reach sweeps</h2>
+  <p class="stands">Stands on 21n3 (the slice of a disc, ½r²θ) and 16a (the area function).</p>
+  <p data-pid="16cef4">Swept-area technique: <b>as the turn runs from α to β, the reach r = f(θ) sweeps the area ½∫ₐᵝ f(θ)² dθ.</b> Each thin turn dθ sweeps a sliver of a disc of radius f(θ).</p>
+  <pre class="lines" data-k="ember" data-label="this step: the swept-area technique">
+A(\theta) = \text{area swept from } \alpha \text{ to } \theta @@ an area function in the turn (16a)
+\tfrac12 m^2 h \le A(\theta + h) - A(\theta) \le \tfrac12 M^2 h @@ between slices of discs of the least and greatest reach m, M on [θ, θ + h] (21n3)
+A'(\theta) = \tfrac12 f(\theta)^2 @@ m and M close in on f(θ) as h → 0, for continuous f
+\htmlClass{new}{\text{area} = \tfrac12\int_\alpha^\beta f(\theta)^2\,d\theta} \quad \blacksquare @@ areas by antiderivatives (16c)
+r = 1 + \cos\theta:\ \tfrac12\int_0^{2\pi}(1 + 2\cos\theta + \cos^2\theta)\,d\theta = \tfrac12(2\pi + 0 + \pi) = \tfrac{3\pi}{2} @@ the heart’s area, by half arcs (21n2)
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · area · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21r4.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="r = \cos 3\theta"></span></span>Find the area of one petal. <br>Find the area of the whole rose.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21r5">
+  <h2 class="sthead"><span class="stno">21r5</span>Illegal moves</h2>
+  <p class="stands">Stands on 21r1 to 21r4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\theta = \arctan\tfrac{y}{x} \text{ always}\,? @@ add π when x &lt; 0: (−3, −3) is not at π/4
+\text{area} = \int f(\theta)\,d\theta\,? @@ ½∫ f²: a sliver is a slice of a disc, not a strip
+\tfrac12\int_0^{2\pi}\cos^2 3\theta\,d\theta \text{ is the rose’s area}\,? @@ that traces each petal twice: π/2 against π/4
+\text{each point has one turn and reach}\,? @@ θ + 2πk, and (−r, θ + π) too
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21r5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="r = \cos 2\theta"></span></span>Find how many petals it has.</li><li><span class="givens"><span data-tex-inline="(r, \theta) = (-2, \tfrac{\pi}{3})"></span></span>Find another turn and reach for the same point, with r > 0.</li><li><span class="givens"><span data-tex-inline="r = \theta,\ \ 0 \le \theta \le 2\pi"></span></span>Find the area it sweeps.</li><li><span class="givens"><span data-tex-inline="r = 1 + 2\cos\theta"></span></span>Find the turns at which its reach is 0. <br>Find where its inner loop is.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">21r.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="x = 1"></span></span>Build a turn-and-reach equation for this line. <br>Build one for every line not through the origin.</div>
+  <div class="chq"><span class="chid">21r.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="r = 1 + b\cos\theta,\ \ b &gt; 0"></span></span>Find the b at which an inner loop first appears. <br>Find the area of the inner loop for b = 2.</div>
+  <div class="chq"><span class="chid">21r.4.3</span><span class="tagq">converse</span>r = 2a cos θ is a circle through the origin. Turn it round: prove that r = A cos θ + B sin θ is always a circle through the origin, unless A = B = 0.</div>
+  <div class="chq"><span class="chid">21r.4.4</span><span class="tagq">reroute</span>Find the disc’s area once more, with the swept-area technique and r = R.</div>
+  <div class="chq"><span class="chid">21r.4.5</span><span class="tagq">seam</span><span class="givens"><span data-tex-inline="r = c\,\theta"></span></span>With this spiral already drawn, you can split any angle into three equal parts: the reach grows in step with the turn, so splitting a reach into three splits the turn. Ruler and compass alone cannot split every angle in three. <br>Is a spiral a fair tool, or cheating? <br>Who decides which tools are fair?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r21q.html">← 21q · angles standing on arcs</a><a href="r21cb18.html">21·cb18 · a city is two turns →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>Turn and reach are polar coordinates; r = f(θ) is a polar equation and its graph a polar curve. The roses are rhodonea curves; r = cθ is the Archimedean spiral.</p>
+  <h3>Who said it first</h3>
+  <p>In 21r.4.5, the spiral is Archimedes’, On Spirals (c. 225 BC), where he uses it to split angles and to straighten the circle. Pappus of Alexandria (fourth century) sorted problems into plane, solid and linear by the curves they need, and counted a solution by a higher curve than necessary as a fault. That ruler and compass cannot split every angle in three was proved by Pierre Wantzel in 1837.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+/* moves of the plane, drawn in SVG, for rung 20 */
+const V=c=>'var('+c+')';
+const FLAG=[[0,0],[0,3],[2,3],[2,2.4],[0.6,2.4],[0.6,1.8],[1.5,1.8],[1.5,1.2],[0.6,1.2],[0.6,0]];
+const M={
+  id:()=>p=>p,
+  slide:(h,k)=>p=>[p[0]+h,p[1]+k],
+  turn:(a,b)=>p=>[a*p[0]-b*p[1],b*p[0]+a*p[1]],
+  stretch:k=>p=>[k*p[0],k*p[1]],
+  flipU:(c,s)=>p=>{ const d=2*(p[0]*c+p[1]*s); return [d*c-p[0],d*s-p[1]]; },              /* across the line through O along (c, s), c² + s² = 1 */
+  flipAt:(q,c,s)=>p=>{ const x=p[0]-q[0],y=p[1]-q[1],d=2*(x*c+y*s); return [q[0]+d*c-x,q[1]+d*s-y]; },
+  turnAt:(q,a,b)=>p=>{ const x=p[0]-q[0],y=p[1]-q[1]; return [q[0]+a*x-b*y,q[1]+b*x+a*y]; },
+  then:(g,f)=>p=>g(f(p))                                                                    /* f first, then g */
+};
+const unit=(x,y)=>{ const r=Math.hypot(x,y); return [x/r,y/r]; };
+const fx=v=>(Math.abs(v)<5e-10?0:v);
+const show=(v,d)=>{ let s=fx(v).toFixed(d==null?2:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return (s==='-0'?'0':s).replace('-','−'); };
+/* shapes: {pts, c, fill, dash, w, open}; dots: {p, c, t}; lines: {p, d, c, dash} */
+function svgPlane(o){ const lo=o.lo==null?-6:o.lo, hi=o.hi==null?6:o.hi, S=300, X=x=>(x-lo)/(hi-lo)*S, Y=y=>S-(y-lo)/(hi-lo)*S;
+  let s='<svg viewBox="0 0 '+S+' '+S+'" style="width:100%;max-width:340px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  for(let g=Math.ceil(lo);g<=hi;g++){ s+='<line x1="'+X(g)+'" y1="0" x2="'+X(g)+'" y2="'+S+'" style="stroke:'+V('--grid')+';stroke-width:'+(g===0?1.6:0.6)+'"/><line x1="0" y1="'+Y(g)+'" x2="'+S+'" y2="'+Y(g)+'" style="stroke:'+V('--grid')+';stroke-width:'+(g===0?1.6:0.6)+'"/>'; }
+  (o.lines||[]).forEach(l=>{ const L=40; s+='<line x1="'+X(l.p[0]-L*l.d[0])+'" y1="'+Y(l.p[1]-L*l.d[1])+'" x2="'+X(l.p[0]+L*l.d[0])+'" y2="'+Y(l.p[1]+L*l.d[1])+'" style="stroke:'+V(l.c||'--teal')+';stroke-width:1.6;stroke-dasharray:'+(l.dash||'5 4')+'"/>'; });
+  (o.shapes||[]).forEach(z=>{ const pts=z.pts.map(p=>X(p[0]).toFixed(1)+','+Y(p[1]).toFixed(1)).join(' ');
+    s+='<'+(z.open?'polyline':'polygon')+' points="'+pts+'" style="fill:'+(z.fill?V(z.c):'none')+';fill-opacity:'+(z.fill?0.28:0)+';stroke:'+V(z.c)+';stroke-width:'+(z.w||2)+(z.dash?';stroke-dasharray:'+z.dash:'')+'"/>'; });
+  (o.dots||[]).forEach(d=>{ s+='<circle cx="'+X(d.p[0])+'" cy="'+Y(d.p[1])+'" r="4" style="fill:'+V(d.c||'--ink')+'"/>'+(d.t?'<text x="'+(X(d.p[0])+7)+'" y="'+(Y(d.p[1])-6)+'" style="fill:'+V(d.c||'--ink')+';font:12px IBM Plex Mono,monospace">'+d.t+'</text>':''); });
+  return s+'</svg>'; }
+function knob(id,lab,min,max,step,val){ return '<div class="kn"><span class="m">'+lab+'</span><input type="range" id="'+id+'" min="'+min+'" max="'+max+'" step="'+step+'" value="'+val+'"><output id="o'+id+'"></output></div>'; }
+function chipRow(el,keys,get,set,after){ el.innerHTML=''; keys.forEach(k=>{ const b=document.createElement('button'); b.type='button'; b.textContent=k; if(k===get()) b.className='on'; b.onclick=()=>{ set(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+
+const CV={'r = 2 cos θ':{f:t=>2*Math.cos(t),m:Math.PI},'r = cos 3θ':{f:t=>Math.cos(3*t),m:Math.PI},'r = cos 2θ':{f:t=>Math.cos(2*t),m:2*Math.PI},
+  'r = 1 + cos θ':{f:t=>1+Math.cos(t),m:2*Math.PI},'r = 1 + 2 cos θ':{f:t=>1+2*Math.cos(t),m:2*Math.PI},'r = θ/4':{f:t=>t/4,m:2*Math.PI}};
+let ck='r = 1 + cos θ', th=6.28;
+$('kt').addEventListener('input',()=>{ th=+$('kt').value; draw(); });
+function draw(){ const c=CV[ck], P=[]; let A=0, prev=null;
+  for(let t=0;t<=th+1e-9;t+=0.01){ const r=c.f(t); P.push([r*Math.cos(t),r*Math.sin(t)]); if(prev!==null) A+=0.5*(r*r+prev*prev)/2*0.01; prev=r; }
+  const r=c.f(th), R=[[0,0],[r*Math.cos(th),r*Math.sin(th)]];
+  $('pl').innerHTML=svgPlane({lo:-3.2,hi:3.2,shapes:[{pts:P,c:'--ember',open:true,w:2.4},{pts:R,c:'--teal',open:true,w:2}],dots:[{p:R[1],c:'--teal'}]});
+  $('okt').textContent=show(th);
+  const v=$('vd'); v.className='verdict'; v.textContent=ck+', turned from 0 to '+show(th)+': reach now '+show(r)+(r<0?' (backwards)':'')+'. Area swept: '+show(A)+(th>c.m+0.01?'. Past '+(c.m===Math.PI?'π':'2π')+' the curve retraces itself, so part of that is counted twice.':'.'); }
+chipRow($('chC'),Object.keys(CV),()=>ck,k=>ck=k,draw); draw();
+window.__pic={set:(k,t)=>{ ck=k; th=t; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'turn and reach',t:R`\htmlClass{new}{(x, y) = (r\cos\theta, r\sin\theta)}`,n:`r = √(x² + y²).`}
+],{title:'The slides · polar · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'polar graph',t:R`\htmlClass{new}{r = 2a\cos\theta \iff (x - a)^2 + y^2 = a^2}`,n:`Multiply by r.`}
+],{title:'The slides · graphs · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'polar slope',t:R`\htmlClass{new}{\tfrac{dy}{dx} = \tfrac{f'\sin\theta + f\cos\theta}{f'\cos\theta - f\sin\theta}}`,n:`θ as the time.`}
+],{title:'The slides · slopes · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'swept area',t:R`\htmlClass{new}{\tfrac12\int_\alpha^\beta f(\theta)^2\,d\theta}`,n:`Slivers of discs.`}
+],{title:'The slides · area · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`\theta \ne \arctan\tfrac{y}{x} \text{ for } x < 0`,n:`Add π.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

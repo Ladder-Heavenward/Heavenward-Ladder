@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How fast does a hot drink cool?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r24l.html">← 24l solutions as power series</a><a href="r24phys.html">next: 24·phys why does a pendulum keep time? →</a></p>
+  <div class="tags"><span class="tag then">24·then · newsflash</span></div>
+  <h1>How fast does a hot drink cool?</h1>
+  <p>How fast does a hot drink cool? Rung seventeen answered it once, for a cup in a room that never changes: the gap between the cup and the room shrinks by equal factors in equal times. But rooms change. The evening air on a deck cools while the tea on the table cools too. What makes the question hard is that the answer is not a curve you can look up. It is a rule about the rate, and the curve has to be got from the rule. This page shows, with rung twenty-four’s rules on rates, what a cup does in a room that keeps cooling, and then follows the same rule into places it was never expected to go: a battery charging a store of charge, a coil of wire, a reaction made of two steps, a reaction warmed, a fishery, and the whole earth in sunlight.</p>
+  <p class="gesture">A cup in a room that cools steadily ends up at the temperature the room had a little while ago, and the delay is the cup’s own time scale. A quantity pulled toward a fixed target in proportion to its distance from it closes the same share of the gap in each stretch of time, whether it is a cup, a store of charge or a current in a coil. Stepping that rule forward by hand settles only if the steps are short enough. A reaction made of a slow step and a fast step runs at the pace of the slow one. Warming a reaction by ten degrees nearly doubles its pace. A state that a rule leaves alone holds when the rate falls as the state rises, and that one reading tells how much fish a sea can give, and how warm sunlight keeps the earth.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r17j.html">17j</a> (cooling), <a href="r17chem.html">17·chem</a> (the first-order technique), <a href="r17bio.html">17·bio</a> (the logistic curve and its fastest growth), <a href="r22h.html">22h</a> (the pull-together technique), <a href="r24a.html">24a</a> (the own-rate technique), <a href="r24g.html">24g</a> (the integrating factor), <a href="r24i.html">24i</a> (stepping forward) and <a href="r24k.html">24k</a> (stability by the sign of a slope). 24·phys asks why a pendulum keeps time.</p></div>
+</header>
+
+<section class="class step" data-step="24then1">
+  <h2 class="sthead"><span class="stno">24then1</span>A drink in a room that changes</h2>
+  <p class="stands">Stands on 17j (cooling), 24a (the own-rate technique) and 24g (the integrating factor).</p>
+  <p data-pid="71e96f">17j read cooling as a measured law: the gap between a drink and its room shrinks at a rate in proportion to the gap. As a rule on rates, T′ = −k(T − A), with T the drink and A the room, in degrees, and t in minutes. 17j let A stay put. Then the gap u = T − A obeys u′ = −ku, and 24a’s own-rate technique gives T = A + (T₀ − A)e^(−kt). An evening room does not stay put. Let it run steadily, A = A₀ + bt.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the lag technique">
+T' + kT = k(A_0 + bt) @@ the cooling law, with the room running at b degrees a minute
+\big(e^{kt}T\big)' = k\,e^{kt}(A_0 + bt) @@ multiply by the integrating factor e^{kt} (24g)
+e^{kt}T = e^{kt}(A_0 + bt) - \tfrac{b}{k}e^{kt} + C @@ an antiderivative: its slope is ke^{kt}(A₀ + bt) + be^{kt} − be^{kt}
+T = A_0 + bt - \tfrac{b}{k} + Ce^{-kt} @@ divide by e^{kt}
+\htmlClass{new}{T - A\big(t - \tfrac1k\big) = Ce^{-kt} \to 0} \quad \blacksquare @@ A(t − 1/k) = A₀ + bt − b/k; k &gt; 0
+  </pre>
+  <p data-pid="0311d6">Lag technique: <b>a drink in a room whose temperature runs steadily ends up at the temperature the room had 1/k minutes earlier.</b> A mug of tea forgotten on a deck in Bozeman, Montana, has k near 0.04 a minute. If the evening air falls by 0.04° a minute, the tea ends up 25 minutes behind the air, a steady 1° warmer.</p>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · the middle of a change</div>
+    <p data-pid="5bf50a">17j’s curve gave the before and the after: start here, and in so many minutes be there. That reading needed a room that stayed put. The cooling law says something smaller and stronger. It gives the rate at each instant, from the gap at that instant. Because it speaks of each instant, it still holds when the room moves, and the curve comes out of it.</p>
+    <p data-pid="118ee4"><b>Describe a change by its rates, not only by its before and after.</b></p>
+    <p data-pid="2c02a1">Every thermometer is a drink in a room. Its reading trails the air by its own 1/k. A good one has 1/k well under a minute, and the lag is too small to see. A slow one, read on a morning when the air warms fast, reads cold.</p>
+    <p class="bait" data-pid="6382e6">A weather station near Astoria has a thermometer with 1/k of two minutes. The air warms by three degrees an hour after sunrise. How far behind is its reading? Would you trust it for the day’s highest temperature?</p>
+  </aside>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · lag · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · a drink in a cooling room</div>
+    <div class="kn"><span class="m">k</span><input type="range" id="kk" min="0.01" max="0.2" step="0.01" value="0.04"><output id="ok"></output></div>
+    <div class="kn"><span class="m">b</span><input type="range" id="kb" min="-0.1" max="0.05" step="0.01" value="-0.04"><output id="ob"></output></div>
+    <div id="pl"></div>
+    <div class="cap">Teal: the room, starting at 18° and running b degrees a minute. Ember: a drink poured at 80°, by the lag technique, over three hours. Ink dashes: the room 1/k minutes earlier, where the drink ends up.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">24·then.1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">coffee poured at 85 °C in a café in Eugene, room at 21 °C</span> <span class="gtx">60 °C after 10 minutes</span></span>Find k. <br>Find when the coffee reaches 45 °C.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24then2">
+  <h2 class="sthead"><span class="stno">24then2</span>One rule in many places</h2>
+  <p class="stands">Stands on 24·then.1, 17·chem (the first-order technique), 22h (the pull-together technique) and 24i (stepping forward).</p>
+  <p data-pid="8f8e88">Many rules share one shape: y′ = (Y − y)/τ, a quantity pulled toward a fixed target Y in proportion to its distance from it. The number τ = 1/k is its time scale. A drink in a still room has Y the room. A decaying sample has Y = 0 (17·chem). A store of charge filled through a resistance R from a battery E has Y = E and τ = RC, where C is how much charge it holds per volt.</p>
+  <p data-pid="a902b3">A coil of wire is one more. A measured law says that a magnetic field Φ changing through a loop of wire makes a push of −Φ′ around the loop. In a coil the field grows in proportion to the current, Φ = LI, so the coil pushes back by −LI′. With a battery E and a resistance R, the pushes balance: LI′ = E − RI, so τ = L/R and Y = E/R.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the target technique">
+y' = \tfrac{Y - y}{\tau} @@ pulled toward Y
+(y - Y)' = -\tfrac{1}{\tau}(y - Y) @@ Y is fixed, so its slope is 0
+y - Y = (y_0 - Y)\,e^{-t/\tau} @@ the own-rate technique (24a)
+\htmlClass{new}{y = Y + (y_0 - Y)\,e^{-t/\tau}} \quad \blacksquare @@ after each τ, e^{−1} ≈ 37% of the gap is left
+  </pre>
+  <p data-pid="18515c">Target technique: <b>a quantity pulled toward a fixed target in proportion to its distance closes about 63% of what is left of the gap in each time τ, whatever the quantity is.</b> A coil of L = 0.5 henry on a 12-volt battery through 10 ohms has τ = 0.05 s. Its current climbs toward 1.2 amps and is within 1% of it after five τ, a quarter of a second.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the same rule, counted in steps">
+I_{n+1} = I_n + \tfrac{h}{L}(E - RI_n) @@ a step of length h along the rule (24i)
+g(I) = I + \tfrac{h}{L}(E - RI),\ \ g'(I) = 1 - \tfrac{hR}{L} @@ the step is a rule fed its own answers
+g\big(\tfrac{E}{R}\big) = \tfrac{E}{R} @@ the target is left alone
+\htmlClass{new}{\text{the run settles at } \tfrac{E}{R} \iff \big|1 - \tfrac{hR}{L}\big| \lt 1 \iff 0 \lt h \lt \tfrac{2L}{R}} @@ the pull-together technique (22h); past it, pushed away
+  </pre>
+  <p data-pid="bf4876">For the coil above, 2L/R = 0.1 s. Steps of 0.01 s creep up on 1.2 amps. Steps of 0.07 s overshoot and swing in. Steps of 0.12 s swing wider each time. The rule did not change; the steps were too long for it.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · target · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24·then.2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a store of charge with RC = 10 s, filled from empty by a 9-volt battery</span></span>Find its voltage after 10 s and after 30 s. <br>Find the longest step length for which the counted rule settles.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24then3">
+  <h2 class="sthead"><span class="stno">24then3</span>Two steps in a row</h2>
+  <p class="stands">Stands on 17·chem (the first-order technique) and 24g (the integrating factor).</p>
+  <p data-pid="99dab5">Many reactions run as a chain. A turns into an in-between stuff B at rate constant k₁, and B turns into the product C at rate constant k₂. Each step is first order (17·chem). Start with no B.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the slow-step technique">
+[A]' = -k_1[A],\ \ [A] = [A]_0\,e^{-k_1t} @@ the first-order technique (17·chem)
+[B]' + k_2[B] = k_1[A]_0\,e^{-k_1t} @@ B is made from A and lost to C
+\big(e^{k_2t}[B]\big)' = k_1[A]_0\,e^{(k_2 - k_1)t} @@ the integrating factor e^{k₂t} (24g)
+[B] = \tfrac{k_1[A]_0}{k_2 - k_1}\big(e^{-k_1t} - e^{-k_2t}\big) @@ the area from 0; [B]₀ = 0; k₁ ≠ k₂
+\tfrac{[B]}{[A]} = \tfrac{k_1}{k_2 - k_1}\big(1 - e^{-(k_2 - k_1)t}\big) \to \tfrac{k_1}{k_2 - k_1} @@ divide by [A]; for k₂ &gt; k₁
+\htmlClass{new}{k_2 \gg k_1:\ \ [B] \approx \tfrac{k_1}{k_2}[A],\ \ [C]' = k_2[B] \approx k_1[A]} \quad \blacksquare @@ the fast step waits on the slow one
+  </pre>
+  <p data-pid="7f27e5">Slow-step technique: <b>when the second step is much faster than the first, the in-between stuff stays scarce and nearly steady, and the product forms at the pace of the slow step.</b> With k₁ = 0.01 a second and k₂ = 1 a second, B settles at about 1% of A. The shortcut is to set [B]′ ≈ 0 and solve for [B] at once; the lines above tell when that shortcut is fair.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · two steps · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24·then.3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="k_1 = 0.02 \text{ s}^{-1},\ \ k_2 = 0.5 \text{ s}^{-1}"></span></span>Find the long-run ratio [B]/[A], and the ratio the shortcut [B]′ ≈ 0 gives. <br>Find the time at which [B] is greatest.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24then4">
+  <h2 class="sthead"><span class="stno">24then4</span>Warmth speeds a reaction</h2>
+  <p class="stands">Stands on 17 (log and exp), 24·then.3 and 24k (stability by the sign of a slope).</p>
+  <p data-pid="cc2809">A measured law, found in 1889, says a rate constant grows with temperature as k = A e^(−E/(RT)). Here T is in kelvins, E is the energy a mole of molecules must gather to react, and R = 8.314 joules per mole per kelvin. It was found by induction under the case with predictable variation: a few reactions, carefully timed at a few temperatures, one rule, and known exceptions.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the ten-degree technique">
+\tfrac{k(T_2)}{k(T_1)} = e^{\frac{E}{R}\left(\frac{1}{T_1} - \frac{1}{T_2}\right)} @@ divide; A cancels
+\ln\tfrac{k(T_2)}{k(T_1)} = \tfrac{E}{R}\cdot\tfrac{T_2 - T_1}{T_1T_2} @@ ln of both sides (17)
+E = 50\,000,\ \ T_1 = 298,\ \ T_2 = 308:\ \ \ln\tfrac{k(T_2)}{k(T_1)} \approx 0.655 @@ a room at 25 °C, and ten degrees warmer
+\htmlClass{new}{\tfrac{k(T_2)}{k(T_1)} \approx 1.92} \quad \blacksquare @@ e^{0.655}
+  </pre>
+  <p data-pid="506435">Ten-degree technique: <b>for a reaction whose energy barrier is near 50 kJ a mole, ten degrees of warming near room temperature nearly doubles its pace.</b> The same barrier makes a fridge at 4 °C slow such a reaction about 4.6 times against a 25 °C counter.</p>
+  <p data-pid="61a52d">A chain can also start with a step that runs both ways fast: A turns into I at k₁, I turns back at k₋₁, and I goes on slowly to the product at k₂. Then [I]′ = k₁[A] − (k₋₁ + k₂)[I]. Its slope in [I] is −(k₋₁ + k₂) &lt; 0, so the back-and-forth settles first (24k), at [I] ≈ (k₁/k₋₁)[A] when k₂ is small beside k₋₁. The product then forms at about k₂(k₁/k₋₁)[A]. The fast pair stands at its own balance while the slow step drains it.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · warmth · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24·then.4.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="E = 75 \text{ kJ/mol}"></span></span>Find how many times faster the reaction runs at 30 °C than at 20 °C. <br>Find how many times slower it runs in a fridge at 4 °C than at 21 °C.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24then5">
+  <h2 class="sthead"><span class="stno">24then5</span>States that hold</h2>
+  <p class="stands">Stands on 24k (stability by the sign of a slope), 17·bio (the logistic curve; fastest growth at half the ceiling) and 24·then.2.</p>
+  <p data-pid="577b4d">A rule y′ = F(y) with no t in it leaves alone each y* where F(y*) = 0. By 24k, if F′(y*) &lt; 0, small departures shrink and the state holds. If F′(y*) &gt; 0, they grow. A body’s core temperature is one such state: heat made and heat lost balance near 37 °C, and the balance tilts back whichever way the body strays.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the harvest technique">
+P' = rP\big(1 - \tfrac{P}{K}\big) - H @@ logistic growth (17·bio), less a steady catch of H a year
+F(P) = 0 \iff rP\big(1 - \tfrac{P}{K}\big) = H @@ the states left alone
+rP\big(1 - \tfrac{P}{K}\big) \le \tfrac{rK}{4},\ \ \text{equal only at } P = \tfrac{K}{2} @@ fastest growth at K/2 (17·bio)
+H \lt \tfrac{rK}{4}:\ \ \text{two roots } P_- \lt \tfrac{K}{2} \lt P_+ @@ the quadratic formula
+F'(P) = r\big(1 - \tfrac{2P}{K}\big):\ \ F'(P_+) \lt 0 \lt F'(P_-) @@ the sign of the slope (24k)
+\htmlClass{new}{P_+ \text{ holds},\ P_- \text{ tips};\ \ H \gt \tfrac{rK}{4}:\ \text{no state holds}} \quad \blacksquare @@ above rK/4, F &lt; 0 everywhere
+  </pre>
+  <p data-pid="e8b13d">Harvest technique: <b>a fish stock can bear a steady catch of at most rK/4 a year, taken at half its full size, and a steady catch above that empties it.</b> A stock with r = 0.4 a year and K = 300 000 tonnes can give at most 30 000 tonnes a year. Near that catch, P₋ and P₊ crowd together, and one bad year can push the stock below P₋, from where it falls on its own.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the earth’s balance">
+c\,T' = \tfrac{(1 - \alpha)S}{4} - \sigma T^4 @@ sunlight kept, less heat glowed away (σT⁴, a measured law), per square metre
+T^* = \Big(\tfrac{(1 - \alpha)S}{4\sigma}\Big)^{1/4} \approx 255 \text{ K} @@ S = 1361 W/m², α = 0.3, σ = 5.67 × 10⁻⁸
+\tfrac{d}{dT}\big(-\sigma T^4\big)\Big|_{T^*} = -4\sigma T^{*3} \approx -3.74 \lt 0 @@ the state holds (24k)
+\htmlClass{new}{\text{an extra push } Q \text{ W/m}^2 \text{ moves it by about } \tfrac{Q}{3.74} \text{ K}} @@ near T*, read the slope as a straight line
+  </pre>
+  <p data-pid="37ccac">255 K is −18 °C. The measured average at the ground is about 15 °C. The 33 degrees between them are the air’s own blanket, left out of this rule. A push of 3.7 W/m², about what doubling the air’s carbon dioxide gives, moves the bare balance by about 1 K; what the air and the ice do in reply is left out here too. The time scale is c/3.74. With c for the top 70 m of the ocean, it comes to about two and a half years.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · holding · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24·then.5.1</span><span class="ph undo">undo</span><span class="givens"><span data-tex-inline="P&#x27; = 0.5P\big(1 - \tfrac{P}{80\,000}\big) - 8000"></span></span>Find the two states left alone, and which one holds. <br>Find the largest steady catch, and the stock it is taken from.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24then6">
+  <h2 class="sthead"><span class="stno">24then6</span>Illegal moves</h2>
+  <p class="stands">Stands on 24·then.1 to 24·then.5.</p>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+T = A + (T_0 - A)e^{-kt} \text{ in a room that cools}\,? @@ only for a room that stays put; else the integrating factor
+\text{the counted rule settles for every step length}\,? @@ only for h &lt; 2τ; longer steps swing wider
+\text{a chain runs at the pace of its fast step}\,? @@ it waits on the slow step
+\text{every state a rule leaves alone holds}\,? @@ only where the slope of F is negative
+  </pre>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24·then.6.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="b = 0"></span></span>Find what the lag technique gives, and why the first line still breaks for b ≠ 0.</li><li><span class="givens"><span data-tex-inline="h = \tfrac{2L}{R}"></span></span>Find what the counted current does.</li><li><span class="givens"><span data-tex-inline="k_1 = 1 \text{ s}^{-1},\ \ k_2 = 0.01 \text{ s}^{-1}"></span></span>Find which step sets the pace, and what [B] does.</li><li><span class="givens"><span data-tex-inline="P&#x27; = 0.4P\big(1 - \tfrac{P}{300\,000}\big) - 20\,000"></span></span>Find the two states left alone, and what a stock just below the lower one does.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">24·then.7.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">a hot tub losing heat to the air by the cooling law, with a heater of steady power P</span></span>Build a rule on rates for its temperature. <br>Find where it settles, and how long it takes to close half the gap.</div>
+  <div class="chq"><span class="chid">24·then.7.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="k_1 = k_2 = k"></span></span>Find [B] in the two-step chain. <br>Find when it is greatest.</div>
+  <div class="chq"><span class="chid">24·then.7.3</span><span class="tagq">converse</span>A state left alone holds when F′(y*) &lt; 0. If F′(y*) = 0, must it fail to hold? <br>Try y′ = −y³, y′ = y³ and y′ = y².</div>
+  <div class="chq"><span class="chid">24·then.7.4</span><span class="tagq">reroute</span>Find the lag technique a second way: write the gap to the room as u = T − A(t), find the rule u obeys, and read off its state left alone.</div>
+  <div class="chq"><span class="chid">24·then.7.5</span><span class="tagq">seam</span>The cooling law fits a cup of tea to within a tenth of a degree. For an iron bar at a dull red heat in the same room, it misses badly. <br>Was it ever a law? Or is it the first term of some truer rule?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r24l.html">← 24l · solutions as power series</a><a href="r24phys.html">24·phys · why does a pendulum keep time? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The cooling law is Newton’s law of cooling, and τ is the time constant. A store of charge is a capacitor, and the circuit an RC circuit; a coil is an inductor, L its inductance in henries, and LI′ = E − RI an LR circuit. The push made by a changing field is Faraday’s law of induction; its minus sign is Lenz’s law. Stepping along a rule is Euler’s method, and its limit h &lt; 2τ is its stability limit. The slow step is the rate-determining step; setting [B]′ ≈ 0 is the steady-state approximation; the fast pair at balance is a pre-equilibrium. k = Ae^(−E/(RT)) is the Arrhenius equation and E the activation energy; the doubling per ten degrees is the Q₁₀ rule of thumb. The largest steady catch is the maximum sustainable yield. The earth’s rule is a zero-dimensional energy balance model; σT⁴ is the Stefan–Boltzmann law, 255 K the earth’s effective temperature, and 3.74 W/m² per kelvin the Planck response.</p>
+  <h3>Who said it first</h3>
+  <p>Isaac Newton published the cooling law without his name in 1701. Michael Faraday found induction in 1831 and Heinrich Lenz gave its sign in 1834. Jacobus van ’t Hoff (1884) and Svante Arrhenius (1889) gave the temperature law. Max Bodenstein used the steady-state shortcut for chains (1913). Walter Cannon named homeostasis (1926), after Claude Bernard’s inner environment. Milner Schaefer (1954) read fisheries through the logistic rule and its catch of rK/4; the Pacific sardine catch off Monterey had collapsed a few years before. Josef Stefan (1879) and Ludwig Boltzmann (1884) gave the σT⁴ law; Mikhail Budyko and William Sellers (1969) built the first energy balance models of the climate. In 24·then.7.5, Pierre Louis Dulong and Alexis Thérèse Petit (1817) measured cooling over large gaps and found Newton’s law too small at high heat.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="24·then: a worked “proof”, not allowed">
+T' = -0.04\,(T - A),\ \ A = 18 - 0.04t @@ fine: the room falls 0.04° a minute
+T = 18 + 62\,e^{-0.04t} @@ not allowed: that curve is for a room that stays at 18°
+\text{after three hours the tea is at } 18.0^\circ @@ false: the air is at 10.8°, and the tea about 11.8°
+  </pre>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+const V=c=>'var('+c+')';
+// plot(series, xr, yr, opts): series = [{pts:[[x,y],...], c:'--ember', w:1.6, dash:''}]; returns svg string
+function plot(series, xr, yr, o){ o=o||{}; const W=360,H=o.H||210,L=34,B=22,T=8,Rr=8;
+  const sx=x=>L+(x-xr[0])/(xr[1]-xr[0])*(W-L-Rr), sy=y=>H-B-(y-yr[0])/(yr[1]-yr[0])*(H-B-T);
+  let s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;max-width:440px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  (o.yt||[]).forEach(y=>{ s+='<line x1="'+L+'" x2="'+(W-Rr)+'" y1="'+sy(y)+'" y2="'+sy(y)+'" style="stroke:'+V('--grid')+';stroke-width:0.6"/><text x="'+(L-3)+'" y="'+(sy(y)+3)+'" text-anchor="end" style="font:9px var(--mono);fill:'+V('--muted')+'">'+y+'</text>'; });
+  (o.xt||[]).forEach(x=>{ s+='<text x="'+sx(x)+'" y="'+(H-8)+'" text-anchor="middle" style="font:9px var(--mono);fill:'+V('--muted')+'">'+x+'</text>'; });
+  s+='<line x1="'+L+'" x2="'+L+'" y1="'+T+'" y2="'+(H-B)+'" style="stroke:'+V('--ink')+';stroke-width:0.8"/><line x1="'+L+'" x2="'+(W-Rr)+'" y1="'+(H-B)+'" y2="'+(H-B)+'" style="stroke:'+V('--ink')+';stroke-width:0.8"/>';
+  series.forEach(se=>{ const cl=v=>Math.max(yr[0]-0.05*(yr[1]-yr[0]),Math.min(yr[1]+0.05*(yr[1]-yr[0]),v));
+    const d=se.pts.filter(p=>isFinite(p[1])).map((p,i)=>(i?'L':'M')+sx(p[0]).toFixed(1)+','+sy(cl(p[1])).toFixed(1)).join('');
+    s+='<path d="'+d+'" style="fill:none;stroke:'+V(se.c||'--ember')+';stroke-width:'+(se.w||1.6)+(se.dash?';stroke-dasharray:'+se.dash:'')+'"/>'; });
+  (o.dots||[]).forEach(p=>{ s+='<circle cx="'+sx(p[0])+'" cy="'+sy(p[1])+'" r="2.6" style="fill:'+V(p[2]||'--ember')+'"/>'; });
+  if(o.xl) s+='<text x="'+(W-Rr)+'" y="'+(H-B-4)+'" text-anchor="end" style="font:9px var(--mono);fill:'+V('--muted')+'">'+o.xl+'</text>';
+  if(o.yl) s+='<text x="'+(L+4)+'" y="'+(T+9)+'" style="font:9px var(--mono);fill:'+V('--muted')+'">'+o.yl+'</text>';
+  return s+'</svg>'; }
+
+function draw(){ const k=+$('kk').value, b=+$('kb').value; $('ok').textContent=fm(k,2)+' /min'; $('ob').textContent=mm(b,2)+'°/min';
+  const A0=18,T0=80,C=T0-A0+b/k, ts=[]; for(let t=0;t<=180;t+=2) ts.push(t);
+  const room=ts.map(t=>[t,A0+b*t]), cup=ts.map(t=>[t,A0+b*t-b/k+C*Math.exp(-k*t)]), lag=ts.map(t=>[t,A0+b*(t-1/k)]);
+  const lo=Math.min(0,A0+b*180-5), hi=82;
+  $('pl').innerHTML=plot([{pts:room,c:'--teal'},{pts:lag,c:'--ink',w:1,dash:'4 4'},{pts:cup,c:'--ember'}],[0,180],[lo,hi],{xt:[0,60,120,180],yt:[0,20,40,60,80],xl:'minutes',yl:'°C'});
+  const v=$('vd'); v.className='verdict'; const e=A0+b*180-b/k+C*Math.exp(-k*180);
+  v.textContent='After three hours the room is at '+mm(A0+b*180,1)+'° and the drink at '+mm(e,1)+'°. The drink trails the room by 1/k = '+fm(1/k,0)+' minutes; drink minus room is '+mm(-b/k,1)+'°.'; }
+$('kk').oninput=draw; $('kb').oninput=draw; draw();
+window.__pic={set:(k,b)=>{ $('kk').value=k; $('kb').value=b; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'the law',t:R`T' = -k(T - A)`,n:`Rate from the gap.`},
+  {k:'ember',kl:'factor',t:R`\big(e^{kt}T\big)' = k\,e^{kt}A`,n:`The integrating factor.`},
+  {k:'ember',kl:'lag',t:R`\htmlClass{new}{T \to A\big(t - \tfrac1k\big)}`,n:`The room, 1/k ago.`}
+],{title:'The slides · lag · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'shape',t:R`y' = \tfrac{Y - y}{\tau}`,n:`Pulled toward Y.`},
+  {k:'ember',kl:'solution',t:R`\htmlClass{new}{y = Y + (y_0 - Y)e^{-t/\tau}}`,n:`63% of the gap per τ.`},
+  {k:'ember',kl:'counted',t:R`h \lt 2\tau`,n:`Or the steps run away.`}
+],{title:'The slides · target · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'the middle',t:R`[B]' + k_2[B] = k_1[A]`,n:`Made, and lost.`},
+  {k:'ember',kl:'scarce',t:R`\htmlClass{new}{[B] \approx \tfrac{k_1}{k_2}[A]}`,n:`When k₂ ≫ k₁.`},
+  {k:'ember',kl:'pace',t:R`[C]' \approx k_1[A]`,n:`The slow step’s.`}
+],{title:'The slides · two steps · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'the law',t:R`k = A\,e^{-E/(RT)}`,n:`Measured, 1889.`},
+  {k:'ember',kl:'ratio',t:R`\htmlClass{new}{\approx 1.92}`,n:`Ten degrees, E ≈ 50 kJ/mol.`},
+  {k:'ember',kl:'pre-balance',t:R`[I] \approx \tfrac{k_1}{k_{-1}}[A]`,n:`The fast pair settles first.`}
+],{title:'The slides · warmth · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'left alone',t:R`F(y^*) = 0`,n:`A state.`},
+  {k:'ember',kl:'holds',t:R`F'(y^*) \lt 0`,n:`Departures shrink.`},
+  {k:'ember',kl:'harvest',t:R`\htmlClass{new}{H \le \tfrac{rK}{4}}`,n:`At P = K/2.`}
+],{title:'The slides · holding · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'illegal',t:R`\text{every balance holds}\,?`,n:`Only where the slope is negative.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>10e · From the left and from the right</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:3fr 2fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+#cvE{touch-action:none;cursor:crosshair}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4em;text-align:right}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r10d.html">← 10d the squeeze</a><a href="r10concl.html">next: 10·∎ conclusion →</a></p>
+  <div class="tags"><span class="tag proof">10e · proof</span></div>
+  <h1>From the left and from the right</h1>
+  <p>A neighbourhood of an input has two halves: the inputs just below and the inputs just above. Sometimes a function does one thing on one side and another on the other: the size of a number over the number is negative one left of 0 and one right of it. Sometimes a function only has one side: the square root has no inputs below 0. This step plays the game on one half at a time and gives each half its mark. Then it proves the fifth principle: a function has a limit at an input exactly when both one-sided limits exist and agree. Then it settles what rung 9 could only describe: near 0, one over the input has no limit from either side.</p>
+  <p class="gesture">Play the game with half the window. Win on the left and on the right with one value, and the least of the two reaches wins the whole game; get two values, and there is no limit.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r10a.html">10a</a> (the definition, lesser-below-both, line-limit, square-limit, agreeing-near), <a href="r10b.html">10b</a> (two-targets, one-limit), <a href="r08b.html">8b</a> (three-way-order on ℝ), <a href="r08f.html">8f</a> (√, powers-keep-order), <a href="r08h.html">8h</a> (|x|, unpack-the-bars), <a href="r08d.html">8d</a> (positive-reciprocal on ℚ, order-and-arithmetic-agree), <a href="r09e.html">9e</a> (1/x, its outputs past every bound), <a href="r07d.html">7d</a> (definitions by cases). <a href="r10f.html">10f</a> splits by sides where an absolute value changes its formula, and gives words for passing every bound; rung 11 asks when a function lands, from each side, where it was headed.</p></div>
+</header>
+
+<section class="class step" data-step="10e1">
+  <h2 class="sthead"><span class="stno">10e1</span>Half a window</h2>
+  <p class="stands">Stands on 10a3 (the neighbourhood) and 10b (one limit).</p>
+  <p data-pid="69e6b9">10a's neighbourhood of w of reach δ is two intervals, (w − δ, w) and (w, w + δ). Each half gets its own game: the same challenge, the same promise, but only the inputs on one side are asked to keep it. For that, a function need only have inputs on that side.</p>
+  <p class="eqline" data-pid="71d9df">From here on, let f be a function whose inputs and outputs are reals, defined just right of a: some interval (a, a + r) with r &gt; 0 is a part of dom f. Then lim_{x→a⁺} f(x) = L means: ∀ε &gt; 0 ∃δ &gt; 0 : ∀x ∈ dom f (a &lt; x &lt; a + δ ⇒ |f(x) − L| &lt; ε). Read it “the limit of f(x) as x heads to a from the right is L”, or “from above”. The small high + after a is part of the mark x → a⁺: it is not a power, not a sign of a number, and a⁺ names no real. It says only that the inputs come from the right of a, the greater side.</p>
+  <p class="eqline" data-pid="70ef6d">From here on, let f be defined just left of a: some interval (a − r, a) with r &gt; 0 is a part of dom f. Then lim_{x→a⁻} f(x) = L means: ∀ε &gt; 0 ∃δ &gt; 0 : ∀x ∈ dom f (a − δ &lt; x &lt; a ⇒ |f(x) − L| &lt; ε). Read it “the limit of f(x) as x heads to a from the left is L”, or “from below”. The small high − after a is part of the mark x → a⁻: it is not 5a's negative, not 5b's reciprocal mark, not 9d's inverse, and a⁻ names no real. It says only that the inputs come from the left of a, the lesser side.</p>
+  <p data-pid="2f53a4">Both are called one-sided limits; 10a's is two-sided when the difference matters. 10b's proof works side by side: One-side-one-value technique: <b>a function has at most one limit from the right at w, and at most one from the left.</b> One-limit's column, with the input w + δ/2 (from the right) or w − δ/2 (from the left). ∎ So lim_{x→w⁺} f(x) and lim_{x→w⁻} f(x) name the one-sided limits when they exist, as 10b's line licensed for two sides, and name nothing when they do not. Agreeing-near's column works side by side as well: two functions that agree on (w, w + r) have the same limits from the right.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the marks · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · half a window at a time</div>
+    <div class="panel">
+      <div class="chips" role="group" aria-label="function" id="fch"></div>
+      <canvas id="cvE"></canvas>
+      <div class="kn">
+        <span class="m">ε</span><input type="range" id="ke" min="0.02" max="1" step="0.01" value="0.4"><output id="oe"></output>
+        <span class="m">L⁻</span><input type="range" id="kLm" step="0.05"><output id="oLm"></output>
+        <span class="m">L⁺</span><input type="range" id="kLp" step="0.05"><output id="oLp"></output>
+      </div>
+      <div class="chips"><button id="bt">claim the true sides</button><button id="bs">claim one value for both</button></div>
+    </div>
+    <div class="panel">
+      <div class="cap">Teal: the left half-window and the target around the left claim L⁻. Gold: the right half-window and the target around L⁺. Each side answers with the largest reach that wins (tested on the window), or none. The graph is teal or gold inside a half-window where it keeps the promise, ember where it escapes. Hollow dots are pairs the function lacks; a filled dot is a stray value. The readout says what two-sides-agree and two-sides-differ conclude.</div>
+      <div class="eqbox" id="eqE"></div>
+    </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">10e1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">lim_{x→3⁺} f(x) = 5</span></span>Write it as a full line of marks. <br>Say which inputs are asked to keep the promise.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10e2">
+  <h2 class="sthead"><span class="stno">10e2</span>The two sides agree</h2>
+  <p class="stands">Stands on 10e1 and 10a5 (lesser-below-both).</p>
+  <p data-pid="34b385">Two-sides-agree technique: <b>for f defined near w, lim_{x→w} f(x) = L exactly when lim_{x→w⁻} f(x) = L and lim_{x→w⁺} f(x) = L.</b> One way is free: a promise for the whole neighbourhood is a promise for each half. The other way needs the least of two reaches.</p>
+  <p class="eqline" data-pid="536d7a">From here on, in this step, δ⁻ and δ⁺ name answers on the left and on the right of a, and L⁻ and L⁺ name limits from the left and from the right. The high mark is part of the name, as it is part of the marks a⁻ and a⁺, and is not a power or a sign.</p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the two-sides-agree technique, rightward">
+\text{let } \varepsilon \gt 0;\ \text{call } \delta \text{ for the two-sided line} @@ use the every, then the some
+a \lt x \lt a + \delta \;\Rightarrow\; 0 \lt |x - a| \lt \delta @@ x − a is positive, so |x − a| = x − a (8h's line), and it is not 0
+\phantom{a \lt x} \Rightarrow\; |f(x) - L| \lt \varepsilon @@ the two-sided promise
+\lim_{x \to a^+} f(x) = L,\ \text{and likewise} \lim_{x \to a^-} f(x) = L @@ the same δ serves each side; on the left, |x − a| = a − x
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: the two-sides-agree technique, leftward">
+\text{let } \varepsilon \gt 0;\ \text{call } \delta^- \text{ for the left},\ \delta^+ \text{ for the right} @@ both one-sided lines at the gap ε (the names δ⁻, δ⁺ by the line above)
+\delta = \htmlClass{new}{\min(\delta^-, \delta^+)};\ \ \text{assume } 0 \lt |x - a| \lt \delta @@ the least of the two
+x \lt a \;\lor\; a \lt x @@ |x − a| &gt; 0 gives x ≠ a; three-way-order on ℝ (8b)
+\text{case } x \lt a:\ \ a - \delta^- \lt x \lt a \Rightarrow |f(x) - L| \lt \varepsilon @@ |x − a| = a − x &lt; δ ≤ δ⁻; the left promise
+\text{case } a \lt x:\ \ a \lt x \lt a + \delta^+ \Rightarrow |f(x) - L| \lt \varepsilon @@ x − a &lt; δ ≤ δ⁺; the right promise
+|f(x) - L| \lt \varepsilon;\ \ \htmlClass{keep}{\lim_{x \to a} f(x) = L} \quad \blacksquare @@ reasoning by cases; prove an if; speak of everything
+  </pre>
+  <p data-pid="e73811">Two-sides-differ technique: <b>if lim_{x→w⁻} f(x) = L⁻ and lim_{x→w⁺} f(x) = L⁺ with L⁻ ≠ L⁺, then f has no limit at w.</b> Suppose lim_{x→w} f(x) = L. Two-sides-agree gives L as a limit from each side; one-side-one-value gives L⁻ = L = L⁺; clash. Refute. ∎ No either-way principle is needed: it ends in a denial.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · two-sides-agree · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10e2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">at ε = 0.5:  δ⁻ = 0.1 wins on the left of 2,  δ⁺ = 0.03 on the right,  both for L = 4</span></span>Answer the two-sided challenge ε = 0.5. <br>Say why the least of the two reaches is the one to use.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10e3">
+  <h2 class="sthead"><span class="stno">10e3</span>Sides that disagree</h2>
+  <p class="stands">Stands on 10e2, 8h (bars by cases) and 7d (definition by cases).</p>
+  <p data-pid="63d68e">The plainest jump is s(x) = |x|/x, on ℝ ∖ {0}. For x &gt; 0, |x| = x, so s(x) = 1; for x &lt; 0, |x| = −x, so s(x) = −1 (8h's line, by cases). On the right of 0, s agrees with the constant 1, so its limit from the right is 1 (agreeing-near side by side, line-limit with m = 0); on the left, −1. Two-sides-differ: s has no limit at 0. The value at 0 never entered: s has none.</p>
+  <pre class="lines" data-k="ember" data-label="this step: split by sides where the formula changes">
+\tfrac{x^2 + x}{|x|} = \tfrac{x\,(x + 1)}{|x|} @@ factor the top (spread on ℚ backwards); the bottom changes its formula at 0
+x \gt 0:\ \ |x| = x,\ \ \tfrac{x(x + 1)}{x} = x + 1 \to \htmlClass{new}{1} @@ cancel x ≠ 0; line-limit from the right
+x \lt 0:\ \ |x| = -x,\ \ \tfrac{x(x + 1)}{-x} = -(x + 1) \to \htmlClass{new}{-1} @@ negative-out on ℚ, cancel; line-limit from the left
+1 \ne -1:\ \ \text{no limit at } 0 @@ two-sides-differ
+  </pre>
+  <p data-pid="1d8016">And sides that agree, around a stray value. Let f(x) = x² for x &lt; 1, f(x) = 2x − 1 for x &gt; 1, and f(1) = 5 (7d's cases). From the left f agrees with x², which heads to 1 at 1 (square-limit); from the right with 2x − 1, which heads to 1 (line-limit). The two sides agree, so two-sides-agree gives lim_{x→1} f(x) = 1, though f(1) = 5. <b>Two formulas glued at a point have a limit there exactly when the two formulas head to the same value.</b> What f does at the point is a separate matter, rung 11's.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · sides · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10e3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{Someone reads } 3^+ \text{ as “the}"></span> <span data-tex-inline="\text{least real above 3” and}"></span> <span data-tex-inline="\text{writes } f(3^+) \text{.}"></span></span>Prove that no real is the least real above 3.</li><li><span class="givens"><span data-tex-inline="\text{Answer two-sides-agree}"></span> <span data-tex-inline="\text{with } \max(\delta^-, \delta^+)"></span> <span data-tex-inline="\text{instead of the least.}"></span></span>Build a glued function where that answer loses, and name the escaping input.</li><li><span class="givens"><span data-tex-inline="s(x) = |x|/x,"></span> <span data-tex-inline="F(x) = s(x) + |x|,"></span> <span data-tex-inline="G(x) = x \cdot s(x)"></span></span>Decide, for F and for G, whether the two sides agree at 0.</li><li><span class="givens"><span data-tex-inline="f(x) = 1/x^2"></span></span>With no-side-at-0's input, adapted, decide whether f has a limit from the right at 0.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10e4">
+  <h2 class="sthead"><span class="stno">10e4</span>Only one side</h2>
+  <p class="stands">Stands on 10e3, 8f (√) and 9e (1/x passes any bound).</p>
+  <p data-pid="76514c">√x is defined on [0, ∞): no input is left of 0, so √x is not defined near 0 and 10a's line does not apply there at all. Its right side does. Root-at-0 technique: <b>lim_{x→0⁺} √x = 0.</b> Given ε, answer δ = ε²: for 0 &lt; x &lt; ε², √x &lt; √(ε²) = ε, by powers-keep-order turned back (8f) and √(ε²) = ε for ε &gt; 0. ∎ Here the answer is the square of the challenge, not a multiple of it: near 0 the root climbs fast, so the inputs must come very near. At ε = 0.1 the answer is 0.01; at ε = 0.001 it is 0.000001.</p>
+  <p data-pid="03ca7b">Now the function rung 9 left hanging. 9e said that near 0 the outputs of 1/x pass any bound, and that this was all that could be said without rung 10's words. Here are the first of those words. No-side-at-0 technique: <b>1/x has no limit from the right at 0, and none from the left.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the no-side-at-0 technique, from the right (a refutation)">
+\lim_{x \to 0^+} \tfrac1x = L @@ assume, to refute
+\varepsilon = 1;\ \ \text{call } \delta @@ challenge with 1
+x = \htmlClass{new}{\min\!\big(\tfrac{\delta}{2}, \tfrac{1}{|L| + 2}\big)} @@ positive (lesser-below-both); and 0 &lt; x &lt; δ
+\tfrac1x \ge |L| + 2 @@ x ≤ 1/(|L| + 2), and positive-reciprocal on ℚ turns the order
+\big|\tfrac1x - L\big| \ge \tfrac1x - |L| \ge 2 \gt 1 @@ the reverse form of triangle; order-and-arithmetic-agree
+|\tfrac1x - L| \lt 1 \quad \bot @@ the promise at x, against the line above
+\neg \lim_{x \to 0^+} \tfrac1x = L \quad \blacksquare @@ refute; every L. From the left, the same with x = −min(δ/2, 1/(|L| + 2))
+  </pre>
+  <p data-pid="40b62c">The challenger's input is the lesser of two: half your reach, to land in your window, and 1/(|L| + 2), to land far enough in that 1/x clears any target around L. Every claimed L loses. 10f gives the outputs' behaviour its own phrase, “passes every bound”, so that it can be said without pretending to be a limit. 10f also names the usual shorthand that writes it as a limit equal to ∞, and why that is not a limit.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · only one side · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10e4.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{Let } P \text{ be } \lim_{x \to 2^-} g(x) = 7."></span></span>Write P as a full line of marks.</li><li><span class="givens"><span data-tex-inline="h(x) = \dfrac{x^2 - 4}{|x - 2|}"></span></span>Find both one-sided limits of h at 2, and decide whether the limit exists.</li><li><span class="givens"><span data-tex-inline="f(x) = x^2 \text{ left of } 1,"></span> <span data-tex-inline="f(x) = 2x - 1 \text{ right of } 1,"></span> <span data-tex-inline="f(1) = 5,"></span> <span data-tex-inline="\varepsilon = 0.3"></span></span>By two-sides-agree, with square-limit and line-limit, answer the challenge ε for f at 1.</li><li><span class="givens"><span data-tex-inline="\text{Let } P \text{ be } \lim_{x \to 1^+} \sqrt{x - 1} = 0."></span></span>Prove P, answering every ε.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10e5">
+  <h2 class="sthead"><span class="stno">10e5</span>The techniques, side by side</h2>
+  <p class="stands">Stands on 10e4, 10c (limits add, multiply, divide) and 10d (squeeze).</p>
+  <p data-pid="a31c62">Every technique of 10b, 10c and 10d was proved by a column whose only use of the neighbourhood was “take an input in it” and “take the least of the reaches”. Both work on a half-window. Sides-too technique: <b>One-limit (as one-side-one-value), limits-add, limits-subtract, limits-multiply, constant-factor, power-limit, away-from-zero, reciprocal-limit, limits-divide and the squeeze (10d's squeeze-for-sides) are true with x → w⁺ in place of x → w, and likewise with x → w⁻.</b> In each column, the window 0 &lt; |x − w| &lt; δ becomes the half-window w &lt; x &lt; w + δ (or w − δ &lt; x &lt; w), and nothing else changes. ∎ So one-sided limits are computed exactly as two-sided ones are.</p>
+  <pre class="lines" data-k="ember" data-label="this step: a one-sided limit by the techniques">
+\lim_{x \to 0^+} \tfrac{\sqrt x + x}{1 + \sqrt x} @@ √x is defined only on [0, ∞): only the right side exists
+\sqrt x \to 0,\ \ x \to 0 \ \text{ from the right} @@ root-at-0; line-limit, side by side
+\text{top} \to 0 + 0 = 0,\ \ \text{bottom} \to 1 + 0 = 1 @@ sides-too: limits-add from the right
+\lim_{x \to 0^+} \tfrac{\sqrt x + x}{1 + \sqrt x} = \tfrac01 = \htmlClass{keep}{0} @@ sides-too: limits-divide from the right, the bottom heading to 1, not 0
+  </pre>
+  <p data-pid="87d5bd">A worked case where both sides exist but use different techniques: let g(x) = √x for x ≥ 0 and g(x) = x² + x for x &lt; 0 (7d's cases). From the right g agrees with √x, which heads to 0 (root-at-0); from the left with x² + x, which heads to 0 (substitution, side by side). The sides agree, and g is defined near 0, so two-sides-agree gives lim_{x→0} g(x) = 0. Here the value g(0) = √0 = 0 happens to match. Change the left piece to x² + 1 and the left limit becomes 1: two-sides-differ, no limit at 0. The work is always the same: name the formula each side uses, take each side's limit with the techniques, compare.</p>
+  <p data-pid="29a457">The limits from the two sides are also called the left-hand and right-hand limits, and at a jump they are its two values. A jump at w is a pair of one-sided limits that disagree; its size is |L⁺ − L⁻|. For |x|/x at 0 the size is 2. 10b's two-targets is the reason no single value can stand in for both: any target of half-width at most 1 misses one side's outputs.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10e5.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">g(x) = √x for x ≥ 0,  g(x) = 3x for x < 0</span></span>Find both one-sided limits at 0, naming each technique. <br>Decide whether g has a limit at 0.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10e6">
+  <h2 class="sthead"><span class="stno">10e6</span>Illegal moves</h2>
+  <p class="stands">Stands on 10e1 to 10e5.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\lim_{x \to 0} \sqrt{x} = 0\,? @@ √x is not defined near 0: no input on the left. Only the right-hand line applies
+a^+ \text{ as a number}\,? @@ a⁺ names no real; there is no “next real after a” (5e: between any two, another)
+\lim_{x \to 1} f(x) = f(1)\ \text{for the glued } f\,? @@ the sides agree on 1; f(1) = 5. The value is not consulted
+\text{one side wins, so the limit exists}\,? @@ |x|/x wins on the right with 1 and still has no limit: both sides, one value
+\delta = \max(\delta^-, \delta^+)\,? @@ the larger reach breaks the other side's promise: take the least
+|x|/x \text{ at } 0 \text{ is } 1 \text{ “because } |0| = 0\text{”}\,? @@ 0/0 names nothing; s has no value at 0, and the game never asks for one
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10e6.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">“|x|/x heads to 1 from the right, so it heads to 1 at 0.”</span></span>Which illegal move is this? <br>Find the limit from the left, and say what two-sides-differ concludes.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10e7">
+  <h2 class="sthead"><span class="stno">10e7</span>Running it backwards</h2>
+  <p class="stands">Stands on 10e1 to 10e5.</p>
+  <p data-pid="e574fa">Handed a function given in pieces, or with an absolute value in it, find where the formula changes, and play each side with the formula that side uses. Handed a claimed limit, check both sides; one side that disagrees, or has no limit, refutes it. Handed a function defined on one side only, use the one-sided line and say so. Found upward; written downward.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10e7.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f \text{&#x27;s limits from the left}"></span> <span data-tex-inline="\text{and from the right at 0 are}"></span> <span data-tex-inline="\text{both 3,}"></span> <span data-tex-inline="f(0) = -1"></span></span>Find its limit at 0, and the technique that gives it.</li><li><span class="givens"><span data-tex-inline="\text{Use } |x - 2| \text{ once.}"></span></span>Write one formula whose limit from the left at 2 is 0, and from the right 6.</li><li><span class="givens"><span data-tex-inline="\text{No-side-at-0&#x27;s challenger}"></span> <span data-tex-inline="\text{played},"></span> <span data-tex-inline="x = \min(\delta/2,\ 1/(|L| + 2)),"></span> <span data-tex-inline="L = 3,"></span> <span data-tex-inline="\delta = 0.5,"></span> <span data-tex-inline="\varepsilon = 1"></span></span>Compute x and the output of one over x there, and show that it escapes ε.</li><li>Build a function with left limit 1, right limit 3 and value 2 at 0. <br>Then change one piece so that the limit at 0 exists.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">10e.4.1</span><span class="tagq">build</span>Build gluings of your own.<ol class="parts" type="a"><li>Make a function whose limit from the right at 0 exists and whose limit from the left does not, and prove both halves.</li><li><span class="givens"><span data-tex-inline="q(x) = 1 \text{ at fractions},\ 0 \text{ elsewhere},"></span> <span data-tex-inline="f(x) = \sqrt{x + 4} - 2 \text{ right of } 0,"></span> <span data-tex-inline="f(x) = x \cdot q(x) \text{ left of } 0"></span></span>Prove that f heads to 0 at 0, naming the technique for each side.</li><li><span class="givens"><span data-tex-inline="f(x) = cx + 1 \text{ left of } 2,"></span> <span data-tex-inline="f(x) = x^2 \text{ right of } 2"></span></span>Find the c for which f has a limit at 2, and the size of its jump for every other c.</li></ol></div>
+  <div class="chq"><span class="chid">10e.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="f \text{ is defined only at the}"></span> <span data-tex-inline="\text{inputs } 1, \tfrac12, \tfrac13, \cdots \text{.}"></span></span>Is it defined just right of 0? <br>Can this step's line for the limit from the right at 0 be asked of it?</div>
+  <div class="chq"><span class="chid">10e.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{If } f \text{ heads to 0 at } w \text{, so}"></span> <span data-tex-inline="\text{does } |f| \text{.}"></span></span>If the size of f heads to 0 at w, must f? <br>If the size heads to 1, must f have a limit at w?</div>
+  <div class="chq"><span class="chid">10e.4.4</span><span class="tagq">seam</span>In 1807 a paper claimed that a step with a jump in it is an endless sum of pieces that have no jumps. A senior critic, it is said, objected that such a sum could never jump. In 1829 another mathematician proved that such a sum, at the jump, takes the value halfway between the two one-sided limits. Which value should a function with a jump have at the jump: the left one, the right one, the halfway one, or none? <br>Does this step's line care?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r10d.html">← 10d · the squeeze</a><a href="r10concl.html">10·∎ · conclusion →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>In 10e.4.4, the paper of 1807 is Joseph Fourier’s; the critic is Joseph-Louis Lagrange; the proof of 1829 is Peter Gustav Lejeune Dirichlet’s.</p>
+  <p>Accepted names: the sides-too technique is the limit laws for one-sided limits; two-sides-agree is the criterion for a limit by one-sided limits.</p>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=v=>{ if(!isFinite(v)) return '—'; const a=Math.abs(v); let s=a>=100?v.toFixed(1):a>=1?v.toFixed(3):a>=0.001?v.toFixed(4):v.toPrecision(2); if(s.indexOf('.')>=0&&s.indexOf('e')<0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const FN={
+  sg:{lab:'|x|/x at 0',tex:R`s(x) = \tfrac{|x|}{x}`,a:0,f:x=>x===0?NaN:Math.abs(x)/x,Lm:-1,Lp:1,x:[-1.6,1.6],y:[-2,2],hollow:[[0,-1],[0,1]],left:true,right:true},
+  xx:{lab:'(x² + x)/|x| at 0',tex:R`\tfrac{x^2 + x}{|x|}`,a:0,f:x=>x===0?NaN:(x*x+x)/Math.abs(x),Lm:-1,Lp:1,x:[-1.6,1.6],y:[-2.5,2.8],hollow:[[0,-1],[0,1]],left:true,right:true},
+  gl:{lab:'glued at 1, f(1) = 5',tex:R`f(x) = x^2\ (x \lt 1),\\ 2x - 1\ (x \gt 1),\ \ f(1) = 5`,a:1,f:x=>x<1?x*x:(x>1?2*x-1:5),Lm:1,Lp:1,x:[-0.2,2.2],y:[-0.5,5.5],hollow:[[1,1]],dots:[[1,5]],left:true,right:true},
+  rt:{lab:'√x at 0',tex:R`\sqrt{x}\ \text{on } [0, \infty)`,a:0,f:x=>x>=0?Math.sqrt(x):NaN,Lm:null,Lp:0,x:[-1,2],y:[-0.6,1.6],left:false,right:true},
+  inv:{lab:'1/x at 0',tex:R`\tfrac1x`,a:0,f:x=>x===0?NaN:1/x,Lm:null,Lp:null,x:[-1.5,1.5],y:[-6,6],left:true,right:true}
+};
+let key='sg', F=FN.sg;
+const ke=$('ke'),kLm=$('kLm'),kLp=$('kLp'), cv=$('cvE');
+const cap=1.2;
+function test(side,e,L,d){ const N=900; for(let k=1;k<=N;k++){ const t=k<N?k/N:1-1e-9; const x=F.a+side*d*t; const v=F.f(x); if(!isFinite(v)) continue; if(!(Math.abs(v-L)<e)) return false; } return true; }
+function largest(side,e,L){ if(test(side,e,L,cap)) return cap; if(!test(side,e,L,1e-7)) return 0; let lo=1e-7,hi=cap; for(let i=0;i<40;i++){ const m=(lo+hi)/2; if(test(side,e,L,m)) lo=m; else hi=m; } return lo; }
+const P=plane(cv,{x:[-1.6,1.6],y:[-2,2],grid:0.5,aspect:0.7,draw:P=>draw(P)});
+Object.defineProperty(P.o,'aspect',{get:()=>cv.clientWidth>560?0.66:0.9});
+let info={};
+function draw(P){ const c=P.ctx, e=+ke.value, a=F.a, Lm=+kLm.value, Lp=+kLp.value; P.axes();
+  const dm=F.left?largest(-1,e,Lm):0, dp=F.right?largest(1,e,Lp):0;
+  const xl=P.X(F.x[0]),xr=P.X(F.x[1]);
+  if(F.left){ c.fillStyle=col('--teal'); c.globalAlpha=.13; c.fillRect(xl,P.Y(Lm+e),P.X(a)-xl,P.Y(Lm-e)-P.Y(Lm+e)); c.globalAlpha=1; P.line(F.x[0],Lm,a,Lm,'--teal',1.3,[5,3]);
+    if(dm>0){ c.fillStyle=col('--teal'); c.globalAlpha=.1; c.fillRect(P.X(a-dm),P.Y(F.y[1]),P.X(a)-P.X(a-dm),P.Y(F.y[0])-P.Y(F.y[1])); c.globalAlpha=1; P.line(a-dm,F.y[0],a-dm,F.y[1],'--teal',1,[4,3]); } }
+  if(F.right){ c.fillStyle=col('--gold'); c.globalAlpha=.16; c.fillRect(P.X(a),P.Y(Lp+e),xr-P.X(a),P.Y(Lp-e)-P.Y(Lp+e)); c.globalAlpha=1; P.line(a,Lp,F.x[1],Lp,'--gold',1.3,[5,3]);
+    if(dp>0){ c.fillStyle=col('--gold'); c.globalAlpha=.12; c.fillRect(P.X(a),P.Y(F.y[1]),P.X(a+dp)-P.X(a),P.Y(F.y[0])-P.Y(F.y[1])); c.globalAlpha=1; P.line(a+dp,F.y[0],a+dp,F.y[1],'--gold',1,[4,3]); } }
+  P.line(a,F.y[0],a,F.y[1],'--muted',1,[2,4]);
+  const showD=Math.max(dm,dp,0.25);
+  // graph: colour by side and promise
+  let run=null; const flush=()=>{ if(run&&run.p.length>1){ c.strokeStyle=col(run.k); c.lineWidth=run.k==='--ink'?1.5:3; c.globalAlpha=run.k==='--ink'?.6:1; c.beginPath(); run.p.forEach((q,i)=>i?c.lineTo(q[0],q[1]):c.moveTo(q[0],q[1])); c.stroke(); c.globalAlpha=1; } };
+  for(let px=xl;px<=xr;px+=0.5){ const x=P.IX(px); const v=Math.abs(x-a)<1e-9?NaN:F.f(x); if(!isFinite(v)||Math.abs(v)>1e3||(run&&Math.sign(x-a)!==run.s)){ flush(); run=null; if(!isFinite(v)||Math.abs(v)>1e3) continue; }
+    let k='--ink'; if(x<a&&F.left&&a-x<(dm>0?dm:showD)) k=Math.abs(v-Lm)<e?'--teal':'--ember'; if(x>a&&F.right&&x-a<(dp>0?dp:showD)) k=Math.abs(v-Lp)<e?'--gold':'--ember';
+    const pt=[px,P.Y(v)]; if(!run||run.k!==k){ if(run){ run.p.push(pt); flush(); } run={k,p:[pt],s:Math.sign(x-a)}; } else run.p.push(pt); }
+  flush();
+  (F.hollow||[]).forEach(([hx,hy])=>{ c.fillStyle=col('--card'); c.strokeStyle=col('--ink'); c.lineWidth=2; c.beginPath(); c.arc(P.X(hx),P.Y(hy),5.5,0,7); c.fill(); c.stroke(); });
+  (F.dots||[]).forEach(([hx,hy])=>P.dot(hx,hy,'--ink',5));
+  info={e,Lm,Lp,dm,dp}; }
+function readout(){ const {e,Lm,Lp,dm,dp}=info; $('oe').textContent=fm(e); $('oLm').textContent=F.left?fm(Lm):'—'; $('oLp').textContent=F.right?fm(Lp):'—';
+  const ls=[F.tex, R`a = ${F.a},\ \ \varepsilon = ${fm(e)}`];
+  ls.push(F.left?R`\text{left, claim } ${fm(Lm)}\text{: }${dm>0?R`\delta^- = `+(dm>=cap?R`\ge `+cap:fm(dm)):R`\text{no reach wins}`}`:R`\text{no inputs on the left}`);
+  ls.push(F.right?R`\text{right, claim } ${fm(Lp)}\text{: }${dp>0?R`\delta^+ = `+(dp>=cap?R`\ge `+cap:fm(dp)):R`\text{no reach wins}`}`:R`\text{no inputs on the right}`);
+  let v;
+  if(key==='inv') v=R`\text{OXN: no claim wins on either side}`;
+  else if(!F.left) v=R`\text{not defined near } 0\text{:}\\ \text{only the right-hand line applies}`;
+  else if(dm>0&&dp>0&&Math.abs(Lm-Lp)<1e-9) v=R`\text{both sides win with one value:}\\ \text{two-sided } \delta = \min(\delta^-, \delta^+) = ${fm(Math.min(dm,dp))}`;
+  else if(dm>0&&dp>0) v=R`\text{each side wins this round, with different values}`;
+  else v=R`\text{a side loses this round}`;
+  ls.push(v);
+  if(F.left&&F.right&&key!=='inv') ls.push(Math.abs(F.Lm-F.Lp)<1e-9?R`\text{true sides agree:}\\ \text{two-sides-agree, the limit is } ${F.Lm}`:R`\text{true sides } ${F.Lm} \ne ${F.Lp}\text{:}\\ \text{two-sides-differ, no limit}`);
+  tex($('eqE'),R`\begin{gathered}`+ls.join(R`\\ `)+R`\end{gathered}`,true); }
+function all(){ P.o.x=F.x; P.o.y=F.y; P.o.grid=F.y[1]-F.y[0]>6?1:0.5; P.redraw(); readout(); }
+function setF(k){ key=k; F=FN[k]; [kLm,kLp].forEach(z=>{ z.min=F.y[0]; z.max=F.y[1]; }); kLm.value=F.Lm===null?0:F.Lm; kLp.value=F.Lp===null?0:F.Lp; kLm.disabled=!F.left; kLp.disabled=!F.right; all(); }
+const fch=$('fch');
+Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===key) b.className='on'; b.onclick=()=>{ [...fch.children].forEach(z=>z.classList.toggle('on',z===b)); setF(k); }; fch.appendChild(b); });
+[ke,kLm,kLp].forEach(z=>z.addEventListener('input',all));
+$('bt').onclick=()=>setF(key);
+$('bs').onclick=()=>{ const v=F.left&&F.right?((+kLm.value)+(+kLp.value))/2:+kLp.value; kLm.value=v; kLp.value=v; all(); };
+cv.addEventListener('pointerdown',e=>{ const p=P.point(e); if(p.x<F.a&&F.left){ kLm.value=p.y; } else if(F.right){ kLp.value=p.y; } all(); });
+setF('sg');
+
+/* ---------- slides ---------- */
+const N='\\htmlClass{new}', K='\\htmlClass{keep}';
+stepper('#sl1',[
+  {k:'ember',kl:'the marks · 1 of 2',t:R`\begin{gathered}\lim_{x \to a^{${N}{+}}} f(x) = L:\ \\\ ${N}{a \lt x \lt a + \delta} \Rightarrow |f(x) - L| \lt \varepsilon\end{gathered}`,n:`From the right: only the inputs just above the point are asked. The point with its high + names no real.`},
+  {k:'ember',kl:'the marks · 2 of 2',t:R`\begin{gathered}\lim_{x \to a^{${N}{-}}} f(x) = L:\ \\\ ${N}{a - \delta \lt x \lt a} \Rightarrow |f(x) - L| \lt \varepsilon\end{gathered}`,n:`From the left: only the inputs just below. The high − is not a negative, a reciprocal or an inverse.`},
+  {k:'ember',kl:'one-side-one-value',t:R`x = a \pm \tfrac{\delta}{2}`,n:`one-limit's column on one side: at most one value from each side, so the one-sided limits are names.`}
+],{title:'The slides · the marks · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'two-sides-agree → · 1 of 2',t:R`a \lt x \lt a + \delta \;\Rightarrow\; 0 \lt |x - a| \lt \delta`,n:`A two-sided promise covers each half: the same δ serves.`},
+  {k:'ember',kl:'two-sides-agree → · 2 of 2',t:R`\begin{gathered}\lim_{x\to a} f = L \;\Rightarrow\;\\ \lim_{x\to a^-} f = L \land \lim_{x\to a^+} f = L\end{gathered}`,n:`Free.`},
+  {k:'ember',kl:'two-sides-agree ← · 1 of 3',t:R`\delta = ${N}{\min(\delta^-, \delta^+)}`,n:`Each side answers the challenge; take the least.`},
+  {k:'ember',kl:'two-sides-agree ← · 2 of 3',t:R`\begin{gathered}0 \lt |x - a| \lt \delta \;\Rightarrow\;\\ x \lt a \lor a \lt x\end{gathered}`,n:`The 0 &lt; rules out the point itself; then three-way-order on ℝ. Two cases, no third.`},
+  {k:'ember',kl:'two-sides-agree ← · 3 of 3',t:R`\text{each case: } |f(x) - L| \lt \varepsilon`,n:`Each case lands in its side's window. Reasoning by cases. ∎`},
+  {k:'ember',kl:'two-sides-differ',t:R`L^- \ne L^+ \;\Rightarrow\; \text{no limit at } a`,n:`A limit would be a limit from each side (two-sides-agree), and those are unique (one-side-one-value). Refute.`}
+],{title:'The slides · two-sides-agree · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'the jump',t:R`\tfrac{|x|}{x} = ${N}{1}\ (x \gt 0),\ \ ${N}{-1}\ (x \lt 0)`,n:`8h's line by cases. Right limit 1, left limit −1: two-sides-differ, no limit at 0.`},
+  {k:'ember',kl:'split by sides · 1 of 2',t:R`x \gt 0:\ \tfrac{x(x + 1)}{${N}{x}} = x + 1 \to 1`,n:`(x² + x)/|x| with |x| = x on the right.`},
+  {k:'ember',kl:'split by sides · 2 of 2',t:R`x \lt 0:\ \tfrac{x(x + 1)}{${N}{-x}} = -(x + 1) \to -1`,n:`|x| = −x on the left. 1 ≠ −1: no limit.`},
+  {k:'ember',kl:'glued',t:R`\begin{gathered}x^2 \to 1 \ (\text{left}),\ \\\ 2x - 1 \to 1\ (\text{right})\end{gathered}`,n:`The sides agree: the limit at 1 is 1, though f(1) = 5.`}
+],{title:'The slides · sides that disagree · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'√x at 0',t:R`0 \lt x \lt ${N}{\varepsilon^2} \;\Rightarrow\; \sqrt x \lt \varepsilon`,n:`powers-keep-order turned back. Only the right side exists; the answer is the square of the challenge.`},
+  {k:'ember',kl:'1/x at 0 · 1 of 2',t:R`x = ${N}{\min\!\big(\tfrac{\delta}{2}, \tfrac{1}{|L| + 2}\big)}`,n:`The challenger's input: in your window, and far enough in.`},
+  {k:'ember',kl:'1/x at 0 · 2 of 2',t:R`\big|\tfrac1x - L\big| \ge \tfrac1x - |L| \ge 2 \gt 1 = \varepsilon`,n:`Every claim loses, on the right and, the same way, on the left. no-side-at-0. ∎`}
+],{title:'The slides · only one side · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

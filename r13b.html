@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>13b · A slope means no gap</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:3fr 2fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r13a.html">← 13a the slope at a point</a><a href="r13c.html">next: 13c the product rule →</a></p>
+  <div class="tags"><span class="tag proof">13b · proof</span></div>
+  <h1>A slope means no gap</h1>
+  <p>The change in a function's output is its chord slope times the change of input. If the chord slopes head to a real, and the change of input heads to 0, their product heads to 0: the output lands where it was headed. So a function with a slope at an input is continuous there. This step proves it, one move per line. It turns it about, to show that a discontinuity means no slope. Then it shows it does not run backwards. A function can be continuous at an input and have no slope there. And a function can have a slope at one input and be continuous at no other.</p>
+  <p class="gesture">Write the change in the output as the chord slope times the change in the input. The first heads to the slope, the second to 0. So the change in the output heads to 0, and the function is continuous there.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r13a.html">13a</a> (the slope, the chord slope, two-ways-to-write-a-limit), <a href="r10a.html">10a</a> (line-limit, agreeing-near), <a href="r10c.html">10c</a> (limits-add, limits-multiply), <a href="r10d.html">10d</a> (squeezed-to-0, heads-nowhere), <a href="r10e.html">10e</a> (one-sided limits, two-sides-agree), <a href="r10f.html">10f</a> (passes every bound, passing-every-bound), <a href="r11a.html">11a</a> (continuous at w, the step u, H₃, continuous-at-one-point), <a href="r11f.html">11f</a> (discontinuities, ⌊x⌋), <a href="r01d.html">1d</a> (turn-and-deny; affirming the consequent). <a href="r13c.html">13c</a> and <a href="r13e.html">13e</a> spend this step's change-heads-to-0 inside their proofs; <a href="r13f.html">13f</a> gives a second function continuous at an input with no slope there.</p></div>
+</header>
+
+<section class="class step" data-step="13b1">
+  <h2 class="sthead"><span class="stno">13b1</span>The rise is the chord slope times the run</h2>
+  <p class="stands">Stands on 13a (the slope at a point) and 10c (limits multiply).</p>
+  <p data-pid="21635c">For h ≠ 0, the chord slope is the rise over the run, so the rise is the chord slope times the run. That is all the proof needs: multiply and divide by the same real other than 0.</p>
+  <p data-pid="48fd83">Slope-means-no-gap technique: <b>if f has a slope at w, then f is continuous at w.</b> In the accepted words: differentiable at w implies continuous at w.</p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the slope-means-no-gap technique">
+\text{call } r:\ f \text{ defined on } (w - r, w + r) @@ the hypothesis of 13a's line for f′(w)
+0 \lt |h| \lt r \;\Rightarrow\; f(w + h) - f(w) = \htmlClass{new}{\dfrac{f(w + h) - f(w)}{h}} \cdot h @@ multiply and divide by h: regroup for times on ℝ, reciprocal on ℝ, times-one on ℝ, licensed because h ≠ 0
+\lim_{h \to 0} \dfrac{f(w + h) - f(w)}{h} = \htmlClass{keep}{f'(w)} @@ the hypothesis: f has a slope at w
+\lim_{h \to 0} h = 0 @@ line-limit (10a): the linear function h ↦ h heads to its value at 0
+\lim_{h \to 0} \big(f(w + h) - f(w)\big) = f'(w) \cdot 0 = \htmlClass{new}{0} @@ limits-multiply (10c), with agreeing-near: the change agrees with the product at every h ≠ 0. anything-times-zero read in ℝ
+\lim_{h \to 0} f(w + h) = \htmlClass{keep}{f(w)} @@ limits-add (10c): add back the constant f(w), which heads to itself (line-limit)
+\lim_{x \to w} f(x) = f(w) @@ two-ways-to-write-a-limit (13a)
+f \text{ is continuous at } w \quad \blacksquare @@ 11a's line: w is an input, f is defined near w, and the limit is the value
+  </pre>
+  <p data-pid="aca9aa">The fifth line is worth a name of its own, because 13c and 13e each spend it in the middle of a proof.</p>
+  <p data-pid="23f506">Change-heads-to-0 technique: <b>if f has a slope at w, then Δf = f(w + h) − f(w) heads to 0 as h → 0.</b> It is slope-means-no-gap's fifth line.</p>
+  <p data-pid="4ec1ce">Notice what made it work. The chord slopes head to a real, so they cannot run off. The run h is heading to 0. <b>A product of something that stays put with something heading to 0 heads to 0.</b> Notice also what was not used: nothing about any input but w, and nothing about which real the slope is. A slope of 0 or of a million does the same work here.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · slope-means-no-gap · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · the chord slope, and the change it multiplies into, as h heads to 0</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="chips" id="fch"></div>
+      <div class="lbl">the chord slope, against h</div>
+      <canvas id="cvC"></canvas>
+      <div class="lbl">the change Δf = chord slope · h, against h</div>
+      <canvas id="cvD"></canvas>
+    </div>
+    <div class="panel">
+      <div class="kn">
+        <span class="m">|h|</span><input type="range" id="kh" min="-3" max="0" step="0.01" value="-0.7"><output id="oh"></output>
+      </div>
+      <div class="chips" id="hch"><button class="on" data-s="1">h &gt; 0</button><button data-s="-1">h &lt; 0</button><button id="bz">zoom to h</button></div>
+      <div class="cap">Across, in both panels: the change h, with h = 0 left out (a hollow ring where a value would be). Ink: the function's chord slopes and changes. For x · q(x) and x² · q(x) there are two families: ember dots at fractions h, teal dashes at irrational h, and every window holds both. The marked column is your h; the readout gives its chord slope and change, and for the q functions a fraction and an irrational beside it.</div>
+      <div class="verdict" id="vd"></div>
+      <div class="eqbox" id="eq"></div>
+    </div>
+  </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">13b1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = x² at 2,  h = 0.1</span></span>Write f(2 + h) − f(2) as a chord slope times h. <br>Say what the change heads to as h → 0, and which technique says so.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13b2">
+  <h2 class="sthead"><span class="stno">13b2</span>A second road, with a recipe</h2>
+  <p class="stands">Stands on 13b1, 10c (bounded-near) and 10d (squeezed-by-distance).</p>
+  <p data-pid="53856a">Slope-means-no-gap's column used the slope only through a limit technique. A second road uses it through a bound, and hands back a recipe for 11a's game.</p>
+  <p data-pid="dc059e">Slope-bounds-change technique: <b>if f has a slope at w, then there is a reach r₁ &gt; 0 such that, with C = |f′(w)| + 1, every x with |x − w| &lt; r₁ has |f(x) − f(w)| ≤ C|x − w|.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the slope-bounds-change technique, and slope-means-no-gap again">
+\text{call } r_1:\ 0 \lt |h| \lt r_1 \Rightarrow \Big|\dfrac{f(a + h) - f(a)}{h}\Big| \lt \htmlClass{new}{|f'(a)| + 1} @@ bounded-near (10c), for the chord slopes, which head to f′(a); r₁ no more than f's reach
+|f(a + h) - f(a)| \le \big(|f'(a)| + 1\big)\,|h| @@ size-of-a-product (8h): the size of the change is the size of the chord slope times |h|; keep-order for times on ℚ read in ℝ. At h = 0 both sides are 0
+|f(x) - f(a)| \le C\,|x - a| \text{ for } |x - a| \lt r_1 \quad \blacksquare @@ x = a + h, as in two-ways-to-write-a-limit: slope-bounds-change
+\lim_{x \to a} f(x) = f(a) @@ squeezed-by-distance (10d): squeezed by the distance, with C. Then 11a's line: slope-means-no-gap by a second road
+  </pre>
+  <p data-pid="86cf61">The squeeze carries its own recipe, as 10d said of squeezed-by-distance: δ = min(r₁, ε/C) wins 11a's game at w. For x² at 1, the chord slope is 2 + h, which is below 3 in size whenever |h| &lt; 1. So r₁ = 1, C = 3, and δ = min(1, ε/3). That is 10a's recipe for x² at w, min(1, ε/(1 + 2|w|)), at w = 1, found again from the slope. <b>A slope at w is more than continuity at w: near w, the change is at most a fixed multiple of the distance.</b></p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · slope-bounds-change · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13b2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = x² at 2</span></span>Find C = |f′(2)| + 1 and a reach r₁ where the chord slopes stay below C in size. <br>Write δ for ε = 0.5.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13b3">
+  <h2 class="sthead"><span class="stno">13b3</span>Turned about: a discontinuity means no slope</h2>
+  <p class="stands">Stands on 13b2 and 1d (turn and deny).</p>
+  <p data-pid="67e50f">By 1d's turn-and-deny, slope-means-no-gap turned about says: <b>if w is an input of f, f is defined near w, and f is not continuous at w, then f has no slope at w.</b> That is the direction you use most. If a function has a discontinuity at an input, 11f's name, do not compute the chord slopes there. There is nothing for them to head to. But it is worth seeing what they do.</p>
+  <pre class="lines" data-k="ember" data-label="this step: breaks, and their chord slopes">
+u \text{ at } 0,\ \ h \gt 0:\ \ \dfrac{u(h) - u(0)}{h} = \dfrac{1 - 1}{h} = 0 @@ 11a's step u: 0 for x &lt; 0, 1 for x ≥ 0. From the right the chords are level
+u \text{ at } 0,\ \ h \lt 0:\ \ \dfrac{u(h) - u(0)}{h} = \dfrac{0 - 1}{h} = \htmlClass{new}{-\dfrac{1}{h}} @@ from the left the rise is −1 for every h: it refuses to shrink
+-\tfrac{1}{h} \text{ passes every bound as } h \to 0^- @@ 10f's line, with δ = 1/M for M &gt; 0: at h = −0.1 it is 10, at h = −0.01 it is 100
+\text{no limit from the left, so no slope at } 0 @@ passing-every-bound (10f), then two-sides-agree (10e). slope-means-no-gap turned about says it at once: u has a jump at 0
+H_3 \text{ at } 1:\ \ \dfrac{H_3(1 + h) - 3}{h} = \dfrac{(2 + h) - 3}{h} = \htmlClass{new}{1 - \dfrac{1}{h}} @@ 11a's H₃: (x² − 1)/(x − 1) = x + 1 off 1, with the value 3 at 1. The rise heads to −1, not 0
+1 - \tfrac1h \text{ passes below every bound as } h \to 0^+ @@ at h = 0.1 it is −9; at h = −0.1 it is 11. No slope: the stray value is a discontinuity
+\lfloor x \rfloor \text{ at } 2,\ \ h \lt 0:\ \ \dfrac{1 - 2}{h} = -\dfrac{1}{h} @@ 11f's round-down: a jump of size 1 at 2, and the same escape from the left
+  </pre>
+  <p data-pid="8f51e2">In each case the rise refuses to shrink: it heads to something other than 0, or stays at −1. Divided by a run heading to 0, it runs off. A slope is a promise that the rise shrinks at least as fast as the run, and a discontinuity breaks that promise.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · turned about · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13b3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = x^2 \text{ at } 1,"></span> <span data-tex-inline="h \in \{0.1, 0.01\}"></span></span>Write the change of f exactly at each h, as a chord slope times h.</li><li><span class="givens"><span data-tex-inline="f(x) = \lfloor x \rfloor \text{ at } 2,"></span> <span data-tex-inline="h \in \{0.5, 0.1, -0.1, -0.01\}"></span></span>Compute the chord slopes, and find which side runs off. <br>Find the technique that says there is no slope here without any computing.</li><li><span class="givens"><span data-tex-inline="f(x) = x \cdot q(x) \text{ at } 0,"></span> <span data-tex-inline="h \in \{\tfrac12, \tfrac{\sqrt2}{2}, \tfrac{1}{1000}\}"></span></span>Give the chord slope at each h.</li><li><span class="givens"><span data-tex-inline="f(x) = x^2 \cdot q(x) \text{ at } 0,"></span> <span data-tex-inline="h \in \{\tfrac13, \tfrac{\sqrt2}{10}\}"></span></span>Give the chord slope at each h, and bounds that squeeze both.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13b4">
+  <h2 class="sthead"><span class="stno">13b4</span>Not backwards</h2>
+  <p class="stands">Stands on 13b3, 11a7 (continuous-at-one-point) and 1d (affirming the consequent).</p>
+  <p data-pid="c4c2a9">The converse of slope-means-no-gap would say: continuous at w, so a slope at w. That is 1d's illegal move, affirming the consequent, and it is refuted by one function. Rung 10 and rung 11 already built it.</p>
+  <p data-pid="b18c06">Continuous-without-slope technique: <b>x · q(x), with 9a's function q, is continuous at 0 and has no slope at 0.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the continuous-without-slope technique">
+x\, q(x) \text{ is continuous at } 0 @@ continuous-at-one-point (11a): |x q(x)| ≤ |x|, squeezed
+\dfrac{h\, q(h) - 0 \cdot q(0)}{h} = \htmlClass{new}{q(h)} \quad (h \ne 0) @@ anything-times-zero; regroup for times on ℝ, reciprocal on ℝ: the chord slope at 0 is q itself
+q \text{ heads nowhere at } 0 @@ heads-nowhere (10d): every window holds a fraction, where q is 1, and an irrational, where q is 0
+x\, q(x) \text{ has no slope at } 0 \quad \blacksquare @@ agreeing-near: the chord slope agrees with q on a neighbourhood of 0, so it has no limit either
+  </pre>
+  <p data-pid="f03cbf">The function lands at 0, squeezed by |x|. But its chords from 0 have slope 1 when h is a fraction and slope 0 when h is irrational, and every window around 0 holds both kinds. The rise shrinks, but it does not shrink at a rate. 13f gives a second refutation with no wild function in it: |x| at 0, whose chords have slope 1 on one side and −1 on the other.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · continuous-without-slope · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13b4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{chord slopes at } 0"></span> <span data-tex-inline="\text{pass every bound as } h \to 0"></span></span>Run slope-means-no-gap's column on such a function, and find where it stops. <br>Build a function continuous at 0 whose chord slopes at 0 do this.</li><li><span class="givens"><span data-tex-inline="f \text{ with a jump at } 0,"></span> <span data-tex-inline="\text{every chord from the right at } 0"></span> <span data-tex-inline="\text{has slope } 1,"></span> <span data-tex-inline="h \in \{-0.1, -0.01\}"></span></span>Build such an f, and compute its chord slopes from the left at each h.</li><li><span class="givens"><span data-tex-inline="\text{Claim: } H_3 = x + 1 \text{ off } 1,"></span> <span data-tex-inline="\text{so by slopes-decided-near,}"></span> <span data-tex-inline="H_3'(1) = 1"></span></span>Find the hypothesis of slopes-decided-near that fails, and what H₃'s chord slopes at 1 actually do.</li><li><span class="givens"><span data-tex-inline="f(x) = x^2 \cdot q(x),"></span> <span data-tex-inline="\varepsilon = \tfrac18"></span></span>As 11a's continuous-at-one-point did, prove in full that f is discontinuous at 1, one move per line.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13b5">
+  <h2 class="sthead"><span class="stno">13b5</span>A slope at one input says nothing about the others</h2>
+  <p class="stands">Stands on 13b4 and 10d (squeeze).</p>
+  <p data-pid="6414c3">Multiply by x once more, and the chord slopes are squeezed too.</p>
+  <p data-pid="a6bb98">Slope-at-0-only technique: <b>x² · q(x) has slope 0 at 0.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the slope-at-0-only technique">
+\dfrac{h^2 q(h) - 0}{h} = \htmlClass{new}{h\, q(h)} \quad (h \ne 0) @@ anything-times-zero; the chord slope at 0
+|h\, q(h)| \le |h| @@ size-of-a-product (8h), with |q(h)| ≤ 1, since q(h) is 0 or 1
+\lim_{h \to 0} h\, q(h) = \htmlClass{keep}{0} @@ squeezed-to-0 (10d), with the trap |h|, which heads to 0
+f'(0) = 0 \quad \blacksquare @@ 13a's line for the slope
+  </pre>
+  <p data-pid="4a4661">Yet x² · q(x) is continuous at no input other than 0. At w ≠ 0, run 11a's continuous-at-one-point column with r² in place of r. Take ε = w²/8. In any window, of reach at most |w|/2, there is a fraction r, with |r| &gt; |w|/2 and so r² &gt; w²/4. There is also an irrational t, where the value is 0. Two outputs more than 2ε apart cannot both be within ε of the value at w (two-targets). So, by slope-means-no-gap turned about, x² · q(x) has a slope at 0 and at no other input. <b>A slope at w is a fact about w, as continuity was.</b> It does not spread to a neighbourhood.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · slope-at-0-only · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13b5.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = x³ · q(x)</span></span>Find the chord slope at 0, and its limit. <br>Say whether f is continuous at 1.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13b6">
+  <h2 class="sthead"><span class="stno">13b6</span>Illegal moves</h2>
+  <p class="stands">Stands on 13b1 to 13b5.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+f \text{ continuous at } a, \text{ so } f \text{ has a slope at } a\,? @@ affirming the consequent (1d): x · q(x) at 0 (continuous-without-slope); and |x| at 0, on 13f
+f'(a) \text{ exists, so } f \text{ is continuous near } a\,? @@ x² · q(x) has slope 0 at 0 and is continuous at no other input
+\begin{aligned}&u\text{'s chords from the right}\\ &\quad\text{are level, so } u'(0) = 0\,?\end{aligned} @@ the chords from the left run off (−1/h): no limit (two-sides-agree). A slope asks both sides
+\begin{aligned}&\text{the change heads to } 0,\\ &\quad \text{ so the chord slopes head somewhere}\,?\end{aligned} @@ x · q(x) at 0: the change h q(h) heads to 0, the chord slope q(h) heads nowhere
+H_3'(1) = 1, \text{ the slope of } x + 1\,? @@ H₃ agrees with x + 1 off 1, but not at 1: slopes-decided-near needs agreement on a whole open interval around 1, the input included
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13b6.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">“f has a slope at w, so f has a slope at every input near w.”</span></span>Which illegal move is this? <br>Name a function that refutes it.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13b7">
+  <h2 class="sthead"><span class="stno">13b7</span>Running it backwards</h2>
+  <p class="stands">Stands on 13b1 to 13b5.</p>
+  <p data-pid="9fe788">Handed a function and an input, look first for a discontinuity: a bottom that is 0, a place where the formula changes with different heights arriving, a stray value. If there is a discontinuity at an input, there is no slope, and you are done (slope-means-no-gap turned about). If there is none, the question is open, and only the chord slopes can settle it. Handed a slope, you have continuity at that input for free, and nothing at any other. Found upward; written downward.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13b7.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f'(2) = 3,"></span> <span data-tex-inline="f(2) = 7"></span></span>Using slope-means-no-gap, find the limit of f at 2.</li><li><span class="givens"><span data-tex-inline="f(1) = 3,"></span> <span data-tex-inline="\lim_{x \to 1} f(x) = 5"></span></span>Using slope-means-no-gap turned about, decide whether f has a slope at 1, writing out the form you used.</li><li><span class="givens"><span data-tex-inline="f(0) = 0,"></span> <span data-tex-inline="\text{chord slopes at } 0:"></span> <span data-tex-inline="3 \text{ at every fraction } h,"></span> <span data-tex-inline="-1 \text{ at every irrational } h"></span></span>Build one such f. <br>Decide whether it is continuous at 0, and whether it has a slope there.</li><li><span class="givens"><span data-tex-inline="f'(0) = 5,"></span> <span data-tex-inline="f \text{ continuous at no other input}"></span></span>Build one such f, and check its chord slopes at 0.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">13b.4.1</span><span class="tagq">build</span>Build a function of your own, not |x|, continuous at 0 with no slope at 0, whose chord slopes at 0 all lie between −5 and 5. <br>Then decide whether x times your function has a slope at 0, from its chord slopes.</div>
+  <div class="chq"><span class="chid">13b.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="f(x) = x^2,"></span> <span data-tex-inline="w = 0,"></span> <span data-tex-inline="f'(0) = 0"></span></span>Find the bound slope-bounds-change gives here, and the reach on which it is true.</div>
+  <div class="chq"><span class="chid">13b.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="f \text{ continuous at every real}"></span></span>Decide whether f must have a slope at every real. <br>Decide whether one can be continuous at every real and have no slope at any whole number.</div>
+  <div class="chq"><span class="chid">13b.4.4</span><span class="tagq">seam</span>A proof was published in 1806 that a continuous function has a slope except at a few isolated inputs, and textbooks repeated it for sixty years. In 1872 a function continuous at every real with a slope at none was presented to the Berlin Academy. A leading mathematician later wrote that he turned away in fright from this lamentable plague of functions without slopes. <br>Was the 1872 function a discovery or a disease?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r13a.html">← 13a · the slope at a point</a><a href="r13c.html">13c · the product rule →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>9a’s function q, 1 at the fractions and 0 elsewhere, is Dirichlet’s function. In question 13b.4.4 the proof of 1806 is André-Marie Ampère’s, the function of 1872 is Karl Weierstrass’s, and the one who turned away in fright is Charles Hermite, writing to Thomas Stieltjes.</p>
+  <p>Accepted names: slope-means-no-gap is “differentiable implies continuous”.</p>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; const a=Math.abs(v); let s=d!=null?v.toFixed(d):(a>=100?v.toFixed(1):a>=1?v.toFixed(4):a>=0.0001?v.toFixed(6):v.toPrecision(3)); if(s.indexOf('.')>=0&&s.indexOf('e')<0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+/* each function at its input: chord slope c(h,kind) and change D(h,kind); kind 'f' fraction, 'i' irrational */
+const FS={
+  sq:{lab:'x² at 1',tx:R`x^2,\ a = 1`,c:h=>2+h,D:h=>(2+h)*h,y:[0,4],yd:[-1.2,3],two:false,
+      v:`The chord slopes head to 2, the slope. The change is the chord slope times h, so it heads to 2 · 0 = 0: continuous at 1, as slope-means-no-gap promises.`,win:true},
+  u:{lab:'u at 0',tx:R`u,\ a = 0`,c:h=>h>0?0:-1/h,D:h=>h>0?0:-1,y:[-1,8],yd:[-1.6,0.6],two:false,
+      v:`From the left the change is −1 for every h &lt; 0: it refuses to shrink, so the chord slopes −1/h run off. No slope at 0. slope-means-no-gap turned about says so at once: u has a jump at 0.`,win:false},
+  H3:{lab:'H₃ at 1',tx:R`H_3,\ a = 1`,c:h=>(h-1)/h,D:h=>h-1,y:[-8,8],yd:[-2.2,0.6],two:false,
+      v:`The change is h − 1, heading to −1, not 0: H₃ heads to 2 at 1 and its value is 3. The chord slopes 1 − 1/h run off on both sides. No slope at 1.`,win:false},
+  xq:{lab:'x · q(x) at 0',tx:R`x\,q(x),\ a = 0`,c:(h,k)=>k==='f'?1:0,D:(h,k)=>k==='f'?h:0,y:[-0.5,1.5],yd:[-1.1,1.1],two:true,
+      v:`The change heads to 0 (squeezed by |h|): continuous at 0, by continuous-at-one-point. But the chord slope is q(h): 1 at every fraction h, 0 at every irrational h, and every window holds both. No slope at 0 (continuous-without-slope): continuous, and no slope.`,win:false},
+  x2q:{lab:'x² · q(x) at 0',tx:R`x^2 q(x),\ a = 0`,c:(h,k)=>k==='f'?h:0,D:(h,k)=>k==='f'?h*h:0,y:[-1.1,1.1],yd:[-0.3,1.1],two:true,
+      v:`The chord slope is h · q(h): h at fractions, 0 at irrationals, trapped between −|h| and |h|. It heads to 0: slope 0 at 0 (slope-at-0-only). And yet the function is continuous at no other input.`,win:true}
+};
+let fk='sq', S=1, LH=-0.7, Z=false;
+const kh=$('kh'),cvC=$('cvC'),cvD=$('cvD');
+const hv=()=>S*Math.pow(10,LH);
+function nice(span){ const p=Math.pow(10,Math.floor(Math.log10(span/4))); const r=span/4/p; return p*(r>=5?5:r>=2?2:1); }
+function tl(v,g){ const dec=Math.max(0,-Math.floor(Math.log10(g))); const s=(Math.round(v/g)*g).toFixed(dec); return s==='-0'?'0':String(+s); }
+function ticks(P){ const c=P.ctx, gx=nice(P.o.x[1]-P.o.x[0]), gy=nice(P.o.y[1]-P.o.y[0]); c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
+  for(let x=Math.ceil(P.o.x[0]/gx)*gx;x<=P.o.x[1]+1e-12;x+=gx){ c.moveTo(P.X(x),P.Y(P.o.y[0])); c.lineTo(P.X(x),P.Y(P.o.y[1])); }
+  for(let y=Math.ceil(P.o.y[0]/gy)*gy;y<=P.o.y[1]+1e-12;y+=gy){ c.moveTo(P.X(P.o.x[0]),P.Y(y)); c.lineTo(P.X(P.o.x[1]),P.Y(y)); } c.stroke();
+  c.fillStyle=col('--muted'); c.font='10px IBM Plex Mono, monospace'; c.textAlign='center'; const ly=Math.min(P.H-4,Math.max(12,P.Y(Math.max(P.o.y[0],Math.min(P.o.y[1],0)))+13));
+  for(let x=Math.ceil(P.o.x[0]/gx)*gx;x<=P.o.x[1]+1e-12;x+=gx){ if(Math.abs(x)<gx*1e-6) continue; c.fillText(tl(x,gx),P.X(x),ly); }
+  c.textAlign='left'; for(let y=Math.ceil(P.o.y[0]/gy)*gy;y<=P.o.y[1]+1e-12;y+=gy){ c.fillText(tl(y,gy),2,P.Y(y)-2); } }
+function W(){ return Z?Math.max(3*Math.abs(hv()),0.004):1; }
+function drawFam(P,g,kind){ const c=P.ctx, w=W(); const F=FS[fk];
+  if(!F.two){ P.fn(t=>Math.abs(t)<w*2e-3?NaN:g(t,'f'),'--ink',2.2); return; }
+  // fractions: ember dots; irrationals: teal dashes
+  for(let k=-60;k<=60;k++){ if(!k) continue; const t=w*k/60; P.dot(t,g(t,'f'),'--ember',2.4); }
+  P.fn(t=>Math.abs(t)<w*2e-3?NaN:g(t,'i'),'--teal',2,[6,4]); }
+function hole(P,y){ const c=P.ctx; c.fillStyle=col('--card'); c.strokeStyle=col('--ink'); c.lineWidth=2; c.beginPath(); c.arc(P.X(0),P.Y(y),5,0,7); c.fill(); c.stroke(); }
+const PC=plane(cvC,{x:[-1,1],y:[0,4],grid:0,aspect:0.5,draw:P=>{ const F=FS[fk], w=W(); P.o.x=[-w,w];
+  if(Z){ let lo=Infinity,hi=-Infinity; for(let k=-80;k<=80;k++){ if(!k) continue; const t=w*k/80; for(const kk of F.two?['f','i']:['f']){ const v=F.c(t,kk); if(isFinite(v)){ lo=Math.min(lo,v); hi=Math.max(hi,v); } } } const pd=Math.max((hi-lo)*0.15,0.05); P.o.y=[Math.max(lo-pd,F.y[0]*50),Math.min(hi+pd,F.y[1]*50)]; } else P.o.y=F.y.slice();
+  P.axes(); ticks(P); drawFam(P,F.c); if(fk==='sq') hole(P,2); if(fk==='x2q') hole(P,0);
+  const h=hv(); P.line(h,P.o.y[0],h,P.o.y[1],'--gold',1.4,[3,4]); P.dot(h,F.c(h,'f'),'--gold',5); }});
+Object.defineProperty(PC.o,'aspect',{get:()=>cvC.clientWidth>560?0.42:0.6});
+const PD=plane(cvD,{x:[-1,1],y:[-1,1],grid:0,aspect:0.42,draw:P=>{ const F=FS[fk], w=W(); P.o.x=[-w,w];
+  if(Z){ let lo=Infinity,hi=-Infinity; for(let k=-80;k<=80;k++){ if(!k) continue; const t=w*k/80; for(const kk of F.two?['f','i']:['f']){ const v=F.D(t,kk); lo=Math.min(lo,v); hi=Math.max(hi,v); } } const pd=Math.max((hi-lo)*0.15,1e-4); P.o.y=[lo-pd,hi+pd]; } else P.o.y=F.yd.slice();
+  P.axes(); ticks(P); drawFam(P,F.D); hole(P,0);
+  const h=hv(); P.line(h,P.o.y[0],h,P.o.y[1],'--gold',1.4,[3,4]); P.dot(h,F.D(h,'f'),'--gold',5); }});
+Object.defineProperty(PD.o,'aspect',{get:()=>cvD.clientWidth>560?0.36:0.5});
+function read(){ const F=FS[fk], h=hv(); $('oh').textContent=fm(Math.abs(h));
+  const vd=$('vd'); vd.className='verdict '+(F.win?'win':'lose'); vd.innerHTML=F.v;
+  let t; if(F.two){ const hi=h*(1+Math.SQRT2/1000);
+    t=R`\begin{gathered}${F.tx}\\ \text{a fraction } h = ${fm(h)}:\ \ \tfrac{\Delta f}{h} = ${fm(F.c(h,'f'))},\ \ \Delta f = ${fm(F.D(h,'f'))}\\ \text{an irrational } h \approx ${fm(hi)}:\ \ \tfrac{\Delta f}{h} = ${fm(F.c(hi,'i'))},\ \ \Delta f = 0\end{gathered}`; }
+  else t=R`\begin{gathered}${F.tx},\ \ h = ${fm(h)}\\ \dfrac{\Delta f}{h} = ${fm(F.c(h))},\ \ \ \Delta f = ${fm(F.D(h))}\end{gathered}`;
+  tex($('eq'),t,true); }
+function all(){ PC.redraw(); PD.redraw(); read(); }
+(function(){ const ch=$('fch'); Object.keys(FS).forEach(k=>{ const b=document.createElement('button'); b.textContent=FS[k].lab; if(k===fk) b.className='on'; b.onclick=()=>{ fk=k; [...ch.children].forEach(z=>z.classList.toggle('on',z===b)); all(); }; ch.appendChild(b); }); })();
+kh.oninput=()=>{ LH=+kh.value; all(); };
+$('hch').querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{ S=+b.dataset.s; $('hch').querySelectorAll('[data-s]').forEach(z=>z.classList.toggle('on',z===b)); all(); });
+$('bz').onclick=()=>{ Z=!Z; $('bz').classList.toggle('on',Z); all(); };
+[cvC,cvD].forEach(cv=>{ cv.style.touchAction='none'; let dn=false; const P=cv===cvC?PC:PD;
+  cv.addEventListener('pointerdown',e=>{ dn=true; cv.setPointerCapture&&cv.setPointerCapture(e.pointerId); mv(e); });
+  function mv(e){ if(!dn) return; let h=P.point(e).x; if(Math.abs(h)<0.001) h=h<0?-0.001:0.001; S=h<0?-1:1; LH=Math.max(-3,Math.min(0,Math.log10(Math.abs(h)))); kh.value=LH; $('hch').querySelectorAll('[data-s]').forEach(z=>z.classList.toggle('on',+z.dataset.s===S)); all(); }
+  cv.addEventListener('pointermove',mv); ['pointerup','pointercancel'].forEach(t=>cv.addEventListener(t,()=>dn=false)); });
+window.__pic={set:(k,h,z)=>{ if(k){ fk=k; [...$('fch').children].forEach((b,i)=>b.classList.toggle('on',Object.keys(FS)[i]===k)); } if(h!=null){ S=h<0?-1:1; LH=Math.log10(Math.abs(h)); kh.value=LH; $('hch').querySelectorAll('[data-s]').forEach(z=>z.classList.toggle('on',+z.dataset.s===S)); } if(z!=null){ Z=!!z; $('bz').classList.toggle('on',Z); } all(); const F=FS[fk]; return {c:F.c(hv(),'f'),D:F.D(hv(),'f'),txt:$('vd').textContent}; }};
+all();
+
+/* ---------- slides ---------- */
+const N='\\htmlClass{new}', K='\\htmlClass{keep}';
+stepper('#sl1',[
+  {k:'ember',kl:'slope-means-no-gap · 1 of 6',t:R`\begin{gathered}f(w + h) - f(w)\\ = ${N}{\dfrac{f(w + h) - f(w)}{h}} \cdot h\end{gathered}`,n:`For 0 &lt; |h| &lt; r: multiply and divide by h, which is not 0.`},
+  {k:'ember',kl:'slope-means-no-gap · 2 of 6',t:R`\dfrac{f(w + h) - f(w)}{h} \to ${K}{f'(w)}`,n:`The hypothesis: f has a slope at w.`},
+  {k:'ember',kl:'slope-means-no-gap · 3 of 6',t:R`h \to 0`,n:`line-limit: the linear function h ↦ h heads to its value at 0.`},
+  {k:'ember',kl:'slope-means-no-gap · 4 of 6',t:R`f(w + h) - f(w) \to f'(w) \cdot 0 = ${N}{0}`,n:`limits-multiply, with agreeing-near; anything-times-zero. This line is change-heads-to-0: the change heads to 0.`},
+  {k:'ember',kl:'slope-means-no-gap · 5 of 6',t:R`f(w + h) \to ${K}{f(w)}`,n:`limits-add: add back the constant f(w).`},
+  {k:'ember',kl:'slope-means-no-gap · 6 of 6',t:R`\lim_{x \to w} f(x) = f(w)`,n:`two-ways-to-write-a-limit, then 11a's line: continuous at w. ∎`}
+],{title:'The slides · slope-means-no-gap · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'slope-bounds-change',t:R`\begin{gathered}|f(x) - f(w)| \le ${N}{C}\,|x - w|\\ C = |f'(w)| + 1\end{gathered}`,n:`bounded-near bounds the chord slopes near w; size-of-a-product turns that into a bound on the change. squeezed-by-distance then gives slope-means-no-gap again, with the recipe δ = min(r₁, ε/C).`}
+],{title:'The slides · slope-bounds-change · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'turned about',t:R`\begin{gathered}\text{a discontinuity at an input } a\\ \Rightarrow\; \text{no slope at } a\end{gathered}`,n:`turn-and-deny (1d). Look for a discontinuity before computing any chord slope.`},
+  {k:'ember',kl:'u at 0',t:R`\dfrac{0 - 1}{h} = ${N}{-\dfrac{1}{h}}\quad (h \lt 0)`,n:`The rise is −1 for every h &lt; 0. It refuses to shrink, so the chord slopes pass every bound.`},
+  {k:'ember',kl:'H₃ at 1',t:R`\dfrac{(2 + h) - 3}{h} = ${N}{1 - \dfrac{1}{h}}`,n:`The rise heads to −1, not 0. The stray value is a discontinuity, and there is no slope.`}
+],{title:'The slides · turned about · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'continuous-without-slope · 1 of 3',t:R`x\,q(x) \text{ continuous at } 0`,n:`continuous-at-one-point: squeezed by |x|.`},
+  {k:'ember',kl:'continuous-without-slope · 2 of 3',t:R`\dfrac{h\,q(h) - 0}{h} = ${N}{q(h)}`,n:`The chord slope at 0 is q itself.`},
+  {k:'ember',kl:'continuous-without-slope · 3 of 3',t:R`q \text{ heads nowhere at } 0`,n:`heads-nowhere. So no slope: continuous at 0 without a slope. The converse of slope-means-no-gap is false. ∎`}
+],{title:'The slides · continuous-without-slope · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'slope-at-0-only · 1 of 2',t:R`\dfrac{h^2 q(h)}{h} = ${N}{h\,q(h)},\ \ |h\,q(h)| \le |h|`,n:`Squeezed by |h|.`},
+  {k:'ember',kl:'slope-at-0-only · 2 of 2',t:R`f'(0) = ${N}{0}`,n:`squeezed-to-0. A slope at 0, and continuous at no other input. ∎`},
+  {k:'ember',kl:'the moral',t:R`\begin{gathered}\text{slope at } w \;\Rightarrow\; \text{continuous at } w\\ \text{and no more}\end{gathered}`,n:`Not backwards; not to a neighbourhood. A slope at w is a fact about w.`}
+],{title:'The slides · slope-at-0-only · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

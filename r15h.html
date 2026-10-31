@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>15h · Sums of thin strips by hand</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r15g.html">← 15g sums and Σ by hand</a><a href="r15i.html">next: 15i geometric sums →</a></p>
+  <div class="tags"><span class="tag tech">15h · technique</span></div>
+  <h1>Sums of thin strips by hand</h1>
+  <p>A lower sum needs the least value of the function on every piece, and finding it can take a step of 14a's work. A sum that uses any value from each piece needs no such work. It still lands between the lower and upper sums, because every value on a piece lies between the least and the greatest. Such sums are how integrals are estimated in practice, from a formula or from measurements taken every hour. This step computes them by hand, says how far off they can be, and uses 15g’s formulas to get the areas under the square and the cube on any interval exactly.</p>
+  <p class="gesture">Pick a point in each piece, take the function’s value there as the box’s height, and add up: a strip sum. It lies between the lower and upper sums, so it is within their gap of the integral; for a continuous function and narrow enough pieces, as close as you like.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r15a.html">15a</a> (partition, L, U), <a href="r15c.html">15c</a> (gap-closes), <a href="r15e.html">15e</a> (areas-add, areas-scale, interval-cut-in-two), <a href="r15f.html">15f</a> (evenly-continuous, continuous-is-integrable), <a href="r15g.html">15g</a> (sums-are-linear, doubled-sum, sum-of-squares, sum-of-cubes), <a href="r08h.html">8h</a> (unpack-the-bars). <a href="r15i.html">15i</a> finds the area under every whole power; <a href="r16.html">rung 16</a> turns to what the integral, taken up to a moving end, does.</p></div>
+</header>
+
+<section class="class step" data-step="15h1">
+  <h2 class="sthead"><span class="stno">15h1</span>Any height from each piece</h2>
+  <p class="stands">Stands on 15c (lower and upper sums, integrable) and 15f (every-continuous-is-integrable).</p>
+  <p class="eqline" data-pid="f392f4">From here on, a tagged partition of [a, b] is a partition with one input cᵢ chosen in each piece [xᵢ₋₁, xᵢ]; the cᵢ are its tags. The strip sum of f for it is S = Σᵢ₌₁ⁿ f(cᵢ) Δxᵢ, and S is a name, for one number. With every cᵢ at the left end it is the left sum, at the right end the right sum, at the middle the midpoint sum. The largest width maxᵢ Δxᵢ is the mesh of the partition. Accepted names: tags, or sample points; left, right and midpoint sums; the mesh, or norm, written ‖P‖.</p>
+  <p data-pid="43de30">Strip-sum-between technique: <b>for f bounded on [u, v] and any tagged partition, L(f, P) ≤ S ≤ U(f, P). So if f is integrable, |S − ∫ᵤᵛ f| ≤ U(f, P) − L(f, P).</b></p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the strip-sum-between technique">
+m_i \le f(c_i) \le M_i @@ cᵢ is on the i-th piece; inf and sup are bounds there
+m_i \Delta x_i \le f(c_i)\Delta x_i \le M_i \Delta x_i @@ order-and-arithmetic-agree
+L(f, P) \le S \le U(f, P) @@ add over i (same-direction-add, induction with sum-one-more)
+L(f, P) \le \textstyle\int_a^b f \le U(f, P) @@ the integral is the sup of the lower sums and the inf of the upper
+\htmlClass{new}{|S - \textstyle\int_a^b f| \le U(f, P) - L(f, P)} \quad \blacksquare @@ two numbers in one window are no further apart than its width (unpack-the-bars)
+  </pre>
+  <p data-pid="32290d">Narrow-strips technique: <b>if f is continuous on [u, v], then for every ε &gt; 0 there is δ &gt; 0 such that every tagged partition with mesh less than δ has |S − ∫ᵤᵛ f| &lt; ε.</b> Continuous-is-integrable's proof did it. Evenly-continuous gives δ with |f(s) − f(t)| &lt; ε/(v − u) whenever |s − t| &lt; δ. So on pieces narrower than δ every Mᵢ − mᵢ &lt; ε/(v − u), and U − L &lt; ε. Strip-sum-between finishes.</p>
+  <p data-pid="9ecf4d">For an increasing f and n equal pieces, U − L = (f(v) − f(u))(v − u)/n (15a.4.4: 15a.2.1c's collapse, run on any increasing f). So every strip sum is within that of the integral, whatever the tags. That is a guarantee. The midpoint sum usually does far better.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · any height from each piece · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · one height from each piece, and how far the total is from the area</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="chips" id="fch"></div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">n</span><input type="range" id="kn" min="1" max="40" step="1" value="4"><output id="on"></output></div>
+      <div class="chips" id="tch"></div>
+      <div class="cap">Plum boxes: height f at the tag (plum dot). Thin teal and ember: the lower and upper sums, between which the strip sum always lies.</div>
+    </div>
+    <div class="panel">
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">15h1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = 2x + 1 on [0, 2],  2 equal pieces,  tags ½ and 3/2</span></span>Find the strip sum S. <br>Find L and U, and check strip-sum-between.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15h2">
+  <h2 class="sthead"><span class="stno">15h2</span>Three sums for one area</h2>
+  <p class="stands">Stands on 15h1 and 15g (sum-of-squares).</p>
+  <pre class="lines" data-k="ember" data-label="this step: x² on [0, 2], four pieces of width ½">
+\text{left: } \tfrac12(0 + \tfrac14 + 1 + \tfrac94) = 1.75 @@ tags 0, ½, 1, 3/2
+\text{right: } \tfrac12(\tfrac14 + 1 + \tfrac94 + 4) = 3.75 @@ tags ½, 1, 3/2, 2
+\text{midpoint: } \tfrac12 \cdot \tfrac{1 + 9 + 25 + 49}{16} = 2.625 @@ tags ¼, ¾, 5/4, 7/4
+\text{exact: } \tfrac{8}{3} \approx 2.667 @@ from the squeeze below
+\text{errors: } -0.92,\ +1.08,\ \htmlClass{new}{-0.042} @@ the midpoint sum, twenty times closer
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: why the midpoint does so well, for x² on [0, 1]">
+M_n = \tfrac1n \textstyle\sum_{i=1}^{n} \big(\tfrac{i - 1/2}{n}\big)^2 = \tfrac{1}{n^3}\sum (i^2 - i + \tfrac14) @@ square-of-a-sum (5h)
+= \tfrac{1}{n^3}\Big(\tfrac{n(n+1)(2n+1)}{6} - \tfrac{n(n+1)}{2} + \tfrac{n}{4}\Big) @@ sums-are-linear; sum-of-squares; doubled-sum
+= \htmlClass{new}{\tfrac13 - \tfrac{1}{12n^2}} @@ expand and collect
+\text{left and right: } \tfrac13 \mp \tfrac{1}{2n} + \tfrac{1}{6n^2} @@ 15g's Lₙ and Uₙ
+  </pre>
+  <p data-pid="18c222">With ten pieces the left sum is off by about 0.045, the midpoint sum by less than 0.001. <b>Doubling the pieces halves the left sum's error and quarters the midpoint sum's.</b></p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · three sums · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15h2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = x² on [0, 1],  2 equal pieces</span></span>Find the left, right and midpoint sums. <br>Find which is closest to ⅓.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15h3">
+  <h2 class="sthead"><span class="stno">15h3</span>Exact areas under x² and x³</h2>
+  <p class="stands">Stands on 15h2 and 15g (two areas paid).</p>
+  <pre class="lines" data-k="teal" data-label="from 15g: any interval">
+\textstyle\int_0^b x^2\,dx = \tfrac{b^3}{3},\ \ \int_0^b x^3\,dx = \tfrac{b^4}{4} @@ 15g.4.5: 15d's squeeze with sum-of-squares and h = b/n; the same with sum-of-cubes
+\textstyle\int_a^b x^2\,dx = \int_0^b - \int_0^a = \htmlClass{new}{\tfrac{b^3 - a^3}{3}} @@ interval-cut-in-two (15e), for 0 ≤ a &lt; b
+\textstyle\int_0^2 (x^3 - 3x + 3)\,dx = \tfrac{16}{4} - 3 \cdot 2 + 3 \cdot 2 = 4 @@ areas-add, areas-scale; 15d; 15c
+\textstyle\int_1^3 (6x^2 - 4x)\,dx = 2(27 - 1) - 2(9 - 1) = 36 @@ areas-add, areas-scale; 15d's (b² − a²)/2
+  </pre>
+  <p data-pid="5e5279"><b>So far: ∫₀ᵇ 1 = b, ∫₀ᵇ x = b²/2, ∫₀ᵇ x² = b³/3, ∫₀ᵇ x³ = b⁴/4.</b> Whether the pattern goes on, and why, is 15i's to find.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · exact areas · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15h3.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = x \text{ on } [0, b];"></span> <span data-tex-inline="\text{left sum, } 4 \text{ equal pieces: } 6"></span></span>Find b.</li><li><span class="givens"><span data-tex-inline="\int_0^b x^2\, dx = 72"></span></span>Find b.</li><li><span class="givens"><span data-tex-inline="f(x) = x^2 \text{ on } [0, 1];"></span> <span data-tex-inline="\text{midpoint sum, } n \text{ equal pieces:}"></span> <span data-tex-inline="\tfrac13 - \tfrac{1}{1200}"></span></span>Find n.</li><li><span class="givens"><span data-tex-inline="\int_0^k (x^2 - kx)\, dx = -36"></span></span>Find k.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15h4">
+  <h2 class="sthead"><span class="stno">15h4</span>An integral from measurements</h2>
+  <p class="stands">Stands on 15h1 to 15h3.</p>
+  <p data-pid="824a9e">A physical premise, carried from physics: the energy a solar array delivers over a stretch of time is the integral of its power over that time. A rooftop array in Davis is read at the middle of each two-hour stretch from 6:00 to 18:00, on a clear June day:</p>
+  <div class="tablewrap"><table class="tt">
+  <tr><th class="l">stretch</th><th>6–8</th><th>8–10</th><th>10–12</th><th>12–14</th><th>14–16</th><th>16–18</th></tr>
+  <tr><td class="l">power at its middle (kW)</td><td>0.8</td><td>2.9</td><td>4.3</td><td>4.5</td><td>3.2</td><td>1.1</td></tr>
+  </table></div>
+  <pre class="lines" data-k="ember" data-label="this step: a midpoint sum from readings">
+S = 2(0.8 + 2.9 + 4.3 + 4.5 + 3.2 + 1.1) @@ widths 2 h; tags at the middles
+= 2 \cdot 16.8 = \htmlClass{new}{33.6 \text{ kWh}} @@ kW times hours: kilowatt-hours
+  </pre>
+  <p data-pid="fa9b60">No formula for the power exists here, and no lower or upper sum can be found, since the least and greatest power in each stretch were never measured. <b>The sum is an estimate whose error the readings alone cannot bound.</b> What they do give is a number, and for a power that rises and falls smoothly, the midpoint sum is usually close.</p>
+  <p data-pid="6e2b7d">The definition began with a question: what should one understand by the integral of a function between two bounds? Divide the interval into pieces, and take in each piece any value of the function. Then ask when the sum of those values times the widths approaches one fixed number, however the pieces shrink.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · readings · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15h4.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = x \text{ on } [0, 3];"></span> <span data-tex-inline="3 \text{ equal pieces}"></span></span>Find the left, right and midpoint sums, and compare each with the integral.</li><li><span class="givens"><span data-tex-inline="J = \int_1^3 x^2\, dx"></span></span>Find J exactly.</li><li><span class="givens"><span data-tex-inline="J = \int_{-1}^{2} (3x^2 - 2x + 1)\, dx"></span></span>Find J exactly.</li><li><span class="givens"><span data-tex-inline="\text{flow, m}^3/\text{s, at the middle}"></span> <span data-tex-inline="\text{of each six-hour stretch:}"></span> <span data-tex-inline="410,\ 455,\ 520,\ 480"></span></span>The flow of the Skagit River at Mount Vernon was read through one day. Estimate the water that passed, and write the premise that makes it an integral.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15h5">
+  <h2 class="sthead"><span class="stno">15h5</span>Illegal moves</h2>
+  <p class="stands">Stands on 15h1 to 15h4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\text{the left sum is always an under-estimate}\,? @@ only for an increasing f; for 4 − x it is the over-estimate
+\text{a strip sum is } \textstyle\int\,? @@ it is within U − L of it; for the readings, of unknown size
+\textstyle\int_a^b x^2 = \tfrac{(b - a)^3}{3}\,? @@ that is a = 0; interval-cut-in-two gives (b³ − a³)/3
+\text{more pieces, closer, for any } f\,? @@ for q, tags at fractions give 1 and tags elsewhere give 0, at every n
+\text{kW} \times \text{h} = \text{kW}\,? @@ power times time is energy: kWh
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15h5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f \text{ decreasing}"></span></span>Find which of the left and right sums is the over-estimate, and prove it from strip-sum-between's first line.</li><li><span class="givens"><span data-tex-inline="f(x) = 4x - x^2 \text{ on } [0, 4];"></span> <span data-tex-inline="2 \text{ equal pieces}"></span></span>Find the left, right and midpoint sums and the integral, and which sums are under and which over.</li><li><span class="givens"><span data-tex-inline="q: \text{ 10d's function, on } [0, 1]"></span></span>Show that every n has a tagged partition whose sum is one and one whose sum is zero.<br>Prove or refute: narrow-strips is true for q.</li><li><span class="givens"><span data-tex-inline="f(x) = 1/x \text{ on } [0.001, 1];"></span> <span data-tex-inline="10 \text{ equal pieces}"></span></span>Compare the left and right sums, and find their gap from the collapse, and the term that makes most of it.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">15h.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{Bend: } 1/x \text{ on } [0.001, 1]"></span> <span data-tex-inline="\text{had sums far apart.}"></span> <span data-tex-inline="\text{Target gap: } 0.01"></span></span>Choose a decreasing function of your own on a closed interval, and find how many equal pieces bring its left and right sums within the target gap of each other.<br>Find which of the two is under the integral.</div>
+  <div class="chq"><span class="chid">15h.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="M = (v - u)\, f\big(\tfrac{u + v}{2}\big)"></span></span>Find every function for which the one-piece midpoint sum M is exact for every interval.</div>
+  <div class="chq"><span class="chid">15h.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="t(x) = 0 \text{ if } x \text{ is not a fraction;}"></span> <span data-tex-inline="t(p/q) = 1/q \text{ in lowest terms},\ q \ge 1;"></span> <span data-tex-inline="I = [0, 1]"></span></span>The function t has a discontinuity at every fraction. Prove or refute: t is integrable on I.</div>
+  <div class="chq"><span class="chid">15h.4.4</span><span class="tagq">seam</span>An earlier definition of the integral covered continuous functions. In 1854 a second definition used these sums so that it would reach functions with discontinuities at every fraction, which no one had needed. Its author built such a function to show his definition reached it. <br>Should a definition be made to fit the functions you have, or the ones you might meet? <br>Did he discover his strange function, or make it?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r15g.html">← 15g · sums and Σ by hand</a><a href="r15i.html">15i · geometric sums →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>Riemann asked what one should understand by the integral of a function between two bounds, divided the interval into pieces, took in each piece any value of the function, and asked when the sum of those values times the widths approaches one fixed number however the pieces shrink.</p><cite>Riemann, “Über die Darstellbarkeit einer Function durch eine trigonometrische Reihe” (1854, printed 1868), section 4; paraphrase</cite></aside>
+  <p>Accepted names: a strip sum is a Riemann sum, after Bernhard Riemann. In the closer, the earlier definition is Augustin-Louis Cauchy’s (1823), and the definition of 1854 is Riemann’s.</p>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+/* least and greatest of F.f on [lo, hi]: the ends, F's critical points inside, and a fine sample (exact between critical points for the functions used here) */
+function ext(F,lo,hi){ if(F.dir) return [0,1]; let m=Infinity,M=-Infinity; const t=x=>{ const v=F.f(x); if(v<m) m=v; if(v>M) M=v; };
+  t(lo); t(hi); (F.crit||[]).forEach(c=>{ if(c>lo&&c<hi) t(c); }); for(let k=1;k<64;k++) t(lo+(hi-lo)*k/64); return [m,M]; }
+function sums(F,pts){ let L=0,U=0; const ms=[],Ms=[]; for(let i=1;i<pts.length;i++){ const [m,M]=ext(F,pts[i-1],pts[i]), w=pts[i]-pts[i-1]; ms.push(m); Ms.push(M); L+=m*w; U+=M*w; } return {L,U,ms,Ms}; }
+const eq=(a,b,n)=>Array.from({length:n+1},(_,i)=>a+(b-a)*i/n);
+function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
+function boxes(P,pts,hs,stroke,fill,alpha){ const c=P.ctx; for(let i=1;i<pts.length;i++){ const a=pts[i-1],b=pts[i],h=hs[i-1]; c.globalAlpha=alpha; P.poly([[a,0],[b,0],[b,h],[a,h]],null,fill); c.globalAlpha=1; P.poly([[a,0],[b,0],[b,h],[a,h]],stroke,null,1.2); } }
+function dirDots(P,a,b){ const c=P.ctx; c.fillStyle=col('--ink'); for(let k=0;k<=300;k++){ const x=a+(b-a)*k/300; const y=(k%2)?0:1; c.fillRect(P.X(x)-1,P.Y(y)-1,2,2); } }
+const FN={
+  sq:{lab:'x² on [0, 2]',f:x=>x*x,a:0,b:2,y:[-0.3,4.4],I:8/3},
+  wig:{lab:'x³ − 3x + 3 on [0, 2]',f:x=>x*x*x-3*x+3,a:0,b:2,crit:[1],y:[-0.5,5.6],I:4},
+  hill:{lab:'4x − x² on [0, 4]',f:x=>4*x-x*x,a:0,b:4,crit:[2],y:[-0.5,4.6],I:32/3},
+  dec:{lab:'4 − x on [0, 4]',f:x=>4-x,a:0,b:4,y:[-0.5,4.6],I:8}
+};
+let key='sq',F=FN.sq,tag='mid';
+const TG={left:(a,b)=>a,right:(a,b)=>b,mid:(a,b)=>(a+b)/2,rand:(a,b,i)=>a+(b-a)*(((i*7919)%97)/97)};
+const kn=$('kn'),cvF=$('cvF');
+const PF=plane(cvF,{x:[0,1],y:[0,1],grid:1,aspect:0.8,draw:P=>draw(P)});
+Object.defineProperty(PF.o,'aspect',{get:()=>cvF.clientWidth>480?0.7:0.9});
+function rs(){ const p=eq(F.a,F.b,+kn.value); let S=0; const cs=[],hs=[]; for(let i=1;i<p.length;i++){ const c=TG[tag](p[i-1],p[i],i); cs.push(c); hs.push(F.f(c)); S+=F.f(c)*(p[i]-p[i-1]); } return {p,S,cs,hs,LU:sums(F,p)}; }
+function draw(P){ const pad=(F.b-F.a)*0.08; P.o.x=[F.a-pad,F.b+pad]; P.o.y=F.y; P.o.grid=(F.b-F.a)>2?1:0.5; P.axes();
+  const r=rs(); boxes(P,r.p,r.hs,'--plum','--plum',0.22); const c=P.ctx; c.globalAlpha=0.7; boxes(P,r.p,r.LU.ms,'--teal',null,0); boxes(P,r.p,r.LU.Ms,'--ember',null,0); c.globalAlpha=1;
+  curve(P,F.f,'--ink',2.6,F.a,F.b); r.cs.forEach((x,i)=>P.dot(x,r.hs[i],'--plum',3.6)); }
+function read(){ const r=rs(), n=+kn.value; $('on').textContent=n; const err=r.S-F.I, gap=r.LU.U-r.LU.L;
+  const vd=$('vdF'); vd.className='verdict'+(Math.abs(err)<0.01?' win':'');
+  vd.textContent='S = '+mm(r.S)+', between L = '+mm(r.LU.L)+' and U = '+mm(r.LU.U)+'. The integral is '+mm(F.I)+': S is off by '+mm(err)+', within the guarantee U − L = '+mm(gap)+'.';
+  tex($('eqF'),R`\begin{gathered}S = \textstyle\sum f(c_i)\Delta x_i = ${mm(r.S)}\\ L = ${mm(r.LU.L)} \le S \le U = ${mm(r.LU.U)}\\ |S - \textstyle\int| = ${mm(Math.abs(err))} \le ${mm(gap)}\end{gathered}`,true); }
+function all(){ PF.redraw(); read(); }
+kn.addEventListener('input',all);
+const fch=$('fch');
+Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===key) b.className='on'; b.onclick=()=>{ key=k; F=FN[k]; [...fch.children].forEach(z=>z.classList.toggle('on',z===b)); all(); }; fch.appendChild(b); });
+const tch=$('tch');
+[['left','left'],['right','right'],['mid','midpoint'],['rand','scattered']].forEach(([k,l])=>{ const b=document.createElement('button'); b.textContent=l; if(k===tag) b.className='on'; b.onclick=()=>{ tag=k; [...tch.children].forEach(z=>z.classList.toggle('on',z===b)); all(); }; tch.appendChild(b); });
+window.__pic={set:(k,n,t)=>{ [...fch.children][Object.keys(FN).indexOf(k)].click(); [...tch.children][['left','right','mid','rand'].indexOf(t||'mid')].click(); kn.value=n; all(); const r=rs(); return {S:+r.S.toFixed(5),L:+r.LU.L.toFixed(5),U:+r.LU.U.toFixed(5),txt:$('vdF').textContent}; }};
+all();
+/* ---------- slides ---------- */
+const Nw='\\htmlClass{new}';
+stepper('#sl1',[
+  {k:'ember',kl:'the strip sum',t:R`S = \textstyle\sum f(c_i)\,\Delta x_i`,n:`Any tag cᵢ from each piece.`},
+  {k:'ember',kl:'three kinds',t:R`\text{left},\ \text{right},\ \text{midpoint}`,n:`Tags at the left ends, the right ends, the middles.`},
+  {k:'ember',kl:'mesh',t:R`\|P\| = \max \Delta x_i`,n:`The widest piece.`},
+  {k:'ember',kl:'strip-sum-between',t:R`${Nw}{L \le S \le U}`,n:`So |S − ∫| ≤ U − L.`},
+  {k:'ember',kl:'narrow-strips',t:R`\|P\| \lt \delta \Rightarrow |S - \textstyle\int| \lt \varepsilon`,n:`For continuous f: evenly-continuous and continuous-is-integrable.`},
+  {k:'ember',kl:'increasing',t:R`|S - \textstyle\int| \le \tfrac{(f(b) - f(a))(b - a)}{n}`,n:`Whatever the tags.`}
+],{title:'The slides · any height from each piece · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'x² on [0, 2]',t:R`1.75,\ 3.75,\ 2.625 \text{ against } \tfrac83`,n:`Left, right, midpoint, with four pieces.`},
+  {k:'ember',kl:'the midpoint',t:R`M_n = \tfrac13 - \tfrac{1}{12n^2}`,n:`Doubling n quarters its error.`}
+],{title:'The slides · three sums · ← → keys work'});
+stepper('#sl3',[
+  {k:'teal',kl:'from 15g · exact',t:R`\textstyle\int_a^b x^2 = \tfrac{b^3 - a^3}{3}`,n:`sum-of-squares, then interval-cut-in-two.`},
+  {k:'ember',kl:'the pattern',t:R`\textstyle\int_0^b x^k = \tfrac{b^{k+1}}{k+1},\ \ k = 0, 1, 2, 3`,n:`Does it go on?`}
+],{title:'The slides · exact areas · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'readings',t:R`2 \cdot 16.8 = 33.6 \text{ kWh}`,n:`A midpoint sum from a solar array in Davis.`}
+],{title:'The slides · readings · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`\text{left} \ne \text{under, in general}`,n:`Only for increasing functions.`}
+],{title:'The slides · illegal · ← → keys work'});
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

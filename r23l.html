@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Numerical integration</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r23k.html">← 23k expansions that diverge yet help</a><a href="r23phys.html">next: 23·phys how does a lens bend light? →</a></p>
+  <div class="tags"><span class="tag tech">23l · technique</span></div>
+  <h1>Numerical integration</h1>
+  <p>Many areas have no antiderivative you can write down, and the bell-shaped curve that statistics lives on is one of them. But an area can be computed from a handful of heights. Cut the base into strips and replace the curve on each strip by something simple whose area is easy: a straight chord, which makes trapezoids, or a parabola through three heights. The matching polynomials of this rung measure how wrong that is. The chord is off by about the bend of the curve times the square of the strip width, so halving the width cuts the error to a quarter. The parabola does far better: halving cuts it to a sixteenth. And if you may choose where to measure the heights, two well-placed heights do the work of three evenly spaced ones.</p>
+  <p class="gesture">Replace the curve on each strip by a chord or a parabola, and add the areas. The error shrinks like the square of the strip width for chords, and like its fourth power for parabolas. Heights at the best places do better still.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r15h.html">15h</a> (sums of thin strips), <a href="r23a.html">23a</a> (matching polynomials), <a href="r23b.html">23b</a> (the error ceiling), <a href="r16d.html">16d</a> (substitution), <a href="r17a.html">17a</a> (ln as an area). <a href="r23phys.html">23·phys</a> asks how a lens bends light.</p></div>
+</header>
+
+<section class="class step" data-step="23l1">
+  <h2 class="sthead"><span class="stno">23l1</span>Trapezoids</h2>
+  <p class="stands">Stands on 15h (sums of thin strips), 23a2 (the matching polynomial), 23b2 (the error ceiling) and 15e (areas add).</p>
+  <p data-pid="2c7f9b">Cut [a, b] into N strips of width h = (b − a)/N, with heights f₀, f₁, …, f_N at the cuts. Join neighbouring heights by chords. The area under the chords is the trapezoid sum Tₕ = h(½f₀ + f₁ + ⋯ + f_{N−1} + ½f_N).</p>
+  <p data-pid="eff32b">Trapezoid technique: <b>if |f″| ≤ K on [a, b], then |Tₕ − ∫ₐᵇ f| ≤ (b − a)Kh²/6.</b> Halve h, and the bound falls to a quarter.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the trapezoid technique">
+f(m+t) = f(m) + f'(m)\,t + R_1(t),\ \ |R_1(t)| \le \tfrac12 K t^2 @@ the match of degree 1 about the strip's middle m (23a2), and its error ceiling (23b2)
+\int_{-h/2}^{h/2} (f(m) + f'(m)t)\,dt = h f(m) = \tfrac{h}{2}\big((f(m) - f'(m)\tfrac h2) + (f(m) + f'(m)\tfrac h2)\big) @@ for a line, the chord is the curve: the rule is exact
+\text{strip error} = \int_{-h/2}^{h/2} R_1 - \tfrac{h}{2}\big(R_1(-\tfrac h2) + R_1(\tfrac h2)\big) @@ the line parts cancel
+|\text{strip error}| \le \tfrac{K}{3}\big(\tfrac h2\big)^3 + \tfrac h2\cdot K\big(\tfrac h2\big)^2 = \tfrac{K h^3}{6} @@ ∫ ½Kt² over [−s, s] is Ks³/3, with s = h/2
+\htmlClass{new}{|T_h - \textstyle\int_a^b f| \le N\cdot\tfrac{Kh^3}{6} = \tfrac{(b-a)K h^2}{6}} \quad \blacksquare @@ N = (b − a)/h strips; the errors add (15e)
+  </pre>
+  <p data-pid="2e4e0b">ln 2 = ∫₁² dx/x (17a), and f″ = 2/x³ ≤ 2 there. Four strips give T = 0.697024, off by 0.00388; the bound is 2/(6·16) = 0.0208. Eight strips give 0.694122, off by 0.000975: a quarter. A finer argument trims the 6 in the bound to 12, which is the most it can be trimmed.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · trapezoids · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">23l1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\int_0^1 e^{-x^2}\,dx"></span></span>Find T with 2 strips and with 4 strips, to six places. <br>Find a ceiling K for |f″| on [0, 1], and the bound for 4 strips. <br>Find how many strips the bound needs to promise an error below 0.00005.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="23l2">
+  <h2 class="sthead"><span class="stno">23l2</span>Parabolas</h2>
+  <p class="stands">Stands on 23l1, 23a2 (the matching polynomial) and 23b2 (the error ceiling).</p>
+  <p data-pid="d8526b">Take the strips in pairs, N even. On a pair [m − h, m + h] use the weights h/3, 4h/3, h/3 on the three heights. The parabola sum is Sₕ = (h/3)(f₀ + 4f₁ + 2f₂ + 4f₃ + ⋯ + 4f_{N−1} + f_N). On each pair it is the area under the parabola through the three heights, since it is exact for every polynomial of degree 2 or less.</p>
+  <p data-pid="4ca415">Parabola technique: <b>if |f⁽⁴⁾| ≤ K on [a, b], then |Sₕ − ∫ₐᵇ f| ≤ (b − a)Kh⁴/45.</b> Halve h, and the bound falls to a sixteenth.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the parabola technique">
+\int_{-h}^{h} 1 = 2h = \tfrac h3(1 + 4 + 1),\ \ \int_{-h}^{h} t^2 = \tfrac{2h^3}{3} = \tfrac h3(h^2 + 0 + h^2) @@ exact for 1 and t²
+\int_{-h}^{h} t = 0 = \tfrac h3(-h + 0 + h),\ \ \int_{-h}^{h} t^3 = 0 = \tfrac h3(-h^3 + 0 + h^3) @@ exact for t and t³: odd, both sides 0
+f(m+t) = T_3(t) + R_3(t),\ \ |R_3(t)| \le \tfrac{K t^4}{24} @@ the match of degree 3 about m (23a2), and its error ceiling (23b2)
+\text{pair error} = \int_{-h}^{h} R_3 - \tfrac h3\big(R_3(-h) + 4R_3(0) + R_3(h)\big) @@ the cubic parts cancel; R₃(0) = 0
+|\text{pair error}| \le \tfrac{K h^5}{60} + \tfrac h3\cdot\tfrac{2Kh^4}{24} = \tfrac{Kh^5}{60} + \tfrac{Kh^5}{36} = \tfrac{2Kh^5}{45} @@ ∫ Kt⁴/24 over [−h, h] is Kh⁵/60
+\htmlClass{new}{|S_h - \textstyle\int_a^b f| \le \tfrac{b-a}{2h}\cdot\tfrac{2Kh^5}{45} = \tfrac{(b-a)K h^4}{45}} \quad \blacksquare @@ (b − a)/(2h) pairs; the errors add
+  </pre>
+  <p data-pid="d53235">Built from parabolas, the rule is exact for cubics, a gift of the symmetry. For ln 2, f⁽⁴⁾ = 24/x⁵ ≤ 24. Four strips give S = 0.693254, off by 0.000107, and eight give 0.6931545, off by 0.0000074. A finer argument trims the 45 to 180.</p>
+  <p data-pid="c49024">The two rules are related. (4T_{h/2} − T_h)/3 = S_{h/2}, exactly: the trapezoid errors shrink like h², and this blend of two trapezoid sums cancels that part of the error. It is 23k's habit again: an error with a known shape can be removed.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · parabolas · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">23l2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\int_0^1 e^{-x^2}\,dx"></span></span>Find S with 2 strips and with 4 strips, to six places, and check that (4T₄ − T₂)/3 gives S₄. <br>f⁽⁴⁾(x) = (16x⁴ − 48x² + 12)e^(−x²). Find a ceiling for it on [0, 1], and the bound for 4 strips. <br>Find how many strips promise six places, an error below 0.0000005.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="23l3">
+  <h2 class="sthead"><span class="stno">23l3</span>The best choice of points</h2>
+  <p class="stands">Stands on 23l2, 15e (areas add, a bigger curve has a bigger area), 16d (substitution) and 8i (quadratics).</p>
+  <p data-pid="2bf678">Both rules measure heights at evenly spaced points. Free the points as well as the weights. Best-points technique: <b>on [−1, 1], f(−1/√3) + f(1/√3) is exact for every polynomial of degree 3 or less; and no rule that uses n heights is exact for every polynomial of degree 2n.</b> Two well-placed heights do the work of the parabola rule's three.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the best-points technique">
+w f(-r) + w f(r) \text{ is exact for } t \text{ and } t^3 @@ odd: both sides are 0
+\text{exact for } 1:\ 2w = 2,\ \text{so } w = 1 @@ ∫ 1 over [−1, 1] is 2
+\text{exact for } t^2:\ 2r^2 = \tfrac23,\ \text{so } r = \tfrac{1}{\sqrt3} @@ ∫ t² over [−1, 1] is ⅔
+\htmlClass{new}{\int_{-1}^{1} p = p\big(-\tfrac{1}{\sqrt3}\big) + p\big(\tfrac{1}{\sqrt3}\big) \text{ for every cubic } p} @@ a cubic is a sum of multiples of 1, t, t², t³; areas add (15e)
+p(t) = (t - x_1)^2 (t - x_2)^2 \cdots (t - x_n)^2 @@ any n points x₁, …, xₙ: degree 2n
+\int_{-1}^{1} p > 0,\ \text{but the rule gives } \textstyle\sum w_i\,p(x_i) = 0 @@ p is 0 at each xᵢ and above 0 everywhere else
+\htmlClass{new}{\text{no } n \text{ heights are exact for every polynomial of degree } 2n} \quad \blacksquare @@ the line above
+  </pre>
+  <p data-pid="849e86">On a strip [m − s, m + s], put x = m + st (16d): the heights go at m ± s/√3, each with weight s. For ∫₀¹ e^(−x²) dx = 0.746824, one pair of best points gives 0.746595, off by 0.00023, while the parabola rule with three heights is off by 0.00036. With n heights, well placed, a rule is exact up to degree 2n − 1, the most the last line allows. Where those places are is decided by a family of polynomials much higher up the ladder.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · best points · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">23l3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\int_0^\pi \sin x\,dx = 2"></span></span>Find the two best points on [0, π], and the value the best-points rule gives, to four places. <br>Find the value of the parabola rule with three heights, at 0, π/2 and π.</li><li><span class="givens"><span data-tex-inline="\tfrac19\big(5f(-\sqrt{3/5}) + 8f(0) + 5f(\sqrt{3/5})\big)"></span></span>Check that it is exact on [−1, 1] for t⁴. <br>Find what it gives for t⁶, and whether it is exact there.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="23l4">
+  <h2 class="sthead"><span class="stno">23l4</span>Illegal moves</h2>
+  <p class="stands">Stands on 23l1 to 23l3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{halve } h, \text{ and the trapezoid error halves}\,? @@ it falls to about a quarter: the error shrinks like h²
+\text{the parabola rule is exact for } t^4\,? @@ ∫ t⁴ over [−1, 1] is 2/5; the rule with h = 1 gives 2/3
+\text{the } h^2 \text{ bound holds for } \sqrt x \text{ on } [0, 1]\,? @@ f″ = −¼x^(−3/2) has no ceiling near 0; there the error shrinks more slowly
+\text{any two heights do as well as the best two}\,? @@ the two ends make one trapezoid: exact only for lines
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">23l4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\int_1^2 \tfrac{dx}{x}"></span></span>Find the trapezoid errors with 4 and with 8 strips. <br>Find their ratio, and the power of 2 it is near.</li><li><span class="givens"><span data-tex-inline="\int_{-1}^{1} t^4\,dt"></span></span>Find the area, and what the parabola rule with h = 1 gives. <br>Find the highest power of t for which that rule is exact.</li><li><span class="givens"><span data-tex-inline="\int_0^1 \sqrt x\,dx = \tfrac23"></span></span>Find the trapezoid errors with 4 and with 16 strips, to five places. <br>Find their ratio, and whether it is near 16.</li><li><span class="givens"><span data-tex-inline="\int_{-1}^{1} t^2\,dt"></span></span>Find what the two ends ±1 give, each with weight 1, and what the best points give. <br>Find which is exact.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">23l.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="w_0 f(0) + w_1 f(1) + w_2 f(2) + w_3 f(3)"></span></span>Build weights that make it exact for every cubic as a rule for ∫₀³ f. <br>Find what it gives for x⁴, against the area 243/5.</div>
+  <div class="chq"><span class="chid">23l.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\int_0^\pi \sin^2 x\,dx"></span></span>Find the trapezoid sum with 2 strips and with 3 strips, and the area. <br>Find why the h² bound is so far from the truth here.</div>
+  <div class="chq"><span class="chid">23l.4.3</span><span class="tagq">converse</span>The parabola rule is exact for cubics. Turn it round: on three evenly spaced points, must a rule that is exact for 1, t and t² be the parabola rule? <br>Must it then be exact for t³ too?</div>
+  <div class="chq"><span class="chid">23l.4.4</span><span class="tagq">reroute</span>Sharpen the trapezoid bound to (b − a)Kh²/12. On a strip with middle m, let g(t) = ∫ from m − t to m + t of f, less t(f(m − t) + f(m + t)). <br>Find g(0) and g′(t), bound g′ by the mean value technique (14c), and add up.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r23k.html">← 23k · expansions that diverge yet help</a><a href="r23phys.html">23·phys · how does a lens bend light? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>Computing areas from heights is numerical integration, or quadrature. The trapezoid sum is the trapezoidal rule; the parabola sum is Simpson's rule, with error bound (b − a)Kh⁴/180 in its sharp form. Blending two trapezoid sums to cancel the h² part is Richardson extrapolation, and done again and again it is Romberg integration. The best-points rule is Gaussian quadrature; its points are the roots of the Legendre polynomials. Rules on evenly spaced points are the Newton–Cotes rules, and the weights 1, 3, 3, 1 of 23l.4.1 make Simpson's three-eighths rule.</p>
+  <h3>Who said it first</h3>
+  <p>Johannes Kepler used a parabola rule to gauge wine barrels in 1615. Bonaventura Cavalieri (1639) and James Gregory (1668) had the parabola rule before Thomas Simpson published it in 1743. Isaac Newton and Roger Cotes worked out the rules for evenly spaced points (1676 to 1711). Carl Friedrich Gauss found the best points in 1814, and Carl Gustav Jacobi explained them in 1826. Lewis Fry Richardson blended trapezoid sums in 1911, and Werner Romberg made a method of it in 1955.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'the sum',t:R`T_h = h\big(\tfrac12 f_0 + f_1 + \cdots + f_{N-1} + \tfrac12 f_N\big)`,n:`Chords on every strip.`},
+  {k:'ember',kl:'the error',t:R`\htmlClass{new}{|T_h - \textstyle\int f| \le \tfrac{(b-a)Kh^2}{6}}`,n:`Halve h, a quarter of the error.`}
+],{title:'The slides · trapezoids · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'the sum',t:R`S_h = \tfrac h3\big(f_0 + 4f_1 + 2f_2 + \cdots + 4f_{N-1} + f_N\big)`,n:`Weights 1, 4, 1 on each pair.`},
+  {k:'ember',kl:'the error',t:R`\htmlClass{new}{|S_h - \textstyle\int f| \le \tfrac{(b-a)Kh^4}{45}}`,n:`Halve h, a sixteenth.`}
+],{title:'The slides · parabolas · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'two points',t:R`\htmlClass{new}{\int_{-1}^{1} p = p(-\tfrac{1}{\sqrt3}) + p(\tfrac{1}{\sqrt3})}`,n:`Exact for cubics.`},
+  {k:'ember',kl:'the limit',t:R`(t - x_1)^2\cdots(t - x_n)^2`,n:`No n heights reach degree 2n.`}
+],{title:'The slides · best points · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

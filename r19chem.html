@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Which moves leave a molecule unchanged?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+.btns{display:flex;flex-wrap:wrap;gap:6px}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r19f.html">← 19f symmetries by hand</a><a href="r19bio.html">next: 19·bio why not just burn the sugar? →</a></p>
+  <div class="tags"><span class="tag chem">19·chem · chemistry</span></div>
+  <h1>Which moves leave a molecule unchanged?</h1>
+  <p>Which moves leave a molecule unchanged? A century and a half ago, chemists could weigh what went into a reaction and count the atoms in a formula, but no one could see a molecule. They could count something else: how many different compounds share one formula. Swap two of the six hydrogens of benzene, C₆H₆, for chlorine, and you get exactly three different liquids, with three different boiling points. Swap two of methane’s four hydrogens, and you get only one. What makes it hard is that a count of bottles says nothing about shape directly. This page shows, with 19’s moves, that a guessed shape predicts a count, and that the count can kill the guess.</p>
+  <p class="gesture">A molecule’s moves are the turns in space that put every atom where an atom of the same kind was. Two ways of swapping in new atoms give one compound when a move carries one to the other. The ways sort into classes, and the size of a class times the moves that keep one way fixed is the number of moves.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r19f.html">19f</a> (symmetries by hand; turning a card over; place-then-count), <a href="r19a.html">19a</a> (shuffles), <a href="r19b.html">19b</a> (one inverse), <a href="r19d.html">19d</a> (shifted copies; copies never overlap), <a href="r02e.html">2e</a> (equivalence relations) and <a href="r04j.html">4j</a> (counting). Rung 20 builds flips, and says how the two forms of 19·chem.6.5 are related.</p></div>
+</header>
+
+<section class="class step" data-step="19chem1">
+  <h2 class="sthead"><span class="stno">19chem1</span>A molecule’s moves</h2>
+  <p class="stands">Stands on 19f1 (symmetries form a group) and 19f3 (turning a card over).</p>
+  <p class="eqline" data-pid="570fe7">From here on, on this page, a move of a molecule is a turn of the whole molecule in space that puts every atom where an atom of the same kind was. Each move shuffles the atoms, and two moves count as one when they make the same shuffle.</p>
+  <p data-pid="ec53be">A water molecule is bent, with the oxygen at the corner. Turn it half a turn about the line through the oxygen that splits the corner in two, and the two hydrogens swap places. So water has two moves: doing nothing, and that half turn. Benzene is a flat ring of six carbons, a regular hexagon, with a hydrogen standing out from each. Its moves are the hexagon’s, by 19f: six turns on the table and six turns over in space.</p>
+  <p data-pid="ce4053">Molecule-moves technique: <b>the moves of a molecule form a part-group of the shuffles of its atoms.</b> The proof is 19f1’s. Doing nothing is a move. Two moves in a row are a move. The undo of a turn is a turn, and it sends atoms back to atoms of the same kind.</p>
+  <pre class="lines" data-k="ember" data-label="this page: three molecules, counted">
+\text{water, } \mathrm{H_2O}:\ \ 2 \text{ moves} @@ do nothing; the half turn swaps the hydrogens
+\text{benzene, } \mathrm{C_6H_6}:\ \ 6 \cdot 2 = 12 \text{ moves} @@ place-then-count (19f2): carbon 1 anywhere, its neighbour one of two
+\htmlClass{new}{\text{methane, } \mathrm{CH_4},\ \text{as a square}:\ 8;\ \ \text{as a tetrahedron}:\ 12} @@ two guesses at one shape; 19f3, and 19f6.1(d)
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · moves · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">19·chem.1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">boron trifluoride, BF₃: a flat triangle of three fluorines round the boron</span> <span class="gtx">ammonia, NH₃: a squat pyramid, the nitrogen on top, three hydrogens below</span></span>Count the moves of each. <br>Find which of them can be done without lifting the molecule off its plane.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="19chem2">
+  <h2 class="sthead"><span class="stno">19chem2</span>One compound, drawn two ways</h2>
+  <p class="stands">Stands on 19·chem.1, 2e (equivalence relations) and 19b (one inverse).</p>
+  <p data-pid="ed2386">Swap two of benzene’s hydrogens for chlorine. Number the carbons 1 to 6 round the ring. The chlorines can sit on any 2 of the 6 places, and there are 15 such pairs (4j). But a pair on places 1 and 2 and a pair on places 3 and 4 are the same molecule, turned. Only a move can tell you that two drawings are one compound.</p>
+  <p class="eqline" data-pid="65c7f6">From here on, on this page, two placements are carried one to the other when some move of the molecule sends the first to the second.</p>
+  <p data-pid="ec6d87">Carried-is-sorting technique: <b>being carried by a move is an equivalence relation, and the three demands of a group are exactly what make it one.</b> Each class is one compound.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the carried-is-sorting technique">
+e\,x = x @@ doing nothing: every placement is carried to itself
+g\,x = y \Rightarrow g^{-1} y = x @@ one inverse (19b): the undo carries it back
+g\,x = y,\ h\,y = z \Rightarrow (hg)\,x = z @@ two moves in a row are a move
+\htmlClass{new}{\text{reflexive, symmetric, transitive}} \quad \blacksquare @@ an equivalence relation (2e); its classes are the compounds
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this page: two chlorines on benzene">
+\{1, 2\}, \{2, 3\}, \dots, \{6, 1\}:\ \ 6 @@ next to each other: one class, carried round by turns
+\{1, 3\}, \{2, 4\}, \dots, \{6, 2\}:\ \ 6 @@ one place between: one class
+\{1, 4\}, \{2, 5\}, \{3, 6\}:\ \ 3 @@ straight across: one class
+\htmlClass{new}{6 + 6 + 3 = 15:\ \ 3 \text{ compounds}} \quad \blacksquare @@ no move changes the distance round the ring, so no two classes merge
+  </pre>
+  <p data-pid="054c37">There are three bottles on the shelf, with three different boiling points. The count and the shelf agree.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · sorting · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">19·chem.2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a flat regular pentagon ring of five places, two of them swapped for chlorine</span></span>Guess how many compounds, then sort the pairs into classes.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="19chem3">
+  <h2 class="sthead"><span class="stno">19chem3</span>Count by the moves that keep it</h2>
+  <p class="stands">Stands on 19·chem.2, 19d2 (shifted copies), 19d3 (copies never overlap) and 19f2 (place-then-count).</p>
+  <p data-pid="9b8f0c">Class-times-keepers technique: <b>the size of a class times the number of moves that keep one of its placements is the number of moves.</b> It is 19f2’s place-then-count, worked for any placement instead of one corner.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the class-times-keepers technique">
+K = \{k : k\,x = x\} @@ the keepers of x: a part-group (19d1)
+g\,x = y \Rightarrow \{h : h\,x = y\} = gK @@ h x = y exactly when g⁻¹h keeps x: a shifted copy (19d2)
+|gK| = |K|,\ \ \text{copies never overlap} @@ copies-same-size; copies-never-overlap (19d3)
+\htmlClass{new}{|G| = (\text{size of the class of } x) \cdot |K|} \quad \blacksquare @@ every move sends x into its class, in exactly one copy
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this page: benzene’s classes, checked">
+\{1, 2\}:\ \ 6 \cdot 2 = 12 @@ kept by doing nothing, and the turn over that swaps 1 and 2
+\{1, 3\}:\ \ 6 \cdot 2 = 12 @@ kept by doing nothing, and the turn over that swaps 1 and 3
+\{1, 4\}:\ \ 3 \cdot 4 = 12 @@ kept by doing nothing, the half turn, and two turns over
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · keepers · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">19·chem.3.1</span><span class="ph undo">undo</span><span class="givens"><span class="gtx">three chlorines on benzene’s ring,  a placement kept by 6 of the 12 moves</span></span>Find the size of its class. <br>Find such a placement.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="19chem4">
+  <h2 class="sthead"><span class="stno">19chem4</span>Square or tetrahedron?</h2>
+  <p class="stands">Stands on 19·chem.1 to 19·chem.3.</p>
+  <p data-pid="1b82ab">Now use the count to test a shape no one could see. Methane is a carbon with four hydrogens. Guess one: the hydrogens sit at the corners of a flat square round the carbon. Guess two: they sit at the corners of a tetrahedron, every two of them equally far apart. Swap two hydrogens for chlorine, and count the compounds each guess allows.</p>
+  <pre class="lines" data-k="ember" data-label="this page: two chlorines on methane">
+\text{square}:\ \ \{1, 2\}, \{2, 3\}, \{3, 4\}, \{4, 1\} \ \ \big|\ \ \{1, 3\}, \{2, 4\} @@ sides and diagonals: no move turns a side into a diagonal
+\text{square}:\ \ 2 \text{ compounds} @@ check: 4 · 2 = 8 and 2 · 4 = 8
+\text{tetrahedron}:\ \ \text{all } 6 \text{ pairs in one class} @@ every two corners are joined; a turn carries any edge to any other
+\htmlClass{new}{\text{tetrahedron}:\ \ 1 \text{ compound}} \quad \blacksquare @@ check: 6 · 2 = 12
+  </pre>
+  <p data-pid="6194a6">Every attempt to make a second compound of this formula has given the first one again. So the square guess is dead. A pyramid with the carbon on top dies the same way: its four turns keep sides and diagonals apart too.</p>
+  <p data-pid="2ed7a0"><b>A guessed shape predicts a count; a count that disagrees with the shelf kills the guess, and one that agrees only lets it live.</b> The tetrahedron has survived. That is not a proof that it is right, only that this test could not catch it.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · the test · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · a benzene ring, its moves, and the class of a placement</div>
+    <div id="ring"></div>
+    <div class="btns"><button type="button" id="bt">turn a sixth</button><button type="button" id="bo">turn over</button><button type="button" id="b0">clear</button></div>
+    <div class="cap">Tap a place to swap its hydrogen for chlorine (ember). The buttons move the molecule; the places stay. Every placement you can reach this way is the same compound.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">19·chem.4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">methane with three hydrogens swapped for chlorine, CHCl₃</span></span>Count the compounds the square guess allows, and the tetrahedron guess. <br>Find whether this count can tell the two guesses apart.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="19chem5">
+  <h2 class="sthead"><span class="stno">19chem5</span>Illegal moves</h2>
+  <p class="stands">Stands on 19·chem.1 to 19·chem.4.</p>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{same atoms, so the same compound}\,? @@ where the atoms sit matters: benzene has three with the same formula
+\text{compounds} = \tfrac{\text{placements}}{\text{moves}}\,? @@ only when doing nothing is each placement’s only keeper: 15/12 is no count
+\text{the count agrees, so the shape is proved}\,? @@ agreement lets a guess live; another count may still kill it
+\text{every turn of } \mathrm{CO_2} \text{ about its axis is another move}\,? @@ they make the same shuffle of the atoms, and count once
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">19·chem.5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span class="gtx">three chlorines on benzene’s ring</span></span>Divide the placements by the moves, and find which line of the tempting column breaks.</li><li><span class="givens"><span class="gtx">cubane, C₈H₈: eight carbons at the corners of a cube, 24 turns</span></span>Count the compounds with two chlorines, and check each class by class-times-keepers.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">19·chem.6.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">three chlorines on benzene’s ring</span></span>Build every class, and check each with class-times-keepers.</div>
+  <div class="chq"><span class="chid">19·chem.6.2</span><span class="tagq">edge</span><span class="givens"><span class="gtx">chlorine gas, Cl₂: two atoms in a line</span></span>Count its moves as shuffles, and as turns in space. <br>Find what class-times-keepers says when moves are counted as turns.</div>
+  <div class="chq"><span class="chid">19·chem.6.3</span><span class="tagq">converse</span><span class="givens"><span class="gtx">a flat ring of eight places,  chlorines at {1, 2, 3, 6},  chlorines at {1, 2, 4, 5}</span></span>Find the distance round the ring between every two chlorines in each. <br>Find whether the two placements are one compound.</div>
+  <div class="chq"><span class="chid">19·chem.6.4</span><span class="tagq">reroute</span><span class="givens"><span class="gtx">methane as a tetrahedron, two chlorines</span></span>Count the compounds again, this time from the keepers of one pair.</div>
+  <div class="chq"><span class="chid">19·chem.6.5</span><span class="tagq">seam</span><span class="givens"><span class="gtx">methane as a tetrahedron, its four hydrogens swapped for four different atoms: H, F, Cl, Br</span></span>Find how many compounds the tetrahedron allows. Find two placements in different classes with every distance between two atoms the same. <br>If no turn carries one to the other, but every distance agrees, are they the same compound?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r19f.html">← 19f · symmetries by hand</a><a href="r19bio.html">19·bio · why not just burn the sugar? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A molecule’s moves, counted as turns and flips together, form its point group; water’s is C₂ᵥ, ammonia’s C₃ᵥ, methane’s T_d and benzene’s D₆ₕ. The turns alone form the rotation subgroup. Compounds with one formula and different structures are isomers. Benzene’s three with two chlorines are ortho-, meta- and para-dichlorobenzene. Class-times-keepers is the orbit-stabiliser theorem; a class is an orbit and the keepers a stabiliser. Two compounds that no turn carries to each other but a flip does, as in 19·chem.6.5, are enantiomers, and a molecule with such a twin is chiral.</p>
+  <h3>Who said it first</h3>
+  <p>August Kekulé proposed the six-carbon ring for benzene in 1865. Wilhelm Körner (1874) counted substitution products of benzene to fix which places were which, his “absolute method”. In the same year Jacobus Henricus van ’t Hoff and Joseph Achille Le Bel argued for the tetrahedron by exactly this page’s count: one dichloromethane, and two forms of a carbon with four different neighbours. Louis Pasteur had already sorted two forms of tartrate crystals, from the tartar left in wine barrels, by hand under a lens in 1848. Arthur Cayley counted isomers of whole families with trees in 1874; George Pólya’s counting theorem of 1937 counts classes for any group.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="19·chem: a worked “proof”, not allowed">
+\text{benzene, two chlorines: } 15 \text{ placements, } 12 \text{ moves} @@ fine
+15 \div 12 = 1.25 \text{ compounds} @@ not allowed: the classes are not all of size 12; straight-across pairs are kept by 4 moves
+\text{so about one compound} @@ false: there are three
+  </pre>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+const V=c=>'var('+c+')';
+let on=[false,false,false,false,false,false], hist=[];
+const PT=k=>{ const a=Math.PI/2-k*Math.PI/3; return [130+62*Math.cos(a),120-62*Math.sin(a)]; };
+const OUT=k=>{ const a=Math.PI/2-k*Math.PI/3; return [130+94*Math.cos(a),120-94*Math.sin(a)]; };
+const key=a=>a.map(x=>x?1:0).join('');
+function moves(){ const M=[]; for(let r=0;r<6;r++){ M.push(k=>(k+r)%6); M.push(k=>(r-k+6)%6); } return M; }
+const MV=moves();
+const app=(m,a)=>{ const b=[false,false,false,false,false,false]; for(let k=0;k<6;k++) if(a[k]) b[m(k)]=true; return b; };
+function draw(){ let h='<svg viewBox="0 0 260 240" style="width:100%;max-width:320px;display:block;margin:auto">';
+  for(let k=0;k<6;k++){ const p=PT(k), q=PT((k+1)%6), o=OUT(k);
+    h+='<line x1="'+p[0]+'" y1="'+p[1]+'" x2="'+q[0]+'" y2="'+q[1]+'" style="stroke:'+V('--ink')+';stroke-width:2"/>';
+    h+='<line x1="'+p[0]+'" y1="'+p[1]+'" x2="'+o[0]+'" y2="'+o[1]+'" style="stroke:'+V('--grid')+';stroke-width:2"/>'; }
+  for(let k=0;k<6;k++){ const p=PT(k), o=OUT(k);
+    h+='<circle cx="'+p[0]+'" cy="'+p[1]+'" r="11" style="fill:'+V('--card')+';stroke:'+V('--ink')+'"/><text x="'+p[0]+'" y="'+(p[1]+4)+'" text-anchor="middle" style="fill:'+V('--ink')+';font:11px IBM Plex Mono,monospace">'+(k+1)+'</text>';
+    h+='<g data-k="'+k+'" style="cursor:pointer"><circle cx="'+o[0]+'" cy="'+o[1]+'" r="'+(on[k]?14:10)+'" style="fill:'+V(on[k]?'--ember':'--sand')+';stroke:'+V('--ink')+'"/><text x="'+o[0]+'" y="'+(o[1]+4)+'" text-anchor="middle" style="fill:'+V(on[k]?'--paper':'--ink')+';font:600 11px IBM Plex Mono,monospace">'+(on[k]?'Cl':'H')+'</text></g>'; }
+  $('ring').innerHTML=h+'</svg>';
+  $('ring').querySelectorAll('g[data-k]').forEach(g=>g.onclick=()=>{ const k=+g.dataset.k; on[k]=!on[k]; draw(); });
+  const cls=new Set(MV.map(m=>key(app(m,on)))), keep=MV.filter(m=>key(app(m,on))===key(on)).length, n=on.filter(x=>x).length;
+  const v=$('vd'); v.className='verdict';
+  v.textContent=n+' chlorine'+(n===1?'':'s')+'. This placement’s class has '+cls.size+' placement'+(cls.size===1?'':'s')+', and '+keep+' of the 12 moves '+(keep===1?'keeps':'keep')+' it: '+cls.size+' × '+keep+' = '+(cls.size*keep)+'.'+(hist.length?' Moves done: '+hist.slice(-8).join(', ')+'.':''); }
+$('bt').onclick=()=>{ on=app(MV[2],on); hist.push('sixth'); draw(); };
+$('bo').onclick=()=>{ on=app(MV[1],on); hist.push('over'); draw(); };
+$('b0').onclick=()=>{ on=[false,false,false,false,false,false]; hist=[]; draw(); };
+draw();
+window.__pic={set:(ks)=>{ on=[false,false,false,false,false,false]; ks.forEach(k=>on[k-1]=true); hist=[]; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'a move',t:R`\text{a turn: atoms to atoms of the same kind}`,n:`A shuffle of the atoms.`},
+  {k:'ember',kl:'counted',t:R`\mathrm{H_2O}: 2,\ \ \mathrm{C_6H_6}: 12`,n:`Methane: 8 or 12, by the guess.`}
+],{title:'The slides · moves · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'carried',t:R`g\,x = y`,n:`A move sends one to the other.`},
+  {k:'ember',kl:'an equivalence',t:R`e,\ g^{-1},\ hg`,n:`Reflexive, symmetric, transitive.`},
+  {k:'ember',kl:'benzene',t:R`6 + 6 + 3`,n:`Three compounds.`}
+],{title:'The slides · sorting · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'class times keepers',t:R`\htmlClass{new}{|G| = |\text{class}| \cdot |K|}`,n:`Shifted copies of the keepers.`},
+  {k:'ember',kl:'checked',t:R`6 \cdot 2,\ 6 \cdot 2,\ 3 \cdot 4`,n:`Each is 12.`}
+],{title:'The slides · keepers · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'square',t:R`2`,n:`Sides and diagonals.`},
+  {k:'ember',kl:'tetrahedron',t:R`\htmlClass{new}{1}`,n:`Every pair alike.`},
+  {k:'ember',kl:'the shelf',t:R`1`,n:`The square dies; the tetrahedron lives.`}
+],{title:'The slides · the test · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`\tfrac{15}{12}\,?`,n:`Divide only when nothing but e keeps a placement.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

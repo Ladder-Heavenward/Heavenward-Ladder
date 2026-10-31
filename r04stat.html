@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>4·stat · What can counting alone say about a list?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r04comp.html">← 4·comp can a row of switches add?</a><a href="r04crypt.html">next: 4·crypt can a shifted alphabet keep a secret? →</a></p>
+  <div class="tags"><span class="tag stat">4·stat · statistics</span></div>
+  <h1>What can counting alone say about a list?</h1>
+  <p>What can counting alone say about a list? A list of measurements, such as how many days it rained each week, or how many birds were counted at each stop, is called data. Before there are fractions, three things can be said about data by counting alone. You can say which value comes up most often, how far apart the largest and smallest are, and how many cases there are of each kind. Chance starts the same way, as counting: of the cases that could happen, how many give what you are waiting for. In this section we'll teach you what can be said about data by counting, and what you can do because you know it.</p>
+  <p class="gesture">The tally of a value is how many places in the list hold it, and the tallies add up to the length of the list. A mode is a value with the largest tally. The range is the gap from the least value up to the greatest. When the cases are equally likely, the chance of an event is how many of the cases give it, out of how many cases there are. Of all the ways a handful of coins can fall, the number that show a given count of heads is one of 4j’s choosing numbers.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r04b.html">4b</a> (induction), <a href="r04g.html">4g</a> (any-two-compare, less-is-adding, least-member), <a href="r04h.html">4h</a> (lists), <a href="r04e.html">4e</a> (cancel for plus) and <a href="r04j.html">4j</a> (lead-one-out, bring-one-in, one-count, finite-is-settled, greatest-member, separate-piles, stages-multiply, counted-functions, choosing-counts-parts, two-term-power). <a href="r05stat.html">5·stat</a> finds the middle of a list, once fractions exist; <a href="r05bio.html">5·bio</a> counts peas.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · read it through, then work the picture and the slides</div>
+
+  <h3>Data and tallies</h3>
+  <p class="eqline" data-pid="f0436c">From here on, data is a list of numbers x₀, x₁, …, x₍ₙ₋₁₎ of length n: a function from n to ℕ, which is 4h's list with its places counted from 0 instead of from 1. Each xᵢ is a value of the data. For a number v, the tally of v is the number of members of {i ∈ n : xᵢ = v}, the places that hold v. That set is a settled part of n, and a settled part of n has a number of members, by induction on n. The part of 0 is ∅, with 0 members. The part of S(n) is the part of n, with n brought in or not, as the settled statement at n says (bring-one-in, since n is not in n). One-count makes that number the only one.</p>
+  <p data-pid="dd1faf">A tally was once kept with strokes, four upright and the fifth across them, so that the strokes could be counted in fives. Its accepted name is in the basement. A table of the values with their tallies is a tally table.</p>
+  <p data-pid="f447ad">Tallies-add-up technique: <b>if the values that appear in a list of length n are v₀, …, v₍ₘ₋₁₎, all different, then the sum of their tallies is n.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the tallies-add-up technique">
+n = \{i \in n : x_i = v_0\} \cup \dots \cup \{i \in n : x_i = v_{m-1}\} @@ each place holds some value, and each value is one of the vⱼ
+\text{the piles share no place} @@ a place holds one value, and the vⱼ are different
+\htmlClass{new}{\textstyle\sum_{j \lt m} (\text{tally of } v_j) = n} \quad \blacksquare @@ separate-piles, once for each pile, by induction on m (induction, sum-one-more)
+  </pre>
+
+  <h3>The greatest, the least, and the gap between</h3>
+  <p data-pid="208730">Least-member gave every settled set of numbers that has a member a least member. The greatest needs its own proof, since ℕ itself has no greatest member. 4j proved it as greatest-member; here is the proof again, under this page's name. Greatest-of-a-finite-set technique: <b>every finite set of numbers with at least one member has a greatest member.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the greatest-of-a-finite-set technique">
+\begin{aligned}&\varphi(k): \text{every set of numbers}\\ &\quad\text{with } S(k) \text{ members has a greatest}\end{aligned} @@ the condition, for induction on k
+\varphi(0): \{a\} \text{ has greatest } a @@ its only member
+\varphi(k) \Rightarrow \varphi(S(k)):\ X = Y \cup \{x\},\ Y \text{ with } S(k) \text{ members} @@ lead-one-out: lead one member out
+g = \text{greatest of } Y;\ \ g \lt x \lor g = x \lor x \lt g @@ φ(k); any-two-compare
+\htmlClass{new}{\text{the greater of } g, x \text{ is the greatest of } X} \quad \blacksquare @@ by cases; induction
+  </pre>
+  <p class="eqline" data-pid="4131cc">From here on, for numbers a ≤ b, b − a names the one number d with a + d = b. Less-is-adding gives such a d when a &lt; b, d = 0 serves when a = b, and cancel for plus makes it the only one. Read it “b minus a”. Rung 5 will give every subtraction an answer; here only the ones with a ≤ b are allowed.</p>
+  <p data-pid="26bfbf">For data with at least one value, its least value and its greatest value exist, by least-member and greatest-of-a-finite-set. The range of the data is greatest − least. A mode of the data is a value whose tally is at least the tally of every value. Mode-exists technique: <b>data with at least one value has at least one mode, and it may have more than one.</b> The tallies of the values that appear make a finite set of numbers with a member, so greatest-of-a-finite-set gives the greatest tally, and any value with that tally is a mode. The list 1, 1, 2, 2 has two modes. Mode is French for the fashion: the value most often worn.</p>
+  <pre class="lines" data-k="ember" data-label="this page: worked">
+3, 5, 2, 5, 6, 0, 5, 3 @@ eight weeks of rain days at Eureka, as one student logged them
+\text{tallies: } 0{:}\,1,\ 2{:}\,1,\ 3{:}\,2,\ 5{:}\,3,\ 6{:}\,1 @@ they add to 8 (tallies-add-up)
+\text{mode } 5;\ \ \text{range } 6 - 0 = 6 @@ mode-exists; greatest-of-a-finite-set and least-member
+  </pre>
+
+  <h3>Counting by two questions at once</h3>
+  <p data-pid="de3b34">When each case is sorted by two questions, the tallies go into a grid. It has a row for each answer to the first question and a column for each answer to the second. Call it a two-way table. Two-ways-to-the-total technique: <b>in a two-way table of counts, the row totals and the column totals add to the same number, the number of cases.</b> Each way splits the cases into separate piles, so each adds to the number of cases by separate-piles.</p>
+  <pre class="lines" data-k="ember" data-label="this page: worked">
+\begin{array}{l|cc|c} & \text{bruised} & \text{sound} & \\ \hline \text{Gravenstein} & 7 & 29 & 36 \\ \text{other} & 4 & 20 & 24 \\ \hline & 11 & 49 & 60 \end{array} @@ 60 apples from an orchard near Sebastopol: 36 + 24 = 60 = 11 + 49
+  </pre>
+
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · counting</div>
+    <p data-pid="6a4659">4j found that random things in a crowd pile into a steady shape, and that the spread is part of the shape. A tally table is that pile, written down. Eight weeks of rain days at Eureka make a pile with its peak at 5, the mode, and a width of 6, the range. Neither number says what next week will bring. Both say something about the weeks as a crowd.</p>
+    <p data-pid="f673bc"><b>The spread is part of the answer, not noise around it.</b></p>
+    <p data-pid="ad7165">The range is the crudest width there is: one very wet week or one dry one sets it alone. It is still a width. A report of rain days without one says less than it seems to.</p>
+    <p class="bait" data-pid="471975">The next year the same student logs eight more weeks at Eureka, and the mode is 2. Did Eureka's weather change?</p>
+  </aside>
+
+  <h3>Chance by counting</h3>
+  <p class="eqline" data-pid="01c06b">From here on, when a set of n cases is taken to be equally likely, and k of them give an event, the chance of the event is k of n. Its accepted name is probability, from the Latin probabilis, “likely”. 5·stat will write it as a fraction.</p>
+  <p data-pid="1451ad">Which cases are equally likely is not proved. <b>It is a choice about the world, and the counting is only as good as that choice.</b> Two dice, one red and one blue, fall in 6 · 6 = 36 ways by stages-multiply. If each way is taken as equally likely, a total of 7 comes in 6 of 36 and a total of 2 in 1 of 36.</p>
+  <p data-pid="299eec">Count-of-successes technique: <b>of the 2ⁿ ways n coins can fall, heads or tails, exactly (n choose k) show k heads, and the counts for k = 0, 1, …, n add to 2ⁿ.</b> A way of falling is a function from n to {heads, tails}, so there are 2ⁿ by counted-functions. Match each way with its set of places that show heads. It is a k-member part of n exactly when the way shows k heads, and each part comes from one way, so choosing-counts-parts counts them. The sum is two-term-power with both numbers 1.</p>
+  <pre class="lines" data-k="ember" data-label="this page: worked">
+n = 4:\ \ 1,\ 4,\ 6,\ 4,\ 1 @@ row 4 of 4j's table; they add to 16 = 2⁴
+\text{two heads in four tosses: } 6 \text{ of } 16 @@ count-of-successes, if each of the 16 ways is equally likely
+\text{three dice, total } 10:\ 27 \text{ of } 216;\ \ \text{total } 9:\ 25 \text{ of } 216 @@ count ordered triples, each die told apart
+  </pre>
+  <p data-pid="1f1e69">Gamblers say a total of 9 and a total of 10 with three dice should come equally often, since each can be made in six ways from three numbers. Yet long play shows 10 more often. The ways must be counted with each die told apart: 10 then has 27 and 9 has 25.</p>
+
+  <h3>Illegal moves</h3>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed">
+\text{the mode is the value in the middle}\,? @@ it is the value with the largest tally, wherever it sits
+3 - 5\,? @@ not yet: here b − a needs a ≤ b; rung 5 builds the answer
+\begin{aligned}&\text{two coins: two heads, two tails, or one}\\ &\quad\text{of each, so one of each is } 1 \text{ of } 3\,?\end{aligned} @@ those three are not equally likely; told apart, there are 4 ways, and one of each comes in 2 of 4
+\begin{aligned}&\text{a list's tallies add to}\\ &\quad\text{the number of different values}\,?\end{aligned} @@ to the length of the list (tallies-add-up)
+  </pre>
+</section>
+
+<section class="pic" id="pic">
+  <div class="eyebrow">The picture · a tally chart, and the count of heads</div>
+  <div class="panels">
+    <div class="panel">
+      <div class="lbl">rain days in each of n weeks; the last one set by hand</div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">n</span><input type="range" id="kn" min="1" max="20" step="1" value="12"><output id="on"></output></div>
+      <div class="kn"><span class="m">last</span><input type="range" id="kw" min="0" max="7" step="1" value="5"><output id="ow"></output></div>
+      <div class="cap">Each dot is one week, stacked over its value. Plum: the modes. Ember: the range, from the least value to the greatest.</div>
+    </div>
+    <div class="panel">
+      <div class="lbl">n coins: how many ways show each number of heads</div>
+      <canvas id="cvL"></canvas>
+      <div class="kn"><span class="m">n</span><input type="range" id="kc" min="1" max="10" step="1" value="4"><output id="oc"></output></div>
+      <div class="kn"><span class="m">k</span><input type="range" id="kk" min="0" max="10" step="1" value="2"><output id="ok"></output></div>
+      <div class="cap">Each bar is (n choose k), the ways with k heads. Plum: the bar for the chosen k. The bars add to 2ⁿ.</div>
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+</section>
+
+<section class="slides" id="sl1"><div class="eyebrow">The slides · data; tallies-add-up; greatest-of-a-finite-set; minus, when it is allowed; range and mode; two-way tables; chance; count-of-successes; the gamblers' dice; illegal moves · ← → keys work</div></section>
+
+<section class="sayback">
+  <div class="eyebrow">Say it back · then work it</div>
+  <h2>Questions</h2>
+  <div class="phkey"></div>
+  <ol>
+    <li><span class="qid">4·stat.1</span><span class="gname">Tallies.</span><span class="gwhy">Do: build the page's pieces.</span>
+      <ol class="sub">
+        <li><span class="qid">4·stat.1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="L: 4, 2, 4, 7, 1, 4, 2, 9, 2, 4"></span></span>Make the tally table of L, and check tallies-add-up on it.</li><li>Find the modes and the range of L.</li><li><span class="givens"><span data-tex-inline="\text{two dice, told apart: } 36 \text{ ways}"></span></span>Count the ways the total is 8, and the ways it is at least 10.</li><li><span class="givens"><span data-tex-inline="\text{five coins: } 32 \text{ ways}"></span></span>Count the ways with exactly 3 heads, and with at least 3.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">4·stat.2</span><span class="gname">From the count back.</span><span class="gwhy">Undo: run the page's techs backwards.</span>
+      <ol class="sub">
+        <li><span class="qid">4·stat.2.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="6 \text{ values},"></span> <span data-tex-inline="\text{least } 3,"></span> <span data-tex-inline="\text{range } 5,"></span> <span data-tex-inline="\text{only mode } 4"></span></span>Write one such list.</li><li><span class="givens"><span data-tex-inline="\text{a two-way table:}"></span> <span data-tex-inline="\text{row totals } 18 \text{ and } 30,"></span> <span data-tex-inline="\text{one column total } 21"></span></span>Find the other column total.</li><li><span class="givens"><span data-tex-inline="\text{an event of } k \text{ heads in } n \text{ coins}"></span> <span data-tex-inline="\text{has chance } 10 \text{ of } 32"></span></span>Find n and k.</li><li><span class="givens"><span data-tex-inline="\text{a tally table with tallies } 3, 5, 4"></span></span>Find the length of the list.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">4·stat.3</span><span class="gname">Where it gives.</span><span class="gwhy">Bend: find where the techs stop working.</span>
+      <ol class="sub">
+        <li><span class="qid">4·stat.3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li>Find the line of greatest-of-a-finite-set's proof that needs the set to be finite, and a set that breaks the claim.</li><li><span class="givens"><span data-tex-inline="3, 5, 2, 5, 6, 0, 5, 3"></span></span>Change one value so the mode changes but the range does not.<br>Change one value so the range changes but the mode does not.</li><li><span class="givens"><span data-tex-inline="\text{three dice, totals } 9 \text{ and } 10;"></span> <span data-tex-inline="\text{the page’s gamblers}"></span> <span data-tex-inline="\text{counted three}"></span> <span data-tex-inline="\text{numbers in any order as one way}"></span></span>Count the ways of each total their way.<br>Find what they took as equally likely.</li><li><span class="givens"><span data-tex-inline="\text{a bent coin}"></span></span>Find what count-of-successes still counts about it, and what it no longer gives.</li></ol></li>
+      </ol></li>
+    <li class="optgroup"><span class="qid">4·stat.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder challenges that rely on your own making. The page is complete without these; the rung's star needs them.</span>
+      <ol class="sub">
+        <li class="opt"><span class="qid">4·stat.4.1</span><span class="tagq">build</span>Log a count of your own for fourteen days, such as cars past a window in five minutes, or Steller's jays at a feeder; make its tally table, check tallies-add-up on it, and find its modes and range.<br>Change one day's count so the mode changes and the range does not, or prove your data cannot allow it.</li>
+        <li class="opt"><span class="qid">4·stat.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{one event: chance } 3 \text{ of } 8,"></span> <span data-tex-inline="\text{another: chance } 2 \text{ of } 5"></span></span>Using counting numbers only, prove which is more likely.</li>
+        <li class="opt"><span class="qid">4·stat.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{the tallies of a list are known,}"></span> <span data-tex-inline="\text{not the order of its values}"></span></span>Find what else about the list you can still find, and whether the mode and the range are among it.</li>
+        <li class="opt"><span class="qid">4·stat.4.4</span><span class="tagq">world</span>Ask 20 people two yes-or-no questions of your own, make the two-way table, and check two-ways-to-the-total on it.</li>
+        <li class="opt"><span class="qid">4·stat.4.5</span><span class="tagq">seam</span>Toss two coins fifty times, tally the throws with at least one head, and compare your share with 3 out of 4.<br>Does your tally prove the count, or only agree with it?<br>Which would settle a coin you suspect: a proof, or a thousand tosses?</li>
+      </ol></li>
+  </ol>
+  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
+</section>
+
+<nav class="nextrung"><a href="r04k.html">← 4k · what a recipe for answers is made of</a><a href="r04comp.html">4·comp · can a row of switches add? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>The gamblers' question was answered by Galileo. The great mathematician of 4·stat.4.5 is Jean d'Alembert, writing in 1754.</p>
+  <aside class="voice para"><p>Gamblers say a total of 9 and a total of 10 with three dice should come equally often, since each can be made in six ways from three numbers. Yet long play shows 10 more often. The ways must be counted with each die told apart: 10 then has 27 and 9 has 25.</p><cite>Galileo Galilei, Sopra le scoperte dei dadi (about 1620); paraphrase</cite></aside>
+  <h3>Accepted names</h3>
+  <p>A tally is a frequency, and a tally table is a frequency table. The chance of an event, k of n, is its probability.</p>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+/* least and greatest of F.f on [lo, hi]: the ends, F's critical points inside, and a fine sample (exact between critical points for the functions used here) */
+function ext(F,lo,hi){ if(F.dir) return [0,1]; let m=Infinity,M=-Infinity; const t=x=>{ const v=F.f(x); if(v<m) m=v; if(v>M) M=v; };
+  t(lo); t(hi); (F.crit||[]).forEach(c=>{ if(c>lo&&c<hi) t(c); }); for(let k=1;k<64;k++) t(lo+(hi-lo)*k/64); return [m,M]; }
+function sums(F,pts){ let L=0,U=0; const ms=[],Ms=[]; for(let i=1;i<pts.length;i++){ const [m,M]=ext(F,pts[i-1],pts[i]), w=pts[i]-pts[i-1]; ms.push(m); Ms.push(M); L+=m*w; U+=M*w; } return {L,U,ms,Ms}; }
+const eq=(a,b,n)=>Array.from({length:n+1},(_,i)=>a+(b-a)*i/n);
+function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
+function boxes(P,pts,hs,stroke,fill,alpha){ const c=P.ctx; for(let i=1;i<pts.length;i++){ const a=pts[i-1],b=pts[i],h=hs[i-1]; c.globalAlpha=alpha; P.poly([[a,0],[b,0],[b,h],[a,h]],null,fill); c.globalAlpha=1; P.poly([[a,0],[b,0],[b,h],[a,h]],stroke,null,1.2); } }
+function dirDots(P,a,b){ const c=P.ctx; c.fillStyle=col('--ink'); for(let k=0;k<=300;k++){ const x=a+(b-a)*k/300; const y=(k%2)?0:1; c.fillRect(P.X(x)-1,P.Y(y)-1,2,2); } }
+/* shade between the graph of fn and the axis from lo to hi: above in pos colour, below in neg colour */
+function shade(P,fn,lo,hi,pos,neg,alpha){ if(hi<lo){ const t=lo; lo=hi; hi=t; } const c=P.ctx, N=300; c.globalAlpha=alpha==null?0.32:alpha;
+  for(let k=0;k<N;k++){ const x0=lo+(hi-lo)*k/N, x1=lo+(hi-lo)*(k+1)/N, xm=(x0+x1)/2, y=fn(xm); if(!isFinite(y)) continue; P.poly([[x0,0],[x1,0],[x1,fn(x1)],[x0,fn(x0)]],null,y>=0?pos:neg); }
+  c.globalAlpha=1; }
+function rangeOf(fn,lo,hi,pad){ let m=Infinity,M=-Infinity; for(let k=0;k<=400;k++){ const v=fn(lo+(hi-lo)*k/400); if(isFinite(v)){ if(v<m) m=v; if(v>M) M=v; } } if(m>0) m=0; if(M<0) M=0; const p=(M-m)*(pad==null?0.12:pad)||1; return [m-p,M+p]; }
+function chips(el,FN,get,setk,after){ Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===get()) b.className='on'; b.onclick=()=>{ setk(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+const Nw='\\htmlClass{new}';
+function gridFor(sp){ return sp>40?10:sp>16?4:sp>8?2:sp>3?1:sp>1.2?0.5:0.25; }
+function frame2(P,fn,lo,hi,pad){ const w=hi-lo; P.o.x=[lo-0.12*w,hi+0.08*w]; P.o.y=rangeOf(fn,lo,hi,pad==null?0.12:pad); const sx=P.o.x[1]-P.o.x[0], sy=P.o.y[1]-P.o.y[0]; let g=gridFor(sx); while(sy/g>24) g*=2; P.o.grid=g; }
+const num=(f,a,b,n)=>{ n=n||4000; const h=(b-a)/n; let s=0; for(let i=0;i<n;i++) s+=f(a+(i+0.5)*h)*h; return s; };
+/* axes with separate steps across and up */
+function axes2(P,gx,gy){ const c=P.ctx,o=P.o; c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ c.moveTo(P.X(x),P.Y(o.y[0])); c.lineTo(P.X(x),P.Y(o.y[1])); }
+  for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ c.moveTo(P.X(o.x[0]),P.Y(y)); c.lineTo(P.X(o.x[1]),P.Y(y)); } c.stroke();
+  c.strokeStyle=col('--muted'); c.lineWidth=1.3; c.beginPath(); if(o.y[0]<=0&&o.y[1]>=0){ c.moveTo(P.X(o.x[0]),P.Y(0)); c.lineTo(P.X(o.x[1]),P.Y(0)); } if(o.x[0]<=0&&o.x[1]>=0){ c.moveTo(P.X(0),P.Y(o.y[0])); c.lineTo(P.X(0),P.Y(o.y[1])); } c.stroke();
+  c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; const ly=Math.min(P.H-6,Math.max(12,P.Y(0)+14));
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ if(Math.abs(x)<1e-9) continue; c.fillText(+x.toFixed(6),P.X(x),ly); }
+  c.textAlign='right'; const lx=Math.max(32,Math.min(P.W-4,P.X(0)-5)); for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ if(Math.abs(y)<1e-9) continue; c.fillText(String(+y.toFixed(6)).replace('-','−'),lx,P.Y(y)+4); } }
+function nice(sp){ const raw=sp/6, p=Math.pow(10,Math.floor(Math.log10(raw))), m=raw/p; return (m<1.5?1:m<3.5?2:m<7.5?5:10)*p; }
+const kn=$('kn'),kw=$('kw'),kc=$('kc'),kk=$('kk'),cvF=$('cvF'),cvL=$('cvL');
+const DATA=[3,5,2,5,6,0,5,3,4,7,2,5,1,3,6,4,5,2,3,4];
+const PF=plane(cvF,{x:[-0.8,7.8],y:[-1.2,9],grid:0,labels:0,draw:P=>drawF(P)});
+const PL=plane(cvL,{x:[-0.8,10.8],y:[-30,270],grid:0,labels:0,draw:P=>drawL(P)});
+function list(){ const n=+kn.value, L=DATA.slice(0,n); L[n-1]=+kw.value; return L; }
+function stats(L){ const t=[0,0,0,0,0,0,0,0]; L.forEach(v=>t[v]++); const top=Math.max(...t), lo=Math.min(...L), hi=Math.max(...L);
+  return {t,top,modes:t.map((c,v)=>c===top?v:-1).filter(v=>v>=0),lo,hi}; }
+const choose=(n,k)=>{ let r=1; for(let i=1;i<=k;i++) r=r*(n-k+i)/i; return Math.round(r); };
+function drawF(P){ const L=list(), s=stats(L); P.line(-0.6,0,7.6,0,'--ink',1.4);
+  for(let v=0;v<=7;v++){ P.text(String(v),v,-0.6,'--ink','center',12); const m=s.modes.includes(v);
+    for(let j=0;j<s.t[v];j++) P.dot(v,0.6+j*0.95,m?'--plum':'--ink',m?7:6); }
+  const y=Math.min(8.6,s.top*0.95+0.9); P.line(s.lo,y,s.hi,y,'--ember',2.4); P.line(s.lo,y-0.3,s.lo,y+0.3,'--ember',2.4); P.line(s.hi,y-0.3,s.hi,y+0.3,'--ember',2.4);
+  P.text('range '+(s.hi-s.lo),(s.lo+s.hi)/2,y+0.45,'--ember','center',12); }
+function drawL(P){ const n=+kc.value, k=Math.min(+kk.value,n), top=choose(n,Math.floor(n/2)); P.o.y=[-top*0.12,top*1.15];
+  P.line(-0.6,0,10.6,0,'--ink',1.4);
+  for(let j=0;j<=n;j++){ const c=choose(n,j); P.poly([[j-0.38,0],[j+0.38,0],[j+0.38,c],[j-0.38,c]],null,j===k?'--plum':'--muted'); P.text(String(j),j,-top*0.06,'--ink','center',11); P.text(String(c),j,c+top*0.04,j===k?'--plum':'--ink','center',11); } }
+function read(){ const L=list(), s=stats(L), n=+kc.value; if(+kk.value>n) kk.value=n; const k=+kk.value;
+  $('on').textContent=kn.value; $('ow').textContent=kw.value; $('oc').textContent=n; $('ok').textContent=k;
+  const vd=$('vdF'); vd.className='verdict';
+  vd.textContent='Left: the list '+L.join(', ')+'; tallies add to '+s.t.reduce((a,b)=>a+b,0)+'; mode'+(s.modes.length>1?'s ':' ')+s.modes.join(' and ')+'; range '+s.hi+' − '+s.lo+' = '+(s.hi-s.lo)+'. Right: '+k+' heads in '+n+' tosses: '+choose(n,k)+' of '+(2**n)+'.';
+  tex($('eqF'),R`\tbinom{${n}}{0} + \cdots + \tbinom{${n}}{${n}} = ${2**n} = 2^{${n}}`,true); }
+function all(){ read(); PF.redraw(); PL.redraw(); }
+[kn,kw,kc,kk].forEach(el=>el.addEventListener('input',all));
+window.__pic={set:(n,w,c,k)=>{ kn.value=n; kw.value=w; kc.value=c; kk.value=k; all(); const s=stats(list()); return {modes:s.modes,range:s.hi-s.lo,sum:s.t.reduce((a,b)=>a+b,0),ways:choose(+kc.value,+kk.value),of:2**(+kc.value)}; }};
+all();
+stepper('#sl1',[
+  {k:'ember',kl:'data',t:R`x_0, x_1, \dots, x_{n-1}`,n:`A list of numbers; the tally of v counts the places holding v.`},
+  {k:'ember',kl:'tallies-add-up',t:R`${Nw}{\textstyle\sum_j (\text{tally of } v_j) = n}`,n:`Separate piles add.`},
+  {k:'ember',kl:'greatest-of-a-finite-set',t:R`${Nw}{\text{a finite set with a member has a greatest}}`,n:`Bring in one more and compare.`},
+  {k:'ember',kl:'minus',t:R`p \le b:\ \ p + (b - p) = b`,n:`Only when p ≤ b, for now.`},
+  {k:'ember',kl:'range and mode',t:R`\text{greatest} - \text{least};\ \ \text{the largest tally}`,n:`Mode-exists: a mode exists, maybe several.`},
+  {k:'ember',kl:'two-way tables',t:R`${Nw}{\text{rows and columns add to one total}}`,n:`Two-ways-to-the-total.`},
+  {k:'ember',kl:'chance',t:R`k \text{ of } n`,n:`n cases taken as equally likely.`},
+  {k:'ember',kl:'count-of-successes',t:R`${Nw}{\tbinom nk \text{ of } 2^n}`,n:`k heads in n tosses.`},
+  {k:'ember',kl:"the gamblers' dice",t:R`10:\ 27,\ \ 9:\ 25 \text{ of } 216`,n:`Tell the dice apart.`},
+  {k:'ember',kl:'illegal',t:R`3 - 5`,n:`Not yet.`}
+],{title:'The slides · data; tallies-add-up; greatest-of-a-finite-set; minus, when it is allowed; range and mode; two-way tables; chance; count-of-successes; the gamblers’ dice; illegal moves · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

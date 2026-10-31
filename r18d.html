@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Circles</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r18c.html">← 18c lines</a><a href="r18e.html">next: 18e conics by distances →</a></p>
+  <div class="tags"><span class="tag proof">18d · proof</span></div>
+  <h1>Circles</h1>
+  <p>A circle is the set of points at one distance from a centre, so its equation is the distance formula squared. This step proves what the definition gives. The points as far from one point as from another make a line, so three points not on one line lie on exactly one circle. A line meets a circle in at most two points, and when it meets it once it is perpendicular to the radius there. Two circles meet exactly when their radii and the distance between their centres could be the sides of a triangle, which proves that such a triangle exists.</p>
+  <p class="gesture">A circle is every point whose squared horizontal and vertical gaps from the centre add to the squared radius. The points equally far from two points make the line through their midpoint, perpendicular to the segment between them. A line meets a circle twice, once or never as its distance from the centre is less than, equal to or more than the radius. Two circles meet when the distance between their centres is no more than the sum of the radii and no less than their difference.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r18a.html">18a</a> (distance-laws, right-triangle, part-of-the-way), <a href="r18b.html">18b</a> (triangle in the plane, equality-on-the-segment), <a href="r18c.html">18c</a> (two-descriptions-agree, two-lines-meet, nearest-point), <a href="r08i.html">8i</a> (completing the square). <a href="r18e.html">18e</a> builds the other conics; <a href="r18h.html">18h</a> works circles by hand; <a href="r18cb13.html">18·cb13</a> finds their slopes.</p></div>
+</header>
+
+<section class="class step" data-step="18d1">
+  <h2 class="sthead"><span class="stno">18d1</span>The definition, and its equation</h2>
+  <p class="stands">Stands on 18a (distance) and 8 (powers-keep-order).</p>
+  <p class="eqline" data-pid="b3414c">From here on, for a point O = (p, q) and a real r &gt; 0, the circle with centre O and radius r is {P : d(P, O) = r}, the set of (x, y) with (x − p)² + (y − q)² = r². A segment from O to a point of the circle is also called a radius; a segment joining two points of the circle is a chord, and a chord through O is a diameter, of length 2r.</p>
+  <p data-pid="f958d4">The equation is the definition squared: both sides are not negative, so squaring loses nothing (powers-keep-order). Expanded, it is x² + y² − 2px − 2qy + (p² + q² − r²) = 0. Circle-equation technique: <b>x² + y² + Dx + Ey + F = 0 is a circle exactly when D² + E² − 4F &gt; 0, with centre (−D/2, −E/2) and radius √(D² + E² − 4F)/2. When D² + E² − 4F = 0 it is one point, and when it is negative it holds no point.</b> It is completing the square twice (8i): (x + D/2)² + (y + E/2)² = (D² + E² − 4F)/4.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the definition · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">18d1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">x² + y² = 25</span></span>Find four points on it with whole-number coordinates, other than (±5, 0) and (0, ±5). <br>Say whether (4, 4) is inside or outside, without drawing.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18d2">
+  <h2 class="sthead"><span class="stno">18d2</span>Equally far from two points</h2>
+  <p class="stands">Stands on 18d1 and 18c (two-lines-meet).</p>
+  <p data-pid="d3ac2a">Perpendicular-bisector technique: <b>for points A ≠ B, the set {X : d(X, A) = d(X, B)} is the line 2(B − A) · X = |B|² − |A|². It passes through the midpoint M of AB and is perpendicular to AB.</b> Its accepted name is the perpendicular bisector of AB.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the perpendicular-bisector technique">
+d(X, A) = d(X, B) \iff |X - A|^2 = |X - B|^2 @@ both not negative (powers-keep-order)
+|X|^2 - 2A \cdot X + |A|^2 = |X|^2 - 2B \cdot X + |B|^2 @@ right-triangle with u = X, v = −A; likewise B
+\iff 2(B - A) \cdot X = |B|^2 - |A|^2 @@ adding-keeps-answers: the |X|² cancels, and what is left is of the first degree
+B - A \ne 0 \Rightarrow \text{a line with normal } B - A @@ 18c; so perpendicular to AB
+2(B - A) \cdot \tfrac{A + B}{2} = |B|^2 - |A|^2 \quad \blacksquare @@ the dot technique: M is on it
+  </pre>
+  <p data-pid="29aa90">Circle-through-three technique: <b>three points A, B, C that are not collinear lie on exactly one circle. Its centre is where the perpendicular bisectors of AB and BC meet. Three collinear points lie on no circle.</b> Its accepted name is the circumscribed circle of the triangle ABC, or circumcircle, with centre the circumcentre.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the circle-through-three technique">
+\text{bisectors of } AB, BC:\ \text{normals } B - A,\ C - B @@ perpendicular-bisector
+C - B = k(B - A) \Rightarrow A, B, C \text{ on one line} @@ the line through B with direction B − A (two-descriptions-agree); three points of a line are collinear (part-of-the-way)
+\text{not collinear} \Rightarrow D \ne 0 \Rightarrow \text{one common point } O @@ two-lines-meet
+d(O, A) = d(O, B) = d(O, C) = r @@ perpendicular-bisector twice; so all three are on the circle with centre O
+\begin{aligned}&\text{any circle through } A, B,\\ &\quad C \text{ has its centre on both bisectors}\end{aligned} @@ perpendicular-bisector: its centre is equally far from each
+\htmlClass{new}{\text{so its centre is } O \text{ and its radius } r} \quad \blacksquare @@ two-lines-meet: only one common point; collinear: D = 0 and the bisectors are parallel
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · equally far · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · the circle through a triangle, and two circles meeting</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="lbl">A = (−3, −1), B = (4, −2), and C; the circumcircle</div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">Cx</span><input type="range" id="kx" min="-5" max="6" step="0.1" value="1"><output id="ox"></output></div>
+      <div class="kn"><span class="m">Cy</span><input type="range" id="ky" min="-5" max="6" step="0.1" value="4"><output id="oy"></output></div>
+      <div class="cap">Ink: the triangle. Dashed ember: the perpendicular bisectors of AB and BC. Plum: their meeting point O and the circle through all three. Teal: the incircle, from inscribed-circle.</div>
+    </div>
+    <div class="panel">
+      <div class="lbl">circles about (0, 0) and (d, 0)</div>
+      <canvas id="cvL"></canvas>
+      <div class="kn"><span class="m">d</span><input type="range" id="kd" min="0.5" max="10" step="0.1" value="5"><output id="od"></output></div>
+      <div class="kn"><span class="m">r₁</span><input type="range" id="k1" min="0.5" max="6" step="0.1" value="4"><output id="o1"></output></div>
+      <div class="kn"><span class="m">r₂</span><input type="range" id="k2" min="0.5" max="6" step="0.1" value="3"><output id="o2"></output></div>
+      <div class="cap">Ink and ember: the two circles. Dashed: the line through their common points, from two-circles-meet. Plum: the common points, and the triangle d, r₁, r₂ they make.</div>
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18d2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">A = (0, 0),  B = (6, 0),  C = (0, 4)</span></span>Find the set of points equally far from A and B. <br>Find the one point equally far from all three.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18d3">
+  <h2 class="sthead"><span class="stno">18d3</span>A line and a circle</h2>
+  <p class="stands">Stands on 18d2 and 18c (nearest-point).</p>
+  <p data-pid="f22212">Line-meets-circle technique: <b>let a line ℓ be at distance δ from the centre O of a circle of radius r, with F the foot of the perpendicular from O. If δ &lt; r, ℓ meets the circle in exactly two points, F ± √(r² − δ²) e, for a direction e of ℓ with |e| = 1. If δ = r, only at F. If δ &gt; r, nowhere. When it meets only at F, ℓ is perpendicular to the radius OF.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the line-meets-circle technique">
+X \in \ell:\ \ X = F + se,\ \ |e| = 1 @@ two-descriptions-agree, with the direction scaled to length 1 (distance-laws)
+d(O, X)^2 = \delta^2 + s^2 @@ right-triangle: O − F ⊥ e (nearest-point)
+d(O, X) = r \iff s^2 = r^2 - \delta^2 @@ the definition, squared
+\delta \lt r:\ s = \pm\sqrt{r^2 - \delta^2};\ \ \delta = r:\ s = 0;\ \ \delta \gt r:\ \text{none} @@ square-root; a square is never negative (square-never-negative)
+\htmlClass{new}{\text{one point} \Rightarrow \text{it is } F,\ \text{and } OF \perp \ell} \quad \blacksquare @@ nearest-point
+  </pre>
+  <p data-pid="8fe930">A line meeting a circle twice has the accepted name a secant, and one meeting it once a tangent line, which touches the circle at F. The chord a secant cuts has length 2√(r² − δ²).</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · a line and a circle · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18d3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="O = (2, -3),"></span> <span data-tex-inline="P = (5, 1)"></span></span>Write the circle with centre O through P.</li><li><span class="givens"><span data-tex-inline="x^2 + y^2 + 8x - 2y - 8 = 0"></span></span>Find the set, with its centre and radius if it is a circle.</li><li><span class="givens"><span data-tex-inline="A = (1, 1),"></span> <span data-tex-inline="B = (7, 1),"></span> <span data-tex-inline="C = (1, 9)"></span></span>Using circle-through-three, find the circle through A, B and C.</li><li><span class="givens"><span data-tex-inline="x + y = 7,"></span> <span data-tex-inline="x^2 + y^2 = 25"></span></span>Find where the line meets the circle.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18d4">
+  <h2 class="sthead"><span class="stno">18d4</span>Two circles, and which triangles exist</h2>
+  <p class="stands">Stands on 18d3 and 18b (the triangle inequality).</p>
+  <p data-pid="3e8290">Two-circles-meet technique: <b>let circles have centres O₁ ≠ O₂, radii r₁ and r₂, and d = d(O₁, O₂). They meet in exactly two points when |r₁ − r₂| &lt; d &lt; r₁ + r₂, in exactly one when d = r₁ + r₂ or d = |r₁ − r₂|, and nowhere otherwise.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the two-circles-meet technique">
+|X - O_1|^2 - |X - O_2|^2 = r_1^2 - r_2^2 @@ a common point satisfies both; subtract
+2(O_2 - O_1) \cdot X = r_1^2 - r_2^2 + |O_2|^2 - |O_1|^2 @@ as in perpendicular-bisector: a line ℓ, with normal O₂ − O₁
+\text{common points} = \ell \cap \text{circle } 1 @@ each step runs back
+\delta = \tfrac{|d^2 + r_1^2 - r_2^2|}{2d} @@ nearest-point from O₁ to ℓ: |O₂|² − 2O₁ · O₂ + |O₁|² = d², so the top is |d² + r₁² − r₂²| and the normal has length 2d
+r_1^2 - \delta^2 = \tfrac{(r_1 + r_2 - d)(d + r_1 - r_2)(d - r_1 + r_2)(d + r_1 + r_2)}{4d^2} @@ the difference of squares (difference-of-squares), twice
+\begin{aligned}&\htmlClass{new}{\text{two points} \iff \text{each of } d, r_1, r_2 \text{ is less }}\\ &\quad \htmlClass{new}{\text{than the sum of the other two}} \quad \blacksquare\end{aligned} @@ line-meets-circle; the last factor is positive; at most one of the other three can be ≤ 0 (triangle in the plane)
+  </pre>
+  <p data-pid="f0f91a">So the converse of the triangle inequality is true. Which-triangles technique: <b>three positive lengths are the sides of a triangle exactly when each is less than the sum of the other two.</b> Put two corners one of the lengths apart, and about them take circles whose radii are the other two: by two-circles-meet they meet in two points, either of which is the third corner, and it is not on the line through the other two, since then equality-on-the-segment would make one side the sum of the others. Euclid does this in his twenty-second proposition, with a compass.</p>
+  <pre class="lines" data-k="ember" data-label="this step: worked">
+x^2 + y^2 - 6x + 4y - 3 = 0:\ \ (x - 3)^2 + (y + 2)^2 = 16 @@ circle-equation: centre (3, −2), radius 4
+(0, 0), (4, 0), (0, 2):\ \ x = 2,\ y = 1 @@ circle-through-three: the bisectors of the two legs; radius √5
+y = x + 1,\ x^2 + y^2 = 25:\ \ x^2 + x - 12 = 0 @@ (3, 4) and (−4, −3); δ = 1/√2 &lt; 5
+\begin{aligned}&\text{stations } A(0, 0), B(60, 0),\\ &\quad C(0, 80) \text{ km read } 50, 50, 50\end{aligned} @@ a quake equally far from all three: the circumcentre, (30, 40)
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · two circles · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18d4.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="A = (-1, 2),"></span> <span data-tex-inline="B = (5, 10),"></span> <span data-tex-inline="\text{ends of a diameter}"></span></span>Find the circle's equation.</li><li><span class="givens"><span data-tex-inline="y = c,"></span> <span data-tex-inline="(x - 1)^2 + (y - 2)^2 = 9"></span></span>Find every c for which the line touches the circle.</li><li><span class="givens"><span data-tex-inline="A = (1, 1),"></span> <span data-tex-inline="x + 2y = 7 \text{ is the}"></span> <span data-tex-inline="\text{perpendicular bisector of } AB"></span></span>Find B.</li><li><span class="givens"><span data-tex-inline="O_1 = (0, 0),"></span> <span data-tex-inline="r_1 = 6,"></span> <span data-tex-inline="O_2 = (10, 0),"></span> <span data-tex-inline="r_2 = r,"></span> <span data-tex-inline="\text{exactly one common point}"></span></span>Find every r.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18d5">
+  <h2 class="sthead"><span class="stno">18d5</span>A circle inside a triangle</h2>
+  <p class="stands">Stands on 18d4 and 18c (nearest-point).</p>
+  <p data-pid="93cfa0">For a triangle ABC, let e₁ = (B − A)/|B − A| and e₂ = (C − A)/|C − A|. The line through A with direction e₁ + e₂ has the accepted name the angle bisector at A. Inscribed-circle technique: <b>every point of the bisector at A is equally far from the lines AB and AC. The bisectors at A and at B meet in one point I, equally far, say ρ, from all three side lines, and the circle with centre I and radius ρ touches each of them once.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the inscribed-circle technique">
+X = A + t(e_1 + e_2):\ \ \text{distance to } AB = |t|\,|e_2 - (e_1 \cdot e_2)e_1| @@ nearest-point: take away the part of X − A along e₁
+|e_2 - (e_1 \cdot e_2)e_1|^2 = 1 - (e_1 \cdot e_2)^2 @@ right-triangle, with |e₁| = |e₂| = 1
+\text{distance to } AC = |t|\sqrt{1 - (e_1 \cdot e_2)^2} @@ the same, with e₁ and e₂ exchanged: equal
+\text{bisectors at } A, B \text{ are not parallel} @@ else the triangle's sides AB, AC, BC would fall on one line; two-lines-meet gives I
+\htmlClass{new}{I \text{ is } \rho \text{ from all three lines}} \quad \blacksquare @@ the first lines at A and at B; line-meets-circle: each side line touches the circle once
+  </pre>
+  <p data-pid="5ec19f">The circle has the accepted name the inscribed circle, or incircle, and I the incentre. Four points that lie on one circle make a cyclic quadrilateral; by circle-through-three they do exactly when the perpendicular bisectors of its four sides all pass through one point.</p>
+  <aside class="voice para"><p data-pid="46d155">Euclid defines a circle as a plane figure bounded by one line, such that all the straight lines falling on it from one point inside the figure are equal to one another; and that point is called the centre.</p><cite>Euclid, Elements, Book I, definitions 15 and 16 (about 300 BCE); paraphrase</cite></aside>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · inside a triangle · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18d5.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">the triangle with corners (0, 0), (4, 0) and (0, 3)</span></span>Guess the radius of its inscribed circle from a sketch. <br>Find it, given that the centre is (r, r).</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18d6">
+  <h2 class="sthead"><span class="stno">18d6</span>Illegal moves</h2>
+  <p class="stands">Stands on 18d1 to 18d5.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+x^2 + y^2 + 2x + 2 = 0 \text{ is a circle}\,? @@ (x + 1)² + y² = −1: no point at all (circle-equation)
+d(X, A) = d(X, B) \Rightarrow X = M\,? @@ every point of the bisector line will do; M is one of them
+\text{three points always lie on a circle}\,? @@ not when they are collinear (circle-through-three)
+\begin{aligned}&\text{a tangent is a line that meets the circle }\\ &\quad \text{once, so it never meets it again }\\ &\quad \text{elsewhere}\,?\end{aligned} @@ true for circles (line-meets-circle), false for other curves
+  </pre>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18d6.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="S = \{P : d(P, O) = r\}"></span></span>Find S when r is zero, and when r is negative.</li><li><span class="givens"><span data-tex-inline="A = (0, 0),"></span> <span data-tex-inline="B = (1, 1),"></span> <span data-tex-inline="C = (2, 2)"></span></span>Run circle-through-three's proof on A, B and C, and find where it stops.</li><li><span class="givens"><span data-tex-inline="c(P, Q) = |x_2 - x_1| + |y_2 - y_1|,"></span> <span data-tex-inline="O = (0, 0),"></span> <span data-tex-inline="S = \{P : c(P, O) = 1\}"></span></span>Draw S. <br>Test line-meets-circle on S.</li><li><span class="givens"><span data-tex-inline="\text{two-circles-meet's proof moved}"></span> <span data-tex-inline="O_1 \text{ to } (0, 0),\ O_2 \text{ to } (d, 0)"></span></span>Find the facts that let the proof make this move without changing any distance.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">18d.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="h &gt; 0"></span></span>Choose three points of your own on one line, and lift the middle one off it by h. <br>Find the circle through the three. <br>Find what its centre and radius do as h shrinks toward zero, and what the circle comes close to.</div>
+  <div class="chq"><span class="chid">18d.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{triangle } ABC,"></span> <span data-tex-inline="I:\ \text{where the bisectors}"></span> <span data-tex-inline="\text{at } A \text{ and } B \text{ meet}"></span></span>Find whether the bisector at C also passes through I, as far as you can take it.</div>
+  <div class="chq"><span class="chid">18d.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{a set } S \text{ meets every line}"></span> <span data-tex-inline="\text{in at most two points}"></span></span>Find whether S must be a circle.</div>
+  <div class="chq"><span class="chid">18d.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="T:\ 4d^2r_1^2 - (d^2 + r_1^2 - r_2^2)^2"></span> <span data-tex-inline="= (r_1 + r_2 - d)(d + r_1 - r_2)"></span> <span data-tex-inline="\cdot\,(d - r_1 + r_2)(d + r_1 + r_2)"></span></span>Difference-of-squares is off limits. <br>Prove T.</div>
+  <div class="chq"><span class="chid">18d.4.5</span><span class="tagq">seam</span>Aristotle reports that Protagoras refuted the geometers: a real hoop does not touch a straightedge at one point, as they claimed, but along a stretch. Line-meets-circle proves a tangent touches at exactly one point. Plato answered that the drawn circle is not the circle. <br>Who was right, and about which circle? <br>What is a technique about circles a technique about?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r18c.html">← 18c · lines</a><a href="r18e.html">18e · conics by distances →</a></nav>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+/* least and greatest of F.f on [lo, hi]: the ends, F's critical points inside, and a fine sample (exact between critical points for the functions used here) */
+function ext(F,lo,hi){ if(F.dir) return [0,1]; let m=Infinity,M=-Infinity; const t=x=>{ const v=F.f(x); if(v<m) m=v; if(v>M) M=v; };
+  t(lo); t(hi); (F.crit||[]).forEach(c=>{ if(c>lo&&c<hi) t(c); }); for(let k=1;k<64;k++) t(lo+(hi-lo)*k/64); return [m,M]; }
+function sums(F,pts){ let L=0,U=0; const ms=[],Ms=[]; for(let i=1;i<pts.length;i++){ const [m,M]=ext(F,pts[i-1],pts[i]), w=pts[i]-pts[i-1]; ms.push(m); Ms.push(M); L+=m*w; U+=M*w; } return {L,U,ms,Ms}; }
+const eq=(a,b,n)=>Array.from({length:n+1},(_,i)=>a+(b-a)*i/n);
+function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
+function boxes(P,pts,hs,stroke,fill,alpha){ const c=P.ctx; for(let i=1;i<pts.length;i++){ const a=pts[i-1],b=pts[i],h=hs[i-1]; c.globalAlpha=alpha; P.poly([[a,0],[b,0],[b,h],[a,h]],null,fill); c.globalAlpha=1; P.poly([[a,0],[b,0],[b,h],[a,h]],stroke,null,1.2); } }
+function dirDots(P,a,b){ const c=P.ctx; c.fillStyle=col('--ink'); for(let k=0;k<=300;k++){ const x=a+(b-a)*k/300; const y=(k%2)?0:1; c.fillRect(P.X(x)-1,P.Y(y)-1,2,2); } }
+/* shade between the graph of fn and the axis from lo to hi: above in pos colour, below in neg colour */
+function shade(P,fn,lo,hi,pos,neg,alpha){ if(hi<lo){ const t=lo; lo=hi; hi=t; } const c=P.ctx, N=300; c.globalAlpha=alpha==null?0.32:alpha;
+  for(let k=0;k<N;k++){ const x0=lo+(hi-lo)*k/N, x1=lo+(hi-lo)*(k+1)/N, xm=(x0+x1)/2, y=fn(xm); if(!isFinite(y)) continue; P.poly([[x0,0],[x1,0],[x1,fn(x1)],[x0,fn(x0)]],null,y>=0?pos:neg); }
+  c.globalAlpha=1; }
+function rangeOf(fn,lo,hi,pad){ let m=Infinity,M=-Infinity; for(let k=0;k<=400;k++){ const v=fn(lo+(hi-lo)*k/400); if(isFinite(v)){ if(v<m) m=v; if(v>M) M=v; } } if(m>0) m=0; if(M<0) M=0; const p=(M-m)*(pad==null?0.12:pad)||1; return [m-p,M+p]; }
+function chips(el,FN,get,setk,after){ Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===get()) b.className='on'; b.onclick=()=>{ setk(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+const Nw='\\htmlClass{new}';
+function gridFor(sp){ return sp>40?10:sp>16?4:sp>8?2:sp>3?1:sp>1.2?0.5:0.25; }
+function frame2(P,fn,lo,hi,pad){ const w=hi-lo; P.o.x=[lo-0.12*w,hi+0.08*w]; P.o.y=rangeOf(fn,lo,hi,pad==null?0.12:pad); const sx=P.o.x[1]-P.o.x[0], sy=P.o.y[1]-P.o.y[0]; let g=gridFor(sx); while(sy/g>24) g*=2; P.o.grid=g; }
+const num=(f,a,b,n)=>{ n=n||4000; const h=(b-a)/n; let s=0; for(let i=0;i<n;i++) s+=f(a+(i+0.5)*h)*h; return s; };
+/* axes with separate steps across and up */
+function axes2(P,gx,gy){ const c=P.ctx,o=P.o; c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ c.moveTo(P.X(x),P.Y(o.y[0])); c.lineTo(P.X(x),P.Y(o.y[1])); }
+  for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ c.moveTo(P.X(o.x[0]),P.Y(y)); c.lineTo(P.X(o.x[1]),P.Y(y)); } c.stroke();
+  c.strokeStyle=col('--muted'); c.lineWidth=1.3; c.beginPath(); if(o.y[0]<=0&&o.y[1]>=0){ c.moveTo(P.X(o.x[0]),P.Y(0)); c.lineTo(P.X(o.x[1]),P.Y(0)); } if(o.x[0]<=0&&o.x[1]>=0){ c.moveTo(P.X(0),P.Y(o.y[0])); c.lineTo(P.X(0),P.Y(o.y[1])); } c.stroke();
+  c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; const ly=Math.min(P.H-6,Math.max(12,P.Y(0)+14));
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ if(Math.abs(x)<1e-9) continue; c.fillText(+x.toFixed(6),P.X(x),ly); }
+  c.textAlign='right'; const lx=Math.max(32,Math.min(P.W-4,P.X(0)-5)); for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ if(Math.abs(y)<1e-9) continue; c.fillText(String(+y.toFixed(6)).replace('-','−'),lx,P.Y(y)+4); } }
+function nice(sp){ const raw=sp/6, p=Math.pow(10,Math.floor(Math.log10(raw))), m=raw/p; return (m<1.5?1:m<3.5?2:m<7.5?5:10)*p; }
+function arrow(P,x1,y1,x2,y2,colr,w){ P.line(x1,y1,x2,y2,colr,w||2.2); const c=P.ctx, X1=P.X(x1),Y1=P.Y(y1),X2=P.X(x2),Y2=P.Y(y2), L=Math.hypot(X2-X1,Y2-Y1); if(L<2) return; const ux=(X2-X1)/L, uy=(Y2-Y1)/L, h=9; c.fillStyle=col(colr); c.beginPath(); c.moveTo(X2,Y2); c.lineTo(X2-h*ux-0.5*h*uy,Y2-h*uy+0.5*h*ux); c.lineTo(X2-h*ux+0.5*h*uy,Y2-h*uy-0.5*h*ux); c.closePath(); c.fill(); }
+function fillA(P,pts,colr,alpha){ const c=P.ctx; c.globalAlpha=alpha==null?0.2:alpha; P.poly(pts,null,colr); c.globalAlpha=1; }
+const sq1=P=>Object.defineProperty(P.o,'aspect',{get:()=>1});
+function rightMark(P,qx,qy,ax,ay,bx,by,s,colr){ const la=Math.hypot(ax-qx,ay-qy), lb=Math.hypot(bx-qx,by-qy); if(!la||!lb) return; const u=[(ax-qx)/la*s,(ay-qy)/la*s], v=[(bx-qx)/lb*s,(by-qy)/lb*s]; P.poly([[qx+u[0],qy+u[1]],[qx+u[0]+v[0],qy+u[1]+v[1]],[qx+v[0],qy+v[1]]],colr||'--muted',null,1.2,false); }
+const dist=(a,b)=>Math.hypot(b[0]-a[0],b[1]-a[1]);
+const dotp=(u,v)=>u[0]*v[0]+u[1]*v[1];
+function clipBox(P,fn){ const c=P.ctx, [x0,x1]=P.o.x,[y0,y1]=P.o.y; c.save(); c.beginPath(); c.rect(P.X(x0),P.Y(y1),P.X(x1)-P.X(x0),P.Y(y0)-P.Y(y1)); c.clip(); fn(); c.restore(); }
+function lineABC(P,a,b,c,colr,w,dash){ const [x0,x1]=P.o.x,[y0,y1]=P.o.y; clipBox(P,()=>{ if(Math.abs(b)>1e-12){ P.line(x0,(c-a*x0)/b,x1,(c-a*x1)/b,colr,w,dash); } else if(Math.abs(a)>1e-12){ P.line(c/a,y0,c/a,y1,colr,w,dash); } }); }
+const kx=$('kx'),ky=$('ky'),kd=$('kd'),k1=$('k1'),k2=$('k2'),cvF=$('cvF'),cvL=$('cvL');
+const PF=plane(cvF,{x:[-6,8],y:[-5,9],grid:1,aspect:1,draw:P=>drawF(P)}); sq1(PF);
+const PL=plane(cvL,{x:[-7,13],y:[-10,10],grid:1,aspect:1,draw:P=>drawL(P)}); sq1(PL);
+const A=[-3,-1], B=[4,-2];
+const bis=(p,q)=>[q[0]-p[0],q[1]-p[1],(q[0]*q[0]+q[1]*q[1]-p[0]*p[0]-p[1]*p[1])/2];
+function circ(C){ const [a1,b1,c1]=bis(A,B), [a2,b2,c2]=bis(B,C), D=a1*b2-a2*b1; if(Math.abs(D)<1e-6) return {D,O:null};
+  const O=[(c1*b2-c2*b1)/D,(a1*c2-a2*c1)/D]; return {D,O,r:dist(O,A)}; }
+function inc(C){ const a=dist(B,C), b=dist(C,A), c=dist(A,B), s=a+b+c, ar=Math.abs((B[0]-A[0])*(C[1]-A[1])-(C[0]-A[0])*(B[1]-A[1]))/2;
+  return {I:[(a*A[0]+b*B[0]+c*C[0])/s,(a*A[1]+b*B[1]+c*C[1])/s],rho:2*ar/s}; }
+function drawF(P){ const C=[+kx.value,+ky.value]; axes2(P,1,1); const ci=circ(C);
+  lineABC(P,...bis(A,B),'--ember',1.8,[6,4]); lineABC(P,...bis(B,C),'--ember',1.8,[6,4]);
+  if(ci.O){ clipBox(P,()=>P.circle(ci.O[0],ci.O[1],ci.r,'--plum',2.2)); const n=inc(C); if(n.rho>0.02) P.circle(n.I[0],n.I[1],n.rho,'--teal',2); P.dot(n.I[0],n.I[1],'--teal',3.5); }
+  P.poly([A,B,C],'--ink',null,2.4,true); [[A,'A'],[B,'B'],[C,'C']].forEach(([p,s])=>{ P.dot(p[0],p[1],'--ink',4.5); P.text(s,p[0]-0.45,p[1]+0.4,'--ink','center',12); });
+  if(ci.O && Math.abs(ci.O[0])<8 && Math.abs(ci.O[1])<10){ P.dot(ci.O[0],ci.O[1],'--plum',5.5); P.text('O',ci.O[0]+0.45,ci.O[1]+0.4,'--plum','center',12); } }
+function meet2(d,r1,r2){ const x=(d*d+r1*r1-r2*r2)/(2*d), h2=r1*r1-x*x; return {x,h2,n:h2>1e-9?2:(Math.abs(h2)<=1e-9?1:0)}; }
+function drawL(P){ const d=+kd.value, r1=+k1.value, r2=+k2.value; axes2(P,1,1);
+  P.circle(0,0,r1,'--ink',2.4); P.circle(d,0,r2,'--ember',2.4); P.dot(0,0,'--ink',4); P.dot(d,0,'--ember',4);
+  const m=meet2(d,r1,r2); lineABC(P,1,0,m.x,'--muted',1.4,[6,4]);
+  if(m.n){ const h=Math.sqrt(Math.max(0,m.h2)); P.poly([[0,0],[d,0],[m.x,h]],'--plum',null,1.6,true); P.dot(m.x,h,'--plum',5.5); if(m.n===2) P.dot(m.x,-h,'--plum',5.5); } }
+function read(){ const C=[+kx.value,+ky.value], d=+kd.value, r1=+k1.value, r2=+k2.value;
+  $('ox').textContent=mm(C[0],1); $('oy').textContent=mm(C[1],1); $('od').textContent=mm(d,1); $('o1').textContent=mm(r1,1); $('o2').textContent=mm(r2,1);
+  const ci=circ(C), m=meet2(d,r1,r2), vd=$('vdF'); vd.className='verdict';
+  const L=ci.O?'Left: O = ('+mm(ci.O[0],3)+', '+mm(ci.O[1],3)+'), radius '+mm(ci.r,3)+'.':'Left: A, B, C are collinear; the bisectors are parallel and no circle passes through all three.';
+  const Rt=m.n===2?'two common points, x = '+mm(m.x,3)+', y = ±'+mm(Math.sqrt(m.h2),3)+'.':(m.n===1?'one common point: the circles touch.':'no common point: no triangle has sides '+mm(d,1)+', '+mm(r1,1)+', '+mm(r2,1)+'.');
+  vd.textContent=L+' Right: '+Rt;
+  const f=(r1+r2+d)*(r1+r2-d)*(d+r1-r2)*(d-r1+r2);
+  tex($('eqF'),R`\big((r_1{+}r_2)^2 - d^2\big)\big(d^2 - (r_1{-}r_2)^2\big) = ${mm(f,2)}`,true); }
+function all(){ PF.redraw(); PL.redraw(); read(); }
+[kx,ky,kd,k1,k2].forEach(e=>e.addEventListener('input',all));
+window.__pic={set:(cx,cy,d,r1,r2)=>{ kx.value=cx; ky.value=cy; kd.value=d; k1.value=r1; k2.value=r2; all(); const ci=circ([cx,cy]), m=meet2(d,r1,r2), n=inc([cx,cy]);
+  return {O:ci.O&&ci.O.map(z=>+z.toFixed(4)),r:ci.r&&+ci.r.toFixed(4),I:n.I.map(z=>+z.toFixed(4)),rho:+n.rho.toFixed(4),x:+m.x.toFixed(4),h2:+m.h2.toFixed(4),n:m.n}; }};
+all();
+stepper('#sl1',[
+  {k:'ember',kl:'the definition',t:R`(x - a)^2 + (y - b)^2 = r^2`,n:`d(P, O) = r, squared.`},
+  {k:'ember',kl:'circle-equation',t:R`${Nw}{D^2 + E^2 - 4F > 0}`,n:`Centre (−D/2, −E/2), radius √(D² + E² − 4F)/2.`}
+],{title:'The slides · the definition · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'perpendicular-bisector',t:R`${Nw}{d(P, A) = d(P, B) \iff (B - A)\cdot P = \tfrac{|B|^2 - |A|^2}{2}}`,n:`A line, ⊥ AB, through the middle.`},
+  {k:'ember',kl:'circle-through-three',t:R`${Nw}{A, B, C \text{ not collinear: one circle}}`,n:`Two bisectors meet once, by two-lines-meet.`},
+  {k:'ember',kl:'collinear',t:R`\text{bisectors parallel: no circle}`,n:`The third point has nowhere to go.`}
+],{title:'The slides · equally far · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'line-meets-circle',t:R`${Nw}{\delta < r:\ F \pm \sqrt{r^2 - \delta^2}\,e}`,n:`At most two points.`},
+  {k:'ember',kl:'tangent ⊥ radius',t:R`\delta = r \Rightarrow \ell \perp OF`,n:`nearest-point's foot is the one point.`}
+],{title:'The slides · a line and a circle · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'two-circles-meet',t:R`${Nw}{|r_1 - r_2| < d < r_1 + r_2}`,n:`Subtract the equations: a line.`},
+  {k:'ember',kl:'the four factors',t:R`(r_1{+}r_2{+}d)(r_1{+}r_2{-}d)(d{+}r_1{-}r_2)(d{-}r_1{+}r_2) > 0`,n:`Positive exactly when two points.`},
+  {k:'ember',kl:'which-triangles',t:R`${Nw}{a < b + c,\ b < c + a,\ c < a + b}`,n:`Then the triangle exists.`},
+  {k:'ember',kl:'worked',t:R`(30, 40),\ 50 \text{ km}`,n:`The quake, equally far from three stations.`}
+],{title:'The slides · two circles · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'inscribed-circle',t:R`${Nw}{I \text{ equally far from three sides}}`,n:`Bisectors along e₁ + e₂.`},
+  {k:'ember',kl:'Euclid',t:R`\text{Euclid, books one and four}`,n:`With a compass.`}
+],{title:'The slides · inside a triangle · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'illegal',t:R`x^2 + y^2 = -1`,n:`An equation, and no circle.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

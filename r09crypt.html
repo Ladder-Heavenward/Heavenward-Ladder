@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>9·crypt · Can a code be truly unbreakable?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.wordin{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:.88rem}
+.wordin input[type=text]{font-family:var(--mono);font-size:.95rem;text-transform:uppercase;width:9.5em;padding:3px 6px;border:1px solid var(--grid);border-radius:4px;background:var(--card);color:var(--ink)}
+.bitgrid{overflow-x:auto;max-width:100%}
+.bitgrid table{border-collapse:collapse;font-family:var(--mono);font-size:.8rem}
+.bitgrid td,.bitgrid th{padding:2px 5px;text-align:center;border-bottom:1px solid var(--grid);white-space:nowrap}
+.bitgrid th{font-weight:500;color:var(--muted);text-align:left}
+.bitgrid td.k{cursor:pointer;color:var(--plum)}
+.bitgrid td.c{color:var(--ember)}
+.bitgrid td.x{color:var(--teal)}
+.bitgrid td.bad{color:var(--muted)}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r09cb4.html">← 9·cb4 recursion revisited: sequences</a><a href="r09chem.html">next: 9·chem does every gas follow the same rule? →</a></p>
+  <div class="tags"><span class="tag crypt">9·crypt · cryptography</span></div>
+  <h1>Can a code be truly unbreakable?</h1>
+  <p>Can a code be truly unbreakable? People have hidden messages for as long as they have written them. For as long, other people have read what was hidden. Many ciphers were called unbreakable, and nearly all of them were broken, usually by a patient reader with tallies and a good guess. So the question sounds like a boast. It is hard because "unbreakable" has to mean something exact. It cannot mean "nobody has broken it yet". It has to mean that the secret text, on its own, tells a reader nothing about the message. This page builds a cipher that meets that demand, from 4·comp's exclusive or. It proves that a key used once hides everything but the length. Then it shows how a key used twice gives both messages away, as it did to real spies in the 1940s.</p>
+  <p class="gesture">Write the message in bits, and a key of bits as long as it, chosen by coin tosses. The secret text is the message and the key joined by exclusive or, place by place, and the same joining with the same key runs it back. Used once, every message of that length fits the secret text with exactly one key. Used twice, the key cancels, and the two secret texts joined give the two messages joined.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r04h.html">4h</a> (numerals in twos, bits), <a href="r04comp.html">4·comp</a> (⊕, the marks technique, checking a sameness row by row), <a href="r04j.html">4j</a> (the counted-functions technique: 2ⁿ lists of n bits), <a href="r04crypt.html">4·crypt</a> (a key, and trying every key), <a href="r09b.html">9b</a> (composing, the identity), <a href="r09c.html">9c</a> (one-to-one, onto, bijection), <a href="r09d.html">9d</a> (there-and-back, running-backwards). Later cryptography pages return to keys (named by rung number only: 10·crypt).</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · the words, the pad, why it hides, how it leaks</div>
+
+  <h3>Ciphers, keys and secret text</h3>
+  <p data-pid="7a53af">A <b>cipher</b> is a pair of rules. One turns a message into secret text with the help of a <b>key</b>; the other turns the secret text back into the message, with the same key. The message is called the <b>plain text</b>, and the secret text the <b>cipher text</b>. Turning plain text into cipher text is <b>encrypting</b>; turning it back is <b>decrypting</b>. 4·crypt's shift was a cipher: its key was how far to count on, and there were only 25 keys worth trying. An attacker tried them all.</p>
+  <p class="eqline" data-pid="2b20aa">From here on, on this page, m names a message, k a key and c a cipher text, each a list of bits. A letter is written as its place in the alphabet, counting from A = 0 to Z = 25, in five bits (4h's numerals in twos): A is 00000, B is 00001, L is 01011, Z is 11001.</p>
+  <p data-pid="c9fb20">A list of n bits is a function from n to 2 = {0, 1}: it gives each place 0, 1, …, n − 1 a bit. By 4j's counted-functions technique there are 2ⁿ of them. A word of four letters is 20 bits, and there are 2²⁰ = 1 048 576 lists of 20 bits.</p>
+
+  <h3>Exclusive or, place by place</h3>
+  <p class="eqline" data-pid="f6b2e6">From here on, on this page, for lists m and k of n bits, m ⊕ k names the list of n bits whose bit at each place i is m(i) ⊕ k(i). 4·comp's ⊕ joined two single marks, 1 when exactly one of them is 1. Here it joins two lists of the same length, one place at a time. On lists of one bit it is the old ⊕.</p>
+  <p data-pid="c90625">Four facts about single bits, each checked on its rows, as 4·comp checked its samenesses. Write 0 here for a list of zeros.</p>
+  <pre class="lines" data-k="teal" data-label="from 4·comp: samenesses, checked row by row">
+A \oplus 0 = A @@ rows A = 0, 1: 0 ⊕ 0 = 0, 1 ⊕ 0 = 1
+A \oplus A = \htmlClass{new}{0} @@ rows: 0 ⊕ 0 = 0, 1 ⊕ 1 = 0. Exactly one of A and A is never 1
+A \oplus B = B \oplus A @@ four rows; "exactly one of" does not care about order
+(A \oplus B) \oplus C = A \oplus (B \oplus C) @@ eight rows: each side is 1 exactly when an odd number of A, B, C are 1
+  </pre>
+  <p data-pid="078990">Each fact is true at every place, so it is true for lists of bits, place by place. That is all the algebra the pad needs.</p>
+
+  <h3>The pad</h3>
+  <p class="eqline" data-pid="97d84b">From here on, on this page, for a key k of n bits, E_k names the function from lists of n bits to lists of n bits given by E_k(m) = m ⊕ k. Encrypting is E_k. The cipher that uses it, with a key as long as the message and used for one message only, is the <b>pad</b>.</p>
+  <p data-pid="ee7bce">Own-way-back technique: <b>E_k ∘ E_k = id: the same key, used the same way, undoes itself.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the own-way-back technique">
+(E_k \circ E_k)(m) = (m \oplus k) \oplus k @@ 9b's composing, inside first
+= m \oplus \htmlClass{new}{(k \oplus k)} @@ regroup (the eight-row fact)
+= m \oplus 0 = \htmlClass{keep}{m} \quad \blacksquare @@ A ⊕ A = 0 at every place, then A ⊕ 0 = A
+  </pre>
+  <p data-pid="ac6e7d">So E_k undoes E_k on both sides. By 9d's running-backwards technique it is a bijection, and its inverse is itself: E_k⁻¹ = E_k. It joins 9f's undo list beside −x and 1/x, the functions that undo themselves. Decrypting is the same machine as encrypting. Vernam's teleprinter of 1917 used one and the same circuit for both.</p>
+  <pre class="lines" data-k="ember" data-label="this page: LODI under a key of coin tosses">
+m = \text{LODI} = 01011\ 01110\ 00011\ 01000 @@ L = 11, O = 14, D = 3, I = 8, in fives
+k = 10110\ 00111\ 11001\ 01101 @@ twenty coin tosses, heads 1
+c = m \oplus k = \htmlClass{new}{11101\ 01001\ 11010\ 00101} @@ place by place. 11101 is 29 and 11010 is 26: no letter. The cipher text is bits, not letters
+c \oplus k = 01011\ 01110\ 00011\ 01000 = \htmlClass{keep}{\text{LODI}} @@ own-way-back
+  </pre>
+
+  <h3>Why the pad hides everything</h3>
+  <p data-pid="c8ae7e">An attacker has c and not k. She can do what 4·crypt's attacker did: try every key. Here is what she gets.</p>
+  <p data-pid="f7c8cf">One-key-each technique: <b>for each message m and each cipher text c of the same length, exactly one key sends m to c, namely k = m ⊕ c.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the one-key-each technique">
+E_{m \oplus c}(m) = m \oplus (m \oplus c) = (m \oplus m) \oplus c = 0 \oplus c = c @@ some key works: regroup, A ⊕ A = 0, A ⊕ 0 = A (and turn the order)
+m \oplus k = c \Rightarrow m \oplus (m \oplus k) = m \oplus c @@ only one key: ⊕ m on both sides (substitute for the expression)
+\Rightarrow \htmlClass{new}{k = m \oplus c} \quad \blacksquare @@ the left side is k, by the first line's techs
+  </pre>
+  <p data-pid="a35f03">Read it as a function. Fix the cipher text c. The rule k ↦ k ⊕ c sends each key to the message it decrypts c into. It is E_c, so it undoes itself, so it is a bijection from the keys onto the messages of length n. Trying every key lists every message of that length, each exactly once. For LODI's cipher text, the key 10011 01001 10000 10111 gives OAKS, and 10001 01001 10110 00101 gives MAMA. Nothing in the list points at LODI.</p>
+  <p data-pid="268db8">That is the exact sense of "hides everything". It needs the key to have been picked with no pattern an attacker could guess: coin tosses, not a phrase from a book. Then the attacker has no reason to prefer one key, and so none to prefer one message. The cipher text says how long the message is, and nothing else.</p>
+
+  <h3>Why the key must be as long as the message</h3>
+  <p data-pid="9e1076">Short-key technique: <b>if the keys are fewer than the messages, some cipher text rules some message out.</b> Suppose the keys have r bits, with r &lt; n, and each is stretched to n bits by a fixed rule, say by repeating it. Fix a cipher text c. The messages that fit c are the outputs of k ↦ (k stretched) ⊕ c, one for each key. So there are at most 2ʳ of them (each fitting message is counted by at least one key). There are 2ⁿ messages, and 2ʳ &lt; 2ⁿ. So some message of length n fits no key at all. ∎ The attacker learns something: that message was not sent. With a short repeated key she learns far more than that, as later cryptography pages show.</p>
+  <p data-pid="c97af1">So the price of the pad is its key. Every bit ever sent costs a bit of key, made in advance, carried to the other side, and burned after one use.</p>
+
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · connections, not families</div>
+    <p data-pid="b49541">"A random key" is a family name. It says how the key was made, and every key of the family looks alike to that name. The one-key-each technique says nothing about families. It is about what the key does: k ↦ k ⊕ c matches the keys with the messages, one each. A key from coin tosses and a key copied from the digits of a phone book can be the same list of bits. Then E_k is the same function, and it hides the same message the same way.</p>
+    <p data-pid="e4fe79"><b>Judge a key by what it does to the messages it meets, and by what else it is connected to.</b></p>
+    <p data-pid="c975b3">The phone book key is connected to a phone book an attacker can also open. The pad used twice is connected to a second message. The family name of the key hides both connections. The function hides neither.</p>
+    <p class="bait" data-pid="f8d710">Two keys are the same list of bits. One came from coin tosses and one from the phone book. Is one of them safer?</p>
+  </aside>
+
+  <h3>The pad used twice</h3>
+  <p data-pid="ea5231">Key-cancels technique: <b>if one key encrypts two messages, the two cipher texts together give m₁ ⊕ m₂, and the key is gone.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the key-cancels technique">
+c_1 \oplus c_2 = (m_1 \oplus k) \oplus (m_2 \oplus k) @@ the same k twice
+= m_1 \oplus m_2 \oplus \htmlClass{new}{(k \oplus k)} @@ turn the order and regroup
+= \htmlClass{keep}{m_1 \oplus m_2} \quad \blacksquare @@ A ⊕ A = 0, A ⊕ 0 = A
+  </pre>
+  <p data-pid="c238c0">Now the attacker does not need the key. She guesses a word that is likely somewhere in one message: an opening like MEET, a place name, a date. Put it at a place in m₁ and ⊕ it with m₁ ⊕ m₂ there. Out comes m₂ at that place, by own-way-back. If the guess and its place are right, m₂ reads as words. If not, it reads as nonsense, or gives groups of five bits that are no letter. A guessed word is called a <b>crib</b>.</p>
+  <pre class="lines" data-k="ember" data-label="this page: two messages, one key">
+m_1 \oplus m_2 = 01011\ 01010\ 01111\ 10000\ \cdots @@ from the two cipher texts; the key never appears
+\text{crib MEET at place } 0:\ \ 01011 \oplus 01100 = 00111 = \text{H},\ \ldots @@ M = 12; then E, E, T in turn
+\Rightarrow m_2 \text{ begins } \htmlClass{new}{\text{HOLD}} @@ a word: the guess is kept
+\text{crib MEET at place } 1:\ \text{G, L, U, A} @@ GLUA: nonsense, so that place is dropped
+  </pre>
+  <p data-pid="006106">Each correct guess in one message gives letters of the other, which suggest new guesses. The whole of both messages can come out this way, and then the key too: k = m₁ ⊕ c₁, by one-key-each. In 1942, under the pressure of war, a Soviet office printed some pages of its pads twice. American codebreakers found the repeats, and over the following decades read parts of thousands of messages. They named spies who had never been suspected.</p>
+  <p data-pid="049629">Two pads in a row are one pad: E_j ∘ E_k = E_{k ⊕ j}, by regroup. So encrypting twice with two keys is no stronger than once, and a key used twice is not rescued by a second key used twice.</p>
+
+  <h3>Illegal moves</h3>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed">
+c \text{ looks like noise, so any key is safe}\,? @@ a key from a guessable source fails, however the output looks: the attacker tries the guessable keys first
+\text{a key of } 8 \text{ bits, repeated, is a pad}\,? @@ short-key: 2⁸ keys cannot fit 2ⁿ messages; most messages are ruled out
+E_k(E_j(m)) \text{ is safer than } E_k(m)\,? @@ E_k ∘ E_j = E_{j ⊕ k}: one pad with key j ⊕ k
+c_1 \oplus c_2 \text{ is noise, since each } c \text{ is}\,? @@ key-cancels: it is m₁ ⊕ m₂, and words in one give words in the other
+m \text{ AND } k \text{ as a cipher}\,? @@ AND is not one-to-one in m: where k(i) = 0 every message gives 0, and nothing can run it back
+  </pre>
+
+  <h3>Running it backwards</h3>
+  <p data-pid="8d5315">Handed m and c, the key is m ⊕ c (one-key-each). Handed c and k, the message is c ⊕ k (own-way-back). Handed two cipher texts under one key, ⊕ them and drag a crib along (key-cancels). Handed a wish, a cipher that hides everything, pay its price: a key from coin tosses, as long as the message, used once.</p>
+</section>
+
+<section class="pic" id="pic">
+  <div class="eyebrow">The picture · left: the pad used once, and every message fits · right: the pad used twice, and a crib dragged along</div>
+  <div class="panels">
+    <div class="panel">
+      <div class="wordin"><span class="m">message</span><input type="text" id="w1" maxlength="10" value="LODI"><button id="toss">toss new key</button></div>
+      <div class="bitgrid" id="g1"></div>
+      <div class="wordin"><span class="m">try a message</span><input type="text" id="w3" maxlength="10" value="OAKS"></div>
+      <div class="cap">Letters A = 0 to Z = 25, five bits each. Plum: the key (tap a bit to change it). Ember: the cipher text. Teal: for the message you try, the one key that sends it to the same cipher text. Any word of the same length fits.</div>
+      <div class="verdict" id="vd1"></div>
+    </div>
+    <div class="panel">
+      <div class="wordin"><span class="m">first message</span><input type="text" id="w4" maxlength="10" value="MEETATLODI"></div>
+      <div class="wordin"><span class="m">second message</span><input type="text" id="w2" maxlength="10" value="HOLDTHEMAP"></div>
+      <div class="wordin"><span class="m">crib</span><input type="text" id="cr" maxlength="10" value="MEET"><span class="m">at place</span><input type="range" id="cp" min="0" max="9" step="1" value="0" style="width:8em"><output id="ocp"></output></div>
+      <div class="bitgrid" id="g2"></div>
+      <div class="cap">The first message, padded with X or cut to the second's length, and both under one key (the left panel's key, ten letters long). Teal row: c₁ ⊕ c₂, which is m₁ ⊕ m₂. Last row: the crib ⊕ that row, at the chosen place: what the second message must say there if the guess is right. Grey: five bits that are no letter.</div>
+      <div class="verdict" id="vd2"></div>
+    </div>
+  </div>
+</section>
+
+<section class="slides" id="sl1"><div class="eyebrow">The slides · letters in bits; ⊕ place by place; the pad; own-way-back; LODI; one key each; every message fits; the short key; the pad used twice; a crib; two pads are one; illegal moves · ← → keys work</div></section>
+
+<section class="sayback">
+  <div class="eyebrow">Say it back · then work it</div>
+  <h2>Questions</h2>
+  <div class="phkey"></div>
+  <ol>
+    <li><span class="qid">9·crypt.1</span><span class="gname">Padding.</span><span class="gwhy">Do: build the page's pieces.</span>
+      <ol class="sub">
+        <li><span class="qid">9·crypt.1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{Letters } A = 0, \ldots, Z = 25 \text{, five}"></span> <span data-tex-inline="\text{bits each.}"></span> <span data-tex-inline="k = \text{10011 00110 11100}"></span></span>Find the cipher text of OAK under k.</li><li><span class="givens"><span data-tex-inline="\text{Letters } A = 0, \ldots, Z = 25 \text{, five}"></span> <span data-tex-inline="\text{bits each.}"></span> <span data-tex-inline="k = \text{10011 00110 11100}"></span></span>Encrypt your answer to part a under k again, place by place.</li><li><span class="givens"><span data-tex-inline="m = \text{SALEM},"></span> <span data-tex-inline="c = \text{01101 10010 00111 11011 01000}"></span></span>Find the key.</li><li><span class="givens"><span data-tex-inline="E_k(m) = m \oplus k,"></span> <span data-tex-inline="\text{Let } P \text{ be } E_j \circ E_k = E_{k \oplus j}."></span></span>Prove P for all keys j and k.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">9·crypt.2</span><span class="gname">From the cipher text back.</span><span class="gwhy">Undo: run the page's techs backwards.</span>
+      <ol class="sub">
+        <li><span class="qid">9·crypt.2.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="c = \text{10111 01101 10110},"></span> <span data-tex-inline="k = \text{10011 00110 11100}"></span></span>Find m.</li><li><span class="givens"><span data-tex-inline="c = \text{10111 01101 10110}"></span></span>Find the key that gives FOX, and the key that gives OWL.</li><li><span class="givens"><span data-tex-inline="\text{Two cipher texts under one}"></span> <span data-tex-inline="\text{key:}"></span> <span data-tex-inline="c_1 \oplus c_2 = \text{10001 10101 10001},"></span> <span data-tex-inline="\qquad \text{00110 01010},"></span> <span data-tex-inline="m_1 = \text{TRACY}"></span></span>Find the second message.</li><li><span class="givens"><span data-tex-inline="c \text{ has 25\ bits.}"></span></span>How many messages of 25 bits fit it? <br>How many of 20 bits?</li></ol></li>
+      </ol></li>
+    <li><span class="qid">9·crypt.3</span><span class="gname">Where the pad bends.</span><span class="gwhy">Bend: find where the techs stop working.</span>
+      <ol class="sub">
+        <li><span class="qid">9·crypt.3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="k = \text{00000 00000 00000}"></span></span>Find what encrypting under k does. <br>Count the keys that send OAK to OAK, and find the chance that 15 coin tosses choose k.</li><li><span class="givens"><span data-tex-inline="\text{A 5-bit key is repeated to}"></span> <span data-tex-inline="\text{cover a 25-bit message.}"></span></span>How many 25-bit messages fit a given cipher text?</li><li><span class="givens"><span data-tex-inline="\text{Replace } \oplus \text{ by OR.}"></span> <span data-tex-inline="k = 1"></span></span>Find two messages of one bit with the same cipher text under k.</li><li><span class="givens"><span data-tex-inline="\text{Replace } \oplus \text{ on bits by}"></span> <span data-tex-inline="\text{adding letters with}"></span> <span data-tex-inline="\text{remainders:}"></span> <span data-tex-inline="c \text{ is the remainder of } m + k"></span> <span data-tex-inline="\text{by 26, place by place,}"></span> <span data-tex-inline="\text{letters as 0 to 25.}"></span></span>Find the decrypting rule, and show it is not the encrypting rule.</li></ol></li>
+      </ol></li>
+    <li class="optgroup"><span class="qid">9·crypt.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder challenges that rely on your own making. The page is complete without these; the rung's star needs them.</span>
+      <ol class="sub">
+        <li class="opt"><span class="qid">9·crypt.4.1</span><span class="tagq">build</span>Build pads of your own.<ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="c \text{ is the remainder of } m + k"></span> <span data-tex-inline="\text{by 26, place by place,}"></span> <span data-tex-inline="\text{letters as 0 to 25.}"></span> <span data-tex-inline="m \text{ and } c \text{ are letter lists of}"></span> <span data-tex-inline="\text{length } n \text{.}"></span></span>Prove one-key-each for this pad: exactly one key list sends m to c.</li><li>Choose two 6-letter messages of your own and one key of coin tosses, and show the key cancelling. <br>Then recover the second message from a crib in the first.</li><li>Build a cipher on lists of 2 bits, with 4 keys, that undoes itself for every key and has a key that is no pad key.</li><li><span class="givens"><span data-tex-inline="\text{A field office in Eugene}"></span> <span data-tex-inline="\text{sends 40 messages a day of}"></span> <span data-tex-inline="\text{150\ letters each, five bits}"></span> <span data-tex-inline="\text{a letter, by the pad.}"></span></span>Find the bits of key it burns in a year of 365 days.</li></ol></li>
+        <li class="opt"><span class="qid">9·crypt.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{A pad carries one answer:}"></span> <span data-tex-inline="\text{YES or NO.}"></span></span>Does the cipher text hide which?</li>
+        <li class="opt"><span class="qid">9·crypt.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{A cipher on lists of } n \text{ bits}"></span> <span data-tex-inline="\text{has one-key-each: for every}"></span> <span data-tex-inline="m \text{ and } c \text{, exactly one key}"></span> <span data-tex-inline="\text{sends } m \text{ to } c \text{.}"></span></span>Must it have at least as many keys as there are lists of n bits? <br>Must each of its encryptions undo itself?</li>
+        <li class="opt"><span class="qid">9·crypt.4.4</span><span class="tagq">seam</span>Before the pad can be used, the two sides must share a key as long as everything they will say. It goes by courier, in a locked case. Has the pad hidden the message, or only moved the secret into the case?</li>
+      </ol></li>
+  </ol>
+  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
+</section>
+
+<nav class="nextrung"><a href="r09bio.html">← 9·bio · is a cow just a big mouse?</a><a href="r09chem.html">9·chem · does every gas follow the same rule? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>Gilbert Vernam, an engineer at AT&amp;T, built the teleprinter cipher of 1917 that adds a key tape to the message tape bit by bit, in the five-hole teleprinter code. Joseph Mauborgne of the United States Army saw that the key tape must be random and never reused. A banker, Frank Miller, had printed the same idea for telegraph codes in 1882; Steven Bellovin found his book in 2011. Claude Shannon proved during the war, and published in 1949, that the pad hides everything and that no cipher can do so with fewer keys than messages. The pages printed twice were Soviet; the American project that read them, begun at Arlington Hall in 1943, was later called Venona, and Meredith Gardner was its first great reader.</p>
+  <aside class="voice para"><p>Shannon showed that perfect secrecy is possible, and that it requires a key at least as long as the message, if the key is not to be used again.</p><cite>Claude Shannon, “Communication Theory of Secrecy Systems”, Bell System Technical Journal 28 (1949); paraphrase</cite></aside>
+  <p>Accepted names: the pad is the one-time pad, or the Vernam cipher. Plain text and cipher text are written plaintext and ciphertext. ⊕ on bits is XOR. Hiding everything, in the sense of one-key-each with keys chosen without pattern, is perfect secrecy. A key used twice gives a two-time pad, and dragging a guessed word along m₁ ⊕ m₂ is crib dragging.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="9·crypt: a worked “proof”, not allowed">
+c = m \oplus k \text{ and } k \text{ is random} @@ fine
+\text{so } c_1 \oplus c_2 \text{ is random too} @@ not allowed: the two k's are the same list, and cancel (key-cancels)
+\text{so a reused key is safe} @@ false: c₁ ⊕ c₂ = m₁ ⊕ m₂, and a crib reads both
+  </pre>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const b5=x=>x.toString(2).padStart(5,'0');
+const clean=s=>(s||'').toUpperCase().replace(/[^A-Z]/g,'');
+const codes=w=>[...clean(w)].map(ch=>ch.charCodeAt(0)-65);
+const L=x=>x<26?String.fromCharCode(65+x):'?';
+let key=[0b10110,0b00111,0b11001,0b01101,0b10011,0b01110,0b00101,0b11000,0b01011,0b10001];
+const w1=$('w1'),w2=$('w2'),w3=$('w3'),w4=$('w4'),cr=$('cr'),cp=$('cp');
+function keyFor(n){ const k=[]; for(let i=0;i<n;i++) k.push(key[i%key.length]); return k; }
+function row(label,cells,cls,attr){ return '<tr><th>'+label+'</th>'+cells.map((v,i)=>'<td class="'+(typeof cls==='function'?cls(v,i):cls||'')+'"'+(attr?attr(i):'')+'>'+v+'</td>').join('')+'</tr>'; }
+function draw1(){ const m=codes(w1.value); const n=m.length; const k=keyFor(n); const c=m.map((x,i)=>x^k[i]);
+  let h='<table>'+row('letter',m.map(L))+row('m',m.map(b5))+'<tr><th>k</th>'+k.map((v,i)=>'<td class="k">'+[...b5(v)].map((ch,j)=>'<span data-i="'+i+'" data-j="'+j+'">'+ch+'</span>').join('')+'</td>').join('')+'</tr>'+row('c',c.map(b5),'c');
+  const t=codes(w3.value); const vd=$('vd1');
+  if(t.length===n&&n){ const kk=t.map((x,i)=>x^c[i]); h+=row('try',t.map(L),'x')+row('its key',kk.map(b5),'x');
+    vd.className='verdict win'; vd.textContent='The key '+kk.map(b5).join(' ')+' sends '+clean(w3.value)+' to the same cipher text: one-key-each. The attacker who tries every key meets this message once, and every other message of '+n+' letters once.'; }
+  else { vd.className='verdict lose'; vd.textContent=n?'Try a message of '+n+' letters: a cipher text says how long the message is, and only messages of that length fit it.':'Type a message.'; }
+  h+='</table>'; $('g1').innerHTML=h;
+  $('g1').querySelectorAll('td.k span').forEach(sp=>sp.onclick=()=>{ const i=+sp.dataset.i, j=+sp.dataset.j; key[i%key.length]^=(1<<(4-j)); all(); });
+}
+function draw2(){ const m2=codes(w2.value); const n=m2.length; let m1=codes(w4.value); while(m1.length<n) m1.push(23); m1=m1.slice(0,n);
+  const k=keyFor(n); const c1=m1.map((x,i)=>x^k[i]), c2=m2.map((x,i)=>x^k[i]); const x=c1.map((v,i)=>v^c2[i]);
+  cp.max=Math.max(0,n-1); const p=Math.min(+cp.value,Math.max(0,n-1)); $('ocp').textContent=p;
+  const g=codes(cr.value); const out=Array(n).fill('');
+  g.forEach((v,j)=>{ if(p+j<n){ out[p+j]=v^x[p+j]; } });
+  let h='<table>'+row('m₁',m1.map(L))+row('c₁',c1.map(b5),'c')+row('c₂',c2.map(b5),'c')+row('c₁⊕c₂',x.map(b5),'x');
+  h+=row('crib',Array(n).fill('').map((_,i)=>i>=p&&i<p+g.length?L(g[i-p]):''),'k');
+  h+=row('m₂ there',out.map(v=>v===''?'':L(v)),(v,i)=>out[i]!==''&&out[i]>25?'bad':'x')+'</table>'; $('g2').innerHTML=h;
+  const got=out.filter(v=>v!=='').map(L).join(''); const real=m2.slice(p,p+g.length).map(L).join(''); const fits=p+g.length<=n; const vd=$('vd2');
+  if(!g.length){ vd.className='verdict'; vd.textContent='Type a guessed word.'; return; }
+  if(fits&&got===real){ vd.className='verdict win'; vd.textContent='The crib gives '+got+': the second message really says that there. No key was used: key-cancels.'; }
+  else { vd.className='verdict lose'; vd.textContent='The crib gives '+(got||'nothing')+(got.indexOf('?')>=0?', with groups that are no letter':'')+'. If that is not a word, the guess or its place is wrong; move it along.'; }
+}
+function all(){ draw1(); draw2(); }
+$('toss').onclick=()=>{ key=key.map(()=>Math.floor(Math.random()*32)); all(); };
+[w1,w2,w3,w4,cr,cp].forEach(el=>el.addEventListener('input',all));
+window.__pic={set:(a,bb,t,c,p)=>{ w1.value=a; w2.value=bb; w3.value=t; cr.value=c; cp.value=p; all(); return {v1:$('vd1').textContent,v2:$('vd2').textContent}; }};
+all();
+
+const N='\\htmlClass{new}', Kp='\\htmlClass{keep}';
+stepper('#sl1',[
+  {k:'teal',kl:'from 4h · letters in bits',t:R`\text{L} = 11 = 01011`,n:`A = 0 to Z = 25, five bits each.`},
+  {k:'teal',kl:'from 4·comp · ⊕ place by place',t:R`01011 \oplus 10110 = ${N}{11101}`,n:`1 where exactly one of the two bits is 1.`},
+  {k:'teal',kl:'from 4·comp · two samenesses',t:R`A \oplus A = 0,\quad A \oplus 0 = A`,n:`Checked on their rows; they are true at every place.`},
+  {k:'ember',kl:'the pad',t:R`E_k(m) = m \oplus k`,n:`A key of coin tosses, as long as the message, used once.`},
+  {k:'ember',kl:'own-way-back',t:R`(m \oplus k) \oplus k = m \oplus ${N}{(k \oplus k)} = ${Kp}{m}`,n:`E_k ∘ E_k = id: decrypting is encrypting again.`},
+  {k:'ember',kl:'LODI',t:R`\text{LODI} \mapsto ${N}{11101\ 01001\ 11010\ 00101}`,n:`The cipher text is bits; 29 and 26 are no letters.`},
+  {k:'ember',kl:'one key each',t:R`m \oplus k = c \iff ${N}{k = m \oplus c}`,n:`For any message and any cipher text of one length, exactly one key.`},
+  {k:'ember',kl:'every message fits',t:R`k \mapsto k \oplus c \text{ is a bijection onto the messages}`,n:`OAKS, MAMA and LODI each fit, each with one key. Nothing points at LODI.`},
+  {k:'ember',kl:'the short key',t:R`2^r \lt 2^n`,n:`Fewer keys than messages: some message fits no key, and is ruled out.`},
+  {k:'ember',kl:'the pad used twice',t:R`c_1 \oplus c_2 = ${Kp}{m_1 \oplus m_2}`,n:`key-cancels: k ⊕ k = 0.`},
+  {k:'ember',kl:'a crib',t:R`\text{MEET} \oplus (m_1 \oplus m_2) = ${N}{\text{HOLD}}`,n:`A guessed word in one message gives the other there.`},
+  {k:'ember',kl:'two pads are one',t:R`E_j \circ E_k = E_{k \oplus j}`,n:`Regroup: a second key adds nothing.`},
+  {k:'ember',kl:'illegal',t:R`m \text{ AND } k`,n:`Not one-to-one: where k is 0, every message gives 0.`}
+],{title:'The slides · letters in bits; ⊕ place by place; the pad; own-way-back; LODI; one key each; every message fits; the short key; the pad used twice; a crib; two pads are one; illegal moves · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

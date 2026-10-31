@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A sum is where its partial sums settle</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+.kn{font-size:.88rem}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r22c.html">← 22c settling without knowing where</a><a href="r22e.html">next: 22e compare with a geometric sum →</a></p>
+  <div class="tags"><span class="tag proof">22d · proof</span></div>
+  <h1>A sum is where its partial sums settle</h1>
+  <p>You cannot add endlessly many numbers one at a time; you would never finish. What you can do is add the first few, then the first few more, and watch the running total. If the running totals settle, the place they settle is the total of the endless sum. That one sentence turns every question about endless sums into a question about lists, and the last three steps answered those. This step draws the first two lessons from it. The pieces you add must shrink toward nothing, or the total cannot settle. And shrinking is not enough: the pieces one, a half, a third, a quarter and so on shrink toward nothing, yet their running total climbs past any ceiling you name.</p>
+  <p class="gesture">An endless sum has a total when its running totals settle, and the total is where they settle. The pieces must shrink toward nothing. But pieces that shrink can still add up to more than any number you name.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r15i.html">15i</a> (endless sums and geometric sums), <a href="r22c.html">22c</a> (crowding), <a href="r22a.html">22a</a> (the climb technique). <a href="r22e.html">22e</a> compares a sum with a geometric one.</p></div>
+</header>
+
+<section class="class step" data-step="22d1">
+  <h2 class="sthead"><span class="stno">22d1</span>Running totals</h2>
+  <p class="stands">Stands on 15i (endless sums) and 22a1 (settles).</p>
+  <p data-pid="e3a791">Rung 15 made the definition already. For a sequence a₁, a₂, a₃, …, the running totals are sₙ = a₁ + a₂ + ⋯ + aₙ. The endless sum Σ aₙ has a total S when sₙ → S, and then Σ aₙ = S.</p>
+  <p class="eqline" data-pid="18c9a8">From here on, the endless sum Σ aₙ settles when its running totals settle, and wanders when they wander. Accepted names: the series converges or diverges; sₙ is its n-th partial sum.</p>
+  <p data-pid="61ef9e">Partial-sum technique: <b>every question about an endless sum is a question about the sequence of its running totals.</b> So 22a, 22b and 22c apply at once. A sum of terms that are never negative has climbing running totals. By the climb technique it settles exactly when its running totals have a ceiling.</p>
+  <p data-pid="d971f8">This is where 15i's geometric sums came from: for |r| &lt; 1, the running totals of 1 + r + r² + ⋯ are (1 − rⁿ)/(1 − r), and they settle at 1/(1 − r).</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · running totals · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">22d1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\textstyle\sum \tfrac{1}{3^n},\ \ \sum n,\ \ \sum \tfrac{1}{n(n+1)}"></span></span>Write the first four running totals of each, from n = 1. <br>Find a rule for the n-th running total of each. <br>Find which settle, and where.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22d2">
+  <h2 class="sthead"><span class="stno">22d2</span>The pieces must shrink</h2>
+  <p class="stands">Stands on 22d1 and 22a1 (a limit is unique).</p>
+  <p data-pid="ca06b3">Shrink technique: <b>if Σ aₙ settles, then aₙ → 0.</b> The piece aₙ is the difference of two running totals, and both head to the same total.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the shrink technique">
+a_n = s_n - s_{n-1} @@ running totals differ by one piece
+s_n \to S,\ \ s_{n-1} \to S @@ the same sequence, one place on
+\htmlClass{new}{a_n \to S - S = 0} \quad \blacksquare @@ limits of differences (10, read on sequences)
+  </pre>
+  <p data-pid="058ab4">Read it the other way round and it becomes a test. If the pieces do not head to 0, the sum wanders. 1 − 1 + 1 − 1 + ⋯ has pieces ±1, so it has no total. Its running totals are 1, 0, 1, 0, …, and 22b1 shows two threads settling apart.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22d2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\textstyle\sum \tfrac{n}{n+1},\ \ \sum (1.01)^n,\ \ \sum (-1)^n\tfrac{n}{2n+1}"></span></span>Show that each wanders, by the shrink technique. <br>Find a sum whose pieces head to 0, and what the shrink technique then tells you about it.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22d3">
+  <h2 class="sthead"><span class="stno">22d3</span>Shrinking is not enough</h2>
+  <p class="stands">Stands on 22d2 and 22d1 (the climb technique for sums).</p>
+  <p data-pid="612b7a">Grouping technique: <b>1 + ½ + ⅓ + ¼ + ⋯ passes every ceiling, although its pieces head to 0.</b> Group the pieces in blocks that double in length. Each block adds at least a half.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the grouping technique">
+\tfrac13 + \tfrac14 \ge \tfrac14 + \tfrac14 = \tfrac12 @@ the block of 2: each piece at least the last
+\tfrac15 + \cdots + \tfrac18 \ge 4 \cdot \tfrac18 = \tfrac12 @@ the block of 4
+\tfrac{1}{2^{k-1}+1} + \cdots + \tfrac{1}{2^k} \ge 2^{k-1} \cdot \tfrac{1}{2^k} = \tfrac12 @@ the block of 2ᵏ⁻¹, for every k ≥ 1
+s_{2^k} \ge 1 + \tfrac{k}{2} @@ induction (4b) over the blocks
+\htmlClass{new}{s_n \text{ passes every ceiling: } \sum \tfrac1n \text{ wanders}} \quad \blacksquare @@ counting passes any real (8): pick k &gt; 2β
+  </pre>
+  <p data-pid="6409f6">The sum wanders, but slowly. To pass 10 it needs more than twelve thousand pieces. A computer adding a million pieces a second would watch it creep past 30 only after weeks. Watching cannot tell you it wanders. The grouping proves it.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · grouping · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · two running totals, one that settles and one that wanders</div>
+    <div id="pl"></div>
+    <div class="kn"><span class="m">pieces</span><input type="range" id="kn" min="2" max="400" step="1" value="40"><output id="okn"></output></div>
+    <div class="cap">Teal: running totals of ½ + ¼ + ⅛ + ⋯, settling at 1. Ember: running totals of 1 + ½ + ⅓ + ⋯, creeping past every ceiling. Both have pieces that head to 0.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22d3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="1 + \tfrac13 + \tfrac15 + \tfrac17 + \cdots"></span></span>Find a k for which the grouping technique shows the running total at 2ᵏ is above 5. <br>Show each piece of the sum given is at least the matching piece of ½ + ¼ + ⅙ + ⋯. <br>Find whether the sum given settles.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22d4">
+  <h2 class="sthead"><span class="stno">22d4</span>Sums that add, and tails</h2>
+  <p class="stands">Stands on 22d1, 22c2 (the crowd technique) and 10 (limits of sums).</p>
+  <p data-pid="4749fd">Sum-of-sums technique: <b>if Σ aₙ = A and Σ bₙ = B, then Σ (aₙ + bₙ) = A + B and Σ c·aₙ = c·A.</b> Running totals add and scale, and limits of sequences do too.</p>
+  <p data-pid="6e7291">Tail technique: <b>dropping or changing finitely many pieces never changes whether a sum settles.</b> It only shifts the total by a fixed amount. What decides settling is the tail: the pieces from some place on.</p>
+  <p data-pid="359927">Crowd technique for sums: <b>Σ aₙ settles exactly when, for every ε &gt; 0, every block of pieces far enough out adds to less than ε in size.</b> That is 22c2 for the running totals, since a block aₘ₊₁ + ⋯ + aₙ is sₙ − sₘ. It is the form used in the next three steps.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the crowd technique for sums">
+s_n - s_m = a_{m+1} + \cdots + a_n @@ a block of pieces
+\text{settles} \Leftrightarrow (s_n) \text{ crowds} @@ 22c1 and 22c2
+\htmlClass{new}{\Leftrightarrow\ \forall\varepsilon>0\ \exists N\ \forall n > m \ge N:\ |a_{m+1} + \cdots + a_n| < \varepsilon} \quad \blacksquare @@ the definition of crowding
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22d4.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\textstyle\sum_{n \ge 1} \big(\tfrac{3}{2^n} + \tfrac{1}{3^n}\big)"></span></span>Find its total, by the sum-of-sums technique and 15i.</li><li><span class="givens"><span class="gtx">a sum whose pieces are 100 for n ≤ 100, and 1/2ⁿ after that</span></span>Find whether it settles, and by which technique. <br>Find its total.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22d5">
+  <h2 class="sthead"><span class="stno">22d5</span>Illegal moves</h2>
+  <p class="stands">Stands on 22d1 to 22d4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+a_n \to 0 \Rightarrow \sum a_n \text{ settles}\,? @@ 1 + ½ + ⅓ + ⋯ wanders (the grouping technique)
+1 - 1 + 1 - \cdots = (1 - 1) + (1 - 1) + \cdots = 0\,? @@ grouping a sum that wanders can manufacture a total; group only sums that settle
+\sum (a_n + b_n) \text{ settles} \Rightarrow \sum a_n \text{ settles}\,? @@ aₙ = 1, bₙ = −1
+\text{the running totals look settled after a million pieces}\,? @@ the harmonic sum looks settled at 14.4 and still wanders
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22d5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\textstyle\sum \tfrac{1}{\sqrt n}"></span></span>Show its pieces head to 0. <br>Show its n-th running total is at least √n, and find whether it settles.</li><li><span class="givens"><span data-tex-inline="1 - 1 + 1 - 1 + \cdots"></span></span>Group it as 1 + (−1 + 1) + (−1 + 1) + ⋯, and find the total that grouping makes. <br>Find why neither grouping gives the sum a total.</li><li><span class="givens"><span data-tex-inline="a_n = \tfrac1n,\ \ b_n = -\tfrac{1}{n+1}"></span></span>Find the total of Σ (aₙ + bₙ). <br>Find whether Σ aₙ settles.</li><li><span class="givens"><span class="gtx">the harmonic sum after a million pieces: about 14.39</span></span>Find a k for which the grouping technique shows the running total at 2ᵏ is above 15. <br>Find how many pieces that is, and what watching the first million told you.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">22d.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="x &gt; 0"></span></span>Go through 1, ½, ⅓, ¼, … in order, and keep 1/n whenever the total kept so far plus 1/n stays at most x. <br>Prove that the sum of the kept pieces settles at x itself.</div>
+  <div class="chq"><span class="chid">22d.4.2</span><span class="tagq">edge</span>The grouping technique gives s at 2ᵏ ≥ 1 + k/2. Prove also that s at 2ᵏ ≤ 1 + k. <br>Find from both a fence for the number of pieces the harmonic sum needs to pass 10.</div>
+  <div class="chq"><span class="chid">22d.4.3</span><span class="tagq">converse</span>If the pieces are never negative, a ceiling for the running totals makes the sum settle. Turn the condition away: if the pieces head to 0 and the running totals have a floor and a ceiling, must the sum settle?</div>
+  <div class="chq"><span class="chid">22d.4.4</span><span class="tagq">reroute</span>Prove that the harmonic sum wanders without grouping. Suppose it settles at H. Split it into its odd pieces and its even pieces, and use the sum-of-sums technique to reach two claims that cannot both hold.</div>
+  <div class="chq"><span class="chid">22d.4.5</span><span class="tagq">seam</span>A runner must first reach the halfway mark, then half of what is left, then half of that, without end. An ancient philosopher concluded that motion is impossible. Another answered that the endless halves are only ever possible, never all completed. Today many reply that ½ + ¼ + ⅛ + ⋯ settles at 1, and that ends it. Others answer that a total is a number, and running is not adding. <br>Does the total of an endless sum show that the runner finishes? <br>Is the place where running totals settle something that happens, or only a number?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r22c.html">← 22c · settling without knowing where</a><a href="r22e.html">22e · compare with a geometric sum →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>An endless sum is a series; its running totals are partial sums. The shrink technique read as a test is the n-th term test (or divergence test). 1 + ½ + ⅓ + ⋯ is the harmonic series, and the grouping technique is the Cauchy condensation idea in its first form. The crowd technique for sums is the Cauchy criterion for series.</p>
+  <h3>Who said it first</h3>
+  <p>Nicole Oresme proved the harmonic series wanders by the doubling blocks around 1350, three centuries before calculus. Pietro Mengoli (1650) and Johann and Jacob Bernoulli (1689) proved it again by other routes. Cauchy (1821) made the running totals the definition of an endless sum. In 22d.4.5, the runner is Zeno of Elea’s (the dichotomy, about 450 BC), and the answer about endless halves that are only possible is Aristotle’s (Physics, book 6). The modern reply by sums was argued by Bertrand Russell and Adolf Grünbaum; Max Black (1951) and James Thomson (1954) answered that a total does not show an endless task completed.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+/* sequence and sum plots for rungs 22 on: plot({xlo,xhi,ylo,yhi,series:[{pts,c,dots,open,w}],h:[{y,c,dash,t}]}) */
+const V=c=>'var('+c+')';
+function plot(o){ const W=320,H=220,P=26, X=x=>P+(x-o.xlo)/(o.xhi-o.xlo)*(W-P-6), Y=y=>H-P-(y-o.ylo)/(o.yhi-o.ylo)*(H-P-8);
+  let s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;max-width:380px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  s+='<line x1="'+P+'" y1="'+Y(Math.max(o.ylo,Math.min(o.yhi,0)))+'" x2="'+W+'" y2="'+Y(Math.max(o.ylo,Math.min(o.yhi,0)))+'" style="stroke:'+V('--grid')+';stroke-width:1.4"/>';
+  s+='<line x1="'+P+'" y1="0" x2="'+P+'" y2="'+(H-P)+'" style="stroke:'+V('--grid')+';stroke-width:1.4"/>';
+  (o.ticks||[]).forEach(t=>{ s+='<text x="2" y="'+(Y(t)+4)+'" style="font-size:10px;fill:'+V('--ink')+'">'+t+'</text>'; });
+  (o.h||[]).forEach(l=>{ s+='<line x1="'+P+'" y1="'+Y(l.y)+'" x2="'+W+'" y2="'+Y(l.y)+'" style="stroke:'+V(l.c||'--teal')+';stroke-width:1.4;stroke-dasharray:'+(l.dash||'5 4')+'"/>'; if(l.t) s+='<text x="'+(W-4)+'" y="'+(Y(l.y)-4)+'" text-anchor="end" style="font-size:10px;fill:'+V(l.c||'--teal')+'">'+l.t+'</text>'; });
+  (o.series||[]).forEach(q=>{ const pts=q.pts.filter(p=>isFinite(p[1])&&p[1]>=o.ylo-1e9);
+    if(q.open) s+='<polyline points="'+pts.map(p=>X(p[0])+','+Y(Math.max(o.ylo,Math.min(o.yhi,p[1])))).join(' ')+'" style="fill:none;stroke:'+V(q.c||'--ink')+';stroke-width:'+(q.w||1.6)+'"/>';
+    if(q.dots!==false) pts.forEach(p=>{ if(p[1]>=o.ylo&&p[1]<=o.yhi) s+='<circle cx="'+X(p[0])+'" cy="'+Y(p[1])+'" r="'+(q.r||2.4)+'" style="fill:'+V(q.c||'--ink')+'"/>'; }); });
+  return s+'</svg>'; }
+
+let n=40; const e=$('kn'); e.addEventListener('input',()=>{ n=+e.value; draw(); });
+function draw(){ const g=[], h=[]; let a=0,b=0; for(let k=1;k<=n;k++){ a+=Math.pow(0.5,k); b+=1/k; g.push([k,a]); h.push([k,b]); }
+  const top=Math.max(2,Math.ceil(b)+0.5);
+  $('pl').innerHTML=plot({xlo:0,xhi:n+1,ylo:0,yhi:top,ticks:[1,Math.floor(top)],series:[{pts:g,c:'--teal',r:n>100?1.2:2.2},{pts:h,c:'--ember',r:n>100?1.2:2.2}],h:[{y:1,c:'--teal',t:'1'}]});
+  $('okn').textContent=n;
+  const v=$('vd'); v.className='verdict'; v.textContent='After '+n+' pieces: the halves total '+a.toFixed(6)+'; the harmonic sum totals '+b.toFixed(4)+'.'; }
+draw();
+window.__pic={set:j=>{ n=j; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'totals',t:R`s_n = a_1 + \cdots + a_n`,n:`A sequence.`},
+  {k:'ember',kl:'the sum',t:R`\htmlClass{new}{\sum a_n = \lim s_n}`,n:`When it settles.`},
+  {k:'ember',kl:'no negatives',t:R`a_n \ge 0:\ \text{settles} \Leftrightarrow s_n \le \beta`,n:`The climb technique.`}
+],{title:'The slides · running totals · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'a block',t:R`\tfrac{1}{2^{k-1}+1} + \cdots + \tfrac{1}{2^k} \ge \tfrac12`,n:`Doubling blocks.`},
+  {k:'ember',kl:'wanders',t:R`\htmlClass{new}{s_{2^k} \ge 1 + \tfrac k2}`,n:`Past every ceiling.`}
+],{title:'The slides · grouping · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

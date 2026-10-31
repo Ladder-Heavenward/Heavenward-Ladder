@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Identities</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r21j.html">← 21j radians</a><a href="r21l.html">next: 21l the slope of sine by hand →</a></p>
+  <div class="tags"><span class="tag tech">21k · technique</span></div>
+  <h1>Identities</h1>
+  <p>A school course in trigonometry hands out a long list of formulas to remember. Every one of them follows from two facts already proved: a point on the circle is one unit from the centre, and turning by two arcs is turning by their sum. This step shows how to grow the list from those two, how to check a formula without fooling yourself, and how to find every angle that answers a question, not just the first.</p>
+  <p class="gesture">Every formula in the list comes from the circle and the sum of turns, by algebra alone. A formula is proved by changing one side until it becomes the other. An equation about an angle usually has endlessly many answers, one family for each turn.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r21c.html">21c</a> (the circle technique), <a href="r21d.html">21d</a> (the sum technique), <a href="r21e.html">21e</a> (flips and the complement), <a href="r01i.html">1i</a> (write it forwards). <a href="r21l.html">21l</a> takes slopes.</p></div>
+</header>
+
+<section class="class step" data-step="21k1">
+  <h2 class="sthead"><span class="stno">21k1</span>One side into the other</h2>
+  <p class="stands">Stands on 21c, 21d4 (doubles) and 0b (the chain technique).</p>
+  <p data-pid="3a3e0a">From here on, an identity is an equation true for every θ where both sides are defined. One-side technique: <b>prove an identity by a chain of equals from one side to the other, never by doing the same thing to both sides of what is still unproved.</b> Doing the same to both sides runs the proof backwards: it shows what follows from the claim, not that the claim holds.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the one-side technique, on one identity">
+\frac{1 - \cos 2\theta}{\sin 2\theta} = \frac{1 - (1 - 2\sin^2\theta)}{2\sin\theta\cos\theta} @@ doubles (21d4), with cos² = 1 − sin² (21c)
+= \frac{2\sin^2\theta}{2\sin\theta\cos\theta} @@ 1 − 1 = 0
+\htmlClass{new}{= \tan\theta} \quad \blacksquare @@ cancel 2 sin θ, allowed where sin 2θ ≠ 0
+  </pre>
+  <p data-pid="04f8ec">The chain technique of 0b joins the links: each line equals the next, so the first equals the last.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · one side · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">21k1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\dfrac{\sin\theta}{1 - \cos\theta} = \dfrac{1 + \cos\theta}{\sin\theta}"></span></span>Prove it, starting from the left side. <br>Find where it is defined.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21k2">
+  <h2 class="sthead"><span class="stno">21k2</span>Halves</h2>
+  <p class="stands">Stands on 21d4 (doubles), 21c (the circle technique) and 21c (signs by quarter).</p>
+  <p data-pid="1e53e8">Half-arc technique: <b>cos²(θ/2) = (1 + cos θ)/2 and sin²(θ/2) = (1 − cos θ)/2.</b> The sign of cos(θ/2) or sin(θ/2) is then fixed by the quarter that θ/2 ends in.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the half-arc technique">
+\cos 2A = 2\cos^2 A - 1 = 1 - 2\sin^2 A @@ doubles, with sin² = 1 − cos² or cos² = 1 − sin²
+\cos^2 A = \tfrac{1 + \cos 2A}{2},\ \ \sin^2 A = \tfrac{1 - \cos 2A}{2} @@ solve each for the square
+\htmlClass{new}{\cos^2\tfrac{\theta}{2} = \tfrac{1 + \cos\theta}{2},\ \ \sin^2\tfrac{\theta}{2} = \tfrac{1 - \cos\theta}{2}} \quad \blacksquare @@ A = θ/2
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · halves · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21k2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\cos\tfrac{\pi}{8},\ \ \sin\tfrac{\pi}{12}"></span></span>Find each exactly. <br>Check sin(π/12) by the difference technique, with π/12 = π/3 − π/4.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21k3">
+  <h2 class="sthead"><span class="stno">21k3</span>Products into sums, and back</h2>
+  <p class="stands">Stands on 21d3 (the sum technique) and 21e2 (differences).</p>
+  <p data-pid="d2543c">Product-to-sum technique: <b>a product of a sine and a cosine is half the sum of two sines; a product of two cosines or two sines is half a sum or difference of cosines.</b> Add and subtract the sum and difference formulas.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the product-to-sum technique">
+\sin(A + B) + \sin(A - B) = 2\sin A\cos B @@ sum + difference: the cos A sin B terms cancel
+\cos(A - B) + \cos(A + B) = 2\cos A\cos B @@ the sin A sin B terms cancel
+\cos(A - B) - \cos(A + B) = 2\sin A\sin B @@ the cos A cos B terms cancel
+\htmlClass{new}{\sin A\cos B = \tfrac12[\sin(A + B) + \sin(A - B)]} \quad \blacksquare @@ and the other two, halved
+x = A + B,\ y = A - B:\ \ \sin x + \sin y = 2\sin\tfrac{x + y}{2}\cos\tfrac{x - y}{2} @@ read backwards: a sum into a product
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · products · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21k3.1</span><span class="ph undo">undo</span><span class="givens"><span data-tex-inline="\sin 5\theta\cos 3\theta,\ \ \cos 5\theta + \cos 3\theta"></span></span>Write the first as a sum. <br>Write the second as a product.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21k4">
+  <h2 class="sthead"><span class="stno">21k4</span>Every answer, not the first one</h2>
+  <p class="stands">Stands on 21b (whole turns), 21e4 (half turns) and 21a4 (arc-picks-a-point).</p>
+  <p data-pid="964cd9">Every-answer technique: <b>if α is one arc with sin α = s, every θ with sin θ = s is α + 2πk or π − α + 2πk; if cos α = c, every θ with cos θ = c is ±α + 2πk.</b> Here k is any whole number.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the every-answer technique, for sin">
+-1 \le s \le 1:\ \text{some } \alpha \text{ with } \sin\alpha = s @@ arc-picks-a-point (21a4), on the half circle and its flips
+\sin(\pi - \alpha) = \sin\alpha @@ half turns (21e4)
+\text{in one turn, at most two points have height } s @@ they are (±√(1 − s²), s), by the circle technique (21c)
+\htmlClass{new}{\theta = \alpha + 2\pi k \ \text{or}\ \pi - \alpha + 2\pi k} \quad \blacksquare @@ then whole turns (21b)
+  </pre>
+  <p data-pid="43c7c5">To solve an equation in sin θ, first solve for sin θ as a number, then use every-answer on each value.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · every answer · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21k4.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="2\sin^2\theta - \sin\theta - 1 = 0"></span></span>Find every θ that solves it.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21k5">
+  <h2 class="sthead"><span class="stno">21k5</span>Illegal moves</h2>
+  <p class="stands">Stands on 21k1 to 21k4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{square both sides of the claim, get } 1 = 1,\ \text{done}\,? @@ that runs backwards: −1 = 1 squares to 1 = 1 too
+\sin\theta\cos\theta = \sin\theta \Rightarrow \cos\theta = 1\,? @@ dividing by sin θ loses the answers where sin θ = 0
+\cos\tfrac{\theta}{2} = \sqrt{\tfrac{1 + \cos\theta}{2}} \text{ always}\,? @@ minus when θ/2 ends left of the upright axis
+\sin\theta = \tfrac12 \Rightarrow \theta = \tfrac{\pi}{6}\,? @@ also 5π/6, and each plus any whole number of turns
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21k5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\sin\theta = 1 - \cos\theta"></span></span>Square both sides and solve for 0 ≤ θ < 2π. <br>Find which answers solve the equation before squaring.</li><li><span class="givens"><span data-tex-inline="\sin 2\theta = 2\sin\theta"></span></span>Find every θ with 0 ≤ θ < 2π that solves it.</li><li><span class="givens"><span data-tex-inline="\theta = 2\pi"></span></span>Find whether cos(θ/2) = √((1 + cos θ)/2) holds there.</li><li><span class="givens"><span data-tex-inline="\sin 3\theta"></span></span>Write it using sin θ alone.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">21k.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="t = \tan\tfrac{\theta}{2}"></span></span>Build sin θ and cos θ out of t alone. <br>Find the points of the circle you get when t is a fraction.</div>
+  <div class="chq"><span class="chid">21k.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\sin\theta + \cos\theta"></span></span>Find the largest value it reaches, and every θ where it reaches it.</div>
+  <div class="chq"><span class="chid">21k.4.3</span><span class="tagq">converse</span>An identity is true at every θ. Turn it round: find an equation that is true at θ = 0, π/6, π/4, π/3 and π/2 but is not an identity.</div>
+  <div class="chq"><span class="chid">21k.4.4</span><span class="tagq">reroute</span>Prove sin x + sin y = 2 sin((x + y)/2) cos((x − y)/2) from a picture: find the midpoint of the points at arcs x and y, and read off its height.</div>
+  <div class="chq"><span class="chid">21k.4.5</span><span class="tagq">seam</span><span class="givens"><span data-tex-inline="x^3 - 3x - 1 = 0"></span></span>This equation has three answers, all of them ordinary numbers. The only formula once known for such equations wrote them with square roots of negative numbers, which most people then held to be meaningless. Another mathematician found all three with an identity of this step and never touched such roots. <br>Were the square roots of negative numbers needed, or only a detour?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r21j.html">← 21j · radians</a><a href="r21l.html">21l · the slope of sine by hand →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The half-arc formulas are the half-angle formulas; product-to-sum and sum-to-product formulas keep their names. The values α + 2πk and π − α + 2πk are the general solution. Writing sin θ and cos θ in t = tan(θ/2) is the Weierstrass substitution.</p>
+  <h3>Who said it first</h3>
+  <p>In 21k.4.5, the formula is Cardano’s, Ars Magna (1545), and the trouble is the case later called irreducible. François Viète solved it with the triple-angle identity in about 1591; Rafael Bombelli had already, in 1572, calculated boldly with the square roots of negatives and got the right answers.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'one side',t:R`\htmlClass{new}{L = \cdots = R}`,n:`A chain, never both sides at once.`}
+],{title:'The slides · one side · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'half arcs',t:R`\htmlClass{new}{\cos^2\tfrac{\theta}{2} = \tfrac{1 + \cos\theta}{2}}`,n:`Sign by quarter.`}
+],{title:'The slides · halves · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'product to sum',t:R`\htmlClass{new}{\sin A\cos B = \tfrac12[\sin(A + B) + \sin(A - B)]}`,n:`And back.`}
+],{title:'The slides · products · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'every answer',t:R`\htmlClass{new}{\theta = \alpha + 2\pi k \text{ or } \pi - \alpha + 2\pi k}`,n:`For sin θ = sin α.`}
+],{title:'The slides · every answer · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`L^2 = R^2 \not\Rightarrow L = R`,n:`Squaring runs backwards.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

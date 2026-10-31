@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>18·logi · How many of each loaf should a bakery bake?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r18nav.html">← 18·nav how can a small map be true to the land?</a><a href="r18phys.html">next: 18·phys why do planets travel on ellipses? →</a></p>
+  <div class="tags"><span class="tag logi">18·logi · logistics</span></div>
+  <h1>How many of each loaf should a bakery bake?</h1>
+  <p>How many of each loaf should a bakery bake? Each morning a baker in Eugene decides how many round country loaves and how many long thin ones to bake. Each kind earns something. Each uses up some flour, some room in the oven and some of the bakers’ time, and there is only so much of each. Bake more of one kind, and there is less left for the other. What makes it hard is that the limits pull in different directions. The loaf that earns most may be the one that eats the oven, and the one that is quick to shape may eat the flour. There are tens of thousands of possible plans, and trying them all by hand is hopeless. This page draws each limit as a line, with 18g’s lines in coordinates. The allowed plans fill a region with straight sides. It shows that the best plan sits at a corner of that region, never in its middle, and finds what one more bag of flour is worth.</p>
+  <p class="gesture">Each limit says that a sum of so much per loaf stays under a fixed amount. That is one side of a line. All the limits together leave a region with straight sides and a few corners. The earnings are a sum of so much per loaf too, so plans with the same earnings lie on one line, and all those lines run the same way. Push that line outward until it is about to leave the region. The last place it touches is a corner. From any plan inside, a small step in the right direction earns more and breaks no limit. A limit with room to spare at the best corner is worth nothing more.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r18g.html">18g</a> (sides-of-a-line, best-corner, convex, the five forms of a line), <a href="r18c.html">18c</a> (two-lines-meet, two-descriptions-agree), <a href="r09e.html">9e</a> (slope and intercepts), <a href="r08d.html">8d</a> (order). <a href="r18phys.html">18·phys</a> uses a line in coordinates to read the shape of an orbit.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · read it through, then work the picture and the slides</div>
+
+  <h3>A bakery in Eugene, as a model</h3>
+  <p data-pid="7c5613">Here is a model of one bakery’s day: a bundle of facts to work on, not a survey of bakeries. It bakes x round loaves and y long ones. A round loaf takes 0.5 kg of flour, and a long one 0.25 kg. The bakery has 100 kg of flour a day. The oven holds 30 loaves of either kind a load, and there is time for 10 loads. Shaping a round loaf takes 1 minute, and a long one 3 minutes. Two bakers shape for 6 hours each, 720 minutes in all. A round loaf earns $3 over its costs, and a long one $2.</p>
+  <pre class="lines" data-k="ember" data-label="18·logi: the limits">
+\text{flour}:\ \ 0.5x + 0.25y \le 100 \iff 2x + y \le 400 @@ times 4, which keeps the order (8d)
+\text{oven}:\ \ x + y \le 300 @@ 30 loaves a load, 10 loads
+\text{hands}:\ \ x + 3y \le 720 @@ minutes of shaping
+x \ge 0,\ \ y \ge 0 @@ no loaf is baked less than 0 times
+\text{earnings}:\ \ g(x, y) = 3x + 2y @@ dollars over costs
+  </pre>
+  <p data-pid="e642d2">By sides-of-a-line (18g), each limit keeps one side of a line: a half-plane. The plans allowed by all five limits are the points in all five half-planes at once. That set holds the whole segment between any two of its points, so it is convex (18g). It is bounded, so it is a polygon, and its corners are where two of its edge lines meet (two-lines-meet).</p>
+  <pre class="lines" data-k="ember" data-label="18·logi: the corners">
+y = 0,\ 2x + y = 400:\ \ (200, 0) @@ flour runs out first along the bottom
+2x + y = 400,\ x + y = 300:\ \ (100, 200) @@ subtract: x = 100
+x + y = 300,\ x + 3y = 720:\ \ (90, 210) @@ subtract: 2y = 420
+x + 3y = 720,\ x = 0:\ \ (0, 240) @@ hands run out first up the side
+(0, 0) @@ and each corner checked against the other limits: (100, 200) uses 700 of the 720 minutes
+  </pre>
+  <h3>The best plan is at a corner</h3>
+  <p data-pid="45b1c7">Best-corner (18g) says that g takes its largest value on the region at a corner. So only five plans need checking, out of tens of thousands.</p>
+  <div class="tablewrap"><table class="tt">
+  <tr><th>corner</th><th>(0, 0)</th><th>(200, 0)</th><th>(100, 200)</th><th>(90, 210)</th><th>(0, 240)</th></tr>
+  <tr><td class="l">earnings, $</td><td>0</td><td>600</td><td><b>700</b></td><td>690</td><td>480</td></tr>
+  </table></div>
+  <p data-pid="1c6a63">The best plan is 100 round loaves and 200 long ones, for $700. It uses all the flour and every place in the oven. It leaves 20 minutes of shaping unused.</p>
+  <p data-pid="89f8c9">Why never the middle? Plans that earn the same lie on one line, 3x + 2y = constant. All such lines have slope −3/2 (9e), so they never cross. Raise the constant and the line slides, keeping its slope, in the direction (3, 2). Slide it as far as the region allows. The last points it touches are on the region’s edge, and a straight edge it cannot run along unless it is parallel to it. So it leaves at a corner.</p>
+  <p data-pid="c4ffe5">No-middle technique: <b>at a plan with room to spare in every limit, a small enough step in the direction of the earnings breaks no limit and earns more.</b> So the best plan is never a point with room to spare everywhere.</p>
+  <pre class="lines" data-k="ember" data-label="18·logi: the no-middle technique">
+\text{at } Q \text{ every limit } \alpha x + \beta y \le c \text{ has } \alpha x_Q + \beta y_Q \lt c @@ room to spare in each
+\text{step to } Q + s(3, 2):\ \ \text{each limit changes by } s(3\alpha + 2\beta) @@ adding-keeps-answers: the limits are of the first degree
+\text{take } s \gt 0 \text{ smaller than each room} \div |3\alpha + 2\beta| @@ finitely many limits, so a least one exists
+\htmlClass{new}{g(Q + s(3, 2)) = g(Q) + 13s \gt g(Q)} \quad \blacksquare @@ sides-of-a-line’s last line: 3² + 2² = 13
+  </pre>
+  <h3>Which corner, and for how long</h3>
+  <p data-pid="e571a1">Prices change. Suppose a round loaf earns $a instead of $3, and a long one still $2. The best corner stays at (100, 200) for a while, then jumps. It stays while the earnings line is no steeper than the flour line and no shallower than the oven line.</p>
+  <p data-pid="7f45a7">Corner-holds technique: <b>a corner is best when stepping from it along either of its two edges earns no more.</b> Its two edge lines cut out a wedge, the whole region lies in that wedge, and every point of the wedge is the corner plus some of each edge’s direction.</p>
+  <pre class="lines" data-k="ember" data-label="18·logi: the corner-holds technique, at (100, 200)">
+\text{along the oven edge, toward } (90, 210):\ \ \text{direction } (-1, 1) @@ x + y stays 300
+\text{change in earnings} = -a + 2 \le 0 \iff a \ge 2 @@ a step of s changes g by s(−a + 2)
+\text{along the flour edge, toward } (200, 0):\ \ \text{direction } (1, -2) @@ 2x + y stays 400
+\text{change in earnings} = a - 4 \le 0 \iff a \le 4 @@ the same, with this direction
+X = (100, 200) + s(-1, 1) + t(1, -2),\ \ s, t \ge 0,\ \text{for every } X \text{ in the region} @@ two-lines-meet: s and t are found from X; s, t ≥ 0 by the flour and oven limits
+\htmlClass{new}{2 \le a \le 4 \Rightarrow g(X) \le g(100, 200)} \quad \blacksquare @@ g(X) = g(100, 200) + s(2 − a) + t(a − 4)
+  </pre>
+  <p data-pid="d5fca7">So the round loaf may earn anything from $2 to $4 and the plan does not change. Above $4 the best plan is 200 round loaves and no long ones. At exactly $4 the two corners tie, and so does every plan on the flour edge between them.</p>
+  <h3>What one more bag is worth</h3>
+  <p data-pid="fb5a0d">The baker can buy more flour, rent more oven time, or hire more hands. Which is worth it? Loosen one limit a little and find the new best corner. The flour line and the oven line still meet at the best corner, a little further along.</p>
+  <pre class="lines" data-k="ember" data-label="18·logi: worth at the margin">
+\text{flour } 101 \text{ kg}:\ \ 2x + y \le 404,\ x + y \le 300 \Rightarrow (104, 196) @@ the corner slides along the oven edge
+g(104, 196) = 312 + 392 = 704 @@ $4 more: each kilogram of flour is worth $4 at the margin
+\text{oven } 301 \text{ places}:\ \ 2x + y \le 400,\ x + y \le 301 \Rightarrow (99, 202),\ g = 701 @@ each place in the oven is worth $1
+\text{hands } 721 \text{ minutes}:\ \ \text{the best corner does not move},\ g = 700 @@ 20 minutes were already spare
+\htmlClass{new}{\text{a limit with room to spare is worth } \$0 \text{ at the margin}} @@ the corner did not touch its line
+  </pre>
+  <p data-pid="f662db">Worth-at-the-margin technique: <b>loosen one limit by one unit, find the new best corner, and the gain in earnings is what that unit is worth.</b> The worth holds only while the same two lines meet at the best corner. Past that, a different limit takes over. Buy 25 kg more flour, and the corner runs along the oven edge to (200, 100). At 150 kg it reaches (300, 0), where the oven edge ends. Past that, more flour is worth $0.</p>
+  <p data-pid="0ba04a">A corner need not fall on whole loaves. With other numbers it might be (87.5, 212.5). Rounding down always keeps the limits, but the best plan in whole loaves need not be the corner rounded. Finding it is a harder question, held in trust much higher up the ladder.</p>
+  <h3>Illegal moves</h3>
+  <pre class="lines" data-k="ember" data-label="18·logi: tempting, and not allowed">
+\text{bake only the loaf that earns most}\,? @@ round loaves alone stop at 200, for $600; the best mix earns $700
+\text{the best plan is in the middle of the region}\,? @@ no-middle: from a plan with room in every limit, a step earns more
+\text{every limit is used up at the best plan}\,? @@ at (100, 200) the hands have 20 minutes spare
+\text{spare hands are worth their wage}\,? @@ at the margin they are worth $0, while the corner stays put
+\text{the best corner rounded down is the best in whole loaves}\,? @@ not in general: check the whole plans near it
+  </pre>
+</section>
+
+<section class="pic" id="pic">
+  <div class="eyebrow">The picture · the allowed plans, and the line of equal earnings</div>
+  <div class="panels">
+    <div class="panel">
+      <div class="lbl">x round loaves across, y long loaves up</div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">round loaf, $</span><input type="range" id="ka" min="0.5" max="6" step="0.1" value="3"><output id="oa"></output></div>
+      <div class="kn"><span class="m">flour, kg</span><input type="range" id="kf" min="60" max="160" step="1" value="100"><output id="of"></output></div>
+      <div class="cap">Ink: the flour line. Teal: the oven line. Plum: the hands line. Shaded: the allowed plans. Ember: the line of equal earnings through the best corner, and the best corner. A long loaf earns $2.</div>
+    </div>
+    <div class="panel">
+      <div class="lbl">earnings at each corner</div>
+      <canvas id="cvL"></canvas>
+      <div class="cap">One bar for each corner, from the bottom left round the region. Ember: the best. Slide the round loaf’s earnings past $4 and watch the best corner jump.</div>
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+</section>
+
+<section class="slides" id="sl1"><div class="eyebrow">The slides · the model; half-planes; the corners; best-corner; equal earnings; no-middle; corner-holds; a tie; flour; oven; hands; whole loaves; illegal · ← → keys work</div></section>
+
+<section class="sayback">
+  <div class="eyebrow">Say it back · then work it</div>
+  <h2>Questions</h2>
+  <div class="phkey"></div>
+  <ol>
+    <li><span class="qid">18·logi.1</span><span class="gname">Plans.</span><span class="gwhy">Do: build the page’s pieces.</span>
+      <ol class="sub">
+        <li><span class="qid">18·logi.1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="3x + 2y \le 120,"></span> <span data-tex-inline="x + y \le 50,"></span> <span data-tex-inline="x + 3y \le 120,"></span> <span data-tex-inline="x, y \ge 0,"></span> <span data-tex-inline="g = 5x + 4y"></span></span>A bakery in Bellingham bakes x trays of rolls and y trays of buns under these limits.<br>Find the corners of the allowed region, and the best plan.</li><li><span class="givens"><span data-tex-inline="2x + y \le 400,"></span> <span data-tex-inline="x + y \le 300,"></span> <span data-tex-inline="x + 3y \le 720,"></span> <span data-tex-inline="x, y \ge 0"></span> <span data-tex-inline="\text{plan } (120, 170)"></span></span>Find whether the plan is allowed, and which limit it breaks.</li><li><span class="givens"><span data-tex-inline="2x + y \le 400,"></span> <span data-tex-inline="x + y \le 300,"></span> <span data-tex-inline="x + 3y \le 720,"></span> <span data-tex-inline="x, y \ge 0"></span> <span data-tex-inline="g = 3x + 2y"></span></span>Find what one more place in the oven is worth.<br>Find what 30 more places, an 11th load, are worth.</li><li><span class="givens"><span data-tex-inline="2x + y \le 400,"></span> <span data-tex-inline="x + y \le 300,"></span> <span data-tex-inline="x + 3y \le 720,"></span> <span data-tex-inline="x, y \ge 0"></span> <span data-tex-inline="g = 3x + by"></span></span>Find every b for which (100, 200) is a best plan.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">18·logi.2</span><span class="gname">From the plan back.</span><span class="gwhy">Undo: run the page’s techs backwards.</span>
+      <ol class="sub">
+        <li><span class="qid">18·logi.2.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="2x + y \le 400,"></span> <span data-tex-inline="x + y \le 300,"></span> <span data-tex-inline="x + 3y \le 720,"></span> <span data-tex-inline="x, y \ge 0"></span> <span data-tex-inline="g = ax + 2y,"></span> <span data-tex-inline="g(100, 200) = 760"></span></span>Find a.<br>Find whether (100, 200) is still the best plan.</li><li><span class="givens"><span data-tex-inline="\text{corners } (0, 0),\ (150, 0),\ (100, 100),\ (0, 150)"></span></span>Find limits, each of the form αx + βy ≤ c, whose allowed region has exactly these corners.</li><li><span class="givens"><span data-tex-inline="2x + y \le 400,"></span> <span data-tex-inline="x + y \le 300,"></span> <span data-tex-inline="x + 3y \le 720,"></span> <span data-tex-inline="x, y \ge 0"></span> <span data-tex-inline="g = 3x + 2y"></span></span>Find how much flour the bakery needs to earn $730.</li><li><span class="givens"><span data-tex-inline="2x + y \le 400,"></span> <span data-tex-inline="x + y \le 300,"></span> <span data-tex-inline="x + 3y \le 720,"></span> <span data-tex-inline="x, y \ge 0"></span></span>Find earnings per loaf, a for round and b for long, for which (90, 210) is the best plan.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">18·logi.3</span><span class="gname">Where it gives.</span><span class="gwhy">Bend: find where the techs stop working.</span>
+      <ol class="sub">
+        <li><span class="qid">18·logi.3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="2x + y \le 400,"></span> <span data-tex-inline="x + y \le 300,"></span> <span data-tex-inline="x + 3y \le 720,"></span> <span data-tex-inline="x, y \ge 0"></span> <span data-tex-inline="g = 4x + 2y"></span></span>Find every best plan.</li><li><span class="givens"><span data-tex-inline="2x + y \le 400,"></span> <span data-tex-inline="x + 3y \le 720,"></span> <span data-tex-inline="x, y \ge 0,"></span> <span data-tex-inline="g = 3x + 2y"></span> <span class="gtx">(a second oven: no oven limit)</span></span>Find the best plan, and what the second oven adds.</li><li><span class="givens"><span data-tex-inline="2x + y \le 400,"></span> <span data-tex-inline="x + y \le 300,"></span> <span data-tex-inline="x + 3y \le 720,"></span> <span data-tex-inline="x, y \ge 0"></span> <span data-tex-inline="x \ge 260"></span></span>Find every allowed plan.</li><li><span class="givens"><span data-tex-inline="2x + y \le 400,"></span> <span data-tex-inline="x + y \le 300,"></span> <span data-tex-inline="x + 3y \le 725,"></span> <span data-tex-inline="x, y \ge 0,"></span> <span data-tex-inline="g = x + 2y"></span></span>Find the best plan.<br>Find the best plan in whole loaves.</li></ol></li>
+      </ol></li>
+    <li class="optgroup"><span class="qid">18·logi.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder challenges that rely on your own making. The page is complete without these; the rung's star needs them.</span>
+      <ol class="sub">
+        <li class="opt"><span class="qid">18·logi.4.1</span><span class="tagq">build</span>Make a plan of your own for a kitchen you know: two things it makes, three limits on what it has, and what each thing earns.<br>Find the best plan, and what one more unit of each limit is worth.<br>Change one earning until the best corner jumps, and find where it jumps.</li>
+        <li class="opt"><span class="qid">18·logi.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="2x + y \le 400,"></span> <span data-tex-inline="x + y \le 300,"></span> <span data-tex-inline="x + 3y \le 720,"></span> <span data-tex-inline="x, y \ge 0"></span> <span data-tex-inline="3x + y \le 500"></span> <span class="gtx">(a mixer)</span> <span data-tex-inline="g = 3x + 2y"></span></span>Find the corners and the best plan.<br>Find what 1 kg more flour is worth, and what 1 kg less costs.</li>
+        <li class="opt"><span class="qid">18·logi.4.3</span><span class="tagq">converse</span>Best-corner says that a profit of the form px + qy is largest at a corner of every bounded region cut out by lines.<br>Prove or refute: a profit that is largest at a corner of every such region must be of the form px + qy + r.</li>
+        <li class="opt"><span class="qid">18·logi.4.4</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="2x + y \le 400,"></span> <span data-tex-inline="x + y \le 300,"></span> <span data-tex-inline="x + 3y \le 720,"></span> <span data-tex-inline="x, y \ge 0"></span> <span data-tex-inline="g = 3x + 2y - 0.004y^2"></span> <span class="gtx">(long loaves sell slower as there are more of them)</span></span>Find whether the best plan is still at a corner.</li>
+        <li class="opt"><span class="qid">18·logi.4.5</span><span class="tagq">seam</span>In 1939 a mathematician in Leningrad found the corner method while planning the work of a plywood trust. He found that his worth-at-the-margin numbers behave like prices: a limit with room to spare gets a price of 0. Planners of an economy run without markets read this as markets brought back by the side door, and his work was set aside for twenty years.<br>A worth at the margin came out of the lines, not from anyone buying or selling. Is it a price?</li>
+      </ol></li>
+  </ol>
+  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
+</section>
+
+<nav class="nextrung"><a href="r18nav.html">← 18·nav · how can a small map be true to the land?</a><a href="r18phys.html">18·phys · why do planets travel on ellipses? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>Kantorovich wrote that the problems of organising production, such as distributing work among machines and making the best use of raw materials, could be solved by a single method, and that the method also yields multipliers that measure how much each limited resource is worth.</p><cite>Leonid Kantorovich, Mathematical Methods of Organizing and Planning Production (1939); paraphrase</cite></aside>
+  <p>In 18·logi.4.5, the mathematician of Leningrad is Leonid Kantorovich, and the trust was the Leningrad Plywood Trust. George Dantzig found the method that walks from corner to better corner, the simplex method, in 1947, for planning in the United States Air Force. Kantorovich and Tjalling Koopmans shared the economics prize of 1975 for the theory of the best use of resources.</p>
+  <p>Accepted names: finding the best corner is linear programming; the limits are constraints, the allowed region is the feasible region, and g is the objective function. A worth at the margin is a shadow price, or dual value. A limit with room to spare is slack; one used up is binding. The best plan in whole numbers is integer programming.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="18·logi: a worked “proof”, not allowed">
+\text{flour per dollar: round } 0.5 \div 3,\ \text{long } 0.25 \div 2 @@ fine
+\text{so bake only round loaves} @@ not allowed: one limit alone does not choose the plan; the oven binds too
+\text{best plan } (200, 0),\ \$600 @@ false: (100, 200) earns $700
+  </pre>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '–'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+function chips(el,FN,get,setk,after){ Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===get()) b.className='on'; b.onclick=()=>{ setk(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+const Nw='\\htmlClass{new}';
+function axes2(P,gx,gy){ const c=P.ctx,o=P.o; c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ c.moveTo(P.X(x),P.Y(o.y[0])); c.lineTo(P.X(x),P.Y(o.y[1])); }
+  for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ c.moveTo(P.X(o.x[0]),P.Y(y)); c.lineTo(P.X(o.x[1]),P.Y(y)); } c.stroke();
+  c.strokeStyle=col('--muted'); c.lineWidth=1.3; c.beginPath(); if(o.y[0]<=0&&o.y[1]>=0){ c.moveTo(P.X(o.x[0]),P.Y(0)); c.lineTo(P.X(o.x[1]),P.Y(0)); } if(o.x[0]<=0&&o.x[1]>=0){ c.moveTo(P.X(0),P.Y(o.y[0])); c.lineTo(P.X(0),P.Y(o.y[1])); } c.stroke();
+  c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; const ly=Math.min(P.H-6,Math.max(12,P.Y(0)+14));
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ if(Math.abs(x)<1e-9) continue; c.fillText(+x.toFixed(6),P.X(x),ly); }
+  c.textAlign='right'; const lx=Math.max(32,Math.min(P.W-4,P.X(0)-5)); for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ if(Math.abs(y)<1e-9) continue; c.fillText(String(+y.toFixed(6)).replace('-','−'),lx,P.Y(y)+4); } }
+
+const ka=$('ka'),kf=$('kf'),cvF=$('cvF'),cvL=$('cvL');
+const PF=plane(cvF,{x:[-30,330],y:[-30,330],grid:50,aspect:1,draw:P=>drawF(P)});
+Object.defineProperty(PF.o,'aspect',{get:()=>1});
+const PL=plane(cvL,{x:[0.3,6.7],y:[-80,1300],grid:1,aspect:0.8,draw:P=>drawL(P)});
+Object.defineProperty(PL.o,'aspect',{get:()=>cvL.clientWidth>480?0.7:0.85});
+function lims(){ const F=4*(+kf.value); return [[-1,0,0],[0,-1,0],[2,1,F],[1,1,300],[1,3,720]]; }
+function corners(){ const C=lims(), pts=[];
+  for(let i=0;i<C.length;i++) for(let j=i+1;j<C.length;j++){ const [a1,b1,c1]=C[i],[a2,b2,c2]=C[j], det=a1*b2-a2*b1; if(Math.abs(det)<1e-12) continue;
+    const x=(c1*b2-c2*b1)/det, y=(a1*c2-a2*c1)/det; if(C.every(([a,b,c])=>a*x+b*y<=c+1e-9) && !pts.some(p=>Math.hypot(p[0]-x,p[1]-y)<1e-6)) pts.push([x,y]); }
+  const cx=pts.reduce((s,p)=>s+p[0],0)/pts.length, cy=pts.reduce((s,p)=>s+p[1],0)/pts.length;
+  pts.sort((p,q)=>Math.atan2(p[1]-cy,p[0]-cx)-Math.atan2(q[1]-cy,q[0]-cx));
+  const k=pts.findIndex(p=>Math.abs(p[0])<1e-9&&Math.abs(p[1])<1e-9); return pts.slice(k).concat(pts.slice(0,k)); }
+const g=(p)=>(+ka.value)*p[0]+2*p[1];
+function best(){ const cs=corners(); let b=0; cs.forEach((p,i)=>{ if(g(p)>g(cs[b])+1e-9) b=i; }); return {cs,b}; }
+function axes(P){ const c=P.ctx; c.strokeStyle=col('--grid'); c.lineWidth=1; c.beginPath(); for(let v=0;v<=300;v+=50){ c.moveTo(P.X(v),P.Y(0)); c.lineTo(P.X(v),P.Y(320)); c.moveTo(P.X(0),P.Y(v)); c.lineTo(P.X(320),P.Y(v)); } c.stroke();
+  P.line(0,0,325,0,'--muted',1.3); P.line(0,0,0,325,'--muted',1.3); c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; for(let v=100;v<=300;v+=100){ c.fillText(v,P.X(v),P.Y(0)+14); } c.textAlign='right'; for(let v=100;v<=300;v+=100) c.fillText(v,P.X(0)-4,P.Y(v)+4); }
+function drawF(P){ axes(P); const {cs,b}=best(); const c=P.ctx; c.globalAlpha=0.18; P.poly(cs,null,'--teal'); c.globalAlpha=1; P.poly(cs,'--ink',null,1.2);
+  const F=4*(+kf.value); P.line((F-330)/2,330,(F+20)/2,-20,'--ink',1.6);
+  P.line(-20,320,320,-20,'--teal',1.6); P.line(-30,250,330,130,'--plum',1.6);
+  const a=+ka.value, B=cs[b], G=g(B); P.line(-30,(G+30*a)/2,330,(G-330*a)/2,'--ember',2,[6,4]); P.dot(B[0],B[1],'--ember',6); cs.forEach((p,i)=>{ if(i!==b) P.dot(p[0],p[1],'--ink',3.5); }); }
+function drawL(P){ const {cs,b}=best(); P.o.x=[0.3,cs.length+0.7]; const c=P.ctx; c.strokeStyle=col('--grid'); c.lineWidth=1; c.beginPath(); for(let v=0;v<=1200;v+=200){ c.moveTo(P.X(0.3),P.Y(v)); c.lineTo(P.X(cs.length+0.7),P.Y(v)); } c.stroke();
+  c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='left'; for(let v=200;v<=1200;v+=400) c.fillText('$'+v,P.X(0.32),P.Y(v)-3);
+  cs.forEach((p,i)=>{ const h=g(p); P.poly([[i+0.65,0],[i+1.35,0],[i+1.35,h],[i+0.65,h]],i===b?'--ember':'--teal',i===b?'rgba(200,90,50,0.3)':'rgba(46,139,139,0.2)',1.2);
+    c.fillStyle=col('--muted'); c.textAlign='center'; c.font='10px IBM Plex Mono, monospace'; c.fillText('('+mm(p[0],1)+', '+mm(p[1],1)+')',P.X(i+1),P.Y(0)+13); }); }
+function read(){ const {cs,b}=best(), a=+ka.value; $('oa').textContent=mm(a,1); $('of').textContent=String(+kf.value);
+  const B=cs[b], ties=cs.filter(p=>Math.abs(g(p)-g(B))<1e-9).length; const vd=$('vdF'); vd.className='verdict '+(ties>1?'lose':'win');
+  vd.textContent='Best plan: '+mm(B[0],1)+' round and '+mm(B[1],1)+' long loaves, earning $'+mm(g(B),1)+'.'+(ties>1?' Two corners tie, and so does the edge between them.':'')+' Hands used: '+mm(B[0]+3*B[1],1)+' of 720 minutes.';
+  tex($('eqF'),R`g = ${mm(a,1)}x + 2y,\quad g(${mm(B[0],1)},\ ${mm(B[1],1)}) = ${mm(g(B),1)}`,true); }
+function all(){ PF.redraw(); PL.redraw(); read(); }
+[ka,kf].forEach(el=>el.addEventListener('input',all));
+window.__pic={set:(a,f)=>{ ka.value=a; kf.value=f; all(); const {cs,b}=best(); return {best:cs[b].map(v=>+v.toFixed(3)), g:+g(cs[b]).toFixed(3), n:cs.length}; }};
+all();
+
+stepper('#sl1',[
+  {k:'ember',kl:'the model',t:R`0.5x + 0.25y \le 100,\ \ x + y \le 300,\ \ x + 3y \le 720`,n:`Flour, oven, hands.`},
+  {k:'ember',kl:'half-planes',t:R`\alpha x + \beta y \le c`,n:`Sides-of-a-line, five times.`},
+  {k:'ember',kl:'the corners',t:R`(0, 0),\ (200, 0),\ (100, 200),\ (90, 210),\ (0, 240)`,n:`Two-lines-meet.`},
+  {k:'ember',kl:'best-corner',t:R`\htmlClass{new}{g(100, 200) = 700}`,n:`Five plans to check, not tens of thousands.`},
+  {k:'ember',kl:'equal earnings',t:R`3x + 2y = \text{constant}`,n:`Lines of one slope, sliding along (3, 2).`},
+  {k:'ember',kl:'no-middle',t:R`\htmlClass{new}{g(Q + s(3, 2)) = g(Q) + 13s}`,n:`Room everywhere means room to earn more.`},
+  {k:'ember',kl:'corner-holds',t:R`\htmlClass{new}{2 \le a \le 4}`,n:`No edge step earns more.`},
+  {k:'ember',kl:'a tie',t:R`a = 4:\ \ g(100, 200) = g(200, 0) = 800`,n:`The whole flour edge ties.`},
+  {k:'ember',kl:'flour',t:R`101 \text{ kg} \Rightarrow (104, 196),\ \$704`,n:`$4 a kilogram.`},
+  {k:'ember',kl:'oven',t:R`301 \Rightarrow (99, 202),\ \$701`,n:`$1 a place.`},
+  {k:'ember',kl:'hands',t:R`\htmlClass{new}{\$0}`,n:`Room to spare, worth nothing more.`},
+  {k:'ember',kl:'whole loaves',t:R`(87.5,\ 212.5)\,?`,n:`Rounding keeps the limits, not the best.`},
+  {k:'ember',kl:'illegal',t:R`\text{only the loaf that earns most}\,?`,n:`$600 against $700.`}
+],{title:'The slides · the model; half-planes; the corners; best-corner; equal earnings; no-middle; corner-holds; a tie; flour; oven; hands; whole loaves; illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

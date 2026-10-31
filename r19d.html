@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A part’s size divides the whole’s</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+.chrow{display:grid;grid-template-columns:4.5em 1fr;gap:6px;align-items:center;font-size:.88rem}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r19c.html">← 19c socks and shoes</a><a href="r19e.html">next: 19e parity of shuffles →</a></p>
+  <div class="tags"><span class="tag proof">19d · proof</span></div>
+  <h1>A part’s size divides the whole’s</h1>
+  <p>Inside the 12 turns of a wheel by twelfths sit smaller groups: the quarter turns, the thirds, the half turn. Their sizes are 4, 3 and 2, and each divides 12. This step proves that this always happens in a finite group. Shift the smaller group by any member and you get a copy the same size; two copies never overlap; together they cover the whole. So the whole is a stack of equal copies.</p>
+  <p class="gesture">If one group sits inside a finite group, its shifted copies all have as many members as it does, any two are equal or share nothing, and every member of the larger group lies in one. So the smaller group’s size divides the larger’s, and so does the number of steps it takes any member to come back round.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r19b.html">19b</a> (cancel, order), <a href="r02e.html">2e</a> (classes never overlap), <a href="r04j.html">4j</a> (counting). <a href="r19e.html">19e</a> finds a part of half the size; <a href="r19f.html">19f</a> counts symmetries with it.</p></div>
+</header>
+
+<section class="class step" data-step="19d1">
+  <h2 class="sthead"><span class="stno">19d1</span>Groups inside groups</h2>
+  <p class="stands">Stands on 19a4 (groups) and 19b (one identity, one inverse).</p>
+  <p class="eqline" data-pid="541d1d">From here on, a part-group of a group G is a part H of G that is a group with G’s own operation. Its accepted name is a subgroup.</p>
+  <p data-pid="c9554c">Part-group test: <b>a part H of a group is a part-group exactly when it is not empty, holds ab whenever it holds a and b, and holds a⁻¹ whenever it holds a.</b> Regroup comes free from G, and e comes from any member a as aa⁻¹.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the part-group test">
+a \in H @@ H is not empty
+a^{-1} \in H,\ \ aa^{-1} = e \in H @@ H holds undoes; then holds products
+(xy)z = x(yz) \text{ for } x, y, z \in H @@ true in G, so in H
+\htmlClass{new}{H \text{ is a group}} \quad \blacksquare @@ the e of G does nothing in H, and each inverse is in H
+  </pre>
+  <p data-pid="d8b54f">In the turns of a wheel by twelfths, write k for the turn by k twelfths, so 0 does nothing and combining is adding, taking away 12 when the sum reaches 12. Then {0, 4, 8}, the turns by thirds, is a part-group. So is {0, 3, 6, 9}. {0, 4} is not: 4 + 4 = 8 is missing.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · part-groups · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">19d1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">the turns of a wheel by sixths, 0 to 5</span></span>Guess how many part-groups there are. <br>Find them all.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="19d2">
+  <h2 class="sthead"><span class="stno">19d2</span>Shifted copies</h2>
+  <p class="stands">Stands on 19d1 and 19b3 (cancel).</p>
+  <p class="eqline" data-pid="0d68c7">From here on, for a part-group H of G and a member a of G, aH is the set {ah : h ∈ H}: every member of H with a done after it. When the operation is written +, it is a + H.</p>
+  <p data-pid="f254ad">Copies-same-size technique: <b>every copy aH has exactly as many members as H.</b> The function h ↦ ah matches H with aH: it is onto aH by its definition, and one-to-one by cancelling.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the copies-same-size technique">
+\phi(h) = ah,\ \ \phi : H \to aH @@ define
+ah = ak \Rightarrow h = k @@ cancel (19b3): one-to-one
+x \in aH \Rightarrow x = ah \text{ for some } h @@ the definition of aH: onto
+\htmlClass{new}{|aH| = |H|} \quad \blacksquare @@ a matching (4j)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: worked, H = {0, 4, 8} in the twelfths">
+1 + H = \{1, 5, 9\},\ \ 2 + H = \{2, 6, 10\},\ \ 3 + H = \{3, 7, 11\} @@ three members each
+4 + H = \{4, 8, 0\} = H @@ 4 is in H, so the copy is H itself
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · copies · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · the twelfths of a turn, sorted into copies of a part-group</div>
+    <div class="chrow"><span class="lbl">H</span><div class="chips" id="chH"></div></div>
+    <div id="dial"></div>
+    <div class="cap">Each colour is one copy a + H. Pick a different H, and the twelve turns sort again into equal piles that never share a turn.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">19d2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">H = {0, 3, 6, 9} in the twelfths</span></span>Find 1 + H, 2 + H, 5 + H and 6 + H. <br>Find how many different copies there are.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="19d3">
+  <h2 class="sthead"><span class="stno">19d3</span>Copies never overlap</h2>
+  <p class="stands">Stands on 19d2.</p>
+  <p data-pid="4cdec7">Copies-never-overlap technique: <b>two copies aH and bH are either the same set or share no member.</b> And every a lies in its own copy, since a = ae.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the copies-never-overlap technique">
+c \in aH \cap bH:\ \ c = ah = bk @@ suppose they share c
+a = bkh^{-1} @@ combine on the right with h⁻¹
+ah' = b(kh^{-1}h') \in bH \text{ for every } h' \in H @@ regroup; kh⁻¹h′ is in H (the part-group test)
+aH \subseteq bH,\ \text{and likewise } bH \subseteq aH @@ the same lines with a and b swapped
+\htmlClass{new}{aH = bH} \quad \blacksquare @@ double-inclusion (2a)
+  </pre>
+  <p data-pid="f3db57">So the copies sort G, the way 2e’s classes sorted a set: each member in exactly one pile.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · never overlap · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">19d3.1</span><span class="ph undo">undo</span><span class="givens"><span class="gtx">in S₃,  H = {e, r, r²},  aH = {s₁₂, s₁₃, s₂₃}</span></span>Find every a that gives this copy. <br>Find every copy of H.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="19d4">
+  <h2 class="sthead"><span class="stno">19d4</span>The count</h2>
+  <p class="stands">Stands on 19d2, 19d3 and 4j (counting).</p>
+  <p data-pid="be420d">Part-divides-whole technique: <b>the size of a part-group of a finite group divides the size of the group.</b> Its famous name is Lagrange’s theorem.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the part-divides-whole technique">
+G = a_1H \cup a_2H \cup \cdots \cup a_kH @@ every member lies in its own copy; keep one of each different copy
+a_iH \cap a_jH = \varnothing \text{ for } i \ne j @@ copies-never-overlap
+|G| = |a_1H| + \cdots + |a_kH| @@ sizes of piles that share nothing add (4j)
+\htmlClass{new}{|G| = k\,|H|} \quad \blacksquare @@ copies-same-size
+  </pre>
+  <p data-pid="9f7090">k, the number of copies, is how many times H fits into G. In the twelfths, {0, 4, 8} fits 4 times. In S₃, {e, s₁₂} fits 3 times, and {e, r, r²} twice.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · the count · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">19d4.1</span><span class="ph undo">undo</span><span class="givens"><span class="gtx">a group of 15 members</span></span>Find every size a part-group of it could have. <br>Find every size it cannot have, and why.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="19d5">
+  <h2 class="sthead"><span class="stno">19d5</span>How soon a move comes back, again</h2>
+  <p class="stands">Stands on 19d4 and 19b5 (powers; order).</p>
+  <p data-pid="33520d">Take any member a of a finite group and all its powers: e, a, a², …, up to a^(n − 1), where n is the order of a. They are a part-group: a product of powers is a power, and the undo of aⁱ is a^(n − i). They are n different members: a repeat aⁱ = aʲ with 0 ≤ i &lt; j &lt; n would give a^(j − i) = e, sooner than n.</p>
+  <p data-pid="b520cd">Order-divides technique: <b>in a finite group, the order of every member divides the size of the group.</b> So a^|G| = e for every a.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the order-divides technique">
+\langle a \rangle = \{e, a, \ldots, a^{n-1}\},\ \ |\langle a \rangle| = n @@ its powers, n of them, all different
+\langle a \rangle \text{ is a part-group} @@ part-group test, with the powers technique
+n \mid |G| @@ part-divides-whole
+\htmlClass{new}{a^{|G|} = (a^n)^{|G|/n} = e} \quad \blacksquare @@ powers technique; aⁿ = e
+  </pre>
+  <p data-pid="baa442">A group whose size is a prime has no room for anything in between: every member but e has the whole group as its powers.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · order divides · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">19d5.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a group of 7 members,  a ≠ e</span></span>Find the order of a. <br>Prove that every member of the group is a power of a.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="19d6">
+  <h2 class="sthead"><span class="stno">19d6</span>Illegal moves</h2>
+  <p class="stands">Stands on 19d1 to 19d5.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+m \mid |G| \Rightarrow \text{a part-group of } m \text{ members}\,? @@ the technique goes one way only; 19d.4.3 tests a turned-round form
+aH \text{ is a part-group}\,? @@ only when a is in H; otherwise aH does not hold e
+aH = Ha\,? @@ in S₃, s₁₃{e, s₁₂} = {s₁₃, r} but {e, s₁₂}s₁₃ = {s₁₃, r²}
+|G| = k\,|H| \text{ for } G = \mathbb{Z}\,? @@ the count needs G finite; ℤ has no size in ℕ
+  </pre>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">19d6.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span class="gtx">S₃,  H = {e, s₁₂}</span></span>Find the three copies aH, and the three copies Ha, with a done before. <br>Find whether the two sortings agree.</li><li><span class="givens"><span class="gtx">ℤ under +,  H = the multiples of 5</span></span>Find the copies a + H and how many there are. <br>Find whether part-divides-whole applies.</li><li><span class="givens"><span class="gtx">a group of 8 members</span></span>Find whether it can have a member of order 3, or of order 8.</li><li><span class="givens"><span class="gtx">the twelfths,  H = {0, 6}</span></span>Find k, and check |G| = k |H|.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">19d.4.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">in S₄,  the shuffles [2 3 4 1] and s₁₃</span></span>Build the smallest part-group of S₄ that holds both. <br>Find its size, and check it against part-divides-whole.</div>
+  <div class="chq"><span class="chid">19d.4.2</span><span class="tagq">edge</span><span class="givens"><span class="gtx">a group with fewer than 6 members</span></span>Prove that it is turn-about.</div>
+  <div class="chq"><span class="chid">19d.4.3</span><span class="tagq">converse</span><span class="givens"><span class="gtx">every member of G has an order dividing m</span></span>Find whether |G| must divide m.</div>
+  <div class="chq"><span class="chid">19d.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="a \sim b \iff a^{-1}b \in H"></span></span>Prove copies-never-overlap again: show that ∼ is a sameness relation in 2e’s sense (its accepted name, used from here on, is an equivalence relation), and that its classes are the copies aH.</div>
+  <div class="chq"><span class="chid">19d.4.5</span><span class="tagq">seam</span>This step’s technique carries, in the books, the name of a man who died before anyone defined a group. He had counted how many different values a formula takes when its letters are shuffled, and found that the counts divided the number of shuffles. Another man proved the count properly thirty years later, and the form proved here came later still. <br>Who found it? <br>What should a technique be named for: the first glimpse, the first proof, or the form that gets used?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r19c.html">← 19c · socks and shoes</a><a href="r19e.html">19e · parity of shuffles →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A part-group is a subgroup; aH is a left coset and Ha a right coset; k = |G|/|H| is the index of H in G. ⟨a⟩ is the cyclic subgroup generated by a. Part-divides-whole is Lagrange's theorem; a^|G| = e is a form of what number theory calls Fermat's little theorem, which rung 39 takes up.</p>
+  <h3>Who said it first</h3>
+  <p>In 19d.4.5, the man is Joseph-Louis Lagrange, Réflexions sur la résolution algébrique des équations (1771). Pietro Abbati gave the proof for groups of shuffles (1803); Camille Jordan and others gave the modern form in the later nineteenth century.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+/* shuffles and pictures for rung 19 */
+const SH={'e':[1,2,3],'r':[2,3,1],'r²':[3,1,2],'s₁₂':[2,1,3],'s₁₃':[3,2,1],'s₂₃':[1,3,2]};
+const cmp=(a,b)=>b.map(x=>a[x-1]);               /* ab: do b, then a */
+const inv=a=>{ const r=[]; a.forEach((y,i)=>r[y-1]=i+1); return r; };
+const same=(a,b)=>a.join()===b.join();
+const nm=p=>Object.keys(SH).find(k=>same(SH[k],p))||'['+p.join(' ')+']';
+const lst=p=>'['+p.join(' ')+']';
+const V=c=>'var('+c+')';
+function svgArrow(id,c){ return '<marker id="'+id+'" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" style="fill:'+V(c)+'"/></marker>'; }
+/* three columns: x, then b(x), then a(b(x)) */
+function arrowsSVG(a,b,tag){ const X=[34,150,266],Y=[26,66,106]; let s='<svg viewBox="0 0 300 132" style="width:100%;max-width:340px;display:block"><defs>'+svgArrow('m1'+tag,'--ember')+svgArrow('m2'+tag,'--teal')+'</defs>';
+  for(let i=0;i<3;i++) s+='<line x1="'+(X[0]+8)+'" y1="'+Y[i]+'" x2="'+(X[1]-10)+'" y2="'+Y[b[i]-1]+'" style="stroke:'+V('--ember')+';stroke-width:2" marker-end="url(#m1'+tag+')"/>';
+  for(let i=0;i<3;i++) s+='<line x1="'+(X[1]+8)+'" y1="'+Y[i]+'" x2="'+(X[2]-10)+'" y2="'+Y[a[i]-1]+'" style="stroke:'+V('--teal')+';stroke-width:2" marker-end="url(#m2'+tag+')"/>';
+  for(let c=0;c<3;c++) for(let i=0;i<3;i++) s+='<circle cx="'+X[c]+'" cy="'+Y[i]+'" r="4" style="fill:'+V('--ink')+'"/><text x="'+(X[c]+(c==2?10:c==0?-10:0))+'" y="'+(Y[i]+(c==1?-9:4))+'" text-anchor="'+(c==2?'start':c==0?'end':'middle')+'" style="fill:'+V('--muted')+';font:12px IBM Plex Mono,monospace">'+(i+1)+'</text>';
+  return s+'</svg>'; }
+function chipRow(el,keys,get,set,after){ el.innerHTML=''; keys.forEach(k=>{ const b=document.createElement('button'); b.type='button'; b.textContent=k; if(k===get()) b.className='on'; b.onclick=()=>{ set(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+/* a table of a group: names, combine(i,j) -> index */
+function tableHTML(names,comb,hi){ let s='<table class="tt gt"><tr><th>·</th>'+names.map(n=>'<th>'+n+'</th>').join('')+'</tr>';
+  names.forEach((a,i)=>{ s+='<tr><th>'+a+'</th>'+names.map((b,j)=>{ const k=comb(i,j); const c=(hi&&hi(i,j,k))||''; return '<td class="'+c+'">'+names[k]+'</td>'; }).join('')+'</tr>'; }); return s+'</table>'; }
+
+const HS={'{0}':1,'{0, 6}':6,'{0, 4, 8}':4,'{0, 3, 6, 9}':3,'{0, 2, …, 10}':2,'all twelve':12};
+const PAL=['--ember','--teal','--plum','--gold','--moss','--ink','--ember','--teal','--plum','--gold','--moss','--ink'];
+let hk='{0, 4, 8}';
+function draw(){ const st=HS[hk]===12?1:HS[hk]; const H=[]; for(let x=0;x<12;x+=st) H.push(x); const k=12/H.length;
+  let s='<svg viewBox="0 0 260 260" style="width:100%;max-width:300px;display:block;margin:auto"><circle cx="130" cy="130" r="100" style="fill:none;stroke:'+V('--grid')+';stroke-width:1.5"/>';
+  for(let j=0;j<12;j++){ const c=j%st, t=-Math.PI/2+j*Math.PI/6, x=130+100*Math.cos(t), y=130+100*Math.sin(t);
+    s+='<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="13" style="fill:'+V(PAL[c])+';opacity:.85"/><text x="'+x.toFixed(1)+'" y="'+(y+4.5).toFixed(1)+'" text-anchor="middle" style="fill:'+V('--paper')+';font:600 13px IBM Plex Mono,monospace">'+j+'</text>'; }
+  for(let c=0;c<st;c++){ const pts=H.map(h=>(h+c)%12).map(j=>{ const t=-Math.PI/2+j*Math.PI/6; return (130+70*Math.cos(t)).toFixed(1)+','+(130+70*Math.sin(t)).toFixed(1); });
+    if(pts.length>1) s+='<polygon points="'+pts.join(' ')+'" style="fill:none;stroke:'+V(PAL[c])+';stroke-width:1.6;opacity:.7"/>'; }
+  $('dial').innerHTML=s+'</svg>';
+  const v=$('vd'); v.className='verdict win'; v.textContent='|H| = '+H.length+'. There are '+st+' copies, each of '+H.length+' turns, sharing none: 12 = '+st+' × '+H.length+'.'; }
+chipRow($('chH'),Object.keys(HS),()=>hk,k=>hk=k,draw); draw();
+window.__pic={set:k=>{ hk=k; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'the test',t:R`\htmlClass{new}{a, b \in H \Rightarrow ab,\ a^{-1} \in H}`,n:`Regroup and e come free.`},
+  {k:'ember',kl:'twelfths',t:R`\{0, 4, 8\},\ \ \{0, 3, 6, 9\}`,n:`Thirds and quarters.`}
+],{title:'The slides · part-groups · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'copies',t:R`aH = \{ah : h \in H\}`,n:`H with a done after.`},
+  {k:'ember',kl:'same size',t:R`\htmlClass{new}{|aH| = |H|}`,n:`h ↦ ah, one-to-one by cancelling.`}
+],{title:'The slides · copies · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'never overlap',t:R`\htmlClass{new}{aH \cap bH \ne \varnothing \Rightarrow aH = bH}`,n:`One pile for each member.`}
+],{title:'The slides · never overlap · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'part divides whole',t:R`\htmlClass{new}{|G| = k\,|H|}`,n:`Equal piles that share nothing.`}
+],{title:'The slides · the count · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'powers of a',t:R`\langle a \rangle = \{e, a, \ldots, a^{n-1}\}`,n:`A part-group of n members.`},
+  {k:'ember',kl:'order divides',t:R`\htmlClass{new}{n \mid |G|,\ \ a^{|G|} = e}`,n:`No room in a prime.`}
+],{title:'The slides · order divides · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'illegal',t:R`m \mid |G| \Rightarrow\,?`,n:`One way only.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

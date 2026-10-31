@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>13l · Implicit slopes and the inverse dodge</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+#cvA,#cvB{touch-action:none}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r13k.html">← 13k the tangent line and the nearby line</a><a href="r13m.html">next: 13m Homing in on a root with tangent lines, and how errors spread →</a></p>
+  <div class="tags"><span class="tag tech">13l · technique</span></div>
+  <h1>Implicit slopes and the inverse dodge</h1>
+  <p>Some sets of pairs are given by an equation between the across and up entries, not by a formula for the up entry. The pairs whose up entry squared is the across entry are not a function: at 4 they hold both 2 and negative 2. Yet near the pair 4 across, 2 up, they agree with a function, the square root, and that function has a slope. This step names such a function a branch, and takes its slope without writing it out. Take slopes of both sides of the equation, let the chain rule handle every up entry, and solve. Then the inverse dodge: when a function is easier to run backwards, take the backward function's slope and turn it upside down. 13e's undoing's-slope said what the two slopes multiply to if both exist; this step proves that the backward one exists.</p>
+  <p class="gesture">Give a name to a branch’s outputs. Take slopes of both sides of the equation, each output the inside of a chain. Solve for the slope. To run a function backwards, take its slope at the matching point and turn it upside down.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r13a.html">13a</a> (slopes-decided-near), <a href="r13e.html">13e</a> (chain for slopes, helper, undoing's-slope, ∛ has no slope at 0, dy/dx), <a href="r13h.html">13h</a> (root-slope, odd roots of negatives), <a href="r13i.html">13i</a> (product for slopes, the multiply-up caution), <a href="r09d.html">9d</a> (f⁻¹, swapped-pairs, swapped-pairs-function, there-and-back, running-backwards, f kept to a part), <a href="r09e.html">9e</a> (column-test, odd-powers-keep-order, swapped pairs drawn), <a href="r05f.html">5f</a> (solution sets of two unknowns), <a href="r12a.html">12a</a> (in-between-value, general form), <a href="r11a.html">11a</a> (continuity-unpacked), <a href="r11c.html">11c</a> (limit-passes-inside), <a href="r08f.html">8f</a> (powers-keep-order). <a href="r13m.html">13m</a> uses the linearization on equations; rung 18 returns to equations whose sets of pairs are shapes.</p></div>
+</header>
+
+<section class="class step" data-step="13l1">
+  <h2 class="sthead"><span class="stno">13l1</span>A set of pairs that is not a function</h2>
+  <p class="stands">Stands on 5f (solution sets of pairs), 8g (unknowns in ℝ) and 9a (functions).</p>
+  <p data-pid="20ad55">5f wrote the solution set of conditions on two unknowns as a set of pairs, and 8g let unknowns range over ℝ. So the solution set of the equation y · y = x is {(x, y) ∈ ℝ × ℝ : y · y = x}, a part of 9e's plane. It holds (4, 2) and (4, −2), so its column at 4 holds two pairs, and by 9e's column-test it is not a function of x. Near (4, 2), though, every pair of it has y = √x, and near (4, −2) every pair has y = −√x. Those are functions, and they have slopes.</p>
+  <p class="eqline" data-pid="b82916">From here on, take an equation in x and y, and a pair (x₀, y₀) in its solution set. <b>A branch of the solution set through (x₀, y₀) is a function φ defined on an open interval around x₀, with φ(x₀) = y₀, whose every pair (x, φ(x)) is in the solution set.</b> When φ has a slope at x₀, that slope is called a slope of the solution set at (x₀, y₀). Such a φ is called an implicit function, given by the equation rather than by a formula. Finding its slope from the equation is called implicit differentiation.</p>
+  <p class="eqline" data-pid="16e93d">A reuse, said out loud. φ has been 2b's name for any condition, a statement with a gap, and 13e kept it away from its helper for that reason. In this step, and only here, φ names a branch: a function. The step always calls it a branch, so the two jobs never meet; elsewhere 2b's job stands.</p>
+  <p data-pid="35e77b">For y · y = x: √, on (0, ∞), is a branch through (4, 2), and −√ is a branch through (4, −2). Through (0, 0) there is no branch at all. A function on an open interval around 0 would need an input x &lt; 0 with φ(x) · φ(x) = x, and a square is never negative (square-never-negative).</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · branches · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · left: a solution set, a branch and its slope · right: a function, its swapped pairs, and a step swapped with them</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="chips" id="sch"></div>
+      <canvas id="cvA"></canvas>
+      <div class="cap">Ink: the solution set. Drag anywhere: the dot moves to the nearest pair of the set. Teal: the branch through it, when there is one. Ember: its tangent line, from the slope of both sides. Where the formula's bottom is 0, the readout says why there is no slope.</div>
+      <div class="verdict" id="vdA"></div>
+    </div>
+    <div class="panel">
+      <div class="chips" id="fch"></div>
+      <canvas id="cvB"></canvas>
+      <div class="kn">
+        <span class="m">p</span><input type="range" id="ka" min="-1.5" max="1.5" step="0.05" value="1"><output id="oa"></output>
+        <span class="m">h</span><input type="range" id="kh" min="0.05" max="0.6" step="0.01" value="0.3"><output id="oh"></output>
+      </div>
+      <div class="cap">Ember: f. Teal: its swapped pairs, the inverse (9e drew them so). At (p, f(p)) a step: run h (grey) and rise Δy (ember). At the swapped pair (f(p), p) the same step, swapped: run Δy and rise h. Their chord slopes are reciprocals, and so, by inverse-slope, are the slopes.</div>
+      <div class="verdict" id="vdB"></div>
+    </div>
+  </div>
+  <div class="eqbox" id="eq"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">13l1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">y · y = 9 − x · x</span></span>Find two pairs with x = 0 in the solution set. <br>Name a branch through each.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13l2">
+  <h2 class="sthead"><span class="stno">13l2</span>Slopes of both sides</h2>
+  <p class="stands">Stands on 13l1, 13c (product for slopes) and 13e (chain for slopes).</p>
+  <p data-pid="2db5bf">Here is the licence, said in words first. On a branch, write y for φ(x). Then the equation, with φ(x) in y's place, is true at every input of an open interval: the two sides are two functions of x that agree there. By 13a's slopes-decided-near, functions that agree on an open interval around x₀ have the same slope at x₀, when one of them has a slope. <b>So take the slope of each side; wherever y appears, it is the inside of a chain, and chain for slopes multiplies by y′.</b></p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: slopes of both sides, y · y = x">
+y \cdot y = x @@ with y = φ(x) on a branch: true at every x of an open interval around x₀
+(y \cdot y)' = (x)' @@ slopes-decided-near: the two sides agree on an open interval, so their slopes agree
+\htmlClass{new}{2y \cdot y'} = 1 @@ chain for slopes with the inside r = y = φ(x), outside r²: 2r · r′. slope-of-a-line on the right
+y' = \dfrac{1}{2y} \quad (y \ne 0) @@ multiplying-keeps-answers by (2y)⁻¹
+\text{at } (4, 2):\ \ y' = \htmlClass{keep}{\tfrac14};\quad \text{at } (4, -2):\ \ y' = \htmlClass{keep}{-\tfrac14} @@ substitute the pair
+  </pre>
+  <p data-pid="5cc300">Check the long way: on the branch √, slope-of-√ gives 1/(2√4) = ¼. The formula 1/(2y) did more than the long way: it gave the other branch's slope too, −¼, without your writing −√x. And it spoke only where it should: at (0, 0) its bottom is 0, and there is no branch there.</p>
+  <p data-pid="7b3b4f">There is one caution, and it is 13i's. The column took the slope of y · y = φ(x)², which needs φ to have a slope first. For y · y = x the branches are ±√, and slope-of-√ supplies it. Taking slopes of both sides recomputes a slope known to exist; it never proves that one exists. In this step every branch is built from functions whose slopes the ladder has already proved. When a branch cannot be written with them, that it has a slope at all needs a technique the ladder has not built, so this step stays with branches it can write.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · both sides · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13l2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">y · y = 4x</span></span>Take slopes of both sides and solve for y′. <br>Find the slope at (1, 2) and at (1, −2).</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13l3">
+  <h2 class="sthead"><span class="stno">13l3</span>Products, and an equation with cubes</h2>
+  <p class="stands">Stands on 13l2 and 13h (root slopes).</p>
+  <pre class="lines" data-k="ember" data-label="this step: xy = 1">
+x \cdot y = 1 @@ the solution set is the graph of 1/x on x ≠ 0: one branch through each pair, with a slope (slope-of-one-over-x)
+1 \cdot y + x \cdot y' = 0 @@ product for slopes on the left: the slope of x is 1. constant-has-slope-0 on the right
+y' = \htmlClass{new}{-\dfrac{y}{x}} \quad (x \ne 0) @@ adding-keeps-answers, then multiplying-keeps-answers by x⁻¹
+\text{at } (2, \tfrac12):\ \ y' = -\tfrac14 @@ slope-of-one-over-x agrees: −1/2² = −¼
+  </pre>
+  <p data-pid="e687bc">Now x³ + y³ = 9. Since cubing keeps order on all of ℝ (9e's odd-powers-keep-order), each x has exactly one y: φ(x) = ∛(9 − x³). It uses 8i's odd roots for the inputs past ∛9, where 9 − x³ &lt; 0. So the solution set is a function after all, one branch everywhere, though writing it is less pleasant than not writing it. Its pairs include (1, 2) and (2, 1): 1 + 8 = 9 and 8 + 1 = 9.</p>
+  <pre class="lines" data-k="ember" data-label="this step: x³ + y³ = 9">
+x^3 + y^3 = 9 @@ y = φ(x) = ∛(9 − x³): a slope wherever 9 − x³ ≠ 0, by chain for slopes with 13h's root slopes
+3x^2 + \htmlClass{new}{3y^2 \cdot y'} = 0 @@ slopes of both sides: power for slopes; chain for slopes with the inside y
+y' = \htmlClass{new}{-\dfrac{x^2}{y^2}} \quad (y \ne 0) @@ adding-keeps-answers, multiplying-keeps-answers
+\text{at } (1, 2):\ \ y' = -\tfrac14;\quad \text{at } (2, 1):\ \ y' = -4 @@ substitute each pair
+  </pre>
+  <p data-pid="1341ee">Where y = 0, at x = ∛9, the formula's bottom is 0, and the formula is right to stop: φ has no slope there. Suppose it had one. Then slopes of both sides would give 3x² + 3 · 0 · φ′ = 0 at x = ∛9, so 3x² = 0, and x = ∛9 is not 0. Refuted, as 13e's undoing's-slope refuted a slope for ∛ at 0.</p>
+  <p data-pid="dc96c5">Look at the two slopes, −¼ and −4. The equation x³ + y³ = 9 does not change when x and y swap places. So its solution set is the same set as its swapped pairs (9d's swapped-pairs): φ undoes itself, φ(φ(x)) = x. And the two slopes, at the pair (1, 2) and at its swapped pair (2, 1), multiply to 1. The inverse dodge below says why.</p>
+  <p data-pid="e108bb">Rung 18 takes slopes of both sides in the same way, for equations whose sets of pairs are its shapes.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · products and cubes · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13l3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">x · y = 6</span></span>Take slopes of both sides. <br>Find the slope at (2, 3), and check it with 6/x.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13l4">
+  <h2 class="sthead"><span class="stno">13l4</span>Where the tech breaks</h2>
+  <p class="stands">Stands on 13l1 to 13l3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+(y \cdot y)' = 2y\,? @@ y is not the input; it is a branch's output. The chain's factor y′ is missing: 2y · y′
+x \cdot x = 4 \;\Rightarrow\; 2x = 0\,? @@ x · x = 4 is true at 2 and −2 only, not on an open interval: slopes-decided-near gives no licence. 2x = 0 would say x = 0
+y' = \dfrac{1}{2y} \text{ at } (0, 0)\,? @@ the bottom is 0, and there is no branch through (0, 0) at all
+\text{slopes of both sides prove } \varphi \text{ has a slope}\,? @@ they recompute one known to exist; existence comes from the branch's own formula (13i's caution)
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · the slip · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13l4.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">“(y · y · y)′ = 3y²”</span></span>Find what is missing. <br>Say why y is not the input.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13l5">
+  <h2 class="sthead"><span class="stno">13l5</span>The inverse dodge</h2>
+  <p class="stands">Stands on 13l4, 13e (undoing’s-slope) and 12 (in-between-value).</p>
+  <p data-pid="2c08cc">One popular calculus book gives this advice. When a function is easier to take the slope of when run backwards, you may do so. The reciprocal of the backward slope gives the forward one.</p>
+  <p data-pid="3148e3">13e's undoing's-slope proved half of this: if f and its undoing g both have slopes, at matching inputs, then g′(y₀) · f′(x₀) = 1. It assumed g had a slope, and said that when it has one is a harder question. Here is the answer. It needs a word for functions that never turn back.</p>
+  <p class="eqline" data-pid="4dcab9">From here on, f keeps order on a set A of its inputs when x &lt; x′ ⇒ f(x) &lt; f(x′) for all x, x′ ∈ A. It turns order about on A when x &lt; x′ ⇒ f(x′) &lt; f(x). Keeping order is called increasing, and turning it about decreasing. A function that keeps or turns order about on A is one-to-one there, by three-way-order on ℝ. 8f's powers-keep-order and 9e's odd-powers-keep-order said that powers keep order: on [0, ∞), and, for odd powers, on all of ℝ. This line names what they said. How the sign of a slope bears on keeping order across a whole interval is rung 14's question.</p>
+  <p data-pid="c73415">Inverse-is-continuous technique: <b>let f be continuous on an open interval I and keep order there, x₀ ∈ I and y₀ = f(x₀). Then the outputs of f on I include an open interval around y₀, and the function g that runs f kept to I backwards (9d) is continuous at y₀.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the inverse-is-continuous technique">
+\text{let } \varepsilon \gt 0 \text{ with } [x_0 - \varepsilon, x_0 + \varepsilon] \subseteq I @@ I is open around x₀: some reach r; any ε &lt; r will do (a smaller ε only makes the promise stronger)
+f(x_0 - \varepsilon) \lt y_0 \lt f(x_0 + \varepsilon) @@ f keeps order
+\delta = \min\big(y_0 - f(x_0 - \varepsilon),\ f(x_0 + \varepsilon) - y_0\big) \gt 0 @@ 8b's min; lesser-below-both
+|y - y_0| \lt \delta \;\Rightarrow\; f(x_0 - \varepsilon) \lt y \lt f(x_0 + \varepsilon) @@ unpack-the-bars
+\text{so } y = f(x) \text{ for some } x \text{ with } |x - x_0| \lt \varepsilon @@ in-between-value, general form (12a) on [x₀ − ε, x₀ + ε], where f is continuous: y is an output
+g(y) = x,\ \ |g(y) - g(y_0)| \lt \htmlClass{new}{\varepsilon} \quad \blacksquare @@ f is one-to-one on I, so g(y) is that x (there-and-back); g(y₀) = x₀. continuity-unpacked (11a)
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · inverse-is-continuous · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13l5.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = 2x + 1</span></span>Show that f keeps order on the reals. <br>Write its inverse g, and check g(f(x)) = x.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13l6">
+  <h2 class="sthead"><span class="stno">13l6</span>The inverse’s slope</h2>
+  <p class="stands">Stands on 13l5 and 13e (the helper).</p>
+  <p data-pid="311fc6">Inverse-slope technique: <b>let f be continuous on an open interval I, keep order there or turn it about, and have a slope f′(x₀) ≠ 0 at x₀ ∈ I. Then g, which runs f kept to I backwards, has a slope at y₀ = f(x₀), and g′(y₀) = 1/f′(x₀).</b> This is the rule for the derivative of an inverse function.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the inverse-slope technique">
+g \text{ is defined on an open interval around } y_0 @@ inverse-is-continuous
+0 \lt |k| \lt \delta:\ \ H = g(y_0 + k) - x_0,\ \ H \ne 0 @@ g is one-to-one (9d's inverse-is-a-bijection), and y₀ + k ≠ y₀
+f(x_0 + H) = y_0 + k @@ there-and-back: f(g(y₀ + k)) = y₀ + k; substitute for the expression g(y₀ + k) = x₀ + H
+k = f(x_0 + H) - f(x_0) = \htmlClass{new}{w(H) \cdot H} @@ helper (ii) (13e): w is f's helper at x₀. Nothing is divided by H
+w(H) \ne 0 @@ k ≠ 0, so neither factor is 0 (anything-times-zero)
+\dfrac{g(y_0 + k) - g(y_0)}{k} = \dfrac{H}{w(H) \cdot H} = \htmlClass{new}{\dfrac{1}{w(H)}} @@ the chord slope of g at y₀; cancel H (fractions-of-rationals i)
+H \to 0 \text{ as } k \to 0 @@ inverse-is-continuous: g is continuous at y₀, and g(y₀) = x₀
+w(H) \to w(0) = f'(x_0) @@ limit-passes-inside (11c), with helper (i): w is continuous at 0
+g'(y_0) = \htmlClass{keep}{\dfrac{1}{f'(x_0)}} \quad \blacksquare @@ reciprocal-limit (10c): f′(x₀) ≠ 0
+  </pre>
+  <p data-pid="45c650">In d-marks: dx/dy · dy/dx = 1, with dx/dy taken at y₀ and dy/dx at x₀. 13e wrote the same line under the hypothesis that dx/dy exists; inverse-slope removes the hypothesis. And it is the swapped pairs at work (9d's swapped-pairs). A change h of input with change Δy of output on f is a change Δy of input with change h of output on g. So every chord slope of g is the reciprocal of one of f's, at the swapped pair.</p>
+  <p data-pid="58eb17">Where it must fail: x³ keeps order on ℝ and has slope 0 at 0, so inverse-slope says nothing there, and 13e's undoing's-slope already proved ∛ has no slope at 0. The hypothesis f′(x₀) ≠ 0 is not decoration.</p>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · inverse-slope · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13l6.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="y \cdot y = 9x"></span></span>Taking slopes of both sides, find the slope at (1, 3) and at (1, −3).</li><li><span class="givens"><span data-tex-inline="x \cdot x \cdot y = 8"></span></span>Taking slopes of both sides, find the slope at (2, 2). <br>Check it by writing the branch as a formula first.</li><li><span class="givens"><span data-tex-inline="f(x) = x^3 \text{ at } 2"></span></span>Find f's slope there. <br>Using inverse-slope, find the cube root's slope at the matching input.</li><li><span class="givens"><span data-tex-inline="f(x) = x^3 + 2x"></span></span>Show that f keeps order on the reals. <br>Using inverse-slope, find the slope of f's inverse at 3.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13l7">
+  <h2 class="sthead"><span class="stno">13l7</span>The dodge at work</h2>
+  <p class="stands">Stands on 13l6.</p>
+  <pre class="lines" data-k="ember" data-label="this step: three inverses">
+\begin{aligned}&x^2 \text{ on } (0, \infty):\ \ \text{keeps}\\ &\quad\text{order (powers-keep-order), slope } 2x \ne 0\end{aligned} @@ continuous (polynomials-are-continuous); 9d's root-undoes-square: √ runs it backwards
+(\sqrt{\ })'(y_0) = \dfrac{1}{2x_0} = \htmlClass{new}{\dfrac{1}{2\sqrt{y_0}}} @@ inverse-slope, with x₀ = √y₀: slope-of-√ by a second road
+x^q \text{ on } (0, \infty):\ \ (\sqrt[q]{\ })'(y_0) = \dfrac{1}{q\,x_0^{\,q-1}} = \htmlClass{new}{\tfrac1q\, y_0^{\frac1q - 1}} @@ inverse-slope with power for slopes, x₀ = y₀^(1/q) and fraction-exponent: 13h's root-slope by the inverse dodge
+f(x) = x^3 + x:\ \ \text{keeps order on } \mathbb R @@ x³ and x keep order (odd-powers-keep-order, slope-of-a-line), and so does their sum (same-direction-add); continuous (polynomials-are-continuous)
+f(1) = 2,\ \ f'(1) = 3 + 1 = 4 @@ find the input that f sends to 2: try small numbers
+(f^{-1})'(2) = \htmlClass{keep}{\tfrac14} @@ inverse-slope: the slope of a function this ladder cannot write as a formula
+  </pre>
+  <section class="slides" id="sl7"><div class="eyebrow">The slides · the dodge · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13l7.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="2y \cdot y' = 3x^2 \text{ after taking slopes}"></span></span>Write an equation it could have started from, and find what can differ between such equations.</li><li><span class="givens"><span data-tex-inline="\text{slope } -y/x \text{ at every pair}"></span> <span data-tex-inline="\text{with a branch with a slope;}"></span> <span data-tex-inline="xy = 3,"></span> <span data-tex-inline="y^2 = 3x,"></span> <span data-tex-inline="x^3 + y^3 = 3"></span></span>By taking slopes, decide which of the three it is.</li><li><span class="givens"><span data-tex-inline="f^{-1} \text{ has the pair } (5, 2),"></span> <span data-tex-inline="\text{slope } \tfrac13 \text{ there}"></span></span>Find the pair on f, and f's slope there.</li><li><span class="givens"><span data-tex-inline="f(x) = x^5 + x + 1"></span></span>Using inverse-slope, find the inputs at which f's inverse has slope one sixth.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13l8">
+  <h2 class="sthead"><span class="stno">13l8</span>Matching the inputs</h2>
+  <p class="stands">Stands on 13l1 to 13l7.</p>
+  <p data-pid="88eb59">The care is all in the word matching. The slope of the inverse at 2 is not 1/f′(2) = 1/13: that is the reciprocal of f's slope at the wrong input. The swapped pairs send (1, 2) on f to (2, 1) on the inverse, and the slopes that multiply to 1 are taken at those two pairs.</p>
+  <p data-pid="8f1b6f">History, in words. In 1638 one mathematician, quarrelling by letter with another about how to find tangent lines, set him an equation as a test: x³ + y³ = 3axy, now called a leaf. The other found its tangent lines without trouble. Its branches cannot be written with the functions this ladder has, so the leaf waits; the basement says for what.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13l8.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="y \cdot y \cdot y = x,"></span> <span data-tex-inline="\text{slip: } 3y^2 = 1"></span></span>Find what is missing, take slopes right, and find the slope at (8, 2).</li><li><span class="givens"><span data-tex-inline="x \cdot x = 9 \text{ is true at } 3;"></span> <span data-tex-inline="\text{taking slopes gives } 2x = 0"></span></span>Find the line that breaks.</li><li><span class="givens"><span data-tex-inline="x^3 + y^3 = 9"></span></span>Taking slopes of both sides, solve for the slope, and find the pair at which your formula's bottom is 0. <br>Refute a slope there by taking slopes of both sides.</li><li><span class="givens"><span data-tex-inline="f(x) = x^2 + 1 \text{ for } x \ge 0,"></span> <span data-tex-inline="\text{claim: inverse\textquoteright s slope at } 2"></span> <span data-tex-inline="= 1/f'(2) = \tfrac14"></span></span>Find the right value, and the input that should have been used.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">13l.4.1</span><span class="tagq">build</span>Build an equation of your own in x and y, not in this step, whose solution set holds a pair of whole numbers other than the pair of zeros. <br>Find the slope at that pair by taking slopes of both sides, and check it by writing the branch through it as a formula.</div>
+  <div class="chq"><span class="chid">13l.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="y \cdot y = x,"></span> <span data-tex-inline="(0, 0)"></span></span>Decide whether there is a branch through the pair. <br>Decide whether inverse-slope gives the root a slope at 0, and whether the root has one.</div>
+  <div class="chq"><span class="chid">13l.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="f'(x_0) = 0"></span></span>Decide whether the inverse can still have a slope at the value of f at x₀.</div>
+  <div class="chq"><span class="chid">13l.4.4</span><span class="tagq">seam</span>In 1638 one mathematician, quarrelling with another, set him the leaf x³ + y³ = 3xy as a test of his tangent method. The other found its tangent lines without trouble, though nobody could write the leaf’s branches as functions. <br>Which is the better method: one that needs a curve’s formula, or one that needs only its equation?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r13k.html">← 13k · the tangent line and the nearby line</a><a href="r13m.html">13m · Homing in on a root with tangent lines, and how errors spread →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Branches that cannot be written down</h3>
+  <p>The technique that shows such a branch has a slope, without writing the branch, is built on 28f. The leaf itself comes back on 18·cb13.</p>
+  <h3>Who said it first</h3>
+  <p>The popular book is Silvanus P. Thompson’s Calculus Made Easy. The quarrel of 1638 was between René Descartes, who set the test, and Pierre de Fermat, who passed it; the leaf is the folium of Descartes.</p>
+  <aside class="voice para"><p>Thompson advises that when a function is easier to take the slope of when run backwards, you may do so, and the reciprocal of the backward slope gives the forward one.</p><cite>Thompson, Calculus Made Easy, 2nd ed. (1914), ch. XIII</cite></aside>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; const a=Math.abs(v); let s=d!=null?v.toFixed(d):(a>=100?v.toFixed(2):a>=1?v.toFixed(4):a>=0.0001?v.toFixed(5):v.toPrecision(3)); if(s.indexOf('.')>=0&&s.indexOf('e')<0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const cbrt=t=>t<0?-Math.cbrt(-t):Math.cbrt(t);
+/* solution sets: param gives pairs; slope from both sides; branch description */
+const SETS={
+  sq:{lab:'y · y = x',tx:'y \\cdot y = x',pts:()=>{ const P=[]; for(let i=-300;i<=300;i++){ const t=i/100; P.push([t*t,t]); } return P; },
+    sl:(x,y)=>y===0?NaN:1/(2*y), br:(x,y)=>y>0?'\\sqrt{x}':y<0?'-\\sqrt{x}':null, bf:(x,y)=>y>0?(t=>t>0?Math.sqrt(t):NaN):y<0?(t=>t>0?-Math.sqrt(t):NaN):null,
+    why:'At (0, 0) the bottom 2y is 0, and there is no branch at all: a branch on an open interval around 0 would need y · y = x for some x < 0.', x:[-1,6],y:[-3,3]},
+  xy:{lab:'x · y = 1',tx:'x \\cdot y = 1',pts:()=>{ const P=[]; for(let i=-300;i<=300;i++){ const t=i/60; if(Math.abs(t)>0.15) P.push([t,1/t]); else P.push([NaN,NaN]); } return P; },
+    sl:(x,y)=>x===0?NaN:-y/x, br:(x,y)=>'\\tfrac1x', bf:(x,y)=>(t=>t*x>0?1/t:NaN), why:'', x:[-4,4],y:[-4,4]},
+  cu:{lab:'x³ + y³ = 9',tx:'x^3 + y^3 = 9',pts:()=>{ const P=[]; for(let i=-400;i<=400;i++){ const t=i/80; P.push([t,cbrt(9-t*t*t)]); } return P; },
+    sl:(x,y)=>Math.abs(y)<1e-9?NaN:-(x*x)/(y*y), br:(x,y)=>'\\sqrt[3]{9 - x^3}', bf:(x,y)=>(t=>cbrt(9-t*t*t)),
+    why:'Here y = 0, at x = ∛9: the bottom y² is 0, and the branch has no slope (slopes of both sides would give 3x² = 0).', x:[-3,4],y:[-3,4]}
+};
+let sk='sq', PX=4, PY=2;
+const FS={c3:{lab:'x³ + x',f:x=>x*x*x+x,d:x=>3*x*x+1,tx:'x^3 + x'},sq:{lab:'x² on x > 0',f:x=>x>0?x*x:NaN,d:x=>2*x,tx:'x^2',pos:true},cb:{lab:'x³',f:x=>x*x*x,d:x=>3*x*x,tx:'x^3'},ln:{lab:'2x + 1',f:x=>2*x+1,d:x=>2,tx:'2x + 1'}};
+let fk='c3', A=1, Hs=0.3;
+const cvA=$('cvA'),cvB=$('cvB'),ka=$('ka'),kh=$('kh');
+const PA=plane(cvA,{x:[-1,6],y:[-3,3],grid:1,aspect:0.85,draw:P=>{ const S=SETS[sk]; P.o.x=S.x; P.o.y=S.y; P.axes(); const c=P.ctx;
+  c.strokeStyle=col('--ink'); c.lineWidth=2.4; c.beginPath(); let pen=false; S.pts().forEach(([x,y])=>{ if(!isFinite(x)||!isFinite(y)||Math.abs(y)>50){ pen=false; return; } if(!pen){ c.moveTo(P.X(x),P.Y(y)); pen=true; } else c.lineTo(P.X(x),P.Y(y)); }); c.stroke();
+  const bf=S.bf(PX,PY); if(bf) P.fn(bf,'--teal',3.4); const m=S.sl(PX,PY); if(isFinite(m)) P.line(S.x[0],PY+m*(S.x[0]-PX),S.x[1],PY+m*(S.x[1]-PX),'--ember',2); P.dot(PX,PY,'--ember',6); }});
+Object.defineProperty(PA.o,'aspect',{get:()=>cvA.clientWidth>560?0.8:0.9});
+function snap(x,y){ const S=SETS[sk]; let best=null,bd=Infinity; S.pts().forEach(([px,py])=>{ if(!isFinite(px)) return; const d=(px-x)*(px-x)+(py-y)*(py-y); if(d<bd){ bd=d; best=[px,py]; } }); if(best){ PX=best[0]; PY=best[1]; } const sp=sk==='sq'?[0,0]:sk==='cu'?[cbrt(9),0]:null; if(sp&&Math.hypot(x-sp[0],y-sp[1])<0.25){ PX=sp[0]; PY=sp[1]; } }
+const PB=plane(cvB,{x:[-3,4],y:[-3,4],grid:1,aspect:0.85,draw:P=>{ const F=FS[fk]; P.axes();
+  P.fn(F.f,'--ember',2.4);
+  const c=P.ctx; c.strokeStyle=col('--teal'); c.lineWidth=2.4; c.beginPath(); let pen=false; for(let i=0;i<=600;i++){ const t=-3+7*i/600, v=F.f(t); if(!isFinite(v)||v<-3.5||v>4.5){ pen=false; continue; } if(!pen){ c.moveTo(P.X(v),P.Y(t)); pen=true; } else c.lineTo(P.X(v),P.Y(t)); } c.stroke();
+  const a=aa(), b=F.f(a), b1=F.f(a+Hs);
+  P.line(a,b,a+Hs,b,'--muted',2.4); P.line(a+Hs,b,a+Hs,b1,'--ember',3); P.dot(a,b,'--ember',5.5);
+  P.line(b,a,b1,a,'--ember',3); P.line(b1,a,b1,a+Hs,'--muted',2.4); P.dot(b,a,'--teal',5.5); }});
+Object.defineProperty(PB.o,'aspect',{get:()=>cvB.clientWidth>560?0.8:0.9});
+function aa(){ const F=FS[fk]; let a=A; if(F.pos&&a<=0.05) a=0.05; return a; }
+function read(){ const S=SETS[sk], m=S.sl(PX,PY), br=S.br(PX,PY);
+  const vA=$('vdA');
+  if(!isFinite(m)){ vA.className='verdict lose'; vA.textContent=S.why; }
+  else { vA.className='verdict win'; vA.textContent='At ('+fm(PX,3)+', '+fm(PY,3)+') the branch is '+(br||'').replace(/\\sqrt\{x\}/,'√x').replace(/\\sqrt\[3\]\{9 - x\^3\}/,'∛(9 − x³)').replace(/\\tfrac1x/,'1/x')+', and slopes of both sides give y′ = '+fm(m)+'.'; }
+  const F=FS[fk], a=aa(), b=F.f(a), d=F.d(a), b1=F.f(a+Hs), dy=b1-b;
+  $('oa').textContent=fm(a,2); $('oh').textContent=fm(Hs,2);
+  const vB=$('vdB');
+  if(Math.abs(d)<1e-9){ vB.className='verdict lose'; vB.textContent='f′('+fm(a,2)+') = 0: inverse-slope is silent. The swapped step has run '+fm(dy)+' and rise '+fm(Hs)+', a chord slope of '+fm(Hs/dy)+', which grows without bound as h shrinks. 13e\'s undoing\'s-slope: ∛ has no slope at 0.'; }
+  else { vB.className='verdict win'; vB.textContent='Chord slopes '+fm(dy/Hs)+' on f and '+fm(Hs/dy)+' on the inverse: reciprocals. In the limit, f′('+fm(a,2)+') = '+fm(d)+' and the inverse\'s slope at '+fm(b)+' is '+fm(1/d)+' (inverse-slope).'; }
+  tex($('eq'),R`\begin{gathered}${S.tx}:\ \ (x_0, y_0) = (${fm(PX,3)},\ ${fm(PY,3)}),\ \ y' = ${isFinite(m)?R`\htmlClass{new}{${fm(m)}}`:R`\text{none}`}\\ f(x) = ${F.tx}:\ \ f(${fm(a,2)}) = ${fm(b)},\ \ f'(${fm(a,2)}) = ${fm(d)},\ \ (f^{-1})'(${fm(b)}) = ${Math.abs(d)<1e-9?R`\text{none}`:R`\htmlClass{keep}{${fm(1/d)}}`}\end{gathered}`,true); }
+function all(){ PA.redraw(); PB.redraw(); read(); }
+(function(){ const ch=$('sch'); Object.keys(SETS).forEach(k=>{ const b=document.createElement('button'); b.textContent=SETS[k].lab; if(k===sk) b.className='on'; b.onclick=()=>{ sk=k; const d={sq:[4,2],xy:[2,0.5],cu:[1,2]}[k]; PX=d[0]; PY=d[1]; [...ch.children].forEach(z=>z.classList.toggle('on',z===b)); all(); }; ch.appendChild(b); }); })();
+(function(){ const ch=$('fch'); Object.keys(FS).forEach(k=>{ const b=document.createElement('button'); b.textContent=FS[k].lab; if(k===fk) b.className='on'; b.onclick=()=>{ fk=k; [...ch.children].forEach(z=>z.classList.toggle('on',z===b)); all(); }; ch.appendChild(b); }); })();
+ka.oninput=()=>{ A=+ka.value; all(); }; kh.oninput=()=>{ Hs=+kh.value; all(); };
+let drag=null; cvA.addEventListener('pointerdown',e=>{ drag=cvA; cvA.setPointerCapture&&cvA.setPointerCapture(e.pointerId); mv(e); }); cvA.addEventListener('pointermove',mv); ['pointerup','pointercancel'].forEach(t=>cvA.addEventListener(t,()=>drag=null));
+cvB.addEventListener('pointerdown',e=>{ drag=cvB; cvB.setPointerCapture&&cvB.setPointerCapture(e.pointerId); mv(e); }); cvB.addEventListener('pointermove',mv); ['pointerup','pointercancel'].forEach(t=>cvB.addEventListener(t,()=>drag=null));
+function mv(e){ if(!drag) return; if(drag===cvA){ const q=PA.point(e); snap(q.x,q.y); } else { const q=PB.point(e); A=Math.max(-1.5,Math.min(1.5,Math.round(q.x*20)/20)); ka.value=A; } all(); }
+window.__pic={set:(s,x,y,f,a,h)=>{ if(s){ sk=s; [...$('sch').children].forEach((b,i)=>b.classList.toggle('on',Object.keys(SETS)[i]===s)); } if(x!=null){ snap(x,y); } if(f){ fk=f; [...$('fch').children].forEach((b,i)=>b.classList.toggle('on',Object.keys(FS)[i]===f)); } if(a!=null){ A=a; ka.value=a; } if(h!=null){ Hs=h; kh.value=h; } all(); return {PX,PY,m:SETS[sk].sl(PX,PY),A:vdA.textContent,B:vdB.textContent}; }};
+const vdA=$('vdA'), vdB=$('vdB');
+all();
+
+/* ---------- slides ---------- */
+const N='\\htmlClass{new}', K='\\htmlClass{keep}';
+stepper('#sl1',[
+  {k:'ember',kl:'not a function',t:R`(4, 2),\ (4, -2) \in \{(x, y) : y \cdot y = x\}`,n:`Two pairs in the column at 4: column-test fails. 5f's solution set, read over ℝ.`},
+  {k:'ember',kl:'a branch',t:R`\varphi = \sqrt{\ } \text{ through } (4, 2),\quad -\sqrt{\ } \text{ through } (4, -2)`,n:`A function on an open interval around x₀ whose pairs all lie in the set. None through (0, 0).`}
+],{title:'The slides · branches · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'both sides · 1 of 3',t:R`(y \cdot y)' = (x)'`,n:`On a branch the two sides agree on an open interval: slopes-decided-near.`},
+  {k:'ember',kl:'both sides · 2 of 3',t:R`${N}{2y \cdot y'} = 1`,n:`chain for slopes with the inside y. The slope of x is 1.`},
+  {k:'ember',kl:'both sides · 3 of 3',t:R`y' = \dfrac{1}{2y}:\ \ \tfrac14 \text{ at } (4, 2),\ \ -\tfrac14 \text{ at } (4, -2)`,n:`Both branches at once. slope-of-√ agrees.`},
+  {k:'ember',kl:'the caution',t:R`\varphi \text{ must have a slope first}`,n:`Slopes of both sides recompute a slope known to exist (13i's caution). Here slope-of-√ supplies it.`}
+],{title:'The slides · both sides · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'xy = 1',t:R`y + x\,y' = 0 \;\Rightarrow\; ${N}{y' = -\dfrac yx}`,n:`product for slopes on the left. At (2, ½): −¼, as slope-of-one-over-x says.`},
+  {k:'ember',kl:'cubes',t:R`3x^2 + 3y^2 y' = 0 \;\Rightarrow\; ${N}{y' = -\dfrac{x^2}{y^2}}`,n:`−¼ at (1, 2) and −4 at (2, 1): they multiply to 1. The set equals its swapped pairs.`},
+  {k:'ember',kl:'no slope at y = 0',t:R`3x^2 + 3\cdot 0 \cdot \varphi' = 0\ ?`,n:`At x = ∛9 it would give 3x² = 0. Refuted.`}
+],{title:'The slides · products and cubes · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'the slip',t:R`(y \cdot y)' = 2y\ ?`,n:`The chain's factor y′ is missing. And x · x = 4 is true at two inputs, not on an interval: no licence.`}
+],{title:'The slides · the slip · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'keeps order',t:R`x \lt x' \Rightarrow f(x) \lt f(x')`,n:`The books' increasing. One-to-one by three-way-order on ℝ.`},
+  {k:'ember',kl:'inverse-is-continuous',t:R`|y - y_0| \lt \delta \Rightarrow |g(y) - g(y_0)| \lt \varepsilon`,n:`δ from the outputs at x₀ ± ε; in-between-value, general form finds the input. The inverse is continuous.`}
+],{title:'The slides · inverse-is-continuous · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'inverse-slope · 1 of 2',t:R`k = w(H)\cdot H,\ \ H = g(y_0 + k) - x_0`,n:`13e's helper: nothing is divided by H.`},
+  {k:'ember',kl:'inverse-slope · 2 of 2',t:R`\dfrac{H}{k} = \dfrac{1}{w(H)} \to ${N}{\dfrac{1}{f'(x_0)}}`,n:`inverse-is-continuous sends H to 0; limit-passes-inside and helper (i); reciprocal-limit needs f′(x₀) ≠ 0. ∎`},
+  {k:'ember',kl:'dx/dy · dy/dx = 1',t:R`\dfrac{dx}{dy}\cdot\dfrac{dy}{dx} = 1`,n:`13e's undoing's-slope, now with dx/dy's existence proved. Silent at x³'s 0.`}
+],{title:'The slides · inverse-slope · ← → keys work'});
+stepper('#sl7',[
+  {k:'ember',kl:'the dodge',t:R`x^q:\ \ (\sqrt[q]{\ })'(y_0) = \dfrac{1}{q x_0^{q-1}} = ${N}{\tfrac1q y_0^{\frac1q - 1}}`,n:`13h's root-slope by a second road.`},
+  {k:'ember',kl:'no formula',t:R`f(x) = x^3 + x:\ \ (f^{-1})'(2) = \dfrac{1}{f'(1)} = ${N}{\tfrac14}`,n:`f(1) = 2 first. Not 1/f′(2) = 1/13: that is the wrong input.`}
+],{title:'The slides · the dodge · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

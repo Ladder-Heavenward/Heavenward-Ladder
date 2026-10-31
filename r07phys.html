@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>7·phys · What flows in a wire, and what pushes it?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+table.tt td.l{text-align:left;font-family:var(--serif)} @media (max-width:520px){table.tt td.l{min-width:7em}}
+#cvK{touch-action:manipulation;cursor:pointer}
+.knobs .knob{min-width:130px}
+.walk{display:flex;flex-wrap:wrap;gap:6px;align-items:stretch}
+.walk .tk{border:1.5px solid var(--grid);border-radius:6px;padding:4px 8px;background:var(--sand);font-family:var(--mono);font-size:.8rem;display:grid;gap:2px;min-width:64px}
+.walk .tk b{font-weight:500}
+.walk .tk.up{border-color:var(--ember)} .walk .tk.up b{color:var(--ember)}
+.walk .tk.dn{border-color:var(--teal)} .walk .tk.dn b{color:var(--teal)}
+.walk .tk.sw{border-color:var(--gold)} .walk .tk.sw b{color:var(--gold)}
+.walk .tk small{color:var(--muted)}
+.lv{display:grid;gap:8px}
+.lv>div{border-left:3px solid var(--plum);padding:6px 12px;background:var(--card);border-radius:0 6px 6px 0;max-width:66ch}
+.lv b{font-family:var(--mono);font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;color:var(--plum)}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r07e.html">← 7e proof by contradiction</a><a href="r07then.html">next: 7·then is a number too big to write down still a number? →</a></p>
+  <div class="tags"><span class="tag phys">7·phys · physics</span></div>
+  <h1>What flows in a wire, and what pushes it?</h1>
+  <p>What flows in a wire, and what pushes it? People use electrons at three levels. At the electrical level a circuit moves energy: a battery lifts charge, a wire carries it, a kettle turns it into heat. At the electronic level, parts control the flow: one-way valves, and switches worked by other currents. At the logic level the flow is read as true or false, and circuits compute, as 4·comp showed. This page is the electrical level, done properly. It says what charge, current, energy and voltage are, each with its unit. It gives the proportion law, and how resistances combine on one path and on side-by-side paths. It gives the two circuit laws, which say nothing is lost and turn every circuit into equations to solve. And it gives power. It ends with a switch as a statement that is true or false, and with where the ladder takes each level.</p>
+  <p class="gesture">Current is charge per second; voltage is energy per charge; a resistor makes them proportional. Nothing piles up at a junction, and around any loop the energy per charge comes back to where it started. Solve the equations; multiply current by voltage for power.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r04comp.html">4·comp</a> (wires, switches, gates, switching as logic), <a href="r05b.html">5b</a> (reciprocals), <a href="r05f.html">5f</a> (rearranging; two conditions, substitution, elimination), <a href="r05g.html">5g</a> (adding fractions, fractions-of-rationals, decimals, ≈), <a href="r05i.html">5i</a> (proportion, units, per, kilo and milli), <a href="r05chem.html">5·chem</a> (atom, scientific notation), <a href="r06phys.html">6·phys</a> (hertz) and <a href="r07d.html">7d</a> (cases on any statement).</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · read it through, then work the picture and the slides</div>
+
+  <h3>Charge, and current as charge per second</h3>
+  <p data-pid="c4ceac">Matter carries <b>electric charge</b>, of two kinds. Two things with the same kind push each other apart; two with different kinds pull together. The kinds were named positive and negative, plus and minus, in 1747. The charge that moves in a metal wire belongs to the <b>electron</b>, a particle far smaller than an atom, found in every atom (5·chem's word), and found in 1897. An electron's charge is negative.</p>
+  <p class="eqline" data-pid="3e460f">From here on, the <b>coulomb</b>, written C, is the unit of charge. Since 2019 one electron's charge is fixed, by agreement, at exactly 1.602176634/10¹⁹ C, so 1 C is the charge of about 6.24 · 10¹⁸ electrons.</p>
+  <p data-pid="2a0895">A <b>current</b> is charge on the move: how much charge passes a point each second.</p>
+  <p class="eqline" data-pid="fd3016">Here a point of a circuit is a place on it, the electricians' plain word; 5g's decimal point keeps its meaning.</p>
+  <p class="eqline" data-pid="4d7aed">From here on, the <b>ampere</b>, written A, is the unit of current: 1 A = 1 C/s, one coulomb per second (5i's per). A milliampere, mA, is 1/1000 A (5i's milli).</p>
+  <p data-pid="6aeb81">A phone charger delivers 1 to 3 A; a kettle draws about 12 A; the light on a power strip, about 20 mA. The man who named plus and minus thought one electric fluid flowed from plus to minus, and engineers kept his arrow. <b>Conventional current</b> runs from the + end of a battery, round the circuit, to its − end. The electrons in a wire go the other way. Nothing breaks, because electrons moving left carry the same charge per second as positive charge moving right. It is a choice of which way counts forward, like 5c's choice of sign. Every equation on this page uses that old arrow.</p>
+  <p data-pid="a9a64a">The electrons themselves crawl. In a copper lamp cord carrying 1 A, they drift at about a tenth of a millimetre per second, some thirty-odd centimetres in an hour. The lamp still lights at once, because the wire is already full of electrons. It is like a hose already full of water: push at one end and water leaves the other immediately, though no drop has gone far.</p>
+
+  <h3>Energy, and voltage as energy per charge</h3>
+  <p data-pid="f0d695"><b>Energy</b> is what it takes to make something happen: to lift a thing, warm it, set it moving, make it glow. It is never made or destroyed, only moved from place to place and changed from one form into another.</p>
+  <p class="eqline" data-pid="b0ca60">From here on, the <b>joule</b>, written J, is the unit of energy: 1 J = 1 kg · m²/s² (5i's unit arithmetic). Lifting a thing of mass m by a height h near the ground takes m · (9.8 m/s²) · h. So lifting a 100 g apple by 1 m takes 0.1 kg · 9.8 m/s² · 1 m = 0.98 J, about a joule.</p>
+  <p data-pid="ea1b85">In 1800 a letter to the Royal Society described a pile of zinc and copper discs separated by card or cloth soaked in salt water. It gave a steady current for the first time. The pile was the first <b>battery</b>. <b>What a battery does is lift charge.</b> Each coulomb that arrives at its − end leaves its + end carrying extra energy. It spends that energy on the way round the circuit, as heat, light or motion, and arrives back with none to spare.</p>
+  <p class="eqline" data-pid="012c97">From here on, the <b>volt</b>, written V, is the unit of voltage: 1 V = 1 J/C. The <b>voltage</b> between two points is the energy each coulomb gives up, or gains, in going from one to the other.</p>
+  <p data-pid="696d33">A 9 V battery gives every coulomb that passes through it 9 J. Think of voltage as height. The battery is a pump lifting water up a hill; the circuit is the channel it runs down; each part along the way is a stretch where it loses height. Height is measured from a level you choose; in a circuit you call the battery's − end 0 V and measure every other point from it.</p>
+  <p class="eqline" data-pid="2089de">From here on, on this page, as is usual, slanted V, I, R and P are quantities in 5i's sense (a rational followed by a unit). V is a voltage, I a current, R a resistance, P a power. The upright V, A, Ω, W, J and C are unit marks. Low marks tell the parts apart: R₁, R₂, I₁. Here I is not 0b's self-sameness axiom, and P is not a statement.</p>
+
+  <h3>Resistance, and the proportion law</h3>
+  <p data-pid="64bf0d">In 5i's words: for a given wire, the voltage across it is directly proportional to the current through it. Double the push, double the flow. So V = kI with k fixed for that wire, and k is called its <b>resistance</b>. <b>This is the proportion law (Ohm's).</b> A <b>resistor</b> is a part made to have a fixed resistance. The proportion law's accepted name is Ohm's law.</p>
+  <p class="eqline" data-pid="c93178">From here on, the <b>ohm</b>, written Ω, is the unit of resistance: 1 Ω = 1 V/A. Ω is the Greek letter omega in its capital form. 2f used it as a name for a set; on this page it is only this unit mark.</p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="teal" data-label="from 5i and 5f: a proportion, three ways">
+V = \htmlClass{new}{I\,R} @@ the proportion law: 5i's direct proportion, with R its constant
+I = \tfrac{V}{R} @@ multiplying-keeps-answers (5f): multiply both sides by R⁻¹, R ≠ 0
+R = \tfrac{V}{I} @@ the same, by I⁻¹, when I ≠ 0
+\Omega \cdot \text{A} = \tfrac{\text{V}}{\text{A}} \cdot \text{A} = \text{V} @@ the units check (5i): the right side is a voltage
+  </pre>
+  <p data-pid="0f5316">Here is a circuit you can build from parts in a drawer. It has a 9 V battery, a red <b>LED</b> (a light-emitting diode, a small light that lets current through one way only), and a resistor to keep the current safe.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the resistor for an LED">
+9\ \text{V} - 2\ \text{V} = 7\ \text{V} @@ a red LED takes about 2 V across it; the rest must drop across the resistor
+I = 20\ \text{mA} = 0.02\ \text{A} @@ the current the LED is made for
+R = \tfrac{7\ \text{V}}{0.02\ \text{A}} = \htmlClass{new}{350\ \Omega} @@ the proportion law, solved for R
+R = 390\ \Omega:\ \ I = \tfrac{7}{390}\ \text{A} \approx 0.018\ \text{A} @@ resistors come in stock sizes; take the next one up: about 18 mA, safely under
+  </pre>
+  <p data-pid="5240b5">The first illegal move lives here. <b>The proportion law is not a law of nature, like the two laws below; it is a fact about some materials.</b> An LED is not a resistor: below about 1.8 V it passes almost nothing, and a little above 2 V it passes as much as you let it. Dividing 9 V by “the LED's resistance” gives nonsense. That is why it needs a real resistor beside it to set the current. A lamp's filament fails the law more gently. Its resistance rises many times over as it heats from cold to white, which is why lamps tend to fail at the moment they are switched on.</p>
+
+  <h3>One path, and side-by-side paths</h3>
+  <p class="eqline" data-pid="ea98ab">From here on, on this page, two parts are <b>in series</b> when they sit one after the other on a single path with no branch between. They are <b>in parallel</b> when they sit side by side, joined at both ends, so that the path splits between them and joins again. These are the electricians' words, and here they name only these two arrangements.</p>
+  <p data-pid="7aff50">In series, the same current goes through both parts, because charge has nowhere else to go. Each coulomb gives up energy in the first and then in the second, so the drops add up to the battery's voltage.</p>
+  <pre class="lines" data-k="ember" data-label="this page: in series, resistances add">
+V = V_1 + V_2 @@ the drops share out the battery's lift
+V = I R_1 + I R_2 @@ the proportion law on each part, with the same I
+V = I\,(\htmlClass{new}{R_1 + R_2}) @@ spread on ℚ turned about (5h's factoring): the pair acts as one resistor
+  </pre>
+  <p data-pid="c56280">And each drop is its share in proportion: V₁ = V · R₁/(R₁ + R₂). Put 12 V across 4 Ω and 8 Ω in series. That is 12 Ω in all, 1 A, and drops of 4 V and 8 V. It is a voltage divider, and it is how a volume knob turns a turn of the hand into a change of voltage.</p>
+  <p data-pid="8f840f">In parallel, both parts have the same voltage across them, since their ends are joined: the same two heights. The current splits, the larger share taking the easier path, and the shares add up to the whole.</p>
+  <pre class="lines" data-k="ember" data-label="this page: in parallel, reciprocals add">
+I = I_1 + I_2 = \tfrac{V}{R_1} + \tfrac{V}{R_2} @@ the proportion law on each branch, the same V across both
+\tfrac{I}{V} = \htmlClass{new}{\tfrac{1}{R_1} + \tfrac{1}{R_2}} @@ multiplying-keeps-answers by V⁻¹: for the pair, the reciprocal of its resistance is the sum of the reciprocals (5b)
+\tfrac{1}{R_1} + \tfrac{1}{R_2} = \tfrac{R_2 + R_1}{R_1 R_2} @@ adding over one bottom (5g)
+R = \htmlClass{new}{\tfrac{R_1 R_2}{R_1 + R_2}} @@ reciprocals of both sides (5b's reciprocal, 5g's reciprocal-of-a-product): product over sum
+  </pre>
+  <p data-pid="d5dc2c">6 Ω and 3 Ω in parallel: 18/9 = 2 Ω, less than either. <b>That is always so: a second path can only make it easier for current to get through.</b> Three tempting mistakes live here. Adding the resistances, 6 + 3 = 9, treats them as in series. Adding the reciprocals and stopping, 1/6 + 1/3 = 1/2, gives the reciprocal of the answer, not the answer. And product over sum is for two resistors only. For three, add three reciprocals and take the reciprocal: 2, 3 and 6 Ω in parallel give 1/2 + 1/3 + 1/6 = 1, so 1 Ω. Every circuit in a house is wired in parallel. That is why switching off the lamp does not switch off the fridge. Each has the full voltage across it, and the currents add at the panel, until a breaker trips.</p>
+
+  <h3>The two circuit laws: nothing is lost</h3>
+  <p data-pid="3682b6">The <b>junction law</b>: at any meeting point of wires, the current flowing in equals the current flowing out. Charge is never made or destroyed, and in a steady circuit it cannot pile up at a point. The <b>loop law</b>: along any loop, a path through the circuit that comes back to where it started, the rises and drops of voltage add to 0. Walk over the hill and back to your door and you are at the same height. These are the two circuit laws (Kirchhoff's). <b>One path and side-by-side paths were these laws in disguise: in series is the loop law, in parallel is the junction law.</b> Here is a circuit that is both: a 12 V battery, a 4 Ω resistor, then 6 Ω and 3 Ω in parallel.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the mixed circuit">
+\tfrac{6 \cdot 3}{6 + 3} = 2\ \Omega @@ the parallel pair, product over sum
+4 + 2 = \htmlClass{new}{6\ \Omega};\ \ I = \tfrac{12}{6} = 2\ \text{A} @@ in series with the 4 Ω; the proportion law on the whole
+2 \cdot 4 = 8\ \text{V},\ \ 2 \cdot 2 = 4\ \text{V},\ \ 8 + 4 = 12 @@ the drops; the loop law checks
+\tfrac{4}{6} = \tfrac{2}{3}\ \text{A},\ \ \tfrac{4}{3}\ \text{A},\ \ \tfrac{2}{3} + \tfrac{4}{3} = \htmlClass{keep}{2}\ \text{A} @@ each branch has 4 V across it; the junction law checks
+  </pre>
+  <p data-pid="756966">Some circuits are neither, and two batteries feeding one load is the standard case. Then name the unknown currents, write one equation per loop by the loop law, and solve the two together, by 5f's substitution and elimination. Left: a 9 V battery and 3 Ω. Right: a 6 V battery and 3 Ω. Shared middle: 1 Ω. Let I₁ be the current up through the left battery and I₂ up through the right; by the junction law, I₁ + I₂ goes down the middle.</p>
+  <pre class="lines" data-k="ember" data-label="this page: two loops, a pair of equations">
+9 = 3I_1 + 1\,(I_1 + I_2) @@ left loop: the battery's lift equals the drops
+6 = 3I_2 + 1\,(I_1 + I_2) @@ right loop, the same way
+9 = 4I_1 + I_2,\ \ 6 = I_1 + 4I_2 @@ collect like terms (5h)
+3 = 3I_1 - 3I_2 @@ add-a-sameness (5f): the second taken from the first
+I_1 = I_2 + 1 @@ multiplying-keeps-answers by 1/3, then adding-keeps-answers
+6 = (I_2 + 1) + 4I_2 @@ substitution (5f)
+\htmlClass{new}{I_2 = 1\ \text{A},\ \ I_1 = 2\ \text{A}},\ \ I_1 + I_2 = 3\ \text{A} @@ solve; check the left loop: 3 · 2 + 1 · 3 = 9
+  </pre>
+  <p data-pid="f59bd3">Now make the left battery 12 V, the side resistors 1 Ω each and the middle 4 Ω, with 6 V on the right. The same steps give I₁ = 4 A and I₂ = −2 A. <b>A negative current is not an error: it says the arrow you guessed points the wrong way.</b> Two amperes are being pushed down through the 6 V battery, against its own lift. It is being charged, as a car's battery is when the engine runs. You never need to guess directions right. Guess, solve, and let the signs tell you. Running backwards is as mechanical. Knowing I₁ = 2 A and I₂ = 1 A in the first circuit, the right loop says the right battery is 3 · 1 + 1 · 3 = 6 V.</p>
+
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · the ledger, again</div>
+    <p data-pid="dc1944">0c's ledger has more than one column. 5·chem closed the stuff column atom by atom, and 6·chem closed charge alongside it in a reaction. The junction law is the charge column closed again, at every joint of a wire, every second: charge in equals charge out. The loop law is the push column. The lift a battery gives each coulomb is spent, exactly, on the way round.</p>
+    <p data-pid="7c847b"><b>You never prove the event happened; you show the books balance.</b></p>
+    <p data-pid="4e57d3">When the books gave −2 A, the ledger did not break. The guess about direction did. The books close whichever way you guessed, and they tell you which guess was wrong.</p>
+    <p class="bait" data-pid="28c0d5">A kettle draws 12.5 A from the wall, and its cord carries 12.5 A back. If no charge is used up in the kettle, what is?</p>
+  </aside>
+
+  <h3>Power: current times voltage</h3>
+  <p class="eqline" data-pid="3ea714">From here on, the <b>watt</b>, written W, is the unit of power: 1 W = 1 J/s. <b>Power</b> is energy moved per second. A kilowatt-hour, kWh, is the energy of 1000 W for an hour: 1000 W · 3600 s = 3 600 000 J.</p>
+  <p class="eqline" data-pid="9d2d1d">From here on, power is also said of energy moved per second, as the physicists say it. 4f's power <span data-tex-inline="a^b"></span> and 2d's power set keep their meanings. The quantity letter P below says which.</p>
+  <pre class="lines" data-k="ember" data-label="this page: power">
+P = I\,V @@ (C/s) · (J/C) = J/s: the coulombs cancel (5i's unit chain)
+P = I\,(\htmlClass{new}{I R}) = I^2 R @@ substitution, with V = IR
+P = \tfrac{V}{R}\,V = \tfrac{V^2}{R} @@ or with I = V/R
+  </pre>
+  <p data-pid="2466b0">A 1500 W kettle on a 120 V outlet draws I = 1500/120 = 12.5 A. Its element has resistance 120²/1500 = 9.6 Ω. (Element is the electricians' word for the part that heats; 5·chem's element, a substance of one kind of atom, keeps its meaning.) Run it four minutes, 240 s, and it uses 1500 · 240 = 360 000 J, which is 0.1 kWh. (The current in a house changes direction 60 times a second, 6·phys's 60 Hz. 120 V is the steady voltage that would warm the kettle at the same rate; the basement says more.) The LED circuit: the resistor turns 7 V · 7/390 A ≈ 0.13 W into heat, so an ordinary quarter-watt resistor is fine. The LED takes 2 V · 7/390 A ≈ 0.036 W. The tempting mistake is to put the battery's voltage into V²/R for one resistor among several. <b>The V in each formula is the voltage across that part.</b></p>
+
+  <h3>A switch is a statement</h3>
+  <p data-pid="960f6d">A switch is closed, and current can pass, or open, and it cannot. “The switch is closed” is a statement. A switch is built so that the statement is decidable, in 7b's word, at every moment it is read. 4·comp made switches and gates into logic. Two switches in series pass current only if both are closed, an and; in parallel, if either is, an or. <b>4·comp's point was that these are not analogies but samenesses: a network of switches computes a table.</b></p>
+  <p data-pid="1b4743">Now the electrical facts. An ideal switch, open, carries no current, and the whole voltage of the battery appears across its gap, since its two sides are at the top and foot of the hill. Closed, it carries the full current with no voltage across it. Split on “the switch is closed” (7d's split, and here a decidable one). Open, I = 0 and P = I · V = 0; closed, V = 0 and P = 0. <b>Either way an ideal switch controls the flow and spends no energy.</b> That is why switching is the way to compute.</p>
+  <p data-pid="bd9694">Real voltages pass through every value in between as a switch goes from one state to the other. So engineers forbid the middle on purpose. Take the classic 5 V logic chips of the 1960s and 1970s. An input below 0.8 V is read as false, one above 2.0 V as true, and a circuit is designed never to be read while it sits between. Rung 7 proved the either-way principle for every statement. Electronics builds it into the hardware, by declaring a strip of voltages where no reading is made and staying out of it.</p>
+
+  <h3>Three levels, and where the ladder takes each</h3>
+  <div class="lv">
+    <div><b>electrical · moving energy</b><p data-pid="399518">Current, voltage, resistance, power; the proportion law and the two circuit laws. This page.</p></div>
+    <div><b>electronic · controlling the flow</b><p data-pid="10c209">Parts whose current is not proportional to their voltage. One is the diode, a one-way valve, of which the LED is one that glows. Another is the transistor, a switch opened and shut by another, smaller current. They are why the LED needs its resistor.</p></div>
+    <div><b>logic · the flow as true or false</b><p data-pid="256f7c">Switches as statements, gates, the adder: 4·comp. Much higher up, the gates are built from transistors, and the three levels meet.</p></div>
+  </div>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>step on this page</th><th>rung that licenses it</th></tr>
+    <tr><td class="l">units, per, kilo and milli; charge, current, voltage as rates and ratios</td><td><a href="r05i.html">5i</a>, <a href="r05chem.html">5·chem</a> (scientific notation)</td></tr>
+    <tr><td class="l">the proportion law; rearranged three ways</td><td><a href="r05i.html">5i</a>, <a href="r05f.html">5f</a> (multiplying-keeps-answers)</td></tr>
+    <tr><td class="l">in series: factoring out the current</td><td><a href="r05h.html">5h</a> (spread on ℚ turned about)</td></tr>
+    <tr><td class="l">in parallel: reciprocals, one bottom, product over sum</td><td><a href="r05b.html">5b</a>, <a href="r05g.html">5g</a> (fractions-of-rationals, reciprocal-of-a-product)</td></tr>
+    <tr><td class="l">two loops as a pair of equations; a negative answer</td><td><a href="r05f.html">5f</a> (add-a-sameness, substitution), <a href="r05a.html">5a</a></td></tr>
+    <tr><td class="l">power, I²R, V²/R; kilowatt-hours</td><td><a href="r05i.html">5i</a>, <a href="r05e.html">5e</a> (r²)</td></tr>
+    <tr><td class="l">a switch as a statement; power in a switch by cases</td><td><a href="r04comp.html">4·comp</a>, <a href="r07b.html">7b</a>, <a href="r07d.html">7d</a></td></tr>
+  </table></div>
+</section>
+
+<section class="pic" id="pic">
+  <div class="eyebrow">The picture · left: a circuit you can rewire, with its currents moving · right: a walk once round a loop</div>
+  <div class="panels">
+    <div class="panel">
+      <div class="chips" role="group" aria-label="circuit" id="cch"><span class="m" style="color:var(--muted)">circuit:</span><button data-c="one" class="on">one resistor</button><button data-c="ser">in series</button><button data-c="par">in parallel</button><button data-c="mix">mixed</button><button data-c="two">two batteries</button></div>
+      <div class="chips"><button id="sw">open the switch</button><button id="dir">show electrons</button></div>
+      <canvas id="cvK"></canvas>
+      <div class="knobs">
+        <div class="knob" id="kV"><label>battery <output id="oV">12</output> V</label><input type="range" id="iV" min="1" max="24" step="1" value="12"></div>
+        <div class="knob" id="kV2"><label>right battery <output id="oV2">6</output> V</label><input type="range" id="iV2" min="1" max="24" step="1" value="6"></div>
+        <div class="knob" id="kR1"><label>R₁ <output id="oR1">4</output> Ω</label><input type="range" id="iR1" min="1" max="20" step="1" value="4"></div>
+        <div class="knob" id="kR2"><label>R₂ <output id="oR2">6</output> Ω</label><input type="range" id="iR2" min="1" max="20" step="1" value="6"></div>
+        <div class="knob" id="kR3"><label>R₃ <output id="oR3">3</output> Ω</label><input type="range" id="iR3" min="1" max="20" step="1" value="3"></div>
+      </div>
+      <div class="cap">Tap the switch, or its button, to open or close it. The moving dots are the current, their speed in proportion to it: ember for conventional current, + to −; teal, when you choose, for the electrons, going the other way. Each resistor is labelled with its resistance, its current and the voltage across it.</div>
+      <div class="eqbox" id="eqK"></div>
+    </div>
+    <div class="panel">
+      <div class="chips" id="lch"><span class="m" style="color:var(--muted)">loop:</span></div>
+      <div class="walk" id="walk"></div>
+      <div class="cap">Walk once round the chosen loop, starting at the battery's − end at 0 V. Each step is one part: a battery lifts the voltage (ember), a resistor drops it by I · R (teal), an open switch drops whatever is left (gold). The number under each step is the height reached. However you set the knobs, the walk ends where it began: the loop law.</div>
+      <div class="eqbox" id="eqL"></div>
+    </div>
+  </div>
+</section>
+
+<section class="slides" id="sl1"><div class="eyebrow">The slides · units, the proportion law three ways, in series and in parallel from the two laws, two loops, a backwards current, power, the switch · ← → keys work</div></section>
+
+<section class="sayback">
+  <div class="eyebrow">Say it back · then work it</div>
+  <h2>Questions</h2>
+  <div class="phkey"></div>
+  <ol>
+    <li><span class="qid">7·phys.1</span><span class="gname">Circuits, worked.</span><span class="gwhy">Do: build the page's pieces.</span>
+      <ol class="sub">
+        <li><span class="qid">7·phys.1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{a 9 V battery lights the red LED,}"></span> <span data-tex-inline="\text{which takes 2 V, at 20 mA}"></span></span>Find the resistor, and the power it turns into heat.</li><li><span class="givens"><span data-tex-inline="2\,\Omega, 3\,\Omega, 6\,\Omega \text{ in parallel,}"></span> <span data-tex-inline="\text{then } 4\,\Omega \text{ in series,}"></span> <span data-tex-inline="\text{across } 12 \text{ V}"></span></span>Find the current and the voltage across each part.</li><li><span class="givens"><span data-tex-inline="\text{the circuit of part b}"></span></span>Find the power in each part, and check they add to the battery’s.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">7·phys.2</span><span class="gname">From readings back to parts.</span><span class="gwhy">Undo: run the page's techs backwards.</span>
+      <ol class="sub">
+        <li><span class="qid">7·phys.2.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{a resistor across 9 V draws 30 mA}"></span></span>Find its resistance.</li><li><span class="givens"><span data-tex-inline="6\,\Omega"></span></span>Find the resistor that, in parallel with it, gives 2 ohms, and the one that gives 4 ohms.</li><li><span class="givens"><span data-tex-inline="\text{left: a 9 V battery and } 3\,\Omega,"></span> <span data-tex-inline="\text{middle: } 1\,\Omega,"></span> <span data-tex-inline="\text{right: a battery of } E \text{ volts and } 3\,\Omega"></span></span>Find E for which no current flows on the right.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">7·phys.3</span><span class="gname">Where the proportion stops.</span><span class="gwhy">Bend: find where the techs stop working.</span>
+      <ol class="sub">
+        <li><span class="qid">7·phys.3.1</span><span class="ph bend">bend</span><span class="givens"><span data-tex-inline="\text{red LED: } 1.8 \text{ V}, 0 \text{ mA};"></span> <span data-tex-inline="2.0 \text{ V}, 10 \text{ mA};"></span> <span data-tex-inline="2.1 \text{ V}, 20 \text{ mA}"></span></span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="V = IR"></span></span>Prove no one resistance R fits all three readings.</li><li><span class="givens"><span data-tex-inline="\text{a 3 V battery feeds the LED}"></span> <span data-tex-inline="\text{through } 50\,\Omega,"></span> <span data-tex-inline="\text{its current rises with its voltage}"></span></span>Prove the LED takes between 2.0 and 2.1 volts.</li><li><span class="givens"><span data-tex-inline="\text{a lamp on 120 V:}"></span> <span data-tex-inline="20\,\Omega \text{ cold, } 240\,\Omega \text{ hot}"></span></span>Find the current and power at switch-on and once lit.</li></ol></li>
+      </ol></li>
+    <li class="optgroup"><span class="qid">7·phys.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder challenges that rely on your own making. The page is complete without these; the rung's star needs them.</span>
+      <ol class="sub">
+        <li class="opt"><span class="qid">7·phys.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{Where the proportion stops, a part}"></span> <span data-tex-inline="\text{can still be read as true or false.}"></span></span>Build switch circuits of your own.<ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="A \lor (B \land C)"></span></span>Wire switches A, B and C so a lamp lights exactly when it is true.</li><li><span class="givens"><span data-tex-inline="\text{a two-way switch joins its middle}"></span> <span data-tex-inline="\text{terminal to one of two ends}"></span></span>Wire two of them so a lamp changes whenever either is switched, and write its table.</li><li><span class="givens"><span data-tex-inline="\text{input: true above 2.0 V,}"></span> <span data-tex-inline="\text{false below 0.8 V,}"></span> <span data-tex-inline="\text{no reading between;}"></span> <span data-tex-inline="\text{from 5 V, } 1\,\text{k}\Omega \text{ above } R;"></span> <span data-tex-inline="\text{the input reads}"></span> <span data-tex-inline="\text{the voltage across } R"></span></span>Find for which R the reading is true, false, or not made.</li></ol></li>
+        <li class="opt"><span class="qid">7·phys.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{a wire of } 0\,\Omega \text{ goes straight}"></span> <span data-tex-inline="\text{across a 9 V battery,}"></span> <span data-tex-inline="V = IR"></span></span>Find the current it gives.</li>
+        <li class="opt"><span class="qid">7·phys.4.3</span><span class="tagq">converse</span>Find the pairs of resistors whose series total is 4 times their parallel total, and those whose series total is 9 times it.</li>
+        <li class="opt"><span class="qid">7·phys.4.4</span><span class="tagq">seam</span>The man who named plus and minus guessed the direction of the flow wrong, and engineers kept his arrow. Decide whether they should have changed it.</li>
+      </ol></li>
+  </ol>
+  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
+</section>
+
+<nav class="nextrung"><a href="r07cb6.html">← 7·cb6 · the top of every chain gives choice</a><a href="r07econ.html">7·econ · should I trust the other prisoner? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Why a changing voltage has a steady stand-in</h3>
+  <p>A house voltage swings up and down 60 times a second. The 120 V on the outlet is the steady voltage that would warm the kettle at the same rate. Saying exactly what “the same rate” means for something that never stays still needs an average over a whole swing, which a later rung builds. Nothing on this page leans on more than the number 120.</p>
+  <h3>Who said it first</h3>
+  <p>Plus and minus, and the arrow of conventional current, are Benjamin Franklin’s (1747). The electron was found by J. J. Thomson (1897). The pile is Alessandro Volta’s, described in his letter of 1800 to Joseph Banks. The proportion law is Georg Ohm’s (1827), and the junction and loop laws are Gustav Kirchhoff’s (1845). That a network of switches computes a table is Claude Shannon’s point.</p>
+  <aside class="voice para"><p>Franklin, describing two people who had rubbed glass tubes and given each other sparks, said that one could be called electrified positively and the other negatively, or rather plus and minus, and that the electric fire passes from the one with more to the one with less.</p><cite>Franklin, letter to Peter Collinson, 25 May 1747, printed in Experiments and Observations on Electricity (1751)</cite></aside>
+  <aside class="voice para"><p>Ohm, a schoolteacher in Cologne, measured currents through wires of different lengths and treated the flow of electricity along a wire as Fourier had treated the flow of heat along a bar. He concluded that the current is directly proportional to the driving force and inversely proportional to the wire's resistance, which grows in proportion to its length.</p><cite>Ohm, Die galvanische Kette, mathematisch bearbeitet (Berlin, 1827)</cite></aside>
+  <aside class="voice para"><p>Kirchhoff, then a student of twenty-one in Königsberg, stated two rules from which the currents in any network of wires can be found: at a meeting of wires the currents arriving and leaving balance, and around any closed path the driving forces balance the drops.</p><cite>Kirchhoff, Annalen der Physik und Chemie 64 (1845)</cite></aside>
+  <h3>Accepted names</h3>
+  <p>The proportion law is Ohm’s law. The junction law and the loop law are Kirchhoff’s current law and Kirchhoff’s voltage law. The either-way principle is the law of excluded middle.</p>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper}=Rung;
+const R=String.raw;
+function size(cv,H){ const dp=window.devicePixelRatio||1, W=cv.clientWidth||300; cv.width=W*dp; cv.height=H*dp; cv.style.height=H+'px'; const c=cv.getContext('2d'); c.setTransform(dp,0,0,dp,0,0); return {c,W}; }
+const fmt=x=>{ if(Math.abs(x)<1e-12) return '0'; const r=Math.round(x*1000)/1000; const exact=Math.abs(x-r)<1e-9; const s=(Math.round(x*100)/100).toString(); return exact?String(r):'≈ '+s; };
+const fmtT=x=>fmt(x).replace('≈ ','\\approx ');
+
+/* ---------- state ---------- */
+let ck='one', closed=true, elec=false;
+const val=id=>+document.getElementById(id).value;
+['iV','iV2','iR1','iR2','iR3'].forEach(id=>{ const el=document.getElementById(id); el.oninput=()=>{ document.getElementById('o'+id.slice(1)).textContent=el.value; solve(); drawK(); drawL(); }; });
+document.querySelectorAll('#cch button').forEach(b=>b.onclick=()=>{ ck=b.dataset.c; document.querySelectorAll('#cch button').forEach(z=>z.classList.toggle('on',z===b)); li=0; setKnobs(); solve(); drawK(); buildLoops(); drawL(); });
+document.getElementById('sw').onclick=()=>{ closed=!closed; solve(); drawK(); drawL(); };
+document.getElementById('dir').onclick=e=>{ elec=!elec; e.target.textContent=elec?'show conventional current':'show electrons'; };
+function setKnobs(){ const show={one:['kV','kR1'],ser:['kV','kR1','kR2'],par:['kV','kR1','kR2'],mix:['kV','kR1','kR2','kR3'],two:['kV','kV2','kR1','kR2','kR3']}[ck];
+  ['kV','kV2','kR1','kR2','kR3'].forEach(k=>document.getElementById(k).style.display=show.includes(k)?'':'none');
+  document.querySelector('#kV label').firstChild.textContent=ck==='two'?'left battery ':'battery '; }
+
+/* ---------- solve ---------- */
+let S={};
+function solve(){ const V=val('iV'),V2=val('iV2'),R1=val('iR1'),R2=val('iR2'),R3=val('iR3'); S={V,V2,R1,R2,R3};
+  if(ck==='one'){ S.I=closed?V/R1:0; S.Is={R1:S.I}; }
+  if(ck==='ser'){ S.I=closed?V/(R1+R2):0; S.Is={R1:S.I,R2:S.I}; }
+  if(ck==='par'){ S.Is={R1:closed?V/R1:0,R2:closed?V/R2:0}; S.I=S.Is.R1+S.Is.R2; }
+  if(ck==='mix'){ const Rp=R2*R3/(R2+R3); S.I=closed?V/(R1+Rp):0; const Vp=S.I*Rp; S.Is={R1:S.I,R2:Vp/R2,R3:Vp/R3}; }
+  if(ck==='two'){ if(closed){ const a=R1+R3,b=R3,c=R3,d=R2+R3,det=a*d-b*c; S.I1=(V*d-b*V2)/det; S.I2=(a*V2-c*V)/det; } else { S.I1=V/(R1+R3); S.I2=0; }
+    S.Is={R1:S.I1,R2:S.I2,R3:S.I1+S.I2}; }
+  S.Vs={}; Object.keys(S.Is).forEach(k=>S.Vs[k]=S.Is[k]*S[k]);
+  // switch voltage
+  if(!closed){ if(ck==='two'){ S.Vsw=V2-S.I1*R3; } else S.Vsw=V; } else S.Vsw=0;
+}
+
+/* ---------- geometry (unit box) ---------- */
+function layout(){ const L={paths:[],parts:[]};
+  const loop=(cur)=>[[.1,.36],[.1,.12],[.9,.12],[.9,.88],[.1,.88],[.1,.64]];
+  if(ck==='one'||ck==='ser'){ L.paths.push({pts:loop(),I:S.I}); L.parts.push({t:'bat',x:.1,y:.5,lab:S.V+' V'}); L.parts.push({t:'sw',x:.32,y:.12,dir:'h'});
+    if(ck==='one') L.parts.push({t:'res',k:'R1',x:.9,y:.5,dir:'v'}); else { L.parts.push({t:'res',k:'R1',x:.62,y:.12,dir:'h'}); L.parts.push({t:'res',k:'R2',x:.9,y:.5,dir:'v'}); } }
+  if(ck==='par'||ck==='mix'){ const xa=ck==='par'?.52:.58, xb=.88;
+    L.paths.push({pts:[[.1,.36],[.1,.12],[xa,.12]],I:S.I}); L.paths.push({pts:[[xa,.12],[xb,.12]],I:S.Is[ck==='par'?'R2':'R3']});
+    L.paths.push({pts:[[xa,.12],[xa,.88]],I:S.Is[ck==='par'?'R1':'R2']}); L.paths.push({pts:[[xb,.12],[xb,.88]],I:S.Is[ck==='par'?'R2':'R3']});
+    L.paths.push({pts:[[xb,.88],[xa,.88]],I:S.Is[ck==='par'?'R2':'R3']}); L.paths.push({pts:[[xa,.88],[.1,.88],[.1,.64]],I:S.I});
+    L.parts.push({t:'bat',x:.1,y:.5,lab:S.V+' V'}); L.parts.push({t:'sw',x:ck==='par'?.3:.3,y:ck==='par'?.12:.88,dir:'h'});
+    if(ck==='mix') L.parts.push({t:'res',k:'R1',x:.42,y:.12,dir:'h'});
+    L.parts.push({t:'res',k:ck==='par'?'R1':'R2',x:xa,y:.5,dir:'v'}); L.parts.push({t:'res',k:ck==='par'?'R2':'R3',x:xb,y:.5,dir:'v'}); }
+  if(ck==='two'){ L.paths.push({pts:[[.5,.88],[.1,.88],[.1,.12],[.5,.12]],I:S.I1}); L.paths.push({pts:[[.5,.88],[.9,.88],[.9,.12],[.5,.12]],I:S.I2}); L.paths.push({pts:[[.5,.12],[.5,.88]],I:S.I1+S.I2});
+    L.parts.push({t:'bat',x:.1,y:.5,lab:S.V+' V'}); L.parts.push({t:'bat',x:.9,y:.5,lab:S.V2+' V'}); L.parts.push({t:'res',k:'R1',x:.3,y:.12,dir:'h'}); L.parts.push({t:'res',k:'R2',x:.7,y:.12,dir:'h'});
+    L.parts.push({t:'res',k:'R3',x:.5,y:.5,dir:'v'}); L.parts.push({t:'sw',x:.75,y:.88,dir:'h'}); }
+  return L; }
+
+/* ---------- draw ---------- */
+const cvK=document.getElementById('cvK'); let offs=[], swGeo=null, last=performance.now();
+function plen(pts){ let L=0; for(let i=1;i<pts.length;i++) L+=Math.hypot(pts[i][0]-pts[i-1][0],pts[i][1]-pts[i-1][1]); return L; }
+function at(pts,s){ for(let i=1;i<pts.length;i++){ const d=Math.hypot(pts[i][0]-pts[i-1][0],pts[i][1]-pts[i-1][1]); if(s<=d){ const t=s/d; return [pts[i-1][0]+t*(pts[i][0]-pts[i-1][0]),pts[i-1][1]+t*(pts[i][1]-pts[i-1][1])]; } s-=d; } return pts[pts.length-1]; }
+const sub=k=>({R1:'R₁',R2:'R₂',R3:'R₃'}[k]);
+function drawK(){
+  const W0=cvK.clientWidth||300, H=Math.round(Math.min(300,W0*(W0<460?.82:.62))); const {c}=size(cvK,H); c.fillStyle=col('--card'); c.fillRect(0,0,W0,H);
+  const X=x=>14+x*(W0-28), Y=y=>12+y*(H-24); const L=layout();
+  L.paths.forEach((p,i)=>{ const pts=p.pts.map(([x,y])=>[X(x),Y(y)]); c.strokeStyle=col('--ink'); c.lineWidth=1.8; c.beginPath(); pts.forEach((q,j)=>j?c.lineTo(q[0],q[1]):c.moveTo(q[0],q[1])); c.stroke();
+    if(offs[i]===undefined) offs[i]=0; const len=plen(pts), sp=22; if(Math.abs(p.I)>1e-9){ c.fillStyle=elec?col('--teal'):col('--ember');
+      for(let s=((offs[i]%sp)+sp)%sp;s<len;s+=sp){ const [x,y]=at(pts,s); c.beginPath(); c.arc(x,y,3,0,7); c.fill(); } } p._pts=pts; p._len=len; });
+  const bw=Math.min(54,W0*.13);
+  L.parts.forEach(P=>{ const x=X(P.x), y=Y(P.y);
+    if(P.t==='bat'){ c.fillStyle=col('--card'); c.fillRect(x-14,y-22,28,44); c.strokeStyle=col('--ink'); c.lineWidth=3; c.beginPath(); c.moveTo(x-14,y-6); c.lineTo(x+14,y-6); c.stroke(); c.lineWidth=5; c.beginPath(); c.moveTo(x-7,y+6); c.lineTo(x+7,y+6); c.stroke();
+      c.fillStyle=col('--ember'); c.font='600 12px IBM Plex Mono, monospace'; c.textAlign='center'; c.fillText('+',x+20,y-10); c.fillText('−',x+20,y+16);
+      c.fillStyle=col('--gold'); c.font='600 12px IBM Plex Mono, monospace'; c.textAlign=P.x<.5?'left':'right'; c.fillText(P.lab,P.x<.5?x+24:x-24,y-28); }
+    if(P.t==='res'){ const h=P.dir==='h'; const w=h?bw:16, hh=h?16:bw; c.fillStyle=col('--sand'); c.fillRect(x-w/2,y-hh/2,w,hh); c.strokeStyle=col('--ink'); c.lineWidth=1.6; c.strokeRect(x-w/2,y-hh/2,w,hh);
+      const I=S.Is[P.k], Vd=S.Vs[P.k]; c.fillStyle=col('--ink'); c.font='11px IBM Plex Mono, monospace'; const lines=[`${sub(P.k)} ${S[P.k]} Ω`,`${fmt(I)} A`,`${fmt(Vd)} V`];
+      if(h){ c.textAlign='center'; lines.forEach((t,j)=>{ c.fillStyle=j?col('--muted'):col('--ink'); c.fillText(t,x,y+hh/2+13+j*12); }); }
+      else { c.textAlign='right'; const tx=x-14; lines.forEach((t,j)=>{ c.fillStyle=j?col('--muted'):col('--ink'); c.fillText(t,tx,y-10+j*12); }); } }
+    if(P.t==='sw'){ c.fillStyle=col('--card'); c.fillRect(x-20,y-14,40,22); c.fillStyle=col('--ink'); c.beginPath(); c.arc(x-14,y,3,0,7); c.arc(x+14,y,3,0,7); c.fill();
+      c.strokeStyle=closed?col('--ink'):col('--gold'); c.lineWidth=2.4; c.beginPath(); c.moveTo(x-14,y); if(closed) c.lineTo(x+14,y); else c.lineTo(x+10,y-13); c.stroke();
+      c.fillStyle=col('--muted'); c.font='10px IBM Plex Mono, monospace'; c.textAlign='center'; c.fillText(closed?'closed':'open',x,y-17); swGeo={x,y}; }
+  });
+  c.textAlign='left';
+}
+function tick(t){ const dt=Math.min(.05,(t-last)/1000); last=t; const L=layout();
+  L.paths.forEach((p,i)=>{ const v=Math.max(-90,Math.min(90,p.I*30)); offs[i]=(offs[i]||0)+(elec?-v:v)*dt; });
+  drawK(); requestAnimationFrame(tick); }
+cvK.addEventListener('pointerdown',e=>{ if(!swGeo) return; const Rc=cvK.getBoundingClientRect(), x=e.clientX-Rc.left, y=e.clientY-Rc.top; if(Math.hypot(x-swGeo.x,y-swGeo.y)<30){ closed=!closed; solve(); drawK(); drawL(); } });
+new ResizeObserver(drawK).observe(cvK);
+
+/* ---------- loops ---------- */
+let li=0;
+function loops(){ const {V,V2,R1,R2,R3,Vsw}=S, sw=closed?null:{k:'sw',lab:'open switch',d:-Vsw};
+  const res=k=>({k,lab:sub(k),d:-S.Vs[k],sub:`${fmt(S.Is[k])} A · ${S[k]} Ω`});
+  const bat=(v,lab)=>({k:'bat',lab,d:v});
+  if(ck==='one') return [{nm:'the loop',st:[bat(V,'battery'),...(sw?[sw]:[]),res('R1')]}];
+  if(ck==='ser') return [{nm:'the loop',st:[bat(V,'battery'),...(sw?[sw]:[]),res('R1'),res('R2')]}];
+  if(ck==='par') return [{nm:'through R₁',st:[bat(V,'battery'),...(sw?[sw]:[]),res('R1')]},{nm:'through R₂',st:[bat(V,'battery'),...(sw?[sw]:[]),res('R2')]}];
+  if(ck==='mix') return [{nm:'through R₂',st:[bat(V,'battery'),res('R1'),res('R2'),...(sw?[sw]:[])]},{nm:'through R₃',st:[bat(V,'battery'),res('R1'),res('R3'),...(sw?[sw]:[])]}];
+  if(ck==='two') return [{nm:'left loop',st:[bat(V,'left battery'),res('R1'),res('R3')]},{nm:'right loop',st:[bat(V2,'right battery'),res('R2'),res('R3'),...(sw?[{k:'sw',lab:'open switch',d:-(V2-S.I1*R3)}]:[])]}];
+}
+function buildLoops(){ const lch=document.getElementById('lch'); [...lch.querySelectorAll('button')].forEach(b=>b.remove());
+  loops().forEach((Lp,i)=>{ const b=document.createElement('button'); b.textContent=Lp.nm; if(i===li) b.className='on'; b.onclick=()=>{ li=i; [...lch.querySelectorAll('button')].forEach(z=>z.classList.toggle('on',z===b)); drawL(); }; lch.appendChild(b); }); }
+function drawL(){ const Ls=loops(); if(li>=Ls.length) li=0; const Lp=Ls[li]; const w=document.getElementById('walk'); w.innerHTML='';
+  let h=0; const add=(cls,b,s,h)=>{ const d=document.createElement('div'); d.className='tk '+cls; d.innerHTML=`<b>${b}</b><small>${s}</small><span>${h}</span>`; w.appendChild(d); };
+  add('', 'start','battery − end', '0 V');
+  const terms=[];
+  Lp.st.forEach(s=>{ h+=s.d; const cls=s.k==='bat'?'up':(s.k==='sw'?'sw':'dn'); const sign=s.d>=0?'+':'−';
+    const a=fmt(Math.abs(s.d)); add(cls,`${a.startsWith('≈')?'≈ '+sign+a.slice(2):sign+a} V`,s.lab+(s.sub?' · '+s.sub:''),`${fmt(Math.abs(h)<1e-9?0:h)} V`); terms.push(s.d); });
+  const T=terms.map((d,i)=>(i===0?'':(d>=0?'+':'-'))+fmtT(Math.abs(d))).join(' ');
+  const Lq=[`${T} = 0\\ \\text{(the loop law)}`];
+  if(ck==='par'||ck==='mix'){ const a=ck==='par'?['R1','R2']:['R2','R3']; const xs=[S.I,S.Is[a[0]],S.Is[a[1]]], ap=xs.some(x=>fmt(x).startsWith('≈')), r=x=>fmt(x).replace('≈ ',''); Lq.push(`\\text{junction: } ${r(xs[0])} ${ap?'\\approx':'='} ${r(xs[1])} + ${r(xs[2])}\\ \\text{A}`); }
+  if(ck==='two') Lq.push(`\\text{junction: } I_1 + I_2 = ${fmtT(S.I1)} + (${fmtT(S.I2)}) = ${fmtT(S.I1+S.I2)}\\ \\text{A}`);
+  if(ck==='two'&&S.I2<-1e-9) Lq.push(`\\htmlClass{new}{I_2 \\lt 0:\\ \\text{the right battery is being charged}}`);
+  const Ptot=ck==='two'?S.V*S.I1+S.V2*S.I2:S.V*S.I; Lq.push(`\\text{power from the batteries: } P = IV ${fmtT(Ptot).startsWith('\\approx')?'':'='} ${fmtT(Ptot)}\\ \\text{W}`);
+  tex(document.getElementById('eqL'),'\\begin{gathered}'+Lq.join('\\\\ ')+'\\end{gathered}',true);
+  const Lk=[];
+  if(ck==='two') Lk.push(`I_1 = ${fmtT(S.I1)}\\ \\text{A},\\ \\ I_2 = ${fmtT(S.I2)}\\ \\text{A}`);
+  else Lk.push(`I = ${fmtT(S.I)}\\ \\text{A}`);
+  if(!closed) Lk.push(`\\text{open switch: } I_{\\text{switch}} = 0,\\ \\ V_{\\text{switch}} = ${fmtT(S.Vsw)}\\ \\text{V},\\ \\ P = 0`);
+  else Lk.push(`\\text{closed switch: } V_{\\text{switch}} = 0,\\ \\ P = 0`);
+  if(ck==='par') Lk.push(`R = \\tfrac{${S.R1} \\cdot ${S.R2}}{${S.R1} + ${S.R2}} ${fmtT(S.R1*S.R2/(S.R1+S.R2)).startsWith('\\approx')?'':'='} ${fmtT(S.R1*S.R2/(S.R1+S.R2))}\\ \\Omega`);
+  if(ck==='ser') Lk.push(`R = ${S.R1} + ${S.R2} = ${S.R1+S.R2}\\ \\Omega`);
+  tex(document.getElementById('eqK'),'\\begin{gathered}'+Lk.join('\\\\ ')+'\\end{gathered}',true);
+}
+setKnobs(); solve(); buildLoops(); drawL(); drawK(); requestAnimationFrame(tick);
+if(window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change',drawK);
+
+/* ---------- slides ---------- */
+const N='\\htmlClass{new}', K='\\htmlClass{keep}';
+stepper('#sl1',[
+  {k:'ember',kl:'units',t:R`1\ \text{A} = 1\ \text{C/s},\quad 1\ \text{V} = 1\ \text{J/C}`,n:`Current is charge per second; voltage is energy per charge. One electron carries 1.602176634/10¹⁹ C.`},
+  {k:'ember',kl:'units',t:R`1\ \Omega = 1\ \text{V/A},\quad 1\ \text{W} = 1\ \text{J/s}`,n:`Resistance is volts per ampere; power is joules per second.`},
+  {k:'teal',kl:'the proportion law, three ways',t:R`V = ${N}{I R},\quad I = \tfrac{V}{R},\quad R = \tfrac{V}{I}`,n:`A direct proportion (5i), rearranged by multiplying-keeps-answers (5f). Ω · A = V.`},
+  {k:'ember',kl:'the LED',t:R`R = \tfrac{9 - 2}{0.02} = 350\ \Omega;\ \ 390\ \Omega:\ I \approx 0.018\ \text{A}`,n:`The LED takes about 2 V; the resistor takes the rest and sets the current. Take the next stock size up.`},
+  {k:'ember',kl:'not a resistor',t:R`\tfrac{V}{I} \text{ not fixed for an LED or a lamp}`,n:`The proportion law is a fact about some materials. Use it only where V/I really is constant.`},
+  {k:'ember',kl:'in series',t:R`V = IR_1 + IR_2 = I(${N}{R_1 + R_2})`,n:`One path: the same current, and the drops add (the loop law). Resistances add.`},
+  {k:'ember',kl:'in parallel',t:R`I = \tfrac{V}{R_1} + \tfrac{V}{R_2}`,n:`Side by side: the same voltage, and the currents add (the junction law).`},
+  {k:'ember',kl:'in parallel',t:R`\tfrac{1}{R} = \tfrac{1}{R_1} + \tfrac{1}{R_2},\quad R = ${N}{\tfrac{R_1 R_2}{R_1 + R_2}}`,n:`Reciprocals add (5b, 5g). 6 Ω and 3 Ω make 2 Ω, less than either.`},
+  {k:'ember',kl:'the mixed circuit',t:R`4 + \tfrac{6 \cdot 3}{6 + 3} = 6\ \Omega,\ \ I = 2\ \text{A}`,n:`Drops 8 V and 4 V; branch currents 2/3 A and 4/3 A. Both laws check.`},
+  {k:'ember',kl:'two loops',t:R`9 = 4I_1 + I_2,\quad 6 = I_1 + 4I_2`,n:`One equation per loop, by the loop law; I₁ + I₂ down the middle, by the junction law.`},
+  {k:'ember',kl:'two loops',t:R`3 = 3I_1 - 3I_2,\ \ I_1 = I_2 + 1`,n:`Add-a-sameness: take the second from the first; then multiplying-keeps-answers by 1/3 and adding-keeps-answers.`},
+  {k:'ember',kl:'two loops',t:R`${N}{I_1 = 2\ \text{A},\ \ I_2 = 1\ \text{A}}`,n:`Substitute; solve; check the left loop: 3 · 2 + 1 · 3 = 9.`},
+  {k:'ember',kl:'a backwards current',t:R`12 \text{ V}, 6 \text{ V};\ 1, 1, 4\ \Omega:\ \ I_2 = ${N}{-2}\ \text{A}`,n:`The guessed arrow was wrong: 2 A is pushed down through the 6 V battery, which is being charged.`},
+  {k:'ember',kl:'power',t:R`P = IV = I^2 R = \tfrac{V^2}{R}`,n:`(C/s)(J/C) = J/s. Substitute V = IR, or I = V/R.`},
+  {k:'ember',kl:'the kettle',t:R`I = \tfrac{1500}{120} = 12.5\ \text{A},\ \ R = \tfrac{120^2}{1500} = 9.6\ \Omega`,n:`Four minutes: 1500 · 240 = 360 000 J = 0.1 kWh.`},
+  {k:'ember',kl:'the switch',t:R`\text{open: } I = 0;\ \ \text{closed: } V = 0;\ \ \text{so } P = 0`,n:`A split on “the switch is closed”: either way an ideal switch spends no energy. That is why switching computes.`},
+  {k:'ember',kl:'the forbidden middle',t:R`\text{below } 0.8\ \text{V: false};\ \ \text{above } 2.0\ \text{V: true}`,n:`Classic 5 V logic reads no voltage in between. Electronics builds the either-way principle into the hardware.`},
+  {k:'ember',kl:'three levels',t:R`\text{electrical} \to \text{electronic} \to \text{logic}`,n:`Energy, control, true and false. This page is the first; 4·comp was the third.`}
+],{title:'The slides · units, the proportion law three ways, in series and in parallel from the two laws, two loops, a backwards current, power, the switch · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

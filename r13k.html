@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>13k · The tangent line and the nearby line</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+#cvA,#cvB{touch-action:none}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r13j.html">← 13j the chain rule by hand</a><a href="r13l.html">next: 13l implicit slopes and the inverse dodge →</a></p>
+  <div class="tags"><span class="tag tech">13k · technique</span></div>
+  <h1>The tangent line and the nearby line</h1>
+  <p>13a defined the tangent line: the linear function through a point of the graph with the slope there. This step makes it a tool. First the line itself, written from the point, with the displacement pattern on both sides. It takes three moves, always in the same order, and then the same moves run backwards. Then comes the discovery that makes it useful. Near the point the tangent line and the function are nearly the same, in a sense this step makes exact. So the line's easy arithmetic can stand in for the function's hard arithmetic. That is how you find the square root of 4.1, or 1.01 to the tenth power, by hand, and how much you are off by. Last, the slope function drawn as a graph of its own.</p>
+  <p class="gesture">Read the point, take the slope at the point, and write the line: the rise from the point is the slope times the run from the point. For an input nearby, read the line instead of the function. Know that the error, divided by the step, goes to 0 in the limit.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r13a.html">13a</a> (the tangent line, x₀ and y₀, the chord slope, two-ways-to-write-a-limit), <a href="r13g.html">13g</a> (the cells with two or more h's, polynomial-chord), <a href="r13h.html">13h</a> and <a href="r13j.html">13j</a> (the rules that give the slope), <a href="r09e.html">9e</a> (the linear function, two-points-one-line, same-ratio), <a href="r08h.html">8h</a> and <a href="r05h.html">5h</a> (the displacement pattern), <a href="r05f.html">5f</a> (licensed techs), <a href="r10b.html">10b</a> (one-limit, sign-kept-near), <a href="r04j.html">4j</a> (two-term-power), <a href="r13f.html">13f</a> (|x| has no slope at 0). <a href="r13m.html">13m</a> walks down tangent lines to find zeros and carries errors through formulas; <a href="r13phys.html">13·phys</a> and <a href="r13chem.html">13·chem</a> read tangent slopes as rates; rung 14 asks which way a function bends away from its tangent lines.</p></div>
+</header>
+
+<section class="class step" data-step="13k1">
+  <h2 class="sthead"><span class="stno">13k1</span>A linear function written from a point</h2>
+  <p class="stands">Stands on 9e (same-ratio) and 5f (the licence table).</p>
+  <p data-pid="1b3efe">Say it in words first. A linear function has the same chord slope between any two of its inputs (9e's same-ratio). Take the linear function with slope m through (x₀, y₀), and a pair (x, y) with x ≠ x₀. <b>The function holds the pair exactly when the change of output from y₀, divided by the change of input from x₀, is m.</b></p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the line written from the point">
+\dfrac{y - y_0}{x - x_0} = m \quad (x \ne x_0) @@ same-ratio: the chord slope from the point is m
+\htmlClass{new}{y - y_0 = m\,(x - x_0)} @@ multiply both sides by x − x₀ (multiplying-keeps-answers, 5f): licensed where x − x₀ ≠ 0
+x = x_0:\ \ 0 = m \cdot 0 @@ the point itself now passes too: anything-times-zero
+  </pre>
+  <p data-pid="62dff4">5f's licence table said that multiplying by something with x in it gains the answers where it is 0. Here that gain is wanted: the fraction form had a hole at the very point it was built from, and the multiplied form mends it, changing nothing at any other x. So the multiplied form is the one to keep. Look at its brackets: y − y₀ and x − x₀. This is the displacement pattern of 5h and 8h, once for the output and once for the input. Read the line as: how far up from the point equals m times how far across from the point. It never needs the start b at all.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · from the point · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">13k1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">slope −2,  through (1, 5)</span></span>Write the line from the point. <br>Then write it as a slope times x plus a constant.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13k2">
+  <h2 class="sthead"><span class="stno">13k2</span>The tangent line in three moves</h2>
+  <p class="stands">Stands on 13k1 and 13d (polynomial-slope).</p>
+  <p data-pid="ff6d36">The function supplies the two ingredients: the point, y₀ = f(x₀), and the slope, m = f′(x₀). Three moves, always in this order: read the point, take the slope at the point, write the line.</p>
+  <pre class="lines" data-k="ember" data-label="this step: three moves">
+x^2 \text{ at } 3:\ \ y_0 = 9 @@ read the point
+f'(x) = 2x,\ \ f'(3) = \htmlClass{new}{6} @@ the slope function (slope-of-x²), then the input: a number, not a formula
+y - \htmlClass{keep}{9} = \htmlClass{new}{6}\,(x - \htmlClass{keep}{3}) @@ write the line from the point; tidied, y = 6x − 9
+\tfrac1x \text{ at } 2:\ \ y_0 = \tfrac12,\ \ f'(2) = -\tfrac14 @@ slope-of-one-over-x
+y - \tfrac12 = -\tfrac14\,(x - 2) @@ the tangent line: it falls, as the chords near 2 do
+(2x - 1)^3 \text{ at } 1:\ \ y_0 = 1,\ \ r_0 = 1 @@ a chain: name the inside r = 2x − 1 (13j)
+f'(1) = 3 \cdot 1^2 \cdot 2 = \htmlClass{new}{6},\ \ y - 1 = 6\,(x - 1) @@ chain for slopes; then the line
+  </pre>
+  <p data-pid="6fb616">The tempting slip is leaving x in the slope. Write f′(x) = 2x in place of f′(3), and you get y − 9 = 2x(x − 3). That is y = 2x² − 6x + 9: a polynomial of degree 2, not a linear function. The mischief is that it does have the pair (3, 9), and its slope at 3 is 4 · 3 − 6 = 6. It has the point and the slope, and it is not a line. Put x₀ into the slope before writing the line.</p>
+  <p data-pid="bedf9f">Two more slips. A tangent line need not meet the graph only once. x³'s tangent line at 1 is 3x − 2, and x³ − (3x − 2) = (x − 1)²(x + 2), so it meets the graph again at −2. What is special at the point is the squared factor (x − 1)², the displacement pattern squared. And where there is no slope there is no tangent line. |x| at 0 has slopes −1 and 1 from the two sides (13f), so the three moves stop at the second. Every linear function through (0, 0) with slope between −1 and 1 stays on or below the graph of |x| and meets it only at 0. So “meets it without crossing” cannot be the definition either. The definition is the slope.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · three moves · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13k2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = x^3 at 2</span></span>Read the point, take the slope, write the line. <br>Say why the slope must be a number, not an expression in x.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13k3">
+  <h2 class="sthead"><span class="stno">13k3</span>Running it backwards: where does it touch?</h2>
+  <p class="stands">Stands on 13k2.</p>
+  <p data-pid="05b502"><b>A tangent line carries exactly two facts about the function: its value at the point and its slope there.</b> Say y − 5 = 3(x − 2) is f's tangent line at 2. Then you know f(2) = 5 and f′(2) = 3, and nothing else. Two functions can share a tangent line at a point and differ everywhere else.</p>
+  <p data-pid="31e840">Given a line, where does it touch? Say y = 4x − 4 is a tangent line of x². The slope must match, so 2x₀ = 4 and x₀ = 2. Matching slope is not enough: the line must also have the pair (2, 4), and it does, since 4 · 2 − 4 = 4. Always check both. The linear function y = 4x has the right slope and misses the point.</p>
+  <pre class="lines" data-k="teal" data-label="backwards: tangent lines of x² through (1, −3)">
+\text{tangent line at } x_0:\ \ y = x_0^2 + 2x_0(x - x_0) = 2x_0 x - x_0^2 @@ the three moves with the input left as an unknown
+-3 = 2x_0 \cdot 1 - x_0^2 @@ demand the pair (1, −3): substitute for the expression
+x_0^2 - 2x_0 - 3 = 0 @@ adding-keeps-answers
+(x_0 - 3)(x_0 + 1) = 0 \;\Rightarrow\; x_0 = \htmlClass{new}{3} \lor x_0 = \htmlClass{new}{-1} @@ 5h's sum-and-product, then zero-product
+y = 6x - 9 \quad\text{and}\quad y = -2x - 1 @@ two tangent lines, one for each touching point
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · where it touches · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13k3.1</span><span class="ph undo">undo</span><span class="givens"><span class="gtx">y = 6x − 9 is a tangent line of x^2</span></span>Find the input where the slopes match. <br>Check that the line has the point there too.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13k4">
+  <h2 class="sthead"><span class="stno">13k4</span>The nearby line</h2>
+  <p class="stands">Stands on 13k3, 13a (slopes) and 13g (polynomial-chord).</p>
+  <p data-pid="f760b9">Now the tool. Read the tangent line at x₀ + h instead of the function: there x − x₀ = h, so the line's value is f(x₀) + f′(x₀)h. <b>Read it as: the value here, plus the slope here times the step.</b> Reading the line instead of the function is called linear approximation, and the nearby line is called the linearization of f at x₀.</p>
+  <p class="eqline" data-pid="13dc9f">From here on, in this step, take f with a slope at x₀ and a change h. L(x₀ + h) names f(x₀) + f′(x₀) · h, the tangent line's value at x₀ + h. E(h) names f(x₀ + h) − L(x₀ + h), the linearization's error: the true value less the line's.</p>
+  <p data-pid="21ff15">How near is “nearby”? Not “small for one h”; 13g taught that size for one h decides nothing. The exact statement is about the error divided by h.</p>
+  <p data-pid="a857d6">Nearby-line-error technique: <b>the tangent line's error shrinks faster than the step, and it is the only line through the point whose error does.</b> Precisely: if f has a slope at x₀, then E(h)/h → 0 as h → 0. And suppose some real m has (f(x₀ + h) − f(x₀) − mh)/h → 0. Then f has a slope at x₀ and it is m.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the nearby-line-error technique">
+\dfrac{E(h)}{h} = \dfrac{f(x_0 + h) - f(x_0) - f'(x_0)h}{h} @@ the line for E, and L's line
+= \htmlClass{new}{\dfrac{f(x_0 + h) - f(x_0)}{h} - f'(x_0)} \quad (h \ne 0) @@ spread on ℝ with h⁻¹, reciprocal on ℝ: the chord slope less the slope
+\to f'(x_0) - f'(x_0) = \htmlClass{keep}{0} @@ 13a's line, limits-subtract (10c) with a constant
+\text{conversely:}\ \ \dfrac{f(x_0 + h) - f(x_0)}{h} = \dfrac{f(x_0 + h) - f(x_0) - mh}{h} + m @@ add and take away m (negative on ℝ, plus-zero on ℝ)
+\to 0 + m = m \quad \blacksquare @@ limits-add: so the chord slopes have the limit m; f′(x₀) = m by 13a's line and one-limit
+  </pre>
+  <p data-pid="eb724b">So having a slope at x₀ is the same as having a linear function through the point whose error shrinks faster than the step. That linear function is the tangent line. Every other linear function through the point has an error that, divided by h, heads to the difference of the slopes, not to 0.</p>
+  <p data-pid="3c9b88">For a polynomial, 13g's polynomial-chord makes the error visible. p(x₀ + h) = p(x₀) + b₁h + b₂h² + ⋯, with b₁ = p′(x₀), so E(h) = b₂h² + b₃h³ + ⋯: exactly the cells with two or more h's. For x² the error is h², exactly; for x³ it is 3x₀h² + h³.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · the nearby line · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · left: a function, its tangent line at x₀, and the linearization’s estimate at x₀ + h · right: the slope function</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="chips" id="fch"></div>
+      <canvas id="cvA"></canvas>
+      <div class="kn">
+        <span class="m">x₀</span><input type="range" id="kx" min="-2" max="5" step="0.05" value="4"><output id="ox"></output>
+        <span class="m">h</span><input type="range" id="kh" min="-1.5" max="1.5" step="0.01" value="0.5"><output id="oh"></output>
+      </div>
+      <div class="chips" id="zch"><button class="on" data-z="1">×1</button><button data-z="4">×4</button><button data-z="16">×16</button><button data-z="64">×64</button></div>
+      <div class="cap">Ink: the function. Ember: its tangent line at x₀. Teal dot: the true value at x₀ + h; ember dot: the linearization's value there; gold: the error between them. Zoom in on the point and the function straightens toward its tangent line. Drag on the picture to move x₀.</div>
+    </div>
+    <div class="panel">
+      <canvas id="cvB"></canvas>
+      <div class="cap">The slope function y = f′(x) (teal). The ember dot is (x₀, f′(x₀)): its height is the tangent line's slope on the left. Where the teal crosses 0, the tangent line on the left is level. Drag here too.</div>
+      <div class="verdict" id="vd"></div>
+    </div>
+  </div>
+  <div class="eqbox" id="eq"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13k4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = x^2,  x₀ = 3</span></span>Find L(3 + h) and E(h). <br>Find E(h)/h, and say where it heads.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13k5">
+  <h2 class="sthead"><span class="stno">13k5</span>Estimates by hand</h2>
+  <p class="stands">Stands on 13k4 and 13e (slope-of-√).</p>
+  <p data-pid="5605e8"><b>The trick is to pick x₀ where you know everything, a perfect square or the number 1, and let h be the small awkward part.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the linearization at work">
+\sqrt{x},\ \ x_0 = 4,\ \ h = 0.1 @@ a base you can do in your head
+f(4) = 2,\ \ f'(4) = \dfrac{1}{2\sqrt4} = \tfrac14 @@ slope-of-√
+L(4.1) = 2 + \tfrac14 \cdot 0.1 = \htmlClass{new}{2.025} @@ the value here plus the slope here times the step
+2.025^2 = 4.100625 @@ the check by squaring: just over 4.1, so the estimate is a little too big
+x^{10},\ \ x_0 = 1,\ \ h = 0.01:\ \ L(1.01) = 1 + 10 \cdot 0.01 = \htmlClass{new}{1.1} @@ every power of 1 is 1; power for slopes gives the slope 10
+(1 + h)^{10} = 1 + 10h + 45h^2 + 120h^3 + \cdots @@ two-term-power read in ℝ: the coefficients are row 10 of 4j's table
+= 1 + 0.1 + \htmlClass{keep}{0.0045 + 0.00012 + \cdots} @@ with h = 0.01: the error is the cells with two or more h's
+  </pre>
+  <p data-pid="97a3ca">√4.1 ≈ 2.02485, so the first estimate is off by about 0.00015, found with a quarter and a tenth. And 1.01¹⁰ ≈ 1.10462: the linearization kept the first two terms, and what it dropped is how wrong it is.</p>
+  <p data-pid="e8f799">For the root, the error has an exact form. By the conjugate (8i), √(x₀ + h) − √x₀ = h/(√(x₀ + h) + √x₀), so</p>
+  <div class="eqline" data-tex="\begin{aligned}&amp;E(h) = \dfrac{h}{\sqrt{x_0 + h} + \sqrt{x_0}} - \dfrac{h}{2\sqrt{x_0}}\\ &amp;\quad = -\,\dfrac{h \cdot h}{2\sqrt{x_0}\,\big(\sqrt{x_0 + h} + \sqrt{x_0}\big)^2}.\end{aligned}"></div>
+  <p data-pid="ce01b5">Root's-nearby-line technique: <b>for x₀ &gt; 0 and every h ≠ 0 with x₀ + h ≥ 0, the linearization of √ at x₀ gives more than √(x₀ + h).</b> The error above is h · h over a positive real, with a minus sign in front: negative for every such h, by square-never-negative and zero-product. So 2.025 had to come out too big, and so does every such estimate of a root, whichever way h goes.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · estimates · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13k5.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">estimate √25.2 from 25</span></span>Make the estimate with the linearization. <br>Say which way it is off, and why.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13k6">
+  <h2 class="sthead"><span class="stno">13k6</span>How wrong, and which way</h2>
+  <p class="stands">Stands on 13k5.</p>
+  <p data-pid="4c2810">For x² the error is h² exactly. Halve the step and the error quarters; cut the step by ten and the error drops by a hundred. For √x from 4: a step of 0.4 gives 2.1 against √4.4 ≈ 2.09762, an error of about 0.0024. A step of 0.04 gives 2.01 against √4.04 ≈ 2.00998, an error of about 0.000025. Ten times smaller step, roughly a hundred times smaller error, as the h · h in root's-nearby-line's top predicts.</p>
+  <p data-pid="8297e7"><b>Which way the error goes depends on how the graph bends away from its tangent line.</b> For √ it is always too big (root's-nearby-line). For x¹⁰ from 1 with h &gt; 0 it is too small, since every dropped term of two-term-power is positive (1.1 against 1.10462). Telling the two kinds of bend apart by a second slope is rung 14's business.</p>
+  <p data-pid="6e3641">And the method fails if you go too far. From 4, the linearization says √8 is about 2 + ¼ · 4 = 3, but 3² = 9. Choose a nearer base: from 9, the line gives 3 − ⅙ = 17/6 ≈ 2.8333, against √8 ≈ 2.8284. The skill is choosing x₀: close to where you want to be, and where you know both the value and the slope.</p>
+  <p data-pid="a8ef6b">The linearization's rise is usually written dy = f′(x₀) dx, with dx the step and dy the rise along the tangent line, and called the differential. This ladder keeps 13e's ruling that dy and dx name nothing alone, and writes the same rise as f′(x₀) · h.</p>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · how wrong · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13k6.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{tangent of } f \text{ at } -1:"></span> <span data-tex-inline="y + 2 = 5(x + 1)"></span></span>Find f's value and slope at minus 1.</li><li><span class="givens"><span data-tex-inline="f(x) = x^2,"></span> <span data-tex-inline="\text{tangent slope } -6"></span></span>Find where f has a tangent line of this slope, and write that line.</li><li><span class="givens"><span data-tex-inline="y = 12x - 16 \text{ is a tangent line of } x^3"></span></span>By matching slopes, find every candidate for the touching input. <br>Find the touching point, and refute each other candidate.</li><li><span class="givens"><span data-tex-inline="\text{a working ends}"></span> <span data-tex-inline="5 + \tfrac{1}{10}(0.5)"></span></span>Find a function and a base that produce exactly that line, and the number being estimated.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13k7">
+  <h2 class="sthead"><span class="stno">13k7</span>The slope function as its own graph</h2>
+  <p class="stands">Stands on 13k6 and 13a (the slope function).</p>
+  <p data-pid="cbd3a9">Move the point along the graph and the tangent line swings. Record its slope at every input and draw those pairs: that is the graph of f′, 13a's derivative, a function of its own (9e's graph is the function's pairs). For x² it is the linear function 2x: below the x-axis left of 0, 0 at 0, above it right of 0. Where the slope function is 0, the tangent line is level: a linear function with step 0, in 9e's word.</p>
+  <p data-pid="785ec1">Slope-sign-near technique: <b>near an input where the slope is positive, the function is higher just to the right and lower just to the left.</b> Precisely: if f′(x₀) &gt; 0, then for some reach r, f(x₀ + h) &gt; f(x₀) for 0 &lt; h &lt; r, and f(x₀ + h) &lt; f(x₀) for −r &lt; h &lt; 0. If f′(x₀) &lt; 0, the same is true with the two orders turned about. The chord slopes head to f′(x₀) &gt; 0. So by 10b's sign-kept-near they are positive on a neighbourhood of 0 of some reach r. And the change f(x₀ + h) − f(x₀) is the chord slope times h. So where the chord slope is positive, the change has the sign of h (8g's sign-of-a-product).</p>
+  <p data-pid="b0b6eb">Slope-sign-near is about one input and its near neighbours. It does not say that f climbs on a whole interval where f′ is positive; that is rung 14's technique. Two more readings of the slope function, from 13d. Lifting f (lifting) leaves its slope function where it was. Displacing the input (displaced-slopes) displaces the slope function's pairs by the same amount.</p>
+  <section class="slides" id="sl7"><div class="eyebrow">The slides · the slope function · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13k7.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = \sqrt{x},"></span> <span data-tex-inline="x_0 = 4"></span></span>Write f's tangent line at x₀ in point-slope form, one move per line, and then as a slope times x plus a constant.</li><li><span class="givens"><span data-tex-inline="\text{estimate } \sqrt{9.06} \text{ from } 9"></span></span>Using the linearization, make the estimate. <br>Check it by squaring, and decide with root's-nearby-line which way it is off.</li><li><span class="givens"><span data-tex-inline="\text{estimate } 0.98^5,"></span> <span data-tex-inline="f(x) = x^5 \text{ at } 1"></span></span>Using f's linearization, make the estimate, and find its error from two-term-power's next term.</li><li><span class="givens"><span data-tex-inline="f(x) = x^3 - 3x"></span></span>Find where f's slope is 0, and write the tangent lines at those inputs.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13k8">
+  <h2 class="sthead"><span class="stno">13k8</span>Illegal moves</h2>
+  <p class="stands">Stands on 13k1 to 13k7.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+y - 9 = 2x\,(x - 3)\,? @@ x left in the slope: degree 2, not a linear function. Put x₀ in first: 6
+\begin{aligned}&\text{the tangent line meets}\\ &\quad\text{the graph only at } x_0\,?\end{aligned} @@ x³ at 1: 3x − 2 meets it again at −2
+y = 4x \text{ touches } x^2 \text{ at } 2\,? @@ the right slope, the wrong point: 4 · 2 = 8, not 4
+L(x_0 + h) \text{ is exact for small } h\,? @@ only E(h)/h heads to 0; E(h) itself is 0 for every h only on a linear function
+\sqrt8 \approx 2 + \tfrac14 \cdot 4 = 3\,? @@ too far from the base: 3² = 9. From 9: 17/6 ≈ 2.8333
+f'(x_0) \gt 0 \text{, so } f \text{ climbs on an interval around } x_0\,? @@ slope-sign-near speaks of x₀ and its neighbours, not of the neighbours among themselves; the interval form is rung 14's
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13k8.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = x^2 \text{ at } -2,"></span> <span data-tex-inline="\text{written: } y - 4 = 2x(x + 2)"></span></span>Expand the written line, and decide whether it has the pair at minus 2 and what its slope is there.</li><li><span class="givens"><span data-tex-inline="f(x) = x^2;"></span> <span data-tex-inline="(0, -4),"></span> <span data-tex-inline="(0, 0),"></span> <span data-tex-inline="(0, 1)"></span></span>Find how many tangent lines of f pass through each point.</li><li><span class="givens"><span data-tex-inline="\text{estimate } \sqrt[3]{8.12}"></span></span>Using the linearization, estimate it from 8, then from 1, and check each by cubing.</li><li><span class="givens"><span data-tex-inline="f(x) = x^3,"></span> <span data-tex-inline="f'(0) = 0"></span></span>Decide whether slope-sign-near applies at 0, and whether f takes values above 0 just right of 0.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">13k.4.1</span><span class="tagq">build</span>Choose a number of your own near a cube, not a cube, and estimate its cube root with the linearization at that cube. <br>Check by cubing, and decide which way it is off. <br>Then choose a second base, also a cube, at which the estimate is worse, and check it by cubing.</div>
+  <div class="chq"><span class="chid">13k.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="f(x) = c"></span></span>Find f's linearization. <br>Decide whether a constant is a linear function on this ladder.</div>
+  <div class="chq"><span class="chid">13k.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="f(x_0 + h) - f(x_0) - mh \to 0"></span> <span data-tex-inline="\text{as } h \to 0,"></span> <span data-tex-inline="\text{for some real } m"></span></span>Prove or refute that f must have a slope at x₀.</div>
+  <div class="chq"><span class="chid">13k.4.4</span><span class="tagq">seam</span>A scientist published his law of springs in 1676 as an anagram, ceiiinosssttuv, and revealed it two years later: ut tensio, sic vis, as the stretch, so the force. Real springs break the law when stretched far. <br>Is the spring law a law of nature, or only the linearization of whatever law the spring obeys, at rest?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r13j.html">← 13j · the chain rule by hand</a><a href="r13l.html">13l · implicit slopes and the inverse dodge →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>4j’s table is Pascal’s triangle. The scientist of question 13k.4.4 is Robert Hooke, and the spring law is Hooke’s law.</p>
+  <p>Accepted names: the linearization’s rise f′(x₀) · h is the differential, dy = f′(x₀) dx. Reading the tangent line instead of the function is linear approximation, and the nearby line is the linearization.</p>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; const a=Math.abs(v); let s=d!=null?v.toFixed(d):(a>=100?v.toFixed(2):a>=1?v.toFixed(5):a>=0.00001?v.toFixed(7):v.toPrecision(3)); if(s.indexOf('.')>=0&&s.indexOf('e')<0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const FN={
+  sq:{lab:'x²',tx:'x^2',f:x=>x*x,d:x=>2*x,dom:x=>true,x:[-2.5,3.5],y:[-1,9],x0:1.5},
+  rt:{lab:'√x',tx:'\\sqrt x',f:x=>x>=0?Math.sqrt(x):NaN,d:x=>x>0?0.5/Math.sqrt(x):NaN,dom:x=>x>0,x:[-0.3,6],y:[-0.5,3],x0:4},
+  cu:{lab:'x³',tx:'x^3',f:x=>x*x*x,d:x=>3*x*x,dom:x=>true,x:[-2.5,2.5],y:[-8,8],x0:1},
+  rc:{lab:'1/x',tx:'\\tfrac1x',f:x=>x!==0?1/x:NaN,d:x=>x!==0?-1/(x*x):NaN,dom:x=>x!==0,x:[-0.3,4],y:[-0.5,4],x0:2},
+  t10:{lab:'x¹⁰',tx:'x^{10}',f:x=>Math.pow(x,10),d:x=>10*Math.pow(x,9),dom:x=>true,x:[-0.2,1.5],y:[-0.5,4],x0:1},
+  cb:{lab:'x³ − 3x',tx:'x^3 - 3x',f:x=>x*x*x-3*x,d:x=>3*x*x-3,dom:x=>true,x:[-2.5,2.5],y:[-4,4],x0:1.5}
+};
+let fk='rt', X=4, Hh=0.4, Z=1;
+const kx=$('kx'),kh=$('kh'),cvA=$('cvA'),cvB=$('cvB');
+function cur(){ const F=FN[fk]; let x=X; if(!F.dom(x)) x=fk==='rt'?0.05:(x<0?-0.05:0.05); let h=Hh; if(fk==='rt'&&x+h<0) h=-x; if(fk==='rc'&&x+h===0) h+=0.01; return {F,x,h}; }
+const PA=plane(cvA,{x:[-2,2],y:[-2,2],grid:1,aspect:0.85,draw:P=>{ const {F,x,h}=cur(), y0=F.f(x), m=F.d(x);
+  const W=(F.x[1]-F.x[0])/2/Z, Hy=(F.y[1]-F.y[0])/2/Z; const cx=Z===1?(F.x[0]+F.x[1])/2:x, cy=Z===1?(F.y[0]+F.y[1])/2:y0; P.o.x=[cx-W,cx+W]; P.o.y=[cy-Hy,cy+Hy];
+  const sp=2*W; P.o.grid=sp>4?1:sp>1?0.25:sp>0.25?0.05:0.01; P.axes(); P.fn(F.f,'--ink',2.4);
+  P.line(P.o.x[0],y0+m*(P.o.x[0]-x),P.o.x[1],y0+m*(P.o.x[1]-x),'--ember',2);
+  const yt=F.f(x+h), yl=y0+m*h; P.line(x+h,yt,x+h,yl,'--gold',3); P.dot(x,y0,'--ink',5); P.dot(x+h,yt,'--teal',5.5); P.dot(x+h,yl,'--ember',5); }});
+Object.defineProperty(PA.o,'aspect',{get:()=>cvA.clientWidth>560?0.8:0.9});
+const PB=plane(cvB,{x:[-2,2],y:[-2,2],grid:1,aspect:0.85,draw:P=>{ const {F,x}=cur(); P.o.x=F.x; let lo=0,hi=0; for(let k=0;k<=200;k++){ const t=F.x[0]+(F.x[1]-F.x[0])*k/200, v=F.d(t); if(isFinite(v)&&Math.abs(v)<30){ lo=Math.min(lo,v); hi=Math.max(hi,v);} } const pad=(hi-lo)*0.1+0.3; P.o.y=[lo-pad,hi+pad]; P.o.grid=(hi-lo)>12?2:(hi-lo)>3?1:0.25; P.axes(); P.fn(F.d,'--teal',2.4); P.dot(x,F.d(x),'--ember',5.5); }});
+Object.defineProperty(PB.o,'aspect',{get:()=>cvB.clientWidth>560?0.8:0.9});
+function read(){ const {F,x,h}=cur(), y0=F.f(x), m=F.d(x), yt=F.f(x+h), L=y0+m*h, E=yt-L;
+  $('ox').textContent=fm(x,2); $('oh').textContent=fm(h,2);
+  tex($('eq'),R`\begin{gathered}f(x) = ${F.tx},\ \ x_0 = ${fm(x,2)},\ \ h = ${fm(h,2)}\\ \text{tangent line: } y - ${fm(y0)} = ${fm(m)}\,(x - ${fm(x,2)})\\ L(x_0 + h) = \htmlClass{new}{${fm(L)}},\ \ f(x_0 + h) = \htmlClass{keep}{${fm(yt)}}\\ E(h) = ${fm(E)},\ \ \dfrac{E(h)}{h} = ${fm(E/h)}\end{gathered}`,true);
+  const vd=$('vd'); vd.className='verdict '+(Math.abs(E/h)<0.05?'win':'');
+  vd.textContent='The linearization is off by '+fm(Math.abs(E))+(E>0?' (too small)':E<0?' (too big)':'')+'; divided by the step that is '+fm(E/h)+'. Shrink h and E(h)/h heads to 0 (nearby-line-error). '+(Math.abs(m)<1e-9?'Here the slope is 0: the tangent line is level.':m>0?'The slope is positive here: just right of x₀ the values are above f(x₀), just left below (slope-sign-near).':'The slope is negative here: just right of x₀ the values are below f(x₀), just left above (slope-sign-near).'); }
+function all(){ PA.redraw(); PB.redraw(); read(); }
+(function(){ const ch=$('fch'); Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===fk) b.className='on'; b.onclick=()=>{ fk=k; X=FN[k].x0; kx.value=X; [...ch.children].forEach(z=>z.classList.toggle('on',z===b)); all(); }; ch.appendChild(b); }); })();
+kx.oninput=()=>{ X=+kx.value; all(); }; kh.oninput=()=>{ Hh=+kh.value; if(Hh===0) Hh=0.01; all(); };
+$('zch').querySelectorAll('[data-z]').forEach(b=>b.onclick=()=>{ Z=+b.dataset.z; $('zch').querySelectorAll('[data-z]').forEach(z=>z.classList.toggle('on',z===b)); all(); });
+let drag=false; [cvA,cvB].forEach(cv=>{ cv.addEventListener('pointerdown',e=>{ drag=cv; cv.setPointerCapture&&cv.setPointerCapture(e.pointerId); mv(e); }); cv.addEventListener('pointermove',mv); ['pointerup','pointercancel'].forEach(t=>cv.addEventListener(t,()=>drag=false)); });
+function mv(e){ if(!drag) return; const P=drag===cvA?PA:PB; const q=P.point(e); X=Math.max(-2,Math.min(5,Math.round(q.x*100)/100)); kx.value=X; all(); }
+window.__pic={set:(k,x,h,z)=>{ if(k){ fk=k; [...$('fch').children].forEach((b,i)=>b.classList.toggle('on',Object.keys(FN)[i]===k)); } if(x!=null){ X=x; kx.value=x; } if(h!=null){ Hh=h; kh.value=h; } if(z!=null){ Z=z; $('zch').querySelectorAll('[data-z]').forEach(q=>q.classList.toggle('on',+q.dataset.z===Z)); } all(); const c=cur(); const E=c.F.f(c.x+c.h)-(c.F.f(c.x)+c.F.d(c.x)*c.h); return {E,Eh:E/c.h,txt:$('vd').textContent}; }};
+kx.value=X; kh.value=Hh; all();
+
+/* ---------- slides ---------- */
+const N='\\htmlClass{new}', K='\\htmlClass{keep}';
+stepper('#sl1',[
+  {k:'ember',kl:'from the point',t:R`\dfrac{y - y_0}{x - x_0} = m \;\Rightarrow\; ${N}{y - y_0 = m(x - x_0)}`,n:`same-ratio, then multiplying-keeps-answers by x − x₀. The gain at x₀ is the point itself, and it is wanted.`}
+],{title:'The slides · from the point · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'three moves · 1',t:R`x^2 \text{ at } 3:\ \ y_0 = 9`,n:`Read the point.`},
+  {k:'ember',kl:'three moves · 2',t:R`f'(3) = 2 \cdot 3 = ${N}{6}`,n:`The slope at the point: a number.`},
+  {k:'ember',kl:'three moves · 3',t:R`y - 9 = 6(x - 3)`,n:`Write the line from the point. Tidied: 6x − 9.`},
+  {k:'ember',kl:'x left in',t:R`y - 9 = 2x(x - 3) = 2x^2 - 6x\ ?`,n:`Degree 2: it has the point and the slope at 3, and it is not a linear function.`},
+  {k:'ember',kl:'meets again',t:R`x^3 - (3x - 2) = ${N}{(x - 1)^2}(x + 2)`,n:`x³'s tangent line at 1 meets the graph again at −2. The squared factor marks the touching point.`}
+],{title:'The slides · three moves · ← → keys work'});
+stepper('#sl3',[
+  {k:'teal',kl:'backwards · 1 of 2',t:R`-3 = 2x_0 - x_0^2`,n:`Tangent lines of x² with the pair (1, −3): the line at an unknown x₀, then the pair.`},
+  {k:'teal',kl:'backwards · 2 of 2',t:R`(x_0 - 3)(x_0 + 1) = 0`,n:`x₀ = 3 or −1: the lines 6x − 9 and −2x − 1.`}
+],{title:'The slides · where it touches · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'the linearization',t:R`L(x_0 + h) = f(x_0) + ${N}{f'(x_0)\,h}`,n:`The value here plus the slope here times the step.`},
+  {k:'ember',kl:'nearby-line-error',t:R`\dfrac{E(h)}{h} = \dfrac{f(x_0 + h) - f(x_0)}{h} - f'(x_0) \to ${N}{0}`,n:`The error shrinks faster than the step. Only the tangent line does that (one-limit). ∎`}
+],{title:'The slides · the nearby line · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'√4.1',t:R`2 + \tfrac14 \cdot 0.1 = ${N}{2.025}`,n:`2.025² = 4.100625: a little too big. √4.1 ≈ 2.02485.`},
+  {k:'ember',kl:'1.01¹⁰',t:R`1 + 10 \cdot 0.01 = ${N}{1.1}`,n:`two-term-power: 1 + 0.1 + 0.0045 + 0.00012 + ⋯ ≈ 1.10462. The dropped cells are the error.`},
+  {k:'ember',kl:'root\'s-nearby-line',t:R`E(h) = ${N}{-\dfrac{h \cdot h}{2\sqrt{x_0}(\sqrt{x_0 + h} + \sqrt{x_0})^2}}`,n:`The conjugate. Negative for every h ≠ 0: the root's linearization is always too big.`}
+],{title:'The slides · estimates · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'how fast',t:R`h = 0.4:\ 0.0024\qquad h = 0.04:\ 0.000025`,n:`√x from 4: ten times smaller step, about a hundred times smaller error: the h · h in root's-nearby-line.`},
+  {k:'ember',kl:'too far',t:R`\sqrt8:\ \ 3 \text{ from } 4,\ \ ${N}{\tfrac{17}{6}} \text{ from } 9`,n:`√8 ≈ 2.8284. Choose the base near where you want to be.`}
+],{title:'The slides · how wrong · ← → keys work'});
+stepper('#sl7',[
+  {k:'ember',kl:'the slope function',t:R`f(x) = x^3 - 3x,\ \ f'(x) = 3x^2 - 3`,n:`0 at ±1: level tangent lines there.`},
+  {k:'ember',kl:'slope-sign-near',t:R`f'(x_0) \gt 0 \;\Rightarrow\; f(x_0 - h) \lt f(x_0) \lt f(x_0 + h)`,n:`For 0 < h < r: sign-kept-near on the chord slopes. One input and its neighbours only; intervals are rung 14's.`}
+],{title:'The slides · the slope function · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

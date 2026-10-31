@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lines in coordinates</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r18f.html">← 18f triangles and parallels by hand</a><a href="r18h.html">next: 18h circles and conics →</a></p>
+  <div class="tags"><span class="tag tech">18g · technique</span></div>
+  <h1>Lines in coordinates</h1>
+  <p>18c proved what a line is. This step is about writing lines down and using them: the five usual ways to give one, which side of it a point is on, the regions cut out by several, and the best point of such a region. Then it proves, by a line or two of algebra each, facts about triangles and four-sided figures that take Euclid a page: the diagonals of a parallelogram, the middles of any four sides, the three medians and the three heights of a triangle, and the area of any triangle from its corners.</p>
+  <p class="gesture">A line rises by its slope times how far it runs from a known point. The sign by which a point misses a line’s equation says which side of the line it is on. On a segment, a first-degree function is largest at an end, so on a region cut out by lines it is largest at a corner. Midpoints are averages. The area of a triangle is half the size of a cross product of two of its side arrows.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r18c.html">18c</a> (two-descriptions-agree, line-through-two-points, two-lines-meet, perpendicular-lines, nearest-point), <a href="r18a.html">18a</a> (part-of-the-way), <a href="r18f.html">18f</a> (parallelogram), <a href="r16g.html">16g</a> (area-between), <a href="r09e.html">9e</a> (slope and intercepts). <a href="r18h.html">18h</a> does the same for circles and conics; <a href="r18j.html">18j</a> checks constructions this way.</p></div>
+</header>
+
+<section class="class step" data-step="18g1">
+  <h2 class="sthead"><span class="stno">18g1</span>Five ways to write a line</h2>
+  <p class="stands">Stands on 18c (two descriptions, one line through two points).</p>
+  <p class="eqline" data-pid="3b0845">Every line is αx + βy = c with (α, β) ≠ (0, 0) by two-descriptions-agree, and the other forms are this one rearranged. Each has an accepted name. Slope-intercept: y = mx + q, with slope m and y-intercept q, for every line that is not x = constant. Point-slope: y − y₀ = m(x − x₀), the line through (x₀, y₀) with slope m. Two-point: through (x₁, y₁) and (x₂, y₂) with x₁ ≠ x₂, take m = (y₂ − y₁)/(x₂ − x₁) and use point-slope; line-through-two-points says it is the only one. Intercept: x/p + y/q = 1, through (p, 0) and (0, q). Standard, or general: αx + βy = c.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the techs">
+\text{through } (1, 2), (4, 8):\ \ m = \tfrac{6}{3} = 2,\ \ y - 2 = 2(x - 1) @@ two-point, then point-slope; y = 2x
+\text{parallel to } 3x - 4y = 5 \text{ through } (2, 1):\ \ 3x - 4y = 2 @@ parallel-through-a-point: keep a and b, change c to 3 · 2 − 4 · 1
+\text{perpendicular to it through } (2, 1):\ \ 4x + 3y = 11 @@ perpendicular-lines: swap a and b, change one sign; then 4 · 2 + 3 · 1
+\text{distance from } (0, 0) \text{ to } 3x - 4y = 5:\ \ \tfrac{|0 - 0 - 5|}{5} = 1 @@ nearest-point
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · five forms · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">18g1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">the line through (0, 3) and (2, 7)</span></span>Write it as y = mx + b and as αx + βy = c. <br>Find where it crosses the x axis.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18g2">
+  <h2 class="sthead"><span class="stno">18g2</span>Sides of a line</h2>
+  <p class="stands">Stands on 18g1 and 18a (part-of-the-way).</p>
+  <p data-pid="7b9d6e">For a line ℓ: αx + βy = c, write f(X) = αx + βy − c, so ℓ is where f = 0. Sides-of-a-line technique: <b>for points P and Q not on ℓ, the segment from P to Q meets ℓ exactly when f(P) and f(Q) have opposite signs. Moving from any point along (α, β) raises f.</b> The two sets {f &gt; 0} and {f &lt; 0} have the accepted name half-planes, and (α, β) points into the first.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the sides-of-a-line technique">
+f(P + t(Q - P)) = (1 - t)f(P) + tf(Q) @@ adding-keeps-answers: f is of the first degree, so the c splits as (1 − t)c + tc
+\text{a zero with } 0 \lt t \lt 1 \iff f(P), f(Q) \text{ of opposite signs} @@ the only zero is t = f(P)/(f(P) − f(Q)), in (0, 1) exactly then
+\htmlClass{new}{f(P + s(a, b)) = f(P) + s(a^2 + b^2)} \quad \blacksquare @@ adding-keeps-answers; a² + b² &gt; 0
+  </pre>
+  <p data-pid="f165ea">So a set cut out by several inequalities of the first degree has a simple shape. If X and Y both satisfy αx + βy ≤ c, so does every point between, by sides-of-a-line's first line, and so for any number of such inequalities. A set with that property, that it holds the whole segment between any two of its points, has the accepted name convex. When it is bounded, it is a polygon, and its corners are where two of its edge lines meet (two-lines-meet).</p>
+  <p data-pid="8e7a5d">Best-corner technique: <b>on a bounded convex polygon, a function g(x, y) = px + qy takes its largest and its smallest values at corners.</b> On a segment, g is (1 − t)g(P) + tg(Q) by the same line as sides-of-a-line, so it is never beyond both ends. Every point of the polygon lies on a segment between two edge points, from any corner through it; and every edge point lies between two corners. So no point beats every corner. The accepted name for finding that corner is linear programming; George Dantzig gave a way to walk from corner to better corner in 1947.</p>
+  <pre class="lines" data-k="ember" data-label="this step: worked">
+x \ge 0,\ y \ge 0,\ x + y \le 40,\ x + 3y \le 60 @@ the corners: (0, 0), (40, 0), (30, 10), (0, 20)
+g = 300x + 500y:\ \ 0,\ 12\,000,\ 14\,000,\ 10\,000 @@ best-corner: the best is at (30, 10)
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · sides of a line · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18g2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">x ≥ 0,  y ≥ 0,  x + y ≤ 10,  x + 2y ≤ 14</span></span>Find the corners of the region. <br>Find the largest value of 3x + 4y on it, and where.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18g3">
+  <h2 class="sthead"><span class="stno">18g3</span>Midpoints are averages</h2>
+  <p class="stands">Stands on 18g2, 18f (parallelogram) and 18d (perpendicular-bisector).</p>
+  <p data-pid="d5c758">By part-of-the-way the midpoint of a segment from A to B is (A + B)/2, and the point a fraction t of the way is (1 − t)A + tB. That one fact proves four techniques.</p>
+  <p data-pid="337798">Parallelogram-diagonals technique: <b>the diagonals of a parallelogram ABCD meet at the midpoint of each. Conversely, a four-sided figure whose diagonals meet at the midpoint of each is a parallelogram.</b> By parallelogram, D = A + C − B, so the midpoint of BD is (B + A + C − B)/2 = (A + C)/2, the midpoint of AC. Conversely, (A + C)/2 = (B + D)/2 gives D − A = C − B and D − C = A − B, so both pairs of opposite sides are parallel.</p>
+  <p data-pid="3c4407">Midpoint-parallelogram technique (Varignon's): <b>for any four points A, B, C, D, the midpoints of AB, BC, CD and DA are the corners of a parallelogram, with sides parallel to the diagonals AC and BD and half as long.</b> The midpoints of BC and AB differ by (C − A)/2, and so do the midpoints of CD and DA; the other pair differ by (D − B)/2.</p>
+  <p data-pid="fd5e88">The segment from a corner of a triangle to the middle of the opposite side has the accepted name median. Centroid technique: <b>the three medians of a triangle meet in one point, G = (A + B + C)/3, two thirds of the way along each from its corner.</b> The point two thirds of the way from A to (B + C)/2 is A/3 + (2/3)(B + C)/2 = (A + B + C)/3, and the letters enter alike. G has the accepted name centroid.</p>
+  <p data-pid="116b33">A line through a corner perpendicular to the opposite side's line has the accepted name height, or altitude. The rung's survey promised that the three heights meet in one point, and that the claim is one of algebra. Heights-meet technique: <b>the three heights of a triangle meet in one point H.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the heights-meet technique">
+(X - A)\cdot(B - C) + (X - B)\cdot(C - A) + (X - C)\cdot(A - B) = 0 @@ adding-keeps-answers and the dot technique: for every X, the X terms add to X · 0, and the rest cancel in pairs
+\text{the heights from } A, B \text{ meet at one } H @@ their normals B − C and C − A are not parallel (else A, B, C collinear); two-lines-meet
+\htmlClass{new}{(H - C)\cdot(A - B) = 0} \quad \blacksquare @@ the first two terms vanish at H; so H is on the height from C (perpendicular-lines)
+  </pre>
+  <p data-pid="2321f5">H has the accepted name orthocentre. A triangle now has four centres from this rung: the circumcentre O of 18d, the incentre I, the centroid G and the orthocentre H.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · midpoints · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · the middles of four sides, and four centres of a triangle</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="lbl">A = (−4, −3), B = (5, −4), C = (6, 4), and D</div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">Dx</span><input type="range" id="kx" min="-6" max="6" step="0.1" value="-3"><output id="ox"></output></div>
+      <div class="kn"><span class="m">Dy</span><input type="range" id="ky" min="-2" max="7" step="0.1" value="5"><output id="oy"></output></div>
+      <div class="cap">Ink: the four-sided figure ABCD. Dashed: its diagonals. Plum: the parallelogram of midpoint-parallelogram on the four midpoints.</div>
+    </div>
+    <div class="panel">
+      <div class="lbl">A = (−4, −2), B = (5, −2), and C; four centres</div>
+      <canvas id="cvL"></canvas>
+      <div class="kn"><span class="m">Cx</span><input type="range" id="kp" min="-5" max="7" step="0.1" value="0"><output id="op"></output></div>
+      <div class="kn"><span class="m">Cy</span><input type="range" id="kq" min="0.5" max="7" step="0.1" value="5"><output id="oq"></output></div>
+      <div class="cap">Ember: the medians and G. Teal: the heights and H. Plum: O, the circumcentre. Muted: I, the incentre.</div>
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18g3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">A = (0, 0),  B = (6, 0),  C = (0, 6)</span></span>Guess where the centroid sits before computing. <br>Find it as the average of the corners.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18g4">
+  <h2 class="sthead"><span class="stno">18g4</span>The area from the corners</h2>
+  <p class="stands">Stands on 18g3 and 16g (area-between).</p>
+  <p data-pid="b1a0fd">Triangle-area technique: <b>for a triangle with u = B − A and v = C − A, the area is ½|u₁v₂ − u₂v₁|. With corners (x₁, y₁), (x₂, y₂), (x₃, y₃) it is ½|x₁y₂ − x₂y₁ + x₂y₃ − x₃y₂ + x₃y₁ − x₁y₃|, and it equals ½ · |AB| · d(C, line AB).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the triangle-area technique">
+\text{below a side from } (x_i, y_i) \text{ to } (x_j, y_j):\ \ \tfrac12 (y_i + y_j)(x_j - x_i) @@ area-between: the integral of a function of the first degree; signed by the direction of travel
+\text{area} = \Big|\tfrac12 \textstyle\sum (y_i + y_{i+1})(x_{i+1} - x_i)\Big| @@ going round, the top sides count once forward and the bottom sides once back (16g); move the triangle up first if need be, which changes no area
+(y_i + y_{i+1})(x_{i+1} - x_i) = (x_{i+1}y_i - x_iy_{i+1}) + (x_{i+1}y_{i+1} - x_iy_i) @@ adding-keeps-answers
+\textstyle\sum (x_{i+1}y_{i+1} - x_iy_i) = 0 @@ round the loop, a sum of differences collapses (collapsing-sum)
+|u_1v_2 - u_2v_1|^2 = |u|^2|v|^2 - (u \cdot v)^2 @@ adding-keeps-answers; dot-bound's proof, with u and v exchanged, found |v|² − (u · v)²/|u|² as the least |v − tu|², the squared distance from C to the line AB
+\htmlClass{new}{\tfrac12 |u_1v_2 - u_2v_1| = \tfrac12\,|AB|\, d(C, AB)} \quad \blacksquare @@ the half base times height
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · the area · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18g4.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{x-intercept } 6,"></span> <span data-tex-inline="\text{through } (2, 4)"></span></span>Find the line's y-intercept.</li><li><span class="givens"><span data-tex-inline="A = (1, 2),"></span> <span data-tex-inline="B = (6, 3),"></span> <span data-tex-inline="C = (8, 7),"></span> <span data-tex-inline="\text{ABCD a parallelogram}"></span></span>Find D, and where the diagonals cross.</li><li><span class="givens"><span data-tex-inline="\text{centroid } G = (2, 3),"></span> <span data-tex-inline="A = (0, 0),"></span> <span data-tex-inline="B = (5, 1)"></span></span>Find the third corner C.</li><li><span class="givens"><span data-tex-inline="A = (0, 0),"></span> <span data-tex-inline="B = (6, 0),"></span> <span data-tex-inline="C = (x, 4)"></span></span>Prove that the area of the triangle ABC is the same for every x, and find it. <br>Find every x for which it has a right angle.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18g5">
+  <h2 class="sthead"><span class="stno">18g5</span>Any polygon, round its corners</h2>
+  <p class="stands">Stands on 18g4.</p>
+  <p data-pid="482659">The sum works for any polygon taken round its corners in order, without crossing itself, since the same count of sides above and below applies; its accepted name is the shoelace formula, after the pattern the crossed products make. Its sign before the absolute value says which way round: positive when the corners go round counterclockwise. Three points are collinear exactly when the area is 0.</p>
+  <pre class="lines" data-k="ember" data-label="this step: worked">
+(1, 1), (5, 2), (2, 6):\ \ \tfrac12|(1 \cdot 2 - 5 \cdot 1) + (5 \cdot 6 - 2 \cdot 2) + (2 \cdot 1 - 1 \cdot 6)| @@ ½|−3 + 26 − 4| = 9.5
+G = \big(\tfrac{8}{3}, 3\big) @@ centroid: the average of the corners
+-3x + 4y = 1,\ \ x + 5y = 15 @@ the heights from A and B, with normals C − B and C − A (perpendicular-lines); two-lines-meet gives H = (55/19, 46/19), and (H − C) · (A − B) = 0 checks heights-meet
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · shoelace · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18g5.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="P = (-2, 5),"></span> <span data-tex-inline="Q = (4, -1)"></span></span>Write the line through P and Q in all five forms, where each exists.</li><li><span class="givens"><span data-tex-inline="P = (3, -2),"></span> <span data-tex-inline="\ell:\ 2x + 5y = 1"></span></span>Write the line through P perpendicular to the given line. <br>Find the distance from P to the given line.</li><li><span class="givens"><span data-tex-inline="A = (0, 0),"></span> <span data-tex-inline="B = (8, 2),"></span> <span data-tex-inline="C = (3, 7)"></span></span>Find the centroid and the area of the triangle ABC.</li><li><span class="givens"><span data-tex-inline="A = (0, 0),"></span> <span data-tex-inline="B = (6, 0),"></span> <span data-tex-inline="C = (2, 4)"></span></span>Find the orthocentre of the triangle ABC.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18g6">
+  <h2 class="sthead"><span class="stno">18g6</span>Illegal moves</h2>
+  <p class="stands">Stands on 18g1 to 18g5.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\text{the line through } (3, 1), (3, 7):\ \ m = \tfrac60\,? @@ no slope: the line is x = 3
+2x - y \gt 4 \text{ is true below the line, since } \gt \text{ means above}\,? @@ sides-of-a-line: (a, b) = (2, −1) points down and right; test a point, such as (0, 0)
+\text{the best point of a region is its centre}\,? @@ best-corner: a corner, never only an inside point
+\text{shoelace with the corners out of order}\,? @@ the path crosses itself and the sum is not the area
+  </pre>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18g6.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f = 300x + 500y"></span></span>Find a region cut out by inequalities on which f has no largest value.</li><li><span class="givens"><span data-tex-inline="\text{four points } A, B, C, D"></span></span>Run midpoint-parallelogram on four points whose four-sided figure crosses itself. <br>Run it on four collinear points.</li><li>Find where the orthocentre of a right triangle lies. <br>Find where it lies for a triangle with an obtuse angle.</li><li><span class="givens"><span data-tex-inline="A = (0, 0),"></span> <span data-tex-inline="B = (4, 0),"></span> <span data-tex-inline="C = (0, 4),"></span> <span data-tex-inline="D = (4, 4)"></span></span>Take the shoelace sum on A, B, C, D in that order. <br>Find where the path crosses itself, and the signed areas of the two triangles it makes.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">18g.4.1</span><span class="tagq">build</span>Make a planting plan of your own for a farm near Modesto: two crops, three limits (land, water, labour), and a profit per unit of each, and find the best plan. <br>Turn one limit around, from a most to a least, so that the region has no bound. <br>Find whether a best plan and a worst plan still exist.</div>
+  <div class="chq"><span class="chid">18g.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{triangle } ABC;"></span> <span data-tex-inline="\text{O, G, H: its circumcentre,}"></span> <span data-tex-inline="\text{centroid and orthocentre}"></span></span>Drag C about in the picture, and watch O, G and H. <br>Using coordinates, find whether O, G and H always lie on one line, and if they do, whether G is always the same fraction of the way from H to O.</div>
+  <div class="chq"><span class="chid">18g.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{corners } V \text{ and } W"></span> <span data-tex-inline="\text{tie for best}"></span></span>Prove that every point between V and W ties too. <br>Find when an inside point can tie, and prove it.</div>
+  <div class="chq"><span class="chid">18g.4.4</span><span class="tagq">seam</span>Euclid spent Book I building to the parallelogram and the triangle's area, with figures and words, and Descartes said his method made such work a matter of reckoning. This step proved heights-meet in three lines that a machine could check. <br>What was lost? <br>Was anything?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r18f.html">← 18f · triangles and parallels by hand</a><a href="r18h.html">18h · circles and conics →</a></nav>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+/* least and greatest of F.f on [lo, hi]: the ends, F's critical points inside, and a fine sample (exact between critical points for the functions used here) */
+function ext(F,lo,hi){ if(F.dir) return [0,1]; let m=Infinity,M=-Infinity; const t=x=>{ const v=F.f(x); if(v<m) m=v; if(v>M) M=v; };
+  t(lo); t(hi); (F.crit||[]).forEach(c=>{ if(c>lo&&c<hi) t(c); }); for(let k=1;k<64;k++) t(lo+(hi-lo)*k/64); return [m,M]; }
+function sums(F,pts){ let L=0,U=0; const ms=[],Ms=[]; for(let i=1;i<pts.length;i++){ const [m,M]=ext(F,pts[i-1],pts[i]), w=pts[i]-pts[i-1]; ms.push(m); Ms.push(M); L+=m*w; U+=M*w; } return {L,U,ms,Ms}; }
+const eq=(a,b,n)=>Array.from({length:n+1},(_,i)=>a+(b-a)*i/n);
+function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
+function boxes(P,pts,hs,stroke,fill,alpha){ const c=P.ctx; for(let i=1;i<pts.length;i++){ const a=pts[i-1],b=pts[i],h=hs[i-1]; c.globalAlpha=alpha; P.poly([[a,0],[b,0],[b,h],[a,h]],null,fill); c.globalAlpha=1; P.poly([[a,0],[b,0],[b,h],[a,h]],stroke,null,1.2); } }
+function dirDots(P,a,b){ const c=P.ctx; c.fillStyle=col('--ink'); for(let k=0;k<=300;k++){ const x=a+(b-a)*k/300; const y=(k%2)?0:1; c.fillRect(P.X(x)-1,P.Y(y)-1,2,2); } }
+/* shade between the graph of fn and the axis from lo to hi: above in pos colour, below in neg colour */
+function shade(P,fn,lo,hi,pos,neg,alpha){ if(hi<lo){ const t=lo; lo=hi; hi=t; } const c=P.ctx, N=300; c.globalAlpha=alpha==null?0.32:alpha;
+  for(let k=0;k<N;k++){ const x0=lo+(hi-lo)*k/N, x1=lo+(hi-lo)*(k+1)/N, xm=(x0+x1)/2, y=fn(xm); if(!isFinite(y)) continue; P.poly([[x0,0],[x1,0],[x1,fn(x1)],[x0,fn(x0)]],null,y>=0?pos:neg); }
+  c.globalAlpha=1; }
+function rangeOf(fn,lo,hi,pad){ let m=Infinity,M=-Infinity; for(let k=0;k<=400;k++){ const v=fn(lo+(hi-lo)*k/400); if(isFinite(v)){ if(v<m) m=v; if(v>M) M=v; } } if(m>0) m=0; if(M<0) M=0; const p=(M-m)*(pad==null?0.12:pad)||1; return [m-p,M+p]; }
+function chips(el,FN,get,setk,after){ Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===get()) b.className='on'; b.onclick=()=>{ setk(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+const Nw='\\htmlClass{new}';
+function gridFor(sp){ return sp>40?10:sp>16?4:sp>8?2:sp>3?1:sp>1.2?0.5:0.25; }
+function frame2(P,fn,lo,hi,pad){ const w=hi-lo; P.o.x=[lo-0.12*w,hi+0.08*w]; P.o.y=rangeOf(fn,lo,hi,pad==null?0.12:pad); const sx=P.o.x[1]-P.o.x[0], sy=P.o.y[1]-P.o.y[0]; let g=gridFor(sx); while(sy/g>24) g*=2; P.o.grid=g; }
+const num=(f,a,b,n)=>{ n=n||4000; const h=(b-a)/n; let s=0; for(let i=0;i<n;i++) s+=f(a+(i+0.5)*h)*h; return s; };
+/* axes with separate steps across and up */
+function axes2(P,gx,gy){ const c=P.ctx,o=P.o; c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ c.moveTo(P.X(x),P.Y(o.y[0])); c.lineTo(P.X(x),P.Y(o.y[1])); }
+  for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ c.moveTo(P.X(o.x[0]),P.Y(y)); c.lineTo(P.X(o.x[1]),P.Y(y)); } c.stroke();
+  c.strokeStyle=col('--muted'); c.lineWidth=1.3; c.beginPath(); if(o.y[0]<=0&&o.y[1]>=0){ c.moveTo(P.X(o.x[0]),P.Y(0)); c.lineTo(P.X(o.x[1]),P.Y(0)); } if(o.x[0]<=0&&o.x[1]>=0){ c.moveTo(P.X(0),P.Y(o.y[0])); c.lineTo(P.X(0),P.Y(o.y[1])); } c.stroke();
+  c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; const ly=Math.min(P.H-6,Math.max(12,P.Y(0)+14));
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ if(Math.abs(x)<1e-9) continue; c.fillText(+x.toFixed(6),P.X(x),ly); }
+  c.textAlign='right'; const lx=Math.max(32,Math.min(P.W-4,P.X(0)-5)); for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ if(Math.abs(y)<1e-9) continue; c.fillText(String(+y.toFixed(6)).replace('-','−'),lx,P.Y(y)+4); } }
+function nice(sp){ const raw=sp/6, p=Math.pow(10,Math.floor(Math.log10(raw))), m=raw/p; return (m<1.5?1:m<3.5?2:m<7.5?5:10)*p; }
+function arrow(P,x1,y1,x2,y2,colr,w){ P.line(x1,y1,x2,y2,colr,w||2.2); const c=P.ctx, X1=P.X(x1),Y1=P.Y(y1),X2=P.X(x2),Y2=P.Y(y2), L=Math.hypot(X2-X1,Y2-Y1); if(L<2) return; const ux=(X2-X1)/L, uy=(Y2-Y1)/L, h=9; c.fillStyle=col(colr); c.beginPath(); c.moveTo(X2,Y2); c.lineTo(X2-h*ux-0.5*h*uy,Y2-h*uy+0.5*h*ux); c.lineTo(X2-h*ux+0.5*h*uy,Y2-h*uy-0.5*h*ux); c.closePath(); c.fill(); }
+function fillA(P,pts,colr,alpha){ const c=P.ctx; c.globalAlpha=alpha==null?0.2:alpha; P.poly(pts,null,colr); c.globalAlpha=1; }
+const sq1=P=>Object.defineProperty(P.o,'aspect',{get:()=>1});
+function rightMark(P,qx,qy,ax,ay,bx,by,s,colr){ const la=Math.hypot(ax-qx,ay-qy), lb=Math.hypot(bx-qx,by-qy); if(!la||!lb) return; const u=[(ax-qx)/la*s,(ay-qy)/la*s], v=[(bx-qx)/lb*s,(by-qy)/lb*s]; P.poly([[qx+u[0],qy+u[1]],[qx+u[0]+v[0],qy+u[1]+v[1]],[qx+v[0],qy+v[1]]],colr||'--muted',null,1.2,false); }
+const dist=(a,b)=>Math.hypot(b[0]-a[0],b[1]-a[1]);
+const dotp=(u,v)=>u[0]*v[0]+u[1]*v[1];
+function clipBox(P,fn){ const c=P.ctx, [x0,x1]=P.o.x,[y0,y1]=P.o.y; c.save(); c.beginPath(); c.rect(P.X(x0),P.Y(y1),P.X(x1)-P.X(x0),P.Y(y0)-P.Y(y1)); c.clip(); fn(); c.restore(); }
+function lineABC(P,a,b,c,colr,w,dash){ const [x0,x1]=P.o.x,[y0,y1]=P.o.y; clipBox(P,()=>{ if(Math.abs(b)>1e-12){ P.line(x0,(c-a*x0)/b,x1,(c-a*x1)/b,colr,w,dash); } else if(Math.abs(a)>1e-12){ P.line(c/a,y0,c/a,y1,colr,w,dash); } }); }
+const kx=$('kx'),ky=$('ky'),kp=$('kp'),kq=$('kq'),cvF=$('cvF'),cvL=$('cvL');
+const PF=plane(cvF,{x:[-7,8],y:[-6,9],grid:1,aspect:1,draw:P=>drawF(P)}); sq1(PF);
+const PL=plane(cvL,{x:[-7,8],y:[-5,10],grid:1,aspect:1,draw:P=>drawL(P)}); sq1(PL);
+const A=[-4,-3], B=[5,-4], C=[6,4], T1=[-4,-2], T2=[5,-2];
+const mid=(p,q)=>[(p[0]+q[0])/2,(p[1]+q[1])/2];
+const shoe=pts=>{ let s=0; for(let i=0;i<pts.length;i++){ const p=pts[i], q=pts[(i+1)%pts.length]; s+=p[0]*q[1]-q[0]*p[1]; } return s/2; };
+function meet(a1,b1,c1,a2,b2,c2){ const D=a1*b2-a2*b1; return Math.abs(D)<1e-9?null:[(c1*b2-c2*b1)/D,(a1*c2-a2*c1)/D]; }
+function centres(C){ const a=dist(T2,C), b=dist(C,T1), c=dist(T1,T2), s=a+b+c;
+  const G=[(T1[0]+T2[0]+C[0])/3,(T1[1]+T2[1]+C[1])/3];
+  const u=[C[0]-T2[0],C[1]-T2[1]], v=[C[0]-T1[0],C[1]-T1[1]];
+  const H=meet(u[0],u[1],dotp(u,T1),v[0],v[1],dotp(v,T2));
+  const bis=(p,q)=>[q[0]-p[0],q[1]-p[1],(q[0]*q[0]+q[1]*q[1]-p[0]*p[0]-p[1]*p[1])/2];
+  const O=meet(...bis(T1,T2),...bis(T2,C));
+  const I=[(a*T1[0]+b*T2[0]+c*C[0])/s,(a*T1[1]+b*T2[1]+c*C[1])/s];
+  return {G,H,O,I}; }
+function drawF(P){ const D=[+kx.value,+ky.value]; axes2(P,1,1); const Q=[A,B,C,D];
+  P.line(A[0],A[1],C[0],C[1],'--muted',1.3,[5,4]); P.line(B[0],B[1],D[0],D[1],'--muted',1.3,[5,4]);
+  P.poly(Q,'--ink',null,2.4,true); const M=[mid(A,B),mid(B,C),mid(C,D),mid(D,A)];
+  fillA(P,M,'--plum',0.18); P.poly(M,'--plum',null,2.2,true); M.forEach(m=>P.dot(m[0],m[1],'--plum',4));
+  [[A,'A',-0.5,-0.6],[B,'B',0.5,-0.6],[C,'C',0.5,0.5],[D,'D',-0.5,0.5]].forEach(([p,s,dx,dy])=>{ P.dot(p[0],p[1],'--ink',4.5); P.text(s,p[0]+dx,p[1]+dy,'--ink','center',12); }); }
+function drawL(P){ const C=[+kp.value,+kq.value]; axes2(P,1,1); const {G,H,O,I}=centres(C), V=[T1,T2,C];
+  clipBox(P,()=>{ V.forEach((p,i)=>{ const q=V[(i+1)%3], r=V[(i+2)%3], m=mid(q,r); P.line(p[0],p[1],m[0],m[1],'--ember',1.6);
+      const n=[r[0]-q[0],r[1]-q[1]]; lineABC(P,n[0],n[1],dotp(n,p),'--teal',1.3,[5,4]); }); });
+  P.poly(V,'--ink',null,2.4,true);
+  [[I,'--muted','I'],[O,'--plum','O'],[G,'--ember','G'],[H,'--teal','H']].forEach(([p,cl,s])=>{ if(p && p[0]>-7&&p[0]<8&&p[1]>-5&&p[1]<10){ P.dot(p[0],p[1],cl,5); P.text(s,p[0]+0.45,p[1]+0.45,cl,'center',12); } }); }
+function read(){ const D=[+kx.value,+ky.value], Ct=[+kp.value,+kq.value]; $('ox').textContent=mm(D[0],1); $('oy').textContent=mm(D[1],1); $('op').textContent=mm(Ct[0],1); $('oq').textContent=mm(Ct[1],1);
+  const Q=shoe([A,B,C,D]), M=shoe([mid(A,B),mid(B,C),mid(C,D),mid(D,A)]), {G,H,O,I}=centres(Ct), f=p=>p?'('+mm(p[0],2)+', '+mm(p[1],2)+')':'none';
+  const vd=$('vdF'); vd.className='verdict';
+  vd.textContent='Left: the shoelace gives ABCD '+mm(Q,2)+' and the midpoint figure '+mm(M,2)+'. Right: O = '+f(O)+', G = '+f(G)+', H = '+f(H)+', I = '+f(I)+'.';
+  tex($('eqF'),R`G = \tfrac{A + B + C}{3} = \big(${mm(G[0],3)},\ ${mm(G[1],3)}\big)`,true); }
+function all(){ PF.redraw(); PL.redraw(); read(); }
+[kx,ky,kp,kq].forEach(el=>el.addEventListener('input',all));
+window.__pic={set:(dx,dy,cx,cy)=>{ kx.value=dx; ky.value=dy; kp.value=cx; kq.value=cy; all(); const D=[dx,dy], c=centres([cx,cy]), r=p=>p&&p.map(z=>+z.toFixed(4));
+  return {Q:+shoe([A,B,C,D]).toFixed(4),M:+shoe([mid(A,B),mid(B,C),mid(C,D),mid(D,A)]).toFixed(4),O:r(c.O),G:r(c.G),H:r(c.H),I:r(c.I)}; }};
+all();
+stepper('#sl1',[
+  {k:'ember',kl:'five forms',t:R`y = mx + q;\ \ y - y_0 = m(x - x_0);\ \ \tfrac xp + \tfrac yq = 1;\ \ ax + by = c`,n:`And two-point, through point-slope.`},
+  {k:'ember',kl:'the techs',t:R`3x - 4y = 2;\ \ 4x + 3y = 11`,n:`Parallel: keep α, β. Perpendicular: swap, one sign.`}
+],{title:'The slides · five forms · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'sides-of-a-line',t:R`${Nw}{f(P + t(Q - P)) = (1 - t)f(P) + tf(Q)}`,n:`Opposite signs, a crossing.`},
+  {k:'ember',kl:'convex',t:R`X, Y \in S \Rightarrow \text{the segment} \subseteq S`,n:`Every region cut out by lines.`},
+  {k:'ember',kl:'best-corner',t:R`${Nw}{\max px + qy \text{ at a corner}}`,n:`Never beyond both ends of a segment.`},
+  {k:'ember',kl:'worked',t:R`300x + 500y:\ (30, 10) \to 14\,000`,n:`Linear programming.`}
+],{title:'The slides · sides of a line · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'parallelogram-diagonals',t:R`${Nw}{\tfrac{A + C}{2} = \tfrac{B + D}{2}}`,n:`Diagonals bisect.`},
+  {k:'ember',kl:'midpoint-parallelogram',t:R`${Nw}{M_2 - M_1 = \tfrac{C - A}{2} = M_3 - M_4}`,n:`Any four points.`},
+  {k:'ember',kl:'centroid',t:R`${Nw}{G = \tfrac{A + B + C}{3}}`,n:`Two thirds along each median.`},
+  {k:'ember',kl:'heights-meet',t:R`${Nw}{\textstyle\sum (X - A)\cdot(B - C) = 0}`,n:`Two heights meet; the third follows.`},
+  {k:'ember',kl:'four centres',t:R`O,\ I,\ G,\ H`,n:`18d, 18d, centroid, heights-meet.`}
+],{title:'The slides · midpoints · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'triangle-area',t:R`${Nw}{\tfrac12 |u_1v_2 - u_2v_1|}`,n:`Half base times height.`}
+],{title:'The slides · the area · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'shoelace',t:R`\tfrac12\big|\textstyle\sum (x_iy_{i+1} - x_{i+1}y_i)\big|`,n:`Corners in order.`}
+],{title:'The slides · shoelace · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'illegal',t:R`m = \tfrac60`,n:`x = 3 has no slope.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

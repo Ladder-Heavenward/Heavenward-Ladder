@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>An area turns multiplying into adding</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="floor4.html">← F4 geometry floor</a><a href="r17a.html">next: 17a the log as an area →</a></p>
+  <div class="tags"><span class="tag theory">Rung 17 · theory</span></div>
+  <h1>Turning multiplying into adding</h1>
+  <p>Rung 16 left one entry out of its table. Every power of the input has a function whose slope it is, except one: the power minus one, which is one over the input. Yet one over the input is continuous for every positive input, so 16b's antiderivative-exists says it has an antiderivative: its own area function, the area under one over the input, from 1 up to the input. Rung 16 found that function and left it unnamed. This rung names it and studies it. Two facts about it change what can be computed. The area from 1 to a product is the area from 1 to the first factor plus the area from 1 to the second. So the function turns multiplying into adding. And the function that runs it backwards is its own slope: its rate of growth is always exactly its size. In this section we'll teach you what it means to say that an area turns multiplying into adding, and what you can do because you know it.</p>
+  <p class="gesture">The natural logarithm of a positive number is the area under one over the input, from 1 to that number. Its slope is one over the input, and the logarithm of a product is the sum of the logarithms. It rises forever, slowly, through every real height, so it can be run backwards: the exponential. The exponential is its own slope. Its value at 1 is the number e, and any positive number raised to any real power is the exponential of that power times the number’s logarithm.</p>
+  <div class="ready"><h3>The steps, in order</h3><div class="thline"><a href="r17a.html">17a The log as an area</a>: the area under 1/t, its first bounds.<details class="stidx"><summary>6 footings</summary><ol><li><a href="r17a.html#17a1"><span class="sn">17a1</span>New marks on this rung</a></li><li><a href="r17a.html#17a2"><span class="sn">17a2</span>The definition</a></li><li><a href="r17a.html#17a3"><span class="sn">17a3</span>Sign and order</a></li><li><a href="r17a.html#17a4"><span class="sn">17a4</span>Two bounds</a></li><li><a href="r17a.html#17a5"><span class="sn">17a5</span>ln 2, squeezed</a></li><li><a href="r17a.html#17a6"><span class="sn">17a6</span>Illegal moves</a></li></ol></details></div>
+<div class="thline"><a href="r17b.html">17b Its slope</a>: one over x, and the table's missing entry filled.<details class="stidx"><summary>4 footings</summary><ol><li><a href="r17b.html#17b1"><span class="sn">17b1</span>The slope of ln</a></li><li><a href="r17b.html#17b2"><span class="sn">17b2</span>When x is negative</a></li><li><a href="r17b.html#17b3"><span class="sn">17b3</span>ln bends down</a></li><li><a href="r17b.html#17b4"><span class="sn">17b4</span>Illegal moves</a></li></ol></details></div>
+<div class="thline"><a href="r17c.html">17c ln(xy) = ln x + ln y</a>: multiplying becomes adding.<details class="stidx"><summary>4 footings</summary><ol><li><a href="r17c.html#17c1"><span class="sn">17c1</span>Products</a></li><li><a href="r17c.html#17c2"><span class="sn">17c2</span>Quotients and powers</a></li><li><a href="r17c.html#17c3"><span class="sn">17c3</span>Worked</a></li><li><a href="r17c.html#17c4"><span class="sn">17c4</span>Illegal moves</a></li></ol></details></div>
+<div class="thline"><a href="r17d.html">17d ln reaches every height</a>: it rises without bound in both directions, slower than any power.<details class="stidx"><summary>4 footings</summary><ol><li><a href="r17d.html#17d1"><span class="sn">17d1</span>No ceiling, no floor</a></li><li><a href="r17d.html#17d2"><span class="sn">17d2</span>Every height, once</a></li><li><a href="r17d.html#17d3"><span class="sn">17d3</span>Slower than any power</a></li><li><a href="r17d.html#17d4"><span class="sn">17d4</span>Illegal moves</a></li></ol></details></div>
+<div class="thline"><a href="r17e.html">17e exp and e</a>: the function that undoes ln, and the number it gives at 1.<details class="stidx"><summary>5 footings</summary><ol><li><a href="r17e.html#17e1"><span class="sn">17e1</span>The function that undoes ln</a></li><li><a href="r17e.html#17e2"><span class="sn">17e2</span>The number e</a></li><li><a href="r17e.html#17e3"><span class="sn">17e3</span>Closing in on e</a></li><li><a href="r17e.html#17e4"><span class="sn">17e4</span>Interest added ever more often</a></li><li><a href="r17e.html#17e5"><span class="sn">17e5</span>Illegal moves</a></li></ol></details></div>
+<div class="thline"><a href="r17f.html">17f exp is its own slope</a>: and the only function that is, up to a constant factor.<details class="stidx"><summary>4 footings</summary><ol><li><a href="r17f.html#17f1"><span class="sn">17f1</span>The slope of exp</a></li><li><a href="r17f.html#17f2"><span class="sn">17f2</span>The only one</a></li><li><a href="r17f.html#17f3"><span class="sn">17f3</span>The whole future</a></li><li><a href="r17f.html#17f4"><span class="sn">17f4</span>Illegal moves</a></li></ol></details></div>
+<div class="thline"><a href="r17g.html">17g pˣ for any real x</a>: powers with every real exponent, and logs to any base. Then the techniques:<details class="stidx"><summary>6 footings</summary><ol><li><a href="r17g.html#17g1"><span class="sn">17g1</span>The definition, and that it agrees</a></li><li><a href="r17g.html#17g2"><span class="sn">17g2</span>The exponent techniques</a></li><li><a href="r17g.html#17g3"><span class="sn">17g3</span>The slopes</a></li><li><a href="r17g.html#17g4"><span class="sn">17g4</span>The log to any base</a></li><li><a href="r17g.html#17g5"><span class="sn">17g5</span>A power the new century asked about</a></li><li><a href="r17g.html#17g6"><span class="sn">17g6</span>Illegal moves</a></li></ol></details></div>
+<div class="thline"><a href="r17h.html">17h Logs and exponents by hand</a><details class="stidx"><summary>6 footings</summary><ol><li><a href="r17h.html#17h1"><span class="sn">17h1</span>Changing base, and rewriting</a></li><li><a href="r17h.html#17h2"><span class="sn">17h2</span>Equations and inequalities</a></li><li><a href="r17h.html#17h3"><span class="sn">17h3</span>Graphs</a></li><li><a href="r17h.html#17h4"><span class="sn">17h4</span>From two measurements</a></li><li><a href="r17h.html#17h5"><span class="sn">17h5</span>Two rulers</a></li><li><a href="r17h.html#17h6"><span class="sn">17h6</span>Illegal moves</a></li></ol></details></div>
+<div class="thline"><a href="r17i.html">17i Slopes of e and ln</a><details class="stidx"><summary>6 footings</summary><ol><li><a href="r17i.html#17i1"><span class="sn">17i1</span>Taking ln first</a></li><li><a href="r17i.html#17i2"><span class="sn">17i2</span>Quotients that are slopes over values</a></li><li><a href="r17i.html#17i3"><span class="sn">17i3</span>Exponentials outrun powers</a></li><li><a href="r17i.html#17i4"><span class="sn">17i4</span>Parts with ln and e</a></li><li><a href="r17i.html#17i5"><span class="sn">17i5</span>What a person can notice</a></li><li><a href="r17i.html#17i6"><span class="sn">17i6</span>Illegal moves</a></li></ol></details></div>
+<div class="thline"><a href="r17j.html">17j Growth and decay</a><details class="stidx"><summary>5 footings</summary><ol><li><a href="r17j.html#17j1"><span class="sn">17j1</span>Equal steps, equal factors</a></li><li><a href="r17j.html#17j2"><span class="sn">17j2</span>Reading k</a></li><li><a href="r17j.html#17j3"><span class="sn">17j3</span>Cooling</a></li><li><a href="r17j.html#17j4"><span class="sn">17j4</span>Food and people</a></li><li><a href="r17j.html#17j5"><span class="sn">17j5</span>Illegal moves</a></li></ol></details></div>
+<div class="thline"><a href="r17k.html">17k Partial fractions into logs</a>; a newsflash<details class="stidx"><summary>4 footings</summary><ol><li><a href="r17k.html#17k1"><span class="sn">17k1</span>The split exists</a></li><li><a href="r17k.html#17k2"><span class="sn">17k2</span>Then each piece is a log</a></li><li><a href="r17k.html#17k3"><span class="sn">17k3</span>How quotients were first integrated</a></li><li><a href="r17k.html#17k4"><span class="sn">17k4</span>Illegal moves</a></li></ol></details></div>
+<div class="thline"><a href="r17stat.html">17·stat Why do so many numbers start with 1?</a></div>
+<div class="thline"><a href="r17then.html">17·then Can a bending curve be straightened?</a>; and the science pages</div>
+<div class="thline"><a href="r17chem.html">17·chem How sour is it, and how long until half is gone?</a></div>
+<div class="thline"><a href="r17bio.html">17·bio Can a population double forever?</a></div>
+<div class="thline"><a href="r17phys.html">17·phys Is light a dot or a flow?</a></div>
+<div class="thline"><a href="r17comp.html">17·comp What is the quickest way to sort a list?</a></div>
+<div class="thline"><a href="r17crypt.html">17·crypt How long would it take to guess a password?</a>.</div></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · read it through, then go to 17a</div>
+
+  <h3>What it means to say it</h3>
+  <p data-pid="feb7bf">For each x &gt; 0 there is a number: the area under the graph of 1/t from 1 to x, counted negative when x is less than 1. That gives a function of x. It is defined by an area, not by a recipe of powers and roots, and no such recipe gives it.</p>
+  <p data-pid="b13179">The claim of this rung is about how it treats multiplying. Stretch the stretch from 1 to x by a factor y, so that it runs from y to xy. The graph of 1/t is lower there by the same factor y. The strip is y times wider and y times lower, so its area is unchanged. So the area from y to xy equals the area from 1 to x. And the area from 1 to xy is the area from 1 to y plus that. <b>Multiplying the inputs adds the outputs.</b></p>
+  <p data-pid="68d257">That one fact makes the function a translator. A product of numbers becomes a sum of their logs, a power becomes a multiple, a root becomes a fraction of the log. Running the function backwards translates sums back into products. The function that runs it backwards has one more property, and it is the one that matters most outside mathematics. Its slope at every point equals its value there. Anything whose rate of change is proportional to its size is described by it: a colony of cells, a sample of radium, money at interest.</p>
+
+  <h3>Where it comes from</h3>
+  <p data-pid="4d9a7f">In 1614 a Scottish landowner published tables that turned multiplying into adding. He built them by imagining two points moving along two lines, one at a steady speed and one slowing in proportion to the distance it had left. A Swiss clockmaker had computed similar tables before 1600, and printed them in 1620. A professor in London visited the first maker in 1615. He recomputed the tables so that the log of 1 is 0 and the log of 10 is 1, and his tables were used for three and a half centuries.</p>
+  <p data-pid="c17993">In 1647 it was shown that areas under the graph of y = 1/x behave like logarithms, and in 1649 this was said outright. In 1668 the area was given as an endless sum. In 1683 the number e turned up in a question about interest added more and more often. From 1728 a Swiss mathematician named e. He defined the exponential as a limit and as an endless sum, and in 1748 set out the logarithm as its inverse.</p>
+
+  <h3>The principles, in plain words</h3>
+  <p data-pid="55f96e">The rung proves seven things, each from the ones before.</p>
+  <p data-pid="2a8b5a">First, the definition. For x &gt; 0, ln x is the area under 1/t from 1 to x. It is 0 at 1, positive past 1, negative before it.</p>
+  <p data-pid="8b6c21">Second, its slope. By rung 16, the slope of ln at x is 1/x. That is the table's missing entry.</p>
+  <p data-pid="44c10d">Third, multiplying becomes adding. For fixed y, the function x ↦ ln(xy) has slope y/(xy) = 1/x, the same as ln. So the two differ by a constant, and at x = 1 the constant is ln y. So ln(xy) = ln x + ln y.</p>
+  <p data-pid="f39c8b">Fourth, ln reaches every height. It always rises, since its slope is positive. ln(2ⁿ) = n ln 2 grows past every bound, and ln(2⁻ⁿ) falls past every bound. By rung 12, it takes every value in between. So it pairs the positive reals one to one with all the reals.</p>
+  <p data-pid="256400">Fifth, the function that undoes it. Call it exp. It takes every real to a positive real, and exp(1) is a number named e, a little over 2.7. Multiplying becomes adding under ln, so adding becomes multiplying under exp: exp(x + y) = exp x · exp y.</p>
+  <p data-pid="5ed65b">Sixth, exp is its own slope. By rung 13's rule for the slope of a function run backwards, the slope of exp at x is 1 over the slope of ln at exp x, which is exp x. <b>And any function equal to its own slope is a constant times exp.</b></p>
+  <p data-pid="1208ce">Seventh, any real power. For p &gt; 0 and any real x, pˣ is exp(x ln p). For whole and fractional x it agrees with rung 8's powers. Its techniques are rung 8's exponent techniques, now for every real exponent.</p>
+
+  <h3>What follows</h3>
+  <p data-pid="6dfd1e"><b>Logs to any base are multiples of ln, and equations with an unknown in the exponent are solved by taking logs.</b> The slopes of eˣ, ln x, pˣ and xʳ for every real r follow by the chain rule. The integrals of 1/x, of g′/g and of eˣ join the table. A quantity whose rate of change is k times its size is Ce^{kt}: growth with a fixed doubling time, or decay with a fixed half-life. Fractions of polynomials split into pieces whose integrals are logs. And in the sciences there is acidity on a scale of logs, and the decay of atoms and the ages of rocks. There is the growth of populations and the limits on it. And there are graphs on which curves of growth become straight lines.</p>
+
+  <h3>What you can do because you know it</h3>
+  <p data-pid="56c862">You can say exactly what a logarithm and an exponential are, and prove their techniques. You can raise any positive number to any real power, and say what that means. You can solve equations where the unknown is an exponent. You can find slopes and areas that involve eˣ and ln x. You can model anything that grows or decays in proportion to its size, and find its doubling time or half-life. You can date a rock or a bone from what is left of an atom inside it. You can read a graph with a log scale.</p>
+
+  <p data-pid="e15075">That is a first handful of logs. The ladder has seen only the tip of what you will do with them.</p>
+  <p data-pid="e3f57d">And 17·stat asks why so many measured numbers start with 1, and reads the first digit off the log scale. It carries a box on <i>laws with a known exception rate</i>. And 17·crypt asks how long a password takes to guess, counting the passwords, measuring the count in bits, and turning bits into years at real guessing speeds. It carries a box on <i>two sizes of truth</i>.</p>
+
+  <h3>What it costs</h3>
+  <p data-pid="e122b2"><b>No axiom is laid down.</b> The rung spends rung 16's two fundamental techniques, and rung 14's rule that same slopes mean the same shape lifted. It spends rung 13's chain rule and its rule for the slope of an inverse, and rung 12's intermediate value technique. And it spends rung 9's inverse functions and rung 8's rational powers. One price is new: ln is defined by an area, so its values come from squeezing or from series, not from a finite recipe. e is a number that rung 15's squeeze can pin down to any number of places. At the end of the rung you will know what it means to say that an area turns multiplying into adding, and what you can do because you know it.</p>
+</section>
+
+<nav class="nextrung"><a href="r16nav.html">← 16·nav · where am I now?</a><a href="r17a.html">17a · the log as an area →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>John Napier, in 1614, published the first tables of logarithms, built from his two moving points. Jost Bürgi had computed similar tables before 1600 and printed them in 1620. Henry Briggs, after visiting Napier in 1615, recomputed the tables so that the log of 1 is 0 and the log of 10 is 1, and Briggs’s tables were used for three and a half centuries.</p>
+  <p>Grégoire de Saint-Vincent, in 1647, showed that areas under the hyperbola y = 1/x behave like logarithms, and Alphonse Antonio de Sarasa said so outright in 1649. Nicholas Mercator, in 1668, gave the area as an endless sum. Jacob Bernoulli, in 1683, met the number e while asking about interest added more and more often. Leonhard Euler, from 1728, named e, defined the exponential as a limit and as an endless sum, and set out the logarithm as its inverse in 1748.</p>
+  <h3>Accepted names</h3>
+  <p>The log techniques are the laws of logarithms, and the real-exponent techniques are the laws of exponents. ln is the natural logarithm.</p>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+Rung.ready(()=>{});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

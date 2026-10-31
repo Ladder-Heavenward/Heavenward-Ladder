@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>11·crypt · Is a keyword safer than one shift?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:3em;text-align:right}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.wordin{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:.88rem}
+.wordin input[type=text]{font-family:var(--mono);font-size:.95rem;text-transform:uppercase;width:9em;padding:3px 6px;border:1px solid var(--grid);border-radius:4px;background:var(--card);color:var(--ink)}
+.ctext{font-family:var(--mono);font-size:.8rem;line-height:1.25;overflow-x:auto;max-width:100%;white-space:pre;background:var(--card);border:1px solid var(--grid);border-radius:4px;padding:6px}
+.ctext .c{color:var(--muted)} .ctext .ok{color:var(--teal)} .ctext .no{color:var(--ember)}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r11econ.html">← 11·econ why would oranges be left to rot?</a><a href="floor3.html">next: F3 derivation floor →</a></p>
+  <div class="tags"><span class="tag crypt">11·crypt · cryptography</span></div>
+  <h1>Is a keyword safer than one shift?</h1>
+  <p>Is a keyword safer than one shift? 10·crypt broke a cipher with twenty-six factorial keys, because each plain letter always became the same cipher letter, and its tally went with it. The repair that ruled for three centuries was to stop that: take a keyword, and shift the first letter by the keyword's first letter, the second by its second, and so on, starting the keyword again when it runs out. Now E becomes a different letter at different places, and the cipher text's chart comes out nearly flat. It was called the cipher nobody could read. It is hard to see how to start on it, because the tallies seem to have nothing left to say. This page shows that they do. Repeats in the cipher text give away the keyword's length, by 4i's common divisors. Counting coincidences tells English from noise, and confirms the length; rung 11 says why the count can be trusted on a long text, and where its estimate breaks. Then each shift falls to tallies, one at a time.</p>
+  <p class="gesture">A keyword is a run of shifts in turn, one per letter of the keyword, so every letter that falls under the same keyword letter is one shift cipher. Repeated stretches of cipher text lie a multiple of the keyword’s length apart, so the length divides their distances. Cut the text into that many columns: with the right length each column counts coincidences like English, about 66 in a thousand, and with a wrong length like noise, about 38 in a thousand. Then break each column as a shift.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r04i.html">4i</a> (divides, the greatest-common-divisor technique), <a href="r04j.html">4j</a> (the counted-functions and choosing-counts-parts techniques), <a href="r05cb2.html">5·cb2</a> (remainders-add), <a href="r04crypt.html">4·crypt</a> (the shift), <a href="r10crypt.html">10·crypt</a> (the tallies-travel technique, English's chart), <a href="r10f.html">10f</a> (a sequence heads to a limit, passing-every-bound), <a href="r10c.html">10c</a> (limits-add, limits-multiply), <a href="r11d.html">11d</a> (rational-functions-are-continuous), <a href="r11f.html">11f</a> (break, endless). Later cryptography pages compose wheels of keys (named by rung number only: 19·crypt).</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · the keyword cipher, its length from repeats, coincidences, the shifts</div>
+
+  <h3>Several shifts in turn</h3>
+  <p class="eqline" data-pid="085342">From here on, on this page, letters are numbers 0 to 25 (A = 0, Z = 25), as on 4·crypt, and a keyword is a list k_0, k_1, …, k_{L−1} of L letters. For a place i of the text, r(i) names the remainder of i on division by L (4i). The <b>keyword cipher</b> encrypts the letter at place i by the shift k_{r(i)}: c_i is the remainder of m_i + k_{r(i)} on division by 26.</p>
+  <p data-pid="3d33fd">So places 0, L, 2L, … all use the shift k_0; places 1, L + 1, 2L + 1, … all use k_1; and so on. <b>A keyword cipher of length L is L shift ciphers, interleaved.</b> Each set of places with one remainder is a <b>column</b>: write the text in rows of L letters, and the columns stand under each other.</p>
+  <pre class="lines" data-k="ember" data-label="this page: Monterey Bay under OTTER">
+\text{OTTER} = 14,\ 19,\ 19,\ 4,\ 17 @@ L = 5; the two T's give two columns the same shift
+\text{MONTE} \mapsto (12 + 14,\ 14 + 19,\ 13 + 19,\ 19 + 4,\ 4 + 17) @@ letter plus key letter, place by place
+\mapsto \htmlClass{new}{\text{AHGXV}} @@ remainders by 26: 0, 7, 6, 23, 21
+  </pre>
+  <p data-pid="d8f001">The page's plain text is a passage of 570 letters about Monterey Bay: its deep canyon, the cold water that wells up each spring and summer, and the life and the fog that come with it. Under OTTER, its E's become S, X, X, I and V by turns. The tallies no longer travel with the letters. The plain text's top letter, E, makes up 12.6% of it; the cipher text's top letter, V, makes up only 7.4%. By 4j's counted-functions technique there are 26⁵, about 1.2 × 10⁷, keywords of 5 letters, and a longer keyword gives far more.</p>
+
+  <h3>Repeats give away the length</h3>
+  <p data-pid="cf9086">Repeats technique: <b>if a plain stretch stands at places i and j, and L divides j − i, then the cipher text holds the same stretch at both places.</b> Places i + t and j + t have the same remainder on division by L, since j + t = (i + t) + (j − i) and L divides j − i (remainders-add). So each letter of the two stretches gets the same shift, and the same plain letter becomes the same cipher letter. ∎</p>
+  <p data-pid="0a4845">An attacker sees only cipher text, so she runs the technique backwards, as a guess. A long repeated cipher stretch probably came from a repeated plain stretch, THE or AND or a repeated word, met by the keyword at the same point. Then L divides the distance. If L divides several distances, then by 4i's greatest-common-divisor technique L divides their greatest common divisor.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the repeats of KVX">
+\begin{aligned}&\text{KVX at places } 164,\ 189,\\ &\quad \ 284,\ 349,\ 384,\ 454,\ 464,\ 524\end{aligned} @@ the cipher text's commonest repeated three letters
+\text{distances } 25,\ 95,\ 65,\ 35,\ 70,\ 10,\ 60 @@ from each place to the next
+\text{greatest common divisor} = \htmlClass{new}{5} @@ 5 divides each; 25 and 35 share only 1 and 5 (4i)
+L \mid 5:\ \ L = 5 \text{ or } L = 1 @@ L = 1 would be one shift, and 10·crypt's chart would show it
+  </pre>
+  <p data-pid="9958d2">Not every repeat is honest. Two different plain stretches can meet different shifts and come out the same by accident. Over all 80 distances between repeated three-letter stretches in this cipher text, their greatest common divisor is 1: a few stray repeats spoil it. The cure is a tally, not a single divisor. Of the 80 distances, 73 are multiples of 5, 43 of 2 and 34 of 3. Five stands far above the rest.</p>
+
+  <h3>Counting coincidences</h3>
+  <p data-pid="850844">A second test needs no repeats at all. Pick two different places of a text. Do they hold the same letter? Count the pairs that do, and share the count by all the pairs.</p>
+  <p class="eqline" data-pid="e28271">From here on, on this page, for a text of n letters with tallies f(x), its <b>coincidence rate</b> is κ = Σ_x f(x)(f(x) − 1) / (n(n − 1)), summed over the 26 letters. Here κ is the Greek letter kappa, in its small form: on this page it names a coincidence rate, and its capital form is not used.</p>
+  <p data-pid="ee3c6d">By 4j's choosing-counts-parts technique a text of n letters has n(n − 1)/2 pairs of places, and the letter x makes f(x)(f(x) − 1)/2 of them matching pairs; the halves cancel. Long English prose gives κ about 0.066: E's pair with E's, T's with T's. A text in which every letter turned up equally often would give about 1/26, or 0.0385. Call these κ_E and κ_flat.</p>
+  <p data-pid="ddbdd5">Two facts make κ useful. First, a shift does not change it: the tallies travel (10·crypt), so the list of numbers f(x) is the same, and so is the sum. Each column of a keyword cipher has the κ of its plain letters. Second, κ of a long text can be trusted, and rung 10 says why.</p>
+  <p data-pid="b6668c">Coincidence-limit technique: <b>if the share of each letter in the first n letters of a text heads to a limit as n grows, then κ of the first n letters heads to the sum of the squares of those limits.</b> Write p_x(n) = f_n(x)/n for the share, P_x for its limit, and s_n = Σ_x p_x(n)².</p>
+  <pre class="lines" data-k="ember" data-label="this page: the coincidence-limit technique">
+\kappa_n = \tfrac{\sum_x f_n(x)^2 - n}{n(n - 1)} = \tfrac{n^2 s_n - n}{n(n - 1)} = \htmlClass{new}{s_n \cdot \tfrac{n}{n - 1} - \tfrac{1}{n - 1}} @@ Σ_x f_n(x) = n; then f_n(x) = n p_x(n); cancel n, for n ≥ 2
+p_x(n)^2 \to P_x^2,\quad s_n \to \textstyle\sum_x P_x^2 @@ limits-multiply, then limits-add, 25 times, for sequences (10f)
+\tfrac{n}{n - 1} \to 1,\quad \tfrac{1}{n - 1} \to 0 @@ one-over-n, written backwards by one place; rational-functions-far-out
+\kappa_n \to \htmlClass{keep}{\textstyle\sum_x P_x^2 \cdot 1 - 0} \quad \blacksquare @@ limits-multiply and limits-subtract
+  </pre>
+  <p data-pid="158397">With English's chart for the P_x, the sum of squares is about 0.066: that is where κ_E comes from. A short text wanders from it, as 10·crypt's shares did; a long one sits close. It is still a guess, resting on English's chart, which is a law and not a technique.</p>
+
+  <h3>The column test, and an estimate that breaks</h3>
+  <p data-pid="6b15d2">Cut the cipher text into L columns for each trial L, find κ of each column, and average. With the right L, each column is one shift of English: κ near 0.066. With a wrong L, each column mixes several shifts, its chart is flattened, and κ falls toward 0.0385.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>trial L</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th></tr>
+    <tr><td class="l">average κ of the columns</td><td>0.046</td><td>0.045</td><td>0.046</td><td>0.045</td><td><b>0.068</b></td><td>0.047</td><td>0.046</td><td>0.045</td><td>0.048</td><td>0.067</td></tr>
+  </table></div>
+  <p data-pid="432446">Five, and its multiple ten, stand out. Ten works too, since a keyword of 5 letters is also a keyword of 10: OTTEROTTER.</p>
+  <p data-pid="c792a6">There is a quicker guess, from κ of the whole cipher text. About one pair in L lies in a single column, where letters match at English's rate. The other pairs lie across columns, where different shifts make matches about as rare as in noise. So κ ≈ κ_E/L + κ_flat(1 − 1/L). Run it backwards for L by 5f's techs, and call the result g(κ), a name for the estimate of L as a function of κ:</p>
+  <pre class="lines" data-k="ember" data-label="this page: the length estimate">
+\kappa \approx \kappa_{\text{flat}} + \tfrac{\kappa_E - \kappa_{\text{flat}}}{L} @@ collect: κ_E/L + κ_flat − κ_flat/L
+L \approx g(\kappa) = \htmlClass{new}{\tfrac{\kappa_E - \kappa_{\text{flat}}}{\kappa - \kappa_{\text{flat}}}} = \tfrac{0.0275}{\kappa - 0.0385} @@ solve for L, for κ ≠ κ_flat
+g(0.0459) \approx 3.7 @@ the OTTER cipher text: a guess of about 4
+g(0.0440) \approx 5.0 @@ the κ the guess itself predicts for L = 5
+  </pre>
+  <p data-pid="d84696">g is a rational function of κ, so it is continuous at every input (11d). Its one break is at κ_flat, where the bottom is 0, and the break is of the endless kind (11f): as κ heads to κ_flat from above, g(κ) passes every bound. <b>Near κ_flat the estimate is useless: a tiny wobble in κ makes a huge change in L.</b> Here a change of 0.002 in κ moves the guess from 3.7 to 5.0. The cipher text's κ is only measured, from a few hundred letters, so g gives a place to start, and the column test decides.</p>
+
+  <h3>Each shift falls</h3>
+  <p data-pid="823fb7">With L = 5, each column is a shift cipher of 114 letters. Its top tally is not always E's: in column 2 the top letter is M, and M comes from T under a shift of 19. So match the whole chart. For each of the 26 shifts, slide English's chart along by it and score how well it fits the column's tallies: the sum, over the letters x, of English's share of x times the column's tally of x shifted. The best score picks the shift.</p>
+  <pre class="lines" data-k="ember" data-label="this page: five columns, five shifts">
+\text{column } 0:\ \text{top letters S, O, H} \Rightarrow \text{shift } 14 = \text{O} @@ E ↦ S, T ↦ H, A ↦ O
+\text{column } 1:\ \text{X, T, M} \Rightarrow 19 = \text{T} @@ E ↦ X, A ↦ T, T ↦ M
+\text{column } 2:\ \text{M, A, X} \Rightarrow 19 = \text{T} @@ T ↦ M leads here, E ↦ X third
+\text{columns } 3, 4:\ \text{W, I} \Rightarrow 4 = \text{E};\ \ \text{K, V} \Rightarrow 17 = \text{R} @@ S ↦ W and E ↦ I; T ↦ K and E ↦ V
+\Rightarrow \htmlClass{keep}{\text{OTTER}} @@ every column agrees with its chart's best fit
+  </pre>
+  <p data-pid="a016f8">So is a keyword safer than one shift? Yes: it needs more text, and more work, and the attacker must find L before she can begin. But the work grows with L, not with the 26^L keywords. A keyword as long as the message would leave every column one letter long, with no tallies to read. A keyword as long as the message, chosen by chance and used once, is 9·crypt's pad, written in letters.</p>
+
+  <h3>Illegal moves</h3>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed">
+\text{the repeats' distances have gcd } 1,\ \text{so } L = 1\,? @@ stray repeats spoil a single divisor; tally which L divides the most distances
+\begin{aligned}&L \text{ divides every distance,}\\ &\quad\text{so } L \text{ is the length}\,?\end{aligned} @@ every divisor of the length does too, and every multiple of it passes the column test
+\text{the top cipher letter of a column is } g(\text{E})\,? @@ in 114 letters, often not: match the whole chart
+g(0.0390) \approx 55,\ \text{so } L = 55\,? @@ near κ_flat the estimate passes every bound; trust the column test
+\text{a shift changes } \kappa\,? @@ tallies-travel: the same tallies on other letters, the same sum
+  </pre>
+
+  <h3>Running it backwards</h3>
+  <p data-pid="c2abe5">Handed a keyword, encrypt by adding its letters in turn and decrypt by taking them away. Handed a cipher text, find the repeats and tally the divisors of their distances; confirm with the column test; then fit each column's chart to English's, and read the keyword from the shifts. Handed a wish, a keyword cipher that resists all this, make the keyword long, so the columns are short; at full length it is the pad.</p>
+</section>
+
+<section class="pic" id="pic">
+  <div class="eyebrow">The picture · left: repeats, and the divisors of their distances · right: the column test, and the keyword read back</div>
+  <div class="panels">
+    <div class="panel">
+      <div class="wordin"><span class="m">keyword</span><input type="text" id="kw" maxlength="12" value="OTTER"></div>
+      <canvas id="cvK"></canvas>
+      <div class="cap">For each trial L from 2 to 12: how many of the distances between repeated three-letter stretches of the cipher text it divides. Ember: the most.</div>
+      <div class="verdict" id="vdK"></div>
+    </div>
+    <div class="panel">
+      <canvas id="cvC"></canvas>
+      <div class="kn"><span class="m">trial L</span><input type="range" id="kL" min="1" max="12" step="1" value="5"><output id="oL"></output></div>
+      <div class="cap">Bars: the average κ of the columns, for each trial L. Dashed gold: κ_E, about 0.066. Dotted: κ_flat, about 0.0385. Teal: your trial L. Below: the keyword each column's best fit gives, and the plain text it reads, teal where right.</div>
+      <div class="ctext" id="ct"></div>
+      <div class="verdict" id="vdC"></div>
+    </div>
+  </div>
+</section>
+
+<section class="slides" id="sl1"><div class="eyebrow">The slides · several shifts in turn; OTTER; the chart flattened; repeats; KVX; the stray repeats; κ; a shift keeps κ; the coincidence limit; the column test; the estimate; its endless break; five shifts; the pad again; illegal moves · ← → keys work</div></section>
+
+<section class="sayback">
+  <div class="eyebrow">Say it back · then work it</div>
+  <h2>Questions</h2>
+  <div class="phkey"></div>
+  <ol>
+    <li><span class="qid">11·crypt.1</span><span class="gname">The keyword cipher.</span><span class="gwhy">Do: build the page's pieces.</span>
+      <ol class="sub">
+        <li><span class="qid">11·crypt.1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="m = \text{MEETATMANTECA},"></span> <span data-tex-inline="\text{keyword: OAK}"></span></span>Encrypt m with the keyword.</li><li><span class="givens"><span data-tex-inline="\text{Repeated stretches of a}"></span> <span data-tex-inline="\text{cipher text lie 24, 36, 60}"></span> <span data-tex-inline="\text{and 18 apart.}"></span></span>Find their greatest common divisor, and every keyword length it allows.</li><li><span class="givens"><span data-tex-inline="m = \text{SACRAMENTO}"></span></span>Find the κ of m.</li><li><span class="givens"><span data-tex-inline="\kappa = 0.047,"></span> <span data-tex-inline="\kappa_E = 0.066,\ \kappa_{\text{flat}} = 0.0385,"></span> <span data-tex-inline="g(\kappa) = \dfrac{\kappa_E - \kappa_{\text{flat}}}{\kappa - \kappa_{\text{flat}}}"></span></span>Find g at this κ.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">11·crypt.2</span><span class="gname">From the cipher text back.</span><span class="gwhy">Undo: run the page's techs backwards.</span>
+      <ol class="sub">
+        <li><span class="qid">11·crypt.2.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="c = \text{RZEPDODKG},"></span> <span data-tex-inline="\text{keyword: DOG}"></span></span>Decrypt c.</li><li><span class="givens"><span data-tex-inline="\text{A keyword has length 4.}"></span> <span data-tex-inline="\text{The columns&#x27; best fits}"></span> <span data-tex-inline="\text{send E to W, I, E and P}"></span> <span data-tex-inline="\text{in turn.}"></span></span>Find the keyword.</li><li><span class="givens"><span data-tex-inline="g(\kappa) = \dfrac{0.0275}{\kappa - 0.0385},"></span> <span data-tex-inline="\text{The estimate gave a length}"></span> <span data-tex-inline="\text{of 4.}"></span></span>Find the κ of the cipher text.</li><li><span class="givens"><span data-tex-inline="\text{Distances between repeats:}"></span> <span data-tex-inline="\text{30, 45, 75, 13, 105, 60.}"></span></span>Find the greatest common divisor of all six, and every length from 2 to 15 that divides the most.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">11·crypt.3</span><span class="gname">Where the attack bends.</span><span class="gwhy">Bend: find where the techs stop working.</span>
+      <ol class="sub">
+        <li><span class="qid">11·crypt.3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{The keyword is BBBB.}"></span></span>What cipher is it, and what does the column test show?</li><li><span class="givens"><span data-tex-inline="\text{The keyword has 6\ letters}"></span> <span data-tex-inline="\text{and the message 30.}"></span></span>Find how long each column is, and whether its top tally can settle its shift.</li><li><span class="givens"><span data-tex-inline="g(\kappa) = \dfrac{0.0275}{\kappa - 0.0385}"></span></span>Find g at 0.040 and at 0.041. <br>Find the change in κ between them, and the change in the estimate it makes.</li><li><span class="givens"><span data-tex-inline="\text{The keyword is as long as}"></span> <span data-tex-inline="\text{the message, and chosen by}"></span> <span data-tex-inline="\text{dice.}"></span></span>What do the repeats and the column test find?</li></ol></li>
+      </ol></li>
+    <li class="optgroup"><span class="qid">11·crypt.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder challenges that rely on your own making. The page is complete without these; the rung's star needs them.</span>
+      <ol class="sub">
+        <li class="opt"><span class="qid">11·crypt.4.1</span><span class="tagq">build</span>Build keyword ciphers of your own.<ol class="parts" type="a"><li>Write a paragraph of your own, at least 300 letters, about a place you know. <br>Encrypt it with a keyword of 4 to 6 letters, and find the length by the column test.</li><li><span class="givens"><span data-tex-inline="\text{A keyword cipher&#x27;s message}"></span> <span data-tex-inline="\text{is one letter repeated.}"></span></span>Prove that its cipher text repeats with the keyword's length, and give the keyword from it.</li><li>Prove the repeats technique, one move per line.</li><li>Prove that a shift leaves κ unchanged.</li></ol></li>
+        <li class="opt"><span class="qid">11·crypt.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{keyword: ABCDEFGHIJKLM},"></span> <span data-tex-inline="\qquad \text{NOPQRSTUVWXYZ},"></span> <span data-tex-inline="\text{message: E, 26 times},"></span> <span data-tex-inline="g(\kappa) = \dfrac{0.0275}{\kappa - 0.0385}"></span></span>Find the κ of the cipher text, and g of it.</li>
+        <li class="opt"><span class="qid">11·crypt.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="L \text{ divides every distance}"></span> <span data-tex-inline="\text{between the repeats of a}"></span> <span data-tex-inline="\text{cipher text.}"></span></span>Must L be the keyword's length?</li>
+        <li class="opt"><span class="qid">11·crypt.4.4</span><span class="tagq">seam</span>An English inventor broke the keyword cipher around 1854, and never published how. A Prussian army officer published the method in 1863. Who broke the keyword cipher?</li>
+      </ol></li>
+  </ol>
+  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
+</section>
+
+<nav class="nextrung"><a href="r11econ.html">← 11·econ · why would oranges be left to rot?</a><a href="floor2concl.html">F2·∎ · what the analysis floor shows →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>Giovan Battista Bellaso described the keyword cipher in 1553. Blaise de Vigenère described a stronger cousin in 1586, whose keyword runs on into the message itself, and the simpler cipher came to carry his name. It was long called le chiffre indéchiffrable, the undecipherable cipher. Charles Babbage broke it around 1854 and left the method in his notes. Friedrich Kasiski, a Prussian infantry officer, published the repeats method in 1863. William Friedman counted coincidences in “The Index of Coincidence and Its Applications in Cryptography” (1922), and his length estimate followed. The Confederate army used the keyword cipher in the American Civil War, and Union readers broke its messages.</p>
+  <aside class="voice para"><p>Kasiski advised looking for groups of letters that repeat in the cipher text, measuring the gaps between them, and finding the number that divides the gaps, since that number is the length of the key.</p><cite>Friedrich W. Kasiski, Die Geheimschriften und die Dechiffrir-Kunst (1863); paraphrase</cite></aside>
+  <p>Accepted names: the keyword cipher is the Vigenère cipher, a polyalphabetic cipher. The repeats technique, run backwards, is the Kasiski examination, or Kasiski test. κ is the index of coincidence, often scaled by 26; g is Friedman's estimate of the key length. Matching a column's chart by sliding is a chi-squared or correlation test.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="11·crypt: a worked “proof”, not allowed">
+\text{the cipher text's chart is nearly flat} @@ fine: κ = 0.046
+\text{so its tallies say nothing} @@ not allowed: the whole text's tallies mix L shifts; each column's tallies are one shift of English's
+\text{so the keyword cipher cannot be read} @@ false: columns of the right length fall one shift at a time
+  </pre>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const TXT="Monterey Bay is cut by a deep canyon that starts close to the beach at Moss Landing and runs out to sea for more than a hundred kilometres. In places it is as deep as the Grand Canyon. Each spring and summer the wind from the north pushes the surface water away from the coast, and cold water from the deep comes up to take its place. With the cold water come the small plants and animals that feed the fish, and with the fish come the birds, the sea lions, the sea otters and the whales. The cold water also brings the fog that sits on the coast through the summer and keeps the hills of the coast green while the valleys inland are dry and brown. The fog is cold, the water is cold, and the bay is full of life because of it.";
+const P=TXT.toUpperCase().replace(/[^A-Z]/g,''); const n=P.length;
+const ENS=[8.2,1.5,2.8,4.3,12.7,2.2,2.0,6.1,7.0,0.15,0.77,4.0,2.4,6.7,7.5,1.9,0.1,6.0,6.3,9.1,2.8,0.98,2.4,0.15,2.0,0.07];
+const KE=0.066, KF=1/26;
+const kw=$('kw'), kL=$('kL'); let C='', key=[];
+const num=s=>[...s].map(ch=>ch.charCodeAt(0)-65);
+function enc(){ const k=num(kw.value.toUpperCase().replace(/[^A-Z]/g,'')||'A'); key=k; C=[...P].map((ch,i)=>String.fromCharCode(65+((ch.charCodeAt(0)-65+k[i%k.length])%26))).join(''); }
+function kappa(t){ const f=new Array(26).fill(0); for(const ch of t) f[ch.charCodeAt(0)-65]++; const m=t.length; if(m<2) return 0; return f.reduce((a,v)=>a+v*(v-1),0)/(m*(m-1)); }
+function gcd(a,b){ while(b){ [a,b]=[b,a%b]; } return a; }
+function repeats(){ const pos={}; for(let i=0;i+3<=n;i++){ const g=C.slice(i,i+3); (pos[g]=pos[g]||[]).push(i); } const ds=[]; let best=null; Object.keys(pos).forEach(g=>{ const v=pos[g]; if(v.length>1){ for(let j=0;j+1<v.length;j++) ds.push(v[j+1]-v[j]); if(!best||v.length>pos[best].length) best=g; } }); return {ds,best,bp:best?pos[best]:[]}; }
+const PK=plane($('cvK'),{x:[1.4,12.6],y:[0,1],grid:0,labels:false,aspect:0.62,draw:Q=>drawK(Q)});
+function drawK(Q){ const c=Q.ctx, r=repeats(); const cnt=[]; for(let L=2;L<=12;L++) cnt.push(r.ds.filter(d=>d%L===0).length); const mx=Math.max(1,...cnt); Q.o.y=[-mx*0.12,mx*1.12]; const top=cnt.indexOf(Math.max(...cnt))+2;
+  cnt.forEach((v,i)=>{ const L=i+2; c.fillStyle=col(L===top?'--ember':'--plum'); c.globalAlpha=.75; c.fillRect(Q.X(L-0.35),Q.Y(v),Q.X(L+0.35)-Q.X(L-0.35),Q.Y(0)-Q.Y(v)); c.globalAlpha=1; c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; c.fillStyle=col('--muted'); c.fillText(L,Q.X(L),Q.Y(0)+13); c.fillText(v,Q.X(L),Q.Y(v)-3); });
+  Q.text('of '+r.ds.length+' distances',12.5,mx*1.04,'--muted','right',11);
+  let g=0; r.ds.forEach(d=>g=gcd(g,d)); let gb=0; const bd=[]; for(let j=0;j+1<r.bp.length;j++){ bd.push(r.bp[j+1]-r.bp[j]); gb=gcd(gb,r.bp[j+1]-r.bp[j]); }
+  const vd=$('vdK'); vd.className='verdict '+(top===key.length||key.length%top===0?'win':'lose');
+  vd.textContent=r.best?('Commonest repeat: '+r.best+' at places '+r.bp.join(', ')+'; distances '+bd.join(', ')+', greatest common divisor '+gb+'. All '+r.ds.length+' distances together: greatest common divisor '+g+'. Most divided by: '+top+'. The keyword has '+key.length+' letters.'):'No repeated three-letter stretch: the keyword is too long for this text, or the text too short.'; }
+const PC=plane($('cvC'),{x:[0.4,13.6],y:[0,0.08],grid:0,labels:false,aspect:0.62,draw:Q=>drawC(Q)});
+function cols(L){ const a=[]; for(let i=0;i<L;i++){ let s=''; for(let j=i;j<n;j+=L) s+=C[j]; a.push(s); } return a; }
+function avgK(L){ return cols(L).reduce((a,s)=>a+kappa(s),0)/L; }
+function bestShift(s){ const f=new Array(26).fill(0); for(const ch of s) f[ch.charCodeAt(0)-65]++; let bs=0,bv=-1; for(let k=0;k<26;k++){ let v=0; for(let x=0;x<26;x++) v+=ENS[x]*f[(x+k)%26]; if(v>bv){ bv=v; bs=k; } } return bs; }
+function drawC(Q){ const c=Q.ctx, L0=+kL.value; Q.o.y=[-0.008,0.085];
+  c.strokeStyle=col('--grid'); c.lineWidth=1; c.beginPath(); [0.02,0.04,0.06,0.08].forEach(y=>{ c.moveTo(Q.X(0.4),Q.Y(y)); c.lineTo(Q.X(13.6),Q.Y(y)); }); c.stroke();
+  for(let L=1;L<=12;L++){ const v=avgK(L); c.fillStyle=col(L===L0?'--teal':'--plum'); c.globalAlpha=.75; c.fillRect(Q.X(L-0.35),Q.Y(v),Q.X(L+0.35)-Q.X(L-0.35),Q.Y(0)-Q.Y(v)); c.globalAlpha=1; c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; c.fillStyle=col('--muted'); c.fillText(L,Q.X(L),Q.Y(0)+13); }
+  Q.line(0.4,KE,13.6,KE,'--gold',1.6,[7,4]); Q.line(0.4,KF,13.6,KF,'--muted',1.4,[2,3]);
+  c.fillStyle=col('--muted'); c.textAlign='right'; [0.02,0.04,0.06,0.08].forEach(y=>c.fillText(y.toFixed(2),Q.X(13.6)-2,Q.Y(y)-3));
+  const sh=cols(L0).map(bestShift); const kws=sh.map(k=>String.fromCharCode(65+k)).join('');
+  const W=40; let h='keyword read back: '+kws+'\n'; let right=0; const lim=Math.min(n,200);
+  for(let i=0;i<lim;i+=W){ const seg=C.slice(i,i+W); h+='<span class="c">'+seg+'</span>\n'; let line=''; for(let j=0;j<seg.length;j++){ const x=(seg.charCodeAt(j)-65-sh[(i+j)%L0]+26)%26; const ch=String.fromCharCode(65+x); const ok=ch===P[i+j]; if(ok) right++; line+='<span class="'+(ok?'ok':'no')+'">'+ch+'</span>'; } h+=line+'\n'; }
+  $('ct').innerHTML=h; $('oL').textContent=L0;
+  const k=kappa(C), g=(KE-KF)/(k-KF); const vd=$('vdC'); const good=right===lim;
+  vd.className='verdict '+(good?'win':'lose'); vd.textContent='κ of the whole cipher text '+k.toFixed(4)+', so g(κ) ≈ '+(g>0&&isFinite(g)?g.toFixed(1):'no estimate')+'. At trial L = '+L0+' the columns average '+avgK(L0).toFixed(3)+(good?'; the keyword read back decrypts the text.':'; the keyword read back gets '+right+' of the first '+lim+' letters right.'); }
+function all(){ enc(); PK.redraw(); PC.redraw(); }
+kw.addEventListener('input',all); kL.addEventListener('input',()=>PC.redraw());
+all();
+window.__pic={read:()=>({K:$('vdK').textContent,C:$('vdC').textContent})};
+
+const N='\\htmlClass{new}', Kp='\\htmlClass{keep}';
+stepper('#sl1',[
+  {k:'ember',kl:'several shifts in turn',t:R`c_i = m_i + k_{r(i)} \ (\text{remainder by } 26)`,n:`r(i): the remainder of the place i on division by L.`},
+  {k:'ember',kl:'OTTER',t:R`\text{MONTE} \mapsto ${N}{\text{AHGXV}}`,n:`Shifts 14, 19, 19, 4, 17 in turn.`},
+  {k:'ember',kl:'the chart flattened',t:R`\text{E} \mapsto \text{S, X, X, I, V}`,n:`The tallies no longer travel with the letters.`},
+  {k:'teal',kl:'from 5·cb2 · repeats',t:R`L \mid j - i \Rightarrow \text{same shifts at } i + t,\ j + t`,n:`A repeated plain stretch, met at the same point of the keyword, repeats in the cipher.`},
+  {k:'teal',kl:'from 4i · KVX',t:R`\text{gcd of } 25, 95, 65, 35, 70, 10, 60 = ${N}{5}`,n:`L divides every distance, so L divides 5.`},
+  {k:'ember',kl:'the stray repeats',t:R`73 \text{ of } 80 \text{ distances are multiples of } 5`,n:`Tally the divisors; one stray repeat spoils a single gcd.`},
+  {k:'ember',kl:'κ',t:R`\kappa = \tfrac{\sum_x f(x)(f(x) - 1)}{n(n - 1)}`,n:`The share of pairs of places holding one letter.`},
+  {k:'teal',kl:'from 10·crypt · a shift keeps κ',t:R`f_c = f_m \circ g^{-1}`,n:`The same tallies, so the same sum.`},
+  {k:'teal',kl:'from 10f · the coincidence limit',t:R`\kappa_n = s_n\tfrac{n}{n - 1} - \tfrac{1}{n - 1} \to ${Kp}{\textstyle\sum_x P_x^2}`,n:`For English, about 0.066.`},
+  {k:'ember',kl:'the column test',t:R`L = 5:\ 0.068;\quad \text{other } L:\ \approx 0.046`,n:`One shift of English per column only at the right length.`},
+  {k:'ember',kl:'the estimate',t:R`g(\kappa) = \tfrac{0.0275}{\kappa - 0.0385}`,n:`g(0.0459) ≈ 3.7: a place to start.`},
+  {k:'teal',kl:'from 11f · its endless break',t:R`\kappa \to 0.0385^+:\ g(\kappa) \text{ passes every bound}`,n:`A tiny wobble in κ, a huge change in L.`},
+  {k:'ember',kl:'five shifts',t:R`\text{best fits: } 14, 19, 19, 4, 17 = ${Kp}{\text{OTTER}}`,n:`Match the whole chart; the top letter alone misleads.`},
+  {k:'ember',kl:'the pad again',t:R`L = n`,n:`Columns one letter long: nothing to tally. Chosen by chance and used once, it is 9·crypt's pad.`},
+  {k:'ember',kl:'illegal',t:R`\text{gcd} = 1 \Rightarrow L = 1\,?`,n:`Stray repeats; tally the divisors instead.`}
+],{title:'The slides · several shifts in turn; OTTER; the chart flattened; repeats; KVX; the stray repeats; κ; a shift keeps κ; the coincidence limit; the column test; the estimate; its endless break; five shifts; the pad again; illegal moves · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

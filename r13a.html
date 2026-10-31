@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>13a · The slope at a point</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+#cvA,#cvB{touch-action:none}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r13.html">← 13 measuring change in an instant</a><a href="r13b.html">next: 13b a slope means no gap →</a></p>
+  <div class="tags"><span class="tag proof">13a · proof</span></div>
+  <h1>The slope at a point</h1>
+  <p>This step gives the rung's words their jobs: point, chord, slope, and a name for a change of input. Then it gives the slope of a function at an input as a limit of chord slopes, with a new mark for it. It proves that the new use of “slope” agrees with the old one for linear functions, and then computes the slopes of the square, the cube and one over the input from the definition, one move per line. Last, the tangent line, and how people talked before there were limits to talk with.</p>
+  <p class="gesture">Fix the input, and change it by a small real other than 0. Divide the change in the output by the change in the input. That chord slope is a function of the change, with a hole at 0. Where it heads as the change heads to 0 is the slope of the function at the input.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r09e.html">9e</a> (the plane, the graph, the linear function with its step m, same-ratio, two-points-one-line), <a href="r11e.html">11e</a> (the rate of a linear function), <a href="r08h.html">8h</a> (displacement, |x|, unpack-the-bars), <a href="r05h.html">5h</a> (square-of-a-sum, the grid of cells, the displacement pattern), <a href="r05g.html">5g</a> (fractions-of-rationals), <a href="r10a.html">10a</a> (the limit line, defined near w, agreeing-near, line-limit, a hole), <a href="r10b.html">10b</a> (one-limit and the name), <a href="r10c.html">10c</a> (substitution), <a href="r08d.html">8d</a> (the rules for ℝ), <a href="r12a.html">12a</a> (open interval). <a href="r13b.html">13b</a> to <a href="r13f.html">13f</a> prove every rule from this definition; 13k works tangent lines by hand.</p></div>
+</header>
+
+<section class="class step" data-step="13a1">
+  <h2 class="sthead"><span class="stno">13a1</span>New marks on this rung</h2>
+  <p class="stands">Stands on 9a1 (marks said first in words).</p>
+  <p data-pid="00b0e0">Each mark below is said first in plain words. Each gets its own “from here on” line on the step named, before any proof uses it.</p>
+  <ul>
+    <li data-pid="052e0e">the change in a function's output when its input changes: 11·chem's capital delta written before the function's name, Δf, read “delta f” (this step)</li>
+    <li data-pid="624ab5">the slope of f at w: a small stroke after the name, f′(w), read “f prime of w” (this step)</li>
+    <li data-pid="429592">the function that gives the slope at each input: f′; and for a formula, the formula in brackets with the stroke after, as in (x²)′ (this step)</li>
+    <li data-pid="8667df">the slope of the slope: two strokes, f″, read “f double prime” (<a href="r13d.html">13d</a>)</li>
+    <li data-pid="366e09">the slope again, written as one mark shaped like a fraction: dy/dx, read “d y d x” (<a href="r13e.html">13e</a>)</li>
+    <li data-pid="953b62">the concentration of a substance, as a function of time: its formula in square brackets, [A] (<a href="r13chem.html">13·chem</a>, in the chemistry steps)</li>
+    <li data-pid="298c41">a value worked out from a fitted line, not measured: a small roof over the letter, ŷ, read “y hat” (<a href="r13stat.html">13·stat</a>)</li>
+  </ul>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">13a1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">Δf,  f′(w)</span></span>Say each mark in words. <br>Name the step that lays each one down.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13a2">
+  <h2 class="sthead"><span class="stno">13a2</span>Points, chords and slopes</h2>
+  <p class="stands">Stands on 13a1, 9e (graphs, two-points-one-line) and 11e (rates).</p>
+  <p data-pid="9186e0">Every word in the rung's title needs a job before it can be used. The first is the smallest.</p>
+  <p class="eqline" data-pid="e31234">From here on, a point of the graph of a function f is one of its pairs (a, f(a)): 9e's dot, in its usual word. “At a point” means at that pair's input: the slope of f at the point (a, f(a)) is the slope of f at a. No shape is meant; the points of geometry wait for rung 18.</p>
+  <p class="eqline" data-pid="f791bc">A reuse, said out loud. “Point” has had three jobs: 5g's decimal point, a mark in a numeral; 11·chem's melting point and boiling point, which are temperatures; and 12·phys's balance point, a place along a bar. Rungs 10 and 11 also said “at a point” loosely for “at an input”, which is this step's sense. The old jobs keep their own words around them, and what the word is said of says which.</p>
+  <p class="eqline" data-pid="ee4c9e">From here on, take a function f whose inputs and outputs are reals, and two different inputs s and t of f. <b>The chord of f through s and t is the linear function through the points (s, f(s)) and (t, f(t)).</b> It is the one that 9e's two-points-one-line gives. It is a function on ℝ, a set of pairs, like every linear function. “Chord” is a word for it, and nothing about shape is meant.</p>
+  <p class="eqline" data-pid="5e28fc">From here on, the slope of a linear function x ↦ mx + b is m. So the slope of the chord of f through s and t is two-points-one-line's step, (f(t) − f(s))/(t − s). “Slope” is the word 9e kept back for this rung. A chord is also called a secant line, and its slope a difference quotient.</p>
+  <p class="eqline" data-pid="dfea74">Reuses, said out loud. The real m has been called the step (9e) and the rate (11e). Slope is a third name for it, and all three stay. The word “step” also names 4c's step of a definition by repeating and 11a's step function u; what it is said of says which. And “slope” gets a second job further down this step, the slope of a function at an input. The slope-of-a-line technique below shows that for a linear function the two jobs come to the same thing.</p>
+  <p data-pid="57ab0d">So the chord of x² through 1 and 4 has slope (16 − 1)/(4 − 1) = 5. Through 1 and 2 it is (4 − 1)/(2 − 1) = 3. Through 1 and 1.1 it is (1.21 − 1)/0.1 = 2.1. The chord of 1/x through 1 and 2 has slope (½ − 1)/(2 − 1) = −½. For a linear function every chord has the same slope, by same-ratio; for x² the slope depends on the chord. The rest of the step asks what the chords through w and a nearby input are doing.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · chords · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · left: a chord through w and w + h · right: the chord slope as a function of h, with its hole at 0</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="chips" id="cch"></div>
+      <canvas id="cvA"></canvas>
+      <div class="kn">
+        <span class="m">w</span><input type="range" id="ka" min="-2" max="2" step="0.05" value="1"><output id="oa"></output>
+        <span class="m">|h|</span><input type="range" id="kh" min="-3" max="0.3" step="0.01" value="0"><output id="oh"></output>
+      </div>
+      <div class="chips" id="hch"><button class="on" data-s="1">h &gt; 0</button><button data-s="-1">h &lt; 0</button><button id="bhalf">halve h</button></div>
+      <div class="cap">Black dot: the point (w, f(w)). Ember dot and line: the point (w + h, f(w + h)) and the chord through both. Grey legs: the run Δx = h and the rise Δy. Teal dashed: the tangent line at w. Drag either dot along the graph, or use the knobs; the |h| knob runs from 0.001 to 2 by powers of ten.</div>
+      <div class="eqbox" id="eqA"></div>
+    </div>
+    <div class="panel">
+      <canvas id="cvB"></canvas>
+      <div class="kn">
+        <span class="m">ε</span><input type="range" id="ke" min="-3" max="0" step="0.05" value="-0.7"><output id="oe"></output>
+      </div>
+      <div class="chips" id="zch"><button class="on" data-z="0">all of h from −2 to 2</button><button data-z="1">zoom to h</button></div>
+      <div class="cap">Across: the change h. Up: the chord slope (f(w + h) − f(w))/h. The hollow ring at h = 0 is the hole: no chord there. Gold band: within ε of f′(w). Grey window: the largest reach δ around 0 that wins 10a's game for that ε, found by testing. The ember dot is your h.</div>
+      <div class="verdict" id="vdB"></div>
+    </div>
+  </div>
+  <div class="eqbox" id="eqT"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13a2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = x² + 1,  inputs 1 and 3</span></span>Write the chord through the two points. <br>Find its slope.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13a3">
+  <h2 class="sthead"><span class="stno">13a3</span>A change of input, and its name</h2>
+  <p class="stands">Stands on 13a2 and 8h (displacement).</p>
+  <p data-pid="20c3bb">Keep one input a fixed and move the other. Two marks help, one old and one new.</p>
+  <p class="eqline" data-pid="e33dd5">From here on, Δ (the Greek letter delta, in its capital form) may be written before the letter of a quantity. It names the change of that quantity, final less starting: ΔT = T − T₀, 8h's displacement of T from T₀. It is also written before the name of a function, or before the letter that names its outputs. For an input a changed to a + h, Δf names f(a + h) − f(a), and so does Δy when y = f(x). Δx names (a + h) − a. Δf is one name, read “delta f”; the Δ is not a number multiplying f. Δ itself is an operator: written before a name, it makes the name of a change. The step always says at which a and which h it is taken. 10a's small δ is a different mark.</p>
+  <p class="eqline" data-pid="c895aa">From here on, h names a real other than 0 that changes an input: a + h is the input a changed by h. <b>It is just a number.</b> It may be positive or negative, as near 0 or as far from it as you like. It is never 0, since a chord needs two different inputs. It is not “a bit” of anything, and there is no such thing as a bit of a bit: h · h is another real, the product of h with itself.</p>
+  <p class="eqline" data-pid="f3483e">A reuse, said out loud: h has been a letter in several steps before. It was 5h's fixed amount in the displacement pattern (x − h)², the displacement in 9e's and 9f's f(x − h), 8f's step 1/n, the step of 10f's picture, and 12d's reciprocal. Those were names in their own steps. From here on, wherever a step writes a chord slope or says “a change h”, h has this job. A step that wants h for something else says so.</p>
+  <p data-pid="f0df52">Now look at the two changes. The change of input is Δx = (w + h) − w = h, by adding-keeps-answers. The change of output is Δy = f(w + h) − f(w). Both are displacements, new less old: Δx is 8h's x − x₀ with x₀ = w, and Δy is the output f(w + h) displaced from f(w). This is the displacement pattern of 5h and 8h, once on the top and once on the bottom of one fraction. The chord of f through w and w + h has slope</p>
+  <div class="eqline" data-tex="\dfrac{\Delta y}{\Delta x} = \dfrac{f(w + h) - f(w)}{h}."></div>
+  <p data-pid="ea3cd6">Call it the chord slope of f at w with change h. Fix w, and suppose f is defined on some open interval (w − r, w + r), 12a's word. Then w is an input and f is defined near w. The chord slope is defined at every h with 0 &lt; |h| &lt; r. As a function of h it is defined near 0, and 0 is not one of its inputs. At h = 0 the fraction would be 0/0, which names nothing (5d's nothing-times-0-is-1). The chord slope has a hole at 0, in 10a's second meaning. And 10a's limit was built for exactly that: the value at the hole plays no part in where a function is headed.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · Δ and h · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13a3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = 2x² at w = 1,  h = 0.1 and h = −0.1</span></span>Find Δx and Δy for each h. <br>Find each chord slope.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13a4">
+  <h2 class="sthead"><span class="stno">13a4</span>The slope at a point</h2>
+  <p class="stands">Stands on 13a3, 10a (limits) and 10b (one limit).</p>
+  <p data-pid="71ad20">The rung's first principle is a definition.</p>
+  <p class="eqline" data-pid="04ee09">From here on, take a function f whose inputs and outputs are reals, and an input a of f with f defined on some open interval (a − r, a + r). f has a slope at a when the chord slopes (f(a + h) − f(a))/h have a limit as h → 0. <b>That limit is the slope of f at a</b>, written f′(a):</p>
+  <div class="eqline" data-tex="f'(a) = \lim_{h \to 0} \dfrac{f(a + h) - f(a)}{h}."></div>
+  <p class="eqline" data-pid="c55e3d">Read f′(a) as “f prime of a”, or “the slope of f at a”. The top is a displacement and the bottom is the change h. The letter h is bound by the mark h → 0, as 10a's x was by x → a. By 10b's one-limit at most one real is the limit, so f′(a), when it exists, names one real.</p>
+  <p class="eqline" data-pid="cd8202">A reuse, said out loud: the mark ′, a prime, has been written after letters before, to make a fresh name near an old one. There were 2b's e′, 4h's q′ and r′, 5f's L′ and R′, 8d's α′, 12b's x′ and K′, 12d's u′ and c′, among others. There it meant nothing by itself. After the name of a function, from here on, it has a job: f′ is fixed by f. The prime is then an operator: carried out on f, it produces one object, the function f′. A prime after any other letter keeps its old use. These steps avoid that use from here on, so the two never meet.</p>
+  <p class="eqline" data-pid="c619ec">From here on, f is differentiable at a when it has a slope at a. Take the function a ↦ f′(a), on the set of inputs at which f has a slope. It is named f′ and called the derivative of f, read “f prime”. Derivative is from the Latin derivare, “to draw off”: f′ is drawn from f. The value f′(a) is also called the derivative of f at a, and the instantaneous rate of change of f at a. f is differentiable on a set A when it is differentiable at every member of A. It is differentiable, with no set named, when it is differentiable at every one of its inputs. And when a function is given by a formula in x, the formula in brackets with a prime after it, as in (x²)′, names that function's derivative. (x²)′ = 2x says the derivative of x ↦ x² is x ↦ 2x.</p>
+  <p data-pid="d9f061">Two small techniques make the definition easier to use. The first says the chord slope can be written with the second input named x instead of w + h.</p>
+  <p data-pid="9bffb4">Two-ways-to-write-a-limit technique: <b>for F defined near w and a real L, lim_{h→0} F(w + h) = L exactly when lim_{x→w} F(x) = L.</b></p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the two-ways-to-write-a-limit technique">
+\text{assume } \lim_{h \to 0} F(a + h) = L;\ \ \text{let } \varepsilon \gt 0;\ \ \text{call } \delta @@ 10a's line, for the function h ↦ F(a + h), defined near 0 with the same reach as F near a
+\text{let } x \in \operatorname{dom} F \text{ with } 0 \lt |x - a| \lt \delta @@ speak of everything
+h = \htmlClass{new}{x - a},\ \ \text{so } x = a + h @@ name the displacement; adding-keeps-answers read in ℝ
+0 \lt |h| \lt \delta \;\Rightarrow\; |F(a + h) - L| \lt \varepsilon @@ the promise, at this h
+|F(x) - L| \lt \htmlClass{keep}{\varepsilon} \quad \blacksquare @@ the swap axiom: a + h = x. Leftward, the same column read back, with x = a + h
+  </pre>
+  <p data-pid="e00911">So the slope is also the limit as x → w of (f(x) − f(w))/(x − w): the displacement of the output over the displacement of the input, both written out. The second says that only inputs near a matter.</p>
+  <p data-pid="71319f">Slopes-decided-near technique: <b>if f and g agree on an open interval (w − r, w + r), then f has a slope at w exactly when g has one, and then f′(w) = g′(w).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the slopes-decided-near technique">
+0 \lt |h| \lt r \;\Rightarrow\; f(a + h) = g(a + h) \land f(a) = g(a) @@ both inputs lie in (a − r, a + r), where the two agree
+\dfrac{f(a + h) - f(a)}{h} = \dfrac{g(a + h) - g(a)}{h} @@ the swap axiom, twice: the chord slopes agree on a neighbourhood of 0 of reach r
+\text{one heads to } L \;\Leftrightarrow\; \text{the other does} \quad \blacksquare @@ agreeing-near (10a)
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · the definition · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13a4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f′(a) = lim_{h→0} (f(a + h) − f(a))/h</span></span>Rewrite it with x in place of a + h, citing two-ways-to-write-a-limit. <br>Say why f must be defined on an open interval around a.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13a5">
+  <h2 class="sthead"><span class="stno">13a5</span>A linear function’s slope is its slope</h2>
+  <p class="stands">Stands on 13a4 and 9e (same-ratio).</p>
+  <p data-pid="490c5a">Slope-of-a-line technique: <b>x ↦ mx + b has a slope at every real w, and it is m.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the slope-of-a-line technique">
+\dfrac{f(a + h) - f(a)}{h} = \dfrac{(m(a + h) + b) - (ma + b)}{h} @@ f(x) = mx + b: substitute for the expression
+= \dfrac{\htmlClass{new}{mh}}{h} @@ spread on ℝ, then ma and b cancel (regroup for plus on ℝ, negative on ℝ, plus-zero on ℝ of 8d)
+= \htmlClass{new}{m} \quad (h \ne 0) @@ regroup for times on ℝ, reciprocal on ℝ, times-one on ℝ: h · h⁻¹ = 1, licensed because h ≠ 0
+f'(a) = \lim_{h \to 0} m = \htmlClass{keep}{m} \quad \blacksquare @@ agreeing-near, and line-limit with step 0: a constant heads to itself
+  </pre>
+  <p data-pid="a31933">Every chord of a linear function has the slope m, by same-ratio; now the linear function has the slope m at every input too. The two jobs of “slope” agree wherever both apply. A constant function c is the linear function with m = 0, so its slope is 0 everywhere; and x ↦ x has slope 1 everywhere.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · slope-of-a-line · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13a5.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = 7 − 2x</span></span>Find f′(w) from the definition. <br>Say why every chord gives the same answer.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13a6">
+  <h2 class="sthead"><span class="stno">13a6</span>x², one move per line</h2>
+  <p class="stands">Stands on 13a5, 5h (square of a sum) and 5d (no dividing by 0).</p>
+  <pre class="lines" data-k="ember" data-label="this step: the slope of x² at 3">
+\dfrac{f(3 + h) - f(3)}{h} = \dfrac{(3 + h)^2 - 3^2}{h} @@ f(x) = x², at a = 3: substitute for the expression
+= \dfrac{\htmlClass{new}{9 + 6h + h^2} - 9}{h} @@ square-of-a-sum (5h), read in ℝ: (3 + h)² = 3² + 2 · 3 · h + h², and 3² = 9
+= \dfrac{6h + h^2}{h} @@ the 9s cancel: regroup for plus on ℝ, negative on ℝ, plus-zero on ℝ
+= \dfrac{(6 + h)\, h}{h} @@ spread on ℝ turned about: h is a common factor (5h's factoring)
+= \htmlClass{new}{6 + h} \quad (h \ne 0) @@ reciprocal on ℝ, times-one on ℝ: licensed because h ≠ 0
+f'(3) = \lim_{h \to 0}\, (6 + h) @@ the definition, with agreeing-near: the chord slope agrees with 6 + h at every h ≠ 0
+= \htmlClass{new}{6} @@ line-limit (10a): the linear function h ↦ h + 6 heads to its value at 0
+  </pre>
+  <p data-pid="89bf2d">Look at the h · h piece. In the top, h² sits beside 6h. Divided by h it is h, exactly, for every h ≠ 0. So the chord slope is 6 + h: not “about 6”, but 6 + h, which is not 6 for any h in this step. Then the limit sends h to 0, because line-limit says the linear function h ↦ 6 + h heads to 6 as h heads to 0. <b>The h · h piece goes to 0 in the limit; it is not dropped for being small.</b> Every chord slope is a little off 6. The slope is where the chord slopes head, which is a different thing from any of them.</p>
+  <p data-pid="26e0dd">The same column, with any input in place of 3:</p>
+  <pre class="lines" data-k="ember" data-label="this step: the slope-of-x² technique">
+\dfrac{(a + h)^2 - a^2}{h} = \dfrac{\htmlClass{new}{2ah + h^2}}{h} @@ square-of-a-sum; the a² cancel
+= \htmlClass{new}{2a + h} \quad (h \ne 0) @@ spread on ℝ turned about; reciprocal on ℝ
+f'(a) = \lim_{h \to 0}\,(2a + h) = \htmlClass{keep}{2a} \quad \blacksquare @@ agreeing-near, line-limit
+  </pre>
+  <p data-pid="7a0bcd">Slope-of-x² technique: <b>x² has a slope at every real w, and it is 2w: (x²)′ = 2x.</b> At −1 the slope is −2: the graph falls there, two up for each step left. At 0 it is 0.</p>
+  <p data-pid="294277">The tempting shortcut is to put h = 0 into the first line. The top is then 9 − 9 = 0 and the bottom 0, and 0/0 names nothing: 5d's nothing-times-0-is-1 proved that no real answers a division by 0. The limit is what licenses the work. Simplify for every h ≠ 0 first, and only then ask where the result is heading. The order matters.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · x² · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13a6.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = x² at a = −2</span></span>Find the chord slope with change h, one move per line. <br>Find f′(−2), and mark the line where h ≠ 0 is spent.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13a7">
+  <h2 class="sthead"><span class="stno">13a7</span>x³ and 1/x</h2>
+  <p class="stands">Stands on 13a6 and 8f (powers).</p>
+  <pre class="lines" data-k="ember" data-label="this step: the slope-of-x³ technique">
+(a + h)^3 = (a + h)(a + h)^2 @@ 8f's powers of a real: power-of-a-next
+= (a + h)(a^2 + 2ah + h^2) @@ square-of-a-sum
+= \htmlClass{new}{a^3 + 3a^2 h + 3a h^2 + h^3} @@ 5h's grid of cells, two rows by three columns, then collect like terms
+\dfrac{(a + h)^3 - a^3}{h} = \dfrac{3a^2 h + 3a h^2 + h^3}{h} @@ the a³ cancel
+= \htmlClass{new}{3a^2 + 3ah + h^2} \quad (h \ne 0) @@ h is a common factor; reciprocal on ℝ
+f'(a) = \lim_{h \to 0}\,(3a^2 + 3ah + h^2) = \htmlClass{keep}{3a^2} \quad \blacksquare @@ substitution (10c): a polynomial in h heads to its value at h = 0
+  </pre>
+  <p data-pid="ac156d">Slope-of-x³ technique: <b>(x³)′ = 3x².</b> At 2 the chord slope is exactly 12 + 6h + h², and the slope is 12. Two pieces go to 0 in the limit here, and both for the same reason: they still carry an h after the division.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the slope-of-one-over-x technique">
+f(x) = \tfrac{1}{x},\ \ a \ne 0,\ \ 0 \lt |h| \lt |a| @@ then a + h ≠ 0, by unpack-the-bars and the reverse form of triangle (8h): f is defined on (a − |a|, a + |a|)
+\dfrac{\frac{1}{a + h} - \frac{1}{a}}{h} = \dfrac{\htmlClass{new}{\frac{a - (a + h)}{a(a + h)}}}{h} @@ one bottom for two fractions (5g), read in ℝ
+= \dfrac{-h}{a(a + h)\, h} @@ a − (a + h) = −h; dividing by h puts h in the bottom (fractions-of-rationals iv)
+= \htmlClass{new}{\dfrac{-1}{a(a + h)}} \quad (h \ne 0) @@ cancel h, top and bottom (fractions-of-rationals i)
+f'(a) = \lim_{h \to 0} \dfrac{-1}{a(a + h)} = \htmlClass{keep}{-\dfrac{1}{a^2}} \quad \blacksquare @@ substitution for a rational function of h: the bottom's value at h = 0 is a · a ≠ 0
+  </pre>
+  <p data-pid="e883e2">Slope-of-one-over-x technique: <b>at every w ≠ 0, (1/x)′ = −1/x².</b> At 2 the chord slope is −1/(2(2 + h)) and the slope is −¼: the graph falls there, a quarter of a step down per step across. At 0 nothing is asked: 0 is not an input of 1/x, and the definition starts with an input.</p>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · x³ and 1/x · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13a7.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = x³ at 1,  g(x) = 1/x at 1</span></span>Write each chord slope with change h, simplified. <br>Find each slope.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13a8">
+  <h2 class="sthead"><span class="stno">13a8</span>The tangent line</h2>
+  <p class="stands">Stands on 13a7 and 9e (the climbing kind).</p>
+  <p data-pid="68e5f5">A slope at a point gives one linear function with a claim on the point.</p>
+  <p class="eqline" data-pid="91ed0c">From here on, take f differentiable at a. <b>The tangent line of f at a is the linear function through the point (a, f(a)) with slope f′(a)</b>: the function x ↦ f(a) + f′(a)(x − a). With x₀ for a and y₀ for f(x₀), its pairs are exactly the (x, y) with y − y₀ = f′(x₀)(x − x₀). That is the displacement of the output against the displacement of the input, scaled by the slope. “Tangent line” is its accepted name, from the Latin tangere, to touch. Here it names this linear function, a set of pairs, and nothing about shape.</p>
+  <p class="eqline" data-pid="360127">Reuses, said out loud. “Line” alone keeps its two jobs, 8a's ordered set ℝ and a line of a proof; “tangent line” is one name, two words long, for a linear function. x₀ is 8h's low-marked name for a fixed input, as in x − x₀, and y₀ is the same habit for a fixed output. Neither low mark is a power.</p>
+  <p data-pid="fc2d76">It is a linear function: f(w) + f′(w)(x − w) = f′(w)x + (f(w) − f′(w)w), with step f′(w). So its slope is f′(w) by slope-of-a-line, and at a its value is f(w).</p>
+  <pre class="lines" data-k="ember" data-label="this step: tangent lines">
+x^2 \text{ at } 3:\ \ y_0 = 9,\ \ f'(3) = 6 @@ slope-of-x²
+t(x) = 9 + 6(x - 3) = \htmlClass{new}{6x - 9} @@ the line for the tangent line; spread on ℝ
+x^2 - t(x) = x^2 - 6x + 9 = \htmlClass{new}{(x - 3)^2} @@ square-of-a-difference (5h) turned about: the displacement pattern, squared
+x^2 - t(x) \ge 0 @@ square-never-negative (8f): no pair of x²'s graph sits below its tangent line at 3, and only (3, 9) is on it
+x^3 \text{ at } 1:\ \ t(x) = 1 + 3(x - 1) = 3x - 2 @@ slope-of-x³: slope 3
+x^3 - (3x - 2) = (x - 1)^2 (x + 2) @@ factor (9g): 1 is a zero, twice. Below the tangent line for x &lt; −2, and meeting it again at −2
+\tfrac{1}{x} \text{ at } 2:\ \ t(x) = \tfrac12 - \tfrac14 (x - 2) = 1 - \tfrac{x}{4} @@ slope-of-one-over-x: slope −¼
+  </pre>
+  <p data-pid="610d7e">So a tangent line need not stay on one side of the graph, and it may meet the graph again far away. The definition asks neither. It asks only for the pair at w and the slope there. 13k works tangent lines by hand.</p>
+  <section class="slides" id="sl7"><div class="eyebrow">The slides · the tangent line · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13a8.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = x^2,"></span> <span data-tex-inline="g(x) = 1/x"></span></span>Find the slope of the chord of f through 2 and 5, and of the chord of g through 1 and 4.</li><li><span class="givens"><span data-tex-inline="f(x) = x^2 - 3x"></span></span>From the definition, one move per line, find f's slope at 2, marking the line where the change being nonzero is spent.</li><li><span class="givens"><span data-tex-inline="f(x) = x^3,"></span> <span data-tex-inline="g(x) = 1/x"></span></span>From the definition, one move per line, find the slope of f at minus 1 and of g at minus 2.</li><li><span class="givens"><span data-tex-inline="f(x) = x^2,"></span> <span data-tex-inline="g(x) = x^3"></span></span>Write the tangent line of f at minus 1 and of g at 2, each as a slope times x plus a constant.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13a9">
+  <h2 class="sthead"><span class="stno">13a9</span>How people talked before limits</h2>
+  <p class="stands">Stands on 13a1 to 13a8.</p>
+  <p data-pid="8b771c">Two inventors each had a working method by the 1670s. One's fluxions were rates of flowing quantities. The other's d before a letter named an endlessly small difference of it. They became rivals, and their followers fought about who had been first for decades. Both methods gave right answers, and neither could say what the small quantities were. Two centuries later the books still taught it their way.</p>
+  <p data-pid="748361">A popular calculus book of 1914 tells its reader that d means “a little bit of”, so that dx is a little bit of x. It lets x grow by dx, and squares. It meets (dx)², which it calls a little bit of a little bit. It strikes that out as small enough to neglect, before dividing by dx.</p>
+  <p data-pid="82ff60">Measure that against the definition. Written that book's way for x² at 3, the work has (3 + dx)² − 9 = 6 · dx + (dx)². Then it has 6 · dx + (dx)² = 6 · dx, with the bit of a bit struck out, and then a division by dx. If dx is a real other than 0, then (dx)² is a real other than 0 (5d's zero-product, read in ℝ and turned about by turn-and-deny). Then the struck-out line is a false equation. If dx is 0, the division is 5d's forbidden one. And there is no third kind of real for it to be: 8e's everyday-counting-passes says no positive real is below every 1/n. A “bit” fails the test of what a differential would have to be: a number that is neither 0 nor any positive real. A well-known modern calculus book makes the same test of the inventors' small quantities. So the ladder never frames the slope with bits. h is a real, never 0. Nothing is struck out. The h · h piece, divided by h, is h, and it goes to 0 in the limit.</p>
+  <p data-pid="21e68c">A philosopher put the objection first, a century and a half before that book was written. Of the small quantities he asked: “They are neither finite Quantities nor Quantities infinitely small, nor yet nothing. May we not call them the Ghosts of departed Quantities?”</p>
+  <p data-pid="7e627c">A French mathematician, in his lectures of 1823, answered by defining the slope as the limit of the ratio of the two changes as the change of input heads to 0. That is this step's line. A Berlin teacher's every and some, 10a's game, made “heads to” provable. After them the ghosts are not needed. Every quantity in this step is a real, and the only thing that heads to 0 is a function's input, in the precise sense rung 10 gave it.</p>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · the middle of a change</div>
+    <p data-pid="09a1a0">Things don't jump between states. They pass through a middle that belongs to neither. A river does not go from flowing to frozen; it goes through slush, and 11·chem measured that slush. 12a proved that a continuous change passes through every value between its ends. The slope at a point is a middle of this kind. Every chord has two points, a before and an after. The slope at w is what the chords settle on as the two points close in. At h = 0 there is a hole, so the middle is never caught on its own, and the limit still measures it exactly.</p>
+    <p data-pid="c29226"><b>Describe a change by its rates, not only by its before and after.</b></p>
+    <p data-pid="9481b5">Rest is often two changes in balance rather than no change at all.</p>
+    <p data-pid="9ca747">The hole at h = 0 is an old one. There the chord slope reads 0/0, the quotient <a href="r05d.html">5d</a> found fits every value, as a truth-teller box fits every mark (<a href="r04comp.html">4·comp</a>). 1/0 had no answer to give. This 0/0 has every answer, and the chords on the way in all point to one of them. What picks the one value the slope has?</p>
+    <p class="bait" data-pid="30f8c8">At the top of a thrown ball's path, its height has stopped rising and has not started falling. What is the slope of its height there? Is the ball at rest?</p>
+  </aside>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13a9.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">(3 + dx)² − 9 = 6 · dx + (dx)²</span></span>Say what the 1914 book did with (dx)², and what the definition does instead. <br>Say what the philosopher objected to in the small quantities.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13a10">
+  <h2 class="sthead"><span class="stno">13a10</span>Illegal moves</h2>
+  <p class="stands">Stands on 13a1 to 13a8.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\dfrac{(3 + 0)^2 - 9}{0}\,? @@ 0/0 names nothing (5d's nothing-times-0-is-1). Simplify for h ≠ 0, then take the limit
+6h + h^2 = 6h \text{ “since } h \text{ is tiny”}\,? @@ false for every h ≠ 0. h · h is a real, and it goes to 0 only after the division, in the limit
+f'(3) = \dfrac{f(3.001) - f(3)}{0.001}\,? @@ that is one chord slope, 6.001. The slope is where the chord slopes head, 6
+f'(3) = (f(3))' = (9)' = 0\,? @@ for f(x) = x²: f′(3) means the derivative, then 3 put in. The slope of the constant 9 is another question
+\big(\tfrac{1}{x}\big)' = \tfrac{1}{(x)'} = 1\,? @@ at 2 the slope of 1/x is −¼ (slope-of-one-over-x), not 1. The slope of a reciprocal is not the reciprocal of a slope
+\text{the chord through } a \text{ and } a\,? @@ two-points-one-line needs two different inputs; there is no such chord, and h is never 0
+\text{the tangent line meets the graph only at } a\,? @@ x³ at 1: its tangent line 3x − 2 meets x³ again at −2
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13a10.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = x^2,"></span> <span data-tex-inline="\text{inputs } 3 - h \text{ and } 3 + h,"></span> <span data-tex-inline="\text{dividing by } h"></span></span>Find where that quotient heads as h shrinks, and what you should have divided by.</li><li><span class="givens"><span data-tex-inline="g(x) = 1/x,"></span> <span data-tex-inline="w = 0"></span></span>Run slope-of-one-over-x's column at w, and find the first line that fails.</li><li><span class="givens"><span data-tex-inline="f(x) = x^3,"></span> <span data-tex-inline="\text{tangent at } 2: \; 12x - 16"></span></span>By factoring the gap between f and its tangent, find where the graph of f meets the tangent again, and which side of the line the graph is on to the left of that meeting.</li><li><span class="givens"><span data-tex-inline="f(x) = x^2 \text{ at } 3,"></span> <span data-tex-inline="h \in \{0.1, -0.01, 0.001\}"></span></span>Write the chord slope exactly at each h. <br>Find every real h for which the chord's change equals six times h, and decide whether any is allowed as a change.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13a11">
+  <h2 class="sthead"><span class="stno">13a11</span>Running it backwards</h2>
+  <p class="stands">Stands on 13a1 to 13a8.</p>
+  <p data-pid="1e825c"><b>A limit shaped like a chord slope is a slope, and the definition read right to left computes it.</b> lim_{h→0} ((2 + h)³ − 8)/h is the slope of x³ at 2, since 8 = 2³: it is 12, by slope-of-x³. lim_{h→0} (1/(3 + h) − 1/3)/h is the slope of 1/x at 3: −1/9, by slope-of-one-over-x. lim_{x→4} (x² − 16)/(x − 4) is two-ways-to-write-a-limit's second form for x² at 4: 8, by slope-of-x². And from a chord slope to a function: if the chord slopes of f at w are exactly 4 + h, then f′(w) = 4. x² at 2 is one function that fits (2 · 2 + h). Found upward; written downward.</p>
+  <section class="slides" id="sl8"><div class="eyebrow">The slides · backwards · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13a11.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = x^2,"></span> <span data-tex-inline="\text{a chord of } f \text{ through the input } 2,"></span> <span data-tex-inline="\text{slope } 7"></span></span>Find the chord's other input, and show it is the only one.</li><li><span class="givens"><span data-tex-inline="\frac{f(w + h) - f(w)}{h} = 10 + h"></span> <span data-tex-inline="\text{for every } h \ne 0"></span></span>Find f's slope at w, and an f and a w that fit.</li><li><span class="givens"><span data-tex-inline="g(x) = 1/x,"></span> <span data-tex-inline="\text{slope-of-one-over-x gave } -\tfrac19"></span></span>Find every input of g at which it did.</li><li><span class="givens"><span data-tex-inline="f(x) = x^2,"></span> <span data-tex-inline="\text{tangent line at some input: } 4x - 4"></span></span>Find the input, and check that the line passes through its point.</li><li><span class="givens"><span data-tex-inline="\lim_{h \to 0} \frac{(1 + h)^3 - 1}{h},"></span> <span data-tex-inline="\lim_{x \to 5} \frac{1/x - 1/5}{x - 5}"></span></span>Read each limit as a slope, finding its function, its input and its value.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">13a.4.1</span><span class="tagq">build</span>Build a function of your own, not a power of x, whose chord slopes at 1 you can write exactly for every nonzero change. <br>Find its slope at 1 from the definition, marking the line where the change being nonzero is spent, and write its tangent line there. <br>Find every input where that line meets the graph again.</div>
+  <div class="chq"><span class="chid">13a.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{a chord of } f \text{ through } w \text{ and } w"></span></span>Decide whether there is one, and find what its slope would have to be.</div>
+  <div class="chq"><span class="chid">13a.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\ell \text{ linear,}"></span> <span data-tex-inline="\ell(w) = f(w),"></span> <span data-tex-inline="\ell \text{ meets the graph of } f"></span> <span data-tex-inline="\text{nowhere else near } w"></span></span>Prove or refute that the line must be the tangent line of f at w.</div>
+  <div class="chq"><span class="chid">13a.4.4</span><span class="tagq">seam</span>One inventor wrote his method of fluxions in the 1660s and printed little of it. The other worked out his calculus in Paris in 1675 and published it in 1684. In 1712 a committee of the Royal Society, whose president was the first, found that the second had taken the idea from him. The first wrote the report himself. <br>Who invented the slope at a point? <br>Can a judge write the verdict in his own case?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r13.html">← 13 · measuring change in an instant</a><a href="r13b.html">13b · a slope means no gap →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>The two inventors are Isaac Newton (fluxions) and Gottfried Wilhelm Leibniz (the d-mark). The popular book is Silvanus P. Thompson’s Calculus Made Easy; the modern book is Michael Spivak’s Calculus. The philosopher is George Berkeley. The French mathematician is Augustin-Louis Cauchy, and the Berlin teacher Karl Weierstrass.</p>
+  <aside class="voice para"><p>Thompson tells his reader that d means “a little bit of”, so that dx is a little bit of x. He lets x grow by dx, squares, meets (dx)², which he calls a little bit of a little bit, and strikes it out as small enough to neglect, before dividing by dx.</p><cite>Thompson, Calculus Made Easy, 2nd ed. (1914), chs. I–III</cite></aside>
+  <aside class="voice para"><p>Spivak observes that the small quantities of Leibniz's notation cannot be numbers: a number other than 0 is not infinitely small, and 0 cannot be divided by. He keeps the notation for its convenience and takes its meaning from the limit alone.</p><cite>Spivak, Calculus, ch. 9</cite></aside>
+  <aside class="voice"><p>“They are neither finite Quantities nor Quantities infinitely small, nor yet nothing. May we not call them the Ghosts of departed Quantities?”</p><cite>Berkeley, The Analyst (1734), §XXXV, as transcribed in D. R. Wilkins's edition (2002)</cite></aside>
+  <p>Accepted names: f′ is the derivative of f; a function with a slope at w is differentiable at w.</p>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; const a=Math.abs(v); let s=d!=null?v.toFixed(d):(a>=100?v.toFixed(1):a>=1?v.toFixed(4):a>=0.001?v.toFixed(5):v.toPrecision(3)); if(s.indexOf('.')>=0&&s.indexOf('e')<0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const pa=v=>v<0?'('+fm(v)+')':fm(v);
+/* the curves, with their exact chord slopes */
+const CUR={
+  climb:{lab:'2x + 1',tx:'2x + 1',f:x=>2*x+1,d:x=>2,cs:(a,h)=>2,cst:a=>'2',x:[-2.6,2.6],y:[-4.5,6.5],ar:[-2,2],a:0.5},
+  sq:{lab:'x²',tx:'x^2',f:x=>x*x,d:x=>2*x,cs:(a,h)=>2*a+h,cst:a=>R`${fm(2*a)} + h`,x:[-2.6,2.6],y:[-1.2,6.2],ar:[-2,2],a:1},
+  cube:{lab:'x³',tx:'x^3',f:x=>x*x*x,d:x=>3*x*x,cs:(a,h)=>3*a*a+3*a*h+h*h,cst:a=>R`${fm(3*a*a)} ${3*a<0?'-':'+'} ${fm(Math.abs(3*a))}h + h^2`,x:[-2.2,2.2],y:[-6,6],ar:[-1.5,1.5],a:1},
+  rec:{lab:'1/x',tx:R`\tfrac{1}{x}`,f:x=>1/x,d:x=>-1/(x*x),cs:(a,h)=>-1/(a*(a+h)),cst:a=>R`\dfrac{-1}{${fm(a)}(${fm(a)} + h)}`,x:[-0.3,4.3],y:[-0.6,4.4],ar:[0.5,2.5],a:1,min:0.1}
+};
+let cu='sq', A=1, S=1, LH=0, Z=0;
+const ka=$('ka'),kh=$('kh'),ke=$('ke'),cvA=$('cvA'),cvB=$('cvB');
+function hval(){ return S*Math.pow(10,LH); }
+function hmax(){ const C=CUR[cu]; let m=2; if(C.min!=null) m=Math.min(m, A-C.min); return m; }
+function H(){ const C=CUR[cu]; let h=hval(); if(C.min!=null&&A+h<C.min) h=C.min-A; return h; }
+function inDom(h){ const C=CUR[cu]; return h!==0 && !(C.min!=null&&A+h<C.min) && Math.abs(h)<=2; }
+const PA=plane(cvA,{x:CUR.sq.x,y:CUR.sq.y,grid:1,aspect:0.85,draw:P=>drawA(P)});
+Object.defineProperty(PA.o,'aspect',{get:()=>cvA.clientWidth>560?0.8:0.9});
+function drawA(P){ const C=CUR[cu], h=H(), fa=C.f(A), fb=C.f(A+h), m=(fb-fa)/h, d=C.d(A); P.axes();
+  P.fn(x=>(C.min!=null&&x<C.min*0.6)?NaN:C.f(x),'--ink',2.4);
+  P.line(C.x[0],fa+d*(C.x[0]-A),C.x[1],fa+d*(C.x[1]-A),'--teal',1.8,[6,5]);
+  P.line(C.x[0],fa+m*(C.x[0]-A),C.x[1],fa+m*(C.x[1]-A),'--ember',2);
+  P.line(A,fa,A+h,fa,'--muted',2.2); P.line(A+h,fa,A+h,fb,'--muted',2.2);
+  P.dot(A,fa,'--ink',5.5); P.dot(A+h,fb,'--ember',6.5); }
+const LB=()=>{ const C=CUR[cu]; let lo=-2; if(C.min!=null) lo=Math.max(lo,C.min-A); return lo; };
+function bigDelta(L,eps){ const C=CUR[cu], hi=Math.min(2,Math.abs(LB()));
+  const ok=dd=>{ for(let k=1;k<=400;k++){ for(const g of [-1,1]){ const h=g*dd*k/400; if(!inDom(h)) continue; if(!(Math.abs(C.cs(A,h)-L)<eps)) return false; } } return true; };
+  const top=Math.min(2,Math.max(hi,2)); if(ok(top)) return top; if(!ok(1e-7)) return 0; let lo=1e-7,up=top; for(let i=0;i<46;i++){ const mm=(lo+up)/2; if(ok(mm)) lo=mm; else up=mm; } return lo; }
+let DB=0;
+function nice(span){ const p=Math.pow(10,Math.floor(Math.log10(span/4))); const r=span/4/p; return p*(r>=5?5:r>=2?2:1); }
+function tl(v,g){ const dec=Math.max(0,-Math.floor(Math.log10(g))); const s=(Math.round(v/g)*g).toFixed(dec); return s==='-0'?'0':String(+s); }
+function ticks(P){ const c=P.ctx, gx=nice(P.o.x[1]-P.o.x[0]), gy=nice(P.o.y[1]-P.o.y[0]); c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
+  for(let x=Math.ceil(P.o.x[0]/gx)*gx;x<=P.o.x[1]+1e-12;x+=gx){ c.moveTo(P.X(x),P.Y(P.o.y[0])); c.lineTo(P.X(x),P.Y(P.o.y[1])); }
+  for(let y=Math.ceil(P.o.y[0]/gy)*gy;y<=P.o.y[1]+1e-12;y+=gy){ c.moveTo(P.X(P.o.x[0]),P.Y(y)); c.lineTo(P.X(P.o.x[1]),P.Y(y)); } c.stroke();
+  c.fillStyle=col('--muted'); c.font='10px IBM Plex Mono, monospace'; c.textAlign='center'; const ly=Math.min(P.H-4,Math.max(12,P.Y(Math.max(P.o.y[0],Math.min(P.o.y[1],0)))+13));
+  for(let x=Math.ceil(P.o.x[0]/gx)*gx;x<=P.o.x[1]+1e-12;x+=gx){ if(Math.abs(x)<gx*1e-6) continue; c.fillText(tl(x,gx),P.X(x),ly); }
+  c.textAlign='left'; for(let y=Math.ceil(P.o.y[0]/gy)*gy;y<=P.o.y[1]+1e-12;y+=gy){ c.fillText(tl(y,gy),2,P.Y(y)-2); } }
+const PB=plane(cvB,{x:[-2,2],y:[0,4],grid:0,aspect:0.85,draw:P=>drawB(P)});
+Object.defineProperty(PB.o,'aspect',{get:()=>cvB.clientWidth>560?0.8:0.9});
+function drawB(P){ const C=CUR[cu], h=H(), L=C.d(A), eps=Math.pow(10,+ke.value); const c=P.ctx;
+  const W=Z?Math.max(3*Math.abs(h),0.004):2; P.o.x=[-W,W];
+  let lo=L, hi=L; for(let k=-200;k<=200;k++){ const t=W*k/200; if(!inDom(t)) continue; const v=C.cs(A,t); lo=Math.min(lo,v); hi=Math.max(hi,v); }
+  lo=Math.min(lo,L-1.6*eps); hi=Math.max(hi,L+1.6*eps); const pad=(hi-lo)*0.12+1e-9; P.o.y=[lo-pad,hi+pad];
+  P.axes(); ticks(P); DB=bigDelta(L,eps);
+  c.fillStyle=col('--gold'); c.globalAlpha=.2; c.fillRect(P.X(-W),P.Y(L+eps),P.X(W)-P.X(-W),P.Y(L-eps)-P.Y(L+eps)); c.globalAlpha=1;
+  if(DB>0){ const d=Math.min(DB,W); c.fillStyle=col('--ink'); c.globalAlpha=.08; c.fillRect(P.X(-d),P.Y(P.o.y[1]),P.X(d)-P.X(-d),P.Y(P.o.y[0])-P.Y(P.o.y[1])); c.globalAlpha=1; P.line(-d,P.o.y[0],-d,P.o.y[1],'--muted',1.2,[5,4]); P.line(d,P.o.y[0],d,P.o.y[1],'--muted',1.2,[5,4]); }
+  P.fn(t=>inDom(t)&&Math.abs(t)>W*1e-3?C.cs(A,t):NaN,'--ink',2.2);
+  c.fillStyle=col('--card'); c.strokeStyle=col('--ink'); c.lineWidth=2; c.beginPath(); c.arc(P.X(0),P.Y(L),5.5,0,7); c.fill(); c.stroke();
+  P.line(h,P.o.y[0],h,P.o.y[1],'--ember',1.2,[3,4]); P.dot(h,C.cs(A,h),'--ember',5.5); }
+function readAll(){ const C=CUR[cu], h=H(), fa=C.f(A), fb=C.f(A+h), m=(fb-fa)/h, d=C.d(A), eps=Math.pow(10,+ke.value);
+  $('oa').textContent=fm(A,2); $('oh').textContent=fm(Math.abs(h)); $('oe').textContent=fm(eps);
+  tex($('eqA'),R`\begin{gathered}f(x) = ${C.tx},\ \ w = ${fm(A,2)},\ \ h = ${fm(h)}\\ \dfrac{\Delta y}{\Delta x} = \dfrac{${fm(fb)} - ${pa(fa)}}{${fm(h)}} = \htmlClass{new}{${fm(m)}}\\ \text{exactly } ${C.cst(A)} \text{ at every } h \ne 0\\ f'(${fm(A,2)}) = \htmlClass{keep}{${fm(d)}}\end{gathered}`,true);
+  const gap=Math.abs(m-d), vd=$('vdB');
+  vd.className='verdict '+(gap<eps?'win':'lose');
+  vd.textContent='Your chord slope is '+fm(m)+', off the slope '+fm(d)+' by '+fm(gap)+': '+(gap<eps?'inside':'outside')+' the band of ε = '+fm(eps)+'. '+(DB>=2?'Every allowed h wins: δ can be anything up to 2.':(DB>0?'The largest δ that wins is about '+fm(DB)+'; every h with 0 < |h| < δ lands in the band.':'No δ wins.'))+' The value at h = 0 plays no part: there is none.';
+  const hs=cvA.clientWidth<500?[0.1,0.01,0.001]:[1,0.1,0.01,0.001], cs=t=>inDom(t)?fm(C.cs(A,t)):R`\cdot`;
+  tex($('eqT'),R`\begin{array}{r|${'c'.repeat(hs.length)}} h & ${hs.map(t=>fm(t)).join(' & ')}\\ \text{chord slope} & ${hs.map(cs).join(' & ')}\\ \hline h & ${hs.map(t=>fm(-t)).join(' & ')}\\ \text{chord slope} & ${hs.map(t=>cs(-t)).join(' & ')}\end{array}`,true); }
+function all(){ PA.redraw(); PB.redraw(); readAll(); }
+function setCurve(k){ cu=k; const C=CUR[k]; PA.o.x=C.x; PA.o.y=C.y; ka.min=C.ar[0]; ka.max=C.ar[1]; A=C.a; ka.value=A; all(); }
+(function(){ const ch=$('cch'); Object.keys(CUR).forEach(k=>{ const b=document.createElement('button'); b.textContent=CUR[k].lab; if(k===cu) b.className='on'; b.onclick=()=>{ [...ch.children].forEach(z=>z.classList.toggle('on',z===b)); setCurve(k); }; ch.appendChild(b); }); })();
+ka.oninput=()=>{ A=+ka.value; all(); }; kh.oninput=()=>{ LH=+kh.value; all(); }; ke.oninput=all;
+$('hch').querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{ S=+b.dataset.s; $('hch').querySelectorAll('[data-s]').forEach(z=>z.classList.toggle('on',z===b)); all(); });
+$('bhalf').onclick=()=>{ LH=Math.max(-3,LH-Math.log10(2)); kh.value=LH; all(); };
+$('zch').querySelectorAll('[data-z]').forEach(b=>b.onclick=()=>{ Z=+b.dataset.z; $('zch').querySelectorAll('[data-z]').forEach(z=>z.classList.toggle('on',z===b)); all(); });
+let drag=null;
+cvA.addEventListener('pointerdown',e=>{ const C=CUR[cu], q=PA.point(e), h=H(); const da=Math.hypot(q.px-PA.X(A),q.py-PA.Y(C.f(A))), db=Math.hypot(q.px-PA.X(A+h),q.py-PA.Y(C.f(A+h))); drag=db<=da?'b':'a'; cvA.setPointerCapture&&cvA.setPointerCapture(e.pointerId); mv(e); });
+function mv(e){ if(!drag) return; const C=CUR[cu], q=PA.point(e);
+  if(drag==='a'){ A=Math.max(C.ar[0],Math.min(C.ar[1],Math.round(q.x*20)/20)); ka.value=A; }
+  else { let h=q.x-A; if(Math.abs(h)<0.001) h=h<0?-0.001:0.001; h=Math.max(-2,Math.min(2,h)); S=h<0?-1:1; LH=Math.log10(Math.abs(h)); kh.value=LH; $('hch').querySelectorAll('[data-s]').forEach(z=>z.classList.toggle('on',+z.dataset.s===S)); }
+  all(); }
+cvA.addEventListener('pointermove',mv); ['pointerup','pointercancel'].forEach(t=>cvA.addEventListener(t,()=>drag=null));
+window.__pic={set:(k,a,h,eps,z)=>{ if(k){ [...$('cch').children][Object.keys(CUR).indexOf(k)].click(); } if(a!=null){ A=a; ka.value=a; } if(h!=null){ S=h<0?-1:1; LH=Math.log10(Math.abs(h)); kh.value=LH; } if(eps!=null) ke.value=Math.log10(eps); if(z!=null) Z=z; $('hch').querySelectorAll('[data-s]').forEach(q=>q.classList.toggle('on',+q.dataset.s===S)); $('zch').querySelectorAll('[data-z]').forEach(q=>q.classList.toggle('on',+q.dataset.z===Z)); all(); return {DB,m:CUR[cu].cs(A,H()),d:CUR[cu].d(A),txt:$('vdB').textContent}; }};
+setCurve('sq');
+
+/* ---------- slides ---------- */
+const N='\\htmlClass{new}', K='\\htmlClass{keep}';
+stepper('#sl1',[
+  {k:'ember',kl:'a point',t:R`(a,\ f(a))`,n:`A pair of the graph, in the books' word. “At a point” means at its input. No shape.`},
+  {k:'ember',kl:'a chord',t:R`\begin{gathered}\text{the linear function through}\\ (s, f(s)) \text{ and } (t, f(t))\end{gathered}`,n:`two-points-one-line's one linear function, for two different inputs s and t. A function, a set of pairs.`},
+  {k:'ember',kl:'its slope',t:R`${N}{\dfrac{f(t) - f(s)}{t - s}}`,n:`The step m of that linear function: 9e's step, 11e's rate, now also called slope.`}
+],{title:'The slides · chords · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'Δ and h',t:R`\begin{gathered}\Delta x = (a + ${N}{h}) - a = h\\ \Delta y = f(a + h) - f(a)\end{gathered}`,n:`h is a real other than 0, just a number. Δ is “the change in”. Both changes are displacements.`},
+  {k:'ember',kl:'the chord slope',t:R`\dfrac{\Delta y}{\Delta x} = \dfrac{f(a + h) - f(a)}{h}`,n:`A function of h, defined for 0 &lt; |h| &lt; r, with a hole at h = 0.`}
+],{title:'The slides · Δ and h · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'the definition',t:R`${N}{f'(a)} = \lim_{h \to 0} \dfrac{f(a + h) - f(a)}{h}`,n:`When the limit exists, f has a slope there, and the mark on the left names it (one-limit). The prime is a new job for an old mark.`},
+  {k:'ember',kl:'two-ways-to-write-a-limit',t:R`f'(a) = \lim_{x \to a} \dfrac{f(x) - f(a)}{${N}{x - a}}`,n:`The same limit with the second input named x, so that h is x less the fixed input.`},
+  {k:'ember',kl:'slopes-decided-near',t:R`\begin{gathered}f = g \text{ on } (a - r, a + r)\\ \Rightarrow\; f'(a) = g'(a)\end{gathered}`,n:`Same chord slopes near 0, so the same limit, by agreeing-near. Only inputs near the point matter.`}
+],{title:'The slides · the definition · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'slope-of-a-line',t:R`\dfrac{(m(a + h) + b) - (ma + b)}{h} = ${N}{m}`,n:`Every chord slope of a linear function is m, so its slope at every input is m. The two jobs of “slope” agree. ∎`}
+],{title:'The slides · slope-of-a-line · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'x² at 3 · 1 of 5',t:R`\dfrac{(3 + h)^2 - 9}{h}`,n:`Substitute for the expression.`},
+  {k:'ember',kl:'x² at 3 · 2 of 5',t:R`= \dfrac{${N}{9 + 6h + h^2} - 9}{h}`,n:`square-of-a-sum, read in ℝ.`},
+  {k:'ember',kl:'x² at 3 · 3 of 5',t:R`= \dfrac{6h + h^2}{h} = \dfrac{(6 + h)h}{h}`,n:`The 9s cancel; h is a common factor.`},
+  {k:'ember',kl:'x² at 3 · 4 of 5',t:R`= ${N}{6 + h}\quad (h \ne 0)`,n:`Exactly, for every h ≠ 0. The h · h piece, divided by h, is h.`},
+  {k:'ember',kl:'x² at 3 · 5 of 5',t:R`f'(3) = \lim_{h \to 0}\,(6 + h) = ${N}{6}`,n:`line-limit: the h goes to 0 in the limit. Nothing was dropped. ∎`},
+  {k:'ember',kl:'the forbidden shortcut',t:R`\dfrac{(3 + 0)^2 - 9}{0} = \dfrac{0}{0}`,n:`Names nothing (nothing-times-0-is-1). Simplify for h ≠ 0 first, then take the limit.`},
+  {k:'ember',kl:'slope-of-x²',t:R`\begin{gathered}\dfrac{(a + h)^2 - a^2}{h} = 2a + h\\ (x^2)' = ${N}{2x}\end{gathered}`,n:`The same column, with any input in place of 3.`}
+],{title:'The slides · x² · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'slope-of-x³ · 1 of 2',t:R`\begin{gathered}(a + h)^3\\ = a^3 + 3a^2 h + 3ah^2 + h^3\end{gathered}`,n:`power-of-a-next and square-of-a-sum, then 5h's grid of cells.`},
+  {k:'ember',kl:'slope-of-x³ · 2 of 2',t:R`3a^2 + 3ah + h^2 \to ${N}{3a^2}`,n:`Two pieces still carry an h after dividing; substitution sends them to 0. (x³)′ = 3x². ∎`},
+  {k:'ember',kl:'slope-of-one-over-x · 1 of 2',t:R`\dfrac{\frac{1}{a + h} - \frac{1}{a}}{h} = \dfrac{-h}{a(a + h)h}`,n:`One bottom for two fractions; the top comes to −h. Keep |h| below the size of the input, so the changed input is not 0.`},
+  {k:'ember',kl:'slope-of-one-over-x · 2 of 2',t:R`\dfrac{-1}{a(a + h)} \to ${N}{-\dfrac{1}{a^2}}`,n:`Cancel h; at h = 0 the bottom is the input squared, not 0. At 2: −¼. ∎`}
+],{title:'The slides · x³ and 1/x · ← → keys work'});
+stepper('#sl7',[
+  {k:'ember',kl:'the tangent line',t:R`y - y_0 = ${N}{f'(x_0)}\,(x - x_0)`,n:`The linear function through (x₀, y₀) with the slope there. x² at 3: 6x − 9, and x² − (6x − 9) = (x − 3)².`}
+],{title:'The slides · the tangent line · ← → keys work'});
+stepper('#sl8',[
+  {k:'teal',kl:'backwards · 1 of 2',t:R`\lim_{h \to 0} \dfrac{(2 + h)^3 - 8}{h}`,n:`8 = 2³: the top is f(2 + h) − f(2) for f(x) = x³.`},
+  {k:'teal',kl:'backwards · 2 of 2',t:R`= f'(2) = 3 \cdot 2^2 = ${N}{12}`,n:`slope-of-x³. A limit shaped like a chord slope is a slope, read right to left.`}
+],{title:'The slides · backwards · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

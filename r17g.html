@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>pˣ for any real x</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r17f.html">← 17f exp is its own slope</a><a href="r17concl.html">next: 17·∎ conclusion →</a></p>
+  <div class="tags"><span class="tag proof">17g · proof</span></div>
+  <h1>pˣ for any real x</h1>
+  <p>Rung 8 gave a meaning to a positive number raised to a fraction, and to nothing else: two raised to the square root of two had none. Log-of-a-power says the logarithm of a fractional power is the fraction times the logarithm, so the power is the exponential of that. That makes sense for every real power. This step takes it as the definition of a positive number raised to any real power. It checks that this is rung 8's power wherever rung 8 had one. And it proves that every exponent technique carries over. Then come the slopes: a number raised to the input has slope itself times the number’s logarithm, and the power rule holds for every real power. Last, the function that undoes raising a number to the input: the logarithm to that base.</p>
+  <p class="gesture">A positive number raised to a power is the exponential of the power times the number’s logarithm. For fractions it is rung 8’s power. Powers add when their results multiply, multiply when one is raised to another, and pass across a product. A number raised to the input has slope itself times the number’s logarithm, and the power rule holds for every real power. The logarithm to a base is the logarithm divided by the base’s logarithm.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r17e.html">17e</a> (adding-becomes-multiplying), <a href="r17f.html">17f</a> (slope-of-exp), <a href="r17c.html">17c</a> (log-of-a-product, log-of-a-power), <a href="r08i.html">8i</a> (fraction-exponent, whole-exponent), <a href="r13e.html">13e</a> (chain for slopes), <a href="r09d.html">9d</a> (the inverse). <a href="r17h.html">17h</a> puts these techniques to work by hand.</p></div>
+</header>
+
+<section class="class step" data-step="17g1">
+  <h2 class="sthead"><span class="stno">17g1</span>The definition, and that it agrees</h2>
+  <p class="stands">Stands on 17e (exp) and 8i (rational powers).</p>
+  <p class="eqline" data-pid="6c7e08">For p &gt; 0 and every real x, pˣ = exp(x ln p) = e<sup>x ln p</sup>. p is the base and x the exponent, as in rung 8.</p>
+  <p data-pid="8483f5">Powers-agree technique: <b>for p &gt; 0 and rational r, exp(r ln p) is rung 8's pʳ. With p = e, exp(x ln e) = exp x, so eˣ means what 17e said.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the powers-agree technique">
+\ln(a^r) = r\ln a @@ log-of-a-power (17c); aʳ as in 8i
+\exp(r\ln a) = \exp(\ln a^r) = a^r @@ inverse-is-a-bijection (9d): exp undoes ln
+\htmlClass{new}{\exp(x\ln e) = \exp(x \cdot 1) = \exp x} \quad \blacksquare @@ ln e = 1 (17e)
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the definition · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">17g1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">2^½ by the definition,  ln 2 ≈ 0.6931</span></span>Write it as exp of a number. <br>Say why its square is 2, naming the technique.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17g2">
+  <h2 class="sthead"><span class="stno">17g2</span>The exponent techniques</h2>
+  <p class="stands">Stands on 17g1 and 17e (adding-becomes-multiplying).</p>
+  <p data-pid="1d5d3b">Real-exponent technique: <b>for p, q &gt; 0 and all real x, y: pˣ⁺ʸ = pˣpʸ, p⁻ˣ = 1/pˣ, (pˣ)ʸ = pˣʸ, (pq)ˣ = pˣqˣ, and ln(pˣ) = x ln p.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the real-exponent technique">
+\ln(a^x) = \ln\exp(x\ln a) = x\ln a @@ inverse-is-a-bijection; log-of-a-power is now true for every real x
+a^{x+y} = e^{(x+y)\ln a} = e^{x\ln a}e^{y\ln a} = a^x a^y @@ adding-becomes-multiplying (17e)
+a^{-x} = e^{-x\ln a} = 1/a^x @@ adding-becomes-multiplying
+(a^x)^y = e^{y\ln(a^x)} = e^{yx\ln a} = a^{xy} @@ the definition with base aˣ, then the first line
+(ab)^x = e^{x(\ln a + \ln b)} = a^x b^x \quad \blacksquare @@ log-of-a-product, then adding-becomes-multiplying
+  </pre>
+  <p data-pid="310e6f">So pˣ &gt; 0 always, p⁰ = 1 and p¹ = p. For p &gt; 1, ln p &gt; 0 and pˣ rises; for 0 &lt; p &lt; 1, ln p &lt; 0 and pˣ falls; 1ˣ = 1.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · the exponent techniques · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17g2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">3^1.5 · 3^0.5,  (2^√2)^√2,  0.5¹⁰</span></span>Simplify the first two by real-exponent. <br>Guess whether the third is above or below 0.001, then check.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17g3">
+  <h2 class="sthead"><span class="stno">17g3</span>The slopes</h2>
+  <p class="stands">Stands on 17g2, 17f (slope-of-exp) and 13e (the chain rule).</p>
+  <p data-pid="f526ec">Slope-of-aˣ technique: <b>(pˣ)′ = pˣ ln p.</b> Real-power technique for slopes: <b>for x &gt; 0 and every real r, (xʳ)′ = rxʳ⁻¹; so ∫xʳ dx = xʳ⁺¹/(r + 1) + C for r ≠ −1.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the techniques slope-of-pˣ and real-power for slopes">
+(a^x)' = (e^{x\ln a})' = e^{x\ln a}\ln a = a^x\ln a @@ chain for slopes (13e); slope-of-exp (17f); ln a is a constant
+(x^r)' = (e^{r\ln x})' = e^{r\ln x}\cdot\tfrac{r}{x} @@ chain for slopes; slope-of-log (17b)
+\htmlClass{new}{= x^r \cdot r x^{-1} = r x^{r-1}} \quad \blacksquare @@ real-exponent
+  </pre>
+  <p data-pid="d6fce4">16f's table of antiderivatives was true for rational powers. <b>It is now true for every real power, with ln|x| at r = −1. The slope of 2ˣ, which 13h left for this rung, is 2ˣ ln 2.</b></p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · the slopes · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17g3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">10ˣ at x = 0,  ln 10 ≈ 2.303</span></span>Find its slope there. <br>Guess 10^0.01 from the tangent at 0.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17g4">
+  <h2 class="sthead"><span class="stno">17g4</span>The log to any base</h2>
+  <p class="stands">Stands on 17g3 and 17d (log-onto-ℝ).</p>
+  <p class="eqline" data-pid="d5352b">For p &gt; 0, p ≠ 1, the function x ↦ pˣ is a bijection from ℝ to (0, ∞): it rises or falls, and takes every positive value, since ln does. The function that undoes it is logₚ, the log to base p: logₚ y is the x with pˣ = y, and logₚ is an operator, as ln is. log₁₀ is the base of the old printed tables. It has the accepted name the common log, often written log; ln is log base e.</p>
+  <p data-pid="828f0f">Log-base-p technique: <b>logₚ x = ln x / ln p; its techniques are log-of-a-product, log-of-a-quotient and log-of-a-power with logₚ in place of ln; and (logₚ x)′ = 1/(x ln p).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the log-base-p technique">
+a^y = x \iff y\ln a = \ln x @@ real-exponent; ln is one to one (log-rises)
+\htmlClass{new}{\log_a x = \tfrac{\ln x}{\ln a}} @@ ln a ≠ 0, since a ≠ 1
+\log_a(xy) = \tfrac{\ln x + \ln y}{\ln a} = \log_a x + \log_a y @@ log-of-a-product; the others the same way
+(\log_a x)' = \tfrac{1}{\ln a}\cdot\tfrac1x \quad \blacksquare @@ slope-of-log; constant-factor for slopes (13d)
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · the log to any base · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · every base, and every power</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="lbl">pˣ = e<sup>x ln p</sup>, with eˣ dashed</div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">p</span><input type="range" id="ka" min="0.2" max="4" step="0.01" value="2"><output id="oa"></output></div>
+      <div class="cap">Ember: pˣ. Dashed: eˣ. Plum: the point at x = √2. Teal dots: rung 8's powers at x = −2, −1, −½, 0, ½, 1, 2, which the curve passes through.</div>
+    </div>
+    <div class="panel">
+      <div class="lbl">xʳ for x &gt; 0, with its tangent at x = 2</div>
+      <canvas id="cvL"></canvas>
+      <div class="kn"><span class="m">r</span><input type="range" id="kr" min="-2" max="3" step="0.01" value="1.41"><output id="or"></output></div>
+      <div class="cap">Ink: xʳ. Ember: the tangent at 2, slope r · 2ʳ⁻¹ by real-power for slopes.</div>
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17g4.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="p^x = e^{0.7x} \text{ for every } x"></span></span>Find p.</li><li><span class="givens"><span data-tex-inline="\log_p 81 = 4"></span></span>Find p.</li><li><span class="givens"><span data-tex-inline="F'(x) = 3^x \ln 3,"></span> <span data-tex-inline="F(0) = 1"></span></span>Find F.</li><li><span class="givens"><span data-tex-inline="2^x = 5"></span></span>Find x to three places.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17g5">
+  <h2 class="sthead"><span class="stno">17g5</span>A power the new century asked about</h2>
+  <p class="stands">Stands on 17g4.</p>
+  <p data-pid="761a1e">Among the problems set in 1900 for the new century, one asked about a power such as 2<sup>√2</sup>: an algebraic base raised to an irrational algebraic exponent. Must it always be transcendental, a number that is the root of no polynomial with whole-number coefficients?</p>
+  <pre class="lines" data-k="ember" data-label="this step: worked">
+2^{\sqrt2} = e^{\sqrt2\ln 2} \approx e^{0.9803} \approx 2.6651 @@ the definition; √2 ≈ 1.4142, ln 2 ≈ 0.6931
+3^x = e^{x\ln 3} \approx e^{1.0986x} @@ every exponential is some e^(kx)
+(x^e)' = e\,x^{e - 1} @@ real-power for slopes
+(2^x)' = 2^x\ln 2 @@ slope-of-pˣ
+\log_2 10 = \tfrac{\ln 10}{\ln 2} \approx 3.3219 @@ log-base-p
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · a power from 1900 · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17g5.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="5^x,"></span> <span data-tex-inline="10^x,"></span> <span data-tex-inline="(\tfrac12)^x"></span></span>Write each as e to the kx, with k to four places.</li><li><span class="givens"><span data-tex-inline="3^x,"></span> <span data-tex-inline="x^{\sqrt 3},"></span> <span data-tex-inline="x^{-e}"></span></span>Find the slope of each.</li><li><span class="givens"><span data-tex-inline="\log_2 32,"></span> <span data-tex-inline="\log_{10} 0.001,"></span> <span data-tex-inline="\log_3 \sqrt 3,"></span> <span data-tex-inline="\log_7 1"></span></span>Find each.</li><li><span class="givens"><span data-tex-inline="I = \int_1^2 x^e\,dx"></span></span>Find I.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17g6">
+  <h2 class="sthead"><span class="stno">17g6</span>Illegal moves</h2>
+  <p class="stands">Stands on 17g1 to 17g5.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+(2^x)' = x\,2^{x-1}\,? @@ real-power for slopes is for a fixed power; here the exponent varies: 2ˣ ln 2
+(-8)^x = e^{x\ln(-8)}\,? @@ ln(−8) has no value; the definition needs a &gt; 0
+\log_a(x + y) = \log_a x + \log_a y\,? @@ products, not sums
+\log_1 x\,? @@ 1ˣ = 1 for every x; it is not one to one, and ln 1 = 0 cannot be divided by
+  </pre>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17g6.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="(-8)^{1/3},"></span> <span data-tex-inline="\text{rung 8: rational powers}"></span> <span data-tex-inline="\text{of positive bases only}"></span></span>Run this step's definition on the given power as far as you can take it.</li><li><span class="givens"><span data-tex-inline="\big((-1)^2\big)^{1/2},"></span> <span data-tex-inline="(-1)^{2 \cdot 1/2}"></span></span>Find each, and write the hypothesis of real-exponent that is missing.</li><li><span class="givens"><span data-tex-inline="1^y = 5,"></span> <span data-tex-inline="0^y = 5"></span></span>Solve each for y as far as you can take it.<br>Find what your tries do to a log to base 1, and to base 0.</li><li><span class="givens"><span data-tex-inline="(x^2)' = 2x,"></span> <span data-tex-inline="(2^x)' = 2^x \ln 2,"></span> <span data-tex-inline="x^x"></span></span>Run each rule on the third function as far as you can take it.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">17g.4.1</span><span class="tagq">build</span>Pick something of your own that keeps a fixed fraction p of itself each year, with 0 &lt; p &lt; 1, and write its amount after x years as A times p to the x.<br>Write p to the x as e to the kx, and find the amount's slope at 0 and at 1.<br>Find, with the log to base p, when your amount is down to half, and check it with ln.</div>
+  <div class="chq"><span class="chid">17g.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="y = p^x,"></span> <span data-tex-inline="y = x,"></span> <span data-tex-inline="p &gt; 1"></span></span>Find every p for which the two graphs meet, trying 1.4, 1.5 and 2.</div>
+  <div class="chq"><span class="chid">17g.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="f \text{ continuous},"></span> <span data-tex-inline="f(x + y) = f(x)f(y),"></span> <span data-tex-inline="\text{for all real } x, y,"></span> <span data-tex-inline="f(1) = p &gt; 0"></span></span>Prove or refute: f(x) is p to the x.</div>
+  <div class="chq"><span class="chid">17g.4.4</span><span class="tagq">seam</span><span class="givens"><span data-tex-inline="2^{\sqrt 2} \approx 2.6651"></span></span>Before this step, the given power had no meaning on the ladder. Now it is a number. In 1900 a leading mathematician asked whether it is the root of any polynomial with whole-number coefficients. He is reported to have said he expected to see a famous open problem about the primes solved first. Two mathematicians answered his question in 1934, and the problem about the primes is still open.<br>What made his guess about the order go wrong?<br>Is a problem's difficulty visible from how it is stated?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r17f.html">← 17f · exp is its own slope</a><a href="r17concl.html">17·∎ · conclusion →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>Hilbert asked, among the problems he set for the new century, whether a power such as 2<sup>√2</sup>, an algebraic base raised to an irrational algebraic exponent, must always be transcendental, a number that is the root of no polynomial with whole-number coefficients.</p><cite>David Hilbert, Mathematical Problems, the seventh (1900); paraphrase</cite></aside>
+  <p>In 17g.4.4, the one who asked is David Hilbert; the open problem about the primes is the Riemann hypothesis; the two who answered are Aleksandr Gelfond and Theodor Schneider. Base-ten logs are Henry Briggs’s.</p>
+  <h3>Accepted names</h3>
+  <p>The real-exponent technique is the laws of exponents.</p>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+/* least and greatest of F.f on [lo, hi]: the ends, F's critical points inside, and a fine sample (exact between critical points for the functions used here) */
+function ext(F,lo,hi){ if(F.dir) return [0,1]; let m=Infinity,M=-Infinity; const t=x=>{ const v=F.f(x); if(v<m) m=v; if(v>M) M=v; };
+  t(lo); t(hi); (F.crit||[]).forEach(c=>{ if(c>lo&&c<hi) t(c); }); for(let k=1;k<64;k++) t(lo+(hi-lo)*k/64); return [m,M]; }
+function sums(F,pts){ let L=0,U=0; const ms=[],Ms=[]; for(let i=1;i<pts.length;i++){ const [m,M]=ext(F,pts[i-1],pts[i]), w=pts[i]-pts[i-1]; ms.push(m); Ms.push(M); L+=m*w; U+=M*w; } return {L,U,ms,Ms}; }
+const eq=(a,b,n)=>Array.from({length:n+1},(_,i)=>a+(b-a)*i/n);
+function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
+function boxes(P,pts,hs,stroke,fill,alpha){ const c=P.ctx; for(let i=1;i<pts.length;i++){ const a=pts[i-1],b=pts[i],h=hs[i-1]; c.globalAlpha=alpha; P.poly([[a,0],[b,0],[b,h],[a,h]],null,fill); c.globalAlpha=1; P.poly([[a,0],[b,0],[b,h],[a,h]],stroke,null,1.2); } }
+function dirDots(P,a,b){ const c=P.ctx; c.fillStyle=col('--ink'); for(let k=0;k<=300;k++){ const x=a+(b-a)*k/300; const y=(k%2)?0:1; c.fillRect(P.X(x)-1,P.Y(y)-1,2,2); } }
+/* shade between the graph of fn and the axis from lo to hi: above in pos colour, below in neg colour */
+function shade(P,fn,lo,hi,pos,neg,alpha){ if(hi<lo){ const t=lo; lo=hi; hi=t; } const c=P.ctx, N=300; c.globalAlpha=alpha==null?0.32:alpha;
+  for(let k=0;k<N;k++){ const x0=lo+(hi-lo)*k/N, x1=lo+(hi-lo)*(k+1)/N, xm=(x0+x1)/2, y=fn(xm); if(!isFinite(y)) continue; P.poly([[x0,0],[x1,0],[x1,fn(x1)],[x0,fn(x0)]],null,y>=0?pos:neg); }
+  c.globalAlpha=1; }
+function rangeOf(fn,lo,hi,pad){ let m=Infinity,M=-Infinity; for(let k=0;k<=400;k++){ const v=fn(lo+(hi-lo)*k/400); if(isFinite(v)){ if(v<m) m=v; if(v>M) M=v; } } if(m>0) m=0; if(M<0) M=0; const p=(M-m)*(pad==null?0.12:pad)||1; return [m-p,M+p]; }
+function chips(el,FN,get,setk,after){ Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===get()) b.className='on'; b.onclick=()=>{ setk(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+const Nw='\\htmlClass{new}';
+function gridFor(sp){ return sp>40?10:sp>16?4:sp>8?2:sp>3?1:sp>1.2?0.5:0.25; }
+function frame2(P,fn,lo,hi,pad){ const w=hi-lo; P.o.x=[lo-0.12*w,hi+0.08*w]; P.o.y=rangeOf(fn,lo,hi,pad==null?0.12:pad); const sx=P.o.x[1]-P.o.x[0], sy=P.o.y[1]-P.o.y[0]; let g=gridFor(sx); while(sy/g>24) g*=2; P.o.grid=g; }
+const num=(f,a,b,n)=>{ n=n||4000; const h=(b-a)/n; let s=0; for(let i=0;i<n;i++) s+=f(a+(i+0.5)*h)*h; return s; };
+/* axes with separate steps across and up */
+function axes2(P,gx,gy){ const c=P.ctx,o=P.o; c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ c.moveTo(P.X(x),P.Y(o.y[0])); c.lineTo(P.X(x),P.Y(o.y[1])); }
+  for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ c.moveTo(P.X(o.x[0]),P.Y(y)); c.lineTo(P.X(o.x[1]),P.Y(y)); } c.stroke();
+  c.strokeStyle=col('--muted'); c.lineWidth=1.3; c.beginPath(); if(o.y[0]<=0&&o.y[1]>=0){ c.moveTo(P.X(o.x[0]),P.Y(0)); c.lineTo(P.X(o.x[1]),P.Y(0)); } if(o.x[0]<=0&&o.x[1]>=0){ c.moveTo(P.X(0),P.Y(o.y[0])); c.lineTo(P.X(0),P.Y(o.y[1])); } c.stroke();
+  c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; const ly=Math.min(P.H-6,Math.max(12,P.Y(0)+14));
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ if(Math.abs(x)<1e-9) continue; c.fillText(+x.toFixed(6),P.X(x),ly); }
+  c.textAlign='right'; const lx=Math.max(32,Math.min(P.W-4,P.X(0)-5)); for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ if(Math.abs(y)<1e-9) continue; c.fillText(String(+y.toFixed(6)).replace('-','−'),lx,P.Y(y)+4); } }
+function nice(sp){ const raw=sp/6, p=Math.pow(10,Math.floor(Math.log10(raw))), m=raw/p; return (m<1.5?1:m<3.5?2:m<7.5?5:10)*p; }
+const ka=$('ka'),kr=$('kr'),cvF=$('cvF'),cvL=$('cvL');
+const PF=plane(cvF,{x:[-3.3,3.3],y:[-0.8,8],grid:1,aspect:0.8,draw:P=>drawF(P)});
+const PL=plane(cvL,{x:[-0.4,4.2],y:[-1,8],grid:1,aspect:0.8,draw:P=>drawL(P)});
+[[PF,cvF],[PL,cvL]].forEach(([P,cv])=>Object.defineProperty(P.o,'aspect',{get:()=>cv.clientWidth>480?0.75:0.9}));
+const S2=Math.SQRT2;
+function drawF(P){ const a=+ka.value, L=Math.log(a); axes2(P,1,1); curve(P,Math.exp,'--muted',1.4,-3.3,3.3,[6,4]); curve(P,x=>Math.exp(x*L),'--ember',2.6,-3.3,3.3);
+  [-2,-1,-0.5,0,0.5,1,2].forEach(r=>P.dot(r,Math.pow(a,r),'--teal',3.5)); P.dot(S2,Math.exp(S2*L),'--plum',5); }
+function drawL(P){ const r=+kr.value, f=x=>Math.exp(r*Math.log(x)), m=r*Math.pow(2,r-1), y2=f(2); axes2(P,1,1); curve(P,t=>y2+m*(t-2),'--ember',2,-0.4,4.2); curve(P,f,'--ink',2.6,0.01,4.2); P.dot(2,y2,'--ember',5); }
+function read(){ const a=+ka.value, r=+kr.value; $('oa').textContent=mm(a,2); $('or').textContent=mm(r,2);
+  const v=Math.exp(S2*Math.log(a)), m=r*Math.pow(2,r-1); const vd=$('vdF'); vd.className='verdict';
+  vd.textContent=mm(a,2)+'^√2 = e^(√2 · ln '+mm(a,2)+') ≈ '+mm(v,4)+'. '+(a>1.005?'ln p > 0, so pˣ rises.':a<0.995?'ln p < 0, so pˣ falls.':'p ≈ 1: pˣ is nearly flat.')+' On the right, the slope of x^'+mm(r,2)+' at 2 is '+mm(r,2)+' · 2^'+mm(r-1,2)+' ≈ '+mm(m,4)+'.';
+  tex($('eqF'),R`\begin{gathered}${mm(a,2)}^{\sqrt2} = e^{\sqrt2\,\ln ${mm(a,2)}} \approx ${mm(v,4)}\\ (x^{${mm(r,2)}})'\big|_{2} = ${mm(r,2)}\cdot 2^{${mm(r-1,2)}} \approx ${mm(m,4)}\end{gathered}`,true); }
+function all(){ PF.redraw(); PL.redraw(); read(); }
+ka.addEventListener('input',all); kr.addEventListener('input',all);
+window.__pic={set:(a,r)=>{ ka.value=a; kr.value=r; all(); const h=1e-5, f=x=>Math.exp(r*Math.log(x)); return {pow:+Math.exp(S2*Math.log(a)).toFixed(5),js:+Math.pow(a,S2).toFixed(5),slope:+((f(2+h)-f(2-h))/(2*h)).toFixed(5),rpr:+(r*Math.pow(2,r-1)).toFixed(5)}; }};
+all();
+stepper('#sl1',[
+  {k:'ember',kl:'the definition',t:R`${Nw}{a^x = e^{x\ln a}}`,n:`For every real x, p > 0.`},
+  {k:'ember',kl:'powers-agree',t:R`e^{r\ln a} = a^r`,n:`Rung 8's power, for rational r.`}
+],{title:'The slides · the definition · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'real-exponent',t:R`a^{x+y} = a^x a^y,\ (a^x)^y = a^{xy}`,n:`adding-becomes-multiplying, and ln(pˣ) = x ln p.`},
+  {k:'ember',kl:'rising, falling',t:R`\ln a \gt 0 \iff a \gt 1`,n:`The sign of the exponent's factor.`}
+],{title:'The slides · the exponent techniques · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'slope-of-pˣ',t:R`${Nw}{(a^x)' = a^x\ln a}`,n:`chain for slopes and slope-of-exp.`},
+  {k:'ember',kl:'real-power for slopes',t:R`${Nw}{(x^r)' = r x^{r-1}}`,n:`Every real r.`},
+  {k:'ember',kl:'the table',t:R`\textstyle\int x^r\,dx = \tfrac{x^{r+1}}{r+1} + C`,n:`Real r ≠ −1.`}
+],{title:'The slides · the slopes · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'logₚ',t:R`a^y = x \iff y = \log_a x`,n:`p > 0, p ≠ 1.`},
+  {k:'ember',kl:'log-base-p',t:R`${Nw}{\log_a x = \tfrac{\ln x}{\ln a}}`,n:`Every log is a multiple of ln.`}
+],{title:'The slides · the log to any base · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'1900',t:R`2^{\sqrt2}\,?`,n:`The seventh problem.`},
+  {k:'ember',kl:'2^√2',t:R`2^{\sqrt2} \approx 2.6651`,n:`Now a number.`}
+],{title:'The slides · a power from 1900 · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'illegal',t:R`(2^x)' \ne x\,2^{x-1}`,n:`The exponent varies.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How far a power sum reaches</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r23b.html">← 23b how wrong the match is</a><a href="r23d.html">next: 23d settling everywhere at once →</a></p>
+  <div class="tags"><span class="tag proof">23c · proof</span></div>
+  <h1>How far a power sum reaches</h1>
+  <p>Let the matching polynomial go on forever and you get an endless sum of powers. Put in a number and it may settle or wander. This step finds that the answer has a simple shape. Around the centre there is a distance, the reach, inside which the sum settles, and settles firmly, while outside it the sum wanders. Only at the two edges can anything happen. The reach can be found from the coefficients alone, by the same comparison with a geometric sum that the last rung used. And it can be smaller than you expect: the sum for one over one plus x squared stops reaching at one, though that function is smooth along the whole line.</p>
+  <p class="gesture">An endless power sum settles inside a distance from its centre and wanders outside it. That distance, the reach, comes from the coefficients alone. At the edges anything can happen.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r22e.html">22e</a> (comparison, ratio, settling in size), <a href="r22d.html">22d</a> (the shrink test), <a href="r08c.html">8c</a> (the least upper bound), <a href="r23a.html">23a</a> (matching polynomials). <a href="r23d.html">23d</a> asks when a list of functions settles all at once.</p></div>
+</header>
+
+<section class="class step" data-step="23c1">
+  <h2 class="sthead"><span class="stno">23c1</span>Power sums</h2>
+  <p class="stands">Stands on 23a2 and 22d1 (running totals).</p>
+  <p class="eqline" data-pid="851eba">From here on, a <i>power sum</i> about a is Σₖ cₖ(x − a)ᵏ, with real coefficients c₀, c₁, c₂, …. For each x it is an endless sum of reals, which settles or wanders. Accepted name: a power series.</p>
+  <p data-pid="9be86c">The endless matching polynomial of a smooth f is the power sum with cₖ = f⁽ᵏ⁾(a)/k!. 23b showed it settles at f(x) for eˣ, sin and cos at every x, and for ln(1 + x) on [0, 1]. Other power sums need not come from any function you know; the sum then defines one, wherever it settles.</p>
+  <p data-pid="ce14f0">Reach technique: <b>if a power sum about a settles at x₀, it settles in size at every x nearer to a than x₀ is.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the reach technique">
+c_k(x_0 - a)^k \to 0 @@ the sum settles at x₀: the shrink test (22d2)
+|c_k(x_0 - a)^k| \le B \text{ for every } k @@ a list that settles has a floor and a ceiling (22b)
+|c_k(x - a)^k| = |c_k(x_0 - a)^k| \cdot \big|\tfrac{x-a}{x_0-a}\big|^k \le B\,r^k,\ \ r = \big|\tfrac{x-a}{x_0-a}\big| < 1 @@ |x − a| &lt; |x₀ − a|
+\htmlClass{new}{\textstyle\sum |c_k(x-a)^k| \text{ settles}} \quad \blacksquare @@ comparison with the geometric sum ΣBrᵏ (22e1)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">23c1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\textstyle\sum c_k x^k \text{ settles at } x = -3"></span></span>List three more x where it must settle in size, and why. <br>Find whether the reach technique says anything about x = 3, or about x = −3 in size. <br>Find one x where the sum might wander.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="23c2">
+  <h2 class="sthead"><span class="stno">23c2</span>The reach</h2>
+  <p class="stands">Stands on 23c1 and 8c (the least upper bound).</p>
+  <p data-pid="a518d2">Reach-of-a-sum technique: <b>every power sum about a has a reach R, a real ≥ 0 or no ceiling at all, such that it settles in size where |x − a| &lt; R and wanders where |x − a| &gt; R.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the reach-of-a-sum technique">
+S = \{|x - a| : \text{the sum settles at } x\} @@ it holds 0: at x = a every piece after c₀ is 0
+R = \sup S,\ \text{or no ceiling if } S \text{ has none} @@ 8c
+|x - a| < R \Rightarrow \text{some } x_0 \text{ with } |x - a| < |x_0 - a| \text{ settles} @@ R is the least ceiling of S
+|x - a| < R \Rightarrow \text{settles in size} @@ the reach technique (23c1)
+|x - a| > R \Rightarrow |x - a| \notin S @@ R is a ceiling of S
+\htmlClass{new}{\text{inside } R \text{ the sum settles in size; outside it wanders}} \quad \blacksquare @@ the lines above
+  </pre>
+  <p class="eqline" data-pid="483b08">From here on, R is the <i>reach</i> of the power sum. Accepted name: the radius of convergence. Where there is no ceiling, write R = ∞ and say the sum reaches everywhere.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · reach · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">23c2.1</span><span class="ph bend">bend</span><span class="givens"><span data-tex-inline="\textstyle\sum c_k (x-2)^k \text{ settles at } x = 5 \text{ and wanders at } x = -2"></span></span>Find a floor and a ceiling for its reach R. <br>For each of x = 0, 4.9, 6 and −1.5, decide: it settles in size, it wanders, or this cannot tell.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="23c3">
+  <h2 class="sthead"><span class="stno">23c3</span>Finding the reach from the coefficients</h2>
+  <p class="stands">Stands on 23c2 and 22e2 (the ratio test).</p>
+  <p data-pid="a4af3c">Reach-by-ratio technique: <b>if |cₖ₊₁/cₖ| heads to L, the reach is 1/L; if it heads to 0, the sum reaches everywhere; if it passes every ceiling, the reach is 0.</b> Run the ratio test on the sizes of the pieces.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the reach-by-ratio technique">
+\Big|\tfrac{c_{k+1}(x-a)^{k+1}}{c_k(x-a)^k}\Big| = \Big|\tfrac{c_{k+1}}{c_k}\Big|\,|x-a| \to L|x-a| @@ for x ≠ a
+L|x - a| < 1 \Rightarrow \text{settles in size} @@ the ratio test (22e2)
+L|x - a| > 1 \Rightarrow \text{the pieces grow: wanders} @@ the shrink test (22d2)
+\htmlClass{new}{R = 1/L} \quad \blacksquare @@ the two lines meet at |x − a| = 1/L
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: four reaches">
+\textstyle\sum \tfrac{x^k}{k!}:\ \tfrac{k!}{(k+1)!} = \tfrac{1}{k+1} \to 0,\ R = \infty @@ the sum for eˣ reaches everywhere
+\textstyle\sum x^k:\ 1 \to 1,\ R = 1 @@ the geometric sum (15i)
+\textstyle\sum (-1)^{k+1}\tfrac{x^k}{k}:\ \tfrac{k}{k+1} \to 1,\ R = 1 @@ the sum for ln(1 + x)
+\htmlClass{new}{\textstyle\sum k!\,x^k:\ (k+1) \text{ passes every ceiling},\ R = 0} @@ it settles at x = 0 and nowhere else
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">23c3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\textstyle\sum_{k \ge 1} \tfrac{2^k x^k}{k},\ \ \sum_{k \ge 1} \tfrac{x^k}{k^2 3^k},\ \ \sum_{k \ge 1} k^3 x^k"></span></span>Find the reach of each by the reach-by-ratio technique.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="23c4">
+  <h2 class="sthead"><span class="stno">23c4</span>Anything at the edge</h2>
+  <p class="stands">Stands on 23c2, 22d3 (the harmonic sum), 22g1 (the bracket) and 22f2 (the p-sums).</p>
+  <pre class="lines" data-k="ember" data-label="this step: three sums with reach 1, at x = 1 and x = −1">
+\textstyle\sum x^k:\ \text{wanders at } 1 \text{ and at } -1 @@ the pieces do not head to 0
+\textstyle\sum \tfrac{x^k}{k}:\ \text{wanders at } 1,\ \text{settles at } -1 @@ the harmonic sum (22d3); the bracket (22g1)
+\htmlClass{new}{\textstyle\sum \tfrac{x^k}{k^2}:\ \text{settles at both}} \quad \blacksquare @@ in size it is the p-sum with p = 2 (22f2)
+  </pre>
+  <p data-pid="3817a4">Now a puzzle. 1/(1 + x²) is smooth along the whole line. Its power sum about 0 is 1 − x² + x⁴ − ⋯, the geometric sum with ratio −x². Its reach is 1. At x = 2 the function is a fifth, and the sum wanders. Nothing on the real line explains why the sum stops at 1. The reason lives off the line, in numbers that turn: 1 + x² is 0 at x = i, one unit from the centre. Rung 25 builds the place where that makes sense.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">23c4.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\textstyle\sum_{k \ge 1} \tfrac{x^k}{\sqrt k},\ \ \sum_{k \ge 1} \tfrac{(x-2)^k}{k\,2^k}"></span></span>Find the centre and the reach of each. <br>Decide each sum at both edges. <br>Write the set of x where each settles.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="23c5">
+  <h2 class="sthead"><span class="stno">23c5</span>Illegal moves</h2>
+  <p class="stands">Stands on 23c1 to 23c4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+R = 1, \text{ so the sum settles at } x = 1\,? @@ the edges are open: anything can happen there
+\text{settles at } x_0 \Rightarrow \text{settles at every } x \text{ with } |x| \le |x_0|\,? @@ only nearer than x₀; the other edge, at −x₀, can wander (Σ xᵏ/k at x₀ = −1)
+f \text{ smooth everywhere} \Rightarrow \text{its sum reaches everywhere}\,? @@ 1/(1 + x²) has reach 1
+\big|\tfrac{c_{k+1}}{c_k}\big| \text{ has no limit, so there is no reach}\,? @@ the reach always exists (23c2); the ratio is only one way to find it
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">23c5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\textstyle\sum x^k,\ \ \sum_{k \ge 1} \tfrac{x^k}{k^2}"></span></span>Find the reach of each. <br>Decide each at x = 1.</li><li><span class="givens"><span data-tex-inline="\textstyle\sum_{k \ge 1} \tfrac{x^k}{k},\ \ x_0 = -1"></span></span>Find whether it settles at x₀ = −1, and at x = 1. <br>Find which x the reach technique covers, starting from x₀.</li><li><span class="givens"><span data-tex-inline="\tfrac{1}{1+x^2} = 1 - x^2 + x^4 - \cdots"></span></span>Find where the function is smooth. <br>Find the first five running totals of the sum at x = 2, and 1/(1 + 2²).</li><li><span class="givens"><span data-tex-inline="c_k = 1 \text{ for even } k,\ \ c_k = 2 \text{ for odd } k"></span></span>Find the ratios |cₖ₊₁/cₖ|, and whether they settle. <br>Find the reach of Σ cₖxᵏ by comparison with geometric sums.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">23c.4.1</span><span class="tagq">build</span>Build a power sum about 1 whose reach is 2, which settles at x = 3 and wanders at x = −1. <br>Check its reach and both edges.</div>
+  <div class="chq"><span class="chid">23c.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\textstyle\sum_{k \ge 0} 4^k x^{2k} = 1 + 4x^2 + 16x^4 + \cdots"></span></span>Every odd coefficient is 0, so the ratio of neighbouring coefficients cannot be taken. <br>Find its reach anyway, and decide both edges. <br>Find its total inside the reach.</div>
+  <div class="chq"><span class="chid">23c.4.3</span><span class="tagq">converse</span>Every power sum has a reach. Turn it round: is every number R ≥ 0, and no ceiling at all, the reach of some power sum? <br>Build one with reach 0, one with reach 7, and one that reaches everywhere.</div>
+  <div class="chq"><span class="chid">23c.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\textstyle\sum_{k \ge 1} \tfrac{x^k}{k^2 3^k}"></span></span>Find its reach without the ratio of neighbours. <br>For |x| &lt; 3, compare its pieces with a geometric sum. <br>For |x| &gt; 3, find whether its pieces head to 0, by 22k.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r23b.html">← 23b · how wrong the match is</a><a href="r23d.html">23d · settling everywhere at once →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A power sum is a power series; its reach is the radius of convergence, and the stretch (a − R, a + R) with whichever edges it settles at is the interval of convergence. The reach technique is often called Abel's lemma. The reach also has a formula from roots, R = 1/limsup |cₖ|^(1/k), the Cauchy–Hadamard formula.</p>
+  <h3>Who said it first</h3>
+  <p>Niels Henrik Abel proved the reach technique in 1826. Augustin-Louis Cauchy gave the root formula in 1821, and Jacques Hadamard rediscovered and proved it in 1888. Cauchy also explained why 1/(1 + x²) stops at 1, by looking off the line.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'inside',t:R`\htmlClass{new}{|x - a| < R \Rightarrow \text{settles in size}}`,n:`Firmly.`},
+  {k:'ember',kl:'outside',t:R`|x - a| > R \Rightarrow \text{wanders}`,n:`The edges are open.`}
+],{title:'The slides · reach · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

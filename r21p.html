@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Related rates</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r21o.html">← 21o adding up slices</a><a href="r21q.html">next: 21q angles standing on arcs →</a></p>
+  <div class="tags"><span class="tag tech">21p · technique</span></div>
+  <h1>Related rates</h1>
+  <p>When two lengths are locked together by a shape, they cannot change on their own. If one moves, the other must move too, and at a speed the shape decides. A ladder against a wall, a balloon watched from the ground, a tank filling with water: each is a shape that ties one rate to another. This step shows how to find the one you cannot see from the one you can, and what it means when the answer comes out impossible.</p>
+  <p class="gesture">Lengths tied together by a shape have speeds tied together by that same shape. Take the slope in time of the tie itself, and the one speed gives the other. When a speed comes out endless, the shape has stopped holding.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r13l.html">13l</a> (implicit slopes), <a href="r13j.html">13j</a> (the chain rule by hand), <a href="r21m.html">21m</a> (arctan), <a href="r21o.html">21o</a> (the cone). <a href="r21q.html">21q</a> returns to the circle’s angles.</p></div>
+</header>
+
+<section class="class step" data-step="21p1">
+  <h2 class="sthead"><span class="stno">21p1</span>Take the slope of the tie</h2>
+  <p class="stands">Stands on 13l (implicit slopes) and 13j (the chain rule by hand).</p>
+  <p data-pid="1edad5">Tied-rates technique: <b>if x(t) and y(t) stay tied by an equation for every t, take the slope in t of both sides; the result ties x′ to y′.</b> Put in the numbers for the instant only after the slopes are taken.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the tied-rates technique, on a ladder of length L">
+x(t)^2 + y(t)^2 = L^2 @@ foot x from the wall, top y up it: the right-triangle technique
+2x\,x' + 2y\,y' = 0 @@ slope in t of each side; the chain rule on each square
+\htmlClass{new}{y' = -\tfrac{x}{y}\,x'} \quad \blacksquare @@ wherever y ≠ 0
+x' > 0 \Rightarrow y' < 0 @@ the foot slides out, the top comes down
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · tied rates · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · a ladder sliding down a wall, its foot at a steady pace</div>
+    <div class="kn"><span class="m">x</span><input type="range" id="kx" min="0.5" max="4.99" step="0.01" value="3"><output id="okx"></output></div>
+    <div id="pl"></div>
+    <div class="cap">The ladder is 5 long and its foot moves out at 0.5 a second. Ember: the ladder. The verdict gives the top’s speed from y′ = −(x/y)x′.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">21p1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a 5 m ladder,  the foot sliding out at 0.5 m/s</span></span>Find how fast the top comes down when the foot is 3 m from the wall.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21p2">
+  <h2 class="sthead"><span class="stno">21p2</span>Rates through an angle</h2>
+  <p class="stands">Stands on 21p1, 21c (tan is steepness) and 21g (slope of tan).</p>
+  <p data-pid="7709f9">Angle-rate technique: <b>when an angle θ is tied to lengths through tan, cos or sin, take the slope of the tie: (tan θ)′ = sec² θ · θ′.</b> Answers come in radians per unit of time.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the angle-rate technique, on a rising balloon watched from d away">
+\tan\theta = \tfrac{h}{d} @@ tan is the steepness (21c), d fixed
+\sec^2\theta\,\theta' = \tfrac{h'}{d} @@ slope in t; the chain rule
+\htmlClass{new}{\theta' = \frac{d\,h'}{d^2 + h^2}} \quad \blacksquare @@ sec² θ = 1 + h²/d²
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · angle rates · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21p2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a balloon rising at 2 m/s,  watched from 100 m away on level ground</span></span>Find how fast the angle of the watcher’s gaze is rising when the balloon is 100 m up.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21p3">
+  <h2 class="sthead"><span class="stno">21p3</span>Rates through a volume</h2>
+  <p class="stands">Stands on 21p1 and 21o1 (the cone).</p>
+  <p data-pid="ff7251">Volume-rate technique: <b>write the volume in the one length you want, using the shape to remove the others; then its slope in t ties the filling rate to that length’s rate.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the volume-rate technique, on a cone point-down, radius R at the top, height H">
+r = \tfrac{R}{H}h @@ similar triangles: the water’s top radius at depth h
+V = \tfrac13\pi r^2 h = \tfrac{\pi R^2}{3H^2}h^3 @@ the cone (21o1), r removed
+\htmlClass{new}{V' = \tfrac{\pi R^2}{H^2}h^2\,h'} \quad \blacksquare @@ slope in t
+h' = \tfrac{H^2 V'}{\pi R^2 h^2} @@ at a steady pour, the level slows as it rises
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · volume rates · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21p3.1</span><span class="ph undo">undo</span><span class="givens"><span class="gtx">a cone tank point-down,  radius 3 m at the top,  height 6 m,  filled at 2 m³ a minute</span></span>Find how fast the level rises when the water is 4 m deep.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21p4">
+  <h2 class="sthead"><span class="stno">21p4</span>When the answer is impossible</h2>
+  <p class="stands">Stands on 21p1 and 1i (refutation).</p>
+  <p data-pid="37f3da">Broken-tie technique: <b>if a rate comes out endless, or faster than anything can move, then the tie it came from has stopped holding before that instant.</b> The equations are right; the picture they describe has ended.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the broken-tie technique, on the ladder">
+y' = -\tfrac{x}{y}\,x' \to -\infty \text{ as } y \to 0 @@ x → L and x′ stays fixed
+\text{no ladder top falls endlessly fast} @@ suppose the tie held to the floor
+\htmlClass{new}{\text{the top leaves the wall before } y = 0} \quad \blacksquare @@ refutation (1i): the tie x² + y² = L² with the top on the wall fails
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · broken tie · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21p4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">the 5 m ladder of 21p1, foot at 0.5 m/s</span></span>Find the top’s speed when it is 10 cm from the floor. <br>Find the height at which the formula says the top passes the speed of sound, 343 m/s.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21p5">
+  <h2 class="sthead"><span class="stno">21p5</span>Illegal moves</h2>
+  <p class="stands">Stands on 21p1 to 21p4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+x = 3 \text{ first, then } (3^2)' = 0\,? @@ a fixed number has slope 0: take slopes before putting in the instant
+\theta' \text{ in degrees}\,? @@ (tan θ)′ = sec² θ · θ′ holds in radians (21j)
+V = \tfrac13\pi r^2h,\ \ V' = \tfrac13\pi r^2h'\,? @@ r changes too: remove it first, or use the product rule
+y' = \tfrac{x}{y}x'\,? @@ minus: the top falls while the foot slides out
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21p5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span class="gtx">a ripple whose radius grows at 3 cm/s</span></span>Find how fast the area inside it grows when the radius is 10 cm.</li><li><span class="givens"><span class="gtx">a ball of ice whose radius shrinks 1 mm a minute</span></span>Find how fast its volume falls when the radius is 5 cm.</li><li><span class="givens"><span class="gtx">a 2 m person walks at 1.5 m/s away from a 6 m lamp post</span></span>Guess whether the shadow’s tip moves faster than the person. <br>Find how fast the shadow grows, and how fast its tip moves.</li><li><span class="givens"><span class="gtx">two cars leave one crossing, one north at 60 km/h, one east at 80 km/h</span></span>Find how fast the distance between them grows.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">21p.4.1</span><span class="tagq">build</span>Build a pair of tied lengths whose tie makes the second rate stay the same for all time, though the first rate is fixed and the lengths change.</div>
+  <div class="chq"><span class="chid">21p.4.2</span><span class="tagq">edge</span>For the sliding ladder, find where the top and the foot move at the same speed.</div>
+  <div class="chq"><span class="chid">21p.4.3</span><span class="tagq">converse</span>Lengths tied by x² + y² = L² have rates tied by x x′ + y y′ = 0. Turn it round: if x x′ + y y′ = 0 for all t, find what can be said about x and y.</div>
+  <div class="chq"><span class="chid">21p.4.4</span><span class="tagq">reroute</span>Find the balloon’s angle rate again with arctan: θ = arctan(h/d), and 21m’s backward slope.</div>
+  <div class="chq"><span class="chid">21p.4.5</span><span class="tagq">seam</span>Two people argue about the sliding ladder. One says the equations are proved, so the top really does hit the floor at an endless speed. The other says the equations are wrong. A third says both are right about something. <br>What actually happens to the ladder? <br>What does the endless speed tell you?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r21o.html">← 21o · adding up slices</a><a href="r21q.html">21q · angles standing on arcs →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>These are related rates problems; the tie is the constraint, and taking the slope in t of both sides is implicit differentiation with respect to time.</p>
+  <h3>Who said it first</h3>
+  <p>In 21p.4.5, the sliding ladder has been a textbook exercise since the nineteenth century. Paul Scholten and Andrew Simoson, “The falling ladder paradox”, College Mathematics Journal 27 (1996), showed that a real ladder’s top leaves the wall before it reaches the floor.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+/* moves of the plane, drawn in SVG, for rung 20 */
+const V=c=>'var('+c+')';
+const FLAG=[[0,0],[0,3],[2,3],[2,2.4],[0.6,2.4],[0.6,1.8],[1.5,1.8],[1.5,1.2],[0.6,1.2],[0.6,0]];
+const M={
+  id:()=>p=>p,
+  slide:(h,k)=>p=>[p[0]+h,p[1]+k],
+  turn:(a,b)=>p=>[a*p[0]-b*p[1],b*p[0]+a*p[1]],
+  stretch:k=>p=>[k*p[0],k*p[1]],
+  flipU:(c,s)=>p=>{ const d=2*(p[0]*c+p[1]*s); return [d*c-p[0],d*s-p[1]]; },              /* across the line through O along (c, s), c² + s² = 1 */
+  flipAt:(q,c,s)=>p=>{ const x=p[0]-q[0],y=p[1]-q[1],d=2*(x*c+y*s); return [q[0]+d*c-x,q[1]+d*s-y]; },
+  turnAt:(q,a,b)=>p=>{ const x=p[0]-q[0],y=p[1]-q[1]; return [q[0]+a*x-b*y,q[1]+b*x+a*y]; },
+  then:(g,f)=>p=>g(f(p))                                                                    /* f first, then g */
+};
+const unit=(x,y)=>{ const r=Math.hypot(x,y); return [x/r,y/r]; };
+const fx=v=>(Math.abs(v)<5e-10?0:v);
+const show=(v,d)=>{ let s=fx(v).toFixed(d==null?2:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return (s==='-0'?'0':s).replace('-','−'); };
+/* shapes: {pts, c, fill, dash, w, open}; dots: {p, c, t}; lines: {p, d, c, dash} */
+function svgPlane(o){ const lo=o.lo==null?-6:o.lo, hi=o.hi==null?6:o.hi, S=300, X=x=>(x-lo)/(hi-lo)*S, Y=y=>S-(y-lo)/(hi-lo)*S;
+  let s='<svg viewBox="0 0 '+S+' '+S+'" style="width:100%;max-width:340px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  for(let g=Math.ceil(lo);g<=hi;g++){ s+='<line x1="'+X(g)+'" y1="0" x2="'+X(g)+'" y2="'+S+'" style="stroke:'+V('--grid')+';stroke-width:'+(g===0?1.6:0.6)+'"/><line x1="0" y1="'+Y(g)+'" x2="'+S+'" y2="'+Y(g)+'" style="stroke:'+V('--grid')+';stroke-width:'+(g===0?1.6:0.6)+'"/>'; }
+  (o.lines||[]).forEach(l=>{ const L=40; s+='<line x1="'+X(l.p[0]-L*l.d[0])+'" y1="'+Y(l.p[1]-L*l.d[1])+'" x2="'+X(l.p[0]+L*l.d[0])+'" y2="'+Y(l.p[1]+L*l.d[1])+'" style="stroke:'+V(l.c||'--teal')+';stroke-width:1.6;stroke-dasharray:'+(l.dash||'5 4')+'"/>'; });
+  (o.shapes||[]).forEach(z=>{ const pts=z.pts.map(p=>X(p[0]).toFixed(1)+','+Y(p[1]).toFixed(1)).join(' ');
+    s+='<'+(z.open?'polyline':'polygon')+' points="'+pts+'" style="fill:'+(z.fill?V(z.c):'none')+';fill-opacity:'+(z.fill?0.28:0)+';stroke:'+V(z.c)+';stroke-width:'+(z.w||2)+(z.dash?';stroke-dasharray:'+z.dash:'')+'"/>'; });
+  (o.dots||[]).forEach(d=>{ s+='<circle cx="'+X(d.p[0])+'" cy="'+Y(d.p[1])+'" r="4" style="fill:'+V(d.c||'--ink')+'"/>'+(d.t?'<text x="'+(X(d.p[0])+7)+'" y="'+(Y(d.p[1])-6)+'" style="fill:'+V(d.c||'--ink')+';font:12px IBM Plex Mono,monospace">'+d.t+'</text>':''); });
+  return s+'</svg>'; }
+function knob(id,lab,min,max,step,val){ return '<div class="kn"><span class="m">'+lab+'</span><input type="range" id="'+id+'" min="'+min+'" max="'+max+'" step="'+step+'" value="'+val+'"><output id="o'+id+'"></output></div>'; }
+function chipRow(el,keys,get,set,after){ el.innerHTML=''; keys.forEach(k=>{ const b=document.createElement('button'); b.type='button'; b.textContent=k; if(k===get()) b.className='on'; b.onclick=()=>{ set(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+
+let x=3; const L=5, xp=0.5;
+$('kx').addEventListener('input',()=>{ x=+$('kx').value; draw(); });
+function draw(){ const y=Math.sqrt(L*L-x*x), yp=-x/y*xp;
+  $('pl').innerHTML=svgPlane({lo:-0.5,hi:6.2,shapes:[{pts:[[0,y],[x,0]],c:'--ember',open:true,w:3},{pts:[[0,0],[0,6.2]],c:'--ink',open:true,w:2},{pts:[[0,0],[6.2,0]],c:'--ink',open:true,w:2}],dots:[{p:[0,y],c:'--ember',t:'top'},{p:[x,0],c:'--teal',t:'foot'}]});
+  $('okx').textContent=show(x);
+  const v=$('vd'); v.className='verdict'; v.textContent='Foot '+show(x)+' out, top '+show(y)+' up. The top falls at '+show(-yp)+' a second'+(Math.abs(yp)>xp?', '+show(-yp/xp)+' times as fast as the foot, and climbing without bound as the top nears the floor.':', slower than the foot.'); }
+draw();
+window.__pic={set:v=>{ x=v; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'tied rates',t:R`\htmlClass{new}{y' = -\tfrac{x}{y}x'}`,n:`Slopes first, numbers after.`}
+],{title:'The slides · tied rates · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'angle rate',t:R`\htmlClass{new}{\theta' = \tfrac{d\,h'}{d^2 + h^2}}`,n:`Radians per second.`}
+],{title:'The slides · angle rates · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'volume rate',t:R`\htmlClass{new}{V' = \tfrac{\pi R^2}{H^2}h^2h'}`,n:`One length left.`}
+],{title:'The slides · volume rates · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'broken tie',t:R`\htmlClass{new}{y' \to -\infty}`,n:`The picture has ended.`}
+],{title:'The slides · broken tie · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`(3^2)' = 0`,n:`Slopes first.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

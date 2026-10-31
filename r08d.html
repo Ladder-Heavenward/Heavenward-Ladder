@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>8d · Adding and multiplying cuts</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+#cvP,#cvM{touch-action:manipulation;cursor:pointer}
+table.tt td.l{text-align:left;font-family:var(--serif)} @media (max-width:520px){table.tt td.l{min-width:6em}}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r08c.html">← 8c the least upper bound</a><a href="r08e.html">next: 8e counting passes any real →</a></p>
+  <div class="tags"><span class="tag support">8d · support</span></div>
+  <h1>Adding and multiplying cuts</h1>
+  <p>To say that a real squares to 2, or that counting passes a real by more than 1, you need arithmetic on the line. This step builds it from the fractions, one operation at a time. It builds the sum of two cuts, the negative of a cut, the product of two positive cuts and then of any two, and the reciprocal. Each is a set of fractions, and each must be proved a cut. Then the twelve techniques of 5c are proved for the reals. Some take a line, because they are rules about fractions in disguise. Some take care, because the product had to be defined by signs. Last, order and arithmetic are shown to agree. The result: the real numbers obey the twelve techniques and have no holes.</p>
+  <p class="gesture">Add cuts by adding their fractions. Negate and invert through the fractions a cut misses, taking care never to keep a greatest member. Multiply positive cuts by multiplying positive fractions; let the signs ride outside.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r04g.html">4g</a> (m &lt; S(m)), <a href="r04h.html">4h</a> (times-does-not-lessen), <a href="r05a.html">5a</a> (member-with-a-0), <a href="r05c.html">5c</a> and <a href="r05d.html">5d</a> (the twelve techniques, one-negative, negative-of-a-negative, negative-of-a-sum, negative-out on ℚ, cancel for times on ℚ), <a href="r05e.html">5e</a> (keep-order for plus on ℚ, keep-order for times on ℚ, compare-by-cross-multiplying, another-between), <a href="r07cb4.html">7·cb4</a> (least-member-for-any-set), <a href="r07d.html">7d</a> (definitions by cases), <a href="r08a.html">8a</a> (cuts, members-below-non-members, members-are-the-fractions-below, fractions-keep-order, chain for less on ℚ), <a href="r08b.html">8b</a> (three-way-order on ℝ, max) and <a href="r08c.html">8c</a> (no-holes). <a href="r08e.html">8e</a> and <a href="r08f.html">8f</a> compute with reals; <a href="r08g.html">8g</a> moves terms across &lt; on the line.</p></div>
+</header>
+
+<section class="class step" data-step="8d1">
+  <h2 class="sthead"><span class="stno">8d1</span>What has to be built</h2>
+  <p class="stands">Stands on 5c (the twelve techniques on ℚ) and 8a (cuts).</p>
+  <p data-pid="ab92b4">Rung 5 built the fractions' operations on representatives and checked that the choice of representative did not matter. Cuts have no representatives: a cut is one set. <b>So each operation is a sift of ℚ, and the work is to check the four conditions.</b> The plan: sums (easy), then negatives (one subtle clause). Then two stepping techniques about walking through a cut. Then products of positives, products by signs, reciprocals, and then the rules. Two techniques about fractions come first.</p>
+  <p data-pid="a71cba">Counting-passes-fractions technique: <b>for rationals w &gt; 0 and c, there is a number n with c &lt; n · w.</b></p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the counting-passes-fractions technique">
+w = \tfrac pq,\ \ c = \tfrac ef;\ \ p, q, f \text{ positive integers} @@ members with positive bottoms (scaling with −1); w positive, so p is
+e = m \lor e = -m,\ \ m \text{ a number} @@ member-with-a-0 (5a)
+c \le m @@ e = −m: c ≤ 0 ≤ m; e = m: m/f ≤ m/1 by compare-by-cross-multiplying and times-does-not-lessen (4h), since 1 ≤ f
+n = (m + 1) \cdot q:\ \ n \cdot w = (m + 1) \cdot p @@ regroup for times on ℚ, turn-about for times on ℚ; q · (p/q) = p (scaling)
+(m + 1) \cdot p \ge m + 1 \gt m @@ times-does-not-lessen, p ≠ 0; m &lt; S(m) (4g), as rationals by order-agrees
+\htmlClass{new}{c \lt n \cdot w} \quad \blacksquare @@ chain for less on ℚ, with ≤ unpacked
+  </pre>
+  <p data-pid="4585e2">And the reciprocal of a positive fraction is positive, and reciprocals of positives turn order about. Positive-reciprocal technique on ℚ: <b>for a positive s, s⁻¹ is positive; and 0 &lt; x &lt; y ⇒ y⁻¹ &lt; x⁻¹.</b> If s⁻¹ were 0, then 1 = s · s⁻¹ = 0 by anything-times-zero. If −s⁻¹ were positive, then s · (−s⁻¹) = −1 would be positive by positive-product on ℚ and negative-out on ℚ. So would 1, against three-way on ℚ. For the second part, multiply x &lt; y by the positive x⁻¹y⁻¹ (keep-order for times on ℚ). That gives y⁻¹ &lt; x⁻¹, after regroup for times on ℚ, turn-about for times on ℚ, reciprocal on ℚ and times-one on ℚ. ∎</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · two techniques · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">8d1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">w = 1/10,  c = 7</span></span>Find a number n with c < n · w. <br>Say how the column finds n from the tops and bottoms.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="8d2">
+  <h2 class="sthead"><span class="stno">8d2</span>Adding cuts</h2>
+  <p class="stands">Stands on 8d1, 8a4 (the four conditions) and 2g (the short form).</p>
+  <p class="eqline" data-pid="43e23f">From here on, for reals α and β, α + β names {r + s : r ∈ α, s ∈ β}, 2g's shorthand for the sift {p ∈ ℚ : ∃r ∈ α ∃s ∈ β (p = r + s)}. Read it “α plus β”. Between reals + always means this. Here + is an operator, a statement with two gaps whose result is a real.</p>
+  <p data-pid="a08d66">Sum-of-cuts technique: <b>for reals α and β, α + β is a real.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the sum-of-cuts technique">
+\text{(i)}\ \ r \in \alpha,\ s \in \beta:\ \ r + s \in \alpha + \beta @@ cut (i) for each; show an example
+a \notin \alpha,\ \ b \notin \beta @@ cut (ii) for each; call them
+r + s = a + b,\ r \in \alpha,\ s \in \beta:\ \ r \lt a,\ s \lt b @@ suppose a + b were in; members-below-non-members for each
+r + s \lt a + s \lt a + b,\ \bot @@ keep-order for plus on ℚ twice; chain for less on ℚ; clash with the sameness (three-way on ℚ at 0)
+\text{(ii)}\ \ a + b \notin \alpha + \beta @@ refute
+t \lt r + s:\ \ t = (t - s) + s,\ \ t - s \lt r @@ the rules; keep-order for plus on ℚ with −s
+\text{(iii)}\ \ t - s \in \alpha,\ \text{so } t \in \alpha + \beta @@ cut (iii) for α; ︿ 
+r \lt r' \in \alpha:\ \ r + s \lt r' + s @@ cut (iv) for α; keep-order for plus on ℚ
+\text{(iv)}\ \ \htmlClass{new}{\alpha + \beta \in \mathbb R} \quad \blacksquare @@ ︿; all four
+  </pre>
+  <p data-pid="cf0c0e">Three rules come almost free. Turn-about technique for plus on ℝ: <b>α + β = β + α</b>, since r + s = s + r by turn-about for plus on ℚ, and then the two sets are the same by same-members. Regroup technique for plus on ℝ: <b>(α + β) + σ = α + (β + σ)</b>, the same way with regroup for plus on ℚ. Plus-zero technique on ℝ: <b>α + 0* = α.</b> A member r + s with s &lt; 0 is below r (keep-order for plus on ℚ), so in α by (iii). And a member r of α has a larger member r′ by (iv). Then r = r′ + (r − r′), with r − r′ &lt; 0, a member of 0*. ∎ And the fractions add as before. Fraction-sums-agree technique: <b>(r + s)* = r* + s*.</b> One way: x &lt; r and y &lt; s give x + y &lt; r + s. The other: for t &lt; r + s, let d = (r + s − t)/2, positive. Then t = (r − d) + (s − d), with r − d &lt; r and s − d &lt; s. ∎</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · the sum · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">8d2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">α = (½)*,  β = (⅓)*</span></span>Show ½ is in α + β by writing it as r + s. <br>Say why 5/6 is not in it.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="8d3">
+  <h2 class="sthead"><span class="stno">8d3</span>The negative of a cut, carefully</h2>
+  <p class="stands">Stands on 8d2 and 5d (negative of a negative).</p>
+  <p data-pid="7f8ea6">The tempting definition of −α is the negatives of the fractions α misses. It is wrong. For α = r*, α misses r and everything above. So the negatives are −r and everything below: a set with a greatest member, −r, and so not a cut. <b>The fix is to drop that one possible greatest member, by asking for a little room:</b></p>
+  <p class="eqline" data-pid="94a2ba">From here on, for a real α, −α names {r ∈ ℚ : ∃s ∈ ℚ (r &lt; s ∧ −s ∉ α)}: the fractions r with some s above r whose negative α misses. Read it “negative α”, or “minus α”. And α − β names α + (−β).</p>
+  <p data-pid="90ca27">Negative-is-a-cut technique: <b>for a real α, −α is a real.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the negative-is-a-cut technique">
+b \notin \alpha:\ \ s = -b,\ \ -s = b \notin \alpha @@ cut (ii) for α; negative-of-a-negative (5d)
+\text{(i)}\ \ s - 1 \lt s,\ \text{so } s - 1 \in -\alpha @@ ︿ the sift, with this s
+a \in \alpha;\ \ -a \in -\alpha\,? @@ cut (i) for α; suppose so, with some s: −a &lt; s, −s ∉ α
+-s \lt a,\ \text{so } -s \in \alpha,\ \bot @@ keep-order for plus on ℚ with a − s on −a &lt; s; cut (iii); clash
+\text{(ii)}\ \ -a \notin -\alpha @@ refute
+\text{(iii)}\ \ t \lt r \lt s:\ \ t \in -\alpha @@ the same s serves; chain for less on ℚ
+\text{(iv)}\ \ r \lt \tfrac{r + s}2 \lt s:\ \ \tfrac{r + s}2 \in -\alpha @@ another-between; the same s serves
+\htmlClass{new}{-\alpha \in \mathbb R} \quad \blacksquare @@ all four
+  </pre>
+  <p data-pid="f9deb7">Now the rule that matters, α + (−α) = 0*. One inclusion is easy. The other needs a way to walk through a cut in steps of a chosen size. Step-out-of-a-cut technique: <b>for a real α and a positive fraction w, there is r ∈ α with r + w ∉ α.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the step-out-of-a-cut technique">
+a \in \alpha,\ \ b \notin \alpha @@ cut (i) and (ii); call them
+\text{call } n \text{ with } b - a \lt n \cdot w @@ counting-passes-fractions
+a + n \cdot w \notin \alpha @@ b &lt; a + n · w (keep-order for plus on ℚ); a member there would put b in, by (iii)
+X = \{k \in \mathbb N : a + k \cdot w \notin \alpha\} \text{ has the member } n @@ Separation; ︿ 
+\text{call its least member } m;\ \ m \ne 0 @@ least-member-for-any-set (7·cb4); 0 ∉ X since a + 0 · w = a ∈ α
+m = S(k),\ \ k \notin X @@ zero-or-a-next (4b); k &lt; m (in-its-next), so not in X, by leastness
+r = a + k \cdot w \in \alpha,\ \ r + w = a + S(k) \cdot w \notin \alpha @@ ﹀; times-a-next, plus-one read as rationals (spread on ℚ)
+\htmlClass{new}{\exists r \in \alpha\,(r + w \notin \alpha)} \quad \blacksquare @@ show an example; the calls close
+  </pre>
+  <p data-pid="67a408">Negative technique on ℝ: <b>α + (−α) = 0*.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the negative technique on ℝ">
+r \in \alpha,\ \ t \in -\alpha \text{ with } t \lt s,\ -s \notin \alpha @@ a member of the sum; ﹀ −α
+r \lt -s,\ \text{so } r + s \lt 0 @@ members-below-non-members; keep-order for plus on ℚ with s
+r + t \lt r + s \lt 0 @@ keep-order for plus on ℚ; chain for less on ℚ
+\alpha + (-\alpha) \subseteq 0^{*} @@ ︿; chase
+p \lt 0:\ \ w = -\tfrac p2 \text{ positive} @@ the other way; 5e's ½
+\text{call } r \in \alpha \text{ with } r + w \notin \alpha @@ step-out-of-a-cut
+t = -(r + w) - w:\ \ t \lt -(r + w),\ \ -(-(r + w)) \notin \alpha @@ w positive; negative-of-a-negative
+t \in -\alpha,\ \ r + t = -2w = p @@ ︿, with s = −(r + w); the rules
+\htmlClass{new}{\alpha + (-\alpha) = 0^{*}} \quad \blacksquare @@ chase; same-members
+  </pre>
+  <p data-pid="d6aec5">Four of the twelve techniques are now proved for ℝ: regroup for plus on ℝ, plus-zero on ℝ, negative on ℝ, turn-about for plus on ℝ. 5c's one-negative, negative-of-a-negative and negative-of-a-sum were proved from rules of adding alone. So they are techniques on the line too, read with reals: the negative is the only one, −(−α) = α, and −(α + β) = −α − β. Fraction-negatives-agree technique: <b>(−r)* = −(r*)</b>, since r* + (−r)* = (r + (−r))* = 0* by fraction-sums-agree, and one-negative.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · the negative · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">8d3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="h\text{: the hole’s cut},"></span> <span data-tex-inline="S\text{: } 2 \in h + h \text{ and } 3 \notin h + h"></span></span>Prove S.</li><li><span class="givens"><span data-tex-inline="\alpha = (3/4)^*"></span></span>Find the negative of α from the definition, and prove it is the cut of the fraction’s negative.</li><li><span class="givens"><span data-tex-inline="\alpha = (3/4)^*"></span></span>Prove the tempting negative of α has a greatest member.</li><li><span class="givens"><span data-tex-inline="h\text{: the hole’s cut},"></span> <span data-tex-inline="r \in h,\ r + 1/10 \notin h"></span></span>Find such an r.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="8d4">
+  <h2 class="sthead"><span class="stno">8d4</span>Order and adding</h2>
+  <p class="stands">Stands on 8d3 and 8b2 (three-way order).</p>
+  <p class="eqline" data-pid="6b2fc6">From here on, a real α is positive when 0* &lt; α, and negative when α &lt; 0*. By members-are-the-fractions-below, α is positive exactly when 0 ∈ α.</p>
+  <p data-pid="25ec74">Order-and-arithmetic-agree technique, first part: <b>α ≤ β ⇒ α + σ ≤ β + σ; α &lt; β ⇒ α + σ &lt; β + σ; and α &lt; β ⇔ β − α is positive.</b> If α ⊆ β, every r + t with r ∈ α is a member of β + σ: the first. Suppose also α + σ = β + σ. Add −σ to both sides and use regroup for plus on ℝ, negative on ℝ, plus-zero on ℝ: α = β, a clash. That is the second. For the third, add −α to both sides of α &lt; β: 0* &lt; β − α. And back, add α. ∎ <b>So the line's order, made from ⊆, is 5c's order made from “positive”.</b> Three-way technique on ℝ: <b>exactly one of α = 0*, α positive, −α positive</b>. It follows by three-way-order on ℝ with 0*, and order-and-arithmetic-agree's third part, which turns α &lt; 0* into 0* &lt; −α. Positive-sum technique on ℝ: <b>a sum of positives is positive</b>. 0* &lt; β gives α &lt; α + β by order-and-arithmetic-agree. And 0* &lt; α, so 0* &lt; α + β by at-most-is-a-partial-order on ℝ. ∎</p>
+  <p data-pid="238fb4">The inventor of cuts claimed that once numbers are cuts, real proofs become possible of facts such as this one: the number whose square is 2, times the number whose square is 3, is the number whose square is 6. So far as he knew, no one had ever proved them before.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · order and adding · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">8d4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">α < β</span></span>Show 0* < β + (−α), citing the first part of order-and-arithmetic-agree. <br>Say which real you added to both sides.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="8d5">
+  <h2 class="sthead"><span class="stno">8d5</span>Multiplying positive cuts</h2>
+  <p class="stands">Stands on 8d4 and 5c (times on ℚ).</p>
+  <p data-pid="24beaf">For positive cuts the obvious recipe works, provided every fraction at most 0 is let in. The positive products alone would miss the negatives, and (iii) would fail. Positive-product-is-a-cut technique: <b>for positive α and β, the sift {p ∈ ℚ : p ≤ 0 ∨ ∃r ∈ α ∃s ∈ β (0 &lt; r ∧ 0 &lt; s ∧ p = rs)} is a positive real.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the positive-product-is-a-cut technique">
+\text{(i)}\ \ 0 \le 0,\ \text{so } 0 \text{ is in} @@ add an option; and so the product is positive, by members-are-the-fractions-below
+a \notin \alpha,\ b \notin \beta;\ \ 0 \lt a,\ 0 \lt b @@ cut (ii); members-below-non-members with 0 ∈ α and 0 ∈ β
+ab = rs,\ r \in \alpha,\ s \in \beta \text{ positive}:\ \ rs \lt as \lt ab,\ \bot @@ suppose ab in (not ≤ 0, by positive-product on ℚ); members-below-non-members; keep-order for times on ℚ twice; clash
+\text{(ii)}\ \ ab \text{ is missed} @@ refute
+0 \lt t \lt p = rs:\ \ t = \tfrac ts \cdot s,\ \ 0 \lt \tfrac ts \lt r @@ positive-reciprocal on ℚ; keep-order for times on ℚ by s⁻¹; fractions-of-rationals
+\text{(iii)}\ \ \tfrac ts \in \alpha,\ \text{so } t \text{ is in} @@ cut (iii); show an example (t ≤ 0 is in at once)
+p \le 0:\ \ r_1 \in \alpha,\ s_1 \in \beta \text{ positive};\ \ p \lt r_1 s_1 @@ cut (iv) above 0; positive-product on ℚ
+p = rs:\ \ r \lt r' \in \alpha,\ \ rs \lt r's @@ cut (iv); keep-order for times on ℚ
+\text{(iv)}\ \ \htmlClass{new}{\text{a positive real}} \quad \blacksquare @@ all four; 0 is in
+  </pre>
+  <p data-pid="1c3496">Four rules about positive products, each reduced to the fractions. First, positive-turn-about technique: <b>for positive reals α and β, αβ = βα.</b> Positive-regroup technique: <b>for positive reals α, β and σ, (αβ)σ = α(βσ).</b> The positive members of αβ are the products rs, and of (αβ)σ the products (rs)t. So both follow by turn-about for times on ℚ and regroup for times on ℚ, with same-members. The members at most 0 are in every product alike. Positive-times-one technique: <b>α · 1* = α</b> for positive α. A product rs with s &lt; 1 is below r (keep-order for times on ℚ), so in α. And a positive r ∈ α has r′ ∈ α above it, with r = r′ · (r/r′) and 0 &lt; r/r′ &lt; 1. Members at most 0 are in α since 0 is. ∎ Positive-spread technique: <b>α(β + σ) = αβ + ασ</b> for positive α, β, σ.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the positive-spread technique">
+p \in \alpha(\beta + \sigma),\ p \le 0:\ \ p = p + 0 @@ p ∈ αβ, 0 ∈ ασ: both let in by the ≤ 0 clause
+p = r(s + t),\ r \in \alpha,\ s \in \beta,\ t \in \sigma,\ s + t \gt 0 @@ ﹀ the product and the sum
+s \le 0:\ \ s + t \le t,\ \text{so } s + t \in \sigma,\ \ p = 0 + r(s + t) @@ keep-order for plus on ℚ; cut (iii); in αβ + ασ (t ≤ 0 likewise)
+s, t \gt 0:\ \ p = rs + rt @@ spread on ℚ; rs ∈ αβ, rt ∈ ασ
+\alpha(\beta + \sigma) \subseteq \alpha\beta + \alpha\sigma @@ cases; chase
+q = p_1 + p_2,\ \ p_1 \le 0:\ \ q \le p_2 \in \alpha\sigma \subseteq \alpha(\beta + \sigma) @@ σ ≤ β + σ (order-and-arithmetic-agree, plus-zero on ℝ); a larger second factor gives more products
+p_1 = r_1 s,\ p_2 = r_2 t \text{ positive}:\ \ r = \max(r_1, r_2) \in \alpha @@ 8b's max on fractions; it is one of the two
+q \le rs + rt = r(s + t) \in \alpha(\beta + \sigma) @@ keep-order for times on ℚ twice; keep-order for plus on ℚ; spread on ℚ
+\htmlClass{new}{\alpha(\beta + \sigma) = \alpha\beta + \alpha\sigma} \quad \blacksquare @@ cut (iii) or sameness; chase; same-members
+  </pre>
+  <p data-pid="108d27">And the reciprocal of a positive cut is built through what it misses, with the same care as −α. It holds the fractions at most 0, and the positive p with some s above p whose reciprocal α misses. Positive-reciprocal technique: <b>for positive α, the sift α′ = {p ∈ ℚ : p ≤ 0 ∨ (0 &lt; p ∧ ∃s (p &lt; s ∧ s⁻¹ ∉ α))} is a positive real, and α · α′ = 1*.</b> It is a cut. 0 is in. For a positive r ∈ α, r⁻¹ is missed: an s &gt; r⁻¹ would have s⁻¹ &lt; r by positive-reciprocal on ℚ, so s⁻¹ ∈ α. (iii) and (iv) go as for −α, with another-between. For p ≤ 0 the larger member is the positive b⁻¹/2, where b ∉ α (positive-reciprocal on ℚ makes b⁻¹ positive). The product needs a second stepping technique. Step-by-a-factor technique: <b>for a positive α and a fraction k &gt; 1, there is a positive r ∈ α with rk ∉ α.</b> Take a positive x ∈ α and w = x(k − 1), positive. Step-out-of-a-cut gives r ∈ α with r + w ∉ α. Let r′ = max(r, x), which is in α and positive. Then r′ + w ∉ α (it is r + w, or above it). And r′k = r′ + r′(k − 1) ≥ r′ + w, so r′k ∉ α, by (iii) turned about. ∎</p>
+  <pre class="lines" data-k="ember" data-label="this step: α · α′ = 1*">
+p = rt,\ r \in \alpha,\ t \in \alpha' \text{ positive},\ t \lt s,\ s^{-1} \notin \alpha @@ a positive member of the product; ﹀ 
+r \lt s^{-1},\ \text{so } rs \lt 1;\ \ rt \lt rs @@ members-below-non-members; keep-order for times on ℚ by s; keep-order for times on ℚ by r
+\alpha\alpha' \subseteq 1^{*} @@ chain for less on ℚ; members ≤ 0 are below 1
+0 \lt p \lt 1:\ \ k = \tfrac{1 + p^{-1}}{2},\ \ 1 \lt k \lt p^{-1} @@ the other way; positive-reciprocal on ℚ gives 1 &lt; p⁻¹; another-between
+\text{call } r \in \alpha \text{ positive with } rk \notin \alpha @@ step-by-a-factor
+t = p\,r^{-1},\ \ s = (rk)^{-1}:\ \ s^{-1} = rk \notin \alpha @@ reciprocal
+t \lt s \Leftrightarrow p \lt k^{-1} \Leftrightarrow k \lt p^{-1} @@ keep-order for times on ℚ by r and its turn about; positive-reciprocal on ℚ
+t \in \alpha',\ \ rt = p @@ ︿; regroup for times on ℚ, reciprocal on ℚ, times-one on ℚ
+\htmlClass{new}{\alpha\alpha' = 1^{*}} \quad \blacksquare @@ chase; same-members
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · positive products · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">8d5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\alpha = \beta = (-1)^*,"></span> <span data-tex-inline="\{rs : r \in \alpha, s \in \beta\}"></span></span>Find the second as a set of fractions, and the condition of a cut it fails.</li><li><span class="givens"><span data-tex-inline="\alpha, \beta \text{ positive}"></span></span>Find the condition of a cut that the positive products alone fail.</li><li><span class="givens"><span data-tex-inline="\alpha = 2^*,"></span> <span data-tex-inline="\{r \in \mathbb Q : r \le 0 \lor r^{-1} \notin \alpha\}"></span></span>Find the second as a set of fractions, and the condition of a cut it fails.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="8d6">
+  <h2 class="sthead"><span class="stno">8d6</span>Products and reciprocals, by signs</h2>
+  <p class="stands">Stands on 8d5, 8b2 (three-way order) and 7d8 (definition by cases).</p>
+  <p class="eqline" data-pid="7ef6a1">From here on, for reals α and β, α · β, also written αβ, names one of five things. It is the positive product of positive-product-is-a-cut when α and β are positive. It is 0* when α = 0* or β = 0*. It is −((−α)β) when α is negative and β positive. It is −(α(−β)) when α is positive and β negative. It is (−α)(−β) when both are negative. Read it “α times β”. For a real α other than 0*, α⁻¹ names α′ of positive-reciprocal when α is positive, and −((−α)′) when α is negative. Read it “the reciprocal of α”. And α/β names αβ⁻¹, for β ≠ 0*. Like +, the marks · and ⁻¹ are operators: · has two gaps and ⁻¹ one, and each result is a real.</p>
+  <p data-pid="439263">By three-way on ℝ exactly one case is so for each real, so these are honest definitions by cases (7d). <b>Everything about signs now follows from one technique.</b> Signs-come-out technique: <b>(−α)β = −(αβ) and α(−β) = −(αβ), for all reals α, β.</b> Check the first case by case; the second is the same table with the roles swapped.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>α</th><th>β</th><th>(−α)β, by the definition</th><th>αβ, by the definition</th></tr>
+    <tr><td class="l">0*</td><td class="l">any</td><td class="l">0*, since −0* = 0*</td><td class="l">0*, and −0* = 0*</td></tr>
+    <tr><td class="l">positive</td><td class="l">positive</td><td class="l">−((−(−α))β) = −(αβ), by negative-of-a-negative</td><td class="l">αβ</td></tr>
+    <tr><td class="l">negative</td><td class="l">positive</td><td class="l">(−α)β, a positive product</td><td class="l">−((−α)β), so −(αβ) = (−α)β by negative-of-a-negative</td></tr>
+    <tr><td class="l">positive</td><td class="l">negative</td><td class="l">(−(−α))(−β) = α(−β)</td><td class="l">−(α(−β))</td></tr>
+    <tr><td class="l">negative</td><td class="l">negative</td><td class="l">−((−α)(−β))</td><td class="l">(−α)(−β)</td></tr>
+  </table></div>
+  <p data-pid="3e538e">In each row the two columns differ by exactly one minus, by negative-of-a-negative. (When β = 0* both are 0*.) ∎ With signs-come-out, the remaining rules reduce to the positive ones.</p>
+  <p data-pid="d8d2ad">Turn-about technique for times on ℝ: <b>αβ = βα.</b> For positive α, β it is positive-turn-about. With 0* both sides are 0*. Otherwise pull the minuses out of each side with signs-come-out, and use positive-turn-about on what is left. ∎ Regroup technique for times on ℝ: <b>(αβ)σ = α(βσ).</b> If any of the three is 0*, both sides are 0*. Otherwise each is a positive real or the negative of one (three-way on ℝ, negative-of-a-negative). Pull every minus to the front of each side with signs-come-out. What is left is (uv)w on one side and u(vw) on the other, for the same positive reals u, v, w. There is a minus in front of each side exactly when an odd number of α, β, σ are negative, since negative-of-a-negative removes the minuses two at a time. Positive-regroup finishes. ∎ Times-one technique on ℝ: <b>α · 1* = α, and 1* ≠ 0*.</b> Positive α: positive-times-one. α = 0*: by definition. Negative α: α · 1* = −((−α)1*) = −(−α) = α, by positive-times-one and negative-of-a-negative. And 0 ∈ 1*, 0 ∉ 0*. ∎ Reciprocal technique on ℝ: <b>α ≠ 0* ⇒ αα⁻¹ = 1*.</b> Positive α: positive-reciprocal. Negative α: α⁻¹ = −((−α)′) is negative. So by the both-negative case αα⁻¹ = (−α)((−α)′) = 1*, by positive-reciprocal. ∎ Positive-product technique on ℝ: <b>a product of positives is positive</b>: positive-product-is-a-cut's product has 0 in it.</p>
+  <p data-pid="e575d9">Spread technique on ℝ: <b>α(β + σ) = αβ + ασ.</b> First the sign of α. If α = 0*, both sides are 0*. If α is negative, signs-come-out turns each side into the negative of the same statement for −α, by negative-of-a-sum. The two sides become −((−α)(β + σ)) and −((−α)β + (−α)σ). So let α be positive. Then by the signs of β and σ:</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>case</th><th>what to write</th><th>by</th></tr>
+    <tr><td class="l">β or σ is 0*</td><td class="l">α(0* + σ) = ασ = 0* + ασ</td><td class="l">Plus-zero on ℝ, the definition</td></tr>
+    <tr><td class="l">both positive</td><td class="l">the statement itself</td><td class="l">Positive-spread</td></tr>
+    <tr><td class="l">both negative</td><td class="l">α(β + σ) = −(α((−β) + (−σ))) = −(α(−β) + α(−σ)) = αβ + ασ</td><td class="l">Negative-of-a-sum, signs-come-out, positive-spread, signs-come-out, negative-of-a-sum, negative-of-a-negative</td></tr>
+    <tr><td class="l">β positive, σ negative, β + σ = 0*</td><td class="l">σ = −β; αβ + α(−β) = αβ − αβ = 0* = α · 0*</td><td class="l">One-negative, signs-come-out, negative on ℝ</td></tr>
+    <tr><td class="l">β positive, σ negative, β + σ positive</td><td class="l">αβ = α((β + σ) + (−σ)) = α(β + σ) + α(−σ); add ασ to both sides</td><td class="l">Regroup for plus on ℝ, negative on ℝ, plus-zero on ℝ, positive-spread, signs-come-out</td></tr>
+    <tr><td class="l">β positive, σ negative, β + σ negative</td><td class="l">α(−σ) = α(β + (−(β + σ))) = αβ − α(β + σ); move the terms</td><td class="l">Negative-of-a-sum, positive-spread, signs-come-out, negative on ℝ</td></tr>
+    <tr><td class="l">β negative, σ positive</td><td class="l">the cases above with β and σ swapped</td><td class="l">Turn-about for plus on ℝ</td></tr>
+  </table></div>
+  <p data-pid="3283b0">Every case ends in an instance of positive-spread with positive inputs, rearranged by the rules of adding. ∎ That is the long proof of the step. Every textbook that builds the reals has some version of this table.</p>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · by signs · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · left: sums and negatives, as sets of fractions · right: products and reciprocals, by signs</div>
+    <div class="panel">
+      <div class="chips" role="group" aria-label="alpha" id="aL"><span class="m" style="color:var(--muted)">α:</span></div>
+      <div class="chips" role="group" aria-label="beta" id="bL"><span class="m" style="color:var(--muted)">β:</span></div>
+      <div class="chips" role="group" aria-label="op" id="oL"><span class="m" style="color:var(--muted)">show:</span><button data-o="sum" class="on">α + β</button><button data-o="neg">−α</button><button data-o="bad">the tempting −α</button></div>
+      <canvas id="cvP"></canvas>
+      <div class="cap">Rows of fractions (bottoms up to 10, from −3 to 3): the inputs ember, the result teal; h is 8a's hole's cut. Tap a fraction in the result row: the readout writes it as r + s with r in α and s in β, or shows the s with room above it that puts it in −α. The tempting −α keeps a greatest member, ringed gold.</div>
+      <div class="eqbox" id="eqP"></div>
+    </div>
+    <div class="panel">
+      <div class="chips" role="group" aria-label="alpha" id="aM"><span class="m" style="color:var(--muted)">α:</span></div>
+      <div class="chips" role="group" aria-label="beta" id="bM"><span class="m" style="color:var(--muted)">β:</span></div>
+      <div class="chips" role="group" aria-label="op" id="oM"><span class="m" style="color:var(--muted)">show:</span><button data-o="mul" class="on">αβ</button><button data-o="inv">α⁻¹</button></div>
+      <canvas id="cvM"></canvas>
+      <div class="cap">The readout names the case of the definition by signs, and pulls the minuses out with signs-come-out. The result row is teal. Tap a positive fraction p in it: for positive inputs the readout writes p = r · s with r in α and s in β; for a reciprocal it shows the s above p whose reciprocal α misses.</div>
+      <div class="eqbox" id="eqM"></div>
+    </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">8d6.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">α = (−2)*,  β = 3*</span></span>Write αβ through a positive product, by the definition by signs. <br>Say which row of the table you used.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="8d7">
+  <h2 class="sthead"><span class="stno">8d7</span>The twelve techniques, for the line</h2>
+  <p class="stands">Stands on 8d2 to 8d6 and 5c (the twelve techniques).</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>rule</th><th>for reals</th><th>proved by</th></tr>
+    <tr><td class="l">Regroup for plus on ℝ</td><td class="l">(α + β) + σ = α + (β + σ)</td><td class="l">Regroup for plus on ℚ, same-members</td></tr>
+    <tr><td class="l">Plus-zero on ℝ</td><td class="l">α + 0* = α</td><td class="l">(iii), (iv)</td></tr>
+    <tr><td class="l">Negative on ℝ</td><td class="l">α + (−α) = 0*</td><td class="l">Members-below-non-members; step-out-of-a-cut</td></tr>
+    <tr><td class="l">Turn-about for plus on ℝ</td><td class="l">α + β = β + α</td><td class="l">Turn-about for plus on ℚ, same-members</td></tr>
+    <tr><td class="l">Regroup for times on ℝ</td><td class="l">(αβ)σ = α(βσ)</td><td class="l">Signs-come-out, positive-regroup</td></tr>
+    <tr><td class="l">Times-one on ℝ</td><td class="l">α · 1* = α, 1* ≠ 0*</td><td class="l">Positive-times-one, signs-come-out</td></tr>
+    <tr><td class="l">Reciprocal on ℝ</td><td class="l">α ≠ 0* ⇒ αα⁻¹ = 1*</td><td class="l">Positive-reciprocal, step-by-a-factor</td></tr>
+    <tr><td class="l">Turn-about for times on ℝ</td><td class="l">αβ = βα</td><td class="l">Signs-come-out, positive-turn-about</td></tr>
+    <tr><td class="l">Spread on ℝ</td><td class="l">α(β + σ) = αβ + ασ</td><td class="l">Signs-come-out, positive-spread, the table</td></tr>
+    <tr><td class="l">Three-way on ℝ</td><td class="l">exactly one of α = 0*, α positive, −α positive</td><td class="l">Three-way-order on ℝ, order-and-arithmetic-agree</td></tr>
+    <tr><td class="l">Positive-sum on ℝ</td><td class="l">α, β positive ⇒ α + β positive</td><td class="l">Order-and-arithmetic-agree, at-most-is-a-partial-order on ℝ</td></tr>
+    <tr><td class="l">Positive-product on ℝ</td><td class="l">α, β positive ⇒ αβ positive</td><td class="l">Positive-product-is-a-cut</td></tr>
+  </table></div>
+  <p data-pid="71fbc0">5d said that whatever it proved from these twelve alone would be true in any collection obeying them. <b>The line obeys them, so that promise is collected here, with no new proof.</b> It covers anything-times-zero (α · 0* = 0*), negative-out on ℚ, negative-of-a-negative, and two-negatives ((−α)(−β) = αβ). It covers cancel for times on ℚ (cancel a factor other than 0*), zero-product (a product is 0* only when a factor is), and nothing-times-0-is-1 (0* has no reciprocal). It covers one-negative and negative-of-a-sum. And it covers 5e's keep-order for plus on ℚ and keep-order for times on ℚ. Those were proved from the rules with order meaning “the difference is positive”, and order-and-arithmetic-agree showed that is the line's order.</p>
+  <p data-pid="a8828c">The order-and-arithmetic-agree technique, second part: <b>α &lt; β and σ positive ⇒ ασ &lt; βσ.</b> βσ − ασ = (β − α)σ, by spread on ℝ and signs-come-out. That is a product of positives (order-and-arithmetic-agree's first part, positive-product on ℝ). So ασ &lt; βσ by order-and-arithmetic-agree's first part. ∎</p>
+  <section class="slides" id="sl7"><div class="eyebrow">The slides · the twelve techniques · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">8d7.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">α · 0* = 0*, for a real α</span></span>Prove it from the twelve techniques alone, as 5d did. <br>Say why 5d’s column needs no change.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="8d8">
+  <h2 class="sthead"><span class="stno">8d8</span>The fractions keep their arithmetic</h2>
+  <p class="stands">Stands on 8d7 and 8a8 (fractions-keep-order).</p>
+  <p data-pid="3e53ff">Fraction-products-agree technique: <b>(rs)* = r*s*</b> for rationals r and s. Take positive r and s first. A member xy of r*s* with 0 &lt; x &lt; r, 0 &lt; y &lt; s is below rs (keep-order for times on ℚ twice). And for 0 &lt; p &lt; rs, pick x with p/s &lt; x &lt; r (another-between); then y = p/x &lt; s, and p = xy. Other signs follow by signs-come-out and fraction-negatives-agree, and 0 by anything-times-zero. Fraction-reciprocals-agree technique: <b>(r⁻¹)* = (r*)⁻¹</b> for r ≠ 0. Here r* · (r⁻¹)* = (r r⁻¹)* = 1*, and cancel for times on ℚ says the reciprocal is the only real that does this. ∎ Now put together fractions-keep-order, fraction-sums-agree, fraction-negatives-agree, fraction-products-agree and fraction-reciprocals-agree. <b>The cuts of fractions are a copy of ℚ that adds, negates, multiplies, inverts and orders exactly as ℚ does.</b> So, as on 5a and 5b:</p>
+  <p class="eqline" data-pid="4e0ac8">From here on, where a real is meant, a rational r names the real r*. So 0 names 0*, 1 names 1*, and ½ names ½*. Every integer and every number names a real too, through 5a's and 5b's naming lines.</p>
+  <p class="eqline" data-pid="0ef522">By fractions-keep-order, fraction-sums-agree and fraction-products-agree the two readings come to the same thing. Where a rational is meant, r still names 5b's class.</p>
+  <section class="slides" id="sl8"><div class="eyebrow">The slides · the naming line · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">8d8.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">r = ½,  s = ⅔</span></span>Name a member of (r + s)* and write it as a member of r* plus a member of s*. <br>Say what the naming line lets you write from now on.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="8d9">
+  <h2 class="sthead"><span class="stno">8d9</span>A number system with no holes</h2>
+  <p class="stands">Stands on 8d7, 8d8 and 8c3 (no-holes).</p>
+  <p class="eqline" data-pid="9e9356">From here on, a regular number system is a set with an adding, a multiplying, a 0, a 1, negatives, reciprocals of everything but 0, and a meaning for positive, in which the twelve techniques of arithmetic hold. <b>Together they make induction over the series entirely regular there: whatever 5d proved from the twelve alone holds in every regular number system without being proved again.</b> It has no holes when every part of it with a member and an upper bound has a least upper bound. Upper bounds are read with “a &lt; b when b − a is positive”.</p>
+  <p data-pid="25829b">No-holes-system technique: <b>ℝ, with the + and · of this step, 0 and 1, −α, α⁻¹ and positive, is a regular number system with no holes.</b> The twelve techniques are the table above. Having no holes is 8c's no-holes technique, since by order-and-arithmetic-agree the order read from “positive” is the order ⊆ that no-holes used. ∎ The fractions are a regular number system with holes (8c's no-least-fraction-bound). There is a further technique: any two regular number systems with no holes are copies of each other, matched member for member with sums, products and order carried. The ladder does not need it, and leaves it there.</p>
+  <section class="slides" id="sl9"><div class="eyebrow">The slides · the no-holes-system technique · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">8d9.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">ℚ,  ℝ</span></span>Say which of the two obeys the twelve techniques, and which has no holes. <br>Name the step that showed what ℚ lacks.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="8d10">
+  <h2 class="sthead"><span class="stno">8d10</span>Illegal moves</h2>
+  <p class="stands">Stands on 8d1 to 8d9.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+-\alpha = \{-s : s \notin \alpha\}\,? @@ for α = r* it has the greatest member −r: (iv) fails. Ask for room: some s above r
+\alpha\beta = \{rs : r \in \alpha,\ s \in \beta\}\,? @@ for 1* and 1*, (−5)(−5) = 25 is in, and so is every fraction: (ii) fails
+\alpha^{-1} = \{s^{-1} : s \notin \alpha\}\,? @@ the reciprocals of large misses are small: a set with no lower part, not closed downward
+\alpha + \beta = \alpha \cup \beta\,? @@ the union is max(α, β) (8b's greater-is-the-merge); 1* ∪ 1* = 1*, while 1* + 1* = 2*
+\alpha/0^{*}\,? @@ nothing-times-0-is-1, collected for the line: 0* has no reciprocal
+\begin{aligned}&\text{spread on ℝ for all}\\ &\quad\text{signs by positive-spread}\,?\end{aligned} @@ positive-spread is for positives only; the other signs need the table
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">8d10.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">−α = {−s : s ∉ α}</span></span>Which illegal move is this? <br>Find a cut α for which it fails, and the condition it breaks.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="8d11">
+  <h2 class="sthead"><span class="stno">8d11</span>Running it backwards</h2>
+  <p class="stands">Stands on 8d1 to 8d9.</p>
+  <p data-pid="1b103a">Handed a set of fractions offered as an operation on cuts, check (iv) first. A greatest member is the usual flaw, and the cure is to ask for room. Wanting a rule for reals, ask what kind of rule it is. Is it a rule about members in disguise (sums, positive products)? Then reduce to ℚ by same-members. Is it about signs? Then pull minuses out with signs-come-out. Wanting to know which fractions are in a sum or product, use fraction-sums-agree and fraction-products-agree for fractions, and members-are-the-fractions-below for the rest. Found upward; written downward.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">8d11.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="h\text{: the hole’s cut},"></span> <span data-tex-inline="(1/2)^* + \beta = h"></span></span>Find β as a set of fractions.</li><li><span class="givens"><span data-tex-inline="\alpha + \beta = \alpha + \sigma"></span></span>Prove β and σ are the same.</li><li><span class="givens"><span data-tex-inline="h\text{: the hole’s cut}"></span></span>By positive-reciprocal, find the reciprocal of h as a set of fractions.</li><li><span class="givens"><span data-tex-inline="(-\alpha)(-\alpha) = \alpha\alpha"></span></span>Prove it from signs-come-out.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">8d.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{such as a clock (5d), or the reals}"></span> <span data-tex-inline="p + q\sqrt 2,\ p, q \text{ fractions}"></span></span>Build a number system of your own: a set with an adding, a multiplying, a 0 and a 1 of your choosing. Then put the twelve techniques of no-holes-system to work on it.<ol class="parts" type="a"><li>Find which of the twelve techniques your system obeys.</li><li><span class="givens"><span data-tex-inline="(\alpha - \beta)(\alpha + \beta) = \alpha\alpha - \beta\beta,"></span> <span data-tex-inline="\alpha\alpha = 0 \Rightarrow \alpha = 0"></span></span>From the twelve techniques alone, prove both.<br>Test each in your system, and where one fails, find the rule your system breaks.</li><li><span class="givens"><span data-tex-inline="0 &lt; \alpha &lt; 1 \Rightarrow \alpha\alpha &lt; \alpha,"></span> <span data-tex-inline="\alpha &lt; \beta \Rightarrow \alpha &lt; (\alpha + \beta)/2 &lt; \beta"></span></span>Do the same for these, with a meaning of positive for your system, if one obeys the rules.</li></ol></div>
+  <div class="chq"><span class="chid">8d.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="-0^*"></span></span>Find it as a set of fractions.</div>
+  <div class="chq"><span class="chid">8d.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="(r + s)^* = r^* + s^*,"></span> <span data-tex-inline="\alpha + \beta \text{ a fraction’s cut}"></span></span>Decide whether α and β must be fractions’ cuts.</div>
+  <div class="chq"><span class="chid">8d.4.4</span><span class="tagq">seam</span>The line obeys the twelve techniques of the fractions, and has no holes besides. Decide whether every set that obeys those thirteen is the line.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r08c.html">← 8c · the least upper bound</a><a href="r08e.html">8e · counting passes any real →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A regular number system is an ordered field. One with no holes is a complete ordered field, and the no-holes-system technique says that ℝ is one.</p>
+  <h3>Who said it first</h3>
+  <p>The inventor of cuts is Richard Dedekind.</p>
+  <aside class="voice para"><p>Dedekind claimed that once numbers are cuts, real proofs become possible of facts such as √2 · √3 = √6, which, so far as he knew, no one had ever proved before.</p><cite>Dedekind, Continuity and Irrational Numbers (1872), §6, after Beman’s translation (1901); paraphrase</cite></aside>
+  <p>Accepted names: the turn-about techniques are the commutative laws; the regroup techniques are the associative laws; the spread technique is the distributive law; plus-zero and times-one name the additive and multiplicative identities; the negative and the reciprocal are the additive and multiplicative inverses.</p>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper}=Rung;
+const R=String.raw;
+function size(cv,H){ const dp=window.devicePixelRatio||1, W=cv.clientWidth||300; cv.width=W*dp; cv.height=H*dp; cv.style.height=H+'px'; const c=cv.getContext('2d'); c.setTransform(dp,0,0,dp,0,0); return {c,W}; }
+function gcd(a,b){ a=Math.abs(a); b=Math.abs(b); while(b){ [a,b]=[b,a%b]; } return a; }
+function fr(p,q){ if(q<0){p=-p;q=-q;} const g=gcd(p,q)||1; return [p/g,q/g]; }
+const Fa=(a,b)=>fr(a[0]*b[1]+b[0]*a[1],a[1]*b[1]), Fm=(a,b)=>fr(a[0]*b[0],a[1]*b[1]), Fn=a=>[-a[0],a[1]], Fi=a=>fr(a[1],a[0]), Fs=(a,b)=>Fa(a,Fn(b));
+const Flt=(a,b)=>a[0]*b[1]<b[0]*a[1], Fz=a=>a[0]===0, fval=f=>f[0]/f[1];
+const ftex=f=>f[1]===1?`${f[0]}`:(f[0]<0?`-\\tfrac{${-f[0]}}{${f[1]}}`:`\\tfrac{${f[0]}}{${f[1]}}`);
+/* reals of the form x + y·√2, x, y fractions: exact membership */
+const Q2=(x,y)=>({x,y:y||[0,1]});
+const qval=a=>fval(a.x)+fval(a.y)*Math.SQRT2;
+const qadd=(a,b)=>Q2(Fa(a.x,b.x),Fa(a.y,b.y)), qneg=a=>Q2(Fn(a.x),Fn(a.y)), qmul=(a,b)=>Q2(Fa(Fm(a.x,b.x),Fm([2,1],Fm(a.y,b.y))),Fa(Fm(a.x,b.y),Fm(a.y,b.x)));
+function qinv(a){ const d=Fs(Fm(a.x,a.x),Fm([2,1],Fm(a.y,a.y))); return Q2(Fm(a.x,Fi(d)),Fn(Fm(a.y,Fi(d)))); }
+function qmem(a,p){ // p < x + y√2 ?
+  const u=Fs(p,a.x), y=a.y; if(Fz(y)) return Flt(u,[0,1]);
+  const u2=Fm(u,u), y2=Fm([2,1],Fm(y,y));
+  if(y[0]>0) return Flt(u,[0,1])||Flt(u2,y2);
+  return Flt(u,[0,1])&&Flt(y2,u2); }
+function qtex(a){ const xs=Fz(a.x)?'':ftex(a.x); if(Fz(a.y)) return xs||'0';
+  const yy=a.y; const ys=(yy[0]===1&&yy[1]===1)?'h':((yy[0]===-1&&yy[1]===1)?'-h':(ftex(yy)+'h'));
+  if(!xs) return ys; return xs+(yy[0]<0?ys:'+'+ys); }
+function farey(lo,hi,Q){ const out=[]; for(let q=1;q<=Q;q++){ for(let p=Math.ceil(lo*q);p<=Math.floor(hi*q);p++){ if(gcd(p,q)===1) out.push([p,q]); } } return out; }
+const OPTS=[{n:'−3/2',v:Q2([-3,2])},{n:'−1',v:Q2([-1,1])},{n:'−1/2',v:Q2([-1,2])},{n:'0',v:Q2([0,1])},{n:'1/2',v:Q2([1,2])},{n:'2/3',v:Q2([2,3])},{n:'1',v:Q2([1,1])},{n:'2',v:Q2([2,1])},{n:'h',v:Q2([0,1],[1,1])}];
+const rname=a=>Fz(a.y)?(a.x[1]===1&&a.x[0]>=0?`${ftex(a.x)}^{*}`:`(${ftex(a.x)})^{*}`):(Fz(a.x)&&a.y[0]===1&&a.y[1]===1?'h':`(${qtex(a)})`);
+function chipset(id,get,set,redraw,noh){ const el=document.getElementById(id); OPTS.forEach((o,i)=>{ if(noh&&o.n==='h') return; const b=document.createElement('button'); b.textContent=o.n; if(i===get()) b.className='on'; b.onclick=()=>{ set(i); [...el.querySelectorAll('button')].forEach(z=>z.classList.toggle('on',z===b)); redraw(); }; el.appendChild(b); }); }
+function nearMember(a,lo,hi){ // a fraction r in a with lo < r (float), smallest bottom
+  for(let q=1;q<=4000;q++){ const p=Math.floor((qval(a)-1e-12)*q); for(let k=p;k>=p-2;k--){ const r=[k,q]; if(fval(r)>lo&&fval(r)<hi&&qmem(a,r)) return fr(k,q); } } return null; }
+function rowDraw(c,W0,y,lab,pred,cl,lo,hi,Q,mark){ const X=v=>34+(W0-42)*(v-lo)/(hi-lo); c.strokeStyle=col('--grid'); c.lineWidth=1; c.beginPath(); c.moveTo(32,y); c.lineTo(W0-6,y); c.stroke();
+  c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='left'; c.fillText(lab,2,y-4);
+  farey(lo,hi,Q).forEach(f=>{ if(!pred(f)) return; const x=X(fval(f)), h=4+16/Math.sqrt(f[1]); c.strokeStyle=col(cl); c.lineWidth=f[1]<=2?1.8:1; c.beginPath(); c.moveTo(x,y); c.lineTo(x,y-h); c.stroke(); });
+  if(mark){ const x=X(fval(mark)); c.beginPath(); c.arc(x,y-24,5,0,7); c.strokeStyle=col('--gold'); c.lineWidth=2; c.stroke(); } return X; }
+const lo=-3, hi=3;
+/* ---------- left ---------- */
+let ai=8, bi=4, op='sum', pk=null, XL=null;
+chipset('aL',()=>ai,v=>{ai=v;pk=null;},drawP); chipset('bL',()=>bi,v=>{bi=v;pk=null;},drawP,true);
+document.querySelectorAll('#oL button').forEach(b=>b.onclick=()=>{ op=b.dataset.o; pk=null; document.querySelectorAll('#oL button').forEach(z=>z.classList.toggle('on',z===b)); drawP(); });
+const cvP=document.getElementById('cvP');
+function resP(){ const A=OPTS[ai].v, B=OPTS[bi].v; if(op==='sum') return {v:qadd(A,B),pred:f=>qmem(qadd(A,B),f)};
+  if(op==='neg') return {v:qneg(A),pred:f=>qmem(qneg(A),f)};
+  return {v:qneg(A),pred:f=>!qmem(A,Fn(f))}; }
+function drawP(){
+  const W0=cvP.clientWidth||300, Q=W0<420?6:10, two=op==='sum', H=two?126:96; const {c}=size(cvP,H); c.fillStyle=col('--card'); c.fillRect(0,0,W0,H);
+  const A=OPTS[ai].v, B=OPTS[bi].v, Rr=resP();
+  rowDraw(c,W0,28,'α',f=>qmem(A,f),'--ember',lo,hi,Q); let y=58; if(two){ rowDraw(c,W0,y,'β',f=>qmem(B,f),'--ember',lo,hi,Q); y=88; }
+  const gm=op==='bad'?(Fz(A.y)?Fn(A.x):null):null;
+  XL=rowDraw(c,W0,y,op==='sum'?'α+β':(op==='neg'?'−α':'bad'),Rr.pred,'--teal',lo,hi,Q,gm);
+  if(pk){ const x=XL(fval(pk)); c.fillStyle=col('--ember'); c.beginPath(); c.arc(x,y+6,4,0,7); c.fill(); }
+  c.fillStyle=col('--muted'); c.textAlign='center'; c.font='11px IBM Plex Mono, monospace'; [-3,-2,-1,0,1,2,3].forEach(v=>c.fillText(v,XL(v),H-4));
+  const L=[];
+  if(op==='sum'){ L.push(`\\alpha + \\beta = ${rname(A)} + ${rname(B)}`);
+    if(pk){ if(!Rr.pred(pk)) L.push(`${ftex(pk)} \\notin \\alpha + \\beta`); else { const d=(qval(qadd(A,B))-fval(pk))/2; const r=nearMember(A,qval(A)-d,qval(A)); const s=Fs(pk,r); L.push(`${ftex(pk)} = \\htmlClass{keep}{${ftex(r)}} + ${ftex(s)},\\ \\ ${ftex(r)} \\in \\alpha,\\ ${ftex(s)} \\in \\beta${qmem(B,s)?'':'\\,?'}`); } }
+    else L.push(R`\text{tap a fraction in the bottom row}`); }
+  else if(op==='neg'){ L.push(`-\\alpha = \\{r : \\exists s\\,(r \\lt s \\land -s \\notin \\alpha)\\}`);
+    if(pk){ if(!Rr.pred(pk)) L.push(`${ftex(pk)} \\notin -\\alpha:\\ \\text{no room above it}`); else { const top=-qval(A); let s=null; for(let q=1;q<5000&&!s;q++){ const p=Math.ceil(fval(pk)*q+1e-9); for(let k=p;k<p+3;k++){ const t=[k,q]; if(Flt(pk,t)&&!qmem(A,Fn(t))){ s=fr(k,q); break; } } } L.push(`s = ${ftex(s)}:\\ \\ ${ftex(pk)} \\lt s,\\ \\ -s = ${ftex(Fn(s))} \\notin \\alpha`); } }
+    else L.push(R`\text{tap a fraction in the bottom row}`); }
+  else { L.push(R`\{-s : s \notin \alpha\}`); if(gm) L.push(`\\htmlClass{new}{${ftex(gm)} \\text{ is its greatest member: (iv) fails}}`); else L.push(R`\text{for the hole's cut it happens to be } -h\text{: no greatest member, since } h \text{ is irrational}`); }
+  tex(document.getElementById('eqP'),'\\begin{gathered}'+L.join('\\\\ ')+'\\end{gathered}',true);
+}
+cvP.addEventListener('pointerdown',e=>{ if(!XL) return; const Rc=cvP.getBoundingClientRect(), x=e.clientX-Rc.left, W0=cvP.clientWidth; const v=lo+(x-34)/(W0-42)*(hi-lo); let best=null,bd=1e9; farey(lo,hi,W0<420?6:10).forEach(f=>{ const d=Math.abs(fval(f)-v)+f[1]*0.002; if(d<bd){bd=d;best=f;} }); pk=best; drawP(); });
+new ResizeObserver(drawP).observe(cvP);
+/* ---------- right ---------- */
+let ci=1, di=5, mop='mul', mk=null, XM=null;
+chipset('aM',()=>ci,v=>{ci=v;mk=null;},drawM,true); chipset('bM',()=>di,v=>{di=v;mk=null;},drawM,true);
+document.querySelectorAll('#oM button').forEach(b=>b.onclick=()=>{ mop=b.dataset.o; mk=null; document.querySelectorAll('#oM button').forEach(z=>z.classList.toggle('on',z===b)); drawM(); });
+const cvM=document.getElementById('cvM');
+const sgn=a=>{ const v=qval(a); return Math.abs(v)<1e-12?0:(v>0?1:-1); };
+function drawM(){
+  const W0=cvM.clientWidth||300, Q=W0<420?6:10, two=mop==='mul', H=two?126:96; const {c}=size(cvM,H); c.fillStyle=col('--card'); c.fillRect(0,0,W0,H);
+  const A=OPTS[ci].v, B=OPTS[di].v; const L=[];
+  let res=null;
+  rowDraw(c,W0,28,'α',f=>qmem(A,f),'--ember',lo,hi,Q); let y=58; if(two){ rowDraw(c,W0,y,'β',f=>qmem(B,f),'--ember',lo,hi,Q); y=88; }
+  if(mop==='mul'){ res=qmul(A,B); const sa=sgn(A), sb=sgn(B);
+    if(sa===0||sb===0) L.push(R`\alpha = 0^{*} \text{ or } \beta = 0^{*}:\ \ \alpha\beta = 0^{*}`);
+    else if(sa>0&&sb>0) L.push(R`\text{both positive: the positive product (positive-product-is-a-cut)}`);
+    else if(sa<0&&sb>0) L.push(R`\alpha \text{ negative, } \beta \text{ positive: } \alpha\beta = -((-\alpha)\beta)`);
+    else if(sa>0&&sb<0) L.push(R`\alpha \text{ positive, } \beta \text{ negative: } \alpha\beta = -(\alpha(-\beta))`);
+    else L.push(R`\text{both negative: } \alpha\beta = (-\alpha)(-\beta)`);
+    L.push(`${rname(A)} \\cdot ${rname(B)} = ${rname(res)}`);
+  } else { if(sgn(A)===0){ L.push(R`0^{*} \text{ has no reciprocal (nothing-times-0-is-1)}`); }
+    else { res=qinv(A); L.push(sgn(A)>0?R`\alpha \text{ positive: } \alpha^{-1} = \alpha' \text{ (positive-reciprocal)}`:R`\alpha \text{ negative: } \alpha^{-1} = -((-\alpha)')`); L.push(`\\big(${rname(A)}\\big)^{-1} = ${rname(res)}`); } }
+  if(res){ XM=rowDraw(c,W0,y,mop==='mul'?'αβ':'α⁻¹',f=>qmem(res,f),'--teal',lo,hi,Q); if(mk){ const x=XM(fval(mk)); c.fillStyle=col('--ember'); c.beginPath(); c.arc(x,y+6,4,0,7); c.fill(); } }
+  else { XM=null; c.strokeStyle=col('--grid'); c.beginPath(); c.moveTo(32,y); c.lineTo(W0-6,y); c.stroke(); }
+  c.fillStyle=col('--muted'); c.textAlign='center'; c.font='11px IBM Plex Mono, monospace'; const X=v=>34+(W0-42)*(v-lo)/(hi-lo); [-3,-2,-1,0,1,2,3].forEach(v=>c.fillText(v,X(v),H-4));
+  if(mk&&res){ if(!qmem(res,mk)) L.push(`${ftex(mk)} \\text{ is not in it}`);
+    else if(mk[0]<=0) L.push(`${ftex(mk)} \\le 0:\\ \\text{let in by the clause } p \\le 0`);
+    else if(mop==='mul'&&sgn(A)>0&&sgn(B)>0){ const va=qval(A), vb=qval(B); const r=nearMember(A,Math.max(fval(mk)/vb,0),va); const s=Fm(mk,Fi(r)); L.push(`${ftex(mk)} = \\htmlClass{keep}{${ftex(r)}} \\cdot ${ftex(s)},\\ \\ ${ftex(r)} \\in \\alpha,\\ ${ftex(s)} \\in \\beta${qmem(B,s)?'':'\\,?'}`); }
+    else if(mop==='inv'&&sgn(A)>0){ let s=null; for(let q=1;q<5000&&!s;q++){ const p=Math.ceil(fval(mk)*q+1e-9); for(let k=p;k<p+3;k++){ const t=[k,q]; if(Flt(mk,t)&&!qmem(A,Fi(t))){ s=fr(k,q); break; } } } L.push(`s = ${ftex(s)}:\\ \\ ${ftex(mk)} \\lt s,\\ \\ s^{-1} = ${ftex(Fi(s))} \\notin \\alpha`); }
+    else L.push(`${ftex(mk)} \\in ${mop==='mul'?'\\alpha\\beta':'\\alpha^{-1}'}:\\ \\text{read the case above, and signs-come-out}`); }
+  else if(res) L.push(R`\text{tap a fraction in the bottom row}`);
+  tex(document.getElementById('eqM'),'\\begin{gathered}'+L.join('\\\\ ')+'\\end{gathered}',true);
+}
+cvM.addEventListener('pointerdown',e=>{ if(!XM) return; const Rc=cvM.getBoundingClientRect(), x=e.clientX-Rc.left, W0=cvM.clientWidth; const v=lo+(x-34)/(W0-42)*(hi-lo); let best=null,bd=1e9; farey(lo,hi,W0<420?6:10).forEach(f=>{ const d=Math.abs(fval(f)-v)+f[1]*0.002; if(d<bd){bd=d;best=f;} }); mk=best; drawM(); });
+new ResizeObserver(drawM).observe(cvM);
+if(window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{ drawP(); drawM(); });
+drawP(); drawM();
+
+/* ---------- slides ---------- */
+const N='\\htmlClass{new}', K='\\htmlClass{keep}';
+stepper('#sl1',[
+  {k:'ember',kl:'two techniques',t:R`c \lt n \cdot w;\ \ 0 \lt x \lt y \Rightarrow y^{-1} \lt x^{-1}`,n:`Counting passes any fraction; reciprocals of positives turn order about.`}
+],{title:'The slides · two techniques · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'the sum',t:R`\alpha + \beta = \{r + s : r \in \alpha,\ s \in \beta\}`,n:`sum-of-cuts: a cut. (ii) by members-below-non-members and keep-order for plus on ℚ; (iii) t = (t − s) + s; (iv) from α's (iv).`},
+  {k:'ember',kl:'free rules',t:R`\text{turn-about for plus on ℝ, regroup for plus on ℝ, plus-zero on ℝ},\ \ (r + s)^{*} = r^{*} + s^{*}`,n:`turn-about for plus on ℚ and regroup for plus on ℚ with same-members; plus-zero on ℝ by (iii) and (iv); fraction-sums-agree with d = (r + s − t)/2.`}
+],{title:'The slides · the sum · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'the negative',t:R`-\alpha = \{r : \exists s\,(r \lt s \land -s \notin \alpha)\}`,n:`Ask for room above r. The tempting {−s : s ∉ α} keeps −r for α = r*.`},
+  {k:'ember',kl:'the step-out-of-a-cut technique',t:R`\exists r \in \alpha\,(r + ${N}{w} \notin \alpha)`,n:`From a member, walk in steps of w (counting-passes-fractions gets past a miss); the first step out is the least member of a set of numbers (least-member-for-any-set).`},
+  {k:'ember',kl:'the negative technique on ℝ',t:R`\alpha + (-\alpha) = ${N}{0^{*}}`,n:`One way by members-below-non-members. The other: for p &lt; 0, w = −p/2; step-out-of-a-cut's r; t = −(r + w) − w is in −α and r + t = p.`}
+],{title:'The slides · the negative · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'order and adding',t:R`\alpha \lt \beta \;\Leftrightarrow\; 0^{*} \lt \beta - \alpha`,n:`order-and-arithmetic-agree: adding keeps ⊆; cancel by −σ. Positive means 0 ∈ α. three-way on ℝ, positive-sum on ℝ follow.`}
+],{title:'The slides · order and adding · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'positive products',t:R`\{p : p \le 0 \lor p = rs,\ r \in \alpha,\ s \in \beta,\ r, s \gt 0\}`,n:`positive-product-is-a-cut: a positive cut. Everything at most 0 is let in, so (iii) is true.`},
+  {k:'ember',kl:'four rules for positives',t:R`\text{positive-turn-about, positive-regroup, positive-times-one, } ${N}{\text{positive-spread}}`,n:`Commute and regroup by turn-about for times on ℚ, regroup for times on ℚ; positive-times-one by keep-order for times on ℚ and (iv); positive-spread by cases on the signs of s and t, with max.`},
+  {k:'ember',kl:'the step-by-a-factor technique',t:R`\exists r \in \alpha\,(r \gt 0 \land r${N}{k} \notin \alpha)`,n:`step-out-of-a-cut with w = x(k − 1), x a positive member, then max(r, x).`},
+  {k:'ember',kl:'the reciprocal',t:R`\alpha\alpha' = 1^{*}`,n:`For 0 &lt; p &lt; 1: k between 1 and p⁻¹; step-by-a-factor's r; t = p r⁻¹ and s = (rk)⁻¹.`}
+],{title:'The slides · positive products · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'by signs',t:R`\alpha\beta:\ \text{positive product},\ 0^{*},\ -((-\alpha)\beta),\ -(\alpha(-\beta)),\ (-\alpha)(-\beta)`,n:`A definition by cases on three-way on ℝ. α⁻¹ likewise.`},
+  {k:'ember',kl:'the signs-come-out technique',t:R`(-\alpha)\beta = ${N}{-(\alpha\beta)} = \alpha(-\beta)`,n:`A table of five rows; in each the two columns differ by one minus (negative-of-a-negative).`}
+],{title:'The slides · by signs · ← → keys work'});
+stepper('#sl7',[
+  {k:'ember',kl:'the rest of the rules',t:R`\text{turn-about for times on ℝ, regroup for times on ℝ, times-one on ℝ, reciprocal on ℝ, positive-product on ℝ},\ \ ${N}{\text{spread on ℝ}}`,n:`Pull the minuses out with signs-come-out; the positive rules finish. spread on ℝ's table rearranges each case into an instance of positive-spread.`},
+  {k:'ember',kl:'5d collected',t:R`\alpha \cdot 0^{*} = 0^{*},\ \ (-\alpha)(-\beta) = \alpha\beta,\ \ldots`,n:`Everything 5d proved from the twelve techniques hold on the line with no new proof.`}
+],{title:'The slides · the twelve techniques · ← → keys work'});
+stepper('#sl8',[
+  {k:'ember',kl:'the naming line',t:R`r \text{ names } r^{*}`,n:`fractions-keep-order, fraction-sums-agree, fraction-negatives-agree, fraction-products-agree, fraction-reciprocals-agree: the cuts of fractions are a faithful copy of ℚ.`}
+],{title:'The slides · the naming line · ← → keys work'});
+stepper('#sl9',[
+  {k:'ember',kl:'the complete-ordered-field technique',t:R`${N}{\mathbb R \text{ is a complete ordered field}}`,n:`The twelve techniques, and no-holes, with the order of ⊆ agreeing with “the difference is positive” (order-and-arithmetic-agree).`}
+],{title:'The slides · the complete-ordered-field technique · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

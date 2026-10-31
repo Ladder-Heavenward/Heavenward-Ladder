@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Slopes of e and ln</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r17h.html">← 17h logs and exponents by hand</a><a href="r17j.html">next: 17j growth and decay →</a></p>
+  <div class="tags"><span class="tag tech">17i · technique</span></div>
+  <h1>Slopes of e and ln</h1>
+  <p>Two new entries in the table, the exponential and the logarithm, multiply what rung 13’s rules and rung 16’s techniques can reach. The chain rule now takes the exponential and the logarithm of anything. Taking the logarithm first turns a product of many factors into a sum, and a power with the input in its exponent into something the rules can touch. Every quotient whose top is the slope of its bottom has a log for its antiderivative. And parts, with the logarithm or the exponential as one factor, finishes what 16e began.</p>
+  <p class="gesture">The exponential of a function has slope the function’s slope times itself. The logarithm of a function has slope the function’s slope over the function. For a positive function, its slope is itself times the slope of its logarithm. The area under a function’s slope over the function is the logarithm of its size, plus a constant. Parts undoes the logarithm, and the input times the exponential. Any power falls behind any number above one raised to the input.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r17b.html">17b</a> (slope-of-log, area-under-1/x), <a href="r17f.html">17f</a> (slope-of-exp), <a href="r17g.html">17g</a> (real-exponent), <a href="r13e.html">13e</a> (chain for slopes), <a href="r13c.html">13c</a> (product for slopes), <a href="r16d.html">16d</a> (substitution for areas), <a href="r16e.html">16e</a> (parts for areas), <a href="r14f.html">14f</a> (first-test), <a href="r17d.html">17d</a> (log-loses-to-powers), <a href="r08f.html">8f</a> (powers-keep-order). <a href="r17k.html">17k</a> splits quotients until each piece is g′/g.</p></div>
+</header>
+
+<section class="class step" data-step="17i1">
+  <h2 class="sthead"><span class="stno">17i1</span>Taking ln first</h2>
+  <p class="stands">Stands on 17b (slope-of-log), 17c (the laws of logs) and 13e (the chain rule).</p>
+  <p data-pid="989262">Log-slope technique: <b>if f &gt; 0 and f has a slope at x, then (ln f)′ = f′/f, so f′ = f · (ln f)′. If f ≠ 0, (ln|f|)′ = f′/f.</b> It is chain for slopes with slope-of-log, or area-under-1/x for |f|. Its accepted name is logarithmic differentiation.</p>
+  <pre class="lines" data-k="ember" data-label="this step: xˣ">
+f(x) = x^x = e^{x\ln x},\ \ x \gt 0 @@ 17g's definition; neither real-power for slopes nor slope-of-pˣ applies
+\ln f = x\ln x @@ real-exponent
+\tfrac{f'}{f} = \ln x + x\cdot\tfrac1x = \ln x + 1 @@ log-slope on the left; product for slopes on the right
+f'(x) = x^x(\ln x + 1) @@ multiply by f
+f' = 0 \iff \ln x = -1 \iff x = e^{-1} \approx 0.3679 @@ f &gt; 0; first-test: f′ goes from − to +
+\min x^x = e^{-1/e} \approx 0.6922 @@ a least value, at x = 1/e
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: a product of three">
+f(x) = \tfrac{x^2 e^x}{x + 1},\ \ x \gt 0 @@ every factor positive
+\ln f = 2\ln x + x - \ln(x + 1) @@ log-of-a-product, log-of-a-quotient, log-of-a-power
+f' = f\Big(\tfrac2x + 1 - \tfrac{1}{x + 1}\Big) @@ log-slope, term by term
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · taking ln first · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · a power with x in its exponent, and a log against a power</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="lbl">xˣ for x &gt; 0, with its tangent</div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">x</span><input type="range" id="kx" min="0.05" max="2.2" step="0.005" value="1"><output id="ox"></output></div>
+      <div class="cap">Ink: xˣ. Ember: the tangent at the knob's x, slope xˣ(ln x + 1). Plum: the least value, at x = 1/e. As x → 0⁺, xˣ → 1.</div>
+    </div>
+    <div class="panel">
+      <div class="lbl">ln I against (Iˢ − 1)/s</div>
+      <canvas id="cvL"></canvas>
+      <div class="kn"><span class="m">s</span><input type="range" id="ka" min="0.02" max="1" step="0.01" value="0.33"><output id="oa"></output></div>
+      <div class="cap">Ink: ln I, the log curve. Ember: (Iˢ − 1)/s, a power of I moved to pass through (1, 0) with slope 1 there. Smaller s, closer to ln.</div>
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">17i1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = 2ˣ · x³,  x > 0</span></span>Write ln f as a sum. <br>Find f′ by log-slope.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17i2">
+  <h2 class="sthead"><span class="stno">17i2</span>Quotients that are slopes over values</h2>
+  <p class="stands">Stands on 17i1 and 16d (substitution).</p>
+  <p data-pid="795110">Area-under-g′/g technique: <b>on an interval where g has a continuous slope and g ≠ 0, ∫ g′(x)/g(x) dx = ln|g(x)| + C.</b> The slope of the right side is g′/g by area-under-1/x and chain for slopes; all-antiderivatives does the rest.</p>
+  <pre class="lines" data-k="ember" data-label="this step: by area-under-g′/g">
+\textstyle\int \tfrac{2x}{x^2 + 1}\,dx = \ln(x^2 + 1) + C @@ g = x² + 1 &gt; 0
+\textstyle\int \tfrac{e^x}{e^x + 2}\,dx = \ln(e^x + 2) + C @@ g = eˣ + 2
+\textstyle\int \tfrac{dx}{x\ln x} = \ln|\ln x| + C,\ \ x \gt 0,\ x \ne 1 @@ g = ln x, g′ = 1/x
+\textstyle\int \tfrac{\ln x}{x}\,dx = \tfrac12(\ln x)^2 + C @@ substitution for areas with r = ln x; not area-under-g′/g, though it looks like it
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · slopes over values · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17i2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">∫ dx/(x ln x),  x > 1</span></span>Find the inside whose slope sits on top. <br>Find every antiderivative, and check it by its slope.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17i3">
+  <h2 class="sthead"><span class="stno">17i3</span>Exponentials outrun powers</h2>
+  <p class="stands">Stands on 17i2 and 17d (log-loses-to-powers).</p>
+  <p data-pid="55dc5c">Exponentials-pass-powers technique: <b>for every real r and every b &gt; 1, xʳ/bˣ → 0 as x → ∞. So bˣ eventually passes every polynomial, and stays past it.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the exponentials-pass-powers technique">
+\ln\tfrac{x^r}{b^x} = r\ln x - x\ln b = x\Big(r\cdot\tfrac{\ln x}{x} - \ln b\Big) @@ real-exponent (17g), log-of-a-quotient; x &gt; 0
+\tfrac{\ln x}{x} \to 0 @@ log-loses-to-powers (17d) with p = 1
+r\cdot\tfrac{\ln x}{x} - \ln b \to -\ln b \lt 0 @@ rung 10's limits; ln b &gt; 0 since b &gt; 1 (log-rises)
+\ln\tfrac{x^r}{b^x} \to -\infty,\ \ \htmlClass{new}{\tfrac{x^r}{b^x} \to 0} @@ x times something below −½ ln b, for x large; then exp heads to 0 (17e)
+|q(x)| \le \big(|a_0| + \cdots + |a_n|\big)x^n \text{ for } x \ge 1 \quad \blacksquare @@ q of degree n: each xᵏ ≤ xⁿ when x ≥ 1 (powers-keep-order); so q(x)/bˣ → 0 too
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: slow, then for ever">
+1.01^x \text{ against } x^{100} @@ at x = 1 the first is larger; at x = 2 it is far smaller
+x\ln 1.01 = 100\ln x \text{ near } x \approx 117{,}300 @@ the second crossing, by halving; past it, 1.01ˣ stays ahead (exponentials-pass-powers)
+xe^{-x} \to 0,\ \ x^3 e^{-x} \to 0 @@ the limits that make ∫₀^∞ xⁿe⁻ˣ dx work by parts
+  </pre>
+  <p data-pid="df4257"><b>So any steady percentage growth, however small, ends ahead of any polynomial growth, however steep.</b> Before that it can lag for a long time.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17i3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">x¹⁰ against 1.1ˣ</span></span>Guess which is larger at x = 10 and at x = 1000. <br>Check by comparing their logs.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17i4">
+  <h2 class="sthead"><span class="stno">17i4</span>Parts with ln and e</h2>
+  <p class="stands">Stands on 17i3 and 16e (parts).</p>
+  <pre class="lines" data-k="ember" data-label="this step: by parts">
+\textstyle\int \ln x\,dx = \int \ln x \cdot 1\,dx = x\ln x - \int x\cdot\tfrac1x\,dx @@ parts for areas (16e): f = ln x, g′ = 1
+= x\ln x - x + C @@ check: (x ln x − x)′ = ln x + 1 − 1
+\textstyle\int x e^x\,dx = xe^x - \int e^x\,dx = (x - 1)e^x + C @@ parts for areas: f = x, g′ = eˣ
+\textstyle\int_1^e \ln x\,dx = (e - e) - (0 - 1) = 1 @@ area-is-a-change
+\textstyle\int_0^1 x e^{-x}\,dx = \big[-(x + 1)e^{-x}\big]_0^1 = 1 - \tfrac{2}{e} \approx 0.2642 @@ parts for areas with g′ = e⁻ˣ
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · parts with ln and e · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17i4.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f &gt; 0,"></span> <span data-tex-inline="(\ln f)' = \tfrac2x + 1,"></span> <span data-tex-inline="f(1) = e"></span></span>Find f.</li><li><span class="givens"><span data-tex-inline="F'(x) = \ln x,"></span> <span data-tex-inline="F(1) = 0"></span></span>Find F.</li><li><span class="givens"><span data-tex-inline="\int \tfrac{g'}{g}\,dx = \ln(x^2 + 4) + C"></span></span>Find a g.</li><li><span class="givens"><span data-tex-inline="f(x) = x^{1/x},"></span> <span data-tex-inline="x &gt; 0"></span></span>Find where f has slope 0, and whether it is a greatest or a least value.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17i5">
+  <h2 class="sthead"><span class="stno">17i5</span>What a person can notice</h2>
+  <p class="stands">Stands on 17i4.</p>
+  <p data-pid="8ca803">A scientist of 1860 took an earlier finding: the least change in a stimulus a person can notice is a fixed fraction of the stimulus. He wrote it as a relation between small changes, dS = k dI / I, and integrated it. So the strength of a sensation grows as the logarithm of the stimulus.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · sensation · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17i5.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="e^{x^2},"></span> <span data-tex-inline="\ln(3x^2 + 1),"></span> <span data-tex-inline="x\ln x,"></span> <span data-tex-inline="\ln(\ln x)"></span></span>Find the slope of each.</li><li><span class="givens"><span data-tex-inline="f(x) = x^{\ln x},"></span> <span data-tex-inline="x &gt; 0"></span></span>Find the slope of f.</li><li><span class="givens"><span data-tex-inline="\int \tfrac{3x^2}{x^3 + 1}\,dx,"></span> <span data-tex-inline="\int \tfrac{e^{2x}}{e^{2x} + 1}\,dx"></span></span>Find each.</li><li><span class="givens"><span data-tex-inline="\int_1^e x\ln x\,dx,"></span> <span data-tex-inline="\int_0^2 xe^x\,dx"></span></span>Find each.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17i6">
+  <h2 class="sthead"><span class="stno">17i6</span>Illegal moves</h2>
+  <p class="stands">Stands on 17i1 to 17i5.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+(x^x)' = x \cdot x^{x-1} = x^x\,? @@ real-power for slopes is for a fixed power: xˣ(ln x + 1)
+(x^x)' = x^x\ln x\,? @@ slope-of-pˣ is for a fixed base: both parts move
+\textstyle\int \tfrac{dx}{x^2 + 1} = \ln(x^2 + 1) + C\,? @@ the top is not the bottom's slope 2x
+(\ln f)' = \tfrac{1}{f}\,? @@ chain for slopes: f′/f
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17i6.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = (x - 3)^5(x + 1)^2"></span></span>Log-slope asks for a positive function.<br>Find the slope of f at 0 by logs.</li><li><span class="givens"><span data-tex-inline="\int \tfrac{dx}{x^2 + 1}"></span></span>Run area-under-g′/g on it as far as you can take it.<br>Find whether any tech in this step reaches it.</li><li><span class="givens"><span data-tex-inline="\int \tfrac{e^x}{x}\,dx"></span></span>Run parts on it for two steps, and write what the steps do.</li><li><span class="givens"><span data-tex-inline="x^x,"></span> <span data-tex-inline="x \to 0^+"></span></span>Find what it does, by a technique of 17d.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">17i.4.1</span><span class="tagq">build</span>Make up a product of three factors of your own, at least one of them negative somewhere.<br>Find its slope by the step's tech wherever the product is not 0, and check it at one point by product for slopes.</div>
+  <div class="chq"><span class="chid">17i.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="I_n = \int x^n e^x\,dx"></span></span>Using parts, write each one through the one before it, and find it at n = 3.</div>
+  <div class="chq"><span class="chid">17i.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="f \ne 0 \text{ on an interval},"></span> <span data-tex-inline="f'/f \text{ constant there}"></span></span>Prove or refute: f is C times e to the kx.</div>
+  <div class="chq"><span class="chid">17i.4.4</span><span class="tagq">seam</span>The scientist of 1860 integrated the noticing fraction and got sensation as a log of stimulus. A century later another asked people to put numbers on how loud or bright things seemed, and found powers instead. Loudness went roughly as the 0.3 power of a sound's energy, and brightness roughly as the 0.33 power of a light's. Electric shock went as the 3.5 power of the current. The picture shows a power with a small exponent hugging the log. <br>Were the two measuring the same thing? <br>What would settle between them?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r17h.html">← 17h · logs and exponents by hand</a><a href="r17j.html">17j · growth and decay →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>Fechner took Weber’s finding, that the least change in a stimulus a person can notice is a fixed fraction of the stimulus, wrote it as a relation between small changes, dS = k dI / I, and integrated it, so that the strength of a sensation grows as the logarithm of the stimulus.</p><cite>Gustav Fechner, Elemente der Psychophysik (1860); paraphrase</cite></aside>
+  <p>The noticing fraction is Ernst Weber’s; in 17i.4.4, the one who found powers is S. S. Stevens. Their accepted names are the Weber–Fechner law and Stevens’s power law.</p>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+/* least and greatest of F.f on [lo, hi]: the ends, F's critical points inside, and a fine sample (exact between critical points for the functions used here) */
+function ext(F,lo,hi){ if(F.dir) return [0,1]; let m=Infinity,M=-Infinity; const t=x=>{ const v=F.f(x); if(v<m) m=v; if(v>M) M=v; };
+  t(lo); t(hi); (F.crit||[]).forEach(c=>{ if(c>lo&&c<hi) t(c); }); for(let k=1;k<64;k++) t(lo+(hi-lo)*k/64); return [m,M]; }
+function sums(F,pts){ let L=0,U=0; const ms=[],Ms=[]; for(let i=1;i<pts.length;i++){ const [m,M]=ext(F,pts[i-1],pts[i]), w=pts[i]-pts[i-1]; ms.push(m); Ms.push(M); L+=m*w; U+=M*w; } return {L,U,ms,Ms}; }
+const eq=(a,b,n)=>Array.from({length:n+1},(_,i)=>a+(b-a)*i/n);
+function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
+function boxes(P,pts,hs,stroke,fill,alpha){ const c=P.ctx; for(let i=1;i<pts.length;i++){ const a=pts[i-1],b=pts[i],h=hs[i-1]; c.globalAlpha=alpha; P.poly([[a,0],[b,0],[b,h],[a,h]],null,fill); c.globalAlpha=1; P.poly([[a,0],[b,0],[b,h],[a,h]],stroke,null,1.2); } }
+function dirDots(P,a,b){ const c=P.ctx; c.fillStyle=col('--ink'); for(let k=0;k<=300;k++){ const x=a+(b-a)*k/300; const y=(k%2)?0:1; c.fillRect(P.X(x)-1,P.Y(y)-1,2,2); } }
+/* shade between the graph of fn and the axis from lo to hi: above in pos colour, below in neg colour */
+function shade(P,fn,lo,hi,pos,neg,alpha){ if(hi<lo){ const t=lo; lo=hi; hi=t; } const c=P.ctx, N=300; c.globalAlpha=alpha==null?0.32:alpha;
+  for(let k=0;k<N;k++){ const x0=lo+(hi-lo)*k/N, x1=lo+(hi-lo)*(k+1)/N, xm=(x0+x1)/2, y=fn(xm); if(!isFinite(y)) continue; P.poly([[x0,0],[x1,0],[x1,fn(x1)],[x0,fn(x0)]],null,y>=0?pos:neg); }
+  c.globalAlpha=1; }
+function rangeOf(fn,lo,hi,pad){ let m=Infinity,M=-Infinity; for(let k=0;k<=400;k++){ const v=fn(lo+(hi-lo)*k/400); if(isFinite(v)){ if(v<m) m=v; if(v>M) M=v; } } if(m>0) m=0; if(M<0) M=0; const p=(M-m)*(pad==null?0.12:pad)||1; return [m-p,M+p]; }
+function chips(el,FN,get,setk,after){ Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===get()) b.className='on'; b.onclick=()=>{ setk(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+const Nw='\\htmlClass{new}';
+function gridFor(sp){ return sp>40?10:sp>16?4:sp>8?2:sp>3?1:sp>1.2?0.5:0.25; }
+function frame2(P,fn,lo,hi,pad){ const w=hi-lo; P.o.x=[lo-0.12*w,hi+0.08*w]; P.o.y=rangeOf(fn,lo,hi,pad==null?0.12:pad); const sx=P.o.x[1]-P.o.x[0], sy=P.o.y[1]-P.o.y[0]; let g=gridFor(sx); while(sy/g>24) g*=2; P.o.grid=g; }
+const num=(f,a,b,n)=>{ n=n||4000; const h=(b-a)/n; let s=0; for(let i=0;i<n;i++) s+=f(a+(i+0.5)*h)*h; return s; };
+/* axes with separate steps across and up */
+function axes2(P,gx,gy){ const c=P.ctx,o=P.o; c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ c.moveTo(P.X(x),P.Y(o.y[0])); c.lineTo(P.X(x),P.Y(o.y[1])); }
+  for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ c.moveTo(P.X(o.x[0]),P.Y(y)); c.lineTo(P.X(o.x[1]),P.Y(y)); } c.stroke();
+  c.strokeStyle=col('--muted'); c.lineWidth=1.3; c.beginPath(); if(o.y[0]<=0&&o.y[1]>=0){ c.moveTo(P.X(o.x[0]),P.Y(0)); c.lineTo(P.X(o.x[1]),P.Y(0)); } if(o.x[0]<=0&&o.x[1]>=0){ c.moveTo(P.X(0),P.Y(o.y[0])); c.lineTo(P.X(0),P.Y(o.y[1])); } c.stroke();
+  c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; const ly=Math.min(P.H-6,Math.max(12,P.Y(0)+14));
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ if(Math.abs(x)<1e-9) continue; c.fillText(+x.toFixed(6),P.X(x),ly); }
+  c.textAlign='right'; const lx=Math.max(32,Math.min(P.W-4,P.X(0)-5)); for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ if(Math.abs(y)<1e-9) continue; c.fillText(String(+y.toFixed(6)).replace('-','−'),lx,P.Y(y)+4); } }
+function nice(sp){ const raw=sp/6, p=Math.pow(10,Math.floor(Math.log10(raw))), m=raw/p; return (m<1.5?1:m<3.5?2:m<7.5?5:10)*p; }
+const kx=$('kx'),ka=$('ka'),cvF=$('cvF'),cvL=$('cvL');
+const xx=x=>Math.exp(x*Math.log(x));
+const PF=plane(cvF,{x:[-0.2,2.3],y:[-0.3,5.6],grid:1,aspect:0.8,draw:P=>drawF(P)});
+const PL=plane(cvL,{x:[-1,21],y:[-2.5,8],grid:1,aspect:0.8,draw:P=>drawL(P)});
+[[PF,cvF],[PL,cvL]].forEach(([P,cv])=>Object.defineProperty(P.o,'aspect',{get:()=>cv.clientWidth>480?0.75:0.9}));
+function drawF(P){ const x=+kx.value, y=xx(x), m=y*(Math.log(x)+1); axes2(P,0.5,1); curve(P,t=>y+m*(t-x),'--ember',2,-0.2,2.3); curve(P,xx,'--ink',2.6,0.002,2.3); P.dot(x,y,'--ember',5); P.dot(1/Math.E,Math.exp(-1/Math.E),'--plum',5); P.dot(0,1,'--muted',3.5); }
+function drawL(P){ const a=+ka.value; axes2(P,2,1); curve(P,Math.log,'--ink',2.6,0.05,21); curve(P,I=>(Math.pow(I,a)-1)/a,'--ember',2.4,0.01,21); P.dot(1,0,'--plum',4); }
+function read(){ const x=+kx.value, a=+ka.value; $('ox').textContent=mm(x,3); $('oa').textContent=mm(a,2);
+  const y=xx(x), m=y*(Math.log(x)+1), g=(Math.pow(20,a)-1)/a; const vd=$('vdF'); vd.className='verdict'+(Math.abs(x-1/Math.E)<0.006?' win':'');
+  vd.textContent='At x = '+mm(x,3)+', xˣ ≈ '+mm(y,4)+' and its slope is '+mm(m,4)+(Math.abs(x-1/Math.E)<0.006?': the least value, e^(−1/e) ≈ 0.6922.':'.')+' At I = 20, ln I ≈ '+mm(Math.log(20),3)+' and (Iˢ − 1)/s ≈ '+mm(g,3)+'.';
+  tex($('eqF'),R`\begin{gathered}(x^x)'\big|_{${mm(x,3)}} = ${mm(y,4)}\,(\ln ${mm(x,3)} + 1) \approx ${mm(m,4)}\\ \tfrac{20^{${mm(a,2)}} - 1}{${mm(a,2)}} \approx ${mm(g,3)},\ \ \ln 20 \approx ${mm(Math.log(20),3)}\end{gathered}`,true); }
+function all(){ PF.redraw(); PL.redraw(); read(); }
+kx.addEventListener('input',all); ka.addEventListener('input',all);
+window.__pic={set:(x,a)=>{ kx.value=x; ka.value=a; all(); const h=1e-6; return {slope:+((xx(x+h)-xx(x-h))/(2*h)).toFixed(5),lgd:+(xx(x)*(Math.log(x)+1)).toFixed(5),lnx:+num(Math.log,1,Math.E).toFixed(5),xe:+num(t=>t*Math.exp(-t),0,1).toFixed(5)}; }};
+all();
+stepper('#sl1',[
+  {k:'ember',kl:'log-slope',t:R`${Nw}{f' = f\cdot(\ln f)'}`,n:`chain for slopes with slope-of-log.`},
+  {k:'ember',kl:'xˣ',t:R`\ln f = x\ln x \Rightarrow f' = x^x(\ln x + 1)`,n:`Neither base nor power is fixed.`},
+  {k:'ember',kl:'least value',t:R`x = \tfrac1e,\ \ x^x = e^{-1/e}`,n:`first-test.`},
+  {k:'ember',kl:'three factors',t:R`\ln f = 2\ln x + x - \ln(x + 1)`,n:`Products become sums.`}
+],{title:'The slides · taking ln first · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'area-under-g′/g',t:R`${Nw}{\textstyle\int \tfrac{g'}{g} = \ln|g| + C}`,n:`g ≠ 0 on an interval.`},
+  {k:'ember',kl:'by area-under-g′/g',t:R`\textstyle\int \tfrac{2x}{x^2 + 1}\,dx = \ln(x^2 + 1) + C`,n:`The top is the bottom's slope.`}
+],{title:'The slides · slopes over values · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'ln x',t:R`\textstyle\int \ln x\,dx = x\ln x - x + C`,n:`Parts with g′ = 1.`},
+  {k:'ember',kl:'xeˣ',t:R`\textstyle\int xe^x\,dx = (x - 1)e^x + C`,n:`Parts with f = x.`}
+],{title:'The slides · parts with ln and e · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'sensation',t:R`dS = k\,\tfrac{dI}{I} \Rightarrow S = k\ln\tfrac{I}{I_0}`,n:`The noticing fraction, integrated.`}
+],{title:'The slides · sensation · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`(x^x)' \ne x\cdot x^{x-1}`,n:`Both parts move.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Turns in coordinates</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+.chrow{display:grid;grid-template-columns:4.5em 1fr;gap:6px;align-items:center;font-size:.88rem}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r20i.html">← 20i moving graphs</a><a href="r20cb19.html">next: 20·cb19 the square’s moves as turns and flips →</a></p>
+  <div class="tags"><span class="tag tech">20j · technique</span></div>
+  <h1>Turns in coordinates</h1>
+  <p>A turn about the origin is decided by one point: where it sends (1, 0). Record that point, and the turn is a pair of numbers. This step works with turns as pairs. Two turns make a third by a rule for pairs, the rule works in either order, and undoing changes one sign. A pair whose squares do not add to 1 is still a move: a turn and a stretch.</p>
+  <p class="gesture">Every other point follows by the same mixing of across and up. One turn then another is a turn, and its pair comes from the two pairs by a fixed rule of multiplying. Turning the second number’s sign gives the turn that undoes it.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r18f.html">18f</a> (turns as pairs), <a href="r20c.html">20c</a> (turns), <a href="r20e.html">20e</a> (two flips), <a href="r20f.html">20f</a> (three points decide), <a href="r20g.html">20g</a> (which way round). The call backs to <a href="r19f.html">19f</a>, <a href="r09d.html">9d</a> and <a href="r08i.html">8i</a> follow.</p></div>
+</header>
+
+<section class="class step" data-step="20j1">
+  <h2 class="sthead"><span class="stno">20j1</span>A turn is a pair</h2>
+  <p class="stands">Stands on 20c2 (turns), 20f2 (three points decide) and 20g (which way round).</p>
+  <p data-pid="7b3f9e">Turn-is-a-pair technique: <b>a turn about the origin is fixed by where it sends (1, 0).</b> If it sends (1, 0) to (a, b), it sends (0, 1) to (−b, a), and every (x, y) to (ax − by, bx + ay).</p>
+  <pre class="lines" data-k="ember" data-label="this step: the turn-is-a-pair technique">
+R(0, 0) = (0, 0),\ \ R(1, 0) = (a, b) @@ a turn about O; a² + b² = 1, since R keeps the length 1
+R(0, 1) \text{ is 1 from } O \text{ and } \sqrt{2} \text{ from } (a, b) @@ R keeps distances (20d)
+(-b, a) \text{ and } (b, -a) \text{ fit; only } (-b, a) \text{ keeps } D @@ D(O, (a, b), (−b, a)) = a² + b² = 1, as for (0, 0), (1, 0), (0, 1)
+\htmlClass{new}{R(x, y) = (ax - by,\ bx + ay)} \quad \blacksquare @@ three points decide (20f2)
+  </pre>
+  <p data-pid="0fcf28">From here on, R<sub>(a, b)</sub> is the turn by (a, b), and the pair is called the turn. These are 18f2’s turns. 18f2 turned points by pairs; this footing shows that every move that turns the plane about the origin is one of them.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · a pair · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">20j1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">the turn about (0, 0) that sends (1, 0) to (0.8, 0.6)</span></span>Find its formula. <br>Find where it sends (0, 1) and (5, 0).</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20j2">
+  <h2 class="sthead"><span class="stno">20j2</span>Turns combine by a rule for pairs</h2>
+  <p class="stands">Stands on 20j1.</p>
+  <p data-pid="8b48c5">Pair-product technique: <b>the turn by (a, b) after the turn by (c, d) is the turn by (ac − bd, ad + bc).</b> Follow (1, 0): the first turn sends it to (c, d), and the second sends (c, d) to (ac − bd, bc + ad).</p>
+  <pre class="lines" data-k="ember" data-label="this step: the pair-product technique">
+R_{(a,b)}(R_{(c,d)}(1, 0)) = R_{(a,b)}(c, d) @@ 20j1
+= (ac - bd,\ bc + ad) @@ the formula, at (c, d)
+\htmlClass{new}{R_{(a,b)} \circ R_{(c,d)} = R_{(ac - bd,\ ad + bc)}} \quad \blacksquare @@ a turn after a turn is a turn (20e); 20j1 fixes it
+  </pre>
+  <p data-pid="535158">This is 18f2’s product of turns, now for every turn of 20c. The rule does not change when (a, b) and (c, d) swap places. So turns about the same point give the same turn in either order.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · combine · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · two turns about the origin, one after the other</div>
+    <div class="chrow"><span class="lbl">first</span><div class="chips" id="chA"></div></div>
+    <div class="chrow"><span class="lbl">then</span><div class="chips" id="chB"></div></div>
+    <div id="pl"></div>
+    <div class="cap">Ink: the flag. Dashed: after the first turn. Ember: after the second. The verdict gives the pair rule’s answer and where (1, 0) went.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20j2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">the turn by (0.6, 0.8)</span></span>Find the turn it makes done twice, and done three times. <br>Check that each pair’s squares add to 1.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20j3">
+  <h2 class="sthead"><span class="stno">20j3</span>Undoing a turn</h2>
+  <p class="stands">Stands on 20j2 and 20b2 (undoing).</p>
+  <p data-pid="72be99">Pair-undo technique: <b>the turn by (a, −b) undoes the turn by (a, b).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the pair-undo technique">
+(a, b) \cdot (a, -b) = (a^2 + b^2,\ -ab + ab) @@ the pair product
+= (1, 0) @@ a² + b² = 1: the turn that does nothing
+\htmlClass{new}{R_{(a,b)}^{-1} = R_{(a,-b)}} \quad \blacksquare @@ either order, by 20j2
+  </pre>
+  <p data-pid="1c886d">So the undo of a turn is its flip over the floor: (a, b) and (a, −b) are mirror points.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · undo · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20j3.1</span><span class="ph undo">undo</span><span class="givens"><span class="gtx">the quarter turn,  (0, 1)</span></span>Find every turn that, done twice, is the quarter turn. <br>Find the turn that undoes each.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20j4">
+  <h2 class="sthead"><span class="stno">20j4</span>Turn and stretch</h2>
+  <p class="stands">Stands on 20j2 and 20a3 (similarities).</p>
+  <p data-pid="1924da">Turn-and-stretch technique: <b>for any pair (a, b) other than (0, 0), (x, y) ↦ (ax − by, bx + ay) is a turn followed by a stretch by r = √(a² + b²).</b> And such pairs combine by the same rule, with the stretches multiplying.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the turn-and-stretch technique">
+(a, b) = r\,(a/r,\ b/r),\ \ (a/r)^2 + (b/r)^2 = 1 @@ r = √(a² + b²) &gt; 0
+(ax - by,\ bx + ay) = r \cdot R_{(a/r,\ b/r)}(x, y) @@ take r out of each coordinate
+(ac - bd)^2 + (ad + bc)^2 = (a^2 + b^2)(c^2 + d^2) @@ share out; the 2abcd terms cancel
+\htmlClass{new}{\text{lengths multiply, turns combine}} \quad \blacksquare
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · stretch · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20j4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">the pair (3, 4)</span></span>Find the turn and the stretch it makes. <br>Find the image of (1, 1), and check its length.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20j5">
+  <h2 class="sthead"><span class="stno">20j5</span>Illegal moves</h2>
+  <p class="stands">Stands on 20j1 to 20j4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+(a, b) \cdot (c, d) = (ac,\ bd)\,? @@ (ac − bd, ad + bc): each new coordinate mixes all four
+R_{(a,b)}^{-1} = R_{(-a,-b)}\,? @@ that is the half turn after it; undo is (a, −b)
+\text{every pair is a turn}\,? @@ only when a² + b² = 1; otherwise it stretches too
+R(0, 1) = (b, -a)\,? @@ that would change the sign of D: a flip, not a turn
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20j5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span class="gtx">the turn by (0, 1)</span></span>Find it done four times.</li><li><span class="givens"><span class="gtx">the pair (1, 1)</span></span>Find its turn and its stretch.</li><li><span class="givens"><span class="gtx">turns whose pair has a = 0.6</span></span>Find every one, and how they are related.</li><li><span class="givens"><span class="gtx">the turns by (a, b) and (c, d), in both orders</span></span>Prove the two products agree, line by line.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">20j.4.1</span><span class="tagq">build</span>Build the turn that, done three times, does nothing (and is not do-nothing). <br>Find its pair without measuring an angle: use that done twice it is its own undo.</div>
+  <div class="chq"><span class="chid">20j.4.2</span><span class="tagq">edge</span><span class="givens"><span class="gtx">(3/5, 4/5),  (5/13, 12/13)</span></span>Find more turns whose pairs are fractions. <br>Find a rule that makes infinitely many, using 20e1.</div>
+  <div class="chq"><span class="chid">20j.4.3</span><span class="tagq">converse</span>Every turn about the origin is a pair with squares adding to 1. Turn it round: prove every isometry that keeps the origin and keeps D is a turn by a pair.</div>
+  <div class="chq"><span class="chid">20j.4.4</span><span class="tagq">reroute</span>Prove that two turns about the origin give the same turn in either order using only 20e: write each as two flips, the floor first.</div>
+  <div class="chq"><span class="chid">20j.4.5</span><span class="tagq">seam</span>Pairs of numbers turn the plane, and multiply like the turns they are. A mathematician spent fifteen years looking for triples of numbers that would turn space the same way. They do not exist. He found the answer walking by a canal and carved it into a bridge: it takes four numbers, and the turn-about rule must be given up. <br>Why might triples fail, when pairs work? <br>What would you give up first?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r20i.html">← 20i · moving graphs</a><a href="r20cb19.html">20·cb19 · the square’s moves as turns and flips →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A turn by (a, b) is a rotation, usually written with the cosine and sine of its angle, which arrive on rung 21. The pair product is complex multiplication, and the pairs with squares adding to 1 form the circle group. The fraction pairs of 20j.4.2 are rational points on the circle, made from Pythagorean triples.</p>
+  <h3>Who said it first</h3>
+  <p>In 20j.4.5, the mathematician is William Rowan Hamilton, who carved i² = j² = k² = ijk = −1 into Broom Bridge, Dublin, on 16 October 1843: the quaternions. In 1877 Frobenius proved that no number system with three parts could divide the way pairs do.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+/* moves of the plane, drawn in SVG, for rung 20 */
+const V=c=>'var('+c+')';
+const FLAG=[[0,0],[0,3],[2,3],[2,2.4],[0.6,2.4],[0.6,1.8],[1.5,1.8],[1.5,1.2],[0.6,1.2],[0.6,0]];
+const M={
+  id:()=>p=>p,
+  slide:(h,k)=>p=>[p[0]+h,p[1]+k],
+  turn:(a,b)=>p=>[a*p[0]-b*p[1],b*p[0]+a*p[1]],
+  stretch:k=>p=>[k*p[0],k*p[1]],
+  flipU:(c,s)=>p=>{ const d=2*(p[0]*c+p[1]*s); return [d*c-p[0],d*s-p[1]]; },              /* across the line through O along (c, s), c² + s² = 1 */
+  flipAt:(q,c,s)=>p=>{ const x=p[0]-q[0],y=p[1]-q[1],d=2*(x*c+y*s); return [q[0]+d*c-x,q[1]+d*s-y]; },
+  turnAt:(q,a,b)=>p=>{ const x=p[0]-q[0],y=p[1]-q[1]; return [q[0]+a*x-b*y,q[1]+b*x+a*y]; },
+  then:(g,f)=>p=>g(f(p))                                                                    /* f first, then g */
+};
+const unit=(x,y)=>{ const r=Math.hypot(x,y); return [x/r,y/r]; };
+const fx=v=>(Math.abs(v)<5e-10?0:v);
+const show=(v,d)=>{ let s=fx(v).toFixed(d==null?2:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return (s==='-0'?'0':s).replace('-','−'); };
+/* shapes: {pts, c, fill, dash, w, open}; dots: {p, c, t}; lines: {p, d, c, dash} */
+function svgPlane(o){ const lo=o.lo==null?-6:o.lo, hi=o.hi==null?6:o.hi, S=300, X=x=>(x-lo)/(hi-lo)*S, Y=y=>S-(y-lo)/(hi-lo)*S;
+  let s='<svg viewBox="0 0 '+S+' '+S+'" style="width:100%;max-width:340px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  for(let g=Math.ceil(lo);g<=hi;g++){ s+='<line x1="'+X(g)+'" y1="0" x2="'+X(g)+'" y2="'+S+'" style="stroke:'+V('--grid')+';stroke-width:'+(g===0?1.6:0.6)+'"/><line x1="0" y1="'+Y(g)+'" x2="'+S+'" y2="'+Y(g)+'" style="stroke:'+V('--grid')+';stroke-width:'+(g===0?1.6:0.6)+'"/>'; }
+  (o.lines||[]).forEach(l=>{ const L=40; s+='<line x1="'+X(l.p[0]-L*l.d[0])+'" y1="'+Y(l.p[1]-L*l.d[1])+'" x2="'+X(l.p[0]+L*l.d[0])+'" y2="'+Y(l.p[1]+L*l.d[1])+'" style="stroke:'+V(l.c||'--teal')+';stroke-width:1.6;stroke-dasharray:'+(l.dash||'5 4')+'"/>'; });
+  (o.shapes||[]).forEach(z=>{ const pts=z.pts.map(p=>X(p[0]).toFixed(1)+','+Y(p[1]).toFixed(1)).join(' ');
+    s+='<'+(z.open?'polyline':'polygon')+' points="'+pts+'" style="fill:'+(z.fill?V(z.c):'none')+';fill-opacity:'+(z.fill?0.28:0)+';stroke:'+V(z.c)+';stroke-width:'+(z.w||2)+(z.dash?';stroke-dasharray:'+z.dash:'')+'"/>'; });
+  (o.dots||[]).forEach(d=>{ s+='<circle cx="'+X(d.p[0])+'" cy="'+Y(d.p[1])+'" r="4" style="fill:'+V(d.c||'--ink')+'"/>'+(d.t?'<text x="'+(X(d.p[0])+7)+'" y="'+(Y(d.p[1])-6)+'" style="fill:'+V(d.c||'--ink')+';font:12px IBM Plex Mono,monospace">'+d.t+'</text>':''); });
+  return s+'</svg>'; }
+function knob(id,lab,min,max,step,val){ return '<div class="kn"><span class="m">'+lab+'</span><input type="range" id="'+id+'" min="'+min+'" max="'+max+'" step="'+step+'" value="'+val+'"><output id="o'+id+'"></output></div>'; }
+function chipRow(el,keys,get,set,after){ el.innerHTML=''; keys.forEach(k=>{ const b=document.createElement('button'); b.type='button'; b.textContent=k; if(k===get()) b.className='on'; b.onclick=()=>{ set(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+
+const PR={'(1, 0)':[1,0],'(0.8, 0.6)':[0.8,0.6],'(0.6, 0.8)':[0.6,0.8],'(0, 1)':[0,1],'(−0.6, 0.8)':[-0.6,0.8],'(−1, 0)':[-1,0],'(0.6, −0.8)':[0.6,-0.8]};
+let ka='(0.6, 0.8)', kb='(0.8, 0.6)';
+function draw(){ const A=PR[ka], B=PR[kb], f=M.turn(A[0],A[1]), g=M.turn(B[0],B[1]);
+  $('pl').innerHTML=svgPlane({lo:-5,hi:5,shapes:[{pts:FLAG,c:'--ink',fill:true},{pts:FLAG.map(f),c:'--muted',dash:'4 3'},{pts:FLAG.map(p=>g(f(p))),c:'--ember',fill:true}],dots:[{p:[1,0],c:'--ink',t:'(1, 0)'},{p:g(f([1,0])),c:'--ember'}]});
+  const c=[B[0]*A[0]-B[1]*A[1], B[0]*A[1]+B[1]*A[0]];
+  const v=$('vd'); v.className='verdict'; v.textContent='('+show(B[0])+', '+show(B[1])+') after ('+show(A[0])+', '+show(A[1])+') is ('+show(c[0])+', '+show(c[1])+') by the pair rule, and (1, 0) went to ('+show(g(f([1,0]))[0])+', '+show(g(f([1,0]))[1])+').'; }
+chipRow($('chA'),Object.keys(PR),()=>ka,k=>ka=k,draw);
+chipRow($('chB'),Object.keys(PR),()=>kb,k=>kb=k,draw); draw();
+window.__pic={set:(a,b)=>{ ka=a; kb=b; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'turn is a pair',t:R`\htmlClass{new}{R_{(a,b)}(x, y) = (ax - by,\ bx + ay)}`,n:`(a, b) is where (1, 0) goes.`}
+],{title:'The slides · a pair · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'pair product',t:R`\htmlClass{new}{(a, b) \cdot (c, d) = (ac - bd,\ ad + bc)}`,n:`Either order.`}
+],{title:'The slides · combine · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'undo',t:R`\htmlClass{new}{(a, b)^{-1} = (a, -b)}`,n:`Change one sign.`}
+],{title:'The slides · undo · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'turn and stretch',t:R`\htmlClass{new}{(a, b) = r \cdot (a/r,\ b/r)}`,n:`r = √(a² + b²).`}
+],{title:'The slides · stretch · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`(a, b)(c, d) \ne (ac, bd)`,n:`All four mix.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

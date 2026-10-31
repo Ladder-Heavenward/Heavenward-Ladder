@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>16b · Its slope is the height</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r16a.html">← 16a the area function</a><a href="r16c.html">next: 16c evaluating by antiderivatives →</a></p>
+  <div class="tags"><span class="tag proof">16b · proof</span></div>
+  <h1>Its slope is the height</h1>
+  <p>16a showed that the area function never jumps: a bound on the height bounds how fast the area can change. This step asks how fast it does change. Move the edge a little way to the right, and the area gains the integral of the function over that short stretch. Divide by the stretch’s width, and the result is an average height over the stretch, caught between the least and greatest heights there. If the function does not jump at the edge, those both close in on its height at the edge as the stretch shrinks. So the slope of the area is the height. The proof is short. What it costs is that the function does not jump at the one point.</p>
+  <p class="gesture">The area gained, divided by the width, is the average height over the stretch. It differs from the height at the edge by at most the largest gap between heights on the stretch and the height at the edge. Because the function does not jump there, that gap shrinks to nothing. So the slope of the area function at the edge is the height of the function there.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r16a.html">16a</a> (the area function, split-in-any-order, area-bound), <a href="r15e.html">15e</a> (areas-add, areas-scale), <a href="r15c.html">15c</a> (a constant's integral), <a href="r13a.html">13a</a> (the slope as a limit), <a href="r13f.html">13f</a> (slopes from each side), <a href="r13e.html">13e</a> (chain for slopes), <a href="r14e.html">14e</a> (antiderivative), <a href="r11a.html">11a</a> (continuous at a point), <a href="r10b.html">10b</a> (the limit's lines). <a href="r16c.html">16c</a> uses this step to find areas without sums.</p></div>
+</header>
+
+<section class="class step" data-step="16b1">
+  <h2 class="sthead"><span class="stno">16b1</span>The first fundamental technique</h2>
+  <p class="stands">Stands on 16a (the area function, area-bound) and 11a (continuity).</p>
+  <p data-pid="ae5ec4">Area-slope technique (the fundamental theorem of calculus, first part): <b>let f be integrable on every closed interval inside an interval I, let p be in I, and let F(x) = ∫ₚˣ f(t) dt. If f is continuous at a point c inside I, then F has a slope at c, and F′(c) = f(c). At an end of I that belongs to I, the same is true with the slope from one side.</b></p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the area-slope technique">
+\text{fix } \varepsilon \gt 0;\ \text{call } \delta \gt 0:\ |t - c| \lt \delta \Rightarrow |f(t) - f(c)| \lt \tfrac{\varepsilon}{2} @@ f is continuous at c (11a), at ε/2; shrink δ so [c − δ, c + δ] lies in I
+0 \lt |h| \lt \delta:\ \ F(c + h) - F(c) = \textstyle\int_c^{c+h} f(t)\,dt @@ split-in-any-order (16a)
+f(c) \cdot h = \textstyle\int_c^{c+h} f(c)\,dt @@ the integral of a constant (15c), with 15e's convention if h &lt; 0
+\tfrac{F(c+h) - F(c)}{h} - f(c) = \tfrac1h \textstyle\int_c^{c+h} \big(f(t) - f(c)\big)\,dt @@ areas-add and areas-scale (15e); spread for times over plus
+\big|\textstyle\int_c^{c+h} (f(t) - f(c))\,dt\big| \le \tfrac{\varepsilon}{2}|h| @@ area-bound (16a) on the stretch between c and c + h, where |t − c| ≤ |h| &lt; δ
+\Big|\tfrac{F(c+h) - F(c)}{h} - f(c)\Big| \le \tfrac{\varepsilon}{2} \lt \varepsilon @@ divide by |h| &gt; 0
+\htmlClass{new}{F'(c) = f(c)} \quad \blacksquare @@ 13a's line: the chord slopes have limit f(c) as h → 0; at an end, h of one sign only (13f)
+  </pre>
+  <p data-pid="4f0b40">Its accepted name is the fundamental theorem of calculus, first part. The fraction in the middle line has a plain reading: the area gained over the stretch, divided by the stretch's width, is the average height of f there, in 15f's sense. Continuity says that on a short enough stretch every height is near f(c), and so is any average of them.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · area-slope · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · the strip gained, its average height, and the slope it tends to</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="chips" id="fch"></div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">c</span><input type="range" id="kc" min="-1.5" max="1.5" step="0.05" value="0.5"><output id="oc"></output></div>
+      <div class="kn"><span class="m">h</span><input type="range" id="kh" min="-1" max="1" step="0.01" value="0.6"><output id="oh"></output></div>
+      <div class="cap">Teal: the strip from c to c + h. Gold: the box on the same base with the strip's area, so its height is the average of f on the strip. Dashed: f's least and greatest values there.</div>
+    </div>
+    <div class="panel">
+      <div class="lbl">the average height (F(c + h) − F(c))/h against h</div>
+      <canvas id="cvQ"></canvas>
+      <div class="cap">Ink: the average height for each h, with a hole at h = 0. Ember: f(c). Plum dot: the h on the knob.</div>
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">16b1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">F(x) = ∫₀ˣ t² dt,  h = 0.1</span></span>Guess F(1.1) − F(1) from a strip of height about 1, then find it by 15h. <br>Find the average height of the strip and compare it with f(1).</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="16b2">
+  <h2 class="sthead"><span class="stno">16b2</span>Every continuous function has an antiderivative</h2>
+  <p class="stands">Stands on 16b1, 15f (continuous-is-integrable) and 14e (antiderivatives).</p>
+  <p data-pid="32e3c6">Antiderivative-exists technique: <b>if f is continuous on an interval I and p is in I, then F(x) = ∫ₚˣ f(t) dt is an antiderivative of f on I.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the antiderivative-exists technique">
+\begin{aligned}&f \text{ is integrable on}\\ &\quad\text{every closed interval inside } I\end{aligned} @@ continuous-is-integrable (15f): continuous on a closed interval
+F'(x) = f(x) \text{ for every } x \text{ in } I @@ area-slope at every x, from one side at an end
+\htmlClass{new}{F \text{ is an antiderivative of } f \text{ on } I} \quad \blacksquare @@ 14e's line
+  </pre>
+  <p data-pid="67ca28">Rung 14 asked, given the slope at every input, what was the function, and could only say that any two answers differ by a constant. Now there is always an answer, if the slope given is continuous. It may not be a function anyone can write with powers and roots; it is always the area function.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · antiderivative-exists · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16b2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(t) = t² + 1</span></span>Write an antiderivative of f as an area function from 0. <br>Find its slope at 3 without finding any area.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="16b3">
+  <h2 class="sthead"><span class="stno">16b3</span>The other end, and a moving end</h2>
+  <p class="stands">Stands on 16b2, 15e (the conventions) and 13e (the chain rule).</p>
+  <pre class="lines" data-k="ember" data-label="this step: the lower end, and an end that is itself a function">
+\textstyle\int_x^b f(t)\,dt = -\int_b^x f(t)\,dt @@ 15e's convention
+\htmlClass{new}{\tfrac{d}{dx}\textstyle\int_x^b f(t)\,dt = -f(x)} @@ area-slope for the area function from b; constant-factor for slopes (13d)
+H(x) = \textstyle\int_a^{g(x)} f(t)\,dt = F(g(x)) @@ g has a slope at x, f is continuous at g(x)
+\htmlClass{new}{H'(x) = f(g(x)) \cdot g'(x)} @@ chain for slopes (13e) with outside F, whose slope is f by area-slope
+\text{e.g. } \tfrac{d}{dx}\textstyle\int_0^{x^3} \sqrt{1 + t^2}\,dt = \sqrt{1 + x^6} \cdot 3x^2 @@ g(x) = x³; √(1 + t²) is continuous (11c, 13e's √)
+  </pre>
+  <p data-pid="b2a2c1">Moving-end technique: <b>if f is continuous on an interval I, p is in I, and g has a slope at x with g(x) in I, then (d/dx) ∫ₚ^{g(x)} f(t) dt = f(g(x)) · g′(x).</b> The lines above prove it.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · the other end · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16b3.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f \text{ continuous},"></span> <span data-tex-inline="\int_0^x f(t)\,dt = x^3 - 2x \text{ for all } x"></span></span>Find f(2).</li><li><span class="givens"><span data-tex-inline="\int_p^x f(t)\,dt = x^2 - 9 \text{ for all } x,"></span> <span data-tex-inline="f \text{ continuous}"></span></span>Find f and every p that fits.</li><li><span class="givens"><span data-tex-inline="f \text{ continuous},"></span> <span data-tex-inline="H(x) = \int_0^{2x} f(t)\,dt,"></span> <span data-tex-inline="H'(1) = 10"></span></span>Find f(2).</li><li><span class="givens"><span data-tex-inline="F(x) = \int_0^x (t^2 - 4)\,dt"></span></span>Find the stretch on which F falls as x grows.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="16b4">
+  <h2 class="sthead"><span class="stno">16b4</span>Where f jumps</h2>
+  <p class="stands">Stands on 16b1 to 16b3 and 16a (the step).</p>
+  <pre class="lines" data-k="ember" data-label="this step: area-slope needs continuity at the point">
+f = u,\ a = 0:\ \ F(x) = 0 \ (x \le 0),\ x \ (x \gt 0) @@ 16a
+\text{from the right at 0: } \tfrac{h - 0}{h} = 1;\ \text{from the left: } \tfrac{0 - 0}{h} = 0 @@ the slopes from each side (13f) differ
+F \text{ has no slope at } 0 @@ two-side-slopes (13f)
+s(t) = 1 \ (t = 0),\ 0 \ (t \ne 0):\ \ \textstyle\int_0^x s = 0 \text{ for every } x @@ one point changes no area: the piece holding it shrinks by everyday-counting-passes
+F = 0,\ \ F'(0) = 0 \ne 1 = s(0) @@ F has a slope at 0, and it is not s(0)
+  </pre>
+  <p data-pid="585cb4">Both ways of failing are possible. At a jump, the area function has a joint and no slope. At a single point raised off the graph, the area function has a slope, and it ignores the raised point. <b>Area-slope promises nothing at either.</b></p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · where f jumps · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16b4.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="F(x) = \int_0^x (t^3 + 1)\,dt"></span></span>Find the slope of F at 2.</li><li><span class="givens"><span data-tex-inline="F(x) = \int_4^x \sqrt{1 + t^4}\,dt"></span></span>Find the slope of F at every x.</li><li><span class="givens"><span data-tex-inline="F(x) = \int_x^5 (t^2 - t)\,dt"></span></span>Find the slope of F at every x.</li><li><span class="givens"><span data-tex-inline="F(x) = \int_1^{x^2} (1 + t)^3\,dt"></span></span>Find the slope of F at every x.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="16b5">
+  <h2 class="sthead"><span class="stno">16b5</span>Illegal moves</h2>
+  <p class="stands">Stands on 16b1 to 16b4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\tfrac{d}{dx}\textstyle\int_0^{x^2} f(t)\,dt = f(x^2)\,? @@ the inside's slope 2x is missing: moving-end
+\tfrac{d}{dx}\textstyle\int_x^5 f(t)\,dt = f(x)\,? @@ the moving end is the lower one: −f(x)
+F'(c) = f(c) \text{ for any integrable } f\,? @@ s and u above: continuity at c is needed
+\tfrac{d}{dx}\textstyle\int_0^x f(t)\,dt = f(t)\,? @@ t is a stand-in letter (16a): the answer is f(x)
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16b5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="u \text{ the step},"></span> <span data-tex-inline="f = 1 - u,"></span> <span data-tex-inline="F(x) = \int_0^x f(t)\,dt"></span></span>Find the slopes of F at 0 from each side.<br>Write the hypothesis of area-slope that fails.</li><li><span class="givens"><span data-tex-inline="f(t) = 0 \text{ for } t \ne 3,"></span> <span data-tex-inline="f(3) = 7"></span></span>Find the area function of f from 0, and its slope at 3.</li><li><span class="givens"><span data-tex-inline="f \text{ integrable on } [0, 1],"></span> <span data-tex-inline="f \text{ continuous except at } \tfrac12,"></span> <span data-tex-inline="F(x) = \int_0^x f(t)\,dt"></span></span>Find every point at which area-slope promises that the slope of F is f.</li><li><span class="givens"><span data-tex-inline="F(x) = \int_0^{x^2} t\,dt,"></span> <span data-tex-inline="\text{Claim: } F'(x) = x^2"></span></span>Find the slope of F two ways: by moving-end, and by working out the integral first.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">16b.4.1</span><span class="tagq">build</span>Make an f of your own on [0, 3] that jumps at 1, has one point raised off its graph at 2, and is continuous everywhere else, and find its area function from 0.<br>Find where that area function has slope f, where a slope that is not f, and where no slope.</div>
+  <div class="chq"><span class="chid">16b.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{On 15f: average-slope for } x^2 + x,"></span> <span data-tex-inline="\text{average-height for } 2x + 1,"></span> <span data-tex-inline="\text{the same } c \text{ on one interval}"></span></span>Prove or refute: the two find the same c on every interval.</div>
+  <div class="chq"><span class="chid">16b.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="F(x) = \int_0^x f(t)\,dt,"></span> <span data-tex-inline="F'(c) = f(c)"></span></span>Prove or refute: f is continuous at c.</div>
+  <div class="chq"><span class="chid">16b.4.4</span><span class="tagq">seam</span>A teacher of geometry proved in 1670, by a figure, that the line touching the area curve meets the axis where the first curve's height says it should. He never used it to find an area. In 1916 a historian argued that this teacher, and not the two usual inventors, was the true discoverer of the calculus. Most historians since have said that a technique nobody computes with is not yet the calculus. <br>Is a technique discovered when it is first proved, or when someone first sees what it is for?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r16a.html">← 16a · the area function</a><a href="r16c.html">16c · evaluating by antiderivatives →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>Barrow drew a curve and, beneath it, a second curve whose height at each point was the area under the first up to there. He showed by a figure that a certain line touching the second curve met the axis where the first curve’s height said it would.</p><cite>Barrow, Lectiones geometricae (1670), Lecture X, §11; paraphrase</cite></aside>
+  <p>In 16b.4.4, the teacher is Isaac Barrow; the historian is J. M. Child, and the two usual inventors are Newton and Leibniz.</p>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+/* least and greatest of F.f on [lo, hi]: the ends, F's critical points inside, and a fine sample (exact between critical points for the functions used here) */
+function ext(F,lo,hi){ if(F.dir) return [0,1]; let m=Infinity,M=-Infinity; const t=x=>{ const v=F.f(x); if(v<m) m=v; if(v>M) M=v; };
+  t(lo); t(hi); (F.crit||[]).forEach(c=>{ if(c>lo&&c<hi) t(c); }); for(let k=1;k<64;k++) t(lo+(hi-lo)*k/64); return [m,M]; }
+function sums(F,pts){ let L=0,U=0; const ms=[],Ms=[]; for(let i=1;i<pts.length;i++){ const [m,M]=ext(F,pts[i-1],pts[i]), w=pts[i]-pts[i-1]; ms.push(m); Ms.push(M); L+=m*w; U+=M*w; } return {L,U,ms,Ms}; }
+const eq=(a,b,n)=>Array.from({length:n+1},(_,i)=>a+(b-a)*i/n);
+function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
+function boxes(P,pts,hs,stroke,fill,alpha){ const c=P.ctx; for(let i=1;i<pts.length;i++){ const a=pts[i-1],b=pts[i],h=hs[i-1]; c.globalAlpha=alpha; P.poly([[a,0],[b,0],[b,h],[a,h]],null,fill); c.globalAlpha=1; P.poly([[a,0],[b,0],[b,h],[a,h]],stroke,null,1.2); } }
+function dirDots(P,a,b){ const c=P.ctx; c.fillStyle=col('--ink'); for(let k=0;k<=300;k++){ const x=a+(b-a)*k/300; const y=(k%2)?0:1; c.fillRect(P.X(x)-1,P.Y(y)-1,2,2); } }
+/* shade between the graph of fn and the axis from lo to hi: above in pos colour, below in neg colour */
+function shade(P,fn,lo,hi,pos,neg,alpha){ if(hi<lo){ const t=lo; lo=hi; hi=t; } const c=P.ctx, N=300; c.globalAlpha=alpha==null?0.32:alpha;
+  for(let k=0;k<N;k++){ const x0=lo+(hi-lo)*k/N, x1=lo+(hi-lo)*(k+1)/N, xm=(x0+x1)/2, y=fn(xm); if(!isFinite(y)) continue; P.poly([[x0,0],[x1,0],[x1,fn(x1)],[x0,fn(x0)]],null,y>=0?pos:neg); }
+  c.globalAlpha=1; }
+function rangeOf(fn,lo,hi,pad){ let m=Infinity,M=-Infinity; for(let k=0;k<=400;k++){ const v=fn(lo+(hi-lo)*k/400); if(isFinite(v)){ if(v<m) m=v; if(v>M) M=v; } } if(m>0) m=0; if(M<0) M=0; const p=(M-m)*(pad==null?0.12:pad)||1; return [m-p,M+p]; }
+function chips(el,FN,get,setk,after){ Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===get()) b.className='on'; b.onclick=()=>{ setk(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+const Nw='\\htmlClass{new}';
+function gridFor(sp){ return sp>40?10:sp>16?4:sp>8?2:sp>3?1:sp>1.2?0.5:0.25; }
+function frame2(P,fn,lo,hi,pad){ const w=hi-lo; P.o.x=[lo-0.12*w,hi+0.08*w]; P.o.y=rangeOf(fn,lo,hi,pad==null?0.12:pad); const sx=P.o.x[1]-P.o.x[0], sy=P.o.y[1]-P.o.y[0]; let g=gridFor(sx); while(sy/g>24) g*=2; P.o.grid=g; }
+const num=(f,a,b,n)=>{ n=n||4000; const h=(b-a)/n; let s=0; for(let i=0;i<n;i++) s+=f(a+(i+0.5)*h)*h; return s; };
+const FN={
+  hill:{lab:'1 − t²',f:t=>1-t*t,G:x=>x-x*x*x/3,tex:'(1 - t^2)'},
+  cub:{lab:'t³/3 − t',f:t=>t*t*t/3-t,G:x=>x**4/12-x*x/2,tex:'(\\tfrac{t^3}{3} - t)'},
+  u:{lab:'step u',f:t=>t<0?0:1,G:x=>Math.max(x,0),tex:'u(t)',jump:0},
+  s:{lab:'raised point',f:t=>Math.abs(t)<1e-9?1:0,G:x=>0,tex:'s(t)',pt:0}
+};
+let key='hill';
+const kc=$('kc'),kh=$('kh'),cvF=$('cvF'),cvQ=$('cvQ');
+const H=()=>{ let h=+kh.value; if(Math.abs(h)<0.01) h=h<0?-0.01:0.01; return h; };
+const Q=(c,h)=>(FN[key].G(c+h)-FN[key].G(c))/h;
+const PF=plane(cvF,{x:[-2.6,2.6],y:[-2,2],grid:1,aspect:0.8,draw:P=>drawF(P)});
+const PQ=plane(cvQ,{x:[-1.1,1.1],y:[-2,2],grid:0.5,aspect:0.8,draw:P=>drawQ(P)});
+[[PF,cvF],[PQ,cvQ]].forEach(([P,cv])=>Object.defineProperty(P.o,'aspect',{get:()=>cv.clientWidth>480?0.75:0.9}));
+function strip(c,h){ const lo=Math.min(c,c+h),hi=Math.max(c,c+h); const S=FN[key]; let m=Infinity,M=-Infinity; for(let k=0;k<=400;k++){ const v=S.f(lo+(hi-lo)*k/400); if(v<m) m=v; if(v>M) M=v; } if(S.pt!=null&&S.pt>=lo&&S.pt<=hi){ M=Math.max(M,1); } return {lo,hi,m,M}; }
+function drawF(P){ const S=FN[key], c=+kc.value, h=H(); P.o.y=rangeOf(S.f,-2.6,2.6,0.15); P.axes();
+  const st=strip(c,h); shade(P,S.f,st.lo,st.hi,'--teal','--teal',0.34);
+  const q=Q(c,h); P.poly([[st.lo,0],[st.hi,0],[st.hi,q],[st.lo,q]],'--gold',null,1.8);
+  P.line(st.lo,st.m,st.hi,st.m,'--muted',1.2,[4,3]); P.line(st.lo,st.M,st.hi,st.M,'--muted',1.2,[4,3]);
+  if(S.jump!=null){ P.line(-2.6,0,0,0,'--ink',2.6); P.line(0,1,2.6,1,'--ink',2.6); P.dot(0,1,'--ink',3.5); }
+  else if(S.pt!=null){ P.line(-2.6,0,2.6,0,'--ink',2.6); P.dot(0,1,'--ink',4); }
+  else curve(P,S.f,'--ink',2.6,-2.6,2.6);
+  P.dot(c,S.f(c),'--ember',5); }
+function drawQ(P){ const S=FN[key], c=+kc.value, h=H(), fc=S.f(c); let lo=Infinity,hi=-Infinity;
+  for(let k=-100;k<=100;k++){ if(k===0) continue; const v=Q(c,k/100); if(v<lo) lo=v; if(v>hi) hi=v; } lo=Math.min(lo,fc); hi=Math.max(hi,fc); const p=Math.max(0.3,(hi-lo)*0.15); P.o.y=[lo-p,hi+p]; P.o.grid=(hi-lo)>3?1:0.5; P.axes();
+  P.line(-1.1,fc,1.1,fc,'--ember',1.6,[6,4]);
+  const c2=P.ctx; c2.strokeStyle=col('--ink'); c2.lineWidth=2.4; [[-1,-0.004],[0.004,1]].forEach(([a,b])=>{ c2.beginPath(); for(let k=0;k<=300;k++){ const t=a+(b-a)*k/300; const v=Q(c,t); k?c2.lineTo(P.X(t),P.Y(v)):c2.moveTo(P.X(t),P.Y(v)); } c2.stroke(); });
+  const lim=(S.jump!=null&&Math.abs(c)<1e-9)?null:(S.pt!=null&&Math.abs(c)<1e-9?0:fc);
+  c2.fillStyle=col('--card'); c2.strokeStyle=col('--ink'); c2.lineWidth=1.6; [ lim===null?[Q(c,1e-6),Q(c,-1e-6)]:[lim] ].flat().forEach(v=>{ c2.beginPath(); c2.arc(P.X(0),P.Y(v),4.5,0,7); c2.fill(); c2.stroke(); });
+  P.dot(h,Q(c,h),'--plum',5); }
+function read(){ const S=FN[key], c=+kc.value, h=H(), q=Q(c,h), fc=S.f(c); $('oc').textContent=mm(c,2); $('oh').textContent=mm(h,2);
+  const vd=$('vdF'); let msg, win=false;
+  if(S.jump!=null&&Math.abs(c)<1e-9) msg='At c = 0 the average height is 1 for every h > 0 and 0 for every h < 0. The two sides disagree: F has no slope at 0, and area-slope promised none, since u jumps there.';
+  else if(S.pt!=null&&Math.abs(c)<1e-9) msg='At c = 0 the average height is 0 for every h: F′(0) = 0, but s(0) = 1. area-slope promised nothing, since s is not continuous at 0.';
+  else { const st=strip(c,h); win=Math.abs(q-fc)<0.02; msg='Average height on the strip: '+mm(q,4)+', between the least '+mm(st.m,3)+' and the greatest '+mm(st.M,3)+'. f(c) = '+mm(fc,4)+'; they differ by '+mm(Math.abs(q-fc),4)+'.'; }
+  vd.className='verdict'+(win?' win':''); vd.textContent=msg;
+  tex($('eqF'),R`\begin{gathered}\tfrac{F(c + h) - F(c)}{h} = \tfrac{1}{${mm(h,2)}}\textstyle\int_{${mm(c,2)}}^{${mm(c+h,2)}} ${S.tex}\,dt = ${mm(q,4)}\\ f(${mm(c,2)}) = ${mm(fc,4)}\end{gathered}`,true); }
+function all(){ PF.redraw(); PQ.redraw(); read(); }
+kc.addEventListener('input',all); kh.addEventListener('input',all);
+chips($('fch'),FN,()=>key,k=>{ key=k; },all);
+window.__pic={set:(k,c,h)=>{ [...$('fch').children][Object.keys(FN).indexOf(k)].click(); kc.value=c; kh.value=h; all(); return {q:+Q(c,H()).toFixed(5),fc:FN[k].f(c),txt:$('vdF').textContent}; }};
+all();
+stepper('#sl1',[
+  {k:'ember',kl:'the strip',t:R`F(c + h) - F(c) = \textstyle\int_c^{c+h} f(t)\,dt`,n:`split-in-any-order.`},
+  {k:'ember',kl:'the average height',t:R`\tfrac{F(c+h) - F(c)}{h} - f(c) = \tfrac1h\textstyle\int_c^{c+h}(f(t) - f(c))\,dt`,n:`Subtract the constant's integral.`},
+  {k:'ember',kl:'continuity at c',t:R`|f(t) - f(c)| \lt \tfrac{\varepsilon}{2} \text{ near } c`,n:`So area-bound bounds the integral by ε|h|/2.`},
+  {k:'ember',kl:'area-slope',t:R`${Nw}{F'(c) = f(c)}`,n:`The slope of the area is the height.`}
+],{title:'The slides · area-slope · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'antiderivative-exists',t:R`f \text{ continuous} \Rightarrow \textstyle\int_a^x f \text{ is an antiderivative}`,n:`Every continuous function is a slope.`}
+],{title:'The slides · antiderivative-exists · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'the lower end',t:R`\tfrac{d}{dx}\textstyle\int_x^b f = -f(x)`,n:`15e's convention, then area-slope.`},
+  {k:'ember',kl:'moving-end',t:R`\tfrac{d}{dx}\textstyle\int_a^{g(x)} f = f(g(x))\,g'(x)`,n:`chain for slopes with F outside.`}
+],{title:'The slides · the other end · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'the jump',t:R`f = u:\ \text{slopes } 0 \text{ and } 1 \text{ at } 0`,n:`No slope.`},
+  {k:'ember',kl:'the raised point',t:R`F' (0) = 0 \ne s(0)`,n:`A slope, but not the height.`}
+],{title:'The slides · where f jumps · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`\tfrac{d}{dx}\textstyle\int_0^{x^2} f \ne f(x^2)`,n:`The inside's slope is missing.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

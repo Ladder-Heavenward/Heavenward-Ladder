@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>11b · Sums and products</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:3fr 2fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+table.tt.dem td{text-align:left;font-family:var(--serif)} table.tt.dem td.ok{color:var(--teal);font-weight:600} table.tt.dem td.no{color:var(--ember);font-weight:600}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r11a.html">← 11a continuity</a><a href="r11c.html">next: 11c continuous after continuous →</a></p>
+  <div class="tags"><span class="tag proof">11b · proof</span></div>
+  <h1>Sums and products</h1>
+  <p>If two functions are continuous at an input, so are their sum, their difference and their product, and so is their quotient when the bottom's value there is not 0. The proofs are rung 10's limit techniques, with the values standing where the limits stood. Each technique says a limit of a combination is the combination of the limits. Continuity says each limit is a value. So the combination's limit is the combination's value. This step proves all of it, once from 10c's techniques and once directly from the game. Then it settles a question rung 9 raised: one over the input is continuous wherever it is defined.</p>
+  <p class="gesture">Continuity is a limit that equals a value. The limit techniques carry limits through adding, multiplying and dividing; the values ride along; so continuity rides along too, with one condition: never divide by a value that is 0.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r11a.html">11a</a> (the definition, continuity-unpacked, lines-are-continuous, the step u, one-sided and interval forms), <a href="r10c.html">10c</a> (functions from functions; limits-add, limits-subtract, limits-multiply, bounded-near, constant-factor, power-limit, away-from-zero, reciprocal-limit, limits-divide; the least of several), <a href="r10e.html">10e</a> (sides-too), <a href="r10a.html">10a</a> (lesser-below-both, one-over-x-limit, agreeing-near), <a href="r10d.html">10d</a> (x · q(x) heads to 0), <a href="r08h.html">8h</a> (triangle, size-of-a-product), <a href="r08f.html">8f</a> (square-never-negative). <a href="r11c.html">11c</a> chains continuous functions; <a href="r11d.html">11d</a> builds every polynomial from these techniques; <a href="r11f.html">11f</a> knows where breaks can hide because of them.</p></div>
+</header>
+
+<section class="class step" data-step="11b1">
+  <h2 class="sthead"><span class="stno">11b1</span>Values ride along</h2>
+  <p class="stands">Stands on 11a (continuity) and 10c (limits add, subtract, constant-factor).</p>
+  <p data-pid="55ee83">10c built the functions f + g, f − g, fg, cf, f/g and fⁿ out of f and g, each on its own domain, and proved that their limits are the sums, products and quotients of the limits. Continuous-sums technique: <b>if f and g are continuous at w, then f + g and f − g are continuous at w, and so is cf for every real c.</b></p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the continuous-sums technique, from 10c's limits-add">
+f, g \text{ defined near } a;\ \ a \in \operatorname{dom} f \cap \operatorname{dom} g @@ the definition (11a), unpacked for each
+f + g \text{ defined near } a;\ \ a \in \operatorname{dom}(f + g) @@ 10c's line: dom (f + g) = dom f ∩ dom g; reach min(r_f, r_g) by lesser-below-both
+\lim_{x \to a} (f + g)(x) = \htmlClass{keep}{f(a)} + \htmlClass{keep}{g(a)} @@ limits-add (10c), with L = f(a) and M = g(a): each limit is a value
+= \htmlClass{new}{(f + g)(a)} \quad \blacksquare @@ 10c's line for f + g, at the input a. It lands where it was headed
+  </pre>
+  <p data-pid="387add">The difference is the same column with 10c's limits-subtract, and cf with constant-factor (its domain is dom f). Nothing new was proved: limits-add had done the work, and continuity only asked that the limits it was given be values.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · continuous-sums · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · combine two functions and ask the result at 0</div>
+    <div class="panel">
+      <div class="lbl">f (teal)</div>
+      <div class="chips" role="group" aria-label="f" id="chf"></div>
+      <div class="lbl">g (gold)</div>
+      <div class="chips" role="group" aria-label="g" id="chg"></div>
+      <div class="lbl">the result (ember)</div>
+      <div class="chips" role="group" aria-label="operation" id="cho"></div>
+      <canvas id="cvB"></canvas>
+    </div>
+    <div class="panel">
+      <div class="cap">Teal f, gold g, ember the result of the chosen operation. Dotted graphs are families: q has its fractions at 1 and its irrationals at 0, both in every window. Filled dots are the values at 0; hollow dots are where a side heads when that is not the value. The table asks the three demands of 11a for f, g and the result at 0, and the verdict names the technique that licenses the result, or says that no technique applies and what is true instead.</div>
+      <div class="verdict" id="vdB"></div>
+      <div class="tablewrap"><table class="tt dem" id="tdB"></table></div>
+      <div class="eqbox" id="eqB"></div>
+    </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">11b1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = x²,  g(x) = 5 − x,  at 3</span></span>Show f + g is continuous at 3 by the limit column. <br>Say what continuous-sums needed beyond limits-add.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="11b2">
+  <h2 class="sthead"><span class="stno">11b2</span>The same, directly from the game</h2>
+  <p class="stands">Stands on 11b1 and 11a3 (continuity-unpacked).</p>
+  <p data-pid="001df2">11a's continuity-unpacked lets the proof be played with the input included. It is a little simpler than limits-add's, because there is no input to leave out and no reach to stay inside. <b>Every input of f + g is an input of both, so both promises apply to it.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the continuous-sums technique, by continuity-unpacked">
+\text{let } \varepsilon \gt 0;\ \text{call } \delta_1 \text{ for } f,\ \delta_2 \text{ for } g \text{ at the gap } \htmlClass{new}{\tfrac{\varepsilon}{2}} @@ continuity-unpacked for f and for g: a budget of half the gap each (10c)
+\delta = \min(\delta_1, \delta_2);\ \ x \in \operatorname{dom}(f + g),\ |x - a| \lt \delta @@ the least of the two; x is an input of f and of g
+\begin{gathered}|(f + g)(x) - (f + g)(a)|\\ = |(f(x) - f(a)) + (g(x) - g(a))|\end{gathered} @@ the line for f + g; negative-of-a-sum and middle-swap: regroup
+\begin{gathered}\le |f(x) - f(a)| + |g(x) - g(a)|\\ \lt \tfrac{\varepsilon}{2} + \tfrac{\varepsilon}{2} = \htmlClass{keep}{\varepsilon} \quad \blacksquare\end{gathered} @@ triangle; both promises; same-direction-add
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · by the game · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">11b2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = 2x,  g(x) = 3x,  at 1,  ε = 0.5</span></span>Answer the challenge for f + g by the game, half the gap each. <br>Say why no input has to be left out.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="11b3">
+  <h2 class="sthead"><span class="stno">11b3</span>Products and powers</h2>
+  <p class="stands">Stands on 11b2, 10c (limits-multiply, bounded-near) and 4b (induction).</p>
+  <p data-pid="0b61da">Continuous-products technique: <b>if f and g are continuous at w, then fg is continuous at w, and so is fⁿ for every number n.</b> fg is defined near w, with w an input, as for f + g. 10c's limits-multiply, with L = f(w) and M = g(w), gives lim_{x→w} (fg)(x) = f(w)g(w) = (fg)(w). For powers, 10c's power-limit gives lim fⁿ = f(w)ⁿ, which is fⁿ(w). Or run 4b's induction with continuous-products itself: f⁰ is the constant 1, continuous by lines-are-continuous, and f^S(n) = fⁿ · f. ∎</p>
+  <p data-pid="0d98ce">Played directly from the game, the product needs everything limits-multiply needed. The split f(x)g(x) − f(w)g(w) = f(x)(g(x) − g(w)) + g(w)(f(x) − f(w)) still has a wild factor, f(x), and bounded-near's first promise still tames it: |f(x)| &lt; |f(w)| + 1 near w. The answer is still the least of three reaches. Continuity changes the target, not the work.</p>
+  <pre class="lines" data-k="teal" data-label="from 10c: limits-multiply's recipe, with values for limits">
+\delta_1:\ |f(x)| \lt |f(a)| + 1 @@ bounded-near, at the gap 1: the first promise
+\delta_2:\ |g(x) - g(a)| \lt \tfrac{\varepsilon}{2(|f(a)| + 1)} @@ half the budget, over the ceiling of the other factor
+\delta_3:\ |f(x) - f(a)| \lt \tfrac{\varepsilon}{2(|g(a)| + 1)} @@ the other half; |g(a)| + 1 is never 0
+\delta = \htmlClass{keep}{\min(\delta_1, \delta_2, \delta_3)} @@ every promise at once, the input a included
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · continuous-products · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">11b3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">x ↦ x⁴, at any real w</span></span>Show it is continuous at w, citing a technique for each join. <br>Say how each power uses the one before.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="11b4">
+  <h2 class="sthead"><span class="stno">11b4</span>A recipe, assembled</h2>
+  <p class="stands">Stands on 11b3.</p>
+  <p data-pid="396862">The techniques say a product of continuous functions is continuous without playing a round. <b>But each technique's column is also a recipe, and the recipes assemble.</b> Take x³ at 2, as the product of f(x) = x and g(x) = x², with f(2) = 2 and g(2) = 4, and let the challenger name ε = 0.5.</p>
+  <pre class="lines" data-k="ember" data-label="this step: limits-multiply's recipe, with numbers">
+\delta_1:\ |x| \lt |2| + 1 = 3 @@ bounded-near at the gap 1 for f(x) = x: line-limit's answer to 1 is 1
+\delta_2:\ |x^2 - 4| \lt \tfrac{0.5}{2 \cdot 3} = \tfrac{1}{12} @@ budget over the ceiling of the other factor; square-limit's recipe at 2: min(1, (1/12)/5) = 1/60
+\delta_3:\ |x - 2| \lt \tfrac{0.5}{2 \cdot 5} = 0.05 @@ the other budget, over |g(2)| + 1 = 5; line-limit: 0.05
+\delta = \min(1, \tfrac{1}{60}, 0.05) = \htmlClass{keep}{\tfrac{1}{60}} @@ the least of several
+\big(2 + \tfrac{1}{60}\big)^3 - 8 \approx 0.2017 \lt 0.5 @@ a check at the window's edge, as a number: it lands well inside
+  </pre>
+  <p data-pid="df1a92">The recipe is cautious, as recipes are: the largest reach that wins here is near 0.04, more than twice 1/60. The proof never needed the largest; it needed one that works, named before any input is handed over. Continuity, proved by the technique, guaranteed that such a reach exists for every ε; the recipe shows one.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · the recipe · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">11b4.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = 3x,"></span> <span data-tex-inline="g(x) = 1/x,"></span> <span data-tex-inline="w = 2,"></span> <span data-tex-inline="\varepsilon = 0.5"></span></span>By continuity-unpacked, with line-limit for f and one-over-x-limit for g, each at half the gap, answer the challenge ε for f plus g at w.</li><li><span class="givens"><span data-tex-inline="f(x) = x^2,"></span> <span data-tex-inline="g(x) = 2x - 3,"></span> <span data-tex-inline="w = 1,"></span> <span data-tex-inline="\varepsilon = 0.6"></span></span>Using limits-multiply's recipe, with square-limit for f, answer the challenge ε for f times g at w.</li><li><span class="givens"><span data-tex-inline="h(x) = \dfrac{x + 1}{x^2 - 3}"></span></span>Show that h is continuous at 2, naming each technique and checking its condition, and find its limit at 2.</li><li><span class="givens"><span data-tex-inline="h(x) = \dfrac{1}{x - 3}"></span></span>Show that h is continuous, naming the intervals of its domain.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="11b5">
+  <h2 class="sthead"><span class="stno">11b5</span>Quotients, when the bottom’s value is not 0</h2>
+  <p class="stands">Stands on 11b4 and 10c (away-from-zero, limits-divide).</p>
+  <p data-pid="3bf601">Continuous-quotients technique: <b>if f and g are continuous at w and g(w) ≠ 0, then f/g is continuous at w.</b> The quotient's domain leaves out every input where g is 0. So two things must be checked before 10c's limits-divide can be used: that w is an input of f/g, and that f/g is defined near w.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the continuous-quotients technique">
+g(a) \ne 0,\ \ \lim_{x \to a} g(x) = g(a) @@ given; g is continuous at a
+\text{call } \delta_1:\ |g(x)| \gt \tfrac{|g(a)|}{2} \gt 0 @@ away-from-zero (10c), with M = g(a) ≠ 0: g is not 0 near a
+f/g \text{ defined near } a,\ \text{reach } \min(r_f, r_g, \delta_1) @@ 10c's line for f/g: inputs of both where g is not 0
+a \in \operatorname{dom}(f/g) @@ g(a) ≠ 0
+\lim_{x \to a} \tfrac{f(x)}{g(x)} = \tfrac{f(a)}{g(a)} = \htmlClass{new}{(f/g)(a)} \quad \blacksquare @@ limits-divide with L = f(a), M = g(a) ≠ 0; the line for f/g at a
+  </pre>
+  <p data-pid="de252e">One-over-x-is-continuous technique: <b>1/x is continuous at every input, that is at every w ≠ 0; so 1/x is continuous.</b> 1/x is the quotient of the constant 1 by x ↦ x, both continuous at w by lines-are-continuous, and the bottom's value at w is w ≠ 0: continuous-quotients. ∎ 10a's one-over-x-limit proved the same limit by hand, with a first promise |x − w| &lt; |w|/2. Continuous-quotients did it with away-from-zero, which is that first promise in general.</p>
+  <p data-pid="0c0123">Here rung 9's question about 1/x is answered, and the words need care. 1/x is continuous: at every one of its inputs it lands where it was headed. It is neither continuous nor discontinuous at 0, because 0 is not an input, and 11a's line asks nothing there. What 1/x does near 0, passing every bound on the right and below every bound on the left, 10f has already said. 11f gives such a place a name, a break, of the endless kind.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · continuous-quotients · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">11b5.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">h(x) = (x + 2)/(x² − 4)</span></span>Find every input where continuous-quotients applies. <br>Say what is true of h at 2.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="11b6">
+  <h2 class="sthead"><span class="stno">11b6</span>One side at a time, and many inputs at once</h2>
+  <p class="stands">Stands on 11b5, 10e (sides-too) and 11a5 (root-is-continuous).</p>
+  <p data-pid="c5455d">10e's sides-too proved limits-add, limits-subtract, limits-multiply, constant-factor, power-limit, away-from-zero, reciprocal-limit and limits-divide from one side. So each technique of this step may be carried out side by side. If f and g are continuous from the right at w, so are f + g, f − g, fg, cf and fⁿ, and so is f/g when g(w) ≠ 0. And on sets: if f and g are continuous on a set A of inputs of both, then so is f + g, and the rest. On an interval with ends, the ends are checked from the inside, by the one-sided forms. <b>Continuous functions on an interval add, multiply and divide into continuous functions on that interval, wherever the bottom is not 0.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: continuity built, not played">
+\tfrac{x^3 - 2x}{x^2 + 1} @@ x³ by continuous-products (powers of x, which is continuous by lines-are-continuous); 2x by continuous-sums; the difference by continuous-sums
+x^2 + 1 \ge 1 \gt 0 @@ square-never-negative; order-and-arithmetic-agree: the bottom is never 0
+\text{continuous at every real} @@ continuous-quotients at each a. So it is continuous
+\lim_{x \to 1} \tfrac{x^3 - 2x}{x^2 + 1} = \tfrac{1 - 2}{1 + 1} = \htmlClass{keep}{-\tfrac12} @@ continuous at 1: the limit is the value (11a)
+\tfrac{1}{x^2 - 4}:\ \text{continuous on } (-\infty, -2),\ (-2, 2),\ (2, \infty) @@ continuous-quotients at every input; the bottom is 0 only at ±2 (5h's difference-of-squares, zero-product)
+  </pre>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · built, not played · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">11b6.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = √x · (x + 1)</span></span>Show f is continuous from the right at 0. <br>Say which techniques you carried out side by side.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="11b7">
+  <h2 class="sthead"><span class="stno">11b7</span>What does not pass back</h2>
+  <p class="stands">Stands on 11b1 to 11b6 and 11a7 (the step u).</p>
+  <p data-pid="318457"><b>The techniques run forward only.</b> f + g can be continuous when neither f nor g is: with 11a's step u and 1 − u, the sum is the constant 1. fg can be continuous when neither factor is: u(x) · (1 − u(x)) is 0 at every real. And a product can be continuous when one factor is continuous and the other is continuous nowhere. x is continuous at 0, and q is continuous at no real (11a's nowhere-continuous). Yet x · q(x) is continuous at 0 (11a's continuous-at-one-point). The continuous factor's value at 0 is 0, and that 0 tames the wild one, as 10d's squeeze did.</p>
+  <p data-pid="3294d5">One direction does pass back, for sums. If g and f + g are continuous at w, so is f, since f = (f + g) − g on the inputs of both, and continuous-sums applies to the difference. Turned about, that gives a refutation: a continuous function plus a discontinuous one is never continuous. If f is continuous at w, g is discontinuous at w, and f + g were continuous at w, then g = (f + g) − f would be continuous at w by continuous-sums: clash; refute. ∎ No such move works for products, because dividing by f needs f(w) ≠ 0, which is exactly what x · q(x) at 0 lacks.</p>
+  <section class="slides" id="sl7"><div class="eyebrow">The slides · what does not pass back · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">11b7.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="“x/x \text{ is continuous at } 0,"></span> <span data-tex-inline="\text{by continuous-quotients,}"></span> <span data-tex-inline="\text{since } x \text{ is.}”"></span></span>Find what is wrong, and decide what is true of this function.</li><li>Find two functions, each discontinuous at 0, whose product is continuous at 0 and is not the constant 0.</li><li><span class="givens"><span data-tex-inline="q(x) = 1 \text{ at fractions},\ 0 \text{ elsewhere},"></span> <span data-tex-inline="F(x) = x \cdot q(x),"></span> <span data-tex-inline="G(x) = (x + 1) \cdot q(x),"></span> <span data-tex-inline="\text{For sums: } g = (f + g) - f \text{, so if}"></span> <span data-tex-inline="f \text{ and } f + g \text{ are continuous at}"></span> <span data-tex-inline="w \text{, so is } g \text{.}"></span></span>Decide whether F and G are continuous at 0. <br>Then find the step of the argument for sums that has no version for products.</li><li>Build a function on the reals that agrees with one over x at every real but 0, and prove that no value at 0 makes it continuous at 0.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="11b8">
+  <h2 class="sthead"><span class="stno">11b8</span>Illegal moves</h2>
+  <p class="stands">Stands on 11b1 to 11b7.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+f/g \text{ continuous at } a \text{ because } f \text{ and } g \text{ are}\,? @@ needs g(a) ≠ 0: 1/x at 0 has no value, and is not even asked
+f + g \text{ continuous, so } f \text{ and } g \text{ are}\,? @@ u + (1 − u) is the constant 1; neither summand is continuous at 0
+fg \text{ is discontinuous wherever } g \text{ is}\,? @@ x · q(x) is continuous at 0, and q is continuous nowhere
+\text{continuous-quotients for } \tfrac{x^2 - 1}{x - 1} \text{ at } 1\,? @@ the bottom's value at 1 is 0: 1 is not an input. continuous-quotients says nothing; 11f mends
+\text{limits-multiply's recipe without } \delta_1 @@ bounded-near's first promise is still needed: the wild factor f(x) needs a ceiling
+\text{continuous from the right, so } f + g \text{ is continuous}\,? @@ sides-too gives one side only: the sum is continuous from the right
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">11b8.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">“f and f + g are both discontinuous at 0, so g is too.”</span></span>Which illegal move is this? <br>Find f and g where it fails.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="11b9">
+  <h2 class="sthead"><span class="stno">11b9</span>Running it backwards</h2>
+  <p class="stands">Stands on 11b1 to 11b7.</p>
+  <p data-pid="3efec9">Handed a function built from continuous pieces by adding, taking away, multiplying and dividing, name the technique for each join and check the one condition: no bottom's value is 0 at the input. Handed a combination that is continuous, do not conclude that its pieces are; find out separately, or build a counterexample from u. Handed a sum known continuous and one summand known continuous, the other is continuous too. Found upward; written downward.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">11b9.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{A proof that } 2f + g \text{ is}"></span> <span data-tex-inline="\text{continuous at } w \text{ answered}"></span> <span data-tex-inline="\text{with},"></span> <span data-tex-inline="\min(\varepsilon/8, \varepsilon/6)."></span> <span data-tex-inline="f \text{ and } g \text{ are linear}"></span> <span data-tex-inline="\text{functions.}"></span></span>Find the sizes of their steps.</li><li><span class="givens"><span data-tex-inline="\text{A quotient } f/g \text{ of functions}"></span> <span data-tex-inline="\text{continuous on } \mathbb{R} \text{ is}"></span> <span data-tex-inline="\text{continuous at every real}"></span> <span data-tex-inline="\text{except 1 and } -3 \text{, where it}"></span> <span data-tex-inline="\text{has no value.}"></span></span>Find what must be true of g, and write one such quotient.</li><li><span class="givens"><span data-tex-inline="f \text{ is continuous at 0, and}"></span> <span data-tex-inline="f + g \text{ is discontinuous at 0.}"></span></span>Prove that g is discontinuous at 0.</li><li><span class="givens"><span data-tex-inline="fg \text{ and } g \text{ are continuous at } w"></span> <span data-tex-inline="\text{, and } g(w) \ne 0 \text{.}"></span></span>Prove that f is continuous at w.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">11b.4.1</span><span class="tagq">build</span>Build with the techniques.<ol class="parts" type="a"><li>Write a quotient of continuous functions that is continuous and whose domain is made of exactly four intervals.</li><li><span class="givens"><span data-tex-inline="u(x) = 0 \text{ for } x &lt; 0,\ 1 \text{ for } x \ge 0,"></span> <span data-tex-inline="h(x) = u(x) + x"></span></span>Write a false proof that h is continuous at 0, and find its bad line.</li><li><span class="givens"><span data-tex-inline="g \text{ and } f - g \text{ are continuous at}"></span> <span data-tex-inline="w \text{.}"></span></span>Prove that f is continuous at w.</li></ol></div>
+  <div class="chq"><span class="chid">11b.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="q(x) = 1 \text{ at fractions},\ 0 \text{ elsewhere},"></span> <span data-tex-inline="\text{Continuous-sums, with } c = 0 \text{:}"></span> <span data-tex-inline="h = 0 \cdot q"></span></span>Is h continuous? <br>On which domain, and at which reals?</div>
+  <div class="chq"><span class="chid">11b.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{Continuous-quotients: } f \text{ and}"></span> <span data-tex-inline="g \text{ continuous at } w \text{, with}"></span> <span data-tex-inline="g(w) \ne 0 \text{, give } f/g \text{ continuous}"></span> <span data-tex-inline="\text{at } w \text{.}"></span> <span data-tex-inline="f/g \text{ is continuous at } w \text{.}"></span></span>Must f and g be?</div>
+  <div class="chq"><span class="chid">11b.4.4</span><span class="tagq">seam</span>Many calculus books say 1/x is discontinuous at 0; analysts and topologists say it is continuous, full stop, since 0 is not one of its inputs. <br>Which sentence should a test reward? <br>What does each choice cost when you meet √x at 0, or 1/x²?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r11a.html">← 11a · continuity</a><a href="r11c.html">11c · continuous after continuous →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>q is Dirichlet’s function, after Peter Gustav Lejeune Dirichlet.</p>
+  <p>Accepted names: the techniques of this step are the algebra of continuous functions (sums, products and quotients of continuous functions are continuous).</p>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=v=>{ if(v===null||v===undefined||!isFinite(v)) return '—'; const a=Math.abs(v); let s=a>=100?v.toFixed(1):a>=1?v.toFixed(3):a>=0.001?v.toFixed(4):v.toPrecision(2); if(s.indexOf('.')>=0&&s.indexOf('e')<0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+/* a function: (x, kind) -> value or NaN; kind 'f' (a fraction) or 'i' (an irrational). 0 is a fraction. */
+const U=x=>x>=0?1:0;
+const LIB={
+  x:{lab:'x',tex:'x',f:(x)=>x,cont:true},
+  sq:{lab:'x² + 1',tex:'x^2 + 1',f:(x)=>x*x+1,cont:true},
+  two:{lab:'2',tex:'2',f:()=>2,cont:true},
+  xm:{lab:'x − 1',tex:'x - 1',f:(x)=>x-1,cont:true},
+  u:{lab:'u',tex:'u(x)',f:(x)=>U(x),cont:false},
+  nu:{lab:'1 − u',tex:'1 - u(x)',f:(x)=>1-U(x),cont:false},
+  q:{lab:'q',tex:'q(x)',f:(x,k)=>k==='f'?1:0,cont:false,fam:true}
+};
+const OPS={add:{lab:'f + g',t:'f + g',op:(p,q)=>p+q,th:'CSU'},sub:{lab:'f − g',t:'f - g',op:(p,q)=>p-q,th:'CSU'},mul:{lab:'f · g',t:'fg',op:(p,q)=>p*q,th:'CPD'},div:{lab:'f / g',t:'f/g',op:(p,q)=>q===0?NaN:p/q,th:'CQU'}};
+let fk='u', gk='nu', ok='add';
+function mk(chid,lib,cur,set){ const ch=$(chid); Object.keys(lib).forEach(k=>{ const b=document.createElement('button'); b.textContent=lib[k].lab; if(k===cur()) b.className='on'; b.onclick=()=>{ set(k); [...ch.children].forEach(z=>z.classList.toggle('on',z===b)); all(); }; ch.appendChild(b); }); }
+mk('chf',LIB,()=>fk,k=>fk=k); mk('chg',LIB,()=>gk,k=>gk=k); mk('cho',OPS,()=>ok,k=>ok=k);
+const res=(x,k)=>OPS[ok].op(LIB[fk].f(x,k),LIB[gk].f(x,k));
+/* analysis at 0: value, and for each side and kind the value approached (sampled) */
+function study(fn){ const v=fn(0,'f'); const hs=[1e-5,1e-7]; const side={};
+  for(const s of [-1,1]) for(const k of ['f','i']){ const a=fn(s*hs[0],k), b=fn(s*hs[1],k); side[s+k]=(isFinite(a)&&isFinite(b)&&Math.abs(a-b)<1e-3)?b:(isFinite(a)||isFinite(b)?'bad':'none'); }
+  const defNear=['-1f','-1i','1f','1i'].every(z=>side[z]!=='none');
+  const vals=['-1f','-1i','1f','1i'].map(z=>side[z]);
+  const lim=(defNear&&vals.every(t=>t!=='bad')&&vals.every(t=>Math.abs(t-vals[0])<1e-3))?vals[0]:null;
+  const cont=isFinite(v)&&defNear&&lim!==null&&Math.abs(lim-v)<1e-3;
+  return {v:isFinite(v)?v:null,defNear,lim:lim===null?null:Math.round(lim*1e6)/1e6,cont,side}; }
+const cv=$('cvB');
+const P=plane(cv,{x:[-2,2],y:[-2,3],grid:1,aspect:0.8,draw:P=>draw(P)});
+Object.defineProperty(P.o,'aspect',{get:()=>cv.clientWidth>560?0.78:0.95});
+function curve(c,fn,k,color,w,dash){ let pen=false; c.strokeStyle=col(color); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let prev=null;
+  for(let px=P.X(P.o.x[0]);px<=P.X(P.o.x[1]);px+=0.5){ const x=P.IX(px); if(Math.abs(x)<1e-9||(prev!==null&&Math.sign(prev)!==Math.sign(x))){ pen=false; } prev=x; const y=fn(x,k); if(!isFinite(y)||Math.abs(y)>50){ pen=false; continue; } const sy=P.Y(y); if(!pen){ c.moveTo(px,sy); pen=true; } else c.lineTo(px,sy); }
+  c.stroke(); c.setLineDash([]); }
+function draw(P){ const c=P.ctx; P.axes();
+  const items=[[LIB[fk].f,'--teal',LIB[fk].fam],[LIB[gk].f,'--gold',LIB[gk].fam],[res,'--ember',LIB[fk].fam||LIB[gk].fam]];
+  items.forEach(([fn,cl,fam],i)=>{ const w=i===2?3:2; if(fam){ curve(c,fn,'f',cl,w,[2,4]); curve(c,fn,'i',cl,w,[2,4]); } else curve(c,fn,'f',cl,w); });
+  items.forEach(([fn,cl],i)=>{ const S=study(fn); const seen=new Set(); ['-1f','1f','-1i','1i'].forEach(z=>{ const t=S.side[z]; if(typeof t==='number'&&!(S.v!==null&&Math.abs(t-S.v)<1e-6)&&!seen.has(t.toFixed(4))){ seen.add(t.toFixed(4)); if(Math.abs(t)<50){ c.fillStyle=col('--card'); c.strokeStyle=col(cl); c.lineWidth=2; c.beginPath(); c.arc(P.X(0),P.Y(t),5,0,7); c.fill(); c.stroke(); } } }); if(S.v!==null&&Math.abs(S.v)<50) P.dot(0,S.v,cl,i===2?6:4.5); });
+  c.font='11px IBM Plex Mono, monospace'; c.fillStyle=col('--muted'); c.textAlign='left'; c.fillText('a = 0',P.X(0)+4,14); }
+function word(S){ if(S.v===null) return S.defNear?'without a value at 0 (not an input)':'without a value at 0, and not defined near 0'; if(!S.defNear) return 'not defined near 0'; if(S.cont) return 'continuous at 0'; return S.lim===null?'discontinuous at 0 (no limit)':'discontinuous at 0 (heads to '+fm(S.lim)+', value '+fm(S.v)+')'; }
+function all(){ P.redraw(); const Sf=study(LIB[fk].f), Sg=study(LIB[gk].f), Sr=study(res);
+  let h='<tr><th></th><th>value</th><th>limit</th><th>at 0</th></tr>';
+  [['f',Sf],['g',Sg],[OPS[ok].lab,Sr]].forEach(([n,S])=>{ h+=`<tr><td>${n}</td><td>${S.v===null?'none':fm(S.v)}</td><td>${S.defNear?(S.lim===null?'none':fm(S.lim)):'—'}</td><td class="${S.cont?'ok':'no'}">${word(S)}</td></tr>`; });
+  $('tdB').innerHTML=h;
+  const vd=$('vdB'); const both=Sf.cont&&Sg.cont; const th=OPS[ok].th;
+  if(both&&(ok!=='div'||(Sg.v!==null&&Sg.v!==0))){ vd.className='verdict win'; vd.textContent='Both are continuous at 0'+(ok==='div'?' and g(0) ≠ 0':'')+': technique '+th+' says the result is continuous at 0, and it is.'; }
+  else if(both&&ok==='div'){ vd.className='verdict lose'; vd.textContent='Both are continuous at 0, but g(0) = 0: 0 is not an input of f/g, and continuous-quotients says nothing. '+(Sr.defNear?'The quotient is defined near 0'+(Sr.lim!==null?' and heads to '+fm(Sr.lim)+' (a hole: 11f).':' and has no limit there.'):'The quotient is not even defined near 0.'); }
+  else { vd.className='verdict '+(Sr.cont?'win':'lose'); const mixed=(ok==='add'||ok==='sub')&&(Sf.cont!==Sg.cont); vd.textContent='Not both continuous at 0, so no technique of this step applies. Checked directly, the result is '+word(Sr)+'.'+(Sr.cont?' The techniques run forward only; this one passes anyway.':'')+(mixed?' Continuous plus discontinuous is never continuous: otherwise continuous-sums would make the discontinuous one continuous.':''); }
+  tex($('eqB'),R`\begin{gathered}f(x) = ${LIB[fk].tex},\ \ g(x) = ${LIB[gk].tex}\\ \text{result: } ${OPS[ok].t}\ \ \text{at } a = 0\end{gathered}`,true); }
+window.__pic={set:(f,g,o)=>{ fk=f; gk=g; ok=o; [['chf',LIB,f],['chg',LIB,g],['cho',OPS,o]].forEach(([id,lib,k])=>[...$(id).children].forEach((z,i)=>z.classList.toggle('on',Object.keys(lib)[i]===k))); all(); return $('vdB').textContent; }};
+all();
+
+/* ---------- slides ---------- */
+const N='\\htmlClass{new}', K='\\htmlClass{keep}';
+stepper('#sl1',[
+  {k:'ember',kl:'continuous-sums · 1 of 3',t:R`\begin{gathered}f, g \text{ continuous at } a:\\ \lim f = ${K}{f(a)},\ \ \lim g = ${K}{g(a)}\end{gathered}`,n:`The definition, for each. Both are defined near the point, and the point is an input of both.`},
+  {k:'ember',kl:'continuous-sums · 2 of 3',t:R`\lim_{x\to a}(f + g)(x) = f(a) + g(a)`,n:`10c's limits-add, with values standing where the limits stood.`},
+  {k:'ember',kl:'continuous-sums · 3 of 3',t:R`= ${N}{(f + g)(a)}`,n:`The line for f + g at the point. It lands where it was headed. ∎ limits-subtract and constant-factor give f − g and cf.`}
+],{title:'The slides · continuous-sums · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'by the game · 1 of 2',t:R`\delta = \min(\delta_1, \delta_2) \text{ at the gap } ${N}{\tfrac{\varepsilon}{2}}`,n:`continuity-unpacked for each, half the gap each. No reach needed: every input of f + g is an input of both.`},
+  {k:'ember',kl:'by the game · 2 of 2',t:R`\begin{gathered}|(f+g)(x) - (f+g)(a)|\\ \le |f(x) - f(a)| + |g(x) - g(a)|\\ \lt ${K}{\varepsilon}\end{gathered}`,n:`Regroup, triangle, both promises. ∎`}
+],{title:'The slides · by the game · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'continuous-products',t:R`\begin{gathered}\lim_{x \to a}(fg)(x) = f(a)\,g(a)\\ = ${N}{(fg)(a)}\end{gathered}`,n:`10c's limits-multiply. Powers by power-limit, or by induction with continuous-products from f⁰ = 1.`}
+],{title:'The slides · continuous-products · ← → keys work'});
+stepper('#sl4',[
+  {k:'teal',kl:'from 10c: the recipe',t:R`\delta = \min(\delta_1, \delta_2, \delta_3)`,n:`bounded-near's first promise (its ceiling: the size of f's value, plus 1), and the two budgets. Continuity changes the target, not the work.`}
+],{title:'The slides · the recipe · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'continuous-quotients · 1 of 3',t:R`\begin{gathered}g(a) \ne 0 \;\Rightarrow\\ |g(x)| \gt ${N}{\tfrac{|g(a)|}{2}} \text{ near } a\end{gathered}`,n:`away-from-zero, with g's value as M. So f/g is defined near the point.`},
+  {k:'ember',kl:'continuous-quotients · 2 of 3',t:R`a \in \operatorname{dom}(f/g)`,n:`Because g's value there is not 0.`},
+  {k:'ember',kl:'continuous-quotients · 3 of 3',t:R`\lim_{x\to a}\tfrac{f(x)}{g(x)} = \tfrac{f(a)}{g(a)} = ${N}{(f/g)(a)}`,n:`limits-divide. ∎`},
+  {k:'ember',kl:'one-over-x-is-continuous',t:R`\begin{gathered}\tfrac1x:\ \text{the constant } 1 \text{ over } x\\ a \ne 0\end{gathered}`,n:`lines-are-continuous for the top and the bottom; continuous-quotients. 1/x is continuous at every input, so continuous. 0 is not an input: nothing is asked there.`}
+],{title:'The slides · continuous-quotients · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'one side',t:R`\begin{gathered}\text{from the right: } f + g,\ fg,\\ f/g\ \ (g(a) \ne 0)\end{gathered}`,n:`sides-too (10e): every technique may be carried out side by side, so every technique here may too.`},
+  {k:'ember',kl:'built, not played',t:R`\begin{gathered}\tfrac{x^3 - 2x}{x^2 + 1}\\ x^2 + 1 \ge 1 \gt 0\end{gathered}`,n:`continuous-products, continuous-sums for the top; square-never-negative for the bottom; continuous-quotients. Continuous at every real.`},
+  {k:'ember',kl:'substitute',t:R`\lim_{x \to 1}\tfrac{x^3 - 2x}{x^2 + 1} = ${K}{-\tfrac12}`,n:`Continuous at 1, so the limit is the value.`}
+],{title:'The slides · built, not played · ← → keys work'});
+stepper('#sl7',[
+  {k:'ember',kl:'not back · sums',t:R`u + (1 - u) = ${K}{1}`,n:`A continuous sum of two functions, neither continuous at 0.`},
+  {k:'ember',kl:'not back · products',t:R`\begin{gathered}x \cdot q(x) \text{ continuous at } 0;\\ q \text{ continuous nowhere}\end{gathered}`,n:`The factor x has value 0 at 0, and that tames q (10d, 11a's continuous-at-one-point).`},
+  {k:'ember',kl:'back, for sums',t:R`f = (f + g) - ${N}{g}`,n:`If g and f + g are continuous at a point, so is f, by continuous-sums. Turned about: continuous plus discontinuous is never continuous.`}
+],{title:'The slides · what does not pass back · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

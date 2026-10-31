@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>When the future is not fixed</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+.kn{font-size:.88rem}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r24d.html">← 24d tame rules fix the future</a><a href="r24concl.html">next: 24·∎ the rung’s conclusion →</a></p>
+  <div class="tags"><span class="tag proof">24e · proof</span></div>
+  <h1>When the future is not fixed</h1>
+  <p>The last step needed the rule to be tame, and it promised a solution only for a while. Both limits are real. This step shows two rules that break them. In the first, the slope is the square root of the height, which is not tame near zero: a quantity resting at zero may stay there forever, or start to grow at any moment it likes, and the rule cannot tell which. In the second, the slope is the square of the height, which is tame on every bounded stretch but grows so fast that the solution climbs past every ceiling in a finite time and simply stops existing. A rule on rates fixes the future only when it is tame, and only for as long as the solution stays in bounds.</p>
+  <p class="gesture">A rule that is not tame can let one start have endlessly many futures. A rule that is tame only on bounded stretches can send its solution past every ceiling in a finite time. A rule fixes the future when it is tame, and only while the solution stays bounded.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r24d.html">24d</a> (tame rules fix the future), <a href="r24a.html">24a</a> (a rule and a start), <a href="r13e.html">13e</a> (the chain rule), <a href="r10e.html">10e</a> (one side at a time). <a href="r24f.html">24f</a> begins solving rules by hand.</p></div>
+</header>
+
+<section class="class step" data-step="24e1">
+  <h2 class="sthead"><span class="stno">24e1</span>One start, endlessly many futures</h2>
+  <p class="stands">Stands on 24a2 and 10e (slopes from one side).</p>
+  <p data-pid="827113">Many-futures technique: <b>y′ = √|y| with y(0) = 0 has a different solution for every c ≥ 0: y = 0 for x ≤ c, and y = (x − c)²/4 for x ≥ c.</b> And y = 0 everywhere solves it too.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the many-futures technique">
+x > c:\ y = \tfrac{(x-c)^2}{4},\ y' = \tfrac{x-c}{2} = \sqrt{y} @@ the chain rule; x − c &gt; 0, so √y = (x − c)/2
+x < c:\ y = 0,\ y' = 0 = \sqrt{0} @@ flat
+x = c:\ \text{both sides have slope } 0 @@ (x − c)/2 → 0 from the right; 0 from the left (10e)
+\htmlClass{new}{\text{each } c \ge 0 \text{ gives a solution with } y(0) = 0} \quad \blacksquare @@ the lines above
+  </pre>
+  <p data-pid="c151a3">So 24d's promise of exactly one fails. Which hypothesis is missing? √|y| is continuous, but not tame near 0: (√|y| − 0)/(y − 0) = 1/√y passes every ceiling as y heads to 0. No L can do. Water draining through a hole in a tank obeys a rule of this shape, with the height falling at a rate in proportion to its square root. Run time backwards from an empty tank and the rule cannot say when it emptied.</p>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · y′ = √|y| from y(0) = 0: wait until c, then grow</div>
+    <div id="pl"></div>
+    <div class="kn"><span class="m">c</span><input type="range" id="kn" min="0" max="30" step="1" value="10"><output id="okn"></output></div>
+    <div class="cap">Ink: the solution that rests at 0 until c, then grows like (x − c)²/4. Teal, faint: others with different c. Every one starts at the same place and obeys the same rule.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">24e1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="y&#x27; = 3y^{2/3},\ y(0) = 0"></span></span>Check that y = x³ and y = 0 both solve it on the whole line. <br>Find a third solution, and then endlessly many more. <br>Prove that 3y^(2/3) is not tame on any rectangle holding (0, 0).</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24e2">
+  <h2 class="sthead"><span class="stno">24e2</span>A solution that runs off</h2>
+  <p class="stands">Stands on 24d2 (the existence technique) and 24a2.</p>
+  <p data-pid="3d78f0">Run-off technique: <b>y′ = y² with y(0) = 1 has the solution y = 1/(1 − x) on x &lt; 1, and no solution reaches x = 1.</b> The rule is tame on every bounded rectangle, yet the solution passes every ceiling as x heads to 1.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the run-off technique">
+y = \tfrac{1}{1-x},\ y' = \tfrac{1}{(1-x)^2} = y^2,\ y(0) = 1 @@ the chain rule
+|y^2 - z^2| = |y + z|\,|y - z| \le 2B|y - z| \text{ when } |y|, |z| \le B @@ tame on every rectangle, with L = 2B
+\text{a solution from } (0, 1) \text{ agrees with } \tfrac{1}{1-x} \text{ while both exist} @@ the drift technique (24d3), with equal starts
+\tfrac{1}{1-x} \to \infty \text{ as } x \to 1^- @@ the bottom heads to 0
+\htmlClass{new}{\text{no solution from } (0, 1) \text{ exists on } [0, 1]} \quad \blacksquare @@ it would have to be continuous at 1, hence bounded near 1
+  </pre>
+  <p data-pid="b9e8f5">Why did 24d not see this coming? Its h shrank as the rectangle grew: hM ≤ b and hL &lt; 1 with M = (1 + b)² and L = 2(1 + b). Each step forward is shorter than the one before, and the steps add up to less than 1. A tame rule fixes the future only for as long as the solution stays in bounds.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24e2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="y&#x27; = y^2"></span></span>Find the solution with y(0) = 3, and where it exists. <br>Find the solution with y(0) = −1, and where it exists. <br>Find why the second never runs off going forward, and where it runs off going back.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24e3">
+  <h2 class="sthead"><span class="stno">24e3</span>Illegal moves</h2>
+  <p class="stands">Stands on 24e1 and 24e2.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+y' = \sqrt{|y|},\ y(0) = 0 \Rightarrow y = 0 \text{ only}\,? @@ any wait c, then (x − c)²/4 (24e1)
+y' = y^2 \text{ is tame, so its solution lasts forever}\,? @@ tame on bounded rectangles; the solution leaves every one by x = 1
+y = \tfrac{1}{1-x} \text{ also solves it for } x > 1, \text{ so the solution continues}\,? @@ that piece starts from no point of the first; it is not the same solution
+\text{the solution is unique, so it can be computed forever}\,? @@ unique where it exists; it may stop existing
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24e3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="y&#x27; = \sqrt{|y|},\ y(0) = 0"></span></span>Find y(4) for the solutions that wait until c = 0, 1, 2 and 4. <br>Find which hypothesis of the existence technique fails, and the quotient that shows it.</li><li><span class="givens"><span data-tex-inline="y&#x27; = y^2,\ y(0) = 1"></span></span>Find the x where the solution reaches 10, and where it reaches 100. <br>Find an L that works while |y| ≤ 100, and why no single L works for every y.</li><li><span class="givens"><span data-tex-inline="y&#x27; = y^2"></span></span>Find the value of 1/(1 − x) at x = 2, and the start it solves the rule from. <br>Find whether one function, equal to 1/(1 − x) on both sides of 1, solves the rule on an open interval holding 0 and 2.</li><li><span class="givens"><span data-tex-inline="y&#x27; = y^2,\ y(0) = 1"></span></span>Step forward along tangent lines: y at x + 0.1 is y + 0.1y². Take twelve steps. <br>Find the value the steps give at x = 1.2, and what the true solution has there.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">24e.4.1</span><span class="tagq">build</span>Build a rule y′ = cy² and a rule y′ = cy³ whose solutions from y(0) = 1 both run off at exactly x = 2. <br>Check each in its rule, and find where each solution reaches 10.</div>
+  <div class="chq"><span class="chid">24e.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="y&#x27; = |y|^p,\ y(0) = 0"></span> <span class="gtx">p &gt; 0</span></span>Find the p for which this rule is tame near y = 0. <br>For p = ⅔ and p = 0.9, find a solution that waits until c and then rises, and check it. <br>Find its value at x = c + 10 for p = 0.99, and what that shows as p heads to 1.</div>
+  <div class="chq"><span class="chid">24e.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="y&#x27; = \sqrt{|y|},\ y(4) = 1"></span></span>From y(0) = 0 the futures branch going forward. Turn it round: start where y is positive, and run time both ways. <br>Prove that forward from x = 4 there is only one solution. <br>Find how many pasts it has before x = 4, and write two of them.</div>
+  <div class="chq"><span class="chid">24e.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="y&#x27; = y^2,\ y(0) = 1"></span></span>Prove that no solution reaches x = 1, without the drift technique. <br>Prove that a solution rises for x ≥ 0 while it exists, and find the slope of 1/y.</div>
+  <div class="chq"><span class="chid">24e.4.5</span><span class="tagq">seam</span>A mathematician wrote in 1814 that an intellect which knew every force in nature, and where every thing is, would see the future as plainly as the past. In 2003 a philosopher described a dome, shaped so that a ball on it is pushed outward with a force in proportion to the square root of its distance from the top, measured along the surface. In suitable units that distance r obeys r″ = √r. A ball sits at rest on the very top. <br>Check that r = 0 for all time obeys the rule and the start. Check that r = 0 until a time T, and (t − T)⁴/144 after it, obeys them too. <br>Which hypothesis of 24d fails? <br>Do the laws of motion fix the future, or only tame forces do? Is the dome a fact about the laws, or about an object no one could build?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r24d.html">← 24d · tame rules fix the future</a><a href="r24concl.html">24·∎ · the rung’s conclusion →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The many-futures rule is a standard example of non-uniqueness for a non-Lipschitz equation (Peano's example); the run-off is finite-time blow-up. A solution that cannot be continued past a point has a maximal interval of existence. The draining rule is Torricelli's law.</p>
+  <h3>Who said it first</h3>
+  <p>Giuseppe Peano gave rules with many solutions from one start in 1890, the year he proved that continuity alone gives at least one. Evangelista Torricelli found the draining rule in 1643. In 24e.4.5, the mathematician is Pierre-Simon Laplace (A Philosophical Essay on Probabilities, 1814), and the philosopher John D. Norton (2003); the shape is Norton's dome.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+/* sequence and sum plots for rungs 22 on: plot({xlo,xhi,ylo,yhi,series:[{pts,c,dots,open,w}],h:[{y,c,dash,t}]}) */
+const V=c=>'var('+c+')';
+function plot(o){ const W=320,H=220,P=26, X=x=>P+(x-o.xlo)/(o.xhi-o.xlo)*(W-P-6), Y=y=>H-P-(y-o.ylo)/(o.yhi-o.ylo)*(H-P-8);
+  let s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;max-width:380px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  s+='<line x1="'+P+'" y1="'+Y(Math.max(o.ylo,Math.min(o.yhi,0)))+'" x2="'+W+'" y2="'+Y(Math.max(o.ylo,Math.min(o.yhi,0)))+'" style="stroke:'+V('--grid')+';stroke-width:1.4"/>';
+  s+='<line x1="'+P+'" y1="0" x2="'+P+'" y2="'+(H-P)+'" style="stroke:'+V('--grid')+';stroke-width:1.4"/>';
+  (o.ticks||[]).forEach(t=>{ s+='<text x="2" y="'+(Y(t)+4)+'" style="font-size:10px;fill:'+V('--ink')+'">'+t+'</text>'; });
+  (o.h||[]).forEach(l=>{ s+='<line x1="'+P+'" y1="'+Y(l.y)+'" x2="'+W+'" y2="'+Y(l.y)+'" style="stroke:'+V(l.c||'--teal')+';stroke-width:1.4;stroke-dasharray:'+(l.dash||'5 4')+'"/>'; if(l.t) s+='<text x="'+(W-4)+'" y="'+(Y(l.y)-4)+'" text-anchor="end" style="font-size:10px;fill:'+V(l.c||'--teal')+'">'+l.t+'</text>'; });
+  (o.series||[]).forEach(q=>{ const pts=q.pts.filter(p=>isFinite(p[1])&&p[1]>=o.ylo-1e9);
+    if(q.open) s+='<polyline points="'+pts.map(p=>X(p[0])+','+Y(Math.max(o.ylo,Math.min(o.yhi,p[1])))).join(' ')+'" style="fill:none;stroke:'+V(q.c||'--ink')+';stroke-width:'+(q.w||1.6)+'"/>';
+    if(q.dots!==false) pts.forEach(p=>{ if(p[1]>=o.ylo&&p[1]<=o.yhi) s+='<circle cx="'+X(p[0])+'" cy="'+Y(p[1])+'" r="'+(q.r||2.4)+'" style="fill:'+V(q.c||'--ink')+'"/>'; }); });
+  return s+'</svg>'; }
+
+let c=10; const e=$('kn'); e.addEventListener('input',()=>{ c=+e.value; draw(); });
+const sol=(x,cc)=>x<=cc?0:(x-cc)*(x-cc)/4;
+function draw(){ const cc=c/10, ser=[]; [0,0.5,1,1.5,2,2.5].forEach(k=>{ const q=[]; for(let i=0;i<=120;i++){ const x=i/40; q.push([x,sol(x,k)]); } ser.push({pts:q,c:'--teal',open:true,dots:false,w:0.8}); });
+  const pts=[]; for(let i=0;i<=120;i++){ const x=i/40; pts.push([x,sol(x,cc)]); }
+  $('pl').innerHTML=plot({xlo:0,xhi:3,ylo:-0.1,yhi:2.4,ticks:[0,1,2],series:ser.concat([{pts,c:'--ink',open:true,dots:false,w:2.4}])});
+  $('okn').textContent=cc.toFixed(1);
+  const v=$('vd'); v.className='verdict'; v.textContent='c = '+cc.toFixed(1)+': y stays at 0 until x = '+cc.toFixed(1)+', and at x = 3 it is '+sol(3,cc).toFixed(3)+'.'; }
+draw();
+window.__pic={set:j=>{ c=j; draw(); return $('vd').textContent; }};
+
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>11d · Every polynomial is continuous</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:3fr 2fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+#cvP{touch-action:none;cursor:ew-resize}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:3.5em;text-align:right}
+table.tt.peel td{text-align:left} table.tt.peel tr.on td{background:var(--sand)} table.tt.peel tr{cursor:pointer}
+table.tt.peel td.lic{font-family:var(--serif);font-size:.85rem;color:var(--muted)}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r11c.html">← 11c continuous after continuous</a><a href="r11e.html">next: 11e a joint doesn't break continuity →</a></p>
+  <div class="tags"><span class="tag proof">11d · proof</span></div>
+  <h1>Every polynomial is continuous</h1>
+  <p>Two bricks and two ways of joining them build every polynomial. The bricks are a constant and the input itself, both continuous by 11a's lines-are-continuous. The joins are adding and multiplying, both of which keep continuity by 11b. What is needed is a plan that builds each polynomial from these in finitely many joins, and an induction that carries continuity along the plan. The plan is to peel: take the constant term off, and what is left is the input times a polynomial of degree one less. So the induction runs on the degree, 9g's measure of a polynomial, and every polynomial, at every real, lands where it was headed.</p>
+  <p class="gesture">Peel the constant term off: a polynomial of degree one more is a constant plus the input times a polynomial of degree one less. A product and a sum carry continuity up one degree; induction carries it up every degree.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r09g.html">9g</a> (polynomials, coefficients, degree, the zero polynomial, Σ with real terms, same-coefficients, at-most-n-zeros, rational functions), <a href="r04j.html">4j</a> (Σ's lines, first-term-off, factor-out), <a href="r04b.html">4b</a> (induction), <a href="r08f.html">8f</a> (powers of a real: power-zero, power-of-a-next read in ℝ), <a href="r11a.html">11a</a> (lines-are-continuous, continuity-unpacked), <a href="r11b.html">11b</a> (continuous-sums, continuous-products, continuous-quotients), <a href="r11c.html">11c</a> (continuous-after-continuous, chain-at-an-edge, limit-passes-inside), <a href="r10c.html">10c</a> (substitution), <a href="r09a.html">9a</a> (equal-functions). <a href="r11f.html">11f</a> hunts breaks only where a polynomial's bottom is 0; <a href="r11chem.html">11·chem</a> reads its pieces as continuous; rung 12 asks what continuity buys a polynomial on a whole interval.</p></div>
+</header>
+
+<section class="class step" data-step="11d1">
+  <h2 class="sthead"><span class="stno">11d1</span>Two bricks, two joins</h2>
+  <p class="stands">Stands on 11a4 (lines-are-continuous) and 11b (sums, products).</p>
+  <p data-pid="7a4d68">A constant c is continuous at every real, and so is x ↦ x (lines-are-continuous). If f and g are continuous at w, so are f + g and fg (continuous-sums, continuous-products). x² is x · x; 3x² is 3 · x²; 3x² + 1 is that plus 1. <b>Every polynomial you can write is built this way, in finitely many joins.</b> But “every polynomial you can write” is not a set the ladder can induct on; 9g's polynomials, with their coefficients and degrees, are. The proof needs a single step that turns a polynomial of one degree into one of the next, built only from bricks and joins.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · bricks and joins · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">11d1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">5x³ − x</span></span>Build it from the bricks c and x, naming each join. <br>Name the technique that makes each join continuous.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="11d2">
+  <h2 class="sthead"><span class="stno">11d2</span>Peeling a power</h2>
+  <p class="stands">Stands on 11d1, 4j (Σ) and 9g (polynomials).</p>
+  <p data-pid="52a5d4">Peel-off-the-constant technique: <b>for every number n and reals a₀, a₁, ⋯, a_S(n), and every real x, Σ_{k≤S(n)} a_k x^k = a₀ + x · Σ_{k≤n} a_S(k) x^k.</b> The sum on the right of x has the coefficients a₁, a₂, ⋯, a_S(n): the old list with its first entry taken off, each moved down one place.</p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the peel-off-the-constant technique">
+\textstyle\sum_{k \le S(n)} a_k x^k = \sum_{k \lt S(S(n))} a_k x^k @@ 4j's line: Σ over k ≤ m is Σ over k &lt; S(m)
+= a_0 x^0 + \textstyle\sum_{k \lt S(n)} a_{S(k)}\, x^{\htmlClass{new}{S(k)}} @@ first-term-off (4j), with real terms (9g): split off the first term
+= a_0 + \textstyle\sum_{k \lt S(n)} a_{S(k)}\,(\htmlClass{new}{x^k \cdot x}) @@ power-zero: x⁰ = 1, times-one on ℝ; power-of-a-next: x^S(k) = x^k · x (8f's powers of a real)
+= a_0 + \textstyle\sum_{k \lt S(n)} \htmlClass{new}{x} \cdot (a_{S(k)}\, x^k) @@ regroup for times on ℝ, turn-about for times on ℝ: regroup, turn about
+= a_0 + \htmlClass{keep}{x} \cdot \textstyle\sum_{k \le n} a_{S(k)}\, x^k \quad \blacksquare @@ factor-out (4j): a factor comes out; 4j's line back
+  </pre>
+  <p data-pid="cb71a0">If the old list's last coefficient a_S(n) is not 0, the old sum has degree S(n). The new sum's last coefficient is that same a_S(n), now at the power n: degree n. So peeling lowers the degree by exactly one and keeps the leading coefficient. Done again and again, it writes a polynomial inside out:</p>
+  <pre class="lines" data-k="ember" data-label="this step: peeling all the way">
+2x^3 - 3x^2 + 5x - 7 @@ degree 3, coefficients −7, 5, −3, 2 (9g's order: a₀ first)
+= -7 + x\,(5 - 3x + 2x^2) @@ peel-off-the-constant once: degree 2 inside
+= -7 + x\,(5 + x\,(-3 + 2x)) @@ peel-off-the-constant again: degree 1 inside
+= -7 + x\,(5 + x\,(-3 + x \cdot \htmlClass{keep}{2})) @@ and again: degree 0 inside, the constant 2
+\text{at } 2:\ \ 2 \to -3 + 2 \cdot 2 = 1 \to 5 + 2 \cdot 1 = 7 \to -7 + 2 \cdot 7 = \htmlClass{new}{7} @@ evaluated from the inside out: three multiplications and three additions
+  </pre>
+  <p data-pid="87cbb4">Evaluating a polynomial from the inside out like this is an old method, written up in a paper of 1819 and much older than that. Here it is the plan of the proof: each line of the peeling is one product and one sum. Its accepted name is Horner’s method, after the author of that paper.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · peel · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · peel a polynomial, and play the game at any input</div>
+    <div class="panel">
+      <div class="chips" role="group" aria-label="degree" id="dch"></div>
+      <canvas id="cvP"></canvas>
+      <div class="kn" id="knobs"></div>
+    </div>
+    <div class="panel">
+      <div class="cap">The ember graph is p. Drag across the picture, or use the w knob, to choose the input w; the gold band is the target, within ε of p(w), and the grey window is the largest reach that wins the game at w (11a's continuity-unpacked, with w included)
+. The table peels p: each row is a constant plus x times the row above, with its value at w, computed from the top down, and the licence that makes it continuous. Tap a row to draw that polynomial in teal.</div>
+      <div class="tablewrap"><table class="tt peel" id="tp"></table></div>
+      <div class="eqbox" id="eqP"></div>
+    </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">11d2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">p(x) = 3x² − 4x + 1</span></span>Peel p all the way. <br>Evaluate p at 2 from the inside out.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="11d3">
+  <h2 class="sthead"><span class="stno">11d3</span>Every polynomial is continuous</h2>
+  <p class="stands">Stands on 11d2 and 4b (induction).</p>
+  <p data-pid="f4e8d4">Polynomials-are-continuous technique: <b>every polynomial is continuous at every real.</b> The proof is 4b's induction, on the number n that a polynomial's sum runs up to. For a polynomial of degree n that number is its degree. The induction does not need the last coefficient to be nonzero, so it covers every polynomial of degree n, and the zero polynomial too, with no case left over.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the polynomials-are-continuous technique, by induction on the degree">
+\varphi(n):\ \text{for all reals } a_0, \cdots, a_n,\ x \mapsto \textstyle\sum_{k \le n} a_k x^k \text{ is continuous at every real} @@ name the condition first (4b's shape); 2b's φ
+\text{base: } \textstyle\sum_{k \le 0} a_k x^k = a_0 x^0 = \htmlClass{new}{a_0} @@ Σ's lines, power-zero: a constant
+\text{continuous at every real} @@ lines-are-continuous with step 0. So φ(0)
+\text{step: let } n \in \mathbb N;\ \text{assume } \varphi(n);\ \text{let } a_0, \cdots, a_{S(n)} \text{ be reals} @@ the induction hypothesis
+p(x) = a_0 + x \cdot \htmlClass{new}{q(x)},\ \ q(x) = \textstyle\sum_{k \le n} a_{S(k)}\,x^k @@ peel-off-the-constant, at every real x; equal-functions: p and x ↦ a₀ + x · q(x) are one function
+q \text{ continuous at every real} @@ φ(n), used with the reals a₁, ⋯, a_S(n): the hypothesis
+x \cdot q(x) \text{ continuous at every real} @@ x by lines-are-continuous; continuous-products
+p \text{ continuous at every real} @@ the constant a₀ by lines-are-continuous; continuous-sums. So φ(S(n))
+\forall n \in \mathbb N\ \varphi(n) \quad \blacksquare @@ the induction technique (4b)
+  </pre>
+  <p data-pid="2df915">9g's line says a polynomial is a function p for which there are a number n and reals a₀, ⋯, a_n with p(x) = Σ_{k≤n} a_k x^k at every x. Use a some; φ(n) at those reals; and p is continuous at every real. So every polynomial is continuous, in 11a's sense, on ℝ. Each polynomial of degree S(n) was continuous because one of degree n was: the induction climbs the degrees, one product and one sum per rung.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · polynomials-are-continuous · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">11d3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="p(x) = x^4 + 1"></span></span>Peel p, writing every middle row, and check that peel-off-the-constant still applies when a coefficient is 0.</li><li><span class="givens"><span data-tex-inline="\text{Suppose}"></span> <span data-tex-inline="\text{polynomials-are-continuous&#x27;s}"></span> <span data-tex-inline="\varphi(n) \text{ said “for all reals}"></span> <span data-tex-inline="a_0, \cdots, a_n \text{ with } a_n \ne 0 \text{”.}"></span></span>Decide whether the step still goes through, which polynomial is then left out, and what covers it.</li><li><span class="givens"><span data-tex-inline="h(x) = \sqrt{x^2 - 4}"></span></span>Decide whether h is continuous at 2, at 3 and at 0, naming the technique, or the reason the question cannot be asked.</li><li><span class="givens"><span data-tex-inline="“\dfrac{x^3 - 8}{x - 2} \text{ is continuous at } 2,"></span> <span data-tex-inline="\text{because it is a polynomial},"></span> <span data-tex-inline="\text{in disguise.}”"></span></span>Find what is true and what is not.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="11d4">
+  <h2 class="sthead"><span class="stno">11d4</span>Another road to the same place</h2>
+  <p class="stands">Stands on 11d3 and 10c (substitution).</p>
+  <p data-pid="2efd77">10c's substitution already said lim_{x→w} p(x) = p(w) for every polynomial p and real w, and read with 11a's line that is this technique. Substitution's road was different: an induction on the number of terms, adding one term a_k x^k at a time. Each term headed to its value by power-limit and constant-factor, and the sum by limits-add. Here the road multiplies by x and adds a constant at each step. Two inductions, two plans of building, one conclusion. <b>When two roads reach the same place, a proof by either is a proof.</b> Seeing both is seeing why the conclusion does not depend on how you write the polynomial.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · the other road · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">11d4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">p(x) = x³ − 2x,  at 3</span></span>Find lim_{x→3} p(x) by 10c’s substitution. <br>Say what 11a’s line adds to that answer.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="11d5">
+  <h2 class="sthead"><span class="stno">11d5</span>On every interval, and from every side</h2>
+  <p class="stands">Stands on 11d4, 11a5 (continuous-both-ways) and 10a5 (agreeing-near).</p>
+  <p data-pid="8955e9">Polynomials-are-continuous says more than it seems to. <b>A polynomial is continuous at every real, so by 11a's continuous-both-ways it is continuous from the left and from the right at every real too.</b> So it is continuous on every interval in 11a's sense: at an end that belongs to the interval only the inside side is asked, and that side is given. x³ − 4x is continuous on [0, 2], on [−5, ∞), on (1, 3]: on any interval anyone names. That is the form rung 12 will lean on.</p>
+  <p data-pid="51f188">The same is true for every piece of a function given by polynomials on intervals. Inside each piece, 10a's agreeing-near makes the function continuous wherever its piece is, and by polynomials-are-continuous that is everywhere inside. So for a function made of polynomial pieces, the only suspects are where the pieces meet, and 11e decides those. And notice what the proof itself never did: it never chose an answer δ. Every round of the game was won by the techniques of 11b, which won their own rounds once and for all. The induction only says which technique to cite at each degree. If you want a δ for a particular polynomial, input and ε, run the techniques' recipes from the inside of the peeling out, as 11b assembled one for x³.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">11d5.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = x² for x < 1,  f(x) = 3 − 2x for x ≥ 1</span></span>Say where f is continuous inside its pieces. <br>Decide whether f is continuous at 1.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="11d6">
+  <h2 class="sthead"><span class="stno">11d6</span>Rational functions, and chains with polynomials</h2>
+  <p class="stands">Stands on 11d5, 11b5 (continuous-quotients) and 11c (chains).</p>
+  <p data-pid="76f0bc">Rational-functions-are-continuous technique: <b>for polynomials p and q with q not the zero polynomial, p/q is continuous at every input; and p/q is continuous.</b> At an input w, q(w) ≠ 0, so continuous-quotients applies to the continuous p and q. Its domain is ℝ without the zeros of q, of which there are at most the degree of q (9g's at-most-n-zeros). Listed in order (three-way-order on ℝ compares any two), they cut ℝ into finitely many intervals, and p/q is continuous on each. ∎</p>
+  <pre class="lines" data-k="ember" data-label="this step: substituting, licensed">
+\lim_{x \to 2} (x^3 - 4x + 1) = 8 - 8 + 1 = \htmlClass{keep}{1} @@ polynomials-are-continuous: continuous at 2, so the limit is the value
+\lim_{x \to -1} \tfrac{x^2 + 3x}{x - 2} = \tfrac{1 - 3}{-3} = \htmlClass{keep}{\tfrac23} @@ rational-functions-are-continuous: −1 is an input (the bottom is −3 there)
+\lim_{x \to 3} \sqrt{x^2 + 7} = \sqrt{16} = \htmlClass{keep}{4} @@ polynomials-are-continuous inside, root-is-continuous outside at 16 &gt; 0: continuous-after-continuous
+\sqrt{x^2 - 2x + 2} = \sqrt{(x - 1)^2 + 1} @@ 8i's completing the square: the inside is at least 1 (square-never-negative)
+\text{continuous at every real} @@ polynomials-are-continuous, root-is-continuous, continuous-after-continuous
+  </pre>
+  <p data-pid="4dff6b">Where the inside of a root can be 0, the edge form is needed. √(x² − 1) is continuous at every w with |w| &gt; 1 by continuous-after-continuous. At 1 and −1 it is continuous only from the outer side, where x² − 1 ≥ 0 (chain-at-an-edge's round, played on that side). And a fraction is continuous at its inputs only. (x² − 1)/(x − 1) is a rational function with no input 1, and rational-functions-are-continuous says nothing there; 11f mends it.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · rational functions · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">11d6.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="p(x) = 4x^3 + x^2 - 2x + 6"></span></span>Peel p all the way, and evaluate it at −1 from the inside out.</li><li><span class="givens"><span data-tex-inline="p(x) = 2x^2 - x + 3"></span></span>Unfold polynomials-are-continuous's induction for p: write the polynomials it passes through, and the technique used at each.</li><li><span class="givens"><span data-tex-inline="h(x) = \dfrac{x^2 + 1}{x^2 - 5x + 6}"></span></span>Find where h is continuous, naming the intervals, and find its limit at 1.</li><li><span class="givens"><span data-tex-inline="u(x) = 0 \text{ for } x &lt; 0,\ 1 \text{ for } x \ge 0"></span></span>With polynomials-are-continuous, prove in two lines that u is not a polynomial.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="11d7">
+  <h2 class="sthead"><span class="stno">11d7</span>Where the bricks stop</h2>
+  <p class="stands">Stands on 11d6 and 8h (size).</p>
+  <p data-pid="f84067">Not every continuous function is built from these bricks. Size-is-not-a-polynomial technique: <b>there is no polynomial p with p(x) = |x| for every real x.</b> Suppose there were, with p(x) = Σ_{k≤n} a_k x^k; padding with zero coefficients, take n ≥ 1. Then p agrees with x ↦ x at the n + 1 reals 1, 2, ⋯, n + 1, since |x| = x there. 9g's same-coefficients gives a₁ = 1 and every other a_k = 0, so p(x) = x for every x. But p(−1) = −1 and |−1| = 1. Clash; refute. ∎ So |x| needs its own proof of continuity: 11c gave one as a chain, and 11e gives the one that matters.</p>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · size-is-not-a-polynomial · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">11d7.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = |x − 1|</span></span>Say whether f is continuous on ℝ. <br>Say whether f is a polynomial: shift the input by 1 to reach size-is-not-a-polynomial.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="11d8">
+  <h2 class="sthead"><span class="stno">11d8</span>Illegal moves</h2>
+  <p class="stands">Stands on 11d1 to 11d7.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\begin{aligned}&\text{a fraction of polynomials}\\ &\quad\text{is continuous at every real}\,?\end{aligned} @@ only at its inputs: 1/(x − 2) has no value at 2
+\tfrac{x^2 - 1}{x - 1} \text{ is a polynomial, so continuous at } 1\,? @@ it has no input 1, so it is not the polynomial x + 1, which does (9a's equal-functions)
+\begin{aligned}&\text{peel-off-the-constant: the}\\ &\quad\text{inside has degree } S(n) - 2\,?\end{aligned} @@ peeling lowers the degree by exactly one: from S(n) to n
+\text{the induction needs } a_n \ne 0 \text{ at every step}\,? @@ φ(n) is for all reals a₀, ⋯, a_n: zero coefficients included, so no case is lost
+\begin{aligned}&|x| \text{ is continuous by}\\ &\quad\text{polynomials-are-continuous}\,?\end{aligned} @@ |x| is no polynomial (size-is-not-a-polynomial). 11c's chain-at-an-edge or 11e's direct proof is the licence
+\lim_{x \to 2} \tfrac{x^2 - 4}{x - 2} = \tfrac{0}{0}\,? @@ 2 is not an input: rational-functions-are-continuous says nothing. Factor and cancel (10f), and 11f mends
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">11d8.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">“Two polynomial pieces glued at 0 make a function continuous at 0.”</span></span>Which illegal move is this? <br>Find a glued function that fails at 0.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="11d9">
+  <h2 class="sthead"><span class="stno">11d9</span>Running it backwards</h2>
+  <p class="stands">Stands on 11d1 to 11d7.</p>
+  <p data-pid="5b57df">Handed a polynomial, peel it to see its plan, or simply cite polynomials-are-continuous. Handed a limit of a polynomial or a rational function at an input, substitute. Handed values, use continuity backwards: a polynomial of degree 2 with limits 4, 1 and 2 at 1, 0 and −1 has those values there, and three values fix its three coefficients. Handed a function that looks like a polynomial, check it is one: the same inputs, and the same values at every one. Found upward; written downward.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">11d9.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="p(x) = 3 + x(-1 + x(2 + 5x))"></span></span>Write p as a sum of powers, with its degree and leading coefficient.</li><li><span class="givens"><span data-tex-inline="\text{A rational function is}"></span> <span data-tex-inline="\text{continuous on } (-\infty, -1) \text{,}"></span> <span data-tex-inline="(-1, 4) \text{ and } (4, \infty) \text{, and}"></span> <span data-tex-inline="\text{nowhere else is asked.}"></span></span>Write one whose top is not constant.</li><li><span class="givens"><span data-tex-inline="“\text{by the hypothesis,}"></span> <span data-tex-inline="x^2 + 4x \text{ is continuous,}"></span> <span data-tex-inline="\text{so } x^3 + 4x^2 - 1 \text{ is.}”"></span></span>Find the reals it used the hypothesis with, and decide whether the step is right.</li><li><span class="givens"><span data-tex-inline="\text{Two polynomials agree on}"></span> <span data-tex-inline="\text{some neighbourhood of 2.}"></span></span>Prove that they have the same value at 2.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">11d.4.1</span><span class="tagq">build</span>Build inductions of your own.<ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = (x - 1)^n"></span></span>By induction on n, prove that f is continuous at every real, for every number n, without expanding.</li><li>Build a chain with a polynomial inside and one over r outside that is continuous at every real except exactly three, where it has no value.</li><li><span class="givens"><span data-tex-inline="r(x) = \sqrt{x} \text{ on } [0, \infty),"></span> <span data-tex-inline="p \text{ is a polynomial.}"></span></span>By at-most-n-zeros, prove that r is not the restriction of p.</li></ol></div>
+  <div class="chq"><span class="chid">11d.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="f(x) = 0"></span></span>Is f covered by polynomials-are-continuous? <br>What is its degree, and does the induction need one?</div>
+  <div class="chq"><span class="chid">11d.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{Polynomials-are-continuous:}"></span> <span data-tex-inline="\text{every polynomial is}"></span> <span data-tex-inline="\text{continuous at every real.}"></span> <span data-tex-inline="f \text{ is continuous at every}"></span> <span data-tex-inline="\text{real.}"></span></span>Must f be a polynomial?</div>
+  <div class="chq"><span class="chid">11d.4.4</span><span class="tagq">seam</span>A famous textbook of 1748 took a function to be an expression made from a variable and constants. The function q (1829) has no expression anyone has written. <br>In 1885 it was proved that every function continuous on a closed interval can be matched there, within any gap, by a polynomial. |x| is not a polynomial (size-is-not-a-polynomial); can polynomials come within every gap of it on [−1, 1]? <br>Which side did that technique vindicate: the function as an expression, or the function as any rule at all?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r11c.html">← 11c · continuous after continuous</a><a href="r11e.html">11e · a joint doesn't break continuity →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>The inside-out order is Horner’s rule (or Horner’s method), after William George Horner’s paper of 1819. In 11d.4.4, the textbook of 1748 is Leonhard Euler’s Introductio in analysin infinitorum; q is Dirichlet’s function (1829); the theorem of 1885 is Karl Weierstrass’s approximation theorem.</p>
+  <p>Accepted names: evaluating a polynomial from the inside out is Horner’s method.</p>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=v=>{ if(v===null||!isFinite(v)) return '—'; const a=Math.abs(v); let s=a>=100?v.toFixed(1):a>=1?v.toFixed(3):a>=0.001?v.toFixed(4):v.toPrecision(2); if(s.indexOf('.')>=0&&s.indexOf('e')<0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+let deg=3, A=[-7,5,-3,2], a=1, eps=0.5, sel=-1;
+const kn=$('knobs');
+function knob(id,lab,min,max,step,val,on){ const s=document.createElement('span'); s.className='m'; s.textContent=lab; const i=document.createElement('input'); i.type='range'; i.id=id; i.min=min; i.max=max; i.step=step; i.value=val; const o=document.createElement('output'); o.id='o'+id; i.addEventListener('input',()=>{ on(+i.value); all(); }); kn.append(s,i,o); return i; }
+const KC=[0,1,2,3].map(k=>knob('k'+k,'a'+['₀','₁','₂','₃'][k],-6,6,0.5,A[k],v=>{ A[k]=v; }));
+const Ka=knob('ka','w',
+-2.5,2.5,0.05,a,v=>{ a=v; });
+const Ke=knob('ke','ε',0.05,2,0.05,eps,v=>{ eps=v; });
+const dch=$('dch');
+[0,1,2,3].forEach(d=>{ const b=document.createElement('button'); b.textContent='degree '+d; if(d===deg) b.className='on'; b.onclick=()=>{ deg=d; sel=-1; [...dch.children].forEach(z=>z.classList.toggle('on',z===b)); all(); }; dch.appendChild(b); });
+/* rows of the peeling: row j (from deg down to 0) is the polynomial with coefficients A[j..deg] */
+const peel=j=>x=>{ let v=0; for(let k=deg;k>=j;k--) v=v*x+A[k]; return v; };
+const p=x=>peel(0)(x);
+function okW(d){ const N=800, pa=p(a); for(let k=0;k<=N;k++){ for(const s of [-1,1]){ const x=a+s*d*k/N; if(!(Math.abs(p(x)-pa)<eps)) return false; } } return true; }
+function largest(){ const cap=3; if(okW(cap)) return cap; let lo=0,hi=cap; for(let i=0;i<40;i++){ const m=(lo+hi)/2; if(okW(m)) lo=m; else hi=m; } return lo; }
+const cv=$('cvP');
+const P=plane(cv,{x:[-3,3],y:[-12,12],grid:1,aspect:0.75,draw:P=>draw(P)});
+Object.defineProperty(P.o,'aspect',{get:()=>cv.clientWidth>560?0.72:0.95});
+let D=0;
+function draw(P){ const c=P.ctx; const pa=p(a); // y range
+  let lo=Infinity,hi=-Infinity; for(let x=-3;x<=3;x+=0.05){ const v=p(x); lo=Math.min(lo,v); hi=Math.max(hi,v); } lo=Math.max(lo,-30); hi=Math.min(hi,30); if(hi-lo<4){ const m=(hi+lo)/2; lo=m-2; hi=m+2; } const padY=(hi-lo)*0.12; P.o.y=[lo-padY,hi+padY]; P.o.grid=(hi-lo)>30?5:(hi-lo)>12?2:1;
+  P.axes(); D=largest();
+  c.fillStyle=col('--gold'); c.globalAlpha=.18; c.fillRect(P.X(-3),P.Y(pa+eps),P.X(3)-P.X(-3),P.Y(pa-eps)-P.Y(pa+eps)); c.globalAlpha=1;
+  c.fillStyle=col('--ink'); c.globalAlpha=.08; c.fillRect(P.X(a-D),P.Y(P.o.y[1]),P.X(a+D)-P.X(a-D),P.Y(P.o.y[0])-P.Y(P.o.y[1])); c.globalAlpha=1;
+  P.line(a-D,P.o.y[0],a-D,P.o.y[1],'--muted',1.2,[5,4]); P.line(a+D,P.o.y[0],a+D,P.o.y[1],'--muted',1.2,[5,4]);
+  if(sel>0) P.fn(peel(sel),'--teal',2,[6,4]);
+  P.fn(p,'--ember',2.6); P.dot(a,pa,'--ink',5); }
+function readout(){ KC.forEach((k,i)=>{ $('ok'+i).textContent=fm(A[i]); k.disabled=i>deg; k.previousSibling.style.opacity=i>deg?.4:1; k.style.opacity=i>deg?.4:1; }); $('oka').textContent=fm(a); $('oke').textContent=fm(eps);
+  // table rows from the top (degree) down
+  let h='<tr><th>row</th><th>value at w</th><th>why continuous</th></tr>'; let v=0;
+  for(let j=deg;j>=0;j--){ v=v*a+A[j]; const nm=j===0?'p':'q'+['₀','₁','₂','₃'][j];
+    const form=j===deg?fm(A[j]):fm(A[j])+' + x·'+(j+1===0?'p':'q'+['₀','₁','₂','₃'][j+1]);
+    const lic=j===deg?'a constant: lines-are-continuous':'x by lines-are-continuous; continuous-products; then continuous-sums with the constant';
+    h+=`<tr data-j="${j}" class="${sel===j||(sel===-1&&false)?'on':''}"><td>${nm} = ${form}</td><td>${fm(v)}</td><td class="lic">${lic}</td></tr>`; }
+  $('tp').innerHTML=h; [...$('tp').querySelectorAll('tr[data-j]')].forEach(tr=>tr.onclick=()=>{ const j=+tr.dataset.j; sel=(sel===j||j===0)?-1:j; all(); });
+  const terms=[]; for(let k=deg;k>=0;k--){ if(A[k]===0) continue; const c=A[k]; const xs=k===0?'':(k===1?'x':'x^'+k); terms.push({c,xs}); }
+  let ps=terms.length?terms.map((t,i)=>{ const s=t.c<0?'-':'+'; const ab=Math.abs(t.c); const co=(ab===1&&t.xs)?'':fm(ab); return (i===0?(t.c<0?'-':''):' '+s+' ')+co+t.xs; }).join(''):'0';
+  tex($('eqP'),R`\begin{gathered}p(x) = ${ps}\\ p(${fm(a)}) = ${fm(p(a))},\ \ \varepsilon = ${fm(eps)}\\ \text{largest winning } \delta ${D>=3?R`\ge 3`:R`\approx `+fm(D)}\end{gathered}`,true); }
+function all(){ P.redraw(); readout(); }
+let dr=false; cv.addEventListener('pointerdown',e=>{ dr=true; cv.setPointerCapture&&cv.setPointerCapture(e.pointerId); mv(e); });
+function mv(e){ if(!dr) return; const q=P.point(e); a=Math.round(Math.max(-2.5,Math.min(2.5,q.x))*20)/20; Ka.value=a; all(); }
+cv.addEventListener('pointermove',mv); ['pointerup','pointercancel'].forEach(t=>cv.addEventListener(t,()=>dr=false));
+window.__pic={set:(d,coef,aa,e,s)=>{ deg=d; coef.forEach((c,i)=>{A[i]=c; KC[i].value=c;}); a=aa; Ka.value=aa; eps=e; Ke.value=e; sel=s===undefined?-1:s; [...dch.children].forEach((z,i)=>z.classList.toggle('on',i===d)); all(); return {D,pa:p(a)}; }};
+all();
+
+/* ---------- slides ---------- */
+const N='\\htmlClass{new}', K='\\htmlClass{keep}';
+stepper('#sl1',[
+  {k:'ember',kl:'bricks and joins',t:R`c,\ \ x;\qquad f + g,\ \ fg`,n:`Constants and x are continuous (lines-are-continuous); sums and products keep continuity (continuous-sums, continuous-products).`}
+],{title:'The slides · bricks and joins · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'peel-off-the-constant · 1 of 4',t:R`\begin{gathered}\textstyle\sum_{k \le S(n)} a_k x^k\\ = a_0 + \textstyle\sum_{k \lt S(n)} a_{S(k)}\,x^{${N}{S(k)}}\end{gathered}`,n:`first-term-off: split off the first term; x⁰ = 1.`},
+  {k:'ember',kl:'peel-off-the-constant · 2 of 4',t:R`x^{S(k)} = ${N}{x^k \cdot x}`,n:`power-of-a-next, for powers of a real (8f).`},
+  {k:'ember',kl:'peel-off-the-constant · 3 of 4',t:R`a_{S(k)}\,(x^k \cdot x) = ${N}{x} \cdot (a_{S(k)}\,x^k)`,n:`Regroup and turn about (regroup for times on ℝ, turn-about for times on ℝ).`},
+  {k:'ember',kl:'peel-off-the-constant · 4 of 4',t:R`= a_0 + ${K}{x} \cdot \textstyle\sum_{k \le n} a_{S(k)}\, x^k`,n:`factor-out: a factor comes out. Degree S(n) becomes degree n inside, same leading coefficient. ∎`},
+  {k:'ember',kl:'peel · 1 of 3',t:R`\begin{gathered}2x^3 - 3x^2 + 5x - 7\\ = -7 + x\,(5 - 3x + 2x^2)\end{gathered}`,n:`Once.`},
+  {k:'ember',kl:'peel · 2 of 3',t:R`= -7 + x\,(5 + x\,(-3 + x \cdot ${K}{2}))`,n:`All the way: degree 0 at the centre.`},
+  {k:'ember',kl:'peel · 3 of 3',t:R`2 \to 1 \to 7 \to ${N}{7}`,n:`At 2, from the inside out: −3 + 2·2, 5 + 2·1, −7 + 2·7. The inside-out order.`}
+],{title:'The slides · peel · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'polynomials-are-continuous · base',t:R`\textstyle\sum_{k \le 0} a_k x^k = ${N}{a_0}`,n:`A constant: continuous at every real (lines-are-continuous).`},
+  {k:'ember',kl:'polynomials-are-continuous · step 1 of 3',t:R`p(x) = a_0 + x \cdot ${N}{q(x)}`,n:`peel-off-the-constant. q has the coefficients a₁, ⋯, a_S(n): one degree less.`},
+  {k:'ember',kl:'polynomials-are-continuous · step 2 of 3',t:R`q \text{ continuous};\ \ x \cdot q \text{ continuous}`,n:`The hypothesis φ(n), with those reals; then lines-are-continuous and continuous-products.`},
+  {k:'ember',kl:'polynomials-are-continuous · step 3 of 3',t:R`a_0 + x \cdot q(x) \text{ continuous}`,n:`lines-are-continuous for the constant; continuous-sums. So φ(S(n)).`},
+  {k:'ember',kl:'polynomials-are-continuous · close',t:R`\forall n \in \mathbb N\ \varphi(n)`,n:`The induction technique. Every polynomial is continuous at every real. ∎`}
+],{title:'The slides · polynomials-are-continuous · ← → keys work'});
+stepper('#sl4',[
+  {k:'teal',kl:'from 10c: the other road',t:R`\lim_{x \to a} p(x) = p(a)`,n:`substitution: one term at a time, by power-limit, constant-factor, limits-add. The same conclusion.`}
+],{title:'The slides · the other road · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'rational-functions-are-continuous',t:R`\begin{gathered}\tfrac{p}{q}:\ \ q(a) \ne 0\\ \Rightarrow \text{continuous at } a\end{gathered}`,n:`continuous-quotients at every input; the domain is ℝ cut at the zeros of q, at most its degree of them (at-most-n-zeros).`},
+  {k:'ember',kl:'substitute',t:R`\begin{gathered}\lim_{x \to -1}\tfrac{x^2 + 3x}{x - 2}\\ = \tfrac{-2}{-3} = ${K}{\tfrac23}\end{gathered}`,n:`−1 is an input: the limit is the value.`}
+],{title:'The slides · rational functions · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'size-is-not-a-polynomial',t:R`\begin{gathered}p(x) = |x| \Rightarrow p(x) = x\\ \Rightarrow p(-1) = ${N}{-1} \ne 1\end{gathered}`,n:`same-coefficients at 1, 2, ⋯, n + 1. |x| is not a polynomial: 11c and 11e prove it continuous another way.`}
+],{title:'The slides · size-is-not-a-polynomial · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

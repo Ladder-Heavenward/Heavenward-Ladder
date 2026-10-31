@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tame rules fix the future</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r24c.html">← 24c a map that shrinks has one fixed point</a><a href="r24e.html">next: 24e when the future is not fixed →</a></p>
+  <div class="tags"><span class="tag proof">24d · proof</span></div>
+  <h1>Tame rules fix the future</h1>
+  <p>Here is the main result of the rung. Take a rule that gives the slope from the place, and suppose it is tame: moving the place a little changes the slope by at most a fixed multiple of the move. Then from any start there is a solution, and only one, at least for a while. The proof is the repeated integration of twenty-four b, seen as a map that shrinks: over a short enough stretch, feeding two guesses through the rule brings them closer by a fixed fraction, so the last step's technique hands over exactly one solution. A second result says how far apart two solutions can drift when their starts differ: no faster than a growth function. Together they say a tame rule fixes the future from the present.</p>
+  <p class="gesture">If the slope changes no faster than in proportion to a change of place, a rule with a start has exactly one solution near the start. Repeated integration is a map that shrinks, and its fixed point is the solution. Two solutions with nearby starts drift apart no faster than a growth function.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r24b.html">24b</a> (the area form, repeated integration), <a href="r24c.html">24c</a> (the shrinking-map technique), <a href="r24a.html">24a</a> (the own-rate technique), <a href="r14c.html">14c</a> (the mean value technique). <a href="r24e.html">24e</a> shows what goes wrong when a rule is not tame.</p></div>
+</header>
+
+<section class="class step" data-step="24d1">
+  <h2 class="sthead"><span class="stno">24d1</span>Tame rules</h2>
+  <p class="stands">Stands on 14c (the mean value technique).</p>
+  <p class="eqline" data-pid="0ba0b5">From here on, F(x, y) is <i>tame</i> on a rectangle R = [x₀ − a, x₀ + a] × [y₀ − b, y₀ + b] when F is continuous on R and there is one number L with |F(x, y) − F(x, z)| ≤ L|y − z| for all (x, y) and (x, z) in R. The number L is its constant.</p>
+  <pre class="lines" data-k="ember" data-label="this step: a slope ceiling makes a rule tame">
+F(x, y) - F(x, z) = \partial_y F(x, c)\,(y - z) @@ the mean value technique (14c), in y with x held still
+|\partial_y F| \le L \text{ on } R \Rightarrow |F(x, y) - F(x, z)| \le L|y - z| @@ the slope in y has a ceiling
+\htmlClass{new}{y' = x^2 + y^2 \text{ is tame on every rectangle}} \quad \blacksquare @@ the slope of x² + y² in y is 2y, at most 2(|y₀| + b) on R
+  </pre>
+  <p class="eqline" data-pid="ad821b">Here ∂_y F(x, c) is the slope of F in y alone, with x held still. Rung 28 builds such slopes in full. Here they are only the slope of one-input functions, y ↦ F(x, y).</p>
+  <p data-pid="e066fc">Not every rule is tame. √|y| has slopes that pass every ceiling near y = 0, and 24e shows the price.</p>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">24d1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">R = [−1, 1] × [−1, 1]</span></span>Decide which of F = xy, F = sin y, F = y^(1/3) and F = |y| are tame on R. <br>Find an L for each one that is. For each one that is not, find the quotient that passes every ceiling. <br>Find the tame one that has no slope in y at some point.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24d2">
+  <h2 class="sthead"><span class="stno">24d2</span>One solution, for a while</h2>
+  <p class="stands">Stands on 24d1, 24b1 (the area form) and 24c3 (the shrinking-map technique).</p>
+  <p data-pid="720584">Existence technique: <b>let F be tame on R with constant L, and |F| ≤ M on R. Choose h &gt; 0 with h ≤ a, hM ≤ b and hL &lt; 1. Then y′ = F(x, y), y(x₀) = y₀ has exactly one solution on [x₀ − h, x₀ + h].</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the existence technique">
+D = \{\text{continuous } y \text{ on } I = [x_0 - h, x_0 + h] \text{ with } |y - y_0| \le b\} @@ guesses that stay in the rectangle
+(Ty)(x) = y_0 + \int_{x_0}^{x} F(t, y(t))\,dt @@ repeated integration, as a map (24b2)
+|(Ty)(x) - y_0| \le |x - x_0|\,M \le hM \le b @@ the area of something at most M in size: T sends D into D
+|(Ty)(x) - (Tz)(x)| \le \Big|\int_{x_0}^{x} |F(t, y) - F(t, z)|\,dt\Big| \le hL\,\|y - z\| @@ tame: each gap at most L‖y − z‖
+\|Ty - Tz\| \le hL\,\|y - z\|,\ hL < 1 @@ T shrinks, with k = hL
+\text{exactly one } y \in D \text{ with } Ty = y @@ the shrinking-map technique (24c3)
+\htmlClass{new}{\text{exactly one solution on } I} \quad \blacksquare @@ fixed points of T are the solutions (area form, 24b1); a solution on I stays in D, since |y − y₀| ≤ hM ≤ b
+  </pre>
+  <p data-pid="8dc150">The proof is a recipe as well as a guarantee. Repeated integration from the flat line at y₀ settles everywhere at once on I, and after n rounds it is within (hL)ⁿ/(1 − hL) times the first step of the solution.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · existence · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24d2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="y&#x27; = x^2 + y^2,\ y(0) = 0"></span></span>On the rectangle with a = b = 1, find M, L and the h the existence technique allows. <br>Keep a = 1. Find M, L and h for b = ½ and for b = 2, and the b that gives the longest h.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24d3">
+  <h2 class="sthead"><span class="stno">24d3</span>Two starts drift apart slowly</h2>
+  <p class="stands">Stands on 24d1, 24b1 (the area form) and 24a3 (the own-rate technique).</p>
+  <p data-pid="0f4d74">Drift technique: <b>if y and z solve the same tame rule on an interval from x₀, with constant L, then |y(x) − z(x)| ≤ |y(x₀) − z(x₀)|·e^(L|x − x₀|).</b> In particular, the same start gives the same solution, on the whole interval where both exist.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the drift technique, for x ≥ x₀">
+u(x) = |y(x) - z(x)| \le u(x_0) + L\int_{x_0}^{x} u(t)\,dt @@ subtract the area forms (24b1); tame inside the area
+U(x) = \int_{x_0}^{x} u,\ \ U' = u \le u(x_0) + LU @@ the slope of an area is the height (16b)
+\big(U e^{-L(x-x_0)}\big)' = (U' - LU)e^{-L(x-x_0)} \le u(x_0)e^{-L(x-x_0)} @@ the product rule, as in 24a3
+U e^{-L(x-x_0)} \le \tfrac{u(x_0)}{L}\big(1 - e^{-L(x-x_0)}\big) @@ compare areas from x₀, where both sides start at 0 (14e)
+u \le u(x_0) + LU \le u(x_0)e^{L(x-x_0)} @@ multiply out
+\htmlClass{new}{|y(x) - z(x)| \le |y(x_0) - z(x_0)|\,e^{L(x - x_0)}} \quad \blacksquare @@ and for x ≤ x₀ the same with x₀ − x
+  </pre>
+  <p data-pid="e91d90">The bound is honest and grim. Two starts a millionth apart may drift apart like e^(Lx), so after a stretch of 14/L they can be a million times further apart. A tame rule fixes the future, but small errors in the present grow, and a rule with a large L forgets its start's digits fast. 24k and the weather annex return to this.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24d3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="y&#x27; = 2y"></span></span>Two solutions start from y(0) = 1 and y(0) = 1.001. Find the drift bound and the true gap at x = 3. <br>Do the same for y′ = −2y with the same starts, and find which bound is sharp.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24d4">
+  <h2 class="sthead"><span class="stno">24d4</span>Illegal moves</h2>
+  <p class="stands">Stands on 24d1 to 24d3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+F \text{ continuous} \Rightarrow \text{one solution}\,? @@ continuous is enough for some solution, by a proof much higher up the ladder, but not for one only: √|y| (24e)
+\text{exactly one solution on } [x_0 - h, x_0 + h], \text{ so on the whole line}\,? @@ only for a while; y′ = y² runs off in finite time (24e)
+hL < 1 \text{ is needed for the solution to exist}\,? @@ it is needed for this proof; solutions often last much longer than h
+\text{same start, same solution, so nearby starts give nearby solutions forever}\,? @@ the drift bound grows like e^{L|x − x₀|}
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24d4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="y&#x27; = 2\sqrt{|y|},\ y(0) = 0"></span></span>Check that y = 0, and the function equal to 0 for x ≤ 0 and to x² for x ≥ 0, both solve it. <br>Find which hypothesis of the existence technique fails, and where.</li><li><span class="givens"><span data-tex-inline="y&#x27; = y^2,\ y(0) = \tfrac12"></span></span>Check that y = 1/(2 − x) solves it, and find where it exists. <br>Find the h the existence technique gives on the square a = b = 1.</li><li><span class="givens"><span data-tex-inline="y&#x27; = y,\ y(0) = 1"></span></span>Find M, L and the h the existence technique allows on the square a = b = 1. <br>Find where the solution exists.</li><li><span class="givens"><span data-tex-inline="y&#x27; = y"></span></span>Two solutions start from y(0) = 1 and y(0) = 1.000001. <br>Find the gap between them at x = 5 and at x = 10, and the x where the gap first reaches 1.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">24d.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="y&#x27; = x^2 + y^2,\ y(0) = 0"></span></span>Build y₁ and y₂. On [−0.4, 0.4], bound the largest gap between y₂ and the solution twice: once on the rectangle a = 0.4, b = 1, and once on a = 0.4, b = 0.1. <br>Check the existence technique's conditions for each, and find why the smaller rectangle gives the better bound.</div>
+  <div class="chq"><span class="chid">24d.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="y&#x27; = y,\ y(0) = 1"></span></span>On a rectangle with a = 10 and any b, find the h the existence technique allows, and prove it is always below 1. <br>Restart the technique at the end of the stretch it gives. Find why, for this rule, the stretches need not shrink, and what that proves about the solution.</div>
+  <div class="chq"><span class="chid">24d.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="y&#x27; = 1 + \sqrt{|y|},\ y(0) = 0"></span></span>The existence technique says a tame rule has one solution from each start. Turn it round: must a rule with exactly one solution from each start be tame? <br>Prove this rule is not tame on any rectangle holding (0, 0). <br>Prove it has only one solution from (0, 0). Let G(y) be the area from 0 to y under 1/(1 + √|s|), and find the slope of G(y(x)).</div>
+  <div class="chq"><span class="chid">24d.4.4</span><span class="tagq">reroute</span>Prove that two solutions of a tame rule with the same start agree, without growth functions. Let u = |y − z|, so u(x) ≤ L∫ₓ₀ˣ u for x ≥ x₀, and let m be the largest value of u on [x₀, x₀ + 1/(2L)]. <br>Prove m ≤ m/2. Then step forward to cover any interval where both exist.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r24c.html">← 24c · a map that shrinks has one fixed point</a><a href="r24e.html">24e · when the future is not fixed →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A tame rule is Lipschitz continuous in y. The existence technique is the Picard–Lindelöf theorem (or the Cauchy–Lipschitz theorem); the drift technique is Grönwall's inequality, and with it the uniqueness half and continuous dependence on initial conditions.</p>
+  <h3>Who said it first</h3>
+  <p>Augustin-Louis Cauchy proved existence for rules with bounded slopes in the 1820s, by stepping. Rudolf Lipschitz weakened the condition in 1876. Émile Picard (1890) and Ernst Lindelöf (1894) gave the proof by repeated integration, and Thomas Grönwall proved his inequality in 1919.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'tame',t:R`|F(x, y) - F(x, z)| \le L|y - z|`,n:`Slope changes in proportion.`},
+  {k:'ember',kl:'one solution',t:R`\htmlClass{new}{h \le a,\ hM \le b,\ hL < 1 \Rightarrow \exists!\ y \text{ on } [x_0 - h, x_0 + h]}`,n:`For a while.`}
+],{title:'The slides · existence · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

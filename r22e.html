@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Compare with a geometric sum</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r22d.html">← 22d a sum is where its partial sums settle</a><a href="r22f.html">next: 22f sums against areas →</a></p>
+  <div class="tags"><span class="tag proof">22e · proof</span></div>
+  <h1>Compare with a geometric sum</h1>
+  <p>Most endless sums have totals nobody can write down. You can still decide whether they settle, by laying them beside a sum you already understand. If every piece of yours is smaller than the matching piece of a sum that settles, yours settles too. If every piece is bigger than the matching piece of a sum that wanders, yours wanders. The best sum to lay beside is the one whose pieces shrink by the same factor each time, because rung fifteen found its total exactly. From that one comparison come two quick tests, one that looks at how each piece compares with the one before, and one that looks at roots of the pieces.</p>
+  <p class="gesture">A sum of pieces that are never negative settles if its pieces stay under the pieces of a sum that settles, and wanders if they stay over the pieces of a sum that wanders. Laying a sum beside a sum that shrinks by a fixed factor gives two quick tests.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r22d.html">22d</a> (running totals, the tail), <a href="r15i.html">15i</a> (geometric sums), <a href="r22a.html">22a</a> (the climb technique). <a href="r22f.html">22f</a> lays sums beside areas.</p></div>
+</header>
+
+<section class="class step" data-step="22e1">
+  <h2 class="sthead"><span class="stno">22e1</span>Lay it beside another</h2>
+  <p class="stands">Stands on 22d1 (the climb technique for sums) and 22d4 (the tail technique).</p>
+  <p data-pid="1df2a8">Comparison technique: <b>let 0 ≤ aₙ ≤ bₙ from some place on. If Σ bₙ settles, so does Σ aₙ. If Σ aₙ wanders, so does Σ bₙ.</b> By the tail technique, start where the inequality starts.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the comparison technique">
+0 \le a_n \le b_n \text{ for } n \ge 1 @@ after dropping the first few pieces (22d4)
+a_1 + \cdots + a_n \le b_1 + \cdots + b_n \le \sum b_n @@ the running totals of b climb to their total
+(a_1 + \cdots + a_n) \text{ climbs, with ceiling } \textstyle\sum b_n @@ no negative pieces
+\htmlClass{new}{\textstyle\sum a_n \text{ settles, and } \sum a_n \le \sum b_n} \quad \blacksquare @@ the climb technique (22a2)
+  </pre>
+  <p data-pid="3e09be">The second half is the first, turned about: if Σ bₙ settled, Σ aₙ would.</p>
+  <p data-pid="0c6a3e">Ratio-of-pieces comparison: <b>if aₙ, bₙ &gt; 0 and aₙ/bₙ heads to a positive real, the two sums settle or wander together.</b> Far out, aₙ lies between half and twice that real times bₙ, so each sum is under a multiple of the other.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · comparison · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">22e1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\textstyle\sum \tfrac{1}{2^n + n}"></span></span>Decide it by the comparison technique, beside Σ 1/2ⁿ. <br>Find a ceiling for its total.</li><li><span class="givens"><span data-tex-inline="\textstyle\sum \tfrac{n + 1}{n^2}"></span></span>Decide it by the ratio-of-pieces comparison, beside Σ 1/n. <br>Decide it again by the plain comparison technique.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22e2">
+  <h2 class="sthead"><span class="stno">22e2</span>The ratio test</h2>
+  <p class="stands">Stands on 22e1 and 15i (geometric sums).</p>
+  <p data-pid="ecca77">Ratio test: <b>let aₙ &gt; 0 and aₙ₊₁/aₙ → q. If q &lt; 1 the sum settles. If q &gt; 1 it wanders. If q = 1 the test says nothing.</b> When each piece is roughly q times the last, the sum behaves like a geometric sum with ratio a little more than q.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the ratio test, q &lt; 1">
+q < r < 1 @@ choose r between: (q + 1)/2 will do
+\tfrac{a_{n+1}}{a_n} < r \text{ for } n \ge N @@ the ratios head to q &lt; r
+a_{N+j} < a_N r^j @@ induction (4b) on j
+\textstyle\sum_j a_N r^j = \tfrac{a_N}{1 - r} @@ 15i, since 0 &lt; r &lt; 1
+\htmlClass{new}{\textstyle\sum a_n \text{ settles}} \quad \blacksquare @@ comparison (22e1) and the tail technique
+  </pre>
+  <p data-pid="48ee43">If q &gt; 1, far out each piece is bigger than the one before, so the pieces do not head to 0 and the shrink technique (22d2) shows the sum wanders. If q = 1, look at Σ 1/n, which wanders, and Σ 1/n², which settles (22c2). Both have ratios heading to 1, so the test cannot tell them apart.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · ratio test · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22e2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\textstyle\sum \tfrac{n}{3^n},\ \ \sum \tfrac{3^n}{n^2},\ \ \sum \tfrac{2^n}{n!}"></span></span>Find where the ratio of each piece to the one before heads. <br>Decide each sum.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22e3">
+  <h2 class="sthead"><span class="stno">22e3</span>The root test</h2>
+  <p class="stands">Stands on 22e2 and 8 (roots of reals).</p>
+  <p data-pid="eb8ccf">Root test: <b>let aₙ ≥ 0 and the n-th root of aₙ head to q. If q &lt; 1 the sum settles; if q &gt; 1 it wanders; if q = 1 the test says nothing.</b> If ⁿ√aₙ &lt; r &lt; 1 far out, then aₙ &lt; rⁿ, and comparison with Σ rⁿ finishes it.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the root test, q &lt; 1">
+\sqrt[n]{a_n} \to q < r < 1 @@ choose r between
+a_n < r^n \text{ for } n \ge N @@ raise both sides to the n-th power: powers keep order on positives
+\htmlClass{new}{\textstyle\sum a_n \text{ settles}} \quad \blacksquare @@ comparison with 15i\'s Σ rⁿ
+  </pre>
+  <p data-pid="f828b3">The root test is for pieces built from n-th powers, like (n/(2n + 1))ⁿ, where ratios would be messy. The ratio test is for pieces built from factorials, where roots would be messy.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22e3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\textstyle\sum \big(\tfrac{n}{2n+1}\big)^n,\ \ \sum \big(1 + \tfrac1n\big)^{-n^2}"></span></span>Find where the n-th root of each piece heads. (17e tells you where (1 + 1/n)ⁿ heads.) <br>Decide each sum.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22e4">
+  <h2 class="sthead"><span class="stno">22e4</span>Settling in size</h2>
+  <p class="stands">Stands on 22e1, 22d4 (the crowd technique for sums) and 8h (the triangle technique).</p>
+  <p data-pid="95737c">All three tests ask for pieces that are never negative. For a sum whose pieces change sign, look at their sizes first.</p>
+  <p data-pid="cfa97f">Size technique: <b>if Σ |aₙ| settles, then Σ aₙ settles too.</b> Any block aₘ₊₁ + ⋯ + aₙ is at most |aₘ₊₁| + ⋯ + |aₙ| in size, by the triangle technique. So if the sizes crowd, the pieces crowd, and 22d4 finishes it.</p>
+  <p class="eqline" data-pid="478c98">From here on, Σ aₙ settles in size when Σ |aₙ| settles. Accepted name: the series converges absolutely.</p>
+  <p data-pid="8461a1">The converse fails, and 22g is about exactly that: 1 − ½ + ⅓ − ¼ + ⋯ settles, but its sizes are the harmonic sum.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22e4.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\textstyle\sum \tfrac{(-1)^n}{n^2},\ \ \sum (-1)^n\tfrac{n}{2^n}"></span></span>Write the sizes of the pieces of each. <br>Decide each sum by the size technique, and name the test you used on the sizes.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22e5">
+  <h2 class="sthead"><span class="stno">22e5</span>Illegal moves</h2>
+  <p class="stands">Stands on 22e1 to 22e4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+a_n \le b_n,\ \sum b_n \text{ settles} \Rightarrow \sum a_n \text{ settles}\,? @@ only if aₙ ≥ 0: aₙ = −1 is under every bₙ = 1/n²
+\tfrac{a_{n+1}}{a_n} < 1 \text{ for every } n \Rightarrow \text{settles}\,? @@ the ratios must head to something below 1: 1/n has every ratio n/(n+1) &lt; 1
+\tfrac{a_{n+1}}{a_n} \to 1 \Rightarrow \text{wanders}\,? @@ the test is silent at 1: Σ 1/n² settles
+\sum a_n \text{ settles} \Rightarrow \sum |a_n| \text{ settles}\,? @@ 1 − ½ + ⅓ − ⋯ (22g)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22e5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="a_n = -\tfrac1n,\ \ b_n = \tfrac{1}{n^2}"></span></span>Check that aₙ ≤ bₙ for every n. <br>Find whether Σ aₙ settles, and which condition of the comparison technique is missing.</li><li><span class="givens"><span data-tex-inline="\textstyle\sum \tfrac{1}{\sqrt n}"></span></span>Find each ratio aₙ₊₁/aₙ, and where the ratios head. <br>Find whether the sum settles.</li><li><span class="givens"><span data-tex-inline="\textstyle\sum \tfrac{1}{n(n+1)}"></span></span>Find where its ratios head. <br>Find its total.</li><li><span class="givens"><span data-tex-inline="1 - \tfrac12 + \tfrac13 - \tfrac14 + \cdots"></span></span>Find whether the sum of its sizes settles. <br>Find why the size technique cannot decide this sum.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">22e.4.1</span><span class="tagq">build</span>Build a sum of positive pieces that the ratio test cannot decide, because its ratios head nowhere, but that the root test settles. <br>Find where its n-th roots head.</div>
+  <div class="chq"><span class="chid">22e.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\textstyle\sum n^k r^n"></span></span>Find every r > 0 and every whole k ≥ 0 for which it settles. <br>Find what happens on the edge r = 1.</div>
+  <div class="chq"><span class="chid">22e.4.3</span><span class="tagq">converse</span>A sum that lies under a settling geometric sum settles. Turn it round: if Σ aₙ settles and aₙ ≥ 0, must some c·rⁿ with r < 1 lie above aₙ from some place on?</div>
+  <div class="chq"><span class="chid">22e.4.4</span><span class="tagq">reroute</span>Prove the ratio test from the root test: show that if aₙ₊₁/aₙ → q, then the n-th root of aₙ also heads to q.</div>
+  <div class="chq"><span class="chid">22e.4.5</span><span class="tagq">seam</span>Where one test fell silent, mathematicians built a finer one, and then a finer one still. A hope grew that some last test would decide every sum of pieces never negative. In 1828 a young mathematician answered a test of that kind by showing no test of its shape could work. Decades later others proved more: for every sum that wanders there is one that wanders more slowly, and for every sum that settles, one that settles more slowly. <br>Can any one yardstick decide every endless sum? <br>Is a test that is sometimes silent a failure, or the honest shape of the question?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r22d.html">← 22d · a sum is where its partial sums settle</a><a href="r22f.html">22f · sums against areas →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The comparison technique is the comparison test, and the ratio-of-pieces comparison the limit comparison test. The ratio test is d’Alembert’s, the root test Cauchy’s. Settling in size is absolute convergence.</p>
+  <h3>Who said it first</h3>
+  <p>Jean le Rond d’Alembert used the ratio of successive pieces in 1768 for the binomial series. Augustin-Louis Cauchy proved both tests in his Cours d’analyse (1821) and showed the root test is the stronger: whenever the ratio test decides, the root test decides the same way. In 22e.4.5, the young mathematician is Niels Henrik Abel (1828), answering a test of Louis Olivier; Ulisse Dini (1867) showed that dividing each piece of a wandering sum by its running total gives one that wanders more slowly, and Paul du Bois-Reymond (1873) and Jacques Hadamard (1894) showed that no scale of comparison sums is the last.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'under',t:R`\htmlClass{new}{0 \le a_n \le b_n,\ \sum b_n \text{ settles} \Rightarrow \sum a_n \text{ settles}}`,n:`And turned about.`},
+  {k:'ember',kl:'ratio',t:R`\tfrac{a_n}{b_n} \to c > 0`,n:`Together.`}
+],{title:'The slides · comparison · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'q < 1',t:R`\htmlClass{new}{\tfrac{a_{n+1}}{a_n} \to q < 1 \Rightarrow \text{settles}}`,n:`Beside rʲ.`},
+  {k:'ember',kl:'q = 1',t:R`\tfrac1n,\ \tfrac1{n^2}`,n:`Says nothing.`}
+],{title:'The slides · ratio test · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

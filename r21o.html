@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Adding up slices</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r21n.html">← 21n trig integrals and substitution; circle area</a><a href="r21p.html">next: 21p related rates →</a></p>
+  <div class="tags"><span class="tag tech">21o · technique</span></div>
+  <h1>Adding up slices</h1>
+  <p>Spin a curve around a line and it sweeps out a solid: a vase, a bowl, a ball. Cut that solid across, like a loaf, and every slice is a disc. Now that the disc has an area, the solid’s volume is the sum of its slices. This step builds the cylinder, the cone and the ball this way. It ends with a result an ancient geometer was proud enough of to want carved on his grave: the ball takes up exactly two thirds of the can that just holds it.</p>
+  <p class="gesture">A solid spun round a line is a stack of discs, so its volume is the total of their areas. The cone is a third of its cylinder, and the ball two thirds of its. The ball’s skin is how fast its volume grows as it swells.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r16j.html">16j</a> (cross-sections), <a href="r21n.html">21n</a> (the disc’s area), <a href="r16g.html">16g</a> (areas between graphs). <a href="r21p.html">21p</a> ties changing sizes together.</p></div>
+</header>
+
+<section class="class step" data-step="21o1">
+  <h2 class="sthead"><span class="stno">21o1</span>Discs</h2>
+  <p class="stands">Stands on 16j2 (cross-sections) and 21n3 (the disc technique).</p>
+  <p data-pid="02bece">Disc-stack technique: <b>spin the region under y = f(x) ≥ 0, from x = a to x = b, about the floor, and the solid has volume ∫ₐᵇ π f(x)² dx.</b> The slice at x is a disc of radius f(x).</p>
+  <pre class="lines" data-k="ember" data-label="this step: the disc-stack technique, on the cone">
+\text{slice at } x = \text{disc of radius } f(x),\ \text{area } \pi f(x)^2 @@ the disc technique (21n3)
+\text{tight: least disc inside, greatest disc around} @@ on each piece, the disc of the least radius sits in every slice and the greatest holds them all; their gap totals U − L for πf² (15c)
+V = \int_a^b \pi f(x)^2\,dx @@ cross-sections (16j2)
+f(x) = \tfrac{r}{h}x,\ 0 \le x \le h:\ \ V = \pi\tfrac{r^2}{h^2}\cdot\tfrac{h^3}{3} @@ a cone of radius r and height h, lying on its side
+\htmlClass{new}{V_{\text{cone}} = \tfrac13\pi r^2 h} \quad \blacksquare @@ a third of its cylinder, πr²h, as 16j found for pyramids
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · discs · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">21o1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="y = \sqrt{x},\ \ 0 \le x \le 4"></span></span>Find the volume of the solid made by spinning the region under it about the floor.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21o2">
+  <h2 class="sthead"><span class="stno">21o2</span>Washers</h2>
+  <p class="stands">Stands on 21o1 and 16g (the area between two graphs).</p>
+  <p data-pid="063e83">Washer technique: <b>spin the region between y = f(x) and y = g(x), with f ≥ g ≥ 0, about the floor, and the solid has volume ∫ₐᵇ π(f(x)² − g(x)²) dx.</b> Each slice is a disc with a smaller disc taken out.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the washer technique">
+\text{slice at } x: \pi f(x)^2 - \pi g(x)^2 @@ the outer disc less the hole
+\text{tight: the narrowest washer inside, the widest around} @@ on each piece, the washer from the largest g to the smallest f sits in every slice, and the one from the smallest g to the largest f holds them all
+\htmlClass{new}{V = \int_a^b \pi\big(f(x)^2 - g(x)^2\big)\,dx} \quad \blacksquare @@ cross-sections (16j2)
+\pi(f^2 - g^2) \ne \pi(f - g)^2 @@ the hole is taken from the disc, not the gap squared
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · washers · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21o2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">the region between y = x and y = x², from x = 0 to x = 1</span></span>Find the volume when it is spun about the floor.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21o3">
+  <h2 class="sthead"><span class="stno">21o3</span>The ball is two thirds of its can</h2>
+  <p class="stands">Stands on 21o1 and 21o2.</p>
+  <p data-pid="1693bb">Ball technique: <b>the ball of radius r has volume (4/3)πr³, two thirds of the cylinder of radius r and height 2r that just holds it.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the ball technique">
+f(x) = \sqrt{r^2 - x^2},\ \ -r \le x \le r @@ spin the upper half disc about the floor
+V = \int_{-r}^{r} \pi(r^2 - x^2)\,dx = \pi\Big[r^2x - \tfrac{x^3}{3}\Big]_{-r}^{r} @@ disc stack
+\htmlClass{new}{V_{\text{ball}} = \tfrac43\pi r^3} \quad \blacksquare @@ π(2r³ − 2r³/3)
+\tfrac{4}{3}\pi r^3 \div (\pi r^2 \cdot 2r) = \tfrac23 @@ the can
+  </pre>
+  <p data-pid="4d68e3">Slice by slice: at height t, the half ball’s slice has area π(r² − t²), which is the can’s slice πr² less the cone’s slice πt². So half ball = can − cone = πr³ − ⅓πr³ = ⅔πr³.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · ball · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21o3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a ball of radius 5,  the cap above a cut 3 from the centre</span></span>Guess whether the cap holds more or less than a tenth of the ball. <br>Find its volume.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21o4">
+  <h2 class="sthead"><span class="stno">21o4</span>The ball’s skin</h2>
+  <p class="stands">Stands on 21o3 and 13a (the slope at a point).</p>
+  <p class="eqline" data-pid="9ed9f5">From here on, the area of the sphere of radius r is the slope of the ball’s volume as its radius grows: S(r) = V′(r).</p>
+  <p data-pid="f81e22">Skin technique: <b>the sphere of radius r has area 4πr², four times the disc through its centre.</b> A ball grown from r to r + h gains a shell, of thickness h, wrapped round the sphere; for small h that shell is the area times h.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the skin technique">
+V(r + h) - V(r) = \text{shell of thickness } h @@ the bigger ball less the smaller
+\frac{V(r + h) - V(r)}{h} \to V'(r) @@ the slope at r (13a)
+\htmlClass{new}{S(r) = \big(\tfrac43\pi r^3\big)' = 4\pi r^2} \quad \blacksquare @@ the power rule (13d)
+4\pi r^2 = 2\pi r \cdot 2r @@ the can’s side, unrolled: a rectangle 2πr round and 2r high
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · skin · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21o4.1</span><span class="ph undo">undo</span><span class="givens"><span class="gtx">a sphere with area 100π</span></span>Find its radius and the volume of its ball.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21o5">
+  <h2 class="sthead"><span class="stno">21o5</span>Illegal moves</h2>
+  <p class="stands">Stands on 21o1 to 21o4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+V = \int_a^b \pi f(x)\,dx\,? @@ the slice’s radius is f(x): square it
+V = \int_a^b \pi(f - g)^2\,dx\,? @@ π(f² − g²): the hole comes out of the disc
+S = \pi r^2 \text{ for a sphere}\,? @@ 4πr²: that is the disc through its centre, once
+\text{slices along the line spun about}\,? @@ across it: those are the discs
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21o5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="y = \sin x,\ \ 0 \le x \le \pi"></span></span>Find the volume when the region under it is spun about the floor.</li><li><span class="givens"><span data-tex-inline="x^2 + (y - 2)^2 \le 1"></span></span>Find the volume of the ring made by spinning this disc about the floor.</li><li><span class="givens"><span class="gtx">a solid on the unit disc whose slices across the floor are half discs standing up</span></span>Find its volume. <br>Find what solid it is.</li><li><span class="givens"><span class="gtx">a can of radius 3 and height 6, a cone, and a ball, each of radius 3</span></span>Find the three volumes, and how they are related.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">21o.4.1</span><span class="tagq">build</span>Build the volume of a bowl: spin y = x² for 0 ≤ x ≤ 2 about the upright axis, and fill it to the top. <br>Slice it across the upright axis.</div>
+  <div class="chq"><span class="chid">21o.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="y = x^k,\ \ 0 \le x \le 1"></span></span>Spin it about the floor. Find, for each k > 0, what share of its cylinder the solid fills.</div>
+  <div class="chq"><span class="chid">21o.4.3</span><span class="tagq">converse</span>Two solids with equal slices at every height have equal volumes. Turn it round: if two solids have equal volumes, must their slices be equal?</div>
+  <div class="chq"><span class="chid">21o.4.4</span><span class="tagq">reroute</span>Find the ball’s volume from the sphere’s area instead: build the ball out of thin shells of radius t and thickness dt.</div>
+  <div class="chq"><span class="chid">21o.4.5</span><span class="tagq">seam</span><span class="givens"><span data-tex-inline="y = \tfrac1x,\ \ x \ge 1"></span></span>Spin it about the floor. The solid runs off forever but holds only π of paint. <br>Show that its skin is endless: each band of it is at least as big as the cylinder’s side of radius 1/x. <br>Can you fill it with paint, but never paint it?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r21n.html">← 21n · trig integrals and substitution; circle area</a><a href="r21p.html">21p · related rates →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The disc-stack and washer techniques are the disc method and the washer method; slicing across, with equal slices giving equal volumes, is Cavalieri’s principle. The ball is the solid sphere; the sphere is its surface. The ring in 21o5.1 is a torus.</p>
+  <h3>Who said it first</h3>
+  <p>The ball as two thirds of its cylinder is Archimedes’, On the Sphere and Cylinder (c. 225 BC); Cicero found the sphere and cylinder carved on his tomb in Syracuse. In 21o.4.5, the endless horn is Evangelista Torricelli’s (1641), now called Gabriel’s horn. Its finite volume set off a long philosophical argument, Thomas Hobbes among those who objected.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'disc stack',t:R`\htmlClass{new}{V = \int_a^b \pi f(x)^2\,dx}`,n:`Each slice a disc.`}
+],{title:'The slides · discs · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'washers',t:R`\htmlClass{new}{V = \int_a^b \pi(f^2 - g^2)\,dx}`,n:`A disc with a hole.`}
+],{title:'The slides · washers · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'ball',t:R`\htmlClass{new}{V_{\text{ball}} = \tfrac43\pi r^3}`,n:`Two thirds of its can.`}
+],{title:'The slides · ball · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'sphere area',t:R`\htmlClass{new}{S = 4\pi r^2}`,n:`The slope of the volume.`}
+],{title:'The slides · skin · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`\int \pi f\,dx \ne \int \pi f^2\,dx`,n:`Square the radius.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

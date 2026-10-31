@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How fast things grow</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r22j.html">← 22j from counting to rare events</a><a href="r22l.html">next: 22l splitting the work, counted →</a></p>
+  <div class="tags"><span class="tag tech">22k · technique</span></div>
+  <h1>How fast things grow</h1>
+  <p>When two quantities both grow without end, it often matters less how big each is than which one wins in the long run. A recipe that takes a hundred times n steps beats one that takes n squared steps, once n is past a hundred. This step gives a way to say "grows no faster than" while ignoring fixed multiples and the first few values, and it ranks the usual kinds of growth: logs, then powers, then a fixed number raised to the nth power, then factorials. It ends with a fence around n factorial, the number of orders of n things.</p>
+  <p class="gesture">Ignore fixed multiples and the first few values, and growth comes in ranks. Logs lose to powers, powers lose to powers of a fixed number, and those lose to factorials. n factorial lies between two simple powers.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r22h.html">22h</a> (sequences to know by heart), <a href="r17a.html">17a</a> (bounds on ln), <a href="r22f.html">22f</a> (sums against areas), <a href="r04j.html">4j</a> (counting choices). <a href="r22l.html">22l</a> counts the steps of recipes that split their work. The size of n! is proved on <a href="r23k.html">23k</a>.</p></div>
+</header>
+
+<section class="class step" data-step="22k1">
+  <h2 class="sthead"><span class="stno">22k1</span>Grows no faster than</h2>
+  <p class="stands">Stands on 10a (some and every) and 22a1 (heading to a limit).</p>
+  <p class="eqline" data-pid="658577">From here on, f(n) = O(g(n)) (read "f is big O of g", or "f grows no faster than g") means: some C and some N make |f(n)| ≤ C·g(n) for every n ≥ N. And f(n) ~ g(n) (read "f and g grow alike") means f(n)/g(n) heads to 1.</p>
+  <p data-pid="361e05">O is a name for a promise with two numbers hidden in it, C and N, like 10a's ε and δ. The = in f = O(g) is not the = of rung 0: it does not turn about. n = O(n²) is true, and n² = O(n) is false. Read it as "is one of the functions that grow no faster than".</p>
+  <pre class="lines" data-k="ember" data-label="this step: three by hand">
+5n^2 + 3n + 7 \le 5n^2 + 3n^2 + 7n^2 = 15n^2 \ (n \ge 1) @@ each lower power is at most n² once n ≥ 1
+\htmlClass{new}{5n^2 + 3n + 7 = O(n^2)} @@ C = 15, N = 1
+\tfrac{5n^2 + 3n + 7}{5n^2} \to 1,\ \text{so } 5n^2 + 3n + 7 \sim 5n^2 @@ divide by n² (22h1)
+n^2 \le C n \text{ for } n \ge N \Rightarrow n \le C \text{ for } n \ge N @@ false for n past C and N
+\htmlClass{new}{n^2 \ne O(n)} \quad \blacksquare @@ no C and N can keep the promise
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · big O · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">22k1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="3n^3 - 100n"></span></span>Find a C and an N that show it is O(n³).</li><li><span class="givens"><span data-tex-inline="n^3,\ \ n^2 \ln n"></span></span>Prove n³ is not O(n² ln n). Use ln n &lt; 2√n, from 17a.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22k2">
+  <h2 class="sthead"><span class="stno">22k2</span>The ranks of growth</h2>
+  <p class="stands">Stands on 22k1, 22h2 (sequences to know by heart) and 17a (ln x ≤ x − 1).</p>
+  <p data-pid="30d32e">Ranking technique: <b>for any a &gt; 0, b &gt; 1 and power k, each of these over the next heads to 0: ln n, nᵏ (with k &gt; 0), bⁿ, n!, nⁿ.</b> So each grows no faster than the next, and the next does not grow no faster than it.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the ranking technique">
+\ln n = \tfrac{2}{a}\ln n^{a/2} \le \tfrac{2}{a}\, n^{a/2} \Rightarrow \tfrac{\ln n}{n^a} \le \tfrac{2}{a}\, n^{-a/2} \to 0 @@ ln x ≤ x − 1 &lt; x (17a)
+\tfrac{n^k}{b^n} = n^k \big(\tfrac1b\big)^n \to 0 @@ 22h2, with r = 1/b
+\tfrac{b^n}{n!} \to 0 @@ 22h2
+\tfrac{n!}{n^n} = \tfrac{n}{n}\cdot\tfrac{n-1}{n}\cdots\tfrac{1}{n} \le \tfrac{1}{n} \to 0 @@ every fraction but the last is at most 1
+\htmlClass{new}{\ln n \ll n^k \ll b^n \ll n! \ll n^n} \quad \blacksquare @@ the four lines above
+  </pre>
+  <p class="eqline" data-pid="3452a9">From here on, f ≪ g (read "f is small beside g") means f(n)/g(n) heads to 0.</p>
+  <p data-pid="6da0bc">At n = 100, n³ is a million. 2ⁿ is about 1.27 × 10³⁰. A recipe of n³ steps finishes on a laptop in a second. A recipe of 2ⁿ steps would not finish if every atom in the earth were a computer working since the earth formed. The rank decides what can be done at all.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22k2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="n\ln n,\ \ n^{1.1},\ \ (1.01)^n,\ \ n^{100},\ \ \sqrt{n!},\ \ 2^{n/2}"></span></span>Put them in order of growth, slowest first. <br>Prove n¹⁰⁰ ≪ (1.01)ⁿ. <br>Find which of the two is bigger at n = 1000.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22k3">
+  <h2 class="sthead"><span class="stno">22k3</span>A fence round n!</h2>
+  <p class="stands">Stands on 22f1 (strips beside a curve), 17i (the area under ln) and 22k2.</p>
+  <p data-pid="c5a8a0">Factorial-fence technique: <b>e(n/e)ⁿ ≤ n! ≤ e·n·(n/e)ⁿ.</b> Take ln, and n! becomes the sum ln 2 + ln 3 + ⋯ + ln n, which the strips of 22f1 fence with areas, the curve now rising.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the factorial-fence technique">
+\ln n! = \ln 2 + \ln 3 + \cdots + \ln n @@ ln of a product is the sum of the lns (17c)
+\ln k \le \int_k^{k+1}\ln x\,dx @@ ln rises: each strip of height ln k lies under the curve (22f1, mirrored)
+\ln 1 + \cdots + \ln(n-1) \le \int_1^n \ln x\,dx \le \ln 2 + \cdots + \ln n @@ add the strips from k = 1 to n − 1, under and over
+n\ln n - n + 1 \le \ln n! \le n\ln n - n + 1 + \ln n @@ the area under ln is x ln x − x (17i); ln n! = ln((n − 1)!) + ln n
+\htmlClass{new}{e\big(\tfrac{n}{e}\big)^n \le n! \le e\,n\big(\tfrac{n}{e}\big)^n} \quad \blacksquare @@ apply exp (17e)
+  </pre>
+  <p data-pid="c51388">At n = 10 the fence gives 1.23 million ≤ 10! ≤ 12.34 million, and 10! is 3 628 800. The fence is loose by a factor of n, here ten, but it already says what matters: n! grows like (n/e)ⁿ, give or take a factor much smaller. The full answer is n! ~ √(2πn)(n/e)ⁿ, which gives 3 598 696 at n = 10, off by less than one percent. It is stated here and proved on 23k.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22k3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="50!"></span></span>Use the factorial fence to put its log₁₀ between two numbers, and so find how many digits it can have. <br>Use the stated full answer to find how many digits it has.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22k4">
+  <h2 class="sthead"><span class="stno">22k4</span>Illegal moves</h2>
+  <p class="stands">Stands on 22k1 to 22k3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+n = O(n^2) \text{ and } n^2 = O(n^2), \text{ so } n = n^2\,? @@ the = of O does not turn about or chain both ways (22k1)
+1000n \text{ is slower than } n^2\,? @@ only for n &lt; 1000; O speaks about n past some N
+2^{2n} = O(2^n)\,? @@ 2²ⁿ/2ⁿ = 2ⁿ passes every ceiling
+f \sim g \Rightarrow f - g \to 0\,? @@ n² + n ~ n², but the difference n passes every ceiling
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22k4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="n,\ \ n^2"></span></span>Find a C and an N that show n = O(n²). <br>Find whether n² = O(n), and what reading the = both ways would prove.</li><li><span class="givens"><span data-tex-inline="1000n,\ \ n^2"></span></span>Find the n where they are equal. <br>Find which is O of which, and which is smaller at n = 10.</li><li><span class="givens"><span data-tex-inline="2^{2n},\ \ 2^n"></span></span>Find 2²ⁿ ÷ 2ⁿ at n = 10 and n = 20. <br>Find whether any C keeps 2²ⁿ ≤ C·2ⁿ far out.</li><li><span class="givens"><span data-tex-inline="n^2 + n,\ \ n^2"></span></span>Find their ratio and their difference at n = 10, 100 and 1000. <br>Find which of the two heads somewhere.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">22k.4.1</span><span class="tagq">build</span>Build a function of n that grows faster than every power of n, and slower than bⁿ for every b above 1. <br>Prove both.</div>
+  <div class="chq"><span class="chid">22k.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\ln n,\ \ n^{0.1}"></span></span>The ranking says ln n ≪ n^0.1. Find which is bigger at n = 10¹⁰ and at n = 10²⁰. <br>Find, roughly, the n past which n^0.1 stays ahead.</div>
+  <div class="chq"><span class="chid">22k.4.3</span><span class="tagq">converse</span>If f ~ g, then f = O(g) and g = O(f). Turn it round: if f = O(g) and g = O(f), must f ~ g? <br>Find an example either way.</div>
+  <div class="chq"><span class="chid">22k.4.4</span><span class="tagq">reroute</span>Prove bⁿ ≪ n! without 22h2. Keep only the top half of the factors of n! to show n! ≥ (n/2)^(n/2). <br>Then compare bⁿ with (n/2)^(n/2).</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r22j.html">← 22j · from counting to rare events</a><a href="r22l.html">22l · splitting the work, counted →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>O is big O notation, read "order of"; ≪ is often written with little o (f = o(g)); ~ is asymptotic equivalence. The ranking is called the hierarchy of growth rates. The full answer n! ~ √(2πn)(n/e)ⁿ is Stirling's formula.</p>
+  <h3>Who said it first</h3>
+  <p>Paul Bachmann introduced O in 1894 and Edmund Landau spread it from 1909, so O and o are sometimes called Landau symbols. Donald Knuth fixed their use in counting the steps of programs in 1976. Abraham de Moivre found that n! grows like a constant times √n (n/e)ⁿ, and James Stirling found the constant, √(2π), in 1730.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'the promise',t:R`\htmlClass{new}{f = O(g) \Leftrightarrow \exists C, N\ \forall n \ge N:\ |f(n)| \le C g(n)}`,n:`Two hidden numbers.`},
+  {k:'ember',kl:'alike',t:R`f \sim g \Leftrightarrow f/g \to 1`,n:`The ratio heads to 1.`}
+],{title:'The slides · big O · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

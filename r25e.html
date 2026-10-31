@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Roots in pairs</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r25concl.html">← 25·∎ every polynomial splits in ℂ</a><a href="r25f.html">next: 25f maps of the plane →</a></p>
+  <div class="tags"><span class="tag tech">25e · technique</span></div>
+  <h1>Roots in pairs</h1>
+  <p>The proof steps of this rung found every root of every polynomial. Most polynomials you have met have real numbers in front, and for them the roots off the floor are never alone. Each one comes with its mirror image across the floor, because the flip keeps sums and products. Put a root and its mirror together and their two line factors multiply to a quadratic with real numbers in front. So every polynomial with real numbers in front is a product of real lines and real quadratics, and no more is ever needed. That finishes a job left open on rung seventeen, where a quotient could be split into simple pieces only when its bottom split into different straight factors. One warning comes with the new numbers. The old rule that the root of a product is the product of the roots holds for numbers that are not negative. Off the floor it breaks, because every number has two square roots and no choice between them keeps products.</p>
+  <p class="gesture">A polynomial with real numbers in front has its roots off the floor in mirrored pairs. Each pair makes a real quadratic, so the polynomial splits into real lines and real quadratics, and every quotient of two such polynomials splits into pieces whose areas you can find. The root of a product is the product of the roots only for numbers that are not negative.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r25a.html">25a</a> (the flip technique), <a href="r25d.html">25d</a> (the root technique), <a href="r09g.html">9g</a> (polynomial division, zeros are factors), <a href="r17k.html">17k</a> (partial fractions into logs), <a href="r17i.html">17i</a> (the log-slope technique), <a href="r21m.html">21m</a> (arctan and its slope), <a href="r08i.html">8i</a> (roots go through products) and <a href="r21cb20.html">21·cb20</a> (equal parts of a turn). <a href="r25f.html">25f</a> moves the plane with the new numbers.</p></div>
+</header>
+
+<section class="class step" data-step="25e1">
+  <h2 class="sthead"><span class="stno">25e1</span>Roots come in mirrored pairs</h2>
+  <p class="stands">Stands on 25a3 (the flip technique), 25d4 (the root technique), 25d.4.1 (one flipped root, by hand) and 4b (induction).</p>
+  <p data-pid="b9557d">From here on, a <i>real polynomial</i> is one with real numbers in front: p(z) = a₀ + a₁z + ⋯ + aₙzⁿ with every aₖ on the floor. Its inputs may be any complex numbers.</p>
+  <p data-pid="23cf4f">The special challenge 25d.4.1 met one case: with 1 + 2i a root of a real polynomial, the flip technique forced 1 − 2i to be a root too. The same lines work for every root of every real polynomial.</p>
+  <p data-pid="93c474">Flipped-root technique: <b>if p is a real polynomial and p(r) = 0, then p(r̄) = 0.</b> The roots of a real polynomial that lie off the floor come in pairs, each the mirror image of the other.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the flipped-root technique">
+\overline{a_k} = a_k \text{ for every } k @@ each aₖ is on the floor (25a3: z̄ = z exactly on the floor)
+\overline{r^k} = \overline{r}^{\,k} @@ the flip of a product, k − 1 times (25a3); induction on k (4b)
+\overline{p(r)} = \textstyle\sum \overline{a_k}\,\overline{r^k} = \sum a_k\,\overline{r}^{\,k} = p(\overline{r}) @@ the flip of a sum and of a product (25a3)
+p(r) = 0 \Rightarrow p(\overline{r}) = \overline{0} = 0 @@ 0 is on the floor
+\htmlClass{new}{p \text{ real},\ p(r) = 0 \Rightarrow p(\overline{r}) = 0} \quad \blacksquare
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: z³ − 3z² + 4z − 2">
+p(1) = 1 - 3 + 4 - 2 = 0 @@ a root on the floor
+(1+i)^2 = 2i,\ \ (1+i)^3 = -2 + 2i @@ the pair product
+p(1+i) = (-2+2i) - 6i + (4+4i) - 2 = 0 @@ a root off the floor
+\htmlClass{new}{p(1-i) = \overline{p(1+i)} = 0} \quad \blacksquare @@ the flipped-root technique: no work at all
+  </pre>
+  <p data-pid="8dc3ad">The technique needs the real numbers in front. z − i has the root i and not −i. A real polynomial of odd degree has its roots off the floor in pairs, an even number of them, so at least one root is left over on the floor. 12e proved that by in-between values; here it comes from counting.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · flipped roots · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">25e1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="z^3 - 5z^2 + 17z - 13"></span></span>It is a real polynomial, and 2 + 3i is a root. Find the other two roots, without any formula for cubics.</li><li><span class="givens"><span data-tex-inline="z^2 + iz + 2"></span></span>Check that i is a root and that −i is not. <br>Find which condition of the flipped-root technique fails.</li><li><span class="givens"><span class="gtx">p real, of degree 5, top coefficient 1, with roots i and 2 − i, and p(0) = −10</span></span>Find all five roots.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="25e2">
+  <h2 class="sthead"><span class="stno">25e2</span>Real lines and real quadratics</h2>
+  <p class="stands">Stands on 25e1, 25d4 (the root technique), 9g (polynomial division, zeros are factors), 8f (square never negative) and 4b (induction).</p>
+  <p data-pid="de6ac6">A root r = s + ti off the floor and its flip make the line factors z − r and z − r̄. Neither has real numbers in front. Their product does.</p>
+  <p data-pid="fc8a0b">Real-pieces technique: <b>every real polynomial of degree n ≥ 1 is its top coefficient times a product of real lines x − c and real quadratics x² + bx + c with b² − 4c &lt; 0.</b> No piece of higher degree is ever needed.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the real-pieces technique">
+r = s + ti,\ t \ne 0,\ p(r) = 0 @@ a root off the floor (if every root is on the floor, the root technique, 25d4, gives real lines and we stop)
+(z - r)(z - \overline{r}) = z^2 - (r + \overline{r})z + r\overline{r} = z^2 - 2s\,z + (s^2 + t^2) @@ share out; r + r̄ = 2s and r r̄ = |r|² (25a3)
+b = -2s,\ c = s^2 + t^2:\ \ b^2 - 4c = -4t^2 < 0 @@ real; and (x + b/2)² = (b² − 4c)/4 &lt; 0 has no real answer (8f)
+p(x) = (x^2 + bx + c)\,q(x) + (ux + v),\ \ q, u, v \text{ real} @@ polynomial division (9g), on the floor alone
+0 = p(r) = ur + v = (us + v) + ut\,i @@ r is a root of p and of the quadratic
+u = 0,\ v = 0 @@ equal pairs have equal parts; t ≠ 0
+p = (x^2 + bx + c)\,q,\ \ q \text{ real, of degree } n - 2 @@ no remainder
+\htmlClass{new}{p = a_n \textstyle\prod (x - c_j) \prod (x^2 + b_k x + c_k)} \quad \blacksquare @@ repeat on q; a root on the floor gives a real line (9g); induction on the degree (4b)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: x⁴ + 4">
+x^4 = -4:\ x = 1 + i,\ 1 - i,\ -1 + i,\ -1 - i @@ equal parts of a turn (21·cb20.3), size √2, turns of an eighth plus quarters
+(x - (1+i))(x - (1-i)) = x^2 - 2x + 2 @@ the first flipped pair
+(x - (-1+i))(x - (-1-i)) = x^2 + 2x + 2 @@ the second
+\htmlClass{new}{x^4 + 4 = (x^2 - 2x + 2)(x^2 + 2x + 2)} \quad \blacksquare @@ check: share out, the x³ and x terms cancel
+  </pre>
+  <p data-pid="8c7f61">Repeated roots pair up too. If 1 + i is a root twice, the quotient q in the proof is real and still has 1 + i as a root, so it also has 1 − i. A repeated root off the floor and its flip are repeated the same number of times.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · real pieces · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">25e2.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="x^3 - 8"></span></span>Split it into a real line and a real quadratic with no real root.</li><li><span class="givens"><span data-tex-inline="x^4 + 1"></span></span>Find its four roots and pair each with its flip. <br>Split it into two real quadratics.</li><li><span class="givens"><span data-tex-inline="x^6 - 1"></span></span>Split it into real lines and real quadratics with no real root.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="25e3">
+  <h2 class="sthead"><span class="stno">25e3</span>Partial fractions, finished</h2>
+  <p class="stands">Stands on 25e1, 25e2, 17k1 (the straight-factors technique), 17i (the log-slope technique), 21m (arctan and its slope) and 16d (the straight-inside technique).</p>
+  <p data-pid="8548d2">17k split a quotient of polynomials only when its bottom split into different straight factors on the floor. It left two cases open. A bottom such as x² + 1 has no straight factor on the floor at all (17k4, the last illegal line). A bottom such as (x − 1)² repeats a factor (17k4, the second line). 17k3 told the story of 1702, when the claim that x⁴ + c⁴ has no real quadratic factors seemed to call for a new kind of function. The real-pieces technique settles the first case for every bottom, and with it the 1702 question: real lines and real quadratics are always enough.</p>
+  <p data-pid="686aa8">Paired-fractions technique: <b>let q be a real polynomial with top coefficient 1 and n different roots in ℂ, and p a real polynomial of degree less than n. Then p/q is a sum of pieces A/(x − c), one for each root c on the floor, and (Bx + C)/(x² + bx + c), one for each flipped pair, with every A, B and C real.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the paired-fractions technique">
+\tfrac{p(z)}{q(z)} = \textstyle\sum_j \tfrac{A_j}{z - r_j},\ \ A_j = \tfrac{p(r_j)}{q_j(r_j)} @@ straight-factors (17k1): its proof uses only field facts and that a polynomial of degree below n with n roots is 0, which hold in ℂ (25d4)
+q_j(r_j) = \textstyle\prod_{k \ne j} (r_j - r_k) @@ q_j is q with the factor z − r_j left out
+\overline{q_j(r_j)} = \textstyle\prod_{k \ne j} (\overline{r_j} - \overline{r_k}) @@ the flip of a product; the roots other than r_j, flipped, are the roots other than r̄_j (25e1)
+\text{the } A \text{ at } \overline{r} \text{ is } \overline{A} @@ p(r̄) is the flip of p(r) (25e1); A · q_j(r_j) = p(r_j), flipped (25a3)
+\tfrac{A}{x - r} + \tfrac{\overline{A}}{x - \overline{r}} = \tfrac{(A + \overline{A})x - (A\overline{r} + \overline{A}r)}{x^2 + bx + c} @@ one bottom; (x − r)(x − r̄) is real (25e2)
+\htmlClass{new}{B = A + \overline{A},\ \ C = -(A\overline{r} + \overline{A\overline{r}})\ \text{ are real}} \quad \blacksquare @@ each is a number plus its flip, twice a floor part (25a3); and A = Ā when r is on the floor
+  </pre>
+  <p data-pid="94e797">Then every piece has an area function on the floor. Write x² + bx + c = (x + b/2)² + k², with k = √(c − b²/4) &gt; 0, and split the top as Bx + C = (B/2)(2x + b) + (C − Bb/2). The first part has its bottom’s slope on top, so its area is a log (17i). The second is a stretched and slid 1/(1 + x²), so its area is an arctan (21m, 16d):</p>
+  <p class="eqline" data-pid="a89541">∫ (Bx + C)/(x² + bx + c) dx = (B/2) ln(x² + bx + c) + ((C − Bb/2)/k) arctan((x + b/2)/k) + const.</p>
+  <pre class="lines" data-k="ember" data-label="this step: 4/(x⁴ − 1)">
+x^4 - 1:\ \text{roots } 1,\ -1,\ i,\ -i @@ x⁴ = 1: equal parts of a turn (21·cb20.3)
+A_1 = \tfrac{4}{(1+1)(1+i)(1-i)} = 1,\ \ A_{-1} = \tfrac{4}{(-2)(-1-i)(-1+i)} = -1 @@ cover-up (17k1)
+A_i = \tfrac{4}{(i-1)(i+1)(2i)} = \tfrac{4}{-4i} = i,\ \ A_{-i} = -i @@ cover-up; the flip, for free
+\tfrac{i}{x - i} - \tfrac{i}{x + i} = \tfrac{i\,(2i)}{x^2 + 1} = -\tfrac{2}{x^2 + 1} @@ the flipped pair, joined
+\htmlClass{new}{\textstyle\int \tfrac{4\,dx}{x^4 - 1} = \ln\Big|\tfrac{x - 1}{x + 1}\Big| - 2\arctan x + C} \quad \blacksquare @@ 17k2 for the lines; arctan′ x = 1/(1 + x²) (21m); on an interval holding neither 1 nor −1
+  </pre>
+  <p data-pid="642261">The second open case, a repeated factor, needs pieces with powers on the bottom: A/(x − c)², and (Bx + C)/(x² + bx + c)² for a repeated pair. The shape is the same, one piece for each power up to the repeat. The first special challenge builds one such split and proves it exists.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · partial fractions · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">25e3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\dfrac{5}{(x - 2)(x^2 + 1)}"></span></span>Split it into a piece over x − 2 and a piece over x² + 1. <br>Find its area function on x &gt; 2.</li><li><span class="givens"><span data-tex-inline="\displaystyle\int \frac{dx}{x^2 + 4x + 13}"></span></span>Find it.</li><li><span class="givens"><span data-tex-inline="\displaystyle\int_0^1 \frac{dx}{x^3 + 1}"></span></span>Find it exactly, using the flipped pair of roots of x³ + 1.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="25e4">
+  <h2 class="sthead"><span class="stno">25e4</span>Square roots off the floor</h2>
+  <p class="stands">Stands on 21·cb20.3 (equal parts of a turn), 8i (roots go through products) and 5d (a product is 0 only if a factor is).</p>
+  <p data-pid="b666ed">On the floor, √u names the one root that is not negative, and 8i proved √u √v = √(uv) for u, v ≥ 0. Off the floor there is no “not negative” to choose by.</p>
+  <p data-pid="ecac0b">Root-choice technique: <b>every w ≠ 0 in ℂ has exactly two square roots, s and −s; and no choice of one root for each w makes √z √w = √(zw) hold for all z and w. What always holds is √z √w = ±√(zw).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the root-choice technique">
+s^2 = w \text{ for some } s @@ equal parts of a turn (21·cb20.3), with n = 2
+z^2 = w \iff (z - s)(z + s) = 0 \iff z = s \text{ or } z = -s @@ share out; a product is 0 only if a factor is (5d, in the field ℂ)
+\text{suppose a choice with } \sqrt{z}\sqrt{w} = \sqrt{zw} \text{ always} @@ for contradiction
+\sqrt{1} = \sqrt{1}\sqrt{1} \Rightarrow \sqrt{1} = 1 @@ √1 ≠ 0; divide by it
+\sqrt{-1}\,\sqrt{-1} = \sqrt{(-1)(-1)} = \sqrt{1} = 1 @@ the rule, with z = w = −1
+\sqrt{-1}\,\sqrt{-1} = -1 @@ √−1 is a square root of −1
+\htmlClass{new}{1 = -1:\ \text{no choice keeps products}} \quad \blacksquare @@ and (√z √w)² = zw, so √z √w is one of the two roots of zw
+  </pre>
+  <p data-pid="f1967c">So off the floor, √ is a choice, and every rule about it must name its choice. The usual one takes √(−u) = i√u for u &gt; 0. With it, √(−4)√9 = 2i · 3 = 6i = √(−36), but √(−4)√(−9) = 2i · 3i = −6, while √36 = 6. A root is safe in an answer. It is not safe inside a product rule unless both numbers are on the floor and not negative.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · two roots · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">25e4.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="-5 + 12i,\ \ -9"></span></span>Find both square roots of each, and check by squaring.</li><li><span class="givens"><span data-tex-inline="\sqrt{-u} = i\sqrt{u} \text{ for } u &gt; 0"></span></span>With this choice, find √(−4)√(−9) and √((−4)(−9)), then √(−4)√9 and √(−36). <br>Find which pair agrees.</li><li><span class="givens"><span data-tex-inline="z^2 = i"></span></span>Find every answer, as a + bi.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="25e5">
+  <h2 class="sthead"><span class="stno">25e5</span>Illegal moves</h2>
+  <p class="stands">Stands on 25e1 to 25e4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\sqrt{-4}\,\sqrt{-9} = \sqrt{36} = 6\,? @@ roots go through products only for u, v ≥ 0 (8i); 2i · 3i = −6 (25e4)
+p(r) = 0 \Rightarrow p(\overline{r}) = 0 \text{ for every polynomial}\,? @@ the flipped-root technique needs real numbers in front (25e1)
+x^4 + 1 \text{ has no real root, so no real factors}\,? @@ no real lines, but two real quadratics (25e2): (x² + √2x + 1)(x² − √2x + 1)
+\textstyle\int \tfrac{dx}{x - i} = \ln|x - i| + C\,? @@ the slope of ln|x − i| = ½ ln(x² + 1) is x/(x² + 1), not 1/(x − i); join the flipped pair first (25e3)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">25e5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\sqrt{-4},\ \sqrt{-9},\ \sqrt{36}"></span></span>Find 2i · 3i. <br>Find which condition of 8i’s roots-go-through-products technique the first line ignores.</li><li><span class="givens"><span data-tex-inline="z^2 - (1 + i)z + i"></span></span>Find its two roots, and whether their flips are roots.</li><li><span class="givens"><span data-tex-inline="x^4 + 1"></span></span>Multiply out (x² + √2x + 1)(x² − √2x + 1). <br>Find the roots of each factor, and whether any is on the floor.</li><li><span class="givens"><span data-tex-inline="\tfrac12\ln(x^2 + 1)"></span></span>Find its slope at x = 1, and 1/(x − i) at x = 1. <br>Find whether they agree, and what goes wrong in the line.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">25e.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\dfrac{1}{(x - 1)^2 (x + 1)}"></span></span>Build its split as A/(x − 1) + B/(x − 1)² + C/(x + 1), and find its area function on x &gt; 1. <br>Prove that every top of degree at most 2 over this bottom splits in this shape, in exactly one way.</div>
+  <div class="chq"><span class="chid">25e.4.2</span><span class="tagq">edge</span>Find a real polynomial of degree 4 with 1 + i as a root twice. <br>Prove that every real polynomial with 1 + i as a root twice has 1 − i as a root twice, and find what this says about a real polynomial of degree 4 with a repeated root off the floor.</div>
+  <div class="chq"><span class="chid">25e.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="i(z^2 + 1)"></span></span>A real polynomial has its roots in flipped pairs, repeats matched. Turn it round: if every root’s flip is a root, repeated as often, must the polynomial be real? <br>Test the given, and find what is true instead.</div>
+  <div class="chq"><span class="chid">25e.4.4</span><span class="tagq">reroute</span>12e proved that a polynomial of odd degree with real numbers in front has a zero on the floor, by in-between values. Reroute: prove it from the root technique (25d4) and the flipped-root technique, by counting.</div>
+  <div class="chq"><span class="chid">25e.4.5</span><span class="tagq">seam</span>In an algebra textbook of 1770, one of the century’s greatest calculators multiplied two square roots of negative numbers as if they were roots of positives, and wrote down a positive answer. <br>Was it a slip, or a rule nobody had yet written down? <br>When a symbol names one of two answers, who decides which, and what must every rule about it then name?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r25concl.html">← 25·∎ · every polynomial splits in ℂ</a><a href="r25f.html">25f · maps of the plane →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The flipped-root technique is the complex conjugate root theorem. The real-pieces technique says every real polynomial factors over ℝ into linear factors and irreducible quadratic factors. The paired-fractions technique is partial fraction decomposition over ℝ, and its pieces are the partial fractions. The choice √(−u) = i√u is the principal square root; a choice of one root for each number is a branch.</p>
+  <h3>Who said it first</h3>
+  <p>Gottfried Leibniz and Johann Bernoulli set out partial fractions in 1702, and Leibniz claimed that x⁴ + a⁴ has no real quadratic factors; Nicolaus I Bernoulli refuted him in 1719. Leonhard Euler stated in 1742, in a letter to Nicolaus I Bernoulli, that every real polynomial is a product of real factors of degree one and two, and gave a proof in 1749. The textbook in 25e.4.5 is Euler’s Vollständige Anleitung zur Algebra (1770), whose rule for multiplying roots of negatives was written for roots of positives.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'real in front',t:R`\overline{a_k} = a_k`,n:`Each coefficient is its own flip.`},
+  {k:'ember',kl:'flip the value',t:R`\overline{p(r)} = p(\overline{r})`,n:`The flip keeps sums and products.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{p(r) = 0 \Rightarrow p(\overline{r}) = 0}`,n:`Roots off the floor come in mirrored pairs.`}
+],{title:'The slides · flipped roots · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'a flipped pair',t:R`(z - r)(z - \overline{r}) = z^2 - 2s\,z + |r|^2`,n:`Real numbers in front.`},
+  {k:'ember',kl:'divide it out',t:R`p = (x^2 + bx + c)\,q`,n:`The remainder must be 0.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{p = a_n \prod(\text{lines}) \prod(\text{quadratics})}`,n:`Nothing bigger.`}
+],{title:'The slides · real pieces · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'split in ℂ',t:R`\tfrac{p}{q} = \sum \tfrac{A_j}{z - r_j}`,n:`17k’s cover-up, in the plane.`},
+  {k:'ember',kl:'pair the flips',t:R`\tfrac{A}{x - r} + \tfrac{\overline{A}}{x - \overline{r}} = \tfrac{Bx + C}{x^2 + bx + c}`,n:`B and C are real.`},
+  {k:'ember',kl:'area',t:R`\htmlClass{new}{\tfrac{B}{2}\ln(x^2 + bx + c) + \tfrac{C - Bb/2}{k}\arctan\tfrac{x + b/2}{k}}`,n:`A log and an arctan.`}
+],{title:'The slides · partial fractions · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'two of them',t:R`z^2 = w \iff z = \pm s`,n:`Every w ≠ 0 has two square roots.`},
+  {k:'ember',kl:'no choice keeps products',t:R`\sqrt{-1}\sqrt{-1} = -1 \ne \sqrt{1}`,n:`Any choice breaks somewhere.`},
+  {k:'ember',kl:'what holds',t:R`\htmlClass{new}{\sqrt{z}\sqrt{w} = \pm\sqrt{zw}}`,n:`Up to a sign.`}
+],{title:'The slides · two roots · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

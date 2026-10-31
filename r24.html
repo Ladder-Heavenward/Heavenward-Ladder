@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A rule on its rates fixes a function</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r23nav.html">← 23·nav how far away is the horizon?</a><a href="r24a.html">next: 24a a rule and a start →</a></p>
+  <div class="tags"><span class="tag theory">Rung 24 · theory</span></div>
+  <h1>A rule on its rates fixes a function</h1>
+  <p>Most laws of nature do not say what a thing is. They say how fast it changes. A cup cools at a rate set by how much hotter it is than the room. A population grows at a rate set by its size. A falling stone gains speed at a rate set by gravity. Such a law is a rule tying a function to its own slopes, and the question is whether the rule, with a place to start, picks out one function. This rung shows that it does, when the rule is tame. It builds the one solution by feeding a guess back into the rule again and again, and proves the guesses settle. It shows how far apart two nearby starts can drift. Then it finds two rules that are not tame: one whose single start has endlessly many futures, and one whose solution runs off to infinity before the clock runs out.</p>
+  <p class="gesture">A rule on a function’s rates, with a starting value, fixes the function near the start, when the rule is tame. The solution is the settled end of repeated integration. Without tameness, one start can have many futures, and a solution can end early.</p>
+  <div class="ready"><h3>The steps, in order</h3><p><a href="r24a.html">24a A rule and a start</a>: what a solution is, and growth at its own rate.<br><a href="r24b.html">24b Building the solution by repeated integration</a>: the rule as an area, fed back into itself.<br><a href="r24c.html">24c A map that shrinks has one fixed point</a>: the largest gap between functions, and why shrinking settles.<br><a href="r24d.html">24d Tame rules fix the future</a>: one solution, and how fast two starts drift apart.<br><a href="r24e.html">24e When the future is not fixed</a>: many futures, and a solution that runs off. Then the techniques:<br><a href="r24f.html">24f Separating the variables</a>.<br><a href="r24g.html">24g The integrating factor</a>.<br><a href="r24h.html">24h The two model equations</a>.<br><a href="r24i.html">24i Slope fields and stepping forward</a>.<br><a href="r24j.html">24j The logistic equation solved</a>.<br><a href="r24k.html">24k Fixed points, stability and the start of chaos</a>.<br><a href="r24l.html">24l Solutions as power series</a>. Then the annexes:<br><a href="r24then.html">24·then How fast does a hot drink cool?</a>, <a href="r24phys.html">24·phys Why does a pendulum keep time?</a>, <a href="r24bio.html">24·bio How does a cell keep time?</a>, <a href="r24eng.html">24·eng How does a thermostat hold a room steady?</a>, <a href="r24now.html">24·now Can chaos be proved?</a>.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · read it through, then go to 24a</div>
+
+  <h3>What it means to say it</h3>
+  <p data-pid="66b964">A rule on rates says, at each input x and each height y, what the slope must be: y′ = F(x, y). A solution is a function whose slope obeys the rule at every input of an interval. A start fixes its height at one input. To say the rule fixes a function is to say that one, and only one, solution passes through the start.</p>
+  <p data-pid="191f6c"><b>A rule on a function’s rates fixes it when exactly one solution passes through each start.</b> The rung finds a condition that makes this true, and two rules that show what happens without it.</p>
+
+  <h3>Where it comes from</h3>
+  <p data-pid="defcaa">Isaac Newton wrote rules on rates for the planets in the 1680s, and Gottfried Wilhelm Leibniz and the Bernoulli brothers solved the first families of them by hand in the 1690s. Leonhard Euler stepped along a rule in small steps in 1768. For a century everyone assumed a solution existed. Augustin-Louis Cauchy proved it in the 1820s, Rudolf Lipschitz gave the tameness condition in 1876, and Émile Picard built the solution by repeated integration in 1890. Stefan Banach made the shrinking-map principle general in 1922. Thomas Grönwall bounded the drift in 1919.</p>
+
+  <h3>The principles, in plain words</h3>
+  <p data-pid="8330f0">The rung proves five things, each from the ones before.</p>
+  <p data-pid="fe537d">First, the rule y′ = ky with a start has exactly one solution, a growth function.</p>
+  <p data-pid="8971ee">Second, a rule with a start is the same question as one equation between a function and an area. Feeding a guess into that area again and again gives a list of functions; for y′ = y, it gives the matching polynomials of the growth function.</p>
+  <p data-pid="219fbe">Third, a map on functions that shrinks every gap by a fixed fraction has exactly one function it leaves unchanged, and repeating the map from any start settles on it.</p>
+  <p data-pid="ff3b44">Fourth, when the rule changes no faster than in proportion to a change in height, the area map shrinks near the start. So exactly one solution passes through the start, and two nearby starts drift apart no faster than a growth function.</p>
+  <p data-pid="c8f564">Fifth, without that condition a start can have endlessly many futures, and even with it a solution can run off to infinity at a finite input.</p>
+  <p data-pid="665fd4"><b>Anexact, yet rigorous.</b> Beside the proofs, the annexes carry boxes of the second kind of care, the kind that measures how wrong it might be instead of proving. 24·then carries <i>the middle of a change</i>: a rule on rates fits the stretch it was measured on. 24·phys carries <i>laws with an exception rate</i>: a pendulum keeps even time only while its swing stays small, and the loss is known. 24·now carries <i>the cloud</i>: a forecast of chaos reports only what holds for every point of its box.</p>
+
+  <h3>What follows</h3>
+  <p data-pid="fa7106">With those five, the techniques solve rules by hand. Rules whose two letters separate are integrated side by side. Rules that are straight in y are solved with a multiplying factor. The two model equations, steady growth and steady swinging, are solved for good, and so is every rule of the second order with constant numbers in front. When no formula is found, the solution is walked in small steps along the slope field, and the error of each walk is counted. The logistic rule is solved, the steady states of a rule are tested for stability, and a simple map is followed until it doubles its period again and again and turns to chaos. Last, some rules are solved by a power sum that obeys them.</p>
+
+  <h3>What you can do because you know it</h3>
+  <p data-pid="71dbbb">You can turn a law about rates into a forecast, and say how long the forecast holds. You can solve the rules for cooling, decay, growth with a ceiling, springs and circuits, and check every answer by putting it back in. When no formula exists, you can step forward on a computer and bound the error. You can tell a steady state that holds from one that falls apart.</p>
+  <p data-pid="39f739">Nearly every law of physics, chemistry and biology is a rule of this kind. The rung hands you the guarantee that such a law has one answer, and the cases where it does not.</p>
+
+  <h3>What it costs</h3>
+  <p data-pid="acf6c2">Nothing new is laid down. The rung spends rung 22’s endless sums and its pull-together technique, rung 23’s settling everywhere at once, rung 16’s areas and rung 14’s mean value technique. At the end of the rung you will know what it means to say a rule on its rates fixes a function, when it is true, and what you can do because you know it.</p>
+</section>
+
+<nav class="nextrung"><a href="r23nav.html">← 23·nav · how far away is the horizon?</a><a href="r24a.html">24a · a rule and a start →</a></nav>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+Rung.ready(()=>{});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How many terms</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r23h.html">← 23h polynomials that hug a curve, by hand</a><a href="r23j.html">next: 23j a list stored in one function →</a></p>
+  <div class="tags"><span class="tag tech">23i · technique</span></div>
+  <h1>How many terms</h1>
+  <p>A sum that settles gives a number only when you stop adding, and then the question is how wrong you are. This step answers it by hand. There are three ways to fence what you left out, and the cheapest one that applies is the one to use. A fence that is narrow is not yet an answer to so many places: the whole fence, slips of rounding included, has to round the same way. With that settled, the step computes the growth constant and the sine of a tenth to six places, shows why a small angle can stand in for its own sine, and shows how a calculator moves any input close to the centre before it adds a single piece.</p>
+  <p class="gesture">Fence the leftover the cheapest way that applies. A value is known to so many places when its whole fence rounds the same way. Small angles are nearly their own sines. Move the input near the centre before adding anything.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r23b.html">23b</a> (the error ceiling), <a href="r22i.html">22i</a> (the leftover technique), <a href="r22g.html">22g</a> (the bracket), <a href="r23h.html">23h</a> (sums by hand), <a href="r21d.html">21d</a> (the sum formulas). <a href="r23j.html">23j</a> stores a whole list in one power sum.</p></div>
+</header>
+
+<section class="class step" data-step="23i1">
+  <h2 class="sthead"><span class="stno">23i1</span>Fences for the leftover</h2>
+  <p class="stands">Stands on 22g1 (the bracket), 22i2 (the leftover technique), 23b2 (the error-ceiling technique) and 23h3 (the sum for ln((1 + x)/(1 − x))).</p>
+  <p data-pid="f4315e">Cheapest-fence technique: <b>to fence the leftover of a sum at x, use the bracket when the signs take turns and the sizes fall, a geometric sum when each piece is at most k times the one before with k &lt; 1, and the error ceiling otherwise, and choose the sum whose pieces shrink fastest at x.</b> The bracket says the leftover is smaller than the next piece. The geometric fence says it is at most the next piece over 1 − k. The error ceiling needs a ceiling on a slope.</p>
+  <pre class="lines" data-k="ember" data-label="this step: ln 2 to six places, two ways">
+\ln 2 = 1 - \tfrac12 + \tfrac13 - \cdots,\ \ \text{leftover after } n \text{ pieces} < \tfrac{1}{n+1} @@ the bracket (22g1)
+\tfrac{1}{n+1} < 0.0000005 \Rightarrow n \ge 2\,000\,000 @@ two million pieces
+\ln 2 = 2\big(\tfrac13 + \tfrac{1}{3 \cdot 3^3} + \tfrac{1}{5 \cdot 3^5} + \cdots\big),\ \ \text{each piece under } \tfrac19 \text{ of the last} @@ 23h3; the ratio of neighbours is (2m − 1)/(9(2m + 1))
+\text{six pieces: } 0.69314707\ldots,\ \ \text{leftover} \le \tfrac{\text{next piece}}{1 - 1/9} < 0.00000011 @@ the leftover technique (22i2); the next piece is 2/(13 · 3¹³)
+\htmlClass{new}{0.69314707 < \ln 2 < 0.69314719,\ \text{so } \ln 2 = 0.693147 \text{ to six places}} \quad \blacksquare @@ six pieces against two million
+  </pre>
+  <p data-pid="1be3a3">The fence was never the hard part. The choice of sum was. Both sums settle at ln 2, and one of them is useless for computing. A sum whose pieces shrink by a fixed factor gains a fixed number of places with every piece.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · fences · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">23i1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\ln 1.2"></span></span>Find how many pieces of ln(1 + x) at x = 0.2 put the leftover below 10⁻⁸, and which fence you used. <br>Find the x that makes (1 + x)/(1 − x) = 1.2, and how many pieces of 23h3's sum do the same. <br>Find ln 1.2 to eight places.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="23i2">
+  <h2 class="sthead"><span class="stno">23i2</span>Six places of e</h2>
+  <p class="stands">Stands on 23i1, 22i2 (the leftover technique) and 8 (the decimal places of a real).</p>
+  <p data-pid="fa783a">Rounding-fence technique: <b>a total is known to d places when every number in its fence, with the slips of rounding added, rounds to the same d places.</b> A fence narrower than half a unit in the last place is needed, and it is not enough: it must also miss the boundary halfway between two roundings.</p>
+  <pre class="lines" data-k="ember" data-label="this step: e to six places">
+1 + 1 + 0.5 + 0.166666667 + 0.041666667 + 0.008333333 + 0.001388889 + 0.000198413 + 0.000024802 + 0.000002756 @@ 1/k! for k = 0 to 9, each rounded to nine places
+= 2.718281527,\ \ \text{slips} \le 10 \times 0.0000000005 = 0.000000005 @@ each rounding moves a piece by at most half a unit in the ninth place
+\text{leftover} \le \tfrac{1/10!}{1 - 1/11} = \tfrac{11}{10 \cdot 10!} < 0.000000304 @@ from 1/10! on, each piece is at most 1/11 of the one before (22i2)
+2.718281522 < e < 2.718281836 @@ the fence, slips included
+\htmlClass{new}{e = 2.718282 \text{ to six places}} \quad \blacksquare @@ every number in the fence rounds to it
+  </pre>
+  <p data-pid="8277d1">Nine pieces would not do. Their fence runs from 2.7182787 to 2.7182819, and the two ends round to different sixth places. Ten pieces leave the lower end at 2.718281522, only 0.000000022 above the boundary 2.7182815 that decides the rounding. Had it fallen below, an eleventh piece would settle it. That is all the rounding-fence technique asks: add pieces until the whole fence rounds one way.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">23i2.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="e^{-1} = 1 - 1 + \tfrac{1}{2!} - \tfrac{1}{3!} + \cdots"></span></span>Find the fewest pieces that give 1/e to six places, the fence you used, and the value.</li><li><span class="givens"><span data-tex-inline="\sqrt e = e^{0.5}"></span></span>Find the fewest pieces that give √e to six places, the fence you used, and the value.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="23i3">
+  <h2 class="sthead"><span class="stno">23i3</span>Small angles</h2>
+  <p class="stands">Stands on 23b1 (the match-error technique), 23a3 (the matches for sin and cos), 21j (radians) and 22g1 (the bracket).</p>
+  <p data-pid="fb6c94">Small-angle technique: <b>for |θ| ≤ h, with θ in radians, sin θ is θ to within h³/6, and cos θ is 1 − θ²/2 to within h⁴/24.</b> The proof skips a term: sin has no θ² piece, so its match of degree 1 is already its match of degree 2, and the error is one power smaller than it looks.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the small-angle technique">
+T_1 = T_2 = \theta \text{ for } \sin @@ the θ² coefficient of sin is 0 (23a3)
+\sin\theta - \theta = R_2(\theta) = -\tfrac{\cos c}{3!}\,\theta^3 @@ the match-error technique (23b1) with n = 2; the third slope of sin is −cos
+|\sin\theta - \theta| \le \tfrac{h^3}{6} @@ |cos c| ≤ 1
+T_2 = T_3 = 1 - \tfrac{\theta^2}{2} \text{ for } \cos,\ \ \cos\theta - T_3(\theta) = \tfrac{\cos c}{4!}\,\theta^4 @@ no θ³ piece; the fourth slope of cos is cos
+\htmlClass{new}{|\sin\theta - \theta| \le \tfrac{h^3}{6},\ \ \big|\cos\theta - \big(1 - \tfrac{\theta^2}{2}\big)\big| \le \tfrac{h^4}{24}} \quad \blacksquare @@ for every |θ| ≤ h
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: sin 0.1 to six places in two pieces">
+\sin 0.1 = 0.1 - \tfrac{0.001}{6} + \tfrac{0.00001}{120} - \cdots @@ the sum for sin (23b2)
+0.1 - 0.000166667 = 0.099833333 @@ two pieces
+0 < \text{leftover} < \tfrac{0.1^5}{120} < 0.0000000834 @@ the bracket (22g1): the next piece is positive
+0.099833333 < \sin 0.1 < 0.099833417 @@ the fence
+\htmlClass{new}{\sin 0.1 = 0.099833 \text{ to six places}} \quad \blacksquare @@ both ends round to it; a third piece gives 0.0998334167
+  </pre>
+  <p data-pid="ce0eef">Degrees must be turned into radians first. 1° is π/180 = 0.0174533, and the technique says sin 1° is that to within 0.0000009. The Moon, 384 400 km away on average, fills about 0.52° of sky, which is 0.0090757 radians. Its width is about 384 400 × 0.0090757 = 3489 km. The exact triangle, with a tangent, gives a width 0.02 km larger. The angle was measured to two figures, so the small-angle step costs nothing that the measurement had not already lost. The Moon is in fact about 3475 km across.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · small angles · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">23i3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\sin 2^\circ,\ \ \cos 2^\circ"></span></span>Find each to six places with the fewest pieces, and the ceiling that shows it.</li><li><span class="givens"><span class="gtx">the Space Needle in Seattle, 184 m tall, seen from a ferry 5 km away</span></span>Find the angle it fills, taking it as arctan(184/5000) ≈ 184/5000, in radians and in degrees. <br>Find a ceiling on the error of that step from the sum for arctan (23e4).</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="23i4">
+  <h2 class="sthead"><span class="stno">23i4</span>Bring the input near the centre</h2>
+  <p class="stands">Stands on 23i1, 21d (the sum formulas), 17c (the log of a product) and 23h3.</p>
+  <p data-pid="58d7d5">Bring-near technique: <b>before adding any pieces, move the input close to the centre with facts that are exact: take whole half turns off an angle, split off a power of 2 inside a log, and split an exponent into a whole part and a small part.</b> The sums then shrink fast from the first piece. Only the facts you used to move the input need to be known to more places.</p>
+  <pre class="lines" data-k="ember" data-label="this step: sin 10, in radians">
+3\pi = 9.424777961,\ \ 10 - 3\pi = 0.575222039 @@ π to ten figures
+\sin 10 = \sin(3\pi + 0.575222039) = -\sin 0.575222039 @@ sin(A + π) = −sin A, from the sum formula (21d): each half turn flips the sign
+\sin 0.575222039 = 0.575222039 - 0.031721616 + 0.000524803 - 0.000004134 + \cdots @@ the sum for sin (23b2)
+0 < \text{leftover} < 0.00000002 @@ the bracket: the next piece is x⁹/9!, about 0.000000019
+\htmlClass{new}{\sin 10 = -0.544021 \text{ to six places}} \quad \blacksquare @@ the four pieces give 0.544021092, and the fence rounds one way
+  </pre>
+  <p data-pid="3c582a">The slip in 3π is three times the slip in π, so π to ten figures is plenty here. For sin 1000 it would not be: 1000 − 318π multiplies the slip in π by 318. Every calculator key for sin, cos, ln and eˣ works this way: move the input near the centre with exact facts, then add a handful of pieces.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">23i4.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\sin 100"></span></span>Find the whole number of half turns to take off, and the angle left, with π = 3.14159265359. <br>Find sin 100 to four places. <br>Find how many places of π are needed for the angle left to be right to six places.</li><li><span class="givens"><span data-tex-inline="\ln 10 = 3\ln 2 + \ln 1.25"></span></span>Find the x with (1 + x)/(1 − x) = 1.25. <br>Find ln 1.25 to eight places, and the pieces it takes. <br>Find ln 10 to six places, with ln 2 = 0.693147181.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="23i5">
+  <h2 class="sthead"><span class="stno">23i5</span>Illegal moves</h2>
+  <p class="stands">Stands on 23i1 to 23i4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\tfrac{1}{10!} < 0.0000003, \text{ so ten pieces give } e \text{ to within } 0.0000003\,? @@ the pieces are all positive: the leftover is more than the next piece; only the bracket gives the next piece as a fence
+\text{the fence is } [0.1234564,\ 0.1234566], \text{ narrower than } 0.0000005, \text{ so six places are known}\,? @@ it straddles 0.1234565: its ends round to 0.123456 and 0.123457
+\sin 1^\circ \approx 1\,? @@ the small-angle technique needs radians: 1° is π/180
+\text{the sum for } \sin \text{ settles at } x = 100, \text{ so add it there}\,? @@ it settles, but its pieces climb past 10⁴² before they fall; every slip of rounding is multiplied
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">23i5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\textstyle\sum \tfrac{1}{k!},\ \ \sum \tfrac{1}{k^2}"></span></span>Find the next piece after 1/9! and the true leftover e − (1 + 1 + ⋯ + 1/9!). <br>Find the next piece after 1/100², and a fence on the true leftover from 22f3.</li><li><span class="givens"><span class="gtx">a fence from 0.1234564 to 0.1234566</span></span>Find its width, and what each end rounds to at six places. <br>Find a fence of the same width that does give six places.</li><li><span class="givens"><span data-tex-inline="\sin 1^\circ,\ \ \sin 1"></span></span>Find each to five places. <br>Find which one the small-angle technique fits, and a ceiling on its error.</li><li><span class="givens"><span data-tex-inline="\sin 100"></span></span>Find the largest piece of the sum for sin at x = 100, and where it comes. <br>Find what a calculator that keeps ten figures loses on a piece that size.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">23i.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\tfrac{\pi}{4} = 4\arctan\tfrac15 - \arctan\tfrac{1}{239}"></span></span>Prove it, using tan(A + B) = (tan A + tan B)/(1 − tan A tan B) from 21d: find tan(2 arctan ⅕), then tan(4 arctan ⅕), then the last step. <br>Build π to six places from it with the sum for arctan (23e4). <br>Find how many pieces of each sum you need.</div>
+  <div class="chq"><span class="chid">23i.4.2</span><span class="tagq">edge</span>sin 0.1 needed two pieces for six places. Find the largest h for which the small-angle technique promises that θ alone gives sin θ to within 0.0000005 for every |θ| ≤ h, in radians and in degrees. <br>Find whether a larger h could work, using the next piece of the sum.</div>
+  <div class="chq"><span class="chid">23i.4.3</span><span class="tagq">converse</span>The small-angle technique: sin has no θ² piece, so |sin θ − θ| is at most a multiple of |θ|³. Turn it round: if f has four slopes near 0 and |f(x) − T₁(x)| ≤ C|x|³ near 0, must f″(0) be 0? <br>Prove your answer from the match-error technique.</div>
+  <div class="chq"><span class="chid">23i.4.4</span><span class="tagq">reroute</span>Compute e to six places another way, from 17e: (1 + 1/n)ⁿ ≤ e ≤ (1 + 1/n)ⁿ⁺¹. <br>Find how large n must be, and why squaring 23 times reaches n = 2²³. <br>Find what goes wrong on a calculator that keeps ten figures, which stores 1 + 2⁻²³ as 1.000000119.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r23h.html">← 23h · polynomials that hug a curve, by hand</a><a href="r23j.html">23j · a list stored in one function →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The leftover is the truncation error, and the slips are rounding error. The cheapest-fence technique gathers the remainder estimates for alternating series, for series bounded by a geometric series, and the Lagrange bound. A value known to d places by the rounding-fence technique is correctly rounded; a total too close to a rounding boundary to settle cheaply is the table-maker's dilemma. The small-angle technique is the small-angle approximation. Moving the input near the centre is argument reduction (or range reduction). The sum for π in the build challenge is Machin's formula.</p>
+  <h3>Who said it first</h3>
+  <p>Henry Briggs computed logarithms to fourteen places by hand and published them in 1624. John Machin reached a hundred places of π in 1706 with the formula of the build challenge. Leonhard Euler printed e to twenty-three places in 1748.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'bracket',t:R`|\text{leftover}| < |a_{n+1}|`,n:`Signs take turns, sizes fall.`},
+  {k:'ember',kl:'geometric',t:R`\text{leftover} \le \tfrac{a_{n+1}}{1-k}`,n:`Each piece at most k times the last.`},
+  {k:'ember',kl:'ceiling',t:R`|R_n| \le \tfrac{K|x-a|^{n+1}}{(n+1)!}`,n:`A ceiling on a slope.`}
+],{title:'The slides · fences · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'sine',t:R`\htmlClass{new}{|\sin\theta - \theta| \le \tfrac{h^3}{6}}`,n:`θ in radians.`},
+  {k:'ember',kl:'cosine',t:R`\big|\cos\theta - 1 + \tfrac{\theta^2}{2}\big| \le \tfrac{h^4}{24}`,n:`One power better than it looks.`}
+],{title:'The slides · small angles · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

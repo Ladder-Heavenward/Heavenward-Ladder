@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Can a letter ever stand for itself?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r19eng.html">← 19·eng what limits an engine’s work per turn?</a><a href="r19comp.html">next: 19·comp how many ways can a puzzle cube be scrambled? →</a></p>
+  <div class="tags"><span class="tag crypt">19·crypt · cryptography</span></div>
+  <h1>Can a letter ever stand for itself?</h1>
+  <p>Can a letter ever stand for itself? A century ago, armies sent orders by radio, so anyone could listen. Machines with turning wheels scrambled each letter before it was sent, and the scramble changed after every letter. Each wheel was wired so that a letter going in came out as another. The signal went through the wheels, bounced off a last wheel, and came back through them. What makes it hard is that the scramble is a long string of moves, different for every letter, and checking each one by hand is hopeless. This page shows, with 19’s moves and socks and shoes, that such a machine can never send a letter to itself, and that one setting both locks and unlocks a message.</p>
+  <p class="gesture">A wheel is a shuffle of the alphabet, and turning it one step gives a turned shuffle. The signal passes through the scrambling wheels, then a wheel that pairs the letters off, then the scrambling wheels undone. So the machine undoes itself, and no letter is ever sent to itself.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r19a.html">19a</a> (shuffles), <a href="r19b.html">19b</a> (one inverse; undoing the undo), <a href="r19c.html">19c</a> (socks and shoes), <a href="r19e.html">19e</a> (parity) and <a href="r04j.html">4j</a> (counting). 20·crypt asks what a guessed word can do against it.</p></div>
+</header>
+
+<section class="class step" data-step="19crypt1">
+  <h2 class="sthead"><span class="stno">19crypt1</span>A wheel is a shuffle</h2>
+  <p class="stands">Stands on 19a (shuffles) and 19b (one inverse).</p>
+  <p data-pid="f9cda0">A wheel has 26 contacts on each face, wired across in some jumbled way. A letter in on one face comes out as one letter on the other, and different letters come out different. <b>A wheel is a shuffle of the alphabet.</b> Call it σ.</p>
+  <p data-pid="3edea6">After each letter the wheel turns one step. Write ρ for the shuffle that moves every letter one along: A to B, …, Z to A. A letter entering the turned wheel meets the contact that used to sit one place back. So the turned wheel undoes the step, does σ, then steps again.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the turned wheel">
+\text{turned once}:\ \ \rho\,\sigma\,\rho^{-1} @@ back one, through the wiring, forward one
+\text{turned } k \text{ times}:\ \ \rho^{k}\,\sigma\,\rho^{-k} @@ by induction on k (4e); ρ⁻ᵏ undoes ρᵏ
+\htmlClass{new}{\text{every turned wheel is a shuffle}} \quad \blacksquare @@ shuffles compose to shuffles (19a)
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · wheels · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">19·crypt.1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a 4-letter alphabet A, B, C, D;  ρ: A→B→C→D→A;  σ: A→C, B→A, C→D, D→B</span></span>Find the wheel turned once, ρσρ⁻¹, letter by letter.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="19crypt2">
+  <h2 class="sthead"><span class="stno">19crypt2</span>Through, and back</h2>
+  <p class="stands">Stands on 19·crypt.1 and 19c (socks and shoes).</p>
+  <p data-pid="2043c2">Three wheels in a row make one shuffle, S = σ₃σ₂σ₁ at the present turns. At the end sits a wheel that never turns. Its wires join the letters in 13 pairs, so it sends each letter to its partner and the partner back. Call it R. Then the signal comes back through the three wheels the other way.</p>
+  <p data-pid="970c4c">Through-and-back technique: <b>the machine’s shuffle is E = S⁻¹ R S.</b> Going back through the wheels runs each one backwards, and the last wheel passed on the way in is the first on the way out: socks and shoes.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the through-and-back technique">
+\text{in}:\ \ \sigma_3 \sigma_2 \sigma_1 = S @@ three wheels, first σ₁
+\text{back}:\ \ \sigma_1^{-1} \sigma_2^{-1} \sigma_3^{-1} = (\sigma_3 \sigma_2 \sigma_1)^{-1} @@ each wheel backwards, σ₃ first: socks and shoes (19c)
+\htmlClass{new}{E = S^{-1} R\, S} \quad \blacksquare @@ in, bounce, back
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · the path · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">19·crypt.2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">the 4-letter alphabet,  S = σ of 19·crypt.1.1,  R: A↔B, C↔D</span></span>Find E = S⁻¹RS, letter by letter. <br>Check which letters it sends to themselves.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="19crypt3">
+  <h2 class="sthead"><span class="stno">19crypt3</span>Never itself, and its own undo</h2>
+  <p class="stands">Stands on 19·crypt.2 and 19b (one inverse).</p>
+  <p data-pid="ec3e3d">No-self technique: <b>the machine never sends a letter to itself.</b> Self-undo technique: <b>the machine undoes itself, so one setting both locks and unlocks.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the no-self technique">
+\text{assume } E\,x = x @@ aiming to refute
+R\,(S x) = S x @@ apply S to both sides of S⁻¹RSx = x
+R \text{ sends no letter to itself} @@ R pairs every letter with another
+\htmlClass{new}{\bot,\ \text{so } E\,x \ne x \text{ for every } x} \quad \blacksquare @@ refute
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this page: the self-undo technique">
+E\,E = S^{-1} R\, S\, S^{-1} R\, S @@ two passes at one setting
+= S^{-1} R\, R\, S = S^{-1} S @@ S S⁻¹ = e; R R = e, since R swaps pairs
+\htmlClass{new}{E\,E = e} \quad \blacksquare @@ type the secret text in, and the message comes out
+  </pre>
+  <p data-pid="0d84e3">Add a board that swaps some letters in pairs before and after the wheels, a shuffle P. The machine becomes P⁻¹S⁻¹RSP, the same shape with SP for S. Both techniques still hold.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · never itself · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">19·crypt.3.1</span><span class="ph undo">undo</span><span class="givens"><span class="gtx">at one setting, the machine sends H to K</span></span>Find what it sends K to at that setting. <br>Find whether the secret text of a message starting with H can start with H.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="19crypt4">
+  <h2 class="sthead"><span class="stno">19crypt4</span>Counting the settings</h2>
+  <p class="stands">Stands on 19·crypt.3 and 4j (counting).</p>
+  <p data-pid="58e9da">The keeper of the secret chose three wheels from a box of five, in order, then the starting turn of each, then ten pairs of letters on the board. Count by stages (4j).</p>
+  <pre class="lines" data-k="ember" data-label="this page: the settings">
+5 \cdot 4 \cdot 3 = 60 @@ three wheels, in order
+26^3 = 17\,576 @@ the starting turns
+\frac{26!}{6!\;10!\;2^{10}} \approx 1.5 \times 10^{14} @@ ten pairs: choose 20 letters, pair them, forget the order of pairs and within each
+\htmlClass{new}{60 \cdot 17\,576 \cdot 1.5 \times 10^{14} \approx 1.6 \times 10^{20}} @@ stages multiply
+  </pre>
+  <p data-pid="8c261b">Try a million settings a second, and the count takes about five million years. <b>A count that large hides the key from anyone who only tries settings.</b> It does not hide it from someone who can rule out settings without trying them.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · settings · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">19·crypt.4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">three wheels chosen in order from a box of eight,  26 starting turns each,  no board</span></span>Count the settings. <br>Find how many settings a board with one pair adds as a factor.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="19crypt5">
+  <h2 class="sthead"><span class="stno">19crypt5</span>Illegal moves</h2>
+  <p class="stands">Stands on 19·crypt.1 to 19·crypt.4.</p>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{back through the wheels is } S \text{ again}\,? @@ it is S⁻¹: each wheel backwards, in the other order
+E^{-1} = S\,R^{-1} S^{-1}\,? @@ socks and shoes gives S⁻¹R⁻¹S, which is E
+\text{the board pairs: } \tbinom{26}{20} \text{ ways}\,? @@ that chooses the letters; the pairing still has to be counted
+\text{more settings, so no way in}\,? @@ settings can be ruled out without being tried
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">19·crypt.5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span class="gtx">a bounce wheel R with one letter wired to itself</span></span>Find which line of the no-self technique fails, and what E does to some letter.</li><li><span class="givens"><span class="gtx">an alphabet of 27 letters</span></span>Find whether a bounce wheel can pair every letter with another.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">19·crypt.6.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">an alphabet of 6 letters</span></span>Build a one-wheel machine with a bounce wheel, choose a setting, and lock a three-letter word. <br>Unlock it with the same setting.</div>
+  <div class="chq"><span class="chid">19·crypt.6.2</span><span class="tagq">edge</span>Find the number of board pairs, from 0 to 13, that gives the most board settings. <br>Find whether 13 pairs gives more than 10.</div>
+  <div class="chq"><span class="chid">19·crypt.6.3</span><span class="tagq">converse</span>A shuffle of the 26 letters undoes itself and sends no letter to itself. Must it be S⁻¹RS for some shuffle S, with this page’s R?</div>
+  <div class="chq"><span class="chid">19·crypt.6.4</span><span class="tagq">reroute</span>Find whether E is even or odd as a shuffle, at every setting, by 19e.</div>
+  <div class="chq"><span class="chid">19·crypt.6.5</span><span class="tagq">seam</span>The makers built the bounce wheel so that one setting both locks and unlocks. It also means no letter is ever its own secret. <br>Does a rule that holds for every letter help the one who keeps the secret, or the one who breaks it?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r19eng.html">← 19·eng · what limits an engine’s work per turn?</a><a href="r19comp.html">19·comp · how many ways can a puzzle cube be scrambled? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The wheels are rotors, the bounce wheel is the reflector, and the board is the plugboard. ρσρ⁻¹ is σ conjugated by ρ, and S⁻¹RS a conjugate of R. A shuffle that undoes itself is an involution; one that sends no letter to itself is a derangement. The machine itself was the Enigma.</p>
+  <h3>Who said it first</h3>
+  <p>Arthur Scherbius patented the rotor machine in 1918; the reflector came in 1926. Marian Rejewski (1932) broke it with exactly this page’s algebra: he wrote the daily keys as conjugates and used the fact that conjugate shuffles have the same cycle shapes. Alan Turing, Gordon Welchman and others at Bletchley Park built on that work. In 19·crypt.6.5, the British codebreakers used the no-self rule to slide a guessed word along a message and rule out every place where a letter matched itself.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="19·crypt: a worked “proof”, not allowed">
+E = S^{-1} R\, S @@ fine
+E^{-1} = S\, R^{-1} S^{-1} @@ not allowed: socks and shoes reverses the order and undoes each; the undo is S⁻¹R⁻¹S
+	ext{so a different setting unlocks} @@ false: E undoes itself
+  </pre>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'a wheel',t:R`\sigma`,n:`A shuffle of 26 letters.`},
+  {k:'ember',kl:'turned',t:R`\htmlClass{new}{\rho^k \sigma \rho^{-k}}`,n:`Step back, wire, step on.`}
+],{title:'The slides · wheels · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'through and back',t:R`\htmlClass{new}{E = S^{-1} R S}`,n:`Socks and shoes.`},
+  {k:'ember',kl:'R',t:R`R(x) \ne x,\ R^2 = e`,n:`Thirteen pairs.`}
+],{title:'The slides · the path · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'no self',t:R`\htmlClass{new}{E\,x \ne x}`,n:`R has no letter to itself.`},
+  {k:'ember',kl:'self-undo',t:R`\htmlClass{new}{E^2 = e}`,n:`One setting locks and unlocks.`}
+],{title:'The slides · never itself · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'wheels',t:R`60 \cdot 26^3`,n:`Order and turns.`},
+  {k:'ember',kl:'the board',t:R`\tfrac{26!}{6!\,10!\,2^{10}}`,n:`Ten pairs.`},
+  {k:'ember',kl:'all',t:R`\htmlClass{new}{\approx 1.6 \times 10^{20}}`,n:`Stages multiply.`}
+],{title:'The slides · settings · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`S \text{ again}\,?`,n:`Back is S⁻¹.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

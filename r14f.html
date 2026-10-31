@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>14f · Crest and trough</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:3.5em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+.signs{font-family:var(--mono);font-size:.82rem;overflow-x:auto;white-space:nowrap}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r14concl.html">← 14·∎ conclusion</a><a href="r14g.html">next: 14g the bend and sketching →</a></p>
+  <div class="tags"><span class="tag tech">14f · technique</span></div>
+  <h1>Crest and trough</h1>
+  <p>14a's flat-top found the critical points. It said nothing about which are tops, which are bottoms and which are neither. 14d's slope-sign-order says that the sign of the slope across an interval decides whether the function climbs or falls there. Put a critical point between two such intervals. If the function climbs up to it and falls after, it is a top. If it falls to it and climbs after, a bottom. If it climbs on both sides, or falls on both, neither. That is the first test. The second reads the same thing from one number. Say the slope is 0 at an input and the slope of the slope is positive there. Then the slope itself is climbing through 0, so it is negative just before and positive just after. That is the first test's bottom.</p>
+  <p class="gesture">Read the sign of the slope just left and just right of a critical point: up then down is a top, down then up a bottom, the same on both sides neither. If the slope is 0 there and the slope of the slope is positive, the slope climbs through 0, which is down then up.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r14d.html">14d</a> (slope-sign-order, positive-but-finitely), <a href="r14a.html">14a</a> (top, bottom, critical point, flat-top, candidates), <a href="r13k.html">13k</a> (slope-sign-near), <a href="r13d.html">13d</a> (f″, polynomial-slope), <a href="r13f.html">13f</a> (one-sided slopes), <a href="r12a.html">12a</a> (in-between-value), <a href="r08g.html">8g</a> (signs of products). <a href="r14g.html">14g</a> adds the sign of f″ across an interval; <a href="r14h.html">14h</a> uses one-critical-point on problems with one critical point.</p></div>
+</header>
+
+<section class="class step" data-step="14f1">
+  <h2 class="sthead"><span class="stno">14f1</span>The first test</h2>
+  <p class="stands">Stands on 14d (slope-sign-order) and 14a (critical points).</p>
+  <p data-pid="344202">First-test technique: <b>let f be continuous on an open interval around c, with a slope at every input of it except perhaps c. If, for some reach δ, f′ &gt; 0 on (c − δ, c) and f′ &lt; 0 on (c, c + δ), then f has a top at c. If f′ &lt; 0 on the left and f′ &gt; 0 on the right, a bottom. If f′ has one sign on both sides, neither.</b></p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the first-test technique · the top">
+f \text{ increasing on } [c - \delta, c] @@ <span class="hl-new">slope-sign-order (14d)</span>: continuous there, positive slopes inside
+c - \delta \lt x \lt c \;\Rightarrow\; f(x) \lt f(c) @@ increasing, at x and c
+f \text{ decreasing on } [c, c + \delta] @@ slope-sign-order: negative slopes inside
+c \lt x \lt c + \delta \;\Rightarrow\; f(x) \lt f(c) @@ decreasing, at c and x
+\htmlClass{new}{f \text{ has a top at } c} @@ f(x) ≤ f(c) on the neighbourhood of reach δ
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: the first-test technique · neither">
+f' \gt 0 \text{ on both sides} @@ the case of one sign
+f \text{ increasing on } [c - \delta, c + \delta] @@ slope-sign-order on each half, chained through c (as in positive-but-finitely)
+f(c - h) \lt f(c) \lt f(c + h) \text{ for } 0 \lt h \lt \delta @@ so every neighbourhood holds a lower and a higher value: neither ∎
+  </pre>
+  <p data-pid="f50a9c">Its accepted name is the first derivative test. <b>The top it finds is strict: every other input near c has a smaller value.</b> It needs no slope at c, so it works at a sharp bend, where flat-top cannot. 14a's x² − 2|x| has slope 2x + 2 on (−1, 0), positive. It has slope 2x − 2 on (0, 1), negative. So it has a top at 0, where it has no slope. The first test is also what shows that 13·econ's level place at 387 jars is a bottom, and that flag is closed.</p>
+  <p data-pid="4d0ce5">To use it, factor f′ and read its sign between neighbouring critical points. For a polynomial the sign cannot change between two neighbouring zeros of f′. That is in-between-value, since f′ is continuous. So one test input in each stretch gives the sign of the whole stretch.</p>
+  <pre class="lines" data-k="ember" data-label="this step: a sign table">
+f(x) = x^3 - 6x^2 + 9x + 1 @@ a polynomial
+f'(x) = 3x^2 - 12x + 9 = 3(x - 1)(x - 3) @@ polynomial-slope; critical points 1 and 3
+x \lt 1:\ + \quad 1 \lt x \lt 3:\ - \quad x \gt 3:\ + @@ signs of products (8g), or test inputs 0, 2, 4
+\text{top at } 1,\ f(1) = 5;\ \ \text{bottom at } 3,\ f(3) = 1 @@ first-test at each
+  </pre>
+  <pre class="lines" data-k="teal" data-label="from 14a: a critical point that is neither, read off the signs">
+f(x) = x^4 - 4x^3,\ \ f'(x) = 4x^2(x - 3) @@ critical points 0 and 3
+x \lt 0:\ - \quad 0 \lt x \lt 3:\ - \quad x \gt 3:\ + @@ x² ≥ 0 does not change sign at 0
+0:\ \text{neither};\ \ 3:\ \text{bottom},\ f(3) = -27 @@ first-test: the sign is the same on both sides of 0
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · first-test · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · left: the function and its critical points · right: the slope function near the chosen one</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="chips" id="fch"></div>
+      <canvas id="cvF"></canvas>
+      <div class="chips" id="cch"></div>
+      <div class="cap">Ink: f. Along the bottom, teal where f′ &gt; 0 and ember where f′ &lt; 0. Gold rings: the critical points; the chosen one is filled. Teal dot: a bottom; ember dot: a top; plum: neither.</div>
+      <div class="verdict" id="vdF"></div>
+    </div>
+    <div class="panel">
+      <div class="lbl">f′ near the chosen critical point</div>
+      <canvas id="cvS"></canvas>
+      <div class="cap">Plum: f′, teal where positive, ember where negative. Gold: its tangent line at c, whose slope is f″(c), when there is one.</div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">14f1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = x^3 − 3x</span></span>Factor f′ and read its sign in each stretch. <br>Classify each critical point by the first test.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="14f2">
+  <h2 class="sthead"><span class="stno">14f2</span>The second test</h2>
+  <p class="stands">Stands on 14f1 and 13d (the second slope).</p>
+  <p data-pid="3bfd20">Second-test technique: <b>if f′(c) = 0 and f″(c) &gt; 0, then f has a bottom at c. If f′(c) = 0 and f″(c) &lt; 0, a top.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the second-test technique · the bottom">
+f''(c) \text{ exists, so } f' \text{ is defined near } c @@ 13a: a slope of f′ at c needs f′ on a neighbourhood
+\text{call } r:\ f'(c + h) \gt f'(c) = 0 \text{ for } 0 \lt h \lt r @@ <span class="hl-new">slope-sign-near (13k)</span>, for the function f′, whose slope at c is positive
+f'(c + h) \lt 0 \text{ for } -r \lt h \lt 0 @@ slope-sign-near, its second half
+f \text{ continuous near } c @@ slope-means-no-gap: f has a slope at every input near c
+\htmlClass{new}{f \text{ has a bottom at } c} \quad \blacksquare @@ first-test: negative on the left, positive on the right
+  </pre>
+  <p data-pid="a8b84c">Its accepted name is the second derivative test. Check it on the sign table above: f″(x) = 6x − 12, so f″(1) = −6, a top, and f″(3) = 6, a bottom. It agrees.</p>
+  <p data-pid="c85330">The second test is silent when f″(c) = 0. At 0, x⁴ has a bottom, −x⁴ a top, and x³ neither, and all three have f′(0) = 0 and f″(0) = 0. Then go back to the first test. And x⁴ − 4x³ at 0 has f″(0) = 0 too, while at 3 it has f″(3) = 108 − 72 = 36 &gt; 0, a bottom, as the signs said.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · second-test · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14f2.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = 2x^3 + 3x^2 - 12x"></span></span>Using the first test, find the tops and bottoms of f, with their values.</li><li><span class="givens"><span data-tex-inline="f(x) = 2x^3 + 3x^2 - 12x"></span></span>Using the second test, classify every critical point of f.</li><li><span class="givens"><span data-tex-inline="f(x) = x^4 - 2x^2"></span></span>Find and classify every critical point of f.</li><li><span class="givens"><span data-tex-inline="f(x) = 9x + 1/x \text{ on } (0, \infty)"></span></span>Find the least value of f, and prove it is the least.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="14f3">
+  <h2 class="sthead"><span class="stno">14f3</span>From a top to the top</h2>
+  <p class="stands">Stands on 14f2, 14a (candidates) and 8g (means).</p>
+  <p data-pid="b4391f">A top is greatest among its neighbours. 14a's candidates finds the greatest value on a closed interval by comparing candidates. On an interval that is not closed there is no highest-and-lowest, but one critical point can be enough.</p>
+  <p data-pid="6adebf">One-critical-point technique: <b>let f be continuous on an interval I with a slope at every input inside. Suppose the slope is 0 at exactly one input c inside, and f′ is continuous inside I. If c is a bottom, then f(c) is the least value of f on I. If c is a top, it is the greatest.</b> The slope has no zero on the part of I left of c, and it is continuous there. So by in-between-value it has one sign there. It must be negative: if it were positive, f would climb up to c, and c would not be a bottom (slope-sign-order). Likewise it is positive right of c. So f is decreasing up to c and increasing after it (slope-sign-order), and f(c) is below every other value. ∎ Every polynomial's slope is continuous.</p>
+  <pre class="lines" data-k="teal" data-label="from 8g: a mean, by one critical point">
+f(x) = x + \tfrac{4}{x} \text{ on } (0, \infty) @@ no closed interval, so no highest-and-lowest
+f'(x) = 1 - \tfrac{4}{x^2} = \tfrac{(x - 2)(x + 2)}{x^2} @@ quotient for slopes, slopes-add; continuous on (0, ∞)
+\text{zero only at } 2;\ \ f''(2) = \tfrac{8}{8} = 1 \gt 0 @@ f″(x) = 8/x³; second-test: a bottom
+\htmlClass{new}{x + \tfrac4x \ge 4 \text{ on } (0, \infty)} @@ one-critical-point: the least value, f(2) = 4
+  </pre>
+  <p data-pid="e9691a">8g's questions compared the halfway mean of two positive reals with the square root of their product. The same comparison falls out here. For x &gt; 0, x and 4/x have the product 4. Their halfway mean is never less than 2, the square root of their product.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · one critical point · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14f3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = x + 9/x on (0, ∞)</span></span>Find its one critical point and classify it. <br>Say why that gives the least value on the whole interval.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="14f4">
+  <h2 class="sthead"><span class="stno">14f4</span>Illegal moves</h2>
+  <p class="stands">Stands on 14f1 to 14f3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+f''(c) = 0, \text{ so neither}\,? @@ x⁴ at 0: a bottom, with f″(0) = 0
+f''(c) \gt 0, \text{ so a bottom}\,? @@ only with f′(c) = 0: x² + x at 0 has f″ = 2 and slope 1
+\begin{aligned}&\text{the sign of } f' \text{ at}\\ &\quad\text{one input decides a stretch}\,?\end{aligned} @@ only between neighbouring zeros of a continuous f′
+\text{a bottom gives the least value}\,? @@ x³ − 3x: bottom at 1, value −2, and f(−3) = −18
+\text{a test at a sharp bend needs } f''\,? @@ first-test needs no slope at c: x² − 2|x| at 0
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14f4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = x^4,\ -x^4,\ x^3;"></span> <span data-tex-inline="c = 0"></span></span>For each f, find its second slope at c, and classify c by the first test.</li><li><span class="givens"><span data-tex-inline="f(x) = |x| + x^3,"></span> <span data-tex-inline="c = 0"></span></span>Classify c by the first test.<br>Find the slope of f at c, or prove there is none.</li><li><span class="givens"><span data-tex-inline="\text{Case one: one critical}"></span> <span data-tex-inline="\text{point only, a bottom.}"></span> <span data-tex-inline="\text{Case two: one top}"></span> <span data-tex-inline="\text{and one bottom.}"></span></span>In each case, prove or refute that a polynomial's bottom value is its least value on the whole real line.</li><li><span class="givens"><span data-tex-inline="f(x) = x^2 + x,"></span> <span data-tex-inline="c = 0,\ f''(c) &gt; 0"></span></span>Decide whether c is a bottom.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="14f5">
+  <h2 class="sthead"><span class="stno">14f5</span>Running it backwards</h2>
+  <p class="stands">Stands on 14f1 to 14f3.</p>
+  <p data-pid="b77e8d">Handed a function and asked for its tops and bottoms, find f′ and factor it. List the critical points, and read the sign in each stretch. Or, where f′(c) = 0, compute f″(c) and use its sign, falling back to the signs if it is 0. Handed a sign table, read the tops and bottoms off it without the function. Handed tops and bottoms and asked for a polynomial, write f′ as a product with those zeros and sign changes, then find f by 14e. Found upward; written downward.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14f5.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f'(x) = (x - 2)^2(x + 1)"></span></span>Find and classify every critical point of f, without finding f.</li><li><span class="givens"><span data-tex-inline="f(x) = x^3 + px^2 + qx,"></span> <span data-tex-inline="\text{a top at } -1,"></span> <span data-tex-inline="\text{a bottom at } 3"></span></span>Find p and q.</li><li><span class="givens"><span data-tex-inline="c = 4,\ f'(c) = 0."></span> <span data-tex-inline="\text{Case one: } f''(c) = -2."></span> <span data-tex-inline="\text{Case two: } f''(c) = 0."></span></span>In each case, decide whether c is a top, a bottom, or cannot be told.</li><li><span class="givens"><span data-tex-inline="f \text{ is continuous on } \mathbb{R};"></span> <span data-tex-inline="f' &gt; 0 \text{ on } (-\infty, -2),"></span> <span data-tex-inline="f' &lt; 0 \text{ on } (-2, 0) \text{ and } (0, 5),"></span> <span data-tex-inline="f' &gt; 0 \text{ on } (5, \infty)"></span></span>Classify each of the three inputs where the given intervals meet.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">14f.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="x^4 \text{ and } x^3 \text{ at } 0."></span> <span data-tex-inline="\text{Critical points: exactly } 0 \text{ and } 1."></span></span>Make a polynomial of your own with exactly those critical points, the second test silent at both, a top at one and neither at the other.<br>Classify each by the first test.</div>
+  <div class="chq"><span class="chid">14f.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="f \text{ is constant}"></span></span>Run both tests on f, then classify its inputs by the definitions of top and bottom.</div>
+  <div class="chq"><span class="chid">14f.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="f \text{ has a bottom at } c,"></span> <span data-tex-inline="f''(c) \text{ exists}"></span></span>Prove or refute: the second slope of f at c is positive.<br>Prove or refute: it is at least zero.</div>
+  <div class="chq"><span class="chid">14f.4.4</span><span class="tagq">seam</span><span class="givens"><span data-tex-inline="f'(c) = 0,\ f''(c) = 0."></span> <span data-tex-inline="\text{Cases: } x^4,\ x^5,\ x^6 - x^7 \text{ at } 0."></span></span>When the second slope at c is zero, a textbook of 1742 looked further: take slopes of slopes until one is not zero at c. If the first such is an odd one, c is neither; if an even one, c is a bottom or a top as it is positive or negative. <br>Try the rule on the given cases and on your build. <br>Is it always right? <br>What if every slope of every order is zero at c?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r14concl.html">← 14·∎ · conclusion</a><a href="r14g.html">14g · the bend and sketching →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>The textbook of 1742 in the closer is Colin Maclaurin’s Treatise of Fluxions.</p>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?3:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=v=>fm(v).replace('-','−');
+/* crit: [input, kind] with kind top|bottom|neither; d2: f″ or null */
+const FN={
+  cu:{lab:'x³ − 6x² + 9x + 1',tex:R`x^3 - 6x^2 + 9x + 1`,lo:-0.5,hi:4.5,f:x=>x**3-6*x*x+9*x+1,df:x=>3*x*x-12*x+9,d2:x=>6*x-12,y:[-2,7],crit:[[1,'top'],[3,'bottom']]},
+  q4:{lab:'x⁴ − 4x³',tex:R`x^4 - 4x^3`,lo:-1.5,hi:4.2,f:x=>x**4-4*x**3,df:x=>4*x**3-12*x*x,d2:x=>12*x*x-24*x,y:[-30,16],crit:[[0,'neither'],[3,'bottom']]},
+  w:{lab:'x⁴ − 2x²',tex:R`x^4 - 2x^2`,lo:-1.7,hi:1.7,f:x=>x**4-2*x*x,df:x=>4*x**3-4*x,d2:x=>12*x*x-4,y:[-1.5,2.5],crit:[[-1,'bottom'],[0,'top'],[1,'bottom']]},
+  b:{lab:'x² − 2|x|',tex:R`x^2 - 2|x|`,lo:-2.2,hi:2.2,f:x=>x*x-2*Math.abs(x),df:x=>x===0?null:(x<0?2*x+2:2*x-2),d2:x=>x===0?null:2,y:[-1.5,1.5],crit:[[-1,'bottom'],[0,'top'],[1,'bottom']]}
+};
+let key='cu',F=FN.cu,ci=0;
+const cvF=$('cvF'),cvS=$('cvS');
+const PF=plane(cvF,{x:[-1,4],y:[-2,7],grid:1,aspect:0.8,draw:P=>drawF(P)});
+const PS=plane(cvS,{x:[-1,4],y:[-2,7],grid:1,aspect:0.8,draw:P=>drawS(P)});
+[[PF,cvF],[PS,cvS]].forEach(([P,cv])=>Object.defineProperty(P.o,'aspect',{get:()=>cv.clientWidth>480?0.75:0.9}));
+function curve(P,fn,colr,w,lo,hi){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(v===null||!isFinite(v)||Math.abs(v)>1e6){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); }
+function band(P,lo,hi){ const c=P.ctx; const n=300; for(let k=0;k<n;k++){ const t0=lo+(hi-lo)*k/n, t1=lo+(hi-lo)*(k+1)/n, d=F.df((t0+t1)/2); if(d===null) continue; c.fillStyle=col(Math.abs(d)<1e-9?'--gold':(d>0?'--teal':'--ember')); c.fillRect(P.X(t0),P.Y(P.o.y[0])-7,P.X(t1)-P.X(t0)+0.5,6); } }
+const kc=k=>k==='top'?'--ember':(k==='bottom'?'--teal':'--plum');
+function drawF(P){ P.o.x=[F.lo,F.hi]; P.o.y=F.y; P.o.grid=(F.y[1]-F.y[0])>12?5:0.5; P.axes(); band(P,F.lo,F.hi);
+  curve(P,F.f,'--ink',2.6,F.lo,F.hi);
+  F.crit.forEach(([c,k],i)=>{ const g=P.ctx; g.strokeStyle=col('--gold'); g.lineWidth=2.2; g.beginPath(); g.arc(P.X(c),P.Y(F.f(c)),9,0,7); g.stroke(); P.dot(c,F.f(c),kc(k),i===ci?6:3.5); }); }
+function drawS(P){ const c=F.crit[ci][0], R0=0.6; const lo=c-R0, hi=c+R0; let a=1e9,b=-1e9; for(let k=0;k<=200;k++){ const t=lo+(hi-lo)*k/200; const v=F.df(t); if(v===null) continue; a=Math.min(a,v); b=Math.max(b,v); } a=Math.min(a,-0.3); b=Math.max(b,0.3); const pad=0.15*(b-a);
+  P.o.x=[lo,hi]; P.o.y=[a-pad,b+pad]; P.o.grid=(b-a)>8?2:((b-a)>2?0.5:0.25); P.axes();
+  curve(P,t=>{ const v=F.df(t); return (v!==null&&v>0)?v:NaN; },'--teal',2.6,lo,hi); curve(P,t=>{ const v=F.df(t); return (v!==null&&v<0)?v:NaN; },'--ember',2.6,lo,hi);
+  const d2=F.d2(c); if(d2!==null&&F.df(c)!==null){ const L=0.3; P.line(c-L,-d2*L,c+L,d2*L,'--gold',1.6,[5,4]); }
+  if(F.df(c)===null){ const g=P.ctx; g.fillStyle=col('--card'); [F.df(c-1e-9),F.df(c+1e-9)].forEach((v,i)=>{ g.strokeStyle=col(i?'--ember':'--teal'); g.lineWidth=2; g.beginPath(); g.arc(P.X(c),P.Y(v),5,0,7); g.fill(); g.stroke(); }); } else P.dot(c,0,'--gold',5); }
+function sgn(v){ return v>1e-9?'+':(v<-1e-9?'−':'0'); }
+function read(){ const [c,k]=F.crit[ci]; const L=F.df(c-0.05), Rr=F.df(c+0.05), d1=F.df(c), d2=F.d2(c); const vd=$('vdF');
+  const first='First test: f′ is '+sgn(L)+' just left and '+sgn(Rr)+' just right, so '+(k==='neither'?'neither':'a '+k)+'.';
+  let second;
+  if(d1===null) second=' Second test: no slope at '+mm(c)+', so it cannot be used.';
+  else if(Math.abs(d2)<1e-9) second=' Second test: f″('+mm(c)+') = 0, silent.';
+  else second=' Second test: f″('+mm(c)+') = '+mm(d2)+', '+(d2>0?'a bottom.':'a top.');
+  vd.className='verdict '+(k==='neither'?'':'win'); vd.textContent=first+second;
+  tex($('eqF'),R`\begin{gathered}${F.tex}\\ c = ${mm(c)},\ \ f(c) = ${mm(F.f(c))}\\ f'(c) ${d1===null?R`\ \text{none}`:'= '+mm(d1)},\ \ f''(c) ${d2===null||d1===null?R`\ \text{none}`:'= '+mm(d2)}\end{gathered}`,true); }
+function all(){ PF.redraw(); PS.redraw(); read(); }
+const fch=$('fch'),cch=$('cch');
+function chips(){ cch.innerHTML=''; F.crit.forEach(([c],i)=>{ const b=document.createElement('button'); b.textContent='c = '+mm(c); if(i===ci) b.className='on'; b.onclick=()=>{ ci=i; [...cch.children].forEach(z=>z.classList.toggle('on',z===b)); all(); }; cch.appendChild(b); }); }
+Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===key) b.className='on'; b.onclick=()=>{ key=k; F=FN[k]; ci=0; [...fch.children].forEach(z=>z.classList.toggle('on',z===b)); chips(); all(); }; fch.appendChild(b); });
+window.__pic={set:(k,i)=>{ [...fch.children][Object.keys(FN).indexOf(k)].click(); [...cch.children][i].click(); return {txt:$('vdF').textContent}; }};
+chips(); all();
+
+/* ---------- slides ---------- */
+const Nw='\\htmlClass{new}';
+stepper('#sl1',[
+  {k:'ember',kl:'first-test',t:R`+\ \text{then}\ -:\ ${Nw}{\text{top}};\ \ -\ \text{then}\ +:\ \text{bottom}`,n:`The sign of f′ just left and just right of c. The same sign on both sides: neither.`},
+  {k:'ember',kl:'the top',t:R`f(x) \lt f(c) \text{ on both sides}`,n:`slope-sign-order on [c − δ, c] and on [c, c + δ]. A strict top.`},
+  {k:'ember',kl:'neither',t:R`f(c - h) \lt f(c) \lt f(c + h)`,n:`One sign on both sides: increasing through c.`},
+  {k:'teal',kl:'from 14a · a sharp bend',t:R`x^2 - 2|x|:\ \ +\ \text{on } (-1, 0),\ \ -\ \text{on } (0, 1)`,n:`A top at 0, where there is no slope. first-test needs none.`},
+  {k:'ember',kl:'a sign table',t:R`3(x - 1)(x - 3):\ \ +\ \ -\ \ +`,n:`x³ − 6x² + 9x + 1: top at 1 (value 5), bottom at 3 (value 1).`},
+  {k:'teal',kl:'neither, by signs',t:R`4x^2(x - 3):\ \ -\ \ -\ \ +`,n:`x⁴ − 4x³: 0 is neither; 3 a bottom, value −27.`}
+],{title:'The slides · first-test · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'second-test',t:R`f'(c) = 0,\ \ f''(c) \gt 0 \;\Rightarrow\; ${Nw}{\text{bottom}}`,n:`f″(c) &lt; 0: a top.`},
+  {k:'ember',kl:'its proof',t:R`f'(c - h) \lt 0 \lt f'(c + h)`,n:`slope-sign-near for f′, whose slope at c is positive. Then first-test.`},
+  {k:'ember',kl:'silent',t:R`x^4,\ \ -x^4,\ \ x^3 \text{ at } 0`,n:`All have f′ = f″ = 0 at 0: bottom, top, neither. Back to the signs.`}
+],{title:'The slides · second-test · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'one-critical-point',t:R`\text{one critical point, a bottom} \;\Rightarrow\; \text{least on } I`,n:`f′ continuous with one zero: one sign on each side (in-between-value). Falling, then climbing.`},
+  {k:'teal',kl:'from 8g · a mean',t:R`x + \tfrac4x \ge ${Nw}{4} \text{ on } (0, \infty)`,n:`One critical point, 2; f″(2) = 1 &gt; 0. No closed interval needed.`}
+],{title:'The slides · one critical point · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'illegal',t:R`f''(c) = 0 \not\Rightarrow \text{neither}`,n:`x⁴ at 0 is a bottom.`}
+],{title:'The slides · illegal · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

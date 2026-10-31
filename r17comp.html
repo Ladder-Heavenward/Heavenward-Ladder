@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>17·comp · What is the quickest way to sort a list?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r17phys.html">← 17·phys is light a dot or a flow?</a><a href="r17crypt.html">next: 17·crypt how long would it take to guess a password? →</a></p>
+  <div class="tags"><span class="tag comp">17·comp · computing</span></div>
+  <h1>What is the quickest way to sort a list?</h1>
+  <p>What is the quickest way to sort a list? A machine sorting a list can only compare two items at a time and act on the answer. So a fair measure of a method's cost is how many comparisons it makes. This page counts them for three methods. Two take about half the square of the number of items in comparisons, by 4j’s sum. The third splits the list in half, sorts the halves, and zips them together, and it takes at most about the number of items times the number of halvings. With a million items that is the difference between a few seconds and a few days. Then the other way to go faster, many machines at once, and the technique that caps what they can do.</p>
+  <p class="gesture">Selection sort always takes the same number of comparisons, about half the square of the count. Insertion sort takes from one fewer than the count to the same as selection sort, about a quarter of the square on average. Merge sort takes at most about the count times the number of halvings. When only part of the work can be split over many machines, the part that cannot be split caps the speedup, however many machines there are.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r04j.html">4j</a> (doubled-sum, arrangements), <a href="r04b.html">4b</a> (induction), <a href="r17g.html">17g</a> (log-base-p), <a href="r17d.html">17d</a> (log-loses-to-powers), <a href="r10a.html">rung 10</a> (limits), <a href="r04comp.html">4·comp</a> (gates). <a href="r17then.html">17·then</a> draws these counts on log scales.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · read it through, then work the picture and the slides</div>
+
+  <h3>The cost of a sort</h3>
+  <p data-pid="2cc08f">A list of n numbers is to be put in rising order. A method for doing it, written as steps a machine can follow, has the accepted name an algorithm. The word comes from a scholar of Baghdad, whose book on reckoning was read in Latin as <i>Algoritmi de numero Indorum</i>. A sorting method that learns about the items only by comparing two of them is a comparison sort. <b>Its cost is the number of comparisons it makes, as a function of n.</b> How that number grows has the accepted name the method's time complexity.</p>
+
+  <h3>Selection sort</h3>
+  <p data-pid="713c64">Look through all n items for the least, and swap it into the first place. Then look through the other n − 1 for the least of those, and swap it into the second place. Continue until one item is left. Its accepted name is selection sort.</p>
+  <p data-pid="e254bf">Selection-count technique: <b>on every list of n ≥ 1 items, selection sort makes exactly n(n − 1)/2 comparisons.</b></p>
+  <pre class="lines" data-k="ember" data-label="17·comp: the selection-count technique">
+\text{the least of } m \text{ items}:\ m - 1 \text{ comparisons} @@ keep the least so far; compare it with each of the rest once
+(n - 1) + (n - 2) + \cdots + 1 + 0 @@ the passes over n, n − 1, …, 1 items, whatever the items are
+= \htmlClass{new}{\tfrac{n(n - 1)}{2}} \quad \blacksquare @@ doubled-sum (4j) with n − 1 in place of n
+  </pre>
+
+  <h3>Insertion sort</h3>
+  <p data-pid="3810ef">Keep the front of the list sorted. Take the next item and walk it toward the front, comparing it with each item before it, and stop when the one before is not larger. Its accepted name is insertion sort. A pair of items in the wrong order, the larger first, has the accepted name an inversion.</p>
+  <p data-pid="9477d0">Insertion-range technique: <b>on a list of n items, insertion sort makes at least n − 1 and at most n(n − 1)/2 comparisons. It makes n − 1 on a sorted list and n(n − 1)/2 on a list in falling order.</b></p>
+  <pre class="lines" data-k="ember" data-label="17·comp: the insertion-range technique">
+\text{item } i \text{ (from } 2 \text{ to } n\text{)}:\ 1 \text{ to } i - 1 \text{ comparisons} @@ at least one look back; at most one for each item before it
+(n - 1) \cdot 1 \le \text{count} \le 1 + 2 + \cdots + (n - 1) @@ add over the items
+\htmlClass{new}{n - 1 \le \text{count} \le \tfrac{n(n - 1)}{2}} \quad \blacksquare @@ doubled-sum; a sorted list stops each walk at once, a falling list walks each item to the front
+  </pre>
+  <p data-pid="524bf0">Insertion-average technique: <b>over all n! orders of n different items, the average number of inversions is n(n − 1)/4, and insertion sort's comparisons are at least the inversions and at most the inversions plus n − 1.</b></p>
+  <pre class="lines" data-k="ember" data-label="17·comp: the insertion-average technique">
+\begin{aligned}&\text{each step of a walk swaps}\\ &\quad\text{one inverted neighbour pair}\end{aligned} @@ the swap removes exactly that inversion, and no other pair changes order
+\text{comparisons} = \text{inversions} + (\text{walks that stop early}) @@ every comparison but a walk's last is a swap
+\text{a list and its reverse}:\ \text{inv} + \text{inv} = \tfrac{n(n - 1)}{2} @@ each of the n(n − 1)/2 pairs is out of order in exactly one of the two
+\text{average over the } n! \text{ orders} = \htmlClass{new}{\tfrac{n(n - 1)}{4}} \quad \blacksquare @@ the orders split into reversed pairs (arrangements, 4j); each pair averages n(n − 1)/4
+  </pre>
+
+  <h3>Merge sort</h3>
+  <p data-pid="7362ee">Two sorted lists can be merged into one by looking only at their fronts: compare the two front items, move the smaller to the output, repeat. Each comparison moves one item. When one list runs out, the rest of the other follows with no comparison. So merging s items with t items takes at most s + t − 1 comparisons. Split a list in half, sort each half by the same method, and merge. Its accepted name is merge sort; a method that uses itself on smaller pieces has the accepted name recursive. It was written out in 1945, among the first programs for a stored-program machine.</p>
+  <p data-pid="bdc11b">Merge-count technique: <b>for n = 2ᵏ, merge sort makes at most M(n) comparisons, where M(1) = 0 and M(2n) = 2M(n) + 2n − 1. So M(n) = n log₂ n − n + 1.</b></p>
+  <pre class="lines" data-k="ember" data-label="17·comp: the merge-count technique">
+M(2^{k+1}) \le 2M(2^k) + 2^{k+1} - 1 @@ sort two halves of 2ᵏ, then merge 2ᵏ⁺¹ items
+\varphi(k):\ M(2^k) = k2^k - 2^k + 1 @@ the claim, for whole k
+\varphi(0):\ M(1) = 0 = 0 - 1 + 1 @@ one item needs no comparison
+2(k2^k - 2^k + 1) + 2^{k+1} - 1 = (k + 1)2^{k+1} - 2^{k+1} + 1 @@ the step, assuming φ(k)
+\forall k\ \varphi(k):\ \ \htmlClass{new}{M(n) = n\log_2 n - n + 1} \quad \blacksquare @@ induction; log₂ 2ᵏ = k (log-base-p, 17g)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="17·comp: how far apart">
+n = 1024:\ \ \tfrac{n(n - 1)}{2} = 523{,}776;\ \ M(n) = 9217 @@ about 57 times fewer
+n = 2^{20} \approx 10^6:\ \ 5.5 \times 10^{11} \text{ against } 2.0 \times 10^7 @@ at 10⁸ comparisons a second, 90 minutes against a fifth of a second
+\tfrac{n\log_2 n}{n(n - 1)/2} = \tfrac{2}{\ln 2}\cdot\tfrac{\ln n}{n - 1} \to 0 @@ log-loses-to-powers with p = 1: no fixed factor makes up the gap
+  </pre>
+
+  <h3>Splitting the work</h3>
+  <p data-pid="9d848e">Another way to finish sooner is to give parts of a job to several processors at once. Working one step after another has the accepted name sequential computing. Working on parts at the same time on one machine is parallel computing. Spreading the work over many machines joined by a network is distributed computing. The speedup is the sequential time divided by the parallel time. <b>Some part of almost every job cannot be split</b>: reading the input, the final merge, waiting on the slowest piece.</p>
+  <p data-pid="caa886">Speed-up-limit technique (Amdahl's law): <b>let a job take time 1 on one processor. Let a fraction p of it, with 0 ≤ p &lt; 1, be shared evenly among N processors, while the rest cannot be shared. Then the speedup is S(N) = 1/((1 − p) + p/N). S rises with N, is always less than 1/(1 − p), and heads to 1/(1 − p) as N grows.</b></p>
+  <pre class="lines" data-k="ember" data-label="17·comp: the speed-up-limit technique">
+\text{time on } N:\ (1 - p) + \tfrac pN @@ the part that cannot be shared, plus the shared part divided N ways
+S(N) = \tfrac{1}{(1 - p) + p/N} @@ the definition of speedup
+\tfrac pN \gt 0 \Rightarrow S(N) \lt \tfrac{1}{1 - p} @@ the bottom is more than 1 − p (when p &gt; 0); 8d
+\tfrac pN \to 0 \Rightarrow \htmlClass{new}{S(N) \to \tfrac{1}{1 - p}} \quad \blacksquare @@ rung 10's limits of sums and quotients
+  </pre>
+  <pre class="lines" data-k="ember" data-label="17·comp: what the cap means">
+p = 0.95:\ \ S(8) \approx 5.9,\ \ S(64) \approx 15.4,\ \ \text{cap } 20 @@ a job 5% unshared never runs more than 20 times faster
+\text{merge sort on two processors}:\ \ M(\tfrac n2) + (n - 1) @@ the halves at once, then one merge: the merge is the unshared part
+  </pre>
+  <p data-pid="354395">In 1967 a designer of large computers argued that effort spent on making many processors work at once is wasted. It is wasted unless the part of the work done one step at a time is sped up by nearly as much. That part, he said, soon sets the pace.</p>
+
+  <h3>Illegal moves</h3>
+  <pre class="lines" data-k="ember" data-label="17·comp: tempting, and not allowed">
+\text{insertion sort is } n(n - 1)/2\,? @@ only on a falling list; a nearly sorted list costs nearly n − 1
+M(n) \text{ for every } n \text{ by the same formula}\,? @@ merge-count is proved for powers of 2; other n split unevenly
+N \text{ processors} \Rightarrow N \text{ times faster}\,? @@ only when p = 1; speed-up-limit caps it at 1/(1 − p)
+\text{fewer comparisons} \Rightarrow \text{faster on every list}\,? @@ for small n a simple method's lighter steps can win
+  </pre>
+</section>
+
+<section class="pic" id="pic">
+  <div class="eyebrow">The picture · a sort, one comparison at a time, and the cap on many processors</div>
+  <div class="panels">
+    <div class="panel">
+      <div class="lbl">a shuffled list of n, part way through the sort</div>
+      <canvas id="cvF"></canvas>
+      <div class="chips" id="fch"></div>
+      <div class="kn"><span class="m">n</span><input type="range" id="kn" min="4" max="48" step="1" value="16"><output id="on"></output></div>
+      <div class="kn"><span class="m">step</span><input type="range" id="ks" min="0" max="1" step="0.001" value="0.4"><output id="os"></output></div>
+      <div class="cap">Bars: the list. Ember: the two items being compared at this step. Plum: the part already in its final place, when the method has one.</div>
+    </div>
+    <div class="panel">
+      <div class="lbl">speedup S(N) against N processors</div>
+      <canvas id="cvL"></canvas>
+      <div class="kn"><span class="m">p</span><input type="range" id="kp" min="0.5" max="0.99" step="0.01" value="0.95"><output id="op"></output></div>
+      <div class="kn"><span class="m">N</span><input type="range" id="kN" min="1" max="64" step="1" value="8"><output id="oN"></output></div>
+      <div class="cap">Ink: S(N) = 1/((1 − p) + p/N). Dashed: the cap 1/(1 − p). Dotted: S = N, perfect sharing. Plum: the knob's N.</div>
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+</section>
+
+<section class="slides" id="sl1"><div class="eyebrow">The slides · cost; selection; selection-count; insertion; insertion-range; inversions; insertion-average; merging; merge-count; how far apart; splitting; speed-up-limit; the cap; illegal moves · ← → keys work</div></section>
+
+<section class="sayback">
+  <div class="eyebrow">Say it back · then work it</div>
+  <h2>Questions</h2>
+  <div class="phkey"></div>
+  <ol>
+    <li><span class="qid">17·comp.1</span><span class="gname">Sorting, and splitting.</span><span class="gwhy">Do: build the page's pieces.</span>
+      <ol class="sub">
+        <li><span class="qid">17·comp.1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="5, 2, 8, 1, 9, 3"></span></span>Sort the list by selection sort, writing the list after each pass, and count the comparisons.</li><li><span class="givens"><span data-tex-inline="5, 2, 8, 1, 9, 3"></span></span>Sort the list by insertion sort, and count its comparisons and its inversions.</li><li><span class="givens"><span data-tex-inline="7, 3, 6, 1, 8, 2, 5, 4,"></span> <span data-tex-inline="M(8) = 17"></span></span>Sort the list by merge sort, showing each merge, and count the comparisons against M(8).</li><li><span class="givens"><span data-tex-inline="80\% \text{ shareable}"></span></span>Find the job's speedup on 4, 16 and endlessly many processors.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">17·comp.2</span><span class="gname">From the count back.</span><span class="gwhy">Undo: run the page's techs backwards.</span>
+      <ol class="sub">
+        <li><span class="qid">17·comp.2.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="4950 \text{ comparisons}"></span></span>Selection sort made the given count.<br>Find the length of the list.</li><li><span class="givens"><span data-tex-inline="1, 2, \ldots, 10,"></span> <span data-tex-inline="\text{exactly } 9 \text{ comparisons}"></span></span>Find every order of the list on which insertion sort makes the given count.</li><li><span class="givens"><span data-tex-inline="1, 2, 3, 4,"></span> <span data-tex-inline="5 \text{ inversions}"></span></span>Write every order of the list with the given inversions.</li><li><span class="givens"><span data-tex-inline="16 \text{ processors},"></span> <span data-tex-inline="\text{speedup } 8"></span></span>Find the fraction of the job that was shareable.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">17·comp.3</span><span class="gname">Where it gives.</span><span class="gwhy">Bend: find where the techs stop working.</span>
+      <ol class="sub">
+        <li><span class="qid">17·comp.3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="6 \text{ items},"></span> <span data-tex-inline="M(n) = n\log_2 n - n + 1"></span></span>Run merge sort on 6 items in its worst case, and find whether M(6) still bounds the count.<br>Find the bound now.</li><li><span class="givens"><span data-tex-inline="s \text{ items with } t \text{ items}"></span></span>Find the lists on which merging takes fewer than s + t − 1 comparisons, and how few it can take.</li><li><span class="givens"><span data-tex-inline="2,\ 2',\ 1"></span></span>Run each of the three sorts on the list, and find which keep 2 before 2′.</li><li><span class="givens"><span data-tex-inline="p = 1"></span></span>Run speed-up-limit's formula at p = 1, and write the hypothesis of the technique it breaks.</li></ol></li>
+      </ol></li>
+    <li class="optgroup"><span class="qid">17·comp.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder challenges that rely on your own making. The page is complete without these; the rung's star needs them.</span>
+      <ol class="sub">
+        <li class="opt"><span class="qid">17·comp.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="M(8) = 17"></span></span>Make a list of your own of 8 different items on which merge sort makes as few comparisons as it can, and one on which it makes 17.<br>Run both and count.</li>
+        <li class="opt"><span class="qid">17·comp.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="n \text{ different items},"></span> <span data-tex-inline="k \text{ yes-or-no answers},"></span> <span data-tex-inline="n\log_2 n"></span></span>Count the orders the items can be in, and the different strings of answers.<br>Prove or refute: some cleverer comparison sort beats the third given by a wide margin.</li>
+        <li class="opt"><span class="qid">17·comp.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{exactly } n(n - 1)/2 \text{ comparisons},"></span> <span data-tex-inline="\text{on every list of } n \text{ items}"></span></span>Prove or refute: a sort with the given is selection sort.</li>
+        <li class="opt"><span class="qid">17·comp.4.4</span><span class="tagq">seam</span>In 1988 a researcher reported speedups of over 1000 on 1024 processors, far past what speed-up-limit seemed to allow for any job with a serial part. His answer was that people given more processors do not run the same job faster. They run a bigger job in the same time, and the serial part does not grow with it. <br>Was the argument of 1967 wrong, or were the two answering different questions? <br>Which question is the one a buyer of processors should ask?</li>
+      </ol></li>
+  </ol>
+  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
+</section>
+
+<nav class="nextrung"><a href="r17phys.html">← 17·phys · is light a dot or a flow?</a><a href="r17crypt.html">17·crypt · how long would it take to guess a password? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>The word algorithm is from the name of Muhammad ibn Musa al-Khwārizmī. Merge sort was written out by John von Neumann in 1945.</p>
+  <aside class="voice para"><p>Knuth reports that computer makers of the 1960s estimated more than a quarter of their machines’ running time went to sorting, and argues that sorting is an ideal subject for learning how algorithms are designed and their costs analysed.</p><cite>Donald Knuth, The Art of Computer Programming, vol. 3 (1973); paraphrase</cite></aside>
+  <aside class="voice para"><p>Amdahl argued that effort spent on making many processors work at once is wasted unless the part of the work done one step at a time is sped up by nearly as much, because that part soon sets the pace.</p><cite>Gene Amdahl, Validity of the single processor approach to achieving large scale computing capabilities (1967); paraphrase</cite></aside>
+  <p>In 17·comp.4.4, the researcher of 1988 is John Gustafson.</p>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+/* least and greatest of F.f on [lo, hi]: the ends, F's critical points inside, and a fine sample (exact between critical points for the functions used here) */
+function ext(F,lo,hi){ if(F.dir) return [0,1]; let m=Infinity,M=-Infinity; const t=x=>{ const v=F.f(x); if(v<m) m=v; if(v>M) M=v; };
+  t(lo); t(hi); (F.crit||[]).forEach(c=>{ if(c>lo&&c<hi) t(c); }); for(let k=1;k<64;k++) t(lo+(hi-lo)*k/64); return [m,M]; }
+function sums(F,pts){ let L=0,U=0; const ms=[],Ms=[]; for(let i=1;i<pts.length;i++){ const [m,M]=ext(F,pts[i-1],pts[i]), w=pts[i]-pts[i-1]; ms.push(m); Ms.push(M); L+=m*w; U+=M*w; } return {L,U,ms,Ms}; }
+const eq=(a,b,n)=>Array.from({length:n+1},(_,i)=>a+(b-a)*i/n);
+function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
+function boxes(P,pts,hs,stroke,fill,alpha){ const c=P.ctx; for(let i=1;i<pts.length;i++){ const a=pts[i-1],b=pts[i],h=hs[i-1]; c.globalAlpha=alpha; P.poly([[a,0],[b,0],[b,h],[a,h]],null,fill); c.globalAlpha=1; P.poly([[a,0],[b,0],[b,h],[a,h]],stroke,null,1.2); } }
+function dirDots(P,a,b){ const c=P.ctx; c.fillStyle=col('--ink'); for(let k=0;k<=300;k++){ const x=a+(b-a)*k/300; const y=(k%2)?0:1; c.fillRect(P.X(x)-1,P.Y(y)-1,2,2); } }
+/* shade between the graph of fn and the axis from lo to hi: above in pos colour, below in neg colour */
+function shade(P,fn,lo,hi,pos,neg,alpha){ if(hi<lo){ const t=lo; lo=hi; hi=t; } const c=P.ctx, N=300; c.globalAlpha=alpha==null?0.32:alpha;
+  for(let k=0;k<N;k++){ const x0=lo+(hi-lo)*k/N, x1=lo+(hi-lo)*(k+1)/N, xm=(x0+x1)/2, y=fn(xm); if(!isFinite(y)) continue; P.poly([[x0,0],[x1,0],[x1,fn(x1)],[x0,fn(x0)]],null,y>=0?pos:neg); }
+  c.globalAlpha=1; }
+function rangeOf(fn,lo,hi,pad){ let m=Infinity,M=-Infinity; for(let k=0;k<=400;k++){ const v=fn(lo+(hi-lo)*k/400); if(isFinite(v)){ if(v<m) m=v; if(v>M) M=v; } } if(m>0) m=0; if(M<0) M=0; const p=(M-m)*(pad==null?0.12:pad)||1; return [m-p,M+p]; }
+function chips(el,FN,get,setk,after){ Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===get()) b.className='on'; b.onclick=()=>{ setk(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+const Nw='\\htmlClass{new}';
+function gridFor(sp){ return sp>40?10:sp>16?4:sp>8?2:sp>3?1:sp>1.2?0.5:0.25; }
+function frame2(P,fn,lo,hi,pad){ const w=hi-lo; P.o.x=[lo-0.12*w,hi+0.08*w]; P.o.y=rangeOf(fn,lo,hi,pad==null?0.12:pad); const sx=P.o.x[1]-P.o.x[0], sy=P.o.y[1]-P.o.y[0]; let g=gridFor(sx); while(sy/g>24) g*=2; P.o.grid=g; }
+const num=(f,a,b,n)=>{ n=n||4000; const h=(b-a)/n; let s=0; for(let i=0;i<n;i++) s+=f(a+(i+0.5)*h)*h; return s; };
+/* axes with separate steps across and up */
+function axes2(P,gx,gy){ const c=P.ctx,o=P.o; c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ c.moveTo(P.X(x),P.Y(o.y[0])); c.lineTo(P.X(x),P.Y(o.y[1])); }
+  for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ c.moveTo(P.X(o.x[0]),P.Y(y)); c.lineTo(P.X(o.x[1]),P.Y(y)); } c.stroke();
+  c.strokeStyle=col('--muted'); c.lineWidth=1.3; c.beginPath(); if(o.y[0]<=0&&o.y[1]>=0){ c.moveTo(P.X(o.x[0]),P.Y(0)); c.lineTo(P.X(o.x[1]),P.Y(0)); } if(o.x[0]<=0&&o.x[1]>=0){ c.moveTo(P.X(0),P.Y(o.y[0])); c.lineTo(P.X(0),P.Y(o.y[1])); } c.stroke();
+  c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; const ly=Math.min(P.H-6,Math.max(12,P.Y(0)+14));
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ if(Math.abs(x)<1e-9) continue; c.fillText(+x.toFixed(6),P.X(x),ly); }
+  c.textAlign='right'; const lx=Math.max(32,Math.min(P.W-4,P.X(0)-5)); for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ if(Math.abs(y)<1e-9) continue; c.fillText(String(+y.toFixed(6)).replace('-','−'),lx,P.Y(y)+4); } }
+function nice(sp){ const raw=sp/6, p=Math.pow(10,Math.floor(Math.log10(raw))), m=raw/p; return (m<1.5?1:m<3.5?2:m<7.5?5:10)*p; }
+const FN={sel:{lab:'selection'},ins:{lab:'insertion'},mrg:{lab:'merge'}};
+let key='sel';
+const kn=$('kn'),ks=$('ks'),kp=$('kp'),kN=$('kN'),cvF=$('cvF'),cvL=$('cvL');
+function shuffled(n){ let s=12345+97*n; const r=()=>{ s=(s*1103515245+12345)%2147483648; return s/2147483648; }; const a=[...Array(n)].map((_,i)=>i+1); for(let i=n-1;i>0;i--){ const j=Math.floor(r()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function trace(k,a0){ const a=a0.slice(), T=[], rec=(c,d)=>T.push({a:a.slice(),c,d}); const n=a.length;
+  if(k==='sel'){ for(let i=0;i<n-1;i++){ let m=i; for(let j=i+1;j<n;j++){ rec([m,j],i); if(a[j]<a[m]) m=j; } [a[i],a[m]]=[a[m],a[i]]; } }
+  else if(k==='ins'){ for(let i=1;i<n;i++){ let j=i; while(j>0){ rec([j-1,j],0); if(a[j-1]>a[j]){ [a[j-1],a[j]]=[a[j],a[j-1]]; j--; } else break; } } }
+  else { for(let w=1;w<n;w*=2){ for(let lo=0;lo<n;lo+=2*w){ const mid=Math.min(lo+w,n), hi=Math.min(lo+2*w,n); let i=lo,j=mid; const out=[]; while(i<mid&&j<hi){ rec([i,j],0); if(a[i]<=a[j]) out.push(a[i++]); else out.push(a[j++]); } while(i<mid) out.push(a[i++]); while(j<hi) out.push(a[j++]); for(let t=0;t<out.length;t++) a[lo+t]=out[t]; } } }
+  T.push({a:a.slice(),c:[],d:n}); return T; }
+const inv=a=>{ let c=0; for(let i=0;i<a.length;i++) for(let j=i+1;j<a.length;j++) if(a[i]>a[j]) c++; return c; };
+const cur=()=>{ const n=+kn.value, a0=shuffled(n), T=trace(key,a0), i=Math.round(+ks.value*(T.length-1)); return {n,a0,T,i,E:T[i]}; };
+const PF=plane(cvF,{x:[-0.6,16],y:[0,17],grid:0,labels:false,aspect:0.8,draw:P=>drawF(P)});
+const PL=plane(cvL,{x:[-4,67],y:[-2,22],grid:1,aspect:0.8,draw:P=>drawL(P)});
+[[PF,cvF],[PL,cvL]].forEach(([P,cv])=>Object.defineProperty(P.o,'aspect',{get:()=>cv.clientWidth>480?0.75:0.9}));
+function drawF(P){ const {n,E}=cur(); P.o.x=[-0.6,n-0.4]; P.o.y=[0,n*1.08];
+  E.a.forEach((v,i)=>{ const c=E.c.indexOf(i)>=0?'--ember':(key==='sel'&&i<E.d)||E.d===n?'--plum':'--ink'; P.poly([[i-0.38,0],[i+0.38,0],[i+0.38,v],[i-0.38,v]],c,c,1); }); }
+function drawL(P){ const p=+kp.value, N=+kN.value, cap=1/(1-p), S=x=>1/((1-p)+p/x); P.o.y=[-cap*0.1,cap*1.18]; axes2(P,8,nice(cap*1.18));
+  P.line(0,cap,67,cap,'--muted',1.4,[6,4]); curve(P,x=>x>cap*1.18?NaN:x,'--muted',1.2,1,67,[2,3]); curve(P,S,'--ink',2.6,1,64); P.dot(N,S(N),'--plum',5); }
+function read(){ const {n,a0,T,i}=cur(), p=+kp.value, N=+kN.value, S=1/((1-p)+p/N); $('on').textContent=n; $('os').textContent=i+' / '+(T.length-1); $('op').textContent=mm(p,2); $('oN').textContent=N;
+  const K=T.length-1, I=inv(a0), lg=Math.log2(n);
+  const what={sel:'Selection always makes n(n − 1)/2 = '+n*(n-1)/2+'.',ins:'Insertion: this list has '+I+' inversions, so between '+I+' and '+(I+n-1)+' comparisons; it made '+K+'.',mrg:'merge: '+K+' here; '+(Number.isInteger(lg)?'merge-count bounds it by n log₂ n − n + 1 = '+(n*lg-n+1)+'.':'n is not a power of 2, so merge-count does not apply as stated.')}[key];
+  const vd=$('vdF'); vd.className='verdict';
+  vd.textContent='Comparison '+i+' of '+K+'. '+what+' Processors: S('+N+') ≈ '+mm(S,2)+', never more than 1/(1 − p) = '+mm(1/(1-p),2)+'.';
+  tex($('eqF'),R`S(${N}) = \tfrac{1}{${mm(1-p,2)} + ${mm(p,2)}/${N}} \approx ${mm(S,2)}`,true); }
+function all(){ PF.redraw(); PL.redraw(); read(); }
+[kn,ks,kp,kN].forEach(e=>e.addEventListener('input',all));
+chips($('fch'),FN,()=>key,k=>{ key=k; },all);
+window.__pic={set:(k,n,s,p,N)=>{ [...$('fch').children][Object.keys(FN).indexOf(k)].click(); kn.value=n; ks.value=s; kp.value=p; kN.value=N; all(); const {a0,T,i,E}=cur(); return {K:T.length-1,inv:inv(a0),i,sorted:T[T.length-1].a.every((v,j,a)=>!j||a[j-1]<=v),S:+(1/((1-p)+p/N)).toFixed(4)}; }};
+all();
+stepper('#sl1',[
+  {k:'ember',kl:'cost',t:R`\text{cost} = \text{comparisons, as a function of } n`,n:`The time complexity.`},
+  {k:'ember',kl:'selection',t:R`\text{least of the rest, to the front}`,n:`n − 1, then n − 2, …`},
+  {k:'ember',kl:'selection-count',t:R`${Nw}{\tfrac{n(n - 1)}{2}}`,n:`doubled-sum (4j). On every list.`},
+  {k:'ember',kl:'insertion',t:R`\text{walk each new item toward the front}`,n:`Stop at one not larger.`},
+  {k:'ember',kl:'insertion-range',t:R`${Nw}{n - 1 \le \text{count} \le \tfrac{n(n - 1)}{2}}`,n:`Sorted, and falling.`},
+  {k:'ember',kl:'inversions',t:R`\text{inv}(L) + \text{inv}(\text{rev } L) = \tfrac{n(n - 1)}{2}`,n:`Each pair is wrong in exactly one.`},
+  {k:'ember',kl:'insertion-average',t:R`${Nw}{\text{average} = \tfrac{n(n - 1)}{4}}`,n:`Comparisons within n − 1 of it.`},
+  {k:'ember',kl:'merging',t:R`a + b - 1 \text{ at most}`,n:`Each comparison moves one item.`},
+  {k:'ember',kl:'merge-count',t:R`${Nw}{M(n) = n\log_2 n - n + 1}`,n:`induction on k, n = 2ᵏ.`},
+  {k:'ember',kl:'how far apart',t:R`523{,}776 \text{ against } 9217`,n:`n = 1024.`},
+  {k:'ember',kl:'splitting',t:R`\text{time} = (1 - p) + \tfrac pN`,n:`Sequential, parallel, distributed.`},
+  {k:'ember',kl:'speed-up-limit',t:R`${Nw}{S(N) = \tfrac{1}{(1 - p) + p/N} \lt \tfrac{1}{1 - p}}`,n:`The cap of 1967.`},
+  {k:'ember',kl:'the cap',t:R`p = 0.95:\ \ S \lt 20`,n:`S(64) ≈ 15.4.`},
+  {k:'ember',kl:'illegal',t:R`N \text{ processors} \ne N\times`,n:`Unless p = 1.`}
+],{title:'The slides · cost; selection; selection-count; insertion; insertion-range; inversions; insertion-average; merging; merge-count; how far apart; splitting; speed-up-limit; the cap; illegal moves · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

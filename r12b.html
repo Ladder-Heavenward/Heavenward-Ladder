@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>12b · Bounded on a closed interval</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:3fr 2fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:3.5em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r12a.html">← 12a the intermediate value technique</a><a href="r12c.html">next: 12c the highest-and-lowest technique →</a></p>
+  <div class="tags"><span class="tag proof">12b · proof</span></div>
+  <h1>Bounded on a closed interval</h1>
+  <p>A function continuous on a closed interval cannot run off without end: some real is at least as large as the size of every output. This step gives “bounded” its line, and shows that both words of the hypothesis are needed. Then it proves the technique by the least upper bound of the inputs up to which the function is bounded. Continuity is spent at exactly one input, the least upper bound itself. Then a bound you can compute by hand, for a polynomial, and a warning that the technique does not run backwards.</p>
+  <p class="gesture">Gather the inputs up to which the function is bounded, and take their least upper bound. Continuity there, challenged with a gap of 1, carries a bound a little past it. Since nothing gathered is past the bound, the bound must be the right end.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r12a.html">12a</a> (closed interval, closed-interval-continuity), <a href="r08c.html">8c</a> (no-holes, sup, upper bound), <a href="r08b.html">8b</a> (three-way-order on ℝ, max, min), <a href="r08h.html">8h</a> (|x|, triangle, unpack-the-bars, size-of-a-product), <a href="r08f.html">8f</a> (powers-keep-order), <a href="r10a.html">10a</a> (lesser-below-both), <a href="r10f.html">10f</a> (passes every bound), <a href="r11a.html">11a</a> (the interval form, the step u), <a href="r11f.html">11f</a> (infinite discontinuities, ⌊x⌋), <a href="r09g.html">9g</a> (polynomials, Σ with real terms), <a href="r07d.html">7d</a> (not-every, negated-if forward). <a href="r12c.html">12c</a> uses this technique twice; <a href="r12d.html">12d</a> shows it fail over the fractions.</p></div>
+</header>
+
+<section class="class step" data-step="12b1">
+  <h2 class="sthead"><span class="stno">12b1</span>Bounded, said exactly</h2>
+  <p class="stands">Stands on 8c (bounds of a set of reals), 8h (unpack the bars) and 8i (completing the square).</p>
+  <p data-pid="f5c4ab">8c said what an upper bound of a set of reals is. A function's outputs on a set of inputs are a set of reals, and the words carry over.</p>
+  <p class="eqline" data-pid="c92961">From here on, take a function f whose outputs are reals, and a set A of its inputs. f is bounded above on A when some real K has f(x) ≤ K for every x ∈ A. f is bounded below on A when some real k has k ≤ f(x) for every x ∈ A. And f is bounded on A when some real K has |f(x)| ≤ K for every x ∈ A. Such a K, or k, is called a bound.</p>
+  <p class="eqline" data-pid="cfca6a">A reuse, said out loud: 8c said upper bound, bounded above and lower bound of a set of reals. Said of a function on A, the words mean the old words said of one particular set: f's values {f(x) : x ∈ A} (2g's shorthand). f is bounded above on A exactly when that set is bounded above in 8c's sense. So the old meaning still applies, to sets, and the new one comes to the same thing. 10f's “passes every bound” uses bound for any real, as here.</p>
+  <p data-pid="ccc035">Bounded-both-ways technique: <b>f is bounded on A exactly when it is bounded above on A and bounded below on A.</b></p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the bounded-both-ways technique">
+|f(x)| \le K \;\Rightarrow\; -K \le f(x) \le K @@ unpack-the-bars (8h): rightward, with K above and −K below
+k \le f(x) \le K_1 @@ leftward: the two bounds, for every x ∈ A
+f(x) \le K_1 \le |K_1| \le \htmlClass{new}{\max(|k|, |K_1|)} @@ sandwich's sandwich; 8b's max is at least each
+-f(x) \le -k \le |k| \le \max(|k|, |K_1|) @@ negative-reverses-order turns k ≤ f(x) about; sandwich; max
+|f(x)| \le \max(|k|, |K_1|) \quad \blacksquare @@ unpack-the-bars packs the two lines (|f(x)| is f(x) or −f(x), 8h)
+  </pre>
+  <p data-pid="f17634">So x² − 4x on [0, 5] is bounded. Completing the square (8i), x² − 4x = (x − 2)² − 4. For x ∈ [0, 5] the displacement x − 2 lies in [−2, 3], so (x − 2)² ≤ 9 (size-squared, powers-keep-order). So −4 ≤ x² − 4x ≤ 5. A bound is 5. 1/x on [1, ∞) is bounded too: 0 &lt; 1/x ≤ 1 there (positive-reciprocal on ℚ read in ℝ).</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · bounded · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">12b1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = x² − 2x on [−1, 3]</span></span>Find a lower bound k and an upper bound K. <br>Turn them into one bound on |f(x)|, as bounded-both-ways does.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="12b2">
+  <h2 class="sthead"><span class="stno">12b2</span>Both words are needed</h2>
+  <p class="stands">Stands on 12b1, 10f (passing every bound) and 11f (the floor).</p>
+  <p data-pid="6480a7">The technique of this step, in words: a function continuous on a closed interval is bounded there. <b>Take away either word and it fails.</b></p>
+  <p data-pid="68a349">Take away “closed”. 1/x is continuous on (0, 1], which keeps its right end and not its left. It is not bounded there: by 10f, 1/x passes every bound as x → 0⁺, so for any K some input x ∈ (0, 1] has 1/x &gt; K. The end that was left out is where it escapes. And x itself is continuous on [0, ∞), which is not a closed interval on this ladder, and passes every real (8e's counting-passes-any-real).</p>
+  <p data-pid="823a71">Take away “continuous”. Let f(x) = 1/x for 0 &lt; x ≤ 1 and f(0) = 0 (7d's cases). Now every input of the closed interval [0, 1] has a value, and f still passes every bound near 0. It is not continuous from the right at 0: 11f's infinite discontinuity, at an input. A single discontinuity is enough.</p>
+  <p data-pid="cab93d">And the technique does not run backwards. 11a's step u is bounded on [−1, 1] (its outputs are 0 and 1) and not continuous there. 11f's ⌊x⌋ is bounded on [0, 3] with three jumps. 9a's q is bounded everywhere and continuous nowhere. Bounded is cheap. What is not cheap is bounded because continuous.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · both words · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">12b2.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = 1/x,"></span> <span data-tex-inline="I = [1, \infty),"></span> <span data-tex-inline="J = (0, 1]"></span></span>Decide whether f is bounded on I, bounded on J, bounded above on J and bounded below on J, with a bound or a refutation each time.</li><li><span class="givens"><span data-tex-inline="\text{domain } (0, 1],"></span> <span data-tex-inline="\text{joints at } 1, \tfrac12, \tfrac13, \ldots"></span></span>Using linear pieces with these joints, build a function continuous and bounded on the domain with no limit at 0. <br>Find the word of bounded-on-a-closed-interval it lacks.</li><li><span class="givens"><span data-tex-inline="f(x) = \frac{1}{1 - x} \text{ on } [0, 1),"></span> <span data-tex-inline="f(1) = 0"></span></span>Run the column on f, and find the line that fails.</li><li><span class="givens"><span data-tex-inline="\text{Claim: } f \text{ bounded above}"></span> <span data-tex-inline="\text{on } [v, w],"></span> <span data-tex-inline="\text{so } f \text{ is bounded}"></span></span>Refute the claim with a function on a closed interval. <br>Decide whether your function can be continuous.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="12b3">
+  <h2 class="sthead"><span class="stno">12b3</span>The proof, every line cited</h2>
+  <p class="stands">Stands on 12b2, 12a3 (closed-interval-continuity) and 8c (the no-holes technique).</p>
+  <p data-pid="b2b598">Bounded-on-a-closed-interval technique: <b>if f is continuous on [v, w], then f is bounded on [v, w].</b> The idea is to walk the bound along the interval. At v, the bound |f(v)| does for the inputs up to v. Continuity at any input carries a bound a little further. But “a little further, again and again” is not a proof: the steps might shrink and pile up short of w. So instead of walking, take the least upper bound of everywhere the walk could get to, and walk once from there.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the bounded-on-a-closed-interval technique · setting up">
+B = \{x \in [a, b] : \exists K\ \forall t \in [a, b]\ (t \le x \Rightarrow |f(t)| \le K)\} @@ Separation (2b): the inputs up to which f is bounded. B ⊆ [a, b] by sift-is-part
+a \in B @@ K = |f(a)|: the only t ∈ [a, b] with t ≤ a is a itself (at-most-is-a-partial-order on ℝ's antisymmetry, 8a)
+\forall x \in B\ (x \le b) @@ b is an upper bound of B
+\htmlClass{new}{\sigma = \sup B} @@ <span class="hl-new">no-holes (8c)</span>: B has a member and an upper bound. The one no-holes line
+a \le \sigma \le b @@ a ∈ B and σ an upper bound; σ least and b an upper bound
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: the bounded-on-a-closed-interval technique · continuity at σ, once">
+\text{call } \delta:\ t \in [a, b] \land |t - \sigma| \lt \delta \Rightarrow |f(t) - f(\sigma)| \lt \htmlClass{new}{1} @@ closed-interval-continuity (12a) at σ, challenged with ε = 1
+\qquad \Rightarrow |f(t)| \lt |f(\sigma)| + 1 @@ triangle (8h): |f(t)| ≤ |f(t) − f(σ)| + |f(σ)|; order-and-arithmetic-agree
+\text{call } x \in B \text{ with } \sigma - \delta \lt x \le \sigma @@ σ − δ is not an upper bound, since σ is the least: not-every bounded, negated-if forward, three-way-order on ℝ; σ is an upper bound
+\text{call } K:\ \forall t \in [a, b]\ (t \le x \Rightarrow |f(t)| \le K) @@ ﹀ x ∈ B; use a some
+x' = \min(\sigma + \tfrac{\delta}{2},\ b),\ \ \ K' = \htmlClass{new}{\max(K,\ |f(\sigma)| + 1)} @@ 8b's min and max: a little past σ, and a bound for both stretches
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: the bounded-on-a-closed-interval technique · the bound carried past σ">
+\text{let } t \in [a, b],\ t \le x' @@ to show |f(t)| ≤ K′
+t \le x \;\lor\; x \lt t @@ three-way-order on ℝ
+\text{case } t \le x:\ \ |f(t)| \le K \le K' @@ the bound up to x; 8b's max, by its two cases, is at least each
+\text{case } x \lt t:\ \ \sigma - \delta \lt x \lt t \le x' \le \sigma + \tfrac{\delta}{2} @@ chain the order (at-most-is-a-partial-order on ℝ); lesser-below-both for x′
+\qquad |t - \sigma| \lt \delta, \text{ so } |f(t)| \lt |f(\sigma)| + 1 \le K' @@ unpack-the-bars packs; the window's line; max
+x' \in B @@ x′ ∈ [a, b] (σ ≤ x′ ≤ b, as min is one of the two), with the bound K′: ︿ the sift
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: the bounded-on-a-closed-interval technique · σ is the right end">
+x' \le \sigma @@ σ is an upper bound of B
+\min(\sigma + \tfrac{\delta}{2},\ b) \ne \sigma + \tfrac{\delta}{2} @@ σ + δ/2 &gt; σ ≥ x′: three-way-order on ℝ
+x' = b @@ min is one of the two (8b's line by cases): the remaining-option technique
+b \le \sigma \le b,\ \ \text{so } \htmlClass{new}{\sigma = b} @@ the two lines above; at-most-is-a-partial-order on ℝ's antisymmetry
+b \in B @@ x′ = b and x′ ∈ B (the swap axiom)
+\exists K\ \forall t \in [a, b]\ (|f(t)| \le K) \quad \blacksquare @@ ﹀ b ∈ B: every t ∈ [a, b] has t ≤ b
+  </pre>
+  <p data-pid="1ceab2">Notice what the proof did not need: a supposition. It never says “suppose f is not bounded”. It carries the bound past σ. It finds that the only way to be past σ and still at most σ is to have reached b, and so lands on b. No-holes was spent at one line, σ = sup B. Continuity was spent at one input, σ: the window of reach δ around σ, with gap 1. Rung 7's either-way principle was spent in the splits by three-way-order on ℝ and in not-every. The closed interval put its left end in B to begin with, and its right end in the interval to end with.</p>
+  <p data-pid="0c0768">Notice too why the walk would not do. Start at the left end and carry the bound as far as continuity at your current input allows, halfway across the window, and repeat. Take a function with an infinite discontinuity at the right end, such as 1/(1 − x) on [0, 1) with the value 0 at 1. Each window is smaller than the last, and the walk piles up at 1 without arriving. The proof does not walk. It goes directly to σ, and at σ the window has a fixed reach δ, whatever happened before. For that function σ = 1, and at 1 there is no window at all. The one input where the proof spends continuity is the one input where continuity fails.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · bounded-on-a-closed-interval · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · carry a bound along, and see where the proof’s one window sits</div>
+    <div class="panel">
+      <div class="chips" id="fch"></div>
+      <canvas id="cvB"></canvas>
+      <div class="kn">
+        <span class="m">up to x</span><input type="range" id="kx" min="0" max="1000" step="1" value="500"><output id="ox"></output>
+      </div>
+      <div class="chips"><button id="bc">carry the bound</button><button id="bc10">ten times</button><button id="br">start the walk again</button></div>
+    </div>
+    <div class="panel">
+      <div class="cap">Ink: the function on its closed interval, with hollow dots where it heads and filled dots for values at discontinuities. Teal: the band from −K to K, where K is the least bound of the outputs up to x (the knob), or “no bound”. The ember strip under the picture is the set B, the inputs up to which f is bounded, and the gold column is σ = sup B. “Carry the bound” walks: at the current gold dot s, it finds the largest window where every output is within 1 of f(s) (gold rows and grey columns), and moves s to min(s + δ/2, b).</div>
+      <div class="verdict" id="vdB"></div>
+      <div class="eqbox" id="eqB"></div>
+    </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">12b3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = x^2 + 2x \text{ on } [-3, 1]"></span></span>By completing the square, prove a bound on f's size.</li><li><span class="givens"><span data-tex-inline="p(x) = 3x^4 - 2x^2 + x - 6"></span> <span data-tex-inline="\text{on } [-2, 1]"></span></span>Using polynomial-bound, bound p's size, showing the R you chose and each term's share.</li><li><span class="givens"><span data-tex-inline="f(x) = \frac{1}{x - 2} \text{ on } [0, 2),"></span> <span data-tex-inline="K &gt; 0"></span></span>Find an input where f's size passes K, so that f is not bounded there.</li><li><span class="givens"><span data-tex-inline="f(x) = x^3 - 3x + 1 \text{ on } [-2, 2]"></span></span>Run the column on f, and show that its sup is 2.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="12b4">
+  <h2 class="sthead"><span class="stno">12b4</span>A bound by hand, for a polynomial</h2>
+  <p class="stands">Stands on 12b3 and 8h (triangle, size of a product).</p>
+  <p data-pid="561d20">Bounded-on-a-closed-interval says a bound exists. It does not hand you one. For a polynomial, the triangle inequality does.</p>
+  <p data-pid="b7f1ad">Polynomial-bound technique: <b>for p(x) = Σ_{k≤n} a_k x^k and a closed interval [v, w], let R = max(|v|, |w|). Then |p(x)| ≤ Σ_{k≤n} |a_k| R^k for every x ∈ [v, w].</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the polynomial-bound technique">
+x \in [a, b] \;\Rightarrow\; |x| \le R @@ a ≤ x ≤ b: if x ≥ 0, |x| = x ≤ b ≤ |b|; if x &lt; 0, |x| = −x ≤ −a ≤ |a| (negative-reverses-order, sandwich); max
+|x^k| = |x|^k \le R^k @@ size-of-a-product by induction on k; powers-keep-order (8f) when |x| &lt; R, the swap axiom when |x| = R; power-zero when k = 0
+\Big|\sum_{k\le n} a_k x^k\Big| \le \sum_{k\le n} |a_k x^k| @@ triangle, by induction on n with sum-one-more (9g's Σ with real terms)
+\le \sum_{k\le n} |a_k|\,\htmlClass{new}{R^k} \quad \blacksquare @@ size-of-a-product; keep-order for times on ℚ read in ℝ, term by term (same-direction-add for the sum)
+  </pre>
+  <pre class="lines" data-k="teal" data-label="from 8h: the triangle inequality, at work">
+p(x) = x^3 - 3x + 1 \text{ on } [-2, 2]:\ \ R = 2 @@ R = max(|−2|, |2|)
+|p(x)| \le 2^3 + 3 \cdot 2 + 1 = \htmlClass{new}{15} @@ polynomial-bound. The values actually stay between −1 and 3 (12c finds them)
+q(x) = 2x^3 - x + 5 \text{ on } [-1, 3]:\ \ R = 3 @@ R = max(1, 3)
+|q(x)| \le 2 \cdot 27 + 3 + 5 = 62 @@ polynomial-bound. The values actually stay between 4 and 56
+  </pre>
+  <p data-pid="c7028d">Polynomial-bound's bound is honest and usually generous: it lets every term take its largest size at once, with all signs agreeing, which rarely happens. Generous is fine. A bound only has to be above; 12c asks for the least one.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · polynomial-bound · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">12b4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">p(x) = 2x³ − x² + 4 on [−1, 2]</span></span>Find R and the bound polynomial-bound gives. <br>Say why the bound is usually generous.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="12b5">
+  <h2 class="sthead"><span class="stno">12b5</span>Illegal moves</h2>
+  <p class="stands">Stands on 12b1 to 12b4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\tfrac1x \text{ is continuous on } (0, 1], \text{ so bounded}\,? @@ (0, 1] is not closed: 1/x passes every bound as x → 0⁺ (10f)
+\begin{aligned}&f \text{ has a value at every input of } [0,\\ &\quad 1], \text{ so bounded}\,?\end{aligned} @@ 1/x with the value 0 at 0: an infinite discontinuity at the input 0
+\lfloor x \rfloor \text{ is bounded on } [0, 3], \text{ so continuous}\,? @@ bounded-on-a-closed-interval does not run backwards: three jumps
+\begin{aligned}&\text{carry the bound step}\\ &\quad\text{by step, so it reaches } b\,?\end{aligned} @@ the steps can pile up short of b; the proof jumps to σ = sup B instead
+\begin{aligned}&\text{polynomial-bound's}\\ &\quad\text{bound is the least bound}\,?\end{aligned} @@ x³ − 3x + 1 on [−2, 2]: polynomial-bound gives 15; no output has size above 3
+\text{bounded above, so bounded}\,? @@ bounded-both-ways needs both: −x² on ℝ is bounded above by 0 and not below
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">12b5.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">“f is bounded on [0, 1], so f is continuous there.”</span></span>Which illegal move is this? <br>Find a function bounded on [0, 1] that is not continuous there.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="12b6">
+  <h2 class="sthead"><span class="stno">12b6</span>Running it backwards</h2>
+  <p class="stands">Stands on 12b1 to 12b4.</p>
+  <p data-pid="d64678">Handed a function said to be bounded on a closed interval, look for one of three things. Continuity on the whole interval: then bounded-on-a-closed-interval. A formula you can bound by hand: polynomial-bound, or completing the square. Or a discontinuity where it escapes: then it may not be bounded. Handed a function that runs off without end on an interval, ask which word is missing: an end left out, or a discontinuity. Found upward; written downward.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">12b6.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="-7 \le f(x) \le 3 \text{ for all } x \in A"></span></span>Find one bound on f's size, as bounded-both-ways's column makes it.</li><li><span class="givens"><span data-tex-inline="f \text{ on } [0, 4],"></span> <span data-tex-inline="\text{continuous except at } 1,"></span> <span data-tex-inline="f \text{ not bounded on } [0, 4]"></span></span>Build one such f whose discontinuity at 1 is endless, and one whose discontinuity there is neither endless nor a jump. <br>Decide whether it can be a jump.</li><li><span class="givens"><span data-tex-inline="p(x) = 2x^3 - x + 5 \text{ on } [-1, 3],"></span> <span data-tex-inline="\text{polynomial-bound gave } 62"></span></span>Find the greatest size p actually reaches there, proving it with gaps of known sign, and find the term polynomial-bound over-counted.</li><li><span class="givens"><span data-tex-inline="\varepsilon = \tfrac12 \text{ in place of } 1"></span> <span data-tex-inline="\text{in the column\textquoteright s continuity block}"></span></span>Rewrite the continuity block, and find the new bound.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">12b.4.1</span><span class="tagq">build</span>Build a function of your own on the interval from 0 to 1, continuous at every input but one inside it, and not bounded there. <br>Run the column on it, and find the line that fails. <br>Then change it near that input so that it is continuous on the whole interval, and give the new one a bound you prove by hand.</div>
+  <div class="chq"><span class="chid">12b.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="A \text{ has one member,}"></span> <span data-tex-inline="B \text{ has } n \text{ members}"></span></span>Decide whether every function on A is bounded, and whether every function on B is.</div>
+  <div class="chq"><span class="chid">12b.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="A \subseteq \mathbb{R},"></span> <span data-tex-inline="\text{every continuous } f \text{ on } A"></span> <span data-tex-inline="\text{is bounded}"></span></span>Prove or refute that A must be a closed interval.</div>
+  <div class="chq"><span class="chid">12b.4.4</span><span class="tagq">seam</span>Another proof of bounded-on-a-closed-interval covers the interval with finitely many windows of continuity. That covering argument has an accepted name that joins two mathematicians’ names. The first of the two never stated it. The second proved a version in 1895. A third had another the same year, and a fourth sharpened it. <br>Whose name should a technique carry: the first to use it, the first to state it, or the one whose version everyone learns?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r12a.html">← 12a · the intermediate value technique</a><a href="r12c.html">12c · the highest-and-lowest technique →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>Weierstrass, lecturing in Berlin, taught that a function continuous on a closed interval is bounded there and reaches its highest and lowest values. His students wrote it down from the lectures; much of it he never published himself.</p><cite>Weierstrass, Berlin lectures on the theory of functions (1861 onward), as recorded by his students; paraphrase</cite></aside>
+  <p>Question 12b.4.4’s covering argument is the Heine–Borel theorem. Eduard Heine never stated it; Émile Borel proved a version in 1895; Pierre Cousin had another the same year; Henri Lebesgue sharpened it.</p>
+  <p>Accepted names: bounded-on-a-closed-interval is the boundedness theorem, and is often stated as the first half of the extreme value theorem.</p>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?3:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+/* each function: on [a,b]; B and sigma known exactly; breaks drawn */
+const FN={
+  cub:{lab:'x³ − 3x + 1 on [−2, 2]',tex:R`x^3 - 3x + 1`,a:-2,b:2,f:x=>x*x*x-3*x+1,y:[-5,5],cont:true,sig:2,Bt:R`B = [-2, 2]`,brk:[]},
+  end:{lab:'1/(1 − x), value 0 at 1, on [0, 1]',tex:R`\tfrac{1}{1 - x}\ (x \lt 1),\ \ 0\ (x = 1)`,a:0,b:1,f:x=>x<1?1/(1-x):0,y:[-1,9],cont:false,sig:1,Bt:R`B = [0, 1)`,brk:[1],esc:1},
+  rec:{lab:'1/x, value 0 at 0, on [0, 1]',tex:R`\tfrac1x\ (x \gt 0),\ \ 0\ (x = 0)`,a:0,b:1,f:x=>x>0?1/x:0,y:[-1,9],cont:false,sig:0,Bt:R`B = \{0\}`,brk:[0],esc:0},
+  flr:{lab:'⌊2x⌋ on [0, 2]',tex:R`\lfloor 2x \rfloor`,a:0,b:2,f:x=>Math.floor(2*x+1e-12),y:[-1,5],cont:false,sig:2,Bt:R`B = [0, 2]`,brk:[0.5,1,1.5,2],jump:true}
+};
+let key='cub',F=FN.cub,walk=[],cur=null;
+const kx=$('kx'),cv=$('cvB');
+const X=t=>F.a+(F.b-F.a)*t/1000;
+function boundUpTo(x){ if(F.esc===1&&x>=1) return null; if(F.esc===0&&x>0) return null; let m=0; const n=3000; for(let k=0;k<=n;k++){ const t=F.a+(x-F.a)*k/n; m=Math.max(m,Math.abs(F.f(t))); } return m; }
+function win(s){ const fs=F.f(s); const ok=d=>{ const n=600; for(let k=-n;k<=n;k++){ const t=s+d*k/n*0.999999; if(t<F.a||t>F.b) continue; if(!(Math.abs(F.f(t)-fs)<1)) return false; } return true; };
+  if(!ok(1e-9)) return 0; let lo=1e-9,hi=F.b-F.a; if(ok(hi)) return hi; for(let i=0;i<45;i++){ const m=(lo+hi)/2; if(ok(m)) lo=m; else hi=m; } return lo; }
+const P=plane(cv,{x:[-2.2,2.2],y:[-5,5],grid:1,aspect:0.75,draw:P=>draw(P)});
+Object.defineProperty(P.o,'aspect',{get:()=>cv.clientWidth>560?0.72:0.92});
+function draw(P){ const c=P.ctx,x=X(+kx.value); const w=F.b-F.a; P.o.x=[F.a-0.08*w,F.b+0.08*w]; P.o.y=F.y; P.o.grid=w>2?1:0.5; P.axes();
+  const K=boundUpTo(x);
+  if(K!==null){ c.fillStyle=col('--teal'); c.globalAlpha=.13; c.fillRect(P.X(F.a),P.Y(Math.min(K,F.y[1])),P.X(x)-P.X(F.a),P.Y(Math.max(-K,F.y[0]))-P.Y(Math.min(K,F.y[1]))); c.globalAlpha=1; if(K<F.y[1]) P.line(F.a,K,x,K,'--teal',1.4,[5,4]); if(-K>F.y[0]) P.line(F.a,-K,x,-K,'--teal',1.4,[5,4]); }
+  P.line(x,F.y[0],x,F.y[1],'--teal',1.2,[2,4]);
+  // the walk's current window
+  if(cur!==null){ const fs=F.f(cur), d=win(cur); c.fillStyle=col('--gold'); c.globalAlpha=.14; c.fillRect(P.X(F.a),P.Y(fs+1),P.X(F.b)-P.X(F.a),P.Y(fs-1)-P.Y(fs+1)); c.globalAlpha=1;
+    if(d>0){ c.fillStyle=col('--ink'); c.globalAlpha=.07; c.fillRect(P.X(Math.max(F.a,cur-d)),P.Y(F.y[1]),P.X(Math.min(F.b,cur+d))-P.X(Math.max(F.a,cur-d)),P.Y(F.y[0])-P.Y(F.y[1])); c.globalAlpha=1; } }
+  // the graph, in runs between breaks
+  const cuts=[F.a,...F.brk.filter(t=>t>F.a&&t<F.b),F.b]; c.strokeStyle=col('--ink'); c.lineWidth=2.4;
+  for(let i=0;i<cuts.length-1;i++){ const lo=cuts[i],hi=cuts[i+1]; c.beginPath(); let pen=false; for(let k=0;k<=500;k++){ let t=lo+(hi-lo)*k/500; if(k===0) t=lo+1e-9; if(k===500) t=hi-1e-9; const v=F.f(t); if(!isFinite(v)||v>F.y[1]*3){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); }
+  if(F.jump){ for(const t of F.brk){ c.fillStyle=col('--card'); c.strokeStyle=col('--ink'); c.lineWidth=2; c.beginPath(); c.arc(P.X(t),P.Y(F.f(t-1e-6)),4.5,0,7); c.fill(); c.stroke(); P.dot(t,F.f(t),'--ink',4.5); } }
+  if(F.esc!==undefined) P.dot(F.esc,0,'--ink',5);
+  // B strip and sigma
+  const yb=F.y[0]+(F.y[1]-F.y[0])*0.04; c.lineWidth=7; c.strokeStyle=col('--ember'); c.globalAlpha=.85; c.beginPath();
+  if(key==='rec'){ c.arc(P.X(0),P.Y(yb),4,0,7); c.fillStyle=col('--ember'); c.fill(); } else { c.moveTo(P.X(F.a),P.Y(yb)); c.lineTo(P.X(key==='end'?0.9995:F.b),P.Y(yb)); c.stroke(); } c.globalAlpha=1;
+  if(key==='end'){ c.fillStyle=col('--card'); c.strokeStyle=col('--ember'); c.lineWidth=2; c.beginPath(); c.arc(P.X(1),P.Y(yb),4.5,0,7); c.fill(); c.stroke(); }
+  P.text('B',F.a-0.07*w,yb-(F.y[1]-F.y[0])*0.012,'--ember','left',12);
+  P.line(F.sig,F.y[0],F.sig,F.y[1],'--gold',2); P.text('σ',F.sig+0.01*w,F.y[1]-(F.y[1]-F.y[0])*0.06,'--gold','left',14);
+  walk.forEach((s,i)=>P.dot(s,F.y[0]+(F.y[1]-F.y[0])*0.1,i===walk.length-1?'--gold':'--muted',i===walk.length-1?5.5:3.5)); }
+function read(){ const x=X(+kx.value); $('ox').textContent=fm(x,3); const K=boundUpTo(x);
+  const vd=$('vdB'); let t='';
+  if(cur!==null){ const d=win(cur); t+= d>0?('Walk: at s = '+fm(cur,4)+' every output within the window of reach '+fm(d,4)+' is within 1 of f(s); s moves to '+fm(Math.min(cur+d/2,F.b),4)+'. '):('Walk: at s = '+fm(cur,4)+' no window keeps the outputs within 1 of f(s): the walk is stuck. '); }
+  if(F.cont){ vd.className='verdict win'; t+='Continuous on the closed interval: σ = sup B = b, and the window at σ carries the bound to b (bounded-on-a-closed-interval).'; }
+  else if(key==='flr'){ vd.className='verdict'; t+='Bounded (B is all of [0, 2]), though not continuous: bounded-on-a-closed-interval does not run backwards. The walk stalls at each jump: walking is not the proof.'; }
+  else { vd.className='verdict lose'; t+='Not bounded: σ = sup B = '+fm(F.sig,0)+', and at σ there is no window (an infinite discontinuity at an input), so the proof\'s one use of continuity fails exactly there.'; }
+  vd.textContent=t;
+  tex($('eqB'),R`\begin{gathered}f(x) = ${F.tex}\\ \text{up to } x = ${fm(x,3)}:\ \ ${K===null?R`\text{no bound}`:R`K = ${fm(K,3)}`}\\ ${F.Bt},\ \ \sigma = \sup B = ${fm(F.sig,0)}\end{gathered}`,true); }
+function all(){ P.redraw(); read(); }
+kx.addEventListener('input',all);
+$('bc').onclick=()=>{ if(cur===null){ cur=F.a; walk=[cur]; } else { const d=win(cur); if(d>0){ cur=Math.min(cur+d/2,F.b); walk.push(cur); } } all(); };
+$('bc10').onclick=()=>{ for(let i=0;i<10;i++) $('bc').click(); };
+$('br').onclick=()=>{ cur=null; walk=[]; all(); };
+const fch=$('fch');
+Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===key) b.className='on'; b.onclick=()=>{ key=k; F=FN[k]; cur=null; walk=[]; [...fch.children].forEach(z=>z.classList.toggle('on',z===b)); all(); }; fch.appendChild(b); });
+window.__pic={set:(k,steps,xv)=>{ [...fch.children][Object.keys(FN).indexOf(k)].click(); for(let i=0;i<(steps||0);i++) $('bc').click(); if(xv!=null) kx.value=xv; all(); return {walk:walk.map(v=>+v.toFixed(5)),txt:$('vdB').textContent}; }};
+all();
+
+/* ---------- slides ---------- */
+const Nw='\\htmlClass{new}';
+stepper('#sl1',[
+  {k:'ember',kl:'bounded',t:R`\exists K\ \forall x \in A\ (|f(x)| \le K)`,n:`Bounded on A. Above: f(x) ≤ K; below: k ≤ f(x). K is a bound.`},
+  {k:'ember',kl:'bounded-both-ways',t:R`|f(x)| \le ${Nw}{\max(|k|, |K_1|)}`,n:`From a bound above and a bound below, a bound on the size, and back by unpack-the-bars. ∎`}
+],{title:'The slides · bounded · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'both words · closed',t:R`\tfrac1x \text{ on } (0, 1]:\ \text{no bound}`,n:`Continuous, but an end is left out; 1/x passes every bound as x → 0⁺ (10f).`},
+  {k:'ember',kl:'both words · continuous',t:R`\tfrac1x\ (x \gt 0),\ \ 0\ (x = 0):\ \text{no bound on } [0, 1]`,n:`Every input has a value; one infinite discontinuity at an input is enough.`},
+  {k:'ember',kl:'not backwards',t:R`\lfloor x \rfloor \text{ on } [0, 3]:\ \text{bounded, three jumps}`,n:`Bounded is cheap. bounded-on-a-closed-interval says bounded because continuous.`}
+],{title:'The slides · both words · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'bounded-on-a-closed-interval · the set',t:R`B = \{x \in [a,b] : f \text{ bounded on } [a,b] \text{ up to } x\}`,n:`The left end is in B: the size of f there is a bound. b is an upper bound.`},
+  {k:'ember',kl:'bounded-on-a-closed-interval · the sup',t:R`${Nw}{\sigma = \sup B}`,n:`no-holes: the one completeness line. σ lies in the interval.`},
+  {k:'ember',kl:'bounded-on-a-closed-interval · the window',t:R`|t - \sigma| \lt \delta \Rightarrow |f(t)| \lt |f(\sigma)| + ${Nw}{1}`,n:`closed-interval-continuity at σ with ε = 1, then triangle. Continuity is spent here, at σ only.`},
+  {k:'ember',kl:'bounded-on-a-closed-interval · a member near σ',t:R`x \in B,\ \ \sigma - \delta \lt x \le \sigma`,n:`σ − δ is not an upper bound, since σ is least. Call x's bound K.`},
+  {k:'ember',kl:'bounded-on-a-closed-interval · carried past',t:R`x' = \min(\sigma + \tfrac\delta2, b),\ \ K' = ${Nw}{\max(K, |f(\sigma)| + 1)}`,n:`Up to x: K. From x to x′: inside the window. So x′ ∈ B.`},
+  {k:'ember',kl:'bounded-on-a-closed-interval · σ is b',t:R`x' \le \sigma \;\Rightarrow\; x' = b \;\Rightarrow\; ${Nw}{\sigma = b}`,n:`x′ is at most σ but σ + δ/2 is not: so the min is b, and b ≤ σ ≤ b.`},
+  {k:'ember',kl:'bounded-on-a-closed-interval · the end',t:R`b \in B:\ \ \exists K\ \forall t \in [a, b]\ (|f(t)| \le K)`,n:`No supposition anywhere. ∎`},
+  {k:'ember',kl:'why not walk',t:R`\tfrac{1}{1-x}:\ \text{windows shrink, the walk piles up at } 1`,n:`The proof does not walk. It goes to σ, where the window has a fixed reach, or, for this function, none.`}
+],{title:'The slides · bounded-on-a-closed-interval · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'polynomial-bound',t:R`|p(x)| \le \sum_{k \le n} |a_k|\,${Nw}{R^k}`,n:`R = max(|v|, |w|) for x ∈ [v, w]; triangle and size-of-a-product. A bound by hand. ∎`},
+  {k:'teal',kl:'from 8h · polynomial-bound used',t:R`x^3 - 3x + 1 \text{ on } [-2, 2]:\ \ 8 + 6 + 1 = 15`,n:`Generous: the values stay between −1 and 3. A bound only has to be above.`}
+],{title:'The slides · polynomial-bound · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

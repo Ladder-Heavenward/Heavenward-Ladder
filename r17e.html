@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>exp and e</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r17d.html">← 17d ln reaches every height</a><a href="r17f.html">next: 17f exp is its own slope →</a></p>
+  <div class="tags"><span class="tag proof">17e · proof</span></div>
+  <h1>exp and e</h1>
+  <p>17d proved that ln is a bijection from the positive numbers to all the reals, so it can be run backwards. This step names the function that runs it backwards, exp, and turns ln's techniques around: ln turns multiplying into adding, so exp turns adding into multiplying. The number the exponential sends one to gets a name of its own, e. It is the number past one where the area under one over the input reaches exactly one. The step traps it between 2 and 3, and then between two runs of numbers that close in on it from both sides.</p>
+  <p class="gesture">The exponential undoes the logarithm, sending every real number to a positive one. The exponential of a sum is the product of the exponentials. The number e is the exponential of one, so its logarithm is one, and it lies between two and three. One plus a small fraction, raised to as many powers as the fraction’s bottom, closes in on e from below.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r17d.html">17d</a> (log-onto-ℝ), <a href="r17c.html">17c</a> (log-of-a-product, log-of-a-quotient, log-of-a-power), <a href="r17a.html">17a</a> (log-rises, log-bounds), <a href="r15h.html">15h</a> (sums), <a href="r09d.html">9d</a> (the inverse), <a href="r10d.html">10d</a> (squeeze), <a href="r08i.html">8i</a> (fraction-exponent). <a href="r17f.html">17f</a> finds the slope of exp.</p></div>
+</header>
+
+<section class="class step" data-step="17e1">
+  <h2 class="sthead"><span class="stno">17e1</span>The function that undoes ln</h2>
+  <p class="stands">Stands on 17d (log-onto-ℝ), 9d (inverse-is-a-bijection) and 17c (log-of-a-product).</p>
+  <p class="eqline" data-pid="be908e">For every real x, exp x is the one positive number whose ln is x. Its accepted name is the exponential function. exp is an operator: carried out on x, it produces one positive number.</p>
+  <p data-pid="8add9d">It exists, and is one function, by log-onto-ℝ (17d). By 9d's inverse-is-a-bijection, exp(ln y) = y for y &gt; 0 and ln(exp x) = x for every real x. By 13l's inverse-is-continuous it is continuous. It rises, since ln does: if x &lt; x′ and exp x ≥ exp x′, then log-rises would give x ≥ x′. And exp 0 = 1, since ln 1 = 0.</p>
+  <p data-pid="9d672a">Adding-becomes-multiplying technique: <b>for all real x and y, exp(x + y) = exp x · exp y; exp(−x) = 1/exp x; and exp(rx) = (exp x)ʳ for rational r.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the adding-becomes-multiplying technique">
+a = \exp x,\ \ b = \exp y @@ so ln a = x and ln b = y (inverse-is-a-bijection)
+\ln(ab) = \ln a + \ln b = x + y @@ log-of-a-product (17c)
+\htmlClass{new}{\exp(x + y) = ab = \exp x \cdot \exp y} @@ ab is the positive number whose ln is x + y
+\ln\tfrac1a = -x \Rightarrow \exp(-x) = \tfrac{1}{\exp x} @@ log-of-a-quotient
+\ln(a^r) = rx \Rightarrow \exp(rx) = (\exp x)^r \quad \blacksquare @@ log-of-a-power, r rational
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the function that undoes ln · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">17e1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">exp 2 · exp 3,  exp 5 / exp 1</span></span>Write each as one exp. <br>Say which law of logs each comes from.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17e2">
+  <h2 class="sthead"><span class="stno">17e2</span>The number e</h2>
+  <p class="stands">Stands on 17e1 and 17a (log-bounds, log-rises).</p>
+  <p class="eqline" data-pid="25d4c0">e = exp 1: the one number with ln e = 1, the place past 1 where the area under 1/t from 1 reaches 1. Its accepted name is simply e (Euler's number). e is a name, for one number.</p>
+  <p data-pid="6928fd">e-bounds technique: <b>2 &lt; e &lt; 3.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the e-bounds technique">
+\ln 2 \lt 2 - 1 = 1 = \ln e @@ log-bounds (17a), strict away from 1
+2 \lt e @@ log-rises: ln rises, so the smaller log has the smaller number
+\text{lower sum for } \textstyle\int_1^3 \tfrac{dt}{t},\ 8 \text{ pieces of width } \tfrac14: @@ 15h; 1/t falls, so each least is at the right end
+\tfrac15 + \tfrac16 + \tfrac17 + \tfrac18 + \tfrac19 + \tfrac1{10} + \tfrac1{11} + \tfrac1{12} \approx 1.0199 @@ each term is ¼ · 1/(1 + k/4) = 1/(4 + k)
+\ln 3 \gt 1 = \ln e \Rightarrow e \lt 3 \quad \blacksquare @@ a lower sum is below the integral; log-rises
+  </pre>
+  <p data-pid="d6316d">For rational r, adding-becomes-multiplying gives exp r = exp(r · 1) = (exp 1)ʳ = eʳ. <b>So on the rationals, exp is rung 8's power of e.</b> From here on eˣ is written for exp x at every real x. For irrational x, that is a definition: rung 8 gave eˣ no meaning there. 17g does the same for every base.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · the number e · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17e2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">2 < e < 3</span></span>Bound e², and say whether it is more or less than 10. <br>Bound exp ½, the number whose square is e.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17e3">
+  <h2 class="sthead"><span class="stno">17e3</span>Closing in on e</h2>
+  <p class="stands">Stands on 17e2 and 17a (log-bounds).</p>
+  <p data-pid="384bdc">e-as-a-limit technique: <b>for every whole n ≥ 1, (1 + 1/n)ⁿ ≤ e ≤ (1 + 1/n)ⁿ⁺¹; so (1 + 1/n)ⁿ → e.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the e-as-a-limit technique">
+1 - \tfrac{1}{1 + h} \le \ln(1 + h) \le h,\ \ h = \tfrac1n @@ log-bounds at x = 1 + 1/n
+\tfrac{1}{n + 1} \le \ln\big(1 + \tfrac1n\big) \le \tfrac1n @@ 1 − n/(n + 1) = 1/(n + 1)
+n\ln\big(1 + \tfrac1n\big) \le 1 \le (n + 1)\ln\big(1 + \tfrac1n\big) @@ multiply the right bound by n, the left by n + 1
+\htmlClass{new}{\big(1 + \tfrac1n\big)^n \le e \le \big(1 + \tfrac1n\big)^{n+1}} @@ log-of-a-power, then exp rises
+0 \le e - \big(1 + \tfrac1n\big)^n \le \big(1 + \tfrac1n\big)^n \cdot \tfrac1n \le \tfrac{e}{n} \lt \tfrac3n @@ the two bounds differ by a factor 1 + 1/n; e-bounds
+\big(1 + \tfrac1n\big)^n \to e \quad \blacksquare @@ squeeze (10d)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: worked">
+n = 10:\ \ 2.5937 \le e \le 2.8531 @@ e-as-a-limit
+n = 100:\ \ 2.7048 \le e \le 2.7319 @@ e-as-a-limit
+e \approx 2.71828 @@ larger n; the gap is below 3/n
+\exp(2\ln 3) = (\exp \ln 3)^2 = 9 @@ adding-becomes-multiplying with r = 2; inverse-is-a-bijection
+e^{2x} = 7 \iff 2x = \ln 7 \iff x = \tfrac12\ln 7 @@ take ln of both sides; ln and exp undo each other
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · closing in on e · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · ln run backwards, and e closed in on</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="lbl">ln and exp, with one pair swapped</div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">x</span><input type="range" id="kx" min="-2" max="2" step="0.01" value="1"><output id="ox"></output></div>
+      <div class="cap">Ink: ln. Ember: exp. The ember dot (x, exp x) and the ink dot (exp x, x) are one pair with its numbers swapped (9d).</div>
+    </div>
+    <div class="panel">
+      <div class="lbl">(1 + 1/k)ᵏ and (1 + 1/k)ᵏ⁺¹, for k = 1 to n</div>
+      <canvas id="cvL"></canvas>
+      <div class="kn"><span class="m">n</span><input type="range" id="kn" min="1" max="60" step="1" value="10"><output id="on"></output></div>
+      <div class="cap">Teal: (1 + 1/k)ᵏ, from below. Ember: (1 + 1/k)ᵏ⁺¹, from above. Dashed: e.</div>
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17e3.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\exp p = 3,"></span> <span data-tex-inline="\exp q = 5"></span></span>Find exp of p + q, and of 2p − q.</li><li><span class="givens"><span data-tex-inline="e^x = 1/e^2,"></span> <span data-tex-inline="e^x = \sqrt e"></span></span>Find the x that solves each.</li><li><span class="givens"><span data-tex-inline="\int_1^b \tfrac{dt}{t} = 2"></span></span>Find b.</li><li><span class="givens"><span data-tex-inline="\big|\big(1 + \tfrac1n\big)^n - e\big| &lt; 0.01"></span></span>Find how large n must be for e-as-a-limit to promise it.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17e4">
+  <h2 class="sthead"><span class="stno">17e4</span>Interest added ever more often</h2>
+  <p class="stands">Stands on 17e3.</p>
+  <p data-pid="d4534a">In 1683 a mathematician asked what becomes of a sum lent at interest, if the interest is added not yearly but at every moment. He showed that a whole year's interest of the same amount, added in this way, gives more than two and a half times the sum, and less than three times.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · interest · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17e4.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\exp 0,"></span> <span data-tex-inline="\exp(\ln 5),"></span> <span data-tex-inline="\ln(\exp 3)"></span></span>Find each.</li><li><span class="givens"><span data-tex-inline="\exp(3\ln 2),"></span> <span data-tex-inline="\exp(\ln 12 - \ln 4),"></span> <span data-tex-inline="e^3 \cdot e^{-1}"></span></span>Simplify each.</li><li><span class="givens"><span data-tex-inline="\big(1 + \tfrac1n\big)^n,"></span> <span data-tex-inline="\big(1 + \tfrac1n\big)^{n+1},"></span> <span data-tex-inline="n = 4"></span></span>Find both, and the interval they trap e in.</li><li><span class="givens"><span data-tex-inline="e^{3x} = 10"></span></span>Solve for x.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17e5">
+  <h2 class="sthead"><span class="stno">17e5</span>Illegal moves</h2>
+  <p class="stands">Stands on 17e1 to 17e4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\exp(xy) = \exp x \cdot \exp y\,? @@ adding-becomes-multiplying is about sums: exp(1·1) = e, but e · e = e²
+\big(1 + \tfrac1n\big)^n \to 1^\infty = 1\,? @@ the base shrinks toward 1 as the power grows; e-as-a-limit traps the result near e
+\exp x \le 0 \text{ for some } x\,? @@ exp takes values in (0, ∞): they are the numbers that have a ln
+e = \tfrac{27}{10} \text{ or } e \approx 2.7 \text{ exactly}\,? @@ e-as-a-limit pins e to any number of places; no fraction is claimed here
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17e5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\exp(xy) = \exp x \cdot \exp y"></span></span>Find every pair x, y for which it is true.</li><li><span class="givens"><span data-tex-inline="1 + \tfrac1n \to 1,"></span> <span data-tex-inline="1^n = 1,"></span> <span data-tex-inline="\text{Claim: so } \big(1 + \tfrac1n\big)^n \to 1"></span></span>Write the step of the claim that breaks.</li><li><span class="givens"><span data-tex-inline="\exp,"></span> <span data-tex-inline="\ln"></span></span>Find the set of inputs of each.</li><li><span class="givens"><span data-tex-inline="100\% \text{ a year},"></span> <span data-tex-inline="n \text{ equal instalments},"></span> <span data-tex-inline="\text{each on the amount so far}"></span></span>Prove or refute: adding it every second makes the amount as large as you like.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">17e.4.1</span><span class="tagq">build</span>Make up a yearly rate of your own, between 1% and 10%, for a savings account in Missoula.<br>Find what $1000 becomes in a year with the interest added monthly, and with it added at every moment, as e to a power.<br>Prove that the monthly amount is the smaller, for every such rate.</div>
+  <div class="chq"><span class="chid">17e.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\big(1 + \tfrac1k\big)^k,"></span> <span data-tex-inline="\big(1 + \tfrac1k\big)^{k+1}"></span></span>In the picture the first seems to rise with k and the second to fall.<br>Prove either, as far as you can take it.</div>
+  <div class="chq"><span class="chid">17e.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="f(x + y) = f(x)f(y),"></span> <span data-tex-inline="\text{for all real } x, y,"></span> <span data-tex-inline="f(1) = e"></span></span>Prove or refute: f is exp.</div>
+  <div class="chq"><span class="chid">17e.4.4</span><span class="tagq">seam</span>For centuries the church and the courts argued over whether interest on a loan is honest at all, and interest on interest worse. <br>One mathematician asked a narrower question: added at every moment, does it grow without bound? He found it does not, and that the answer is a number between 2½ and 3. <br>Was his question about money, or about numbers? <br>Does the answer change the old argument?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r17d.html">← 17d · ln reaches every height</a><a href="r17f.html">17f · exp is its own slope →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>Jacob Bernoulli asked what becomes of a sum lent at interest if the interest is added not yearly but at every moment, and showed that a whole year’s interest of the same amount added in this way gives more than two and a half times the sum, and less than three times.</p><cite>Jacob Bernoulli, on a question of interest (1690, posed 1683); paraphrase</cite></aside>
+  <p>The letter e, and the name Euler’s number, are after Leonhard Euler, who named the number from 1728.</p>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+/* least and greatest of F.f on [lo, hi]: the ends, F's critical points inside, and a fine sample (exact between critical points for the functions used here) */
+function ext(F,lo,hi){ if(F.dir) return [0,1]; let m=Infinity,M=-Infinity; const t=x=>{ const v=F.f(x); if(v<m) m=v; if(v>M) M=v; };
+  t(lo); t(hi); (F.crit||[]).forEach(c=>{ if(c>lo&&c<hi) t(c); }); for(let k=1;k<64;k++) t(lo+(hi-lo)*k/64); return [m,M]; }
+function sums(F,pts){ let L=0,U=0; const ms=[],Ms=[]; for(let i=1;i<pts.length;i++){ const [m,M]=ext(F,pts[i-1],pts[i]), w=pts[i]-pts[i-1]; ms.push(m); Ms.push(M); L+=m*w; U+=M*w; } return {L,U,ms,Ms}; }
+const eq=(a,b,n)=>Array.from({length:n+1},(_,i)=>a+(b-a)*i/n);
+function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
+function boxes(P,pts,hs,stroke,fill,alpha){ const c=P.ctx; for(let i=1;i<pts.length;i++){ const a=pts[i-1],b=pts[i],h=hs[i-1]; c.globalAlpha=alpha; P.poly([[a,0],[b,0],[b,h],[a,h]],null,fill); c.globalAlpha=1; P.poly([[a,0],[b,0],[b,h],[a,h]],stroke,null,1.2); } }
+function dirDots(P,a,b){ const c=P.ctx; c.fillStyle=col('--ink'); for(let k=0;k<=300;k++){ const x=a+(b-a)*k/300; const y=(k%2)?0:1; c.fillRect(P.X(x)-1,P.Y(y)-1,2,2); } }
+/* shade between the graph of fn and the axis from lo to hi: above in pos colour, below in neg colour */
+function shade(P,fn,lo,hi,pos,neg,alpha){ if(hi<lo){ const t=lo; lo=hi; hi=t; } const c=P.ctx, N=300; c.globalAlpha=alpha==null?0.32:alpha;
+  for(let k=0;k<N;k++){ const x0=lo+(hi-lo)*k/N, x1=lo+(hi-lo)*(k+1)/N, xm=(x0+x1)/2, y=fn(xm); if(!isFinite(y)) continue; P.poly([[x0,0],[x1,0],[x1,fn(x1)],[x0,fn(x0)]],null,y>=0?pos:neg); }
+  c.globalAlpha=1; }
+function rangeOf(fn,lo,hi,pad){ let m=Infinity,M=-Infinity; for(let k=0;k<=400;k++){ const v=fn(lo+(hi-lo)*k/400); if(isFinite(v)){ if(v<m) m=v; if(v>M) M=v; } } if(m>0) m=0; if(M<0) M=0; const p=(M-m)*(pad==null?0.12:pad)||1; return [m-p,M+p]; }
+function chips(el,FN,get,setk,after){ Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===get()) b.className='on'; b.onclick=()=>{ setk(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+const Nw='\\htmlClass{new}';
+function gridFor(sp){ return sp>40?10:sp>16?4:sp>8?2:sp>3?1:sp>1.2?0.5:0.25; }
+function frame2(P,fn,lo,hi,pad){ const w=hi-lo; P.o.x=[lo-0.12*w,hi+0.08*w]; P.o.y=rangeOf(fn,lo,hi,pad==null?0.12:pad); const sx=P.o.x[1]-P.o.x[0], sy=P.o.y[1]-P.o.y[0]; let g=gridFor(sx); while(sy/g>24) g*=2; P.o.grid=g; }
+const num=(f,a,b,n)=>{ n=n||4000; const h=(b-a)/n; let s=0; for(let i=0;i<n;i++) s+=f(a+(i+0.5)*h)*h; return s; };
+/* axes with separate steps across and up */
+function axes2(P,gx,gy){ const c=P.ctx,o=P.o; c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ c.moveTo(P.X(x),P.Y(o.y[0])); c.lineTo(P.X(x),P.Y(o.y[1])); }
+  for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ c.moveTo(P.X(o.x[0]),P.Y(y)); c.lineTo(P.X(o.x[1]),P.Y(y)); } c.stroke();
+  c.strokeStyle=col('--muted'); c.lineWidth=1.3; c.beginPath(); if(o.y[0]<=0&&o.y[1]>=0){ c.moveTo(P.X(o.x[0]),P.Y(0)); c.lineTo(P.X(o.x[1]),P.Y(0)); } if(o.x[0]<=0&&o.x[1]>=0){ c.moveTo(P.X(0),P.Y(o.y[0])); c.lineTo(P.X(0),P.Y(o.y[1])); } c.stroke();
+  c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; const ly=Math.min(P.H-6,Math.max(12,P.Y(0)+14));
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ if(Math.abs(x)<1e-9) continue; c.fillText(+x.toFixed(6),P.X(x),ly); }
+  c.textAlign='right'; const lx=Math.max(32,Math.min(P.W-4,P.X(0)-5)); for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ if(Math.abs(y)<1e-9) continue; c.fillText(String(+y.toFixed(6)).replace('-','−'),lx,P.Y(y)+4); } }
+function nice(sp){ const raw=sp/6, p=Math.pow(10,Math.floor(Math.log10(raw))), m=raw/p; return (m<1.5?1:m<3.5?2:m<7.5?5:10)*p; }
+const kx=$('kx'),kn=$('kn'),cvF=$('cvF'),cvL=$('cvL');
+const PF=plane(cvF,{x:[-3,8],y:[-3,8],grid:1,aspect:0.8,draw:P=>drawF(P)});
+const PL=plane(cvL,{x:[-4,61],y:[1.8,4.2],grid:1,aspect:0.8,draw:P=>drawL(P)});
+[[PF,cvF],[PL,cvL]].forEach(([P,cv])=>Object.defineProperty(P.o,'aspect',{get:()=>cv.clientWidth>480?0.75:0.9}));
+function drawF(P){ const x=+kx.value, y=Math.exp(x); axes2(P,1,1); curve(P,Math.log,'--ink',2.6,0.04,8); curve(P,Math.exp,'--ember',2.6,-3,Math.log(8));
+  P.line(x,y,y,x,'--muted',1.2,[4,4]); P.dot(x,y,'--ember',5); P.dot(y,x,'--ink',5); P.dot(1,Math.E,'--plum',3); }
+function drawL(P){ const n=+kn.value; P.o.x=[-0.07*n-0.5,n+0.6]; axes2(P,nice(n+1),0.5); P.line(P.o.x[0],Math.E,n+0.6,Math.E,'--muted',1.4,[6,4]);
+  for(let k=1;k<=n;k++){ P.dot(k,Math.pow(1+1/k,k),'--teal',n>30?2.5:3.5); P.dot(k,Math.pow(1+1/k,k+1),'--ember',n>30?2.5:3.5); } }
+function read(){ const x=+kx.value, n=+kn.value; $('ox').textContent=mm(x,2); $('on').textContent=n;
+  const lo=Math.pow(1+1/n,n), hi=Math.pow(1+1/n,n+1); const vd=$('vdF'); vd.className='verdict'+(hi-lo<0.05?' win':'');
+  vd.textContent='exp '+mm(x,2)+' ≈ '+mm(Math.exp(x),4)+', and ln '+mm(Math.exp(x),4)+' = '+mm(x,2)+'. With n = '+n+': '+mm(lo,4)+' ≤ e ≤ '+mm(hi,4)+', a gap of '+mm(hi-lo,4)+' (at most 3/n = '+mm(3/n,4)+').';
+  tex($('eqF'),R`\begin{gathered}\exp(${mm(x,2)}) \approx ${mm(Math.exp(x),4)}\\ \big(1 + \tfrac{1}{${n}}\big)^{${n}} \approx ${mm(lo,4)} \le e \le ${mm(hi,4)} \approx \big(1 + \tfrac{1}{${n}}\big)^{${n+1}}\end{gathered}`,true); }
+function all(){ PF.redraw(); PL.redraw(); read(); }
+kx.addEventListener('input',all); kn.addEventListener('input',all);
+window.__pic={set:(x,n)=>{ kx.value=x; kn.value=n; all(); return {exp:+Math.exp(x).toFixed(5),lo:+Math.pow(1+1/n,n).toFixed(5),hi:+Math.pow(1+1/n,n+1).toFixed(5),L3:+sums({f:t=>1/t,crit:[]},eq(1,3,8)).L.toFixed(5)}; }};
+all();
+stepper('#sl1',[
+  {k:'ember',kl:'exp',t:R`${Nw}{\exp = \ln^{-1} : \mathbb{R} \to (0, \infty)}`,n:`By log-onto-ℝ.`},
+  {k:'ember',kl:'adding-becomes-multiplying',t:R`${Nw}{\exp(x + y) = \exp x \cdot \exp y}`,n:`log-of-a-product, read backwards.`}
+],{title:'The slides · the function that undoes ln · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'e',t:R`e = \exp 1,\ \ \ln e = 1`,n:`Where the area reaches 1.`},
+  {k:'ember',kl:'ln 2 < 1',t:R`\ln 2 \lt 1 \Rightarrow 2 \lt e`,n:`log-bounds, strict.`},
+  {k:'ember',kl:'ln 3 > 1',t:R`\tfrac15 + \cdots + \tfrac1{12} \approx 1.0199`,n:`A lower sum.`},
+  {k:'ember',kl:'e-bounds',t:R`${Nw}{2 \lt e \lt 3}`,n:`Both by log-rises.`},
+  {k:'ember',kl:'every x',t:R`e^x := \exp x`,n:`Rung 8's powers on the rationals; new elsewhere.`}
+],{title:'The slides · the number e · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'e-as-a-limit',t:R`${Nw}{\big(1 + \tfrac1n\big)^n \le e \le \big(1 + \tfrac1n\big)^{n+1}}`,n:`log-bounds at 1 + 1/n.`},
+  {k:'ember',kl:'the gap',t:R`\le \tfrac{e}{n} \lt \tfrac3n`,n:`So the runs close on e.`}
+],{title:'The slides · closing in on e · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'interest',t:R`2\tfrac12 \lt e \lt 3`,n:`Interest at every moment.`}
+],{title:'The slides · interest · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`\exp(xy) \ne \exp x \cdot \exp y`,n:`Sums, not products.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

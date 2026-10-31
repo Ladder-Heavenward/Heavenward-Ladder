@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Can two files have the same fingerprint?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+#cv svg{width:100%;max-width:360px;display:block;margin:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r22chem.html">← 22·chem does the order of adding change a crystal's energy?</a><a href="r22econ.html">next: 22·econ how far does one dollar of spending go? →</a></p>
+  <div class="tags"><span class="tag crypt">22·crypt · cryptography</span></div>
+  <h1>Can two files have the same fingerprint?</h1>
+  <p>Can two files have the same fingerprint? A fingerprint of a file is a short code worked out from the whole file, the same way every time. Change one letter of the file and the code changes beyond recognition. Computers use fingerprints to check that a download arrived whole, to store passwords without storing the passwords themselves, and to name every version of a program. Each of these uses trusts that two different files never share a fingerprint. But there are far more files than codes, so some pairs of files must share one. What makes it hard is to tell how soon such a pair turns up, when nobody can predict the codes. This page shows, with counting, rung seventeen’s exp and rung twenty-two’s rare events, that among codes drawn at random a shared code turns up far sooner than the number of codes suggests, after about its square root, and why fingerprints are made twice as long as a count of codes alone would ask.</p>
+  <p class="gesture">Draw codes at random, one after another. The chance that no code matches an earlier one is a product of shrinking fractions, one for each draw. Count the pairs of draws, and share them out over the codes. The chance of a match is fenced above by that share, and below by a fence built from rung seventeen’s exp of it. So a match is as likely as not once the pairs are about seven tenths of the codes, and that happens at about the square root of the number of codes. Twenty-three people share a birthday as often as not. A fingerprint holds out against a search for any matching pair only half as many bits as it has.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r08cb5.html">8·cb5</a> (the pigeonhole technique), <a href="r04j.html">4j</a> (counted-functions; arrangements), <a href="r04stat.html">4·stat</a> (chance by counting), <a href="r04b.html">4b</a> (induction), <a href="r14d.html">14d</a> (slope-sign-order), <a href="r17e.html">17e</a> and <a href="r17f.html">17f</a> (exp), <a href="r17crypt.html">17·crypt</a> (bits), <a href="r22j.html">22j</a> (the rare-events technique) and <a href="r22k.html">22k</a> (the ranking technique). 27·crypt asks whether a grid of numbers can scramble letters.</p></div>
+</header>
+
+<section class="class step" data-step="22crypt1">
+  <h2 class="sthead"><span class="stno">22crypt1</span>Shared fingerprints must exist</h2>
+  <p class="stands">Stands on 8·cb5 (the pigeonhole technique), 4j (counted-functions) and 17·crypt (bits).</p>
+  <p class="eqline" data-pid="221cd7">From here on, on this page, a fingerprint is a function F from files to codes of b bits, so there are N = 2ᵇ codes. A collision is two files f ≠ g with F(f) = F(g).</p>
+  <pre class="lines" data-k="ember" data-label="this page: collisions exist">
+\text{files of 1 kB}:\ 2^{8192} @@ counted-functions (4j): 8192 bits, each 0 or 1
+\text{codes of 256 bits}:\ 2^{256} @@ the same count
+2^{8192} > 2^{256} @@ powers of 2 rise (4f)
+\htmlClass{new}{\text{some two files of 1 kB share a code}} \quad \blacksquare @@ the pigeonhole technique (8·cb5)
+  </pre>
+  <p data-pid="47d718">Collision technique: <b>a fingerprint of b bits on files longer than b bits always has collisions; what can be made hard is only to find one.</b> So the question is how many files someone must fingerprint before two of them collide.</p>
+  <p data-pid="4e4e54">Nobody can predict a good fingerprint’s codes. So take as a working guess that the codes of n different files behave like n codes drawn at random: every list of n codes is equally likely. The guess is tested by the fingerprint’s makers, not proved.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · collisions · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">22·crypt.1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a fingerprint of 160 bits</span> <span class="gtx">a short name made of the first 7 hex digits of it</span></span>Find a lower bound for how many files of 1 kB share the busiest 160-bit code. <br>Find the fewest files that make two short names alike, for certain.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22crypt2">
+  <h2 class="sthead"><span class="stno">22crypt2</span>No match, counted</h2>
+  <p class="stands">Stands on 22·crypt.1, 4j (counted-functions; arrangements) and 4·stat (chance by counting).</p>
+  <pre class="lines" data-k="ember" data-label="this page: the no-match technique">
+\text{lists of } n \text{ codes}:\ N^n @@ counted-functions (4j)
+\text{lists with no two alike}:\ N(N - 1)\cdots(N - n + 1) @@ arrangements (4j)
+q_n = \tfrac{N(N-1)\cdots(N-n+1)}{N^n} @@ chance by counting (4·stat), every list equally likely
+\htmlClass{new}{q_n = (1 - \tfrac1N)(1 - \tfrac2N)\cdots(1 - \tfrac{n-1}{N})} \quad \blacksquare @@ one fraction for each draw after the first
+  </pre>
+  <p data-pid="092e16">No-match technique: <b>among n codes drawn at random from N, the chance that no two match is the product of 1 − k/N for k from 1 to n − 1.</b> The chance of a match is 1 − qₙ.</p>
+  <p data-pid="5ca046">Birthdays are codes, too: take N = 365, every day equally likely, and leave out the leap day. For 23 people, q₂₃ ≈ 0.4927. So a shared birthday among 23 is a little more likely than not: about 0.507.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · no match · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22·crypt.2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a seminar of 30 students at the University of Oregon in Eugene</span> <span class="gtx">birthdays as 365 equally likely codes</span></span>Find the chance that two of them share a birthday. <br>Find the chance for 10 of them.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22crypt3">
+  <h2 class="sthead"><span class="stno">22crypt3</span>Fenced by e</h2>
+  <p class="stands">Stands on 22·crypt.2, 4b (induction), 14d (slope-sign-order), 17e (adding becomes multiplying), 17f (exp is its own slope), 15g (sums by hand) and 22j (the rare-events technique).</p>
+  <p data-pid="6f08be">The product is hard to read. Fence it. Write λ = n(n − 1)/(2N): the number of pairs of draws, n(n − 1)/2, shared out over the N codes.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the pair technique">
+1 - x \le e^{-x} \text{ for } x \ge 0 @@ exp(−x) − (1 − x) is 0 at 0, and its slope 1 − exp(−x) ≥ 0 (14d, 17f)
+q_n \le e^{-1/N} e^{-2/N} \cdots e^{-(n-1)/N} = e^{-\lambda} @@ multiply the fences; adding becomes multiplying (17e); 1 + ⋯ + (n − 1) = n(n − 1)/2 (15g)
+q_n \ge 1 - (\tfrac1N + \tfrac2N + \cdots + \tfrac{n-1}{N}) = 1 - \lambda @@ (1 − x₁)⋯(1 − xⱼ) ≥ 1 − (x₁ + ⋯ + xⱼ) for each xᵢ in [0, 1], by induction (4b)
+\htmlClass{new}{1 - e^{-\lambda} \le 1 - q_n \le \lambda} \quad \blacksquare @@ take each fence from 1
+  </pre>
+  <p data-pid="d64f4d">Pair technique: <b>with λ the number of pairs per code, the chance of a match lies between 1 − e<sup>−λ</sup> and λ.</b> For 23 birthdays λ ≈ 0.693, so the chance is fenced between 0.500 and 0.693; the count gave 0.507.</p>
+  <p data-pid="3803d3">The lower fence is 22j’s rare-events technique at work. Each of the n(n − 1)/2 pairs is a rare event, matching with chance 1/N, and 22j gives the chance that none of them happens as about e<sup>−λ</sup>. When N is large and λ is not, the fence and the count agree to many places.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · fences · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · codes drawn at random, and the chance that two match</div>
+    <div class="kn"><span class="m">bits b</span><input type="range" id="kb" min="6" max="32" step="1" value="12"><output id="ob"></output></div>
+    <div class="kn"><span class="m">codes drawn n</span><input type="range" id="kn" min="1" max="400" step="1" value="100"><output id="on"></output></div>
+    <div id="cv"></div>
+    <div class="cap">Across: n, as a multiple of √N, from 0 to 4. Up: the chance of a match, from 0 to 1. Teal: the lower fence 1 − e<sup>−λ</sup>; dashed: the upper fence λ; both drawn with λ about n²/(2N). The ember dot is the chance counted exactly for the n chosen.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22·crypt.3.1</span><span class="ph undo">undo</span><span class="givens"><span class="gtx">4-digit PINs at a credit union in Tacoma, chosen at random,  N = 10 000</span></span>Find the fewest members for which the lower fence makes a shared PIN at least as likely as not. <br>Find the most members for which the upper fence keeps a shared PIN below one chance in ten.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22crypt4">
+  <h2 class="sthead"><span class="stno">22crypt4</span>About the square root</h2>
+  <p class="stands">Stands on 22·crypt.3, 17e (exp undoes ln), 17g (pˣ for any real x), 17·crypt (bits) and 22k (the ranking technique).</p>
+  <pre class="lines" data-k="ember" data-label="this page: the square-root technique">
+1 - e^{-\lambda} = \tfrac12 \iff \lambda = \ln 2 @@ exp undoes ln (17e)
+n(n - 1) = 2N\ln 2 \Rightarrow n \approx \sqrt{2\ln 2}\,\sqrt{N} \approx 1.18\sqrt{N} @@ n − 1 is about n when n is large
+N = 2^b \Rightarrow \sqrt{N} = 2^{b/2} @@ powers (17g)
+\htmlClass{new}{\text{a } b\text{-bit fingerprint gives up a collision after about } 1.18 \cdot 2^{b/2} \text{ tries}} \quad \blacksquare @@ the lower fence
+  </pre>
+  <p data-pid="32c56f">Square-root technique: <b>a match among random codes is as likely as not after about 1.18 √N of them, so a b-bit fingerprint holds out only about b/2 bits against a search for any colliding pair.</b> The pairs grow as n², and n² outgrows n (22k’s ranking technique), so they catch up with the codes long before the draws do.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the search, at a million million tries a second">
+b = 28:\ \ 1.9 \times 10^{4} \text{ tries} @@ 7 hex digits: at once
+b = 128:\ \ 2.2 \times 10^{19} \text{ tries, about 8 months} @@ within reach of one large effort
+b = 160:\ \ 1.4 \times 10^{24} \text{ tries, about } 45\,000 \text{ years} @@ by brute search alone
+\htmlClass{new}{b = 256:\ \ 4.0 \times 10^{38} \text{ tries, about } 10^{19} \text{ years}} @@ out of reach
+  </pre>
+  <p data-pid="3b02b2">That is why fingerprints are made long. A password of 128 random bits holds out for 2¹²⁸ guesses (17·crypt). A fingerprint must have 256 bits to hold out as long against a search for a colliding pair.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · square root · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22·crypt.4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a project storing 20 000 versions,  each named by the first 7 hex digits of its 160-bit fingerprint</span></span>Find both fences on the chance that two versions share a name. <br>Find how many hex digits keep that chance below one in a million, by the upper fence.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22crypt5">
+  <h2 class="sthead"><span class="stno">22crypt5</span>Illegal moves</h2>
+  <p class="stands">Stands on 22·crypt.1 to 22·crypt.4.</p>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+365 \text{ days, so a shared birthday takes about } 183 \text{ people}\,? @@ the pairs grow as n²: 23 people make it as likely as not
+\text{a } b\text{-bit fingerprint takes } 2^b \text{ tries to break}\,? @@ that is for a match to one given file; any colliding pair takes about √(2ᵇ)
+\text{the chance of a match is } \lambda\,? @@ λ is an upper fence; for 40 birthdays it is about 2.14
+\text{no collision has been found, so none exists}\,? @@ by pigeonhole they exist; only finding one is hard
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22·crypt.5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span class="gtx">a 64-bit fingerprint,  a searcher who wants a second file whose code matches one given file’s</span></span>Find the chance of success after n tries, and the tries for an even chance. <br>Find which line of the square-root technique breaks.</li><li><span class="givens"><span class="gtx">22 people in Salem, not counting you,  birthdays as 365 equally likely codes</span></span>Find the chance that one of them shares your birthday. <br>Find the chance that some two of the 23, you included, share a birthday.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">22·crypt.6.1</span><span class="tagq">build</span>Build a group size for which a shared birthday is at least 99% likely, using only the lower fence. <br>Check it against the count.</div>
+  <div class="chq"><span class="chid">22·crypt.6.2</span><span class="tagq">edge</span>Find the chance of a match among N + 1 codes drawn from N, from the count and from each fence.</div>
+  <div class="chq"><span class="chid">22·crypt.6.3</span><span class="tagq">converse</span>Among n codes drawn at random from N, a match is at least as likely as not. <br>Must λ = n(n − 1)/(2N) be at least ln 2?</div>
+  <div class="chq"><span class="chid">22·crypt.6.4</span><span class="tagq">reroute</span>Find the fence qₙ ≤ e<sup>−λ</sup> again by taking ln of the product and using ln x ≤ x − 1 (17a).</div>
+  <div class="chq"><span class="chid">22·crypt.6.5</span><span class="tagq">seam</span>A fingerprint of 160 bits had held for a decade, and a brute search for a collision would take about 2⁸⁰ tries. Then a method was published that would find one with far fewer, though no one had yet spent them. Some said the fingerprint must be retired at once. Others kept using it for years, since nobody had shown a colliding pair. Twelve years after the method, a pair was shown. <br>Was the fingerprint broken before anyone showed a pair?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r22chem.html">← 22·chem · does the order of adding change a crystal's energy?</a><a href="r22econ.html">22·econ · how far does one dollar of spending go? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A fingerprint is a cryptographic hash function, and its code a hash value or digest. The shared-birthday count is the birthday problem, often called the birthday paradox, and a search for any colliding pair is a birthday attack. A search for a second file matching one given file’s code, as in 22·crypt.5.1, is a second-preimage attack. Common fingerprints: MD5 (128 bits), SHA-1 (160 bits) and SHA-256 (256 bits). The version-control program git names every stored version by its SHA-1 code and shows a few hex digits of it as a short name.</p>
+  <h3>Who said it first</h3>
+  <p>The shared-birthday count is usually credited to Richard von Mises (1939). Gideon Yuval (1979) turned it into an attack on signed messages. Xiaoyun Wang and her colleagues found collisions in MD5 in 2004 and, in 2005, published a method for SHA-1 far faster than 2⁸⁰ tries; the dispute staged in 22·crypt.6.5 followed. In 2012 the Flame malware forged a software-signing certificate with an MD5 collision. In 2017 Marc Stevens and colleagues at CWI Amsterdam and Google showed the first SHA-1 collision, two different PDF files with one code, after about 2⁶³ computations.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="22·crypt: a worked “proof”, not allowed">
+\text{each new person has chance } \tfrac{1}{365} \text{ of sharing my birthday} @@ fine
+\text{so 23 people give a match with chance about } \tfrac{22}{365} \approx 0.06 @@ not allowed: that counts only the pairs with me, 22 of them; there are 253 pairs in all
+\text{a shared birthday among 23 is rare} @@ false: it is about 0.507
+  </pre>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+const V=c=>'var('+c+')';
+const show=(v,d)=>{ let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s; };
+const sci=v=>v<1e5?show(v,0):v.toExponential(2).replace('e+',' × 10^');
+let b=12, t=100;
+function draw(){ const N=Math.pow(2,b), r=Math.sqrt(N), n=Math.max(1,Math.round(t/100*r)), W=360,H=220,X=x=>10+x/4*(W-20),Y=y=>H-12-y*(H-24);
+  let l=0; for(let k=1;k<n;k++) l+=Math.log1p(-k/N); const m=1-Math.exp(l), lam=n*(n-1)/(2*N);
+  let s='<svg viewBox="0 0 '+W+' '+H+'" style="background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  for(let g=0;g<=4;g++) s+='<line x1="'+X(g)+'" y1="'+Y(0)+'" x2="'+X(g)+'" y2="'+Y(1)+'" style="stroke:'+V('--grid')+';stroke-width:0.7"/><text x="'+(X(g)+(g<4?2:-26))+'" y="'+(Y(0)-2)+'" style="fill:'+V('--ink')+';font:9px IBM Plex Mono,monospace">'+g+'√N</text>';
+  [0,0.5,1].forEach(y=>{ s+='<line x1="'+X(0)+'" y1="'+Y(y)+'" x2="'+X(4)+'" y2="'+Y(y)+'" style="stroke:'+V('--grid')+';stroke-width:0.7"/>'; });
+  const lo=[],hi=[]; for(let i=0;i<=200;i++){ const x=i/50, L=x*x/2; lo.push(X(x).toFixed(1)+','+Y(1-Math.exp(-L)).toFixed(1)); if(L<=1) hi.push(X(x).toFixed(1)+','+Y(L).toFixed(1)); }
+  s+='<polyline points="'+lo.join(' ')+'" style="fill:none;stroke:'+V('--teal')+';stroke-width:2"/><polyline points="'+hi.join(' ')+'" style="fill:none;stroke:'+V('--ink')+';stroke-width:1.2;stroke-dasharray:4 3"/>';
+  s+='<circle cx="'+X(Math.min(4,n/r))+'" cy="'+Y(m)+'" r="4.5" style="fill:'+V('--ember')+'"/>';
+  $('cv').innerHTML=s+'</svg>'; $('ob').textContent=b; $('on').textContent=n;
+  const v=$('vd'); v.className='verdict';
+  v.textContent='N = 2^'+b+' = '+sci(N)+' codes, n = '+n+' drawn, λ = '+show(lam,4)+'. Counted: chance of a match '+show(m,4)+'. Fences: '+show(1-Math.exp(-lam),4)+' ≤ '+show(m,4)+' ≤ '+show(lam,4)+'. Even chance near n = 1.18 √N ≈ '+sci(1.1774*r)+'.'; }
+$('kb').addEventListener('input',()=>{ b=+$('kb').value; draw(); });
+$('kn').addEventListener('input',()=>{ t=+$('kn').value; draw(); });
+draw();
+window.__pic={set:(bb,tt)=>{ b=bb; t=tt; $('kb').value=b; $('kn').value=t; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'fingerprint',t:R`F:\ \text{files} \to 2^b \text{ codes}`,n:`Short, from long.`},
+  {k:'ember',kl:'collision',t:R`\htmlClass{new}{f \ne g,\ F(f) = F(g)}`,n:`Pigeonhole: they exist.`}
+],{title:'The slides · collisions · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'lists',t:R`N^n`,n:`Counted-functions.`},
+  {k:'ember',kl:'no two alike',t:R`N(N-1)\cdots(N-n+1)`,n:`Arrangements.`},
+  {k:'ember',kl:'the chance',t:R`\htmlClass{new}{\prod_{k=1}^{n-1}(1 - \tfrac{k}{N})}`,n:`Then 1 − qₙ.`}
+],{title:'The slides · no match · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'pairs per code',t:R`\lambda = \tfrac{n(n-1)}{2N}`,n:`Pairs, shared out.`},
+  {k:'ember',kl:'fenced',t:R`\htmlClass{new}{1 - e^{-\lambda} \le 1 - q_n \le \lambda}`,n:`The law of small numbers.`}
+],{title:'The slides · fences · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'even chance',t:R`\lambda = \ln 2`,n:`The lower fence.`},
+  {k:'ember',kl:'tries',t:R`\htmlClass{new}{n \approx 1.18\sqrt{N} = 1.18 \cdot 2^{b/2}}`,n:`Half the bits.`}
+],{title:'The slides · square root · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`2^b\ \text{tries}\,?`,n:`Any pair: about √N.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

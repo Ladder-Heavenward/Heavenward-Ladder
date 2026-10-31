@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>8·stat · How spread out is a list?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r08phys.html">← 8·phys how big and how small do things get?</a><a href="r08cb5.html">next: 8·cb5 the fractions' holes, filled →</a></p>
+  <div class="tags"><span class="tag stat">8·stat · statistics</span></div>
+  <h1>How spread out is a list?</h1>
+  <p>How spread out is a list? 5·stat found two middles for a list, the mean and the median, and watched one wild value drag the first and leave the second alone. Neither says how spread out the list is. Spread is a distance from the middle, and distance needed rung 8's absolute value; the usual measure also needs a square root, which rung 8 has just built. This page measures spread, and then settles which middle is the right one. It turns out to depend on how you count a miss: by its size, or by its size squared. The last part measures whether two lists rise and fall together, and proves the measure can never pass 1.</p>
+  <p class="gesture">The variance is the mean of the squared distances from the mean; the standard deviation is its square root. The mean is the centre that makes the total of squared misses least; the median makes the total of plain misses least. Few values lie far out: at most a quarter lie more than two standard deviations away, at most a ninth more than three. And a correlation always lies between −1 and 1.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r05stat.html">5·stat</a> (the mean, sorting, the median, shift-and-stretch), <a href="r08f.html">8f</a> (square-never-negative, square roots), <a href="r08g.html">8g</a> (inequalities), <a href="r08h.html">8h</a> (|x|, triangle), <a href="r08i.html">8i</a> (completing the square, the quadratic formula). <a href="r09stat.html">9·stat</a> draws data as a function; <a href="r13stat.html">13·stat</a> fits the best line.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · read it through, then work the picture and the slides</div>
+
+  <h3>Spread</h3>
+  <p class="eqline" data-pid="cfa4ce">From here on, for real data x₀, …, x₍ₙ₋₁₎ with mean x̄, the deviation of xᵢ is xᵢ − x̄. The variance is σ² = (1/n) Σᵢ (xᵢ − x̄)², and the standard deviation is σ = √(σ²), which exists by 8f since each square is not negative (square-never-negative). The deviations always add to 0, since Σᵢ xᵢ = n x̄; that is why their squares are used, or their sizes.</p>
+  <p data-pid="c40002">Sometimes the list is a sample taken from a larger group, and the aim is to guess the spread of the group. Then books divide by n − 1 instead of n and write s² and s. That version has the accepted name the sample variance, and the one above the population variance. A test question says which it wants; a calculator usually shows both.</p>
+  <p data-pid="259421">Squared-misses technique: <b>for every real c, Σᵢ (xᵢ − c)² = Σᵢ (xᵢ − x̄)² + n(x̄ − c)². So the sum is least exactly at c = x̄, and σ² = (the mean of the xᵢ²) − x̄².</b></p>
+  <pre class="lines" data-k="ember" data-label="8·stat: the squared-misses technique">
+x_i - c = (x_i - \bar x) + (\bar x - c) @@ adding-keeps-answers
+(x_i - c)^2 = (x_i - \bar x)^2 + 2(x_i - \bar x)(\bar x - c) + (\bar x - c)^2 @@ 5h's square of a sum
+\textstyle\sum_i 2(x_i - \bar x)(\bar x - c) = 2(\bar x - c)\sum_i (x_i - \bar x) = 0 @@ the deviations add to 0
+\textstyle\sum_i (x_i - c)^2 = \sum_i (x_i - \bar x)^2 + n(\bar x - c)^2 @@ add over i
+n(\bar x - c)^2 \ge 0,\ = 0 \Leftrightarrow c = \bar x @@ square-never-negative; a square is 0 only at 0
+\htmlClass{new}{c = 0:\ \ n\sigma^2 = \textstyle\sum_i x_i^2 - n\bar x^2} \quad \blacksquare @@ divide by n
+  </pre>
+  <p data-pid="0c651c">The shift-and-stretch technique of 5·stat carries over. Replacing each x by px + b multiplies every deviation by p. <b>So σ becomes |p|σ, and the shift b does nothing to the spread.</b></p>
+
+  <h3>The other middle, and the other count</h3>
+  <p data-pid="914488">Median-misses technique: <b>for every real c, Σᵢ |xᵢ − c| ≥ Σᵢ |xᵢ − m|, where m is the median. The c that make the sum least are exactly those between the two middle values of the sorted list, or the middle value itself when n is odd.</b></p>
+  <pre class="lines" data-k="ember" data-label="8·stat: the median-misses technique">
+y_0 \le \dots \le y_{n-1} @@ 5·stat's sorting; the sum is the same in sorted order
+|y_i - c| + |y_{n-1-i} - c| \ge y_{n-1-i} - y_i @@ triangle, for each pair from the two ends, i &lt; n − 1 − i
+\text{equality} \Leftrightarrow y_i \le c \le y_{n-1-i} @@ 8h, by cases on where c lies
+\begin{aligned}&\text{every pair holds the}\\ &\quad\text{middle between its ends}\end{aligned} @@ y₍ᵢ₎ ≤ m ≤ y₍ₙ₋₁₋ᵢ₎ by the sort; and a lone middle value, when n is odd, adds |yₘ − c| ≥ 0
+\begin{aligned}&\htmlClass{new}{\textstyle\sum_i |y_i - c| \ge \sum_{\text{pairs}} (y_{n-1-i} - y_i) }\\ &\quad \htmlClass{new}{= \sum_i |y_i - m|} \quad \blacksquare\end{aligned} @@ equality exactly when c is in every pair's stretch, and at the lone middle
+  </pre>
+  <p data-pid="713fee">So the question “which middle is best?” has two answers, and each is right for its count. <b>Count a miss by its size and the best guess is the median. Count it by its size squared, which punishes a big miss far more than a small one, and the best guess is the mean.</b> One astronomer, fitting the shape of the Earth in 1757, counted sizes. Others in 1805 and 1809 counted squares, which give answers by algebra alone, and the squares won the textbooks. Counting squares has the accepted name the method of least squares.</p>
+
+  <h3>How many can be far out</h3>
+  <p data-pid="67cee6">Far-from-the-mean bound technique (Chebyshev's): <b>for every k &gt; 0 and σ &gt; 0, fewer than n/k² of the values lie more than kσ from the mean.</b> Each such value adds more than k²σ² to Σᵢ(xᵢ − x̄)², which is nσ², and nothing in the sum is negative. So (their number) · k²σ² &lt; nσ². It was proved in 1853, and again in 1867. For k = 2: fewer than a quarter of any list lie more than 2σ from its mean, whatever the list.</p>
+  <p data-pid="5f5554">The worked lines read 5g’s ≈ for a real, as 5g read it for a fraction: σ ≈ 6.54 says σ rounds to 6.54 at two places. That needs no new line, since it is checked on the squares: 6.535² ≤ 42.8 &lt; 6.545² gives 6.535 ≤ σ &lt; 6.545 (powers-keep-order, read backwards).</p>
+  <pre class="lines" data-k="ember" data-label="8·stat: worked">
+62, 70, 71, 75, 82 @@ five July highs in Redding, in degrees Fahrenheit (°F); n = 5
+\bar x = 72,\ \ \text{deviations } -10, -2, -1, 3, 10 @@ they add to 0
+\sigma^2 = \tfrac{100 + 4 + 1 + 9 + 100}{5} = 42.8,\ \ \sigma \approx 6.54 @@ s² = 214/4 = 53.5 for the sample version
+\textstyle\sum |x_i - 71| = 9 + 1 + 0 + 4 + 11 = 25,\ \ \sum |x_i - 72| = 26 @@ median-misses: the median 71 beats the mean on sizes
+\textstyle\sum (x_i - 71)^2 = 219 = 214 + 5(1)^2 @@ squared-misses: the mean beats the median on squares
+  </pre>
+
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · counting, again</div>
+    <p data-pid="fc197e">4j found a principle of the second kind of care in a pile of coin tosses: random things in a crowd make a steady shape. 4·stat wrote the pile down as a tally table, with the range as its crudest width. 4·crypt read the shape of a pile of letters, and 5·stat gave a list its middle. This page gives a list the second number its shape needs: how wide it is.</p>
+    <p data-pid="4e427f"><b>The spread is part of the answer, not noise around it.</b></p>
+    <p data-pid="bbffc7">Five July highs in Redding have a mean of 72 °F. The mean alone says little about tomorrow. With σ ≈ 6.5 it says something, and the far-from-the-mean bound says it for every list: fewer than a quarter of the values lie more than 13 °F from the middle.</p>
+    <p class="bait" data-pid="986699">Two towns both have a mean July high of 72 °F. In one σ is 2 °F, in the other 12 °F. Packing for a week in July, what do you bring to each?</p>
+  </aside>
+
+  <h3>Two lists at once</h3>
+  <p data-pid="b39cc1">Dot-bound technique for lists (Cauchy's and Schwarz's): <b>for reals u₀, …, u₍ₙ₋₁₎ and v₀, …, v₍ₙ₋₁₎, (Σᵢ uᵢvᵢ)² ≤ (Σᵢ uᵢ²)(Σᵢ vᵢ²). The two sides are equal exactly when one list is a fixed multiple of the other.</b></p>
+  <pre class="lines" data-k="ember" data-label="8·stat: the dot-bound technique for lists">
+\text{every } b_i = 0:\ \ 0 \le 0 @@ and the list of 0s is 0 times the other
+q(t) = \textstyle\sum_i (a_i - tb_i)^2 \ge 0 \text{ for every real } t @@ square-never-negative, added
+q(t) = B t^2 - 2Ct + A,\ \ A = \sum a_i^2,\ B = \sum b_i^2,\ C = \sum a_ib_i @@ 5h, added over i; B &gt; 0
+q\big(\tfrac CB\big) = A - \tfrac{C^2}{B} \ge 0 @@ completing the square (8i)
+\htmlClass{new}{C^2 \le AB} \quad \blacksquare @@ multiply by B &gt; 0; equality makes q(C/B) = 0, so every aᵢ = (C/B)bᵢ
+  </pre>
+  <p data-pid="2dfc5b">Take paired data (x₀, y₀), …, (x₍ₙ₋₁₎, y₍ₙ₋₁₎), such as each student's hours of sleep and score. Let uᵢ = xᵢ − x̄ and vᵢ = yᵢ − ȳ. The number r = Σuᵢvᵢ / √(Σuᵢ² · Σvᵢ²) has the accepted name the correlation. Correlation-bound technique: <b>−1 ≤ r ≤ 1, and r = ±1 exactly when every yᵢ − ȳ is one fixed multiple of xᵢ − x̄.</b> Dot-bound for lists gives r² ≤ 1, and 8f's square roots take it from there. r is above 0 when the two lists tend to sit above their means together. It is below 0 when one tends to be above while the other is below. It is near 0 when neither pattern wins.</p>
+  <pre class="lines" data-k="ember" data-label="8·stat: worked">
+x: 1, 2, 3, 4;\ \ y: 2, 1, 4, 3 @@ x̄ = 2.5, ȳ = 2.5
+a: -1.5, -0.5, 0.5, 1.5;\ \ b: -0.5, -1.5, 1.5, 0.5 @@ deviations
+\textstyle\sum ab = 0.75 + 0.75 + 0.75 + 0.75 = 3,\ \ \sum a^2 = \sum b^2 = 5 @@ r = 3/5 = 0.6
+  </pre>
+
+  <h3>Illegal moves</h3>
+  <pre class="lines" data-k="ember" data-label="8·stat: tempting, and not allowed">
+\sigma = \tfrac1n \textstyle\sum_i (x_i - \bar x)\,? @@ that sum is always 0; square first, or take sizes
+\sqrt{\textstyle\sum x_i^2} - \bar x \text{ is the spread}\,? @@ squared-misses: σ² is the mean of squares minus x̄², and the root comes last
+r = 0.9 \Rightarrow \text{one causes the other}\,? @@ r measures rising together; ice cream and drownings rise together in July
+r = 0 \Rightarrow \text{no pattern}\,? @@ x: −1, 0, 1 and y: 1, 0, 1 have r = 0, and y is exactly the square of x
+  </pre>
+</section>
+
+<section class="pic" id="pic">
+  <div class="eyebrow">The picture · two counts of a miss, and two lists that rise together</div>
+  <div class="panels">
+    <div class="panel">
+      <div class="lbl">seven values on the line, and a guess c</div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">c</span><input type="range" id="kc" min="0" max="30" step="0.1" value="12"><output id="oc"></output></div>
+      <div class="kn"><span class="m">wild value</span><input type="range" id="kw" min="14" max="30" step="0.5" value="18"><output id="ow"></output></div>
+      <div class="cap">Ink: the values. Teal: the guess c, with its misses. Plum: the median. Ember: the mean, and the stretch from x̄ − σ to x̄ + σ.</div>
+    </div>
+    <div class="panel">
+      <div class="lbl">x above, y below, each pair joined; y = x mixed with a shuffle</div>
+      <canvas id="cvL"></canvas>
+      <div class="kn"><span class="m">mix</span><input type="range" id="km" min="-1" max="1" step="0.05" value="0.6"><output id="om"></output></div>
+      <div class="cap">Each line joins a student's x to the same student's y. At mix 1, y is x; at −1, y is x turned about; between, part of y is a shuffle of x. Plum: a student whose y has the same rank as their x.</div>
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+</section>
+
+<section class="slides" id="sl1"><div class="eyebrow">The slides · deviations; variance and σ; sample or population; squared-misses; median-misses; sizes against squares; far-from-the-mean bound; worked; dot-bound for lists; correlation; correlation-bound; illegal moves · ← → keys work</div></section>
+
+<section class="sayback">
+  <div class="eyebrow">Say it back · then work it</div>
+  <h2>Questions</h2>
+  <div class="phkey"></div>
+  <ol>
+    <li><span class="qid">8·stat.1</span><span class="gname">Spread.</span><span class="gwhy">Do: build the page's pieces.</span>
+      <ol class="sub">
+        <li><span class="qid">8·stat.1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="4, 8, 6, 5, 7"></span></span>Find the mean, the variance and the standard deviation, both the population and the sample versions.</li><li><span class="givens"><span data-tex-inline="4, 8, 6, 5, 7"></span></span>By squared-misses’s shortcut, find the population variance.</li><li><span class="givens"><span data-tex-inline="1, 2, 6, 7, 20,"></span> <span data-tex-inline="\textstyle\sum |x_i - c|,"></span> <span data-tex-inline="\textstyle\sum (x_i - c)^2"></span></span>Find every c that makes the first least, and the c that makes the second least.</li><li><span class="givens"><span data-tex-inline="x\text{: } 1, 2, 3, 4, 5,"></span> <span data-tex-inline="y\text{: } 3, 5, 4, 8, 10"></span></span>Find r.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">8·stat.2</span><span class="gname">From the spread back.</span><span class="gwhy">Undo: run the page's techs backwards.</span>
+      <ol class="sub">
+        <li><span class="qid">8·stat.2.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="10 \text{ values, mean } 6,"></span> <span data-tex-inline="\textstyle\sum x_i^2 = 400"></span></span>Find σ.</li><li><span class="givens"><span data-tex-inline="\text{four values, mean } 10"></span></span>Write such a list with no spread, and then one with standard deviation 5.</li><li><span class="givens"><span data-tex-inline="5 \text{ values},"></span> <span data-tex-inline="\textstyle\sum (x_i - 3)^2 = 50,"></span> <span data-tex-inline="\textstyle\sum (x_i - \bar x)^2 = 30"></span></span>Find the two possible means.</li><li><span class="givens"><span data-tex-inline="200 \text{ values},\ \sigma = 4"></span></span>Find at most how many lie more than 12 from the mean.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">8·stat.3</span><span class="gname">Where it gives.</span><span class="gwhy">Bend: find where the techs stop working.</span>
+      <ol class="sub">
+        <li><span class="qid">8·stat.3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\sigma = 0"></span></span>Find the lists for which it is true.<br>Compute correlation-bound’s r for one, and find the step that fails.</li><li><span class="givens"><span data-tex-inline="\text{far-from-the-mean bound},"></span> <span data-tex-inline="k = 1,\ k = 1/2"></span></span>Run the bound at each k, and find a list that either one rules out.</li><li><span class="givens"><span data-tex-inline="1, 2, 6, 7"></span></span>Find every best c of median-misses, and the one that “the median” names.</li><li><span class="givens"><span data-tex-inline="62, 70, 71, 75, 82"></span></span>Change one value so that the mean moves by 4 but the median does not move.<br>Find what happened to σ.</li></ol></li>
+      </ol></li>
+    <li class="optgroup"><span class="qid">8·stat.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder challenges that rely on your own making. The page is complete without these; the rung's star needs them.</span>
+      <ol class="sub">
+        <li class="opt"><span class="qid">8·stat.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{One changed value can move the}"></span> <span data-tex-inline="\text{mean and } \sigma \text{ and leave}"></span> <span data-tex-inline="\text{the median still.}"></span></span>Build spreads of your own, and read them.<ol class="parts" type="a"><li>Look up a week of daily highs for Crescent City and for Redding, and find which town's weather spreads more, and by how much.</li><li>Find two lists of your own with r close to 1 that have nothing to do with each other.</li><li><span class="givens"><span data-tex-inline="u_i = k v_i \text{ for every } i"></span></span>Prove both sides of dot-bound for lists are then equal.</li></ol></li>
+        <li class="opt"><span class="qid">8·stat.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{a miss counted by its size}"></span> <span data-tex-inline="\text{to the fourth power}"></span></span>Find the best c, and how a far value pulls it.<br>Find a way of counting misses for which the best guess is the mode, or prove there is none.</li>
+        <li class="opt"><span class="qid">8·stat.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{far-from-the-mean bound: an upper}"></span> <span data-tex-inline="\text{bound on how many values lie far out}"></span></span>Decide whether it is ever reached.<br>Build a list where exactly a quarter of the values lie at least two standard deviations from the mean.</li>
+        <li class="opt"><span class="qid">8·stat.4.4</span><span class="tagq">seam</span>One old astronomer counted sizes; later ones counted squares, and the squares won: the algebra was easier. Decide whether "easier to compute" is a reason to call an answer right.<br>Find which count one wild value in a list pulls further.</li>
+      </ol></li>
+  </ol>
+  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
+</section>
+
+<nav class="nextrung"><a href="r08i.html">← 8i · roots, powers and the quadratic formula</a><a href="r08cb5.html">8·cb5 · the fractions' holes, filled →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>The astronomer who counted sizes, fitting the shape of the Earth in 1757, was Roger Boscovich. Adrien-Marie Legendre in 1805 and Carl Friedrich Gauss in 1809 counted squares. The far-from-the-mean bound was proved by Irénée-Jules Bienaymé in 1853 and by Pafnuty Chebyshev again in 1867. The correlation r was named by Karl Pearson in 1896, who took the idea from Francis Galton.</p>
+  <p>Accepted names: the far-from-the-mean bound is Chebyshev’s inequality; the dot-bound for lists is the Cauchy–Schwarz inequality; the correlation is Pearson’s r; counting squares is the method of least squares.</p>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '–'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+/* least and greatest of F.f on [lo, hi]: the ends, F's critical points inside, and a fine sample (exact between critical points for the functions used here) */
+function ext(F,lo,hi){ if(F.dir) return [0,1]; let m=Infinity,M=-Infinity; const t=x=>{ const v=F.f(x); if(v<m) m=v; if(v>M) M=v; };
+  t(lo); t(hi); (F.crit||[]).forEach(c=>{ if(c>lo&&c<hi) t(c); }); for(let k=1;k<64;k++) t(lo+(hi-lo)*k/64); return [m,M]; }
+function sums(F,pts){ let L=0,U=0; const ms=[],Ms=[]; for(let i=1;i<pts.length;i++){ const [m,M]=ext(F,pts[i-1],pts[i]), w=pts[i]-pts[i-1]; ms.push(m); Ms.push(M); L+=m*w; U+=M*w; } return {L,U,ms,Ms}; }
+const eq=(a,b,n)=>Array.from({length:n+1},(_,i)=>a+(b-a)*i/n);
+function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
+function boxes(P,pts,hs,stroke,fill,alpha){ const c=P.ctx; for(let i=1;i<pts.length;i++){ const a=pts[i-1],b=pts[i],h=hs[i-1]; c.globalAlpha=alpha; P.poly([[a,0],[b,0],[b,h],[a,h]],null,fill); c.globalAlpha=1; P.poly([[a,0],[b,0],[b,h],[a,h]],stroke,null,1.2); } }
+function dirDots(P,a,b){ const c=P.ctx; c.fillStyle=col('--ink'); for(let k=0;k<=300;k++){ const x=a+(b-a)*k/300; const y=(k%2)?0:1; c.fillRect(P.X(x)-1,P.Y(y)-1,2,2); } }
+/* shade between the graph of fn and the axis from lo to hi: above in pos colour, below in neg colour */
+function shade(P,fn,lo,hi,pos,neg,alpha){ if(hi<lo){ const t=lo; lo=hi; hi=t; } const c=P.ctx, N=300; c.globalAlpha=alpha==null?0.32:alpha;
+  for(let k=0;k<N;k++){ const x0=lo+(hi-lo)*k/N, x1=lo+(hi-lo)*(k+1)/N, xm=(x0+x1)/2, y=fn(xm); if(!isFinite(y)) continue; P.poly([[x0,0],[x1,0],[x1,fn(x1)],[x0,fn(x0)]],null,y>=0?pos:neg); }
+  c.globalAlpha=1; }
+function rangeOf(fn,lo,hi,pad){ let m=Infinity,M=-Infinity; for(let k=0;k<=400;k++){ const v=fn(lo+(hi-lo)*k/400); if(isFinite(v)){ if(v<m) m=v; if(v>M) M=v; } } if(m>0) m=0; if(M<0) M=0; const p=(M-m)*(pad==null?0.12:pad)||1; return [m-p,M+p]; }
+function chips(el,FN,get,setk,after){ Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===get()) b.className='on'; b.onclick=()=>{ setk(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+const Nw='\\htmlClass{new}';
+function gridFor(sp){ return sp>40?10:sp>16?4:sp>8?2:sp>3?1:sp>1.2?0.5:0.25; }
+function frame2(P,fn,lo,hi,pad){ const w=hi-lo; P.o.x=[lo-0.12*w,hi+0.08*w]; P.o.y=rangeOf(fn,lo,hi,pad==null?0.12:pad); const sx=P.o.x[1]-P.o.x[0], sy=P.o.y[1]-P.o.y[0]; let g=gridFor(sx); while(sy/g>24) g*=2; P.o.grid=g; }
+const num=(f,a,b,n)=>{ n=n||4000; const h=(b-a)/n; let s=0; for(let i=0;i<n;i++) s+=f(a+(i+0.5)*h)*h; return s; };
+/* axes with separate steps across and up */
+function axes2(P,gx,gy){ const c=P.ctx,o=P.o; c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ c.moveTo(P.X(x),P.Y(o.y[0])); c.lineTo(P.X(x),P.Y(o.y[1])); }
+  for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ c.moveTo(P.X(o.x[0]),P.Y(y)); c.lineTo(P.X(o.x[1]),P.Y(y)); } c.stroke();
+  c.strokeStyle=col('--muted'); c.lineWidth=1.3; c.beginPath(); if(o.y[0]<=0&&o.y[1]>=0){ c.moveTo(P.X(o.x[0]),P.Y(0)); c.lineTo(P.X(o.x[1]),P.Y(0)); } if(o.x[0]<=0&&o.x[1]>=0){ c.moveTo(P.X(0),P.Y(o.y[0])); c.lineTo(P.X(0),P.Y(o.y[1])); } c.stroke();
+  c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; const ly=Math.min(P.H-6,Math.max(12,P.Y(0)+14));
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ if(Math.abs(x)<1e-9) continue; c.fillText(+x.toFixed(6),P.X(x),ly); }
+  c.textAlign='right'; const lx=Math.max(32,Math.min(P.W-4,P.X(0)-5)); for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ if(Math.abs(y)<1e-9) continue; c.fillText(String(+y.toFixed(6)).replace('-','−'),lx,P.Y(y)+4); } }
+function nice(sp){ const raw=sp/6, p=Math.pow(10,Math.floor(Math.log10(raw))), m=raw/p; return (m<1.5?1:m<3.5?2:m<7.5?5:10)*p; }
+function arrow(P,x1,y1,x2,y2,colr,w){ P.line(x1,y1,x2,y2,colr,w||2.2); const c=P.ctx, X1=P.X(x1),Y1=P.Y(y1),X2=P.X(x2),Y2=P.Y(y2), L=Math.hypot(X2-X1,Y2-Y1); if(L<2) return; const ux=(X2-X1)/L, uy=(Y2-Y1)/L, h=9; c.fillStyle=col(colr); c.beginPath(); c.moveTo(X2,Y2); c.lineTo(X2-h*ux-0.5*h*uy,Y2-h*uy+0.5*h*ux); c.lineTo(X2-h*ux+0.5*h*uy,Y2-h*uy-0.5*h*ux); c.closePath(); c.fill(); }
+function fillA(P,pts,colr,alpha){ const c=P.ctx; c.globalAlpha=alpha==null?0.2:alpha; P.poly(pts,null,colr); c.globalAlpha=1; }
+const sq1=P=>Object.defineProperty(P.o,'aspect',{get:()=>1});
+function rightMark(P,qx,qy,ax,ay,bx,by,s,colr){ const la=Math.hypot(ax-qx,ay-qy), lb=Math.hypot(bx-qx,by-qy); if(!la||!lb) return; const u=[(ax-qx)/la*s,(ay-qy)/la*s], v=[(bx-qx)/lb*s,(by-qy)/lb*s]; P.poly([[qx+u[0],qy+u[1]],[qx+u[0]+v[0],qy+u[1]+v[1]],[qx+v[0],qy+v[1]]],colr||'--muted',null,1.2,false); }
+const dist=(a,b)=>Math.hypot(b[0]-a[0],b[1]-a[1]);
+const dotp=(u,v)=>u[0]*v[0]+u[1]*v[1];
+function clipBox(P,fn){ const c=P.ctx, [x0,x1]=P.o.x,[y0,y1]=P.o.y; c.save(); c.beginPath(); c.rect(P.X(x0),P.Y(y1),P.X(x1)-P.X(x0),P.Y(y0)-P.Y(y1)); c.clip(); fn(); c.restore(); }
+function lineABC(P,a,b,c,colr,w,dash){ const [x0,x1]=P.o.x,[y0,y1]=P.o.y; clipBox(P,()=>{ if(Math.abs(b)>1e-12){ P.line(x0,(c-a*x0)/b,x1,(c-a*x1)/b,colr,w,dash); } else if(Math.abs(a)>1e-12){ P.line(c/a,y0,c/a,y1,colr,w,dash); } }); }
+const kc=$('kc'),kw=$('kw'),km=$('km'),cvF=$('cvF'),cvL=$('cvL');
+const BASE=[6,8,9,11,12,13];
+const PF=plane(cvF,{x:[-1,31],y:[-3,9],grid:0,labels:0,draw:P=>drawF(P)});
+const PL=plane(cvL,{x:[-0.5,10.5],y:[-1.5,10.5],grid:0,labels:0,draw:P=>drawL(P)});
+const XS=[2,3,5,6,8,9,11,12], ZS=[9,2,12,5,3,11,6,8];
+function st(L){ const n=L.length, m=L.reduce((a,b)=>a+b,0)/n, y=[...L].sort((p,q)=>p-q), h=Math.floor(n/2), med=n%2?y[h]:(y[h-1]+y[h])/2, v=L.reduce((a,b)=>a+(b-m)**2,0)/n; return {m,med,s:Math.sqrt(v),y}; }
+function drawF(P){ const L=[...BASE,+kw.value], c=+kc.value, S=st(L);
+  P.line(0,0,30,0,'--ink',1.4); for(let t=0;t<=30;t+=5){ P.line(t,-0.25,t,0.25,'--ink',1.2); P.text(String(t),t,-1,'--muted','center',11); }
+  P.line(S.m-S.s,6.6,S.m+S.s,6.6,'--ember',3); P.line(S.m,5.9,S.m,7.3,'--ember',2.4); P.text('x̄ ± σ',S.m,7.9,'--ember','center',11);
+  P.line(S.med,5.0,S.med,5.6,'--plum',2.6); P.text('median',S.med,4.4,'--plum','center',11);
+  S.y.forEach((v,i)=>{ const h=0.7+0.5*i; P.line(c,h,v,h,'--teal',1.4); P.dot(v,0,'--ink',5); });
+  P.line(c,-0.4,c,4.3,'--teal',2,[5,4]); P.text('c',c,-2,'--teal','center',12); }
+function ys(){ const mx=+km.value, a=Math.abs(mx); return XS.map((x,i)=>mx*x+(1-a)*ZS[i]); }
+function corr(x,y){ const n=x.length, mx=x.reduce((p,q)=>p+q,0)/n, my=y.reduce((p,q)=>p+q,0)/n; let sab=0,saa=0,sbb=0; for(let i=0;i<n;i++){ const a=x[i]-mx,b=y[i]-my; sab+=a*b; saa+=a*a; sbb+=b*b; } return sbb<1e-12?null:sab/Math.sqrt(saa*sbb); }
+function drawL(P){ const Y=ys(), lo=Math.min(...Y), hi=Math.max(...Y), sc=v=>hi-lo<1e-9?5:0.5+9*(v-lo)/(hi-lo), sx=v=>0.5+9*(v-2)/10;
+  P.line(0,8.5,10,8.5,'--ink',1.4); P.line(0,1,10,1,'--ink',1.4); P.text('x',-0.3,9.3,'--ink','center',12); P.text('y',-0.3,1.8,'--ink','center',12);
+  const ord=XS.map((x,i)=>i).sort((i,j)=>Y[i]-Y[j]);
+  XS.forEach((x,i)=>{ const keep=ord[i]===i; P.line(sx(x),8.5,sc(Y[i]),1,keep?'--plum':'--muted',keep?2.2:1.4); P.dot(sx(x),8.5,'--ink',4.5); P.dot(sc(Y[i]),1,'--ink',4.5); }); }
+function read(){ const L=[...BASE,+kw.value], c=+kc.value, S=st(L), Y=ys(), r=corr(XS,Y);
+  $('oc').textContent=mm(c,1); $('ow').textContent=mm(+kw.value,1); $('om').textContent=mm(+km.value,2);
+  const d1=L.reduce((a,v)=>a+Math.abs(v-c),0), d2=L.reduce((a,v)=>a+(v-c)**2,0), m1=L.reduce((a,v)=>a+Math.abs(v-S.med),0), m2=L.reduce((a,v)=>a+(v-S.m)**2,0);
+  const vd=$('vdF'); vd.className='verdict';
+  vd.textContent='Left: at c = '+mm(c,1)+', Σ|x − c| = '+mm(d1,2)+' (least '+mm(m1,2)+', at the median '+mm(S.med,1)+') and Σ(x − c)² = '+mm(d2,2)+' (least '+mm(m2,2)+', at the mean '+mm(S.m,2)+'); σ = '+mm(S.s,3)+'. Right: r = '+(r==null?'undefined, y does not vary':mm(r,3))+'.';
+  tex($('eqF'),R`${mm(m2,1)} + 7(${mm(S.m,2)} - ${mm(c,1)})^2 = ${mm(d2,1)}`,true); }
+function all(){ PF.redraw(); PL.redraw(); read(); }
+[kc,kw,km].forEach(el=>el.addEventListener('input',all));
+window.__pic={set:(c,w,m)=>{ kc.value=c; kw.value=w; km.value=m; all(); const L=[...BASE,w], S=st(L); return {mean:+S.m.toFixed(4),med:S.med,s:+S.s.toFixed(4),d1:+L.reduce((a,v)=>a+Math.abs(v-c),0).toFixed(3),d2:+L.reduce((a,v)=>a+(v-c)**2,0).toFixed(3),r:corr(XS,ys())}; }};
+all();
+stepper('#sl1',[
+  {k:'ember',kl:'deviations',t:R`\textstyle\sum_i (x_i - \bar x) = 0`,n:`So square them, or take sizes.`},
+  {k:'ember',kl:'variance and σ',t:R`\sigma^2 = \tfrac1n \textstyle\sum_i (x_i - \bar x)^2`,n:`σ is its square root (8f).`},
+  {k:'ember',kl:'sample or population',t:R`s^2 = \tfrac{1}{n - 1}\textstyle\sum_i (x_i - \bar x)^2`,n:`A guess at a larger group's spread.`},
+  {k:'ember',kl:'squared-misses',t:R`${Nw}{\textstyle\sum (x_i - c)^2 = \sum (x_i - \bar x)^2 + n(\bar x - c)^2}`,n:`Least at the mean.`},
+  {k:'ember',kl:'median-misses',t:R`${Nw}{\textstyle\sum |x_i - c| \ge \sum |x_i - m|}`,n:`Least at the median; pair the ends.`},
+  {k:'ember',kl:'sizes against squares',t:R`\text{sizes, 1757;\ squares, 1805}`,n:`Two counts, two middles.`},
+  {k:'ember',kl:'far-from-the-mean bound',t:R`${Nw}{\text{the number of } i \text{ with } |x_i - \bar x| \gt k\sigma \text{ is below } n/k^2}`,n:`Proved in 1853, and again in 1867.`},
+  {k:'ember',kl:'worked',t:R`\sigma^2 = 42.8`,n:`Five July highs in Redding.`},
+  {k:'ember',kl:'dot-bound for lists',t:R`${Nw}{\big(\textstyle\sum u_iv_i\big)^2 \le \sum u_i^2 \sum v_i^2}`,n:`A square that is never negative, completed.`},
+  {k:'ember',kl:'correlation',t:R`r = \tfrac{\sum u_iv_i}{\sqrt{\sum u_i^2 \sum v_i^2}}`,n:`Named in 1896.`},
+  {k:'ember',kl:'correlation-bound',t:R`${Nw}{-1 \le r \le 1}`,n:`±1 only for one fixed multiple.`},
+  {k:'ember',kl:'illegal',t:R`r = 0.9 \text{ does not give a cause}`,n:`Ice cream and drownings.`}
+],{title:'The slides · deviations; variance and σ; sample or population; squared-misses; median-misses; sizes against squares; far-from-the-mean bound; worked; dot-bound for lists; correlation; correlation-bound; illegal moves · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

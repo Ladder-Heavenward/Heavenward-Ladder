@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>16g · Definite integrals and areas</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r16f.html">← 16f the table run backwards</a><a href="r16h.html">next: 16h substitution and parts by hand →</a></p>
+  <div class="tags"><span class="tag tech">16g · technique</span></div>
+  <h1>Definite integrals and areas</h1>
+  <p>A definite integral counts the region below the axis as negative, so it is not always the area people mean. The region between two graphs is not the region under either one. And a long record of readings is often summed up by one number, its average. This step sorts these out. It proves, by rung 15's boxes, that the region between two graphs has as its area the integral of the top minus the bottom. It shows how to get the total area, with nothing counted negative, by cutting at the points where the graph crosses the axis. And it works out averages with 16c's antiderivatives instead of 15f's existence proof.</p>
+  <p class="gesture">The area between two graphs is the integral of the top less the bottom. For the total area under a graph, find where it crosses zero, cut there, and add the sizes of the pieces. The average height is the integral divided by the width of the interval.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r16c.html">16c</a> (area-is-a-change), <a href="r16f.html">16f</a> (the table), <a href="r15a.html">15a</a> (the three area axioms, boxes), <a href="r15c.html">15c</a> (gap-closes, exactly-one-between), <a href="r15e.html">15e</a> (areas-add, interval-cut-in-two, smaller-function-smaller-area), <a href="r15f.html">15f</a> (average value, average-height, continuous-is-integrable), <a href="r12a.html">12a</a> (in-between-value, general form), <a href="r08h.html">8h</a> (unpack-the-bars). <a href="r16i.html">16i</a> asks about regions that run off forever; <a href="r16phys.html">16·phys</a> reads areas as distances and works.</p></div>
+</header>
+
+<section class="class step" data-step="16g1">
+  <h2 class="sthead"><span class="stno">16g1</span>The region between two graphs</h2>
+  <p class="stands">Stands on 15a (the area axioms), 15c (exactly-one-between) and 16c (area-is-a-change).</p>
+  <p data-pid="dea1be">Area-between technique: <b>let f and g be integrable on [p, b], with f(x) ≥ g(x) there. Let the set of points (x, y) with p ≤ x ≤ b and g(x) ≤ y ≤ f(x) have an area A obeying the three area axioms. Then A = ∫ₚᵇ (f − g).</b></p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="the area-between technique">
+\begin{aligned}&\text{on the } i\text{-th piece of } P:\ \text{the box from }\\ &\quad  M_i(g) \text{ up to } m_i(f), \text{ if } m_i(f) \gt M_i(g)\end{aligned} @@ it fits inside the region: below f and above g on the whole piece
+\textstyle\sum \max(0,\ m_i(f) - M_i(g))\,\Delta x_i \le A @@ inside-no-more for the boxes inside, side-by-side to add them (they meet only on lines x = xᵢ)
+L(f, P) - U(g, P) \le A @@ each term is at least mᵢ(f)Δxᵢ − Mᵢ(g)Δxᵢ
+\begin{aligned}&\text{the boxes from } m_i(g) \text{ up to } M_i(f) \text{ cover}\\ &\quad\text{the region:\ } A \le U(f, P) - L(g, P)\end{aligned} @@ inside-no-more, side-by-side the same way
+\text{fix } \varepsilon:\ \text{one } P \text{ has both gaps } U - L \lt \tfrac{\varepsilon}{2} @@ gap-closes for f and for g, then a common refinement (15b's refining-tightens)
+|A - (\textstyle\int f - \int g)| \lt \varepsilon \text{ for every } \varepsilon,\ \ \htmlClass{new}{A = \int_a^b (f - g)} \quad \blacksquare @@ both numbers lie in [L(f) − U(g), U(f) − L(g)], an interval of width under ε; three-way on ℝ; areas-add
+  </pre>
+  <p data-pid="f295f7">No height of zero was needed. The graphs can sit above the axis, below it, or across it; only f ≥ g matters. Where the graphs cross, f ≥ g fails, so the interval is cut at the crossings and the top and bottom swapped on each piece.</p>
+  <pre class="lines" data-k="ember" data-label="between y = 2x and y = x²">
+2x = x^2 \iff x = 0 \text{ or } x = 2 @@ x(2 − x) = 0
+2x \ge x^2 \text{ on } [0, 2] @@ x(2 − x) ≥ 0 there: both factors ≥ 0
+A = \textstyle\int_0^2 (2x - x^2)\,dx = \big(x^2 - \tfrac{x^3}{3}\big)\Big|_0^2 = 4 - \tfrac83 = \tfrac43 @@ area-between; the table (16f); area-is-a-change
+  </pre>
+  <pre class="lines" data-k="ember" data-label="three crossings: y = x³ and y = x on [−1, 1]">
+x^3 = x \iff x(x - 1)(x + 1) = 0 @@ crossings at −1, 0 and 1
+x^3 \ge x \text{ on } [-1, 0],\ \ x \ge x^3 \text{ on } [0, 1] @@ the sign of x(x − 1)(x + 1) on each piece
+A = \textstyle\int_{-1}^{0} (x^3 - x)\,dx + \int_0^1 (x - x^3)\,dx = \tfrac14 + \tfrac14 = \tfrac12 @@ area-between on each piece; interval-cut-in-two; odd-and-even-areas (16d) would see the two pieces are equal
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the region between · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · between two graphs, net against total, and the box of average height</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="chips" id="fch"></div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">b</span><input type="range" id="kb" min="0.2" max="1" step="0.01" value="1"><output id="ob"></output></div>
+      <div class="cap">Ink: the first graph; dashed: the second. Teal: where the first is on top. Plum: where the second is. Dots: the crossings. The knob moves the right end as a share of the chip's interval.</div>
+    </div>
+    <div class="panel">
+      <div class="lbl">f − g, and the box of its average height</div>
+      <canvas id="cvA"></canvas>
+      <div class="cap">Ink: the difference f − g. Gold: the box on [p, b] whose height is the average of f − g; its area is the net.</div>
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">16g1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">y = 3 and y = x² − 1</span></span>Find where they cross, and the area between them. <br>Compare it with the box from y = −1 to 3 over the same stretch.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="16g2">
+  <h2 class="sthead"><span class="stno">16g2</span>Slicing the other way</h2>
+  <p class="stands">Stands on 16g1.</p>
+  <p data-pid="9a2b8a">Read the graphs x = y² and x = y + 2 as functions of y. The region between them has a left edge and a right edge for each height y from −1 to 2. Cut it into boxes lying on their sides, one for each piece of [−1, 2] on the y-axis. Then the squeeze of area-between runs the same way, with right minus left in place of top minus bottom. That uses the side-by-side axiom for boxes that meet along lines y = k; the basement says why it is there to use. <b>With it, area-between is true with x and y swapped.</b></p>
+  <pre class="lines" data-k="ember" data-label="between x = y² and x = y + 2">
+y^2 = y + 2 \iff y = -1 \text{ or } y = 2 @@ (y − 2)(y + 1) = 0
+A = \textstyle\int_{-1}^{2} (y + 2 - y^2)\,dy = \big(\tfrac{y^2}{2} + 2y - \tfrac{y^3}{3}\big)\Big|_{-1}^{2} = \tfrac{10}{3} + \tfrac76 = \tfrac92 @@ area-between on its side; area-is-a-change
+\text{in } x:\ \ \textstyle\int_0^1 2\sqrt{x}\,dx + \int_1^4 (\sqrt{x} - x + 2)\,dx = \tfrac43 + \tfrac{19}{6} = \tfrac92 @@ the top edge is √x; the bottom is −√x up to x = 1, then the line y = x − 2
+  </pre>
+  <p data-pid="a2a4ce">The same number both ways, and the sideways road needed one integral where the upright one needed two.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16g2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">x = y² and x = 4</span></span>Find the area between them by slicing across y. <br>Find it again slicing upright, and check the two agree.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="16g3">
+  <h2 class="sthead"><span class="stno">16g3</span>Reading an area function</h2>
+  <p class="stands">Stands on 16g2, 16b (area-slope) and 14d (rising and falling by the slope).</p>
+  <pre class="lines" data-k="ember" data-label="F(x) = ∫ₐˣ f(t) dt, f continuous, read from the graph of f">
+F' = f @@ area-slope (16b)
+f \gt 0 \text{ on a stretch} \Rightarrow F \text{ increasing there};\ f \lt 0 \Rightarrow F \text{ decreasing} @@ slope-sign-order (14d)
+f \text{ changes from } + \text{ to } - \text{ at } c \Rightarrow F \text{ has a crest at } c @@ first-test (14f)
+f \text{ increasing} \Rightarrow F \text{ bends up};\ \ f \text{ decreasing} \Rightarrow F \text{ bends down} @@ bends-up (14g), where f has a slope
+  </pre>
+  <p data-pid="8cfe9e">So the area function of x² − 1 from 0 falls until x = 1. There f crosses from negative to positive, and F has a trough. Then F climbs. It bends up wherever x &gt; 0, since there x² − 1 is increasing.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16g3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">F(x) = ∫₀ˣ (4 − 2t) dt</span></span>Without finding F, say where F rises, where it falls, and where it peaks. <br>Then find F, and check.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="16g4">
+  <h2 class="sthead"><span class="stno">16g4</span>Net and total</h2>
+  <p class="stands">Stands on 16g3, 15e (below the axis) and 12a (in-between-value).</p>
+  <p class="eqline" data-pid="31763d">From here on, ∫ₐᵇ f is the net area of f on [a, b], and ∫ₐᵇ |f| its total area. Their accepted names are signed area and total area; for a velocity, displacement and distance travelled.</p>
+  <pre class="lines" data-k="ember" data-label="f(x) = x² − 1 on [0, 2]">
+x^2 - 1 = 0 \text{ at } x = 1 \text{ in } [0, 2] @@ the one crossing; f &lt; 0 on [0, 1), f &gt; 0 on (1, 2]
+\text{net: } \textstyle\int_0^2 (x^2 - 1)\,dx = \big(\tfrac{x^3}{3} - x\big)\Big|_0^2 = \tfrac23 @@ area-is-a-change
+\textstyle\int_0^1 (x^2 - 1)\,dx = -\tfrac23,\ \ \int_1^2 (x^2 - 1)\,dx = \tfrac43 @@ interval-cut-in-two (15e): −2/3 + 4/3 = 2/3
+\text{total: } \textstyle\int_0^2 |x^2 - 1|\,dx = \tfrac23 + \tfrac43 = 2 @@ |f| = −f on [0, 1], f on [1, 2] (unpack-the-bars); interval-cut-in-two, areas-scale
+  </pre>
+  <p data-pid="9c860b">Between two crossings f keeps one sign, by 12a's in-between-value, general form: a continuous function that changed sign there would have to cross. <b>So the recipe always works for a continuous f with finitely many crossings: find them, integrate on each piece, and add the sizes.</b></p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · net and total · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16g4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = x − 1 on [0, 3]</span></span>Guess from the graph which is larger, the net or the total area. <br>Find both.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="16g5">
+  <h2 class="sthead"><span class="stno">16g5</span>Averages</h2>
+  <p class="stands">Stands on 16g4 and 15f (average-height).</p>
+  <pre class="lines" data-k="ember" data-label="averages by antiderivatives">
+\text{avg of } x^2 \text{ on } [0, 3] = \tfrac13 \cdot \tfrac{x^3}{3}\Big|_0^3 = 3 @@ 15f's line; area-is-a-change
+x^2 = 3 \text{ at } c = \sqrt3 \in [0, 3] @@ the c that average-height promises
+\text{avg of } 6t - t^2 \text{ on } [0, 6] = \tfrac16\big(3t^2 - \tfrac{t^3}{3}\big)\Big|_0^6 = \tfrac16(108 - 72) = 6 @@ 16c's ferry: average speed 6 km an hour
+  </pre>
+  <p data-pid="dd818f"><b>An average height times the width gives the area.</b> The box on [p, b] of height avg(f) has the same area as the region under f. 15f proved such a height is reached somewhere. 16c finds its value.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · averages · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16g5.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="y = kx,"></span> <span data-tex-inline="y = x^2,"></span> <span data-tex-inline="[0, k],"></span> <span data-tex-inline="k &gt; 0,"></span> <span data-tex-inline="\text{area between} = 36"></span></span>Find k.</li><li><span class="givens"><span data-tex-inline="f(x) = x^2 + c,"></span> <span data-tex-inline="\text{average on } [0, 3] = 7"></span></span>Find c.</li><li><span class="givens"><span data-tex-inline="h(t) = 2 + 0.3t - 0.05t^2,"></span> <span data-tex-inline="\text{average on } [0, T] = 2.3"></span></span>A tide gauge at Port Angeles reads h metres at t hours.<br>Find every T that fits.</li><li><span class="givens"><span data-tex-inline="f \text{ continuous on } [0, 4],"></span> <span data-tex-inline="\text{net area } 3,"></span> <span data-tex-inline="\text{total area } 11,"></span> <span data-tex-inline="\text{one crossing, } f &gt; 0 \text{ left of it}"></span></span>Find the integral over each piece.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="16g6">
+  <h2 class="sthead"><span class="stno">16g6</span>The middle speed</h2>
+  <p class="stands">Stands on 16g5.</p>
+  <p data-pid="89f32b">A teacher in Paris, around 1350, drew the speeds of a body as heights standing on a line of times. If the speed grows evenly from nothing, the figure is cut off by a straight line. The whole distance, he said, is the same as if the body had moved all the time at the speed it had at the middle instant.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · the middle speed · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16g6.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="y = x,"></span> <span data-tex-inline="y = x^3,"></span> <span data-tex-inline="[0, 1]"></span></span>Find the area between the two graphs.</li><li><span class="givens"><span data-tex-inline="f(x) = x^3 - 4x,"></span> <span data-tex-inline="[-1, 2]"></span></span>Find the net and the total area of f.</li><li><span class="givens"><span data-tex-inline="f(x) = \sqrt x,"></span> <span data-tex-inline="[0, 4]"></span></span>Find the average of f, and the c where f equals it.</li><li><span class="givens"><span data-tex-inline="y = 4 - x^2,"></span> <span data-tex-inline="y = x + 2"></span></span>Find the area between the two graphs.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="16g7">
+  <h2 class="sthead"><span class="stno">16g7</span>Illegal moves</h2>
+  <p class="stands">Stands on 16g1 to 16g6.</p>
+  <pre class="lines" data-k="ember" data-label="tempting, and not allowed">
+\text{area between } x \text{ and } x^2 \text{ on } [0, 2] = \textstyle\int_0^2 (x - x^2)\,dx\,? @@ they cross at 1: x ≥ x² on [0, 1] but x² ≥ x on [1, 2]; cut and swap
+\textstyle\int_0^2 |x^2 - 1|\,dx = \big|\int_0^2 (x^2 - 1)\,dx\big|\,? @@ the size of the net is 2/3; the total is 2
+\text{avg of } f \text{ on } [a, b] = \tfrac{f(a) + f(b)}{2}\,? @@ true for straight lines, and for a few others by luck, such as (2t − 1)³ on [0, 1]; x² on [0, 3] gives 4.5, not 3
+\text{area} = \textstyle\int_a^b f \text{ for any } f\,? @@ only where f ≥ 0; elsewhere the part below the axis counts against
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16g7.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="y = x,"></span> <span data-tex-inline="y = x^2,"></span> <span data-tex-inline="[0, 2],"></span> <span data-tex-inline="\text{Claim: area} = \int_0^2 (x - x^2)\,dx"></span></span>Find what the claim gives, and the area between.</li><li><span class="givens"><span data-tex-inline="\text{boxes that meet}"></span> <span data-tex-inline="\text{along the graph of } g"></span></span>Area-between's proof used boxes standing on the pieces of P, meeting on upright lines.<br>Write the hypothesis of the side-by-side axiom that the given boxes would break.</li><li><span class="givens"><span data-tex-inline="u \text{ the step},"></span> <span data-tex-inline="f = 1 - u \text{ on } [-1, 1]"></span></span>Find the net area and the total area of f.<br>Is in-between-value, general form's argument about crossings needed?</li><li><span class="givens"><span data-tex-inline="\text{the average of } f \text{ on } [p, b],"></span> <span data-tex-inline="\tfrac{f(p) + f(b)}{2}"></span></span>Find every f for which the two agree for every p and b.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">16g.4.1</span><span class="tagq">build</span>Choose two polynomials of your own whose graphs cross at three points.<br>Find the area between them, cutting where they cross, and compare it with the integral of their difference over the same stretch.</div>
+  <div class="chq"><span class="chid">16g.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="q \text{ is 10d's Dirichlet function},"></span> <span data-tex-inline="h(x) = x(2q(x) - 1) \text{ on } [0, 1]"></span></span>Find whether h has a total area, and whether it is the integral of the size of h.</div>
+  <div class="chq"><span class="chid">16g.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="f, g \text{ continuous},"></span> <span data-tex-inline="\text{the same average}"></span> <span data-tex-inline="\text{on every interval}"></span></span>Prove or refute: f = g.</div>
+  <div class="chq"><span class="chid">16g.4.4</span><span class="tagq">seam</span>Scholars in Paris and at a college in Oxford had, by 1350, the rule that a body speeding up evenly goes as far as it would at its middle speed. In 1638 a famous scientist gave the same rule as his own, with experiments on balls rolling down slopes. In 1913 a historian argued that he owed it to the medieval schools. Another answered that a rule about imagined qualities is not yet a law about falling bodies. <br>Who found the law: the ones who reasoned it, or the one who measured it?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r16f.html">← 16f · the table run backwards</a><a href="r16h.html">16h · substitution and parts by hand →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Side by side, both ways</h3>
+  <p>15a laid the side-by-side axiom down for sets that meet along a line x = k. Nothing in it cares which of the two coordinates the line keeps fixed. Turn the roles of x and y about and it reads the same for a line y = k: the boxes and their areas are the same boxes and areas, named the other way round. So the ladder had earned it both ways without saying so, and 16g is the first page to use the second way. Oh, it works both ways.</p>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>Oresme drew the speeds of a body as heights standing on a line of times. If the speed grows evenly from nothing, the figure is cut off by a straight line, and the whole distance, he said, is the same as if the body had moved all the time at the speed it had at the middle instant.</p><cite>Nicole Oresme, Tractatus de configurationibus qualitatum et motuum (about 1350), part III; paraphrase</cite></aside>
+  <p>In 16g.4.4, the scholars are Nicole Oresme in Paris and the calculators of Merton College, Oxford; the scientist of 1638 is Galileo; the historian of 1913 is Pierre Duhem, and the one who answered him is Alexandre Koyré. The middle-speed rule’s accepted name is the mean speed theorem, or the Merton rule.</p>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+/* least and greatest of F.f on [lo, hi]: the ends, F's critical points inside, and a fine sample (exact between critical points for the functions used here) */
+function ext(F,lo,hi){ if(F.dir) return [0,1]; let m=Infinity,M=-Infinity; const t=x=>{ const v=F.f(x); if(v<m) m=v; if(v>M) M=v; };
+  t(lo); t(hi); (F.crit||[]).forEach(c=>{ if(c>lo&&c<hi) t(c); }); for(let k=1;k<64;k++) t(lo+(hi-lo)*k/64); return [m,M]; }
+function sums(F,pts){ let L=0,U=0; const ms=[],Ms=[]; for(let i=1;i<pts.length;i++){ const [m,M]=ext(F,pts[i-1],pts[i]), w=pts[i]-pts[i-1]; ms.push(m); Ms.push(M); L+=m*w; U+=M*w; } return {L,U,ms,Ms}; }
+const eq=(a,b,n)=>Array.from({length:n+1},(_,i)=>a+(b-a)*i/n);
+function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
+function boxes(P,pts,hs,stroke,fill,alpha){ const c=P.ctx; for(let i=1;i<pts.length;i++){ const a=pts[i-1],b=pts[i],h=hs[i-1]; c.globalAlpha=alpha; P.poly([[a,0],[b,0],[b,h],[a,h]],null,fill); c.globalAlpha=1; P.poly([[a,0],[b,0],[b,h],[a,h]],stroke,null,1.2); } }
+function dirDots(P,a,b){ const c=P.ctx; c.fillStyle=col('--ink'); for(let k=0;k<=300;k++){ const x=a+(b-a)*k/300; const y=(k%2)?0:1; c.fillRect(P.X(x)-1,P.Y(y)-1,2,2); } }
+/* shade between the graph of fn and the axis from lo to hi: above in pos colour, below in neg colour */
+function shade(P,fn,lo,hi,pos,neg,alpha){ if(hi<lo){ const t=lo; lo=hi; hi=t; } const c=P.ctx, N=300; c.globalAlpha=alpha==null?0.32:alpha;
+  for(let k=0;k<N;k++){ const x0=lo+(hi-lo)*k/N, x1=lo+(hi-lo)*(k+1)/N, xm=(x0+x1)/2, y=fn(xm); if(!isFinite(y)) continue; P.poly([[x0,0],[x1,0],[x1,fn(x1)],[x0,fn(x0)]],null,y>=0?pos:neg); }
+  c.globalAlpha=1; }
+function rangeOf(fn,lo,hi,pad){ let m=Infinity,M=-Infinity; for(let k=0;k<=400;k++){ const v=fn(lo+(hi-lo)*k/400); if(isFinite(v)){ if(v<m) m=v; if(v>M) M=v; } } if(m>0) m=0; if(M<0) M=0; const p=(M-m)*(pad==null?0.12:pad)||1; return [m-p,M+p]; }
+function chips(el,FN,get,setk,after){ Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===get()) b.className='on'; b.onclick=()=>{ setk(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+const Nw='\\htmlClass{new}';
+function gridFor(sp){ return sp>40?10:sp>16?4:sp>8?2:sp>3?1:sp>1.2?0.5:0.25; }
+function frame2(P,fn,lo,hi,pad){ const w=hi-lo; P.o.x=[lo-0.12*w,hi+0.08*w]; P.o.y=rangeOf(fn,lo,hi,pad==null?0.12:pad); const sx=P.o.x[1]-P.o.x[0], sy=P.o.y[1]-P.o.y[0]; let g=gridFor(sx); while(sy/g>24) g*=2; P.o.grid=g; }
+const num=(f,a,b,n)=>{ n=n||4000; const h=(b-a)/n; let s=0; for(let i=0;i<n;i++) s+=f(a+(i+0.5)*h)*h; return s; };
+/* axes with separate steps across and up */
+function axes2(P,gx,gy){ const c=P.ctx,o=P.o; c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ c.moveTo(P.X(x),P.Y(o.y[0])); c.lineTo(P.X(x),P.Y(o.y[1])); }
+  for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ c.moveTo(P.X(o.x[0]),P.Y(y)); c.lineTo(P.X(o.x[1]),P.Y(y)); } c.stroke();
+  c.strokeStyle=col('--muted'); c.lineWidth=1.3; c.beginPath(); if(o.y[0]<=0&&o.y[1]>=0){ c.moveTo(P.X(o.x[0]),P.Y(0)); c.lineTo(P.X(o.x[1]),P.Y(0)); } if(o.x[0]<=0&&o.x[1]>=0){ c.moveTo(P.X(0),P.Y(o.y[0])); c.lineTo(P.X(0),P.Y(o.y[1])); } c.stroke();
+  c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; const ly=Math.min(P.H-6,Math.max(12,P.Y(0)+14));
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ if(Math.abs(x)<1e-9) continue; c.fillText(+x.toFixed(6),P.X(x),ly); }
+  c.textAlign='right'; const lx=Math.max(32,Math.min(P.W-4,P.X(0)-5)); for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ if(Math.abs(y)<1e-9) continue; c.fillText(String(+y.toFixed(6)).replace('-','−'),lx,P.Y(y)+4); } }
+function nice(sp){ const raw=sp/6, p=Math.pow(10,Math.floor(Math.log10(raw))), m=raw/p; return (m<1.5?1:m<3.5?2:m<7.5?5:10)*p; }
+const FN={
+  A:{lab:'2x and x²',f:x=>2*x,g:x=>x*x,a:0,B:2,X:[0,2],ft:'2x',gt:'x^2',D:x=>x*x-x*x*x/3},
+  Bx:{lab:'x and x² on [0, 2]',f:x=>x,g:x=>x*x,a:0,B:2,X:[0,1,2],ft:'x',gt:'x^2',D:x=>x*x/2-x*x*x/3},
+  C:{lab:'x² − 1 and the axis',f:x=>x*x-1,g:x=>0,a:0,B:2,X:[1],ft:'(x^2 - 1)',gt:'0',D:x=>x*x*x/3-x},
+  E:{lab:'4 − x² and x + 2',f:x=>4-x*x,g:x=>x+2,a:-2,B:1,X:[-2,1],ft:'(4 - x^2)',gt:'(x + 2)',D:x=>2*x-x*x/2-x*x*x/3}
+};
+let key='Bx';
+const kb=$('kb'),cvF=$('cvF'),cvA=$('cvA');
+const bnow=()=>{ const S=FN[key]; return S.a+(+kb.value)*(S.B-S.a); };
+const PF=plane(cvF,{x:[0,1],y:[0,1],grid:1,aspect:0.8,draw:P=>drawF(P)});
+const PA=plane(cvA,{x:[0,1],y:[0,1],grid:1,aspect:0.8,draw:P=>drawA(P)});
+[[PF,cvF],[PA,cvA]].forEach(([P,cv])=>Object.defineProperty(P.o,'aspect',{get:()=>cv.clientWidth>480?0.75:0.9}));
+function between(P,S,lo,hi){ const c=P.ctx, N=300; c.globalAlpha=0.34; for(let k=0;k<N;k++){ const x0=lo+(hi-lo)*k/N, x1=lo+(hi-lo)*(k+1)/N, xm=(x0+x1)/2; P.poly([[x0,S.g(x0)],[x1,S.g(x1)],[x1,S.f(x1)],[x0,S.f(x0)]],null,S.f(xm)>=S.g(xm)?'--teal':'--plum'); } c.globalAlpha=1; }
+function drawF(P){ const S=FN[key], b=bnow(); const r1=rangeOf(S.f,S.a,S.B), r2=rangeOf(S.g,S.a,S.B); frame2(P,x=>0,S.a,S.B); P.o.y=[Math.min(r1[0],r2[0]),Math.max(r1[1],r2[1])]; P.o.grid=1; P.axes();
+  between(P,S,S.a,b); curve(P,S.f,'--ink',2.6,S.a,S.B); curve(P,S.g,'--muted',2.4,S.a,S.B,[6,4]); S.X.forEach(x=>P.dot(x,S.f(x),'--ember',4.5)); P.line(b,P.o.y[0],b,P.o.y[1],'--ember',1.4,[]); }
+function drawA(P){ const S=FN[key], b=bnow(), d=x=>S.f(x)-S.g(x); frame2(P,d,S.a,S.B,0.15); P.o.grid=P.o.grid<0.5?0.5:P.o.grid; P.axes(); shade(P,d,S.a,b,'--teal','--plum',0.3);
+  const net=S.D(b)-S.D(S.a), avg=net/(b-S.a); P.poly([[S.a,0],[b,0],[b,avg],[S.a,avg]],'--gold',null,2); curve(P,d,'--ink',2.6,S.a,S.B); }
+function read(){ const S=FN[key], b=bnow(), net=S.D(b)-S.D(S.a), tot=num(x=>Math.abs(S.f(x)-S.g(x)),S.a,b), avg=net/(b-S.a); $('ob').textContent=mm(b,2);
+  const vd=$('vdF'); vd.className='verdict'+(Math.abs(net-tot)<1e-4?' win':'');
+  vd.textContent='Net ∫(f − g) = '+mm(net,4)+'. Total ∫|f − g| = '+mm(tot,4)+(Math.abs(net-tot)<1e-4?': no crossing inside, so they agree.':': a crossing inside, so the plum part counts against the net.')+' Average of f − g: '+mm(avg,4)+'.';
+  tex($('eqF'),R`\begin{gathered}\textstyle\int_{${mm(S.a,2)}}^{${mm(b,2)}} \big(${S.ft} - ${S.gt}\big)\,dx = ${mm(net,4)}\\ \text{total } ${mm(tot,4)},\ \ \text{average } {${mm(avg,4)}}\end{gathered}`,true); }
+function all(){ PF.redraw(); PA.redraw(); read(); }
+kb.addEventListener('input',all);
+chips($('fch'),FN,()=>key,k=>{ key=k; },all);
+window.__pic={set:(k,s)=>{ [...$('fch').children][Object.keys(FN).indexOf(k)].click(); kb.value=s; all(); const S=FN[k], b=bnow(); return {b:+b.toFixed(3),net:+(S.D(b)-S.D(S.a)).toFixed(5),netnum:+num(x=>S.f(x)-S.g(x),S.a,b).toFixed(5),tot:+num(x=>Math.abs(S.f(x)-S.g(x)),S.a,b).toFixed(5)}; }};
+all();
+stepper('#sl1',[
+  {k:'ember',kl:'inside',t:R`L(f, P) - U(g, P) \le A`,n:`Boxes from the top of g to the bottom of f.`},
+  {k:'ember',kl:'over',t:R`A \le U(f, P) - L(g, P)`,n:`Boxes from the bottom of g to the top of f.`},
+  {k:'ember',kl:'area-between',t:R`${Nw}{A = \textstyle\int_a^b (f - g)}`,n:`gap-closes for both, a common refinement.`},
+  {k:'ember',kl:'2x and x²',t:R`\textstyle\int_0^2 (2x - x^2)\,dx = \tfrac43`,n:`Find the crossings first.`}
+],{title:'The slides · the region between · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'net and total',t:R`\textstyle\int_a^b f \text{ and } \int_a^b |f|`,n:`Signed area and total area.`},
+  {k:'ember',kl:'cut at crossings',t:R`-\tfrac23 + \tfrac43 \text{ and } \tfrac23 + \tfrac43`,n:`x² − 1 on [0, 2]: net ⅔, total 2.`}
+],{title:'The slides · net and total · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'averages',t:R`\tfrac13\textstyle\int_0^3 x^2\,dx = 3`,n:`15f's line, with area-is-a-change.`},
+  {k:'ember',kl:'average-height\'s c',t:R`c = \sqrt3`,n:`Where x² reaches its average.`}
+],{title:'The slides · averages · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'the middle speed',t:R`\text{avg of } at \text{ on } [0, T] = a\tfrac{T}{2}`,n:`The medieval rule, for even speeding up.`}
+],{title:'The slides · the middle speed · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`\textstyle\int_0^2 (x - x^2)\,dx`,n:`They cross at 1.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

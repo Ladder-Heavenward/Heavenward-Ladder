@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>8c · The least upper bound</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+#cvS{touch-action:none;cursor:ew-resize} #cvU{touch-action:manipulation}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r08b.html">← 8b any two reals compare</a><a href="r08d.html">next: 8d adding and multiplying cuts →</a></p>
+  <div class="tags"><span class="tag proof">8c · proof</span></div>
+  <h1>The least upper bound</h1>
+  <p>This is the principle the rung is named for. Take any heap of reals that has something above it all. Then there is a least real above it all. Among the fractions this fails, and 5e's hole is the reason. Among cuts it is true, and the proof is short enough to be surprising. Take the union of the heap: tip all its fractions into one set, with rung 2's merging. Check that the union is a cut, condition by condition. Then notice that it is the least thing above the heap, because being above is being a superset. The same move, run from below, gives a greatest real below any heap that has something below it all.</p>
+  <p class="gesture">The least upper bound of a heap of cuts is the union of the heap. An upper bound contains every member, so it contains the union.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r02c.html">2c</a> (⋃, Union), <a href="r06a.html">6a</a> (non-empty), <a href="r06d.html">6d</a> (upper bound), <a href="r08a.html">8a</a> (cut (i)–(iv), ≤ as ⊆, r*, members-are-the-fractions-below, hole's-heap-is-a-cut, hole's-step, no-least-above), <a href="r08b.html">8b</a> (three-way-order on ℝ). <a href="r08e.html">8e</a> proves counting-passes-any-real by a least upper bound; <a href="r08f.html">8f</a> builds every root as one; <a href="r08cb5.html">8·cb5</a> reads every endless decimal as one.</p></div>
+</header>
+
+<section class="class step" data-step="8c1">
+  <h2 class="sthead"><span class="stno">8c1</span>Bounds, in words and marks</h2>
+  <p class="stands">Stands on 8a7 (order on ℝ) and 6d (upper bounds in a partial order).</p>
+  <p class="eqline" data-pid="468dfb">From here on, for a set S of reals, a real β is an upper bound of S when ∀α ∈ S (α ≤ β). S is bounded above when it has an upper bound. A least upper bound of S is an upper bound σ of S with σ ≤ β for every upper bound β of S.</p>
+  <p class="eqline" data-pid="fc01f3">Here S is a letter naming a set of reals, as any letter may. 3a's mark S(x), with its bracket, keeps its job: S followed by a bracket is still the next one.</p>
+  <p data-pid="2981ae">6d's “upper bound” was the same idea for any partial order; here the order is the line's. <b>There is at most one least upper bound.</b> If σ and σ′ are both least, each is at most the other, so σ = σ′ by double-inclusion. So the name below is honest.</p>
+  <p class="eqline" data-pid="c5112e">From here on, sup S names the least upper bound of S, when there is one. Read it “the least upper bound of S”.</p>
+  <p data-pid="9e475b">From below: a real β is a lower bound of S when ∀α ∈ S (β ≤ α). S is bounded below when it has one. A greatest lower bound is a lower bound that every lower bound is at most.</p>
+  <p class="eqline" data-pid="a1e10b">From here on, inf S names the greatest lower bound of S, when there is one. Read it “the greatest lower bound of S”. At most one, by double-inclusion, as for sup.</p>
+  <p data-pid="cc5005">sup S may be a member of S or not. For {1*, 2*, 3*} it is 3*, a member. For the heap of cuts (1 − 1/n)*, n a number other than 0, it is 1*, which no member reaches. You will check it below.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · bounds · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">8c1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">S = {1*, 2*, 3*}</span></span>Name two upper bounds of S, and its least one. <br>Say whether sup S is a member of S.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="8c2">
+  <h2 class="sthead"><span class="stno">8c2</span>A union of cuts is a cut</h2>
+  <p class="stands">Stands on 8c1, 8a4 (the four conditions) and 2c (merge).</p>
+  <p data-pid="903a04">Union-of-cuts technique: <b>if S is a set of reals with a member and an upper bound β, then ⋃S is a real.</b> ⋃S is a set of fractions, by 2c's Union, since every member of a member of S is a fraction. Now the four conditions.</p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the union-of-cuts technique">
+\text{call } \alpha \in S;\ \text{call } r \in \alpha @@ S has a member; cut (i) for α
+\text{(i)}\ \ r \in \bigcup S @@ 2c's ⋃ line: show an example, α
+\text{call } s \in \mathbb Q \text{ with } s \notin \beta @@ cut (ii) for the bound β
+t \in \bigcup S \Rightarrow \exists \alpha \in S\,(t \in \alpha) \Rightarrow t \in \beta @@ ﹀ ⋃; α ≤ β is α ⊆ β
+\text{(ii)}\ \ s \notin \bigcup S @@ if s were in, s ∈ β: clash. Refute
+t \in \bigcup S,\ u \lt t:\ \ t \in \alpha \in S @@ ﹀ ⋃; call α
+\text{(iii)}\ \ u \in \alpha,\ \text{so } u \in \bigcup S @@ cut (iii) for α; ︿ ⋃
+t \in \alpha \in S:\ \text{call } v \in \alpha,\ t \lt v @@ cut (iv) for α
+\text{(iv)}\ \ v \in \bigcup S,\ t \lt v @@ ︿ ⋃; show an example
+\htmlClass{new}{\bigcup S \in \mathbb R} \quad \blacksquare @@ all four; the calls close
+  </pre>
+  <p data-pid="3578a8">Each condition is inherited from a member, except (ii), which is inherited from the bound. That is the only job the bound does: without it, the union may swallow every fraction (illegal moves below).</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · the union-of-cuts technique · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">8c2.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\{n^* : n \in \mathbb N\}"></span></span>Find the line of union-of-cuts that fails for it.</li><li><span class="givens"><span data-tex-inline="\emptyset"></span></span>Prove it has no least upper bound.</li><li><span class="givens"><span data-tex-inline="K = \{r \in \mathbb Q : r &lt; 0 \lor r \cdot r &lt; 3\}"></span></span>In the fractions, prove K has no least fractional upper bound.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="8c3">
+  <h2 class="sthead"><span class="stno">8c3</span>No holes</h2>
+  <p class="stands">Stands on 8c2 and 8a7 (order is being a part of).</p>
+  <p data-pid="175101">No-holes technique: <b>every set of reals that has a member and an upper bound has a least upper bound</b>, and it is the union: sup S = ⋃S.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the no-holes technique">
+\sigma = \bigcup S \in \mathbb R @@ the union-of-cuts technique; σ names the union (8a's line for σ)
+\alpha \in S \Rightarrow \alpha \subseteq \sigma @@ chase: r ∈ α gives r ∈ ⋃S, by show an example
+\sigma \text{ is an upper bound of } S @@ ︿ ≤ (8a); α was anything
+\beta \text{ an upper bound};\ \ r \in \sigma @@ assume; chase a member
+\text{call } \alpha \in S \text{ with } r \in \alpha;\ \ r \in \beta @@ ﹀ ⋃; α ⊆ β
+\sigma \subseteq \beta,\ \text{so } \sigma \le \beta @@ ︿ ⊆; ︿ ≤; the call closes
+\htmlClass{new}{\sigma = \sup S} \quad \blacksquare @@ an upper bound at most every upper bound
+  </pre>
+  <p data-pid="19454b">Notice what the column did not cite: no either-way, no not-not-out, no Choice. Every or it had was given. With cuts, no-holes is the cheap principle and the comparison of 8b the expensive one. Books that start from the twelve techniques, with no cuts to build from, lay this one down as an axiom.</p>
+  <p data-pid="036d45">One well-known calculus book builds its subject on the twelve properties of numbers that rung 5 proved for the fractions. It points out that the fractions satisfy all twelve, so the twelve alone cannot prove that a number squaring to 2 exists. It adds one more, the least upper bound property, as the thirteenth. With it, the rest of the subject becomes provable.</p>
+  <p data-pid="69ba92">Greatest-lower-bound technique: <b>every set of reals that has a member and a lower bound has a greatest lower bound.</b> Let L be the set of lower bounds of S, sifted from ℝ. L has a member, since S is bounded below. Every member of S is an upper bound of L: each lower bound is at most each member. So by no-holes, σ = sup L exists. σ is a lower bound of S: for α ∈ S, α is an upper bound of L, so σ ≤ α, since σ is least. And every lower bound β of S is in L, so β ≤ σ, since σ is an upper bound of L. So σ = inf S. ∎ No new set had to be built. The principle from below is the old one, used on the set of lower bounds.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · the no-holes technique · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · left: hunt for the least upper bound · right: the union, condition by condition</div>
+    <div class="panel">
+      <div class="chips" role="group" aria-label="S" id="sch"></div>
+      <canvas id="cvS"></canvas>
+      <div class="cap">Teal dots: the members of S, each the cut of a fraction, set out by size. Drag the ember marker: it is a fraction b, and b* turns into an upper bound when no member is above it. Gold: the least upper bound, once you find it (drag near it and the readout names it). Sets of fractions with no least fractional bound show why the line needed new numbers.</div>
+      <div class="eqbox" id="eqS"></div>
+    </div>
+    <div class="panel">
+      <div class="chips" role="group" aria-label="S" id="uch"></div>
+      <canvas id="cvU"></canvas>
+      <div class="cap">Each row is one member of S as a set of fractions (bottoms up to 10, from −1 to 3), ember; the bottom row, teal, is the union ⋃S. The readout checks union-of-cuts's four conditions on it: (i) from the first member, (ii) from a fraction the upper bound misses, (iii) and (iv) inherited. For the counting numbers, (ii) has nothing to inherit.</div>
+      <div class="eqbox" id="eqU"></div>
+    </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">8c3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\{(1/n)^* : n \in \mathbb N,\ n \neq 0\}"></span></span>Find its sup and inf, and prove which of them are members.</li><li><span class="givens"><span data-tex-inline="\{r^* : r \in \mathbb Q,\ r \cdot r &lt; 3\}"></span></span>Find its sup and inf, and prove which of them are members.</li><li><span class="givens"><span data-tex-inline="\{(1 - 1/n)^* : n \in \mathbb N,\ n \neq 0\}"></span> <span data-tex-inline="\cup\, \{(-1 + 1/n)^* : n \in \mathbb N,\ n \neq 0\}"></span></span>Find its sup and inf, and prove which of them are members.</li><li><span class="givens"><span data-tex-inline="\{1^*, 2^*, 3^*\}"></span></span>By computing the union, find its sup, and its inf, and prove which of them are members.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="8c4">
+  <h2 class="sthead"><span class="stno">8c4</span>Every real is the least upper bound of its fractions</h2>
+  <p class="stands">Stands on 8c3, 8a9 (members are the fractions below) and 2g (the short form of a set).</p>
+  <p data-pid="a23c7a">Real-is-the-merge technique: <b>for every real α, α = sup{r* : r ∈ α}.</b> The set {r* : r ∈ α} is 2g's shorthand, a sift of ℝ. It has a member by (i), and α is an upper bound by members-are-the-fractions-below. Its union is α. A fraction s in some r* with r ∈ α has s &lt; r, so s ∈ α by (iii). And a fraction s ∈ α has some t ∈ α with s &lt; t by (iv), so s ∈ t*. By same-members the union is α, and no-holes says the union is the sup. ∎ So the slogan of 8a has a second reading. A real is the set of the fractions below it, and also the least real above all of them.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · the real-is-the-merge technique · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">8c4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">α = (½)*</span></span>Write the set {r* : r ∈ α} by its rule. <br>Show that its union is α.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="8c5">
+  <h2 class="sthead"><span class="stno">8c5</span>The fractions are not complete</h2>
+  <p class="stands">Stands on 8c3 and 8a10 (hole’s-step).</p>
+  <p data-pid="d124fa">Ask the same question inside ℚ. Let H be the hole's heap of 8a, {r ∈ ℚ : r &lt; 0 ∨ r² &lt; 2}. It has fractional upper bounds: 3/2 is above every member, and so is 2. No-least-fraction-bound technique: <b>no fraction is a least upper bound of H among the fractions.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the no-least-fraction-bound technique">
+u \text{ a fractional upper bound of } H @@ assume: every member of H is at most u
+1 \in H,\ \text{so } 1 \le u,\ u \text{ positive} @@ 1² = 1 &lt; 2; chain for less on ℚ
+u^2 \lt 2 \Rightarrow \exists s \in H\,(u \lt s),\ \bot @@ no-greatest-below (5e): a member above an upper bound; clash
+2 \lt u^2 @@ refute; no-fraction-squares-to-2: u² ≠ 2; any-two-compare on ℚ
+\text{call } s:\ 0 \lt s \lt u,\ 2 \lt s^2 @@ no-least-above (8a)
+h \in H \Rightarrow h \lt s @@ h &lt; 0 &lt; s; or h² &lt; 2 &lt; s², and s ≤ h would give s² ≤ h² by squares-keep-order on ℚ
+\htmlClass{new}{s \text{ is a smaller fractional upper bound}} \quad \blacksquare @@ so u is not least; u was anything
+  </pre>
+  <p data-pid="f0a044">Every fractional upper bound has a smaller one below it, forever: hole's-step's step from 3/2 runs 10/7, 17/12, 58/41, 99/70, never stopping. On the line the heap of cuts {r* : r ∈ H} does have a least upper bound. By real-is-the-merge it is H itself: 8a's hole's cut, the irrational number sitting at the split. <b>On the line this never fails, and that is what having no holes means.</b></p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · the fractions fail · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">8c5.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">u = 3/2, an upper bound of the hole’s heap H</span></span>Find a smaller fractional upper bound, by hole’s-step. <br>Say why the search for a least one never stops in ℚ.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="8c6">
+  <h2 class="sthead"><span class="stno">8c6</span>A sup that is not a member</h2>
+  <p class="stands">Stands on 8c3 and 8a8 (fractions-keep-order).</p>
+  <p data-pid="5edd87">Take S = {(1 − 1/n)* : n ∈ ℕ, n ≠ 0}. Every member is at most 1*, by fractions-keep-order, since 1 − 1/n &lt; 1. The union is 1*. A fraction below some 1 − 1/n is below 1 (chain for less on ℚ). And a fraction r &lt; 1 is below some 1 − 1/n:</p>
+  <pre class="lines" data-k="ember" data-label="this step: the union is 1*">
+r \lt 1:\ \ 1 - r = \tfrac pq,\ \ p, q \text{ positive integers} @@ 5c's &lt;: 1 − r is positive; take a member with positive bottom (scaling with k = −1), whose top is then positive
+n = q + 1:\ \ \tfrac1n \lt \tfrac1q \le \tfrac pq @@ compare-by-cross-multiplying (5e): q &lt; q + 1, and 1 ≤ p
+r = 1 - \tfrac pq \lt 1 - \tfrac1n @@ keep-order for plus on ℚ: add 1 − p/q − 1/n to both sides of 1/n &lt; p/q
+\htmlClass{new}{r \in (1 - \tfrac1n)^{*}},\ \text{so } r \in \bigcup S @@ ︿; show an example
+  </pre>
+  <p data-pid="7d6aa2">So sup S = 1*. Is 1* a member? Then 1* = (1 − 1/n)* for some n, and fractions-keep-order gives 1 = 1 − 1/n, so 1/n = 0. But n · (1/n) = 1 by reciprocal, while n · 0 = 0 by anything-times-zero, and 1 ≠ 0. <b>So the sup is not reached: the heap climbs toward it forever, and it sits just above them all.</b> Many sups on later rungs are of this kind.</p>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · a sup not reached · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">8c6.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">S = {(1 − 1/n)* : n ∈ ℕ, n ≠ 0}</span></span>Find a member of S above (9/10)*. <br>Say why no member reaches 1*.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="8c7">
+  <h2 class="sthead"><span class="stno">8c7</span>Illegal moves</h2>
+  <p class="stands">Stands on 8c1 to 8c6.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\sup S \in S\,? @@ sometimes: {1*, 2*, 3*}. Not for (1 − 1/n)*: no member reaches 1*
+\bigcup\{n^{*} : n \in \mathbb N\} \text{ is a real}\,? @@ every fraction is below some number, so the union is all of ℚ: (ii) fails. No upper bound, no sup
+\sup \varnothing\,? @@ every real is an upper bound of ∅, and there is no least real: no-holes needs a member
+\begin{aligned}&\inf S \text{ is the common}\\ &\quad\text{part of the members of } S\,?\end{aligned} @@ the cuts (1/n)* have common part {r : r ≤ 0}, which has a greatest member. inf goes through sup of the lower bounds
+\begin{aligned}&\text{the fractions have a}\\ &\quad\text{least upper bound for } H\,?\end{aligned} @@ no-least-fraction-bound: every fractional upper bound has a smaller one
+\beta \text{ upper bound, so } \beta = \sup S\,? @@ an upper bound may be far above; sup is the least of them
+  </pre>
+  <section class="slides" id="sl7"><div class="eyebrow">The slides · no bound · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">8c7.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">“sup S is a member of S.”</span></span>When is this so? <br>Name a set of reals for which it fails.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="8c8">
+  <h2 class="sthead"><span class="stno">8c8</span>Running it backwards</h2>
+  <p class="stands">Stands on 8c1 to 8c6.</p>
+  <p data-pid="0de2af">Wanting sup S, write the union and check its members are the fractions you expect, by same-members. Wanting to show σ = sup S without the union, show two things. σ is an upper bound. And nothing smaller is: for any β &lt; σ, some member of S is above β. Wanting a greatest lower bound, take the sup of the lower bounds. Handed a set of fractions with no least fractional upper bound, look for the cut it makes on the line: that is its sup there. Found upward; written downward.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">8c8.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\sigma = 1^*"></span></span>Find a set of fractions’ cuts, none of them σ, with sup σ.</li><li><span class="givens"><span data-tex-inline="\sigma = \sup S,\ \sigma \notin S,"></span> <span data-tex-inline="r \text{ a fraction with } r^* &lt; \sigma"></span></span>Prove some member of S is above the cut of r.</li><li><span class="givens"><span data-tex-inline="S\text{: a set of reals with a member}"></span> <span data-tex-inline="\text{and an upper bound}"></span></span>Prove sup S is in S exactly when S has a greatest member.</li><li><span class="givens"><span data-tex-inline="S \subseteq T,"></span> <span data-tex-inline="\text{each with a member}"></span> <span data-tex-inline="\text{and an upper bound}"></span></span>Prove sup S is at most sup T.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">8c.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{No-holes stops without a member}"></span> <span data-tex-inline="\text{or an upper bound.}"></span> <span data-tex-inline="S, T\text{: sets of reals, each with}"></span> <span data-tex-inline="\text{a member and an upper bound}"></span></span>Build least upper bounds of your own from two sets that have both.<ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\sup(S \cup T) = \max(\sup S, \sup T)"></span></span>Prove it.</li><li><span class="givens"><span data-tex-inline="\text{every member of } S \text{ is at most}"></span> <span data-tex-inline="\text{some member of } T"></span></span>Prove sup S is at most sup T.</li><li><span class="givens"><span data-tex-inline="\sup S &lt; \sup T"></span></span>Prove some member of T is above every member of S.</li></ol></div>
+  <div class="chq"><span class="chid">8c.4.2</span><span class="tagq">edge</span>Decide whether the reals have an upper bound.</div>
+  <div class="chq"><span class="chid">8c.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{no-holes gives greatest-lower-bound}"></span></span>Decide whether greatest-lower-bound gives no-holes.</div>
+  <div class="chq"><span class="chid">8c.4.4</span><span class="tagq">seam</span>Every set of reals with a member and an upper bound has a least upper bound, even sets nobody can list. Decide whether the principle is true, or empty.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r08b.html">← 8b · any two reals compare</a><a href="r08d.html">8d · adding and multiplying cuts →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>sup S is short for the supremum of S, and inf S for its infimum, from the Latin for highest and lowest. Having no holes is called completeness.</p>
+  <h3>Who said it first</h3>
+  <p>The calculus book that adds the least upper bound property as a thirteenth rule is Michael Spivak’s.</p>
+  <aside class="voice para"><p>Spivak builds the calculus on the twelve properties of numbers that rung 5 proved for the fractions, and points out that the fractions satisfy all twelve, so the twelve alone cannot prove that a number squaring to 2 exists. He adds one more, the least upper bound property, as the thirteenth, and with it the rest of the subject becomes provable.</p><cite>Spivak, Calculus, ch. 8</cite></aside>
+  <p>Accepted names: the no-holes technique is the least-upper-bound property, or the completeness of ℝ; the greatest-lower-bound technique is its form for infima.</p>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper}=Rung;
+const R=String.raw;
+function size(cv,H){ const dp=window.devicePixelRatio||1, W=cv.clientWidth||300; cv.width=W*dp; cv.height=H*dp; cv.style.height=H+'px'; const c=cv.getContext('2d'); c.setTransform(dp,0,0,dp,0,0); return {c,W}; }
+function gcd(a,b){ a=Math.abs(a); b=Math.abs(b); while(b){ [a,b]=[b,a%b]; } return a; }
+function fr(p,q){ if(q<0){p=-p;q=-q;} const g=gcd(p,q)||1; return [p/g,q/g]; }
+const ftex=f=>f[1]===1?`${f[0]}`:(f[0]<0?`-\\tfrac{${-f[0]}}{${f[1]}}`:`\\tfrac{${f[0]}}{${f[1]}}`);
+const star=f=>f[1]===1?`${ftex(f)}^{*}`:`(${ftex(f)})^{*}`;
+const fval=f=>f[0]/f[1];
+function farey(lo,hi,Q){ const out=[]; for(let q=1;q<=Q;q++){ for(let p=Math.ceil(lo*q);p<=Math.floor(hi*q);p++){ if(gcd(p,q)===1) out.push([p,q]); } } return out; }
+const hs=r=>fr(2*r[0]+2*r[1], r[0]+2*r[1]);
+/* sets: members (fractions), sup (value), sup name, whether sup is a member, irrational sup */
+function climb(){ const a=[[1,1]]; for(let i=0;i<5;i++) a.push(hs(a[a.length-1])); return a; }
+const SETS=[
+  {lab:'{1*, 2*, 3*}',m:[[1,1],[2,1],[3,1]],sup:3,sn:'3^{*}',in:true,lo:0,hi:3.5},
+  {lab:'(1 − 1/n)*',m:[1,2,3,4,5,6,8,10,15,20,40].map(n=>fr(n-1,n)),sup:1,sn:'1^{*}',in:false,lo:-0.1,hi:1.4},
+  {lab:'climbing to the hole',m:climb(),sup:Math.SQRT2,sn:R`\text{the hole's cut}`,in:false,irr:true,lo:0.8,hi:1.6},
+  {lab:'(−1/n)*',m:[1,2,3,4,5,8,12,20].map(n=>fr(-1,n)),sup:0,sn:'0^{*}',in:false,lo:-1.2,hi:0.4}];
+let si=2, drag=false;
+const sch=document.getElementById('sch');
+SETS.forEach((S,i)=>{ const bt=document.createElement('button'); bt.textContent=S.lab; if(i===si) bt.className='on'; bt.onclick=()=>{ si=i; bf=snapB(S.hi-0.1*(S.hi-S.lo),S); [...sch.children].forEach(z=>z.classList.toggle('on',z===bt)); drawS(); }; sch.appendChild(bt); });
+const cvS=document.getElementById('cvS');
+function snapB(v,S){ // nearest fraction with small bottom to v
+  let best=null,bd=1e9; const span=S.hi-S.lo; const Q=span>2?12:(span>1?40:400);
+  for(let q=1;q<=Q;q++){ const p=Math.round(v*q); const d=Math.abs(p/q-v); if(d<bd-1e-12){ bd=d; best=fr(p,q); } if(d<span/600) break; }
+  return best; }
+let bf=[3,2];
+function drawS(){
+  const S=SETS[si], W0=cvS.clientWidth||300, H=130; const {c}=size(cvS,H); c.fillStyle=col('--card'); c.fillRect(0,0,W0,H);
+  const X=v=>16+(W0-32)*(v-S.lo)/(S.hi-S.lo), y=70;
+  c.strokeStyle=col('--grid'); c.lineWidth=1; c.beginPath(); c.moveTo(8,y); c.lineTo(W0-8,y); c.stroke();
+  const ub=S.m.every(f=>fval(f)<=fval(bf)+1e-15);
+  // sup
+  const sx=X(S.sup); c.strokeStyle=col('--gold'); c.lineWidth=2; c.setLineDash([4,3]); c.beginPath(); c.moveTo(sx,y-36); c.lineTo(sx,y+18); c.stroke(); c.setLineDash([]);
+  S.m.forEach(f=>{ const x=X(fval(f)); c.beginPath(); c.arc(x,y,4.5,0,7); c.fillStyle=col('--teal'); c.fill(); });
+  const bx=X(fval(bf)); c.fillStyle=ub?col('--ember'):col('--muted'); c.beginPath(); c.moveTo(bx,y-8); c.lineTo(bx-8,y-24); c.lineTo(bx+8,y-24); c.closePath(); c.fill(); c.strokeStyle=c.fillStyle; c.lineWidth=2; c.beginPath(); c.moveTo(bx,y-8); c.lineTo(bx,y+10); c.stroke();
+  c.font='11px IBM Plex Mono, monospace'; c.fillStyle=col('--muted'); c.textAlign='center';
+  const ticks=S.hi-S.lo>2?[0,1,2,3]:(S.hi-S.lo>1?[-1,0,1]:[]); ticks.filter(v=>v>=S.lo&&v<=S.hi).forEach(v=>c.fillText(v,X(v),H-8));
+  c.fillStyle=col('--gold'); c.fillText('sup',sx,y-40);
+  const L=[`S = \\{${S.m.slice(0,4).map(star).join(', ')}${S.m.length>4?', \\ldots':''}\\}`, `b = ${ftex(bf)}`];
+  if(!ub){ const w=S.m.find(f=>fval(f)>fval(bf)); L.push(`${star(w)} \\in S \\text{ is above } b^{*}:\\ \\text{not an upper bound}`); }
+  else { L.push(R`b^{*} \text{ is an upper bound of } S`);
+    if(Math.abs(fval(bf)-S.sup)<1e-12){ L.push(`\\htmlClass{keep}{b^{*} = \\sup S}${S.in?R`\ \ \text{(a member)}`:R`\ \ \text{(not a member)}`}`); }
+    else if(S.irr){ const s=hs(bf); L.push(`\\text{smaller fractional bound: } ${ftex(s)}\\ \\text{(hole's-step; no-least-fraction-bound)}`); L.push(`\\htmlClass{new}{\\sup S = ${S.sn}},\\ \\text{irrational}`); }
+    else { L.push(`\\text{not least: } \\sup S = ${S.sn}\\ \\text{is below it}`); } }
+  tex(document.getElementById('eqS'),'\\begin{gathered}'+L.join('\\\\ ')+'\\end{gathered}',true);
+}
+function setFromX(e){ const S=SETS[si], Rc=cvS.getBoundingClientRect(), W0=cvS.clientWidth; let v=S.lo+(e.clientX-Rc.left-16)/(W0-32)*(S.hi-S.lo); v=Math.max(S.lo,Math.min(S.hi,v));
+  if(Math.abs(v-S.sup)<(S.hi-S.lo)/80 && !S.irr) bf=fr(Math.round(S.sup*1),1); else bf=snapB(v,S); drawS(); }
+cvS.addEventListener('pointerdown',e=>{ drag=true; cvS.setPointerCapture&&cvS.setPointerCapture(e.pointerId); setFromX(e); });
+cvS.addEventListener('pointermove',e=>{ if(drag) setFromX(e); });
+cvS.addEventListener('pointerup',()=>drag=false);
+new ResizeObserver(drawS).observe(cvS);
+
+/* ---------- right: the union ---------- */
+const USETS=[
+  {lab:'{(1/3)*, hole, 1*}',m:[{f:[1,3]},{h:1},{f:[1,1]}],bound:'3/2',bd:[3,2]},
+  {lab:'{(1/2)*, (2/3)*, (3/4)*}',m:[{f:[1,2]},{f:[2,3]},{f:[3,4]}],bound:'1',bd:[1,1]},
+  {lab:'climbing to the hole',m:climb().slice(0,4).map(f=>({f})),bound:'3/2',bd:[3,2]},
+  {lab:'{0*, 1*, 2*, …}: no bound',m:[{f:[0,1]},{f:[1,1]},{f:[2,1]},{f:[3,1]}],bound:null}];
+let ui=0; const uch=document.getElementById('uch');
+USETS.forEach((S,i)=>{ const bt=document.createElement('button'); bt.textContent=S.lab; if(i===ui) bt.className='on'; bt.onclick=()=>{ ui=i; [...uch.children].forEach(z=>z.classList.toggle('on',z===bt)); drawU(); }; uch.appendChild(bt); });
+const um=(k,f)=>k.h?(f[0]<0||f[0]*f[0]<2*f[1]*f[1]):(f[0]*k.f[1]<k.f[0]*f[1]);
+const uname=k=>k.h?R`\text{hole}`:star(k.f);
+const cvU=document.getElementById('cvU');
+function drawU(){
+  const S=USETS[ui], W0=cvU.clientWidth||300, rows=S.m.length+1, H=rows*30+24; const {c}=size(cvU,H); c.fillStyle=col('--card'); c.fillRect(0,0,W0,H);
+  const lo=-1, hi=3, X=v=>30+(W0-40)*(v-lo)/(hi-lo); const fs=farey(lo,hi,W0<420?6:10);
+  c.font='11px IBM Plex Mono, monospace';
+  for(let i=0;i<rows;i++){ const y=26+i*30, last=i===rows-1; c.strokeStyle=col('--grid'); c.lineWidth=1; c.beginPath(); c.moveTo(28,y); c.lineTo(W0-6,y); c.stroke();
+    c.fillStyle=col('--muted'); c.textAlign='left'; c.fillText(last?'⋃S':(S.m[i].h?'H':(S.m[i].f[1]===1?S.m[i].f[0]+'*':S.m[i].f[0]+'/'+S.m[i].f[1]+'*')),2,y-4);
+    fs.forEach(f=>{ const inn=last?(S.bound?S.m.some(k=>um(k,f)):true):um(S.m[i],f); if(!inn) return; const x=X(fval(f)), h=4+14/Math.sqrt(f[1]); c.strokeStyle=last?col('--teal'):col('--ember'); c.lineWidth=f[1]<=2?1.8:1; c.beginPath(); c.moveTo(x,y); c.lineTo(x,y-h); c.stroke(); }); }
+  c.fillStyle=col('--muted'); c.textAlign='center'; [-1,0,1,2,3].forEach(v=>c.fillText(v,X(v),H-4));
+  const L=[`S = \\{${S.m.map(uname).join(', ')}${S.bound?'':', \\ldots'}\\}`];
+  const r0=S.m[0].h?[-1,1]:fr(S.m[0].f[0]-1,S.m[0].f[1]);
+  L.push(`\\text{(i) } ${ftex(r0)} \\in ${uname(S.m[0])} \\subseteq \\textstyle\\bigcup S`);
+  if(S.bound){ L.push(`\\text{(ii) } ${S.bound}^{*} \\text{ bounds } S;\\ ${S.bound} \\notin \\textstyle\\bigcup S`); L.push(R`\text{(iii), (iv): inherited from a member}`); L.push(`\\htmlClass{keep}{\\textstyle\\bigcup S = \\sup S}`); }
+  else { L.push(R`\text{(ii) every fraction is below some number}`); L.push(R`\htmlClass{new}{\textstyle\bigcup S = \mathbb Q:\ \text{not a cut, no sup}}`); }
+  tex(document.getElementById('eqU'),'\\begin{gathered}'+L.join('\\\\ ')+'\\end{gathered}',true);
+}
+new ResizeObserver(drawU).observe(cvU);
+if(window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{ drawS(); drawU(); });
+drawS(); drawU();
+
+/* ---------- slides ---------- */
+const N='\\htmlClass{new}', K='\\htmlClass{keep}';
+stepper('#sl1',[
+  {k:'ember',kl:'upper bound',t:R`\beta \text{ is an upper bound of } S:\ \forall \alpha \in S\,(\alpha \le \beta)`,n:`Bounded above: some real is. Lower bound and bounded below, turned over.`},
+  {k:'ember',kl:'sup and inf',t:R`${N}{\sup S}:\ \text{the least upper bound};\ \ ${N}{\inf S}:\ \text{the greatest lower bound}`,n:`At most one of each, by double-inclusion. sup may be in S or not.`}
+],{title:'The slides · bounds · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'union-of-cuts (i)',t:R`r \in \alpha \in S \;\Rightarrow\; r \in \textstyle\bigcup S`,n:`From a member of a member.`},
+  {k:'ember',kl:'union-of-cuts (ii)',t:R`s \notin \beta \;\Rightarrow\; s \notin \textstyle\bigcup S`,n:`Everything of the union is in the bound β, so what β misses, the union misses.`},
+  {k:'ember',kl:'union-of-cuts (iii), (iv)',t:R`\text{inherited from the member that holds the fraction}`,n:`Closed downward and no greatest member, each from one cut of S.`},
+  {k:'ember',kl:'the union-of-cuts technique',t:R`${N}{\textstyle\bigcup S \in \mathbb R}`,n:`A union of a non-empty heap of cuts with an upper bound is a cut.`}
+],{title:'The slides · the union-of-cuts technique · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'the no-holes technique',t:R`\sup S = ${N}{\textstyle\bigcup S}`,n:`Each member is inside the union; each upper bound contains every member, so contains the union. No either-way anywhere.`},
+  {k:'ember',kl:'the greatest-lower-bound technique',t:R`\inf S = \sup\{\beta : \beta \text{ a lower bound of } S\}`,n:`The lower bounds are bounded above by any member of S. Completeness turned over.`}
+],{title:'The slides · the no-holes technique · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'the real-is-the-merge technique',t:R`\alpha = \sup\{r^{*} : r \in \alpha\}`,n:`The union of the cuts of α's fractions is α: (iii) one way, (iv) the other.`}
+],{title:'The slides · the real-is-the-merge technique · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'the fractions fail',t:R`u \text{ bounds } H \;\Rightarrow\; 2 \lt u^2 \;\Rightarrow\; \text{a smaller bound}`,n:`no-greatest-below rules out u² &lt; 2, no-fraction-squares-to-2 rules out u² = 2, and no-least-above finds a smaller fractional bound. The no-least-fraction-bound technique.`},
+  {k:'ember',kl:'on the line',t:R`\sup\{r^{*} : r \in H\} = ${N}{H}`,n:`By real-is-the-merge: the hole's cut, irrational, at the split.`}
+],{title:'The slides · the fractions fail · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'a sup not reached',t:R`\sup\{(1 - \tfrac1n)^{*}\} = 1^{*} \notin S`,n:`For r &lt; 1, write 1 − r = p/q and take n = q + 1. And 1/n is never 0.`}
+],{title:'The slides · a sup not reached · ← → keys work'});
+stepper('#sl7',[
+  {k:'ember',kl:'no bound',t:R`\textstyle\bigcup\{n^{*} : n \in \mathbb N\} = \mathbb Q`,n:`(ii) fails: without a bound the union swallows every fraction.`}
+],{title:'The slides · no bound · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

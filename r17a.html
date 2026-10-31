@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The log as an area</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r17.html">← 17 turning multiplying into adding</a><a href="r17b.html">next: 17b its slope →</a></p>
+  <div class="tags"><span class="tag proof">17a · proof</span></div>
+  <h1>The log as an area</h1>
+  <p>16f proved that no power has slope one over the input, and 16b proved that something does: the area function of one over the input. This step gives that area function a name and finds the first facts about it from rung 15's rules alone. It is 0 at 1, negative to the left of 1 and positive to the right, and it always rises. It is caught between two simple functions, one less one over the input below, and the input less one above. And any value of it can be squeezed between lower and upper sums as tightly as you like.</p>
+  <p class="gesture">The logarithm of a positive number is the area under one over the input, from one out to that number. The logarithm of one is zero, and the logarithm rises. It stays between those two simple functions, by smaller-function-smaller-area on the stretch between one and the number.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r16a.html">16a</a> (the area function, split-in-any-order), <a href="r16b.html">16b</a> (antiderivative-exists), <a href="r16f.html">16f</a> (no-power-for-1/x), <a href="r15e.html">15e</a> (smaller-function-smaller-area, the convention), <a href="r15f.html">15f</a> (continuous-is-integrable), <a href="r15h.html">15h</a> (strip sums), <a href="r14d.html">14d</a> (increasing). <a href="r17b.html">17b</a> finds its slope; <a href="r17c.html">17c</a> what it does to products.</p></div>
+</header>
+
+<section class="class step" data-step="17a1">
+  <h2 class="sthead"><span class="stno">17a1</span>New marks on this rung</h2>
+  <p class="stands">Stands on 9a1 (marks said first in words).</p>
+  <p data-pid="a13824">Each mark below is said first in plain words. Each gets its own “from here on” line, or its defining line, on the step named, before any proof uses it.</p>
+  <ul>
+    <li data-pid="a28262">the area under 1/t from 1 to x, for x &gt; 0, the natural log of x: ln x (17a)</li>
+    <li data-pid="bb6c85">the function that runs ln backwards, the exponential: exp x, the one positive number whose ln is x (17e)</li>
+    <li data-pid="88d137">the one number whose ln is 1: the letter e (17e)</li>
+    <li data-pid="b9fd49">exp x, written as a power of e at every real x: eˣ (17e)</li>
+    <li data-pid="ce905a">a positive base p raised to any real x, defined as exp(x ln p): pˣ (17g)</li>
+    <li data-pid="2f5329">the log to base p, the x with pˣ = y: logₚ y; the log to base 10 is often written log (17g)</li>
+    <li data-pid="45c16d">on 17·chem only: the acidity scale, pH; a reaction that runs both ways, a double arrow ⇌; a half-life, t₁/₂; and a decay rate per nucleus, the small Greek letter lambda, λ</li>
+    <li data-pid="dd5063">on 17·phys only: a wave's length, λ again; its frequency, f; and energy in electronvolts, eV</li>
+  </ul>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">17a1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">ln x,  e,  pˣ,  logₚ y</span></span>Say each mark in words. <br>Name the step that lays each one down.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17a2">
+  <h2 class="sthead"><span class="stno">17a2</span>The definition</h2>
+  <p class="stands">Stands on 16a (the area function), 15f (continuous-is-integrable) and 11b (one-over-x-is-continuous).</p>
+  <p class="eqline" data-pid="d789bb">From here on, for x &gt; 0, ln x = ∫₁ˣ dt/t. Its accepted name is the natural logarithm of x, read "el en of x" or "log x"; some books write log x. ln is an operator: carried out on x, it produces one number, an area.</p>
+  <p data-pid="098f81">1/t is continuous on (0, ∞) (11b's one-over-x-is-continuous). So it is integrable on every closed interval there (continuous-is-integrable), and <b>ln x is a number for every x &gt; 0.</b> For x &lt; 1 it is −∫ₓ¹ dt/t, by 15e's convention. At 0 and below, 1/t is not defined on the stretch from 1, and ln has no value.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the definition · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · the area under 1/t, and the bounds that trap it</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="lbl">1/t, with the area from 1 to x</div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">x</span><input type="range" id="kx" min="0.2" max="5" step="0.01" value="2"><output id="ox"></output></div>
+      <div class="kn"><span class="m">n</span><input type="range" id="kn" min="1" max="40" step="1" value="6"><output id="on"></output></div>
+      <div class="cap">Teal: the region from 1 to x, counted plus when x &gt; 1 and minus when x &lt; 1. Ember outline: n upper boxes; filled: n lower boxes.</div>
+    </div>
+    <div class="panel">
+      <div class="lbl">ln x, between 1 − 1/x and x − 1</div>
+      <canvas id="cvL"></canvas>
+      <div class="cap">Ink: ln. Dashed: the two bounds of log-bounds. Plum: the knob's x.</div>
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17a2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">ln 2 = ∫₁² dt/t</span></span>Guess the area from the heights 1 and ½ at the ends. <br>Say why the area exists, naming the techniques.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17a3">
+  <h2 class="sthead"><span class="stno">17a3</span>Sign and order</h2>
+  <p class="stands">Stands on 17a2 and 15e (the conventions, smaller-function-smaller-area).</p>
+  <p data-pid="04d4e4">Log-rises technique: <b>ln 1 = 0; ln x &lt; 0 for 0 &lt; x &lt; 1; ln x &gt; 0 for x &gt; 1; and 0 &lt; x &lt; y gives ln x &lt; ln y.</b></p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the log-rises technique">
+\ln 1 = \textstyle\int_1^1 \tfrac{dt}{t} = 0 @@ 15e: ∫ₐᵃ f = 0
+0 \lt x \lt y:\ \ \ln y - \ln x = \textstyle\int_x^y \tfrac{dt}{t} @@ split-in-any-order (16a)
+\tfrac1t \ge \tfrac1y \text{ on } [x, y] @@ t ≤ y and both positive; 8d
+\textstyle\int_x^y \tfrac{dt}{t} \ge \tfrac{y - x}{y} \gt 0 @@ smaller-function-smaller-area (15e), its second form with m = 1/y
+\htmlClass{new}{\ln x \lt \ln y} @@ so ln rises
+x \lt 1 \Rightarrow \ln x \lt \ln 1 = 0;\ \ x \gt 1 \Rightarrow \ln x \gt 0 \quad \blacksquare @@ the last line with y = 1, then with x = 1
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · sign and order · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17a3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">x > 0,  ln x < ln 5</span></span>Find every x that fits, naming the line of log-rises that licenses it. <br>Find the x among them with ln x > 0.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17a4">
+  <h2 class="sthead"><span class="stno">17a4</span>Two bounds</h2>
+  <p class="stands">Stands on 17a3.</p>
+  <p data-pid="ce2e47">Log-bounds technique: <b>for every x &gt; 0, 1 − 1/x ≤ ln x ≤ x − 1, with equality only at x = 1.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the log-bounds technique">
+x \gt 1:\ \ \tfrac1x \le \tfrac1t \le 1 \text{ on } [1, x] @@ 1 ≤ t ≤ x
+\tfrac{x - 1}{x} \le \ln x \le x - 1 @@ smaller-function-smaller-area, both sides; (x − 1)/x = 1 − 1/x
+x \lt 1:\ \ 1 \le \tfrac1t \le \tfrac1x \text{ on } [x, 1] @@ x ≤ t ≤ 1
+1 - x \le \textstyle\int_x^1 \tfrac{dt}{t} = -\ln x \le \tfrac{1 - x}{x} @@ smaller-function-smaller-area; the convention
+\htmlClass{new}{1 - \tfrac1x \le \ln x \le x - 1} \quad \blacksquare @@ multiply by −1 (8d turns the order), the same two bounds; at x = 1 all three are 0
+  </pre>
+  <p data-pid="d48ce5">Equality away from 1 would need 1/t to equal one constant on a whole stretch, which it does not (log-rises's strict line, run on each bound). So the graph of ln lies strictly between the two curves except where all three meet, at 1.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · two bounds · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17a4.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\ln x = 0"></span></span>Find x, and prove there is no other.</li><li><span class="givens"><span data-tex-inline="\ln u = \ln v,"></span> <span data-tex-inline="u, v &gt; 0"></span></span>Find what follows, and cite the line that licenses it.</li><li><span class="givens"><span data-tex-inline="\ln x \le x - 1,"></span> <span data-tex-inline="\text{(log-bounds)}"></span></span>Find every x for which it gives ln x at most 0.1.</li><li><span class="givens"><span data-tex-inline="\text{a sum of boxes for } \int_1^x \tfrac{dt}{t}"></span> <span data-tex-inline="= \tfrac12\big(1 + \tfrac23 + \tfrac12 + \tfrac25\big)"></span></span>Find x, the number of pieces, and the kind of sum.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17a5">
+  <h2 class="sthead"><span class="stno">17a5</span>ln 2, squeezed</h2>
+  <p class="stands">Stands on 17a4 and 15a (lower and upper sums).</p>
+  <pre class="lines" data-k="ember" data-label="this step: ln 2, squeezed">
+\tfrac12 \le \ln 2 \le 1 @@ log-bounds at x = 2
+n = 10 \text{ equal pieces of } [1, 2]:\ \ L \approx 0.6688,\ \ U \approx 0.7188 @@ 15a: 1/t falls, so the least is at each right end
+\ln 2 \approx 0.6931 @@ more pieces; the squeeze closes (continuous-is-integrable)
+\ln \tfrac12 = -\textstyle\int_{1/2}^{1} \tfrac{dt}{t} @@ the convention; log-bounds gives −1 ≤ ln ½ ≤ −½
+  </pre>
+  <p data-pid="af8866">In 1649 a defender of an older work on the curve y = 1/x pointed something out. When the stretches along the axis grow in one fixed ratio, the areas over them grow by equal amounts. So the areas behave as the logarithms do in the first printed tables.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · ln 2 · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17a5.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\ln 3"></span></span>Bound it by log-bounds.</li><li><span class="givens"><span data-tex-inline="\ln 3 = \int_1^3 \tfrac{dt}{t},"></span> <span data-tex-inline="4 \text{ equal pieces of } [1, 3]"></span></span>Find the lower and upper sums.</li><li><span class="givens"><span data-tex-inline="\ln 0.8"></span></span>Bound it by log-bounds.</li><li><span class="givens"><span data-tex-inline="\ln 0.5,\ \ln 1,\ \ln 1.5,\ \ln 4"></span></span>Put them in order without computing any of them.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17a6">
+  <h2 class="sthead"><span class="stno">17a6</span>Illegal moves</h2>
+  <p class="stands">Stands on 17a1 to 17a5.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\ln 0 = \textstyle\int_1^0 \tfrac{dt}{t}\,? @@ 1/t is not bounded on [0, 1]; ln is defined only for x &gt; 0
+\ln(-2)\,? @@ the stretch from 1 to −2 crosses 0, where 1/t has no value
+\ln x = \tfrac{x^0}{0}\,? @@ the power line has no entry at −1 (16f); ln is defined by the area
+\ln x \ge 0\,? @@ for x &lt; 1 the area counts negative
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17a6.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\int_x^1 \tfrac{dt}{t},"></span> <span data-tex-inline="x \to 0^+"></span></span>Find what the integral does, and so whether the same area can give ln a value at 0.</li><li><span class="givens"><span data-tex-inline="L(x) = \int_0^x \tfrac{dt}{t}"></span></span>Run the definition as far as you can take it, and write the line where it breaks.</li><li><span class="givens"><span data-tex-inline="M(x) = \int_2^x \tfrac{dt}{t}"></span></span>Find M in terms of ln.</li><li><span class="givens"><span data-tex-inline="1 - \tfrac{1}{x} \le \ln x \le x - 1,"></span> <span data-tex-inline="x = 10"></span></span>Find which bound is closer to ln 10, and whether either is useful there.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">17a.4.1</span><span class="tagq">build</span>Choose an x of your own between 1 and 3.<br>Squeeze ln x between two numbers less than 0.05 apart, with boxes you choose.<br>Compare the gap between log-bounds's two bounds at your x.</div>
+  <div class="chq"><span class="chid">17a.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\ln 100 \le 99 \text{ (log-bounds)}"></span></span>Find a better upper bound with an upper sum of four pieces of your choosing on [1, 100].<br>Find how much better four pieces can do.</div>
+  <div class="chq"><span class="chid">17a.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="F \text{ on } (0, \infty),"></span> <span data-tex-inline="F(1) = 0,"></span> <span data-tex-inline="F \text{ rises}"></span></span>Prove or refute: F is ln.</div>
+  <div class="chq"><span class="chid">17a.4.4</span><span class="tagq">loop</span><span class="givens"><span data-tex-inline="\int_1^2 x^r\,dx = \tfrac{2^{r+1} - 1}{r + 1},"></span> <span data-tex-inline="r \text{ rational},\ r \ne -1"></span></span>Find it at r = −0.99 and at r = −1.01, and prove that ln 2 lies between the two.</div>
+  <div class="chq"><span class="chid">17a.4.5</span><span class="tagq">seam</span>The first logarithms were built in 1614 from two moving points, one steady and one slowing, as a device for turning products into sums. Two mathematicians found, thirty-five years later, that an area under the graph of 1/t does the same. The first table's numbers and the areas differ by a factor and a shift. <br>Which is the logarithm: the table that does the job, or the area that turns out to do it? <br>Did the table's maker know what he had?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r17.html">← 17 · turning multiplying into adding</a><a href="r17b.html">17b · its slope →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>De Sarasa, defending Saint-Vincent’s work on the hyperbola, pointed out that when the stretches along the axis grow in one fixed ratio, the areas over them grow by equal amounts, so that the areas behave as the logarithms do in Napier’s tables.</p><cite>Alphonse Antonio de Sarasa, Solutio problematis (1649); paraphrase</cite></aside>
+  <p>In 17a.4.5, the maker of the first tables is John Napier, and the two who found the hyperbola’s areas are Grégoire de Saint-Vincent and Alphonse Antonio de Sarasa.</p>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+/* least and greatest of F.f on [lo, hi]: the ends, F's critical points inside, and a fine sample (exact between critical points for the functions used here) */
+function ext(F,lo,hi){ if(F.dir) return [0,1]; let m=Infinity,M=-Infinity; const t=x=>{ const v=F.f(x); if(v<m) m=v; if(v>M) M=v; };
+  t(lo); t(hi); (F.crit||[]).forEach(c=>{ if(c>lo&&c<hi) t(c); }); for(let k=1;k<64;k++) t(lo+(hi-lo)*k/64); return [m,M]; }
+function sums(F,pts){ let L=0,U=0; const ms=[],Ms=[]; for(let i=1;i<pts.length;i++){ const [m,M]=ext(F,pts[i-1],pts[i]), w=pts[i]-pts[i-1]; ms.push(m); Ms.push(M); L+=m*w; U+=M*w; } return {L,U,ms,Ms}; }
+const eq=(a,b,n)=>Array.from({length:n+1},(_,i)=>a+(b-a)*i/n);
+function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
+function boxes(P,pts,hs,stroke,fill,alpha){ const c=P.ctx; for(let i=1;i<pts.length;i++){ const a=pts[i-1],b=pts[i],h=hs[i-1]; c.globalAlpha=alpha; P.poly([[a,0],[b,0],[b,h],[a,h]],null,fill); c.globalAlpha=1; P.poly([[a,0],[b,0],[b,h],[a,h]],stroke,null,1.2); } }
+function dirDots(P,a,b){ const c=P.ctx; c.fillStyle=col('--ink'); for(let k=0;k<=300;k++){ const x=a+(b-a)*k/300; const y=(k%2)?0:1; c.fillRect(P.X(x)-1,P.Y(y)-1,2,2); } }
+/* shade between the graph of fn and the axis from lo to hi: above in pos colour, below in neg colour */
+function shade(P,fn,lo,hi,pos,neg,alpha){ if(hi<lo){ const t=lo; lo=hi; hi=t; } const c=P.ctx, N=300; c.globalAlpha=alpha==null?0.32:alpha;
+  for(let k=0;k<N;k++){ const x0=lo+(hi-lo)*k/N, x1=lo+(hi-lo)*(k+1)/N, xm=(x0+x1)/2, y=fn(xm); if(!isFinite(y)) continue; P.poly([[x0,0],[x1,0],[x1,fn(x1)],[x0,fn(x0)]],null,y>=0?pos:neg); }
+  c.globalAlpha=1; }
+function rangeOf(fn,lo,hi,pad){ let m=Infinity,M=-Infinity; for(let k=0;k<=400;k++){ const v=fn(lo+(hi-lo)*k/400); if(isFinite(v)){ if(v<m) m=v; if(v>M) M=v; } } if(m>0) m=0; if(M<0) M=0; const p=(M-m)*(pad==null?0.12:pad)||1; return [m-p,M+p]; }
+function chips(el,FN,get,setk,after){ Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===get()) b.className='on'; b.onclick=()=>{ setk(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+const Nw='\\htmlClass{new}';
+function gridFor(sp){ return sp>40?10:sp>16?4:sp>8?2:sp>3?1:sp>1.2?0.5:0.25; }
+function frame2(P,fn,lo,hi,pad){ const w=hi-lo; P.o.x=[lo-0.12*w,hi+0.08*w]; P.o.y=rangeOf(fn,lo,hi,pad==null?0.12:pad); const sx=P.o.x[1]-P.o.x[0], sy=P.o.y[1]-P.o.y[0]; let g=gridFor(sx); while(sy/g>24) g*=2; P.o.grid=g; }
+const num=(f,a,b,n)=>{ n=n||4000; const h=(b-a)/n; let s=0; for(let i=0;i<n;i++) s+=f(a+(i+0.5)*h)*h; return s; };
+/* axes with separate steps across and up */
+function axes2(P,gx,gy){ const c=P.ctx,o=P.o; c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ c.moveTo(P.X(x),P.Y(o.y[0])); c.lineTo(P.X(x),P.Y(o.y[1])); }
+  for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ c.moveTo(P.X(o.x[0]),P.Y(y)); c.lineTo(P.X(o.x[1]),P.Y(y)); } c.stroke();
+  c.strokeStyle=col('--muted'); c.lineWidth=1.3; c.beginPath(); if(o.y[0]<=0&&o.y[1]>=0){ c.moveTo(P.X(o.x[0]),P.Y(0)); c.lineTo(P.X(o.x[1]),P.Y(0)); } if(o.x[0]<=0&&o.x[1]>=0){ c.moveTo(P.X(0),P.Y(o.y[0])); c.lineTo(P.X(0),P.Y(o.y[1])); } c.stroke();
+  c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; const ly=Math.min(P.H-6,Math.max(12,P.Y(0)+14));
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ if(Math.abs(x)<1e-9) continue; c.fillText(+x.toFixed(6),P.X(x),ly); }
+  c.textAlign='right'; const lx=Math.max(32,Math.min(P.W-4,P.X(0)-5)); for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ if(Math.abs(y)<1e-9) continue; c.fillText(String(+y.toFixed(6)).replace('-','−'),lx,P.Y(y)+4); } }
+function nice(sp){ const raw=sp/6, p=Math.pow(10,Math.floor(Math.log10(raw))), m=raw/p; return (m<1.5?1:m<3.5?2:m<7.5?5:10)*p; }
+const kx=$('kx'),kn=$('kn'),cvF=$('cvF'),cvL=$('cvL');
+const inv=t=>1/t;
+const PF=plane(cvF,{x:[0,5.3],y:[-0.3,5.2],grid:1,aspect:0.8,draw:P=>drawF(P)});
+const PL=plane(cvL,{x:[0,5.3],y:[-4.5,4.5],grid:1,aspect:0.8,draw:P=>drawL(P)});
+[[PF,cvF],[PL,cvL]].forEach(([P,cv])=>Object.defineProperty(P.o,'aspect',{get:()=>cv.clientWidth>480?0.75:0.9}));
+function drawF(P){ const x=+kx.value, n=+kn.value; P.axes(); const lo=Math.min(1,x), hi=Math.max(1,x);
+  shade(P,inv,lo,hi,'--teal','--teal',0.22); const p=eq(lo,hi,n); const S=sums({f:inv,crit:[]},p); boxes(P,p,S.ms,'--teal','--teal',0.22); boxes(P,p,S.Ms,'--ember',null,0);
+  curve(P,inv,'--ink',2.6,0.19,5.3); P.line(1,-0.3,1,5.2,'--muted',1.2,[4,4]); P.line(x,-0.3,5.2,-0.3,'--card',0); }
+function drawL(P){ const x=+kx.value; P.axes(); curve(P,t=>1-1/t,'--muted',1.6,0.2,5.3,[6,4]); curve(P,t=>t-1,'--muted',1.6,0.2,5.3,[6,4]); curve(P,Math.log,'--ink',2.6,0.2,5.3); P.dot(x,Math.log(x),'--plum',5); }
+function read(){ const x=+kx.value, n=+kn.value, lo=Math.min(1,x), hi=Math.max(1,x); $('ox').textContent=mm(x,2); $('on').textContent=n;
+  const S=sums({f:inv,crit:[]},eq(lo,hi,n)), sg=x<1?-1:1; const L=x<1?-S.U:S.L, U=x<1?-S.L:S.U;
+  const vd=$('vdF'); vd.className='verdict'+(U-L<0.01?' win':'');
+  vd.textContent='With '+n+' pieces, ln '+mm(x,2)+' lies in ['+mm(L,4)+', '+mm(U,4)+']'+(x<1?' (the convention turns the sums over)':'')+'. log-bounds: '+mm(1-1/x,4)+' ≤ ln x ≤ '+mm(x-1,4)+'. Squeezed further: '+mm(Math.log(x),4)+'.';
+  tex($('eqF'),R`\begin{gathered}\ln ${mm(x,2)} = \textstyle\int_1^{${mm(x,2)}} \tfrac{dt}{t} \approx ${mm(Math.log(x),4)}\\ ${mm(1-1/x,3)} \le \ln ${mm(x,2)} \le ${mm(x-1,3)}\end{gathered}`,true); }
+function all(){ PF.redraw(); PL.redraw(); read(); }
+kx.addEventListener('input',all); kn.addEventListener('input',all);
+window.__pic={set:(x,n)=>{ kx.value=x; kn.value=n; all(); const lo=Math.min(1,x), hi=Math.max(1,x), S=sums({f:inv,crit:[]},eq(lo,hi,n)); return {L:+S.L.toFixed(5),U:+S.U.toFixed(5),ln:+Math.log(x).toFixed(5),num:+num(inv,1,x).toFixed(5)}; }};
+all();
+stepper('#sl1',[
+  {k:'ember',kl:'the definition',t:R`${Nw}{\ln x = \textstyle\int_1^x \tfrac{dt}{t}},\ x \gt 0`,n:`The natural logarithm.`}
+],{title:'The slides · the definition · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'ln 1',t:R`\ln 1 = 0`,n:`No stretch, no area.`},
+  {k:'ember',kl:'log-rises',t:R`x \lt y \Rightarrow \ln x \lt \ln y`,n:`smaller-function-smaller-area with m = 1/y.`},
+  {k:'ember',kl:'the sign',t:R`\ln x \lt 0 \text{ for } x \lt 1,\ \gt 0 \text{ for } x \gt 1`,n:`From log-rises at 1.`}
+],{title:'The slides · sign and order · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'log-bounds above 1',t:R`\tfrac{x - 1}{x} \le \ln x \le x - 1`,n:`1/x ≤ 1/t ≤ 1 on [1, x].`},
+  {k:'ember',kl:'log-bounds below 1',t:R`1 - x \le -\ln x \le \tfrac{1 - x}{x}`,n:`Then multiply by −1.`},
+  {k:'ember',kl:'log-bounds',t:R`${Nw}{1 - \tfrac1x \le \ln x \le x - 1}`,n:`Equal only at 1.`}
+],{title:'The slides · two bounds · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'ln 2',t:R`0.6688 \le \ln 2 \le 0.7188`,n:`Ten pieces.`},
+  {k:'ember',kl:'ln ½',t:R`-1 \le \ln\tfrac12 \le -\tfrac12`,n:`The convention, then log-bounds.`}
+],{title:'The slides · ln 2 · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`\ln 0,\ \ln(-2)`,n:`The stretch would cross 0.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

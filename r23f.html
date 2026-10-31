@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The function that refuses its series</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+.kn{font-size:.88rem}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r23e.html">← 23e term by term</a><a href="r23g.html">next: 23g two famous proofs →</a></p>
+  <div class="tags"><span class="tag proof">23f · proof</span></div>
+  <h1>The function that refuses its series</h1>
+  <p>So far every smooth function tried has been rebuilt by its endless matching polynomial, at least near the point. It is natural to think that must always happen: if a function has every slope at a point, surely those slopes say everything. This step builds a function that says nothing at the point. It is so flat there that its height and every one of its slopes are zero, so its matching sum is zero everywhere. Yet the function itself is not zero anywhere else. Its sum reaches everywhere and is right only at the one point it started from. Being smooth is one thing. Being rebuilt from one point is another, and stronger.</p>
+  <p class="gesture">One smooth function has height zero and every slope zero at a point, but is not zero anywhere else. Its matching sum is zero and settles everywhere, and is wrong everywhere but the point. Smooth does not mean rebuilt from a point.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r23b.html">23b</a> (how wrong the match is), <a href="r22k.html">22k</a> (the ranks of growth), <a href="r17e.html">17e</a> (exp), <a href="r13e.html">13e</a> (the chain rule). <a href="r23g.html">23g</a> uses the sum for e to prove e is not a fraction.</p></div>
+</header>
+
+<section class="class step" data-step="23f1">
+  <h2 class="sthead"><span class="stno">23f1</span>A function flatter than any power</h2>
+  <p class="stands">Stands on 17e (exp) and 22k2 (powers ≪ exponentials).</p>
+  <p data-pid="0d308a">Let f(x) = e^(−1/x²) for x ≠ 0, and f(0) = 0. Near 0, 1/x² is huge, so f is tiny. How tiny is the point.</p>
+  <pre class="lines" data-k="ember" data-label="this step: f is smaller than every power near 0">
+\tfrac{f(x)}{x^m} = \tfrac{t^m}{e^{t^2}} \text{ in size},\ t = \tfrac{1}{|x|} @@ for x ≠ 0; m any whole number ≥ 0
+\tfrac{t^m}{e^{t^2}} \le \tfrac{t^m}{e^{t}} \text{ for } t \ge 1 @@ t² ≥ t, and exp climbs
+\tfrac{t^m}{e^t} \to 0 \text{ as } t \text{ passes every bound} @@ powers ≪ exponentials (22k2), with b = e
+\htmlClass{new}{\tfrac{f(x)}{x^m} \to 0 \text{ as } x \to 0, \text{ for every } m} \quad \blacksquare @@ x → 0 sends t past every bound
+  </pre>
+  <p data-pid="25ed4a">So f(x) shrinks faster than x, than x², than x¹⁰⁰⁰, as x heads to 0. No power is flat enough to keep up.</p>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · e^(−1/x²), zoomed toward 0</div>
+    <div id="pl"></div>
+    <div class="kn"><span class="m">zoom</span><input type="range" id="kn" min="1" max="8" step="1" value="1"><output id="okn"></output></div>
+    <div class="cap">Ink: f(x) = e^(−1/x²). Teal: its matching sum at 0, which is 0. Zoom in on 0 and the curve flattens onto the axis faster than the window shrinks.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">23f1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="f(x) = e^{-1/x^2}"></span></span>Find f(0.5), f(0.2) and f(0.1). <br>Compare each with (0.1)¹⁰, and with x¹⁰ at the same x. <br>Find the first of the three x where f(x) is below x¹⁰.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="23f2">
+  <h2 class="sthead"><span class="stno">23f2</span>Every slope at 0 is 0</h2>
+  <p class="stands">Stands on 23f1, 13e (the chain rule) and 13c (the product rule).</p>
+  <p data-pid="76ab7b">Flat-point technique: <b>f is smooth, and f⁽ⁿ⁾(0) = 0 for every n.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the flat-point technique">
+x \ne 0:\ f'(x) = \tfrac{2}{x^3}e^{-1/x^2} @@ the chain rule (13e)
+x \ne 0:\ f^{(n)}(x) = P_n\big(\tfrac1x\big)\,e^{-1/x^2},\ P_n \text{ a polynomial} @@ by induction (4g): the product and chain rules keep the shape
+f^{(n)}(0) = 0 \Rightarrow \tfrac{f^{(n)}(h) - f^{(n)}(0)}{h} = \tfrac1h P_n\big(\tfrac1h\big) e^{-1/h^2} @@ the slope at 0, from its definition (13a)
+\tfrac1h P_n\big(\tfrac1h\big) e^{-1/h^2} \to 0 @@ a sum of terms f(h)/hᵐ, each heading to 0 (23f1)
+\htmlClass{new}{f^{(n+1)}(0) = 0 \text{ for every } n} \quad \blacksquare @@ induction from f(0) = 0
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">23f2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="f(x) = e^{-1/x^2},\ \ P_1(t) = 2t^3"></span></span>Find P₂ and P₃, from f″ and f‴ for x ≠ 0. <br>Find f″(0) from the slope quotient (f′(h) − f′(0))/h, using 23f1. <br>Find that quotient at h = 0.5, 0.2 and 0.1.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="23f3">
+  <h2 class="sthead"><span class="stno">23f3</span>Smooth is not rebuilt from a point</h2>
+  <p class="stands">Stands on 23f2, 23a2 (matching polynomials) and 23e3 (a power sum is its own match).</p>
+  <pre class="lines" data-k="ember" data-label="this step: the matching sum of f at 0">
+T_n(x) = \textstyle\sum_{k=0}^{n} \tfrac{f^{(k)}(0)}{k!}x^k = 0 @@ every coefficient is 0 (23f2)
+\text{the matching sum is } 0 \text{ and reaches everywhere} @@ every piece is 0
+f(x) > 0 \text{ for every } x \ne 0 @@ exp is positive (17e)
+\htmlClass{new}{\text{the matching sum of } f \text{ at } 0 \text{ equals } f \text{ only at } 0} \quad \blacksquare @@ the lines above
+  </pre>
+  <p data-pid="03aa2b">Two consequences. First, no power sum about 0 has total f near 0: by 23e3 its coefficients would be f's slopes over factorials, all 0. Second, adding f to any function changes it everywhere except at 0, and changes no slope at 0. Infinitely many smooth functions share every slope at a point.</p>
+  <p class="eqline" data-pid="9c895e">From here on, f is <i>rebuilt from a</i> when some power sum about a with reach above 0 has total f(x) for every x near enough to a. Accepted name: f is analytic at a.</p>
+  <p data-pid="13b1bb">eˣ, sin, cos and polynomials are rebuilt from every point. ln(1 + x) and 1/(1 + x²) are rebuilt from 0, within reach 1. e^(−1/x²) is smooth at 0 and is not rebuilt from 0. The survey's claim, that a smooth function is rebuilt from one point, holds for the functions this ladder has met so far and fails for this one. Smooth asks for every slope. Rebuilt asks for the slopes to tell the whole story.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · refuses · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">23f3.1</span><span class="ph make">make</span>Build a smooth function g that is 0 for x ≤ 0 and positive for x &gt; 0. <br>Find its slopes at 0, from the left and from the right. <br>Find whether g is rebuilt from 0.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="23f4">
+  <h2 class="sthead"><span class="stno">23f4</span>Illegal moves</h2>
+  <p class="stands">Stands on 23f1 to 23f3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+f \text{ smooth at } a \Rightarrow f \text{ is rebuilt from } a\,? @@ e^(−1/x²) at 0
+\text{the matching sum settles at } x \Rightarrow \text{it settles at } f(x)\,? @@ it settles at 0 for every x; f(x) is not 0
+f^{(n)}(0) = \lim_{x \to 0} P_n\big(\tfrac1x\big)e^{-1/x^2} = P_n(\infty)\,e^{-\infty}\,? @@ ∞ is not a number to put in; the limit needs 23f1
+\text{two functions with the same slopes at } a \text{ are equal near } a\,? @@ add e^(−1/(x−a)²) to one of them
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">23f4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = e^{-1/x^2},\ \ f(0) = 0"></span></span>Find T₅(0.5) and f(0.5). <br>Find what smooth gives at 0, and what it does not.</li><li><span class="givens"><span data-tex-inline="f(x) = e^{-1/x^2},\ \ f(0) = 0"></span></span>Find where the matching sum at 0 settles at x = 1, and f(1).</li><li><span class="givens"><span data-tex-inline="\tfrac{2}{h^3}\,e^{-1/h^2}"></span></span>Find its value at h = 0.5, 0.2 and 0.1. <br>Find what ∞ · 0 would have to mean, and why 23f1 is needed instead.</li><li><span class="givens"><span data-tex-inline="g(x) = \sin x,\ \ h(x) = \sin x + e^{-1/x^2},\ \ h(0) = 0"></span></span>Find the slopes of g and of h at 0, order by order. <br>Find h(0.5) − g(0.5) and h(1) − g(1).</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">23f.4.1</span><span class="tagq">build</span>Build a smooth function that is positive on (−1, 1) and 0 everywhere else. <br>Check that every slope is 0 at x = 1 and at x = −1.</div>
+  <div class="chq"><span class="chid">23f.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="e^{-1/|x|},\ \ e^{-1/x},\ \ \text{each set to } 0 \text{ at } 0"></span></span>Find whether e^(−1/|x|) is flat at 0, as f is. <br>Find what e^(−1/x) does as x heads to 0 from below, and whether it is continuous at 0.</div>
+  <div class="chq"><span class="chid">23f.4.3</span><span class="tagq">converse</span>f is flat at 0 and is not rebuilt from 0. Turn it round: if g is rebuilt from 0 and every slope of g at 0 is 0, what is g near 0? <br>Find whether f + g can be rebuilt from 0 when g is.</div>
+  <div class="chq"><span class="chid">23f.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="e^{s} \ge \tfrac{s^k}{k!} \text{ for } s \ge 0"></span></span>Prove the given line from the sum for eˢ (23b2). <br>Put s = 1/x², and prove that f(x)/xᵐ heads to 0 without 22k.</div>
+  <div class="chq"><span class="chid">23f.4.5</span><span class="tagq">seam</span><span class="givens"><span data-tex-inline="f(x) = e^{-1/x^2},\ \ f(0) = 0"></span></span>A book of 1797 built the whole calculus without limits. 13f.4.4 met its method: write f(x + h) = f(x) + p h + q h² + ⋯, and read the slope off as p. The book held that every function can be written so, except at a few odd points. In 1823 a course of lectures answered with this f. <br>Run the book's method on f at x = 0. If f(h) = p h + q h² + ⋯ near 0, find p, q and every later coefficient, by 23e3 and 23f2. <br>Find whether any such sum gives f(h) for h ≠ 0. <br>At 0 this f has a bottom. 14f.4.4 asked what the rule of higher slopes says when every slope is 0. Find what it says here. <br>Was the book wrong, or right for a smaller class of functions? Could a calculus without limits be built on that class alone?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r23e.html">← 23e · term by term</a><a href="r23g.html">23g · two famous proofs →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A function rebuilt from a is analytic at a; one rebuilt from every point of an interval is real analytic there. Smooth functions that vanish outside an interval, built from e^(−1/x²), are bump functions. The flat-point technique shows e^(−1/x²) is smooth but not analytic at 0.</p>
+  <h3>Who said it first</h3>
+  <p>Joseph-Louis Lagrange built his calculus in 1797 on the belief that every function is its power series. Augustin-Louis Cauchy gave e^(−1/x²) as a counterexample in 1823. In 23f.4.5, the book is Lagrange's Théorie des fonctions analytiques and the lectures are Cauchy's Résumé of 1823; the rule of higher slopes in 14f.4.4 is Maclaurin's.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+/* sequence and sum plots for rungs 22 on: plot({xlo,xhi,ylo,yhi,series:[{pts,c,dots,open,w}],h:[{y,c,dash,t}]}) */
+const V=c=>'var('+c+')';
+function plot(o){ const W=320,H=220,P=26, X=x=>P+(x-o.xlo)/(o.xhi-o.xlo)*(W-P-6), Y=y=>H-P-(y-o.ylo)/(o.yhi-o.ylo)*(H-P-8);
+  let s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;max-width:380px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  s+='<line x1="'+P+'" y1="'+Y(Math.max(o.ylo,Math.min(o.yhi,0)))+'" x2="'+W+'" y2="'+Y(Math.max(o.ylo,Math.min(o.yhi,0)))+'" style="stroke:'+V('--grid')+';stroke-width:1.4"/>';
+  s+='<line x1="'+P+'" y1="0" x2="'+P+'" y2="'+(H-P)+'" style="stroke:'+V('--grid')+';stroke-width:1.4"/>';
+  (o.ticks||[]).forEach(t=>{ s+='<text x="2" y="'+(Y(t)+4)+'" style="font-size:10px;fill:'+V('--ink')+'">'+t+'</text>'; });
+  (o.h||[]).forEach(l=>{ s+='<line x1="'+P+'" y1="'+Y(l.y)+'" x2="'+W+'" y2="'+Y(l.y)+'" style="stroke:'+V(l.c||'--teal')+';stroke-width:1.4;stroke-dasharray:'+(l.dash||'5 4')+'"/>'; if(l.t) s+='<text x="'+(W-4)+'" y="'+(Y(l.y)-4)+'" text-anchor="end" style="font-size:10px;fill:'+V(l.c||'--teal')+'">'+l.t+'</text>'; });
+  (o.series||[]).forEach(q=>{ const pts=q.pts.filter(p=>isFinite(p[1])&&p[1]>=o.ylo-1e9);
+    if(q.open) s+='<polyline points="'+pts.map(p=>X(p[0])+','+Y(Math.max(o.ylo,Math.min(o.yhi,p[1])))).join(' ')+'" style="fill:none;stroke:'+V(q.c||'--ink')+';stroke-width:'+(q.w||1.6)+'"/>';
+    if(q.dots!==false) pts.forEach(p=>{ if(p[1]>=o.ylo&&p[1]<=o.yhi) s+='<circle cx="'+X(p[0])+'" cy="'+Y(p[1])+'" r="'+(q.r||2.4)+'" style="fill:'+V(q.c||'--ink')+'"/>'; }); });
+  return s+'</svg>'; }
+
+let z=1; const e=$('kn'); e.addEventListener('input',()=>{ z=+e.value; draw(); });
+const f=x=>x===0?0:Math.exp(-1/(x*x));
+function draw(){ const w=1.5/Math.pow(1.6,z-1), pts=[]; for(let i=0;i<=240;i++){ const x=-w+2*w*i/240; pts.push([x,f(x)]); }
+  const yh=Math.max(f(w),1e-300)*1.1;
+  $('pl').innerHTML=plot({xlo:-w,xhi:w,ylo:-yh*0.05,yhi:yh,ticks:[0],series:[{pts,c:'--ink',open:true,dots:false},{pts:[[-w,0],[w,0]],c:'--teal',open:true,dots:false,w:1.2}]});
+  $('okn').textContent='±'+w.toPrecision(2);
+  const v=$('vd'); v.className='verdict'; v.textContent='window ±'+w.toPrecision(2)+': the top of the window is f('+w.toPrecision(2)+') = '+f(w).toPrecision(3)+', while '+w.toPrecision(2)+'¹⁰ = '+Math.pow(w,10).toPrecision(3)+'.'; }
+draw();
+window.__pic={set:j=>{ z=j; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'flat',t:R`f^{(n)}(0) = 0 \text{ for every } n`,n:`Every slope at 0 is 0.`},
+  {k:'ember',kl:'refuses',t:R`\htmlClass{new}{T_n = 0 \ne f \text{ off } 0}`,n:`Smooth, not rebuilt from 0.`}
+],{title:'The slides · refuses · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

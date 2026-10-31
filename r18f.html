@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Triangles and parallels by hand</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r18concl.html">← 18·∎ conclusion</a><a href="r18g.html">next: 18g lines in coordinates →</a></p>
+  <div class="tags"><span class="tag tech">18f · technique</span></div>
+  <h1>Triangles and parallels by hand</h1>
+  <p>18a to 18e built the plane from pairs of numbers. This step works Euclid's own techniques about triangles, parallels and similar figures, the way they are worked on paper and on tests, and checks each one in coordinates. It says what an angle is and when two angles are equal, then measures how big one is by halving the quarter turn again and again. Degrees are counted quarter turns, so nothing new is laid down. Along the way it earns three things held in trust since earlier rungs: al-Khwārizmī's drawing, the seesaw's trade of force for distance, and an animal's skin against its bulk.</p>
+  <p class="gesture">In any triangle, the square of a side is the sum of the squares of the other two, less twice their product times how far the angle between them opens. So two sides and the angle between them fix the third side (two-sides-and-the-angle), and three sides fix every angle (three-sides). Parallels make equal alternate angles, so a triangle's angles add to 180°. Two angles equal makes two triangles similar: every side in one ratio.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r18a.html">18a</a> (distance-laws, right-triangle, square's-area), <a href="r18b.html">18b</a> (triangle in the plane, equality-on-the-segment), <a href="r18c.html">18c</a> (two-lines-meet, parallel-through-a-point, perpendicular-lines), <a href="r18d.html">18d</a> (perpendicular-bisector), <a href="r08c.html">8c</a> (completeness), <a href="r16d.html">16d</a> (substitution for areas), <a href="r08i.html">8i</a> (al-Khwārizmī). <a href="r18g.html">18g</a> works the same figures in coordinates; <a href="r18j.html">18j</a> constructs them; rung 21 finds the same size by walking round a circle.</p></div>
+</header>
+
+<section class="class step" data-step="18f1">
+  <h2 class="sthead"><span class="stno">18f1</span>Angles, and when two are equal</h2>
+  <p class="stands">Stands on 18a (the dot product) and 18b (segments).</p>
+  <p class="eqline" data-pid="ee65ba">From here on, for points A ≠ B, the ray from A through B is {A + t(B − A) : t ≥ 0}. For points B and C, each different from A, the angle ∠BAC is the pair of rays from A through B and through C, with A its vertex. ∠BAC is a name, for that pair of rays. With e₁ = (B − A)/|B − A| and e₂ = (C − A)/|C − A|, call the number e₁ · e₂ the opening of the angle. By dot-bound it lies between −1 and 1. It is 1 when the rays are one ray, and −1 when they point opposite ways along one line. Two angles are equal when their openings are equal; the accepted word for equal angles, and for figures whose sides and angles all match, is congruent.</p>
+  <p data-pid="9744a5">This is Euclid's own test, done with numbers. Mark the point at distance 1 along each ray. The two marks are e₁ and e₂ after moving A to (0, 0), and by right-triangle their distance is √(2 − 2 e₁ · e₂). So two angles are equal exactly when a compass opened to 1 at each vertex cuts off equal chords.</p>
+  <p data-pid="eef6e0">Saying when two angles are equal is not yet saying how big one is. The next three footings measure that, with nothing laid down: a size, from the turns of the plane. For a line αx + βy = c, its two sides are the points with αx + βy &gt; c and those with αx + βy &lt; c.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · angles · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">18f1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">A = (1, 1),  B = (4, 1),  C = (1, 5)</span></span>Find the opening of the angle BAC. <br>Guess which opens wider, the angle at B or the angle at C, from the sides, then check with their openings.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18f2">
+  <h2 class="sthead"><span class="stno">18f2</span>Turns, and the quarter turn</h2>
+  <p class="stands">Stands on 18f1, 18a (the dot product), 9e (pairs) and 9·cb8 (the product of pairs).</p>
+  <p class="eqline" data-pid="0763a0">From here on, a turn is a pair (a, b) of reals with a² + b² = 1. Turning the point (x, y) by (a, b) sends it to (ax − by, bx + ay). The product of two turns is (a, b)(c, d) = (ac − bd, ad + bc). These are the pairs of 9·cb8 with absolute value 1, and this is 9·cb8’s product. Turning by (c, d) and then by (a, b) is turning once by their product.</p>
+  <p data-pid="85352e">Turn-keeps technique: <b>a turn keeps every distance and every opening, and the product of two turns is a turn.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the turn-keeps technique">
+(ax - by)^2 + (bx + ay)^2 = (a^2 + b^2)(x^2 + y^2) = x^2 + y^2 @@ multiply out; the terms −2abxy and +2abxy cancel
+(ax - by)(ax' - by') + (bx + ay)(bx' + ay') = xx' + yy' @@ the same, with two points; a² + b² = 1
+|(a, b)(c, d)|^2 = (a^2 + b^2)(c^2 + d^2) = 1 @@ the first line, with (x, y) = (c, d)
+\htmlClass{new}{\text{distances, openings kept; products are turns}} \quad \blacksquare @@ a distance is the root of a dot (18a); an opening is a dot of directions (18f1)
+  </pre>
+  <p data-pid="0fe270">Turn-between technique: <b>for two directions e₁ = (u₁, u₂) and e₂ = (v₁, v₂) of length 1, exactly one turn sends e₁ to e₂. It is (e₁ · e₂, u₁v₂ − u₂v₁).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the turn-between technique">
+a = u_1v_1 + u_2v_2,\ \ b = u_1v_2 - u_2v_1 @@ the pair to try
+au_1 - bu_2 = v_1(u_1^2 + u_2^2) = v_1 @@ multiply out; the u₁u₂v₂ terms cancel
+bu_1 + au_2 = v_2(u_1^2 + u_2^2) = v_2 @@ likewise; so (a, b) sends e₁ to e₂
+a^2 + b^2 = (u_1^2 + u_2^2)(v_1^2 + v_2^2) = 1 @@ multiply out; the 2u₁u₂v₁v₂ terms cancel; so (a, b) is a turn
+\htmlClass{new}{(a', b') \text{ another} \Rightarrow a' = a,\ b' = b} \quad \blacksquare @@ subtract the two and multiply by u₁ and by u₂: (a − a′)(u₁² + u₂²) = 0, and the same for b
+  </pre>
+  <p data-pid="df558b">So the opening of an angle is the first number of the turn from one of its rays to the other. From here on, that turn is the turn between the rays.</p>
+  <p class="eqline" data-pid="02cfa2">From here on, 1 is the turn (1, 0), which leaves every point where it is, and −1 is the turn (−1, 0), the half turn, which sends every direction to its opposite. i is the turn (0, 1), the quarter turn: it sends (1, 0) to (0, 1). Then i · i = (0 − 1, 0 + 0) = −1. <b>Turning a quarter turn twice is a half turn, so i is a square root of −1.</b></p>
+  <section class="slides" id="sl7"><div class="eyebrow">The slides · turns · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18f2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">e₁ = (3/5, 4/5),  e₂ = (0, 1)</span></span>Find the turn between them, and check that it sends e₁ to e₂. <br>Find i · i · i · i.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18f3">
+  <h2 class="sthead"><span class="stno">18f3</span>Halving the quarter turn</h2>
+  <p class="stands">Stands on 18f2.</p>
+  <p data-pid="b7a6d4">Halving technique: <b>a turn (a, b) with b ≥ 0 has exactly two halves, turns that give it when multiplied by themselves: h and −h, where h = (√((1 + a)/2), √((1 − a)/2)).</b> The half is h, the one with no number below 0.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the halving technique">
+h \cdot h = \left(\tfrac{1 + a}{2} - \tfrac{1 - a}{2},\ 2\sqrt{\tfrac{1 + a}{2}}\sqrt{\tfrac{1 - a}{2}}\right) = \left(a,\ \sqrt{1 - a^2}\right) @@ the product of turns (18f2)
+\sqrt{1 - a^2} = b @@ a² + b² = 1 and b ≥ 0
+(p, q)^2 = (a, b) \Rightarrow p^2 - q^2 = a,\ p^2 + q^2 = 1,\ 2pq = b @@ the product of turns; (p, q) is a turn
+\htmlClass{new}{p^2 = \tfrac{1 + a}{2},\ q^2 = \tfrac{1 - a}{2},\ pq \ge 0} \quad \blacksquare @@ add and subtract; p and q share a sign, so (p, q) is h or −h
+  </pre>
+  <p class="eqline" data-pid="659b54">From here on, i<sup>1/2</sup> is the half of i, i<sup>1/4</sup> the half of i<sup>1/2</sup>, and so on: i<sup>1/2ⁿ</sup> is i halved n times. For whole k, i<sup>k/2ⁿ</sup> is i<sup>1/2ⁿ</sup> multiplied by itself k times. One fraction written two ways gives one turn, since a half multiplied by itself gives back what was halved: i<sup>2k/2ⁿ⁺¹</sup> = i<sup>k/2ⁿ</sup>. Fractions with a power of 2 below the line have the accepted name dyadic fractions.</p>
+  <p data-pid="2b4671">Halving-keeps-order technique: <b>as s runs up through the dyadic fractions from 0 to 2, the first number of i<sup>s</sup> falls from 1 to −1, and its second number never drops below 0.</b> Write i<sup>s</sup> = (C(s), S(s)). The proof halves once more at each line, so it runs by induction (4b) on n, the number of halvings.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the halving-keeps-order technique">
+i^0 = 1,\ \ i^1 = i,\ \ i^2 = -1 @@ no halving: first numbers 1, 0, −1
+s \le 1:\ \ i^s \cdot i^s = i^{2s},\ \ S(2s) \ge 0 @@ 2s needs one halving fewer; the induction
+i^s = \pm\,(\text{the half of } i^{2s}) @@ the halving technique
+\text{the sign is } + \text{ from } s = 0 \text{ to } s = 1 @@ neighbours differ by the turn i^(1/2ⁿ), whose first number is above 0, and turn-keeps gives them that opening; a half and minus a half have opening at most 0
+C(s) = \sqrt{\tfrac{1 + C(2s)}{2}} \text{ falls as } s \text{ rises to } 1 @@ C(2s) falls, by the induction, and the root rises with what is under it
+1 \le s \le 2:\ \ i^s = i \cdot i^{s - 1} = (-S(s - 1),\ C(s - 1)) @@ the product with (0, 1)
+\htmlClass{new}{C \text{ falls on } [0, 2],\ S \ge 0} \quad \blacksquare @@ on [0, 1] both numbers are at least 0, so S(s − 1) = √(1 − C(s − 1)²) rises as C(s − 1) falls
+  </pre>
+  <p data-pid="a71cb0">The steps between neighbours shrink too. With c = C(1/2ⁿ), the next half has 1 − √((1 + c)/2) = (1 − c)/(2(1 + √((1 + c)/2))), at most half of 1 − c. So 1 − C(1/2ⁿ) ≤ 1/2ⁿ, and neighbouring powers come as close as you like.</p>
+  <section class="slides" id="sl8"><div class="eyebrow">The slides · halving · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18f3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">i = (0, 1)</span></span>Find i<sup>1/2</sup> and i<sup>1/4</sup>, to three places. <br>Check that i<sup>1/4</sup> · i<sup>1/4</sup> = i<sup>1/2</sup>, and find i<sup>3/4</sup>.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18f4">
+  <h2 class="sthead"><span class="stno">18f4</span>How big an angle is</h2>
+  <p class="stands">Stands on 18f3 and 8c (completeness).</p>
+  <p class="eqline" data-pid="c8bf67">From here on, the size of an angle whose opening is a is the least upper bound of the dyadic fractions s in [0, 2] with C(s) ≥ a. It is counted in quarter turns. The set has 0 in it and 2 above it, so by completeness (8c3) the size exists. An angle of size t measures 90t degrees, written 90t°: <b>x° is the size x/90, a power of i.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: one degree, squeezed by halvings">
+1° = \text{the size } \tfrac{1}{90} = i^{1/90} @@ x° is the size x/90
+\tfrac{1}{128} \lt \tfrac{1}{90} \lt \tfrac{2}{128} @@ 7 halvings: between 0.70° and 1.41°
+\tfrac{11}{1024} \lt \tfrac{1}{90} \lt \tfrac{12}{1024} @@ 10 halvings: between 0.967° and 1.055°
+\tfrac{91}{8192} \lt \tfrac{1}{90} \lt \tfrac{92}{8192} @@ 13 halvings: between 0.9998° and 1.0107°
+\htmlClass{new}{\tfrac{1}{90} \ne \tfrac{d}{2^k} \text{ for every } d, k} \quad \blacksquare @@ 2ᵏ = 90d would need the odd 45 to divide 2ᵏ: squeezed by halvings, never landed on
+  </pre>
+  <p data-pid="f4611a">Size technique: <b>equal angles, and only they, have equal sizes. One ray alone has size 0, two opposite rays size 2, which is 180°. For a ray from A and either side of its line, each size between 0 and 2 belongs to exactly one angle made with a ray from A on that side. And if D = A + s(B − A) + t(C − A) with s, t &gt; 0, the sizes of ∠BAD and ∠DAC add to the size of ∠BAC.</b> The last clause has the accepted name angle addition. When the rays through B and C are opposite, the angles BAD and DAC are a linear pair, and their sizes add to 2, which is 180°.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the size technique">
+a < a' \Rightarrow C(s) \text{ strictly between them for some } s @@ neighbouring powers come as close as you like (18f3), and C falls
+\text{different openings, different sizes; equal openings, equal sizes} @@ the size depends only on the opening
+C(0) = 1,\ C(2) = -1 @@ one ray has opening 1, opposite rays −1 (18f1)
+\text{size } t:\ (a, \pm\sqrt{1 - a^2}),\ a = \text{the greatest lower bound of } C(s),\ s < t @@ two turns with that opening, one to each side (turn-between); the − one turns back
+i^{s} \cdot i^{s'} = i^{s + s'} @@ for dyadic s and s′, k halves times m halves is k + m halves
+\text{turn }(B \to C) = \text{turn }(D \to C) \cdot \text{turn }(B \to D) @@ turn-between: both send the direction of B to that of C; D inside the angle keeps the sizes adding to at most 2
+\htmlClass{new}{\text{size}(BAD) + \text{size}(DAC) = \text{size}(BAC)} \quad \blacksquare @@ squeeze each size between neighbouring powers; their products are powers, and the gaps shrink
+  </pre>
+  <p data-pid="82804c">Right-angle technique: <b>if (B − A) · (C − A) = 0, then ∠BAC measures 90°.</b> Its opening is 0, which is C(1), the first number of i. So its size is one quarter turn. Its accepted name is a right angle. An angle under 90° is acute, one over 90° is obtuse.</p>
+  <p data-pid="c4e2f5">Nothing here was laid down. Degrees are counted quarter turns, and the rules a measure of angles needs are proved from turning. Rung 21 finds the same size a second way, by walking round a circle, and shows the two agree.</p>
+  <section class="slides" id="sl9"><div class="eyebrow">The slides · size · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18f4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">A = (0, 0),  B = (1, 0),  C = (1, 1);  then an angle with opening 0.9</span></span>Find the opening of ∠BAC, its size in quarter turns, and its degrees. <br>Find two neighbouring powers of i, with 8 halvings or fewer, whose sizes sit on either side of the angle with opening 0.9.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18f5">
+  <h2 class="sthead"><span class="stno">18f5</span>Two sides and the angle between</h2>
+  <p class="stands">Stands on 18f1, 18f4 and 18a (right-triangle).</p>
+  <p data-pid="9f344d">Write d = |BC|, b = |CA|, c = |AB| for the sides of a triangle ABC: b and c are named by the small letter of the corner each faces, and d is the side facing A. Two-sides-and-the-angle technique: <b>in every triangle, d² = b² + c² − 2bc · (the opening at A). So if two triangles have AB = A′B′, AC = A′C′ and ∠BAC = ∠B′A′C′, then BC = B′C′, and the angles at B and B′, and at C and C′, are equal.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the two-sides-and-the-angle technique">
+|C - B|^2 = |(C - A) - (B - A)|^2 @@ adding-keeps-answers
+= |C - A|^2 + |B - A|^2 - 2(B - A) \cdot (C - A) @@ right-triangle and the dot technique, with u = C − A and v = −(B − A)
+(B - A) \cdot (C - A) = cb\,(e_1 \cdot e_2) @@ the definition of the opening
+a^2 = b^2 + c^2 - 2bc\,(e_1 \cdot e_2) @@ so equal b, c and opening give equal a
+\htmlClass{new}{\text{the opening at } B = \tfrac{a^2 + c^2 - b^2}{2ac}} \quad \blacksquare @@ the same line, said at B; three equal sides, three equal openings
+  </pre>
+  <p data-pid="35a12a">So three sides fix the angles too. Three-sides technique: <b>if two triangles have their three sides equal in pairs, they have their three angles equal in pairs, and are congruent.</b> Each opening is the last line of two-sides-and-the-angle, a fraction of the sides alone.</p>
+  <p data-pid="4dccc9">Euclid proved his fourth proposition, two sides and the angle, by picking up one triangle and laying it on the other: put A on A′ and AB along A′B′, and B falls on B′, because the lengths are equal. Nothing in his postulates says a figure can be carried about without changing. That move has the accepted name superposition, and it is Euclid's, not this ladder's. David Hilbert, in 1899, made two-sides-and-the-angle an axiom rather than prove it that way. Here it was a calculation.</p>
+  <aside class="voice para"><p data-pid="596f33">If the triangle ABC is applied to the triangle DEF, with the point A placed on D and the line AB on DE, then B will fall on E, since AB equals DE; and since the angle at A equals the angle at D, AC will fall on DF.</p><cite>Euclid, Elements, Book I, proposition 4 (about 300 BCE); paraphrase</cite></aside>
+  <p data-pid="509b06">Equal-sides-equal-angles technique: <b>in a triangle, b = c exactly when the angles at B and C are equal.</b> One way is two-sides-and-the-angle's last line at B and at C, with b = c. For the other, set the two openings equal and clear the fractions: (b − c)(d² − (b + c)²) = 0, and d &lt; b + c by triangle in the plane, so b = c. A triangle with two equal sides has the accepted name isosceles; with three, equilateral. Medieval students called his fifth proposition the bridge of asses, the pons asinorum, the first proof that the slow could not cross.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · two sides and the angle · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18f5.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">b = 3,  c = 4,  a right angle at A</span></span>Find d by two-sides-and-the-angle. <br>Say what that line becomes when the angle is right.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18f6">
+  <h2 class="sthead"><span class="stno">18f6</span>Crossing lines and parallels</h2>
+  <p class="stands">Stands on 18f5 and 18c (parallel-through-a-point).</p>
+  <p data-pid="8ce648">Opposite-angles technique: <b>when two lines cross at O, the angles across from each other are equal.</b> With directions ±u and ±v from O, the angles across are between u and v and between −u and −v, and (−u) · (−v) = u · v. They have the accepted name vertical angles.</p>
+  <p data-pid="a2a8c3">Alternate-angles technique: <b>if a line crosses two parallel lines at P and Q, the angles it makes on opposite sides, one at P and one at Q, are equal.</b> The parallels have one direction v by 18c, and the crossing line has a direction w from P towards Q. The angle at P between w and v and the angle at Q between −w and −v have the same opening. They have the accepted name alternate angles. Euclid needed his fifth postulate for his twenty-ninth proposition; here parallel-through-a-point already did that work.</p>
+  <p data-pid="a4829f">Angle-sum technique: <b>the angles of a triangle add to 180°.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the angle-sum technique">
+D = C - (B - A),\ \ E = C + (B - A) @@ the parallel to AB through C (parallel-through-a-point); rays from C through D and E are opposite
+m\angle DCA = m\angle CAB,\ \ m\angle ECB = m\angle CBA @@ alternate-angles, with AC and BC as the crossing lines
+A - C = (D - C) + (B - C) @@ adding-keeps-answers; so A lies inside ∠DCB, with s = t = 1
+m\angle DCA + m\angle ACB = m\angle DCB @@ the size technique: angle addition
+\begin{aligned}&\htmlClass{new}{m\angle CAB + m\angle ACB + m\angle CBA = 180°}\\ &\quad \blacksquare\end{aligned} @@ ∠DCB and ∠BCE are a linear pair (the size technique)
+  </pre>
+  <p data-pid="065abf">So an equilateral triangle has three angles of 60° (equal-sides-equal-angles twice, then angle-sum), and the two angles of a right triangle other than the right one add to 90°. Halve an equilateral triangle of side 2 along the line from a corner to the middle of the opposite side: by three-sides the halves are congruent, the angles at the middle are a linear pair and so 90° each, and right-triangle gives the third side √(4 − 1) = √3. That is the 30°, 60°, 90° triangle, with sides 1, √3, 2. Halving a square along its diagonal gives the 45°, 45°, 90° triangle, with sides 1, 1, √2.</p>
+  <p data-pid="84063b">Parallelogram technique: <b>if AB is parallel to CD and AD is parallel to BC, then D = A + C − B, so AB = CD and AD = BC.</b> The point A + C − B is on the line through A with direction C − B and on the line through C with direction A − B; those two lines are not parallel, so by two-lines-meet they meet only once, at D. The figure has the accepted name parallelogram. A parallelogram with a right angle is a rectangle, and a rectangle with equal sides is 18a's square.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · crossing lines · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18f6.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a parallelogram with one angle of 70°</span></span>Find its other three angles. <br>Name the techniques you used.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18f7">
+  <h2 class="sthead"><span class="stno">18f7</span>Same shape, another size</h2>
+  <p class="stands">Stands on 18f6 and 18d (circles).</p>
+  <p data-pid="5a1da3">Scaling technique in the plane: <b>for a point O and k &gt; 0, the map X ↦ O + k(X − O) multiplies every distance by k, keeps every opening, sends each line to a line parallel to it, and multiplies every area by k².</b> The distances are distance-laws with the k taken out of the root. The openings keep, since each eᵢ is unchanged. For areas, put O at (0, 0): the region between the graphs of f ≤ g over [α, β] goes to the region between x ↦ kf(x/k) and x ↦ kg(x/k) over [kα, kβ], whose area is ∫ k(g − f)(x/k) dx = k² ∫ (g − f)(u) du by substitution for areas, with u = x/k. Figures that one such map carries onto figures congruent to others have the accepted name similar, and k is the scale factor.</p>
+  <p data-pid="73002a">Parallel-cut technique: <b>in a triangle ABC, for t &gt; 0 let D = A + t(B − A). The line through D parallel to BC meets the line AC at E = A + t(C − A), and DE = t · BC.</b> The point A + t(C − A) is on AC, and it minus D is t(C − B), so it is on the parallel through D; by two-lines-meet the two lines meet only there. Its accepted name is the intercept theorem.</p>
+  <p data-pid="e47426">Similar-triangles technique: <b>if two triangles ABC and A′B′C′ have ∠A = ∠A′ and ∠B = ∠B′, then ∠C = ∠C′, and A′B′/AB = B′C′/BC = C′A′/CA.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the similar-triangles technique">
+t = A'B'/AB,\ \ D = A + t(B - A),\ \ E = A + t(C - A) @@ parallel-cut: DE is parallel to BC, AD = A′B′, AE = t · AC, DE = t · BC
+\angle ADE = \angle ABC = \angle A'B'C' @@ alternate-angles's twin on one side: D − A and B − A share a direction, and so do E − D and C − B
+E' \text{ on the ray } A'C',\ A'E' = AE @@ then two-sides-and-the-angle for ADE and A′B′E′: A′B′ = AD, A′E′ = AE, ∠A′ = ∠A
+\angle A'B'E' = \angle ADE = \angle A'B'C' @@ two-sides-and-the-angle's last clause
+E' = C' @@ the size technique: one ray on that side has that size; it meets the line A′C′ once (two-lines-meet)
+\begin{aligned}&\htmlClass{new}{C'A' = t \cdot CA,}\\ &\htmlClass{new}{B'C' = B'E' = DE = t \cdot BC} \quad \blacksquare\end{aligned} @@ two-sides-and-the-angle gave B′E′ = DE; ∠C = ∠C′ by angle-sum
+  </pre>
+  <p data-pid="d2db8d">Right-triangle technique by similarity: <b>if ∠C is right and F is the foot of the perpendicular from C to AB, then b² = c · |AF| and d² = c · |FB|, so d² + b² = c².</b> The triangles AFC and ACB share ∠A and each has a right angle, so similar-triangles gives |AF|/b = b/c; likewise at B. F lies between A and B, since the angles at A and B are acute by angle-sum, so |AF| + |FB| = c by equality-on-the-segment. This is the second proof promised on the survey. The first was 18a's, by algebra on the coordinates.</p>
+  <p data-pid="88976a">Angle-in-a-semicircle technique (Thales'): <b>for a circle with diameter AB, a point X ≠ A, B lies on the circle exactly when ∠AXB is a right angle.</b> Put the centre at (0, 0), so B = −A: then (A − X) · (B − X) = |X|² − |A|², which is 0 exactly when |X| = |A|.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · same shape · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18f7.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="b = 7,"></span> <span data-tex-inline="c = 8,"></span> <span data-tex-inline="\text{side } d = 13 \text{ faces } A"></span></span>Find the opening at A, and from it the degrees of the angle at A.</li><li><span class="givens"><span data-tex-inline="\angle B = \angle C = 40^\circ"></span></span>Find the third angle, and which sides are equal.</li><li><span class="givens"><span data-tex-inline="ABC \sim A^\prime B^\prime C^\prime,"></span> <span data-tex-inline="A^\prime B^\prime = 9,"></span> <span data-tex-inline="AB = 6,"></span> <span data-tex-inline="BC = 10"></span></span>Find B′C′, and the ratio of the areas.</li><li><span class="givens"><span data-tex-inline="A = (-3, 0),"></span> <span data-tex-inline="B = (3, 0),"></span> <span data-tex-inline="X = (x, 2),"></span> <span data-tex-inline="\angle AXB \text{ right}"></span></span>Find x.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18f8">
+  <h2 class="sthead"><span class="stno">18f8</span>Three things earned at last</h2>
+  <p class="stands">Stands on 18f7, 8i, 12·phys and 9·bio.</p>
+  <p data-pid="0fea9f">Al-Khwārizmī, in 8i, solved a square and ten roots make thirty-nine, and justified his recipe with a drawing. Here it is. Draw a square of side x, its area x² by square's-area. Along two of its sides lay rectangles x by 5, together 10x. The figure has area x² + 10x = 39, and it is a square of side x + 5 missing its corner, 5 by 5. Fill the corner: the whole is a square of area 39 + 25 = 64, so its side is 8 and x = 3. The drawing finds only the root 3. The root −13 of 8i's formula is missing, because no side has a length below 0, and al-Khwārizmī had no number for it. That closes the flag 8i opened for his drawing.</p>
+  <p data-pid="86caf1">On 12·phys, a stiff bar turning on its pivot moved each place in proportion to its distance from the pivot, taken from watching a seesaw. That closes the premise 12·phys took from measurement. Put the pivot at O = (0, 0) and the bar along a unit direction u, with the hands at P = pu and the stone at Q = −qu. After the turn the bar lies along a unit direction u′, so P′ = pu′ and Q′ = −qu′. Then P′ − P = p(u′ − u) and Q′ − Q = −q(u′ − u): the two moves are parallel, opposite, and in the ratio p to q. The triangles OPP′ and OQQ′ are similar, by scaling in the plane with k = q/p after opposite-angles turns one onto the other's lines.</p>
+  <p data-pid="937e37">On 9·bio, the surface law asked why an animal's skin should go as its bulk to the ⅔ power. Take two animals of one shape, the second k times as long in every direction. By scaling in the plane every area of skin is k² times as big. Bulk is counted in cubes of 13g, and a cube of side s becomes a cube of side ks, holding k³ times as much. So skin goes as k² and bulk as k³, and skin goes as bulk to the ⅔ power. That closes the flag 9·bio left for this rung.</p>
+  <pre class="lines" data-k="ember" data-label="this step: worked">
+b = 7,\ c = 8,\ \text{opening } \tfrac12:\ \ a^2 = 49 + 64 - 56 = 57 @@ two-sides-and-the-angle: a = √57
+a = 5,\ b = 6,\ c = 7:\ \ \text{opening at } C = \tfrac{25 + 36 - 49}{60} = \tfrac15 @@ two-sides-and-the-angle's last line at C; acute, since the opening is above 0
+\text{a tree's shadow } 12 \text{ m, a 1.5 m stake's } 2 \text{ m} @@ similar-triangles, the sun's rays parallel: the tree is 9 m
+c = 13,\ |AF| = 4:\ \ b^2 = 52 @@ right-triangle by similarity: b = 2√13; |FB| = 9, a = √117 = 3√13
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · three earned · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · a triangle’s three angles, and al-Khwārizmī’s square</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="lbl">A = (0, 0), B = (6, 0), and C; the parallel through C</div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">Cx</span><input type="range" id="kx" min="-3" max="9" step="0.1" value="2"><output id="ox"></output></div>
+      <div class="kn"><span class="m">Cy</span><input type="range" id="ky" min="0.5" max="7" step="0.1" value="4"><output id="oy"></output></div>
+      <div class="cap">Ink: the triangle. Dashed ember: the parallel to AB through C, from angle-sum. Plum and teal: the angles at A and B, and their copies at C by alternate-angles.</div>
+    </div>
+    <div class="panel">
+      <div class="lbl">x² + bx = c, drawn</div>
+      <canvas id="cvL"></canvas>
+      <div class="kn"><span class="m">b</span><input type="range" id="kb" min="2" max="12" step="1" value="10"><output id="ob"></output></div>
+      <div class="kn"><span class="m">c</span><input type="range" id="kc" min="4" max="60" step="1" value="39"><output id="oc"></output></div>
+      <div class="cap">Plum: the square x². Ember: the two rectangles x by b/2. Teal: the corner (b/2)², which completes the square.</div>
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18f8.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="A = (1, 1),"></span> <span data-tex-inline="B = (5, 4),"></span> <span data-tex-inline="C = (-2, 5)"></span></span>Find the opening of the angle BAC, and whether it is acute, right or obtuse.</li><li><span class="givens"><span data-tex-inline="b = 5,"></span> <span data-tex-inline="c = 8,"></span> <span data-tex-inline="\text{opening } \tfrac12 \text{ at } A,"></span> <span data-tex-inline="d = d(B, C)"></span></span>Using two-sides-and-the-angle, find d.</li><li><span class="givens"><span data-tex-inline="\text{two angles of a triangle:}"></span> <span data-tex-inline="47^\circ,\ 68^\circ"></span></span>Find the third angle, and the angle beside it on a straight line.</li><li><span class="givens"><span data-tex-inline="\text{right angle at } C,"></span> <span data-tex-inline="CA = 6,"></span> <span data-tex-inline="CB = 8,"></span> <span data-tex-inline="F:\ \text{the foot of the}"></span> <span data-tex-inline="\text{perpendicular from } C"></span></span>Find the distances from F to A and to B along the long side.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18f9">
+  <h2 class="sthead"><span class="stno">18f9</span>Illegal moves</h2>
+  <p class="stands">Stands on 18f1 to 18f8.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\begin{aligned}&\text{two sides and an angle not}\\ &\quad\text{between them fix a triangle}\,?\end{aligned} @@ b = 5, c = 7, ∠B with opening 0.8 gives two triangles; two-sides-and-the-angle needs the angle between
+\begin{aligned}&\text{three equal angles}\\ &\quad\text{make congruent triangles}\,?\end{aligned} @@ similar, by similar-triangles; any scale factor will do
+\text{equal openings} \Rightarrow \text{equal openings of } 2\times\text{ the angle, so double the degrees}\,? @@ the size technique gives addition; doubling an angle is adding it to itself, and needs a ray to put it on
+x^2 + 10x = 39 \Rightarrow x = 3 \text{ only}\,? @@ the drawing has no room for −13; the equation does
+  </pre>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18f9.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{A, B, C collinear,}"></span> <span data-tex-inline="B, C \ne A"></span></span>Take three such points of your own, run two-sides-and-the-angle's first line on them with the opening at A, and check whether it is still true.</li><li><span class="givens"><span data-tex-inline="b = 5,"></span> <span data-tex-inline="c = 7,"></span> <span data-tex-inline="\text{opening } 0.8 \text{ at } B"></span></span>Find every triangle with these, and draw them. <br>Find whether two sides and this angle fix the triangle.</li><li><span class="givens"><span data-tex-inline="\text{through a point off a line,}"></span> <span data-tex-inline="\text{many parallels}"></span></span>Find the line of angle-sum's proof that stops working.</li><li><span class="givens"><span data-tex-inline="x^2 + bx = c"></span> <span data-tex-inline="\text{(the drawing works),}"></span> <span data-tex-inline="x^2 + c = bx"></span></span>Run al-Khwārizmī's drawing on the second, and find what goes wrong.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">18f.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="AB = c,"></span> <span data-tex-inline="CA = b,"></span> <span data-tex-inline="\text{opening } \omega \text{ at } B"></span></span>Build a rule, from this step's lines, that finds how many triangles fit: none, one or two. <br>Pick numbers for each case, and check.</div>
+  <div class="chq"><span class="chid">18f.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{opening of } 60^\circ = \tfrac12,"></span> <span data-tex-inline="\text{opening of } 90^\circ = 0,"></span> <span data-tex-inline="\theta_1 = 30^\circ,\ \theta_2 = 45^\circ"></span></span>Find the openings of θ₁ and θ₂. <br>Find whether halving i ever lands exactly on 30°, and if not, what does.</div>
+  <div class="chq"><span class="chid">18f.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\dfrac{A^\prime B^\prime}{AB} = \dfrac{B^\prime C^\prime}{BC} = \dfrac{C^\prime A^\prime}{CA}"></span></span>Find whether the angles must be equal, and the line of this step that decides it.</div>
+  <div class="chq"><span class="chid">18f.4.4</span><span class="tagq">world</span><span class="givens"><span data-tex-inline="\text{crowbar } 1.5 \text{ m long,}"></span> <span data-tex-inline="\text{stone } 0.1 \text{ m from its end,}"></span> <span data-tex-inline="\text{hands move down } 28 \text{ cm}"></span></span>Using this step, not a seesaw, find how far the load rises, every line cited.</div>
+  <div class="chq"><span class="chid">18f.4.5</span><span class="tagq">world</span><span class="givens"><span data-tex-inline="\text{harbour seal about } 1.5 \text{ m,}"></span> <span data-tex-inline="\text{elephant seal about } 4.5 \text{ m,}"></span> <span data-tex-inline="\text{roughly one shape}"></span></span>Find the factor by which their skins should differ, and their bulks.</div>
+  <div class="chq"><span class="chid">18f.4.6</span><span class="tagq">seam</span>For forty years one geometer published proof after proof that a triangle's angles add to two right angles, from the other four starting rules of the old geometry alone, and each time a reader found a hidden step. This step proved angle-sum in a few lines. <br>Which line, or which earlier choice, carries the step he could never avoid? <br>Could any proof avoid it?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r18concl.html">← 18·∎ · conclusion</a><a href="r18g.html">18g · lines in coordinates →</a></nav>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+/* least and greatest of F.f on [lo, hi]: the ends, F's critical points inside, and a fine sample (exact between critical points for the functions used here) */
+function ext(F,lo,hi){ if(F.dir) return [0,1]; let m=Infinity,M=-Infinity; const t=x=>{ const v=F.f(x); if(v<m) m=v; if(v>M) M=v; };
+  t(lo); t(hi); (F.crit||[]).forEach(c=>{ if(c>lo&&c<hi) t(c); }); for(let k=1;k<64;k++) t(lo+(hi-lo)*k/64); return [m,M]; }
+function sums(F,pts){ let L=0,U=0; const ms=[],Ms=[]; for(let i=1;i<pts.length;i++){ const [m,M]=ext(F,pts[i-1],pts[i]), w=pts[i]-pts[i-1]; ms.push(m); Ms.push(M); L+=m*w; U+=M*w; } return {L,U,ms,Ms}; }
+const eq=(a,b,n)=>Array.from({length:n+1},(_,i)=>a+(b-a)*i/n);
+function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
+function boxes(P,pts,hs,stroke,fill,alpha){ const c=P.ctx; for(let i=1;i<pts.length;i++){ const a=pts[i-1],b=pts[i],h=hs[i-1]; c.globalAlpha=alpha; P.poly([[a,0],[b,0],[b,h],[a,h]],null,fill); c.globalAlpha=1; P.poly([[a,0],[b,0],[b,h],[a,h]],stroke,null,1.2); } }
+function dirDots(P,a,b){ const c=P.ctx; c.fillStyle=col('--ink'); for(let k=0;k<=300;k++){ const x=a+(b-a)*k/300; const y=(k%2)?0:1; c.fillRect(P.X(x)-1,P.Y(y)-1,2,2); } }
+/* shade between the graph of fn and the axis from lo to hi: above in pos colour, below in neg colour */
+function shade(P,fn,lo,hi,pos,neg,alpha){ if(hi<lo){ const t=lo; lo=hi; hi=t; } const c=P.ctx, N=300; c.globalAlpha=alpha==null?0.32:alpha;
+  for(let k=0;k<N;k++){ const x0=lo+(hi-lo)*k/N, x1=lo+(hi-lo)*(k+1)/N, xm=(x0+x1)/2, y=fn(xm); if(!isFinite(y)) continue; P.poly([[x0,0],[x1,0],[x1,fn(x1)],[x0,fn(x0)]],null,y>=0?pos:neg); }
+  c.globalAlpha=1; }
+function rangeOf(fn,lo,hi,pad){ let m=Infinity,M=-Infinity; for(let k=0;k<=400;k++){ const v=fn(lo+(hi-lo)*k/400); if(isFinite(v)){ if(v<m) m=v; if(v>M) M=v; } } if(m>0) m=0; if(M<0) M=0; const p=(M-m)*(pad==null?0.12:pad)||1; return [m-p,M+p]; }
+function chips(el,FN,get,setk,after){ Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===get()) b.className='on'; b.onclick=()=>{ setk(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+const Nw='\\htmlClass{new}';
+function gridFor(sp){ return sp>40?10:sp>16?4:sp>8?2:sp>3?1:sp>1.2?0.5:0.25; }
+function frame2(P,fn,lo,hi,pad){ const w=hi-lo; P.o.x=[lo-0.12*w,hi+0.08*w]; P.o.y=rangeOf(fn,lo,hi,pad==null?0.12:pad); const sx=P.o.x[1]-P.o.x[0], sy=P.o.y[1]-P.o.y[0]; let g=gridFor(sx); while(sy/g>24) g*=2; P.o.grid=g; }
+const num=(f,a,b,n)=>{ n=n||4000; const h=(b-a)/n; let s=0; for(let i=0;i<n;i++) s+=f(a+(i+0.5)*h)*h; return s; };
+/* axes with separate steps across and up */
+function axes2(P,gx,gy){ const c=P.ctx,o=P.o; c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ c.moveTo(P.X(x),P.Y(o.y[0])); c.lineTo(P.X(x),P.Y(o.y[1])); }
+  for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ c.moveTo(P.X(o.x[0]),P.Y(y)); c.lineTo(P.X(o.x[1]),P.Y(y)); } c.stroke();
+  c.strokeStyle=col('--muted'); c.lineWidth=1.3; c.beginPath(); if(o.y[0]<=0&&o.y[1]>=0){ c.moveTo(P.X(o.x[0]),P.Y(0)); c.lineTo(P.X(o.x[1]),P.Y(0)); } if(o.x[0]<=0&&o.x[1]>=0){ c.moveTo(P.X(0),P.Y(o.y[0])); c.lineTo(P.X(0),P.Y(o.y[1])); } c.stroke();
+  c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; const ly=Math.min(P.H-6,Math.max(12,P.Y(0)+14));
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ if(Math.abs(x)<1e-9) continue; c.fillText(+x.toFixed(6),P.X(x),ly); }
+  c.textAlign='right'; const lx=Math.max(32,Math.min(P.W-4,P.X(0)-5)); for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ if(Math.abs(y)<1e-9) continue; c.fillText(String(+y.toFixed(6)).replace('-','−'),lx,P.Y(y)+4); } }
+function nice(sp){ const raw=sp/6, p=Math.pow(10,Math.floor(Math.log10(raw))), m=raw/p; return (m<1.5?1:m<3.5?2:m<7.5?5:10)*p; }
+function arrow(P,x1,y1,x2,y2,colr,w){ P.line(x1,y1,x2,y2,colr,w||2.2); const c=P.ctx, X1=P.X(x1),Y1=P.Y(y1),X2=P.X(x2),Y2=P.Y(y2), L=Math.hypot(X2-X1,Y2-Y1); if(L<2) return; const ux=(X2-X1)/L, uy=(Y2-Y1)/L, h=9; c.fillStyle=col(colr); c.beginPath(); c.moveTo(X2,Y2); c.lineTo(X2-h*ux-0.5*h*uy,Y2-h*uy+0.5*h*ux); c.lineTo(X2-h*ux+0.5*h*uy,Y2-h*uy-0.5*h*ux); c.closePath(); c.fill(); }
+function fillA(P,pts,colr,alpha){ const c=P.ctx; c.globalAlpha=alpha==null?0.2:alpha; P.poly(pts,null,colr); c.globalAlpha=1; }
+const sq1=P=>Object.defineProperty(P.o,'aspect',{get:()=>1});
+function rightMark(P,qx,qy,ax,ay,bx,by,s,colr){ const la=Math.hypot(ax-qx,ay-qy), lb=Math.hypot(bx-qx,by-qy); if(!la||!lb) return; const u=[(ax-qx)/la*s,(ay-qy)/la*s], v=[(bx-qx)/lb*s,(by-qy)/lb*s]; P.poly([[qx+u[0],qy+u[1]],[qx+u[0]+v[0],qy+u[1]+v[1]],[qx+v[0],qy+v[1]]],colr||'--muted',null,1.2,false); }
+const dist=(a,b)=>Math.hypot(b[0]-a[0],b[1]-a[1]);
+const dotp=(u,v)=>u[0]*v[0]+u[1]*v[1];
+function clipBox(P,fn){ const c=P.ctx, [x0,x1]=P.o.x,[y0,y1]=P.o.y; c.save(); c.beginPath(); c.rect(P.X(x0),P.Y(y1),P.X(x1)-P.X(x0),P.Y(y0)-P.Y(y1)); c.clip(); fn(); c.restore(); }
+function lineABC(P,a,b,c,colr,w,dash){ const [x0,x1]=P.o.x,[y0,y1]=P.o.y; clipBox(P,()=>{ if(Math.abs(b)>1e-12){ P.line(x0,(c-a*x0)/b,x1,(c-a*x1)/b,colr,w,dash); } else if(Math.abs(a)>1e-12){ P.line(c/a,y0,c/a,y1,colr,w,dash); } }); }
+const kx=$('kx'),ky=$('ky'),kb=$('kb'),kc=$('kc'),cvF=$('cvF'),cvL=$('cvL');
+const PF=plane(cvF,{x:[-4,10],y:[-3,11],grid:1,aspect:1,draw:P=>drawF(P)}); sq1(PF);
+const PL=plane(cvL,{x:[-0.5,10.5],y:[-0.5,10.5],grid:1,aspect:1,draw:P=>drawL(P)}); sq1(PL);
+const A=[0,0], B=[6,0];
+const opening=(V,X,Y)=>{ const u=[X[0]-V[0],X[1]-V[1]], v=[Y[0]-V[0],Y[1]-V[1]]; return dotp(u,v)/(Math.hypot(...u)*Math.hypot(...v)); };
+const deg=o=>Math.acos(Math.max(-1,Math.min(1,o)))*180/Math.PI;
+function arc(P,V,X,Y,r,colr){ const a1=Math.atan2(X[1]-V[1],X[0]-V[0]); let a2=Math.atan2(Y[1]-V[1],Y[0]-V[0]); let d=a2-a1; while(d>Math.PI) d-=2*Math.PI; while(d<-Math.PI) d+=2*Math.PI;
+  const pts=[[V[0],V[1]]]; for(let i=0;i<=30;i++){ const t=a1+d*i/30; pts.push([V[0]+r*Math.cos(t),V[1]+r*Math.sin(t)]); } fillA(P,pts,colr,0.28); P.poly(pts.slice(1),colr,null,1.6,false); }
+function drawF(P){ const C=[+kx.value,+ky.value]; axes2(P,1,1); const D=[C[0]-6,C[1]], E=[C[0]+6,C[1]];
+  lineABC(P,0,1,C[1],'--ember',1.8,[6,4]);
+  arc(P,A,B,C,0.9,'--plum'); arc(P,B,C,A,0.9,'--teal'); arc(P,C,D,A,0.9,'--plum'); arc(P,C,B,E,0.9,'--teal');
+  P.poly([A,B,C],'--ink',null,2.4,true); [[A,'A',-0.4,-0.6],[B,'B',0.4,-0.6],[C,'C',0,0.7]].forEach(([p,s,dx,dy])=>{ P.dot(p[0],p[1],'--ink',4.5); P.text(s,p[0]+dx,p[1]+dy,'--ink','center',12); }); }
+function solve(b,c){ const h=b/2, s=Math.sqrt(c+h*h); return {h,s,x:s-h}; }
+function drawL(P){ const b=+kb.value, c=+kc.value, {h,s,x}=solve(b,c); axes2(P,1,1);
+  fillA(P,[[0,0],[x,0],[x,x],[0,x]],'--plum',0.3); P.poly([[0,0],[x,0],[x,x],[0,x]],'--plum',null,2,true);
+  fillA(P,[[x,0],[s,0],[s,x],[x,x]],'--ember',0.3); P.poly([[x,0],[s,0],[s,x],[x,x]],'--ember',null,2,true);
+  fillA(P,[[0,x],[x,x],[x,s],[0,s]],'--ember',0.3); P.poly([[0,x],[x,x],[x,s],[0,s]],'--ember',null,2,true);
+  fillA(P,[[x,x],[s,x],[s,s],[x,s]],'--teal',0.3); P.poly([[x,x],[s,x],[s,s],[x,s]],'--teal',null,2,true,[5,4]);
+  P.text('x²',x/2,x/2,'--plum','center',13); P.text(mm(h,1)+'x',x+h/2,x/2,'--ember','center',12); P.text(mm(h,1)+'x',x/2,x+h/2,'--ember','center',12); P.text(mm(h*h,2),x+h/2,x+h/2,'--teal','center',12); }
+function read(){ const C=[+kx.value,+ky.value], b=+kb.value, c=+kc.value; $('ox').textContent=mm(C[0],1); $('oy').textContent=mm(C[1],1); $('ob').textContent=b; $('oc').textContent=c;
+  const dA=deg(opening(A,B,C)), dB=deg(opening(B,C,A)), dC=deg(opening(C,A,B)), r=solve(b,c);
+  const vd=$('vdF'); vd.className='verdict';
+  vd.textContent='Left: '+mm(dA,1)+'° + '+mm(dB,1)+'° + '+mm(dC,1)+'° = '+mm(dA+dB+dC,1)+'°. Right: x² + '+b+'x + '+mm(r.h*r.h,2)+' = '+c+' + '+mm(r.h*r.h,2)+' = '+mm(r.s*r.s,2)+', a square of side '+mm(r.s,3)+', so x = '+mm(r.x,3)+'.';
+  tex($('eqF'),R`x = \sqrt{${c} + ${mm(r.h*r.h,2)}} - ${mm(r.h,1)} = ${mm(r.x,3)}`,true); }
+function all(){ PF.redraw(); PL.redraw(); read(); }
+[kx,ky,kb,kc].forEach(el=>el.addEventListener('input',all));
+window.__pic={set:(cx,cy,b,c)=>{ kx.value=cx; ky.value=cy; kb.value=b; kc.value=c; all(); const C=[cx,cy];
+  return {A:+deg(opening(A,B,C)).toFixed(3),B:+deg(opening(B,C,A)).toFixed(3),C:+deg(opening(C,A,B)).toFixed(3),x:+solve(b,c).x.toFixed(4)}; }};
+all();
+stepper('#sl1',[
+  {k:'ember',kl:'angles',t:R`\text{opening} = e_1 \cdot e_2`,n:`Equal openings, equal angles: Euclid's compass test.`},
+  {k:'ember',kl:'two sides of a line',t:R`\alpha x + \beta y > c \ \text{or}\ < c`,n:`Needed for sizes, next.`}
+],{title:'The slides · angles · ← → keys work'});
+stepper('#sl7',[
+  {k:'ember',kl:'turn',t:R`(a, b)(c, d) = (ac - bd,\ ad + bc)`,n:`A pair with a² + b² = 1.`},
+  {k:'ember',kl:'turn-keeps',t:R`${Nw}{\text{distances and openings kept}}`,n:`The cross terms cancel.`},
+  {k:'ember',kl:'turn-between',t:R`${Nw}{(e_1 \cdot e_2,\ u_1v_2 - u_2v_1)}`,n:`Exactly one turn from one direction to another.`},
+  {k:'ember',kl:'quarter turn',t:R`${Nw}{i = (0, 1),\ \ i \cdot i = -1}`,n:`A square root of −1.`}
+]);
+stepper('#sl8',[
+  {k:'ember',kl:'halving',t:R`${Nw}{h = \left(\sqrt{\tfrac{1 + a}{2}},\ \sqrt{\tfrac{1 - a}{2}}\right)}`,n:`Exactly two halves: h and −h.`},
+  {k:'ember',kl:'powers',t:R`i^{k/2^n}`,n:`Halve n times, then multiply k times.`},
+  {k:'ember',kl:'halving-keeps-order',t:R`${Nw}{C(s) \text{ falls from } 1 \text{ to } -1}`,n:`And the steps shrink: 1 − C(1/2ⁿ) ≤ 1/2ⁿ.`}
+]);
+stepper('#sl9',[
+  {k:'ember',kl:'size',t:R`\sup\{s : C(s) \ge a\}`,n:`Counted in quarter turns; completeness.`},
+  {k:'ember',kl:'degrees',t:R`${Nw}{x° = i^{x/90}}`,n:`Counted quarter turns. Nothing laid down.`},
+  {k:'ember',kl:'size technique',t:R`${Nw}{\text{sizes add}}`,n:`Turns multiply, so powers add.`},
+  {k:'ember',kl:'right-angle',t:R`${Nw}{u \cdot v = 0 \Rightarrow 90°}`,n:`Opening 0 is C(1): one quarter turn.`}
+]);
+stepper('#sl2',[
+  {k:'ember',kl:'two-sides-and-the-angle',t:R`${Nw}{a^2 = b^2 + c^2 - 2bc\,(e_1 \cdot e_2)}`,n:`Two sides and the angle between fix the third.`},
+  {k:'ember',kl:'three-sides',t:R`${Nw}{\text{opening at } A = \tfrac{b^2 + c^2 - a^2}{2bc}}`,n:`Three sides fix every angle.`},
+  {k:'ember',kl:'superposition',t:R`\text{Euclid's fourth: lay one on the other}`,n:`His move, not licensed by his postulates.`},
+  {k:'ember',kl:'equal-sides-equal-angles',t:R`${Nw}{b = c \iff \angle B = \angle C}`,n:`(b − c)(d² − (b + c)²) = 0.`}
+],{title:'The slides · two sides and the angle · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'opposite-angles',t:R`${Nw}{(-u)\cdot(-v) = u \cdot v}`,n:`Vertical angles.`},
+  {k:'ember',kl:'alternate-angles',t:R`${Nw}{\text{alternate angles are equal}}`,n:`parallel-through-a-point did the fifth postulate's work.`},
+  {k:'ember',kl:'angle-sum',t:R`${Nw}{A + B + C = 180°}`,n:`The parallel through C.`},
+  {k:'ember',kl:'special triangles',t:R`1, 1, \sqrt2;\ \ 1, \sqrt3, 2`,n:`45, 45, 90 and 30, 60, 90.`},
+  {k:'ember',kl:'parallelogram',t:R`${Nw}{D = A + C - B}`,n:`Opposite sides equal.`}
+],{title:'The slides · crossing lines · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'scaling in the plane',t:R`${Nw}{\text{distances} \times k,\ \text{areas} \times k^2}`,n:`Openings kept.`},
+  {k:'ember',kl:'parallel-cut',t:R`${Nw}{D = A + t(B - A) \Rightarrow E = A + t(C - A)}`,n:`The intercept technique.`},
+  {k:'ember',kl:'similar-triangles',t:R`${Nw}{\text{two angles equal} \Rightarrow \text{sides in one ratio}}`,n:`Euclid VI.4.`},
+  {k:'ember',kl:'right-triangle by similarity',t:R`${Nw}{b^2 = c\,|AF|,\ a^2 = c\,|FB|}`,n:`Pythagoras, the second way.`},
+  {k:'ember',kl:'angle-in-a-semicircle',t:R`${Nw}{(A - X)\cdot(-A - X) = |X|^2 - |A|^2}`,n:`The angle in a semicircle is right.`}
+],{title:'The slides · same shape · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'three earned',t:R`(x + 5)^2 = 64;\ \ p : q;\ \ k^2 : k^3`,n:`The drawing, the seesaw, the skin.`}
+],{title:'The slides · three earned · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'illegal',t:R`\text{SSA}`,n:`Two triangles can fit.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

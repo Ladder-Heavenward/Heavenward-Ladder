@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>17·stat · Why do so many numbers start with 1?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r17k.html">← 17k partial fractions into logs</a><a href="r17then.html">next: 17·then can a bending curve be straightened? →</a></p>
+  <div class="tags"><span class="tag stat">17·stat · statistics</span></div>
+  <h1>Why do so many numbers start with 1?</h1>
+  <p>Why do so many numbers start with 1? Take the people in each county of Oregon, the lengths of rivers, the prices in a shop, or the powers of two. Read only the first digit of each. You might guess that each of the nine digits comes first about as often as any other. It does not. In many lists about three numbers in ten start with 1, and fewer than one in twenty start with 9. People noticed this in old books of log tables, whose first pages were worn far more than their last. What makes it hard is that no one list explains it. A county is not a river, and a price is not a power. This page reads the first digit off a log scale, with 17’s logs and 15·stat’s chances as areas. It finds the share of each digit when a list is spread evenly on that scale. Then it checks the guess on real lists, finds where it fails, and uses it to spot figures that someone made up.</p>
+  <p class="gesture">Put the decimal point after the first digit, and the log of the number keeps only its part after the point. The first digit is 1 exactly when that part is below the log of 2, which is about three tenths. If that part lands anywhere from 0 to 1 with no place favoured, the chance of a first digit is the gap between the logs of that digit and the next. A change of units moves every log by the same amount, and an even spread stays even. Lists that cover many powers of ten often come close. Lists held inside one power of ten, or chosen by people, do not.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r17h.html">17h</a> (change-of-base; two rulers marked in logs), <a href="r17g.html">17g</a> (log-base-p), <a href="r17c.html">17c</a> (log-of-a-product, log-of-a-quotient), <a href="r17a.html">17a</a> (log-rises), <a href="r11f.html">11f</a> (the floor technique), <a href="r15stat.html">15·stat</a> (a density; range-chance). <a href="r17then.html">17·then</a> reads whole curves on log scales.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · read it through, then work the picture and the slides</div>
+
+  <h3>Worn pages</h3>
+  <p data-pid="7b5408">Before calculators, people multiplied by looking up logs in a printed book of tables. The book ran from numbers starting with 1 at the front to numbers starting with 9 at the back. In 1881 an astronomer noticed that the front pages of such books were far more worn than the back ones. People looked up numbers starting with 1 more often than numbers starting with 9. He guessed a rule for how much more often. Fifty-seven years later an engineer counted the first digits of more than twenty thousand numbers, from twenty different lists, and found the same rule.</p>
+  <p data-pid="c6bbc5">From here on, on this page, log means log₁₀ (17g), so log 10 = 1 and log 2 ≈ 0.3010. The first digit of a positive number is its first digit that is not 0: the first digit of 0.0472 is 4.</p>
+  <h3>The first digit lives in the log</h3>
+  <p data-pid="e48103">Write a positive X as a number from 1 up to 10, times a power of ten: 47 300 = 4.73 × 10⁴. The power is ⌊log X⌋, by the floor technique (11f). What is left over is the part of log X after the point.</p>
+  <p data-pid="b3d143">From here on, for X &gt; 0, m(X) = log X − ⌊log X⌋. So 0 ≤ m(X) &lt; 1, and X = 10<sup>m(X)</sup> × 10<sup>⌊log X⌋</sup>. Shifting the decimal point changes ⌊log X⌋ and leaves m(X) alone.</p>
+  <p data-pid="3e43e4">First-digit technique: <b>a positive number starts with the digit d exactly when the part of its log after the point lies from log d up to log(d + 1).</b> In marks: X has first digit d exactly when log d ≤ m(X) &lt; log(d + 1).</p>
+  <pre class="lines" data-k="ember" data-label="17·stat: the first-digit technique">
+k = \lfloor \log X \rfloor:\ \ 10^k \le X \lt 10^{k+1} @@ the floor technique (11f), then 10ˣ rises (17g)
+X \text{ has first digit } d \iff d \cdot 10^k \le X \lt (d + 1) \cdot 10^k @@ the meaning of first digit, with k the place of the point
+\iff \log d + k \le \log X \lt \log(d + 1) + k @@ log-rises (17a), both ways; log-of-a-product (17c)
+\htmlClass{new}{\iff \log d \le m(X) \lt \log(d + 1)} \quad \blacksquare @@ take k from each part; m(X) = log X − k
+  </pre>
+  <pre class="lines" data-k="ember" data-label="17·stat: worked">
+47\,300:\ \ \log 47\,300 \approx 4.6749,\ \ m \approx 0.6749 @@ log 4 ≈ 0.6021 ≤ 0.6749 &lt; 0.6990 ≈ log 5: first digit 4
+2^{10} = 1024:\ \ \log 2^{10} = 10 \log 2 \approx 3.0103,\ \ m \approx 0.0103 @@ log-of-a-power; below log 2: first digit 1
+2^{100}:\ \ 100 \log 2 \approx 30.103,\ \ m \approx 0.103 @@ first digit 1, and 31 digits, with no need to write it out
+  </pre>
+  <p data-pid="ff204e">17h built a ruler with each number placed at its log. The first-digit technique says: cut that ruler from 1 to 10, mark the nine digits, and the stretch for 1 is the widest. It runs from 0 to 0.301, nearly a third of the ruler. The stretch for 9 runs from 0.954 to 1, less than a twentieth.</p>
+  <h3>Spread evenly on the log scale</h3>
+  <p data-pid="9c955e">Now a guess. Take a number from a list. Suppose its m lands by the density 1 on [0, 1] (15·stat): no part of the log ruler is favoured. Then the chance of each first digit is the width of its stretch.</p>
+  <p data-pid="72ba4d">Log-spread technique: <b>if the part of the log after the point is spread evenly, a first digit d turns up with chance log(1 + 1/d).</b> So 1 comes first about 30.1% of the time, and 9 about 4.6%.</p>
+  <pre class="lines" data-k="ember" data-label="17·stat: the log-spread technique">
+\text{chance of first digit } d = \text{chance that } m \in [\log d,\ \log(d + 1)) @@ first-digit technique
+= \textstyle\int_{\log d}^{\log(d + 1)} 1\,dt = \log(d + 1) - \log d @@ range-chance (15·stat), with the density 1
+\htmlClass{new}{= \log\big(1 + \tfrac1d\big)} \quad \blacksquare @@ log-of-a-quotient (17c)
+\textstyle\sum_{d=1}^{9} \big(\log(d + 1) - \log d\big) = \log 10 - \log 1 = 1 @@ the sum collapses: the nine chances add to 1
+  </pre>
+  <div class="tablewrap"><table class="tt">
+  <tr><th>first digit</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th></tr>
+  <tr><td class="l">chance</td><td>0.301</td><td>0.176</td><td>0.125</td><td>0.097</td><td>0.079</td><td>0.067</td><td>0.058</td><td>0.051</td><td>0.046</td></tr>
+  </table></div>
+  <p data-pid="8b5ae9">The same width gives more. The chance that a number starts with 1, 2 or 3 is log 4 ≈ 0.602. The chance that its first two digits are 1 then 0 is log(11/10) ≈ 0.041.</p>
+  <h3>Why an even spread?</h3>
+  <p data-pid="e21f23">Nothing so far says why a real list should be spread evenly on the log scale. Here is one reason, and it can be proved. Measure the rivers of Oregon in miles, and then in kilometres. Every length is multiplied by about 1.609. A rule about first digits that holds for real lengths should not care which unit was used.</p>
+  <p data-pid="0e4394">Unit-change technique: <b>multiplying every number by the same c &gt; 0 keeps an even spread of m even.</b> So the shares of the log-spread technique survive every change of units.</p>
+  <pre class="lines" data-k="ember" data-label="17·stat: the unit-change technique">
+\log(cX) = \log X + \log c @@ log-of-a-product (17c)
+s = m(c) \in [0, 1):\ \ m(cX) = m(X) + s \text{ when } m(X) + s \lt 1,\ \text{else } m(X) + s - 1 @@ the whole number ⌊log c⌋ only moves the point
+m(cX) \in [u, v) \iff m(X) \in [u - s, v - s) \text{ or } m(X) \in [u - s + 1, v - s + 1) @@ for 0 ≤ u ≤ v ≤ 1; each piece cut to [0, 1)
+\text{the pieces inside } [0, 1) \text{ have widths adding to } v - u @@ the second piece is the first moved up by 1; interval-cut-in-two (15e)
+\htmlClass{new}{\text{chance that } m(cX) \in [u, v) = v - u} \quad \blacksquare @@ range-chance: still the density 1
+  </pre>
+  <p data-pid="99dee5">The technique goes one way. It says an even spread is kept. It does not say that a list kept by every change of units must be spread evenly. That turned-round claim is true for first digits, but its proof is much higher up the ladder.</p>
+  <p data-pid="983e34">A second reason is a guess, not a proof. When a list runs across many powers of ten, and its numbers pile up smoothly with no sharp peaks, the cuts at the whole numbers fall in every part of the pile. Then m comes out nearly even. Growth that multiplies, as in 17j, does this: a quantity that grows by a steady factor walks along the log ruler in equal steps.</p>
+  <h3>Checking it on real lists</h3>
+  <pre class="lines" data-k="ember" data-label="17·stat: three lists, counted">
+2^1, 2^2, \ldots, 2^{100}:\ \ 30,\ 17,\ 13,\ 10,\ 7,\ 7,\ 6,\ 5,\ 5 @@ counts of first digits 1 to 9; the law gives 30.1, 17.6, 12.5, 9.7, 7.9, 6.7, 5.8, 5.1, 4.6
+\text{the } 36 \text{ counties of Oregon, people in } 2020:\ \ 9,\ 8,\ 3,\ 2,\ 2,\ 3,\ 3,\ 5,\ 1 @@ the law gives 10.8, 6.3, 4.5, 3.5, 2.9, 2.4, 2.1, 1.8, 1.6
+\text{the whole numbers } 1 \text{ to } 999:\ \ 111 \text{ for each digit} @@ the law gives 301 for 1 and 46 for 9: it fails
+  </pre>
+  <p data-pid="31db43">The powers of two fit closely. Each step adds log 2 ≈ 0.301 to the log, and the steps never line up with the whole numbers, so m is pushed into every part of [0, 1). The counties fit roughly. There are only 36 of them, and with so few, counts of 8 or 5 where 6.3 or 1.8 are expected are not surprising. The whole numbers from 1 to 999 do not fit at all. On the log scale they crowd toward the top of each power of ten: there are 900 from 100 to 999, and only 9 from 1 to 9.</p>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · laws with a known exception rate</div>
+    <p data-pid="c20de1">The first-digit law is a measured rule, and it comes with its range. It holds well for lists that run across several powers of ten and that come from growth, from multiplying, or from mixing many kinds of things: populations, river lengths, the amounts in a company’s books. It fails, in a known direction, for lists held inside one power of ten. The heights of adults, in centimetres, nearly all start with 1. It fails for numbers that people assign: telephone numbers, house numbers on one street, prices set at 9.99.</p>
+    <p data-pid="770a3f"><b>State the rule, the kind of list it holds for, and the kind it fails for.</b></p>
+    <p data-pid="c867c6">A list that should follow the law and does not is a reason to look closer. A list that should not, and does not, tells you nothing.</p>
+    <p class="bait" data-pid="1dc618">A list of the depths of 50 lakes in Washington, in feet, has 12 starting with 1 and 9 starting with 9. Which part of the law would you check first: the lakes, or the count?</p>
+  </aside>
+  <h3>Spotting made-up figures</h3>
+  <p data-pid="05c509">People asked to make up numbers tend to spread their first digits much more evenly than the law. They choose 1 too seldom and 7, 8 and 9 too often. So an auditor can count the first digits in a company’s books. A count far from the law is not proof of anything. It says which pages to read first.</p>
+  <pre class="lines" data-k="ember" data-label="17·stat: a check">
+500 \text{ amounts in a set of books, } 62 \text{ starting with } 1 @@ the law expects 500 × 0.301 ≈ 151
+\text{evenly spread first digits would give } 500 \div 9 \approx 56 @@ the books sit near the even spread
+\htmlClass{new}{\text{a reason to read the books, not a verdict}} @@ some honest lists fail the law: the exceptions above
+  </pre>
+  <h3>Illegal moves</h3>
+  <pre class="lines" data-k="ember" data-label="17·stat: tempting, and not allowed">
+\text{every first digit has chance } \tfrac19\,? @@ only if the numbers themselves are spread evenly; on the log scale, 1 takes 0.301
+\text{chance of first digit } d = \log d\,? @@ it is log(d + 1) − log d; log 1 = 0 would give 1 no chance at all
+m(47\,300) = \log 4.73 \text{, so the first digit is } m\,? @@ m is a log; the first digit d has log d ≤ m &lt; log(d + 1)
+\text{a change of units changes the shares}\,? @@ not for an even spread of m: the unit-change technique
+\text{every list follows the law}\,? @@ lists inside one power of ten, and numbers people assign, do not
+  </pre>
+</section>
+
+<section class="pic" id="pic">
+  <div class="eyebrow">The picture · first digits counted, and the same numbers on the log ruler</div>
+  <div class="panels">
+    <div class="panel">
+      <div class="lbl">share of each first digit</div>
+      <canvas id="cvF"></canvas>
+      <div class="chips" id="fch"></div>
+      <div class="kn"><span class="m">how many</span><input type="range" id="kn" min="10" max="300" step="1" value="100"><output id="on"></output></div>
+      <div class="cap">Bars: the share of the list with each first digit. Ember dots: the law, log(1 + 1/d). The knob sets how many numbers of the list are counted, where the list allows it.</div>
+    </div>
+    <div class="panel">
+      <div class="lbl">m(cX) for each number, on a ruler from 0 to 1</div>
+      <canvas id="cvL"></canvas>
+      <div class="kn"><span class="m">times c</span><input type="range" id="kc" min="0" max="1" step="0.005" value="0"><output id="oc"></output></div>
+      <div class="cap">Each tick is one number, placed at the part of its log after the point. Teal lines: log 2, log 3, …, log 9, which cut the ruler into the nine stretches. The knob multiplies every number by c, from 1 to 10, so every tick slides by log c and starts again at 0 past 1.</div>
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+</section>
+
+<section class="slides" id="sl1"><div class="eyebrow">The slides · worn pages; m(X); first digit; worked; 2¹⁰⁰; log-spread; the nine; unit-change; one way only; powers of two; counties; 1 to 999; the range; made up; illegal · ← → keys work</div></section>
+
+<section class="sayback">
+  <div class="eyebrow">Say it back · then work it</div>
+  <h2>Questions</h2>
+  <div class="phkey"></div>
+  <ol>
+    <li><span class="qid">17·stat.1</span><span class="gname">First digits.</span><span class="gwhy">Do: build the page’s pieces.</span>
+      <ol class="sub">
+        <li><span class="qid">17·stat.1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\log 2 \approx 0.3010,"></span> <span data-tex-inline="\log 3 \approx 0.4771,"></span> <span data-tex-inline="m \text{ spread evenly on } [0, 1)"></span></span>Find the chance that the first digit is 2.<br>Find the chance that it is at most 3.</li><li><span class="givens"><span data-tex-inline="X = 175\,535"></span> <span class="gtx">(the people of Salem, Oregon, in 2020)</span></span>Find ⌊log X⌋ and m(X).<br>Find the first digit from m(X) alone, by the first-digit technique.</li><li><span class="givens"><span data-tex-inline="500 \text{ amounts},"></span> <span data-tex-inline="\text{spread evenly on the log scale}"></span></span>Find how many to expect starting with 9, and how many starting with 1 or 2.</li><li><span class="givens"><span data-tex-inline="m \text{ spread evenly}"></span></span>Prove that the chance that the first digit is at least d is 1 − log d.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">17·stat.2</span><span class="gname">From the share back.</span><span class="gwhy">Undo: run the page’s techs backwards.</span>
+      <ol class="sub">
+        <li><span class="qid">17·stat.2.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="m(X) = 0.85"></span></span>Find the first digit of X.<br>Find every X from 1 to 1000 with this m.</li><li><span class="givens"><span data-tex-inline="\text{the chance that the first digit is at most } d \text{ is } 0.699"></span></span>Find d.</li><li><span class="givens"><span data-tex-inline="m \text{ spread evenly},"></span> <span data-tex-inline="\text{every number doubled}"></span></span>Find the chance that a doubled number starts with 1.<br>Find the first digits that the numbers starting with 1 came from.</li><li><span class="givens"><span data-tex-inline="m \text{ spread evenly}"></span></span>Find the chance that X starts with the two digits 1 then 9.<br>Find the chance that it starts with 9 then 1.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">17·stat.3</span><span class="gname">Where it gives.</span><span class="gwhy">Bend: find where the techs stop working.</span>
+      <ol class="sub">
+        <li><span class="qid">17·stat.3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{heights of adults: } 140 \text{ to } 200 \text{ cm}"></span></span>Find the share that start with 1, and what the log-spread technique predicts.<br>Find the assumption that fails.</li><li><span class="givens"><span data-tex-inline="m \text{ spread evenly on } [0, 0.5),"></span> <span data-tex-inline="\text{never on } [0.5, 1)"></span></span>Find the chance of each first digit.</li><li><span class="givens"><span data-tex-inline="2^1, 2^2, \ldots, 2^{10}"></span></span>Count the first digits, and find the digit where the count misses the law by most.</li><li><span class="givens"><span data-tex-inline="10, 100, 1000, \ldots, 10^{12}"></span></span>Find the shares of the first digits, and the line of the unit-change technique that still holds for this list.</li></ol></li>
+      </ol></li>
+    <li class="optgroup"><span class="qid">17·stat.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder challenges that rely on your own making. The page is complete without these; the rung's star needs them.</span>
+      <ol class="sub">
+        <li class="opt"><span class="qid">17·stat.4.1</span><span class="tagq">build</span>Take a list of your own of at least 40 numbers that runs across at least three powers of ten: the heights of peaks in the Olympic Mountains, the people in the towns of a county, the lengths of streams in a watershed.<br>Count its first digits, and set the counts beside the log-spread technique.<br>Find which digit misses by most, and a reason in the list for it.</li>
+        <li class="opt"><span class="qid">17·stat.4.2</span><span class="tagq">edge</span>Build a list of 100 positive numbers that runs across six powers of ten and has no number that starts with 1.<br>Find which assumption of the second reason your list breaks.</li>
+        <li class="opt"><span class="qid">17·stat.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{for every } c \gt 0,"></span> <span data-tex-inline="\text{the shares of first digits of } cX \text{ equal those of } X"></span></span>Prove or refute: the share of first digit 1 is log 2.</li>
+        <li class="opt"><span class="qid">17·stat.4.4</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="3^1, 3^2, \ldots, 3^{n}"></span></span>Find whether the shares of first digits come close to the law as n grows, and what in log 3 decides it.</li>
+        <li class="opt"><span class="qid">17·stat.4.5</span><span class="tagq">seam</span>In 2009, analysts counted the digits of the vote counts from the districts of a national election, and read the misses from the law as signs of fraud. Others answered that honest counts from districts of similar size need not follow the law at all, and that fraud can leave it untouched.<br>Can a pattern that honest lists usually show be evidence against a list that lacks it?<br>What would you need to know about the districts before the count meant anything?</li>
+      </ol></li>
+  </ol>
+  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
+</section>
+
+<nav class="nextrung"><a href="r17k.html">← 17k · partial fractions into logs</a><a href="r17then.html">17·then · can a bending curve be straightened? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>Newcomb remarked that the first pages of tables of logarithms wear out much faster than the last ones, and that the first significant figure is oftener 1 than any other digit, and less often 9.</p><cite>Simon Newcomb, “Note on the frequency of use of the different digits in natural numbers”, American Journal of Mathematics (1881); paraphrase</cite></aside>
+  <p>The engineer of 1938 is Frank Benford, a physicist at General Electric, who counted 20 229 numbers from 20 lists, from river areas to street addresses. The rule carries his name. Roger Pinkham (1961) showed that a first-digit rule that survives every change of units must be this one. Theodore Hill (1995) proved it in general, and showed why numbers drawn from a mix of many lists come close to it. Mark Nigrini brought the count into tax and fraud audits in the 1990s. In 17·stat.4.5, the election is Iran’s of 2009; Walter Mebane argued for second-digit tests of vote counts, and Joseph Deckert, Mikhail Myagkov and Peter Ordeshook (2011) argued that such tests cannot tell fraud from honest counts.</p>
+  <p>Accepted names: the first-digit law is Benford’s law, or the law of anomalous numbers; the first digit is the leading digit, or first significant digit; m(X) is the mantissa of log X; a list whose first digits are unchanged by every change of units is scale-invariant.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="17·stat: a worked “proof”, not allowed">
+\text{the chance of first digit } d \text{ is } \log d @@ not allowed: the chance is the width of d’s stretch, log(d + 1) − log d
+\text{so first digit } 9 \text{ is likeliest, with } 0.954 @@ false: 9 is least likely, with 0.046
+  </pre>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '–'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+function chips(el,FN,get,setk,after){ Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===get()) b.className='on'; b.onclick=()=>{ setk(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+const Nw='\\htmlClass{new}';
+function axes2(P,gx,gy){ const c=P.ctx,o=P.o; c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ c.moveTo(P.X(x),P.Y(o.y[0])); c.lineTo(P.X(x),P.Y(o.y[1])); }
+  for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ c.moveTo(P.X(o.x[0]),P.Y(y)); c.lineTo(P.X(o.x[1]),P.Y(y)); } c.stroke();
+  c.strokeStyle=col('--muted'); c.lineWidth=1.3; c.beginPath(); if(o.y[0]<=0&&o.y[1]>=0){ c.moveTo(P.X(o.x[0]),P.Y(0)); c.lineTo(P.X(o.x[1]),P.Y(0)); } if(o.x[0]<=0&&o.x[1]>=0){ c.moveTo(P.X(0),P.Y(o.y[0])); c.lineTo(P.X(0),P.Y(o.y[1])); } c.stroke();
+  c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; const ly=Math.min(P.H-6,Math.max(12,P.Y(0)+14));
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ if(Math.abs(x)<1e-9) continue; c.fillText(+x.toFixed(6),P.X(x),ly); }
+  c.textAlign='right'; const lx=Math.max(32,Math.min(P.W-4,P.X(0)-5)); for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ if(Math.abs(y)<1e-9) continue; c.fillText(String(+y.toFixed(6)).replace('-','−'),lx,P.Y(y)+4); } }
+
+const OR=[16668,95184,421401,41072,52589,64929,24738,23446,198253,111201,1995,7233,7495,23977,223259,24502,88090,69413,8160,382971,50395,128610,31571,345920,12186,815428,87433,1870,27390,80075,26196,7391,26670,600372,1451,107722];
+const L2=Math.log10(2), L3=Math.log10(3), PHI=Math.log10((1+Math.sqrt(5))/2);
+const fr=v=>v-Math.floor(v);
+const LS={p2:{lab:'powers of 2',n:true,m:n=>Array.from({length:n},(_,i)=>fr((i+1)*L2))},
+  p3:{lab:'powers of 3',n:true,m:n=>Array.from({length:n},(_,i)=>fr((i+1)*L3))},
+  fib:{lab:'1, 1, 2, 3, 5, 8, …',n:true,m:n=>{ const o=[]; let a=1,b=1; for(let i=0;i<n;i++){ o.push(i<70?fr(Math.log10(a)):fr((i+1)*PHI-Math.log10(Math.sqrt(5)))); const t=a+b; a=b; b=t; } return o; }},
+  ore:{lab:'Oregon counties',n:false,m:()=>OR.map(v=>fr(Math.log10(v)))},
+  all:{lab:'1 to 999',n:false,m:()=>Array.from({length:999},(_,i)=>fr(Math.log10(i+1)))}};
+let key='p2';
+const kn=$('kn'),kc=$('kc'),cvF=$('cvF'),cvL=$('cvL');
+const PF=plane(cvF,{x:[0.2,9.8],y:[-0.05,0.42],grid:1,aspect:0.8,draw:P=>drawF(P)});
+const PL=plane(cvL,{x:[-0.06,1.06],y:[-0.5,1.6],grid:1,aspect:0.5,draw:P=>drawL(P)});
+Object.defineProperty(PF.o,'aspect',{get:()=>cvF.clientWidth>480?0.62:0.8});
+Object.defineProperty(PL.o,'aspect',{get:()=>0.45});
+const LAW=d=>Math.log10(1+1/d);
+function data(){ const s=Math.log10(1+9*(+kc.value)); const ms=LS[key].m(+kn.value).map(m=>fr(m+s)); const cnt=Array(10).fill(0); ms.forEach(m=>{ cnt[Math.floor(Math.pow(10,m)+1e-12)]++; }); return {ms,cnt,s,N:ms.length}; }
+function drawF(P){ const {cnt,N}=data(); axes2(P,1,0.1);
+  for(let d=1;d<=9;d++){ const h=cnt[d]/N; P.poly([[d-0.35,0],[d+0.35,0],[d+0.35,h],[d-0.35,h]],'--teal','rgba(46,139,139,0.25)',1.2); P.dot(d,LAW(d),'--ember',4.5); } }
+function drawL(P){ const {ms}=data(); const c=P.ctx; P.line(0,0,1,0,'--ink',2); P.line(0,-0.15,0,0.15,'--ink',2); P.line(1,-0.15,1,0.15,'--ink',2);
+  for(let d=2;d<=9;d++){ const x=Math.log10(d); P.line(x,-0.3,x,1.3,'--teal',1.2,[4,3]); P.text(String(d),x,-0.45,'--muted','center',11); }
+  P.text('1',0,-0.45,'--muted','center',11); P.text('10',1,-0.45,'--muted','center',11);
+  ms.forEach((m,i)=>{ const y=0.15+1.0*((i*0.6180339)%1); P.line(m,y-0.05,m,y+0.05,'--plum',1.4); }); }
+function read(){ const {cnt,N,s}=data(); $('on').textContent=LS[key].n?String(+kn.value):String(N); $('oc').textContent=mm(Math.pow(10,s),3);
+  const vd=$('vdF'); const sh=cnt[1]/N; vd.className='verdict '+(Math.abs(sh-LAW(1))<0.04?'win':'lose');
+  vd.textContent=LS[key].lab+', '+N+' numbers, times '+mm(Math.pow(10,s),3)+': '+cnt[1]+' start with 1 ('+mm(100*sh,1)+'%), against '+mm(100*LAW(1),1)+'% for the law; '+cnt[9]+' start with 9 ('+mm(100*cnt[9]/N,1)+'%), against '+mm(100*LAW(9),1)+'%.';
+  tex($('eqF'),R`\text{share}(1) = \tfrac{${cnt[1]}}{${N}} \approx ${mm(sh,3)},\quad \log 2 \approx 0.301`,true); }
+function all(){ PF.redraw(); PL.redraw(); read(); }
+[kn,kc].forEach(el=>el.addEventListener('input',all));
+chips($('fch'),LS,()=>key,k=>{ key=k; },all);
+window.__pic={set:(k,n,c)=>{ [...$('fch').children][Object.keys(LS).indexOf(k)].click(); kn.value=n; kc.value=c; all(); const d=data(); return d.cnt.slice(1); }};
+all();
+
+stepper('#sl1',[
+  {k:'ember',kl:'worn pages',t:R`\text{front pages worn, back pages clean}`,n:`Numbers starting with 1 were looked up more.`},
+  {k:'ember',kl:'m(X)',t:R`m(X) = \log X - \lfloor \log X \rfloor`,n:`The part of the log after the point.`},
+  {k:'ember',kl:'first digit',t:R`\htmlClass{new}{\log d \le m(X) \lt \log(d + 1)}`,n:`Read the first digit off the log ruler.`},
+  {k:'ember',kl:'worked',t:R`47\,300:\ m \approx 0.6749`,n:`Between log 4 and log 5.`},
+  {k:'ember',kl:'2¹⁰⁰',t:R`100 \log 2 \approx 30.103`,n:`First digit 1, without writing it out.`},
+  {k:'ember',kl:'log-spread',t:R`\htmlClass{new}{\log\big(1 + \tfrac1d\big)}`,n:`The width of the digit’s stretch.`},
+  {k:'ember',kl:'the nine',t:R`0.301,\ 0.176,\ \ldots,\ 0.046`,n:`They add to log 10 = 1.`},
+  {k:'ember',kl:'unit-change',t:R`\htmlClass{new}{m(cX) = m(X) + s \text{ or } m(X) + s - 1}`,n:`An even spread stays even.`},
+  {k:'ember',kl:'one way only',t:R`\text{kept by units} \Rightarrow \text{even}\,?`,n:`True, but proved much higher up.`},
+  {k:'ember',kl:'powers of two',t:R`30,\ 17,\ 13,\ 10,\ \ldots`,n:`Close to 30.1, 17.6, 12.5, 9.7.`},
+  {k:'ember',kl:'counties',t:R`9 \text{ of } 36 \text{ start with } 1`,n:`Rough, with so few.`},
+  {k:'ember',kl:'1 to 999',t:R`111 \text{ each}`,n:`Crowded at the top of each power of ten.`},
+  {k:'ember',kl:'the range',t:R`\text{many powers of ten, made by multiplying}`,n:`Fails inside one power, and for assigned numbers.`},
+  {k:'ember',kl:'made up',t:R`62 \text{ of } 500 \text{ against } 151`,n:`A reason to read, not a verdict.`},
+  {k:'ember',kl:'illegal',t:R`\log d\,?`,n:`It is log(d + 1) − log d.`}
+],{title:'The slides · worn pages; m(X); first digit; worked; 2¹⁰⁰; log-spread; the nine; unit-change; one way only; powers of two; counties; 1 to 999; the range; made up; illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

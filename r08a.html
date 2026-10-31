@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>8a · A real number is a cut</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+#cvA,#cvB{touch-action:none;cursor:pointer}
+.conds{display:grid;gap:3px;font-size:.88rem;margin-top:4px}
+.conds div{padding:3px 8px;border-left:3px solid var(--teal);background:var(--sand);border-radius:0 4px 4px 0;overflow-x:auto}
+.conds div.bad{border-left-color:var(--ember)}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r08.html">← 8 drawing lines</a><a href="r08b.html">next: 8b any two reals compare →</a></p>
+  <div class="tags"><span class="tag proof">8a · proof</span></div>
+  <h1>A real number is a cut</h1>
+  <p>5e left a hole in the fractions: a clean split into a lower part and an upper part with nothing at the split. This step turns the lower part of such a split into a number. A real number will be a set of fractions with four properties, the properties every lower part has. The set of all of them is the reals, which the ladder will call the line. Order between reals is rung 2's oldest relation, being a part of. Every fraction sits among the reals as the set of fractions below it, with its order kept. And the hole of 5e is a cut too, one that belongs to no fraction: a new number.</p>
+  <p class="gesture">A real number is the set of the fractions below it. One real is at most another when its fractions are among the other's.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r02a.html">2a</a> (⊆, same-members, double-inclusion, self-part, chain for part of), <a href="r02b.html">2b</a> (Separation), <a href="r02d.html">2d</a> (𝒫, Power), <a href="r05c.html">5c</a> (the twelve techniques, &lt; on ℚ, any-two-compare on ℚ), <a href="r05d.html">5d</a> (negative-out on ℚ, two-negatives), <a href="r05e.html">5e</a> (½, another-between, r², no-fraction-squares-to-2, no-greatest-below, the hole), <a href="r05g.html">5g</a> (fractions-of-rationals), <a href="r05h.html">5h</a> (square-of-a-sum), <a href="r06d.html">6d</a> (partial order) and <a href="r07d.html">7d</a> (not-every, negated-if forward, not-not-out). <a href="r08b.html">8b</a> proves any two reals compare; <a href="r08c.html">8c</a> takes unions of cuts; <a href="r08d.html">8d</a> adds and multiplies them; <a href="r08f.html">8f</a> shows the hole's cut squares to 2.</p></div>
+</header>
+
+<section class="class step" data-step="8a1">
+  <h2 class="sthead"><span class="stno">8a1</span>New marks on this rung</h2>
+  <p class="stands">Stands on 1f (a stroke makes a second name) and 2d (𝒫).</p>
+  <p data-pid="f8fbd4">Each mark below is said first in plain words. Each gets its own “from here on” line on the step named, before any proof uses it.</p>
+  <ul>
+    <li data-pid="84e11c">a real number, a cut: the small Greek letters alpha, beta and sigma, α, β and σ (8a)</li>
+    <li data-pid="3d6094">the set of all the reals: ℝ (8a)</li>
+    <li data-pid="4fef3b">one real is at most another, meaning it is a part of the other: α ≤ β; and below, at most and not the same: α &lt; β (8a)</li>
+    <li data-pid="b60548">the cut of a fraction r, the fractions below r: r*, read “r star” (8a). Where a real is meant, r alone names r* (8d)</li>
+    <li data-pid="671826">the greater and the lesser of two reals: max(α, β) and min(α, β) (8b)</li>
+    <li data-pid="9d8c5c">the least upper bound and the greatest lower bound of a set of reals: sup S and inf S (8c)</li>
+    <li data-pid="2c1d91">the sum, the negative, the difference, the product and the reciprocal of reals: α + β, −α, α − β, α · β or αβ, and α⁻¹ (8d)</li>
+    <li data-pid="bf07a7">a real to the power of a number: α^k (8f)</li>
+    <li data-pid="37d836">the square root and the n-th root of a real at least 0: √u and ⁿ√u (8f); the odd root of a negative real (8i)</li>
+    <li data-pid="2103d1">the stretches of the line between two reals, with the ends in or out: (c, d), [c, d], [c, d) and (c, d]; and the stretches with no end on one side, such as (c, ∞), where ∞ is never a number (8g)</li>
+    <li data-pid="b4490b">the size of a real, its distance from 0: |p| (8h)</li>
+    <li data-pid="27ef4d">powers with a negative or a fraction in the high place: u^(−k) and u^x (8i)</li>
+    <li data-pid="9304bd">plus or minus, two answers at once: ± (8i)</li>
+    <li data-pid="234170">the standard deviation of data: σ, with σ² the variance (8·stat). There σ names a spread, not a cut</li>
+    <li data-pid="b80928">a real at a splitting: the small Greek letter rho, ρ (8·cb5)</li>
+    <li data-pid="ac9eed">an endless decimal, a number and then a digit for each place: N.d₁d₂d₃⋯; and a bar over a block of digits, meaning the block repeats for ever (8·cb5)</li>
+    <li data-pid="e2f206">on the optional page 8·phys only: the front parts of units, μ, M, G and T; and 5g’s ≈ read for any positive real</li>
+  </ul>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">8a1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">α,  ℝ,  r*</span></span>Say each mark in words. <br>Name the step that lays each one down.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="8a2">
+  <h2 class="sthead"><span class="stno">8a2</span>The hole, again</h2>
+  <p class="stands">Stands on 5e (no fraction squares to 2; crowded and holed at once).</p>
+  <p data-pid="cf0d30">Sort every fraction into one of two heaps. The lower heap holds the fractions that are negative or square to less than 2. The upper heap holds the rest: those that are not negative and square to 2 or more. By no-fraction-squares-to-2 no fraction squares to exactly 2. So the upper heap is the positive fractions squaring to more than 2. Everything in the lower heap is below everything in the upper heap. (You will prove it below, as the members-below-non-members technique, for any heap of this kind.) And no-greatest-below showed that the lower heap has no greatest member. From any positive r with r² &lt; 2 it built a larger fraction still squaring to less than 2. So the split is clean, and at the split there is no fraction. 5e called that a hole, and promised that rung 8 would fill it.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the hole · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">8a2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">the lower heap {r : r < 0 ∨ r² < 2}</span></span>Name two fractions in it and two outside it. <br>Say why no fraction sits at the split.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="8a3">
+  <h2 class="sthead"><span class="stno">8a3</span>The turn: the split is the number</h2>
+  <p class="stands">Stands on 8a2.</p>
+  <p data-pid="88557e">The old move was to stop looking for a number at the split and to let the split itself be the number. Whenever a splitting of the fractions is produced by no fraction, the inventor said, we create a new number, and regard it as completely fixed by the splitting.</p>
+  <p data-pid="3d685d"><b>A splitting is fixed by its lower heap: the upper heap is just the fractions left over.</b> So the ladder takes the lower heap alone and asks what makes a set of fractions the lower heap of a split. Four things. It has something in it. It does not have every fraction, so the upper heap is not empty. It is closed downward: whatever is below a member is a member. And it has no greatest member, a choice that keeps one fraction from being written twice (8a4.1e shows why).</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · the turn · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">8a3.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">the fractions split at ½: those below ½, and the rest</span></span>Write the lower heap. <br>Say why the ladder keeps only the lower heap.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="8a4">
+  <h2 class="sthead"><span class="stno">8a4</span>What a cut is</h2>
+  <p class="stands">Stands on 8a3 and 5c (order on fractions).</p>
+  <p class="eqline" data-pid="85c9df">From here on, a cut is a set α ⊆ ℚ with four properties. (i) α has a member: ∃r (r ∈ α). (ii) α misses some fraction: ∃s ∈ ℚ (s ∉ α). (iii) α is closed downward: ∀r ∈ α ∀s ∈ ℚ (s &lt; r ⇒ s ∈ α). (iv) α has no greatest member: ∀r ∈ α ∃s ∈ α (r &lt; s).</p>
+  <p data-pid="18d3bc">The &lt; inside the conditions is 5c's order on fractions. A cut is used by unpacking: (i) and (ii) are somes, used by calling a member; (iii) and (iv) are everys, used with any member you have. A cut is made by proving all four, which this step does three times.</p>
+  <p class="eqline" data-pid="6f842b">From here on, α (the Greek letter alpha, in its small form) names a cut, a real number. β (beta, in its small form) names another, and σ (sigma, in its small form) a third, when a third is needed. Small Greek letters for reals are a habit, like rung 0's small letters for things, not a rule. The capital Σ of 4j is a different mark and keeps its job.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · a cut · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">8a4.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\{r \in \mathbb Q : r &lt; 3/4\}"></span></span>Prove it meets the four conditions of a cut, or find the first it fails.</li><li><span class="givens"><span data-tex-inline="\{r \in \mathbb Q : r \le 3/4\}"></span></span>Prove it meets the four conditions of a cut, or find the first it fails.</li><li><span class="givens"><span data-tex-inline="\{r \in \mathbb Q : r \cdot r &lt; 2\}"></span></span>Prove it meets the four conditions of a cut, or find the first it fails.</li><li><span class="givens"><span data-tex-inline="\{r \in \mathbb Q : r &lt; 0 \lor r \cdot r &lt; 3\}"></span></span>Prove it meets the four conditions of a cut, or find the first it fails.</li><li><span class="givens"><span data-tex-inline="\text{the four conditions,}"></span> <span data-tex-inline="\text{with (iv) dropped}"></span></span>Find two different sets of fractions that would both be lower heaps of the splitting at 3/4.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="8a5">
+  <h2 class="sthead"><span class="stno">8a5</span>The set of all cuts, and its name</h2>
+  <p class="stands">Stands on 8a4 and 2b, 2d (Separation, Power).</p>
+  <p data-pid="c62444">A cut is a part of ℚ, so it is a member of 𝒫(ℚ), the set of all the parts of ℚ (2d's Power). The condition “is a cut” is a statement about a set, built from ∈, &lt; and rung 1's words. So, by Separation, there is a set of all of them:</p>
+  <p class="eqline" data-pid="e486c4">From here on, ℝ names the set {α ∈ 𝒫(ℚ) : α is a cut}. Its members are the real numbers, or reals. Read it “R”, or “the reals”.</p>
+  <p class="eqline" data-pid="8e7e34">From here on, the line is the ladder's name for ℝ with the order defined below: “on the line” means “in ℝ”. No geometry is meant. The line is a word for the ordered set ℝ, and its picture is a picture of order: less to the left, greater to the right. The shape that shares the name waits for geometry, on rung 18. A line of a proof is still a line of writing.</p>
+  <p data-pid="3d6d7e">Nothing has been assumed. <b>By Power, Separation and same-members, from rung 2, ℝ is a set, and every real is a set of fractions.</b> The pictures in this step set fractions out by size so the eye can follow the order; only left of and right of carry meaning in them.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · ℝ · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">8a5.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">ℝ = {α ∈ 𝒫(ℚ) : α is a cut}</span></span>Name the rung 2 tools that make ℝ a set. <br>Say what had to be assumed.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="8a6">
+  <h2 class="sthead"><span class="stno">8a6</span>A first technique: members sit below non-members</h2>
+  <p class="stands">Stands on 8a4 and 5c (any-two-compare on ℚ).</p>
+  <p data-pid="dc532d">Order on the fractions chains. 5c never wrote this down as a technique, so here it is. Chain technique for less on ℚ: <b>x &lt; y ∧ y &lt; z ⇒ x &lt; z.</b></p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the chain technique for less on ℚ">
+a \lt b,\ \ b \lt c @@ given
+b - a,\ \ c - b \text{ positive} @@ ﹀ 5c's &lt;
+(c - b) + (b - a) \text{ positive} @@ positive-sum on ℚ (5c)
+(c - b) + (b - a) = c + ((-b) + b) + (-a) @@ regroup for plus on ℚ, turn-about for plus on ℚ (5c): regroup and commute
+= c + 0 + (-a) = \htmlClass{new}{c - a} @@ negative on ℚ, plus-zero on ℚ; 5c's line for a − b
+a \lt c \quad \blacksquare @@ the swap axiom on the positive line; ︿ &lt;
+  </pre>
+  <p data-pid="26c970">Members-below-non-members technique: <b>for a cut α, r ∈ α ∧ s ∉ α ⇒ r &lt; s.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the members-below-non-members technique">
+r \in \alpha,\ \ s \notin \alpha @@ given
+s \lt r \lor s = r \lor r \lt s @@ any-two-compare on ℚ (5c): any two fractions compare, a proved or
+\text{case } s \lt r:\ s \in \alpha,\ \bot @@ (iii) with the member r; clash with s ∉ α
+\text{case } s = r:\ s \in \alpha,\ \bot @@ the swap axiom on r ∈ α; clash
+\text{case } r \lt s:\ \htmlClass{new}{r \lt s} @@ the case itself
+r \lt s \quad \blacksquare @@ reason by cases; the first two by everything permitted
+  </pre>
+  <p data-pid="54635f">So a cut and the fractions it misses are a lower and an upper heap: everything of the one below everything of the other. The either-way principle was not used: any-two-compare on ℚ's or is proved.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · members below non-members · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">8a6.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">α = (½)*,  r = ⅓,  s = ¾</span></span>Check that r ∈ α and s ∉ α. <br>Then rule out s < r and s = r, as the column does.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="8a7">
+  <h2 class="sthead"><span class="stno">8a7</span>Order is being a part of</h2>
+  <p class="stands">Stands on 8a5, 2a (inclusion) and 6d (partial orders).</p>
+  <p class="eqline" data-pid="089bde">From here on, for reals α and β, α ≤ β means α ⊆ β. Read it “α is at most β”. And α &lt; β means α ≤ β ∧ α ≠ β (“α is less than β”). β ≥ α and β &gt; α mean α ≤ β and α &lt; β, as in 4g. Between reals these marks always mean this. Between fractions they keep 5c's meaning, and what stands on each side says which. Each of these marks is a statement with two gaps, as 0b's = is.</p>
+  <p data-pid="dd32fa">At-most-is-a-partial-order technique on ℝ: <b>it is reflexive, antisymmetric and transitive</b>, in 6d's words. Reflexive: α ⊆ α is 2a's self-part. Antisymmetric: α ⊆ β and β ⊆ α give α = β by 2a's double-inclusion. Transitive: α ⊆ β and β ⊆ σ give α ⊆ σ by 2a's chain for part of. ∎ Three lines, each a technique of rung 2: order on the line is inherited, not invented. Whether any two reals compare is a different question, and 8b's.</p>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · order · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">8a7.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">α ≤ β,  β ≤ γ</span></span>Prove α ≤ γ. <br>Name the part of at-most-is-a-partial-order you used.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="8a8">
+  <h2 class="sthead"><span class="stno">8a8</span>Each fraction is a cut</h2>
+  <p class="stands">Stands on 8a4, 8a7 and 4g (≤ on fractions).</p>
+  <p class="eqline" data-pid="54133f">From here on, for a rational r, r* names {s ∈ ℚ : s &lt; r}, the set of the fractions below r. Read it “r star”, or “the cut of r”.</p>
+  <p data-pid="4dc41f">Fraction-cut technique: <b>for every rational r, r* ∈ ℝ.</b> It is a sift of ℚ, so a part of ℚ (sift-is-part). The four conditions, one at a time:</p>
+  <pre class="lines" data-k="ember" data-label="this step: the fraction-cut technique">
+r - 1 \lt r @@ r − (r − 1) = 1, positive (times-one on ℚ, negative on ℚ and the rules); 5c's &lt;
+\text{(i)}\ \ r - 1 \in r^{*} @@ ︿ the sift
+\neg(r \lt r) @@ r − r = 0, and three-way on ℚ says 0 is not positive
+\text{(ii)}\ \ r \notin r^{*} @@ ﹀ the sift: membership needs r &lt; r
+\text{(iii)}\ \ t \in r^{*},\ s \lt t \;\Rightarrow\; s \lt r,\ s \in r^{*} @@ ﹀; chain for less on ℚ; ︿ 
+t \in r^{*} \;\Rightarrow\; t \lt \tfrac{t + r}{2} \lt r @@ another-between (5e), between t and r
+\text{(iv)}\ \ \tfrac{t + r}{2} \in r^{*},\ \text{greater than } t @@ ︿ the sift; show an example
+\htmlClass{new}{r^{*} \in \mathbb R} \quad \blacksquare @@ all four; ︿ the sift of 𝒫(ℚ)
+  </pre>
+  <p data-pid="fcdd07">Fractions-keep-order technique: <b>for rationals r and s, r ≤ s ⇔ r* ≤ s*, and r &lt; s ⇔ r* &lt; s*; in particular r* = s* ⇔ r = s.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the fractions-keep-order technique, the first part">
+\text{assume } r \le s;\ \text{let } t \in r^{*} @@ to prove an if; chase a member
+t \lt r,\ \text{so } t \lt s @@ ﹀; chain for less on ℚ if r &lt; s, the swap axiom if r = s
+t \in s^{*};\ \ r^{*} \subseteq s^{*} @@ ︿; t was anything; ︿ ⊆
+\text{assume } r^{*} \subseteq s^{*} \text{ and } s \lt r @@ the other way; the second aiming to refute
+s \in r^{*},\ \text{so } s \in s^{*},\ s \lt s,\ \bot @@ ︿; carry the ⊆ through; ﹀; ¬(s &lt; s) as above
+\neg(s \lt r),\ \text{so } \htmlClass{new}{r \le s} \quad \blacksquare @@ refute; any-two-compare on ℚ: the or of the other two
+  </pre>
+  <p data-pid="926498">The sameness part follows by antisymmetry each side (at-most-is-a-partial-order on ℝ and 4g's ≤ on fractions with any-two-compare on ℚ), and the strict part by joining the two. So the cuts r* are a copy of the fractions, in the same order. 8d shows the copy adds and multiplies like the original, and only then gives the naming line that lets r stand for r*.</p>
+  <section class="slides" id="sl7"><div class="eyebrow">The slides · the cut of r · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">8a8.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">r = ⅔</span></span>Show r* meets the four conditions of a cut. <br>Name a member of r* greater than ½.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="8a9">
+  <h2 class="sthead"><span class="stno">8a9</span>A real is the set of the fractions below it</h2>
+  <p class="stands">Stands on 8a6 and 8a8.</p>
+  <p data-pid="aa9dcf">Now the slogan becomes a technique. Members-are-the-fractions-below technique: <b>for a real α and a rational r, r ∈ α ⇔ r* &lt; α.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the members-are-the-fractions-below technique">
+\text{assume } r \in \alpha;\ \text{let } t \in r^{*} @@ the rightward direction
+t \lt r,\ \ t \in \alpha;\ \ r^{*} \subseteq \alpha @@ ﹀; (iii); ︿ ⊆
+\text{if } r^{*} = \alpha:\ r \in r^{*},\ \bot @@ the swap axiom on r ∈ α; clash with fraction-cut's (ii)
+r^{*} \ne \alpha;\ \ \htmlClass{new}{r^{*} \lt \alpha} @@ refute; join; ︿ &lt;
+\text{assume } r^{*} \subseteq \alpha \land r^{*} \ne \alpha @@ the leftward direction
+\neg\forall t\,(t \in \alpha \Rightarrow t \in r^{*}) @@ else α ⊆ r*, and double-inclusion gives r* = α: clash; refute
+\exists t\,(t \in \alpha \land t \notin r^{*}) @@ not-every, then negated-if forward (7d)
+\text{call it } t:\ \neg(t \lt r),\ \text{so } r \le t @@ use the some; ﹀; any-two-compare on ℚ
+\htmlClass{new}{r \in \alpha} \quad \blacksquare @@ r = t: the swap axiom; r &lt; t: (iii). Cases; the call closes
+  </pre>
+  <p data-pid="f7e4f9">Read the rightward direction as the gesture of the step: every fraction in α is a fraction below α. The leftward one uses not-every, so it is classical: it finds a member of α beyond r without saying which.</p>
+  <section class="slides" id="sl8"><div class="eyebrow">The slides · the members-are-the-fractions-below technique · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · left: a set of fractions, magnified at its split · right: order as being a part of</div>
+    <div class="panel">
+      <div class="chips" role="group" aria-label="the set" id="setch"></div>
+      <canvas id="cvA"></canvas>
+      <div class="chips"><button id="zin">magnify ×4</button><button id="zout">back out</button></div>
+      <div class="cap">Each tick is a fraction, taller for smaller bottoms, set out by size (only left and right mean anything). Teal: in the set; ember: not in it. Tap a tick to choose a fraction p. The readout finds a larger member, or a smaller non-member, or names the condition that fails there. Magnify around the split and watch the fractions keep coming.</div>
+      <div class="eqbox" id="eqA"></div>
+      <div class="conds" id="cdA"></div>
+    </div>
+    <div class="panel">
+      <div class="chips" role="group" aria-label="alpha" id="ach"><span class="m" style="color:var(--muted)">α:</span></div>
+      <div class="chips" role="group" aria-label="beta" id="bch"><span class="m" style="color:var(--muted)">β:</span></div>
+      <canvas id="cvB"></canvas>
+      <div class="cap">Two reals as two rows of fractions: α above (ember), β below (teal), among the fractions with bottoms up to 12 from −1 to 2. A fraction in one and not the other is ringed gold. The readout says which is a part of which, and turns a ringed fraction w into members-are-the-fractions-below's line: the smaller real is at most w*, and w* is less than the larger.</div>
+      <div class="eqbox" id="eqB"></div>
+    </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">8a9.1</span><span class="ph bend">bend</span><span class="givens"><span data-tex-inline="\alpha \text{ a real},"></span> <span data-tex-inline="r \text{ a rational}"></span></span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="r \notin \alpha \Rightarrow \alpha \le r^*"></span></span>Prove it.</li><li><span class="givens"><span data-tex-inline="\alpha \le r^* \Rightarrow r \notin \alpha"></span></span>Prove it.</li><li><span class="givens"><span data-tex-inline="h\text{: the hole’s cut},"></span> <span data-tex-inline="S\text{: } (7/5)^* &lt; h &lt; (3/2)^*"></span></span>Prove S.</li><li><span class="givens"><span data-tex-inline="\text{a fraction’s cut between}"></span> <span data-tex-inline="(7/5)^* \text{ and } (3/2)^*"></span></span>Prove its fraction lies between those two fractions.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="8a10">
+  <h2 class="sthead"><span class="stno">8a10</span>The hole is a cut, and it is no fraction’s cut</h2>
+  <p class="stands">Stands on 8a8, 8a9, 5e (no-greatest-below) and 5g (fractions of rationals).</p>
+  <p data-pid="431fd3">Let α = {r ∈ ℚ : r &lt; 0 ∨ r² &lt; 2}, the lower heap of the hole. Three small results first. Squares-keep-order technique on ℚ: <b>0 ≤ s &lt; r ⇒ s² &lt; r².</b> If s = 0, then s² = 0 and r is positive, so r² is positive (positive-product on ℚ). If s is positive: s · s &lt; r · s and r · s &lt; r · r. Each is by 5e's keep-order for times on ℚ (multiply by a positive). Then use turn-about for times on ℚ and chain for less on ℚ. ∎</p>
+  <p data-pid="fce578">Hole's-step technique: <b>for a rational r ≥ 0, with s = (2r + 2)/(r + 2): s − r = (2 − r²)/(r + 2) and s² − 2 = 2(r² − 2)/(r + 2)².</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the hole's-step technique">
+s - r = \tfrac{2r + 2}{r + 2} - \tfrac{r(r + 2)}{r + 2} @@ fractions-of-rationals i (5g): r over the same bottom; r + 2 positive, so not 0
+= \tfrac{2r + 2 - r^2 - 2r}{r + 2} = \htmlClass{new}{\tfrac{2 - r^2}{r + 2}} @@ fractions-of-rationals iii; spread on ℚ; collect
+s^2 - 2 = \tfrac{(2r + 2)^2 - 2(r + 2)^2}{(r + 2)^2} @@ fractions-of-rationals ii and iii, over (r + 2)²
+= \tfrac{4r^2 + 8r + 4 - 2r^2 - 8r - 8}{(r + 2)^2} = \htmlClass{new}{\tfrac{2(r^2 - 2)}{(r + 2)^2}} \quad \blacksquare @@ square-of-a-sum (5h) twice; spread on ℚ; collect
+  </pre>
+  <p data-pid="ea4919">This is 5e's no-greatest-below step: with r = p/q it is (2p + 2q)/(p + 2q). Read the two lines for sign. Below the hole, r² &lt; 2: s − r is positive and s² − 2 is negative, so s is larger and still below. Above the hole, r² &gt; 2: s − r is negative and s² − 2 is positive, so s is smaller and still above. From 1 the step climbs 4/3, 7/5, 24/17, 41/29; from 3/2 it falls 10/7, 17/12, 58/41, 99/70. Neither heap has an end at the split. That second half matches 5e's step from the other side. Written down, it is the no-least-above technique: <b>r positive ∧ 2 &lt; r² ⇒ ∃s (0 &lt; s &lt; r ∧ 2 &lt; s²)</b>. Take s from hole's-step. Its top and bottom are positive, so s is positive. The signs of hole's-step's two lines do the rest, by negative-out on ℚ and positive-product on ℚ.</p>
+  <p data-pid="bcd177">Hole's-heap-is-a-cut technique: <b>α = {r ∈ ℚ : r &lt; 0 ∨ r² &lt; 2} is a real.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the hole's-heap-is-a-cut technique">
+\text{(i)}\ \ -1 \lt 0,\ \text{so } -1 \in \alpha @@ add an option; ︿ the sift
+\text{(ii)}\ \ \neg(2 \lt 0),\ \neg(4 \lt 2),\ \text{so } 2 \notin \alpha @@ 2 positive; 2² = 4 and 4 − 2 = 2 positive; neither (1c)
+\text{(iii)}\ \ s \lt r,\ r \in \alpha:\ \text{case } r \lt 0:\ s \lt 0 @@ chain for less on ℚ
+\quad \text{case } r^2 \lt 2:\ s \lt 0,\ \text{or } 0 \le s \text{ and } s^2 \lt r^2 \lt 2 @@ any-two-compare on ℚ on s and 0; squares-keep-order on ℚ; chain for less on ℚ
+\quad s \in \alpha @@ add an option in each case; reason by cases
+\text{(iv)}\ \ r \in \alpha:\ r \lt 0 \text{ gives } 0;\ \ r = 0 \text{ gives } 1 @@ any-two-compare on ℚ on r and 0; 0² = 0 &lt; 2; 1² = 1 &lt; 2
+\quad 0 \lt r \text{ gives } \tfrac{2r + 2}{r + 2} @@ r² &lt; 2 by remaining-option; no-greatest-below (5e), with hole's-step's s
+\htmlClass{new}{\alpha \in \mathbb R} \quad \blacksquare @@ all four; ︿ 
+  </pre>
+  <p data-pid="efd7ba">Hole-is-no-fraction's-cut technique: <b>for every rational r, α ≠ r*.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the hole-is-no-fraction's-cut technique">
+\text{assume } \alpha = r^{*} @@ aiming to refute
+r \notin \alpha:\ \neg(r \lt 0) \land \neg(r^2 \lt 2) @@ fraction-cut's (ii); the swap axiom; ﹀; neither
+r^2 \ne 2,\ \text{so } 2 \lt r^2;\ \ r \text{ positive} @@ no-fraction-squares-to-2 (5e); any-two-compare on ℚ; r = 0 would give 0 &lt; 2
+\text{call } s:\ 0 \lt s \lt r,\ \ 2 \lt s^2 @@ no-least-above; use the some
+s \in r^{*} = \alpha,\ \text{so } s \lt 0 \lor s^2 \lt 2 @@ ︿; the swap axiom; ﹀ 
+\bot @@ s &lt; 0 clashes with 0 &lt; s; s² &lt; 2 with 2 &lt; s² gives 2 &lt; 2 by chain for less on ℚ
+\htmlClass{new}{\alpha \ne r^{*}} \quad \blacksquare @@ refute; r was anything
+  </pre>
+  <p class="eqline" data-pid="024975">From here on, a real that is r* for no rational r is irrational. The hole's cut is irrational, by hole-is-no-fraction's-cut. A real that is some r* may be called rational, as its fraction is.</p>
+  <p data-pid="08f76b">So the line holds something the fractions did not: a real sitting exactly at 5e's split. Every fraction of the lower heap is below it. Every fraction of the upper heap is not below it (by members-are-the-fractions-below: r ∈ α ⇔ r* &lt; α). 5e opened a flag when it promised that rung 8 would fill its hole: that flag is closed here, since the hole now has a number at it. What this real gives when multiplied by itself is 8f's question, once 8d has said what multiplying cuts means.</p>
+  <section class="slides" id="sl9"><div class="eyebrow">The slides · the hole’s cut · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">8a10.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">r = 7/5</span></span>Find s, the hole’s step from r. <br>Check that s is in the hole’s cut and greater than r.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="8a11">
+  <h2 class="sthead"><span class="stno">8a11</span>Illegal moves</h2>
+  <p class="stands">Stands on 8a1 to 8a10.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\{r \in \mathbb Q : r \le \tfrac12\} \text{ is a cut}\,? @@ ½ is its greatest member: (iv) fails. With it, ½ would have two cuts, this and ½*
+\{r \in \mathbb Q : r^2 \lt 2\} \text{ is the hole's cut}\,? @@ −3 &lt; 1, 1 is in, −3 is not: (iii) fails. The negatives must be let in
+\begin{aligned}&\alpha \le \beta \text{ means every member}\\ &\quad\text{of } \alpha \text{ is below every member of } \beta\,?\end{aligned} @@ that is never true: (iv) gives members of α above any member you name. Order is ⊆
+r^{*} \text{ is the fraction } r\,? @@ r* is a set of fractions; r is a class of pairs. fractions-keep-order says the copy keeps order; 8d gives the naming line
+\begin{aligned}&\alpha \text{ is irrational because}\\ &\quad\text{nobody has found its fraction}\,?\end{aligned} @@ hole-is-no-fraction's-cut is a proof for every r. Not finding is not refuting (1b)
+r^{*} \lt \alpha \text{ for every } r \in \alpha \text{, so } \alpha \text{ has a greatest member}\,? @@ members-are-the-fractions-below gives each member a place below α; (iv) gives each a larger member. No member is at the top
+\text{the line is a straight line}\,? @@ it is the ordered set ℝ. Its pictures show order only; shapes wait for rung 18
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">8a11.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">“{r ∈ ℚ : r ≤ ½} is a cut.”</span></span>Which condition fails? <br>Mend the set so that it is a cut.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="8a12">
+  <h2 class="sthead"><span class="stno">8a12</span>Running it backwards</h2>
+  <p class="stands">Stands on 8a1 to 8a10.</p>
+  <p data-pid="f9df6a">Handed a set of fractions and asked whether it is a real, check the four conditions in order. Expect (iii) and (iv) to need work. (iii) wants every negative let in when the condition talks about squares. (iv) wants a recipe for a larger member: a halfway fraction by another-between, or a step like hole's-step's. Handed a real and asked which fraction it is, look for r with α = r*. The least fraction not in α, if there is one, is r. If the fractions missed by α have no least member, α is irrational. Wanting α ≤ β, chase a member. Wanting r ∈ α from order, use members-are-the-fractions-below. Found upward; written downward.</p>
+  <section class="slides" id="sl10"><div class="eyebrow">The slides · running it backwards · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">8a12.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\{s \in \mathbb Q : s &lt; 0 \lor s \cdot s &lt; 9/4\} = r^*"></span></span>Find r.</li><li><span class="givens"><span data-tex-inline="(5/7)^*"></span></span>Find the least fraction it misses.</li><li><span class="givens"><span data-tex-inline="K = \{r \in \mathbb Q : r &lt; 0 \lor r \cdot r &lt; 3\}"></span></span>Prove the fractions K misses have no least member.</li><li><span class="givens"><span data-tex-inline="K = \{r \in \mathbb Q : r &lt; 0 \lor r \cdot r &lt; 3\}"></span></span>Prove K is no fraction’s cut.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">8a.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{The hole’s cut sits strictly}"></span> <span data-tex-inline="\text{between two fractions’ cuts.}"></span> <span data-tex-inline="\kappa = \{r \in \mathbb Q : r &lt; 0 \lor r \cdot r \cdot r &lt; 2\}"></span></span>Test this set at the cube for a cut, and pin it the same way.<ol class="parts" type="a"><li>Prove κ is a real.</li><li>Prove κ is irrational.</li><li><span class="givens"><span data-tex-inline="r^* &lt; \kappa &lt; s^*,"></span> <span data-tex-inline="s - r = 1/20"></span></span>Find fractions r and s that fit.</li></ol></div>
+  <div class="chq"><span class="chid">8a.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\emptyset,"></span> <span data-tex-inline="\mathbb Q,"></span> <span data-tex-inline="\{r \in \mathbb Q : r &lt; r\}"></span></span>Decide whether each is a cut.</div>
+  <div class="chq"><span class="chid">8a.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="r \in \alpha \Leftrightarrow r^* &lt; \alpha,"></span> <span data-tex-inline="r^* \le \alpha"></span></span>Decide whether such an r is always in α, and find when it is not.</div>
+  <div class="chq"><span class="chid">8a.4.4</span><span class="tagq">seam</span>Old: at a splitting no fraction makes, a new number is created, fixed by the splitting. The ladder: the number is the splitting’s lower heap. Decide which is the number at 5e’s hole.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r08.html">← 8 · drawing lines</a><a href="r08b.html">8b · any two reals compare →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>The move of letting the split itself be the number is Richard Dedekind’s. 8a.4.4’s old answer is his.</p>
+  <aside class="voice para"><p>Dedekind’s move was to stop looking for a number at the split and to let the split itself be the number. Whenever a splitting of the fractions is produced by no fraction, he said, we create a new number, and regard it as completely fixed by the splitting.</p><cite>Dedekind, Continuity and Irrational Numbers (1872), §IV, after Beman's translation (1901)</cite></aside>
+  <p>Accepted names: a cut is a Dedekind cut.</p>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper}=Rung;
+const R=String.raw;
+function size(cv,H){ const dp=window.devicePixelRatio||1, W=cv.clientWidth||300; cv.width=W*dp; cv.height=H*dp; cv.style.height=H+'px'; const c=cv.getContext('2d'); c.setTransform(dp,0,0,dp,0,0); return {c,W}; }
+function gcd(a,b){ a=Math.abs(a); b=Math.abs(b); while(b){ [a,b]=[b,a%b]; } return a; }
+function fr(p,q){ if(q<0){p=-p;q=-q;} const g=gcd(p,q)||1; return [p/g,q/g]; }
+const ftex=f=>f[1]===1?`${f[0]}`:(f[0]<0?`-\\tfrac{${-f[0]}}{${f[1]}}`:`\\tfrac{${f[0]}}{${f[1]}}`);
+const fval=f=>f[0]/f[1];
+const add=(a,b)=>fr(a[0]*b[1]+b[0]*a[1],a[1]*b[1]), half=a=>fr(a[0],2*a[1]);
+const step=r=>fr(2*r[0]+2*r[1], r[0]+2*r[1]); // (2r+2)/(r+2)
+function farey(lo,hi,Q){ const out=[]; for(let q=1;q<=Q;q++){ for(let p=Math.ceil(lo*q);p<=Math.floor(hi*q);p++){ if(gcd(p,q)===1) out.push([p,q]); } } return out; }
+
+/* ---------- left: a set of fractions ---------- */
+const SETS=[
+  {k:'h',lab:'r < 0 ∨ r² < 2',t:R`\{r : r \lt 0 \lor r^2 \lt 2\}`,mem:f=>f[0]<0||f[0]*f[0]<2*f[1]*f[1],split:Math.SQRT2,ok:[1,1,1,1]},
+  {k:'s',lab:'r < ½',t:R`\{r : r \lt \tfrac12\}`,mem:f=>2*f[0]<f[1],split:.5,ok:[1,1,1,1]},
+  {k:'l',lab:'r ≤ ½',t:R`\{r : r \le \tfrac12\}`,mem:f=>2*f[0]<=f[1],split:.5,ok:[1,1,1,0]},
+  {k:'q',lab:'r² < 4',t:R`\{r : r^2 \lt 4\}`,mem:f=>f[0]*f[0]<4*f[1]*f[1],split:-2,ok:[1,1,0,1]},
+  {k:'a',lab:'all of ℚ',t:R`\mathbb Q`,mem:f=>true,split:0,ok:[1,0,1,1]}];
+const CW=[R`\text{(i) has a member}`,R`\text{(ii) misses a fraction}`,R`\text{(iii) closed downward}`,R`\text{(iv) no greatest member}`];
+let si=0, zoom=0, pick=null, ticks=[];
+const setch=document.getElementById('setch');
+SETS.forEach((S,i)=>{ const b=document.createElement('button'); b.textContent=S.lab; if(i===si) b.className='on'; b.onclick=()=>{ si=i; zoom=0; pick=null; [...setch.children].forEach(z=>z.classList.toggle('on',z===b)); drawA(); }; setch.appendChild(b); });
+document.getElementById('zin').onclick=()=>{ if(zoom<4){ zoom++; drawA(); } };
+document.getElementById('zout').onclick=()=>{ zoom=0; drawA(); };
+const cvA=document.getElementById('cvA');
+function win(){ const S=SETS[si]; const w=2/Math.pow(4,zoom); const c=zoom?S.split:(S.k==='q'?-0.5:(S.k==='a'?0.5:0.6)); return [c-w*(zoom?1:1.35),c+w*(zoom?1:1.35)]; }
+function drawA(){
+  const S=SETS[si], W0=cvA.clientWidth||300, H=150; const {c}=size(cvA,H); c.fillStyle=col('--card'); c.fillRect(0,0,W0,H);
+  const [lo,hi]=win(); let Q=1; while(Q<400 && farey(lo,hi,Q+1).length<=Math.max(40,Math.min(110,W0/4))) Q++;
+  const fs=farey(lo,hi,Q); ticks=[]; const X=v=>12+(W0-24)*(v-lo)/(hi-lo), base=96;
+  c.strokeStyle=col('--grid'); c.lineWidth=1; c.beginPath(); c.moveTo(6,base); c.lineTo(W0-6,base); c.stroke();
+  fs.sort((a,b)=>b[1]-a[1]).forEach(f=>{ const x=X(fval(f)), h=8+46/Math.sqrt(f[1]); const inS=S.mem(f);
+    c.strokeStyle=inS?col('--teal'):col('--ember'); c.lineWidth=f[1]<=2?2.2:1.3; c.beginPath(); c.moveTo(x,base); c.lineTo(x,base-h); c.stroke(); ticks.push({x,f}); });
+  // labels for the smallest bottoms
+  c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; c.fillStyle=col('--muted');
+  const lab=fs.filter(f=>f[1]===Math.min(...fs.map(g=>g[1]))||f[1]<=1).slice(0,9); let lastx=-99;
+  lab.sort((a,b)=>fval(a)-fval(b)).forEach(f=>{ const x=X(fval(f)); if(x-lastx>34){ c.fillText(f[1]===1?f[0]:f[0]+'/'+f[1],x,base+16); lastx=x; } });
+  if(pick){ const x=X(fval(pick)); if(x>=0&&x<=W0){ c.beginPath(); c.arc(x,base-62,6,0,7); c.fillStyle=col('--gold'); c.fill(); c.strokeStyle=col('--gold'); c.lineWidth=1.5; c.beginPath(); c.moveTo(x,base-56); c.lineTo(x,base); c.stroke(); } }
+  c.fillStyle=col('--muted'); c.textAlign='left'; c.fillText(`bottoms up to ${Q} · from ${lo.toFixed(4).replace(/0+$/,'').replace(/\.$/,'')} to ${hi.toFixed(4).replace(/0+$/,'').replace(/\.$/,'')}`,8,H-10);
+  readA();
+  const cd=document.getElementById('cdA'); cd.innerHTML=''; S.ok.forEach((o,i)=>{ const d=document.createElement('div'); if(!o) d.className='bad'; tex(d,CW[i]+(o?R`\ \ \checkmark`:R`\ \ \text{fails}`),false); cd.appendChild(d); });
+}
+function readA(){
+  const S=SETS[si], L=[`s = ${S.t}`];
+  if(!pick){ L.push(R`\text{tap a tick to choose a fraction } p`); }
+  else { const p=pick, P=ftex(p), inS=S.mem(p);
+    if(inS){ L.push(`p = ${P} \\in s`);
+      if(S.k==='l'&&p[0]*2===p[1]) { L.push(R`\text{no member of } s \text{ is greater than } \tfrac12`); L.push(R`\htmlClass{new}{\text{(iv) fails here: } \tfrac12 \text{ is the greatest member}}`); }
+      else { let q, why;
+        if(S.k==='h'){ if(p[0]<0){ q=[0,1]; why=R`0 \text{ is greater, and } 0^2 \lt 2`; } else if(p[0]===0){ q=[1,1]; why=R`1^2 = 1 \lt 2`; } else { q=step(p); why=R`\text{hole's-step's step: } \tfrac{2p+2}{p+2}`; } }
+        else if(S.k==='s'){ q=half(add(p,[1,2])); why=R`\text{another-between: halfway to } \tfrac12`; }
+        else if(S.k==='l'){ q=half(add(p,[1,2])); why=R`\text{halfway to } \tfrac12`; }
+        else if(S.k==='q'){ q=half(add(p,[2,1])); why=R`\text{halfway to } 2`; }
+        else { q=add(p,[1,1]); why=R`p + 1`; }
+        L.push(`\\htmlClass{keep}{${ftex(q)} \\in s},\\ \\ ${ftex(q)} \\gt p`); L.push(why); }
+    } else { L.push(`p = ${P} \\notin s`);
+      if(S.k==='q'&&fval(p)<0){ L.push(R`0 \in s \text{ and } p \lt 0`); L.push(R`\htmlClass{new}{\text{(iii) fails: a member above a non-member}}`); }
+      else if(S.k==='h'){ const q=step(p); L.push(R`\text{every member is below } p \text{ (members-below-non-members)}`); L.push(`\\htmlClass{keep}{${ftex(q)} \\notin s},\\ \\ ${ftex(q)} \\lt p \\ \\text{(no-least-above's step)}`); L.push(R`\text{no least non-member: no fraction at the split}`); }
+      else if(S.k==='s'&&p[0]*2===p[1]){ L.push(R`\tfrac12 \text{ is the least non-member: } s = \tfrac12^{*}`); }
+      else if(S.k==='q'){ L.push(R`\text{every member is below } p`); }
+      else { L.push(R`\text{every member is below } p \text{ (members-below-non-members)}`); } }
+  }
+  tex(document.getElementById('eqA'),'\\begin{gathered}'+L.join('\\\\ ')+'\\end{gathered}',true);
+}
+cvA.addEventListener('pointerdown',e=>{ const Rc=cvA.getBoundingClientRect(), x=e.clientX-Rc.left; let best=null,bd=1e9; ticks.forEach(t=>{ const d=Math.abs(t.x-x)+ (t.f[1]>6?2:0); if(d<bd){ bd=d; best=t; } }); if(best&&bd<14){ pick=best.f; drawA(); } });
+new ResizeObserver(drawA).observe(cvA);
+
+/* ---------- right: order as being a part of ---------- */
+const CUTS=[[-1,1],[0,1],[1,2],[2,3],[3,4],[1,1],[7,5],'H',[3,2]];
+const cname=k=>k==='H'?R`\text{the hole's cut}`:(k[1]===1?`${ftex(k)}^{*}`:`(${ftex(k)})^{*}`);
+const cmem=(k,f)=>k==='H'?(f[0]<0||f[0]*f[0]<2*f[1]*f[1]):(f[0]*k[1]<k[0]*f[1]);
+const cval=k=>k==='H'?Math.SQRT2:fval(k);
+let ai=6, bi=7;
+function chips(id,get,set){ const el=document.getElementById(id); CUTS.forEach((k,i)=>{ const b=document.createElement('button'); b.textContent=k==='H'?'hole':(k[1]===1?k[0]:k[0]+'/'+k[1]); if(i===get()) b.className='on'; b.onclick=()=>{ set(i); [...el.querySelectorAll('button')].forEach(z=>z.classList.toggle('on',z===b)); drawB(); }; el.appendChild(b); }); }
+chips('ach',()=>ai,v=>ai=v); chips('bch',()=>bi,v=>bi=v);
+const cvB=document.getElementById('cvB');
+function drawB(){
+  const W0=cvB.clientWidth||300, H=150; const {c}=size(cvB,H); c.fillStyle=col('--card'); c.fillRect(0,0,W0,H);
+  const lo=-1, hi=2, X=v=>12+(W0-24)*(v-lo)/(hi-lo); const fs=farey(lo,hi,12).filter(f=>f[1]<=(W0<420?8:12));
+  const A=CUTS[ai], B=CUTS[bi]; const ya=50, yb=112;
+  c.font='12px IBM Plex Mono, monospace'; c.fillStyle=col('--muted'); c.textAlign='left'; c.fillText('α',4,ya-30); c.fillText('β',4,yb-30);
+  [[A,ya,'--ember'],[B,yb,'--teal']].forEach(([K,y,cl])=>{ c.strokeStyle=col('--grid'); c.lineWidth=1; c.beginPath(); c.moveTo(6,y); c.lineTo(W0-6,y); c.stroke();
+    fs.forEach(f=>{ if(!cmem(K,f)) return; const x=X(fval(f)), h=4+22/Math.sqrt(f[1]); c.strokeStyle=col(cl); c.lineWidth=f[1]<=2?2:1.1; c.beginPath(); c.moveTo(x,y); c.lineTo(x,y-h); c.stroke(); }); });
+  let wit=null; fs.slice().sort((a,b)=>a[1]-b[1]||fval(a)-fval(b)).forEach(f=>{ if(cmem(A,f)!==cmem(B,f)){ const x=X(fval(f)); c.beginPath(); c.arc(x,(ya+yb)/2+2,f[1]<=3?5:3,0,7); c.strokeStyle=col('--gold'); c.lineWidth=1.6; c.stroke(); if(!wit) wit=f; } });
+  c.fillStyle=col('--muted'); c.textAlign='center'; [-1,0,1,2].forEach(v=>c.fillText(v,X(v),H-6));
+  const L=[`\\alpha = ${cname(A)},\\ \\ \\beta = ${cname(B)}`];
+  const va=cval(A), vb=cval(B);
+  if(ai===bi){ L.push(R`\alpha \subseteq \beta \text{ and } \beta \subseteq \alpha:\ \ \htmlClass{keep}{\alpha = \beta} \text{ (double-inclusion)}`); }
+  else { const lt=va<vb; const sm=lt?R`\alpha`:R`\beta`, lg=lt?R`\beta`:R`\alpha`;
+    L.push(`${sm} \\subseteq ${lg}:\\ \\ \\htmlClass{keep}{${sm} \\lt ${lg}}`);
+    if(wit){ L.push(`w = ${ftex(wit)} \\in ${lg},\\ \\ w \\notin ${sm}`); L.push(`${sm} \\le w^{*} \\lt ${lg}\\ \\ \\text{(members-below-non-members, then members-are-the-fractions-below)}`); } }
+  tex(document.getElementById('eqB'),'\\begin{gathered}'+L.join('\\\\ ')+'\\end{gathered}',true);
+}
+new ResizeObserver(drawB).observe(cvB);
+if(window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{ drawA(); drawB(); });
+drawA(); drawB();
+
+/* ---------- slides ---------- */
+const N='\\htmlClass{new}', K='\\htmlClass{keep}';
+stepper('#sl1',[
+  {k:'ember',kl:'the hole',t:R`\{r : r \lt 0 \lor r^2 \lt 2\} \quad\text{and}\quad \{r : 0 \le r \land 2 \lt r^2\}`,n:`Every fraction on one side (no-fraction-squares-to-2), everything left below everything right, no greatest on the left (no-greatest-below), no least on the right. Nothing at the split.`}
+],{title:'The slides · the hole · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'the turn',t:R`\text{the split itself is the number}`,n:`Keep the lower heap: it fixes the split.`}
+],{title:'The slides · the turn · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'a cut',t:R`\text{(i) } \exists r\,(r \in \alpha) \quad \text{(ii) } \exists s \in \mathbb Q\,(s \notin \alpha)`,n:`A member; and a fraction it misses.`},
+  {k:'ember',kl:'a cut',t:R`\text{(iii) } r \in \alpha \land s \lt r \Rightarrow s \in \alpha \quad \text{(iv) } r \in \alpha \Rightarrow \exists s \in \alpha\,(r \lt s)`,n:`Closed downward; no greatest member.`}
+],{title:'The slides · a cut · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'ℝ',t:R`${N}{\mathbb R} = \{\alpha \in \mathcal P(\mathbb Q) : \alpha \text{ is a cut}\}`,n:`power and Separation: nothing assumed. α, β, σ name reals. The ladder calls ℝ the line: an ordered set, no geometry.`}
+],{title:'The slides · ℝ · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'the chain technique for less on ℚ',t:R`x \lt y \land y \lt z \;\Rightarrow\; ${N}{x \lt z}`,n:`z − x = (z − y) + (y − x), positive by positive-sum on ℚ.`},
+  {k:'ember',kl:'the members-below-non-members technique',t:R`r \in \alpha \land s \notin \alpha \;\Rightarrow\; ${N}{r \lt s}`,n:`any-two-compare on ℚ: s &lt; r would put s in by (iii); s = r by the swap axiom. A cut and its misses are a lower and an upper heap.`}
+],{title:'The slides · members below non-members · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'order',t:R`\alpha \le \beta \;\Leftrightarrow\; ${N}{\alpha \subseteq \beta}`,n:`And α &lt; β when also α ≠ β. at-most-is-a-partial-order on ℝ: reflexive (self-part), antisymmetric (double-inclusion), transitive (chain for part of).`}
+],{title:'The slides · order · ← → keys work'});
+stepper('#sl7',[
+  {k:'ember',kl:'the cut of r',t:R`r^{*} = \{s \in \mathbb Q : s \lt r\}`,n:`The fraction-cut technique: (i) r − 1; (ii) r itself is missed; (iii) chain for less on ℚ; (iv) the halfway fraction (t + r)/2, by another-between.`},
+  {k:'ember',kl:'the fractions-keep-order technique',t:R`r \le s \Leftrightarrow r^{*} \le s^{*},\ \ r \lt s \Leftrightarrow ${N}{r^{*} \lt s^{*}}`,n:`A copy of the fractions in the same order. Rightward by chain for less on ℚ; leftward by refuting s &lt; r with s ∈ s*.`}
+],{title:'The slides · the cut of r · ← → keys work'});
+stepper('#sl8',[
+  {k:'ember',kl:'the members-are-the-fractions-below technique',t:R`r \in \alpha \;\Leftrightarrow\; ${N}{r^{*} \lt \alpha}`,n:`A real is the set of the fractions below it. The leftward direction uses not-every and negated-if forward: classical.`}
+],{title:'The slides · the members-are-the-fractions-below technique · ← → keys work'});
+stepper('#sl9',[
+  {k:'ember',kl:'the squares-keep-order technique on ℚ',t:R`0 \le s \lt r \;\Rightarrow\; s^2 \lt r^2`,n:`s · s &lt; r · s &lt; r · r, by keep-order for times on ℚ twice (s = 0 apart).`},
+  {k:'ember',kl:'the hole\'s-step technique',t:R`s = \tfrac{2r + 2}{r + 2}:\ \ s - r = \tfrac{2 - r^2}{r + 2},\ \ s^2 - 2 = \tfrac{2(r^2 - 2)}{(r + 2)^2}`,n:`fractions-of-rationals and square-of-a-sum. Below the hole s climbs and stays below; above, s falls and stays above.`},
+  {k:'ember',kl:'the step',t:R`1 \to \tfrac43 \to \tfrac75 \to \tfrac{24}{17} \to \tfrac{41}{29};\ \ \tfrac32 \to \tfrac{10}{7} \to \tfrac{17}{12} \to \tfrac{58}{41}`,n:`Neither heap ends at the split: no-greatest-below and its match no-least-above.`},
+  {k:'ember',kl:'the hole\'s-heap-is-a-cut technique',t:R`\alpha = \{r : r \lt 0 \lor r^2 \lt 2\} \in ${N}{\mathbb R}`,n:`(i) −1; (ii) 2 is missed; (iii) by cases, with squares-keep-order on ℚ; (iv) 0, 1, or hole's-step's step.`},
+  {k:'ember',kl:'the hole-is-no-fraction\'s-cut technique',t:R`\alpha \ne r^{*} \text{ for every } r`,n:`If α = r*, r is missed, so r² &gt; 2 (no-fraction-squares-to-2); no-least-above gives a smaller s still above, yet s ∈ r* = α. Clash.`},
+  {k:'ember',kl:'irrational',t:R`\text{a real that is no } r^{*}`,n:`The hole's cut is irrational: a new number, sitting exactly at 5e's split.`}
+],{title:'The slides · the hole’s cut · ← → keys work'});
+stepper('#sl10',[
+  {k:'ember',kl:'running backwards',t:R`\text{least fraction missed} = r \;\Rightarrow\; \alpha = r^{*}`,n:`If the misses have a least member r, α is r*; if they have none, α is irrational.`}
+],{title:'The slides · running it backwards · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

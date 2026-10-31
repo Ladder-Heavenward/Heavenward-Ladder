@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Can a flat map tell the truth?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+#mp svg{width:100%;max-width:360px;display:block;margin:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r22logi.html">← 22·logi can a computer try every route?</a><a href="r22chem.html">next: 22·chem does the order of adding change a crystal's energy? →</a></p>
+  <div class="tags"><span class="tag nav">22·nav · navigation</span></div>
+  <h1>Can a flat map tell the truth?</h1>
+  <p>Can a flat map tell the truth? Every map of the world is drawn on a flat sheet, and the world is a ball. A sailor wants a map on which a steady compass heading is a straight line, so that a ruler can lay the course. A school wants a map on which every country is its true size. What makes it hard is that the skin of a ball cannot be laid flat without stretching, as an orange peel tears when it is pressed onto a table. So every flat map stretches something, and the only questions are what, and by how much. This page shows, with rung twenty-one’s turns, rung fifteen’s thin strips and rung twenty-two’s endless sums, how much a map must stretch to keep a compass course straight, why the poles fall off the top of such a map, and why no flat map keeps both sizes and shapes.</p>
+  <p class="gesture">On a map whose lines of latitude run straight across, each of them is drawn as long as the equator, so the far north is stretched east and west. To keep every heading true, the map must stretch north and south by the same amount, strip by thin strip. The height of each latitude on the map is then the total of endlessly many thin strips, and the strips near the pole add up past every bound, as the sum of one, a half, a third and so on does. A map that keeps sizes must squash where the other stretches, so it cannot keep headings too. And no flat map at all keeps every distance.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r21cb18.html">21·cb18</a> (a city is two turns; the city-distance technique), <a href="r21nav.html">21·nav</a> (headings; runs as arrows), <a href="r21c.html">21c</a> (the tangent and its family), <a href="r21g.html">21g</a> (the slopes of sin, cos and tan), <a href="r21f.html">21f</a> (fences for a small arc), <a href="r15h.html">15h</a> (sums of thin strips), <a href="r16c.html">16c</a> (evaluating by antiderivatives), <a href="r17b.html">17b</a> (the slope of ln) and <a href="r22d.html">22d</a> (the grouping technique: 1 + ½ + ⅓ + ⋯ passes every ceiling). 23·nav asks how far away the horizon is, on the same ball.</p></div>
+</header>
+
+<section class="class step" data-step="22nav1">
+  <h2 class="sthead"><span class="stno">22nav1</span>Every straight grid stretches the far north</h2>
+  <p class="stands">Stands on 21·cb18.1 (two turns name a point) and 21j3 (arcs on any circle).</p>
+  <p class="eqline" data-pid="3dfb3a">From here on, on this page, a straight-grid map draws every line of longitude as an upright straight line, evenly spaced, and every line of latitude as a straight line across. It draws the equator at true scale: a globe of radius R gives a map 2πR wide.</p>
+  <p data-pid="4b9cda">A line of latitude is a circle round the earth’s axis. On the globe it shrinks toward the pole. On a straight-grid map it is drawn as wide as the equator.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the east-stretch technique">
+\text{latitude } \varphi:\ \text{a circle of radius } R\cos\varphi @@ two turns (21·cb18.1): its reach from the axis
+\text{its length on the globe: } 2\pi R\cos\varphi @@ arcs on any circle (21j3)
+\text{its length on the map: } 2\pi R @@ every line across is as wide as the equator
+\htmlClass{new}{\text{east-west stretch at } \varphi = \tfrac{2\pi R}{2\pi R\cos\varphi} = \sec\varphi} \quad \blacksquare @@ the tangent’s family (21c)
+  </pre>
+  <p data-pid="59032c">East-stretch technique: <b>a straight-grid map stretches every east-west length at latitude φ by sec φ.</b> At Eureka, 40.8° N, the stretch is 1.32. At Vancouver, 49.3° N, it is 1.53. At 60° N it is 2. At the pole sec is not defined: a single point would have to be drawn as wide as the equator.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · east stretch · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">22·nav.1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a straight-grid map, the equator drawn 40 cm long</span> <span class="gtx">R = 6371 km</span> <span class="gtx">Eureka at 40.8° N,  Vancouver at 49.3° N</span></span>Find the east-west stretch at each. <br>Find the drawn length of one degree of longitude at each, and its true length on the ground.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22nav2">
+  <h2 class="sthead"><span class="stno">22nav2</span>Keep every heading: an endless sum of thin strips</h2>
+  <p class="stands">Stands on 22·nav.1, 21·nav.4 (a run on a heading), 13 (slope), 15h (sums of thin strips), 16c (evaluating by antiderivatives), 17b (the slope of ln) and 21g (the slopes of sin, cos and tan).</p>
+  <p data-pid="ec4641">A short step of length s on heading β goes s cos β north and s sin β east (21·nav.4). On the map the east part is stretched by sec φ. Let the north part be stretched by k, which the mapmaker is free to choose. The drawn step then leans at a heading β′ from the map’s upright lines.</p>
+  <pre class="lines" data-k="ember" data-label="this page: what keeps a heading">
+\tan\beta' = \tfrac{\sec\varphi \cdot s\sin\beta}{k \cdot s\cos\beta} = \tfrac{\sec\varphi}{k}\tan\beta @@ east part over north part, as drawn
+\beta' = \beta \text{ for every } \beta \Rightarrow \tfrac{\sec\varphi}{k} = 1 @@ take β = 45°, where tan β = 1
+\htmlClass{new}{k = \sec\varphi} \quad \blacksquare @@ and k = sec φ keeps every β
+  </pre>
+  <p data-pid="41c1f9">Let y(φ) be the drawn height of latitude φ above the equator. A step R h north, from φ to φ + h, is drawn y(φ + h) − y(φ) tall. So the north stretch at φ is the slope y′(φ) divided by R.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the strip technique">
+\tfrac{y(\varphi + h) - y(\varphi)}{R\,h} \to \tfrac{y'(\varphi)}{R} = \sec\varphi @@ the north stretch is the east stretch
+y(\varphi) = R\int_0^{\varphi}\sec t\,dt @@ the drawn height is the area under its slope (16c); y(0) = 0
+\tfrac{d}{d\varphi}\ln(\sec\varphi + \tan\varphi) = \tfrac{\sec\varphi\tan\varphi + \sec^2\varphi}{\sec\varphi + \tan\varphi} = \sec\varphi @@ slope of ln (17b), the chain (13), slopes of sec and tan (21g)
+\htmlClass{new}{y(\varphi) = R\ln(\sec\varphi + \tan\varphi)} \quad \blacksquare @@ both are 0 at the equator (16c)
+  </pre>
+  <p data-pid="211f37">Strip technique: <b>a straight-grid map keeps every heading exactly when it draws latitude φ at height R ln(sec φ + tan φ), the total of its thin strips.</b> A steady compass heading crosses every line of longitude at one angle, so on this map it is a straight line, and a ruler lays the course.</p>
+  <p data-pid="999aa8">Before anyone had the formula, the heights were found by adding strips. Each strip of width h is fenced between R h sec at its lower edge and R h sec at its upper edge, since sec rises from the equator to the pole (15h).</p>
+  <pre class="lines" data-k="ember" data-label="this page: strip sums up to 60°">
+6 \text{ strips of } 10^\circ:\ \ 1.2384\,R \le y(60^\circ) \le 1.4129\,R @@ lower and upper edges of each strip
+60 \text{ strips of } 1^\circ:\ \ 1.3083\,R \le y(60^\circ) \le 1.3258\,R @@ the fences close in (15h)
+\htmlClass{new}{y(60^\circ) = R\ln(2 + \sqrt3) \approx 1.3170\,R} @@ sec 60° = 2, tan 60° = √3
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · keep headings · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · two straight-grid maps, one latitude, one small round patch</div>
+    <div class="kn"><span class="m">φ</span><input type="range" id="kf" min="0" max="84" step="1" value="49"><output id="of"></output></div>
+    <div class="kn"><span class="m">strips</span><input type="range" id="kn" min="1" max="60" step="1" value="6"><output id="on"></output></div>
+    <div id="mp"></div>
+    <div class="cap">Left, the map that keeps headings; right, the map that keeps sizes. Lines every 10° of latitude and 30° of longitude. The ember patch is the same small round patch of ground, about 1100 km across, drawn on each map at latitude φ. The strips fence the left map’s height of φ from below and above.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22·nav.2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a straight-grid map that keeps every heading,  R = 6.37 cm on the map</span> <span class="gtx">Seattle at 47.6° N, 122.3° W;  Missoula at 46.9° N, 114.0° W</span></span>Find the drawn height of each above the equator. <br>Find the steady compass heading that takes a plane from Seattle to Missoula.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22nav3">
+  <h2 class="sthead"><span class="stno">22nav3</span>The pole falls off the top</h2>
+  <p class="stands">Stands on 22·nav.2, 21f (fences for a small arc) and 22d (the grouping technique).</p>
+  <p data-pid="dab121">Near the pole sec φ is huge, so the strips there are drawn very tall. Measure from the pole instead: let c = 90° − φ, in radians. Then sec φ = 1 / sin c, and sin c ≤ c (21f), so sec φ ≥ 1 / c.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the pole technique">
+\text{cut from } c = h \text{ to } c = nh \text{ into strips of width } h @@ strip k runs from c = (k − 1)h to c = kh, for k = 2, …, n
+\text{strip } k \ge R\,h \cdot \tfrac{1}{kh} = \tfrac{R}{k} @@ sec φ ≥ 1/c ≥ 1/(kh) across the strip
+y(90^\circ - h) - y(90^\circ - nh) \ge R\,(\tfrac12 + \tfrac13 + \cdots + \tfrac1n) @@ add the strips
+\htmlClass{new}{\text{the drawn height passes every bound as } \varphi \to 90^\circ} \quad \blacksquare @@ fix nh; as n grows, 1 + ½ + ⅓ + ⋯ passes every ceiling (22d’s grouping technique)
+  </pre>
+  <p data-pid="3a3e32">Pole technique: <b>on a map that keeps every heading, the drawn height of latitude φ passes every bound as φ nears the pole, just as 1 + ½ + ⅓ + ⋯ does.</b> The pole is never on the map. Every such map is cut off at a top edge somewhere short of it.</p>
+  <pre class="lines" data-k="ember" data-label="this page: steps toward the pole">
+y(89^\circ) \approx 4.74\,R,\ \ y(89.9^\circ) \approx 7.04\,R,\ \ y(89.99^\circ) \approx 9.35\,R @@ the strip technique
+\sec\varphi + \tan\varphi = \tfrac{1 + \cos c}{\sin c} \approx \tfrac{2}{c} @@ c small
+\htmlClass{new}{\text{each step ten times closer adds about } R\ln 10 \approx 2.30\,R} @@ log-of-a-quotient (17c)
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · the pole · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22·nav.3.1</span><span class="ph undo">undo</span><span class="givens"><span class="gtx">a straight-grid map that keeps every heading,  R = 1 unit</span> <span class="gtx">a point drawn 2 units above the equator</span> <span class="gtx">the same map drawn 1 m tall from the equator to its top edge,  R = 6.37 cm</span></span>Find the latitude of the point. <br>Find how far from the pole, on the ground, the top edge falls, with the earth’s R = 6371 km.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22nav4">
+  <h2 class="sthead"><span class="stno">22nav4</span>Sizes or headings, not both</h2>
+  <p class="stands">Stands on 22·nav.1, 22·nav.2, 15e (areas scale), 18a (distance) and 21·cb18.2 (the city-distance technique).</p>
+  <p data-pid="a96c72">A small patch of ground at latitude φ, a wide and b tall, is drawn a sec φ wide and b k tall. So its area is stretched by k sec φ (15e).</p>
+  <pre class="lines" data-k="ember" data-label="this page: the shape-or-size technique">
+\text{area stretch} = k\sec\varphi @@ areas scale (15e)
+\text{headings kept} \Rightarrow k = \sec\varphi @@ 22·nav.2
+\text{sizes kept} \Rightarrow k\sec\varphi = 1 \Rightarrow k = \cos\varphi,\ \ y = R\sin\varphi @@ the slope of sin is cos (21g)
+\htmlClass{new}{\text{both} \Rightarrow \sec^2\varphi = 1 \Rightarrow \varphi = 0} \quad \blacksquare @@ only along the equator
+  </pre>
+  <p data-pid="36b181">Shape-or-size technique: <b>a straight-grid map can keep every heading or every size, but it keeps both only along the equator.</b> The heading map stretches every area by sec² φ.</p>
+  <pre class="lines" data-k="ember" data-label="this page: Greenland against Africa, on the heading map">
+\text{Greenland}:\ 2.17 \text{ million km}^2 \text{ near } 72^\circ \text{ N};\ \ \sec^2 72^\circ \approx 10.5 @@ the shape-or-size technique
+\text{drawn as if } 2.17 \cdot 10.5 \approx 22.7 \text{ million km}^2 @@ at the equator’s scale
+\htmlClass{new}{\text{Africa}:\ 30.4 \text{ million km}^2,\ \text{astride the equator, drawn near true size}} @@ fourteen times Greenland, drawn not much bigger
+  </pre>
+  <p data-pid="88d2fb">Maps that are not straight grids can bend their lines. Can one of them keep every distance? Take the north pole N, and on the equator A at longitude 0°, M at 45° and B at 90°. Along the surface, A, M and B are each a quarter turn from N, so NA = NM = NB = πR/2. Along the equator, AM = MB = πR/4 and AB = πR/2 (21·cb18.2).</p>
+  <pre class="lines" data-k="ember" data-label="this page: no flat map keeps every distance">
+A' = (0, 0),\ \ B' = (s, 0),\ \ s = \tfrac{\pi R}{2} @@ suppose a flat map keeps every distance; slide and turn it (20)
+|A'M'| = |B'M'| = \tfrac{s}{2} \Rightarrow M' = (\tfrac{s}{2},\ 0) @@ subtract the two distance equations: x = s/2, then y = 0 (18a)
+|A'N'| = |B'N'| = s \Rightarrow N' = (\tfrac{s}{2},\ \pm\tfrac{\sqrt3}{2}s) @@ the same way
+\htmlClass{new}{|N'M'| = \tfrac{\sqrt3}{2}s \ne s = NM} \quad \blacksquare @@ the map breaks one distance, so no flat map keeps them all
+  </pre>
+  <p data-pid="91c9c8">Keeping every heading and every size at once would make every short length come out true, and then every distance would be kept. That step, for maps that bend their lines, is held in trust for much higher up the ladder.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · sizes · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22·nav.4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">the map that keeps headings,  areas at the equator’s scale</span> <span class="gtx">Vancouver Island: 31 300 km², near 49.6° N</span> <span class="gtx">Montana: 381 000 km², near 47.0° N</span></span>Find the drawn area of each. <br>Find the latitude where a patch is drawn at four times its size. <br>Find the drawn height of 49.6° N on the map that keeps sizes, with R = 6.37 cm.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22nav5">
+  <h2 class="sthead"><span class="stno">22nav5</span>Illegal moves</h2>
+  <p class="stands">Stands on 22·nav.1 to 22·nav.4.</p>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{every straight-grid map stretches the north by } \sec\varphi\,? @@ only the east stretch is forced; the north stretch is chosen
+\text{a straight line on the heading map is the shortest route}\,? @@ it is a steady heading; the great circle bends toward the pole (21·cb18.3)
+\text{the pole is drawn at } R\ln(\sec 90^\circ + \tan 90^\circ)\,? @@ sec 90° is not defined; the height passes every bound
+\text{the strips get thin, so their total stays small}\,? @@ thin strips can add past every bound, as 1 + ½ + ⅓ + ⋯ does
+\text{the same drawn area means the same area on the ground}\,? @@ on the heading map, only at the same latitude
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22·nav.5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span class="gtx">a straight-grid map that draws every strip from φ to φ + h exactly R h tall</span></span>Find its north stretch and its area stretch. <br>Find where it keeps headings, and where it keeps sizes.</li><li><span class="givens"><span class="gtx">Tofino at 49.2° N,  and the point at 49.2° N half a turn round from it in longitude</span> <span class="gtx">R = 6371 km</span></span>Find the length of the steady-heading course between them, along the latitude, and of the great circle between them. <br>Find which line of the tempting column breaks.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">22·nav.6.1</span><span class="tagq">build</span>Build a straight-grid map that draws every patch of ground at exactly twice its size, at the equator’s scale. <br>Find the drawn height of 60° N on it, with R = 1, and the heading it draws for a true heading of 45° at 60° N.</div>
+  <div class="chq"><span class="chid">22·nav.6.2</span><span class="tagq">edge</span>Find the drawn height of a latitude south of the equator on the heading map, and the north stretch on the equator itself.</div>
+  <div class="chq"><span class="chid">22·nav.6.3</span><span class="tagq">converse</span>A straight-grid map draws every steady compass heading as a straight line. <br>Must its north stretch be sec φ?</div>
+  <div class="chq"><span class="chid">22·nav.6.4</span><span class="tagq">reroute</span>Find ∫₀<sup>φ</sup> sec t dt again by writing sec t = cos t / (1 − sin² t) and putting u = sin t. <br>Show the answer equals ln(sec φ + tan φ).</div>
+  <div class="chq"><span class="chid">22·nav.6.5</span><span class="tagq">seam</span>A table of heights for the heading map was first made by adding strips, one for every minute of arc. Decades later a teacher of navigation noticed that it matched, figure for figure, a printed table of the logs of tan(45° + φ/2). For more than twenty years no one could prove that the two tables were one, and a wager was offered on it. <br>While no proof existed, did the navigators know that the two tables agree?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r22logi.html">← 22·logi · can a computer try every route?</a><a href="r22chem.html">22·chem · does the order of adding change a crystal's energy? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A straight-grid map is a cylindrical projection. The map that keeps headings is the Mercator projection, and a steady compass heading is a rhumb line, or loxodrome. The map that keeps sizes is Lambert’s cylindrical equal-area projection; stretched upright by a fixed factor it becomes the Gall–Peters projection. The east and north stretches are scale factors. A map that keeps every angle is conformal, and one that keeps every area is equal-area. The integral ∫₀<sup>φ</sup> sec t dt is the inverse Gudermannian function, and the drawn height on the heading map is often called the meridional part. That keeping angles and areas at once would keep lengths, and that no flat map keeps lengths, are the content of Gauss’s Theorema Egregium: the ball is curved, and the sheet is not.</p>
+  <h3>Who said it first</h3>
+  <p>Gerardus Mercator drew the heading map in 1569, spacing the lines of latitude by hand, without a formula. Edward Wright (Certaine Errors in Navigation, 1599) worked out its heights by adding the secants of every minute of latitude, this page’s strip sums. Henry Bond noticed about 1645 that Wright’s table matched a table of log tangents, the guess staged in 22·nav.6.5. Nicholas Mercator (no relation) offered a wager in the 1660s on whether it could be proved; James Gregory proved it in 1668 and Isaac Barrow gave the partial-fraction proof of 22·nav.6.4 in 1670. Johann Heinrich Lambert drew the size map in 1772. Leonhard Euler proved in 1777 that no flat map of a ball keeps every distance, and Carl Friedrich Gauss explained why in 1827.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="22·nav: a worked “proof”, not allowed">
+y(\varphi) = R\int_0^{\varphi}\sec t\,dt @@ fine
+\text{each strip near the pole is thin} @@ fine
+\text{so the pole is drawn at some finite height} @@ not allowed: thin strips can still add past every bound; here they do, as 1 + ½ + ⅓ + ⋯
+  </pre>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+const V=c=>'var('+c+')';
+const D=Math.PI/180, sec=t=>1/Math.cos(t), Y=f=>Math.log(sec(f)+Math.tan(f));
+const show=(v,d)=>{ let s=v.toFixed(d==null?2:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s; };
+let phi=49, n=6;
+function draw(){ const W=360,H=300,P=60,base=H-14, L=10, Rr=170;
+  let s='<svg viewBox="0 0 '+W+' '+H+'" style="background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  [[L,'keeps headings',f=>Y(f)],[L+Rr,'keeps sizes',f=>Math.sin(f)]].forEach(([x0,lab,h])=>{
+    for(let g=0;g<=4;g++){ const x=x0+g*P*Math.PI/6; s+='<line x1="'+x+'" y1="'+(base-3.4*P)+'" x2="'+x+'" y2="'+base+'" style="stroke:'+V('--grid')+';stroke-width:0.7"/>'; }
+    for(let f=0;f<=80;f+=10){ const y=base-h(f*D)*P; s+='<line x1="'+x0+'" y1="'+y+'" x2="'+(x0+4*P*Math.PI/6)+'" y2="'+y+'" style="stroke:'+V('--grid')+';stroke-width:'+(f===0?1.6:0.7)+'"/>'; if(f%20===0&&(lab==='keeps headings'||f<=40)) s+='<text x="'+(x0+2)+'" y="'+(y-2)+'" style="fill:'+V('--ink')+';font:9px IBM Plex Mono,monospace">'+f+'°</text>'; }
+    const y=base-h(phi*D)*P, cx=x0+2*P*Math.PI/6, r=5*D*P, k=(lab==='keeps sizes')?Math.cos(phi*D):sec(phi*D);
+    s+='<line x1="'+x0+'" y1="'+y+'" x2="'+(x0+4*P*Math.PI/6)+'" y2="'+y+'" style="stroke:'+V('--teal')+';stroke-width:1.6"/>';
+    s+='<ellipse cx="'+cx+'" cy="'+y+'" rx="'+(r*sec(phi*D))+'" ry="'+(r*k)+'" style="fill:'+V('--ember')+';fill-opacity:0.35;stroke:'+V('--ember')+'"/>';
+    s+='<text x="'+x0+'" y="12" style="fill:'+V('--ink')+';font:600 10px IBM Plex Mono,monospace">'+lab+'</text>'; });
+  const h=phi*D/n; let lo=0, hi=0;
+  for(let k=0;k<n;k++){ lo+=h*sec(k*h); hi+=h*sec((k+1)*h); const yt=base-hi*P, w=6; s+='<rect x="'+(L+4*P*Math.PI/6+3)+'" y="'+yt+'" width="'+w+'" height="'+(h*sec((k+1)*h)*P)+'" style="fill:none;stroke:'+V('--ink')+';stroke-width:0.6"/>'; }
+  $('mp').innerHTML=s+'</svg>'; $('of').textContent=phi+'°'; $('on').textContent=n;
+  const v=$('vd'); v.className='verdict';
+  v.textContent='At '+phi+'°: east stretch sec φ = '+show(sec(phi*D),3)+'. Heading map: height '+show(Y(phi*D),4)+' R, areas ×'+show(sec(phi*D)**2,2)+'. Size map: height sin φ = '+show(Math.sin(phi*D),4)+' R, the patch drawn '+show(Math.cos(phi*D)**2,3)+' times as tall as it is wide. '+n+' strips fence the heading map’s height: '+show(lo,4)+' R ≤ y ≤ '+show(hi,4)+' R.'; }
+$('kf').addEventListener('input',()=>{ phi=+$('kf').value; draw(); });
+$('kn').addEventListener('input',()=>{ n=+$('kn').value; draw(); });
+draw();
+window.__pic={set:(f,m)=>{ phi=f; if(m) n=m; $('kf').value=phi; $('kn').value=n; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'a latitude',t:R`2\pi R\cos\varphi`,n:`On the globe.`},
+  {k:'ember',kl:'drawn',t:R`2\pi R`,n:`As wide as the equator.`},
+  {k:'ember',kl:'stretch',t:R`\htmlClass{new}{\sec\varphi}`,n:`East and west.`}
+],{title:'The slides · east stretch · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'north stretch',t:R`y'(\varphi) = R\sec\varphi`,n:`Match the east stretch.`},
+  {k:'ember',kl:'the strips',t:R`y(\varphi) = R\int_0^{\varphi}\sec t\,dt`,n:`Their total.`},
+  {k:'ember',kl:'the height',t:R`\htmlClass{new}{R\ln(\sec\varphi + \tan\varphi)}`,n:`A heading is a straight line.`}
+],{title:'The slides · keep headings · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'a strip',t:R`\ge \tfrac{R}{k}`,n:`sec φ ≥ 1/c.`},
+  {k:'ember',kl:'the sum',t:R`\htmlClass{new}{\ge R(\tfrac12 + \cdots + \tfrac1n)}`,n:`Past every bound.`}
+],{title:'The slides · the pole · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'area stretch',t:R`k\sec\varphi`,n:`East times north.`},
+  {k:'ember',kl:'headings',t:R`\sec^2\varphi`,n:`Greenland swells.`},
+  {k:'ember',kl:'sizes',t:R`\htmlClass{new}{y = R\sin\varphi}`,n:`Shapes squash.`}
+],{title:'The slides · sizes · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`k = \sec\varphi\ \text{for free}\,?`,n:`Only the east stretch is forced.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

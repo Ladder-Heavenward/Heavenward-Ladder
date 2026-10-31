@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>9f · Composing and inverting by hand</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.chips .lab{font-family:var(--mono);font-size:.8rem;color:var(--muted);margin-right:2px}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%}
+.trail{display:grid;gap:3px;font-family:var(--mono);font-size:.85rem}
+.trail div{padding:4px 8px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0;overflow-x:auto}
+.trail div.f{border-left-color:var(--teal)} .trail div.u{border-left-color:var(--gold)} .trail div.x{border-left-color:var(--ember)}
+#cvV{touch-action:manipulation}
+table.tt td.l{text-align:left;font-family:var(--serif)}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r09e.html">← 9e reading and drawing graphs</a><a href="r09g.html">next: 9g polynomials and rational functions →</a></p>
+  <div class="tags"><span class="tag tech">9f · technique</span></div>
+  <h1>Composing and inverting by hand</h1>
+  <p>9b proved you may chain functions and 9d proved a bijection can be run backwards. This step is where your hands learn to do both fast, and on purpose. You build a function you want out of pieces you know. You take a formula apart into the chain that made it. And you undo a chain by undoing its links in reverse. Every undo here is made of techs you own: adding, multiplying, powers and roots. When a link uses an output twice, you keep part of its inputs first, as 9d did for squaring.</p>
+  <p class="gesture">Compose inside out: the inside's output is the outside's input. Take a formula apart by finding the last thing done to the input: that is the outside, and what it was done to is the inside. Invert by undoing the links, last first.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r05f.html">5f</a> (adding-keeps-answers, multiplying-keeps-answers, licensed techs), <a href="r08g.html">8g</a> (intervals, sign charts), <a href="r08h.html">8h</a> (size-squared, unpack-the-bars), <a href="r08i.html">8i</a> (roots, odd roots, fraction-exponent techniques), <a href="r09b.html">9b</a> (composite-is-a-function, regroup for composing), <a href="r09d.html">9d</a> (swapped-pairs, domains-trade-places, there-and-back, running-backwards, socks-and-shoes, restriction), <a href="r09e.html">9e</a> (natural domain, displacement in pairs). <a href="r09g.html">9g</a> takes polynomials apart; <a href="r09phys.html">9·phys</a> runs distance back to time; <a href="r09bio.html">9·bio</a> runs metabolism back to mass.</p></div>
+</header>
+
+<section class="class step" data-step="9f1">
+  <h2 class="sthead"><span class="stno">9f1</span>Composing by hand: inside out</h2>
+  <p class="stands">Stands on 9b (composing) and 9e6 (natural domain).</p>
+  <p data-pid="3fb383">(g ∘ f)(x) is g(f(x)): do f, then hand its output to g (9b's composite-is-a-function). <b>With numbers, peel from the inside, one layer per line.</b> With formulas, substitute for the expression: wherever the outside's formula has its letter, put the whole inside formula, in brackets.</p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: compose, both orders">
+f(x) = x^2 + 1,\ \ g(x) = \sqrt x @@ g lives on x ≥ 0 (9e's natural domain)
+(g \circ f)(x) = g(\htmlClass{new}{x^2 + 1}) = \sqrt{x^2 + 1} @@ substitute the inside for g's letter; every x, since x² + 1 ≥ 1
+(f \circ g)(x) = f(\htmlClass{new}{\sqrt x}) = (\sqrt x)^2 + 1 @@ the other order: √x goes in for f's letter
+\phantom{(f \circ g)(x)} = x + 1 \quad \htmlClass{keep}{\text{for } x \ge 0} @@ 8f's line: √x · √x = x, but only where √x names a real
+  </pre>
+  <p data-pid="ff3a1b">The small print on the last line is the tempting illegal move. f ∘ g can only be fed what g can be fed, so its domain is [0, ∞). And x ↦ x + 1 on all of ℝ has pairs, like (−4, −3), that f ∘ g lacks: different functions by pairs-fix-the-inputs. The rule for the domain of a composite is in its definition. Composite-domain technique: <b>the natural domain of x ↦ g(f(x)) is {x ∈ dom f : f(x) ∈ dom g}.</b> The formula g(f(x)) names a real exactly when f(x) does and g's formula names a real at it. ∎ So finding it is a small backwards problem: run the outside's condition back through the inside.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the domain of √(4 − x²)">
+\sqrt{4 - x^2}:\ \ \text{outside } \sqrt{\ },\ \text{inside } 4 - x^2 @@ the outside accepts only reals ≥ 0
+4 - x^2 \ge 0 @@ composite-domain: the inside's output must be an input of the outside
+x^2 \le 4 @@ add x² to both sides (adding keeps order, 8g); 4 ≥ x² is x² ≤ 4 (4g's line for ≥)
+|x| \le 2 @@ size-squared: |x|² = x²; powers-keep-order backwards, since |x| and 2 are ≥ 0
+\htmlClass{new}{-2 \le x \le 2} @@ unpack-the-bars (8h): the domain is [−2, 2]
+  </pre>
+  <p data-pid="341c5c">And do not confuse g ∘ f with g · f. The ring means “after”; the dot means “times”. (g · f)(x) = √x · (x² + 1) is a product, a third function again, with domain [0, ∞).</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · inside out · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">9f1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = x + 4,  g(x) = √x</span></span>Find g ∘ f and f ∘ g, each with its natural domain. <br>Say which one is not g · f.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="9f2">
+  <h2 class="sthead"><span class="stno">9f2</span>Taking a chain apart: find the outside, name the inside r</h2>
+  <p class="stands">Stands on 9f1.</p>
+  <p data-pid="3c510b">Running composition backwards is reading a formula from the outside in. Ask: if I were computing this for a particular x, what would I do last? <b>That last operation is the outside. Everything it was done to is the inside, and you call it r.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: take a chain apart">
+y = (3x - 1)^5 @@ the last thing done: raise to the fifth power
+r = \htmlClass{new}{3x - 1},\ \ y = r^5 @@ the inside is what got raised
+y = \tfrac{1}{x^2 + 4} @@ the last thing done: one over
+r = \htmlClass{new}{x^2 + 4},\ \ y = \tfrac1r @@ the inside is the whole bottom
+y = \sqrt{1 + (2x)^3} @@ three links: double; cube and add 1; root
+r = 2x,\ \ s = 1 + r^3,\ \ y = \htmlClass{new}{\sqrt s} @@ peel one layer at a time; regroup for composing: the brackets of the chain don't matter
+  </pre>
+  <p data-pid="540944">The decomposition is not unique, and that is a feature. (3x − 1)⁵ is also 3⁵(x − ⅓)⁵, by power-of-a-product read in ℝ: a different chain for the same function. A later rung asks you to work through a chain link by link (rung 13 does). Then you get to pick the cut that makes the work easy. Running forward again is the check. Substitute the inside back into the outside, and you must land on the formula you started with.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · take it apart · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">9f2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">y = √(5x + 2)</span></span>Find the last thing done, and name the inside r. <br>Write y as a chain of two links.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="9f3">
+  <h2 class="sthead"><span class="stno">9f3</span>The undo list</h2>
+  <p class="stands">Stands on 9f2, 9d (inverses), 5d (no reciprocal of 0) and 8f (roots).</p>
+  <p data-pid="a4cf74">To invert a chain you need the inverse of each link. Here are the links you own, with their undos, and the condition under which each undo is legal. <b>In every row it is 9d's condition: the link must be one-to-one and onto on the sets in use.</b></p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>the link</th><th>its undo</th><th>legal when</th></tr>
+    <tr><td class="l">x + k</td><td class="l">x − k</td><td class="l">always</td></tr>
+    <tr><td class="l">kx</td><td class="l">x/k</td><td class="l">k ≠ 0 (5d: no reciprocal of 0)</td></tr>
+    <tr><td class="l">−x, and 1/x</td><td class="l">themselves</td><td class="l">always (for 1/x, x ≠ 0): each undoes itself (9d)</td></tr>
+    <tr><td class="l">xⁿ, n odd</td><td class="l">ⁿ√x</td><td class="l">always: odd powers are bijections of ℝ (odd-powers-keep-order, 8i's odd roots)</td></tr>
+    <tr><td class="l">xⁿ, n even</td><td class="l">ⁿ√x, or −ⁿ√x</td><td class="l">only after keeping x ≥ 0 (or x ≤ 0, with −ⁿ√x): 9d's root-undoes-square and its kin</td></tr>
+    <tr><td class="l">x^(p/q), p, q positive integers</td><td class="l">x^(q/p)</td><td class="l">on x &gt; 0: (x^(p/q))^(q/p) = x^1 by fraction-exponent techniques (8i)</td></tr>
+  </table></div>
+  <p data-pid="2389dc">Undoing x ↦ 2ˣ, for fractions x, needs a function this ladder has not built; rung 17 builds it.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · the undo list · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">9f3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">x ↦ x³,  x ↦ 1/x,  x ↦ x²</span></span>Write the undo of each. <br>Say when each undo is legal.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="9f4">
+  <h2 class="sthead"><span class="stno">9f4</span>Inverting a chain: undo in reverse order, or swap and solve</h2>
+  <p class="stands">Stands on 9f3 and 9d3 (socks and shoes).</p>
+  <p data-pid="eb1729">Socks then shoes; to undo, shoes off first. 9d's socks-and-shoes says it exactly: (g ∘ f)⁻¹ = f⁻¹ ∘ g⁻¹. <b>The last link applied is the outside, so it comes off first.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: undo in reverse order">
+f(x) = (2x - 3)^3 + 1 @@ the chain: double, take 3, cube, add 1
+\text{undo: } \htmlClass{new}{\text{take } 1,\ \text{cube root},\ \text{add } 3,\ \text{halve}} @@ each link's undo, from the last link to the first (socks-and-shoes)
+f^{-1}(x) = \tfrac{\sqrt[3]{x - 1} + 3}{2} @@ written as one formula, innermost undo first
+f(2) = 1^3 + 1 = 2,\ \ f^{-1}(2) = \tfrac{1 + 3}{2} = \htmlClass{keep}{2} @@ there and back at a number (there-and-back)
+  </pre>
+  <p data-pid="eb840c">The other route reads 9d's swapped-pairs as a recipe. The swapped pairs (v, u) are those with v = f(u). So write y = f(x), and solve for x by licensed techs (5f's adding-keeps-answers and multiplying-keeps-answers, read in ℝ by 8g). The answer x = h(y) names f⁻¹ = h. Each move peels the outermost link left, so the two routes always agree. Solving succeeds, with exactly one x for each y, precisely when f is a bijection onto the set of y you allow (swapped-pairs-function).</p>
+  <pre class="lines" data-k="ember" data-label="this step: solve for x">
+y = (2x - 3)^3 + 1 @@ the function as an equation in x and y
+y - 1 = (2x - 3)^3 @@ adding-keeps-answers: add −1 to both sides
+\sqrt[3]{y - 1} = 2x - 3 @@ cube roots of both sides: licensed, since cubing is a bijection of ℝ (odd-powers-keep-order)
+\htmlClass{new}{x = \tfrac{\sqrt[3]{y - 1} + 3}{2}} @@ adding-keeps-answers by 3, multiplying-keeps-answers by ½: the same as undoing in reverse
+  </pre>
+  <p data-pid="45dba9">The usual recipe is “swap x and y, then solve for y”. That is the same work with the letters exchanged at the start: the swapped pairs, written with x for the left entry as usual. The ladder solves for x and renames at the end, so no letter changes its job midway.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · inverting a chain · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · left: build a chain, then run it backwards · right: which inputs survive a chain</div>
+    <div class="panel">
+      <div class="chips" id="lch"></div>
+      <div class="kn"><span class="m">x</span><input type="range" id="kx" min="-4" max="4" step="0.5" value="2"><output id="ox">2</output></div>
+      <div class="trail" id="trail"></div>
+      <div class="cap">Tap a link's button to change it (three links, done first to last). Teal rows: the chain run forwards from x. Gold rows: the undos, last link first, carrying f(x) back to x. Ember: a link that cannot take the number it is handed, or an undo that is not legal because the link used an output twice.</div>
+      <div class="eqbox" id="eqK"></div>
+    </div>
+    <div class="panel">
+      <div class="chips" id="vin"></div>
+      <div class="chips" id="vout"></div>
+      <canvas id="cvV"></canvas>
+      <div class="cap">Choose an inside f and an outside g. The order picture shows the reals from −5 to 5: teal where x survives, so that g(f(x)) names a real (composite-domain), grey where it does not. Below, the sign of f(x) on each stretch, as in 8g's charts.</div>
+      <div class="eqbox" id="eqV"></div>
+    </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">9f4.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = x^2 - 1,"></span> <span data-tex-inline="g(x) = \sqrt{x + 3}"></span></span>Find g after f and f after g, with their natural domains.</li><li><span class="givens"><span data-tex-inline="h(x) = (2x + 5)^{3/2}"></span></span>Take h apart into three links.</li><li><span class="givens"><span data-tex-inline="g(x) = 4 - (x + 1)^3"></span></span>Invert g.</li><li><span class="givens"><span data-tex-inline="f(x) = \dfrac{3x - 1}{x + 2}"></span></span>Invert f, and find the two reals the domains trade.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="9f5">
+  <h2 class="sthead"><span class="stno">9f5</span>When two inputs share an output: keep part, then invert</h2>
+  <p class="stands">Stands on 9f4 and 9d4 (restriction).</p>
+  <p data-pid="8c9ab5">Solve y = (x − 2)² + 1 for x and you hit a fork at the square root. (x − 2)² = y − 1 has two answers when y &gt; 1, namely 2 ± √(y − 1) (8i's ±). The fork is the failure of one-to-one, seen in the algebra: f(1) = f(3) = 2. <b>So first decide which inputs to keep.</b> Keep x ≥ 2, where the displacement x − 2 is never negative.</p>
+  <pre class="lines" data-k="ember" data-label="this step: keep part, then invert">
+f(x) = (x - 2)^2 + 1 \text{ kept to } x \ge 2 @@ 9d's restriction; outputs y ≥ 1 (square-never-negative), every y ≥ 1 reached
+y - 1 = (x - 2)^2 @@ adding-keeps-answers
+\sqrt{y - 1} = \sqrt{(x - 2)^2} = |x - 2| @@ roots of both sides (both ≥ 0); size-squared
+\phantom{\sqrt{y - 1}} = \htmlClass{new}{x - 2} @@ the bars come off because x ≥ 2 was kept: this is the line the keeping was for
+x = 2 + \sqrt{y - 1} @@ adding-keeps-answers
+f^{-1}(x) = 2 + \sqrt{x - 1} \text{ on } [1, \infty) @@ rename; domains-trade-places: the inverse's domain is f's range
+  </pre>
+  <p data-pid="ccc2c8">Keep x ≤ 2 instead and the bars come off as 2 − x, giving 2 − √(x − 1). The tempting illegal move is to take roots and write x − 2 = √(y − 1) with no comment. <b>The honest root of a square is the absolute value; the keeping is what licenses dropping the bars.</b></p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · keep part, then invert · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">9f5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="y = x^2 - 6x + 10,"></span> <span data-tex-inline="x \ge 3"></span></span>Solve for x.</li><li><span class="givens"><span data-tex-inline="“f(x) = (x - 1)^2,"></span> <span data-tex-inline="\text{so } f^{-1}(x) = \sqrt{x} + 1.”"></span></span>Find the inputs at which the claimed inverse after f is not the identity.</li><li><span class="givens"><span data-tex-inline="f(x) = \sqrt{1 - 1/x}"></span></span>Find the natural domain of f.</li><li><span class="givens"><span data-tex-inline="f(x) = \sqrt[3]{x^2}"></span></span>Is f one-to-one on the reals? <br>On the positive reals?</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="9f6">
+  <h2 class="sthead"><span class="stno">9f6</span>Fractions, displacements, and fractional powers</h2>
+  <p class="stands">Stands on 9f4, 9e8 (displacement) and 8i (fractional powers).</p>
+  <p data-pid="0471f8"><b>Solving works on fractions too: clear the bottom, gather the x terms, factor x out, divide.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: invert a fraction">
+y = \tfrac{x + 1}{x - 2},\ \ x \ne 2 @@ the natural domain
+y(x - 2) = x + 1 @@ multiplying-keeps-answers by x − 2, not 0 on the domain
+yx - x = 2y + 1 @@ expand (spread on ℚ); adding-keeps-answers: add 2y − x to both sides, so the x terms stand on the left
+x\,\htmlClass{new}{(y - 1)} = 2y + 1 @@ factor x out (spread on ℚ backwards)
+x = \tfrac{2y + 1}{y - 1},\ \ y \ne 1 @@ multiplying-keeps-answers by (y − 1)⁻¹; at y = 1 the line reads 0 = 3, no answer
+f^{-1}(x) = \tfrac{2x + 1}{x - 1} @@ rename; domain ℝ ∖ {1} = ran f (domains-trade-places)
+  </pre>
+  <p data-pid="bad186">Notice the domains trading places. f lives on x ≠ 2 and never outputs 1; f⁻¹ lives on x ≠ 1 and never outputs 2. That is swapped-pairs, again, and the fraction 9e found the range of.</p>
+  <p data-pid="d0e38e">Displacements and added amounts are links too. 9e showed g(x) = f(x − h) has the pair (u + h, v) whenever f has (u, v). Now see it as a chain: g = f ∘ d, with d(x) = x − h acting first. And f(x) + k is t ∘ f with t(y) = y + k acting last. So g(x) = (x − 2)³ + 5 is: take 2, cube, add 5. Its inverse undoes those last first: take 5, cube root, add 2. So g⁻¹(x) = ³√(x − 5) + 2. Check at 3: g(3) = 1 + 5 = 6, and g⁻¹(6) = 1 + 2 = 3.</p>
+  <p data-pid="de0bef">A fractional power is itself a chain (8i): x^(p/q) is “the q-th root, then the p-th power”. So it inverts like any chain, and on x &gt; 0 the undo is the reciprocal power. Take f(x) = 2x^(3/2) on [0, ∞): power 3/2, then double. Undo: halve, then power 2/3, so f⁻¹(x) = (x/2)^(2/3). Check with a number whose roots are easy: f(4) = 2 · (√4)³ = 16, and f⁻¹(16) = 8^(2/3) = (³√8)² = 4. 9·bio runs the three-quarters law backwards this way.</p>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · fractions, displacements, fractional powers · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">9f6.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = (x + 3)/(x − 1),  x ≠ 1</span></span>Invert f. <br>Say which real f never outputs, and which f⁻¹ never takes in.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="9f7">
+  <h2 class="sthead"><span class="stno">9f7</span>Illegal moves</h2>
+  <p class="stands">Stands on 9f1 to 9f6.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+f \circ g = (x \mapsto x + 1) \text{ on } \mathbb R\,? @@ for f(x) = x² + 1, g(x) = √x: f ∘ g lives where g does, [0, ∞) (composite-domain)
+(g \circ f)^{-1} = g^{-1} \circ f^{-1}\,? @@ undo the last link first: f⁻¹ ∘ g⁻¹ (socks-and-shoes)
+(\tfrac{x}{2})^3 + 1 \text{ undone as } \sqrt[3]{2x} - 1\,? @@ wrong order. Test at 2: f(2) = 2, and ³√4 − 1 is not 2. Take 1, cube root, double
+y - 2 = \sqrt{x - 1} \text{ with no keeping}\,? @@ √((y − 2)²) = |y − 2| (size-squared); the bars come off only on the kept side
+x^4 \text{ undone by } x^{1/4} \text{ on } \mathbb R\,? @@ (−2)⁴ = 16 and 16^(1/4) = 2: keep x ≥ 0 first
+(g \cdot f)(x) = g(f(x))\,? @@ the dot is times, the ring is after
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">9f7.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">f(x) = x² + 1,  g(x) = √x:  “f ∘ g is x ↦ x + 1 on ℝ.”</span></span>Which illegal move is this? <br>Give f ∘ g its true domain.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="9f8">
+  <h2 class="sthead"><span class="stno">9f8</span>Running it backwards</h2>
+  <p class="stands">Stands on 9f1 to 9f6.</p>
+  <p data-pid="a11de7">Handed a chain: substitute inside out. Handed a formula: find the last operation, name the inside r, and repeat on r. Handed a function to invert: list its links, and check each is one-to-one on what it is fed (keep part if not). Then undo last first; or solve y = f(x) for x. Handed a claimed inverse: compose both ways at a number, then as formulas. Found upward; written downward.</p>
+  <section class="slides" id="sl7"><div class="eyebrow">The slides · the check · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">9f8.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="g(x + 1) = x^2 \text{ for every real } x"></span></span>Find g.</li><li><span class="givens"><span data-tex-inline="f(2x) = x^2 + 2x \text{ for every real } x"></span></span>Find f.</li><li><span class="givens"><span data-tex-inline="h \text{ is linear.}"></span> <span data-tex-inline="h(h(x)) = 4x + 9 \text{ for every real } x"></span></span>Find every such h.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">9f.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{Kept to } x \ge 3 \text{, a fork}"></span> <span data-tex-inline="\text{closes and the chain runs}"></span> <span data-tex-inline="\text{back.}"></span></span>Build inverses of your own.<ol class="parts" type="a"><li>Build a chain of three links, one of them a power, that is one-to-one only on a kept part. <br>Name the part, and invert the chain there.</li><li><span class="givens"><span data-tex-inline="f(x) = 3(x - 2)^{5/3} + 1 \text{ on } (2, \infty)"></span></span>Invert f.</li><li><span class="givens"><span data-tex-inline="g(x) = 2(3x - 1) + 5"></span></span>Prove that the inverse of a chain of linear functions is linear, and find the inverse of g.</li></ol></div>
+  <div class="chq"><span class="chid">9f.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="f(x) = \sqrt{-x^2}"></span></span>Find the natural domain of f.</div>
+  <div class="chq"><span class="chid">9f.4.3</span><span class="tagq">seam</span>No link on the undo list undoes x ↦ 2ˣ, for fractions x. <br>Does anything?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r09e.html">← 9e · reading and drawing graphs</a><a href="r09g.html">9g · polynomials and rational functions →</a></nav>
+
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper}=Rung;
+const R=String.raw;
+function size(cv,H){ const dp=window.devicePixelRatio||1, W=cv.clientWidth||300; cv.width=W*dp; cv.height=H*dp; cv.style.height=H+'px'; const c=cv.getContext('2d'); c.setTransform(dp,0,0,dp,0,0); return {c,W}; }
+const fmt=v=>{ if(!isFinite(v)) return '–'; const r=Math.round(v*1000)/1000; return Object.is(r,-0)?'0':String(r); };
+/* ---------- left: links ---------- */
+const LINKS=[
+  {lab:'add 2',f:x=>x+2,u:y=>y-2,t:s=>`${s} + 2`,ut:s=>`${s} - 2`,un:'take 2'},
+  {lab:'times 3',f:x=>3*x,u:y=>y/3,t:s=>/^[(\\]/.test(s)?`3${s}`:`3(${s})`,ut:s=>`\\tfrac{${s}}{3}`,un:'divide by 3'},
+  {lab:'take 5',f:x=>x-5,u:y=>y+5,t:s=>`${s} - 5`,ut:s=>`${s} + 5`,un:'add 5'},
+  {lab:'cube',f:x=>x*x*x,u:y=>Math.cbrt(y),t:s=>`(${s})^3`,ut:s=>`\\sqrt[3]{${s}}`,un:'cube root'},
+  {lab:'one over',f:x=>x===0?NaN:1/x,u:y=>y===0?NaN:1/y,t:s=>`\\tfrac{1}{${s}}`,ut:s=>`\\tfrac{1}{${s}}`,un:'one over',dom:x=>x!==0},
+  {lab:'square, kept to ≥ 0',f:x=>x>=0?x*x:NaN,u:y=>y>=0?Math.sqrt(y):NaN,t:s=>`(${s})^2`,ut:s=>`\\sqrt{${s}}`,un:'square root',dom:x=>x>=0},
+  {lab:'square, not kept',f:x=>x*x,u:y=>NaN,t:s=>`(${s})^2`,ut:s=>`?`,un:'no undo',bad:true},
+  {lab:'root',f:x=>x>=0?Math.sqrt(x):NaN,u:y=>y>=0?y*y:NaN,t:s=>`\\sqrt{${s}}`,ut:s=>`(${s})^2`,un:'square (outputs ≥ 0)',dom:x=>x>=0}];
+let chain=[0,3,1];
+const lch=document.getElementById('lch');
+function linkChips(){ lch.innerHTML=''; chain.forEach((li,k)=>{ const l=document.createElement('span'); l.className='lab'; l.textContent=`link ${k+1}:`; const b=document.createElement('button'); b.textContent=LINKS[li].lab; b.className='on'; b.onclick=()=>{ chain[k]=(chain[k]+1)%LINKS.length; linkChips(); runK(); }; lch.append(l,b); }); }
+const kx=document.getElementById('kx'), ox=document.getElementById('ox');
+kx.oninput=()=>{ ox.textContent=kx.value; runK(); };
+function strip(s){ return s.replace(/^\((x)\)/,'$1'); }
+function runK(){
+  const x=+kx.value; const tr=document.getElementById('trail'); tr.innerHTML='';
+  let v=x, ok=true; const vals=[x];
+  const row=(cls,html)=>{ const d=document.createElement('div'); d.className=cls; d.innerHTML=html; tr.appendChild(d); };
+  row('f',`x = ${fmt(x)}`);
+  chain.forEach((li,k)=>{ const L=LINKS[li]; if(!ok) return; if(L.dom&&!L.dom(v)){ ok=false; row('x',`link ${k+1} (${L.lab}) cannot take ${fmt(v)}`); return; } v=L.f(v); vals.push(v); row('f',`link ${k+1}, ${L.lab}: ${fmt(v)}`); });
+  let back=v, okb=ok;
+  if(ok){ row('u',`f(x) = ${fmt(v)}; now undo, last link first`);
+    for(let k=chain.length-1;k>=0;k--){ const L=LINKS[chain[k]]; if(L.bad){ okb=false; row('x',`undo link ${k+1}: squaring on all reals used outputs twice (${fmt(vals[k])} and ${fmt(-vals[k])} both give ${fmt(vals[k+1])}); keep part first`); break; } back=L.u(back); row('u',`undo link ${k+1}, ${L.un}: ${fmt(back)}`); }
+    if(okb) row('u',`back at ${fmt(back)} ${Math.abs(back-x)<1e-9?'= x':''}`); }
+  // formulas
+  let ft='x'; chain.forEach(li=>{ ft=LINKS[li].t(ft); });
+  let it='x', okinv=true; for(let k=chain.length-1;k>=0;k--){ const L=LINKS[chain[k]]; if(L.bad){ okinv=false; break; } it=L.ut(it); }
+  const clean=s=>s.replace(/\((x)\)/g,'$1');
+  const Lq=[`f(x) = ${clean(ft)}`, okinv?`f^{-1}(x) = ${clean(it)}`:R`f^{-1}:\ \text{keep part first}`];
+  tex(document.getElementById('eqK'),'\\begin{gathered}'+Lq.join('\\\\ ')+'\\end{gathered}',true);
+}
+linkChips(); runK();
+/* ---------- right: which inputs survive ---------- */
+const INS=[
+  {lab:'4 − x²',t:'4 - x^2',f:x=>4-x*x,z:[-2,2]},
+  {lab:'x − 1',t:'x - 1',f:x=>x-1,z:[1]},
+  {lab:'x² − 1',t:'x^2 - 1',f:x=>x*x-1,z:[-1,1]},
+  {lab:'2x + 6',t:'2x + 6',f:x=>2*x+6,z:[-3]},
+  {lab:'x² + 1',t:'x^2 + 1',f:x=>x*x+1,z:[]}];
+const OUTS=[
+  {lab:'√ r',t:s=>`\\sqrt{${s}}`,ok:v=>v>=0,cond:'\\ge 0'},
+  {lab:'1/r',t:s=>`\\tfrac{1}{${s}}`,ok:v=>v!==0,cond:'\\ne 0'},
+  {lab:'1/√r',t:s=>`\\tfrac{1}{\\sqrt{${s}}}`,ok:v=>v>0,cond:'\\gt 0'}];
+let ii=0, oi=0;
+function vchips(id,arr,get,set,lab){ const el=document.getElementById(id); el.innerHTML=''; const l=document.createElement('span'); l.className='lab'; l.textContent=lab; el.appendChild(l); arr.forEach((A,i)=>{ const b=document.createElement('button'); b.textContent=A.lab; if(i===get()) b.className='on'; b.onclick=()=>{ set(i); vchips(id,arr,get,set,lab); drawV(); }; el.appendChild(b); }); }
+vchips('vin',INS,()=>ii,i=>ii=i,'inside f(x) = r:'); vchips('vout',OUTS,()=>oi,i=>oi=i,'outside g:');
+const cvV=document.getElementById('cvV');
+function pieces(I,O){ // intervals of x in R where O.ok(I.f(x))
+  const z=I.z.slice().sort((a,b)=>a-b), pts=[-Infinity,...z,Infinity]; const out=[];
+  for(let k=0;k<pts.length-1;k++){ const a=pts[k], b=pts[k+1]; const m=a===-Infinity?(b===Infinity?0:b-1):(b===Infinity?a+1:(a+b)/2); if(O.ok(I.f(m))) out.push({a,b,ia:false,ib:false}); }
+  // zeros: include if ok(0)
+  const inc=O.ok(0);
+  // union with zeros
+  const res=[]; out.forEach(p=>res.push(p));
+  if(inc){ z.forEach(r=>{ const L=res.find(p=>p.b===r), Rr=res.find(p=>p.a===r); if(L&&Rr){ L.b=Rr.b; L.ib=Rr.ib; res.splice(res.indexOf(Rr),1); } else if(L) L.ib=true; else if(Rr) Rr.ia=true; else res.push({a:r,b:r,ia:true,ib:true}); }); }
+  return res.sort((p,q)=>p.a-q.a);
+}
+function itex(p){ const s=v=>v===-Infinity?'-\\infty':v===Infinity?'\\infty':String(v); if(p.a===p.b) return `\\{${p.a}\\}`; return `${p.ia?'[':'('}${s(p.a)}, ${s(p.b)}${p.ib?']':')'}`; }
+function drawV(){
+  const I=INS[ii], O=OUTS[oi], W0=cvV.clientWidth||300, H=132; const {c}=size(cvV,H); c.fillStyle=col('--card'); c.fillRect(0,0,W0,H);
+  const lo=-5, hi=5, X=v=>16+(W0-32)*(v-lo)/(hi-lo), y=40;
+  const P=pieces(I,O);
+  c.lineWidth=8; c.strokeStyle=col('--grid'); c.beginPath(); c.moveTo(X(lo),y); c.lineTo(X(hi),y); c.stroke();
+  c.strokeStyle=col('--teal'); P.forEach(p=>{ const a=Math.max(lo,p.a), b=Math.min(hi,p.b); c.beginPath(); c.moveTo(X(a),y); c.lineTo(X(b)+(p.a===p.b?0.1:0),y); c.stroke(); });
+  c.lineWidth=1; I.z.forEach(r=>{ const inside=P.some(p=>(p.a<r&&r<p.b)||(p.a===r&&p.ia)||(p.b===r&&p.ib)); c.beginPath(); c.arc(X(r),y,6,0,7); if(inside){ c.fillStyle=col('--teal'); c.fill(); } else { c.fillStyle=col('--card'); c.fill(); c.strokeStyle=col('--ember'); c.lineWidth=2; c.stroke(); } });
+  c.font='11px IBM Plex Mono, monospace'; c.fillStyle=col('--muted'); c.textAlign='center'; for(let v=lo;v<=hi;v++) c.fillText(v,X(v),y+22);
+  // sign row
+  const z=I.z.slice().sort((a,b)=>a-b), pts=[lo,...z,hi]; c.font='13px IBM Plex Mono, monospace';
+  for(let k=0;k<pts.length-1;k++){ const m=(pts[k]+pts[k+1])/2; const s=I.f(m)>0?'+':'−'; c.fillStyle=s==='+'?col('--teal'):col('--ember'); c.fillText(s,X(m),y+64); }
+  z.forEach(r=>{ c.fillStyle=col('--ink'); c.fillText('0',X(r),y+64); });
+  c.textAlign='left'; c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.fillText('sign of r on each stretch:',4,y+44);
+  const dom=P.length?P.map(itex).join(' \\cup '):'\\varnothing';
+  const L=[`g(f(x)) = ${O.t(I.t)}`, `\\text{needs } ${I.t} ${O.cond}`, `\\htmlClass{keep}{\\text{domain: } ${dom}}`];
+  tex(document.getElementById('eqV'),'\\begin{gathered}'+L.join('\\\\ ')+'\\end{gathered}',true);
+}
+new ResizeObserver(drawV).observe(cvV);
+if(window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{ drawV(); });
+drawV();
+
+/* ---------- slides ---------- */
+const N='\\htmlClass{new}', K='\\htmlClass{keep}';
+stepper('#sl1',[
+  {k:'ember',kl:'substitute',t:R`(g \circ f)(x) = g(${N}{x^2 + 1}) = \sqrt{x^2 + 1}`,n:`f(x) = x² + 1, g(x) = √x. Substitute for the expression: the whole inside, in brackets, for g's letter.`},
+  {k:'ember',kl:'the other order',t:R`(f \circ g)(x) = (\sqrt x)^2 + 1 = x + 1\ \ ${K}{(x \ge 0)}`,n:`f ∘ g lives where g does.`},
+  {k:'ember',kl:'the composite-domain technique',t:R`\operatorname{dom}(g \circ f) = \{x \in \operatorname{dom} f : f(x) \in \operatorname{dom} g\}`,n:`Run the outside's condition back through the inside.`},
+  {k:'ember',kl:'a domain',t:R`4 - x^2 \ge 0 \;\Rightarrow\; |x| \le 2 \;\Rightarrow\; ${N}{[-2, 2]}`,n:`√(4 − x²): adding-keeps-answers, size-squared, unpack-the-bars.`}
+],{title:'The slides · inside out · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'take it apart',t:R`y = (3x - 1)^5:\ \ r = ${N}{3x - 1},\ \ y = r^5`,n:`The last thing done is the outside; what it was done to is r.`},
+  {k:'ember',kl:'three links',t:R`r = 2x,\ \ s = 1 + r^3,\ \ y = \sqrt s`,n:`y = √(1 + (2x)³), peeled one layer at a time.`}
+],{title:'The slides · take it apart · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'the undo list',t:R`x + k \text{ undone by } x - k,\ \ kx \text{ undone by } \tfrac xk,\ \ x^n \text{ undone by } \sqrt[n]{x}`,n:`Each legal where the link is one-to-one and onto on what it is fed. Even powers: keep x ≥ 0 first.`}
+],{title:'The slides · the undo list · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'reverse order',t:R`(2x - 3)^3 + 1:\ \ ${N}{\text{take }1,\ \sqrt[3]{\ },\ \text{add }3,\ \text{halve}}`,n:`socks-and-shoes: last link off first.`},
+  {k:'ember',kl:'the inverse',t:R`f^{-1}(x) = \tfrac{\sqrt[3]{x - 1} + 3}{2}`,n:`Check: f(2) = 2 and f⁻¹(2) = 2.`},
+  {k:'ember',kl:'solve for x',t:R`y - 1 = (2x - 3)^3 \;\Rightarrow\; \sqrt[3]{y - 1} = 2x - 3`,n:`swapped-pairs as a recipe: the swapped pairs are (y, x) with y = f(x). Cube roots licensed by odd-powers-keep-order.`}
+],{title:'The slides · inverting a chain · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'a fork',t:R`(x - 2)^2 = y - 1 \;\Rightarrow\; x = 2 \pm \sqrt{y - 1}`,n:`Two answers: f(1) = f(3). Keep part first.`},
+  {k:'ember',kl:'keep x ≥ 2',t:R`\sqrt{(x - 2)^2} = |x - 2| = ${N}{x - 2}`,n:`size-squared; the bars come off because x ≥ 2 was kept.`},
+  {k:'ember',kl:'the kept inverse',t:R`f^{-1}(x) = 2 + \sqrt{x - 1} \text{ on } [1, \infty)`,n:`domains-trade-places: the inverse lives on f's range.`}
+],{title:'The slides · keep part, then invert · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'a fraction',t:R`y = \tfrac{x + 1}{x - 2} \;\Rightarrow\; x(y - 1) = 2y + 1`,n:`Clear the bottom, gather, factor x out.`},
+  {k:'ember',kl:'its inverse',t:R`f^{-1}(x) = \tfrac{2x + 1}{x - 1}`,n:`f never outputs 1; f⁻¹ never outputs 2. The domains trade places.`},
+  {k:'ember',kl:'a displacement',t:R`(x - 2)^3 + 5 \;\to\; \sqrt[3]{x - 5} + 2`,n:`Take 2, cube, add 5; undo: take 5, cube root, add 2. Check at 3: 6, and back to 3.`},
+  {k:'ember',kl:'a fractional power',t:R`2x^{3/2} \;\to\; \left(\tfrac x2\right)^{2/3}`,n:`power 3/2, then double; undo: halve, then power 2/3 (fraction-exponent techniques). f(4) = 16, f⁻¹(16) = 4.`}
+],{title:'The slides · fractions, displacements, fractional powers · ← → keys work'});
+stepper('#sl7',[
+  {k:'ember',kl:'the check',t:R`f(f^{-1}(x)) = x,\ \ f^{-1}(f(x)) = x`,n:`At a number first, then as formulas. A wrong inverse fails both.`}
+],{title:'The slides · the check · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A rule and a start</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r24.html">← 24 a rule on its rates fixes a function</a><a href="r24b.html">next: 24b building the solution by repeated integration →</a></p>
+  <div class="tags"><span class="tag proof">24a · proof</span></div>
+  <h1>A rule and a start</h1>
+  <p>Many laws of nature do not say what a quantity is. They say how fast it changes, given where it is now. A bank balance grows at a rate set by the balance. A cup of tea cools at a rate set by how much hotter it is than the room. A rule like that, together with where things start, is a question whose answer is a whole function. This step says exactly what counts as an answer, and settles the simplest case completely: when a quantity grows at a rate equal to itself and starts at one, the only answer is the growth function of the seventeenth rung.</p>
+  <p class="gesture">A rule on rates ties a function to its own slope. With a starting value it becomes one question, whose answer is a function. A function that grows at a rate equal to itself and starts at one can only be the growth function.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r17e.html">17e</a> (exp), <a href="r17f.html">17f</a> (exp is its own slope), <a href="r14d.html">14d</a> (zero slope means flat), <a href="r13c.html">13c</a> (the product rule), <a href="r16b.html">16b</a> (the slope of an area is the height). <a href="r24b.html">24b</a> builds answers by integrating again and again.</p></div>
+</header>
+
+<section class="class step" data-step="24a1">
+  <h2 class="sthead"><span class="stno">24a1</span>Rules on rates</h2>
+  <p class="stands">Stands on 13 (slopes) and 9 (functions).</p>
+  <p class="eqline" data-pid="4c2380">From here on, a <i>rate rule</i> is an equation that ties an unknown function y of x to its slopes, such as y′ = y, y′ = x − y² or y″ = −y. A <i>solution</i> on an open interval I is a function with the slopes the rule mentions at every x in I, making the equation true at every x in I. Accepted name: a differential equation, and its solution.</p>
+  <p data-pid="9c6916">The <i>order</i> of the rule is the highest slope in it: y′ = x − y² is first order, y″ = −y is second order. Most of this rung is about first-order rules written y′ = F(x, y), where F gives the slope from the place.</p>
+  <pre class="lines" data-k="ember" data-label="this step: checking a solution">
+y = Ce^{-x^2/2} \Rightarrow y' = -x\,Ce^{-x^2/2} @@ the chain rule (13e)
+y' = -xy \text{ at every } x @@ the line above, with y = Ce^{−x²/2}
+\htmlClass{new}{y = Ce^{-x^2/2} \text{ solves } y' = -xy \text{ on the whole line, for every } C} \quad \blacksquare @@ the definition of a solution
+  </pre>
+  <p data-pid="1e1fcc">A rule alone usually has many solutions: here, one for each C. The rule says how things change, and nothing yet says where they are.</p>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">24a1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="y&#x27; = x + y"></span></span>Check which of y = x², y = x² + 2x + 2 and y = Ceˣ − x − 1 solve the rule, and on what open interval. <br>For each that fails, find the x where its equation happens to hold, and why those points are not enough.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24a2">
+  <h2 class="sthead"><span class="stno">24a2</span>A rule and a start</h2>
+  <p class="stands">Stands on 24a1.</p>
+  <p class="eqline" data-pid="fc2f81">From here on, a <i>start</i> for a first-order rule is a pair (x₀, y₀), and a solution with the start is one with y(x₀) = y₀. The rule and its start together are one question. Accepted name: an initial value problem.</p>
+  <p data-pid="bff155">For y′ = −xy the start (0, 3) picks C = 3, since y(0) = C. So among the solutions above, exactly one has that start. But that is only among those. Could some other function, not of that form, also solve the rule from that start? Showing that none can is the hard half of every question on this rung.</p>
+  <p data-pid="96dc31">Every question about a rule and a start has two halves. Is there a solution? Is there only one? A rule that answers both, for every start, fixes the future from the present. The rest of this rung finds which rules do.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24a2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="y&#x27; = 2y"></span> <span class="gtx">start (1, 5)</span></span>Check that y = Ce^(2x) solves the rule on the whole line. <br>Find the C that meets the start, and the solution's values at x = 0 and x = 2.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24a3">
+  <h2 class="sthead"><span class="stno">24a3</span>Growth at its own rate</h2>
+  <p class="stands">Stands on 24a2, 17f (exp′ = exp), 13c (the product rule) and 14d (zero slope means flat).</p>
+  <p data-pid="1b11e9">Own-rate technique: <b>for any real k and start (x₀, A), the rule y′ = ky has exactly one solution on the whole line: y = Ae^(k(x − x₀)).</b> Divide any solution by the claimed one and its slope comes out 0.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the own-rate technique">
+y = Ae^{k(x-x_0)} \Rightarrow y' = kAe^{k(x-x_0)} = ky,\ \ y(x_0) = A @@ exp′ = exp and the chain rule: there is one
+z \text{ solves } z' = kz,\ z(x_0) = A;\ \ g(x) = z(x)e^{-k(x-x_0)} @@ any solution at all, on an interval I holding x₀
+g' = z'e^{-k(x-x_0)} - kz\,e^{-k(x-x_0)} = (kz - kz)e^{-k(x-x_0)} = 0 @@ the product rule (13c); z′ = kz
+g \text{ is constant on } I,\ g(x_0) = A @@ zero slope means flat (14d)
+\htmlClass{new}{z = Ae^{k(x-x_0)} \text{ on } I} \quad \blacksquare @@ multiply by e^{k(x − x₀)}, which is never 0
+  </pre>
+  <p data-pid="038014">With k = 1 and the start (0, 1): the only function that grows at a rate equal to itself and starts at 1 is eˣ. Rung 17 built exp; this says nothing else could have done the job. Every quantity that grows or shrinks at a rate in proportion to itself, with nothing else acting on it, is a growth function, and its start and k fix it entirely.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · own rate · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24a3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="y&#x27; = 0.3y,\ y(0) = 2000"></span></span>A culture of 2000 yeast cells grows at a rate of 0.3 of itself per hour, with x in hours. <br>Find the count at 5 hours, when it reaches 10 000, and how long it takes to double. <br>Find why no other count curve can fit the rule and the start.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24a4">
+  <h2 class="sthead"><span class="stno">24a4</span>Illegal moves</h2>
+  <p class="stands">Stands on 24a1 to 24a3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+y = Ce^{-x^2/2} \text{ solves } y' = -xy, \text{ so every solution has that form}\,? @@ checking that some functions solve it says nothing about the others; that needs 24a3's kind of proof
+y' = y \Rightarrow \tfrac{y'}{y} = 1 \Rightarrow \ln y = x + C\,? @@ ln y needs y &gt; 0, and y′/y needs y ≠ 0; the zero solution is lost
+y' = ky,\ y(0) = A \Rightarrow y = A + kAx\,? @@ that is the tangent line at the start, not the solution
+\text{a rule with a start always has exactly one solution}\,? @@ 24e finds rules with many, and with ones that run off in a moment
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24a4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="y&#x27; = -xy"></span></span>Find what checking y = Ce^(−x²/2) shows, and what it leaves open. <br>Find the slope of y·e^(x²/2) for any solution y, and what it proves.</li><li><span class="givens"><span data-tex-inline="y&#x27; = y"></span></span>Find which solutions the line loses, and the step where each is lost.</li><li><span class="givens"><span data-tex-inline="y&#x27; = y,\ y(0) = 1"></span></span>Compare 1 + x with eˣ at x = 0.1, 1 and 3. <br>Find what 1 + x shares with the solution, and what it does not.</li><li><span class="givens"><span data-tex-inline="xy&#x27; = 2y"></span></span>Check that y = Cx² solves this rule on the whole line, for every C. <br>Find how many solutions have y(0) = 0, and how many have y(0) = 1.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">24a.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="y&#x27; = y + 2x - x^2"></span></span>Check that y = x² + Ceˣ solves this rule for every C. <br>Prove that every solution has this form: find the rule that y − x² obeys. <br>Build a rule of the same kind whose solutions are y = sin x + Ceˣ.</div>
+  <div class="chq"><span class="chid">24a.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="y&#x27; = y"></span> <span class="gtx">on the set made of (0, 1) and (2, 3)</span></span>The own-rate technique asks for an interval. <br>Find a solution on this set with y(½) = 1 that is not e^(x − ½) on all of it. <br>Find the line of the proof that breaks, and what the rule y′ = 0 gives on one interval and on this set.</div>
+  <div class="chq"><span class="chid">24a.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="f(x + s) = f(x)\,f(s)"></span></span>The solution of y′ = ky from (0, 1) obeys this for all x and s. Turn it round. Suppose f obeys it for all x and s, and f has slope k at 0. <br>Find the two values f(0) can take. <br>Prove that f = e^(kx) in one case, and find f in the other.</div>
+  <div class="chq"><span class="chid">24a.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="y&#x27; = y,\ y(0) = 1"></span></span>Prove that a solution is never 0, without dividing by eˣ: find the slope of y(x)·y(−x). <br>Then find the slope of ln y, and prove y = eˣ from there.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r24.html">← 24 · a rule on its rates fixes a function</a><a href="r24b.html">24b · building the solution by repeated integration →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A rate rule is an ordinary differential equation (ODE); a rule and a start is an initial value problem; the order is the order of the equation. The own-rate technique is the uniqueness of exponential growth, the simplest case of the existence and uniqueness theorem proved on 24d.</p>
+  <h3>Who said it first</h3>
+  <p>Isaac Newton wrote rules on rates ("fluxional equations") in 1671, and Gottfried Leibniz and the Bernoulli brothers solved many in the 1690s. Leonhard Euler organized the subject in the 1760s. Augustin-Louis Cauchy, in the 1820s, was the first to ask whether a solution must exist and be unique, and to prove it.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'the rule',t:R`y^{\prime} = ky,\ y(x_0) = A`,n:`A rule and a start.`},
+  {k:'ember',kl:'the one solution',t:R`\htmlClass{new}{y = Ae^{k(x-x_0)}}`,n:`Only one, on any interval.`}
+],{title:'The slides · own rate · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

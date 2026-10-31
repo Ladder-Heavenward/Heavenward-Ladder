@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>12·∎ · Continuous curves don&#x27;t skip</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.cl-lock{display:none;border-left:3px solid var(--gold);background:var(--sand);padding:10px 14px;border-radius:0 4px 4px 0;max-width:66ch}
+body.cl-locked .cl-lock{display:block} body.cl-locked .cl-body{display:none}
+.cl-lock button{margin-top:6px;font-size:.8rem}
+.claim{border:1px solid var(--grid);border-left:4px solid var(--teal);background:var(--card);border-radius:0 6px 6px 0;padding:10px 16px;max-width:66ch}
+.claim p{margin:.4em 0}
+ul.cl-adds{max-width:66ch;padding-left:1.1em} ul.cl-adds li{margin:.5em 0}
+ul.cl-adds .cl-w{display:none;color:var(--muted);font-style:italic}
+ul.cl-adds li.cl-wait .cl-t{display:none} ul.cl-adds li.cl-wait .cl-w{display:inline}
+pre.lines{white-space:pre-wrap;overflow-wrap:anywhere;max-width:100%}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r12d.html">← 12d why having no holes matters</a><a href="r12e.html">next: 12e bisection by hand →</a></p>
+  <div class="tags"><span class="tag concl">12·∎ · conclusion</span></div>
+  <h1>Continuous curves don't skip</h1>
+  <p class="gesture">On a closed interval, a continuous function cannot jump past a value: it takes every height between its two end values. It cannot run off without end, and it reaches a highest and a lowest value.</p>
+  <div class="ready"><h3>What this stands on</h3><p>The survey of <a href="r12.html">rung 12</a>, and its proof steps: <a href="r12a.html">12a</a> (the intermediate value technique), <a href="r12b.html">12b</a> (bounded on a closed interval), <a href="r12c.html">12c</a> (the highest-and-lowest technique), <a href="r12d.html">12d</a> (why having no holes matters). It opens once 12d is ticked, and it gains a line each time you finish a step or annex after it.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The conclusion · the rung's claim, in full, and its proof</div>
+  <div class="cl-lock"><p>This page opens once every question on <a href="r12d.html">12d why having no holes matters</a> is ticked. The claim below is proved from the steps of this rung, so it waits for them.</p><button type="button" class="cl-peek">reviewing the ladder? open it anyway</button></div>
+  <div class="cl-body">
+  <h3>What the rung set out to show</h3>
+  <p data-pid="2e6d60">The survey of rung 12 promised three claims on one hypothesis. A function continuous on an interval that keeps both its ends takes every value between its end values, is bounded, and reaches its greatest and least values. <a href="r12a.html">12a</a> named closed intervals, read continuity there as one promise, and proved that a sign is kept near an input. Then it proved the in-between-value technique by the sup of the inputs where f is still below 0. <a href="r12b.html">12b</a> proved bounded-on-a-closed-interval by the sup of the inputs up to which f is bounded.</p>
+  <p data-pid="4e8d0c"><a href="r12c.html">12c</a> proved the highest-and-lowest technique, with the reciprocal of the gap below the top. <a href="r12d.html">12d</a> replayed all three over the fractions, and found that only the line that takes a sup fails. This page states the claim in full and sets the three proofs side by side, each with its one no-holes line marked.</p>
+  <h3>The claim, in full</h3>
+  <div class="claim">
+  <p data-pid="df7c48"><b>A function continuous on a closed interval skips no value between its end values, is bounded there, and reaches a greatest and a least value.</b></p>
+  <p data-pid="aeaa6b">Let v < w be reals, and let f be continuous on the closed interval [v, w].</p>
+  <p data-pid="fb1272">If y lies between f(v) and f(w), then f(c) = y for some c with v < c < w.</p>
+  <p data-pid="7d6129">Some real K has |f(x)| ≤ K for every x in [v, w].</p>
+  <p data-pid="7484f7">Some c and d in [v, w] have f(d) ≤ f(x) ≤ f(c) for every x in [v, w].</p>
+  <p data-pid="ff7ed6">Each part needs both words, continuous and closed, and each proof spends the line's no-holes at one line.</p>
+  </div>
+  <h3>The proof</h3>
+  <p data-pid="2f7c96">The first part is 12a's in-between-value technique, here in short. Its reasons name the step on 12a where each line is worked in full.</p>
+  <pre class="lines" data-k="ember" data-label="the first part: a sign change has a zero">
+f(a) \lt 0 \lt f(b);\ \ A = \{x \in [a, b] : f(x) \lt 0\} @@ given; Separation (2b): the inputs where f is still below 0
+a \in A;\ \ b \text{ bounds } A @@ ︿ the sift; every member is in [a, b]
+\htmlClass{new}{\sigma = \sup A},\ \ a \le \sigma \le b @@ no-holes (8c): the one line that spends no-holes
+f(\sigma) \gt 0 \lor f(\sigma) = 0 \lor f(\sigma) \lt 0 @@ three-way-order on ℝ (8b)
+\neg(f(\sigma) \gt 0) @@ sign-kept-near-an-input (12a) gives a window around σ where f > 0; σ least puts a member of A in it
+\neg(f(\sigma) \lt 0) @@ σ ≠ b, as f(b) > 0; sign-kept-near-an-input puts min(σ + δ/2, b) in A, past its upper bound σ
+f(\sigma) = 0,\ \ a \lt \sigma \lt b @@ the remaining-option technique, twice; f(a) < 0 < f(b) rules out both ends
+\htmlClass{new}{\exists c\,(a \lt c \lt b \land f(c) = 0)} \quad \blacksquare @@ show an example: c = σ
+  </pre>
+  <p data-pid="7a736c">0 is not special. Move the target, and the first part takes any height between the end values.</p>
+  <pre class="lines" data-k="ember" data-label="the first part, any height">
+\text{let } f(a) \lt y \lt f(b);\ \ g(x) = f(x) - y @@ 10c's f − g, with the constant y
+g \text{ continuous on } [a, b] @@ continuous-sums (11b), with the constant by lines-are-continuous; side by side at the ends
+g(a) \lt 0 \lt g(b) @@ order-and-arithmetic-agree (8d)
+\text{call } c:\ a \lt c \lt b,\ \ g(c) = 0 @@ the first part, for g
+\htmlClass{new}{f(c) = y} \quad \blacksquare @@ add y to both sides. For f(b) < y < f(a), the same with y − f(x)
+  </pre>
+  <p data-pid="5104cb">The second part is 12b's. It does not walk the bound along the interval, which might pile up short of b. It goes straight to the sup of how far the bound reaches, and walks once from there.</p>
+  <pre class="lines" data-k="ember" data-label="the second part: bounded">
+B = \{x \in [a, b] : \exists K\,\forall t \in [a, b]\,(t \le x \Rightarrow |f(t)| \le K)\} @@ Separation (2b): the inputs up to which f is bounded
+a \in B;\ \ b \text{ bounds } B @@ K = |f(a)|; sift-is-part
+\htmlClass{new}{\sigma = \sup B} @@ no-holes (8c): the one no-holes line
+\text{call } \delta:\ t \in [a, b],\ |t - \sigma| \lt \delta \Rightarrow |f(t)| \lt |f(\sigma)| + 1 @@ closed-interval-continuity (12a) at σ, with ε = 1; triangle (8h)
+\text{call } x \in B,\ \ \sigma - \delta \lt x \le \sigma @@ σ − δ is not an upper bound, since σ is least; σ is one
+x' = \min(\sigma + \tfrac{\delta}{2},\ b) \in B @@ bound max(K, |f(σ)| + 1): cases t ≤ x and x < t, by three-way-order on ℝ
+x' \le \sigma,\ \text{so } x' = b \text{ and } b \in B @@ σ bounds B; σ + δ/2 > σ, and min is one of the two (8b)
+\htmlClass{new}{\exists K\,\forall t \in [a, b]\ (|f(t)| \le K)} \quad \blacksquare @@ ﹀ b ∈ B: every t in [a, b] has t ≤ b
+  </pre>
+  <p data-pid="1e3a3a">The third part is 12c's. The sup of the values exists by the second part. If nothing reached it, the reciprocal of the gap below it would be continuous, so bounded, and the bound would give a smaller upper bound.</p>
+  <pre class="lines" data-k="ember" data-label="the third part: the top and the bottom are reached">
+V = \{f(x) : x \in [a, b]\};\ \ \htmlClass{new}{M = \sup V} @@ the second part gives an upper bound, f(a) a member; no-holes (8c)
+\text{suppose } \neg\exists c \in [a, b]\ (f(c) = M) @@ a supposition for contradiction (7e)
+g(x) = \tfrac{1}{M - f(x)} \text{ continuous on } [a, b] @@ each f(x) < M, so each bottom is positive; continuous-sums, continuous-quotients (11b)
+\text{call } K:\ 0 \lt g(a) \le K,\ \ \forall x\ g(x) \le K @@ the second part, for g
+f(x) \le M - \tfrac1K \text{ for every } x \in [a, b] @@ reciprocals of positives turn the order about (positive-reciprocal on ℚ read in ℝ); order-and-arithmetic-agree
+M \le M - \tfrac1K \lt M;\ \ \bot @@ M is the least upper bound; 1/K positive; three-way-order on ℝ
+\text{call } c \in [a, b],\ f(c) = M;\ \ \forall x\ f(x) \le f(c) @@ refute; not-not-out (7d); use the some; the swap axiom
+\htmlClass{new}{\text{call } d:\ \forall x \in [a, b]\ f(d) \le f(x)} \quad \blacksquare @@ the column for −f, continuous by constant-factor (11b); negative-reverses-order (8g)
+  </pre>
+  <p data-pid="a3c90b">Each part needs both words. Without continuity, 11a's step u skips ½. Without the closed interval, x on the stretch from 0 to 1 that leaves out 1 never reaches its top. And over the fractions, x² − 2 skips 0 between 1 and 2 (no-in-between-over-ℚ, 12d): each of the three columns, run over the fractions, breaks at its sup line.</p>
+  <h3>What the rest of the rung adds</h3>
+  <p data-pid="5997b1">Each step and annex after the proof steps adds a line to the claim. A line appears here once you have finished its page.</p>
+  <ul class="cl-adds">
+    <li data-after="r12e" data-pid="1606aa"><b><a href="r12e.html">12e bisection by hand</a></b>: <span class="cl-t">Bisection: keep a closed interval whose ends disagree in sign, test the middle, keep the half that still disagrees. It finds √2 and the cube root of 2 by hand, and proves that odd degree has a zero and that continuous functions take intervals to intervals.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r12phys" data-pid="110147"><b><a href="r12phys.html">12·phys how does a small push lift a heavy weight?</a></b>: <span class="cl-t">The lever's law, as a ratio of turning effects. As the support slides along a bar, the total turning effect slides continuously from one sign to the other, so a balance point exists by the in-between-value technique, and halving finds it.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r12eng" data-pid="054937"><b><a href="r12eng.html">12·eng will the shelf hold?</a></b>: <span class="cl-t">It shares a load between two supports by 12·phys's balance run backwards, and uses the highest-and-lowest technique to promise a worst place for a moving load before finding it at the middle. It checks a beam against a safety factor, rounding loads up and strengths down.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r12comp" data-pid="c2a1fc"><b><a href="r12comp.html">12·comp what can a machine with no memory check?</a></b>: <span class="cl-t">It builds strings by rules and checks them with a machine of finitely many states, and proves by pigeonhole that no such machine checks aⁿbⁿ. Rung 12 appears as a walk of brackets that, moving by one, cannot skip a depth.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r12econ" data-pid="ec41ad"><b><a href="r12econ.html">12·econ must there be a price where buyers and sellers match?</a></b>: <span class="cl-t">In-between-value, run on the gap between supply and demand, gives a matching price whenever neither curve jumps and a shortage turns into a surplus; halving traps it, and prices in whole cents can step right over it.</span><span class="cl-w">its line appears when you finish it.</span></li>
+  </ul>
+  <p data-pid="6b05f6">Continuous curves don't skip, and you can now say why, and point to the one step where no-holes is spent. That is a good place to stand, and a beginning.</p>
+  </div>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · the middle of a change; the cloud</div>
+    <p data-pid="e9bed5">12a set beside the intermediate value technique a principle of the second kind of care. Things do not jump between states. They pass through a middle, as 11·chem's ice passes through slush. <b>A continuous change has a middle, even when no one catches it there.</b></p>
+    <p data-pid="6c9300">12e set the cloud beside bisection. A zero that cannot be written as a dot is caught in a trap, and the trap's width is the honest part of the answer. Ten halvings buy three places, and no number of halvings buys a dot.</p>
+  </aside>
+</section>
+
+<nav class="nextrung"><a href="r12d.html">← 12d · why having no holes matters</a><a href="r12e.html">12e · bisection by hand →</a></nav>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+  const need="r12d";
+  let p={}; try{ p=JSON.parse(LS.getItem('pages:done')||'{}')||{}; }catch(e){}
+  let peek=false; try{ peek=sessionStorage.getItem('cl:peek')==='1'; }catch(e){}
+  const done=k=>!!(p[k]&&p[k].v);
+  function apply(){
+    const open=peek||done(need);
+    document.body.classList.toggle('cl-locked',!open);
+    document.querySelectorAll('ul.cl-adds li[data-after]').forEach(li=>li.classList.toggle('cl-wait',!(peek||done(li.dataset.after))));
+    if(open&&done(need)){ const me=(location.pathname.split('/').pop()||'').replace(/\.html?$/,'');
+      if(window.MarksSync&&MarksSync.reportPage) MarksSync.reportPage(me,true,true,true,false);
+      else { try{ p[me]={v:true,a:true,o:true,h:false,t:Date.now()}; LS.setItem('pages:done',JSON.stringify(p)); }catch(e){} } }
+  }
+  const b=document.querySelector('.cl-peek'); if(b) b.addEventListener('click',()=>{ peek=true; try{ sessionStorage.setItem('cl:peek','1'); }catch(e){} apply(); });
+  apply();
+  try{ if(window.MarksSync&&MarksSync.pages) MarksSync.pages().then(q=>{ if(q){ p=Object.assign({},p,q); apply(); } },()=>{}); }catch(e){}
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

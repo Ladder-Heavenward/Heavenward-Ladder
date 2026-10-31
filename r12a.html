@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>12a · The intermediate value technique</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:3fr 2fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+#cvI{touch-action:none;cursor:ns-resize}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:3.5em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r12.html">← 12 skipping nothing on the way</a><a href="r12b.html">next: 12b bounded on a closed interval →</a></p>
+  <div class="tags"><span class="tag proof">12a · proof</span></div>
+  <h1>The intermediate value technique</h1>
+  <p>A function continuous on a closed interval, below 0 at the left end and above 0 at the right end, is 0 somewhere between. This step lays down the words the statement needs. It reads 11a's interval form of continuity as one promise. It proves that a continuous function keeps its sign near an input. Then it proves the technique by the least upper bound of the inputs where the function is still below 0, every line cited. Then 0 stops being special: any value between the two end values is taken. Last, what the technique does not say.</p>
+  <p class="gesture">Gather the inputs where the function is still below 0, and take their least upper bound. Above 0 there would put a gathered input inside a window where the function is above 0. Below 0 there would gather an input past the bound. So the function is 0 at the bound.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r08c.html">8c</a> (upper bound, least upper bound, sup, no-holes), <a href="r08b.html">8b</a> (three-way-order on ℝ, min), <a href="r08g.html">8g</a> (intervals), <a href="r08h.html">8h</a> (|x|, unpack-the-bars), <a href="r08d.html">8d</a> (order-and-arithmetic-agree), <a href="r10b.html">10b</a> (sign-kept-near), <a href="r10a.html">10a</a> (lesser-below-both), <a href="r10c.html">10c</a> (functions from functions), <a href="r11a.html">11a</a> (continuity-unpacked, the interval form, continuous-both-ways, the step u, curve), <a href="r11b.html">11b</a> (continuous-sums, constant-factor, side by side), <a href="r11d.html">11d</a> (polynomials-are-continuous), <a href="r07d.html">7d</a> (not-every, negated-if forward), <a href="r02b.html">2b</a> (Separation, sift-is-part). <a href="r12b.html">12b</a> and <a href="r12c.html">12c</a> run the same kind of argument; <a href="r12d.html">12d</a> shows its one no-holes line fail over the fractions; <a href="r12e.html">12e</a> finds the zero by halving; <a href="r12phys.html">12·phys</a> finds a balance point with it.</p></div>
+</header>
+
+<section class="class step" data-step="12a1">
+  <h2 class="sthead"><span class="stno">12a1</span>New marks on this rung</h2>
+  <p class="stands">Stands on 9a1 (marks said first in words) and 8c (sup and inf).</p>
+  <p data-pid="ca9334">Rung 12 brings in few marks. Each is said here in plain words first, and then shown. Each gets its own “from here on” line on the step named, before any proof uses it.</p>
+  <ul>
+    <li data-pid="21408c">the least upper bound of the values a function takes on a set of its inputs: sup with the set written low after it, sup_A f (<a href="r12c.html">12c</a>)</li>
+    <li data-pid="596087">the greatest lower bound of those values: inf_A f, read “inf of f on A” (<a href="r12c.html">12c</a>)</li>
+    <li data-pid="1ac336">rounded to so many places, said now of any positive real, not only of fractions: 5g's ≈ (<a href="r12e.html">12e</a>)</li>
+    <li data-pid="9c3d3f">the unit of force, the newton: N, as in 300 N (<a href="r12phys.html">12·phys</a>, in that step)</li>
+  </ul>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">12a1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">sup_{[0, 2]} f,  for f(x) = x²</span></span>Say the mark in words. <br>Find it.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="12a2">
+  <h2 class="sthead"><span class="stno">12a2</span>Words for the statement</h2>
+  <p class="stands">Stands on 12a1, 8g (intervals) and 9g (zeros of polynomials).</p>
+  <p data-pid="510e66">8g wrote [c, d] for the reals from c to d with both ends kept and (c, d) for the reals strictly between. This rung leans on the difference, so the two get names.</p>
+  <p class="eqline" data-pid="ccede7">From here on, for reals c &lt; d, 8g's interval [c, d] is called a closed interval, and 8g's (c, d) is called an open interval. <b>A closed interval keeps both its ends; an open interval keeps neither.</b> In [c, d] the entries are reals with c &lt; d. It is 8g's interval, never 5a's class [a, b] of a pair of numbers, and what stands inside says which. On this ladder “closed interval” means [c, d] with both ends reals; [c, ∞) is not one.</p>
+  <p class="eqline" data-pid="4d58c9">A reuse, said out loud: square brackets have had jobs before. 2e's [x] and 5a's [a, b] name classes, and in a line of working a bracket groups. 8g gave [c, d] its interval meaning and this step keeps it; the older jobs keep theirs elsewhere. The sign of which job is meant: two reals c &lt; d with a comma between, where a set of reals is wanted, is the interval.</p>
+  <p data-pid="46746e">So [1, 2] is closed and (1, 2) is open, and [1, 2) is neither: it keeps one end. Take a function continuous on [v, w], in 11a's interval form. It is continuous at every input strictly between v and w, continuous from the right at v, and continuous from the left at w. That is 11f's demand of no discontinuity on the whole interval, with the ends asked only from the inside.</p>
+  <p class="eqline" data-pid="ce795d">From here on, for a function f whose outputs are reals, a zero of f is an input c of f with f(c) = 0. It is 9g's word for polynomials, said now of any such function. It is also called a root of f, or a solution of the equation f(x) = 0.</p>
+  <p class="eqline" data-pid="3d77cb">Reuses, said out loud. The word zero has named the number 0 since 3a, and a zero of a polynomial since 9g. The number keeps its name, and “a zero of f” always has “of f” after it and names an input. The word root has named 8f's √a and ⁿ√a. A root of f is an input where f is 0. The two uses agree where they meet, since √a is the root of x ↦ x² − a that is not negative.</p>
+  <p data-pid="5cc8f0">The technique, in words: <b>a function continuous on a closed interval, with a negative value at the left end and a positive value at the right end, has a zero strictly between them.</b> Its accepted name is the intermediate value theorem. It was first proved in a paper of 1817.</p>
+  <p data-pid="2d7c09">The 1817 paper objects that the usual proof borrows a truth from geometry: that a continuous line passing from below another to above it must meet it. That is a fact about lines used to prove a fact about functions. The order of the sciences, it argues, runs the other way. The fact about functions should be proved first, from the nature of quantity alone.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · words · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">12a2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">[0, 1],  (0, 1),  (0, 1]</span></span>Say which is closed, which open, and which neither. <br>Find the zeros of x² − x on each.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="12a3">
+  <h2 class="sthead"><span class="stno">12a3</span>Continuity on [v, w], read as one promise</h2>
+  <p class="stands">Stands on 12a2 and 11a (continuity on an interval, from one side).</p>
+  <p data-pid="e30d96">The interval form has three kinds of input, and a proof that has to visit all three every time gets long. One technique folds them into a single promise about the inputs of the interval.</p>
+  <p data-pid="d0ab5d">Closed-interval-continuity technique: <b>continuity on a closed interval is one promise, made alike at every input, ends included.</b> Precisely: let f be continuous on [v, w], and take c ∈ [v, w] and ε &gt; 0. Then there is δ &gt; 0 such that every x ∈ [v, w] with |x − c| &lt; δ has |f(x) − f(c)| &lt; ε.</p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the closed-interval-continuity technique">
+\text{let } c \in [a, b];\ \ \text{let } \varepsilon \gt 0 @@ speak of everything, twice
+a \le c \le b @@ 8g's line for [a, b]
+c = a \;\lor\; a \lt c \lt b \;\lor\; c = b @@ three-way-order on ℝ (8b) on a and c, and on c and b: rung 7's either-way principle
+\text{case } a \lt c \lt b:\ \ \text{call } \delta:\ \forall x \in \operatorname{dom} f\ (|x - c| \lt \delta \Rightarrow |f(x) - f(c)| \lt \varepsilon) @@ continuous at c (the interval form), unpacked by continuity-unpacked (11a)
+\qquad x \in [a, b] \Rightarrow x \in \operatorname{dom} f @@ [a, b] is an interval of inputs: the promise is kept on it
+\text{case } c = a:\ \ \text{call } \delta:\ \htmlClass{new}{a \le x \lt a + \delta} \Rightarrow |f(x) - f(a)| \lt \varepsilon @@ continuous from the right at a: continuity-unpacked side by side (11a)
+\qquad x \in [a, b] \land |x - a| \lt \delta \;\Rightarrow\; a \le x \lt a + \delta @@ x ≥ a since x ∈ [a, b]; x − a &lt; δ by unpack-the-bars (8h)
+\text{case } c = b:\ \ \text{the same column, from the left} @@ continuous from the left at b: b − δ &lt; x ≤ b
+\forall x \in [a, b]\ (|x - c| \lt \delta \Rightarrow |f(x) - f(c)| \lt \varepsilon) \quad \blacksquare @@ reasoning by cases; show an example of δ; speak of everything
+  </pre>
+  <p data-pid="262ddc">The end cases are the reason for 11a's care. At the left end, nothing to its left is asked about, because nothing to its left is in the interval. Closed-interval-continuity is the only place in this step where the three kinds of input are told apart; every later column cites closed-interval-continuity and treats every member of the interval alike.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · closed-interval-continuity · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">12a3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f continuous on [0, 2]</span></span>Name the three kinds of input of [0, 2], and what 11a asks at each. <br>Say what closed-interval-continuity folds them into.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="12a4">
+  <h2 class="sthead"><span class="stno">12a4</span>The sign is kept near an input</h2>
+  <p class="stands">Stands on 12a3 and 10b4 (sign-kept-near).</p>
+  <p data-pid="d1aa21">10b's sign-kept-near said that a limit that is positive makes the outputs positive near the input. Continuity puts the value in the limit's place and lets the input in.</p>
+  <p data-pid="68764f">Sign-kept-near-an-input technique: <b>if f is continuous on [v, w], c ∈ [v, w] and f(c) &gt; 0, then there is δ &gt; 0 with f(x) &gt; 0 for every x ∈ [v, w] with |x − c| &lt; δ. Likewise, if f(c) &lt; 0, there is δ &gt; 0 with f(x) &lt; 0 for those x.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the sign-kept-near-an-input technique">
+\varepsilon = \htmlClass{new}{f(c)} \gt 0 @@ challenge with the value itself
+\text{call } \delta:\ x \in [a, b] \land |x - c| \lt \delta \Rightarrow |f(x) - f(c)| \lt f(c) @@ closed-interval-continuity
+-f(c) \lt f(x) - f(c) @@ unpack-the-bars (8h): the lower half of the unpacked bars
+0 \lt \htmlClass{new}{f(x)} \quad \blacksquare @@ add f(c) to both sides: order-and-arithmetic-agree (8d). For f(c) &lt; 0 take ε = −f(c) and use the upper half
+  </pre>
+  <p data-pid="dcc4a4">That is 10b's sign-kept-near with the value in place of the limit, and with c itself among the inputs that keep the sign. 10b said rung 12 would lean on sign-kept-near; this is the lean. With ε = f(c) the band around f(c) reaches down exactly to 0, and continuity keeps every nearby output inside the band, so above 0.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · sign-kept-near-an-input · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">12a4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = x² − 1 on [0, 3],  c = 2</span></span>Find a δ that keeps f positive near 2, by challenging with f(2). <br>Check one input in your window.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="12a5">
+  <h2 class="sthead"><span class="stno">12a5</span>The proof, every line cited</h2>
+  <p class="stands">Stands on 12a4, 8c (the no-holes technique) and 2b (the sift).</p>
+  <p data-pid="fd0421">In-between-value technique (the intermediate value theorem): <b>if f is continuous on [v, w] and f(v) &lt; 0 &lt; f(w), then f has a zero c with v &lt; c &lt; w.</b> In marks: f(v) &lt; 0 &lt; f(w) ⇒ ∃c (v &lt; c &lt; w ∧ f(c) = 0).</p>
+  <pre class="lines" data-k="ember" data-label="this step: the in-between-value technique · setting up">
+A = \{x \in [a, b] : f(x) \lt 0\} @@ Separation (2b) of [a, b] by a condition: the inputs where f is still below 0. A ⊆ [a, b] by sift-is-part
+a \in A @@ a ∈ [a, b], and f(a) &lt; 0: ︿ the sift
+\forall x \in A\ (x \le b) @@ ﹀ x ∈ [a, b]: b is an upper bound of A (8c's line)
+\htmlClass{new}{\sigma = \sup A} @@ <span class="hl-new">no-holes (8c)</span>: A has a member and an upper bound. The one line that needs rung 8's no-holes
+a \le \sigma \le b @@ σ is an upper bound and a ∈ A; σ is the least upper bound and b is an upper bound
+\sigma \in [a, b], \text{ so } f(\sigma) \text{ names a real} @@ 8g's line; [a, b] is an interval of inputs
+f(\sigma) \gt 0 \;\lor\; f(\sigma) = 0 \;\lor\; f(\sigma) \lt 0 @@ three-way-order on ℝ (8b) with 0: rung 7's either-way principle
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: the in-between-value technique · the case f(σ) &gt; 0">
+\text{assume } f(\sigma) \gt 0 @@ to refute
+\text{call } \delta:\ x \in [a, b] \land |x - \sigma| \lt \delta \Rightarrow f(x) \gt 0 @@ sign-kept-near-an-input at σ
+\sigma - \delta \lt \sigma @@ δ is positive (order-and-arithmetic-agree)
+\neg(\sigma - \delta \text{ is an upper bound of } A) @@ an upper bound below σ would break σ ≤ β for every upper bound β (8c's “least”), by three-way-order on ℝ
+\text{call } x \in A \text{ with } \htmlClass{new}{\sigma - \delta \lt x} @@ not-every bounded and negated-if forward (7d), then three-way-order on ℝ: “not every member is at most σ − δ” gives a member beyond it
+x \le \sigma @@ σ is an upper bound of A
+|x - \sigma| \lt \delta @@ −δ &lt; x − σ ≤ 0, and unpack-the-bars packs it
+f(x) \gt 0 \;\land\; f(x) \lt 0 @@ the window (x ∈ [a, b] by sift-is-part) and the sift (x ∈ A)
+\bot;\ \ \neg(f(\sigma) \gt 0) @@ three-way-order on ℝ: at most one of the two; refute
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: the in-between-value technique · the case f(σ) &lt; 0">
+\text{assume } f(\sigma) \lt 0 @@ to refute
+\sigma \ne b, \text{ so } \sigma \lt b @@ σ = b would give f(b) &lt; 0 by the swap axiom, against f(b) &gt; 0 (three-way-order on ℝ); σ ≤ b and σ ≠ b is 8a's line for &lt;
+\text{call } \delta:\ x \in [a, b] \land |x - \sigma| \lt \delta \Rightarrow f(x) \lt 0 @@ sign-kept-near-an-input at σ, its negative form
+x = \htmlClass{new}{\min(\sigma + \tfrac{\delta}{2},\ b)} @@ 8b's min: a little past σ, but not past b
+\sigma \lt x \le b @@ σ &lt; σ + δ/2 and σ &lt; b, and min is one of the two (8b's cases); lesser-below-both for x ≤ b
+x \in [a, b] \;\land\; |x - \sigma| \lt \delta @@ a ≤ σ &lt; x ≤ b; 0 &lt; x − σ ≤ δ/2 &lt; δ (lesser-below-both, order-and-arithmetic-agree), unpack-the-bars packs it
+f(x) \lt 0, \text{ so } x \in A @@ the window; ︿ the sift
+x \le \sigma @@ σ is an upper bound of A
+\bot;\ \ \neg(f(\sigma) \lt 0) @@ σ &lt; x and x ≤ σ: three-way-order on ℝ; refute
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: the in-between-value technique · the end">
+f(\sigma) = 0 @@ the three-way or with two of its sides refuted: the remaining-option technique, twice
+\sigma \ne a \;\land\; \sigma \ne b @@ f(a) &lt; 0 and f(b) &gt; 0, and f(σ) = 0: the swap axiom and three-way-order on ℝ, each refuted
+a \lt \sigma \lt b @@ a ≤ σ ≤ b with both samenesses refuted (8a's line for &lt;)
+\exists c\ (a \lt c \lt b \;\land\; f(c) = 0) \quad \blacksquare @@ show an example: c = σ
+  </pre>
+  <p data-pid="d65505">Notice where each hypothesis was spent. No-holes made σ exist, at one marked line. Continuity entered only through sign-kept-near-an-input, which made each wrong case impossible. Above 0 at σ would keep the function above 0 on a window around σ, and “least” puts a member of A in that window. Below 0 at σ would keep the function below 0 a little past σ, and then A would reach past its own upper bound. The closed interval made the values at both ends exist, and kept σ among the inputs. It let sign-kept-near-an-input work at σ even when σ might have been an end. And rung 7's either-way principle entered three times: the three-way split of f(σ), the turn from “not an upper bound” to “a member beyond”, and the splits inside closed-interval-continuity.</p>
+  <p data-pid="fd4ef0">Notice too which zero you found. Every member of A is at most σ, so to the right of σ the function is never below 0. σ is the last input at which the function comes up from below 0. A function with several zeros has σ at one of them, and the technique does not say which. A different set finds the first zero instead: the inputs x such that f is below 0 at every input of [v, w] up to x. The picture has both.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · in-between-value · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · shape a curve, take the sup, and test a candidate against the proof</div>
+    <div class="panel">
+      <div class="chips" id="mch"><button class="on" data-m="cont">a continuous curve</button><button data-m="jump">with a jump at 2</button></div>
+      <canvas id="cvI"></canvas>
+      <div class="kn">
+        <span class="m">y</span><input type="range" id="ky" min="-1" max="1" step="0.05" value="0"><output id="oy"></output>
+        <span class="m">s</span><input type="range" id="ks" min="0" max="4" step="0.01" value="1.2"><output id="os"></output>
+      </div>
+      <div class="chips" id="sch"><button class="on" data-s="last">A: where f &lt; y</button><button data-s="first">where f &lt; y all the way from the left end</button><button id="bss">put s at σ</button></div>
+    </div>
+    <div class="panel">
+      <div class="cap">The function is made of climbing pieces joined at the nine dots, glued where their heights match (11e's glued-functions), so it is continuous on [0, 4]. Drag up and down near a dot to move it. The gold dashed row is the height y. The ember strip under the picture is the set A of inputs; the gold column is σ = sup A, with f(σ) ringed. The teal column is your candidate s: the readout runs the proof's tests at s. With the jump on, everything from 2 on is lifted, and the proof's window fails at 2.</div>
+      <div class="verdict" id="vdI"></div>
+      <div class="eqbox" id="eqI"></div>
+    </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">12a5.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="p(x) = x^5 - 3x + 1"></span></span>Using in-between-value, show that p has a zero strictly between 0 and 1 and another strictly between 1 and 2, naming each hypothesis you checked.</li><li><span class="givens"><span data-tex-inline="f(x) = 2x + 1 \text{ on } [0, 3],"></span> <span data-tex-inline="c = 0,"></span> <span data-tex-inline="\varepsilon = \tfrac12"></span></span>Using closed-interval-continuity at c, find a window that answers ε, and name the form of continuity it uses at that end.</li><li><span class="givens"><span data-tex-inline="f(x) = x^2 - 2 \text{ on } [0, 2]"></span></span>Run the column on f as far as its sup, writing the set it takes the sup of.</li><li>Using in-between-value, general form, show that some input strictly between 1 and 2 has cube 5.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="12a6">
+  <h2 class="sthead"><span class="stno">12a6</span>Any value between</h2>
+  <p class="stands">Stands on 12a5 and 11b (continuous-sums).</p>
+  <p data-pid="ddd9a1">0 is not special. Move the target, and the technique applies to any height between the two end values.</p>
+  <p data-pid="4f43d6">In-between-value technique, general form: <b>any height between the two end values is taken.</b> Precisely: let f be continuous on [v, w]. Let y be a real between f(v) and f(w), that is f(v) &lt; y &lt; f(w) or f(w) &lt; y &lt; f(v). Then f(c) = y for some c with v &lt; c &lt; w.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the in-between-value technique, general form">
+\text{case } f(a) \lt y \lt f(b):\ \ g(x) = \htmlClass{new}{f(x) - y} @@ 10c's f − g with the constant y: a function on dom f
+g \text{ continuous on } [a, b] @@ continuous-sums (11b) with the constant y (lines-are-continuous), side by side at the ends
+g(a) = f(a) - y \lt 0 \lt f(b) - y = g(b) @@ order-and-arithmetic-agree: α &lt; β exactly when β − α is positive
+\text{call } c:\ a \lt c \lt b,\ \ g(c) = 0 @@ the in-between-value technique, applied to g
+f(c) = y @@ add y to both sides of f(c) − y = 0 (adding-keeps-answers read in ℝ)
+\text{case } f(b) \lt y \lt f(a):\ \ h(x) = \htmlClass{new}{y - f(x)} @@ continuous-sums and constant-factor: continuous on [a, b]; h(a) &lt; 0 &lt; h(b); in-between-value gives h(c) = 0, so f(c) = y. ∎
+  </pre>
+  <p data-pid="52cf6e">In words: a function continuous on a closed interval takes every value between its two end values. Its curve, a set of pairs, has a pair at every height between the heights of its first and last pairs. It does not skip.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the technique used">
+p(x) = x^3 + x - 3,\ \ p(1) = -1,\ \ p(2) = 7 @@ a polynomial, so continuous on [1, 2] (polynomials-are-continuous, 11d)
+\text{a zero } c,\ \ 1 \lt c \lt 2 @@ in-between-value. It says nothing about where; 12e finds c ≈ 1.213
+f(x) = x^2 \text{ on } [1, 2]:\ \ f(1) = 1 \lt \htmlClass{new}{3} \lt 4 = f(2) @@ in-between-value, general form with y = 3
+c^2 = 3 \text{ for some } c,\ 1 \lt c \lt 2 @@ so √3 exists: 8f's square-root by a second road (both roads spend no-holes)
+q(x) = x^3 - 3x + 1,\ \ q(0) = 1,\ \ q(1) = -1 @@ the end values the other way about
+\text{a zero in } (0, 1) @@ in-between-value, general form's second case with y = 0
+  </pre>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · the middle of a change, proved</div>
+    <p data-pid="df1e2b">6·chem, 10·bio and 11·chem met a principle of the second kind of care: things do not jump between states, they pass through a middle. 11·chem measured the slush at 0 °C. This step proves the mathematical side of it. A continuous change from below 0 to above 0 passes through 0. It cannot get from one side to the other without a middle.</p>
+    <p data-pid="9d2575"><b>A continuous change has a middle, even when no one catches it there.</b></p>
+    <p data-pid="741b20">The proof does not say where the middle is. It says only that the middle is there, and that is enough to go looking. Where a change does jump, as the step u does, the technique is silent. Continuity is the promise that no jump happens.</p>
+    <p class="bait" data-pid="0f964e">At 6 a.m. the air in Redding is 58 °F, and at 2 p.m. it is 97 °F. Was there a moment when it was exactly 80 °F? Could any thermometer show you that moment?</p>
+  </aside>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · any value between · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">12a6.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = x³ on [1, 2]</span></span>Show f takes the value 5 between 1 and 2. <br>Name the function you hand to in-between-value.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="12a7">
+  <h2 class="sthead"><span class="stno">12a7</span>What the technique does not say</h2>
+  <p class="stands">Stands on 12a6 and 11a7 (the step u).</p>
+  <p data-pid="70d2b0"><b>It does not say where, and it does not say how many.</b> q(x) = x³ − 3x + 1 on [−2, 2] has q(−2) = −1 and q(2) = 3. The technique promises one zero, and q has three, near −1.88, 0.35 and 1.53. Equal signs at the two ends promise nothing either way. x² − ¼ on [−1, 1] is positive at both ends and has two zeros. x² + 1 is positive at both ends and has none.</p>
+  <p data-pid="1377cc">It needs both of its words. Without continuity: take u(x) − ½, with 11a's step u. It is −½ at −1 and ½ at 1, continuous at every input but 0, and never 0: the step skips over it. Without the whole closed interval: 1/x is −1 at −1 and 1 at 1. But [−1, 1] is not an interval of its inputs, because 0 is not an input. 1/x is continuous, and it skips 0 at its discontinuity.</p>
+  <p data-pid="661029">And it does not run backwards. Let f(x) = x for x ∈ [0, 1] and f(x) = x − 1 for x ∈ (1, 2]. Then f(0) = 0 and f(2) = 1, and every value between is taken, already on [0, 1]. But from the left f heads to 1 at 1 and from the right to 0: a jump (11f), so f is not continuous on [0, 2]. Taking every value between the end values does not make a function continuous.</p>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · what it does not say · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">12a7.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = 1/x,"></span> <span data-tex-inline="g(x) = u(x) - \tfrac12,"></span> <span data-tex-inline="f(-1) &lt; 0 &lt; f(1),"></span> <span data-tex-inline="g(-1) &lt; 0 &lt; g(1),"></span> <span data-tex-inline="f, g \ne 0 \text{ on } [-1, 1]"></span></span>Find which hypothesis of in-between-value fails for each of f and g, and where.</li><li><span class="givens"><span data-tex-inline="g(x) = u(x) - \tfrac12 \text{ on } [-1, 1]"></span></span>Run the column on g as far as it goes, and find the line that fails.</li><li><span class="givens"><span data-tex-inline="f(c) &gt; 0,"></span> <span data-tex-inline="\varepsilon_1 = 2f(c),"></span> <span data-tex-inline="\varepsilon_2 = f(c)/2"></span></span>Rerun sign-kept-near-an-input with each challenge in place of f(c), deciding which still keeps f's sign near c, and rewrite the line that changes.</li><li><span class="givens"><span data-tex-inline="f \text{ continuous on } [0, 1],"></span> <span data-tex-inline="f \text{ takes } 0 \text{ and } 1"></span></span>Prove or refute that f can take no value but these two.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="12a8">
+  <h2 class="sthead"><span class="stno">12a8</span>Illegal moves</h2>
+  <p class="stands">Stands on 12a1 to 12a7.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+f(a) \lt 0 \lt f(b), \text{ so a zero}\,? @@ only for f continuous on [a, b]: u(x) − ½ on [−1, 1] has none
+\tfrac1x \text{ changes sign on } [-1, 1], \text{ so a zero}\,? @@ [−1, 1] is not an interval of inputs of 1/x: 0 is a discontinuity
+\sigma = \sup A \in A\,? @@ f(σ) = 0, which is not below 0: σ ∉ A. A sup need not be a member (8c)
+\sigma \text{ is the only zero}\,? @@ q(x) = x³ − 3x + 1 on [−2, 2]: three zeros; σ is one of them
+f(a), f(b) \text{ of the same sign, so no zero}\,? @@ x² − ¼ on [−1, 1]: two zeros
+\begin{aligned}&\text{every value between}\\ &\quad\text{is taken, so continuous}\,?\end{aligned} @@ x on [0, 1], x − 1 on (1, 2]: a jump at 1
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">12a8.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">“f(0) = 1 and f(1) = 1, so f has no zero on [0, 1].”</span></span>Which illegal move is this? <br>Find a continuous f where it fails.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="12a9">
+  <h2 class="sthead"><span class="stno">12a9</span>Running it backwards</h2>
+  <p class="stands">Stands on 12a1 to 12a7.</p>
+  <p data-pid="904483">Handed an equation and asked whether it has an answer, move everything to one side to get f(x) = 0. Look for two inputs whose values have opposite signs. Check that f is continuous on the closed interval between them. Then the technique says yes, with an answer between. Handed a value to reach, check that it lies between two values already reached. Handed a supposed counterexample, find which hypothesis it lacks: a discontinuity, a missing end, or values of the same sign. Found upward; written downward.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">12a9.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f \text{ continuous on } [0, 5],"></span> <span data-tex-inline="f(0) = 3,"></span> <span data-tex-inline="f(5) = -1"></span></span>Find a value in-between-value guarantees f takes, and one it does not guarantee though f might take it.</li><li><span class="givens"><span data-tex-inline="f \text{ continuous on } [0, 4],"></span> <span data-tex-inline="f(0) = 7,"></span> <span data-tex-inline="f(4) = -2"></span></span>Build the function you hand to in-between-value to find an input where f is 1, and check its end values.</li><li><span class="givens"><span data-tex-inline="f(c) = 0.3,"></span> <span data-tex-inline="\delta = 0.1 \text{ from sign-kept-}"></span> <span data-tex-inline="\text{near-an-input at } c,"></span> <span data-tex-inline="q = c + 0.05 \in [v, w]"></span></span>Decide whether f could take the value minus one hundredth at q.</li><li><span class="givens"><span data-tex-inline="f(x) = x \text{ on } [0, 1],"></span> <span data-tex-inline="f(x) = x - 1 \text{ on } (1, 2]"></span></span>Show that f takes every value between its values at 0 and at 2, and yet is not continuous on the whole interval.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">12a.4.1</span><span class="tagq">build</span>Build a function of your own on the interval from 0 to 2, below 0 at 0 and above 0 at 2, that is never 0, and find which hypothesis of in-between-value it breaks, and where. <br>Then change it as little as you can so that it is continuous on the whole interval. <br>Find an interval that holds a zero of the new one, naming each hypothesis you checked.</div>
+  <div class="chq"><span class="chid">12a.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="f \text{ continuous on } [v, w],"></span> <span data-tex-inline="f(v) = 0 &lt; f(w)"></span></span>Decide whether in-between-value still promises a zero strictly between v and w. <br>Decide whether f must have one.</div>
+  <div class="chq"><span class="chid">12a.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="A \subseteq \mathbb{R},"></span> <span data-tex-inline="\text{every } f \text{ continuous on } A"></span> <span data-tex-inline="\text{negative and positive on } A"></span> <span data-tex-inline="\text{has a zero in } A"></span></span>Prove or refute that A must be an interval.</div>
+  <div class="chq"><span class="chid">12a.4.4</span><span class="tagq">seam</span>A mathematician wrote a whole pamphlet, in 1817, to prove that a continuous function negative at one end and positive at the other is 0 somewhere between. Many of his readers thought it needed no proof at all, since the curve plainly crosses. <br>Was the pamphlet a waste of paper?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r12.html">← 12 · skipping nothing on the way</a><a href="r12b.html">12b · bounded on a closed interval →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>The paper of 1817 is Bernard Bolzano’s, published in Prague, and the in-between-value technique is also called Bolzano’s theorem. The pamphlet of question 12a.4.4 is the same paper.</p>
+  <aside class="voice para"><p>Bolzano objects that the usual proof borrows a truth from geometry, that a continuous line passing from below another to above it must meet it. That is a fact about lines used to prove a fact about functions, and he argues that the order of the sciences runs the other way: the fact about functions should be proved first, from the nature of quantity alone.</p><cite>Bolzano, Rein analytischer Beweis des Lehrsatzes, dass zwischen je zwey Werthen, die ein entgegengesetztes Resultat gewähren, wenigstens eine reelle Wurzel der Gleichung liege (Prague, 1817), preface</cite></aside>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?3:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+/* the curve: climbing pieces through nine dots; with the jump, everything from 2 on is lifted by J */
+const HX=[0,0.5,1,1.5,2,2.5,3,3.5,4];
+const CONT=[-1.2,-0.5,0.5,0.2,-0.5,-0.3,0.6,0.4,1.2], JMP=[-1.2,-1,-0.8,-0.9,-0.7,-0.6,-0.5,-0.7,-0.2];
+let HY=CONT.slice(), mode='cont', which='last'; const J=1.4;
+const lift=x=>mode==='jump'&&x>=2?J:0;
+function base(x){ if(x<=0) return HY[0]; if(x>=4) return HY[8]; const i=Math.min(7,Math.floor(x*2)); const t=x*2-i; return HY[i]+(HY[i+1]-HY[i])*t; }
+const f=x=>base(x)+lift(x);
+const ky=$('ky'),ks=$('ks'),cv=$('cvI');
+const N=4000;
+function inA(x,y){ if(which==='last') return f(x)<y; const M=Math.ceil(x*N/4); for(let k=0;k<=M;k++){ const t=Math.min(x,4*k/N); if(!(f(t)<y)) return false; } return true; }
+function sigma(y){ // sup of the chosen set, refined between grid points
+  if(which==='last'){ let last=null; for(let k=0;k<=N;k++){ const x=4*k/N; if(f(x)<y) last=x; } if(last===null) return null; if(last>=4) return 4; let lo=last,hi=Math.min(4,last+4/N); for(let i=0;i<50;i++){ const m=(lo+hi)/2; if(f(m)<y) lo=m; else hi=m; } return mode==='jump'&&Math.abs(hi-2)<1e-6?2:hi; }
+  if(!(f(0)<y)) return null; let k=1; for(;k<=N;k++){ if(!(f(4*k/N)<y)) break; } if(k>N) return 4; let lo=4*(k-1)/N,hi=4*k/N; for(let i=0;i<50;i++){ const m=(lo+hi)/2; if(f(m)<y) lo=m; else hi=m; } return mode==='jump'&&Math.abs(hi-2)<1e-6?2:hi; }
+const P=plane(cv,{x:[-0.3,4.3],y:[-2.55,2.4],grid:1,aspect:0.72,draw:P=>draw(P)});
+Object.defineProperty(P.o,'aspect',{get:()=>cv.clientWidth>560?0.7:0.9});
+let S=null;
+function draw(P){ const c=P.ctx,y=+ky.value,s=+ks.value; P.axes();
+  P.line(-0.3,y,4.3,y,'--gold',1.3,[6,4]);
+  P.line(0,-2.4,0,2.4,'--muted',0.8,[2,4]); P.line(4,-2.4,4,2.4,'--muted',0.8,[2,4]);
+  // the set A, as a strip of inputs under the picture
+  const yb=-2.3; c.lineWidth=7; c.strokeStyle=col('--ember'); c.globalAlpha=.85; let on=false; c.beginPath();
+  const M=800; for(let k=0;k<=M;k++){ const x=4*k/M; if(inA(x,y)){ if(!on){ c.moveTo(P.X(x),P.Y(yb)); on=true; } else c.lineTo(P.X(x),P.Y(yb)); } else on=false; } c.stroke(); c.globalAlpha=1;
+  P.text('A',-0.25,yb-0.06,'--ember','left',12);
+  // the curve, in two runs when the jump is on
+  const run=(lo,hi)=>{ c.strokeStyle=col('--ink'); c.lineWidth=2.6; c.beginPath(); for(let k=0;k<=400;k++){ const x=lo+(hi-lo)*k/400; const v=(x>=2&&mode==='jump'&&hi>2)?base(x)+J:base(x); k?c.lineTo(P.X(x),P.Y(v)):c.moveTo(P.X(x),P.Y(v)); } c.stroke(); };
+  if(mode==='jump'){ run(0,1.99999); run(2,4); c.fillStyle=col('--card'); c.strokeStyle=col('--ink'); c.lineWidth=2; c.beginPath(); c.arc(P.X(2),P.Y(base(2)),5,0,7); c.fill(); c.stroke(); P.dot(2,base(2)+J,'--ink',4.5); }
+  else run(0,4);
+  S=sigma(y);
+  if(S!==null){ P.line(S,-2.0,S,2.4,'--gold',2); c.strokeStyle=col('--gold'); c.lineWidth=2.4; c.beginPath(); c.arc(P.X(S),P.Y(f(S)),9,0,7); c.stroke(); P.text('σ',S+0.05,2.15,'--gold','left',14); }
+  P.line(s,-2.0,s,2.4,'--teal',1.6,[5,4]); P.dot(s,f(s),'--teal',5); P.text('s',s+0.05,1.85,'--teal','left',13);
+  HX.forEach((x,i)=>P.dot(x,HY[i]+lift(x),'--ink',4));
+  P.text('a',0.03,-1.85,'--muted','left',12); P.text('b',3.97,-1.85,'--muted','right',12); }
+function aboveFrom(s,y){ for(let k=0;k<=N;k++){ const x=4*k/N; if(x>s+0.005&&inA(x,y)) return x; } return null; }
+function window_(c0,y,sgn){ // largest δ ≤ 2 with sign kept on [0,4] near c0 (numerical)
+  const ok=d=>{ for(let k=-200;k<=200;k++){ const x=c0+d*k/200; if(x<0||x>4) continue; const v=f(x)-y; if(sgn>0?!(v>0):!(v<0)) return false; } return true; };
+  if(!ok(1e-6)) return 0; let lo=1e-6,hi=2; if(ok(hi)) return hi; for(let i=0;i<40;i++){ const m=(lo+hi)/2; if(ok(m)) lo=m; else hi=m; } return lo; }
+function read(){ const y=+ky.value,s=+ks.value; $('oy').textContent=fm(y,2); $('os').textContent=fm(s,2);
+  const fa=f(0),fb=f(4); const hyp=fa<y&&y<fb; const vd=$('vdI'); let h='';
+  if(S===null){ vd.className='verdict lose'; vd.textContent='A has no member here: the value at the left end is not below y'+(which==='last'?' and f is never below y':'')+', so there is nothing to take the sup of. The technique asks for a value below y at the left end and above y at the right.'; }
+  else { const fs=f(S); const tol=0.012;
+    if(s<S-tol){ const x=aboveFrom(s,y); h='s is not an upper bound of A: x ≈ '+fm(x,2)+' is in A and past s. '; }
+    else if(s>S+tol){ h='s is an upper bound of A, but not the least: σ ≈ '+fm(S,3)+' is a smaller one. '; }
+    else h='s is σ. ';
+    let k='';
+    if(Math.abs(fs-y)<0.02) k='f(σ) = y, as the technique says: neither case survives. ';
+    else { const sg=fs>y?1:-1, d=window_(S,y,sg); if(d>0) k='f(σ) '+(sg>0?'> y':'< y')+' and sign-kept-near-an-input keeps the sign on a window of reach '+fm(d,3)+'. '; else k='f(σ) = '+fm(fs,2)+' is '+(fs>y?'above':'below')+' y, and no window keeps the sign at σ: f is not continuous at σ, so sign-kept-near-an-input, and the proof, fail there. '; }
+    vd.className='verdict '+(Math.abs(fs-y)<0.02?'win':'lose'); vd.textContent=h+k+(hyp?'':'The hypothesis, below y at the left end and above y at the right, is not true here.'); }
+  tex($('eqI'),R`\begin{gathered}f(a) = ${fm(fa,2)},\ \ f(b) = ${fm(fb,2)},\ \ y = ${fm(y,2)}\\ ${S===null?R`A = \varnothing`:R`\sigma = \sup A \approx ${fm(S,3)},\ \ f(\sigma) \approx ${fm(f(S),3)}`}\\ s = ${fm(s,2)},\ \ f(s) \approx ${fm(f(s),3)}\end{gathered}`,true); }
+function all(){ P.redraw(); read(); }
+[ky,ks].forEach(z=>z.addEventListener('input',all));
+[...$('mch').children].forEach(b=>b.onclick=()=>{ mode=b.dataset.m; HY=(mode==='jump'?JMP:CONT).slice(); [...$('mch').children].forEach(z=>z.classList.toggle('on',z===b)); all(); });
+[...$('sch').querySelectorAll('[data-s]')].forEach(b=>b.onclick=()=>{ which=b.dataset.s; $('sch').querySelectorAll('[data-s]').forEach(z=>z.classList.toggle('on',z===b)); all(); });
+$('bss').onclick=()=>{ if(S!==null){ ks.value=Math.round(S*100)/100; all(); } };
+let hd=-1;
+cv.addEventListener('pointerdown',ev=>{ const p=P.point(ev); let best=-1,bd=1e9; HX.forEach((x,i)=>{ const d=Math.abs(P.X(x)-p.px); if(d<bd){ bd=d; best=i; } }); if(bd<30){ hd=best; cv.setPointerCapture&&cv.setPointerCapture(ev.pointerId); mv(ev); } });
+function mv(ev){ if(hd<0) return; const p=P.point(ev); HY[hd]=Math.max(-1.9,Math.min(1.9,Math.round((p.y-lift(HX[hd]))*20)/20)); all(); }
+cv.addEventListener('pointermove',mv); ['pointerup','pointercancel'].forEach(t=>cv.addEventListener(t,()=>hd=-1));
+window.__pic={set:(m,w,y,s)=>{ if(m){ [...$('mch').children].find(b=>b.dataset.m===m).click(); } if(w){ $('sch').querySelector('[data-s="'+w+'"]').click(); } if(y!=null) ky.value=y; if(s!=null) ks.value=s; all(); return {S,txt:$('vdI').textContent}; }};
+all();
+
+/* ---------- slides ---------- */
+const Nw='\\htmlClass{new}', K='\\htmlClass{keep}';
+stepper('#sl1',[
+  {k:'ember',kl:'closed and open',t:R`[c, d] \text{ closed},\ \ (c, d) \text{ open}\ \ (c \lt d)`,n:`8g's intervals, named. [c, d) keeps one end and is neither. Not 5a's class of a pair.`},
+  {k:'ember',kl:'a zero',t:R`f(c) = ${Nw}{0}`,n:`An input with value 0: 9g's word, now for any function with real outputs. The books also say root.`}
+],{title:'The slides · words · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'closed-interval-continuity · 1 of 2',t:R`c = a \;\lor\; a \lt c \lt b \;\lor\; c = b`,n:`Three kinds of input, split by three-way-order on ℝ.`},
+  {k:'ember',kl:'closed-interval-continuity · 2 of 2',t:R`\begin{gathered}x \in [a, b] \land |x - c| \lt \delta\\ \Rightarrow |f(x) - f(c)| \lt \varepsilon\end{gathered}`,n:`Inside: continuity at c. At an end: one side, which is all of the interval near it. One promise for every member. ∎`}
+],{title:'The slides · closed-interval-continuity · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'sign-kept-near-an-input',t:R`\begin{gathered}\varepsilon = ${Nw}{f(c)}:\ \ |f(x) - f(c)| \lt f(c)\\ \Rightarrow f(x) \gt 0\end{gathered}`,n:`The band around f(c) reaches down exactly to 0. 10b's sign-kept-near with the value, and c included. ∎`}
+],{title:'The slides · sign-kept-near-an-input · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'in-between-value · the set',t:R`A = \{x \in [a, b] : f(x) \lt 0\}`,n:`Separation: the inputs where f is still below 0. The left end is in A; the right end is an upper bound.`},
+  {k:'ember',kl:'in-between-value · the sup',t:R`${Nw}{\sigma = \sup A}`,n:`no-holes (8c). The one line that needs rung 8's completeness. Then σ lies in the interval, so f(σ) is a value.`},
+  {k:'ember',kl:'in-between-value · three cases',t:R`f(\sigma) \gt 0 \;\lor\; f(\sigma) = 0 \;\lor\; f(\sigma) \lt 0`,n:`three-way-order on ℝ with 0: rung 7's either-way principle. Refute the outer two.`},
+  {k:'ember',kl:'above · 1 of 3',t:R`f \gt 0 \text{ on } [a, b] \text{ within } \delta \text{ of } \sigma`,n:`sign-kept-near-an-input at σ.`},
+  {k:'ember',kl:'above · 2 of 3',t:R`x \in A,\ \ ${Nw}{\sigma - \delta \lt x} \le \sigma`,n:`σ − δ is not an upper bound, since σ is the least: not-every gives a member beyond it.`},
+  {k:'ember',kl:'above · 3 of 3',t:R`f(x) \gt 0 \land f(x) \lt 0\ \ \bot`,n:`x is in the window and in A. Refute: not above.`},
+  {k:'ember',kl:'below · 1 of 3',t:R`\sigma \lt b;\ \ f \lt 0 \text{ within } \delta \text{ of } \sigma`,n:`σ at the right end would make the value there negative. sign-kept-near-an-input's negative form at σ.`},
+  {k:'ember',kl:'below · 2 of 3',t:R`x = ${Nw}{\min(\sigma + \tfrac{\delta}{2}, b)}`,n:`A little past σ, still in the interval, still in the window. So f(x) &lt; 0 and x ∈ A.`},
+  {k:'ember',kl:'below · 3 of 3',t:R`\sigma \lt x \le \sigma\ \ \bot`,n:`A member of A past its upper bound. Refute: not below.`},
+  {k:'ember',kl:'in-between-value · the end',t:R`${Nw}{f(\sigma) = 0},\ \ a \lt \sigma \lt b`,n:`The remaining-option technique twice; σ is neither end, since f is below 0 at the left end and above 0 at the right. ∎`},
+  {k:'ember',kl:'which zero',t:R`x \gt \sigma \;\Rightarrow\; f(x) \ge 0`,n:`Past σ the function is never below 0: σ is the last place it comes up from below. Another set finds the first.`}
+],{title:'The slides · in-between-value · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'in-between-value, general form',t:R`\begin{gathered}f(a) \lt y \lt f(b):\\ g(x) = ${Nw}{f(x) - y},\ \ g(a) \lt 0 \lt g(b)\end{gathered}`,n:`Move the target. in-between-value on g gives f(c) = y. The other order with y − f(x). ∎`},
+  {k:'ember',kl:'used · 1 of 2',t:R`p(1) = -1,\ \ p(2) = 7\ \ \Rightarrow\ \ \text{a zero in } (1, 2)`,n:`p(x) = x³ + x − 3, continuous by polynomials-are-continuous.`},
+  {k:'ember',kl:'used · 2 of 2',t:R`1 \lt ${Nw}{3} \lt 4\ \ \Rightarrow\ \ c^2 = 3`,n:`x² on [1, 2] takes 3: √3 exists, by a second road.`}
+],{title:'The slides · any value between · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'not · how many',t:R`x^3 - 3x + 1 \text{ on } [-2, 2]:\ \ \text{three zeros}`,n:`in-between-value promises one.`},
+  {k:'ember',kl:'not · without continuity',t:R`u(x) - \tfrac12:\ \ -\tfrac12 \text{ at } -1,\ \ \tfrac12 \text{ at } 1,\ \ \text{never } 0`,n:`The step skips. Continuity on the whole closed interval is spent at sign-kept-near-an-input.`},
+  {k:'ember',kl:'not · backwards',t:R`\begin{gathered}x\ (x \le 1),\ \ x - 1\ (1 \lt x \le 2):\\ \text{every value between, and a jump}\end{gathered}`,n:`Taking every value between the end values does not make a function continuous.`}
+],{title:'The slides · what it does not say · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

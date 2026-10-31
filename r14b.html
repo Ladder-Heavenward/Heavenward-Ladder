@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>14b · Level ends, a level point between</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:3.5em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r14a.html">← 14a zero slope at a top or bottom</a><a href="r14c.html">next: 14c the mean value technique →</a></p>
+  <div class="tags"><span class="tag proof">14b · proof</span></div>
+  <h1>Level ends, a level point between</h1>
+  <p>14a's flat-top says a top inside the domain, where there is a slope, has slope 0. It does not say there is a top. 12c's highest-and-lowest says a function continuous on a closed interval reaches a greatest and a least value, and does not say they are inside. Put the two together on a function whose two ends have the same value. Either the greatest or the least value is reached inside, and there the slope is 0. Or both are reached only at the ends, so they are equal, and the function never moves. Either way some input strictly inside has slope 0. One technique that names no place, and one that names a place but promises nothing is there, make a technique that promises a place.</p>
+  <p class="gesture">Equal ends, continuous on the closed interval, a slope inside. Highest-and-lowest gives a top and a bottom. If one is inside, flat-top makes its slope 0. If both are at the ends, the function is constant and every slope is 0.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r14a.html">14a</a> (top, bottom, flat-top, candidates's neighbourhood), <a href="r12c.html">12c</a> (highest-and-lowest), <a href="r12a.html">12a</a> (in-between-value, closed and open interval), <a href="r13a.html">13a</a> (slopes-decided-near), <a href="r13d.html">13d</a> (constant-has-slope-0, polynomial-slope), <a href="r09g.html">9g</a> (factor, at-most-n-zeros), <a href="r08b.html">8b</a> (three-way-order on ℝ), <a href="r07a.html">7a</a> (either-way). <a href="r14c.html">14c</a> tilts it into the mean value technique; <a href="r14i.html">14i</a> runs it on two functions at once.</p></div>
+</header>
+
+<section class="class step" data-step="14b1">
+  <h2 class="sthead"><span class="stno">14b1</span>The technique, every line cited</h2>
+  <p class="stands">Stands on 14a (flat-top) and 12c (highest-and-lowest).</p>
+  <p data-pid="bae1f2">Level-ends technique (Rolle's): <b>if f is continuous on [α, β], has a slope at every input of (α, β), and f(α) = f(β), then f′(c) = 0 for some c with α &lt; c &lt; β.</b></p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the level-ends technique · the two extremes">
+\text{call } c_1:\ \forall x \in [a, b]\ (f(x) \le f(c_1)) @@ <span class="hl-new">highest-and-lowest (12c)</span>, the greatest value
+\text{call } c_2:\ \forall x \in [a, b]\ (f(c_2) \le f(x)) @@ highest-and-lowest, the least value
+c_1 \in (a, b) \;\lor\; c_2 \in (a, b) \;\lor\; c_1, c_2 \in \{a, b\} @@ <span class="hl-new">either-way (7a), rung 7's principle</span>, with three-way-order on ℝ placing each in [a, b]
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: the level-ends technique · case one, an extreme inside">
+c_1 \in (a, b):\ f \text{ has a top at } c_1 @@ δ = min(c₁ − a, b − c₁), as in 14a's candidates
+f'(c_1) = 0 @@ <span class="hl-new">flat-top (14a)</span>; the slope at c₁ exists by hypothesis
+c_2 \in (a, b):\ f'(c_2) = 0 @@ the same, with a bottom
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: the level-ends technique · case two, both at the ends">
+f(c_1) = f(a) \text{ and } f(c_2) = f(a) @@ each is f(a) or f(b), and f(a) = f(b)
+f(a) \le f(x) \le f(a) \text{ for every } x \in [a, b] @@ the two lines of highest-and-lowest
+f(x) = f(a) \text{ on } [a, b] @@ at-most-is-a-partial-order on ℝ's antisymmetry: f is constant
+c = \tfrac{a + b}{2}:\ \ f'(c) = 0 \quad \blacksquare @@ slopes-decided-near (13a): f agrees with the constant f(a) on (a, b), which has slope 0 (constant-has-slope-0)
+  </pre>
+  <p data-pid="3edb05">Where each hypothesis was spent. Continuity on the closed interval: in highest-and-lowest, both times. The slope inside: at flat-top, and only there. Equal ends: in case two. That is where a function with unequal ends escapes, since its greatest value can sit at one end and its least at the other. Rung 7's either-way principle: at the three-way split, and inside highest-and-lowest. The proof never says which case is true, so it never names c. In case one it points at an input that highest-and-lowest promised and did not find.</p>
+  <p data-pid="36e58d">A version of this was proved in 1691, for polynomials only, as part of a method for finding where a polynomial is 0. It used a rule for building a new polynomial from an old one, which is the slope that the polynomial-slope technique gives, without limits and without any word for slope. The method went in steps. The zeros of the slope cut the line into stretches, and each stretch holds at most one zero of the polynomial itself.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · level-ends · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · left: the function, its chord and the level-ends inputs · right: the slope function</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="chips" id="fch"></div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">tilt t</span><input type="range" id="kt" min="-2" max="2" step="0.05" value="0"><output id="ot"></output></div>
+      <div class="cap">Ink: f(x) + t(x − α) on [α, β]. Gold dashed: the chord through the two ends. Plum: short tangent lines at every input inside where f′ is 0. Teal dot: the greatest value; ember dot: the least. Set the tilt to 0 for the level-ends case.</div>
+      <div class="verdict" id="vdF"></div>
+    </div>
+    <div class="panel">
+      <div class="lbl">the slope function, f′(x) + t</div>
+      <canvas id="cvS"></canvas>
+      <div class="cap">Plum: the slope function inside (α, β), with a gap where there is no slope. Gold row: the chord's slope. Plum dots: where the slope function meets the gold row.</div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">14b1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = x^2 − 4x on [0, 4]</span></span>Check each hypothesis of level-ends. <br>Find the c it promises.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="14b2">
+  <h2 class="sthead"><span class="stno">14b2</span>Each hypothesis is needed</h2>
+  <p class="stands">Stands on 14b1, 13f (no slope at a joint) and 11e (joints).</p>
+  <p data-pid="8ca2f0"><b>Take away any one hypothesis, and a function shows the conclusion fails.</b></p>
+  <p data-pid="e52ec6">Take away continuity at an end: f(x) = x for 0 ≤ x &lt; 1, and f(1) = 0. Then f(0) = f(1) = 0, and f has slope 1 at every input of (0, 1). No slope inside is 0. Highest-and-lowest cannot be cited, and indeed f reaches no greatest value on [0, 1].</p>
+  <p data-pid="bb9041">Take away the slope at one input: |x| on [−1, 1]. Then |−1| = |1|, and |x| is continuous, with slope −1 left of 0 and 1 right of 0, and none at 0. The bottom is at 0, inside, and flat-top cannot be cited there.</p>
+  <p data-pid="9736ce">Take away equal ends: x on [0, 1]. Continuous, slope 1 everywhere, and 0 ≠ 1.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · each hypothesis · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14b2.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = 1/x^2 \text{ on } [-1, 1],"></span> <span data-tex-inline="f(-1) = f(1),"></span> <span data-tex-inline="f'(x) = -2/x^3 \ne 0"></span></span>Find the hypothesis of level-ends that fails.</li><li><span class="givens"><span data-tex-inline="f(x) = 1 - |x - 1| \text{ on } [0, 2],"></span> <span data-tex-inline="f(0) = f(2),"></span> <span data-tex-inline="\text{no slope of } 0 \text{ inside}"></span></span>Find the hypothesis of level-ends that fails, and where.</li><li><span class="givens"><span data-tex-inline="f(x) = x^2 + 2x \text{ on } [-2, 1],"></span> <span data-tex-inline="f'(-1) = 0"></span></span>Decide whether f has equal values at the ends, and whether that goes against level-ends.</li><li><span class="givens"><span data-tex-inline="f \text{ is continuous on } [0, 3],"></span> <span data-tex-inline="f' \text{ exists on } (0, 3),"></span> <span data-tex-inline="f(0) = f(1) = f(3)"></span></span>Find the least number of inputs with slope zero that level-ends promises.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="14b3">
+  <h2 class="sthead"><span class="stno">14b3</span>Where the zeros of a slope are</h2>
+  <p class="stands">Stands on 14b2, 12a (in-between-value) and 13d (polynomial-slope).</p>
+  <p data-pid="7549ed">The technique's first use. Suppose a polynomial p is 0 at r and at s, with r &lt; s. A polynomial is continuous and has a slope everywhere (polynomials-are-continuous, polynomial-slope). So level-ends on [r, s] gives a zero of p′ strictly between.</p>
+  <p data-pid="a0fc8b">Zeros-of-slopes technique: <b>if a polynomial p has zeros r₁ &lt; r₂ &lt; … &lt; rₙ, then p′ has a zero strictly between each neighbouring pair, so at least n − 1 zeros. Turned about: if p′ has at most k zeros, then p has at most k + 1.</b> The first part is level-ends on each [rᵢ, rᵢ₊₁]; the stretches do not overlap, so the zeros it finds are different. The second is the first refuted: k + 2 zeros of p would give k + 1 zeros of p′.</p>
+  <pre class="lines" data-k="teal" data-label="from 12a: exactly one zero, by two techniques">
+q(x) = x^3 + x + 1 @@ a polynomial
+q(-1) = -1 \lt 0 \lt 1 = q(0) @@ in-between-value (12a): a zero between −1 and 0
+q'(x) = 3x^2 + 1 \ge 1 @@ polynomial-slope; square-never-negative: never 0
+q \text{ has } \htmlClass{new}{\text{exactly one}} \text{ zero} @@ zeros-of-slopes: q′ has 0 zeros, so q has at most 1
+  </pre>
+  <p data-pid="d7e0e7">In-between-value says there is at least one; level-ends says there is at most one. Neither says where it is: 12e's bisection does.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the level-ends c is not the middle">
+f(x) = x(x - 1)(x - 3) = x^3 - 4x^2 + 3x \text{ on } [0, 1] @@ f(0) = f(1) = 0
+f'(x) = 3x^2 - 8x + 3 @@ polynomial-slope
+c = \tfrac{4 - \sqrt7}{3} \approx 0.451 @@ completing the square (8i); the other zero, (4 + √7)/3, is outside
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: more than one c">
+x^3 - x \text{ on } [-1, 1]:\ \ 3x^2 - 1 = 0 \text{ at } \pm\tfrac{1}{\sqrt3} @@ both inside: level-ends promises at least one, not one
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · zeros of slopes · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14b3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = x^2 - 6x + 5,"></span> <span data-tex-inline="I = [1, 5]"></span></span>Check every hypothesis of level-ends for f on I, and find every c it promises.</li><li><span class="givens"><span data-tex-inline="f(x) = x^3 - 9x,"></span> <span data-tex-inline="I = [-3, 3]"></span></span>Find every c that level-ends promises for f on I.</li><li><span class="givens"><span data-tex-inline="f(x) = x^3 + 2x - 5"></span></span>Show that f has exactly one zero.</li><li><span class="givens"><span data-tex-inline="f(x) = x^4 - 5x^2 + 4,"></span> <span data-tex-inline="\text{zeros of } f: -2, -1, 1, 2"></span></span>Show that the slope of f has a zero strictly between each neighbouring pair of zeros of f.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="14b4">
+  <h2 class="sthead"><span class="stno">14b4</span>Illegal moves</h2>
+  <p class="stands">Stands on 14b1 to 14b3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+c = \tfrac{a + b}{2}\,? @@ x(x − 1)(x − 3) on [0, 1] has c ≈ 0.451
+\text{exactly one } c\,? @@ x³ − x on [−1, 1] has two
+f'(c) = 0 \text{ inside, so } f(a) = f(b)\,? @@ x² on [−1, 2]: slope 0 at 0, and 1 ≠ 4
+\begin{aligned}&\text{a slope missing at one input does no harm}\,\\ &\quad ?\end{aligned} @@ |x| on [−1, 1]: no slope inside is 0
+\text{continuous inside is enough}\,? @@ x, dropped to 0 at 1: slope 1 everywhere inside
+\text{the proof finds } c\,? @@ it cites highest-and-lowest, which names no input
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14b4.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">“f(x) = x^2 on [−1, 2] has f′(c) = 0 at c = 0, so f(−1) = f(2).”</span></span>Which illegal move is this? <br>Check the two ends.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="14b5">
+  <h2 class="sthead"><span class="stno">14b5</span>Running it backwards</h2>
+  <p class="stands">Stands on 14b1 to 14b3.</p>
+  <p data-pid="2ad693">Handed a claim that some slope inside is 0, look for two inputs with equal values. Then check continuity between them and a slope at every input strictly between. Handed a claim that an equation has at most so many solutions, move everything to one side, take its slope, and count the slope's zeros. <b>Zeros-of-slopes turns a count of the slope's zeros into a bound on the solutions.</b> Pair it with in-between-value for at least one. Handed a function where the conclusion fails, find which of the three hypotheses is missing. Found upward; written downward.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14b5.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f \text{ is continuous on } [2, 7],"></span> <span data-tex-inline="f'(x) \text{ exists and is not } 0"></span> <span data-tex-inline="\text{for every } x \text{ in } (2, 7)"></span></span>Decide whether f takes the same value at the two ends, and prove it.</li><li><span class="givens"><span data-tex-inline="p \text{ is a polynomial,}"></span> <span data-tex-inline="p' \text{ has exactly two zeros}"></span></span>Find the most zeros p can have, and make a p that has that many.</li><li><span class="givens"><span data-tex-inline="f(x) = x^3 - 3x + k,"></span> <span data-tex-inline="J = (-1, 1),"></span> <span data-tex-inline="K = (-2, 2)"></span></span>Show that f has at most one zero in J, whatever k is.<br>Show that f has at least one zero in J when k is in K.</li><li><span class="givens"><span data-tex-inline="f \text{ is a cubic,}"></span> <span data-tex-inline="\text{leading coefficient } 1,"></span> <span data-tex-inline="f(0) = f(4) = 0,"></span> <span data-tex-inline="f'(1) = 0"></span></span>Find f, and every other c that level-ends promises between its two given zeros.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">14b.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="1 - |x - 1| \text{ on } [0, 2] \text{ has no } c."></span> <span data-tex-inline="I = [0, 2]"></span></span>Make a polynomial of your own with equal values at the ends of I and exactly two inputs c inside I, find both, and prove there is no third.</div>
+  <div class="chq"><span class="chid">14b.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="f \text{ is constant}"></span></span>Find which c the proof of level-ends gives for f, and whether it could have given any other.</div>
+  <div class="chq"><span class="chid">14b.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="f'(c) = 0"></span></span>Prove or refute: there are always two inputs, one on each side of c, at which f takes the same value.</div>
+  <div class="chq"><span class="chid">14b.4.4</span><span class="tagq">world</span><span class="givens"><span data-tex-inline="\text{Leaves at } 9{:}00,"></span> <span data-tex-inline="\text{back at } 9{:}40."></span></span>A delivery van leaves a warehouse in Eureka, drives along the one straight road out of town and back, and is at the warehouse again. Its position along the road has a slope at every instant. <br>Find what must be true of its velocity, the slope of its position, at some instant, and prove it. <br>Who could you ask to check?</div>
+  <div class="chq"><span class="chid">14b.4.5</span><span class="tagq">seam</span>From 1700, in the Paris Academy, the man who first proved level-ends argued that the new calculus gave false results. He said it rested on quantities no one could say were something or nothing. Two defenders of the calculus answered him, and the quarrel ran for years before he let it drop. His technique about polynomials, proved without the calculus, is now where the calculus begins its proofs. <br>Was he right about the calculus of 1700? <br>Does it matter that his technique needed none of it?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r14a.html">← 14a · zero slope at a top or bottom</a><a href="r14c.html">14c · the mean value technique →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>Michel Rolle proved the polynomial version in 1691, in his Démonstration d’une méthode pour résoudre les égalités de tous les degrés. From 1700 he attacked the calculus in the Paris Academy, and Pierre Varignon and Joseph Saurin answered him.</p>
+  <p>Accepted names: the level-ends technique is Rolle’s theorem. The highest-and-lowest technique is the extreme value theorem, and the flat-top technique is Fermat’s theorem.</p>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?3:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=v=>fm(v).replace('-','−');
+/* zs: inputs inside where f′ = 0, exact; fail: which hypothesis is missing */
+const r7=Math.sqrt(7), r3=Math.sqrt(3);
+const FN={
+  sq:{lab:'x² − 4x on [0, 4]',tex:R`x^2 - 4x`,a:0,b:4,f:x=>x*x-4*x,df:x=>2*x-4,y:[-5,2],zs:[2]},
+  cu:{lab:'x³ − x on [−1, 1]',tex:R`x^3 - x`,a:-1,b:1,f:x=>x*x*x-x,df:x=>3*x*x-1,y:[-0.8,0.8],zs:[-1/r3,1/r3]},
+  mid:{lab:'x(x − 1)(x − 3) on [0, 1]',tex:R`x(x - 1)(x - 3)`,a:0,b:1,f:x=>x*(x-1)*(x-3),df:x=>3*x*x-8*x+3,y:[-0.3,0.9],zs:[(4-r7)/3]},
+  ab:{lab:'|x| on [−1, 1]',tex:R`|x|`,a:-1,b:1,f:x=>Math.abs(x),df:x=>x===0?null:Math.sign(x),y:[-0.4,1.4],zs:[],fail:'a slope at every input inside: |x| has none at 0'},
+  dr:{lab:'x, dropped to 0 at 1',tex:R`x\ (x \lt 1),\ 0\ (x = 1)`,a:0,b:1,f:x=>x<1?x:0,df:x=>1,y:[-0.4,1.4],zs:[],fail:'continuity on [0, 1]: a discontinuity at 1',brk:1}
+};
+let key='sq',F=FN.sq;
+const cvF=$('cvF'),cvS=$('cvS'),kt=$('kt');
+const T=()=>+kt.value;
+const g=x=>F.f(x)+T()*(x-F.a);
+const PF=plane(cvF,{x:[0,4],y:[-5,2],grid:1,aspect:0.8,draw:P=>drawF(P)});
+const PS=plane(cvS,{x:[0,4],y:[-4,4],grid:1,aspect:0.8,draw:P=>drawS(P)});
+[[PF,cvF],[PS,cvS]].forEach(([P,cv])=>Object.defineProperty(P.o,'aspect',{get:()=>cv.clientWidth>480?0.75:0.9}));
+function curve(P,fn,colr,w,lo,hi){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)||Math.abs(v)>1e6){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); }
+function yr(){ const w=F.b-F.a, tw=T()*w; return [Math.min(F.y[0],F.y[0]+tw),Math.max(F.y[1],F.y[1]+tw)]; }
+function ext(){ let M=-1e9,m=1e9,Mi=null,mi=null; const n=2000; for(let k=0;k<=n;k++){ const x=F.a+(F.b-F.a)*k/n; const v=(F.brk&&k===n)?g(F.b):g(x); if(v>M+1e-12){M=v;Mi=x;} if(v<m-1e-12){m=v;mi=x;} } return {M,Mi,m,mi}; }
+function drawF(P){ const w=F.b-F.a; P.o.x=[F.a-0.1*w,F.b+0.1*w]; P.o.y=yr(); P.o.grid=w>2?1:0.25; P.axes();
+  P.line(F.a,g(F.a),F.b,g(F.b),'--gold',1.4,[6,4]);
+  curve(P,g,'--ink',2.6,F.a,F.brk?F.b-1e-6:F.b); if(F.brk){ P.dot(F.b,g(F.b),'--ink',5); const c=P.ctx; c.fillStyle=col('--card'); c.strokeStyle=col('--ink'); c.lineWidth=2; c.beginPath(); c.arc(P.X(F.b),P.Y(F.f(F.b-1e-9)+T()*w),5,0,7); c.fill(); c.stroke(); }
+  const L=0.12*w; F.zs.forEach(z=>{ const s=T(); P.line(z-L,g(z)-s*L,z+L,g(z)+s*L,'--plum',2.4,[]); P.dot(z,g(z),'--plum',5); });
+  if(!F.brk){ const E=ext(); P.dot(E.Mi,E.M,'--teal',6); P.dot(E.mi,E.m,'--ember',6); } }
+function drawS(P){ const w=F.b-F.a; P.o.x=[F.a-0.1*w,F.b+0.1*w]; let lo=1e9,hi=-1e9; for(let k=1;k<200;k++){ const x=F.a+w*k/200; const d=F.df(x); if(d===null) continue; lo=Math.min(lo,d+T()); hi=Math.max(hi,d+T()); }
+  const ch=(g(F.b)-g(F.a))/w; lo=Math.min(lo,ch,-0.5); hi=Math.max(hi,ch,0.5); const pad=0.15*(hi-lo); P.o.y=[lo-pad,hi+pad]; P.o.grid=(hi-lo)>6?2:0.5; P.axes();
+  P.line(P.o.x[0],ch,P.o.x[1],ch,'--gold',1.4,[6,4]);
+curve(P,x=>{ if(x<=F.a||x>=F.b) return NaN; const d=F.df(Math.abs(x)<1e-9?0:x); return d===null?NaN:d+T(); },'--plum',2.4,F.a+1e-6,F.b-1e-6);
+  if(key==='ab'){ const c=P.ctx; c.fillStyle=col('--card'); c.strokeStyle=col('--plum'); c.lineWidth=2; [-1,1].forEach(s=>{ c.beginPath(); c.arc(P.X(0),P.Y(s+T()),5,0,7); c.fill(); c.stroke(); }); }
+  F.zs.forEach(z=>P.dot(z,F.df(z)+T(),'--plum',5)); }
+function read(){ const t=T(); $('ot').textContent=mm(t); const vd=$('vdF'); const w=F.b-F.a, ch=(g(F.b)-g(F.a))/w;
+  let s;
+  if(F.fail){ vd.className='verdict lose'; vd.textContent='Equal ends at tilt 0, and no slope inside is 0. Missing: '+F.fail+'.'; }
+  else if(Math.abs(t)<1e-9){ vd.className='verdict win'; vd.textContent='Equal ends: level-ends promises a slope of 0 strictly inside, and here it is at '+F.zs.map(mm).join(' and ')+'.'; }
+  else { vd.className='verdict'; vd.textContent='Tilted: the ends are no longer equal, so level-ends is silent. Yet at '+F.zs.map(mm).join(' and ')+' the slope is '+mm(t)+', the chord\u2019s slope.'; }
+  if(F.fail) s=R`\text{no } c`; else s=R`c = ${F.zs.map(mm).join(',\\ ')}:\ \ \text{slope } ${mm(t)}`;
+  tex($('eqF'),R`\begin{gathered}${F.tex}${Math.abs(t)<1e-9?'':R` + ${mm(t)}(x - ${mm(F.a)})`} \text{ on } [${mm(F.a)}, ${mm(F.b)}]\\ \text{chord slope } ${mm(ch)}\\ ${s}\end{gathered}`,true); }
+function all(){ PF.redraw(); PS.redraw(); read(); }
+kt.addEventListener('input',all);
+const fch=$('fch');
+Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===key) b.className='on'; b.onclick=()=>{ key=k; F=FN[k]; [...fch.children].forEach(z=>z.classList.toggle('on',z===b)); all(); }; fch.appendChild(b); });
+window.__pic={set:(k,v)=>{ [...fch.children][Object.keys(FN).indexOf(k)].click(); kt.value=v; all(); return {txt:$('vdF').textContent}; }};
+all();
+
+/* ---------- slides ---------- */
+const Nw='\\htmlClass{new}';
+stepper('#sl1',[
+  {k:'ember',kl:'level-ends',t:R`f(a) = f(b) \;\Rightarrow\; ${Nw}{f'(c) = 0},\ \ a \lt c \lt b`,n:`Continuous on [α, β], a slope at every input inside.`},
+  {k:'ember',kl:'the two extremes',t:R`f(c_2) \le f(x) \le f(c_1)`,n:`highest-and-lowest, twice. It names no input.`},
+  {k:'ember',kl:'the split',t:R`c_1 \in (a, b) \;\lor\; c_2 \in (a, b) \;\lor\; c_1, c_2 \in \{a, b\}`,n:`either-way: rung 7's principle.`},
+  {k:'ember',kl:'case one',t:R`c_1 \in (a, b) \;\Rightarrow\; f'(c_1) = 0`,n:`A top inside, with a slope: flat-top.`},
+  {k:'ember',kl:'case two',t:R`f(a) \le f(x) \le f(a)`,n:`Both extremes at the ends, and the ends are equal: f is constant, and constant-has-slope-0 with slopes-decided-near gives slope 0 at the middle. ∎`},
+  {k:'ember',kl:'where each went',t:R`\text{highest-and-lowest} \cdot \text{flat-top} \cdot f(a) = f(b)`,n:`Continuity in highest-and-lowest; the slope at flat-top; equal ends in case two.`}
+],{title:'The slides · level-ends · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'no continuity',t:R`x\ (x \lt 1),\ 0\ (x = 1)`,n:`Equal ends, slope 1 everywhere inside.`},
+  {k:'ember',kl:'no slope at one input',t:R`|x| \text{ on } [-1, 1]`,n:`The bottom is inside, at 0, where there is no slope.`},
+  {k:'ember',kl:'no equal ends',t:R`x \text{ on } [0, 1]`,n:`Slope 1 everywhere.`}
+],{title:'The slides · each hypothesis · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'zeros-of-slopes',t:R`p(r) = p(s) = 0 \;\Rightarrow\; ${Nw}{p'(c) = 0},\ r \lt c \lt s`,n:`n zeros of p give n − 1 of p′. Turned about: k zeros of p′ allow at most k + 1 of p.`},
+  {k:'teal',kl:'from 12a · exactly one',t:R`x^3 + x + 1:\ \ q(-1) \lt 0 \lt q(0),\ \ q' \ge 1`,n:`in-between-value for at least one; zeros-of-slopes for at most one.`},
+  {k:'ember',kl:'not the middle',t:R`x(x - 1)(x - 3):\ \ c = \tfrac{4 - \sqrt7}{3}`,n:`About 0.451 on [0, 1].`},
+  {k:'ember',kl:'more than one',t:R`x^3 - x:\ \ c = \pm\tfrac{1}{\sqrt3}`,n:`At least one, not exactly one.`}
+],{title:'The slides · zeros of slopes · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'illegal',t:R`f'(c) = 0 \not\Rightarrow f(a) = f(b)`,n:`x² on [−1, 2]. level-ends does not run backwards.`}
+],{title:'The slides · illegal · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

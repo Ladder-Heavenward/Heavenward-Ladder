@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>7·crypt · Can I prove I know a secret without telling it?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+table.tt td.l{text-align:left;font-family:var(--serif)} @media (max-width:520px){table.tt td.l{min-width:6.5em}}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.rounds{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:2px;font-family:var(--mono);font-size:.7rem;text-align:center}
+.rounds div{border-radius:3px;padding:3px 0;color:#fff}
+.rounds .p{background:var(--teal)} .rounds .f{background:var(--ember)} .rounds .x{background:var(--grid);color:var(--muted)}
+canvas{width:100%;display:block;border-radius:4px}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r07econ.html">← 7·econ should I trust the other prisoner?</a><a href="r07logi.html">next: 7·logi can these meetings fit in three rooms? →</a></p>
+  <div class="tags"><span class="tag crypt">7·crypt · cryptography</span></div>
+  <h1>Can I prove I know a secret without telling it?</h1>
+  <p>Can I prove I know a secret without telling it? Every time you type a password, you hand the secret over to prove you have it. Whoever receives it, and anyone listening in, now has it too. People asked whether there was another way, and the question sounds impossible. To convince someone you know a thing, surely you have to show them the thing. What makes it hard is that the checker must end up sure, and also end up knowing nothing new. This page answers with a cave, a locked door and a coin. The checker never sees the secret. Instead he sets a challenge, again and again, that only someone with the secret can meet every time. Rung seven does the heavy lifting: whether she knows the secret is true or false, even though the checker cannot look inside her head, so he can reason in each case. The page ends with the strangest part. The checker becomes sure, and yet he could not convince anyone else, because the record of what he saw is something he could have made up on his own.</p>
+  <p class="gesture">Set a challenge the prover can meet every time if she knows the secret, and only half the time if she does not. Let a fair coin choose the challenge, after she has committed. Split on whether she knows: in one case she always passes, in the other she passes many rounds only by a long run of luck, whose chance halves with every round. Then ask what the checker saw. If he could have produced the same record alone, with the same chances, the record told him nothing about the secret.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r07a.html">7a</a> (the either-way principle), <a href="r07d.html">7d</a> (proof by cases on any statement), <a href="r04j.html">4j</a> (stages-multiply, counted-functions), <a href="r04b.html">4b</a> (induction), <a href="r05stat.html">5·stat</a> (chance as a fraction, the chance-product technique) and <a href="r04crypt.html">4·crypt</a> (keys, and trying them all). Later cryptography pages build locks from remainders and from numbers too large to search.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · read it through, then work the picture and the slides</div>
+
+  <h3>The cave</h3>
+  <p data-pid="7bd94f">A cave has one mouth. A little way in, the passage splits in two, a left passage and a right passage. Deep inside, the two passages join again, but where they join stands a locked door. The door opens only to someone who says the secret word. So from the left passage you can reach the right one only through the door.</p>
+  <p data-pid="3cd44d">The <b>prover</b> says she knows the word. The <b>checker</b> wants to be convinced, and she will not say the word. So they play rounds. In each round the checker waits outside, where he cannot see the fork. The prover walks in and takes the left passage or the right one. Then the checker walks to the fork, tosses a fair coin, and calls out a side: left or right. The prover must come out of the side he calls.</p>
+  <p data-pid="35e766">If she knows the word, she can always do it. If she is in the called passage, she walks back out. If not, she opens the door and comes out the other side. If she does not know the word, she is stuck in the passage she chose. She comes out the called side only when she happened to choose it.</p>
+  <p class="eqline" data-pid="ec661d">From here on, on this page, a <b>cheat</b> is a prover who does not know the word, and a round is <b>passed</b> when the prover comes out of the side called.</p>
+
+  <h3>One round, then many</h3>
+  <p data-pid="72e8c6">In one round, the coin has two equally likely calls. A cheat's side is fixed before the call, and exactly one of the two calls matches it. So a cheat passes one round with chance 1/2, by 5·stat's chance as a fraction. Half the time is no proof of anything. So they play again.</p>
+  <p data-pid="1bb680">Cheat's-chance technique: <b>a cheat passes n rounds in a row with chance 1/2ⁿ, however she plays.</b> She may choose each side by any plan, and her plan may use the calls she has heard so far. The proof counts lists of calls.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the cheat's-chance technique">
+2^n \text{ lists of calls, equally likely} @@ counted-functions (4j): a call for each of n rounds, from {left, right}; the coin is fair
+\text{her side in round } i \text{ is fixed by the calls before it} @@ her plan: whatever it is, the earlier calls settle it
+n = 0:\ \text{one list, the empty one, and it passes} @@ induction on n (4b)
+\text{a list of } S(n) \text{ passes} \iff \text{its first } n \text{ pass and the last matches} @@ the rounds are passed in turn
+\text{exactly one first part passes, and one of two last calls fits it} @@ the induction, then her side for round S(n) is fixed
+\htmlClass{new}{1 \text{ list of } 2^n:\ P(\text{pass}) = \tfrac{1}{2^n}} \quad \blacksquare @@ chance as a fraction
+  </pre>
+  <p data-pid="19cbbb">A cheat who tosses a coin of her own to choose her sides does no better. For each way her own coin falls, she passes exactly one list in 2ⁿ, so her chance is 1/2ⁿ whatever her coin does. Ten rounds bring a cheat's chance down to 1/1024. Twenty bring it to 1/1 048 576, about one in a million. Each round halves it.</p>
+  <p data-pid="cb8616">One failed round settles the matter the other way. A prover who knows the word passes every round. So a prover who fails a round does not know it, by 1i's refutation: suppose she knows; then she passes; she failed; a collision. <b>One failure refutes the claim; no run of passes proves it outright.</b></p>
+
+  <h3>She knows, or she does not</h3>
+  <p data-pid="24c898">The checker cannot look inside her head. Before rung seven, a proof could split into cases only on a statement someone could settle. “She knows the word” is not one the checker can settle, and that is the whole point. With 7a's either-way principle, it is true or false all the same, and 7d's proof by cases may split on it.</p>
+  <pre class="lines" data-k="teal" data-label="from 7a and 7d: cases on a statement nobody can check">
+\text{she knows} \lor \lnot(\text{she knows}) @@ the either-way principle
+\text{case she knows}:\ \text{she passes all } n \text{ rounds} @@ she opens the door whenever she must
+\text{case she does not}:\ P(\text{she passes all } n) = \tfrac{1}{2^n} @@ the cheat's-chance technique
+\htmlClass{new}{\text{she passed } 20:\ \text{she knows, or a } \tfrac{1}{1\,048\,576} \text{ chance came off}} @@ reasoning by cases: the two cases, with what each allows
+  </pre>
+  <p data-pid="d35282">That is the verdict. It is not “she knows”. It is an or, and one side of the or has a chance attached that the checker chose himself. He can make it as small as he likes by playing more rounds.</p>
+
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · laws with a known exception rate</div>
+    <p data-pid="d220e0">The checker's verdict is a rule he lives by: after 20 passed rounds, treat her as knowing the word. It is not certain. It can be wrong, and the page knows exactly how often and which way. It passes a cheat with chance 1/1 048 576. It never fails a prover who knows. The error runs in one direction only.</p>
+    <p data-pid="7662e9"><b>State the rule, its range, and the direction it fails past the edge.</b></p>
+    <p data-pid="db9e30">The range is part of the rule. The 1/2ⁿ holds only in a cave where the door is the one way between the passages, and only when the calls are fair tosses made after she has chosen. A checker who always calls left, or who calls the side she did not come out of last time, can be read, and a cheat who reads him passes every round. A second, hidden tunnel does the same. Past the edge, the rule fails toward letting cheats through.</p>
+    <p class="bait" data-pid="eb7219">A thief tries the cave a million times, once with each of a million stolen claims, and the checker plays 20 rounds each time. How many of the million would you expect to get through?</p>
+  </aside>
+
+  <h3>What the checker learns</h3>
+  <p data-pid="c93bef">The checker is convinced. What has he learned about the word? He saw a list of calls, and the prover coming out of the side called, every time. Could he have produced that same record without her?</p>
+  <p data-pid="ff1826">He could. Let a friend who does not know the word stand in. The checker films each round. In each round the friend guesses a side, and the checker tosses his coin. When the call misses, they cut that piece of film and play the round again. When it hits, they keep it. After 20 kept rounds the film shows 20 fair calls, each one met. Nothing-learned technique: <b>the record of a real proof could be made, with the same chances, by someone who does not know the word.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the nothing-learned technique">
+\text{real: each call is a fair toss, and is met} @@ she knows the word, so every call is met
+\text{faked: a kept round's call is a fair toss that matched a guess} @@ guess and toss each fair; the misses are cut
+P(\text{left} \mid \text{kept}) = \tfrac{1/4}{1/2} = \tfrac12 @@ of the 4 equally likely (guess, call) pairs, 2 match, and 1 of them is left (5·stat: chance given that)
+\text{each kept round: left or right, } \tfrac12 \text{ each, met} @@ the same in both records
+\htmlClass{new}{\text{every list of } n \text{ calls: } \tfrac{1}{2^n} \text{ in both, each met}} \quad \blacksquare @@ chance-product, round by round
+  </pre>
+  <p data-pid="b2f90c">So the record carries nothing that needs the word. Whatever the checker could work out from it, he could have worked out from a film he made himself. <b>A proof can convince the one who checks it and tell him nothing else.</b></p>
+  <p data-pid="5c1fbe">It has an odd side effect. Show the film to a friend in Salem, and the friend shrugs. The film could have been cut, and it would look exactly the same. What convinced the checker was not the record. It was that he tossed the coins himself, live, after she had gone in. The proof lives in the doing, and does not travel.</p>
+
+  <h3>Cards, and keys</h3>
+  <p data-pid="024821">The cave is a story, but the shape is everywhere. A friend cannot tell red from green, and holds two cards that look the same to him. You say one is red and one is green. He shows you a card, hides both behind his back, tosses a coin, and swaps the cards or not. Then he shows you a card again, and you say whether he swapped. If the cards were really alike to you too, you would be guessing, and you would be right with chance 1/2. After 15 rounds of being right, the chance of guessing your way through is 1/32 768. He is convinced the cards differ, and he still has no idea which one is red.</p>
+  <p data-pid="88ca43">Computers use the same idea to show they hold a secret key without sending it. A login of this kind never puts the password on the wire. Since 2016 the digital currency Zcash has used proofs of this family to show that a payment is valid without showing who paid whom, or how much. 4·crypt's shift was beaten by trying all 25 keys. Here there is nothing to try: the checker never sees a single letter of the secret.</p>
+
+  <h3>Illegal moves</h3>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed">
+\text{she passed } 20 \text{ rounds, so she knows}\,? @@ or a 1/1 048 576 chance came off; the verdict carries its chance
+\begin{aligned}&\text{a cheat passes } 20 \text{ rounds}\\ &\quad\text{with chance } 20 \cdot \tfrac12\,?\end{aligned} @@ the rounds' chances multiply: 1/2 twenty times over, 1/2²⁰
+\begin{aligned}&\text{he cannot tell whether she knows,}\\ &\quad\text{so he cannot split on it}\,?\end{aligned} @@ either-way: she knows or she does not; reason in each case
+\begin{aligned}&\text{always call left: still}\\ &\quad\tfrac12 \text{ a round}\,?\end{aligned} @@ a cheat who knows the pattern goes left and always passes; the call must be a fair toss
+\text{the film proves she knows}\,? @@ a cut film looks the same; only the live tosses convince
+  </pre>
+
+  <h3>Which rung each step uses</h3>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>step</th><th>the mathematics</th><th>from</th></tr>
+    <tr><td class="l">one round</td><td class="l">chance as a fraction</td><td><a href="r05stat.html">5·stat</a></td></tr>
+    <tr><td class="l">n rounds</td><td class="l">counted-functions; induction</td><td><a href="r04j.html">4j</a>, <a href="r04b.html">4b</a></td></tr>
+    <tr><td class="l">one failure refutes</td><td class="l">refutation</td><td><a href="r01i.html">1i</a></td></tr>
+    <tr><td class="l">she knows or she does not</td><td class="l">the either-way principle; proof by cases</td><td><a href="r07a.html">7a</a>, <a href="r07d.html">7d</a></td></tr>
+    <tr><td class="l">nothing learned</td><td class="l">chance given that; chance-product</td><td><a href="r05stat.html">5·stat</a></td></tr>
+  </table></div>
+</section>
+
+<section class="pic" id="pic">
+  <div class="eyebrow">The picture · left: the cave, round by round · right: a real film and a cut one</div>
+  <div class="panels">
+    <div class="panel">
+      <div class="chips" role="group" aria-label="prover" id="wch"></div>
+      <canvas id="cv1"></canvas>
+      <div class="chips" role="group" aria-label="play" id="rch"></div>
+      <div class="lbl">rounds so far: teal passed, ember failed</div>
+      <div class="rounds" id="rds1"></div>
+      <div class="cap">The prover's path is drawn in ember, the door in teal when it opens. The call is printed beside the mouth. A cheat's run ends at her first failed round.</div>
+      <div class="verdict" id="vd1"></div>
+      <div class="eqbox" id="eq1"></div>
+    </div>
+    <div class="panel">
+      <div class="chips" role="group" aria-label="film" id="fch"></div>
+      <div class="lbl">the real film: 10 rounds, the prover knows</div>
+      <div class="rounds" id="rds2"></div>
+      <div class="lbl">the cut film: 10 kept rounds, a stand-in who guesses</div>
+      <div class="rounds" id="rds3"></div>
+      <div class="cap">Each box is a kept round: the call, met. Grey boxes below were cut from the second film. Only the cutting room knows about them.</div>
+      <div class="rounds" id="rds4"></div>
+      <div class="verdict" id="vd2"></div>
+    </div>
+  </div>
+</section>
+
+<section class="slides" id="sl1"><div class="eyebrow">The slides · the cave; one round; n rounds; the cheat's-chance technique; one failure refutes; cases on a statement nobody can check; the cut film; cards; illegal moves · ← → keys work</div></section>
+
+<section class="sayback">
+  <div class="eyebrow">Say it back · then work it</div>
+  <h2>Questions</h2>
+  <div class="phkey"></div>
+  <ol>
+    <li><span class="qid">7·crypt.1</span><span class="gname">Rounds, counted.</span><span class="gwhy">Do: build the page's pieces.</span>
+      <ol class="sub">
+        <li><span class="qid">7·crypt.1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\text{the cave: two passages that join}"></span> <span data-tex-inline="\text{behind a door only the word opens;}"></span> <span data-tex-inline="\text{the call is a fair toss, after she chooses}"></span></span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{a cheat}, 10 \text{ rounds}"></span></span>Find her chance of passing all 10.</li><li>Find the least number of rounds that brings a cheat's chance of passing them all below 1 in 1 000 000.</li><li><span class="givens"><span data-tex-inline="\text{a cave with three passages,}"></span> <span data-tex-inline="\text{each pair joined behind locked doors};"></span> <span data-tex-inline="\text{the call: one of the three, equally likely}"></span></span>Find a cheat's chance of passing one round.<br>Find the least number of rounds that brings her chance below 1 in 1 000 000.</li><li><span class="givens"><span data-tex-inline="\text{two cards, alike to a friend};"></span> <span data-tex-inline="\text{he swaps them or not by a fair toss};"></span> <span data-tex-inline="\text{you name the swap, } 15 \text{ rounds};"></span> <span data-tex-inline="\text{the cards look alike to you too}"></span></span>Find your chance of naming all 15 right.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">7·crypt.2</span><span class="gname">From the chance back.</span><span class="gwhy">Undo: run the page's techs backwards.</span>
+      <ol class="sub">
+        <li><span class="qid">7·crypt.2.1</span><span class="ph undo">undo</span><span class="givens"><span data-tex-inline="\text{the cave: two passages that join}"></span> <span data-tex-inline="\text{behind a door only the word opens}"></span></span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{a cheat's chance of passing every round: } 1/4096"></span></span>Find the number of rounds.</li><li><span class="givens"><span data-tex-inline="\text{a cave whose call has } k \text{ equally likely sides};"></span> <span data-tex-inline="5 \text{ rounds}"></span></span>Find the least k that brings a cheat's chance below 1/1000.</li><li><span class="givens"><span data-tex-inline="\text{a prover passes } 7 \text{ rounds}"></span> <span data-tex-inline="\text{and fails the } 8\text{th}"></span></span>Decide whether she knows the word.</li><li><span class="givens"><span data-tex-inline="\text{the checker rolls a die each round:}"></span> <span data-tex-inline="1 \text{ to } 4 \text{ calls left},\ 5 \text{ or } 6 \text{ right};"></span> <span data-tex-inline="\text{a cheat goes left every round}"></span></span>Find her chance of passing 10 rounds.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">7·crypt.3</span><span class="gname">Where the cave leaks.</span><span class="gwhy">Bend: find where the techs stop working.</span>
+      <ol class="sub">
+        <li><span class="qid">7·crypt.3.1</span><span class="ph bend">bend</span><span class="givens"><span data-tex-inline="\text{the cave: two passages that join}"></span> <span data-tex-inline="\text{behind a door only the word opens}"></span></span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{the checker calls his side before}"></span> <span data-tex-inline="\text{the prover goes in}"></span></span>Find a cheat's chance of passing 20 rounds.</li><li><span class="givens"><span data-tex-inline="\text{the first call is a fair toss};"></span> <span data-tex-inline="\text{after that, the checker calls the side}"></span> <span data-tex-inline="\text{she did not come out of last round}"></span></span>Find the best chance a cheat can get of passing 20 rounds.</li><li><span class="givens"><span data-tex-inline="\text{the checker films } 20 \text{ passed rounds}"></span> <span data-tex-inline="\text{and shows the film to a friend in Salem}"></span></span>Find the friend's chance of being fooled by a cut film, if he believes every film of 20 passed rounds.</li><li><span class="givens"><span data-tex-inline="\text{the door opens to a } 4\text{-digit code};"></span> <span data-tex-inline="\text{a cheat at the door guesses one code}"></span> <span data-tex-inline="\text{each round, every code equally likely}"></span></span>Find a cheat's chance of passing one round.</li></ol></li>
+      </ol></li>
+    <li class="optgroup"><span class="qid">7·crypt.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder challenges that rely on your own making. The page is complete without these; the rung's star needs them.</span>
+      <ol class="sub">
+        <li class="opt"><span class="qid">7·crypt.4.1</span><span class="tagq">build</span>Build a test of your own for a skill someone claims, such as telling tap water from bottled by taste, that convinces you and tells you nothing else.<ol class="parts" type="a"><li>Design a round, and find a pretender's chance of passing it.</li><li>Find the rounds that bring a pretender's chance below 1 in 1 000 000.</li><li>Show that someone without the skill could make a record of your rounds with the same chances.</li></ol></li>
+        <li class="opt"><span class="qid">7·crypt.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{a prover plays } 0 \text{ rounds}"></span></span>Find a cheat's chance of passing them all.<br>Decide what the checker may conclude.</li>
+        <li class="opt"><span class="qid">7·crypt.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{a prover's chance of passing } n \text{ rounds}"></span> <span data-tex-inline="\text{is } 1/2^n, \text{ for every } n"></span></span>Decide whether she must not know the word.</li>
+        <li class="opt"><span class="qid">7·crypt.4.4</span><span class="tagq">seam</span>After 60 rounds a cheat's chance of passing is 1/2⁶⁰, less than one in a billion billion. <br>Has the prover proved that she knows the word?</li>
+      </ol></li>
+  </ol>
+  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
+</section>
+
+<nav class="nextrung"><a href="r07econ.html">← 7·econ · should I trust the other prisoner?</a><a href="r07logi.html">7·logi · can these meetings fit in three rooms? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>Shafi Goldwasser, Silvio Micali and Charles Rackoff set out proofs that convince and reveal nothing in a paper first circulated in 1985; Goldwasser and Micali received the Turing Award for this line of work in 2012. The cave is from a 1989 paper by Jean-Jacques Quisquater, Louis Guillou and others, “How to explain zero-knowledge protocols to your children”, where the prover and checker are Peggy and Victor and the cave is Ali Baba's. The red and green cards are a common classroom version. The test of a stand-in whose misses are cut is the idea behind the formal definition, where the stand-in is called a simulator. Michael Rabin's test of whether a number is prime (1976, 1980), which can be wrong with a chance you choose, drew the first loud argument over whether a check with a chance of error is a proof. Zcash launched in October 2016.</p>
+  <h3>Accepted names</h3>
+  <p>A proof that convinces and tells nothing more is a <b>zero-knowledge proof</b>. The prover and checker are the <b>prover</b> and the <b>verifier</b>, and the rounds of question and answer make an <b>interactive proof</b>. The call is the <b>challenge</b>. That a knower always passes is <b>completeness</b>; that a cheat rarely passes is <b>soundness</b>, and 1/2ⁿ is the <b>soundness error</b>. The stand-in who makes a cut film is a <b>simulator</b>. A checker who keeps to the rules, tossing fair coins after the prover has chosen, is an <b>honest verifier</b>.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="7·crypt: a worked “proof”, not allowed">
+\text{a cheat passes one round with chance } \tfrac12 @@ fine: the cheat's-chance technique with n = 1
+\text{the checker has called left five times running} @@ fine, it happens: 1 time in 32
+\text{so the next call will surely be right, and a cheat should go right} @@ not allowed: a fair toss has no memory; the next call is left or right, 1/2 each, whatever came before
+  </pre>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const Nw='\\htmlClass{new}';
+function sizeH(cv,H){ const dp=window.devicePixelRatio||1, W=cv.clientWidth||300; cv.width=W*dp; cv.height=H*dp; cv.style.height=H+'px'; const c=cv.getContext('2d'); c.setTransform(dp,0,0,dp,0,0); return {c,W}; }
+const coin=()=>Math.random()<.5?'L':'R';
+
+/* ---------- left: the cave ---------- */
+let knows=true, hist=[], last=null, over=false;
+[['she knows the word',true],['she is a cheat',false]].forEach(([lab,v],i)=>{ const b=document.createElement('button'); b.textContent=lab; if(v===knows) b.className='on'; b.onclick=()=>{ knows=v; [...$('wch').children].forEach(x=>x.classList.toggle('on',x===b)); hist=[]; last=null; over=false; draw1(); }; $('wch').appendChild(b); });
+function round(){ if(over) return; const side=coin(), call=coin(); const pass=knows||side===call; last={side,call,pass,door:knows&&side!==call}; hist.push(pass); if(!pass) over=true; }
+[['play a round',()=>round()],['play 10',()=>{ for(let i=0;i<10;i++) round(); }],['start again',()=>{ hist=[]; last=null; over=false; }]].forEach(([lab,f])=>{ const b=document.createElement('button'); b.textContent=lab; b.onclick=()=>{ f(); draw1(); }; $('rch').appendChild(b); });
+function cave(){ const cv=$('cv1'), H=170; const {c,W}=sizeH(cv,H); c.fillStyle=col('--card'); c.fillRect(0,0,W,H);
+  const cx=W/2, mouthY=H-12, forkY=H-50, topY=22, dx=Math.min(W*0.3,120);
+  c.lineCap='round'; c.lineJoin='round';
+  const path=(pts,w,s)=>{ c.strokeStyle=s; c.lineWidth=w; c.beginPath(); pts.forEach(([x,y],i)=>i?c.lineTo(x,y):c.moveTo(x,y)); c.stroke(); };
+  const Lp=[[cx,mouthY],[cx,forkY],[cx-dx,forkY-30],[cx-dx,topY+20],[cx-14,topY]];
+  const Rp=[[cx,forkY],[cx+dx,forkY-30],[cx+dx,topY+20],[cx+14,topY]];
+  path(Lp,22,col('--sand')); path(Rp,22,col('--sand'));
+  path(Lp,1.2,col('--grid')); path(Rp,1.2,col('--grid'));
+  c.fillStyle=last&&last.door?col('--teal'):col('--ink'); c.fillRect(cx-4,topY-10,8,20);
+  c.font='11px IBM Plex Mono, monospace'; c.fillStyle=col('--muted'); c.textAlign='center';
+  c.fillText('door',cx,topY+24); c.textAlign='left'; c.fillText('mouth',cx+16,H-4); c.textAlign='center'; c.fillText('left',cx-dx-26,forkY-10); c.fillText('right',cx+dx+28,forkY-10);
+  if(last){ const ins=last.side==='L'?Lp:[[cx,mouthY],...Rp];
+    const callP=last.call==='L'?Lp:[[cx,mouthY],...Rp];
+    path(ins.slice(0,4),3,col('--ember'));
+    if(last.door){ path([ins[3],ins[4],[ins[4][0]+(last.side==='L'?28:-28),topY]],3,col('--ember')); path(callP.slice(0,5).reverse(),3,col('--ember')); }
+    c.textAlign='left'; c.fillStyle=col('--ember'); c.font='bold 12px IBM Plex Mono, monospace'; c.fillText('call: '+(last.call==='L'?'left':'right'),6,H-22);
+    c.fillStyle=last.pass?col('--teal'):col('--ember'); c.fillText(last.pass?'out as called':'stuck: failed',6,H-6);
+  }
+}
+function draw1(){ cave();
+  $('rds1').innerHTML=hist.slice(-30).map(p=>`<div class="${p?'p':'f'}">${p?'✓':'✗'}</div>`).join('');
+  const n=hist.filter(x=>x).length, vd=$('vd1');
+  if(!hist.length){ vd.className='verdict'; vd.textContent='Play a round. The prover picks a side unseen; then the coin calls.'; }
+  else if(over){ vd.className='verdict lose'; vd.textContent='She failed a round. A prover who knows the word never fails, so she does not know it: refuted.'; }
+  else { vd.className='verdict win'; vd.textContent=`${n} rounds passed. Either she knows the word, or a cheat's luck of 1 in ${Math.pow(2,n).toLocaleString('en-US').replace(/,/g,' ')} came off.`; }
+  const L=[R`\text{rounds passed: } ${n}`,R`P(\text{a cheat passes } ${n}) = \tfrac{1}{2^{${n}}}${n<=40?R` = \tfrac{1}{${Math.pow(2,n).toLocaleString('en-US').replace(/,/g,'\\,')}}`:''}`];
+  tex($('eq1'),'\\begin{gathered}'+L.join('\\\\ ')+'\\end{gathered}',true);
+}
+new ResizeObserver(()=>cave()).observe($('cv1'));
+
+/* ---------- right: a real film and a cut one ---------- */
+let real=[], cut=[], cutroom=0;
+function film(){ real=[]; cut=[]; cutroom=0; for(let i=0;i<10;i++) real.push(coin());
+  while(cut.length<10){ const guess=coin(), call=coin(); if(guess===call) cut.push(call); else cutroom++; } }
+[['make both films',()=>film()]].forEach(([lab,f])=>{ const b=document.createElement('button'); b.textContent=lab; b.onclick=()=>{ f(); draw2(); }; $('fch').appendChild(b); });
+function draw2(){ const sq=a=>a.map(x=>`<div class="p">${x}</div>`).join('');
+  $('rds2').innerHTML=sq(real); $('rds3').innerHTML=sq(cut);
+  $('rds4').innerHTML=Array(Math.min(cutroom,30)).fill('<div class="x">cut</div>').join('');
+  $('vd2').textContent=`Both films: 10 fair calls, each met. The cut film needed ${cutroom} more rounds, thrown away. Which film is real? Nothing on the film can say.`; }
+if(window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>cave());
+film(); draw1(); draw2();
+window.__pic={set:(k,n)=>{ knows=k; hist=[]; last=null; over=false; for(let i=0;i<n;i++) round(); draw1(); return {hist:hist.slice(),over,v:$('vd1').textContent}; }};
+
+/* ---------- slides ---------- */
+stepper('#sl1',[
+  {k:'ember',kl:'the cave',t:R`\text{left} \quad \text{door} \quad \text{right}`,n:`Two passages from one fork, joined deep inside behind a door only the word opens.`},
+  {k:'ember',kl:'one round',t:R`P(\text{a cheat passes}) = \tfrac12`,n:`Her side is fixed before the toss; one of two equally likely calls matches it.`},
+  {k:'ember',kl:'n rounds',t:R`2^n \text{ lists of calls}`,n:`Counted-functions (4j). Her side each round is fixed by the calls before it.`},
+  {k:'ember',kl:'the cheat\'s-chance technique',t:R`P(\text{a cheat passes } n) = ${Nw}{\tfrac{1}{2^n}}`,n:`Exactly one list of calls in 2ⁿ passes, by induction on n.`},
+  {k:'ember',kl:'twenty rounds',t:R`\tfrac{1}{2^{20}} = \tfrac{1}{1\,048\,576}`,n:`About one in a million. Each round halves it.`},
+  {k:'ember',kl:'one failure refutes',t:R`\text{knows} \Rightarrow \text{passes every round}`,n:`She failed, so she does not know: a refutation, no rung 7 needed.`},
+  {k:'teal',kl:'cases on what nobody can check',t:R`\text{she knows} \lor \lnot(\text{she knows})`,n:`The either-way principle (7a): true or false, whether or not the checker can see which.`},
+  {k:'teal',kl:'the verdict',t:R`${Nw}{\text{she knows, or a } \tfrac{1}{2^{20}} \text{ chance came off}}`,n:`Proof by cases (7d). The chance is the checker's to choose.`},
+  {k:'ember',kl:'the cut film',t:R`P(\text{left} \mid \text{kept}) = \tfrac12`,n:`A stand-in guesses; the misses are cut. Every list of kept calls has chance 1/2ⁿ, just as in the real film.`},
+  {k:'ember',kl:'nothing learned',t:R`${Nw}{\text{same record, same chances, no word}}`,n:`The checker is convinced and learns nothing else; the film convinces nobody else.`},
+  {k:'ember',kl:'cards',t:R`\tfrac{1}{2^{15}} = \tfrac{1}{32\,768}`,n:`Fifteen swaps named right: he is sure the cards differ, and does not learn which is red.`},
+  {k:'ember',kl:'illegal',t:R`\text{always call left}\,?`,n:`A cheat who reads the pattern always passes. The call must be a fair toss, after she chooses.`}
+],{title:'The slides · the cave; one round; n rounds; the cheat\'s-chance technique; one failure refutes; cases on a statement nobody can check; the cut film; cards; illegal moves · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>15d · The area under x, worked to the end</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r15c.html">← 15c integrable, and the sign ∫</a><a href="r15e.html">next: 15e areas add, scale, split →</a></p>
+  <div class="tags"><span class="tag proof">15d · proof</span></div>
+  <h1>The area under x, worked to the end</h1>
+  <p>The definition of the integral asks about every partition at once, and gap-closes asks for one partition per gap. Neither yet has given a single number for anything but constants and steps. This step computes the first: the region under the line where up equals across, from 0 to 1. With equal pieces, the lower and upper sums are sums of whole numbers, and 4j's doubled-sum adds them in one line. The lower sums come out just below a half, the upper sums just above, and the gap is one over the number of pieces. Nothing but a half survives every cut.</p>
+  <p class="gesture">With equal pieces, the boxes under the line climb in equal steps, and doubled-sum adds them to just under a half. The boxes over add to just as far above a half. The integral is caught between for every number of pieces, and only a half is.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r15c.html">15c</a> (lower and upper integral, gap-closes, exactly-one-between), <a href="r15a.html">15a</a> (the equal partition, L, U), <a href="r04j.html">4j</a> (doubled-sum, Σ), <a href="r08e.html">8e</a> (everyday-counting-passes), <a href="r08d.html">8d</a> (order-and-arithmetic-agree), <a href="r08h.html">8h</a> (unpack-the-bars), <a href="r14c.html">14c</a> (average-slope). <a href="r15e.html">15e</a> builds rules so that sums need not be redone for each function; <a href="r15g.html">15g</a> finds the sums of squares and cubes that x² and x³ need.</p></div>
+</header>
+
+<section class="class step" data-step="15d1">
+  <h2 class="sthead"><span class="stno">15d1</span>Squeezed for every n</h2>
+  <p class="stands">Stands on 8e (the whole numbers pass every real) and 7e (proof by contradiction).</p>
+  <p data-pid="92fc38">Squeezed-for-every-n technique: <b>if a number I satisfies |I − c| ≤ k/n for every whole n ≥ 1, with k ≥ 0 fixed, then I = c.</b></p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the squeezed-for-every-n technique">
+\text{suppose } I \ne c @@ for contradiction (7e)
+\alpha = \tfrac{|I - c|}{k + 1} \gt 0 @@ |I − c| &gt; 0 by three-way on ℝ; k + 1 &gt; 0
+\text{call } n:\ \tfrac1n \lt \alpha @@ everyday-counting-passes (8e)
+|I - c| \le \tfrac{k}{n} \lt \tfrac{k + 1}{n} \lt (k + 1)\alpha = |I - c|;\ \ \bot @@ the hypothesis at this n; order-and-arithmetic-agree; three-way-order on ℝ
+\htmlClass{new}{I = c} \quad \blacksquare @@ refute; three-way on ℝ
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · squeezed · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">15d1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">|I − 3| ≤ 2/n for every whole n ≥ 1</span></span>Find I. <br>Say which n would refute I = 3.01.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15d2">
+  <h2 class="sthead"><span class="stno">15d2</span>The sums for y = x</h2>
+  <p class="stands">Stands on 15d1, 15c (gap-closes) and 4j (the doubled sum).</p>
+  <pre class="lines" data-k="ember" data-label="this step: the lower and upper sums">
+P_n:\ x_i = \tfrac{i}{n},\ \ \Delta x_i = \tfrac1n @@ the equal partition of [0, 1] into n pieces
+m_i = \tfrac{i-1}{n},\ \ M_i = \tfrac{i}{n} @@ x is increasing: its least on a piece is at the left end, its greatest at the right
+L_n = \textstyle\sum_{i=1}^{n} \tfrac{i - 1}{n} \cdot \tfrac1n = \tfrac{1}{n^2} \sum_{j=0}^{n-1} j @@ order-and-arithmetic-agree and spread for times over plus to bring out 1/n²; j = i − 1
+= \tfrac{1}{n^2} \cdot \tfrac{(n-1)n}{2} = \htmlClass{new}{\tfrac12 - \tfrac{1}{2n}} @@ doubled-sum (4j): twice 0 + 1 + ⋯ + m is m(m + 1)
+U_n = \tfrac{1}{n^2} \textstyle\sum_{i=1}^{n} i = \tfrac{n(n+1)}{2n^2} = \htmlClass{new}{\tfrac12 + \tfrac{1}{2n}} @@ doubled-sum again
+U_n - L_n = \tfrac1n @@ the gap
+  </pre>
+  <p data-pid="e171a4">Area-under-x technique: <b>x is integrable on [0, 1], and ∫₀¹ x dx = ½.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the area-under-x technique">
+\text{fix } \varepsilon \gt 0;\ \ \text{call } n:\ \tfrac1n \lt \varepsilon @@ everyday-counting-passes
+U(x, P_n) - L(x, P_n) = \tfrac1n \lt \varepsilon @@ the gap
+\text{x is integrable on } [0, 1];\ \ \text{call its integral } I @@ <span class="hl-new">gap-closes (15c)</span>
+L_n \le I \le U_n \text{ for every } n @@ I is the sup of the lower sums and the inf of the upper sums
+\tfrac12 - \tfrac{1}{2n} \le I \le \tfrac12 + \tfrac{1}{2n},\ \ |I - \tfrac12| \le \tfrac{1}{2n} @@ the two sums; unpack-the-bars (8h)
+\htmlClass{new}{\textstyle\int_0^1 x\,dx = \tfrac12} \quad \blacksquare @@ squeezed-for-every-n with k = ½
+  </pre>
+  <p data-pid="ebf8f4"><b>So the region under y = x from 0 to 1 has area ½: half the box [0, 1] × [0, 1].</b> A picture suggests the half by a half turn of the box about its middle point, (½, ½), which carries the part below the graph onto the part above. A half turn is a move that rung 20 studies, and none of the three area axioms says that moving a set keeps its area. The squeeze needed no move.</p>
+  <p data-pid="ef3a9a">One mathematician computed the ratio of 0 + 1 + 2 + ⋯ + n to n + n + ⋯ + n, all n + 1 terms equal to n, for one n after another. He found it always a little more than one half, by a part that shrinks as n grows. With endlessly many terms, he said, the ratio is exactly one half.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · the sums for x · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · the boxes under and over y = x, and the window they leave for the integral</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="chips" id="fch"></div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">n</span><input type="range" id="kn" min="1" max="50" step="1" value="5"><output id="on"></output></div>
+      <div class="kn"><span class="m">b</span><input type="range" id="kb" min="1" max="4" step="0.5" value="1"><output id="ob"></output></div>
+      <div class="cap">Teal, filled: the lower boxes. Ember outline: the upper boxes. The upper boxes stick out by a staircase of n small boxes, each of width h and height h: together nh².</div>
+    </div>
+    <div class="panel">
+      <div class="lbl">the window [Lₙ, Uₙ] against n</div>
+      <canvas id="cvS"></canvas>
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15d2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = x on [0, 1],  n = 4</span></span>Find L₄ and U₄. <br>Check them against ½ − 1/(2n) and ½ + 1/(2n).</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15d3">
+  <h2 class="sthead"><span class="stno">15d3</span>Any interval from 0 up</h2>
+  <p class="stands">Stands on 15d2.</p>
+  <pre class="lines" data-k="ember" data-label="this step: x on [a, b], with 0 ≤ a &lt; b">
+h = \tfrac{b - a}{n},\ \ x_i = a + ih @@ the equal partition
+L_n = \textstyle\sum_{i=1}^{n} (a + (i - 1)h)\,h = nah + h^2 \tfrac{(n-1)n}{2} @@ 4j's termwise and factor-out, sums add termwise and a factor comes out (sum-one-more, induction); doubled-sum
+= a(b - a) + \tfrac{(b - a)^2}{2}(1 - \tfrac1n) @@ nh = b − a
+U_n = a(b - a) + \tfrac{(b - a)^2}{2}(1 + \tfrac1n),\ \ U_n - L_n = \tfrac{(b - a)^2}{n} @@ the same with i in place of i − 1
+\htmlClass{new}{\textstyle\int_a^b x\,dx = a(b - a) + \tfrac{(b - a)^2}{2} = \tfrac{b^2 - a^2}{2}} @@ gap-closes, then squeezed-for-every-n with k = (b − a)²/2; spread for times over plus
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · from 0 up · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15d3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = x \text{ on } [0, 1];"></span> <span data-tex-inline="n = 10"></span></span>Find the lower and upper sums for n equal pieces.</li><li><span class="givens"><span data-tex-inline="J = \int_0^2 x\, dx"></span></span>Find J from the sums for n equal pieces, without the step's general formula.</li><li><span class="givens"><span data-tex-inline="J = \int_1^3 x\, dx"></span></span>Find J.</li><li><span class="givens"><span data-tex-inline="f(x) = x \text{ on } [0, 1]"></span></span>Find how many equal pieces bring the gap between the upper and lower sums under one thousandth.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15d4">
+  <h2 class="sthead"><span class="stno">15d4</span>A falling body</h2>
+  <p class="stands">Stands on 15d3.</p>
+  <pre class="lines" data-k="teal" data-label="a falling body: the distance, as an area">
+v(t) = at \text{ from rest, for } 0 \le t \le T @@ given: a velocity that grows steadily from rest, by a each second
+\text{lower sum: } \textstyle\sum a\tfrac{i-1}{n}T \cdot \tfrac{T}{n} = aT^2(\tfrac12 - \tfrac{1}{2n}) @@ the same doubled-sum line, scaled by aT²
+\text{upper sum: } aT^2(\tfrac12 + \tfrac{1}{2n}) @@ the gap is aT²/n
+\textstyle\int_0^T at\,dt = \tfrac12 aT^2 @@ squeezed-for-every-n
+\text{distance covered by } T:\ x(T) = \tfrac12 aT^2 @@ given: such a body covers ½aT² by time T. The same number: distance is the area under velocity
+  </pre>
+  <p data-pid="abf93a">The distance a body covers can be squeezed the same way: between n speeds times n short times, from below and from above. Those are the lower and upper sums of that steady velocity. An old figure for falling (Galileo's) compared amounts that this rung calls areas. Here they are.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · a falling body · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15d4.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\int_0^b x\, dx = 8,\ b &gt; 0"></span></span>Find b.</li><li><span class="givens"><span data-tex-inline="\text{fall in } T\ \text{s}: \int_0^T 9.8t\, dt\ \text{m};"></span> <span data-tex-inline="d = 44.1\ \text{m}"></span></span>A stone is dropped from rest. Find the T for which it falls d.</li><li><span class="givens"><span data-tex-inline="f(x) = x \text{ on } [0, b];"></span> <span data-tex-inline="n = 50,\ U_n - L_n = 0.18"></span></span>Find b.</li><li><span class="givens"><span data-tex-inline="P \text{ any partition of } [0, 1];"></span> <span data-tex-inline="\text{Claim: } L(1 - x, P) = 1 - U(x, P);"></span> <span data-tex-inline="J = \int_0^1 (1 - x)\, dx"></span></span>Prove the claim.<br>Use it to find J without new sums.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15d5">
+  <h2 class="sthead"><span class="stno">15d5</span>Illegal moves</h2>
+  <p class="stands">Stands on 15d1 to 15d4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\textstyle\int_0^1 x\,dx = \tfrac12 \text{ by a half turn}\,? @@ no rule of area yet says that moving a set keeps its area
+L_n \to \tfrac12, \text{ so } I = \tfrac12\,? @@ the lower sums alone bound the lower integral only; gap-closes or the upper sums are needed too
+\textstyle\int_a^b x\,dx = \tfrac{(b - a)^2}{2}\,? @@ that is a = 0; the box of height a under the line adds a(b − a)
+\textstyle\int_{-1}^{1} x\,dx \text{ is an area}\,? @@ x is negative on [−1, 0): the region is not defined there, and 15e decides what the integral means
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15d5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = x \text{ on } [-1, 1];"></span> <span data-tex-inline="2n \text{ equal pieces}"></span></span>Find the lower and upper sums, what they squeeze, and which part of the step's meaning of area fails.</li><li><span class="givens"><span data-tex-inline="B = [0, 1] \times [0, 1]"></span></span>The half-turn argument says the graph of x cuts B into two parts, and a half turn of B about its middle point carries one part onto the other. Find the rule it would need that is not among the three area axioms.</li><li><span class="givens"><span data-tex-inline="L_n \to \tfrac12"></span></span>Someone shows the given line and stops. Find what they can conclude about the lower integral, and what is still open.</li><li><span class="givens"><span data-tex-inline="|I - c| \le k/n \text{ only for}"></span> <span data-tex-inline="n \le 1\,000\,000"></span></span>Squeezed-for-every-n asks for every n. Find what would follow if the given were true only that far.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">15d.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{Bend: no half turn fits } x^2."></span> <span data-tex-inline="\text{On trust: } 0^2 + 1^2 + \cdots + m^2"></span> <span data-tex-inline="= \tfrac{m(m + 1)(2m + 1)}{6}."></span> <span data-tex-inline="f(x) = x^2 \text{ on } [0, 1]"></span></span>Using squeezed-for-every-n, find the area under f.</div>
+  <div class="chq"><span class="chid">15d.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="|I - c| \le k/n"></span></span>Decide whether squeezed-for-every-n needs the given for every n, or whether endlessly many n would be enough.</div>
+  <div class="chq"><span class="chid">15d.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\int_0^1 f(x)\, dx = \tfrac12"></span></span>Prove or refute: f takes the value x at every input x.</div>
+  <div class="chq"><span class="chid">15d.4.4</span><span class="tagq">seam</span><span class="givens"><span data-tex-inline="y = x \text{ on } [0, 1];\ \text{area } \tfrac12"></span></span>In 1656 a mathematician found the given area by computing a ratio of sums for one n after another and saying what it became with endlessly many terms. A philosopher answered for twenty years that geometry is about figures, that an endless sum is no sum, and that the mathematician's pages were a scab of symbols. <br>Is that the area under the graph because of a sum of numbers, or because of a figure? <br>Could someone who never saw the figure know the area?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r15c.html">← 15c · integrable, and the sign ∫</a><a href="r15e.html">15e · areas add, scale, split →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>Wallis computed the ratio of 0 + 1 + 2 + ⋯ + n to n + n + ⋯ + n, all n + 1 terms equal to n, for one n after another, and found it always a little more than one half, by a part that shrinks as n grows; with endlessly many terms, he said, the ratio is exactly one half.</p><cite>Wallis, Arithmetica infinitorum (1656), Proposition 1 to 3; paraphrase</cite></aside>
+  <p>The mathematician of the closer is John Wallis, and the philosopher is Thomas Hobbes. The old figure for falling is Galileo’s, from Two New Sciences (1638).</p>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+/* least and greatest of F.f on [lo, hi]: the ends, F's critical points inside, and a fine sample (exact between critical points for the functions used here) */
+function ext(F,lo,hi){ if(F.dir) return [0,1]; let m=Infinity,M=-Infinity; const t=x=>{ const v=F.f(x); if(v<m) m=v; if(v>M) M=v; };
+  t(lo); t(hi); (F.crit||[]).forEach(c=>{ if(c>lo&&c<hi) t(c); }); for(let k=1;k<64;k++) t(lo+(hi-lo)*k/64); return [m,M]; }
+function sums(F,pts){ let L=0,U=0; const ms=[],Ms=[]; for(let i=1;i<pts.length;i++){ const [m,M]=ext(F,pts[i-1],pts[i]), w=pts[i]-pts[i-1]; ms.push(m); Ms.push(M); L+=m*w; U+=M*w; } return {L,U,ms,Ms}; }
+const eq=(a,b,n)=>Array.from({length:n+1},(_,i)=>a+(b-a)*i/n);
+function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
+function boxes(P,pts,hs,stroke,fill,alpha){ const c=P.ctx; for(let i=1;i<pts.length;i++){ const a=pts[i-1],b=pts[i],h=hs[i-1]; c.globalAlpha=alpha; P.poly([[a,0],[b,0],[b,h],[a,h]],null,fill); c.globalAlpha=1; P.poly([[a,0],[b,0],[b,h],[a,h]],stroke,null,1.2); } }
+function dirDots(P,a,b){ const c=P.ctx; c.fillStyle=col('--ink'); for(let k=0;k<=300;k++){ const x=a+(b-a)*k/300; const y=(k%2)?0:1; c.fillRect(P.X(x)-1,P.Y(y)-1,2,2); } }
+const FN={ x0:{lab:'x from 0',a0:0}, x1:{lab:'x from 1',a0:1} };
+let key='x0';
+const kn=$('kn'),kb=$('kb'),cvF=$('cvF'),cvS=$('cvS');
+const G=()=>{ const a=FN[key].a0, b=Math.max(a+0.5,+kb.value+(key==='x1'?1:0)); return {f:x=>x,a,b}; };
+const LU=(n)=>{ const {a,b}=G(), d=b-a; return {L:a*d+d*d/2*(1-1/n),U:a*d+d*d/2*(1+1/n),I:(b*b-a*a)/2}; };
+const PF=plane(cvF,{x:[0,1],y:[0,1],grid:1,aspect:0.8,draw:P=>drawF(P)});
+const PS=plane(cvS,{x:[0,1],y:[0,1],grid:1,aspect:0.8,draw:P=>drawS(P)});
+[[PF,cvF],[PS,cvS]].forEach(([P,cv])=>Object.defineProperty(P.o,'aspect',{get:()=>cv.clientWidth>480?0.75:0.9}));
+function drawF(P){ const F=G(); P.o.x=[-0.3,F.b+0.3]; P.o.y=[-0.3,F.b+0.3]; P.o.grid=F.b>2.5?1:0.5; P.axes();
+  const p=eq(F.a,F.b,+kn.value), S=sums(F,p);
+  boxes(P,p,S.ms,'--teal','--teal',0.28); boxes(P,p,S.Ms,'--ember',null,0); curve(P,F.f,'--ink',2.6,F.a,F.b); }
+function drawS(P){ const top=50, A=LU(1), I=A.I; const span=Math.max(A.U-I,I-A.L); P.o.x=[-2,top+1]; P.o.y=[I-span*1.1,I+span*1.1]; P.o.grid=10; P.axes();
+  for(let n=1;n<=top;n++){ const s=LU(n); P.line(n,s.L,n,s.U,'--grid',1.4,[]); P.dot(n,s.L,'--teal',2.4); P.dot(n,s.U,'--ember',2.4); }
+  const n=+kn.value, s=LU(n); P.line(n,s.L,n,s.U,'--plum',2.4,[]); P.line(0,I,top,I,'--gold',1.3,[6,4]); }
+function read(){ const n=+kn.value, s=LU(n), {a,b}=G(); $('on').textContent=n; $('ob').textContent=mm(b);
+  const vd=$('vdF'); vd.className='verdict'+(s.U-s.L<0.01?' win':'');
+  vd.textContent='The integral lies in ['+mm(s.L)+', '+mm(s.U)+'], a window of width '+mm(s.U-s.L)+'. Only '+mm(s.I)+' lies in every window.';
+  tex($('eqF'),R`\begin{gathered}L_{${n}} = ${mm(a*(b-a))} + \tfrac{${mm((b-a)**2)}}{2}\left(1 - \tfrac{1}{${n}}\right) = ${mm(s.L)}\\ U_{${n}} = ${mm(s.U)},\ \ U_{${n}} - L_{${n}} = \tfrac{${mm((b-a)**2)}}{${n}}\\ \textstyle\int_{${mm(a)}}^{${mm(b)}} x\,dx = \tfrac{${mm(b*b)} - ${mm(a*a)}}{2} = ${mm(s.I)}\end{gathered}`,true); }
+function all(){ PF.redraw(); PS.redraw(); read(); }
+kn.addEventListener('input',all); kb.addEventListener('input',all);
+const fch=$('fch');
+Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===key) b.className='on'; b.onclick=()=>{ key=k; [...fch.children].forEach(z=>z.classList.toggle('on',z===b)); all(); }; fch.appendChild(b); });
+window.__pic={set:(k,n,b)=>{ [...fch.children][Object.keys(FN).indexOf(k)].click(); kn.value=n; kb.value=b; all(); const F=G(), S=sums(F,eq(F.a,F.b,n)), s=LU(n); return {a:F.a,b:F.b,L:+s.L.toFixed(5),U:+s.U.toFixed(5),Lnum:+S.L.toFixed(5),Unum:+S.U.toFixed(5),txt:$('vdF').textContent}; }};
+all();
+/* ---------- slides ---------- */
+const Nw='\\htmlClass{new}';
+stepper('#sl1',[
+  {k:'ember',kl:'squeezed-for-every-n',t:R`|I - c| \le \tfrac{k}{n}\ \forall n \;\Rightarrow\; I = c`,n:`everyday-counting-passes finds an n too big for any gap.`}
+],{title:'The slides · squeezed · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'the partition',t:R`x_i = \tfrac{i}{n}`,n:`Equal pieces of width 1/n.`},
+  {k:'ember',kl:'heights',t:R`m_i = \tfrac{i - 1}{n},\ \ M_i = \tfrac{i}{n}`,n:`x is increasing.`},
+  {k:'ember',kl:'the lower sum',t:R`L_n = ${Nw}{\tfrac12 - \tfrac{1}{2n}}`,n:`doubled-sum: twice 0 + ⋯ + (n − 1) is (n − 1)n.`},
+  {k:'ember',kl:'the upper sum',t:R`U_n = ${Nw}{\tfrac12 + \tfrac{1}{2n}}`,n:`doubled-sum again.`},
+  {k:'ember',kl:'the gap',t:R`U_n - L_n = \tfrac1n`,n:`A staircase of n small boxes.`},
+  {k:'ember',kl:'area-under-x',t:R`${Nw}{\textstyle\int_0^1 x\,dx = \tfrac12}`,n:`gap-closes for integrable; squeezed-for-every-n for the value.`},
+  {k:'ember',kl:'no half turn',t:R`\text{half the box, with no move}`,n:`The three area axioms say nothing about moving a set.`}
+],{title:'The slides · the sums for x · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'from 0 up',t:R`\textstyle\int_a^b x\,dx = \tfrac{b^2 - a^2}{2}`,n:`The box under the line, and the half above it.`}
+],{title:'The slides · from 0 up · ← → keys work'});
+stepper('#sl4',[
+  {k:'teal',kl:'a falling body',t:R`\textstyle\int_0^T at\,dt = \tfrac12 aT^2 = x(T)`,n:`Distance is the area under velocity.`}
+],{title:'The slides · a falling body · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`L_n \to \tfrac12 \not\Rightarrow I = \tfrac12`,n:`The upper sums must close in too.`}
+],{title:'The slides · illegal · ← → keys work'});
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

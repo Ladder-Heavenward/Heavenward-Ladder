@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>15b · Every under-estimate is below every over-estimate</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r15a.html">← 15a partitions, lower and upper sums</a><a href="r15c.html">next: 15c integrable, and the sign ∫ →</a></p>
+  <div class="tags"><span class="tag proof">15b · proof</span></div>
+  <h1>Every under-estimate is below every over-estimate</h1>
+  <p>15a's lower-below-upper compared the lower and upper sums of one partition. Boxes-trap-the-area said that if the region has an area, it sits between them. But two people may cut the same interval differently, and nothing yet says that one person's under-estimate cannot be bigger than the other's over-estimate. If it could, the two estimates would contradict each other, and boxes-trap-the-area would prove that the region has no area at all. This step shows that it cannot happen. The proof never mentions area. It is a technique about sums, and it is built from one small observation: cutting a piece in two can only raise the least height and lower the greatest.</p>
+  <p class="gesture">A smaller set has a greatest lower bound at least as large and a least upper bound at least as small. So adding a point raises the lower sum and lowers the upper. Put the points of two partitions together. The lower sum of one is below the lower sum of the pair. That is below its upper sum, which is below the upper sum of the other.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r15a.html">15a</a> (partition, mᵢ, Mᵢ, L, U, lower-below-upper), <a href="r08c.html">8c</a> (sup, inf, no-holes, greatest-lower-bound), <a href="r08d.html">8d</a> (order-and-arithmetic-agree), <a href="r04j.html">4j</a> (sum-one-more), <a href="r04g.html">4g</a> (induction), <a href="r14h.html">14h</a> (a best value). <a href="r15c.html">15c</a> uses every-lower-below-every-upper to bound the lower sums by any upper sum, so that no-holes gives them a least upper bound.</p></div>
+</header>
+
+<section class="class step" data-step="15b1">
+  <h2 class="sthead"><span class="stno">15b1</span>A smaller set, a tighter bound</h2>
+  <p class="stands">Stands on 8c (inf and sup).</p>
+  <p data-pid="9bb855">Smaller-set-tighter-bound technique: <b>if S is a non-empty part of T, and T is bounded, then inf T ≤ inf S ≤ sup S ≤ sup T.</b></p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the smaller-set-tighter-bound technique">
+t \ge \inf T \text{ for every } t \in T @@ inf T is a lower bound of T (8c)
+s \ge \inf T \text{ for every } s \in S @@ every member of S is a member of T
+\inf T \le \inf S @@ inf S is the greatest lower bound of S, and inf T is one (greatest-lower-bound)
+\inf S \le s_0 \le \sup S @@ S is not empty: take any s₀ in it
+\htmlClass{new}{\sup S \le \sup T} \quad \blacksquare @@ the same three lines, turned about (no-holes)
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · smaller set · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">15b1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">T = [0, 5],  S = [1, 3]</span></span>Find inf and sup of each. <br>Check the chain smaller-set-tighter-bound promises.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15b2">
+  <h2 class="sthead"><span class="stno">15b2</span>One more point</h2>
+  <p class="stands">Stands on 15b1 and 15a (the two sums).</p>
+  <p class="eqline" data-pid="e90973">From here on, a partition Q of [a, b] is a refinement of a partition P of [a, b] when every point of P is a point of Q. The common refinement of P and Q is the partition whose points are those of P and those of Q together, listed in increasing order. Its accepted name is a refinement; the common refinement is also called the union of the two partitions.</p>
+  <p data-pid="9b8d60">One-more-point technique: <b>if f is bounded on [u, v] and P* is P with one more point y, then L(f, P) ≤ L(f, P*) and U(f, P*) ≤ U(f, P).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the one-more-point technique · the lower sum">
+x_{k-1} \lt y \lt x_k @@ y lies inside one piece of P, the k-th
+c_1 = \inf f \text{ on } [x_{k-1}, y],\ \ c_2 = \inf f \text{ on } [y, x_k] @@ the two new pieces
+m_k \le c_1,\ \ m_k \le c_2 @@ <span class="hl-new">smaller-set-tighter-bound</span>: each new piece is part of the old one
+c_1(y - x_{k-1}) + c_2(x_k - y) \ge m_k(y - x_{k-1}) + m_k(x_k - y) @@ order-and-arithmetic-agree: each width is positive
+= m_k \Delta x_k @@ the two widths add to the old one (spread for times over plus)
+\htmlClass{new}{L(f, P^*) \ge L(f, P)} @@ every other term of the sum is unchanged
+U(f, P^*) \le U(f, P) \quad \blacksquare @@ the same lines with sup, and smaller-set-tighter-bound's other half
+  </pre>
+  <p data-pid="34eff3">Refining-tightens technique: <b>if Q is a refinement of P, then L(f, P) ≤ L(f, Q) ≤ U(f, Q) ≤ U(f, P).</b> Q has finitely many points that P lacks; add them one at a time, using one-more-point at each step, by induction on how many there are. The middle inequality is lower-below-upper.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · one more point · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · two partitions, and the common refinement between them</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="chips" id="fch"></div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">P pieces</span><input type="range" id="kp" min="1" max="12" step="1" value="2"><output id="op"></output></div>
+      <div class="kn"><span class="m">Q pieces</span><input type="range" id="kq" min="1" max="12" step="1" value="3"><output id="oq"></output></div>
+      <div class="chips" id="rch"></div>
+      <div class="cap">Teal, filled: the lower boxes of P. Ember outline: the upper boxes of Q. With the common refinement shown, plum dashes give its lower and upper boxes, which always sit between.</div>
+    </div>
+    <div class="panel">
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15b2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = x on [0, 1],  P = {0, 1},  P* = {0, ½, 1}</span></span>Find L and U for P and for P*. <br>Say which way each sum moved.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15b3">
+  <h2 class="sthead"><span class="stno">15b3</span>Any two partitions</h2>
+  <p class="stands">Stands on 15b2.</p>
+  <p data-pid="17a827">Every-lower-below-every-upper technique: <b>if f is bounded on [u, v], and P and Q are any two partitions of [u, v], then L(f, P) ≤ U(f, Q).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the every-lower-below-every-upper technique">
+R = \text{the common refinement of } P \text{ and } Q @@ a refinement of P and a refinement of Q
+L(f, P) \le L(f, R) @@ refining-tightens, R refining P
+L(f, R) \le U(f, R) @@ lower-below-upper (15a)
+U(f, R) \le U(f, Q) @@ refining-tightens, R refining Q
+\htmlClass{new}{L(f, P) \le U(f, Q)} \quad \blacksquare @@ the three lines chained
+  </pre>
+  <p data-pid="50a0fb"><b>Nothing in the proof used area, or f ≥ 0, or continuity.</b> It may be used for every bounded function, including 10d's q (Dirichlet's), where every lower sum is 0 and every upper sum is 1.</p>
+  <p data-pid="bbd80b">An ancient mathematician wrote to a friend that some results first became clear to him by a mechanical method, weighing figures against each other. They then had to be proved by geometry, since finding a thing by that method is not proving it. But it is easier to prove a thing once you have some notion of it.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · any two · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15b3.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="L(f, P) = 2,\ U(f, Q) = 2"></span></span>Find what follows for every lower sum, every upper sum, and any area of the region.</li><li><span class="givens"><span data-tex-inline="f \text{ increasing;}"></span> <span data-tex-inline="\text{a piece of width } 0.4;"></span> <span data-tex-inline="\text{adding its midpoint raised } L"></span> <span data-tex-inline="\text{by } 0.1"></span></span>Find how much f rises from the left end of that piece to its midpoint.</li><li><span class="givens"><span data-tex-inline="f(x) = x \text{ on } [0, 1];"></span> <span data-tex-inline="n \text{ equal pieces},\ L = 0.45"></span></span>Find n.</li><li><span class="givens"><span data-tex-inline="f(x) = x \text{ on } [0, 1];"></span> <span data-tex-inline="P = \{0, 1\}"></span></span>Find the two points which, added to P, raise the lower sum the most.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15b4">
+  <h2 class="sthead"><span class="stno">15b4</span>Worked chains</h2>
+  <p class="stands">Stands on 15b3 and 14h (the best point).</p>
+  <pre class="lines" data-k="ember" data-label="this step: x² on [0, 1], halves against thirds">
+P = \{0, \tfrac12, 1\},\ \ Q = \{0, \tfrac13, \tfrac23, 1\} @@ neither refines the other
+L(f, P) = \tfrac12 \cdot 0 + \tfrac12 \cdot \tfrac14 = \tfrac18 @@ x² increasing: left ends
+U(f, Q) = \tfrac13(\tfrac19 + \tfrac49 + 1) = \tfrac{14}{27} @@ right ends
+R = \{0, \tfrac13, \tfrac12, \tfrac23, 1\} @@ widths ⅓, ⅙, ⅙, ⅓
+L(f, R) = \tfrac{45}{216} = \tfrac{5}{24},\ \ U(f, R) = \tfrac{105}{216} = \tfrac{35}{72} @@ the same rule on R's pieces
+\htmlClass{new}{\tfrac18 \le \tfrac{5}{24} \le \tfrac{35}{72} \le \tfrac{14}{27}} @@ 0.125 ≤ 0.208 ≤ 0.486 ≤ 0.519
+  </pre>
+  <pre class="lines" data-k="teal" data-label="from 15a: two points added to a hill">
+4x - x^2 \text{ on } [0, 4],\ \ P = \{0, 2, 4\} @@ on each piece the least is 0, the greatest 4
+L(f, P) = 0,\ \ U(f, P) = 16 @@ two pieces of width 2
+Q = \{0, 1, 2, 3, 4\} @@ a refinement of P
+L(f, Q) = 6,\ \ U(f, Q) = 14 @@ 15a's worked sum
+0 \le 6 \le 14 \le 16 @@ refining-tightens
+  </pre>
+  <pre class="lines" data-k="teal" data-label="from 14h: the best single point to add">
+f(x) = x \text{ on } [0, 1],\ \ P = \{0, 1\} @@ L(f, P) = 0
+L(f, \{0, y, 1\}) = 0 \cdot y + y(1 - y) @@ the least on [y, 1] is y
+\tfrac{d}{dy}\,y(1 - y) = 1 - 2y = 0 \;\Leftrightarrow\; y = \tfrac12 @@ one-critical-point (14f): one critical point, a top
+\text{best: } \htmlClass{new}{y = \tfrac12},\ \ L = \tfrac14 @@ halving the piece
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · worked chains · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15b4.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = x \text{ on } [0, 1];"></span> <span data-tex-inline="P, Q: \text{ equal, } 2 \text{ and } 3 \text{ pieces}"></span></span>Find the lower sum for P, the upper sum for Q, and both sums for their common refinement, and check the chain.</li><li><span class="givens"><span data-tex-inline="f(x) = 4x - x^2 \text{ on } [0, 1];"></span> <span data-tex-inline="\{0, 1\} \text{ and } \{0, \tfrac12, 1\}"></span></span>Find the lower and upper sums for each partition.</li><li><span class="givens"><span data-tex-inline="f(x) = x^3 - 3x + 3 \text{ on } [0, 2];"></span> <span data-tex-inline="\{0, 2\} \text{ and } \{0, 1, 2\}"></span></span>Find the lower and upper sums for each partition.</li><li>Prove the sup half of smaller-set-tighter-bound, every line cited.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15b5">
+  <h2 class="sthead"><span class="stno">15b5</span>More points are not always better</h2>
+  <p class="stands">Stands on 15b4.</p>
+  <p data-pid="9049d8">Refining-tightens is about refinements. <b>Two partitions with more and fewer points, where neither refines the other, need not compare.</b> Let f be 0 except near ⅓, where it rises to a narrow peak: f(x) = 1 − 20|x − ⅓| for |x − ⅓| ≤ 1/20, and 0 elsewhere. With two equal pieces, only the first piece holds the peak, so U = ½. With three equal pieces, ⅓ is a point, and both pieces beside it hold the peak, so U = ⅔. Three pieces gave a worse over-estimate than two. Thirds do not refine halves.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · the peak · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15b5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{the step's peak at } \tfrac13;"></span> <span data-tex-inline="2,\ 3 \text{ and } 6 \text{ equal pieces}"></span></span>Find the upper sum for each partition, and which of the partitions refine which.</li><li><span class="givens"><span data-tex-inline="f(x) = 4 - x \text{ on } [0, 4];"></span> <span data-tex-inline="\{0, 4\} \text{ and } \{0, 2, 4\}"></span></span>Boxes take the value at each piece's left end as their height. Prove or refute that adding a point always raises the total, trying f with the given partitions.</li><li><span class="givens"><span data-tex-inline="y \text{ added to a partition } P"></span></span>Find where one-more-point's proof uses that y lies strictly inside a piece, and what happens when y is already a point of P.</li><li><span class="givens"><span data-tex-inline="q: \text{ 10d's function, on } [0, 1]"></span></span>Every-lower-below-every-upper is true for q. Find every number that lies above every lower sum and below every upper sum.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15b6">
+  <h2 class="sthead"><span class="stno">15b6</span>Illegal moves</h2>
+  <p class="stands">Stands on 15b1 to 15b5.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\text{more pieces} \;\Rightarrow\; \text{tighter}\,? @@ only for a refinement; the peak at ⅓ refutes it for halves and thirds
+L(f, P) \le U(f, Q) \text{ because both are near the area}\,? @@ no area exists yet; every-lower-below-every-upper is proved from sums alone
+\inf S \le \inf T \text{ for } S \subseteq T\,? @@ backwards: the smaller set has the larger inf
+\text{the common refinement has } n_P + n_Q \text{ pieces}\,? @@ only when no point is shared; a, b and any common point count once
+  </pre>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15b6.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">“P has 10 points and Q has 3, so U(f, P) ≤ U(f, Q).”</span></span>Which illegal move is this? <br>Say what must be true of P and Q for it to hold.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">15b.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{Bend: } 2,\ 3 \text{ and } 6 \text{ equal pieces.}"></span></span>Make a function of your own and two equal partitions, one with a piece more than the other, for which the lower sum with more pieces is smaller.<br>Form their common refinement, and check the chain.</div>
+  <div class="chq"><span class="chid">15b.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="P \text{ refines } \{u, v\} \text{ for every } P"></span></span>Find the bounds this gives every lower sum and every upper sum.</div>
+  <div class="chq"><span class="chid">15b.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="L(f, P) \le L(f, Q)"></span></span>Prove or refute: Q refines P. Your build is a place to start.</div>
+  <div class="chq"><span class="chid">15b.4.4</span><span class="tagq">seam</span><span class="givens"><span data-tex-inline="y = x^2"></span></span>An ancient mathematician found the area cut off the given graph by a line by weighing its lines against the lines of another figure on an imagined balance. Only afterwards did he prove it, by fitting figures inside and outside. He told a friend by letter that the weighing was no proof. The letter was lost until 1906. <br>Did he know the area when he had weighed it, or only when he had proved it? <br>Does every-lower-below-every-upper prove anything about the area under that graph, or only about sums?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r15a.html">← 15a · partitions, lower and upper sums</a><a href="r15c.html">15c · integrable, and the sign ∫ →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>Archimedes wrote to Eratosthenes that some results first became clear to him by a mechanical method, weighing figures against each other, and that they then had to be proved by geometry, since finding a thing by that method is not proving it; but it is easier to prove a thing once you have some notion of it.</p><cite>Archimedes, The Method, letter to Eratosthenes (3rd century BCE); paraphrase</cite></aside>
+  <p>The mathematician of the closer is Archimedes, and the friend is Eratosthenes; the letter is The Method, recovered in 1906.</p>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+/* least and greatest of F.f on [lo, hi]: the ends, F's critical points inside, and a fine sample (exact between critical points for the functions used here) */
+function ext(F,lo,hi){ if(F.dir) return [0,1]; let m=Infinity,M=-Infinity; const t=x=>{ const v=F.f(x); if(v<m) m=v; if(v>M) M=v; };
+  t(lo); t(hi); (F.crit||[]).forEach(c=>{ if(c>lo&&c<hi) t(c); }); for(let k=1;k<64;k++) t(lo+(hi-lo)*k/64); return [m,M]; }
+function sums(F,pts){ let L=0,U=0; const ms=[],Ms=[]; for(let i=1;i<pts.length;i++){ const [m,M]=ext(F,pts[i-1],pts[i]), w=pts[i]-pts[i-1]; ms.push(m); Ms.push(M); L+=m*w; U+=M*w; } return {L,U,ms,Ms}; }
+const eq=(a,b,n)=>Array.from({length:n+1},(_,i)=>a+(b-a)*i/n);
+function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
+function boxes(P,pts,hs,stroke,fill,alpha){ const c=P.ctx; for(let i=1;i<pts.length;i++){ const a=pts[i-1],b=pts[i],h=hs[i-1]; c.globalAlpha=alpha; P.poly([[a,0],[b,0],[b,h],[a,h]],null,fill); c.globalAlpha=1; P.poly([[a,0],[b,0],[b,h],[a,h]],stroke,null,1.2); } }
+function dirDots(P,a,b){ const c=P.ctx; c.fillStyle=col('--ink'); for(let k=0;k<=300;k++){ const x=a+(b-a)*k/300; const y=(k%2)?0:1; c.fillRect(P.X(x)-1,P.Y(y)-1,2,2); } }
+const tent=x=>{ const d=Math.abs(x-1/3); return d<=0.05?1-20*d:0; };
+const FN={
+  sq:{lab:'x² on [0, 1]',f:x=>x*x,a:0,b:1,y:[-0.1,1.15]},
+  hill:{lab:'4x − x² on [0, 4]',f:x=>4*x-x*x,a:0,b:4,crit:[2],y:[-0.5,4.6]},
+  wig:{lab:'x³ − 3x + 3 on [0, 2]',f:x=>x*x*x-3*x+3,a:0,b:2,crit:[1],y:[-0.5,5.6]},
+  peak:{lab:'a peak at ⅓',f:tent,a:0,b:1,crit:[1/3],y:[-0.1,1.15]}
+};
+let key='sq',F=FN.sq,showR=true;
+const kp=$('kp'),kq=$('kq'),cvF=$('cvF');
+const merge=(p,q)=>{ const all=[...p,...q].sort((u,v)=>u-v); const r=[]; all.forEach(x=>{ if(!r.length||x-r[r.length-1]>1e-12) r.push(x); }); return r; };
+const PF=plane(cvF,{x:[0,1],y:[0,1],grid:1,aspect:0.8,draw:P=>draw(P)});
+Object.defineProperty(PF.o,'aspect',{get:()=>cvF.clientWidth>480?0.7:0.9});
+function parts(){ const p=eq(F.a,F.b,+kp.value), q=eq(F.a,F.b,+kq.value); return {p,q,r:merge(p,q)}; }
+function draw(P){ const pad=(F.b-F.a)*0.08; P.o.x=[F.a-pad,F.b+pad]; P.o.y=F.y; P.o.grid=(F.b-F.a)>2?1:0.25; P.axes();
+  const {p,q,r}=parts(), Sp=sums(F,p), Sq=sums(F,q), Sr=sums(F,r);
+  boxes(P,p,Sp.ms,'--teal','--teal',0.28); boxes(P,q,Sq.Ms,'--ember',null,0);
+  if(showR){ const c=P.ctx; c.setLineDash([4,3]); boxes(P,r,Sr.ms,'--plum',null,0); boxes(P,r,Sr.Ms,'--plum',null,0); c.setLineDash([]); }
+  curve(P,F.f,'--ink',2.6,F.a,F.b); }
+function read(){ const {p,q,r}=parts(), Lp=sums(F,p).L, Uq=sums(F,q).U, Sr=sums(F,r); $('op').textContent=kp.value; $('oq').textContent=kq.value;
+  const np=+kp.value,nq=+kq.value, refines=(nq%np===0)?'Q refines P':((np%nq===0)?'P refines Q':'neither refines the other');
+  const vd=$('vdF'); vd.className='verdict win';
+  vd.textContent='L(P) = '+mm(Lp)+' ≤ L(R) = '+mm(Sr.L)+' ≤ U(R) = '+mm(Sr.U)+' ≤ U(Q) = '+mm(Uq)+'. Here '+refines+'; R has '+(r.length-1)+' pieces.';
+  tex($('eqF'),R`\begin{gathered}L(f, P) \le L(f, R) \le U(f, R) \le U(f, Q)\\ ${mm(Lp)} \le ${mm(Sr.L)} \le ${mm(Sr.U)} \le ${mm(Uq)}\\ \text{refining-tightens},\ \ \text{lower-below-upper},\ \ \text{refining-tightens}\end{gathered}`,true); }
+function all(){ PF.redraw(); read(); }
+kp.addEventListener('input',all); kq.addEventListener('input',all);
+const fch=$('fch');
+Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===key) b.className='on'; b.onclick=()=>{ key=k; F=FN[k]; [...fch.children].forEach(z=>z.classList.toggle('on',z===b)); all(); }; fch.appendChild(b); });
+const rch=$('rch');
+[[true,'show the common refinement'],[false,'hide it']].forEach(([v,l])=>{ const b=document.createElement('button'); b.textContent=l; if(v===showR) b.className='on'; b.onclick=()=>{ showR=v; [...rch.children].forEach(z=>z.classList.toggle('on',z===b)); all(); }; rch.appendChild(b); });
+window.__pic={set:(k,np,nq)=>{ [...fch.children][Object.keys(FN).indexOf(k)].click(); kp.value=np; kq.value=nq; all(); const {p,q,r}=parts(); return {Lp:+sums(F,p).L.toFixed(5),Up:+sums(F,p).U.toFixed(5),Uq:+sums(F,q).U.toFixed(5),Lq:+sums(F,q).L.toFixed(5),LR:+sums(F,r).L.toFixed(5),UR:+sums(F,r).U.toFixed(5),txt:$('vdF').textContent}; }};
+all();
+/* ---------- slides ---------- */
+const Nw='\\htmlClass{new}';
+stepper('#sl1',[
+  {k:'ember',kl:'smaller-set-tighter-bound',t:R`S \subseteq T:\ \ \inf T \le \inf S \le \sup S \le \sup T`,n:`A smaller set has the tighter bounds.`}
+],{title:'The slides · smaller set · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'refinement',t:R`P \subseteq Q`,n:`Every point of P is a point of Q.`},
+  {k:'ember',kl:'one more point',t:R`x_{k-1} \lt y \lt x_k`,n:`Split one piece in two.`},
+  {k:'ember',kl:'one-more-point',t:R`${Nw}{L(P) \le L(P^*)},\ \ U(P^*) \le U(P)`,n:`Each half has an inf at least mₖ; widths add.`},
+  {k:'ember',kl:'refining-tightens',t:R`L(P) \le L(Q) \le U(Q) \le U(P)`,n:`For Q refining P: one-more-point once per new point.`}
+],{title:'The slides · one more point · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'common refinement',t:R`R = P \cup Q`,n:`Refines both.`},
+  {k:'ember',kl:'every-lower-below-every-upper',t:R`${Nw}{L(f, P) \le U(f, Q)}`,n:`Any two partitions. Through R: refining-tightens, lower-below-upper, refining-tightens.`}
+],{title:'The slides · any two · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'halves and thirds',t:R`\tfrac18 \le \tfrac{5}{24} \le \tfrac{35}{72} \le \tfrac{14}{27}`,n:`x² on [0, 1].`},
+  {k:'teal',kl:'from 15a · a hill',t:R`0 \le 6 \le 14 \le 16`,n:`{0, 2, 4} refined to {0, 1, 2, 3, 4}.`},
+  {k:'teal',kl:'from 14h · the best point',t:R`y(1 - y) \text{ greatest at } y = \tfrac12`,n:`Halving gives the most.`}
+],{title:'The slides · worked chains · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'the peak at ⅓',t:R`U_2 = \tfrac12 \lt U_3 = \tfrac23`,n:`More pieces, worse: thirds do not refine halves.`}
+],{title:'The slides · the peak · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'illegal',t:R`S \subseteq T \not\Rightarrow \inf S \le \inf T`,n:`The smaller set has the larger inf.`}
+],{title:'The slides · illegal · ← → keys work'});
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

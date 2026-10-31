@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Its slope</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r17a.html">← 17a the log as an area</a><a href="r17c.html">next: 17c ln(xy) = ln x + ln y →</a></p>
+  <div class="tags"><span class="tag proof">17b · proof</span></div>
+  <h1>Its slope</h1>
+  <p>17a defined ln by an area and bounded it. This step finds its slope, and the slope is the one 16f could not find a function for: one over the input. That fills the gap in rung 16's table of antiderivatives, and closes the flag 16f left open. It also opens a question 17a left shut, what to do with one over the input when the input is negative, and closes it with the logarithm of the input’s size. And it shows that the logarithm bends down everywhere, so its tangent at one lies above it: the line that 17a met as a bound.</p>
+  <p class="gesture">The slope of the logarithm is one over the input, by area-slope. The logarithm of the input’s size has the same slope on both sides of zero, by chain for slopes on the left. So the area under one over the input is the logarithm of its size, plus a constant, on any interval that misses zero. The slope of the slope is negative, so the logarithm bends down.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r17a.html">17a</a> (the definition, log-rises, log-bounds), <a href="r16b.html">16b</a> (area-slope), <a href="r16f.html">16f</a> (the table, no-power-for-1/x), <a href="r13e.html">13e</a> (chain for slopes), <a href="r14e.html">14e</a> (same-slopes, all-antiderivatives), <a href="r14g.html">14g</a> (bends-up), <a href="r16d.html">16d</a> (substitution for areas). <a href="r17c.html">17c</a> uses the slope to prove what ln does to products.</p></div>
+</header>
+
+<section class="class step" data-step="17b1">
+  <h2 class="sthead"><span class="stno">17b1</span>The slope of ln</h2>
+  <p class="stands">Stands on 17a (the definition) and 16b (area-slope).</p>
+  <p data-pid="18ebd3">Slope-of-log technique: <b>ln is differentiable on (0, ∞), and ln′(x) = 1/x.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the slope-of-log technique">
+\ln x = \textstyle\int_1^x \tfrac{dt}{t} @@ 17a's definition
+\tfrac1t \text{ is continuous at every } x \gt 0 @@ one-over-x-is-continuous (11b)
+\htmlClass{new}{\ln'(x) = \tfrac1x} \quad \blacksquare @@ area-slope (16b): the area function's slope is the height at its end
+  </pre>
+  <p data-pid="14cd43">16f proved that no power x<sup>r+1</sup>/(r + 1) has slope x⁻¹; no-power-for-1/x said the table has a hole at r = −1. Slope-of-log fills it, with a function that is not a power at all.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the table, whole">
+\textstyle\int x^r\,dx = \tfrac{x^{r+1}}{r+1} + C,\ \ r \ne -1 @@ 16f's power line, for rational r
+\textstyle\int x^{-1}\,dx = \ln x + C \quad (x \gt 0) @@ slope-of-log and all-antiderivatives (14e)
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the slope of ln · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">17b1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">ln 2 ≈ 0.693</span></span>Find the slope of ln at 2 and at ½. <br>Guess ln 2.1 from ln 2 and the slope at 2.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17b2">
+  <h2 class="sthead"><span class="stno">17b2</span>When x is negative</h2>
+  <p class="stands">Stands on 17b1, 16b (antiderivative-exists) and 16f (a gap in the domain).</p>
+  <p data-pid="027e87">1/x is defined and continuous for x &lt; 0 too, so antiderivative-exists says it has an antiderivative there. ln x has no value there. ln(−x) does.</p>
+  <p data-pid="64c009">Area-under-1/x technique: <b>for x ≠ 0, the slope of ln|x| is 1/x. So on any interval that does not contain 0, ∫ dx/x = ln|x| + C.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the area-under-1/x technique">
+x \gt 0:\ \ \ln|x| = \ln x,\ \ \text{slope } \tfrac1x @@ slope-of-log
+x \lt 0:\ \ \ln|x| = \ln(-x),\ \ \text{slope } \tfrac{1}{-x}\cdot(-1) = \tfrac1x @@ chain for slopes (13e): the outside's slope at −x, times the inside's slope −1
+\htmlClass{new}{\textstyle\int \tfrac{dx}{x} = \ln|x| + C} \quad \blacksquare @@ all-antiderivatives on the interval; an interval that misses 0 lies on one side
+  </pre>
+  <p data-pid="f2bc84"><b>On all of x ≠ 0 at once the C need not be one constant.</b> Same-slopes needs an interval, and (−∞, 0) and (0, ∞) are two. Any function that is ln|x| + C₁ on the left and ln|x| + C₂ on the right has slope 1/x everywhere it is defined.</p>
+  <p data-pid="00c772">In 1712 one of the first workers in the calculus argued to another that the log of −x must equal the log of x. The two have the same slope, d(−x)/(−x) = dx/x. The other answered that the logs of negative numbers are not real at all. The equal slopes, he said, prove nothing about the values.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · when x is negative · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · the slope of ln, and 1/x on both sides of 0</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="lbl">ln x and its tangent at the knob</div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">x</span><input type="range" id="kx" min="0.2" max="5" step="0.01" value="2"><output id="ox"></output></div>
+      <div class="cap">Ink: ln. Ember: the tangent at the knob's x, slope 1/x. Dashed: the tangent at 1, y = x − 1. The graph stays under every tangent.</div>
+    </div>
+    <div class="panel">
+      <div class="lbl">1/x, and functions with that slope on both sides of 0</div>
+      <canvas id="cvL"></canvas>
+      <div class="kn"><span class="m">C₁</span><input type="range" id="kc" min="-2" max="2" step="0.05" value="0"><output id="oc"></output></div>
+      <div class="cap">Dashed: 1/x. Ink: ln|x| + C₂ on the right, with C₂ = 0, and ln|x| + C₁ on the left, set by the knob. Every setting has slope 1/x wherever it is defined.</div>
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17b2.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="F \text{ on } (0, \infty),"></span> <span data-tex-inline="F'(x) = \tfrac1x,"></span> <span data-tex-inline="F(1) = 3"></span></span>Find F.</li><li><span class="givens"><span data-tex-inline="\ln' (x) = 2,"></span> <span data-tex-inline="\ln' (x) = \tfrac{1}{100}"></span></span>Find the x that solves each.</li><li><span class="givens"><span data-tex-inline="F'(x) = \tfrac1x \text{ for } x \ne 0,"></span> <span data-tex-inline="F(1) = 0,"></span> <span data-tex-inline="F(-1) = 5"></span></span>Find F(2) and F(−2) in terms of ln 2.</li><li><span class="givens"><span data-tex-inline="F'(x) = \tfrac{1}{x - 3},"></span> <span data-tex-inline="x &gt; 3,"></span> <span data-tex-inline="F(4) = 0"></span></span>Find F.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17b3">
+  <h2 class="sthead"><span class="stno">17b3</span>ln bends down</h2>
+  <p class="stands">Stands on 17b2 and 14g (bending).</p>
+  <p data-pid="33ea1f">Log-bends-down technique: <b>ln″(x) = −1/x² &lt; 0 for x &gt; 0; the graph of ln lies below each of its tangent lines, touching only at the point of contact.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the log-bends-down technique">
+\ln''(x) = (x^{-1})' = -x^{-2} \lt 0 @@ slope-of-log, then the power rule (13h)
+\ln' \text{ falls on } (0, \infty) @@ slope-sign-order (14d) applied to ln′
+\htmlClass{new}{\ln \text{ bends down}} @@ bends-up (14g), run with the slope falling
+\text{tangent at } 1:\ \ y = 0 + 1\cdot(x - 1) = x - 1 @@ ln 1 = 0, ln′(1) = 1
+\ln x \le x - 1 \quad \blacksquare @@ the curve stays under its tangent; 17a's upper bound, seen a second way
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: worked">
+\textstyle\int_2^8 \tfrac{dx}{x} = \ln 8 - \ln 2 @@ area-is-a-change (16c) with G = ln
+\textstyle\int_{-4}^{-1} \tfrac{dx}{x} = \ln|{-1}| - \ln|{-4}| = -\ln 4 @@ area-is-a-change with G = ln|x|; [−4, −1] misses 0
+\tfrac{d}{dx}\ln(x^2 + 1) = \tfrac{2x}{x^2 + 1} @@ chain for slopes; x² + 1 &gt; 0 always
+\textstyle\int \tfrac{dx}{3x - 6} = \tfrac13 \ln|3x - 6| + C @@ substitution for areas (16d), r = 3x − 6, on x &lt; 2 or on x &gt; 2
+\lim_{h \to 0} \tfrac{\ln(1 + h)}{h} = 1 @@ the slope of ln at 1, written as 13a's limit
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · ln bends down · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17b3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\ln \text{ at } 4"></span></span>Find the slope of ln at 4, and the tangent line there.</li><li><span class="givens"><span data-tex-inline="\ln(3x),"></span> <span data-tex-inline="\ln(x^2 + 1)"></span></span>Find the slope of each.</li><li><span class="givens"><span data-tex-inline="\int_2^8 \tfrac{dx}{x},"></span> <span data-tex-inline="\int_{-6}^{-3} \tfrac{dx}{x}"></span></span>Write each as a difference of logs.</li><li><span class="givens"><span data-tex-inline="f(x) = \tfrac{1}{2x + 5}"></span></span>Find every antiderivative of f, with each interval on which it works.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17b4">
+  <h2 class="sthead"><span class="stno">17b4</span>Illegal moves</h2>
+  <p class="stands">Stands on 17b1 to 17b3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\textstyle\int_{-1}^{1} \tfrac{dx}{x} = \ln 1 - \ln 1 = 0\,? @@ [−1, 1] contains 0, where 1/x is unbounded; area-is-a-change needs a continuous integrand on the whole interval
+\tfrac{d}{dx}\ln(2x) = \tfrac{1}{2x}\,? @@ chain for slopes: (1/(2x))·2 = 1/x
+\tfrac{d}{dx}\ln|x| = \tfrac{1}{|x|}\,? @@ on the left the inside's slope is −1: it is 1/x
+\textstyle\int \tfrac{dx}{x} = \ln x + C \text{ for all } x \ne 0\,? @@ ln x has no value for x &lt; 0; and one C cannot serve both sides
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17b4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="0 &lt; c &lt; \tfrac12,"></span> <span data-tex-inline="S(c) = \int_{-1}^{-c} \tfrac{dx}{x} + \int_c^1 \tfrac{dx}{x},"></span> <span data-tex-inline="T(c) = \int_{-1}^{-c} \tfrac{dx}{x} + \int_{2c}^1 \tfrac{dx}{x}"></span></span>Find S(c) and T(c).<br>Prove or refute: the area of 1/x over [−1, 1] names a number.</li><li><span class="givens"><span data-tex-inline="\ln |x|,"></span> <span data-tex-inline="x = 0"></span></span>Prove or refute: it has a slope at 0; it has a value at 0.</li><li><span class="givens"><span data-tex-inline="\ln'(x) = \tfrac1x \to 0 \text{ as } x \to \infty"></span></span>Prove or refute: ln levels off below some ceiling.</li><li><span class="givens"><span data-tex-inline="\ln x \le x - 1 \text{ (log-bends-down)}"></span></span>Find a tangent of ln that lies below ln, if any.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">17b.4.1</span><span class="tagq">build</span>Make up a function of your own, ln of the size of a straight g that is not x itself, and find its slope.<br>Find every function with that slope wherever it has one, fixed by a value you choose on each side.</div>
+  <div class="chq"><span class="chid">17b.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\tfrac{\ln x}{x - 1},"></span> <span data-tex-inline="x \to 1"></span></span>Find the limit, and the slope it is.</div>
+  <div class="chq"><span class="chid">17b.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="F'(x) = \tfrac1x \text{ at every } x \ne 0"></span></span>Prove or refute: F is ln of the size of x plus one constant.</div>
+  <div class="chq"><span class="chid">17b.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\ln 1.01"></span></span>Estimate it from the slope of ln at 1, and bound it by log-bounds.</div>
+  <div class="chq"><span class="chid">17b.4.5</span><span class="tagq">seam</span>In 1712 one mathematician said the log of −1 is 0, since ln(−x) and ln x have the same slope. Another said it is not a real number. Each could point to a proof. This step gave ln|x| the slope 1/x on both sides. <br>Does that settle which of them was right, or does it change the question?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r17a.html">← 17a · the log as an area</a><a href="r17c.html">17c · ln(xy) = ln x + ln y →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>Johann Bernoulli argued to Leibniz that the log of −x must equal the log of x, since the two have the same slope, d(−x)/(−x) = dx/x. Leibniz answered that the logs of negative numbers are not real at all, and that the equal slopes prove nothing about the values.</p><cite>Leibniz and Johann Bernoulli, letters of 1712–1713; paraphrase</cite></aside>
+  <p>In 17b.4.5, the one who said 0 is Johann Bernoulli, and the one who said “not real” is Leibniz.</p>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+/* least and greatest of F.f on [lo, hi]: the ends, F's critical points inside, and a fine sample (exact between critical points for the functions used here) */
+function ext(F,lo,hi){ if(F.dir) return [0,1]; let m=Infinity,M=-Infinity; const t=x=>{ const v=F.f(x); if(v<m) m=v; if(v>M) M=v; };
+  t(lo); t(hi); (F.crit||[]).forEach(c=>{ if(c>lo&&c<hi) t(c); }); for(let k=1;k<64;k++) t(lo+(hi-lo)*k/64); return [m,M]; }
+function sums(F,pts){ let L=0,U=0; const ms=[],Ms=[]; for(let i=1;i<pts.length;i++){ const [m,M]=ext(F,pts[i-1],pts[i]), w=pts[i]-pts[i-1]; ms.push(m); Ms.push(M); L+=m*w; U+=M*w; } return {L,U,ms,Ms}; }
+const eq=(a,b,n)=>Array.from({length:n+1},(_,i)=>a+(b-a)*i/n);
+function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
+function boxes(P,pts,hs,stroke,fill,alpha){ const c=P.ctx; for(let i=1;i<pts.length;i++){ const a=pts[i-1],b=pts[i],h=hs[i-1]; c.globalAlpha=alpha; P.poly([[a,0],[b,0],[b,h],[a,h]],null,fill); c.globalAlpha=1; P.poly([[a,0],[b,0],[b,h],[a,h]],stroke,null,1.2); } }
+function dirDots(P,a,b){ const c=P.ctx; c.fillStyle=col('--ink'); for(let k=0;k<=300;k++){ const x=a+(b-a)*k/300; const y=(k%2)?0:1; c.fillRect(P.X(x)-1,P.Y(y)-1,2,2); } }
+/* shade between the graph of fn and the axis from lo to hi: above in pos colour, below in neg colour */
+function shade(P,fn,lo,hi,pos,neg,alpha){ if(hi<lo){ const t=lo; lo=hi; hi=t; } const c=P.ctx, N=300; c.globalAlpha=alpha==null?0.32:alpha;
+  for(let k=0;k<N;k++){ const x0=lo+(hi-lo)*k/N, x1=lo+(hi-lo)*(k+1)/N, xm=(x0+x1)/2, y=fn(xm); if(!isFinite(y)) continue; P.poly([[x0,0],[x1,0],[x1,fn(x1)],[x0,fn(x0)]],null,y>=0?pos:neg); }
+  c.globalAlpha=1; }
+function rangeOf(fn,lo,hi,pad){ let m=Infinity,M=-Infinity; for(let k=0;k<=400;k++){ const v=fn(lo+(hi-lo)*k/400); if(isFinite(v)){ if(v<m) m=v; if(v>M) M=v; } } if(m>0) m=0; if(M<0) M=0; const p=(M-m)*(pad==null?0.12:pad)||1; return [m-p,M+p]; }
+function chips(el,FN,get,setk,after){ Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===get()) b.className='on'; b.onclick=()=>{ setk(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+const Nw='\\htmlClass{new}';
+function gridFor(sp){ return sp>40?10:sp>16?4:sp>8?2:sp>3?1:sp>1.2?0.5:0.25; }
+function frame2(P,fn,lo,hi,pad){ const w=hi-lo; P.o.x=[lo-0.12*w,hi+0.08*w]; P.o.y=rangeOf(fn,lo,hi,pad==null?0.12:pad); const sx=P.o.x[1]-P.o.x[0], sy=P.o.y[1]-P.o.y[0]; let g=gridFor(sx); while(sy/g>24) g*=2; P.o.grid=g; }
+const num=(f,a,b,n)=>{ n=n||4000; const h=(b-a)/n; let s=0; for(let i=0;i<n;i++) s+=f(a+(i+0.5)*h)*h; return s; };
+/* axes with separate steps across and up */
+function axes2(P,gx,gy){ const c=P.ctx,o=P.o; c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ c.moveTo(P.X(x),P.Y(o.y[0])); c.lineTo(P.X(x),P.Y(o.y[1])); }
+  for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ c.moveTo(P.X(o.x[0]),P.Y(y)); c.lineTo(P.X(o.x[1]),P.Y(y)); } c.stroke();
+  c.strokeStyle=col('--muted'); c.lineWidth=1.3; c.beginPath(); if(o.y[0]<=0&&o.y[1]>=0){ c.moveTo(P.X(o.x[0]),P.Y(0)); c.lineTo(P.X(o.x[1]),P.Y(0)); } if(o.x[0]<=0&&o.x[1]>=0){ c.moveTo(P.X(0),P.Y(o.y[0])); c.lineTo(P.X(0),P.Y(o.y[1])); } c.stroke();
+  c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; const ly=Math.min(P.H-6,Math.max(12,P.Y(0)+14));
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ if(Math.abs(x)<1e-9) continue; c.fillText(+x.toFixed(6),P.X(x),ly); }
+  c.textAlign='right'; const lx=Math.max(32,Math.min(P.W-4,P.X(0)-5)); for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ if(Math.abs(y)<1e-9) continue; c.fillText(String(+y.toFixed(6)).replace('-','−'),lx,P.Y(y)+4); } }
+function nice(sp){ const raw=sp/6, p=Math.pow(10,Math.floor(Math.log10(raw))), m=raw/p; return (m<1.5?1:m<3.5?2:m<7.5?5:10)*p; }
+const kx=$('kx'),kc=$('kc'),cvF=$('cvF'),cvL=$('cvL');
+const PF=plane(cvF,{x:[0,5.3],y:[-2.5,2.5],grid:1,aspect:0.8,draw:P=>drawF(P)});
+const PL=plane(cvL,{x:[-5.3,5.3],y:[-4,4],grid:1,aspect:0.8,draw:P=>drawL(P)});
+[[PF,cvF],[PL,cvL]].forEach(([P,cv])=>Object.defineProperty(P.o,'aspect',{get:()=>cv.clientWidth>480?0.75:0.9}));
+function drawF(P){ const x=+kx.value, m=1/x, b=Math.log(x)-m*x; P.axes();
+  curve(P,t=>t-1,'--muted',1.4,0,5.3,[6,4]); curve(P,t=>m*t+b,'--ember',2,0,5.3); curve(P,Math.log,'--ink',2.6,0.05,5.3); P.dot(x,Math.log(x),'--ember',5); P.dot(1,0,'--muted',4); }
+function drawL(P){ const c=+kc.value; P.axes(); curve(P,t=>1/t,'--muted',1.4,0.18,5.3,[6,4]); curve(P,t=>1/t,'--muted',1.4,-5.3,-0.18,[6,4]);
+  curve(P,t=>Math.log(t),'--ink',2.6,0.02,5.3); curve(P,t=>Math.log(-t)+c,'--ink',2.6,-5.3,-0.02);
+  const x=+kx.value; [x,-x].forEach(u=>{ const y=Math.log(Math.abs(u))+(u<0?c:0), m=1/u; P.line(u-0.8,y-0.8*m,u+0.8,y+0.8*m,'--ember',2); P.dot(u,y,'--ember',4); }); }
+function read(){ const x=+kx.value, c=+kc.value; $('ox').textContent=mm(x,2); $('oc').textContent=mm(c,2);
+  const vd=$('vdF'); vd.className='verdict'+(Math.abs(x-1)<0.006?' win':'');
+  vd.textContent='Slope of ln at '+mm(x,2)+': 1/x = '+mm(1/x,4)+'. On the left, at '+mm(-x,2)+', the slope is '+mm(-1/x,4)+' whatever C₁ is. '+(Math.abs(x-1)<0.006?'At 1 the tangent is y = x − 1, 17a’s bound.':'The tangent sits above the graph.');
+  tex($('eqF'),R`\begin{gathered}\ln'(${mm(x,2)}) = \tfrac{1}{${mm(x,2)}} \approx ${mm(1/x,4)}\\ \tfrac{d}{dx}\big(\ln|x| + C_1\big)\Big|_{x = ${mm(-x,2)}} = ${mm(-1/x,4)}\end{gathered}`,true); }
+function all(){ PF.redraw(); PL.redraw(); read(); }
+kx.addEventListener('input',all); kc.addEventListener('input',all);
+window.__pic={set:(x,c)=>{ kx.value=x; kc.value=c; all(); const h=1e-5; return {slope:+((Math.log(x+h)-Math.log(x-h))/(2*h)).toFixed(5),inv:+(1/x).toFixed(5),left:+((Math.log(x+h)-Math.log(x-h))/(-2*h)).toFixed(5),area:+num(t=>1/t,1,x).toFixed(5),ln:+Math.log(x).toFixed(5)}; }};
+all();
+stepper('#sl1',[
+  {k:'ember',kl:'slope-of-log',t:R`${Nw}{\ln'(x) = \tfrac1x}`,n:`area-slope on 17a's area.`},
+  {k:'ember',kl:'the table',t:R`\textstyle\int x^{-1}\,dx = \ln x + C`,n:`The hole at r = −1, filled.`}
+],{title:'The slides · the slope of ln · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'the left side',t:R`(\ln(-x))' = \tfrac{1}{-x}\cdot(-1)`,n:`chain for slopes.`},
+  {k:'ember',kl:'area-under-1/x',t:R`${Nw}{\textstyle\int \tfrac{dx}{x} = \ln|x| + C}`,n:`On an interval that misses 0.`},
+  {k:'ember',kl:'two constants',t:R`\ln|x| + C_1,\ \ \ln|x| + C_2`,n:`same-slopes needs an interval.`},
+  {k:'ember',kl:'1712',t:R`\ln(-1) \overset{?}{=} 0`,n:`One for; one against.`}
+],{title:'The slides · when x is negative · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'log-bends-down',t:R`${Nw}{\ln''(x) = -\tfrac{1}{x^2} \lt 0}`,n:`ln bends down.`},
+  {k:'ember',kl:'tangent at 1',t:R`\ln x \le x - 1`,n:`Under its tangent: log-bounds again.`},
+  {k:'ember',kl:'worked',t:R`\textstyle\int_{-4}^{-1} \tfrac{dx}{x} = -\ln 4`,n:`ln|x| on the left.`}
+],{title:'The slides · ln bends down · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'illegal',t:R`\textstyle\int_{-1}^{1} \tfrac{dx}{x}\,?`,n:`It crosses 0.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>14·logi · Should we order often or order big?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r14econ.html">← 14·econ how much should a factory make?</a><a href="r15.html">next: 15 · measuring what is under a curve →</a></p>
+  <div class="tags"><span class="tag logi">14·logi · logistics</span></div>
+  <h1>Should we order often or order big?</h1>
+  <p>Should we order often or order big? Every shop that sells goods off a shelf faces it. Each order costs something whatever its size: a delivery charge, a driver's time, the paperwork. Each bag on the shelf costs something too: the money tied up in it, the space it takes, the chance it spoils. Order often and the delivery charges pile up. Order big and the shelf fills with stock that waits for weeks. 14h found the order that balances the two when sales are steady. Real sales are not steady, and deliveries take days to come. This page asks how much the balance cares about a wrong guess, when to place the next order, and how much to keep back in case.</p>
+  <p class="gesture">The daily cost of an order size is the ordering charge, which falls as orders grow, plus the cost of holding stock, which rises. It is least where the two parts are equal. Away from the best size the cost rises slowly: ordering twice the best amount, or half of it, costs only a quarter more. Reorder when the stock falls to what sells while a delivery is on its way, plus a store kept back for the days that sell more.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r14h.html">14h</a> (optimising, equal-parts, the economic order quantity), <a href="r14a.html">14a</a> (flat-top, candidates), <a href="r14d.html">14d</a> (slope-sign-order), <a href="r14f.html">14f</a> (one-critical-point), <a href="r08g.html">8g</a> (the means), <a href="r09stat.html">9·stat</a> (the running total), <a href="r04j.html">4j</a> (counting). <a href="r14econ.html">14·econ</a> chose how much to make; <a href="r15stat.html">15·stat</a> reads a spread of sales as a curve.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · read it through, then work the picture and the slides</div>
+
+  <h3>The balance, from 14h</h3>
+  <p data-pid="7ebafd">A feed store in Gonzales sells chicken feed by the bag, about d = 20 bags a day. Each order from the mill costs K = $50 in delivery and handling, whatever its size. Holding one bag for a day costs about h = $0.008, mostly the money tied up in it. Order Q bags at a time. Then there are d/Q orders a day, and the stock falls steadily from Q to 0 between them, so on average Q/2 bags sit on the shelf.</p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="teal" data-label="from 14h: the order that costs least">
+T(Q) = \tfrac{Kd}{Q} + \tfrac{h}{2}Q \text{ on } (0, \infty) @@ ordering cost a day, plus holding cost a day
+Q_b = \sqrt{\tfrac{2Kd}{h}} = \sqrt{\tfrac{2 \cdot 50 \cdot 20}{0.008}} = \sqrt{250\,000} = 500 @@ equal-parts (14h), with a = Kd and b = h/2
+T(500) = 2 + 2 = \$4 \text{ a day} @@ the two parts equal: an order every 25 days
+  </pre>
+
+  <h3>How much a wrong order costs</h3>
+  <p data-pid="cb136a">K and h are guesses. Nobody knows the true cost of a bag's day on the shelf to the tenth of a cent. So the useful question is how much an order away from Q_b costs.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the cost of a wrong order">
+Kd = \tfrac{h}{2}Q_b^{\,2} @@ Q_b² = 2Kd/h, multiplied by h/2
+T(Q) = \tfrac{h}{2}\Big(\tfrac{Q_b^{\,2}}{Q} + Q\Big) = \tfrac{h}{2}Q_b\Big(\tfrac{Q_b}{Q} + \tfrac{Q}{Q_b}\Big) @@ put it in for Kd; take out Q_b
+T(Q_b) = hQ_b @@ the line above at Q = Q_b
+\htmlClass{new}{\tfrac{T(Q)}{T(Q_b)} = \tfrac12\Big(\tfrac{Q}{Q_b} + \tfrac{Q_b}{Q}\Big)} \quad \blacksquare @@ divide
+  </pre>
+  <p data-pid="63872f">Write x = Q/Q_b. By 8g's means, ½(x + 1/x) ≥ 1, and equals 1 only at x = 1. Near x = 1 it barely rises.</p>
+  <div class="tablewrap"><table class="tt">
+  <tr><th>Q/Q_b</th><th>½</th><th>0.8</th><th>1</th><th>1.25</th><th>1.5</th><th>2</th></tr>
+  <tr><th>T/T(Q_b)</th><td>1.25</td><td>1.025</td><td>1</td><td>1.025</td><td>1.083</td><td>1.25</td></tr>
+  </table></div>
+  <p data-pid="ea21a4">An order half again too big costs about 8% more. Suppose the store guessed K at $100, twice the truth. Its formula then gives √2 Q_b, about 707 bags, and costs ½(√2 + 1/√2) ≈ 1.061 times the least: 6% more for a guess off by a factor of 2. <b>Near the best order, the cost curve is nearly level, so a rough guess of the costs gives nearly the least cost.</b> That is flat-top at work: at Q_b the slope of T is 0, so small misses climb almost nothing.</p>
+
+  <h3>When to order: the lead time</h3>
+  <p data-pid="62798d">An order from the mill takes L = 4 days to come. Wait for the shelf to empty and the store sells nothing for 4 days. So the store reorders when the stock falls to what sells in 4 days, the reorder point r = dL = 80 bags. If sales were steady, the delivery would arrive just as the last bag left.</p>
+  <p data-pid="69b9ed">Sales are not steady. A store's books might show four-day sales anywhere from about 60 to just over 100 bags. Reorder at 80, and the shelf runs empty before the truck comes in about half the cycles, every time four days sell more than 80.</p>
+
+  <h3>The stock kept back</h3>
+  <p data-pid="d69d03">So the store reorders a little earlier, at r = dL + s. The s bags are a store kept back for a busy four days. They are never meant to be sold, and they cost hs every day, all year. Where to put r is read off the books with 9·stat's running total. Count the past lead times. Choose r so that the four-day sales were at most r in as many of them as the store wants covered.</p>
+  <pre class="lines" data-k="ember" data-label="this page: a reorder point from the books">
+\begin{aligned}&\text{20 past four-day sales, sorted: } 62,\\ &\quad 66, 70, 71, 73, 75, 76, 77, 78, 79,\end{aligned} @@ a year of the store's records, a model
+\begin{aligned}&\phantom{\text{20 past four-day sales, sorted: }} 80,\\ &\quad 81, 82, 84, 85, 87, 88, 90, 93, 101\end{aligned} @@ mean 79.9, near dL = 80
+F(80) = 11,\ \ F(90) = 18,\ \ F(93) = 19 @@ the running total (9·stat): how many were at most r
+r = 93:\ \ s = 13 \text{ bags kept back} @@ covers 19 of 20; costs 13 × 0.008 ≈ $0.10 a day
+  </pre>
+  <p data-pid="f15f18"><b>The stock kept back buys a share of the cycles that do not run out, and each extra bag of it buys less than the last.</b> Going from 19 of 20 covered to 20 of 20 here takes 8 more bags, for one cycle in the records.</p>
+
+  <h3>Two stores, one shelf</h3>
+  <p data-pid="ee14ff">Two stores, each selling d a day with the same K and h, each order Q_b and hold Q_b/2 on average. Together they hold Q_b = √(2Kd/h). Merge them into one store selling 2d: it orders √(2K · 2d/h) = √2 · Q_b and holds half that.</p>
+  <pre class="lines" data-k="ember" data-label="this page: pooling the stock">
+2 \cdot \tfrac12\sqrt{\tfrac{2Kd}{h}} = \sqrt{\tfrac{2Kd}{h}} @@ two stores' average stock
+\tfrac12\sqrt{\tfrac{2K \cdot 2d}{h}} = \tfrac{1}{\sqrt2}\sqrt{\tfrac{2Kd}{h}} @@ one store, twice the sales
+\text{ratio } \htmlClass{new}{\tfrac{1}{\sqrt2} \approx 0.71} @@ about 29% less stock, for the same sales
+  </pre>
+  <p data-pid="45f70c">Double the sales and the best order grows only by √2. So a big store orders more often, for its size, than a small one, and holds less stock for each bag it sells.</p>
+
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · laws with a known exception rate</div>
+    <p data-pid="a77d29">The best-order rule works in a range: sales steady, K and h fixed, the truck on time, the goods kept forever. Past each edge it fails, and in a known direction. Uneven sales empty the shelf at the end of a cycle, never in the middle, so the fix is a store kept back. Goods that spoil cap the order at what sells before they spoil. A price cut for big orders pulls the order up past Q_b.</p>
+    <p data-pid="ddd8df"><b>State the rule, its range, and the direction it fails past the edge.</b></p>
+    <p data-pid="aa275a">Because the cost curve is level near its bottom, the rule survives most of these failures with little loss. Its weak point is the reorder point, not the order size.</p>
+    <p class="bait" data-pid="8eb0bc">A garden centre in Watsonville sells twice as many bags of soil in April as in a usual month. Should its order in April be twice as big?</p>
+  </aside>
+
+  <h3>Which rung licenses each step</h3>
+  <div class="tablewrap"><table class="tt">
+  <tr><th class="l">step</th><th class="l">licence</th></tr>
+  <tr><td class="l">K, h and steady sales</td><td class="l">premises, from the store's books</td></tr>
+  <tr><td class="l">the best order</td><td class="l">14h's equal-parts</td></tr>
+  <tr><td class="l">the cost of a wrong order</td><td class="l">algebra; 8g's means for ½(x + 1/x) ≥ 1</td></tr>
+  <tr><td class="l">small misses cost little</td><td class="l">14a's flat-top: slope 0 at the bottom</td></tr>
+  <tr><td class="l">the reorder point</td><td class="l">9·stat's running total, over the records</td></tr>
+  <tr><td class="l">pooling</td><td class="l">algebra on the best order</td></tr>
+  </table></div>
+
+  <h3>Illegal moves</h3>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed">
+\text{sales double, so the order doubles}\,? @@ it grows by √2
+\begin{aligned}&\text{reorder at } dL \text{, and the shelf never empties}\,\\ &\quad ?\end{aligned} @@ only if every lead time sells exactly dL
+\begin{aligned}&\text{the stock kept back is}\\ &\quad\text{sold, so it costs nothing}\,?\end{aligned} @@ it is there every day: hs a day
+\text{order } 1.5Q_b \text{, cost } 1.5\,T(Q_b)\,? @@ about 1.08 T(Q_b): the curve is level near its bottom
+\text{two stores' stock adds when they merge}\,? @@ pooled, it is 1/√2 of the sum
+  </pre>
+</section>
+
+<section class="pic" id="pic">
+  <div class="eyebrow">The picture · left: half a year on the shelf · right: the daily cost against the order size</div>
+  <div class="panels">
+    <div class="panel">
+      <div class="lbl">bags on the shelf, day by day, with uneven daily sales</div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">order Q</span><input type="range" id="kQ" min="100" max="1200" step="20" value="500"><output id="oQ"></output></div>
+      <div class="kn"><span class="m">reorder r</span><input type="range" id="kr" min="40" max="160" step="1" value="80"><output id="or"></output></div>
+      <div class="chips" id="fch"></div>
+      <div class="cap">Ink: the stock. Gold dashed: the reorder point. Plum ticks: orders placed; each arrives 4 days later. Ember: days the shelf ran empty. Each day sells from 10 to 30 bags, all equally likely: 20 on average.</div>
+      <div class="verdict" id="vdF"></div>
+    </div>
+    <div class="panel">
+      <div class="lbl">dollars a day against Q</div>
+      <canvas id="cvS"></canvas>
+      <div class="cap">Teal dashed: ordering, Kd/Q. Ember dashed: holding, hQ/2. Ink: their sum T(Q). Gold dot: Q_b = 500. Plum dot: your Q.</div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+</section>
+
+<section class="slides" id="sl1"><div class="eyebrow">The slides · the balance; the cost of a wrong order; the table; a wrong guess of K; the lead time; uneven sales; the stock kept back; pooling; illegal moves · ← → keys work</div></section>
+
+<section class="sayback">
+  <div class="eyebrow">Say it back · then work it</div>
+  <h2>Questions</h2>
+  <div class="phkey"></div>
+  <ol>
+    <li><span class="qid">14·logi.1</span><span class="gname">Orders and reorders.</span><span class="gwhy">Do: build the page's pieces.</span>
+      <ol class="sub">
+        <li><span class="qid">14·logi.1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="d = 30 \text{ bags a day},"></span> <span data-tex-inline="K = \$60,"></span> <span data-tex-inline="h = \$0.01 \text{ a bag a day}"></span></span>A garden centre in Watsonville sells soil. Find its best order, the days between orders, and the daily cost.</li><li><span class="givens"><span data-tex-inline="d = 30 \text{ bags a day},"></span> <span data-tex-inline="\text{lead time: } 5 \text{ days}"></span></span>Sales are steady. Find the reorder point.</li><li><span class="givens"><span data-tex-inline="d = 30,\ K = \$60,\ h = \$0.01,"></span> <span data-tex-inline="Q = 900"></span></span>The centre orders Q at a time instead of its best order. Find by what share its daily cost rises.</li><li><span class="givens"><span data-tex-inline="\text{Sales: } 128, 141, 150, 155, 137,"></span> <span data-tex-inline="162, 149, 171, 144, 152,"></span> <span data-tex-inline="133, 158, 146, 165, 139,"></span> <span data-tex-inline="151, 147, 186, 143, 156"></span></span>These are twenty past five-day sales. Find the least reorder point that covered all but one of them, and the stock it keeps back.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">14·logi.2</span><span class="gname">From the order back to the costs.</span><span class="gwhy">Undo: run the page's techs backwards.</span>
+      <ol class="sub">
+        <li><span class="qid">14·logi.2.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="Q_b = 400,\ d = 25 \text{ a day},"></span> <span data-tex-inline="h = \$0.02 \text{ a bag a day}"></span></span>Find K.</li><li><span class="givens"><span data-tex-inline="\text{holding cost at the best order:}"></span> <span data-tex-inline="\$5 \text{ a day}"></span></span>Find the store's ordering cost a day and its daily cost.</li><li><span class="givens"><span data-tex-inline="\text{reorder point: } 220,"></span> <span data-tex-inline="\text{kept back: } 40,"></span> <span data-tex-inline="\text{lead time: } 6 \text{ days}"></span></span>Find d.</li><li><span class="givens"><span data-tex-inline="T(Q)/T(Q_b) = 1.25"></span></span>Find every ratio of Q to the best order that fits.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">14·logi.3</span><span class="gname">Where the rule gives.</span><span class="gwhy">Bend: find where the techs stop working.</span>
+      <ol class="sub">
+        <li><span class="qid">14·logi.3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="d = 30,\ K = \$60,\ h = \$0.01;"></span> <span data-tex-inline="\$8 \text{ a bag;}"></span> <span data-tex-inline="2\% \text{ off orders of } 1000 \text{ or more}"></span></span>Decide whether the garden centre should order enough for the discount.</li><li><span class="givens"><span data-tex-inline="d = 50,\ K = \$40,"></span> <span data-tex-inline="h = \$0.005 \text{ a carton a day},"></span> <span data-tex-inline="\text{shelf life: } 10 \text{ days}"></span></span>A grocery in Salinas sells milk. Find its best order.</li><li><span class="givens"><span data-tex-inline="d = 30,\ Q = 600,"></span> <span data-tex-inline="\text{lead time: } 30 \text{ days},"></span> <span data-tex-inline="\text{rule: reorder at } 900"></span></span>The rule asks for more bags than ever sit on the shelf. Find what the stock falling to the reorder point must mean.</li><li><span class="givens"><span data-tex-inline="\text{Sat and Sun: } 35 \text{ bags a day;}"></span> <span data-tex-inline="\text{other days: } 14 \text{ a day;}"></span> <span data-tex-inline="\text{lead time: } 4 \text{ days}"></span></span>Decide whether the best order changes from that of a steady sale with the same weekly total, and whether the reorder point does.</li></ol></li>
+      </ol></li>
+    <li class="optgroup"><span class="qid">14·logi.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder challenges that rely on your own making. The page is complete without these; the rung's star needs them.</span>
+      <ol class="sub">
+        <li class="opt"><span class="qid">14·logi.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{Bend's milk keeps } 10 \text{ days.}"></span></span>Choose something your household buys often, guess d, K and h, find its best order, and compare it with how you buy it now.<br>Give it a shelf life shorter than one best order lasts, and prove what the best order is under that limit.</li>
+        <li class="opt"><span class="qid">14·logi.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="d = 20,\ h = \$0.008;"></span> <span data-tex-inline="\text{a truck holds } 400 \text{ bags,}"></span> <span data-tex-inline="\$50 \text{ a truck, however full}"></span></span>Find the best order.</li>
+        <li class="opt"><span class="qid">14·logi.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{At } Q_b, \text{ ordering cost a day}"></span> <span data-tex-inline="= \text{holding cost a day.}"></span></span>Prove or refute: a store whose two costs a day are equal is ordering its best order.<br>Decide whether the answer survives the edge question's trucks.</li>
+        <li class="opt"><span class="qid">14·logi.4.4</span><span class="tagq">world</span><span class="givens"><span data-tex-inline="\text{same } d,\ K \text{ and } h;"></span> <span data-tex-inline="\text{Claim: average stock falls}"></span> <span data-tex-inline="\text{by the factor } 1/\sqrt{2}."></span></span>Two stores with these costs merge. Prove the claim.</li>
+        <li class="opt"><span class="qid">14·logi.4.5</span><span class="tagq">seam</span>In 1913 an engineer balanced the cost of each order against the cost of the stock. Forty years later a car maker in Japan cut the time to change a press from hours to minutes, and drove its orders toward a single part, with almost nothing on the shelf. Its critics say it only pushed the stock back onto its suppliers. <br>Was the balance wrong, or were its costs?</li>
+      </ol></li>
+  </ol>
+  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
+</section>
+
+<nav class="nextrung"><a href="r14econ.html">← 14·econ · how much should a factory make?</a><a href="r15.html">15 · measuring what is under a curve →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>Ohno likened the stock in a factory to the water in a river. While the water is high it covers the rocks. Lower it, and the rocks show: the machines that break, the parts that come late. Then they can be fixed.</p><cite>Taiichi Ohno, Toyota Production System (1978), the image as it is usually told; paraphrase</cite></aside>
+  <p>The engineer of 1913 is Ford W. Harris, in “How many parts to make at once”, in Factory, The Magazine of Management. R. H. Wilson spread the formula in 1934, and many books call it Wilson’s. In 14·logi.4.5, the car maker is Toyota, and the quick change of a press is Shigeo Shingo’s. The factor 1/√2 for pooled stock was set out by David Maister in 1976.</p>
+  <p>Accepted names: the economic order quantity for Q_b; lead time; reorder point; safety stock for the stock kept back; service level for the share of cycles covered; cycle stock for the rest; inventory position for stock on the shelf plus stock on order; the square-root law for pooling; just-in-time.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="14·logi: a worked “proof”, not allowed">
+d = 20,\ L = 4:\ \ r = 80 @@ fine, for steady sales
+\text{the mean of the four-day sales is } 80 @@ fine
+\text{so reordering at } 80 \text{ empties the shelf only rarely} @@ not allowed: about half the lead times sell more than their mean
+  </pre>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '?'; let s=v.toFixed(d==null?2:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const K=50,d=20,h=0.008,L=4,DAYS=180,QB=500;
+function rng(seed){ return ()=>{ seed|=0; seed=seed+0x6D2B79F5|0; let t=Math.imul(seed^seed>>>15,1|seed); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+let seed=7, sales=[];
+function draw(){ const r=rng(seed); sales=[]; for(let i=0;i<DAYS;i++) sales.push(10+Math.floor(r()*21)); }
+draw();
+const kQ=$('kQ'),kr=$('kr'),cvF=$('cvF'),cvS=$('cvS');
+const Q=()=>+kQ.value, rp=()=>+kr.value;
+function run(){ let stock=Q(), onOrder=0, arrive=-1, orders=[], short=[], lost=0, held=0, path=[[0,stock]];
+  for(let day=0;day<DAYS;day++){
+    if(day===arrive){ stock+=onOrder; onOrder=0; arrive=-1; path.push([day,stock]); }
+    const want=sales[day], sold=Math.min(want,stock); if(sold<want){ short.push(day); lost+=want-sold; }
+    held+=stock-sold/2; stock-=sold; path.push([day+1,stock]);
+    if(onOrder===0&&stock<=rp()){ onOrder=Q(); arrive=day+1+L; orders.push(day+1); }
+  }
+  return {path,orders,short,lost,held:held/DAYS,cost:(orders.length*K)/DAYS+h*held/DAYS}; }
+const T=q=>K*d/q+h*q/2;
+const PF=plane(cvF,{x:[0,DAYS],y:[0,1300],grid:0,aspect:0.8,draw:P=>drawF(P)});
+const PS=plane(cvS,{x:[0,1250],y:[0,10],grid:0,aspect:0.8,draw:P=>drawS(P)});
+[[PF,cvF],[PS,cvS]].forEach(([P,cv])=>Object.defineProperty(P.o,'aspect',{get:()=>cv.clientWidth>480?0.75:0.9}));
+function grid(P,gx,gy){ const c=P.ctx; c.strokeStyle=col('--grid'); c.lineWidth=1; c.beginPath();
+  for(let x=0;x<=P.o.x[1]+1e-9;x+=gx){ c.moveTo(P.X(x),P.Y(P.o.y[0])); c.lineTo(P.X(x),P.Y(P.o.y[1])); }
+  for(let y=0;y<=P.o.y[1]+1e-9;y+=gy){ c.moveTo(P.X(P.o.x[0]),P.Y(y)); c.lineTo(P.X(P.o.x[1]),P.Y(y)); } c.stroke();
+  P.line(P.o.x[0],0,P.o.x[1],0,'--muted',1.3); P.line(0,P.o.y[0],0,P.o.y[1],'--muted',1.3); }
+let last=null;
+function labels(P,gx,gy,fx,fy){ const c=P.ctx; c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center';
+  for(let x=P.o.x[0]+gx;x<P.o.x[1]-gx*0.05;x+=gx) c.fillText(fx(x),P.X(x),P.Y(P.o.y[0])+14);
+  c.textAlign='left'; for(let y=Math.ceil(P.o.y[0]/gy)*gy;y<=P.o.y[1]+1e-9;y+=gy){ if(Math.abs(y-P.o.y[0])<1e-9||y>P.o.y[1]-(P.o.y[1]-P.o.y[0])*0.05) continue; c.fillText(fy(y),P.X(P.o.x[0])+3,P.Y(y)-3); } }
+function drawF(P){ P.o.y=[0,Math.max(300,Q()*1.15)]; grid(P,30,100); labels(P,30,200,x=>x,y=>y); const S=last||run();
+  P.line(0,rp(),DAYS,rp(),'--gold',1.3,[6,4]);
+  S.short.forEach(dy=>P.poly([[dy,0],[dy+1,0],[dy+1,P.o.y[1]*0.04],[dy,P.o.y[1]*0.04]],null,'--ember'));
+  const c=P.ctx; c.strokeStyle=col('--ink'); c.lineWidth=1.8; c.beginPath(); S.path.forEach(([x,y],i)=>i?c.lineTo(P.X(x),P.Y(y)):c.moveTo(P.X(x),P.Y(y))); c.stroke();
+  S.orders.forEach(dy=>P.line(dy,P.o.y[1]*0.92,dy,P.o.y[1],'--plum',2)); }
+function drawS(P){ grid(P,250,2); labels(P,250,2,x=>x,y=>'$'+y);
+  P.fn(q=>K*d/q,'--teal',1.6,[5,4]); P.fn(q=>h*q/2,'--ember',1.6,[5,4]); P.fn(T,'--ink',2.6);
+  P.dot(QB,T(QB),'--gold',6); P.dot(Q(),T(Q()),'--plum',5); }
+function read(){ last=run(); const S=last, vd=$('vdF'); $('oQ').textContent=Q(); $('or').textContent=rp();
+  const cyc=S.orders.length, ratio=T(Q())/T(QB);
+  const msg=cyc+' orders in '+DAYS+' days; the shelf ran empty on '+S.short.length+' day'+(S.short.length===1?'':'s')+', '+S.lost+' bags short. ';
+  if(S.short.length===0&&ratio<1.1){ vd.className='verdict win'; vd.textContent=msg+'Cost about $'+mm(S.cost,2)+' a day, '+mm(100*(ratio-1),1)+'% above the steady-sales least for the order size.'; }
+  else if(S.short.length===0){ vd.className='verdict lose'; vd.textContent=msg+'Never empty, but this order size costs '+mm(100*(ratio-1),1)+'% more than Q_b would.'; }
+  else { vd.className='verdict lose'; vd.textContent=msg+'Raise the reorder point: keep more back for a busy four days.'; }
+  tex($('eqF'),R`\begin{gathered}T(${Q()}) = \tfrac{1000}{${Q()}} + 0.004 \cdot ${Q()} = ${mm(T(Q()),3)}\\ \tfrac{T(Q)}{T(Q_b)} = \tfrac12\Big(\tfrac{${Q()}}{500} + \tfrac{500}{${Q()}}\Big) = ${mm(ratio,3)}\\ \text{kept back: } s = r - 80 = ${rp()-80}\end{gathered}`,true); }
+function all(){ read(); PF.redraw(); PS.redraw(); }
+kQ.addEventListener('input',all); kr.addEventListener('input',all);
+const fch=$('fch'); const b=document.createElement('button'); b.textContent='another half-year of sales'; b.onclick=()=>{ seed+=1; draw(); all(); }; fch.appendChild(b);
+window.__pic={set:(q,r,s)=>{ kQ.value=q; kr.value=r; if(s!=null){ seed=s; draw(); } all(); return {orders:last.orders.length,shortDays:last.short.length,lost:last.lost,txt:$('vdF').textContent}; }};
+all();
+/* ---------- slides ---------- */
+const Nw='\\htmlClass{new}';
+stepper('#sl1',[
+  {k:'teal',kl:'the balance',t:R`T(Q) = \tfrac{Kd}{Q} + \tfrac{h}{2}Q,\ \ Q_b = \sqrt{2Kd/h}`,n:`14h's equal-parts. The feed store: 500 bags, $4 a day.`},
+  {k:'ember',kl:'the cost of a wrong order',t:R`${Nw}{\tfrac{T(Q)}{T(Q_b)} = \tfrac12\Big(\tfrac{Q}{Q_b} + \tfrac{Q_b}{Q}\Big)}`,n:`Put Kd = (h/2)Q_b² into T.`},
+  {k:'ember',kl:'the table',t:R`1.5 \mapsto 1.083,\ \ 2 \mapsto 1.25`,n:`Half again too big: 8% more. The curve is level near its bottom.`},
+  {k:'ember',kl:'a wrong guess of K',t:R`2K \Rightarrow \sqrt2\,Q_b \Rightarrow 1.061`,n:`A guess off by 2 costs 6%.`},
+  {k:'ember',kl:'the lead time',t:R`r = dL = 80`,n:`Enough for the 4 days the truck takes, if sales are steady.`},
+  {k:'ember',kl:'uneven sales',t:R`\text{four days: } 62 \text{ to } 101`,n:`Reorder at 80 and about half the cycles run out.`},
+  {k:'ember',kl:'the stock kept back',t:R`r = dL + s = 93`,n:`The running total of the records: 19 of 20 covered.`},
+  {k:'ember',kl:'pooling',t:R`\tfrac{1}{\sqrt2} \approx 0.71`,n:`One store with twice the sales holds 29% less stock.`},
+  {k:'ember',kl:'illegal',t:R`2d \not\Rightarrow 2Q_b`,n:`Twice the sales: √2 times the order.`}
+],{title:'The slides · the balance; the cost of a wrong order; the table; a wrong guess of K; the lead time; uneven sales; the stock kept back; pooling; illegal moves · ← → keys work'});
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

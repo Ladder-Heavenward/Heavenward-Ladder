@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>2b · Sifting, and a set to start from</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.95rem;white-space:normal}
+.colm{display:grid;gap:3px;font-family:var(--serif);background:var(--sand);padding:8px 12px;border-radius:4px}
+.ln{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 14px;align-items:baseline;font-size:.95rem}
+.ln .r{font-family:var(--mono);font-size:.74rem;color:var(--muted);text-align:right;max-width:28ch}
+.ln.in{padding-left:18px;border-left:2px solid var(--grid)}
+.ln.bot .s{color:var(--ember)} .ln.out .s{color:var(--teal)}
+@media (max-width:560px){.ln{grid-template-columns:1fr}.ln .r{text-align:left;max-width:none}}
+.refuse{font-family:var(--mono);font-size:.85rem;color:var(--ember);border:1px dashed var(--ember);padding:6px 10px;border-radius:4px}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r02a.html">← 2a membership and same members</a><a href="r02c.html">next: 2c gather and merge →</a></p>
+  <div class="tags"><span class="tag proof">2b · proof</span></div>
+  <h1>Sifting, and a set to start from</h1>
+  <p>2a said what a set is and when sets are the same. This step builds. The tool is sifting: from a set you have and a condition, the set of those members that pass. It is the tool everyone uses when they write “the set of all things such that…”. The small print in it is that the sifting happens <i>inside a set you already have</i>, and that is what keeps the whole subject from falling over. The step also notices that a tool which makes sets from sets makes nothing from nothing. So it lays down the axiom that there is a set, and sifts from it the set with no members. That turns out to be the same set whichever set you began with. At the end it shows the outsider-set argument (Russell's): what happens when you sift from nothing, written out move by move until something totally false, with no step that this ladder has withheld.</p>
+  <p class="gesture">To pick out members, name the set you are picking from and the condition they must pass. Sifting keeps or drops; it never adds. Sift with a condition nothing passes and you have the empty set, the only set with no members.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r00a.html">0a</a> (statements with a gap), <a href="r01b.html">1b</a> (⊥, refute, when nothing is true, everything is permitted), <a href="r01d.html">1d</a> (⇔), <a href="r01e.html">1e</a> (∃, use a some) and <a href="r02a.html">2a</a> (∈, listing, same-members, ⊆, the double-inclusion technique). <a href="r02c.html">2c</a> defines the common members of sets by sifting; <a href="r02d.html">2d</a> proves ∅ is part of every set; <a href="r02f.html">2f</a> runs the outsider-set argument again against a set of all sets; rung 3 starts its endless run from ∅.</p></div>
+</header>
+
+<section class="class step" data-step="2b1">
+  <h2 class="sthead"><span class="stno">2b1</span>Picking things out, in plain words</h2>
+  <p class="stands">Stands on 2a (a set and its members).</p>
+  <p data-pid="1ac39e">This step is about picking things out. You do it all day. From the clothes in a drawer, you pick the clean ones. From the people in a class, you pick the ones who walk to school. Each time you need a collection you already have. You also need a test that each member passes or fails. What comes out is the members that pass.</p>
+  <p data-pid="5368de">A kitchen sieve does the same. Pour in the flour, and the lumps stay behind. A sieve never makes flour. It only keeps some of what you poured in. A sieve is this step's tool, and the step calls it sifting.</p>
+  <p class="eqline" data-pid="d9e446"><b>Sifting keeps the members of a set you already have that pass a test, and it never adds anything.</b></p>
+  <p data-pid="c56628">The marks look harder than the idea. Here is one:</p>
+  <div class="eqline" data-tex="\{x \in u : x \text{ can fly}\}"></div>
+  <p data-pid="ffb056">It is read “the set of x in u such that x can fly”. The braces mean a set, as on 2a. The x is a blank that runs through the members of u, one at a time. The colon is read “such that”. After it comes the test.</p>
+  <p data-pid="bf0543">Let u be {cat, dog, owl}. The test runs on each member in turn. The cat can't fly, so it is dropped. The dog can't fly, so it is dropped too. The owl can fly, so it is kept. The result is {owl}.</p>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">2b1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">u is {Rex, Pickles, Pip}. Rex and Pip bark; Pickles does not.</span></span>Run the test “x barks” on each member of u in turn. <br>Write the set that comes out.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="2b2">
+  <h2 class="sthead"><span class="stno">2b2</span>A condition</h2>
+  <p class="stands">Stands on 2b1 (a test on each member) and 0a (a statement with a gap).</p>
+  <p data-pid="7d73ea">The step writes the test as φ(x), with a Greek letter, phi: the first Greek letter on the ladder. That letter means “some test, any test at all”. It works like a blank on a form: φ(x) is the test with x written in the blank.</p>
+  <p data-pid="c1c8b8">0a had statements with a gap: “… is asleep”, written P(x) with the gap shown. Put a name in the gap and you have a statement. When such a statement-with-a-gap is used to pick things out, the ladder calls it a <b>condition</b>. Examples: “x can fly”, “x is red”, “x ∈ b”, “x ≠ cat”, “∃y (y is a child of x)”. A condition is built from nothing but rung 1's joining words, 0b's =, 2a's ∈, and everyday words. It says of the thing in its gap something that is so or not so. Rung 1 wrote statements with gaps as P, Q, R. A condition that is to be <i>any condition whatever</i> is the one the sifting tool accepts. For it the ladder uses a letter from another alphabet, so that it is never confused with a particular statement:</p>
+  <p class="eqline" data-pid="70c8c3">From here on, <span data-tex-inline="\varphi"></span> (the Greek letter phi, in its small form) stands for any condition: a statement with a gap. <span data-tex-inline="\varphi(x)"></span> is that condition with x in its gap.</p>
+  <p data-pid="a633a0">For example, if φ(x) is “x can fly”, then φ(owl) is “owl can fly”, which is so, and φ(cat) is “cat can fly”, which is not. Back to the rule: nothing is assumed about φ except that, for each thing put in its gap, the result is a statement. The letter x in φ(x) is a placeholder in 1e's sense: it names nothing and may be renamed.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">2b2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">φ(x) is “x has fur”.</span></span>Write φ(Rex) and φ(Nemo the goldfish) as statements. <br>Which is so?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="2b3">
+  <h2 class="sthead"><span class="stno">2b3</span>The empty set, in plain words</h2>
+  <p class="stands">Stands on 2b1 (sifting) and 2a (a set is nothing but its members).</p>
+  <p data-pid="80cf80">Now a strange case. Sift with a test nothing passes, such as “is not itself”. Everything is itself, so nothing is kept. You are left with a set that has no members. It is called the empty set.</p>
+  <p data-pid="069a46">Is there only one empty set? An empty cup and an empty bucket are different things, because each is made of something besides what is inside it. A set is made of nothing but its members (2a). So any empty set has the same members as any other, which is none, and they are the same set.</p>
+  <p data-pid="a2665a">Why did 2a1 lay down an axiom that the empty set exists? Because sifting needs a set to pour in. With nothing in the sieve, nothing comes out. The empty-set axiom puts one set in hand, and 2b9 writes it in marks. Any other set would sift down to it too, with “is not itself”.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">2b3.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">An empty cup and an empty bucket.</span></span>Are they the same thing? <br>Are two sets with no members the same set? <br>Find what makes the answers differ.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="2b4">
+  <h2 class="sthead"><span class="stno">2b4</span>Why a sieve needs a bowl</h2>
+  <p class="stands">Stands on 2b1 (sifting) and 1b (refute).</p>
+  <p data-pid="0d52c0">Last, the step asks why a sieve needs a bowl. Suppose you could sift from nothing: “the set of every thing that passes the test”, with no set to pour from. It sounds harmless. Try the test “does not list itself”. Picture a library catalogue that lists every catalogue that does not list itself.</p>
+  <p class="bait" data-pid="a7d6a0">Does that catalogue list itself? Say yes, and follow where it leads. Then say no, and follow that.</p>
+  <p data-pid="1601e5">The step runs that question move by move in footing 2b14. Then it shows what changes when the sifting happens inside a set you have. Now the same ideas again, with the care that turns them into arguments.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">2b4.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">A catalogue lists every catalogue that does not list itself, and no other catalogue.</span></span>Suppose the catalogue lists itself. What follows? <br>Suppose it does not. What follows?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="2b5">
+  <h2 class="sthead"><span class="stno">2b5</span>The sift tool</h2>
+  <p class="stands">Stands on 2b2 (a condition φ) and 1c (and: keep, join).</p>
+  <p data-pid="f6a352">Here is the tool, in words: from a set u and a condition φ, the set of those members of u of which φ is true. In marks:</p>
+  <p class="eqline" data-pid="08c810">From here on, <span data-tex-inline="\{x \in u : \varphi(x)\}"></span> means: the set whose members are exactly the members of u that pass φ:</p>
+  <div class="eqline" data-tex="y \in \{x \in u : \varphi(x)\} \;\Leftrightarrow\; y \in u \land \varphi(y)"></div>
+  <div class="eqline" data-tex="\begin{aligned}&amp;\textbf{Axiom Sift:}\quad\\ &amp;\quad \text{for any set } u \text{ and any condition } \varphi,\\ &amp;\quad \text{ there is a set } \{x \in u : \varphi(x)\}.\end{aligned}"></div>
+  <p data-pid="a09cfd">Read the colon as “such that”: “the set of x in u such that φ of x”. The x before the colon is the placeholder, and it runs through u. The condition after the colon has that same letter in its gap.</p>
+  <p data-pid="bac298">The sift axiom says the sifted set exists. The “from here on” line says who its members are. The mark {x ∈ u : φ(x)} is a name: it names the one set the sift picks out. By 2a's same-members axiom, only one set has those members.</p>
+  <p data-pid="d8f322"><b>A thing is in the sifted set exactly when it is in u and passes.</b> That is an and. To use a membership in a sifted set, keep either part. To make one, join.</p>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · the sieve: a set and a condition, and what passes</div>
+    <div class="panel">
+      <div class="cap">The set t: letters of the alphabet, each in a colour, some capital and some small. Choose the condition φ. The ember outline is {x ∈ t : φ(x)}; faded letters are the members of t that fail.</div>
+      <div class="knobs"><div class="knob"><label for="phi">φ(x)</label><select id="phi"></select></div></div>
+      <div class="chips" role="group" aria-label="sift from"><span class="m" style="color:var(--muted)">sift from:</span><button data-from="t" class="on">the set t</button><button data-from="none">nothing</button></div>
+      <canvas id="cv1"></canvas>
+      <div class="eqbox" id="eq1"></div>
+      <div class="refuse" id="ref1" style="display:none"></div>
+      <div class="cap">Try: a condition nothing in t passes, then x ≠ x, then x = x. Then switch to sifting from nothing and read why the sieve refuses.</div>
+    </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">2b5.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="d = \{x \in u : x \text{ is a dog}\}"></span></span>Unpack Rex ∈ d into an and. <br>Which tech uses a membership in d, and which tech makes one?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="2b6">
+  <h2 class="sthead"><span class="stno">2b6</span>The fliers among cat, dog and owl</h2>
+  <p class="stands">Stands on 2b5 (the sift tool) and 2a3 (the listing line).</p>
+  <p data-pid="d3b09f">The fliers among cat, dog and owl, with the facts about flying laid down as given, since the ladder cannot watch an owl.</p>
+  <p data-pid="29bc12">Given: the cat cannot fly, the dog cannot fly, and the owl can fly. The sift axiom gives this set; call it fliers:</p>
+  <div class="eqline" data-tex="\{x \in \{\text{cat},\text{dog},\text{owl}\} : x \text{ can fly}\}"></div>
+  <p data-pid="49821a">Is the owl in fliers? The owl is the owl, by the self-sameness axiom, so add an option and pack the listing: the owl is in {cat, dog, owl}. The owl can fly: keep that part of the given. Join the two, and pack the sift:</p>
+  <div class="eqline" data-tex="\text{owl} \in \text{fliers}"></div>
+  <p data-pid="ba53ca">Is the cat in fliers? Suppose, until we drop it, that it is. Unpack the sift and keep the right part: the cat can fly. That clashes with the given: ⊥. Drop the supposition; it is refuted: <span data-tex-inline="\text{cat} \notin \text{fliers}"></span>. The same steps run for the dog: suppose the dog is in fliers; unpack and keep the right part: the dog can fly; that clashes with the given; refute.</p>
+  <p data-pid="def43b">So fliers has owl as a member, and neither cat nor dog. By 2a's listing line and the same-members axiom, fliers = {owl}: the slides finish that. The habit to take from this: a sift is used by unpacking its membership into an and, and made by joining.</p>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · the fliers come to {owl} · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">2b6.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\text{Rex and Pip are dogs; Pickles is not.}"></span> <span data-tex-inline="t = \{\text{Rex}, \text{Pickles}, \text{Pip}\},"></span> <span data-tex-inline="c = \{x \in t : x \text{ is a dog}\}"></span> <span data-tex-inline="\text{Feet: Rex} \in c,\ \text{Pickles} \notin c"></span></span>By the sift, say in plain words why each foot is so. <br>Name the tech at each step.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="2b7">
+  <h2 class="sthead"><span class="stno">2b7</span>Sifts worth knowing by sight</h2>
+  <p class="stands">Stands on 2b5 (the sift tool) and 0b (self-sameness).</p>
+  <p data-pid="35a016">Some sifts worth knowing by sight:</p>
+  <div class="eqline" data-tex="\begin{aligned} &amp;\{x \in u : x = x\} = u\\ &amp;\{s \in b : \text{cat} \in s\}\\ &amp;\{x \in u : x \in v\} \end{aligned}"></div>
+  <p data-pid="db8abb">A condition everything passes gives the set back, since x = x is the self-sameness axiom for any x.</p>
+  <p data-pid="540142">A sift can run on a set whose members are sets: {s ∈ b : cat ∈ s} picks out the members of b that have cat in them.</p>
+  <p data-pid="e775b3">A sift can mention other sets you have: {x ∈ u : x ∈ v} is the members u and v share, and 2c gives it a mark.</p>
+  <p data-pid="998e2e">What a condition may not do is mention the set being built, since that set is not yet in hand.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">2b7.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="b = \{\{\text{cat}\}, \{\text{dog}\}, \{\text{cat}, \text{owl}\}\}"></span></span>Write {s ∈ b : cat ∈ s} as a list. <br>Write {x ∈ b : x = x} as a list.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="2b8">
+  <h2 class="sthead"><span class="stno">2b8</span>Sifting never adds</h2>
+  <p class="stands">Stands on 2b5 (the sift tool) and 2a9 (⊆).</p>
+  <p data-pid="456323">Sift-is-part technique: <b>whatever the condition, the sifted set is part of the set you sifted.</b> This is the technique to cite when someone expects a sift to produce something that was not there to keep.</p>
+  <p data-pid="a636f9">The plan: wanting the sift ⊆ a, the last step packs ⊆; before it is an every; so open with y anything.</p>
+  <p data-pid="5b15f3">Let a be any set and φ any condition. Take y, anything at all. Suppose this:</p>
+  <div class="eqline" data-tex="y \in \{x \in a : \varphi(x)\}"></div>
+  <p data-pid="5289d8">Unpack the sift: y ∈ a and φ(y). Keep the left part: y ∈ a.</p>
+  <p data-pid="0bedce">Drop the supposition: we have proved an if. y was anything, so speak of everything, and pack the mark: <span data-tex-inline="\{x \in a : \varphi(x)\} \subseteq a"></span>.</p>
+  <p data-pid="f66267">2a's cup of seawater was a sift all along. The cup takes exactly the molecules of the Sound that are in a certain place: cupful = {x ∈ Sound : x is in the cup}. So the sift-is-part technique gives cupful ⊆ Sound with no further work. <b>A cup is a sift: it keeps what passes, and what it keeps was already there.</b></p>
+  <p data-pid="b90346">So <span data-tex-inline="\{x \in \{\text{cat},\text{dog}\} : x \text{ can fly}\}">{x ∈ {cat, dog} : x can fly}</span> is not {owl}, whatever the owl can do. No flier was in {cat, dog} to keep, so nothing passes, and the result is a set with no members at all. Which raises the question of what that set is, and whether there is such a thing.</p>
+  <section class="slides" id="sl8"><div class="eyebrow">The slides · the fliers of {cat, dog} come to ∅ · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">2b8.1</span><span class="ph bend">bend</span><span class="givens"><span data-tex-inline="\text{Rex, Pip and Bo are dogs.}"></span> <span data-tex-inline="s = \{x \in \{\text{Rex}, \text{Pip}\} : x \text{ is a dog}\}"></span> <span data-tex-inline="\text{1. Rex} \in \{\text{Rex}, \text{Pip}\}"></span> <span data-tex-inline="\text{\quad} \land \text{ Rex is a dog}"></span> <span data-tex-inline="\text{2. Rex} \in s"></span> <span data-tex-inline="\text{3. Bo} \in s"></span></span>Mark each line earned or not. <br>Where the argument breaks, write what that line would need before it.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="2b9">
+  <h2 class="sthead"><span class="stno">2b9</span>A set to start from</h2>
+  <p class="stands">Stands on 2b8 (sifting needs a set) and 1e (a some).</p>
+  <p data-pid="fce7b1">Look at what the tool needs. Sifting takes a set in. Every tool of this rung does: 2c's gather takes things you have, its merge takes a set of sets, 2d's tool takes a set. <b>The tools make sets from sets, and with nothing in hand they make nothing.</b> The techs of rung 1 never produce an object either; they reason about objects you have. And 2a's listing only <i>writes</i> a set you have. So without 2a1, nothing would say that there is any set at all. Mathematics does not pretend otherwise. 2a1 laid down an axiom that does not build but simply asserts. In marks:</p>
+  <div class="eqline" data-tex="\textbf{Empty-set axiom:}\qquad \exists e\;\forall y\; y \notin e."></div>
+  <p class="eqline" data-pid="486fae">From here on, “the empty-set axiom” is this axiom, in these marks.</p>
+  <p data-pid="cc4975">It is the smallest start there could be: one set, with nothing in it. Some books lay down instead only that some set exists, and sift the empty set out of it, as 2b10 does for any set. With sifting in hand, the two come to the same thing. The ladder starts from the empty one, because it is the first thing the rung needs. (Rung 3 will lay down an axiom that asserts another set exists, a particular and endless one.)</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">2b9.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">The empty-set axiom: ∃e ∀y y ∉ e.</span></span>Does the axiom say what other sets there are? <br>Why can't sifting alone, with no axiom, give you any set at all?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="2b10">
+  <h2 class="sthead"><span class="stno">2b10</span>Every set sifts to the empty set</h2>
+  <p class="stands">Stands on 2b9 (the empty-set axiom), 2b5 (the sift) and 1e (every).</p>
+  <p data-pid="0a1554">Empty-sift technique: <b>any set, sifted by “is not itself”, gives a set with no members.</b> The argument:</p>
+  <p data-pid="180dd6">Let a be any set at all, with nothing else assumed. Sift a by the condition “is not itself”, and call the result e: <span data-tex-inline="e = \{x \in a : x \ne x\}"></span>.</p>
+  <p data-pid="140309">Take y, anything at all, and suppose y ∈ e. Unpack the sift: y ∈ a and y ≠ y. Keep the right part, and unpack ≠: y is not y. But y = y, by the self-sameness axiom. That clashes: ⊥. So y ∈ e is refuted: y ∉ e.</p>
+  <p data-pid="a250f2">y was anything, so speak of everything: nothing is in e.</p>
+  <div class="eqline" data-tex="\forall y\; y \notin e"></div>
+  <p data-pid="a1224b">a was any set, so this holds for every set.</p>
+  <p data-pid="c550c6">This makes no new set appear: the empty-set axiom already gave one. It shows that every set leads down to a set with no members, by one sift. 2b11 shows that it is always the same one.</p>
+  <section class="pic" id="pic2">
+    <div class="eyebrow">The picture · the empty set, sifted from any set</div>
+    <div class="panel">
+      <div class="chips" role="group" aria-label="the set a" id="ach"><span class="m" style="color:var(--muted)">take any set u =</span></div>
+      <div class="cap">Whichever set u is, sift it by x ≠ x. The column below is the step's proof, run on that set, and the readout names what comes out.</div>
+      <div class="colm" id="colm"></div>
+      <div class="eqbox" id="eq2"></div>
+      <div class="cap">Change u. The sifted set never changes, and the one-empty-set technique is why: a set with no members is the only set with no members.</div>
+    </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">2b10.1</span><span class="ph undo">undo</span><span class="givens"><span data-tex-inline="u \text{ a set; Pickles a pet.}"></span> <span data-tex-inline="\text{Foot: Pickles} \notin \{x \in u : x \ne \text{Pickles}\}"></span></span>Working back from the foot, find how an argument for it must open. <br>Find which clash closes it, and whether anything about u is needed.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="2b11">
+  <h2 class="sthead"><span class="stno">2b11</span>The only set with no members</h2>
+  <p class="stands">Stands on 2b10 (a set with no members), 2a7 (the same-members axiom) and 1b (when nothing is true, everything is permitted).</p>
+  <p data-pid="deceed">One-empty-set technique: <b>two sets with no members are the same set.</b></p>
+  <p data-pid="1e2c15">The argument that they are the same uses the tech “when nothing is true, everything is permitted”, and it is the standard use of that tech. A thing cannot be in e. So if you suppose it is, you reach something totally false. Since nothing is then true, everything is permitted: you may say that it is in e′, for as long as the supposition stands.</p>
+  <p data-pid="c4df37">Here it is. Suppose nothing is in e and nothing is in e′. Aim at the same-members axiom. Take x, anything at all.</p>
+  <p data-pid="2f7b7a">Suppose x ∈ e. Nothing is in e, so x ∉ e. Unpack ∉: that clashes, ⊥. Everything is permitted, so x ∈ e′. Drop the supposition: if x ∈ e, then x ∈ e′. The line x ∈ e′ goes with the supposition. Only the if leaves, and an empty if is all the same-members axiom asks for. The same steps, with e and e′ exchanged, give: if x ∈ e′, then x ∈ e.</p>
+  <p data-pid="835307">Join the two ifs and pack: <span data-tex-inline="x \in e \Leftrightarrow x \in e'"></span>. x was anything, so speak of everything. The same-members axiom then gives e = e′.</p>
+  <section class="slides" id="sl11"><div class="eyebrow">The slides · the empty set is unique · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">2b11.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">e and e′ are sets with no members.</span></span>Say in plain words why “if x ∈ e, then x ∈ e′” is so. <br>Where did the line x ∈ e′ go when the supposition was dropped?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="2b12">
+  <h2 class="sthead"><span class="stno">2b12</span>A name for the empty set</h2>
+  <p class="stands">Stands on 2b11 (only one set has no members).</p>
+  <p data-pid="cb0254">There is a set with no members, and no other. So it may be given a name of its own:</p>
+  <p class="eqline" data-pid="cbf09e">From here on, <span data-tex-inline="\varnothing"></span> means: the set with no members. Read it “the empty set”.</p>
+  <p data-pid="d70039">Empty-set technique: <b>nothing is a member of the empty set.</b> In marks, <span data-tex-inline="\forall y\; y \notin \varnothing"></span>.</p>
+  <p data-pid="d3da80">The empty-set technique is the empty-set argument of footing 2b10, read for ∅; the one-empty-set technique is why “the” is the right word. Every argument that mentions ∅ uses them, in one of two ways. Either “x ∉ ∅, so supposing x ∈ ∅ is totally false”, or “this set has no members, so it is ∅”. In particular <span data-tex-inline="\{x \in u : \varphi(x)\} = \varnothing">{x ∈ u : φ(x)} = ∅</span> exactly when no member of u passes φ; the slides prove the fliers among {cat, dog} come to ∅ that way.</p>
+  <p class="aside" data-pid="ab5c97">A word on the mark. It is a letter from the Danish and Norwegian alphabet, chosen by a group of French mathematicians who wrote under one shared pen name. One of them said he had taken it from the Norwegian he knew. It is not the Greek letter phi, which stands for a condition in this step, and it is not a mark from any later rung. Treat it as the mark its line makes it: a name, for one set.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">2b12.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\{x \in \{\text{Rex}, \text{Pip}\} : x \text{ can fly}\}"></span></span>Name the set, with its mark. <br>Which technique says the name is right?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="2b13">
+  <h2 class="sthead"><span class="stno">2b13</span>The illegal sift</h2>
+  <p class="stands">Stands on 2b5 (the sift needs a set to sift from).</p>
+  <p data-pid="d5b2eb">Here is the sift that looks most harmless and is not allowed: “the set of all cats”. It is written <span data-tex-inline="\{x : x \text{ is a cat}\}">{x : x is a cat}</span>, with nothing after the x to sift from. The sift axiom says nothing of it, and no tool of the rung builds it. If you want the cats, you must say which set's cats: the cats among the animals in the zoo, {x ∈ z : x is a cat}. Saying which set's cats seems pedantic in life. In mathematics it is the difference between a subject that stands and a subject that falls, and the argument that shows it is short enough to run in full.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">2b13.1</span><span class="ph bend">bend</span><span class="givens"><span data-tex-inline="\{x : x \text{ is a dog}\}"></span></span>What is missing from this sift? <br>Rewrite it as a sift the axiom allows.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="2b14">
+  <h2 class="sthead"><span class="stno">2b14</span>The outsider set</h2>
+  <p class="stands">Stands on 2b13 (the illegal sift), 1d (⇔) and 1b (refute).</p>
+  <p data-pid="8de0f6">Early in the century before this one, a logician had completed a foundation for arithmetic. Its rules allowed a set to be formed from any condition at all, with no set to sift from. A younger logician wrote to him with a question. Take the condition “x ∉ x”, is not a member of itself. Most sets pass it: {cat} is not a member of {cat}, since its only member is a cat. The old rules allow the set r of all things that pass. Is r a member of itself?</p>
+  <p data-pid="d8ca45">Outsider-set technique: <b>no set has as its members exactly the things that are not members of themselves.</b></p>
+  <p data-pid="79c430">Here is what happens, in the techs of rung 1 and nothing else.</p>
+  <p data-pid="b7898b">Suppose, until we drop it, that there is such a set. Use the some: call it r. So for every x, x ∈ r exactly when x ∉ x. Use that every on r itself: <span data-tex-inline="r \in r \Leftrightarrow r \notin r"></span>.</p>
+  <p data-pid="637293">Now suppose, inside, that r ∈ r. Keep the rightward direction and carry it through: r ∉ r. Unpack ∉: that clashes, ⊥. So r ∈ r is refuted: r ∉ r.</p>
+  <p data-pid="c93b99">Now keep the leftward direction and carry it through, on what we just proved: r ∈ r. That clashes with r ∉ r: ⊥. The ⊥ does not mention r, so it stands outside the some.</p>
+  <p data-pid="73d8c7">Drop the first supposition: it is refuted. <span data-tex-inline="\neg\exists r\;\forall x\,(x \in r \Leftrightarrow x \notin x)"></span>.</p>
+  <p data-pid="82d7dd">Look at what the argument did not do. It never asked “is r in r, or not?” and split into cases; that would be 1g's either-way, which this ladder does not grant for a statement like this. It supposed r ∈ r, refuted it, and then used the refutation to carry the other direction through. Both sides of the final clash were <i>proved</i>. The outsider-set argument (Russell's) needs nothing that rung 1 withheld.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">2b14.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">r is a set whose members are exactly the things that are not members of themselves.</span></span>Use that every on r itself, and write what you get. <br>Then say why supposing r ∈ r leads to a clash.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="2b15">
+  <h2 class="sthead"><span class="stno">2b15</span>The sift inside a set</h2>
+  <p class="stands">Stands on 2b14 (the outsider-set technique) and 2b5 (the sift axiom).</p>
+  <p data-pid="1321e8">Now set the outsider-set technique beside the sift tool. The old rules said: for any condition, there is the set of all things that pass. With the condition x ∉ x that gives exactly the r the technique refutes. So the old rules prove ⊥, and when nothing is true, everything is permitted: every statement, so and not so alike. The author of the foundation, with great generosity, wrote back that the argument had shaken the ground he meant to build on.</p>
+  <p data-pid="c4e7a1">All the water on Earth is the top of 2a's cup chain: every body of water in it is part of it. But its members are molecules, not sets. A set of everything has no such top to sift from.</p>
+  <p data-pid="2e136d"><b>The sift axiom says instead: for any condition and any set u you have, there is the set of members of u that pass.</b> Run the same sift inside a set:</p>
+  <p class="eqline" data-pid="bc506c">From here on, a small letter written low after a name, as in rᵤ, makes a new name that recalls the first. It claims nothing.</p>
+  <p data-pid="66aec6">So <span data-tex-inline="r_u = \{x \in u : x \notin x\}">rᵤ = {x ∈ u : x ∉ x}</span> is the outsider set made inside u. The same steps now give rᵤ ∉ rᵤ. The second clash needed rᵤ ∈ u for free; inside u that is not given, so the clash refutes rᵤ ∈ u instead: the set you sifted from does not contain its own outsider set. Nothing totally false; a technique. 2f runs that version, and draws from it that there is no set of all sets.</p>
+  <p data-pid="d2914e">The accepted word for what the outsider set did to the old rules is <b>paradox</b>, from the Greek for “contrary to expectation”.</p>
+  <section class="slides" id="sl15"><div class="eyebrow">The slides · the outsider set, inside a set · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">2b15.1</span><span class="ph bend">bend</span><span class="givens"><span data-tex-inline="u = \{\text{cat}, \text{dog}\}"></span></span>Write rᵤ as a list. <br>Is rᵤ a member of u? Say why that is no clash.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="2b16">
+  <h2 class="sthead"><span class="stno">2b16</span>Illegal moves</h2>
+  <p class="stands">Stands on 2b5 to 2b15.</p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\{x : x \text{ can fly}\} @@ no set to sift from. The tool wants {x ∈ a : …} for a set a you have. Written without the a, it is the old unrestricted rule, and the technique above shows where that leads
+\{x \in \{\text{cat},\text{dog}\} : x \text{ can fly}\} = \{\text{owl}\}\,? @@ sifting never adds (the sift-is-part technique). No owl was there to keep; the sift is ∅
+\varphi(y) \quad\text{so } y \in \{x \in a : \varphi(x)\}\,? @@ passing is not enough. The owl passes “can fly” and is not in the sift of {cat, dog}. You need y ∈ a as well: join
+s = \{x \in a : x \notin s\} @@ the condition mentions the set being built. Not a sift: s is not in hand until the sift is done. (This is the outsider set trying to get in through a side door)
+\varnothing \in a \quad\text{because } \varnothing \subseteq a\,? @@ 2a's confusion again. Every set has ∅ as a part (held in trust until 2d proves it); only some have it as a member
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">2b16.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">“φ(x) is “x barks”. Bo barks. So Bo ∈ {x ∈ {Rex, Pip} : x barks}.”</span></span>Which illegal move is this? <br>What else would Bo need?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="2b17">
+  <h2 class="sthead"><span class="stno">2b17</span>Running it backwards</h2>
+  <p class="stands">Stands on 2b5 (the sift) and 2b12 (∅).</p>
+  <p data-pid="efc654">Wanting y ∈ {x ∈ u : φ(x)}, you know the step before is y ∈ u ∧ φ(y), so you want both of those, and join. Wanting y ∉ {x ∈ u : φ(x)}, you suppose the membership, unpack it, and need a clash with either part: either you have y ∉ u, or you have ¬φ(y). Wanting s = ∅, you have two routes. You can show s has no members, that is, for any y, y ∉ s, and cite the one-empty-set technique. Or you can show inclusions each way. The direction ∅ ⊆ s is free by everything-permitted (held in trust here; 2d writes it out), and the direction s ⊆ ∅ is the real work. Found from the goal back; written from the givens forward.</p>
+  <section class="slides" id="sl17"><div class="eyebrow">The slides · backwards · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">2b17.1</span><span class="ph undo">undo</span><span class="givens"><span class="gtx">Wanted: {x ∈ {Rex, Pip} : x is a cat} = ∅. Rex and Pip are dogs, not cats.</span></span>Which of the two routes would you take? <br>Write its opening sentence and the clash that does the work.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <div class="chq"><span class="chid">2b.4.1</span><span class="tagq">build</span>Take a set of things you know and can list, and write a condition, other than “x is not x”, that sifts the empty set from every set, proving it with no facts about your things. <br>Write another that sifts the empty set from your set only by facts about your things; lay the facts down as givens, prove it, and find a set it does not sift the empty set from. <br>Then prove your two sifts give the same set.</div>
+  <div class="chq"><span class="chid">2b.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{Every member of } s \text{ is in}"></span> <span data-tex-inline="\text{the school; every}"></span> <span data-tex-inline="\text{member of } s \text{ is not.}"></span></span>Prove that every member of the empty set is a pet, and that every member of the empty set is not a pet, and find whether that is a clash. <br>Find s, and prove it.</div>
+  <div class="chq"><span class="chid">2b.4.3</span><span class="tagq">loop</span><span class="givens"><span data-tex-inline="R \text{ a statement with gaps}"></span> <span data-tex-inline="\text{at both places.}"></span> <span data-tex-inline="\text{Foot: } \neg\exists r\, \forall x\, (R(x, r) \Leftrightarrow \neg R(x, x))"></span></span>Prove the foot. <br>Read R(x, y) as “y shaves x”, then as “x is a member of y”, and write each reading's foot in English.</div>
+  <div class="chq"><span class="chid">2b.4.4</span><span class="tagq">world</span><span class="givens"><span data-tex-inline="\text{A world's only things: Rex,}"></span> <span data-tex-inline="\text{Pickles and Pip, none a set.}"></span></span>Find which of the axioms same-members, sift and empty-set are true there. <br>Can the empty-set axiom be proved from the others?</div>
+  <div class="chq"><span class="chid">2b.4.6</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\mathit{Said}\text{: the ideas that can be said}"></span> <span data-tex-inline="\mathit{Approx}\text{: approximations of the world}"></span> <span data-tex-inline="\mathit{Obs} \subseteq \mathit{Approx}"></span> <span data-tex-inline="W\text{: lines a logical system writes}"></span> <span data-tex-inline="\forall s \in \mathit{Said}\;\exists w \in W\,(w \text{ writes } s)"></span> <span data-tex-inline="\forall o \in \mathit{Obs}\;\exists w \in W\,(w \text{ writes } o)"></span></span>Read the last two lines in plain words. Where on the ladder have you met them before? <br>Can they be proved from anything the ladder has? If not, what is someone doing when they write them down?</div>
+  <div class="chq"><span class="chid">2b.4.5</span><span class="tagq">seam</span>Sifting from nothing by x ∉ x reaches something totally false: no set holds exactly the x with x ∉ x. <br>Sift says there is {x ∈ u : φ(x)} only for a set u in hand. <br>Should {x : x is a town on the Monterey County coast} be a set, with no set to sift it from? <br>Draw the line between the conditions that may make a set from nothing and those that may not.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r02a.html">← 2a · membership and same members</a><a href="r02c.html">2c · gather and merge →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Other ways the same marks are written</h3>
+  <p>Mathematics writes some of these marks in more than one way, by subject and by century. Each one below means what the mark in this step means; know them on sight.</p>
+  <ul>
+    <li><span data-tex-inline="\{x \in u : \varphi(x)\}">{x ∈ u : φ(x)}</span> is also written with a bar, <span data-tex-inline="\{x \in u \mid \varphi(x)\}">{x ∈ u ∣ φ(x)}</span>. Either form is set-builder notation.</li>
+    <li><span data-tex-inline="\varnothing">\varnothing</span> is also written {}.</li>
+  </ul>
+  <h3>Who said it first</h3>
+  <p>The logician whose foundation fell is Gottlob Frege; the younger logician who wrote to him, in 1902, is Bertrand Russell. The author of the ancestor list of axioms, who assumed an empty set outright, is Ernst Zermelo (1908). The French group with the shared pen name is Bourbaki; the member who chose ∅ from the Norwegian he knew is André Weil.</p>
+  <h3>Accepted names</h3>
+  <p>The outsider-set technique is Russell’s paradox; the outsider set is the Russell set. The old unrestricted rule is unrestricted comprehension. The sift axiom is the axiom of separation, or of subsets.</p>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper}=Rung;
+const R=String.raw;
+
+/* ---------- left: the sieve ---------- */
+const TOK=[['A','ember'],['e','teal'],['i','gold'],['O','teal'],['u','ember'],['b','ember'],['K','gold'],['m','teal'],['S','ember'],['t','gold'],['R','teal'],['z','gold']].map(([id,c])=>({id,c,cap:id===id.toUpperCase(),vow:'aeiou'.includes(id.toLowerCase())}));
+const CONDS={
+  'x is a vowel':t=>t.vow,'x is a consonant':t=>!t.vow,'x is a capital':t=>t.cap,'x is small':t=>!t.cap,
+  'x is ember':t=>t.c==='ember','x is teal':t=>t.c==='teal','x is gold':t=>t.c==='gold',
+  'x is a vowel ∧ x is not ember':t=>t.vow&&t.c!=='ember','x is a vowel ∨ x is gold':t=>t.vow||t.c==='gold',
+  'x is a capital vowel that is teal':t=>t.cap&&t.vow&&t.c==='teal','x = x':t=>true,'x ≠ x':t=>false
+};
+const TEXC={'x is a vowel':'x \\text{ is a vowel}','x is a consonant':'x \\text{ is a consonant}','x is a capital':'x \\text{ is a capital}','x is small':'x \\text{ is small}','x is ember':'x \\text{ is ember}','x is teal':'x \\text{ is teal}','x is gold':'x \\text{ is gold}','x is a vowel ∧ x is not ember':'x \\text{ is a vowel} \\land \\neg(x \\text{ is ember})','x is a vowel ∨ x is gold':'x \\text{ is a vowel} \\lor x \\text{ is gold}','x is a capital vowel that is teal':'x \\text{ is a capital} \\land x \\text{ is a vowel} \\land x \\text{ is teal}','x = x':'x = x','x ≠ x':'x \\ne x'};
+const phi=document.getElementById('phi'); Object.keys(CONDS).forEach(k=>phi.add(new Option(k,k))); phi.value='x is a vowel';
+let from='t';
+const cv1=document.getElementById('cv1');
+function size(cv,ar){ const d=window.devicePixelRatio||1, W=cv.clientWidth||300, H=Math.round(W/ar); cv.width=W*d; cv.height=H*d; cv.style.height=H+'px'; const c=cv.getContext('2d'); c.setTransform(d,0,0,d,0,0); return {c,W,H}; }
+function badge(c,x,y,r){ c.beginPath(); c.roundRect?c.roundRect(x-r,y-r,2*r,2*r,r*.35):c.rect(x-r,y-r,2*r,2*r); }
+function draw1(){
+  const {c,W,H}=size(cv1,1.5); c.fillStyle=col('--card'); c.fillRect(0,0,W,H);
+  const f=CONDS[phi.value]; const pass=t=>from==='t'&&f(t);
+  if(from==='t'){ c.strokeStyle=col('--muted'); c.lineWidth=1.2; c.setLineDash([4,4]); c.strokeRect(8,8,W-16,H-16); c.setLineDash([]); c.fillStyle=col('--muted'); c.font='12px IBM Plex Mono, monospace'; c.fillText('t',16,24); }
+  else { c.fillStyle=col('--muted'); c.font='12px IBM Plex Mono, monospace'; c.fillText('no set: nothing to sift',16,24); }
+  const ins=TOK.filter(pass), outs=TOK.filter(t=>!pass(t));
+  const r=Math.max(10,Math.min(17,W/30));
+  // passing letters inside an ember region on the left; failing on the right
+  const cx=W*.3, cy=H*.52, rx=W*.22, ry=H*.36;
+  if(from==='t'){ c.strokeStyle=col('--ember'); c.lineWidth=2.4; c.beginPath(); c.ellipse(cx,cy,rx,ry,0,0,Math.PI*2); c.stroke(); c.fillStyle=col('--ember'); c.font='12px IBM Plex Mono, monospace'; c.fillText('φ',cx-rx*.9,cy-ry*.95); }
+  const grid=(L,x0,y0,w,h)=>{ const cols=Math.max(1,Math.min(L.length,Math.floor(w/(r*2.6)))); const rows=Math.ceil(L.length/cols)||1; L.forEach((t,j)=>{ const ro=Math.floor(j/cols), co=j%cols; const x=x0+(co-(cols-1)/2)*r*2.6, y=y0+(ro-(rows-1)/2)*r*2.6; const on=pass(t);
+    badge(c,x,y,r); c.fillStyle=col('--'+t.c); c.globalAlpha=from==='t'?(on?1:.22):.22; c.fill(); c.globalAlpha=1;
+    c.fillStyle=on?'#fff':col('--muted'); c.font='600 '+Math.round(r*1.2)+'px Source Serif 4, serif'; c.textAlign='center'; c.textBaseline='middle'; c.fillText(t.id,x,y+1); c.textAlign='left'; c.textBaseline='alphabetic'; }); };
+  if(from==='t'){ grid(ins,cx,cy,rx*1.7,ry*1.7); grid(outs,W*.72,cy,W*.4,H*.8); } else grid(TOK,W/2,cy,W*.8,H*.8);
+  const eq=document.getElementById('eq1'), rf=document.getElementById('ref1');
+  if(from==='t'){ const m=ins.map(t=>t.id); tex(eq,`\\{x \\in t : ${TEXC[phi.value]}\\} = ${m.length?'\\{'+m.join(',\\,')+'\\}':'\\varnothing'}${m.length===TOK.length?'\\; = t':''}`,true); rf.style.display='none'; }
+  else { tex(eq,`\\{x : ${TEXC[phi.value]}\\}`,true); rf.style.display=''; rf.textContent='refused: no set to sift from. By the sift axiom there is {x ∈ u : φ(x)} for a set u you have; with no u there is no tool, and “the set of all x such that φ(x)” is the old unrestricted rule, which the outsider-set technique turns into ⊥.'; }
+}
+phi.onchange=draw1;
+document.querySelectorAll('[data-from]').forEach(b=>b.onclick=()=>{ from=b.dataset.from; document.querySelectorAll('[data-from]').forEach(x=>x.classList.toggle('on',x===b)); draw1(); });
+new ResizeObserver(draw1).observe(cv1);
+if(window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change',draw1);
+draw1();
+
+/* ---------- right: the empty set from any a ---------- */
+const AS=[['{cat}','\\{\\text{cat}\\}'],['{Ann, Ben, Cal}','\\{\\text{Ann},\\text{Ben},\\text{Cal}\\}'],['{red, blue}','\\{\\text{red},\\text{blue}\\}'],['{{cat}}','\\{\\{\\text{cat}\\}\\}'],['∅ itself','\\varnothing']];
+let ai=0; const ach=document.getElementById('ach');
+AS.forEach(([lab],i)=>{ const b=document.createElement('button'); b.textContent=lab; if(i===0) b.className='on'; b.onclick=()=>{ ai=i; [...ach.querySelectorAll('button')].forEach(x=>x.classList.toggle('on',x===b)); draw2(); }; ach.appendChild(b); });
+function draw2(){
+  const [lab,tx]=AS[ai]; const colm=document.getElementById('colm'); colm.innerHTML='';
+  const lines=[['u = '+lab,'any set',''],['e = {x ∈ u : x ≠ x}','the sift axiom',''],['let y be anything','',''],['assume y ∈ e','assumed','in'],['y ∈ u ∧ y ≠ y','﹀ the sift','in'],['y ≠ y','keep right','in'],['⊥','clash with y = y (the self-sameness axiom)','in bot'],['y ∉ e','refute','out'],['∀y y ∉ e','speak of everything','out']];
+  lines.forEach(([s,r,cls])=>{ const d=document.createElement('div'); d.className='ln '+cls; d.innerHTML='<span class="s"></span><span class="r"></span>'; d.children[0].textContent=s; d.children[1].textContent=r; colm.appendChild(d); });
+  tex(document.getElementById('eq2'),`\\begin{gathered}\\{x \\in ${tx} : x \\ne x\\} = \\varnothing\\\\ \\text{the one-empty-set technique: no members, so the empty set}\\end{gathered}`,true);
+}
+draw2();
+
+/* ---------- slides ---------- */
+const N='\\htmlClass{new}', K='\\htmlClass{keep}';
+const col2=(...rows)=>'\\begin{aligned}'+rows.map(([l,r])=>'&'+l+' &&\\text{'+r+'}').join('\\\\ ')+'\\end{aligned}';
+const T=s=>'\\text{'+s+'}';
+stepper('#sl6',[
+  {k:'ember',kl:'the fliers come to {owl}',t:R`\text{fliers} = \{x \in \{\text{cat},\text{dog},\text{owl}\} : x \text{ can fly}\} \overset{?}{=} \{\text{owl}\}`,n:`The class showed owl ∈ fliers, cat ∉ fliers, dog ∉ fliers. Two sets are the same when they have the same members: for any y, y is in one exactly when it is in the other. So take y, anything at all.`},
+  {k:'ember',kl:'the fliers come to {owl}',t:col2([R`\text{Take } y \text{, anything. Suppose } y \in \text{fliers.}`,'supposed, aiming at an if'],[R`\qquad \text{So } y \in \{\text{cat},\text{dog},\text{owl}\} \text{, and } y \text{ can fly.}`,'unpack the sift'],[R`\qquad \text{So } y \text{ is cat, or dog, or owl.}`,'keep the left part; unpack the listing']),n:`While we suppose it: the and gives both parts, and the listing gives an or, which asks for cases.`},
+  {k:'ember',kl:'the fliers come to {owl}',t:col2([R`\qquad \text{Case } y = \text{cat. Then the cat can fly.}`,'by cases; swap cat in for y'],[R`\qquad \text{That clashes with the given: } \bot.`,'clash'],[R`\qquad \text{So } ${N}{y = \text{owl}}.`,'everything permitted'],[R`\qquad \text{Case } y = \text{dog: the same.}`,''],[R`\qquad \text{Case } y = \text{owl: } y = \text{owl}.`,'in hand'],[R`\qquad \text{So in every case, } ${N}{y \in \{\text{owl}\}}.`,'by cases; pack the listing']),n:`The cat case: swap cat in for y in “y can fly”, clash with the given, and by everything permitted say what the case needed. That is the everyday use of the strange tech: closing a case that cannot happen.`},
+  {k:'ember',kl:'the fliers come to {owl}',t:col2([R`\text{If } y \in \text{fliers, then } y \in \{\text{owl}\}.`,'drop the supposition: an if'],[R`\text{If } y \in \{\text{owl}\} \text{, then } y \in \text{fliers.}`,'suppose y = owl; the class gave owl ∈ fliers; swap'],[R`\text{So } ${N}{\text{fliers} = \{\text{owl}\}}. \quad \blacksquare`,'join; pack; speak of everything; same members']),n:`The leftward if is short: y = owl, and the class showed owl ∈ fliers; swap. ∎ A sift, listed.`}
+],{title:'The slides · the fliers come to {owl} · ← → keys work'});
+stepper('#sl8',[
+  {k:'ember',kl:'the fliers of {cat, dog} come to ∅',t:R`g = \{x \in \{\text{cat},\text{dog}\} : x \text{ can fly}\} \overset{?}{=} \varnothing`,n:`The quickest route to “= ∅” is the one-empty-set technique: show g has no members. So: let y be anything, suppose y ∈ g, reach ⊥.`},
+  {k:'ember',kl:'the fliers of {cat, dog} come to ∅',t:col2([R`\qquad \text{Suppose } y \in g.`,'supposed'],[R`\qquad \text{So } y \text{ is cat or dog, and } y \text{ can fly.}`,'unpack the sift and the listing; keep both'],[R`\qquad \text{Case cat: the cat can fly. That clashes: } \bot.`,'by cases; swap; clash with the given'],[R`\qquad \text{Case dog: the same.}`,''],[R`\qquad \text{So in every case, } ${N}{\bot}.`,'by cases']),n:`Each option swaps into “y can fly” and clashes with what was given about cats and dogs. ⊥ in every case, so ⊥ stands.`},
+  {k:'ember',kl:'the fliers of {cat, dog} come to ∅',t:col2([R`\text{So } y \notin g.`,'drop the supposition: refuted'],[R`y \text{ was anything, so nothing is in } g.`,'speak of everything'],[R`\text{So } ${N}{g = \varnothing}. \quad \blacksquare`,'the one-empty-set technique, with the empty-set technique for ∅']),n:`∎ Sifting never adds: no flier was there to keep. The sift-is-part technique says it in general; this is it on a case.`}
+],{title:'The slides · the fliers of {cat, dog} come to ∅ · ← → keys work'});
+stepper('#sl11',[
+  {k:'ember',kl:'the empty set is unique',t:col2([R`\text{Nothing is in } e \text{, and nothing is in } e'.`,'given: both have no members'],[R`\text{Take } x \text{, anything. Suppose } x \in e.`,'supposed, aiming at an if'],[R`\qquad \text{But nothing is in } e \text{, so } x \notin e \text{. Clash: } \bot.`,'use the every; clash']),n:`The one-empty-set technique. The if from e to e′: suppose x ∈ e. But nothing is in e, so ⊥ at once.`},
+  {k:'ember',kl:'the empty set is unique',t:col2([R`\qquad \text{So } ${N}{x \in e'}.`,'everything permitted'],[R`\text{If } x \in e \text{, then } x \in e'.`,'drop the supposition: an if'],[R`\text{If } x \in e' \text{, then } x \in e.`,'the same, with the names exchanged']),n:`From ⊥, what the if needed. This is the standard use of everything permitted on sets: a promise about the members of a set with no members is kept vacuously (1h's word).`},
+  {k:'ember',kl:'the empty set is unique',t:col2([R`x \in e \text{ exactly when } x \in e' \text{, for every } x.`,'join; pack; speak of everything'],[R`\text{So } ${N}{e = e'}. \quad \blacksquare`,'the same-members axiom']),n:`∎ No other set has no members, which is why it may be called the empty set and given the mark ∅.`}
+],{title:'The slides · the empty set is unique · ← → keys work'});
+stepper('#sl15',[
+  {k:'ember',kl:'the outsider set, inside a set',t:R`r_u = \{x \in u : x \notin x\}`,n:`Now the outsider sift run legally, inside a set u you have. Watch the same steps turn from ⊥ into a technique.`},
+  {k:'ember',kl:'the outsider set, inside a set',t:col2([R`r_u \in r_u \text{ exactly when } r_u \in u \text{ and } r_u \notin r_u.`,'unpack the sift, with r-sub-u in the gap'],[R`\qquad \text{Suppose } r_u \in r_u.`,'supposed, aiming to refute'],[R`\qquad \text{Then } r_u \notin r_u \text{. Clash: } \bot.`,'carry the if through; keep right; clash'],[R`\text{So } ${N}{r_u \notin r_u}.`,'drop the supposition: refuted']),n:`Just as before: supposing r_u ∈ r_u gives r_u ∉ r_u, and they clash. So r_u is not a member of itself. No case split; the denial is proved.`},
+  {k:'ember',kl:'the outsider set, inside a set',t:col2([R`\qquad \text{Suppose } r_u \in u.`,'supposed, aiming to refute'],[R`\qquad \text{Then } r_u \in u \text{ and } r_u \notin r_u.`,'join, with what we just proved'],[R`\qquad \text{So } r_u \in r_u.`,'carry the leftward if through'],[R`\qquad \text{That clashes with } r_u \notin r_u \text{: } \bot.`,'clash'],[R`\text{So } ${N}{r_u \notin u}. \quad \blacksquare`,'drop the supposition: refuted']),n:`Here is the step that differs. Before, with no set to sift from, the leftward direction needed only r ∉ r and gave ⊥ outright. Now it needs r_u ∈ u as well, and supposing that is what leads to ⊥. ∎ So: whatever set you sift the outsider condition from, the result is not in that set. 2f draws the moral.`}
+],{title:'The slides · the outsider set, inside a set · ← → keys work'});
+stepper('#sl17',[
+  {k:'ember',kl:'backwards',t:R`\text{?}\qquad\qquad ${K}{\{x \in u : x \in v\} \subseteq v}\;\;\text{wanted}`,n:`Work back from the claim. ⊆ is an every around an if: “take y, anything; suppose y ∈ {x ∈ u : x ∈ v}; … so y ∈ v”. While we suppose it, the sift unpacks to y ∈ u and y ∈ v, and keeping the right part gives the conclusion.`},
+  {k:'ember',kl:'backwards',t:col2([R`\text{Take } y \text{, anything. Suppose } y \in \{x \in u : x \in v\}.`,'the plan'],[R`\qquad \text{So } y \in u \text{ and } y \in v.`,'unpack the sift'],[R`\qquad \text{So } ${N}{y \in v}.`,'keep the right part'],[R`\text{So } ${N}{\{x \in u : x \in v\} \subseteq v}. \quad \blacksquare`,'drop the supposition: an if; speak of everything; pack ⊆']),n:`Now in order, from the start. ∎ Compare the sift-is-part technique, which kept left: a sift is part of the set sifted, and when the condition is membership in v, part of v as well. 2c names this set.`}
+],{title:'The slides · backwards · ← → keys work'});
+
+/* long worked lines: stack the note under the line instead of scrolling */
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

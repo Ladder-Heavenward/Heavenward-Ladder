@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="ladder-cert" content="rung"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>12e · Bisection by hand</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:3fr 2fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.9rem;white-space:normal}
+@media (max-width:520px){.pic .eqbox{font-size:.78rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4em;text-align:right}
+table.tt td.num{font-family:var(--mono);text-align:right;white-space:nowrap}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+#bars{max-height:180px;overflow:auto;font-family:var(--mono);font-size:.78rem}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r12concl.html">← 12·∎ conclusion</a><a href="r12phys.html">next: 12·phys how does a small push lift a heavy weight? →</a></p>
+  <div class="tags"><span class="tag tech">12e · technique</span></div>
+  <h1>Bisection by hand</h1>
+  <p>12a proved that a continuous function that changes sign on a closed interval has a zero there. It did not say where. Bisection finds out. Keep the zero trapped between two inputs whose values have opposite signs. Test the middle, throw away the half that cannot be relied on, and repeat. It is slow, it never fails on a trap, and on a polynomial with whole-number coefficients it needs nothing but whole-number multiplication. By the end of this step you will have the square root and the cube root of 2 to three decimal places, by hand. You will have a way to say in advance how many tests any accuracy costs. And you will have two proofs: that a polynomial of odd degree always has a zero, and that a continuous function takes intervals to intervals.</p>
+  <p class="gesture">Keep a closed interval whose ends have values of opposite sign; test the middle; keep the half whose ends still disagree. Each test halves the trap, so ten tests shrink it about a thousand times.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r12a.html">12a</a> (in-between-value, in-between-value, general form, sign-kept-near-an-input, closed interval, zero), <a href="r12c.html">12c</a> (highest-and-lowest), <a href="r08c.html">8c</a> (no-holes, greatest-lower-bound), <a href="r08h.html">8h</a> (middle, unpack-the-bars), <a href="r08f.html">8f</a> (√, ³√, roots-of-every-order), <a href="r05g.html">5g</a> (rounding, ≈, the decimal point), <a href="r08e.html">8e</a> (counting-passes-any-real), <a href="r07cb4.html">7·cb4</a> (least-member-for-any-set), <a href="r04f.html">4f</a> (powers), <a href="r04h.html">4h</a> (the reading rule in twos), <a href="r09g.html">9g</a> (leading-term, polynomials), <a href="r09e.html">9e</a> (even-or-odd-powers, xⁿ ≥ x past 1), <a href="r10f.html">10f</a> (passes every bound, sequence limits, one-over-n), <a href="r10d.html">10d</a> (the squeeze), <a href="r11d.html">11d</a> (polynomials-are-continuous), <a href="r11f.html">11f</a> (discontinuities). <a href="r12phys.html">12·phys</a> finds a balance point by halving.</p></div>
+</header>
+
+<section class="class step" data-step="12e1">
+  <h2 class="sthead"><span class="stno">12e1</span>The trap</h2>
+  <p class="stands">Stands on 12a (in-between-value) and 8h (the middle of a stretch).</p>
+  <p class="eqline" data-pid="b87c13">From here on, a trap for f is a closed interval [c, d] on which f is continuous, with f(c) and f(d) of opposite signs: one negative and the other positive. By 12a's in-between-value a trap holds a zero of f strictly inside it. To bisect a trap is to test its middle m = (c + d)/2. Then keep [c, m] or [m, d], whichever is still a trap. The method is called bisection. Bisection is from the Latin bi-, “two”, and secare, “to cut”.</p>
+  <p data-pid="2790f7">The middle is strictly inside: c &lt; (c + d)/2 &lt; d, by 5e's another-between read in ℝ. It is 8h's middle of the stretch from c to d. And f is continuous on each half. Every input of a half is an input of [c, d]. At the cut m, f is continuous (m is inside [c, d]), so from each side.</p>
+  <p data-pid="718d51">Middle-of-a-trap technique: <b>for a trap [c, d] with middle m, exactly one is true: f(m) = 0; or [c, m] is a trap; or [m, d] is a trap.</b> Three-way-order on ℝ splits f(m) three ways. If f(m) has the sign of f(d), then f(c) and f(m) disagree and [c, m] is a trap. If it has the sign of f(c), then [m, d] is. ∎ So only the sign of f(m) matters, never its size. The tempting illegal move is to keep the half whose middle value is nearer 0. Nearness of a value to 0 says nothing about where the zero is, and the sign says everything.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the trap · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · left: run the trap yourself · right: where an interval goes</div>
+    <div class="panel">
+      <div class="chips" id="fch"></div>
+      <canvas id="cvT"></canvas>
+      <div class="chips"><button id="bl">keep the left half</button><button id="brt">keep the right half</button><button id="bp">let the step choose</button><button id="bu">undo</button><button id="b0">start again</button><button id="bz">zoom to the trap</button></div>
+      <div class="kn"><span class="m">tolerance t</span><input type="range" id="kt" min="1" max="6" step="1" value="3"><output id="ot"></output></div>
+      <div id="bars"></div>
+    </div>
+    <div class="panel">
+      <div class="cap">Ink: f. Shaded: the current trap. Dots at the trap's ends and its middle: ember where f is negative, teal where positive, gold at a zero. You choose a half; the step checks whether it is still a trap. The list below the picture is every trap so far, with your bits. The tolerance knob says how many halvings the trap needs, by doubling.</div>
+      <div class="verdict" id="vdT"></div>
+      <div class="eqbox" id="eqT"></div>
+      <div class="lbl">where an interval goes</div>
+      <div class="chips" id="gch"></div>
+      <canvas id="cvV"></canvas>
+      <div class="kn">
+        <span class="m">c</span><input type="range" id="kc" min="-2" max="2" step="0.05" value="-1"><output id="oc"></output>
+        <span class="m">d</span><input type="range" id="kd" min="-2" max="2" step="0.05" value="2"><output id="od"></output>
+      </div>
+      <div class="chips" id="ech"><button class="on" data-e="closed">[c, d]</button><button data-e="open">(c, d)</button></div>
+      <div class="cap">The grey stretch is the interval from c to d (ends kept, or left out: hollow ends). The teal bar at the left edge is the set of values on it: a filled end is reached, a hollow end is not. For ⌊x⌋ the values are separate dots.</div>
+      <div class="eqbox" id="eqV"></div>
+    </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">12e1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = x² − 5 on [2, 3]</span></span>Check that [2, 3] is a trap. <br>Find the middle, and say which case of middle-of-a-trap holds.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="12e2">
+  <h2 class="sthead"><span class="stno">12e2</span>√2 with whole numbers</h2>
+  <p class="stands">Stands on 12e1 and 8f (squares keep order).</p>
+  <p data-pid="b9c503">Take f(x) = x² − 2 on [1, 2]: f(1) = −1, f(2) = 2, a trap. Every middle is a fraction whose bottom is a power of 2: 3/2, then 5/4 or 7/4, then eighths, and so on. To find the sign of (p/q)² − 2, multiply through by the positive q² (keep-order for times on ℚ read in ℝ keeps the order): compare p² with 2q². <b>No decimals, no roots, just whole-number squares.</b></p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: √2 by halving">
+[1, 2]:\ m = \tfrac32,\ \ 3^2 = 9 \text{ against } 2 \cdot 2^2 = 8 @@ 9 &gt; 8: m² &gt; 2, the middle is past the zero. Keep the left half
+[1, \tfrac32]:\ m = \tfrac54,\ \ 25 \text{ against } 2 \cdot 16 = 32 @@ 25 &lt; 32: short of the zero. Keep the right half
+[\tfrac54, \tfrac32]:\ m = \tfrac{11}{8},\ \ 121 \text{ against } 128 @@ short: keep the right half
+[\tfrac{11}{8}, \tfrac32]:\ m = \tfrac{23}{16},\ \ 529 \text{ against } 512 @@ past: keep the left half
+[\tfrac{11}{8}, \tfrac{23}{16}]:\ m = \tfrac{45}{32},\ \ 2025 \text{ against } 2048 @@ short: keep the right half
+\htmlClass{new}{[\tfrac{45}{32}, \tfrac{23}{16}] = [1.40625,\ 1.4375]} @@ five halvings: width 1/32
+  </pre>
+  <p data-pid="0a85b3">Carry on the same way. Write both ends over one bottom and the middle's top is the sum of the two tops, over twice the bottom: 45/32 and 23/16 = 46/32 have middle 91/64. No division is ever needed.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>test</th><th>middle</th><th>p² against 2q²</th><th>keep</th><th>trap after (decimals)</th></tr>
+    <tr><td>6</td><td>91/64</td><td class="num">8281 &gt; 8192</td><td>left</td><td class="num">1.40625 to 1.421875</td></tr>
+    <tr><td>7</td><td>181/128</td><td class="num">32761 &lt; 32768</td><td>right</td><td class="num">1.4140625 to 1.421875</td></tr>
+    <tr><td>8</td><td>363/256</td><td class="num">131769 &gt; 131072</td><td>left</td><td class="num">1.4140625 to 1.41796875</td></tr>
+    <tr><td>9</td><td>725/512</td><td class="num">525625 &gt; 524288</td><td>left</td><td class="num">1.4140625 to 1.416015625</td></tr>
+    <tr><td>10</td><td>1449/1024</td><td class="num">2099601 &gt; 2097152</td><td>left</td><td class="num">1.4140625 to 1.4150390625</td></tr>
+  </table></div>
+  <p data-pid="1f8161">Test 7 is worth a look: 32761 against 32768, short by 7 in thirty-two thousand. 181/128 is a very good fraction for √2, just below it.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · √2 · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">12e2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">x² − 2,  trap [11/8, 3/2]</span></span>Find the middle by adding tops over twice the bottom. <br>Test it by comparing p² with 2q², and say which half to keep.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="12e3">
+  <h2 class="sthead"><span class="stno">12e3</span>To three decimal places</h2>
+  <p class="stands">Stands on 12e2 and 5g (rounding).</p>
+  <p class="eqline" data-pid="fd3ad9">From here on, 5g's rounding and its mark ≈ apply to any positive real x, not only to rationals. To round to m places, take the number k with k/10^m ≤ x &lt; (k + 1)/10^m. It exists. Some number passes 10^m · x (counting-passes-any-real, 8e), and the least number that passes it is k + 1 (least-member-for-any-set, 7·cb4). The rest of 5g's line is unchanged, and x ≈ b is still a statement, as on 5g: it says that b is x rounded to as many places as b shows.</p>
+  <p data-pid="6e7032">After ten halvings the trap is 1/1024 wide, less than 0.001. Is that √2 to three places, in 5g's sense of rounding? Not yet. The trap runs from 1.4140625 to 1.4150390625, and it holds 1.4145, the boundary between rounding down to 1.414 and up to 1.415. <b>Width alone does not settle a rounding: the trap must also be clear of the boundary.</b> Two more halvings would do it (the trap becomes 1.4140625 to 1.414306640625). Or test the boundary itself.</p>
+  <pre class="lines" data-k="ember" data-label="this step: settle the rounding at its boundary">
+1.414^2 = 1.999396 \lt 2 @@ so √2 &gt; 1.414 (powers-keep-order, 8f)
+1.4145^2 = 2.00081025 \gt 2 @@ so √2 &lt; 1.4145
+\htmlClass{new}{1.414 \lt \sqrt2 \lt 1.4145} @@ every real here rounds to 1.414: √2 ≈ 1.414 (5g's rounding, for reals)
+  </pre>
+  <p data-pid="af66ef">That last move is licensed because a split point need not be the middle. Any input strictly inside a trap splits it into two closed intervals, and by three-way-order on ℝ one of them is a trap or the split point is a zero. The middle is merely the choice that guarantees the trap halves.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · the rounding · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">12e3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">√3,  trap [1.732, 1.7325]</span></span>Decide by squaring whether √3 lies in the trap. <br>Say what √3 rounds to, to three places.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="12e4">
+  <h2 class="sthead"><span class="stno">12e4</span>Cube roots: split where the arithmetic is short</h2>
+  <p class="stands">Stands on 12e3.</p>
+  <p data-pid="ff8123">For ³√2, use x³ − 2 on [1, 2]. Exact middles mean cubing fractions like 161/128: honest work, and tedious. The invented move: <b>split at a short decimal near the middle instead.</b> You give up exact halving and gain arithmetic you can do on the back of an envelope.</p>
+  <pre class="lines" data-k="ember" data-label="this step: ³√2 by short decimals">
+1.5^3 = 3.375 \gt 2 @@ keep [1, 1.5]
+1.25^3 = 1.953125 \lt 2 @@ keep [1.25, 1.5]
+1.3^3 = 2.197 \gt 2 @@ keep [1.25, 1.3]
+1.27^3 = 2.048383 \gt 2 @@ keep [1.25, 1.27]
+1.26^3 = 2.000376 \gt 2 @@ only just: keep [1.25, 1.26]
+1.259^3 = 1.995616979 \lt 2 @@ keep [1.259, 1.26]
+1.2595^3 = 1.997995544875 \lt 2 @@ the rounding boundary: the zero is above it
+\htmlClass{new}{1.2595 \lt \sqrt[3]{2} \lt 1.26} @@ so ³√2 ≈ 1.260 to three places; cut off after three places, 1.259
+  </pre>
+  <p data-pid="4acc7d">The last line has a warning in it. “To three places” can mean rounded, 1.260, or cut off, 1.259, and the two differ here because ³√2 sits just below 1.26. Say which you mean. And the zero bisection traps is 8f's ³√2: x³ − 2 has exactly one zero on the line that is not negative (roots-of-every-order).</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · ³√2 · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">12e4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">x³ − 3 on [1, 2]</span></span>Trap the zero between two decimals of one place, splitting at short decimals. <br>Say what ³√3 is cut off to, to one place.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="12e5">
+  <h2 class="sthead"><span class="stno">12e5</span>How fast the trap closes</h2>
+  <p class="stands">Stands on 12e4 and 4b (induction).</p>
+  <p data-pid="c2870c">Halvings-width technique: <b>starting from a trap [u, v], if no tested middle is a zero, the trap after n halvings has width (v − u)/2ⁿ.</b> By induction on n. At the start the width is v − u = (v − u)/2⁰ (power-zero). Each halving takes a width w to w/2, which is (v − u)/2^{S(n)} by power-of-a-next and 5g's fractions-of-rationals. ∎</p>
+  <p data-pid="2e63ca">So to get the width below a tolerance t you need 2ⁿ &gt; (v − u)/t. No new function is needed to find n: double until you pass.</p>
+  <pre class="lines" data-k="ember" data-label="this step: counting halvings with powers of 2">
+[1, 2],\ t = 0.001:\ \ 2^n \gt \tfrac{1}{0.001} = 1000 @@ what to pass
+2^9 = 512,\ \ \htmlClass{new}{2^{10} = 1024} @@ double until you pass 1000: n = 10
+t = 0.000001:\ \ 2^n \gt 10^6 @@ six places
+2^{20} = (2^{10})^2 = 1\,048\,576 \gt 10^6 @@ power-of-a-power (4f); n = 20, since 2¹⁹ = 524 288 falls short
+\text{width } 3,\ t = 0.01:\ \ 2^n \gt 300 @@ 2⁸ = 256 falls short, 2⁹ = 512 passes: n = 9
+  </pre>
+  <p data-pid="c46cd8">Because 2¹⁰ = 1024 is just over a thousand, ten halvings buy about three decimal places, every time. If you report the middle of the final trap, the zero is within half the width of it, so one halving fewer puts the middle within t. Run it backwards and the same line tells you where you started: if twelve halvings left a trap 0.0025 wide, it began 0.0025 · 4096 = 10.24 wide.</p>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · the cloud, trapped</div>
+    <p data-pid="d5f65a">8·cb5 gave √2's decimals a width, 8·phys gave a measurement one, 8·eng added widths on purpose, and 9·stat watched a histogram's bins change the shape it showed. That is a principle of the second kind of care: when a thing can't be pinned to a dot, give the stretch it stays inside and say how wide. The trap is that stretch, built on purpose. After ten halvings the zero of x² − 2 is somewhere in a stretch 1/1024 wide, and nowhere else.</p>
+    <p data-pid="aaeb60"><b>Be rigorous about the trap, not the dot.</b></p>
+    <p data-pid="bbbd71">The width is yours to choose. Ten halvings buy three places and twenty buy six. What you cannot choose is width 0: no number of halvings reports √2 as a dot. 12a promised the middle is there. The trap says where, to the width you paid for. Written 8·eng's way, the answer is the middle of the trap, ± half its width.</p>
+    <p class="bait" data-pid="bc59db">A calculator shows √2 as 1.414213562. How wide is the trap it is reporting, and how would you check that √2 is really inside it?</p>
+  </aside>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · halvings · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">12e5.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = x^2 - 3,"></span> <span data-tex-inline="\text{first trap } [1, 2]"></span></span>Using bisection, trap the zero of f by five halvings by hand, testing each middle by comparing squares.</li><li><span class="givens"><span data-tex-inline="\text{first trap } [0, 1],"></span> <span data-tex-inline="\text{choices } 1, 0, 1, 1"></span></span>Find the final trap as fractions, and check it with trap-from-its-bits.</li><li><span class="givens"><span data-tex-inline="\text{first trap } [0, 1],"></span> <span data-tex-inline="w_1 = 0.01,"></span> <span data-tex-inline="w_2 = 0.0001"></span></span>Find how many halvings make the trap narrower than each width.</li><li><span class="givens"><span data-tex-inline="f(x) = x^5 - 4x^2 + 1"></span></span>Show that f has a zero, by a trap with whole-number ends. <br>Show that f has at least three zeros.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="12e6">
+  <h2 class="sthead"><span class="stno">12e6</span>The choices are bits</h2>
+  <p class="stands">Stands on 12e5 and 4h (numerals in twos).</p>
+  <p data-pid="699953">Write 0 for “keep the left half” and 1 for “keep the right half”. Then the choices are 4h's bits, and the trap can be read off them.</p>
+  <p data-pid="4af93b">Trap-from-its-bits technique: <b>the choices, read as a numeral in twos, say exactly where the trap is.</b> Precisely: start from [u, v], and make choices e₁, e₂, ⋯, e_n. Let k be the value of the bits e₁e₂⋯e_n read in twos by 4h's reading rule. (0s in front are allowed, as 5g allowed them for decimal places.) Then the trap is [u + k(v − u)/2ⁿ, u + (k + 1)(v − u)/2ⁿ]. By induction: the reading rule's step takes k to 2k + e_{S(n)}. Choosing left keeps [u + 2k(v − u)/2^{S(n)}, u + (2k + 1)(v − u)/2^{S(n)}], which is the left half. Choosing right adds 1. ∎</p>
+  <pre class="lines" data-k="teal" data-label="from 4h: numerals in twos">
+\text{√2's choices: } 0, 1, 1, 0, 1 @@ left, right, right, left, right
+01101_2 = 13 @@ 4h's reading rule in twos: 8 + 4 + 1
+[1 + \tfrac{13}{32},\ 1 + \tfrac{14}{32}] = [\tfrac{45}{32}, \tfrac{46}{32}] @@ trap-from-its-bits with a = 1, b − a = 1: the trap after five tests
+\text{ten choices } 0110101000:\ \ k = 424 @@ [1 + 424/1024, 1 + 425/1024] = [181/128, 1449/1024]: the table's last trap
+  </pre>
+  <p data-pid="7e73eb">So bisection on [1, 2] spells √2 out one bit per test. After n tests, √2 − 1 lies between k/2ⁿ and (k + 1)/2ⁿ, with k the first n bits read in twos. That is much as 5g's division place by place spelled a fraction out in tens. The bits are a list, read by 4h's rule; no new mark is needed.</p>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · trap-from-its-bits · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">12e6.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">first trap [0, 1],  choices 0, 1, 1</span></span>Read the choices as a numeral in twos. <br>Write the final trap.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="12e7">
+  <h2 class="sthead"><span class="stno">12e7</span>Why the trap always holds a zero</h2>
+  <p class="stands">Stands on 12e6, 8c (the no-holes technique) and 12a4 (sign-kept-near-an-input).</p>
+  <p data-pid="e2f077">12a proved a trap holds a zero by a least upper bound. Bisection gives a second proof: the traps close on a single real, and it is a zero. It is the proof put in a note to a course of lectures of 1821, and the idea behind the 1817 paper's own.</p>
+  <p data-pid="98fd29">Halving-traps technique: <b>let [u, v] be a trap with f(u) &lt; 0 &lt; f(v), and bisect it again and again. Either some middle is a zero, or the left ends c_n and right ends d_n close on a real z with f(z) = 0.</b> (Here c_n and d_n are terms of sequences, 9·cb4's low marks, and z is a letter naming a real.)</p>
+  <pre class="lines" data-k="ember" data-label="this step: the halving-traps technique">
+f(c_n) \lt 0 \lt f(d_n),\ \ c_n \le c_{S(n)} \lt d_{S(n)} \le d_n @@ by induction with middle-of-a-trap: keep the half whose left end is negative
+z = \htmlClass{new}{\sup\{c_n : n \in \mathbb N\}} @@ no-holes (8c): every c_n is below d₀ = b
+c_n \le z \le d_n \text{ for every } n @@ z an upper bound; each d_n is an upper bound (c_k ≤ d_k ≤ d_n or c_k ≤ c_n &lt; d_n), and z is least
+|c_n - z|,\ |d_n - z| \le d_n - c_n = \tfrac{b - a}{2^n} \le \tfrac{b - a}{S(n)} @@ halvings-width; 2ⁿ ≥ S(n) by induction
+c_n \to z,\ \ d_n \to z @@ <span class="hl-new">the squeeze (10d), in 10f's form for sequences</span>, with (b − a)/S(n) → 0 by one-over-n and constant-factor
+f(z) \gt 0 \Rightarrow \text{a window of } z \text{ where } f \gt 0 \text{ holds some } c_n:\ \bot @@ sign-kept-near-an-input; the window's reach as a gap for c_n → z
+f(z) \lt 0 \Rightarrow \text{a window where } f \lt 0 \text{ holds some } d_n:\ \bot @@ sign-kept-near-an-input's negative form
+f(z) = 0 \quad \blacksquare @@ three-way-order on ℝ; the remaining-option technique twice
+  </pre>
+  <p data-pid="2a610a">Notice the one line that needs rung 8 again: z = sup of the left ends. Run it over the fractions, on x² − 2. The left ends climb 1, 5/4, 11/8, 45/32, 181/128, ⋯ and the right ends fall, and they close on the hole of 12d. There is no fraction for them to close on. <b>Bisection, like the sup argument, needs a line with no holes.</b></p>
+  <section class="slides" id="sl7"><div class="eyebrow">The slides · halving-traps · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">12e7.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">x² − 2 over the fractions: left ends 1, 5/4, 11/8, 45/32, …</span></span>Say which line of halving-traps’ column needs rung 8. <br>Say what goes wrong at that line over the fractions.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="12e8">
+  <h2 class="sthead"><span class="stno">12e8</span>A polynomial of odd degree has a zero</h2>
+  <p class="stands">Stands on 12e7, 9g (leading-term) and 10f (passing every bound).</p>
+  <p data-pid="f2ebc4">9g's leading-term said the leading term decides the large inputs, and said that rung 12 would show an odd-degree polynomial must have a zero. Here it is, with 10f's words.</p>
+  <p data-pid="97e5c7">Odd-degree-passes-bounds technique: <b>if p has odd degree n and leading coefficient a_n &gt; 0, then p(x) passes every bound as x → ∞ and passes below every bound as x → −∞.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the odd-degree-passes-bounds technique">
+|x| \ge M_0 \Rightarrow |p(x) - a_n x^n| \le \tfrac12 |a_n x^n| @@ leading-term (9g), its M written M₀ here because M names a greatest value in this step: M₀ = max(1, 2C/|a_n|)
+x \ge M_0:\ \ p(x) \ge \tfrac12 a_n x^n \ge \tfrac12 a_n x @@ unpack-the-bars; xⁿ ≥ x past 1 (9e)
+\text{given } K:\ N = \max(M_0, \tfrac{2|K|}{a_n}),\ \ x \gt N \Rightarrow p(x) \gt |K| \ge K @@ 10f's line “passes every bound as x → ∞”, with threshold N
+x \le -M_0:\ \ x^n = -|x|^n,\ \ p(x) \le \tfrac12 a_n x^n \le -\tfrac12 a_n |x| @@ n odd: even-or-odd-powers (9e); unpack-the-bars the other way
+\text{given } K:\ x \lt -N \Rightarrow p(x) \lt -|K| \le K \quad \blacksquare @@ passes below every bound as x → −∞
+  </pre>
+  <p data-pid="01401b">Odd-degree-zero technique: <b>every polynomial of odd degree has a zero.</b> If its leading coefficient is negative, take −p, which has the same zeros. By odd-degree-passes-bounds with the bound 0, some N₁ has p(x) &gt; 0 for every x &gt; N₁, and some N₂ has p(x) &lt; 0 for every x &lt; N₂. Let c = min(N₁, N₂) − 1 and d = max(N₁, N₂) + 1. Then c &lt; d, p(c) &lt; 0 &lt; p(d), p is continuous on [c, d] (polynomials-are-continuous), and in-between-value gives a zero. ∎ 9g's promise is kept.</p>
+  <pre class="lines" data-k="ember" data-label="this step: a cubic, trapped and halved">
+p(x) = x^3 - x - 1:\ \ p(1) = -1,\ \ p(2) = 5 @@ a trap, found by trying whole numbers, with no need for N
+\tfrac32:\ 0.875 \gt 0;\ \ \tfrac54:\ -0.296875 \lt 0;\ \ \tfrac{11}{8}:\ 0.2246\cdots \gt 0 @@ left, right, left
+\tfrac{21}{16} \lt 0;\ \ \tfrac{43}{32} \gt 0;\ \ \tfrac{85}{64} \gt 0;\ \ \tfrac{169}{128} \lt 0 @@ right, left, left, right
+[\tfrac{169}{128}, \tfrac{85}{64}] = [1.3203125,\ 1.328125] @@ the zero is 1.3247⋯; ten tests give [1.32421875, 1.3251953125]
+  </pre>
+  <p data-pid="1db915">Even degree promises nothing. x² + 1 is at least 1 everywhere (square-never-negative), with no zero. x⁴ − 5x² + 4 has four, at −2, −1, 1 and 2. The step of odd-degree-zero that needs “odd” is the sign of xⁿ for negative x.</p>
+  <section class="slides" id="sl8"><div class="eyebrow">The slides · odd degree · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">12e8.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">p(x) = x³ − 4x + 1</span></span>Find a trap with whole-number ends. <br>Say why odd degree guarantees one, and even degree does not.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="12e9">
+  <h2 class="sthead"><span class="stno">12e9</span>Intervals to intervals</h2>
+  <p class="stands">Stands on 12e8 and 12c (highest-and-lowest).</p>
+  <p data-pid="6f58e8">Closed-to-closed technique: <b>a continuous function takes a closed interval to a closed interval, or to a single real.</b> Precisely: let f be continuous on [u, v], with least value m and greatest value M (12c's highest-and-lowest). Then the set of its values {f(x) : x ∈ [u, v]} is [m, M] when m &lt; M, and {m} when m = M.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the closed-to-closed technique">
+\text{call } c, d \in [a, b]:\ f(c) = M,\ f(d) = m @@ highest-and-lowest (12c)
+x \in [a, b] \Rightarrow m \le f(x) \le M @@ the values lie in [m, M]
+\begin{aligned}&m \lt y \lt M \Rightarrow \text{some } x \text{ strictly}\\ &\quad\text{between } c \text{ and } d \text{ has } f(x) = y\end{aligned} @@ c ≠ d since m &lt; M; three-way-order on ℝ orders them; in-between-value, general form (12a) on the closed interval between them
+y = m \text{ at } d,\ \ y = M \text{ at } c @@ the ends are reached
+\{f(x) : x \in [a, b]\} = [m, M] \quad \blacksquare @@ chase a member both ways; same-members
+  </pre>
+  <p data-pid="e79238">On any interval I, closed or not, the same in-between-value, general form gives the property that matters. If y₁ and y₂ are values of a function continuous on I, every real between them is a value too, because the closed interval between the two inputs lies inside I. No-gaps technique: <b>for f continuous on an interval I, if f(x₁) &lt; y &lt; f(x₂) with x₁, x₂ ∈ I, then y is a value of f on I.</b> ∎ And a set of reals with no gaps is an interval. The gap-free-sets technique: <b>a set S of reals with two members, such that every real between two members is a member, is one of 8g's intervals.</b> Suppose S is bounded below and above, and let α = inf S and β = sup S (greatest-lower-bound, no-holes). Every y with α &lt; y &lt; β has a member below it (y is not a lower bound) and a member above it (not an upper bound), so y ∈ S. Hence (α, β) ⊆ S ⊆ [α, β]. The either-way principle's four cases on α ∈ S and β ∈ S give (α, β), [α, β), (α, β] or [α, β]. A side with no bound gives ∞ on that side the same way. ∎ So a continuous function takes an interval to an interval, or to a single real.</p>
+  <pre class="lines" data-k="ember" data-label="this step: where intervals go">
+x^2 \text{ on } [-1, 2] \;\to\; [0, 4] @@ least 0 at 0, greatest 4 at 2 (closed-to-closed)
+x^2 \text{ on } (-1, 2) \;\to\; [0, 4) @@ an open interval to one that is neither: 0 reached, 4 not (no-gaps, gap-free-sets)
+\tfrac1x \text{ on } (0, 1] \;\to\; [1, \infty) @@ passes every bound as x → 0⁺: an interval with no right end
+\lfloor x \rfloor \text{ on } [0, 2] \;\to\; \{0, 1, 2\} @@ not an interval: jumps leave gaps. Continuity is needed
+  </pre>
+  <section class="slides" id="sl9"><div class="eyebrow">The slides · closed-to-closed · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">12e9.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = x² − 2x on [0, 3]</span></span>Find the closed interval f takes [0, 3] to. <br>Name the inputs that reach its ends.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="12e10">
+  <h2 class="sthead"><span class="stno">12e10</span>When the trap fails</h2>
+  <p class="stands">Stands on 12e1 to 12e9.</p>
+  <p data-pid="92d123">No sign change to start: x² − ¼ on [−1, 1] is positive at both ends and has two zeros, ±½. Equal signs at the ends tell you nothing; split first until the signs disagree. A zero that touches without crossing: (x − 1)² is 0 at 1 and positive elsewhere, so no trap ever holds it. A discontinuity inside: 1/x on [−1, 2] has values −1 and ½ at the ends. Bisection will close happily on 0, where there is an infinite discontinuity (11f) and no zero. The hypothesis “continuous on [c, d]” was false. 11f's hunt for discontinuities comes before any bisection.</p>
+  <p data-pid="9fac39">The oldest geometry book that has come down whole proves a fact behind every halving. From the greater of two unequal sizes, take away more than its half; from the remainder, more than its half; and so on. Some remainder will be less than the lesser size. Halving again and again gets below any size you name.</p>
+  <section class="slides" id="sl10"><div class="eyebrow">The slides · when it fails · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">12e10.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{Rule: keep the half}"></span> <span data-tex-inline="\text{whose middle value}"></span> <span data-tex-inline="\text{is nearer } 0,"></span> <span data-tex-inline="\text{on } [0, 4]"></span></span>Make a continuous function and a first trap where this rule throws the zero away.</li><li><span class="givens"><span data-tex-inline="f(x) = x^2 - \tfrac14 \text{ on } [-1, 1]"></span></span>Find the demand of a trap that this interval fails, and choose a first split that produces a trap for one of f's zeros.</li><li><span class="givens"><span data-tex-inline="f(x) = (x - 1)^2"></span></span>Decide whether any trap can hold f's zero at 1, and show it is a zero another way.</li><li><span class="givens"><span data-tex-inline="f(x) = 1/x \text{ on } [-1, 2]"></span></span>Run six halvings on f, and find where the trap closes, whether there is a zero there, and which hypothesis of a trap was false.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="12e11">
+  <h2 class="sthead"><span class="stno">12e11</span>Illegal moves</h2>
+  <p class="stands">Stands on 12e1 to 12e10.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\begin{aligned}&\text{keep the half whose}\\ &\quad\text{middle value is nearer } 0\,?\end{aligned} @@ size is not sign: only the sign of f(m) decides (middle-of-a-trap)
+\text{width} \lt 0.001, \text{ so three places}\,? @@ the trap must also be clear of the rounding boundary: 1.4145 sat inside
+1.26 \text{ is } \sqrt[3]{2} \text{ to three places, cut off}\,? @@ cut off it is 1.259; rounded it is 1.260. Say which
+\text{bisect } \tfrac1x \text{ on } [-1, 2] @@ not a trap: 1/x is not continuous on [−1, 2]. The traps close on its discontinuity at 0
+\text{even degree, so no zero}\,? @@ x⁴ − 5x² + 4 has four. Only odd degree promises one
+\begin{aligned}&f \text{ continuous on } (a, b),\\ &\quad \text{ so its values form an open interval}\,?\end{aligned} @@ x² on (−1, 2) gives [0, 4)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">12e11.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">“f(1) < 0 < f(2), so [1, 2] is a trap for f(x) = 1/(x − 1.5).”</span></span>Which illegal move is this? <br>Say which demand of a trap fails, and what the first halving runs into.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="12e12">
+  <h2 class="sthead"><span class="stno">12e12</span>Running it backwards</h2>
+  <p class="stands">Stands on 12e1 to 12e10.</p>
+  <p data-pid="2f2149">Handed a trap and a list of choices, read the final trap off the bits (trap-from-its-bits). Handed a final trap and its width, double back to the starting width. Handed an accuracy, double until 2ⁿ passes (v − u)/t. Handed an equation of odd degree, say at once that it has an answer, then find two whole numbers whose values disagree in sign and start halving. Handed an interval and a continuous function, find its least and greatest values and say the set of values is the closed interval between them. Found upward; written downward.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">12e12.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{three halvings of } [1, 2]"></span> <span data-tex-inline="\text{left } [\tfrac{11}{8}, \tfrac32]"></span></span>Find which halves were kept, in order, as bits, and check with trap-from-its-bits.</li><li><span class="givens"><span data-tex-inline="\text{a bisection for } \sqrt2 \text{ ended at}"></span> <span data-tex-inline="[1.4140625, 1.4150390625]"></span></span>Decide whether this trap alone rounds the root to three places, and find the single test that settles it.</li><li><span class="givens"><span data-tex-inline="\text{after } 12 \text{ halvings,}"></span> <span data-tex-inline="\text{width } 0.0025"></span></span>Find the trap's width at the start, and the first halving after which it was narrower than 1.</li><li><span class="givens"><span data-tex-inline="\text{a bisection closed on } [2.71, 2.72],"></span> <span data-tex-inline="f \text{ has no zero there}"></span></span>Find what must be true of f somewhere in the first interval.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">12e.4.1</span><span class="tagq">build</span>Build a polynomial of your own, of degree 2 or more, with a zero that no trap can hold. <br>Then change its constant term by a fraction you choose so that a trap holds a zero, and find a first trap with fraction ends. <br>Halve it until it is narrower than a sixteenth.</div>
+  <div class="chq"><span class="chid">12e.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="[c, c]"></span></span>Check it against each demand of a trap's definition, and decide whether it is a trap for any f. <br>Bisect it once, and compare its halves with it.</div>
+  <div class="chq"><span class="chid">12e.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="f \text{ one-to-one on an interval,}"></span> <span data-tex-inline="f \text{ leaves no gaps in its values}"></span></span>Prove or refute that f must be continuous.</div>
+  <div class="chq"><span class="chid">12e.4.4</span><span class="tagq">seam</span>12a’s proof names σ as a least upper bound and gives no way to compute it; this step computes. One side of an old quarrel argued that only the second kind of proof shows that something exists. The other side answered that taking the either-way principle from the mathematician would be like taking the telescope from the astronomer, or the fists from the boxer. <br>Which proof of in-between-value would you rather own?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r12concl.html">← 12·∎ · conclusion</a><a href="r12phys.html">12·phys · how does a small push lift a heavy weight? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>The note of 1821 is in Augustin-Louis Cauchy’s Cours d’analyse; the 1817 paper is Bernard Bolzano’s. In question 12e.4.4 the two sides are L. E. J. Brouwer and David Hilbert.</p>
+  <aside class="voice para"><p>Euclid proves that if from the greater of two unequal magnitudes more than its half is taken away, and from the remainder more than its half, and so on, some remainder will be less than the lesser magnitude. Halving again and again gets below any size you name.</p><cite>Euclid, Elements X.1, after Heath (1908)</cite></aside>
+  <p>Accepted names: the halving-traps technique is the nested interval property, used as a proof of the intermediate value theorem; the either-way principle is the law of excluded middle; halving a trap again and again is bisection.</p>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?3:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s.replace('-','−'); };
+/* ---------- left: the trap ---------- */
+const FN={
+  r2:{lab:'x² − 2 on [1, 2]',tex:R`x^2 - 2`,f:x=>x*x-2,a:1,b:2},
+  c2:{lab:'x³ − 2 on [1, 2]',tex:R`x^3 - 2`,f:x=>x*x*x-2,a:1,b:2},
+  cu:{lab:'x³ − x − 1 on [1, 2]',tex:R`x^3 - x - 1`,f:x=>x*x*x-x-1,a:1,b:2},
+  r3:{lab:'x² − 3 on [1, 2]',tex:R`x^2 - 3`,f:x=>x*x-3,a:1,b:2},
+  rec:{lab:'1/x on [−1, 2]',tex:R`\tfrac1x`,f:x=>1/x,a:-1,b:2,brk:0},
+  q:{lab:'x² − ¼ on [−1, 1]',tex:R`x^2 - \tfrac14`,f:x=>x*x-0.25,a:-1,b:1}
+};
+let key='r2',F=FN.r2,hist=[],zoom=false;
+const sg=v=>v>0?1:(v<0?-1:0);
+function cur(){ return hist.length?hist[hist.length-1]:{c:F.a,d:F.b,bits:''}; }
+const cvT=$('cvT'),kt=$('kt');
+const PT=plane(cvT,{x:[0.9,2.1],y:[-1.5,2.5],grid:0.5,aspect:0.72,draw:P=>drawT(P)});
+Object.defineProperty(PT.o,'aspect',{get:()=>cvT.clientWidth>560?0.68:0.9});
+function drawT(P){ const t=cur(); let x0,x1; if(zoom){ const w=t.d-t.c; x0=t.c-0.6*w; x1=t.d+0.6*w; } else { const w=F.b-F.a; x0=F.a-0.08*w; x1=F.b+0.08*w; }
+  let lo=Infinity,hi=-Infinity; for(let k=0;k<=200;k++){ const x=x0+(x1-x0)*k/200; if(F.brk!==undefined&&Math.abs(x-F.brk)<(x1-x0)*0.02) continue; const v=F.f(x); if(isFinite(v)){ lo=Math.min(lo,v); hi=Math.max(hi,v); } }
+  if(F.brk!==undefined){ lo=Math.max(lo,-4); hi=Math.min(hi,4); }
+  const pad=(hi-lo)*0.15+1e-9; P.o.x=[x0,x1]; P.o.y=[Math.min(lo,0)-pad,Math.max(hi,0)+pad]; const nice=v=>{ const q=Math.pow(10,Math.floor(Math.log10(v))), r=v/q; return (r<1.5?1:r<3.5?2:r<7.5?5:10)*q; }; P.o.grid=nice(Math.max(x1-x0,P.o.y[1]-P.o.y[0])/7);
+  P.axes(); const c=P.ctx;
+  c.fillStyle=col('--teal'); c.globalAlpha=.12; c.fillRect(P.X(t.c),P.Y(P.o.y[1]),P.X(t.d)-P.X(t.c),P.Y(P.o.y[0])-P.Y(P.o.y[1])); c.globalAlpha=1;
+  const run=(lo2,hi2)=>{ c.strokeStyle=col('--ink'); c.lineWidth=2.4; c.beginPath(); let pen=false; for(let k=0;k<=500;k++){ const x=lo2+(hi2-lo2)*k/500; const v=F.f(x); if(!isFinite(v)||v<P.o.y[0]-50||v>P.o.y[1]+50){ pen=false; continue; } pen?c.lineTo(P.X(x),P.Y(v)):c.moveTo(P.X(x),P.Y(v)); pen=true; } c.stroke(); };
+  if(F.brk!==undefined){ run(x0,F.brk-1e-4); run(F.brk+1e-4,x1); } else run(x0,x1);
+  const m=(t.c+t.d)/2; [[t.c,6],[t.d,6],[m,4.5]].forEach(([x,r])=>{ const v=F.f(x); const s=sg(v); P.dot(x,isFinite(v)?Math.max(P.o.y[0],Math.min(P.o.y[1],v)):0,s>0?'--teal':(s<0?'--ember':'--gold'),r); });
+  P.line(m,P.o.y[0],m,P.o.y[1],'--muted',1,[3,4]); }
+function trapOK(c,d){ const a=sg(F.f(c)),b=sg(F.f(d)); return a*b<0 && !(F.brk!==undefined&&c<F.brk&&F.brk<d); }
+function halv(){ const kk=+kt.value, w=F.b-F.a, need=w/Math.pow(10,-kk); let n=0,p=1; const seq=[]; while(p<=need){ n++; p*=2; if(n>=1) seq.push(p); } return {n,seq,need}; }
+function read(){ const t=cur(); const kk=+kt.value; $('ot').textContent='10^−'+kk;
+  const okStart=trapOK(F.a,F.b); const vd=$('vdT'); const m=(t.c+t.d)/2, fmv=F.f(m);
+  let msg='';
+  if(!okStart){ msg=sg(F.f(F.a))===sg(F.f(F.b))?'Not a trap to start: f has the same sign at both ends. Split first.':'The ends disagree in sign, but f is not continuous on the starting interval: an infinite discontinuity at 0. Not a trap; the halving will close on the discontinuity.'; vd.className='verdict lose'; }
+  else if(t.bad){ msg='The half you kept is not a trap: its ends have the same sign. Undo, and keep the other half (middle-of-a-trap).'; vd.className='verdict lose'; }
+  else if(sg(fmv)===0){ msg='The middle is a zero: stop (middle-of-a-trap).'; vd.className='verdict win'; }
+  else { msg='A trap: f('+fm(t.c,6)+') and f('+fm(t.d,6)+') disagree in sign. The middle '+fm(m,6)+' has f '+(fmv>0?'positive':'negative')+', so keep the '+((sg(fmv)===sg(F.f(t.d)))?'left':'right')+' half.'; vd.className='verdict win'; }
+  vd.textContent=msg;
+  const H=halv(); const n=hist.length, w=(F.b-F.a)/Math.pow(2,n);
+  const k=t.bits?parseInt(t.bits,2):0;
+  tex($('eqT'),R`\begin{gathered}f(x) = ${F.tex},\ \ \text{tests: } ${n}\\ \text{width } \tfrac{${fm(F.b-F.a)}}{2^{${n}}} = ${fm(w,7)}\\ \text{bits } ${t.bits||R`\text{(none)}`}${t.bits?R`,\ \ k = ${k}`:''}\\ t = 10^{-${kk}}:\ 2^n \gt ${fm(H.need)}\ \Rightarrow\ n = ${H.n}\\ 2^{${H.n-1}} = ${H.n>1?Math.pow(2,H.n-1):1},\ \ 2^{${H.n}} = ${Math.pow(2,H.n)}\end{gathered}`,true);
+  $('bars').innerHTML=hist.map((h,i)=>`<div style="color:var(${h.bad?'--ember':'--ink'})">${i+1}. ${h.bits.slice(-1)} → [${fm(h.c,8)}, ${fm(h.d,8)}]${h.bad?' (not a trap)':''}</div>`).join(''); }
+function push(side){ const t=cur(); const m=(t.c+t.d)/2; const nc=side?m:t.c, nd=side?t.d:m; hist.push({c:nc,d:nd,bits:t.bits+(side?'1':'0'),bad:!trapOK(nc,nd)&&!(F.brk!==undefined)}); all(); }
+function all(){ PT.redraw(); read(); }
+$('bl').onclick=()=>push(0); $('brt').onclick=()=>push(1);
+$('bp').onclick=()=>{ const t=cur(); const m=(t.c+t.d)/2; const v=F.f(m); if(sg(v)===0) return; push(sg(v)===sg(F.f(t.d))?0:1); };
+$('bu').onclick=()=>{ hist.pop(); all(); }; $('b0').onclick=()=>{ hist=[]; all(); }; $('bz').onclick=()=>{ zoom=!zoom; $('bz').classList.toggle('on',zoom); all(); };
+kt.addEventListener('input',all);
+const fch=$('fch'); Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===key) b.className='on'; b.onclick=()=>{ key=k; F=FN[k]; hist=[]; [...fch.children].forEach(z=>z.classList.toggle('on',z===b)); all(); }; fch.appendChild(b); });
+/* ---------- right: where an interval goes ---------- */
+const GN={
+  sq:{lab:'x²',tex:R`x^2`,f:x=>x*x},
+  cu:{lab:'x³ − 3x + 1',tex:R`x^3 - 3x + 1`,f:x=>x*x*x-3*x+1},
+  fl:{lab:'⌊x⌋',tex:R`\lfloor x \rfloor`,f:x=>Math.floor(x+1e-12),jump:true}
+};
+let gk='sq',G=GN.sq,ends='closed';
+const cvV=$('cvV'),kc=$('kc'),kd=$('kd');
+const PV=plane(cvV,{x:[-2.2,2.2],y:[-4,5],grid:1,aspect:0.85,draw:P=>drawV(P)});
+Object.defineProperty(PV.o,'aspect',{get:()=>cvV.clientWidth>480?0.8:0.95});
+function image(){ let c=+kc.value,d=+kd.value; if(c>d){ const t=c; c=d; d=t; } if(c===d) return null;
+  const n=4000; let lo=Infinity,hi=-Infinity,loAt=[],hiAt=[]; const vals=new Set();
+  for(let k=0;k<=n;k++){ if(ends==='open'&&(k===0||k===n)) continue; const x=c+(d-c)*k/n; const v=G.f(x); if(G.jump) vals.add(v); if(v<lo-1e-9){ lo=v; loAt=[x]; } else if(Math.abs(v-lo)<1e-9) loAt.push(x); if(v>hi+1e-9){ hi=v; hiAt=[x]; } else if(Math.abs(v-hi)<1e-9) hiAt.push(x); }
+  // an end left out may carry the extreme value, not reached
+  let loR=true,hiR=true; if(ends==='open'){ [c,d].forEach(e=>{ const v=G.f(e); if(G.jump) return; if(v<lo-1e-9){ lo=v; loR=false; } if(v>hi+1e-9){ hi=v; hiR=false; } if(Math.abs(v-lo)<1e-9&&loAt.every(x=>Math.abs(x-e)<1e-6)) loR=false; if(Math.abs(v-hi)<1e-9&&hiAt.every(x=>Math.abs(x-e)<1e-6)) hiR=false; }); }
+  return {c,d,lo,hi,loR,hiR,vals:[...vals].sort((a,b)=>a-b)}; }
+function drawV(P){ const I=image(); P.axes(); const c=P.ctx;
+  if(!I) return;
+  c.fillStyle=col('--ink'); c.globalAlpha=.06; c.fillRect(P.X(I.c),P.Y(5),P.X(I.d)-P.X(I.c),P.Y(-4)-P.Y(5)); c.globalAlpha=1;
+  P.fn(x=>G.f(x),'--grid',1.4,[3,4]);
+  c.strokeStyle=col('--ink'); c.lineWidth=2.6; c.beginPath(); let pen=false,prev=null; for(let k=0;k<=400;k++){ const x=I.c+(I.d-I.c)*k/400; const v=G.f(x); if(G.jump&&prev!==null&&v!==prev) pen=false; pen?c.lineTo(P.X(x),P.Y(v)):c.moveTo(P.X(x),P.Y(v)); pen=true; prev=v; } c.stroke();
+  // the image on the y-axis
+  const ax=P.o.x[0]+0.12;
+  if(G.jump){ I.vals.forEach(v=>P.dot(ax,v,'--teal',5)); }
+  else { c.strokeStyle=col('--teal'); c.lineWidth=7; c.beginPath(); c.moveTo(P.X(ax),P.Y(I.lo)); c.lineTo(P.X(ax),P.Y(I.hi)); c.stroke();
+    [[I.lo,I.loR],[I.hi,I.hiR]].forEach(([v,r])=>{ if(r) P.dot(ax,v,'--teal',6); else { c.fillStyle=col('--card'); c.strokeStyle=col('--teal'); c.lineWidth=2.4; c.beginPath(); c.arc(P.X(ax),P.Y(v),5.5,0,7); c.fill(); c.stroke(); } }); }
+  [I.c,I.d].forEach(e=>{ const v=G.f(e); if(ends==='open'){ c.fillStyle=col('--card'); c.strokeStyle=col('--ink'); c.lineWidth=2; c.beginPath(); c.arc(P.X(e),P.Y(v),4.5,0,7); c.fill(); c.stroke(); } else P.dot(e,v,'--ink',4.5); }); }
+function readV(){ $('oc').textContent=fm(+kc.value,2); $('od').textContent=fm(+kd.value,2); const I=image();
+  if(!I){ tex($('eqV'),R`c = d:\ \text{no interval}`,true); return; }
+  const L=ends==='closed'?'[':'(', Rr=ends==='closed'?']':')';
+  let out;
+  if(G.jump) out=R`\{${I.vals.map(v=>fm(v)).join(',\ ')}\}\ ${I.vals.length>1?R`\text{: gaps, not an interval}`:R`\text{: one real}`}`;
+  else out=R`${I.loR?'[':'('}${fm(I.lo,3)},\ ${fm(I.hi,3)}${I.hiR?']':')'}`;
+  tex($('eqV'),R`\begin{gathered}${G.tex} \text{ on } ${L}${fm(I.c,2)},\ ${fm(I.d,2)}${Rr}\\ \text{values: } ${out}\\ ${G.jump?R`\text{not continuous: the values skip}`:(ends==='closed'?R`\text{IVI: least and greatest, and all between}`:R`\text{GFI: no gaps; an end may be lost}`)}\end{gathered}`,true); }
+function allV(){ PV.redraw(); readV(); }
+[kc,kd].forEach(z=>z.addEventListener('input',allV));
+const gch=$('gch'); Object.keys(GN).forEach(k=>{ const b=document.createElement('button'); b.textContent=GN[k].lab; if(k===gk) b.className='on'; b.onclick=()=>{ gk=k; G=GN[k]; [...gch.children].forEach(z=>z.classList.toggle('on',z===b)); allV(); }; gch.appendChild(b); });
+[...$('ech').children].forEach(b=>b.onclick=()=>{ ends=b.dataset.e; [...$('ech').children].forEach(z=>z.classList.toggle('on',z===b)); allV(); });
+window.__pic={run:(k,n,choice)=>{ [...fch.children][Object.keys(FN).indexOf(k)].click(); for(let i=0;i<n;i++){ if(choice==='page') $('bp').click(); else push(choice[i]==='1'?1:0); } return {trap:[cur().c,cur().d],bits:cur().bits,txt:$('vdT').textContent}; },
+  img:(k,c,d,e)=>{ [...gch.children][Object.keys(GN).indexOf(k)].click(); kc.value=c; kd.value=d; [...$('ech').children].find(b=>b.dataset.e===e).click(); return $('eqV').textContent.slice(0,80); }};
+all(); allV();
+
+/* ---------- slides ---------- */
+const Nw='\\htmlClass{new}';
+stepper('#sl1',[
+  {k:'ember',kl:'a trap',t:R`[c, d]:\ f \text{ continuous},\ \ f(c), f(d) \text{ of opposite signs}`,n:`in-between-value puts a zero strictly inside.`},
+  {k:'ember',kl:'middle-of-a-trap',t:R`f(m) = 0 \;\lor\; [c, m] \text{ a trap} \;\lor\; [m, d] \text{ a trap}`,n:`m = (c + d)/2. Only the sign of f(m) decides. ∎`}
+],{title:'The slides · the trap · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'√2 · 1 of 3',t:R`m = \tfrac32:\ \ 9 \gt 8`,n:`Compare p² with 2q²: past the zero. Keep [1, 3/2].`},
+  {k:'ember',kl:'√2 · 2 of 3',t:R`m = \tfrac54:\ \ 25 \lt 32;\ \ m = \tfrac{11}{8}:\ \ 121 \lt 128`,n:`Short, short: keep the right halves.`},
+  {k:'ember',kl:'√2 · 3 of 3',t:R`m = \tfrac{181}{128}:\ \ 32761 \lt 32768`,n:`Test 7: short by 7 in thirty-two thousand.`}
+],{title:'The slides · √2 · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'the rounding',t:R`1.414^2 \lt 2 \lt 1.4145^2`,n:`Test the boundary itself: √2 ≈ 1.414. Any split point inside a trap is allowed.`}
+],{title:'The slides · the rounding · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'³√2',t:R`1.2595^3 \lt 2 \lt 1.26^3`,n:`Short decimals instead of middles: ³√2 ≈ 1.260 rounded, 1.259 cut off.`}
+],{title:'The slides · ³√2 · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'halvings-width',t:R`\text{width after } n:\ \ ${Nw}{\tfrac{b - a}{2^n}}`,n:`Induction with power-of-a-next. ∎`},
+  {k:'ember',kl:'doubling',t:R`2^n \gt \tfrac{b - a}{t}:\ \ 2^{10} = 1024 \gt 1000`,n:`Ten halvings buy about three decimal places.`}
+],{title:'The slides · halvings · ← → keys work'});
+stepper('#sl6',[
+  {k:'teal',kl:'from 4h · trap-from-its-bits',t:R`01101_2 = 13:\ \ [1 + \tfrac{13}{32},\ 1 + \tfrac{14}{32}]`,n:`Left is 0, right is 1; the trap is read off the bits. ∎`}
+],{title:'The slides · trap-from-its-bits · ← → keys work'});
+stepper('#sl7',[
+  {k:'ember',kl:'halving-traps · 1 of 2',t:R`z = ${Nw}{\sup\{c_n\}},\ \ c_n \le z \le d_n`,n:`no-holes once more. The ends squeeze z: d_n − c_n = (v − u)/2ⁿ.`},
+  {k:'ember',kl:'halving-traps · 2 of 2',t:R`f(z) \gt 0 \text{ or } \lt 0\ \Rightarrow\ \bot`,n:`sign-kept-near-an-input: a window of one sign holds an end of the other. So f(z) = 0. ∎`}
+],{title:'The slides · halving-traps · ← → keys work'});
+stepper('#sl8',[
+  {k:'ember',kl:'odd-degree-passes-bounds',t:R`x \ge M_0 \Rightarrow p(x) \ge \tfrac12 a_n x`,n:`leading-term, then xⁿ ≥ x past 1: passes every bound. Odd n: below every bound on the left.`},
+  {k:'ember',kl:'odd-degree-zero',t:R`p(c) \lt 0 \lt p(d) \;\Rightarrow\; \text{a zero}`,n:`Take c, d past the two thresholds; polynomials-are-continuous; in-between-value. Odd degree always has a zero. ∎`}
+],{title:'The slides · odd degree · ← → keys work'});
+stepper('#sl9',[
+  {k:'ember',kl:'closed-to-closed',t:R`\{f(x) : x \in [a, b]\} = ${Nw}{[m, M]}`,n:`highest-and-lowest for the ends, in-between-value, general form for everything between. ∎`},
+  {k:'ember',kl:'where intervals go',t:R`x^2:\ (-1, 2) \to [0, 4)`,n:`Open goes to neither. No gaps (no-gaps), so an interval (gap-free-sets).`}
+],{title:'The slides · closed-to-closed · ← → keys work'});
+stepper('#sl10',[
+  {k:'ember',kl:'when it fails',t:R`\tfrac1x \text{ on } [-1, 2]:\ \text{the traps close on } 0`,n:`An infinite discontinuity, no zero. Hunt the discontinuities first (11f).`}
+],{title:'The slides · when it fails · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

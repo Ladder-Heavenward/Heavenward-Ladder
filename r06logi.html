@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>6·logi · Can every job get a driver?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+table.tt td.l{text-align:left;font-family:var(--serif)} @media (max-width:520px){table.tt td.l{min-width:6.5em}}
+table.grid{border-collapse:collapse;font-family:var(--mono);font-size:.8rem;width:100%}
+table.grid th,table.grid td{border:1px solid var(--grid);padding:4px 2px;text-align:center}
+table.grid th.l{text-align:left;font-weight:400;padding-left:6px}
+table.grid td.can{cursor:pointer;color:var(--muted)} table.grid td.no{background:var(--sand)}
+table.grid td.on{background:var(--ember);color:#fff} table.grid td.clash{background:var(--plum);color:#fff}
+table.grid tr.block th.l{color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%;min-width:0} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4em;text-align:right}
+.kn label{font-family:var(--mono);font-size:.8rem;color:var(--muted)}
+.bins{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:3px;font-family:var(--mono);font-size:.7rem;text-align:center}
+.bins div{border:1px solid var(--grid);border-radius:3px;padding:3px 0;background:var(--card)}
+.bins div.pk{border-color:var(--ember);color:var(--ember);font-weight:500}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r06chem.html">← 6·chem who gives up electrons?</a><a href="r07.html">next: 7 fixing truth →</a></p>
+  <div class="tags"><span class="tag logi">6·logi · logistics</span></div>
+  <h1>Can every job get a driver?</h1>
+  <p>Can every job get a driver? Every morning in the harvest, a dispatcher in Salinas has a list of loads to move and a list of drivers. Lettuce must come in from the fields near Gonzales and Soledad before it wilts. A tanker of fertilizer must go out to Chualar. Not every driver can take every load: a tractor-trailer needs one licence, a tanker of ammonia another. So each load has its own set of drivers who could take it, and the dispatcher must pick one from each set. That is 6a's choosing function, met in a yard full of trucks. What makes the question hard is that the picks are not separate. A driver picked for one load is gone for the others. This page counts the ways to pick, finds the one shape that makes picking impossible, and ends in a cold store, where the picks do not matter and a rule must still make them.</p>
+  <p class="gesture">An assignment gives each job a driver from that job's set. Count them by multiplying the sizes of the sets. A fair one gives no driver two jobs. If some group of jobs has fewer drivers between them than there are jobs in the group, no fair assignment exists. Where every pick is as good as any other, a rule that picks still has to be written down.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r06a.html">6a</a> (choosing functions; rules that pick; least-chooses; socks), <a href="r06b.html">6b</a> (finite-choice, counting-pickings), <a href="r04j.html">4j</a> (matchings, lead-one-out, one-count, stages-multiply, arrangements, n choose k) and <a href="r04g.html">4g</a> (order, least-member). Later logistics pages count routes and lines of waiting trucks.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · read it through, then work the picture and the slides</div>
+
+  <h3>An assignment is a choosing function</h3>
+  <p data-pid="81842a">Here is one morning's board, with five drivers: Ana, Ben, Cruz, Dev and Eli. Only Ana, Ben and Cruz hold the licence for a tractor-trailer. Only Cruz and Dev may drive the ammonia tanker. Anyone can take the box van.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>job</th><th>the load</th><th>who can take it</th><th>how many</th></tr>
+    <tr><td>g</td><td class="l">lettuce from Gonzales, tractor-trailer</td><td class="l">Ana, Ben, Cruz</td><td>3</td></tr>
+    <tr><td>s</td><td class="l">lettuce from Soledad, tractor-trailer</td><td class="l">Ana, Ben, Cruz</td><td>3</td></tr>
+    <tr><td>t</td><td class="l">ammonia to Chualar, tanker</td><td class="l">Cruz, Dev</td><td>2</td></tr>
+    <tr><td>v</td><td class="l">boxes to Monterey, van</td><td class="l">all five</td><td>5</td></tr>
+  </table></div>
+  <p class="eqline" data-pid="00d6ec">From here on, on this page, for a job j, D(j) is the set of drivers who can take it. An assignment is a function f on the jobs with f(j) ∈ D(j) for every job j.</p>
+  <p data-pid="51cb41">That is 6a's choosing function, with one change. 6a picks from each member of a collection, and a collection is a set, so two equal members are one member. Here jobs g and s have the same set of drivers. The collection {D(g), D(s), D(t), D(v)} has only three members, and a choosing function for it gives g and s the same driver. So the picks are made by job, not by set: the assignment is a choosing function for the list of sets, one entry per job.</p>
+  <p data-pid="0a46e8">How many assignments are there? Pick for g, then for s, then t, then v. Each stage has as many choices as its set has members, whatever was picked before. So 4j's stages-multiply counts them, as 6b's counting-pickings did. <b>The number of assignments is the product of the sizes of the sets.</b></p>
+  <pre class="lines" data-k="teal" data-label="from 6b: counting-pickings, one factor per job">
+3 \cdot 3 \cdot 2 \cdot 5 = \htmlClass{new}{90} @@ one factor for each of g, s, t, v
+  </pre>
+  <p data-pid="a12588">No axiom is needed. There are four jobs, and 6b's finite-choice picks from finitely many sets in turn. The question of this page is a different one.</p>
+
+  <h3>Fair assignments: no driver twice</h3>
+  <p data-pid="984c38">Most of those 90 send one driver out on two loads at once, which no one can do. An assignment is <b>fair</b> when it gives no driver two jobs: f(j) = f(j′) only when j = j′. A fair assignment is a matching of the jobs with the drivers it uses, in 4j's sense. Count them by cases on the tanker, which has the fewest drivers.</p>
+  <pre class="lines" data-k="ember" data-label="this page: counting the fair assignments">
+f(t) = \text{Cruz}:\ \ g, s \text{ from Ana, Ben}:\ 2 \cdot 1 @@ two drivers left for the two trailers, in order
+\quad v \text{ from Dev, Eli}:\ 2,\ \ \text{so } 2 \cdot 1 \cdot 2 = 4 @@ the van takes one of the two left
+f(t) = \text{Dev}:\ \ g, s \text{ from Ana, Ben, Cruz}:\ 3 \cdot 2 @@ stages-multiply
+\quad v \text{ from the two left}:\ 2,\ \ \text{so } 3 \cdot 2 \cdot 2 = 12 @@ one of Ana, Ben, Cruz is left, and Eli
+4 + 12 = \htmlClass{new}{16} @@ separate-piles: the two cases share nothing
+  </pre>
+  <p data-pid="ae874c">Fair assignments do not simply multiply. The choices for s depend on the choice for g. So the cases have to be split by hand, and the count needs care.</p>
+
+  <h3>When no fair assignment exists</h3>
+  <p data-pid="2789ce">Now Cruz calls in sick, and a third load of lettuce comes in, from Greenfield. It too needs a tractor-trailer. The jobs g, s and the Greenfield load f each have drivers {Ana, Ben}. Three loads, two drivers who can take any of them. Whatever the dispatcher does, one load waits.</p>
+  <p data-pid="9b4b24">First, a count to stand on. No-room technique: <b>a set with k members cannot be matched with a part of a set with fewer than k members.</b> Let X have k members, and let Y have m members. Let f be a matching of X with a part of Y. The proof of k ≤ m is by induction on m.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the no-room technique">
+m = 0:\ \ Y = \varnothing,\ \text{so } X = \varnothing,\ k = 0 @@ each member of X has a partner in Y; one-count
+Y \text{ has } S(m) \text{ members};\ \text{take } y \in Y @@ the step; Y has a member
+y = f(x) \text{ for some } x \in X,\ \text{or not} @@ settled: X is finite, finite-is-settled, along X by induction
+\text{not}:\ f \text{ matches } X \text{ into } Y \setminus \{y\},\ k \le m @@ lead-one-out gives Y ∖ {y} m members; the induction
+y = f(x):\ f \text{ matches } X \setminus \{x\} \text{ into } Y \setminus \{y\} @@ partners of the others are not y; lead-one-out on both
+\htmlClass{new}{k \le S(m)} \quad \blacksquare @@ X ∖ {x} has at most m members, so X at most S(m)
+  </pre>
+  <p data-pid="4db80f">Now the obstacle. Blocking-group technique: <b>if some k of the jobs have, between them, fewer than k drivers who can take them, no fair assignment exists.</b> Suppose a fair assignment f existed. On those k jobs it is a matching of them with drivers who can take them. That is a matching of a set with k members with a part of their drivers' merge, which has fewer than k members. No-room forbids it.</p>
+  <pre class="lines" data-k="ember" data-label="this page: worked, with Cruz out">
+D(g) = D(s) = D(f) = \{\text{Ana}, \text{Ben}\} @@ three tractor-trailer loads
+D(g) \cup D(s) \cup D(f) = \{\text{Ana}, \text{Ben}\} @@ 2 drivers between them
+3 \text{ jobs},\ 2 \text{ drivers}:\ \htmlClass{new}{\text{no fair assignment}} @@ blocking-group, with k = 3
+  </pre>
+  <p data-pid="2b03a2">A job that nobody can take, with D(j) = ∅, is a blocking group of one. It blocks everything, as 6a's empty-member technique says. The blocking group is the same idea, grown up. Is a blocking group the only way to fail? That question is left for the star.</p>
+
+  <h3>Picking in turn can get stuck</h3>
+  <p data-pid="109994">A busy dispatcher works down the board and gives each job the first free driver on its list. That is finite-choice's picking in turn, made into a rule. It can fail when a fair assignment exists. Say job g can go to Ana or Ben, and job t only to Ana. Down the board, g takes Ana, and t is left with nobody. Yet g to Ben and t to Ana is fair. <b>Picking in turn can strand a job that a better order would have served.</b> The fix is a swap: move g from Ana to Ben, and give Ana to t. Dispatchers do this all day.</p>
+
+  <h3>The cold store that has to pick</h3>
+  <p data-pid="0f6964">Last, a pick that does not matter. A cooler in Salinas holds 40 cases of the same strawberries, and an order comes in for 3. Any 3 will do. There are 40 choose 3 = 9880 ways to pick them, by 4j, and the customer cannot tell them apart. In 6a's words these cases are socks. No condition the customer cares about picks one.</p>
+  <p data-pid="4737ac">The order still has to be filled, so the store writes a rule that picks. Number the cases by the day they came in, and take the 3 oldest: least first, by 4g's least-member. That is 6a's least-chooses, applied to strawberries. It has a reason, too: older fruit spoils first. <b>When every pick is as good as any other, a rule that picks has to be written down anyway, and the best rules pick by a number.</b></p>
+
+  <h3>Illegal moves</h3>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed">
+90 \text{ ways, so } 90 \text{ fair ways}\,? @@ most of the 90 give a driver two loads; only 16 are fair
+\begin{aligned}&\text{five drivers, four jobs,}\\ &\quad\text{so a fair assignment exists}\,?\end{aligned} @@ more drivers than jobs is not enough: check every group of jobs
+\begin{aligned}&\text{a choosing function for } \{D(g),\\ &\quad D(s), D(t), D(v)\}\,?\end{aligned} @@ D(g) = D(s), so the collection has three members; pick by job
+\begin{aligned}&\text{picking in turn failed,}\\ &\quad\text{so no fair assignment exists}\,?\end{aligned} @@ the order may be at fault; try a swap
+\text{the cases are alike, so no rule is needed}\,? @@ the store still has to pick 3; a rule names which
+  </pre>
+
+  <h3>Which rung each step uses</h3>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>step</th><th>the mathematics</th><th>from</th></tr>
+    <tr><td class="l">an assignment</td><td class="l">a choosing function, by job</td><td><a href="r06a.html">6a</a></td></tr>
+    <tr><td class="l">counting assignments</td><td class="l">counting-pickings, stages-multiply</td><td><a href="r06b.html">6b</a>, <a href="r04j.html">4j</a></td></tr>
+    <tr><td class="l">fair assignments</td><td class="l">matchings; cases; separate-piles</td><td><a href="r04j.html">4j</a></td></tr>
+    <tr><td class="l">no room, a blocking group</td><td class="l">induction, lead-one-out, one-count</td><td><a href="r04j.html">4j</a></td></tr>
+    <tr><td class="l">picking in turn</td><td class="l">finite-choice</td><td><a href="r06b.html">6b</a></td></tr>
+    <tr><td class="l">the cold store</td><td class="l">n choose k; least-chooses</td><td><a href="r04j.html">4j</a>, <a href="r06a.html">6a</a></td></tr>
+  </table></div>
+</section>
+
+<section class="pic" id="pic">
+  <div class="eyebrow">The picture · left: the dispatcher's board · right: the cold store's rule</div>
+  <div class="panels">
+    <div class="panel">
+      <div class="chips" role="group" aria-label="morning" id="mch"></div>
+      <div class="lbl">tap a dot to give that job that driver</div>
+      <table class="grid" id="grid"></table>
+      <div class="cap">A dot: the driver can take the job. Ember: the driver given to it. Plum: a driver given two jobs. A row in ember type is part of a blocking group.</div>
+      <div class="verdict" id="vd1"></div>
+      <div class="eqbox" id="eq1"></div>
+    </div>
+    <div class="panel">
+      <div class="lbl">40 cases of strawberries, numbered by the day each came in</div>
+      <div class="bins" id="bins"></div>
+      <div class="kn"><label for="kq">order</label><input type="range" id="kq" min="1" max="10" step="1" value="3"><output id="oq"></output></div>
+      <div class="chips" role="group" aria-label="rule" id="rch"></div>
+      <div class="cap">Ember: the cases the rule picks. “Oldest first” is a rule: it names the same cases every time. “Any” is not: press it twice.</div>
+      <div class="verdict" id="vd2"></div>
+    </div>
+  </div>
+</section>
+
+<section class="slides" id="sl1"><div class="eyebrow">The slides · the board; an assignment; counting-pickings; fair; counting the fair ones; no-room; blocking-group; picking in turn; the swap; the cold store; illegal moves · ← → keys work</div></section>
+
+<section class="sayback">
+  <div class="eyebrow">Say it back · then work it</div>
+  <h2>Questions</h2>
+  <div class="phkey"></div>
+  <ol>
+    <li><span class="qid">6·logi.1</span><span class="gname">Counting the picks.</span><span class="gwhy">Do: build the page's pieces.</span>
+      <ol class="sub">
+        <li><span class="qid">6·logi.1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\text{assignment: each job } j"></span> <span data-tex-inline="\text{gets a driver in } D(j),"></span> <span data-tex-inline="\text{fair: no driver gets two jobs,}"></span> <span data-tex-inline="D(p) = \{\text{Ana}, \text{Ben}\},"></span> <span data-tex-inline="D(q) = \{\text{Ben}, \text{Cruz}\},"></span> <span data-tex-inline="D(r) = \{\text{Ana}, \text{Cruz}\},"></span> <span data-tex-inline="D(w) = \{\text{Ana}, \text{Ben}, \text{Cruz}, \text{Dev}\}"></span></span><ol class="parts" type="a"><li>Count the assignments of p, q, r and w.</li><li>Count the fair assignments of p, q, r and w.</li><li><span class="givens"><span data-tex-inline="D(x) = \{\text{Ben}, \text{Cruz}\}"></span></span>Add job x, and find a blocking group.</li><li><span class="givens"><span data-tex-inline="\text{a cooler holds 30 cases,}"></span> <span data-tex-inline="\text{an order takes 4}"></span></span>Count the ways the 4 can be picked.<br>Write a rule that names one way.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">6·logi.2</span><span class="gname">From the count back.</span><span class="gwhy">Undo: run the page's techs backwards.</span>
+      <ol class="sub">
+        <li><span class="qid">6·logi.2.1</span><span class="ph undo">undo</span><span class="givens"><span data-tex-inline="\text{assignment: each job } j"></span> <span data-tex-inline="\text{gets a driver in } D(j),"></span> <span data-tex-inline="\text{fair: no driver gets two jobs}"></span></span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{three jobs, each with } D(j) = D,"></span> <span data-tex-inline="60 \text{ fair assignments}"></span></span>Find how many members D has.</li><li><span class="givens"><span data-tex-inline="\text{four jobs, sets of sizes } 3, 3, s, 5,"></span> <span data-tex-inline="90 \text{ assignments}"></span></span>Find s.</li><li><span class="givens"><span data-tex-inline="D(g) = D(s) = D(f) = \{\text{Ana}, \text{Ben}\},"></span> <span data-tex-inline="D(v) = \{\text{Ana}, \text{Ben}, \text{Dev}, \text{Eli}\}"></span></span>Find one driver, added to one job's set, that gives a fair assignment.<br>Find every other answer, or prove there is none.</li><li>Find driver sets for four jobs that have exactly one fair assignment.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">6·logi.3</span><span class="gname">Where it gives.</span><span class="gwhy">Bend: find where the techs stop working.</span>
+      <ol class="sub">
+        <li><span class="qid">6·logi.3.1</span><span class="ph bend">bend</span><span class="givens"><span data-tex-inline="\text{assignment: each job } j"></span> <span data-tex-inline="\text{gets a driver in } D(j),"></span> <span data-tex-inline="\text{fair: no driver gets two jobs}"></span></span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="D(g) = D(s) = \{\text{Ana}, \text{Ben}\}"></span></span>Count the choosing functions for the collection of the two sets D(g) and D(s), and the assignments of g and s.<br>List the assignments that no choosing function for the collection gives.</li><li><span class="givens"><span data-tex-inline="\text{in board order:}"></span> <span data-tex-inline="m\text{: } \{\text{Ana}, \text{Ben}\},"></span> <span data-tex-inline="n\text{: } \{\text{Ana}, \text{Cruz}\},"></span> <span data-tex-inline="o\text{: } \{\text{Ana}\}"></span></span>Pick in turn, the first free driver on each list, and find where it sticks.<br>Find a fair assignment.</li><li><span class="givens"><span data-tex-inline="\text{each driver may take two jobs:}"></span> <span data-tex-inline="\text{one in the morning,}"></span> <span data-tex-inline="\text{one after lunch}"></span></span>Decide whether blocking-group is still true as stated.<br>Find what takes its place.</li><li><span class="givens"><span data-tex-inline="\text{every job has at least 2 drivers,}"></span> <span data-tex-inline="\text{as many drivers as jobs}"></span></span>Decide whether a fair assignment must exist.</li></ol></li>
+      </ol></li>
+    <li class="optgroup"><span class="qid">6·logi.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder challenges that rely on your own making. The page is complete without these; the rung's star needs them.</span>
+      <ol class="sub">
+        <li class="opt"><span class="qid">6·logi.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{Two drivers to every job does}"></span> <span data-tex-inline="\text{not make a fair assignment certain.}"></span></span>Build boards of your own.<ol class="parts" type="a"><li>Take the chores of a week and the people who could do each, and count the assignments and the fair ones.</li><li>Make a board of 5 jobs and 5 drivers, each job with at least 2 drivers, that has exactly 2 fair assignments.</li><li>Find a place that picks among things that are all alike, such as a shelf, a car park or a queue, and write down the rule it uses.</li></ol></li>
+        <li class="opt"><span class="qid">6·logi.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{jobs and drivers: } 0, 1, 2, \ldots,"></span> <span data-tex-inline="\text{job } 0\text{: any driver but } 0,"></span> <span data-tex-inline="\text{job } n \ge 1\text{: driver } n \text{ only}"></span></span>Decide whether every group of jobs has at least as many drivers between them as it has jobs.<br>Decide whether a fair assignment exists.</li>
+        <li class="opt"><span class="qid">6·logi.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{finitely many jobs,}"></span> <span data-tex-inline="\text{any } k \text{ jobs have at least } k"></span> <span data-tex-inline="\text{drivers between them}"></span></span>Decide whether a fair assignment must exist.</li>
+        <li class="opt"><span class="qid">6·logi.4.4</span><span class="tagq">seam</span>Loads without end, each with a driver who can take it; no one can state a rule that picks. One: an assignment exists. Another: one nobody can describe is no assignment. Decide who is right.</li>
+      </ol></li>
+  </ol>
+  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
+</section>
+
+<nav class="nextrung"><a href="r06chem.html">← 6·chem · who gives up electrons?</a><a href="r07.html">7 · fixing truth →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>The converse in 6·logi.4.3 was proved by Philip Hall in 1935, for choosing distinct members from a list of sets; Dénes Kőnig had a form of it for graphs a few years before. The swap that rescues a stranded job is the step of the method of Harold Kuhn (1955), who named it after Kőnig and Egerváry. The two mathematicians of 6·logi.4.4 stand for the letters of 1905 in which Émile Borel, René Baire and Henri Lebesgue doubted Ernst Zermelo's axiom, and Jacques Hadamard defended it.</p>
+  <h3>Accepted names</h3>
+  <p>A fair assignment is a <b>system of distinct representatives</b>, or a <b>matching</b> that covers every job. Hall's result is <b>Hall's marriage theorem</b>, and the blocking group's absence is <b>Hall's condition</b>. Finding the best fair assignment when each pairing has a cost is the <b>assignment problem</b>. Picking in turn is a <b>greedy algorithm</b>. Taking the oldest stock first is <b>FIFO</b>, first in, first out; for food it is often <b>FEFO</b>, first expired, first out.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="6·logi: a worked “proof”, not allowed">
+\text{every job has a driver} @@ fine: no D(j) is empty
+\text{finite-choice picks one for each} @@ fine: that is an assignment
+\text{so every job gets its own driver} @@ not allowed: an assignment may give one driver two jobs. Fair needs more than non-empty sets
+  </pre>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,stepper}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const Nw='\\htmlClass{new}';
+const DR=['Ana','Ben','Cruz','Dev','Eli'];
+const MORN={
+ all:{lab:'all five drivers',jobs:[['g · Gonzales',[0,1,2]],['s · Soledad',[0,1,2]],['t · tanker',[2,3]],['v · van',[0,1,2,3,4]]]},
+ sick:{lab:'Cruz out sick',jobs:[['g · Gonzales',[0,1]],['s · Soledad',[0,1]],['t · tanker',[3]],['v · van',[0,1,3,4]]]},
+ more:{lab:'and a Greenfield load',jobs:[['g · Gonzales',[0,1]],['s · Soledad',[0,1]],['t · tanker',[3]],['v · van',[0,1,3,4]],['f · Greenfield',[0,1]]]}};
+let mk='all', asg=[];
+function reset(){ asg=MORN[mk].jobs.map(()=>null); }
+Object.keys(MORN).forEach(k=>{ const b=document.createElement('button'); b.textContent=MORN[k].lab; if(k===mk) b.className='on'; b.onclick=()=>{ mk=k; reset(); [...$('mch').children].forEach(z=>z.classList.toggle('on',z===b)); draw1(); }; $('mch').appendChild(b); });
+function count(J){ let all=1, fair=0; J.forEach(j=>all*=j[1].length); (function go(i,used){ if(i===J.length){ fair++; return; } J[i][1].forEach(d=>{ if(!used.has(d)){ used.add(d); go(i+1,used); used.delete(d); } }); })(0,new Set()); return {all,fair}; }
+function blocking(J){ const n=J.length; let best=null; for(let m=1;m<(1<<n);m++){ const ids=[],u=new Set(); for(let i=0;i<n;i++) if(m>>i&1){ ids.push(i); J[i][1].forEach(d=>u.add(d)); } if(u.size<ids.length&&(!best||ids.length<best.ids.length)) best={ids,u:[...u]}; } return best; }
+function draw1(){ const J=MORN[mk].jobs, c=count(J), bl=c.fair?null:blocking(J);
+  const uses={}; asg.forEach(d=>{ if(d!==null) uses[d]=(uses[d]||0)+1; });
+  let h='<tr><th class="l">job</th>'+DR.map(d=>'<th>'+d+'</th>').join('')+'</tr>';
+  J.forEach((j,i)=>{ h+='<tr'+(bl&&bl.ids.includes(i)?' class="block"':'')+'><th class="l">'+j[0]+'</th>'+DR.map((d,k)=>{ if(!j[1].includes(k)) return '<td class="no"></td>'; const on=asg[i]===k; return '<td class="can'+(on?(uses[k]>1?' clash':' on'):'')+'" data-i="'+i+'" data-k="'+k+'">'+(on?'●':'·')+'</td>'; }).join('')+'</tr>'; });
+  $('grid').innerHTML=h; $('grid').querySelectorAll('td.can').forEach(td=>td.onclick=()=>{ const i=+td.dataset.i,k=+td.dataset.k; asg[i]=asg[i]===k?null:k; draw1(); });
+  const done=asg.every(x=>x!==null), clash=Object.values(uses).some(v=>v>1), vd=$('vd1');
+  if(bl){ vd.className='verdict lose'; vd.textContent='No fair assignment: jobs '+bl.ids.map(i=>J[i][0].split(' ')[0]).join(', ')+' have only '+bl.u.map(k=>DR[k]).join(' and ')+' between them. Blocking-group.'; }
+  else if(done&&!clash){ vd.className='verdict win'; vd.textContent='A fair assignment: every job has a driver, and nobody has two.'; }
+  else if(clash){ vd.className='verdict lose'; vd.textContent='An assignment, but not fair: a driver in plum has two loads.'; }
+  else { vd.className='verdict'; vd.textContent='Give every job a driver. '+c.fair+' of the '+c.all+' assignments are fair.'; }
+  tex($('eq1'),R`\text{assignments: } ${J.map(j=>j[1].length).join(R` \cdot `)} = ${c.all},\quad \text{fair: } ${Nw}{${c.fair}}`,true); }
+/* right: the cold store */
+const NB=40; let rule='old', rnd=[];
+const RU={old:{lab:'oldest first'},any:{lab:'any'}};
+Object.keys(RU).forEach(k=>{ const b=document.createElement('button'); b.textContent=RU[k].lab; if(k===rule) b.className='on'; b.onclick=()=>{ rule=k; if(k==='any') reroll(); [...$('rch').children].forEach(z=>z.classList.toggle('on',z===b)); draw2(); }; $('rch').appendChild(b); });
+const day=i=>1+((i*17)%NB);
+for(let i=0;i<NB;i++){ const d=document.createElement('div'); d.id='b'+i; d.textContent=day(i); $('bins').appendChild(d); }
+function reroll(){ const q=+$('kq').value, idx=[...Array(NB).keys()]; for(let i=idx.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [idx[i],idx[j]]=[idx[j],idx[i]]; } rnd=idx.slice(0,q); }
+function choose(n,k){ let r=1; for(let i=1;i<=k;i++) r=r*(n-k+i)/i; return Math.round(r); }
+function draw2(){ const q=+$('kq').value; $('oq').textContent=q; if(rule==='any'&&rnd.length!==q) reroll();
+  const pick=rule==='old'?[...Array(NB).keys()].sort((a,b)=>day(a)-day(b)).slice(0,q):rnd;
+  for(let i=0;i<NB;i++) $('b'+i).classList.toggle('pk',pick.includes(i));
+  $('vd2').textContent=choose(NB,q).toLocaleString('en-US').replace(/,/g,' ')+' ways to pick '+q+' of '+NB+'. '+(rule==='old'?'The rule names one: the cases from days '+pick.map(day).sort((a,b)=>a-b).join(', ')+'.':'This pick names no rule; the next press may differ.'); }
+$('kq').addEventListener('input',()=>{ if(rule==='any') reroll(); draw2(); });
+window.__pic={set:(m,a)=>{ [...$('mch').children][Object.keys(MORN).indexOf(m)].click(); asg=a.slice(); draw1(); const c=count(MORN[m].jobs); return {all:c.all,fair:c.fair,block:!!blocking(MORN[m].jobs)&&!c.fair}; }};
+reset(); draw1(); draw2();
+stepper('#sl1',[
+  {k:'ember',kl:'the board',t:R`D(g) = D(s) = \{\text{Ana}, \text{Ben}, \text{Cruz}\},\ D(t) = \{\text{Cruz}, \text{Dev}\}`,n:`And the van: anyone.`},
+  {k:'teal',kl:'an assignment',t:R`f(j) \in D(j) \text{ for every job } j`,n:`A choosing function (6a), by job, not by set.`},
+  {k:'teal',kl:'counting-pickings',t:R`3 \cdot 3 \cdot 2 \cdot 5 = ${Nw}{90}`,n:`One factor per job (6b).`},
+  {k:'ember',kl:'fair',t:R`f(j) = f(j') \Rightarrow j = j'`,n:`No driver twice: a matching of the jobs with the drivers used.`},
+  {k:'ember',kl:'counting the fair ones',t:R`4 + 12 = ${Nw}{16}`,n:`Cases on the tanker: Cruz, then Dev.`},
+  {k:'ember',kl:'no-room',t:R`k \text{ members into fewer than } k: \text{ impossible}`,n:`Induction on the size of the target, lead-one-out on both sides.`},
+  {k:'ember',kl:'blocking-group',t:R`D(g) \cup D(s) \cup D(f) = \{\text{Ana}, \text{Ben}\}`,n:`Three loads, two drivers: ${'no fair assignment'}.`},
+  {k:'ember',kl:'picking in turn',t:R`g \mapsto \text{Ana},\ t \mapsto\ ?`,n:`The first free driver can strand a later job.`},
+  {k:'ember',kl:'the swap',t:R`g \mapsto \text{Ben},\ t \mapsto \text{Ana}`,n:`Move one pick, and the stranded job is served.`},
+  {k:'teal',kl:'the cold store',t:R`\tbinom{40}{3} = 9880`,n:`All alike, like socks. Oldest first is a rule that picks (least-chooses).`},
+  {k:'ember',kl:'illegal',t:R`90 \ne \text{the fair count}`,n:`Only 16 of the 90 are fair.`}
+],{title:'The slides · the board; an assignment; counting-pickings; fair; counting the fair ones; no-room; blocking-group; picking in turn; the swap; the cold store; illegal moves · ← → keys work'});
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

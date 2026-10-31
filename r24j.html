@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The logistic equation solved</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+.kn{font-size:.88rem}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r24i.html">← 24i slope fields and stepping forward</a><a href="r24k.html">next: 24k fixed points, stability and the start of chaos →</a></p>
+  <div class="tags"><span class="tag tech">24j · technique</span></div>
+  <h1>The logistic equation solved</h1>
+  <p>The seventeenth rung met a population that grows at a rate set by its size, slowed by the share of room already taken. It found the S-shaped curve, and the moment of fastest growth at half the ceiling. But it worked under a quiet assumption: that the population stays between nothing and the ceiling, so that its logarithms make sense. It never showed that the curve is the only one the rule allows, and it waved at starts above the ceiling. This step pays all of that. The rule is tame, so the curve is the one solution, and it can never touch the ceiling. Every start is solved, including the ones that fall and the ones that run off. Turned upside down, the rule becomes the cooling rule, and that gives a way to read the ceiling from three counts. And walked forward a year at a time, the same rule can refuse to settle at all.</p>
+  <p class="gesture">The logistic rule is tame, so its S-shaped curve is the only solution from its start, and it never touches the ceiling. Every start has a formula. Turned upside down, the population cools toward one over the ceiling, and three counts at equal times fix the whole curve. Taken a year at a time, the rule settles only if the yearly growth is not too strong.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r17bio.html">17·bio</a> (the logistic-solution and fastest-growth techniques), <a href="r24d.html">24d</a> (tame rules, the drift technique), <a href="r24f.html">24f</a> (resting lines), <a href="r24e.html">24e</a> (the run-off technique), <a href="r24a.html">24a</a> (the own-rate technique), <a href="r22h.html">22h</a> (rules fed their own answers), <a href="r24i.html">24i</a> (stepping forward). <a href="r24k.html">24k</a> asks which steady states hold, and follows the yearly rule into chaos.</p></div>
+</header>
+
+<section class="class step" data-step="24j1">
+  <h2 class="sthead"><span class="stno">24j1</span>One solution, and it never touches the ceiling</h2>
+  <p class="stands">Stands on 17·bio (the logistic-solution technique), 24d1 (tame rules), 24d3 (the drift technique), 24f2 (the put-back technique) and 24f3 (the resting-line technique).</p>
+  <p data-pid="6f2008">17·bio solved P′ = rP(1 − P/K) “while 0 &lt; P &lt; K”. It used ln P and ln(K − P), which need both to be positive. So it found one solution that stays between, and left open whether a solution could reach K, or whether another curve could share the start. Both are closed here.</p>
+  <p data-pid="dda875">Stays-between technique: <b>for P′ = rP(1 − P/K) with r, K &gt; 0 and 0 &lt; P₀ &lt; K, exactly one solution passes through (0, P₀). It is P = K/(1 + Ce^(−rt)) with C = (K − P₀)/P₀, it exists for every real t, and it never touches 0 or K.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the stays-between technique">
+F(P) = rP\big(1 - \tfrac{P}{K}\big),\ \ F'(P) = r\big(1 - \tfrac{2P}{K}\big),\ \ |F'(P)| \le r\big(1 + \tfrac{2B}{K}\big) \text{ for } |P| \le B @@ a slope ceiling on every bounded strip: tame (24d1)
+P = 0 \text{ and } P = K \text{ are resting lines} @@ F(0) = F(K) = 0
+0 < P(t) < K \text{ wherever a solution from } (0, P_0) \text{ exists} @@ the resting-line technique (24f3): a solution that starts off a resting line never touches it
+P = \tfrac{K}{1 + Ce^{-rt}},\ \ C = \tfrac{K - P_0}{P_0} > 0 @@ now 17·bio's steps are licensed: the logistic-solution technique
+\tfrac{K}{1 + Ce^{-rt}} \text{ has a slope for every } t \text{ and obeys the rule, from } P_0 @@ the bottom is above 1; the put-back technique (24f2)
+\htmlClass{new}{\text{that curve, for every } t, \text{ is the only solution, and stays between } 0 \text{ and } K} \quad \blacksquare @@ any solution agrees with it while both exist (the drift technique, 24d3)
+  </pre>
+  <p data-pid="957afa">The ceiling is approached and never reached, as 17·bio's illegal moves said. Now there is a reason that does not lean on the formula: the ceiling is itself a solution, and two solutions of a tame rule never meet.</p>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">24j1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="P&#x27; = 0.5P\big(1 - \tfrac{P}{200}\big),\ \ P(0) = 20"></span></span>Find C and P(4). <br>Find the time at which P reaches 150. <br>Find why P never reaches 200, without the formula.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24j2">
+  <h2 class="sthead"><span class="stno">24j2</span>Every start</h2>
+  <p class="stands">Stands on 24j1, 13e (the chain rule) and 24e2 (the run-off technique).</p>
+  <p data-pid="15c7eb">Every-start technique: <b>for every start P₀ ≠ 0, the one solution of P′ = rP(1 − P/K) through (0, P₀) is P = K/(1 + Ce^(−rt)), C = (K − P₀)/P₀, wherever 1 + Ce^(−rt) &gt; 0. A start above K falls to K; a start below 0 runs off to minus infinity at t = ln(−C)/r.</b> A start at 0 stays at 0.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the every-start technique">
+P = \tfrac{K}{1 + Ce^{-rt}} \Rightarrow P' = \tfrac{rKCe^{-rt}}{(1 + Ce^{-rt})^2} @@ the chain rule (13e)
+rP\big(1 - \tfrac{P}{K}\big) = r\,\tfrac{K}{1 + Ce^{-rt}}\cdot\tfrac{Ce^{-rt}}{1 + Ce^{-rt}} = P' @@ 1 − P/K = Ce^{−rt}/(1 + Ce^{−rt})
+P(0) = \tfrac{K}{1 + C} = P_0 \iff C = \tfrac{K - P_0}{P_0} @@ the start
+P_0 > K:\ -1 < C < 0,\ \ 1 + Ce^{-rt} > 0 \text{ for } t \ge 0,\ \ P \to K \text{ from above} @@ e^{−rt} ≤ 1 and heads to 0
+P_0 < 0:\ C < -1,\ \ 1 + Ce^{-rt} = 0 \text{ at } t^* = \tfrac{\ln(-C)}{r} > 0 @@ the bottom reaches 0 going forward
+\htmlClass{new}{P_0 < 0:\ P \to -\infty \text{ as } t \to t^*,\ \text{a run-off as in 24e2}} \quad \blacksquare @@ the formula is the one solution while it lasts (24d3)
+  </pre>
+  <p data-pid="4370c3">A start above K also runs off, backward in time, at t = ln(−C)/r &lt; 0. A herd of 8000 elk on range that holds 5000, with r = 0.3 a year, has C = −0.375. It falls to 5457 in five years. Run the rule backward and it would have been infinite 3.27 years before the count, which says only that the rule cannot have held back then. A negative population has no meaning; it is here because the rule does not know that, and its run-off is the same as y′ = y²'s.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · every start · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24j2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="P&#x27; = 0.4P\big(1 - \tfrac{P}{1000}\big)"></span></span>From P(0) = 1500, find C, P(3), and the time before 0 at which the formula runs off. <br>From P(0) = −100, find C and the time at which the solution runs off.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24j3">
+  <h2 class="sthead"><span class="stno">24j3</span>Turned over, the population cools</h2>
+  <p class="stands">Stands on 24j1, 13e (the chain rule), 24a3 (the own-rate technique) and 17j (cooling).</p>
+  <p data-pid="7f816b">Reciprocal-cooling technique: <b>if P solves P′ = rP(1 − P/K) and is never 0, then u = 1/P solves u′ = −r(u − 1/K): u closes on 1/K as a drink cools toward its room, and the gap u − 1/K shrinks by the factor e^(−rT) in every stretch of time T.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the reciprocal-cooling technique, and three counts">
+u = \tfrac1P,\ \ u' = -\tfrac{P'}{P^2} = -\tfrac{r}{P} + \tfrac{r}{K} = -r\big(u - \tfrac1K\big) @@ the chain rule (13e); put in the rule
+u - \tfrac1K = \big(u_0 - \tfrac1K\big)e^{-rt} @@ the own-rate technique (24a3) on the gap
+u_2 - c = q\,(u_1 - c),\ \ u_3 - c = q\,(u_2 - c),\ \ c = \tfrac1K,\ q = e^{-rT} @@ three counts, T apart
+q = \tfrac{u_3 - u_2}{u_2 - u_1} @@ subtract the two lines
+(u_2 - c)^2 = (u_1 - c)(u_3 - c) @@ both sides equal q²(u₁ − c)²
+\htmlClass{new}{\tfrac1K = \tfrac{u_1u_3 - u_2^2}{u_1 + u_3 - 2u_2},\ \ r = -\tfrac{\ln q}{T}} \quad \blacksquare @@ multiply out; the u² terms on both sides cancel
+  </pre>
+  <p data-pid="449ce9">So three counts at equal times fix K and r, and with them the whole curve. Try it on the United States census, sixty years apart: 3.929 million in 1790, 23.192 million in 1850, 92.228 million in 1910. The technique gives K ≈ 199 million and r ≈ 0.0313 a year. The curve through those three counts gives 149.5 million for 1950; the census found 151.3 million. It gives 191.9 million for 2020; the census found 331.4 million.</p>
+  <p data-pid="a90982">Nothing in the mathematics failed. Three counts always fix a logistic curve exactly, whatever the population is doing. The fit to 1950 is a fact about the curve. The claim that the curve is a law of growth is a separate claim, and the counts after 1950 refuted it. The seam challenge returns to this.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · turned over · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · the United States census against the logistic curve through three of its counts</div>
+    <div id="pl"></div>
+    <div class="kn"><span class="m">up to</span><input type="range" id="kn" min="1790" max="2020" step="10" value="1950"><output id="okn"></output></div>
+    <div class="cap">Ink: the curve through the counts of 1790, 1850 and 1910 (teal dashes at its ceiling, about 199 million). Ember dots: each census, in millions, up to the year on the knob.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24j3.1</span><span class="ph undo">undo</span><span class="givens"><span class="gtx">a yeast culture in a lab in Corvallis, counted every 5 hours: 100, 250, 500 thousand cells per millilitre</span></span>Find K and r, assuming a logistic rule. <br>Find the counts the rule then gives at 15 and 20 hours. <br>Find when the culture grows fastest.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24j4">
+  <h2 class="sthead"><span class="stno">24j4</span>Walking the rule a year at a time</h2>
+  <p class="stands">Stands on 24j1, 24i1 (the forward walk), 22h4 (where a rule does not settle) and 13 (slopes).</p>
+  <p data-pid="a7b556">Many animals and plants breed once a year, so a census is a list, one count a year, and the rule becomes a forward walk with h = 1: Pₙ₊₁ = Pₙ + rPₙ(1 − Pₙ/K). The smooth rule always settles at K from any start between. The walk need not.</p>
+  <p data-pid="d3d4b3">Logistic-walk technique: <b>forward steps of size h on P′ = rP(1 − P/K) pull starts near K in when 0 &lt; hr &lt; 2, and push them away when hr &gt; 2. Written in x = hrP/((1 + hr)K), the walk is xₙ₊₁ = a·xₙ(1 − xₙ), with a = 1 + hr.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the logistic-walk technique">
+g(P) = P + hrP\big(1 - \tfrac{P}{K}\big),\ \ g(K) = K @@ one forward step (24i1); K is left alone
+g'(P) = 1 + hr - \tfrac{2hrP}{K},\ \ g'(K) = 1 - hr @@ the slope of a polynomial (13)
+|1 - hr| < 1 \iff 0 < hr < 2 @@ 22h4: below 1 in size pulls in, above 1 pushes away
+P = cx,\ c = \tfrac{(1 + hr)K}{hr}:\ \ x_{n+1} = (1 + hr)x_n - \tfrac{hr\,c}{K}x_n^2 = (1 + hr)\,x_n(1 - x_n) @@ divide one step by c
+\htmlClass{new}{x_{n+1} = a\,x_n(1 - x_n),\ \ a = 1 + hr} \quad \blacksquare @@ the lines above
+  </pre>
+  <p data-pid="7b6979">With hr = 2.2 the walk is 22h4's rule sₙ₊₁ = 3.2sₙ(1 − sₙ), whose run splits into two threads. A population that breeds once a year and grows fast can swing between a high year and a low year forever, with nothing outside it changing. The smooth rule cannot do that: by 24j1 it climbs to K and stays below. 24k follows the yearly rule further.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24j4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">yearly counts, P_{n+1} = P_n + rP_n(1 − P_n/1000), from P₀ = 100</span></span>Find the slope of the step at K for r = 0.8, r = 1.8 and r = 2.5, and which of the three settle at 1000. <br>Find P₁ to P₄ for r = 2.5. <br>Find the a of the map xₙ₊₁ = a·xₙ(1 − xₙ) for each r.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24j5">
+  <h2 class="sthead"><span class="stno">24j5</span>Illegal moves</h2>
+  <p class="stands">Stands on 24j1 to 24j4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+P = \tfrac{K}{1 + Ce^{-rt}} \text{ solves the rule, so no other solution starts at } P_0\,? @@ checking one solution says nothing about others; tameness and the drift technique do (24j1, 24f2)
+P \text{ climbs toward } K, \text{ so it reaches } K \text{ and rests there}\,? @@ it would touch the resting line P = K, and a tame rule forbids it (24f3)
+\tfrac1P \text{ closes on } \tfrac1K \text{ by a fixed factor, so } P \text{ closes on } K \text{ by the same factor}\,? @@ the factor is for the gap in 1/P; the gap in P shrinks by a factor that changes
+\text{the smooth rule settles at } K, \text{ so the yearly walk does too}\,? @@ only when hr &lt; 2; past it the walk swings (24j4)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24j5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="y&#x27; = 2\sqrt{|y|},\ \ y(0) = 0"></span></span>Check that y = t² solves it for t ≥ 0. <br>Find a second solution with the same start. <br>Find what the logistic rule has that this rule lacks.</li><li><span class="givens"><span data-tex-inline="P&#x27; = P(1 - P),\ \ P(0) = 0.5"></span></span>Find P(t) and the first t at which P is within 0.01 of 1. <br>Find whether any t gives P = 1.</li><li><span class="givens"><span data-tex-inline="P&#x27; = P\big(1 - \tfrac{P}{100}\big),\ \ P(0) = 10"></span></span>Find the gap 100 − P at t = 0, 1, 2 and 3, and the ratio of each gap to the one before. <br>Find the gap 1/P − 1/100 at the same times, and its ratios.</li><li><span class="givens"><span class="gtx">yearly counts, K = 1000, r = 2.2, P₀ = 500</span></span>Find P₁ to P₄ by the yearly walk. <br>Find whether the counts settle, and what the smooth rule from P(0) = 500 does.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">24j.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="P&#x27; = rP\ln\tfrac{K}{P}"></span></span>Build the solution from P(0) = P₀ with 0 &lt; P₀ &lt; K, using u = ln(P/K). <br>Find the size at which this rule grows fastest, and compare it with the logistic's K/2.</div>
+  <div class="chq"><span class="chid">24j.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="P&#x27; = P\big(1 - \tfrac{P}{10^6}\big)"></span></span>Find the time to reach half the ceiling from P₀ = 1, and from P₀ = 0.001. <br>Find how that time grows as P₀ heads to 0, and what the rule does from P₀ = 0.</div>
+  <div class="chq"><span class="chid">24j.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="P(t) = K\big(\tfrac12 + \tfrac1\pi\arctan t\big)"></span></span>It rises from 0 to K, and grows fastest when P = K/2. Turn it round: must a curve like that be logistic? <br>Find P′ as a function of P alone, and whether it is rP(1 − P/K) for any r.</div>
+  <div class="chq"><span class="chid">24j.4.4</span><span class="tagq">reroute</span>Solve the logistic rule a second way: write it for u = 1/P and solve that with the integrating factor of 24g. <br>Then solve it a third way, by separating the variables (24f), with 17·bio's split of K/(P(K − P)).</div>
+  <div class="chq"><span class="chid">24j.4.5</span><span class="tagq">seam</span>In 1920 two biologists fitted the logistic curve to the United States censuses from 1790 to 1910, found it fit closely, and called it a law of population growth. In 1940 a mathematician showed that curves from quite different rules fit the same records, and many records of other populations, just as closely. <br>This step showed that any three counts fix a logistic curve exactly. Was the close fit evidence for the law, or only for the curve? What would a law of growth have to do that a close fit to past counts cannot?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r24i.html">← 24i · slope fields and stepping forward</a><a href="r24k.html">24k · fixed points, stability and the start of chaos →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The logistic rule is the logistic (Verhulst) equation; K is the carrying capacity and r the intrinsic rate of increase. The solutions P = 0 and P = K are its equilibria. The substitution u = 1/P is the standard way to solve a Bernoulli equation. The three-counts formula is a method of fitting from three equally spaced points. The yearly walk, in x, is the logistic map, and the rule P′ = rP ln(K/P) of the build challenge is the Gompertz equation.</p>
+  <h3>Who said it first</h3>
+  <p>Pierre-François Verhulst proposed the rule in 1838 and named its curve the logistic in 1845. Raymond Pearl and Lowell Reed found it again in 1920, fitted it to the census and called it a law. William Feller showed in 1940 that other S-shaped curves fit the same data as well. Benjamin Gompertz proposed his rule in 1825, for human mortality. Robert May showed in 1976 how wild the yearly version can be.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+/* sequence and sum plots for rungs 22 on: plot({xlo,xhi,ylo,yhi,series:[{pts,c,dots,open,w}],h:[{y,c,dash,t}]}) */
+const V=c=>'var('+c+')';
+function plot(o){ const W=320,H=220,P=26, X=x=>P+(x-o.xlo)/(o.xhi-o.xlo)*(W-P-6), Y=y=>H-P-(y-o.ylo)/(o.yhi-o.ylo)*(H-P-8);
+  let s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;max-width:380px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  s+='<line x1="'+P+'" y1="'+Y(Math.max(o.ylo,Math.min(o.yhi,0)))+'" x2="'+W+'" y2="'+Y(Math.max(o.ylo,Math.min(o.yhi,0)))+'" style="stroke:'+V('--grid')+';stroke-width:1.4"/>';
+  s+='<line x1="'+P+'" y1="0" x2="'+P+'" y2="'+(H-P)+'" style="stroke:'+V('--grid')+';stroke-width:1.4"/>';
+  (o.ticks||[]).forEach(t=>{ s+='<text x="2" y="'+(Y(t)+4)+'" style="font-size:10px;fill:'+V('--ink')+'">'+t+'</text>'; });
+  (o.h||[]).forEach(l=>{ s+='<line x1="'+P+'" y1="'+Y(l.y)+'" x2="'+W+'" y2="'+Y(l.y)+'" style="stroke:'+V(l.c||'--teal')+';stroke-width:1.4;stroke-dasharray:'+(l.dash||'5 4')+'"/>'; if(l.t) s+='<text x="'+(W-4)+'" y="'+(Y(l.y)-4)+'" text-anchor="end" style="font-size:10px;fill:'+V(l.c||'--teal')+'">'+l.t+'</text>'; });
+  (o.series||[]).forEach(q=>{ const pts=q.pts.filter(p=>isFinite(p[1])&&p[1]>=o.ylo-1e9);
+    if(q.open) s+='<polyline points="'+pts.map(p=>X(p[0])+','+Y(Math.max(o.ylo,Math.min(o.yhi,p[1])))).join(' ')+'" style="fill:none;stroke:'+V(q.c||'--ink')+';stroke-width:'+(q.w||1.6)+'"/>';
+    if(q.dots!==false) pts.forEach(p=>{ if(p[1]>=o.ylo&&p[1]<=o.yhi) s+='<circle cx="'+X(p[0])+'" cy="'+Y(p[1])+'" r="'+(q.r||2.4)+'" style="fill:'+V(q.c||'--ink')+'"/>'; }); });
+  return s+'</svg>'; }
+
+let yr=1950; const e=$('kn'); e.addEventListener('input',()=>{ yr=+e.value; draw(); });
+const cen=[[1790,3.929],[1800,5.308],[1810,7.240],[1820,9.638],[1830,12.866],[1840,17.069],[1850,23.192],[1860,31.443],[1870,38.558],[1880,50.189],[1890,62.980],[1900,76.212],[1910,92.228],[1920,106.022],[1930,123.203],[1940,132.165],[1950,151.326],[1960,179.323],[1970,203.212],[1980,226.546],[1990,248.710],[2000,281.422],[2010,308.746],[2020,331.449]];
+const u1=1/3.929214,u2=1/23.191876,u3=1/92.228496, iK=(u1*u3-u2*u2)/(u1+u3-2*u2), q=(u3-u2)/(u2-u1);
+const Pm=t=>1/(iK+(u1-iK)*Math.pow(q,(t-1790)/60));
+function draw(){ const pts=[]; for(let i=0;i<=115;i++){ const t=1790+2*i; pts.push([t,Pm(t)]); }
+  const dots=cen.filter(c=>c[0]<=yr);
+  $('pl').innerHTML=plot({xlo:1790,xhi:2020,ylo:0,yhi:350,ticks:[0,100,200,300],h:[{y:1/iK,c:'--teal',t:'K ≈ 199'}],series:[{pts,c:'--ink',open:true,dots:false,w:2.2},{pts:dots,c:'--ember',r:2.6}]});
+  $('okn').textContent=yr; const c=cen.find(c=>c[0]===yr); const v=$('vd');
+  const gap=c[1]-Pm(yr); v.className='verdict'+(Math.abs(gap)<0.05*c[1]?' win':' lose');
+  v.textContent=yr+': census '+c[1].toFixed(1)+' million, curve '+Pm(yr).toFixed(1)+' million, off by '+(100*Math.abs(gap)/c[1]).toFixed(1)+'%.'; }
+draw();
+window.__pic={set:j=>{ yr=j; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'the formula',t:R`P = \tfrac{K}{1 + Ce^{-rt}},\ \ C = \tfrac{K - P_0}{P_0}`,n:`Checked in the rule.`},
+  {k:'ember',kl:'above K',t:R`-1 < C < 0:\ P \downarrow K`,n:`Falls to the ceiling.`},
+  {k:'ember',kl:'below 0',t:R`\htmlClass{new}{C < -1:\ \text{run-off at } t = \tfrac{\ln(-C)}{r}}`,n:`Like y′ = y².`}
+],{title:'The slides · every start · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'u = 1/P',t:R`u' = -r\big(u - \tfrac1K\big)`,n:`The cooling rule of 17j.`},
+  {k:'ember',kl:'three counts',t:R`\htmlClass{new}{\tfrac1K = \tfrac{u_1u_3 - u_2^2}{u_1 + u_3 - 2u_2}}`,n:`Equal times apart.`},
+  {k:'ember',kl:'the census',t:R`K \approx 199 \text{ million (1790, 1850, 1910)}`,n:`A curve, not yet a law.`}
+],{title:'The slides · turned over · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

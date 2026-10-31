@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sums against areas</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r22e.html">← 22e compare with a geometric sum</a><a href="r22g.html">next: 22g signs that alternate, and sums that can be rearranged →</a></p>
+  <div class="tags"><span class="tag proof">22f · proof</span></div>
+  <h1>Sums against areas</h1>
+  <p>When the pieces of a sum come from a curve that falls, each piece is a strip one unit wide standing under or over the curve. So the endless sum and the area under the curve out to forever go together: both settle, or both wander. That turns questions about sums into questions about areas, which the sixteenth rung can answer. It settles a whole family at once: the sums of one over a power of the counting numbers settle exactly when the power is more than one. And it puts a fence round totals nobody can find: one plus a quarter plus a ninth and so on settles below two, though its exact total waits for a much later rung.</p>
+  <p class="gesture">If the pieces come from a falling curve, the sum and the area under the curve settle or wander together. One over the counting numbers raised to a power settles exactly when the power is more than one. The area also fences in the total.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r22e.html">22e</a> (comparison), <a href="r16i.html">16i</a> (improper integrals), <a href="r15b.html">15b</a> (lower and upper sums), <a href="r17a.html">17a</a> (ln as an area). <a href="r22g.html">22g</a> lets the signs alternate.</p></div>
+</header>
+
+<section class="class step" data-step="22f1">
+  <h2 class="sthead"><span class="stno">22f1</span>Strips beside the curve</h2>
+  <p class="stands">Stands on 15b (lower and upper sums), 16i (improper integrals) and 22d1 (the climb technique for sums).</p>
+  <p data-pid="8ecaa4">Area technique for sums: <b>let f be positive and falling on [1, ∞), and aₙ = f(n). Then Σ aₙ settles exactly when ∫₁^∞ f settles.</b> On [k, k + 1] the strip of height f(k + 1) lies under the curve and the strip of height f(k) lies over it.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the area technique for sums">
+f(k+1) \le \int_k^{k+1} f \le f(k) @@ f falls: lowest at the right end, highest at the left (15b)
+a_2 + \cdots + a_n \le \int_1^n f \le a_1 + \cdots + a_{n-1} @@ add the strips from k = 1 to n − 1
+\int_1^\infty f \text{ settles} \Rightarrow s_n \le a_1 + \int_1^\infty f @@ a ceiling for the running totals
+\textstyle\sum a_n \text{ settles} \Rightarrow \int_1^n f \le \sum a_n @@ a ceiling for the areas, which climb in n
+\htmlClass{new}{\textstyle\sum a_n \text{ and } \int_1^\infty f \text{ settle together}} \quad \blacksquare @@ the climb technique on each side (22a2)
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · strips · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">22f1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="f(x) = \tfrac1x \text{ on } [1, 5]"></span></span>Draw the four strips under the curve and the four over it. <br>Write the two inequalities of the area technique for n = 5, with numbers. <br>Find the fence they put round ln 5.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22f2">
+  <h2 class="sthead"><span class="stno">22f2</span>The p-sums</h2>
+  <p class="stands">Stands on 22f1, 16i (∫₁^∞ x^(−p)) and 17 (ln).</p>
+  <p data-pid="115570">p-sum technique: <b>Σ 1/nᵖ settles exactly when p &gt; 1.</b> The curve 1/xᵖ falls for p &gt; 0. 16i found ∫₁^∞ x^(−p) dx settles exactly when p &gt; 1. For p ≤ 0 the pieces do not head to 0.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the p-sum technique">
+\int_1^b x^{-p}\,dx = \tfrac{b^{1-p} - 1}{1 - p} \ (p \ne 1),\ \ \int_1^b \tfrac{dx}{x} = \ln b @@ 16c and 17a
+p > 1:\ \int_1^\infty x^{-p}\,dx = \tfrac{1}{p - 1} @@ b¹⁻ᵖ → 0
+p \le 1:\ \text{the areas pass every ceiling} @@ ln b and b¹⁻ᵖ both do
+\htmlClass{new}{\textstyle\sum \tfrac{1}{n^p} \text{ settles} \Leftrightarrow p > 1} \quad \blacksquare @@ the area technique (22f1)
+  </pre>
+  <p data-pid="1cf3d0">So the line between settling and wandering runs exactly through the harmonic sum. Σ 1/n wanders. Σ 1/n^1.01 settles. The p-sums are the main yardstick for comparison after the geometric sums: use them when the pieces shrink like a power of n rather than like a power of a fixed number.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · p-sums · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22f2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\textstyle\sum \tfrac{1}{\sqrt n},\ \ \sum \tfrac{1}{n^{1.5}},\ \ \sum \tfrac{n}{n^3 + 1}"></span></span>Decide the first two by the p-sum technique. <br>Decide the third by comparison with a p-sum.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22f3">
+  <h2 class="sthead"><span class="stno">22f3</span>A fence round the total</h2>
+  <p class="stands">Stands on 22f1.</p>
+  <p data-pid="fa6fd8">Fence technique for sums: <b>if f is positive and falling, the total of Σ f(n) lies between ∫₁^∞ f and f(1) + ∫₁^∞ f; and the tail after n pieces lies between ∫_{n+1}^∞ f and ∫ₙ^∞ f.</b> These are the inequalities of 22f1, with the area run out to forever.</p>
+  <pre class="lines" data-k="ember" data-label="this step: 1 + ¼ + ⅑ + ⋯">
+\int_1^\infty \tfrac{dx}{x^2} = 1 @@ 22f2 with p = 2
+1 \le \textstyle\sum \tfrac{1}{n^2} \le 1 + 1 = 2 @@ the fence technique
+s_{10} = 1.5497\ldots,\ \ \tfrac{1}{11} \le \text{tail} \le \tfrac{1}{10} @@ ten pieces, and the tail fenced by areas
+\htmlClass{new}{1.6406 < \textstyle\sum \tfrac{1}{n^2} < 1.6498} \quad \blacksquare @@ add the fences to s₁₀
+  </pre>
+  <p data-pid="5d0b1e">Ten pieces and two areas pin the total to within a hundredth. Its exact value is a famous number that involves π. This ladder can only fence it for now. The proof waits for rung 32.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22f3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\textstyle\sum \tfrac{1}{n^3}"></span></span>Find s₅, to six places. <br>Fence the tail after five pieces by two areas. <br>Find the fence round the total, and its width.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22f4">
+  <h2 class="sthead"><span class="stno">22f4</span>A gap that settles</h2>
+  <p class="stands">Stands on 22f1, 22a2 (the fall technique) and 17a (ln as an area).</p>
+  <p data-pid="caa557">The harmonic sum wanders, but 22f1 says how fast: its running totals Hₙ = 1 + ½ + ⋯ + 1/n stay within 1 of ln n. The gap between them does better than that. It settles.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the gap Hₙ − ln n">
+g_n = H_n - \ln n @@ the running total less the area ∫₁ⁿ dx/x
+g_n - g_{n+1} = \ln(n+1) - \ln n - \tfrac{1}{n+1} = \int_n^{n+1}\Big(\tfrac1x - \tfrac{1}{n+1}\Big)dx \ge 0 @@ 1/x ≥ 1/(n+1) on the strip: gₙ falls
+g_n \ge \tfrac1n > 0 @@ 22f1: Hₙ − 1/n = a₁ + ⋯ + aₙ₋₁ ≥ ∫₁ⁿ dx/x = ln n
+\htmlClass{new}{g_n \to \gamma \text{ for some } \gamma \ge 0} \quad \blacksquare @@ the fall technique (22a2)
+  </pre>
+  <p data-pid="4fb16e">The fall technique gives a number without giving its digits. Computed, γ ≈ 0.5772. Nobody knows whether γ is a fraction. That question has been open for nearly three hundred years.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22f4.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\gamma \approx 0.5772"></span></span>Estimate H₁₀₀₀ from ln 1000 and γ. <br>Find about how many pieces the harmonic sum needs to pass 20. <br>Find on which side of the truth the estimate ln n + γ lies, and why.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22f5">
+  <h2 class="sthead"><span class="stno">22f5</span>Illegal moves</h2>
+  <p class="stands">Stands on 22f1 to 22f4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\textstyle\sum \tfrac{1}{n^2} = \int_1^\infty \tfrac{dx}{x^2} = 1\,? @@ the area only fences the total; the sum is between 1 and 2
+\text{use the area technique on } \tfrac{\sin^2 x}{x^2}\,? @@ the curve must fall; this one wobbles
+p \ge 1 \Rightarrow \textstyle\sum n^{-p} \text{ settles}\,? @@ p = 1 is the harmonic sum: it wanders
+\gamma \text{ is a fraction, since it is a limit of } H_n - \ln n\,? @@ a limit of numbers of a kind need not be of that kind (22a3)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22f5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\textstyle\sum \tfrac{1}{n^3},\ \ \int_1^\infty \tfrac{dx}{x^3}"></span></span>Find the area. <br>Find the fence for the total, and whether the area is inside it.</li><li><span class="givens"><span data-tex-inline="f(x) = \sin^2(\pi x)"></span></span>Find Σ f(n). <br>Find ∫₁ⁿ f, and whether the area settles. <br>Find which condition of the area technique fails.</li><li><span class="givens"><span data-tex-inline="\textstyle\sum n^{-p}"></span></span>Find ∫₁ᵇ dx/x, and whether it settles as b grows. <br>Find the least p for which Σ n⁻ᵖ settles, if there is one.</li><li><span class="givens"><span class="gtx">a limit of fractions</span></span>Find a sequence of fractions that settles at a real that is not a fraction. <br>Find what is known about whether γ is a fraction.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">22f.4.1</span><span class="tagq">build</span>Build a sum whose pieces are smaller than 1/n far out, but which still wanders. <br>Then build one whose pieces are bigger than 1/nᵖ far out for every p > 1, but which still settles.</div>
+  <div class="chq"><span class="chid">22f.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\textstyle\sum \tfrac{1}{n^2}"></span></span>Find the fewest pieces after which the fence technique pins its total to within 0.0001.</div>
+  <div class="chq"><span class="chid">22f.4.3</span><span class="tagq">converse</span>The area technique asks for a curve that falls. Drop that and keep f positive and continuous. <br>Find an f for which Σ f(n) settles but the area wanders. <br>Find one for which the area settles but Σ f(n) wanders.</div>
+  <div class="chq"><span class="chid">22f.4.4</span><span class="tagq">reroute</span>Prove that Σ 1/nᵖ settles for p > 1 without any area. Group the pieces in doubling blocks as 22d3 did, and find a geometric sum above the blocks.</div>
+  <div class="chq"><span class="chid">22f.4.5</span><span class="tagq">seam</span>A young mathematician announced the total of 1 + ¼ + ⅑ + ⋯, a number built from π. To find it he treated the sine as a polynomial with endlessly many factors, one for each place it is 0. Others objected that a rule for polynomials need not carry over to the endless, and that the sine might hide other zeros. He checked his total to many places against the running totals, and published. Proofs that met the objections came much later. <br>Was the total known when it was announced? <br>Is an answer checked to many places, but reached by a step nobody can justify, knowledge?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r22e.html">← 22e · compare with a geometric sum</a><a href="r22g.html">22g · signs that alternate, and sums that can be rearranged →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The area technique for sums is the integral test; the p-sums are the p-series; the fence technique gives the integral test remainder estimate. γ is the Euler–Mascheroni constant. The total of 1 + ¼ + ⅑ + ⋯ is π²/6; finding it is the Basel problem.</p>
+  <h3>Who said it first</h3>
+  <p>Colin Maclaurin (1742) and Cauchy (1827) laid sums beside areas. Pietro Mengoli posed the Basel problem in 1650, the Bernoulli brothers failed at it, and Leonhard Euler solved it in 1734, aged twenty-seven, by a step that was not justified for a century. Euler also found γ (1734), and Lorenzo Mascheroni computed it, partly wrongly, in 1790. In 22f.4.5, the objections were raised by Daniel Bernoulli and others; Euler gave a second proof in 1741, and the product for the sine was put on firm ground by Karl Weierstrass (1876).</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'under and over',t:R`f(k+1) \le \int_k^{k+1} f \le f(k)`,n:`f falls.`},
+  {k:'ember',kl:'together',t:R`\htmlClass{new}{\textstyle\sum f(n) \sim \int_1^\infty f}`,n:`Settle or wander together.`}
+],{title:'The slides · strips · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'p > 1',t:R`\htmlClass{new}{\textstyle\sum n^{-p} \text{ settles} \Leftrightarrow p > 1}`,n:`The area 1/(p − 1).`}
+],{title:'The slides · p-sums · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

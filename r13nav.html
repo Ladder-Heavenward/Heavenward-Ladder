@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>13·nav · How fast is the tide rising?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+@media (max-width:520px){.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+.tw td{text-align:right;font-family:var(--mono);font-size:.84rem}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r13comp.html">← 13·comp how does a calculator find a root?</a><a href="r14.html">next: 14 · reading a shape from its slopes →</a></p>
+  <div class="tags"><span class="tag nav">13·nav · navigation</span></div>
+  <h1>How fast is the tide rising?</h1>
+  <p>How fast is the tide rising? Anyone who keeps a boat on this coast asks it. A sailboat waiting to cross the bar at Moss Landing needs a few more feet of water. A crabber on a Puget Sound beach wants to know how long the sand stays dry. The tide table answers a different question. It gives the height of the water at certain times: the times of high and low water, or one reading each hour. How fast the water climbs between readings is not printed anywhere. It is hard because the rate changes all the time. Near low water the sea barely moves, and a few hours later it climbs a foot in twenty minutes. This page reads the rate from a real table as chords, finds the rate at an instant from a function fitted to the low and the high, and proves why the middle hours of a rise run fastest. It ends with the sailors' old rule of twelfths, and with a rise from Seattle that the rule gets wrong.</p>
+  <p class="gesture">The average rate over an hour is the rise in that hour. The best reading of the rate at an instant from an hourly table is the centred chord: the rise over the two hours around it, halved. For the rate at an instant itself, fit the smoothest rise that starts and ends at rest. Its rate is zero at low and high water and greatest exactly halfway, at one and a half times the range over the time of the rise. The sailors' rule says the six hours of a rise climb one, two, three, three, two and one twelfths of the range. The fitted rise agrees to within a hundredth of the range. A rise that is quicker at its start than at its end breaks both.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r13a.html">13a</a> (the chord and its slope, the slope at a point as a limit, slope-of-a-line), <a href="r13d.html">13d</a> (polynomial-slope, constant-factor for slopes), <a href="r13j.html">13j</a> (multiple-inside), <a href="r13f.html">13f</a> (a joint has no slope), <a href="r13k.html">13k</a> (the nearby line), <a href="r08i.html">8i</a> (completing the square), <a href="r08f.html">8f</a> (square-never-negative), <a href="r05i.html">5i</a> (rates and units). Rung 14 reads a shape from its slopes; a much higher navigation page asks how tides are predicted years ahead.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · read it through, then work the picture and the slides</div>
+
+  <h3>The words</h3>
+  <p data-pid="7207fa">Take Monterey on the evening of 21 July 2024. The predictions below are NOAA's, for its station on the Monterey wharf, in feet above the chart's zero, at Pacific standard time. Low water came at 3:36 p.m., at 2.77 ft. High water came at 9:47 p.m., at 6.47 ft. In between, the table gives one height each hour.</p>
+  <p class="eqline" data-pid="94c2c0">From here on, on this page, t is the time in hours, and h(t) the height of the water in feet. The low and the high are L and L + R: R is the range of the rise. T is how long the rise takes, from low water to high. Monterey's evening: L = 2.77, R = 3.70, T = 6.18 (6 hours 11 minutes).</p>
+  <p data-pid="8527f9"><b>A tide table is a function of time, known only at the times it lists.</b> Between them, the water rises without jumps, but the table says nothing about how.</p>
+  <div class="tablewrap"><table class="tt tw">
+  <tr><th class="l">time</th><th class="l">height h, ft</th><th class="l">rise in the next hour, ft</th></tr>
+  <tr><td class="l">4 p.m.</td><td class="l">2.798</td><td class="l">0.339</td></tr>
+  <tr><td class="l">5 p.m.</td><td class="l">3.137</td><td class="l">0.693</td></tr>
+  <tr><td class="l">6 p.m.</td><td class="l">3.830</td><td class="l">0.913</td></tr>
+  <tr><td class="l">7 p.m.</td><td class="l">4.743</td><td class="l">0.908</td></tr>
+  <tr><td class="l">8 p.m.</td><td class="l">5.651</td><td class="l">0.644</td></tr>
+  <tr><td class="l">9 p.m.</td><td class="l">6.295</td><td class="l">0.164</td></tr>
+  <tr><td class="l">10 p.m.</td><td class="l">6.459</td><td class="l"></td></tr>
+  </table></div>
+  <h3>Chords from a table</h3>
+  <p data-pid="f0822a">The rise from 6 p.m. to 7 p.m. is 4.743 − 3.830 = 0.913 ft. Over a run of one hour, that is a chord of slope 0.913 ft an hour (13a). It is the average rate of that hour, nothing more. The whole rise averages R/T = 3.70/6.18 ≈ 0.60 ft an hour.</p>
+  <p data-pid="6a87fd">The chords climb, then fall: 0.34, 0.69, 0.91, 0.91, 0.64, 0.16. <b>The middle hours of the rise run fastest, and the first and last run slowest.</b> The table shows it. It does not say why, or how fast the water climbs at 7 p.m. exactly.</p>
+  <div class="brkkey"></div>
+  <p data-pid="38fc7f">The chord from 6 to 7 belongs to 6:30 more than to either end. For the rate at 7 p.m. itself, take the chord from 6 to 8, which has 7 at its middle. Centred-chord technique: <b>for a function made of a constant, a multiple of t and a multiple of t², the chord over a stretch centred on t has exactly the slope at t.</b> For other functions it is a guess, usually a close one.</p>
+  <pre class="lines" data-k="ember" data-label="13·nav: the centred-chord technique">
+f(t) = a + bt + ct^2 @@ the supposition
+f(t + d) - f(t - d) = 2bd + c\big((t + d)^2 - (t - d)^2\big) = 2bd + 4ctd @@ a leaves; square-of-a-sum and of a difference (5h)
+\tfrac{f(t + d) - f(t - d)}{2d} = b + 2ct @@ the chord's slope over a run of 2d; d ≠ 0
+\htmlClass{new}{= f'(t)} \quad \blacksquare @@ polynomial-slope (13d)
+  </pre>
+  <p data-pid="2aac1b">At Monterey, the centred chord at 7 p.m. is (5.651 − 3.830)/2 ≈ 0.91 ft an hour. That is a guess at the rate at an instant, made from two readings. To do better needs a function for every instant, not a list.</p>
+  <h3>A function for the whole rise</h3>
+  <p data-pid="34d4fc">Near low water and near high water the sea stands almost still for a while. Sailors call it slack water. So guess a rise that starts at rest at L, ends at rest at L + R, and has no corners. The plainest polynomial that does it has degree 3.</p>
+  <p class="eqline" data-pid="4e9368">From here on, on this page, s = (t − t₀)/T is the share of the rise gone by, where t₀ is the time of low water: s runs from 0 at low water to 1 at high. The smooth rise is h(t) = L + R(3s² − 2s³). Its accepted name is a smoothstep.</p>
+  <pre class="lines" data-k="ember" data-label="13·nav: the rate of the smooth rise">
+h(t_0) = L,\ \ h(t_0 + T) = L + R(3 - 2) = L + R @@ s = 0 and s = 1: the rise starts and ends where the table says
+\tfrac{d}{ds}(3s^2 - 2s^3) = 6s - 6s^2 @@ polynomial-slope (13d)
+h'(t) = R \cdot (6s - 6s^2) \cdot \tfrac1T @@ constant-factor; multiple-inside (13j) and displaced-slopes (13d): s is t/T less a constant
+\htmlClass{new}{h'(t) = \tfrac{6R}{T}\,(s - s^2)} @@ the rate of the smooth rise, in feet an hour
+h'(t_0) = 0 = h'(t_0 + T) @@ at s = 0 and s = 1: at rest at low and high water
+  </pre>
+  <p data-pid="ac2db3">For Monterey's evening, 6R/T = 6 · 3.703/6.183 ≈ 3.59. At 7 p.m., s = (19 − 15.6)/6.183 ≈ 0.55, so h′ ≈ 3.59 · (0.55 − 0.30) ≈ 0.89 ft an hour. The centred chord said 0.91. The model also puts the water at 4.90 ft at 7 p.m., where the table says 4.74. Across the evening, model and table never differ by more than 0.18 ft.</p>
+  <h3>Why the middle hours run fastest</h3>
+  <p data-pid="337049">Fastest-at-mid-tide technique. Let h be the smooth rise. <b>Its rate is greatest exactly halfway through the rise, where it is 3R/(2T), one and a half times the average.</b> And the rate a share s into the rise equals the rate a share s before its end.</p>
+  <pre class="lines" data-k="ember" data-label="13·nav: the fastest-at-mid-tide technique">
+s - s^2 = \tfrac14 - \big(s - \tfrac12\big)^2 @@ completing the square (8i)
+s - s^2 \le \tfrac14,\ \text{ with equality only at } s = \tfrac12 @@ square-never-negative (8f), and a square is 0 only at 0
+h'(t) \le \tfrac{6R}{T} \cdot \tfrac14 = \htmlClass{new}{\tfrac{3R}{2T}} @@ the rate of the smooth rise; 6R/T &amp;gt; 0
+(1 - s) - (1 - s)^2 = s - s^2 \quad \blacksquare @@ expand: the rate at s and at 1 − s agree
+  </pre>
+  <p data-pid="ad3cc0">So the rise is slow at both ends and quickest in the middle for one plain reason: it must start at rest and end at rest, and it must cover R in T. At Monterey the greatest rate is 3 · 3.703/(2 · 6.183) ≈ 0.90 ft an hour, at about 6:41 p.m. The table's fastest hours, 6 to 7 and 7 to 8, rose 0.91 ft each.</p>
+  <h3>The rule of twelfths</h3>
+  <p data-pid="0549f8">Sailors on this coast learn an older rule, with no function in it. For a rise of about six hours, the water climbs 1/12 of the range in the first hour, 2/12 in the second, 3/12 in the third, 3/12 in the fourth, 2/12 in the fifth and 1/12 in the sixth. Its accepted name is the rule of twelfths. It is a law, read from tides: it has a range, and it has exceptions.</p>
+  <pre class="lines" data-k="ember" data-label="13·nav: the smooth rise against the rule">
+T = 6:\ \ \text{hour } k \text{ rises } R\big(f(\tfrac k6) - f(\tfrac{k-1}6)\big),\ f(s) = 3s^2 - 2s^3 @@ the smooth rise, hour by hour
+\tfrac{12}{R} \times \text{rise}:\ 0.89,\ 2.22,\ 2.89,\ 2.89,\ 2.22,\ 0.89 @@ worked; they add to 12
+\text{the rule}:\ 1,\ 2,\ 3,\ 3,\ 2,\ 1 @@ whole twelfths, easy to add in a cockpit
+\htmlClass{new}{\text{running totals differ by under } 0.01R} @@ after hours 1, 2, 3: 1, 3, 6 twelfths against 0.89, 3.11, 6
+  </pre>
+  <p data-pid="79f4bb">In the middle two hours the rule climbs R/4 an hour, and the smooth rise's greatest rate is 3R/(2 · 6) = R/4 as well. At Monterey R/4 ≈ 0.93 ft an hour; the table's fastest hours rose 0.91. <b>The rule of twelfths is the smooth rise rounded to whole twelfths.</b></p>
+  <h3>A rise the rule gets wrong</h3>
+  <p data-pid="233f3d">Seattle, 5 June 2023, from NOAA's Seattle station on Elliott Bay. Low water at 11:26 a.m., −3.66 ft. High water at 7:09 p.m., 12.06 ft. The range is 15.7 ft, and the rise takes 7 hours 43 minutes, not six. The table's hourly rises from noon: 1.75, 2.85, 3.28, 3.10, 2.43, 1.48, 0.54 ft. The fastest hour, 2 to 3 p.m., comes before the middle of the rise at 3:17.</p>
+  <p data-pid="5daf26">The smooth rise puts the water at 3.31 ft at 3 p.m.; the table says 4.51. The water passed half its range before half the time had gone. This rise is quicker at its start than at its end, and no rise that is the same both ways round can follow it. The rule of twelfths fails the same way. Puget Sound's tides are mixed: two highs and two lows a day, of different sizes. <b>The rule and the smooth rise fit a tide that rises the same both ways round, in about six hours, and the further a tide is from that, the worse they do.</b></p>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · the middle of a change</div>
+    <p data-pid="1d24e5">13a set beside the slope a second kind of care. Things do not jump between states; they pass through a middle. A tide table lists heights: a before and an after for each hour. The rate of the tide is the middle between them. It is what a skipper waiting at a bar needs, and the table never prints it.</p>
+    <p data-pid="b043bb"><b>Describe a change by its rates, not only by its before and after.</b></p>
+    <p data-pid="f31dab">At Seattle the water rose 3.28 ft between 2 and 3 p.m. That is a before and after. The smooth rise says that near the middle of a rise the water climbs at one and a half times its average rate, for a short while. A skipper who reads only the average, 2 ft an hour, is wrong by a foot an hour when it matters most.</p>
+    <p class="bait" data-pid="db535f">At 3 p.m. on 5 June 2023, was the water at Seattle rising faster than a foot every twenty minutes?</p>
+  </aside>
+  <h3>Which rung licenses each step</h3>
+  <div class="tablewrap"><table class="tt">
+  <tr><th class="l">step</th><th class="l">licence</th></tr>
+  <tr><td class="l">the heights</td><td class="l">premises: NOAA’s predictions</td></tr>
+  <tr><td class="l">an hour’s rise as an average rate</td><td class="l">the chord and its slope (13a)</td></tr>
+  <tr><td class="l">the centred chord</td><td class="l">centred-chord, by polynomial-slope (13d)</td></tr>
+  <tr><td class="l">the smooth rise</td><td class="l">a guess, checked against the table</td></tr>
+  <tr><td class="l">its rate</td><td class="l">polynomial-slope, constant-factor, displaced-slopes (13d); multiple-inside (13j)</td></tr>
+  <tr><td class="l">the middle runs fastest</td><td class="l">completing the square (8i); square-never-negative (8f)</td></tr>
+  <tr><td class="l">the rule of twelfths</td><td class="l">a law, read from tides; compared by arithmetic</td></tr>
+  </table></div>
+  <h3>Illegal moves</h3>
+  <pre class="lines" data-k="ember" data-label="13·nav: tempting, and not allowed">
+\text{the rate at 7 p.m. is the rise from 7 to 8}\,? @@ that chord belongs to 7:30; the centred chord, 6 to 8, is the better guess
+\text{rate} = \tfrac RT \text{ all through the rise}\,? @@ that is the average, 0.60 ft an hour at Monterey; the middle runs at 0.90
+\begin{aligned}&\text{the rule of twelfths for}\\ &\quad\text{any rise}\,?\end{aligned} @@ Seattle’s rise took 7 h 43 min and ran quicker early: 1.2 ft off at 3 p.m.
+\begin{aligned}&\text{the fastest hour of the table}\\ &\quad\text{is the instant of the fastest rate}\,?\end{aligned} @@ an hour’s chord is an average over the hour; the instant lies somewhere near it
+h'(t) = 6R(s - s^2)\,? @@ multiple-inside: s = (t − t₀)/T brings a factor 1/T
+  </pre>
+  <h3>Running it backwards</h3>
+  <p data-pid="edd98e">Handed the greatest rate of a smooth rise and its time T, the range is R = 2T/3 times that rate. Handed one hour of a six-hour rise under the rule of twelfths, the range is that hour's rise over its twelfths: a third hour of 1.8 ft means a range of 7.2 ft. Handed a centred chord and one reading, the other reading is the first plus twice the chord times the half-run.</p>
+</section>
+
+<section class="pic" id="pic">
+  <div class="eyebrow">The picture · left: a rise from the table, the smooth rise, and a chord · right: the rate, hour by hour and at each instant</div>
+  <div class="panels">
+    <div class="panel">
+      <div class="chips" id="stch"></div>
+      <div class="lbl">height in feet against the hour</div>
+      <canvas id="cvH"></canvas>
+      <div class="kn"><span class="m">time t</span><input type="range" id="kt" min="0" max="1" step="0.005" value="0.5"><output id="ot"></output></div>
+      <div class="kn"><span class="m">chord run</span><input type="range" id="kd" min="0" max="4" step="1" value="2"><output id="od"></output></div>
+      <div class="cap">Dots: NOAA’s hourly predictions. Plum dashed: the smooth rise through the low and the high. Ember: a chord of the smooth rise, centred on t; shrink its run and watch its slope settle on the rate at t. Ink dashed: the line at t with the smooth rise’s rate.</div>
+      <div class="verdict" id="vdH"></div>
+    </div>
+    <div class="panel">
+      <div class="lbl">rate in feet an hour, through the rise</div>
+      <canvas id="cvR"></canvas>
+      <div class="cap">Teal bars: the table’s rise in each clock hour. Gold steps: the rule of twelfths, stretched to this rise’s time. Plum: the smooth rise’s rate, greatest at the middle. Ember dot: the rate at t.</div>
+      <div class="eqbox" id="eqR"></div>
+    </div>
+  </div>
+</section>
+
+<section class="slides" id="sl1"><div class="eyebrow">The slides · a table is a function; a chord; centred-chord; the smooth rise; its rate; fastest-at-mid-tide; the rule of twelfths; Seattle; the middle of a change; illegal moves · ← → keys work</div></section>
+
+<section class="sayback">
+  <div class="eyebrow">Say it back · then work it</div>
+  <h2>Questions</h2>
+  <div class="phkey"></div>
+  <div class="model"><span class="mname">Model · Astoria, 21 July 2024</span><span class="givens"><span class="gtx">NOAA predictions, feet, Pacific standard time.</span> <span data-tex-inline="\text{low } 7{:}33\text{ a.m.}, -1.629;"></span> <span data-tex-inline="\text{high } 2{:}05\text{ p.m.}, 7.210;"></span> <span data-tex-inline="8{:}00\ \ {-1.522},\ \ 9{:}00\ \ {-0.544},"></span> <span data-tex-inline="10{:}00\ \ 1.194,\ \ 11{:}00\ \ 3.251,"></span> <span data-tex-inline="12{:}00\ \ 5.204,\ \ 13{:}00\ \ 6.638,"></span> <span data-tex-inline="14{:}00\ \ 7.207"></span></span></div>
+  <ol>
+    <li><span class="qid">13·nav.1</span><span class="gname">The Astoria rise.</span><span class="gwhy">Do: build the page’s pieces.</span>
+      <ol class="sub">
+        <li><span class="qid">13·nav.1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li>Find the rise in each clock hour from 8:00 to 14:00, and the fastest hour.</li><li>Find the centred chord at 11:00.</li><li>Fit the smooth rise to the low and the high. <br>Find its rate at 11:00.</li><li>Find the smooth rise’s greatest rate, and when it comes.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">13·nav.2</span><span class="gname">From the rate back.</span><span class="gwhy">Undo: run the page’s techs backwards.</span>
+      <ol class="sub">
+        <li><span class="qid">13·nav.2.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{smooth rise},"></span> <span data-tex-inline="T = 6 \text{ h},"></span> <span data-tex-inline="\text{greatest }\text{rate } 1.5 \text{ ft }"></span> <span data-tex-inline="\text{an }\text{hour}"></span></span>Find the range.</li><li><span class="givens"><span data-tex-inline="\text{rule of twelfths},"></span> <span data-tex-inline="\text{third hour: } 1.8 \text{ ft}"></span></span>Find the range and the rise in the first hour.</li><li><span class="givens"><span data-tex-inline="\text{centred }\text{chord }\text{at } 15{:}00"></span> <span data-tex-inline="\text{over }\text{two }\text{hours: } 1.8"></span> <span data-tex-inline="\text{ft }\text{an }\text{hour},"></span> <span data-tex-inline="h(14) = 2.1 \text{ ft}"></span></span>Find h(16).</li><li><span class="givens"><span data-tex-inline="\text{smooth rise},"></span> <span data-tex-inline="R = 6 \text{ ft},\ T = 6 \text{ h}"></span></span>Find every time after low water when the water climbs at 1 ft an hour.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">13·nav.3</span><span class="gname">Where the rule gives.</span><span class="gwhy">Bend: find where the techs stop working.</span>
+      <ol class="sub">
+        <li><span class="qid">13·nav.3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{Seattle, 5 June 2023:}"></span> <span data-tex-inline="\text{low } 11{:}26,\ -3.659"></span> <span data-tex-inline="\text{ft};"></span> <span data-tex-inline="\text{high } 19{:}09,\ 12.055"></span> <span data-tex-inline="\text{ft};"></span> <span data-tex-inline="h(15{:}00) = 4.507 \text{ ft}"></span></span>Find the smooth rise’s height at 15:00, and its miss. <br>Decide whether this rise climbs the same both ways round.</li><li><span class="givens"><span data-tex-inline="\text{Monterey, 21 July 2024:}"></span> <span data-tex-inline="\text{low } 4{:}38,\ -1.244 \text{ ft};"></span> <span data-tex-inline="\text{high } 11{:}29,\ 3.888"></span> <span data-tex-inline="\text{ft};"></span> <span data-tex-inline="h(7{:}00) = 0.299,\ h(8{:}00) = 1.486"></span></span>Find the height the rule of twelfths gives three hours after low water. <br>Compare it with the table.</li><li><span class="givens"><span data-tex-inline="\text{a }\text{smooth }\text{rise }\text{from }\text{low }"></span> <span data-tex-inline="\text{to }\text{high, }\text{glued }\text{at }\text{high }"></span> <span data-tex-inline="\text{water}"></span> <span data-tex-inline="\text{to }\text{a }\text{smooth }\text{fall }\text{from }"></span> <span data-tex-inline="\text{high }\text{to }\text{the }\text{next }\text{low}"></span></span>Decide whether the glued tide has a slope at high water.</li><li><span class="givens"><span data-tex-inline="\text{Seattle, 5 June 2023:}"></span> <span data-tex-inline="h(18) = 11.510,\ h(19) = 12.047,"></span> <span data-tex-inline="h(20) = 11.804;\ \text{high }"></span> <span data-tex-inline="\text{at } 19{:}09"></span></span>Decide whether the water was still rising at 19:00. <br>Decide whether the hourly table can give the instant of high water.</li></ol></li>
+      </ol></li>
+    <li class="optgroup"><span class="qid">13·nav.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder challenges that rely on your own making. The page is complete without these; the rung's star needs them.</span>
+      <ol class="sub">
+        <li class="opt"><span class="qid">13·nav.4.1</span><span class="tagq">build</span>Choose a tide station on this coast: Point Atkinson in Vancouver, Port Townsend, Crescent City or another. Read one rise from a published table, hour by hour. <br>Find its hourly rises, fit the smooth rise, and compare both with the rule of twelfths. <br>Build a rule of hourly shares of your own that fits your station better.</li>
+        <li class="opt"><span class="qid">13·nav.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{the }\text{rule }\text{of }\text{twelfths’ }"></span> <span data-tex-inline="\text{tide: }\text{six }\text{straight }"></span> <span data-tex-inline="\text{pieces,}"></span> <span data-tex-inline="\text{rising } 1, 2, 3, 3, 2, 1"></span> <span data-tex-inline="\text{twelfths }\text{of } R \text{ an }\text{hour}"></span></span>Find the times in the rise where this tide has no slope.</li>
+        <li class="opt"><span class="qid">13·nav.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="g \text{ a }\text{polynomial }\text{of }"></span> <span data-tex-inline="\text{degree }\text{at }\text{most } 3,"></span> <span data-tex-inline="g(0) = 0,\ g(1) = 1,\ g&#x27;(0) = g&#x27;(1) = 0"></span></span>Prove that g(s) = 3s² − 2s³. <br>Decide whether degree at most 4 forces the same g.</li>
+        <li class="opt"><span class="qid">13·nav.4.4</span><span class="tagq">seam</span>In 1632 a famous scientist argued that the tides come from the earth’s own motions, and scorned the idea that the moon pulls the sea. Today’s tide tables are computed from each port’s own long records, fitted to regular swings, port by port. <br>Do the tables settle what causes the tide?</li>
+      </ol></li>
+  </ol>
+  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
+</section>
+
+<nav class="nextrung"><a href="r13comp.html">← 13·comp · how does a calculator find a root?</a><a href="r14.html">14 · reading a shape from its slopes →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>The rule of twelfths is a sailors’ rule, taught for generations in British and Commonwealth seamanship books; who first wrote it down is not known. The famous scientist of 13·nav.4.4 is Galileo Galilei, in the Dialogue Concerning the Two Chief World Systems (1632), who held that the tides were the sloshing of the seas as the earth spins on its axis and travels around the sun; Johannes Kepler had already blamed the moon. Isaac Newton’s Principia (1687) gave the moon’s and sun’s pull as the cause. William Thomson (Lord Kelvin) built the first tide-predicting machine in 1872, a set of pulleys that added up regular swings; the United States used such machines to print its tables until 1966.</p>
+  <aside class="voice para"><p>Galileo wondered that so great a mind as Kepler’s should have lent his ear and his assent to the moon’s rule over the waters, and to other occult properties and such childish ideas.</p><cite>Galileo Galilei, Dialogue Concerning the Two Chief World Systems (1632), Fourth Day; paraphrase</cite></aside>
+  <h3>Accepted names</h3>
+  <p>The rise is the flood and the fall the ebb; the still water near low and high is slack water, or the stand. NOAA’s zero for these heights is mean lower low water, the chart datum: the average of each day’s lower low water over nineteen years. A tide with two highs and two lows a day of different sizes is a mixed tide. Fitting regular swings to a port’s records has the accepted name harmonic analysis. The smooth rise is a smoothstep, or the cubic Hermite step.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="13·nav: a worked “proof”, not allowed">
+\text{Seattle: the rise from 2 to 3 p.m. is the greatest, } 3.277 @@ fine
+\text{so the rate is greatest at 2:30 p.m.} @@ not allowed: a chord is an average; the instant can lie anywhere the readings allow
+\text{so the rate at 2:30 p.m. is } 3.277 \text{ ft an hour} @@ not allowed: a rate at an instant can exceed every hour’s average around it
+  </pre>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '?'; let s=v.toFixed(d==null?2:d); if(/^-0(\.0*)?$/.test(s)) s=s.slice(1); return s.replace('-','−'); };
+const ST={
+ mon:{name:'Monterey, 21 July 2024, evening',L:2.769,H:6.472,t0:15.6,t1:21+47/60,h0:15,hs:[2.829,2.798,3.137,3.83,4.743,5.651,6.295,6.459]},
+ ast:{name:'Astoria, 21 July 2024',L:-1.629,H:7.21,t0:7.55,t1:14+5/60,h0:7,hs:[-1.468,-1.522,-0.544,1.194,3.251,5.204,6.638,7.207,6.837]},
+ sea:{name:'Seattle, 5 June 2023',L:-3.659,H:12.055,t0:11+26/60,t1:19+9/60,h0:11,hs:[-3.502,-3.371,-1.621,1.23,4.507,7.605,10.032,11.51,12.047,11.804]},
+ sf:{name:'San Francisco, 5 June 2023',L:-1.623,H:4.653,t0:6+7/60,t1:13+41/60,h0:6,hs:[-1.618,-1.376,-0.603,0.503,1.738,2.931,3.926,4.532,4.629,4.286]}};
+let st=ST.mon;
+const R_=()=>st.H-st.L, T_=()=>st.t1-st.t0;
+const sm=t=>{ const s=Math.min(1,Math.max(0,(t-st.t0)/T_())); return st.L+R_()*(3*s*s-2*s*s*s); };
+const rate=t=>{ const s=(t-st.t0)/T_(); return (s<0||s>1)?0:6*R_()/T_()*(s-s*s); };
+const twelfth=t=>{ const k=Math.floor(6*(t-st.t0)/T_()); const w=[1,2,3,3,2,1][k]; return w===undefined?NaN:w*R_()/(2*T_()); };
+const kt=$('kt'), kd=$('kd'); const RUNS=[0,1/6,0.5,1,2];
+const tNow=()=>st.t0+(+kt.value)*T_();
+const clk=t=>{ let h=Math.floor(t), m=Math.round((t-h)*60); if(m===60){h++;m=0;} const ap=h>=12?'p.m.':'a.m.'; let hh=h%12; if(hh===0) hh=12; return hh+':'+String(m).padStart(2,'0')+' '+ap; };
+const PH=plane($('cvH'),{x:[0,1],y:[0,1],grid:0,labels:0,aspect:0.8,draw:P=>drawH(P)});
+const PR=plane($('cvR'),{x:[0,1],y:[0,1],grid:0,labels:0,aspect:0.8,draw:P=>drawR(P)});
+function frame(P,y0,y1){ const a=st.h0-0.3, b=st.h0+st.hs.length-1+0.3; P.o.x=[a,b]; P.o.y=[y0,y1];
+  for(let h=st.h0;h<st.h0+st.hs.length;h++){ P.line(h,y0,h,y1,'--grid',1); P.text(String(((h+11)%12)+1),h,y0+(y1-y0)*0.03,'--muted','center',10); } }
+function drawH(P){ const lo=Math.min(...st.hs,st.L)-1, hi=Math.max(...st.hs,st.H)+1; frame(P,lo,hi);
+  for(let y=Math.ceil(lo/2)*2;y<=hi;y+=2){ P.line(P.o.x[0],y,P.o.x[1],y,y===0?'--muted':'--grid',1); P.text(y+' ft',P.o.x[0]+0.05,y+0.15,'--muted','left',10); }
+  P.fn(t=>(t>=st.t0&&t<=st.t1)?sm(t):NaN,'--plum',2,[6,4]);
+  st.hs.forEach((v,i)=>P.dot(st.h0+i,v,'--teal',4)); P.dot(st.t0,st.L,'--ink',5); P.dot(st.t1,st.H,'--ink',5);
+  const t=tNow(), r=rate(t); P.line(t-1.2,sm(t)-1.2*r,t+1.2,sm(t)+1.2*r,'--ink',1.3,[4,4]);
+  const d=RUNS[+kd.value]; if(d>0){ const a=t-d/2, b=t+d/2; P.line(a,sm(a),b,sm(b),'--ember',2.4); P.dot(a,sm(a),'--ember',4); P.dot(b,sm(b),'--ember',4); } P.dot(t,sm(t),'--ember',5); }
+function drawR(P){ const top=1.7*R_()/T_()*1.2; frame(P,-0.08*top,top);
+  for(let y=0;y<=top;y+=0.5){ P.line(P.o.x[0],y,P.o.x[1],y,y===0?'--muted':'--grid',1); P.text(fm(y,1),P.o.x[0]+0.05,y+top*0.015,'--muted','left',10); }
+  const c=P.ctx; for(let i=0;i+1<st.hs.length;i++){ const h=st.h0+i, v=st.hs[i+1]-st.hs[i]; c.globalAlpha=.35; P.poly([[h+0.08,0],[h+0.92,0],[h+0.92,v],[h+0.08,v]],null,'--teal'); c.globalAlpha=1; }
+  P.fn(t=>(t>=st.t0&&t<st.t1)?twelfth(t):NaN,'--gold',2.2); P.fn(t=>(t>=st.t0&&t<=st.t1)?rate(t):NaN,'--plum',2.4);
+  const t=tNow(); P.dot(t,rate(t),'--ember',5); }
+function read(){ const t=tNow(), d=RUNS[+kd.value]; $('ot').textContent=clk(t); $('od').textContent=d===0?'none':(d<1?Math.round(d*60)+' min':d+' h');
+  const ch=d>0?(sm(t+d/2)-sm(t-d/2))/d:null, s=(t-st.t0)/T_();
+  $('vdH').className='verdict win';
+  $('vdH').textContent=st.name+'. Low '+fm(st.L)+' ft at '+clk(st.t0)+', high '+fm(st.H)+' ft at '+clk(st.t1)+'; at '+clk(t)+' the smooth rise stands at '+fm(sm(t))+' ft and climbs '+fm(rate(t))+' ft an hour'+(ch===null?'.':'; its chord over '+$('od').textContent+' says '+fm(ch,3)+'.')+' Greatest rate: '+fm(1.5*R_()/T_())+' ft an hour, at '+clk(st.t0+T_()/2);
+  tex($('eqR'),R`\begin{aligned}&R = ${fm(R_())},\ T = ${fm(T_())},\ s = ${fm(s,3)}\\ &h'(t) = \tfrac{6R}{T}(s - s^2) = ${fm(rate(t),3)}\\ &\tfrac{3R}{2T} = ${fm(1.5*R_()/T_(),3)}\end{aligned}`,true);
+  PH.redraw(); PR.redraw(); }
+const stch=$('stch'); [['Monterey','mon'],['Astoria','ast'],['Seattle','sea'],['San Francisco','sf']].forEach(([n,k])=>{ const b=document.createElement('button'); b.textContent=n; b.onclick=()=>{ st=ST[k]; [...stch.children].forEach(x=>x.classList.toggle('on',x===b)); read(); }; if(k==='mon') b.classList.add('on'); stch.appendChild(b); });
+[kt,kd].forEach(el=>el.addEventListener('input',read));
+window.__pic={set:(k,u,d)=>{ st=ST[k]; kt.value=u; kd.value=d; read(); const t=tNow(); return {t,h:sm(t),rate:rate(t),max:1.5*R_()/T_()}; }};
+read();
+
+stepper('#sl1',[
+  {k:'ember',kl:'a table is a function',t:R`h(18) = 3.830,\ \ h(19) = 4.743`,n:`Known only at the times it lists.`},
+  {k:'teal',kl:'a chord',t:R`\tfrac{4.743 - 3.830}{1} = 0.913`,n:`The average rate from 6 to 7 p.m., in feet an hour.`},
+  {k:'ember',kl:'centred-chord',t:R`\htmlClass{new}{\tfrac{f(t + d) - f(t - d)}{2d} = f\'(t)}`,n:`Exact for a + bt + ct²; a close guess otherwise.`},
+  {k:'ember',kl:'the smooth rise',t:R`h(t) = L + R(3s^2 - 2s^3),\ \ s = \tfrac{t - t_0}{T}`,n:`At rest at low water and at high.`},
+  {k:'ember',kl:'its rate',t:R`\htmlClass{new}{h\'(t) = \tfrac{6R}{T}(s - s^2)}`,n:`Multiple-inside brings the 1/T.`},
+  {k:'ember',kl:'fastest-at-mid-tide',t:R`s - s^2 = \tfrac14 - (s - \tfrac12)^2`,n:`Greatest rate 3R/(2T), exactly halfway.`},
+  {k:'ember',kl:'the rule of twelfths',t:R`1,\ 2,\ 3,\ 3,\ 2,\ 1`,n:`The smooth rise rounded to whole twelfths.`},
+  {k:'ember',kl:'Seattle',t:R`h(15) = 4.51 \text{ against } 3.31`,n:`A rise quicker at its start than its end.`},
+  {k:'ember',kl:'the middle of a change',t:R`\tfrac{3R}{2T} \text{ against } \tfrac RT`,n:`Near mid-tide the water climbs half again as fast as its average.`},
+  {k:'ember',kl:'illegal',t:R`h\'(t) \ne 6R(s - s^2)`,n:`Multiple-inside: s = (t − t₀)/T brings 1/T.`}
+],{title:'The slides · a table is a function; a chord; centred-chord; the smooth rise; its rate; fastest-at-mid-tide; the rule of twelfths; Seattle; the middle of a change; illegal moves · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

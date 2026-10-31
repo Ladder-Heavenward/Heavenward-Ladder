@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sorting geometries by the moves they keep</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+.chrow{display:grid;grid-template-columns:5.5em 1fr;gap:6px;align-items:center;font-size:.88rem}.btns{display:flex;flex-wrap:wrap;gap:6px}.kept{font-size:.86rem;line-height:1.6}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r20g.html">← 20g handedness</a><a href="r20concl.html">next: 20·∎ conclusion →</a></p>
+  <div class="tags"><span class="tag proof">20h · proof</span></div>
+  <h1>Sorting geometries by the moves they keep</h1>
+  <p>This rung has met four families of moves: the slides, the slides and turns, the isometries, and the similarities. Each sits inside the next, and each is a group. Each also keeps some facts about a figure and loses others. This step turns that round. A geometry is a choice of moves, and its facts are exactly what those moves keep. More moves keep fewer facts.</p>
+  <p class="gesture">Slides sit inside slides and turns, which sit inside isometries, which sit inside similarities, each a part-group of the next. A fact belongs to a geometry when every one of its moves keeps it. If one group sits inside another, every fact the larger one keeps is a fact the smaller keeps too.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r20b.html">20b</a> (the group), <a href="r20g.html">20g</a> (handedness), <a href="r19d.html">19d</a> (part-groups), <a href="r02e.html">2e</a> (sorting). The <a href="r20concl.html">conclusion</a> puts the rung together.</p></div>
+</header>
+
+<section class="class step" data-step="20h1">
+  <h2 class="sthead"><span class="stno">20h1</span>What each family keeps</h2>
+  <p class="stands">Stands on 20a (isometries and similarities), 20d and 20g.</p>
+  <p data-pid="f74463">Kept-facts technique: <b>each family of moves keeps some facts about every figure and can change the others.</b> A slide keeps every displacement, so it keeps lengths and directions. A turn keeps lengths and D but changes directions. A flip keeps lengths but changes the sign of D. A stretch by k keeps angles and the ratio of any two lengths, but multiplies every length by k.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the kept-facts technique, family by family">
+\text{slides: displacement } B - A @@ S(B) − S(A) = B − A (20d1)
+\text{slides and turns: lengths, and } D @@ 20d2, 20g2
+\text{isometries: lengths} @@ 20d; D only up to sign (20g3)
+\text{similarities: angles, ratios of lengths, “is a circle”} @@ 20a3, 20a4
+\htmlClass{new}{\text{more moves, fewer facts kept}} @@ each family holds the one before
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · kept · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · a triangle, moved within one geometry</div>
+    <div class="chrow"><span class="lbl">geometry</span><div class="chips" id="chG"></div></div>
+    <div id="pl"></div>
+    <div class="btns"><button type="button" id="bm">another move from this family</button></div>
+    <div class="cap">Ink: the triangle. Ember: its image under a move from the chosen family. The list says which facts held.</div>
+    <div class="verdict kept" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">20h1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">the segment from (0, 0) to (1, 1);  the slide by (2, 1),  the quarter turn,  the flip over the floor,  the stretch by 2</span></span>Find which of the four keep its length. <br>Find which keep its direction.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20h2">
+  <h2 class="sthead"><span class="stno">20h2</span>Families inside families</h2>
+  <p class="stands">Stands on 20h1, 20b3 (the group) and 19d1 (the part-group test).</p>
+  <p data-pid="e7ec2d">Nested-families technique: <b>the slides, the slides and turns, the isometries, and the similarities are each a part-group of the next.</b> Each holds the one before. Each passes the part-group test.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the nested-families technique">
+S_v \circ S_w = S_{v+w},\ \ S_v^{-1} = S_{-v} @@ slides: combine and undo inside the family
+\text{slides and turns} = \text{the isometries that keep } D @@ 20g4: an even number of flips
+\text{keep } D \text{ twice, or undo one that keeps it: still keeps it} @@ (−1)ᵏ with k even
+\text{isometries} = \text{similarities with factor } 1 @@ factors multiply (20b3): 1 · 1 = 1, and 1⁻¹ = 1
+\htmlClass{new}{\text{slides} \subset \text{slides and turns} \subset \text{isometries} \subset \text{similarities}} \quad \blacksquare @@ the part-group test, four times
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · nested · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20h2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">the flips alone;  the turns about the origin alone</span></span>Find whether each is a part-group of the isometries.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20h3">
+  <h2 class="sthead"><span class="stno">20h3</span>A geometry is a choice of moves</h2>
+  <p class="stands">Stands on 20h1 and 20h2.</p>
+  <p class="eqline" data-pid="82c827">From here on, a geometry is a group of moves of the plane, and a fact of that geometry is a fact about figures that every move in the group keeps.</p>
+  <p data-pid="cb687d">Fewer-facts technique: <b>if one group of moves sits inside another, every fact of the bigger geometry is a fact of the smaller one.</b> If every move of H keeps a fact, so does every move of G, since each move of G is a move of H.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the fewer-facts technique">
+G \subset H,\ \ \text{every } h \in H \text{ keeps the fact} @@ suppose
+g \in G \Rightarrow g \in H \Rightarrow g \text{ keeps it} @@ G sits in H
+\htmlClass{new}{\text{facts of } H \subset \text{facts of } G} \quad \blacksquare
+  </pre>
+  <p data-pid="b624e6">So Euclid’s geometry, with the isometries, has more facts than the geometry of shape, with the similarities. Length is a fact of the first. Only ratios of lengths are facts of the second.</p>
+  <p data-pid="82e5ae">A fifth family goes beyond the similarities. From here on, a pull is a move that stretches in one direction only, such as (x, y) ↦ (2x, y). The pulls together with the similarities, and every move built from them, make a bigger group. The picture above offers its pulls. Its geometry has fewer facts still.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · geometry · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20h3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">the pull (x, y) ↦ (2x, y)</span></span>Find the images of the circle x² + y² = 1 and of the line y = x. <br>Find whether midpoints, parallel lines and right angles are kept.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20h4">
+  <h2 class="sthead"><span class="stno">20h4</span>Each geometry sorts figures</h2>
+  <p class="stands">Stands on 20h3, 20d4 (congruence) and 2e (sorting).</p>
+  <p data-pid="41e966">Same-in-a-geometry technique: <b>in each geometry, two figures are the same when a move of its group carries one onto the other, and this sorts all figures.</b> The proof is 20d4’s, word for word. Doing nothing, undoing and combining are in every group.</p>
+  <pre class="lines" data-k="ember" data-label="this step: what each geometry sorts">
+\text{slides: a figure and its slid copies} @@ same size, same way round, same direction
+\text{isometries: congruent figures} @@ triangles sorted by three sides (20f4)
+\text{similarities: similar figures} @@ triangles sorted by two angles (20f4)
+\text{similarities: every circle with every circle} @@ 20a4: one sort holds them all
+\htmlClass{new}{\text{a bigger group, fewer and larger sorts}} \quad \blacksquare @@ each sort of G lies inside one sort of H
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · sorting · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20h4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">triangle P: (0, 0), (4, 0), (0, 3).  Q: (0, 0), (8, 0), (0, 6).  R: (0, 0), (3, 0), (0, 4)</span></span>Guess which pairs are the same in which of the four geometries. <br>Check one guess with a move, and one with a fact that is not kept.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20h5">
+  <h2 class="sthead"><span class="stno">20h5</span>Illegal moves</h2>
+  <p class="stands">Stands on 20h1 to 20h4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{a bigger group keeps more facts}\,? @@ fewer: each extra move is one more test a fact must pass
+\text{similar} \Rightarrow \text{congruent}\,? @@ the 3, 4, 5 and the 6, 8, 10 triangles
+\text{the pulls keep angles}\,? @@ (x, y) ↦ (2x, y) bends y = x away from the eighth turn
+\text{any set of moves is a geometry}\,? @@ the flips alone do not combine inside the set
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20h5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span class="gtx">the isometries that keep the point (0, 0)</span></span>Find whether they are a group, and name two facts they keep that the isometries do not.</li><li><span class="givens"><span class="gtx">area</span></span>Find the biggest of the four families that keeps it.</li><li><span class="givens"><span class="gtx">the two triangles (0, 0), (1, 0), (0, 1) and (5, 5), (5, 4), (4, 5)</span></span>Find the smallest of the four families in which they are the same.</li><li><span class="givens"><span class="gtx">the slides together with the half turns about every point</span></span>Find whether they form a group.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">20h.4.1</span><span class="tagq">build</span>Build a family of moves bigger than the similarities that still keeps straight lines and midpoints. <br>Find a fact of the similarities it does not keep.</div>
+  <div class="chq"><span class="chid">20h.4.2</span><span class="tagq">edge</span><span class="givens"><span class="gtx">the group with one move, do-nothing</span></span>Find its facts, and how it sorts figures. <br>Then the same for the group of every one-to-one function of the plane onto itself.</div>
+  <div class="chq"><span class="chid">20h.4.3</span><span class="tagq">converse</span>A bigger group has fewer facts. Turn it round: if every fact of H is a fact of G, must G sit inside H? Find a case to test it.</div>
+  <div class="chq"><span class="chid">20h.4.4</span><span class="tagq">reroute</span>Prove that the slides and turns form a group without D: show directly that a turn after a slide is a slide after a turn.</div>
+  <div class="chq"><span class="chid">20h.4.5</span><span class="tagq">seam</span>A physicist in 1868 argued that we can measure space only because a ruler can be carried anywhere and turned any way without changing: geometry rests on free movement. Fourteen years earlier a mathematician had pictured spaces whose bending changes from place to place, where a carried ruler cannot stay the same. <br>Is it the moves that make a geometry, or the space? <br>If rulers could not be moved without changing, could we still measure?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r20g.html">← 20g · handedness</a><a href="r20concl.html">20·∎ · conclusion →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>Sorting geometries by their groups of moves is the Erlangen program. The facts a group keeps are its invariants. The slides are the translations; the slides and turns, the proper or direct isometries; the pulls belong to the affine maps.</p>
+  <h3>Who said it first</h3>
+  <p>The program is Felix Klein's, in his Erlangen inaugural programme (1872). In 20h.4.5, the physicist is Hermann von Helmholtz, “On the facts that underlie geometry” (1868), and the mathematician is Bernhard Riemann, “On the hypotheses that underlie geometry” (lecture of 1854, printed 1868). Their argument was settled, in a sense, by Einstein's general relativity (1915), in which rulers do change as they move.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+/* moves of the plane, drawn in SVG, for rung 20 */
+const V=c=>'var('+c+')';
+const FLAG=[[0,0],[0,3],[2,3],[2,2.4],[0.6,2.4],[0.6,1.8],[1.5,1.8],[1.5,1.2],[0.6,1.2],[0.6,0]];
+const M={
+  id:()=>p=>p,
+  slide:(h,k)=>p=>[p[0]+h,p[1]+k],
+  turn:(a,b)=>p=>[a*p[0]-b*p[1],b*p[0]+a*p[1]],
+  stretch:k=>p=>[k*p[0],k*p[1]],
+  flipU:(c,s)=>p=>{ const d=2*(p[0]*c+p[1]*s); return [d*c-p[0],d*s-p[1]]; },              /* across the line through O along (c, s), c² + s² = 1 */
+  flipAt:(q,c,s)=>p=>{ const x=p[0]-q[0],y=p[1]-q[1],d=2*(x*c+y*s); return [q[0]+d*c-x,q[1]+d*s-y]; },
+  turnAt:(q,a,b)=>p=>{ const x=p[0]-q[0],y=p[1]-q[1]; return [q[0]+a*x-b*y,q[1]+b*x+a*y]; },
+  then:(g,f)=>p=>g(f(p))                                                                    /* f first, then g */
+};
+const unit=(x,y)=>{ const r=Math.hypot(x,y); return [x/r,y/r]; };
+const fx=v=>(Math.abs(v)<5e-10?0:v);
+const show=(v,d)=>{ let s=fx(v).toFixed(d==null?2:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return (s==='-0'?'0':s).replace('-','−'); };
+/* shapes: {pts, c, fill, dash, w, open}; dots: {p, c, t}; lines: {p, d, c, dash} */
+function svgPlane(o){ const lo=o.lo==null?-6:o.lo, hi=o.hi==null?6:o.hi, S=300, X=x=>(x-lo)/(hi-lo)*S, Y=y=>S-(y-lo)/(hi-lo)*S;
+  let s='<svg viewBox="0 0 '+S+' '+S+'" style="width:100%;max-width:340px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  for(let g=Math.ceil(lo);g<=hi;g++){ s+='<line x1="'+X(g)+'" y1="0" x2="'+X(g)+'" y2="'+S+'" style="stroke:'+V('--grid')+';stroke-width:'+(g===0?1.6:0.6)+'"/><line x1="0" y1="'+Y(g)+'" x2="'+S+'" y2="'+Y(g)+'" style="stroke:'+V('--grid')+';stroke-width:'+(g===0?1.6:0.6)+'"/>'; }
+  (o.lines||[]).forEach(l=>{ const L=40; s+='<line x1="'+X(l.p[0]-L*l.d[0])+'" y1="'+Y(l.p[1]-L*l.d[1])+'" x2="'+X(l.p[0]+L*l.d[0])+'" y2="'+Y(l.p[1]+L*l.d[1])+'" style="stroke:'+V(l.c||'--teal')+';stroke-width:1.6;stroke-dasharray:'+(l.dash||'5 4')+'"/>'; });
+  (o.shapes||[]).forEach(z=>{ const pts=z.pts.map(p=>X(p[0]).toFixed(1)+','+Y(p[1]).toFixed(1)).join(' ');
+    s+='<'+(z.open?'polyline':'polygon')+' points="'+pts+'" style="fill:'+(z.fill?V(z.c):'none')+';fill-opacity:'+(z.fill?0.28:0)+';stroke:'+V(z.c)+';stroke-width:'+(z.w||2)+(z.dash?';stroke-dasharray:'+z.dash:'')+'"/>'; });
+  (o.dots||[]).forEach(d=>{ s+='<circle cx="'+X(d.p[0])+'" cy="'+Y(d.p[1])+'" r="4" style="fill:'+V(d.c||'--ink')+'"/>'+(d.t?'<text x="'+(X(d.p[0])+7)+'" y="'+(Y(d.p[1])-6)+'" style="fill:'+V(d.c||'--ink')+';font:12px IBM Plex Mono,monospace">'+d.t+'</text>':''); });
+  return s+'</svg>'; }
+function knob(id,lab,min,max,step,val){ return '<div class="kn"><span class="m">'+lab+'</span><input type="range" id="'+id+'" min="'+min+'" max="'+max+'" step="'+step+'" value="'+val+'"><output id="o'+id+'"></output></div>'; }
+function chipRow(el,keys,get,set,after){ el.innerHTML=''; keys.forEach(k=>{ const b=document.createElement('button'); b.type='button'; b.textContent=k; if(k===get()) b.className='on'; b.onclick=()=>{ set(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+
+const T0=[[0,0],[3,0],[1,2]];
+let seed=7; const rnd=()=>{ seed=(seed*9301+49297)%233280; return seed/233280; };
+const PAIRS=[[0.6,0.8],[0,1],[-0.8,0.6],[-1,0],[0.8,-0.6],[0,-1]];
+const ri=n=>Math.floor(rnd()*n);
+const GEO={
+ 'slides':()=>M.slide(ri(5)-2,ri(5)-3),
+ 'slides and turns':()=>{ const p=PAIRS[ri(6)]; return M.then(M.slide(ri(5)-2,ri(5)-2),M.turn(p[0],p[1])); },
+ 'isometries':()=>{ const p=PAIRS[ri(6)], u=PAIRS[ri(6)]; return M.then(M.slide(ri(5)-2,ri(5)-2),M.then(M.turn(p[0],p[1]),M.flipU(u[0],u[1]))); },
+ 'similarities':()=>{ const p=PAIRS[ri(6)], k=[0.5,1.5,2][ri(3)]; return M.then(M.slide(ri(3)-1,ri(3)-2),M.then(M.turn(p[0],p[1]),M.stretch(k))); },
+ 'pulls':()=>{ const a=[2,0.5,1.5][ri(3)]; return M.then(M.slide(ri(3)-2,ri(3)-2),p=>[a*p[0],p[1]]); }};
+let gk='isometries', mv=GEO[gk]();
+const dd=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1]);
+const D=(a,b,c)=>(b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0]);
+const ang=(a,b,c)=>{ const u=[b[0]-a[0],b[1]-a[1]],v=[c[0]-a[0],c[1]-a[1]]; return (u[0]*v[0]+u[1]*v[1])/(Math.hypot(u[0],u[1])*Math.hypot(v[0],v[1])); };
+const eq=(x,y)=>Math.abs(x-y)<1e-6;
+function draw(){ const im=T0.map(mv);
+  $('pl').innerHTML=svgPlane({lo:-6,hi:6,shapes:[{pts:T0,c:'--ink',fill:true},{pts:im,c:'--ember',fill:true}],dots:[{p:T0[0],c:'--ink',t:'A'},{p:im[0],c:'--ember',t:'A′'}]});
+  const F=[['direction of AB',eq(im[1][0]-im[0][0],3)&&eq(im[1][1]-im[0][1],0)],
+           ['D (which way round)',eq(D(...im),D(...T0))],
+           ['length of AB',eq(dd(im[0],im[1]),3)],
+           ['angle at A',eq(ang(...im),ang(...T0))],
+           ['ratio AB : AC',eq(dd(im[0],im[1])/dd(im[0],im[2]),3/Math.hypot(1,2))],
+           ['midpoint of AB goes to the midpoint of A′B′',true]];
+  $('vd').innerHTML=F.map(f=>(f[1]?'✓ kept: ':'✗ changed: ')+f[0]).join('<br>'); }
+$('bm').onclick=()=>{ mv=GEO[gk](); draw(); };
+chipRow($('chG'),Object.keys(GEO),()=>gk,k=>{ gk=k; mv=GEO[gk](); },draw); draw();
+window.__pic={set:(k,n)=>{ gk=k; for(let i=0;i<(n||1);i++) mv=GEO[gk](); draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'kept facts',t:R`\htmlClass{new}{\text{more moves, fewer facts}}`,n:`Each family keeps less.`}
+],{title:'The slides · kept · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'families',t:R`\htmlClass{new}{\text{slides} \subset \dots \subset \text{similarities}}`,n:`Each a part-group of the next.`}
+],{title:'The slides · nested · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'a geometry',t:R`\htmlClass{new}{G \subset H \Rightarrow \text{facts}(H) \subset \text{facts}(G)}`,n:`More moves, fewer facts.`}
+],{title:'The slides · geometry · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'same in a geometry',t:R`\htmlClass{new}{S \sim_G T \iff g(S) = T}`,n:`For some g in G.`}
+],{title:'The slides · sorting · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`\text{bigger group} \Rightarrow \text{fewer facts}`,n:`Never more.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

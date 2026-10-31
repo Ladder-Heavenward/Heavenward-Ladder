@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>13f · A joint has no slope</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:3.6em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+#cvJ,#cvK{touch-action:none}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r13e.html">← 13e the chain rule</a><a href="r13concl.html">next: 13·∎ conclusion →</a></p>
+  <div class="tags"><span class="tag proof">13f · proof</span></div>
+  <h1>A joint has no slope</h1>
+  <p>11e proved the size of a number continuous at 0, with pieces that climb at the rates negative one and one, and said that rung 13 would ask what the difference in rates costs. This step answers. Its chords from 0 have slope one on the right and negative one on the left, and a limit cannot head two ways, so it has no slope at 0. In general, at a joint a function has a slope exactly when its pieces arrive with the same slope. That is the second condition 11f promised for gluing pieces. Last, the quotient rule, built from the product and chain rules, and with it the slopes of the negative powers.</p>
+  <p class="gesture">At a joint, take the chords from each side separately. Each side's chord slopes head to its piece's slope. The slope exists exactly when the two sides agree.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r13a.html">13a</a> (the slope, slopes-decided-near, slope-of-a-line, slope-of-x², slope-of-one-over-x), <a href="r13b.html">13b</a> (slope-means-no-gap), <a href="r13c.html">13c</a> (product for slopes), <a href="r13d.html">13d</a> (power for slopes, lifting, constant-factor for slopes), <a href="r13e.html">13e</a> (chain for slopes), <a href="r10e.html">10e</a> (one-sided limits, two-sides-agree, two-sides-differ, agreeing-near side by side), <a href="r11e.html">11e</a> (glued-functions, joint, rate, size-is-continuous), <a href="r11f.html">11f</a> (the two conditions at 2), <a href="r08h.html">8h</a> (|x| by cases), <a href="r10c.html">10c</a> (f/g, away-from-zero), <a href="r08i.html">8i</a> (negative powers, whole-exponent), <a href="r05g.html">5g</a> (one bottom). The techniques that follow, <a href="r13g.html">13g</a> to <a href="r13m.html">13m</a>, and the science pages <a href="r13phys.html">13·phys</a> and <a href="r13chem.html">13·chem</a>, put these rules to work; rung 14 uses the rules of this rung everywhere.</p></div>
+</header>
+
+<section class="class step" data-step="13f1">
+  <h2 class="sthead"><span class="stno">13f1</span>|x| at 0</h2>
+  <p class="stands">Stands on 13a (slopes), 13b (slope-means-no-gap) and 8h (size by cases).</p>
+  <p data-pid="e7d173">Size-has-no-slope-at-0 technique: <b>|x| is continuous at 0 and has no slope there. Its chord slopes from 0 are 1 for every h &gt; 0 and −1 for every h &lt; 0.</b></p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the size-has-no-slope-at-0 technique">
+h \gt 0:\ \ \dfrac{|0 + h| - |0|}{h} = \dfrac{h}{h} = \htmlClass{new}{1} @@ 8h's line for |a| by cases: |h| = h when 0 ≤ h; reciprocal on ℝ
+h \lt 0:\ \ \dfrac{|0 + h| - |0|}{h} = \dfrac{-h}{h} = \htmlClass{new}{-1} @@ |h| = −h when h &lt; 0; negative-out on ℚ, reciprocal on ℝ
+\lim_{h \to 0^+} (\cdots) = 1,\ \ \lim_{h \to 0^-} (\cdots) = -1 @@ agreeing-near side by side (10e): each side agrees with a constant, which heads to itself
+1 \ne -1 @@ three-way on ℝ, read for 1 and −1
+\text{the chord slopes have no limit at } 0 @@ two-sides-differ (10e): two sides that differ, no limit
+|x| \text{ has no slope at } 0 \quad \blacksquare @@ 13a's line. And |x| is continuous at 0: size-is-continuous (11e)
+  </pre>
+  <p data-pid="a2795b">So the converse of 13b's slope-means-no-gap fails again, this time with no wild function in sight. And |x| has a slope at every other input. At w &gt; 0 it agrees with x on (0, 2w), so its slope is 1 (slopes-decided-near, slope-of-a-line). At w &lt; 0 it agrees with −x on (2w, 0), so its slope is −1. Continuous at every real, with a slope at every real but one.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · size at 0 · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · left: chords from each side of an input · right: tune two pieces until the joint has a slope</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="chips" id="jch"></div>
+      <canvas id="cvJ"></canvas>
+      <div class="kn">
+        <span class="m">h</span><input type="range" id="kh" min="-1.5" max="1.5" step="0.01" value="0.8"><output id="oh"></output>
+      </div>
+      <div class="cap">Black dot: the point at the input. Ember: the chord to the second point; drag on the picture, or use the knob, and cross from one side to the other. Teal dashed: the linear function with the slope from the left; gold dashed: with the slope from the right. When they are one linear function, the function has a slope there.</div>
+      <div class="verdict" id="vdJ"></div>
+    </div>
+    <div class="panel">
+      <canvas id="cvK"></canvas>
+      <div class="kn">
+        <span class="m">m</span><input type="range" id="kA" min="-2" max="6" step="0.5" value="1"><output id="oA"></output>
+        <span class="m">b</span><input type="range" id="kB" min="-8" max="4" step="0.5" value="1"><output id="oB"></output>
+      </div>
+      <div class="chips"><button id="bj">join the heights</button><button id="bs">join the heights and slopes</button></div>
+      <div class="cap">11f's pieces: teal mx + 1 for x &lt; 2, gold x² − b for x ≥ 2, the value at 2 from the gold piece. Dashed: each piece's tangent line at 2. Knobs m and b, or the buttons. The readout gives the heights arriving and the slopes arriving, and the verdict.</div>
+      <div class="verdict" id="vdK"></div>
+      <div class="eqbox" id="eqK"></div>
+    </div>
+  </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">13f1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = |x|,  h = 0.1 and h = −0.1</span></span>Find the chord slope from 0 for each h. <br>Say why no single number is approached.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13f2">
+  <h2 class="sthead"><span class="stno">13f2</span>Slopes from the two sides</h2>
+  <p class="stands">Stands on 13f1 and 10f (limits from one side).</p>
+  <p data-pid="c7f675">The two sides deserve names of their own, since they exist even where the slope does not.</p>
+  <p class="eqline" data-pid="29425f">From here on, take a function f with a an input, and f defined on some interval [a, a + r) with r &gt; 0. The slope from the right of f at a is lim_{h→0⁺} (f(a + h) − f(a))/h, when that one-sided limit exists. Likewise, take f defined on some (a − r, a]. The slope from the left of f at a is lim_{h→0⁻} (f(a + h) − f(a))/h, when it exists. These are 10e's one-sided limits of 13a's chord slopes. No new mark is used: the step writes the limits out.</p>
+  <p data-pid="7a84dd">Two-side-slopes technique: <b>a function has a slope exactly when its slopes from the two sides exist and agree.</b> Precisely: let f be defined on an open interval around w. f has a slope at w exactly when it has a slope from the left and a slope from the right at w, and the two are the same. Then f′(w) is their common value. It is 10e's two-sides-agree, read for the chord-slope function of h at 0. |x| at 0 has the slope −1 from the left and 1 from the right: 11e's two rates, now each a one-sided slope.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · two sides · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13f2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = |x − 5|</span></span>Find f’s slope from the right and from the left at 5. <br>Decide by two-side-slopes whether f has a slope there.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13f3">
+  <h2 class="sthead"><span class="stno">13f3</span>A joint’s slope</h2>
+  <p class="stands">Stands on 13f2 and 11e (glued functions).</p>
+  <p data-pid="60f327">|x| at 0 is the plainest joint. The general one has two pieces, each with a slope of its own.</p>
+  <p data-pid="ae51a8">Joint-slopes technique: <b>at a joint, a function has a slope exactly when its pieces arrive with the same slope.</b> Precisely: let f equal f₁ on (w − r, w) and f₂ on (w, w + r), where f₁ and f₂ are functions with slopes at w. Let f(w) = f₁(w) = f₂(w), so that w is a joint of f. Then the slope of f from the left at w is f₁′(w), and from the right is f₂′(w). So f has a slope at w exactly when f₁′(w) = f₂′(w), and then f′(w) is that value. The low marks 1 and 2 name the two pieces, as 3c's low marks name things.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the joint-slopes technique">
+-r \lt h \lt 0:\ \ \dfrac{f(a + h) - f(a)}{h} = \dfrac{f_1(a + h) - f_1(a)}{h} @@ f agrees with f₁ at a + h and at a: the swap axiom, twice
+\dfrac{f_1(a + h) - f_1(a)}{h} \to f_1'(a) \text{ as } h \to 0 @@ the hypothesis: f₁ has a slope at a
+\lim_{h \to 0^-} \dfrac{f(a + h) - f(a)}{h} = \htmlClass{new}{f_1'(a)} @@ two-sides-agree's free direction (a two-sided limit gives both one-sided ones), then agreeing-near side by side
+\lim_{h \to 0^+} \dfrac{f(a + h) - f(a)}{h} = \htmlClass{new}{f_2'(a)} @@ the same column on (0, r), with f₂
+f \text{ has a slope at } a \;\Leftrightarrow\; f_1'(a) = f_2'(a) \quad \blacksquare @@ two-side-slopes
+  </pre>
+  <p data-pid="cd2290">That is the cost 11e asked about. A joint costs nothing in continuity: the pieces need only arrive at the same height. It costs the slope, unless the pieces also arrive with the same slope. 11e's glued-functions asked how the pieces arrive; joint-slopes asks how they leave.</p>
+  <pre class="lines" data-k="ember" data-label="this step: joints, with and without slopes">
+2x + 1\ (x \le 1),\ \ 4 - x\ (x \gt 1) @@ 11e's joint at 1: heights 3 and 3
+\text{slopes at } 1:\ 2 \text{ and } -1 @@ slope-of-a-line for each piece. joint-slopes: no slope at 1
+|x - 2| + |x + 1| = -2x + 1,\ \ 3,\ \ 2x - 1 @@ 11e's pieces on (−∞, −1), [−1, 2], (2, ∞)
+\text{at } -1:\ -2 \text{ and } 0;\ \ \text{at } 2:\ 0 \text{ and } 2 @@ no slope at either joint; slope −2, 0 or 2 everywhere else
+x|x| = -x^2\ (x \lt 0),\ \ x^2\ (x \ge 0) @@ 8h's line by cases
+\text{at } 0:\ \ (-x^2)'(0) = 0,\ \ (x^2)'(0) = 0 @@ slope-of-x² and constant-factor for slopes. The same slope: joint-slopes gives x|x| the slope 0 at 0
+(x|x|)' = 2|x| @@ −2a for a &lt; 0, 2a for a &gt; 0, 0 at 0: a slope everywhere. Its slope function 2|x| has none at 0 (size-has-no-slope-at-0, constant-factor for slopes)
+u:\ \ 0\ (x \lt 0),\ \ 1\ (x \ge 0) @@ both pieces have slope 0 at 0, but they arrive at 0 and 1: not a joint, a jump. No slope, by slope-means-no-gap turned about
+  </pre>
+  <p data-pid="ad5329">The last line is a warning about the order of the two conditions. Equal slopes are not enough: joint-slopes starts from a joint, equal heights arriving and the value there. Without that, 13b already says no.</p>
+  <p data-pid="aad8ea">Take as given a measured heating curve: 100 g of ice, heated steadily through melting and boiling to steam. Its temperature, as a function of the heat put in, is continuous with four joints, and its five pieces climb at about 4.78, 0, 2.39, 0 and 4.98 °C per kJ. (The annex 11·chem measures it.) No two neighbours agree, so the temperature has no slope at any of its four joints.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · joint-slopes · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13f3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = |x - 3|"></span></span>Find f's slopes from the left and from the right at 3, one move per line, and decide whether f has a slope at 3.</li><li><span class="givens"><span data-tex-inline="f(x) = \max(x, 0)"></span></span>Write f in pieces, find its slopes from each side at 0, and find where it has a slope.</li><li><span class="givens"><span data-tex-inline="f(x) = kx^2 + b \text{ for } x &lt; 1,"></span> <span data-tex-inline="f(x) = 4x \text{ for } x \ge 1"></span></span>Find k and b so that f has a slope at 1.</li><li><span class="givens"><span data-tex-inline="f(x) = \frac{2x - 1}{x + 2}"></span></span>Using quotient for slopes, find f's slope at 1. <br>Check it by writing f as 2 minus a single fraction.</li><li><span class="givens"><span data-tex-inline="f(x) = \frac{3}{x^2} - \frac{2}{x}"></span></span>Using negative-powers, find f's slope at minus 1.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13f4">
+  <h2 class="sthead"><span class="stno">13f4</span>The second condition at a joint</h2>
+  <p class="stands">Stands on 13f3 and 11f (gluing with a family of pairs).</p>
+  <p data-pid="f93d19">11f glued mx + 1, for x &lt; 2, to x² − b, for x ≥ 2. It found that the pieces arrive at one height exactly when 2m + 1 = 4 − b: a whole family of pairs (m, b), among them (1, 1), (0, 3) and (3/2, 0). It said a second condition of another kind would pin down one pair, and that rung 13 supplies the usual one. Here it is.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the two conditions at 2">
+2m + 1 = 4 - b @@ the joint: glued-functions (11e), as 11f found
+\text{left slope at } 2 = m,\ \ \text{right slope at } 2 = 2 \cdot 2 = 4 @@ slope-of-a-line; slope-of-x² and lifting for x² − b
+m = \htmlClass{new}{4} @@ joint-slopes: a slope at 2 exactly when the slopes agree
+4 - b = 2 \cdot 4 + 1 = 9,\ \ \text{so } b = \htmlClass{new}{-5} @@ the first condition, solved (adding-keeps-answers, 5f)
+4x + 1\ (x \lt 2),\ \ x^2 + 5\ (x \ge 2) @@ heights 9 and 9; slopes 4 and 4; f′(2) = 4
+  </pre>
+  <p data-pid="ab2710">Look at the left piece: 4x + 1 is the tangent line of x² + 5 at 2, since 9 + 4(x − 2) = 4x + 1. <b>Pieces that join with a slope meet as a piece meets its tangent line.</b> The other pairs of 11f's family, such as m = 1 and b = 1, give a joint with slopes 1 and 4: continuous at 2, no slope there.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · the second condition · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13f4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = ax + 2 for x < 1,  f(x) = x^2 + c for x ≥ 1</span></span>Write the condition for one height at 1, and the condition for one slope. <br>Find a and c.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13f5">
+  <h2 class="sthead"><span class="stno">13f5</span>Continuous everywhere, a slope nowhere</h2>
+  <p class="stands">Stands on 13f3.</p>
+  <p data-pid="40821d">|x| lacks a slope at one input, and |x − 2| + |x + 1| at two. A function with a joint at every whole number, such as the distance from x to the nearest whole number, lacks one at endlessly many. How far can it go? In 1872 a function continuous at every real with a slope at none was presented to the Berlin Academy, and it was published in 1875. It is an endless sum, built from functions this ladder builds on rung 21. However near you look to any input, its chords from that input never settle on a slope. Earlier, the author of 12a's paper of 1817 had built a continuous function lacking slopes at endlessly many inputs. It was in his manuscript of the 1830s, the one 12c mentioned, which was not printed until 1930. Mathematicians of the time had taken for granted that a continuous function has a slope at most of its inputs. <b>Slope-means-no-gap is all that survives of that belief: a slope means continuity, and never the other way.</b></p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13f5.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">the distance from x to the nearest whole number</span></span>Find its slopes from each side at 0 and at ½. <br>Say where it has no slope.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13f6">
+  <h2 class="sthead"><span class="stno">13f6</span>The quotient rule, from the product and chain rules</h2>
+  <p class="stands">Stands on 13c (product for slopes), 13e (chain for slopes) and 10c (away-from-zero).</p>
+  <p data-pid="e14269">13e's chains already found the slope of 1/(x² + 1) using only 1/r's slope. That is the general tech.</p>
+  <p data-pid="42e6d0">Reciprocal technique for slopes: <b>if g has a slope at w and g(w) ≠ 0, then 1/g has a slope at w, and (1/g)′(w) = −g′(w)/g(w)².</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the reciprocal technique for slopes">
+g \text{ continuous at } a,\ \ g(a) \ne 0 @@ slope-means-no-gap (13b); the hypothesis
+g(x) \ne 0 \text{ on an open interval around } a @@ away-from-zero (10c), with M = g(a): 1/g is defined there (10c's line for 1/g)
+\tfrac1g:\ \ r = g(x),\ \ y = \tfrac1r @@ name the inside r; the outside is 1/r (equal-functions)
+\big(\tfrac1g\big)'(a) = -\dfrac{1}{g(a)^2}\cdot g'(a) \quad \blacksquare @@ chain for slopes (13e), with slope-of-one-over-x (13a) at r₀ = g(a) ≠ 0
+  </pre>
+  <p data-pid="14f89d">Quotient technique for slopes (the quotient rule): <b>if f and g have slopes at w and g(w) ≠ 0, then f/g has a slope at w, and (f/g)′(w) = (f′(w)g(w) − f(w)g′(w))/g(w)².</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the quotient technique for slopes">
+\dfrac{f}{g} = f \cdot \dfrac{1}{g} \text{ on an open interval around } a @@ 5b's line for dividing, read in ℝ: f(x)/g(x) = f(x) · g(x)⁻¹; equal-functions; the interval of reciprocal for slopes
+\Big(\dfrac{f}{g}\Big)'(a) = f'(a)\cdot\dfrac{1}{g(a)} + f(a)\cdot\Big(-\dfrac{g'(a)}{g(a)^2}\Big) @@ slopes-decided-near, then product for slopes (13c) with reciprocal for slopes
+= \htmlClass{new}{\dfrac{f'(a)\,g(a) - f(a)\,g'(a)}{g(a)^2}} \quad \blacksquare @@ one bottom (5g), read in ℝ; negative-out on ℚ
+  </pre>
+  <p data-pid="01b854">Built, not assumed: the quotient rule needs nothing beyond the product rule, the chain rule and the slope of 1/x. The order in the top matters, because subtraction cannot be turned about: the slope of the top times the bottom, less the top times the slope of the bottom.</p>
+  <pre class="lines" data-k="ember" data-label="this step: quotient for slopes and reciprocal for slopes, used">
+\dfrac{x^2 + 1}{x - 1} \text{ at } 2:\ \ \dfrac{4 \cdot 1 - 5 \cdot 1}{1^2} = \htmlClass{new}{-1} @@ quotient for slopes: f(2) = 5, f′(2) = 4, g(2) = 1, g′(2) = 1
+\dfrac{x^2 + 1}{x - 1} = x + 1 + \dfrac{2}{x - 1} @@ 9g's polynomial-division, as a check
+\text{slope at } 2:\ \ 1 - \dfrac{2}{(2 - 1)^2} = -1 @@ slopes-add, slope-of-a-line, and reciprocal for slopes with constant-factor for slopes: the same
+\dfrac{2x + 3}{x^2 + 1} \text{ at } 1:\ \ \dfrac{2 \cdot 2 - 5 \cdot 2}{2^2} = -\tfrac32 @@ quotient for slopes
+  </pre>
+  <p data-pid="2bd764">Negative-powers technique: <b>for every number n ≥ 1 and every w ≠ 0, x^{−n} has a slope at w, and it is −n w^{−n−1}.</b> By 8i's line x^{−n} is 1/xⁿ. Reciprocal for slopes with power for slopes gives −n w^{n−1}/(wⁿ)², and 8i's whole-exponent makes that −n w^{−n−1}. With n = 1 it is slope-of-one-over-x again. So the power rule's shape, n x^{n−1}, gives the slope of every whole power (power for slopes). It gives it for every negative integer power away from 0 (negative-powers), and for the power ½ (13e's slope-of-√).</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · the quotient rule · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13f6.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = x/(x + 1)</span></span>Find f′(1) by quotient for slopes. <br>Check it by writing f as 1 minus a single fraction.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13f7">
+  <h2 class="sthead"><span class="stno">13f7</span>Illegal moves</h2>
+  <p class="stands">Stands on 13f1 to 13f6.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\begin{aligned}&|x| \text{ is continuous at } 0,\\ &\quad \text{ so it has a slope there}\,?\end{aligned} @@ size-has-no-slope-at-0: slopes −1 and 1 from the two sides. slope-means-no-gap does not run backwards
+\text{the pieces' slopes agree, so } f \text{ has a slope}\,? @@ u at 0: both pieces have slope 0, and u has a jump. The joint comes first
+f'(a) = \tfrac12\big(f_1'(a) + f_2'(a)\big) \text{ at a joint}\,? @@ |x| at 0 would get slope 0. A limit that heads two ways has no value at all (two-sides-differ)
+\Big(\dfrac fg\Big)' = \dfrac{f'}{g'}\,? @@ x²/x at 1: the quotient is x off 0, slope 1; f′/g′ gives 2
+\Big(\dfrac fg\Big)' = \dfrac{f g' - f' g}{g^2}\,? @@ the top in the wrong order: the sign comes out wrong. (x² + 1)/(x − 1) at 2 would give 1, not −1
+\Big(\dfrac1g\Big)'(a) \text{ when } g(a) = 0\,? @@ 1/g is not defined at a; reciprocal for slopes's hypothesis g(a) ≠ 0 is not decoration
+  </pre>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · the tempting quotient · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13f7.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = \sqrt{x},"></span> <span data-tex-inline="h &gt; 0"></span></span>Compute f's chord slopes from 0, and decide whether f has a slope from the right at 0.</li><li><span class="givens"><span data-tex-inline="f(x) = x^3 \text{ for } x &lt; 1,"></span> <span data-tex-inline="f(x) = mx + c \text{ for } x \ge 1"></span></span>Show that a slope at 1 forces the linear piece to be the tangent line of the cube at 1.</li><li><span class="givens"><span data-tex-inline="f(x) = x|x|,"></span> <span data-tex-inline="g(x) = x^2|x|"></span></span>Decide whether f's slope function has a slope at every real, and whether g's does.</li><li><span class="givens"><span data-tex-inline="f/g \text{ has a slope at } w,"></span> <span data-tex-inline="f = (f/g) \cdot g"></span></span>Using product for slopes, solve for the slope of the quotient at w. <br>Find what this assumes that reciprocal for slopes proves.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13f8">
+  <h2 class="sthead"><span class="stno">13f8</span>Running it backwards</h2>
+  <p class="stands">Stands on 13f1 to 13f6.</p>
+  <p data-pid="f5aa80">Handed a function in pieces, find each joint by glued-functions, then compare the pieces' slopes there by joint-slopes: equal, a slope; unequal, none. Handed a family of pieces to tune, write the two conditions, equal heights and equal slopes, and solve them together, as 5f solved two equations at once. Handed a quotient-rule answer, (f′g − fg′)/g², read off f and g from the bottom and the shape of the top. Found upward; written downward.</p>
+  <p data-pid="67f0f6">That completes the core of rung 13. The slope at a point is a limit of chord slopes. A slope means no gap. Products, powers, chains and quotients have rules, each proved once from the definition. And at a joint the pieces must arrive with one slope for the function to have one.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13f8.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f \text{ continuous at } 0,"></span> <span data-tex-inline="f(0) = 0,"></span> <span data-tex-inline="\text{chord slopes: } 3 \text{ for } h &gt; 0,"></span> <span data-tex-inline="-1 \text{ for } h &lt; 0"></span></span>Write f in two pieces.</li><li><span class="givens"><span data-tex-inline="f(x) = x^2 \text{ for } x \le 1,"></span> <span data-tex-inline="f \text{ linear for } x &gt; 1,"></span> <span data-tex-inline="f \text{ has a slope at } 1"></span></span>Find the linear piece.</li><li><span class="givens"><span data-tex-inline="f \text{ continuous,}"></span> <span data-tex-inline="\text{made of linear pieces,}"></span> <span data-tex-inline="\text{joints only at } 0 \text{ and } 4,"></span> <span data-tex-inline="\text{slopes } 1, 3 \text{ either side of } 0,"></span> <span data-tex-inline="\text{slopes } 3, -2 \text{ either side of } 4,"></span> <span data-tex-inline="f(0) = 0"></span></span>Write f.</li><li><span class="givens"><span data-tex-inline="\text{a quotient-rule answer:}"></span> <span data-tex-inline="\frac{(2x)(x^3 + 1) - (x^2 - 1)(3x^2)}{(x^3 + 1)^2}"></span></span>Find the quotient.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">13f.4.1</span><span class="tagq">build</span>Build a function of your own from two pieces glued at 1, neither piece a linear function, that has a slope at every real. <br>Then change one piece so that the function is still continuous at 1 but has different slopes from the two sides there, and find both.</div>
+  <div class="chq"><span class="chid">13f.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="f \text{ defined only on } [0, 1]"></span></span>Decide whether f can have a slope at 0. <br>Decide whether f can have a slope from the right at 0.</div>
+  <div class="chq"><span class="chid">13f.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="f \text{ has a slope at a joint}"></span></span>Prove or refute that its pieces must arrive there with one slope.</div>
+  <div class="chq"><span class="chid">13f.4.4</span><span class="tagq">seam</span>A book of 1797 on analytic functions tried to free the calculus from limits altogether: write every function as a sum of powers of h, and read its slope off as the coefficient of h. |x| at 0 has one slope from the left and another from the right. <br>Run that book’s method on |x| at 0, as far as you can take it. <br>Were the lectures of 1823 right to bring the limits back?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r13e.html">← 13e · the chain rule</a><a href="r13concl.html">13·∎ · conclusion →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>The function of 1872 is Karl Weierstrass’s; Paul du Bois-Reymond published it in 1875. The manuscript of the 1830s is Bernard Bolzano’s. In question 13f.4.4 the book of 1797 is Joseph-Louis Lagrange’s Théorie des fonctions analytiques, and the lectures of 1823 are Augustin-Louis Cauchy’s.</p>
+  <aside class="voice para"><p>Hermite wrote to Stieltjes that he turned away in fright and horror from this lamentable plague of continuous functions that have no derivative.</p><cite>Hermite, letter to Stieltjes (20 May 1893); paraphrase</cite></aside>
+  <p>Accepted names: subtraction is not commutative.</p>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; const a=Math.abs(v); let s=d!=null?v.toFixed(d):(a>=100?v.toFixed(1):a>=1?v.toFixed(3):a>=0.001?v.toFixed(4):v.toPrecision(3)); if(s.indexOf('.')>=0&&s.indexOf('e')<0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+/* ---------- left: chords from each side ---------- */
+const JS={
+  abs:{lab:'|x| at 0',a:0,f:x=>Math.abs(x),L:-1,Rt:1,x:[-2,2],y:[-1,2.5],joint:true},
+  two2:{lab:'|x − 2| + |x + 1| at 2',a:2,f:x=>Math.abs(x-2)+Math.abs(x+1),L:0,Rt:2,x:[-2.5,3.8],y:[0,8],joint:true},
+  twom1:{lab:'… at −1',a:-1,f:x=>Math.abs(x-2)+Math.abs(x+1),L:-2,Rt:0,x:[-2.8,3.2],y:[0,8],joint:true},
+  xabs:{lab:'x|x| at 0',a:0,f:x=>x*Math.abs(x),L:0,Rt:0,x:[-2,2],y:[-2.5,2.5],joint:true},
+  kink:{lab:'2x + 1, then 4 − x, at 1',a:1,f:x=>x<=1?2*x+1:4-x,L:2,Rt:-1,x:[-0.8,3],y:[-1,4.5],joint:true},
+  u:{lab:'u at 0',a:0,f:x=>x>=0?1:0,L:0,Rt:0,x:[-2,2],y:[-0.8,1.8],joint:false}
+};
+let jk='abs', HJ=0.8;
+const kh=$('kh'),cvJ=$('cvJ');
+const PJ=plane(cvJ,{x:[-2,2],y:[-1,2.5],grid:1,aspect:0.8,draw:P=>{ const J=JS[jk], a=J.a, fa=J.f(a), h=HJ; P.o.x=J.x; P.o.y=J.y; P.axes();
+  if(jk==='u'){ P.fn(x=>x<0?0:NaN,'--ink',2.4); P.fn(x=>x>=0?1:NaN,'--ink',2.4); const c=P.ctx; c.fillStyle=col('--card'); c.strokeStyle=col('--ink'); c.lineWidth=2; c.beginPath(); c.arc(P.X(0),P.Y(0),5,0,7); c.fill(); c.stroke(); }
+  else P.fn(J.f,'--ink',2.4);
+  const X0=J.x[0],X1=J.x[1];
+  if(J.joint){ P.line(X0,fa+J.L*(X0-a),a,fa,'--teal',2,[6,4]); P.line(a,fa,X1,fa+J.Rt*(X1-a),'--gold',2,[6,4]); }
+  const m=(J.f(a+h)-fa)/h; P.line(X0,fa+m*(X0-a),X1,fa+m*(X1-a),'--ember',1.8);
+  P.dot(a,fa,'--ink',5.5); P.dot(a+h,J.f(a+h),'--ember',6); }});
+Object.defineProperty(PJ.o,'aspect',{get:()=>cvJ.clientWidth>560?0.8:0.9});
+function readJ(){ const J=JS[jk], a=J.a, h=HJ, m=(J.f(a+h)-J.f(a))/h; $('oh').textContent=fm(h,2);
+  const vd=$('vdJ'); let t='The chord slope at h = '+fm(h,2)+' is '+fm(m)+'. ';
+  if(!J.joint){ vd.className='verdict lose'; t+='Both pieces of u have slope 0, but they arrive at 0 and 1: a jump, not a joint. From the left the chords run off (−1/h). No slope at 0, by slope-means-no-gap turned about.'; }
+  else if(J.L===J.Rt){ vd.className='verdict win'; t+='From the left the chords head to '+fm(J.L)+', from the right to '+fm(J.Rt)+': the same. By joint-slopes and two-side-slopes the function has the slope '+fm(J.L)+' here.'; }
+  else { vd.className='verdict lose'; t+='From the left the chords head to '+fm(J.L)+', from the right to '+fm(J.Rt)+'. A joint, continuous, and the two sides differ: no slope here (two-sides-differ, joint-slopes).'; }
+  vd.textContent=t; }
+function allJ(){ PJ.redraw(); readJ(); }
+(function(){ const ch=$('jch'); Object.keys(JS).forEach(k=>{ const b=document.createElement('button'); b.textContent=JS[k].lab; if(k===jk) b.className='on'; b.onclick=()=>{ jk=k; [...ch.children].forEach(z=>z.classList.toggle('on',z===b)); allJ(); }; ch.appendChild(b); }); })();
+kh.oninput=()=>{ HJ=+kh.value; if(Math.abs(HJ)<0.01) HJ=HJ<0?-0.01:0.01; allJ(); };
+let dJ=false; cvJ.addEventListener('pointerdown',e=>{ dJ=true; cvJ.setPointerCapture&&cvJ.setPointerCapture(e.pointerId); mJ(e); });
+function mJ(e){ if(!dJ) return; let h=PJ.point(e).x-JS[jk].a; h=Math.max(-1.5,Math.min(1.5,Math.round(h*100)/100)); if(Math.abs(h)<0.01) h=h<0?-0.01:0.01; HJ=h; kh.value=h; allJ(); }
+cvJ.addEventListener('pointermove',mJ); ['pointerup','pointercancel'].forEach(t=>cvJ.addEventListener(t,()=>dJ=false));
+/* ---------- right: 11f's two conditions ---------- */
+const kA=$('kA'),kB=$('kB'),cvK=$('cvK');
+const PK=plane(cvK,{x:[-0.5,4],y:[-4,16],grid:1,aspect:0.85,draw:P=>{ const a=+kA.value,b=+kB.value; P.o.grid=2; P.axes();
+  const hl=2*a+1, hr=4-b;
+  P.line(-0.5,hl+a*(-2.5),4,hl+a*2,'--teal',1.3,[5,4]); P.line(-0.5,hr+4*(-2.5),4,hr+4*2,'--gold',1.3,[5,4]);
+  P.fn(x=>x<2?a*x+1:NaN,'--teal',2.6); P.fn(x=>x>=2?x*x-b:NaN,'--gold',2.6);
+  if(Math.abs(hl-hr)>1e-9){ const c=P.ctx; c.fillStyle=col('--card'); c.strokeStyle=col('--teal'); c.lineWidth=2; c.beginPath(); c.arc(P.X(2),P.Y(hl),5,0,7); c.fill(); c.stroke(); }
+  P.dot(2,hr,'--ink',5.5); }});
+Object.defineProperty(PK.o,'aspect',{get:()=>cvK.clientWidth>560?0.85:0.95});
+function readK(){ const a=+kA.value,b=+kB.value; $('oA').textContent=fm(a); $('oB').textContent=fm(b); const hl=2*a+1, hr=4-b; const vd=$('vdK');
+  if(Math.abs(hl-hr)>1e-9){ vd.className='verdict lose'; vd.textContent='The pieces arrive at '+fm(hl)+' and '+fm(hr)+': a jump of size '+fm(Math.abs(hl-hr))+' (11f). Not continuous at 2, so no slope (slope-means-no-gap). First condition: 2a + 1 = 4 − b.'; }
+  else if(a!==4){ vd.className='verdict lose'; vd.textContent='Heights agree at '+fm(hl)+': a joint, continuous at 2 (glued-functions). But the slopes arriving are '+fm(a)+' and 4: no slope at 2 (joint-slopes). Second condition: m = 4.'; }
+  else { vd.className='verdict win'; vd.textContent='Heights 9 and 9, slopes 4 and 4: a joint with a slope, f′(2) = 4. The left piece 4x + 1 is the tangent line of x² + 5 at 2.'; }
+  const lp=a===0?'1':(a===1?'x':a===-1?'-x':fm(a)+'x')+' + 1', rp=b===0?'x^2':R`x^2 ${b<0?'+':'-'} ${fm(Math.abs(b))}`;
+  tex($('eqK'),R`\begin{gathered}${lp}\ (x \lt 2),\ \ ${rp}\ (x \ge 2)\\ \text{heights arriving: } ${fm(hl)} \text{ and } ${fm(hr)}\\ \text{slopes arriving: } ${fm(a)} \text{ and } 4\end{gathered}`,true); }
+function allK(){ PK.redraw(); readK(); }
+[kA,kB].forEach(z=>z.addEventListener('input',allK));
+$('bj').onclick=()=>{ kB.value=Math.max(-8,Math.min(4,3-2*(+kA.value))); allK(); };
+$('bs').onclick=()=>{ kA.value=4; kB.value=-5; allK(); };
+window.__pic={joint:(k,h)=>{ jk=k; [...$('jch').children].forEach((b,i)=>b.classList.toggle('on',Object.keys(JS)[i]===k)); HJ=h; kh.value=h; allJ(); const J=JS[jk]; return {m:(J.f(J.a+h)-J.f(J.a))/h,txt:$('vdJ').textContent}; },
+  tune:(a,b)=>{ kA.value=a; kB.value=b; allK(); return $('vdK').textContent; }};
+allJ(); allK();
+
+/* ---------- slides ---------- */
+const N='\\htmlClass{new}', K='\\htmlClass{keep}';
+stepper('#sl1',[
+  {k:'ember',kl:'size-has-no-slope-at-0 · right',t:R`h \gt 0:\ \ \dfrac{|h| - 0}{h} = \dfrac{h}{h} = ${N}{1}`,n:`8h's |x| by cases.`},
+  {k:'ember',kl:'size-has-no-slope-at-0 · left',t:R`h \lt 0:\ \ \dfrac{|h| - 0}{h} = \dfrac{-h}{h} = ${N}{-1}`,n:`Every chord from the left has slope −1.`},
+  {k:'ember',kl:'size-has-no-slope-at-0 · no limit',t:R`1 \ne -1\ \ \Rightarrow\ \ \text{no slope at } 0`,n:`two-sides-differ: two sides that differ, no limit. Continuous (size-is-continuous), with no slope. ∎`}
+],{title:'The slides · size at 0 · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'one-sided slopes',t:R`\begin{gathered}\lim_{h \to 0^+} \dfrac{f(a + h) - f(a)}{h}\\ \lim_{h \to 0^-} \dfrac{f(a + h) - f(a)}{h}\end{gathered}`,n:`The slopes from the right and from the left, when they exist. No new mark.`},
+  {k:'ember',kl:'two-side-slopes',t:R`f'(a) \text{ exists} \;\Leftrightarrow\; \text{left} = \text{right}`,n:`10e's two-sides-agree, read for the chord slopes.`}
+],{title:'The slides · two sides · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'joint-slopes · 1 of 2',t:R`\begin{gathered}h \lt 0:\ \text{chord slope of } f\\ = \text{chord slope of } f_1 \to ${N}{f_1'(w)}\end{gathered}`,n:`f agrees with f₁ at w + h and at w. Likewise on the right with f₂.`},
+  {k:'ember',kl:'joint-slopes · 2 of 2',t:R`f'(a) \text{ exists} \;\Leftrightarrow\; ${N}{f_1'(a) = f_2'(a)}`,n:`At a joint, the pieces must arrive with one slope. That is what different rates cost. ∎`},
+  {k:'ember',kl:'x|x|',t:R`(-x^2)'(0) = 0 = (x^2)'(0)`,n:`A joint where the slopes agree: x|x| has slope 0 at 0, and slope 2|x| everywhere.`},
+  {k:'ember',kl:'u',t:R`0 = 0 \text{ (slopes)},\ \ 0 \ne 1 \text{ (heights)}`,n:`Equal slopes are not enough. A jump has no slope (slope-means-no-gap).`}
+],{title:'The slides · joint-slopes · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'11f at 2 · 1 of 2',t:R`\begin{gathered}2m + 1 = 4 - b\\ m = ${N}{4}\end{gathered}`,n:`Equal heights (glued-functions); equal slopes (joint-slopes, with slope-of-x² for x² − b).`},
+  {k:'ember',kl:'11f at 2 · 2 of 2',t:R`4x + 1\ (x \lt 2),\ \ x^2 + 5\ (x \ge 2)`,n:`b = −5. The left piece is the tangent line of x² + 5 at 2.`}
+],{title:'The slides · the second condition · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'reciprocal for slopes',t:R`\Big(\dfrac1g\Big)'(a) = -\dfrac{1}{g(a)^2}\cdot g'(a)`,n:`Name the inside r = g(x); the outside is 1/r. chain for slopes with slope-of-one-over-x, at r₀ = g(a) ≠ 0. ∎`},
+  {k:'ember',kl:'quotient for slopes · 1 of 2',t:R`\Big(f\cdot\dfrac1g\Big)'(a) = \dfrac{f'(a)}{g(a)} - \dfrac{f(a)g'(a)}{g(a)^2}`,n:`product for slopes with reciprocal for slopes.`},
+  {k:'ember',kl:'quotient for slopes · 2 of 2',t:R`\Big(\dfrac fg\Big)'(a) = ${N}{\dfrac{f'(a)g(a) - f(a)g'(a)}{g(a)^2}}`,n:`One bottom. The order in the top matters. ∎`},
+  {k:'ember',kl:'quotient for slopes used',t:R`\dfrac{x^2 + 1}{x - 1} \text{ at } 2:\ \ \dfrac{4 - 5}{1} = ${N}{-1}`,n:`Checked by x + 1 + 2/(x − 1): 1 − 2 = −1.`},
+  {k:'ember',kl:'negative-powers',t:R`(x^{-n})' = -\dfrac{n\,x^{n - 1}}{x^{2n}} = ${N}{-n\,x^{-n - 1}}`,n:`reciprocal for slopes with power for slopes; whole-exponent. The power rule's shape for negative powers too, away from 0.`}
+],{title:'The slides · the quotient rule · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'the tempting quotient',t:R`\Big(\dfrac{x^2}{x}\Big)'(1) = 1,\ \ \text{not } \dfrac{2}{1}`,n:`(f/g)′ is not f′/g′.`}
+],{title:'The slides · the tempting quotient · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

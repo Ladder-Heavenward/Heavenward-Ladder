@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>12·econ · Must there be a price where buyers and sellers match?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+@media (max-width:520px){.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r12comp.html">← 12·comp what can a machine with no memory check?</a><a href="r13.html">next: 13 · measuring change in an instant →</a></p>
+  <div class="tags"><span class="tag econ">12·econ · economics</span></div>
+  <h1>Must there be a price where buyers and sellers match?</h1>
+  <p>Must there be a price where buyers and sellers match? Economists have drawn it that way since the eighteen hundreds: demand falls as the price rises, supply climbs, and the two cross. But 11·econ found a market where they never cross. When picking had a cost, supply jumped clean over demand, and fruit stayed on the trees. So the question is a real one. It is hard for two reasons. Supply and demand are guesses, read from what buyers and sellers did at the few prices they met, not at every price. And the price where they match is rarely one that algebra can solve for. This page proves that a matching price exists whenever supply and demand have no jumps, buyers want more than sellers offer at a low price, and sellers offer more than buyers want at a high one. The proof is 12a's in-between values. Then the page asks what the proof leaves out: where the price is, how many there are, whether a market ever finds one, and what happens when prices come in whole cents.</p>
+  <p class="gesture">Take the gap: what sellers offer at a price, less what buyers want there. At a low price the gap is negative, and at a high price it is positive. If the gap has no jumps, it passes through nothing on the way, and at that price buyers and sellers match. Halving traps the price as tightly as you like. If supply only rises and demand only falls, it is the only matching price. Over many seasons a fishery's supply can turn back down, and then there can be two. Prices charged in whole cents have holes, and the match can fall between two of them.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r11econ.html">11·econ</a> (demand D, supply S, the gap E, the meeting price, a supply with a jump), <a href="r12a.html">12a</a> (in-between-value, closed-interval-continuity), <a href="r12e.html">12e</a> (halving-traps, halvings-width, trap-from-its-bits), <a href="r12d.html">12d</a> (a hole can make a technique fail), <a href="r11b.html">11b</a> (continuous-sums, continuous-quotients), <a href="r11d.html">11d</a> (polynomials-are-continuous), <a href="r08g.html">8g</a> (same-direction-add, negative-reverses-order) and <a href="r08i.html">8i</a> (the quadratic formula). Rung 13 measures how fast a price changes what is sold; <a href="r16econ.html">16·econ</a> measures who gains at the matching price.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · read it through, then work the picture and the slides</div>
+
+  <h3>The words</h3>
+  <p data-pid="73b495">Take the first week of the Dungeness crab season at Pillar Point Harbor, near Half Moon Bay. Boats sell crab off the dock to fish markets and restaurants, by the pound. At each price some pounds are landed and offered, and some are wanted. The numbers below are made up to be the right size, not measured; their shape is the usual one.</p>
+  <p class="eqline" data-pid="728697">From here on, on this page, p is a price in dollars per pound. D(p) is the pounds a day buyers would take at p, and S(p) the pounds a day the boats would land and offer at p, as in 11·econ. The gap is E(p) = S(p) − D(p): the pounds offered but not bought at p. When E(p) is negative, buyers want more than is offered.</p>
+  <p data-pid="c6af1c">The guess for the dock is D(p) = 6000 − 400p and S(p) = 50p³. Demand is a line, as in 11·econ. Supply is not: at a low price only the boats near the harbor go out, and each dollar more sends boats further and pulls more pots. So E(p) = 50p³ + 400p − 6000. Setting it to 0 asks for the answer of a sameness of degree 3, and the ladder has no formula for that.</p>
+  <p data-pid="a68363">Still, two readings settle a lot. At $4 a pound, S(4) = 3200 and D(4) = 4400, so E(4) = −1200: buyers are short. At $5, S(5) = 6250 and D(5) = 4000, so E(5) = 2250: crab is left over. <b>Somewhere between $4 and $5 the gap changes sign, and it has no jumps on the way.</b></p>
+  <div class="brkkey"></div>
+  <h3>A matching price exists</h3>
+  <p data-pid="aa546b">Matching-price technique. Let S and D be continuous on [v, w]. Suppose S(v) &lt; D(v): at the low price, buyers want more. Suppose S(w) &gt; D(w): at the high price, sellers offer more. Then some price p with v &lt; p &lt; w has S(p) = D(p). <b>If supply and demand have no jumps, and the shortage at a low price turns into a surplus at a high one, then some price between makes them match.</b></p>
+  <pre class="lines" data-k="ember" data-label="12·econ: the matching-price technique">
+E = S - D \text{ is continuous on } [v, w] @@ continuous-sums (11b), at every price of [v, w]
+E(v) = S(v) - D(v) \lt 0 \lt S(w) - D(w) = E(w) @@ the two suppositions, each moved across (adding-keeps-answers)
+\text{some } c \text{ with } v \lt c \lt w \text{ and } E(c) = 0 @@ in-between-value (12a)
+\htmlClass{new}{S(c) = D(c)} \quad \blacksquare @@ adding-keeps-answers: add D(c) to both sides
+  </pre>
+  <p data-pid="d42584">For the dock, E is a polynomial, so it is continuous everywhere (11d), and v = 4, w = 5 do the rest. A matching price lies strictly between $4 and $5. The proof does not solve anything. It spends the line with no holes, 12a's least upper bound, at exactly one place.</p>
+  <h3>What the proof does not say: where</h3>
+  <p data-pid="01a01c">The proof gives no number. 12e's halving gives as many places as you pay for. Test the middle of the trap. If the gap there is negative, the match is to its right; keep the right half. If positive, keep the left half.</p>
+  <pre class="lines" data-k="ember" data-label="12·econ: trapping the dock price">
+[4, 5]:\ E(4.5) = 356.25 \gt 0 @@ keep the left half: [4, 4.5]
+E(4.25) \approx -461.7 \lt 0 @@ keep the right half: [4.25, 4.5]
+E(4.375) \approx -63.0 \lt 0 @@ [4.375, 4.5]
+E(4.4375) \approx 144.0 \gt 0 @@ [4.375, 4.4375]
+E(4.40625) \approx 39.9 \gt 0 @@ [4.375, 4.40625]
+E(4.390625) \approx -11.7 \lt 0 @@ [4.390625, 4.40625]
+E(4.3984375) \approx 14.0 \gt 0 \Rightarrow \htmlClass{new}{[4.390625,\ 4.3984375]} @@ width 1/128, under a cent
+  </pre>
+  <p data-pid="0d76eb">Seven halvings put the matching price inside a trap less than a cent wide, by halvings-width: 1/2⁷ = 1/128. The price is about $4.39 a pound, and about 4240 pounds a day change hands. Halving-traps says more halvings close on one price, at about 4.3942.</p>
+  <h3>What the proof does not say: how many</h3>
+  <p data-pid="f3fc97">One-match technique. Let S rise on [v, w]: p &lt; q gives S(p) &lt; S(q). Let D fall on [v, w]: p &lt; q gives D(p) &gt; D(q). Then at most one price in [v, w] has S(p) = D(p). <b>When supply only rises and demand only falls, there is at most one matching price.</b></p>
+  <pre class="lines" data-k="ember" data-label="12·econ: the one-match technique">
+p \lt q \Rightarrow S(p) \lt S(q) \text{ and } -D(p) \lt -D(q) @@ the suppositions; negative-reverses-order (8g)
+p \lt q \Rightarrow E(p) \lt E(q) @@ same-direction-add (8g)
+E(p) = 0 = E(q) \text{ with } p \ne q @@ suppose two matches; name the smaller p
+E(p) \lt E(q),\ \text{so } 0 \lt 0 @@ the line above
+\htmlClass{new}{\text{at most one match}} \quad \blacksquare @@ refute the supposition (7e)
+  </pre>
+  <p data-pid="ede1a7">Both suppositions matter. Over many seasons a high price draws more boats, and together they take more crab than the stock replaces. Then the catch falls, and so does what the fleet can land. Fishery economists found this in 1970: where anyone may fish, the long-run supply first rises with the price and then turns back down.</p>
+  <pre class="lines" data-k="ember" data-label="12·econ: a supply that turns back">
+S_L(p) = 2400p - 200p^2 \text{ on } [0, 12] @@ a guess for the long run: greatest at $6, falling after
+E_L(p) = S_L(p) - D(p) = -200(p^2 - 14p + 30) @@ collect
+E_L(0) = -6000,\ \ E_L(7) = 3800,\ \ E_L(12) = -1200 @@ negative, positive, negative
+p = 7 \pm \sqrt{19} \approx \htmlClass{new}{2.64} \text{ or } \htmlClass{new}{11.36} @@ the quadratic formula (8i): two matching prices
+  </pre>
+  <p data-pid="62276e">Matching-price runs on [0, 7] and finds the first. Run on [7, 12], with the shortage and surplus the other way round, it finds the second: the technique only needs the gap to change sign. At $2.64 the fleet lands about 4940 pounds a day. At $11.36 it lands about 1450. Both are matches. The proof says nothing about which one a market would settle at.</p>
+  <h3>What the proof does not say: whether a market gets there</h3>
+  <p data-pid="419b94">11·econ guessed that a price drifts toward the match: where buyers are short they bid it up, and where crab is left over the boats cut it. That guess is a law, read from markets, with a range and exceptions. It is not a technique. The matching-price technique says a match exists. It says nothing about the road to it, or how long the road takes, or whether the market is still there when it arrives. <b>A proof that a price exists is not a proof that anyone finds it.</b></p>
+  <p data-pid="00c092">Halving is one road, and it looks like haggling. Try a price, see whether buyers or sellers are left over, and move toward the other side. A market does not halve exactly, and it may overshoot. Whether it still closes in is a question for rung 13 and later.</p>
+  <h3>What the proof does not say: in whole cents</h3>
+  <p data-pid="35a75d">The dock does not charge $4.3942 a pound. It charges whole cents, and the cents are like 12d's fractions: a line with holes. At $4.39, E is about −13.8: buyers are short by about 14 pounds a day. At $4.40, E is about 19.2: about 19 pounds are left over. No price in whole cents matches.</p>
+  <p data-pid="d8c1d1">So the market clears near the match, not at it. A few pounds go unsold, or a few buyers go without. On a line with holes the in-between-value technique fails at its least upper bound line, as 12d showed for x² − 2. Here the fault is small, because a cent is small beside the trade. <b>The matching price lives on the line, not on the price list.</b></p>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · the middle of a change, proved</div>
+    <p data-pid="ffbf9b">12a proved the mathematical side of a principle met in 6·chem, 10·bio and 11·chem: a continuous change from below 0 to above 0 passes through 0. The dock's gap runs from a shortage at $4 to a surplus at $5. It cannot get from one to the other without a middle where nobody is short and nothing is left over.</p>
+    <p data-pid="06c4ca"><b>A market whose gap has no jumps has a middle, even when no one trades there.</b></p>
+    <p data-pid="7e913e">The middle at about $4.3942 is a price nobody charges, between two cents. Yet the trades at $4.39 and $4.40 are measured against it: one leaves 14 pounds short, the other 19 pounds over. The middle is what makes those two numbers small.</p>
+    <p class="bait" data-pid="e362d3">A Dungeness crab season can open late, with boats waiting at the dock. On the first morning the price swings by a dollar a pound. Is there a matching price that morning?</p>
+  </aside>
+  <h3>Which rung licenses each step</h3>
+  <div class="tablewrap"><table class="tt">
+  <tr><th class="l">step</th><th class="l">licence</th></tr>
+  <tr><td class="l">D, S and the long-run supply</td><td class="l">premises, guessed to be the right size</td></tr>
+  <tr><td class="l">E has no jumps</td><td class="l">continuous-sums (11b); polynomials-are-continuous (11d)</td></tr>
+  <tr><td class="l">a matching price exists</td><td class="l">in-between-value (12a), in the matching-price technique</td></tr>
+  <tr><td class="l">trapping it</td><td class="l">halving-traps and halvings-width (12e)</td></tr>
+  <tr><td class="l">at most one</td><td class="l">same-direction-add, negative-reverses-order (8g); refuting a supposition (7e)</td></tr>
+  <tr><td class="l">two matches in the long run</td><td class="l">the quadratic formula (8i)</td></tr>
+  <tr><td class="l">no match in whole cents</td><td class="l">12d: a line with holes can skip 0</td></tr>
+  <tr><td class="l">a market drifts to the match</td><td class="l">a law, not a technique</td></tr>
+  </table></div>
+  <h3>Illegal moves</h3>
+  <pre class="lines" data-k="ember" data-label="12·econ: tempting, and not allowed">
+\text{supply rises and demand falls, so they cross}\,? @@ 11·econ's picking cost: a supply with a jump skipped over demand
+E(4) \lt 0 \lt E(5) \Rightarrow E(4.5) = 0\,? @@ the technique says some price between, not the middle; E(4.5) = 356.25
+\begin{aligned}&E(v) \lt 0 \text{ and } E(w) \lt 0,\\ &\quad\text{so no match between}\,?\end{aligned} @@ the long-run gap is negative at 0 and at 12, and matches twice between
+\begin{aligned}&\text{a match exists, so the}\\ &\quad\text{market trades there}\,?\end{aligned} @@ existence is not a road; and in whole cents no price matches
+\text{exactly one match, always}\,? @@ only when supply rises and demand falls; the long-run supply turns back
+  </pre>
+  <h3>Running it backwards</h3>
+  <p data-pid="19d74b">Handed a matching price and one of the two guesses, solve for what the other must be there: with S = 50p³ and a match at $4, demand must be 3200 pounds at $4. Handed a table of the gap at a few prices, count its sign changes: each one between neighbours holds a match, so the table proves at least that many. Handed a halving record of kept halves, read the trap back from the bits, as 12e did.</p>
+</section>
+
+<section class="pic" id="pic">
+  <div class="eyebrow">The picture · left: supply and demand at the dock · right: the gap, and the trap closing on its zero</div>
+  <div class="panels">
+    <div class="panel">
+      <div class="lbl">pounds a day against the price in dollars a pound</div>
+      <canvas id="cvM"></canvas>
+      <div class="kn"><span class="m">price p</span><input type="range" id="kp" min="0.5" max="12" step="0.01" value="4"><output id="op"></output></div>
+      <div class="chips" id="sch"></div>
+      <div class="cap">Plum: demand D. Teal: supply S, this week's or the long run's. Ember: the gap E = S − D at your price, drawn between the two curves. The dots mark the matching prices.</div>
+      <div class="verdict" id="vdM"></div>
+    </div>
+    <div class="panel">
+      <div class="lbl">the gap E against the price, near the trap</div>
+      <canvas id="cvE"></canvas>
+      <div class="chips" id="hch"></div>
+      <div class="cap">Ink: E. Gold band: the trap. Each halving tests the middle and keeps the half where E changes sign. Once the trap is narrow, the gray ticks mark whole cents: watch E jump from one side of 0 to the other between two of them.</div>
+      <div class="eqbox" id="eqE"></div>
+    </div>
+  </div>
+</section>
+
+<section class="slides" id="sl1"><div class="eyebrow">The slides · the gap; the dock; matching-price; halving; one-match; a supply that turns back; no road promised; whole cents; the middle of a change; illegal moves · ← → keys work</div></section>
+
+<section class="sayback">
+  <div class="eyebrow">Say it back · then work it</div>
+  <h2>Questions</h2>
+  <div class="phkey"></div>
+  <ol>
+    <li><span class="qid">12·econ.1</span><span class="gname">The dock price.</span><span class="gwhy">Do: build the page’s pieces.</span>
+      <ol class="sub">
+        <li><span class="qid">12·econ.1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="D(p) = 9000 - 600p,"></span> <span data-tex-inline="S(p) = 40p^3 \text{ (pounds }\text{a }"></span> <span data-tex-inline="\text{day)}"></span></span>Fresh albacore is sold off the boats at Westport, Washington. <br>Prove that a matching price lies between $5 and $6.</li><li><span class="givens"><span data-tex-inline="D \text{ and } S \text{ of part a}"></span></span>Trap the matching price in a stretch of width 1/8.</li><li><span class="givens"><span data-tex-inline="D \text{ and } S \text{ of part a},"></span> <span data-tex-inline="0 \le p \le 10"></span></span>Prove there is no second matching price.</li><li><span class="givens"><span data-tex-inline="D \text{ and } S \text{ of part a},"></span> <span data-tex-inline="\text{prices in whole cents}"></span></span>Decide whether any price in whole cents matches.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">12·econ.2</span><span class="gname">From the match back.</span><span class="gwhy">Undo: run the page’s techs backwards.</span>
+      <ol class="sub">
+        <li><span class="qid">12·econ.2.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="D(p) = k - 400p,"></span> <span data-tex-inline="S(p) = 50p^3,"></span> <span data-tex-inline="\text{a match at } \$4"></span></span>Find k.</li><li><span class="givens"><span data-tex-inline="E \text{ continuous }\text{on } [3, 7];"></span> <span data-tex-inline="E(3) = -200,\ E(4) = -50,"></span> <span data-tex-inline="E(5) = 30,\ E(6) = -10,"></span> <span data-tex-inline="E(7) = 500"></span></span>Find the least number of matching prices this table proves, and a stretch of width 1 holding each.</li><li><span class="givens"><span data-tex-inline="\text{start: } [2, 6],\ E(2) \lt 0 \lt E(6);"></span> <span data-tex-inline="\text{kept: }\text{left, }\text{right, }"></span> <span data-tex-inline="\text{right, }\text{left}"></span></span>Each halving kept the left or the right half. Find the trap.</li><li><span class="givens"><span data-tex-inline="\text{start: } [4, 5];"></span> <span data-tex-inline="\text{trap }\text{now: } [4.375,\ 4.40625]"></span></span>Find how many halvings were made. <br>Find how many more bring the width under one cent.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">12·econ.3</span><span class="gname">Where the proof gives.</span><span class="gwhy">Bend: find where the techs stop working.</span>
+      <ol class="sub">
+        <li><span class="qid">12·econ.3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="S(p) = 0 \text{ for } p \lt 3,"></span> <span data-tex-inline="S(p) = 5000 \text{ for } p \ge 3,"></span> <span data-tex-inline="D(p) = 8000 - 1000p"></span></span>Decide whether a matching price exists, and whether the matching-price technique can show it.</li><li><span class="givens"><span data-tex-inline="S(p) = 2400p - 200p^2,"></span> <span data-tex-inline="D(p) = 6000 - 400p,"></span> <span data-tex-inline="0 \le p \le 12"></span></span>Find every matching price. <br>Find a closed stretch around each on which the technique applies.</li><li><span class="givens"><span data-tex-inline="D(p) = 12\,000/p,"></span> <span data-tex-inline="S(p) = 1000p,"></span> <span data-tex-inline="p \gt 0"></span></span>Buyers spend $12 000 a day whatever the price. Find a closed stretch on which the technique applies. <br>Find the matching price.</li><li><span class="givens"><span data-tex-inline="S, D \text{ continuous }\text{on } [v, w],"></span> <span data-tex-inline="S(v) \lt D(v),\ S(w) \lt D(w)"></span></span>Decide whether a matching price must exist between v and w, and whether one can.</li></ol></li>
+      </ol></li>
+    <li class="optgroup"><span class="qid">12·econ.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder challenges that rely on your own making. The page is complete without these; the rung's star needs them.</span>
+      <ol class="sub">
+        <li class="opt"><span class="qid">12·econ.4.1</span><span class="tagq">build</span>Choose a stall at Pike Place Market in Seattle and one thing it sells. Guess a demand and a supply that is not a line. <br>Prove that a matching price exists, and trap it to within a cent. <br>Decide whether a price in whole cents matches.</li>
+        <li class="opt"><span class="qid">12·econ.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="S, D \text{ continuous }\text{on } [v, w],"></span> <span data-tex-inline="S(v) \lt D(v),\ S(w) \gt D(w)"></span></span>Prove that there is a least matching price in [v, w].</li>
+        <li class="opt"><span class="qid">12·econ.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="E \text{ continuous }\text{on } [v, w],"></span> <span data-tex-inline="E(p) = 0 \text{ at }\text{exactly }"></span> <span data-tex-inline="\text{one } p \text{ in } [v, w]"></span></span>Prove or refute: E(v) and E(w) have opposite signs.</li>
+        <li class="opt"><span class="qid">12·econ.4.4</span><span class="tagq">seam</span>In the 1930s one side held that a board of planners could set every price by trial: raise the price of whatever ran short, lower the price of whatever piled up, as a market does. The other side held that only a market could, because what it needs to know is scattered in many heads. <br>Whose case does the proof that a matching price exists help?</li>
+      </ol></li>
+  </ol>
+  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
+</section>
+
+<nav class="nextrung"><a href="r12comp.html">← 12·comp · what can a machine with no memory check?</a><a href="r13.html">13 · measuring change in an instant →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>Léon Walras, in the Elements of Pure Economics (1874), set a whole economy of matching prices down as equations and pictured an auctioneer who calls prices and gropes toward the match; the groping has the accepted name tâtonnement. Whether the equations had an answer was argued for sixty years. Abraham Wald gave the first proofs for special cases in the 1930s. Kenneth Arrow and Gérard Debreu proved in 1954 that a whole economy has matching prices, with a technique about continuous functions that has the accepted name a fixed point theorem; for one good and one price it is the in-between-value technique of this page. The fishery whose long-run supply turns back is Parzival Copes's, in 1970.</p>
+  <aside class="voice para"><p>Hayek argued that the knowledge a planner would need never exists in one mind. It is scattered among many people, each knowing a little about their own time and place, and a price passes on just enough of it.</p><cite>Friedrich Hayek, “The Use of Knowledge in Society” (1945); paraphrase</cite></aside>
+  <p>In 12·econ.4.4, the side that doubted planners is Ludwig von Mises (1920) and Hayek; the side that trusted them is Oskar Lange (1936–37), who answered that a planning board could copy the market’s trial and error. The argument has the accepted name the socialist calculation debate.</p>
+  <h3>Accepted names</h3>
+  <p>A matching price is an equilibrium price, or the market-clearing price. S − D is the excess supply, and D − S the excess demand; a negative excess supply is a shortage, a positive one a surplus. A supply that falls at high prices is a backward-bending supply curve.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="12·econ: a worked “proof”, not allowed">
+E(0) \lt 0 \text{ and } E(12) \lt 0 \text{ for the long-run gap} @@ fine: −6000 and −1200
+E \text{ is continuous on } [0, 12] @@ fine: a polynomial
+\text{so } E \text{ is never } 0 \text{ on } [0, 12] @@ not allowed: in-between-value says nothing when the ends share a sign; E(7) = 3800
+  </pre>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '?'; let s=v.toFixed(d==null?2:d); if(/^-0(\.0*)?$/.test(s)) s=s.slice(1); return s.replace('-','−'); };
+const D=p=>6000-400*p, S1=p=>50*p*p*p, SL=p=>2400*p-200*p*p;
+let longrun=false; const S=p=>longrun?SL(p):S1(p); const E=p=>S(p)-D(p);
+const kp=$('kp');
+let trap=[4,5], steps=0;
+function roots(){ if(longrun) return [7-Math.sqrt(19),7+Math.sqrt(19)]; let a=4,b=5; for(let i=0;i<60;i++){ const m=(a+b)/2; if(E(m)<0) a=m; else b=m; } return [a]; }
+const PM=plane($('cvM'),{x:[0,12],y:[0,11000],grid:0,labels:0,aspect:0.8,draw:P=>drawM(P)});
+const PE=plane($('cvE'),{x:[3,6],y:[-3000,3000],grid:0,labels:0,aspect:0.8,draw:P=>drawE(P)});
+function drawM(P){ for(let x=0;x<=12;x+=2){ P.line(x,0,x,11000,'--grid',1); if(x<12) P.text('$'+x,x+0.1,250,'--muted','left',10); }
+  for(let y=2000;y<=10000;y+=2000){ P.line(0,y,12,y,'--grid',1); P.text(String(y),0.15,y+150,'--muted','left',10); }
+  P.fn(D,'--plum',2.4); P.fn(p=>S(p)<=11000?S(p):NaN,'--teal',2.4);
+  const p=+kp.value; P.line(p,S(p),p,D(p),'--ember',3); P.dot(p,Math.min(S(p),11000),'--teal',4); P.dot(p,D(p),'--plum',4);
+  roots().forEach(r=>P.dot(r,D(r),'--ink',5)); }
+function drawE(P){ const w=trap[1]-trap[0], a=trap[0]-w, b=trap[1]+w; P.o.x=[a,b]; let m=0; for(let i=0;i<=40;i++){ m=Math.max(m,Math.abs(E(a+(b-a)*i/40))); } P.o.y=[-m*1.1,m*1.1];
+  const c=P.ctx; c.globalAlpha=.22; P.poly([[trap[0],P.o.y[0]],[trap[1],P.o.y[0]],[trap[1],P.o.y[1]],[trap[0],P.o.y[1]]],null,'--gold'); c.globalAlpha=1;
+  P.line(a,0,b,0,'--muted',1.3);
+  if(b-a<0.25){ for(let ct=Math.ceil(a*100);ct<=Math.floor(b*100);ct++){ const x=ct/100; P.line(x,P.o.y[0],x,P.o.y[1],'--grid',1); P.dot(x,E(x),'--muted',3); if(b-a<0.08) P.text('$'+x.toFixed(2),x,P.o.y[0]+(P.o.y[1]-P.o.y[0])*0.04,'--muted','center',9); } }
+  P.fn(E,'--ink',2.4); P.dot(trap[0],E(trap[0]),'--ember',4); P.dot(trap[1],E(trap[1]),'--teal',4); }
+function readE(){ tex($('eqE'),R`\begin{aligned}&\text{after } ${steps} \text{ halvings: } [${fm(trap[0],6)},\ ${fm(trap[1],6)}]\\ &\text{width } ${fm(trap[1]-trap[0],6)}\\ &E(\text{left}) = ${fm(E(trap[0]),2)},\ E(\text{right}) = ${fm(E(trap[1]),2)}\end{aligned}`,true); PE.redraw(); }
+function read(){ const p=+kp.value; $('op').textContent='$'+p.toFixed(2); const e=E(p), vd=$('vdM');
+  vd.className='verdict '+(Math.abs(e)<20?'win':'lose');
+  vd.textContent='At $'+p.toFixed(2)+' a pound the boats offer '+fm(S(p),0)+' pounds a day and buyers want '+fm(D(p),0)+'. The gap is '+fm(e,0)+': '+(Math.abs(e)<20?'close to a match.':e<0?'buyers are short, and they bid the price up.':'crab is left over, and the boats cut the price.')+' Matching price'+(longrun?'s: about $2.64 and $11.36.':': about $4.39.');
+  PM.redraw(); }
+const sch=$('sch'); [['this week',false],['the long run',true]].forEach(([t,v])=>{ const b=document.createElement('button'); b.textContent=t; b.onclick=()=>{ longrun=v; [...sch.children].forEach(x=>x.classList.toggle('on',x===b)); trap=v?[0,7]:[4,5]; steps=0; read(); readE(); }; if(!v) b.classList.add('on'); sch.appendChild(b); });
+const hch=$('hch');
+const bH=document.createElement('button'); bH.textContent='halve the trap'; bH.onclick=()=>{ const m=(trap[0]+trap[1])/2, e=E(m); if(e===0) trap=[m,m+1e-12]; else if((E(trap[0])<0)===(e<0)) trap=[m,trap[1]]; else trap=[trap[0],m]; steps++; readE(); }; hch.appendChild(bH);
+const bR=document.createElement('button'); bR.textContent='start over'; bR.onclick=()=>{ trap=longrun?[0,7]:[4,5]; steps=0; readE(); }; hch.appendChild(bR);
+kp.addEventListener('input',read);
+window.__pic={set:(p,lr)=>{ longrun=!!lr; trap=longrun?[0,7]:[4,5]; steps=0; [...sch.children].forEach((x,i)=>x.classList.toggle('on',i===(longrun?1:0))); kp.value=p; read(); readE(); return {S:S(p),D:D(p),E:E(p),roots:roots()}; }};
+read(); readE();
+
+stepper('#sl1',[
+  {k:'ember',kl:'the gap',t:R`E(p) = S(p) - D(p)`,n:`Pounds offered but not bought at p.`},
+  {k:'ember',kl:'the dock',t:R`E(4) = -1200,\ \ E(5) = 2250`,n:`Short at $4, left over at $5.`},
+  {k:'ember',kl:'matching-price',t:R`\htmlClass{new}{S(c) = D(c)},\ \ v \lt c \lt w`,n:`In-between-value, applied to E = S − D.`},
+  {k:'teal',kl:'halving',t:R`[4.390625,\ 4.3984375]`,n:`Seven halvings: a trap under a cent wide.`},
+  {k:'ember',kl:'one-match',t:R`p \lt q \Rightarrow E(p) \lt E(q)`,n:`Supply rises, demand falls: at most one match.`},
+  {k:'ember',kl:'a supply that turns back',t:R`p = 7 \pm \sqrt{19}`,n:`Two matches, at about $2.64 and $11.36.`},
+  {k:'ember',kl:'no road promised',t:R`\exists\, c:\ E(c) = 0`,n:`A match exists; the proof says nothing about finding it.`},
+  {k:'ember',kl:'whole cents',t:R`E(4.39) \approx -13.8,\ \ E(4.40) \approx 19.2`,n:`No price on the list matches.`},
+  {k:'ember',kl:'the middle of a change',t:R`4.39 \lt c \lt 4.40`,n:`A middle nobody trades at, which keeps both misses small.`},
+  {k:'ember',kl:'illegal',t:R`E(4) \lt 0 \lt E(5) \not\Rightarrow E(4.5) = 0`,n:`Some price between, not the middle.`}
+],{title:'The slides · the gap; the dock; matching-price; halving; one-match; a supply that turns back; no road promised; whole cents; the middle of a change; illegal moves · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>16·phys · How far did it go, if you only know how fast?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r16j.html">← 16j volumes by cross sections</a><a href="r16cb12.html">next: 16·cb12 floating and sinking →</a></p>
+  <div class="tags"><span class="tag phys">16·phys · physics</span></div>
+  <h1>How far did it go, if you only know how fast?</h1>
+  <p>How far did it go, if you only know how fast? 13·phys read velocity as the slope of position, and acceleration as the slope of velocity. 14·phys read force as the slope of momentum. Each of those is a slope, so 16c runs each one backwards: position from velocity, velocity from acceleration, momentum from force. A force can be added up two ways, over the time it acts or over the distance it pushes through, and the two totals are different things. Added over time, it gives the change in momentum. Added over distance, it gives the change in 14·phys's kinetic energy. This page proves both, follows a spring through a whole swing, and finds how fast a stone must leave the Earth never to come back.</p>
+  <p class="gesture">The change in place is the area under the speed, and the change in speed the area under the push. A force added over time, the impulse, is the change in mass times speed. A force added over distance, the work, is the change in half the mass times the square of the speed, by substitution for areas. A spring stores energy that grows with the square of its stretch. Escaping the Earth takes a fixed, finite amount of work.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r16c.html">16c</a> (area-is-a-change), <a href="r16d.html">16d</a> (substitution for areas), <a href="r16g.html">16g</a> (net and total), <a href="r16i.html">16i</a> (out-to-forever), <a href="r13phys.html">13·phys</a> (velocity, acceleration, F = ma), <a href="r14phys.html">14·phys</a> (momentum, impulse, F = p′, kinetic energy), <a href="r13k.html">13k</a> (the spring law), <a href="r12phys.html">12·phys</a> (the newton, weight), <a href="r09phys.html">9·phys</a> (falling-distance), <a href="r07phys.html">7·phys</a> (the joule). <a href="r16then.html">16·then</a> adds up rates of every kind.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · read it through, then work the picture and the slides</div>
+
+  <h3>Distance from speed</h3>
+  <pre class="lines" data-k="ember" data-label="16·phys: position and velocity from their slopes">
+x'(t) = v(t),\ \ v'(t) = a(t) @@ 13·phys's lines
+x(t_2) - x(t_1) = \textstyle\int_{t_1}^{t_2} v(t)\,dt @@ area-is-a-change (16c), with x an antiderivative of v; v continuous
+v(t_2) - v(t_1) = \textstyle\int_{t_1}^{t_2} a(t)\,dt @@ the same, one step down
+a \text{ constant}:\ v(t) = v_0 + at,\ \ x(t) = x_0 + v_0 t + \tfrac12 a t^2 @@ the table (16f) twice; the initial conditions v(0) = v₀, x(0) = x₀
+v_0 = 0,\ x_0 = 0:\ \ x(t) = \tfrac12 at^2 @@ 9·phys's falling-distance, a third time
+  </pre>
+  <p data-pid="719e22"><b>The integral of v is the displacement, the change in position; the integral of |v| is the distance travelled</b>, as 16g said. A cable car climbing a San Francisco hill and slipping back has a small displacement and a long distance.</p>
+
+  <h3>Force over time: impulse</h3>
+  <p data-pid="5fbae1">Impulse technique: <b>if the total force F(t) on a body is continuous on [t₁, t₂] and F = p′, then the change in momentum p(t₂) − p(t₁) is ∫_{t₁}^{t₂} F(t) dt.</b> It is area-is-a-change with p as the antiderivative of F. 14·phys defined the impulse as the change in momentum; impulse says it is the area under the force.</p>
+  <pre class="lines" data-k="ember" data-label="16·phys: a bat on a ball">
+F(t) = 9 \times 10^9\,t(0.002 - t) \text{ N},\ \ 0 \le t \le 0.002 \text{ s} @@ a push that rises and falls over 2 ms, at most 9000 N
+J = \textstyle\int_0^{0.002} 9 \times 10^9\,(0.002t - t^2)\,dt = 9 \times 10^9\big(0.001t^2 - \tfrac{t^3}{3}\big)\Big|_0^{0.002} @@ the table; area-is-a-change
+= 9 \times 10^9 \cdot \tfrac{(0.002)^3}{6} = 12 \text{ N} \cdot \text{s} @@ 0.001 · 0.002² − 0.002³/3 = 0.002³(½ − ⅓)
+\text{a 0.15 kg ball: } \Delta v = \tfrac{12}{0.15} = 80 \text{ m/s};\ \ \text{average force } \tfrac{12}{0.002} = 6000 \text{ N} @@ p = mv; 16g's average
+  </pre>
+
+  <h3>Force over distance: work</h3>
+  <p class="eqline" data-pid="9fac4f">From here on, the work done by a force F(x) on a body moving along a line from x₁ to x₂ is W = ∫_{x₁}^{x₂} F(x) dx, in joules when F is in newtons and x in metres. For a constant force it is force times displacement. Its accepted name is work.</p>
+  <p data-pid="122f13">Work-energy technique: <b>let a body of mass m move along a line with position x(t), with x′ = v and v′ continuous. Let the total force on it depend only on position, F(x), continuous, with F(x(t)) = m v′(t). Then ∫_{x(t₁)}^{x(t₂)} F(x) dx = ½ m v(t₂)² − ½ m v(t₁)².</b></p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="16·phys: the work-energy technique">
+\textstyle\int_{x(t_1)}^{x(t_2)} F(x)\,dx = \int_{t_1}^{t_2} F(x(t))\,x'(t)\,dt @@ substitution for areas (16d), read right to left, with the inside r = x(t): x′ = v is continuous since v has a slope (slope-means-no-gap)
+= \textstyle\int_{t_1}^{t_2} m\,v'(t)\,v(t)\,dt @@ F(x(t)) = m v′(t); x′ = v
+\big(\tfrac12 m v^2\big)' = m v v' @@ chain for slopes with power for slopes
+= \tfrac12 m v(t_2)^2 - \tfrac12 m v(t_1)^2 \quad \blacksquare @@ area-is-a-change
+  </pre>
+  <p data-pid="8a6d27">Its accepted name is the work–energy theorem. So adding a force up over time gives Δ(mv), and adding the same force up over distance gives Δ(½mv²). Neither replaces the other. 14·phys's crash kept the first and lost some of the second.</p>
+  <p data-pid="7530b1">A writer of 1740 argued, against the followers of an older school, that the force of a moving body is measured by its mass times the square of its speed. Her evidence was a set of experiments with soft clay. A ball dropped from four times the height arrives twice as fast, and sinks four times as deep.</p>
+
+  <h3>A spring through a whole swing</h3>
+  <pre class="lines" data-k="ember" data-label="16·phys: the spring">
+F(x) = -kx @@ the spring law (Hooke's), from 13k; x measured from the rest point
+\text{work by the spring from } x_1 \text{ to } x_2:\ \ \textstyle\int_{x_1}^{x_2} -kx\,dx = \tfrac12 k x_1^2 - \tfrac12 k x_2^2 @@ the table; area-is-a-change
+\tfrac12 m v_2^2 - \tfrac12 m v_1^2 = \tfrac12 k x_1^2 - \tfrac12 k x_2^2 @@ work-energy
+\begin{aligned}&\htmlClass{new}{\tfrac12 m v^2 + \tfrac12 k x^2 = E \text{, the same at every }}\\ &\quad \htmlClass{new}{\text{instant}}\end{aligned} @@ rearrange: the total is kept
+\text{released at rest from } x = A:\ \ E = \tfrac12 k A^2,\ \ v = \pm\sqrt{\tfrac km (A^2 - x^2)} @@ the speed at every point of the swing
+  </pre>
+  <p data-pid="09b0f7">From A to 0 the spring does work ½kA², and the mass arrives at its top speed A√(k/m). From 0 to −A the spring does work −½kA², and the mass stops. Then the same backwards. 14·phys's ½ks² is the work it takes to squeeze the spring by s. That closes the premise 14·phys held in trust. Its accepted name is the spring's potential energy.</p>
+
+  <h3>Leaving the Earth</h3>
+  <pre class="lines" data-k="ember" data-label="16·phys: the work to escape">
+F(r) = \tfrac{GMm}{r^2},\ \ G = 6.674 \times 10^{-11} \text{ N m}^2/\text{kg}^2 @@ the law of gravitation (Newton's), a measured law; the pull toward the Earth's centre at distance r
+\text{work against it from } R \text{ to } b:\ \ \textstyle\int_R^b \tfrac{GMm}{r^2}\,dr = GMm\big(\tfrac1R - \tfrac1b\big) @@ negative-powers backwards; area-is-a-change
+\text{from } R \text{ out to forever: } \tfrac{GMm}{R} @@ out-to-forever's limit (16i): 1/b → 0
+\tfrac12 m v^2 \ge \tfrac{GMm}{R}:\ \ v \ge \sqrt{\tfrac{2GM}{R}} @@ work-energy: the kinetic energy at launch must pay all the work
+M = 5.97 \times 10^{24} \text{ kg},\ R = 6.37 \times 10^6 \text{ m}:\ \ v \approx 11.2 \text{ km/s} @@ ignoring the air; m cancels
+  </pre>
+
+  <h3>Charges, and how fast work is done</h3>
+  <pre class="lines" data-k="ember" data-label="16·phys: electric energy">
+F(r) = \tfrac{kq_1q_2}{r^2},\ \ k = 8.99 \times 10^9 \text{ N m}^2/\text{C}^2 @@ the law of charges (Coulomb's), a measured law with gravitation's shape; like charges push apart
+U(r) = \textstyle\int_r^\infty \tfrac{kq_1q_2}{x^2}\,dx = \tfrac{kq_1q_2}{r} @@ the work the push does as the charges fly apart to forever; out-to-forever (16i). Its accepted name is electric potential energy
+\tfrac12 mv^2 + \tfrac{kq_1q_2}{r} = E \text{, the same at every instant} @@ work-energy with the work from r₁ to r₂ equal to U(r₁) − U(r₂): electric energy is conserved
+\begin{aligned}&\text{an alpha particle at } 7.7 \text{ MeV toward}\\ &\quad\text{gold}:\ \ r_{\min} = \tfrac{k(2e)(79e)}{E} \approx 3.0 \times 10^{-14} \text{ m}\end{aligned} @@ all of E becomes U at the closest point; e = 1.602 × 10⁻¹⁹ C, the charge of one proton; 1 MeV, a million electronvolts, is 1.602 × 10⁻¹³ J
+  </pre>
+  <p class="eqline" data-pid="50453d">Power is the rate at which work is done, P = W′(t); its accepted unit is the watt, 1 W = 1 J/s. For a force F on a body at speed v, P = Fv, since W′ = F x′ by chain for slopes on ∫ F dx. That answers the question 13·eng left for rung 16.</p>
+  <p data-pid="7ccb70">A helmet or a crumple zone does not change the impulse of a crash, which is fixed by the change in momentum (impulse). It spreads it over a longer time, and the average force, impulse over time, falls in proportion.</p>
+
+  <h3>Illegal moves</h3>
+  <pre class="lines" data-k="ember" data-label="16·phys: tempting, and not allowed">
+\text{distance} = \textstyle\int v\,dt \text{ always}\,? @@ that is displacement; distance is ∫ |v| dt (16g)
+W = F \cdot d \text{ for a spring}\,? @@ F changes along the way; the work is an area: ½k(x₁² − x₂²)
+\textstyle\int F\,dt = \Delta(\tfrac12 mv^2)\,? @@ over time it is Δ(mv); over distance, Δ(½mv²)
+\text{escape: } \textstyle\int_R^\infty \tfrac{GMm}{r^2}\,dr = \infty \text{ since the region is endless}\,? @@ out-to-forever with p = 2: it converges
+  </pre>
+</section>
+
+<section class="pic" id="pic">
+  <div class="eyebrow">The picture · work as an area under force, and where the energy goes</div>
+  <div class="panels">
+    <div class="panel">
+      <div class="chips" id="fch"></div>
+      <div class="lbl">force against position, with the work so far</div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">x</span><input type="range" id="kx" min="0" max="1" step="0.005" value="0.5"><output id="ox"></output></div>
+      <div class="cap">Teal counts plus, plum minus: the work the force has done from the start to the knob's place.</div>
+    </div>
+    <div class="panel">
+      <div class="lbl">the energy, at the knob's place</div>
+      <canvas id="cvE"></canvas>
+      <div class="cap">Ember: kinetic energy ½mv². Teal: stored energy, ½kx² for the spring or −GMm/r plus a constant for gravity. Gold: their total, which work-energy keeps.</div>
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+</section>
+
+<section class="slides" id="sl1"><div class="eyebrow">The slides · position from velocity; constant acceleration; impulse as an area; the bat; work defined; work-energy by substitution for areas; the clay; the spring; the swing; escape · ← → keys work</div></section>
+
+<section class="sayback">
+  <div class="eyebrow">Say it back · then work it</div>
+  <h2>Questions</h2>
+  <div class="phkey"></div>
+  <ol>
+    <li><span class="qid">16·phys.1</span><span class="gname">Totals from rates.</span><span class="gwhy">Do: build the page's pieces.</span>
+      <ol class="sub">
+        <li><span class="qid">16·phys.1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="v(t) = 2 - 0.5t \text{ m/s},"></span> <span data-tex-inline="0 \le t \le 6 \text{ s}"></span></span>Find the displacement and the distance of the kayak on Puget Sound.</li><li><span class="givens"><span data-tex-inline="F(t) = 400t \text{ N},"></span> <span data-tex-inline="m = 20 \text{ kg, at rest},"></span> <span data-tex-inline="0 \le t \le 3 \text{ s}"></span></span>Find the impulse on the cart and its final speed.</li><li><span class="givens"><span data-tex-inline="k = 250 \text{ N/m},"></span> <span data-tex-inline="\text{from } 0.1 \text{ m to } 0.3 \text{ m}"></span></span>Find the work needed to stretch the spring.</li><li><span class="givens"><span data-tex-inline="M = 7.35 \times 10^{22} \text{ kg},"></span> <span data-tex-inline="R = 1.74 \times 10^6 \text{ m}"></span></span>Find the escape speed from the Moon.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">16·phys.2</span><span class="gname">From the total back.</span><span class="gwhy">Undo: run the page's techs backwards.</span>
+      <ol class="sub">
+        <li><span class="qid">16·phys.2.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="v(t) = 3t \text{ m/s},"></span> <span data-tex-inline="\text{displacement on } [0, T] = 96 \text{ m}"></span></span>Find T.</li><li><span class="givens"><span data-tex-inline="m = 0.4 \text{ kg},"></span> <span data-tex-inline="5 \text{ m/s to } -3 \text{ m/s},"></span> <span data-tex-inline="\text{contact } 0.01 \text{ s}"></span></span>Find the impulse on the puck from the boards, and the average force.</li><li><span class="givens"><span data-tex-inline="2 \text{ J stored},"></span> <span data-tex-inline="\text{squeezed by } 0.1 \text{ m}"></span></span>Find the spring's k.</li><li><span class="givens"><span data-tex-inline="\text{top speed } 1.5 \text{ m/s},"></span> <span data-tex-inline="A = 0.3 \text{ m}"></span></span>Find k/m for the mass on its spring.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">16·phys.3</span><span class="gname">Where it gives.</span><span class="gwhy">Bend: find where the techs stop working.</span>
+      <ol class="sub">
+        <li><span class="qid">16·phys.3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{friction pushes}"></span> <span data-tex-inline="\text{against the motion}"></span></span>Work-energy needed the force to depend only on position.<br>Write the line of its proof that uses that, and run that line on friction as far as you can take it.</li><li><span class="givens"><span data-tex-inline="k = 100 \text{ N/m},"></span> <span data-tex-inline="\text{from } 0 \text{ to } 0.2 \text{ m},"></span> <span data-tex-inline="\text{Claim: } 100 \cdot 0.2 \cdot 0.2 = 4 \text{ J}"></span></span>Find the work, and the line of the claim's reckoning that broke.</li><li><span class="givens"><span data-tex-inline="\text{launched at}"></span> <span data-tex-inline="\text{exactly the escape speed}"></span></span>Find the rocket's speed at each distance r from the centre.<br>Prove or refute: it stops somewhere.</li><li><span class="givens"><span data-tex-inline="U = GMm\Big(\tfrac1R - \tfrac{1}{R + h}\Big),"></span> <span data-tex-inline="h \text{ small next to } R"></span></span>Prove that U is close to mgh, and find g from G, M and R.</li></ol></li>
+      </ol></li>
+    <li class="optgroup"><span class="qid">16·phys.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder challenges that rely on your own making. The page is complete without these; the rung's star needs them.</span>
+      <ol class="sub">
+        <li class="opt"><span class="qid">16·phys.4.1</span><span class="tagq">build</span>Make up a force of your own on a body moving along a line, depending only on its position, and give the body a mass.<br>Find the work the force does between two places you choose, and the body's speed at the second if it starts at rest at the first.</li>
+        <li class="opt"><span class="qid">16·phys.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{stone } A \text{: at rest}"></span> <span data-tex-inline="\text{on the ground},"></span> <span data-tex-inline="\text{stone } B \text{: thrown up,}"></span> <span data-tex-inline="\text{caught at the same speed}"></span></span>Find which stone has had work done on it, and which an impulse.</li>
+        <li class="opt"><span class="qid">16·phys.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\tfrac12 mv^2 + U(x) \text{ fixed}"></span> <span data-tex-inline="\text{for every motion}"></span></span>Prove or refute: the force on the body is minus the slope of U.</li>
+        <li class="opt"><span class="qid">16·phys.4.4</span><span class="tagq">seam</span>For fifty years after 1686, the followers of one school said the true measure of a moving body's force was mv², and the followers of another said mv. One side was backed with the clay experiments; the other with collisions. In 1743 a mathematician said the quarrel was about a word: a force added up over time gives the change in mv, over distance the change in mv². <br>Was that a resolution, or a refusal to answer? <br>Was anyone wrong?</li>
+      </ol></li>
+  </ol>
+  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
+</section>
+
+<nav class="nextrung"><a href="r16then.html">← 16·then · how much has piled up, if you only know the rate?</a><a href="r16eng.html">16·eng · where will a loaded beam crack? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>Du Châtelet argued, against the followers of Descartes and from ’s Gravesande’s experiments, that the force of a moving body is measured by its mass times the square of its speed, since a ball dropped from four times the height, arriving twice as fast, sinks four times as deep into soft clay.</p><cite>Émilie du Châtelet, Institutions de physique (1740), chapter XXI; paraphrase</cite></aside>
+  <p>In 16·phys.4.4, the mv² school is Leibniz’s and the mv school Descartes’s; the mathematician of 1743 is Jean le Rond d’Alembert. The spring law is Robert Hooke’s, the law of gravitation Isaac Newton’s, and the law of charges Charles-Augustin de Coulomb’s.</p>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+/* least and greatest of F.f on [lo, hi]: the ends, F's critical points inside, and a fine sample (exact between critical points for the functions used here) */
+function ext(F,lo,hi){ if(F.dir) return [0,1]; let m=Infinity,M=-Infinity; const t=x=>{ const v=F.f(x); if(v<m) m=v; if(v>M) M=v; };
+  t(lo); t(hi); (F.crit||[]).forEach(c=>{ if(c>lo&&c<hi) t(c); }); for(let k=1;k<64;k++) t(lo+(hi-lo)*k/64); return [m,M]; }
+function sums(F,pts){ let L=0,U=0; const ms=[],Ms=[]; for(let i=1;i<pts.length;i++){ const [m,M]=ext(F,pts[i-1],pts[i]), w=pts[i]-pts[i-1]; ms.push(m); Ms.push(M); L+=m*w; U+=M*w; } return {L,U,ms,Ms}; }
+const eq=(a,b,n)=>Array.from({length:n+1},(_,i)=>a+(b-a)*i/n);
+function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
+function boxes(P,pts,hs,stroke,fill,alpha){ const c=P.ctx; for(let i=1;i<pts.length;i++){ const a=pts[i-1],b=pts[i],h=hs[i-1]; c.globalAlpha=alpha; P.poly([[a,0],[b,0],[b,h],[a,h]],null,fill); c.globalAlpha=1; P.poly([[a,0],[b,0],[b,h],[a,h]],stroke,null,1.2); } }
+function dirDots(P,a,b){ const c=P.ctx; c.fillStyle=col('--ink'); for(let k=0;k<=300;k++){ const x=a+(b-a)*k/300; const y=(k%2)?0:1; c.fillRect(P.X(x)-1,P.Y(y)-1,2,2); } }
+/* shade between the graph of fn and the axis from lo to hi: above in pos colour, below in neg colour */
+function shade(P,fn,lo,hi,pos,neg,alpha){ if(hi<lo){ const t=lo; lo=hi; hi=t; } const c=P.ctx, N=300; c.globalAlpha=alpha==null?0.32:alpha;
+  for(let k=0;k<N;k++){ const x0=lo+(hi-lo)*k/N, x1=lo+(hi-lo)*(k+1)/N, xm=(x0+x1)/2, y=fn(xm); if(!isFinite(y)) continue; P.poly([[x0,0],[x1,0],[x1,fn(x1)],[x0,fn(x0)]],null,y>=0?pos:neg); }
+  c.globalAlpha=1; }
+function rangeOf(fn,lo,hi,pad){ let m=Infinity,M=-Infinity; for(let k=0;k<=400;k++){ const v=fn(lo+(hi-lo)*k/400); if(isFinite(v)){ if(v<m) m=v; if(v>M) M=v; } } if(m>0) m=0; if(M<0) M=0; const p=(M-m)*(pad==null?0.12:pad)||1; return [m-p,M+p]; }
+function chips(el,FN,get,setk,after){ Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===get()) b.className='on'; b.onclick=()=>{ setk(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+const Nw='\\htmlClass{new}';
+function gridFor(sp){ return sp>40?10:sp>16?4:sp>8?2:sp>3?1:sp>1.2?0.5:0.25; }
+function frame2(P,fn,lo,hi,pad){ const w=hi-lo; P.o.x=[lo-0.12*w,hi+0.08*w]; P.o.y=rangeOf(fn,lo,hi,pad==null?0.12:pad); const sx=P.o.x[1]-P.o.x[0], sy=P.o.y[1]-P.o.y[0]; let g=gridFor(sx); while(sy/g>24) g*=2; P.o.grid=g; }
+const num=(f,a,b,n)=>{ n=n||4000; const h=(b-a)/n; let s=0; for(let i=0;i<n;i++) s+=f(a+(i+0.5)*h)*h; return s; };
+/* axes with separate steps across and up */
+function axes2(P,gx,gy){ const c=P.ctx,o=P.o; c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ c.moveTo(P.X(x),P.Y(o.y[0])); c.lineTo(P.X(x),P.Y(o.y[1])); }
+  for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ c.moveTo(P.X(o.x[0]),P.Y(y)); c.lineTo(P.X(o.x[1]),P.Y(y)); } c.stroke();
+  c.strokeStyle=col('--muted'); c.lineWidth=1.3; c.beginPath(); if(o.y[0]<=0&&o.y[1]>=0){ c.moveTo(P.X(o.x[0]),P.Y(0)); c.lineTo(P.X(o.x[1]),P.Y(0)); } if(o.x[0]<=0&&o.x[1]>=0){ c.moveTo(P.X(0),P.Y(o.y[0])); c.lineTo(P.X(0),P.Y(o.y[1])); } c.stroke();
+  c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; const ly=Math.min(P.H-6,Math.max(12,P.Y(0)+14));
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ if(Math.abs(x)<1e-9) continue; c.fillText(+x.toFixed(6),P.X(x),ly); }
+  c.textAlign='right'; const lx=Math.max(32,Math.min(P.W-4,P.X(0)-5)); for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ if(Math.abs(y)<1e-9) continue; c.fillText(String(+y.toFixed(6)).replace('-','−'),lx,P.Y(y)+4); } }
+function nice(sp){ const raw=sp/6, p=Math.pow(10,Math.floor(Math.log10(raw))), m=raw/p; return (m<1.5?1:m<3.5?2:m<7.5?5:10)*p; }
+const FN={
+  spring:{lab:'spring',x0:0.2,x1:-0.2,F:x=>-40*x,U:x=>20*x*x,E:0.8,xl:'x (m)',ft:'-40x',unit:'J',info:'k = 40 N/m, m = 0.5 kg, released at rest from 0.2 m'},
+  push:{lab:'a fading push',x0:0,x1:6,F:x=>6-x,U:x=>-(6*x-x*x/2),E:0,xl:'x (m)',ft:'(6 - x)',unit:'J',info:'F = 6 − x newtons on a 1 kg mass from rest'},
+  grav:{lab:'leaving the Earth',x0:1,x1:6,F:r=>-1/(r*r),U:r=>-1/r,E:0,xl:'r (Earth radii)',ft:'-\\tfrac{1}{r^2}',unit:'GMm/R',info:'Energies in units of GMm/R, launched at exactly the escape speed'}
+};
+let key='spring';
+const kx=$('kx'),cvF=$('cvF'),cvE=$('cvE');
+const pos=()=>{ const S=FN[key]; return S.x0+(+kx.value)*(S.x1-S.x0); };
+const PF=plane(cvF,{x:[0,1],y:[0,1],grid:1,aspect:0.8,draw:P=>drawF(P)});
+const PE=plane(cvE,{x:[0,3],y:[-1,1],grid:0,labels:false,aspect:0.8,draw:P=>drawE(P)});
+[[PF,cvF],[PE,cvE]].forEach(([P,cv])=>Object.defineProperty(P.o,'aspect',{get:()=>cv.clientWidth>480?0.75:0.9}));
+function drawF(P){ const S=FN[key], x=pos(), lo=Math.min(S.x0,S.x1), hi=Math.max(S.x0,S.x1); frame2(P,S.F,lo,hi,0.15); axes2(P,nice(P.o.x[1]-P.o.x[0]),nice(P.o.y[1]-P.o.y[0]));
+  shade(P,S.F,S.x0,x,'--teal','--plum',0.34); curve(P,S.F,'--ink',2.6,lo,hi); P.line(x,P.o.y[0],x,P.o.y[1],'--ember',1.6,[]); P.dot(S.x0,0,'--muted',3.5); }
+function drawE(P){ const S=FN[key], x=pos(), U=S.U(x)-(key==='spring'?0:0), K=S.E-S.U(x), E=S.E; const vals=[K,S.U(x),E]; let m=Math.min(0,...vals,S.U(S.x0),S.U(S.x1)), M=Math.max(...vals,S.E,0.001,S.E-S.U(S.x1),S.E-S.U(S.x0));
+  const pad=(M-m)*0.12||0.1; P.o.y=[m-pad,M+pad]; P.o.x=[0,3]; P.line(0,0,3,0,'--muted',1.2);
+  [['--ember',K],['--teal',S.U(x)],['--gold',E]].forEach(([c,v],i)=>{ P.poly([[0.3+i,0],[0.9+i,0],[0.9+i,v],[0.3+i,v]],c,c,1.5); });
+  P.text('kinetic',0.6,M+pad*0.3,'--muted','center',11); P.text('stored',1.6,M+pad*0.3,'--muted','center',11); P.text('total',2.6,M+pad*0.3,'--muted','center',11); }
+function read(){ const S=FN[key], x=pos(), W=num(S.F,S.x0,x), K=S.E-S.U(x); $('ox').textContent=mm(x,3);
+  const vd=$('vdF'); vd.className='verdict win';
+  let extra=''; if(key==='spring') extra=' Speed: '+mm(Math.sqrt(Math.max(0,2*K/0.5)),3)+' m/s.'; if(key==='push') extra=' Speed: '+mm(Math.sqrt(Math.max(0,2*K)),3)+' m/s.'; if(key==='grav') extra=' The kinetic energy left is 1/r; it shrinks toward 0 and never reaches it.';
+  vd.textContent=S.info+'. Work so far: '+mm(W,4)+' '+S.unit+'; kinetic energy now: '+mm(K,4)+' '+S.unit+(key==='spring'?'':(key==='grav'?' (it started at 1)':''))+'.'+extra;
+  tex($('eqF'),R`\textstyle\int_{${mm(S.x0,2)}}^{${mm(x,3)}} ${S.ft}\,dx = ${mm(W,4)} = \Delta K`,true); }
+function all(){ PF.redraw(); PE.redraw(); read(); }
+kx.addEventListener('input',all);
+chips($('fch'),FN,()=>key,k=>{ key=k; },all);
+window.__pic={set:(k,s)=>{ [...$('fch').children][Object.keys(FN).indexOf(k)].click(); kx.value=s; all(); const S=FN[k], x=pos(), W=num(S.F,S.x0,x), K=S.E-S.U(x), K0=S.E-S.U(S.x0); return {x:+x.toFixed(4),W:+W.toFixed(5),dK:+(K-K0).toFixed(5)}; }};
+all();
+stepper('#sl1',[
+  {k:'ember',kl:'position',t:R`x(t_2) - x(t_1) = \textstyle\int_{t_1}^{t_2} v\,dt`,n:`area-is-a-change with x′ = v.`},
+  {k:'ember',kl:'constant acceleration',t:R`x = x_0 + v_0 t + \tfrac12 at^2`,n:`The table twice.`},
+  {k:'ember',kl:'impulse',t:R`\Delta p = \textstyle\int F\,dt`,n:`F = p′, then area-is-a-change.`},
+  {k:'ember',kl:'the bat',t:R`J = 12 \text{ N} \cdot \text{s}`,n:`A 2 ms push, at most 9000 N.`},
+  {k:'ember',kl:'work',t:R`W = \textstyle\int_{x_1}^{x_2} F(x)\,dx`,n:`Force added up over distance.`},
+  {k:'ember',kl:'work-energy',t:R`${Nw}{\textstyle\int F\,dx = \Delta\big(\tfrac12 mv^2\big)}`,n:`substitution for areas with r = x(t), then (½mv²)′ = mvv′.`},
+  {k:'ember',kl:'the clay',t:R`4\times \text{height} \to 2\times \text{speed} \to 4\times \text{depth}`,n:`The case for mv².`},
+  {k:'ember',kl:'the spring',t:R`\tfrac12 mv^2 + \tfrac12 kx^2 = E`,n:`Kept through the swing.`},
+  {k:'ember',kl:'the swing',t:R`v = \pm\sqrt{\tfrac km(A^2 - x^2)}`,n:`Fastest at the rest point.`},
+  {k:'ember',kl:'escape',t:R`\tfrac12 mv^2 \ge \tfrac{GMm}{R}:\ \ v \approx 11.2 \text{ km/s}`,n:`out-to-forever with p = 2.`}
+],{title:'The slides · position from velocity; constant acceleration; impulse as an area; the bat; work defined; work-energy by substitution for areas; the clay; the spring; the swing; escape · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

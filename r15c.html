@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>15c · Integrable, and the sign ∫</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r15b.html">← 15b every under-estimate is below every over-estimate</a><a href="r15d.html">next: 15d the area under x →</a></p>
+  <div class="tags"><span class="tag proof">15c · proof</span></div>
+  <h1>Integrable, and the sign ∫</h1>
+  <p>15b showed that the lower sums all sit below the upper sums, so there is a gap between them, or a single point where they meet. This step takes the best of each. The lower sums are bounded above, so rung 8's no-holes gives them a least upper bound. The upper sums have a greatest lower bound. Suppose those two numbers are the same. Then exactly one number is above every under-estimate and below every over-estimate, and boxes-trap-the-area leaves the area no choice: it is that number. A long S is the mark for it.</p>
+  <p class="gesture">The best under-estimate is the sup of all lower sums. The best over-estimate is the inf of all upper sums. The first is never more than the second. When they are equal, the function is integrable, and the common value is its integral: the area. To check, find one partition whose two sums are as close as you like.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r15b.html">15b</a> (every-lower-below-every-upper, refining-tightens, common refinement), <a href="r15a.html">15a</a> (L, U, boxes-trap-the-area, the three area axioms), <a href="r08c.html">8c</a> (no-holes, greatest-lower-bound, sup and inf), <a href="r08b.html">8b</a> (three-way-order on ℝ, witness-for-less), <a href="r10d.html">10d</a> (q, Dirichlet's), <a href="r07e.html">7e</a> (proof by contradiction). <a href="r15d.html">15d</a> computes the first integral; <a href="r15f.html">15f</a> proves that every continuous function passes this step's test.</p></div>
+</header>
+
+<section class="class step" data-step="15c1">
+  <h2 class="sthead"><span class="stno">15c1</span>The best estimates</h2>
+  <p class="stands">Stands on 15b (every-lower-below-every-upper) and 8c (sup and inf).</p>
+  <p data-pid="1c769f">Fix f bounded on [u, v]. The set of its lower sums, one for each partition, is not empty, since {u, v} is a partition. By every-lower-below-every-upper every lower sum is at most U(f, {u, v}). So the set is bounded above, and 8c's no-holes gives it a least upper bound. Likewise the upper sums are bounded below, and greatest-lower-bound gives them a greatest lower bound. From here on the ladder uses no-holes’ accepted name, completeness: a regular number system with no holes is a complete ordered field, and ℝ is one.</p>
+  <p class="eqline" data-pid="7c63c6">From here on, the lower integral of f on [a, b] is the sup of L(f, P) over all partitions P of [a, b], and the upper integral is the inf of U(f, P) over all partitions. Their accepted names are the lower integral and the upper integral. In marks, the lower integral is <span data-tex-inline="\sup_P L(f, P)"></span>: the P written low says which letter runs over the partitions, as i does in a Σ. The upper integral is <span data-tex-inline="\inf_Q U(f, Q)"></span> in the same way. Each mark is a name, for one number: the packed form of a search through every partition.</p>
+  <p data-pid="3c9f3f">Lower-at-most-upper technique: <b>for f bounded on [u, v], the lower integral is at most the upper integral.</b></p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the lower-at-most-upper technique">
+\text{fix a partition } Q @@ any one
+L(f, P) \le U(f, Q) \text{ for every } P @@ every-lower-below-every-upper (15b)
+\sup_P L(f, P) \le U(f, Q) @@ U(f, Q) is an upper bound of the lower sums; the sup is the least (no-holes)
+\text{that is true for every } Q @@ Q was any partition
+\htmlClass{new}{\sup_P L(f, P) \le \inf_Q U(f, Q)} \quad \blacksquare @@ the lower integral is a lower bound of the upper sums; the inf is the greatest (greatest-lower-bound)
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the best estimates · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">15c1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">every lower sum ≤ 7,  every upper sum ≥ 7</span></span>Say what this tells you about the lower and upper integrals. <br>Name the technique that orders them.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15c2">
+  <h2 class="sthead"><span class="stno">15c2</span>Integrable</h2>
+  <p class="stands">Stands on 15c1 and 15a (boxes-trap-the-area).</p>
+  <p class="eqline" data-pid="defed4">From here on, f is integrable on [a, b] when f is bounded there and its lower integral equals its upper integral. The common value is the integral of f from a to b, written ∫ₐᵇ f(x) dx, read “the integral from a to b of f of x, d x”. Its accepted names: f is integrable; ∫ₐᵇ f(x) dx is a definite integral; f is the integrand. a and b are the bounds of integration, which many books call its limits, a second use of that word. The whole mark ∫ₐᵇ f(x) dx is a name, for one number. ∫ with its ends and dx is an operator: carried out on f, it produces that number.</p>
+  <p data-pid="bfaacf">The letter x in ∫ᵤᵛ f(x) dx is a dummy, like i in a Σ: ∫ᵤᵛ f(t) dt is the same number. The dx is a reminder of the widths Δxᵢ, and of which letter is the input. It is not a number, and nothing here multiplies by it.</p>
+  <p data-pid="cacfe6">Exactly-one-between technique: <b>if f is integrable on [u, v] and a number A satisfies L(f, P) ≤ A ≤ U(f, P) for every partition P, then A = ∫ᵤᵛ f(x) dx.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the exactly-one-between technique">
+A \ge L(f, P) \text{ for every } P @@ the hypothesis
+A \ge \text{the lower integral} @@ A is an upper bound of the lower sums (no-holes)
+A \le \text{the upper integral} @@ A is a lower bound of the upper sums (greatest-lower-bound)
+\text{lower} = \text{upper} = \textstyle\int_a^b f(x)\,dx @@ integrable
+\htmlClass{new}{A = \textstyle\int_a^b f(x)\,dx} \quad \blacksquare @@ three-way-order on ℝ: A is neither less nor more
+  </pre>
+  <p data-pid="eaa92c"><b>So boxes-trap-the-area and exactly-one-between together leave the area no room.</b> If f ≥ 0 is integrable, and the region under f has an area obeying the three area axioms, that area is ∫ᵤᵛ f(x) dx.</p>
+  <p class="eqline" data-pid="fcc9f5">From here on, the area of the region under an integrable f ≥ 0 on [a, b] is ∫ₐᵇ f(x) dx.</p>
+  <p data-pid="1a05fc">One of the inventors of the calculus, in a manuscript of 29 October 1675, proposed writing a long S in place of the word omnia. The sum of all the l's would then be written ∫ l.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · integrable · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · lower and upper sums for equal pieces, as n grows</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="chips" id="fch"></div>
+      <canvas id="cvF"></canvas>
+      <div class="cap">Ink: the graph, with the boxes for the chosen n: teal under, ember over.</div>
+      <div class="kn"><span class="m">n</span><input type="range" id="kn" min="1" max="60" step="1" value="6"><output id="on"></output></div>
+    </div>
+    <div class="panel">
+      <div class="lbl">lower sums (teal) and upper sums (ember) against n</div>
+      <canvas id="cvS"></canvas>
+      <div class="kn"><span class="m">ε</span><input type="range" id="ke" min="1" max="100" step="1" value="20"><output id="oe"></output></div>
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15c2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f integrable on [0, 3],  L(f, P) ≤ 6 ≤ U(f, P) for every P</span></span>Find ∫₀³ f(x) dx, naming the technique. <br>Say why ∫₀³ f(t) dt is the same number.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15c3">
+  <h2 class="sthead"><span class="stno">15c3</span>The test</h2>
+  <p class="stands">Stands on 15c2.</p>
+  <p data-pid="f5356a">The definition asks about every partition at once. The test asks for one.</p>
+  <p data-pid="8ac4ae">Gap-closes technique (Riemann's): <b>a bounded f is integrable on [u, v] exactly when, for every ε &gt; 0, some partition P has U(f, P) − L(f, P) &lt; ε.</b></p>
+  <p data-pid="38a281">In the column below, <span data-tex-inline="\underline{I}"></span> (I with a bar below) names the lower integral and <span data-tex-inline="\overline{I}"></span> (I with a bar above) the upper integral. The bars are part of the names, as a low mark is, and claim nothing.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the gap-closes technique · if the gap closes">
+\begin{aligned}&\text{let } \underline{I} \text{ and } \overline{I} \text{ be}\\ &\quad\text{the lower and upper integrals}\end{aligned} @@ lower-at-most-upper: I̲ ≤ Ī
+\text{suppose } \underline{I} \lt \overline{I} @@ for contradiction (7e)
+\varepsilon = \overline{I} - \underline{I} \gt 0 @@ the gap between them
+\text{call } P:\ U(f, P) - L(f, P) \lt \varepsilon @@ the hypothesis, at this ε
+L(f, P) \le \underline{I} \le \overline{I} \le U(f, P) @@ sup is an upper bound, inf a lower bound; lower-at-most-upper
+\overline{I} - \underline{I} \le U - L \lt \varepsilon = \overline{I} - \underline{I};\ \ \bot @@ order-and-arithmetic-agree; three-way-order on ℝ
+\htmlClass{new}{\underline{I} = \overline{I}} @@ refute; lower-at-most-upper and three-way-order on ℝ
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: the gap-closes technique · if integrable">
+I = \underline{I} = \overline{I};\ \ \text{fix } \varepsilon \gt 0 @@ integrable
+\text{call } P_1:\ L(f, P_1) \gt I - \tfrac{\varepsilon}{2} @@ I − ε/2 is less than the sup, so no upper bound of the lower sums (no-holes)
+\text{call } P_2:\ U(f, P_2) \lt I + \tfrac{\varepsilon}{2} @@ likewise for the inf (greatest-lower-bound)
+P = \text{the common refinement of } P_1 \text{ and } P_2 @@ 15b
+U(f, P) - L(f, P) \le U(f, P_2) - L(f, P_1) @@ refining-tightens, twice
+\htmlClass{new}{\lt (I + \tfrac{\varepsilon}{2}) - (I - \tfrac{\varepsilon}{2}) = \varepsilon} \quad \blacksquare @@ the two calls
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · gap-closes · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15c3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = x on [0, 1],  n equal pieces</span></span>Find U − L for n pieces. <br>Find an n that makes it less than 0.01.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15c4">
+  <h2 class="sthead"><span class="stno">15c4</span>Worked: what passes</h2>
+  <p class="stands">Stands on 15c3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: a constant">
+f(x) = c \text{ on } [a, b] @@ mᵢ = Mᵢ = c on every piece
+L(f, P) = U(f, P) = c \textstyle\sum \Delta x_i = c(b - a) @@ widths add (15a)
+\htmlClass{new}{\textstyle\int_a^b c\,dx = c(b - a)} @@ every lower sum and every upper sum is that number
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: a step">
+f = 1 \text{ on } [0, 1),\ \ f = 2 \text{ on } [1, 2] @@ one discontinuity, at 1
+P_\delta = \{0, 1 - \delta, 1 + \delta, 2\},\ \ 0 \lt \delta \lt 1 @@ a narrow piece around the discontinuity
+L = (1 - \delta) + 2\delta \cdot 1 + 2(1 - \delta) = 3 - \delta @@ on the middle piece the least is 1
+U = (1 - \delta) + 2\delta \cdot 2 + 2(1 - \delta) = 3 + \delta @@ and the greatest is 2
+U - L = 2\delta @@ below any ε, with δ = ε/3
+\htmlClass{new}{\textstyle\int_0^2 f(x)\,dx = 3} @@ gap-closes, then exactly-one-between: 3 is between every L and U by every-lower-below-every-upper, as 3 − δ ≤ I ≤ 3 + δ for every δ
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · what passes · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15c4.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\int_2^b 5\, dx = 30"></span></span>Find b.</li><li><span class="givens"><span data-tex-inline="f \text{ integrable};"></span> <span data-tex-inline="L(f, P) = 6.9,\ U(f, P) = 7.2"></span></span>Find two numbers its integral lies between.</li><li><span class="givens"><span data-tex-inline="f \text{ bounded on } [0, 3];"></span> <span data-tex-inline="\text{lower integral } 4,\ \text{upper } 6"></span></span>Decide whether some partition gives a lower sum of five, and whether one gives an upper sum of five and a half.</li><li><span class="givens"><span data-tex-inline="f \text{ on } [0, 2] \text{ takes two values;}"></span> <span data-tex-inline="\int_0^2 f(x)\, dx = 5"></span></span>Find such an f.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15c5">
+  <h2 class="sthead"><span class="stno">15c5</span>Worked: what fails</h2>
+  <p class="stands">Stands on 15c4 and 10d (the function q).</p>
+  <pre class="lines" data-k="teal" data-label="from 10d: q">
+q = 1 \text{ at fractions},\ \ 0 \text{ elsewhere, on } [0, 1] @@ 10d
+\begin{aligned}&\text{every piece holds a}\\ &\quad\text{fraction and a non-fraction}\end{aligned} @@ witness-for-less (8b), and witness-for-less shifted by 8a's hole
+L(q, P) = 0,\ \ U(q, P) = 1 \text{ for every } P @@ 15a.3.1d
+\text{lower integral } 0,\ \ \text{upper integral } 1 @@ the sup of a set of 0s; the inf of a set of 1s
+\htmlClass{new}{q \text{ is not integrable on } [0, 1]} @@ 0 ≠ 1
+  </pre>
+  <p data-pid="5cc2c2"><b>So the squeeze can fail.</b> For 10d's q, any number from 0 to 1, taken as the area under it, breaks none of the three area axioms, and the definition gives it none.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · what fails · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15c5.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = 3 \text{ on } [1, 5]"></span></span>Find every lower sum and every upper sum of f, its lower and upper integrals, and its integral.</li><li><span class="givens"><span data-tex-inline="\text{the step's step;}"></span> <span data-tex-inline="P = \{0, 0.9, 1.1, 2\}"></span></span>Find the lower and upper sums for P.</li><li><span class="givens"><span data-tex-inline="f = 5 \text{ on } [0, 2),"></span> <span data-tex-inline="f = 1 \text{ on } [2, 3]"></span></span>Using gap-closes, find the integral of f over its domain.</li><li><span class="givens"><span data-tex-inline="\int_{-1}^{2} t^2\, dt"></span></span>Rewrite the given integral twice, changing one symbol each time: once so the number stays the same, once so it changes.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15c6">
+  <h2 class="sthead"><span class="stno">15c6</span>Illegal moves</h2>
+  <p class="stands">Stands on 15c1 to 15c5.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\textstyle\int_a^b f(x)\,dx \text{ for any bounded } f\,? @@ only when the lower and upper integrals agree; q on [0, 1] has none
+\begin{aligned}&\text{the lower integral}\\ &\quad\text{is } \lim L_n \text{ for equal pieces}\,?\end{aligned} @@ it is the sup over all partitions; equal pieces may not reach it (15b's peak)
+\textstyle\int_a^b f(x)\,dx \cdot dx\,? @@ dx is not a number; nothing multiplies by it
+\textstyle\int_a^b f(x)\,dx \text{ depends on } x\,? @@ x is a dummy; the integral is one number
+\text{gap-closes with one fixed } \varepsilon\,? @@ every ε &gt; 0 must have its partition
+  </pre>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15c6.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="r = 1 \text{ at numbers not fractions,}"></span> <span data-tex-inline="r = 0 \text{ at fractions, on } [0, 1];"></span> <span data-tex-inline="q: \text{ 10d's function}"></span></span>Decide whether r is integrable, and whether the sum of q and r is.</li><li><span class="givens"><span data-tex-inline="q: \text{ 10d's function, on } [0, 1]"></span></span>Find every number that could be the area under q without breaking any of the three area axioms.</li><li><span class="givens"><span data-tex-inline="f(0) = 0,"></span> <span data-tex-inline="f(x) = 1/x \text{ on } (0, 1]"></span></span>Find the step of this step's definition that fails for f.</li><li><span class="givens"><span data-tex-inline="\text{gap-closes checked for } \varepsilon = 0.1;"></span> <span data-tex-inline="\text{a partition found}"></span></span>Someone then declares f integrable. Find what is missing.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">15c.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{Bend's } r \text{ takes two values}"></span> <span data-tex-inline="\text{in every piece.}"></span> <span data-tex-inline="I = [0, 4]"></span></span>Make a function of your own on I that takes three values, each on a piece of positive width, and find its integral with gap-closes, giving a partition for every ε, not for one.</div>
+  <div class="chq"><span class="chid">15c.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\int_u^u f(x)\, dx"></span></span>Decide whether the definition gives this a value.<br>Choose a value for it, and check it against a box of width zero.</div>
+  <div class="chq"><span class="chid">15c.4.3</span><span class="tagq">converse</span>Every function this rung has called integrable so far is either continuous or has finitely many discontinuities. <br>Prove or refute: an integrable function must be continuous.<br>Decide whether it can have endlessly many discontinuities.</div>
+  <div class="chq"><span class="chid">15c.4.4</span><span class="tagq">seam</span><span class="givens"><span data-tex-inline="\text{The sign: } \int"></span></span>One inventor had his method of fluxions by 1666 and printed little of it for decades. The other wrote the given sign in 1675, and printed his rules in 1684 and 1686, and others learned the calculus from him. In 1712 a committee of the Royal Society, whose president was the first of the two, ruled that he had been first. <br>Who discovered the calculus: the first to find it, or the first to write it so that others could use it? <br>Is the sign a discovery, or only a notation?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r15b.html">← 15b · every under-estimate is below every over-estimate</a><a href="r15d.html">15d · the area under x →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>Leibniz, in a manuscript of 29 October 1675, proposed writing a long S in place of the word omnia, so that the sum of all the l's would be written ∫ l.</p><cite>Leibniz, manuscript “Analysis tetragonistica” (1675); paraphrase</cite></aside>
+  <p>The long S is Gottfried Leibniz’s. The closer’s two inventors are Isaac Newton (fluxions, 1666) and Leibniz; the Royal Society’s ruling of 1712 is the Commercium Epistolicum.</p>
+  <p>Accepted names: integrable is also called Riemann integrable, after Bernhard Riemann, and the gap-closes technique is Riemann’s criterion. 10d’s q is Dirichlet’s function.</p>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+/* least and greatest of F.f on [lo, hi]: the ends, F's critical points inside, and a fine sample (exact between critical points for the functions used here) */
+function ext(F,lo,hi){ if(F.dir) return [0,1]; let m=Infinity,M=-Infinity; const t=x=>{ const v=F.f(x); if(v<m) m=v; if(v>M) M=v; };
+  t(lo); t(hi); (F.crit||[]).forEach(c=>{ if(c>lo&&c<hi) t(c); }); for(let k=1;k<64;k++) t(lo+(hi-lo)*k/64); return [m,M]; }
+function sums(F,pts){ let L=0,U=0; const ms=[],Ms=[]; for(let i=1;i<pts.length;i++){ const [m,M]=ext(F,pts[i-1],pts[i]), w=pts[i]-pts[i-1]; ms.push(m); Ms.push(M); L+=m*w; U+=M*w; } return {L,U,ms,Ms}; }
+const eq=(a,b,n)=>Array.from({length:n+1},(_,i)=>a+(b-a)*i/n);
+function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
+function boxes(P,pts,hs,stroke,fill,alpha){ const c=P.ctx; for(let i=1;i<pts.length;i++){ const a=pts[i-1],b=pts[i],h=hs[i-1]; c.globalAlpha=alpha; P.poly([[a,0],[b,0],[b,h],[a,h]],null,fill); c.globalAlpha=1; P.poly([[a,0],[b,0],[b,h],[a,h]],stroke,null,1.2); } }
+function dirDots(P,a,b){ const c=P.ctx; c.fillStyle=col('--ink'); for(let k=0;k<=300;k++){ const x=a+(b-a)*k/300; const y=(k%2)?0:1; c.fillRect(P.X(x)-1,P.Y(y)-1,2,2); } }
+const FN={
+  sq:{lab:'x² on [0, 1]',f:x=>x*x,a:0,b:1,y:[-0.1,1.15],I:1/3},
+  root:{lab:'√x on [0, 1]',f:x=>Math.sqrt(Math.max(0,x)),a:0,b:1,y:[-0.1,1.15],I:2/3},
+  step:{lab:'the step on [0, 2]',f:x=>x<1?1:2,a:0,b:2,y:[-0.2,2.4],I:3,brk:1},
+  rec:{lab:'1/x on [1, 2]',f:x=>1/x,a:1,b:2,y:[-0.1,1.15]},
+  dir:{lab:'10d’s q on [0, 1]',f:x=>NaN,dir:true,a:0,b:1,y:[-0.1,1.15]}
+};
+/* the step's least and greatest on a piece that holds 1 */
+const ext0=ext; function extS(F,lo,hi){ if(F.brk!=null&&lo<F.brk&&hi>=F.brk) return [1,2]; if(F.brk!=null) return [F.f(lo),F.f(lo)]; return ext0(F,lo,hi); }
+const sumsS=(F,pts)=>{ let L=0,U=0; const ms=[],Ms=[]; for(let i=1;i<pts.length;i++){ const [m,M]=extS(F,pts[i-1],pts[i]), w=pts[i]-pts[i-1]; ms.push(m); Ms.push(M); L+=m*w; U+=M*w; } return {L,U,ms,Ms}; };
+let key='sq',F=FN.sq;
+const kn=$('kn'),ke=$('ke'),cvF=$('cvF'),cvS=$('cvS');
+const NMAX=60;
+const PF=plane(cvF,{x:[0,1],y:[0,1],grid:1,aspect:0.8,draw:P=>drawF(P)});
+const PS=plane(cvS,{x:[0,1],y:[0,1],grid:1,aspect:0.8,draw:P=>drawS(P)});
+[[PF,cvF],[PS,cvS]].forEach(([P,cv])=>Object.defineProperty(P.o,'aspect',{get:()=>cv.clientWidth>480?0.75:0.9}));
+const seq=()=>Array.from({length:NMAX},(_,i)=>sumsS(F,eq(F.a,F.b,i+1)));
+function drawF(P){ const pad=(F.b-F.a)*0.08; P.o.x=[F.a-pad,F.b+pad]; P.o.y=F.y; P.o.grid=(F.b-F.a)>1.5?0.5:0.25; P.axes();
+  const p=eq(F.a,F.b,+kn.value), S=sumsS(F,p);
+  boxes(P,p,S.ms,'--teal','--teal',0.28); boxes(P,p,S.Ms,'--ember',null,0);
+  if(F.dir) dirDots(P,F.a,F.b); else if(F.brk!=null){ P.line(F.a,1,F.brk,1,'--ink',2.6,[]); P.line(F.brk,2,F.b,2,'--ink',2.6,[]); P.dot(F.brk,2,'--ink',4); } else curve(P,F.f,'--ink',2.6,F.a,F.b); }
+function drawS(P){ const S=seq(); const lo=Math.min(...S.map(s=>s.L)), hi=Math.max(...S.map(s=>s.U)); const pad=(hi-lo)*0.08+0.02; P.o.x=[-3,NMAX+2]; P.o.y=[lo-pad,hi+pad]; P.o.grid=10; P.axes();
+  const c=P.ctx; S.forEach((s,i)=>{ P.dot(i+1,s.L,'--teal',2.6); P.dot(i+1,s.U,'--ember',2.6); });
+  const n=+kn.value; P.line(n,lo-pad,n,hi+pad,'--grid',1,[3,3]); P.dot(n,S[n-1].L,'--teal',5); P.dot(n,S[n-1].U,'--ember',5);
+  if(F.I!=null) P.line(0,F.I,NMAX,F.I,'--gold',1.2,[6,4]); }
+function read(){ const S=seq(), n=+kn.value, e=+ke.value/100; $('on').textContent=n; $('oe').textContent=mm(e,2);
+  let first=-1; for(let i=0;i<NMAX;i++){ if(S[i].U-S[i].L<e-1e-9){ first=i+1; break; } }
+  const supL=Math.max(...S.map(s=>s.L)), infU=Math.min(...S.map(s=>s.U)); const vd=$('vdF');
+  if(F.dir){ vd.className='verdict lose'; vd.textContent='U − L = 1 for every n, and for every partition: no partition passes ε = '+mm(e,2)+'. The lower integral is 0, the upper 1: not integrable.'; }
+  else if(first>0){ vd.className='verdict win'; vd.textContent='With '+first+' equal pieces, U − L = '+mm(S[first-1].U-S[first-1].L)+' < ε = '+mm(e,2)+'. gap-closes asks for such a partition for every ε > 0.'; }
+  else { vd.className='verdict'; vd.textContent='No n up to '+NMAX+' gives U − L < ε = '+mm(e,2)+'; more pieces are needed.'; }
+  tex($('eqF'),R`\begin{gathered}L_{${n}} = ${mm(S[n-1].L)},\ \ U_{${n}} = ${mm(S[n-1].U)}\\ \max_{n \le ${NMAX}} L_n = ${mm(supL)} \le \min_{n \le ${NMAX}} U_n = ${mm(infU)}\\ ${F.I!=null?R`\textstyle\int = ${mm(F.I)}\ \text{(gold)}`:(F.dir?R`\text{not integrable}`:R`\text{the two columns close in}`)}\end{gathered}`,true); }
+function all(){ PF.redraw(); PS.redraw(); read(); }
+kn.addEventListener('input',all); ke.addEventListener('input',all);
+const fch=$('fch');
+Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===key) b.className='on'; b.onclick=()=>{ key=k; F=FN[k]; [...fch.children].forEach(z=>z.classList.toggle('on',z===b)); all(); }; fch.appendChild(b); });
+window.__pic={set:(k,n,e)=>{ [...fch.children][Object.keys(FN).indexOf(k)].click(); kn.value=n; ke.value=e; all(); const S=sumsS(F,eq(F.a,F.b,n)); return {L:+S.L.toFixed(5),U:+S.U.toFixed(5),txt:$('vdF').textContent}; }};
+all();
+/* ---------- slides ---------- */
+const Nw='\\htmlClass{new}';
+stepper('#sl1',[
+  {k:'ember',kl:'the best under-estimate',t:R`\underline{I} = \sup_P L(f, P)`,n:`Bounded above by any upper sum (every-lower-below-every-upper), so no-holes applies.`},
+  {k:'ember',kl:'the best over-estimate',t:R`\overline{I} = \inf_P U(f, P)`,n:`greatest-lower-bound.`},
+  {k:'ember',kl:'lower-at-most-upper',t:R`${Nw}{\underline{I} \le \overline{I}}`,n:`Every upper sum bounds the lower sums.`}
+],{title:'The slides · the best estimates · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'integrable',t:R`\underline{I} = \overline{I} = \textstyle\int_a^b f(x)\,dx`,n:`Integrable; the definite integral.`},
+  {k:'ember',kl:'the dummy',t:R`\textstyle\int_a^b f(x)\,dx = \int_a^b f(t)\,dt`,n:`dx names the input; it is not a number.`},
+  {k:'ember',kl:'exactly-one-between',t:R`L \le A \le U \text{ for all } P \;\Rightarrow\; ${Nw}{A = \textstyle\int}`,n:`So the area is the integral.`}
+],{title:'The slides · integrable · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'gap-closes',t:R`\forall \varepsilon \gt 0\ \exists P:\ U - L \lt \varepsilon`,n:`One partition per ε.`}
+],{title:'The slides · gap-closes · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'a constant',t:R`\textstyle\int_a^b c\,dx = c(b - a)`,n:`Every sum is that number.`},
+  {k:'ember',kl:'a step',t:R`U - L = 2\delta;\ \ \textstyle\int_0^2 f = 3`,n:`A discontinuity costs nothing: a narrow piece covers it.`}
+],{title:'The slides · what passes · ← → keys work'});
+stepper('#sl5',[
+  {k:'teal',kl:'from 10d · q fails',t:R`\underline{I} = 0 \ne 1 = \overline{I}`,n:`Every piece holds both kinds of number.`}
+],{title:'The slides · what fails · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'illegal',t:R`\textstyle\int \text{ needs } \underline{I} = \overline{I}`,n:`Bounded is not enough.`}
+],{title:'The slides · illegal · ← → keys work'});
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

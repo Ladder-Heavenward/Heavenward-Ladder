@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>8·comp · Why is 0.1 + 0.2 not 0.3 on a computer?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+table.tt td.l{text-align:left;font-family:var(--serif)} @media (max-width:520px){table.tt td.l{min-width:6em}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%;min-width:0} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0;overflow-wrap:anywhere}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r08econ.html">← 8·econ what does a price really say?</a><a href="r09.html">next: 9 making functions →</a></p>
+  <div class="tags"><span class="tag comp">8·comp · computing</span></div>
+  <h1>Why is 0.1 + 0.2 not 0.3 on a computer?</h1>
+  <p>Why is 0.1 + 0.2 not 0.3 on a computer? Ask almost any programming language to add one tenth and two tenths, and it prints a three, then fifteen zeros, then a four. Ask it whether the sum is three tenths, and it answers no. Programmers meet this in their first week, and it has cost real money. In the early eighties a stock index in Vancouver lost nearly half its value on paper in under two years, while the market under it rose. People ask the question because the machine looks broken. What makes it hard is that nothing is broken. The machine keeps every number in twos, with a fixed count of bits, and one tenth has no numeral in twos that ends. So the machine keeps a nearby fraction in its place. This page proves that one tenth has no ending numeral in twos. It says how far the kept number can sit from the true one. It adds those distances with rung 8's triangle technique. And it shows why a test of sameness fails where a test of distance works.</p>
+  <p class="gesture">Write the number in twos. If its bottom has a prime other than two, the numeral never ends, and the machine keeps only its first few bits, rounded. The kept number sits within half a gap of the true one, and half a gap is a fixed small share of the number's size. Each sum carries the two distances it was handed and makes one of its own. So two roads to three tenths can end on two neighbouring kept numbers, a gap apart. Ask whether two results are near each other, not whether they are the same.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r04h.html">4h</a> (numerals in twos, bits, split-by-a-base, the reading rule), <a href="r04i.html">4i</a> (prime-divides-a-list, one-prime-list), <a href="r05g.html">5g</a> (decimals, rounding), <a href="r08cb5.html">8·cb5</a> (cut-offs, the digit rule, repeating-decimal, shift-the-point), <a href="r08phys.html">8·phys</a> (one-scientific-form), <a href="r08g.html">8g</a> (inequalities, same-direction-add) and <a href="r08h.html">8h</a> (distance on the line, triangle, unpack-the-bars). Later computing pages run a root-finding program on such a machine (named by rung number only: 13·comp).</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · numbers kept in bits, one tenth in twos, the gap, how gaps add, the test that fails</div>
+
+  <h3>A machine keeps a fixed count of bits</h3>
+  <p data-pid="bc5967">A computer's memory is a long row of bits, 4h's digits in twos. A whole number fits in a row of bits as its numeral in twos. A real number with endless digits cannot fit at all. So machines keep reals in 8·phys's scientific form, with 2 in place of ten. One-scientific-form's proof never used anything about ten but that it is more than 1. With 2 in its place it says: <b>every positive real is u · 2ⁿ for exactly one integer n and one real u with 1 ≤ u &lt; 2.</b> The machine keeps the sign, the power n, and the first few bits of u.</p>
+  <p class="eqline" data-pid="3966f9">From here on, on this page, an s-bit machine is a machine that keeps exactly 0 and the reals ±m · 2^k, where k is an integer and m is a number with 2^(s−1) ≤ m &lt; 2^s. Such a real is a kept number. So m has exactly s bits in twos, its first bit 1. Nearly every computer today has a 53-bit machine inside it, with k kept in a range from about −1074 to 971. On this page the range is ignored, except in one question.</p>
+  <p data-pid="bb1467">A 5-bit machine is small enough to work by hand. Its m run from 16 to 31. Between 1 and 2 it keeps 16/16, 17/16, …, 31/16, and then 2 itself: sixteen kept numbers, 1/16 apart. Between 2 and 4 it keeps the same pattern doubled, 1/8 apart. Between ½ and 1 it is halved, 1/32 apart. <b>The kept numbers are evenly spaced between neighbouring powers of two, and the spacing doubles at each power.</b></p>
+  <p class="eqline" data-pid="87021b">From here on, on this page, the gap at x is the spacing of the kept numbers between the powers of two around x. If 2ⁿ ≤ x &lt; 2ⁿ⁺¹, the gap is 2^(n+1−s).</p>
+
+  <h3>One tenth has no ending numeral in twos</h3>
+  <p data-pid="b7f228">A numeral in twos that ends after k places names m/2^k for some number m: that is 4h's reading rule, with the point shifted (8·cb5's shift-the-point). So one tenth has an ending numeral in twos exactly when it is some m/2^k.</p>
+  <p data-pid="1d304d">No-ending-twos technique: <b>one tenth is not a number divided by a power of two.</b> Let m and k be numbers.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the no-ending-twos technique">
+\tfrac{m}{2^k} = \tfrac{1}{10} @@ suppose, for contradiction (7e)
+10\,m = 2^k @@ multiply both sides by 10 · 2^k, not 0
+5 \mid 2^k @@ 10m = 5 · (2m): 5 divides the left side, so it divides the right
+5 \mid 2 @@ prime-divides-a-list (4i): 5 is prime, and 2^k is the product of a list of 2s
+\bot @@ 5 is more than 2, and divisor-not-past (4i)
+\htmlClass{keep}{\tfrac{1}{10} \ne \tfrac{m}{2^k}} \quad \blacksquare @@ refute
+  </pre>
+  <p data-pid="eae0b8">The same column works for any bottom with a prime other than 2 in it. So one fifth, one third and three tenths have no ending numeral in twos either. One half, three eighths and five sixteenths do. 8·cb5's division place by place runs in twos just as in tens: double the remainder, and the next bit is 1 when the double reaches the bottom.</p>
+  <pre class="lines" data-k="teal" data-label="from 8·cb5: one tenth, divided place by place in twos">
+1 \to 2 \to 4 \to 8 @@ remainders after doubling 1, 2, 4 by 10: bits 0, 0, 0 (2, 4 and 8 are less than 10)
+16 = 10 + \htmlClass{new}{6} @@ bit 1, remainder 6
+12 = 10 + \htmlClass{new}{2} @@ bit 1, remainder 2: a remainder seen before
+\tfrac{1}{10} = 0.0\overline{0011}_2 @@ repeating-decimal's rightward half, in twos: from here the bits come round
+  </pre>
+  <p data-pid="bfce8f">So in scientific form in twos, one tenth is 1.1001 1001 1001…₂ · 2⁻⁴, and the block 1001 never stops. A machine with any fixed count of bits must stop it somewhere.</p>
+
+  <h3>The kept number, and the gap around it</h3>
+  <p class="eqline" data-pid="43d56d">From here on, on this page, st(x) names the kept number nearest to x, the number an s-bit machine stores for x. When x is exactly halfway between two kept numbers, st(x) is the one whose m is even. That tie rule is a choice, and the machine makes it the same way every time.</p>
+  <pre class="lines" data-k="ember" data-label="this page: one tenth on a 5-bit machine">
+\tfrac{1}{16} \le \tfrac{1}{10} \lt \tfrac18 @@ n = −4; the gap there is 2^(−4+1−5) = 1/256
+\tfrac{1}{10} = \tfrac{25.6}{256} @@ between the kept numbers 25/256 and 26/256
+\mathrm{st}\big(\tfrac{1}{10}\big) = \htmlClass{new}{\tfrac{26}{256}} = 0.1015625 @@ 26 is nearer to 25.6
+\big|\mathrm{st}\big(\tfrac1{10}\big) - \tfrac{1}{10}\big| = 0.0015625 @@ distance on the line (8h): 0.4 of a gap
+  </pre>
+  <p data-pid="d3d255">Half-gap technique: <b>the kept number is never farther from the true one than half a gap, and half a gap is at most the number's size over 2^s.</b> In marks: |st(x) − x| ≤ 2^(−s) · |x|. Let x be positive; for a negative x, the sign comes along unchanged.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the half-gap technique">
+2^n \le x \lt 2^{n+1} @@ one-scientific-form in twos
+\tfrac{m}{2^{s-1-n}} \le x \le \tfrac{m+1}{2^{s-1-n}},\ \ 2^{s-1} \le m \lt 2^s @@ x lies between two neighbouring kept numbers, a gap g = 2^(n+1−s) apart; 2ⁿ⁺¹ itself is kept, with m = 2^(s−1)
+|\mathrm{st}(x) - x| \le \tfrac{g}{2} @@ the nearer of the two ends is at most half the stretch away (unpack-the-bars, 8h)
+\tfrac{g}{2} = 2^{n-s} = 2^{-s} \cdot 2^n \le \htmlClass{keep}{2^{-s}\,x} \quad \blacksquare @@ powers-add-their-counts; 2ⁿ ≤ x, times the positive 2^(−s) (8g)
+  </pre>
+  <p data-pid="bcf15c">For the 53-bit machine, 2⁻⁵³ ≈ 1.1 · 10⁻¹⁶. Every kept number is within about a ten-thousand-millionth of a millionth of its own size of the true one. That is close: Mount Rainier's height of 4392 m, kept, is off by at most 4392 · 2⁻⁵³ ≈ 4.9 · 10⁻¹³ m. But it is not nothing.</p>
+  <p data-pid="0cbd24">Here are the three numbers of the title on the 53-bit machine, as exact fractions, written out in tens. The fifty-odd digits are exact: each kept number is a fraction with a power of two at the bottom, and its decimal ends.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>x</th><th>st(x)</th><th>st(x) − x</th></tr>
+    <tr><td>0.1</td><td class="l">0.1000000000000000055511151231257827…</td><td>+5.6 · 10⁻¹⁸</td></tr>
+    <tr><td>0.2</td><td class="l">0.2000000000000000111022302462515654…</td><td>+1.1 · 10⁻¹⁷</td></tr>
+    <tr><td>0.3</td><td class="l">0.2999999999999999888977697537484345…</td><td>−1.1 · 10⁻¹⁷</td></tr>
+  </table></div>
+  <p data-pid="bf3dbf">The first two are kept a little high and the third a little low. That alone decides the title.</p>
+
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · the cloud, stored</div>
+    <p data-pid="54e85c">8·cb5 met a principle of 0c's second kind of care: some things are there but can't be pinned to a dot. √2 has no decimal that ends, so every decimal of √2 you write carries a width. 8·phys gave a measurement a width from its instrument. A machine gives every number it keeps a width from its count of bits.</p>
+    <p data-pid="bc03ba"><b>A kept number stands for a stretch of the line, not a dot, so test stretches, not dots.</b></p>
+    <p data-pid="ae6c66">st(0.1) is exact as a fraction: 3602879701896397/2⁵⁵. It is also the kept number of every real within half a gap of it. Which one the program meant is lost. The half-gap technique says how wide the loss can be. Be rigorous about that width, and the dot stops mattering.</p>
+    <p class="bait" data-pid="4dd733">A billing program in Olympia adds three charges of 10, 20 and 30 cents, written in dollars, and compares the total with 60 cents. It reports a mismatch. Did anyone pay the wrong amount?</p>
+  </aside>
+
+  <h3>How gaps add</h3>
+  <p data-pid="7abc6f">The machine cannot add a and b. It adds st(a) and st(b) exactly, then keeps the result: its sum is st(st(a) + st(b)). Each st along the way moves the number by at most its half-gap. 8h's triangle technique adds the moves up.</p>
+  <p data-pid="4b0170">Adding-gaps technique: <b>the machine's sum is off from the true sum by at most the two half-gaps it was handed plus the half-gap of its own rounding.</b> Let a and b be reals, and write u for 2^(−s).</p>
+  <pre class="lines" data-k="ember" data-label="this page: the adding-gaps technique">
+\mathrm{st}(\mathrm{st}(a) + \mathrm{st}(b)) - (a + b) = \big[\mathrm{st}(w) - w\big] + \big[\mathrm{st}(a) - a\big] + \big[\mathrm{st}(b) - b\big] @@ w = st(a) + st(b); regroup and cancel (8d)
+|\ldots| \le |\mathrm{st}(w) - w| + |\mathrm{st}(a) - a| + |\mathrm{st}(b) - b| @@ triangle, twice (8h)
+\le u\,|w| + u\,|a| + u\,|b| @@ half-gap, three times; same-direction-add (8g)
+|w| \le (1 + u)(|a| + |b|) @@ triangle on w, then half-gap on each piece
+|\ldots| \le \htmlClass{keep}{(2 + u)\,u\,(|a| + |b|)} \quad \blacksquare @@ substitute; spread
+  </pre>
+  <p data-pid="d64033">For 0.1 and 0.2 on the 53-bit machine, the bound is about 2 · 1.1 · 10⁻¹⁶ · 0.3 ≈ 6.7 · 10⁻¹⁷. The true error is smaller, as it must be: here are the numbers.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the title, on the 53-bit machine">
+\mathrm{st}(0.1) + \mathrm{st}(0.2) = 0.3000000000000000166533\ldots @@ exact: the two errors were both upward, 5.6 · 10⁻¹⁸ and 1.1 · 10⁻¹⁷
+\text{kept numbers near } 0.3:\ \ 0.2999999999999999888977\ldots,\ \ 0.3000000000000000444089\ldots @@ between ¼ and ½ the gap is 2⁻⁵⁴ ≈ 5.6 · 10⁻¹⁷
+\text{the exact sum is halfway between them} @@ a tie: the upper one has the even m
+\mathrm{st}(\mathrm{st}(0.1) + \mathrm{st}(0.2)) = \htmlClass{new}{0.30000000000000004440\ldots} @@ printed as 0.30000000000000004
+\mathrm{st}(0.3) = \htmlClass{keep}{0.29999999999999998889\ldots} @@ one gap below: the two roads end on neighbours
+  </pre>
+  <p data-pid="54691c">The 5-bit machine shows the same thing large enough to see. st(0.1) = 26/256 and st(0.2) = 26/128, both kept high. Their sum is 78/256 = 0.3046875. Between ¼ and ½ the gap is 1/64, and 0.3046875 is exactly halfway between 19/64 and 20/64. The tie goes to 20/64 = 0.3125. But st(0.3) = 19/64 = 0.296875. Again the two roads end one gap apart.</p>
+  <p data-pid="ca6c47">Errors pile up with the number of steps. Add st(0.1) to itself ten times on the 53-bit machine, keeping after each addition, and the result prints as 0.9999999999999999, one gap below 1. On the 5-bit machine the same ten additions end at 31/32. The bound grows with each step: n additions, each adding a half-gap of its own.</p>
+
+  <h3>The index that lost half its value</h3>
+  <p data-pid="a229b4">The Vancouver Stock Exchange started a new index in January 1982 at 1000.000. A program updated it after every trade, about three thousand times a day. Each time it cut the new value to three places after the point, 8·cb5's cut-off c₃, instead of rounding it.</p>
+  <pre class="lines" data-k="ember" data-label="this page: cut-offs that never cancel">
+c_3 \le x \lt c_3 + 0.001 @@ the digit rule (8·cb5): each cut-off loses between 0 and 0.001
+\text{after } N \text{ updates, the loss is between } 0 \text{ and } 0.001\,N @@ same-direction-add, N times: every loss has the same sign
+\text{rounded instead: each move is within } 0.0005 \text{, either way} @@ half-gap, with the gap 0.001
+\text{November 1983: } \htmlClass{new}{524.811} \text{ shown}, \ \ \htmlClass{keep}{1098.892} \text{ recomputed} @@ about 574 points lost, with no trade to blame
+  </pre>
+  <p data-pid="bdb208"><b>Losses that all point one way add up; they never cancel.</b> Over some twenty months and well over a million updates, an average loss near 0.0005 a time is several hundred points. Rounding to the nearest would have pointed the moves both ways. How far moves that point both ways cancel is a question about chance, for the statistics rungs. Cutting off made it no question at all.</p>
+
+  <h3>Why a test of sameness fails, and what to test instead</h3>
+  <p data-pid="95b556">A program that asks whether st(st(0.1) + st(0.2)) is st(0.3) compares two kept numbers. They are different kept numbers, so the answer is no, though both roads set out for 3/10. The machine is right about the dots. The question was wrong.</p>
+  <p data-pid="bbc09b">Near-enough technique: <b>if two results are each within known distances of the same real, they are within the sum of those distances of each other.</b> Let p be within d₁ of x, and q within d₂ of x. Then |p − q| ≤ |p − x| + |x − q| ≤ d₁ + d₂, by triangle and size-of-a-negative (8h). ∎ So the test |p − q| ≤ d₁ + d₂ never calls two roads to one real different. Its price: it may call two different reals the same, when they are closer than d₁ + d₂. Choosing the distances is the programmer's work, and the adding-gaps technique is where they come from.</p>
+  <p data-pid="dbcf32">A second way out is to keep only numbers the machine can hold exactly. A whole number of cents, below 2⁵³, is kept with no gap at all. A bank that counts in cents adds 10 + 20 and gets 30.</p>
+
+  <h3>Illegal moves</h3>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed">
+\mathrm{st}(a) + \mathrm{st}(b) = \mathrm{st}(a + b)\,? @@ 5-bit: 26/256 + 26/128 = 0.3046875, while st(0.3) = 0.296875
+\mathrm{st}(0.1) = 0.1 \text{, since it prints as } 0.1\,? @@ printing rounds again, to the shortest decimal that keeps the same number; st(0.1) is 3602879701896397/2⁵⁵
+\text{more bits make } 0.1 \text{ exact}\,? @@ no-ending-twos: no count of bits holds 1/10
+\text{grouping does not matter on the machine}\,? @@ 0.1 + 0.2 + 0.3 left to right prints 0.6000000000000001; right to left, 0.6
+\text{small errors cancel in the long run}\,? @@ cut-offs all point down: Vancouver lost about 574 points
+\text{the gap is the same everywhere}\,? @@ it doubles at each power of two: 1/16 between 1 and 2 on a 5-bit machine, 1/8 between 2 and 4
+  </pre>
+
+  <h3>Running it backwards</h3>
+  <p data-pid="3c055f">Handed a kept number, find every real the machine would keep as it: the stretch of half a gap on each side, ends included or not by the tie rule. Handed a fraction, ask whether its bottom has a prime other than 2. If it has none, the machine may hold it exactly; if it has one, it cannot. Handed a calculation, count its roundings, and add their half-gaps for a bound. Handed a test of sameness, ask what roads led to each side, and replace it by a test of distance with the sum of their bounds.</p>
+
+  <h3>Which rung each step uses</h3>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>step</th><th>the mathematics</th><th>from</th></tr>
+    <tr><td class="l">numbers in twos</td><td class="l">bits, the reading rule, one-scientific-form with 2</td><td><a href="r04h.html">4h</a>, <a href="r08phys.html">8·phys</a></td></tr>
+    <tr><td class="l">no ending numeral for 1/10</td><td class="l">prime-divides-a-list, divisor-not-past</td><td><a href="r04i.html">4i</a></td></tr>
+    <tr><td class="l">the repeating block</td><td class="l">repeating-decimal, in twos</td><td><a href="r08cb5.html">8·cb5</a></td></tr>
+    <tr><td class="l">half-gap</td><td class="l">distance, unpack-the-bars, inequalities</td><td><a href="r08h.html">8h</a>, <a href="r08g.html">8g</a></td></tr>
+    <tr><td class="l">adding-gaps, near-enough</td><td class="l">triangle, size-of-a-negative</td><td><a href="r08h.html">8h</a></td></tr>
+    <tr><td class="l">cut-offs that never cancel</td><td class="l">the digit rule, same-direction-add</td><td><a href="r08cb5.html">8·cb5</a>, <a href="r08g.html">8g</a></td></tr>
+  </table></div>
+</section>
+
+<section class="pic" id="pic">
+  <div class="eyebrow">The picture · left: the kept numbers near a real, and the stretch each one stands for · right: two roads to one sum</div>
+  <div class="panels">
+    <div class="panel">
+      <div class="chips" id="chx"></div>
+      <div class="kn"><span class="m">bits s</span><input type="range" id="ks" min="3" max="12" step="1" value="5"><output id="os"></output></div>
+      <canvas id="cvA"></canvas>
+      <div class="cap">The line near x (ink). Ticks: the kept numbers of an s-bit machine. Gold: the stretch of reals kept as st(x), half a gap on each side. Ember: st(x). Below, the true distance and the half-gap bound 2^(−s) x.</div>
+      <div class="eqbox" id="eqA"></div>
+    </div>
+    <div class="panel">
+      <div class="chips" id="chs"></div>
+      <div class="kn"><span class="m">bits s</span><input type="range" id="kt" min="3" max="53" step="1" value="5"><output id="ot"></output></div>
+      <canvas id="cvB"></canvas>
+      <div class="cap">Ticks: kept numbers near the true sum a + b (ink). Ember: the machine's sum st(st(a) + st(b)). Teal: st(a + b), the number the program compares it with. Gold: the adding-gaps bound around a + b.</div>
+      <div class="verdict" id="vdB"></div>
+    </div>
+  </div>
+</section>
+
+<section class="slides" id="sl1"><div class="eyebrow">The slides · scientific form in twos; the s-bit machine; no ending numeral; the repeating block; st; half-gap; adding-gaps; the title worked; Vancouver; near-enough; illegal moves · ← → keys work</div></section>
+
+<section class="sayback">
+  <div class="eyebrow">Say it back · then work it</div>
+  <h2>Questions</h2>
+  <div class="phkey"></div>
+  <ol>
+    <li><span class="qid">8·comp.1</span><span class="gname">Keeping a number.</span><span class="gwhy">Do: build the page's pieces.</span>
+      <ol class="sub">
+        <li><span class="qid">8·comp.1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\text{An } s\text{-bit machine keeps } 0 \text{ and } \pm m \cdot 2^k,"></span> <span data-tex-inline="k \text{ an integer},\ 2^{s-1} \le m \lt 2^s;"></span> <span data-tex-inline="\mathrm{st}(x) \text{ is the nearest, ties to even } m."></span></span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\tfrac38,\ \ \tfrac15"></span></span>Find the numeral in twos of each, with its repeating block if it has one.</li><li><span class="givens"><span data-tex-inline="s = 5,\ \ x = 0.7"></span></span>Find st(x), the gap at x, and |st(x) − x|.</li><li><span class="givens"><span data-tex-inline="s = 53;"></span> <span data-tex-inline="\text{Mount Hood is } 3429 \text{ m high}"></span></span>Bound the distance between its height and the kept number for it.</li><li><span class="givens"><span data-tex-inline="s = 5"></span></span>Find st(st(0.1) + st(0.1)) and st(0.2). <br>Are they the same?</li></ol></li>
+      </ol></li>
+    <li><span class="qid">8·comp.2</span><span class="gname">From the kept number back.</span><span class="gwhy">Undo: run the page's techs backwards.</span>
+      <ol class="sub">
+        <li><span class="qid">8·comp.2.1</span><span class="ph undo">undo</span><span class="givens"><span data-tex-inline="\text{An } s\text{-bit machine keeps } 0 \text{ and } \pm m \cdot 2^k,"></span> <span data-tex-inline="k \text{ an integer},\ 2^{s-1} \le m \lt 2^s;"></span> <span data-tex-inline="\mathrm{st}(x) \text{ is the nearest, ties to even } m."></span></span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="s = 5,\ \ \mathrm{st}(x) = \tfrac{13}{32}"></span></span>Find every real x with this kept number.</li><li><span class="givens"><span data-tex-inline="0.\overline{011}_2"></span></span>Find the fraction.</li><li><span class="givens"><span data-tex-inline="\text{Kept numbers between 1 and 2}"></span> <span data-tex-inline="\text{are } 2^{-10} \text{ apart.}"></span></span>Find s.</li><li><span class="givens"><span data-tex-inline="p \text{ and } q \text{ are each within } 2^{-52}"></span> <span data-tex-inline="\text{of one real } x."></span></span>Find the least t for which |p − q| ≤ t is sure to hold.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">8·comp.3</span><span class="gname">Where the machine bends.</span><span class="gwhy">Bend: find where the techs stop working.</span>
+      <ol class="sub">
+        <li><span class="qid">8·comp.3.1</span><span class="ph bend">bend</span><span class="givens"><span data-tex-inline="\text{An } s\text{-bit machine keeps } 0 \text{ and } \pm m \cdot 2^k,"></span> <span data-tex-inline="k \text{ an integer},\ 2^{s-1} \le m \lt 2^s;"></span> <span data-tex-inline="\mathrm{st}(x) \text{ is the nearest, ties to even } m."></span></span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="s = 5"></span></span>Find st(st(1 + 1/32) + 1/32) and st(1 + st(1/32 + 1/32)). <br>Does grouping matter on the machine?</li><li><span class="givens"><span data-tex-inline="s = 5;"></span> <span data-tex-inline="y_0 = 0,\ \ y_{i+1} = \mathrm{st}(y_i + \mathrm{st}(0.1))"></span></span>Find y₁₀, and its distance from 1.</li><li><span class="givens"><span data-tex-inline="s = 5"></span></span>Find st(1/3) and st(2/3), and the machine's sum of the two. <br>Is it st(1)?</li><li><span class="givens"><span data-tex-inline="\text{An index near 1000 is updated}"></span> <span data-tex-inline="\text{2800 times a day for 20 days.}"></span></span>Bound its drift each way when each update is cut to 3 places. <br>Then bound it when each is rounded to 3 places.</li></ol></li>
+      </ol></li>
+    <li class="optgroup"><span class="qid">8·comp.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder challenges that rely on your own making. The page is complete without these; the rung's star needs them.</span>
+      <ol class="sub">
+        <li class="opt"><span class="qid">8·comp.4.1</span><span class="tagq">build</span>Build machines and bounds of your own.<ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="s = 8"></span></span>Choose a fraction with 3, 5 or 7 at the bottom. <br>Find its numeral in twos, its kept number, and its error against the half-gap bound.</li><li><span class="givens"><span data-tex-inline="v/b \text{ in lowest terms}"></span></span>Prove that v/b has an ending numeral in twos exactly when b is a power of 2.</li><li><span class="givens"><span data-tex-inline="\text{A machine cuts } x \gt 0 \text{ off}"></span> <span data-tex-inline="\text{at its last bit, instead of rounding.}"></span></span>Find the bound in place of half-gap, and prove it.</li><li><span class="givens"><span data-tex-inline="a, b, c \text{ reals};\ \ u = 2^{-s}"></span></span>Bound st(st(st(a) + st(b)) + st(c)) − (a + b + c), every line licensed.</li></ol></li>
+        <li class="opt"><span class="qid">8·comp.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="s = 5;\ \ k \ge -10 \text{ only};"></span> <span data-tex-inline="x = \tfrac{1}{1000}"></span></span>Find st(x). <br>Does half-gap hold?</li>
+        <li class="opt"><span class="qid">8·comp.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="y \text{ is a kept number},"></span> <span data-tex-inline="|y - x| \le 2^{-s}\,|x|"></span></span>Must y be st(x)?</li>
+        <li class="opt"><span class="qid">8·comp.4.4</span><span class="tagq">seam</span>A credit union in Victoria keeps every balance as a whole number of cents. A laboratory in Corvallis keeps every reading as a 53-bit kept number. One programmer calls the first way wasted effort; another calls the second careless. How should a machine keep a number?</li>
+      </ol></li>
+  </ol>
+  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
+</section>
+
+<nav class="nextrung"><a href="r08econ.html">← 8·econ · what does a price really say?</a><a href="r09.html">9 · making functions →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>Keeping numbers in scientific form on a machine goes back to Konrad Zuse's Z1 and Z3 in Berlin (1938 to 1941), which kept numbers in twos with a power and a fixed count of bits. Through the 1960s and 1970s each maker rounded in its own way, and the same program gave different answers on different machines. William Kahan of Berkeley led the committee whose standard of 1985 fixed the 53-bit format, rounding to the nearest with ties to even, and what a machine must do at the edges of its range. The Vancouver index's story was told in the Wall Street Journal in November 1983. In 1991 an air-defence battery at Dhahran kept time by adding one tenth of a second, in a 24-bit register, every tick. After a hundred hours the clock was off by about a third of a second, and it failed to stop a missile.</p>
+  <h3>Accepted names</h3>
+  <p>A kept number is a <b>floating-point number</b>, and the 53-bit machine is <b>double precision</b> in the standard IEEE 754. m is the <b>significand</b> (or mantissa) and k the <b>exponent</b>. The gap is one <b>unit in the last place</b>, an ulp. 2⁻⁵³ is the <b>unit roundoff</b>; twice it, the gap at 1, is <b>machine epsilon</b>. The tie rule is <b>round half to even</b>, also called banker's rounding. Cutting off is <b>truncation</b>. Keeping money as whole cents is <b>fixed-point</b> arithmetic. A test |p − q| ≤ t is a <b>tolerance</b> test.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="8·comp: a worked “proof”, not allowed">
+\mathrm{st}(0.1) \text{ is within } 2^{-53} \cdot 0.1 \text{ of } 0.1 @@ fine: half-gap
+\text{so } \mathrm{st}(\mathrm{st}(0.1) + \mathrm{st}(0.2)) = \mathrm{st}(0.3) @@ not allowed: two kept numbers can each be near 0.3 and still differ by a gap
+\text{so the test } x = 0.3 \text{ is safe} @@ false: it prints false on almost every machine; test |x − 0.3| ≤ t instead
+  </pre>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+/* exact fractions with BigInt: [p,q], q>0 */
+const B=BigInt;
+const gcd=(a,b)=>{ a=a<0n?-a:a; b=b<0n?-b:b; while(b){ [a,b]=[b,a%b]; } return a; };
+const fr=(p,q)=>{ if(q<0n){p=-p;q=-q;} const g=gcd(p,q)||1n; return [p/g,q/g]; };
+const add=(x,y)=>fr(x[0]*y[1]+y[0]*x[1],x[1]*y[1]);
+const sub=(x,y)=>fr(x[0]*y[1]-y[0]*x[1],x[1]*y[1]);
+const num=x=>Number(x[0])/Number(x[1]);
+function pow2(n){ return n>=0?[1n<<B(n),1n]:[1n,1n<<B(-n)]; }
+function lt(x,y){ return x[0]*y[1]<y[0]*x[1]; }
+function le(x,y){ return x[0]*y[1]<=y[0]*x[1]; }
+/* n with 2^n <= x < 2^(n+1), x>0 */
+function expo(x){ let n=Math.floor(Math.log2(num(x))); while(lt(x,pow2(n))) n--; while(le(pow2(n+1),x)) n++; return n; }
+/* st on an s-bit machine: returns {v, n, k} */
+function st(x,s){ if(x[0]===0n) return {v:[0n,1n],n:0,k:0};
+  const sg=x[0]<0n?-1n:1n; const ax=[x[0]*sg,x[1]]; const n=expo(ax); const k=s-1-n;
+  const t=k>=0?[ax[0]*(1n<<B(k)),ax[1]]:[ax[0],ax[1]*(1n<<B(-k))];
+  let m=t[0]/t[1]; const rem=t[0]-m*t[1]; const twice=2n*rem;
+  if(twice>t[1]||(twice===t[1]&&(m%2n===1n))) m+=1n;
+  const v=k>=0?fr(sg*m,1n<<B(k)):fr(sg*m*(1n<<B(-k)),1n);
+  return {v,n,k}; }
+const sup=n=>String(n).split('').map(ch=>'⁻⁰¹²³⁴⁵⁶⁷⁸⁹'['-0123456789'.indexOf(ch)]).join('');
+const sci=v=>{ if(v===0) return '0'; const e=Math.floor(Math.log10(Math.abs(v))); const m=v/Math.pow(10,e); return m.toFixed(2)+' · 10'+sup(e); };
+const fmt=(v,d)=>{ let s=(+v).toPrecision(d||6); if(s.indexOf('e')<0&&s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s; };
+const ftex=x=>{ if(x[1]===1n) return String(x[0]); const q=x[1]; let e=0; let t=q; while(t>1n&&t%2n===0n){t/=2n;e++;} if(t===1n&&e>12) return R`\tfrac{${x[0]}}{2^{${e}}}`; return R`\tfrac{${x[0]}}{${q}}`; };
+/* left: one real on the machine */
+const XS=[['0.1',[1n,10n]],['0.3',[3n,10n]],['1/3',[1n,3n]],['0.7',[7n,10n]],['13/32',[13n,32n]]]; let xi=0;
+const chx=$('chx'); XS.forEach(([l],i)=>{ const b=document.createElement('button'); b.textContent='x = '+l; b.onclick=()=>{xi=i; mark(chx,i); PA.redraw();}; chx.appendChild(b); });
+function mark(el,i){ [...el.children].forEach((b,j)=>b.classList.toggle('on',j===i)); }
+mark(chx,0);
+const ks=$('ks');
+const PA=plane($('cvA'),{x:[0,1],y:[-1,1],grid:0,labels:false,aspect:0.42,draw:Q=>drawA(Q)});
+function drawA(Q){ const c=Q.ctx, s=+ks.value, x=XS[xi][1], r=st(x,s), g=Math.pow(2,r.n+1-s), xv=num(x), sv=num(r.v);
+  Q.o.x=[xv-4.2*g,xv+4.2*g]; Q.o.y=[-1,1];
+  Q.line(Q.o.x[0],0,Q.o.x[1],0,'--muted',1.2);
+  const lo=Math.floor((xv-4.2*g)/g*1)-1;
+  c.strokeStyle=col('--ink'); c.lineWidth=1.2; c.beginPath();
+  for(let j=lo;j<lo+12;j++){ const t=j*g; if(t<Q.o.x[0]||t>Q.o.x[1]) continue; c.moveTo(Q.X(t),Q.Y(-0.25)); c.lineTo(Q.X(t),Q.Y(0.25)); } c.stroke();
+  c.fillStyle=col('--gold'); c.globalAlpha=.35; c.fillRect(Q.X(sv-g/2),Q.Y(0.18),Q.X(sv+g/2)-Q.X(sv-g/2),Q.Y(-0.18)-Q.Y(0.18)); c.globalAlpha=1;
+  Q.dot(sv,0,'--ember',5.5); Q.line(xv,-0.55,xv,0.55,'--ink',2);
+  Q.text('x',xv,0.62,'--ink','center',12); Q.text('st(x)',sv,-0.75,'--ember','center',12);
+  $('os').textContent=s; const d=Math.abs(num(sub(r.v,x)));
+  tex($('eqA'),R`\begin{gathered}\mathrm{st}(x) = ${ftex(r.v)} \approx ${fmt(sv,8)},\ \ \text{gap } 2^{${r.n+1-s}}\\ |\mathrm{st}(x) - x| \approx ${fmt(d,4)} \le 2^{-${s}}\,x \approx ${fmt(xv*Math.pow(2,-s),4)}\end{gathered}`,true); }
+ks.addEventListener('input',()=>PA.redraw());
+/* right: two roads to one sum */
+const SS=[['0.1 + 0.2',[1n,10n],[2n,10n]],['0.1 + 0.7',[1n,10n],[7n,10n]],['1/3 + 2/3',[1n,3n],[2n,3n]],['0.25 + 0.5',[1n,4n],[1n,2n]]]; let si=0;
+const chs=$('chs'); SS.forEach(([l],i)=>{ const b=document.createElement('button'); b.textContent=l; b.onclick=()=>{si=i; mark(chs,i); PB.redraw();}; chs.appendChild(b); });
+mark(chs,0);
+const kt=$('kt');
+const PB=plane($('cvB'),{x:[0,1],y:[-1,1],grid:0,labels:false,aspect:0.42,draw:Q=>drawB(Q)});
+function drawB(Q){ const c=Q.ctx, s=+kt.value, a=SS[si][1], b=SS[si][2];
+  const sa=st(a,s).v, sb=st(b,s).v, w=add(sa,sb), m=st(w,s), tsum=add(a,b), t=st(tsum,s);
+  const g=Math.pow(2,t.n+1-s), u=Math.pow(2,-s), bound=(2+u)*u*(Math.abs(num(a))+Math.abs(num(b)));
+  const span=Math.max(3.2*g,1.6*bound); Q.o.x=[-span,span];
+  const mo=num(sub(m.v,tsum)), to=num(sub(t.v,tsum));
+  Q.line(-span,0,span,0,'--muted',1.2);
+  c.fillStyle=col('--gold'); c.globalAlpha=.3; c.fillRect(Q.X(-bound),Q.Y(0.14),Q.X(bound)-Q.X(-bound),Q.Y(-0.14)-Q.Y(0.14)); c.globalAlpha=1;
+  c.strokeStyle=col('--ink'); c.lineWidth=1.2; c.beginPath(); const J=Math.ceil(span/g)+1; for(let j=-J;j<=J;j++){ const tt=to+j*g; if(tt<-span||tt>span) continue; c.moveTo(Q.X(tt),Q.Y(-0.25)); c.lineTo(Q.X(tt),Q.Y(0.25)); } c.stroke();
+  Q.line(0,-0.55,0,0.55,'--ink',2); Q.text('a + b',0,0.62,'--ink','center',12);
+  Q.dot(to,0,'--teal',6); Q.dot(mo,0,'--ember',4.2);
+  $('ot').textContent=s;
+  const same=(m.v[0]===t.v[0]&&m.v[1]===t.v[1]); const gapsApart=Math.round(num(sub(m.v,t.v))/g);
+  const vd=$('vdB'); vd.className='verdict '+(same?'win':'lose');
+  vd.textContent=(same?'The same kept number: the sameness test happens to pass. ':'Different kept numbers, '+Math.abs(gapsApart)+' gap'+(Math.abs(gapsApart)===1?'':'s')+' apart: the sameness test fails. ')+'Machine sum minus (a + b) ≈ '+sci(mo)+'; st(a + b) minus (a + b) ≈ '+sci(to)+'; adding-gaps bound ≈ '+sci(bound)+'.'; }
+kt.addEventListener('input',()=>PB.redraw());
+PA.redraw(); PB.redraw();
+window.__pic={st:(p,q,s)=>{ const r=st([B(p),B(q)],s); return r.v.map(String); }, read:()=>({A:$('eqA').textContent,B:$('vdB').textContent})};
+
+const N='\\htmlClass{new}', Kp='\\htmlClass{keep}';
+stepper('#sl1',[
+  {k:'teal',kl:'from 8·phys · scientific form in twos',t:R`x = u \cdot 2^n,\ \ 1 \le u \lt 2`,n:`One-scientific-form, with 2 in place of ten.`},
+  {k:'ember',kl:'the s-bit machine',t:R`\pm m \cdot 2^k,\ \ 2^{s-1} \le m \lt 2^s`,n:`m has exactly s bits. Between powers of two the kept numbers are evenly spaced.`},
+  {k:'ember',kl:'no ending numeral',t:R`\tfrac{m}{2^k} = \tfrac1{10} \Rightarrow 5 \mid 2^k \Rightarrow ${N}{\bot}`,n:`Prime-divides-a-list (4i).`},
+  {k:'teal',kl:'from 8·cb5 · the repeating block',t:R`\tfrac1{10} = 0.0\overline{0011}_2`,n:`Remainders 1, 2, 4, 8, 6, 2: a remainder seen before.`},
+  {k:'ember',kl:'st',t:R`\mathrm{st}\big(\tfrac1{10}\big) = ${N}{\tfrac{26}{256}} \text{ on 5 bits}`,n:`The nearest kept number; ties go to the even m.`},
+  {k:'ember',kl:'half-gap',t:R`|\mathrm{st}(x) - x| \le \tfrac{g}{2} \le ${Kp}{2^{-s}|x|}`,n:`On 53 bits, about 1.1 · 10⁻¹⁶ of the number's size.`},
+  {k:'ember',kl:'adding-gaps',t:R`|\ldots| \le (2 + u)\,u\,(|a| + |b|)`,n:`Triangle twice, half-gap three times.`},
+  {k:'ember',kl:'the title, worked',t:R`0.30000000000000004 \ne 0.29999999999999998`,n:`A tie at the exact sum goes up; st(0.3) sits one gap below.`},
+  {k:'ember',kl:'Vancouver',t:R`0 \le \text{loss} \le 0.001\,N`,n:`Cut-offs all point down: 1098.892 shown as 524.811.`},
+  {k:'ember',kl:'near-enough',t:R`|p - q| \le ${N}{d_1 + d_2}`,n:`Test distance, not sameness.`},
+  {k:'ember',kl:'illegal',t:R`\mathrm{st}(a) + \mathrm{st}(b) = \mathrm{st}(a + b)\,?`,n:`On 5 bits: 0.3046875 against 0.296875.`}
+],{title:'The slides · scientific form in twos; the s-bit machine; no ending numeral; the repeating block; st; half-gap; adding-gaps; the title worked; Vancouver; near-enough; illegal moves · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

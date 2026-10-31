@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Around the circle</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r21h.html">← 21h the two triangles</a><a href="r21j.html">next: 21j radians →</a></p>
+  <div class="tags"><span class="tag tech">21i · technique</span></div>
+  <h1>Around the circle</h1>
+  <p>A point going round and round a circle rises and falls, and its height over time draws a wave. Tides, seasons, sound and the swing of a pendulum all draw waves of that one shape. This step shows that every such wave is the plain wave of the sine, stretched taller or shorter, squeezed or spread along, slid sideways and lifted. Four numbers say how much of each, and four readings of a real wave are enough to find them.</p>
+  <p class="gesture">Every wave of the sine’s shape is the sine moved: lifted, stretched up, squeezed across and slid along. How high it swings, how long it takes to repeat, where it starts, and the level it swings about are the four numbers that say how.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r20i.html">20i</a> (moving a graph moves its equation), <a href="r21b.html">21b</a> (whole turns), <a href="r21e.html">21e</a> (the complement). <a href="r21j.html">21j</a> measures the turn in other units.</p></div>
+</header>
+
+<section class="class step" data-step="21i1">
+  <h2 class="sthead"><span class="stno">21i1</span>How high, and about what level</h2>
+  <p class="stands">Stands on 20i4 (pulls), 20i2 (slides) and 21c (−1 ≤ sin θ ≤ 1).</p>
+  <p data-pid="57ed6e">Pull the graph of y = sin θ upright by a, then lift it by d. By 20i it becomes y = a sin θ + d. Wave-height technique: <b>y = a sin θ + d swings between d − |a| and d + |a|, evenly about the level d.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the wave-height technique">
+-1 \le \sin\theta \le 1 @@ the circle technique (21c)
+-|a| \le a\sin\theta \le |a| @@ times a, for a &gt; 0 or a &lt; 0
+\htmlClass{new}{d - |a| \le a\sin\theta + d \le d + |a|} \quad \blacksquare @@ add d; both ends are reached, at sin θ = ±1
+  </pre>
+  <p data-pid="3e1972">From here on, the level d is the midline, and the half-height |a| is the amplitude.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · height · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · the sine, moved four ways</div>
+    <div class="kn"><span class="m">a</span><input type="range" id="ka" min="-3" max="3" step="0.5" value="2"><output id="oka"></output></div>
+    <div class="kn"><span class="m">b</span><input type="range" id="kb" min="0.5" max="3" step="0.5" value="1"><output id="okb"></output></div>
+    <div class="kn"><span class="m">h</span><input type="range" id="kh" min="-3" max="3" step="0.25" value="0"><output id="okh"></output></div>
+    <div class="kn"><span class="m">d</span><input type="range" id="kd" min="-3" max="3" step="0.5" value="1"><output id="okd"></output></div>
+    <div id="pl"></div>
+    <div class="cap">Ink: y = sin θ. Ember: y = a sin(b(θ − h)) + d. Dashed: the midline. The dots on the floor are quarter turns, π/2 apart.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">21i1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="y = 3\sin\theta + 1"></span></span>Find its highest and lowest values, its midline and its amplitude. <br>Find the first θ > 0 where it is highest.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21i2">
+  <h2 class="sthead"><span class="stno">21i2</span>How long until it repeats</h2>
+  <p class="stands">Stands on 20i4 (pulls) and 21b3 (whole turns).</p>
+  <p data-pid="e8006f">Squeeze the graph across by b > 0, and y = sin θ becomes y = sin(bθ) (20i4, a sideways pull by 1/b). Period technique: <b>y = sin(bθ) repeats every 2π/b, and no sooner.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the period technique">
+\sin\!\big(b(\theta + \tfrac{2\pi}{b})\big) = \sin(b\theta + 2\pi) = \sin(b\theta) @@ a whole turn adds nothing (21b3)
+0 < p,\ \ \sin(b(\theta + p)) = \sin(b\theta) \text{ for every } \theta @@ suppose a shorter repeat p
+\theta = \tfrac{\pi}{2b}:\ \ \sin(\tfrac{\pi}{2} + bp) = 1 @@ the top of the wave must come back
+\tfrac{\pi}{2} + bp = \tfrac{\pi}{2} + 2\pi k @@ sin is 1 only at the top of the circle, a whole number of turns round (21b)
+\htmlClass{new}{bp = 2\pi k,\ \ p \ge \tfrac{2\pi}{b}} \quad \blacksquare @@ k ≥ 1, since p &gt; 0
+  </pre>
+  <p data-pid="7d3fbe">From here on, the shortest repeat is the period. A wave with period T goes round once every T; its turn per unit of θ is 2π/T.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · period · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21i2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="y = \sin 3\theta"></span></span>Find its period. <br>Find the first θ > 0 where it is highest, and the first where it is lowest.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21i3">
+  <h2 class="sthead"><span class="stno">21i3</span>Where it starts</h2>
+  <p class="stands">Stands on 20i2 (graph slides) and 21e (the complement).</p>
+  <p data-pid="fb3ed9">Slide-inside technique: <b>to read the slide of y = sin(bθ − c), take b out first: sin(bθ − c) = sin(b(θ − c/b)), a slide by c/b, not by c.</b> The squeeze acts on the slide too.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the slide-inside technique">
+y = \sin(b\theta) \text{ slid by } h @@ graph-slide (20i2): replace θ by θ − h
+y = \sin(b(\theta - h)) = \sin(b\theta - bh) @@ share out
+\htmlClass{new}{\sin(b\theta - c) = \sin\!\big(b(\theta - \tfrac{c}{b})\big)} \quad \blacksquare @@ c = bh, so h = c/b
+\cos\theta = \sin(\theta + \tfrac{\pi}{2}) @@ the complement (21e): the cosine is the sine slid left a quarter turn
+  </pre>
+  <p data-pid="7d9010">From here on, the slide h is the phase shift. So every wave of this kind is a sin(b(θ − h)) + d, and cos is one of them.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · slide · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21i3.1</span><span class="ph undo">undo</span><span class="givens"><span data-tex-inline="y = \sin(2\theta - \tfrac{\pi}{2})"></span></span>Guess how far it is slid. <br>Find the slide, and write it as a cosine.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21i4">
+  <h2 class="sthead"><span class="stno">21i4</span>A share of the time is a share of the turn</h2>
+  <p class="stands">Stands on 21i1 to 21i3.</p>
+  <p data-pid="116628">Four readings decide a wave. Wave-from-readings technique: <b>from the highest value M, the lowest m, the time T between two highs, and the time t₀ of one high, the wave is y = a cos(2π(t − t₀)/T) + d, with a = (M − m)/2 and d = (M + m)/2.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the wave-from-readings technique">
+d = \tfrac{M + m}{2},\ \ a = \tfrac{M - m}{2} @@ wave-height: the midline is halfway, the amplitude half the gap
+b = \tfrac{2\pi}{T} @@ period: one turn per T
+h = t_0 @@ cos is highest at 0, so slide the high to t₀
+\htmlClass{new}{y = a\cos\!\big(\tfrac{2\pi}{T}(t - t_0)\big) + d} \quad \blacksquare @@ slide-inside: cos is sin slid, so this is a sin(b(t − h)) + d too
+  </pre>
+  <p data-pid="39c47c">The share (t − t₀)/T of the time since a high is the same share of a whole turn. A quarter of the way through, the wave is at its midline, falling; half way, at its lowest.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · readings · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21i4.1</span><span class="ph undo">undo</span><span class="givens"><span class="gtx">high water 5 m at 2 o’clock, low water 1 m, the next high 12 hours later</span></span>Find the wave of the water’s height at hour t. <br>Find the height at 6 o’clock.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21i5">
+  <h2 class="sthead"><span class="stno">21i5</span>Illegal moves</h2>
+  <p class="stands">Stands on 21i1 to 21i4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\sin(2\theta + \tfrac{\pi}{2}) \text{ is slid left by } \tfrac{\pi}{2}\,? @@ by π/4: take the 2 out first
+y = -3\sin\theta \text{ has amplitude } -3\,? @@ amplitude |a| = 3; the minus flips it over the midline
+\sin(b\theta) \text{ repeats every } 2\pi b\,? @@ every 2π/b: squeezing shortens the period
+\sin\theta + \sin 2\theta \text{ is the sine, moved}\,? @@ its highs and lows are not half a period apart
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21i5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="y = -2\sin\theta"></span></span>Find its amplitude, and the first θ > 0 where it is highest.</li><li><span class="givens"><span data-tex-inline="y = \sin\tfrac{\theta}{2}"></span></span>Find its period.</li><li><span class="givens"><span data-tex-inline="y = \sin\theta + \sin 2\theta"></span></span>Find its period. <br>Find whether it is the sine, moved.</li><li><span class="givens"><span data-tex-inline="y = \sin^2\theta"></span></span>Find whether it is the sine, moved. <br>If so, find its amplitude, period and midline.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">21i.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="a\cos\theta + b\sin\theta"></span></span>Build a single wave R sin(θ + φ) equal to this, using the sum technique of 21d. <br>Find R and φ for 3 cos θ + 4 sin θ.</div>
+  <div class="chq"><span class="chid">21i.4.2</span><span class="tagq">edge</span>Find every a, b, h, d with b ≠ 0 for which a sin(b(θ − h)) + d is the same function as sin θ.</div>
+  <div class="chq"><span class="chid">21i.4.3</span><span class="tagq">converse</span>Every moved sine repeats. Turn it round: find whether every graph that repeats is a moved sine.</div>
+  <div class="chq"><span class="chid">21i.4.4</span><span class="tagq">reroute</span>Prove cos θ = sin(θ + π/2) from 21b alone: the point at θ + π/2 is the point at θ given a quarter turn.</div>
+  <div class="chq"><span class="chid">21i.4.5</span><span class="tagq">seam</span>A spinning disc with a ring of holes, blown through, makes a note. One scientist built discs whose holes were not evenly spaced, so the puffs made no sine wave at all, and still heard one clear pitch, set by how often the whole pattern came round. Another held that the ear hears only the sine waves hidden inside a sound, one pitch for each. <br>Is a pitch set by how often a sound repeats, or by the sine waves inside it? <br>What would you build to tell the two apart?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r21h.html">← 21h · the two triangles</a><a href="r21j.html">21j · radians →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A graph y = a sin(b(θ − h)) + d is a sinusoid. Its amplitude is |a|, its period 2π/|b|, its phase shift h, its midline y = d. The number b/2π of turns per unit is its frequency. In physics the turn per unit, b, is the angular frequency, often written ω.</p>
+  <h3>Who said it first</h3>
+  <p>In 21i.6.5, the disc is August Seebeck’s siren (1841), and the reply is Georg Ohm’s “acoustic law” (1843), backed by Hermann von Helmholtz, On the Sensations of Tone (1863). Seebeck’s pitch with no sine wave at its own rate is now called the missing fundamental (Jan Schouten, 1940).</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+/* moves of the plane, drawn in SVG, for rung 20 */
+const V=c=>'var('+c+')';
+const FLAG=[[0,0],[0,3],[2,3],[2,2.4],[0.6,2.4],[0.6,1.8],[1.5,1.8],[1.5,1.2],[0.6,1.2],[0.6,0]];
+const M={
+  id:()=>p=>p,
+  slide:(h,k)=>p=>[p[0]+h,p[1]+k],
+  turn:(a,b)=>p=>[a*p[0]-b*p[1],b*p[0]+a*p[1]],
+  stretch:k=>p=>[k*p[0],k*p[1]],
+  flipU:(c,s)=>p=>{ const d=2*(p[0]*c+p[1]*s); return [d*c-p[0],d*s-p[1]]; },              /* across the line through O along (c, s), c² + s² = 1 */
+  flipAt:(q,c,s)=>p=>{ const x=p[0]-q[0],y=p[1]-q[1],d=2*(x*c+y*s); return [q[0]+d*c-x,q[1]+d*s-y]; },
+  turnAt:(q,a,b)=>p=>{ const x=p[0]-q[0],y=p[1]-q[1]; return [q[0]+a*x-b*y,q[1]+b*x+a*y]; },
+  then:(g,f)=>p=>g(f(p))                                                                    /* f first, then g */
+};
+const unit=(x,y)=>{ const r=Math.hypot(x,y); return [x/r,y/r]; };
+const fx=v=>(Math.abs(v)<5e-10?0:v);
+const show=(v,d)=>{ let s=fx(v).toFixed(d==null?2:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return (s==='-0'?'0':s).replace('-','−'); };
+/* shapes: {pts, c, fill, dash, w, open}; dots: {p, c, t}; lines: {p, d, c, dash} */
+function svgPlane(o){ const lo=o.lo==null?-6:o.lo, hi=o.hi==null?6:o.hi, S=300, X=x=>(x-lo)/(hi-lo)*S, Y=y=>S-(y-lo)/(hi-lo)*S;
+  let s='<svg viewBox="0 0 '+S+' '+S+'" style="width:100%;max-width:340px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  for(let g=Math.ceil(lo);g<=hi;g++){ s+='<line x1="'+X(g)+'" y1="0" x2="'+X(g)+'" y2="'+S+'" style="stroke:'+V('--grid')+';stroke-width:'+(g===0?1.6:0.6)+'"/><line x1="0" y1="'+Y(g)+'" x2="'+S+'" y2="'+Y(g)+'" style="stroke:'+V('--grid')+';stroke-width:'+(g===0?1.6:0.6)+'"/>'; }
+  (o.lines||[]).forEach(l=>{ const L=40; s+='<line x1="'+X(l.p[0]-L*l.d[0])+'" y1="'+Y(l.p[1]-L*l.d[1])+'" x2="'+X(l.p[0]+L*l.d[0])+'" y2="'+Y(l.p[1]+L*l.d[1])+'" style="stroke:'+V(l.c||'--teal')+';stroke-width:1.6;stroke-dasharray:'+(l.dash||'5 4')+'"/>'; });
+  (o.shapes||[]).forEach(z=>{ const pts=z.pts.map(p=>X(p[0]).toFixed(1)+','+Y(p[1]).toFixed(1)).join(' ');
+    s+='<'+(z.open?'polyline':'polygon')+' points="'+pts+'" style="fill:'+(z.fill?V(z.c):'none')+';fill-opacity:'+(z.fill?0.28:0)+';stroke:'+V(z.c)+';stroke-width:'+(z.w||2)+(z.dash?';stroke-dasharray:'+z.dash:'')+'"/>'; });
+  (o.dots||[]).forEach(d=>{ s+='<circle cx="'+X(d.p[0])+'" cy="'+Y(d.p[1])+'" r="4" style="fill:'+V(d.c||'--ink')+'"/>'+(d.t?'<text x="'+(X(d.p[0])+7)+'" y="'+(Y(d.p[1])-6)+'" style="fill:'+V(d.c||'--ink')+';font:12px IBM Plex Mono,monospace">'+d.t+'</text>':''); });
+  return s+'</svg>'; }
+function knob(id,lab,min,max,step,val){ return '<div class="kn"><span class="m">'+lab+'</span><input type="range" id="'+id+'" min="'+min+'" max="'+max+'" step="'+step+'" value="'+val+'"><output id="o'+id+'"></output></div>'; }
+function chipRow(el,keys,get,set,after){ el.innerHTML=''; keys.forEach(k=>{ const b=document.createElement('button'); b.type='button'; b.textContent=k; if(k===get()) b.className='on'; b.onclick=()=>{ set(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+
+const st={a:2,b:1,h:0,d:1};
+['ka','kb','kh','kd'].forEach(id=>{ const e=$(id); e.addEventListener('input',()=>{ st[id[1]]=+e.value; draw(); }); });
+function sg(v){ return v>0?' − '+show(v):' + '+show(-v); }
+function draw(){ const A=[],B=[];
+  for(let t=-7;t<=7.001;t+=0.04){ A.push([t,Math.sin(t)]); B.push([t,st.a*Math.sin(st.b*(t-st.h))+st.d]); }
+  const ticks=[]; for(let k=-4;k<=4;k++) ticks.push({p:[k*Math.PI/2,0],c:'--muted'});
+  $('pl').innerHTML=svgPlane({lo:-7,hi:7,shapes:[{pts:A,c:'--ink',open:true},{pts:B,c:'--ember',open:true,w:2.6}],lines:[{p:[0,st.d],d:[1,0],c:'--muted'}],dots:ticks});
+  $('oka').textContent=show(st.a); $('okb').textContent=show(st.b); $('okh').textContent=show(st.h); $('okd').textContent=show(st.d);
+  const inner=st.h===0?(st.b===1?'θ':show(st.b)+'θ'):(st.b===1?'θ'+sg(st.h):show(st.b)+'(θ'+sg(st.h)+')');
+  let r=(st.a===1?'':st.a===-1?'−':show(st.a)+' ')+'sin('+inner+')'; if(st.d) r+=(st.d>0?' + ':' − ')+show(Math.abs(st.d));
+  const v=$('vd'); v.className='verdict';
+  v.textContent=st.a===0?'y = '+show(st.d)+': amplitude 0, a flat line, no wave left.':'y = '+r+'. Amplitude '+show(Math.abs(st.a))+', period 2π/'+show(st.b)+' ≈ '+show(2*Math.PI/st.b)+', slid by '+show(st.h)+', midline y = '+show(st.d)+'. It swings from '+show(st.d-Math.abs(st.a))+' to '+show(st.d+Math.abs(st.a))+'.'; }
+draw();
+window.__pic={set:(a,b,h,d)=>{ Object.assign(st,{a,b,h,d}); draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'wave height',t:R`\htmlClass{new}{d - |a| \le a\sin\theta + d \le d + |a|}`,n:`Amplitude |a|, midline d.`}
+],{title:'The slides · height · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'period',t:R`\htmlClass{new}{\sin(b\theta) \text{ repeats every } \tfrac{2\pi}{b}}`,n:`And no sooner.`}
+],{title:'The slides · period · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'slide inside',t:R`\htmlClass{new}{\sin(b\theta - c) = \sin(b(\theta - \tfrac{c}{b}))}`,n:`Take b out first.`}
+],{title:'The slides · slide · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'wave from readings',t:R`\htmlClass{new}{y = a\cos(\tfrac{2\pi}{T}(t - t_0)) + d}`,n:`Four readings, four numbers.`}
+],{title:'The slides · readings · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`\sin(2\theta + \tfrac{\pi}{2}) \ne \sin(2(\theta + \tfrac{\pi}{2}))`,n:`Take the 2 out first.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

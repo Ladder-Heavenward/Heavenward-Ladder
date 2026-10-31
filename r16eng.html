@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>16·eng · Where will a loaded beam crack?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r16then.html">← 16·then how much has piled up, if you only know the rate?</a><a href="r16econ.html">next: 16·econ who gains from a trade, and how much? →</a></p>
+  <div class="tags"><span class="tag eng">16·eng · engineering</span></div>
+  <h1>Where will a loaded beam crack?</h1>
+  <p>Where will a loaded beam crack? Builders asked it long before they could answer it, because a beam gives no second try: the test that finds its breaking point breaks it. What makes the question hard is that the load sits all along the beam, and the beam fails at one place. That place is not always under the heaviest load. This page cuts a beam in thought at every point, and asks what keeps each piece still. The answer comes out as two quantities, the shear and the bending, and each is found from the one before by 16c: the shear is an area under the load, and the bending is an area under the shear. The bending is greatest where the shear crosses zero, and that is where a plain beam cracks. Then one more area, taken across the beam's depth, shows why floor joists stand on edge.</p>
+  <p class="gesture">The force across the beam at a point is the support’s push less the load so far. The bending there is the area under that force so far. So the force falls as fast as the load is laid on, and the bending changes as fast as the force. The bending is greatest where the force changes from positive to negative. For an even load, the greatest bending is at the middle, and it grows with the square of the span. Across the beam, the greatest strain grows with the width but shrinks with the square of the depth.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r16c.html">16c</a> (area-is-a-change), <a href="r16b.html">16b</a> (area-slope), <a href="r16a.html">16a</a> (split-in-any-order), <a href="r16d.html">16d</a> (odd-and-even-areas), <a href="r16f.html">16f</a> (the table), <a href="r15e.html">15e</a> (areas-add, areas-scale), <a href="r15h.html">15h</a> (sums of thin strips), <a href="r14f.html">14f</a> (first-test), <a href="r14a.html">14a</a> (candidates), <a href="r13c.html">13c</a> (product for slopes), <a href="r12eng.html">12·eng</a> (loads, supports and the balance point). <a href="r18eng.html">18·eng</a> builds bridges from bars that only push or pull, and never bend.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · read it through, then work the picture and the slides</div>
+
+  <h3>A beam, its load, and its supports</h3>
+  <p data-pid="67df81">Lay a beam of length L on two supports, one at each end. Measure x in metres from the left support. A load spread along the beam presses down with w(x) kilonewtons on each metre: the weight of a floor, of snow, of the beam itself. The supports push up, with R₀ at the left end and R_L at the right.</p>
+  <p data-pid="343eb2">Two measured laws, from 12·eng, keep a body still. The pushes up equal the pushes down. And the turning effects about any point cancel, where a push P at a distance d from the point turns with P · d. Their accepted names are the balance of forces and the balance of moments. For the whole beam they give the two supports.</p>
+  <pre class="lines" data-k="ember" data-label="16·eng: the supports">
+R_0 + R_L = \textstyle\int_0^L w(s)\,ds @@ the pushes balance. The load on a thin strip of width Δs near s is about w(s)Δs; strip sums (15h)
+R_L \cdot L = \textstyle\int_0^L s\,w(s)\,ds @@ the turning effects about the left end balance: each strip turns with arm s
+w \text{ even: } R_0 = R_L = \tfrac{wL}{2} @@ ∫₀ᴸ s ds = L²/2 (the table, 16f)
+  </pre>
+
+  <h3>Cut it in thought</h3>
+  <p data-pid="89fd09">Cut the beam, in thought, at x. The left piece stays still. The support and the load push on it, and the right piece holds it across the cut. Whatever the right piece must supply, the beam must carry at x.</p>
+  <p class="eqline" data-pid="b77c85">From here on, the shear at x is V(x) = R₀ − ∫₀ˣ w(s) ds: the net push up on the left piece from the support and the load. The bending moment at x is M(x) = R₀x − ∫₀ˣ (x − s) w(s) ds: the net turning effect of those same pushes about the cut. Their accepted names are shear force and bending moment.</p>
+  <p data-pid="e0593d">The right piece supplies −V across the cut, and a turning effect −M. A positive M makes the beam sag: its bottom face is stretched and its top face squeezed.</p>
+  <p data-pid="13a3a6">Shear-from-load technique: <b>the load is the slope of the shear, with its sign turned.</b> If w is continuous on [0, L], then V′(x) = −w(x) there. It is area-slope (16b), applied to the area under w.</p>
+  <p data-pid="7d7282">Moment-from-shear technique: <b>the bending at a cut is the area under the shear up to it.</b> If w is continuous on [0, L], then M′(x) = V(x), and M(x) = ∫₀ˣ V(s) ds.</p>
+  <pre class="lines" data-k="ember" data-label="16·eng: the moment-from-shear technique">
+M(x) = R_0 x - x\textstyle\int_0^x w(s)\,ds + \int_0^x s\,w(s)\,ds @@ (x − s)w(s) = x·w(s) − s·w(s); areas-add and areas-scale (15e), with x fixed inside the integral
+M'(x) = R_0 - \textstyle\int_0^x w(s)\,ds - x\,w(x) + x\,w(x) @@ product for slopes (13c) on x · ∫₀ˣ w; area-slope (16b) twice, w and s·w continuous
+= V(x) @@ the meaning of V
+\begin{aligned}&\htmlClass{new}{M(x) = M(0) + \textstyle\int_0^x V(s)\,ds = \int_0^x V(s)\,ds}\\ &\quad \blacksquare\end{aligned} @@ area-is-a-change (16c); M(0) = R₀ · 0 − 0 = 0
+  </pre>
+  <p data-pid="db5f7d">So the load is run backwards twice, one area at a time: from w to V, then from V to M. The far end checks the books. V(L) = R₀ − ∫₀ᴸ w = −R_L, the right support's push seen from the left piece. And M(L) = L · V(L) + ∫₀ᴸ s w(s) ds = −R_L L + R_L L = 0, as it must be at a free end.</p>
+
+  <h3>Where it bends most</h3>
+  <p data-pid="f294ee">Most-bending technique: <b>a beam bends most where the shear crosses zero.</b> Let w be continuous with w ≥ 0 on [0, L], and not 0 everywhere. Then V falls, M rises while V &gt; 0 and falls once V &lt; 0, and M is greatest at the point where V changes from + to −.</p>
+  <pre class="lines" data-k="ember" data-label="16·eng: an even load">
+V(x) = \tfrac{wL}{2} - wx @@ shear-from-load; R₀ = wL/2
+M(x) = \textstyle\int_0^x \big(\tfrac{wL}{2} - ws\big)\,ds = \tfrac{w}{2}\,x(L - x) @@ moment-from-shear; the table
+V = 0 \text{ at } x = \tfrac L2,\ + \text{ before},\ - \text{ after} @@ most-bending; first-test (14f)
+\htmlClass{new}{M_{\max} = M\big(\tfrac L2\big) = \tfrac{wL^2}{8}} @@ the middle bends most
+  </pre>
+  <p data-pid="592ae8">A floor joist in a house in Salinas: Douglas fir, sold as a 2 × 10, which is 38 mm by 235 mm. It spans 4.2 m, with joists 0.4 m apart. Houses are designed for a floor load of about 2.4 kPa, which is 2.4 kN on each square metre: 1.9 for people and furniture, 0.5 for the floor itself. Each joist carries a strip 0.4 m wide, so w = 2.4 × 0.4 = 0.96 kN/m.</p>
+  <pre class="lines" data-k="ember" data-label="16·eng: one joist">
+w = 0.96 \text{ kN/m},\ \ L = 4.2 \text{ m} @@ 2.4 kPa on a strip 0.4 m wide
+R_0 = R_L = \tfrac{0.96 \cdot 4.2}{2} \approx 2.02 \text{ kN} @@ each end bears half
+M_{\max} = \tfrac{0.96 \cdot 4.2^2}{8} \approx 2.12 \text{ kN m} @@ at the middle, 2.1 m from each wall
+  </pre>
+
+  <h3>Where the stress gathers</h3>
+  <p data-pid="6a4b41">The bending moment is carried across the cut by the wood itself. Above the middle of its depth the wood is squeezed, and below it the wood is stretched. Its accepted name for push per unit of area across a cut is stress, measured in megapascals: 1 MPa is 1 newton on each square millimetre. A measured law, called the stretch law here, says how the stress spreads. While the wood still springs back, the stress at a depth y below the middle is in proportion to y: σ(y) = (2y/h) σ_m for −h/2 ≤ y ≤ h/2, with σ_m the stress at the bottom face.</p>
+  <p data-pid="662d18">Deep-beam technique: <b>depth helps a beam by its square, and width only by itself.</b> Let a beam of width b and depth h carry a bending moment M at a cut. Under the stretch law, the greatest stress at the cut is σ_m = 6M/(bh²), at the top and bottom faces.</p>
+  <pre class="lines" data-k="ember" data-label="16·eng: the deep-beam technique">
+\text{a strip of depth } \Delta y \text{ at } y:\ \text{push } \sigma(y)\,b\,\Delta y,\ \text{arm } |y| @@ each strip turns about the middle; squeeze above and stretch below turn the same way
+M = \textstyle\int_{-h/2}^{h/2} \sigma(y)\,y\,b\,dy = \tfrac{2b\sigma_m}{h} \int_{-h/2}^{h/2} y^2\,dy @@ strip sums (15h); the stretch law; areas-scale (15e)
+= \tfrac{2b\sigma_m}{h} \cdot 2 \textstyle\int_0^{h/2} y^2\,dy = \tfrac{2b\sigma_m}{h} \cdot \tfrac{h^3}{12} @@ odd-and-even-areas (16d): y² is even; the table: 2 · (h/2)³/3 = h³/12
+\htmlClass{new}{\sigma_m = \tfrac{6M}{bh^2}} \quad \blacksquare @@ rearrange
+\textstyle\int_{-h/2}^{h/2} \sigma(y)\,b\,dy = 0 @@ odd-and-even-areas: σ is odd, so squeeze and stretch balance and the beam is not pushed along
+  </pre>
+  <pre class="lines" data-k="ember" data-label="16·eng: the joist, on edge and laid flat">
+\text{on edge: } \sigma_m = \tfrac{6 \cdot 2.12 \text{ kN m}}{0.038 \cdot 0.235^2} \approx 6.05 \text{ MPa} @@ deep-beam; b = 38 mm, h = 235 mm
+\text{laid flat: } \sigma_m = \tfrac{6 \cdot 2.12 \text{ kN m}}{0.235 \cdot 0.038^2} \approx 37.4 \text{ MPa} @@ the same wood, b and h swapped
+\tfrac{37.4}{6.05} \approx 6.2 = \tfrac{235}{38} @@ the ratio of the sides
+  </pre>
+  <p data-pid="6e9462">The design tables give a common grade of Douglas fir, No. 2, a base value of 900 pounds per square inch in bending, about 6.2 MPa. The joist on edge sits just under it. Laid flat, the same piece of wood would carry six times that stress. So joists are tall and thin: the strength grows as bh², and the wood used only as bh. Doubling the depth gives four times the strength for twice the wood. They cannot be made thinner without end. A joist too thin for its depth rolls over sideways under load, which is why carpenters nail short blocks between joists.</p>
+  <p data-pid="ec231a">Where does a plain beam crack, then? At the face that is stretched, where the bending moment is greatest. For a beam on two supports that is the bottom face, near the middle. Concrete is strong when squeezed and weak when stretched. So a concrete beam on two supports carries steel bars near its bottom face. A balcony that juts from a wall bends the other way, with its top face stretched and its greatest moment at the wall. Its steel goes near the top.</p>
+
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · laws with a known exception rate</div>
+    <p data-pid="a1f8d2">The strength of wood is a law in the ladder's sense: a measured regularity with a known exception rate. No two boards are alike. Knots, the slope of the grain and the moisture move each board's breaking stress up or down. So a grade's strength is not an average. It is set from tests of many boards, at the stress that about 1 board in 20 fails below. That value is then divided by a further factor, a little over 2 for bending, before it goes into the design tables.</p>
+    <p data-pid="660967"><b>State the rule, its range, and the direction it fails past the edge.</b></p>
+    <p data-pid="d2d580">The stretch law has its range too. It is true while the wood springs back. Near breaking, the squeezed side yields first, and the stress spreads in a way that is no longer in proportion to depth. The page's 6M/(bh²) is a design rule inside that range, not a prediction of the breaking load.</p>
+    <p class="bait" data-pid="c06bdd">Test 200 joists of one grade, and 14 break below the stress that 1 in 20 should. Is the grade's value wrong, or this batch?</p>
+  </aside>
+
+  <h3>Illegal moves</h3>
+  <pre class="lines" data-k="ember" data-label="16·eng: tempting, and not allowed">
+\text{a beam cracks under its heaviest load}\,? @@ it bends most where the shear crosses zero (most-bending)
+M(x) = \textstyle\int_0^x w(s)\,ds\,? @@ that is R₀ − V(x); M is the area under V, two steps from w
+\text{twice as deep, twice as strong}\,? @@ deep-beam: four times, since h is squared
+\text{a person standing at } a:\ V'(a) = -w(a)\,? @@ a load at one point makes V jump there; area-slope needs w continuous
+\sigma_m = \tfrac{6M}{bh^2} \text{ gives the breaking load}\,? @@ only while the stretch law is true
+  </pre>
+</section>
+
+<section class="pic" id="pic">
+  <div class="eyebrow">The picture · a load run backwards twice, and a joist on edge</div>
+  <div class="panels">
+    <div class="panel">
+      <div class="lbl">a 4 m beam: the load w (kN/m), the shear V (kN), the bending moment M (kN m)</div>
+      <canvas id="cvW"></canvas>
+      <canvas id="cvV"></canvas>
+      <canvas id="cvM"></canvas>
+      <div class="chips" id="lch"></div>
+      <div class="kn"><span class="m">cut at x</span><input type="range" id="kx" min="0" max="4" step="0.02" value="1.2"><output id="ox"></output></div>
+      <div class="kn"><span class="m">point load at</span><input type="range" id="ka" min="0.2" max="3.8" step="0.05" value="1.4"><output id="oa"></output></div>
+      <div class="cap">Ink: the load, then the shear, then the bending moment. Teal: the area under the shear up to the cut, which is M there. Gold: where the shear crosses zero, and the greatest bending. The second knob moves the point load, when it is chosen.</div>
+    </div>
+    <div class="panel">
+      <div class="lbl">the beam's cross-section at the worst cut, mm</div>
+      <canvas id="cvS"></canvas>
+      <div class="kn"><span class="m">width b</span><input type="range" id="kb" min="20" max="240" step="1" value="38"><output id="ob"></output></div>
+      <div class="kn"><span class="m">depth h</span><input type="range" id="kh" min="20" max="240" step="1" value="235"><output id="oh"></output></div>
+      <div class="cap">Ember: the squeeze above the middle. Teal: the stretch below it. Both grow in proportion to the distance from the middle. The verdict compares the greatest stress with 6.2 MPa.</div>
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+</section>
+
+<section class="slides" id="sl1"><div class="eyebrow">The slides · the supports; cut it in thought; shear and bending; shear-from-load; moment-from-shear; the books close; most-bending; an even load; a joist in Salinas; the stretch law; deep-beam; on edge and flat; where it cracks; one board in twenty; illegal moves · ← → keys work</div></section>
+
+<section class="sayback">
+  <div class="eyebrow">Say it back · then work it</div>
+  <h2>Questions</h2>
+  <div class="phkey"></div>
+  <ol>
+    <li><span class="qid">16·eng.1</span><span class="gname">Shear and bending.</span><span class="gwhy">Do: build the page's pieces.</span>
+      <ol class="sub">
+        <li><span class="qid">16·eng.1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="L = 6 \text{ m},"></span> <span data-tex-inline="w = 2 \text{ kN/m, even},"></span> <span data-tex-inline="\text{two end supports}"></span></span>Find the greatest bending moment on the beam.</li><li><span class="givens"><span data-tex-inline="L = 4 \text{ m},"></span> <span data-tex-inline="w(x) = 3x \text{ kN/m},"></span> <span data-tex-inline="\text{two end supports}"></span></span>Find where the bending moment is greatest, and its value.</li><li><span class="givens"><span data-tex-inline="38 \text{ mm by } 184 \text{ mm},"></span> <span data-tex-inline="\text{on edge},"></span> <span data-tex-inline="M = 1.5 \text{ kN m}"></span></span>Find the greatest stress in the Douglas fir 2 × 8.</li><li><span class="givens"><span data-tex-inline="38 \text{ mm by } 184 \text{ mm},"></span> <span data-tex-inline="M = 1.5 \text{ kN m}"></span></span>Find the factor by which the greatest stress grows when the 2 × 8 is laid flat instead of on edge.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">16·eng.2</span><span class="gname">From the bending back.</span><span class="gwhy">Undo: run the page's techs backwards.</span>
+      <ol class="sub">
+        <li><span class="qid">16·eng.2.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="L = 8 \text{ m},"></span> <span data-tex-inline="\text{two end supports},"></span> <span data-tex-inline="M(x) = 2x(8 - x) \text{ kN m}"></span></span>Find the load on the beam, and the supports.</li><li><span class="givens"><span data-tex-inline="L = 5 \text{ m},"></span> <span data-tex-inline="\text{two end supports},"></span> <span data-tex-inline="V(x) = 10 - 4x \text{ kN}"></span></span>Find the load, both supports, and the greatest bending moment.</li><li><span class="givens"><span data-tex-inline="L = 3 \text{ m},"></span> <span data-tex-inline="\text{two end supports},"></span> <span data-tex-inline="M \le 4.5 \text{ kN m}"></span></span>Find the greatest even load the plank may carry.</li><li><span class="givens"><span data-tex-inline="\text{width } 38 \text{ mm},"></span> <span data-tex-inline="M = 3 \text{ kN m},"></span> <span data-tex-inline="\text{stress} \le 7 \text{ MPa}"></span></span>Find the least depth of the beam.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">16·eng.3</span><span class="gname">Where it gives.</span><span class="gwhy">Bend: find where the techs stop working.</span>
+      <ol class="sub">
+        <li><span class="qid">16·eng.3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{span } L,"></span> <span data-tex-inline="0.9 \text{ kN at } x = p,"></span> <span data-tex-inline="\text{no other load}"></span></span>Find the shear and the bending moment on each side of p, and the greatest bending moment.<br>Find where the carpenter should stand to bend the joist most.</li><li><span class="givens"><span data-tex-inline="\text{juts } L \text{ from a wall},"></span> <span data-tex-inline="\text{even load } w,"></span> <span data-tex-inline="\text{free far end},"></span> <span data-tex-inline="x \text{ from the free end}"></span></span>Find the bending moment on the balcony at every x.<br>Find where its size is greatest, and which face is stretched.</li><li><span class="givens"><span data-tex-inline="L = 6 \text{ m},"></span> <span data-tex-inline="\text{supports at } 0, 3, 6 \text{ m},"></span> <span data-tex-inline="\text{even load}"></span></span>Run the two balance laws on the three supports as far as you can take them.</li><li><span class="givens"><span data-tex-inline="\text{a joist},"></span> <span data-tex-inline="\text{twice the width, or},"></span> <span data-tex-inline="1.5 \text{ times the depth}"></span></span>Find which of the two helps the joist more against bending.</li></ol></li>
+      </ol></li>
+    <li class="optgroup"><span class="qid">16·eng.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder challenges that rely on your own making. The page is complete without these; the rung's star needs them.</span>
+      <ol class="sub">
+        <li class="opt"><span class="qid">16·eng.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="L = 4 \text{ m},"></span> <span data-tex-inline="\text{two end supports}"></span></span>A deck joist in Modesto has the given span and supports.<br>Make a load of your own that lies on one half only, and find where the bending moment is greatest, and its value.</li>
+        <li class="opt"><span class="qid">16·eng.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{length } L,"></span> <span data-tex-inline="\text{even load } w,"></span> <span data-tex-inline="\text{supports } c \text{ in from each end}"></span></span>Find the c that makes the greatest size of the bending moment least, and compare it with supports at the ends.</li>
+        <li class="opt"><span class="qid">16·eng.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{two end supports},"></span> <span data-tex-inline="M \text{ greatest at a point inside}"></span></span>Prove or refute: the shear is 0 at that point.</li>
+        <li class="opt"><span class="qid">16·eng.4.4</span><span class="tagq">seam</span>In 1638 a mathematician reasoned that a beam jutting from a wall breaks by turning about the bottom edge of its section, with every fibre of the section pulling equally. His rule makes the strength grow as bh², as this page does, but gives three times this page's strength. For a century and a half, builders who used his rule only to compare two beams of one wood found it worked. <br>Was his account of the beam right?</li>
+      </ol></li>
+  </ol>
+  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
+</section>
+
+<nav class="nextrung"><a href="r16phys.html">← 16·phys · how far did it go, if you only know how fast?</a><a href="r16econ.html">16·econ · who gains from a trade, and how much? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>Galileo set a beam into a wall and asked what weight at its far end would break it. He took the break to happen by turning about the lowest edge of the section in the wall, with all the fibres of the section resisting alike, and concluded that the strength of a beam on edge is to its strength laid flat as its depth is to its width.</p><cite>Galileo Galilei, Discourses and Mathematical Demonstrations Relating to Two New Sciences (1638), the second day; paraphrase</cite></aside>
+  <p>In 16·eng.4.4, the mathematician of 1638 is Galileo. Edme Mariotte (1686) and Antoine Parent (1713) saw that the fibres near the edge are stretched less than those far from it. Charles-Augustin de Coulomb (1773) put the neutral line in the middle and found this page's factor. Claude-Louis Navier's lectures of 1826 made the stretch law the engineer's working rule.</p>
+  <p>Accepted names: the stretch law is the beam's flexure formula, resting on the assumption that plane sections stay plane, and on Hooke's law; the bending and shear drawn along a beam are its shear and moment diagrams. The 1 board in 20 is the fifth percentile, or 5% exclusion value, of ASTM D245 and D1990.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="16·eng: a worked “proof”, not allowed">
+\text{even load: } V(x) = \tfrac{wL}{2} - wx @@ fine
+M(x) = \textstyle\int_0^x w\,ds = wx @@ not allowed: M is the area under V, not under w (moment-from-shear)
+M_{\max} = M(L) = wL @@ false: M(L) = 0 at a free end; the greatest is wL²/8, at the middle
+  </pre>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '–'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+function chips(el,FN,get,setk,after){ Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===get()) b.className='on'; b.onclick=()=>{ setk(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+const Nw='\\htmlClass{new}';
+function axes2(P,gx,gy){ const c=P.ctx,o=P.o; c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ c.moveTo(P.X(x),P.Y(o.y[0])); c.lineTo(P.X(x),P.Y(o.y[1])); }
+  for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ c.moveTo(P.X(o.x[0]),P.Y(y)); c.lineTo(P.X(o.x[1]),P.Y(y)); } c.stroke();
+  c.strokeStyle=col('--muted'); c.lineWidth=1.3; c.beginPath(); if(o.y[0]<=0&&o.y[1]>=0){ c.moveTo(P.X(o.x[0]),P.Y(0)); c.lineTo(P.X(o.x[1]),P.Y(0)); } if(o.x[0]<=0&&o.x[1]>=0){ c.moveTo(P.X(0),P.Y(o.y[0])); c.lineTo(P.X(0),P.Y(o.y[1])); } c.stroke();
+  c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; const ly=Math.min(P.H-6,Math.max(12,P.Y(0)+14));
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ if(Math.abs(x)<1e-9) continue; c.fillText(+x.toFixed(6),P.X(x),ly); }
+  c.textAlign='right'; const lx=Math.max(32,Math.min(P.W-4,P.X(0)-5)); for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ if(Math.abs(y)<1e-9) continue; c.fillText(String(+y.toFixed(6)).replace('-','−'),lx,P.Y(y)+4); } }
+function curve(P,xs,ys,colr,w){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.beginPath(); xs.forEach((x,i)=>i?c.lineTo(P.X(x),P.Y(ys[i])):c.moveTo(P.X(x),P.Y(ys[i]))); c.stroke(); }
+const L=4, N=800;
+/* loads: w(x) in kN/m, or a point load of 6 kN at a */
+const LD={even:{lab:'even, 3 kN/m',w:x=>3},rise:{lab:'rising, 1.5x',w:x=>1.5*x},mid:{lab:'heavy middle',w:x=>x*(4-x)},pt:{lab:'point, 6 kN',pt:6}};
+let key='even';
+const kx=$('kx'),ka=$('ka'),kb=$('kb'),kh=$('kh');
+function solve(){ const xs=[],V=[],M=[],W=[]; const F=LD[key]; let R0;
+  if(F.pt){ const a=+ka.value,P=F.pt; R0=P*(L-a)/L; for(let i=0;i<=N;i++){ const x=L*i/N; xs.push(x); W.push(0); V.push(x<a?R0:R0-P); M.push(x<a?R0*x:R0*x-P*(x-a)); } return {xs,V,M,W,R0,RL:P*a/L}; }
+  let tot=0,mo=0; const h=L/N; for(let i=0;i<N;i++){ const s=(i+0.5)*h, w=F.w(s); tot+=w*h; mo+=s*w*h; } const RL=mo/L; R0=tot-RL;
+  let cw=0,cm=0; for(let i=0;i<=N;i++){ const x=L*i/N; if(i>0){ const s=x-h/2; cw+=F.w(s)*h; } xs.push(x); W.push(F.w(x)); V.push(R0-cw); }
+  for(let i=0;i<=N;i++){ if(i>0) cm+=(V[i]+V[i-1])/2*h; M.push(cm); } return {xs,V,M,W,R0,RL}; }
+const cvW=$('cvW'),cvV=$('cvV'),cvM=$('cvM'),cvS=$('cvS');
+const asp=cv=>()=>cv.clientWidth>480?0.32:0.42;
+const PW=plane(cvW,{x:[-0.3,4.3],y:[-1,7],grid:0,draw:P=>drawW(P)}); Object.defineProperty(PW.o,'aspect',{get:asp(cvW)});
+const PV=plane(cvV,{x:[-0.3,4.3],y:[-7,7],grid:0,draw:P=>drawV(P)}); Object.defineProperty(PV.o,'aspect',{get:asp(cvV)});
+const PM=plane(cvM,{x:[-0.3,4.3],y:[-1,8],grid:0,draw:P=>drawM(P)}); Object.defineProperty(PM.o,'aspect',{get:asp(cvM)});
+const PS=plane(cvS,{x:[-140,140],y:[-140,140],grid:0,labels:false,draw:P=>drawS(P)}); Object.defineProperty(PS.o,'aspect',{get:()=>0.8});
+let S=null;
+function peak(){ let im=0; S.M.forEach((m,i)=>{ if(Math.abs(m)>Math.abs(S.M[im])) im=i; }); return im; }
+function drawW(P){ P.o.y=[-1.2,7]; axes2(P,1,2); const F=LD[key];
+  P.line(0,-0.6,L,-0.6,'--ink',5); P.poly([[0,-0.6],[-0.15,-1.15],[0.15,-1.15]],'--ink','--ink',1); P.poly([[L,-0.6],[L-0.15,-1.15],[L+0.15,-1.15]],'--ink','--ink',1);
+  if(F.pt){ const a=+ka.value; P.line(a,6,a,-0.4,'--ember',2.4); P.poly([[a,-0.4],[a-0.08,0.2],[a+0.08,0.2]],'--ember','--ember',1); P.text('6 kN',a+0.1,5.5,'--ember','left',11); }
+  else { const c=P.ctx; c.globalAlpha=0.25; P.poly([[0,0]].concat(S.xs.map((x,i)=>[x,S.W[i]])).concat([[L,0]]),null,'--ember'); c.globalAlpha=1; curve(P,S.xs,S.W,'--ink',2.4); }
+  P.line(+kx.value,-1.2,+kx.value,7,'--plum',1.3,[4,3]); P.text('w',4.28,6.2,'--muted','right',12); }
+function drawV(P){ let m=0; S.V.forEach(v=>m=Math.max(m,Math.abs(v))); m=Math.max(1,m)*1.15; P.o.y=[-m,m]; axes2(P,1,m>6?2:1);
+  const x=+kx.value, i=Math.round(x/L*N), c=P.ctx; c.globalAlpha=0.3; for(let j=0;j<i;j++){ const v=(S.V[j]+S.V[j+1])/2; P.poly([[S.xs[j],0],[S.xs[j+1],0],[S.xs[j+1],S.V[j+1]],[S.xs[j],S.V[j]]],null,v>=0?'--teal':'--plum'); } c.globalAlpha=1;
+  curve(P,S.xs,S.V,'--ink',2.4); const ip=peak(); P.dot(S.xs[ip],0,'--gold',5); P.line(x,-m,x,m,'--plum',1.3,[4,3]); P.text('V',4.28,m*0.8,'--muted','right',12); }
+function drawM(P){ let m=0; S.M.forEach(v=>m=Math.max(m,Math.abs(v))); m=Math.max(1,m)*1.18; P.o.y=[-m*0.12,m]; axes2(P,1,m>8?2:1);
+  curve(P,S.xs,S.M,'--ink',2.4); const ip=peak(); P.dot(S.xs[ip],S.M[ip],'--gold',5.5); const x=+kx.value, i=Math.round(x/L*N); P.dot(x,S.M[i],'--teal',5); P.line(x,-m,x,m,'--plum',1.3,[4,3]); P.text('M',4.28,m*0.85,'--muted','right',12); }
+function sigma(){ const Mm=Math.abs(S.M[peak()]), b=+kb.value/1000, h=+kh.value/1000; return 6*Mm/(b*h*h)/1000; }
+function drawS(P){ const b=+kb.value, h=+kh.value; const c=P.ctx; c.globalAlpha=0.18; P.poly([[-b/2,-h/2],[b/2,-h/2],[b/2,h/2],[-b/2,h/2]],null,'--gold'); c.globalAlpha=1; P.poly([[-b/2,-h/2],[b/2,-h/2],[b/2,h/2],[-b/2,h/2]],'--ink',null,2);
+  P.line(-130,0,130,0,'--muted',1,[4,3]); const s=sigma(), k=Math.min(1,6.2/Math.max(s,1e-9)), x0=b/2+8, len=Math.min(110,s*8);
+  for(let j=-5;j<=5;j++){ const y=h/2*j/5, l=len*j/5; P.line(x0,y,x0+Math.abs(l),y,j>0?'--ember':'--teal',1.6); }
+  P.line(x0,-h/2,x0+len,h/2,'--ember',1.2,[3,3]); P.line(x0,-h/2,x0,h/2,'--muted',1.2);
+  P.text('b = '+b+' mm',0,-h/2-14,'--ink','center',11); P.text('h = '+h,-b/2-6,0,'--ink','right',11); }
+function read(){ S=solve(); const x=+kx.value, i=Math.round(x/L*N), ip=peak(); $('ox').textContent=mm(x,2)+' m'; $('oa').textContent=mm(+ka.value,2)+' m'; $('ob').textContent=kb.value+' mm'; $('oh').textContent=kh.value+' mm';
+  const s=sigma(), vd=$('vdF'); vd.className='verdict '+(s<=6.2?'win':'lose');
+  vd.textContent='Supports: R₀ ≈ '+mm(S.R0,2)+' kN, R_L ≈ '+mm(S.RL,2)+' kN. At the cut, V ≈ '+mm(S.V[i],2)+' kN and M ≈ '+mm(S.M[i],2)+' kN m. Greatest M ≈ '+mm(S.M[ip],2)+' kN m at x ≈ '+mm(S.xs[ip],2)+' m. Greatest stress 6M/(bh²) ≈ '+mm(s,2)+' MPa: '+(s<=6.2?'under':'over')+' 6.2 MPa.';
+  tex($('eqF'),R`M(${mm(x,2)}) = \textstyle\int_0^{${mm(x,2)}} V \approx ${mm(S.M[i],2)},\quad \sigma_m = \tfrac{6M_{\max}}{bh^2} \approx ${mm(s,2)} \text{ MPa}`,true); }
+function all(){ read(); PW.redraw(); PV.redraw(); PM.redraw(); PS.redraw(); }
+[kx,ka,kb,kh].forEach(el=>el.addEventListener('input',all));
+chips($('lch'),LD,()=>key,k=>{ key=k; },all);
+window.__pic={set:(k,x,a,b,h)=>{ [...$('lch').children][Object.keys(LD).indexOf(k)].click(); kx.value=x; ka.value=a; kb.value=b; kh.value=h; all(); const i=Math.round(x/L*N), ip=peak(); return {R0:+S.R0.toFixed(4),V:+S.V[i].toFixed(4),M:+S.M[i].toFixed(4),Mmax:+S.M[ip].toFixed(4),at:+S.xs[ip].toFixed(3),sig:+sigma().toFixed(3)}; }};
+all();
+stepper('#sl1',[
+  {k:'ember',kl:'the supports',t:R`R_0 + R_L = \textstyle\int_0^L w,\ \ R_L L = \int_0^L s\,w`,n:`The two balance laws, for the whole beam.`},
+  {k:'ember',kl:'cut it in thought',t:R`\text{left piece: support, load, and the cut}`,n:`What the right piece supplies, the beam carries at x.`},
+  {k:'ember',kl:'shear and bending',t:R`V = R_0 - \textstyle\int_0^x w,\ \ M = R_0 x - \int_0^x (x - s)w`,n:`The net push, and the net turning about the cut.`},
+  {k:'ember',kl:'shear-from-load',t:R`${Nw}{V' = -w}`,n:`area-slope, w continuous.`},
+  {k:'ember',kl:'moment-from-shear',t:R`${Nw}{M' = V,\ \ M(x) = \textstyle\int_0^x V}`,n:`Product for slopes, then area-is-a-change.`},
+  {k:'ember',kl:'the books close',t:R`V(L) = -R_L,\ \ M(L) = 0`,n:`A free end carries no bending.`},
+  {k:'ember',kl:'most-bending',t:R`${Nw}{M \text{ greatest where } V \text{ goes } + \to -}`,n:`first-test.`},
+  {k:'ember',kl:'an even load',t:R`${Nw}{M_{\max} = \tfrac{wL^2}{8}}`,n:`At the middle.`},
+  {k:'ember',kl:'a joist in Salinas',t:R`w = 0.96,\ L = 4.2:\ M_{\max} \approx 2.12 \text{ kN m}`,n:`2.4 kPa on a strip 0.4 m wide.`},
+  {k:'ember',kl:'the stretch law',t:R`\sigma(y) = \tfrac{2y}{h}\,\sigma_m`,n:`A measured law, while the wood springs back.`},
+  {k:'ember',kl:'deep-beam',t:R`${Nw}{\sigma_m = \tfrac{6M}{bh^2}}`,n:`odd-and-even-areas on y².`},
+  {k:'ember',kl:'on edge and flat',t:R`6.05 \text{ MPa against } 37.4 \text{ MPa}`,n:`The ratio is h/b ≈ 6.2.`},
+  {k:'ember',kl:'where it cracks',t:R`\text{the stretched face, where } |M| \text{ is greatest}`,n:`Steel goes on that side of concrete.`},
+  {k:'ember',kl:'one board in twenty',t:R`\text{a strength with a known exception rate}`,n:`Then divided by a little over 2.`},
+  {k:'ember',kl:'illegal',t:R`M \ne \textstyle\int_0^x w`,n:`M is the area under V.`}
+],{title:'The slides · the supports; cut it in thought; shear and bending; shear-from-load; moment-from-shear; the books close; most-bending; an even load; a joist in Salinas; the stretch law; deep-beam; on edge and flat; where it cracks; one board in twenty; illegal moves · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

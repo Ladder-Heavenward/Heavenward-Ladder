@@ -1,0 +1,667 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>5a · Integers as pairs</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.95rem;white-space:normal}
+@media (max-width:520px){.pic .eqbox{font-size:.82rem}}
+#cvG{touch-action:manipulation;cursor:pointer}
+#cvH{touch-action:manipulation}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+table.tt td.l{text-align:left;font-family:var(--serif)} table.tt td[data-tex-inline]{white-space:nowrap} @media (max-width:520px){table.tt td.l{min-width:9em}}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r05.html">← 5 making room to undo</a><a href="r05b.html">next: 5b fractions as ratios →</a></p>
+  <div class="tags"><span class="tag proof">5a · proof</span></div>
+  <h1>Integers as pairs</h1>
+  <p>The counting numbers cannot take away more than they have: no number added to 3 gives 0. This step proves that, and then builds the numbers that can. A pair of numbers will stand for the question “what must be added to the second to make the first?”. Two pairs that ask the same question are counted as one, by a relation that uses nothing but adding, and each class of such pairs is an integer. Adding and multiplying are defined on the classes by working on a pair from each, and proved not to depend on which pairs were picked. The counting numbers turn out to sit inside, every integer gets a negative, every technique of rung 4 carries over, and at the end every subtraction has an answer.</p>
+  <p class="gesture">Write the missing amount as a pair, the amount to be reached first and the starting amount second. Count two pairs as one when the first of each added to the second of the other gives the same number. Work on any member of a class, and check that the class of the answer stays put.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r02e.html">2e</a> (pairs, products, relations, sameness relations, classes, the classes-never-overlap technique), <a href="r04b.html">4b</a> (zero-or-a-next), <a href="r04e.html">4e</a> (the techniques of adding), <a href="r04f.html">4f</a> (the techniques of multiplying) and <a href="r04g.html">4g</a> (less-is-adding, at-most-is-adding, any-two-compare, settled-order). <a href="r05b.html">5b</a> builds the fractions from these integers, using the techniques proved here; <a href="r05c.html">5c</a> brings order to them.</p></div>
+</header>
+
+<section class="class step" data-step="5a1">
+  <h2 class="sthead"><span class="stno">5a1</span>The gap</h2>
+  <p class="stands">Stands on 4e (next-on-the-left for plus), 3a (next-never-empty) and 4g (at-most-is-adding, any-two-compare).</p>
+  <h3>New marks on this rung</h3>
+  <p data-pid="78aed6">This rung brings in new marks. <b>Each is said here in plain words first, then shown, and each is laid down in full on the page named.</b> Old marks given a new job, such as ∼, + and · between the new numbers, are said where they get it.</p>
+  <ul>
+    <li data-pid="66d919">The class of a pair: all the pairs that ask the same question as it: [k, b] (5a).</li>
+    <li data-pid="be1de2">Two letters side by side, for their product; a numeral before a letter, the same: kc, 2k (5a).</li>
+    <li data-pid="d0ef85">The set of the integers: ℤ (5a).</li>
+    <li data-pid="e13d8c">The negative of an integer, and the difference of two: −x, x − y (5a).</li>
+    <li data-pid="573f20">The set of the rationals: ℚ (5b).</li>
+    <li data-pid="64c337">The class of a fraction pair, read “p over q”, written with a slash or with p stacked over q: p/q (5b).</li>
+    <li data-pid="66877f">The reciprocal of a rational other than 0, a small high −1: w⁻¹ (5b).</li>
+    <li data-pid="8affd6">The reciprocal of 2, read “one half”: ½ (5e).</li>
+    <li data-pid="f4039d">A rational multiplied by itself, its square: r² (5e).</li>
+    <li data-pid="ec6b18">A letter for an asked-for rational, and the set of the rationals that answer: {x ∈ ℚ : φ(x)} (5f).</li>
+    <li data-pid="570b34">A check that came out right: ✓ (5f).</li>
+    <li data-pid="79dfae">The least common multiple of two numbers: lcm(q, s) (5g).</li>
+    <li data-pid="10a382">A finite decimal: a numeral, a point, then more digits: 2.54 (5g).</li>
+    <li data-pid="481bac">A rational and its rounding, read “v is about b”: v ≈ b (5g).</li>
+    <li data-pid="e90ab5">So many hundredths, read “n percent”: n% (5g).</li>
+    <li data-pid="52d4cd">A rational multiplied by itself n times: rⁿ (5h).</li>
+    <li data-pid="70a7a7">A ratio, two amounts compared up to scaling, read “p to b”: p : b (5i).</li>
+    <li data-pid="2fe1d1">An amount of a unit, the unit written upright after the number: 3 m (5i).</li>
+    <li data-pid="39c863">Dividing by a unit, read “per”: m/s (5i).</li>
+    <li data-pid="3ca992">A unit cancelled in a chain, struck through: <s>km</s> (5i).</li>
+    <li data-pid="068faa">A chemical change, read “become”, from its starting substances to its products: → (5·chem).</li>
+    <li data-pid="4e0f12">How many atoms of an element are in one molecule, a small low number: H₂O (5·chem).</li>
+    <li data-pid="0257eb">A decimal times a power of ten: 6.022 · 10²³ (5·chem).</li>
+    <li data-pid="b07f95">The cross of two plants, with 2e's product mark: Rr × rr (5·bio).</li>
+    <li data-pid="c20cfc">The mean of data, read “x bar”: x̄ (5·stat).</li>
+    <li data-pid="b5a32e">The chance of an event, and its chance given another: P(A), P(A | B) (5·stat).</li>
+    <li data-pid="6a6624">The expected value of a payout: E X (5·stat).</li>
+    <li data-pid="a11dd3">The set of the classes of a relation, read “A over ∼”: A/∼ (5·cb2).</li>
+    <li data-pid="dab973">Same remainder on dividing by n: m ∼ₙ b (5·cb2).</li>
+  </ul>
+  <p data-pid="998e27">Now the gap this rung is about. <b>Counting numbers cannot take away more than they have.</b></p>
+  <p data-pid="78d1b4">Rung 4 can add any two numbers. Running adding backwards is another matter. Ask for a number x with 3 + x = 0. Since 3 names S(2), the next-on-the-left technique for plus turns 3 + x into S(2 + x), a next one, and 3a's next-never-empty technique says a next one is never 0. The same argument works for any number other than 0. Call it the gap-in-ℕ technique: <b>for every number k other than 0, no number x has k + x = 0.</b></p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the gap-in-ℕ technique">
+\text{let } a \in \mathbb N,\ \ a \ne 0;\ \ \text{assume } \exists x \in \mathbb N\,(a + x = 0) @@ aiming to refute
+\text{call such a number } x:\ \ a + x = 0 @@ use the some
+a = S(m) \text{ for a number } m @@ the zero-or-a-next technique; a ≠ 0, so the other option (the remaining-option technique); use the some
+\htmlClass{new}{S(m)} + x = 0 @@ the swap axiom
+\htmlClass{new}{S(m + x)} = 0 @@ the next-on-the-left technique for plus, with the chain technique
+S(m + x) \ne 0 @@ the next-never-empty technique
+\bot @@ clash
+\neg\exists x \in \mathbb N\,(a + x = 0) \quad \blacksquare @@ close the somes; refute
+  </pre>
+  <p data-pid="76b022">More generally, 4g's at-most-is-adding technique says that b + x = k has an answer exactly when b ≤ k, and 4e's cancel for plus says there is then only one. So “what must be added to 3 to make 5?” has the answer 2. And “what must be added to 5 to make 3?” has none. An answer x would make 5 ≤ 3 by at-most-is-adding, and any-two-compare forbids that alongside 3 &lt; 5. Taking away works in ℕ only when there is enough to take.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the gap · ← → keys work</div></section>
+  <section class="pic" id="pic2">
+    <div class="eyebrow">The picture · the question b + x = k, in ℕ and in ℤ</div>
+    <div class="panel">
+      <div class="chips" role="group" aria-label="k" id="hach"><span class="m" style="color:var(--muted)">k =</span></div>
+      <div class="chips" role="group" aria-label="b" id="hbch"><span class="m" style="color:var(--muted)">b =</span></div>
+      <canvas id="cvH"></canvas>
+      <div class="cap">The numbers 0 to 12 in 4g's order. Teal hops count the x with b + x = k when there is one (at-most-is-adding). When k is before b, no hop from b ever lands on it: ℕ has no answer. The readout gives the answer in ℤ, the class [k, b], and checks it.</div>
+      <div class="eqbox" id="eqH"></div>
+    </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">5a1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="5 + x = 3"></span></span>Is there a number x? <br>Answer with at-most-is-adding and any-two-compare, one sentence each.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="5a2">
+  <h2 class="sthead"><span class="stno">5a2</span>Naming the answer by the question</h2>
+  <p class="stands">Stands on 5a1 and 2e (pairs, the product ℕ × ℕ).</p>
+  <p data-pid="8b3772">Here is the move this whole rung makes, twice. <b>If the answer is missing, let the question stand in for it.</b> The pair (5, 3) will stand for “what must be added to 3 to make 5”, and the pair (3, 5) for “what must be added to 5 to make 3”. Read the pair (k, b) as “k less b”: the amount to reach first, the starting amount second. Pairs of numbers exist (2e's product ℕ × ℕ), so every question of this kind is now an object.</p>
+  <p data-pid="253ab9">But many pairs ask for the same amount. (3, 5), (0, 2) and (10, 12) each ask for whatever must be added to a number to land 2 short of it. They must make one new number, not three. When do two pairs ask for the same amount? Saying “k less b is c less d” seems to need the taking-away that is missing. The way round is to see what the sameness says when both amounts do exist.</p>
+  <pre class="lines" data-k="ember" data-label="this step: where both amounts exist and are one amount e">
+b + e = a,\ \ \ d + e = c @@ suppose the one number e answers both questions
+a + d = (b + e) + d @@ the swap axiom, with the first sameness
+\phantom{a + d} = b + (e + d) @@ the regroup technique for plus
+\phantom{a + d} = b + (\htmlClass{new}{d + e}) @@ the turn-about technique for plus, inside
+\phantom{a + d} = \htmlClass{new}{b + c} @@ the swap axiom, with the second sameness
+  </pre>
+  <p data-pid="aa12c5">The last line mentions only adding. It makes sense for every two pairs, whether or not the amounts exist, so it can be the definition. (And it is the right one. Where both amounts do exist, k + d = b + c forces them to be the same, by cancel for plus. A question below asks for the column.)</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · naming by the question · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">5a2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="(7, 4),\ (3, 0),\ (4, 7),\ (10, 7)"></span></span>Say in words what each pair asks. <br>Which of them ask the same question as (7, 4)?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="5a3">
+  <h2 class="sthead"><span class="stno">5a3</span>The cross-sum</h2>
+  <p class="stands">Stands on 5a2 and 2e (relations).</p>
+  <p data-pid="8b1145">The column in 5a2 used only adding. <b>Two pairs ask the same question when the first of each added to the second of the other gives one number.</b></p>
+  <p class="eqline" data-pid="094d7b">From here on, for pairs of numbers (a, b) and (c, d), the first line means the second:</p>
+  <div class="eqline" data-tex="\begin{aligned} &amp;(a, b) \sim (c, d)\\ &amp;a + d = b + c \end{aligned}"></div>
+  <p data-pid="7a0e87">Read it “(a, b) is equivalent to (c, d)”. It is the relation on ℕ × ℕ that goes with this statement: the sift of (ℕ × ℕ) × (ℕ × ℕ) by it (2e's word relation).</p>
+  <p data-pid="8389a1">Read it as a cross-sum: the first of each pair added to the second of the other. (3, 5) ∼ (0, 2), since 3 + 2 = 5 + 0. (3, 5) and (2, 0) are not equivalent, since 3 + 0 is 3 and 5 + 2 is 7, and 3 ≠ 7. 2e kept the mark ∼ for a sameness relation, and the next technique earns it.</p>
+  <p class="eqline" data-pid="a22c53">From here on, between pairs of numbers, ∼ also means this relation. 2e's use, ∼ for whichever sameness relation is in hand, still stands elsewhere; what stands on each side says which.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · the relation · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">5a3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="(2, 9),\ (5, 12),\ (9, 2)"></span></span>By the cross-sum, decide whether (2, 9) ∼ (5, 12). <br>Decide whether (2, 9) ∼ (9, 2).</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="5a4">
+  <h2 class="sthead"><span class="stno">5a4</span>Swapping the middle</h2>
+  <p class="stands">Stands on 4e (regroup and turn-about for plus) and 4f (the same for times).</p>
+  <p data-pid="90b775">Proofs on this rung keep rearranging four things added in two pairs. One technique does it once and for all. Middle-swap technique: <b>(x + y) + (u + w) = (x + u) + (y + w).</b> The two middle terms trade places.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the middle-swap technique">
+(x + y) + (u + w) = x + (y + (u + w)) @@ the regroup technique for plus
+\phantom{(x + y) + (u + w)} = x + ((y + u) + w) @@ the regroup technique for plus inside, turned about
+\phantom{(x + y) + (u + w)} = x + ((\htmlClass{new}{u + y}) + w) @@ the turn-about technique for plus, inside
+\phantom{(x + y) + (u + w)} = x + (u + (y + w)) @@ the regroup technique for plus, inside
+\phantom{(x + y) + (u + w)} = (x + u) + (y + w) \quad \blacksquare @@ the regroup technique for plus, turned about
+  </pre>
+  <p data-pid="0c61d5">The column uses only regroup for plus and turn-about for plus. So the same column runs wherever those two techniques are in hand. Put regroup for times and turn-about for times in place of regroup for plus and turn-about for plus, and the same column proves this. It is cited as middle-swap (for ·).</p>
+  <div class="eqline" data-tex="(x \cdot y) \cdot (u \cdot w) = (x \cdot u) \cdot (y \cdot w)"></div>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · the middle-swap technique · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">5a4.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="(1 + 2) + (3 + 4)"></span></span>Rewrite it as (1 + 3) + (2 + 4), citing middle-swap. <br>Then check that both sides come to 10.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="5a5">
+  <h2 class="sthead"><span class="stno">5a5</span>Letters side by side</h2>
+  <p class="stands">Stands on 4f (times) and 4h (numerals).</p>
+  <p data-pid="462fd5">Products of letters are about to pile up. <b>Two letters set side by side name their product.</b></p>
+  <p class="eqline" data-pid="70b496">From here on, two letters set side by side name their product: <span data-tex-inline="ac"></span> is <span data-tex-inline="a \cdot c"></span>, and a numeral set before a letter, as in <span data-tex-inline="2a"></span>, names <span data-tex-inline="2 \cdot a"></span>. A product written this way binds as · does, before +. A numeral is never set beside a numeral to mean a product: 23 stays 4h's tens numeral.</p>
+  <p class="eqline" data-pid="ee150a">The labels of pages, such as 2e or 4c, are names of pages, not products: 2e is never 2 · e.</p>
+  <p data-pid="8db200">Example: 2ab names 2 · a · b, and 3(a + b) names 3 · (a + b). But 32 is still thirty-two, and 2e is still a page.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">5a5.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">2e, 2a, 23, 2 · a · b</span></span>Say what each of the first three names. <br>Write 2 · a · b the short way.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="5a6">
+  <h2 class="sthead"><span class="stno">5a6</span>An equivalence</h2>
+  <p class="stands">Stands on 5a3, 5a4, 4e (cancel for plus) and 2e (sameness relations).</p>
+  <p data-pid="0690e5">Now the same-difference technique: <b>the relation ∼ on ℕ × ℕ is reflexive, symmetric and transitive.</b> Reflexive: k + b = b + k is turn-about for plus, so (k, b) ∼ (k, b). Symmetric: from k + d = b + c, the turn-about technique gives b + c = k + d. Turn-about for plus on each side then gives c + b = d + k, which is (c, d) ∼ (k, b). Transitive is the one that needs work, and it is where rung 4's cancelling comes in.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the same-difference technique, the transitive part">
+a + d = b + c,\ \ \ c + f = d + e @@ given (a, b) ∼ (c, d) and (c, d) ∼ (e, f); ﹀ ∼
+(a + d) + (c + f) = (b + c) + (d + e) @@ the swap axiom: the same thing added to each side, then each side swapped by a given line
+(a + d) + (\htmlClass{new}{f + c}) = (b + c) + (\htmlClass{new}{e + d}) @@ the turn-about technique for plus, inside, on each side
+(\htmlClass{new}{a + f}) + (d + c) = (\htmlClass{new}{b + e}) + (c + d) @@ the middle-swap technique, on each side
+(a + f) + (\htmlClass{new}{c + d}) = (b + e) + \htmlClass{keep}{(c + d)} @@ the turn-about technique for plus, inside, on the left
+\htmlClass{new}{a + f = b + e} @@ the cancel technique for plus: c + d is taken off both sides
+(a, b) \sim (e, f) \quad \blacksquare @@ ︿ ∼
+  </pre>
+  <p data-pid="00b047">So ∼ is a sameness relation, and all of 2e applies: the classes, and the classes-never-overlap technique, that two classes sharing a member are one class.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · the same-difference technique · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">5a6.1</span><span class="ph bend">bend</span><span class="givens"><span data-tex-inline="\text{on } \mathbb{N} \times \mathbb{N}:"></span> <span data-tex-inline="(k, b) \approx (c, d) \iff kd = bc"></span></span>Test whether the relation is reflexive, symmetric and transitive, giving pairs that break each that fails.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="5a7">
+  <h2 class="sthead"><span class="stno">5a7</span>The integers</h2>
+  <p class="stands">Stands on 5a6 and 2e (classes, the classes-never-overlap technique).</p>
+  <p data-pid="6c4252">Now the classes. <b>An integer is a whole class of pairs that ask the same question.</b></p>
+  <p class="eqline" data-pid="4817fe">From here on, <span data-tex-inline="[a, b]"></span> is short for <span data-tex-inline="[(a, b)]"></span>, 2e's class of the pair (a, b): the set of pairs (c, d) in ℕ × ℕ with (c, d) ∼ (a, b).</p>
+  <p data-pid="ae28b2">Same-class technique: <b>[k, b] = [c, d] exactly when k + d = b + c.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the same-class technique">
+(a, b) \in [a, b] @@ ∼ is reflexive (same-difference); ︿ the class
+\text{assume } (a, b) \sim (c, d):\ \ (a, b) \in [c, d] @@ ︿ the class
+\qquad [a, b] = [c, d] @@ the classes-never-overlap technique: the two classes share the member (a, b)
+\text{assume } [a, b] = [c, d]:\ \ (a, b) \in [c, d] @@ the swap axiom, with the first line
+\qquad (a, b) \sim (c, d) @@ ﹀ the class
+[a, b] = [c, d] \;\Leftrightarrow\; \htmlClass{new}{a + d = b + c} \quad \blacksquare @@ prove an if each way; ︿ ⇔; ﹀ ∼
+  </pre>
+  <p class="eqline" data-pid="0f1545">From here on, <span data-tex-inline="\mathbb Z"></span> names the set of all the classes of ∼:</p>
+  <div class="eqline" data-tex="\begin{aligned} &amp;\{c \in \mathcal P(\mathbb N \times \mathbb N) :\\ &amp;\quad \exists p \in \mathbb N \times \mathbb N\,(c = [p])\} \end{aligned}"></div>
+  <p data-pid="ff5370">Its members are the <b>integers</b>. Read it “Z”, or “the integers”; the letter is for the German <i>Zahlen</i>, numbers.</p>
+  <p data-pid="f2c172">It is a set: each class is a part of ℕ × ℕ, so a member of 𝒫(ℕ × ℕ) (2d), and ℤ is sifted from that. Every integer is [k, b] for some pair, and a pair in it is a <b>member</b> of the integer, or, in 2e's word, a representative. [3, 5], [0, 2] and [10, 12] are one integer, by same-class. A pair is never itself an integer: an integer is the whole class.</p>
+  <p data-pid="7eb1b5">An older way of building the integers defined “plus m” as the relation that n + m bears to n, for every number n. It defined “minus m” as the relation that n bears to n + m. A relation is a set of pairs. So its “plus 2” is exactly the class of (2, 0) in this step: the pairs (2, 0), (3, 1), (4, 2) and so on.</p>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · the integers · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · the grid of pairs, with classes as trails of dots</div>
+    <div class="panel">
+      <div class="chips" role="group" aria-label="tap sets"><span class="m" style="color:var(--muted)">tap sets:</span><button data-gs="x" class="on">x</button><button data-gs="y">y</button></div>
+      <div class="chips" role="group" aria-label="operation"><span class="m" style="color:var(--muted)">do:</span><button data-go="add" class="on">x + y</button><button data-go="mul">x · y</button><button data-go="neg">−x</button><button data-go="sub">x − y</button><button data-go="fake">slot by slot</button></div>
+      <canvas id="cvG"></canvas>
+      <div class="chips"><button id="nx">next member of x</button><button id="ny">next member of y</button></div>
+      <div class="cap">The grid is 2e's grid of ℕ × ℕ: the pair (k, b) sits in row k (counted up from the foot) and column b (counted from the left). A class is a trail of dots: from each member the next is one row up and one column over. Tap a dot to set x (ember) or y (teal); the answer's pair is ringed gold and its class drawn gold. Press “next member” to swap a member for another of the same class and watch whether the answer's class moves.</div>
+      <div class="eqbox" id="eqG"></div>
+    </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">5a7.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="[3, 5],\ [0, 2],\ [2, 0],\ [10, 12]"></span></span>Which of these are one integer? <br>Use same-class, one line each.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="5a8">
+  <h2 class="sthead"><span class="stno">5a8</span>Adding classes</h2>
+  <p class="stands">Stands on 5a7 and 5a4 (middle-swap).</p>
+  <p data-pid="3ac742"><b>To add two integers, add a member of each, entry by entry, and check the class of the answer does not depend on the members.</b></p>
+  <p data-pid="1c215c">Where the amounts exist, adding them is easy to read off. Suppose b + e = k and d + e′ = c. Then (b + d) + (e + e′) = (b + e) + (d + e′) = k + c, by middle-swap. So the sum of the two missing amounts is what must be added to b + d to make k + c. So the sum of the pairs (k, b) and (c, d) should be (k + c, b + d). Before that can be a definition on classes, it must not matter which members were used. Honest-adding technique on ℤ: <b>if (k, b) ∼ (k′, b′) and (c, d) ∼ (c′, d′), then (k + c, b + d) ∼ (k′ + c′, b′ + d′).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the honest-adding technique on ℤ">
+a + b' = b + a',\ \ \ c + d' = d + c' @@ given; ﹀ ∼
+(a + b') + (c + d') = (b + a') + (d + c') @@ the swap axiom, as in same-difference
+(\htmlClass{new}{a + c}) + (\htmlClass{new}{b' + d'}) = (\htmlClass{new}{b + d}) + (\htmlClass{new}{a' + c'}) @@ the middle-swap technique, on each side
+(a + c,\ b + d) \sim (a' + c',\ b' + d') \quad \blacksquare @@ ︿ ∼: first of each plus second of the other
+  </pre>
+  <p class="eqline" data-pid="016eb9">From here on, for integers x and y, <span data-tex-inline="x + y"></span> names <span data-tex-inline="[a + c,\ b + d]"></span>, where (a, b) is any member of x and (c, d) any member of y. Read it “x plus y”. The honest-adding technique on ℤ, with same-class, makes the name honest: every choice of members gives the same class.</p>
+  <p data-pid="7ca058">So + now has two jobs, adding numbers and adding integers. What stands on each side says which is meant, and the counting numbers' own sums will turn out to agree (the ℕ-inside-ℤ technique below). Check: [3, 5] + [4, 1] = [7, 6]. Swap [3, 5] for its member (0, 2): [0, 2] + [4, 1] = [4, 3], and (7, 6) ∼ (4, 3) since 7 + 3 = 6 + 4. The pair changed; its class did not.</p>
+  <section class="slides" id="sl7"><div class="eyebrow">The slides · adding classes · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">5a8.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="[2, 5] + [6, 1]"></span></span>Add by the rule. <br>Add again using the members (0, 3) and (5, 0), and check that the two answers are one class.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="5a9">
+  <h2 class="sthead"><span class="stno">5a9</span>What a product must ask</h2>
+  <p class="stands">Stands on 5a8 and 4f (spread for times over plus).</p>
+  <p data-pid="876638">Multiplying is harder to guess, so guess it where the amounts exist. Suppose k = b + e and c = d + e′, so that (k, b) asks for e and (c, d) asks for e′. The product should ask for ee′. Spread the products out with spread for times over plus:</p>
+  <pre class="lines" data-k="ember" data-label="this step: what the product of two pairs must ask for">
+a = b + e,\ \ \ c = d + e' @@ suppose both amounts exist
+ac = bd + be' + ed + ee' @@ the swap axiom; spread for times over plus with turn-about for times, spreading each way; regroup for plus
+ad + bc = bd + ed + bd + be' @@ the swap axiom; spread for times over plus with turn-about for times, and spread for times over plus; regroup for plus
+ac + bd = (ad + bc) + \htmlClass{new}{ee'} @@ the same products on each side, by regroup for plus, turn-about for plus and middle-swap, with ee′ left over
+  </pre>
+  <p data-pid="4abec0">So the pair (kc + bd, kd + bc) asks for exactly ee′, the product of the two amounts. That pair uses only adding and multiplying of numbers, so it can be written for any two pairs. Honest-multiplying technique on ℤ: <b>if (k, b) ∼ (k′, b′) and (c, d) ∼ (c′, d′), then (kc + bd, kd + bc) ∼ (k′c′ + b′d′, k′d′ + b′c′).</b> Change one member at a time.</p>
+  <section class="slides" id="sl8"><div class="eyebrow">The slides · what the product asks · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">5a9.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">(7, 4) asks for 3; (5, 3) asks for 2.</span></span>Compute (7 · 5 + 4 · 3, 7 · 3 + 4 · 5). <br>Which number does that pair ask for, and is it 3 · 2?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="5a10">
+  <h2 class="sthead"><span class="stno">5a10</span>Multiplying classes</h2>
+  <p class="stands">Stands on 5a9, 5a6 (same-difference) and 5a4 (middle-swap).</p>
+  <pre class="lines" data-k="ember" data-label="this step: the honest-multiplying technique on ℤ, changing the first member">
+a + b' = b + a' @@ given (a, b) ∼ (a′, b′); ﹀ ∼
+(ac + bd) + (a'd + b'c) = (ac + b'c) + (bd + a'd) @@ turn-about for plus inside; the middle-swap technique
+\phantom{(ac + bd) + (a'd + b'c)} = (a + b')c + (b + a')d @@ spread for times over plus with turn-about for times, turned about, twice
+\phantom{(ac + bd) + (a'd + b'c)} = (\htmlClass{new}{b + a'})c + (b + a')d @@ the given, by the swap axiom
+(ad + bc) + (a'c + b'd) = (ad + b'd) + (bc + a'c) @@ turn-about for plus inside; the middle-swap technique
+\phantom{(ad + bc) + (a'c + b'd)} = (a + b')d + (b + a')c @@ spread for times over plus with turn-about for times, turned about, twice
+\phantom{(ad + bc) + (a'c + b'd)} = (\htmlClass{new}{b + a'})d + (b + a')c @@ the given, by the swap axiom
+\phantom{(ad + bc) + (a'c + b'd)} = (b + a')c + (b + a')d @@ the turn-about technique for plus
+(ac + bd) + (a'd + b'c) = (ad + bc) + (a'c + b'd) @@ the two chains meet: the techniques turn-about and chain
+(ac + bd,\ ad + bc) \sim (a'c + b'd,\ a'd + b'c) @@ ︿ ∼
+  </pre>
+  <p data-pid="8f7c67">That changes the first member and keeps the class. The rule reads the same with the two pairs exchanged. That is because ck + db = kc + bd and cb + dk = kd + bc by turn-about for times and turn-about for plus. So run the same column with (c, d) and (c′, d′) in the first place, and (k′, b′) kept fixed. It gives (k′c + b′d, k′d + b′c) ∼ (k′c′ + b′d′, k′d′ + b′c′). Same-difference's transitive part joins the two, and honest-multiplying on ℤ is proved. ∎</p>
+  <p class="eqline" data-pid="ea7821">From here on, for integers x and y, <span data-tex-inline="x \cdot y"></span>, also written <span data-tex-inline="xy"></span>, names this class, where (a, b) is any member of x and (c, d) any member of y:</p>
+  <div class="eqline" data-tex="[ac + bd,\ ad + bc]"></div>
+  <p data-pid="6d06e4">Read it “x times y”. The honest-multiplying technique on ℤ makes the name honest.</p>
+  <p class="eqline" data-pid="44a0fb">So · now has two jobs, as + does: multiplying numbers and multiplying integers. What stands on each side says which, and the ℕ-inside-ℤ technique below shows the two agree on the numbers.</p>
+  <p data-pid="12e2b9">Here is a rule that looks simpler and fails the test. Multiply slot by slot: (k, b), (c, d) ↦ (kc, bd). Take (0, 2) and (0, 3): the rule gives (0, 6). Now take another member of the first class, (1, 3): the rule gives (0, 9). And (0, 6) is not equivalent to (0, 9), since 0 + 9 is 9 and 6 + 0 is 6. The same two classes, two different answers. The slot-by-slot rule multiplies names, not integers; it defines nothing on ℤ. The picture in 5a7 has it, so you can watch its answer jump between classes.</p>
+  <section class="slides" id="sl9"><div class="eyebrow">The slides · multiplying classes · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">5a10.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">Slot by slot: (k, b), (c, d) ↦ (kc, bd).</span></span>Multiply (2, 0) by (0, 1) slot by slot, then (3, 1) by (0, 1). <br>Are the two answers one class? What does that say about the rule?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="5a11">
+  <h2 class="sthead"><span class="stno">5a11</span>The counting numbers inside</h2>
+  <p class="stands">Stands on 5a8, 5a10, 5a7 (same-class) and 4j (bijection).</p>
+  <p data-pid="937ba0">ℕ-inside-ℤ technique: <b>for numbers m and n, [m, 0] = [n, 0] exactly when m = n; [m, 0] + [n, 0] = [m + n, 0]; and [m, 0] · [n, 0] = [mn, 0].</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the ℕ-inside-ℤ technique">
+[m, 0] = [n, 0] \;\Leftrightarrow\; m + 0 = 0 + n \;\Leftrightarrow\; \htmlClass{new}{m = n} @@ the same-class technique; plus-zero and zero-plus
+[m, 0] + [n, 0] = [m + n,\ 0 + 0] = [\htmlClass{new}{m + n}, 0] @@ ﹀ + on ℤ; plus-zero
+[m, 0] \cdot [n, 0] = [mn + 0 \cdot 0,\ m \cdot 0 + 0 \cdot n] = [\htmlClass{new}{mn}, 0] \quad \blacksquare @@ ﹀ · on ℤ; times-zero, zero-times, plus-zero, zero-plus
+  </pre>
+  <p class="eqline" data-pid="1bc662">From here on, where an integer is meant, a number n names the integer [n, 0]. So, as integers, 0 names [0, 0], 1 names [1, 0], 2 names [2, 0], and so on. By the ℕ-inside-ℤ technique, sameness, sums and products come out the same whichever reading is taken, so no line of rung 4 changes its meaning.</p>
+  <p class="eqline" data-pid="ce2933">So the numerals gain a second meaning, shown by ℕ-inside-ℤ to come to the same thing as the first. 3a said they name its sets “and nothing else”; this line is the step saying otherwise. Where a number is meant, n still names the set of 3a and 4h.</p>
+  <p data-pid="aad0bc">Strictly, the set 2 = {0, 1} is not the class [2, 0]: one is a number, the other a set of pairs. What sits inside ℤ is a copy. The rule n ↦ [n, 0] is a bijection, in 4j's word, between ℕ and the part of ℤ made of the classes [n, 0]. It carries + to + and · to ·. “ℕ sits inside ℤ” means exactly that, and the naming line lets you forget the difference safely.</p>
+  <section class="slides" id="sl10"><div class="eyebrow">The slides · ℕ inside ℤ · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">5a11.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="[2, 0] \cdot [3, 0]"></span></span>Multiply by the rule. <br>Which number names the answer, and which line of ℕ-inside-ℤ says it must?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="5a12">
+  <h2 class="sthead"><span class="stno">5a12</span>A member with a 0</h2>
+  <p class="stands">Stands on 5a7 (same-class), 5a11 and 4g (any-two-compare, at-most-is-adding).</p>
+  <p data-pid="0946b2">Member-with-a-0 technique: <b>every integer is [n, 0] or [0, n] for some number n; the n is the only one; and both forms are true only of [0, 0].</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the member-with-a-0 technique">
+x = [a, b] @@ x is a class of some pair; use the some
+b \le a \ \lor\ a \lt b @@ the any-two-compare technique, the at-least-one part
+\text{case } b \le a:\ \ a = b + n @@ the at-most-is-adding technique, its some used
+\qquad a + 0 = b + n,\ \text{so } x = [\htmlClass{new}{n, 0}] @@ plus-zero; the same-class technique
+\text{case } a \lt b:\ \ b = a + n @@ the less-is-adding technique, its some used
+\qquad a + n = b + 0,\ \text{so } x = [\htmlClass{new}{0, n}] @@ plus-zero; the same-class technique
+\exists n \in \mathbb N\,(x = [n, 0] \lor x = [0, n]) @@ add an option and show an example in each case; reason by cases
+[n, 0] = [m, 0] \Rightarrow n = m;\ \ \ [0, n] = [0, m] \Rightarrow m = n @@ ℕ-inside-ℤ; same-class with plus-zero and zero-plus
+[n, 0] = [0, m] \Rightarrow n + m = 0 \Rightarrow n = 0 = m \quad \blacksquare @@ same-class, plus-zero; n ≠ 0 would clash with gap-in-ℕ, and settled-order settles n = 0 or not; then zero-plus
+  </pre>
+  <p data-pid="daef8f">So [7, 4] = [3, 0], which is 3, and [3, 5] = [0, 2]. In the picture in 5a7, the member with a 0 sits at the start of each trail of dots, on the bottom row or the left-hand column. The integers of the form [0, n] with n ≠ 0 are the new ones; the next section names them.</p>
+  <section class="slides" id="sl11"><div class="eyebrow">The slides · the member with a 0 · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">5a12.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="[9, 4],\ [4, 9],\ [6, 6]"></span></span>Find the member with a 0 of each. <br>Name each as n or as [0, n].</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="5a13">
+  <h2 class="sthead"><span class="stno">5a13</span>Negatives</h2>
+  <p class="stands">Stands on 5a12 and 5a7 (same-class).</p>
+  <p data-pid="dd4cbb">Swapping the entries of a pair turns its question around. <b>The negative of an integer is the class of its pairs, swapped.</b></p>
+  <p data-pid="f0de32">Swapping the entries of a pair turns its question around: (k, b) asks what takes b to k, and (b, k) what takes k to b. Honest-swapping technique: <b>if (k, b) ∼ (k′, b′) then (b, k) ∼ (b′, k′).</b> Unpack: k + b′ = b + k′. Turn it about (the turn-about technique): b + k′ = k + b′, and that is (b, k) ∼ (b′, k′), packed. ∎</p>
+  <p class="eqline" data-pid="b79e71">From here on, for an integer x, <span data-tex-inline="-x"></span> names <span data-tex-inline="[b, a]"></span>, where (a, b) is any member of x. Read it “negative x”, or “minus x”. The honest-swapping technique makes the name honest.</p>
+  <p data-pid="9d7350">So −2, the negative of the integer 2, is −[2, 0] = [0, 2], and member-with-a-0 now reads: every integer is n or −n for exactly one number n. −0 = [0, 0] = 0. And −(−x) = x, since swapping twice gives the pair back. Note what −x is: the negative of x, whatever x is. −(−2) is 2. Whether an integer is above or below 0 is a question about order, and order on the new numbers is 5c's. The negative −x is also called the additive inverse of x.</p>
+  <section class="slides" id="sl12"><div class="eyebrow">The slides · negatives · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">5a13.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="x = [7, 2]"></span></span>Write −x and −(−x) as classes. <br>Give each its member with a 0.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="5a14">
+  <h2 class="sthead"><span class="stno">5a14</span>The techniques come with the pairs</h2>
+  <p class="stands">Stands on 5a8, 5a10, 5a13 and the techniques of 4e and 4f.</p>
+  <p data-pid="1ca083"><b>The techniques of adding and multiplying from 4e and 4f carry over to ℤ, each by the same three moves.</b> Unpack the operations to a member of each class, use the technique of rung 4 on the entries, and pack. The table lists them, with x = [k, b], y = [c, d], z = [e, f]. In most rows the two sides come out as the very same pair. In negative on ℤ they are equivalent pairs, and same-class makes their classes one. Call the whole list the carry-over technique.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>name</th><th>in words</th><th>for integers</th><th>on the pairs, by</th></tr>
+    <tr><td>Turn-about for plus on ℤ</td><td class="l">order in a sum doesn't matter</td><td data-tex-inline="x + y = y + x"></td><td class="l">Turn-about for plus in each entry</td></tr>
+    <tr><td>Regroup for plus on ℤ</td><td class="l">brackets in a sum don't matter</td><td data-tex-inline="(x + y) + z = x + (y + z)"></td><td class="l">Regroup for plus in each entry</td></tr>
+    <tr><td>Plus-zero on ℤ</td><td class="l">adding 0 changes nothing</td><td data-tex-inline="x + 0 = x"></td><td class="l">Plus-zero in each entry</td></tr>
+    <tr><td>Negative on ℤ</td><td class="l">a number and its negative add to 0</td><td data-tex-inline="x + (-x) = 0"></td><td class="l">Turn-about for plus, then same-class (in full below)</td></tr>
+    <tr><td>Turn-about for times on ℤ</td><td class="l">order in a product doesn't matter</td><td data-tex-inline="xy = yx"></td><td class="l">Turn-about for times, turn-about for plus</td></tr>
+    <tr><td>Regroup for times on ℤ</td><td class="l">brackets in a product don't matter</td><td data-tex-inline="(xy)z = x(yz)"></td><td class="l">Spread for times over plus, regroup for times, turn-about for times, regroup for plus, turn-about for plus: each entry is the same four products</td></tr>
+    <tr><td>Times-one on ℤ</td><td class="l">multiplying by 1 changes nothing, and 1 isn't 0</td><td data-tex-inline="x \cdot 1 = x,\ \ 1 \ne 0"></td><td class="l">One-changes-nothing, times-zero, plus-zero, zero-plus; ℕ-inside-ℤ and next-never-empty for 1 ≠ 0</td></tr>
+    <tr><td>Spread on ℤ</td><td class="l">times spreads over plus</td><td data-tex-inline="x(y + z) = xy + xz"></td><td class="l">Spread for times over plus, middle-swap (in full below)</td></tr>
+    <tr><td>Times-zero on ℤ</td><td class="l">times 0 is 0, on the pairs</td><td data-tex-inline="x \cdot 0 = 0"></td><td class="l">Times-zero, plus-zero</td></tr>
+    <tr><td>Negative-out on ℤ</td><td class="l">a negative comes out of a product</td><td data-tex-inline="(-x)y = -(xy)"></td><td class="l">Turn-about for plus: both are [bc + kd, bd + kc]</td></tr>
+  </table></div>
+  <p data-pid="bb6b67">Two of them in full. Negative on ℤ first:</p>
+  <pre class="lines" data-k="ember" data-label="this step: the negative technique on ℤ">
+x = [k, b] @@ use the some
+x + (-x) = [k, b] + [b, k] @@ ﹀ −
+\phantom{x + (-x)} = [k + b,\ b + k] @@ ﹀ + on ℤ
+(k + b) + 0 = (b + k) + 0 @@ turn-about for plus; the swap axiom
+[k + b,\ b + k] = [0, 0] @@ the same-class technique
+x + (-x) = \htmlClass{new}{0} \quad \blacksquare @@ the chain technique; 0 names [0, 0]
+  </pre>
+  <p data-pid="e6865a">And the spreading technique, spread on ℤ, which is the only one that ties adding to multiplying:</p>
+  <pre class="lines" data-k="ember" data-label="this step: the spread technique on ℤ">
+x(y + z) = [k, b]\,[c + e,\ d + f] @@ ﹀ + on ℤ
+\phantom{x(y + z)} = [k(c + e) + b(d + f),\ k(d + f) + b(c + e)] @@ ﹀ · on ℤ
+\phantom{x(y + z)} = [(kc + ke) + (bd + bf),\ (kd + kf) + (bc + be)] @@ spread for times over plus, four times
+\phantom{x(y + z)} = [(\htmlClass{new}{kc + bd}) + (\htmlClass{new}{ke + bf}),\ (kd + bc) + (kf + be)] @@ the middle-swap technique, in each entry
+\phantom{x(y + z)} = [kc + bd,\ kd + bc] + [ke + bf,\ kf + be] @@ ︿ + on ℤ
+\phantom{x(y + z)} = xy + xz \quad \blacksquare @@ ︿ · on ℤ, twice
+  </pre>
+  <p data-pid="42c6b1">With regroup for plus on ℤ and turn-about for plus on ℤ in hand, middle-swap may be used for integers too, by its own column. So does middle-swap (for ·), by regroup for times on ℤ and turn-about for times on ℤ.</p>
+  <section class="slides" id="sl13"><div class="eyebrow">The slides · the techniques carry over · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">5a14.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">x = [k, b], y = [c, d].</span></span>Prove turn-about for plus on ℤ. <br>Unpack, use turn-about for plus in each entry, and pack.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="5a15">
+  <h2 class="sthead"><span class="stno">5a15</span>Taking away</h2>
+  <p class="stands">Stands on 5a13, 5a14 and 5a11 (the naming line).</p>
+  <p data-pid="59035e"><b>Subtracting is adding the negative, and now every subtraction has exactly one answer.</b></p>
+  <p class="eqline" data-pid="8c3273">From here on, for integers x and y, <span data-tex-inline="x - y"></span> names <span data-tex-inline="x + (-y)"></span>. Read it “x minus y”; it is the <b>difference</b> of x and y, and forming it is <b>subtracting</b> y from x.</p>
+  <p data-pid="22cb74">First, the pairs were what they claimed to be. Pair-is-the-difference technique: <b>for numbers k and b, k − b = [k, b].</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the pair-is-the-difference technique">
+a - b = [a, 0] + (-[b, 0]) @@ the naming line; ﹀ −
+\phantom{a - b} = [a, 0] + [0, b] @@ ﹀ the negative
+\phantom{a - b} = [a + 0,\ 0 + b] @@ ﹀ + on ℤ
+\phantom{a - b} = [\htmlClass{new}{a, b}] \quad \blacksquare @@ plus-zero, zero-plus
+  </pre>
+  <p data-pid="43617b">So (3, 5) was “3 less 5” all along: 3 − 5 = [3, 5] = [0, 2] = −2. And where taking away already worked in ℕ, the new subtraction agrees with it. If k = b + c then k − b = [k, b] = [c, 0] = c, by same-class. So 4·stat's b − a, allowed there only when a ≤ b, is this subtraction, and that flag is closed. Now the technique the rung is named for, its first part. Subtraction technique: <b>for any integers x and y, y + (x − y) = x; and if y + z = x, then z = x − y.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the subtraction technique">
+\text{let } x, y \in \mathbb Z @@ speak of everything by speaking of anything
+y + (x - y) = y + (x + (-y)) @@ ﹀ −
+\phantom{y + (x - y)} = y + ((-y) + x) @@ turn-about for plus on ℤ, inside
+\phantom{y + (x - y)} = (y + (-y)) + x @@ regroup for plus on ℤ, turned about
+\phantom{y + (x - y)} = 0 + x = x + 0 = \htmlClass{new}{x} @@ negative on ℤ; turn-about for plus on ℤ; plus-zero on ℤ: x − y is an answer
+\text{assume } y + z = x @@ any answer z at all
+(-y) + (y + z) = (-y) + x @@ the swap axiom: the same thing added on the left of each side
+((-y) + y) + z = (-y) + x @@ regroup for plus on ℤ, turned about
+(y + (-y)) + z = (-y) + x @@ turn-about for plus on ℤ, inside
+0 + z = (-y) + x @@ negative on ℤ
+\htmlClass{new}{z} = x + (-y) = x - y \quad \blacksquare @@ turn-about for plus on ℤ and plus-zero on ℤ on the left, turn-about for plus on ℤ on the right; ︿ −: the only answer
+  </pre>
+  <p data-pid="c8c21a">So 3 + x = 0, the question 5a1 began with, has exactly one answer among the integers: 0 − 3 = [0, 3] = −3. Check it forward: [3, 0] + [0, 3] = [3, 3] = 0, by same-class. Every question “what must be added to y to make x?” has one answer, and the counting numbers' answers, where they had them, are among them.</p>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · the ledger, balanced</div>
+    <p data-pid="ada8bf">Look in the jar for −1 cookie and you will not find one. Counted as things, the negative numbers are not there, and neither is taking away: every jar holds 0 cookies or more. As an arrangement of things, a negative number does not exist.</p>
+    <p data-pid="2becee">As a series, it does. At noon there was one cookie on the plate, and at one o’clock there were none. Whoever ate the last cookie took one away, and nothing left on the plate is that taking. It lives between two counts, a before and an after, and that is exactly what this rung’s pairs hold: (0, 1) asks what takes 1 to 0, and its class is −1. The moment a cookie goes, a series has broken out, and a difference of cookies exists along it. Write it in 0c’s ledger and the books balance to the cookie: one before, −1 for the eating, 0 after.</p>
+    <p data-pid="e3fa86"><b>A negative number is not a thing you can count; it is the entry that balances the books between two counts, and it exists only along a series.</b></p>
+    <p data-pid="47f6c2">And once a difference exists, so does a question about it: one cookie gone, over how long? A change counted against the series it happens along is already, quietly, a rate.</p>
+    <p class="bait" data-pid="5a8b39">Someone eats the cookie you were saving, and buys one to put back before you notice. The jar ends where it began, and the integer for the whole stretch is 0. Did nothing happen?</p>
+  </aside>
+  <section class="slides" id="sl14"><div class="eyebrow">The slides · the pair is the difference, and the subtraction technique · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">5a15.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="[k, b] + [c, d] = [k + c, b + d],"></span> <span data-tex-inline="[k, b] \cdot [c, d] = [kc + bd, kd + bc]"></span></span>Unpack each to pairs, and give the answer as a number or the negative of one.<ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="(-3) + 5"></span></span></li><li><span class="givens"><span data-tex-inline="(-3) - 5"></span></span></li><li><span class="givens"><span data-tex-inline="(-3) \cdot 5"></span></span></li><li><span class="givens"><span data-tex-inline="(-3) \cdot (-5)"></span></span></li><li><span class="givens"><span data-tex-inline="(-1) \cdot (-1) \cdot (-1)"></span></span></li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="5a16">
+  <h2 class="sthead"><span class="stno">5a16</span>Illegal moves</h2>
+  <p class="stands">Stands on 5a1 to 5a15.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+(a, b),\,(c, d) \mapsto (ac,\ bd)\,? @@ not honest: (0, 2) and (1, 3) are both −2, yet with (0, 3) they give (0, 6) and (0, 9), which are −6 and −9. A rule on names is not a rule on integers
+[a, b] = [c, d] \Rightarrow a = c\,? @@ [3, 5] = [0, 2] and 3 ≠ 0. A class has many members; same-class is the test, not the entries
+(a, b)\ r\ (c, d) \text{ when } a + c = b + d\,? @@ a relation r of that kind is not even reflexive: (1, 0) against itself gives 1 + 1 against 0 + 0. The cross-sum crosses: first of one, second of the other
+x - y = y - x\,? @@ 3 − 5 = −2 and 5 − 3 = 2, and member-with-a-0 says −2 ≠ 2. Subtracting is adding a negative; the negative belongs to y alone
+(x - y) - z = x - (y - z)\,? @@ (5 − 3) − 1 = 1 and 5 − (3 − 1) = 3. Brackets matter for subtracting; write x + (−y) + (−z) and regroup for plus on ℤ is free again
+-x \text{ is below } 0\,? @@ −x is the negative of x, whatever x is: −(−2) = 2. Order on the integers is 5c's
+\text{the integer } (3, 5) @@ a pair is a member of an integer, never an integer: the integer is the class [3, 5]
+2 = [2, 0] \text{ as sets}\,? @@ false: 2 = {0, 1}, and [2, 0] is a set of pairs. The naming line is a reading, licensed by ℕ-inside-ℤ, not a sameness of sets
+  </pre>
+  <section class="slides" id="sl15"><div class="eyebrow">The slides · a fake, again · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">5a16.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">“[3, 5] = [0, 2], so 3 = 0.”</span></span>Which illegal move is this? <br>Say what same-class checks instead.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="5a17">
+  <h2 class="sthead"><span class="stno">5a17</span>Running it backwards</h2>
+  <p class="stands">Stands on 5a1 to 5a15.</p>
+  <p data-pid="ced81c">Given a question b + x = k, write its answer down at once: the class [k, b], and member-with-a-0 gives its name. Given an integer, find members with any entries you like above its member with a 0. Add the same number to both entries (same-class, with regroup for plus and turn-about for plus). Given a sum and one of its parts, subtract (subtraction). Wanting to show two classes are one, cross-add (same-class). Wanting to show an operation honest, change one member and cross-add the two answers. Then use middle-swap until the given sameness can be swapped in. Wanting a technique for integers, unpack to members, use rung 4's technique on the entries, and pack. <b>Found upward; written downward.</b></p>
+  <section class="slides" id="sl16"><div class="eyebrow">The slides · backwards · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">5a17.1</span><span class="ph undo">undo</span><span class="givens"><span data-tex-inline="x \in \mathbb{Z}"></span></span>Find every x that meets the condition, as a number or the negative of one, and prove there are no others.<ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="x + 7 = 2"></span></span></li><li><span class="givens"><span data-tex-inline="(-4) - x = 3"></span></span></li><li><span class="givens"><span data-tex-inline="x \cdot x = 1"></span></span></li><li><span class="givens"><span data-tex-inline="3x = -12"></span></span></li><li><span class="givens"><span data-tex-inline="2x = 1"></span></span></li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">5a.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{on } \mathbb{N} \times \mathbb{N}:"></span> <span data-tex-inline="(k, b) \approx (c, d) \iff kd = bc,"></span> <span data-tex-inline="[(k, b)] \cdot [(c, d)] = [(kc, bd)]"></span></span>Refuse as few pairs as you can so that the relation is a sameness relation on the pairs left, and prove it is one.<br>Refuse more pairs if the product needs it, and prove the class it gives does not depend on the pairs picked.</div>
+  <div class="chq"><span class="chid">5a.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="x \in \mathbb{Z},"></span> <span data-tex-inline="x = -x"></span></span>Find every such x, and prove there are no others.</div>
+  <div class="chq"><span class="chid">5a.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="(k, b) \sim (c, d) \iff k + d = b + c,"></span> <span data-tex-inline="(k, b) \sim (k', b'),"></span> <span data-tex-inline="(k + c, b + d) \sim (k' + c', b' + d'),"></span> <span data-tex-inline="G: (c, d) \sim (c', d')"></span></span>Settle whether G must be true.</div>
+  <div class="chq"><span class="chid">5a.4.4</span><span class="tagq">world</span><span class="givens"><span data-tex-inline="U \text{ a set with a member},"></span> <span data-tex-inline="A, B, C, D \subseteq U,"></span> <span data-tex-inline="(A, B) \approx (C, D) \iff A \cup D = B \cup C"></span></span>Test whether the relation is reflexive, symmetric and transitive.<br>Find the pair that does the damage.</div>
+  <div class="chq"><span class="chid">5a.4.5</span><span class="tagq">seam</span>For a set with 3 members, 3 counts the members. In ℤ, −3 = [0, 3]. <br>Is −3 a number?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r05.html">← 5 · making room to undo</a><a href="r05b.html">5b · fractions as ratios →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>Russell defined the integer “plus m” as the relation that n + m bears to n, for every number n, and “minus m” as the relation that n bears to n + m. A relation is a set of pairs, so his “plus 2” is exactly the class of (2, 0) in this step: the pairs (2, 0), (3, 1), (4, 2) and so on.</p><cite>Russell, Introduction to Mathematical Philosophy (1919), ch. VII</cite></aside>
+  <p>Accepted names: the turn-about techniques are the commutative laws, the regroup techniques the associative laws, and spread the distributive law. The carry-over technique says that ℤ keeps them.</p>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper}=Rung;
+const R=String.raw;
+function size(cv,ar){ const d=window.devicePixelRatio||1, W=cv.clientWidth||300, H=Math.round(W/ar); cv.width=W*d; cv.height=H*d; cv.style.height=H+'px'; const c=cv.getContext('2d'); c.setTransform(d,0,0,d,0,0); return {c,W,H}; }
+const nm=k=>k<0?'-'+(-k):String(k);
+const canon=p=>{ const k=p[0]-p[1]; return k>=0?[k,0]:[0,-k]; };
+const val=p=>p[0]-p[1];
+function chips(attr,cb){ const bs=document.querySelectorAll('['+attr+']'); bs.forEach(b=>b.onclick=()=>{ bs.forEach(x=>x.classList.toggle('on',x===b)); cb(b.getAttribute(attr)); }); }
+
+/* ---------- left: the grid of pairs ---------- */
+const cvG=document.getElementById('cvG'); const NG=9;
+let X=[3,5], Y=[4,1], slot='x', op='add', prev=null, geo=null;
+chips('data-gs',v=>slot=v); chips('data-go',v=>{ op=v; prev=null; drawG(); });
+function res(){ const [a,b]=X,[c,d]=Y;
+  if(op==='add') return [a+c,b+d]; if(op==='mul') return [a*c+b*d,a*d+b*c]; if(op==='neg') return [b,a];
+  if(op==='sub') return [a+d,b+c]; return [a*c,b*d]; }
+function drawG(){
+  const {c,W,H}=size(cvG,1.02); c.fillStyle=col('--card'); c.fillRect(0,0,W,H);
+  const padL=30,padB=28,padT=12,padR=12, s=Math.min((W-padL-padR)/NG,(H-padT-padB)/NG);
+  const Xb=b=>padL+b*s, Ya=a=>H-padB-a*s; geo={Xb,Ya,s};
+  c.font='11px IBM Plex Mono, monospace'; c.fillStyle=col('--muted');
+  c.textAlign='center'; for(let i=0;i<=NG;i++) c.fillText(String(i),Xb(i),H-padB+15);
+  c.textAlign='right'; for(let i=0;i<=NG;i++) c.fillText(String(i),padL-8,Ya(i)+4);
+  c.textAlign='left'; c.fillText('b →',Xb(NG)-26,H-6); c.fillText('k ↑',0,(Ya(NG)+Ya(NG-1))/2+4);
+  const trail=(k,cl,w,dash)=>{ const a0=Math.max(k,0), b0=Math.max(-k,0); const n=NG-Math.max(a0,b0); if(n<0) return;
+    c.strokeStyle=col(cl); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); c.moveTo(Xb(b0),Ya(a0)); c.lineTo(Xb(b0+n),Ya(a0+n)); c.stroke(); c.setLineDash([]); };
+  const r=res(); const kx=val(X), ky=val(Y), kr=val(r); const showY=op!=='neg';
+  trail(kr,'--gold',3,[6,4]); trail(kx,'--ember',2); if(showY) trail(ky,'--teal',2);
+  for(let a=0;a<=NG;a++) for(let b=0;b<=NG;b++){ let f=col('--grid'), rad=2.6; const k=a-b;
+    if(k===kx){ f=col('--ember'); rad=3.4; } else if(showY&&k===ky){ f=col('--teal'); rad=3.4; } else if(k===kr){ f=col('--gold'); rad=3.2; }
+    c.fillStyle=f; c.beginPath(); c.arc(Xb(b),Ya(a),rad,0,7); c.fill(); }
+  const big=(p,cl)=>{ if(p[0]>NG||p[1]>NG) return; c.fillStyle=col(cl); c.beginPath(); c.arc(Xb(p[1]),Ya(p[0]),7,0,7); c.fill(); c.strokeStyle=col('--ink'); c.lineWidth=1.4; c.stroke(); };
+  if(showY) big(Y,'--teal'); big(X,'--ember');
+  if(r[0]<=NG&&r[1]<=NG){ c.strokeStyle=col('--gold'); c.lineWidth=3; c.beginPath(); c.arc(Xb(r[1]),Ya(r[0]),10,0,7); c.stroke(); }
+  // readout
+  const P=p=>`(${p[0]}, ${p[1]})`, cls=p=>{ const q=canon(p); return `[${q[0]}, ${q[1]}] = ${nm(val(p))}`; };
+  const [a,b]=X,[cc,d]=Y; const L=[`x = [${a}, ${b}] = ${cls(X)}`]; if(showY) L.push(`y = [${cc}, ${d}] = ${cls(Y)}`);
+  const f={add:`(${a} + ${cc},\\ ${b} + ${d})`,mul:`(${a}\\cdot ${cc} + ${b}\\cdot ${d},\\ ${a}\\cdot ${d} + ${b}\\cdot ${cc})`,neg:`(${b}, ${a})`,sub:`(${a} + ${d},\\ ${b} + ${cc})`,fake:`(${a}\\cdot ${cc},\\ ${b}\\cdot ${d})`}[op];
+  const lab={add:'x + y',mul:'x \\cdot y',neg:'-x',sub:'x - y = x + (-y)',fake:'\\text{slot by slot}'}[op];
+  L.push(`${lab}:\\ ${f} = \\htmlClass{new}{${P(r)}}`); L.push(`\\text{its class: } ${cls(r)}`);
+  if(r[0]>NG||r[1]>NG) L.push(`\\text{(the pair is off the grid; its class's trail is gold)}`);
+  if(prev){ const same=prev[0]+r[1]===prev[1]+r[0];
+    L.push(`\\text{before: } ${P(prev)},\\ \\text{now: } ${P(r)}`);
+    L.push(same?`\\htmlClass{keep}{${prev[0]} + ${r[1]} = ${prev[1]} + ${r[0]}:\\ \\text{the same class}}`:`\\htmlClass{new}{${prev[0]} + ${r[1]} \\ne ${prev[1]} + ${r[0]}:\\ \\text{the class moved}}`); }
+  tex(document.getElementById('eqG'),'\\begin{gathered}'+L.join('\\\\ ')+'\\end{gathered}',true);
+}
+cvG.addEventListener('pointerdown',e=>{ if(!geo) return; const Rc=cvG.getBoundingClientRect(), x=e.clientX-Rc.left, y=e.clientY-Rc.top; const {Xb,Ya,s}=geo;
+  const b=Math.round((x-Xb(0))/s), a=Math.round((Ya(0)-y)/s); if(a<0||b<0||a>NG||b>NG) return; if(Math.hypot(Xb(b)-x,Ya(a)-y)>s*.7) return;
+  if(slot==='x') X=[a,b]; else Y=[a,b]; prev=null; drawG(); });
+const nextM=p=>(p[0]<NG&&p[1]<NG)?[p[0]+1,p[1]+1]:canon(p);
+document.getElementById('nx').onclick=()=>{ prev=res(); X=nextM(X); drawG(); };
+document.getElementById('ny').onclick=()=>{ prev=res(); Y=nextM(Y); drawG(); };
+
+/* ---------- right: the question b + x = a ---------- */
+const cvH=document.getElementById('cvH'); let HA=3, HB=5;
+function hchips(id,get,set){ const el=document.getElementById(id); for(let k=0;k<=6;k++){ const bt=document.createElement('button'); bt.textContent=String(k); if(k===get()) bt.className='on'; bt.onclick=()=>{ set(k); [...el.querySelectorAll('button')].forEach(z=>z.classList.toggle('on',z===bt)); drawH(); }; el.appendChild(bt); } }
+hchips('hach',()=>HA,k=>HA=k); hchips('hbch',()=>HB,k=>HB=k);
+function drawH(){
+  const {c,W,H}=size(cvH,W0()<480?2.7:3.4); c.fillStyle=col('--card'); c.fillRect(0,0,W,H);
+  const M=12, x0=16, x1=W-16, X=n=>x0+(x1-x0)*n/M, y=H*.66;
+  c.font=(W<480?'10px':'11px')+' IBM Plex Mono, monospace'; c.textAlign='center';
+  const ok=HB<=HA;
+  if(ok){ for(let i=HB;i<HA;i++){ c.strokeStyle=col('--teal'); c.lineWidth=2; c.beginPath(); const m=(X(i)+X(i+1))/2, rr=(X(i+1)-X(i))/2; c.arc(m,y,rr,Math.PI,0); c.stroke(); } }
+  else { for(let i=HB;i<Math.min(M,HB+3);i++){ c.strokeStyle=col('--grid'); c.lineWidth=1.5; c.setLineDash([3,3]); c.beginPath(); const m=(X(i)+X(i+1))/2, rr=(X(i+1)-X(i))/2; c.arc(m,y,rr,Math.PI,0); c.stroke(); c.setLineDash([]); } }
+  for(let n=0;n<=M;n++){ let f=col('--grid'), rad=4; if(n===HB){ f=col('--ink'); rad=6; } if(n===HA){ f=ok?col('--teal'):col('--ember'); rad=6; }
+    c.fillStyle=f; c.beginPath(); c.arc(X(n),y,rad,0,7); c.fill(); c.fillStyle=col('--muted'); c.fillText(String(n),X(n),y+20); }
+  if(!ok){ c.strokeStyle=col('--ember'); c.lineWidth=2; c.beginPath(); c.arc(X(HA),y,10,0,7); c.stroke(); }
+  c.fillStyle=col('--ink'); c.textAlign='left'; c.fillText('start: b = '+HB+'   reach: k = '+HA,x0,16);
+  const L=[`\\text{the question: } ${HB} + x = ${HA}`];
+  if(ok){ L.push(`\\text{in } \\mathbb N:\\ x = \\htmlClass{keep}{${HA-HB}}`); L.push(`${HB} + ${HA-HB} = ${HA}\\text{ (at-most-is-adding); only one (cancel for plus)}`); }
+  else { L.push(`\\text{in } \\mathbb N:\\ \\htmlClass{new}{\\text{no answer}}`); L.push(`\\text{at-most-is-adding would give } ${HB} \\le ${HA}\\text{; any-two-compare forbids it}`); }
+  const q=canon([HA,HB]);
+  L.push(`\\text{in } \\mathbb Z:\\ x = ${HA} - ${HB} = [${HA}, ${HB}] = [${q[0]}, ${q[1]}] = \\htmlClass{new}{${nm(HA-HB)}}`);
+  L.push(`\\text{check: } [${HB}, 0] + [${HA}, ${HB}] = [${HB+HA}, ${HB}]`); L.push(`${HB+HA} + 0 = ${HB} + ${HA}\\text{, so it is } [${HA}, 0]\\text{ (same-class)}`);
+  tex(document.getElementById('eqH'),'\\begin{gathered}'+L.join('\\\\ ')+'\\end{gathered}',true);
+}
+function W0(){ return cvH.clientWidth||300; }
+new ResizeObserver(()=>{ drawG(); drawH(); }).observe(cvG);
+if(window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{ drawG(); drawH(); });
+drawG(); drawH();
+
+/* ---------- slides ---------- */
+const N='\\htmlClass{new}', K='\\htmlClass{keep}';
+const SYM={'≠':'$\\ne$','∈':'$\\in$','⇔':'$\\Leftrightarrow$','⊥':'$\\bot$','∀':'$\\forall$','∃':'$\\exists$','¬':'$\\neg$','∧':'$\\land$','∨':'$\\lor$','⇒':'$\\Rightarrow$','ℕ':'$\\mathbb N$','ℤ':'$\\mathbb Z$','≤':'$\\le$','∼':'$\\sim$','·':'$\\cdot$','−':'$-$','′':"$'$"};
+const tx=r=>r.replace(/[≠∈⇔⊥∀∃¬∧∨⇒ℕℤ≤∼·−′]/gu,ch=>SYM[ch]);
+const col2=(...rows)=>'\\begin{aligned}'+rows.map(([l,r])=>'&'+l+' &&\\text{'+tx(r)+'}').join('\\\\ ')+'\\end{aligned}';
+stepper('#sl1',[
+  {k:'ember',kl:'the gap',t:R`3 + x = S(2) + x = ${N}{S(2 + x)} \ne 0`,n:`3 names S(2); next-on-the-left for plus moves the next-one out; next-never-empty says a next one is never 0. Gap-in-ℕ technique: no number added to a number other than 0 gives 0.`}
+],{title:'The slides · the gap · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'naming by the question',t:col2([`b + e = a,\\ \\ d + e = c`,'one amount e answers both'],[`a + d = (b + e) + d = b + (d + e) = ${N}{b + c}`,'the swap axiom; regroup for plus; turn-about for plus; the swap axiom']),n:`Where the missing amounts exist and are one amount, the cross-sums agree. That line mentions only adding, so it can be the definition.`}
+],{title:'The slides · naming by the question · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'the relation',t:R`(a, b) \sim (c, d) \;\Leftrightarrow\; ${N}{a + d = b + c}`,n:`The cross-sum: first of each plus second of the other. It uses only adding, so it makes sense for every two pairs.`},
+  {k:'ember',kl:'the relation',t:R`3 + 2 = 5 + 0:\ (3, 5) \sim (0, 2)\qquad 3 + 0 \ne 5 + 2`,n:`(3, 5) and (0, 2) ask the same question; (3, 5) and (2, 0) do not.`}
+],{title:'The slides · the relation · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'the middle-swap technique',t:R`(x + y) + (u + w) = (x + ${N}{u}) + (${N}{y} + w)`,n:`The middle terms trade places, by regroup for plus and turn-about for plus alone. With regroup for times and turn-about for times it works for products too.`}
+],{title:'The slides · the middle-swap technique · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'the same-difference technique',t:col2([`(a + d) + (c + f) = (b + c) + (d + e)`,'the two givens added'],[`(a + f) + (c + d) = (b + e) + ${K}{(c + d)}`,'turn-about for plus inside; middle-swap'],[`${N}{a + f = b + e}`,'cancel for plus']),n:`∎ The transitive part of same-difference. Reflexive is turn-about for plus; symmetric is the turn-about technique and turn-about for plus. So ∼ is an equivalence relation, and 2e's classes apply.`}
+],{title:'The slides · the same-difference technique · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'the integers',t:R`[a, b] = [c, d] \;\Leftrightarrow\; a + d = b + c\qquad \mathbb Z = \{[p] : p \in \mathbb N \times \mathbb N\}`,n:`The same-class technique, by classes-never-overlap. An integer is a whole class; a pair in it is a member. [3, 5] = [0, 2] = [10, 12].`}
+],{title:'The slides · the integers · ← → keys work'});
+stepper('#sl7',[
+  {k:'ember',kl:'adding classes',t:R`[3, 5] + [4, 1] = [${N}{7, 6}]`,n:`Add the members entry by entry. The class of (7, 6) is 1.`},
+  {k:'ember',kl:'adding classes',t:R`[${K}{0, 2}] + [4, 1] = [4, 3],\qquad 7 + 3 = 6 + 4`,n:`Swap (3, 5) for another member of its class, (0, 2). The pair changed; its class did not. The honest-adding technique on ℤ says this always happens.`}
+],{title:'The slides · adding classes · ← → keys work'});
+stepper('#sl8',[
+  {k:'ember',kl:'what the product asks',t:R`k = b + e,\ c = d + e':\quad kc + bd = (kd + bc) + ${N}{ee'}`,n:`Where both amounts exist, the pair (kc + bd, kd + bc) asks for their product. So that pair is the definition, for every two pairs.`}
+],{title:'The slides · what the product asks · ← → keys work'});
+stepper('#sl9',[
+  {k:'ember',kl:'multiplying classes',t:R`[0, 2] \cdot [0, 3] = [0 \cdot 0 + 2 \cdot 3,\ 0 \cdot 3 + 2 \cdot 0] = [${N}{6, 0}]`,n:`−2 times −3, with the members that have a 0. The answer is 6.`},
+  {k:'ember',kl:'multiplying classes',t:R`[${K}{1, 3}] \cdot [0, 3] = [9, 3],\qquad 9 + 0 = 3 + 6`,n:`Another member of −2, another pair, the same class. The honest-multiplying technique on ℤ.`},
+  {k:'ember',kl:'a fake',t:R`(0, 2), (0, 3) \mapsto (0, 6)\qquad (1, 3), (0, 3) \mapsto ${N}{(0, 9)}`,n:`Slot by slot: two members of one class, two different classes in the answer, −6 and −9. Not a rule on integers.`}
+],{title:'The slides · multiplying classes · ← → keys work'});
+stepper('#sl10',[
+  {k:'ember',kl:'ℕ inside ℤ',t:R`[2, 0] + [3, 0] = [${N}{5}, 0]\qquad [2, 0] \cdot [3, 0] = [${N}{6}, 0]`,n:`The ℕ-inside-ℤ technique: the classes [n, 0] add and multiply as the numbers do. From here on, a number n names [n, 0] where an integer is meant.`}
+],{title:'The slides · ℕ inside ℤ · ← → keys work'});
+stepper('#sl11',[
+  {k:'ember',kl:'the member with a 0',t:R`[7, 4] = [${N}{3, 0}]\qquad [3, 5] = [${N}{0, 2}]`,n:`The member-with-a-0 technique: every integer is [n, 0] or [0, n], one n, by any-two-compare and at-most-is-adding or less-is-adding.`}
+],{title:'The slides · the member with a 0 · ← → keys work'});
+stepper('#sl12',[
+  {k:'ember',kl:'negatives',t:R`-[a, b] = [${N}{b, a}]:\quad -2 = [0, 2],\quad -(-2) = 2`,n:`Swap the entries (honest by honest-swapping). Every integer is n or −n for exactly one number n.`}
+],{title:'The slides · negatives · ← → keys work'});
+stepper('#sl13',[
+  {k:'ember',kl:'the techniques carry over',t:R`x + (-x) = [a + b,\ b + a] = [0, 0] = ${N}{0}`,n:`Negative on ℤ, by turn-about for plus and same-class. The techniques of adding and multiplying carry over to integers: unpack, use rung 4's technique on the entries, pack.`}
+],{title:'The slides · the techniques carry over · ← → keys work'});
+stepper('#sl14',[
+  {k:'ember',kl:'the pair is the difference',t:R`a - b = [a, 0] + [0, b] = [${N}{a, b}]`,n:`The pair-is-the-difference technique. (3, 5) was 3 less 5 all along: 3 − 5 = [3, 5] = −2.`},
+  {k:'ember',kl:'the subtraction technique',t:R`y + (x - y) = (y + (-y)) + x = 0 + x = ${N}{x}`,n:`∎ Every subtraction has an answer, and only one: from y + z = x, add −y on the left of each side and z = x − y.`}
+],{title:'The slides · the pair is the difference, and the subtraction technique · ← → keys work'});
+stepper('#sl15',[
+  {k:'ember',kl:'a fake, again',t:R`3 - 5 = -2,\qquad 5 - 3 = ${N}{2}`,n:`Order matters for subtracting, and so do its brackets. Write x − y as x + (−y), and the techniques of adding apply again.`}
+],{title:'The slides · a fake, again · ← → keys work'});
+stepper('#sl16',[
+  {k:'ember',kl:'backwards',t:R`3 + x = 0:\quad x = 0 - 3 = [0, 3] = ${N}{-3}`,n:`The question the page began with. Check forward: [3, 0] + [0, 3] = [3, 3] = 0.`}
+],{title:'The slides · backwards · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

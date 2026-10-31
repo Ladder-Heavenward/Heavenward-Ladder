@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Testing sums by hand</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r22h.html">← 22h sequences by hand</a><a href="r22j.html">next: 22j from counting to rare events →</a></p>
+  <div class="tags"><span class="tag tech">22i · technique</span></div>
+  <h1>Testing sums by hand</h1>
+  <p>By now there are many ways to decide whether an endless sum settles, and the work is choosing the one that fits. The look of the pieces usually tells you which: a power of a fixed number points one way, a power of n another, a sign that flips another. And deciding that a sum settles is only half the job. To use its total you need a number, and a number is only as good as the size of its possible error. Each test that says a sum settles also says how much is left in the part you did not add.</p>
+  <p class="gesture">The shape of the pieces says which test to reach for. Each test that shows a sum settles also fences the part left over. A total is used with its error beside it.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r22d.html">22d</a> to <a href="r22g.html">22g</a> (every test so far), <a href="r22h.html">22h</a> (standard sequences). <a href="r22j.html">22j</a> puts endless sums to work counting rare events.</p></div>
+</header>
+
+<section class="class step" data-step="22i1">
+  <h2 class="sthead"><span class="stno">22i1</span>Which test, when</h2>
+  <p class="stands">Stands on 22d2 (the shrink test), 22e (comparison, ratio and root), 22f (areas and p-sums) and 22g (the bracket).</p>
+  <p data-pid="5ff68e">Choosing technique: <b>ask, in this order: do the pieces head to 0? Is it a geometric sum or a p-sum? Do the pieces look like one of those, far out? Are there factorials or nth powers? Do the pieces come from a falling curve? Do the signs take turns?</b> The first question that answers settles it.</p>
+  <ul>
+    <li data-pid="e26015">Pieces not heading to 0: the sum wanders (22d2). Check this first; it is the cheapest.</li>
+    <li data-pid="68805f">Pieces like rⁿ or 1/nᵖ, far out: compare (22e1), or compare by the ratio of pieces (22e1).</li>
+    <li data-pid="7af1b6">Factorials, or a fixed number to the nth power: the ratio test (22e2). Something to the nth power whole: the root test (22e3).</li>
+    <li data-pid="bfed0c">Pieces f(n) with f falling, often with a log in them: the area technique (22f1).</li>
+    <li data-pid="8fe02e">Signs that take turns: the bracket (22g1); then ask separately whether it settles in size (22e4).</li>
+  </ul>
+  <pre class="lines" data-k="ember" data-label="this step: five sums, five tests">
+\textstyle\sum \tfrac{n}{2n+1} \text{ wanders} @@ the pieces head to ½, not 0 (22d2)
+\textstyle\sum \tfrac{2n+1}{n^3 + 1} \text{ settles} @@ the pieces over 1/n² head to 2; the p-sum with p = 2 settles (22e1, 22f2)
+\textstyle\sum \tfrac{n^3}{3^n} \text{ settles} @@ the ratio of neighbours heads to ⅓ (22e2)
+\textstyle\sum_{n \ge 2} \tfrac{1}{n \ln n} \text{ wanders} @@ the area ∫₂^b dx/(x ln x) = ln ln b − ln ln 2 passes every ceiling (22f1)
+\htmlClass{new}{\textstyle\sum \tfrac{(-1)^n}{\sqrt n} \text{ settles only by taking turns}} \quad \blacksquare @@ the bracket settles it; in size it is the p-sum with p = ½, which wanders (22g1, 22f2)
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · which test · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">22i1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\textstyle\sum \tfrac{n^2}{n^2 + 1}"></span></span>Find the first test on the list that decides it, and decide it.</li><li><span class="givens"><span data-tex-inline="\textstyle\sum \tfrac{1}{2^n + n}"></span></span>Find the first test on the list that decides it, and decide it.</li><li><span class="givens"><span data-tex-inline="\textstyle\sum \tfrac{2^n}{n!}"></span></span>Find the first test on the list that decides it, and decide it.</li><li><span class="givens"><span data-tex-inline="\textstyle\sum \big(\tfrac{n}{2n + 1}\big)^n"></span></span>Find the first test on the list that decides it, and decide it.</li><li><span class="givens"><span data-tex-inline="\textstyle\sum_{n \ge 2} \tfrac{1}{n(\ln n)^2}"></span></span>Find the first test on the list that decides it, and decide it.</li><li><span class="givens"><span data-tex-inline="\textstyle\sum \tfrac{(-1)^n\, n}{n^2 + 1}"></span></span>Find the first test on the list that decides it, and decide it. <br>Find whether it settles in size.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22i2">
+  <h2 class="sthead"><span class="stno">22i2</span>A total and its error</h2>
+  <p class="stands">Stands on 22i1, 22e2, 22f3 (the fence) and 22g1 (the bracket bound).</p>
+  <p data-pid="b9c418">Leftover technique: <b>stop after n pieces, and the error is the tail. If each piece is at most k times the one before, with k &lt; 1, the tail is at most aₙ₊₁/(1 − k). If the pieces come from a falling curve, the tail lies between ∫ₙ₊₁^∞ f and ∫ₙ^∞ f. If the signs take turns and the sizes fall to 0, the tail is less than aₙ₊₁ in size.</b> The first is a geometric sum laid over the tail. The other two are 22f3 and 22g1.</p>
+  <pre class="lines" data-k="ember" data-label="this step: 1 + 1 + 1/2! + 1/3! + ⋯ fenced in eight pieces">
+\tfrac{a_{k+1}}{a_k} = \tfrac{1}{k+1} \le \tfrac{1}{9} \text{ for } k \ge 8 @@ the pieces are 1/k!, counting from k = 0
+\text{tail after } \tfrac{1}{7!} \le \tfrac{1/8!}{1 - 1/9} = \tfrac{9}{8 \cdot 8!} < 0.0000280 @@ the leftover technique
+1 + 1 + \tfrac12 + \tfrac16 + \cdots + \tfrac{1}{5040} = 2.7182540\ldots @@ the first eight pieces
+\htmlClass{new}{2.718254 < \textstyle\sum \tfrac{1}{k!} < 2.718282} \quad \blacksquare @@ the total, fenced
+  </pre>
+  <p data-pid="85e0a0">Eight pieces give the total to four places. The same work on 1 − ½ + ⅓ − ¼ + ⋯ needs about ten thousand pieces for four places, because its bracket bound is only the next piece, 1/(n + 1). Both settle. One settles fast. How fast a sum settles is a fact about it as real as whether it does.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22i2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\textstyle\sum \tfrac{1}{n^4}"></span></span>Find the fewest pieces after which the fence puts the tail below 0.001. <br>Find the running total there, to five places, and the fence round the total.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22i3">
+  <h2 class="sthead"><span class="stno">22i3</span>Illegal moves</h2>
+  <p class="stands">Stands on 22i1 and 22i2.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\tfrac1n \to 0, \text{ so } \textstyle\sum \tfrac1n \text{ settles}\,? @@ heading to 0 is needed, not enough (22d3)
+\textstyle\sum a_n \text{ settles, so any order of it settles at the same total}\,? @@ only if it settles in size (22g3)
+\tfrac{a_{n+1}}{a_n} < 1 \text{ for every } n, \text{ so it settles}\,? @@ Σ1/n has every ratio below 1; the ratios must stay below one k &lt; 1
+\text{ratio test gives } 1, \text{ so the sum wanders}\,? @@ a ratio of 1 decides nothing: Σ1/n wanders, Σ1/n² settles
+\text{the next piece is } 0.001, \text{ so the total is right to } 0.001\,? @@ only for the bracket; Σ1/n has next pieces as small as you like and no total
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22i3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\textstyle\sum \tfrac1n"></span></span>Find s₁, s₂, s₄ and s₈. <br>Find a floor for s₂ₘ by grouping, and what it says about a total.</li><li><span class="givens"><span data-tex-inline="1 - \tfrac12 + \tfrac13 - \tfrac14 + \cdots,\ \ 1 + \tfrac13 - \tfrac12 + \tfrac15 + \tfrac17 - \tfrac14 + \cdots"></span></span>Find whether the first settles in size. <br>Find the totals 22g gives for the two orders.</li><li><span class="givens"><span data-tex-inline="\textstyle\sum \tfrac1n"></span></span>Find aₙ₊₁/aₙ for n = 1, 10 and 100. <br>Find whether one k below 1 lies above every ratio.</li><li><span class="givens"><span data-tex-inline="\textstyle\sum \tfrac1n,\ \ \sum \tfrac1{n^2}"></span></span>Find where the ratio of neighbours heads for each. <br>Find which sum settles, and what decides it.</li><li><span class="givens"><span data-tex-inline="\textstyle\sum \tfrac1n"></span></span>Find the next piece after s₁₀₀₀. <br>Find a fence for s₁₀₀₀ from the strips of 22f1, and whether s₁₀₀₀ is near a total.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">22i.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\textstyle\sum \tfrac{1}{n\,2^n}"></span></span>Build a fence round its total less than 0.0001 wide. <br>Find how many pieces it needs, and the fence.</div>
+  <div class="chq"><span class="chid">22i.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\textstyle\sum_{n \ge 2} \tfrac{1}{n(\ln n)^p}"></span></span>Find every p for which it settles. <br>Find what the ratio test and the root test tell you about it.</div>
+  <div class="chq"><span class="chid">22i.4.3</span><span class="tagq">converse</span>The shrink test: if Σ aₙ settles, its pieces head to 0. Ask for more and turn it round: if the pieces fall and n·aₙ heads to 0, must the sum settle? <br>Try aₙ = 1/(n ln n), from n = 2.</div>
+  <div class="chq"><span class="chid">22i.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="1 - \tfrac12 + \tfrac13 - \tfrac14 + \cdots"></span></span>Estimate its total another way: take the average of s₉ and s₁₀. <br>Find its error against ln 2 ≈ 0.6931, and compare with the bracket bounds for s₉ and s₁₀. <br>Find why the average is never further off than half the gap between them.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r22h.html">← 22h · sequences by hand</a><a href="r22j.html">22j · from counting to rare events →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>Choosing among the tests is usually taught as a strategy for testing series. The leftover technique gives remainder estimates: for the ratio test, for the integral test, and for the alternating series test. The total of 1 + 1 + 1/2! + ⋯ is e, shown on the next step.</p>
+  <h3>Who said it first</h3>
+  <p>Error bounds for sums are as old as the sums. Isaac Newton estimated the leftover of his series by eye; Joseph-Louis Lagrange (1797) and Augustin-Louis Cauchy (1821) gave the first bounds that were proved.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'first',t:R`a_n \not\to 0 \Rightarrow \text{wanders}`,n:`Cheapest; check it first.`},
+  {k:'ember',kl:'then',t:R`\text{geometric, } p\text{, ratio, root, area, bracket}`,n:`Read the shape of the pieces.`}
+],{title:'The slides · which test · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

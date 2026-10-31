@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>14·stat · Which guess makes the data most likely?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+@media (max-width:520px){.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r14i.html">← 14i When top and bottom both vanish, and growth races</a><a href="r14phys.html">next: 14·phys what stays the same when things crash? →</a></p>
+  <div class="tags"><span class="tag stat">14·stat · statistics</span></div>
+  <h1>Which guess makes the data most likely?</h1>
+  <p>Which guess makes the data most likely? A coin lands heads seven times in ten. A baseball team wins eighty-eight games of a hundred and sixty-two. A gardener counts round peas and wrinkled ones. Each time there is a chance nobody can see, and a record everybody can. People want the chance. The question is hard because every guess at the chance could have made the record: a fair coin can land heads seven times in ten, and so can a coin bent toward heads. No record proves the chance. But some guesses make the record seen far more likely than others do. This page writes the chance of the record as a function of the guess, and takes the guess where that function is greatest. Rung 14's slopes find it, and it is the share seen. Then the page asks how far the other guesses fall behind, and what happens when the best guess sits at an end, where the slope is not zero.</p>
+  <p class="gesture">Fix the record and let the guess move: the chance of exactly what was seen, read as a function of the guess, is the likelihood. Its slope has the sign of the heads seen less the guess times the tosses. So it climbs up to the share seen, and falls after it. The best guess is the share seen. Other guesses make the record less likely, and how much less is part of the answer. When none of the tosses land heads, or the guess is held to a range, the best guess sits at an end, and there the slope is not zero.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r04stat.html">4·stat</a> (chance, count-of-successes), <a href="r04j.html">4j</a> (stages-multiply, counted-functions, the choosing numbers), <a href="r05stat.html">5·stat</a> (chance as a fraction), <a href="r12c.html">12c</a> (highest-and-lowest), <a href="r13c.html">13c</a> (product for slopes), <a href="r13d.html">13d</a> (power for slopes, constant-factor), <a href="r13j.html">13j</a> (the chain rule by hand), <a href="r14a.html">14a</a> (flat-top, candidates), <a href="r14d.html">14d</a> (slope-sign-order), <a href="r14f.html">14f</a> (first-test, one-critical-point), <a href="r12e.html">12e</a> (halving-traps) and <a href="r13stat.html">13·stat</a> (a best line as a best guess). <a href="r14phys.html">14·phys</a> asks what stays the same in a crash; <a href="r15stat.html">15·stat</a> asks how likely landing in a range is.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · read it through, then work the picture and the slides</div>
+
+  <h3>The chance of a record</h3>
+  <p data-pid="b1349b">4·stat and 5·stat built chance by counting equally likely cases. A coin bent so that heads has chance 3/10 is like a spinner with ten equal slots, three of them marked heads. Toss it n times, each toss a fresh spin. Then every list of n slots is equally likely, and the lists can be counted.</p>
+  <p data-pid="0d287a">Chance-of-a-record technique. Let each toss be one of b equally likely slots, a of them heads, so that p = a/b. Let every list of n slots be equally likely. <b>Then a given order of k heads and n − k tails has chance pᵏ(1 − p)ⁿ⁻ᵏ, and k heads in any order have chance (n choose k) pᵏ(1 − p)ⁿ⁻ᵏ.</b></p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="14·stat: the chance-of-a-record technique">
+\text{lists of } n \text{ slots: } b^n @@ counted-functions (4j): functions from n to b slots
+\text{lists with heads in the given } k \text{ places: } a^k(b - a)^{n - k} @@ stages-multiply (4j), place by place
+\tfrac{a^k(b - a)^{n-k}}{b^n} = \big(\tfrac ab\big)^k\big(1 - \tfrac ab\big)^{n-k} = p^k(1 - p)^{n-k} @@ chance as a fraction (5·stat); 5b's rules
+\htmlClass{new}{\tbinom nk\, p^k(1 - p)^{n-k}} \text{ for } k \text{ heads in any order} \quad \blacksquare @@ the orders are separate piles, one for each k-member part (count-of-successes, 4·stat)
+  </pre>
+  <p data-pid="47b551">A real coin is no spinner, and its chance need not be a fraction. The ladder cannot yet say what a chance is when it is not a share of equally likely cases. So take the formula as the model for every p from 0 to 1: a guess that agrees with every fraction, and has no jumps between them. Its accepted name is the binomial model.</p>
+  <h3>The likelihood</h3>
+  <p class="eqline" data-pid="454d36">From here on, on this page, the record is k heads in n tosses, and it is fixed. The guess p moves over [0, 1]. The likelihood is L(p) = (n choose k) pᵏ(1 − p)ⁿ⁻ᵏ: the chance of the record seen, if the coin's chance were p.</p>
+  <p data-pid="62a6ba"><b>The likelihood is the chance of what was seen, read as a function of the guess.</b> It is not the chance that the guess is right. For 7 heads in 10, L(0.5) ≈ 0.117 and L(0.7) ≈ 0.267. A coin with chance 0.7 makes the record more than twice as likely as a fair one does. That says nothing yet about which coin it was.</p>
+  <p data-pid="49c256">The best guess is a p in [0, 1] where L is greatest. One exists: L is a polynomial, so continuous on the closed interval [0, 1], and highest-and-lowest (12c) says it reaches a greatest value. 14a's candidates say where to look: at the two ends, and at inputs inside where the slope is 0.</p>
+  <h3>The slope of the likelihood</h3>
+  <pre class="lines" data-k="ember" data-label="14·stat: the slope of L, for 1 ≤ k ≤ n − 1">
+\big(p^k\big)' = k\,p^{k-1} @@ power for slopes (13d)
+\big((1 - p)^{n-k}\big)' = (n - k)(1 - p)^{n-k-1} \cdot (-1) @@ the chain rule (13j): the inside 1 − p has slope −1
+L'(p) = \tbinom nk\big(k\,p^{k-1}(1 - p)^{n-k} - (n - k)\,p^k(1 - p)^{n-k-1}\big) @@ product for slopes (13c); constant-factor
+= \tbinom nk\, p^{k-1}(1 - p)^{n-k-1}\big(k(1 - p) - (n - k)p\big) @@ take out the common factor
+\htmlClass{new}{L'(p) = \tbinom nk\, p^{k-1}(1 - p)^{n-k-1}(k - np)} @@ the bracket: k − kp − np + kp
+  </pre>
+  <p data-pid="59ac89">Inside (0, 1), every factor before the bracket is positive. So the slope of L has the sign of k − np. It is positive while p &lt; k/n, 0 at p = k/n, and negative after.</p>
+  <p data-pid="be864a">Seen-share technique. Let 1 ≤ k ≤ n − 1. <b>The guess that makes k heads in n tosses most likely is the share seen, k/n.</b> The slope is 0 inside (0, 1) only at k/n, positive before it and negative after, so first-test (14f) makes k/n a top. One-critical-point (14f) makes it the greatest value on (0, 1). The ends give L(0) = L(1) = 0, less than L(k/n). ∎</p>
+  <pre class="lines" data-k="ember" data-label="14·stat: worked">
+\text{7 heads in 10}:\ L'(p) = 120\,p^6(1 - p)^2(7 - 10p) @@ zero inside only at 0.7
+L(0.7) = 120 \cdot 0.7^7 \cdot 0.3^3 \approx 0.267 @@ the best; L(0.5) ≈ 0.117
+\text{Seattle Mariners, 2023: 88 wins in 162} @@ best guess at the chance of a win: 88/162 ≈ 0.543
+\text{a coin tossed 10\,000 times by hand: 5067 heads} @@ best guess 0.5067
+\text{peas, 1866: 5474 round of 7324} @@ best guess ≈ 0.747, close to the 3/4 the gardener expected
+  </pre>
+  <h3>How far behind the other guesses fall</h3>
+  <p data-pid="50a0a4">The best guess is one number. The record allows others. A plain way to measure how far behind a guess falls is the ratio L(p)/L(k/n), at most 1. For 7 heads in 10 the fair coin's ratio is about 0.44: it makes the record less than half as likely, but far from impossible. Halving (12e) on L(p) − L(0.7)/10 finds where the ratio falls to a tenth: at about 0.37 and about 0.93. Every guess between makes the record at least a tenth as likely as the best guess does.</p>
+  <p data-pid="e3adda">More tosses narrow the stretch. For the 10 000 tosses with 5067 heads, the fair coin's ratio is about 0.41: a fair coin is no worse a fit for 10 000 tosses than for 10. But a coin with chance 0.53 has ratio below a hundredth. For the pea counts, the ratio at 3/4 is about 0.88.</p>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · counting</div>
+    <p data-pid="0911a6">4j set beside counting a principle of the second kind of care: random things in a crowd make smooth, steady patterns. One toss can land either way. Ten thousand tosses pile up near one share, and the likelihood gathers into a narrow peak around it. Ten tosses leave a wide hump.</p>
+    <p data-pid="bb7c36"><b>The spread is part of the answer, not noise around it.</b></p>
+    <p data-pid="91e876">“The best guess is 0.7” says where the hump peaks. The stretch from 0.37 to 0.93 says how wide it is. A report of the peak alone treats ten tosses like ten thousand.</p>
+    <p class="bait" data-pid="288ca1">A coin tossed 10 000 times landed heads 5067 times. The best guess is 0.5067, not 0.5. Is the coin fair?</p>
+  </aside>
+  <h3>When the best guess sits at an end</h3>
+  <p data-pid="624b3a">The seen-share technique left out k = 0 and k = n. Take k = 0: no heads at all. Then L(p) = (1 − p)ⁿ, and its slope is −n(1 − p)ⁿ⁻¹, negative on [0, 1). By slope-sign-order (14d), L falls all the way. The best guess is p = 0, at an end, and the slope there is −n, not 0. Flat-top (14a) promised a slope of 0 only at a top inside the interval.</p>
+  <p data-pid="5c634a">A real case. In the 44 years from 1981 to 2024, Mount St. Helens had no eruption as large as that of 18 May 1980. Count each year as a toss. The best guess at the chance of such an eruption in a year is 0. <b>A best guess at an end can say “never” after a record that only says “not yet”.</b> The spread tells the rest: every chance up to about 0.05 a year makes the record at least a tenth as likely as 0 does.</p>
+  <p data-pid="76316a">A guess can also be held to a range on purpose. Suppose a coin is known to be bent toward heads: p ≥ ½. It lands heads 4 times in 10. On [½, 1], k − np = 4 − 10p is negative, so L falls. End-guess technique: <b>when the share seen lies outside the range the guess is held to, the best guess is the end of the range nearest the share.</b> Here it is ½, where the slope of L is about −0.82.</p>
+  <h3>Two records of one coin</h3>
+  <p data-pid="f03ff9">Toss a coin 10 times and see 7 heads; toss it 30 more and see 9. Each record has its likelihood. Fresh spins keep every list equally likely, so the chance of both records is the product of their chances. The product is a constant times p¹⁶(1 − p)²⁴, and its best guess is 16/40 = 0.4. <b>Two records of one coin are one record: the best guess is the share seen in both together.</b> It is not the average of the two shares, 0.7 and 0.3, which is 0.5.</p>
+  <h3>Which rung licenses each step</h3>
+  <div class="tablewrap"><table class="tt">
+  <tr><th class="l">step</th><th class="l">licence</th></tr>
+  <tr><td class="l">the chance of a record</td><td class="l">chance-of-a-record, by counted-functions and stages-multiply (4j)</td></tr>
+  <tr><td class="l">a chance that is not a fraction</td><td class="l">the binomial model: a guess</td></tr>
+  <tr><td class="l">a best guess exists</td><td class="l">highest-and-lowest (12c)</td></tr>
+  <tr><td class="l">where to look</td><td class="l">candidates (14a)</td></tr>
+  <tr><td class="l">the slope of L</td><td class="l">product for slopes (13c), power (13d), the chain rule (13j)</td></tr>
+  <tr><td class="l">k/n is the best</td><td class="l">first-test, one-critical-point (14f)</td></tr>
+  <tr><td class="l">the stretch of fair guesses</td><td class="l">halving-traps (12e)</td></tr>
+  <tr><td class="l">a best guess at an end</td><td class="l">slope-sign-order (14d)</td></tr>
+  </table></div>
+  <h3>Illegal moves</h3>
+  <pre class="lines" data-k="ember" data-label="14·stat: tempting, and not allowed">
+L(0.7) = 0.267 \text{ is the chance that } p = 0.7\,? @@ it is the chance of the record if p were 0.7
+L'(p) = \tbinom nk\, k\,p^{k-1} \cdot (n - k)(1 - p)^{n-k-1}\,? @@ the slope of a product is not the product of the slopes (13c)
+\big((1 - p)^m\big)' = m(1 - p)^{m-1}\,? @@ the chain rule: the inside 1 − p brings −1
+\text{the best guess always has slope } 0\,? @@ at an end it need not: no heads in n gives slope −n at p = 0
+\text{best guess } 0.7 \text{, so the coin is not fair}\,? @@ the fair coin makes 7 in 10 about 0.44 times as likely: far from ruled out
+  </pre>
+  <h3>Running it backwards</h3>
+  <p data-pid="54d2a2">Handed a best guess and the number of tosses, the heads are their product: 0.35 from 20 tosses means 7 heads. Handed the slope of a likelihood written as a constant times p to a power, times (1 − p) to a power, times a bracket, read the powers back: they are k − 1 and n − k − 1. Handed a best guess at an end, read the record: a best guess of 0 on [0, 1] means no heads at all.</p>
+</section>
+
+<section class="pic" id="pic">
+  <div class="eyebrow">The picture · left: the likelihood of the record against the guess · right: what each guess says the record could have been</div>
+  <div class="panels">
+    <div class="panel">
+      <div class="lbl">L(p) against the guess p</div>
+      <canvas id="cvL"></canvas>
+      <div class="kn"><span class="m">tosses n</span><input type="range" id="kn" min="1" max="60" step="1" value="10"><output id="on"></output></div>
+      <div class="kn"><span class="m">heads k</span><input type="range" id="kk" min="0" max="10" step="1" value="7"><output id="ok"></output></div>
+      <div class="kn"><span class="m">guess p</span><input type="range" id="kp" min="0" max="1" step="0.005" value="0.5"><output id="op"></output></div>
+      <div class="chips" id="rch"></div>
+      <div class="cap">Ink: the likelihood. Teal dot: the best guess. Gold band: the guesses that make the record at least a tenth as likely as the best guess does. Ember: your guess, with the line through it at L’s slope.</div>
+      <div class="verdict" id="vdL"></div>
+    </div>
+    <div class="panel">
+      <div class="lbl">the chance of each count of heads, if the coin’s chance were your guess</div>
+      <canvas id="cvB"></canvas>
+      <div class="cap">Each bar is the chance of that many heads in n tosses at your guess. Ember bar: the record seen. Its height is L at your guess. Slide the guess and watch the ember bar grow tallest at the share seen.</div>
+      <div class="eqbox" id="eqL"></div>
+    </div>
+  </div>
+</section>
+
+<section class="slides" id="sl1"><div class="eyebrow">The slides · chance-of-a-record; the likelihood; a best guess exists; the slope of L; seen-share; worked; how far behind; counting; a best guess at an end; end-guess; illegal moves · ← → keys work</div></section>
+
+<section class="sayback">
+  <div class="eyebrow">Say it back · then work it</div>
+  <h2>Questions</h2>
+  <div class="phkey"></div>
+  <ol>
+    <li><span class="qid">14·stat.1</span><span class="gname">Best guesses.</span><span class="gwhy">Do: build the page’s pieces.</span>
+      <ol class="sub">
+        <li><span class="qid">14·stat.1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{Seattle }\text{Seahawks, }\text{2023: } 9"></span> <span data-tex-inline="\text{wins }\text{in } 17 \text{ games}"></span></span>Write the likelihood of a chance p of a win, and its slope. <br>Find the best guess.</li><li><span class="givens"><span data-tex-inline="L \text{ of part a}"></span></span>Find the sign of the slope of L at p = 0.6.</li><li><span class="givens"><span data-tex-inline="\text{peas, }\text{1866: } 6022"></span> <span data-tex-inline="\text{yellow }\text{of } 8023"></span></span>Find the best guess at the chance of yellow. <br>Compare it with 3/4.</li><li><span class="givens"><span class="gtx">A crabber at Bodega Bay pulls pots until one holds a legal crab.</span> <span data-tex-inline="\text{pots } 1, 2, 3 \text{ empty; }"></span> <span data-tex-inline="\text{pot } 4 \text{ holds }\text{one}"></span></span>Write the likelihood of a chance p that a pot holds one, and find the best guess.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">14·stat.2</span><span class="gname">From the guess back.</span><span class="gwhy">Undo: run the page’s techs backwards.</span>
+      <ol class="sub">
+        <li><span class="qid">14·stat.2.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{best guess } 0.35,"></span> <span data-tex-inline="n = 20"></span></span>Find k.</li><li><span class="givens"><span data-tex-inline="L&#x27;(p) = c\,p^4(1 - p)^2(5 - 8p),"></span> <span data-tex-inline="c \gt 0"></span></span>Find n and k.</li><li><span class="givens"><span data-tex-inline="\text{one }\text{coin: } 3 \text{ heads }\text{in } 10,"></span> <span data-tex-inline="\text{then } 9 \text{ heads in } 20"></span></span>Find the best guess from both records.</li><li><span class="givens"><span data-tex-inline="\text{the }\text{best }\text{guess }\text{on } [0, 1]"></span> <span data-tex-inline="\text{is } 0"></span></span>Find k.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">14·stat.3</span><span class="gname">Where the slope gives.</span><span class="gwhy">Bend: find where the techs stop working.</span>
+      <ol class="sub">
+        <li><span class="qid">14·stat.3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{Mount }\text{St. }\text{Helens, }\text{1981 }"></span> <span data-tex-inline="\text{to }\text{2024:}"></span> <span data-tex-inline="0 \text{ eruptions }\text{as }\text{large }"></span> <span data-tex-inline="\text{as }\text{1980&#x27;s }\text{in } 44 \text{ years}"></span></span>Find the best guess at the chance of one in a year. <br>Find every chance that makes the record at least a tenth as likely as the best guess does.</li><li><span class="givens"><span data-tex-inline="p \ge \tfrac12,"></span> <span data-tex-inline="4 \text{ heads in } 10"></span></span>Find the best guess and the slope of L there.</li><li><span class="givens"><span data-tex-inline="12 \text{ heads in } 12"></span></span>Find the best guess. <br>Decide whether flat-top finds it.</li><li><span class="givens"><span data-tex-inline="2 \text{ heads in } 3"></span></span>Find L(½)/L(⅔). <br>Decide whether the record rules out a fair coin.</li></ol></li>
+      </ol></li>
+    <li class="optgroup"><span class="qid">14·stat.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder challenges that rely on your own making. The page is complete without these; the rung's star needs them.</span>
+      <ol class="sub">
+        <li class="opt"><span class="qid">14·stat.4.1</span><span class="tagq">build</span>Keep a yes-or-no record of your own: the days it rained in your town last month, or a team’s wins in a season. <br>Find the best guess at the chance. <br>Trap, to within 0.01, every guess that makes your record at least a tenth as likely as the best guess does.</li>
+        <li class="opt"><span class="qid">14·stat.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="0 \lt a \lt b \lt 1,"></span> <span data-tex-inline="p \text{ held to } [a, b],"></span> <span data-tex-inline="k \text{ heads in } n"></span></span>Prove that the best guess is the point of [a, b] nearest k/n.</li>
+        <li class="opt"><span class="qid">14·stat.4.3</span><span class="tagq">converse</span><span class="givens"><span class="gtx">A coin is bent, and nobody marked which face is which.</span> <span data-tex-inline="8 \text{ tosses }\text{of } 10"></span> <span data-tex-inline="\text{showed }\text{the }\text{same }\text{face;}"></span> <span data-tex-inline="L(p) = \tbinom{10}{8}\cdot\tfrac12(A + B),"></span> <span data-tex-inline="A = p^8(1 - p)^2,"></span> <span data-tex-inline="B = p^2(1 - p)^8"></span></span>Prove or refute: a guess inside (0, 1) where the slope of L is 0 makes the record most likely.</li>
+        <li class="opt"><span class="qid">14·stat.4.4</span><span class="tagq">seam</span>Two people watched the same 12 tosses: 9 heads and 3 tails. One had decided beforehand to toss 12 times. The other had decided to toss until the third tail. Their two likelihoods differ only by a constant factor, so their best guesses agree. <br>Should they reach the same verdict on whether the coin is fair?</li>
+      </ol></li>
+  </ol>
+  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
+</section>
+
+<nav class="nextrung"><a href="r14i.html">← 14i · When top and bottom both vanish, and growth races</a><a href="r14phys.html">14·phys · what stays the same when things crash? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>Daniel Bernoulli asked in 1778 for the guess that makes a set of observations most probable. Carl Friedrich Gauss used the same idea in 1809 to justify 13·stat’s least squares. Ronald Fisher made it a method in 1912 and named the likelihood in 1921 and 1922. The 10 000 tosses are John Kerrich’s, made by hand while he was held prisoner in Denmark during the Second World War, and published in 1946. The pea counts are Gregor Mendel’s, from his papers of 1866 (5·bio).</p>
+  <aside class="voice para"><p>Fisher insisted that likelihood is not a probability. It does not add up to one over the guesses, and it obeys none of the laws of chance; it only ranks the guesses by how well each accounts for what was seen.</p><cite>after R. A. Fisher, “On the mathematical foundations of theoretical statistics” (1922); paraphrase</cite></aside>
+  <p>In 14·stat.4.4, the claim that two people with likelihoods that differ by a constant factor must reach the same verdict has the accepted name the likelihood principle; Allan Birnbaum argued for it in 1962. The 9 heads and 3 tails are the example of Dennis Lindley and Lawrence Phillips (1976): a test that counts tosses fixed in advance and a test that counts until the third tail give different verdicts on a fair coin. The way of stopping is the stopping rule.</p>
+  <p>For a record with no heads, Pierre-Simon Laplace proposed in 1814 to guess (k + 1)/(n + 2) instead of k/n, and asked with it the chance that the sun rises tomorrow; its accepted name is the rule of succession.</p>
+  <h3>Accepted names</h3>
+  <p>The likelihood function; the best guess is the maximum likelihood estimate, written p̂, and the method is maximum likelihood. The model of k heads in n fresh tosses is the binomial distribution; the model of the crabber’s pots, failures until the first success, is the geometric distribution. The guesses within a set ratio of the best form a likelihood interval.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="14·stat: a worked “proof”, not allowed">
+L(p) = (1 - p)^{12} \text{ for no heads in 12} @@ fine
+L'(p) = -12(1 - p)^{11} = 0 \iff p = 1 @@ fine
+\text{so the best guess is } p = 1 @@ not allowed: L(1) = 0 is the least value; L falls all the way, so the best is the end p = 0
+  </pre>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '?'; let s=v.toFixed(d==null?2:d); if(/^-0(\.0*)?$/.test(s)) s=s.slice(1); return s.replace('-','−'); };
+const kn=$('kn'),kk=$('kk'),kp=$('kp'); let held=false;
+function choose(n,k){ let c=1; for(let i=1;i<=k;i++) c=c*(n-k+i)/i; return c; }
+const N=()=>+kn.value, Kk=()=>+kk.value;
+const L=p=>choose(N(),Kk())*Math.pow(p,Kk())*Math.pow(1-p,N()-Kk());
+const dL=p=>{ const n=N(),k=Kk(),c=choose(n,k); if(k===0) return -n*c*Math.pow(1-p,n-1); if(k===n) return n*c*Math.pow(p,n-1); return c*Math.pow(p,k-1)*Math.pow(1-p,n-k-1)*(k-n*p); };
+const lo=()=>held?0.5:0;
+const best=()=>Math.max(lo(),Kk()/N());
+function band(){ const b=best(), t=L(b)/10, f=p=>L(p)-t; const bis=(a,c)=>{ for(let i=0;i<50;i++){ const m=(a+c)/2; if((f(a)<0)===(f(m)<0)) a=m; else c=m; } return (a+c)/2; };
+  const left=(f(lo())>=0)?lo():bis(lo(),b), right=(f(1)>=0)?1:bis(b,1); return [left,right]; }
+const PL=plane($('cvL'),{x:[-0.03,1.03],y:[0,1],grid:0,labels:0,aspect:0.8,draw:P=>drawL(P)});
+const PB=plane($('cvB'),{x:[-1,11],y:[0,1],grid:0,labels:0,aspect:0.8,draw:P=>drawB(P)});
+function drawL(P){ const top=L(best())*1.15||1; P.o.y=[-top*0.06,top];
+  for(let x=0;x<=1.0001;x+=0.1){ P.line(x,0,x,top,'--grid',1); if(Math.round(x*10)%2===0) P.text(x.toFixed(1),x,-top*0.045,'--muted','center',10); }
+  P.line(-0.03,0,1.03,0,'--muted',1.3);
+  const [a,b]=band(); const c=P.ctx; c.globalAlpha=.22; P.poly([[a,0],[b,0],[b,top],[a,top]],null,'--gold'); c.globalAlpha=1;
+  if(held){ c.globalAlpha=.12; P.poly([[-0.03,0],[0.5,0],[0.5,top],[-0.03,top]],null,'--ink'); c.globalAlpha=1; }
+  P.fn(p=>(p>=0&&p<=1)?L(p):NaN,'--ink',2.4);
+  P.dot(best(),L(best()),'--teal',5.5);
+  const p=+kp.value, s=dL(p), w=0.12; P.line(Math.max(0,p-w),L(p)-w*s,Math.min(1,p+w),L(p)+w*s,'--ember',1.6,[4,4]); P.dot(p,L(p),'--ember',5); }
+function drawB(P){ const n=N(), p=+kp.value; P.o.x=[-0.8,n+0.8]; let m=0; const v=[]; for(let j=0;j<=n;j++){ v.push(choose(n,j)*Math.pow(p,j)*Math.pow(1-p,n-j)); m=Math.max(m,v[j]); } P.o.y=[-m*0.08,m*1.12];
+  P.line(-0.8,0,n+0.8,0,'--muted',1.3); const wd=Math.min(0.42,0.42);
+  v.forEach((h,j)=>{ P.poly([[j-wd,0],[j+wd,0],[j+wd,h],[j-wd,h]],null,j===Kk()?'--ember':'--teal'); });
+  const step=n>30?10:n>12?5:1; for(let j=0;j<=n;j+=step) P.text(String(j),j,-m*0.065,'--muted','center',10); }
+function read(){ kk.max=kn.value; if(+kk.value>+kn.value) kk.value=kn.value; const n=N(),k=Kk(),p=+kp.value,b=best(),[a,c]=band();
+  $('on').textContent=n; $('ok').textContent=k; $('op').textContent=fm(p,3);
+  const s=dL(p), vd=$('vdL'); vd.className='verdict '+(Math.abs(p-b)<0.003?'win':'lose');
+  vd.textContent=k+' heads in '+n+'. Best guess '+fm(b,3)+(held&&k/n<0.5?', at the end of the range p ≥ ½':'')+'. Your guess '+fm(p,3)+' makes the record '+fm(L(p)/L(b),3)+' times as likely as the best guess does; the slope of L there is '+(Math.abs(s)<1e-12?'0':s>0?'positive: move right.':'negative: move left.')+' Guesses from '+fm(a,2)+' to '+fm(c,2)+' make it at least a tenth as likely.';
+  tex($('eqL'),R`\begin{aligned}&L(p) = \tbinom{${n}}{${k}}\,p^{${k}}(1 - p)^{${n-k}}\\ &L(${fm(p,3)}) = ${fm(L(p),4)},\ \ L'(${fm(p,3)}) = ${fm(s,4)}\end{aligned}`,true);
+  PL.redraw(); PB.redraw(); }
+const rch=$('rch'); const bh=document.createElement('button'); bh.textContent='hold the guess to p ≥ ½'; bh.onclick=()=>{ held=!held; bh.classList.toggle('on',held); read(); }; rch.appendChild(bh);
+[kn,kk,kp].forEach(el=>el.addEventListener('input',read));
+window.__pic={set:(n,k,p,h)=>{ held=!!h; kn.value=n; read(); kk.value=k; kp.value=p; read(); return {L:L(p),dL:dL(p),best:best(),band:band()}; }};
+read();
+
+stepper('#sl1',[
+  {k:'ember',kl:'chance-of-a-record',t:R`\tbinom nk\,p^k(1 - p)^{n-k}`,n:`k heads in n fresh spins, counted.`},
+  {k:'ember',kl:'the likelihood',t:R`L(p) = \tbinom nk\,p^k(1 - p)^{n-k}`,n:`The record fixed; the guess moves.`},
+  {k:'teal',kl:'a best guess exists',t:R`L \text{ continuous on } [0, 1]`,n:`Highest-and-lowest; candidates at the ends and where the slope is 0.`},
+  {k:'ember',kl:'the slope of L',t:R`\htmlClass{new}{L\'(p) = \tbinom nk\,p^{k-1}(1 - p)^{n-k-1}(k - np)}`,n:`Product for slopes and the chain rule.`},
+  {k:'ember',kl:'seen-share',t:R`\hat p = \tfrac kn`,n:`Climbs to the share seen, falls after it.`},
+  {k:'ember',kl:'worked',t:R`\tfrac{88}{162} \approx 0.543`,n:`The Mariners’ 2023 season.`},
+  {k:'ember',kl:'how far behind',t:R`\tfrac{L(0.5)}{L(0.7)} \approx 0.44`,n:`A fair coin, after 7 heads in 10.`},
+  {k:'ember',kl:'counting',t:R`0.37 \lt p \lt 0.93`,n:`The spread is part of the answer.`},
+  {k:'ember',kl:'a best guess at an end',t:R`L(p) = (1 - p)^n,\ \ L\'(0) = -n`,n:`No heads: best guess 0, slope not 0.`},
+  {k:'ember',kl:'end-guess',t:R`p \ge \tfrac12,\ \ 4 \text{ in } 10 \Rightarrow \hat p = \tfrac12`,n:`The end of the range nearest the share.`},
+  {k:'ember',kl:'illegal',t:R`L(0.7) \ne P(p = 0.7)`,n:`The chance of the record, not of the guess.`}
+],{title:'The slides · chance-of-a-record; the likelihood; a best guess exists; the slope of L; seen-share; worked; how far behind; counting; a best guess at an end; end-guess; illegal moves · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

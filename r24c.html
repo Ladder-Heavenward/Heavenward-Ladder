@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A map that shrinks has one fixed point</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r24b.html">← 24b building the solution by repeated integration</a><a href="r24d.html">next: 24d tame rules fix the future →</a></p>
+  <div class="tags"><span class="tag proof">24c · proof</span></div>
+  <h1>A map that shrinks has one fixed point</h1>
+  <p>On rung 22 you saw that a rule which pulls every two numbers closer together, fed its own answers, settles at the one number it leaves alone. This step makes the same idea work for functions. To do that you need a way to say how far apart two functions are, and the simplest is the largest gap between their graphs. With that distance, a list of functions that crowds together settles everywhere at once, onto a function with no breaks. And a map that takes functions to functions, and pulls every two of them closer by a fixed fraction, has exactly one function it leaves alone. Repeated integration will turn out to be such a map.</p>
+  <p class="gesture">Measure the distance between two functions by the largest gap between them. Lists of functions that crowd in that distance settle everywhere at once. A map on functions that pulls every two closer by a fixed fraction has exactly one function it leaves alone.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r22h.html">22h</a> (the pull-together technique), <a href="r22c.html">22c</a> (crowding), <a href="r23d.html">23d</a> (settling everywhere at once), <a href="r12c.html">12c</a> (highest and lowest values), <a href="r08h.html">8h</a> (the triangle technique). <a href="r24d.html">24d</a> uses it to fix the future.</p></div>
+</header>
+
+<section class="class step" data-step="24c1">
+  <h2 class="sthead"><span class="stno">24c1</span>The largest gap</h2>
+  <p class="stands">Stands on 12c (the highest-and-lowest technique), 8h (the triangle technique) and 23d2 (settling everywhere at once).</p>
+  <p class="eqline" data-pid="2681e1">From here on, for functions f and g continuous on [a, b], ‖f − g‖ is the largest value of |f(x) − g(x)| on [a, b]. It exists by 12c, since |f − g| is continuous there. Read it "the largest gap between f and g". Accepted name: the sup norm, or uniform distance.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the largest gap behaves like a distance">
+\|f - g\| \ge 0, \text{ and } \|f - g\| = 0 \Leftrightarrow f = g @@ every gap is 0 exactly when the largest is
+\|f - g\| = \|g - f\| @@ |f(x) − g(x)| = |g(x) − f(x)|
+|f(x) - h(x)| \le |f(x) - g(x)| + |g(x) - h(x)| \le \|f - g\| + \|g - h\| @@ the triangle technique (8h), at each x
+\htmlClass{new}{\|f - h\| \le \|f - g\| + \|g - h\|} \quad \blacksquare @@ the bound holds at the x where the left side is largest
+  </pre>
+  <p data-pid="20b414">And settling everywhere at once is settling in this distance: fₙ settles everywhere at once to f on [a, b] exactly when ‖fₙ − f‖ heads to 0. The "one N for every x" of 23d2 is one N for the largest gap.</p>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">24c1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = x^2,\ g(x) = x"></span> <span class="gtx">on [0, 2]</span></span>Find ‖f − g‖, and the x where it sits.</li><li><span class="givens"><span data-tex-inline="f = \sin,\ g = 0"></span> <span class="gtx">on [0, π]</span></span>Find ‖f − g‖, and the x where it sits.</li><li><span class="givens"><span data-tex-inline="f(x) = e^x,\ g(x) = 1 + x"></span> <span class="gtx">on [−1, 1]</span></span>Find ‖f − g‖, and the x where it sits. <br>Find the ceiling the error-ceiling technique gives for it.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24c2">
+  <h2 class="sthead"><span class="stno">24c2</span>Crowding functions settle</h2>
+  <p class="stands">Stands on 24c1, 22c2 (the crowd technique) and 23d3 (kept continuity).</p>
+  <p data-pid="1adfbb">Function-crowd technique: <b>if continuous fₙ on [a, b] crowd in the largest gap, meaning for every ε &gt; 0 some N makes ‖fₘ − fₙ‖ &lt; ε for all m, n ≥ N, then they settle everywhere at once to a continuous f.</b> The line of reals has no holes, and neither does this space of functions.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the function-crowd technique">
+|f_m(x) - f_n(x)| \le \|f_m - f_n\| @@ each gap is at most the largest
+f_n(x) \text{ crowds, so settles; call its limit } f(x) @@ the crowd technique (22c2), at each x
+n \ge N:\ |f_n(x) - f_m(x)| < \varepsilon \text{ for every } m \ge N \text{ and every } x @@ the crowding, with one N
+n \ge N:\ |f_n(x) - f(x)| \le \varepsilon \text{ for every } x @@ let m grow: limits keep ≤ (10b)
+f_n \to f \text{ everywhere at once} @@ one N for every x
+\htmlClass{new}{f \text{ is continuous on } [a, b]} \quad \blacksquare @@ kept continuity (23d3)
+  </pre>
+  <p data-pid="cd4092">One more fact for the next steps. If every fₙ takes values in a closed interval [c, d], so does f, since limits keep ≤ and ≥.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24c2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="T_n(x) = 1 + x + \tfrac{x^2}{2!} + \cdots + \tfrac{x^n}{n!}"></span> <span class="gtx">on [−1, 1]</span></span>Find a ceiling for ‖Tₘ − Tₙ‖ when m &gt; n. <br>Prove that the Tₙ crowd in the largest gap. <br>Find the least N that works for ε = 0.001.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24c3">
+  <h2 class="sthead"><span class="stno">24c3</span>A map that shrinks</h2>
+  <p class="stands">Stands on 24c2 and 22h3 (the pull-together technique).</p>
+  <p data-pid="f87be8">Let D be the continuous functions on [a, b] with values in [c, d], and T a map that sends each f in D to a function Tf in D.</p>
+  <p data-pid="386690">Shrinking-map technique: <b>if ‖Tf − Tg‖ ≤ k‖f − g‖ for all f, g in D and one k &lt; 1, then exactly one f in D has Tf = f; and from any start f₀ in D, fₙ₊₁ = Tfₙ settles everywhere at once to it.</b> It is 22h3 again, with the largest gap in place of the distance between numbers.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the shrinking-map technique">
+\|f_{n+1} - f_n\| \le k^n \|f_1 - f_0\| @@ apply the shrink n times
+\|f_m - f_n\| \le \tfrac{k^n}{1-k}\|f_1 - f_0\| \ \ (m > n) @@ add the steps (24c1's triangle); the geometric sum (15i)
+f_n \to f \text{ everywhere at once},\ f \in D @@ the function-crowd technique (24c2)
+\|Tf - f\| \le \|Tf - Tf_n\| + \|f_{n+1} - f\| \le k\|f - f_n\| + \|f_{n+1} - f\| \to 0 @@ Tfₙ = fₙ₊₁
+Tg = g,\ Tf = f \Rightarrow \|f - g\| \le k\|f - g\| \Rightarrow f = g @@ k &lt; 1
+\htmlClass{new}{\text{exactly one } f \in D \text{ with } Tf = f, \text{ and } T^n f_0 \to f} \quad \blacksquare @@ the lines above
+  </pre>
+  <p data-pid="0d5234">The proof also says how fast: after n rounds you are within kⁿ/(1 − k) times the first step of the answer. Each round wins a fixed share of the remaining distance.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · shrinking map · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24c3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="(Tf)(x) = \tfrac12 f(x^2) + x"></span> <span class="gtx">on [0, 1]</span></span>Check that T sends functions with values in [0, 2] to functions with values in [0, 2], and that it shrinks with k = ½. <br>Run two rounds from f₀ = 0, and bound the largest gap between f₂ and the fixed function. <br>Find the fixed function as a sum, and its true largest gap from f₂.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24c4">
+  <h2 class="sthead"><span class="stno">24c4</span>Illegal moves</h2>
+  <p class="stands">Stands on 24c1 to 24c3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\|Tf - Tg\| < \|f - g\| \text{ for } f \ne g, \text{ so a fixed point exists}\,? @@ the shrink must be by one fixed k &lt; 1; on [1, ∞), x + 1/x pulls closer and has no fixed point
+f_n \to f \text{ at each point, so } \|f_n - f\| \to 0\,? @@ xⁿ on [0, 1]: the largest gap stays at least ½ (23d2)
+T \text{ shrinks, so it has a fixed point, wherever } D \text{ is}\,? @@ D must keep its limits; on (0, 1], x ↦ x/2 shrinks and has none
+\|f + g\| = \|f\| + \|g\|\,? @@ only ≤; f = x, g = −x on [0, 1] gives 0 on the left and 2 on the right
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24c4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="g(x) = \sqrt{x^2 + 1}"></span> <span class="gtx">on [0, ∞)</span></span>Prove that g pulls every two different points closer. <br>Run four steps from 0, and find where the run goes. <br>Find what the shrinking-map technique asks that g does not give.</li><li><span class="givens"><span data-tex-inline="f_n(x) = x^n"></span> <span class="gtx">on [0, 1]</span></span>Find the x where xⁿ = ½, for n = 10 and n = 100. <br>Find ‖xⁿ − x²ⁿ‖, and what it says about crowding.</li><li><span class="givens"><span data-tex-inline="g(x) = \tfrac{x}{2}"></span> <span class="gtx">on (0, 1]</span></span>Run four steps from 1, and find where the run heads. <br>Find the line of the shrinking-map proof that breaks.</li><li><span class="givens"><span data-tex-inline="f(x) = x,\ g(x) = 1 - x"></span> <span class="gtx">on [0, 1]</span></span>Find ‖f‖, ‖g‖ and ‖f + g‖, where ‖h‖ means ‖h − 0‖. <br>Find when ‖f + g‖ = ‖f‖ + ‖g‖ does hold.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">24c.4.1</span><span class="tagq">build</span>Build a map T on continuous functions on [0, ½] that shrinks, and whose fixed function is eˣ. <br>Find its k, and a closed interval of values that T keeps. <br>Bound the largest gap after five rounds from f₀ = 1, and compare it with the true gap.</div>
+  <div class="chq"><span class="chid">24c.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="(Tf)(x) = 1 + \int_0^x f(t)\,dt"></span> <span class="gtx">on [0, b]</span></span>Find the k this map shrinks by. Find the b for which the shrinking-map technique applies, with a closed interval of values that T keeps. <br>At b = 1 and b = 2 the technique gives nothing. Find whether T still has exactly one fixed function there.</div>
+  <div class="chq"><span class="chid">24c.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="(Tf)(x) = \sin(f(x))"></span> <span class="gtx">on [0, 1], values in [0, 1]</span></span>The shrinking-map technique gives one fixed function, found from any start. Turn it round: if a map has exactly one fixed function, and every run settles at it everywhere at once, must the map shrink by a fixed k &lt; 1? <br>Find the fixed functions of this T, and where a run from f₀ = 1 heads. <br>Find whether any k &lt; 1 works.</div>
+  <div class="chq"><span class="chid">24c.4.4</span><span class="tagq">reroute</span>The shrinking-map technique bounds the distance to the fixed function from the first step. Find a bound from the last step instead: prove ‖fₙ − f‖ ≤ k‖fₙ − fₙ₋₁‖/(1 − k). <br>Check it on 24c3.1 after two rounds. Find why a bound like this is the one to use when deciding to stop.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r24b.html">← 24b · building the solution by repeated integration</a><a href="r24d.html">24d · tame rules fix the future →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The largest gap is the supremum (uniform, or infinity) norm, written ‖·‖∞. The function-crowd technique says the space C[a, b] of continuous functions is complete in that norm (a Banach space). The shrinking-map technique is the contraction mapping principle, or the Banach fixed-point theorem.</p>
+  <h3>Who said it first</h3>
+  <p>Stefan Banach proved the principle in general in his 1920 thesis, published in 1922; Picard's and Lindelöf's existence proofs had used the same idea for rules on rates thirty years earlier. Maurice Fréchet, in 1906, first treated functions as points of a space with a distance.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'the shrink',t:R`\|Tf - Tg\| \le k\|f - g\|,\ k < 1`,n:`In the largest gap.`},
+  {k:'ember',kl:'one fixed point',t:R`\htmlClass{new}{Tf = f \text{ for exactly one } f}`,n:`Repeating T finds it.`}
+],{title:'The slides · shrinking map · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

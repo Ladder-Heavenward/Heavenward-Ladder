@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>18·nav · How can a small map be true to the land?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r18econ.html">← 18·econ how much do buyers flinch?</a><a href="r18logi.html">next: 18·logi how many of each loaf should a bakery bake? →</a></p>
+  <div class="tags"><span class="tag nav">18·nav · navigation</span></div>
+  <h1>How can a small map be true to the land?</h1>
+  <p>How can a small map be true to the land? 9e drew pairs of numbers as points, and a graph is a shape made from numbers. A map runs the other way. The shape is already there: a coast, a road, a field. The map-maker lays a grid over it, so that every place gets a pair of numbers. Then the paper shrinks every distance by the same factor, so that the county fits on a table. This page shows that the shrinking is 18f's scaling, that every triangle of places is similar to its picture, and that a distance can be read straight off the paper. Then it shows how a surveyor fixes a far point from one measured line and two sightings, which is how maps were made in the first place.</p>
+  <p class="gesture">On a grid in kilometres, the distance between places is the square root of the squared east gap plus the squared north gap. At a scale of one to some number, paper distance is ground distance divided by that number, and paper area is ground area divided by its square. Every triangle of places is similar to its picture. From a measured base line, two sighted directions fix a far point: the two sight lines meet once.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r18f.html">18f</a> (scaling in the plane, similar-triangles, parallel-cut, the degrees axiom), <a href="r18a.html">18a</a> (distance-laws, right-triangle), <a href="r18b.html">18b</a> (triangle in the plane), <a href="r18c.html">18c</a> (two-lines-meet), <a href="r18g.html">18g</a> (triangle-area), <a href="r09e.html">9e</a> (pairs drawn). Rung 21 says how big an angle is, and turns a sighting into a number.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · read it through, then work the picture and the slides</div>
+
+  <h3>A grid laid over the ground</h3>
+  <p data-pid="9c58bc">Start with a place, and call it the origin. Choose a direction east and a direction north, at a right angle. Choose a unit: 1 km. Now every place has a pair (e, n): how far east of the origin, and how far north. Their accepted names are easting and northing. This is 9e's plane, with one change of order. In 9e the numbers came first and the drawing after. Here the ground comes first, and the numbers are read off it.</p>
+  <p data-pid="65e5bd">Rung 18 works in a plane. The Earth is round, but a county is a small enough patch that a flat grid serves: across Monterey Bay, the error is far less than the width of a road. On such a grid, distance-laws give the distance between two places as √(Δe² + Δn²), with Δe and Δn the differences of their eastings and northings.</p>
+  <pre class="lines" data-k="ember" data-label="18·nav: Monterey Bay on a grid in km, origin at Point Pinos light">
+\begin{aligned}&\text{the wharf in Monterey } (3.6, -3.3),\\ &\quad \ \ \text{Carmel Mission } (1.2, -10.1)\end{aligned} @@ read off a map, to about a tenth of a km
+\begin{aligned}&\text{Moss Landing harbour } (13.1, 19.0),\\ &\quad \ \ \text{Santa Cruz light } (-8.4, 35.3)\end{aligned} @@ across the bay
+\text{Point Pinos to Moss Landing}:\ \sqrt{13.1^2 + 19.0^2} \approx 23.1 \text{ km} @@ distance-laws (18a)
+\text{Point Pinos to Santa Cruz light}:\ \sqrt{8.4^2 + 35.3^2} \approx 36.3 \text{ km} @@ the mouth of the bay
+  </pre>
+
+  <h3>Scale is a ratio of similar triangles</h3>
+  <p data-pid="4445c4">A paper map shrinks the grid. At scale 1 : n, a length of 1 on the paper stands for a length of n on the ground, in the same unit. So 1 : 24 000 means 1 cm on paper for 24 000 cm, or 240 m, on the ground. The United States Geological Survey's standard maps of California are at 1 : 24 000, one sheet for each small patch: Monterey, Seaside, Marina, Moss Landing, Carmel Valley and the rest.</p>
+  <p class="eqline" data-pid="aca4f5">A reuse, said out loud. 18f called X ↦ O + k(X − O) a map: a function from the plane to itself. A paper map is that same thing. Put the origin at O, take k = 1/n, then slide the result onto the paper, which changes no distance. 18f's word keeps its job; this page only adds the paper.</p>
+  <p data-pid="05fb03">Map-scale technique: <b>on a map at one scale, every distance on paper is the same fraction of the distance on the ground.</b> At scale 1 : n, paper distance = ground distance / n and paper area = ground area / n². Every triangle of places is similar to its picture on the paper, with scale factor 1/n.</p>
+  <pre class="lines" data-k="ember" data-label="18·nav: the map-scale technique">
+X \mapsto O + \tfrac1n (X - O) @@ the paper map, with origin O and k = 1/n
+\begin{aligned}&\text{every distance times } \tfrac1n,\\ &\quad \ \text{every area times } \tfrac{1}{n^2}\end{aligned} @@ scaling in the plane (18f)
+\begin{aligned}&\text{triangle } ABC \text{ and its}\\ &\quad\text{picture } A'B'C' \text{ are similar}\end{aligned} @@ scaling in the plane carries one onto the other: the meaning of similar (18f)
+\htmlClass{new}{\tfrac{A'B'}{AB} = \tfrac{B'C'}{BC} = \tfrac{C'A'}{CA} = \tfrac1n} \quad \blacksquare @@ the same factor for every pair of places
+  </pre>
+  <p data-pid="e94321">So a map can be checked. Measure any three places on the ground and on the paper. If the three ratios differ, the map is not at one scale. And a map's scale can be found from one known distance: divide the paper length by the ground length, in the same unit.</p>
+  <p data-pid="7e00e7">Most maps also carry a scale bar: a segment drawn on the paper, marked with the ground length it stands for. A scale bar is printed as part of the map. Enlarge the map on a copier, and the bar grows with everything else, so it stays right. The ratio printed beside it does not.</p>
+
+  <h3>Reading distance off the map</h3>
+  <p data-pid="cc2fb3">There are two ways to find a distance from a map. Read the eastings and northings, and use distance-laws. Or lay a ruler across the paper and divide by the scale. The two agree. The right triangle with legs Δe and Δn on the ground is similar to its picture on the paper, so the ruler measures 1/n of √(Δe² + Δn²).</p>
+  <pre class="lines" data-k="ember" data-label="18·nav: worked">
+\text{Point Pinos to Moss Landing, at } 1 : 250\,000 @@ a road map of the region
+\tfrac{23.1 \text{ km}}{250\,000} = \tfrac{2\,310\,000 \text{ cm}}{250\,000} \approx 9.2 \text{ cm} @@ map-scale: the ruler reads 9.2 cm
+\text{a field } 2.5 \text{ cm} \times 1.5 \text{ cm at } 1 : 24\,000 @@ a lettuce field near Salinas
+600 \text{ m} \times 360 \text{ m} = 216\,000 \text{ m}^2 = 21.6 \text{ ha} @@ each side times 240 m; the area times 240² (1 ha = 10 000 m²)
+  </pre>
+  <p data-pid="e202d6">A ruler gives the straight distance. A road is never shorter than that, and a winding one is much longer. Highway 1 south of Carmel follows every bend of the coast. By 18b's triangle technique in the plane, each bend can only add length, since a path made of segments is at least as long as the straight segment from its start to its end.</p>
+
+  <h3>A surveyor's triangle</h3>
+  <p data-pid="04bf6a">How was the first map made, with no map to copy? Measure one length on the ground with great care: a base line AB. From each end, sight a far point T, a hilltop or a lighthouse, and record the direction. Two directions from two known points fix T. Surveyor's-triangle technique: <b>one measured length and two sighted directions fix a far point.</b></p>
+  <p data-pid="b17dd3">There are two ways to say it, with the tools of 18f and of 18c. With angles: measure the angles at A and at B in degrees. Draw any triangle A′B′T′ with the same two angles, on paper. By similar-triangles, it is similar to ABT. So AT = AB · A′T′/A′B′, and likewise for BT. The paper triangle is a map of the ground triangle, with its scale set by the base. With coordinates: put A at (0, 0) and B at (b, 0). Mark each sight line with a stake: from A, a stake p along the base and q out from it lines up with T. Each sight line is then a line through a known point with a known direction, and two-lines-meet gives T.</p>
+  <pre class="lines" data-k="ember" data-label="18·nav: the surveyor's-triangle technique, by stakes">
+A = (0, 0),\ B = (600, 0) \text{ m} @@ a base line along the beach at Del Monte, in Monterey
+\text{from } A:\ \text{stake at } (100, 150);\ \ \text{from } B:\ \text{stake at } (500, 300) @@ each lines up with a buoy offshore
+y = 1.5x,\ \ y = -3(x - 600) @@ the two sight lines: through a point, with a slope (18g)
+1.5x = 1800 - 3x \Rightarrow T = (400, 600) @@ two-lines-meet (18c): their slopes differ
+AT = \sqrt{400^2 + 600^2} \approx 721 \text{ m},\ \ BT = \sqrt{200^2 + 600^2} \approx 632 \text{ m} @@ distance-laws
+\begin{aligned}&\htmlClass{new}{\text{the stake triangle is a map of the big one, }}\\ &\quad \htmlClass{new}{\text{at } 1 : 4} \quad \blacksquare\end{aligned} @@ parallel-cut (18f): legs 100 and 150 against 400 and 600
+  </pre>
+  <p data-pid="586e0a">Once T is fixed, AT is a known length too, and it can serve as the base for the next triangle. A chain of triangles, each resting on the last, carries one careful measurement across a whole state. Its accepted name is triangulation. Only the first base is measured with a tape; every other length comes from the sightings.</p>
+
+  <h3>Heights drawn flat</h3>
+  <p data-pid="3d0a05">A graph turns numbers into a shape. A height map does the reverse. Walk over a hill and note, at each place (e, n), its height above the sea. That is a function from places to heights, and paper is flat. So draw it flat: for a chosen height, mark every place at exactly that height, and join the marks. Each such line has the accepted name contour line, and the drawing is a contour map.</p>
+  <div class="contourfig" style="display:flex;flex-wrap:wrap;gap:12px;margin:14px 0"><div style="flex:1 1 260px;min-width:0"><div class="eyebrow">from above: a contour map of a hill, heights in metres</div><svg viewBox="0 0 300 215" width="100%" role="img" aria-label="Four closed contour lines, at 100, 200, 300 and 400 metres, nested round a top of 450 metres; they spread wide to the west and crowd close to the east."><line x1="10" y1="108" x2="290" y2="108" stroke="var(--muted)" stroke-dasharray="3 3" stroke-width=".8"/><circle cx="172.2" cy="108" r="92.4" fill="none" stroke="var(--teal)" stroke-width="1.4"/><circle cx="188.8" cy="108" r="66.0" fill="none" stroke="var(--teal)" stroke-width="1.4"/><circle cx="205.2" cy="108" r="39.6" fill="none" stroke="var(--teal)" stroke-width="1.4"/><circle cx="221.8" cy="108" r="13.2" fill="none" stroke="var(--teal)" stroke-width="1.4"/><text x="79.8" y="111" font-size="9" fill="var(--muted)" text-anchor="middle" paint-order="stroke" stroke="var(--paper)" stroke-width="3">100</text><text x="122.8" y="111" font-size="9" fill="var(--muted)" text-anchor="middle" paint-order="stroke" stroke="var(--paper)" stroke-width="3">200</text><text x="165.6" y="111" font-size="9" fill="var(--muted)" text-anchor="middle" paint-order="stroke" stroke="var(--paper)" stroke-width="3">300</text><text x="208.6" y="111" font-size="9" fill="var(--muted)" text-anchor="middle" paint-order="stroke" stroke="var(--paper)" stroke-width="3">400</text><circle cx="230" cy="108" r="2.5" fill="var(--ember)"/><text x="230" y="102" font-size="9" fill="var(--ember)" text-anchor="middle">450</text><text x="282" y="16" font-size="10" fill="var(--muted)" text-anchor="middle">N</text><line x1="282" y1="20" x2="282" y2="34" stroke="var(--muted)" stroke-width="1"/><line x1="14" y1="208" x2="47" y2="208" stroke="var(--ink)" stroke-width="1.5"/><text x="14" y="203" font-size="9" fill="var(--muted)">1 km</text></svg></div><div style="flex:1 1 260px;min-width:0"><div class="eyebrow">from the side: the height along the dashed line</div><svg viewBox="0 0 300 132" width="100%" role="img" aria-label="The height along the dashed east-west line: a long gentle rise from the west to 450 metres, then a short steep drop to the east."><line x1="34" y1="115" x2="290" y2="115" stroke="var(--muted)" stroke-width=".8"/><line x1="34" y1="93.9" x2="290" y2="93.9" stroke="var(--grid)" stroke-width=".8"/><text x="30" y="96.9" font-size="8" fill="var(--muted)" text-anchor="end">100</text><line x1="34" y1="72.8" x2="290" y2="72.8" stroke="var(--grid)" stroke-width=".8"/><text x="30" y="75.8" font-size="8" fill="var(--muted)" text-anchor="end">200</text><line x1="34" y1="51.7" x2="290" y2="51.7" stroke="var(--grid)" stroke-width=".8"/><text x="30" y="54.7" font-size="8" fill="var(--muted)" text-anchor="end">300</text><line x1="34" y1="30.6" x2="290" y2="30.6" stroke="var(--grid)" stroke-width=".8"/><text x="30" y="33.6" font-size="8" fill="var(--muted)" text-anchor="end">400</text><path d="M34.0 115.0 L35.0 115.0 L36.0 115.0 L37.0 115.0 L38.0 114.5 L39.0 114.0 L40.0 113.5 L41.0 113.0 L42.0 112.5 L43.0 112.0 L44.0 111.5 L45.0 111.0 L46.0 110.5 L47.0 110.1 L48.0 109.6 L49.0 109.1 L50.0 108.6 L51.0 108.1 L52.0 107.6 L53.0 107.1 L54.0 106.6 L55.0 106.1 L56.0 105.6 L57.0 105.1 L58.0 104.6 L59.0 104.1 L60.0 103.7 L61.0 103.2 L62.0 102.7 L63.0 102.2 L64.0 101.7 L65.0 101.2 L66.0 100.7 L67.0 100.2 L68.0 99.7 L69.0 99.2 L70.0 98.7 L71.0 98.2 L72.0 97.8 L73.0 97.3 L74.0 96.8 L75.0 96.3 L76.0 95.8 L77.0 95.3 L78.0 94.8 L79.0 94.3 L80.0 93.8 L81.0 93.3 L82.0 92.8 L83.0 92.3 L84.0 91.8 L85.0 91.4 L86.0 90.9 L87.0 90.4 L88.0 89.9 L89.0 89.4 L90.0 88.9 L91.0 88.4 L92.0 87.9 L93.0 87.4 L94.0 86.9 L95.0 86.4 L96.0 85.9 L97.0 85.4 L98.0 85.0 L99.0 84.5 L100.0 84.0 L101.0 83.5 L102.0 83.0 L103.0 82.5 L104.0 82.0 L105.0 81.5 L106.0 81.0 L107.0 80.5 L108.0 80.0 L109.0 79.5 L110.0 79.1 L111.0 78.6 L112.0 78.1 L113.0 77.6 L114.0 77.1 L115.0 76.6 L116.0 76.1 L117.0 75.6 L118.0 75.1 L119.0 74.6 L120.0 74.1 L121.0 73.6 L122.0 73.1 L123.0 72.7 L124.0 72.2 L125.0 71.7 L126.0 71.2 L127.0 70.7 L128.0 70.2 L129.0 69.7 L130.0 69.2 L131.0 68.7 L132.0 68.2 L133.0 67.7 L134.0 67.2 L135.0 66.7 L136.0 66.3 L137.0 65.8 L138.0 65.3 L139.0 64.8 L140.0 64.3 L141.0 63.8 L142.0 63.3 L143.0 62.8 L144.0 62.3 L145.0 61.8 L146.0 61.3 L147.0 60.8 L148.0 60.4 L149.0 59.9 L150.0 59.4 L151.0 58.9 L152.0 58.4 L153.0 57.9 L154.0 57.4 L155.0 56.9 L156.0 56.4 L157.0 55.9 L158.0 55.4 L159.0 54.9 L160.0 54.4 L161.0 54.0 L162.0 53.5 L163.0 53.0 L164.0 52.5 L165.0 52.0 L166.0 51.5 L167.0 51.0 L168.0 50.5 L169.0 50.0 L170.0 49.5 L171.0 49.0 L172.0 48.5 L173.0 48.0 L174.0 47.6 L175.0 47.1 L176.0 46.6 L177.0 46.1 L178.0 45.6 L179.0 45.1 L180.0 44.6 L181.0 44.1 L182.0 43.6 L183.0 43.1 L184.0 42.6 L185.0 42.1 L186.0 41.7 L187.0 41.2 L188.0 40.7 L189.0 40.2 L190.0 39.7 L191.0 39.2 L192.0 38.7 L193.0 38.2 L194.0 37.7 L195.0 37.2 L196.0 36.7 L197.0 36.2 L198.0 35.7 L199.0 35.3 L200.0 34.8 L201.0 34.3 L202.0 33.8 L203.0 33.3 L204.0 32.8 L205.0 32.3 L206.0 31.8 L207.0 31.3 L208.0 30.8 L209.0 30.3 L210.0 29.8 L211.0 29.3 L212.0 28.9 L213.0 28.4 L214.0 27.9 L215.0 27.4 L216.0 26.9 L217.0 26.4 L218.0 25.9 L219.0 25.4 L220.0 24.9 L221.0 24.4 L222.0 23.9 L223.0 23.4 L224.0 23.0 L225.0 22.5 L226.0 22.0 L227.0 21.5 L228.0 21.0 L229.0 20.5 L230.0 20.0 L231.0 22.1 L232.0 24.3 L233.0 26.4 L234.0 28.5 L235.0 30.7 L236.0 32.8 L237.0 34.9 L238.0 37.1 L239.0 39.2 L240.0 41.3 L241.0 43.5 L242.0 45.6 L243.0 47.7 L244.0 49.9 L245.0 52.0 L246.0 54.1 L247.0 56.3 L248.0 58.4 L249.0 60.5 L250.0 62.6 L251.0 64.8 L252.0 66.9 L253.0 69.0 L254.0 71.2 L255.0 73.3 L256.0 75.4 L257.0 77.6 L258.0 79.7 L259.0 81.8 L260.0 84.0 L261.0 86.1 L262.0 88.2 L263.0 90.4 L264.0 92.5 L265.0 94.6 L266.0 96.8 L267.0 98.9 L268.0 101.0 L269.0 103.2 L270.0 105.3 L271.0 107.4 L272.0 109.6 L273.0 111.7 L274.0 113.8 L275.0 115.0 L276.0 115.0 L277.0 115.0 L278.0 115.0 L279.0 115.0 L280.0 115.0 L281.0 115.0 L282.0 115.0 L283.0 115.0 L284.0 115.0 L285.0 115.0 L286.0 115.0 L287.0 115.0 L288.0 115.0 L289.0 115.0 L290.0 115.0" fill="none" stroke="var(--ember)" stroke-width="1.6"/><text x="34" y="128" font-size="8" fill="var(--muted)">west</text><text x="288" y="128" font-size="8" fill="var(--muted)" text-anchor="end">east</text></svg></div></div>
+  <p data-pid="3d0a06">Read the picture. Walking along one line, you neither climb nor fall. Stepping from one line to the next, you climb or fall the same 100 m every time. Where the lines crowd together, that 100 m comes in a short walk; where they spread out, the walk is long. The second drawing is the familiar kind, a graph: the height along the dashed line, cut out of the map.</p>
+  <p data-pid="3d0a07">Every line in this picture closes up on itself, round the top. Could a contour line ever simply stop, in the middle of the land?</p>
+
+  <h3>Illegal moves</h3>
+  <pre class="lines" data-k="ember" data-label="18·nav: tempting, and not allowed">
+1 : 24\,000 \text{ means } 1 \text{ cm for } 24\,000 \text{ m}\,? @@ the same unit both sides: 24 000 cm, which is 240 m
+\text{a copy enlarged to } 150\% \text{ is still } 1 : 24\,000\,? @@ it is 1 : 16 000; the scale bar grew with it and stays right
+6 \text{ cm}^2 \text{ at } 1 : 24\,000 \text{ is } 6 \times 240 \text{ m}^2\,? @@ the area scales by 240² : 6 × 57 600 m² = 34.56 ha
+\text{eastings in km, northings in miles}:\ \sqrt{\Delta e^2 + \Delta n^2}\,? @@ distance-laws needs one unit in both directions
+\text{the road is as long as the line on the map}\,? @@ never shorter (18b), and on a coast road far longer
+  </pre>
+</section>
+
+<section class="pic" id="pic">
+  <div class="eyebrow">The picture · Monterey Bay on a grid, and a surveyor's triangle</div>
+  <div class="panels">
+    <div class="panel">
+      <div class="lbl">a rough tracing of the coast, km east and north of Point Pinos light</div>
+      <canvas id="cvF"></canvas>
+      <div class="chips" id="fch"></div>
+      <div class="chips" id="sch"></div>
+      <div class="cap">Ink: the coast, traced to about half a km. Ember: the straight line from Point Pinos to the chosen place. Dashed: its east and north legs, a right triangle.</div>
+    </div>
+    <div class="panel">
+      <div class="lbl">a base line of 600 m, and two stakes</div>
+      <canvas id="cvL"></canvas>
+      <div class="kn"><span class="m">A's stake</span><input type="range" id="ka" min="40" max="400" step="5" value="150"><output id="oa"></output></div>
+      <div class="kn"><span class="m">B's stake</span><input type="range" id="kb" min="40" max="400" step="5" value="300"><output id="ob"></output></div>
+      <div class="cap">Each stake stands 100 m along the base from its end, and the knob's distance out from it. Teal: the sight lines. Plum: the stake triangle at A, a small map of the big triangle under T.</div>
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+</section>
+
+<section class="slides" id="sl1"><div class="eyebrow">The slides · a graph run backwards; a grid on Monterey Bay; distance-laws on the grid; 1 : 24 000; the map is a scaling; map-scale; checking a map; the scale bar; ruler and grid agree; a field near Salinas; the road is longer; the surveyor's triangle; stakes; the stake triangle is a map; triangulation; illegal moves · ← → keys work</div></section>
+
+<section class="sayback">
+  <div class="eyebrow">Say it back · then work it</div>
+  <h2>Questions</h2>
+  <div class="phkey"></div>
+  <ol>
+    <li><span class="qid">18·nav.1</span><span class="gname">Map scale.</span><span class="gwhy">Do: build the page's pieces.</span>
+      <ol class="sub">
+        <li><span class="qid">18·nav.1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{scale } 1 : 24\,000,"></span> <span data-tex-inline="\text{on the map: } 6.5 \text{ cm}"></span></span>Find how far apart the two trailheads in Garland Ranch Regional Park are on the ground.</li><li><span class="givens"><span data-tex-inline="\text{grid in km: Point Pinos } (0, 0),"></span> <span data-tex-inline="\text{Moss Landing } (13.1, 19.0),"></span> <span data-tex-inline="\text{map at } 1 : 250\,000"></span></span>Find the distance, and its length on the map.</li><li><span class="givens"><span data-tex-inline="\text{scale bar } 4.0 \text{ cm} = 1 \text{ km},"></span> <span data-tex-inline="\text{scale } 1 : n"></span></span>Find n.</li><li><span class="givens"><span data-tex-inline="\text{scale } 1 : 24\,000,"></span> <span data-tex-inline="\text{field } 2.5 \text{ cm by } 1.5 \text{ cm}"></span> <span data-tex-inline="\text{on the map,}"></span> <span data-tex-inline="1 \text{ ha} = 10\,000 \text{ m}^2"></span></span>Find the field's area on the ground in hectares.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">18·nav.2</span><span class="gname">From the paper back.</span><span class="gwhy">Undo: run the page's techs backwards.</span>
+      <ol class="sub">
+        <li><span class="qid">18·nav.2.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{wharf to Carmel Mission:}"></span> <span data-tex-inline="7.2 \text{ km},"></span> <span data-tex-inline="\text{on the map: } 14.4 \text{ cm}"></span></span>Find the scale.</li><li><span class="givens"><span data-tex-inline="A = (0, 0),"></span> <span data-tex-inline="B = (500, 0) \text{ m},"></span> <span data-tex-inline="\text{stake } (100, 80) \text{ lines up from } A,"></span> <span data-tex-inline="\text{stake } (400, 120) \text{ lines up from } B"></span></span>Find the rock both stakes sight, and its distance from A.</li><li><span class="givens"><span data-tex-inline="\text{map triangle: } 3, 4, 5 \text{ cm},"></span> <span data-tex-inline="\text{the } 3 \text{ cm side is } 1.2 \text{ km}"></span></span>Find the other two ground lengths, and the scale.</li><li><span class="givens"><span data-tex-inline="\text{ruler upright } 60 \text{ cm}"></span> <span data-tex-inline="\text{from the eye,}"></span> <span data-tex-inline="\text{deck } 79 \text{ m above the eye}"></span> <span data-tex-inline="\text{covers } 12 \text{ cm of the ruler}"></span></span>Find how far away the deck of Bixby Creek Bridge is, along the ground.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">18·nav.3</span><span class="gname">Where it gives.</span><span class="gwhy">Bend: find where the techs stop working.</span>
+      <ol class="sub">
+        <li><span class="qid">18·nav.3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{scale } 1 : 24\,000,"></span> <span data-tex-inline="\text{copied at } 150\%"></span></span>Find the scale of the copy, and what happened to its scale bar.</li><li>Find whether the straight distance on a map can be longer than the road between the same two places, and whether it can be shorter.</li><li><span class="givens"><span data-tex-inline="A = (0, 0),"></span> <span data-tex-inline="B = (500, 0) \text{ m},"></span> <span data-tex-inline="\text{stake } (100, 80) \text{ from } A,"></span> <span data-tex-inline="\text{stake } (400, 125) \text{ from } B"></span></span>Find how far the rock moves from where 18·nav.2.1b put it. <br>Find what happens as the two sight lines come close to parallel.</li><li><span class="givens"><span data-tex-inline="\text{grid: km east, miles north,}"></span> <span data-tex-inline="1 \text{ mile} \approx 1.609 \text{ km},"></span> <span data-tex-inline="P = (3, 2)"></span></span>Find the distance, in km, from the origin to P.</li></ol></li>
+      </ol></li>
+    <li class="optgroup"><span class="qid">18·nav.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder challenges that rely on your own making. The page is complete without these; the rung's star needs them.</span>
+      <ol class="sub">
+        <li class="opt"><span class="qid">18·nav.4.1</span><span class="tagq">build</span>Plan a survey of your own in a park in Missoula: a base line you could pace, a far point T, and two stakes that sight it, all on a grid in metres, and find T from the stakes. <br>Shift one stake 1 m across its sight line, and find how far T moves. <br>Move the base line so that the same shift moves T less, and check it.</li>
+        <li class="opt"><span class="qid">18·nav.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{a } 1 : 24\,000 \text{ map of Monterey,}"></span> <span data-tex-inline="\text{flat, north up, on a table}"></span> <span data-tex-inline="\text{inside the patch it shows}"></span></span>Find whether a point of the paper lies exactly over the place it shows, and how many there are.</li>
+        <li class="opt"><span class="qid">18·nav.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{on a map, every three places}"></span> <span data-tex-inline="\text{form a triangle similar}"></span> <span data-tex-inline="\text{to their picture}"></span></span>Find whether the map must have one scale for every pair of places.</li>
+        <li class="opt"><span class="qid">18·nav.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\text{scale } 1 : n,"></span> <span data-tex-inline="T:\ \text{map area} = \tfrac{1}{n^2}\,\text{ground area}"></span></span>From the coordinates of the corners, prove T for every triangle of places.</li>
+        <li class="opt"><span class="qid">18·nav.4.5</span><span class="tagq">reroute</span>Take a printed map with a scale bar. <br>Find the straight distance between two places twice: once with a ruler and the bar, once from a grid you lay on it.</li>
+        <li class="opt"><span class="qid">18·nav.4.6</span><span class="tagq">seam</span>In 1569 a Flemish map-maker drew the whole world on a grid that keeps the shapes of small regions, and stretches lands far from the equator: Greenland looks as big as Africa, which is about fourteen times larger. In 1973 a German historian launched a map that keeps areas instead, and called the first one unfair to the tropics. Map-makers answered that his map was neither new nor better, and squashed every shape near the poles. <br>Can a flat map of the whole Earth keep one scale everywhere? <br>If not, which map is honest?</li>
+      </ol></li>
+  </ol>
+  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
+</section>
+
+<nav class="nextrung"><a href="r18econ.html">← 18·econ · how much do buyers flinch?</a><a href="r18logi.html">18·logi · how many of each loaf should a bakery bake? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>Snellius told how he measured the Earth by a chain of triangles across Holland, resting the whole on one base line measured on the ground and carrying every other length by angles alone.</p><cite>Willebrord Snellius, Eratosthenes Batavus (1617); paraphrase</cite></aside>
+  <p>In 18·nav.4.6, the map-maker of 1569 is Gerardus Mercator, and the historian of 1973 is Arno Peters. In California, George Davidson of the United States Coast Survey worked the coast from 1850, and in 1881 measured a base line near Davis, in Yolo County, from which chains of triangles crossed the state.</p>
+  <p>Accepted names: easting and northing; triangulation; the grid printed on the Geological Survey's sheets is the Universal Transverse Mercator grid, in metres.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="18·nav: a worked “proof”, not allowed">
+\text{a map at } 1 : 24\,000 \text{ shows a field as } 6 \text{ cm}^2 @@ fine
+\text{the field is } 6 \times 24\,000 \text{ cm}^2 @@ not allowed: only lengths scale by n; areas scale by n² (scaling in the plane)
+\text{so it is about } 14 \text{ m}^2 @@ false: it is 6 × 24 000² cm² = 345 600 m²
+  </pre>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '–'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+function chips(el,FN,get,setk,after){ Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===get()) b.className='on'; b.onclick=()=>{ setk(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+const Nw='\\htmlClass{new}';
+function axes2(P,gx,gy){ const c=P.ctx,o=P.o; c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ c.moveTo(P.X(x),P.Y(o.y[0])); c.lineTo(P.X(x),P.Y(o.y[1])); }
+  for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ c.moveTo(P.X(o.x[0]),P.Y(y)); c.lineTo(P.X(o.x[1]),P.Y(y)); } c.stroke();
+  c.strokeStyle=col('--muted'); c.lineWidth=1.3; c.beginPath(); if(o.y[0]<=0&&o.y[1]>=0){ c.moveTo(P.X(o.x[0]),P.Y(0)); c.lineTo(P.X(o.x[1]),P.Y(0)); } if(o.x[0]<=0&&o.x[1]>=0){ c.moveTo(P.X(0),P.Y(o.y[0])); c.lineTo(P.X(0),P.Y(o.y[1])); } c.stroke();
+  c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; const ly=Math.min(P.H-6,Math.max(12,P.Y(0)+14));
+  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ if(Math.abs(x)<1e-9) continue; c.fillText(+x.toFixed(6),P.X(x),ly); }
+  c.textAlign='right'; const lx=Math.max(32,Math.min(P.W-4,P.X(0)-5)); for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ if(Math.abs(y)<1e-9) continue; c.fillText(String(+y.toFixed(6)).replace('-','−'),lx,P.Y(y)+4); } }
+function fillA(P,pts,colr,alpha){ const c=P.ctx; c.globalAlpha=alpha==null?0.2:alpha; P.poly(pts,null,colr); c.globalAlpha=1; }
+const sq1=P=>Object.defineProperty(P.o,'aspect',{get:()=>1});
+function clipBox(P,fn){ const c=P.ctx, [x0,x1]=P.o.x,[y0,y1]=P.o.y; c.save(); c.beginPath(); c.rect(P.X(x0),P.Y(y1),P.X(x1)-P.X(x0),P.Y(y0)-P.Y(y1)); c.clip(); fn(); c.restore(); }
+/* a rough tracing of the coast from Natural Bridges to Point Lobos, km east and north of Point Pinos light */
+const COAST=[[-11.2,35.4],[-8.4,35.3],[-5.5,36.6],[-1.8,37.6],[2.1,37.2],[6.1,32.9],[9.2,28.0],[11.0,24.1],[13.1,19.0],[12.6,13.5],[10.9,6.6],[9.0,2.0],[7.1,-1.7],[3.6,-3.3],[1.8,-1.6],[0,0],[-1.2,-1.6],[-2.6,-3.9],[-3.8,-5.9],[-2.2,-7.4],[0.4,-8.9],[0.1,-10.6],[-0.8,-12.9]];
+const PL_={wharf:{lab:'Monterey wharf',p:[3.6,-3.3]},mission:{lab:'Carmel Mission',p:[1.2,-10.1]},moss:{lab:'Moss Landing',p:[13.1,19.0]},scl:{lab:'Santa Cruz light',p:[-8.4,35.3]},sal:{lab:'Salinas',p:[24.8,4.9]}};
+const SC={s24:{lab:'1 : 24 000',n:24000},s100:{lab:'1 : 100 000',n:100000},s250:{lab:'1 : 250 000',n:250000}};
+let key='moss', sk='s250';
+const ka=$('ka'),kb=$('kb'),cvF=$('cvF'),cvL=$('cvL');
+const PF=plane(cvF,{x:[-14,28],y:[-15,40],grid:5,aspect:1,draw:P=>drawF(P)});
+Object.defineProperty(PF.o,'aspect',{get:()=>55/42});
+const PL=plane(cvL,{x:[-80,720],y:[-80,720],grid:100,aspect:1,draw:P=>drawL(P)}); sq1(PL);
+function drawF(P){ axes2(P,5,5); P.poly(COAST,'--ink',null,2.2,false);
+  P.text('Monterey Bay',4.5,25,'--muted','center',12); P.text('Pacific Ocean',-8,12,'--muted','center',11);
+  P.dot(0,0,'--ink',4.5); P.text('Point Pinos',-1,1.2,'--ink','right',11);
+  Object.keys(PL_).forEach(k=>{ const q=PL_[k].p; P.dot(q[0],q[1],k===key?'--ember':'--muted',k===key?5:3.5); });
+  const q=PL_[key].p; P.line(0,0,q[0],0,'--muted',1.3,[5,4]); P.line(q[0],0,q[0],q[1],'--muted',1.3,[5,4]); P.line(0,0,q[0],q[1],'--ember',2.4);
+  P.text(PL_[key].lab,q[0]+(q[0]>15?-0.8:0.8),q[1]+1.4,'--ember',q[0]>15?'right':'left',12); }
+const b=600;
+function meet(){ const sa=+ka.value/100, sbb=+kb.value/100; const x=b*sbb/(sa+sbb); return [x,sa*x]; }
+function drawL(P){ axes2(P,100,100); const sa=+ka.value, sbv=+kb.value, T=meet();
+  fillA(P,[[0,0],[100,0],[100,sa]],'--plum',0.35); P.poly([[0,0],[100,0],[100,sa]],'--plum',null,1.6);
+  P.poly([[0,0],[T[0],0],T],'--plum',null,1.2);
+  clipBox(P,()=>{ P.line(0,0,T[0]*1.6,T[1]*1.6,'--teal',1.6); P.line(b,0,b-(b-T[0])*1.6,T[1]*1.6,'--teal',1.6); });
+  P.line(0,0,b,0,'--ink',3); P.dot(0,0,'--ink',4.5); P.dot(b,0,'--ink',4.5); P.text('A',-25,-45,'--ink','center',12); P.text('B',b+25,-45,'--ink','center',12);
+  P.dot(100,sa,'--plum',4); P.dot(b-100,sbv,'--plum',4); P.dot(T[0],T[1],'--ember',5.5); P.text('T',T[0]+30,T[1]+20,'--ember','center',12); }
+function read(){ const q=PL_[key].p, n=SC[sk].n, d=Math.hypot(q[0],q[1]), cm=d*100000/n; $('oa').textContent=mm(+ka.value,0)+' m'; $('ob').textContent=mm(+kb.value,0)+' m';
+  const T=meet(), AT=Math.hypot(T[0],T[1]), BT=Math.hypot(b-T[0],T[1]), ratio=T[0]/100; const vd=$('vdF'); vd.className='verdict';
+  vd.textContent='Left: Point Pinos to '+PL_[key].lab+' is √('+q[0].toFixed(1).replace('-','−')+'² + '+q[1].toFixed(1).replace('-','−')+'²) ≈ '+mm(d,1)+' km; at '+SC[sk].lab+' that is '+mm(cm,cm<10?2:1)+' cm of paper. Right: T = ('+mm(T[0],0)+', '+mm(T[1],0)+'), AT ≈ '+mm(AT,0)+' m, BT ≈ '+mm(BT,0)+' m; the stake triangle is the big one at 1 : '+mm(ratio,2)+'.';
+  tex($('eqF'),R`T = \Big(\tfrac{600\,s_B}{s_A + s_B},\ \tfrac{s_A}{100}\cdot\tfrac{600\,s_B}{s_A + s_B}\Big) \approx (${mm(T[0],1)},\ ${mm(T[1],1)})`,true); }
+function all(){ PF.redraw(); PL.redraw(); read(); }
+[ka,kb].forEach(el=>el.addEventListener('input',all));
+chips($('fch'),PL_,()=>key,k=>{ key=k; },all);
+chips($('sch'),SC,()=>sk,k=>{ sk=k; },all);
+window.__pic={set:(k,s,a,bb)=>{ [...$('fch').children][Object.keys(PL_).indexOf(k)].click(); [...$('sch').children][Object.keys(SC).indexOf(s)].click(); ka.value=a; kb.value=bb; all(); const q=PL_[k].p, T=meet(); return {d:+Math.hypot(q[0],q[1]).toFixed(3), cm:+(Math.hypot(q[0],q[1])*100000/SC[s].n).toFixed(3), T:T.map(z=>+z.toFixed(3))}; }};
+all();
+stepper('#sl1',[
+  {k:'ember',kl:'a graph run backwards',t:R`\text{ground} \to (e, n)`,n:`The shape first, the numbers after.`},
+  {k:'ember',kl:'a grid on Monterey Bay',t:R`\text{Moss Landing } (13.1, 19.0)`,n:`km east and north of Point Pinos.`},
+  {k:'ember',kl:'distance-laws on the grid',t:R`\sqrt{13.1^2 + 19.0^2} \approx 23.1 \text{ km}`,n:`18a, on a patch flat enough.`},
+  {k:'ember',kl:'1 : 24 000',t:R`1 \text{ cm} \leftrightarrow 240 \text{ m}`,n:`The same unit on both sides.`},
+  {k:'ember',kl:'the map is a scaling',t:R`X \mapsto O + \tfrac1n (X - O)`,n:`18f’s map, with k = 1/n.`},
+  {k:'ember',kl:'map-scale',t:R`${Nw}{\tfrac{A'B'}{AB} = \tfrac{B'C'}{BC} = \tfrac{C'A'}{CA} = \tfrac1n}`,n:`Areas by 1/n².`},
+  {k:'ember',kl:'checking a map',t:R`\text{three ratios, one scale}`,n:`If they differ, it is not at one scale.`},
+  {k:'ember',kl:'the scale bar',t:R`\text{enlarged } 150\%:\ 1 : 16\,000`,n:`The bar grows with the map.`},
+  {k:'ember',kl:'ruler and grid agree',t:R`\tfrac{23.1 \text{ km}}{250\,000} \approx 9.2 \text{ cm}`,n:`Similar right triangles.`},
+  {k:'ember',kl:'a field near Salinas',t:R`2.5 \times 1.5 \text{ cm} \to 21.6 \text{ ha}`,n:`Area by 240².`},
+  {k:'ember',kl:'the road is longer',t:R`\text{path} \ge \text{segment}`,n:`18b.`},
+  {k:'ember',kl:'the surveyor’s triangle',t:R`${Nw}{AB \text{ and two directions fix } T}`,n:`Similar-triangles, or two-lines-meet.`},
+  {k:'ember',kl:'stakes',t:R`y = 1.5x,\ y = -3(x - 600) \Rightarrow T = (400, 600)`,n:`AT ≈ 721 m.`},
+  {k:'ember',kl:'the stake triangle is a map',t:R`${Nw}{1 : 4}`,n:`parallel-cut.`},
+  {k:'ember',kl:'triangulation',t:R`\text{each side the next base}`,n:`One tape, then only sightings.`},
+  {k:'ember',kl:'illegal',t:R`6 \text{ cm}^2 \ne 6 \times 240 \text{ m}^2`,n:`Areas scale by 240².`}
+],{title:'The slides · a graph run backwards; a grid on Monterey Bay; distance-laws on the grid; 1 : 24 000; the map is a scaling; map-scale; checking a map; the scale bar; ruler and grid agree; a field near Salinas; the road is longer; the surveyor’s triangle; stakes; the stake triangle is a map; triangulation; illegal moves · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

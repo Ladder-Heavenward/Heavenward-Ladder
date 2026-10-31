@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>11c · Continuous after continuous</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:3fr 2fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r11b.html">← 11b sums and products</a><a href="r11d.html">next: 11d every polynomial is continuous →</a></p>
+  <div class="tags"><span class="tag proof">11c · proof</span></div>
+  <h1>Continuous after continuous</h1>
+  <p>Do one continuous function, then another, and the result is continuous. The proof is a chain of three gaps, worked from the outside in. The challenger names a gap for the final output. The outer function, continuous at the inside's value, answers with how near its own input must be: a gap in the middle. The inner function, challenged with that middle gap, answers with how near the input must be. That answer is yours. The middle gap needs a name, and this step gives it a third Greek letter. Then the chain is turned into a licence for carrying a limit inside a continuous function, and two tempting swaps are caught.</p>
+  <p class="gesture">Work from the outside in: the outer function says how near its input must be; challenge the inner function with that, and its answer wins the whole round.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r11a.html">11a</a> (the definition, continuity-unpacked, lines-are-continuous, root-is-continuous, one-sided forms), <a href="r11b.html">11b</a> (continuous-sums, continuous-products, continuous-quotients, one-over-x-is-continuous), <a href="r10a.html">10a</a> (the limit's line, square-limit and one-over-x-limit recipes, defined near), <a href="r10c.html">10c</a> (the least of several), <a href="r09b.html">9b</a> (∘, regroup for composing), <a href="r09f.html">9f</a> (composite-domain; the inside named r; substitute for the expression), <a href="r09d.html">9d</a> (restriction), <a href="r08h.html">8h</a> (size-squared: √(x²) = |x|). <a href="r11d.html">11d</a> and <a href="r11f.html">11f</a> chain freely; <a href="r11e.html">11e</a> reads |x| as a chain.</p></div>
+</header>
+
+<section class="class step" data-step="11c1">
+  <h2 class="sthead"><span class="stno">11c1</span>The chain, and its domain</h2>
+  <p class="stands">Stands on 9f (chains by hand, composite-domain) and 11a (continuity).</p>
+  <p data-pid="2f8951">9f taught chains by hand: name the inside r = g(x), and read x ↦ f(g(x)) as the outside f after the inside g. 9f's composite-domain gave its natural domain: the inputs x of g whose output g(x) is an input of f. This step writes f ∘ g for that chain, 9b's ring, with g kept (9d) to the inputs whose outputs f can take, so that 9b's line applies. Throughout, g is the inside and f the outside, and the inside's value at the input w gets a name of its own: r₀ = g(w), with 3c's low mark. The accepted name for f ∘ g is the composite function, from the Latin compositus, “put together”.</p>
+  <p data-pid="f23342"><b>The challenge game now has three lines to keep track of: x near w, r near r₀, and f(r) near f(r₀).</b> The challenger's gap ε is on the last; your answer δ is on the first. The middle needs a name.</p>
+  <p class="eqline" data-pid="0a38c7">From here on, η (the Greek letter eta, in its small form) names a positive real that is the answer in the middle of a chain: how near the inside's outputs must come to r₀ for the outside to keep its promise. The outer function gives it as an answer; the inner function receives it as a challenge. On this ladder η always names a positive real, and its capital form is not used.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · η · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">11c1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(r) = √r,  g(x) = 3 − x</span></span>Find the natural domain of f ∘ g. <br>At w = 2, say which line η sits on, and what it measures.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="11c2">
+  <h2 class="sthead"><span class="stno">11c2</span>Continuous after continuous</h2>
+  <p class="stands">Stands on 11c1 and 11a3 (continuity-unpacked).</p>
+  <p data-pid="224a79">Continuous-after-continuous technique: <b>if g is continuous at w and f is continuous at r₀ = g(w), then f ∘ g is continuous at w.</b> First the chain must be defined near w, with w an input. Then the round itself.</p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the continuous-after-continuous technique, the chain is defined near a">
+r_0 = g(a) \in \operatorname{dom} f;\ \ \text{a reach } k \text{ for } f \text{ near } r_0 @@ f continuous at r₀: r₀ is an input, f is defined near r₀. Every r with |r − r₀| &lt; k is an input of f
+\text{challenge } g \text{ with } k;\ \ \text{call } \delta_0 @@ g is continuous at a; continuity-unpacked: |x − a| &lt; δ₀ gives |g(x) − r₀| &lt; k
+|x - a| \lt \min(\delta_0, r_g) \;\Rightarrow\; x \in \operatorname{dom}(f \circ g) @@ r_g a reach for g near a: x is an input of g, and g(x) is an input of f (composite-domain)
+a \in \operatorname{dom}(f \circ g) @@ g(a) = r₀ is an input of f. So f ∘ g is defined near a, and a is an input
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: the continuous-after-continuous technique, the round">
+\text{let } \varepsilon \gt 0 @@ the challenge is about the final output f(g(x))
+\text{call } \htmlClass{new}{\eta}:\ r \in \operatorname{dom} f,\ |r - r_0| \lt \eta \Rightarrow |f(r) - f(r_0)| \lt \varepsilon @@ f is continuous at r₀ (continuity-unpacked): it answers ε with a middle gap
+\text{call } \delta:\ x \in \operatorname{dom} g,\ |x - a| \lt \delta \Rightarrow |g(x) - r_0| \lt \htmlClass{keep}{\eta} @@ g is continuous at a (continuity-unpacked), challenged with η
+\text{let } x \in \operatorname{dom}(f \circ g);\ \text{assume } |x - a| \lt \delta @@ x is an input of g, and r = g(x) is an input of f (composite-domain)
+|\htmlClass{new}{g(x)} - r_0| \lt \eta @@ g's promise
+|f(g(x)) - f(r_0)| \lt \varepsilon @@ f's promise at r = g(x): substitute for the expression
+|(f \circ g)(x) - (f \circ g)(a)| \lt \htmlClass{keep}{\varepsilon} \quad \blacksquare @@ 9b's line: (f ∘ g)(a) = f(g(a)) = f(r₀). continuity-unpacked for f ∘ g
+  </pre>
+  <p data-pid="516751">Notice there is no “0 &lt;” anywhere. That matters. The inside's output g(x) may be exactly r₀ at inputs x other than w (a constant inside does that everywhere), and then f's promise is asked at r₀ itself. A mere limit of f at r₀ would make no promise there; continuity does. That is why the outside must be continuous, and not just headed somewhere.</p>
+  <p data-pid="760dfa">Read it backwards to see how it was found. The final gap is about f; so ask f first: how near must its input be? That is η. Then the question becomes one about g: how near must x be for g(x) to be within η of r₀? That is δ. The outer function's answer becomes the inner function's challenge. Found from the outside in; written from the outside in too, because each answer is needed before the next challenge can be named.</p>
+  <pre class="lines" data-k="ember" data-label="this step: three chains, with numbers">
+\tfrac{1}{x^2} \text{ at } 1:\ \ \eta = \min(\tfrac12, \tfrac{\varepsilon}{2}),\ \ \delta = \min(1, \tfrac{\eta}{3}) @@ outer 1/r at r₀ = 1 by one-over-x-limit's recipe; inner x² at 1 by square-limit's. ε = 0.3: η = 0.15, δ = 0.05
+(2x + 1)^2 \text{ at } 0:\ \ \eta = \min(1, \tfrac{\varepsilon}{3}),\ \ \delta = \tfrac{\eta}{2} @@ outer r² at r₀ = 1 by square-limit; inner 2x + 1 by line-limit. ε = 0.6: η = 0.2, δ = 0.1
+\sqrt{x^2 + 1} \text{ at } 2:\ \ \eta = \min(5, \varepsilon\sqrt5),\ \ \delta = \min(1, \tfrac{\eta}{5}) @@ outer √r at r₀ = 5 by 10d's squeezed-by-distance recipe for root-limit; inner x² + 1 at 2. ε = 0.1: η ≈ 0.2236, δ ≈ 0.0447
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · continuous-after-continuous · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · the chain of three gaps, on three order lines</div>
+    <div class="panel">
+      <div class="chips" role="group" aria-label="chain" id="cch"></div>
+      <canvas id="cvT"></canvas>
+      <div class="kn">
+        <span class="m">ε</span><input type="range" id="ke" min="-2.5" max="0" step="0.05" value="-0.5"><output id="oe"></output>
+        <span class="m">push δ</span><input type="range" id="kp" min="0.5" max="4" step="0.05" value="1"><output id="op"></output>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="cap">Top line: x near w, with the band of half-width δ. Middle: r = g(x) near r₀ = g(w), with the band η that the outer function needs. Bottom: f(r) near f(r₀), with the gold band ε. Each line has its own zoom (only order is meant). The picture finds the largest η and δ that work, by testing; the class's recipes answer with less, which is allowed. Each arrow follows one x down the chain: teal if it lands inside every band, ember where it first misses, grey if x is outside the window. The ε knob moves the power of ten; “push δ” multiplies the chain's answer, to see where it breaks.</div>
+      <div class="verdict" id="vdT"></div>
+      <div class="eqbox" id="eqT"></div>
+    </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">11c2.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(r) = 3r,"></span> <span data-tex-inline="g(x) = x + 2,"></span> <span data-tex-inline="w = 1,"></span> <span data-tex-inline="\varepsilon = 0.6"></span></span>By continuous-after-continuous, answer the challenge ε for f after g at w.</li><li><span class="givens"><span data-tex-inline="h(x) = \sqrt{4 - x^2}"></span></span>Show that h is continuous at 1, naming every link.</li><li><span class="givens"><span data-tex-inline="h(x) = \sqrt{\dfrac{x^2 - 4}{x - 2}}"></span></span>Find the limit of h at 2, naming each step.</li><li><span class="givens"><span data-tex-inline="h(x) = \dfrac{1}{1 + \sqrt{x^2 + 3}}"></span></span>Show that h is continuous at every real, naming every link from the inside out.</li><li><span class="givens"><span data-tex-inline="h(x) = (3x - 1)^2,"></span> <span data-tex-inline="w = 1"></span></span>Write continuous-after-continuous's round for h at w, with the two recipes named and δ as a formula in ε.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="11c3">
+  <h2 class="sthead"><span class="stno">11c3</span>At the edge of the outside’s domain</h2>
+  <p class="stands">Stands on 11c2, 11a5 (root-is-continuous) and 8h (size-squared).</p>
+  <p data-pid="935eac">|x| is √(x²), by 8h's size-squared. At w ≠ 0 the inside's value w² is positive, √ is continuous there (root-is-continuous), and continuous-after-continuous applies. At 0 the inside's value is 0, and √ is not continuous at 0 in 11a's sense: it is not defined near 0. Yet look at what continuous-after-continuous's round used of f: only the promise “r ∈ dom f, |r − r₀| &lt; η ⇒ |f(r) − f(r₀)| &lt; ε”, over f's inputs. At the edge of a domain with no inputs on the other side, that promise is the one-sided one: for √ at 0, “r ≥ 0 and |r| &lt; η” is “0 ≤ r &lt; η”. Chain-at-an-edge technique: <b>if g is continuous at w, f is continuous from the right at r₀ = g(w) and has no inputs below r₀, and f ∘ g is defined near w, then f ∘ g is continuous at w</b>; likewise with left and above. Continuous-after-continuous's round, word for word, with the one-sided promise in place of f's two-sided one. ∎</p>
+  <pre class="lines" data-k="ember" data-label="this step: |x| at 0, as a chain">
+|x| = \sqrt{x^2} @@ size-squared (8h)
+x^2 \ge 0 \text{ for every } x @@ square-never-negative: the inside's outputs are all inputs of √, so the chain is defined at every real
+\begin{aligned}&\sqrt{\ } \text{ continuous from the right at } 0\\ &\quad ;\ \text{no inputs below } 0\end{aligned} @@ root-is-continuous (11a)
+|x| \text{ continuous at } 0 @@ chain-at-an-edge, with η = ε² (root-at-0's answer) and δ = √η = ε (|x²| &lt; ε² when |x| &lt; ε, by powers-keep-order)
+  </pre>
+  <p data-pid="105ac3">11e proves |x| continuous a third way, directly from the game, and makes the point of it.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · at the edge · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">11c3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">h(x) = √(x³)</span></span>Decide whether h is defined near 0. <br>Say what chain-at-an-edge gives at 0, and from which side.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="11c4">
+  <h2 class="sthead"><span class="stno">11c4</span>A limit passes inside a continuous function</h2>
+  <p class="stands">Stands on 11c2 and 10a5 (agreeing-near).</p>
+  <p data-pid="869115">The chain has a second use: computing limits. Limit-passes-inside technique: <b>if lim_{x→w} g(x) = M and f is continuous at M, and f ∘ g is defined near w, then lim_{x→w} f(g(x)) = f(M).</b> The round is continuous-after-continuous's, with the window 0 &lt; |x − w| &lt; δ in place of |x − w| &lt; δ on the inside's line. g's line is now a limit: the input w is left out, and g need not even have a value at w. f's promise has no “0 &lt;”, because f is continuous at M. ∎</p>
+  <p data-pid="1e2dd9">In marks, limit-passes-inside says lim f(g(x)) = f(lim g(x)): the limit passes inside f. It is licensed exactly when f is continuous at the inside's limit.</p>
+  <pre class="lines" data-k="ember" data-label="this step: limits carried inside">
+\lim_{x \to 1} \sqrt{\tfrac{x^2 - 1}{x - 1}} @@ the inside is 9a's H, which has no value at 1
+\tfrac{x^2 - 1}{x - 1} \to 2 \text{ as } x \to 1 @@ 10a (agreeing-near with x + 1)
+\sqrt{\ } \text{ continuous at } 2 @@ root-is-continuous
+\lim_{x \to 1} \sqrt{\tfrac{x^2 - 1}{x - 1}} = \htmlClass{keep}{\sqrt2} @@ limit-passes-inside. The chain is defined near 1: H's outputs near 1 are near 2, inputs of √
+\lim_{x \to 0} \tfrac{1}{1 + x \cdot q(x)} = \tfrac{1}{1 + 0} = \htmlClass{keep}{1} @@ inside heads to 1 (10d, limits-add); 1/r continuous at 1 (one-over-x-is-continuous); limit-passes-inside
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · limit-passes-inside · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">11c4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">lim_{x→3} √((x² − 9)/(x − 3))</span></span>Find the limit, naming each step. <br>Say what licenses passing the limit inside √.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="11c5">
+  <h2 class="sthead"><span class="stno">11c5</span>Two swaps that are not allowed</h2>
+  <p class="stands">Stands on 11c4 and 7d (definition by cases).</p>
+  <p data-pid="ce3176">Let v be the function with v(r) = 1 for every r ≠ 0 and v(0) = 0 (7d's cases): a constant with one stray value. v heads to 1 at 0, and is discontinuous there.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the swaps, refuted">
+g(x) = x^2:\ \ v(g(x)) = 1 \text{ for } x \ne 0 @@ x² ≠ 0 when x ≠ 0 (zero-product); so lim_{x→0} v(g(x)) = 1 (agreeing-near, lines-are-continuous)
+v\big(\lim_{x\to0} g(x)\big) = v(0) = \htmlClass{new}{0} \ne 1 @@ the swap lim v(g(x)) = v(lim g(x)) fails: v is not continuous at 0
+g(x) = 0 \text{ for every } x:\ \ v(g(x)) = v(0) = 0 @@ a constant inside; lim_{x→0} v(g(x)) = 0
+\lim_{r \to 0} v(r) = \htmlClass{new}{1} \ne 0 @@ the swap lim v(g(x)) = lim_{r→M} v(r) fails: the inside sits at M itself
+  </pre>
+  <p data-pid="eddb4d"><b>Both swaps are repaired by the same condition: the outside continuous at the inside's limit.</b> Then the first is limit-passes-inside, and the second is true too, since lim_{r→M} f(r) = f(M). The second swap can also be rescued another way, when the inside never takes the value M near w; a question asks for that column.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · swap refuted · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">11c5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="h(x) = (2x + 1)^2,"></span> <span data-tex-inline="w = 0,"></span> <span data-tex-inline="\varepsilon = 0.6,"></span> <span data-tex-inline="\text{Someone answers with}"></span> <span data-tex-inline="\delta = \eta \text{.}"></span></span>Find an x within that δ whose output escapes.</li><li><span class="givens"><span data-tex-inline="v(r) = 1 \text{ for } r \ne 0,\ v(0) = 0,"></span> <span data-tex-inline="s(x) = x^2"></span></span>Change v at one input so that v after s is continuous at 0. <br>Which demand did you repair, and for which function?</li><li><span class="givens"><span data-tex-inline="h(x) = \sqrt{x^2 - 1}"></span></span>Decide whether h is defined near 1, and which hypothesis of chain-at-an-edge fails at 1.</li><li><span class="givens"><span data-tex-inline="v(r) = 1 \text{ for } r \ne 0,\ v(0) = 0,"></span> <span data-tex-inline="“\lim_{x \to 0} v(x^2) = v(0) = 0.”"></span></span>Find the technique being misused, the condition it lacks, and the true limit.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="11c6">
+  <h2 class="sthead"><span class="stno">11c6</span>Longer chains</h2>
+  <p class="stands">Stands on 11c5 and 9b (regroup for composing).</p>
+  <p data-pid="f55442"><b>A chain of three, s after r after x, is two uses of continuous-after-continuous</b>, and 9b's regroup for composing says the brackets do not matter. Take 1/√(x² + 1). The inside x² + 1 is continuous everywhere (lines-are-continuous, continuous-products, continuous-sums) and at least 1. √ is continuous at every positive real (root-is-continuous). 1/r is continuous at every r ≠ 0 (one-over-x-is-continuous). So it is continuous at every real, and its limit at 0 is its value, 1. No round of the game was played, and none needed to be.</p>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · longer chains · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">11c6.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">h(x) = 1/(x² + 1)²</span></span>Take h apart into links, from the outside in. <br>Show h is continuous at every real, naming each link.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="11c7">
+  <h2 class="sthead"><span class="stno">11c7</span>Illegal moves</h2>
+  <p class="stands">Stands on 11c1 to 11c6.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\begin{aligned}&\text{the outer function only needs a limit at } r_0\,\\ &\quad ?\end{aligned} @@ the inside may sit at r₀ (a constant): f's promise is asked at r₀ itself. v after the constant 0
+\delta \text{ chosen before } \eta\,? @@ the inner function's challenge is η; there is nothing to answer until the outer has spoken
+\lim v(g(x)) = v(\lim g(x))\,? @@ needs v continuous at the limit: with g = x², 1 against 0
+\begin{aligned}&|x| = \sqrt{x^2} \text{ continuous}\\ &\quad\text{at } 0 \text{ by continuous-after-continuous}\,?\end{aligned} @@ √ is not continuous at 0 in 11a's sense; chain-at-an-edge, the edge form, is the licence
+\eta = \varepsilon\,? @@ the middle gap is the outer's answer, not the challenge: for (2x + 1)² at 0 and ε = 0.6, η is 0.2
+\begin{aligned}&\text{continuous-after-continuous}\\ &\quad\text{for } \sqrt{x - 1} \text{ after } x^2 \text{ at } 0\,?\end{aligned} @@ the inside's value 0 is not an input of √(r − 1): the chain has no value at 0, and is not even defined near 0
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">11c7.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">“f is continuous at r₀ and g heads to r₀ at w, so f ∘ g is continuous at w.”</span></span>Which illegal move is this? <br>Find f, g and w where it fails.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="11c8">
+  <h2 class="sthead"><span class="stno">11c8</span>Running it backwards</h2>
+  <p class="stands">Stands on 11c1 to 11c6.</p>
+  <p data-pid="e52f9e">Handed a chain to prove continuous, take it apart from the outside (9f). Check the outside at the inside's value and the inside at the input. Check too that the inside's outputs near the input stay among the outside's inputs. Handed a limit of a chain, find the inside's limit, check the outside is continuous there, and substitute. Handed a recipe min(1, η/3) with η = min(½, ε/2), read off the two functions' recipes and guess the chain. Found from the outside in; written the same way.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">11c8.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="v(r) = 1 \text{ for } r \ne 0,\ v(0) = 0,"></span> <span data-tex-inline="g(x) = 0"></span></span>Compute v after g at every x, and its limit at 5, and compare with the limit of v at 0.</li><li><span class="givens"><span data-tex-inline="\lim_{x \to w} 1/g(x) = 4,"></span> <span data-tex-inline="g \text{ is continuous at } w \text{.}"></span></span>Find g at w, and the technique that lets you.</li><li><span class="givens"><span data-tex-inline="f(r) = \sqrt{r},"></span> <span data-tex-inline="f \circ g \text{ is continuous at 3.}"></span></span>Find what must be true of g at 3; there are two kinds of answer.</li><li><span class="givens"><span data-tex-inline="\text{A chain&#x27;s inner link}"></span> <span data-tex-inline="\text{answered},"></span> <span data-tex-inline="\delta = \min(1, \eta/5) \text{ at } w = 2,"></span> <span data-tex-inline="\text{from a first promise of 1.}"></span></span>Find an inner function it fits.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">11c.4.1</span><span class="tagq">build</span>Build chains of your own.<ol class="parts" type="a"><li>Build a chain continuous at 0 whose outside is continuous only from the right at the inside's value.</li><li>Write a limit at 1 that needs limit-passes-inside, factor and cancel, and one-over-x-is-continuous, in that order, and compute it.</li><li><span class="givens"><span data-tex-inline="\lim_{r \to M} f(r) = L,"></span> <span data-tex-inline="\lim_{x \to w} g(x) = M,"></span> <span data-tex-inline="\text{on a neighbourhood of } w,"></span> <span data-tex-inline="g(x) \ne M"></span></span>Prove that f after g heads to L at w, one move per line, marking where the last given is used.</li></ol></div>
+  <div class="chq"><span class="chid">11c.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="q(x) = 1 \text{ at fractions},\ 0 \text{ elsewhere},"></span> <span data-tex-inline="g \text{ is a constant.}"></span></span>Is q after g continuous? <br>Where?</div>
+  <div class="chq"><span class="chid">11c.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{Continuous-after-continuous:}"></span> <span data-tex-inline="g \text{ continuous at } w \text{ and } f"></span> <span data-tex-inline="\text{continuous at } g(w) \text{ give}"></span> <span data-tex-inline="f \circ g \text{ continuous at } w \text{.}"></span> <span data-tex-inline="f \circ g \text{ is continuous at } w \text{.}"></span></span>Must g be? <br>Must f be, at the value of g at w?</div>
+  <div class="chq"><span class="chid">11c.4.4</span><span class="tagq">seam</span>For two centuries a continuous curve was one you could draw without lifting the pen. x · q(x) is continuous at 0 and nowhere else, and no pen draws it. In 1875 a function was described that is continuous at every irrational and at no fraction. <br>Can a function be continuous at every fraction and at no irrational? <br>Should continuity be the pen’s or the game’s?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r11b.html">← 11b · sums and products</a><a href="r11d.html">11d · every polynomial is continuous →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>The function of 1875 in 11c.4.4 is Carl Johannes Thomae’s, now called Thomae’s function.</p>
+  <p>Accepted names: continuous-after-continuous is the continuity of composite functions; limit-passes-inside is the limit of a composite function.</p>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=v=>{ if(v===null||!isFinite(v)) return '—'; const a=Math.abs(v); let s=a>=100?v.toFixed(1):a>=1?v.toFixed(3):a>=0.001?v.toFixed(4):v.toPrecision(2); if(s.indexOf('.')>=0&&s.indexOf('e')<0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const V=r=>r===0?0:1;
+const CH={
+  c1:{lab:'x², then 1/r, at 1',g:x=>x*x,f:r=>r===0?NaN:1/r,fd:r=>r!==0,a:1,gt:'x^2',ft:R`\tfrac1r`},
+  c2:{lab:'2x + 1, then r², at 0',g:x=>2*x+1,f:r=>r*r,fd:r=>true,a:0,gt:'2x + 1',ft:'r^2'},
+  c3:{lab:'x² + 1, then √r, at 2',g:x=>x*x+1,f:r=>r>=0?Math.sqrt(r):NaN,fd:r=>r>=0,a:2,gt:'x^2 + 1',ft:R`\sqrt r`},
+  c4:{lab:'x², then √r, at 0 (an edge)',g:x=>x*x,f:r=>r>=0?Math.sqrt(r):NaN,fd:r=>r>=0,a:0,gt:'x^2',ft:R`\sqrt r`},
+  c5:{lab:'x², then v, at 0',g:x=>x*x,f:r=>V(r),fd:r=>true,a:0,gt:'x^2',ft:'v(r)',bad:true}
+};
+let key='c1',C=CH.c1;
+const ke=$('ke'),kp=$('kp'),cv=$('cvT');
+/* largest eta: every input r of f with |r - r0| < eta, r0 included, has |f(r) - f(r0)| < e */
+function okF(e,eta,r0,fr0){ const N=1500; for(let k=0;k<=N;k++){ const t=k<N?k/N:1-1e-9; for(const s of [-1,1]){ const r=r0+s*eta*t; if(!C.fd(r)) continue; const v=C.f(r); if(!(Math.abs(v-fr0)<e)) return false; } } return true; }
+function okG(eta,d,a,r0){ const N=1500; for(let k=0;k<=N;k++){ const t=k<N?k/N:1-1e-9; for(const s of [-1,1]){ const x=a+s*d*t; if(!(Math.abs(C.g(x)-r0)<eta)) return false; } } return true; }
+function big(test,cap){ if(test(cap)) return cap; if(!test(1e-9)) return 0; let lo=1e-9,hi=cap; for(let i=0;i<46;i++){ const m=(lo+hi)/2; if(test(m)) lo=m; else hi=m; } return lo; }
+function model(){ const e=Math.pow(10,+ke.value), a=C.a, r0=C.g(a), fr0=C.f(r0);
+  const eta=big(m=>okF(e,m,r0,fr0),3); const d=eta>0?big(m=>okG(eta,m,a,r0),2):0; const etaT=eta>0?eta:Math.min(0.5,e); const dT=eta>0?d:big(m=>okG(etaT,m,a,r0),2); return {e,a,r0,fr0,eta,d,etaT,dT,k:+kp.value}; }
+function resize(){ const w=cv.clientWidth||600; const h=Math.round(w*(w>560?0.62:0.95)); const dpr=window.devicePixelRatio||1; cv.width=Math.round(w*dpr); cv.height=Math.round(h*dpr); cv.style.height=h+'px'; const c=cv.getContext('2d'); c.setTransform(dpr,0,0,dpr,0,0); return {c,w,h}; }
+let M=null;
+function draw(){ const {c,w,h}=resize(); c.fillStyle=col('--card'); c.fillRect(0,0,w,h); M=model(); const m=M;
+  const pad=16, ys=[h*0.16,h*0.52,h*0.88];
+  const ds=m.dT*m.k; const dShow=Math.max(ds,1e-6);
+  const lines=[{c:m.a,b:dShow,lab:'x',bl:'δ',bc:'--muted'},{c:m.r0,b:m.etaT,lab:'r = g(x)',bl:m.eta>0?'η':'trial η',bc:'--teal'},{c:m.fr0,b:m.e,lab:'f(r)',bl:'ε',bc:'--gold'}];
+  // spans: each line shows its centre ± 2.4 bands
+  lines.forEach(L=>{ L.span=L.b*2.4; });
+  const X=(L,v)=>pad+(w-2*pad)*((v-(L.c-L.span))/(2*L.span));
+  lines.forEach((L,i)=>{ const y=ys[i]; c.strokeStyle=col('--muted'); c.lineWidth=1.3; c.beginPath(); c.moveTo(pad,y); c.lineTo(w-pad,y); c.stroke();
+    c.fillStyle=col(L.bc); c.globalAlpha=.2; c.fillRect(X(L,L.c-L.b),y-9,X(L,L.c+L.b)-X(L,L.c-L.b),18); c.globalAlpha=1;
+    c.strokeStyle=col(L.bc); c.lineWidth=1.5; [L.c-L.b,L.c+L.b].forEach(v=>{ c.beginPath(); c.moveTo(X(L,v),y-11); c.lineTo(X(L,v),y+11); c.stroke(); });
+    c.fillStyle=col('--ink'); c.beginPath(); c.arc(X(L,L.c),y,3.5,0,7); c.fill();
+    c.font='11px IBM Plex Mono, monospace'; c.textAlign='left'; c.fillStyle=col('--muted'); c.fillText(L.lab,pad,y-14); c.textAlign='center'; c.fillText(fm(L.c),X(L,L.c),y+24); c.fillStyle=col(L.bc==='--muted'?'--ink':L.bc); c.fillText(L.bl+' = '+fm(L.b),X(L,L.c+L.b),y-14); });
+  if(m.eta===0){ c.fillStyle=col('--ember'); c.font='12px IBM Plex Mono, monospace'; c.textAlign='center'; c.fillText('a trial η: the outside breaks its promise',w/2,(ys[1]+ys[2])/2); }
+  const S=13; for(let i=0;i<S;i++){ const t=-1.3+2.6*i/(S-1); const x=m.a+t*dShow; const r=C.g(x); const ok1=Math.abs(x-m.a)<dShow; const inG=Math.abs(r-m.r0)<m.etaT; const fv=C.fd(r)?C.f(r):NaN; const inF=isFinite(fv)&&Math.abs(fv-m.fr0)<m.e;
+    const k1=!ok1?'--grid':(inG?'--teal':'--ember'); const k2=!ok1?'--grid':(!inG?'--grid':(inF?'--teal':'--ember'));
+    const p0=[X(lines[0],x),ys[0]]; const cl=(L,v)=>Math.max(pad,Math.min(w-pad,X(L,v))); const p1=[cl(lines[1],r),ys[1]]; const p2=[isFinite(fv)?cl(lines[2],fv):p1[0],ys[2]];
+    c.globalAlpha=ok1?1:.7; c.strokeStyle=col(k1==='--grid'?'--muted':k1); c.lineWidth=ok1?1.6:1; c.beginPath(); c.moveTo(p0[0],p0[1]+4); c.lineTo(p1[0],p1[1]-4); c.stroke();
+    if(isFinite(fv)){ c.strokeStyle=col(k2==='--grid'?'--muted':k2); c.beginPath(); c.moveTo(p1[0],p1[1]+4); c.lineTo(p2[0],p2[1]-4); c.stroke(); }
+    c.globalAlpha=1; [p0,p1,p2].forEach((p,j)=>{ if(j===2&&!isFinite(fv)) return; c.fillStyle=col(j===0?(ok1?'--ink':'--muted'):(j===1?k1==='--grid'?'--muted':k1:k2==='--grid'?'--muted':k2)); c.beginPath(); c.arc(p[0],p[1],3,0,7); c.fill(); }); }
+  readout(); }
+function readout(){ const m=M; $('oe').textContent=fm(m.e); $('op').textContent='× '+fm(m.k);
+  const vd=$('vdT');
+  if(m.eta===0){ vd.className='verdict lose'; vd.textContent='The outside is not continuous at r₀ = '+fm(m.r0)+': every reach η holds an input r ≠ 0 with output 1, far from v(0) = 0. The picture tries η = '+fm(m.etaT)+': the inside keeps its promise (teal to the middle line), and the outside breaks its own (ember to the bottom). No η works, so the chain has no answer. (v heads to 1 at 0; its value is 0.)'; }
+  else if(m.k<=1){ vd.className='verdict win'; vd.textContent='Every x within δ of a lands inside every band: the chain wins this round'+(key==='c4'?' (chain-at-an-edge: √ keeps its promise at 0 from the only side it has).':'.'); }
+  else { vd.className='verdict lose'; vd.textContent='δ pushed past the chain\'s answer: some x within it reaches the middle line outside η, and from there the outside need not keep its promise.'; }
+  tex($('eqT'),R`\begin{gathered}x \mapsto ${C.gt} \mapsto ${C.ft},\ \ w = ${fm(m.a)},\ \ r_0 = ${fm(m.r0)}\\ \varepsilon = ${fm(m.e)} \;\to\; \eta = ${m.eta>0?fm(m.eta):R`\text{none}`} \;\to\; \delta = ${m.d>0?fm(m.d):R`\text{none}`}\end{gathered}`,true); }
+const cch=$('cch');
+Object.keys(CH).forEach(k=>{ const b=document.createElement('button'); b.textContent=CH[k].lab; if(k===key) b.className='on'; b.onclick=()=>{ [...cch.children].forEach(z=>z.classList.toggle('on',z===b)); key=k; C=CH[k]; draw(); }; cch.appendChild(b); });
+[ke,kp].forEach(z=>z.addEventListener('input',draw));
+new ResizeObserver(()=>draw()).observe(cv);
+if(window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change',draw);
+window.__pic={set:(k,e,p)=>{ key=k; C=CH[k]; [...cch.children].forEach((z,i)=>z.classList.toggle('on',Object.keys(CH)[i]===k)); if(e!==undefined) ke.value=Math.log10(e); if(p!==undefined) kp.value=p; draw(); return {eta:M.eta,d:M.d}; }};
+draw();
+
+/* ---------- slides ---------- */
+const N='\\htmlClass{new}', K='\\htmlClass{keep}';
+stepper('#sl1',[
+  {k:'ember',kl:'η',t:R`${N}{\eta} \gt 0:\ \text{the gap in the middle}`,n:`The outer function's answer, the inner function's challenge. Its capital form is not used.`}
+],{title:'The slides · η · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'defined near the point · 1 of 2',t:R`\begin{gathered}\text{challenge } g \text{ with } k:\\ |x - a| \lt \delta_0 \Rightarrow |g(x) - r_0| \lt k\end{gathered}`,n:`k a reach for f near r₀: every r within k of r₀ is an input of f.`},
+  {k:'ember',kl:'defined near the point · 2 of 2',t:R`\begin{gathered}|x - a| \lt \min(\delta_0, r_g)\\ \Rightarrow x \in \operatorname{dom}(f \circ g)\end{gathered}`,n:`And the inside's value at the point is r₀, an input of f, so the point is an input of the chain.`},
+  {k:'ember',kl:'continuous-after-continuous · 1 of 4',t:R`\text{let } \varepsilon \gt 0`,n:`The challenge is about the final output.`},
+  {k:'ember',kl:'continuous-after-continuous · 2 of 4',t:R`\begin{gathered}|r - r_0| \lt ${N}{\eta} \Rightarrow\\ |f(r) - f(r_0)| \lt \varepsilon\end{gathered}`,n:`Ask the outside first: f is continuous at r₀ (continuity-unpacked).`},
+  {k:'ember',kl:'continuous-after-continuous · 3 of 4',t:R`|x - a| \lt \delta \Rightarrow |g(x) - r_0| \lt ${K}{\eta}`,n:`Then the inside, challenged with η (continuity-unpacked).`},
+  {k:'ember',kl:'continuous-after-continuous · 4 of 4',t:R`\begin{gathered}|x - a| \lt \delta \Rightarrow\\ |f(g(x)) - f(r_0)| \lt ${K}{\varepsilon}\end{gathered}`,n:`Carry the if through twice, with r = g(x): substitute for the expression. ∎`},
+  {k:'ember',kl:'no 0 <',t:R`g(x) = r_0 \text{ is allowed}`,n:`A constant inside sits at r₀. f's promise must cover r₀ itself: continuity, not a mere limit.`},
+  {k:'ember',kl:'numbers · 1 of 3',t:R`\begin{gathered}\tfrac{1}{x^2} \text{ at } 1:\\ \eta = 0.15,\ \ \delta = 0.05\end{gathered}`,n:`ε = 0.3. one-over-x-limit's recipe min(½, ε/2) for 1/r; square-limit's min(1, η/3) for x².`},
+  {k:'ember',kl:'numbers · 2 of 3',t:R`\begin{gathered}(2x + 1)^2 \text{ at } 0:\\ \eta = 0.2,\ \ \delta = 0.1\end{gathered}`,n:`ε = 0.6. square-limit at r₀ = 1: min(1, ε/3); line-limit: η/2.`},
+  {k:'ember',kl:'numbers · 3 of 3',t:R`\begin{gathered}\sqrt{x^2 + 1} \text{ at } 2:\\ \eta \approx 0.2236,\ \ \delta \approx 0.0447\end{gathered}`,n:`ε = 0.1. √ at 5 by squeezed-by-distance's recipe min(5, ε√5); x² + 1 at 2: min(1, η/5).`}
+],{title:'The slides · continuous-after-continuous · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'chain-at-an-edge',t:R`\begin{gathered}\sqrt{\ } \text{ at } 0:\\ r \ge 0,\ |r| \lt \eta \Rightarrow \sqrt r \lt \varepsilon\end{gathered}`,n:`At an edge with no inputs on the other side, the one-sided promise is all the round uses.`},
+  {k:'ember',kl:'|x| as a chain',t:R`\begin{gathered}|x| = \sqrt{x^2}:\\ \eta = \varepsilon^2,\ \ \delta = ${K}{\varepsilon}\end{gathered}`,n:`size-squared, square-never-negative, root-is-continuous, chain-at-an-edge. Continuous at 0.`}
+],{title:'The slides · at the edge · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'limit-passes-inside',t:R`\begin{gathered}\lim_{x \to a} f(g(x))\\ = f\big(\lim_{x\to a} g(x)\big)\end{gathered}`,n:`When f is continuous at the inside's limit. The inside's line keeps its 0 &lt;; the outside's needs none.`},
+  {k:'ember',kl:'limit-passes-inside used',t:R`\lim_{x \to 1}\sqrt{\tfrac{x^2 - 1}{x - 1}} = ${K}{\sqrt2}`,n:`The inside heads to 2 (it has no value at 1); √ is continuous at 2.`}
+],{title:'The slides · limit-passes-inside · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'swap refuted · 1 of 2',t:R`\lim_{x\to0} v(x^2) = 1 \ne ${N}{0} = v(0)`,n:`v is 1 off 0 and 0 at 0. The limit does not pass inside a discontinuous v.`},
+  {k:'ember',kl:'swap refuted · 2 of 2',t:R`v(0) = 0 \ne ${N}{1} = \lim_{r \to 0} v(r)`,n:`With the constant inside 0: the inside sits at M, and v's limit is the wrong number.`}
+],{title:'The slides · swap refuted · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'longer chains',t:R`x \mapsto x^2 + 1 \mapsto \sqrt r \mapsto \tfrac1s`,n:`continuous-after-continuous twice; regroup for composing. 1/√(x² + 1) is continuous at every real.`}
+],{title:'The slides · longer chains · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

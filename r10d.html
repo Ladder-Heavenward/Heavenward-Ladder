@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>10d · The squeeze</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:3fr 2fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+#cvS{touch-action:none;cursor:ew-resize} #cvQ{touch-action:manipulation}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4em;text-align:right}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r10c.html">← 10c limits add, multiply and divide</a><a href="r10e.html">next: 10e from the left and from the right →</a></p>
+  <div class="tags"><span class="tag proof">10d · proof</span></div>
+  <h1>The squeeze</h1>
+  <p>10c's techniques need limits to start from. Some functions offer nothing to start with. 9a's strange function is 1 at every fraction and 0 at every irrational. It cannot be drawn, it has no formula to rewrite, and, as this step proves, it has no limit anywhere. Yet the input times that function heads to 0 at 0. The tool is the squeeze. Trap the function, near the input, between two functions that head to the same value. Then it is forced to head there too, whatever it does in between. The step proves the squeeze, then two handy forms of it, then uses them on the strange function and on a root.</p>
+  <p class="gesture">Find a function below and a function above, near the input, both heading to one value. The target that holds them both holds everything between.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r10a.html">10a</a> (the definition, lesser-below-both, line-limit), <a href="r10b.html">10b</a> (two-targets), <a href="r10c.html">10c</a> (constant-factor, the least of several), <a href="r08h.html">8h</a> (unpack-the-bars, size-of-a-product, sandwich), <a href="r08e.html">8e</a> (fraction-between, everyday-counting-passes), <a href="r08f.html">8f</a> (√, powers-keep-order), <a href="r09a.html">9a</a> (the function q; r + √2/n irrational). <a href="r10f.html">10f</a> squeezes when no rewrite works; rung 12 and rung 21 squeeze again.</p></div>
+</header>
+
+<section class="class step" data-step="10d1">
+  <h2 class="sthead"><span class="stno">10d1</span>The squeeze</h2>
+  <p class="stands">Stands on 10a (the definition), 10a5 (lesser-below-both) and 10b4 (limits keep order).</p>
+  <p data-pid="9baea3">In plain words first. Near w, a function f sits between a lower function g and an upper function h, and both g and h head to the same L. Then f heads to L. The challenger's gap keeps g and h in their targets; f, caught between, has nowhere else to be. Squeeze technique: <b>if there is a reach r with g(x) ≤ f(x) ≤ h(x) for every x in the neighbourhood of w of reach r (all three defined there), and lim_{x→w} g(x) = L and lim_{x→w} h(x) = L, then lim_{x→w} f(x) = L.</b> Its accepted name is the squeeze theorem, also called the sandwich theorem.</p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the squeeze technique">
+\text{let } \varepsilon \gt 0;\ \text{call } \delta_1 \text{ for } g,\ \delta_2 \text{ for } h @@ speak of everything; both limits at the gap ε
+\delta = \htmlClass{new}{\min(\delta_1, \delta_2, r)};\ \ \text{assume } 0 \lt |x - a| \lt \delta @@ the least of several (10c): all three windows at once
+L - \varepsilon \lt g(x) @@ |g(x) − L| &lt; ε, unpacked by unpack-the-bars (8h): keep the left part
+h(x) \lt L + \varepsilon @@ |h(x) − L| &lt; ε, unpacked: keep the right part
+L - \varepsilon \lt g(x) \le \htmlClass{keep}{f(x)} \le h(x) \lt L + \varepsilon @@ the trap, since δ ≤ r
+L - \varepsilon \lt f(x) \lt L + \varepsilon @@ at-most-is-a-partial-order on ℝ: &lt; then ≤ gives &lt;, twice
+|f(x) - L| \lt \varepsilon \quad \blacksquare @@ unpack-the-bars, packed; prove an if; speak of everything
+  </pre>
+  <p data-pid="ced658">Notice what the column never used: any value of f. It knows f only through the trap. That is why the squeeze works on functions with no formula, and why it is the tool of last resort when rewriting fails. Notice too that the trap is needed only near w. What f, g and h do far from w, or at w itself, is never consulted.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · squeeze · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · left: a function trapped near the input · right: the challenger beats every claim for q</div>
+    <div class="panel">
+      <div class="chips" role="group" aria-label="function" id="fch"></div>
+      <canvas id="cvS"></canvas>
+      <div class="kn"><span class="m">ε</span><input type="range" id="ke" min="-2.5" max="0" step="0.05" value="-0.7"><output id="oe"></output></div>
+      <div class="cap">Teal: the lower and upper traps. Gold rows: the target around L. Grey columns: the least of the traps' windows. Ember: the trapped function. For q, which no drawing can show, the two dotted ember lines are its values at fractions and at irrationals. Drag along the picture to move your input (the dashed plum column); the readout runs squeeze's chain at it.</div>
+      <div class="eqbox" id="eqS"></div>
+    </div>
+    <div class="panel">
+      <div class="kn">
+        <span class="m">w</span><input type="range" id="qa" min="-2" max="2" step="0.25" value="0.5"><output id="oqa"></output>
+        <span class="m">L</span><input type="range" id="qL" min="-0.5" max="1.5" step="0.05" value="0.6"><output id="oqL"></output>
+        <span class="m">δ</span><input type="range" id="qd" min="-6" max="0" step="0.5" value="-1"><output id="oqd"></output>
+      </div>
+      <canvas id="cvQ"></canvas>
+      <div class="cap">Whatever L you claim for q at w, and whatever reach δ you answer with (its power of ten on the knob), the challenger names ε = ½ and finds, inside the window, a fraction r (q = 1, gold) and an irrational t = r + √2/n (q = 0, teal). Their outputs are 1 apart, so one escapes the target (gold rows).</div>
+      <div class="eqbox" id="eqQ"></div>
+    </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">10d1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">−x² ≤ f(x) ≤ x² near 0</span></span>Find the limit of f at 0, naming the techniques that give the traps’ limits. <br>Say what the column needs to know about f’s own values.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10d2">
+  <h2 class="sthead"><span class="stno">10d2</span>Two forms you will use more than the technique</h2>
+  <p class="stands">Stands on 10d1, 10c (constant-factor) and 8i (conjugates).</p>
+  <p data-pid="90fb80">Most traps are built from a size. Squeezed-to-0 technique: <b>if there is a reach r with |f(x)| ≤ h(x) for every x in the neighbourhood of w of reach r, and lim_{x→w} h(x) = 0, then lim_{x→w} f(x) = 0.</b> By unpack-the-bars, |f(x)| ≤ h(x) is −h(x) ≤ f(x) ≤ h(x); −h heads to −0 = 0 by constant-factor; squeeze. ∎</p>
+  <p data-pid="9bb250">And the commonest size of all is the input's own distance. First a small fact: lim_{x→w} |x − w| = 0. Here ||x − w| − 0| = |x − w| &lt; δ, so δ = ε wins (the size of a size is itself, by 8h). Squeezed-by-distance technique: <b>if there are a real C ≥ 0 and a reach r with |f(x) − L| ≤ C · |x − w| for every x in the neighbourhood of w of reach r, then lim_{x→w} f(x) = L.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the squeezed-by-distance technique">
+\lim_{x \to a} C\,|x - a| = C \cdot 0 = 0 @@ the small fact, then constant-factor (10c)
+|f(x) - L| \le C\,|x - a| \ \ \text{near } a @@ the hypothesis
+\lim_{x \to a} \big(f(x) - L\big) = \htmlClass{new}{0} @@ squeezed-to-0, with f − L for f and C|x − a| for h
+\lim_{x \to a} f(x) = L \quad \blacksquare @@ ﹀ both lines: |(f(x) − L) − 0| and |f(x) − L| are the same distance
+  </pre>
+  <p data-pid="fd3c32">Squeezed-by-distance is the bound a linear function always gives (|(mx + b) − (mw + b)| = |m||x − w|), so it is line-limit again. But it also works for functions that only obey such a bound. Here is one. √(x + 4) at 0, heading to 2.</p>
+  <pre class="lines" data-k="ember" data-label="this step: a root, squeezed by the distance">
+\sqrt{x + 4} - 2 = \tfrac{(\sqrt{x + 4} - 2)(\sqrt{x + 4} + 2)}{\sqrt{x + 4} + 2} @@ times 1, as 8i's conjugate: √(x + 4) + 2 ≥ 2 &gt; 0 for x ≥ −4
+= \tfrac{\htmlClass{new}{(x + 4) - 4}}{\sqrt{x + 4} + 2} = \tfrac{x}{\sqrt{x + 4} + 2} @@ difference-of-squares (5h) on the top; √(x + 4)² = x + 4 (8f)
+|\sqrt{x + 4} - 2| = \tfrac{|x|}{\sqrt{x + 4} + 2} \le \htmlClass{new}{\tfrac12}\,|x - 0| @@ size-of-a-product; the bottom is at least 2, so its reciprocal is at most ½ (positive-reciprocal on ℚ)
+\lim_{x \to 0} \sqrt{x + 4} = 2 @@ squeezed-by-distance with C = ½ and reach 4: the function is defined on [−4, ∞), which holds the neighbourhood of 0 of reach 4
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · squeezed-by-distance · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10d2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">|f(x) − 1| ≤ 4|x − 3|  for |x − 3| < 1</span></span>Find lim_{x→3} f(x), citing squeezed-by-distance. <br>Give δ for ε = 0.2.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10d3">
+  <h2 class="sthead"><span class="stno">10d3</span>A function nobody can draw</h2>
+  <p class="stands">Stands on 10d2, 9a5 (q) and 8e (fraction-between).</p>
+  <p data-pid="9bd53b">9a's q is 1 at every fraction and 0 at every irrational. Both kinds are in every neighbourhood of every real. The fractions are there by 8e's fraction-between. The irrationals are there because, as 9a showed, r + √2/n is irrational for every fraction r and number n ≠ 0. And everyday-counting-passes makes √2/n as small as you like. So in any window, however narrow, q takes both values 0 and 1. Heads-nowhere technique: <b>for every real w and every real L, q does not head to L at w.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the heads-nowhere technique, a refutation">
+\lim_{x \to a} q(x) = L @@ assume, to refute (no either-way principle needed)
+\varepsilon = \tfrac12;\ \ \text{call } \delta @@ challenge with one half; use the some
+r \in \mathbb Q,\ \ a \lt r \lt a + \delta @@ fraction-between (8e): a fraction between two reals
+n \ne 0 \text{ with } \tfrac{\sqrt2}{n} \lt a + \delta - r;\ \ t = r + \tfrac{\sqrt2}{n} @@ everyday-counting-passes on the positive (a + δ − r)/√2; positive-reciprocal on ℚ
+r \lt t \lt a + \delta,\ \ t \text{ irrational} @@ order-and-arithmetic-agree; 9a's technique
+q(r) = \htmlClass{new}{1},\ \ q(t) = \htmlClass{new}{0} @@ the definition of q, by cases
+|1 - L| \lt \tfrac12 \;\land\; |0 - L| \lt \tfrac12 @@ r and t are both in the window: carry the promise through twice; join
+\bot @@ two-targets (10b) with values 1 and 0: 2 · ½ = 1 = |1 − 0|
+\neg\big(\lim_{x \to a} q(x) = L\big) \quad \blacksquare @@ refute; then speak of everything: every L, every a
+  </pre>
+  <p data-pid="04124b">So q has no limit anywhere: the some of 10b's ∃! fails, at every real. Now multiply it by x. Every output of q is 0 or 1, so |q(x)| ≤ 1 and |x · q(x)| = |x| |q(x)| ≤ |x| (size-of-a-product). That is a trap: squeezed-to-0 with h(x) = |x|, which heads to 0 at 0 by the small fact. So lim_{x→0} x · q(x) = 0. A function that is wild everywhere, tamed at one point by a factor that heads to 0 there. At any other point w it is still wild: near w ≠ 0, x · q(x) is near w at fractions and is 0 at irrationals (10d5.1b). Likewise 1 + x² · q(x) sits between 1 and 1 + x², both heading to 1 at 0, so it heads to 1 there.</p>
+  <p data-pid="6b3209">Such a function was first described at the end of a paper of 1829, as an example of a function the paper’s methods could not handle. It takes one value at the fractions and another at the irrationals, so that it jumps between the two in every stretch, however short.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · heads-nowhere · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10d3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="q(x) = 1 \text{ at fractions},\ 0 \text{ elsewhere},"></span> <span data-tex-inline="f(x) = x^2 \cdot q(x) + 3"></span></span>By squeeze, prove that f heads to 3 at 0.</li><li><span class="givens"><span data-tex-inline="\text{Let } P \text{ be } \lim_{x \to 0} \sqrt{x + 9} = 3."></span></span>Prove P by squeezed-by-distance.</li><li><span class="givens"><span data-tex-inline="q(x) = 1 \text{ at fractions},\ 0 \text{ elsewhere},"></span> <span data-tex-inline="\text{Claim: } q \text{ heads to } L = 0.5 \text{ at}"></span> <span data-tex-inline="w = 0 \text{,}"></span> <span data-tex-inline="\text{defended with } \delta = 10^{-3} \text{.}"></span></span>Using heads-nowhere's challenge, find inputs in the window whose outputs beat the claim.</li><li><span class="givens"><span data-tex-inline="\text{Let } P \text{ be } 1.7320^2 &lt; 3 &lt; 1.7321^2."></span></span>Check P exactly. <br>Find a distance within which P puts the square root of 3 of 1.73205.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10d4">
+  <h2 class="sthead"><span class="stno">10d4</span>Numbers squeezed</h2>
+  <p class="stands">Stands on 10d1, 8f (squares keep order) and 8·cb5 (cut-offs).</p>
+  <p data-pid="09f519">The squeeze is older than functions. 8f trapped √2 between decimals: 1.4142 &lt; √2 &lt; 1.4143, because 1.4142² = 1.99996164 and 1.4143² = 2.00024449. 8·cb5 made it endless: the k-th cut-off c_k of a decimal and c_k + 10^(−k) trap its real for every k. Each trap is a squeeze with numbers in place of functions, and 10f turns that into a statement about sequences: the cut-offs head to the real. <b>What this step adds is that the same trap works when the thing trapped is a whole function, near an input.</b></p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · numbers squeezed · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10d4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">1.7² = 2.89,  1.8² = 3.24</span></span>Trap √3 between two decimals of one place. <br>Trap it between two decimals of two places.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10d5">
+  <h2 class="sthead"><span class="stno">10d5</span>What the squeeze cannot do</h2>
+  <p class="stands">Stands on 10d1 and 10d3.</p>
+  <p data-pid="cccdd6"><b>The traps must head to the same value.</b> q itself sits between the constants 0 and 1, which head to 0 and to 1. Those are two different values, and the squeeze says nothing. That is just as well, since q has no limit. The traps must be in place on a whole neighbourhood, not at a few inputs: a function that is below x² at the fractions and wild at the irrationals is not trapped. And the trap must be ≤ on both sides; one side alone proves nothing (q ≥ 0 and 0 → 0, yet q heads nowhere).</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · cannot · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10d5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="1 \le f(x) \le 1 + x^2 \text{ near } 0,"></span> <span data-tex-inline="f(0) = 7,"></span> <span data-tex-inline="\text{A second function } g \text{ has},"></span> <span data-tex-inline="1 \le g(x) \le 2 + x^2 \text{ near } 0"></span></span>Find the limit of f at 0. <br>Find what the squeeze gives for g.</li><li><span class="givens"><span data-tex-inline="q(x) = 1 \text{ at fractions},\ 0 \text{ elsewhere},"></span> <span data-tex-inline="h(x) = x \cdot q(x)"></span></span>Prove that h has no limit at any real but 0.</li><li><span class="givens"><span data-tex-inline="\text{In squeezed-by-distance,}"></span> <span data-tex-inline="\text{replace } C \cdot |x - w| \text{ by}"></span> <span data-tex-inline="C \cdot |x - w|^2 \text{, then by a}"></span> <span data-tex-inline="\text{constant } C &gt; 0 \text{.}"></span></span>Decide whether each version is still a technique, and prove or refute it.</li><li><span class="givens"><span data-tex-inline="q(x) = 1 \text{ at fractions},\ 0 \text{ elsewhere},"></span> <span data-tex-inline="“q(x) \ge 0 \text{ near } 0, \text{ and the constant } 0,"></span> <span data-tex-inline="\text{heads to } 0, \text{ so } q \text{ heads to } 0.”"></span></span>Name the missing trap, and an input that escapes ε one half.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10d6">
+  <h2 class="sthead"><span class="stno">10d6</span>The squeeze with the techniques</h2>
+  <p class="stands">Stands on 10d2, 10c (limits add) and 10b (sides).</p>
+  <p data-pid="c7eb3b">A squeeze rarely works alone. Most wild functions are a tame part plus a wild part, and the techniques of 10c handle the sum once the squeeze has handled the wild part. Take x · q(x) + 3x + 2 at 0: the wild part x · q(x) heads to 0 (above), the tame part 3x + 2 heads to 2 (line-limit), and limits-add gives 2. Or take (x³ + x · q(x))/(1 + x²) at 0. The top heads to 0 + 0 = 0 (power-limit, the squeeze, limits-add). The bottom heads to 1 (substitution), so limits-divide gives 0. <b>The habit is to split off what the techniques can do and squeeze only what they cannot.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: build a trap for a wild factor">
+f(x) = (x - 2)^2 \cdot q(x) + 5 \text{ near } 2 @@ the wild factor q is bounded; the tame factor (x − 2)² heads to 0 at 2
+|f(x) - 5| = (x - 2)^2\,|q(x)| \le \htmlClass{new}{(x - 2)^2} @@ size-of-a-product; |q(x)| ≤ 1; (x − 2)² ≥ 0 (square-never-negative)
+(x - 2)^2 \to 0 \text{ at } 2 @@ substitution (10c): substitute 2
+\lim_{x \to 2} f(x) = \htmlClass{keep}{5} @@ squeezed-to-0, with f − 5 for f; then ﹀, as in squeezed-by-distance
+  </pre>
+  <p data-pid="f2f713">The squeeze also works side by side, as 10e will need. Squeeze-for-sides technique: <b>if g(x) ≤ f(x) ≤ h(x) for every x with w &lt; x &lt; w + r, and g and h head to L from the right at w, then f heads to L from the right at w</b>; likewise from the left. Squeeze's column, with the half-window w &lt; x &lt; w + δ in place of the neighbourhood. ∎ So one trap on one side is enough for a one-sided limit. 0 ≤ √x ≤ √x is no help. But 0 ≤ x · q(x) ≤ x for x &gt; 0 gives x · q(x) heading to 0 from the right, with no help from the left at all.</p>
+  <p data-pid="47b696">And squeezed-by-distance, the commonest form, has a sharper reading. A bound |f(x) − L| ≤ C|x − w| on a reach r hands you the answer outright, δ = min(r, ε/C) (or any δ when C = 0). For √(x + 4) at 0, C = ½ and r = 4 give δ = min(4, 2ε). A squeeze is a recipe in disguise.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10d6.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = (x − 1)² · q(x) + 2x  near 1</span></span>Find lim_{x→1} f(x). <br>Name the technique for each part.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10d7">
+  <h2 class="sthead"><span class="stno">10d7</span>Illegal moves</h2>
+  <p class="stands">Stands on 10d1 to 10d6.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+0 \le q(x) \le 1 \;\Rightarrow\; q \text{ has a limit}\,? @@ the traps head to 0 and to 1: no squeeze. heads-nowhere says there is none
+q(x) \ge 0 \text{ and } 0 \to 0 \;\Rightarrow\; q \to 0\,? @@ one trap is not a squeeze: ε = ½ and t = 1 at fractions beat it
+\text{trap at the fractions only}\,? @@ the hypothesis is “for every x near a”. Inputs left out of the trap are free
+\text{“x · q(x) heads to 0, so q heads to 0”}\,? @@ the factor x did the work. Without it, heads-nowhere
+\text{read q's value off a drawing}\,? @@ every drawn input is a finite decimal, a fraction. q is not what any drawing shows
+|f(x) - 2| \le 3|x - 1| \text{ at } x = 1.1,\ 1.01,\ 1.001\,? @@ three inputs prove nothing: the bound must be true on a neighbourhood
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10d7.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">“q(x) ≥ 0 near 0, and 0 heads to 0, so q heads to 0.”</span></span>Which illegal move is this? <br>Say what a squeeze needs that this lacks.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10d8">
+  <h2 class="sthead"><span class="stno">10d8</span>Running it backwards</h2>
+  <p class="stands">Stands on 10d1 to 10d6.</p>
+  <p data-pid="9877e7">Wanting lim f = L with no rewrite in sight: write f(x) − L as a product with one factor you can bound and one that heads to 0, then cite squeezed-to-0. Wanting a trap for a wild factor: bound its outputs by a constant (|q(x)| ≤ 1) and let a tame factor do the shrinking. Wanting to refute a limit for a wild function: find two kinds of input in every window with outputs a fixed distance apart, as heads-nowhere did. Found upward; written downward.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10d8.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="2 - x^2 \le f(x) \le 2 + x^4 \text{ near } 0,"></span> <span data-tex-inline="\text{You are told nothing else}"></span> <span data-tex-inline="\text{about } f \text{.}"></span></span>Find the limit of f at 0, and the techniques that give the traps' limits.</li><li><span class="givens"><span data-tex-inline="|f(x) - 2| \le 3|x - 1| \text{ for } |x - 1| &lt; \tfrac12,"></span> <span data-tex-inline="\varepsilon = 0.06"></span></span>Give δ for ε, and then for every ε.</li><li><span class="givens"><span data-tex-inline="\text{Heads-nowhere&#x27;s challenger}"></span> <span data-tex-inline="\text{used } \varepsilon = \tfrac12 \text{.}"></span></span>Find every ε that would also have won against every claimed limit.</li><li><span class="givens"><span data-tex-inline="\text{A real } x \ge 0 \text{ has the same}"></span> <span data-tex-inline="\text{first four decimal places}"></span> <span data-tex-inline="\text{as } \tfrac13 \text{.}"></span></span>Find a distance within which it must be of one third.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">10d.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="q(x) = 1 \text{ at fractions},\ 0 \text{ elsewhere}"></span></span>Build squeezes of your own.<ol class="parts" type="a"><li>Write a function built from q that heads to 5 at 2 and has no limit at any other real, and prove both halves.</li><li>Build a fraction p at most the square root of 5, with the root at most p plus one hundredth, and check it exactly.</li><li><span class="givens"><span data-tex-inline="F(x) = -x^2,"></span> <span data-tex-inline="G(x) = x^2"></span></span>Make a function that is trapped between F and G at every irrational and is 1 at every fraction, and decide whether it has a limit at 0.</li></ol></div>
+  <div class="chq"><span class="chid">10d.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{Squeezed-by-distance with}"></span> <span data-tex-inline="C = 0 \text{:}"></span> <span data-tex-inline="|f(x) - L| \le 0 \text{ near } w"></span></span>Find f near w, and every δ that wins.</div>
+  <div class="chq"><span class="chid">10d.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{Squeeze: trapped between}"></span> <span data-tex-inline="\text{two functions heading to } L \text{,}"></span> <span data-tex-inline="f \text{ heads to } L \text{.}"></span> <span data-tex-inline="f \text{ heads to } L \text{ at } w \text{.}"></span></span>Can it always be trapped between two other functions heading to L?</div>
+  <div class="chq"><span class="chid">10d.4.4</span><span class="tagq">seam</span>An ancient book trapped a quantity it wanted between two families of others, some below it and some above, closing in from both sides. It closed with two refutations: the quantity is neither more nor less than the value it named. In 1635 a later mathematician instead built such quantities by summing endlessly many pieces with no width, and a critic attacked him in print for it. Which of the two is doing this step's squeeze? <br>Can a whole be made of pieces with no width?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r10c.html">← 10c · limits add, multiply and divide</a><a href="r10e.html">10e · from the left and from the right →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>The paper of 1829 is Peter Gustav Lejeune Dirichlet’s, and q is known as Dirichlet’s function. In 10d.4.4, the ancient book is Archimedes’ Measurement of a Circle; the one who summed indivisible lines is Bonaventura Cavalieri, and his critic is Paul Guldin.</p>
+  <aside class="voice para"><p>Dirichlet described such a function at the end of a paper of 1829, as an example of a function his methods could not handle: one that takes one value at the fractions and another at the irrationals, so that it jumps between the two in every stretch, however short.</p><cite>Dirichlet, “Sur la convergence des séries trigonométriques qui servent à représenter une fonction arbitraire entre des limites données”, Journal für die reine und angewandte Mathematik 4 (1829)</cite></aside>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=v=>{ if(!isFinite(v)) return '—'; const a=Math.abs(v); if(a!==0&&a<1e-3) return v.toExponential(2).replace('e-',' \\cdot 10^{-')+'}'; let s=a>=100?v.toFixed(1):a>=1?v.toFixed(3):v.toFixed(4); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const SQ2=Math.SQRT2;
+/* families: lower g, upper h, f (or the two families of a q-function), L, a, window */
+const FN={
+  xq:{lab:'x · q(x) at 0',L:0,a:0,g:x=>-Math.abs(x),h:x=>Math.abs(x),fr:x=>x,ir:x=>0,x:[-1.6,1.6],y:[-1.6,1.6],tex:R`-|x| \le x\,q(x) \le |x|`},
+  rt:{lab:'√(x + 4) at 0',L:2,a:0,g:x=>2-Math.abs(x)/2,h:x=>2+Math.abs(x)/2,f:x=>x>=-4?Math.sqrt(x+4):NaN,x:[-3,3],y:[0,3.6],tex:R`2 - \tfrac{|x|}{2} \le \sqrt{x + 4} \le 2 + \tfrac{|x|}{2}`},
+  x2q:{lab:'1 + x² · q(x) at 0',L:1,a:0,g:x=>1,h:x=>1+x*x,fr:x=>1+x*x,ir:x=>1,x:[-1.5,1.5],y:[0.3,3.4],tex:R`1 \le 1 + x^2 q(x) \le 1 + x^2`},
+  bad:{lab:'q between 0 and 1',L:null,a:0,g:x=>0,h:x=>1,fr:x=>1,ir:x=>0,x:[-1.5,1.5],y:[-0.6,1.6],tex:R`0 \le q(x) \le 1`}
+};
+let key='xq', F=FN.xq, xs=0.4, auto=true;
+function win(fun,e,L){ // largest reach (to 5) with |fun - L| < e on the punctured window, tested
+  const ok=d=>{ for(const s of [-1,1]) for(let k=1;k<=800;k++){ const x=F.a+s*d*k/800*(k<800?1:1-1e-9); const v=fun(x); if(!(Math.abs(v-L)<e)) return false; } return true; };
+  if(ok(5)) return 5; if(!ok(1e-7)) return 0; let lo=1e-7,hi=5; for(let i=0;i<40;i++){ const m=(lo+hi)/2; if(ok(m)) lo=m; else hi=m; } return lo; }
+const fch=$('fch');
+Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===key) b.className='on'; b.onclick=()=>{ key=k; F=FN[k]; xs=0.4*(F.x[1]); auto=true; [...fch.children].forEach(z=>z.classList.toggle('on',z===b)); all(); }; fch.appendChild(b); });
+const ke=$('ke'), cvS=$('cvS');
+const PS=plane(cvS,{x:[-1.6,1.6],y:[-1.6,1.6],grid:0.5,aspect:0.7,draw:P=>drawS(P)});
+Object.defineProperty(PS.o,'aspect',{get:()=>cvS.clientWidth>560?0.62:0.85});
+let info={};
+function drawS(P){ const c=P.ctx, e=Math.pow(10,+ke.value), a=F.a; P.axes(); const xl=P.X(F.x[0]),xr=P.X(F.x[1]);
+  let dg=0,dh=0,d=0,L=F.L;
+  if(L!==null){ c.fillStyle=col('--gold'); c.globalAlpha=.18; c.fillRect(xl,P.Y(L+e),xr-xl,P.Y(L-e)-P.Y(L+e)); c.globalAlpha=1; P.line(F.x[0],L,F.x[1],L,'--gold',1.4); P.line(F.x[0],L+e,F.x[1],L+e,'--gold',1,[5,4]); P.line(F.x[0],L-e,F.x[1],L-e,'--gold',1,[5,4]);
+    dg=win(F.g,e,L); dh=win(F.h,e,L); d=Math.min(dg,dh); if(d>0){ c.fillStyle=col('--ink'); c.globalAlpha=.08; c.fillRect(P.X(a-d),P.Y(F.y[1]),P.X(a+d)-P.X(a-d),P.Y(F.y[0])-P.Y(F.y[1])); c.globalAlpha=1; P.line(a-d,F.y[0],a-d,F.y[1],'--muted',1.2,[5,4]); P.line(a+d,F.y[0],a+d,F.y[1],'--muted',1.2,[5,4]); } }
+  else { [0,1].forEach(v=>{ c.fillStyle=col(v?'--gold':'--teal'); c.globalAlpha=.12; c.fillRect(xl,P.Y(v+e),xr-xl,P.Y(v-e)-P.Y(v+e)); c.globalAlpha=1; }); dg=win(F.g,e,0); dh=win(F.h,e,1); }
+  P.fn(F.g,'--teal',2.2); P.fn(F.h,'--teal',2.2);
+  if(F.f) P.fn(F.f,'--ember',2.6); else { P.fn(F.fr,'--ember',2,[2,3]); P.fn(F.ir,'--ember',2,[2,3]); }
+  P.line(a,F.y[0],a,F.y[1],'--muted',1,[2,4]);
+  P.line(xs,F.y[0],xs,F.y[1],'--plum',1.2,[3,3]);
+  info={e,dg,dh,d,L};
+  if(auto&&d>0){ auto=false; xs=+(F.a+0.6*Math.min(d,(F.x[1]-F.a)*0.9)).toPrecision(3); P.redraw(); }
+}
+function readS(){ const {e,dg,dh,d,L}=info; $('oe').textContent=fm(e).replace(/\\cdot 10\^\{-(\d+)\}/,'e-$1');
+  const x=xs, ls=[F.tex, R`\varepsilon = ${fm(e)}`];
+  if(L===null){ ls.push(R`\text{the traps head to } 0 \text{ and to } 1\text{: different values}`); ls.push(R`\text{no squeeze; and heads-nowhere: } q \text{ has no limit}`); }
+  else { ls.push(R`\delta_g = ${dg>=5?R`\ge 5`:fm(dg)},\ \ \delta_h = ${dh>=5?R`\ge 5`:fm(dh)},\ \ \delta = ${fm(Math.min(d,5))}`);
+    const inw=Math.abs(x-F.a)<d&&Math.abs(x-F.a)>0;
+    const gx=F.g(x), hx=F.h(x);
+    if(F.f){ const fx=F.f(x); ls.push(R`x = ${fm(x)}:\ \ ${fm(L-e)} ${L-e<gx?R`\lt`:R`\ge`} ${fm(gx)} \le ${fm(fx)} \le ${fm(hx)} ${hx<L+e?R`\lt`:R`\ge`} ${fm(L+e)}`); }
+    else { ls.push(R`x = ${fm(x)}\text{ (a fraction): } f(x) = ${fm(F.fr(x))};\ \text{ an irrational there: } ${fm(F.ir(x))}`); ls.push(R`${fm(L-e)} ${L-e<gx?R`\lt`:R`\ge`} ${fm(gx)} \le f \le ${fm(hx)} ${hx<L+e?R`\lt`:R`\ge`} ${fm(L+e)}`); }
+    ls.push(inw?R`\text{in the window: trapped inside the target}`:R`\text{outside the window: no promise here}`); }
+  tex($('eqS'),R`\begin{gathered}`+ls.join(R`\\ `)+R`\end{gathered}`,true); }
+let dr=false; cvS.addEventListener('pointerdown',e=>{ dr=true; cvS.setPointerCapture&&cvS.setPointerCapture(e.pointerId); mv(e); });
+function mv(e){ if(!dr) return; auto=false; const p=PS.point(e); xs=+Math.max(F.x[0],Math.min(F.x[1],p.x)).toFixed(3); if(xs===F.a) xs+=0.001; PS.redraw(); readS(); }
+cvS.addEventListener('pointermove',mv); ['pointerup','pointercancel'].forEach(t=>cvS.addEventListener(t,()=>dr=false));
+ke.addEventListener('input',()=>{ auto=true; PS.redraw(); readS(); });
+/* right: the challenger against q */
+const qa=$('qa'), qL=$('qL'), qd=$('qd'), cvQ=$('cvQ');
+const PQ=plane(cvQ,{x:[0,1],y:[-0.6,1.6],grid:0,labels:false,aspect:0.75,draw:P=>drawQ(P)});
+let qi={};
+function drawQ(P){ const c=P.ctx, a=+qa.value, L=+qL.value, d=Math.pow(10,+qd.value); P.o.x=[a-1.6*d,a+1.6*d];
+  // a fraction r in (a, a+d): r = (floor((a + d/2) * 10^k) )/10^k with 10^k > 4/d
+  const k=Math.ceil(Math.log10(4/d)); const den=Math.pow(10,k); const r=Math.round((a+d/2)*den)/den;
+  let n=1; while(SQ2/n>=(a+d-r)/2) n*=2; const t=r+SQ2/n;
+  const xl=P.X(a-1.6*d), xr=P.X(a+1.6*d);
+  c.fillStyle=col('--gold'); c.globalAlpha=.18; c.fillRect(xl,P.Y(L+0.5),xr-xl,P.Y(L-0.5)-P.Y(L+0.5)); c.globalAlpha=1; P.line(a-1.6*d,L,a+1.6*d,L,'--gold',1.4);
+  c.fillStyle=col('--ink'); c.globalAlpha=.08; c.fillRect(P.X(a-d),P.Y(1.6),P.X(a+d)-P.X(a-d),P.Y(-0.6)-P.Y(1.6)); c.globalAlpha=1;
+  P.line(a,-0.6,a,1.6,'--muted',1,[2,4]); P.line(a-1.6*d,0,a+1.6*d,0,'--muted',1); P.line(a-1.6*d,1,a+1.6*d,1,'--muted',1,[1,3]);
+  P.dot(r,1,'--gold',6); P.dot(t,0,'--teal',6);
+  const escR=Math.abs(1-L)>=0.5, escT=Math.abs(0-L)>=0.5;
+  [[r,1,escR],[t,0,escT]].forEach(([x,y,es])=>{ if(es){ c.strokeStyle=col('--ember'); c.lineWidth=2; c.beginPath(); c.arc(P.X(x),P.Y(y),10,0,7); c.stroke(); } });
+  P.text('1',a-1.55*d,1.05,'--muted','left',11); P.text('0',a-1.55*d,0.05,'--muted','left',11);
+  qi={a,L,d,r,t,n,den,escR,escT}; }
+function readQ(){ const {a,L,d,r,t,n,den,escR,escT}=qi; $('oqa').textContent=a; $('oqL').textContent=L; $('oqd').textContent='10^'+qd.value;
+  tex($('eqQ'),R`\begin{gathered}\text{claim } \lim_{x\to ${a}} q(x) = ${L},\ \ \delta = 10^{${qd.value}},\ \ \varepsilon = \tfrac12\\ r = ${fm(r)} \in \mathbb Q:\ q(r) = 1,\ \ |1 - ${L}| = ${fm(Math.abs(1-L))}\ ${escR?R`\ge`:R`\lt`}\ \tfrac12\\ t = r + \tfrac{\sqrt2}{${n}}:\ q(t) = 0,\ \ |0 - ${L}| = ${fm(Math.abs(L))}\ ${escT?R`\ge`:R`\lt`}\ \tfrac12\\ ${escR&&escT?R`\text{both escape}`:escR?R`\text{the fraction escapes}`:R`\text{the irrational escapes}`}\end{gathered}`,true); }
+[qa,qL,qd].forEach(k=>k.addEventListener('input',()=>{ PQ.redraw(); readQ(); }));
+function all(){ PS.o.x=F.x; PS.o.y=F.y; PS.redraw(); readS(); PQ.redraw(); readQ(); }
+all();
+
+/* ---------- slides ---------- */
+const N='\\htmlClass{new}', K='\\htmlClass{keep}';
+stepper('#sl1',[
+  {k:'ember',kl:'squeeze · 1 of 4',t:R`\begin{gathered}g \le f \le h \text{ near } a,\\ g \to L,\ \ h \to L\end{gathered}`,n:`The hypotheses: a trap on a neighbourhood of reach r, and both traps heading to one value.`},
+  {k:'ember',kl:'squeeze · 2 of 4',t:R`\delta = ${N}{\min(\delta_1, \delta_2, r)}`,n:`Both traps answer the challenge; the least reach keeps the trap in force too.`},
+  {k:'ember',kl:'squeeze · 3 of 4',t:R`\begin{gathered}L - \varepsilon \lt g(x) \le ${K}{f(x)}\\ \le h(x) \lt L + \varepsilon\end{gathered}`,n:`unpack-the-bars unpacks each trap's promise; the trap sits in the middle.`},
+  {k:'ember',kl:'squeeze · 4 of 4',t:R`|f(x) - L| \lt \varepsilon`,n:`at-most-is-a-partial-order on ℝ, then unpack-the-bars packed. No value of f was ever used. ∎`}
+],{title:'The slides · the squeeze · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'squeezed-to-0',t:R`\begin{gathered}|f(x)| \le h(x),\ \ h \to 0 \;\\ \Rightarrow\; ${K}{f \to 0}\end{gathered}`,n:`unpack-the-bars makes the size bound a trap −h ≤ f ≤ h; constant-factor gives −h → 0.`},
+  {k:'ember',kl:'the small fact',t:R`\lim_{x \to a} |x - a| = 0`,n:`The size of a size is itself, so δ = ε wins.`},
+  {k:'ember',kl:'squeezed-by-distance',t:R`\begin{gathered}|f(x) - L| \le ${N}{C\,|x - a|} \;\\ \Rightarrow\; f \to L\end{gathered}`,n:`squeezed-to-0 with f − L for f and the bound for h.`},
+  {k:'ember',kl:'a root · 1 of 3',t:R`\sqrt{x + 4} - 2 = \tfrac{${N}{x}}{\sqrt{x + 4} + 2}`,n:`Times the conjugate over itself (8i); difference-of-squares on top.`},
+  {k:'ember',kl:'a root · 2 of 3',t:R`\begin{gathered}\sqrt{x + 4} + 2 \ge 2 \;\\ \Rightarrow\; |\sqrt{x + 4} - 2| \le ${N}{\tfrac12}\,|x|\end{gathered}`,n:`The bottom is at least 2, so its reciprocal is at most ½.`},
+  {k:'ember',kl:'a root · 3 of 3',t:R`\lim_{x \to 0} \sqrt{x + 4} = ${K}{2}`,n:`squeezed-by-distance with C = ½, reach 4. 10f does every root this way.`}
+],{title:'The slides · squeezed-by-distance · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'heads-nowhere · 1 of 3',t:R`\lim_{x\to a} q(x) = L\ ?\quad \varepsilon = ${N}{\tfrac12}`,n:`Assume it, to refute, and challenge with one half.`},
+  {k:'ember',kl:'heads-nowhere · 2 of 3',t:R`\begin{gathered}r \in \mathbb Q,\ \ t = r + \tfrac{\sqrt2}{n}\\ \text{both in } (a, a + \delta)\end{gathered}`,n:`fraction-between gives the fraction; everyday-counting-passes makes √2/n small enough; 9a: t is irrational.`},
+  {k:'ember',kl:'heads-nowhere · 3 of 3',t:R`|1 - L| \lt \tfrac12,\ \ |0 - L| \lt \tfrac12\ \ ${N}{\bot}`,n:`q(r) = 1, q(t) = 0; two-targets with values 1 and 0. Refute: q has no limit anywhere. ∎`},
+  {k:'ember',kl:'x · q(x) · 1 of 2',t:R`|x\,q(x)| = |x|\,|q(x)| \le |x|`,n:`Every output of q is 0 or 1. A size bound, so a trap.`},
+  {k:'ember',kl:'x · q(x) · 2 of 2',t:R`\lim_{x \to 0} x\,q(x) = ${K}{0}`,n:`squeezed-to-0 with h(x) = |x|. Wild everywhere, tamed at 0 by a factor heading to 0 there.`}
+],{title:'The slides · heads-nowhere · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'numbers squeezed',t:R`\begin{gathered}1.4142^2 = 1.99996164\\ \lt 2 \lt 2.00024449 = 1.4143^2\end{gathered}`,n:`8f's trap for √2 (powers-keep-order): a squeeze with numbers in place of functions.`}
+],{title:'The slides · numbers squeezed · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'cannot · 1 of 2',t:R`0 \le q(x) \le 1`,n:`The traps head to 0 and to 1. No squeeze, and indeed no limit.`},
+  {k:'ember',kl:'cannot · 2 of 2',t:R`q(x) \ge 0,\ \ 0 \to 0\ \ ${N}{\times}`,n:`One trap is not a squeeze: at fractions q is 1, outside the target ε = ½ around 0.`}
+],{title:'The slides · what the squeeze cannot do · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

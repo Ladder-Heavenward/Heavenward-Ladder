@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How does a cell keep time?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r24phys.html">← 24·phys why does a pendulum keep time?</a><a href="r24eng.html">next: 24·eng how does a thermostat hold a room steady? →</a></p>
+  <div class="tags"><span class="tag bio">24·bio · biology</span></div>
+  <h1>How does a cell keep time?</h1>
+  <p>How does a cell keep time? A bean plant lifts its leaves by day and folds them at night. Shut it in a dark cupboard, and it goes on lifting and folding for days, with nothing outside to tell it the hour. People sent to live for weeks in caves with no clocks still sleep and wake on a cycle of about a day. A single cell has no gears and no pendulum. It has only molecules that are made, that stick to one another, and that wear out. What makes the question hard is that each of those is a slow, smooth change, and a clock needs something that turns over and over. This page shows, with rung twenty-four’s rules on rates and their states that hold, how sticking together can make a sharp switch, how two genes can make a memory with two settings, how three genes in a ring can make a beat, and how anyone could tell that the beat comes from inside.</p>
+  <p class="gesture">When a protein must catch several copies of a signal at once, the share of it caught rises slowly, then suddenly, then levels off: a switch. Two genes, each making a protein that shuts the other off, have two states that hold, one with the first gene on and one with the second, and a tipping point between them that does not hold. Three genes in a ring, each shutting off the next, have only one state left alone, and when the switches are sharp enough it pushes the cell away, so the genes take turns, on and off, for as long as the cell lives. A clock that runs a little slow or fast when cut off from daylight, and drifts steadily against the sun, must be keeping its own time.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r24k.html">24k</a> (stability by the sign of a slope), <a href="r22h.html">22h</a> (the pull-together technique; rules fed their own answers that do not settle), <a href="r24a.html">24a</a> (the own-rate technique), <a href="r12a.html">12a</a> (in-between values), <a href="r14d.html">14d</a> (the slope-sign-order technique) and <a href="r17bio.html">17·bio</a> (growth with a ceiling). 24·eng asks how a thermostat holds a room steady.</p></div>
+</header>
+
+<section class="class step" data-step="24bio1">
+  <h2 class="sthead"><span class="stno">24bio1</span>Catching several at once</h2>
+  <p class="stands">Stands on 24a (the own-rate technique) and 24k (stability by the sign of a slope).</p>
+  <p data-pid="f72521">Many proteins work only after catching some signal molecule, present at amount x. Suppose a protein catches n copies at once, or none. Let θ be the share of the protein holding them. Free protein catches at a rate in proportion to xⁿ; held protein lets go at a steady rate. As a rule on rates, θ′ = pxⁿ(1 − θ) − qθ.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the binding technique">
+\theta' = p\,x^n(1 - \theta) - q\,\theta @@ caught, less let go; x held steady
+F(\theta^*) = 0 \iff \theta^* = \tfrac{p x^n}{p x^n + q} = \tfrac{x^n}{K^n + x^n},\ \ K^n = \tfrac{q}{p} @@ the state left alone
+F'(\theta) = -(p\,x^n + q) \lt 0 @@ the state holds (24k)
+\theta - \theta^* = (\theta_0 - \theta^*)\,e^{-(p x^n + q)t} @@ the own-rate technique (24a), on the gap
+\htmlClass{new}{\theta \to \tfrac{x^n}{K^n + x^n}} \quad \blacksquare @@ whatever the start
+  </pre>
+  <p data-pid="e2033a">Binding technique: <b>a protein that catches n copies at once ends up with the share xⁿ/(Kⁿ + xⁿ) caught, and half caught when x = K.</b> With n = 1 the share climbs gently. With n = 4 it hardly moves below K, and is nearly full a little above it.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · binding · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">24·bio.1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="n = 4,\ \ K = 2 \ \mu\text{M}"></span></span>Find the share caught at x = 1, 2 and 4 µM. <br>Find how long it takes, in units of 1/q, to close half the gap at x = K.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24bio2">
+  <h2 class="sthead"><span class="stno">24bio2</span>How steep the switch is</h2>
+  <p class="stands">Stands on 24·bio.1 and 17 (log and exp).</p>
+  <p data-pid="381b5d">Blood is the best-known case. Each haemoglobin molecule carries oxygen to the body. Fitted to measured binding, its curve has K ≈ 26.8 in the units of oxygen pressure, mmHg, and an n of about 2.8. The fitted n is not a whole number, because the four seats do not all fill at once; it measures how steep the curve is. It is a law found by induction under the case with predictable variation.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the steepness technique">
+\tfrac{d}{dx}\tfrac{x^n}{K^n + x^n} = \tfrac{n\,K^n x^{n-1}}{(K^n + x^n)^2} @@ the quotient rule
+\text{at } x = K:\ \ \tfrac{n\,K^{2n-1}}{4K^{2n}} = \tfrac{n}{4K} @@ steepest climb grows with n
+\theta = 0.1 \iff x = K\,9^{-1/n};\ \ \theta = 0.9 \iff x = K\,9^{1/n} @@ solve for x
+\htmlClass{new}{\tfrac{x_{90}}{x_{10}} = 81^{1/n}} \quad \blacksquare @@ the stretch of signal that throws the switch
+  </pre>
+  <p data-pid="1d9ba9">Steepness technique: <b>to go from 10% caught to 90% caught takes 81 times as much signal when n = 1, and only 81^(1/n) times as much when n copies are caught at once.</b> For haemoglobin that is about 4.8 times. In the lungs, at 100 mmHg, the curve gives 98% loaded. In a hard-working muscle, at 20 mmHg, it gives 31%. So 67% of the load is handed over. With n = 1 and the same K, the shares would be 79% and 43%, and only 36% would be handed over.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · steepness · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24·bio.2.1</span><span class="ph undo">undo</span><span class="givens"><span class="gtx">a binding curve that goes from 10% to 90% caught over a threefold rise in signal</span></span>Find n. <br>Find its steepest climb, in shares per unit of signal, at K = 5.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24bio3">
+  <h2 class="sthead"><span class="stno">24bio3</span>Two genes that hold each other down</h2>
+  <p class="stands">Stands on 24·bio.1, 22h (rules fed their own answers) and 24k.</p>
+  <p data-pid="08cf6a">A gene makes a protein at a top rate a when it is free. A second protein, at amount v, sits on the gene and stops it, catching it n at a time. By the binding technique, measured in units of K, the gene is free for the share 1/(1 + vⁿ) of the time. Proteins wear out at a rate in proportion to their amount. So u′ = a/(1 + vⁿ) − u. Now let v’s gene be stopped by u in the same way: v′ = a/(1 + uⁿ) − v. Write f(x) = a/(1 + xⁿ).</p>
+  <p data-pid="d1c56f">Two rules on rates at once are past rung 24’s one-variable tools. Here is a guess, a relay reading: let u settle with v held, then v with u held, and so on. Each settles at once by the binding technique, so the relay runs uₖ₊₁ = f(f(uₖ)), a rule fed its own answers (22h).</p>
+  <pre class="lines" data-k="ember" data-label="this page: the switch technique, n = 2">
+u = f(v),\ \ v = f(u) @@ a state left alone by both rules
+u(1 + v^2) = v(1 + u^2) \iff (u - v)(1 - uv) = 0 @@ both equal a; take one from the other
+uv = 1 \Rightarrow u + v = u + v\cdot uv = u(1 + v^2) = a @@ the second case
+u,\ v = \tfrac{a \pm \sqrt{a^2 - 4}}{2},\ \ \text{for } a \gt 2 @@ two numbers with sum a and product 1
+\big(f\circ f\big)'(u) = f'(v)\,f'(u) = \tfrac{4}{a^2} \lt 1 @@ f′(x) = −2ax/(1 + x²)², and 1 + u² = a/v
+\htmlClass{new}{\text{two states hold: } u \text{ high, } v \text{ low, and } u \text{ low, } v \text{ high}} \quad \blacksquare @@ the pull-together technique (22h)
+  </pre>
+  <p data-pid="94d9ea">Switch technique: <b>two genes that hold each other down, with a &gt; 2 and n = 2, have two states that hold, one with each gene on.</b> The third state, u = v = L with L(1 + L²) = a, has relay slope f′(L)² = (2(1 − L/a))², which is above 1 for a &gt; 2: it tips. With a = 4 the held states are 2 ± √3, about 3.73 and 0.27. A pulse of a chemical that pulls one protein off its gene flips the switch, and it stays flipped. The relay reading is a guess. For this pair, the full two-rule check, held in trust for higher up the ladder, gives the same answer.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · switch · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24·bio.3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="a = 3,\ \ n = 2"></span></span>Find the two held states, and their relay slope. <br>Find the state u = v, to three places, and whether it holds.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24bio4">
+  <h2 class="sthead"><span class="stno">24bio4</span>Three genes in a ring</h2>
+  <p class="stands">Stands on 24·bio.3, 12a (in-between values), 14d (the slope-sign-order technique) and 22h (where a rule does not settle).</p>
+  <p data-pid="2bbd1d">Now three genes in a ring: the first stops the second, the second stops the third, the third stops the first. The relay reading runs once round the ring with h = f∘f∘f.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the ring technique">
+f' \lt 0 \Rightarrow h' = f'(f(f(x)))\,f'(f(x))\,f'(x) \lt 0 @@ three negative slopes: h falls (14d)
+h(0) \gt 0,\ \ h(x) - x \lt 0 \text{ for large } x @@ h stays between 0 and a
+\text{exactly one } L \text{ with } h(L) = L,\ \text{and } f(L) = L @@ in-between values (12a); h(x) − x falls; L = f(L) is one such point
+f'(L) = -\tfrac{a\,n\,L^{n-1}}{(1 + L^n)^2} = -n\big(1 - \tfrac{L}{a}\big) @@ use 1 + Lⁿ = a/L
+h'(L) = f'(L)^3 @@ the chain rule
+\htmlClass{new}{n\big(1 - \tfrac{L}{a}\big) \gt 1 \Rightarrow |h'(L)| \gt 1:\ L \text{ pushes; nothing else is left alone}} \quad \blacksquare @@ 22h: the run cannot settle
+  </pre>
+  <p data-pid="d037c2">Ring technique: <b>three genes in a ring that stop one another have one state left alone, and when the switches are steep enough it pushes, so the genes take turns for ever.</b> Since 1 − L/a &lt; 1, n = 1 never ticks: a clock of this kind needs genes caught several copies at a time. The relay reading asks for n(1 − L/a) &gt; 1. The two-rule check with the rules on rates, held in trust, asks for more: n(1 − L/a) &gt; 2. With a = 10 and n = 3, L ≈ 1.70 and n(1 − L/a) ≈ 2.49, so it passes both. A ring of this kind was built in a bacterium in 2000. Its genes took turns about every 150 minutes, slower than the cells divided.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · ring · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · three genes in a ring</div>
+    <div class="kn"><span class="m">n</span><input type="range" id="kn" min="1" max="4" step="0.1" value="3"><output id="on"></output></div>
+    <div class="kn"><span class="m">a</span><input type="range" id="ka" min="1" max="30" step="0.5" value="10"><output id="oa"></output></div>
+    <div id="pl"></div>
+    <div class="cap">The rules on rates for the ring, u₁′ = a/(1 + u₃ⁿ) − u₁ and so on round, stepped forward from an uneven start. Ember, teal and ink: the three proteins, over sixty units of wear-out time.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24·bio.4.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="a = 10,\ \ n = 2"></span></span>Find L. <br>Find f′(L), and whether the relay reading takes turns. <br>Find whether the rules on rates do.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24bio5">
+  <h2 class="sthead"><span class="stno">24bio5</span>Is the beat inside?</h2>
+  <p class="stands">Stands on 24·bio.4, 5d (laws) and 0c (guesses by case).</p>
+  <p data-pid="57d509">Plants, flies, mice and people keep a cycle of about a day. Is it a clock inside, or a reply to something outside: light, warmth, the turning earth? A reply would keep exactly 24 hours, in step with what it replies to. Cut off from daylight, a clock inside would keep its own period, a little off 24 hours, and drift against the sun.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the drift technique">
+\text{own period } P,\ \text{days of } 24 \text{ h} @@ cut off from daylight
+\text{after } m \text{ days: } m(P - 24) \text{ hours out of step} @@ each cycle starts P − 24 h later than the last
+\htmlClass{new}{\text{a steady drift } P - 24 \ne 0 \Rightarrow \text{the period is not the sun’s}} \quad \blacksquare @@ a reply to the sun would keep 24 h
+  </pre>
+  <p data-pid="be4d90">Drift technique: <b>a cycle that drifts steadily against the sun, when cut off from daylight, keeps a period of its own.</b> People living without clocks in dim, steady light kept a period averaging about 24.2 hours, drifting about 11 minutes a day. In 2005 three proteins from a blue-green bacterium, mixed in a test tube with fuel, kept a cycle of about a day with no genes and no light at all.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · drift · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24·bio.5.1</span><span class="ph undo">undo</span><span class="givens"><span class="gtx">a mouse in constant darkness starts running on its wheel 18 minutes earlier each day</span></span>Find its own period. <br>Find after how many days it runs at the hour it used to sleep, 12 hours out of step.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24bio6">
+  <h2 class="sthead"><span class="stno">24bio6</span>Illegal moves</h2>
+  <p class="stands">Stands on 24·bio.1 to 24·bio.5.</p>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\theta = \tfrac{x}{K + x} \text{ for every protein}\,? @@ only for one-at-a-time catching; n at once gives xⁿ/(Kⁿ + xⁿ)
+\text{two genes that stop each other always make a switch}\,? @@ for n = 2, only when a &gt; 2
+\text{every state left alone by the relay holds}\,? @@ only where the relay slope is under 1 in size
+\text{the relay takes turns, so the cell keeps time}\,? @@ the rules on rates ask for more: n(1 − L/a) &gt; 2
+  </pre>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24·bio.6.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="n = 3,\ \ K = 1,\ \ x = 2"></span></span>Find the share caught, and what the first line would give.</li><li><span class="givens"><span data-tex-inline="a = 1.5,\ \ n = 2"></span></span>Find every state the two genes leave alone.</li><li><span class="givens"><span data-tex-inline="a = 4,\ \ n = 2,\ \ u = v"></span></span>Find the relay slope there, and what a start just off it does.</li><li><span class="givens"><span data-tex-inline="a = 10,\ \ n = 2"></span></span>Find which of the two checks the ring passes.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">24·bio.7.1</span><span class="tagq">build</span>Build a ring of four genes, each stopping the next. <br>Find whether its relay reading can take turns, or whether it makes a switch.</div>
+  <div class="chq"><span class="chid">24·bio.7.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="n = 2"></span></span>Find the smallest a at which two genes that stop each other make a switch. <br>Find what the three states do as a heads down to it.</div>
+  <div class="chq"><span class="chid">24·bio.7.3</span><span class="tagq">converse</span>A ring of three genes takes turns. Must its genes be caught several copies at a time? <br>What in the rules on rates would you change to let n = 1 tick?</div>
+  <div class="chq"><span class="chid">24·bio.7.4</span><span class="tagq">reroute</span>Find the binding technique’s curve a second way: count the ways a protein can hold 0 or n copies, with the chance of each in proportion to qθ against pxⁿ(1 − θ), at balance.</div>
+  <div class="chq"><span class="chid">24·bio.7.5</span><span class="tagq">seam</span>A crab kept in a dark room for weeks goes on darkening and paling on a cycle near a day. One reader holds that its clock is inside. Another holds that it feels some faint signal of the turning earth that no wall keeps out. <br>What would settle it?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r24phys.html">← 24·phys · why does a pendulum keep time?</a><a href="r24eng.html">24·eng · how does a thermostat hold a room steady? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>Catching several copies at once is cooperative binding; xⁿ/(Kⁿ + xⁿ) is the Hill equation, n the Hill coefficient and K the half-saturation constant. Haemoglobin’s curve is the oxygen dissociation curve, and its K the P₅₀. A protein that stops a gene is a repressor. The two-gene switch is the genetic toggle switch, and its flipping is bistability; the three-gene ring is the repressilator. A cycle of about a day is a circadian rhythm; its period cut off from daylight is the free-running period, and the outside signal that resets it a zeitgeber. The test-tube clock is the KaiABC oscillator.</p>
+  <h3>Who said it first</h3>
+  <p>Archibald Vivian Hill fitted the curve to haemoglobin in 1910. Timothy Gardner, Charles Cantor and James Collins built the toggle switch, and Michael Elowitz and Stanislas Leibler the repressilator; both appeared in the same issue of Nature, in January 2000. Jean-Jacques d’Ortous de Mairan kept a mimosa in a dark cupboard in 1729. Ronald Konopka and Seymour Benzer found the first clock gene, in flies, in 1971; Jeffrey Hall, Michael Rosbash and Michael Young shared the Nobel prize for the clock’s gears in 2017. Charles Czeisler’s group measured the human period near 24.2 hours (1999). Masato Nakajima, Takao Kondo and colleagues built the test-tube clock (2005). In 24·bio.7.5, Frank A. Brown Jr. argued for an outside signal through the 1950s and 1960s; Colin Pittendrigh and Erwin Bünning argued for a clock inside.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="24·bio: a worked “proof”, not allowed">
+u' = \tfrac{1.5}{1 + v^2} - u,\ \ v' = \tfrac{1.5}{1 + u^2} - v @@ fine: a = 1.5, n = 2
+u + v = 1.5,\ uv = 1 @@ fine as algebra
+\text{so a switch holds at } u, v = \tfrac{1.5 \pm \sqrt{2.25 - 4}}{2} @@ not allowed: a² − 4 &lt; 0, there are no such u, v
+  </pre>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+const V=c=>'var('+c+')';
+// plot(series, xr, yr, opts): series = [{pts:[[x,y],...], c:'--ember', w:1.6, dash:''}]; returns svg string
+function plot(series, xr, yr, o){ o=o||{}; const W=360,H=o.H||210,L=34,B=22,T=8,Rr=8;
+  const sx=x=>L+(x-xr[0])/(xr[1]-xr[0])*(W-L-Rr), sy=y=>H-B-(y-yr[0])/(yr[1]-yr[0])*(H-B-T);
+  let s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;max-width:440px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  (o.yt||[]).forEach(y=>{ s+='<line x1="'+L+'" x2="'+(W-Rr)+'" y1="'+sy(y)+'" y2="'+sy(y)+'" style="stroke:'+V('--grid')+';stroke-width:0.6"/><text x="'+(L-3)+'" y="'+(sy(y)+3)+'" text-anchor="end" style="font:9px var(--mono);fill:'+V('--muted')+'">'+y+'</text>'; });
+  (o.xt||[]).forEach(x=>{ s+='<text x="'+sx(x)+'" y="'+(H-8)+'" text-anchor="middle" style="font:9px var(--mono);fill:'+V('--muted')+'">'+x+'</text>'; });
+  s+='<line x1="'+L+'" x2="'+L+'" y1="'+T+'" y2="'+(H-B)+'" style="stroke:'+V('--ink')+';stroke-width:0.8"/><line x1="'+L+'" x2="'+(W-Rr)+'" y1="'+(H-B)+'" y2="'+(H-B)+'" style="stroke:'+V('--ink')+';stroke-width:0.8"/>';
+  series.forEach(se=>{ const cl=v=>Math.max(yr[0]-0.05*(yr[1]-yr[0]),Math.min(yr[1]+0.05*(yr[1]-yr[0]),v));
+    const d=se.pts.filter(p=>isFinite(p[1])).map((p,i)=>(i?'L':'M')+sx(p[0]).toFixed(1)+','+sy(cl(p[1])).toFixed(1)).join('');
+    s+='<path d="'+d+'" style="fill:none;stroke:'+V(se.c||'--ember')+';stroke-width:'+(se.w||1.6)+(se.dash?';stroke-dasharray:'+se.dash:'')+'"/>'; });
+  (o.dots||[]).forEach(p=>{ s+='<circle cx="'+sx(p[0])+'" cy="'+sy(p[1])+'" r="2.6" style="fill:'+V(p[2]||'--ember')+'"/>'; });
+  if(o.xl) s+='<text x="'+(W-Rr)+'" y="'+(H-B-4)+'" text-anchor="end" style="font:9px var(--mono);fill:'+V('--muted')+'">'+o.xl+'</text>';
+  if(o.yl) s+='<text x="'+(L+4)+'" y="'+(T+9)+'" style="font:9px var(--mono);fill:'+V('--muted')+'">'+o.yl+'</text>';
+  return s+'</svg>'; }
+
+function draw(){ const n=+$('kn').value, a=+$('ka').value; $('on').textContent=fm(n,1); $('oa').textContent=fm(a,1);
+  const f=x=>a/(1+Math.pow(Math.max(x,0),n)); let u=[1,1.5,2]; const h=0.02, tm=60, P=[[],[],[]];
+  const F=u=>[f(u[2])-u[0],f(u[0])-u[1],f(u[1])-u[2]], add=(x,y,s)=>x.map((v,i)=>v+s*y[i]);
+  for(let t=0;t<=tm;t+=h){ if(Math.round(t/h)%5===0) for(let i=0;i<3;i++) P[i].push([t,u[i]]);
+    const k1=F(u),k2=F(add(u,k1,h/2)),k3=F(add(u,k2,h/2)),k4=F(add(u,k3,h)); u=u.map((v,i)=>v+h/6*(k1[i]+2*k2[i]+2*k3[i]+k4[i])); }
+  const top=Math.max(2,...P.flat().map(p=>p[1]))*1.05;
+  $('pl').innerHTML=plot([{pts:P[2],c:'--ink',w:1.2},{pts:P[1],c:'--teal'},{pts:P[0],c:'--ember'}],[0,tm],[0,top],{xt:[0,20,40,60],yt:[0,Math.round(top/2)],xl:'time',yl:'protein'});
+  let lo=0,hi=a; for(let i=0;i<100;i++){ const m=(lo+hi)/2; if(m-f(m)>0) hi=m; else lo=m; } const L=lo, s=n*(1-L/a);
+  const tail=P[0].slice(-150).map(p=>p[1]), sw=Math.max(...tail)-Math.min(...tail);
+  const v=$('vd'); v.className='verdict';
+  v.textContent='L = '+fm(L,3)+', n(1 − L/a) = '+fm(s,3)+'. '+(s>2?'Above 2: the state pushes, and the genes take turns (swing '+fm(sw,2)+').':(s>1?'Between 1 and 2: the relay reading takes turns, but the rules on rates settle (swing '+fm(sw,3)+').':'Under 1: even the relay reading settles at L.')); }
+$('kn').oninput=draw; $('ka').oninput=draw; draw();
+window.__pic={set:(n,a)=>{ $('kn').value=n; $('ka').value=a; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'rule',t:R`\theta' = p\,x^n(1 - \theta) - q\,\theta`,n:`Caught, less let go.`},
+  {k:'ember',kl:'holds',t:R`F' \lt 0`,n:`Departures shrink.`},
+  {k:'ember',kl:'curve',t:R`\htmlClass{new}{\tfrac{x^n}{K^n + x^n}}`,n:`Half at x = K.`}
+],{title:'The slides · binding · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'steepest',t:R`\tfrac{n}{4K}`,n:`At x = K.`},
+  {k:'ember',kl:'throw',t:R`\htmlClass{new}{\tfrac{x_{90}}{x_{10}} = 81^{1/n}}`,n:`Narrower as n grows.`}
+],{title:'The slides · steepness · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'relay',t:R`u_{k+1} = f(f(u_k))`,n:`One gene, then the other.`},
+  {k:'ember',kl:'held',t:R`\htmlClass{new}{u, v = \tfrac{a \pm \sqrt{a^2 - 4}}{2}}`,n:`For a > 2.`},
+  {k:'ember',kl:'tip',t:R`u = v = L`,n:`Pushes.`}
+],{title:'The slides · switch · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'one state',t:R`h = f\circ f\circ f \text{ falls}`,n:`One crossing.`},
+  {k:'ember',kl:'slope',t:R`f'(L) = -n\big(1 - \tfrac La\big)`,n:`From 1 + Lⁿ = a/L.`},
+  {k:'ember',kl:'ticks',t:R`\htmlClass{new}{n\big(1 - \tfrac La\big) \gt 2}`,n:`For the rules on rates.`}
+],{title:'The slides · ring · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'drift',t:R`m(P - 24)`,n:`Hours out of step.`},
+  {k:'ember',kl:'inside',t:R`\htmlClass{new}{P \ne 24}`,n:`A period of its own.`}
+],{title:'The slides · drift · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'illegal',t:R`\text{turns in the relay} \Rightarrow \text{a clock}\,?`,n:`The rules on rates ask more.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

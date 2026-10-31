@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Every isometry is at most three flips</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+.btns{display:flex;flex-wrap:wrap;gap:6px}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r20e.html">← 20e two flips</a><a href="r20g.html">next: 20g handedness →</a></p>
+  <div class="tags"><span class="tag proof">20f · proof</span></div>
+  <h1>Every isometry is at most three flips</h1>
+  <p>20c named three kinds of move, and 20e built slides and turns out of flips. Are there other isometries, ones no one has thought of? This step says no. A point is fixed by its distances to three corners of a triangle, so an isometry is fixed by where it sends three corners. Three flips, chosen one corner at a time, can send them anywhere they are allowed to go. The same construction proves Euclid’s tests for congruent triangles from the moves.</p>
+  <p class="gesture">Given three points not on one line, any point is fixed by its distances to them, and an isometry by where it sends them. Flip the first point to its place, then the second, then the third, each flip keeping what is already placed. So every isometry is at most three flips.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r20e.html">20e</a> (two flips), <a href="r20d.html">20d</a> (congruence), <a href="r18d.html">18d</a> (equally far from two points), <a href="r18f.html">18f</a> (triangles by hand). <a href="r20g.html">20g</a> counts the flips by parity.</p></div>
+</header>
+
+<section class="class step" data-step="20f1">
+  <h2 class="sthead"><span class="stno">20f1</span>Three points fix a point</h2>
+  <p class="stands">Stands on 18d2 (the points equally far from two points).</p>
+  <p data-pid="4029ac">Three-anchors technique: <b>if A, B, C are not on one line, a point is fixed by its distances to A, B and C.</b> Two different points X and Y with the same three distances would put A, B and C all on the one line of points equally far from X and Y.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the three-anchors technique">
+d(X, A) = d(Y, A),\ \ d(X, B) = d(Y, B),\ \ d(X, C) = d(Y, C) @@ suppose
+X \ne Y \Rightarrow A, B, C \in \{P : d(P, X) = d(P, Y)\} @@ each is equally far from X and Y
+\{P : d(P, X) = d(P, Y)\} \text{ is a line} @@ 18d2, since X ≠ Y
+\htmlClass{new}{X = Y} \quad \blacksquare @@ A, B, C are not on one line: proof by contradiction (7e)
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · three anchors · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">20f1.1</span><span class="ph undo">undo</span><span class="givens"><span class="gtx">A = (0, 0), B = (4, 0), C = (0, 3);  d(X, A) = 5,  d(X, B) = √17,  d(X, C) = √10</span></span>Find X.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20f2">
+  <h2 class="sthead"><span class="stno">20f2</span>An isometry is fixed by three points</h2>
+  <p class="stands">Stands on 20f1 and 20b (the group).</p>
+  <p data-pid="877e32">Three-points-decide technique: <b>two isometries that agree at three points not on one line are the same move.</b> If f(A) = A, f(B) = B and f(C) = C, every X has f(X) at the same three distances as X, so f(X) = X. For two isometries f and g agreeing at A, B, C, apply this to g⁻¹ ∘ f.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the three-points-decide technique">
+f(A) = A,\ f(B) = B,\ f(C) = C @@ suppose
+d(f(X), A) = d(f(X), f(A)) = d(X, A) @@ f keeps distances; likewise for B and C
+f(X) = X \text{ for every } X @@ three-anchors
+g^{-1} \circ f \text{ keeps } A, B, C \Rightarrow \htmlClass{new}{f = g} \quad \blacksquare @@ g⁻¹ ∘ f is an isometry (20b), so it does nothing
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · three decide · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20f2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">an isometry f with f(0, 0) = (0, 0),  f(1, 0) = (0, 1),  f(0, 1) = (−1, 0)</span></span>Find f(3, 2), and name the move.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20f3">
+  <h2 class="sthead"><span class="stno">20f3</span>Three flips are enough</h2>
+  <p class="stands">Stands on 20f2, 20c3 (flips) and 18d2.</p>
+  <p data-pid="76ae75">Three-flips technique: <b>every isometry is at most three flips.</b> Choose A, B, C not on one line. Flip A onto f(A). Then flip the new B onto f(B), across a line that keeps f(A). Then the new C onto f(C), across a line that keeps f(A) and f(B).</p>
+  <pre class="lines" data-k="ember" data-label="this step: the three-flips technique">
+F_1:\ \text{across the line equally far from } A \text{ and } f(A) @@ do-nothing if f(A) = A; now F₁(A) = f(A)
+F_2:\ \text{across the line equally far from } F_1(B) \text{ and } f(B) @@ do-nothing if they agree
+d(f(A), F_1(B)) = d(A, B) = d(f(A), f(B)) @@ so f(A) is on F₂’s line, and F₂ keeps it
+F_3:\ \text{the same for } F_2F_1(C) \text{ and } f(C) @@ its line holds f(A) and f(B), by the same line of distances
+F_3F_2F_1 = f \text{ at } A, B, C \Rightarrow \htmlClass{new}{f = F_3 \circ F_2 \circ F_1} \quad \blacksquare @@ three-points-decide
+  </pre>
+  <p data-pid="b7094c">This also settles a question 20a left open. Every flip is onto, so <b>any function from the plane to itself that keeps distances is a move</b>: the proof never used onto, only distances.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · three flips · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · three flips carry a triangle onto any congruent copy</div>
+    <div id="pl"></div>
+    <div class="btns"><button type="button" id="b0">start</button><button type="button" id="b1">flip A home</button><button type="button" id="b2">flip B home</button><button type="button" id="b3">flip C home</button></div>
+    <div class="cap">Ink: the triangle ABC. Plum: the target, a congruent copy. Ember: where the flips so far have taken ABC. Teal dashes: the line of the last flip.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20f3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">A = (0, 0), B = (2, 0), C = (0, 1);  f(A) = (2, 2),  f(B) = (2, 0),  f(C) = (3, 2)</span></span>Find the flips F₁, F₂, F₃ of the construction, as lines. <br>Find which of them are do-nothing.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20f4">
+  <h2 class="sthead"><span class="stno">20f4</span>Euclid’s tests, earned from the moves</h2>
+  <p class="stands">Stands on 20f3, 20d4 (congruence) and 18f (triangles by hand).</p>
+  <p data-pid="392965">Three-sides-congruent technique: <b>two triangles with their three sides equal in pairs are congruent: some isometry sends one onto the other.</b> Run 20f3 with f(A), f(B), f(C) replaced by the corners of the second triangle. Each line of distances in the proof needs only that the sides agree, and then the three flips carry the corners, and with them the segments (20a2), onto the second triangle.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the other tests">
+AB = A'B',\ AC = A'C',\ \angle A = \angle A' \Rightarrow BC = B'C' @@ two-sides-and-the-angle (18f), then three-sides-congruent
+\angle A = \angle A',\ \angle B = \angle B',\ AB = A'B' @@ similar-triangles (18f) gives ratios equal to AB/A′B′ = 1, so all three sides agree
+\angle A = \angle A',\ \angle B = \angle B' \Rightarrow \text{similar} @@ stretch by k = A′B′/AB (a similarity), then the three sides agree
+\htmlClass{new}{\text{side-angle-side, angle-side-angle, side-side-side; and angle-angle for similar}} \quad \blacksquare
+  </pre>
+  <p data-pid="f84c90">Euclid proved the first by laying one triangle on another, and had to hold the move in trust (20a.4.5). Here the move is built.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · tests · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20f4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">triangle (0, 0), (4, 0), (0, 3) and triangle (5, 5), (5, 1), (2, 5)</span></span>Guess whether they are congruent, from their sides. <br>Find an isometry that sends one onto the other.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20f5">
+  <h2 class="sthead"><span class="stno">20f5</span>Illegal moves</h2>
+  <p class="stands">Stands on 20f1 to 20f4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{two anchors fix a point}\,? @@ a point and its flip across the line AB have the same two distances
+\text{side-side-angle} \Rightarrow \cong\,? @@ two triangles can share two sides and an angle not between them and differ
+\text{every isometry is exactly three flips}\,? @@ at most three: a flip is one, a turn or slide is two
+\text{three corners on one line fix the move}\,? @@ the flip across that line keeps all three
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20f5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span class="gtx">A = (0, 0), B = (4, 0);  d(X, A) = 5,  d(X, B) = √17</span></span>Find every such X.</li><li><span class="givens"><span class="gtx">sides 5 and 7, and an angle of 30° facing the side 5</span></span>Find whether two triangles fit, and whether they must be congruent.</li><li><span class="givens"><span class="gtx">an isometry that keeps (0, 0), (1, 0) and (2, 0)</span></span>Find every such isometry.</li><li><span class="givens"><span class="gtx">the half turn about the origin</span></span>Find how many flips it takes, and which lines.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">20f.4.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">triangles ABC and A′B′C′ with three equal sides in pairs</span></span>Build an isometry that sends one onto the other in the fewest flips you can, for a pair that needs three.</div>
+  <div class="chq"><span class="chid">20f.4.2</span><span class="tagq">edge</span><span class="givens"><span class="gtx">an isometry f with f ∘ f = e,  f ≠ e</span></span>Find every kind of move f can be.</div>
+  <div class="chq"><span class="chid">20f.4.3</span><span class="tagq">converse</span>Every isometry is at most three flips. Turn it round: is every string of flips, however long, an isometry, and how few flips does it come down to?</div>
+  <div class="chq"><span class="chid">20f.4.4</span><span class="tagq">reroute</span>Prove three-sides-congruent with coordinates instead: slide A′ to A, turn B′ onto the ray AB, and decide C′ with at most one flip.</div>
+  <div class="chq"><span class="chid">20f.4.5</span><span class="tagq">seam</span>Euclid’s first proof of a congruence moved one triangle onto another. Twenty-four centuries later, a famous book of foundations took side-angle-side as an axiom instead, because nothing earlier could prove it. This step proved it from distances and flips. <br>Is side-angle-side an axiom or a theorem? <br>Can the same statement be both, and in what sense?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r20e.html">← 20e · two flips</a><a href="r20g.html">20g · handedness →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The three-flips technique is often stated as: every isometry of the plane is a product of at most three reflections. The tests are SSS, SAS, ASA and AA; side-side-angle is the ambiguous case (21h meets it again).</p>
+  <h3>Who said it first</h3>
+  <p>In 20f.4.5, the book is David Hilbert's Grundlagen der Geometrie (1899), in which a form of side-angle-side is axiom III.5.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+/* moves of the plane, drawn in SVG, for rung 20 */
+const V=c=>'var('+c+')';
+const FLAG=[[0,0],[0,3],[2,3],[2,2.4],[0.6,2.4],[0.6,1.8],[1.5,1.8],[1.5,1.2],[0.6,1.2],[0.6,0]];
+const M={
+  id:()=>p=>p,
+  slide:(h,k)=>p=>[p[0]+h,p[1]+k],
+  turn:(a,b)=>p=>[a*p[0]-b*p[1],b*p[0]+a*p[1]],
+  stretch:k=>p=>[k*p[0],k*p[1]],
+  flipU:(c,s)=>p=>{ const d=2*(p[0]*c+p[1]*s); return [d*c-p[0],d*s-p[1]]; },              /* across the line through O along (c, s), c² + s² = 1 */
+  flipAt:(q,c,s)=>p=>{ const x=p[0]-q[0],y=p[1]-q[1],d=2*(x*c+y*s); return [q[0]+d*c-x,q[1]+d*s-y]; },
+  turnAt:(q,a,b)=>p=>{ const x=p[0]-q[0],y=p[1]-q[1]; return [q[0]+a*x-b*y,q[1]+b*x+a*y]; },
+  then:(g,f)=>p=>g(f(p))                                                                    /* f first, then g */
+};
+const unit=(x,y)=>{ const r=Math.hypot(x,y); return [x/r,y/r]; };
+const fx=v=>(Math.abs(v)<5e-10?0:v);
+const show=(v,d)=>{ let s=fx(v).toFixed(d==null?2:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return (s==='-0'?'0':s).replace('-','−'); };
+/* shapes: {pts, c, fill, dash, w, open}; dots: {p, c, t}; lines: {p, d, c, dash} */
+function svgPlane(o){ const lo=o.lo==null?-6:o.lo, hi=o.hi==null?6:o.hi, S=300, X=x=>(x-lo)/(hi-lo)*S, Y=y=>S-(y-lo)/(hi-lo)*S;
+  let s='<svg viewBox="0 0 '+S+' '+S+'" style="width:100%;max-width:340px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  for(let g=Math.ceil(lo);g<=hi;g++){ s+='<line x1="'+X(g)+'" y1="0" x2="'+X(g)+'" y2="'+S+'" style="stroke:'+V('--grid')+';stroke-width:'+(g===0?1.6:0.6)+'"/><line x1="0" y1="'+Y(g)+'" x2="'+S+'" y2="'+Y(g)+'" style="stroke:'+V('--grid')+';stroke-width:'+(g===0?1.6:0.6)+'"/>'; }
+  (o.lines||[]).forEach(l=>{ const L=40; s+='<line x1="'+X(l.p[0]-L*l.d[0])+'" y1="'+Y(l.p[1]-L*l.d[1])+'" x2="'+X(l.p[0]+L*l.d[0])+'" y2="'+Y(l.p[1]+L*l.d[1])+'" style="stroke:'+V(l.c||'--teal')+';stroke-width:1.6;stroke-dasharray:'+(l.dash||'5 4')+'"/>'; });
+  (o.shapes||[]).forEach(z=>{ const pts=z.pts.map(p=>X(p[0]).toFixed(1)+','+Y(p[1]).toFixed(1)).join(' ');
+    s+='<'+(z.open?'polyline':'polygon')+' points="'+pts+'" style="fill:'+(z.fill?V(z.c):'none')+';fill-opacity:'+(z.fill?0.28:0)+';stroke:'+V(z.c)+';stroke-width:'+(z.w||2)+(z.dash?';stroke-dasharray:'+z.dash:'')+'"/>'; });
+  (o.dots||[]).forEach(d=>{ s+='<circle cx="'+X(d.p[0])+'" cy="'+Y(d.p[1])+'" r="4" style="fill:'+V(d.c||'--ink')+'"/>'+(d.t?'<text x="'+(X(d.p[0])+7)+'" y="'+(Y(d.p[1])-6)+'" style="fill:'+V(d.c||'--ink')+';font:12px IBM Plex Mono,monospace">'+d.t+'</text>':''); });
+  return s+'</svg>'; }
+function knob(id,lab,min,max,step,val){ return '<div class="kn"><span class="m">'+lab+'</span><input type="range" id="'+id+'" min="'+min+'" max="'+max+'" step="'+step+'" value="'+val+'"><output id="o'+id+'"></output></div>'; }
+function chipRow(el,keys,get,set,after){ el.innerHTML=''; keys.forEach(k=>{ const b=document.createElement('button'); b.type='button'; b.textContent=k; if(k===get()) b.className='on'; b.onclick=()=>{ set(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+
+const T0=[[0,0],[3,0],[0,2]];
+const tgt=M.then(M.slide(1,1),M.then(M.turn(0.6,-0.8),M.flipU(1,0)));
+const TT=T0.map(tgt);
+const lineBetween=(P,Q)=>{ const m=[(P[0]+Q[0])/2,(P[1]+Q[1])/2], d=[Q[0]-P[0],Q[1]-P[1]], L=Math.hypot(d[0],d[1]); return {p:m,n:[d[0]/L,d[1]/L],u:[-d[1]/L,d[0]/L]}; };
+const flipOver=l=>M.flipAt(l.p,l.u[0],l.u[1]);
+let stage=0;
+function state(){ let cur=T0.slice(), last=null, n=0;
+  for(let i=0;i<stage;i++){ const P=cur[i], Q=TT[i]; if(Math.hypot(P[0]-Q[0],P[1]-Q[1])<1e-9){ last=null; continue; } const l=lineBetween(P,Q); const F=flipOver(l); cur=cur.map(F); last=l; n++; }
+  return {cur,last,n}; }
+function draw(){ const {cur,last,n}=state();
+  $('pl').innerHTML=svgPlane({lo:-6,hi:6,shapes:[{pts:T0,c:'--ink',fill:true},{pts:TT,c:'--plum',fill:true},{pts:cur,c:'--ember',w:2.6}],lines:last?[{p:last.p,d:last.u}]:[],dots:[{p:cur[0],c:'--ember',t:'A'},{p:cur[1],c:'--ember',t:'B'},{p:cur[2],c:'--ember',t:'C'}]});
+  const v=$('vd'); const done=stage===3; v.className='verdict'+(done?' win':''); v.textContent=done?'All three corners are home, after '+n+' flips: the move is those flips.':'Flips used so far: '+n+'.'; }
+[0,1,2,3].forEach(i=>$('b'+i).onclick=()=>{ stage=i; draw(); }); draw();
+window.__pic={set:s=>{ stage=s; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'three anchors',t:R`\htmlClass{new}{X = Y}`,n:`Else A, B, C share a line.`}
+],{title:'The slides · three anchors · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'three points decide',t:R`\htmlClass{new}{f = g \text{ on } A, B, C \Rightarrow f = g}`,n:`g⁻¹ ∘ f keeps three anchors.`}
+],{title:'The slides · three decide · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'flip A',t:R`F_1(A) = f(A)`,n:`Across the line between them.`},
+  {k:'ember',kl:'then B, then C',t:R`\htmlClass{new}{f = F_3 \circ F_2 \circ F_1}`,n:`Each keeps what is placed.`}
+],{title:'The slides · three flips · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'three sides',t:R`\htmlClass{new}{\text{three sides} \Rightarrow \cong}`,n:`Three flips build the move.`},
+  {k:'ember',kl:'the rest',t:R`\text{two sides and the angle; two angles}`,n:`Through 18f to three sides.`}
+],{title:'The slides · tests · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`\text{SSA}\,?`,n:`Two triangles can fit.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

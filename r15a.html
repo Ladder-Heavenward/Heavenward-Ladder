@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>15a · Partitions, lower and upper sums</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r15.html">← 15 measuring what is under a curve</a><a href="r15b.html">next: 15b every under-estimate is below every over-estimate →</a></p>
+  <div class="tags"><span class="tag proof">15a · proof</span></div>
+  <h1>Partitions, lower and upper sums</h1>
+  <p>Rung 9 drew the graph of a function as a set of points in the plane. Under the graph of a function that is never negative there is another set of points: everything between the graph and the across axis. Nothing on the ladder so far says how big that set is. This step lays down the three rules that anything called area must obey. Then it does one thing with those rules: cut the interval into pieces, stand a box on each piece, and add up the boxes. Boxes that fit under the graph give a total that is too small. Boxes that reach over it give a total that is too big. The area, whatever it turns out to be, is caught between them.</p>
+  <p class="gesture">Cut the interval at finitely many points. On each piece, the least value of the function gives a box that fits under the graph, and the greatest gives one that reaches over it. Add the boxes' widths times heights. The area is at least the first total and at most the second.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r09e.html">9e</a> (the plane, the graph), <a href="r04j.html">4j</a> (Σ, sum-one-more, doubled-sum), <a href="r08c.html">8c</a> (sup, inf, no-holes, greatest-lower-bound), <a href="r12b.html">12b</a> (bounded, bounded-both-ways), <a href="r12c.html">12c</a> (highest-and-lowest, greatest and least value), <a href="r08d.html">8d</a> (order-and-arithmetic-agree), <a href="r08b.html">8b</a> (three-way-order on ℝ, witness-for-less), <a href="r10d.html">10d</a> (q, Dirichlet's). <a href="r15b.html">15b</a> cuts finer and compares two partitions; <a href="r15c.html">15c</a> takes the best of all the lower sums; <a href="r15h.html">15h</a> computes them by hand.</p></div>
+</header>
+
+<section class="class step" data-step="15a1">
+  <h2 class="sthead"><span class="stno">15a1</span>New marks on this rung</h2>
+  <p class="stands">Stands on 9a1 (marks said first in words).</p>
+  <p data-pid="03469b"><b>Each new mark of rung 15 is said here in words first, then written.</b> Each is laid down on the step named, where it is first used.</p>
+  <p data-pid="cb2c66">The set of points with x from p to q and y from c to d, a box: <span data-tex-inline="[p, q] \times [c, d]"></span>. Laid down in this step.</p>
+  <p data-pid="73cae2">The width of the i-th piece of a partition: <span data-tex-inline="\Delta x_i"></span>. Laid down in this step.</p>
+  <p data-pid="3f5028">A sum over the whole numbers i from 1 to n: <span data-tex-inline="\sum_{i=1}^{n}"></span>. Laid down in this step. From p to q, <span data-tex-inline="\sum_{i=p}^{q}"></span>, on 15g; without end, <span data-tex-inline="\sum_{i=0}^{\infty}"></span>, on 15i.</p>
+  <p data-pid="d308e0">The least and the greatest values of f on the i-th piece: <span data-tex-inline="m_i"></span> and <span data-tex-inline="M_i"></span>. The lower and upper sums: L(f, P) and U(f, P). Laid down in this step.</p>
+  <p data-pid="851d51">The sup of the lower sums, taken over every partition P: <span data-tex-inline="\sup_P L(f, P)"></span>, with the running letter written low. Laid down on 15c.</p>
+  <p data-pid="23df16">The lower and the upper integral: <span data-tex-inline="\underline{I}"></span>, with a bar below, and <span data-tex-inline="\overline{I}"></span>, with a bar above. Laid down on 15c.</p>
+  <p data-pid="865191">The integral of f from u to v: <span data-tex-inline="\int_u^v f(x)\,dx"></span>. Laid down on 15c.</p>
+  <p data-pid="15c5ce">The integral taken from the larger end back to the smaller, which is minus the other: <span data-tex-inline="\int_b^a f"></span>. Laid down on 15e.</p>
+  <p data-pid="91207b">The positive part and the negative part of f: <span data-tex-inline="f^+"></span> and <span data-tex-inline="f^-"></span>. Laid down on 15e.</p>
+  <p data-pid="1971be">8i's ± turned about, packing a line with − and a line with + into one: ∓. Laid down on 15g.</p>
+  <p data-pid="241a45">On 15·chem only, the extra pressure that stops water crossing a membrane: Π, a Greek capital letter used as a plain name.</p>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">15a1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">Δxᵢ,  mᵢ,  Mᵢ,  L(f, P)</span></span>Say each mark in words. <br>Name the step that lays each one down.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15a2">
+  <h2 class="sthead"><span class="stno">15a2</span>Boxes, and three rules for area</h2>
+  <p class="stands">Stands on 5f (sets of pairs) and 8 (reals).</p>
+  <p class="eqline" data-pid="92af7a">From here on, for p &lt; q and c &lt; d, the box [p, q] × [c, d] is the set of points (x, y) of the plane with p ≤ x ≤ q and c ≤ y ≤ d. Its width is q − p and its height is d − c. The mark [p, q] × [c, d] is a name: it names one set of points. Its accepted name is a rectangle.</p>
+  <p class="eqline" data-pid="1175b4">From here on, for f with f(x) ≥ 0 at every x in [a, b], the region under f on [a, b] is the set of points (x, y) with a ≤ x ≤ b and 0 ≤ y ≤ f(x).</p>
+  <p data-pid="61dafc">Area is to be a number given to some sets of points. Nobody has yet said which number. Three rules are laid down as the starting point. They are premises about what the word area must mean, chosen because every way of measuring land or cloth already obeys them:</p>
+  <p class="eqline" data-pid="3acd16">Box-area axiom: the box [p, q] × [c, d] has area (q − p)(d − c), its width times its height.<br>Inside-no-more axiom: if one set lies inside another, and both have areas, the first area is no more than the second.<br>Side-by-side axiom: if two sets with areas share no points except some on a single line x = k, then the two together have the sum of the two areas.</p>
+  <p data-pid="83b0c6">By the side-by-side axiom, boxes standing side by side have areas that add. [0, 1] × [0, 2] and [1, 3] × [0, 5] share only points with x = 1, so together they have area 2 + 10 = 12. <b>Nothing else is assumed.</b> In particular, nothing yet says that the region under x² has an area at all.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · three rules · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15a2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">[0, 2] × [0, 3]  and  [2, 5] × [0, 1]</span></span>Find the area of each box by the box-area axiom. <br>Find the area of the two together, naming the rule.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15a3">
+  <h2 class="sthead"><span class="stno">15a3</span>Cutting the interval</h2>
+  <p class="stands">Stands on 15a2 and 4j (Σ).</p>
+  <p class="eqline" data-pid="4d99f6">From here on, a partition of [a, b] is a finite list of inputs a = x₀ &lt; x₁ &lt; ⋯ &lt; xₙ = b. For each i from 1 to n, the interval [xᵢ₋₁, xᵢ] is its i-th piece, and Δxᵢ = xᵢ − xᵢ₋₁ is the piece's width. Δxᵢ is a name, for one number. Its accepted name is a partition, and the xᵢ are its points. The equal partition into n pieces has xᵢ = a + i(b − a)/n, every width (b − a)/n.</p>
+  <p class="eqline" data-pid="44a5c0">From here on, Σᵢ₌₁ⁿ t(i) is 4j's Σ taken over the i with 1 ≤ i ≤ n: t(1) + t(2) + ⋯ + t(n). It is still an operator: carried out, it produces one number, the total.</p>
+  <p data-pid="84bc00"><b>The widths add to the whole.</b> Σ Δxᵢ = (x₁ − x₀) + (x₂ − x₁) + ⋯ + (xₙ − xₙ₋₁). Every point but the two ends appears once added and once taken away, leaving xₙ − x₀, the length of the whole interval. (By induction on n, with sum-one-more: adding a piece adds xₙ₊₁ − xₙ to a total of xₙ − x₀.)</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · a partition · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15a3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">P = {1, 1.5, 3, 4} of [1, 4]</span></span>Write each width Δxᵢ. <br>Check that the widths add to 3.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15a4">
+  <h2 class="sthead"><span class="stno">15a4</span>The least and the greatest on each piece</h2>
+  <p class="stands">Stands on 15a3, 8c (inf and sup) and 12b (bounded-both-ways).</p>
+  <p class="eqline" data-pid="84d552">From here on, for f bounded on [a, b] and a partition P of it, mᵢ is the inf, and Mᵢ the sup, of the values of f on the i-th piece. The lower sum is L(f, P) = Σᵢ₌₁ⁿ mᵢ Δxᵢ, and the upper sum is U(f, P) = Σᵢ₌₁ⁿ Mᵢ Δxᵢ. mᵢ and Mᵢ are names of numbers. L(f, P) and U(f, P) are names too, each the packed form of a whole sum of boxes. Their accepted names are the lower sum and the upper sum.</p>
+  <p data-pid="bd452f">The inf and the sup exist by 8c's greatest-lower-bound and no-holes, because f is bounded on [u, v] (12b's bounded-both-ways) and so on each piece. When f is continuous, 12c's highest-and-lowest says more: f reaches mᵢ and Mᵢ on the piece, so they are its least and greatest values there.</p>
+  <p data-pid="98e8db">Lower-below-upper technique: <b>for f bounded on [u, v] and any partition P of [u, v], L(f, P) ≤ U(f, P).</b></p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the lower-below-upper technique">
+x_{i-1} \text{ is on the } i\text{-th piece} @@ the piece is not empty
+m_i \le f(x_{i-1}) \le M_i @@ inf is a lower bound, sup an upper bound (8c)
+\Delta x_i \gt 0 @@ the points are listed in increasing order
+m_i\,\Delta x_i \le M_i\,\Delta x_i @@ <span class="hl-new">order-and-arithmetic-agree (8d)</span>: multiplying by a positive keeps order
+\htmlClass{new}{\textstyle\sum_{i=1}^{n} m_i \Delta x_i \le \sum_{i=1}^{n} M_i \Delta x_i} \quad \blacksquare @@ induction on n with sum-one-more: adding the same order to both sides (order-and-arithmetic-agree)
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · the two sums · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15a4.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = x \text{ on } [0, 2];"></span> <span data-tex-inline="P: \text{ equal partition, } 4 \text{ pieces}"></span></span>Find the lower and upper sums of f for P.</li><li><span class="givens"><span data-tex-inline="f(x) = x^2 \text{ on } [-1, 1];"></span> <span data-tex-inline="P: -1, 0, 1"></span></span>Find the lower and upper sums of f for P.</li><li><span class="givens"><span data-tex-inline="f(x) = 1/x \text{ on } [1, 3];"></span> <span data-tex-inline="P: \text{ equal partition, } 2 \text{ pieces}"></span></span>Find the lower and upper sums of f for P.</li><li><span class="givens"><span data-tex-inline="\text{a partition of } [u, v] \text{ into } n \text{ pieces}"></span></span>Prove by induction on n that the widths of the pieces add to the length of the interval.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15a5">
+  <h2 class="sthead"><span class="stno">15a5</span>The boxes trap the area</h2>
+  <p class="stands">Stands on 15a4 and 15a2 (the three rules).</p>
+  <p data-pid="f0563d">Boxes-trap-the-area technique: <b>let f ≥ 0 be bounded on [u, v], and P a partition. If the region under f on [u, v] has an area A obeying the three area axioms, then L(f, P) ≤ A ≤ U(f, P).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the boxes-trap-the-area technique">
+\text{the lower boxes } [x_{i-1}, x_i] \times [0, m_i] @@ mᵢ ≥ 0, since 0 is a lower bound of f there and mᵢ is the greatest
+(x, y) \in \text{lower box} \;\Rightarrow\; 0 \le y \le m_i \le f(x) @@ mᵢ is a lower bound for f on the piece
+\text{every lower box lies in the region} @@ so their union does too
+\text{area of their union} = \textstyle\sum m_i \Delta x_i = L(f, P) @@ box-area for each box; side-by-side, adding one box at a time (sum-one-more): neighbours share only x = xᵢ
+L(f, P) \le A @@ inside-no-more
+\text{the upper boxes } [x_{i-1}, x_i] \times [0, M_i] \text{ cover the region} @@ a point (x, y) of the region has x in some piece, and y ≤ f(x) ≤ Mᵢ
+\htmlClass{new}{L(f, P) \le A \le U(f, P)} \quad \blacksquare @@ box-area, side-by-side, inside-no-more again, the other way
+  </pre>
+  <p data-pid="625c2f">A box of height 0 is not a box by the definition above, since it needs c &lt; d. Where mᵢ = 0 the lower box is left out, and its term mᵢ Δxᵢ = 0 changes nothing.</p>
+  <p data-pid="2c4db7">One early mathematician asked his readers to think of a plane figure as woven of all its lines, one at each x, like a cloth of its threads. Two figures were to be compared by comparing their lines one pair at a time.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · the trap · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · the boxes under and over a graph, and their totals</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="chips" id="fch"></div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">pieces n</span><input type="range" id="kn" min="1" max="40" step="1" value="4"><output id="on"></output></div>
+      <div class="chips" id="pch"></div>
+      <div class="cap">Ink: the graph. Teal, filled: the lower boxes, height mᵢ. Ember outline: the upper boxes, height Mᵢ. The area, if there is one, lies between the teal total and the ember total.</div>
+    </div>
+    <div class="panel">
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15a5.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = 2x on [0, 1],  P = {0, ½, 1}</span></span>Find L and U. <br>Say what the trap says about the area under f.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15a6">
+  <h2 class="sthead"><span class="stno">15a6</span>Worked sums</h2>
+  <p class="stands">Stands on 15a5 and 14a (a top inside a piece).</p>
+  <pre class="lines" data-k="ember" data-label="this step: x² on [0, 1], four equal pieces">
+P = \{0, \tfrac14, \tfrac12, \tfrac34, 1\},\ \ \Delta x_i = \tfrac14 @@ the equal partition into 4 pieces
+m_i = (\tfrac{i-1}{4})^2,\ \ M_i = (\tfrac{i}{4})^2 @@ x² is increasing on [0, 1]: least at the left end, greatest at the right
+L = \tfrac14 \cdot \tfrac{0 + 1 + 4 + 9}{16} = \tfrac{14}{64} @@ 0.21875
+U = \tfrac14 \cdot \tfrac{1 + 4 + 9 + 16}{16} = \tfrac{30}{64} @@ 0.46875
+\htmlClass{new}{\tfrac{14}{64} \le A \le \tfrac{30}{64}} @@ boxes-trap-the-area, if the region has an area
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: the same function, unequal pieces">
+P = \{0, \tfrac12, \tfrac34, 1\} @@ widths ½, ¼, ¼
+L = 0 \cdot \tfrac12 + \tfrac{1}{16} \cdot \tfrac14 + \tfrac{9}{16} \cdot \tfrac14 = \tfrac{13}{64} @@ least values at the left ends
+U = \tfrac14 \cdot \tfrac12 + \tfrac{9}{16} \cdot \tfrac14 + 1 \cdot \tfrac14 = \tfrac{33}{64} @@ greatest at the right ends
+\text{three pieces, a worse squeeze than four} @@ 15b asks when more points must help
+  </pre>
+  <pre class="lines" data-k="teal" data-label="from 14a: when the greatest value is inside a piece">
+f(x) = 4x - x^2 \text{ on } [0, 4],\ \ 4 \text{ equal pieces} @@ f(0) = 0, f(1) = 3, f(2) = 4, f(3) = 3, f(4) = 0
+m_i:\ 0, 3, 3, 0 @@ on each piece the least value is at an end: f has no bottom inside (0, 4)
+M_i:\ 3, 4, 4, 3 @@ candidates (14a): the top at 2 is an end of the second and third pieces
+L = 6,\ \ U = 14 @@ each piece has width 1
+  </pre>
+  <p data-pid="7378be">Had the partition been 0, 1.5, 2.5, 4, the greatest value on the middle piece would be f(2) = 4. That is at a critical point inside it, and neither end would give it. <b>The heights are the least and greatest on each piece, wherever on the piece they fall.</b></p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · worked sums · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15a6.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = x \text{ on } [0, 1];"></span> <span data-tex-inline="n \text{ equal pieces},\ U = 0.55"></span></span>Find n.</li><li><span class="givens"><span data-tex-inline="f \text{ is constant on } [2, 7];"></span> <span data-tex-inline="L(f, P) = 15 \text{ for some } P"></span></span>Find the constant, and the upper sum for that partition.</li><li><span class="givens"><span data-tex-inline="f \text{ is increasing on } [0, 1];"></span> <span data-tex-inline="5 \text{ equal pieces},\ U - L = 0.4"></span></span>Find how much f rises from end to end.</li><li><span class="givens"><span data-tex-inline="f(x) = x \text{ on } [0, b];"></span> <span data-tex-inline="P: 0, 1, b;\ L(f, P) = 3"></span></span>Find b.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15a7">
+  <h2 class="sthead"><span class="stno">15a7</span>Illegal moves</h2>
+  <p class="stands">Stands on 15a1 to 15a6.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+m_i = f(x_{i-1})\,? @@ only where f is increasing on the piece; for 4x − x² on [2, 3] the least is at 3
+\text{a partition with } x_i = x_{i+1}\,? @@ the points are strictly increasing: no piece of width 0
+\text{infinitely many points}\,? @@ a partition is a finite list; the sums must be sums
+\text{L and U for } f \text{ unbounded}\,? @@ with no upper bound on a piece there is no sup, so no Mᵢ
+\begin{aligned}&\text{boxes-trap-the-area}\\ &\quad\text{for } f \text{ with negative values}\,?\end{aligned} @@ the region is defined only for f ≥ 0; 15e deals with the rest
+  </pre>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15a7.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(0) = 0,"></span> <span data-tex-inline="f(x) = 1/x \text{ for } 0 &lt; x \le 1;"></span> <span data-tex-inline="P \text{ a partition of } [0, 1]"></span></span>Decide which of the lower and upper sums of f for P exists.</li><li><span class="givens"><span data-tex-inline="f(x) = 4x - x^2 \text{ on } [0, 4];"></span> <span data-tex-inline="4 \text{ equal pieces}"></span></span>Someone takes the value at the left end of each piece as the height of an under-estimating box. Compare their total with the lower sum.</li><li><span class="givens"><span data-tex-inline="f(x) = -x \text{ on } [0, 1];"></span> <span data-tex-inline="2 \text{ equal pieces}"></span></span>Find the lower sum of f, and the line of boxes-trap-the-area that fails.</li><li><span class="givens"><span data-tex-inline="q: \text{ 10d's function, on } [0, 1]"></span></span>Find the lower and upper sums of q for every partition.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">15a.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{Bend: left-end heights for } 4x - x^2."></span></span>Choose a function of your own and a partition into three pieces, so that on one piece the least value is at neither end and on another the greatest is at neither end.<br>Find the lower and upper sums, and the left-end total.</div>
+  <div class="chq"><span class="chid">15a.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="P = \{u, v\}"></span></span>Find the lower and upper sums for P, and every function for which they are equal.</div>
+  <div class="chq"><span class="chid">15a.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="L(f, P) = U(f, P),"></span> <span data-tex-inline="P \text{ a partition of } [u, v]"></span></span>Prove or refute: f is constant on the interval.</div>
+  <div class="chq"><span class="chid">15a.4.4</span><span class="tagq">loop</span><span class="givens"><span data-tex-inline="f \text{ increasing on } [u, v];"></span> <span data-tex-inline="n \text{ equal pieces;}"></span> <span data-tex-inline="\text{Claim: } U - L = \tfrac{(f(v) - f(u))(v - u)}{n};"></span> <span data-tex-inline="g(x) = x^2 \text{ on } [0, 1]"></span></span>Prove the claim.<br>Find how many equal pieces bring the gap between the sums of g under one hundredth.</div>
+  <div class="chq"><span class="chid">15a.4.5</span><span class="tagq">seam</span><span class="givens"><span data-tex-inline="R_1 = [0, 2] \times [0, 1],"></span> <span data-tex-inline="R_2 = [0, 1] \times [0, 1]"></span></span>In 1635 one mathematician treated the region under a graph as made of all its lines, one at each input, as long as the graph is high there. A critic answered that the lines of a figure are endlessly many, that a line has no width, and that endlessly many things of no width cannot be added or compared. This step covers the region with finitely many boxes of positive width. <br>Is the region made of its lines, or of something with width? <br>If of lines: are there more lines in the first given box than in the second?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r15.html">← 15 · measuring what is under a curve</a><a href="r15b.html">15b · every under-estimate is below every over-estimate →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>Cavalieri asked his readers to think of a plane figure as woven of all its lines, one at each x, like a cloth of its threads, and to compare two figures by comparing their lines one pair at a time.</p><cite>Cavalieri, Geometria indivisibilibus continuorum (1635); paraphrase</cite></aside>
+  <p>The closer’s heap of lines is Bonaventura Cavalieri’s (1635); the critic is Paul Guldin. 10d’s q is Dirichlet’s function.</p>
+  <p>Accepted names: the lower and upper sums are also called lower and upper Darboux sums, after Gaston Darboux.</p>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+/* least and greatest of F.f on [lo, hi]: the ends, F's critical points inside, and a fine sample (exact between critical points for the functions used here) */
+function ext(F,lo,hi){ if(F.dir) return [0,1]; let m=Infinity,M=-Infinity; const t=x=>{ const v=F.f(x); if(v<m) m=v; if(v>M) M=v; };
+  t(lo); t(hi); (F.crit||[]).forEach(c=>{ if(c>lo&&c<hi) t(c); }); for(let k=1;k<64;k++) t(lo+(hi-lo)*k/64); return [m,M]; }
+function sums(F,pts){ let L=0,U=0; const ms=[],Ms=[]; for(let i=1;i<pts.length;i++){ const [m,M]=ext(F,pts[i-1],pts[i]), w=pts[i]-pts[i-1]; ms.push(m); Ms.push(M); L+=m*w; U+=M*w; } return {L,U,ms,Ms}; }
+const eq=(a,b,n)=>Array.from({length:n+1},(_,i)=>a+(b-a)*i/n);
+function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
+function boxes(P,pts,hs,stroke,fill,alpha){ const c=P.ctx; for(let i=1;i<pts.length;i++){ const a=pts[i-1],b=pts[i],h=hs[i-1]; c.globalAlpha=alpha; P.poly([[a,0],[b,0],[b,h],[a,h]],null,fill); c.globalAlpha=1; P.poly([[a,0],[b,0],[b,h],[a,h]],stroke,null,1.2); } }
+function dirDots(P,a,b){ const c=P.ctx; c.fillStyle=col('--ink'); for(let k=0;k<=300;k++){ const x=a+(b-a)*k/300; const y=(k%2)?0:1; c.fillRect(P.X(x)-1,P.Y(y)-1,2,2); } }
+const FN={
+  sq:{lab:'x² on [0, 1]',f:x=>x*x,a:0,b:1,y:[-0.1,1.15]},
+  hill:{lab:'4x − x² on [0, 4]',f:x=>4*x-x*x,a:0,b:4,crit:[2],y:[-0.5,4.6]},
+  rec:{lab:'1/x on [1, 3]',f:x=>1/x,a:1,b:3,y:[-0.1,1.15]},
+  wig:{lab:'x³ − 3x + 3 on [0, 2]',f:x=>x*x*x-3*x+3,a:0,b:2,crit:[1],y:[-0.5,5.6]},
+  dir:{lab:'10d’s q on [0, 1]',f:x=>NaN,dir:true,a:0,b:1,y:[-0.1,1.15]}
+};
+let key='sq',F=FN.sq,ptype='eq';
+const kn=$('kn'),cvF=$('cvF');
+function pts(){ const n=+kn.value; if(ptype==='eq') return eq(F.a,F.b,n);
+  /* uneven: widths grow, a fixed rule so the picture is repeatable */ const w=Array.from({length:n},(_,i)=>1+((i*7)%5)); const t=w.reduce((s,v)=>s+v,0); let x=F.a; const p=[x]; w.forEach(v=>{ x+=(F.b-F.a)*v/t; p.push(x); }); p[n]=F.b; return p; }
+const PF=plane(cvF,{x:[0,1],y:[0,1],grid:1,aspect:0.8,draw:P=>draw(P)});
+Object.defineProperty(PF.o,'aspect',{get:()=>cvF.clientWidth>480?0.7:0.9});
+function draw(P){ const pad=(F.b-F.a)*0.08; P.o.x=[F.a-pad,F.b+pad]; P.o.y=F.y; P.o.grid=(F.b-F.a)>2?1:0.25; P.axes();
+  const p=pts(), S=sums(F,p);
+  boxes(P,p,S.ms,'--teal','--teal',0.28); boxes(P,p,S.Ms,'--ember',null,0);
+  if(F.dir) dirDots(P,F.a,F.b); else curve(P,F.f,'--ink',2.6,F.a,F.b); }
+function read(){ const p=pts(), S=sums(F,p), n=p.length-1; $('on').textContent=n;
+  const vd=$('vdF'); vd.className='verdict'+(S.U-S.L<0.01?' win':'');
+  vd.textContent=F.dir?'Every piece holds a fraction and a number that is not one (witness-for-less): mᵢ = 0 and Mᵢ = 1 on every piece, so L = 0 and U = 1 for every partition. Cutting finer changes nothing.'
+    :(n===1?'One piece: L is the width times the least value, U the width times the greatest.':'L = '+mm(S.L)+' and U = '+mm(S.U)+'. The gap U − L is '+mm(S.U-S.L)+(S.U-S.L<0.01?': the boxes now pin any area to within a hundredth.':'.'));
+  tex($('eqF'),R`\begin{gathered}n = ${n},\ \ ${ptype==='eq'?R`\Delta x_i = ${mm((F.b-F.a)/n)}`:R`\text{uneven widths}`}\\ L(f, P) = \textstyle\sum m_i \Delta x_i = ${mm(S.L)}\\ U(f, P) = \textstyle\sum M_i \Delta x_i = ${mm(S.U)}\\ U - L = ${mm(S.U-S.L)}\end{gathered}`,true); }
+function all(){ PF.redraw(); read(); }
+kn.addEventListener('input',all);
+const fch=$('fch');
+Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===key) b.className='on'; b.onclick=()=>{ key=k; F=FN[k]; [...fch.children].forEach(z=>z.classList.toggle('on',z===b)); all(); }; fch.appendChild(b); });
+const pch=$('pch');
+[['eq','equal pieces'],['un','uneven pieces']].forEach(([k,l])=>{ const b=document.createElement('button'); b.textContent=l; if(k===ptype) b.className='on'; b.onclick=()=>{ ptype=k; [...pch.children].forEach(z=>z.classList.toggle('on',z===b)); all(); }; pch.appendChild(b); });
+window.__pic={set:(k,n,t)=>{ [...fch.children][Object.keys(FN).indexOf(k)].click(); [...pch.children][t==='un'?1:0].click(); kn.value=n; all(); const S=sums(F,pts()); return {L:+S.L.toFixed(5),U:+S.U.toFixed(5),txt:$('vdF').textContent}; }};
+all();
+/* ---------- slides ---------- */
+const Nw='\\htmlClass{new}';
+stepper('#sl1',[
+  {k:'ember',kl:'the box',t:R`[p, q] \times [c, d]`,n:`The points with p ≤ x ≤ q and c ≤ y ≤ d. Accepted name: a rectangle.`},
+  {k:'ember',kl:'three rules',t:R`\text{box-area: } (q - p)(d - c);\ \ \text{inside-no-more};\ \ \text{side-by-side: add}`,n:`Premises about what area must mean.`},
+  {k:'ember',kl:'the region',t:R`\{(x, y) : a \le x \le b,\ 0 \le y \le f(x)\}`,n:`For f ≥ 0. Nothing yet says it has an area.`}
+],{title:'The slides · three rules · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'a partition',t:R`a = x_0 \lt x_1 \lt \cdots \lt x_n = b`,n:`Finitely many points; pieces [xᵢ₋₁, xᵢ] of width Δxᵢ.`},
+  {k:'ember',kl:'widths add',t:R`\textstyle\sum \Delta x_i = b - a`,n:`Each inner point is added once and taken away once.`}
+],{title:'The slides · a partition · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'the heights',t:R`m_i = \inf,\ \ M_i = \sup \text{ on the } i\text{-th piece}`,n:`greatest-lower-bound and no-holes (8c); for continuous f, highest-and-lowest says they are reached.`},
+  {k:'ember',kl:'the two sums',t:R`L = \textstyle\sum m_i \Delta x_i,\ \ U = \textstyle\sum M_i \Delta x_i`,n:`The lower sum and the upper sum.`},
+  {k:'ember',kl:'lower-below-upper',t:R`${Nw}{L(f, P) \le U(f, P)}`,n:`mᵢ ≤ Mᵢ, times a positive width, added up.`}
+],{title:'The slides · the two sums · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'boxes-trap-the-area',t:R`${Nw}{L(f, P) \le A \le U(f, P)}`,n:`Lower boxes lie inside the region; upper boxes cover it. The three area axioms.`}
+],{title:'The slides · the trap · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'x², four pieces',t:R`\tfrac{14}{64} \le A \le \tfrac{30}{64}`,n:`If the region under x² on [0, 1] has an area.`},
+  {k:'teal',kl:'from 14a · a top inside',t:R`4x - x^2:\ \ L = 6,\ U = 14`,n:`The greatest value on a piece can be at a critical point, not an end.`}
+],{title:'The slides · worked sums · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'illegal',t:R`m_i \ne f(x_{i-1}) \text{ in general}`,n:`The least value on a piece is wherever it is.`}
+],{title:'The slides · illegal · ← → keys work'});
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

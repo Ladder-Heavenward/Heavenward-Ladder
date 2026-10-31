@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>12c · The highest-and-lowest technique</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:3.5em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r12b.html">← 12b bounded on a closed interval</a><a href="r12d.html">next: 12d why having no holes matters →</a></p>
+  <div class="tags"><span class="tag proof">12c · proof</span></div>
+  <h1>The highest-and-lowest technique</h1>
+  <p>12b showed that a function continuous on a closed interval has its outputs below some bound. So they have a least upper bound. This step asks whether some input reaches it, or whether the outputs only creep up on it the way the fractions creep up on the square root of 2. For a function continuous on a closed interval, some input reaches it. The proof is a refutation with an invented function. If the top were never reached, the reciprocal of the gap below the top would be continuous on the whole interval. So 12b would bound it, and that bound would give a smaller top. The least value comes from turning the function upside down.</p>
+  <p class="gesture">If the top is never reached, then one over the gap below the top is continuous, so it is bounded. Then every output stays a fixed amount below the top, so the top was not the least upper bound: totally false. So some input reaches the top.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r12b.html">12b</a> (bounded-on-a-closed-interval, bounded-both-ways), <a href="r12a.html">12a</a> (closed interval), <a href="r08c.html">8c</a> (sup, no-holes, inf), <a href="r08d.html">8d</a> (order-and-arithmetic-agree, positive-reciprocal on ℚ read in ℝ), <a href="r08b.html">8b</a> (three-way-order on ℝ), <a href="r08g.html">8g</a> (negative-reverses-order), <a href="r08i.html">8i</a> (completing the square), <a href="r10c.html">10c</a> (functions from functions), <a href="r11b.html">11b</a> (continuous-sums, constant-factor, continuous-quotients), <a href="r09g.html">9g</a> (factor), <a href="r07e.html">7e</a> (proof by contradiction), <a href="r07d.html">7d</a> (not-not-out, not-every). <a href="r12d.html">12d</a> shows the technique fail over the fractions; <a href="r12e.html">12e</a> uses it to take intervals to intervals; rung 14 starts from it.</p></div>
+</header>
+
+<section class="class step" data-step="12c1">
+  <h2 class="sthead"><span class="stno">12c1</span>Greatest and least, said exactly</h2>
+  <p class="stands">Stands on 4g (greatest and least), 8c (sup) and 12b (bounded).</p>
+  <p data-pid="a330bc">4g gave the words greatest and least for numbers, and 5c and 8a carried them to fractions and reals. Said of a function's outputs:</p>
+  <p class="eqline" data-pid="de8e4c">From here on, take a function f whose outputs are reals, and a set A of its inputs. f reaches its greatest value on A at c when c ∈ A and f(x) ≤ f(c) for every x ∈ A. Then f(c) is the greatest value of f on A. Likewise f reaches its least value on A at d when d ∈ A and f(d) ≤ f(x) for every x ∈ A, and f(d) is the least value. A greatest value is called a maximum and a least value a minimum, and either is called an extreme value. On the whole domain they are the absolute maximum and minimum.</p>
+  <p data-pid="86a0e1">The greatest value is one real; the inputs that reach it may be many. Two inputs c and c′ that both reach it have f(c) ≤ f(c′) and f(c′) ≤ f(c), so f(c) = f(c′) (at-most-is-a-partial-order on ℝ's antisymmetry): “the greatest value” is a name.</p>
+  <p class="eqline" data-pid="fb2e7d">From here on, for f and A as above, sup_A f names sup{f(x) : x ∈ A}, when there is one. That is the least upper bound of f's set of values on A (2g's shorthand, a set of reals, 8c's line). And inf_A f names its greatest lower bound, when there is one. Read them “the sup of f on A” and “the inf of f on A”. When A is clear from the step, they are written sup f and inf f. Both marks are names: each names one real.</p>
+  <p class="eqline" data-pid="c41073">Reuses, said out loud. 8c's sup S names the least upper bound of a set S of reals, and still does. sup_A f is that same sup, taken of one set, f's values on A. So it is a new way of writing an old thing, not a new idea. 4g gave greatest and least to numbers, and 6d's least member to partial orders. Here they are said of a function's values, with the input that gives the value named too. In this step the letter M names sup f: it is not 8·phys's upright M for mega, nor the M of 9g's leading-term.</p>
+  <p data-pid="9228a7">Greatest-is-reached technique: <b>f reaches its greatest value on A at c exactly when sup_A f exists and equals f(c), with c ∈ A.</b> Rightward: f(c) is an upper bound of the values, and any upper bound β has f(c) ≤ β because f(c) is a value; so f(c) is the least upper bound. Leftward: every value is at most the sup, which is f(c). ∎ Likewise the least value is the inf, reached.</p>
+  <p data-pid="45eb47">So the question of this step is a question about sup f: it exists for a function bounded above (no-holes), and the technique says whether it is a value.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · greatest value · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">12c1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = 4 − x² on [−1, 2]</span></span>Find the greatest value and every input that reaches it. <br>Say what sup_{[−1, 2]} f is, citing greatest-is-reached.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="12c2">
+  <h2 class="sthead"><span class="stno">12c2</span>Bounded is not reaching</h2>
+  <p class="stands">Stands on 12c1, 5e (another-between) and 10f (passing every bound).</p>
+  <p data-pid="08623f"><b>Without both words of the hypothesis, the sup can exist and not be reached.</b></p>
+  <p data-pid="8992f8">Leave out an end: x on [0, 1) is continuous and bounded, and its sup is 1. Every value is below 1. And nothing below 1 is an upper bound: for c &lt; 1, the middle (c + 1)/2 is an input above c (5e's another-between read in ℝ). So 1 is the sup and no input reaches it. On (0, 1), x has neither a greatest nor a least value.</p>
+  <p data-pid="f62f8c">Put in a discontinuity: let f(x) = x for 0 ≤ x &lt; 1 and f(1) = 0, on the closed interval [0, 1]. The sup is still 1 and still not reached. One discontinuity at the end is enough to lose the top.</p>
+  <p data-pid="cbdb86">Leave out an end and the bound too: 1/x on (0, 1] reaches its least value 1 at 1 and has no greatest value, since it passes every bound (10f). And off any closed interval: x²/(1 + x²) on ℝ creeps up on 1 and never gets there, because 1 − x²/(1 + x²) = 1/(1 + x²) is positive.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · not reached · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">12c2.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = \frac{x}{1 + x^2},"></span> <span data-tex-inline="I = [2, 5]"></span></span>Decide whether f has a greatest value on all the reals, and on I. <br>For I, find it, and prove it with a gap of known sign.</li><li><span class="givens"><span data-tex-inline="f(x) = 1/x \text{ on } (0, 1]"></span></span>Find the extreme value f reaches and the one it does not, and the hypothesis of highest-and-lowest that fails.</li><li><span class="givens"><span data-tex-inline="\text{Claim: } f \text{ is greatest at } c,"></span> <span data-tex-inline="\text{so } f \text{ is continuous at } c"></span></span>Refute the claim with a function from rung 11.</li><li><span class="givens"><span data-tex-inline="\text{Claim: } f \text{ bounded on } [0, 1],"></span> <span data-tex-inline="\text{so some input reaches } \sup f"></span></span>Refute the claim, and find the missing word.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="12c3">
+  <h2 class="sthead"><span class="stno">12c3</span>The proof, every line cited</h2>
+  <p class="stands">Stands on 12c2, 12b3 (bounded-on-a-closed-interval) and 11b5 (continuous-quotients).</p>
+  <p data-pid="8c15c8">Highest-and-lowest technique (the extreme value theorem): <b>if f is continuous on [v, w], then f reaches a greatest value on [v, w] and a least value on [v, w].</b> In marks: ∃c ∈ [v, w] ∀x ∈ [v, w] (f(x) ≤ f(c)) and ∃d ∈ [v, w] ∀x ∈ [v, w] (f(d) ≤ f(x)).</p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the highest-and-lowest technique · the top exists">
+f \text{ bounded above on } [a, b] @@ bounded-on-a-closed-interval (12b), then bounded-both-ways
+V = \{f(x) : x \in [a, b]\} @@ 2g's shorthand: a set of reals with the member f(a) and an upper bound
+\htmlClass{new}{M = \sup_{[a,b]} f = \sup V} @@ <span class="hl-new">no-holes (8c)</span>
+\forall x \in [a, b]\ (f(x) \le M) @@ M is an upper bound of V
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: the highest-and-lowest technique · the top is reached">
+\text{suppose } \neg\exists c \in [a, b]\ (f(c) = M) @@ a supposition for contradiction (7e)
+\forall x \in [a, b]\ (f(x) \ne M) @@ not-some (1e), bounded
+\forall x \in [a, b]\ (f(x) \lt M) @@ the line above and f(x) ≤ M: 8a's line for &lt;
+g(x) = \htmlClass{new}{\frac{1}{M - f(x)}} @@ 10c's quotient of the constant 1 by M − f: every bottom on [a, b] is positive (order-and-arithmetic-agree)
+g \text{ continuous on } [a, b] @@ continuous-sums for M − f; continuous-quotients, since the bottom's value is not 0 at any input of [a, b]; side by side at the ends (11b)
+\text{call } K:\ \forall x \in [a, b]\ (g(x) \le K) @@ <span class="hl-new">bounded-on-a-closed-interval (12b) again, for g</span>, then bounded-both-ways
+0 \lt g(a) \le K @@ the reciprocal of a positive real is positive (positive-reciprocal on ℚ read in ℝ)
+\tfrac1K \le M - f(x) @@ reciprocals of positives turn the order about (positive-reciprocal on ℚ read in ℝ); the reciprocal of g(x) is M − f(x) (reciprocal on ℝ)
+f(x) \le \htmlClass{new}{M - \tfrac1K} \text{ for every } x \in [a, b] @@ order-and-arithmetic-agree: add f(x) − 1/K to both sides
+M - \tfrac1K \text{ is an upper bound of } V,\ \ M - \tfrac1K \lt M @@ 8c's line; 1/K is positive
+M \le M - \tfrac1K;\ \ \bot @@ M is the least upper bound; three-way-order on ℝ
+\exists c \in [a, b]\ (f(c) = M) @@ refute gives ¬¬; <span class="hl-new">not-not-out (7d), rung 7's either-way principle</span>
+\forall x \in [a, b]\ (f(x) \le f(c)) @@ the swap axiom in the line M is an upper bound: f reaches its greatest value at c
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: the highest-and-lowest technique · the bottom, by turning upside down">
+h(x) = \htmlClass{new}{-f(x)} \text{ is continuous on } [a, b] @@ constant-factor (11b) with the constant −1
+\text{call } d:\ \forall x \in [a, b]\ (-f(x) \le -f(d)) @@ the greatest value of h, by the column above
+\forall x \in [a, b]\ (f(d) \le f(x)) \quad \blacksquare @@ negative-reverses-order (8g): multiply by −1, and the order turns about
+  </pre>
+  <p data-pid="635f1a">Where each hypothesis was spent. No-holes: at M = sup V, and inside both uses of bounded-on-a-closed-interval, each with its own least upper bound. Continuity: inside bounded-on-a-closed-interval for f, and again in making g continuous. That is the heart of the trick. The supposition “never reached” is exactly what keeps g's bottom away from 0, so it is what makes g continuous. The closed interval: inside both uses of bounded-on-a-closed-interval. And rung 7's either-way principle: the proof is by contradiction proper. It never says where the greatest value is reached. It shows that “nowhere” is totally false, and the last step from ¬¬∃c to ∃c is not-not-out. That is honest: the technique gives no recipe for finding c, and constructive mathematicians do not accept it in this form.</p>
+  <p data-pid="5d3384">Watch the trick fail where the technique fails. For x on [0, 1), M = 1 and nothing reaches it, so the supposition is true and g(x) = 1/(1 − x) is continuous on [0, 1). But [0, 1) is not closed, bounded-on-a-closed-interval cannot be cited, and indeed g passes every bound as x → 1⁻. The column breaks at the line that calls K.</p>
+  <p data-pid="1ca733">One well-known calculus book gathers this technique, 12a’s and 12b’s into a chapter of their own. It states them, uses them, and keeps the proofs back until the next chapter. They cannot be proved from the rules of arithmetic and order alone: each needs the least upper bound.</p>
+  <p data-pid="db63d6">The technique's accepted name carries the name of a teacher who taught it in his Berlin lectures of the 1860s. The mathematician of 12a's 1817 paper had a proof in a manuscript of the 1830s that was not published until 1930.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · highest-and-lowest · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · left: the top and the bottom · right: the reciprocal of the gap below a claimed top</div>
+    <div class="panel">
+      <div class="chips" id="fch"></div>
+      <canvas id="cvE"></canvas>
+      <div class="cap">Ink: the function on its interval. Gold row: M = sup f, with gold dots at the inputs that reach it, or a hollow ring where the values creep up on it. Teal row: the inf, with teal dots where it is reached. A dashed ink column marks an end that the interval leaves out.</div>
+      <div class="verdict" id="vdE"></div>
+    </div>
+    <div class="panel">
+      <div class="lbl">the trick's function, g(x) = 1/(u − f(x))</div>
+      <canvas id="cvG"></canvas>
+      <div class="kn"><span class="m">u − M</span><input type="range" id="ku" min="0" max="2" step="0.05" value="0.5"><output id="ou"></output></div>
+      <div class="cap">Plum: g for a claimed top u at least M. Set u − M to 0 to run the proof's supposition: if M is reached, g has no value at the inputs that reach it; if not, g is defined everywhere and the readout says whether it is bounded.</div>
+      <div class="eqbox" id="eqE"></div>
+    </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">12c3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f continuous on [0, 3];  suppose every value is below M = sup f</span></span>Write the column’s g, and say why it is continuous on [0, 3]. <br>Say which technique then bounds g, and what that bound does to M.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="12c4">
+  <h2 class="sthead"><span class="stno">12c4</span>By hand: where the top and bottom are</h2>
+  <p class="stands">Stands on 12c3, 8i (completing the square) and 9g (factoring).</p>
+  <p data-pid="b0c9ac">Highest-and-lowest promises a greatest and a least value. <b>For some functions you can find them by hand, by writing the gap to a claimed top or bottom as something whose sign you know.</b></p>
+  <pre class="lines" data-k="teal" data-label="from 8i: completing the square">
+x^2 - 2x = (x - 1)^2 - 1 @@ completing the square (8i)
+(x - 1)^2 \ge 0, \text{ with } 0 \text{ only at } 1 @@ square-never-negative (8f): least value −1, reached at 1
+x \in [-1, 2] \;\Rightarrow\; |x - 1| \le 2 @@ −2 ≤ x − 1 ≤ 1, unpack-the-bars
+(x - 1)^2 \le 4, \text{ with } 4 \text{ only at } x = -1 @@ size-squared and powers-keep-order (8f); |x − 1| = 2 only at −1 inside [−1, 2]
+\text{greatest } \htmlClass{new}{3} \text{ at } -1,\ \ \text{least } \htmlClass{new}{-1} \text{ at } 1 @@ the two extreme values of x² − 2x on [−1, 2]
+  </pre>
+  <pre class="lines" data-k="teal" data-label="from 9g: the factor technique, finding the gap's sign">
+p(x) = x^3 - 3x + 1 \text{ on } [-2, 2] @@ 12b's polynomial-bound bounded its size by 15
+p(x) - 3 = (x + 1)^2 (x - 2) @@ factor (9g): −1 is a zero of p − 3, twice; expand to check by 5h's grid
+x \le 2 \;\Rightarrow\; p(x) - 3 \le 0 @@ a square (square-never-negative) times a factor at most 0: 8g's sign-of-a-product, or 0
+p(x) + 1 = (x - 1)^2 (x + 2) \ge 0 \text{ on } [-2, 2] @@ the same, with the factor x + 2 ≥ 0
+\text{greatest } 3 \text{ at } -1 \text{ and } 2;\ \ \text{least } -1 \text{ at } -2 \text{ and } 1 @@ each extreme value reached at two inputs: the gap is 0 there
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: a fraction's top">
+\tfrac12 - \tfrac{x}{1 + x^2} = \tfrac{(1 - x)^2}{2(1 + x^2)} @@ one bottom (5g's fractions-of-rationals, read in ℝ); square-of-a-difference
+\ge 0, \text{ with } 0 \text{ only at } x = 1 @@ square-never-negative on the top; the bottom is positive
+\tfrac{x}{1 + x^2} \text{ on } [0, 3]:\ \text{greatest } \tfrac12 \text{ at } 1,\ \text{least } 0 \text{ at } 0 @@ the top as above; at 0 the value is 0 and every value on [0, 3] is at least 0
+  </pre>
+  <p data-pid="b9d7e7">Highest-and-lowest does not find these. It says they are there, which is what makes a search for them sensible. Rung 14 starts from this technique and gives a way to narrow the search.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · by hand · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">12c4.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = x^2 - 6x + 5 \text{ on } [0, 4]"></span></span>By completing the square, find f's greatest and least values and the inputs that reach them.</li><li><span class="givens"><span data-tex-inline="f(x) = x \text{ on } (0, 1)"></span></span>Show that f's sup is 1 and its inf is 0, and that neither is reached.</li><li><span class="givens"><span data-tex-inline="f(x) = x^3 - 3x + 1 \text{ on } [0, 2]"></span></span>Using the class's two factorings, find f's greatest and least values.</li><li><span class="givens"><span data-tex-inline="f(x) = x \text{ on } [0, 1),"></span> <span data-tex-inline="M = 1"></span></span>Write the column's g for f, and show that it passes every bound as inputs near 1 from below, with an input for each bound.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="12c5">
+  <h2 class="sthead"><span class="stno">12c5</span>Illegal moves</h2>
+  <p class="stands">Stands on 12c1 to 12c4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+f \text{ is bounded on } [a, b], \text{ so it reaches } \sup f\,? @@ x for x &lt; 1 and 0 at 1, on [0, 1]: bounded, sup 1, never reached
+\text{the greatest value is reached at one input}\,? @@ x³ − 3x + 1 on [−2, 2] reaches 3 at −1 and at 2
+\begin{aligned}&f \text{ reaches its greatest value at } c,\\ &\quad \text{ so continuous at } c\,?\end{aligned} @@ u reaches 1 at 0, where it jumps
+g = \tfrac{1}{M - f} \text{ is bounded, by 12b}\,? @@ only if g is continuous on a closed interval: for x on [0, 1), g passes every bound
+\text{the proof shows where } c \text{ is}\,? @@ it shows that “nowhere” is totally false; the last line is not-not-out
+\begin{aligned}&\text{polynomial-bound's}\\ &\quad\text{bound is the greatest value}\,?\end{aligned} @@ polynomial-bound gives 15 for x³ − 3x + 1 on [−2, 2]; the greatest value is 3
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">12c5.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">“f is continuous on (0, 1), so it reaches a greatest value there.”</span></span>Which illegal move is this? <br>Find a function continuous on (0, 1) with no greatest value.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="12c6">
+  <h2 class="sthead"><span class="stno">12c6</span>Running it backwards</h2>
+  <p class="stands">Stands on 12c1 to 12c4.</p>
+  <p data-pid="835143">Handed a function on a closed interval and asked whether it has a greatest value, check continuity on the whole interval. Then yes, by highest-and-lowest. Handed a claimed greatest value M, check that the gap M − f(x) is never negative and is 0 somewhere: a square, a product of factors with known signs, a single bottom. Handed a function that never reaches its sup, find the missing word: an end left out, or a discontinuity. Found upward; written downward.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">12c6.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f \text{ continuous on } [0, 2],"></span> <span data-tex-inline="\sup f = 7"></span></span>Decide whether f could take 8 at 1, and whether f could miss 7 at every input.</li><li><span class="givens"><span data-tex-inline="f \text{ on } [0, 1],"></span> <span data-tex-inline="\sup f = 1, \text{ never reached,}"></span> <span data-tex-inline="f \text{ continuous except at } \tfrac12"></span></span>Build such an f, and name the kind of its discontinuity.</li><li><span class="givens"><span data-tex-inline="\text{Claim: } \frac{x}{1 + x^2} \ge -\tfrac12"></span> <span data-tex-inline="\text{for every real } x"></span></span>Using a gap of known sign, settle the claim, and find where the gap is 0.</li><li><span class="givens"><span data-tex-inline="p(x) = x^3 - 3x + 1 \text{ on } [-2, 2],"></span> <span data-tex-inline="\text{polynomial-bound gave } 15"></span></span>Find the greatest size p actually reaches there.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">12c.4.1</span><span class="tagq">build</span>Build a function of your own on the interval from 0 to 2, continuous at every input but 1, that is bounded and never reaches its sup. <br>Write the column's g for it, and find where g passes every bound. <br>Then change it near 1 so that it is continuous on the whole interval, and find its greatest value and an input that reaches it, proving both with a gap of known sign.</div>
+  <div class="chq"><span class="chid">12c.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{greatest of } f \text{ on } [v, w]"></span> <span data-tex-inline="= \text{least of } f \text{ on } [v, w]"></span></span>Find what f is.</div>
+  <div class="chq"><span class="chid">12c.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="f \text{ has a greatest and a least}"></span> <span data-tex-inline="\text{value on } [v, w]"></span></span>Decide whether f must be continuous. <br>Decide whether f must take every value between them.</div>
+  <div class="chq"><span class="chid">12c.4.4</span><span class="tagq">seam</span>In 1851 a mathematician took it as plain that among all the shapes a certain physical quantity can take, one makes its energy least. In 1870 another gave an example where the lower bound is approached and never reached. A third rescued the claim in 1900, under extra hypotheses. <br>Was the first wrong to trust it? <br>What should a physicist do with a least value no technique promises?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r12b.html">← 12b · bounded on a closed interval</a><a href="r12d.html">12d · why having no holes matters →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>Spivak gathers this technique, 12a's and 12b's into a chapter he calls “Three Hard Theorems”, states them, uses them, and keeps the proofs back until the next chapter, because they cannot be proved from the rules of arithmetic and order alone: each needs the least upper bound property.</p><cite>Spivak, Calculus, chs. 7–8</cite></aside>
+  <p>The Berlin teacher is Karl Weierstrass; the manuscript of the 1830s is Bernard Bolzano’s. In question 12c.4.4, the mathematician of 1851 is Bernhard Riemann, the claim is Dirichlet’s principle, the example of 1870 is Weierstrass’s, and the rescue of 1900 is David Hilbert’s.</p>
+  <p>Accepted names: the highest-and-lowest technique is the extreme value theorem (Weierstrass’s); sup and inf are the supremum and infimum.</p>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?3:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=v=>fm(v).replace('-','−');
+/* M, m and the inputs reaching them are known exactly */
+const FN={
+  sq:{lab:'x² − 2x on [−1, 2]',tex:R`x^2 - 2x \text{ on } [-1, 2]`,a:-1,b:2,f:x=>x*x-2*x,y:[-1.6,3.6],M:3,Mat:[-1],m:-1,mat:[1],ok:true},
+  cub:{lab:'x³ − 3x + 1 on [−2, 2]',tex:R`x^3 - 3x + 1 \text{ on } [-2, 2]`,a:-2,b:2,f:x=>x*x*x-3*x+1,y:[-1.8,3.8],M:3,Mat:[-1,2],m:-1,mat:[-2,1],ok:true},
+  open:{lab:'x on [0, 1)',tex:R`x \text{ on } [0, 1)`,a:0,b:1,f:x=>x,y:[-0.3,1.4],M:1,Mat:[],m:0,mat:[0],openR:true,creep:1},
+  brk:{lab:'x (x < 1), 0 at 1, on [0, 1]',tex:R`x\ (x \lt 1),\ 0\ (x = 1)`,a:0,b:1,f:x=>x<1?x:0,y:[-0.3,1.4],M:1,Mat:[],m:0,mat:[0,1],brk:1,creep:1}
+};
+let key='sq',F=FN.sq;
+const cvE=$('cvE'),cvG=$('cvG'),ku=$('ku');
+const PE=plane(cvE,{x:[-1.2,2.2],y:[-1.6,3.6],grid:1,aspect:0.8,draw:P=>drawE(P)});
+const PG=plane(cvG,{x:[-1.2,2.2],y:[0,6],grid:1,aspect:0.8,draw:P=>drawG(P)});
+[[PE,cvE],[PG,cvG]].forEach(([P,cv])=>Object.defineProperty(P.o,'aspect',{get:()=>cv.clientWidth>480?0.75:0.9}));
+function frame(P,yy){ const w=F.b-F.a; P.o.x=[F.a-0.1*w,F.b+0.1*w]; P.o.y=yy; P.o.grid=w>2?1:0.25; }
+function curve(P,fn,colr,w,lo,hi){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)||Math.abs(v)>1e6){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); }
+function drawE(P){ frame(P,F.y); const c=P.ctx; P.axes();
+  P.line(F.o?F.a:F.a,F.y[0],F.a,F.y[1],'--muted',0.8,[2,4]); P.line(F.b,F.y[0],F.b,F.y[1],F.openR?'--ink':'--muted',F.openR?1.4:0.8,F.openR?[6,4]:[2,4]);
+  P.line(P.o.x[0],F.M,P.o.x[1],F.M,'--gold',1.4,[6,4]); P.line(P.o.x[0],F.m,P.o.x[1],F.m,'--teal',1.4,[6,4]);
+  curve(P,F.f,'--ink',2.6,F.a,F.brk?F.b-1e-6:F.b);
+  if(F.brk){ P.dot(F.b,F.f(F.b),'--ink',5); }
+  F.Mat.forEach(t=>P.dot(t,F.M,'--gold',7)); F.mat.forEach(t=>P.dot(t,F.m,'--teal',6));
+  if(F.creep!==undefined){ c.fillStyle=col('--card'); c.strokeStyle=col('--gold'); c.lineWidth=2.4; c.beginPath(); c.arc(P.X(F.creep),P.Y(F.M),7,0,7); c.fill(); c.stroke(); }
+  P.text('M',P.o.x[0]+0.02*(F.b-F.a),F.M+0.04*(F.y[1]-F.y[0]),'--gold','left',13); }
+function g(x,u){ return 1/(u-F.f(x)); }
+let GK=null;
+function drawG(P){ const u=F.M+(+ku.value); // bound of g on the interval, numerically, or none
+  let mx=0,bad=false; const n=4000; for(let k=0;k<=n;k++){ let t=F.a+(F.b-F.a)*k/n; if(F.openR&&k===n) continue; const d=u-F.f(t); if(d<=1e-12){ bad=true; continue; } mx=Math.max(mx,1/d); }
+  GK={bad,mx,u};
+  const top=Math.min(30,Math.max(3,(isFinite(mx)?mx:10)*1.25)); frame(P,[0,(+ku.value===0&&(F.creep!==undefined))?12:top]); P.o.grid=P.o.y[1]>8?2:0.5; P.axes();
+  curve(P,x=>{ const d=u-F.f(x); return d>1e-9?1/d:NaN; },'--plum',2.6,F.a,(F.openR||F.brk)?F.b-1e-6:F.b);
+  if(F.brk){ const d=u-F.f(F.b); if(d>0) P.dot(F.b,1/d,'--plum',5); }
+  if(!bad&&isFinite(mx)&&!(+ku.value===0&&F.creep!==undefined)) P.line(P.o.x[0],mx,P.o.x[1],mx,'--gold',1.3,[5,4]); }
+function read(){ const d=+ku.value; $('ou').textContent=fm(d,2); const vd=$('vdE');
+  if(F.ok){ vd.className='verdict win'; vd.textContent='Continuous on a closed interval: the greatest value '+mm(F.M)+' is reached at '+F.Mat.map(mm).join(' and ')+', the least '+mm(F.m)+' at '+F.mat.map(mm).join(' and ')+' (highest-and-lowest).'; }
+  else { vd.className='verdict lose'; vd.textContent='sup f = '+fm(F.M)+', never reached: '+(F.openR?'the interval leaves out its right end.':'one discontinuity, at the right end.')+' The least value '+fm(F.m)+' is reached.'; }
+  const u=F.M+d; let t;
+  if(d===0&&F.ok) t=R`u = M = ${fm(F.M)}:\ \ g \text{ has no value at } ${F.Mat.map(v=>fm(v)).join(',\ ')}\\ \text{the supposition “never reached” is false}`;
+  else if(d===0) t=R`u = M = ${fm(F.M)},\ \text{never reached}:\ g \text{ is defined}\\ \text{at every input, and passes every bound}\\ \text{as } x \to 1^-:\ \text{no } K${F.openR?R`\ (\text{not closed})`:R`\ (\text{a discontinuity at } 1)`}`;
+  else { const K=GK.mx; t=R`u = ${fm(u,2)}:\ \ g \le K = ${fm(K,3)}\\ u - \tfrac1K = ${fm(u-1/K,3)}\ \ ${Math.abs(u-1/K-F.M)<2e-3?R`= M`:''}\\ \text{a smaller upper bound than } u,\\ \text{and no smaller than } M`; }
+  tex($('eqE'),R`\begin{gathered}${F.tex}\\ ${t}\end{gathered}`,true); }
+function all(){ PE.redraw(); PG.redraw(); read(); }
+ku.addEventListener('input',all);
+const fch=$('fch');
+Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===key) b.className='on'; b.onclick=()=>{ key=k; F=FN[k]; [...fch.children].forEach(z=>z.classList.toggle('on',z===b)); all(); }; fch.appendChild(b); });
+window.__pic={set:(k,d)=>{ [...fch.children][Object.keys(FN).indexOf(k)].click(); ku.value=d; all(); return {GK,txt:$('vdE').textContent}; }};
+all();
+
+/* ---------- slides ---------- */
+const Nw='\\htmlClass{new}';
+stepper('#sl1',[
+  {k:'ember',kl:'greatest value',t:R`c \in A,\ \ \forall x \in A\ (f(x) \le ${Nw}{f(c)})`,n:`f reaches its greatest value on A at c. Least likewise. The value is one real; the inputs may be many.`},
+  {k:'ember',kl:'sup f',t:R`\sup_A f = \sup\{f(x) : x \in A\}`,n:`The least upper bound of the values, when there is one. inf likewise.`},
+  {k:'ember',kl:'greatest-is-reached',t:R`\text{greatest at } c \;\Leftrightarrow\; \sup_A f = ${Nw}{f(c)}`,n:`The greatest value is the sup, reached. ∎`}
+],{title:'The slides · greatest value · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'not reached · an end',t:R`x \text{ on } [0, 1):\ \sup = 1,\ \text{never reached}`,n:`For c &lt; 1 the middle (c + 1)/2 is above it. So 1 is least; no input gives it.`},
+  {k:'ember',kl:'not reached · a discontinuity',t:R`x\ (x \lt 1),\ 0\ (x = 1) \text{ on } [0, 1]`,n:`Closed, bounded, sup 1, never reached: one discontinuity at the end.`}
+],{title:'The slides · not reached · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'highest-and-lowest · the top exists',t:R`${Nw}{M = \sup_{[a,b]} f}`,n:`bounded-on-a-closed-interval makes f bounded above; no-holes gives M.`},
+  {k:'ember',kl:'highest-and-lowest · the supposition',t:R`\forall x \in [a, b]\ (f(x) \lt M)`,n:`Suppose no input reaches M. Then every value is strictly below it.`},
+  {k:'ember',kl:'highest-and-lowest · the trick',t:R`g(x) = ${Nw}{\tfrac{1}{M - f(x)}}`,n:`Every bottom is positive, so g is continuous on the whole interval (continuous-sums, continuous-quotients). The supposition is what makes it so.`},
+  {k:'ember',kl:'highest-and-lowest · g is bounded',t:R`g(x) \le K,\ \ K \gt 0`,n:`bounded-on-a-closed-interval again, for g.`},
+  {k:'ember',kl:'highest-and-lowest · a smaller top',t:R`f(x) \le ${Nw}{M - \tfrac1K} \lt M`,n:`Turn the reciprocals about (positive-reciprocal on ℚ), then add. An upper bound below the least: ⊥.`},
+  {k:'ember',kl:'highest-and-lowest · reached',t:R`\neg\neg\exists c\ (f(c) = M) \;\Rightarrow\; \exists c\ (f(c) = M)`,n:`Refute, then not-not-out: rung 7's either-way principle. The proof never says where c is.`},
+  {k:'ember',kl:'highest-and-lowest · the bottom',t:R`h = ${Nw}{-f}:\ \ -f(x) \le -f(d) \;\Rightarrow\; f(d) \le f(x)`,n:`The greatest value of −f is the least of f, by negative-reverses-order. ∎`},
+  {k:'ember',kl:'the trick failing',t:R`x \text{ on } [0, 1):\ \ g(x) = \tfrac{1}{1 - x} \text{ passes every bound}`,n:`Not closed, so bounded-on-a-closed-interval cannot be cited: the column breaks at the line that calls K.`}
+],{title:'The slides · highest-and-lowest · ← → keys work'});
+stepper('#sl4',[
+  {k:'teal',kl:'from 8i · by hand',t:R`x^2 - 2x = (x - 1)^2 - 1`,n:`On [−1, 2]: least −1 at 1 (square-never-negative); greatest 3 at −1, since (x − 1)² ≤ 4 there.`},
+  {k:'teal',kl:'from 9g · by hand',t:R`\begin{gathered}p - 3 = (x + 1)^2(x - 2)\\ p + 1 = (x - 1)^2(x + 2)\end{gathered}`,n:`p(x) = x³ − 3x + 1 on [−2, 2]: greatest 3 at −1 and 2, least −1 at −2 and 1.`},
+  {k:'ember',kl:'a fraction',t:R`\tfrac12 - \tfrac{x}{1 + x^2} = \tfrac{(1 - x)^2}{2(1 + x^2)}`,n:`So x/(1 + x²) is at most ½, reached at 1.`}
+],{title:'The slides · by hand · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

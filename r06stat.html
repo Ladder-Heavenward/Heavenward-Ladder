@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>6·stat · How do you pick a fair sample?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+table.tt td.l{text-align:left;font-family:var(--serif)} @media (max-width:520px){table.tt td.l{min-width:6.5em}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%;min-width:0} .kn output{font-family:var(--mono);font-size:.82rem;min-width:3.6em;text-align:right}
+.kn label{font-family:var(--mono);font-size:.8rem;color:var(--muted)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+.cty{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:3px;font-family:var(--mono);font-size:.62rem;text-align:center}
+.cty div{border:1px solid var(--grid);border-radius:3px;padding:4px 1px;background:var(--card);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.cty div.co{border-color:var(--teal);color:var(--teal)}
+.cty div.on{background:var(--ember);border-color:var(--ember);color:#fff}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+canvas{width:100%;display:block;border-radius:4px}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r06d.html">← 6d choosing, lining up any set, and the top of every chain</a><a href="r06phys.html">next: 6·phys can a scale be perfectly in tune? →</a></p>
+  <div class="tags"><span class="tag stat">6·stat · statistics</span></div>
+  <h1>How do you pick a fair sample?</h1>
+  <p>How do you pick a fair sample? Nobody can ask every voter in Oregon, or test the water in every well. So people ask a few and hope the few speak for the many. The few are a sample, and picking them is a choice in rung six's sense: one group picked out of all the groups that could have been. What makes it hard is that every way of picking is a rule or a draw, and a rule can lean without anyone meaning it to. The people easiest to reach are not like the rest. The people who answer a question are often the ones who care most about it. This page says what a fair pick is, counts what it promises, finds where it still misses, and then looks at a famous poll that heard from over two million people and got the answer wrong.</p>
+  <p class="gesture">Call a sample fair when every group of the same size is equally likely to be the one picked. Then each member's chance of being in is the size of the sample over the size of the whole, and the sample's share of anything is right on average. A single fair sample can still miss, so count how often. When the chance of being picked depends on the people, and above all on their answers, the sample leans toward whoever was easier to pick.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r06a.html">6a</a> (choosing functions; rules that pick; least-chooses; socks), <a href="r06b.html">6b</a> (finite-choice), <a href="r04j.html">4j</a> (n choose k, choosing-counts-parts, stages-multiply), <a href="r04stat.html">4·stat</a> (chance by counting), <a href="r05stat.html">5·stat</a> (chance as a fraction, expected value, expected-values-add, shift-and-stretch) and <a href="r05i.html">5i</a> (ratio). Later statistics pages ask how far a sample's answer is likely to stray.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · read it through, then work the picture and the slides</div>
+
+  <h3>A sample is a pick</h3>
+  <p data-pid="8819f0">Oregon has 36 counties. Say a state study can afford to test the well water in 4 of them. The whole set of 36 is the <b>population</b>, and the 4 tested are a <b>sample</b>. A sample of 4 is a part of the population with 4 members. So picking a sample is picking one member from one set: the set of all parts with 4 members.</p>
+  <pre class="lines" data-k="teal" data-label="from 4j: n choose k">
+\binom{36}{4} = \tfrac{36 \cdot 35 \cdot 34 \cdot 33}{4 \cdot 3 \cdot 2 \cdot 1} = \htmlClass{new}{58\,905} @@ choosing-counts-parts: the number of samples of 4
+  </pre>
+  <p data-pid="fd847b">That is one set with 58 905 members, so 6b's finite-choice picks from it with no axiom. Picking is never the problem. The problem is which pick. A rule that picks is easy to write. Take the first four in the alphabet: Baker, Benton, Clackamas and Clatsop. That is 6a's least-chooses, with the alphabet as the order. It names the same four every time, and nothing about the alphabet makes those four like the state.</p>
+  <p class="eqline" data-pid="364fb0">From here on, on this page, a sample of k from a population of N members is <b>fair</b> when each of the parts with k members is equally likely to be the one picked.</p>
+  <p data-pid="1fbd21">Write all 36 names on tickets, mix them in a drum, and draw 4 without putting any back. Every list of 4 different tickets in the order drawn is equally likely, and each part of 4 comes from 4 · 3 · 2 · 1 = 24 such lists. So each part is equally likely: a fair sample. A fair draw is a pick that looks at nothing about the members. In 6a's words, it treats them as socks.</p>
+
+  <h3>Each member's chance</h3>
+  <p data-pid="ac9689">In a fair sample of 4 counties, what is Lane County's chance of being in? Count the parts with Lane in them, and divide by all the parts. Fair-share technique: <b>in a fair sample of k from N, each member's chance of being in is k/N.</b> The proof counts one set of pairs in two ways.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the fair-share technique">
+\text{parts holding } x:\ \binom{N-1}{k-1} @@ x is in; pick the other k − 1 from the N − 1 others (choosing-counts-parts)
+\text{pairs (a part, one of its members)}:\ \binom{N}{k} \cdot k @@ stages-multiply: the part, then one of its k members
+\text{the same pairs}:\ N \cdot \binom{N-1}{k-1} @@ stages-multiply the other way: the member, then a part that holds it
+P(x \text{ is in}) = \binom{N-1}{k-1} \Big/ \binom{N}{k} @@ chance as a fraction (5·stat): the parts are equally likely
+\htmlClass{new}{P(x \text{ is in}) = \tfrac{k}{N}} \quad \blacksquare @@ the two counts are the same, so the bottom is N/k times the top (5b)
+  </pre>
+  <p data-pid="36cbf6">For Lane, 6545 of the 58 905 samples hold it, and 6545/58 905 = 4/36 = 1/9. Every county gets the same 1/9. The coast and the high desert are treated alike.</p>
+
+  <h3>Right on average</h3>
+  <p data-pid="b5822a">Seven of Oregon's counties touch the Pacific: Clatsop, Tillamook, Lincoln, Lane, Douglas, Coos and Curry. The share on the coast is 7/36. How many coastal counties does a fair sample of 4 hold? It varies from sample to sample, so ask for the expected value, 5·stat's average over the equally likely cases. Fair-sample technique: <b>if m of the N members have a property, a fair sample of k holds k · m/N of them on average, so its share is m/N on average.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the fair-sample technique">
+X = X_1 + X_2 + \cdots + X_m @@ X counts the members with the property in the sample; X_i is 1 when the ith of them is in, 0 when not
+E\, X_i = 1 \cdot \tfrac{k}{N} + 0 = \tfrac{k}{N} @@ fair-share; a payout of 1 with chance k/N
+E\, X = m \cdot \tfrac{k}{N} @@ expected-values-add, m times
+\htmlClass{new}{E\, \tfrac{X}{k} = \tfrac{m}{N}} \quad \blacksquare @@ shift-and-stretch, with r = 1/k and b = 0
+  </pre>
+  <p data-pid="c826d1">For the counties, a fair sample of 4 holds 4 · 7/36 = 7/9 coastal counties on average, and its share is 7/36 on average: the state's own share. No sample holds 7/9 of a county. The average is a fact about all 58 905 samples together, not about any one of them.</p>
+
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · counting</div>
+    <p data-pid="727c70">Right on average is not right every time. Count the samples of 4 by how many coastal counties they hold. A sample with j of them picks j of the 7 coastal and 4 − j of the 29 inland, so stages-multiply gives the count.</p>
+    <div class="tablewrap"><table class="tt">
+      <tr><th>coastal in the sample</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th></tr>
+      <tr><th>samples</th><td>23 751</td><td>25 578</td><td>8526</td><td>1015</td><td>35</td></tr>
+    </table></div>
+    <p data-pid="9daf6c">They add to 58 905. Four samples in ten hold no coastal county at all, and 35 hold nothing else. A study that drew one of those would have a fair sample and a strange answer. Fair does not mean typical. It means you know the shape of the pile you drew from.</p>
+    <p data-pid="36c682"><b>The spread is part of the answer, not noise around it.</b></p>
+    <p data-pid="483ac3">Bigger samples pile closer to the middle. That is why a sample of a thousand voters can speak for a state, and a sample of 4 counties cannot speak for much.</p>
+    <p class="bait" data-pid="e6b4ad">Draw 18 of the 36 counties fairly. How many coastal counties should you expect, and how likely is a sample with none?</p>
+  </aside>
+
+  <h3>Samples of convenience</h3>
+  <p data-pid="64e764">Most samples are not drawn from a drum. They are whoever was easy to reach: the people at the ferry terminal in Anacortes, the readers of one newspaper, the people who click on a poll. Such a sample is picked by a rule too, but the rule looks at the people. Some are much more likely to be in than others.</p>
+  <p data-pid="81d94f">Say a town has 10 000 voters, and 4000 of them favour a new bridge toll. A web poll asks. Those in favour feel strongly, and 1 in 20 of them answers. Those against mostly shrug, and 1 in 100 answers. The town is 40 percent in favour.</p>
+  <pre class="lines" data-k="ember" data-label="this page: a tilted pick, by the rule of three">
+4000 \cdot \tfrac{1}{20} = 200 @@ in favour, expected to answer
+6000 \cdot \tfrac{1}{100} = 60 @@ against, expected to answer
+200 : 60 = 10 : 3 @@ ratios (5i): divide both by 20
+\htmlClass{new}{\tfrac{200}{260} = \tfrac{10}{13} \approx 77\%} @@ the poll's share in favour, against 40% in the town
+  </pre>
+  <p data-pid="984701">The expected counts are in the ratio of chance times number. When every member's chance is the same, that ratio is the town's own ratio, which is the fair-sample technique again. When the chance depends on the answer, the ratio tilts. <b>When the chance of being picked depends on the answer, the sample leans toward the answer that is easier to pick.</b> No amount of size fixes it: a million such answers lean exactly as far as 260.</p>
+  <p data-pid="b0ea71">In 1936 an American magazine mailed about 10 million ballots before the presidential election. Its names came largely from telephone books, car registrations and its own subscribers, which in 1936 meant the better-off. About 2.4 million came back, from those who cared to answer. It forecast that the loser would win, with about 57 percent. The winner took about 61 percent of the vote. A much smaller poll, built to be fair, called it right.</p>
+
+  <h3>The draw must not see the answers</h3>
+  <p data-pid="4f2dd5">Even a drum can lean. In December 1969 the United States drew the order in which men born from 1944 to 1950 would be called up for the war, by birthday. The 366 birthdays went into capsules, the capsules went into a box one month at a time, and they were drawn by hand. In a fair draw each birthday's number averages 183.5, so each month's average should come out near that. They did not. The December capsules went in last, sat on top, and came out early: December's birthdays averaged about 121.5, and January's about 201.2. The next year's draw used two drums and much more mixing.</p>
+  <p data-pid="8ad5cf">So a fair sample needs more than good intentions. It needs a pick that looks at nothing about the members, and the mixing to make that true. Rung six said a pick can be made with no rule. A fair sample says more: for this job a pick must be made with no rule that sees who is being picked.</p>
+
+  <h3>Illegal moves</h3>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed">
+\begin{aligned}&58\,905 \text{ samples, so Lane's}\\ &\quad\text{chance is } 1/58\,905\,?\end{aligned} @@ that is one sample's chance; Lane is in 6545 of them, so 4/36
+\begin{aligned}&\text{the first four in the alphabet:}\\ &\quad\text{the alphabet has no opinion}\,?\end{aligned} @@ a rule names one part every time; the other 58 904 can never come
+\begin{aligned}&2.4 \text{ million answers, so the}\\ &\quad\text{poll must be close}\,?\end{aligned} @@ size does not undo a tilted pick: the lean stays the same
+\begin{aligned}&\text{a fair sample of } 4\\ &\quad\text{matches the state}\,?\end{aligned} @@ only on average; 23 751 of the 58 905 hold no coastal county
+\text{the people who answered were a fair sample}\,? @@ answering depends on the answer; the chances differ
+  </pre>
+
+  <h3>Which rung each step uses</h3>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>step</th><th>the mathematics</th><th>from</th></tr>
+    <tr><td class="l">a sample is a pick</td><td class="l">n choose k; finite-choice; rules that pick</td><td><a href="r04j.html">4j</a>, <a href="r06b.html">6b</a>, <a href="r06a.html">6a</a></td></tr>
+    <tr><td class="l">each member's chance</td><td class="l">stages-multiply, counted both ways; chance as a fraction</td><td><a href="r04j.html">4j</a>, <a href="r05stat.html">5·stat</a></td></tr>
+    <tr><td class="l">right on average</td><td class="l">expected-values-add, shift-and-stretch</td><td><a href="r05stat.html">5·stat</a></td></tr>
+    <tr><td class="l">how often it misses</td><td class="l">stages-multiply; separate-piles</td><td><a href="r04j.html">4j</a></td></tr>
+    <tr><td class="l">a tilted pick</td><td class="l">ratio; the rule of three</td><td><a href="r05i.html">5i</a></td></tr>
+  </table></div>
+</section>
+
+<section class="pic" id="pic">
+  <div class="eyebrow">The picture · left: Oregon's 36 counties, sampled · right: a poll that answers for itself</div>
+  <div class="panels">
+    <div class="panel">
+      <div class="kn"><label for="kk">sample</label><input type="range" id="kk" min="1" max="18" step="1" value="4"><output id="ok"></output></div>
+      <div class="chips" role="group" aria-label="pick" id="pch"></div>
+      <div class="cty" id="cty"></div>
+      <div class="cap">Teal outline: the 7 coastal counties. Ember: the sample. “Draw fairly” mixes the drum; “first in the alphabet” is a rule. “Draw 1000” draws a thousand fair samples and tallies how many coastal counties each held.</div>
+      <canvas id="cv1"></canvas>
+      <div class="eqbox" id="eq1"></div>
+    </div>
+    <div class="panel">
+      <div class="kn"><label for="km">in favour</label><input type="range" id="km" min="0" max="100" step="5" value="40"><output id="om"></output></div>
+      <div class="kn"><label for="kp">answers if for</label><input type="range" id="kp" min="1" max="50" step="1" value="5"><output id="op"></output></div>
+      <div class="kn"><label for="kq">answers if against</label><input type="range" id="kq" min="1" max="50" step="1" value="1"><output id="oq"></output></div>
+      <canvas id="cv2"></canvas>
+      <div class="cap">A town of 10 000. Top bar: the town, ember for those in favour. Bottom bar: the expected answers to the poll. The sliders give each side's chance of answering, in percent.</div>
+      <div class="verdict" id="vd2"></div>
+      <div class="eqbox" id="eq2"></div>
+    </div>
+  </div>
+</section>
+
+<section class="slides" id="sl1"><div class="eyebrow">The slides · a sample is a pick, the fair sample, each member's chance, right on average, how often it misses, a tilted poll, the drum that leaned · ← → keys work</div></section>
+
+<section class="sayback">
+  <div class="eyebrow">Say it back · then work it</div>
+  <h2>Questions</h2>
+  <div class="phkey"></div>
+  <ol>
+    <li><span class="qid">6·stat.1</span><span class="gname">Fair picks, counted.</span><span class="gwhy">Do: build the page's pieces.</span>
+      <ol class="sub">
+        <li><span class="qid">6·stat.1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\text{fair: every part of the sample's size}"></span> <span data-tex-inline="\text{equally likely to be picked}"></span></span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{Washington's } 39 \text{ counties},"></span> <span data-tex-inline="\text{a fair sample of } 3"></span></span>Find the number of possible samples, and King County's chance of being in.</li><li><span class="givens"><span data-tex-inline="\text{a class of } 30 \text{ in Tacoma},"></span> <span data-tex-inline="12 \text{ of them walk to school};"></span> <span data-tex-inline="\text{a fair sample of } 5"></span></span>Find the expected number of walkers in the sample.</li><li><span class="givens"><span data-tex-inline="\text{the class and sample of part b}"></span></span>Find the chance that the sample holds no walker.</li><li><span class="givens"><span data-tex-inline="\text{a town of } 8000,\ 2000 \text{ in favour};"></span> <span data-tex-inline="\text{in favour: } 1 \text{ in } 10 \text{ answers a poll};"></span> <span data-tex-inline="\text{against: } 1 \text{ in } 40"></span></span>Find the poll's expected share in favour.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">6·stat.2</span><span class="gname">From the sample back.</span><span class="gwhy">Undo: run the page's techs backwards.</span>
+      <ol class="sub">
+        <li><span class="qid">6·stat.2.1</span><span class="ph undo">undo</span><span class="givens"><span data-tex-inline="\text{fair: every part of the sample's size}"></span> <span data-tex-inline="\text{equally likely to be picked}"></span></span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{a population of } 84;"></span> <span data-tex-inline="\text{each member's chance of being in: } 1/12"></span></span>Find the size of the fair sample.</li><li><span class="givens"><span data-tex-inline="\text{a population of } 45;"></span> <span data-tex-inline="\text{a fair sample of } 6 \text{ holds } 2"></span> <span data-tex-inline="\text{with a property, on average}"></span></span>Find how many of the 45 have it.</li><li><span class="givens"><span data-tex-inline="\text{a poll: } 300 \text{ yes},\ 100 \text{ no};"></span> <span data-tex-inline="\text{the town: as many yes as no};"></span> <span data-tex-inline="\text{yes: } 1 \text{ in } 20 \text{ answers}"></span></span>Find the chance that a no answers, and the size of the town.</li><li><span class="givens"><span data-tex-inline="\text{a population of } 30;"></span> <span data-tex-inline="4060 \text{ possible samples}"></span></span>Find every possible size of the sample.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">6·stat.3</span><span class="gname">Where the pick leans.</span><span class="gwhy">Bend: find where the techs stop working.</span>
+      <ol class="sub">
+        <li><span class="qid">6·stat.3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{three households in Eureka, of } 1, 2, 3 \text{ people};"></span> <span data-tex-inline="\text{one household picked fairly,}"></span> <span data-tex-inline="\text{then one person in it, fairly}"></span></span>Find each person's chance of being picked.</li><li><span class="givens"><span data-tex-inline="100 \text{ riders of a bus line in Olympia};"></span> <span data-tex-inline="20 \text{ ride } 10 \text{ times a week},\ 80 \text{ ride once};"></span> <span data-tex-inline="\text{one week's rides, sampled fairly}"></span></span>Find the share of sampled rides taken by the frequent riders.<br>Find their share of the riders.</li><li><span class="givens"><span data-tex-inline="\text{half of a large town favours a plan};"></span> <span data-tex-inline="\text{each draw is in favour with chance } 1/2;"></span> <span data-tex-inline="\text{a pollster draws until the first in favour,}"></span> <span data-tex-inline="\text{at most } 2 \text{ draws}"></span></span>Find the expected share in favour among those drawn.</li><li><span class="givens"><span data-tex-inline="\text{a fair sample of } 4 \text{ of Oregon's } 36 \text{ counties};"></span> <span data-tex-inline="7 \text{ of the } 36 \text{ on the coast}"></span></span>Find the chance that all 4 are inland.<br>Decide whether an all-inland sample shows the draw was not fair.</li></ol></li>
+      </ol></li>
+    <li class="optgroup"><span class="qid">6·stat.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder challenges that rely on your own making. The page is complete without these; the rung's star needs them.</span>
+      <ol class="sub">
+        <li class="opt"><span class="qid">6·stat.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{a class of } 25;"></span> <span data-tex-inline="\text{one six-sided die, nothing else}"></span></span>Build a fair draw of your own.<ol class="parts" type="a"><li>Design a way to pick 1 of the 25 with the die so that each has chance 1/25.<br>Prove it.</li><li>Extend it to a sample of 3, and prove that every part of 3 is equally likely.</li><li>Find a sample of convenience in your own town, and the way its chances lean.</li></ol></li>
+        <li class="opt"><span class="qid">6·stat.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{a fair sample of } 0 \text{ from a population of } 36"></span></span>Find each member's chance of being in, and the sample's expected count of coastal counties.<br>Find the sample's share of them.</li>
+        <li class="opt"><span class="qid">6·stat.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{a draw gives each of } N \text{ members}"></span> <span data-tex-inline="\text{the chance } k/N \text{ of being in a sample of } k"></span></span>Decide whether the sample must be fair.</li>
+        <li class="opt"><span class="qid">6·stat.4.4</span><span class="tagq">seam</span>A drum, well mixed, picks 100 of a city's 10 000 voters, and by luck all 100 live on one street. <br>Is it a fair sample?</li>
+      </ol></li>
+  </ol>
+  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
+</section>
+
+<nav class="nextrung"><a href="r06d.html">← 6d · choosing, lining up any set, and the top of every chain</a><a href="r06phys.html">6·phys · can a scale be perfectly in tune? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>Anders Kiær, head of Norway's statistics office, argued in 1895 that a well-chosen part could stand for a whole country, and was met with doubt; his "representative method" picked by judgement. Arthur Bowley used drawing by lot in surveys of English towns from 1912. Jerzy Neyman showed in 1934 that a fair draw, unlike picking by judgement, lets you say how far the answer may stray. The magazine of 1936 was the Literary Digest; its poll favoured Alf Landon, and Franklin Roosevelt won. George Gallup's far smaller poll called it. The draft lottery of December 1969 was studied by Stephen Fienberg in 1971, who found the months' averages too far apart for a fair draw. Ronald Fisher made the fair draw the heart of experiments in the 1920s and 1930s; William Gosset, who wrote as Student, argued that a planned, balanced layout of field plots can do better.</p>
+  <h3>Accepted names</h3>
+  <p>A fair sample is a <b>simple random sample</b>, drawn <b>without replacement</b>. Drawing by lot is <b>random sampling</b>. A sample of whoever is easy to reach is a <b>convenience sample</b>; one where people choose to answer is a <b>voluntary response sample</b>, or <b>self-selected</b>. A lean in the expected answer is <b>bias</b>: a picked list that leaves people out has <b>undercoverage</b>, and people who do not answer cause <b>nonresponse bias</b>. The fair-sample technique says the sample share is an <b>unbiased estimator</b> of the population share. The list the sample is drawn from is the <b>sampling frame</b>.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="6·stat: a worked “proof”, not allowed">
+\text{a fair sample's share is right on average} @@ fine: the fair-sample technique
+\text{the poll heard from } 2.4 \text{ million people} @@ fine, and a huge sample
+\text{so its share is right on average} @@ not allowed: the technique needs every member's chance the same; those who answer chose themselves
+  </pre>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const Nw='\\htmlClass{new}';
+function sizeH(cv,H){ const dp=window.devicePixelRatio||1, W=cv.clientWidth||300; cv.width=W*dp; cv.height=H*dp; cv.style.height=H+'px'; const c=cv.getContext('2d'); c.setTransform(dp,0,0,dp,0,0); return {c,W}; }
+function C(n,k){ if(k<0||k>n) return 0; let r=1; for(let i=1;i<=k;i++) r=r*(n-k+i)/i; return Math.round(r); }
+const g=n=>String(n).replace(/\B(?=(\d{3})+(?!\d))/g,'\\,');
+
+/* ---------- left: the counties ---------- */
+const CO=['Baker','Benton','Clackamas','Clatsop','Columbia','Coos','Crook','Curry','Deschutes','Douglas','Gilliam','Grant','Harney','Hood River','Jackson','Jefferson','Josephine','Klamath','Lake','Lane','Lincoln','Linn','Malheur','Marion','Morrow','Multnomah','Polk','Sherman','Tillamook','Umatilla','Union','Wallowa','Wasco','Washington','Wheeler','Yamhill'];
+const COAST=new Set(['Clatsop','Tillamook','Lincoln','Lane','Douglas','Coos','Curry']);
+const ct=$('cty'); CO.forEach((n,i)=>{ const d=document.createElement('div'); d.textContent=n; d.title=n; if(COAST.has(n)) d.className='co'; ct.appendChild(d); });
+let k=4, pick=[], tally=null;
+const kk=$('kk'); kk.oninput=()=>{ k=+kk.value; pick=[]; tally=null; draw1(); };
+function fair(){ const a=CO.map((_,i)=>i); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a.slice(0,k); }
+[['draw fairly',()=>{ pick=fair(); }],['first in the alphabet',()=>{ pick=CO.map((_,i)=>i).slice(0,k); }],['draw 1000',()=>{ tally=new Array(8).fill(0); for(let t=0;t<1000;t++){ const s=fair(); tally[s.filter(i=>COAST.has(CO[i])).length]++; } pick=fair(); }]].forEach(([lab,f])=>{ const b=document.createElement('button'); b.textContent=lab; b.onclick=()=>{ f(); draw1(); }; $('pch').appendChild(b); });
+function draw1(){ $('ok').textContent=k;
+  [...ct.children].forEach((d,i)=>{ d.classList.toggle('on',pick.includes(i)); });
+  const tot=C(36,k); const exp=[...Array(Math.min(k,7)+1).keys()].map(j=>C(7,j)*C(29,k-j));
+  const cv=$('cv1'), H=130; const {c,W}=sizeH(cv,H); c.fillStyle=col('--card'); c.fillRect(0,0,W,H);
+  const n=exp.length, bw=(W-16)/n; const mx=Math.max(...exp.map(v=>v/tot), ...(tally?tally.map(v=>v/1000):[0]));
+  exp.forEach((v,j)=>{ const h=(H-30)*(v/tot)/mx; c.fillStyle=col('--teal'); c.globalAlpha=.35; c.fillRect(8+j*bw+2,H-16-h,bw-4,h); c.globalAlpha=1;
+    if(tally){ const h2=(H-30)*(tally[j]/1000)/mx; c.fillStyle=col('--ember'); c.fillRect(8+j*bw+bw*0.3,H-16-h2,bw*0.4,h2); }
+    c.fillStyle=col('--muted'); c.font='10px IBM Plex Mono, monospace'; c.textAlign='center'; c.fillText(String(j),8+j*bw+bw/2,H-4); });
+  c.textAlign='left'; c.fillText('coastal counties in a sample: pale, the exact share; ember, 1000 draws',6,11);
+  const got=pick.filter(i=>COAST.has(CO[i])).length;
+  const L=[R`\binom{36}{${k}} = ${g(tot)} \text{ samples}`,R`P(\text{a county is in}) = \tfrac{${k}}{36}`,R`\text{expected coastal: } ${k} \cdot \tfrac{7}{36} \approx ${(k*7/36).toFixed(2)}`,
+    R`P(\text{no coastal}) = \tfrac{${g(C(29,k))}}{${g(tot)}} \approx ${(C(29,k)/tot).toFixed(3)}`];
+  if(pick.length) L.push(R`\text{this sample: } ${Nw}{${got}} \text{ coastal of } ${k}`);
+  if(tally) L.push(R`\text{1000 draws: mean } ${(tally.reduce((s,v,j)=>s+v*j,0)/1000).toFixed(2)} \text{ coastal}`);
+  tex($('eq1'),'\\begin{gathered}'+L.join('\\\\ ')+'\\end{gathered}',true);
+}
+new ResizeObserver(()=>draw1()).observe($('cv1'));
+
+/* ---------- right: a poll that answers for itself ---------- */
+const km=$('km'),kp=$('kp'),kq=$('kq'); [km,kp,kq].forEach(e=>e.addEventListener('input',draw2));
+function draw2(){ const m=+km.value*100, p=+kp.value/100, q=+kq.value/100; $('om').textContent=km.value+'%'; $('op').textContent=kp.value+'%'; $('oq').textContent=kq.value+'%';
+  const a=m*p, b=(10000-m)*q, share=a+b>0?a/(a+b):0;
+  const cv=$('cv2'), H=110; const {c,W}=sizeH(cv,H); c.fillStyle=col('--card'); c.fillRect(0,0,W,H);
+  const bar=(y,f,lab)=>{ c.fillStyle=col('--grid'); c.fillRect(6,y,W-12,26); c.fillStyle=col('--ember'); c.fillRect(6,y,(W-12)*f,26); c.fillStyle=col('--muted'); c.font='10px IBM Plex Mono, monospace'; c.textAlign='left'; c.fillText(lab,6,y-4); };
+  bar(18,m/10000,'the town: '+(m/100).toFixed(0)+'% in favour'); bar(72,share,'the poll: '+(100*share).toFixed(0)+'% in favour');
+  const vd=$('vd2'); vd.textContent=Math.abs(p-q)<1e-9?'The two sides answer with the same chance, so the poll leans nowhere on average: its share is the town\'s.':(share>m/10000?'Those in favour answer more readily, so the poll leans toward them.':'Those against answer more readily, so the poll leans toward them.');
+  const L=[R`${g(m)} \cdot ${p.toFixed(2)} = ${g(Math.round(a))} \text{ in favour answer}`,R`${g(10000-m)} \cdot ${q.toFixed(2)} = ${g(Math.round(b))} \text{ against answer}`,R`\text{poll share} \approx ${Nw}{${(100*share).toFixed(1)}\%},\ \text{town share } ${(m/100).toFixed(0)}\%`];
+  tex($('eq2'),'\\begin{gathered}'+L.join('\\\\ ')+'\\end{gathered}',true);
+}
+new ResizeObserver(()=>draw2()).observe($('cv2'));
+if(window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{ draw1(); draw2(); });
+draw1(); draw2();
+
+/* ---------- slides ---------- */
+stepper('#sl1',[
+  {k:'teal',kl:'a sample is a pick',t:R`\binom{36}{4} = ${Nw}{58\,905}`,n:`Oregon's 36 counties, a sample of 4: one pick from one set, so finite-choice needs no axiom.`},
+  {k:'ember',kl:'a rule that picks',t:R`\text{Baker, Benton, Clackamas, Clatsop}`,n:`First in the alphabet: least-chooses. The same four every time.`},
+  {k:'ember',kl:'the fair sample',t:R`\text{each part of } k \text{ equally likely}`,n:`A drum, mixed, drawn without putting back: each part of 4 comes from 24 equally likely orders.`},
+  {k:'ember',kl:'each member\'s chance',t:R`\binom{N}{k} \cdot k = N \cdot \binom{N-1}{k-1}`,n:`One set of pairs, counted two ways by stages-multiply.`},
+  {k:'ember',kl:'each member\'s chance',t:R`P(x \text{ is in}) = ${Nw}{\tfrac{k}{N}}`,n:`Lane is in 6545 of 58 905 samples: 1/9, like every county.`},
+  {k:'ember',kl:'right on average',t:R`E\, X = m \cdot \tfrac{k}{N}`,n:`Expected-values-add over the m members with the property.`},
+  {k:'ember',kl:'right on average',t:R`4 \cdot \tfrac{7}{36} = ${Nw}{\tfrac{7}{9}}`,n:`Coastal counties in a fair sample of 4, on average. No sample holds 7/9 of a county.`},
+  {k:'teal',kl:'how often it misses',t:R`\binom{29}{4} = 23\,751`,n:`Four samples in ten hold no coastal county. Fair does not mean typical.`},
+  {k:'ember',kl:'a tilted poll',t:R`200 : 60 = 10 : 3`,n:`4000 in favour answer 1 in 20; 6000 against answer 1 in 100. The poll says 77%; the town says 40%.`},
+  {k:'ember',kl:'the magazine poll',t:R`2.4 \text{ million answers, about } 57\%`,n:`A picked list and those who cared to answer: it forecast the loser. The winner took about 61%.`},
+  {k:'ember',kl:'the drum that leaned',t:R`121.5 \text{ against } 201.2`,n:`December's draw numbers against January's, in 1969, where a fair draw averages 183.5.`}
+],{title:'The slides · a sample is a pick, the fair sample, each member\'s chance, right on average, how often it misses, a tilted poll, the drum that leaned · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

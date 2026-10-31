@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Running trig backwards</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+.chrow{display:grid;grid-template-columns:4.5em 1fr;gap:6px;align-items:center;font-size:.88rem}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r21l.html">← 21l the slope of sine by hand</a><a href="r21n.html">next: 21n trig integrals and substitution; circle area →</a></p>
+  <div class="tags"><span class="tag tech">21m · technique</span></div>
+  <h1>Running trig backwards</h1>
+  <p>Given an angle, the circle tells you its coordinates. This step asks the question the other way: given a height, which angle has it? Because the waves repeat, many angles do, so you agree to answer from one stretch where each height comes only once. The answer for the cosine turns out to be the arc this rung began with. The slopes of these backward functions are simple fractions with no circle in sight, which is how the circle hides inside so much of calculus.</p>
+  <p class="gesture">Cut each wave down to a stretch where it never repeats, and it can be run backwards. Running the cosine backwards gives the arc that started the rung. The backward functions have slopes made only of squares and roots.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r21a.html">21a</a> (the arc L), <a href="r21b.html">21b</a> (cos as the undoing of L), <a href="r13l.html">13l</a> (inverse slopes), <a href="r21g.html">21g</a> (slopes of sin, cos, tan). <a href="r21n.html">21n</a> puts them inside integrals.</p></div>
+</header>
+
+<section class="class step" data-step="21m1">
+  <h2 class="sthead"><span class="stno">21m1</span>Cosine backwards is the arc</h2>
+  <p class="stands">Stands on 21a2 (the arc L), 21b1 (cos θ is the x with L(x) = θ).</p>
+  <p data-pid="249ffa">On 0 ≤ θ ≤ π, the cosine never repeats a value. Arc-is-arccos technique: <b>running cos on [0, π] backwards gives the arc L of 21a: the angle whose cosine is x is L(x).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the arc-is-arccos technique">
+\cos\theta = x \iff L(x) = \theta \quad (0 \le \theta \le \pi) @@ 21b1: cos θ was defined as the x with L(x) = θ
+\htmlClass{new}{\arccos x = L(x) = \int_x^1 \frac{dt}{\sqrt{1 - t^2}}} \quad \blacksquare @@ the undoing of cos on [0, π], for −1 ≤ x ≤ 1
+  </pre>
+  <p class="eqline" data-pid="d7e408">From here on, arccos x is the one θ in [0, π] with cos θ = x. It is also written cos⁻¹ x, where the −1 means “run backwards”, not “one over”.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · arccos · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · a wave cut down, and flipped over the line y = x</div>
+    <div class="chrow"><span class="lbl">wave</span><div class="chips" id="chW"></div></div>
+    <div id="pl"></div>
+    <div class="cap">Ink: the whole wave, faint. Teal: the stretch where it never repeats. Ember: that stretch flipped over the dashed line y = x, which is the backward function.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">21m1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\arccos\tfrac12,\ \ \arccos(-\tfrac{\sqrt2}{2}),\ \ \arccos(\cos\tfrac{5\pi}{3})"></span></span>Find each.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21m2">
+  <h2 class="sthead"><span class="stno">21m2</span>Sine and tangent backwards</h2>
+  <p class="stands">Stands on 21m1, 21e3 (the complement) and 21g (slopes).</p>
+  <p data-pid="6c58e6">Sin climbs on [−π/2, π/2], since its slope cos is positive inside; tan climbs on (−π/2, π/2) and takes every value. Arcsin-and-arctan technique: <b>each has an undoing, arcsin from [−1, 1] onto [−π/2, π/2] and arctan from all numbers onto (−π/2, π/2); and arcsin x + arccos x = π/2.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the arcsin-and-arctan technique">
+\theta = \arccos x \Rightarrow \sin(\tfrac{\pi}{2} - \theta) = \cos\theta = x @@ the complement (21e3)
+0 \le \theta \le \pi \Rightarrow -\tfrac{\pi}{2} \le \tfrac{\pi}{2} - \theta \le \tfrac{\pi}{2} @@ so π/2 − θ is in sin’s stretch
+\htmlClass{new}{\arcsin x = \tfrac{\pi}{2} - \arccos x} \quad \blacksquare @@ the one angle there with sine x
+\tan\theta \to \pm\infty \text{ at } \pm\tfrac{\pi}{2} @@ sin → ±1, cos → 0 from above: every number is reached, by the intermediate value technique (12a)
+  </pre>
+  <p class="eqline" data-pid="624d96">From here on, arcsin x (or sin⁻¹ x) is the one θ in [−π/2, π/2] with sin θ = x, and arctan x (or tan⁻¹ x) the one θ in (−π/2, π/2) with tan θ = x.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · arcsin, arctan · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21m2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\arcsin(-\tfrac12),\ \ \arctan\sqrt3,\ \ \cos(\arctan 2)"></span></span>Find each. <br>Check arcsin x + arccos x = π/2 at x = ½.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21m3">
+  <h2 class="sthead"><span class="stno">21m3</span>The slopes backwards</h2>
+  <p class="stands">Stands on 21m2, 13l (the inverse-slope technique) and 21c (the circle technique).</p>
+  <p data-pid="0508ca">Backward-slope technique: <b>arcsin′ x = 1/√(1 − x²), arccos′ x = −1/√(1 − x²) and arctan′ x = 1/(1 + x²).</b> No circle appears in the answers.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the backward-slope technique">
+\arcsin' x = \frac{1}{\sin'(\arcsin x)} = \frac{1}{\cos(\arcsin x)} @@ inverse-slope (13l), for −1 &lt; x &lt; 1
+\cos(\arcsin x) = \sqrt{1 - x^2} @@ the circle technique (21c); cos ≥ 0 on [−π/2, π/2]
+\arctan' x = \frac{1}{\sec^2(\arctan x)} = \frac{1}{1 + x^2} @@ sec² = 1 + tan² (21c)
+\htmlClass{new}{\arcsin' x = \tfrac{1}{\sqrt{1 - x^2}},\ \ \arctan' x = \tfrac{1}{1 + x^2}} \quad \blacksquare @@ and arccos′ = −arcsin′, by 21m2
+  </pre>
+  <p data-pid="b4a50c">Read the other way, as areas: ∫₀¹ dx/(1 + x²) = arctan 1 − arctan 0 = π/4. A fraction with no circle in it has π hidden in its area.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · slopes · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21m3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\arcsin 2x,\ \ x\arctan x"></span></span>Find the slope of each. <br>Find the area under 1/(1 + x²) from x = 0 to x = √3.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21m4">
+  <h2 class="sthead"><span class="stno">21m4</span>Undoing, and undoing back</h2>
+  <p class="stands">Stands on 21m1 and 21m2.</p>
+  <p data-pid="8dfffe">Stretch technique: <b>arcsin(sin θ) = θ only when θ is in [−π/2, π/2]; elsewhere it is the one angle in that stretch with the same sine.</b> The other way round, sin(arcsin x) = x for every x in [−1, 1], and is meaningless outside.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the stretch technique, on one value">
+\arcsin(\sin\tfrac{5\pi}{6}) @@ 5π/6 is outside [−π/2, π/2]
+= \arcsin(\sin(\pi - \tfrac{5\pi}{6})) = \arcsin(\sin\tfrac{\pi}{6}) @@ half turns (21e4): sin(π − θ) = sin θ
+\htmlClass{new}{= \tfrac{\pi}{6}} \quad \blacksquare @@ π/6 is inside the stretch
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · stretches · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21m4.1</span><span class="ph undo">undo</span><span class="givens"><span data-tex-inline="\arcsin(\sin 3),\ \ \arccos(\cos(-1)),\ \ \arctan(\tan 4)"></span></span>Guess each. <br>Find each.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21m5">
+  <h2 class="sthead"><span class="stno">21m5</span>Illegal moves</h2>
+  <p class="stands">Stands on 21m1 to 21m4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\sin^{-1} x = \tfrac{1}{\sin x}\,? @@ that is csc x; sin⁻¹ means run backwards
+\arcsin(\sin\theta) = \theta \text{ always}\,? @@ only on [−π/2, π/2]
+\sin(\arcsin 2) = 2\,? @@ arcsin 2 is not defined: no height is 2
+\arccos' x = \tfrac{1}{\sqrt{1 - x^2}}\,? @@ minus: arccos falls
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21m5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\arctan x + \arctan\tfrac1x,\ \ x &gt; 0"></span></span>Find its slope. <br>Find its value.</li><li><span class="givens"><span data-tex-inline="\arcsin x"></span></span>Find its slope at x = 1.</li><li><span class="givens"><span data-tex-inline="\int_{-1}^{1} \frac{dx}{\sqrt{1 - x^2}}"></span></span>Find it with arcsin, and compare 21a’s π.</li><li><span class="givens"><span data-tex-inline="\tan(\arcsin x)"></span></span>Write it without trig.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">21m.4.1</span><span class="tagq">build</span>Build π/4 out of arctan(1/2) and arctan(1/3), using the tangent of a sum (21d4).</div>
+  <div class="chq"><span class="chid">21m.4.2</span><span class="tagq">edge</span>Find every x where arcsin x = arccos x.</div>
+  <div class="chq"><span class="chid">21m.4.3</span><span class="tagq">converse</span>cos(arccos x) = x for every x in [−1, 1]. Turn it round: find arccos(cos θ) for every θ in [−π, π], as one formula.</div>
+  <div class="chq"><span class="chid">21m.4.4</span><span class="tagq">reroute</span>Find arctan′ by implicit slopes (13l): from tan y = x, take slopes of both sides.</div>
+  <div class="chq"><span class="chid">21m.4.5</span><span class="tagq">seam</span><span class="givens"><span data-tex-inline="\tfrac{\pi}{4} = 1 - \tfrac13 + \tfrac15 - \tfrac17 + \cdots"></span></span>This sum, read off arctan, was found twice, three centuries and half a world apart. It is exactly right, and it is slow: five hundred terms give only three places. <br>Is an exact rule that is slow worth more or less than a rough rule that is fast? <br>Could you make this one faster without losing its exactness?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r21l.html">← 21l · the slope of sine by hand</a><a href="r21n.html">21n · trig integrals and substitution; circle area →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>arcsin, arccos and arctan are the inverse trigonometric functions; sin⁻¹, cos⁻¹ and tan⁻¹ are the same functions, and calculators label their keys that way. The chosen stretches are the principal values.</p>
+  <h3>Who said it first</h3>
+  <p>In 21m.4.5, the sum was found by Madhava of Sangamagrama in Kerala (c. 1400), with correction terms that speed it up, and again by James Gregory (1671) and Gottfried Leibniz (1674). John Machin used arctan(1/5) and arctan(1/239) in 1706 to reach a hundred places.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+/* moves of the plane, drawn in SVG, for rung 20 */
+const V=c=>'var('+c+')';
+const FLAG=[[0,0],[0,3],[2,3],[2,2.4],[0.6,2.4],[0.6,1.8],[1.5,1.8],[1.5,1.2],[0.6,1.2],[0.6,0]];
+const M={
+  id:()=>p=>p,
+  slide:(h,k)=>p=>[p[0]+h,p[1]+k],
+  turn:(a,b)=>p=>[a*p[0]-b*p[1],b*p[0]+a*p[1]],
+  stretch:k=>p=>[k*p[0],k*p[1]],
+  flipU:(c,s)=>p=>{ const d=2*(p[0]*c+p[1]*s); return [d*c-p[0],d*s-p[1]]; },              /* across the line through O along (c, s), c² + s² = 1 */
+  flipAt:(q,c,s)=>p=>{ const x=p[0]-q[0],y=p[1]-q[1],d=2*(x*c+y*s); return [q[0]+d*c-x,q[1]+d*s-y]; },
+  turnAt:(q,a,b)=>p=>{ const x=p[0]-q[0],y=p[1]-q[1]; return [q[0]+a*x-b*y,q[1]+b*x+a*y]; },
+  then:(g,f)=>p=>g(f(p))                                                                    /* f first, then g */
+};
+const unit=(x,y)=>{ const r=Math.hypot(x,y); return [x/r,y/r]; };
+const fx=v=>(Math.abs(v)<5e-10?0:v);
+const show=(v,d)=>{ let s=fx(v).toFixed(d==null?2:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return (s==='-0'?'0':s).replace('-','−'); };
+/* shapes: {pts, c, fill, dash, w, open}; dots: {p, c, t}; lines: {p, d, c, dash} */
+function svgPlane(o){ const lo=o.lo==null?-6:o.lo, hi=o.hi==null?6:o.hi, S=300, X=x=>(x-lo)/(hi-lo)*S, Y=y=>S-(y-lo)/(hi-lo)*S;
+  let s='<svg viewBox="0 0 '+S+' '+S+'" style="width:100%;max-width:340px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  for(let g=Math.ceil(lo);g<=hi;g++){ s+='<line x1="'+X(g)+'" y1="0" x2="'+X(g)+'" y2="'+S+'" style="stroke:'+V('--grid')+';stroke-width:'+(g===0?1.6:0.6)+'"/><line x1="0" y1="'+Y(g)+'" x2="'+S+'" y2="'+Y(g)+'" style="stroke:'+V('--grid')+';stroke-width:'+(g===0?1.6:0.6)+'"/>'; }
+  (o.lines||[]).forEach(l=>{ const L=40; s+='<line x1="'+X(l.p[0]-L*l.d[0])+'" y1="'+Y(l.p[1]-L*l.d[1])+'" x2="'+X(l.p[0]+L*l.d[0])+'" y2="'+Y(l.p[1]+L*l.d[1])+'" style="stroke:'+V(l.c||'--teal')+';stroke-width:1.6;stroke-dasharray:'+(l.dash||'5 4')+'"/>'; });
+  (o.shapes||[]).forEach(z=>{ const pts=z.pts.map(p=>X(p[0]).toFixed(1)+','+Y(p[1]).toFixed(1)).join(' ');
+    s+='<'+(z.open?'polyline':'polygon')+' points="'+pts+'" style="fill:'+(z.fill?V(z.c):'none')+';fill-opacity:'+(z.fill?0.28:0)+';stroke:'+V(z.c)+';stroke-width:'+(z.w||2)+(z.dash?';stroke-dasharray:'+z.dash:'')+'"/>'; });
+  (o.dots||[]).forEach(d=>{ s+='<circle cx="'+X(d.p[0])+'" cy="'+Y(d.p[1])+'" r="4" style="fill:'+V(d.c||'--ink')+'"/>'+(d.t?'<text x="'+(X(d.p[0])+7)+'" y="'+(Y(d.p[1])-6)+'" style="fill:'+V(d.c||'--ink')+';font:12px IBM Plex Mono,monospace">'+d.t+'</text>':''); });
+  return s+'</svg>'; }
+function knob(id,lab,min,max,step,val){ return '<div class="kn"><span class="m">'+lab+'</span><input type="range" id="'+id+'" min="'+min+'" max="'+max+'" step="'+step+'" value="'+val+'"><output id="o'+id+'"></output></div>'; }
+function chipRow(el,keys,get,set,after){ el.innerHTML=''; keys.forEach(k=>{ const b=document.createElement('button'); b.type='button'; b.textContent=k; if(k===get()) b.className='on'; b.onclick=()=>{ set(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+
+const W={'cos':{f:Math.cos,a:0,b:Math.PI},'sin':{f:Math.sin,a:-Math.PI/2,b:Math.PI/2},'tan':{f:Math.tan,a:-1.45,b:1.45}};
+let wk='cos';
+function draw(){ const w=W[wk], all=[], cut=[], back=[];
+  for(let x=-3.5;x<=3.5;x+=0.02){ const y=w.f(x); if(Math.abs(y)<3.6) all.push([x,y]); }
+  for(let x=w.a;x<=w.b+1e-9;x+=0.01){ const y=w.f(x); if(Math.abs(y)<3.6){ cut.push([x,y]); back.push([y,x]); } }
+  $('pl').innerHTML=svgPlane({lo:-3.6,hi:3.6,shapes:[{pts:all,c:'--muted',open:true,w:1},{pts:cut,c:'--teal',open:true,w:2.4},{pts:back,c:'--ember',open:true,w:2.6}],lines:[{p:[0,0],d:[Math.SQRT1_2,Math.SQRT1_2],c:'--muted'}]});
+  const v=$('vd'); v.className='verdict';
+  v.textContent=wk==='cos'?'cos on [0, π], run backwards: arccos, from [−1, 1] onto [0, π]. It is 21a’s arc L.':wk==='sin'?'sin on [−π/2, π/2], run backwards: arcsin, from [−1, 1] onto [−π/2, π/2].':'tan on (−π/2, π/2), run backwards: arctan, from every number onto (−π/2, π/2). It flattens toward ±π/2 and never reaches them.'; }
+chipRow($('chW'),Object.keys(W),()=>wk,k=>wk=k,draw); draw();
+window.__pic={set:k=>{ wk=k; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'arccos is the arc',t:R`\htmlClass{new}{\arccos x = L(x)}`,n:`The rung’s first function.`}
+],{title:'The slides · arccos · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'backwards',t:R`\htmlClass{new}{\arcsin x + \arccos x = \tfrac{\pi}{2}}`,n:`Each from its own stretch.`}
+],{title:'The slides · arcsin, arctan · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'backward slopes',t:R`\htmlClass{new}{\arctan' x = \tfrac{1}{1 + x^2}}`,n:`No circle in sight.`}
+],{title:'The slides · slopes · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'stretch',t:R`\htmlClass{new}{\arcsin(\sin\theta) = \theta \text{ on } [-\tfrac{\pi}{2}, \tfrac{\pi}{2}]}`,n:`Only there.`}
+],{title:'The slides · stretches · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`\sin^{-1} x \ne \tfrac{1}{\sin x}`,n:`Backwards, not one over.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>13c · The product rule</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.cells{border-collapse:collapse;margin:6px auto;font-size:.92rem;max-width:100%}
+table.cells td,table.cells th{border:1px solid var(--grid);padding:6px 8px;text-align:center;font-weight:400;min-width:4.5em}
+table.cells th{background:var(--sand);color:var(--muted);font-family:var(--mono);font-size:.8rem}
+table.cells td.k{background:var(--card)} table.cells td.o1{box-shadow:inset 4px 0 0 var(--teal)} table.cells td.o2{box-shadow:inset 4px 0 0 var(--gold)} table.cells td.lo{box-shadow:inset 4px 0 0 var(--ember)}
+@media (max-width:520px){table.cells{font-size:.78rem} table.cells td,table.cells th{padding:4px 4px;min-width:3.6em}}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r13b.html">← 13b a slope means no gap</a><a href="r13d.html">next: 13d the power rule →</a></p>
+  <div class="tags"><span class="tag proof">13c · proof</span></div>
+  <h1>The product rule</h1>
+  <p>Change the input of a product of two functions by a little. Each factor changes, and 5h's grid of cells splits the new product into four cells. There is the old product, and two cells that each carry one change. And there is a leftover cell that carries both changes at once. Divided by the change in the input, the two one-change cells head to each function times the other's slope. The leftover cell, divided the same way, is a chord slope times a change, and by 13b the change goes to 0 in the limit. So the slope of a product is each function times the slope of the other, added. A second road, by adding and taking away one product, reaches the same rule.</p>
+  <p class="gesture">Split the new product into four cells, take away the old product, and divide by the change. Two cells head to each function times the other’s slope. The leftover cell goes to 0 in the limit, because a slope means no gap.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r13a.html">13a</a> (the slope, Δf, slope-of-a-line, slopes-decided-near, slope-of-x², slope-of-x³, slope-of-one-over-x), <a href="r13b.html">13b</a> (change-heads-to-0, slope-means-no-gap), <a href="r05h.html">5h</a> (the grid of cells, grid-of-cells), <a href="r10c.html">10c</a> (fg as a function, limits-add, limits-multiply, constant-factor), <a href="r10a.html">10a</a> (agreeing-near), <a href="r08d.html">8d</a> (the rules for ℝ), <a href="r08b.html">8b</a> (min). <a href="r13d.html">13d</a> climbs the powers with it; <a href="r13f.html">13f</a> builds the quotient rule from it and the chain rule.</p></div>
+</header>
+
+<section class="class step" data-step="13c1">
+  <h2 class="sthead"><span class="stno">13c1</span>The change of a product, in cells</h2>
+  <p class="stands">Stands on 13a (slopes), 5h (the grid of cells) and 10c (products of functions).</p>
+  <p data-pid="c5cf90">Let f and g have slopes at w. Each is defined on some open interval around w; on the smaller of the two (8b's min of the reaches) both are, and so is fg, 10c's function x ↦ f(x)g(x). By 13a's line for Δ, f(w + h) = f(w) + Δf and g(w + h) = g(w) + Δg. So the new product is a product of two sums, and 5h's grid-of-cells multiplies it out.</p>
+  <p class="eqline" data-pid="272eb4">A word about the picture, said plainly. It is often drawn with boxes that grow, and read as geometry, speaking of what the boxes cover. The ladder has not built that; rung 15 builds what the boxes would be read as. Here it is 5h's grid of cells and nothing more. There is a row for each term of the first sum and a column for each term of the second. In each cell is the product of its row and its column. The boxes are writing. Their sizes mean nothing.</p>
+  <table class="cells" aria-label="the grid of cells for (f(w) + Δf)(g(w) + Δg)">
+    <tr><th></th><th data-tex-inline="g(w)"></th><th data-tex-inline="\Delta g"></th></tr>
+    <tr><th data-tex-inline="f(w)"></th><td class="k" data-tex-inline="f(w)\,g(w)"></td><td class="k o1" data-tex-inline="f(w)\,\Delta g"></td></tr>
+    <tr><th data-tex-inline="\Delta f"></th><td class="k o2" data-tex-inline="\Delta f\, g(w)"></td><td class="k lo" data-tex-inline="\Delta f\,\Delta g"></td></tr>
+  </table>
+  <p data-pid="c2fed8">The cell at the top left is the old product f(w)g(w). Two cells carry one change each: f(w)Δg and Δf g(w). They are called the strips. The cell at the bottom right carries both changes at once, Δf Δg: call it the leftover cell. <b>The change of the product, Δ(fg) = (fg)(w + h) − (fg)(w), is the new product less the old one: the three cells other than the old product.</b></p>
+  <p data-pid="53518f">With numbers: f(x) = x² + 1 and g(x) = x at w = 2, with h = 0.1. Then f(2) = 5, g(2) = 2, Δf = 5.41 − 5 = 0.41 and Δg = 0.1. The cells are 10, then 5 · 0.1 = 0.5 and 0.41 · 2 = 0.82, and the leftover 0.41 · 0.1 = 0.041. Their sum less the old product is 0.5 + 0.82 + 0.041 = 1.361, and indeed (fg)(2.1) = 5.41 · 2.1 = 11.361, which is 10 + 1.361. Divided by h the three cells are 5, 8.2 and 0.41. Shrink h and the first two head to 5 and 8, and the leftover heads to 0.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · four cells · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · left: the grid of cells for the product at w · right: each cell divided by h, against h</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="lbl">f</div><div class="chips" id="fch"></div>
+      <div class="lbl">g</div><div class="chips" id="gch"></div>
+      <div class="kn">
+        <span class="m">w</span><input type="range" id="ka" min="-2" max="2" step="0.1" value="2"><output id="oa"></output>
+        <span class="m">|h|</span><input type="range" id="kh" min="-3" max="0" step="0.01" value="-1"><output id="oh"></output>
+      </div>
+      <div class="chips" id="hch"><button class="on" data-s="1">h &gt; 0</button><button data-s="-1">h &lt; 0</button></div>
+      <table class="cells" id="grid"></table>
+      <div class="eqbox" id="eqG"></div>
+    </div>
+    <div class="panel">
+      <canvas id="cvQ"></canvas>
+      <div class="cap">Across: the change h, with h = 0 left out. Teal: f(w)Δg/h. Gold: Δf g(w)/h. Ember: the leftover cell over h, ΔfΔg/h. Ink: their sum, the chord slope of fg. Hollow rings at h = 0 mark where each heads: f(w)g′(w), g(w)f′(w), 0, and (fg)′(w). The gold column is your h. Drag on the picture to move it.</div>
+      <div class="verdict" id="vd"></div>
+    </div>
+  </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">13c1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = 2x,  g(x) = x²,  w = 1,  h = 0.1</span></span>Fill in the four cells. <br>Check that they add up to the new product.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13c2">
+  <h2 class="sthead"><span class="stno">13c2</span>The proof, every line cited</h2>
+  <p class="stands">Stands on 13c1 and 13b (change-heads-to-0).</p>
+  <p data-pid="da65be">Product technique for slopes (the product rule): <b>if f and g have slopes at w, then fg has a slope at w, and (fg)′(w) = f′(w)g(w) + f(w)g′(w).</b> In words: each function times the slope of the other, added.</p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the product technique for slopes">
+\text{call } r:\ f, g \text{ defined on } (a - r, a + r) @@ the lesser of the two reaches (8b's min, lesser-below-both); fg is defined there (10c)
+f(a + h) = f(a) + \Delta f,\ \ g(a + h) = g(a) + \Delta g @@ 13a's line for Δ, and adding-keeps-answers: for 0 &lt; |h| &lt; r
+(fg)(a + h) = (f(a) + \Delta f)\,(g(a) + \Delta g) @@ 10c's line for fg; the swap axiom
+= f(a)g(a) + \htmlClass{new}{f(a)\,\Delta g} + \htmlClass{new}{\Delta f\, g(a)} + \htmlClass{new}{\Delta f\, \Delta g} @@ grid-of-cells (5h), read in ℝ: the four cells
+\Delta(fg) = f(a)\,\Delta g + g(a)\,\Delta f + \Delta f\,\Delta g @@ take away the cell f(a)g(a) (adding-keeps-answers); turn-about for times on ℝ
+\dfrac{\Delta(fg)}{h} = f(a)\,\dfrac{\Delta g}{h} + g(a)\,\dfrac{\Delta f}{h} + \dfrac{\Delta f}{h}\cdot \Delta g @@ multiply by h⁻¹: spread on ℝ, regroup for times on ℝ, turn-about for times on ℝ; h ≠ 0
+\dfrac{\Delta g}{h} \to g'(a),\ \ \dfrac{\Delta f}{h} \to f'(a) @@ the hypotheses: the chord slopes head to the slopes
+\Delta g \to \htmlClass{keep}{0} @@ change-heads-to-0 (13b): g has a slope at a. This is where “a slope means no gap” is spent
+\dfrac{\Delta f}{h}\cdot \Delta g \;\to\; f'(a) \cdot 0 = \htmlClass{new}{0} @@ limits-multiply (10c); anything-times-zero. The leftover cell, divided by h, goes to 0 in the limit
+(fg)'(a) = f(a)\,g'(a) + g(a)\,f'(a) \quad \blacksquare @@ constant-factor for the constants f(a) and g(a), limits-add, plus-zero on ℝ; agreeing-near: the chord slope of fg is this sum at every 0 &lt; |h| &lt; r
+  </pre>
+  <p data-pid="2b7e93">Look at the leftover cell. For every h ≠ 0 the four cells add up exactly to the new product: nothing is set aside. Divided by h, the leftover cell is (Δf/h) · Δg: a chord slope of f times a change of g. The chord slope heads to f′(w), and the change heads to 0, by 13b. So their product heads to 0. When f and g are both x, Δf = Δg = h and the leftover cell is h · h. Divided by h it is h, which goes to 0 as h does. That is the same h · h piece 13a met in x², and it gets the same treatment. It is not dropped for being small. It goes to 0 in the limit, and the line that sends it there is cited.</p>
+  <p data-pid="1c5a22">Notice where each hypothesis was spent. The slopes of f and g were spent on the two one-change cells. The slope of g was spent a second time, through change-heads-to-0, on the leftover cell. Without continuity of g at w, Δg need not shrink, and the leftover cell need not go to 0.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · product for slopes · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13c2.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="p(x) = (x^2 + 1)(x - 2)"></span></span>Using product for slopes, find p's slope at 1. <br>Expand p, and find the cubic's slope at 1 from the definition.</li><li><span class="givens"><span data-tex-inline="f(x) = x,"></span> <span data-tex-inline="g(x) = x^2,"></span> <span data-tex-inline="w = 1,"></span> <span data-tex-inline="h = 0.1"></span></span>Fill in the four cells exactly, and check that the three cells other than the old product add up to the change of the product from 1 to 1.1.</li><li><span class="givens"><span data-tex-inline="f(x) = x^2 + 1,"></span> <span data-tex-inline="g(x) = x,"></span> <span data-tex-inline="w = 2"></span></span>Write the leftover cell divided by h exactly as a function of h, and find where it heads.</li><li><span class="givens"><span data-tex-inline="f(x) = x,"></span> <span data-tex-inline="g(x) = 1/x,"></span> <span data-tex-inline="w = 2"></span></span>Run the second road with numbers, one move per line.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13c3">
+  <h2 class="sthead"><span class="stno">13c3</span>A second road</h2>
+  <p class="stands">Stands on 13c2 and 10c (add and take away).</p>
+  <p data-pid="c7dd5a">A well-known modern calculus book proves the rule by one trick, which never draws a grid: add and take away the same product, so that a real is unchanged.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the product technique for slopes, the second road">
+f(w + h)g(w + h) - f(w)g(w) @@ the change of the product
+= f(w + h)g(w + h) \htmlClass{new}{- f(w + h)g(w) + f(w + h)g(w)} - f(w)g(w) @@ add and take away f(w + h)g(w): negative on ℝ, plus-zero on ℝ
+= \htmlClass{keep}{f(w + h)}\,\big(g(w + h) - g(w)\big) + \big(f(w + h) - f(w)\big)\,\htmlClass{keep}{g(w)} @@ spread on ℝ turned about, twice; regroup for plus on ℝ
+\dfrac{\Delta(fg)}{h} = f(w + h)\,\dfrac{\Delta g}{h} + \dfrac{\Delta f}{h}\, g(w) @@ multiply by h⁻¹
+f(w + h) \to f(w) @@ slope-means-no-gap (13b) and two-ways-to-write-a-limit: f is continuous at w. The leftover cell is hiding in f(w + h) = f(w) + Δf
+(fg)'(w) = f(w)\,g'(w) + f'(w)\,g(w) \quad \blacksquare @@ limits-multiply, constant-factor, limits-add
+  </pre>
+  <p data-pid="398f30"><b>The two roads spend the same hypotheses.</b> The grid makes the leftover cell visible. The second road folds it into f(w + h), and spends continuity on the line that sends f(w + h) to f(w).</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · second road · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13c3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(w + h)g(w + h) − f(w)g(w)</span></span>Add and take away f(w + h)g(w), and regroup into two products. <br>Say which line spends continuity, and which technique gives it.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13c4">
+  <h2 class="sthead"><span class="stno">13c4</span>Checks against what 13a found</h2>
+  <p class="stands">Stands on 13c3 and 13a (slopes of x², x³, 1/x).</p>
+  <pre class="lines" data-k="ember" data-label="this step: the rule, checked">
+x \cdot x:\ \ 1 \cdot a + a \cdot 1 = 2a @@ product for slopes with slope-of-a-line twice: agrees with slope-of-x²
+x \cdot x^2:\ \ 1 \cdot a^2 + a \cdot 2a = \htmlClass{new}{3a^2} @@ product for slopes with slope-of-a-line and slope-of-x²: agrees with slope-of-x³, and x · x² = x³ by power-of-a-next
+x \cdot \tfrac1x = 1 \ (x \ne 0):\ \ 1 \cdot \tfrac1a + a \cdot \big(-\tfrac{1}{a^2}\big) = \htmlClass{new}{0} @@ product for slopes with slope-of-a-line and slope-of-one-over-x; and the constant 1 has slope 0 (slope-of-a-line), by slopes-decided-near on (a − |a|, a + |a|)
+(x^2 + 1)\cdot x \text{ at } 2:\ \ 2 \cdot 2 \cdot 2 + 5 \cdot 1 = \htmlClass{new}{13} @@ product for slopes, with the slope of x² + 1 at 2 being 4 (its chord slopes are x²'s: the 1s cancel in the top; slope-of-x²) and the slope of x being 1 (slope-of-a-line)
+\dfrac{(2.001^3 + 2.001) - 10}{0.001} = 13.006001 @@ one chord slope of x³ + x at 2: exactly 13 + 6h + h² at h = 0.001
+  </pre>
+  <p data-pid="27399a">The fourth line borrowed the slope of x² + 1 from x²'s, because the 1s cancel in the top of every chord slope. 13d proves in general that adding a constant changes no slope. With g a constant c the rule gives f′(w) · c + f(w) · 0 = c f′(w): a constant factor comes out, which 13d records.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · checks · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13c4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">(x² · (1/x))′ at 2</span></span>Find it by product for slopes. <br>Say what product it is, and check against slope-of-a-line.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13c5">
+  <h2 class="sthead"><span class="stno">13c5</span>The tempting rule</h2>
+  <p class="stands">Stands on 13c4.</p>
+  <p data-pid="ea6231">The rule everyone tries first is (fg)′ = f′g′: the slope of a product is the product of the slopes. Test it on the smallest case. x · x is x², whose slope at 3 is 6 (slope-of-x²). The tempting rule gives 1 · 1 = 1. The cells say why. (Δf/h)(Δg/h) heads to f′(w)g′(w), and it is the leftover cell divided by h twice. But the change of the product is divided by h once, and divided once the leftover cell is the one piece that goes to 0. <b>The tempting rule keeps the only piece that vanishes and throws away both pieces that stay.</b></p>
+  <p data-pid="21f599">One of the two inventors, as historians of his manuscripts tell it, tried that guess in his notes of November 1675. He checked it on an example, and found it false. When he published his rules in 1684, in a short paper in the Acta Eruditorum, the product came with the right rule: each factor times the difference of the other, added.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · the tempting rule · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13c5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{Claim: } (fg)' = f'g',"></span> <span data-tex-inline="f(x) = x,"></span> <span data-tex-inline="g(x) = x^2"></span></span>Refute the claim with f and g at 1.</li><li><span class="givens"><span data-tex-inline="\text{Claim: } |x| \text{ has no slope at } 0,"></span> <span data-tex-inline="\text{so } |x| \cdot |x| \text{ has none}"></span></span>Refute the claim.</li><li><span class="givens"><span data-tex-inline="\text{Claim: the leftover cell is small,}"></span> <span data-tex-inline="\text{so strike it out before dividing;}"></span> <span data-tex-inline="f = g = x \text{ at } 3"></span></span>Find an h for which striking it out makes the line false.</li><li><span class="givens"><span data-tex-inline="g \text{ with a jump at } w"></span></span>Find the line of product for slopes's column that fails, and what the leftover cell divided by h does then.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13c6">
+  <h2 class="sthead"><span class="stno">13c6</span>Illegal moves</h2>
+  <p class="stands">Stands on 13c1 to 13c5.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+(fg)' = f'g'\,? @@ x · x at 3: 1 · 1 = 1, but the slope of x² at 3 is 6
+\text{drop } \Delta f\,\Delta g \text{ because it is small}\,? @@ for every h ≠ 0 the four cells add up exactly; the leftover goes to 0 only after dividing by h, in the limit, by change-heads-to-0
+\begin{aligned}&(fg)' = f'g + fg' \text{ with } f'(a) \text{ and } g \text{ taken}\\ &\quad\text{at different inputs}\,?\end{aligned} @@ every piece is at the one input a: f′(a)g(a) + f(a)g′(a)
+\text{no slope for } f, \text{ so none for } fg\,? @@ |x| · |x| = x², which has slope 0 at 0 (13f shows |x| has none). The rule is silent when its hypotheses fail
+(x \cdot q(x)) \cdot x \text{ has no slope at } 0\,? @@ it is x² · q(x), with slope 0 at 0 (slope-at-0-only), though x · q(x) has none (continuous-without-slope)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13c6.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">“(fg)′(w) = f′(w)g′(w) + f(w)g(w).”</span></span>Which illegal move is this? <br>Test it on x · x at 3.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13c7">
+  <h2 class="sthead"><span class="stno">13c7</span>Running it backwards</h2>
+  <p class="stands">Stands on 13c1 to 13c5.</p>
+  <p data-pid="dfc810">Handed the answer 3x²(2x + 5) + x³ · 2, look for two factors whose slopes appear. 3x² is the slope of x³ (slope-of-x³) and 2 is the slope of 2x + 5 (slope-of-a-line), so the product was x³(2x + 5). Handed a product whose slope must be 0 everywhere, as x · (1/x), look for factors that undo each other. Handed a product and a slope to check, compute one chord slope with a small h and compare, as above. A chord slope is not the slope, but it should be near it, and the exact chord slope tells you how near. Found upward; written downward.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13c7.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{a product-rule answer:}"></span> <span data-tex-inline="2x \cdot \tfrac1x + x^2 \cdot \left(-\tfrac{1}{x^2}\right)"></span></span>Find the product, and simplify the answer.</li><li><span class="givens"><span data-tex-inline="\text{the four cells: } 6, 0.3, 0.4, 0.02,"></span> <span data-tex-inline="f(w) = 2"></span></span>Find the value of g at w, the change of f and the change of g, and every answer there is.</li><li><span class="givens"><span data-tex-inline="\text{the second road added}"></span> <span data-tex-inline="\text{and took away } f(w + h)\,g(w)"></span></span>Find where that product sits in the grid of cells.</li><li><span class="givens"><span data-tex-inline="x^2 \cdot x^2,"></span> <span data-tex-inline="x \cdot x^3"></span></span>Using product for slopes on each at w, find both slopes and compare.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">13c.4.1</span><span class="tagq">build</span>Choose f and g of your own, neither a power of x, each with a slope at 1. <br>Fill in the four cells of their product at 1 for a general h, and find the product's slope at 1 from the cells before any rule, marking the cell that cancels and the cell that heads to 0. <br>Then check it with product for slopes.</div>
+  <div class="chq"><span class="chid">13c.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="g \text{ a constant}"></span></span>Run product for slopes, and find what it gives and which cells are always 0.</div>
+  <div class="chq"><span class="chid">13c.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="fg \text{ and } f \text{ have slopes at } w,"></span> <span data-tex-inline="f(w) \ne 0"></span></span>Prove or refute that g must have a slope at w.</div>
+  <div class="chq"><span class="chid">13c.4.4</span><span class="tagq">seam</span>In his notes of November 1675, one of the inventors asked himself whether the change of a product xy is the change of x times the change of y. He asked whether the same was true for quotients. A few days later he had the right rule. <br>Was the first guess foolish? <br>What would have told him, before any proof, that it was wrong?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r13b.html">← 13b · a slope means no gap</a><a href="r13d.html">13d · the power rule →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>The modern book of the second road is Michael Spivak’s Calculus. The inventor who tried the tempting guess in November 1675, and published the right rule in 1684, is Gottfried Wilhelm Leibniz.</p>
+  <aside class="voice para"><p>Spivak proves the product rule by adding and subtracting f(w + h)g(w), and points out that the proof needs f(w + h) to approach f(w), which is where the continuity of a function with a derivative is used.</p><cite>Spivak, Calculus, ch. 10</cite></aside>
+  <p>Accepted names: the product technique for slopes is the product rule.</p>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; const a=Math.abs(v); let s=d!=null?v.toFixed(d):(a>=100?v.toFixed(2):a>=1?v.toFixed(4):a>=0.0001?v.toFixed(6):v.toPrecision(3)); if(s.indexOf('.')>=0&&s.indexOf('e')<0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const FN={
+  x:{lab:'x',tx:'x',f:x=>x,d:x=>1},
+  x2:{lab:'x²',tx:'x^2',f:x=>x*x,d:x=>2*x},
+  x21:{lab:'x² + 1',tx:'x^2 + 1',f:x=>x*x+1,d:x=>2*x},
+  xp1:{lab:'x + 1',tx:'x + 1',f:x=>x+1,d:x=>1},
+  inv:{lab:'1/x',tx:R`\tfrac1x`,f:x=>1/x,d:x=>-1/(x*x),pos:true},
+  c2:{lab:'2',tx:'2',f:x=>2,d:x=>0}
+};
+let fk='x21', gk='x', A=2, S=1, LH=-1;
+const ka=$('ka'),kh=$('kh'),cv=$('cvQ');
+const needPos=()=>FN[fk].pos||FN[gk].pos;
+function H(){ let h=S*Math.pow(10,LH); if(needPos()&&Math.abs(h)>A/2) h=S*A/2; return h; }
+function cells(h){ const F=FN[fk],G=FN[gk]; const fa=F.f(A),ga=G.f(A),df=F.f(A+h)-fa,dg=G.f(A+h)-ga; return {fa,ga,df,dg,c00:fa*ga,c01:fa*dg,c10:df*ga,c11:df*dg}; }
+function nice(span){ const p=Math.pow(10,Math.floor(Math.log10(span/4))); const r=span/4/p; return p*(r>=5?5:r>=2?2:1); }
+function tl(v,g){ const dec=Math.max(0,-Math.floor(Math.log10(g))); const s=(Math.round(v/g)*g).toFixed(dec); return s==='-0'?'0':String(+s); }
+function ticks(P){ const c=P.ctx, gx=nice(P.o.x[1]-P.o.x[0]), gy=nice(P.o.y[1]-P.o.y[0]); c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
+  for(let x=Math.ceil(P.o.x[0]/gx)*gx;x<=P.o.x[1]+1e-12;x+=gx){ c.moveTo(P.X(x),P.Y(P.o.y[0])); c.lineTo(P.X(x),P.Y(P.o.y[1])); }
+  for(let y=Math.ceil(P.o.y[0]/gy)*gy;y<=P.o.y[1]+1e-12;y+=gy){ c.moveTo(P.X(P.o.x[0]),P.Y(y)); c.lineTo(P.X(P.o.x[1]),P.Y(y)); } c.stroke();
+  c.fillStyle=col('--muted'); c.font='10px IBM Plex Mono, monospace'; c.textAlign='center'; const ly=Math.min(P.H-4,Math.max(12,P.Y(Math.max(P.o.y[0],Math.min(P.o.y[1],0)))+13));
+  for(let x=Math.ceil(P.o.x[0]/gx)*gx;x<=P.o.x[1]+1e-12;x+=gx){ if(Math.abs(x)<gx*1e-6) continue; c.fillText(tl(x,gx),P.X(x),ly); }
+  c.textAlign='left'; for(let y=Math.ceil(P.o.y[0]/gy)*gy;y<=P.o.y[1]+1e-12;y+=gy){ c.fillText(tl(y,gy),2,P.Y(y)-2); } }
+function W(){ return needPos()?A/2:1; }
+const PQ=plane(cv,{x:[-1,1],y:[-1,1],grid:0,aspect:0.8,draw:P=>{ const w=W(); P.o.x=[-w,w]; const F=FN[fk],G=FN[gk];
+  const q=t=>{ const c=cells(t); return [c.c01/t,c.c10/t,c.c11/t,(c.c01+c.c10+c.c11)/t]; };
+  const L=[F.f(A)*G.d(A),G.f(A)*F.d(A),0,F.f(A)*G.d(A)+G.f(A)*F.d(A)];
+  let lo=Math.min(0,...L),hi=Math.max(0,...L); for(let k=-60;k<=60;k++){ if(!k) continue; const v=q(w*k/60); v.forEach(z=>{ if(isFinite(z)){ lo=Math.min(lo,z); hi=Math.max(hi,z); } }); }
+  const pd=Math.max((hi-lo)*0.1,0.2); P.o.y=[lo-pd,hi+pd]; P.axes(); ticks(P);
+  const cl=['--teal','--gold','--ember','--ink'];
+  [0,1,2,3].forEach(i=>P.fn(t=>Math.abs(t)<w*3e-3?NaN:q(t)[i],cl[i],i===3?2.6:2));
+  const c=P.ctx; L.forEach((y,i)=>{ c.fillStyle=col('--card'); c.strokeStyle=col(cl[i]); c.lineWidth=2; c.beginPath(); c.arc(P.X(0),P.Y(y),5,0,7); c.fill(); c.stroke(); });
+  const h=H(); P.line(h,P.o.y[0],h,P.o.y[1],'--gold',1.2,[3,4]); q(h).forEach((y,i)=>P.dot(h,y,cl[i],4)); }});
+Object.defineProperty(PQ.o,'aspect',{get:()=>cv.clientWidth>560?0.8:0.95});
+function read(){ const F=FN[fk],G=FN[gk],h=H(),c=cells(h); $('oa').textContent=fm(A,1); $('oh').textContent=fm(Math.abs(h));
+  const t=(s)=>{ const span=document.createElement('span'); tex(span,s,false); return span.outerHTML; };
+  $('grid').innerHTML=`<tr><th></th><th>${t('g(w) = '+fm(c.ga))}</th><th>${t(R`\Delta g = `+fm(c.dg))}</th></tr><tr><th>${t('f(w) = '+fm(c.fa))}</th><td class="k">${t(fm(c.c00))}</td><td class="k o1">${t(fm(c.c01))}</td></tr><tr><th>${t(R`\Delta f = `+fm(c.df))}</th><td class="k o2">${t(fm(c.c10))}</td><td class="k lo">${t(fm(c.c11))}</td></tr>`;
+  const ch=c.c01+c.c10+c.c11, direct=F.f(A+h)*G.f(A+h)-F.f(A)*G.f(A);
+  tex($('eqG'),R`\begin{gathered}f(x) = ${F.tx},\ \ g(x) = ${G.tx},\ \ w = ${fm(A,1)},\ \ h = ${fm(h)}\\ \Delta(fg) = ${fm(c.c01)} + ${fm(c.c10)} + \htmlClass{new}{${fm(c.c11)}} = ${fm(ch)}\\ (fg)(w + h) - (fg)(w) = ${fm(direct)}\end{gathered}`,true);
+  const L1=F.f(A)*G.d(A),L2=G.f(A)*F.d(A); const vd=$('vd'); vd.className='verdict win';
+  vd.textContent='Divided by h: '+fm(c.c01/h)+' heading to f(w)g′(w) = '+fm(L1)+'; '+fm(c.c10/h)+' heading to g(w)f′(w) = '+fm(L2)+'; and the leftover '+fm(c.c11/h)+', a chord slope times a change, heading to 0. The chord slope of fg is '+fm(ch/h)+', heading to (fg)′(w) = '+fm(L1+L2)+'. The tempting f′(w)g′(w) would be '+fm(F.d(A)*G.d(A))+'.'; }
+function all(){ if(needPos()&&A<0.5){ A=0.5; ka.value=A; } ka.min=needPos()?0.5:-2; PQ.redraw(); read(); }
+function chips(id,cur,set){ const ch=$(id); Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===cur) b.className='on'; b.onclick=()=>{ set(k); [...ch.children].forEach(z=>z.classList.toggle('on',z===b)); all(); }; ch.appendChild(b); }); }
+chips('fch',fk,k=>fk=k); chips('gch',gk,k=>gk=k);
+ka.oninput=()=>{ A=+ka.value; all(); }; kh.oninput=()=>{ LH=+kh.value; all(); };
+$('hch').querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{ S=+b.dataset.s; $('hch').querySelectorAll('[data-s]').forEach(z=>z.classList.toggle('on',z===b)); all(); });
+cv.style.touchAction='none'; let dn=false;
+cv.addEventListener('pointerdown',e=>{ dn=true; cv.setPointerCapture&&cv.setPointerCapture(e.pointerId); mv(e); });
+function mv(e){ if(!dn) return; let h=PQ.point(e).x; if(Math.abs(h)<0.001) h=h<0?-0.001:0.001; S=h<0?-1:1; LH=Math.max(-3,Math.min(0,Math.log10(Math.abs(h)))); kh.value=LH; $('hch').querySelectorAll('[data-s]').forEach(z=>z.classList.toggle('on',+z.dataset.s===S)); all(); }
+cv.addEventListener('pointermove',mv); ['pointerup','pointercancel'].forEach(t=>cv.addEventListener(t,()=>dn=false));
+window.__pic={set:(f,g,a,h)=>{ if(f){ fk=f; [...$('fch').children].forEach((b,i)=>b.classList.toggle('on',Object.keys(FN)[i]===f)); } if(g){ gk=g; [...$('gch').children].forEach((b,i)=>b.classList.toggle('on',Object.keys(FN)[i]===g)); } if(a!=null){ A=a; ka.value=a; } if(h!=null){ S=h<0?-1:1; LH=Math.log10(Math.abs(h)); kh.value=LH; $('hch').querySelectorAll('[data-s]').forEach(z=>z.classList.toggle('on',+z.dataset.s===S)); } all(); const c=cells(H()); return {c,txt:$('vd').textContent}; }};
+all();
+
+/* ---------- slides ---------- */
+const N='\\htmlClass{new}', K='\\htmlClass{keep}';
+stepper('#sl1',[
+  {k:'ember',kl:'the new values',t:R`\begin{gathered}f(a + h) = f(a) + \Delta f\\ g(a + h) = g(a) + \Delta g\end{gathered}`,n:`13a's Δ, and adding-keeps-answers. For 0 &lt; |h| &lt; r, where both are defined.`},
+  {k:'ember',kl:'four cells',t:R`\begin{gathered}(f(w) + \Delta f)(g(w) + \Delta g)\\ = f(w)g(w) + ${N}{f(w)\Delta g}\\ + ${N}{\Delta f\, g(w)} + ${N}{\Delta f\,\Delta g}\end{gathered}`,n:`grid-of-cells (5h): a row per term, a column per term, a product in each cell. Writing, not geometry.`}
+],{title:'The slides · four cells · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'the change',t:R`\begin{gathered}\Delta(fg) = f(a)\Delta g + g(a)\Delta f\\ + \Delta f\,\Delta g\end{gathered}`,n:`Take away the old product. Exactly, for every h ≠ 0.`},
+  {k:'ember',kl:'divide by h',t:R`\begin{gathered}\dfrac{\Delta(fg)}{h} = f(a)\dfrac{\Delta g}{h} + g(a)\dfrac{\Delta f}{h}\\ + \dfrac{\Delta f}{h}\cdot\Delta g\end{gathered}`,n:`Multiply by h⁻¹, cell by cell.`},
+  {k:'ember',kl:'two cells',t:R`\begin{gathered}f(a)\dfrac{\Delta g}{h} \to ${K}{f(a)g'(a)}\\ g(a)\dfrac{\Delta f}{h} \to ${K}{g(a)f'(a)}\end{gathered}`,n:`The hypotheses, and constant-factor.`},
+  {k:'ember',kl:'the leftover cell',t:R`\dfrac{\Delta f}{h}\cdot\Delta g \to f'(a)\cdot 0 = ${N}{0}`,n:`A chord slope times a change. change-heads-to-0: g has a slope, so Δg → 0. It goes to 0 in the limit; nothing is dropped.`},
+  {k:'ember',kl:'product for slopes',t:R`(fg)'(a) = ${N}{f'(a)g(a) + f(a)g'(a)}`,n:`limits-add. Each function times the slope of the other, added. ∎`},
+  {k:'ember',kl:'x · x',t:R`\Delta f\,\Delta g = h \cdot h,\ \ \dfrac{h \cdot h}{h} = h \to 0`,n:`The leftover cell for x · x is 13a's h · h piece, with the same treatment.`}
+],{title:'The slides · product for slopes · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'second road · 1 of 3',t:R`\begin{gathered}f(w + h)g(w + h)\\ ${N}{- f(w + h)g(w) + f(w + h)g(w)}\\ - f(w)g(w)\end{gathered}`,n:`Add and take away the same product. A real is unchanged.`},
+  {k:'ember',kl:'second road · 2 of 3',t:R`\begin{gathered}= ${K}{f(w + h)}\,\Delta g\\ + \Delta f\,${K}{g(w)}\end{gathered}`,n:`spread on ℝ turned about, twice.`},
+  {k:'ember',kl:'second road · 3 of 3',t:R`f(w + h) \to f(w)`,n:`slope-means-no-gap: f is continuous at w. The leftover cell hides inside f(w + h) = f(w) + Δf. The same rule. ∎`}
+],{title:'The slides · second road · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'check · slope-of-x³',t:R`(x \cdot x^2)' = 1 \cdot x^2 + x \cdot 2x = ${N}{3x^2}`,n:`Agrees with 13a's slope-of-x³.`},
+  {k:'ember',kl:'check · a constant 1',t:R`\big(x \cdot \tfrac1x\big)' = \tfrac1a - \tfrac{a}{a^2} = ${N}{0}`,n:`x · (1/x) is 1 for x ≠ 0, whose slope is 0 (slope-of-a-line, slopes-decided-near).`},
+  {k:'ember',kl:'check · numbers',t:R`\begin{gathered}((x^2 + 1)\,x)' \text{ at } 2\\ = 4 \cdot 2 + 5 \cdot 1 = ${N}{13}\\ \text{chord at } h = 0.001:\ 13.006001\end{gathered}`,n:`One chord slope near 2 of x³ + x, which is the same product: 13 + 6h + h².`}
+],{title:'The slides · checks · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'the tempting rule',t:R`(x \cdot x)' \text{ at } 3:\ \ 1 \cdot 1 = 1 \ne 6`,n:`f′g′ is the leftover cell divided by h twice. Divided once, it is the piece that vanishes.`}
+],{title:'The slides · the tempting rule · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

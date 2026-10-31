@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Expansions that diverge yet help</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r23j.html">← 23j a list stored in one function</a><a href="r23l.html">next: 23l numerical integration →</a></p>
+  <div class="tags"><span class="tag tech">23k · technique</span></div>
+  <h1>Expansions that diverge yet help</h1>
+  <p>Some endless sums wander for every input but one, and are still the best way to compute. The trick is to stop early. Their pieces shrink for a while and then grow, and the error of stopping is no bigger than the first piece left out. So you stop at the smallest piece, and the answer is good to that size. Such a sum makes a different promise from a sum that settles: not that more pieces always help, but that a fixed number of pieces gets better and better as the input shrinks. The same habit of mind sizes an area by its peak: a tall narrow hill has an area of about its height times its width. Put together with a fence made of trapezoids and an old product for half of pi, it proves at last how big n factorial is, which the last rung could only state.</p>
+  <p class="gesture">A sum that wanders can still compute, if you stop at its smallest piece. An area is about its peak times its width. With trapezoids under the log curve and areas under powers of the sine, the size of n factorial is proved.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r23e.html">23e</a> (the finite geometric sum and its leftover), <a href="r23b.html">23b</a> (the match-error technique), <a href="r22k.html">22k</a> (O, ~ and the factorial fence), <a href="r22f.html">22f</a> (sums against areas), <a href="r14g.html">14g</a> (bending), <a href="r16h.html">16h</a> (one integral through a smaller one), <a href="r21g.html">21g</a> (the slopes of sin and cos). <a href="r23l.html">23l</a> computes areas from a few heights.</p></div>
+</header>
+
+<section class="class step" data-step="23k1">
+  <h2 class="sthead"><span class="stno">23k1</span>A sum that wanders, and computes</h2>
+  <p class="stands">Stands on 15i (the finite geometric sum, exact), 16e (parts), 16i (improper integrals), 22k1 (O) and 23c3 (Σ k!xᵏ has reach 0).</p>
+  <p data-pid="dbc583">Let f(x) = ∫₀^∞ e^(−t)/(1 + xt) dt for x ≥ 0. Its endless power sum is 1 − x + 2!x² − 3!x³ + ⋯, which 23c3 found settles only at x = 0. Yet the sum, stopped early, gives f.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the leftover of a sum with reach 0">
+\int_0^\infty t^k e^{-t}\,dt = k! @@ parts (16e): the area for k is k times the area for k − 1; the area for 0 is 1 (16i)
+\tfrac{1}{1+xt} = \textstyle\sum_{k \lt n} (-xt)^k + \tfrac{(-xt)^n}{1+xt} @@ the finite geometric sum, exact (15i)
+f(x) = \textstyle\sum_{k \lt n} (-1)^k k!\,x^k + R_n(x),\ \ R_n(x) = (-x)^n \int_0^\infty \tfrac{t^n e^{-t}}{1+xt}\,dt @@ areas add (15e), one piece at a time
+|R_n(x)| \le n!\,x^n @@ 1 + xt ≥ 1 for x, t ≥ 0
+\htmlClass{new}{\Big|f(x) - \textstyle\sum_{k \lt n} (-1)^k k!\,x^k\Big| \le n!\,x^n \text{ for every } n} \quad \blacksquare @@ yet the sum wanders for every x &gt; 0 (23c3)
+  </pre>
+  <p class="eqline" data-pid="94364f">From here on, Σ cₖxᵏ is an <i>expansion of f as x shrinks</i> when, for every n, stopping before cₙxⁿ leaves an error that is O(xⁿ) as x heads to 0: some C keeps it at most C·xⁿ for every small enough x &gt; 0. The sum need not settle anywhere but 0. Accepted name: an asymptotic expansion.</p>
+  <p data-pid="1c68a7">The two promises point opposite ways. A sum that settles promises: fix x, take more pieces, and the error heads to 0. An expansion as x shrinks promises: fix the number of pieces, shrink x, and the error shrinks like the next power. The sum for f keeps the second promise and breaks the first.</p>
+  <p data-pid="01cab1">Cut-at-the-smallest technique: <b>when each error is at most the next piece in size, and the pieces shrink and then grow, stop just before the smallest piece; the error is at most that piece.</b> At x = 0.1 the pieces in size are 1, 0.1, 0.02, 0.006, 0.0024, …, smallest at k = 9 and 10, both 0.00036288. Nine pieces give 0.915819, and f(0.1) = 0.915633. Twenty give 0.9076, and thirty give −65.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · wanders, computes · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">23k1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="x = 0.05"></span></span>Find the k where the pieces k!·xᵏ are smallest, and that piece. <br>Find the running total of the pieces before it, to eight places. <br>Find how many places of f(0.05) the bound promises.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="23k2">
+  <h2 class="sthead"><span class="stno">23k2</span>An area dominated by its peak</h2>
+  <p class="stands">Stands on 23k1, 23b1 (the match-error technique), 14a (a top has slope 0), 17e (exp climbs) and 15e (a bigger curve has a bigger area).</p>
+  <p data-pid="410f2f">Peak technique: <b>if ln g has its top at m, and its second slope is at least −K on a stretch of width w beside m, then g stays above e^(−Kw²/2)·g(m) there, and the area under g is at least w·e^(−Kw²/2)·g(m).</b> Near a smooth top a curve falls away like the square of the distance, and the second slope says how fast.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the peak technique">
+\ln g(t) = \ln g(m) + 0\cdot(t-m) + \tfrac12(\ln g)''(c)\,(t-m)^2 @@ the match-error technique with n = 1 (23b1); the slope is 0 at the top (14a)
+\ln g(t) \ge \ln g(m) - \tfrac12 K w^2 \text{ on the stretch} @@ (ln g)″ ≥ −K there, and |t − m| ≤ w
+g(t) \ge e^{-Kw^2/2}\,g(m) @@ exp climbs (17e)
+\htmlClass{new}{\textstyle\int g \ge w\,e^{-Kw^2/2}\,g(m)} \quad \blacksquare @@ a bigger curve has a bigger area (15e)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: n! by its peak">
+n! = \int_0^\infty g,\ \ g(t) = t^n e^{-t},\ \ \ln g = n\ln t - t @@ 23k1
+(\ln g)' = \tfrac{n}{t} - 1 = 0 \text{ at } t = n @@ the top is at n (17b)
+(\ln g)'' = -\tfrac{n}{t^2} \ge -\tfrac1n \text{ for } t \ge n @@ t² ≥ n²
+\htmlClass{new}{n! \ge \sqrt n\,e^{-1/2}\big(\tfrac{n}{e}\big)^n} \quad \blacksquare @@ the peak technique with K = 1/n and w = √n on [n, n + √n]; g(n) = (n/e)ⁿ
+  </pre>
+  <p data-pid="124a0e">The top of the hill is (n/e)ⁿ and its width is about √n. 22k3's fence missed that width: it was loose by a factor of n. A sum can be sized by its peak the same way: nⁿ/n! is one piece of eⁿ = Σ nᵏ/k!, so nⁿ/n! &lt; eⁿ, the lower half of 22k3's fence in one line. Two things remain: an upper side, and the constant in front of √n.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">23k2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="e\big(\tfrac{n}{e}\big)^n,\ \ \sqrt n\,e^{-1/2}\big(\tfrac{n}{e}\big)^n"></span></span>Find the least n for which the peak bound is the larger of the two. <br>Find both at n = 25, and compare each with 25!.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="23k3">
+  <h2 class="sthead"><span class="stno">23k3</span>A trapezoid fence for ln n!</h2>
+  <p class="stands">Stands on 22k3 (the factorial fence), 14g1 (a curve that bends down lies above its chords and below its tangent lines), 17a (ln(1 + u) ≤ u), 17i (the area under ln), 15g2 (the collapse) and 22a2 (the climb technique).</p>
+  <p data-pid="cfa3a7">Write dₙ = ln n! − (n + ½) ln n + n, so that n! = e^(dₙ)·√n·(n/e)ⁿ. Trapezoid-fence technique: <b>dₙ falls and settles at some c, with c &lt; dₙ &lt; c + 1/(8n).</b> Lay trapezoids under ln, one per strip, and measure the slivers between.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the trapezoid-fence technique">
+\tfrac12(\ln k + \ln(k+1)) \le \int_k^{k+1} \ln x\,dx \le \ln(k + \tfrac12) @@ ln bends down: its chord lies under it, its tangent line at k + ½ over it (14g1); the area under that tangent line is its height at the middle
+0 < s_k = \int_k^{k+1} \ln - \tfrac12(\ln k + \ln(k+1)) \le \tfrac12\ln\Big(1 + \tfrac{1}{4k(k+1)}\Big) \le \tfrac{1}{8k(k+1)} @@ (k + ½)² = k(k + 1) + ¼; ln(1 + u) ≤ u (17a)
+\int_1^n \ln x\,dx - \big(\ln 2 + \cdots + \ln(n-1) + \tfrac12\ln n\big) = s_1 + \cdots + s_{n-1} @@ add the strips: the trapezoids from 1 to n
+n\ln n - n + 1 - \ln n! + \tfrac12\ln n = 1 - d_n @@ the area under ln is x ln x − x (17i)
+d_n = 1 - (s_1 + \cdots + s_{n-1}) \text{ falls, and } s_1 + s_2 + \cdots \le \textstyle\sum \tfrac18\big(\tfrac1k - \tfrac{1}{k+1}\big) = \tfrac18 @@ each sliver is positive; the sum collapses (15g2)
+\htmlClass{new}{d_n \to c,\ \ 0 < d_n - c = s_n + s_{n+1} + \cdots < \tfrac{1}{8n}} \quad \blacksquare @@ running totals that climb under ⅛ settle (22a2); the tail collapses the same way
+  </pre>
+  <p data-pid="6f6b27">d₁ = 1, d₁₀ = 0.92727, d₁₀₀₀ = 0.91902. So n! is e^c·√n·(n/e)ⁿ to within a factor e^(1/(8n)), with c somewhere near 0.919. The fence holds c in a window. It does not name c. A different area names it.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · trapezoid fence · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">23k3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="5! = 120,\ \ 10! = 3\,628\,800"></span></span>Find d₅ and d₁₀ to five places. <br>Find the window each puts round c, and which is narrower.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="23k4">
+  <h2 class="sthead"><span class="stno">23k4</span>The size of n!, proved</h2>
+  <p class="stands">Stands on 23k3, 16e (parts), 16h4 (one integral through a smaller one), 21g (the slopes of sin and cos), 21c (sin² + cos² = 1), 10f4 (the squeeze) and 10c (limits multiply).</p>
+  <p data-pid="890be5">Size-of-factorials technique (Stirling's formula): <b>n! ~ √(2πn)(n/e)ⁿ, and more: √(2πn)(n/e)ⁿ &lt; n! &lt; √(2πn)(n/e)ⁿ·e^(1/(8n)).</b> The constant comes from areas under powers of sin, which know π.</p>
+  <pre class="lines" data-k="ember" data-label="this step: areas under powers of sin">
+I_m = \int_0^{\pi/2} \sin^m x\,dx,\ \ I_0 = \tfrac{\pi}{2},\ \ I_1 = 1 @@ −cos is an antiderivative of sin (21g)
+I_m = (m-1)(I_{m-2} - I_m) \text{ for } m \ge 2 @@ parts (16e) on sinᵐ⁻¹x · sin x; cos² = 1 − sin² (21c)
+I_m = \tfrac{m-1}{m}\,I_{m-2} @@ as 16h4 pulled Jₙ out of both sides
+I_{2k} = \tfrac{(2k)!}{(2^k k!)^2}\cdot\tfrac{\pi}{2},\ \ I_{2k+1} = \tfrac{(2^k k!)^2}{(2k+1)!} @@ induction (4b): each step multiplies by (m − 1)/m
+I_{2k+1} \le I_{2k} \le I_{2k-1} = \tfrac{2k+1}{2k}\,I_{2k+1} @@ 0 ≤ sin x ≤ 1, so a higher power is lower (15e)
+\htmlClass{new}{\tfrac{I_{2k}}{I_{2k+1}} \to 1,\ \text{that is,}\ \tfrac{(2^k k!)^4}{((2k)!)^2\,(2k+1)} \to \tfrac{\pi}{2}} \quad \blacksquare @@ the ratio is squeezed between 1 and (2k + 1)/(2k) (10f4); write it out
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: the size-of-factorials technique">
+k! = e^{d_k}\sqrt k\,\big(\tfrac{k}{e}\big)^k,\ \ (2k)! = e^{d_{2k}}\sqrt{2k}\,\big(\tfrac{2k}{e}\big)^{2k} @@ the meaning of dₙ (23k3)
+\tfrac{(2^k k!)^4}{((2k)!)^2\,(2k+1)} = e^{4d_k - 2d_{2k}}\cdot\tfrac{k^2}{2k(2k+1)} @@ the powers 2⁴ᵏ(k/e)⁴ᵏ cancel
+\to e^{4c - 2c}\cdot\tfrac14 = \tfrac{e^{2c}}{4} @@ d_k and d₂ₖ head to c (23k3); limits multiply (10c)
+\tfrac{e^{2c}}{4} = \tfrac{\pi}{2},\ \text{so } e^c = \sqrt{2\pi} @@ a list settles at one place only (22a1)
+\htmlClass{new}{\sqrt{2\pi n}\,\big(\tfrac{n}{e}\big)^n < n! < \sqrt{2\pi n}\,\big(\tfrac{n}{e}\big)^n e^{1/(8n)}} \quad \blacksquare @@ n! = e^(dₙ)√n(n/e)ⁿ and c &lt; dₙ &lt; c + 1/(8n) (23k3)
+  </pre>
+  <p data-pid="4fe717">At n = 10 this reads 3 598 696 &lt; 3 628 800 &lt; 3 643 962. The ratio n!/(√(2πn)(n/e)ⁿ) is 1.0084 at n = 10 and 1.00083 at n = 100, close to e^(1/(12n)). The corrections go on: ln n! = (n + ½) ln n − n + ln √(2π) + 1/(12n) − 1/(360n³) + 1/(1260n⁵) − ⋯. That sum wanders for every n, like 23k1's. It is an expansion as n grows, stated here and held in trust. Stopped after 1/(12n), it gives 10! as 3 628 810, off by ten.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · the size of n! · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">23k4.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\binom{2m}{m} = \tfrac{(2m)!}{(m!)^2}"></span></span>Use the technique to find a simple function of m that it grows alike with. <br>Find the chance of exactly 50 heads in 100 tosses of a fair coin, by it and as 100 choose 50 over 2¹⁰⁰.</li><li><span class="givens"><span data-tex-inline="52!"></span></span>It counts the orders of a deck of cards. Find its number of digits by the technique, and the window for 52! the fence gives.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="23k5">
+  <h2 class="sthead"><span class="stno">23k5</span>Illegal moves</h2>
+  <p class="stands">Stands on 23k1 to 23k4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\textstyle\sum (-1)^k k!\,x^k \text{ wanders, so it says nothing about } f\,? @@ nine pieces give f(0.1) to within 0.0004 (23k1)
+\text{more pieces of an expansion always do better}\,? @@ at x = 0.1 thirty pieces give −65; the pieces grow past k = 10
+n! \sim \sqrt{2\pi n}\,(n/e)^n, \text{ so } n! - \sqrt{2\pi n}\,(n/e)^n \to 0\,? @@ ~ speaks of the ratio: at n = 10 the gap is 30 104, and it passes every ceiling
+\tfrac{(2^k k!)^4}{((2k)!)^2(2k+1)} \text{ equals } \tfrac{\pi}{2} \text{ once } k \text{ is large}\,? @@ each value is a fraction and π/2 is not (23g); a list can head to a place it never reaches
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">23k5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="x = 0.1"></span></span>Find the running totals of the expansion with 1, 3, 5, 7 and 9 pieces. <br>Find which of them lie within 0.001 of f(0.1) = 0.915633.</li><li><span class="givens"><span data-tex-inline="x = 0.1"></span></span>Find the pieces k!·xᵏ for k = 10, 15 and 20. <br>Find what stopping at k = 20 costs, against stopping at k = 9.</li><li><span class="givens"><span data-tex-inline="n = 10,\ \ n = 20"></span></span>Find n! − √(2πn)(n/e)ⁿ and n! ÷ √(2πn)(n/e)ⁿ at both. <br>Find which of the two heads somewhere.</li><li><span class="givens"><span data-tex-inline="k = 1,\ 2,\ 3"></span></span>Find (2ᵏk!)⁴/(((2k)!)²(2k + 1)) as a fraction for each. <br>Find whether any value of a fraction can equal π/2.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">23k.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="h(x) = \int_0^\infty \tfrac{e^{-t}}{(1+xt)^2}\,dt"></span></span>Build its expansion as x shrinks, with a bound on the error of stopping after n pieces. <br>Find h(0.1) by cutting at the smallest piece, and how many places the bound promises.</div>
+  <div class="chq"><span class="chid">23k.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="x = 0.5"></span></span>Find the smallest piece of 23k1's expansion at x = 0.5, and what the cut-at-the-smallest technique promises there. <br>f(0.5) = 0.72266. Find whether the expansion is any use at x = 0.5, and at about which x it stops being useful.</div>
+  <div class="chq"><span class="chid">23k.4.3</span><span class="tagq">converse</span>A function decides its expansion as x shrinks: cₙ is the limit of (f(x) − Σ_{k&lt;n} cₖxᵏ)/xⁿ. Turn it round: does the expansion decide the function? <br>Try f(x) + e^(−1/x) for x &gt; 0, with 23f in mind.</div>
+  <div class="chq"><span class="chid">23k.4.4</span><span class="tagq">reroute</span>Prove n! ≤ e·√n·(n/e)ⁿ from the trapezoid fence alone, with no areas under powers of sin. <br>Compare it with 22k3's upper fence at n = 10.</div>
+  <div class="chq"><span class="chid">23k.4.5</span><span class="tagq">seam</span>On 22g.4.5 a young mathematician, in 1826, called sums with no total an invention of the devil, a shame to base any proof on. For a century before him, the best computers used such sums, stopped early, to find numbers to many places, and one of them gave 1 − 1 + 2 − 6 + 24 − ⋯ a value near 0.5963. Sixty years after the ban, two others defined what such a sum promises, as 23k1 does, and showed it can be proved. <br>Was the ban right in 1826? <br>Is a number computed from a sum that wanders, without a bound on the error, known? With the bound?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r23j.html">← 23j · a list stored in one function</a><a href="r23l.html">23l · numerical integration →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>An expansion as x shrinks is an asymptotic expansion; the sum 1 − x + 2!x² − ⋯ is Euler's divergent series, or Stieltjes' series, and cutting at the smallest piece is optimal truncation. The peak technique is the lower half of Laplace's method. The size-of-factorials technique is Stirling's formula, and the sum that continues it is the Stirling series. The limit for π/2 is the Wallis product, π/2 = (2·2)/(1·3) · (4·4)/(3·5) · (6·6)/(5·7) ⋯.</p>
+  <h3>Who said it first</h3>
+  <p>John Wallis found his product in 1656, in Arithmetica infinitorum. Abraham de Moivre found in 1730 that n! grows like a constant times √n(n/e)ⁿ, and James Stirling found the constant √(2π) the same year. Thomas Bayes noticed, in a letter printed in 1763, that Stirling's sum wanders. Leonhard Euler gave 1 − 1 + 2 − 6 + ⋯ the value 0.5963… in 1760. Pierre-Simon Laplace sized integrals by their peaks in 1774. Niels Henrik Abel banned divergent series in a letter of 1826. Henri Poincaré and Thomas Stieltjes, both in 1886, defined asymptotic expansions and made them rigorous.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'the bound',t:R`\htmlClass{new}{\Big|f(x) - \textstyle\sum_{k \lt n}(-1)^k k!\,x^k\Big| \le n!\,x^n}`,n:`The next piece bounds the error.`},
+  {k:'ember',kl:'reach 0',t:R`\textstyle\sum (-1)^k k!\,x^k \text{ wanders for } x > 0`,n:`Stop at the smallest piece.`}
+],{title:'The slides · wanders, computes · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'slivers',t:R`0 < s_k \le \tfrac{1}{8k(k+1)}`,n:`Chord under, tangent over.`},
+  {k:'ember',kl:'settles',t:R`\htmlClass{new}{c < d_n < c + \tfrac{1}{8n}}`,n:`dₙ falls to c.`}
+],{title:'The slides · trapezoid fence · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'half of π',t:R`\tfrac{(2^k k!)^4}{((2k)!)^2(2k+1)} \to \tfrac{\pi}{2}`,n:`Areas under powers of sin.`},
+  {k:'ember',kl:'n!',t:R`\htmlClass{new}{n! \sim \sqrt{2\pi n}\,\big(\tfrac{n}{e}\big)^n}`,n:`The constant is √(2π).`}
+],{title:'The slides · the size of n! · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

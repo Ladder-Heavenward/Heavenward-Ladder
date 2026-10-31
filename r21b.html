@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cos and sin as coordinates</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+.kn{font-size:.88rem}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r21a.html">← 21a an angle is an arc; π</a><a href="r21c.html">next: 21c sin² + cos² = 1 →</a></p>
+  <div class="tags"><span class="tag proof">21b · proof</span></div>
+  <h1>Cos and sin as coordinates</h1>
+  <p>Walk a given distance around a circle of radius one. Start at the point due east of the centre and go anticlockwise. Where do you end up? Your position has two parts: how far east of the centre you are, and how far north. Those two numbers are called the cosine and the sine of the distance you walked. Walk once all the way round and you are back where you started, so they repeat. For a short walk, inside the first quarter, they are the two short sides of a right triangle, and that is how builders and surveyors use them.</p>
+  <p class="gesture">The cosine and sine of an angle are how far across and how far up you are after walking that far around a circle of radius one. They repeat with every full turn, and in any right triangle they give the sides from the longest side and one angle.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r21a.html">21a</a> (an angle is an arc), <a href="r20c.html">20c</a> (flips), <a href="r18f.html">18f</a> (the opening of an angle), <a href="r20d.html">20d</a> (turns keep dot products). <a href="r21c.html">21c</a> proves the point is on the circle.</p></div>
+</header>
+
+<section class="class step" data-step="21b1">
+  <h2 class="sthead"><span class="stno">21b1</span>The upper half</h2>
+  <p class="stands">Stands on 21a4 (the arc-picks-a-point technique).</p>
+  <p class="eqline" data-pid="f7f99b">From here on, for 0 ≤ θ ≤ π, cos θ is the one x with L(x) = θ, and sin θ = √(1 − cos² θ). They are read “cos theta” and “sine theta”.</p>
+  <p data-pid="9fc64a"><b>(cos θ, sin θ) is the point of the circle reached by walking θ around it from (1, 0), anticlockwise.</b> On the upper half that point is (x, √(1 − x²)) with L(x) = θ, and that is the definition.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the first values">
+L(1) = 0 \Rightarrow \cos 0 = 1,\ \sin 0 = 0 @@ no walk at all
+L(0) = \tfrac{\pi}{2} \Rightarrow \cos\tfrac{\pi}{2} = 0,\ \sin\tfrac{\pi}{2} = 1 @@ 21a4
+L(-1) = \pi \Rightarrow \htmlClass{new}{\cos \pi = -1,\ \sin \pi = 0} @@ π itself
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · upper · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · walk θ around the circle</div>
+    <div id="pl"></div>
+    <div class="kn"><span class="m">θ</span><input type="range" id="kt" min="-7" max="13" step="0.01" value="1"><output id="okt"></output></div>
+    <div class="cap">Ink: the circle of radius 1. Ember: the arc walked, from (1, 0). Teal: cos θ across and sin θ up.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">21b1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">θ = 0,  π/2,  π</span></span>Find the point (cos θ, sin θ) for each, and draw it. <br>Find which of cos and sin falls as θ runs from 0 to π.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21b2">
+  <h2 class="sthead"><span class="stno">21b2</span>The lower half</h2>
+  <p class="stands">Stands on 21b1 and 20c3 (flips).</p>
+  <p class="eqline" data-pid="5d02a9">From here on, for π < θ < 2π, cos θ = cos(2π − θ) and sin θ = −sin(2π − θ).</p>
+  <p data-pid="536386"><b>Walking on past π, you trace the lower half, which is the flip of the upper half over the floor.</b> After θ you are 2π − θ short of a whole turn, so you stand at the flip of the point at 2π − θ. The flip keeps the across and changes the sign of the up.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the lower half">
+\pi < \theta < 2\pi \Rightarrow 0 < 2\pi - \theta < \pi @@ the walk still to go is on the upper half
+F_0(x, y) = (x, -y) @@ the flip over the floor keeps lengths of paths (21a3)
+\htmlClass{new}{\cos\tfrac{3\pi}{2} = 0,\ \ \sin\tfrac{3\pi}{2} = -1} @@ 2π − 3π/2 = π/2
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · lower · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21b2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">θ = 5π/4,  the point at π/4 is (1/√2, 1/√2)</span></span>Find cos θ and sin θ. <br>Find which quarter of the circle the point is in.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21b3">
+  <h2 class="sthead"><span class="stno">21b3</span>Every real θ</h2>
+  <p class="stands">Stands on 21b2 and 4j (whole numbers of steps).</p>
+  <p class="eqline" data-pid="db7f91">From here on, for every real θ, cos θ = cos(θ − 2πk) and sin θ = sin(θ − 2πk), where k is the whole number with 0 ≤ θ − 2πk < 2π.</p>
+  <p data-pid="a323ad">Whole-turns technique: <b>adding a whole turn changes nothing: cos(θ + 2π) = cos θ and sin(θ + 2π) = sin θ.</b> A negative θ is a walk clockwise. Its accepted name: cos and sin are periodic, with period 2π.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the whole-turns technique">
+\theta + 2\pi - 2\pi(k + 1) = \theta - 2\pi k @@ the same remainder in [0, 2π)
+\htmlClass{new}{\cos(\theta + 2\pi) = \cos\theta,\ \ \sin(\theta + 2\pi) = \sin\theta} \quad \blacksquare @@ the definition reads only the remainder
+\cos\big(-\tfrac{\pi}{2}\big) = \cos\tfrac{3\pi}{2} = 0,\ \ \sin\big(-\tfrac{\pi}{2}\big) = -1 @@ a quarter turn clockwise
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · every θ · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21b3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">θ = 7π/3,  θ = −π,  θ = 100π</span></span>Find cos θ and sin θ for each, using cos(π/3) = 1/2 and sin(π/3) = √3/2.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21b4">
+  <h2 class="sthead"><span class="stno">21b4</span>Arcs you can find exactly</h2>
+  <p class="stands">Stands on 21b1, 20c3 (flips) and 21a5 (the eighth arc).</p>
+  <p data-pid="381925">Thirds-of-the-half technique: <b>the points (1/2, √3/2) and (−1/2, √3/2) cut the upper half circle into three arcs of π/3 each.</b> The flip across the line through (0, 0) and A = (1/2, √3/2) swaps (1, 0) with B = (−1/2, √3/2) and keeps A, so it swaps the first two arcs. The flip across the upright axis swaps the first and last.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the thirds-of-the-half technique">
+u = (\tfrac12, \tfrac{\sqrt3}{2}):\ F_u(1, 0) = 2(\tfrac12)u - (1, 0) = (-\tfrac12, \tfrac{\sqrt3}{2}) @@ 20c3; and F_u(A) = A, since A is on the line
+\text{arc}(1, 0)\text{ to }A = \text{arc } A\text{ to }B = \text{arc } B\text{ to }(-1, 0) @@ flips keep lengths of paths
+3 \cdot \text{arc} = \pi \Rightarrow \htmlClass{new}{\cos\tfrac{\pi}{3} = \tfrac12,\ \sin\tfrac{\pi}{3} = \tfrac{\sqrt3}{2}} @@ the three arcs make the half
+\cos\tfrac{\pi}{6} = \tfrac{\sqrt3}{2},\ \sin\tfrac{\pi}{6} = \tfrac12 \quad \blacksquare @@ the flip across y = x: arc π/3 from (0, 1) is arc π/2 − π/3 from (1, 0)
+  </pre>
+  <p data-pid="93c1bc">And 21a5 gave the eighth: cos(π/4) = sin(π/4) = 1/√2. These five, with the quarters, are the arcs whose points can be written with square roots. Most arcs cannot be: their cos and sin live in a cloud, like π.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · exact arcs · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21b4.1</span><span class="ph undo">undo</span><span class="givens"><span data-tex-inline="\cos\theta = \tfrac12"></span></span>Find every θ in [0, 2π) with this cosine. <br>Find sin θ for each.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21b5">
+  <h2 class="sthead"><span class="stno">21b5</span>The opening is the cosine</h2>
+  <p class="stands">Stands on 21b1, 18f (the opening of an angle) and 20d.4.4 (turns keep dot products).</p>
+  <p data-pid="befca2">18f gave every angle an opening, e₁ · e₂, and a size, by halving the quarter turn. Now it has a second measure: the arc θ it cuts on the circle of radius 1 about its corner. 21j shows the two measure one thing. Opening-is-cosine technique: <b>the opening of an angle of size θ is cos θ.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the opening-is-cosine technique">
+\text{slide the corner to } O,\ \text{turn } e_1 \text{ onto } (1, 0) @@ moves keep lengths of paths, so the arc θ is kept
+e_2 = (\cos\theta,\ \pm\sin\theta) @@ the point at arc θ, above or below the floor
+\htmlClass{new}{e_1 \cdot e_2 = \cos\theta} \quad \blacksquare @@ (1, 0) · e₂, and turns keep dot products (20d.4.4)
+  </pre>
+  <p data-pid="5c2f5d">Next-and-facing technique: <b>in a triangle with a right angle at C, longest side c and an angle θ at A, the side next to θ is c cos θ and the side facing θ is c sin θ.</b> Put A at O and C on the floor: B is c times the point at arc θ.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · opening · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21b5.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a right triangle with longest side 10 and an angle π/6</span></span>Find its other two sides. <br>Check them by the right-triangle technique of 18a.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21b6">
+  <h2 class="sthead"><span class="stno">21b6</span>Illegal moves</h2>
+  <p class="stands">Stands on 21b1 to 21b5.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\sin\theta = \sqrt{1 - \cos^2\theta} \text{ for every } \theta\,? @@ only on the upper half; below the floor sin is negative
+\cos 2\pi = \cos 0 \Rightarrow 2\pi = 0\,? @@ cos takes each value many times: it cannot be run backwards without a choice (21m)
+\cos(\pi/3) = \pi/6\,? @@ π/3 is a length round; cos is a coordinate
+\sin\theta = \tfrac{\text{facing}}{\text{next}}\,? @@ facing ÷ longest; facing ÷ next is tan (21c)
+  </pre>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21b6.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\sin\theta = 2"></span></span>Find every θ that answers it.</li><li><span class="givens"><span class="gtx">the point (0.6, 0.8) of the circle</span></span>Find whether its θ in [0, π] is more or less than π/3.</li><li><span class="givens"><span class="gtx">a ladder 5 m long, its foot 3 m from the wall</span></span>Find the cosine and the sine of the angle it makes with the ground.</li><li><span class="givens"><span class="gtx">cos θ and cos(−θ)</span></span>Guess how they are related, and check at θ = π/3.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">21b.4.1</span><span class="tagq">build</span>Build the six corners of a regular hexagon on the circle of radius 1, starting at (1, 0). <br>Prove that each arc between neighbours is π/3.</div>
+  <div class="chq"><span class="chid">21b.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\cos\theta = \sin\theta"></span></span>Find every θ that answers it.</div>
+  <div class="chq"><span class="chid">21b.4.3</span><span class="tagq">converse</span>Every θ gives a point of the circle. Turn it round: prove every point of the circle is (cos θ, sin θ) for exactly one θ in [0, 2π). <br>Find how many θ in all the reals give it.</div>
+  <div class="chq"><span class="chid">21b.4.4</span><span class="tagq">reroute</span>Find sin(π/6) without flips: halve an equilateral triangle of side 1, as 18f did, and use the right-triangle technique.</div>
+  <div class="chq"><span class="chid">21b.4.5</span><span class="tagq">seam</span>For three hundred years, astronomers made tables of the chord of each angle: the straight line across the circle between the ends of its arc. Then astronomers in India began to tabulate half the chord of twice the angle instead, and within a few centuries no one tabulated chords any more. <br>Why might the half-chord be the better thing to tabulate? <br>What does it make easy that the chord makes hard?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r21a.html">← 21a · an angle is an arc; π</a><a href="r21c.html">21c · sin² + cos² = 1 →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>cos θ and sin θ are the cosine and sine of θ; the circle of radius 1 is the unit circle. In a right triangle the sides next to and facing θ are the adjacent and opposite sides, and the longest is the hypotenuse: sin = opposite/hypotenuse, cos = adjacent/hypotenuse, often remembered as SOH-CAH-TOA. The opening of 18f, now cos θ, makes its two-sides-and-the-angle technique the law of cosines (21h).</p>
+  <h3>Who said it first</h3>
+  <p>In 21b.4.5, the chord tables are those of Hipparchus (about 140 BC) and Ptolemy's Almagest (about 150 AD). Āryabhaṭa (499 AD) tabulated the half-chord, jyā, a word that also means “bowstring”: the arc is the bow (Latin arcus) and the chord its string (Greek chordē). Arabic writers kept the word as jība; read as jaib, “a fold”, it was translated into Latin in the twelfth century as sinus, from which comes sine.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+/* moves of the plane, drawn in SVG, for rung 20 */
+const V=c=>'var('+c+')';
+const FLAG=[[0,0],[0,3],[2,3],[2,2.4],[0.6,2.4],[0.6,1.8],[1.5,1.8],[1.5,1.2],[0.6,1.2],[0.6,0]];
+const M={
+  id:()=>p=>p,
+  slide:(h,k)=>p=>[p[0]+h,p[1]+k],
+  turn:(a,b)=>p=>[a*p[0]-b*p[1],b*p[0]+a*p[1]],
+  stretch:k=>p=>[k*p[0],k*p[1]],
+  flipU:(c,s)=>p=>{ const d=2*(p[0]*c+p[1]*s); return [d*c-p[0],d*s-p[1]]; },              /* across the line through O along (c, s), c² + s² = 1 */
+  flipAt:(q,c,s)=>p=>{ const x=p[0]-q[0],y=p[1]-q[1],d=2*(x*c+y*s); return [q[0]+d*c-x,q[1]+d*s-y]; },
+  turnAt:(q,a,b)=>p=>{ const x=p[0]-q[0],y=p[1]-q[1]; return [q[0]+a*x-b*y,q[1]+b*x+a*y]; },
+  then:(g,f)=>p=>g(f(p))                                                                    /* f first, then g */
+};
+const unit=(x,y)=>{ const r=Math.hypot(x,y); return [x/r,y/r]; };
+const fx=v=>(Math.abs(v)<5e-10?0:v);
+const show=(v,d)=>{ let s=fx(v).toFixed(d==null?2:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return (s==='-0'?'0':s).replace('-','−'); };
+/* shapes: {pts, c, fill, dash, w, open}; dots: {p, c, t}; lines: {p, d, c, dash} */
+function svgPlane(o){ const lo=o.lo==null?-6:o.lo, hi=o.hi==null?6:o.hi, S=300, X=x=>(x-lo)/(hi-lo)*S, Y=y=>S-(y-lo)/(hi-lo)*S;
+  let s='<svg viewBox="0 0 '+S+' '+S+'" style="width:100%;max-width:340px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  for(let g=Math.ceil(lo);g<=hi;g++){ s+='<line x1="'+X(g)+'" y1="0" x2="'+X(g)+'" y2="'+S+'" style="stroke:'+V('--grid')+';stroke-width:'+(g===0?1.6:0.6)+'"/><line x1="0" y1="'+Y(g)+'" x2="'+S+'" y2="'+Y(g)+'" style="stroke:'+V('--grid')+';stroke-width:'+(g===0?1.6:0.6)+'"/>'; }
+  (o.lines||[]).forEach(l=>{ const L=40; s+='<line x1="'+X(l.p[0]-L*l.d[0])+'" y1="'+Y(l.p[1]-L*l.d[1])+'" x2="'+X(l.p[0]+L*l.d[0])+'" y2="'+Y(l.p[1]+L*l.d[1])+'" style="stroke:'+V(l.c||'--teal')+';stroke-width:1.6;stroke-dasharray:'+(l.dash||'5 4')+'"/>'; });
+  (o.shapes||[]).forEach(z=>{ const pts=z.pts.map(p=>X(p[0]).toFixed(1)+','+Y(p[1]).toFixed(1)).join(' ');
+    s+='<'+(z.open?'polyline':'polygon')+' points="'+pts+'" style="fill:'+(z.fill?V(z.c):'none')+';fill-opacity:'+(z.fill?0.28:0)+';stroke:'+V(z.c)+';stroke-width:'+(z.w||2)+(z.dash?';stroke-dasharray:'+z.dash:'')+'"/>'; });
+  (o.dots||[]).forEach(d=>{ s+='<circle cx="'+X(d.p[0])+'" cy="'+Y(d.p[1])+'" r="4" style="fill:'+V(d.c||'--ink')+'"/>'+(d.t?'<text x="'+(X(d.p[0])+7)+'" y="'+(Y(d.p[1])-6)+'" style="fill:'+V(d.c||'--ink')+';font:12px IBM Plex Mono,monospace">'+d.t+'</text>':''); });
+  return s+'</svg>'; }
+function knob(id,lab,min,max,step,val){ return '<div class="kn"><span class="m">'+lab+'</span><input type="range" id="'+id+'" min="'+min+'" max="'+max+'" step="'+step+'" value="'+val+'"><output id="o'+id+'"></output></div>'; }
+function chipRow(el,keys,get,set,after){ el.innerHTML=''; keys.forEach(k=>{ const b=document.createElement('button'); b.type='button'; b.textContent=k; if(k===get()) b.className='on'; b.onclick=()=>{ set(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+
+let th=1; const e=$('kt'); e.addEventListener('input',()=>{ th=+e.value; draw(); });
+function draw(){ const c=Math.cos(th), s=Math.sin(th), circ=[], arc=[];
+  for(let k=0;k<=120;k++){ const a=2*Math.PI*k/120; circ.push([Math.cos(a),Math.sin(a)]); }
+  const m=Math.max(2,Math.ceil(Math.abs(th)*20)); for(let k=0;k<=m;k++){ const a=th*k/m; arc.push([Math.cos(a)*(1+0.03*a/(2*Math.PI)),Math.sin(a)*(1+0.03*a/(2*Math.PI))]); }
+  $('pl').innerHTML=svgPlane({lo:-1.4,hi:1.4,shapes:[{pts:circ,c:'--ink',open:true},{pts:arc,c:'--ember',open:true,w:3},{pts:[[0,0],[c,0],[c,s]],c:'--teal',open:true,w:2.4}],dots:[{p:[1,0],c:'--ink'},{p:[c,s],c:'--ember',t:'(cos θ, sin θ)'}]});
+  $('okt').textContent=show(th);
+  const q=((th%(2*Math.PI))+2*Math.PI)%(2*Math.PI), turns=Math.floor(th/(2*Math.PI));
+  const v=$('vd'); v.className='verdict'; v.textContent='θ = '+show(th)+': cos θ = '+show(c,3)+', sin θ = '+show(s,3)+'. '+(turns!==0?'That is '+show(Math.abs(turns),0)+' whole turn'+(Math.abs(turns)>1?'s':'')+(turns<0?' clockwise':'')+' and '+show(q)+' more. ':'')+'Across² + up² = '+show(c*c+s*s,3)+'.'; }
+draw();
+window.__pic={set:k=>{ th=k; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'the definition',t:R`\htmlClass{new}{L(\cos\theta) = \theta,\ \ \sin\theta = \sqrt{1 - \cos^2\theta}}`,n:`For 0 ≤ θ ≤ π.`}
+],{title:'The slides · upper · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'lower half',t:R`\htmlClass{new}{(\cos\theta, \sin\theta) = (\cos(2\pi - \theta),\ -\sin(2\pi - \theta))}`,n:`For π < θ < 2π.`}
+],{title:'The slides · lower · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'whole turns',t:R`\htmlClass{new}{\cos(\theta + 2\pi) = \cos\theta}`,n:`And likewise sin.`}
+],{title:'The slides · every θ · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'thirds',t:R`\htmlClass{new}{\cos\tfrac{\pi}{3} = \tfrac12,\ \ \sin\tfrac{\pi}{3} = \tfrac{\sqrt3}{2}}`,n:`Three equal arcs in the half.`},
+  {k:'ember',kl:'sixths and eighths',t:R`\cos\tfrac{\pi}{6} = \tfrac{\sqrt3}{2},\ \ \cos\tfrac{\pi}{4} = \tfrac{1}{\sqrt2}`,n:`By the flip across y = x.`}
+],{title:'The slides · exact arcs · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'opening = cos',t:R`\htmlClass{new}{e_1 \cdot e_2 = \cos\theta}`,n:`18f’s opening, sized.`},
+  {k:'ember',kl:'right triangles',t:R`\text{next} = c\cos\theta,\ \ \text{facing} = c\sin\theta`,n:`Longest side c.`}
+],{title:'The slides · opening · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'illegal',t:R`\sin\theta \ne \tfrac{\text{facing}}{\text{next}}`,n:`Facing ÷ longest.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

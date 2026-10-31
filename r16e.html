@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>16e · Parts</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r16d.html">← 16d substitution</a><a href="r16concl.html">next: 16·∎ conclusion →</a></p>
+  <div class="tags"><span class="tag proof">16e · proof</span></div>
+  <h1>Parts</h1>
+  <p>Rung 13’s product rule says the slope of a product is the first’s slope times the second, plus the first times the second’s slope: two products, added. 16c makes that a statement about areas. So the areas under those two products add up to the change in the product from end to end. So if one of the two areas is hard and the other easy, the hard one can be traded for the easy one and a difference of two values. This step proves the trade, and shows how to choose which factor to treat as which. Then it uses the trade, with rung 4's induction, to find a whole family of areas at once. These are the areas under a power of the input times a power of one less the input, and they come out as ratios of rung 4’s factorials.</p>
+  <p class="gesture">The area under one function times another’s slope is the change in their product less the area under the first’s slope times the second. Choose the first to get simpler when its slope is taken, and the second’s slope to stay no worse when undone. Repeated, it gives each area in the family as a ratio of factorials.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r16c.html">16c</a> (area-is-a-change, the bar), <a href="r16d.html">16d</a> (substitution for areas, straight-inside), <a href="r13c.html">13c</a> (product for slopes), <a href="r13d.html">13d</a> (power for slopes), <a href="r15e.html">15e</a> (areas-add, areas-scale), <a href="r15f.html">15f</a> (continuous-is-integrable), <a href="r04j.html">4j</a> (factorials, choosing k of n), <a href="r04b.html">4b</a> (induction). <a href="r16h.html">16h</a> practises substitution and parts together.</p></div>
+</header>
+
+<section class="class step" data-step="16e1">
+  <h2 class="sthead"><span class="stno">16e1</span>The product rule, backwards</h2>
+  <p class="stands">Stands on 13c (product for slopes) and 16c (area-is-a-change).</p>
+  <p data-pid="5ced6f">Parts technique for areas (integration by parts): <b>if f and g have slopes at every point of [p, q], with f′ and g′ continuous there, then ∫ₚ^q f(x) g′(x) dx = f(x)g(x)|ₚ^q − ∫ₚ^q f′(x) g(x) dx.</b></p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the parts technique for areas">
+(fg)' = f'g + fg' \text{ on } [a, b] @@ product for slopes (13c)
+f'g \text{ and } fg' \text{ are continuous, so integrable} @@ f and g are continuous (slope-means-no-gap, 13b); 11b; continuous-is-integrable (15f)
+\textstyle\int_a^b (f'g + fg') = fg\Big|_a^b @@ area-is-a-change (16c), with G = fg
+\textstyle\int_a^b f'g + \int_a^b fg' = fg\Big|_a^b @@ areas-add (15e)
+\htmlClass{new}{\textstyle\int_a^b fg' = fg\Big|_a^b - \int_a^b f'g} \quad \blacksquare @@ subtract ∫ f′g from both sides (rung 3's techs)
+  </pre>
+  <p data-pid="244872">Without ends: ∫ f g′ dx = fg − ∫ f′g dx. In 16d's bookkeeping, with dg = g′(x) dx and df = f′(x) dx, it reads ∫ f dg = fg − ∫ g df. Its accepted name is integration by parts; many books write it ∫ u dv = uv − ∫ v du, with letters that this ladder has already spent.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · backwards · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · two areas that add to the change in fg</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="chips" id="fch"></div>
+      <div class="lbl">f · g′ and f′ · g against x</div>
+      <canvas id="cvX"></canvas>
+      <div class="kn"><span class="m">b</span><input type="range" id="kb" min="0.1" max="1" step="0.01" value="1"><output id="ob"></output></div>
+      <div class="cap">Teal: the area under f · g′. Gold: the area under f′ · g. The knob moves the right end as a share of the chip's interval.</div>
+    </div>
+    <div class="panel">
+      <div class="lbl">f · g against x</div>
+      <canvas id="cvP"></canvas>
+      <div class="cap">Ink: the product fg. Plum: its rise from p to q, which parts for areas says is the teal area plus the gold area.</div>
+      <div class="verdict" id="vdF"></div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">16e1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f = x,  g = (x + 1)³ on [0, 1]</span></span>Find fg|₀¹. <br>Find ∫₀¹ x · 3(x + 1)² dx by parts, using ∫₀¹ (x + 1)³ dx.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="16e2">
+  <h2 class="sthead"><span class="stno">16e2</span>Choosing the parts</h2>
+  <p class="stands">Stands on 16e1 and 16d (straight-inside).</p>
+  <pre class="lines" data-k="ember" data-label="this step: one integral, two choices">
+\textstyle\int_0^1 x(1 - x)^4\,dx:\ \ f = x,\ g' = (1 - x)^4 @@ f gets simpler when its slope is taken; g′ is easy to undo
+g = -\tfrac{(1 - x)^5}{5},\ \ f' = 1 @@ straight-inside (16d) with k = −1
+= -\tfrac{x(1 - x)^5}{5}\Big|_0^1 + \tfrac15\textstyle\int_0^1 (1 - x)^5\,dx @@ parts for areas; areas-scale
+= 0 + \tfrac15 \cdot \tfrac16 = \tfrac{1}{30} @@ the bar is 0 at both ends; 16d's third substitution
+\text{the other choice: } f = (1 - x)^4,\ g' = x,\ g = \tfrac{x^2}{2} @@ legal, and worse: ∫ f′g is ∫ −4(1 − x)³ x²/2, a harder integral than the first
+  </pre>
+  <p data-pid="57b206"><b>Parts is never wrong; it can be useless.</b> The useful choice is the one that makes the leftover integral simpler than the one you started with. A power of x is the usual f: each slope lowers its power by one.</p>
+  <pre class="lines" data-k="ember" data-label="this step: parts against substitution">
+\textstyle\int_0^3 x\sqrt{x + 1}\,dx:\ \ f = x,\ g' = (x + 1)^{1/2},\ g = \tfrac23(x + 1)^{3/2} @@ straight-inside with fraction-power for slopes
+= \tfrac23 x (x + 1)^{3/2}\Big|_0^3 - \tfrac23\textstyle\int_0^3 (x + 1)^{3/2}\,dx @@ parts for areas; areas-scale
+= \tfrac23 \cdot 3 \cdot 8 - \tfrac23 \cdot \tfrac25 (x + 1)^{5/2}\Big|_0^3 = 16 - \tfrac{4}{15}(32 - 1) = \tfrac{116}{15} @@ 4^{3/2} = 8, 4^{5/2} = 32
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · choosing the parts · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16e2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">∫ x(x − 3)⁵ dx</span></span>Choose the parts, and say why your choice makes the leftover simpler. <br>Find every antiderivative.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="16e3">
+  <h2 class="sthead"><span class="stno">16e3</span>A family of areas</h2>
+  <p class="stands">Stands on 16e2 and 4b (induction).</p>
+  <p data-pid="b65102">Areas-under-xᵐ(1 − x)ⁿ technique: <b>for all whole m, n ≥ 0, ∫₀¹ xᵐ(1 − x)ⁿ dx = m! n! / (m + n + 1)!.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the areas-under-xᵐ(1 − x)ⁿ technique, by induction on n">
+I(m, n) = \textstyle\int_0^1 x^m (1 - x)^n\,dx @@ a name for the area
+n = 0:\ \ I(m, 0) = \tfrac{x^{m+1}}{m+1}\Big|_0^1 = \tfrac{1}{m+1} = \tfrac{m!\,0!}{(m+1)!} @@ area-is-a-change with power for slopes; 0! = 1 and (m + 1)! = (m + 1) · m! (4j)
+\text{suppose, for one } n \ge 1, \text{ the claim is true for } n - 1 \text{ and every } m @@ induction on n (4b), the claim for all m at once
+f = (1 - x)^n,\ g' = x^m,\ g = \tfrac{x^{m+1}}{m+1},\ f' = -n(1 - x)^{n-1} @@ chain for slopes with power for slopes; power for slopes backwards
+I(m, n) = \tfrac{(1 - x)^n x^{m+1}}{m+1}\Big|_0^1 + \tfrac{n}{m+1}\textstyle\int_0^1 x^{m+1}(1 - x)^{n-1}\,dx @@ parts for areas; areas-scale
+= 0 + \tfrac{n}{m+1}\, I(m + 1, n - 1) @@ at 1, (1 − 1)ⁿ = 0 since n ≥ 1; at 0, 0^{m+1} = 0
+= \tfrac{n}{m+1} \cdot \tfrac{(m+1)!\,(n-1)!}{(m + n + 1)!} = \htmlClass{new}{\tfrac{m!\,n!}{(m + n + 1)!}} \quad \blacksquare @@ the claim for n − 1 at m + 1; (m + 1)! = (m + 1) · m!, n! = n · (n − 1)!
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · a family of areas · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16e3.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{Parts gave } \tfrac{x(x - 1)^4}{4} - \int \tfrac{(x - 1)^4}{4}\,dx"></span></span>Find the integral it was working on, and its two factors.</li><li><span class="givens"><span data-tex-inline="\int_0^1 x^4(1 - x)^n\,dx = \tfrac{1}{630}"></span></span>Find n.</li><li><span class="givens"><span data-tex-inline="f(0) = 0,"></span> <span data-tex-inline="f(1) = 2,"></span> <span data-tex-inline="g(0) = 5,"></span> <span data-tex-inline="g(1) = 3,"></span> <span data-tex-inline="\int_0^1 f'g = 7"></span></span>Find the integral of f times the slope of g, from 0 to 1.</li><li><span class="givens"><span data-tex-inline="I = \int_0^1 x^m(1 - x)^n\,dx,"></span> <span data-tex-inline="J = \int_0^1 x^n(1 - x)^m\,dx"></span></span>Prove I = J without areas-under-xᵐ(1 − x)ⁿ.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="16e4">
+  <h2 class="sthead"><span class="stno">16e4</span>One area, with no expanding</h2>
+  <p class="stands">Stands on 16e3 and 4j (counting choices).</p>
+  <p data-pid="caaa43">So ∫₀¹ x²(1 − x)³ dx = 2! 3!/6! = 12/720 = 1/60, with no expanding. In rung 4's terms, (m + n + 1) · I(m, n) is one over the number of ways to choose m things from m + n. An area under a curve has turned into a count.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16e4.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="I = \int_0^1 x(1 - x)^6\,dx"></span></span>Find I by parts.</li><li><span class="givens"><span data-tex-inline="f(x) = x(x + 2)^4"></span></span>Find every antiderivative of f by parts.</li><li><span class="givens"><span data-tex-inline="I = \int_0^1 x^3(1 - x)^2\,dx"></span></span>Find I by areas-under-xᵐ(1 − x)ⁿ, and check it by expanding.</li><li><span class="givens"><span data-tex-inline="I = \int_1^4 x\sqrt x\,dx"></span></span>Find I two ways: as one power, and by parts with x as the factor whose slope you take.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="16e5">
+  <h2 class="sthead"><span class="stno">16e5</span>Illegal moves</h2>
+  <p class="stands">Stands on 16e1 to 16e4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\textstyle\int fg' = fg - \int f'g'\,? @@ the leftover is f′g: the product rule's other term
+\textstyle\int_a^b fg' = fg - \int_a^b f'g\,? @@ on a definite integral, fg must be taken between the ends: fg|ₐᵇ
+\textstyle\int f(x)g(x)\,dx = \int f \cdot \int g\,? @@ no product rule for areas says that: ∫₀¹ x · x dx = ⅓, but (∫₀¹ x)² = ¼
+\textstyle\int_0^1 x(1 - x)^4 = 0 \text{ since the bar is } 0\,? @@ the bar is one of two terms; the leftover integral remains
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16e5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="I = \int_0^1 x(1 - x)^4\,dx,"></span> <span data-tex-inline="f = (1 - x)^4,"></span> <span data-tex-inline="g' = x"></span></span>Run parts on I with these factors for two steps.<br>Write what the powers do.</li><li><span class="givens"><span data-tex-inline="n = 0"></span></span>Run the step of areas-under-xᵐ(1 − x)ⁿ at the given n, and write the bar it leaves.<br>Find the base case, the area under xᵐ from 0 to 1, without parts.</li><li><span class="givens"><span data-tex-inline="\text{Claim: } \int_0^1 x^2\,dx = \Big(\int_0^1 x\,dx\Big)^2"></span></span>Refute the claim with numbers.</li><li><span class="givens"><span data-tex-inline="I = \int_{-1}^1 x \cdot u(x)\,dx,"></span> <span data-tex-inline="u \text{ the step},"></span> <span data-tex-inline="g' = u"></span></span>Write the hypothesis of parts for areas that fails.<br>Find I by splitting at 0.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">16e.4.1</span><span class="tagq">build</span>Choose whole m and n of your own, each at least 2, and find the area under xᵐ(1 − x)ⁿ from 0 to 1 two ways: by expanding, and by parts until one power is gone, marking at each step the factor whose slope you take.</div>
+  <div class="chq"><span class="chid">16e.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="I(m, n) = \int_0^1 x^m(1 - x)^n\,dx"></span></span>Find what areas-under-xᵐ(1 − x)ⁿ gives for I(0, 0), and for I(0, n) at every n, and check each against the area itself.</div>
+  <div class="chq"><span class="chid">16e.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\int_0^1 h(x)\,dx = \tfrac{m!\,n!}{(m + n + 1)!},"></span> <span data-tex-inline="g(x) = x^m(1 - x)^n"></span></span>Prove or refute: h = g.</div>
+  <div class="chq"><span class="chid">16e.4.4</span><span class="tagq">seam</span>In 1729 two mathematicians asked what 1, 2, 6, 24, 120, … should be between the whole numbers: what is the factorial of ½? A third answered with an area, which gives the factorials at whole numbers and keeps going between them. Others said that n! means the number of ways to put n things in a row, and half a thing cannot be put anywhere. <br>Is a factorial a count or an area? <br>If an area agrees with every count, has it found what the count was, or invented something new?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r16d.html">← 16d · substitution</a><a href="r16concl.html">16·∎ · conclusion →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>Euler, looking for a meaning for the factorial of a number that is not whole, found that the integral of xᵉ(1 − x)ⁿ from 0 to 1 gives, for whole e and n, a ratio of factorials, and that the integral still has a value when e is a fraction, where the factorials so far had none.</p><cite>Euler, De progressionibus transcendentibus (written 1729–30, printed 1738); paraphrase</cite></aside>
+  <p>In 16e.4.4, the two who asked were Christian Goldbach and Daniel Bernoulli, and the one who answered with an area was Leonhard Euler.</p>
+  <h3>Accepted names</h3>
+  <p>The areas ∫₀¹ xᵐ(1 − x)ⁿ dx are values of the beta function; the area that carries the factorials between the whole numbers is the gamma function.</p>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+/* least and greatest of F.f on [lo, hi]: the ends, F's critical points inside, and a fine sample (exact between critical points for the functions used here) */
+function ext(F,lo,hi){ if(F.dir) return [0,1]; let m=Infinity,M=-Infinity; const t=x=>{ const v=F.f(x); if(v<m) m=v; if(v>M) M=v; };
+  t(lo); t(hi); (F.crit||[]).forEach(c=>{ if(c>lo&&c<hi) t(c); }); for(let k=1;k<64;k++) t(lo+(hi-lo)*k/64); return [m,M]; }
+function sums(F,pts){ let L=0,U=0; const ms=[],Ms=[]; for(let i=1;i<pts.length;i++){ const [m,M]=ext(F,pts[i-1],pts[i]), w=pts[i]-pts[i-1]; ms.push(m); Ms.push(M); L+=m*w; U+=M*w; } return {L,U,ms,Ms}; }
+const eq=(a,b,n)=>Array.from({length:n+1},(_,i)=>a+(b-a)*i/n);
+function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
+function boxes(P,pts,hs,stroke,fill,alpha){ const c=P.ctx; for(let i=1;i<pts.length;i++){ const a=pts[i-1],b=pts[i],h=hs[i-1]; c.globalAlpha=alpha; P.poly([[a,0],[b,0],[b,h],[a,h]],null,fill); c.globalAlpha=1; P.poly([[a,0],[b,0],[b,h],[a,h]],stroke,null,1.2); } }
+function dirDots(P,a,b){ const c=P.ctx; c.fillStyle=col('--ink'); for(let k=0;k<=300;k++){ const x=a+(b-a)*k/300; const y=(k%2)?0:1; c.fillRect(P.X(x)-1,P.Y(y)-1,2,2); } }
+/* shade between the graph of fn and the axis from lo to hi: above in pos colour, below in neg colour */
+function shade(P,fn,lo,hi,pos,neg,alpha){ if(hi<lo){ const t=lo; lo=hi; hi=t; } const c=P.ctx, N=300; c.globalAlpha=alpha==null?0.32:alpha;
+  for(let k=0;k<N;k++){ const x0=lo+(hi-lo)*k/N, x1=lo+(hi-lo)*(k+1)/N, xm=(x0+x1)/2, y=fn(xm); if(!isFinite(y)) continue; P.poly([[x0,0],[x1,0],[x1,fn(x1)],[x0,fn(x0)]],null,y>=0?pos:neg); }
+  c.globalAlpha=1; }
+function rangeOf(fn,lo,hi,pad){ let m=Infinity,M=-Infinity; for(let k=0;k<=400;k++){ const v=fn(lo+(hi-lo)*k/400); if(isFinite(v)){ if(v<m) m=v; if(v>M) M=v; } } if(m>0) m=0; if(M<0) M=0; const p=(M-m)*(pad==null?0.12:pad)||1; return [m-p,M+p]; }
+function chips(el,FN,get,setk,after){ Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===get()) b.className='on'; b.onclick=()=>{ setk(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+const Nw='\\htmlClass{new}';
+function gridFor(sp){ return sp>40?10:sp>16?4:sp>8?2:sp>3?1:sp>1.2?0.5:0.25; }
+function frame2(P,fn,lo,hi,pad){ const w=hi-lo; P.o.x=[lo-0.12*w,hi+0.08*w]; P.o.y=rangeOf(fn,lo,hi,pad==null?0.12:pad); const sx=P.o.x[1]-P.o.x[0], sy=P.o.y[1]-P.o.y[0]; let g=gridFor(sx); while(sy/g>24) g*=2; P.o.grid=g; }
+const num=(f,a,b,n)=>{ n=n||4000; const h=(b-a)/n; let s=0; for(let i=0;i<n;i++) s+=f(a+(i+0.5)*h)*h; return s; };
+const FN={
+  A:{lab:'x · (1 − x)⁴',f:x=>x,fp:x=>1,g:x=>-((1-x)**5)/5,gp:x=>(1-x)**4,a:0,B:1,t:R`f = x,\ g' = (1 - x)^4`},
+  Bq:{lab:'x · √(x + 1)',f:x=>x,fp:x=>1,g:x=>2/3*Math.pow(x+1,1.5),gp:x=>Math.sqrt(x+1),a:0,B:3,t:R`f = x,\ g' = \sqrt{x + 1}`},
+  C:{lab:'(1 − x)³ · x²',f:x=>(1-x)**3,fp:x=>-3*(1-x)**2,g:x=>x**3/3,gp:x=>x*x,a:0,B:1,t:R`f = (1 - x)^3,\ g' = x^2`},
+  D:{lab:'x² · x',f:x=>x*x,fp:x=>2*x,g:x=>x*x/2,gp:x=>x,a:0,B:2,t:R`f = x^2,\ g' = x`}
+};
+let key='A';
+const kb=$('kb'),cvX=$('cvX'),cvP=$('cvP');
+const bnow=()=>{ const S=FN[key]; return S.a+(+kb.value)*(S.B-S.a); };
+const PX=plane(cvX,{x:[0,1],y:[0,1],grid:1,aspect:0.8,draw:P=>drawX(P)});
+const PP=plane(cvP,{x:[0,1],y:[0,1],grid:1,aspect:0.8,draw:P=>drawP(P)});
+[[PX,cvX],[PP,cvP]].forEach(([P,cv])=>Object.defineProperty(P.o,'aspect',{get:()=>cv.clientWidth>480?0.75:0.9}));
+function drawX(P){ const S=FN[key], b=bnow(), A=x=>S.f(x)*S.gp(x), Bf=x=>S.fp(x)*S.g(x);
+  const r1=rangeOf(A,S.a,S.B), r2=rangeOf(Bf,S.a,S.B); frame2(P,x=>0,S.a,S.B); P.o.y=[Math.min(r1[0],r2[0]),Math.max(r1[1],r2[1])]; let g=P.o.grid; while((P.o.y[1]-P.o.y[0])/g>24) g*=2; P.o.grid=g; P.axes();
+  shade(P,A,S.a,b,'--teal','--teal',0.34); shade(P,Bf,S.a,b,'--gold','--gold',0.22);
+  curve(P,A,'--teal',2.4,S.a,S.B); curve(P,Bf,'--gold',2.4,S.a,S.B); P.line(b,P.o.y[0],b,P.o.y[1],'--ember',1.6,[]); }
+function drawP(P){ const S=FN[key], b=bnow(), fg=x=>S.f(x)*S.g(x); frame2(P,fg,S.a,S.B,0.15); P.axes(); curve(P,fg,'--ink',2.6,S.a,S.B);
+  const ya=fg(S.a), yb=fg(b); P.line(S.a,ya,b,ya,'--muted',1.2,[4,4]); P.line(b,ya,b,yb,'--plum',3,[]); P.dot(S.a,ya,'--ink',3.5); P.dot(b,yb,'--plum',5); }
+function read(){ const S=FN[key], b=bnow(), A=num(x=>S.f(x)*S.gp(x),S.a,b), B2=num(x=>S.fp(x)*S.g(x),S.a,b), d=S.f(b)*S.g(b)-S.f(S.a)*S.g(S.a); $('ob').textContent=mm(b,2);
+  const vd=$('vdF'); vd.className='verdict win'; vd.textContent='∫ f g′ = '+mm(A,4)+' and ∫ f′ g = '+mm(B2,4)+'; together '+mm(A+B2,4)+', which is fg|ₚ^q = '+mm(d,4)+'.';
+  tex($('eqF'),R`\begin{gathered}${S.t}\\ \textstyle\int_{${mm(S.a,2)}}^{${mm(b,2)}} fg' = fg\Big|_{${mm(S.a,2)}}^{${mm(b,2)}} - \int_{${mm(S.a,2)}}^{${mm(b,2)}} f'g\\ = ${mm(d,4)} - (${mm(B2,4)}) = ${mm(A,4)}\end{gathered}`,true); }
+function all(){ PX.redraw(); PP.redraw(); read(); }
+kb.addEventListener('input',all);
+chips($('fch'),FN,()=>key,k=>{ key=k; },all);
+window.__pic={set:(k,s)=>{ [...$('fch').children][Object.keys(FN).indexOf(k)].click(); kb.value=s; all(); const S=FN[k], b=bnow(); const A=num(x=>S.f(x)*S.gp(x),S.a,b), B2=num(x=>S.fp(x)*S.g(x),S.a,b), d=S.f(b)*S.g(b)-S.f(S.a)*S.g(S.a); return {A:+A.toFixed(5),B:+B2.toFixed(5),d:+d.toFixed(5),ok:Math.abs(A+B2-d)<1e-5}; }};
+all();
+stepper('#sl1',[
+  {k:'ember',kl:'backwards',t:R`(fg)' = f'g + fg'`,n:`product for slopes, then area-is-a-change.`},
+  {k:'ember',kl:'parts for areas',t:R`${Nw}{\textstyle\int_a^b fg' = fg\Big|_a^b - \int_a^b f'g}`,n:`Trade one area for the other.`},
+  {k:'ember',kl:'bookkeeping',t:R`\textstyle\int f\,dg = fg - \int g\,df`,n:`16d's marks.`}
+],{title:'The slides · backwards · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'a good choice',t:R`f = x,\ g' = (1 - x)^4:\ \tfrac{1}{30}`,n:`The leftover is simpler.`},
+  {k:'ember',kl:'a useless choice',t:R`f = (1 - x)^4,\ g' = x`,n:`Legal, and the powers grow.`},
+  {k:'ember',kl:'against substitution',t:R`\textstyle\int_0^3 x\sqrt{x + 1}\,dx = \tfrac{116}{15}`,n:`Two roads, one number.`}
+],{title:'The slides · choosing the parts · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'areas-under-xᵐ(1 − x)ⁿ · base',t:R`I(m, 0) = \tfrac{1}{m + 1}`,n:`power for slopes backwards.`},
+  {k:'ember',kl:'areas-under-xᵐ(1 − x)ⁿ · step',t:R`I(m, n) = \tfrac{n}{m+1}\,I(m + 1, n - 1)`,n:`Parts; the bar vanishes.`},
+  {k:'ember',kl:'areas-under-xᵐ(1 − x)ⁿ',t:R`${Nw}{\textstyle\int_0^1 x^m(1 - x)^n\,dx = \tfrac{m!\,n!}{(m + n + 1)!}}`,n:`An area that is a count.`}
+],{title:'The slides · a family of areas · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`\textstyle\int fg \ne \int f \cdot \int g`,n:`⅓ is not ¼.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

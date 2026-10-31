@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>8i · Roots, powers and the quadratic formula</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%}
+.steps{display:grid;gap:3px;font-size:.88rem;margin-top:6px}
+.steps div{padding:3px 8px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0;overflow-x:auto}
+.steps div.on{border-left-color:var(--ember)} .steps div.gone{opacity:.55}
+.steps small{display:block;font-family:var(--mono);font-size:.74rem;color:var(--muted)}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r08h.html">← 8h absolute value and distance</a><a href="r08phys.html">next: 8·phys how big and how small do things get? →</a></p>
+  <div class="tags"><span class="tag tech">8i · technique</span></div>
+  <h1>Roots, powers and the quadratic formula</h1>
+  <p>8f gave every positive real a root of every order. This step puts them to work. First the hands: moving radicals around legally and getting them out of a bottom. Then powers with integers below zero and fractions in the high place, defined so that the old exponent rules keep working, and proved well defined. Then the one rewriting that opens every quadratic, run forward, backward and on letters until it becomes the formula that solves them all. With it comes the exact condition under which a quadratic has no answer on the line.</p>
+  <p class="gesture">A root is the one non-negative real whose power gives back what you started with: prove samenesses by checking powers. To open a quadratic, add the missing piece, the square of half the middle coefficient, so that the square term and the middle term become one square, less a constant.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r04f.html">4f</a> (powers-add-their-counts, power-of-a-power), <a href="r05cb2.html">5·cb2</a> (well defined), <a href="r05f.html">5f</a> (licences; squaring gains answers), <a href="r05g.html">5g</a> (reciprocal-of-a-product), <a href="r05h.html">5h</a> (square-of-a-sum, square-of-a-difference, difference-of-squares, sum-and-product, the displacement pattern), <a href="r08d.html">8d</a> (the rules for ℝ), <a href="r08f.html">8f</a> (√, ⁿ√, one-root, powers-keep-order, square-never-negative), <a href="r08g.html">8g</a> (charts) and <a href="r08h.html">8h</a> (|p|, size-squared). <a href="r08phys.html">8·phys</a> writes sizes with powers of ten below one; <a href="r08cb6.html">8·cb6</a> computes 2^(k/12).</p></div>
+</header>
+
+<section class="class step" data-step="8i1">
+  <h2 class="sthead"><span class="stno">8i1</span>Radicals: prove by powers</h2>
+  <p class="stands">Stands on 8f3 (one-root), 8f4 (roots of every order) and 8h2 (the rules for bars).</p>
+  <p data-pid="ad3afd">A root is fixed by two facts: it is not negative, and its power gives back the original (8f's one-root and roots-of-every-order). <b>So to prove two expressions with roots are the same, show both are not negative and have the same power.</b> Here is the method on the commonest rule. Roots-go-through-products technique: <b>for reals u, v ≥ 0, √u √v = √(uv).</b></p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: roots go through products">
+a, b \ge 0 @@ the rule needs this; watch where it is used
+(\sqrt a\,\sqrt b)^2 = (\sqrt a)^2(\sqrt b)^2 @@ power-of-a-product (read in ℝ, 8f)
+= \htmlClass{new}{ab} @@ each root squared gives back what it is the root of
+\sqrt a\,\sqrt b \ge 0 @@ a product of non-negatives (positive-product on ℝ, or a factor is 0)
+\htmlClass{new}{\sqrt a\,\sqrt b = \sqrt{ab}} \quad \blacksquare @@ one-root: the one non-negative real whose square is ab
+  </pre>
+  <p data-pid="a45636">The same lines give √u/√v = √(u/v) for v &gt; 0, and ⁿ√u ⁿ√v = ⁿ√(uv). And √(u²) = |u|, by 8h's size-squared: for u = −3 it is 3. Square roots never name a negative. x² = 9 has the two answers 3 and −3, but √9 is 3 only. For odd orders a negative has a root too:</p>
+  <p class="eqline" data-pid="6cca86">From here on, for an odd number n and a real a &lt; 0, ⁿ√a names −ⁿ√(−a). It is the only real x with xⁿ = a. Such an x must be negative, and −x is then the n-th root of −a (signs-come-out, powers-keep-order). So ³√(−8) = −2.</p>
+  <p data-pid="09e348">Tidying: pull square factors out, √12 = √4 √3 = 2√3. Then like radicals collect like like terms (5h): √50 + √18 = 5√2 + 3√2 = 8√2. To clear a root from a bottom, multiply by 1 in a useful form: 1/√2 = √2/2. For a sum or difference, multiply top and bottom by the same two terms with the sign between them changed. (The second is called the conjugate of the first.) Then 5h's difference-of-squares kills the root:</p>
+  <pre class="lines" data-k="ember" data-label="this step: a root out of a bottom">
+\dfrac{1}{\sqrt3 - 1} @@ a root in the bottom
+= \dfrac{1}{\sqrt3 - 1}\cdot\htmlClass{new}{\dfrac{\sqrt3 + 1}{\sqrt3 + 1}} @@ multiply by 1 (times-one on ℝ); √3 + 1 is not 0
+= \dfrac{\sqrt3 + 1}{(\sqrt3)^2 - 1^2} = \htmlClass{new}{\dfrac{\sqrt3 + 1}{2}} @@ difference-of-squares (5h); (√3)² = 3
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · roots by powers · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">8i1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">√50,  1/(√2 + 1)</span></span>Pull the square factor out of the first. <br>Clear the root from the bottom of the second.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="8i2">
+  <h2 class="sthead"><span class="stno">8i2</span>Powers below zero, and fractions in the high place</h2>
+  <p class="stands">Stands on 8i1, 4f (powers), 5b (reciprocals) and 5·cb2 (well defined).</p>
+  <p data-pid="bd8e96">4f's high place held numbers. Extend it so that 4f's techniques keep working. If u^(−k) is to obey u^(−k) u^k = u⁰ = 1, it must be the reciprocal of u^k:</p>
+  <p class="eqline" data-pid="3239d1">From here on, for a real a ≠ 0 and a number k, a^(−k) names (a^k)⁻¹. With k = 1 this is 5b's mark a⁻¹ (which 5b called one mark, not a power): now the two readings agree.</p>
+  <p data-pid="960238">Whole-exponent techniques: <b>for reals u, v ≠ 0 and integers m, n: u^m u^n = u^(m + n), (u^m)^n = u^(mn), (uv)^n = u^n v^n.</b> Split on the signs of m and n. When both are numbers it is powers-add-their-counts, power-of-a-power and power-of-a-product. A negative exponent turns a power into a reciprocal, and 5g's reciprocal-of-a-product ((bk)⁻¹ = b⁻¹k⁻¹, read in ℝ) moves the reciprocal through the product. When the signs differ, cancel the common factors with reciprocal on ℝ. ∎ Now fractions. If u^(1/q) is to obey (u^(1/q))^q = u, it must be the q-th root.</p>
+  <p class="eqline" data-pid="26fd5c">From here on, for a positive real a and a rational x = p/q, with p an integer and q a positive integer, a^x names (<sup>q</sup>√a)^p. Read it “a to the power x”. With q = 1 it is the integer power above.</p>
+  <p data-pid="64560f">A rational is a class of pairs, so the name must not depend on the pair: 5·cb2's well defined. Fractional-powers-defined technique: <b>if p/q = p′/q′, then (<sup>q</sup>√u)^p = (<sup>q′</sup>√u)^(p′).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the fractional-powers-defined technique">
+pq' = p'q @@ cross-multiplying (5b): cross-multiplying
+\big((\sqrt[q]a)^p\big)^{qq'} = \big((\sqrt[q]a)^q\big)^{pq'} = a^{pq'} @@ whole-exponent techniques: rearrange the exponents; (q√a)^q = a
+\big((\sqrt[q']a)^{p'}\big)^{qq'} = a^{p'q} = a^{pq'} @@ the same, with q′; the first line
+\text{both are positive} @@ a power of a positive real is positive (positive-product on ℝ, positive-reciprocal on ℚ)
+\htmlClass{new}{(\sqrt[q]a)^p = (\sqrt[q']a)^{p'}} \quad \blacksquare @@ equal qq′-th powers of positives are the same (powers-keep-order backwards)
+  </pre>
+  <p data-pid="f384ce">Fraction-exponent techniques: <b>for positive reals u, v and rationals x, y: u^x u^y = u^(x + y), (u^x)^y = u^(xy), (uv)^x = u^x v^x.</b> Each goes by the same method. Both sides are positive; raise both to a common bottom's power, and use the whole-exponent techniques. ∎ <b>So the exponent rules of 4f now work with any fraction in the high place, for a positive base.</b> With the whole-exponent techniques, their accepted name is the laws of exponents. Worked, root first to keep the numbers small:</p>
+  <pre class="lines" data-k="ember" data-label="this step: fractional powers">
+8^{2/3} = (\sqrt[3]{8})^2 = 2^2 = \htmlClass{new}{4} @@ the definition; 2³ = 8
+27^{-2/3} = (\sqrt[3]{27})^{-2} = 3^{-2} = \htmlClass{new}{\tfrac19} @@ the definition with p = −2; then the reciprocal
+a^{1/2}\,a^{1/3} = a^{1/2 + 1/3} = \htmlClass{new}{a^{5/6}} @@ fraction-exponent techniques: add the exponents, as fractions (5g)
+\sqrt[3]{x^2} = x^{2/3},\ \ \tfrac{1}{\sqrt x} = x^{-1/2} @@ backwards, for x &gt; 0: radicals into powers
+  </pre>
+  <p data-pid="61e71c">Keep fractional powers for positive bases. Without that the rules contradict each other. Suppose (−8)^(1/3) meant −2. Since 2/6 = 1/3, (−8)^(2/6) would have to be the same, yet ((−8)²)^(1/6) = 64^(1/6) = 2. Odd roots of negatives are written as roots, with the line above.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · powers below zero, and fractions up high · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">8i2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">16^{3/4},  4^{−1/2}</span></span>Compute each from the definitions. <br>Say why the base must be positive for fractions in the high place.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="8i3">
+  <h2 class="sthead"><span class="stno">8i3</span>Completing the sameness</h2>
+  <p class="stands">Stands on 5h (square of a sum) and 8f1 (a square is at least 0).</p>
+  <p data-pid="a77d81">5h's square-of-a-sum says (x + h)² = x² + 2hx + h². So x² + bx is the start of the square of x + b/2, missing only the last piece (b/2)².</p>
+  <p class="eqline" data-pid="6896c9">From here on, completing the sameness is the tech x² + bx = (x + b/2)² − (b/2)². Adding (b/2)² makes x² + bx + (b/2)² the square of x + b/2, by square-of-a-sum. Its accepted name is completing the square. The name is traditional, and here it means exactly x² + bx + (b/2)², the product (x + b/2)(x + b/2), and no shape.</p>
+  <p data-pid="9ccd98">In ninth-century Baghdad, the book whose title gave the word “algebra” solved “a square and ten of its roots make thirty-nine” by a recipe. Halve the number of roots, giving five. Multiply it by itself, twenty-five. Add it to thirty-nine, sixty-four. Take the root, eight. Take away the half, five. Three remains. The book justified it with a drawing, which needs the geometry of rung 18. The arithmetic alone is the tech above.</p>
+  <pre class="lines" data-k="ember" data-label="this step: completing the square">
+x^2 + 6x + 5 @@ the question: one square plus a constant
+= (x^2 + 6x \htmlClass{new}{+ 9}) \htmlClass{new}{- 9} + 5 @@ half of 6 is 3, and 3² = 9: add it and take it away
+= \htmlClass{new}{(x + 3)^2} - 4 @@ square-of-a-sum backwards
+2x^2 + 12x + 7 = 2(x^2 + 6x) + 7 @@ with a leading number, factor it out of the x terms only
+= 2\big[(x + 3)^2 - 9\big] + 7 = \htmlClass{new}{2(x + 3)^2 - 11} @@ complete inside; spread on ℝ: the −9 becomes −18
+  </pre>
+  <p data-pid="de584f">Now (x + 3)² − 4 says what x² + 6x + 5 hides. Since (x + 3)² ≥ 0 (square-never-negative), the sum is never below −4, and it is −4 exactly at x = −3. And x + 3 is the displacement x − (−3) (8h): the square measures how far x is from −3. <b>In general the completed form t(x − h)² + k says that the value at x = h is k. For t &gt; 0 no value is below k; for t &lt; 0 none is above.</b> Backward is just expanding: (x − 2)² + 3 = x² − 4x + 7. Doing both directions on one expression is the best check there is.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · completing · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">8i3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">x² − 8x + 10</span></span>Complete the sameness. <br>Find the least value it takes, and the x where it takes it.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="8i4">
+  <h2 class="sthead"><span class="stno">8i4</span>The quadratic formula, one move per line</h2>
+  <p class="stands">Stands on 8i3, 8i1 and 8f3 (√).</p>
+  <p class="eqline" data-pid="97eacb">From here on, a formula also means a name written in marks with letters in it, such as b² − 4ac, which names a real once its letters name reals. 5·chem's formula, what is in one molecule, keeps its meaning. What the word is said of says which.</p>
+  <p class="eqline" data-pid="3ecf7a">From here on, x = p ± q is short for x = p + q ∨ x = p − q. Read “±” as “plus or minus”. And for a quadratic ax² + bx + c with a ≠ 0, b² − 4ac is its discriminant.</p>
+  <p data-pid="19bc49">Quadratic-formula technique: <b>for reals t, b and c with t ≠ 0 and b² − 4tc ≥ 0, tx² + bx + c = 0 exactly when x = (−b ± √(b² − 4tc))/(2t).</b> The lines below prove it, each move licensed both ways.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the quadratic formula">
+ax^2 + bx + c = 0,\quad a \ne 0 @@ the general quadratic equation
+x^2 + \tfrac ba x + \tfrac ca = 0 @@ multiply by 1/a: licensed, a ≠ 0 (multiplying-keeps-answers)
+x^2 + \tfrac ba x = -\tfrac ca @@ add −c/a (adding-keeps-answers)
+x^2 + \tfrac ba x \htmlClass{new}{+ \tfrac{b^2}{4a^2}} = \tfrac{b^2}{4a^2} - \tfrac ca @@ half of b/a is b/(2a); add its square to both sides
+\htmlClass{new}{\big(x + \tfrac{b}{2a}\big)^2} = \tfrac{b^2 - 4ac}{4a^2} @@ completed; one bottom 4a² on the right (fractions-of-rationals)
+\big|x + \tfrac{b}{2a}\big| = \tfrac{\sqrt{b^2 - 4ac}}{|2a|} @@ roots of both sides, needing b² − 4ac ≥ 0: √(y²) = |y| (size-squared); √ of a quotient
+x + \tfrac{b}{2a} = \htmlClass{new}{\pm}\tfrac{\sqrt{b^2 - 4ac}}{2a} @@ ﹀ the bars: two cases; the sign of 2a is swallowed by ±
+x = \htmlClass{new}{\dfrac{-b \pm \sqrt{b^2 - 4ac}}{2a}} @@ add −b/(2a)
+  </pre>
+  <p data-pid="6e5d3b">Every move is licensed both ways, except taking roots, which needs b² − 4tc ≥ 0. <b>So if the discriminant is positive, there are two answers; if it is 0, one; if it is negative, none on the line.</b> At 0 there is one, since ± adds and takes away 0. When it is negative there are none, because the left side of the completed line is a square, never negative (square-never-negative), and the right side is negative. Check every answer by two facts read off the formula. The two answers add to −b/t and multiply to c/t (5h's sum-and-product, run backwards). Example: x² − 2x − 1 = 0 gives x = (2 ± √8)/2 = 1 ± √2. Check: they add to 2, and multiply to 1 − 2 = −1, by difference-of-squares. And 3x² + 2x − 1 = 0 gives (−2 ± 4)/6: 1/3 and −1.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · the formula · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · left: the old recipe, move by move · right: the formula, its discriminant, and the completed form</div>
+    <div class="panel">
+      <div class="kn"><span class="m">b</span><input type="range" id="kb" min="-12" max="12" step="1" value="10"><output id="ob">10</output><span class="m">c</span><input type="range" id="kc" min="-40" max="60" step="1" value="39"><output id="oc">39</output></div>
+      <div class="steps" id="stA"></div>
+      <div class="chips"><button id="nx">next move</button><button id="rsA">start again</button></div>
+      <div class="cap">The equation x² + bx = c. Each press makes one move of the recipe, in his words and in marks. The last move shows both answers: he kept only the positive one; the line keeps both, or neither when c + (b/2)² is negative.</div>
+    </div>
+    <div class="panel">
+      <div class="kn"><span class="m">t</span><input type="range" id="qa" min="-4" max="4" step="1" value="1"><output id="oa">1</output><span class="m">b</span><input type="range" id="qb" min="-10" max="10" step="1" value="-2"><output id="obb">-2</output><span class="m">c</span><input type="range" id="qc" min="-10" max="10" step="1" value="-1"><output id="occ">-1</output></div>
+      <canvas id="cvQ"></canvas>
+      <div class="cap">The answers of tx² + bx + c = 0 set out on the line (gold), when there are any. Ember: h, where the completed form's square is 0. The readout gives the discriminant, the completed form, the answers, and the sum and product check.</div>
+      <div class="eqbox" id="eqQ"></div>
+    </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">8i4.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\sqrt{75} - \sqrt{12} + \sqrt{27}"></span></span>Simplify it.</li><li><span class="givens"><span data-tex-inline="1/(\sqrt 5 - \sqrt 3)"></span></span>Clear the root from its bottom.</li><li><span class="givens"><span data-tex-inline="27^{-2/3}"></span></span>Compute it.</li><li><span class="givens"><span data-tex-inline="2x^2 - 4x - 3 = 0"></span></span>Solve it, and check by the sum and product of the answers.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="8i5">
+  <h2 class="sthead"><span class="stno">8i5</span>Squaring adds strangers; disguised quadratics</h2>
+  <p class="stands">Stands on 8i4 and 5f (the licence table).</p>
+  <p data-pid="5e7477">To solve √(x + 3) = x − 3, square both sides. 5f's licence table said squaring gains answers. From p = q you get p² = q², but p² = q² gives only |p| = |q|. <b>So check every answer in the original.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: a stranger">
+\sqrt{x + 3} = x - 3 @@ the question
+x + 3 = x^2 - 6x + 9 @@ square both sides (gains answers: note to check); square-of-a-difference
+x^2 - 7x + 6 = 0;\ \ (x - 1)(x - 6) = 0 @@ collect; factor (sum-and-product)
+x = 1:\ \sqrt4 = 2 \ne -2 @@ check: a stranger. A root is never negative
+\htmlClass{new}{x = 6}:\ \sqrt9 = 3 = 3 @@ check: it stands
+  </pre>
+  <p data-pid="a69cd0">Some equations are quadratics in costume. In x⁴ − 5x² + 4 = 0, x² appears twice, once squared. Name the inside r: r = x², so r² − 5r + 4 = 0, (r − 1)(r − 4) = 0, r = 1 or 4. Substitute for the expression: x² = 1 or x² = 4. So x = ±1 or x = ±2. Fractional powers undo by the reciprocal power. x^(3/2) = 8, for x &gt; 0, gives x = 8^(2/3) = 4, by the fraction-exponent techniques. Check: 4^(3/2) = (√4)³ = 8.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · a stranger · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">8i5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\sqrt{2x + 3} = x"></span></span>Solve it, and find the stranger squaring brought in.</li><li><span class="givens"><span data-tex-inline="\sqrt{u^2 v} = u\sqrt v,\ v &gt; 0"></span></span>Find every real u that fits.</li><li><span class="givens"><span data-tex-inline="x - 5\sqrt x + 6 = 0"></span></span>Solve it.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="8i6">
+  <h2 class="sthead"><span class="stno">8i6</span>Illegal moves</h2>
+  <p class="stands">Stands on 8i1 to 8i5.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\sqrt{a + b} = \sqrt a + \sqrt b\,? @@ √(9 + 16) = 5, √9 + √16 = 7. Roots go through products, not sums
+(x + 3)^2 = 4,\ \text{so } x + 3 = 2\,? @@ loses x = −5: rooting gives |x + 3| = 2, two cases
+x^2 = 5x,\ \text{so } x = 5\,? @@ dividing by x loses 0: x(x − 5) = 0
+2x^2 + 12x = (x + 6)^2 - 36\,? @@ factor the 2 out first: 2[(x + 3)² − 9]
+x = \tfrac{-3 \pm \sqrt{9 + 16}}{2} \text{ for } x^2 - 3x - 4 = 0\,? @@ −b is +3 here: x = (3 ± 5)/2, so 4 and −1. Bracket negatives when you substitute
+(-8)^{2/6} = (-8)^{1/3}\,? @@ fractional powers are for positive bases only
+\text{the quadratic formula when } b^2 - 4ac \lt 0\,? @@ √ of a negative names nothing on the line: no answers
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">8i6.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">“√(a + b) = √a + √b.”</span></span>Find a and b where it fails. <br>Say what roots do go through.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="8i7">
+  <h2 class="sthead"><span class="stno">8i7</span>Running it backwards</h2>
+  <p class="stands">Stands on 8i1 to 8i5.</p>
+  <p data-pid="1d7e93">Handed two answers r and s, the quadratic x² − (r + s)x + rs = 0 has them (sum-and-product). Handed a completed form, expand it; handed a sum, complete it. Wanting a root out of a bottom, multiply by the conjugate. Wanting it into the bottom, do the same to the top. Wanting u^x for a fraction x, take the root first, then the power. Found upward; written downward.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">8i7.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{answers } 2 + \sqrt 3 \text{ and } 2 - \sqrt 3"></span></span>Find a quadratic with these answers.</li><li><span class="givens"><span data-tex-inline="x^2 + 5x + 1"></span></span>Complete it.</li><li><span class="givens"><span data-tex-inline="x^{2/3} = 9,\ x &gt; 0"></span></span>Find x.</li><li><span class="givens"><span data-tex-inline="x^2 + bx + 9 = 0"></span></span>Find every b for which it has exactly one answer.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">8i.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{Squaring can bring in strangers;}"></span> <span data-tex-inline="\text{the old algebraists lost answers}"></span> <span data-tex-inline="\text{instead, keeping only}"></span> <span data-tex-inline="\text{the positive ones.}"></span></span>Build the old problems again, and keep every answer on the line.<ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{a square and twenty-one}"></span> <span data-tex-inline="\text{equal ten roots}"></span></span>Solve it.</li><li><span class="givens"><span data-tex-inline="\text{three roots and four}"></span> <span data-tex-inline="\text{equal a square}"></span></span>Solve it.</li><li><span class="givens"><span data-tex-inline="b, c &gt; 0,"></span> <span data-tex-inline="x^2 + c = bx,"></span> <span data-tex-inline="S\text{: a positive answer} \Leftrightarrow b^2 \ge 4c"></span></span>Prove S.</li></ol></div>
+  <div class="chq"><span class="chid">8i.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="x^2 + 6x + c = 0"></span></span>Find every c for which it has exactly one answer, and that answer.</div>
+  <div class="chq"><span class="chid">8i.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="r, s\text{: the answers of } tx^2 + bx + c = 0,"></span> <span data-tex-inline="t \neq 0,"></span> <span data-tex-inline="r + s = -b/t,\ rs = c/t"></span></span>Given only their sum and product, find r and s.</div>
+  <div class="chq"><span class="chid">8i.4.4</span><span class="tagq">seam</span>An algebraist of the 1500s asked for two parts of 10 whose product is 40, and wrote 5 + √−15 and 5 − √−15. <br>Did he find them?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r08h.html">← 8h · absolute value and distance</a><a href="r08stat.html">8·stat · how spread out is a list? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>The book from ninth-century Baghdad is al-Khwārizmī’s, and 8i.4.1’s old problems are his. The algebraist of 8i.4.4 is Gerolamo Cardano, in his Ars Magna (1545).</p>
+  <aside class="voice para"><p>Al-Khwārizmī, in ninth-century Baghdad, in the book whose title gave the word “algebra”, solved “a square and ten of its roots make thirty-nine” by a recipe: halve the number of roots, giving five; multiply it by itself, twenty-five; add it to thirty-nine, sixty-four; take the root, eight; take away the half, five; three remains. He justified it with a drawing, which needs the geometry of rung 18; the arithmetic alone is the tech above.</p><cite>al-Khwārizmī, al-Kitāb al-mukhtaṣar fī ḥisāb al-jabr wa-l-muqābala (around 830), after Rosen's translation (1831)</cite></aside>
+  <p>Accepted names: the whole-exponent and fraction-exponent techniques are the laws of exponents.</p>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper}=Rung;
+const R=String.raw;
+function size(cv,H){ const dp=window.devicePixelRatio||1, W=cv.clientWidth||300; cv.width=W*dp; cv.height=H*dp; cv.style.height=H+'px'; const c=cv.getContext('2d'); c.setTransform(dp,0,0,dp,0,0); return {c,W}; }
+function gcd(a,b){ a=Math.abs(a); b=Math.abs(b); while(b){ [a,b]=[b,a%b]; } return a; }
+function frt(p,q){ if(q<0){p=-p;q=-q;} const g=gcd(p,q)||1; p/=g; q/=g; return q===1?`${p}`:(p<0?`-\\tfrac{${-p}}{${q}}`:`\\tfrac{${p}}{${q}}`); }
+function isq(n){ if(n<0) return null; const r=Math.round(Math.sqrt(n)); return r*r===n?r:null; }
+/* surd form for (P ± √D)/Q with integers */
+function rootTex(D){ if(D===0) return '0'; let k=1, m=D; for(let f=2;f*f<=m;f++){ while(m%(f*f)===0){ m/=f*f; k*=f; } } return m===1?`${k}`:(k===1?`\\sqrt{${m}}`:`${k}\\sqrt{${m}}`); }
+/* ---------- left: the recipe ---------- */
+let b=10, c=39, st=0;
+const kb=document.getElementById('kb'), kc=document.getElementById('kc');
+kb.oninput=()=>{ b=+kb.value; document.getElementById('ob').textContent=b; st=0; drawA(); };
+kc.oninput=()=>{ c=+kc.value; document.getElementById('oc').textContent=c; st=0; drawA(); };
+document.getElementById('nx').onclick=()=>{ if(st<6){ st++; drawA(); } };
+document.getElementById('rsA').onclick=()=>{ st=0; drawA(); };
+function drawA(){
+  const h2=frt(b,2), sq=frt(b*b,4), tot=frt(4*c+b*b,4), totv=(4*c+b*b)/4; const el=document.getElementById('stA'); el.innerHTML='';
+  const S=[[`x^2 ${b<0?'-':'+'} ${Math.abs(b)}x = ${c}`,'a square and '+(b<0?'less ':'')+Math.abs(b)+' roots make '+c],
+    [`\\tfrac b2 = ${h2}`,'halve the number of roots'],
+    [`\\big(\\tfrac b2\\big)^2 = ${sq}`,'multiply it by itself'],
+    [`\\big(x + ${h2}\\big)^2 = ${c} + ${sq} = ${tot}`.replace('+ -','- '),'add it to the number: completing the square'],
+    [totv<0?R`\text{a square is never negative: no answer}`:`\\big|x + ${h2}\\big| = \\sqrt{${tot}}`.replace('+ -','- '),'take the root'],
+    [totv<0?R`\varnothing`:(()=>{ const Dn=4*c+b*b; const r=isq(Dn); if(r!==null){ const x1=frt(-b+r,2), x2=frt(-b-r,2); return x1===x2?`x = ${x1}`:`x = ${x1} \\ \\text{or}\\ x = ${x2}`; } return `x = \\tfrac{${-b} \\pm ${rootTex(Dn)}}{2}`; })(),'take away the half'],
+    [totv<0?R`\text{(he would say: impossible)}`:(()=>{ const Dn=4*c+b*b, r=isq(Dn); if(r===null) return R`\text{he kept the positive answer, if any}`; const x1=(-b+r)/2, x2=(-b-r)/2; return `\\text{he kept } ${[x1,x2].filter(v=>v>0).map(v=>frt(v*2,2)).join(', ')||'\\text{nothing}'};\\ \\text{the line keeps both}`; })(),'what he kept']];
+  S.forEach((s,i)=>{ const d=document.createElement('div'); d.className=i===st?'on':(i>st?'gone':''); if(i>st){ d.innerHTML='<small>…</small>'; el.appendChild(d); return; } const m=document.createElement('span'); tex(m,s[0],false); d.appendChild(m); const sm=document.createElement('small'); sm.textContent=s[1]; d.appendChild(sm); el.appendChild(d); });
+}
+/* ---------- right: the formula ---------- */
+let A=1, B=-2, C=-1;
+[['qa','oa',v=>A=v],['qb','obb',v=>B=v],['qc','occ',v=>C=v]].forEach(([i,o,f])=>{ const e=document.getElementById(i); e.oninput=()=>{ let v=+e.value; if(i==='qa'&&v===0){ v=(A>0?-1:1); e.value=v; } f(v); document.getElementById(o).textContent=v; drawQ(); }; });
+const cvQ=document.getElementById('cvQ');
+function drawQ(){
+  const W0=cvQ.clientWidth||300, H=90; const {c}=size(cvQ,H); c.fillStyle=col('--card'); c.fillRect(0,0,W0,H);
+  const D=B*B-4*A*C, h=-B/(2*A), k=C-B*B/(4*A);
+  const xs=D>=0?[(-B+Math.sqrt(D))/(2*A),(-B-Math.sqrt(D))/(2*A)]:[];
+  const lo=-10, hi=10, X=v=>14+(W0-28)*(v-lo)/(hi-lo), y=48;
+  c.strokeStyle=col('--grid'); c.lineWidth=1; c.beginPath(); c.moveTo(8,y); c.lineTo(W0-8,y); c.stroke();
+  c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; c.fillStyle=col('--muted'); for(let v=lo;v<=hi;v+=5) c.fillText(v,X(v),y+18);
+  if(h>=lo&&h<=hi){ c.strokeStyle=col('--ember'); c.lineWidth=2; c.beginPath(); c.moveTo(X(h),y-16); c.lineTo(X(h),y+6); c.stroke(); c.fillStyle=col('--ember'); c.fillText('h',X(h),y-20); }
+  xs.forEach(v=>{ if(v>=lo&&v<=hi){ c.beginPath(); c.arc(X(v),y,6,0,7); c.fillStyle=col('--gold'); c.fill(); } });
+  const t=(n)=>n===1?'':(n===-1?'-':n);
+  const L=[`${t(A)}x^2 ${B===0?'':(B<0?'- ':'+ ')+(Math.abs(B)===1?'':Math.abs(B))+'x'} ${C===0?'':(C<0?'- ':'+ ')+Math.abs(C)} = 0`, `b^2 - 4tc = ${D}`];
+  L.push(`= ${t(A)}\\big(x ${-h>=0?'+':'-'} ${frt(Math.abs(B),Math.abs(2*A))}\\big)^2 ${k<0?'-':'+'} ${frt(Math.abs(4*A*C-B*B),Math.abs(4*A))}`.replace('x + 0\\big)','x\\big)').replace('x - 0\\big)','x\\big)'));
+  if(D<0) L.push(R`\htmlClass{new}{\text{discriminant negative: no answer on the line}}`);
+  else { const r=isq(D); let ans; if(r!==null){ const p=frt(-B+r,2*A), q=frt(-B-r,2*A); ans=p===q?`x = ${p}`:`x = ${p},\\ \\ x = ${q}`; } else ans=`x = \\dfrac{${-B} \\pm ${rootTex(D)}}{${2*A}}`;
+    L.push(`\\htmlClass{keep}{${ans}}`+(D===0?R`\ \ \text{(one answer)}`:''));
+    L.push(`\\text{sum } ${frt(-B,A)},\\ \\ \\text{product } ${frt(C,A)}`); }
+  tex(document.getElementById('eqQ'),'\\begin{gathered}'+L.join('\\\\ ')+'\\end{gathered}',true);
+}
+new ResizeObserver(drawQ).observe(cvQ);
+if(window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{ drawQ(); });
+drawA(); drawQ();
+
+/* ---------- slides ---------- */
+const N='\\htmlClass{new}', K='\\htmlClass{keep}';
+stepper('#sl1',[
+  {k:'ember',kl:'roots by powers',t:R`(\sqrt u\sqrt v)^2 = uv,\ \ \sqrt u\sqrt v \ge 0 \;\Rightarrow\; ${N}{\sqrt u\sqrt v = \sqrt{uv}}`,n:`Both not negative, same square: one-root.`},
+  {k:'ember',kl:'clearing a bottom',t:R`\tfrac{1}{\sqrt3 - 1} = \tfrac{\sqrt3 + 1}{2}`,n:`Multiply by the conjugate over itself; difference-of-squares.`}
+],{title:'The slides · roots by powers · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'below zero',t:R`u^{-k} = (u^k)^{-1}`,n:`So u^(−k) u^k = 1. With k = 1, 5b's u⁻¹. whole-exponent techniques: the techniques for integer exponents.`},
+  {k:'ember',kl:'fractions up high',t:R`u^{p/q} = (\sqrt[q]u)^p`,n:`For a positive u. fractional-powers-defined: the same for every pair naming p/q (cross-multiply, then compare qq′-th powers).`},
+  {k:'ember',kl:'using them',t:R`8^{2/3} = 4,\ \ 27^{-2/3} = \tfrac19,\ \ u^{1/2}u^{1/3} = u^{5/6}`,n:`fraction-exponent techniques. Root first, then power.`},
+  {k:'ember',kl:'positive bases only',t:R`(-8)^{1/3} \text{ vs } (-8)^{2/6}`,n:`Odd roots of negatives are written as roots.`}
+],{title:'The slides · powers below zero, and fractions up high · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'completing',t:R`x^2 + bx = \big(x + \tfrac b2\big)^2 - \big(\tfrac b2\big)^2`,n:`The traditional name, completing the square, means x² + bx + (b/2)², and no shape.`},
+  {k:'ember',kl:'forward',t:R`x^2 + 6x + 5 = ${N}{(x + 3)^2} - 4`,n:`Never below −4 (square-never-negative); −4 exactly at x = −3.`},
+  {k:'ember',kl:'with a leading number',t:R`2x^2 + 12x + 7 = 2(x + 3)^2 - 11`,n:`Factor the 2 out of the x terms first.`}
+],{title:'The slides · completing · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'the formula',t:R`tx^2 + bx + c = 0 \;\to\; x^2 + \tfrac bt x = -\tfrac ct`,n:`Multiply by 1/t; add −c/t.`},
+  {k:'ember',kl:'the formula',t:R`\big(x + \tfrac{b}{2t}\big)^2 = \tfrac{b^2 - 4tc}{4t^2}`,n:`Add (b/(2t))² to both sides; one bottom.`},
+  {k:'ember',kl:'the formula',t:R`x = ${N}{\dfrac{-b \pm \sqrt{b^2 - 4tc}}{2t}}`,n:`Roots of both sides (size-squared), unpack the bars, add −b/(2t). Needs b² − 4tc ≥ 0.`},
+  {k:'ember',kl:'when there is none',t:R`b^2 - 4tc \lt 0 \;\Rightarrow\; \varnothing`,n:`A square equal to a negative: never (square-never-negative).`},
+  {k:'ember',kl:'using it',t:R`x^2 - 2x - 1 = 0:\ \ x = 1 \pm \sqrt2`,n:`Check: sum 2, product −1.`}
+],{title:'The slides · the formula · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'a stranger',t:R`\sqrt{x + 3} = x - 3:\ \ x = 6\ (\text{not } 1)`,n:`Squaring gains answers; check in the original.`},
+  {k:'ember',kl:'in costume',t:R`r = x^2:\ \ r^2 - 5r + 4 = 0`,n:`Name the inside r; then put x² back: x = ±1, ±2.`}
+],{title:'The slides · a stranger · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

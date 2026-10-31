@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>12·eng · Will the shelf hold?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+@media (max-width:520px){.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r12phys.html">← 12·phys how does a small push lift a heavy weight?</a><a href="r12comp.html">next: 12·comp what can a machine with no memory check? →</a></p>
+  <div class="tags"><span class="tag eng">12·eng · engineering</span></div>
+  <h1>Will the shelf hold?</h1>
+  <p>Will the shelf hold? Whoever hangs a shelf asks it before the books go on. So does a builder laying a plank across a scaffold, and an engineer drawing a floor. The one sure test is to load the thing until it breaks, and that destroys it. Three things make the question hard. The load moves: books shift, and a painter walks along the plank. The wood varies from board to board. And no measurement is exact. Engineers answer with three habits. Find where the load does the most harm. Check that worst case against what the part can take. Keep a margin for everything nobody measured. This page builds the three habits from 12·phys's turning effects. Rung 12 earns its keep twice. The highest-and-lowest technique promises a worst case before anything is computed. And 12e's rounding says which way to round.</p>
+  <p class="gesture">A plank on two supports presses on them in the reverse ratio of the load's distances to them. A single load bends the wood under it with a turning effect that grows with its distance from each support, and is greatest when the load stands at the middle: a quarter of the load times the span. A load spread evenly over the span bends it most at the middle too, by an eighth of the total load times the span. A part passes when what it can take is at least the safety factor times the worst load. Round loads up and strengths down.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r12phys.html">12·phys</a> (force, weight, the newton, the turning effect, balance, balance-formula, a uniform bar acts at its middle), <a href="r12c.html">12c</a> (highest-and-lowest), <a href="r12e.html">12e</a> (bisection, settling a rounding at its boundary), <a href="r11e.html">11e</a> (a joint doesn't break continuity), <a href="r08i.html">8i</a> (completing the square), <a href="r05i.html">5i</a> (ratio, units) and <a href="r05f.html">5f</a> (solving). <a href="r12comp.html">12·comp</a> asks what a machine with no memory can check.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · read it through, then work the picture and the slides</div>
+
+  <h3>The words</h3>
+  <p class="eqline" data-pid="2696d7">From here on, on this page, a beam is a stiff bar, as in 12·phys, held up at two or more places along it. Each such place is a support. A plank across two trestles, a shelf on two brackets and a floor joist resting on two walls are all beams. The span is the distance between two supports. The load is everything the beam carries, its own weight included.</p>
+  <p class="eqline" data-pid="d6c99f">From here on, on this page, the push of a support is the force, in newtons, with which it holds the beam up. Its accepted name is the support's reaction. A load spread evenly along a beam is given by its weight per metre, w, in N/m. Thirty kilograms of books on each metre of shelf is w ≈ 30 · 9.8 = 294 N/m.</p>
+  <p class="eqline" data-pid="ca499d">Page letters, said out loud. P is a load at one place, in newtons (not 7·phys's power). d is where it stands, measured from the left support A, at 0. The columns of working write that same place a. L is the span, so the right support B is at L (12·phys's L was a bar's length). R_A and R_B are the pushes of A and B. w is a spread load per metre. M(x) is the turning effect at a cut, defined below (not 12c's greatest value).</p>
+  <p data-pid="63e60a">The physics premise comes from 12·phys. A beam at rest does not move and does not turn. So two things are true. The forces on it balance: the pushes up add to the loads down. And the turning effects about the place of any support add to 0, with each push counted as a weight below 0, as 12·phys.3.1b counted a balloon. <b>A beam at rest is a lever that balances, with its supports pushing as weights below 0.</b> The premise has the accepted name static equilibrium.</p>
+
+  <h3>How hard each support pushes</h3>
+  <p data-pid="65ef4b">Support-pushes technique: <b>a load shares itself between two supports in the reverse ratio of its distances to them.</b> Precisely: a load P at d, on a beam with supports at 0 and L, gives the pushes R_B = Pd/L and R_A = P(L − d)/L. The beam's own weight is set aside here; it adds its own pushes, found the same way.</p>
+  <pre class="lines" data-k="ember" data-label="12·eng: the support-pushes technique">
+P\,(a - 0) + (-R_A)(0 - 0) + (-R_B)(L - 0) = 0 @@ turning effects about A add to 0 (the premise; 12·phys's turning effect W(x − p) with p = 0)
+Pa - R_B L = 0 @@ 5h's collecting; the push at A has distance 0
+R_B = \tfrac{Pa}{L} @@ adding-keeps-answers, then multiplying-keeps-answers by 1/L (5f); L &gt; 0
+R_A + R_B = P @@ the forces balance (the premise)
+\htmlClass{new}{R_A = \tfrac{P(L - a)}{L}} \quad \blacksquare @@ adding-keeps-answers; one bottom (5g)
+  </pre>
+  <p data-pid="f37253">Read it against 12·phys's balance-formula. Treat the two pushes as weights at 0 and L. Their balance point is (R_A · 0 + R_B · L)/(R_A + R_B) = Pd/P = d. <b>The load stands at the balance point of the pushes that hold it.</b> So the technique is the balance-formula run backwards.</p>
+  <pre class="lines" data-k="ember" data-label="12·eng: a painter on a plank">
+P = 90 \cdot 9.8 = 882 \text{ N},\ \ a = 0.6 \text{ m},\ \ L = 2.4 \text{ m} @@ a painter with tools, a quarter of the way along a plank on two trestles
+R_B = \tfrac{882 \cdot 0.6}{2.4} = \htmlClass{new}{220.5} \text{ N} @@ support-pushes
+R_A = 882 - 220.5 = \htmlClass{new}{661.5} \text{ N} @@ the nearer trestle takes three quarters: 1.8 : 0.6 = 3 : 1
+  </pre>
+
+  <h3>Where the wood is bent hardest</h3>
+  <p data-pid="9c00dc">Picture the plank sawn through at a place x. The left piece would turn about the cut. What stops it is the wood at x, which holds the two pieces together. So the wood at x carries a turning effect, equal and opposite to that of everything left of the cut. The greater it is, the harder the wood there is bent. A board breaks where that turning effect first passes what the wood can take.</p>
+  <p class="eqline" data-pid="2d8dce">From here on, on this page, the turning effect at the cut x is M(x): the net turning effect about x of every force on the beam left of x, with a push up counted positive. For a single load P at a, M(x) = R_A x when x ≤ a, and M(x) = R_A x − P(x − a) when x ≥ a. Its accepted name is the bending moment, measured in N · m.</p>
+  <pre class="lines" data-k="ember" data-label="12·eng: the turning effect along the plank">
+x \le a:\ \ M(x) = R_A\,x @@ only the push at A lies left of the cut
+x \ge a:\ \ M(x) = R_A x - P(x - a) = Pa - R_B x = R_B(L - x) @@ collect; R_A − P = −R_B; Pa = R_B L (support-pushes)
+M(a) = R_A a = \htmlClass{new}{\tfrac{P\,a(L - a)}{L}} @@ both pieces agree at a: a joint (11e), so M is continuous on [0, L]
+  </pre>
+  <p data-pid="0cdf56">Both pieces are linear functions (9e). The first rises from 0 at A, the second falls to 0 at B, and they meet under the load. <b>For one load, the wood is bent hardest right under it.</b> For the painter, M(0.6) = 661.5 · 0.6 = 396.9 N · m.</p>
+
+  <h3>The worst place for a load that moves</h3>
+  <p data-pid="8581e3">The painter walks. Where is she most dangerous? Before computing anything, rung 12 says there is an answer. Wherever she stands, the hardest bend along the plank is g(d) = Pd(L − d)/L, a polynomial in d. So g is continuous (11d) on the closed interval [0, L], and highest-and-lowest promises a place where it is greatest. Completing the square finds it.</p>
+  <p data-pid="d0a390">Worst-place technique: <b>a single load does the most harm at the middle of the span, where it bends the wood with a turning effect of PL/4.</b></p>
+  <pre class="lines" data-k="ember" data-label="12·eng: the worst-place technique">
+g(a) = \tfrac{P}{L}\,a(L - a),\ \ 0 \le a \le L @@ the hardest bend, with the load at a
+a(L - a) = \tfrac{L^2}{4} - \big(a - \tfrac L2\big)^2 @@ completing the square (8i)
+g(a) = \tfrac PL\Big(\tfrac{L^2}{4} - \big(a - \tfrac L2\big)^2\Big) \le \tfrac PL \cdot \tfrac{L^2}{4} @@ square-never-negative; P/L &gt; 0 keeps the order
+\htmlClass{new}{g(a) \le \tfrac{PL}{4}},\ \text{equal exactly at } a = \tfrac L2 \quad \blacksquare @@ a square is 0 only at 0
+P = 882,\ L = 2.4:\ \ \tfrac{PL}{4} = \htmlClass{new}{529.2} \text{ N} \cdot \text{m} @@ a third more than at a = 0.6
+  </pre>
+  <p data-pid="e2ec27">The promise matters more than the formula. With two painters, or a pile of paint tins, there is no tidy g. The physics premise of 12·phys is still true: moving the loads a little changes every turning effect a little. So the hardest bend is still continuous in where the loads stand, on a closed interval of places, and a worst place still exists. The engineer can then search for it, by trying places or by halving. A search for a worst case that might not exist could go on finding worse cases for ever. 12c's x on [0, 1) does exactly that.</p>
+
+  <h3>A load spread out</h3>
+  <p data-pid="0e119c">Books lie all along a shelf. By 12·phys's premise, a stretch of even load turns things as if all of it sat at its middle. A load w per metre over the span [0, L] weighs wL and acts at L/2. So by support-pushes each support pushes wL/2. Left of a cut at x lies a stretch of length x, weighing wx, acting at x/2.</p>
+  <p data-pid="a6a2ca">Spread-load technique: <b>a load spread evenly over a span bends the wood hardest at the middle, with a turning effect of wL²/8.</b></p>
+  <pre class="lines" data-k="ember" data-label="12·eng: the spread-load technique">
+M(x) = \tfrac{wL}{2}\,x - wx \cdot \big(x - \tfrac x2\big) @@ the push at A, and the books left of the cut acting at their middle
+= \tfrac w2\,x(L - x) @@ collect (5h)
+= \tfrac w2\Big(\tfrac{L^2}{4} - \big(x - \tfrac L2\big)^2\Big) @@ completing the square, as before
+\htmlClass{new}{M(x) \le \tfrac{wL^2}{8}},\ \text{equal exactly at } x = \tfrac L2 \quad \blacksquare @@ square-never-negative
+  </pre>
+  <p data-pid="f34f11">Houses in the United States are framed with upright wall studs 16 inches apart, about 0.406 m. Shelf brackets are screwed into studs, so a common span is two gaps, about 0.81 m. A metre of hardback books weighs roughly 20 to 30 kg.</p>
+  <pre class="lines" data-k="ember" data-label="12·eng: a shelf of books">
+w = 30 \cdot 9.8 = 294 \text{ N/m},\ \ L = 0.81 \text{ m} @@ the heavier end of the range: see "rounding the wrong way" below
+R_A = R_B = \tfrac{294 \cdot 0.81}{2} \approx 119.1 \text{ N} @@ spread-load: each bracket takes half
+\tfrac{wL^2}{8} = \tfrac{294 \cdot 0.6561}{8} \approx \htmlClass{new}{24.1} \text{ N} \cdot \text{m} @@ at the middle of the shelf
+  </pre>
+  <p data-pid="e0105d">The square of the span matters. Double the span and the hardest bend is four times as great, on the same books per metre. That is why long shelves sag in the middle and short ones do not.</p>
+
+  <h3>The margin: a safety factor</h3>
+  <p class="eqline" data-pid="adf9a6">From here on, on this page, the capacity of a part is the greatest load, or turning effect, it can take without failing. It is measured by breaking samples. The safety factor of a design is the ratio capacity : worst load, read as the fraction capacity/worst. <b>A design passes a safety factor s when the part's capacity is at least s times the worst load it will meet.</b></p>
+  <p data-pid="120032">Why a margin at all? Boards of one kind break at different loads. People overload what they were told not to. Wood weakens with damp and with years. And every calculation on this page simplified something. The United States' workplace safety rules ask each part of a scaffold to hold its own weight and at least 4 times the greatest load it is meant to carry. The ropes that hang a scaffold must hold at least 6 times.</p>
+  <pre class="lines" data-k="ember" data-label="12·eng: a scaffold plank checked before anyone stands on it">
+\text{own weight } 15 \text{ kg}:\ \ w = \tfrac{147}{2.4} = 61.25 \text{ N/m},\ \ \tfrac{wL^2}{8} = 44.1 \text{ N} \cdot \text{m} @@ spread-load, at the middle
+\text{the painter at worst}:\ \ \tfrac{PL}{4} = 529.2 \text{ N} \cdot \text{m} @@ worst-place, also at the middle
+44.1 + 4 \cdot 529.2 = \htmlClass{new}{2160.9} \text{ N} \cdot \text{m} @@ turning effects of separate loads add (each is 12·phys's Σ); both are greatest at the same place
+\text{capacity} \ge 2400 \text{ N} \cdot \text{m} \Rightarrow \text{passes} @@ if tests break planks of this kind at no less than 2400 N · m
+  </pre>
+
+  <h3>Rounding the wrong way, on purpose</h3>
+  <p data-pid="772d35">Every number in a check is rounded somewhere. Engineers round each one the way that makes the check harder to pass. <b>Loads round up and strengths round down.</b> Books at 20 to 30 kg per metre are taken as 30. A test series that broke planks at 2437, 2511 and 2480 N · m is written as 2400, below the least of them.</p>
+  <p data-pid="f3b50a">12e met the same choice. A trap [1.414, 1.4145] for √2 can be reported cut off or rounded, and you say which. An engineer whose halving traps a worst turning effect in [2160, 2161] N · m writes 2161. One whose halving traps a capacity in [2400, 2401] writes 2400. The reason is the cost of each mistake. A shelf that looks weaker than it is costs a few more screws. A shelf that looks stronger than it is falls down.</p>
+
+  <h3>When a push turns into a pull</h3>
+  <p data-pid="1016da">Support-pushes can be used for a load past a support too, with d &gt; L. Then R_A = P(L − d)/L is below 0: A would have to pull the plank down. A trestle cannot pull. So the plank lifts off A and tips. Here only the plank's own weight, on the other side of B, holds it down.</p>
+  <pre class="lines" data-k="ember" data-label="12·eng: a plank that overhangs">
+\begin{aligned}&\text{plank } 2.7 \text{ m, trestles at } 0 \text{ and } 2.4,\\ &\quad \ \ 147 \text{ N at its middle } 1.35\end{aligned} @@ a 0.3 m overhang at the right
+\text{about } B:\ \ 147(1.35 - 2.4) + 882(2.7 - 2.4) + (-R_A)(0 - 2.4) = 0 @@ the premise, with the painter at the very end
+-154.35 + 264.6 + 2.4R_A = 0 @@ collect
+R_A \approx \htmlClass{new}{-45.9} \text{ N} @@ below 0: A must pull, and cannot. The plank tips
+  </pre>
+  <p data-pid="8ad4e8">The same rules limit how far a plank may stick out past its support, unless it is fixed down. A plank must reach at least 6 inches past the middle of its support, so it cannot slip off. A short plank may reach at most 12 inches past it, so it cannot tip.</p>
+
+  <h3>Which rung licenses each step</h3>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>step</th><th>licence</th></tr>
+    <tr><td>the pushes of the supports</td><td>12·phys's turning effect and balance; 5f's solving</td></tr>
+    <tr><td>the turning effect at a cut is continuous</td><td>9e's linear pieces; 11e's joint</td></tr>
+    <tr><td>a worst place exists</td><td>12c's highest-and-lowest, on the closed interval [0, L]</td></tr>
+    <tr><td>finding it</td><td>8i's completing the square; or trying places and halving (12e)</td></tr>
+    <tr><td>a spread load acts at its middle</td><td>12·phys's premise for a uniform bar</td></tr>
+    <tr><td>which way to round</td><td>12e's settling a rounding at its boundary</td></tr>
+  </table></div>
+
+  <h3>Illegal moves</h3>
+  <pre class="lines" data-k="ember" data-label="12·eng: tempting, and not allowed">
+\text{each support takes half the load}\,? @@ only with the load at the middle; at a = 0.6 m of 2.4 m, the near one takes three quarters
+\begin{aligned}&\text{the plank bends hardest at its middle}\,\\ &\quad ?\end{aligned} @@ for one load, it bends hardest under the load (at 0.6 m: 396.9 against 294 N · m at the middle)
+\text{twice the span, twice the bend}\,? @@ for a spread load, wL²/8: twice the span is four times the bend
+\text{safety factor } 4 \Rightarrow \text{a quarter of the load is safe}\,? @@ the factor multiplies the worst load: capacity ≥ 4 × worst
+\text{round each number to the nearest}\,? @@ loads round up and strengths round down
+\text{a negative push is a small push}\,? @@ it is a pull the support must supply; a trestle cannot, and the plank tips
+  </pre>
+
+  <h3>Running it backwards</h3>
+  <p data-pid="577155">Handed the two pushes, find where a single load stands: d = L · R_B/(R_A + R_B). Handed a worst turning effect, find the load: P = 4 · worst/L, or w = 8 · worst/L². Handed a capacity and a safety factor, find the greatest load the part may carry: divide the capacity by the factor first. Handed a span that fails, shorten it: the bend falls with the square of the span.</p>
+</section>
+
+<section class="pic" id="pic">
+  <div class="eyebrow">The picture · left: a plank on two trestles, its loads and its pushes · right: the turning effect at every cut, and the worst over every place</div>
+  <div class="panels">
+    <div class="panel">
+      <div class="chips" id="mch"><button class="on" data-m="one">one painter</button><button data-m="two">two painters</button><button data-m="books">books, spread</button><button data-m="over">overhang</button></div>
+      <canvas id="cvP"></canvas>
+      <div class="kn"><span class="m">place d</span><input type="range" id="ka" min="0" max="2.4" step="0.01" value="0.6"><output id="oa"></output></div>
+      <div class="kn"><span class="m">mass</span><input type="range" id="km" min="20" max="140" step="1" value="90"><output id="om"></output></div>
+      <div class="cap">Ink: the plank. Grey wedges: the trestles. Ember arrows: loads down. Teal arrows: the pushes up; an ember push below a trestle is a pull it cannot give, and the plank tips. In “two painters” d is where the first stands; the second stands 0.6 m to the right. In “books” the mass is per metre.</div>
+    </div>
+    <div class="panel">
+      <canvas id="cvM"></canvas>
+      <div class="kn"><span class="m">capacity</span><input type="range" id="kc" min="200" max="4000" step="50" value="2400"><output id="oc"></output></div>
+      <div class="chips" id="sch"><span class="m">safety factor</span><button data-s="2">2</button><button class="on" data-s="4">4</button><button data-s="6">6</button></div>
+      <div class="cap">Ember: M(x), the turning effect at the cut x, for the loads as they stand; over a support with an overhang it falls below 0, bending the plank the other way, and its size is what counts. Plum dashed: the hardest bend along the plank for each place d of the load; its top is the worst place. The ember dot is where you are. Gold: capacity divided by the safety factor, the most the loads may make.</div>
+      <div class="verdict" id="vd"></div>
+      <div class="eqbox" id="eq"></div>
+    </div>
+  </div>
+</section>
+
+<section class="slides" id="sl1"><div class="eyebrow">The slides · the premise; support-pushes; the balance-formula backwards; the turning effect at a cut; worst-place; a worst place exists; spread-load; the shelf; a safety factor; the plank checked; rounding the wrong way; a push turns into a pull; illegal moves · ← → keys work</div></section>
+
+<section class="sayback">
+  <div class="eyebrow">Say it back · then work it</div>
+  <h2>Questions</h2>
+  <div class="phkey"></div>
+  <ol>
+    <li><span class="qid">12·eng.1</span><span class="gname">Planks and shelves.</span><span class="gwhy">Do: build the page's pieces.</span>
+      <ol class="sub">
+        <li><span class="qid">12·eng.1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{plank } 2.4\text{ m on end trestles,}"></span> <span data-tex-inline="\text{painter } 75\text{ kg,}"></span> <span data-tex-inline="0.8\text{ m from the left end,}"></span> <span data-tex-inline="g \approx 9.8\text{ m/s}^2"></span></span>Find each trestle's push.</li><li><span class="givens"><span data-tex-inline="\text{the plank and painter of part a}"></span></span>Find the turning effect under the painter and at the middle.</li><li><span class="givens"><span data-tex-inline="\text{span } 0.81\text{ m between brackets,}"></span> <span data-tex-inline="25\text{ kg of books per metre, even}"></span></span>Find the pushes, and the greatest turning effect and where it is.</li><li><span class="givens"><span data-tex-inline="\text{plank of part a: } 14\text{ kg,}"></span> <span data-tex-inline="\text{breaks at no less}"></span> <span data-tex-inline="\text{than } 1800\text{ N·m,}"></span> <span data-tex-inline="\text{safety factor } 4"></span></span>Decide whether the painter passes, wherever she stands.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">12·eng.2</span><span class="gname">From the bend back to the load.</span><span class="gwhy">Undo: run the page's techs backwards.</span>
+      <ol class="sub">
+        <li><span class="qid">12·eng.2.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{span } 3\text{ m, one load,}"></span> <span data-tex-inline="\text{push at } B = 3 \times \text{push at } A"></span></span>Find where the load is.</li><li><span class="givens"><span data-tex-inline="\text{span } 2\text{ m, one moving load,}"></span> <span data-tex-inline="\text{worst turning effect } 450\text{ N·m}"></span></span>Find the load, in newtons and in kilograms.</li><li><span class="givens"><span data-tex-inline="\text{span } 0.9\text{ m, even load,}"></span> <span data-tex-inline="\text{greatest turning effect } 30\text{ N·m}"></span></span>Find the load per metre and the whole load.</li><li><span class="givens"><span data-tex-inline="\text{trestles } 2\text{ m apart,}"></span> <span data-tex-inline="\text{each pushes at most } 600\text{ N,}"></span> <span data-tex-inline="\text{load } 1000\text{ N between them}"></span></span>Find every place where the load may stand.</li></ol></li>
+      </ol></li>
+    <li><span class="qid">12·eng.3</span><span class="gname">Where it gives.</span><span class="gwhy">Bend: find where the techs stop working.</span>
+      <ol class="sub">
+        <li><span class="qid">12·eng.3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{plank } 2.7\text{ m, } 15\text{ kg,}"></span> <span data-tex-inline="\text{trestles at } 0 \text{ and } 2.4\text{ m,}"></span> <span data-tex-inline="\text{painter } 90\text{ kg, from the middle}"></span></span>Find how far right she can walk before the plank tips.</li><li><span class="givens"><span data-tex-inline="\text{two painters, } 90\text{ kg each,}"></span> <span data-tex-inline="0.6\text{ m apart,}"></span> <span data-tex-inline="\text{plank } 2.4\text{ m on end trestles}"></span></span>Find the worst place for the pair and the worst turning effect, deciding whether it puts the middle of the pair at the middle of the plank.</li><li><span class="givens"><span data-tex-inline="\text{brackets at } 0, 0.8, 1.6\text{ m,}"></span> <span data-tex-inline="\text{books spread evenly}"></span></span>Decide whether the premise alone finds the three pushes.</li><li><span class="givens"><span data-tex-inline="\text{a load anywhere on } (0, L),"></span> <span data-tex-inline="\text{never on a support}"></span></span>Decide whether highest-and-lowest still promises a worst place. <br>Decide whether there is a worst place, and whether there is a least harmful one.</li></ol></li>
+      </ol></li>
+    <li class="optgroup"><span class="qid">12·eng.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder challenges that rely on your own making. The page is complete without these; the rung's star needs them.</span>
+      <ol class="sub">
+        <li class="opt"><span class="qid">12·eng.4.1</span><span class="tagq">build</span>Design a shelf of your own, choosing its span, the books it carries per metre, and the turning effect its boards break at, and check it with safety factor 3. <br>Then one heavy box of your own is set on it as well, wherever it does most harm. <br>Find the heaviest box it may hold.</li>
+        <li class="opt"><span class="qid">12·eng.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{one moving load:}"></span> <span data-tex-inline="\text{one worst place}"></span></span>Find loads moving together along a span with exactly two worst places, and loads with endlessly many.</li>
+        <li class="opt"><span class="qid">12·eng.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{an even load bends}"></span> <span data-tex-inline="\text{hardest at the middle;}"></span> <span data-tex-inline="\text{a beam is bent hardest}"></span> <span data-tex-inline="\text{at its middle}"></span></span>Decide whether its load must be even, or the same on both sides of the middle.</li>
+        <li class="opt"><span class="qid">12·eng.4.4</span><span class="tagq">seam</span>In 1638 a scientist worked out from the lever how much a beam sticking out of a wall can hold before it breaks. Some fifty years later another broke real beams, and they broke under less. Engineers now multiply their loads by safety factors of 2 to 6 whatever they calculate. <br>Is a safety factor part of the calculation, or an admission that the calculation is not believed?</li>
+      </ol></li>
+  </ol>
+  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
+</section>
+
+<nav class="nextrung"><a href="r12phys.html">← 12·phys · how does a small push lift a heavy weight?</a><a href="r12comp.html">12·comp · what can a machine with no memory check? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>The scientist of 1638 in 12·eng.4.4 is Galileo Galilei, in Two New Sciences, whose Second Day is the first book on the strength of beams. He took the wood of the whole break to pull equally hard, which made his beams about three times too strong. Edme Mariotte broke beams of wood and glass in the 1670s and 1680s and found them weaker than Galileo's figure. The full account of how the pull is shared across a break came only in the eighteenth and nineteenth centuries.</p>
+  <aside class="voice para"><p>Galileo asks why a large beam breaks under its own weight where a small one of the same shape stands, and answers that strength grows more slowly than weight as all the sizes grow together.</p><cite>Galileo Galilei, Two New Sciences (1638), Second Day; paraphrase</cite></aside>
+  <h3>Accepted names</h3>
+  <p>The push of a support is the reaction. The turning effect at a cut is the bending moment, and its graph along the beam the bending moment diagram. A beam on two end supports is simply supported; one fixed at one end only, sticking out, is a cantilever. A beam with more supports than the premise can solve for, as in 12·eng.3.1c, is statically indeterminate. The scaffold rules quoted are the United States' Occupational Safety and Health Administration's, in its scaffold standard for construction.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="12·eng: a worked “proof”, not allowed">
+\text{one painter: worst at the middle, } \tfrac{PL}{4} @@ fine (worst-place)
+\text{two painters: put the pair's middle at the plank's middle} @@ not allowed: worst-place was proved for one load only
+\text{so the worst is } 793.8 \text{ N} \cdot \text{m} @@ false: 12·eng.3.1b finds a worse place, a little off the middle
+  </pre>
+</section>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return 'none'; let s=v.toFixed(d==null?2:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s.replace('-','−'); };
+const g=9.8;
+let mode='one', SF=4;
+const ka=$('ka'),km=$('km'),kc=$('kc');
+/* a set-up: span Ls (trestles at 0 and Ls), plank from 0 to Lp, its own weight spread; point loads and spread loads */
+function setup(){ const a=+ka.value, m=+km.value;
+  if(mode==='one') return {Ls:2.4,Lp:2.4,own:0,pts:[[a,m*g]],spr:[],amax:2.4};
+  if(mode==='two') return {Ls:2.4,Lp:2.4,own:0,pts:[[a,m*g],[a+0.6,m*g]],spr:[],amax:1.8};
+  if(mode==='books') return {Ls:0.81,Lp:0.81,own:0,pts:[],spr:[[0,0.81,m*g]],amax:0.81};
+  return {Ls:2.4,Lp:2.7,own:15*g,pts:[[a,m*g]],spr:[],amax:2.7}; }
+function solve(S,pts){ pts=pts||S.pts; const own=S.own?[[0,S.Lp,S.own/S.Lp]]:[]; const spr=S.spr.concat(own);
+  let tot=0,mom=0; pts.forEach(([s,P])=>{ tot+=P; mom+=P*s; }); spr.forEach(([s0,s1,w])=>{ const W=w*(s1-s0); tot+=W; mom+=W*(s0+s1)/2; });
+  const RB=mom/S.Ls, RA=tot-RB;
+  const M=x=>{ let v=RA*x; if(x>S.Ls) v+=RB*(x-S.Ls); pts.forEach(([s,P])=>{ if(s<x) v-=P*(x-s); }); spr.forEach(([s0,s1,w])=>{ if(x>s0){ const e=Math.min(x,s1); v-=w*(e-s0)*(x-(s0+e)/2); } }); return v; };
+  let mx=-Infinity,at=0,lo=0; for(let i=0;i<=480;i++){ const x=S.Lp*i/480, v=M(x); if(Math.abs(v)>mx){ mx=Math.abs(v); at=x; } if(v<lo) lo=v; }
+  return {RA,RB,M,mx,at,lo}; }
+function worstOver(S){ if(mode==='books') return null; const out=[]; for(let i=0;i<=120;i++){ const a=S.amax*i/120; const pts=mode==='two'?[[a,S.pts[0][1]],[a+0.6,S.pts[1][1]]]:[[a,S.pts[0][1]]]; out.push([a,solve(S,pts).mx]); } return out; }
+const PP=plane($('cvP'),{x:[-0.25,2.95],y:[-1.3,1.3],grid:0,labels:0,aspect:0.62,draw:P=>drawP(P)});
+const PM=plane($('cvM'),{x:[-0.1,2.8],y:[-200,1000],grid:0,labels:0,aspect:0.8,draw:P=>drawM(P)});
+function arrow(P,x,y1,y2,c,w){ P.line(x,y1,x,y2,c,w||2.4); const d=y2<y1?-1:1; P.poly([[x,y2],[x-0.05,y2-d*0.14],[x+0.05,y2-d*0.14]],null,c); }
+function drawP(P){ const S=setup(), r=solve(S); const scale=v=>Math.max(0.12,Math.min(0.95,v/900*0.6));
+  P.line(0,0,S.Lp,0,'--ink',6);
+  [0,S.Ls].forEach(x=>P.poly([[x,-0.05],[x-0.1,-0.42],[x+0.1,-0.42]],null,'--muted'));
+  S.pts.forEach(([s,F])=>{ arrow(P,s,0.12+scale(F),0.12,'--ember'); P.text(fm(F/g,0)+' kg',s,0.2+scale(F),'--ember','center',11); });
+  S.spr.forEach(([s0,s1,w])=>{ const c=P.ctx; c.globalAlpha=.35; P.poly([[s0,0.05],[s1,0.05],[s1,0.35],[s0,0.35]],null,'--gold'); c.globalAlpha=1; for(let x=s0+0.05;x<s1;x+=0.12) arrow(P,x,0.33,0.07,'--ember',1.3); P.text(fm(w/g,0)+' kg per metre',(s0+s1)/2,0.5,'--ember','center',11); });
+  [[0,r.RA],[S.Ls,r.RB]].forEach(([x,F])=>{ const bad=F<-1e-9; const len=scale(Math.abs(F)); arrow(P,x+(x?0.16:-0.16),-0.5-len,-0.5,bad?'--ember':'--teal'); });
+  P.text('A: '+fm(r.RA,1)+' N',0,-1.15,r.RA<0?'--ember':'--teal','left',11);
+  P.text('B: '+fm(r.RB,1)+' N',S.Ls,-1.15,'--teal','right',11);
+  if(r.RA<0) P.text('A must pull: the plank tips',S.Lp/2,1.12,'--ember','center',12); }
+function drawM(P){ const S=setup(), r=solve(S), W=worstOver(S); const cap=+kc.value/SF;
+  let top=Math.max(r.mx,cap,W?Math.max(...W.map(q=>q[1])):0)*1.15; top=Math.max(top,50); P.o.y=[Math.min(-top*0.18,r.lo*1.2),top]; P.o.x=[-0.1,S.Lp+0.1];
+  const c=P.ctx; P.line(P.o.x[0],0,P.o.x[1],0,'--muted',1.2);
+  for(let k=1;k<=4;k++){ const v=top*k/4.6; P.line(P.o.x[0],v,P.o.x[1],v,'--grid',1); P.text(fm(v,0),P.o.x[0]+0.02,v+top*0.015,'--muted','left',10); }
+  for(let x=0;x<=S.Lp+1e-9;x+=(S.Lp<1?0.2:0.4)) P.text(fm(x,1)+' m',x,-top*0.12,'--muted','center',10);
+  P.line(P.o.x[0],cap,P.o.x[1],cap,'--gold',1.6,[5,4]);
+  const pts=[]; for(let i=0;i<=300;i++){ const x=S.Lp*i/300; pts.push([x,r.M(x)]); } c.globalAlpha=.2; P.poly([[0,0]].concat(pts,[[S.Lp,0]]),null,'--ember'); c.globalAlpha=1; P.poly(pts,'--ember',null,2.4,false);
+  if(W){ c.setLineDash([6,4]); P.poly(W,'--plum',null,1.6,false); c.setLineDash([]); const a=+ka.value; const cur=W.reduce((b,q)=>Math.abs(q[0]-a)<Math.abs(b[0]-a)?q:b); P.dot(cur[0],cur[1],'--plum',4); }
+  P.dot(r.at,r.M(r.at),'--ember',5); }
+function read(){ const S=setup(), r=solve(S); $('oa').textContent=fm(+ka.value,2)+' m'; $('om').textContent=km.value+(mode==='books'?' kg/m':' kg'); $('oc').textContent=kc.value+' N·m';
+  ka.max=S.amax; ka.disabled=(mode==='books');
+  const W=worstOver(S); let wv=r.mx, wa=null; if(W){ const b=W.reduce((p,q)=>q[1]>p[1]?q:p); wv=b[1]; wa=b[0]; }
+  const need=SF*wv, cap=+kc.value, ok=cap>=need&&r.RA>=0;
+  const vd=$('vd'); vd.className='verdict '+(ok?'win':'lose');
+  vd.textContent=(r.RA<0?'The plank tips: no safety factor helps. ':'')+'Hardest bend now: '+fm(r.mx,1)+' N·m at '+fm(r.at,2)+' m. '+(W?'Worst over every place: '+fm(wv,1)+' N·m, with d = '+fm(wa,2)+' m. ':'')+'Needed: '+SF+' × '+fm(wv,1)+' = '+fm(need,0)+' N·m against a capacity of '+cap+'. '+(ok?'Passes.':'Fails.');
+  if(mode==='one') tex($('eq'),R`R_B = \tfrac{Pa}{L} = ${fm(r.RB,1)},\ \ R_A = ${fm(r.RA,1)},\ \ M(a) = \tfrac{Pa(L - a)}{L} = ${fm(r.mx,1)},\ \ \tfrac{PL}{4} = ${fm(wv,1)}`,true);
+  else if(mode==='books') tex($('eq'),R`R_A = R_B = \tfrac{wL}{2} = ${fm(r.RA,1)},\ \ \tfrac{wL^2}{8} = ${fm(r.mx,1)}`,true);
+  else if(mode==='two') tex($('eq'),R`R_A = ${fm(r.RA,1)},\ \ R_B = ${fm(r.RB,1)},\ \ \max M = ${fm(r.mx,1)}\ \text{at}\ ${fm(r.at,2)}`,true);
+  else tex($('eq'),R`2.4R_A = 154.35 - ${fm(+km.value*g,1)}(a - 2.4)\ \Rightarrow\ R_A = ${fm(r.RA,1)}`,true); }
+function all(){ PP.redraw(); PM.redraw(); read(); }
+[ka,km,kc].forEach(el=>el.addEventListener('input',all));
+document.querySelectorAll('#mch button').forEach(b=>b.onclick=()=>{ mode=b.dataset.m; document.querySelectorAll('#mch button').forEach(z=>z.classList.toggle('on',z===b));
+  if(mode==='books'){ km.min=5; km.max=60; km.value=30; } else { km.min=20; km.max=140; km.value=90; }
+  ka.max=setup().amax; ka.value=mode==='over'?2.7:mode==='two'?1.05:0.6; all(); });
+document.querySelectorAll('#sch button').forEach(b=>b.onclick=()=>{ SF=+b.dataset.s; document.querySelectorAll('#sch button').forEach(z=>z.classList.toggle('on',z===b)); all(); });
+window.__pic={set:(m,a,kg)=>{ mode=m; ka.max=setup().amax; if(kg!=null) km.value=kg; if(a!=null) ka.value=a; all(); const S=setup(), r=solve(S); return {RA:+r.RA.toFixed(3),RB:+r.RB.toFixed(3),mx:+r.mx.toFixed(3),at:+r.at.toFixed(3)}; }};
+all();
+stepper('#sl1',[
+  {k:'ember',kl:'the premise',t:R`\text{forces balance};\ \ \text{turning effects add to } 0`,n:`A beam at rest is a lever that balances, its supports pushing as weights below 0.`},
+  {k:'ember',kl:'support-pushes',t:R`\htmlClass{new}{R_B = \tfrac{Pa}{L},\ \ R_A = \tfrac{P(L - a)}{L}}`,n:`The reverse ratio of the distances.`},
+  {k:'ember',kl:'the balance-formula backwards',t:R`\tfrac{R_A \cdot 0 + R_B \cdot L}{R_A + R_B} = a`,n:`The load stands at the balance point of the pushes.`},
+  {k:'ember',kl:'the turning effect at a cut',t:R`M(x) = R_A x \ (x \le a),\ \ R_B(L - x)\ (x \ge a)`,n:`Hardest right under the load.`},
+  {k:'ember',kl:'worst-place',t:R`\htmlClass{new}{\tfrac PL\,a(L - a) \le \tfrac{PL}{4}}`,n:`Completing the square; equal only at the middle.`},
+  {k:'ember',kl:'a worst place exists',t:R`[0, L]\ \text{closed}\ \Rightarrow\ \text{a greatest value}`,n:`highest-and-lowest, before any formula.`},
+  {k:'ember',kl:'spread-load',t:R`\htmlClass{new}{M(x) = \tfrac w2\,x(L - x) \le \tfrac{wL^2}{8}}`,n:`The books act at their middle.`},
+  {k:'ember',kl:'the shelf',t:R`294 \cdot 0.81^2 / 8 \approx 24.1\ \text{N} \cdot \text{m}`,n:`Twice the span, four times the bend.`},
+  {k:'ember',kl:'a safety factor',t:R`\text{capacity} \ge s \cdot \text{worst}`,n:`Scaffold parts: 4. Hanging ropes: 6.`},
+  {k:'ember',kl:'the plank checked',t:R`44.1 + 4 \cdot 529.2 = 2160.9 \le 2400`,n:`Passes, before anyone stands on it.`},
+  {k:'ember',kl:'rounding the wrong way',t:R`[2160, 2161] \to 2161;\ \ [2400, 2401] \to 2400`,n:`Loads up, strengths down.`},
+  {k:'ember',kl:'a push turns into a pull',t:R`R_A \approx -45.9\ \text{N}`,n:`A trestle cannot pull: the plank tips.`},
+  {k:'ember',kl:'illegal',t:R`\text{twice the span} \ne \text{twice the bend}`,n:`wL²/8: four times.`}
+],{title:'The slides · the premise; support-pushes; the balance-formula backwards; the turning effect at a cut; worst-place; a worst place exists; spread-load; the shelf; a safety factor; the plank checked; rounding the wrong way; a push turns into a pull; illegal moves · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

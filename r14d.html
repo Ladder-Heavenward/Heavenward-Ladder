@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>14d · Zero slope means flat</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:3.5em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r14c.html">← 14c the mean value technique</a><a href="r14e.html">next: 14e same slopes, same shape lifted →</a></p>
+  <div class="tags"><span class="tag proof">14d · proof</span></div>
+  <h1>Zero slope means flat</h1>
+  <p>A speedometer that reads 0 all afternoon means the car has not moved. Rung 13 could not prove it. Every rule there was about one input, and a slope of 0 at each input, one at a time, says nothing about two inputs apart. 14c's average-slope says that the change between any two inputs is a slope times the step. The slope is one the function really has between them. If every slope is 0, every change is 0. If every slope is positive, every change in the direction of the step is positive. So the sign of the slope across a whole interval decides how the values compare, which is the question 13k and 13l left for this rung.</p>
+  <p class="gesture">Take any two inputs in the interval. Average-slope says the change between them is a slope, at some input between, times the step. If the slope is 0 everywhere, the change is 0. If the slope is positive everywhere, the change is positive.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r14c.html">14c</a> (average-slope, velocity), <a href="r14a.html">14a</a> (critical point), <a href="r13k.html">13k</a> (slope-sign-near), <a href="r13l.html">13l</a> (keeps order, increasing and decreasing, inverse-slope), <a href="r09e.html">9e</a> (odd-powers-keep-order), <a href="r08g.html">8g</a> (sign-of-a-product, intervals), <a href="r08b.html">8b</a> (three-way-order on ℝ). <a href="r14e.html">14e</a> applies zero-slope-is-constant to a difference of two functions; <a href="r14f.html">14f</a> reads the sign of the slope on each side of a critical point.</p></div>
+</header>
+
+<section class="class step" data-step="14d1">
+  <h2 class="sthead"><span class="stno">14d1</span>Zero slope everywhere</h2>
+  <p class="stands">Stands on 14c (average-slope) and 13b (slope-means-no-gap).</p>
+  <p data-pid="48c2dc">Zero-slope-is-constant technique: <b>if f has slope 0 at every input of an open interval I, then f is constant on I. Likewise if f is continuous on [α, β] and has slope 0 at every input of (α, β), then f is constant on [α, β].</b></p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the zero-slope-is-constant technique">
+x, y \in I,\ \ x \lt y @@ any two inputs; for x = y there is nothing to prove
+f \text{ continuous on } [x, y] @@ slope-means-no-gap (13b) at each input: [x, y] lies in I, since I is an interval (8g)
+\text{call } c,\ x \lt c \lt y:\ f(y) - f(x) = f'(c)(y - x) @@ <span class="hl-new">average-slope (14c)</span>
+f(y) - f(x) = 0 \cdot (y - x) = 0 @@ f′(c) = 0, since c ∈ I
+\htmlClass{new}{f(x) = f(y)} \quad \blacksquare @@ for every pair: f has one value on I
+  </pre>
+  <p data-pid="c06e4e">Where each hypothesis was spent: the slope at every input, in slope-means-no-gap and at c; the interval, in the second line. <b>The interval matters.</b> Let f(x) = 0 for x &lt; 0 and f(x) = 1 for x &gt; 0, with 0 left out of the domain. Every input has a neighbourhood on which f is constant. So f has slope 0 at every input of its domain (slopes-decided-near, constant-has-slope-0), and f is not constant. [−1, 1] does not lie in the domain, and the second line fails.</p>
+  <p data-pid="14c460">Throw a ball straight up. Its velocity v is the slope of its height x (14c), and its acceleration is the slope of its velocity, v′. At the top, the highest point, v = 0 (flat-top, 14a). Suppose the acceleration were 0 at every instant from the top on. Then v′ = 0 on an interval makes v constant, so v stays at its value at the top, 0. And then v = x′ = 0 makes the height constant: the ball would hang there. Zero-slope-is-constant twice. 13·phys held this step in trust, and that flag is closed here.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · zero slope · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · left: the function and two inputs · right: the slope function, its sign marked along the line</div>
+    <div class="panels">
+    <div class="panel">
+      <div class="chips" id="fch"></div>
+      <canvas id="cvF"></canvas>
+      <div class="kn"><span class="m">x</span><input type="range" id="kx" min="0" max="1000" step="1" value="200"><output id="ox"></output></div>
+      <div class="kn"><span class="m">y</span><input type="range" id="ky" min="0" max="1000" step="1" value="700"><output id="oy"></output></div>
+      <div class="cap">Ink: f. Gold dots: f(x) and f(y), joined by their chord. Plum: an input c between with the chord's slope, when average-slope applies. Along the bottom, teal where f′ &gt; 0, ember where f′ &lt; 0, gold where f′ = 0.</div>
+      <div class="verdict" id="vdF"></div>
+    </div>
+    <div class="panel">
+      <div class="lbl">f′(x)</div>
+      <canvas id="cvS"></canvas>
+      <div class="cap">Plum: the slope function, with a gap where f has no input. Gold row: the chord's slope, met at c.</div>
+      <div class="eqbox" id="eqF"></div>
+    </div>
+  </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">14d1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f′(x) = 0 on (0, 5),  f(1) = 4</span></span>Find f(3), citing zero-slope-is-constant. <br>Say why the interval matters.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="14d2">
+  <h2 class="sthead"><span class="stno">14d2</span>The sign of the slope decides the order</h2>
+  <p class="stands">Stands on 14d1 and 13l (keeping order).</p>
+  <p data-pid="a996c2">Slope-sign-order technique: <b>if f is continuous on an interval and has a positive slope at every input inside it, then f is increasing on the interval. If every slope inside is negative, f is decreasing. If every slope inside is at least 0, then x &lt; y gives f(x) ≤ f(y).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the slope-sign-order technique">
+x \lt y \text{ in the interval} @@ any two
+\text{call } c,\ x \lt c \lt y:\ f(y) - f(x) = f'(c)(y - x) @@ average-slope on [x, y]: f is continuous there, and c is inside the interval
+f'(c) \gt 0,\ \ y - x \gt 0 @@ the hypothesis; x &lt; y
+\htmlClass{new}{f(x) \lt f(y)} @@ sign-of-a-product (8g): a product of positives is positive
+\text{negative slopes: } f(y) - f(x) \lt 0;\ \ \text{slopes} \ge 0:\ f(y) - f(x) \ge 0 \quad \blacksquare @@ the same line, with 8g's signs of products
+  </pre>
+  <p data-pid="b7b140">This is 13l's keeping order, proved from the slope. A function whose every slope inside is at least 0 is called non-decreasing. One whose every slope is at most 0 is called non-increasing. A function that is one or the other on an interval is called monotone there.</p>
+  <p data-pid="ce17c3">The ends may be included: the technique asks for continuity on the interval and slopes only inside. So x³ − 3x, whose slope 3(x − 1)(x + 1) is negative on (−1, 1), is decreasing on the closed interval [−1, 1], ends and all.</p>
+  <p data-pid="08aba4">Slope-sign-order does not run backwards. x³ is increasing on ℝ (9e's odd-powers-keep-order) and its slope at 0 is 0. What does run backwards is the weaker form. If f is increasing on an open interval and has a slope at c, then f′(c) ≥ 0. Were it negative, 13k's slope-sign-near would find f(c + h) &lt; f(c) for some h &gt; 0, against increasing. <b>So an increasing function has slopes at least 0, and may have slope 0 at some inputs.</b> A few such inputs do no harm.</p>
+  <p data-pid="042834">Positive-but-finitely technique: <b>if f is continuous on an interval, and its slope is positive at every input inside but finitely many, where it is 0, then f is increasing on the interval.</b> The finitely many inputs cut the interval into stretches. On each stretch, with its ends, slope-sign-order makes f increasing. And take x &lt; y in different stretches: the values climb from stretch to stretch through the cut points in between (three-way-order on ℝ, chained). ∎ For x³ there is one cut, at 0.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · slope-sign-order · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14d2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">f(x) = x^2 − 4x</span></span>Find where f′ is positive and where it is negative. <br>Say where f is increasing and where decreasing, ends included.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="14d3">
+  <h2 class="sthead"><span class="stno">14d3</span>What the order buys</h2>
+  <p class="stands">Stands on 14d2, 13l (inverse-slope) and 14b (zeros of slopes).</p>
+  <pre class="lines" data-k="ember" data-label="this step: an inequality, from a slope">
+g(x) = x^3 - 3x + 2,\ \ g(1) = 0 @@ to prove x³ ≥ 3x − 2 for every x ≥ 1
+g'(x) = 3x^2 - 3 = 3(x - 1)(x + 1) \gt 0 \text{ for } x \gt 1 @@ polynomial-slope; 8g's sign-of-a-product
+g \text{ increasing on } [1, \infty) @@ slope-sign-order: continuous there (polynomials-are-continuous), positive slopes inside
+x \ge 1 \;\Rightarrow\; g(x) \ge g(1) = 0 @@ so x³ ≥ 3x − 2, with equality only at 1
+  </pre>
+  <pre class="lines" data-k="teal" data-label="from 13l: an inverse, licensed by the slope">
+f(x) = x^5 + x,\ \ f'(x) = 5x^4 + 1 \ge 1 @@ polynomial-slope; square-never-negative
+f \text{ increasing on } \mathbb{R} @@ slope-sign-order
+g \text{ runs } f \text{ backwards};\ \ f(1) = 2 @@ 13l: one-to-one, so g exists on f's outputs
+g'(2) = \tfrac{1}{f'(1)} = \htmlClass{new}{\tfrac16} @@ inverse-slope (13l): the order it asked for is now proved from the slope
+  </pre>
+  <pre class="lines" data-k="teal" data-label="from 14b: exactly one zero, again">
+x^5 + 3x - 7:\ \ \text{slope } 5x^4 + 3 \gt 0 @@ increasing on ℝ, so one-to-one: at most one zero
+f(1) = -3 \lt 0 \lt 31 = f(2) @@ in-between-value: at least one
+  </pre>
+  <p data-pid="fad676">14b counted zeros with level-ends. <b>Slope-sign-order gives the same count by a different road, and gives the order of the values too.</b></p>
+  <p data-pid="d39df2">An old thought experiment asks you to picture a ball on a smooth, level floor, with every obstacle taken away. Nothing would speed it up and nothing would slow it. So it would go on at the same speed for as long as the floor went on.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · what the order buys · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14d3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = x^3 - 12x"></span></span>Find the intervals on which f is increasing and those on which it is decreasing.</li><li><span class="givens"><span data-tex-inline="f(x) = x - 1/x,"></span> <span data-tex-inline="I = (0, \infty)"></span></span>Show that f is increasing on I.</li><li><span class="givens"><span data-tex-inline="\text{Claim: } x^4 \ge 4x - 3"></span> <span data-tex-inline="\text{for every } x \ge 1"></span></span>Prove the claim using slope-sign-order.</li><li><span class="givens"><span data-tex-inline="f'(x) = 0 \text{ on } (-2, 5),"></span> <span data-tex-inline="f(1) = 4,"></span> <span data-tex-inline="c = 3"></span></span>Find the value of f at c.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="14d4">
+  <h2 class="sthead"><span class="stno">14d4</span>Illegal moves</h2>
+  <p class="stands">Stands on 14d1 to 14d3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\begin{aligned}&f' = 0 \text{ at every input}\\ &\quad\text{of the domain, so constant}\,?\end{aligned} @@ only on an interval: 0 left of 0, 1 right of 0, with 0 left out
+f' \lt 0 \text{ on the domain of } \tfrac1x, \text{ so decreasing}\,? @@ −1 &lt; 1 and 1/(−1) &lt; 1/1: the domain is not an interval
+f \text{ increasing, so } f' \gt 0\,? @@ x³ at 0: increasing, slope 0
+f'(x_0) \gt 0, \text{ so increasing near } x_0\,? @@ slope-sign-near says only that values right of x₀ are above f(x₀) and left are below; not that they climb among themselves
+f' \gt 0 \text{ inside, so } f(a) \lt f(b), \text{ without continuity at } b\,? @@ x on [0, 1), and 0 at 1
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14d4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x) = 1/x^2,"></span> <span data-tex-inline="f' &gt; 0 \text{ on } (-\infty, 0),"></span> <span data-tex-inline="f' &lt; 0 \text{ on } (0, \infty)"></span></span>Decide whether f is increasing on the negative reals.<br>Decide whether f is decreasing on its whole domain.</li><li><span class="givens"><span data-tex-inline="f(x) = x^2,\ f'(x) = 2x."></span> <span data-tex-inline="\text{Claim one: } f'(1) &gt; 0,"></span> <span data-tex-inline="\text{so } f \text{ is increasing on}"></span> <span data-tex-inline="\text{some interval around } 1."></span> <span data-tex-inline="\text{Claim two: } f'(0) = 0,"></span> <span data-tex-inline="\text{so } f \text{ is flat around } 0."></span></span>Prove the claim that is true, and refute the other.</li><li><span class="givens"><span data-tex-inline="f(x) = x^3 + 3x^2 + 3x,"></span> <span data-tex-inline="f'(x) = 3(x + 1)^2"></span></span>Prove or refute: f is increasing on the whole real line.</li><li><span class="givens"><span data-tex-inline="f'(x) &gt; 0 \text{ on } (0, 1),"></span> <span data-tex-inline="f \text{ is continuous on } [0, 1),"></span> <span data-tex-inline="f(1) &lt; f(\tfrac12)"></span></span>Build such an f, and name the hypothesis of slope-sign-order it breaks.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="14d5">
+  <h2 class="sthead"><span class="stno">14d5</span>Running it backwards</h2>
+  <p class="stands">Stands on 14d1 to 14d3.</p>
+  <p data-pid="0043ff">Handed a claim that a function never changes, show its slope is 0 at every input of an interval. Handed an inequality f(x) ≥ g(x) for x ≥ w, look at the gap f − g. Check it is at least 0 at w, and that its slope is at least 0 after w. Handed a question about where a function climbs, factor its slope and read its sign between the critical points. Handed a function that seems to break zero-slope-is-constant or slope-sign-order, look at its domain: it is not an interval. Found upward; written downward.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14d5.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f'(x) = 3x^2 + 1 \text{ on } \mathbb{R},"></span> <span data-tex-inline="f(0) = 2,"></span> <span data-tex-inline="c = 1"></span></span>Show that the value of f at c is above its value at zero, and pin it between two whole numbers.</li><li><span class="givens"><span data-tex-inline="f(x) = x^3 + kx"></span></span>Find every k for which f is increasing on the whole real line.</li><li><span class="givens"><span data-tex-inline="f(x) = x^3 + 2x,"></span> <span data-tex-inline="g \text{ runs } f \text{ backwards,}"></span> <span data-tex-inline="s = 3,\ t = -12"></span></span>Find the slopes of g at s and at t.</li><li><span class="givens"><span data-tex-inline="\text{acceleration } 0 \text{ on } [0, 6]\ \text{s},"></span> <span data-tex-inline="v(0) = 3\ \text{m/s},"></span> <span data-tex-inline="x(0) = 1\ \text{m}"></span></span>A puck slides on ice with this motion. Find its velocity and position at the end of the stretch.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">14d.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="x^3 + 3x^2 + 3x \text{ has slope } 0 \text{ at } -1."></span></span>Make a polynomial of your own, increasing on the whole real line, whose slope is zero at exactly two inputs, and prove that it is increasing.</div>
+  <div class="chq"><span class="chid">14d.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="0 \le f'(x) \le 0 \text{ on an interval}"></span></span>Find f.<br>Make a non-decreasing function that is constant on one stretch and climbs on another, or prove there is none.</div>
+  <div class="chq"><span class="chid">14d.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="f \text{ is increasing on an open interval,}"></span> <span data-tex-inline="f \text{ has a slope everywhere}"></span></span>Prove or refute: its slopes are all positive. Your build answers this one.<br>Prove or refute: its slopes are all at least zero.<br>Prove or refute: its slopes can be zero on a whole stretch.</div>
+  <div class="chq"><span class="chid">14d.4.4</span><span class="tagq">seam</span><span class="givens"><span data-tex-inline="v' = F/m"></span></span>An old teaching said that a moving body keeps moving only while something moves it: take the mover away and it stops. Later, the ball on a smooth level floor, and then the first law of motion (Newton's), said a body with no force on it keeps its velocity. Given the second law of motion, the given line, the first law looks like zero-slope-is-constant applied to the velocity. <br>Is the first law then a technique, or a law of its own? <br>And was the old teaching wrong about the world, or about what a velocity is?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r14c.html">← 14c · the mean value technique</a><a href="r14e.html">14e · same slopes, same shape lifted →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <aside class="voice para"><p>Galileo asked his reader to picture a ball on a smooth, level floor, with every obstacle taken away: nothing would speed it up and nothing would slow it, so it would go on at the same speed for as long as the floor went on.</p><cite>Galileo, Two New Sciences (1638), Third and Fourth Days; paraphrase</cite></aside>
+  <p>The old teaching of the closer is Aristotle’s. The first law of motion is from Isaac Newton’s Principia (1687).</p>
+</section>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?3:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=v=>fm(v).replace('-','−');
+/* gap: an input left out of the domain */
+const FN={
+  w:{lab:'x³ − 3x',tex:R`x^3 - 3x`,lo:-2.2,hi:2.2,f:x=>x*x*x-3*x,df:x=>3*x*x-3,y:[-3,3]},
+  c:{lab:'x³',tex:R`x^3`,lo:-1.5,hi:1.5,f:x=>x*x*x,df:x=>3*x*x,y:[-3.4,3.4]},
+  r:{lab:'1/x',tex:R`\tfrac1x`,lo:-3,hi:3,f:x=>1/x,df:x=>-1/(x*x),y:[-4,4],gap:0},
+  s:{lab:'0 left of 0, 1 right',tex:R`0\ (x \lt 0),\ 1\ (x \gt 0)`,lo:-2,hi:2,f:x=>x<0?0:1,df:x=>0,y:[-0.5,1.5],gap:0}
+};
+let key='w',F=FN.w;
+const cvF=$('cvF'),cvS=$('cvS'),kx=$('kx'),ky=$('ky');
+function pts(){ let x=F.lo+(F.hi-F.lo)*(+kx.value)/1000, y=F.lo+(F.hi-F.lo)*(+ky.value)/1000; x=Math.round(x*20)/20; y=Math.round(y*20)/20; if(F.gap!==undefined){ if(x===F.gap) x+=0.05; if(y===F.gap) y+=0.05; } if(y<x){ const t=x; x=y; y=t; } if(y===x) y=x+0.05; return [x,y]; }
+const across=(x,y)=>F.gap!==undefined&&x<F.gap&&F.gap<y;
+function cs(a,b,m){ if(across(a,b)) return []; const out=[]; const n=3000; let pv=null,px=null; for(let k=1;k<n;k++){ const x=a+(b-a)*k/n; const v=F.df(x)-m; if(Math.abs(v)<1e-12){ out.push(x); } else if(pv!==null&&pv*v<0){ let l=px,r=x; for(let i=0;i<60;i++){ const md=(l+r)/2; if((F.df(l)-m)*(F.df(md)-m)<=0) r=md; else l=md; } out.push((l+r)/2); } pv=v; px=x; } const u=[]; out.forEach(z=>{ if(!u.some(w=>Math.abs(w-z)<1e-3)) u.push(z); }); return u.length>8?'all':u; }
+const PF=plane(cvF,{x:[-2,2],y:[-3,3],grid:1,aspect:0.8,draw:P=>drawF(P)});
+const PS=plane(cvS,{x:[-2,2],y:[-3,3],grid:1,aspect:0.8,draw:P=>drawS(P)});
+[[PF,cvF],[PS,cvS]].forEach(([P,cv])=>Object.defineProperty(P.o,'aspect',{get:()=>cv.clientWidth>480?0.75:0.9}));
+function curve(P,fn,colr,w,lo,hi){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.beginPath(); let pen=false; for(let k=0;k<=800;k++){ const t=lo+(hi-lo)*k/800; const v=(F.gap!==undefined&&Math.abs(t-F.gap)<1e-3)?NaN:fn(t); if(!isFinite(v)||Math.abs(v)>1e6){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); }
+function band(P){ const c=P.ctx; const n=300; for(let k=0;k<n;k++){ const t0=F.lo+(F.hi-F.lo)*k/n, t1=F.lo+(F.hi-F.lo)*(k+1)/n, tm=(t0+t1)/2; if(F.gap!==undefined&&Math.abs(tm-F.gap)<(F.hi-F.lo)/n) continue; const d=F.df(tm); c.fillStyle=col(Math.abs(d)<1e-9?'--gold':(d>0?'--teal':'--ember')); c.fillRect(P.X(t0),P.Y(P.o.y[0])-7,P.X(t1)-P.X(t0)+0.5,6); } }
+function drawF(P){ P.o.x=[F.lo,F.hi]; P.o.y=F.y; P.o.grid=1; P.axes(); band(P);
+  curve(P,F.f,'--ink',2.6,F.lo,F.hi);
+  const [x,y]=pts(); P.line(x,F.f(x),y,F.f(y),'--gold',1.4,[6,4]); P.dot(x,F.f(x),'--gold',6); P.dot(y,F.f(y),'--gold',6);
+  const m=(F.f(y)-F.f(x))/(y-x); const C=cs(x,y,m); if(C!=='all') C.forEach(c=>{ const L=0.12*(F.hi-F.lo); P.line(c-L,F.f(c)-m*L,c+L,F.f(c)+m*L,'--plum',2,[]); P.dot(c,F.f(c),'--plum',5); }); }
+function drawS(P){ let lo=1e9,hi=-1e9; for(let k=0;k<=400;k++){ const t=F.lo+(F.hi-F.lo)*k/400; if(F.gap!==undefined&&Math.abs(t-F.gap)<0.15) continue; const d=F.df(t); lo=Math.min(lo,d); hi=Math.max(hi,d); }
+  const [x,y]=pts(), m=(F.f(y)-F.f(x))/(y-x); lo=Math.min(lo,m,-0.5); hi=Math.max(hi,m,0.5); lo=Math.max(lo,-12); hi=Math.min(hi,16); const pad=0.12*(hi-lo);
+  P.o.x=[F.lo,F.hi]; P.o.y=[lo-pad,hi+pad]; P.o.grid=(hi-lo)>8?2:0.5; P.axes(); band(P);
+  curve(P,F.df,'--plum',2.4,F.lo,F.hi); P.line(F.lo,m,F.hi,m,'--gold',1.3,[5,4]); }
+function read(){ const [x,y]=pts(); $('ox').textContent=mm(x); $('oy').textContent=mm(y); const vd=$('vdF'); const fx=F.f(x),fy=F.f(y), m=(fy-fx)/(y-x);
+  const rel=Math.abs(fy-fx)<1e-9?'=':(fx<fy?'<':'>'); const C=cs(x,y,m);
+  if(across(x,y)){ vd.className='verdict lose'; vd.textContent='f('+mm(x)+') '+rel.replace('<','<').replace('>','>')+' f('+mm(y)+'), but 0 lies between and is not an input: [x, y] is not in the domain, and average-slope cannot be cited.'; }
+  else { let sg=0; for(let k=1;k<200;k++){ const d=F.df(x+(y-x)*k/200); sg|=(d>1e-9?1:(d<-1e-9?2:4)); } const word=sg===1?'every slope between is positive, so f(x) < f(y) (slope-sign-order)':sg===2?'every slope between is negative, so f(x) > f(y) (slope-sign-order)':sg===4?'every slope between is 0, so f(x) = f(y) (zero-slope-is-constant)':(sg===5?'every slope between is positive but at one input, where it is 0, so f(x) < f(y) (positive-but-finitely)':'the slopes between change sign, so slope-sign-order is silent; average-slope still gives c'); vd.className='verdict '+(sg===3||sg===7||sg===6?'':'win'); vd.textContent='f('+mm(x)+') = '+mm(fx)+', f('+mm(y)+') = '+mm(fy)+': '+word+'.'; }
+  tex($('eqF'),R`\begin{gathered}${F.tex}\\ \tfrac{f(y) - f(x)}{y - x} = ${mm(m)}\\ ${across(x,y)?R`\text{no } c:\ 0 \text{ is not an input}`:(C==='all'?R`f'(c) = ${mm(m)} \text{ at every } c`:(C.length?R`f'(c) = ${mm(m)} \text{ at } c = ${C.map(mm).join(',\\ ')}`:R`\text{no } c`))}\end{gathered}`,true); }
+function all(){ PF.redraw(); PS.redraw(); read(); }
+[kx,ky].forEach(k=>k.addEventListener('input',all));
+const fch=$('fch');
+Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===key) b.className='on'; b.onclick=()=>{ key=k; F=FN[k]; [...fch.children].forEach(z=>z.classList.toggle('on',z===b)); all(); }; fch.appendChild(b); });
+window.__pic={set:(k,a,b)=>{ [...fch.children][Object.keys(FN).indexOf(k)].click(); kx.value=a; ky.value=b; all(); return {p:pts(),txt:$('vdF').textContent}; }};
+all();
+
+/* ---------- slides ---------- */
+const Nw='\\htmlClass{new}';
+stepper('#sl1',[
+  {k:'ember',kl:'zero-slope-is-constant',t:R`f' = 0 \text{ on } I \;\Rightarrow\; ${Nw}{f(x) = f(y)}`,n:`average-slope on [x, y]: the change is 0 · (y − x). I must be an interval.`},
+  {k:'ember',kl:'why an interval',t:R`0\ (x \lt 0),\ \ 1\ (x \gt 0)`,n:`Slope 0 at every input of its domain, and not constant: [−1, 1] is not in the domain.`},
+  {k:'teal',kl:'a thrown ball · the top',t:R`a = 0 \Rightarrow v \text{ constant};\ \ v = 0 \Rightarrow x \text{ constant}`,n:`zero-slope-is-constant twice: the ball would hang.`}
+],{title:'The slides · zero slope · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'slope-sign-order',t:R`f' \gt 0 \text{ inside} \;\Rightarrow\; x \lt y \Rightarrow ${Nw}{f(x) \lt f(y)}`,n:`average-slope, then sign-of-a-product. Negative slopes: decreasing. Slopes at least 0: non-decreasing.`},
+  {k:'ember',kl:'ends included',t:R`x^3 - 3x \text{ decreasing on } [-1, 1]`,n:`Continuity on the interval, slopes only inside.`},
+  {k:'ember',kl:'not backwards',t:R`x^3:\ \text{increasing},\ (x^3)'(0) = 0`,n:`But increasing with a slope gives f′ ≥ 0, by slope-sign-near.`},
+  {k:'ember',kl:'positive-but-finitely',t:R`f' \gt 0 \text{ but at finitely many inputs}`,n:`Stretch by stretch, then chained through the cut points: still increasing.`}
+],{title:'The slides · slope-sign-order · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'an inequality',t:R`x^3 - 3x + 2 \ge 0 \text{ for } x \ge 1`,n:`0 at 1, positive slope after: increasing, so never below 0.`},
+  {k:'teal',kl:'from 13l · an inverse',t:R`g'(2) = \tfrac{1}{f'(1)} = \tfrac16`,n:`x⁵ + x has slope at least 1: increasing on ℝ, so inverse-slope applies.`},
+  {k:'teal',kl:'from 14b · one zero',t:R`x^5 + 3x - 7`,n:`Increasing: at most one zero. in-between-value: at least one.`}
+],{title:'The slides · what the order buys · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'illegal',t:R`\left(\tfrac1x\right)' \lt 0 \not\Rightarrow \text{decreasing on the domain}`,n:`−1 &lt; 1 and f(−1) = −1 &lt; 1 = f(1): the domain is not an interval.`}
+],{title:'The slides · illegal · ← → keys work'});
+
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>
