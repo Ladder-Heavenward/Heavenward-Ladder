@@ -439,7 +439,7 @@ function marks(){
   if(document.querySelector('li.built')) window.__ladderMarks={st,save};
   const items=[];
   const VAR=/^(?:[^.\s]+\.\d+\.\d+|\d+[a-z]+\d+\.\d+)$/;
-  document.querySelectorAll('.qid').forEach(el=>{ if(el.closest('#desk')) return; if(!VAR.test(el.textContent.trim())){ el.classList.add('auto'); el.title='ticks itself when every question in this group is ticked; tap for prompt, copy or report'; return; } items.push({el,id:'q:'+el.textContent.trim(),on:()=>el.classList.contains('done'),set:v=>el.classList.toggle('done',v)}); });
+  document.querySelectorAll('.qid').forEach(el=>{ if(el.closest('#desk')) return; if(!VAR.test(el.textContent.trim())){ el.classList.add('auto'); el.title='ticks itself when every question in this group is ticked; tap for prompt or report'; return; } items.push({el,id:'q:'+el.textContent.trim(),on:()=>el.classList.contains('done'),set:v=>el.classList.toggle('done',v)}); });
   document.querySelectorAll('li>.n').forEach(el=>{ const li=el.parentElement;
     if(li.classList.contains('built')&&!li.classList.contains('k-theory')&&!li.classList.contains('k-gate')){ li.classList.add('autorow'); el.title='ticks itself when every question on this page is ticked'; el.addEventListener('click',e=>{ e.preventDefault(); e.stopPropagation(); lockedHint(li); }); return; }
     items.push({el,id:'L:'+el.textContent.trim(),on:()=>li.classList.contains('passed'),set:v=>li.classList.toggle('passed',v)}); });
@@ -458,7 +458,7 @@ function marks(){
   /* pull again whenever the page comes back into view, so a ✓ made on another device shows up without a reload */
   document.addEventListener('visibilitychange',()=>{ if(!document.hidden) go(); });
   window.addEventListener('pageshow',e=>{ if(e.persisted) go(); });
-  if(items.length&&document.querySelector('.qid')){ const p=document.createElement('p'); p.className='marknote'; p.textContent='Tap a question’s label to tick it ✓, copy it, or report it. Marks save in this browser and sync to the ladder’s record; I say in chat when one is earned.'; document.body.appendChild(p); }
+  if(items.length&&document.querySelector('.qid')){ const p=document.createElement('p'); p.className='marknote'; p.textContent='Tap a question’s label to tick it ✓, prompt from it, or report it. Marks save in this browser and sync to the ladder’s record; I say in chat when one is earned.'; document.body.appendChild(p); }
 }
 
 /* desk */
@@ -847,19 +847,17 @@ function toast(msg){ let t=document.getElementById('patoast'); if(!t){ t=documen
   t.textContent=msg; t.classList.add('on'); clearTimeout(toast.h); toast.h=setTimeout(()=>t.classList.remove('on'),2200); }
 const copy=s=>{ try{ navigator.clipboard.writeText(s).then(()=>{},()=>{}); }catch(e){} };
 function addresses(info){
-  const ps=[...document.querySelectorAll('section.class p[data-pid]')]; if(!ps.length) return;
+  const ps=[...document.querySelectorAll('section.class p[data-pid], #intro p[data-pid]')]; if(!ps.length) return;
   const per={};
   ps.forEach((p,i)=>{ const st=p.closest('section.step'), k=st?st.dataset.step:info.label; per[k]=(per[k]||0)+1; const ad=k+'.0.'+per[k]; p.dataset.addr=ad; p.id=p.id||'p-'+p.dataset.pid;
-    const b=document.createElement('button'); b.type='button'; b.className='pa'; b.textContent=ad; b.setAttribute('aria-label','paragraph '+ad+': prompt, copy or report');
+    const b=document.createElement('button'); b.type='button'; b.className='pa'; b.textContent=ad; b.setAttribute('aria-label','paragraph '+ad+': prompt, report or leave a note');
     b.addEventListener('click',e=>{ e.stopPropagation(); openMenu(p,b); }); p.appendChild(document.createTextNode(' ')); p.appendChild(b); });
   menu=document.createElement('div'); menu.className='pamenu'; menu.hidden=true;
-  menu.innerHTML='<button type="button" data-a="prompt">prompt from</button><button type="button" data-a="text">copy text</button><button type="button" data-a="addr">copy address</button><button type="button" data-a="report">report</button><button type="button" data-a="note">my note</button>';
+  menu.innerHTML='<button type="button" data-a="prompt">prompt from</button><button type="button" data-a="report">report</button><button type="button" data-a="note">leave a note</button>';
   document.body.appendChild(menu);
   menu.addEventListener('click',e=>{ const a=e.target.dataset.a; if(!a||!cur) return; const ad=cur.dataset.addr;
     const text=[...cur.childNodes].filter(n=>!(n.classList&&n.classList.contains('pa'))).map(n=>n.textContent).join('').trim();
-    if(a==='prompt'){ copy('About '+ad+': '); toast('“About '+ad+': ” is copied: paste it to the tutor and ask'); }
-    if(a==='text'){ copy(text+' ('+ad+')'); toast('paragraph '+ad+' copied'); }
-    if(a==='addr'){ copy(ad); toast(ad+' copied'); }
+    if(a==='prompt'){ copy('About paragraph '+ad+' of the ladder, which reads: “'+text+'”\n\n'); toast('paragraph '+ad+' and its words are copied: paste them to your assistant and ask'); }
     if(a==='edit'){ menu.hidden=true; startEdit(cur); return; }
     if(a==='note'){ menu.hidden=true; noteEdit(cur); return; }
     if(a==='report'){ menu.hidden=true; report({kind:'paragraph',where:ad,pid:cur.dataset.pid,text}); return; }
@@ -918,11 +916,10 @@ function qMenu(q,tick,on){
     document.addEventListener('click',e=>{ if(!qmenu.hidden&&!qmenu.contains(e.target)) qmenu.hidden=true; }); }
   const ad=q.textContent.replace(/\s*✓\s*$/,'').trim(), li=q.closest('li');
   const text=li?li.textContent.replace(ad,'').trim():'';
-  qmenu.innerHTML=(tick?'<button type="button" data-a="tick">'+(on?'take off the ✓':'tick ✓')+'</button>':'')+'<button type="button" data-a="prompt">prompt from</button><button type="button" data-a="addr">copy address</button><button type="button" data-a="report">report</button>';
+  qmenu.innerHTML=(tick?'<button type="button" data-a="tick">'+(on?'take off the ✓':'tick ✓')+'</button>':'')+'<button type="button" data-a="prompt">prompt from</button><button type="button" data-a="report">report</button>';
   qmenu.onclick=e=>{ const a=e.target.dataset.a; if(!a) return; qmenu.hidden=true;
     if(a==='tick') tick();
-    if(a==='prompt'){ copy('About question '+ad+': '); toast('“About question '+ad+': ” is copied: paste it to the tutor and ask'); }
-    if(a==='addr'){ copy(ad); toast(ad+' copied'); }
+    if(a==='prompt'){ copy('About question '+ad+' of the ladder, which asks: “'+text+'”\n\n'); toast('question '+ad+' and its words are copied: paste them to your assistant and ask'); }
     if(a==='report') report({kind:'question',where:ad,text}); };
   const r=q.getBoundingClientRect(); qmenu.hidden=false; const w=qmenu.offsetWidth||220;
   qmenu.style.left=Math.max(8,Math.min(window.innerWidth-w-8,r.left))+'px'; qmenu.style.top=(r.bottom+window.scrollY+6)+'px'; }
@@ -1077,7 +1074,7 @@ function steps(){
   addEventListener('resize',bleed);
   paint();
 }
-ready(()=>{ steps(); const info=tagInfo(); if(info){ titles(info); addresses(info); edInit(); } reportQuestions(); pn(); nonskid(); greek(); curly();
+ready(()=>{ steps(); const info=tagInfo(); if(info){ titles(info); addresses(info); edInit(); } else if(document.querySelector('#intro p[data-pid]')){ addresses({label:'ladder'}); edInit(); } reportQuestions(); pn(); nonskid(); greek(); curly();
   const fit=()=>{ stackTables(); liftLong(); }; window.__fit=fit;
   setTimeout(fit,400); if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>setTimeout(fit,100)); });
 })();

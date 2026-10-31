@@ -69,4 +69,10 @@
       ['Not now', () => { A.asked = Date.now(); saveA(); hide(); }]]);
   }
   window.addEventListener('load', () => { check().then(remind, remind); });
+  /* a phone keeps an installed app alive in the background, so 'load' can be days old: check again whenever the
+     app comes back into view or comes back online, at most once every ten minutes */
+  let lastCheck = Date.now();
+  const again = () => { if (document.hidden || Date.now() - lastCheck < 6e5) return; lastCheck = Date.now(); check(); };
+  document.addEventListener('visibilitychange', again);
+  window.addEventListener('online', again);
 })();
