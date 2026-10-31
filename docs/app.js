@@ -50,10 +50,12 @@
     if (!local) { if (await apply(remote, null, false)) banner('The ladder is saved on this device. It works offline now.', [['OK', hide]]); return; }
     if (local.version === remote.version) return;
     if (remote.required) { if (await apply(remote, local, true)) location.reload(); return; }
-    if (sessionStorage.getItem('ladder-later') === remote.version) return;
-    banner('A new version of the ladder is ready (' + remote.version + '). Your record stays as it is.', [
-      ['Update now', async () => { banner('Updating…'); if (await apply(remote, local, false)) location.reload(); }],
-      ['Later', () => { sessionStorage.setItem('ladder-later', remote.version); hide(); }]]);
+    /* every newer version comes in by itself (Andrew, 2026-10-31): the changed pages download quietly, and the
+       page you are reading stays as it is until you open the next one. Your record is never part of an update. */
+    if (await apply(remote, local, true)) {
+      banner('The ladder updated itself to ' + remote.version + '. The next page you open is the new one.', [['OK', hide]]);
+      setTimeout(hide, 6000);
+    }
   }
   function remind() {
     if (!window.LadderRecord || bar && !bar.hidden) return;
