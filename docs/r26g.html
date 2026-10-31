@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The rim fixes the inside</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r26f.html">← 26f no hole, no total</a><a href="r26h.html">next: 26h residues →</a></p>
+  <div class="tags"><span class="tag proof">26g · proof</span></div>
+  <h1>The rim fixes the inside</h1>
+  <p>A function with a complex slope on a disc is fixed inside the disc by its values on the rim alone. Know it round a circle, and you know it at every point inside, by one integral. From that one fact a flood follows. Such a function is a power sum, so it has slopes of every order, and rung 23’s catch, a smooth function that refuses its sum, cannot happen here. A function with a complex slope everywhere that stays bounded must be constant. And the root technique of rung 25 drops out in two lines.</p>
+  <p class="gesture">A function with a complex slope on a disc is fixed inside by its values on the rim, and is a power sum there. One that has a slope everywhere and stays bounded is constant. So every polynomial has a root, again.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r26f.html">26f</a> (the disc-undoing technique), <a href="r26e.html">26e</a> (the circle-powers technique), <a href="r23e.html">23e</a> (areas, term by term), <a href="r23c.html">23c</a> (reach) and <a href="r25d.html">25d</a> (the far-out technique). <a href="r26h.html">26h</a> counts what a loop totals round its troubles.</p></div>
+</header>
+
+<section class="class step" data-step="26g1">
+  <h2 class="sthead"><span class="stno">26g1</span>The rim formula</h2>
+  <p class="stands">Stands on 26f2, 26e3, 23d (settling everywhere at once) and 23e1 (the area-at-once technique).</p>
+  <p data-pid="171937">Rim technique: <b>if f has a complex slope on an open disc holding the circle C: |w − a| = r and its inside, then for every z with |z − a| &lt; r, f(z) = (1/2πi) ∮_C f(w)/(w − z) dw.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the rim technique">
+g(w) = \frac{f(w) - f(z)}{w - z},\ \ g(z) = f'(z) @@ continuous on the disc, with a slope at every w but z (26d1)
+\oint_C g = 0 \Rightarrow \oint_C \frac{f(w)}{w-z}\,dw = f(z)\oint_C \frac{dw}{w-z} @@ the disc-undoing technique, one point excepted (26f2)
+\frac{1}{w-z} = \sum_{k\ge0}\frac{(z-a)^k}{(w-a)^{k+1}} @@ the geometric sum, with |z − a|/|w − a| = |z − a|/r &lt; 1
+\text{settles everywhere at once on } C @@ the at-once comparison (23d4): pieces at most (|z − a|/r)ᵏ/r
+\oint_C \frac{dw}{w-z} = \sum_k (z-a)^k\oint_C \frac{dw}{(w-a)^{k+1}} = 2\pi i @@ term by term (23e1); circle powers (26e3): only k = 0 survives
+\htmlClass{new}{f(z) = \frac{1}{2\pi i}\oint_C \frac{f(w)}{w-z}\,dw} \quad \blacksquare
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the rim formula · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">26g1.1</span><span class="ph do">do</span>Find ∮ e^w/(w − 1) dw round |w| = 2, and ∮ cos w/w dw round |w| = 1, by the rim technique. <br>Find ∮ e^w/(w − 1) dw round |w| = ½, and the technique that gives it.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="26g2">
+  <h2 class="sthead"><span class="stno">26g2</span>Every such function is a power sum</h2>
+  <p class="stands">Stands on 26g1, 23c and 23e.</p>
+  <p data-pid="7744ac">Rebuilt-in-the-plane technique: <b>if f has a complex slope on the open disc |z − a| &lt; R, then f(z) = Σ cₖ(z − a)ᵏ there, with cₖ = (1/2πi) ∮ f(w)/(w − a)ᵏ⁺¹ dw round any circle |w − a| = r &lt; R; and |cₖ| ≤ M/rᵏ, where M is the largest |f| on that circle.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the rebuilt-in-the-plane technique">
+f(z) = \frac{1}{2\pi i}\oint \frac{f(w)}{w-z}\,dw = \frac{1}{2\pi i}\oint f(w)\sum_k\frac{(z-a)^k}{(w-a)^{k+1}}\,dw @@ the rim technique (26g1); the geometric sum of its proof
+= \sum_k (z-a)^k\cdot\frac{1}{2\pi i}\oint\frac{f(w)}{(w-a)^{k+1}}\,dw @@ settles everywhere at once on the circle, since f is bounded there: term by term (23e1)
+|c_k| \le \frac{1}{2\pi}\cdot\frac{M}{r^{k+1}}\cdot 2\pi r = \frac{M}{r^k} @@ the path fence (26e1)
+\htmlClass{new}{f = \textstyle\sum c_k(z-a)^k \text{ on } |z-a| < R} \quad \blacksquare @@ any r &lt; R will do, so the sum holds on the whole disc
+  </pre>
+  <p data-pid="e57a14">So one complex slope gives slopes of every order, by 23e’s smooth-sum technique: cₖ = f⁽ᵏ⁾(a)/k!. Rung 23 found a real function, e^(−1/x²), smooth and not its sum. In the plane that cannot happen. And the reach of the sum is at least the distance to the nearest point where f fails, which is why 1/(1 + x²) reaches only 1 on the line: in the plane it fails at ±i.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">26g2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="f(z) = \tfrac{1}{1 + z^2}"></span></span>Find the points of the plane where f fails. <br>Find the reach of its power sum about 0, and about 1, by the distance to those points. <br>Write the power sum about 0, and check its reach by the reach-by-ratio technique.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="26g3">
+  <h2 class="sthead"><span class="stno">26g3</span>Bounded everywhere means constant</h2>
+  <p class="stands">Stands on 26g2 and 25d1.</p>
+  <p data-pid="2d9ab0">Bounded-constant technique: <b>if f has a complex slope at every z in ℂ and |f(z)| ≤ M for all z, then f is constant.</b> So, again, every polynomial of degree n ≥ 1 has a root.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the bounded-constant technique">
+f = \textstyle\sum c_k z^k \text{ on all of } \mathbb{C} @@ 26g2, with every R
+|c_k| \le M/r^k \text{ for every } r > 0 @@ 26g2
+k \ge 1:\ c_k = 0 @@ M/rᵏ heads to 0 as r grows
+\htmlClass{new}{f = c_0} \quad \blacksquare
+  </pre>
+  <pre class="lines" data-k="ember" data-label="the root technique, in two lines">
+p \text{ has no root} \Rightarrow 1/p \text{ has a slope everywhere, and } |1/p| \le \max\big(2/(|a_n|R^n),\ \max_{|z|\le R}|1/p|\big) @@ the plane-slope technique (26d1); the far-out technique (25d1); the lowest-size technique (25d2)
+1/p \text{ constant, so } p \text{ constant: a contradiction} \quad \blacksquare @@ the bounded-constant technique
+  </pre>
+  <p data-pid="ebbd3a">And the largest size of f on a closed disc is reached on its rim: by the rim technique at the centre, |f(a)| ≤ the largest |f| on any circle round a. A function with a complex slope cannot have a peak of size inside a disc unless it is flat.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · bounded means constant · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">26g3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\sin z = \textstyle\sum_m (-1)^m \frac{z^{2m+1}}{(2m+1)!}"></span></span>Find why sin z = (e^(iz) − e^(−iz))/(2i), and why it has a complex slope everywhere. <br>Find why sin z cannot be bounded on ℂ, by the bounded-constant technique. <br>Find sin(iy) from the sum, as i times a real sum, and |sin(iy)| for y = 1, 2 and 5, to four places.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="26g4">
+  <h2 class="sthead"><span class="stno">26g4</span>Illegal moves</h2>
+  <p class="stands">Stands on 26g1 to 26g3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\sin z \text{ is bounded by } 1\,? @@ only on the floor; sin(iy) grows like e^|y|/2
+\text{smooth on } \mathbb{R} \Rightarrow \text{a power sum}\,? @@ e^(−1/x²) (23f): the rebuilt-in-the-plane technique needs a complex slope on a disc
+f(z) = \frac{1}{2\pi i}\oint_C \frac{f(w)}{w-z}\,dw \text{ for } z \text{ outside } C\,? @@ outside, w ↦ f(w)/(w − z) has a slope inside C, so the total is 0
+\text{the reach of a sum is set by where its real graph misbehaves}\,? @@ by the nearest trouble in the plane: 1/(1 + x²) is smooth on the whole line
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">26g4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="z = i"></span></span>Find sin i from its sum, and its size, to four places. <br>Find where in the plane the fence |sin z| ≤ 1 is safe to use.</li><li><span class="givens"><span data-tex-inline="f(z) = e^{-1/z^2}"></span></span>Find f(0.1) and f(0.1i) as powers of e. <br>Find whether any value at 0 makes f continuous at 0 in the plane, and which demand of the rebuilt-in-the-plane technique fails.</li><li><span class="givens"><span data-tex-inline="f(w) = 1,\ \ C: |w| = 1,\ \ z = 3"></span></span>Find ∮ 1/(w − 3) dw round C, and the technique that gives it. <br>Find what the tempting line would give, and which line of the rim proof needs z inside.</li><li><span class="givens"><span data-tex-inline="\tfrac{1}{1+x^2} = 1 - x^2 + x^4 - \cdots"></span></span>Find the running totals at x = ½ and at x = 1, and where each settles, if anywhere. <br>Find the points nearest 0 where the function fails in the plane, and their distance from 0.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">26g.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="f(z) = e^z,\ \ c_k = 1/k!"></span></span>The rebuilt-in-the-plane technique fences |cₖ| ≤ M/rᵏ on every circle |z| = r. Build the best fence it gives: find M for e^z on |z| = r, and the r that makes M/rᵏ least. <br>Find that least fence for k = 5 and k = 10, and compare it with 1/k!.</div>
+  <div class="chq"><span class="chid">26g.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="f(z) = e^{iz}"></span></span>Find |f(z)| for z = x + yi, and where in the plane |f(z)| ≤ 1. <br>f is bounded on the whole upper half of the plane, and is not constant. Find the demand of the bounded-constant technique it fails. <br>Find |f(−5i)|.</div>
+  <div class="chq"><span class="chid">26g.4.3</span><span class="tagq">converse</span>The largest size of f on a closed disc is reached on its rim. Turn it round: must the smallest size be reached on the rim too? <br>Find the smallest size of f(z) = z, and of f(z) = e^z, on |z| ≤ 1, and where each is reached. <br>Prove that the smallest size is on the rim when f has no root on the closed disc.</div>
+  <div class="chq"><span class="chid">26g.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="|f(z)| \le M \text{ for all } z"></span></span>Prove the bounded-constant technique from the rim technique alone, without the power sum. For two points a and b, write f(a) − f(b) as one rim integral round |w| = R. <br>Fence it by the path fence, and find what the fence does as R grows.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r26f.html">← 26f · no hole, no total</a><a href="r26h.html">26h · residues →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The rim technique is Cauchy’s integral formula. The rebuilt-in-the-plane technique says holomorphic functions are analytic, with Cauchy’s estimates |cₖ| ≤ M/rᵏ. The bounded-constant technique is Liouville’s theorem. The largest size on the rim is the maximum modulus principle; the ladder says largest size, since its word for |z| is size.</p>
+  <h3>Who said it first</h3>
+  <p>Augustin-Louis Cauchy gave the integral formula in 1831. Joseph Liouville stated the bounded-constant theorem in his lectures of 1847, and Cauchy had proved it in 1844. The two-line proof that every polynomial has a root is the standard one in every course on the subject.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'subtract',t:R`\oint \frac{f(w) - f(z)}{w-z}\,dw = 0`,n:`A slope everywhere but one point.`},
+  {k:'ember',kl:'the kernel',t:R`\oint \frac{dw}{w-z} = 2\pi i`,n:`Geometric sum, term by term.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{f(z) = \frac{1}{2\pi i}\oint \frac{f(w)}{w-z}dw}`,n:`The rim fixes the inside.`}
+],{title:'The slides · the rim formula · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'fence',t:R`|c_k| \le M/r^k`,n:`Every circle.`},
+  {k:'ember',kl:'let r grow',t:R`c_k = 0,\ k \ge 1`,n:`Only the constant is left.`},
+  {k:'ember',kl:'roots',t:R`\htmlClass{new}{\text{no root} \Rightarrow 1/p \text{ bounded}}`,n:`So p would be constant.`}
+],{title:'The slides · bounded means constant · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

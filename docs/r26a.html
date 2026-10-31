@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>e to an imaginary power</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r26.html">← 26 growth and turning are one function</a><a href="r26b.html">next: 26b the exponential still turns adding into multiplying →</a></p>
+  <div class="tags"><span class="tag proof">26a · proof</span></div>
+  <h1>e to an imaginary power</h1>
+  <p>The growth function was built for real inputs. Its endless sum, one plus x plus x squared over two and so on, makes sense for any number you can add and multiply, and the new numbers can be added and multiplied. So feed it a number off the line and see what comes out. Feed it a quarter turn times an angle, and the sum splits in two: one half is the endless sum for the cosine, the other half is the endless sum for the sine. Growth, fed a turn, turns. The famous line that ties together e, i, pi, one and zero falls out at the end.</p>
+  <p class="gesture">The growth function’s endless sum settles for every complex input. Fed a turn, it gives cosine plus i times sine. So every complex number is a length times e to a turn.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r22e.html">22e</a> (settling in size), <a href="r22j.html">22j</a> (exp as a sum), <a href="r23b.html">23b</a> (the sums for sine and cosine), <a href="r21cb20.html">21·cb20</a> (out and round) and <a href="r25c.html">25c</a> (sizes). <a href="r26b.html">26b</a> shows the new exponential still turns adding into multiplying.</p></div>
+</header>
+
+<section class="class step" data-step="26a1">
+  <h2 class="sthead"><span class="stno">26a1</span>Sums of complex numbers</h2>
+  <p class="stands">Stands on 22d, 22e and 25c2.</p>
+  <p data-pid="9ccd55">A sum Σ zₖ of complex numbers settles at S when its running totals do, by 25c2’s distance: |Sₙ − S| heads to 0. It settles exactly when the floor parts and the upright parts both settle, since each part is at most the size and the size is at most the two parts’ sizes added.</p>
+  <p data-pid="1967b1">Plane-size technique: <b>if Σ |zₖ| settles, then Σ zₖ settles.</b> 22e’s size technique, applied to each part.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the plane-size technique">
+|a_k| \le |z_k|,\ \ |b_k| \le |z_k| \text{ for } z_k = a_k + b_k i @@ a part is at most the size (25c2)
+\textstyle\sum |a_k|,\ \sum |b_k| \text{ settle} @@ the comparison technique (22e)
+\textstyle\sum a_k,\ \sum b_k \text{ settle} @@ the size technique (22e)
+\htmlClass{new}{\textstyle\sum z_k = \sum a_k + i\sum b_k \text{ settles}} \quad \blacksquare @@ the sum-of-sums technique (22d)
+  </pre>
+  <p data-pid="19b3ef">So every power sum Σ cₖzᵏ whose sizes Σ |cₖ||z|ᵏ settle has a total, and 23c’s reach works in the plane: it settles inside a disc |z − a| &lt; R and wanders outside.</p>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">26a1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="z = \tfrac{1+i}{2}"></span></span>Find |z|, and whether Σ |z|ᵏ settles. <br>Find the running total 1 + z + ⋯ + zⁿ by the finite geometric sum, and where it settles, as a + bi. <br>Check that your total times 1 − z is 1.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="26a2">
+  <h2 class="sthead"><span class="stno">26a2</span>The growth function on ℂ</h2>
+  <p class="stands">Stands on 26a1, 22j3 (exp as a sum) and 22h1 (xⁿ/n! heads to 0).</p>
+  <p class="eqline" data-pid="da353a">From here on, for every z in ℂ, e^z = exp z = 1 + z + z²/2! + z³/3! + ⋯. Accepted name: the complex exponential.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the sum settles everywhere">
+\textstyle\sum |z|^k/k! = e^{|z|} @@ exp as a sum (22j3), at the real number |z|
+\htmlClass{new}{\textstyle\sum z^k/k! \text{ settles for every } z \in \mathbb{C}} \quad \blacksquare @@ the plane-size technique (26a1)
+x \in \mathbb{R} \Rightarrow \exp x \text{ is rung 17's } e^x @@ 22j3: the same sum, on the floor
+  </pre>
+  <p data-pid="931b49">So the new e^z agrees with rung 17’s on the floor. Nothing was redefined: the old function was always this sum, and the sum never needed its input to be real.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · exp on ℂ · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">26a2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="z = i"></span></span>Find the first five running totals of e^z, from 1 up to 1 + i + i²/2! + i³/3! + i⁴/4!, each as a + bi. <br>Find cos 1 and sin 1 to four places, and how far the fifth running total is from cos 1 + i sin 1 in each part. <br>Find which pieces of the sum move the floor part, and which move the upright part.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="26a3">
+  <h2 class="sthead"><span class="stno">26a3</span>Growth, fed a turn, turns</h2>
+  <p class="stands">Stands on 26a2, 23b2 (the sums for sin and cos), 22d (the sum-of-sums technique) and 22e.</p>
+  <p data-pid="17a518">Turn-growth technique: <b>for every real θ, e^(iθ) = cos θ + i sin θ.</b> The even pieces of the sum are the cosine sum, and the odd pieces, divided by i, are the sine sum.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the turn-growth technique">
+i^{2m} = (-1)^m,\ \ i^{2m+1} = (-1)^m i @@ i² = −1, and powers multiply
+\textstyle\sum_k \frac{(i\theta)^k}{k!} = \sum_m \frac{(i\theta)^{2m}}{(2m)!} + \sum_m \frac{(i\theta)^{2m+1}}{(2m+1)!} @@ even and odd pieces: each settles in size (22e), so the sum-of-sums technique (22d) splits the total
+= \textstyle\sum_m (-1)^m\frac{\theta^{2m}}{(2m)!} + i\sum_m (-1)^m\frac{\theta^{2m+1}}{(2m+1)!} @@ the first line
+\htmlClass{new}{e^{i\theta} = \cos\theta + i\sin\theta} \quad \blacksquare @@ the sums for cos and sin (23b2)
+  </pre>
+  <p data-pid="8259c7">Put θ = π. Then cos π = −1 and sin π = 0, so e^(iπ) = −1, or e^(iπ) + 1 = 0. Five numbers met on five different floors, in one line.</p>
+  <p data-pid="d6e98d">And |e^(iθ)| = √(cos²θ + sin²θ) = 1. So 21·cb20’s out-and-round form r(cos θ + i sin θ) is r e^(iθ): every complex number other than 0 is a length times e to a turn.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · growth turns · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">26a3.1</span><span class="ph do">do</span>Find e^(iπ/2), e^(iπ/3) and e^(2πi) as a + bi. <br>Write 1 + i and −2 as a length times e to a turn. <br>Find the path e^(iθ) traces in the picture as θ runs from 0 to 2π.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="26a4">
+  <h2 class="sthead"><span class="stno">26a4</span>Illegal moves</h2>
+  <p class="stands">Stands on 26a1 to 26a3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+e^{i\theta} = (e^i)^\theta \text{, so it is a real power of a number}\,? @@ e^(iθ) is defined by the sum; powers with complex numbers wait for 26c's logarithm
+e^{i\theta} \text{ grows as } \theta \text{ grows}\,? @@ its size is 1 for every real θ; it turns, it does not grow
+\textstyle\sum z_k \text{ settles} \Rightarrow \sum |z_k| \text{ settles}\,? @@ the size technique runs one way only; Σ (−1)ᵏ/k settles but Σ 1/k does not (22g)
+e^{2\pi i} = 1 \Rightarrow 2\pi i = 0\,? @@ e^z is not one-to-one on ℂ: e^(iθ) repeats every whole turn
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">26a4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="e^{i}"></span></span>Find e^i as a + bi, to four places. <br>Find the rung that built real powers bˣ, and what kind of number b had to be there.</li><li><span class="givens"><span data-tex-inline="\theta = 1,\ 10,\ 100"></span></span>Find |e^(iθ)| for each. <br>Find where e^(iθ) lies for θ = π/2, π, 3π/2 and 2π, and what changes as θ grows.</li><li><span class="givens"><span data-tex-inline="\textstyle\sum_{k\ge1} \tfrac{i^k}{k}"></span></span>Find its floor part and its upright part as two sums whose signs take turns, and whether each settles. <br>Find whether the sum of the sizes settles.</li><li><span class="givens"><span data-tex-inline="e^{2\pi i},\ \ e^{0}"></span></span>Find each. <br>Find two more z with e^z = 1, and what the tempting line took from rung 17 that the plane does not keep.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">26a.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\theta = \tfrac{\pi}{3}"></span></span>Find e^(iθ) and e^(−iθ) as a + bi, and their sum and difference. <br>Build cos θ and sin θ, for every real θ, out of e^(iθ) and e^(−iθ) alone, and prove your two lines with the turn-growth technique.</div>
+  <div class="chq"><span class="chid">26a.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\textstyle\sum_{k\ge1} \tfrac{z^k}{k}"></span></span>Find where the plane-size technique makes it settle. <br>On the circle |z| = 1 that technique is silent. Find whether the sum settles at z = 1, at z = −1 and at z = i. <br>Find why the plane-size technique can decide nothing at any point of that circle.</div>
+  <div class="chq"><span class="chid">26a.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="z = -1"></span></span>Every complex number other than 0 is a length r times e to a turn θ. Turn it round: is the pair r, θ fixed by the number? <br>Find three different θ with e^(iθ) = −1, and every r that can go with them. <br>Find which of r and θ the number fixes, and why 0 has no turn at all.</div>
+  <div class="chq"><span class="chid">26a.4.4</span><span class="tagq">reroute</span>Prove the plane-size technique without splitting into floor and upright parts. Fence |Sₘ − Sₙ| by the triangle (25c2), and find why the running totals Sₙ crowd. <br>Find what makes a crowding list in ℂ settle.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r26.html">← 26 · growth and turning are one function</a><a href="r26b.html">26b · the exponential still turns adding into multiplying →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The turn-growth technique is Euler’s formula, and e^(iπ) + 1 = 0 is Euler’s identity. The form re^(iθ) is the polar form, or exponential form, of a complex number. The plane-size technique says absolute convergence implies convergence in ℂ.</p>
+  <h3>Who said it first</h3>
+  <p>Roger Cotes found an equivalent of the turn-growth technique, in logarithms, in 1714. Abraham de Moivre’s formula (cos θ + i sin θ)ⁿ = cos nθ + i sin nθ dates from 1722 and 1730. Leonhard Euler wrote e^(iθ) = cos θ + i sin θ in his Introductio of 1748, by comparing the sums as this step does.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'the sum',t:R`e^z = \textstyle\sum z^k/k!`,n:`Any complex z.`},
+  {k:'ember',kl:'sizes',t:R`\textstyle\sum |z|^k/k! = e^{|z|}`,n:`A real sum that settles.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{e^z \text{ settles everywhere}}`,n:`The plane-size technique.`}
+],{title:'The slides · exp on ℂ · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'split',t:R`\textstyle\sum \frac{(i\theta)^k}{k!} = \text{even} + \text{odd}`,n:`Each half settles in size.`},
+  {k:'ember',kl:'even',t:R`\cos\theta`,n:`Powers i²ᵐ = (−1)ᵐ.`},
+  {k:'ember',kl:'odd',t:R`i\sin\theta`,n:`Powers i²ᵐ⁺¹ = (−1)ᵐi.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{e^{i\theta} = \cos\theta + i\sin\theta}`,n:`And e^(iπ) + 1 = 0.`}
+],{title:'The slides · growth turns · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

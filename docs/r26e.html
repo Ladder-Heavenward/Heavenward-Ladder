@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Integrals round a loop</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r26d.html">← 26d a complex slope</a><a href="r26f.html">next: 26f no hole, no total →</a></p>
+  <div class="tags"><span class="tag proof">26e · proof</span></div>
+  <h1>Integrals round a loop</h1>
+  <p>On the line, an integral runs from one end of an interval to the other. In the plane there are endlessly many roads between two points, and an integral can follow any of them. This step builds the integral along a path, fences its size by the length of the road, and finds that when the function has an undoing, the road does not matter: only the two ends count. Then it goes once round a circle with each power of z. Every power totals zero, except one. One over z totals two pi i, because its undoing, the logarithm, comes back a whole turn out.</p>
+  <p class="gesture">An integral along a path adds the function times the path’s velocity. When the function has an undoing, only the ends count. Once round a circle, every power of z totals zero except one over z, which totals two pi i.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r18i.html">18i</a> (paths, length), <a href="r16c.html">16c</a> (evaluating by antiderivatives), <a href="r26d.html">26d</a> (complex slopes) and <a href="r26c.html">26c</a> (the logarithm). <a href="r26f.html">26f</a> shows when a loop’s total is always zero.</p></div>
+</header>
+
+<section class="class step" data-step="26e1">
+  <h2 class="sthead"><span class="stno">26e1</span>An integral along a path</h2>
+  <p class="stands">Stands on 18i1 to 18i4, 16 and 25c.</p>
+  <p class="eqline" data-pid="2dede5">From here on, a <i>path</i> in ℂ is γ(t) = x(t) + iy(t) for t in [a, b], with x′ and y′ continuous; γ′(t) = x′(t) + iy′(t). For f continuous on the path, ∫_γ f(z) dz = ∫ₐᵇ f(γ(t))γ′(t) dt, where the integral of a complex function of t is the integral of its floor part plus i times the integral of its upright part. A path with γ(a) = γ(b) is a <i>loop</i>. Accepted names: a contour integral; a closed contour.</p>
+  <p data-pid="322f0d">Path-fence technique: <b>if |f| ≤ M on the path, and the path has length L, then |∫_γ f(z) dz| ≤ ML.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the path-fence technique">
+\int_a^b g(t)\,dt = \rho e^{i\varphi} \Rightarrow \rho = \int_a^b e^{-i\varphi}g(t)\,dt @@ out and round (26a3): turn the total onto the positive floor
+\rho = \int_a^b \text{floor part of } e^{-i\varphi}g(t)\,dt \le \int_a^b |g(t)|\,dt @@ ρ is real, so the upright part integrates to 0; a part is at most the size (25c2)
+\Big|\int_\gamma f\,dz\Big| \le \int_a^b |f(\gamma(t))|\,|\gamma'(t)|\,dt @@ the line above, with g = f(γ)γ′; sizes multiply (25c1)
+\htmlClass{new}{\Big|\int_\gamma f\,dz\Big| \le M\int_a^b |\gamma'(t)|\,dt = ML} \quad \blacksquare @@ |γ′| is the speed; its area is the length (18i4)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">26e1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\gamma(t) = t + it,\ \ 0 \le t \le 1"></span></span>Find γ′(t), and the length L of the path. <br>Find ∫ z dz and ∫ z̄ dz along it, as a + bi. <br>Find the largest |z| on the path, and check each answer against the path-fence technique.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="26e2">
+  <h2 class="sthead"><span class="stno">26e2</span>Only the ends count</h2>
+  <p class="stands">Stands on 26e1, 26d1 (the chain rule in ℂ) and 16c.</p>
+  <p data-pid="7f3433">Path-ends technique: <b>if F has a complex slope F′ = f at every point of an open set holding the path γ, then ∫_γ f(z) dz = F(γ(b)) − F(γ(a)); so round any loop in that set, the total is 0.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the path-ends technique">
+\tfrac{d}{dt}F(\gamma(t)) = F'(\gamma(t))\,\gamma'(t) = f(\gamma(t))\gamma'(t) @@ the chain rule (13e, in ℂ by 26d1), with a real input t
+\int_a^b f(\gamma(t))\gamma'(t)\,dt = F(\gamma(b)) - F(\gamma(a)) @@ change for any integrable (16c), on the floor part and the upright part
+\htmlClass{new}{\int_\gamma f\,dz = F(\text{end}) - F(\text{start})} \quad \blacksquare
+  </pre>
+  <p data-pid="4e0854">So zⁿ, for every whole n ≠ −1, has the undoing zⁿ⁺¹/(n + 1), with a complex slope everywhere it is defined. Every loop that misses 0 gives it a total of 0. And e^z, sin z and every polynomial give every loop a total of 0. The one power left out is 1/z. Its undoing would be a logarithm, and 26c showed that no single logarithm can go all the way round 0 without a jump.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · only the ends · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">26e2.1</span><span class="ph do">do</span>Find ∫ z² dz along any path from 0 to 1 + i, and ∫ e^z dz along any path from 0 to iπ. <br>Find the total of z² round the loop that runs straight from 0 to 1 + i and back by way of 1.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="26e3">
+  <h2 class="sthead"><span class="stno">26e3</span>Once round a circle</h2>
+  <p class="stands">Stands on 26e1, 26e2 and 26a3.</p>
+  <p data-pid="f9301a">Circle-powers technique: <b>once round the circle |z| = r anticlockwise, ∫ zⁿ dz = 2πi when n = −1, and 0 for every other whole n.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the circle-powers technique">
+\gamma(t) = re^{it},\ \gamma'(t) = ire^{it},\ 0 \le t \le 2\pi @@ the circle, traced once (26d2: the slope of e^(it))
+\int_\gamma z^n\,dz = \int_0^{2\pi} r^n e^{int}\cdot ire^{it}\,dt = ir^{n+1}\int_0^{2\pi} e^{i(n+1)t}\,dt @@ 26e1; the plane-adding technique (26b1)
+m \ne 0:\ \int_0^{2\pi} e^{imt}\,dt = \int_0^{2\pi}\cos mt\,dt + i\int_0^{2\pi}\sin mt\,dt = 0 @@ whole turns of cos and sin (21)
+m = 0:\ \int_0^{2\pi} 1\,dt = 2\pi @@ n = −1 gives m = n + 1 = 0
+\htmlClass{new}{\oint_{|z|=r} z^n\,dz = \begin{cases} 2\pi i & n = -1 \\ 0 & n \ne -1\end{cases}} \quad \blacksquare
+  </pre>
+  <p data-pid="898c6a">The answer does not depend on r. However large or small the circle, 1/z round it totals 2πi: one whole turn of the logarithm, times i. That single number is the seed of everything left on this rung.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · round a circle · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">26e3.1</span><span class="ph do">do</span>Find the totals of 1/z, 1/z², 3/z + z and e^z once round |z| = 2, naming the technique for each. <br>Find which of the four totals change if the circle is |z| = 5.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="26e4">
+  <h2 class="sthead"><span class="stno">26e4</span>Illegal moves</h2>
+  <p class="stands">Stands on 26e1 to 26e3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\oint_{|z|=1} \tfrac{dz}{z} = \big[\operatorname{Log} z\big] = 0\,? @@ Log has no complex slope across the negative floor; no undoing works all the way round 0
+\Big|\int_\gamma f\,dz\Big| \le \max|f|\,\cdot|\text{end} - \text{start}|\,? @@ the fence uses the path's length, not the gap between its ends: a loop has gap 0
+\int_\gamma \overline{z}\,dz = \Big[\tfrac{\overline{z}^2}{2}\Big]\,? @@ the flip has no complex slope (26d3): there is no undoing to use
+\oint_{|z|=1} \tfrac{dz}{z} = 2\pi\,? @@ the i stays: γ′ = ie^(it)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">26e4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\gamma(t) = e^{it},\ \ -\pi &lt; t \le \pi"></span></span>Find Log γ(t), and the values it heads to as t heads to −π and to π. <br>Find the difference, and the point of the circle where Log has no complex slope.</li><li><span class="givens"><span data-tex-inline="f(z) = 1/z,\ \ |z| = 1"></span></span>Find the largest |f| on the circle, the gap between the loop’s ends, and the path’s length. <br>Compare the largest |f| times the gap, and the path fence ML, with the total 2πi.</li><li><span class="givens"><span data-tex-inline="f(z) = \overline{z}"></span></span>Find ∫ z̄ dz from 0 to 1 + i along the straight path, and along the path from 0 to 1, then 1 to 1 + i. <br>Find z̄²/2 at the two ends, and what the three numbers show.</li><li><span class="givens"><span data-tex-inline="\gamma(t) = e^{it},\ \ 0 \le t \le 2\pi"></span></span>Find γ′(t), and f(γ(t))γ′(t) for f(z) = 1/z. <br>Find its integral over [0, 2π], and where the tempting line lost a factor.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">26e.4.1</span><span class="tagq">build</span>Build a loop round which 1/z totals −2πi, and one round which it totals 6πi. <br>Build a loop that goes round 0 twice, on two circles of different sizes, on which 1/z totals 0.</div>
+  <div class="chq"><span class="chid">26e.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="f(z) = 1/z,\ \ |z| = r"></span></span>Find M, L and ML for f on the circle, and compare ML with the size of its total. <br>Do the same for 1/z² on |z| = r. <br>Find what must hold along a path for the path fence to be reached exactly.</div>
+  <div class="chq"><span class="chid">26e.4.3</span><span class="tagq">converse</span>1/z totals 2πi round every circle |z| = r. Turn it round: must a function that totals 2πi round every such circle be 1/z? <br>Find three other functions that do. <br>Find whether any of them has an undoing on a set holding the circle |z| = 1.</div>
+  <div class="chq"><span class="chid">26e.4.4</span><span class="tagq">reroute</span>Prove the path-fence technique another way, from sums. Cut [a, b] into small pieces, and fence Σ f(γ(tₖ))(γ(tₖ₊₁) − γ(tₖ)) by the triangle (25c2). <br>Find why the sum of the |γ(tₖ₊₁) − γ(tₖ)| is at most L, and why the integral keeps the fence that every sum obeys.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r26d.html">← 26d · a complex slope</a><a href="r26f.html">26f · no hole, no total →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The integral along a path is a contour integral or line integral; ∮ marks a closed contour. The path-fence technique is the ML-inequality (or estimation lemma). The path-ends technique is the fundamental theorem for contour integrals.</p>
+  <h3>Who said it first</h3>
+  <p>Carl Friedrich Gauss knew in 1811 that an integral between two points in the plane depends on the path only through the points it goes round, and wrote so in a letter to Friedrich Bessel. Augustin-Louis Cauchy developed integrals along paths in ℂ from 1814 to 1825.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'chain rule',t:R`\tfrac{d}{dt}F(\gamma(t)) = f(\gamma(t))\gamma'(t)`,n:`Along the path.`},
+  {k:'ember',kl:'area',t:R`\int_a^b \ldots = F(\gamma(b)) - F(\gamma(a))`,n:`16c, on each part.`},
+  {k:'ember',kl:'loops',t:R`\htmlClass{new}{\oint f\,dz = 0}`,n:`When f has an undoing.`}
+],{title:'The slides · only the ends · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'trace it',t:R`\gamma = re^{it},\ \gamma' = ire^{it}`,n:`Once round.`},
+  {k:'ember',kl:'powers',t:R`ir^{n+1}\int_0^{2\pi} e^{i(n+1)t}\,dt`,n:`Whole turns cancel.`},
+  {k:'ember',kl:'except',t:R`\htmlClass{new}{\oint dz/z = 2\pi i}`,n:`One over z.`}
+],{title:'The slides · round a circle · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

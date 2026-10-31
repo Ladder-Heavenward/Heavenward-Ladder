@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Real integrals by residues</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r26j.html">← 26j why 1/(1 + x²) has radius 1</a><a href="r26l.html">next: 26l the factorial past the counting numbers →</a></p>
+  <div class="tags"><span class="tag tech">26k · technique</span></div>
+  <h1>Real integrals by residues</h1>
+  <p>Some integrals along the whole line resist every technique of rung sixteen. The area under the cosine divided by one plus x squared has no antiderivative anyone can write down. Yet its value is exact and simple: pi over e. The road to it leaves the line. Run along the floor from far left to far right, then come back over the top on a half circle, and the road is a loop. Rung twenty six totals a loop by its holes alone, a few residues read off at a few points. If the half circle contributes less and less as it grows, the loop’s total is the line’s total. This step builds that road, fences the half circle, and uses it three times: once where the answer can be checked by the arctan, once where nothing else reaches, and once for the sine divided by x, an integral that settles only because its waves take turns.</p>
+  <p class="gesture">Close the line with a half circle over the top. The loop totals two pi i times the residues above the floor. When the half circle’s share fades as it grows, what is left is the integral along the line.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r26e.html">26e</a> (the path-fence and path-ends techniques), <a href="r26f.html">26f</a> (the disc-undoing technique), <a href="r26g.html">26g</a> (the rim technique), <a href="r26h.html">26h</a> (the pole-split and residue techniques), <a href="r26b.html">26b</a> (the growth-and-turn technique), <a href="r16i.html">16i</a> (improper integrals), <a href="r16d.html">16d</a> (odd and even areas) and <a href="r25c.html">25c</a> (sizes). <a href="r26l.html">26l</a> carries the factorial past the counting numbers by an integral.</p></div>
+</header>
+
+<section class="class step" data-step="26k1">
+  <h2 class="sthead"><span class="stno">26k1</span>Closing the line</h2>
+  <p class="stands">Stands on 26h1 (the pole-split technique), 26h2 (the residue technique), 26f2 (the disc-undoing technique), 26e2 (the path-ends technique), 26g1 (the rim technique) and 25c2.</p>
+  <p class="eqline" data-pid="e8358e">From here on, for R &gt; 0, the <i>half-disc loop</i> H_R runs along the floor from −R to R, then along the upper half of the circle |z| = R from R back round to −R. Along the floor it is γ(t) = t, with γ′ = 1, so that piece of ∮ round H_R of f is the real integral ∫ from −R to R of f(x) dx.</p>
+  <p data-pid="3f4c52">26h2 totalled a function round a circle. The half-disc loop is not a circle, so the residue technique must be carried over to it.</p>
+  <p data-pid="064c42">Half-disc technique: <b>let f have a complex slope at every point of ℂ except finitely many poles, none on the floor and none of size R; then ∮ round H_R of f is 2πi times the sum of the residues of f at the poles above the floor of size less than R.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the half-disc technique">
+a = s - ti,\ t > 0,\ c = \tfrac{R^2 + 1}{t}:\ \ |z - ic|^2 \le R^2 + c^2 \text{ on } H_R @@ |z − ic|² = |z|² − 2c·(upright part of z) + c², with |z| ≤ R and upright part ≥ 0
+|a - ic|^2 \ge (t + c)^2 = t^2 + 2(R^2 + 1) + c^2 > R^2 + c^2 + 1 @@ the upright part of a − ic is −(t + c)
+\text{the disc } |z - ic|^2 < R^2 + c^2 + 1 \text{ holds } H_R \text{ and not } a @@ the two lines above; a pole above the floor of size more than R is outside the disc |z| &lt; |a|, which holds H_R
+\oint_{H_R} P_a = 0 \text{ for every pole } a \text{ outside the half-disc} @@ the trouble part Pₐ has a complex slope on that disc (26h1): the disc-undoing technique (26f2)
+\oint_{H_R} \tfrac{dz}{(z-a)^k} = 0 \text{ for } k \ge 2 @@ an undoing −1/((k − 1)(z − a)ᵏ⁻¹), with a slope on H_R (26e2)
+\oint_{H_R} \tfrac{dz}{z-a} + \oint_{L_R} \tfrac{dz}{z-a} = \oint_{|z|=R} \tfrac{dz}{z-a} = 2\pi i @@ L_R: the lower half circle, then the floor back from R to −R; the floor is run once each way and cancels; the kernel of the rim technique (26g1)
+\oint_{L_R} \tfrac{dz}{z-a} = 0 \text{ for } a \text{ above the floor} @@ the first three lines turned upside down: a disc holds L_R and not a
+\oint_{H_R} \big(f - \textstyle\sum_j P_j\big) = 0 @@ the pole-split technique (26h1) at every pole leaves a complex slope everywhere; the disc-undoing technique on |z| &lt; R + 1
+\htmlClass{new}{\oint_{H_R} f = 2\pi i \textstyle\sum_{a \text{ above, } |a| < R} \operatorname{Res}(f, a)} \quad \blacksquare @@ the lines above: only the 1/(z − a) piece of each pole inside survives
+  </pre>
+  <p data-pid="bfec09">So 26h2’s residue technique holds round the half-disc loop: the poles below the floor and the poles beyond the arc count for nothing.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the half-disc · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">26k1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\dfrac{1}{z^2 + 4}"></span></span>Find its total round H_R for R = 3 and for R = 1.</li><li><span class="givens"><span data-tex-inline="\dfrac{1}{(z - i)(z + 2i)}"></span></span>Find its total round H_R for R = 3, naming the pole that does not count.</li><li><span class="givens"><span data-tex-inline="\dfrac{e^{iz}}{z - 2i}"></span></span>Find its total round H_R for R = 5.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="26k2">
+  <h2 class="sthead"><span class="stno">26k2</span>The arc fades</h2>
+  <p class="stands">Stands on 26k1, 26e1 (the path-fence technique), 26h1, 25c2 (the plane-triangle technique) and 16i (improper integrals, comparison).</p>
+  <p data-pid="8831d7">Fading-arc technique: <b>if |f(z)| ≤ M_R on the upper half circle of radius R, and R·M_R heads to 0 as R grows, then the integral of f along that half circle heads to 0.</b> The half circle has length πR, so the path fence gives at most πR·M_R.</p>
+  <pre class="lines" data-k="ember" data-label="this step: ∫ 1/(1 + x²) over the whole line">
+\operatorname{Res}\big(\tfrac{1}{1+z^2}, i\big) = \tfrac{1}{2i} @@ a pole of order 1: p(a)/q′(a), with q′(i) = 2i (26h1)
+\int_{-R}^{R} \tfrac{dx}{1+x^2} + \int_{\text{arc}} \tfrac{dz}{1+z^2} = 2\pi i\cdot\tfrac{1}{2i} = \pi @@ the half-disc technique (26k1), R &gt; 1: −i is below the floor
+|1 + z^2| \ge |z|^2 - 1 = R^2 - 1 \text{ on the arc} @@ the plane-triangle technique (25c2)
+\Big|\int_{\text{arc}}\Big| \le \pi R\cdot\tfrac{1}{R^2 - 1} \to 0 @@ the fading-arc technique
+\textstyle\int_0^\infty \text{ and } \int_{-\infty}^0 \text{ converge} @@ comparison for areas with 1/x² beyond 1 (16i3), as 16i3 did
+\htmlClass{new}{\int_{-\infty}^{\infty} \tfrac{dx}{1+x^2} = \pi} \quad \blacksquare @@ both halves converge, so the whole is the limit of ∫ from −R to R
+  </pre>
+  <p data-pid="9637c5">Check: arctan runs from −π/2 to π/2 (21m), a rise of π. The loop got there without the arctan. For any quotient p/q of real polynomials whose bottom has no root on the floor and has degree at least the top’s plus 2, the arc fades the same way: far out, |p| is at most a constant times Rᵐ and |q| at least a constant times Rⁿ (the far-out technique, 25d1), so R·M_R heads to 0 when n ≥ m + 2.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · the arc fades · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">26k2.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\displaystyle\int_{-\infty}^{\infty} \frac{dx}{x^2 + 4}"></span></span>Find it by the half-disc and fading-arc techniques, and check it by the arctan.</li><li><span class="givens"><span data-tex-inline="\displaystyle\int_{-\infty}^{\infty} \frac{dx}{(x^2 + 1)(x^2 + 4)}"></span></span>Find it by residues, and check it by splitting into two fractions.</li><li><span class="givens"><span data-tex-inline="\displaystyle\int_{-\infty}^{\infty} \frac{dx}{x^4 + 1}"></span></span>Find it by residues.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="26k3">
+  <h2 class="sthead"><span class="stno">26k3</span>Waves along the line</h2>
+  <p class="stands">Stands on 26k1, 26k2, 26b2 (the growth-and-turn technique), 26i3 (cos in the plane) and 16d (odd and even areas).</p>
+  <p data-pid="6bdc46">Upper-wave technique: <b>for k ≥ 0 and z with upright part y ≥ 0, |e^(ikz)| = e^(−ky) ≤ 1; so to find ∫ cos(kx) f(x) dx over the line, take the floor part of the total of e^(ikz) f(z) round H_R, and the arc fades whenever it fades for f.</b> Use e^(ikz), never cos kz.</p>
+  <pre class="lines" data-k="ember" data-label="this step: ∫ cos x/(1 + x²) over the whole line">
+e^{iz} = e^{-y + ix},\ \ |e^{iz}| = e^{-y} \le 1 \text{ for } y \ge 0 @@ the growth-and-turn technique (26b2), z = x + iy
+\Big|\tfrac{e^{iz}}{1+z^2}\Big| \le \tfrac{1}{R^2 - 1} \text{ on the arc} @@ 26k2's fence; the arc fades
+\operatorname{Res}\big(\tfrac{e^{iz}}{1+z^2}, i\big) = \tfrac{e^{i\cdot i}}{2i} = \tfrac{e^{-1}}{2i} @@ p(a)/q′(a) (26h1)
+\int_{-R}^{R} \tfrac{e^{ix}}{1+x^2}\,dx + \int_{\text{arc}} = 2\pi i\cdot\tfrac{e^{-1}}{2i} = \tfrac{\pi}{e} @@ the half-disc technique (26k1)
+\int_{-R}^{R} \tfrac{e^{ix}}{1+x^2}\,dx = \int_{-R}^{R} \tfrac{\cos x}{1+x^2}\,dx + i\int_{-R}^{R} \tfrac{\sin x}{1+x^2}\,dx,\ \text{the second } 0 @@ the turn-growth technique; the sine piece is odd (16d)
+\htmlClass{new}{\int_{-\infty}^{\infty} \tfrac{\cos x}{1+x^2}\,dx = \tfrac{\pi}{e} \approx 1.1557} \quad \blacksquare @@ the arc fades; both halves converge, as (1 + cos x)/(1 + x²) lies between 0 and 2/(1 + x²) (16i3)
+  </pre>
+  <p data-pid="129f9f">Why not cos z itself? On the upright, cos(iR) = (e^(−R) + e^R)/2 (26i3), which outgrows every power of R. The arc would not fade. e^(iz) shrinks over the top and grows underneath; cos z is half of each, so it grows on both sides.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · waves · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">26k3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\displaystyle\int_{-\infty}^{\infty} \frac{\cos 2x}{x^2 + 1}\,dx"></span></span>Find it.</li><li><span class="givens"><span data-tex-inline="\displaystyle\int_{-\infty}^{\infty} \frac{\cos x}{x^2 + 4}\,dx"></span></span>Find it, and give it to four places.</li><li><span class="givens"><span data-tex-inline="\dfrac{\cos z}{1 + z^2},\ \ z = iR"></span></span>Find its size at R = 10 and R = 20. <br>Find why the fading-arc technique cannot be used with it.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="26k4">
+  <h2 class="sthead"><span class="stno">26k4</span>The sine integral</h2>
+  <p class="stands">Stands on 26k1, 26e1, 26f2, 26b2, 21f (sin h / h heads to 1), 14d (the slope-sign-order technique), 16d and 16i1.</p>
+  <p data-pid="bde8ec">∫ from 0 to ∞ of sin x / x dx is harder. The bottom x shrinks the waves only as fast as 1/R, so the fading-arc technique fails: R · (1/R) does not head to 0. What saves it is that e^(iz) is tiny over most of the arc, and large only near the floor.</p>
+  <p data-pid="3a2229">Sine-chord technique: <b>for 0 ≤ t ≤ π/2, sin t ≥ 2t/π; so for R &gt; 0, ∫ from 0 to π of e^(−R sin t) dt &lt; π/R.</b> The sine stays above its chord from 0 to π/2.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the sine-chord technique">
+g(t) = t\cos t - \sin t:\ g(0) = 0,\ g'(t) = -t\sin t \le 0 @@ the product rule; slopes of sin and cos (21g)
+g(t) \le 0 \text{ on } [0, \tfrac{\pi}{2}] @@ the slope-sign-order technique (14d)
+\big(\tfrac{\sin t}{t}\big)' = \tfrac{g(t)}{t^2} \le 0,\ \text{so } \tfrac{\sin t}{t} \ge \tfrac{\sin(\pi/2)}{\pi/2} = \tfrac{2}{\pi} @@ falls on (0, π/2] (14d)
+\int_0^\pi e^{-R\sin t}\,dt = 2\int_0^{\pi/2} e^{-R\sin t}\,dt \le 2\int_0^{\pi/2} e^{-2Rt/\pi}\,dt @@ sin(π − t) = sin t (21e4), so the two halves agree (16d); smaller function, smaller area (15e)
+\htmlClass{new}{\int_0^\pi e^{-R\sin t}\,dt \le \tfrac{\pi}{R}\big(1 - e^{-R}\big) < \tfrac{\pi}{R}} \quad \blacksquare @@ the area of e^(−2Rt/π) (16c)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: ∫ sin x / x from 0 to ∞">
+f(z) = \tfrac{e^{iz} - 1}{z},\ f(0) = i @@ (e^(iz) − 1)/z = i + i²z/2! + i³z²/3! + ⋯, a power sum: continuous at 0
+\oint_{H_R} f = 0 @@ a complex slope at every z ≠ 0 (26d1, 26d2): the disc-undoing technique with one point excepted (26f2)
+\int_{-R}^{R} \tfrac{e^{ix} - 1}{x}\,dx = \int_{-R}^{R} \tfrac{\cos x - 1}{x}\,dx + i\int_{-R}^{R}\tfrac{\sin x}{x}\,dx = 0 + 2i\int_0^R \tfrac{\sin x}{x}\,dx @@ the first is odd, the second even (16d)
+\int_{\text{arc}} \tfrac{dz}{z} = \int_0^\pi \tfrac{iRe^{it}}{Re^{it}}\,dt = i\pi @@ the arc as Re^(it), 0 ≤ t ≤ π (26e1)
+\Big|\int_{\text{arc}} \tfrac{e^{iz}}{z}\,dz\Big| \le \int_0^\pi \tfrac{e^{-R\sin t}}{R}\,R\,dt < \tfrac{\pi}{R} @@ |e^(iz)| = e^(−R sin t) on the arc (26b2); the sine-chord technique
+2i\int_0^R \tfrac{\sin x}{x}\,dx + \int_{\text{arc}} \tfrac{e^{iz}}{z}\,dz - i\pi = 0 @@ the floor piece plus the arc piece of the loop
+\htmlClass{new}{\int_0^\infty \tfrac{\sin x}{x}\,dx = \tfrac{\pi}{2}} \quad \blacksquare @@ divide by 2i; the arc piece heads to 0; the limit as R grows is the integral (16i1)
+  </pre>
+  <p data-pid="6eb494">At x = 0 the integrand has the value 1, since sin h / h heads to 1 (21f); the only end that runs off is ∞. The integral settles, but not in size: the waves take turns, and their sizes alone add up without a ceiling, as the third special challenge shows. Comparison could never prove it settles; the loop did.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · the sine integral · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">26k4.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\sin t \ge \tfrac{2t}{\pi}"></span></span>Check it at t = π/6 and at t = π/4, and find where on [0, π/2] the two sides are equal.</li><li><span class="givens"><span data-tex-inline="\displaystyle\int_0^{\infty} \frac{\sin 3x}{x}\,dx"></span></span>Find it from the sine integral by a stretch.</li><li><span class="givens"><span data-tex-inline="\displaystyle\int_{-\infty}^{\infty} \frac{x\sin x}{x^2 + 1}\,dx"></span></span>Find it by residues, fencing the arc with the sine-chord technique.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="26k5">
+  <h2 class="sthead"><span class="stno">26k5</span>Illegal moves</h2>
+  <p class="stands">Stands on 26k1 to 26k4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\int \tfrac{\cos x}{1+x^2}\,dx = 2\pi i\operatorname{Res}\big(\tfrac{\cos z}{1+z^2}, i\big)\,? @@ cos z grows over the top: the arc does not fade (26k3); use e^(iz) and take the floor part
+\int_{-\infty}^{\infty} \tfrac{x\,dx}{1+x^2} = 2\pi i\operatorname{Res}\big(\tfrac{z}{1+z^2}, i\big) = \pi i\,? @@ πR·R/(R² − 1) heads to π, not 0: the arc does not fade; and ∫ from 0 to ∞ diverges (16i)
+\oint_{H_R} \tfrac{dz}{1+z^2} = 2\pi i\big(\operatorname{Res}(\cdot, i) + \operatorname{Res}(\cdot, -i)\big)\,? @@ −i lies below the floor, outside the half-disc (26k1): the total is π, not 0
+\int_0^\infty \tfrac{\sin x}{x}\,dx \text{ converges by comparison with } \tfrac1x\,? @@ comparison needs a function ≥ 0 and a bigger area that converges; ∫ 1/x diverges (16i2)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">26k5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\dfrac{\cos z}{1 + z^2}"></span></span>Find its residue at i, and 2πi times it. <br>Compare with π/e, and find which condition the first line ignores.</li><li><span class="givens"><span data-tex-inline="\displaystyle\int_0^{b} \frac{x\,dx}{1 + x^2}"></span></span>Find it for every b &gt; 0, and what it does as b grows. <br>Find what the second line ignores.</li><li><span class="givens"><span data-tex-inline="\dfrac{1}{1 + z^2}"></span></span>Find its residues at i and at −i, and their sum. <br>Find the total round H_R for R = 2, and which pole the third line should drop.</li><li><span class="givens"><span data-tex-inline="\dfrac{\sin x}{x} \le \dfrac{1}{x}"></span></span>Find a value of x where the left side is negative. <br>Find which two conditions of comparison for areas fail.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">26k.4.1</span><span class="tagq">build</span>Build a quotient p/q of real polynomials, with no root of q on the floor, whose integral over the whole line is π/3. <br>Prove the value by residues.</div>
+  <div class="chq"><span class="chid">26k.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\dfrac{x}{x^2 + 1}"></span></span>The arc fades for p/q when the bottom’s degree is at least the top’s plus 2. Find what happens at a gap of exactly 1, with the given. <br>Find ∫ from −R to R for every R, whether the integral over the whole line converges, and what the arc’s share heads to.</div>
+  <div class="chq"><span class="chid">26k.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\displaystyle\int_0^{\infty} \frac{|\sin x|}{x}\,dx"></span></span>∫ from 0 to ∞ of sin x / x settles. Turn it round: does the area of its size settle too? <br>Prove it or refute it.</div>
+  <div class="chq"><span class="chid">26k.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\displaystyle\int_{-\infty}^{\infty} \frac{dx}{(x^2 + 1)^2}"></span></span>Find it by residues, with the pole of order 2 at i split by the pole-split technique. <br>Reroute: find it with x = tan t (21n).</div>
+  <div class="chq"><span class="chid">26k.4.5</span><span class="tagq">seam</span>For decades before the loop was understood, integrals like these were found by putting an imaginary number in place of a real letter and trusting what came out. The answers were right. <br>Was that a proof? <br>What does the half-disc technique check that the bare substitution did not?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r26j.html">← 26j · why 1/(1 + x²) has radius 1</a><a href="r26l.html">26l · the factorial past the counting numbers →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The half-disc loop is the standard semicircular contour, and the half-disc technique is the residue theorem on it. The fading-arc technique is the ML-inequality applied to the arc; the sine-chord technique is Jordan’s inequality, and its bound on the arc is Jordan’s lemma. ∫ from 0 to ∞ of sin x / x = π/2 is the Dirichlet integral. Computing real integrals this way is contour integration.</p>
+  <h3>Who said it first</h3>
+  <p>Leonhard Euler and Pierre-Simon Laplace found many such integrals in the eighteenth century by passing from real to imaginary values, a method that Siméon Denis Poisson and others distrusted. Augustin-Louis Cauchy presented a memoir on definite integrals in 1814, printed in 1827, which began the loop method; his residues followed from 1826. Peter Gustav Lejeune Dirichlet studied the sine integral in 1829 in his work on Fourier series. Camille Jordan’s lemma appeared in his Cours d’analyse of 1894.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'below the floor',t:R`|z - ic|^2 < R^2 + c^2 + 1`,n:`A disc holds the loop and misses the pole.`},
+  {k:'ember',kl:'inside',t:R`\oint_{H_R} \tfrac{dz}{z-a} = 2\pi i - \oint_{L_R} \tfrac{dz}{z-a} = 2\pi i`,n:`The circle, less the lower half.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\oint_{H_R} f = 2\pi i\textstyle\sum_{\text{above}} \operatorname{Res}}`,n:`The poles above the floor.`}
+],{title:'The slides · the half-disc · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'loop',t:R`\int_{-R}^{R} + \int_{\text{arc}} = 2\pi i\cdot\tfrac{1}{2i}`,n:`One pole above the floor.`},
+  {k:'ember',kl:'fence',t:R`\Big|\int_{\text{arc}}\Big| \le \tfrac{\pi R}{R^2 - 1}`,n:`Length times largest size.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\int_{-\infty}^{\infty} \tfrac{dx}{1+x^2} = \pi}`,n:`The line is the loop.`}
+],{title:'The slides · the arc fades · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'over the top',t:R`|e^{iz}| = e^{-y} \le 1`,n:`e^(iz) shrinks above the floor.`},
+  {k:'ember',kl:'one residue',t:R`2\pi i\cdot\tfrac{e^{-1}}{2i} = \tfrac{\pi}{e}`,n:`At i.`},
+  {k:'ember',kl:'floor part',t:R`\htmlClass{new}{\int \tfrac{\cos x}{1+x^2}\,dx = \tfrac{\pi}{e}}`,n:`The sine part is odd.`}
+],{title:'The slides · waves · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'no pole',t:R`f = \tfrac{e^{iz} - 1}{z},\ \oint_{H_R} f = 0`,n:`The −1 removes the trouble at 0.`},
+  {k:'ember',kl:'the line',t:R`2i\int_0^R \tfrac{\sin x}{x}\,dx`,n:`Odd and even pieces.`},
+  {k:'ember',kl:'the arc',t:R`\int_{\text{arc}} \tfrac{dz}{z} = i\pi,\ \ \Big|\int_{\text{arc}} \tfrac{e^{iz}}{z}\Big| < \tfrac{\pi}{R}`,n:`The sine-chord fence.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\int_0^\infty \tfrac{\sin x}{x}\,dx = \tfrac{\pi}{2}}`,n:`Half of π.`}
+],{title:'The slides · the sine integral · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

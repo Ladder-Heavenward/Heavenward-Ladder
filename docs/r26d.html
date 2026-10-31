@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A complex slope</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r26c.html">← 26c the logarithm of −1</a><a href="r26e.html">next: 26e integrals round a loop →</a></p>
+  <div class="tags"><span class="tag proof">26d · proof</span></div>
+  <h1>A complex slope</h1>
+  <p>A slope on the line is what the rise over the run settles at as the run shrinks. In the plane the run is a complex number, and it can shrink toward zero from any direction at all. A complex slope asks for one answer from every direction at once. That is a great deal to ask. The powers, the polynomials, one over z and the growth function all give it. The flip, which looks as plain as any function, gives it nowhere. The rest of the rung shows how much follows from asking so much.</p>
+  <p class="gesture">A function has a complex slope at a point when its rise over run settles at one number, whichever way the run shrinks. Powers, polynomials, one over z and the growth function have one. The flip has none.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r10a.html">10a</a> (limits), <a href="r13a.html">13a</a> to <a href="r13e.html">13e</a> (slopes and their rules), <a href="r25c.html">25c</a> (sizes) and <a href="r26b.html">26b</a>. <a href="r26e.html">26e</a> integrates these functions round a loop.</p></div>
+</header>
+
+<section class="class step" data-step="26d1">
+  <h2 class="sthead"><span class="stno">26d1</span>A slope from every direction</h2>
+  <p class="stands">Stands on 10a, 13a, 13c, 13d, 13e and 25c.</p>
+  <p class="eqline" data-pid="966c49">From here on, f has a <i>complex slope</i> f′(z₀) at z₀ when f is defined on a disc round z₀ and (f(z₀ + h) − f(z₀))/h heads to f′(z₀) as the complex number h heads to 0: for every ε &gt; 0 some δ &gt; 0 makes |(f(z₀ + h) − f(z₀))/h − f′(z₀)| &lt; ε whenever 0 &lt; |h| &lt; δ. Accepted name: f is complex differentiable at z₀; on an open set, holomorphic.</p>
+  <p data-pid="d4e042">Plane-slope technique: <b>sums, products, quotients and chains of functions with complex slopes have complex slopes, by rung 13’s rules; so (zⁿ)′ = nzⁿ⁻¹, every polynomial has a complex slope everywhere, and (1/z)′ = −1/z² for z ≠ 0.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the plane-slope technique">
+\text{13's proofs of the sum, product, quotient and chain rules} @@ they use only the field techniques and limits by size
+|\cdot| \text{ in } \mathbb{C} \text{ multiplies and obeys the triangle} @@ 25c1, 25c2: every step of those proofs holds in ℂ
+\frac{(z+h)^n - z^n}{h} = nz^{n-1} + h\,(\ldots) @@ share out (4j); the rest has a factor h
+\frac{1/(z+h) - 1/z}{h} = \frac{-1}{z(z+h)} \to -\frac{1}{z^2} @@ the quotient, with |z + h| ≥ |z|/2 for small h (25c2)
+\htmlClass{new}{(z^n)' = nz^{n-1},\ \ (1/z)' = -1/z^2} \quad \blacksquare
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">26d1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="f(z) = z^3 - 2iz + 5"></span> <span data-tex-inline="g(z) = \tfrac{1}{z - i}"></span></span>Find the complex slope of each by the plane-slope technique, and where each slope exists. <br>Find f′(i) and g′(0) as a + bi.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="26d2">
+  <h2 class="sthead"><span class="stno">26d2</span>The growth function has a slope</h2>
+  <p class="stands">Stands on 26d1, 26b1 and 26a2.</p>
+  <p data-pid="a273dd">Plane-exp-slope technique: <b>exp has a complex slope at every z, and exp′(z) = exp z.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the plane-exp-slope technique">
+\frac{e^{z+h} - e^z}{h} = e^z\,\frac{e^h - 1}{h} @@ the plane-adding technique (26b1)
+\frac{e^h - 1}{h} - 1 = \sum_{k \ge 2} \frac{h^{k-1}}{k!} @@ the sum for e^h (26a2), less its first two pieces
+\Big|\sum_{k\ge2} \frac{h^{k-1}}{k!}\Big| \le |h|\sum_{k\ge2}\frac{|h|^{k-2}}{k!} \le |h|e^{|h|} @@ the triangle (25c2), endlessly: sums that settle in size
+\htmlClass{new}{\exp'(z) = e^z} \quad \blacksquare @@ |h|e^(|h|) heads to 0 with h
+  </pre>
+  <p data-pid="4746fd">So e^(iθ), as a function of the real θ, has slope ie^(iθ) by the chain rule: its velocity is always a quarter turn from its position. That is moving round a circle, at speed 1.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · exp’s slope · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">26d2.1</span><span class="ph do">do</span>Find the complex slopes of e^(2z), e^(z²) and z e^(−z), naming the rule used for each. <br>Find every point where the slope of z e^(−z) is 0.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="26d3">
+  <h2 class="sthead"><span class="stno">26d3</span>The flip has no slope</h2>
+  <p class="stands">Stands on 26d1.</p>
+  <p data-pid="47b85b">Two-ways technique: <b>if f has a complex slope at z₀, the rise over run along the floor (h = t) and along the upright (h = it) head to the same number; so the slope along the upright is i times the slope along the floor.</b> The flip fails it everywhere.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the two-ways technique">
+h = t \in \mathbb{R},\ t \to 0:\ \ \frac{f(z_0+t) - f(z_0)}{t} \to f'(z_0) @@ a direction is a special case of every direction
+h = it,\ t \to 0:\ \ \frac{f(z_0+it) - f(z_0)}{it} \to f'(z_0) @@ the same, along the upright
+f(z) = \overline{z}:\ \ \frac{\overline{t}}{t} = 1,\ \ \frac{\overline{it}}{it} = \frac{-it}{it} = -1 @@ the flip of a real is itself; the flip of it is −it
+\htmlClass{new}{\overline{z} \text{ has no complex slope anywhere}} \quad \blacksquare @@ 1 ≠ −1
+  </pre>
+  <p data-pid="4b1df2">The flip is as smooth as can be in each direction, and still fails. A complex slope is not a slope in two directions; it is one number that serves every direction at once. Rung 28 builds slopes in many directions for any function. Here, the demand for a single answer will turn out to fix almost everything about the function.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · the flip · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">26d3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="f(z) = |z|^2,\ \ z_0 = x_0 + y_0 i"></span></span>Find the rise over run along the floor (h = t) and along the upright (h = it), and where each settles as t heads to 0. <br>Find the only point where the two can agree as the two-ways technique asks. <br>Check that f has a complex slope there, and find it.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="26d4">
+  <h2 class="sthead"><span class="stno">26d4</span>Illegal moves</h2>
+  <p class="stands">Stands on 26d1 to 26d3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\overline{z} \text{ is a reflection, so its slope is } {-1}\,? @@ along the floor the rise over run is 1, along the upright −1: no single slope
+f = u + iv \text{ with } u, v \text{ smooth} \Rightarrow f \text{ has a complex slope}\,? @@ the flip: u = x, v = −y are as smooth as can be
+\frac{f(z_0+h)-f(z_0)}{h} \text{ settles along the floor} \Rightarrow f'(z_0) \text{ exists}\,? @@ one direction is not every direction
+(e^z)' = ze^{z-1}\,? @@ that is the power rule misused: the variable is in the exponent; exp′ = exp
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">26d4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(z) = \overline{z},\ \ h = t,\ it,\ t(1+i)"></span></span>Find the rise over run for each h. <br>Find what a single slope of −1 would need, and which directions break it.</li><li><span class="givens"><span data-tex-inline="f(z) = z,\ \ f(z) = \overline{z}"></span></span>Write each as u + iv, with u and v in x and y. <br>Find the rise over run of each along the floor and along the upright, and what tells the two apart.</li><li><span class="givens"><span class="gtx">f(z) = the floor part of z</span></span>Find the rise over run along the floor and along the upright at any z₀. <br>Find whether f has a complex slope anywhere.</li><li><span class="givens"><span data-tex-inline="h = 0.001,\ \ 0.001i"></span></span>Find (e^h − 1)/h for each, to four places, and z e^(z − 1) at z = 0. <br>Find which rule the tempting line used, and why it does not apply.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">26d.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="u = x^3 - 3xy^2"></span></span>Build a function f = u + iv with a complex slope everywhere and this floor part: find z³ as a + bi in x and y, and read off v. <br>Check the two-ways technique at z₀ = 1 + i: find the rise over run along the floor and along the upright for small t, and compare with 3z₀².</div>
+  <div class="chq"><span class="chid">26d.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="f(z) = \overline{z}^{\,2}"></span></span>Find the rise over run (f(z₀ + h) − f(z₀))/h, and split it into a piece with h̄/h and a piece that heads to 0. <br>Find every point where f has a complex slope, and whether it has one on any disc.</div>
+  <div class="chq"><span class="chid">26d.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="f(x + yi) = \sqrt{|xy|}"></span></span>If f has a complex slope at z₀, the slope along the upright is i times the slope along the floor. Turn it round: if the floor and upright slopes agree in that way, must f have a complex slope? <br>Find the rise over run of this f at 0 along the floor, along the upright, and along h = t(1 + i) for t > 0 and for t < 0. <br>Find whether f has a complex slope at 0.</div>
+  <div class="chq"><span class="chid">26d.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="e^z = \textstyle\sum_k z^k/k!"></span></span>Find the sum you get by taking the slope of each piece by the plane-slope technique, and check that it is e^z again. <br>Find the rung 23 technique that takes slopes piece by piece on the line, and what its proof leans on that would need checking in the plane before this route is a proof.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r26c.html">← 26c · the logarithm of −1</a><a href="r26e.html">26e · integrals round a loop →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A function with a complex slope on an open set is holomorphic (or analytic, or complex differentiable). The two-ways technique, written for f = u + iv, is the pair of Cauchy–Riemann equations u_x = v_y and u_y = −v_x.</p>
+  <h3>Who said it first</h3>
+  <p>Jean le Rond d’Alembert met the two-ways equations in fluid flow in 1752, and Leonhard Euler used them in 1777. Augustin-Louis Cauchy made the complex slope the centre of a theory from 1814 on, and Bernhard Riemann took it as the definition in his 1851 thesis.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'factor',t:R`\frac{e^{z+h}-e^z}{h} = e^z\frac{e^h-1}{h}`,n:`Adding to multiplying.`},
+  {k:'ember',kl:'the rest',t:R`\Big|\frac{e^h-1}{h} - 1\Big| \le |h|e^{|h|}`,n:`Fence the sum.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\exp' = \exp}`,n:`In the plane too.`}
+],{title:'The slides · exp’s slope · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'along the floor',t:R`\overline{t}/t = 1`,n:`Rise over run is 1.`},
+  {k:'ember',kl:'along the upright',t:R`\overline{it}/(it) = -1`,n:`Rise over run is −1.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\overline{z}:\ \text{no slope}}`,n:`Two answers, not one.`}
+],{title:'The slides · the flip · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

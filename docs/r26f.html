@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>No hole, no total</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r26e.html">← 26e integrals round a loop</a><a href="r26g.html">next: 26g the rim fixes the inside →</a></p>
+  <div class="tags"><span class="tag proof">26f · proof</span></div>
+  <h1>No hole, no total</h1>
+  <p>Once round a circle, one over z totals two pi i, and every other power totals nothing. The difference is a hole: one over z has no value at the centre. This step proves that the hole is the whole story. A function with a complex slope everywhere inside a disc totals nothing round every loop in that disc. The proof cuts a triangle into four, keeps the worst quarter, and cuts again, until the triangle is so small that the function is nearly a straight line on it, and a straight line totals nothing.</p>
+  <p class="gesture">A function with a complex slope on a disc totals zero round every triangle in it, and so has an undoing on the disc, and so totals zero round every loop there. One point without a slope does not spoil this, if the function stays continuous there.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r26e.html">26e</a> (integrals along paths, the path fence, only the ends count), <a href="r26d.html">26d</a> (complex slopes) and <a href="r22c.html">22c</a> (crowding lists settle). <a href="r26g.html">26g</a> uses it to rebuild a function from its rim.</p></div>
+</header>
+
+<section class="class step" data-step="26f1">
+  <h2 class="sthead"><span class="stno">26f1</span>Round a triangle</h2>
+  <p class="stands">Stands on 26e1, 26e2, 26d1 and 22c2 (the crowd technique).</p>
+  <p data-pid="ade53b">Triangle-total technique: <b>if f has a complex slope at every point of an open set holding a closed triangle T and its inside, then ∮ round T of f is 0.</b> Cut, keep the worst quarter, and repeat.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the triangle-total technique">
+\oint_T f = \sum_{j=1}^{4}\oint_{T_j} f @@ join the midpoints: the four inner edges are run once each way and cancel
+\Big|\oint_{T_1} f\Big| \ge \tfrac14\Big|\oint_T f\Big| @@ the triangle (25c2): one of the four is at least a quarter
+T \supset T_1 \supset T_2 \supset \cdots,\ \ \Big|\oint_{T_n} f\Big| \ge 4^{-n}\Big|\oint_T f\Big| @@ repeat; each side and the perimeter halve: Pₙ = P/2ⁿ
+\text{corners of } T_n \to z_0 \in T @@ the corners crowd (22c2), and T is closed
+f(z) = f(z_0) + f'(z_0)(z - z_0) + \varepsilon(z)(z - z_0),\ \varepsilon(z) \to 0 @@ the complex slope at z₀ (26d1)
+\oint_{T_n} \big(f(z_0) + f'(z_0)(z-z_0)\big)\,dz = 0 @@ it has an undoing (26e2)
+\Big|\oint_{T_n} f\Big| \le \max_{T_n}|\varepsilon|\cdot \tfrac{P}{2^n}\cdot\tfrac{P}{2^n} @@ the path fence (26e1): |z − z₀| ≤ Pₙ on Tₙ
+\Big|\oint_T f\Big| \le 4^n\cdot\max_{T_n}|\varepsilon|\cdot\tfrac{P^2}{4^n} = P^2\max_{T_n}|\varepsilon| \to 0 @@ the last two lines
+\htmlClass{new}{\oint_T f = 0} \quad \blacksquare
+  </pre>
+  <p data-pid="610f03">The same holds if f is continuous on the set and has a complex slope at every point but one. Cut T so that the bad point sits in a triangle as small as you like; that triangle’s total is at most max |f| times its perimeter, which is as small as you like, and the other triangles total 0.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · cut and keep · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">26f1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">T, the triangle 0 → 1 → i → 0</span></span>Find ∮ z² dz round T by the path-ends technique, and check that it is 0, as the triangle-total technique promises. <br>Find ∮ z̄ dz round T directly, one side at a time. <br>Find which demand of the triangle-total technique z̄ fails.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="26f2">
+  <h2 class="sthead"><span class="stno">26f2</span>An undoing on a disc</h2>
+  <p class="stands">Stands on 26f1 and 26e2.</p>
+  <p data-pid="1ebe06">Disc-undoing technique: <b>if f is continuous on an open disc D and has a complex slope at every point of D but at most one, then f has an undoing F on D, and ∮ round every loop in D of f is 0.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the disc-undoing technique">
+F(z) = \int_{[c,\,z]} f @@ along the straight segment from the centre c of D to z
+F(z+h) - F(z) = \int_{[z,\,z+h]} f @@ the triangle c, z, z + h lies in D; its total is 0 (26f1)
+\frac{F(z+h)-F(z)}{h} - f(z) = \frac1h\int_{[z,\,z+h]} (f(w) - f(z))\,dw @@ ∫ along [z, z + h] of the constant f(z) is f(z)h
+\Big|\ldots\Big| \le \max_{[z,z+h]}|f(w) - f(z)| \to 0 @@ the path fence (26e1); f is continuous at z
+\htmlClass{new}{F' = f \text{ on } D,\ \ \oint f = 0 \text{ round every loop in } D} \quad \blacksquare @@ only the ends count (26e2)
+  </pre>
+  <p data-pid="128a7f">So inside a disc where f has a complex slope, the road between two points never matters. A loop totals something only if it goes round a point where f fails, as 1/z fails at 0.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">26f2.1</span><span class="ph do">do</span>Find ∮ e^(z²) dz round the circle |z| = 3, and ∮ 1/(z − 5) dz round the same circle. <br>Find the technique that answers each, and a disc each one needs.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="26f3">
+  <h2 class="sthead"><span class="stno">26f3</span>The hole is the whole story</h2>
+  <p class="stands">Stands on 26f2 and 26e3.</p>
+  <p data-pid="2affd9">Hole technique: <b>round the circle |z| = 1, 1/z totals 2πi; so 1/z has no undoing on any set holding that circle, though it has a complex slope at every point but 0.</b> The disc-undoing technique needs the disc to hold no hole.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the hole technique">
+\oint_{|z|=1} \tfrac{dz}{z} = 2\pi i \ne 0 @@ the circle-powers technique (26e3)
+F' = 1/z \text{ on a set holding the circle} \Rightarrow \oint \tfrac{dz}{z} = 0 @@ only the ends count (26e2)
+\htmlClass{new}{1/z \text{ has no undoing round } 0} \quad \blacksquare @@ the two lines above
+  </pre>
+  <p data-pid="1e84f3">Inside any disc that does not hold 0, 1/z has an undoing: one of the logarithms of 26c, chosen to be continuous there. Round 0 there is none. That is the hole.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">26f3.1</span><span class="ph do">do</span>Find ∮ 1/z dz round the circle |z − 3| = 1, naming the technique. <br>For the circle |z − 1| = 2, write 1/z as a geometric sum in 1/(z − 1), and find the total term by term. <br>Find what the two circles hold that decides the answers.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="26f4">
+  <h2 class="sthead"><span class="stno">26f4</span>Illegal moves</h2>
+  <p class="stands">Stands on 26f1 to 26f3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\oint_{|z|=1} \tfrac{dz}{z} = 0 \text{ by the disc-undoing technique}\,? @@ 1/z is not continuous at 0, and has no value there: the exception point must keep f continuous
+\oint \overline{z}\,dz = 0 \text{ round every loop}\,? @@ the flip has no complex slope (26d3); round |z| = 1 it totals 2πi
+\text{the four quarter-triangles' totals are each a quarter}\,? @@ only their sum is the whole; one of them is at least a quarter
+F(z) = \int_{[c,z]} f \text{ works on any set}\,? @@ the segment from c to z must stay inside, and the triangles too: a disc, not a ring
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">26f4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(z) = 1/z"></span></span>Find |f(z)| at z = 0.1, 0.01 and 0.001. <br>Find whether some value at 0 would make f continuous there, and which demand of the disc-undoing technique fails.</li><li><span class="givens"><span data-tex-inline="f(z) = \overline{z},\ \ |z| = 1"></span></span>Find ∮ z̄ dz round the circle, with γ(t) = e^(it). <br>Find the demand of the disc-undoing technique that z̄ fails.</li><li><span class="givens"><span class="gtx">four totals that add to 8</span></span>Find four such totals, none of them 2. <br>Prove that at least one of any four such totals has size at least 2.</li><li><span class="givens"><span class="gtx">the ring of points with ½ < |z| < 2</span> <span data-tex-inline="f(z) = 1/z"></span></span>Find whether the straight segment from 1 to −1 stays in the ring. <br>Find what F(−1), the integral of f from 1 to −1, would need, and why the ring has no centre to start from.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">26f.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="f(z) = e^{z^2}"></span></span>Build the undoing F of f that the disc-undoing technique gives on ℂ, with centre 0, as a power sum: integrate the sum for e^(w²) piece by piece along [0, z]. <br>Find F(i), to four places, and why it is i times a real number.</div>
+  <div class="chq"><span class="chid">26f.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="f(z) = \tfrac{e^z - 1}{z},\ \ f(0) = 1"></span></span>Find the power sum of f about 0, whether f is continuous at 0, and whether it has a complex slope there. <br>Find whether 1/z, on a disc round 0, can be given a value at 0 that makes it one of the functions the one-point exception allows. <br>Find ∮ round |z| = 1 of f and of 1/z.</div>
+  <div class="chq"><span class="chid">26f.4.3</span><span class="tagq">converse</span>A function with a complex slope on a disc totals 0 round every triangle in it. Turn it round: if a continuous f totals 0 round every triangle in a disc, must it have a complex slope there? <br>Find the lines of the disc-undoing proof that use only continuity and triangle totals, and what they give F. <br>Find what would still be needed to pass from F to f, and whether z̄ is a counterexample.</div>
+  <div class="chq"><span class="chid">26f.4.4</span><span class="tagq">reroute</span>Prove the triangle-total technique for a square instead: cut it into four squares by joining the midpoints of its sides. <br>Find what each line of 26f1 becomes, with the perimeter Pₙ and the factor 4ⁿ. <br>Find whether the square needs anything the triangle did not.</div>
+  <div class="chq"><span class="chid">26f.4.5</span><span class="tagq">seam</span><span class="givens"><span data-tex-inline="\oint f(z)\,dz = 0"></span></span>A great analyst proved in 1825 that a loop’s total is 0 for a function with a complex slope, assuming that the slope f′ is itself continuous. For seventy-five years that assumption stayed in the technique. In 1900 another mathematician removed it by cutting the region into small squares, and a critic soon showed that triangles cut more cleanly, as 26f1 does. <br>Find the line of 26f1 where a continuous f′ would have been a help, if any. <br>Suppose every function with a complex slope on a disc turned out to have a continuous slope. Would the 1900 proof then be needless, or might the proof of that fact need it? <br>If a proof assumes more than it needs, has it proved less?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r26e.html">← 26e · integrals round a loop</a><a href="r26g.html">26g · the rim fixes the inside →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The triangle-total technique is Goursat’s theorem (or the Cauchy–Goursat theorem); the disc-undoing technique is Cauchy’s theorem for a disc, or for a convex set. A set with no holes is simply connected; the general theorem holds there.</p>
+  <h3>Who said it first</h3>
+  <p>Augustin-Louis Cauchy proved the loop total is zero in 1825, assuming the slope f′ is continuous. Édouard Goursat removed that assumption in 1900 by the cutting argument used here.</p>
+  <p>In 26f.4.5, the analyst of 1825 is Cauchy, the mathematician of 1900 is Goursat, who cut into squares, and the critic is Alfred Pringsheim (1901), who cut into triangles. Cauchy’s later proof of 1846 went through a double integral, and needed the continuous slope.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'four quarters',t:R`\oint_T = \textstyle\sum_{j=1}^4 \oint_{T_j}`,n:`Inner edges cancel.`},
+  {k:'ember',kl:'the worst',t:R`|\oint_{T_n}| \ge 4^{-n}|\oint_T|`,n:`Keep the worst each time.`},
+  {k:'ember',kl:'nearly a line',t:R`|\oint_{T_n}| \le \varepsilon P^2/4^n`,n:`Lines total nothing.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\oint_T f = 0}`,n:`Squeezed to 0.`}
+],{title:'The slides · cut and keep · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

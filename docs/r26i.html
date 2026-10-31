@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>e^(iθ) by hand</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r26concl.html">← 26·∎ growth and turning are one function</a><a href="r26j.html">next: 26j why 1/(1 + x²) has radius 1 →</a></p>
+  <div class="tags"><span class="tag tech">26i · technique</span></div>
+  <h1>e^(iθ) by hand</h1>
+  <p>Rung twenty one proved the sum formulas for the cosine and the sine by turning the plane, and proved the powers of a turn by induction, one power at a time. Rung twenty six showed that a turn is the growth function fed an imaginary number, and that the growth function still turns adding into multiplying. With those two facts in hand, the old formulas stop being things to remember. Multiply out one complex number, and read off its floor part and its upright part: two formulas fall out at once. Raise a turn to a power, and the formulas for every multiple of an angle fall out the same way. Run it backwards, writing the cosine as half of a turn plus its flip, and every power of the cosine or the sine turns into a plain sum of cosines and sines, ready to be integrated.</p>
+  <p class="gesture">Find one complex number two ways and compare the parts: the floor parts agree, and the upright parts agree. A turn raised to a power gives the formulas for multiple angles. The cosine is half a turn plus its flip, so its powers become sums.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r26a.html">26a</a> (the turn-growth technique), <a href="r26b.html">26b</a> (the plane-adding and growth-and-turn techniques), <a href="r21d.html">21d</a> (the sum technique), <a href="r21e.html">21e</a> (reversing an angle), <a href="r21cb20.html">21·cb20</a> (the multiply-and-add technique), <a href="r21k.html">21k</a> (the half-arc and product-to-sum techniques), <a href="r21n.html">21n</a> (trig areas) and <a href="r04j.html">4j</a> (the two-term power). <a href="r26j.html">26j</a> uses the plane to find how far a real power sum reaches.</p></div>
+</header>
+
+<section class="class step" data-step="26i1">
+  <h2 class="sthead"><span class="stno">26i1</span>The sum formulas in one line</h2>
+  <p class="stands">Stands on 26a3 (the turn-growth technique), 26b1 (the plane-adding technique), 21d (the sum technique) and 25a (equal pairs have equal parts).</p>
+  <p data-pid="2507b2">21d proved the sum technique by carrying arcs round the circle with a turn. Here is the same result again, with nothing to carry and nothing to remember.</p>
+  <p data-pid="48f180">Part-reading technique: <b>to prove a fact about cos and sin, find one complex number two ways, each written as floor part plus i times upright part; then the floor parts agree, and the upright parts agree.</b> Two numbers of the plane are equal exactly when their floor parts and their upright parts are (25a).</p>
+  <pre class="lines" data-k="ember" data-label="this step: the sum technique, read off">
+e^{i(a+b)} = e^{ia}\,e^{ib} @@ the plane-adding technique (26b1)
+= (\cos a + i\sin a)(\cos b + i\sin b) @@ the turn-growth technique (26a3), twice
+= (\cos a\cos b - \sin a\sin b) + i(\sin a\cos b + \cos a\sin b) @@ share out; i² = −1
+e^{i(a+b)} = \cos(a+b) + i\sin(a+b) @@ the turn-growth technique at a + b
+\htmlClass{new}{\cos(a+b) = \cos a\cos b - \sin a\sin b,\ \ \sin(a+b) = \sin a\cos b + \cos a\sin b} \quad \blacksquare @@ the part-reading technique: floor parts, then upright parts
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: cos 75°">
+\tfrac{5\pi}{12} = \tfrac{\pi}{4} + \tfrac{\pi}{6} @@ 75° as a sum of angles whose cos and sin are known (21b)
+\cos\tfrac{5\pi}{12} = \tfrac{\sqrt2}{2}\cdot\tfrac{\sqrt3}{2} - \tfrac{\sqrt2}{2}\cdot\tfrac12 @@ the floor part of the line above
+\htmlClass{new}{\cos\tfrac{5\pi}{12} = \tfrac{\sqrt6 - \sqrt2}{4} \approx 0.2588} \quad \blacksquare @@ check: cos 75° = 0.258819 to six places
+  </pre>
+  <p data-pid="e8cff7">21d needed one argument for the cosine and another for the sine. Here one multiplication gives both, because one complex number holds both. The difference formulas of 21e come the same way from e^(i(a − b)) = e^(ia) e^(−ib), with e^(−ib) = cos b − i sin b by reversing an angle (21e1).</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · read the parts · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">26i1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="e^{i(a - b)} = e^{ia}\,e^{-ib}"></span></span>Find cos(a − b) and sin(a − b) by reading the parts.</li><li><span class="givens"><span data-tex-inline="\sin\tfrac{5\pi}{12}"></span></span>Find it exactly, from the upright part of e^(iπ/4) e^(iπ/6).</li><li><span class="givens"><span data-tex-inline="e^{i(a + b + c)}"></span></span>Find cos(a + b + c) as a sum of products of cosines and sines, by reading the floor part.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="26i2">
+  <h2 class="sthead"><span class="stno">26i2</span>Powers of a turn in one line</h2>
+  <p class="stands">Stands on 26i1, 26b1, 26b2, 26a3, 21·cb20 (the multiply-and-add technique), 4j (the two-term-power technique) and 21c (the circle technique).</p>
+  <p data-pid="3f2d13">21·cb20 proved that the n-th power of cos θ + i sin θ is cos nθ + i sin nθ, by the multiply-and-add technique and induction, one power at a time. The plane-adding technique does it in one line, and for negative powers too.</p>
+  <p data-pid="d32f75">Many-angle technique: <b>for every whole n, (cos θ + i sin θ)ⁿ = cos nθ + i sin nθ; so cos nθ and sin nθ are the floor and upright parts of (cos θ + i sin θ)ⁿ multiplied out by the two-term power.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the many-angle technique">
+(\cos\theta + i\sin\theta)^n = \big(e^{i\theta}\big)^n @@ the turn-growth technique (26a3)
+\big(e^{i\theta}\big)^n = e^{in\theta} \text{ for } n \ge 1 @@ the plane-adding technique (26b1), n − 1 times; induction (4b)
+\big(e^{i\theta}\big)^{-n} = 1/e^{in\theta} = e^{-in\theta} @@ 1/e^z = e^(−z) (26b2)
+\htmlClass{new}{(\cos\theta + i\sin\theta)^n = \cos n\theta + i\sin n\theta \text{ for every whole } n} \quad \blacksquare @@ the turn-growth technique at nθ
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: cos 3θ and sin 3θ">
+(c + is)^3 = c^3 + 3c^2(is) + 3c(is)^2 + (is)^3 @@ c = cos θ, s = sin θ; the two-term power (4j)
+= (c^3 - 3cs^2) + i(3c^2 s - s^3) @@ i² = −1, i³ = −i
+\cos 3\theta = c^3 - 3c(1 - c^2),\ \ \sin 3\theta = 3(1 - s^2)s - s^3 @@ the part-reading technique (26i1); s² = 1 − c² (21c)
+\htmlClass{new}{\cos 3\theta = 4\cos^3\theta - 3\cos\theta,\ \ \sin 3\theta = 3\sin\theta - 4\sin^3\theta} \quad \blacksquare
+  </pre>
+  <p data-pid="4201ac">The same line finds any power of any number of the plane. 1 + i is √2 e^(iπ/4), so (1 + i)¹⁰ = 2⁵ e^(i10π/4) = 32 e^(iπ/2) e^(2πi) = 32i. Ten multiplications become one.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · many angles · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">26i2.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\cos 4\theta,\ \ \sin 4\theta"></span></span>Write each as a polynomial in cos θ and sin θ. <br>Write cos 4θ in cos θ alone.</li><li><span class="givens"><span data-tex-inline="(1 + i\sqrt3)^{6},\ \ (1 - i)^{-8}"></span></span>Find each as a + bi.</li><li><span class="givens"><span data-tex-inline="4x^3 - 3x = \tfrac12"></span></span>Put x = cos θ, and find all three roots as cosines of angles.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="26i3">
+  <h2 class="sthead"><span class="stno">26i3</span>Powers of cos and sin as sums</h2>
+  <p class="stands">Stands on 26a3, 26b1, 21e1 (the reversal technique), 4j (the two-term-power technique), 16d (odd and even areas) and 21n (trig areas).</p>
+  <p data-pid="1ec4df">Run the turn-growth technique at θ and at −θ, and add or subtract. The cosine and the sine come out as halves of a turn and its flip.</p>
+  <p data-pid="56f3c4">Power-to-sum technique: <b>cos θ = (e^(iθ) + e^(−iθ))/2 and sin θ = (e^(iθ) − e^(−iθ))/(2i); so every power of cos θ or sin θ, and every product of such powers, is a sum of terms cos kθ and sin kθ, found by multiplying out.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the power-to-sum technique">
+e^{-i\theta} = \cos\theta - i\sin\theta @@ the turn-growth technique at −θ (26a3); cos(−θ) = cos θ, sin(−θ) = −sin θ (21e1)
+e^{i\theta} + e^{-i\theta} = 2\cos\theta,\ \ e^{i\theta} - e^{-i\theta} = 2i\sin\theta @@ add; subtract
+\htmlClass{new}{\cos\theta = \tfrac{e^{i\theta} + e^{-i\theta}}{2},\ \ \sin\theta = \tfrac{e^{i\theta} - e^{-i\theta}}{2i}} \quad \blacksquare
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: cos³θ">
+\cos^3\theta = \tfrac18\big(e^{i\theta} + e^{-i\theta}\big)^3 @@ the power-to-sum technique
+= \tfrac18\big(e^{3i\theta} + 3e^{i\theta} + 3e^{-i\theta} + e^{-3i\theta}\big) @@ the two-term power (4j); e^(iθ)e^(−iθ) = 1 (26b1)
+= \tfrac18\big(2\cos 3\theta + 6\cos\theta\big) @@ pair each term with its flip: e^(ikθ) + e^(−ikθ) = 2 cos kθ
+\htmlClass{new}{\cos^3\theta = \tfrac34\cos\theta + \tfrac14\cos 3\theta} \quad \blacksquare
+  </pre>
+  <p data-pid="2dad03">The terms always come in flipped pairs, so a power of the cosine is a sum of cosines: cos⁴θ = (3 + 4 cos 2θ + cos 4θ)/8. Over a whole turn every cos kθ with k ≠ 0 has area 0, so ∫ from 0 to 2π of cos⁴θ dθ is 2π · 3/8 = 3π/4. 21n halved the arc twice to get there; here it is one multiplication.</p>
+  <p data-pid="63ecdc">For a complex z, cos z and sin z mean their endless sums (23b2), which settle everywhere by the plane-size technique (26a1). Splitting e^(iz) and e^(−iz) into even and odd pieces, as 26a3 did, gives cos z = (e^(iz) + e^(−iz))/2 and sin z = (e^(iz) − e^(−iz))/(2i) for every complex z, not only real θ.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · powers to sums · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">26i3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\sin^3\theta,\ \ \cos^4\theta"></span></span>Write each as a sum of terms cos kθ or sin kθ.</li><li><span class="givens"><span data-tex-inline="\displaystyle\int_0^{\pi} \sin^4\theta\,d\theta"></span></span>Find it from its sum.</li><li><span class="givens"><span data-tex-inline="\cos^2\theta\,\sin^2\theta"></span></span>Write it as a sum of cosines, and find its area over one whole turn.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="26i4">
+  <h2 class="sthead"><span class="stno">26i4</span>Illegal moves</h2>
+  <p class="stands">Stands on 26i1 to 26i3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\cos^3\theta = \cos 3\theta\,? @@ a power of the cosine is not the cosine of a multiple: cos³θ = (3 cos θ + cos 3θ)/4 (26i3)
+(\cos\theta + i\sin\theta)^n = \cos^n\theta + i\sin^n\theta\,? @@ the power of a sum is not the sum of the powers (4j); the middle terms carry the turn
+\cos\theta \text{ is the floor part of } e^{i\theta}, \text{ so } \cos^2\theta \text{ is the floor part of } e^{2i\theta}\,? @@ the floor part of a product is not the product of the floor parts: cos 2θ = cos²θ − sin²θ
+e^{i\theta} + e^{-i\theta} = 2i\sin\theta\,? @@ the sum is 2 cos θ; the difference is 2i sin θ
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">26i4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\theta = \tfrac{\pi}{3}"></span></span>Find cos³θ and cos 3θ. <br>Find what the first line confuses.</li><li><span class="givens"><span data-tex-inline="(\cos\theta + i\sin\theta)^2"></span></span>Multiply it out, and find the term the second line drops.</li><li><span class="givens"><span data-tex-inline="\theta = \tfrac{\pi}{4}"></span></span>Find cos²θ and the floor part of e^(2iθ). <br>Find which rule about floor parts the third line assumes, and why it fails.</li><li><span class="givens"><span data-tex-inline="\theta = \tfrac{\pi}{2}"></span></span>Find e^(iθ) + e^(−iθ), and find which side of the fourth line it matches.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">26i.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\textstyle\sum_{k=0}^{n-1} \cos k\theta"></span></span>Build a closed form for it, for θ not a whole number of turns, as the floor part of a geometric sum of e^(ikθ). <br>Prove it, and check it at n = 3, θ = π/2.</div>
+  <div class="chq"><span class="chid">26i.4.2</span><span class="tagq">edge</span>Prove that cos nθ is a polynomial in cos θ for every whole n ≥ 0. <br>Find whether sin nθ is a polynomial in sin θ for every whole n, and where it fails.</div>
+  <div class="chq"><span class="chid">26i.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="1 + \cos 2\theta + \cos 3\theta"></span></span>The power-to-sum technique turns every power of cos θ into a sum of cosines. Turn it round: is every sum a₀ + a₁ cos θ + ⋯ + aₙ cos nθ a polynomial of degree at most n in cos θ? <br>Prove it or refute it, and find the polynomial for the given.</div>
+  <div class="chq"><span class="chid">26i.4.4</span><span class="tagq">reroute</span>21k proved the half-arc technique, cos²(θ/2) = (1 + cos θ)/2, from the sum technique. Reroute: prove it, and sin²(θ/2) = (1 − cos θ)/2, from the power-to-sum technique, each in one line.</div>
+  <div class="chq"><span class="chid">26i.4.5</span><span class="tagq">seam</span>The many-angle formula was in use around 1722, a quarter of a century before anyone wrote e to an imaginary power. It was checked case by case, and it never failed. <br>Was it known before it was proved? <br>What did the plane-adding technique give that the cases did not?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r26concl.html">← 26·∎ · growth and turning are one function</a><a href="r26j.html">26j · why 1/(1 + x²) has radius 1 →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The many-angle technique is de Moivre’s formula. The power-to-sum technique gives Euler’s formulas for cosine and sine, cos θ = (e^(iθ) + e^(−iθ))/2 and sin θ = (e^(iθ) − e^(−iθ))/(2i); writing powers of cos and sin as sums of multiple angles is called linearization, or power reduction. cos 3θ = 4cos³θ − 3cos θ is the triple-angle formula, and cos nθ written as a polynomial in cos θ is the Chebyshev polynomial Tₙ.</p>
+  <h3>Who said it first</h3>
+  <p>Abraham de Moivre used the many-angle pattern in 1722 and in his Miscellanea analytica of 1730, without writing e to an imaginary power. Leonhard Euler wrote cos θ = (e^(iθ) + e^(−iθ))/2 in his Introductio of 1748, and from it read off the sum formulas and the multiple-angle formulas as this step does. Pafnuty Chebyshev studied the polynomials Tₙ from 1854.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'two ways',t:R`e^{i(a+b)} = e^{ia}e^{ib}`,n:`Adding becomes multiplying.`},
+  {k:'ember',kl:'multiply out',t:R`(\cos a + i\sin a)(\cos b + i\sin b)`,n:`Share out; i² = −1.`},
+  {k:'ember',kl:'read off',t:R`\htmlClass{new}{\cos(a+b) = \cos a\cos b - \sin a\sin b}`,n:`And the upright part gives sin(a + b).`}
+],{title:'The slides · read the parts · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'a turn, n times',t:R`(e^{i\theta})^n = e^{in\theta}`,n:`Adding becomes multiplying.`},
+  {k:'ember',kl:'multiply out',t:R`(c + is)^3 = (c^3 - 3cs^2) + i(3c^2s - s^3)`,n:`The two-term power.`},
+  {k:'ember',kl:'read off',t:R`\htmlClass{new}{\cos 3\theta = 4\cos^3\theta - 3\cos\theta}`,n:`With s² = 1 − c².`}
+],{title:'The slides · many angles · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'halves',t:R`\cos\theta = \tfrac{e^{i\theta} + e^{-i\theta}}{2}`,n:`A turn plus its flip.`},
+  {k:'ember',kl:'cube',t:R`\tfrac18(e^{3i\theta} + 3e^{i\theta} + 3e^{-i\theta} + e^{-3i\theta})`,n:`The two-term power.`},
+  {k:'ember',kl:'pair the flips',t:R`\htmlClass{new}{\cos^3\theta = \tfrac34\cos\theta + \tfrac14\cos 3\theta}`,n:`Cosines only.`}
+],{title:'The slides · powers to sums · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>
