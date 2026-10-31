@@ -846,7 +846,7 @@ function toast(msg){ let t=document.getElementById('patoast'); if(!t){ t=documen
   t.textContent=msg; t.classList.add('on'); clearTimeout(toast.h); toast.h=setTimeout(()=>t.classList.remove('on'),2200); }
 const copy=s=>{ try{ navigator.clipboard.writeText(s).then(()=>{},()=>{}); }catch(e){} };
 function addresses(info){
-  const ps=[...document.querySelectorAll('section.class p[data-pid], #intro p[data-pid]')]; if(!ps.length) return;
+  const ps=[...document.querySelectorAll('section.class p[data-pid]')]; if(!ps.length) return;
   const per={};
   ps.forEach((p,i)=>{ const st=p.closest('section.step'), k=st?st.dataset.step:info.label; per[k]=(per[k]||0)+1; const ad=k+'.0.'+per[k]; p.dataset.addr=ad; p.id=p.id||'p-'+p.dataset.pid;
     const b=document.createElement('button'); b.type='button'; b.className='pa'; b.textContent=ad; b.setAttribute('aria-label','paragraph '+ad+': prompt, report or leave a note');
@@ -1073,7 +1073,7 @@ function steps(){
   addEventListener('resize',bleed);
   paint();
 }
-ready(()=>{ steps(); const info=tagInfo(); if(info){ titles(info); addresses(info); edInit(); } else if(document.querySelector('#intro p[data-pid]')){ addresses({label:'ladder'}); edInit(); } reportQuestions(); pn(); nonskid(); greek(); curly();
+ready(()=>{ steps(); const info=tagInfo(); if(info){ titles(info); addresses(info); edInit(); } reportQuestions(); pn(); nonskid(); greek(); curly();
   const fit=()=>{ stackTables(); liftLong(); }; window.__fit=fit;
   setTimeout(fit,400); if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>setTimeout(fit,100)); });
 })();
