@@ -841,7 +841,7 @@ function addresses(info){
     const b=document.createElement('button'); b.type='button'; b.className='pa'; b.textContent=ad; b.setAttribute('aria-label','paragraph '+ad+': prompt, copy or report');
     b.addEventListener('click',e=>{ e.stopPropagation(); openMenu(p,b); }); p.appendChild(document.createTextNode(' ')); p.appendChild(b); });
   menu=document.createElement('div'); menu.className='pamenu'; menu.hidden=true;
-  menu.innerHTML='<button type="button" data-a="prompt">prompt from</button><button type="button" data-a="text">copy text</button><button type="button" data-a="addr">copy address</button><button type="button" data-a="report">report</button><button type="button" data-a="edit" hidden>edit</button>';
+  menu.innerHTML='<button type="button" data-a="prompt">prompt from</button><button type="button" data-a="text">copy text</button><button type="button" data-a="addr">copy address</button><button type="button" data-a="report">report</button>';
   document.body.appendChild(menu);
   menu.addEventListener('click',e=>{ const a=e.target.dataset.a; if(!a||!cur) return; const ad=cur.dataset.addr;
     const text=[...cur.childNodes].filter(n=>!(n.classList&&n.classList.contains('pa'))).map(n=>n.textContent).join('').trim();
@@ -884,7 +884,7 @@ function reportQuestions(){ document.querySelectorAll('li > span.qid').forEach(q
    the site's database, edits/<pid> {pid, page, html, at}, shown to every reader at once, and folded
    into the page's source at the next publish. Paragraphs with typeset maths are left alone. */
 const ED={db:null,owner:false,page:((location.pathname.split('/').pop()||'index.html').replace(/\.html?$/,''))||'index'};
-function edWait(){ return new Promise(res=>{ let n=0; (function t(){ if(window.claude&&typeof window.claude.use==='function') return res(true); if(++n>40) return res(false); setTimeout(t,250); })(); }); }
+function edWait(){ return Promise.resolve(false); return new Promise(res=>{ let n=0; (function t(){ if(window.claude&&typeof window.claude.use==='function') return res(true); if(++n>40) return res(false); setTimeout(t,250); })(); }); }
 function editable(p){ return !p.querySelector('[data-tex],[data-tex-inline],.katex,code'); }
 const ED_OK={B:1,STRONG:1,I:1,EM:1,A:1,SUP:1,SUB:1,BR:1};
 function edClean(node){ const out=document.createElement('div');
