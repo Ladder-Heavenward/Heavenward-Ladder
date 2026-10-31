@@ -152,8 +152,10 @@ function render(box){
   box.innerHTML='<p class="dnote">Practice drawn from the pools your steps have opened. A question never comes twice. Right answers so far: <b>'+right+'</b>.</p>'
     +'<div class="rzlines">'+q.lines.map(([t,w],i)=>'<div class="rzl"><span class="rzn">'+(i+1)+'</span><span class="rzt">'+esc(t)+'</span><span class="rzw">'+(w?esc(w):'?')+'</span></div>').join('')+'</div>'
     +'<p class="rzask">'+esc(q.ask)+'</p><div class="rzopts">'+q.opts.map(o=>'<button type="button" class="rzo">'+esc(o)+'</button>').join('')+'</div>'
-    +'<p class="rzwhy" hidden></p><p><button type="button" class="dlink rznext">another question</button></p>'+picker(q);
+    +'<p class="rzwhy" hidden></p><p><button type="button" class="dlink rznext">another question</button></p>'
+    +'<p class="dnote">this question’s seed: <button type="button" class="rzseed" title="tap to report this question">'+esc(q.index)+'</button></p>'+picker(q);
   wire();
+  box.querySelector('.rzseed').onclick=()=>{ if(window.__report) window.__report({kind:'laundry',where:'seed '+q.index,text:q.lines.map(l=>l[0]).join(' / ')+' | '+q.ask+' | answer: '+q.right}); };
   const why=box.querySelector('.rzwhy'); let done=false;
   box.querySelectorAll('.rzo').forEach(b=>b.onclick=()=>{ if(done) return; done=true;
     const ok=b.textContent===q.right;

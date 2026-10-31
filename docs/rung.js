@@ -439,22 +439,26 @@ function marks(){
   if(document.querySelector('li.built')) window.__ladderMarks={st,save};
   const items=[];
   const VAR=/^(?:[^.\s]+\.\d+\.\d+|\d+[a-z]+\d+\.\d+)$/;
-  document.querySelectorAll('.qid').forEach(el=>{ if(el.closest('#desk')) return; if(!VAR.test(el.textContent.trim())){ el.classList.add('auto'); el.title='ticks itself when every question in this group is ticked'; return; } items.push({el,id:'q:'+el.textContent.trim(),on:()=>el.classList.contains('done'),set:v=>el.classList.toggle('done',v)}); });
+  document.querySelectorAll('.qid').forEach(el=>{ if(el.closest('#desk')) return; if(!VAR.test(el.textContent.trim())){ el.classList.add('auto'); el.title='ticks itself when every question in this group is ticked; tap for prompt, copy or report'; return; } items.push({el,id:'q:'+el.textContent.trim(),on:()=>el.classList.contains('done'),set:v=>el.classList.toggle('done',v)}); });
   document.querySelectorAll('li>.n').forEach(el=>{ const li=el.parentElement;
     if(li.classList.contains('built')&&!li.classList.contains('k-theory')&&!li.classList.contains('k-gate')){ li.classList.add('autorow'); el.title='ticks itself when every question on this page is ticked'; el.addEventListener('click',e=>{ e.preventDefault(); e.stopPropagation(); lockedHint(li); }); return; }
     items.push({el,id:'L:'+el.textContent.trim(),on:()=>li.classList.contains('passed'),set:v=>li.classList.toggle('passed',v)}); });
-  items.forEach(it=>{ if(it.id in st) it.set(!!st[it.id]); it.el.addEventListener('click',e=>{ e.preventDefault(); e.stopPropagation();
-    const li=it.el.parentElement;
-    if(li&&li.classList&&li.classList.contains('k-theory')){ theoryHint(li); return; }
-    const v=!it.on(); it.set(v); st[it.id]=v; save(it.id); progress();
-    if(it.id.startsWith('L:')&&li.classList.contains('k-theory')&&v) unpack(li.closest('section.rung'),true); }); });
+  items.forEach(it=>{ if(it.id in st) it.set(!!st[it.id]);
+    const tick=()=>{ const li=it.el.parentElement;
+      if(li&&li.classList&&li.classList.contains('k-theory')){ theoryHint(li); return; }
+      const v=!it.on(); it.set(v); st[it.id]=v; save(it.id); progress();
+      if(it.id.startsWith('L:')&&li.classList.contains('k-theory')&&v) unpack(li.closest('section.rung'),true); };
+    it.el.__tick=tick;
+    it.el.addEventListener('click',e=>{ e.preventDefault(); e.stopPropagation();
+      if(it.id.startsWith('q:')&&window.__qMenu) window.__qMenu(it.el,()=>tick(),it.on()); else tick(); }); });
+  document.querySelectorAll('.qid.auto').forEach(el=>el.addEventListener('click',e=>{ e.preventDefault(); e.stopPropagation(); if(window.__qMenu) window.__qMenu(el,null,false); }));
   progress(); gateLadder(true);
   const go=()=>{ if(window.MarksSync){ const r=MarksSync.init(KEY,st,items); const after=()=>{ if(relabel()){ try{ LS.setItem(KEY,JSON.stringify(st)); }catch(e){} items.forEach(it=>{ if(it.id in st){ it.set(!!st[it.id]); if(it.id.startsWith('q:'+NEW+'.')) MarksSync.push(KEY,st,it.id); } }); } progress(); gateLadder(); }; if(r&&r.then) r.then(after,after); else after(); } };
   if(window.MarksSync) go(); else { const s=document.createElement('script'); s.src='sync.js'; s.onload=go; document.head.appendChild(s); }
   /* pull again whenever the page comes back into view, so a ✓ made on another device shows up without a reload */
   document.addEventListener('visibilitychange',()=>{ if(!document.hidden) go(); });
   window.addEventListener('pageshow',e=>{ if(e.persisted) go(); });
-  if(items.length&&document.querySelector('.qid')){ const p=document.createElement('p'); p.className='marknote'; p.textContent='Click a question’s label to toggle its ✓. Marks save in this browser and sync to the ladder’s record; I say in chat when one is earned.'; document.body.appendChild(p); }
+  if(items.length&&document.querySelector('.qid')){ const p=document.createElement('p'); p.className='marknote'; p.textContent='Tap a question’s label to tick it ✓, copy it, or report it. Marks save in this browser and sync to the ladder’s record; I say in chat when one is earned.'; document.body.appendChild(p); }
 }
 
 /* desk */
@@ -462,7 +466,7 @@ function deskHTML(){
   const b=document.createElement('button'); b.id='deskbtn'; b.setAttribute('aria-label','open the desk: questions and a grapher'); b.textContent='☰ desk';
   const d=document.createElement('div'); d.id='desk'; d.setAttribute('role','dialog'); d.setAttribute('aria-label','desk');
   const qs=!!document.querySelector('.sayback');
-  d.innerHTML='<div class="dtabs">'+(qs?'<button data-p="qs">Questions</button>':'')+'<button data-p="graph">Graph</button><button data-p="moves">Reference</button><button data-p="rand">Laundry</button><button data-p="rec">Record</button><a class="dshare" href="install.html">Share the ladder</a><button class="x" aria-label="close">✕</button></div>'
+  d.innerHTML='<div class="dtabs">'+(qs?'<button data-p="qs">Questions</button>':'')+'<button data-p="graph">Graph</button><button data-p="moves">Reference</button><button data-p="rand">Laundry</button><button data-p="rec">Record</button><button type="button" class="dkeys" aria-label="the math keys">⌨ Keys</button><a class="dshare" href="install.html">Share the ladder</a><button class="x" aria-label="close">✕</button></div>'
     +(qs?'<div class="dpane" id="dp-qs"><p class="dnote">The page’s questions, here so you can read them beside the class.</p><div class="dq" id="dq"></div></div>':'')
     +'<div class="dpane" id="dp-graph"><div id="dmg"></div><p class="dnote" style="margin-top:10px">Type it as on paper: x^2, 2sin(x), e^x, ln x, √x, |x|, x!. a, b, c and k get sliders.</p></div>'
     +'<div class="dpane" id="dp-moves"><p class="dnote" id="dmnote">The techs this step uses and builds: what each is called, what it does in words, and the line in symbols.</p><div id="dmoves"></div><p><a class="dlink" href="moves.html">every tech you have earned →</a></p></div>'
@@ -539,18 +543,19 @@ function ladderBar(){
   const home=!!document.querySelector('.rungs');
   const bar=document.createElement('nav'); bar.id='lbar'; bar.setAttribute('aria-label','the ladder bar');
   bar.innerHTML=(home?'<button type="button" class="lb lb-ladder"':'<a class="lb lb-ladder" href="index.html"')+' title="the ladder: how far you have climbed"><svg viewBox="0 0 20 28" width="15" height="21" aria-hidden="true"><path d="M5 1v26M15 1v26M5 6h10M5 12h10M5 18h10M5 24h10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg><span class="lb-l">the ladder</span><b class="lb-far"></b><span class="lb-star"></span>'+(home?'</button>':'</a>')
-    +'<span class="lb-gap"></span><button type="button" class="lb lb-rep" aria-label="report to the author" title="report to the author">⚑ <span class="lb-l">report</span></button><button type="button" class="lb lb-keys" aria-label="the keys">⌨ <span class="lb-l">keys</span></button><button type="button" class="lb lb-tray" aria-label="the tray">☰ <span class="lb-l">tray</span></button>';
+    +'<span class="lb-gap"></span>'+(ladderPage()==='about'?'<button type="button" class="lb lb-rep" aria-label="report to the author" title="report to the author">⚑ <span class="lb-l">report</span></button>':'')+'<button type="button" class="lb lb-keys" aria-label="the keys" hidden>⌨ <span class="lb-l">keys</span></button>'+'<button type="button" class="lb lb-tray" aria-label="the tray">☰ <span class="lb-l">tray</span></button>';
   document.body.appendChild(bar); document.body.classList.add('hasbar');
   const stats=()=>{ let v={far:-1,stars:0}; try{ v=Object.assign(v,JSON.parse(LS.getItem('ladder:stats')||'{}')); }catch(e){}
     bar.querySelector('.lb-far').textContent=v.far<0?'':String(v.far);
     bar.querySelector('.lb-star').textContent=v.stars?'★ '+v.stars:''; };
   window.__barStats=stats; stats();
   if(home) bar.querySelector('.lb-ladder').onclick=()=>climbTo(true);
-  bar.querySelector('.lb-rep').onclick=()=>{ if(window.__report) window.__report({kind:'page'}); };
-  bar.querySelector('.lb-keys').onclick=()=>{ const b=document.querySelector('#mk-tray .mk-btn'); if(b) b.click(); };
+  const rb=bar.querySelector('.lb-rep'); if(rb) rb.onclick=()=>{ if(window.__report) window.__report({kind:'page'}); };
+  const kb=bar.querySelector('.lb-keys'); if(kb) kb.onclick=()=>{ const b=document.querySelector('#mk-tray .mk-btn'); if(b) b.click(); };
   bar.querySelector('.lb-tray').onclick=()=>{ const b=document.getElementById('deskbtn'); if(b) b.click(); };
   const sync=()=>{ const t=document.getElementById('mk-tray'), d=document.getElementById('desk');
-    bar.querySelector('.lb-keys').classList.toggle('on',!!(t&&t.classList.contains('open')));
+    if(kb){ kb.hidden=!!d||!t; kb.classList.toggle('on',!!(t&&t.classList.contains('open'))); }
+    const dk=document.querySelector('#desk .dkeys'); if(dk) dk.classList.toggle('on',!!(t&&t.classList.contains('open')));
     bar.querySelector('.lb-tray').classList.toggle('on',!!(d&&d.classList.contains('open'))); };
   new MutationObserver(sync).observe(document.body,{subtree:true,attributes:true,attributeFilter:['class']}); sync();
 }
@@ -765,7 +770,7 @@ window.__deskInit=function(){
   const origQ=t=>[...document.querySelectorAll('.qid,.id')].find(o=>!o.closest('#desk')&&o.textContent.trim()===t);
   function syncQs(){ document.querySelectorAll('#dq .qid,#dq .id').forEach(el=>{ const o=origQ(el.textContent.trim()); if(o) el.classList.toggle('done',o.classList.contains('done')); }); }
   function fillQs(){ const q=document.getElementById('dq'); if(q.dataset.done){ syncQs(); return; } const stq=[...document.querySelectorAll('section.step:not([hidden]) .sayback ol')]; const src=stq.length?null:document.querySelector('.sayback ol, #qs ol, section.sayback'); if(stq.length){ stq.forEach(o=>{ const c=o.cloneNode(true); c.querySelectorAll('[id]').forEach(e=>e.removeAttribute('id')); q.appendChild(c); }); } if(src){ const c=src.cloneNode(true); c.querySelectorAll('[id]').forEach(e=>e.removeAttribute('id')); q.appendChild(c);
-    q.querySelectorAll('.qid,.id').forEach(el=>{ el.style.cursor='pointer'; el.addEventListener('click',e=>{ e.preventDefault(); e.stopPropagation(); const o=origQ(el.textContent.trim()); if(o){ o.click(); el.classList.toggle('done',o.classList.contains('done')); } }); }); }
+    q.querySelectorAll('.qid,.id').forEach(el=>{ el.style.cursor='pointer'; el.addEventListener('click',e=>{ e.preventDefault(); e.stopPropagation(); const o=origQ(el.textContent.trim()); if(o&&o.__tick){ o.__tick(); el.classList.toggle('done',o.classList.contains('done')); } }); }); }
     q.dataset.done=1; syncQs(); }
   function show(p){ desk.querySelectorAll('.dtabs [data-p]').forEach(b=>b.classList.toggle('on',b.dataset.p===p)); desk.querySelectorAll('.dpane').forEach(d=>d.classList.toggle('on',d.id==='dp-'+p)); if(p==='book') renderBook(); if(p==='qs') fillQs(); if(p==='moves') fillMoves(); if(p==='graph') initGraph(); if(p==='rand') loadRand(); else if(window.MathKeys) MathKeys.limit(null); st.tab=p; save(); }
   function loadRand(){ if(window.LadderRandomizer){ const bx=desk.querySelector('#dp-rand .rzbox'); if(bx) LadderRandomizer.render(bx); return; } const s=document.createElement('script'); s.src='randomizer.js'; document.head.appendChild(s); }
@@ -788,6 +793,7 @@ window.__deskInit=function(){
     if(window.LADDER_MOVES) draw(); else { const s=document.createElement('script'); s.src='moves-data.js'; s.onload=draw; s.onerror=()=>{ box.textContent='The moves could not load.'; }; document.head.appendChild(s); } }
   btn.onclick=()=>open(!desk.classList.contains('open'));
   desk.querySelector('.x').onclick=()=>open(false);
+  const dkb=desk.querySelector('.dkeys'); if(dkb) dkb.onclick=()=>{ const b=document.querySelector('#mk-tray .mk-btn'); if(b) b.click(); };
   desk.querySelectorAll('.dtabs [data-p]').forEach(b=>b.onclick=()=>show(b.dataset.p));
   const rx=desk.querySelector('.recx'), ri=desk.querySelector('.reci'), rn=desk.querySelector('#recnote');
   if(rx) rx.onclick=()=>LadderRecord.export();
@@ -904,10 +910,24 @@ function report(meta){ repMeta=meta||{kind:'page'};
   repBox.querySelector('.repwhere').textContent='From '+(repMeta.kind==='page'?'this page':repMeta.kind+' '+repMeta.where)+'.';
   repBox.hidden=false; setTimeout(()=>repBox.querySelector('.repsub').focus(),30); }
 window.__report=report;
-function reportQuestions(){ document.querySelectorAll('li > span.qid').forEach(q=>{ if(q.parentNode.querySelector(':scope > button.qrep')) return;
-  const b=document.createElement('button'); b.type='button'; b.className='qrep'; b.textContent='⚑'; b.title='report this question'; b.setAttribute('aria-label','report question '+q.textContent.trim());
-  b.onclick=e=>{ e.stopPropagation(); const li=q.parentNode; report({kind:'question',where:q.textContent.trim(),text:li.textContent.replace('⚑','').trim()}); };
-  q.after(b); }); }
+/* A question's label is its address (Andrew, 2026-10-31): tapping it opens tick, prompt, copy and report,
+   the same way a paragraph's number does. The bar keeps no report button except on the about page. */
+let qmenu=null;
+function qMenu(q,tick,on){
+  if(!qmenu){ qmenu=document.createElement('div'); qmenu.className='pamenu qmenu'; qmenu.hidden=true; document.body.appendChild(qmenu);
+    document.addEventListener('click',e=>{ if(!qmenu.hidden&&!qmenu.contains(e.target)) qmenu.hidden=true; }); }
+  const ad=q.textContent.replace(/\s*✓\s*$/,'').trim(), li=q.closest('li');
+  const text=li?li.textContent.replace(ad,'').trim():'';
+  qmenu.innerHTML=(tick?'<button type="button" data-a="tick">'+(on?'take off the ✓':'tick ✓')+'</button>':'')+'<button type="button" data-a="prompt">prompt from</button><button type="button" data-a="addr">copy address</button><button type="button" data-a="report">report</button>';
+  qmenu.onclick=e=>{ const a=e.target.dataset.a; if(!a) return; qmenu.hidden=true;
+    if(a==='tick') tick();
+    if(a==='prompt'){ copy('About question '+ad+': '); toast('“About question '+ad+': ” is copied: paste it to the tutor and ask'); }
+    if(a==='addr'){ copy(ad); toast(ad+' copied'); }
+    if(a==='report') report({kind:'question',where:ad,text}); };
+  const r=q.getBoundingClientRect(); qmenu.hidden=false; const w=qmenu.offsetWidth||220;
+  qmenu.style.left=Math.max(8,Math.min(window.innerWidth-w-8,r.left))+'px'; qmenu.style.top=(r.bottom+window.scrollY+6)+'px'; }
+window.__qMenu=qMenu;
+function reportQuestions(){}
 
 /* Paragraph edits: the artifact's owner can rewrite a prose paragraph in place. The edit is kept in
    the site's database, edits/<pid> {pid, page, html, at}, shown to every reader at once, and folded
