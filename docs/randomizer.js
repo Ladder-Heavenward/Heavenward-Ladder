@@ -153,9 +153,9 @@ function render(box){
     +'<div class="rzlines">'+q.lines.map(([t,w],i)=>'<div class="rzl"><span class="rzn">'+(i+1)+'</span><span class="rzt">'+esc(t)+'</span><span class="rzw">'+(w?esc(w):'?')+'</span></div>').join('')+'</div>'
     +'<p class="rzask">'+esc(q.ask)+'</p><div class="rzopts">'+q.opts.map(o=>'<button type="button" class="rzo">'+esc(o)+'</button>').join('')+'</div>'
     +'<p class="rzwhy" hidden></p><p><button type="button" class="dlink rznext">another question</button></p>'
-    +'<p class="dnote">this question’s address (seed.link): <button type="button" class="rzseed" title="tap to report this question">'+esc(q.addr)+'</button>. Tap it if the question does not make sense.</p>'+picker(q);
+    +'<p class="dnote">If this question does not make sense, report it: <button type="button" class="rzseed" title="report this question">seed.link</button></p>'+picker(q);
   wire();
-  box.querySelector('.rzseed').onclick=()=>{ if(window.__report) window.__report({kind:'laundry',where:q.addr,text:q.lines.map(l=>l[0]).join(' / ')+' | '+q.ask+' | answer: '+q.right}); };
+  box.querySelector('.rzseed').onclick=()=>{ if(window.__report) window.__report({kind:'laundry',where:'seed.link '+btoa(unescape(encodeURIComponent(q.addr))).replace(/=+$/,''),text:q.lines.map(l=>l[0]).join(' / ')+' | '+q.ask}); };
   const why=box.querySelector('.rzwhy'); let done=false;
   box.querySelectorAll('.rzo').forEach(b=>b.onclick=()=>{ if(done) return; done=true;
     const ok=b.textContent===q.right;

@@ -904,7 +904,7 @@ function report(meta){ repMeta=meta||{kind:'page'};
       try{ const r=JSON.parse(LS.getItem('ladder:reports')||'[]'); r.push({page,where:m.where||'',pid:m.pid||'',sub,body,t:Date.now()}); LS.setItem('ladder:reports',JSON.stringify(r)); }catch(err){}
       repBox.hidden=true; repBox.querySelector('.repsub').value=''; repBox.querySelector('.repbody').value='';
       location.href=mail; toast('your email app should open with the report'); }; }
-  repBox.querySelector('.repwhere').textContent='From '+(repMeta.kind==='page'?'this page':repMeta.kind+' '+repMeta.where)+'.';
+  repBox.querySelector('.repwhere').textContent='From '+(repMeta.kind==='page'?'this page':repMeta.kind==='laundry'?'this laundry question (its seed.link travels with the report)':repMeta.kind+' '+repMeta.where)+'.';
   repBox.hidden=false; setTimeout(()=>repBox.querySelector('.repsub').focus(),30); }
 window.__report=report;
 /* A question's label is its address (Andrew, 2026-10-31): tapping it opens tick, prompt, copy and report,
