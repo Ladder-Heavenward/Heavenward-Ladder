@@ -60,7 +60,7 @@ body.cl-locked .cl-lock{display:block} body.cl-locked .cl-body{display:none}
   function apply(){
     const open=NEED.every(done);
     document.body.classList.toggle('cl-locked',!(open||peek));
-    const me=(location.pathname.split('/').pop()||'').replace(/\.html?$/,'');
+    const me=(window.ladderPage?ladderPage():(location.pathname.split('/').pop()||'').replace(/\.html?$/,''));
     if(open){ if(window.MarksSync&&MarksSync.reportPage) MarksSync.reportPage(me,true,true,true,false);
       else { try{ p[me]={v:true,a:true,o:true,h:false,t:Date.now()}; LS.setItem('pages:done',JSON.stringify(p)); }catch(e){} } }
     if(window.LadderCert) LadderCert.fill(document.querySelector('.fcert'),me,open);

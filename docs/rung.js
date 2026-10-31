@@ -8,6 +8,8 @@
      <div class="phkey"></div>    filled with the legend for question phases
      .qid (questions) and li>.n (ladder rows) toggle ✓ on click; marks save per page title.
    The desk (☰): the page's questions beside you, and a grapher. Injected automatically. */
+/* the page's name: its file name, or the name the desk viewer gives it (window.LADDER_PAGE) */
+window.ladderPage=function(){ return window.LADDER_PAGE||((location.pathname.split('/').pop()||'index.html').replace(/\.html?$/,''))||'index'; };
 /* The ladder record: one versioned object on this device holding everything the ladder remembers,
    kept under the single key 'ladder:record'. Nothing leaves the device unless sync is on.
    Sections: progress.pages (step reports), marks (ticks per page), certs, games, desk, cards, prefs,
@@ -18,7 +20,7 @@
 const RK='ladder:record', V=1;
 const blank=()=>({schema:'ladder-record',v:V,created:Date.now(),updated:Date.now(),
   progress:{pages:{}},steps:{},marks:{},certs:{},games:{},desk:{},cards:{},prefs:{},stats:{},reports:[],sync:{},
-  tutor:{ticks:{},notes:[]},index:{},counts:{},welfare:{},meta:{},other:{}});
+  tutor:{ticks:{},notes:[]},notes:{},index:{},counts:{},welfare:{},meta:{},other:{}});
 let raw=null, rec=null, mem=null;
 const store=(()=>{ try{ const t='__ladder_t'; localStorage.setItem(t,'1'); localStorage.removeItem(t); return localStorage; }catch(e){ return null; } })();
 function load(){
@@ -42,6 +44,7 @@ function where(k){ let m;
   if((m=k.match(/^mg:([\s\S]+)$/))) return ['games',m[1]];
   if((m=k.match(/^desk:([\s\S]+)$/))) return ['desk',m[1]];
   if((m=k.match(/^cards:([\s\S]+)$/))) return ['cards',m[1]];
+  if((m=k.match(/^note:([\s\S]+)$/))) return ['notes',m[1]];
   if(k==='ladder:stats') return ['stats',null];
   if(k==='ladder:reports') return ['reports',null];
   if(k==='ladder:reset') return ['meta','reset'];
@@ -49,7 +52,7 @@ function where(k){ let m;
   if(k==='mathkeys-line') return ['prefs','mathkeys-line'];
   return ['other',k];
 }
-function name(sec,sub){ return ({sync:sub,marks:'marks:'+sub,certs:'cert:'+sub,games:'mg:'+sub,desk:'desk:'+sub,cards:'cards:'+sub,
+function name(sec,sub){ return ({sync:sub,marks:'marks:'+sub,certs:'cert:'+sub,games:'mg:'+sub,desk:'desk:'+sub,cards:'cards:'+sub,notes:'note:'+sub,
   steps:'steps:'+sub,prefs:sub==='mathkeys-line'?sub:'ladder:'+sub,meta:'ladder:'+sub,other:sub})[sec]; }
 const parse=v=>{ try{ return JSON.parse(v); }catch(e){ return String(v); } };
 const show=v=>typeof v==='string'?v:JSON.stringify(v);
@@ -62,7 +65,7 @@ function keys(){ const r=load(), out=[];
   if(r.progress.pages&&Object.keys(r.progress.pages).length) out.push('pages:done');
   if(r.stats&&Object.keys(r.stats).length) out.push('ladder:stats');
   if(r.reports&&r.reports.length) out.push('ladder:reports');
-  ['sync','steps','marks','certs','games','desk','cards','prefs','other'].forEach(s=>Object.keys(r[s]||{}).forEach(u=>out.push(name(s,u))));
+  ['sync','steps','marks','certs','games','desk','cards','notes','prefs','other'].forEach(s=>Object.keys(r[s]||{}).forEach(u=>out.push(name(s,u))));
   if(r.meta.reset!==undefined) out.push('ladder:reset');
   return out; }
 window.LS={
@@ -207,7 +210,7 @@ function plane(cv,o){
 
 
 /* question groups tick themselves; a page with every question ticked reports itself done to the ladder */
-const PAGE=((location.pathname.split('/').pop()||'index.html').replace(/\.html?$/,''))||'index';
+const PAGE=ladderPage();
 function progress(){
   const boxes=[...document.querySelectorAll('.sayback')], box=document.querySelector('.themecert')||boxes[0];
   if(box){
@@ -766,7 +769,7 @@ window.__deskInit=function(){
   function open(v){ if(!v&&window.MathKeys) MathKeys.limit(null); desk.classList.toggle('open',v); document.body.classList.toggle('deskopen',v); btn.textContent=v?'✕ desk':'☰ desk'; st.open=v; save(); if(v) show(st.tab&&desk.querySelector('.dtabs [data-p="'+st.tab+'"]')?st.tab:desk.querySelector('.dtabs [data-p]').dataset.p); }
   let movesDone=false;
   function fillMoves(){ if(movesDone) return; movesDone=true; const box=document.getElementById('dmoves'), note=document.getElementById('dmnote');
-    const page=((location.pathname.split('/').pop()||'index.html').replace(/\.html?$/,''))||'index';
+    const page=ladderPage();
     const draw=()=>{ const M=window.LADDER_MOVES; if(!M){ box.textContent=''; return; } const ids=M.apply[page];
       if(page==='index'){ note.textContent='Every tech you have earned, in ladder order, with its line in symbols.'; return; }
       /* the axioms earned so far always show, after the page's own techs: every axiom the main ladder has laid down at or before this page (0.0.449) */
@@ -841,7 +844,7 @@ function addresses(info){
     const b=document.createElement('button'); b.type='button'; b.className='pa'; b.textContent=ad; b.setAttribute('aria-label','paragraph '+ad+': prompt, copy or report');
     b.addEventListener('click',e=>{ e.stopPropagation(); openMenu(p,b); }); p.appendChild(document.createTextNode(' ')); p.appendChild(b); });
   menu=document.createElement('div'); menu.className='pamenu'; menu.hidden=true;
-  menu.innerHTML='<button type="button" data-a="prompt">prompt from</button><button type="button" data-a="text">copy text</button><button type="button" data-a="addr">copy address</button><button type="button" data-a="report">report</button>';
+  menu.innerHTML='<button type="button" data-a="prompt">prompt from</button><button type="button" data-a="text">copy text</button><button type="button" data-a="addr">copy address</button><button type="button" data-a="report">report</button><button type="button" data-a="note">my note</button>';
   document.body.appendChild(menu);
   menu.addEventListener('click',e=>{ const a=e.target.dataset.a; if(!a||!cur) return; const ad=cur.dataset.addr;
     const text=[...cur.childNodes].filter(n=>!(n.classList&&n.classList.contains('pa'))).map(n=>n.textContent).join('').trim();
@@ -849,10 +852,33 @@ function addresses(info){
     if(a==='text'){ copy(text+' ('+ad+')'); toast('paragraph '+ad+' copied'); }
     if(a==='addr'){ copy(ad); toast(ad+' copied'); }
     if(a==='edit'){ menu.hidden=true; startEdit(cur); return; }
+    if(a==='note'){ menu.hidden=true; noteEdit(cur); return; }
     if(a==='report'){ menu.hidden=true; report({kind:'paragraph',where:ad,pid:cur.dataset.pid,text}); return; }
     menu.hidden=true; });
   document.addEventListener('click',e=>{ if(menu&&!menu.hidden&&!menu.contains(e.target)) menu.hidden=true; });
+  ps.forEach(noteShow);
 }
+
+/* Learner notes (Andrew, 2026-10-31): a private note on any paragraph. It lives in the learner's record on
+   this device (notes, one object per page, keyed by paragraph pid), travels with the saved copy, and is never sent. */
+const NPG=ladderPage();
+function noteAll(){ try{ return JSON.parse(LS.getItem('note:'+NPG)||'{}')||{}; }catch(e){ return {}; } }
+function notePut(pid,text){ const o=noteAll(); if(text) o[pid]={text,at:Date.now()}; else delete o[pid];
+  if(Object.keys(o).length) LS.setItem('note:'+NPG,JSON.stringify(o)); else LS.removeItem('note:'+NPG); }
+function noteBox(p){ const n=p.nextElementSibling; return n&&n.classList.contains('lnote')?n:null; }
+function noteShow(p){ let box=noteBox(p); const n=noteAll()[p.dataset.pid];
+  if(!n){ if(box) box.remove(); return; }
+  if(!box){ box=document.createElement('div'); box.className='lnote'; p.after(box); }
+  box.innerHTML='<span class="lk">my note</span><div class="lt"></div><button type="button" class="le">change</button>';
+  box.querySelector('.lt').textContent=n.text; box.querySelector('.le').onclick=()=>noteEdit(p); }
+function noteEdit(p){ const old=noteBox(p); if(old) old.remove(); const n=noteAll()[p.dataset.pid];
+  const box=document.createElement('div'); box.className='lnote editing';
+  box.innerHTML='<span class="lk">my note · only on this device</span><textarea rows="3" placeholder="what you want to remember about this paragraph"></textarea><div class="lb"><button type="button" data-n="save">save</button>'+(n?'<button type="button" data-n="del">delete</button>':'')+'<button type="button" data-n="cancel">cancel</button></div>';
+  p.after(box); const ta=box.querySelector('textarea'); ta.value=n?n.text:''; ta.focus();
+  box.querySelector('.lb').addEventListener('click',e=>{ const k=e.target.dataset.n; if(!k) return;
+    if(k==='save'){ notePut(p.dataset.pid,ta.value.trim()); toast(ta.value.trim()?'note saved on this device':'note removed'); }
+    if(k==='del'){ notePut(p.dataset.pid,''); toast('note removed'); }
+    box.remove(); noteShow(p); }); }
 
 /* Reports (Andrew, 2026-10-31): a report opens an email to the author, titled "LADDER REPORT (subject)",
    with where it was sent from (page, paragraph or question) above the learner's words. A copy stays on this device. */
@@ -865,7 +891,7 @@ function report(meta){ repMeta=meta||{kind:'page'};
     repBox.querySelector('.repcancel').onclick=()=>{ repBox.hidden=true; };
     repBox.addEventListener('click',e=>{ if(e.target===repBox) repBox.hidden=true; });
     repBox.querySelector('.repsend').onclick=()=>{ const m=repMeta, sub=repBox.querySelector('.repsub').value.trim()||'no subject', body=repBox.querySelector('.repbody').value.trim();
-      const page=(location.pathname.split('/').pop()||'index.html');
+      const page=ladderPage()+'.html';
       const tag=(document.querySelector('header.top .tags .tag')||{}).textContent||'';
       const meta=['page: '+page+(tag?' ('+tag.trim()+')':''),'where: '+(m.kind==='page'?'the page as a whole':m.kind+' '+m.where)+(m.pid?' · pid '+m.pid:''),(m.text?'it reads: '+m.text.slice(0,300)+(m.text.length>300?'…':''):''),'sent: '+new Date().toISOString(),'screen: '+window.innerWidth+'×'+window.innerHeight].filter(Boolean).join('\n');
       const mail='mailto:'+REPORT_TO+'?subject='+encodeURIComponent('LADDER REPORT ('+sub+')')+'&body='+encodeURIComponent(meta+'\n\n---\n'+body+'\n');
@@ -883,7 +909,7 @@ function reportQuestions(){ document.querySelectorAll('li > span.qid').forEach(q
 /* Paragraph edits: the artifact's owner can rewrite a prose paragraph in place. The edit is kept in
    the site's database, edits/<pid> {pid, page, html, at}, shown to every reader at once, and folded
    into the page's source at the next publish. Paragraphs with typeset maths are left alone. */
-const ED={db:null,owner:false,page:((location.pathname.split('/').pop()||'index.html').replace(/\.html?$/,''))||'index'};
+const ED={db:null,owner:false,page:ladderPage()};
 function edWait(){ return Promise.resolve(false); return new Promise(res=>{ let n=0; (function t(){ if(window.claude&&typeof window.claude.use==='function') return res(true); if(++n>40) return res(false); setTimeout(t,250); })(); }); }
 function editable(p){ return !p.querySelector('[data-tex],[data-tex-inline],.katex,code'); }
 const ED_OK={B:1,STRONG:1,I:1,EM:1,A:1,SUP:1,SUB:1,BR:1};
@@ -1001,7 +1027,7 @@ function liftLong(){
    the certification) waits for the last step. The header pill says how many steps the theme has. */
 function steps(){
   const ss=[...document.querySelectorAll('section.step')]; if(!ss.length) return;
-  const page=((location.pathname.split('/').pop()||'').replace(/\.html?$/,''))||'index', K='steps:'+page;
+  const page=ladderPage(), K='steps:'+page;
   let open=1; try{ open=Math.max(1,parseInt(LS.getItem(K)||'1',10)||1); }catch(e){}
   const h=decodeURIComponent(location.hash.slice(1)); if(h){ const t=document.getElementById(h);
     const hi=ss.findIndex(s=>s.dataset.step===h||(t&&s.contains(t))); if(hi>=0) open=Math.max(open,hi+1); }

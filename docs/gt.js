@@ -3,7 +3,7 @@
    The list is curated by hand from every page, so "flip the fraction" and "over a stretch of x" stay unmarked. */
 (function(){
 'use strict';
-const page=(location.pathname.split('/').pop()||'index.html');
+const page=(window.ladderPage?ladderPage()+'.html':(location.pathname.split('/').pop()||'index.html'));
 const MARKS={
  'bite10b.html':[['swap the axes and it is','flip'],['A slope and its mirror slope','flip'],['The second dodge in the chapter','flip'],['what the mirror does to rise and run','flip']],
  'bite12.html':[['a quarter turn is a constant','turn'],['a spoke turned by a tiny angle','turn'],['he uses cos θ = sin(π/2 − θ)','turn'],['one wave slid alon','slide'],['cos θ = sin(π/2 − θ). What is the slope of the inside','turn']],
