@@ -55,7 +55,7 @@
     /* every newer version comes in by itself (Andrew, 2026-10-31): the changed pages download quietly, and the
        page you are reading stays as it is until you open the next one. Your record is never part of an update. */
     if (await apply(remote, local, true)) {
-      banner('The ladder updated itself to ' + remote.version + '. The next page you open is the new one.', [['OK', hide]]);
+      banner('The ladder updated itself to ' + remote.version + '. This page is still the old one until you reload it.', [['Reload now', () => location.reload()], ['Later', hide]]);
       setTimeout(hide, 6000);
     }
   }
