@@ -61,6 +61,8 @@
   else {
     btn.onclick=function(){ var e=window.__bip; if(!e){ note.textContent='Your browser has not offered the install. If the ladder is already installed on this device, the browser will not offer it twice: open it from your apps. Otherwise wait a moment, or use the browser menu (⋮): Install app, or Add to Home screen. In Firefox, the ladder works as a normal page.'; return; }
       e.prompt(); e.userChoice.then(function(c){ window.__bip=null; note.textContent=c&&c.outcome==='accepted'?'Installed. Look for the ladder among your apps.':'Not installed. Press the button again any time.'; }); };
+    /* listen here too, so the button works even while an older saved copy of the app's script is in charge */
+    window.addEventListener('beforeinstallprompt',function(e){ e.preventDefault(); window.__bip=e; ready(); });
     if(window.__bip) ready(); document.addEventListener('ladder-installable',ready);
     window.addEventListener('appinstalled',function(){ btn.textContent='Installed'; btn.disabled=true; note.textContent='Look for the ladder among your apps.'; });
   }
