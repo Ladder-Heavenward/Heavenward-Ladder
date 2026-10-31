@@ -950,8 +950,12 @@ async function edInit(){
   try{ const snap=await db.collection('edits').where('page','==',ED.page).get();
     snap.docs.forEach(d=>{ const v=d.data()||{}; const p=document.querySelector('p[data-pid="'+(v.pid||d.id)+'"]'); if(p&&typeof v.html==='string'&&editable(p)) edApply(p,v.html); }); }catch(e){}
   try{ const k='ladder:pending-edits', m=JSON.parse(localStorage.getItem(k)||'{}'); let sent=0;
-    for(const pid in m){ const r=m[pid]; try{ await ED.db.doc('edits/'+pid).set(r); delete m[pid]; sent++; const p=r.page===ED.page&&document.querySelector('p[data-pid="'+pid+'"]'); if(p&&editable(p)) edApply(p,r.html); }catch(_){ } }
+    for(const pid in m){ const r=m[pid]; try{ await ED.db.doc('edits/'+pid).set(r); delete m[pid]; sent++; try{ const dm=JSON.parse(localStorage.getItem('ladder:edit-drafts')||'{}'); delete dm[pid]; localStorage.setItem('ladder:edit-drafts',JSON.stringify(dm)); }catch(_){} const p=r.page===ED.page&&document.querySelector('p[data-pid="'+pid+'"]'); if(p&&editable(p)) edApply(p,r.html); }catch(_){ } }
     localStorage.setItem(k,JSON.stringify(m)); if(sent) toast(sent+' edit'+(sent>1?'s':'')+' saved that had been waiting on this device'); }catch(_){}
+  try{ const m=JSON.parse(localStorage.getItem('ladder:edit-drafts')||'{}'); let n=0;
+    for(const pid in m){ const d=m[pid]; if(d.page!==ED.page) continue; const p=document.querySelector('p[data-pid="'+pid+'"]'); if(!p||!editable(p)) continue;
+      startEdit(p); p.innerHTML=d.html; n++; }
+    if(n) toast('your unsaved edit'+(n>1?'s are':' is')+' back, still open: press save when ready'); }catch(_){}
 }
 function startEdit(p){ if(!ED.db||!ED.owner||!editable(p)||p.isContentEditable) return;
   const b=p.querySelector('button.pa'); if(b) b.remove(); const before=p.innerHTML;
@@ -959,7 +963,10 @@ function startEdit(p){ if(!ED.db||!ED.owner||!editable(p)||p.isContentEditable) 
   const bar=document.createElement('div'); bar.className='pebar';
   bar.innerHTML='<button type="button" data-e="save">save</button><button type="button" data-e="cancel">cancel</button><span class="pehint">prose only · bold with '+(/Mac|iPhone|iPad/.test(navigator.platform||navigator.userAgent)?'⌘B':'Ctrl+B')+'</span>';
   p.after(bar);
-  const done=()=>{ p.contentEditable='false'; p.classList.remove('pediting'); bar.remove(); if(b){ p.appendChild(document.createTextNode(' ')); p.appendChild(b); } };
+  const DK='ladder:edit-drafts', dset=v=>{ try{ const m=JSON.parse(localStorage.getItem(DK)||'{}'); if(v==null) delete m[p.dataset.pid]; else m[p.dataset.pid]={page:ED.page,html:v,at:Date.now()}; localStorage.setItem(DK,JSON.stringify(m)); }catch(_){} };
+  let dt=0; p.addEventListener('input',()=>{ clearTimeout(dt); dt=setTimeout(()=>dset(p.innerHTML),400); });
+  const done0=()=>{ p.contentEditable='false'; p.classList.remove('pediting'); bar.remove(); if(b){ p.appendChild(document.createTextNode(' ')); p.appendChild(b); } };
+  const done=()=>{ clearTimeout(dt); dset(null); done0(); };
   bar.addEventListener('click',async e=>{ const k=e.target.dataset.e; if(!k) return;
     if(k==='cancel'){ p.innerHTML=before; done(); return; }
     const html=edClean(p); e.target.disabled=true;
