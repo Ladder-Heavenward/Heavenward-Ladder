@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How does a machine learn from its mistakes?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r28logi.html">← 28·logi where should the warehouse go?</a><a href="floor5.html">next: F5 statistics floor →</a></p>
+  <div class="tags"><span class="tag now">28·now · research front</span></div>
+  <h1>How does a machine learn from its mistakes?</h1>
+  <p>How does a machine learn from its mistakes? A program that reads handwritten digits, or turns speech into text, is not written line by line by anyone. It starts as a machine with millions of knobs set at random, and it is shown examples with their right answers. Each time it is wrong, every knob is turned a little, in the direction that would have made it less wrong. After enough examples it is right most of the time. People have tried to build such machines since the 1950s. The first could learn only what a single straight line can separate, and in 1969 a short proof showed how little that is. What makes the question hard is the knobs. To know which way to turn each of millions of them, you need the slope of the error in each of millions of directions, and finding each slope by trying the knob costs a whole run of the machine. In 1986 a paper showed that every one of those slopes comes out of one run backwards through the machine, by the chain technique of rung twenty-eight. Training is then a walk downhill in a space with millions of directions. This page proves the first machine’s mistake count, why one unit cannot learn either-but-not-both, how the backward run gets every slope at once, and what a walk downhill is sure to find. It ends with what is proved, and with what is still open: why the huge machines of today work as well as they do.</p>
+  <p class="gesture">The first machine adds up its inputs with weights and answers yes when the total is above 0. When it is wrong, it adds the example to its weights, or takes it away. If some weights would get every example right with room to spare, the machine stops making mistakes after a number of them fixed by that room. But one such unit cannot answer either-but-not-both, and units stacked in layers cannot be trained by that rule. Replace the sharp yes or no by a smooth switch whose slope is easy to find. Then the error of the whole machine is a chain of flat maps, and its slopes multiply as grids do. Multiply them starting from the error and going back toward the inputs, and each step is a row times a grid: the backward run costs about as much as the forward run, however many knobs there are. With every slope in hand, step downhill. If the error does not bend too sharply, each step lowers it, and after many steps some step was taken where the ground was nearly flat. Nearly flat is not the bottom: it can be a saddle, or a poor hollow. Why walking downhill on the error of a huge machine finds answers that also work on examples it never saw is the open question.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r28c.html">28c</a> (the chain-of-flat-maps and roads-add techniques), <a href="r28b.html">28b</a> (the slope-grid technique), <a href="r28g.html">28g</a> (the uphill technique), <a href="r28o.html">28o</a> (gradient descent), <a href="r28l.html">28l</a> (the second-slope grid and saddles), <a href="r27i.html">27i</a> (the angle-between technique), <a href="r27d.html">27d</a> (the product-is-doing technique), <a href="r23b.html">23b</a> (how wrong the match is), <a href="r17e.html">17e</a> (exp), <a href="r26then.html">26·then</a> (a nerve that fires) and <a href="r27now.html">27·now</a> (what is proved, and what is open). Rung 29 asks whether space itself must be flat.</p></div>
+</header>
+
+<section class="class step" data-step="28now1">
+  <h2 class="sthead"><span class="stno">28now1</span>A machine that learns from its mistakes</h2>
+  <p class="stands">Stands on 27i (the angle-between technique) and 4b (induction).</p>
+  <p data-pid="831ea6">Each example is a list of inputs x, with a 1 put last to stand for a fixed push, and a right answer y, which is +1 or −1. The machine holds a list of weights w and answers +1 when w · x is above 0. It starts at w = 0. On a mistake, when y (w · x) ≤ 0, it adds yx to w. Nothing else.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the mistake-bound technique">
+|w^*| = 1,\ \ y\,(w^* \cdot x) \ge \gamma \gt 0,\ \ |x| \le R \text{ for every example} @@ some weights w* get every example right, with room γ
+w_{k+1} \cdot w^* = w_k \cdot w^* + y\,(x \cdot w^*) \ge w_k \cdot w^* + \gamma @@ the (k + 1)th mistake adds yx
+|w_{k+1}|^2 = |w_k|^2 + 2y\,(w_k \cdot x) + |x|^2 \le |w_k|^2 + R^2 @@ on a mistake y(w_k · x) ≤ 0
+k\gamma \le w_k \cdot w^* \le |w_k| \le \sqrt{k}\,R @@ induction (4b) from w₀ = 0; the angle-between technique (27i): w · w* ≤ |w||w*|
+\htmlClass{new}{k \le (R/\gamma)^2} \quad \blacksquare @@ square, and divide by kγ²
+  </pre>
+  <p data-pid="922a15">Mistake-bound technique: <b>if some weights get every example right with room γ, and no example is longer than R, the machine makes at most (R/γ)² mistakes, however the examples are ordered and however many times they come round.</b> Teach it either-or (OR) on two inputs: the examples (0, 0, 1) with −1, and (0, 1, 1), (1, 0, 1), (1, 1, 1) with +1. Here R = √3, and w* = (1, 1, −0.5)/1.5 has room ⅓. The bound is 27 mistakes. Shown the four examples round and round, the machine makes 9 and stops at w = (2, 2, −1).</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · mistakes · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">28·now.1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">both-and (AND): (0, 0, 1), (0, 1, 1), (1, 0, 1) with −1; (1, 1, 1) with +1</span></span>Find the room γ of w* = (1, 1, −1.5) scaled to length 1, and the bound on mistakes. <br>Find the first three mistakes and the weights after each, shown the examples in that order from w = 0.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28now2">
+  <h2 class="sthead"><span class="stno">28now2</span>What one unit cannot learn, and a smooth switch</h2>
+  <p class="stands">Stands on 28·now.1, 17e (exp) and 13 (slope).</p>
+  <p data-pid="e32a00">Either-but-not-both (XOR) answers +1 for (0, 1) and (1, 0), and −1 for (0, 0) and (1, 1). Can one unit learn it?</p>
+  <pre class="lines" data-k="ember" data-label="this page: the either-not-both technique">
+w = (p, q, r):\ \ r \lt 0,\ \ p + r \gt 0,\ \ q + r \gt 0,\ \ p + q + r \lt 0 @@ what the four answers need, if one unit is right on all four
+p + q + 2r \gt 0 @@ add the middle two
+p + q + r \gt -r \gt 0 @@ take r away; r &lt; 0
+\htmlClass{new}{\text{no weights are right on all four}} \quad \blacksquare @@ against the last need
+  </pre>
+  <p data-pid="4aed58">Either-not-both technique: <b>no single unit that answers by the sign of w · x can answer either-but-not-both.</b> Two layers can: one unit for either-or, one for both-and, and an output for the first but not the second. But the mistake rule says nothing about how to set the weights of a unit hidden inside, whose right answer no example gives.</p>
+  <p data-pid="c6fcc2">The way through is slope. A sharp yes or no has slope 0 wherever it has one, so it never says which way to turn a knob. Replace it by a smooth switch, as a nerve cell’s rate of firing rises smoothly with its input (26·then).</p>
+  <pre class="lines" data-k="ember" data-label="this page: the smooth-switch technique">
+\sigma(z) = \tfrac{1}{1 + e^{-z}},\ \ 0 \lt \sigma \lt 1,\ \ \sigma(0) = \tfrac12 @@ near 0 for z far below 0, near 1 far above
+\sigma'(z) = \tfrac{e^{-z}}{(1 + e^{-z})^2} @@ the chain technique of rung 13, and (e^(−z))′ = −e^(−z) (17e)
+\htmlClass{new}{\sigma'(z) = \sigma(z)\,\big(1 - \sigma(z)\big)} \quad \blacksquare @@ e^(−z)/(1 + e^(−z)) = 1 − σ(z)
+  </pre>
+  <p data-pid="abd439">Smooth-switch technique: <b>the smooth switch σ has slope σ(1 − σ), so its slope comes free with its value.</b> Its slope is largest, ¼, at z = 0, and fades where the switch is nearly sure. A unit that answers σ(w · x) is a rate model: it gives a rate between 0 and 1, not a yes or no.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · one unit · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28·now.2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">either-both-or-neither (XNOR): +1 for (0, 0) and (1, 1), −1 for (0, 1) and (1, 0)</span></span>Find whether one unit can answer it. <br>Find σ(2), σ′(2) and σ′(−2).</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28now3">
+  <h2 class="sthead"><span class="stno">28now3</span>Every slope from one run backwards</h2>
+  <p class="stands">Stands on 28·now.2, 28c (the chain-of-flat-maps technique), 28b (the slope-grid technique) and 27d (the product-is-doing technique).</p>
+  <p data-pid="c3f2cb">Stack the units in layers. Layer k takes the list a₍ₖ₋₁₎ from the layer before and gives aₖ = σ(Wₖ a₍ₖ₋₁₎), with σ applied to each entry. The grid Wₖ holds that layer’s knobs. The last layer’s list is the answer o, and the error on one example with right answer t is ℓ = ½|o − t|².</p>
+  <pre class="lines" data-k="ember" data-label="this page: the backward-pass technique">
+z_k = W_k\,a_{k-1},\ \ a_k = \sigma(z_k),\ \ k = 1, \dots, D @@ the forward run, from a₀ = x to a_D = o
+g_D = (o - t)^{T} @@ the row of slopes of ℓ in the entries of o
+\text{slope grid of } a_{k-1} \mapsto a_k:\ \ \Sigma_k W_k,\ \ \Sigma_k = \text{the grid with } \sigma'(z_k) \text{ down its middle} @@ the slope-grid technique (28b); entry by entry, the chain technique of rung 13
+g_{k-1} = g_k\,\Sigma_k\,W_k @@ the chain-of-flat-maps technique (28c): slope grids of a chain multiply
+\htmlClass{new}{\tfrac{\partial \ell}{\partial (W_k)_{ij}} = (g_k\,\Sigma_k)_i\,(a_{k-1})_j} \quad \blacksquare @@ the knob (W_k)_{ij} reaches ℓ only through (z_k)_i, which it moves at the rate (a_{k−1})_j
+  </pre>
+  <p data-pid="635a83">Backward-pass technique: <b>run the machine forward and keep each layer’s list; then carry one row of slopes back from the error, multiplying by each layer’s slope grid in turn, and every knob’s slope is a product of a number from the row and a number kept from the forward run.</b> Each backward step is a row times a grid, so it costs about what the forward step cost. Trying the knobs one at a time costs a whole forward run for each knob: for a million knobs, a million runs instead of about two.</p>
+  <p data-pid="a6655f">Take the two-layer machine for either-but-not-both with W₁ = (3, 3; 2, 2), pushes (−1, −3), output weights (2, −2) and push −1. On x = (1, 0) with t = 1 the forward run gives hidden rates 0.881 and 0.269, and o = σ(0.224) = 0.556, so ℓ = 0.0987. Back: the output’s number is (o − t)σ′ = −0.444 × 0.247 = −0.1097. The output weights’ slopes are −0.1097 × (0.881, 0.269) = (−0.0966, −0.0295). The hidden numbers are −0.1097 × (2, −2) times σ′ = (0.105, 0.197): (−0.0230, 0.0431). Nudging a knob by a millionth and running forward again gives the same slopes to four places.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · backward · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28·now.3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">the same machine, on x = (1, 1) with t = 0</span></span>Find the forward run: hidden rates, o and ℓ. <br>Find the slopes of ℓ in the two output weights and in the four knobs of W₁.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28now4">
+  <h2 class="sthead"><span class="stno">28now4</span>Training is walking downhill</h2>
+  <p class="stands">Stands on 28·now.3, 28o (gradient descent), 28g (the uphill technique), 28l (saddles) and 23b (how wrong the match is).</p>
+  <p data-pid="84cbeb">Add the errors over every example: that is the total error, a function of all the knobs. Its uphill arrow comes from the backward pass, one example at a time. Training steps the knobs p ↦ p − η∇ℓ(p), as 28o walks downhill. The total error of a network is no bowl: it has many hollows, and saddles between them. What can a walk downhill be sure of?</p>
+  <pre class="lines" data-k="ember" data-label="this page: the small-slope technique">
+\varphi(t) = \ell(p - t\,g),\ \ g = \nabla\ell(p),\ \ \varphi'(0) = -|g|^2 @@ the roads-add technique (28c) along the step
+\varphi''(t) \le L\,|g|^2 @@ given: along any line, the second slope of ℓ is at most L times the square of the speed
+\varphi(\tfrac1L) \le \varphi(0) - \tfrac1L|g|^2 + \tfrac{L}{2}\cdot\tfrac{1}{L^2}|g|^2 = \ell(p) - \tfrac{|g|^2}{2L} @@ the match-error technique (23b), with the polynomial of degree 1
+|g_0|^2 + \cdots + |g_{K-1}|^2 \le 2L\,\big(\ell(p_0) - \ell(p_K)\big) \le 2L\,\big(\ell(p_0) - \ell_{\min}\big) @@ add K steps of size η = 1/L; the error never falls below ℓ_min
+\htmlClass{new}{\text{some } k \lt K \text{ has } |g_k|^2 \le \tfrac{2L\,(\ell(p_0) - \ell_{\min})}{K}} \quad \blacksquare @@ the least of K numbers is at most their average
+  </pre>
+  <p data-pid="821d1b">Small-slope technique: <b>if the error never bends more sharply than L, steps of size 1/L never raise it, and after K steps some step was taken where the uphill arrow was small, its square at most 2L(ℓ₀ − ℓ_min)/K.</b> That is all. A place with a small uphill arrow can be a bottom, a poor hollow, or a saddle (28l). The technique does not say which.</p>
+  <p data-pid="d8cd1f">On the four examples of either-but-not-both, from the knobs above, the total error starts at 0.337. With step size 0.5 it is 0.166 after 100 steps and 0.009 after 1000. With step size 2 it is 0.030 after 100. With step size 8 it first jumps up, to 0.67 after 10 steps, and then falls fast, to 0.003 after 100. With step size 20 it sits near 0.50 for hundreds of steps, a flat place that is not the bottom, before it finds its way down.</p>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · laws with an exception rate</div>
+    <p data-pid="caf23b">A trained machine is a law guessed from cases: from the examples it was shown, to a rule it gives for every input. Like any law, it has a range, and exceptions. The error on its own examples says almost nothing about them. A machine with enough knobs can be right on every example it was shown, and wrong on most new ones.</p>
+    <p data-pid="247153"><b>Report a trained machine’s rate of mistakes on examples it was never trained on, and say where those examples came from.</b></p>
+    <p data-pid="87152b">So the examples are split before training. Some are kept back, never shown. The rate of mistakes on those, and the kind of cases they were drawn from, is the measure of the law. Rung 30 gives the tools to say how far that rate can be trusted.</p>
+    <p class="bait" data-pid="b605ea">A machine trained on photographs of skin from hospitals in Seattle is right 95 times in 100 on photographs kept back from the same hospitals. What does that say about photographs taken with a phone in Missoula?</p>
+  </aside>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · downhill · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · either-but-not-both, trained by steps downhill</div>
+    <div class="kn"><span class="m">η</span><input type="range" id="ke" min="0.1" max="30" step="0.1" value="2"><output id="oe"></output></div>
+    <div class="kn"><span class="m">steps</span><input type="range" id="kk" min="50" max="3000" step="50" value="500"><output id="ok"></output></div>
+    <div id="pl"></div>
+    <div class="cap">Ember: the total error over the four examples, step by step, from the knobs of 28·now.3. Try a step size of 0.5, then 8, then 20: slow, a jump and a fall, and a long flat stretch.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28·now.4.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\ell(w) = 2w^2,\ \ w_0 = 1"></span></span>Find L, and the steps w₁, w₂, w₃ for step sizes 0.1, 0.25 and 0.6. <br>Find every step size for which the steps settle. <br>Find, with L = 2 and ℓ₀ − ℓ_min = 0.34, how many steps make sure that some |g|² is at most 10⁻⁴.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28now5">
+  <h2 class="sthead"><span class="stno">28now5</span>What is proved, and what is open</h2>
+  <p class="stands">Stands on 28·now.1 to 28·now.4 and 27·now (what is proved, and what is open).</p>
+  <p data-pid="78771a"><b>How to get every slope at once, and what a walk downhill is sure to reach, are proved; why walking downhill on a huge machine finds rules that work on new cases is open.</b></p>
+  <ul>
+    <li data-pid="22580d">Proposed, 1943 and 1958. A unit that fires when a weighted sum passes a threshold, and then a machine that learns its weights from mistakes.</li>
+    <li data-pid="5f40fd">Proved, 1962. The mistake-bound technique of 28·now.1.</li>
+    <li data-pid="335a13">Proved, 1969. Single units cannot answer either-but-not-both, nor many other questions about a picture, as 28·now.2 began to show. Work on such machines slowed for more than a decade.</li>
+    <li data-pid="dd2899">Proved, 1970. Slopes of any chain of steps can be got by one run backwards, at a cost of a few forward runs: the backward-pass technique, for any program.</li>
+    <li data-pid="ea1f67">Shown, 1986. Machines with hidden layers, trained by the backward pass and steps downhill, learn useful hidden units of their own.</li>
+    <li data-pid="1f65ee">Proved, 1989. A machine with one hidden layer of smooth switches, given enough units, can come as close as you like to any continuous function on a closed box. It says nothing about how many units, or how to find the knobs.</li>
+    <li data-pid="5c2456">Proved, 2016 and after. For errors that do not bend too sharply, a walk downhill from a random start almost never settles on a saddle that curves down in some direction.</li>
+    <li data-pid="ccbe36">Shown, 2017. Large machines can be trained to be right on every example even when the right answers are shuffled at random. So the knobs can hold anything, and yet, with real answers, the same machines do well on new cases.</li>
+    <li data-pid="5c8e48">Open. Why walking downhill picks, out of all the knob settings that fit the examples, ones that also work on new cases. Why making a machine larger, past the size where it fits every example, often makes it better on new cases, not worse. Proofs exist for special cases, such as machines so wide that they behave almost like straight maps. The machines in daily use are far from those cases.</li>
+  </ul>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · open · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28·now.5.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a machine with 10 layers, each a grid of 1000 by 1000 knobs</span></span>Find the number of knobs, and the multiplications in one forward run. <br>Find the multiplications to get every slope by the backward pass, and by trying the knobs one at a time.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28now6">
+  <h2 class="sthead"><span class="stno">28now6</span>Illegal moves</h2>
+  <p class="stands">Stands on 28·now.1 to 28·now.5.</p>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{the mistake rule always stops}\,? @@ only when some weights get every example right with room γ &gt; 0
+\text{a sharp yes or no can be trained by slopes}\,? @@ its slope is 0 wherever it has one
+\text{start every knob at the same value}\,? @@ the two hidden units then get the same slopes, and stay twins for ever
+\text{a larger step size reaches the bottom sooner}\,? @@ past 2/L the steps can grow, or stall on a flat stretch
+\text{a small uphill arrow means a bottom}\,? @@ it can be a saddle or a poor hollow (28l)
+  </pre>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28·now.6.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span class="gtx">XOR, shown to the mistake rule round and round</span></span>Find whether the mistakes stop.</li><li><span class="givens"><span class="gtx">the 2-2-1 machine with both hidden units given the same knobs</span></span>Find the slopes of ℓ in the two units’ knobs, and what a step does to them.</li><li><span class="givens"><span data-tex-inline="\ell(w) = 2w^2,\ \ \eta = 0.6"></span></span>Find whether the steps settle.</li><li><span class="givens"><span data-tex-inline="\ell(x, y) = x^2 - y^2,\ \ p_0 = (1, 0)"></span></span>Find where the walk with η = 0.25 goes, and what kind of place it nears.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">28·now.7.1</span><span class="tagq">build</span>Build knobs for the two-layer machine that answer either-but-not-both, with every rate on the right side of ½, by hand from either-or and both-and units.</div>
+  <div class="chq"><span class="chid">28·now.7.2</span><span class="tagq">edge</span><span class="givens"><span class="gtx">the mistake-bound technique</span></span>Find what happens to the bound as the room γ shrinks to 0, and an order of examples that makes the machine use many mistakes.</div>
+  <div class="chq"><span class="chid">28·now.7.3</span><span class="tagq">converse</span>An error that never bends more sharply than L makes every step of size 1/L go down. Turn it round: if every step of size 1/L goes down, from every start, must the error never bend more sharply than L? Test ℓ(w) = 2w² with L = 3.</div>
+  <div class="chq"><span class="chid">28·now.7.4</span><span class="tagq">reroute</span><span class="givens"><span class="gtx">28·now.3’s machine, x = (1, 0), t = 1</span></span>Find the slope of ℓ in the knob (W₁)₁₁ a second way, by the roads-add technique through every road from that knob to ℓ, and check it against −0.0230.</div>
+  <div class="chq"><span class="chid">28·now.7.5</span><span class="tagq">seam</span>One side holds that a machine that predicts well has learned the rule of what it predicts, whatever is inside it. The other holds that it has learned only the shape of its examples, and will fail where the world is not like them, unless its inside can be read and checked. <br>Can a law guessed from cases be trusted without an account of why it holds?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r28logi.html">← 28·logi · where should the warehouse go?</a><a href="floor5.html">F5 · statistics floor →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A unit that answers by the sign of w · x is a perceptron, and the mistake rule is the perceptron learning rule; the mistake-bound technique is the perceptron convergence theorem, and γ is the margin. Either-but-not-both is exclusive or (XOR). The smooth switch is the logistic sigmoid, a unit is a neuron, and a machine of layers is a neural network, its knobs weights and biases. The backward-pass technique is <i>backpropagation</i>, reverse-mode automatic differentiation for any program. Training by steps downhill is gradient descent, and with a small random batch of examples each step, stochastic gradient descent; η is the learning rate. The bound L is a Lipschitz constant of the gradient, and the small-slope technique finds an approximate stationary point. Examples kept back are the test set, and doing well on them is generalisation. The 1989 result is the universal approximation theorem. Larger-past-fitting doing better is double descent; very wide machines behaving like straight maps is the neural tangent kernel.</p>
+  <h3>Who said it first</h3>
+  <p>Warren McCulloch and Walter Pitts described the threshold unit in 1943. Frank Rosenblatt built the perceptron at Cornell in 1958. Albert Novikoff proved the mistake bound in 1962. Marvin Minsky and Seymour Papert published their book on perceptrons in 1969. Seppo Linnainmaa gave reverse-mode differentiation in his master’s thesis in 1970, and Paul Werbos proposed it for networks in 1974. David Rumelhart, Geoffrey Hinton and Ronald Williams showed hidden units learning by backpropagation in 1986. George Cybenko proved universal approximation for sigmoids in 1989. Jason Lee and colleagues proved that gradient descent from a random start almost surely avoids strict saddles in 2016. Chiyuan Zhang and colleagues trained networks on shuffled labels in 2017. Arthur Jacot, Franck Gabriel and Clément Hongler introduced the neural tangent kernel in 2018, and Mikhail Belkin and colleagues named double descent in 2019.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="28·now: a worked “proof”, not allowed">
+\ell(p_{k+1}) \le \ell(p_k) \text{ for every } k @@ fine: steps of size 1/L
+\ell \text{ settles, so } p_k \text{ settles at a bottom} @@ not allowed: the error can settle while the knobs drift, or at a saddle
+\text{so the trained machine is the best one} @@ not allowed: best on its own examples, at a flat place; new cases are another question
+  </pre>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+const V=c=>'var('+c+')';
+// plot(series, xr, yr, opts): series = [{pts:[[x,y],...], c:'--ember', w:1.6, dash:''}]; returns svg string
+function plot(series, xr, yr, o){ o=o||{}; const W=360,H=o.H||210,L=34,B=22,T=8,Rr=8;
+  const sx=x=>L+(x-xr[0])/(xr[1]-xr[0])*(W-L-Rr), sy=y=>H-B-(y-yr[0])/(yr[1]-yr[0])*(H-B-T);
+  let s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;max-width:440px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  (o.yt||[]).forEach(y=>{ s+='<line x1="'+L+'" x2="'+(W-Rr)+'" y1="'+sy(y)+'" y2="'+sy(y)+'" style="stroke:'+V('--grid')+';stroke-width:0.6"/><text x="'+(L-3)+'" y="'+(sy(y)+3)+'" text-anchor="end" style="font:9px var(--mono);fill:'+V('--muted')+'">'+y+'</text>'; });
+  (o.xt||[]).forEach(x=>{ s+='<text x="'+sx(x)+'" y="'+(H-8)+'" text-anchor="middle" style="font:9px var(--mono);fill:'+V('--muted')+'">'+x+'</text>'; });
+  s+='<line x1="'+L+'" x2="'+L+'" y1="'+T+'" y2="'+(H-B)+'" style="stroke:'+V('--ink')+';stroke-width:0.8"/><line x1="'+L+'" x2="'+(W-Rr)+'" y1="'+(H-B)+'" y2="'+(H-B)+'" style="stroke:'+V('--ink')+';stroke-width:0.8"/>';
+  series.forEach(se=>{ const cl=v=>Math.max(yr[0]-0.05*(yr[1]-yr[0]),Math.min(yr[1]+0.05*(yr[1]-yr[0]),v));
+    const d=se.pts.filter(p=>isFinite(p[1])).map((p,i)=>(i?'L':'M')+sx(p[0]).toFixed(1)+','+sy(cl(p[1])).toFixed(1)).join('');
+    s+='<path d="'+d+'" style="fill:none;stroke:'+V(se.c||'--ember')+';stroke-width:'+(se.w||1.6)+(se.dash?';stroke-dasharray:'+se.dash:'')+'"/>'; });
+  (o.dots||[]).forEach(p=>{ s+='<circle cx="'+sx(p[0])+'" cy="'+sy(p[1])+'" r="2.6" style="fill:'+V(p[2]||'--ember')+'"/>'; });
+  if(o.xl) s+='<text x="'+(W-Rr)+'" y="'+(H-B-4)+'" text-anchor="end" style="font:9px var(--mono);fill:'+V('--muted')+'">'+o.xl+'</text>';
+  if(o.yl) s+='<text x="'+(L+4)+'" y="'+(T+9)+'" style="font:9px var(--mono);fill:'+V('--muted')+'">'+o.yl+'</text>';
+  return s+'</svg>'; }
+
+const sg=z=>1/(1+Math.exp(-z));
+const X=[[0,0],[0,1],[1,0],[1,1]], T=[0,1,1,0];
+function lossgrad(w){ let L=0; const g=new Array(9).fill(0);
+  for(let n=0;n<4;n++){ const x=X[n];
+    const z1=w[0]*x[0]+w[1]*x[1]+w[4], z2=w[2]*x[0]+w[3]*x[1]+w[5]; const h1=sg(z1), h2=sg(z2);
+    const o=sg(w[6]*h1+w[7]*h2+w[8]); L+=0.5*(o-T[n])*(o-T[n]);
+    const d=(o-T[n])*o*(1-o); g[6]+=d*h1; g[7]+=d*h2; g[8]+=d;
+    const d1=d*w[6]*h1*(1-h1), d2=d*w[7]*h2*(1-h2);
+    g[0]+=d1*x[0]; g[1]+=d1*x[1]; g[4]+=d1; g[2]+=d2*x[0]; g[3]+=d2*x[1]; g[5]+=d2; }
+  return [L,g]; }
+function draw(){ const eta=+$('ke').value, K=+$('kk').value; $('oe').textContent=fm(eta,1); $('ok').textContent=K;
+  let w=[3,3,2,2,-1,-3,2,-2,-1]; const P=[]; let L=0, mx=0;
+  for(let k=0;k<=K;k++){ const r=lossgrad(w); L=r[0]; if(k%Math.max(1,Math.round(K/300))===0) P.push([k,L]); mx=Math.max(mx,L);
+    if(k<K) for(let i=0;i<9;i++) w[i]-=eta*r[1][i]; }
+  const outs=X.map(x=>{ const h1=sg(w[0]*x[0]+w[1]*x[1]+w[4]), h2=sg(w[2]*x[0]+w[3]*x[1]+w[5]); return sg(w[6]*h1+w[7]*h2+w[8]); });
+  $('pl').innerHTML=plot([{pts:P,c:'--ember',w:1.5}],[0,K],[0,0.9],{xt:[0,Math.round(K/2),K],yt:[0,0.3,0.6,0.9],xl:'step',yl:'error',H:220});
+  const v=$('vd'); const ok=outs.every((o,i)=>(o>0.5)===(T[i]===1)); v.className='verdict '+(ok?'win':'lose');
+  v.textContent='After '+K+' steps of size '+fm(eta,1)+': total error '+fm(L,4)+' (highest on the way '+fm(mx,3)+'). Rates for (0,0), (0,1), (1,0), (1,1): '+outs.map(o=>fm(o,3)).join(', ')+(ok?'. Every answer on the right side of ½.':'. Not every answer is on the right side of ½ yet.'); }
+$('ke').oninput=draw; $('kk').oninput=draw; draw();
+window.__pic={set:(e,k)=>{ $('ke').value=e; $('kk').value=k; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'rule',t:R`w \mapsto w + yx`,n:`On a mistake.`},
+  {k:'ember',kl:'grow',t:R`k\gamma \le |w_k| \le \sqrt k\,R`,n:`Two ways.`},
+  {k:'ember',kl:'bound',t:R`\htmlClass{new}{k \le (R/\gamma)^2}`,n:`Then no more.`}
+],{title:'The slides · mistakes · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'needs',t:R`r \lt 0,\ p + q + r \lt 0`,n:`And the middle two.`},
+  {k:'ember',kl:'none',t:R`\htmlClass{new}{\text{no } (p, q, r)}`,n:`XOR.`},
+  {k:'ember',kl:'switch',t:R`\sigma' = \sigma(1 - \sigma)`,n:`Free slope.`}
+],{title:'The slides · one unit · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'forward',t:R`a_k = \sigma(W_k a_{k-1})`,n:`Keep each list.`},
+  {k:'ember',kl:'back',t:R`g_{k-1} = g_k\,\Sigma_k\,W_k`,n:`Row times grid.`},
+  {k:'ember',kl:'knob',t:R`\htmlClass{new}{(g_k\Sigma_k)_i\,(a_{k-1})_j}`,n:`Every slope.`}
+],{title:'The slides · backward · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'step',t:R`p \mapsto p - \tfrac1L\nabla\ell`,n:`Never up.`},
+  {k:'ember',kl:'drop',t:R`\ell - \tfrac{|g|^2}{2L}`,n:`Each step.`},
+  {k:'ember',kl:'flat',t:R`\htmlClass{new}{\min|g_k|^2 \le \tfrac{2L(\ell_0 - \ell_{\min})}{K}}`,n:`Some step.`}
+],{title:'The slides · downhill · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'proved',t:R`\text{every slope at once}`,n:`The backward pass.`},
+  {k:'ember',kl:'open',t:R`\htmlClass{new}{\text{why new cases?}}`,n:`Not yet proved.`}
+],{title:'The slides · open · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'illegal',t:R`|\nabla\ell| \approx 0 \Rightarrow \text{bottom}\,?`,n:`Or a saddle.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

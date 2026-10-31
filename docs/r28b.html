@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The best flat map</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r28a.html">← 28a two knobs, keep one still</a><a href="r28c.html">next: 28c the chain rule along several roads →</a></p>
+  <div class="tags"><span class="tag proof">28b · proof</span></div>
+  <h1>The best flat map</h1>
+  <p>On rung 13 a slope was a number. Near the point, the function looked like a straight line, and the slope was how steep the line was. With two inputs, a hillside near one spot looks like a flat tilted sheet. This step says what it means for a function to look like a flat sheet near a point, in every direction at once. The flat sheet is a straight map, so rung 27 can describe it with a grid of numbers. The step then proves that the grid is made of the partial slopes, and that partial slopes which change smoothly are enough to give the sheet.</p>
+  <p class="gesture">A function has a slope at a point when one straight map matches it there better than any gap shrinks. That map is unique, its grid is the partial slopes, and continuous partial slopes guarantee it.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r28a.html">28a</a> (partial slopes), <a href="r27c.html">27c</a> and <a href="r27d.html">27d</a> (straight maps are grids) and <a href="r14c.html">14c</a> (the average-slope technique). <a href="r28c.html">28c</a> chains these maps together.</p></div>
+</header>
+
+<section class="class step" data-step="28b1">
+  <h2 class="sthead"><span class="stno">28b1</span>A flat map that matches</h2>
+  <p class="stands">Stands on 28a1, 27c1, 27d1.</p>
+  <p data-pid="c46caf">Let f send lists of n numbers to lists of m numbers. f has a <i>slope at a</i> when there is a straight map L with</p>
+  <p class="eqline" data-pid="1c506b">\(f(a + h) = f(a) + L(h) + r(h), \quad \text{where } \dfrac{|r(h)|}{|h|} \to 0 \text{ as } h \to 0.\)</p>
+  <p data-pid="5d16c7">L is the <i>best flat map</i> of f at a. Accepted name: the <i>derivative</i> of f at a, written Df(a). The leftover r(h) shrinks faster than the step h. With n = m = 1, L(h) = f′(a)h and this is rung 13’s slope, read through 13k’s nearby line.</p>
+  <p data-pid="5f6e3e">One-flat-map technique: <b>a function has at most one best flat map at a point.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the one-flat-map technique">
+f(a+h) = f(a) + L(h) + r(h) = f(a) + M(h) + s(h) @@ two best flat maps L and M
+(L - M)(h) = s(h) - r(h) @@ subtract
+(L - M)(tu) = t\,(L-M)(u) \text{ for a fixed } u,\ t > 0 @@ L − M is straight (27c)
+|(L-M)(u)| = \dfrac{|s(tu) - r(tu)|}{t} = |u|\,\dfrac{|s(tu) - r(tu)|}{|tu|} \to 0 @@ as t → 0, by the definition
+\htmlClass{new}{(L - M)(u) = 0 \text{ for every } u, \text{ so } L = M} \quad \blacksquare @@ a fixed number heading to 0 is 0
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · best flat map · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">28b1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="f(x,y) = x^2 + 3y"></span> <span data-tex-inline="L(h,k) = 2a\,h + 3k"></span></span>Find f(a + h, b + k) − f(a, b) − L(h, k). This is the leftover r(h, k). <br>Show that |r(h, k)|/|(h, k)| ≤ |(h, k)|, and find what it heads to as (h, k) → (0, 0). <br>At (a, b) = (2, −1), find L(0.1, 0.2), the true change f(2.1, −0.8) − f(2, −1), and the leftover.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28b2">
+  <h2 class="sthead"><span class="stno">28b2</span>The grid of the flat map</h2>
+  <p class="stands">Stands on 28b1, 28a2, 27d1.</p>
+  <p data-pid="f76cb8">Slope-grid technique: <b>if f has a best flat map L at a, then every partial slope of every output exists there, and the grid of L has ∂fᵢ/∂xⱼ (a) in row i, column j.</b> The grid is the <i>slope grid</i> of f at a. Accepted name: the <i>Jacobian matrix</i>.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the slope-grid technique">
+f(a + t e_j) = f(a) + t\,L(e_j) + r(te_j) @@ the definition with h = t·eⱼ, a step along knob j
+\dfrac{f(a + te_j) - f(a)}{t} = L(e_j) + \dfrac{r(te_j)}{t} @@ divide by t ≠ 0
+\dfrac{|r(te_j)|}{|t|} = \dfrac{|r(te_j)|}{|te_j|} \to 0 @@ |eⱼ| = 1
+\dfrac{\partial f}{\partial x_j}(a) = L(e_j) @@ the left side heads to the partial slope (28a2)
+\htmlClass{new}{\text{column } j \text{ of the grid of } L \text{ is } \partial f/\partial x_j (a)} \quad \blacksquare @@ the columns technique (27d)
+  </pre>
+  <p data-pid="9980af">The same lines with any arrow u of length 1 in place of eⱼ give the slope of f along u: it is L(u). So the best flat map gives a slope in every direction, and the slope grid hands it over by one multiplication.</p>
+  <p data-pid="3e5a4c">Flat-means-continuous technique: <b>if f has a best flat map at a, f is continuous at a.</b> For f(a + h) − f(a) = L(h) + r(h), and both terms head to 0: L(h) is a mix of the places of h (27d), and r(h) = |h| · (r(h)/|h|).</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · slope grid · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28b2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="T(r,\theta) = (r\cos\theta,\ r\sin\theta)"></span> <span data-tex-inline="(r,\theta) = (2, \pi/3)"></span> <span data-tex-inline="u = (\tfrac35, \tfrac45)"></span></span>Find the four partial slopes of T, and its slope grid at (2, π/3). <br>Find the slope of T along u, and the length of that slope. <br>Find the length of each column of the grid. Find why turning θ moves the point twice as fast as turning r here.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28b3">
+  <h2 class="sthead"><span class="stno">28b3</span>Continuous partials are enough</h2>
+  <p class="stands">Stands on 28b1, 28a3, 14c.</p>
+  <p data-pid="b57570">28a3 showed partial slopes alone do not give a best flat map: that function was not even continuous. Partial slopes that change continuously do.</p>
+  <p data-pid="826af3">Smooth-knobs technique: <b>if every partial slope of f exists near a and is continuous at a, then f has a best flat map at a.</b> Shown here for two inputs; with n inputs the same walk takes n legs.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the smooth-knobs technique">
+f(a+h, b+k) - f(a,b) = [f(a+h,b+k) - f(a,b+k)] + [f(a,b+k) - f(a,b)] @@ walk along x, then along y
+f(a+h,b+k) - f(a,b+k) = f_x(a + sh,\, b+k)\,h,\ \ 0<s<1 @@ the average-slope technique (14c), in x with y = b + k held still
+f(a,b+k) - f(a,b) = f_y(a,\, b + tk)\,k,\ \ 0<t<1 @@ the same, in y
+r = [f_x(a+sh,b+k) - f_x(a,b)]\,h + [f_y(a,b+tk) - f_y(a,b)]\,k @@ subtract L(h,k) = f_x(a,b)h + f_y(a,b)k
+\dfrac{|r|}{|(h,k)|} \le |f_x(a+sh,b+k) - f_x(a,b)| + |f_y(a,b+tk) - f_y(a,b)| @@ |h|, |k| ≤ |(h, k)|
+\htmlClass{new}{\dfrac{|r|}{|(h,k)|} \to 0} \quad \blacksquare @@ both partial slopes are continuous at (a, b) (28a1)
+  </pre>
+  <p data-pid="930226">A function whose partial slopes all exist and are continuous is called <i>smoothly sloped</i> here. Every formula built from places by sums, products, quotients, powers, exponentials and the trig functions is smoothly sloped wherever its bottoms are not 0.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · enough · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28b3.1</span><span class="ph make">make</span><span class="givens"><span data-tex-inline="A(x,y) = xy"></span> <span data-tex-inline="(x, y) = (3, 5)\ \text{metres}"></span></span>A plot in a community garden in Missoula, Montana, is 3 m by 5 m. Find A<sub>x</sub> and A<sub>y</sub>, check that they are continuous, and build the best flat map of A at (3, 5) by the smooth-knobs technique. <br>The plot is redrawn 3.1 m by 4.8 m. Use the flat map to estimate its area, and find the true area. <br>Find the leftover r(h, k), and show that |r|/|(h, k)| ≤ |(h, k)|/2.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28b4">
+  <h2 class="sthead"><span class="stno">28b4</span>Illegal moves</h2>
+  <p class="stands">Stands on 28b1 to 28b3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+f_x, f_y \text{ exist at } a \Rightarrow Df(a) \text{ exists}\,? @@ 28a3: f there is not even continuous
+\dfrac{|r(h)|}{|h|} \text{ bounded} \Rightarrow L \text{ is the best flat map}\,? @@ the leftover must head to 0, not just stay small
+Df(a) \text{ exists} \Rightarrow \text{partials continuous at } a\,? @@ smooth knobs give the flat map, not the other way round
+\text{slope along } u = L(u) \text{ for any arrow } u\,? @@ only for u of length 1; for 2u the change is twice as fast
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28b4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x,y) = \dfrac{xy}{x^2+y^2},\ \ f(0,0) = 0"></span></span>Find the slope grid Df(0, 0) would have to have, by the slope-grid technique. <br>With that L, find r(t, t) and |r(t, t)|/|(t, t)|, and what it does as t → 0.</li><li><span class="givens"><span data-tex-inline="f(x,y) = |x|,\ \ (0, 0)"></span></span>Try L(h, k) = 0 and L(h, k) = h. Find a bound on |r|/|(h, k)| for each. <br>Find whether either is a best flat map, and what the slope along x does at (0, 0).</li><li><span class="givens"><span data-tex-inline="f(x,y) = x^2\sin(1/x) + y^2 \ (x \ne 0),\ \ f(0,y) = y^2"></span></span>Show that |f(h, k) − f(0, 0)| ≤ h² + k², and find Df(0, 0). <br>Find f<sub>x</sub>(x, y) for x ≠ 0, and its values at x = 1/(2πn) for whole numbers n. Find whether f<sub>x</sub> is continuous at (0, 0).</li><li><span class="givens"><span data-tex-inline="f(x,y) = x^2 + 3y,\ \ (2, -1),\ \ u = (\tfrac35, \tfrac45)"></span></span>Find the slope of f along u, and L(2u). <br>Find the change in f per metre travelled along 2u, and why a slope along an arrow needs the arrow to have length 1.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">28b.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="L(h,k) = 3h - 2k"></span></span>Build a function f with f(0, 0) = 0 whose best flat map at (0, 0) is this L, but which is not itself straight. Check from the definition that |r|/|(h, k)| → 0. <br>Build a map from the plane to the plane whose slope grid at (0, 0) is the quarter turn with rows (0, −1) and (1, 0), and which is not straight. Find its slope grid at (1, 1).</div>
+  <div class="chq"><span class="chid">28b.4.2</span><span class="tagq">edge</span>Find the best flat map of a straight map A at every point, and of a constant map. <br>With one input and one output, show that f has a best flat map at a exactly when it has a slope at a in the sense of rung 13, and that then L(h) = f′(a)h.</div>
+  <div class="chq"><span class="chid">28b.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="g(x,y) = \dfrac{x^2y}{x^4+y^2},\ \ g(0,0) = 0"></span></span>A best flat map gives a slope along every arrow u of length 1. Turn it round: if f has a slope along every such u, must f have a best flat map? <br>For u = (p, q) with q ≠ 0, find (g(tp, tq) − g(0, 0))/t and its limit as t → 0. Find the slope along (1, 0). <br>Find whether these slopes come from one straight map of u, and whether g is continuous at (0, 0).</div>
+  <div class="chq"><span class="chid">28b.4.4</span><span class="tagq">reroute</span>Prove the one-flat-map technique another way. The lines of the slope-grid technique do not use it. Use them to find L(eⱼ) and M(eⱼ) for two best flat maps L and M of f at a. <br>Find the step of rung 27 that turns equal columns into equal maps.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r28a.html">← 28a · two knobs, keep one still</a><a href="r28c.html">28c · the chain rule along several roads →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The best flat map is the (total, or Fréchet) derivative Df(a). The slope grid is the Jacobian matrix, and its determinant, when the grid is square, the Jacobian. The slope along an arrow u of length 1 is the directional derivative. A function whose partial derivatives exist and are continuous is continuously differentiable, or of class C¹.</p>
+  <h3>Who said it first</h3>
+  <p>Karl Weierstrass taught the derivative as a best linear approximation in Berlin in the 1860s. Otto Stolz wrote it down for functions of several variables in 1893, and William Henry Young made it the centre of the subject in 1910. Maurice Fréchet carried the idea to spaces of functions in 1911. Carl Gustav Jacob Jacobi studied the determinant of the grid of partial derivatives in 1841.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'match',t:R`f(a+h) = f(a) + L(h) + r(h)`,n:`L straight.`},
+  {k:'ember',kl:'leftover',t:R`|r(h)|/|h| \to 0`,n:`Shrinks faster than h.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{L \text{ is unique}}`,n:`Call it Df(a).`}
+],{title:'The slides · best flat map · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'step',t:R`h = t e_j`,n:`Turn knob j only.`},
+  {k:'ember',kl:'read',t:R`L(e_j) = \partial f / \partial x_j`,n:`A column.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{Df(a) = \left[\partial f_i/\partial x_j\right]}`,n:`And any direction: L(u).`}
+],{title:'The slides · slope grid · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'walk',t:R`(a,b) \to (a, b+k) \to (a+h, b+k)`,n:`One knob per leg.`},
+  {k:'ember',kl:'average',t:R`f_x(\cdot)h + f_y(\cdot)k`,n:`14c on each leg.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{continuous partials} \Rightarrow Df(a)}`,n:`The leftover shrinks.`}
+],{title:'The slides · enough · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

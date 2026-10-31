@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Polynomials that hug a surface, by hand</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r28k.html">← 28k partials and gradients by hand</a><a href="r28m.html">next: 28m integrals by hand →</a></p>
+  <div class="tags"><span class="tag tech">28l · technique</span></div>
+  <h1>Polynomials that hug a surface, by hand</h1>
+  <p>Rung twenty three hugged a curve with a polynomial that matched its height and its slopes at one point. A surface can be hugged the same way. The flat sheet of the last step matches the height and the two partial slopes. One more layer matches the second slopes too: how fast each partial slope changes along each knob. Those second slopes sit in a small square grid, and since the order of the knobs does not matter, the grid is the same when flipped across its middle. The grid decides what a flat spot looks like. A bowl has a bottom, a dome has a top, and a mountain pass is a saddle: the lowest point on the ridge, and the highest point of the road through it. Two numbers of the grid tell the three apart. The step ends with a ceiling on how wrong the hugging polynomial can be.</p>
+  <p class="gesture">Walk along a straight line through the point, and the surface becomes a curve, which rung twenty three already knows how to hug. Gathered back, the second slopes make a square grid. At a flat point, the grid’s corner and its determinant tell a bottom from a top from a saddle. Bounds on the next slopes cap the error.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r23a.html">23a</a> (the match technique), <a href="r23b.html">23b</a> (the match-error and error-ceiling techniques), <a href="r28c.html">28c</a> (the roads-add technique), <a href="r28d.html">28d</a> (the swap-knobs technique), <a href="r28b.html">28b</a> (the smooth-knobs technique), <a href="r14f.html">14f</a> (the second-test technique), <a href="r12c.html">12c</a> (the highest-and-lowest technique) and <a href="r28k.html">28k</a> (the tangent-plane technique). <a href="r28m.html">28m</a> totals over regions by hand.</p></div>
+</header>
+
+<section class="class step" data-step="28l1">
+  <h2 class="sthead"><span class="stno">28l1</span>The hug of degree 2</h2>
+  <p class="stands">Stands on 28c3 (the roads-add technique), 28b3 (the smooth-knobs technique), 28d2 (the swap-knobs technique), 23b1 (the match-error technique) and 28k1.</p>
+  <p data-pid="9437b7">Let f(x, y) have second partial slopes f<sub>xx</sub>, f<sub>xy</sub>, f<sub>yx</sub>, f<sub>yy</sub> (28d1), all continuous near p. Then f<sub>x</sub> and f<sub>y</sub> are smoothly sloped (28b3), and f<sub>xy</sub> = f<sub>yx</sub> (28d2). The <i>second-slope grid</i> of f at p is</p>
+  <p class="eqline" data-pid="b92d53">\(H(p) = \begin{pmatrix} f_{xx}(p) & f_{xy}(p) \\ f_{xy}(p) & f_{yy}(p) \end{pmatrix},\quad h^{\mathsf T}H(p)\,h = f_{xx}h_1^2 + 2f_{xy}h_1h_2 + f_{yy}h_2^2.\)</p>
+  <p data-pid="d9c434">It is the same when flipped across its middle. Accepted name: the <i>Hessian</i>. Its number hᵀH(p)h, for an arrow h = (h₁, h₂), is the second slope of f along h.</p>
+  <p data-pid="9a11cf">Surface-match technique: <b>if the second partial slopes of f are continuous on a disc around p, then f(p + h) = f(p) + ∇f(p) · h + ½ hᵀH(p)h + E(h), where E(h)/|h|² heads to 0 as h heads to 0.</b> The polynomial of degree 2 in h, without E, is the hug of f at p.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the surface-match technique">
+g(t) = f(p + th),\ \ 0 \le t \le 1 @@ f along the segment from p to p + h, inside the disc
+g'(t) = f_x(p + th)\,h_1 + f_y(p + th)\,h_2 @@ the roads-add technique (28c3)
+g''(t) = h^{\mathsf T}H(p + th)\,h @@ roads-add again, on f_x and f_y; f_xy = f_yx (28d2)
+g(1) = g(0) + g'(0) + \tfrac12 g''(c),\ \ 0 < c < 1 @@ the match-error technique (23b1) with n = 1
+E(h) = \tfrac12\,h^{\mathsf T}\big(H(p + ch) - H(p)\big)h @@ subtract the hug
+|E(h)| \le \tfrac12\big(|\Delta_{xx}| + 2|\Delta_{xy}| + |\Delta_{yy}|\big)|h|^2 @@ Δ the changes in the entries; |h₁|, |h₂| ≤ |h|
+\htmlClass{new}{E(h)/|h|^2 \to 0} \quad \blacksquare @@ each Δ heads to 0: the second slopes are continuous at p (28a1)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: the hug of eˣ cos y">
+f = e^x\cos y,\ \ p = (0, 0):\ \ f = 1,\ \ \nabla f = (e^x\cos y,\ -e^x\sin y) = (1, 0) @@ the one-knob technique (28a2)
+f_{xx} = e^x\cos y = 1,\ \ f_{xy} = -e^x\sin y = 0,\ \ f_{yy} = -e^x\cos y = -1 @@ at (0, 0)
+f(x, y) \approx 1 + x + \tfrac12(x^2 - y^2) @@ the surface-match technique
+\htmlClass{new}{f(0.1, 0.2) = 1.0831;\ \ \text{the hug gives } 1.085} \quad \blacksquare @@ the flat sheet 1 + x gives 1.1: the hug is ten times closer
+  </pre>
+  <p data-pid="b20061">The hug of eˣ cos y is the product of the hugs of eˣ and of cos y from 23h, cut off at degree 2: (1 + x + x²/2)(1 − y²/2) with the terms of degree 3 and 4 dropped. Building hugs from known hugs works on surfaces too, and is often quicker than taking slopes.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the hug · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">28l1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x, y) = \ln(1 + x + 2y),\ \ (0, 0)"></span></span>Find ∇f, the second-slope grid and the hug. Compare the hug with f at (0.1, 0.05).</li><li><span class="givens"><span data-tex-inline="f(x, y) = xe^y,\ \ (1, 0)"></span></span>Find the hug in powers of x − 1 and y, and compare it with f at (1.1, 0.1).</li><li><span class="givens"><span data-tex-inline="B = \tfrac{m}{h^2},\ \ m = 70\ \text{kg},\ \ h = 1.75\ \text{m}"></span></span>B is the body-mass number used by doctors. Find its hug at the point, and use the sheet and then the hug to estimate B at m = 72, h = 1.78. Compare both with the true value.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28l2">
+  <h2 class="sthead"><span class="stno">28l2</span>Top, bottom or saddle</h2>
+  <p class="stands">Stands on 28l1, 12c (the highest-and-lowest technique), 14f2 (the second-test technique) and 27e (the determinant).</p>
+  <p data-pid="891d7d">A flat point of f is a point p where ∇f(p) = 0: the tangent plane there is level. A <i>saddle</i> is a flat point where f is higher than f(p) along one line through p and lower along another, at points as near p as you like, as on a mountain pass.</p>
+  <p data-pid="3830a4">Grid-test technique: <b>let the second partial slopes of f be continuous near a flat point p. Let A = f<sub>xx</sub>(p), B = f<sub>xy</sub>(p), C = f<sub>yy</sub>(p), and D = AC − B², the determinant of H(p). If D &gt; 0 and A &gt; 0, f has a bottom at p. If D &gt; 0 and A &lt; 0, a top. If D &lt; 0, a saddle. If D = 0, this test cannot tell.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the grid-test technique, the bottom">
+Q(h) = Ah_1^2 + 2Bh_1h_2 + Ch_2^2 = A\big(h_1 + \tfrac{B}{A}h_2\big)^2 + \tfrac{D}{A}h_2^2 @@ complete the square; A ≠ 0, since AC &gt; B² ≥ 0
+Q(h) > 0 \text{ for } h \ne 0 @@ two squares with positive weights: 0 only when h₂ = 0 and then h₁ = 0
+Q(\cos\theta, \sin\theta) \ge m > 0 \text{ for every } \theta @@ the highest-and-lowest technique (12c) on [0, 2π]: the least value is reached, and it is positive
+Q(h) \ge m\,|h|^2 @@ Q(sh) = s²Q(h); write h = |h|(cos θ, sin θ)
+f(p + h) - f(p) = \tfrac12 Q(h) + E(h) \ge \tfrac12 m|h|^2 - \tfrac14 m|h|^2 @@ the surface-match technique (28l1) with ∇f(p) = 0; |E(h)| ≤ ¼m|h|² once |h| is small
+\htmlClass{new}{f(p + h) > f(p) \text{ for } 0 < |h| \text{ small: a bottom}} \quad \blacksquare @@ for the top, the same lines for −f
+  </pre>
+  <p data-pid="cb108f">The saddle. If D &lt; 0 and A ≠ 0, then Q(1, 0) = A and Q(−B, A) = A(AC − B²) = AD have opposite signs. If A = 0, then B ≠ 0, and Q(1, s) = 2Bs + Cs² changes sign with s near 0. Along an arrow h with Q(h) &gt; 0, the curve g(t) = f(p + th) has g′(0) = 0 and g″(0) = Q(h) &gt; 0, so a bottom at t = 0 by the second-test technique (14f2). Along an arrow with Q(h) &lt; 0 it has a top. So p is a saddle.</p>
+  <pre class="lines" data-k="ember" data-label="this step: two flat points">
+f = x^3 + y^3 - 3xy:\ \ \nabla f = (3x^2 - 3y,\ 3y^2 - 3x) = 0 @@ y = x², then x⁴ = x
+(0, 0) \text{ and } (1, 1) @@ the only real answers
+H = \begin{pmatrix} 6x & -3 \\ -3 & 6y \end{pmatrix}:\ \ D(0,0) = -9,\ \ D(1,1) = 36 - 9 = 27 @@ the second partial slopes
+(0, 0): D < 0,\ \text{a saddle};\ \ f(t, -t) = 3t^2,\ \ f(t, t) = 2t^3 - 3t^2 @@ higher along one line, lower along the other
+\htmlClass{new}{(1, 1): D > 0,\ A = 6 > 0,\ \text{a bottom},\ f = -1} \quad \blacksquare @@ the grid-test technique
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · flat points · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28l2.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x, y) = 2x^2 - 2xy + y^2 - 2x"></span></span>Find every flat point, and decide each by the grid-test technique.</li><li><span class="givens"><span data-tex-inline="f(x, y) = x^4 + y^4 - 4xy"></span></span>Find the three flat points, decide each, and find the value of f at each bottom.</li><li><span class="givens"><span data-tex-inline="f = x^4 + y^4,\ \ g = x^4 - y^4"></span></span>Find D at (0, 0) for each. Decide each flat point by looking at the formula.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28l3">
+  <h2 class="sthead"><span class="stno">28l3</span>How wrong the hug can be</h2>
+  <p class="stands">Stands on 28l1, 23b1 (the match-error technique), 23b2 (the error-ceiling technique) and 28c3.</p>
+  <p data-pid="b598b6">23b2 put a ceiling on the error of a matching polynomial from a bound on the next slope. The same works on a surface, one line at a time.</p>
+  <p data-pid="f5b2f3">Hug-ceiling technique: <b>let f be smoothly sloped to the order needed on a disc holding p and p + h. If every second partial slope has size at most K there, the sheet’s error is at most ½K(|h₁| + |h₂|)². If every third partial slope has size at most K there, the hug’s error is at most K(|h₁| + |h₂|)³/6.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the hug-ceiling technique">
+g(t) = f(p + th):\ \ g''(t) = \textstyle\sum_{i,j} f_{ij}(p + th)\,h_ih_j @@ as in 28l1: two roads each time, so four terms
+|g''(t)| \le K\,\textstyle\sum_{i,j}|h_i||h_j| = K(|h_1| + |h_2|)^2 @@ every second partial slope has size at most K
+g^{\prime\prime\prime}(t) = \textstyle\sum_{i,j,k} f_{ijk}(p + th)\,h_ih_jh_k,\ \ |g^{\prime\prime\prime}(t)| \le K(|h_1| + |h_2|)^3 @@ roads-add once more (28c3): eight terms
+\text{sheet error} = \tfrac12 g''(c),\ \ \text{hug error} = \tfrac16 g^{\prime\prime\prime}(c_2) @@ the match-error technique (23b1) with n = 1 and n = 2
+\htmlClass{new}{|\text{sheet error}| \le \tfrac12K(|h_1| + |h_2|)^2,\ \ |\text{hug error}| \le \tfrac16K(|h_1| + |h_2|)^3} \quad \blacksquare @@ the error-ceiling technique (23b2), once each
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: the hug of eˣ cos y, fenced">
+\text{third partial slopes of } e^x\cos y \text{ are } \pm e^x\cos y,\ \pm e^x\sin y @@ each slope turns cos into −sin or sin into cos, and keeps eˣ
+K = e^{0.1} \approx 1.1052 \text{ on } 0 \le x \le 0.1 @@ |cos|, |sin| ≤ 1, and eˣ rises
+\tfrac16 K(0.1 + 0.2)^3 \approx 0.0050 @@ the hug-ceiling technique
+\htmlClass{new}{|1.08314 - 1.085| \approx 0.0019 \le 0.0050} \quad \blacksquare @@ 28l1’s hug, inside its fence
+  </pre>
+  <p data-pid="7e9546">The fence holds the true value without knowing it. That is what makes a hug safe to use: the answer comes with a number that says how far off it can be, and the number shrinks like the cube of the step.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · the fence · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28l3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x, y) = e^{x + y},\ \ p = (0, 0),\ \ h = (0.1, 0.1)"></span></span>Find the hug, its value at h, a ceiling on its error, and the true error.</li><li><span class="givens"><span data-tex-inline="f(x, y) = \ln(1 + x + 2y),\ \ h = (0.1, 0.05)"></span></span>Find g‴(t) for g(t) = f(th) directly, a ceiling on it for 0 ≤ t ≤ 1, and from it a ceiling on the error of the hug of 28l1.1(a). Compare with the true error.</li><li><span class="givens"><span data-tex-inline="f(x, y) = x^2y,\ \ p = (2, 3),\ \ h = (0.1, -0.1)"></span></span>Find K for the second partial slopes on the box 2 ≤ x ≤ 2.1, 2.9 ≤ y ≤ 3, the ceiling on the sheet’s error, and the true error of the sheet.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28l4">
+  <h2 class="sthead"><span class="stno">28l4</span>Illegal moves</h2>
+  <p class="stands">Stands on 28l1 to 28l3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\nabla f(p) = 0 \Rightarrow p \text{ is a top or a bottom}\,? @@ x² − y² is flat at 0, and has a saddle there
+f_{xx} > 0,\ f_{yy} > 0 \Rightarrow \text{a bottom}\,? @@ x² + 3xy + y²: A = C = 2, B = 3, D = −5 &lt; 0, a saddle
+D = 0 \Rightarrow \text{neither a top nor a bottom}\,? @@ x⁴ + y⁴ has D = 0 at 0, and a bottom there
+\text{a bottom along every line through } p \Rightarrow \text{a bottom}\,? @@ (y − x²)(y − 3x²) has a bottom at 0 along every line, and is −x⁴ along y = 2x²
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28l4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x, y) = x^2 - y^2"></span></span>Find ∇f(0, 0), f(t, 0) and f(0, t). <br>Find what the first line takes for granted.</li><li><span class="givens"><span data-tex-inline="f(x, y) = x^2 + 3xy + y^2"></span></span>Find A, B, C and D at (0, 0), and f(t, −t). <br>Find what the second line leaves out.</li><li><span class="givens"><span data-tex-inline="f(x, y) = x^4 + y^4"></span></span>Find D at (0, 0), and the least value of f. <br>Find what D = 0 does say.</li><li><span class="givens"><span data-tex-inline="f(x, y) = (y - x^2)(y - 3x^2)"></span></span>Find f along y = mx for m ≠ 0 and small x ≠ 0, along both axes, and along y = 2x². <br>Find why no single line catches the dip.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">28l.4.1</span><span class="tagq">build</span>Build a polynomial f of degree 2 whose only flat point is (1, −2), a saddle, with f(1, −2) = 5. <br>Then build one of degree 2 with a whole line of bottoms.</div>
+  <div class="chq"><span class="chid">28l.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="x^2 + y^4,\ \ x^2 - y^4,\ \ x^2 + y^3"></span></span>Each has D = 0 at its flat point (0, 0). Decide each: bottom, top or saddle, in the sense of 28l2. <br>Find how the third differs from the second along the upright axis.</div>
+  <div class="chq"><span class="chid">28l.4.3</span><span class="tagq">converse</span>The grid-test technique: D &gt; 0 and A &gt; 0 give a bottom. Turn it round: at a bottom, with continuous second slopes, must D &gt; 0? <br>Prove that at a bottom A ≥ 0, C ≥ 0 and D ≥ 0, and find a bottom with D = 0.</div>
+  <div class="chq"><span class="chid">28l.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="H = \begin{pmatrix} A &amp; B \\ B &amp; C \end{pmatrix}"></span></span>Reroute the bottom half of the grid-test technique through stretches. By the middle-sum technique (27l1), prove that the two stretches of H are real. Prove that A &gt; 0 and D &gt; 0 make both positive. Prove that when the stretches differ their arrows are at right angles. <br>Then write Q(h) in those arrows, by the read-off technique (27i2), as a sum of two squares.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r28k.html">← 28k · partials and gradients by hand</a><a href="r28m.html">28m · integrals by hand →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The second-slope grid is the Hessian matrix, and its determinant D the Hessian (determinant). The hug is the second-order Taylor polynomial of f at p, and the surface-match technique is Taylor’s theorem in two variables. The number hᵀHh is a quadratic form; a form positive for every h ≠ 0 is positive definite, and completing the square to show it is the idea behind the Cholesky factorization. The grid-test technique is the second derivative test. A flat point is a critical (or stationary) point, and a saddle a saddle point. Bottoms and tops among neighbours are local minima and maxima.</p>
+  <h3>Who said it first</h3>
+  <p>Joseph-Louis Lagrange gave the conditions for a maximum or minimum of a function of two variables in 1759, by completing the square. Otto Hesse studied the determinant of second derivatives in 1844, and James Joseph Sylvester named it after him in 1851. Giuseppe Peano showed in 1884, in his edition of Angelo Genocchi’s calculus, that a function can have a minimum along every line through a point and still no minimum there; his example was (y − x²)(y − 2x²).</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'one line',t:R`g(t) = f(p + th)`,n:`A curve, as rung 23 hugged.`},
+  {k:'ember',kl:'its slopes',t:R`g'' = h^{\mathsf T}Hh`,n:`Roads add, twice.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{f(p + h) \approx f(p) + \nabla f\cdot h + \tfrac12 h^{\mathsf T}Hh}`,n:`Error small next to |h|².`}
+],{title:'The slides · the hug · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'complete the square',t:R`Q = A(h_1 + \tfrac BA h_2)^2 + \tfrac DA h_2^2`,n:`Two squares, two weights.`},
+  {k:'ember',kl:'both positive',t:R`D > 0,\ A > 0`,n:`Q is positive off 0.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{bottom};\ \ D < 0:\ \text{saddle}}`,n:`D = 0: the test is silent.`}
+],{title:'The slides · flat points · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'one line',t:R`|g''| \le K(|h_1| + |h_2|)^2`,n:`Second slopes bounded by K.`},
+  {k:'ember',kl:'the next',t:R`|g'''| \le K(|h_1| + |h_2|)^3`,n:`Third slopes bounded by K.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{|\text{hug error}| \le \tfrac16K(|h_1| + |h_2|)^3}`,n:`A fence that shrinks like the cube.`}
+],{title:'The slides · the fence · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

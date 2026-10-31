@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gradient descent</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r28n.html">← 28n along curves and across surfaces</a><a href="r28p.html">next: 28p how errors spread →</a></p>
+  <div class="tags"><span class="tag tech">28o · technique</span></div>
+  <h1>Gradient descent</h1>
+  <p>To find the bottom of a valley in fog, take a step in the steepest way down, look again, and take another. With a formula in place of a valley, the steepest way down is minus the uphill arrow, and the walk is a few multiplications per step, even with a million inputs where no one could solve for the flat point. This step proves that a small enough step always goes down. Then it asks how big a step can be. Too small and the walk crawls; too big and it bounces from wall to wall and climbs out. In a long narrow valley the walls are steep and the floor is gentle, and the walk is slow however the step is chosen. Last, it finds the valleys where the walk cannot be fooled: those that bend up along every line have one bottom, and any flat point is it.</p>
+  <p class="gesture">Step against the uphill arrow: a small enough step always goes down. In a bowl, the step must be shorter than two over the steepest bend, and the best step balances the steepest bend against the gentlest. A valley that bends up along every line has exactly one bottom.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r28g.html">28g</a> (the uphill technique), <a href="r28c.html">28c</a> (the roads-add technique), <a href="r28l.html">28l</a> (the surface-match and grid-test techniques), <a href="r13k.html">13k</a> (the slope-sign-near technique), <a href="r22h.html">22h</a> (the standard-sequences technique), <a href="r24i.html">24i</a> (the stiff-step technique), <a href="r14d.html">14d</a> (the slope-sign-order technique) and <a href="r14g.html">14g</a> (the bends-up technique). <a href="r28p.html">28p</a> follows errors through a formula.</p></div>
+</header>
+
+<section class="class step" data-step="28o1">
+  <h2 class="sthead"><span class="stno">28o1</span>A step against the uphill arrow</h2>
+  <p class="stands">Stands on 28g1 (the uphill technique), 28c3 (the roads-add technique) and 13k (the slope-sign-near technique).</p>
+  <p data-pid="5e273b">By 28g1, the steepest way down from p is −∇f(p). A <i>downhill step</i> of size η &gt; 0 goes from p to p − η∇f(p). Repeated, it is the walk x<sub>k+1</sub> = x<sub>k</sub> − η∇f(x<sub>k</sub>). Accepted name: <i>gradient descent</i>.</p>
+  <p data-pid="989ec3">Downhill-step technique: <b>let f be smoothly sloped near p, with ∇f(p) ≠ 0. Then some η₀ &gt; 0 makes f(p − η∇f(p)) &lt; f(p) for every η with 0 &lt; η &lt; η₀.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the downhill-step technique">
+g(\eta) = f\big(p - \eta\nabla f(p)\big) @@ f along the line from p in the steepest way down
+g'(0) = \nabla f(p)\cdot\big(-\nabla f(p)\big) = -|\nabla f(p)|^2 @@ the roads-add technique (28c3), with the moving point p − η∇f(p)
+g'(0) < 0 @@ ∇f(p) ≠ 0, so its length is not 0 (18a)
+\htmlClass{new}{g(\eta) < g(0) \text{ for } 0 < \eta < \eta_0} \quad \blacksquare @@ the slope-sign-near technique (13k), for −g: where the slope is negative, lower just to the right
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: two steps down">
+f = (x - 3)^2 + 2(y + 1)^2,\ \ \nabla f = \big(2(x - 3),\ 4(y + 1)\big),\ \ \eta = 0.1 @@ a bowl with its bottom at (3, −1)
+(0, 0):\ \ f = 11,\ \ \nabla f = (-6,\ 4) @@ the start
+(0.6,\ -0.4):\ \ f = 6.48,\ \ \nabla f = (-4.8,\ 2.4) @@ one step: (0, 0) − 0.1(−6, 4)
+\htmlClass{new}{(1.08,\ -0.64):\ \ f = 3.9456} \quad \blacksquare @@ two steps: down from 11, toward 0 at the bottom
+  </pre>
+  <p data-pid="50a4ed">The technique promises some step that goes down, not which one. A walk that uses one fixed η can still go wrong, and the next footing finds when. It also promises nothing at a flat point: there the uphill arrow is 0, the walk stops, and whether it has stopped at a bottom is a question for 28l.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · downhill · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">28o1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f = x^2 + 4y^2,\ \ (2, 1),\ \ \eta = 0.1"></span></span>Take two downhill steps, and find f at each point.</li><li><span class="givens"><span data-tex-inline="f = x^2 + 4y^2,\ \ (2, 1),\ \ \eta = 0.3"></span></span>Take two downhill steps, and find f at each point. Find what went wrong.</li><li><span class="givens"><span data-tex-inline="S(m, c) = \sum_i (y_i - mx_i - c)^2,\ \ \text{points } (0, 1),\ (1, 3),\ (2, 4),\ (3, 4)"></span></span>S totals the squared misses of the line y = mx + c. Find ∇S at (0, 0), take one downhill step with η = 0.05, and compare S before and after.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28o2">
+  <h2 class="sthead"><span class="stno">28o2</span>How big a step</h2>
+  <p class="stands">Stands on 28o1, 28a2 (the one-knob technique), 22h2 (the standard-sequences technique), 4b (induction) and 24i (the stiff-step technique).</p>
+  <p data-pid="3f6589">A <i>bowl</i> is f(x) = ½(a₁x₁² + ⋯ + aₙxₙ²) with 0 &lt; a₁ ≤ ⋯ ≤ aₙ: its bottom is 0, and aᵢ is how sharply it bends along the i-th knob. Near a bottom, 28l’s hug makes every smooth valley look like a bowl, turned to some directions.</p>
+  <p data-pid="5ff1f6">Step-size technique: <b>on a bowl, the walk with step η heads to the bottom from every start exactly when 0 &lt; η &lt; 2/aₙ. Each step shrinks the distance to the bottom by a factor of at most the largest |1 − ηaᵢ|. That factor is least at η = 2/(a₁ + aₙ), where it is (aₙ − a₁)/(aₙ + a₁).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the step-size technique">
+\nabla f(x) = (a_1x_1, \ldots, a_nx_n) @@ the one-knob technique (28a2)
+x_i \mapsto x_i - \eta a_ix_i = (1 - \eta a_i)\,x_i @@ one step, place by place: the places do not mix
+x_i \text{ after } k \text{ steps} = (1 - \eta a_i)^k\,x_i @@ induction (4b)
+\to 0 \text{ for every start} \iff |1 - \eta a_i| < 1 \text{ for every } i \iff 0 < \eta < 2/a_n @@ the standard-sequences technique (22h2): rᵏ → 0 exactly when |r| &lt; 1; aₙ is the largest
+|x \text{ after one step}| \le \max_i|1 - \eta a_i|\;|x| @@ each place shrinks by at least that factor
+\htmlClass{new}{\text{least at } 1 - \eta a_1 = \eta a_n - 1:\ \ \eta = \tfrac{2}{a_1 + a_n},\ \ \text{factor } \tfrac{a_n - a_1}{a_n + a_1}} \quad \blacksquare @@ the largest is |1 − ηa₁| or |1 − ηaₙ|; one falls and the other rises as η grows
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: a narrow valley">
+f = \tfrac12(x^2 + 10y^2):\ \ a_1 = 1,\ a_2 = 10 @@ ten times steeper across than along
+\eta < 0.2 @@ the step-size technique; at η = 0.2 the y place flips sign forever
+\eta = \tfrac{2}{11} \approx 0.18:\ \ \text{factor } \tfrac{9}{11} \approx 0.82 @@ the best step
+\htmlClass{new}{(9/11)^k \le 0.001 \text{ for } k \ge 35} \quad \blacksquare @@ 35 steps to cut the distance a thousandfold: ln 1000/ln(11/9) ≈ 34.4
+  </pre>
+  <p data-pid="2ad782">Each downhill step on a bowl is a forward step of 24i on the rate rule x′ = −∇f(x), place by place xᵢ′ = −aᵢxᵢ, with η as the step length. The stiff-step technique of 24i asked for hk &lt; 2, and here it is again as ηaᵢ &lt; 2. A narrow valley is a stiff rule: the steep walls force a short step, and the gentle floor then takes many of them.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · the step size · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28o2.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f = x^2 + 4y^2"></span></span>Write f as a bowl. Find the largest steps that head to the bottom, the best step and its factor, and the point after five best steps from (2, 1).</li><li><span class="givens"><span data-tex-inline="f = x^2 + 4y^2,\ \ \eta = 0.3"></span></span>Find the factor for each place, and why 28o1.1(b) ran away.</li><li><span class="givens"><span data-tex-inline="f = \tfrac12(x^2 + 100y^2)"></span></span>Find the best step and its factor, and how many steps cut the distance a thousandfold. Compare with f = ½(x² + y²) and η = 1.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28o3">
+  <h2 class="sthead"><span class="stno">28o3</span>Valleys with one bottom</h2>
+  <p class="stands">Stands on 28l1 (the surface-match technique), 28l2 (the grid-test technique), 28c3, 14d (the slope-sign-order technique) and 14g (the bends-up technique).</p>
+  <p data-pid="7dda3b">14g said f bends up on an interval when, between any two inputs, f lies below the chord. A function of two inputs <i>bends up along every line</i> when for every p and every arrow h ≠ 0 the curve t ↦ f(p + th) bends up.</p>
+  <p data-pid="5e41f5">One-bottom technique: <b>let f have continuous second partial slopes on the whole plane, with f<sub>xx</sub> &gt; 0 and D = f<sub>xx</sub>f<sub>yy</sub> − f<sub>xy</sub>² &gt; 0 at every point. Then f bends up along every line. And if ∇f(p) = 0, then f(q) &gt; f(p) for every q ≠ p: p is the one bottom, and the lowest point of all.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the one-bottom technique">
+g(t) = f(p + th),\ \ h = q - p \ne 0 @@ f along the line through p and q
+g''(t) = h^{\mathsf T}H(p + th)\,h > 0 @@ as in 28l1; A &gt; 0 and D &gt; 0 make the form positive off 0, by the square completed in 28l2
+g' \text{ is increasing, so } g \text{ bends up} @@ the slope-sign-order technique (14d) on g′; the bends-up technique (14g)
+g(1) > g(0) + g'(0)\cdot 1 @@ the bends-up technique (14g): g lies above its tangent line away from 0
+g'(0) = \nabla f(p)\cdot h = 0 @@ the roads-add technique (28c3); p is flat
+\htmlClass{new}{f(q) = g(1) > g(0) = f(p)} \quad \blacksquare @@ for every q ≠ p
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: one bottom, found two ways">
+f = x^2 + xy + y^2 - 3x:\ \ f_{xx} = 2,\ f_{xy} = 1,\ f_{yy} = 2,\ D = 3 @@ the same at every point: f bends up along every line
+\nabla f = (2x + y - 3,\ x + 2y) = 0:\ \ (x, y) = (2, -1),\ \ f = -3 @@ two samenesses; the one bottom
+\text{descent with } \eta = 0.5 \text{ from } (0, 0):\ (1.5, 0),\ (1.5, -0.75),\ (1.875, -0.75),\ \ldots @@ each step cuts the distance of one place to the bottom by four
+\htmlClass{new}{\text{the walk heads to } (2, -1)} \quad \blacksquare @@ the one-bottom technique: a flat point it reaches can only be the bottom
+  </pre>
+  <p data-pid="e61feb">If a walk with a fixed step settles at a point x*, then x<sub>k+1</sub> − x<sub>k</sub> = −η∇f(x<sub>k</sub>) heads to 0, so ∇f(x*) = 0 by continuity: walks only settle at flat points. On a valley that bends up along every line there is one flat point, so a walk that settles has found the bottom, whatever its start. Elsewhere a walk can settle in a shallow dip and never learn of a deeper one.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · one bottom · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28o3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f = 3x^2 + 2xy + y^2 - 4x"></span></span>Check that f bends up along every line, and find its one bottom and the value there.</li><li><span class="givens"><span data-tex-inline="f = e^x + e^{-x} + y^2"></span></span>Check that f bends up along every line, and find its bottom.</li><li><span class="givens"><span data-tex-inline="f = x^4 - 2x^2 + x"></span></span>Find where f″ &lt; 0, and its two bottoms, to three places. Walk down from x = 1 and from x = −1 with η = 0.05, and find where each walk settles.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28o4">
+  <h2 class="sthead"><span class="stno">28o4</span>Illegal moves</h2>
+  <p class="stands">Stands on 28o1 to 28o3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{a bigger step gets down faster}\,? @@ on x² + 4y² from (2, 1), η = 0.3 lands at f = 8.48, above the start’s 8
+\text{the walk has stopped, so it is at the lowest point}\,? @@ on x⁴ − 2x² + x it stops near 0.838 from x = 1; the lowest point is near −1.107
+\text{bends up along both axes, so along every line}\,? @@ x² + 3xy + y² bends up along each axis and down along y = −x
+x_{k+1} = x_k + \eta\nabla f(x_k)\,? @@ ∇f points uphill (28g1): this walk climbs
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28o4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f = x^2 + 4y^2,\ \ (2, 1)"></span></span>Find f after one step with η = 0.1, 0.2, 0.25 and 0.3. <br>Find which steps go down, and why size alone does not decide.</li><li><span class="givens"><span data-tex-inline="f = x^4 - 2x^2 + x"></span></span>Find f at the two points where walks settle in 28o3.1(c). <br>Find what the second line takes for granted.</li><li><span class="givens"><span data-tex-inline="f = x^2 + 3xy + y^2"></span></span>Find f(t, 0), f(0, t) and f(t, −t). <br>Find what the third line forgets.</li><li><span class="givens"><span data-tex-inline="f = x^2 + y^2,\ \ (1, 1),\ \ \eta = 0.1"></span></span>Take two steps of the fourth line’s walk, and find f at each point. <br>Find the slip.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">28o.4.1</span><span class="tagq">build</span>Build a bowl ½(ax² + by²), with a ≤ b, on which the walk with η = 0.1 heads to the bottom and the walk with η = 0.25 runs away, and whose factor at η = 0.1 is 0.9. <br>Find every such pair a, b.</div>
+  <div class="chq"><span class="chid">28o.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="f = \tfrac12(x^2 + 4y^2),\ \ \eta = 0.5"></span></span>η = 2/aₙ exactly. Walk from (1, 1) for four steps. <br>Find what each place does for ever, and whether the walk heads anywhere.</div>
+  <div class="chq"><span class="chid">28o.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="f(x) = \tfrac{x^2}{1 + x^2}"></span></span>A valley that bends up along every line has one bottom, and walks that settle find it. Turn it round: if a function of one input has one bottom, and every walk with a small enough step heads to it, must it bend up? <br>Test this f: its one bottom, where it bends, and where walks go.</div>
+  <div class="chq"><span class="chid">28o.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="f = x^2 + xy + y^2 - 3x"></span></span>Reroute the hunt for the bottom through 13m’s tangent step, run on the uphill arrow: x ↦ x − H⁻¹∇f(x), with H the second-slope grid. <br>Prove that from every start it lands on the bottom in one step. Find why it does so on every polynomial of degree 2 whose H can be undone, and what each step costs that descent does not.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r28n.html">← 28n · along curves and across surfaces</a><a href="r28p.html">28p · how errors spread →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The walk is gradient descent (or steepest descent), and η the step size, or in machine learning the learning rate. A bowl is a quadratic function; aₙ/a₁ is the condition number of its Hessian, and the factor (aₙ − a₁)/(aₙ + a₁) is the convergence rate of gradient descent with the best fixed step. A function that bends up along every line is strictly convex; the one-bottom technique says a strictly convex function has at most one minimizer, and any critical point is the global minimum. The tangent step on the uphill arrow is Newton’s method for minimization.</p>
+  <h3>Who said it first</h3>
+  <p>Augustin-Louis Cauchy proposed the method of steepest descent in 1847, to solve the equations of the orbits of stars. Johan Jensen defined convex functions in 1906. Haskell Curry studied the method’s convergence in 1944. Herbert Robbins and Sutton Monro introduced the walk with noisy slopes in 1951, the ancestor of how machines are trained today.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'the step',t:R`p - \eta\nabla f(p)`,n:`Against the uphill arrow.`},
+  {k:'ember',kl:'its slope',t:R`g'(0) = -|\nabla f(p)|^2`,n:`Roads add.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{f \text{ falls, for } \eta \text{ small}}`,n:`Small enough, not any size.`}
+],{title:'The slides · downhill · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'one step',t:R`x_i \mapsto (1 - \eta a_i)x_i`,n:`The places do not mix.`},
+  {k:'ember',kl:'settles',t:R`0 < \eta < 2/a_n`,n:`Short enough for the steepest wall.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\eta = \tfrac{2}{a_1 + a_n}:\ \tfrac{a_n - a_1}{a_n + a_1}}`,n:`Narrow valleys are slow.`}
+],{title:'The slides · the step size · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'bends up',t:R`g'' = h^{\mathsf T}Hh > 0`,n:`Along every line.`},
+  {k:'ember',kl:'flat',t:R`g'(0) = 0`,n:`At the flat point.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{f(q) > f(p) \text{ for every } q \ne p}`,n:`Any flat point is the bottom.`}
+],{title:'The slides · one bottom · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

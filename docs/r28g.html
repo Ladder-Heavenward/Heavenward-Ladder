@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The best point on a constraint</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r28f.html">← 28f when an equation fixes a function</a><a href="r28h.html">next: 28h double integrals →</a></p>
+  <div class="tags"><span class="tag proof">28g · proof</span></div>
+  <h1>The best point on a constraint</h1>
+  <p>Many questions ask for the best value of something while something else is held fixed. The biggest field a fixed length of fence can hold. The cheapest mix that still meets a recipe. Rung 14 found tops and bottoms where the slope is flat. On a constraint the slope need not be flat, because you are only allowed to walk along the constraint. This step first finds the arrow that points straight uphill, then proves that at the best point on a constraint, the uphill arrow of what you want and the uphill arrow of the constraint line up.</p>
+  <p class="gesture">A one-output function has an uphill arrow made of its partial slopes. At a top or bottom of f on the curve g = 0, where g’s uphill arrow is not zero, f’s uphill arrow is a multiple of g’s.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r28b.html">28b</a> (the slope grid), <a href="r28f.html">28f</a> (an equation fixes a function), <a href="r14a.html">14a</a> (the flat-top technique) and <a href="r18b.html">18b</a> (the dot-bound technique). <a href="r28econ.html">28·econ</a> spends it on a budget.</p></div>
+</header>
+
+<section class="class step" data-step="28g1">
+  <h2 class="sthead"><span class="stno">28g1</span>The uphill arrow</h2>
+  <p class="stands">Stands on 28b2, 18b1.</p>
+  <p data-pid="4a6f9f">For f with one output, the slope grid is a single row. Read as an arrow it is ∇f = (f<sub>x</sub>, f<sub>y</sub>), the <i>uphill arrow</i>. Accepted name: the <i>gradient</i>. By 28b2 the slope of f along an arrow u of length 1 is ∇f · u.</p>
+  <p data-pid="c9fac1">Uphill technique: <b>if ∇f(a) ≠ 0, the slope of f at a is greatest along the direction of ∇f(a), and that greatest slope is |∇f(a)|. Along a level curve of f, where f keeps one value, the direction of travel is at right angles to ∇f.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the uphill technique">
+\text{slope along } u = \nabla f(a) \cdot u,\ \ |u| = 1 @@ the slope-grid technique (28b2)
+\nabla f(a)\cdot u \le |\nabla f(a)|\,|u| = |\nabla f(a)| @@ the dot-bound technique (18b)
+\text{equality} \iff u = \nabla f(a) / |\nabla f(a)| @@ the dot-bound’s equal case: u a positive multiple of ∇f(a)
+f(x(t), y(t)) = c \Rightarrow \nabla f \cdot (x'(t), y'(t)) = 0 @@ the roads-add technique (28c3), and a constant has slope 0
+\htmlClass{new}{\nabla f \text{ points uphill, with slope } |\nabla f|, \text{ and is at right angles to level curves}} \quad \blacksquare @@ the lines above; a zero dot means a right angle (18a)
+  </pre>
+  <p data-pid="7e909f">A map of a hill with lines of equal height shows this: the steepest way up crosses every contour line square on.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · uphill arrow · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">28g1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="h(x,y) = 3429 - 40x^2 - 90y^2"></span> <span data-tex-inline="(x, y) = (2, 1)"></span></span>A smooth model of the upper slopes of Mount Hood, Oregon, gives the height h in metres at x km east and y km north of the summit. Find ∇h at (2, 1). <br>Find the steepest slope there, in metres per km, and the direction of steepest climb as an arrow of length 1. <br>Find the height of the level curve through (2, 1), and a direction of length 1 along it.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28g2">
+  <h2 class="sthead"><span class="stno">28g2</span>The arrows line up</h2>
+  <p class="stands">Stands on 28g1, 28f2, 14a.</p>
+  <p data-pid="691e02">Now walk only along the curve g(x, y) = 0. Lines-up technique: <b>if f and g are smoothly sloped, f has a top or a bottom among the points of g = 0 at a, and ∇g(a) ≠ 0, then ∇f(a) = λ∇g(a) for some number λ.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the lines-up technique">
+g_y(a) \ne 0 \ \ (\text{or else } g_x(a) \ne 0 \text{ and swap the roles of } x, y) @@ ∇g(a) ≠ 0
+\text{near } a,\ g = 0 \text{ is the graph } y = \varphi(x),\ \ \varphi' = -g_x/g_y @@ the fixed-by-an-equation and implicit-slope techniques (28f)
+h(x) = f(x, \varphi(x)) \text{ has a top or bottom at } a_1 @@ the points (x, φ(x)) are exactly the points of g = 0 near a
+0 = h'(a_1) = f_x + f_y\,\varphi' = f_x - f_y\,g_x/g_y @@ the flat-top technique (14a), the roads-add technique (28c3)
+f_x\,g_y - f_y\,g_x = 0 @@ multiply by g_y
+\htmlClass{new}{\nabla f(a) = \lambda\,\nabla g(a),\ \ \lambda = f_y(a)/g_y(a)} \quad \blacksquare @@ f_x = λg_x by the line above, and f_y = λg_y by the choice of λ
+  </pre>
+  <p data-pid="6d976a">So the search for the best point on a constraint becomes three equations in three unknowns: f<sub>x</sub> = λg<sub>x</sub>, f<sub>y</sub> = λg<sub>y</sub>, g = 0. The number λ has a meaning too: it is how fast the best value changes as the constraint is loosened. 28·econ reads it as the worth of one more dollar.</p>
+  <p data-pid="ee33d8">Worked once: the biggest area xy of a rectangle with perimeter 2x + 2y = 40. ∇(xy) = (y, x) and ∇g = (2, 2), so y = 2λ and x = 2λ, so x = y = 10. The best rectangle is a square.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · line up · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28g2.1</span><span class="ph make">make</span><span class="givens"><span data-tex-inline="S(r,h) = 2\pi r^2 + 2\pi r h"></span> <span data-tex-inline="\pi r^2 h = 0.2\ \text{m}^3"></span></span>A closed rain barrel for a garden in Portland, Oregon, is a cylinder that holds 0.2 m³. S is its metal: top, bottom and side. Write the constraint as g(r, h) = 0. <br>Solve S<sub>r</sub> = λg<sub>r</sub>, S<sub>h</sub> = λg<sub>h</sub>, g = 0 by the lines-up technique. Find r, h and the metal used. <br>Find λ. Find the least metal as a formula in the volume V, and check that its slope along V is λ.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28g3">
+  <h2 class="sthead"><span class="stno">28g3</span>Illegal moves</h2>
+  <p class="stands">Stands on 28g1 and 28g2.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{best on } g = 0 \Rightarrow \nabla f(a) = 0\,? @@ only the slope along the curve is 0; ∇f may point off the curve
+\nabla f = \lambda\nabla g \Rightarrow a \text{ is a top}\,? @@ the arrows also line up at bottoms and at flat-but-neither points: check them
+\nabla g(a) = 0 \text{ is allowed}\,? @@ then the curve may have a corner or a cusp, and the technique is silent; test those points by hand
+\text{the steepest slope at } a \text{ is } f_x + f_y\,? @@ it is |∇f| = √(f_x² + f_y²), along ∇f
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28g3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x,y) = xy,\ \ 2x + 2y = 40"></span></span>Find ∇f at the best point (10, 10). <br>Find the slope of f along the constraint there, and whether ∇f is 0.</li><li><span class="givens"><span data-tex-inline="f(x,y) = y,\ \ x^2 + y^2 = 1"></span></span>Find every point of the circle where ∇f = λ∇g, and λ at each. <br>Find which is a top and which a bottom.</li><li><span class="givens"><span data-tex-inline="f(x,y) = x,\ \ g(x,y) = y^2 - x^3"></span></span>Find the least value of f on g = 0, and where it is. <br>Find ∇g there. Find whether f<sub>x</sub> = λg<sub>x</sub>, f<sub>y</sub> = λg<sub>y</sub>, g = 0 has any answer at all.</li><li><span class="givens"><span data-tex-inline="f(x,y) = x^2 + 3y,\ \ (2, -1)"></span></span>Find the steepest slope at (2, −1), and f<sub>x</sub> + f<sub>y</sub> there. <br>Find the slope of f along (1, 1)/√2, and what f<sub>x</sub> + f<sub>y</sub> measures.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">28g.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="f(x,y) = (x - 1)^2 + y^2,\ \ x + y = 1"></span></span>Find the best point of f on the line, and λ there. <br>Build another f and constraint with λ = 0 at the best point. Find what λ = 0 tells you about the best value as the constraint is loosened.</div>
+  <div class="chq"><span class="chid">28g.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="f(x,y) = xy,\ \ g(x,y) = (x + y - 2)^2"></span></span>Find the points of g = 0, and ∇g at each. <br>Find the greatest value of f on g = 0, and whether the lines-up equations find it. <br>Find a g that draws the same line and lets the technique work.</div>
+  <div class="chq"><span class="chid">28g.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="f(x,y) = x^3 + y,\ \ g(x,y) = y"></span></span>If f has a top or a bottom at a on g = 0, the arrows line up. Turn it round: if ∇f(a) = λ∇g(a) at a point of g = 0, must f have a top or a bottom there? <br>Find ∇f and ∇g at (0, 0), and λ. <br>Find f along the constraint, and whether (0, 0) is a top or a bottom.</div>
+  <div class="chq"><span class="chid">28g.4.4</span><span class="tagq">reroute</span>Prove the lines-up technique another way. Walk along g = 0 as a moving point r(t) with r(0) = a and r′(0) ≠ 0. <br>Use the roads-add technique on f(r(t)) and on g(r(t)). Find two arrows at right angles to r′(0). <br>Find why, in the plane, they must be parallel, and where ∇g(a) ≠ 0 is used.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r28f.html">← 28f · when an equation fixes a function</a><a href="r28h.html">28h · double integrals →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The uphill arrow is the gradient, ∇f, read “del f” or “grad f”. The slope along u is the directional derivative. Level curves are contour lines or isolines. The lines-up technique is the method of Lagrange multipliers, and λ is the Lagrange multiplier.</p>
+  <h3>Who said it first</h3>
+  <p>Joseph-Louis Lagrange gave the multiplier method in his Mécanique analytique of 1788, for bodies held on surfaces and curves, and stated it for best values in 1797. The sign ∇ was introduced by William Rowan Hamilton in 1837 and named “nabla”, after a Phoenician harp, by Peter Guthrie Tait in the 1870s.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'arrow',t:R`\nabla f = (f_x, f_y)`,n:`The slope grid, as an arrow.`},
+  {k:'ember',kl:'slope along u',t:R`\nabla f \cdot u \le |\nabla f|`,n:`Dot-bound.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{steepest along } \nabla f;\ \perp \text{ level curves}}`,n:`Contours are crossed square on.`}
+],{title:'The slides · uphill arrow · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'constraint',t:R`g(x,y) = 0`,n:`Walk only here.`},
+  {k:'ember',kl:'flat along it',t:R`f_x g_y - f_y g_x = 0`,n:`Flat-top on the curve.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\nabla f = \lambda\nabla g}`,n:`The uphill arrows are parallel.`}
+],{title:'The slides · line up · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

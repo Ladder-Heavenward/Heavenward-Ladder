@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Flattening the map</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r27now.html">← 27·now which web page matters most?</a><a href="r28a.html">next: 28a two knobs, keep one still →</a></p>
+  <div class="tags"><span class="tag theory">Rung 28 · theory</span></div>
+  <h1>Flattening the map</h1>
+  <p>Rung 13 found the slope of a function with one input: near a point, the graph looks like a straight line. Most things depend on more than one input. The height of a hillside depends on how far east and how far north you stand. This rung asks what a slope is when there are several inputs. Holding all but one input still gives a slope along each one, but those slopes alone can miss a jump. The real answer is a flat map: near the point, the function looks like a straight map from rung 27, and its grid is made of the slopes along each input. From that one idea come the chain of slopes along several roads, a way to run a curved map backwards near a point, a way to turn an equation into a function, and the best point when something is held fixed. Then the rung totals functions over patches of the plane, changes the measures it totals with, and trades a total over the inside of a region for a total round its edge.</p>
+  <p class="gesture">With several inputs, the slope of a function at a point is a straight map, the best flat map near that point. Its grid is the grid of partial slopes, and everything else on this rung follows from it.</p>
+  <div class="ready"><h3>The steps, in order</h3><p><a href="r28a.html">28a Two knobs, keep one still</a>: partial slopes, and a function that has them and still jumps.<br><a href="r28b.html">28b The best flat map</a>: the slope as a straight map, unique, with the partial slopes as its grid.<br><a href="r28c.html">28c The chain rule along several roads</a>: slope grids multiply.<br><a href="r28d.html">28d Does the order of the knobs matter?</a>: mixed slopes agree when they are continuous, and an example where they do not.<br><a href="r28e.html">28e Locally undoable</a>: an undoable slope grid means the map can be undone near the point.<br><a href="r28f.html">28f When an equation fixes a function</a>: the implicit slopes of 13l, earned.<br><a href="r28g.html">28g The best point on a constraint</a>: the uphill arrows line up.<br><a href="r28h.html">28h Double integrals</a>: totals over a rectangle, in either order.<br><a href="r28i.html">28i Changing the variables</a>: the determinant of the slope grid is the area scale.<br><a href="r28j.html">28j Flux and circulation</a>: swirl and spread inside, totals round the edge. Then the techniques:<br><a href="r28k.html">28k Partials and gradients by hand</a>.<br><a href="r28l.html">28l Polynomials that hug a surface, by hand</a>.<br><a href="r28m.html">28m Integrals by hand</a>.<br><a href="r28n.html">28n Along curves and across surfaces</a>.<br><a href="r28o.html">28o Gradient descent</a>.<br><a href="r28p.html">28p How errors spread</a>. Then the annexes:<br><a href="r28then.html">28·then How good can an engine ever be?</a>, <a href="r28phys.html">28·phys Why does a narrowed artery matter so much?</a>, <a href="r28econ.html">28·econ What is the best basket on a budget?</a>, <a href="r28bio.html">28·bio Why do foxes and rabbits take turns?</a>, <a href="r28logi.html">28·logi Where should the warehouse go?</a>, <a href="r28now.html">28·now How does a machine learn from its mistakes?</a>.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The class · read it through, then go to 28a</div>
+
+  <h3>What it means to say it</h3>
+  <p data-pid="b5eb8b">To say the derivative is a flat map is to say that near a point, a function of several inputs is matched by one straight map so well that the mismatch shrinks faster than the step you take. In every direction at once, not only along the axes. The flat map is a grid of numbers, and each number is the slope along one input of one output.</p>
+  <p data-pid="db07b4"><b>A function of several inputs has a slope at a point when one straight map matches it there better than any step shrinks, and then that map’s grid is the grid of its partial slopes.</b> The rung proves the map is unique, that continuous partial slopes guarantee it, and that chains, undoings, equations and constraints all obey it.</p>
+
+  <h3>Where it comes from</h3>
+  <p data-pid="8be313">Euler and Clairaut used partial derivatives in the 1730s and 1740s, and Lagrange gave the multiplier method in 1788. Cauchy found that the two orders of a double integral can disagree in 1814. Ostrogradsky proved the divergence theorem in 1826, Green published his essay in 1828, and Riemann proved the plane form in 1851. Jacobi studied the determinant of slopes in 1841, Schwarz proved that mixed slopes agree in 1873, and Peano collected the counterexamples in 1884. Dini proved the implicit and inverse function theorems around 1878, and the derivative as a linear map was set out by Stolz in 1893, Young in 1910 and Fréchet in 1911.</p>
+
+  <h3>The principles, in plain words</h3>
+  <p data-pid="139895">The rung proves five things, each from the ones before.</p>
+  <p data-pid="91a947">First, slopes along each input are not enough: a function can have them all and still jump. What is enough is a best flat map, and continuous partial slopes give one.</p>
+  <p data-pid="b8b3dd">Second, chains of maps have chains of flat maps: the slope grids multiply, and the change of a quantity is the sum, over every road, of how fast that road moves times how much the quantity cares.</p>
+  <p data-pid="c3fcef">Third, a curved map whose slope grid can be undone can itself be undone near the point. So an equation that really cares about one unknown fixes that unknown as a function of the rest, and at the best point on a constraint the uphill arrows line up.</p>
+  <p data-pid="bb7b6f">Fourth, a continuous function has a total over a rectangle, and it can be taken in either order. Changing the measures multiplies the total by the size of the determinant of the slope grid.</p>
+  <p data-pid="72b8ba">Fifth, the swirl and the spread of a field, totalled inside a region, equal its circulation and its flux round the edge.</p>
+  <p data-pid="e33fc7"><b>Anexact, yet rigorous.</b> Beside the proofs, the annexes carry boxes of the second kind of care, the kind that measures how wrong it might be instead of proving. 28·then carries <i>a law with an exception rate</i>: the law that heat runs downhill is stated with the size of the crowd, since a drop in disorder has a small but stated chance. 28·phys carries <i>the cloud, through a fourth power</i>: through a fourth power, a measured radius’s share of error comes out four times as large, and the flow is stated with it. 28·econ carries <i>laws with a known exception rate</i>: the law of demand is measured, with known exceptions, and the page says where to look for them. 28·bio carries <i>the border line, settled</i>: a result that rests on an exact balance in the rules is checked against a small change before it is read as a fact about the world. 28·logi carries <i>the cloud, at the bottom</i>: near a flat bottom, report the region within a stated margin of the best, not one point. 28·now carries <i>laws with an exception rate</i>: a trained machine is reported with its rate of mistakes on examples it never trained on, and where those came from.</p>
+
+  <h3>What follows</h3>
+  <p data-pid="c926de">With those five, the techniques compute. Partial slopes and uphill arrows are found by hand, and a surface is hugged by a polynomial whose second slopes say bowl, dome or saddle. Totals over discs, balls and slanted regions are taken in the measures that suit them. Totals along curves and across surfaces are found, and walking downhill finds the bottom of a valley. Errors in measured inputs are carried through to the answer. The annexes take these into engines, blood flow, budgets, predators and prey, a warehouse, and a machine that learns.</p>
+
+  <h3>What you can do because you know it</h3>
+  <p data-pid="6254ed">You can take the slope of anything with several inputs, in any direction, and chain such slopes through several steps. You can tell when a curved map can be run backwards, when an equation defines a function, and where the best point under a constraint is. You can total a quantity over a region in whatever measures make it easy, and trade a total inside for one on the edge.</p>
+  <p data-pid="87f925">From here on, every quantity with several causes is handled with a slope grid.</p>
+
+  <h3>What it costs</h3>
+  <p data-pid="ccc80d">Nothing new is laid down. The rung spends rung 13’s slopes, rung 14’s average-slope technique, rungs 15 and 16’s areas, rung 24’s shrinking map and rung 27’s straight maps and determinants. At the end of the rung you will know what it means to say the derivative is a flat map in every direction, when it is true, and what you can do because you know it.</p>
+</section>
+
+<nav class="nextrung"><a href="r27now.html">← 27·now · which web page matters most?</a><a href="r28a.html">28a · two knobs, keep one still →</a></nav>
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+Rung.ready(()=>{});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

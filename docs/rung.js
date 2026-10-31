@@ -1,3 +1,5 @@
+/* a link's page stem; on the desk links read view.html#p=<stem> */
+function hstem(h){ h=h||''; const m=h.match(/^view\.html#(?:.*&)?p=([^&]+)/); if(m) return decodeURIComponent(m[1]); return h.replace(/#.*$/,'').replace(/\.html?$/,''); }
 /* rung.js: the shared machinery of the new ladder's pages.
    Load order at the end of <body>: katex (in <head>), then rung.js, then the page's own script, then tray.js.
    Provides window.Rung = { tex, col, stepper, plane, ready }.
@@ -263,10 +265,10 @@ function certify(box,all){
 }
 /* on the ladder: beside each floor conclusion row, its certification (once the floor conclusion has opened) */
 function floorCerts(){
-  const rows=[...document.querySelectorAll('.rungs li.k-concl')].filter(li=>{ const a=li.querySelector('.t a'); return a&&/^floor\d+concl\.html$/.test(a.getAttribute('href')||''); });
+  const rows=[...document.querySelectorAll('.rungs li.k-concl')].filter(li=>{ const a=li.querySelector('.t a'); return a&&/^floor\d+concl$/.test(hstem(a.getAttribute('href'))); });
   if(!rows.length) return;
   let pages={}; try{ pages=JSON.parse(LS.getItem('pages:done')||'{}')||{}; }catch(e){}
-  rows.forEach(li=>{ const stem=li.querySelector('.t a').getAttribute('href').replace(/\.html$/,'');
+  rows.forEach(li=>{ const stem=hstem(li.querySelector('.t a').getAttribute('href'));
     let w=li.querySelector('.certrow'); if(!w){ w=document.createElement('a'); w.className='certrow'; w.href=stem+'.html#cert'; li.querySelector('.t').appendChild(w); }
     const rec=certRead(stem), open=!!(pages[stem]&&pages[stem].v);
     if(rec&&rec.by==='proctor'){ w.textContent='✓ certified'; w.className='certrow proctor'; }
@@ -282,7 +284,7 @@ async function gateLadder(localOnly){
   if(!localOnly){ try{ if(window.MarksSync&&MarksSync.pages) pages=await MarksSync.pages(); }catch(e){} }
   rows.forEach(li=>{
     const a=li.querySelector('.t a'); if(!a) return;
-    const stem=(a.getAttribute('href')||'').replace(/\.html?$/,'');
+    const stem=hstem(a.getAttribute('href'));
     li.classList.toggle('passed',!!(pages[stem]&&pages[stem].v));
     li.classList.toggle('started',!!(pages[stem]&&pages[stem].a));
     li.classList.toggle('starred',!!(pages[stem]&&pages[stem].v&&pages[stem].o!==false));
@@ -293,7 +295,7 @@ async function gateLadder(localOnly){
   const L=window.__ladderMarks;
   document.querySelectorAll('li.k-theory.built').forEach(li=>{
     const a=li.querySelector('.t a'); if(!a) return;
-    const stem=(a.getAttribute('href')||'').replace(/\.html?$/,'');
+    const stem=hstem(a.getAttribute('href'));
     const r=pages['open:'+stem]; const lab=(li.querySelector(':scope>.n')||{}).textContent||'';
     li.classList.toggle('passed', r ? !!r.v : !!(L&&L.st['L:'+lab.trim()]));
   });
@@ -525,7 +527,7 @@ function ladderStats(){
   document.querySelectorAll('li.k-gate,li.k-quiz,li.k-test').forEach(li=>{
     const lab=((li.querySelector(':scope>.n')||{}).textContent||'').trim(); const n=parseInt(lab,10); if(isNaN(n)) return;
     const a=li.querySelector('.t a'); const kind=(lab.split('·')[1]||'').trim()||'gate';
-    const stem=a?(a.getAttribute('href')||'').replace(/\.html?$/,''):('r'+String(n).padStart(2,'0')+kind);
+    const stem=a?hstem(a.getAttribute('href')):('r'+String(n).padStart(2,'0')+kind);
     if((pages[stem]&&pages[stem].v)||li.classList.contains('passed')) far=Math.max(far,n);
   });
   for(let i=0;i<LS.length;i++){ const k=LS.key(i)||''; const m=k.match(/^cert:r(\d\d)/); if(m) far=Math.max(far,+m[1]); }
@@ -843,7 +845,7 @@ function pn(){
 }
 let menu=null, cur=null;
 function toast(msg){ let t=document.getElementById('patoast'); if(!t){ t=document.createElement('div'); t.id='patoast'; t.setAttribute('role','status'); document.body.appendChild(t); }
-  t.textContent=msg; t.classList.add('on'); clearTimeout(toast.h); toast.h=setTimeout(()=>t.classList.remove('on'),2200); }
+  t.textContent=msg; t.classList.add('on'); clearTimeout(toast.h); toast.h=setTimeout(()=>t.classList.remove('on'),Math.max(2200,msg.length*70)); }
 const copy=s=>{ try{ navigator.clipboard.writeText(s).then(()=>{},()=>{}); }catch(e){} };
 function addresses(info){
   const ps=[...document.querySelectorAll('section.class p[data-pid]')]; if(!ps.length) return;
@@ -972,7 +974,7 @@ function startEdit(p){ if(!ED.db||!ED.owner||!editable(p)||p.isContentEditable) 
     const html=edClean(p); e.target.disabled=true;
     const rec={pid:p.dataset.pid,page:ED.page,html,at:new Date().toISOString()}; let err=null;
     for(const wait of [0,1500,4000,9000]){ if(wait){ toast('the database is busy; trying again…'); await new Promise(r=>setTimeout(r,wait)); }
-      try{ await ED.db.doc('edits/'+p.dataset.pid).set(rec); err=null; break; }catch(x){ err=x; } }
+      try{ await Promise.race([ED.db.doc('edits/'+p.dataset.pid).set(rec), new Promise((_,rj)=>setTimeout(()=>rj({code:'no answer in 10 seconds'}),10000))]); err=null; break; }catch(x){ err=x; } }
     if(!err){ try{ const k='ladder:pending-edits', m=JSON.parse(localStorage.getItem(k)||'{}'); delete m[p.dataset.pid]; localStorage.setItem(k,JSON.stringify(m)); }catch(_){}
       p.innerHTML=html; p.classList.add('pedited'); done(); toast('saved: every reader sees it now, and it goes into the page at the next publish'); }
     else{ try{ const k='ladder:pending-edits', m=JSON.parse(localStorage.getItem(k)||'{}'); m[p.dataset.pid]=rec; localStorage.setItem(k,JSON.stringify(m)); }catch(_){}

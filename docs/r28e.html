@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Locally undoable</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r28d.html">← 28d does the order of the knobs matter?</a><a href="r28f.html">next: 28f when an equation fixes a function →</a></p>
+  <div class="tags"><span class="tag proof">28e · proof</span></div>
+  <h1>Locally undoable</h1>
+  <p>Rung 27 found that a grid can be undone exactly when its determinant is not zero. A curved map is harder: it bends space, and it may fold it over on itself far away. This step proves that if the best flat map of a curved map can be undone at a point, then the curved map itself can be undone near that point. The proof hunts for the answer by repeated small corrections, and rung 24’s shrinking map promises that the hunt ends at exactly one answer.</p>
+  <p class="gesture">If a smoothly sloped map from lists of n numbers to lists of n numbers has an undoable slope grid at a, it can be undone on some patch around a, and the undoing is smoothly sloped, with the undone grid as its slope grid.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r28b.html">28b</a> and <a href="r28c.html">28c</a> (best flat maps and chains), <a href="r27e.html">27e</a> (the nonzero-det technique) and <a href="r24c.html">24c</a> (the shrinking-map technique). <a href="r28f.html">28f</a> uses it to solve equations for one input.</p></div>
+</header>
+
+<section class="class step" data-step="28e1">
+  <h2 class="sthead"><span class="stno">28e1</span>Small slopes, small moves</h2>
+  <p class="stands">Stands on 28b2, 28c1, 14c.</p>
+  <p data-pid="ccd07e">Segment-bound technique: <b>if φ is smoothly sloped on a ball, and every entry of its slope grid has size at most ε there, then |φ(x) − φ(x′)| ≤ nε |x − x′| for x, x′ in the ball.</b> A ball is the set of points within a fixed length of a centre; with any two points it holds the segment between them.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the segment-bound technique">
+g(t) = \varphi_i(x' + t(x - x')),\ \ 0 \le t \le 1 @@ one output, along the segment, which stays in the ball
+\varphi_i(x) - \varphi_i(x') = g(1) - g(0) = g'(s) = \text{row}_i\,(x - x') @@ the average-slope technique (14c), and the roads-add technique (28c3); the row is taken at a point of the segment
+|\varphi_i(x) - \varphi_i(x')| \le \sqrt{n}\,\varepsilon\,|x - x'| @@ the dot-bound technique (18b): the row has n entries of size at most ε
+\htmlClass{new}{|\varphi(x) - \varphi(x')| \le n\varepsilon\,|x - x'|} \quad \blacksquare @@ square and add the n outputs
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · segment bound · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">28e1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\varphi(x,y) = (0.1\sin y,\ 0.1\cos x)"></span></span>Find the slope grid of φ, and an ε that bounds every entry on the whole plane. <br>Find the factor the segment-bound technique gives. Check that φ sends the disc |(x, y)| ≤ 1 into itself. <br>Start at (0, 0) and apply φ three times. Find what the shrinking-map technique promises about these points.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28e2">
+  <h2 class="sthead"><span class="stno">28e2</span>Undoing near a point</h2>
+  <p class="stands">Stands on 28e1, 24c, 27e3.</p>
+  <p data-pid="5dfc56">Let f be smoothly sloped near a, from lists of n numbers to lists of n numbers, with b = f(a) and A = Df(a) undoable (det A ≠ 0, 27e). To solve f(x) = y for y near b, correct a guess x by the undone flat map:</p>
+  <p class="eqline" data-pid="c19939">\(\varphi_y(x) = x + A^{-1}\,(y - f(x)).\)</p>
+  <p data-pid="4c8451">A point x is <i>still</i> under φ<sub>y</sub> exactly when f(x) = y. Local-undo technique: <b>there are balls U around a and V around b such that each y in V has exactly one x in U with f(x) = y.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the local-undo technique">
+D\varphi_y(x) = I - A^{-1}Df(x),\ \ D\varphi_y(a) = 0 @@ the chain-of-flat-maps technique (28c2); it does not depend on y
+\text{entries of } D\varphi_y \le \tfrac{1}{2n} \text{ on the closed ball } |x - a| \le r @@ the partial slopes are continuous at a (28a1); choose r small
+|\varphi_y(x) - \varphi_y(x')| \le \tfrac12 |x - x'| @@ the segment-bound technique (28e1)
+|\varphi_y(x) - a| \le \tfrac12|x - a| + |A^{-1}(y - b)| \le \tfrac r2 + c\,|y - b| @@ φ_y(a) − a = A⁻¹(y − b); c from the stretch-bound technique (28c1) for A⁻¹
+|y - b| < \tfrac{r}{2c} \Rightarrow \varphi_y \text{ sends the ball into itself} @@ the line above is then less than r
+\htmlClass{new}{\text{exactly one } x \text{ in the ball with } f(x) = y} \quad \blacksquare @@ the shrinking-map technique (24c); its proof runs word for word with points and |·|, since crowding points settle place by place (12e)
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · local undo · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28e2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="f(x,y) = (x + y^2,\ y + x^2)"></span> <span data-tex-inline="\text{target } (0.1,\ 0.05)"></span></span>Find A = Df(0, 0), and the correction φ for this target. <br>Start at (0, 0) and run three rounds. Find f at the third guess, and how far it is from the target. <br>Find the gaps between guesses, and whether each is at most half the one before.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28e3">
+  <h2 class="sthead"><span class="stno">28e3</span>The undoing has a slope</h2>
+  <p class="stands">Stands on 28e2, 28b1, 28c2.</p>
+  <p data-pid="76de70">Call the undoing g: for y in V, g(y) is the one x in U with f(x) = y. Undo-slope technique: <b>g is smoothly sloped on V, and Dg(y) = Df(g(y))⁻¹.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the undo-slope technique">
+|x - x'| \le |\varphi_y(x) - \varphi_y(x')| + |A^{-1}(f(x) - f(x'))| \le \tfrac12|x - x'| + c\,|f(x) - f(x')| @@ write x − x′ = φ_y(x) − φ_y(x′) + A⁻¹(f(x) − f(x′)); 28e2 and 28c1
+|g(y) - g(y')| \le 2c\,|y - y'| @@ the line above with x = g(y), x′ = g(y′); so g is continuous
+f(x + k) - f(x) = Df(x)k + s(k),\ \ k = g(y + h) - g(y) @@ the best flat map of f at x = g(y) (28b1)
+k = Df(x)^{-1}h - Df(x)^{-1}s(k) @@ h = f(x + k) − f(x); Df(x) is undoable near a, since det is continuous and not 0 at a (27e)
+\dfrac{|Df(x)^{-1}s(k)|}{|h|} \le c'\cdot 2c\,\dfrac{|s(k)|}{|k|} \to 0 @@ 28c1 for Df(x)⁻¹, and |k| ≤ 2c|h|
+\htmlClass{new}{Dg(y) = Df(g(y))^{-1}} \quad \blacksquare @@ the leftover shrinks faster than h (28b1); its entries are continuous, by the stand-in grid (27g)
+  </pre>
+  <p data-pid="4e4079">So near a point where the slope grid is undoable, the map is a change of coordinates: it can be run backwards, and backwards it is smooth too. The polar map (r, θ) ↦ (r cos θ, r sin θ) has det = r, so it is undoable near every point with r ≠ 0, though not on the whole plane: θ and θ + 2π land on the same point.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · undo slope · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28e3.1</span><span class="ph make">make</span><span class="givens"><span data-tex-inline="T(r,\theta) = (r\cos\theta,\ r\sin\theta)"></span> <span data-tex-inline="(r,\theta) = (2, \pi/6)"></span></span>Find the point T(2, π/6), the slope grid of T there, and its det. <br>Find the slope grid of the undoing at that point by the undo-slope technique. <br>Near that point r = √(x² + y²) and θ = arctan(y/x). Find their partial slopes directly, and compare.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28e4">
+  <h2 class="sthead"><span class="stno">28e4</span>Illegal moves</h2>
+  <p class="stands">Stands on 28e1 to 28e3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\det Df(a) \ne 0 \Rightarrow f \text{ one-to-one everywhere}\,? @@ only near a: the polar map repeats every 2π
+\det Df(a) = 0 \Rightarrow f \text{ not one-to-one near } a\,? @@ x ↦ x³ is one-to-one with slope 0 at 0; only its undoing loses its slope there
+Dg(y) = Df(y)^{-1}\,? @@ the grid of f is taken at the point g(y), not at y
+\det Df \ne 0 \text{ everywhere} \Rightarrow f \text{ one-to-one}\,? @@ (x, y) ↦ (eˣ cos y, eˣ sin y) has det e²ˣ ≠ 0 and repeats every 2π in y
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28e4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="T(r,\theta) = (r\cos\theta,\ r\sin\theta)"></span></span>Find T(1, 0) and T(1, 2π), and det DT at each. <br>Find what the local-undo technique promises near (1, 0), and what it does not.</li><li><span class="givens"><span data-tex-inline="f(x) = x^3"></span></span>Find f′(0), and whether f is one-to-one. <br>Find the undoing g, and whether g has a slope at 0.</li><li><span class="givens"><span data-tex-inline="f(x) = e^x,\ \ g(y) = \ln y"></span></span>Find g′(1), Df(g(1))⁻¹ and Df(1)⁻¹. <br>Find which one matches, and where the grid of f must be taken.</li><li><span class="givens"><span data-tex-inline="f(x,y) = (e^x\cos y,\ e^x\sin y)"></span></span>Find det Df(x, y), and whether it is ever 0. <br>Find f(0, 0) and f(0, 2π). Find whether f is one-to-one, and what the local-undo technique still gives.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">28e.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="f(x,y) = (2x + y^3,\ y)"></span></span>Find the undoing g of f as a formula, on the whole plane. <br>Check the undo-slope technique at (u, v) = (3, 1): find g(3, 1), Dg(3, 1) and Df(g(3, 1))⁻¹. <br>Build a map of the plane that is one-to-one on the whole plane, but whose slope grid has det 0 at (0, 0). Find what its undoing does there.</div>
+  <div class="chq"><span class="chid">28e.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="f(x) = x + 2x^2\sin(1/x)\ \ (x \ne 0),\ \ f(0) = 0"></span></span>Find f′(0) from the definition. <br>Find f′(x) for x ≠ 0, and its values at x = 1/(2πn) and at x = 1/((2n + 1)π), for whole numbers n. <br>Find whether f is one-to-one on any interval around 0, and which demand of the local-undo technique it fails.</div>
+  <div class="chq"><span class="chid">28e.4.3</span><span class="tagq">converse</span>If det Df(a) ≠ 0, f has a smoothly sloped undoing near a. Turn it round: if f has an undoing g near a, and g has a best flat map at f(a), must det Df(a) ≠ 0? <br>Apply the chain-of-flat-maps technique to g(f(x)) = x, then the det-product technique. <br>Find how f(x) = x³ fits.</div>
+  <div class="chq"><span class="chid">28e.4.4</span><span class="tagq">reroute</span>Prove Dg(y) = Df(g(y))⁻¹ another way, taking for granted that g has a best flat map. Apply the chain-of-flat-maps technique to f(g(y)) = y. <br>Find what the longer proof of 28e3 gives that this route takes for granted.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r28d.html">← 28d · does the order of the knobs matter?</a><a href="r28f.html">28f · when an equation fixes a function →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The local-undo and undo-slope techniques together are the inverse function theorem. A map that is one-to-one, smooth and has a smooth inverse is a diffeomorphism; a local one is a change of coordinates. The correction φ<sub>y</sub> is a simplified Newton iteration, which keeps the first slope grid instead of updating it.</p>
+  <h3>Who said it first</h3>
+  <p>Joseph-Louis Lagrange and Augustin-Louis Cauchy used the idea for power series. Ulisse Dini proved the implicit and inverse function theorems for real functions in his lectures at Pisa, published in 1878. The proof by a contraction mapping follows Émile Picard’s method of successive approximation (1890) and Stefan Banach’s fixed point theorem (1922).</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'along',t:R`g(t) = \varphi_i(x^{\prime} + t(x - x^{\prime}))`,n:`Walk the segment.`},
+  {k:'ember',kl:'average',t:R`g(1) - g(0) = \text{row}_i (x - x^{\prime})`,n:`14c.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{|\varphi(x)-\varphi(x^{\prime})| \le n\varepsilon|x-x^{\prime}|}`,n:`Small slopes, small moves.`}
+],{title:'The slides · segment bound · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'correct',t:R`\varphi_y(x) = x + A^{-1}(y - f(x))`,n:`Still exactly when f(x) = y.`},
+  {k:'ember',kl:'shrink',t:R`|\varphi_y(x) - \varphi_y(x^{\prime})| \le \tfrac12|x - x^{\prime}|`,n:`Small slopes near a.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{f(x) = y \text{ has one answer near } a}`,n:`Shrinking map, 24c.`}
+],{title:'The slides · local undo · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'bound',t:R`|g(y) - g(y^{\prime})| \le 2c|y - y^{\prime}|`,n:`g is continuous.`},
+  {k:'ember',kl:'solve',t:R`k = Df^{-1}h - Df^{-1}s(k)`,n:`Turn the flat map round.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{Dg = (Df)^{-1}}`,n:`Undone grid.`}
+],{title:'The slides · undo slope · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

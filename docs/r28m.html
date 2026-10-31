@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Integrals by hand</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r28l.html">← 28l polynomials that hug a surface, by hand</a><a href="r28n.html">next: 28n along curves and across surfaces →</a></p>
+  <div class="tags"><span class="tag tech">28m · technique</span></div>
+  <h1>Integrals by hand</h1>
+  <p>The proof steps built a total over a rectangle, showed it can be taken in either order, and found the extra factor a change of measures brings in. This step is the workshop. A region with curved edges is cut into strips, and the first job is to read its edges off a sketch. Sometimes the strips one way lead to a function whose area no table holds, while the strips the other way make it easy, so swapping the order is a real tool and not a trick. Round regions are easier in distance and angle, with the extra factor of the distance. In space the same ideas give two more sets of measures: one for cylinders and one for balls. With them the volume of a ball, the water a storm drops on a valley, and the weight of the earth from a guess at how dense its insides are, all come out of one kind of total.</p>
+  <p class="gesture">Read the edges of the region off a sketch, and total in strips. If one order is hard, swap it: the region is the same, described the other way. Round regions take distance and angle, with an extra factor of the distance. In space, cylinders take an extra distance, and balls take the distance squared times the sine of the angle down from the top.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r28h.html">28h</a> (the either-order technique), <a href="r28i.html">28i</a> (the change-of-variables technique, with slanted regions and round measures), <a href="r28j.html">28j</a> (totals over a box in space), <a href="r27k.html">27k</a> (the expansion technique), <a href="r21r.html">21r</a> (the swept-area technique), <a href="r21o.html">21o</a> (the ball technique) and <a href="r16d.html">16d</a> (substitution). <a href="r28n.html">28n</a> totals along curves and across surfaces.</p></div>
+</header>
+
+<section class="class step" data-step="28m1">
+  <h2 class="sthead"><span class="stno">28m1</span>Swapping the order</h2>
+  <p class="stands">Stands on 28i3 (the change-of-variables technique and its slanted regions), 28h2 (the either-order technique) and 16d (the substitution technique for areas).</p>
+  <p data-pid="f18ca5">28i3 totalled a region <i>slanted in x</i>, a ≤ x ≤ b with φ₁(x) ≤ y ≤ φ₂(x), as ∫ from a to b of ∫ from φ₁(x) to φ₂(x) of f dy dx. With the roles of x and y swapped, a region <i>slanted in y</i>, c ≤ y ≤ d with ψ₁(y) ≤ x ≤ ψ₂(y), is totalled the other way. In both the edges are smoothly sloped, and the lower edge is below the upper one inside.</p>
+  <p data-pid="a5e7b8">Order-swap technique: <b>if a region D is slanted in x and also slanted in y, and f is continuous on D, the two totals in strips are equal: the total from a to b of the total from φ₁(x) to φ₂(x) of f dy dx is the total from c to d of the total from ψ₁(y) to ψ₂(y) of f dx dy.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the order-swap technique">
+\textstyle\int_a^b\!\int_{\varphi_1(x)}^{\varphi_2(x)} f\,dy\,dx = \iint_D f @@ D slanted in x: the slanted regions of 28i3
+\textstyle\int_c^d\!\int_{\psi_1(y)}^{\psi_2(y)} f\,dx\,dy = \iint_D f @@ the same lines with x and y swapped: the map T(t, y) = (ψ₁(y) + t(ψ₂(y) − ψ₁(y)), y) has det ψ₂ − ψ₁ up to sign, and 28i3 takes its size
+\htmlClass{new}{\textstyle\int_a^b\!\int_{\varphi_1}^{\varphi_2} f\,dy\,dx = \int_c^d\!\int_{\psi_1}^{\psi_2} f\,dx\,dy} \quad \blacksquare @@ one region, one total
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: an area no table holds">
+\textstyle\int_0^1\!\int_x^1 e^{y^2}\,dy\,dx @@ the inner total needs an antiderivative of e^(y²), which no table of rung 16 holds
+D:\ 0 \le x \le 1,\ x \le y \le 1 \ \ = \ \ 0 \le y \le 1,\ 0 \le x \le y @@ the triangle with corners (0, 0), (0, 1), (1, 1), read off a sketch the other way
+= \textstyle\int_0^1\!\int_0^y e^{y^2}\,dx\,dy = \int_0^1 y\,e^{y^2}\,dy @@ the order-swap technique; the inner total is y e^(y²), as y is fixed
+\htmlClass{new}{= \tfrac12\big[e^{y^2}\big]_0^1 = \tfrac{e - 1}{2} \approx 0.859} \quad \blacksquare @@ substitution (16d), u = y²
+  </pre>
+  <p data-pid="4d9617">The hard part is the sketch, not the totals. Draw the region. Draw one strip the first way, and read where it enters and leaves. Then draw one strip the other way, and read again. The numbers at the ends of the outer total are always plain numbers; the ends of the inner total may hold the outer letter.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · swap · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">28m1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\iint_D xy,\ \ D:\ 0 \le x \le 1,\ x^2 \le y \le \sqrt x"></span></span>Find the total in both orders.</li><li><span class="givens"><span data-tex-inline="\int_0^4\!\int_{\sqrt x}^2 \sin(y^3)\,dy\,dx"></span></span>Swap the order, and find the total.</li><li><span class="givens"><span data-tex-inline="\text{lot: corners } (0, 0),\ (60, 0),\ (0, 40)\ \text{m};\ \ \text{depth } 0.3 + 0.002x\ \text{m}"></span></span>A triangular lot near Chilliwack is covered with topsoil of this depth. Find the volume of soil, and check the area of the lot by the same total with depth 1.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28m2">
+  <h2 class="sthead"><span class="stno">28m2</span>Round regions</h2>
+  <p class="stands">Stands on 28i3 (round measures), 28m1 and 21r4 (the swept-area technique).</p>
+  <p data-pid="6aebe3">A region <i>slanted in θ</i> is α ≤ θ ≤ β with r₁(θ) ≤ r ≤ r₂(θ), between two curves of 21r, with β − α at most 2π and 0 ≤ r₁ ≤ r₂.</p>
+  <p data-pid="296790">Round-slab technique: <b>if f is continuous on a region D slanted in θ, then ∬<sub>D</sub> f = ∫ from α to β of ∫ from r₁(θ) to r₂(θ) of f(r cos θ, r sin θ) r dr dθ. With f = 1, the area of D is ∫ from α to β of ½(r₂² − r₁²) dθ.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the round-slab technique">
+T(r, \theta) = (r\cos\theta,\ r\sin\theta),\ \ |\det DT| = r @@ round measures (28i3)
+\textstyle\iint_D f = \iint_{(\theta, r)} f(T)\,r @@ the change-of-variables technique (28i3); T is one-to-one once a thin ring r &lt; ε and a thin wedge at θ = β are cut off, and their totals head to 0, as f is bounded
+= \textstyle\int_\alpha^\beta\!\int_{r_1(\theta)}^{r_2(\theta)} f(r\cos\theta, r\sin\theta)\,r\,dr\,d\theta @@ the region in (θ, r) is slanted in θ: 28i3 again
+\htmlClass{new}{f = 1:\ \ \textstyle\int_\alpha^\beta \tfrac12\big(r_2^2 - r_1^2\big)\,d\theta} \quad \blacksquare @@ the inner total of r is ½r² between the edges: 21r4’s swept area, now with an inner edge too
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: under a round bowl">
+z = 4 - x^2 - y^2 \ge 0 \text{ over the disc } x^2 + y^2 \le 4 @@ a bowl turned upside down, 4 high
+= \textstyle\int_0^{2\pi}\!\int_0^2 (4 - r^2)\,r\,dr\,d\theta @@ the round-slab technique: x² + y² = r²
+= 2\pi\big[2r^2 - \tfrac14 r^4\big]_0^2 = 2\pi(8 - 4) @@ the inner total does not hold θ
+\htmlClass{new}{= 8\pi \approx 25.1} \quad \blacksquare @@ half the cylinder of radius 2 and height 4 that holds it, 16π
+  </pre>
+  <p data-pid="6cdf42">In across-and-up measures the same bowl is ∫ from −2 to 2 of ∫ from −√(4 − x²) to √(4 − x²) of (4 − x² − y²) dy dx, with roots at both ends of every strip. The round measures fit the round edge, so the edges become plain numbers.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · round slabs · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28m2.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\iint_{x^2 + y^2 \le 9} (x^2 + y^2)"></span></span>Find it by the round-slab technique.</li><li><span class="givens"><span data-tex-inline="r = 1 + \cos\theta"></span></span>Find the area inside this heart-shaped curve as a double total.</li><li><span class="givens"><span data-tex-inline="\text{depth } 0.030 - 0.000004\,r\ \text{m},\ \ 0 \le r \le 5000\ \text{m}"></span></span>A storm over the Skagit valley drops rain to this depth at distance r from its centre, out to 5 km. Find the volume of water that falls.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28m3">
+  <h2 class="sthead"><span class="stno">28m3</span>Cylinders and balls</h2>
+  <p class="stands">Stands on 28i3, 28j3 (totals over a box in space), 27e (the determinant as a volume scale), 27k2 (the expansion technique), 21c and 21o (the ball technique).</p>
+  <p data-pid="fd2b06">28j3 took totals over a box in space in any order, ∭ f. The change-of-variables technique runs in space word for word, with small cubes in place of small squares and the size of the determinant of a 3 × 3 slope grid, the volume scale of 27e, in place of the area scale. Two sets of measures fit round solids. <i>Cylinder measures</i>: x = r cos θ, y = r sin θ, and z. <i>Ball measures</i>: ρ, the distance from 0; φ, the angle down from the top, from 0 to π; and θ, the turn round the upright, so x = ρ sin φ cos θ, y = ρ sin φ sin θ, z = ρ cos φ.</p>
+  <p data-pid="03869d">Round-space technique: <b>in cylinder measures the volume scale is r. In ball measures it is ρ² sin φ.</b> So a total over a round solid is ∭ f r dr dθ dz in the first, and ∭ f ρ² sin φ dρ dφ dθ in the second.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the round-space technique">
+DT = \begin{pmatrix} \sin\varphi\cos\theta & \rho\cos\varphi\cos\theta & -\rho\sin\varphi\sin\theta \\ \sin\varphi\sin\theta & \rho\cos\varphi\sin\theta & \rho\sin\varphi\cos\theta \\ \cos\varphi & -\rho\sin\varphi & 0 \end{pmatrix} @@ the one-knob technique (28a2), one column for each of ρ, φ, θ
+\det DT = \cos\varphi\cdot\rho^2\sin\varphi\cos\varphi - \rho\sin\varphi\cdot(-\rho\sin^2\varphi) @@ the expansion technique (27k2) along the bottom row; sin²θ + cos²θ = 1 (21c) in each stand-in
+= \rho^2\sin\varphi\,(\cos^2\varphi + \sin^2\varphi) = \rho^2\sin\varphi @@ 21c again
+\sin\varphi \ge 0 \text{ for } 0 \le \varphi \le \pi @@ so the size is ρ² sin φ itself
+\htmlClass{new}{\text{cylinders: } r;\ \ \text{balls: } \rho^2\sin\varphi} \quad \blacksquare @@ for cylinders, expand along the z row: 1 times the round-measure grid of 28i3, det r
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: the ball, once more">
+\text{the ball of radius } a:\ 0 \le \rho \le a,\ 0 \le \varphi \le \pi,\ 0 \le \theta \le 2\pi @@ a box in ball measures
+= \textstyle\int_0^{2\pi}\!\int_0^\pi\!\int_0^a \rho^2\sin\varphi\,d\rho\,d\varphi\,d\theta @@ the round-space technique, f = 1
+= 2\pi\cdot\big[-\cos\varphi\big]_0^\pi\cdot\tfrac{a^3}{3} = 2\pi\cdot 2\cdot\tfrac{a^3}{3} @@ the three totals do not hold each other’s letters
+\htmlClass{new}{= \tfrac43\pi a^3} \quad \blacksquare @@ 21o’s ball technique, reached without slices
+  </pre>
+  <p data-pid="573685">Latitude on a globe, as in 21·cb18, is measured up from the equator, not down from the top. With latitude in place of φ the scale is ρ² cos of the latitude. Either way the scale is 0 on the upright axis, where a whole circle of θ shrinks to one point.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · round solids · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28m3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\rho \le 2,\ \ \varphi \le \tfrac{\pi}{4}"></span></span>Find the volume of this cone with a round cap, cut from a ball of radius 2.</li><li><span class="givens"><span data-tex-inline="x^2 + y^2 \le z \le 4"></span></span>Find the volume of this solid in cylinder measures, the total of z over it, and its average height.</li><li><span class="givens"><span data-tex-inline="\text{density } 13000 - 10400\,\tfrac{\rho}{R}\ \text{kg/m}^3,\ \ R = 6.371\times10^6\ \text{m}"></span></span>A first guess at the earth: dense at the centre, thinning in a straight line to rock at the surface. Find the mass this guess gives, and compare it with the measured 5.97 × 10²⁴ kg.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28m4">
+  <h2 class="sthead"><span class="stno">28m4</span>Illegal moves</h2>
+  <p class="stands">Stands on 28m1 to 28m3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\textstyle\int_0^1\!\int_x^1 f\,dy\,dx = \int_0^1\!\int_y^1 f\,dx\,dy\,? @@ the region 0 ≤ x ≤ y ≤ 1 read across is 0 ≤ x ≤ y, not y ≤ x ≤ 1
+\textstyle\iint_{x^2 + y^2 \le 1} 1 = \int_{-1}^1\!\int_{-1}^1 dy\,dx\,? @@ those ends trace the square around the disc: 4, not π
+(x - 1)^2 + y^2 \le 1 \text{ is } 0 \le r \le 1,\ 0 \le \theta \le 2\pi\,? @@ that is the disc about 0; this one is 0 ≤ r ≤ 2 cos θ, −π/2 ≤ θ ≤ π/2
+\text{scale } \rho^2\sin\varphi \text{ with } \varphi \text{ measured up from the equator}\,? @@ from the equator the scale is ρ² cos φ; sin φ is for the angle down from the top
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28m4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f = 1"></span></span>Find both totals of the first line, and the area of the region 0 ≤ x ≤ y ≤ 1. <br>Find the slip.</li><li><span class="givens"><span data-tex-inline="x^2 + y^2 \le 1"></span></span>Find the area of the disc by the round-slab technique, and the total the second line gives. <br>Find what the ends of the inner total must hold.</li><li><span class="givens"><span data-tex-inline="(x - 1)^2 + y^2 \le 1"></span></span>Write its edge in round measures. Find the total of x over it by the round-slab technique with the right ends, and with the third line’s ends. Find why the areas alone would not catch the slip. <br>Find where the third line goes wrong.</li><li><span class="givens"><span data-tex-inline="\text{the ball of radius 1, with } \varphi \text{ the latitude, } -\tfrac{\pi}{2} \le \varphi \le \tfrac{\pi}{2}"></span></span>Find the volume with scale ρ² sin φ and with ρ² cos φ. <br>Find which one is right, and why.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">28m.4.1</span><span class="tagq">build</span>Build a double total over the triangle 0 ≤ y ≤ x ≤ 1 whose inner total, taken along y first, needs an antiderivative no table of rung 16 holds, while along x first it falls out. <br>Find its value.</div>
+  <div class="chq"><span class="chid">28m.4.2</span><span class="tagq">edge</span>The ball measures are not one-to-one on the upright axis, where φ is 0 or π, nor at ρ = 0, and their volume scale is 0 there. <br>Find the set of points of space where this happens. Prove that it can be fenced inside thin cylinders and balls whose volumes are as small as you like, and use that to find why the total over the ball is still right.</div>
+  <div class="chq"><span class="chid">28m.4.3</span><span class="tagq">converse</span>If f = 0 on a region, every total of f over a rectangle inside it is 0. Turn it round: if f is continuous on the plane and its total over every rectangle is 0, must f be 0 everywhere? <br>Prove your answer, and find whether the same holds with every rectangle replaced by every disc about 0.</div>
+  <div class="chq"><span class="chid">28m.4.4</span><span class="tagq">reroute</span>21o proved the ball technique, 4πa³/3, by slicing, and the skin technique, 4πa², separately. Reroute both through this step: the volume by the round-space technique, and the skin as the slope of the volume of the ball as a grows. <br>Find why the slope of the volume is the skin, by the volume of a thin shell a ≤ ρ ≤ a + h.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r28l.html">← 28l · polynomials that hug a surface, by hand</a><a href="r28n.html">28n · along curves and across surfaces →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>Totals in strips are iterated integrals; a region slanted in x is a type I (or vertically simple) region, and one slanted in y a type II region. The order-swap technique is reversing (or switching) the order of integration, a case of Fubini’s theorem. Round measures are polar coordinates, cylinder measures cylindrical coordinates, and ball measures spherical coordinates, with ρ the radial distance, φ the polar (or zenith) angle and θ the azimuth. The volume scale is the Jacobian determinant, and the shorthand dV = ρ² sin φ dρ dφ dθ is the volume element. A triple total is a triple integral, ∭ f dV. The heart-shaped curve r = 1 + cos θ is the cardioid.</p>
+  <h3>Who said it first</h3>
+  <p>Leonhard Euler swapped the order of double integrals and changed their variables in 1769. Joseph-Louis Lagrange used spherical coordinates and their volume factor in triple integrals in 1773, working out the pull of an ellipsoid. The density of the earth was first measured by Henry Cavendish in 1798, at about 5.45 times that of water, from the pull between lead balls in a shed in London. The modern figure is about 5.51.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'one way',t:R`\int_a^b\!\int_{\varphi_1(x)}^{\varphi_2(x)} f\,dy\,dx`,n:`Strips up and down.`},
+  {k:'ember',kl:'the other',t:R`\int_c^d\!\int_{\psi_1(y)}^{\psi_2(y)} f\,dx\,dy`,n:`Strips across.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{both are } \iint_D f}`,n:`Read the edges off a sketch.`}
+],{title:'The slides · swap · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'measures',t:R`x = r\cos\theta,\ y = r\sin\theta`,n:`Distance and angle.`},
+  {k:'ember',kl:'the factor',t:R`|\det DT| = r`,n:`Outer rings are bigger.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\iint_D f = \int\!\int f\,r\,dr\,d\theta}`,n:`With f = 1, 21r’s swept area.`}
+],{title:'The slides · round slabs · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'cylinders',t:R`(r\cos\theta,\ r\sin\theta,\ z)`,n:`Scale r.`},
+  {k:'ember',kl:'balls',t:R`(\rho\sin\varphi\cos\theta,\ \rho\sin\varphi\sin\theta,\ \rho\cos\varphi)`,n:`Expand along the bottom row.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{|\det| = \rho^2\sin\varphi}`,n:`The ball comes out as 4πa³/3.`}
+],{title:'The slides · round solids · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

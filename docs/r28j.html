@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Flux and circulation</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r28i.html">← 28i changing the variables</a><a href="r28concl.html">next: 28·∎ the derivative is a flat map in every direction →</a></p>
+  <div class="tags"><span class="tag proof">28j · proof</span></div>
+  <h1>Flux and circulation</h1>
+  <p>Picture water moving across a pond, with a speed and a direction at every point. Draw a loop on the surface. Two questions can be asked of the loop. How much water flows out across it? And how much does the water push along it, going round? The first is the flux, the second the circulation. This step proves that each can be found without walking the loop at all: add up, over the inside, how much the water spreads out at each point, or how much it swirls. Rung 16 traded a total along a line for two values at its ends. This step makes the same trade one dimension up, and then once more in space.</p>
+  <p class="gesture">Round the edge of a rectangle, the circulation of a smooth field equals the total of its swirl inside, and the flux out equals the total of its spread inside. Over a box in space, the flux out equals the total of the spread inside.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r16c.html">16c</a> (the area-is-a-change technique), <a href="r28h.html">28h</a> (totals in either order) and <a href="r28c.html">28c</a> (the roads-add technique). It ends the proof steps; <a href="r28concl.html">28·∎</a> puts the rung together.</p></div>
+</header>
+
+<section class="class step" data-step="28j1">
+  <h2 class="sthead"><span class="stno">28j1</span>Totals along a path</h2>
+  <p class="stands">Stands on 18i, 28c3, 16c.</p>
+  <p data-pid="54c411">A <i>field</i> F = (P, Q) gives an arrow at each point of the plane. A path is a moving point r(t) = (x(t), y(t)) for α ≤ t ≤ β, with slopes (18i). The <i>circulation</i> of F along the path totals the part of F that points along the way:</p>
+  <p class="eqline" data-pid="20e34a">\(\int_r F \cdot dr = \int_\alpha^\beta \big(P\,x^{\prime}(t) + Q\,y^{\prime}(t)\big)\,dt.\)</p>
+  <p data-pid="8a07f1">The <i>flux</i> of F across the path totals the part of F that crosses it, to the right of the direction of travel: ∫ (P y′(t) − Q x′(t)) dt. Round a loop travelled with the inside on the left, that is the flux out.</p>
+  <p data-pid="0e50f1">Uphill-total technique: <b>if F = ∇φ for a smoothly sloped φ, the circulation of F along any path is φ at the end minus φ at the start.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the uphill-total technique">
+P\,x'(t) + Q\,y'(t) = \varphi_x x'(t) + \varphi_y y'(t) = \tfrac{d}{dt}\varphi(r(t)) @@ F = ∇φ, and the roads-add technique (28c3)
+\textstyle\int_\alpha^\beta \tfrac{d}{dt}\varphi(r(t))\,dt = \varphi(r(\beta)) - \varphi(r(\alpha)) @@ the area-is-a-change technique (16c)
+\htmlClass{new}{\textstyle\int_r \nabla\varphi \cdot dr = \varphi(\text{end}) - \varphi(\text{start})} \quad \blacksquare @@ the two lines
+  </pre>
+  <p data-pid="06a945">So round any closed loop the circulation of an uphill field is 0: you end where you started. A field with nonzero circulation round some loop is not uphill from anything. Nothing in these lines used the plane: in space, with F = (P, Q, S) and a third road z(t), the circulation is ∫ (P x′ + Q y′ + S z′) dt, and the uphill-total technique holds word for word, since the roads-add technique (28c3) takes any number of roads.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · along a path · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">28j1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="F = (-y,\ x)"></span> <span data-tex-inline="G = (x,\ y)"></span> <span data-tex-inline="r(t) = (\cos t,\ \sin t),\ \ 0 \le t \le 2\pi"></span></span>Find the circulation and the flux of F round the unit circle, travelled once with the inside on the left. <br>Do the same for G. <br>Find a φ with G = ∇φ. Find whether F is uphill from anything, and why.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28j2">
+  <h2 class="sthead"><span class="stno">28j2</span>Swirl inside, circulation round</h2>
+  <p class="stands">Stands on 28j1, 28h2, 16c.</p>
+  <p data-pid="151213">The <i>swirl</i> of F at a point is Q<sub>x</sub> − P<sub>y</sub>. Accepted name: the <i>curl</i>, in the plane. The <i>spread</i> is P<sub>x</sub> + Q<sub>y</sub>. Accepted name: the <i>divergence</i>.</p>
+  <p data-pid="917883">Swirl technique: <b>if P and Q are smoothly sloped on a rectangle R, the circulation of F round the edge of R, travelled with R on the left, equals ∬<sub>R</sub> (Q<sub>x</sub> − P<sub>y</sub>).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the swirl technique">
+\textstyle\iint_R Q_x = \int_c^d \Big(\int_a^b Q_x(x,y)\,dx\Big)dy = \int_c^d \big(Q(b,y) - Q(a,y)\big)\,dy @@ the either-order technique (28h2), then the area-is-a-change technique (16c) inside
+\textstyle\int_c^d Q(b,y)\,dy - \int_c^d Q(a,y)\,dy = \text{the } Q \text{ part of the circulation} @@ up the right side y′ = 1, down the left side y′ = −1; on the top and bottom y′ = 0
+\textstyle\iint_R P_y = \int_a^b \big(P(x,d) - P(x,c)\big)\,dx @@ the same, in the other order
+-\textstyle\iint_R P_y = \text{the } P \text{ part of the circulation} @@ along the bottom x′ = 1, back along the top x′ = −1
+\htmlClass{new}{\oint_{\partial R} F\cdot dr = \iint_R (Q_x - P_y)} \quad \blacksquare @@ add the two parts
+  </pre>
+  <p data-pid="69ed1d">The same lines run on any region that is slanted both ways, between two graphs in x and between two graphs in y, with 28i’s slanted totals in place of the rectangle’s. Regions that can be cut into such pieces follow by adding: the circulations along shared cuts cancel, since each cut is walked once each way.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · swirl · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28j2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="F = (xy,\ x^2)"></span> <span data-tex-inline="R = [0,2] \times [0,1]"></span></span>Find the swirl of F, and its total over R. <br>Find the circulation along each of the four sides, travelled with R on the left, and add them. <br>Check that the two sides of the swirl technique agree.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28j3">
+  <h2 class="sthead"><span class="stno">28j3</span>Spread inside, flux out</h2>
+  <p class="stands">Stands on 28j2, 28h2.</p>
+  <p data-pid="c07c85">Spread technique: <b>if P and Q are smoothly sloped on R, the flux of F out of R equals ∬<sub>R</sub> (P<sub>x</sub> + Q<sub>y</sub>). For a box B in space and a field F = (P, Q, S) smoothly sloped on it, the flux out through the six faces equals the triple total of P<sub>x</sub> + Q<sub>y</sub> + S<sub>z</sub>.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the spread technique">
+G = (-Q, P) @@ turn every arrow of F a quarter turn
+\text{circulation of } G = \textstyle\int (-Q\,x' + P\,y')\,dt = \text{flux of } F @@ 28j1’s two totals
+(P)_x - (-Q)_y = P_x + Q_y @@ the swirl of G is the spread of F
+\text{flux of } F \text{ out of } R = \textstyle\iint_R (P_x + Q_y) @@ the swirl technique (28j2) for G
+\textstyle\iiint_B P_x = \iint \big(P(\text{front}) - P(\text{back})\big) @@ in space: totals over a box in any order (28h2, with three cuts), and 16c along x
+\htmlClass{new}{\text{flux out of } B = \textstyle\iiint_B (P_x + Q_y + S_z)} \quad \blacksquare @@ the same for Q along y and S along z, then add
+  </pre>
+  <p data-pid="f84473">So there are three trades of the same kind. On a line, a total of slopes is the change between the two ends (16c). On a patch of the plane, a total of swirl or spread is a total round the edge. In a box of space, a total of spread is the flux through the faces. Each says that what happens inside, added up, shows on the boundary, because the inside bits cancel in pairs.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · spread · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28j3.1</span><span class="ph make">make</span><span class="givens"><span data-tex-inline="F = (0.002x,\ 0,\ 0.001z)\ \text{m/s}"></span> <span data-tex-inline="B = [0,10] \times [0,8] \times [0,3]\ \text{m}"></span></span>In a model of a warming room, 10 m by 8 m by 3 m, the air moves with speed field F. Find the spread of F. <br>Find the flux out through each of the six faces, in cubic metres per second, and add them. <br>Find the triple total of the spread over the room, and compare.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28j4">
+  <h2 class="sthead"><span class="stno">28j4</span>Illegal moves</h2>
+  <p class="stands">Stands on 28j1 to 28j3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\oint F \cdot dr = 0 \text{ round every loop, for every field}\,? @@ only for uphill fields; (−y, x) circulates 2π round the unit circle
+\text{swirl technique with the loop travelled clockwise}\,? @@ the sign flips: the inside must be on the left
+\text{swirl technique round a loop enclosing a point where } F \text{ blows up}\,? @@ (−y, x)/(x² + y²) has swirl 0 off the origin but circulation 2π round it
+\text{spread} = P_y + Q_x\,? @@ spread is P_x + Q_y: each part along its own direction
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28j4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="F = (-y,\ x),\ \ G = (x,\ y)"></span></span>Find the circulation of each round the unit circle (28j1.1). <br>Find which is an uphill field, and what that means for the other.</li><li><span class="givens"><span data-tex-inline="F = (-y,\ x),\ \ R = [0,1]\times[0,1]"></span></span>Find ∬<sub>R</sub> (Q<sub>x</sub> − P<sub>y</sub>). <br>Find the circulation round the edge travelled clockwise, and how it compares.</li><li><span class="givens"><span data-tex-inline="F = \dfrac{(-y,\ x)}{x^2 + y^2}"></span></span>Find the swirl of F at points other than the origin. <br>Find the circulation of F round the unit circle. Find which demand of the swirl technique fails.</li><li><span class="givens"><span data-tex-inline="F = (x^2,\ xy),\ \ R = [0,1]\times[0,1]"></span></span>Find P<sub>x</sub> + Q<sub>y</sub> and P<sub>y</sub> + Q<sub>x</sub>, and the total of each over R. <br>Find the flux out of R face by face, and which total matches.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">28j.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="F = (2xy + 1,\ x^2 + 3y^2)"></span></span>Find the swirl of F. Build a φ with ∇φ = F. <br>Find the circulation of F along any path from (0, 0) to (1, 2). <br>Find the circulation round the edge of [0, 1] × [0, 2] two ways.</div>
+  <div class="chq"><span class="chid">28j.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="F = \dfrac{(-y,\ x)}{x^2 + y^2}"></span></span>Find the circulation of F round the edge of [1, 2] × [0, 1] by the swirl technique. <br>For the square with corners (±1, ±1), find the circulation along the right side, x = 1, from y = −1 to y = 1. <br>Use the quarter-turn symmetry of F to find the circulation round the whole square. Find why the swirl technique does not apply.</div>
+  <div class="chq"><span class="chid">28j.4.3</span><span class="tagq">converse</span>An uphill field has circulation 0 round every loop. Turn it round: if a smoothly sloped field has circulation 0 round the edge of every rectangle, must its swirl be 0? <br>Suppose the swirl is positive at a point. Use continuity to find a small rectangle on which the swirl stays above half that value, and finish the proof. <br>Find whether swirl 0 at every point where a field is defined makes it uphill from something. Test (−y, x)/(x² + y²).</div>
+  <div class="chq"><span class="chid">28j.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="(x, y) = (3\cos t,\ 2\sin t),\ \ 0 \le t \le 2\pi"></span></span>Find the area inside this oval another way, by walking its edge. Find a field G whose swirl is 1, and its circulation round the oval. <br>Find why the oval meets the demand of the swirl technique, and compare with 28i.4.1.</div>
+  <div class="chq"><span class="chid">28j.4.5</span><span class="tagq">seam</span><span class="givens"><span data-tex-inline="\oint_{\partial R} F\cdot dr = \iint_R (Q_x - P_y)"></span></span>In 1828 a miller in the English Midlands, who had taught himself mathematics from the books of his town’s subscription library, printed an essay on electricity at his own cost. Fifty-one people subscribed. In its pages was a trade of the kind this step proves: a total over the inside for a total over the boundary. Almost nobody read it. He went to university at forty and died at forty-seven. Four years after his death a young graduate found the essay, saw what was in it, and had it reprinted. Two years before the essay, another mathematician had proved the spread technique in space, and that paper too lay unprinted for years. <br>Find which of the techniques of 28j the essay’s trade is closest to, and the step of rung 16 that makes the same kind of trade on a line. <br>Find the seam closer of rung 27 about a schoolteacher nobody read, and what the two stories share. <br>Was the essay mathematics while nobody read it? Does a technique belong to the first who proves it, the first who prints it, or the one who makes it used? The swirl technique carries the miller’s name. Is that fair?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r28i.html">← 28i · changing the variables</a><a href="r28concl.html">28·∎ · the derivative is a flat map in every direction →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A field is a vector field. The circulation is the line integral ∮ F · dr, and the flux the flux integral ∮ F · n ds. An uphill field is a conservative (or gradient) field, and φ its potential; the uphill-total technique is the fundamental theorem for line integrals. Swirl is curl (in the plane, the scalar curl), and spread is divergence, div F. The swirl technique is Green’s theorem; the spread technique is the divergence theorem (Gauss’s theorem, or Ostrogradsky’s theorem).</p>
+  <h3>Who said it first</h3>
+  <p>Lagrange (1762) and Gauss (1813) used special cases of the divergence theorem in work on gravity. Mikhail Ostrogradsky proved it in general in 1826. George Green, a miller’s son from Nottingham who taught himself mathematics, published an essay in 1828, sold to 51 subscribers, whose identities in space hold this kind of trade; the plane form on this page was stated later. Augustin-Louis Cauchy stated it in 1846, and Bernhard Riemann proved it in 1851. The circulation version on curved surfaces is due to William Thomson, Lord Kelvin, in a letter to George Stokes in 1850.</p>
+  <p>In 28j.4.5, the miller is George Green of Sneinton, Nottingham. His Essay on the Application of Mathematical Analysis to the Theories of Electricity and Magnetism (1828) went to 51 subscribers. He entered Gonville and Caius College, Cambridge, in 1833 and died in 1841. The young graduate is William Thomson, who found the essay in 1845 and had it reprinted in Crelle’s journal from 1850. The mathematician of 1826 is Mikhail Ostrogradsky, who presented the divergence theorem to the Paris Academy that year and printed it in St Petersburg in 1831.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'circulation',t:R`\int (P x^{\prime} + Q y^{\prime})\,dt`,n:`Along the way.`},
+  {k:'ember',kl:'flux',t:R`\int (P y^{\prime} - Q x^{\prime})\,dt`,n:`Across it.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\int \nabla\varphi\cdot dr = \varphi(\text{end}) - \varphi(\text{start})}`,n:`Uphill fields: 0 round a loop.`}
+],{title:'The slides · along a path · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'swirl',t:R`Q_x - P_y`,n:`How much it turns.`},
+  {k:'ember',kl:'two sides',t:R`\iint Q_x = \text{right} - \text{left}`,n:`16c inside.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\oint F\cdot dr = \iint (Q_x - P_y)}`,n:`Circulation from inside.`}
+],{title:'The slides · swirl · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'turn',t:R`G = (-Q, P)`,n:`A quarter turn of every arrow.`},
+  {k:'ember',kl:'swap',t:R`\text{swirl of } G = \text{spread of } F`,n:`Circulation becomes flux.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{flux out} = \iint \text{spread}}`,n:`And in a box: ∭.`}
+],{title:'The slides · spread · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Where should the warehouse go?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r28bio.html">← 28·bio why do foxes and rabbits take turns?</a><a href="r28now.html">next: 28·now how does a machine learn from its mistakes? →</a></p>
+  <div class="tags"><span class="tag logi">28·logi · logistics</span></div>
+  <h1>Where should the warehouse go?</h1>
+  <p>Where should the warehouse go? A grocery chain with stores in Missoula, Great Falls, Bozeman and Billings sends trucks from one warehouse to all four, every week, all year. Each kilometre of each trip costs fuel, a driver’s time and wear on the truck. Put the warehouse in the wrong town and the chain pays for it on every trip for decades. The question is old. In the seventeenth century it was asked for three points: find the one point whose distances to all three add up to the least. What makes it hard is that there are two inputs, east and west, north and south, and moving the warehouse toward one store moves it away from others. There is no formula for the answer in general. And the answer depends on what you add up. Add the squares of the distances and the best point is an average, found in one line. Add the distances themselves, which is what the trucks pay for, and the best point is somewhere else. This page finds both with the flat maps of rung twenty-eight: the uphill arrow of the total, the point where it is zero, and a walk downhill to reach it.</p>
+  <p class="gesture">On one road, the total distance is lowest at the middle store, where no more than half the trucks lie on either side; the total of squared distances is lowest at the average. In the plane the same split holds. The total of squared distances has an uphill arrow that points straight away from the weighted average of the stores, so the average is its bottom. The total of distances has an uphill arrow made of one unit arrow from each store, weighted by its trucks: each store pulls the warehouse toward itself with the same force, however far away it is. The best point is where those pulls balance, and the total bends up, so there is only one such point. It has no formula, but a step downhill can be taken as a fresh weighted average, with each store weighted by its trucks over its distance, and each such step never raises the total. Sometimes the best point is a store itself: when that store’s trucks outweigh the pull of all the others. And near the bottom the total is so flat that a whole region does nearly as well.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r28a.html">28a</a> (the one-knob technique), <a href="r28c.html">28c</a> (the roads-add technique), <a href="r28g.html">28g</a> (the uphill technique), <a href="r28o.html">28o</a> (gradient descent), <a href="r18a.html">18a</a> (distance), <a href="r18b.html">18b</a> (the triangle inequality in the plane), <a href="r14g.html">14g</a> (the bends-up technique), <a href="r14d.html">14d</a> (the slope-sign-order technique) and <a href="r22logi.html">22·logi</a> (routes between stops). 28·now walks downhill in a million directions at once.</p></div>
+</header>
+
+<section class="class step" data-step="28logi1">
+  <h2 class="sthead"><span class="stno">28logi1</span>One road: the middle store</h2>
+  <p class="stands">Stands on 13 (slope), 14d (the slope-sign-order technique) and 14a (the candidates technique).</p>
+  <p data-pid="7e8892">Start on one road. Interstate 5 runs north and south through five cities of Puget Sound and beyond. Measured north from Seattle as the crow flies, Bellingham is at 127 km, Everett at 41, Seattle at 0, Tacoma at −39 and Olympia at −63. Each gets one truck a day. Where on the line should the warehouse be?</p>
+  <pre class="lines" data-k="ember" data-label="this page: the middle-store technique">
+F(p) = \textstyle\sum_i w_i\,(p - s_i)^2,\ \ F'(p) = 2\textstyle\sum_i w_i\,(p - s_i) @@ squared distances, with wᵢ trucks to the store at sᵢ
+F'(p) = 0 \iff p = \tfrac{\sum w_i s_i}{\sum w_i} @@ the weighted average; F′ rises, so this is the bottom (14d)
+G(p) = \textstyle\sum_i w_i\,|p - s_i|,\ \ G'(p) = (\text{trucks south of } p) - (\text{trucks north of } p) @@ away from the stores, each |p − sᵢ| has slope +1 or −1
+G \text{ falls while more than half the trucks lie north, and rises while more than half lie south} @@ the slope-sign-order technique (14d)
+\htmlClass{new}{G \text{ is lowest at a store with no more than half the trucks on either side of it}} \quad \blacksquare @@ the only candidates where G′ changes sign are the stores (14a)
+  </pre>
+  <p data-pid="86a032">Middle-store technique: <b>on one road, the total distance is lowest at the middle store, where no more than half of the trucks lie on either side; the total of squared distances is lowest at the average.</b> Here the average is 66/5 = 13.2 km north of Seattle, and the middle store is Seattle itself.</p>
+  <p data-pid="7a977e">Move the northern store from Bellingham to Vancouver, 186 km north of Seattle. The average moves 12 km north, to 25.0. The middle store does not move at all. Squares let a far store pull hard; distances let it pull no harder than a near one.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · one road · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">28·logi.1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">one store each, along Interstate 5 south from Portland: Portland 0, Salem 76, Albany 111, Eugene 177, Roseburg 286 km</span></span>Find the average and the middle store. <br>Find both again with Roseburg replaced by Medford, at 438 km.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28logi2">
+  <h2 class="sthead"><span class="stno">28logi2</span>Two inputs: the average point</h2>
+  <p class="stands">Stands on 28·logi.1, 28a (the one-knob technique), 28g (the uphill technique) and 18a (distance).</p>
+  <p data-pid="3c8401">Now the plane. Put Helena at (0, 0) and measure east and north in kilometres, as the crow flies. Missoula is at (−150, 31), Great Falls at (56, 102), Bozeman at (76, −101) and Billings at (271, −90). The chain sends trucks in proportion to each city’s people in the 2020 count: 7, 6, 5 and 12 a week.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the average-point technique">
+F(p) = \textstyle\sum_i w_i\,|p - s_i|^2 = \sum_i w_i\big((x - a_i)^2 + (y - b_i)^2\big) @@ stores sᵢ = (aᵢ, bᵢ), the warehouse p = (x, y)
+F_x = 2\textstyle\sum_i w_i\,(x - a_i),\ \ F_y = 2\textstyle\sum_i w_i\,(y - b_i) @@ the one-knob technique (28a)
+\nabla F(p) = 2W\,(p - m),\ \ W = \textstyle\sum w_i,\ \ m = \tfrac1W \textstyle\sum w_i s_i @@ the uphill arrow (28g) points straight away from m
+F(p) = W\,|p - m|^2 + F(m) @@ expand, and use Σ wᵢ(sᵢ − m) = 0
+\htmlClass{new}{F \text{ is lowest at the weighted average } m \text{, and only there}} \quad \blacksquare @@ W|p − m|² is above 0 for p ≠ m
+  </pre>
+  <p data-pid="a7c9d2">Average-point technique: <b>the total of squared distances, weighted by trucks, is lowest at the weighted average of the stores, and it grows as W times the square of the distance from there.</b> For the four stores, W = 30 and m = (97.3, −25.2), about 100 km east and 25 km south of Helena. Each store pulls on the uphill arrow with 2wᵢ times its distance: Missoula, the farthest, pulls hardest.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · average · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28·logi.2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">stores at (0, 0), (6, 0) and (0, 9), with 1, 2 and 3 trucks</span></span>Find the average point. <br>Find the uphill arrow of F at (0, 0), and the direction to walk from there.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28logi3">
+  <h2 class="sthead"><span class="stno">28logi3</span>Distance itself: the pulls balance</h2>
+  <p class="stands">Stands on 28·logi.2, 28c (the roads-add technique), 28g (the uphill technique), 18b (the triangle inequality in the plane) and 14g (the bends-up technique).</p>
+  <p data-pid="3a2181">The trucks pay for distance, not its square. Write G(p) = Σ wᵢ|p − sᵢ|, the truck-kilometres a week, one way.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the balanced-pulls technique">
+\tfrac{\partial}{\partial x}|p - s| = \tfrac{x - a}{|p - s|},\ \ \tfrac{\partial}{\partial y}|p - s| = \tfrac{y - b}{|p - s|} @@ the one-knob technique and the chain technique of rung 13, for p ≠ s
+\nabla G(p) = \textstyle\sum_i w_i\,e_i,\ \ e_i = \tfrac{p - s_i}{|p - s_i|} @@ eᵢ: the unit arrow from store i toward p
+G(tp + (1 - t)q) \le t\,G(p) + (1 - t)\,G(q),\ \ 0 \le t \le 1 @@ the triangle inequality (18b), store by store: G bends up along every line
+\varphi(t) = G(p + t(q - p)),\ \ \varphi'(0) = \nabla G(p)\cdot(q - p) @@ the roads-add technique (28c)
+\nabla G(p) = 0 \Rightarrow \tfrac{\varphi(t) - \varphi(0)}{t} \ge \varphi'(0) = 0 @@ chord slopes from 0 of a function that bends up never fall below its slope at 0 (14g)
+\htmlClass{new}{\nabla G(p) = 0 \Rightarrow G(q) \ge G(p) \text{ for every } q} \quad \blacksquare @@ t = 1
+  </pre>
+  <p data-pid="22a23f">Balanced-pulls technique: <b>each store pulls the warehouse toward itself with a force equal to its trucks, however far away it is, and a point where all the pulls add to zero is the best point.</b> With squares, a store’s pull grows with its distance. With distance, it does not. That is why far Missoula moves the average more than it moves the best point.</p>
+  <p data-pid="2d7ed2">At the average m = (97.3, −25.2) the pulls do not balance: ∇G(m) ≈ (−1.2, 1.7), so the walk goes the other way, east and south. The best point is about (111.8, −44.3). There the unit arrows from Missoula, Great Falls, Bozeman and Billings, weighted 7, 6, 5 and 12, add to zero.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · pulls · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28·logi.3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">one truck each to stores at (0, 0), (8, 0), (8, 6) and (0, 6)</span></span>Find the uphill arrow of G at (4, 0), and the direction to walk. <br>Find the point where the pulls balance, and G there.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28logi4">
+  <h2 class="sthead"><span class="stno">28logi4</span>Stepping downhill by reweighting</h2>
+  <p class="stands">Stands on 28·logi.2 (the average-point technique), 28·logi.3 and 28o (gradient descent).</p>
+  <p data-pid="bf0283">Where the pulls balance has no formula. So walk downhill (28o): p ↦ p − η∇G(p), for a step size η. One step size turns each step into an average.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the reweighting technique">
+\nabla G(p) = \textstyle\sum_i \tfrac{w_i}{d_i}\,(p - s_i),\ \ d_i = |p - s_i| @@ 28·logi.3
+\eta = \Big(\textstyle\sum_i \tfrac{w_i}{d_i}\Big)^{-1}:\ \ p' = p - \eta\nabla G(p) = \tfrac{\sum (w_i/d_i)\,s_i}{\sum w_i/d_i} @@ the step lands on an average, store i weighted by wᵢ/dᵢ
+H(q) = \textstyle\sum_i \tfrac{w_i}{d_i}\,|q - s_i|^2,\ \ H(p') \le H(p) = G(p) @@ the average-point technique: p′ is H’s bottom
+\tfrac{d_i'^2}{d_i} \ge 2d_i' - d_i,\ \ d_i' = |p' - s_i| @@ (dᵢ′ − dᵢ)² ≥ 0, divided by dᵢ
+2G(p') - G(p) \le H(p') \le G(p) @@ multiply by wᵢ and add
+\htmlClass{new}{G(p') \le G(p)} \quad \blacksquare @@ gather
+  </pre>
+  <p data-pid="f9932b">Reweighting technique: <b>re-averaging the stores, each weighted by its trucks over its distance from the warehouse, is a step downhill that never raises the total distance.</b> A near store gets more weight, a far store less: the opposite of squares.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the walk from the average">
+p_0 = (97.3,\ -25.2),\ \ G = 5196.1 @@ the average point
+p_1 = (103.3,\ -33.9),\ \ G = 5177.9 @@ one reweighting
+p_2 = (106.9,\ -38.9),\ \ G = 5171.8 @@ two
+p_4 = (110.2,\ -43.0),\ \ G = 5169.4 @@ four
+\htmlClass{new}{p_{15} = (111.8,\ -44.3),\ \ G = 5169.2} @@ settled to the first decimal
+  </pre>
+  <p data-pid="4b1746">The best point is in ranch country about 60 km north of Livingston, far from any interstate. Its total is 5169 truck-kilometres a week, one way, against 5400 at Bozeman and 5829 at Helena.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · reweight · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · four stores, and the walk downhill</div>
+    <div class="kn"><span class="m">Billings</span><input type="range" id="kw" min="1" max="30" step="1" value="12"><output id="ow"></output></div>
+    <div class="kn"><span class="m">steps</span><input type="range" id="kn" min="0" max="20" step="1" value="4"><output id="on"></output></div>
+    <div id="pl"></div>
+    <div class="cap">Kilometres east and north of Helena. Muted dots: Missoula, Great Falls, Bozeman and Billings, with 7, 6 and 5 trucks and the chosen number for Billings. Ink: the average point. Ember: the walk by reweighting from the average. Raise Billings past 17 and watch the walk end on Billings itself.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28·logi.4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">one truck each to stores at (0, 0), (8, 0) and (0, 6); start at the average point</span></span>Find G at the average point. <br>Find one reweighting step, and G after it.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28logi5">
+  <h2 class="sthead"><span class="stno">28logi5</span>When a store is the answer</h2>
+  <p class="stands">Stands on 28·logi.3, 28c (the roads-add technique) and 18b (the triangle inequality in the plane).</p>
+  <p data-pid="16e9b7">At a store the distance to that store has a sharp point, and no uphill arrow. Test the slopes in each direction instead.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the heavy-store technique">
+\varphi(t) = G(s_k + tu),\ \ |u| = 1,\ \ t \ge 0 @@ walk out of store k in the direction u
+\varphi(t) = w_k\,t + \textstyle\sum_{i \ne k} w_i\,|s_k + tu - s_i| @@ store k’s own term is wₖt
+\text{slope at } t = 0^+:\ \ w_k + R\cdot u,\ \ R = \textstyle\sum_{i \ne k} w_i\,\tfrac{s_k - s_i}{|s_k - s_i|} @@ the other terms have uphill arrow R at sₖ (28·logi.3, 28c)
+w_k + R\cdot u \ge w_k - |R| @@ the dot bound (18b)
+\htmlClass{new}{|R| \le w_k \Rightarrow G \text{ is lowest at store } k} \quad \blacksquare @@ every direction climbs at first, and G bends up along every line (28·logi.3)
+  </pre>
+  <p data-pid="0a4c6b">Heavy-store technique: <b>a store is itself the best place for the warehouse exactly when its own trucks are at least the size of the combined pull of all the other stores on it.</b> When |R| > wₖ, walking from the store along −R lowers the total. In Montana the others pull on Billings with size 17.2, against its 12 trucks: not Billings. With 18 trucks a week or more, Billings would be the answer. Along Interstate 5, the four other cities pull on Seattle with size 0.64, less than its one truck: Seattle is the best point in the plane too.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · heavy · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28·logi.5.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">one truck each to stores at (0, 0), (8, 0) and (0, 6)</span></span>Find the pull of the other two on the store at (0, 0). <br>Find the fewest trucks to (0, 0) that would make it the best place.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28logi6">
+  <h2 class="sthead"><span class="stno">28logi6</span>A flat bottom</h2>
+  <p class="stands">Stands on 28·logi.3, 28·logi.4 and 28b (the best flat map).</p>
+  <p data-pid="da2f68">At the best point the uphill arrow is zero, so the best flat map of G there is the zero map: walk a little way and G changes by far less than the distance walked. That is good news and bad news.</p>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · the cloud, at the bottom</div>
+    <p data-pid="30b301">The trucks a week are a guess from head counts. Roads are not straight lines. Next year Bozeman may grow faster than Billings. Each of these moves the best point by kilometres. But near the bottom G barely changes: every point within about 30 km of the best point has a total within 1% of the best. The average point, 24 km away, costs 0.5% more. Bozeman, 67 km away, costs 4.5% more.</p>
+    <p data-pid="e327fc"><b>Near a flat bottom, report the region within a stated margin of the best, not one point, and choose inside it by what the total left out.</b></p>
+    <p data-pid="526f80">So the point the reweighting walk settles on is less an answer than the centre of a region of near-answers. Inside that region, the choice belongs to things the total left out: an interstate, a rail line, land for sale, workers to hire.</p>
+    <p class="bait" data-pid="93097a">Livingston sits on Interstate 90, about 60 km south of the best point. Is it inside the 1% region, and what would you need to know before you build there?</p>
+  </aside>
+  <p data-pid="3d99e6">Flat bottoms are why the question of where to build is easier than it looks, and why it is argued over all the same.</p>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · flat · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28·logi.6.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">the four Montana stores, 7, 6, 5 and 12 trucks</span></span>Find G at Livingston, about (113, −103), and its share above the best total, 5169. <br>Find whether Livingston is inside the 1% region.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28logi7">
+  <h2 class="sthead"><span class="stno">28logi7</span>Illegal moves</h2>
+  <p class="stands">Stands on 28·logi.1 to 28·logi.6.</p>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{the best point for distance is the average}\,? @@ that is the best point for squares; for distance the pulls must balance
+\text{a far store pulls harder}\,? @@ for distance, every store pulls with its trucks, near or far
+\text{the uphill arrow of } G \text{ at a store is its pull}\,? @@ at a store G has a sharp point; test the slopes in each direction
+\text{a walk downhill can settle on a bad bottom}\,? @@ G bends up: a point where the pulls balance is the bottom
+\text{the best point is where to build}\,? @@ near the bottom G is flat; choose within the region
+  </pre>
+  <section class="slides" id="sl7"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28·logi.7.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span class="gtx">stores at 0 and 10 on a road, with 1 and 3 trucks</span></span>Find the best point for squares and for distance.</li><li><span class="givens"><span class="gtx">stores at (0, 0), (1, 0) and (100, 0), one truck each</span></span>Find the pull of each store at (2, 0).</li><li><span class="givens"><span class="gtx">stores at (0, 0) and (4, 0), one truck each</span></span>Find the slopes of G in each direction out of (0, 0), and every best point.</li><li><span class="givens"><span data-tex-inline="G(p) = |p - s_1| + |p - s_2| + |p - s_3|"></span></span>Find whether G can have two separate bottoms.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">28·logi.8.1</span><span class="tagq">build</span>Build a rule for the best place for the warehouse when it must sit on Interstate 90, a straight line through two of the stores, using 28g’s lines-up technique.</div>
+  <div class="chq"><span class="chid">28·logi.8.2</span><span class="tagq">edge</span><span class="givens"><span class="gtx">three stores, one truck each, at the corners of a triangle</span></span>Find the best point when every angle of the triangle is below 120°. <br>Find it when one angle is 120° or more.</div>
+  <div class="chq"><span class="chid">28·logi.8.3</span><span class="tagq">converse</span>A point where the pulls balance is the best point. Turn it round: if a point that is not a store is the best point, must the pulls balance there?</div>
+  <div class="chq"><span class="chid">28·logi.8.4</span><span class="tagq">reroute</span><span class="givens"><span class="gtx">one truck each to (0, 0), (8, 0) and (0, 6)</span></span>Find the best point a second way, by walking downhill with a fixed step size η = 1, and compare the number of steps with reweighting.</div>
+  <div class="chq"><span class="chid">28·logi.8.5</span><span class="tagq">seam</span>One school of planners put each warehouse at the point that makes the truck-kilometres least, as on this page. Another held that firms cluster near each other, near ports and near workers, and that the least-distance point is where no one builds. <br>Which gives the better advice to a chain choosing a town in Montana, and what would you measure to decide?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r28bio.html">← 28·bio · why do foxes and rabbits take turns?</a><a href="r28now.html">28·now · how does a machine learn from its mistakes? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The point that makes the total distance least is the geometric median, and for three points the Fermat point; with weights, finding it is the Weber problem. The middle store is the weighted median. The reweighting walk is the Weiszfeld algorithm. A function whose chords lie on or above it is convex. The uphill arrow is the gradient. The pulls are the forces in a Varignon frame: strings through holes in a table at the stores, tied at one knot, each pulled down by weights in proportion to its trucks; the knot comes to rest at the best point.</p>
+  <h3>Who said it first</h3>
+  <p>Pierre de Fermat posed the three-point problem in the early seventeenth century, and Evangelista Torricelli solved it by geometry. Thomas Simpson added weights in 1750. Alfred Weber made it a question of where industry should go in 1909. Endre Weiszfeld published the reweighting walk in 1937, and Harold Kuhn showed in 1973 when it settles. The heavy-store test is in Kuhn’s work too. The questions of clustering in 28·logi.8.5 belong to economic geography, from Alfred Marshall in 1890 to Paul Krugman in 1991.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="28·logi: a worked “proof”, not allowed">
+G(p) = \textstyle\sum w_i\,|p - s_i| @@ fine: total distance
+\nabla G = 2\textstyle\sum w_i\,(p - s_i) = 0 \Rightarrow p = m @@ not allowed: that is the uphill arrow of F, the squares; G’s arrow has unit arrows
+\text{so the warehouse goes at } (97.3,\ -25.2) @@ not allowed: G is lowest at (111.8, −44.3)
+  </pre>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+const V=c=>'var('+c+')';
+// plot(series, xr, yr, opts): series = [{pts:[[x,y],...], c:'--ember', w:1.6, dash:''}]; returns svg string
+function plot(series, xr, yr, o){ o=o||{}; const W=360,H=o.H||210,L=34,B=22,T=8,Rr=8;
+  const sx=x=>L+(x-xr[0])/(xr[1]-xr[0])*(W-L-Rr), sy=y=>H-B-(y-yr[0])/(yr[1]-yr[0])*(H-B-T);
+  let s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;max-width:440px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  (o.yt||[]).forEach(y=>{ s+='<line x1="'+L+'" x2="'+(W-Rr)+'" y1="'+sy(y)+'" y2="'+sy(y)+'" style="stroke:'+V('--grid')+';stroke-width:0.6"/><text x="'+(L-3)+'" y="'+(sy(y)+3)+'" text-anchor="end" style="font:9px var(--mono);fill:'+V('--muted')+'">'+y+'</text>'; });
+  (o.xt||[]).forEach(x=>{ s+='<text x="'+sx(x)+'" y="'+(H-8)+'" text-anchor="middle" style="font:9px var(--mono);fill:'+V('--muted')+'">'+x+'</text>'; });
+  s+='<line x1="'+L+'" x2="'+L+'" y1="'+T+'" y2="'+(H-B)+'" style="stroke:'+V('--ink')+';stroke-width:0.8"/><line x1="'+L+'" x2="'+(W-Rr)+'" y1="'+(H-B)+'" y2="'+(H-B)+'" style="stroke:'+V('--ink')+';stroke-width:0.8"/>';
+  series.forEach(se=>{ const cl=v=>Math.max(yr[0]-0.05*(yr[1]-yr[0]),Math.min(yr[1]+0.05*(yr[1]-yr[0]),v));
+    const d=se.pts.filter(p=>isFinite(p[1])).map((p,i)=>(i?'L':'M')+sx(p[0]).toFixed(1)+','+sy(cl(p[1])).toFixed(1)).join('');
+    s+='<path d="'+d+'" style="fill:none;stroke:'+V(se.c||'--ember')+';stroke-width:'+(se.w||1.6)+(se.dash?';stroke-dasharray:'+se.dash:'')+'"/>'; });
+  (o.dots||[]).forEach(p=>{ s+='<circle cx="'+sx(p[0])+'" cy="'+sy(p[1])+'" r="2.6" style="fill:'+V(p[2]||'--ember')+'"/>'; });
+  if(o.xl) s+='<text x="'+(W-Rr)+'" y="'+(H-B-4)+'" text-anchor="end" style="font:9px var(--mono);fill:'+V('--muted')+'">'+o.xl+'</text>';
+  if(o.yl) s+='<text x="'+(L+4)+'" y="'+(T+9)+'" style="font:9px var(--mono);fill:'+V('--muted')+'">'+o.yl+'</text>';
+  return s+'</svg>'; }
+
+const S=[[-150,31],[56,102],[76,-101],[271,-90]];
+function G(p,W){ let s=0; for(let i=0;i<4;i++) s+=W[i]*Math.hypot(p[0]-S[i][0],p[1]-S[i][1]); return s; }
+function step(p,W){ let t=0,x=0,y=0; for(let i=0;i<4;i++){ const d=Math.max(1e-9,Math.hypot(p[0]-S[i][0],p[1]-S[i][1])); const a=W[i]/d; t+=a; x+=a*S[i][0]; y+=a*S[i][1]; } return [x/t,y/t]; }
+function draw(){ const wb=+$('kw').value, n=+$('kn').value; $('ow').textContent=wb; $('on').textContent=n;
+  const W=[7,6,5,wb], Wt=W.reduce((a,b)=>a+b,0);
+  const m=[0,1].map(j=>S.reduce((s,q,i)=>s+W[i]*q[j],0)/Wt);
+  let p=m.slice(); const P=[p]; for(let k=0;k<n;k++){ p=step(p,W); P.push(p); }
+  let q=m.slice(); for(let k=0;k<400;k++) q=step(q,W);
+  let R=[0,0]; for(let i=0;i<3;i++){ const d=Math.hypot(S[3][0]-S[i][0],S[3][1]-S[i][1]); R[0]+=W[i]*(S[3][0]-S[i][0])/d; R[1]+=W[i]*(S[3][1]-S[i][1])/d; }
+  const pull=Math.hypot(R[0],R[1]);
+  $('pl').innerHTML=plot([{pts:P,c:'--ember',w:1.5}],[-170,290],[-130,130],{xt:[-150,-50,50,150,250],yt:[-100,0,100],xl:'km east',yl:'km north',dots:S.map(s=>[s[0],s[1],'--muted']).concat([[m[0],m[1],'--ink'],[p[0],p[1],'--ember']]),H:240});
+  const v=$('vd'); v.className='verdict';
+  v.textContent='Average ('+fm(m[0],1)+', '+fm(m[1],1)+'), G = '+fm(G(m,W),1)+'. After '+n+' steps: ('+fm(p[0],1)+', '+fm(p[1],1)+'), G = '+fm(G(p,W),1)+'. Best: ('+fm(q[0],1)+', '+fm(q[1],1)+'), G = '+fm(G(q,W),1)+'. Pull on Billings '+fm(pull,1)+(pull<=wb?' ≤ ':' > ')+wb+' trucks: '+(pull<=wb?'Billings is the best place.':'not Billings.'); }
+$('kw').oninput=draw; $('kn').oninput=draw; draw();
+window.__pic={set:(w,n)=>{ $('kw').value=w; $('kn').value=n; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'squares',t:R`F' = 2\sum w_i(p - s_i)`,n:`The average.`},
+  {k:'ember',kl:'distance',t:R`\htmlClass{new}{G' = \text{south} - \text{north}}`,n:`The middle store.`}
+],{title:'The slides · one road · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'slopes',t:R`F_x = 2\sum w_i(x - a_i)`,n:`One knob.`},
+  {k:'ember',kl:'arrow',t:R`\nabla F = 2W(p - m)`,n:`Away from m.`},
+  {k:'ember',kl:'bottom',t:R`\htmlClass{new}{p = m}`,n:`The average.`}
+],{title:'The slides · average · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'unit',t:R`\nabla|p - s| = \tfrac{p - s}{|p - s|}`,n:`Length 1.`},
+  {k:'ember',kl:'sum',t:R`\nabla G = \sum w_i e_i`,n:`Pulls add.`},
+  {k:'ember',kl:'balance',t:R`\htmlClass{new}{\nabla G = 0 \Rightarrow \text{best}}`,n:`G bends up.`}
+],{title:'The slides · pulls · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'step',t:R`\eta = 1/\sum (w_i/d_i)`,n:`One step size.`},
+  {k:'ember',kl:'average',t:R`p' = \tfrac{\sum (w_i/d_i)s_i}{\sum w_i/d_i}`,n:`Reweighted.`},
+  {k:'ember',kl:'down',t:R`\htmlClass{new}{G(p') \le G(p)}`,n:`Never up.`}
+],{title:'The slides · reweight · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'pull',t:R`R = \sum_{i \ne k} w_i\,\tfrac{s_k - s_i}{|s_k - s_i|}`,n:`The others.`},
+  {k:'ember',kl:'store',t:R`\htmlClass{new}{|R| \le w_k}`,n:`The store wins.`}
+],{title:'The slides · heavy · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'flat',t:R`\nabla G(p^*) = 0`,n:`Zero flat map.`},
+  {k:'ember',kl:'region',t:R`\htmlClass{new}{G \le 1.01\,G(p^*)}`,n:`About 30 km.`}
+],{title:'The slides · flat · ← → keys work'});
+stepper('#sl7',[
+  {k:'ember',kl:'illegal',t:R`\text{best for distance} = m\,?`,n:`That is for squares.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

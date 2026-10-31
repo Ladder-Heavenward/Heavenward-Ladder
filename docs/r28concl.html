@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The derivative is a flat map in every direction</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+.cl-lock{display:none;border-left:3px solid var(--gold);background:var(--sand);padding:10px 14px;border-radius:0 4px 4px 0;max-width:66ch}
+body.cl-locked .cl-lock{display:block} body.cl-locked .cl-body{display:none}
+.cl-lock button{margin-top:6px;font-size:.8rem}
+.claim{border:1px solid var(--grid);border-left:4px solid var(--teal);background:var(--card);border-radius:0 6px 6px 0;padding:10px 16px;max-width:66ch}
+.claim p{margin:.4em 0}
+ul.cl-adds{max-width:66ch;padding-left:1.1em} ul.cl-adds li{margin:.5em 0}
+ul.cl-adds .cl-w{display:none;color:var(--muted);font-style:italic}
+ul.cl-adds li.cl-wait .cl-t{display:none} ul.cl-adds li.cl-wait .cl-w{display:inline}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r28j.html">← 28j flux and circulation</a><a href="r28k.html">next: 28k partials and gradients by hand →</a></p>
+  <div class="tags"><span class="tag concl">28·∎ · conclusion</span></div>
+  <h1>The derivative is a flat map in every direction</h1>
+  <p class="gesture">With several inputs, the slope at a point is the best flat map, whose grid is the grid of partial slopes. Slope grids multiply along chains; an undoable slope grid means a local undoing; an equation fixes a function; at a best point on a constraint the uphill arrows line up; totals over regions change by the determinant of the slope grid; and totals inside trade for totals round the edge.</p>
+  <div class="ready"><h3>What this stands on</h3><p>The survey of <a href="r28.html">rung 28</a>, and its proof steps: <a href="r28a.html">28a</a> to <a href="r28j.html">28j</a>. It opens once 28j is ticked, and it gains a line each time you finish a step or annex after it.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The conclusion · the rung's claim, in full, and its proof</div>
+  <div class="cl-lock"><p>This page opens once every question on <a href="r28j.html">28j flux and circulation</a> is ticked. The claim below is proved from the steps of this rung, so it waits for them.</p><button type="button" class="cl-peek">reviewing the ladder? open it anyway</button></div>
+  <div class="cl-body">
+  <h3>What the rung set out to show</h3>
+  <p data-pid="9d59c3">The survey of rung 28 asked what a slope is when a function has several inputs. <b>A function of several inputs has a slope at a point when one straight map matches it better than any step shrinks, and then that map’s grid is the grid of its partial slopes.</b> The price is the demand of continuity: partial slopes alone can miss a jump, and mixed slopes can disagree.</p>
+  <p data-pid="4ffca7"><a href="r28a.html">28a</a> turned one knob at a time and found that was not enough. <a href="r28b.html">28b</a> defined the best flat map and found its grid. <a href="r28c.html">28c</a> chained flat maps. <a href="r28d.html">28d</a> swapped the order of the knobs. <a href="r28e.html">28e</a> undid a curved map near a point, and <a href="r28f.html">28f</a> fixed a function by an equation. <a href="r28g.html">28g</a> lined up the uphill arrows on a constraint. <a href="r28h.html">28h</a> totalled over rectangles, <a href="r28i.html">28i</a> changed the variables, and <a href="r28j.html">28j</a> traded totals inside for totals round the edge. This page puts the claim together.</p>
+  <h3>The claim, in full</h3>
+  <div class="claim">
+  <p data-pid="918a81"><b>If f(a + h) = f(a) + L(h) + r(h) with L straight and |r(h)|/|h| → 0, then L is unique, its grid is [∂fᵢ/∂xⱼ (a)], and continuous partial slopes guarantee such an L.</b></p>
+  <p data-pid="7991cd">D(f ∘ g)(a) = Df(g(a)) Dg(a). If f<sub>xy</sub> and f<sub>yx</sub> are continuous, they are equal.</p>
+  <p data-pid="1cee4b">If det Df(a) ≠ 0, f can be undone near a, with D(f⁻¹) = (Df)⁻¹. If F(a, b) = 0 and F<sub>y</sub>(a, b) ≠ 0, F(x, y) = 0 fixes y = g(x) near a, with g′ = −F<sub>x</sub>/F<sub>y</sub>. At a best point of f on g = 0 with ∇g ≠ 0, ∇f = λ∇g.</p>
+  <p data-pid="2d1fd7">A continuous f on a rectangle has ∬<sub>R</sub> f, equal to either total of totals; ∬<sub>T(Q)</sub> f = ∬<sub>Q</sub> f(T) |det DT|; and ∮<sub>∂R</sub> F · dr = ∬<sub>R</sub> (Q<sub>x</sub> − P<sub>y</sub>), with the flux out equal to the total of the spread.</p>
+  </div>
+  <h3>The proof</h3>
+  <p data-pid="d2c8e4">Each part below is a technique already proved on a step of this rung. The proof cites them by name and joins them.</p>
+  <pre class="lines" data-k="ember" data-label="the best flat map">
+f_x, f_y \text{ exist} \not\Rightarrow f \text{ continuous} @@ the knobs-miss-jumps technique (28a)
+L \text{ unique},\ \ \text{column } j = \partial f/\partial x_j(a) @@ the one-flat-map and slope-grid techniques (28b)
+\htmlClass{new}{\text{continuous partials} \Rightarrow Df(a) \text{ exists}} \quad \blacksquare @@ the smooth-knobs technique (28b)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="chains and order">
+|Ah| \le c\,|h| @@ the stretch-bound technique (28c)
+\htmlClass{new}{D(f\circ g)(a) = Df(g(a))\,Dg(a)} @@ the chain-of-flat-maps technique (28c)
+\htmlClass{new}{f_{xy} = f_{yx}} \text{ when both are continuous} \quad \blacksquare @@ the swap-knobs technique (28d); the order-matters technique shows the demand is needed
+  </pre>
+  <pre class="lines" data-k="ember" data-label="undoing, equations, constraints">
+\det Df(a) \ne 0 \Rightarrow f \text{ undoable near } a,\ \ D(f^{-1}) = (Df)^{-1} @@ the local-undo and undo-slope techniques (28e)
+F_y \ne 0 \Rightarrow y = g(x),\ \ g' = -F_x/F_y @@ the fixed-by-an-equation and implicit-slope techniques (28f)
+\htmlClass{new}{\nabla f = \lambda\,\nabla g \text{ at a best point on } g = 0} \quad \blacksquare @@ the uphill and lines-up techniques (28g)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="totals">
+\textstyle\iint_R f = \int\!\int f\,dy\,dx = \int\!\int f\,dx\,dy @@ the rectangle-total and either-order techniques (28h)
+\textstyle\iint_{T(Q)} f = \iint_Q f(T)\,|\det DT| @@ the area-scale, near-flat and change-of-variables techniques (28i)
+\htmlClass{new}{\oint F\cdot dr = \iint (Q_x - P_y),\ \ \text{flux out} = \iint (P_x + Q_y)} \quad \blacksquare @@ the uphill-total, swirl and spread techniques (28j)
+  </pre>
+  <p data-pid="454c21">So the rung’s claim holds: with several inputs, the slope at a point is the best flat map, and chains, undoings, equations, constraints, totals and boundaries all follow from it.</p>
+  <h3>What the rest of the rung adds</h3>
+  <p data-pid="be5737">Each step and annex after the proof steps adds a line to the claim. A line appears here once you have finished its page.</p>
+  <ul class="cl-adds">
+    <li data-after="r28k" data-pid="d06c72"><b><a href="r28k.html">28k partials and gradients by hand</a></b>: <span class="cl-t">uphill arrows, level curves and slopes along any direction, computed.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r28l" data-pid="d024c0"><b><a href="r28l.html">28l polynomials that hug a surface, by hand</a></b>: <span class="cl-t">the grid of second slopes, and bowls, domes and saddles.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r28m" data-pid="cb4e9d"><b><a href="r28m.html">28m integrals by hand</a></b>: <span class="cl-t">totals over slanted, round, cylindrical and spherical regions.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r28n" data-pid="053e87"><b><a href="r28n.html">28n along curves and across surfaces</a></b>: <span class="cl-t">totals along paths and through surfaces, and uphill fields.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r28o" data-pid="8f8a45"><b><a href="r28o.html">28o gradient descent</a></b>: <span class="cl-t">walking downhill to the bottom, and how big a step to take.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r28p" data-pid="9edf63"><b><a href="r28p.html">28p how errors spread</a></b>: <span class="cl-t">errors in several measured inputs, carried to the answer.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r28then" data-pid="8f3708"><b><a href="r28then.html">28·then how good can an engine ever be?</a></b>: <span class="cl-t">heat, work and the best efficiency, from slopes of state.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r28phys" data-pid="b9261b"><b><a href="r28phys.html">28·phys why does a narrowed artery matter so much?</a></b>: <span class="cl-t">flow in a tube, and the fourth power of its radius.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r28econ" data-pid="7eec19"><b><a href="r28econ.html">28·econ what is the best basket on a budget?</a></b>: <span class="cl-t">the best point on a budget line, and the worth of one more dollar.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r28bio" data-pid="ae9460"><b><a href="r28bio.html">28·bio why do foxes and rabbits take turns?</a></b>: <span class="cl-t">two rate rules tied together, and a kept quantity that closes the loops.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r28logi" data-pid="7fd908"><b><a href="r28logi.html">28·logi where should the warehouse go?</a></b>: <span class="cl-t">total distance as a function of two inputs, walked downhill.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r28now" data-pid="e3def5"><b><a href="r28now.html">28·now how does a machine learn from its mistakes?</a></b>: <span class="cl-t">the chain of slopes run backwards through a network.</span><span class="cl-w">its line appears when you finish it.</span></li>
+  </ul>
+  <p data-pid="ea7e13">That is the slope, in every direction at once. The rest of the ladder works with functions of many inputs as a matter of course. You have only just begun to see how much a flat map can tell you.</p>
+  </div>
+</section>
+
+<nav class="nextrung"><a href="r28j.html">← 28j · flux and circulation</a><a href="r28k.html">28k · partials and gradients by hand →</a></nav>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+  const need="r28j";
+  let p={}; try{ p=JSON.parse(LS.getItem('pages:done')||'{}')||{}; }catch(e){}
+  let peek=false; try{ peek=sessionStorage.getItem('cl:peek')==='1'; }catch(e){}
+  const done=k=>!!(p[k]&&p[k].v);
+  function apply(){
+    const open=peek||done(need);
+    document.body.classList.toggle('cl-locked',!open);
+    document.querySelectorAll('ul.cl-adds li[data-after]').forEach(li=>li.classList.toggle('cl-wait',!(peek||done(li.dataset.after))));
+    if(open&&done(need)){ const me=(window.ladderPage?ladderPage():(location.pathname.split('/').pop()||'').replace(/\.html?$/,''));
+      if(window.MarksSync&&MarksSync.reportPage) MarksSync.reportPage(me,true,true,true,false);
+      else { try{ p[me]={v:true,a:true,o:true,h:false,t:Date.now()}; LS.setItem('pages:done',JSON.stringify(p)); }catch(e){} } }
+  }
+  const b=document.querySelector('.cl-peek'); if(b) b.addEventListener('click',()=>{ peek=true; try{ sessionStorage.setItem('cl:peek','1'); }catch(e){} apply(); });
+  apply();
+  try{ if(window.MarksSync&&MarksSync.pages) MarksSync.pages().then(q=>{ if(q){ p=Object.assign({},p,q); apply(); } },()=>{}); }catch(e){}
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

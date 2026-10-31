@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>When an equation fixes a function</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r28e.html">← 28e locally undoable</a><a href="r28g.html">next: 28g the best point on a constraint →</a></p>
+  <div class="tags"><span class="tag proof">28f · proof</span></div>
+  <h1>When an equation fixes a function</h1>
+  <p>Step 13l took slopes of curves given by equations, like a circle, by assuming that near a point the curve was the graph of some function. That assumption was held in trust. This step pays it. If an equation ties two quantities together, and the equation really cares about the second one at a point, then near that point the equation fixes the second as a function of the first. The proof builds a map that keeps the first quantity and reports the equation, and undoes it with the last step.</p>
+  <p class="gesture">If F(x, y) = 0 at a point, and the slope of F along y is not 0 there, then near that point the equation has exactly one answer y = g(x), and g is smoothly sloped with g′ = −F<sub>x</sub>/F<sub>y</sub>.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r28e.html">28e</a> (locally undoable), <a href="r28c.html">28c</a> (the roads-add technique) and <a href="r13l.html">13l</a> (implicit slopes, whose assumption this step pays). <a href="r28g.html">28g</a> walks along such a curve to find the best point.</p></div>
+</header>
+
+<section class="class step" data-step="28f1">
+  <h2 class="sthead"><span class="stno">28f1</span>Keep x, report the equation</h2>
+  <p class="stands">Stands on 28e2, 28b2, 27e1.</p>
+  <p data-pid="4521a2">Let F(x, y) be smoothly sloped near (a, b), with F(a, b) = 0 and F<sub>y</sub>(a, b) ≠ 0. Build the map that keeps x and reports how far the equation is from holding:</p>
+  <p class="eqline" data-pid="9c4bb4">\(G(x, y) = \big(x,\ F(x, y)\big).\)</p>
+  <p data-pid="bedea6">Fixed-by-an-equation technique: <b>there are an interval I around a and an interval J around b such that for each x in I exactly one y in J has F(x, y) = 0. Calling it g(x), g is smoothly sloped on I.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the fixed-by-an-equation technique">
+DG(a,b) = \begin{pmatrix} 1 & 0 \\ F_x & F_y \end{pmatrix},\ \ \det DG(a,b) = F_y(a,b) \ne 0 @@ the slope-grid technique (28b2); the determinant of a stair grid is the product down the middle (27k)
+G \text{ has a smoothly sloped undoing } H \text{ near } G(a,b) = (a, 0) @@ the local-undo and undo-slope techniques (28e)
+G(x, y) = (x, 0) \iff F(x, y) = 0 @@ the first place of G is x itself
+H(x, 0) = (x, g(x)) \text{ for } x \text{ near } a @@ H undoes G, and G keeps the first place
+\htmlClass{new}{F(x, g(x)) = 0, \text{ one } y \text{ near } b \text{ for each } x, \ g \text{ smoothly sloped}} \quad \blacksquare @@ g is the second place of H(x, 0), a chain of smoothly sloped maps (28c2)
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · fixed by an equation · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">28f1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="F(x,y) = x^3 + y^3 - 6xy"></span></span>Check that (3, 3) lies on the curve F = 0, and find F<sub>y</sub>(3, 3). <br>Find every point of the curve where F<sub>y</sub> = 0. Use F<sub>y</sub> = 0 to write x in terms of y, then substitute. <br>Find the line of the proof in 28f1 that fails at those points.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28f2">
+  <h2 class="sthead"><span class="stno">28f2</span>The slope of the fixed function</h2>
+  <p class="stands">Stands on 28f1, 28c3.</p>
+  <p data-pid="767cad">Implicit-slope technique: <b>where F(x, g(x)) = 0 and F<sub>y</sub> ≠ 0, g′(x) = −F<sub>x</sub>(x, g(x)) / F<sub>y</sub>(x, g(x)).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the implicit-slope technique">
+\tfrac{d}{dx} F(x, g(x)) = F_x \cdot 1 + F_y \cdot g'(x) @@ the roads-add technique (28c3), roads x and y = g(x); g has a slope by 28f1
+\tfrac{d}{dx} F(x, g(x)) = 0 @@ F(x, g(x)) = 0 for every x near a: the constant-has-slope-0 technique (13d)
+\htmlClass{new}{g'(x) = -\dfrac{F_x(x, g(x))}{F_y(x, g(x))}} \quad \blacksquare @@ F_y ≠ 0 near (a, b), by continuity (28a1)
+  </pre>
+  <p data-pid="805c76">For the circle x² + y² = 25 at (3, 4): F<sub>x</sub> = 6, F<sub>y</sub> = 8, so g′(3) = −3/4. That is 18·cb13’s circle-slope technique, minus the run over the rise, now with its assumption earned. At (5, 0) F<sub>y</sub> = 0, the circle stands straight up, and no function of x describes it there.</p>
+  <p data-pid="1a27b0">With m equations in m unknowns y and any number of inputs x, the same lines run with grids: if the grid of slopes of F along the y’s is undoable, the equations fix the y’s as smoothly sloped functions of the x’s, and Dg = −(D<sub>y</sub>F)⁻¹ D<sub>x</sub>F.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · implicit slope · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28f2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="x^3 + y^3 = 6xy"></span></span>Find F<sub>x</sub> and F<sub>y</sub> at (3, 3), and g′(3) by the implicit-slope technique. <br>Find the tangent line at (3, 3). <br>Check that (4/3, 8/3) lies on the curve, and find the slope of the curve there.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28f3">
+  <h2 class="sthead"><span class="stno">28f3</span>Illegal moves</h2>
+  <p class="stands">Stands on 28f1 and 28f2.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+F(a,b) = 0 \Rightarrow y \text{ is a function of } x \text{ near } a\,? @@ only when F_y(a, b) ≠ 0; at (5, 0) on the circle it is not
+F_y(a,b) = 0 \Rightarrow \text{no function } g \text{ near } a\,? @@ y³ = x has F_y = 0 at (0, 0), and g(x) = ∛x still works, without a slope
+g'(x) = -F_y / F_x\,? @@ the slope along x goes on top
+\text{one } g \text{ for the whole curve}\,? @@ the technique fixes g near one point; the circle needs two halves
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28f3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="x^2 + y^2 = 25,\ \ (5, 0)"></span></span>Find F<sub>y</sub>(5, 0). <br>Find every y with x² + y² = 25 for x = 4.9 and for x = 5.1. Find why no function g works near x = 5.</li><li><span class="givens"><span data-tex-inline="F(x,y) = y^3 - x,\ \ (0, 0)"></span></span>Find F<sub>y</sub>(0, 0), and the function g with F(x, g(x)) = 0. <br>Find whether g has a slope at 0, and what the technique’s silence means.</li><li><span class="givens"><span data-tex-inline="x^2 + y^2 = 25,\ \ (3, 4)"></span></span>Find −F<sub>x</sub>/F<sub>y</sub> and −F<sub>y</sub>/F<sub>x</sub> at (3, 4). <br>Find the slope of y = √(25 − x²) at x = 3, and which ratio matches.</li><li><span class="givens"><span data-tex-inline="x^2 + y^2 = 25"></span></span>Find the two points of the circle with x = 3, and the slope at each by the implicit-slope technique. <br>Find why one function g of x cannot give both.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">28f.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="x + y + z = 6,\ \ x^2 + y^2 + z^2 = 14,\ \ (1, 2, 3)"></span></span>Check that (1, 2, 3) solves both. Find the grid of slopes of the two equations along y and z there, and whether it is undoable. <br>The equations fix y and z as functions of x near x = 1. Find y′(1) and z′(1) by taking slopes of both equations along x. <br>Build an equation F(x, y) = 0 through (1, 2), not a straight line, whose fixed function has slope 3 there.</div>
+  <div class="chq"><span class="chid">28f.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="F(x,y) = x^2 - y^2,\ \ (0, 0)"></span></span>Find F<sub>x</sub> and F<sub>y</sub> at (0, 0). <br>Find every y with F(x, y) = 0 for a given x ≠ 0. Find how many functions g, continuous near 0, have F(x, g(x)) = 0. <br>Then take F = x² + y². Find the points of F = 0, and what the technique gives there.</div>
+  <div class="chq"><span class="chid">28f.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="F(x,y) = (y - x)^3"></span></span>If F<sub>y</sub>(a, b) ≠ 0, the equation fixes y near b. Turn it round: if near (a, b) the equation fixes exactly one y for each x, by a smoothly sloped g, must F<sub>y</sub>(a, b) ≠ 0? <br>Find the points where this F is 0, and F<sub>y</sub> there. <br>Find g, and whether it is smoothly sloped.</div>
+  <div class="chq"><span class="chid">28f.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="x^2 + y^2 = 25,\ \ (3, 4)"></span></span>Find the slope of the fixed function another way, without the roads-add technique. Build G(x, y) = (x, F(x, y)), and find DG(3, 4) and its undone grid. <br>The undoing H has H(x, 0) = (x, g(x)). Read g′(3) off the undone grid, by the undo-slope technique.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r28e.html">← 28e · locally undoable</a><a href="r28g.html">28g · the best point on a constraint →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The fixed-by-an-equation technique is the implicit function theorem; g is the function defined implicitly by F(x, y) = 0. The grid D<sub>y</sub>F is a partial Jacobian matrix.</p>
+  <h3>Who said it first</h3>
+  <p>Newton and Leibniz took slopes of curves given by equations in the 1670s and 1680s. Cauchy proved an implicit function theorem for power series in 1831, and Ulisse Dini proved the real version in 1876 to 1878. The several-variable form with matrices was set out by Edouard Goursat in 1903.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'build',t:R`G(x,y) = (x, F(x,y))`,n:`Keep x, report F.`},
+  {k:'ember',kl:'grid',t:R`\det DG = F_y \ne 0`,n:`Undoable.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{F(x, g(x)) = 0}`,n:`One y for each x, near the point.`}
+],{title:'The slides · fixed by an equation · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'chain',t:R`F_x + F_y\,g^{\prime} = 0`,n:`Roads add to 0.`},
+  {k:'ember',kl:'circle',t:R`x^2 + y^2 = 25,\ (3,4)`,n:`F_x = 6, F_y = 8.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{g^{\prime} = -F_x/F_y}`,n:`Minus the ratio of the slopes.`}
+],{title:'The slides · implicit slope · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

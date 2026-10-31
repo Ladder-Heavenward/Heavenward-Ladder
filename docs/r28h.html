@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Double integrals</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r28g.html">← 28g the best point on a constraint</a><a href="r28i.html">next: 28i changing the variables →</a></p>
+  <div class="tags"><span class="tag proof">28h · proof</span></div>
+  <h1>Double integrals</h1>
+  <p>Rung 15 measured the area under a curve by trapping it between thin boxes from below and from above. A function of two inputs stands over a patch of ground, like snow lying on a field, and the question is how much there is in total. The same trap works with columns instead of strips. This step builds the total over a rectangle, proves that every continuous function has one, and then proves something rung 15 never needed: you can add up row by row or column by column and get the same total.</p>
+  <p class="gesture">A continuous function on a rectangle has exactly one total between every lower and every upper column sum. It equals the total taken in strips along y and then along x, and also in the other order.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r15a.html">15a</a> to <a href="r15f.html">15f</a> (lower and upper sums, integrable, continuous is integrable) and <a href="r28a.html">28a</a> (continuity with two inputs). <a href="r28i.html">28i</a> changes the variables inside such a total.</p></div>
+</header>
+
+<section class="class step" data-step="28h1">
+  <h2 class="sthead"><span class="stno">28h1</span>Columns from below and above</h2>
+  <p class="stands">Stands on 15a, 15c, 28a1.</p>
+  <p data-pid="9ed0d0">Let R be the rectangle a ≤ x ≤ b, c ≤ y ≤ d, and f bounded on R. Cut [a, b] at a = x₀ &lt; … &lt; x<sub>p</sub> = b and [c, d] at c = y₀ &lt; … &lt; y<sub>q</sub> = d. This cuts R into small boxes R<sub>ij</sub> of area (x<sub>i</sub> − x<sub>i−1</sub>)(y<sub>j</sub> − y<sub>j−1</sub>). On each box take m<sub>ij</sub>, the inf of f there, and M<sub>ij</sub>, the sup.</p>
+  <p class="eqline" data-pid="3b5395">\(L(f, P) = \sum_{i,j} m_{ij}\,|R_{ij}|, \qquad U(f, P) = \sum_{i,j} M_{ij}\,|R_{ij}|.\)</p>
+  <p data-pid="5724c1">Every lower column sum is below every upper one: 15b’s proof runs word for word, since adding a cut only splits boxes. f is <i>integrable</i> on R when exactly one number A lies between every L and every U, and A is written ∬<sub>R</sub> f. With f ≥ 0, it is the volume under the graph.</p>
+  <p data-pid="6bcb71">Rectangle-total technique: <b>if f is continuous on R, then f is integrable on R.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the rectangle-total technique">
+\text{for every } \varepsilon > 0 \text{ some } \delta: |x - x'| < \delta \Rightarrow |f(x) - f(x')| < \varepsilon @@ the evenly-continuous technique (15f), whose proof by halving traps (12e) runs on R with quarters
+\text{boxes of width less than } \delta/2 \text{ each way} \Rightarrow M_{ij} - m_{ij} \le \varepsilon @@ two points of one box are less than δ apart; the highest-and-lowest technique (12c), carried the same way
+U(f,P) - L(f,P) \le \varepsilon \textstyle\sum |R_{ij}| = \varepsilon\,|R| @@ add over the boxes
+\htmlClass{new}{f \text{ is integrable on } R} \quad \blacksquare @@ the gap between some L and U is as small as we like, so at most one number fits; one does, by the no-gaps property (15c)
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · column sums · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">28h1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="f(x,y) = x + y"></span> <span data-tex-inline="R = [0,2] \times [0,1]"></span></span>Cut [0, 2] at 0, 1, 2 and [0, 1] at 0, ½, 1. Find L(f, P) and U(f, P). <br>Cut each side into four equal pieces, sixteen boxes. Find L and U. <br>Find U − L each time. Find the volume under the flat roof z = x + y as the height at the centre of R times the area of R, and check that it lies between all four sums.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28h2">
+  <h2 class="sthead"><span class="stno">28h2</span>Either order</h2>
+  <p class="stands">Stands on 28h1, 15e, 15c.</p>
+  <p data-pid="e88236">Hold x still and total along y: F(x) = ∫<sub>c</sub><sup>d</sup> f(x, y) dy. That is a function of x, and its total along x is a total of totals.</p>
+  <p data-pid="5da819">Either-order technique: <b>if f is continuous on R, then ∬<sub>R</sub> f = ∫<sub>a</sub><sup>b</sup> (∫<sub>c</sub><sup>d</sup> f(x, y) dy) dx = ∫<sub>c</sub><sup>d</sup> (∫<sub>a</sub><sup>b</sup> f(x, y) dx) dy.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the either-order technique">
+F(x) = \textstyle\int_c^d f(x,y)\,dy \text{ exists for each } x @@ y ↦ f(x, y) is continuous (28a1), so integrable (15f)
+|F(x) - F(x')| \le \varepsilon\,(d - c) \text{ when } |x - x'| < \delta @@ evenly continuous f (28h1), and the smaller-function-smaller-area technique (15e)
+F \text{ is continuous, so } \textstyle\int_a^b F \text{ exists} @@ the line above; 15f
+m_{ij}(y_j - y_{j-1}) \le \textstyle\int_{y_{j-1}}^{y_j} f(x,y)\,dy \le M_{ij}(y_j - y_{j-1}) \text{ for } x \text{ in } [x_{i-1}, x_i] @@ 15e, on one box
+\textstyle\sum_j m_{ij}\Delta y_j \le F(x) \le \sum_j M_{ij}\Delta y_j \text{ there} @@ the interval-cut-in-two technique (15e), over the j’s
+L(f,P) \le \textstyle\int_a^b F \le U(f,P) @@ 15e again, over the i’s
+\htmlClass{new}{\textstyle\int_a^b F = \iint_R f} \quad \blacksquare @@ exactly one number lies between every L and U (28h1); the other order runs the same lines with x and y swapped
+  </pre>
+  <p data-pid="8f3647">Worked once: ∬ over [0, 2] × [0, 1] of xy² is ∫₀² x (∫₀¹ y² dy) dx = ∫₀² x/3 dx = 2/3. In the other order, ∫₀¹ y² (∫₀² x dx) dy = ∫₀¹ 2y² dy = 2/3.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · either order · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28h2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="f(x,y) = x^2y + e^y"></span> <span data-tex-inline="R = [0,1] \times [0,2]"></span></span>Find F(x) = ∫₀² f(x, y) dy, then ∫₀¹ F(x) dx. <br>Find ∫₀¹ f(x, y) dx for each y, then its total along y from 0 to 2. <br>Check that the two agree, and find the total to three decimals.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28h3">
+  <h2 class="sthead"><span class="stno">28h3</span>Illegal moves</h2>
+  <p class="stands">Stands on 28h1 and 28h2.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\textstyle\int_a^b\!\int_c^d f\,dy\,dx = \int_c^d\!\int_a^b f\,dy\,dx\,? @@ when the order of the totals swaps, so must the order of the limits: the inner total is along y, from c to d
+\iint_R f g = (\iint_R f)(\iint_R g)\,? @@ totals add, they do not multiply; only f(x)g(y) splits this way
+\text{either order, for every bounded } f\,? @@ the technique needs continuity; for wild f the two inner totals can fail to exist
+\iint_R 1 = b - a\,? @@ the total of 1 over R is its area, (b − a)(d − c)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28h3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x,y) = xy^2,\ \ R = [0,2]\times[0,1]"></span></span>Find ∫₀² (∫₀¹ xy² dy) dx. <br>Find ∫₀¹ (∫₀² xy² dy) dx, with the limits left where they were. Find why it is a different total.</li><li><span class="givens"><span data-tex-inline="R = [0,1]\times[0,1]"></span></span>With f = x and g = y, find ∬ fg, ∬ f and ∬ g. <br>With f = g = x, find the same three. Find when the total of a product splits.</li><li><span class="givens"><span data-tex-inline="q(x,y) = 1 \text{ if } x \text{ is a fraction},\ 0 \text{ if not};\ \ R = [0,1]\times[0,1]"></span></span>For each x, find ∫₀¹ q(x, y) dy. <br>Find whether that inner total, as a function of x, has a total from 0 to 1. Find which demand of the either-order technique q fails.</li><li><span class="givens"><span data-tex-inline="R = [1,4]\times[2,7]"></span></span>Find ∬<sub>R</sub> 1 from one column sum, and b − a. <br>Find what b − a measures, and what it leaves out.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">28h.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="d(x,y) = 0.5 + 0.002x - 0.001y"></span> <span data-tex-inline="R = [0,200] \times [0,100]"></span></span>After a storm, snow lies on a field near Bozeman, Montana, 200 m by 100 m. A smooth fit gives its depth d in metres at x m east and y m north of the south-west corner. Find the total snow, in cubic metres, by the either-order technique. <br>Fresh snow melts to about a tenth of its volume in water. Find the water in the field, in litres. <br>Find ∬ y e<sup>xy</sup> over [0, 1] × [0, 1], choosing the order that makes the inner total easy.</div>
+  <div class="chq"><span class="chid">28h.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="s(x,y) = 1 \text{ if } y \le x,\ 0 \text{ if } y &gt; x;\ \ R = [0,1]\times[0,1]"></span></span>Find whether s is continuous on R, and whether the either-order technique applies to it. <br>Find both totals of totals. <br>With p × p equal boxes, find a bound on U − L from the boxes the line y = x touches, and whether s is integrable.</div>
+  <div class="chq"><span class="chid">28h.4.3</span><span class="tagq">converse</span>If f = 0 on R, its total is 0. Turn it round: if f is continuous on R and ∬<sub>R</sub> f = 0, must f be 0? <br>Test f = x − 1 on [0, 2] × [0, 1]. <br>Prove that if also f ≥ 0, then f = 0 everywhere on R. Start from a point where f &gt; 0.</div>
+  <div class="chq"><span class="chid">28h.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="f(x,y) = x + y,\ \ R = [0,2]\times[0,1]"></span></span>Prove that f is integrable on R another way, without the evenly-continuous technique. Cut R into p × q equal boxes, and find M − m on each box exactly. <br>Find U − L, and what it heads to.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r28g.html">← 28g · the best point on a constraint</a><a href="r28i.html">28i · changing the variables →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The total over a rectangle is the double integral, ∬<sub>R</sub> f dA, built here from Darboux sums. A total of totals is an iterated integral. The either-order technique is Fubini’s theorem, in the form for continuous functions.</p>
+  <h3>Who said it first</h3>
+  <p>Euler computed double integrals as iterated integrals in 1769. Cauchy noticed in 1814 that the two orders can give different answers for badly behaved functions. Camille Jordan built the double integral on rectangles carefully in 1892. Guido Fubini proved the general theorem for Lebesgue integrals in 1907, and Leonida Tonelli the companion for positive functions in 1909.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'boxes',t:R`R_{ij},\ \ |R_{ij}| = \Delta x_i\,\Delta y_j`,n:`Cut both ways.`},
+  {k:'ember',kl:'trap',t:R`L(f,P) \le A \le U(f,P)`,n:`From below and above.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{continuous} \Rightarrow \iint_R f \text{ exists}}`,n:`The gap closes.`}
+],{title:'The slides · column sums · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'inner',t:R`F(x) = \int_c^d f(x,y)\,dy`,n:`A total along y.`},
+  {k:'ember',kl:'trap',t:R`L \le \int_a^b F \le U`,n:`Box by box.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\iint_R f = \int\!\!\int f\,dy\,dx = \int\!\!\int f\,dx\,dy}`,n:`Rows or columns.`}
+],{title:'The slides · either order · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

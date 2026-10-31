@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Two knobs, keep one still</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r28.html">← 28 flattening the map</a><a href="r28b.html">next: 28b the best flat map →</a></p>
+  <div class="tags"><span class="tag proof">28a · proof</span></div>
+  <h1>Two knobs, keep one still</h1>
+  <p>Most things you measure depend on more than one input. The pressure in a tyre depends on how hot it is and how much air is in it. The height of a hillside depends on how far east you stand and how far north. This step asks what a slope means when there are two knobs to turn. The first answer is simple: hold one knob still, turn the other, and take the slope of what you get. Then the step finds out that this simple answer is not enough. A function can have a slope along every knob at a point and still jump there.</p>
+  <p class="gesture">A function of two inputs has a slope along each input: hold the other still and take the slope. Those slopes can all exist at a point where the function jumps.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r13.html">rung 13</a> (slope), <a href="r10.html">rung 10</a> (heading to a value) and <a href="r27i.html">27i</a> (length of a list of numbers). <a href="r28b.html">28b</a> asks for more than these slopes, and gets it.</p></div>
+</header>
+
+<section class="class step" data-step="28a1">
+  <h2 class="sthead"><span class="stno">28a1</span>Near, in every direction</h2>
+  <p class="stands">Stands on 10a, 10c, 27i1.</p>
+  <p data-pid="80d0e8">With one input, x is near a when |x − a| is small. With two inputs, the point x = (x₁, x₂) is near a = (a₁, a₂) when the length |x − a| is small, the length of 27i. The same holds for lists of n numbers.</p>
+  <p data-pid="a0f7fd">So f, from lists of n numbers to numbers, <i>heads to L at a</i> when for every ε &gt; 0 there is a δ &gt; 0 with |f(x) − L| &lt; ε whenever 0 &lt; |x − a| &lt; δ. And f is <i>continuous at a</i> when it heads to f(a) there. Nothing in rung 10’s proofs used more than the triangle technique and the size of a gap, so its limit techniques carry over word for word.</p>
+  <p data-pid="400ea1">Each-place technique: <b>each place xᵢ is a continuous function of the point x, and so is every sum, product and quotient (where the bottom is not 0) of continuous functions.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the each-place technique">
+|x_i - a_i| \le |x - a| @@ |x − a|² is a sum of squares, one of them (xᵢ − aᵢ)²
+|x - a| < \varepsilon \Rightarrow |x_i - a_i| < \varepsilon @@ the line above, with δ = ε
+x \mapsto x_i \text{ is continuous} @@ continuity at a, for every a
+\htmlClass{new}{\text{sums, products, quotients of continuous functions are continuous}} \quad \blacksquare @@ the limits-add, limits-multiply and limits-divide techniques (10c), whose proofs use only gaps
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · near a point · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">28a1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="f(x,y) = \dfrac{x^2 + y}{1 + x^2y^2}"></span> <span data-tex-inline="g(x,y) = \dfrac{x + y}{x - y}"></span></span>Write f as sums, products and a quotient of the places x and y. Check that its bottom is never 0, and find what the each-place technique gives. <br>Find f(1, 2), and f(1 + t, 2) for t = 0.1 and t = 0.01. <br>Find every point where the bottom of g is 0. Find g(1 + t, 1) for small t ≠ 0, and whether any value at (1, 1) makes g continuous there.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28a2">
+  <h2 class="sthead"><span class="stno">28a2</span>One knob at a time</h2>
+  <p class="stands">Stands on 28a1, 13a, 13d.</p>
+  <p data-pid="a7a76a">Hold every input but one still. What is left is a function of one input, and rung 13 can take its slope. For f(x, y), the slope along x at (a, b) is the slope at a of x ↦ f(x, b). Write it ∂f/∂x (a, b), or f<sub>x</sub>(a, b). The slope along y is the slope at b of y ↦ f(a, y). These are <i>partial slopes</i>. Accepted name: <i>partial derivatives</i>.</p>
+  <p data-pid="fc082c">One-knob technique: <b>to find a partial slope, treat every other input as a fixed number and use the slope techniques of rung 13.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the one-knob technique">
+\frac{\partial f}{\partial x}(a,b) = \lim_{h \to 0} \frac{f(a+h,b) - f(a,b)}{h} @@ the slope at a of x ↦ f(x, b) (13a)
+x \mapsto f(x,b) \text{ is a function of one input, with } b \text{ fixed} @@ b is a number, not a variable
+\htmlClass{new}{\text{every technique of rung 13 applies, with } b \text{ as a constant}} \quad \blacksquare @@ the constant-has-slope-0, product and power techniques (13c, 13d) see b as a number
+  </pre>
+  <p data-pid="80e62d">So for f(x, y) = x²y + y³, f<sub>x</sub> = 2xy and f<sub>y</sub> = x² + 3y². The first treats y like 5; the second treats x like 5.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · partial slope · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28a2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="V = \pi r^2 h"></span> <span data-tex-inline="r = 4\ \text{cm},\ \ h = 12\ \text{cm}"></span></span>A food can is a cylinder with radius r and height h. Find ∂V/∂r and ∂V/∂h as formulas, and their values at this can. <br>Find what each number means in words, with its units. <br>The cannery can add 1 mm to the radius or 1 mm to the height. Use the partial slopes to find which adds more volume, and about how much each adds.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28a3">
+  <h2 class="sthead"><span class="stno">28a3</span>The knobs are not enough</h2>
+  <p class="stands">Stands on 28a1, 28a2.</p>
+  <p data-pid="e06625">With one input, a slope at a forces continuity at a (13b). With two inputs, a slope along each knob does not.</p>
+  <p data-pid="d3c7a2">Knobs-miss-jumps technique: <b>a function can have both partial slopes at a point and still not be continuous there.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the knobs-miss-jumps technique">
+f(x,y) = \frac{xy}{x^2+y^2},\ \ f(0,0) = 0 @@ the example
+f(x,0) = 0,\ \ f(0,y) = 0 \text{ for every } x, y @@ the top is 0 on both axes
+f_x(0,0) = 0,\ \ f_y(0,0) = 0 @@ each knob alone sees a flat line (13a)
+f(t,t) = \frac{t^2}{2t^2} = \tfrac12 \text{ for every } t \ne 0 @@ along the line y = x
+(t,t) \to (0,0) \text{ but } f(t,t) \not\to 0 @@ the points heading in stay at height ½
+\htmlClass{new}{f \text{ is not continuous at } (0,0)} \quad \blacksquare @@ 28a1, the definition of continuity
+  </pre>
+  <p data-pid="22da1e">The two knobs look only along two lines through the point. The jump hides on every other line. So a slope that speaks for every direction must be something more than a list of partial slopes. That is the next step.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · a hidden jump · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28a3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x,y) = \dfrac{xy}{x^2+y^2},\ \ f(0,0) = 0"></span></span>Find f on the line y = mx, for x ≠ 0. Find its values on the lines y = 0, y = x, y = −x and y = 2x. <br>Find every value f takes on every disc around (0, 0), however small.</li><li><span class="givens"><span data-tex-inline="g(x,y) = \dfrac{x^2y}{x^4+y^2},\ \ g(0,0) = 0"></span></span>Find g(x, 0) and g(0, y), and the two partial slopes of g at (0, 0).</li><li>Find g on the line y = mx with m ≠ 0, and what it heads to as x → 0.</li><li>Find g on the curve y = x². Find whether g is continuous at (0, 0), and which road shows it.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28a4">
+  <h2 class="sthead"><span class="stno">28a4</span>Illegal moves</h2>
+  <p class="stands">Stands on 28a1 to 28a3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+f_x, f_y \text{ exist at } a \Rightarrow f \text{ continuous at } a\,? @@ 28a3: the knobs miss the jump
+f \text{ heads to } L \text{ along every line through } a \Rightarrow f \text{ heads to } L\,? @@ a curved road can still find a step
+\frac{\partial}{\partial x}(x^2y) = 2xy + x^2\,? @@ y is held still; its slope along x is 0
+f_x(a,b) \text{ is the slope of } y \mapsto f(a,y)\,? @@ that is f_y; f_x turns the x knob
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28a4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(x,y) = \dfrac{xy}{x^2+y^2},\ \ f(0,0) = 0"></span></span>Find f<sub>x</sub>(0, 0), f<sub>y</sub>(0, 0) and f(t, t). <br>Find which demand of continuity at (0, 0) fails, and why the two knobs never see it.</li><li><span class="givens"><span data-tex-inline="g(x,y) = \dfrac{x^2y}{x^4+y^2},\ \ g(0,0) = 0"></span></span>This g heads to 0 along every straight line through (0, 0) (28a3.1). Find a road on which it does not. <br>Find what “heads to 0” asks that the lines alone cannot check.</li><li><span class="givens"><span data-tex-inline="f(x,y) = x^2y,\ \ (3, 5)"></span></span>Find the slope at x = 3 of x ↦ 5x², and ∂(x²y)/∂x at (3, 5). <br>Find where the extra x² in the line comes from, and why it does not belong.</li><li><span class="givens"><span data-tex-inline="f(x,y) = x^2y + y^3,\ \ (1, 2)"></span></span>Find the slope of y ↦ f(1, y) at y = 2, and the slope of x ↦ f(x, 2) at x = 1. <br>Find which of them is f<sub>x</sub>(1, 2), and which knob each one turns.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">28a.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="h(x,y) = \dfrac{x^3y}{x^6+y^2},\ \ h(0,0) = 0"></span></span>Build a function with both partial slopes 0 at (0, 0) that heads to 0 along every straight line through (0, 0), and still jumps there. Check that this h does: find h on the axes, on the line y = mx, and on the curve y = x³. <br>Build another that heads to 0 along every line and along y = x², but not along y = x⁵.</div>
+  <div class="chq"><span class="chid">28a.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="f(x,y) = \dfrac{xy}{x^2+y^2},\ \ \text{now with } f(0,0) = \tfrac12"></span></span>Find whether f is now continuous at (0, 0). <br>Find (f(h, 0) − f(0, 0))/h, and whether f<sub>x</sub>(0, 0) still exists. <br>Find which value at (0, 0), if any, gives f both partial slopes, and which value, if any, makes f continuous.</div>
+  <div class="chq"><span class="chid">28a.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="f(x,y) = \dfrac{xy}{x^2+y^2},\ \ f(0,0) = 0"></span></span>If f is continuous, then every one-knob function x ↦ f(x, b) and y ↦ f(a, y) is continuous. Turn it round: if every one-knob function is continuous, must f be? <br>Check each one-knob function of this f, for b = 0 and for b ≠ 0. <br>Find whether f is continuous at (0, 0), and what the one-knob functions miss.</div>
+  <div class="chq"><span class="chid">28a.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="f(x,y) = xy"></span></span>Prove that f is continuous at (a, b) another way, without the each-place technique. Write xy − ab = x(y − b) + b(x − a), and bound each term using |(x, y) − (a, b)|. <br>Find a δ that works for a given ε. Start by asking for δ ≤ 1, so that |x| ≤ |a| + 1.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r28.html">← 28 · flattening the map</a><a href="r28b.html">28b · the best flat map →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A partial slope is a partial derivative, written ∂f/∂x or f<sub>x</sub>. The sign ∂ is a rounded d, kept apart from the d of a function of one input. Lists of n numbers with the length of 27i make up Euclidean n-space, ℝⁿ.</p>
+  <h3>Who said it first</h3>
+  <p>Leonhard Euler and Alexis Fontaine des Bertins used partial derivatives in the 1730s, writing them in ways close to today’s. The rounded ∂ was used by Adrien-Marie Legendre in 1786 and made standard by Carl Gustav Jacob Jacobi in 1841. The example xy/(x² + y²) is in Giuseppe Peano’s edition of Angelo Genocchi’s calculus of 1884, which corrected several such mistakes in the textbooks of the day.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'near',t:R`|x - a| < \delta`,n:`Length of the gap, in every direction at once.`},
+  {k:'ember',kl:'places',t:R`|x_i - a_i| \le |x - a|`,n:`Each place is closer than the point.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{built from places} \Rightarrow \text{continuous}}`,n:`Rung 10 carries over.`}
+],{title:'The slides · near a point · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'one knob',t:R`f_x(a,b) = \lim_{h\to 0}\frac{f(a+h,b)-f(a,b)}{h}`,n:`Hold y at b.`},
+  {k:'ember',kl:'example',t:R`f = x^2y + y^3`,n:`Two knobs.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{f_x = 2xy,\ \ f_y = x^2 + 3y^2}`,n:`The other input is a number.`}
+],{title:'The slides · partial slope · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'axes',t:R`f(x,0) = f(0,y) = 0`,n:`Both knobs see flat.`},
+  {k:'ember',kl:'diagonal',t:R`f(t,t) = \tfrac12`,n:`Another road sees a step.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{partials exist, } f \text{ jumps}}`,n:`Knobs are not enough.`}
+],{title:'The slides · a hidden jump · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

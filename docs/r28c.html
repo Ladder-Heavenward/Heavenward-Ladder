@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The chain rule along several roads</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r28b.html">← 28b the best flat map</a><a href="r28d.html">next: 28d does the order of the knobs matter? →</a></p>
+  <div class="tags"><span class="tag proof">28c · proof</span></div>
+  <h1>The chain rule along several roads</h1>
+  <p>On rung 13 a chain of two functions had a slope that was the product of their slopes. Here a change can travel by several roads at once. Turn up the heat in a tyre and the pressure rises directly, and also because the rubber stretches and the air has more room. This step proves that the roads add up in exactly the way grids multiply. The best flat map of a chain is the chain of the best flat maps.</p>
+  <p class="gesture">If g has a best flat map at a, and f has one at g(a), then doing g then f has a best flat map at a, and its slope grid is the product of the two slope grids.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r28b.html">28b</a> (the best flat map), <a href="r27d.html">27d</a> (doing one grid then another is multiplying) and <a href="r13e.html">13e</a> (the chain technique for slopes). <a href="r28e.html">28e</a> runs a chain backwards.</p></div>
+</header>
+
+<section class="class step" data-step="28c1">
+  <h2 class="sthead"><span class="stno">28c1</span>Straight maps stretch by a bounded amount</h2>
+  <p class="stands">Stands on 27d1, 18b1, 27i1.</p>
+  <p data-pid="e9b3d4">A chain feeds the step h through two maps. To control the leftover, one fact about straight maps is needed: they never stretch an arrow by more than a fixed factor.</p>
+  <p data-pid="f27b28">Stretch-bound technique: <b>if A is a grid with m rows and n columns, and c is the square root of the sum of the squares of its entries, then |Ah| ≤ c|h| for every h.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the stretch-bound technique">
+(Ah)_i = \text{row}_i \cdot h @@ the columns technique (27d), read along a row
+|(Ah)_i| \le |\text{row}_i|\,|h| @@ the dot-bound technique (18b, in lists of n numbers by 27i1)
+|Ah|^2 = \textstyle\sum_i (Ah)_i^2 \le \sum_i |\text{row}_i|^2\,|h|^2 @@ square and add
+\htmlClass{new}{|Ah| \le c\,|h|,\ \ c^2 = \textstyle\sum_{i,j} a_{ij}^2} \quad \blacksquare @@ the rows together hold every entry once
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · bounded stretch · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">28c1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="A = \begin{pmatrix} 3 &amp; 4 \\ 0 &amp; 5 \end{pmatrix}"></span></span>Find c. <br>Find |Ah| for h = (1, 0) and h = (0, 1), and check the stretch-bound technique on each. <br>Find |Ah|/|h| for h = (1, 3), and how close it comes to c.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28c2">
+  <h2 class="sthead"><span class="stno">28c2</span>Chains of flat maps</h2>
+  <p class="stands">Stands on 28b1, 28c1, 27d2.</p>
+  <p data-pid="7e22e4">Chain-of-flat-maps technique: <b>if g has best flat map B at a, and f has best flat map A at g(a), then f ∘ g has best flat map AB at a. Its slope grid is the product of the slope grids.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the chain-of-flat-maps technique">
+g(a+h) = g(a) + Bh + r(h),\ \ \ f(g(a)+k) = f(g(a)) + Ak + s(k) @@ the two best flat maps (28b1)
+k = Bh + r(h) @@ the step that g hands on to f
+f(g(a+h)) = f(g(a)) + ABh + A\,r(h) + s(k) @@ substitute, and A is straight (27c)
+|A\,r(h)| \le c_A |r(h)|,\ \ \text{so } \dfrac{|A\,r(h)|}{|h|} \to 0 @@ the stretch-bound technique (28c1)
+|k| \le c_B|h| + |r(h)| \le (c_B + 1)|h| \text{ for small } h @@ 28c1, and |r(h)| ≤ |h| once h is small
+\dfrac{|s(k)|}{|h|} \le (c_B + 1)\dfrac{|s(k)|}{|k|} \to 0 \ \ (k \ne 0) @@ k → 0 as h → 0; when k = 0, s(k) = 0
+\htmlClass{new}{D(f\circ g)(a) = Df(g(a))\,Dg(a)} \quad \blacksquare @@ the leftover shrinks faster than h; doing B then A is AB (27d)
+  </pre>
+  <p data-pid="4487fd">With one input and one output each, the grids are single numbers and this is 13e’s chain technique. The new thing is that the product of grids is a sum over the roads: entry (i, j) of AB adds, over every middle quantity, the slope along one road times the slope along the next.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · chain · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28c2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="g(r,\theta) = (r\cos\theta,\ r\sin\theta)"></span> <span data-tex-inline="T(x,y) = 20 + x^2 - y^2"></span></span>A metal plate is heated so that its temperature, in degrees, is T at the point (x, y). Find the slope grid of g at (r, θ), and the slope grid of T at g(r, θ). <br>Multiply them to find the slope grid of T ∘ g. Find its value at r = 2, θ = π/6. <br>Substitute first: write T(g(r, θ)) as a formula in r and θ, take its partial slopes, and compare.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28c3">
+  <h2 class="sthead"><span class="stno">28c3</span>Several roads to one output</h2>
+  <p class="stands">Stands on 28c2.</p>
+  <p data-pid="a3d848">The most used case: a single output f(x, y) along a moving point (x(t), y(t)).</p>
+  <p data-pid="c8b391">Roads-add technique: <b>if x(t) and y(t) have slopes at t and f has a best flat map at (x(t), y(t)), then the slope of f(x(t), y(t)) is f<sub>x</sub> · x′(t) + f<sub>y</sub> · y′(t).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the roads-add technique">
+Dg(t) = \begin{pmatrix} x'(t) \\ y'(t) \end{pmatrix},\ \ Df = \begin{pmatrix} f_x & f_y \end{pmatrix} @@ the slope-grid technique (28b2), g(t) = (x(t), y(t))
+\htmlClass{new}{\dfrac{d}{dt} f(x(t),y(t)) = f_x\,x'(t) + f_y\,y'(t)} \quad \blacksquare @@ the chain-of-flat-maps technique (28c2): a row times a column
+  </pre>
+  <p data-pid="b1b15b">Each term is one road: how fast x moves, times how much f cares about x; then the same for y. The total change is the sum over the roads.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · roads add · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28c3.1</span><span class="ph make">make</span><span class="givens"><span data-tex-inline="h(x,y) = 1650 + 120x - 30y^2"></span> <span data-tex-inline="(x(t),\ y(t)) = (2t,\ 1 + t)"></span></span>A smooth model of the slopes above Paradise, on Mount Rainier, gives the height h in metres at x km east and y km north of a trailhead. A hiker walks the path given, with t in hours. Find h<sub>x</sub> and h<sub>y</sub>. <br>Find the rate of climb at t = 0.5 by the roads-add technique. Find which road adds height and which takes it away. <br>Substitute first: write h(x(t), y(t)) in t, take its slope, and compare. Find when the hiker stops climbing.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28c4">
+  <h2 class="sthead"><span class="stno">28c4</span>Illegal moves</h2>
+  <p class="stands">Stands on 28c1 to 28c3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+D(f\circ g)(a) = Dg(a)\,Df(g(a))\,? @@ g is done first, so its grid is on the right: AB, not BA
+D(f\circ g)(a) = Df(a)\,Dg(a)\,? @@ f’s flat map is taken where g lands, at g(a)
+\tfrac{d}{dt}f(x(t),y(t)) = f_x + f_y\,? @@ each road is weighted by how fast its input moves
+\text{partials of } f \text{ exist} \Rightarrow \text{roads add}\,? @@ the technique needs f’s best flat map; 28a3’s function breaks it along y = x
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28c4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="g(t) = (t,\ t^2),\ \ f(x,y) = x + 2y,\ \ t = 1"></span></span>Find Dg(1), Df(g(1)), and the slope of f(g(t)) at t = 1. <br>Find the product of the two grids in each order, and which one is the slope.</li><li><span class="givens"><span data-tex-inline="g(u,v) = (2u,\ 3v),\ \ f(x,y) = xy,\ \ a = (1, 1)"></span></span>Find D(f ∘ g)(1, 1) by substituting first. <br>Find Df(g(1, 1)) Dg(1, 1) and Df(1, 1) Dg(1, 1). Find which one matches, and why.</li><li><span class="givens"><span data-tex-inline="f(x,y) = xy,\ \ (x(t), y(t)) = (\cos t,\ \sin t)"></span></span>Find the slope of f(x(t), y(t)) at t = π/4, first by substituting, then by the roads-add technique. <br>Find f<sub>x</sub> + f<sub>y</sub> there, and what it leaves out.</li><li><span class="givens"><span data-tex-inline="f(x,y) = \dfrac{xy}{x^2+y^2},\ \ f(0,0) = 0,\ \ (x(t), y(t)) = (t, t)"></span></span>Find what the roads-add line gives at t = 0, using the partial slopes of f at (0, 0). <br>Find f(t, t) for t ≠ 0 and at t = 0, and whether it has a slope at t = 0. Find which demand of the technique fails.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">28c.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="g(t) = (t,\ t^2,\ t^3),\ \ f(x,y,z) = xy + z"></span></span>Build the chain f(g(t)). Find Dg(t), Df(g(t)) and their product. <br>Find the three roads, one term each, and check their sum against the slope of f(g(t)) found by substituting first.</div>
+  <div class="chq"><span class="chid">28c.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="g(t) = (1, 2) \text{ for every } t"></span></span>Find Dg, and the slope grid the chain-of-flat-maps technique gives for f ∘ g, for any f with a best flat map at (1, 2). <br>Here the step k that g hands on is 0 for every h. Find the line of the proof that divides by |k|, and why the proof still holds. <br>Find the leftover s(k) when f is itself straight.</div>
+  <div class="chq"><span class="chid">28c.4.3</span><span class="tagq">converse</span>If g and f have best flat maps, so does f ∘ g. Turn it round: if f ∘ g has a best flat map, must g and f? <br>Test g(x, y) = (|x|, y) and f(u, v) = u² + v at (0, 0). <br>Test g(t) = (t, 0) and f = xy/(x² + y²) with f(0, 0) = 0, at t = 0.</div>
+  <div class="chq"><span class="chid">28c.4.4</span><span class="tagq">reroute</span>Prove the roads-add technique another way, for f smoothly sloped. Walk from (x(t), y(t)) to (x(t + τ), y(t + τ)) one knob at a time, as in the smooth-knobs technique, and use the average-slope technique on each leg. <br>Divide by τ and let τ → 0. Find the extra demand this route needs that the chain-of-flat-maps technique does not.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r28b.html">← 28b · the best flat map</a><a href="r28d.html">28d · does the order of the knobs matter? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The chain-of-flat-maps technique is the multivariable chain rule. The stretch-bound number c is the Frobenius (or Hilbert–Schmidt) norm of the matrix; the least such factor is the operator norm. The roads-add technique is the chain rule for a total derivative, often drawn as a tree diagram of variables.</p>
+  <h3>Who said it first</h3>
+  <p>Leibniz and Johann Bernoulli used the chain rule for one variable in the 1690s. Euler used the several-roads form freely in the 1750s in his work on fluids. The clean statement with linear maps and matrices belongs to the twentieth century, through William Henry Young (1910) and Jean Dieudonné’s Foundations of Modern Analysis (1960).</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'row',t:R`|(Ah)_i| \le |\text{row}_i||h|`,n:`Dot-bound.`},
+  {k:'ember',kl:'add',t:R`|Ah|^2 \le \sum |\text{row}_i|^2 |h|^2`,n:`Square and sum.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{|Ah| \le c|h|}`,n:`Every straight map is tame.`}
+],{title:'The slides · bounded stretch · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'feed',t:R`k = Bh + r(h)`,n:`g hands f a step.`},
+  {k:'ember',kl:'expand',t:R`f(g(a)) + ABh + \text{small}`,n:`Two leftovers.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{D(f\circ g) = Df \cdot Dg}`,n:`Grids multiply.`}
+],{title:'The slides · chain · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'row',t:R`(f_x\ \ f_y)`,n:`How much f cares.`},
+  {k:'ember',kl:'column',t:R`(x^{\prime}\ \ y^{\prime})`,n:`How fast each input moves.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\tfrac{d}{dt}f = f_x x^{\prime} + f_y y^{\prime}}`,n:`One term per road.`}
+],{title:'The slides · roads add · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

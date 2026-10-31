@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How errors spread</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r28o.html">← 28o gradient descent</a><a href="r28then.html">next: 28·then how good can an engine ever be? →</a></p>
+  <div class="tags"><span class="tag tech">28p · technique</span></div>
+  <h1>How errors spread</h1>
+  <p>Every measured number comes with a doubt: a ruler good to a fifth of a millimetre, a stopwatch good to a hundredth of a second. When measured numbers go into a formula, the doubts go in too, and something comes out the other side. Rung thirteen followed a doubt through a single power. With several inputs, each doubt travels by its own road, weighted by how much the formula cares about that input, and the roads add. This step puts a true ceiling on what comes out, finds the quick rule for products and powers, where the doubts as shares simply add, and then runs the question backwards. When the thing you want is found by undoing a formula, as a position is found from distances, a small doubt can grow large, and the determinant of the slope grid says when.</p>
+  <p class="gesture">The doubt in the output is at most the sum of each input’s doubt times the largest partial slope along it. For products of powers, doubts measured as shares add, each times its power. Undoing a formula multiplies the doubts by the undone slope grid, which is large when the determinant is small.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r28b.html">28b</a> (the best flat map), <a href="r28c.html">28c</a> (the roads-add technique), <a href="r28e.html">28e</a> (the segment-bound and undo-slope techniques), <a href="r14c.html">14c</a> (the average-slope technique), <a href="r13m.html">13m</a> (relative error and the relative-errors technique), <a href="r17c.html">17c</a> (logs of products and powers), <a href="r17b.html">17b</a> (the slope-of-log technique) and <a href="r27g.html">27g</a> (the stand-in technique). <a href="r28then.html">28·then</a> asks how good an engine can ever be.</p></div>
+</header>
+
+<section class="class step" data-step="28p1">
+  <h2 class="sthead"><span class="stno">28p1</span>A ceiling on the spread</h2>
+  <p class="stands">Stands on 28c3 (the roads-add technique), 14c (the average-slope technique), 28e1 (the segment-bound technique) and 28b1.</p>
+  <p data-pid="6467d6">Let x₁, …, xₙ be measured as p₁, …, pₙ, each within a known doubt: the true value is pᵢ + hᵢ with |hᵢ| ≤ Δᵢ. The true inputs then lie in the box of points within Δᵢ of pᵢ in each place. The question is how far f(p + h) can be from f(p).</p>
+  <p data-pid="42337b">Error-bound technique: <b>let f be smoothly sloped on the box. Suppose |∂f/∂xᵢ| ≤ Mᵢ at every point of the box. Then |f(p + h) − f(p)| ≤ M₁Δ₁ + ⋯ + MₙΔₙ for every true point p + h in the box.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the error-bound technique">
+g(t) = f(p + th),\ \ 0 \le t \le 1 @@ along the segment from the measured point to the true one, which stays in the box
+f(p + h) - f(p) = g(1) - g(0) = g'(c),\ \ 0 < c < 1 @@ the average-slope technique (14c), the same walk as the segment-bound technique (28e1)
+g'(c) = \textstyle\sum_i \frac{\partial f}{\partial x_i}(p + ch)\,h_i @@ the roads-add technique (28c3)
+|g'(c)| \le \textstyle\sum_i M_i\,|h_i| @@ the triangle technique (8h), term by term
+\htmlClass{new}{|f(p + h) - f(p)| \le M_1\Delta_1 + \cdots + M_n\Delta_n} \quad \blacksquare @@ |hᵢ| ≤ Δᵢ
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: a can of soup">
+V = \pi r^2h,\ \ r = 3.30 \pm 0.02\ \text{cm},\ \ h = 12.2 \pm 0.1\ \text{cm} @@ a can measured with a ruler
+V = 417.4\ \text{cm}^3,\ \ V_r = 2\pi rh \approx 253.0,\ \ V_h = \pi r^2 \approx 34.2 @@ the one-knob technique (28a2), at the measured point
+\text{flat estimate: } 253.0(0.02) + 34.2(0.1) \approx 5.06 + 3.42 = 8.48 @@ the best flat map (28b1), with each doubt taken the bad way
+M_r = 2\pi(3.32)(12.3) \approx 256.6,\ \ M_h = \pi(3.32)^2 \approx 34.6 @@ the largest partial slopes on the box
+\htmlClass{new}{|\Delta V| \le 5.13 + 3.46 = 8.59\ \text{cm}^3:\ \ V = 417 \pm 9\ \text{cm}^3} \quad \blacksquare @@ the error-bound technique; the true worst is 8.54
+  </pre>
+  <p data-pid="49d6e9">The flat estimate with the slopes at the measured point is what people use every day, and its own error shrinks faster than the doubts (28b1). The ceiling with the largest slopes on the box costs a little more and is never wrong. Both treat each doubt as if it fell the bad way. Doubts that fall at random partly cancel, and how much they cancel is a question about chance, for rung thirty.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the ceiling · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">28p1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="120.0 \pm 0.5\ \text{m} \times 75.0 \pm 0.5\ \text{m}"></span></span>A sports field in Eugene is measured with a long tape. Find its area, the flat estimate of the doubt, the ceiling, and the true worst case.</li><li><span class="givens"><span data-tex-inline="c = \sqrt{a^2 + b^2},\ \ a = 30.0 \pm 0.1,\ \ b = 40.0 \pm 0.1"></span></span>Find c and the flat estimate of its doubt.</li><li><span class="givens"><span data-tex-inline="H = d\tan\theta,\ \ d = 25.0 \pm 0.2\ \text{m},\ \ \theta = 35^\circ \pm 0.5^\circ"></span></span>A bigleaf maple in Stanley Park is measured by pacing out d from its foot and sighting the angle θ up to its top. Find H, the flat estimate of the doubt, and which measurement matters more. Work θ in radians.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28p2">
+  <h2 class="sthead"><span class="stno">28p2</span>Shares add</h2>
+  <p class="stands">Stands on 28p1, 13m (relative error and the relative-errors technique), 17c (the log-of-a-product and log-of-a-power techniques), 17b (the slope-of-log technique), 28a2 and 28b1.</p>
+  <p data-pid="d5eeb5">13m defined the relative error of a measured x as Δx/x, the doubt as a share, and proved that through a power k the share is multiplied by k. Many laws of science are products of powers, and for them the shares simply add.</p>
+  <p data-pid="21e8ed">Relative-errors-add technique: <b>let f = c x₁^k₁ ⋯ xₙ^kₙ with c &gt; 0 and every xᵢ &gt; 0. If xᵢ is measured with relative error eᵢ, the relative error of f is, to first order, at most |k₁|e₁ + ⋯ + |kₙ|eₙ.</b> To first order means: by the best flat map, whose own error shrinks faster than the doubts.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the relative-errors-add technique">
+\ln f = \ln c + k_1\ln x_1 + \cdots + k_n\ln x_n @@ the log-of-a-product and log-of-a-power techniques (17c), real powers by 17g
+\tfrac{\partial}{\partial x_i}\ln f = \tfrac{k_i}{x_i} @@ the one-knob technique (28a2) and the slope-of-log technique (17b)
+\Delta(\ln f) \approx k_1\tfrac{\Delta x_1}{x_1} + \cdots + k_n\tfrac{\Delta x_n}{x_n} @@ the best flat map of ln f (28b1)
+\Delta(\ln f) = \ln\big(1 + \tfrac{\Delta f}{f}\big) \approx \tfrac{\Delta f}{f} @@ the best flat map of ln at 1, of slope 1 (17b)
+\htmlClass{new}{\tfrac{|\Delta f|}{f} \lesssim |k_1|e_1 + \cdots + |k_n|e_n} \quad \blacksquare @@ the triangle technique (8h); ≲ marks a bound to first order
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: the pull of gravity from a pendulum">
+g = \tfrac{4\pi^2L}{T^2},\ \ L = 1.000 \pm 0.002\ \text{m},\ \ T = 2.006 \pm 0.005\ \text{s} @@ a pendulum’s length and the time of one swing out and back
+e_L = 0.2\%,\ \ e_T = 0.249\% @@ shares of the measured values
+e_g \lesssim 1\cdot0.2\% + 2\cdot0.249\% \approx 0.70\% @@ the relative-errors-add technique: L to the power 1, T to the power −2
+\htmlClass{new}{g = 9.811 \pm 0.069\ \text{m/s}^2} \quad \blacksquare @@ the time counts twice: improve the stopwatch first
+  </pre>
+  <p data-pid="ef7cc7">The powers tell you where to spend effort. The time enters squared, so its share counts twice. Timing twenty swings and dividing by twenty cuts the time’s doubt twentyfold with the same stopwatch, and then the length becomes the weak link.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · shares · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28p2.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="m = 66.8 \pm 0.1\ \text{g},\ \ d = 2.54 \pm 0.01\ \text{cm},\ \ \rho = \tfrac{m}{\pi d^3/6}"></span></span>A steel ball bearing is weighed and its width measured. Find its density and the doubt in it.</li><li><span class="givens"><span data-tex-inline="E = \tfrac12 mv^2,\ \ m = 1500 \pm 10\ \text{kg},\ \ v = 27.8 \pm 0.3\ \text{m/s}"></span></span>Find the energy of motion of a car at about 100 km/h on the I-5, and its doubt.</li><li><span class="givens"><span data-tex-inline="L = 1.000 \pm 0.002\ \text{m},\ \ 20T = 40.12 \pm 0.005\ \text{s}"></span></span>Twenty swings are timed together. Find T and its doubt, and the new doubt in g. Find which measurement now matters more.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28p3">
+  <h2 class="sthead"><span class="stno">28p3</span>Measuring backwards</h2>
+  <p class="stands">Stands on 28e2 (the local-undo technique), 28e3 (the undo-slope technique), 28b1, 27g2 (the stand-in technique) and 28p1.</p>
+  <p data-pid="e7e993">Often the thing wanted is not measured. Something else is, y = F(x), and x is found by undoing F. Two radio beacons give your distances to each, and your position is the point with those distances. Then the doubts in y pass backwards through the undoing.</p>
+  <p data-pid="313ec0">Undo-error technique: <b>let F be smoothly sloped near x, with slope grid J = DF(x) undoable. If x is found by undoing F from a measured y, then, to first order, the error in x is J⁻¹ times the error in y. Every entry of J⁻¹ is a stand-in of J divided by det J, so when det J is near 0, small doubts in y make large doubts in x.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the undo-error technique">
+G(F(x)) = x \text{ near } x,\ \ G \text{ smoothly sloped} @@ the local-undo technique (28e2): det J ≠ 0
+DG(y) = DF(x)^{-1} = J^{-1} @@ the undo-slope technique (28e3), at y = F(x)
+\Delta x = G(y + \Delta y) - G(y) \approx J^{-1}\Delta y @@ the best flat map of G (28b1)
+J^{-1} = \tfrac{1}{\det J}\,S @@ the stand-in technique (27g2): S is the grid of stand-ins
+\htmlClass{new}{\Delta x \approx \tfrac{1}{\det J}\,S\,\Delta y} \quad \blacksquare @@ small det J, large Δx
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: two beacons">
+F(x, y) = \big(\sqrt{x^2 + y^2},\ \sqrt{(x - 10)^2 + y^2}\big) @@ distances, in km, to beacons at (0, 0) and (10, 0)
+\text{at } (5, 12):\ \ J = \tfrac{1}{13}\begin{pmatrix} 5 & 12 \\ -5 & 12 \end{pmatrix},\ \ \det J = \tfrac{120}{169} \approx 0.71 @@ the slope-grid technique (28b2): x/d₁, y/d₁ and so on
+J^{-1} = \begin{pmatrix} 1.3 & -1.3 \\ 0.542 & 0.542 \end{pmatrix} @@ the stand-in technique (27g2)
+\text{doubts } \pm 0.01:\ \ |\Delta x| \le 0.026,\ \ |\Delta y| \le 0.011 @@ add the sizes along each row of J⁻¹, times 0.01
+\text{at } (5, 1):\ \ \det J = \tfrac{10}{26} \approx 0.38,\ \ |\Delta y| \le 0.051 @@ the same work: near the line through the beacons
+\htmlClass{new}{\text{close to the line through the beacons, the north is poorly fixed}} \quad \blacksquare @@ det J = 10y/(d₁d₂) heads to 0 as y does
+  </pre>
+  <p data-pid="a02622">The same happens with no curves at all. Undoing a grid whose determinant is small, as in 27j’s elimination, multiplies the doubts in the right-hand side by the large entries of the undone grid. Two samenesses that are nearly the same sameness fix their answer badly, however carefully they are solved.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · backwards · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28p3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{beacons at } (0, 0),\ (10, 0);\ \ \text{you at } (6, 8)"></span></span>Find your distances, J, det J and J⁻¹. With doubts of ±0.01 km in each distance, find the worst doubts in x and in y.</li><li><span class="givens"><span data-tex-inline="F(x, y) = \big(\sqrt{x^2 + y^2},\ \sqrt{(x - 10)^2 + y^2}\big)"></span></span>Find det DF at a point (x, y) with y &gt; 0 as one formula, and where it is 0.</li><li><span class="givens"><span data-tex-inline="x_1 + x_2 = 2,\ \ x_1 + 1.01x_2 = 2.01,\ \ \text{right sides } \pm 0.005"></span></span>Find the answer, the undone grid, and the worst doubts in x₁ and x₂.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28p4">
+  <h2 class="sthead"><span class="stno">28p4</span>Illegal moves</h2>
+  <p class="stands">Stands on 28p1 to 28p3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{relative errors add for a difference too}\,? @@ 10.0 ± 0.1 minus 9.8 ± 0.1 is 0.2 ± 0.2: a share of 100%, not 2%
+e_{\sqrt x} = 2e_x\,? @@ through a power the share is multiplied by the power: ½
+\Delta V = \Delta r + \Delta h \text{ for } V = \pi r^2h\,? @@ each doubt goes by its own road, weighted by its partial slope; and cm³ are not cm
+\text{the flat estimate } |\nabla f(p)\cdot h| \text{ is a ceiling}\,? @@ f = x² at x = 0 ± 0.1: the estimate is 0, the true error up to 0.01
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28p4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="x = 10.0 \pm 0.1,\ \ y = 9.8 \pm 0.1"></span></span>Find x − y, its worst doubt, and its share. Find the shares of x and y. <br>Find what the first line forgets about differences.</li><li><span class="givens"><span data-tex-inline="x = 100 \pm 1"></span></span>Find the least and greatest √x, and the shares of x and of √x. <br>Find the slip.</li><li><span class="givens"><span data-tex-inline="V = \pi r^2h,\ \ r = 3.30 \pm 0.02,\ \ h = 12.2 \pm 0.1"></span></span>Find what the third line gives, and the ceiling of 28p1. <br>Find what the third line leaves out.</li><li><span class="givens"><span data-tex-inline="f = x^2,\ \ x = 0 \pm 0.1"></span></span>Find the flat estimate and the true worst error. Find the ceiling of the error-bound technique. <br>Find which of the two may be trusted as a ceiling.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">28p.4.1</span><span class="tagq">build</span>Build a rectangle of area 100 m² whose two sides, each measured to ±1 cm, give the least flat estimate of the doubt in the area. <br>Find it by the lines-up technique (28g2), and the doubt.</div>
+  <div class="chq"><span class="chid">28p.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="f(x, y) = xy,\ \ x = 0 \pm 0.1,\ \ y = 0 \pm 0.1"></span></span>At a flat point the flat estimate of the doubt is 0. Find the true worst error here. <br>Use the hug-ceiling technique (28l3) to give a ceiling that does not vanish, and compare.</div>
+  <div class="chq"><span class="chid">28p.4.3</span><span class="tagq">converse</span>Products of powers have constant shares: x f<sub>x</sub>/f = k₁ and y f<sub>y</sub>/f = k₂. Turn it round: if f &gt; 0 is smoothly sloped for x, y &gt; 0, and x f<sub>x</sub>/f and y f<sub>y</sub>/f are fixed numbers k₁ and k₂, must f be c x^k₁ y^k₂? <br>Prove your answer.</div>
+  <div class="chq"><span class="chid">28p.4.4</span><span class="tagq">reroute</span>13m proved the relative-errors technique for one power by the nearby line. Reroute it through logs, as in 28p2, with one input. <br>Then find the exact share of (1 + 0.01)³ − 1 and of 1 − (1 − 0.01)³, and compare with the first-order 3%.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r28o.html">← 28o · gradient descent</a><a href="r28then.html">28·then · how good can an engine ever be? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>Following doubts through a formula is the propagation of error (or of uncertainty). The flat estimate is the total differential, df = f<sub>x</sub> dx + f<sub>y</sub> dy, used as a linear error estimate; the error-bound technique is a form of the mean value inequality. A share is a relative (or fractional, or percentage) error; the relative-errors-add technique is the rule for products and quotients, found by logarithmic differentiation. For errors that are random and independent, the sum is replaced by the square root of the sum of squares, adding in quadrature. How much an undoing magnifies doubts is measured by the condition number of the matrix; a system with a large one is ill-conditioned. In navigation by beacons or satellites, the magnification by the geometry is the dilution of precision.</p>
+  <h3>Who said it first</h3>
+  <p>Carl Friedrich Gauss built a theory of errors in observation in 1809 and 1821 to 1823, for astronomy and for surveying the kingdom of Hanover. Alan Turing named the condition number in 1948, in a paper on the rounding errors of matrix work. Henry Kater measured the pull of gravity with a reversible pendulum in 1817.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'one segment',t:R`f(p + h) - f(p) = g'(c)`,n:`The average-slope technique.`},
+  {k:'ember',kl:'roads add',t:R`g'(c) = \sum f_{x_i}h_i`,n:`Each doubt, weighted.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{|\Delta f| \le \sum M_i\Delta_i}`,n:`Never wrong.`}
+],{title:'The slides · the ceiling · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'logs',t:R`\ln f = \ln c + \sum k_i\ln x_i`,n:`Products become sums.`},
+  {k:'ember',kl:'slopes',t:R`\partial_{x_i}\ln f = k_i/x_i`,n:`One knob, one log.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{e_f \lesssim \sum |k_i|\,e_i}`,n:`Each share times its power.`}
+],{title:'The slides · shares · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'undo',t:R`DG(y) = J^{-1}`,n:`The undo-slope technique.`},
+  {k:'ember',kl:'the doubt',t:R`\Delta x \approx J^{-1}\Delta y`,n:`The flat map of the undoing.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{J^{-1} = S/\det J}`,n:`Small det, large doubt.`}
+],{title:'The slides · backwards · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Along curves and across surfaces</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r28m.html">← 28m integrals by hand</a><a href="r28o.html">next: 28o gradient descent →</a></p>
+  <div class="tags"><span class="tag tech">28n · technique</span></div>
+  <h1>Along curves and across surfaces</h1>
+  <p>The last proof step of this rung totalled a field along a path and round the edge of a rectangle. This step takes those totals out into the open. A wire bent into a coil has a weight that is a total along a curve. The work a wind does on a kite, or gravity on a hiker, is a total of the push along the way. The first thing to check is that these totals belong to the curve and not to how fast it was walked. Next, a field that is uphill from something has a total along a path that depends only on the ends, and two cross slopes tell, on a rectangle, whether a field is of that kind and how to find what it is uphill from. Last, a surface in space is traced by two measures, as a curve is traced by one, and the cross of its two edge arrows gives both its area and the flow through it.</p>
+  <p class="gesture">A total along a curve does not care how fast the curve is traced; walking it backwards only turns the sign of a work total. On a rectangle, a field is uphill from something exactly when its two cross slopes agree, and then the work depends only on the ends. A surface is traced by two measures; the cross of its edge arrows gives its area and the flow through it.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r28j.html">28j</a> (circulation and flux, and the uphill-total, swirl and spread techniques), <a href="r28d.html">28d</a> (the swap-knobs technique), <a href="r28i.html">28i</a> (the change-of-variables technique), <a href="r28c.html">28c</a> (the chain-of-flat-maps technique), <a href="r27i.html">27i</a> (the cross and moving-dot techniques), <a href="r18i.html">18i</a> (curves traced in time) and <a href="r16d.html">16d</a> (substitution). <a href="r28o.html">28o</a> walks downhill.</p></div>
+</header>
+
+<section class="class step" data-step="28n1">
+  <h2 class="sthead"><span class="stno">28n1</span>Totals along a curve</h2>
+  <p class="stands">Stands on 28j1 (circulation), 18i (the distance-travelled technique), 27i4 (arrows that move), 13e (the chain technique for slopes) and 16d (the substitution technique for areas).</p>
+  <p data-pid="b959ac">Let r(t), for α ≤ t ≤ β, trace a curve C in the plane or in space, with r′ continuous and never 0. 28j1 defined the circulation of a field F along r; in space it is the same total with three places: ∫ from α to β of F(r(t)) · r′(t) dt. When F is a force, this total is the <i>work</i> it does. A second total weighs a function f along the curve by distance, as 18i measured length: ∫ from α to β of f(r(t)) |r′(t)| dt, written ∫<sub>C</sub> f ds. With f the weight per metre of a wire, it is the wire’s weight.</p>
+  <p data-pid="ad82b5">Retrace technique: <b>let u(s), for γ ≤ s ≤ δ, have a continuous slope that is never 0, and run from α to β or from β to α. Tracing the curve again as q(s) = r(u(s)) keeps ∫<sub>C</sub> f ds. It keeps the work total when u runs forwards, and turns its sign when u runs backwards.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the retrace technique">
+q'(s) = u'(s)\,r'(u(s)) @@ the chain technique for slopes (13e), place by place
+\textstyle\int_\gamma^\delta F(q(s))\cdot q'(s)\,ds = \int_\gamma^\delta F(r(u(s)))\cdot r'(u(s))\,u'(s)\,ds @@ put in q′
+= \textstyle\int_{u(\gamma)}^{u(\delta)} F(r(t))\cdot r'(t)\,dt @@ the substitution technique for areas (16d), t = u(s)
+\text{backwards: } u(\gamma) = \beta,\ u(\delta) = \alpha, \text{ and the total turns sign} @@ swapping the ends of a total turns its sign
+\textstyle\int_\gamma^\delta f(q)\,|q'|\,ds = \int_\gamma^\delta f(r(u))\,|r'(u)|\,|u'|\,ds @@ |q′| = |u′| |r′(u)|
+\htmlClass{new}{\textstyle\int_C f\,ds \text{ is kept either way}} \quad \blacksquare @@ backwards |u′| = −u′, and that minus cancels the swap of the ends
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: a coiled wire">
+r(t) = (3\cos t,\ 3\sin t,\ 4t),\ \ 0 \le t \le 2\pi,\ \ |r'(t)| = 5 @@ 27i4’s spiral staircase, one turn
+f = z = 4t \ \text{grams per unit of length} @@ the wire thickens as it climbs
+\textstyle\int_C f\,ds = \int_0^{2\pi} 4t\cdot 5\,dt = 40\pi^2 \approx 395\ \text{g} @@ the weight
+F = (-y,\ x,\ 0):\ \ F\cdot r' = 9\sin^2 t + 9\cos^2 t = 9 @@ a field that turns round the upright axis
+\htmlClass{new}{\text{work } 18\pi \text{ climbing};\ \ -18\pi \text{ coming down}} \quad \blacksquare @@ the retrace technique with u(s) = 2π − s
+  </pre>
+  <p data-pid="eb93f6">A total along a curve belongs to the curve and its direction, not to the walk. So a curve can be traced by whatever measure makes the totals easiest: by x itself when the curve is a graph, by the angle on a circle, by the height on a coil.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · along a curve · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">28n1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="F = (y^2,\ x)"></span></span>Find the work from (0, 0) to (1, 1) along the parabola y = x², and along the straight line y = x.</li><li><span class="givens"><span data-tex-inline="\text{quarter circle of radius 2 from } (2, 0) \text{ to } (0, 2);\ \ f = x + y\ \text{g/cm}"></span></span>Find the weight of the wire.</li><li><span class="givens"><span data-tex-inline="q(s) = (1 - s,\ (1 - s)^2),\ \ 0 \le s \le 1"></span></span>This traces the parabola of part (a) from (1, 1) back to (0, 0). Find the work of F = (y², x) along it, and compare with part (a).</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28n2">
+  <h2 class="sthead"><span class="stno">28n2</span>Fields that are uphill from something</h2>
+  <p class="stands">Stands on 28j1 (the uphill-total technique), 28j2 (the swirl technique), 28d2 (the swap-knobs technique) and 16b (the area-slope technique).</p>
+  <p data-pid="8cd0f6">By the uphill-total technique of 28j1, if F = ∇φ, the work along every path is φ at the end minus φ at the start, and round every loop it is 0. A field of that kind is <i>uphill from</i> φ, and φ is its <i>potential</i>. Two questions remain for the hand: how to tell such a field, and how to find φ.</p>
+  <p data-pid="a25e53">Cross-slopes technique: <b>let P and Q be smoothly sloped on a rectangle R. Then F = (P, Q) is uphill from some φ on R exactly when P<sub>y</sub> = Q<sub>x</sub> on R.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the cross-slopes technique">
+F = \nabla\varphi \Rightarrow P_y = \varphi_{xy} = \varphi_{yx} = Q_x @@ one way: the swap-knobs technique (28d2); φ’s second slopes are P and Q’s slopes, continuous
+\varphi(x,y) = \textstyle\int_{x_0}^x P(t, y_0)\,dt + \int_{y_0}^y Q(x, t)\,dt @@ the other way: (x₀, y₀) the lower left corner of R; across, then up
+\psi(x,y) = \textstyle\int_{y_0}^y Q(x_0, t)\,dt + \int_{x_0}^x P(t, y)\,dt @@ up, then across
+\varphi - \psi = \text{circulation round the edge of } [x_0, x]\times[y_0, y] @@ along the bottom, up the right side, back along the top, down the left: inside on the left
+= \textstyle\iint (Q_x - P_y) = 0 @@ the swirl technique (28j2); the cross slopes agree
+\varphi_y = Q(x, y),\ \ \psi_x = P(x, y) @@ the area-slope technique (16b), on the last piece of each
+\htmlClass{new}{\varphi = \psi, \text{ so } \nabla\varphi = (P, Q)} \quad \blacksquare @@ φₓ = ψₓ = P
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: finding the potential">
+F = (2xy + 3,\ x^2 + 4y):\ \ P_y = 2x = Q_x @@ the cross-slopes technique: F is uphill from something
+\varphi = \textstyle\int P\,dx = x^2y + 3x + c(y) @@ hold y still; the constant may hold y
+\varphi_y = x^2 + c'(y) = x^2 + 4y,\ \ c(y) = 2y^2 @@ match Q
+\varphi = x^2y + 3x + 2y^2 @@ check: ∇φ = F
+\htmlClass{new}{\text{work from } (0, 0) \text{ to } (1, 2) = \varphi(1, 2) - \varphi(0, 0) = 13} \quad \blacksquare @@ the uphill-total technique (28j1), along every path
+  </pre>
+  <p data-pid="c9116e">The rectangle matters. The field (−y, x)/(x² + y²) of 28j4 has P<sub>y</sub> = Q<sub>x</sub> at every point but 0, and works 2π round the circle about 0, so it is uphill from nothing on the plane with 0 taken out. On any rectangle that misses 0, the cross-slopes technique still hands it a potential. The trouble is the hole, not the field.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · uphill from · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28n2.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="F = (y\cos(xy),\ x\cos(xy) + 2y)"></span></span>Test F by the cross-slopes technique, find φ, and find the work from (0, 0) to (1, π/2).</li><li><span class="givens"><span data-tex-inline="F = (x + y,\ y - x)"></span></span>Test F. Find its circulation once round the unit circle, with the inside on the left, two ways: along the circle, and by the swirl technique on the disc.</li><li><span class="givens"><span data-tex-inline="m = 15\ \text{kg},\ \ g = 9.81\ \text{m/s}^2,\ \ F = (0,\ 0,\ -mg)"></span></span>A hiker carries a pack up a switchback trail on Mount Hood, from 1700 m to 2000 m above the sea. Find a φ with ∇φ = F, and the work gravity does on the pack, whatever the trail.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28n3">
+  <h2 class="sthead"><span class="stno">28n3</span>Totals across a surface</h2>
+  <p class="stands">Stands on 27i3 (the cross technique), 27e2 (the three-rules technique), 28c2 (the chain-of-flat-maps technique), 28i3 (the change-of-variables technique) and 28j3 (the spread technique).</p>
+  <p data-pid="145a66">A <i>patch</i> is a map r(u, v) from a region S of the uv-plane into space, smoothly sloped and one-to-one, with r<sub>u</sub> × r<sub>v</sub> ≠ 0 inside S. Its edge arrows r<sub>u</sub> and r<sub>v</sub> are the partial slopes, place by place. A small box of sides Δu, Δv goes to nearly the parallelogram on r<sub>u</sub>Δu and r<sub>v</sub>Δv, of area |r<sub>u</sub> × r<sub>v</sub>|ΔuΔv by the cross technique. So the <i>area</i> of the patch is ∬<sub>S</sub> |r<sub>u</sub> × r<sub>v</sub>|, and the <i>flux</i> of a field F through it, toward the side r<sub>u</sub> × r<sub>v</sub> points to, is ∬<sub>S</sub> F(r) · (r<sub>u</sub> × r<sub>v</sub>). For a face of 28j3’s box, r(u, v) = (b, u, v), and r<sub>u</sub> × r<sub>v</sub> = (1, 0, 0): the flux is the face total of P that 28j3 took.</p>
+  <p data-pid="5cbaeb">Patch technique: <b>if the patch is traced again as q(s, t) = r(T(s, t)), with T smoothly sloped and one-to-one from S′ onto S, then q<sub>s</sub> × q<sub>t</sub> = det DT · (r<sub>u</sub> × r<sub>v</sub>). So the area is kept, and the flux is kept when det DT &gt; 0 and turns sign when det DT &lt; 0.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the patch technique">
+q_s = u_s\,r_u + v_s\,r_v,\ \ q_t = u_t\,r_u + v_t\,r_v @@ the chain-of-flat-maps technique (28c2): a 3 × 2 grid times the 2 × 2 grid DT
+q_s\times q_t = u_sv_t\,(r_u\times r_v) + v_su_t\,(r_v\times r_u) @@ the cross is straight in each slot (27e2); r_u × r_u = r_v × r_v = 0 (27i3)
+= (u_sv_t - v_su_t)\,(r_u\times r_v) = \det DT\,(r_u\times r_v) @@ v × u = −(u × v) (27i3)
+\textstyle\iint_{S'} F(q)\cdot(q_s\times q_t) = \iint_{S'} \big[F(r)\cdot(r_u\times r_v)\big](T)\,\det DT @@ put in
+\htmlClass{new}{= \pm\textstyle\iint_S F(r)\cdot(r_u\times r_v)} \quad \blacksquare @@ the change-of-variables technique (28i3) takes |det DT|: + when det DT &gt; 0; for the area the sizes are taken and no sign appears
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: through a sphere">
+r(\varphi, \theta) = a(\sin\varphi\cos\theta,\ \sin\varphi\sin\theta,\ \cos\varphi),\ \ 0 \le \varphi \le \pi,\ 0 \le \theta \le 2\pi @@ ball measures (28m3) with ρ = a
+r_\varphi\times r_\theta = a^2\sin\varphi\,(\sin\varphi\cos\theta,\ \sin\varphi\sin\theta,\ \cos\varphi) @@ the cross technique (27i3): a² sin φ times the outward arrow of length 1
+\text{area} = \textstyle\int_0^{2\pi}\!\int_0^\pi a^2\sin\varphi\,d\varphi\,d\theta = 4\pi a^2 @@ 21o’s skin technique, again
+F = (x, y, z):\ \ F\cdot(r_\varphi\times r_\theta) = a\cdot a^2\sin\varphi @@ F is a times the outward arrow
+\htmlClass{new}{\text{flux out} = 4\pi a^3} \quad \blacksquare @@ and the spread of F is 3, with 3 · (4/3)πa³ = 4πa³
+  </pre>
+  <p data-pid="6e08f2">28j3 proved the trade of flux for spread on boxes. The sphere is not a box, and still the flux out matches the total of the spread inside. This step does not prove the trade for every solid; it only shows that the patch total and the spread agree here, as they should if the trade is as wide as it looks.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · across a surface · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28n3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="r(s, \theta) = (s\cos\theta,\ s\sin\theta,\ s),\ \ 0 \le s \le 1"></span></span>Find r<sub>s</sub> × r<sub>θ</sub> for this cone, and its area. Check it against the slant height times π times the radius.</li><li><span class="givens"><span data-tex-inline="F = (0,\ 0,\ 1),\ \ \text{the half sphere } z \ge 0 \text{ of radius } a"></span></span>Rain falls straight down. Find the flux of F out through the half sphere, and through the flat disc under it. Find what that says about how much rain a dome catches.</li><li><span class="givens"><span data-tex-inline="F = (x,\ y,\ 0),\ \ x^2 + y^2 = 4,\ \ 0 \le z \le 3"></span></span>Find the flux of F out through the side of this tank, and through its top and bottom. Compare the sum with the spread of F times the volume.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28n4">
+  <h2 class="sthead"><span class="stno">28n4</span>Illegal moves</h2>
+  <p class="stands">Stands on 28n1 to 28n3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\textstyle\int_C f\,ds \text{ turns sign when } C \text{ is walked backwards}\,? @@ |r′| is never negative: only the work total turns sign
+P_y = Q_x,\ \text{so } \varphi = \textstyle\int P\,dx\,? @@ the constant of that total may hold y: ∫(2xy + 3) dx = x²y + 3x misses the 2y²
+\text{work} = \textstyle\int F(r)\cdot\frac{r'}{|r'|}\,dt\,? @@ that drops the speed: dt is time, not distance
+\text{area of a patch} = \textstyle\iint |r_u|\,|r_v|\,? @@ a small piece is a parallelogram, not a rectangle: |r_u × r_v| = |r_u| |r_v| sin θ
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28n4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f = x + y,\ \ \text{the quarter circle of 28n1.1(b)}"></span></span>Find ∫<sub>C</sub> f ds traced from (2, 0) to (0, 2), and from (0, 2) to (2, 0). <br>Find what the first line confuses.</li><li><span class="givens"><span data-tex-inline="F = (2xy + 3,\ x^2 + 4y)"></span></span>Find ∇ of x²y + 3x, and compare it with F. <br>Find what the second line forgets.</li><li><span class="givens"><span data-tex-inline="r(t) = (\cos 2t,\ \sin 2t),\ \ 0 \le t \le \pi,\ \ F = (-y,\ x)"></span></span>Find the work, and the total the third line gives. <br>Find what was dropped.</li><li><span class="givens"><span data-tex-inline="r(u, v) = (u + v,\ v,\ 0),\ \ 0 \le u, v \le 1"></span></span>Find the area of this flat patch by the cross, and the total the fourth line gives. <br>Find the slip.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">28n.4.1</span><span class="tagq">build</span>Build a field on the plane with 0 taken out whose cross slopes agree at every point, and whose circulation once round the unit circle, with the inside on the left, is 6π. <br>Prove both facts.</div>
+  <div class="chq"><span class="chid">28n.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="F = \tfrac{(-y,\ x)}{x^2 + y^2},\ \ R:\ 1 \le x \le 3,\ -1 \le y \le 1"></span></span>On R, find φ with ∇φ = F, by the recipe of 28n2 or by an arctangent, and check it. <br>Find a region of the plane, with 0 and one ray from 0 taken out, on which one φ works, and why no region that goes all the way round 0 can have one.</div>
+  <div class="chq"><span class="chid">28n.4.3</span><span class="tagq">converse</span>The uphill-total technique: a field uphill from φ works 0 round every loop. Turn it round: if F is continuous on a rectangle, and works 0 round every loop of straight pieces in it, must F be uphill from something? <br>Prove your answer, with φ(p) the work from a fixed corner to p along any path of straight pieces.</div>
+  <div class="chq"><span class="chid">28n.4.4</span><span class="tagq">seam</span><span class="givens"><span data-tex-inline="f(x,y) = \tfrac{xy(x^2 - y^2)}{x^2 + y^2},\ \ f(0,0) = 0"></span></span>Go back to the war left open at 28d.4.5. Let F = ∇f for the function of 28d3, whose mixed second slopes at 0 differ. F is uphill from f by its making. <br>Find P<sub>y</sub> and Q<sub>x</sub> at (0, 0). Does F break the cross-slopes technique, or does the technique’s demand save it? <br>The old books took the order of the knobs to be free, and so would have read P<sub>y</sub> = Q<sub>x</sub> as a test that needs no demand at all. Does this field take a side in the war? If the old claim had been right, what would the cross-slopes technique gain?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r28m.html">← 28m · integrals by hand</a><a href="r28o.html">28o · gradient descent →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A total along a curve is a line integral: ∫<sub>C</sub> f ds is the line integral with respect to arc length, and ∫<sub>C</sub> F · dr the line integral of a vector field, which is the work when F is a force. The retrace technique is the independence of line integrals from the parametrization, up to orientation. A field uphill from φ is a conservative (or gradient) field, and φ its (scalar) potential; physicists often use −φ, so that a ball rolls down the potential. The cross-slopes technique is the test for exactness, P<sub>y</sub> = Q<sub>x</sub>; a field that passes it is closed, and one with a potential is exact. That a closed field is exact on a region with no holes is the Poincaré lemma. A patch is a parametrized surface, r<sub>u</sub> × r<sub>v</sub> its normal vector, and the two totals the surface area and the flux (or surface) integral ∬ F · dS.</p>
+  <h3>Who said it first</h3>
+  <p>Alexis Clairaut gave the condition P<sub>y</sub> = Q<sub>x</sub> for a total differential in 1739 and 1740. Joseph-Louis Lagrange used a potential for gravity in 1773, and George Green named it the potential in his pamphlet of 1828. Carl Friedrich Gauss took totals across closed surfaces in his work on the pull of ellipsoids in 1813, and Mikhail Ostrogradsky in his work on heat.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'work',t:R`\int F(r)\cdot r'\,dt`,n:`The push along the way.`},
+  {k:'ember',kl:'weight',t:R`\int f(r)\,|r'|\,dt`,n:`Weighed by distance.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{backwards: work turns sign; } \int f\,ds \text{ kept}}`,n:`The total belongs to the curve.`}
+],{title:'The slides · along a curve · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'the test',t:R`P_y = Q_x`,n:`Cross slopes agree, on a rectangle.`},
+  {k:'ember',kl:'the potential',t:R`\varphi = \int P\,dx + c(y)`,n:`Then match Q.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{work} = \varphi(\text{end}) - \varphi(\text{start})}`,n:`Every path, one number.`}
+],{title:'The slides · uphill from · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'a patch',t:R`r(u, v)`,n:`Two measures trace a surface.`},
+  {k:'ember',kl:'edge arrows',t:R`r_u\times r_v`,n:`Area of the small parallelogram.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{flux} = \iint F(r)\cdot(r_u\times r_v)}`,n:`Kept when det DT &gt; 0.`}
+],{title:'The slides · across a surface · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>
