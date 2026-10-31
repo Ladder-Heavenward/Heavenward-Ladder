@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Shortest paths</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r29f.html">← 29f total curvature counts holes</a><a href="r29h.html">next: 29h spaces flat up close →</a></p>
+  <div class="tags"><span class="tag proof">29g · proof</span></div>
+  <h1>Shortest paths</h1>
+  <p>Rung 14 found the best value of a function by asking where its slope is 0. This step asks a bigger question. Among all paths between two points, which one is shortest? Which shape of wire lets a bead slide down fastest? The thing to make best is no longer a number chosen from a line, but a whole curve chosen from endlessly many. The same trick works: nudge the best curve a little, and the total cannot change at first. That gives one equation every best curve must obey. On a surface, it says what the surface’s straight lines are. And it pays back the triangle-total that 29f held in trust.</p>
+  <p class="gesture">A curve that makes a total least obeys one equation, found by nudging it. On a surface, shortest paths turn only out of the surface, never along it, and a triangle of them has total bend equal to its excess.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r14a.html">14a</a> (a slope is 0 at a best point inside), <a href="r16e.html">16e</a> (parts), <a href="r28h.html">28h</a> (either order), <a href="r29d.html">29d</a>, <a href="r29e.html">29e</a> and <a href="r29f.html">29f</a>. <a href="r29l.html">29l</a> runs the equation by hand.</p></div>
+</header>
+
+<section class="class step" data-step="29g1">
+  <h2 class="sthead"><span class="stno">29g1</span>The best-path equation</h2>
+  <p class="stands">Stands on 14a, 16e, 28h, 11.</p>
+  <p data-pid="b93b25">Let L(x, y, p) have continuous second partial slopes. For a curve y(x) from (a, A) to (b, B), its total is J[y] = ∫ₐᵇ L(x, y, y′) dx. A <i>nudge</i> is a function η with η(a) = η(b) = 0 and a continuous slope, so y + tη has the same ends for every t.</p>
+  <p data-pid="07cb8f">Best-path technique: <b>if y makes J least (or greatest) among curves with the same ends, then d/dx (∂L/∂p) = ∂L/∂y along y.</b> Here ∂L/∂p is the slope of L along its third input, taken at p = y′.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the best-path technique">
+j(t) = J[y + t\eta] \text{ is least at } t = 0 @@ y + tη is one of the curves; y is best
+j^{\prime}(0) = 0 @@ flat-top (14a)
+j^{\prime}(0) = \int_a^b \big(L_y\,\eta + L_p\,\eta^{\prime}\big)\,dx @@ chains (28c) inside the total; the slope passes inside by either-order (28h)
+\int_a^b L_p\,\eta^{\prime}\,dx = \big[L_p\,\eta\big]_a^b - \int_a^b \big(\tfrac{d}{dx}L_p\big)\eta\,dx @@ parts (16e)
+\int_a^b \big(L_y - \tfrac{d}{dx}L_p\big)\,\eta\,dx = 0 \text{ for every nudge } \eta @@ η is 0 at both ends
+h = L_y - \tfrac{d}{dx}L_p,\ \ h(c) > 0 \Rightarrow h > 0 \text{ on } (c - \delta, c + \delta) @@ continuity keeps the sign near c (11)
+\eta = (x - c + \delta)^2(x - c - \delta)^2 \text{ there, } 0 \text{ elsewhere} \Rightarrow \int h\,\eta > 0 @@ a bump nudge, with a continuous slope
+\htmlClass{new}{h = 0:\ \ \tfrac{d}{dx}\,\tfrac{\partial L}{\partial p} = \tfrac{\partial L}{\partial y}} \quad \blacksquare @@ the same for h(c) &lt; 0; the line above contradicts the one before it
+  </pre>
+  <p data-pid="c14271">Check it on the flat plane. Length is ∫√(1 + y′²) dx, so L = √(1 + p²), with L<sub>y</sub> = 0. The equation says y′/√(1 + y′²) is constant, so y′ is constant. The shortest curve between two points is a straight line, as it should be.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · best paths · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">29g1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="L = \sqrt{1 + p^2}"></span> <span data-tex-inline="L = p^2 + y^2"></span> <span data-tex-inline="L = y\sqrt{1 + p^2}"></span></span>For each L, find L<sub>y</sub> and L<sub>p</sub>, and write the best-path equation. <br>For the first, find the curve through (0, 1) and (3, 7) that obeys it. <br>For the second, check that y = (e<sup>x</sup> − e<sup>−x</sup>)/(e − e<sup>−1</sup>) obeys it, with y(0) = 0 and y(1) = 1. Find y(½) to three decimals. <br>For the third, check that y = ½(e<sup>x</sup> + e<sup>−x</sup>) obeys it.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29g2">
+  <h2 class="sthead"><span class="stno">29g2</span>Paths on a surface</h2>
+  <p class="stands">Stands on 29g1, 29d1, 29e5.</p>
+  <p data-pid="2dbde0">On a surface, a path is two functions u(s), v(s), and its length is ∫ √(E u′² + 2F u′v′ + G v′²) ds (29d1). Nudge u alone, then v alone: each obeys the best-path equation. A path that obeys both is a <i>straightest path</i> of the surface. Accepted name: <i>geodesic</i>. Every shortest path is a straightest path.</p>
+  <p data-pid="66345e">Path-equations technique: <b>in a ruler du² + g² dv², a shortest path traced at speed 1 obeys u″ = g g<sub>u</sub> v′² and (g² v′)′ = g g<sub>v</sub> v′².</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the path-equations technique">
+\Lambda = \sqrt{u^{\prime 2} + g^2 v^{\prime 2}} = 1 \text{ along the path} @@ the length’s integrand, at speed 1
+\Lambda_{u^{\prime}} = u^{\prime}/\Lambda,\ \ \Lambda_u = g\,g_u\,v^{\prime 2}/\Lambda @@ slopes of a square root (13)
+\tfrac{d}{ds}\,u^{\prime} = g\,g_u\,v^{\prime 2} @@ best-path (29g1) for u, with Λ = 1 put in after the slopes
+\Lambda_{v^{\prime}} = g^2 v^{\prime}/\Lambda,\ \ \Lambda_v = g\,g_v\,v^{\prime 2}/\Lambda @@ the same for v
+\htmlClass{new}{u^{\prime\prime} = g\,g_u\,v^{\prime 2},\ \ (g^2 v^{\prime})^{\prime} = g\,g_v\,v^{\prime 2}} \quad \blacksquare @@ best-path for v
+  </pre>
+  <p data-pid="4c1cd9">The curves v = constant, traced as u = s, obey both: v′ = 0 and u″ = 0. So the curves straight out are straightest. They are shortest too: any path from u = a to u = b has length ∫√(u′² + g² v′²) ds ≥ ∫|u′| ds ≥ b − a. On the sphere, with u the distance from the north pole, this proves the meridians are shortest, and so, by turning the sphere, every arc of a great circle shorter than half of it.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · paths on a surface · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29g2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="ds^2 = du^2 + R^2\sin^2(u/R)\,dv^2"></span></span>This is the sphere of radius R, with u the distance from the north pole and v the longitude. Find g, g<sub>u</sub> and g<sub>v</sub>, and write the two path equations. <br>Check that a meridian, v constant and u = s, obeys both. <br>Check that the equator, u = πR/2 and v = s/R, is traced at speed 1 and obeys both. <br>The circle of latitude 45° N is u = πR/4. Find v′ for a speed-1 tracing of it. Find both sides of the first path equation, and whether it holds.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29g3">
+  <h2 class="sthead"><span class="stno">29g3</span>Turning along a straightest path</h2>
+  <p class="stands">Stands on 29g2.</p>
+  <p data-pid="cdbf4a">Measure the heading of a path by ψ, the angle from the straight-out direction r<sub>u</sub> to the path’s direction. At speed 1, u′ = cos ψ and g v′ = sin ψ.</p>
+  <p data-pid="5a2af1">Heading technique: <b>along a straightest path in the ruler du² + g² dv², the heading changes by dψ = −g<sub>u</sub> dv.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the heading technique">
+u^{\prime} = \cos\psi,\ \ v^{\prime} = \sin\psi / g @@ the two directions r_u and r_v/g are at right angles and of length 1
+u^{\prime\prime} = -\sin\psi\;\psi^{\prime} @@ chain technique (13, 21)
+-\sin\psi\;\psi^{\prime} = g\,g_u\,\frac{\sin^2\psi}{g^2} @@ path-equations (29g2)
+\psi^{\prime} = -g_u\,\frac{\sin\psi}{g} = -g_u\,v^{\prime} @@ divide by −sin ψ, where it is not 0
+\htmlClass{new}{\frac{d\psi}{dv} = -g_u} \quad \blacksquare @@ chains: dψ/dv = ψ′/v′
+  </pre>
+  <p data-pid="a77921">On the flat plane in polar coordinates g = u, so dψ = −dv: a straight line crossing the rays from the origin turns, relative to them, exactly as fast as the rays fan out.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · heading · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29g3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="g = u\ \ (u = \text{distance from } (0, 0),\ \ v = \text{angle})"></span> <span data-tex-inline="x = 1,\ \ 0 \le y \le 1,\ \ \text{traced upward}"></span></span>Find u and v at (1, 0) and at (1, 1). <br>Find the heading ψ at each end: the angle from the straight-out direction to the path’s direction (0, 1). <br>Check that the change in ψ is minus the change in v. <br>Find ψ at every point of the line, as a function of v.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29g4">
+  <h2 class="sthead"><span class="stno">29g4</span>A triangle’s total is its excess</h2>
+  <p class="stands">Stands on 29g2, 29g3, 29e5, 29f3.</p>
+  <p data-pid="e7ca60">Round a point A of a surface, the straightest paths leaving A at speed 1 in every direction give a straight-out ruler du² + g² dv² near A, with g = 0 and g<sub>u</sub> = 1 at A, as in polar coordinates on the flat plane. The basement says where this comes from.</p>
+  <p data-pid="6a4554">Triangle-total technique: <b>a triangle with straightest sides, small enough to sit in such a ruler round one corner, has total bend equal to its excess α + β + γ − π.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the triangle-total technique">
+A \text{ at } u = 0;\ AB \text{ along } v = 0,\ AC \text{ along } v = \alpha;\ BC:\ u = h(v) @@ the straight-out ruler round A
+\iint K\,dA = \int_0^{\alpha}\!\!\int_0^{h(v)} -\frac{g_{uu}}{g}\,g\,du\,dv @@ straight-out (29e5), ruler-area (29d2)
+= \int_0^{\alpha} \big(g_u(0, v) - g_u(h(v), v)\big)\,dv = \alpha - \int_0^{\alpha} g_u(h(v), v)\,dv @@ g_u undoes g_uu (16); g_u = 1 at A
+-\int_0^{\alpha} g_u\,dv = \psi_C - \psi_B @@ heading technique (29g3) along BC
+\beta = \pi - \psi_B,\ \ \gamma = \psi_C @@ BA points along −r_u at B; CA along −r_u at C
+\htmlClass{new}{\iint_T K\,dA = \alpha + \beta + \gamma - \pi} \quad \blacksquare @@ the lines above
+  </pre>
+  <p data-pid="19e013">This is what 29f held in trust. Cut the surface finely, so each triangle is small enough, and the excess-count and hole-count techniques stand on proved ground. On the sphere it agrees with 29b: the total bend of a triangle is its area times 1/R², which is its excess.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · triangle total · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29g4.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="K = -1"></span> <span data-tex-inline="\alpha = 60^\circ,\ \ \beta = 45^\circ,\ \ \gamma = 30^\circ"></span></span>A triangle in the disc plane has these angles. Find its excess, in radians, and its area from the triangle-total technique. <br>Find the area of a disc-plane triangle with all three angles 30°. <br>Find the largest area a disc-plane triangle can have, and whether any triangle reaches it. <br>On a sphere of radius 1, find the area of a triangle with angles 90°, 90° and 60°.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29g5">
+  <h2 class="sthead"><span class="stno">29g5</span>Illegal moves</h2>
+  <p class="stands">Stands on 29g1 to 29g4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{every curve that obeys the best-path equation is shortest}\,? @@ the equation is asked of best curves; it does not make one best (two arcs of a great circle)
+\text{nudges may move the ends}\,? @@ the ends are fixed: η(a) = η(b) = 0 dropped the edge terms of parts
+\text{the circle of latitude } 45^\circ \text{ N is the shortest way between two points on it}\,? @@ it does not obey the path equations; it turns along the surface
+\int h\,\eta = 0 \text{ for one nudge, so } h = 0\,? @@ it must hold for every nudge; the bump is chosen after h
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29g5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{Vancouver: } 49.28^\circ\text{N},\ 123.12^\circ\text{W}"></span> <span data-tex-inline="\text{Tokyo: } 35.68^\circ\text{N},\ 139.69^\circ\text{E}"></span> <span data-tex-inline="R = 6371\ \text{km}"></span></span>The great circle through the two cities is cut by them into two arcs. Find the length of each. <br>Find whether both obey the path equations, and which is the shortest way.</li><li><span class="givens"><span data-tex-inline="J[y] = \int_0^1 y^{\prime 2}\,dx,\ \ y = x,\ \ \eta = x"></span></span>The nudge η = x moves the right end. Find j(t) = J[y + tη] and j′(0). <br>Find the edge term [L<sub>p</sub> η] from 0 to 1, and what it shows about the proof.</li><li><span class="givens"><span data-tex-inline="(45^\circ\text{N},\ 0^\circ),\ \ (45^\circ\text{N},\ 90^\circ\text{E}),\ \ R = 6371\ \text{km}"></span></span>Find the length between the two points along the circle of latitude, and along the great circle. <br>Find which is shorter, and what the path equations show about the circle of latitude.</li><li><span class="givens"><span data-tex-inline="h(x) = x \text{ on } [-1, 1],\ \ \eta = 1 - x^2"></span></span>Find ∫ hη from −1 to 1. <br>Find a nudge with ∫ hη ≠ 0, and why one nudge is not enough.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">29g.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="L = L(y, p) \text{ with no } x"></span></span>Build a shortcut. Prove that when L has no x, L − y′L<sub>p</sub> stays the same along every curve that obeys the best-path equation. Take its slope along x, and use the equation. <br>Use it on L = y√(1 + p²) to get y/√(1 + y′²) = c. Check that y = ½c(e<sup>x/c</sup> + e<sup>−x/c</sup>) obeys it. <br>A soap film joins two rings of radius 1 m, 1 m apart on one axis. Its side is spun from a profile y(x), −½ ≤ x ≤ ½, which makes the area 2π∫ y√(1 + y′²) dx least. Find c, to three decimals, with ½c(e<sup>1/(2c)</sup> + e<sup>−1/(2c)</sup>) = 1. There are two; take the larger.</div>
+  <div class="chq"><span class="chid">29g.4.2</span><span class="tagq">edge</span>Take L = p, so J[y] = ∫ₐᵇ y′ dx. Find J for any curve from (a, A) to (b, B), and what the best-path equation becomes. <br>On a sphere, find the shortest paths from the north pole to the south pole, and how many there are. <br>In the ruler of 29g2.1, find g at u = πR. Find what happens to the straight-out ruler round the north pole there.</div>
+  <div class="chq"><span class="chid">29g.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{cylinder of radius } 1:\ \ ds^2 = du^2 + dv^2,\ \ (u, v) \text{ and } (u, v + 2\pi) \text{ the same point}"></span></span>Every shortest path is a straightest path. Turn it round: is every straightest path between two points the shortest? <br>Find the straightest paths of this ruler. <br>Find the length of the straightest path from (0, 0) to (1, 0) that goes straight along, of the one that winds once round the cylinder on its way, and of the one that winds twice. <br>Find which of them is shortest, and how many straightest paths join the two points.</div>
+  <div class="chq"><span class="chid">29g.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="g = R\sin(u/R),\ \ K = 1/R^2"></span> <span data-tex-inline="\text{corners: the north pole},\ (0^\circ\text{N}, 0^\circ),\ (0^\circ\text{N}, 90^\circ\text{E})"></span></span>Prove the triangle-total technique for this triangle another way, without the heading technique. Total K dA over it directly, with dA = g du dv. <br>Find its three angles and its excess, and check them against the total. Check against 29b’s excess-area technique too.</div>
+  <div class="chq"><span class="chid">29g.4.5</span><span class="tagq">seam</span><span class="givens"><span data-tex-inline="J[y] = \int_{-1}^{1} x^2\,y^{\prime 2}\,dx,\ \ y(-1) = -1,\ \ y(1) = 1"></span></span>In 1851 a mathematician took it as plain that a total of this kind always has a curve that makes it least, and built some of his deepest results on it (12c.4.4). In 1870 another wrote down this total. <br>Find why J is never below 0. For a small ε &gt; 0, take y = −1 for x ≤ −ε, y = 1 for x ≥ ε, and y = x(3ε² − x²)/(2ε³) between. Check that this curve has a continuous slope, and find J for it. <br>Find whether any curve with a continuous slope gives J = 0. Start from where x²y′² can be 0. <br>Write the best-path equation for this L, and find whether any curve that obeys it passes through both ends. <br>The best-path technique begins “if y makes J least”. Was the first mathematician wrong to trust that a least curve exists? A soap film, a hanging chain and a ray of light all seem to find their best shape. Does nature promise what a proof does not?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r29f.html">← 29f · total curvature counts holes</a><a href="r29h.html">29h · spaces flat up close →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>Choosing a best curve is the calculus of variations, and J is a functional. The best-path equation is the Euler–Lagrange equation, and a nudge is a variation. The fact that ∫hη = 0 for every nudge forces h = 0 is the fundamental lemma of the calculus of variations. Straightest paths are geodesics. The straight-out ruler round a point is geodesic polar coordinates; that the straightest paths from A cross the circles round A at right angles, so that F = 0 there, is Gauss’s lemma. The triangle-total technique is the local Gauss–Bonnet theorem for geodesic triangles.</p>
+  <h3>Who said it first</h3>
+  <p>Johann Bernoulli posed the fastest-slide problem in 1696. Leonhard Euler found the equation for general problems in 1744, by cutting curves into many straight pieces, and Joseph-Louis Lagrange found the nudging method in a letter to Euler in 1755; Euler named the subject the calculus of variations in 1766. Carl Friedrich Gauss proved the geodesic triangle form, and the lemma about polar coordinates, in 1827. Karl Weierstrass showed in 1870 that a best curve need not exist, which sent the subject back to its foundations.</p>
+  <h3>Where the straight-out ruler comes from</h3>
+  <p>Leave A along every direction at speed 1 on straightest paths. Rung 24’s existence technique, carried to pairs of functions, gives one path for each direction. Call the distance travelled u and the starting direction v. These are coordinates near A, and E = 1 since each path has speed 1. That F = 0 is Gauss’s lemma: nudging a straightest path’s direction does not change its length at first (29g1), and the slope of F along u is exactly that first change. So the ruler is du² + g² dv², and near A it looks like the flat plane’s polar one, g ≈ u.</p>
+  <h3>The seam closer</h3>
+  <p>In 29g.4.5, the mathematician of 1851 is Bernhard Riemann, and the claim he trusted is Dirichlet’s principle. The total of 1870 is Karl Weierstrass’s example. David Hilbert rescued the principle in 1900, under extra demands on the total and on the curves allowed.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'nudge',t:R`j(t) = J[y + t\eta]`,n:`A number for each t.`},
+  {k:'ember',kl:'flat',t:R`\int (L_y - \tfrac{d}{dx}L_p)\eta = 0`,n:`Parts moves the slope.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\tfrac{d}{dx}L_p = L_y}`,n:`Every bump must vanish.`}
+],{title:'The slides · best paths · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'length',t:R`\sqrt{u^{\prime 2} + g^2 v^{\prime 2}}`,n:`The ruler.`},
+  {k:'ember',kl:'vary',t:R`u^{\prime\prime} = g g_u v^{\prime 2}`,n:`Best-path, twice.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{meridians are shortest}}`,n:`Straight out is straightest.`}
+],{title:'The slides · paths on a surface · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'direction',t:R`u^{\prime} = \cos\psi`,n:`Measured from straight out.`},
+  {k:'ember',kl:'equation',t:R`u^{\prime\prime} = g g_u v^{\prime 2}`,n:`Straightest.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{d\psi = -g_u\,dv}`,n:`The heading turns with g’s slope.`}
+],{title:'The slides · heading · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'bend',t:R`\iint -g_{uu}\,du\,dv`,n:`Straight-out ruler.`},
+  {k:'ember',kl:'heading',t:R`\psi_C - \psi_B`,n:`The far side turns.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\alpha+\beta+\gamma-\pi}`,n:`The trust is paid.`}
+],{title:'The slides · triangle total · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

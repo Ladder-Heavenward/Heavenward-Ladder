@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Spherical triangles by hand</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r29concl.html">← 29·∎ flat is one geometry among many</a><a href="r29j.html">next: 29j hyperbolic geometry by hand →</a></p>
+  <div class="tags"><span class="tag tech">29i · technique</span></div>
+  <h1>Spherical triangles by hand</h1>
+  <p>A navigator on a ship, a pilot over the Pacific and a phone that shows the distance to another city all solve the same small problem. Three points on a globe, joined by great circles, make a triangle, and some of its sides and angles are known while others are wanted. On a flat page the third side of a triangle comes from two sides and the angle between them. On a globe the same question has a new answer, and this step proves it from the dot product of arrows of length one drawn from the centre. Then the north pole becomes a corner of every triangle. With it, the distance between two cities comes straight from their latitudes and longitudes, together with the direction a plane must point as it leaves. A rule for sines follows, and with it the farthest north a great circle route ever climbs.</p>
+  <p class="gesture">On a sphere of radius one the third side of a triangle comes from two sides and the angle between them, by a cosine rule with sines and cosines of the sides. With the pole as a corner, it gives the distance and the starting heading between two places from their latitudes and longitudes. A sine rule gives the farthest north a route climbs.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r27i.html">27i</a> (the angle-between and cross techniques), <a href="r27m.html">27m</a> (the length-keeper and axis-turn techniques), <a href="r27k.html">27k</a> (the expansion technique), <a href="r27e.html">27e</a> (the column-slide technique), <a href="r21e.html">21e</a> (the complement technique), <a href="r21h.html">21h</a> (the cosine-side technique) and <a href="r29b.html">29b</a> (great circles as lines, and the excess-area technique). <a href="r29j.html">29j</a> does the same kind of work in the disc plane, where the angles add to less.</p></div>
+</header>
+
+<section class="class step" data-step="29i1">
+  <h2 class="sthead"><span class="stno">29i1</span>The cosine rule on a sphere</h2>
+  <p class="stands">Stands on 27i1 (the angle-between technique), 27i3 (the cross technique), 27m1 (the length-keeper technique), 27m3 (the axis-turn technique) and 29b1 (great circles as lines; the angle between two great circles).</p>
+  <p data-pid="38ee27">Work on the sphere of radius 1 about O. A point of it is an arrow A from O of length 1. Take a triangle ABC whose sides are arcs of great circles, each shorter than π. Its side a is the arc from B to C, its length the angle at O between B and C; likewise b from A to C and c from A to B. Its angle at A, written A as well, is the angle between the planes of the two great circles through A, which is the angle between their normals (29b1). On a sphere of radius R, multiply each side by R; the angles do not change.</p>
+  <p data-pid="5e2cb6">Sphere-cosine technique: <b>in a triangle on the sphere of radius 1, cos a = cos b cos c + sin b sin c cos A.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the sphere-cosine technique">
+\cos a = B\cdot C,\ \ \cos b = A\cdot C,\ \ \cos c = A\cdot B @@ the angle-between technique (27i1), with |A| = |B| = |C| = 1
+B = \cos c\,A + \sin c\,u,\ \ C = \cos b\,A + \sin b\,w @@ u = (B − cos c A)/sin c has u · A = 0 and |u|² = (1 − cos² c)/sin² c = 1; w likewise
+A\times B = \sin c\,(A\times u),\ \ A\times C = \sin b\,(A\times w) @@ the cross is straight in each slot, and A × A = 0 (27i3)
+\cos A = (A\times u)\cdot(A\times w) = u\cdot w @@ the normals of the two planes (29b1); x ↦ A × x is the quarter turn about A on arrows at right angles to A (27m3), and a turn keeps dots (27m1)
+B\cdot C = \cos b\cos c + \sin b\sin c\,(u\cdot w) @@ multiply out, with A · A = 1 and A · u = A · w = 0
+\htmlClass{new}{\cos a = \cos b\cos c + \sin b\sin c\cos A} \quad \blacksquare @@ the lines above
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: a right angle at a corner">
+b = c = \tfrac{\pi}{3},\ \ A = \tfrac{\pi}{2} @@ two sides of one sixth of a great circle, square to each other
+\cos a = \tfrac12\cdot\tfrac12 + \tfrac{\sqrt3}{2}\cdot\tfrac{\sqrt3}{2}\cdot 0 = \tfrac14 @@ the sphere-cosine technique
+a = \arccos\tfrac14 \approx 1.318 @@ the arc-is-arccos technique (21m)
+\text{flat: } a^2 = b^2 + c^2 = \tfrac{2\pi^2}{9},\ \ a \approx 1.481 @@ the cosine-side technique (21h2) with a right angle
+\htmlClass{new}{\text{on the sphere the third side is shorter: } 1.318 < 1.481} \quad \blacksquare @@ the sides bow outward from the centre, and the third side cuts across
+  </pre>
+  <p data-pid="47b2f6">For small sides the sphere-cosine technique turns back into the flat one. With cos x close to 1 − x²/2 and sin x close to x (23b), it reads 1 − a²/2 ≈ (1 − b²/2)(1 − c²/2) + bc cos A, and dropping the terms of fourth order leaves a² ≈ b² + c² − 2bc cos A, the cosine-side technique of 21h2. A small triangle on a globe is nearly flat, as 29b4 found from its area.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the cosine rule · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">29i1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="b = c = \tfrac{\pi}{2},\ \ A = \tfrac{\pi}{3}"></span></span>Two sides run from the north pole down to the equator. Find the third side a, and what kind of arc it is.</li><li><span class="givens"><span data-tex-inline="b = c = \tfrac{\pi}{4},\ \ A = \tfrac{\pi}{2}"></span></span>Find a, and the third side a flat triangle with the same two sides and angle would have.</li><li><span class="givens"><span data-tex-inline="a = b = c = \tfrac{\pi}{3}"></span></span>Turn the technique round to find cos A. Find the three angles, their total, the excess, and the area of the triangle on the sphere of radius 1 by the excess-area technique (29b3).</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29i2">
+  <h2 class="sthead"><span class="stno">29i2</span>Distance and heading from latitude and longitude</h2>
+  <p class="stands">Stands on 29i1, 21e (the complement technique) and 29b1.</p>
+  <p data-pid="34fb04">Give a place its latitude φ, north of the equator (south counts as less than 0), and its longitude λ, east of Greenwich (west counts as less than 0). The north pole N, a place P = (φ₁, λ₁) and a place Q = (φ₂, λ₂) make a triangle. Its side NP is π/2 − φ₁, its side NQ is π/2 − φ₂, and its angle at N is the gap in longitude Δλ = λ₂ − λ₁, because the planes of the two half great circles from N, the meridians, meet at that angle along the earth’s axis. The heading of a route at P is its angle with the meridian toward N, measured toward the east or the west.</p>
+  <p data-pid="30c727">Great-circle technique: <b>the great circle distance from P to Q on a sphere of radius R is Rδ, where cos δ = sin φ₁ sin φ₂ + cos φ₁ cos φ₂ cos Δλ; and the route leaves P at the heading h, from north toward Q’s side, with sin φ₂ = sin φ₁ cos δ + cos φ₁ sin δ cos h.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the great-circle technique">
+NP = \tfrac{\pi}{2} - \varphi_1,\ \ NQ = \tfrac{\pi}{2} - \varphi_2,\ \ \angle N = \Delta\lambda @@ the triangle NPQ on the sphere of radius 1
+\cos\delta = \cos NP\,\cos NQ + \sin NP\,\sin NQ\,\cos\Delta\lambda @@ the sphere-cosine technique (29i1), side PQ facing N
+\cos(\tfrac{\pi}{2} - \varphi) = \sin\varphi,\ \ \sin(\tfrac{\pi}{2} - \varphi) = \cos\varphi @@ the complement technique (21e)
+\cos\delta = \sin\varphi_1\sin\varphi_2 + \cos\varphi_1\cos\varphi_2\cos\Delta\lambda @@ put them in
+\cos NQ = \cos NP\,\cos\delta + \sin NP\,\sin\delta\,\cos h @@ the sphere-cosine technique again, side NQ facing P, whose angle is h
+\htmlClass{new}{\sin\varphi_2 = \sin\varphi_1\cos\delta + \cos\varphi_1\sin\delta\cos h} \quad \blacksquare @@ the complement technique; then multiply by R for distance
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: Vancouver to Tokyo">
+P = (49.19^\circ,\ -123.18^\circ),\ \ Q = (35.76^\circ,\ 140.39^\circ) @@ Vancouver airport and Tokyo’s Narita airport
+\Delta\lambda = 263.57^\circ,\ \ \cos\Delta\lambda = \cos 96.43^\circ \approx -0.1120 @@ the whole-turns technique (21b): 360° − 263.57° = 96.43°, westward
+\cos\delta \approx 0.4423 - 0.0594 \approx 0.3829,\ \ \delta \approx 1.1778 @@ the great-circle technique: sin φ₁ sin φ₂ ≈ 0.4423, cos φ₁ cos φ₂ ≈ 0.5303
+R\delta \approx 6371 \times 1.1778 \approx 7504\ \text{km} @@ the earth taken as a sphere of radius 6371 km
+\cos h = \tfrac{\sin\varphi_2 - \sin\varphi_1\cos\delta}{\cos\varphi_1\sin\delta} \approx 0.4879,\ \ h \approx 60.8^\circ @@ the second half of the technique, solved for cos h
+\htmlClass{new}{\text{about 7500 km, leaving on a heading } 60.8^\circ \text{ west of north}} \quad \blacksquare @@ Tokyo lies south of Vancouver, yet the route sets off to the north west
+  </pre>
+  <p data-pid="5b8eff">Tokyo is south of Vancouver, and still the plane turns north as it leaves. A path that kept to one heading would be longer, and a path along a circle of latitude is not a line of the sphere at all (29b5). 29·nav asks why so many routes to Asia pass so far north.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · the pole as a corner · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29i2.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="P = (47.45^\circ,\ -122.31^\circ),\ \ Q = (51.47^\circ,\ -0.45^\circ),\ \ R = 6371\ \text{km}"></span></span>Seattle’s airport and London’s Heathrow. Find δ, the great circle distance, and the heading at Seattle.</li><li><span class="givens"><span data-tex-inline="P = (0^\circ,\ 0^\circ),\ \ Q = (0^\circ,\ 90^\circ)"></span></span>Two places on the equator. Find the distance by the technique, and check it as a quarter of the equator.</li><li><span class="givens"><span data-tex-inline="P = (45.59^\circ,\ -122.60^\circ),\ \ Q = (45.59^\circ,\ 57.40^\circ)"></span></span>Portland’s airport and the place on the far side of the globe at the same latitude. Find the great circle distance and the heading at Portland. Find the length of the way along the circle of latitude, R cos φ times the gap in longitude (29d1).</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29i3">
+  <h2 class="sthead"><span class="stno">29i3</span>The sine rule, and how far north a route climbs</h2>
+  <p class="stands">Stands on 29i1, 27i3 (the cross technique), 27k2 (the expansion technique), 27e1 (the column-slide technique), 21e, 12c (highest and lowest values on a closed interval) and 14a (a greatest value inside is a critical point).</p>
+  <p data-pid="e806ba">The flat sine rule (21h3) says each side over the sine of the angle it faces is the same for all three. On a sphere the sides are arcs, and they take sines too.</p>
+  <p data-pid="dc6b41">Sphere-sine technique: <b>in a triangle on the sphere of radius 1, sin A / sin a = sin B / sin b = sin C / sin c.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the sphere-sine technique">
+B\times C = \cos c\sin b\,(A\times w) + \sin c\cos b\,(u\times A) + \sin b\sin c\,(u\times w) @@ B and C split as in 29i1; the cross is straight in each slot, and A × A = 0
+A\cdot(B\times C) = \sin b\sin c\;A\cdot(u\times w) @@ the cross is at right angles to each of its arrows (27i3), so the first two terms dot A to 0
+u\times w = \pm\sin A\;A @@ u and w are at right angles to A, at the angle A to each other; their cross is at right angles to both, so along A, of size sin A (27i3)
+|\det[A\ B\ C]| = |A\cdot(B\times C)| = \sin A\,\sin b\,\sin c @@ expand det along its first column (27k2): the stand-ins are the places of B × C
+\tfrac{\sin A}{\sin a} = \tfrac{|\det[A\ B\ C]|}{\sin a\,\sin b\,\sin c} @@ divide by sin a sin b sin c
+\htmlClass{new}{\tfrac{\sin A}{\sin a} = \tfrac{\sin B}{\sin b} = \tfrac{\sin C}{\sin c}} \quad \blacksquare @@ the same lines from B or from C give the same right side: swapping columns only flips the sign of det (27e1)
+  </pre>
+  <p data-pid="da9300">Farthest-north technique: <b>a great circle route that leaves latitude φ₁ at heading h, not due north or due south, reaches its highest latitude φₘ where cos φₘ = cos φ₁ sin h; there it heads due east or due west.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the farthest-north technique">
+V \text{ the highest point of the whole great circle} @@ its latitude is continuous on a closed loop, so it has a greatest value (12c, once round the loop)
+\text{at } V \text{ the route crosses the meridian at a right angle} @@ at a greatest value the latitude stops rising (14a): the route has no northward part there
+\text{triangle } NPV:\ \ NP = \tfrac{\pi}{2} - \varphi_1,\ \ NV = \tfrac{\pi}{2} - \varphi_m,\ \ \angle P = h,\ \ \angle V = \tfrac{\pi}{2} @@ N the pole, P the start
+\tfrac{\sin(\pi/2)}{\sin NP} = \tfrac{\sin h}{\sin NV} @@ the sphere-sine technique: each angle against the side it faces
+\htmlClass{new}{\cos\varphi_m = \cos\varphi_1\sin h} \quad \blacksquare @@ the complement technique (21e)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: how far north Vancouver to Tokyo climbs">
+\varphi_1 = 49.19^\circ,\ \ h \approx 60.8^\circ,\ \ \sin h \approx 0.8729 @@ from 29i2
+\cos\varphi_m \approx 0.6534 \times 0.8729 \approx 0.5704 @@ the farthest-north technique
+\htmlClass{new}{\varphi_m \approx 55.2^\circ\ \text{N}} \quad \blacksquare @@ the arc-is-arccos technique (21m): the route crosses the coast of south east Alaska
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · the sine rule · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29i3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="A = \tfrac{\pi}{2},\ \ b = c = \tfrac{\pi}{3}"></span></span>Find a by the sphere-cosine technique, then sin B by the sphere-sine technique. Find B, and decide between B and π − B with the sphere-cosine technique for side b.</li><li><span class="givens"><span data-tex-inline="P = \text{Seattle},\ \ Q = \text{London (29i2.1a)}"></span></span>Find the farthest north the great circle route from Seattle to London climbs.</li><li><span class="givens"><span data-tex-inline="\varphi_1 = 30^\circ,\ \ h = 45^\circ"></span></span>A ship off Baja California sets off along a great circle at a heading of 45° east of north. Find the farthest north its great circle reaches.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29i4">
+  <h2 class="sthead"><span class="stno">29i4</span>Illegal moves</h2>
+  <p class="stands">Stands on 29i1 to 29i3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{the angles of } NPQ \text{ for Vancouver and Tokyo add to } \pi\,? @@ they add to π plus the excess (29b3), about 0.38 more
+\delta^2 = NP^2 + NQ^2 - 2\,NP\cdot NQ\cos\Delta\lambda\,? @@ the flat cosine-side rule only holds nearly, for small triangles
+\text{between two places on one latitude, the circle of latitude is the shortest way}\,? @@ it is not a great circle (29b5); at 45° N, half way round, it is 14 153 km against 10 008 km
+\tfrac{\sin A}{a} = \tfrac{\sin B}{b} \text{ with sides in km}\,? @@ the sphere-sine technique takes the sines of the sides, as angles at O
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29i4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\Delta\lambda = 96.43^\circ,\ \ h_P \approx 60.80^\circ,\ \ h_Q \approx 44.67^\circ"></span></span>These are the three angles of the triangle of the pole, Vancouver and Tokyo. Find their total and the excess, and the area of the triangle on the earth by 29b3. <br>Find what the first line forgets.</li><li><span class="givens"><span data-tex-inline="NP = 40.81^\circ,\ \ NQ = 54.24^\circ,\ \ \Delta\lambda = 96.43^\circ"></span></span>Find δ in km from the second line, with each side in km first, and compare with 7504 km. <br>Find why the flat rule fails here.</li><li><span class="givens"><span data-tex-inline="\varphi = 45^\circ,\ \ \Delta\lambda = 180^\circ,\ \ R = 6371\ \text{km}"></span></span>Find the length along the circle of latitude, and the great circle distance through the pole. <br>Find what the third line forgets.</li><li><span class="givens"><span data-tex-inline="a = b = c = \tfrac{\pi}{3},\ \ R = 6371\ \text{km}"></span></span>Find the three angles (29i1.1c). Find sin A / a with a in km, and sin A / sin a. Then do the same on a sphere of radius 1. <br>Find which of the two ratios belongs to the triangle, whatever the size of the sphere.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">29i.4.1</span><span class="tagq">build</span>Build a triangle on the sphere of radius 1 with three right angles. <br>Find its sides by the sphere-cosine technique, and its area by the excess-area technique, and check the area against the whole skin (21o).</div>
+  <div class="chq"><span class="chid">29i.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="P = (49.19^\circ,\ -123.18^\circ)"></span></span>Find the place Q exactly opposite Vancouver on the globe, and δ from the great-circle technique. <br>Find why the heading formula fails there, and how many great circle routes there are from P to Q.</div>
+  <div class="chq"><span class="chid">29i.4.3</span><span class="tagq">converse</span>Three numbers a, b, c between 0 and π are given. Turn the sphere-cosine technique round: is there a triangle on the sphere with these sides? <br>Prove that there is when each is less than the sum of the other two and a + b + c &lt; 2π. Put A at the pole and B on the meridian of longitude 0, and find C.</div>
+  <div class="chq"><span class="chid">29i.4.4</span><span class="tagq">reroute</span>Reroute the distance half of the great-circle technique without the triangle. Write the place (φ, λ) as the arrow (cos φ cos λ, cos φ sin λ, sin φ) of length 1, as in 29d1. <br>Find the dot of two such arrows, and the angle between them by 27i1.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r29concl.html">← 29·∎ · flat is one geometry among many</a><a href="r29j.html">29j · hyperbolic geometry by hand →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The sphere-cosine technique is the spherical law of cosines (for sides), and the sphere-sine technique the spherical law of sines. Working with the sides and angles of triangles on a sphere is spherical trigonometry. The great-circle technique gives the great-circle distance and the initial bearing (or initial course) of the route; the triangle of the pole and two places is the navigational triangle, and with a star in place of the second place it is the astronomical triangle. The farthest-north technique is a case of Clairaut’s relation, cos φ sin h stays the same all along a great circle. The highest point is the vertex of the great circle. A route that keeps one compass heading is a rhumb line (or loxodrome). Navigators long used half of 1 − cos δ, the haversine, because it keeps its digits when δ is small.</p>
+  <h3>Who said it first</h3>
+  <p>Menelaus of Alexandria worked with spherical triangles around 100 CE. Abu al-Wafa al-Buzjani and his contemporaries in Baghdad gave the spherical sine rule in the tenth century. Regiomontanus wrote the cosine rule for sides in On Triangles of All Kinds, finished about 1464 and printed in 1533. Alexis Clairaut found his relation in 1743 for paths on surfaces made by turning a curve about an axis. Pedro Nunes showed in 1537 that a fixed compass heading is not a great circle. James Inman published tables of haversines for seamen in 1835.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'sides as dots',t:R`\cos a = B\cdot C`,n:`Arrows of length 1 from the centre.`},
+  {k:'ember',kl:'split off A',t:R`B = \cos c\,A + \sin c\,u`,n:`u leaves A along the side.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\cos a = \cos b\cos c + \sin b\sin c\cos A}`,n:`Two sides and the angle give the third.`}
+],{title:'The slides · the cosine rule · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'the triangle',t:R`NP = \tfrac{\pi}{2} - \varphi_1,\ \ \angle N = \Delta\lambda`,n:`Latitude gives the side, longitude the angle.`},
+  {k:'ember',kl:'the rule',t:R`\cos\delta = \sin\varphi_1\sin\varphi_2 + \cos\varphi_1\cos\varphi_2\cos\Delta\lambda`,n:`The sphere-cosine technique.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{distance } R\delta,\ \text{heading from the rule again}}`,n:`Two uses of one rule.`}
+],{title:'The slides · the pole as a corner · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'the box',t:R`|\det[A\ B\ C]| = \sin A\sin b\sin c`,n:`The same from every corner.`},
+  {k:'ember',kl:'divide',t:R`\tfrac{\sin A}{\sin a}`,n:`By the three sines of the sides.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\cos\varphi_m = \cos\varphi_1\sin h}`,n:`The pole, the start and the top.`}
+],{title:'The slides · the sine rule · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

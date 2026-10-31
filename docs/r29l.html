@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The best path, by hand</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r29k.html">← 29k curvature by hand</a><a href="r29m.html">next: 29m perspective →</a></p>
+  <div class="tags"><span class="tag tech">29l · technique</span></div>
+  <h1>The best path, by hand</h1>
+  <p>In the summer of sixteen ninety six a challenge went out to the mathematicians of Europe. A bead slides without friction along a wire from one point down to another, lower and off to the side. Which shape of wire brings it down fastest? Not the straight one. This step answers that question with the best-path equation of rung twenty nine, and then two more that look nothing alike: the shape of a soap film stretched between two rings, and the shape of a chain hanging between two hooks. All three have a rule that does not care where along the floor you stand, and for such rules the equation gives up a quantity that never changes along the best path. With it, each problem comes down to one step of separating the letters. The fastest slide is the curve traced by a point on a rolling wheel. The soap film and the chain share one curve, built from e.</p>
+  <p class="gesture">When the rule does not mention where along the floor you stand, the best-path equation keeps one quantity fixed all along the best path. The fastest slide is traced by a point on a rolling wheel. The soap film between two rings and the hanging chain take one and the same curve, built from e.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r29g.html">29g</a> (the best-path technique), <a href="r28c.html">28c</a> (the roads-add technique), <a href="r28g.html">28g</a> (the lines-up technique), <a href="r29f.html">29f</a> (spun surfaces), <a href="r29d.html">29d</a> (the ruler-area technique), <a href="r24f.html">24f</a> (separating the letters, and the put-back technique) and <a href="r17.html">rung 17</a> (log and exp). <a href="r29m.html">29m</a> turns to the painter’s window.</p></div>
+</header>
+
+<section class="class step" data-step="29l1">
+  <h2 class="sthead"><span class="stno">29l1</span>A rule that does not mention x</h2>
+  <p class="stands">Stands on 29g1 (the best-path technique), 28c3 (the roads-add technique) and rung 13 (slopes of products).</p>
+  <p data-pid="c552d3">29g1 proved that a curve y(x) which makes ∫ L(x, y, y′) dx least, among curves with the same ends, obeys d/dx L<sub>p</sub> = L<sub>y</sub>, where p stands for the third input and L<sub>p</sub> is taken at p = y′. That is an equation with second slopes in it. When x does not appear in L, one slope can be taken off at once.</p>
+  <p data-pid="af1300">No-x technique: <b>if L depends on y and p only, then along every curve that obeys the best-path equation, L − y′L<sub>p</sub> keeps one value.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the no-x technique">
+\tfrac{d}{dx}\,L(y, y^{\prime}) = L_y\,y^{\prime} + L_p\,y^{\prime\prime} @@ the roads-add technique (28c3): two roads, through y and through p = y′
+\tfrac{d}{dx}\,(y^{\prime}L_p) = y^{\prime\prime}L_p + y^{\prime}\,\tfrac{d}{dx}L_p @@ the slope of a product (13)
+\tfrac{d}{dx}\,(L - y^{\prime}L_p) = y^{\prime}\big(L_y - \tfrac{d}{dx}L_p\big) @@ subtract: the terms in y″ cancel
+L_y - \tfrac{d}{dx}L_p = 0 @@ the best-path technique (29g1)
+\htmlClass{new}{L - y^{\prime}L_p \text{ keeps one value}} \quad \blacksquare @@ its slope is 0 on an interval (14d)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: the straight line once more">
+L = \sqrt{1 + p^2},\ \ L_p = \tfrac{p}{\sqrt{1 + p^2}} @@ length in the flat plane (29g1), no x and no y
+L - pL_p = \tfrac{1 + p^2 - p^2}{\sqrt{1 + p^2}} = \tfrac{1}{\sqrt{1 + p^2}} @@ the no-x technique
+\tfrac{1}{\sqrt{1 + y^{\prime 2}}} = k \Rightarrow y^{\prime 2} = \tfrac{1}{k^2} - 1 @@ one value all along
+\htmlClass{new}{y^{\prime} \text{ keeps one value: a straight line}} \quad \blacksquare @@ y′ is continuous, so it cannot jump between the two roots (12)
+  </pre>
+  <p data-pid="ade099">The kept quantity has a meaning in mechanics, with time for x: when the rule of motion does not mention the time, something is kept, and 29·then names it. Here it is a tool. It turns an equation in y″ into an equation in y′, and that can often be solved by separating the letters (24f).</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · no x · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">29l1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="L = \tfrac{\sqrt{1 + p^2}}{y},\ \ y &gt; 0"></span></span>This is length in the half-plane of 29j2. Find the kept quantity, and show that (x − b)² + y² = r² obeys it for a suitable value.</li><li><span class="givens"><span data-tex-inline="L = p^2 + y^2"></span></span>Find the kept quantity. Check that y = e^x keeps it.</li><li><span class="givens"><span data-tex-inline="L = y\sqrt{1 + p^2}"></span></span>Find L<sub>p</sub> and the kept quantity, as one fraction.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29l2">
+  <h2 class="sthead"><span class="stno">29l2</span>The fastest slide</h2>
+  <p class="stands">Stands on 29l1, 29g1, 16·phys (energy of motion) and 21b.</p>
+  <p data-pid="be2e9e">Measure y downward from the start (0, 0) to an end (X, Y) with Y &gt; 0. A bead released from rest on a wire without friction has dropped by y when its speed is v = √(2gy), since the work its weight does, mgy, becomes ½mv² (16·phys), and the wire pushes at right angles to the motion and does no work. The time along the wire is the total of distance over speed: T = ∫ √(1 + y′²) / √(2gy) dx.</p>
+  <p data-pid="6764dc">Fastest-slide technique: <b>a curve that makes the time of the slide least obeys y(1 + y′²) = 2a for a number a &gt; 0. The curve x = a(θ − sin θ), y = a(1 − cos θ), traced by a point on the rim of a wheel of radius a rolling along the underside of the floor, obeys it, and the bead takes θ√(a/g) to reach the point at θ.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the fastest-slide technique">
+L = \tfrac{\sqrt{1 + p^2}}{\sqrt{2gy}},\ \ L - pL_p = \tfrac{1}{\sqrt{2gy}\sqrt{1 + p^2}} @@ no x in L; the same work as 29l1, divided by √(2gy)
+y(1 + y^{\prime 2}) = 2a @@ the no-x technique: the kept value is 1/√(4ga), naming a
+\tfrac{dy}{dx} = \tfrac{\sin\theta}{1 - \cos\theta},\ \ 1 + y^{\prime 2} = \tfrac{2}{1 - \cos\theta} @@ dy/dθ over dx/dθ (13), then sin² θ = 1 − cos² θ (21c)
+y(1 + y^{\prime 2}) = a(1 - \cos\theta)\cdot\tfrac{2}{1 - \cos\theta} = 2a @@ the wheel’s curve obeys it
+ds = a\sqrt{2 - 2\cos\theta}\,d\theta,\ \ v = \sqrt{2ga(1 - \cos\theta)} @@ speed along the curve (18i), and v = √(2gy)
+\htmlClass{new}{dt = \tfrac{ds}{v} = \sqrt{\tfrac{a}{g}}\,d\theta,\ \ T = \theta\sqrt{\tfrac{a}{g}}} \quad \blacksquare @@ the time grows evenly with the wheel’s turn
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: a slide 20 m deep">
+a = 10\ \text{m},\ \ \theta = \pi:\ \ (X, Y) = (10\pi,\ 20) \approx (31.4,\ 20)\ \text{m} @@ the bottom of the wheel’s curve
+T = \pi\sqrt{10/9.81} \approx 3.17\ \text{s} @@ the fastest-slide technique
+\text{straight chute: length } D = 10\sqrt{\pi^2 + 4} \approx 37.2\ \text{m},\ \ \text{pull along it } g\cdot\tfrac{20}{D} @@ the weight’s share along a straight slope
+D = \tfrac12\big(\tfrac{20g}{D}\big)T^2 \Rightarrow T = D\sqrt{\tfrac{2}{20g}} \approx 3.76\ \text{s} @@ from rest under a steady pull, distance is ½ × pull × time² (9·phys)
+\htmlClass{new}{\text{the wheel’s curve wins by nearly 0.6 s}} \quad \blacksquare @@ it drops steeply first, gains speed early, and spends it on the long way
+  </pre>
+  <p data-pid="9eb8e3">The fastest curve is longer than the straight chute. It trades distance for speed. And on it the time to the bottom is π√(a/g) from wherever on the curve the bead is let go, which 29l.4.1 asks you to prove.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · the fastest slide · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29l2.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="a = 5\ \text{m},\ \ g = 9.81\ \text{m/s}^2"></span></span>Find the bottom point of the wheel’s curve and the time to reach it.</li><li><span class="givens"><span data-tex-inline="(X, Y) = (5\pi,\ 10)"></span></span>Find the time down a straight chute from (0, 0) to the same point, and compare.</li><li><span class="givens"><span data-tex-inline="(X, Y) = (20,\ 10)\ \text{m}"></span></span>Find θ at the end from (θ − sin θ)/(1 − cos θ) = X/Y, by halving (12), to two places. Then find a, the time on the fastest curve, and the time on the straight chute. Find whether the bead passes below the end before it gets there.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29l3">
+  <h2 class="sthead"><span class="stno">29l3</span>The soap film</h2>
+  <p class="stands">Stands on 29l1, 29f2 (spun surfaces), 29d2 (the ruler-area technique), 24f (separating the letters, and the put-back technique) and rung 17.</p>
+  <p data-pid="310cc8">Dip two wire rings of radius R, held square to one axis, into soapy water and draw them apart. The film between them pulls itself as small as it can. Spin the curve y(x) about the x-axis: by 29f2 and 29d2, the surface has area 2π ∫ y √(1 + y′²) dx, the total of the circle’s length 2πy over the distance along the curve.</p>
+  <p data-pid="2550a0">Write C(w) = (e^w + e^(−w))/2 and S(w) = (e^w − e^(−w))/2 for short. Then C′ = S, S′ = C and C² − S² = 1, by slopes of exp (17) and multiplying out.</p>
+  <p data-pid="7986cb">Soap-film technique: <b>if a film spun about the x-axis has least area among those with the same rings, and y′ is not 0 all along, its curve is y = a C((x − b)/a) for numbers a &gt; 0 and b.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the soap-film technique">
+L = y\sqrt{1 + p^2},\ \ L - pL_p = \tfrac{y}{\sqrt{1 + p^2}} @@ no x in L (29l1)
+\tfrac{y}{\sqrt{1 + y^{\prime 2}}} = a,\ \ y^{\prime 2} = \tfrac{y^2}{a^2} - 1 @@ the no-x technique, naming the kept value a
+\tfrac{dy}{\sqrt{y^2 - a^2}} = \tfrac{dx}{a} @@ separating the letters (24f), on a piece where y′ &gt; 0
+\ln\big(y + \sqrt{y^2 - a^2}\big) = \tfrac{x - b}{a} + \ln a @@ the left side has slope 1/√(y² − a²) (17, 13); b is the constant
+y + \sqrt{y^2 - a^2} = a\,e^{(x - b)/a} @@ exp undoes ln (17)
+y - \sqrt{y^2 - a^2} = \tfrac{a^2}{y + \sqrt{y^2 - a^2}} = a\,e^{-(x - b)/a} @@ multiply out (y + √)(y − √) = a²
+\htmlClass{new}{y = a\,C\big(\tfrac{x - b}{a}\big)} \quad \blacksquare @@ add the last two lines and halve; put-back (24f2): y′ = S, 1 + S² = C², so y/√(1 + y′²) = a
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: two rings 10 cm apart">
+R = 10\ \text{cm},\ \ \text{rings at } x = \pm 5 @@ the film is the same on both sides, so b = 0
+a\,C\big(\tfrac{5}{a}\big) = 10 @@ the curve passes through each ring
+a \approx 8.483 \ \text{ or } \ a \approx 2.351 @@ two answers, found by halving (12)
+\text{area} = \pi a\big(10 + a\,S(\tfrac{10}{a})\big) \approx 599.2 \ \text{ or } \ 684.6\ \text{cm}^2 @@ the total of 2π a C² over x, with C² = (1 + C(2w))/2
+\htmlClass{new}{\text{the deep curve, } a \approx 8.483,\ \text{beats two flat discs, } 2\pi R^2 \approx 628.3} \quad \blacksquare @@ the shallow one obeys the equation and is not least
+  </pre>
+  <p data-pid="b0129e">Pull the rings further apart and the two answers draw together. When the distance passes about 1.33 times the radius there is no answer at all, and the film snaps into two flat discs, one on each ring.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · the soap film · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29l3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="R = 10\ \text{cm},\ \ \text{rings at } x = \pm h"></span></span>For the curve y = aC(x/a), h/R = u/C(u) with u = h/a. Find the u where u/C(u) is greatest, from its slope, by halving, and the greatest distance 2h between the rings.</li><li><span class="givens"><span data-tex-inline="y = 2\,C(x/2),\ \ x = 2"></span></span>Find y, y′ and y/√(1 + y′²) at the point, and check the kept value.</li><li><span class="givens"><span data-tex-inline="R = 10\ \text{cm},\ \ 2h = 10\ \text{cm}"></span></span>Check by your own halving that a ≈ 8.483 and a ≈ 2.351 both give aC(5/a) = 10. Find the depth of each film at its waist, x = 0.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29l4">
+  <h2 class="sthead"><span class="stno">29l4</span>The hanging chain</h2>
+  <p class="stands">Stands on 29l3, 28g2 (the lines-up technique) and 29g1.</p>
+  <p data-pid="02c51d">A chain of length ℓ, the same weight w per metre all along, hangs from two hooks. It settles where its weight sits lowest, that is, where the height total ∫ y ds = ∫ y √(1 + y′²) dx is least, with y measured up. But not among all curves: only among those of length ∫ √(1 + y′²) dx = ℓ.</p>
+  <p data-pid="638594">For a best point of f on a level set of g, 28g2’s lines-up technique gives a number λ with ∇f = λ∇g. Its carry-over to paths says: a curve that makes ∫ L dx least, among curves with the same ends and the same value of ∫ M dx, obeys the best-path equation for L − λM, for some number λ. Its proof waits much higher up the ladder. Here it is held in trust.</p>
+  <p data-pid="472885">Lowest-chain technique: <b>a hanging chain whose height total is least among curves of its length, with y′ not 0 all along, hangs as y = λ + a C((x − b)/a) for numbers λ, a &gt; 0 and b.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the lowest-chain technique">
+L - \lambda M = y\sqrt{1 + p^2} - \lambda\sqrt{1 + p^2} = (y - \lambda)\sqrt{1 + p^2} @@ height total less λ times length: the lines-up carry-over, held in trust
+Y = y - \lambda:\ \ L - \lambda M = Y\sqrt{1 + Y^{\prime 2}} @@ Y′ = y′: sliding the curve up or down changes nothing else
+\htmlClass{new}{Y = a\,C\big(\tfrac{x - b}{a}\big),\ \ y = \lambda + a\,C\big(\tfrac{x - b}{a}\big)} \quad \blacksquare @@ the soap-film technique (29l3), word for word
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: a power line">
+\text{towers } 300\ \text{m apart, same height, sag } 10\ \text{m} @@ put the lowest point at x = 0, so b = 0
+a\big(C(\tfrac{150}{a}) - 1\big) = 10 \Rightarrow a \approx 1126.7\ \text{m} @@ the lowest-chain technique, solved by halving (12)
+\text{length} = \int_{-150}^{150} C\big(\tfrac{x}{a}\big)\,dx = 2a\,S\big(\tfrac{150}{a}\big) \approx 300.89\ \text{m} @@ √(1 + S²) = C, and S undoes C’s slope
+\htmlClass{new}{\text{under 0.3\% more wire than the span gives a 10 m sag}} \quad \blacksquare @@ shallow chains are nearly straight
+  </pre>
+  <p data-pid="c37d08">The same curve comes out of a balance of pulls, with no trust at all, by 25·eng’s hanging-chain technique: the pull along the chain has a level part that never changes, and its upright part carries the weight below. Two different arguments, one curve. The soap film and the chain are the same problem because each asks for the least total of a height times a length.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · the hanging chain · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29l4.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{span } 300\ \text{m},\ \ a = 1126.7\ \text{m}"></span></span>Find the sag of the chain curve at a quarter of the span, x = 75, and that of the parabola with the same 10 m sag, y = 10(x/150)².</li><li><span class="givens"><span data-tex-inline="\ell = 10\ \text{m},\ \ \text{hooks } 8\ \text{m apart, same height}"></span></span>Find a from 2aS(4/a) = 10, by halving, and the sag.</li><li><span class="givens"><span data-tex-inline="y = \lambda + a\,C(x/a)"></span></span>Check that this curve obeys a y″ = √(1 + y′²), the balance of pulls of 25·eng.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29l5">
+  <h2 class="sthead"><span class="stno">29l5</span>Illegal moves</h2>
+  <p class="stands">Stands on 29l1 to 29l4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{the straight chute is fastest, since it is shortest}\,? @@ for the 20 m slide it takes 3.76 s against 3.17 s
+\text{a curve that obeys the equation is least}\,? @@ the shallow film between rings 10 cm apart has area 684.6 against 599.2
+L - y^{\prime}L_p \text{ keeps one value for every } L\,? @@ the no-x technique needs L free of x: for L = xp² it fails
+\text{a hanging chain is a parabola}\,? @@ close for shallow sags, but the parabola does not obey the chain’s equation
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29l5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="(X, Y) = (10\pi,\ 20)\ \text{m}"></span></span>Find the length of the straight chute and of the wheel’s curve to the bottom, 4a. <br>Find what the first line forgets.</li><li><span class="givens"><span data-tex-inline="R = 10\ \text{cm},\ \ 2h = 10\ \text{cm}"></span></span>Find the two values of a and the two areas. <br>Find what the best-path equation does and does not promise.</li><li><span class="givens"><span data-tex-inline="L = x\,p^2,\ \ 1 \le x \le e"></span></span>Solve the best-path equation, and find L − y′L<sub>p</sub> along the answer. <br>Find which step of the no-x technique breaks.</li><li><span class="givens"><span data-tex-inline="y = \tfrac{x^2}{2a}"></span></span>Find a y″ and √(1 + y′²) for this parabola at x = 0 and at x = a. <br>Find whether it obeys a y″ = √(1 + y′²).</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">29l.4.1</span><span class="tagq">build</span>Build a track on which a bead let go from rest anywhere reaches the bottom in the same time. <br>On the wheel’s curve with the bottom at θ = π, let the bead start at θ₀. Find its speed at θ from the drop, and prove the time to the bottom is π√(a/g), whatever θ₀. Use cos θ = 2cos²(θ/2) − 1 and put w = cos(θ/2).</div>
+  <div class="chq"><span class="chid">29l.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="R = 10\ \text{cm}"></span></span>Draw the rings 14 cm apart. Find whether any curve y = aC(x/a) passes through both rings. Find the area of the two flat discs, and what the film does. <br>Then find, for rings 13 cm apart, the area of the deep film, and compare.</div>
+  <div class="chq"><span class="chid">29l.4.3</span><span class="tagq">converse</span>Turn the no-x technique round: if L has no x and L − y′L<sub>p</sub> keeps one value along a curve, must the curve obey the best-path equation? <br>Test the flat curve y = 5 for the slide’s rule L = √(1 + p²)/√(2gy). Find which line of the proof divides by something that can be 0.</div>
+  <div class="chq"><span class="chid">29l.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="y(1 + y^{\prime 2}) = 2a"></span></span>The fastest-slide technique checked the wheel’s curve by putting it back. Reroute: find it. Put y = a(1 − cos θ), that is y = 2a sin²(θ/2), and find dx/dθ from the kept value by separating the letters (24f). <br>Find x as a function of θ with x = 0 at θ = 0.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r29k.html">← 29k · curvature by hand</a><a href="r29m.html">29m · perspective →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The fastest slide is the brachistochrone problem (shortest time), and its answer is a cycloid. That the time to the bottom of a cycloid does not depend on the start makes it the tautochrone (or isochrone) curve. The no-x technique is the Beltrami identity, and L − y′L<sub>p</sub> is a first integral of the Euler–Lagrange equation. The chain curve is the catenary, y = a cosh((x − b)/a), with C = cosh and S = sinh, the hyperbolic cosine and sine. The soap film spun from a catenary is a catenoid, a minimal surface. The lines-up carry-over is the method of Lagrange multipliers for an isoperimetric constraint, and its proof is part of the calculus of variations.</p>
+  <h3>Who said it first</h3>
+  <p>Johann Bernoulli set the fastest-slide problem in the Acta Eruditorum in June 1696. Solutions came from Johann himself, his brother Jakob, Gottfried Leibniz, Guillaume de l’Hôpital and Isaac Newton, whose came unsigned; Johann is said to have known him “by his claw”. Christiaan Huygens had shown in 1673 that the cycloid is the same-time curve, and built pendulum clocks on it. Galileo Galilei thought a hanging chain made a parabola; Joachim Jungius showed in 1669 that it does not, and in 1691 Leibniz, Huygens and Johann Bernoulli found the catenary. Leonhard Euler showed in 1744 that the catenoid is the least surface between two rings. Joseph Plateau studied soap films by experiment in his book of 1873. Eugenio Beltrami wrote the identity in 1868.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'roads add',t:R`\tfrac{d}{dx}L = L_y y^{\prime} + L_p y^{\prime\prime}`,n:`Two roads.`},
+  {k:'ember',kl:'subtract',t:R`\tfrac{d}{dx}(L - y^{\prime}L_p) = y^{\prime}(L_y - \tfrac{d}{dx}L_p)`,n:`y″ cancels.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{L - y^{\prime}L_p = \text{const}}`,n:`One slope fewer.`}
+],{title:'The slides · no x · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'the time',t:R`T = \int \tfrac{\sqrt{1 + y^{\prime 2}}}{\sqrt{2gy}}\,dx`,n:`Distance over speed.`},
+  {k:'ember',kl:'no x',t:R`y(1 + y^{\prime 2}) = 2a`,n:`One value along it.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{x = a(\theta - \sin\theta),\ y = a(1 - \cos\theta)}`,n:`A point on a rolling wheel.`}
+],{title:'The slides · the fastest slide · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'the area',t:R`2\pi\int y\sqrt{1 + y^{\prime 2}}\,dx`,n:`Circles along the curve.`},
+  {k:'ember',kl:'no x',t:R`\tfrac{y}{\sqrt{1 + y^{\prime 2}}} = a`,n:`Separate the letters.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{y = a\,C\big(\tfrac{x-b}{a}\big)}`,n:`The chain curve.`}
+],{title:'The slides · the soap film · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'constraint',t:R`\int\sqrt{1 + y^{\prime 2}}\,dx = \ell`,n:`Only curves of one length.`},
+  {k:'ember',kl:'lines up',t:R`(y - \lambda)\sqrt{1 + y^{\prime 2}}`,n:`Held in trust.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{y = \lambda + a\,C\big(\tfrac{x-b}{a}\big)}`,n:`The soap film again.`}
+],{title:'The slides · the hanging chain · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

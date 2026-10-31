@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Curvature by hand</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r29j.html">← 29j hyperbolic geometry by hand</a><a href="r29l.html">next: 29l the best path, by hand →</a></p>
+  <div class="tags"><span class="tag tech">29k · technique</span></div>
+  <h1>Curvature by hand</h1>
+  <p>Rung twenty nine measured the bend of a curve when it is traced at a steady speed of one, and the bend of a surface through two main bends and their product. Real curves rarely come at speed one. A spring, a spiral staircase and the double strand of a living cell are traced by turning and climbing at whatever pace the formula gives. This step finds the bend of a curve traced at any speed, from two slopes and a cross. Then it finds the surface bend of any hillside written as height over a map, at every point and not only at the top. Last it takes surfaces made by spinning a curve, like a doughnut or a tyre, and finds both of their main bends at every point, so that the outside and the inside of a ring can be told apart by hand.</p>
+  <p class="gesture">A curve traced at any speed bends by the size of the cross of its first two slopes, over the cube of its speed. A hillside written as height over a map has a surface bend at every point, from its second slopes and its tilt. A spun surface bends along its curve and around its axis: a bowl outside a ring, and a saddle inside.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r29e.html">29e</a> (the curve-bend, normal-bend, surface-bend and straight-out techniques), <a href="r29d.html">29d</a> (the ruler), <a href="r29f.html">29f</a> (spun surfaces), <a href="r27i.html">27i</a> (the cross and moving-dot techniques), <a href="r28d.html">28d</a> (mixed slopes agree) and <a href="r18i.html">18i</a> (distance as the total of speed). <a href="r29l.html">29l</a> runs the best-path technique by hand.</p></div>
+</header>
+
+<section class="class step" data-step="29k1">
+  <h2 class="sthead"><span class="stno">29k1</span>The bend of a curve at any speed</h2>
+  <p class="stands">Stands on 29e1 (the curve-bend technique), 27i3 (the cross technique), 27i4 (the moving-dot technique) and 18i.</p>
+  <p data-pid="e48b91">Let γ(t) be a curve in space whose slope γ′(t) is never 0. Its speed is v = |γ′|, and its direction T = γ′/v has length 1. The distance travelled s grows at ds/dt = v (18i). 29e1 measured the bend as κ = |dT/ds|, the turning per unit of distance.</p>
+  <p data-pid="da84f2">Any-speed-bend technique: <b>a curve γ(t) with γ′ never 0 has bend κ = |γ′ × γ″| / |γ′|³. In the plane this is |x′y″ − y′x″| / (x′² + y′²)^(3/2), and for a graph y = f(x) it is |f″| / (1 + f′²)^(3/2).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the any-speed-bend technique">
+\gamma^{\prime} = v\,T,\ \ \gamma^{\prime\prime} = v^{\prime}\,T + v\,\tfrac{dT}{dt} @@ slope of a number times an arrow, place by place (13)
+\gamma^{\prime}\times\gamma^{\prime\prime} = v\,v^{\prime}\,(T\times T) + v^2\,\big(T\times\tfrac{dT}{dt}\big) = v^2\,\big(T\times\tfrac{dT}{dt}\big) @@ the cross is straight in each slot, and T × T = 0 (27i3)
+\big|T\times\tfrac{dT}{dt}\big| = \big|\tfrac{dT}{dt}\big| @@ an arrow of length 1 moves at right angles to itself (27i4, 29e1); the cross of arrows at right angles has the product of their sizes (27i3)
+\tfrac{dT}{dt} = \tfrac{dT}{ds}\,v @@ the chain technique (13), with ds/dt = v
+|\gamma^{\prime}\times\gamma^{\prime\prime}| = v^3\,\kappa @@ the lines above
+\htmlClass{new}{\kappa = \frac{|\gamma^{\prime}\times\gamma^{\prime\prime}|}{|\gamma^{\prime}|^3}} \quad \blacksquare @@ divide by v³; in the plane the cross is (0, 0, x′y″ − y′x″), and a graph is x = t, y = f(t)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: a helix, and the double strand of a cell">
+\gamma = (a\cos t,\ a\sin t,\ bt) @@ a helix of radius a, climbing 2πb each turn
+\gamma^{\prime} = (-a\sin t,\ a\cos t,\ b),\ \ \gamma^{\prime\prime} = (-a\cos t,\ -a\sin t,\ 0) @@ slopes of cos and sin (21g)
+\gamma^{\prime}\times\gamma^{\prime\prime} = (ab\sin t,\ -ab\cos t,\ a^2),\ \ |\cdot| = a\sqrt{a^2 + b^2} @@ the cross technique, and sin² + cos² = 1 (21c)
+\kappa = \frac{a\sqrt{a^2 + b^2}}{(a^2 + b^2)^{3/2}} = \frac{a}{a^2 + b^2} @@ the any-speed-bend technique, the same at every t
+\text{DNA: } a \approx 1.0\ \text{nm},\ \ 2\pi b \approx 3.4\ \text{nm},\ \ b \approx 0.541\ \text{nm} @@ the double helix: radius about a nanometre, about 3.4 nm per turn
+\htmlClass{new}{\kappa \approx 0.774\ \text{per nm},\ \ \text{hugging circle radius} \approx 1.29\ \text{nm}} \quad \blacksquare @@ the climb straightens it: the hugging circle is wider than the helix
+  </pre>
+  <p data-pid="6f89da">The circle that hugs a curve best at a point has radius 1/κ. For the graph y = x²/(2R) at 0, f′ = 0 and f″ = 1/R, so κ = 1/R: near its bottom, the parabola is hugged by the circle of radius R. That is how a road engineer turns a design curve into a radius, and why a ramp drawn as a parabola can be signed with a single safe speed near its tightest point.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · any speed · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">29k1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="y = x^2"></span></span>Find the bend at x = 0 and at x = 1, and the radius of the hugging circle at each.</li><li><span class="givens"><span data-tex-inline="\gamma = (3\cos t,\ 3\sin t,\ 4t)"></span></span>Find the speed and the bend. Find the helix with the same radius 3 and no climb, and its bend.</li><li><span class="givens"><span data-tex-inline="\gamma = (4\cos t,\ 2\sin t)"></span></span>An oval running track drawn as this ellipse, in units of 10 m. Find the bend at t = 0 and at t = π/2, and the radius of the hugging circle at each, in metres.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29k2">
+  <h2 class="sthead"><span class="stno">29k2</span>The bend of a hillside at every point</h2>
+  <p class="stands">Stands on 29d1 (the ruler-length technique and the ruler grid), 29e2 (the bending grid), 29e3 (the surface-bend technique), 27i3 and 28d (mixed slopes agree).</p>
+  <p data-pid="4a5123">29e3 found the surface bend of z = f(x, y) at a point where the surface is level, as f<sub>xx</sub>f<sub>yy</sub> − f<sub>xy</sub>², the determinant of 28l’s grid of second slopes. On a slope, the ruler and the outward arrow both tilt, and the formula changes.</p>
+  <p data-pid="f0c905">Graph-bend technique: <b>the surface z = f(x, y) has surface bend K = (f<sub>xx</sub>f<sub>yy</sub> − f<sub>xy</sub>²) / (1 + f<sub>x</sub>² + f<sub>y</sub>²)² at every point.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the graph-bend technique">
+r = (x,\ y,\ f),\ \ r_x = (1,\ 0,\ f_x),\ \ r_y = (0,\ 1,\ f_y) @@ the graph as a patch, with u = x and v = y (29d1)
+E = 1 + f_x^2,\ \ F = f_x f_y,\ \ G = 1 + f_y^2,\ \ EG - F^2 = 1 + f_x^2 + f_y^2 = W^2 @@ the dots; multiply out, and f_x²f_y² cancels
+r_x\times r_y = (-f_x,\ -f_y,\ 1),\ \ n = \tfrac{1}{W}(-f_x,\ -f_y,\ 1) @@ the cross technique (27i3); its length is W
+r_{xx} = (0, 0, f_{xx}),\ \ r_{xy} = (0, 0, f_{xy}),\ \ r_{yy} = (0, 0, f_{yy}) @@ mixed slopes agree (28d)
+L = \tfrac{f_{xx}}{W},\ \ M = \tfrac{f_{xy}}{W},\ \ N = \tfrac{f_{yy}}{W} @@ the bending grid (29e2): only the last place of n counts
+\htmlClass{new}{K = \frac{LN - M^2}{EG - F^2} = \frac{f_{xx}f_{yy} - f_{xy}^2}{(1 + f_x^2 + f_y^2)^2}} \quad \blacksquare @@ the surface-bend technique (29e3)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: a saddle, and a mountain pass">
+f = xy:\ \ f_x = y,\ f_y = x,\ f_{xx} = f_{yy} = 0,\ f_{xy} = 1 @@ the saddle of 28l
+K = \frac{-1}{(1 + x^2 + y^2)^2} @@ the graph-bend technique
+K(0, 0) = -1,\ \ K(1, 1) = -\tfrac19,\ \ K(10, 0) = -\tfrac{1}{10\,201} @@ sharpest at the centre, nearly flat far out
+f = 919 - \tfrac{x^2}{2000} + \tfrac{y^2}{1000}\ \ (\text{metres}) @@ a smooth model of Snoqualmie Pass, the road running along x and the ridge along y
+K(0, 0) = \big(-\tfrac{1}{1000}\big)\cdot\tfrac{1}{500} = -2\times10^{-6}\ \text{per m}^2 @@ level at the pass, so the bottom is 1
+\htmlClass{new}{\text{main bends } -\tfrac{1}{1000} \text{ and } \tfrac{1}{500}:\ \text{circles of } 1000\ \text{m and } 500\ \text{m}} \quad \blacksquare @@ the road falls away both ways from the pass; the ridge rises both ways from it
+  </pre>
+  <p data-pid="421e41">The surface bend of the saddle is −1 at its centre, like the disc plane, but only there. Far out it flattens. 29k.4.1 asks for a surface that bends by −1 at every point.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · a hillside · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29k2.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="z = x^2 + y^2"></span></span>Find K at (0, 0) and at (1, 0), and the main bends at (0, 0).</li><li><span class="givens"><span data-tex-inline="z = \sqrt{R^2 - x^2 - y^2}"></span></span>Find K at (0, 0). Then find it at (R/2, 0) by the graph-bend technique.</li><li><span class="givens"><span data-tex-inline="z = 919 - \tfrac{x^2}{2000} + \tfrac{y^2}{1000},\ \ (100,\ 50)"></span></span>Find K at this point of the pass, and how much it differs from K at the pass itself.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29k3">
+  <h2 class="sthead"><span class="stno">29k3</span>The two bends of a ring</h2>
+  <p class="stands">Stands on 29f2 (spun surfaces and their ruler), 29e2 (the normal-bend technique), 29e3, 27i3 and 29k1.</p>
+  <p data-pid="21ddef">29f2 spun a curve, traced at speed 1 as (ρ(u), z(u)), about the upright axis, and found from the ruler alone that K = −ρ″/ρ. From outside, the surface bends in two main ways, and the product hides which is which. On a doughnut the bends tell the outside from the inside.</p>
+  <p data-pid="1807e2">Spun-bends technique: <b>on a spun surface, the main bends at each point are ρ′z″ − z′ρ″ along the spun curve and z′/ρ around the axis, and their product is −ρ″/ρ.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the spun-bends technique">
+r_u = (\rho^{\prime}\cos v,\ \rho^{\prime}\sin v,\ z^{\prime}),\ \ r_v = (-\rho\sin v,\ \rho\cos v,\ 0) @@ the patch of 29f2: E = 1, F = 0, G = ρ²
+r_u\times r_v = \rho\,n,\ \ n = (-z^{\prime}\cos v,\ -z^{\prime}\sin v,\ \rho^{\prime}) @@ the cross technique (27i3); n has length 1, since ρ′² + z′² = 1
+L = r_{uu}\cdot n = \rho^{\prime}z^{\prime\prime} - z^{\prime}\rho^{\prime\prime},\ \ M = r_{uv}\cdot n = 0,\ \ N = r_{vv}\cdot n = \rho\,z^{\prime} @@ r_uu = (ρ″ cos v, ρ″ sin v, z″), r_uv = ρ′(−sin v, cos v, 0), r_vv = −ρ(cos v, sin v, 0)
+b(\theta) = L\cos^2\theta + \tfrac{N}{\rho^2}\sin^2\theta @@ the normal-bend technique (29e2) along cos θ r_u + sin θ r_v/ρ, of length 1
+\text{main bends } L \text{ and } \tfrac{N}{\rho^2} = \tfrac{z^{\prime}}{\rho} @@ b(θ) is a share of one plus the rest of the other, so it lies between them
+L\,\tfrac{z^{\prime}}{\rho} = \tfrac{\rho^{\prime}z^{\prime}z^{\prime\prime} - z^{\prime 2}\rho^{\prime\prime}}{\rho} = \tfrac{-\rho^{\prime 2}\rho^{\prime\prime} - z^{\prime 2}\rho^{\prime\prime}}{\rho} @@ ρ′ρ″ + z′z″ = 0, the slope of ρ′² + z′² = 1
+\htmlClass{new}{\kappa_1\kappa_2 = -\rho^{\prime\prime}/\rho} \quad \blacksquare @@ ρ′² + z′² = 1 again; it agrees with 29f2, as the remarkable technique (29e4) says it must
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: a bagel">
+\rho = 4 + 2\cos\tfrac{u}{2},\ \ z = 2\sin\tfrac{u}{2}\ \ (\text{cm}) @@ a circle of radius 2 about a centre 4 from the axis, at speed 1; put t = u/2
+\rho^{\prime}z^{\prime\prime} - z^{\prime}\rho^{\prime\prime} = \tfrac12(\sin^2 t + \cos^2 t) = \tfrac12 @@ the bend around the tube is 1/2 everywhere: the circle of radius 2
+\tfrac{z^{\prime}}{\rho} = \tfrac{\cos t}{4 + 2\cos t} @@ the bend around the axis
+\text{outside } (t = 0):\ \tfrac12,\ \tfrac16,\ \ K = \tfrac{1}{12};\ \ \text{inside } (t = \pi):\ \tfrac12,\ -\tfrac12,\ \ K = -\tfrac14 @@ the spun-bends technique
+\htmlClass{new}{\text{top and bottom } (t = \pm\tfrac{\pi}{2}):\ \tfrac12,\ 0,\ \ K = 0} \quad \blacksquare @@ the outside is a bowl, the inside a saddle, and the two circles between are flat in one direction
+  </pre>
+  <p data-pid="c94fe6">Around the axis, a point of the bagel travels on a circle of radius ρ, which bends by 1/ρ. The surface bends by only z′/ρ that way, because the circle leans out of the surface: at the top of the bagel, the circle lies flat on the surface and the surface does not bend along it at all.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · a ring · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29k3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="R = 33\ \text{cm},\ \ a = 1.4\ \text{cm}"></span></span>A bicycle inner tube is spun from a circle of radius a about a centre R from the axle. Find both main bends and K on the outermost circle, the innermost circle and the top circle.</li><li><span class="givens"><span data-tex-inline="\rho = R\cos\tfrac{u}{R},\ \ z = R\sin\tfrac{u}{R}"></span></span>Check speed 1. Find both main bends of the sphere this spins, and K.</li><li><span class="givens"><span data-tex-inline="\rho = u\sin\alpha,\ \ z = u\cos\alpha,\ \ \alpha = \tfrac{\pi}{6},\ \ u = 2"></span></span>A cone. Find both main bends and K.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29k4">
+  <h2 class="sthead"><span class="stno">29k4</span>Illegal moves</h2>
+  <p class="stands">Stands on 29k1 to 29k3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{a helix of radius } a \text{ bends by } \tfrac1a,\ \text{like the circle it winds round}\,? @@ the climb straightens it: a/(a² + b²) &lt; 1/a when b ≠ 0
+z = xy \text{ has } K = -1 \text{ at every point}\,? @@ only at the centre; the tilt divides by (1 + x² + y²)²
+\text{the main bend around the axis is } \tfrac{1}{\rho}\,? @@ that is the bend of the circle the point travels on; the surface bends by z′/ρ
+\text{the main bends of a ring are } \tfrac1a \text{ and } \tfrac1R\,? @@ around the axis it is cos t/(R + a cos t), from 1/(R + a) outside to −1/(R − a) inside
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29k4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="a = 1.0,\ \ b = 0.541"></span></span>Find the bend of this helix and 1/a. <br>Find what the first line forgets.</li><li><span class="givens"><span data-tex-inline="z = xy,\ \ (1, 1),\ \ (0, 2)"></span></span>Find K at both points by the graph-bend technique, and f<sub>xx</sub>f<sub>yy</sub> − f<sub>xy</sub>² there. <br>Find the slip.</li><li><span class="givens"><span data-tex-inline="\rho = 4 + 2\cos t,\ \ z = 2\sin t,\ \ t = \tfrac{\pi}{2}"></span></span>Find 1/ρ and z′/ρ at the top of the bagel. <br>Find which one is the surface’s bend, and why the other is not.</li><li><span class="givens"><span data-tex-inline="R = 4,\ \ a = 2"></span></span>Find K on the inside of the bagel from the fourth line, and from the spun-bends technique. <br>Find what the fourth line forgets about the inside.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">29k.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\rho = e^{-u},\ \ u \ge 0"></span></span>Build a spun surface with K = −1 at every point. <br>Find ρ″/ρ for this ρ. Find z′ so that the curve has speed 1, and where this fails. Find the area of the surface for u ≥ 0, and compare its shape with the disc plane of 29c.</div>
+  <div class="chq"><span class="chid">29k.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\gamma = (t^2,\ t^3)"></span></span>The any-speed-bend technique asks that γ′ is never 0. This curve stops at t = 0. <br>Find its bend for t ≠ 0, and what happens to it as t heads to 0. Draw the curve near the origin.</div>
+  <div class="chq"><span class="chid">29k.4.3</span><span class="tagq">converse</span>The flat plane has K = 0 at every point. Turn it round: if a surface has K = 0 at every point, must it be part of a plane? <br>Test the cylinder, the cone of 29k3.1c, and the graph z = f(x) of a function of x alone, by the graph-bend technique.</div>
+  <div class="chq"><span class="chid">29k.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="z = \sqrt{R^2 - x^2 - y^2}"></span></span>29e5 found K = 1/R² for the sphere from its ruler. Reroute it by the graph-bend technique at every point of the upper half, not only the top. <br>Find f<sub>x</sub>, f<sub>y</sub>, the second slopes, and K.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r29j.html">← 29j · hyperbolic geometry by hand</a><a href="r29l.html">29l · the best path, by hand →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The any-speed-bend technique is the curvature formula κ = |r′ × r″| / |r′|³; in the plane, κ = |x′y″ − y′x″| / (x′² + y′²)^(3/2). The hugging circle is the osculating circle, its radius 1/κ the radius of curvature and its centre the centre of curvature. A curve’s twisting out of its plane, which a helix also has, is its torsion. The graph-bend technique is the Gaussian curvature of a Monge patch. A spun surface is a surface of revolution; its curve is the profile, or meridian, and its main bends are along the meridians and the parallels, its lines of curvature. The surface of the build challenge is the pseudosphere, spun from a tractrix. A surface with K = 0 everywhere is developable: it can be unrolled flat.</p>
+  <h3>Who said it first</h3>
+  <p>Christiaan Huygens studied the circle that hugs a curve in 1673, for his pendulum clocks. Isaac Newton gave the radius of curvature of a curve in his work on fluxions around 1671, and Gottfried Leibniz named the hugging circle the osculating (kissing) circle in 1686. Leonhard Euler studied the bends of surfaces along every direction in 1760, and found the two main ones at right angles. Jean Baptiste Meusnier related the bend of a slanted curve on a surface to the normal bend in 1776. Eugenio Beltrami used the pseudosphere in 1868 to show that a piece of the geometry of the disc plane sits in ordinary space. Rosalind Franklin’s X-ray photographs and the model of James Watson and Francis Crick fixed the shape of the double helix in 1953.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'split',t:R`\gamma^{\prime\prime} = v^{\prime}T + v\tfrac{dT}{dt}`,n:`Speeding up, and turning.`},
+  {k:'ember',kl:'cross',t:R`\gamma^{\prime}\times\gamma^{\prime\prime} = v^2\,T\times\tfrac{dT}{dt}`,n:`Speeding up drops out.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\kappa = |\gamma^{\prime}\times\gamma^{\prime\prime}|/|\gamma^{\prime}|^3}`,n:`Divide out the speed.`}
+],{title:'The slides · any speed · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'ruler',t:R`EG - F^2 = 1 + f_x^2 + f_y^2`,n:`The tilt stretches the ruler.`},
+  {k:'ember',kl:'bending grid',t:R`L = f_{xx}/W`,n:`Second slopes over W.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{K = \frac{f_{xx}f_{yy} - f_{xy}^2}{(1 + f_x^2 + f_y^2)^2}}`,n:`Divide by W⁴.`}
+],{title:'The slides · a hillside · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'outward arrow',t:R`n = (-z^{\prime}\cos v,\ -z^{\prime}\sin v,\ \rho^{\prime})`,n:`From the cross.`},
+  {k:'ember',kl:'bending grid',t:R`L = \rho^{\prime}z^{\prime\prime} - z^{\prime}\rho^{\prime\prime},\ M = 0,\ N = \rho z^{\prime}`,n:`Along and around.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\kappa_1\kappa_2 = -\rho^{\prime\prime}/\rho}`,n:`Bowl outside, saddle inside.`}
+],{title:'The slides · a ring · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sometimes time has holes, and apparently that's ok (I)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r29nav.html">← 29·nav why fly over the pole to Asia?</a><a href="r29now.html">next: 29·now can we hear space bend? →</a></p>
+  <div class="tags"><span class="tag now">29·G · research front</span></div>
+  <h1>Sometimes time has holes, and apparently that's ok (I)</h1>
+  <p>Sometimes time has holes, and apparently that’s ok. Every law of motion on this ladder so far has had time flowing: a slope is taken at an instant, and an instant sits between any two others. But no clock ever shows time flowing. A clock ticks. A computer that follows the Moon or a protein moves it in steps, one tick after the next, with nothing in between. And no one knows whether nature itself has a smallest tick. So people asked: what if time came in steps? Can mechanics be rebuilt with holes between the instants, so that it still works? What makes this hard is that the great facts of mechanics were proved with slopes. A body’s momentum is kept because a slope is zero, and the area of a patch of states is kept because a flow has no spread. Take the slopes away and those proofs fall. A paper in 1994 showed how to rebuild them. Start, as the laziest-path account of motion does, from a total, the action, but make it a sum over steps. Ask for the stepped path that makes that sum level. A stepped law of motion comes out, and with it, exactly, a kept momentum and a kept area. Energy is the one thing that is not kept, and yet it never wanders far. This page builds that much. It is the first of several visits to time in steps; the others come much higher up the ladder.</p>
+  <p class="gesture">Put a body at one place for each tick, and nowhere in between. For each step, write its action: its mass times the square of its stepped speed, halved, less its stored energy, all times the length of the tick. Add the steps. Each inner place appears in just two steps, so asking the total to be level asks two partial slopes to cancel, and that is a stepped law: mass times the stepped bend of the path is the force at that tick. If sliding every body along together changes no step’s action, then a stepped momentum is the same at every tick, exactly, however long the tick. The law that takes two places to the next pair has a slope grid with determinant one, so it keeps the area of every patch of states, which the plain way of stepping does not. For a spring, a quantity built from the speed and the two ends of a step is kept exactly. It is not quite the energy, so the energy wobbles in a narrow band forever, instead of growing step after step. Whether nature’s own time has steps is open.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r29g.html">29g</a> (the best-path technique), <a href="r29then.html">29·then</a> (the action-to-force, symmetry-keeps and kept-area techniques), <a href="r28a.html">28a</a> (partial slopes), <a href="r28c.html">28c</a> (the roads-add technique), <a href="r28i.html">28i</a> (the change-of-variables technique: the area scale), <a href="r27e.html">27e</a> (determinants), <a href="r14a.html">14a</a> (the flat-top technique), <a href="r23b.html">23b</a> (how wrong the match is) and <a href="r21e.html">21e</a> (sums of turns). 29·now asks whether we can hear space bend.</p></div>
+</header>
+
+<section class="class step" data-step="29time1">
+  <h2 class="sthead"><span class="stno">29time1</span>The laziest path, with time in steps</h2>
+  <p class="stands">Stands on 29·then.1 (the action-to-force technique), 29g (the best-path technique), 28a (partial slopes) and 14a (the flat-top technique).</p>
+  <p data-pid="20318d">29·then.1: a body of mass m with stored energy V(x) moves so that its action, the total of ½mx′² − V(x) over the time of the motion, is level among paths with the same ends, and 29g’s best-path technique turns that into the action-to-force technique, mx″ = −V′(x). Now let time come in ticks of length h. The body is at x₀, x₁, …, x_N at the times 0, h, …, Nh, and nowhere in between. The slope becomes (x_{k+1} − x_k)/h, and the total a sum.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the step-action technique">
+L_h(a, b) = h\Big(\tfrac m2\big(\tfrac{b - a}{h}\big)^2 - V(a)\Big) @@ the action of one step, from a to b
+A_h = L_h(x_0, x_1) + L_h(x_1, x_2) + \cdots + L_h(x_{N-1}, x_N) @@ the stepped path’s action; x₀ and x_N are fixed
+\partial_{x_k}A_h = \partial_2L_h(x_{k-1}, x_k) + \partial_1L_h(x_k, x_{k+1}) = 0,\ \ 0 \lt k \lt N @@ x_k sits in two steps only; level means every partial slope is 0 (28a), as at a best point (14a, one knob at a time)
+\partial_2L_h(a, b) = \tfrac{m(b - a)}{h},\ \ \partial_1L_h(a, b) = -\tfrac{m(b - a)}{h} - hV'(a) @@ partial slopes (28a)
+\htmlClass{new}{m\,\tfrac{x_{k+1} - 2x_k + x_{k-1}}{h^2} = -V'(x_k)} \quad \blacksquare @@ add, and divide by −h
+  </pre>
+  <p data-pid="bf160d">Step-action technique: <b>when time comes in steps and the action is a sum over them, the stepped path that makes it level obeys a stepped law: mass times the stepped bend of the path equals the force at that tick.</b> Given x₀ and x₁, it fixes every later place: x_{k+1} = 2x_k − x_{k−1} − h²V′(x_k)/m. As h shrinks, the stepped bend heads to x″ (23b), and the law to the action-to-force technique’s.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · steps · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">29·G.1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="V(x) = mgx,\ \ g = 9.81 \text{ m/s}^2,\ \ h = 0.1 \text{ s},\ \ x_0 = 0,\ \ x_1 = 2 \text{ m}"></span> <span class="gtx">a stone thrown up</span></span>Find x₂, x₃ and x₄ by the stepped law. <br>Find whether they lie exactly on the flowing-time path x(t) = 20.4905t − 4.905t².</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29time2">
+  <h2 class="sthead"><span class="stno">29time2</span>A symmetry keeps something, exactly</h2>
+  <p class="stands">Stands on 29·G.1, 29·then.4 (the symmetry-keeps technique) and 28c (the roads-add technique).</p>
+  <p data-pid="cc244a">Let a and b now be lists: the places of several bodies at one tick and the next. Suppose sliding every body along by the same ε changes no step’s action: L_h(a + ε, b + ε) = L_h(a, b), with ε added to every entry. Two bodies tied by a spring, with V depending only on x − y, are an example. Write ∂₁ and ∂₂ for the sum of the partial slopes over the bodies in the first and second slot.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the stepped-symmetry technique">
+\partial_1L_h(a, b) + \partial_2L_h(a, b) = 0 \text{ for every } a, b @@ take the slope in ε at ε = 0: the roads-add technique (28c)
+p_k = \partial_2L_h(x_{k-1}, x_k) @@ the stepped momentum at tick k
+p_k = -\partial_1L_h(x_k, x_{k+1}) @@ the step-action technique’s equation, added over the bodies
+-\partial_1L_h(x_k, x_{k+1}) = \partial_2L_h(x_k, x_{k+1}) = p_{k+1} @@ the first line, at (x_k, x_{k+1})
+\htmlClass{new}{p_k = p_{k+1} \text{ at every tick}} \quad \blacksquare @@ the last three lines
+  </pre>
+  <p data-pid="6dc1d8">Stepped-symmetry technique: <b>if sliding every body along together changes no step’s action, the stepped momentum is the same at every tick, exactly, however long the tick.</b> For the step action above, p_k = Σ m(x_k − x_{k−1})/h: masses times stepped speeds. 29·then.4’s symmetry-keeps technique found the same in flowing time, with slopes; here no slope of time was needed, only the sliding. Energy is different. In flowing time it is kept when the action does not hold the time, so that sliding the motion along in time changes nothing. Stepped time can only slide by whole ticks. The next two footings show what survives.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · symmetry · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29·G.2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="m_1 = 2,\ \ m_2 = 1,\ \ V = \tfrac12\kappa(x - y - 1)^2,\ \ \kappa = 50,\ \ h = 0.1"></span> <span data-tex-inline="(x_0, y_0) = (0, -1),\ \ (x_1, y_1) = (0.1, -0.8)"></span></span>Find (x₂, y₂) and (x₃, y₃) by the stepped law. <br>Find p₁, p₂ and p₃, and check that they agree.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29time3">
+  <h2 class="sthead"><span class="stno">29time3</span>Area kept, at any step</h2>
+  <p class="stands">Stands on 29·G.1, 28a (partial slopes), 27e (determinants), 28i (the area scale) and 29·then.5 (the kept-area technique).</p>
+  <p data-pid="f22194">The stepped law is a map F from one pair of places to the next: (x_{k−1}, x_k) ↦ (x_k, x_{k+1}). 29·then.5’s kept-area technique: flowing mechanics keeps the area of every patch of starts in the plane of places and pushes. Does the stepped law keep area, in the plane of pairs of places?</p>
+  <pre class="lines" data-k="ember" data-label="this page: the stepped-area technique">
+x_{k+1} = 2x_k - x_{k-1} - \tfrac{h^2}{m}V'(x_k) @@ the step-action technique
+\text{slope grid of } F = \begin{pmatrix} 0 & 1 \\ -1 & 2 - \tfrac{h^2}{m}V''(x_k) \end{pmatrix} @@ partial slopes (28a) of x_k and x_{k+1} in x_{k−1} and x_k
+\det = 0 - (1)(-1) = 1 @@ determinants (27e)
+\htmlClass{new}{F \text{ keeps the area of every patch}} \quad \blacksquare @@ the area scale is |det| (28i)
+  </pre>
+  <p data-pid="9969da">Stepped-area technique: <b>the stepped law sends every patch of starting pairs to a patch of the same area, at any step size.</b> The plain way to step is different. It moves the place by h times the speed and the speed by h times the force over m. For a spring, V = ½mω²x², its grid is (1, h; −hω², 1), with determinant 1 + h²ω²: every step blows the area up.</p>
+  <p data-pid="322212">Follow the Moon round the earth in steps of one day, pulled only by the earth: GM = 3.986 × 10¹⁴ m³/s², starting 384 400 km out at the speed of a circle. Plain steps fling it out: after 27 days it is 1.18 million km away. The stepped law keeps it between 384 000 and 394 000 km for a whole year. The picture runs both.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · area · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · the Moon followed in steps</div>
+    <div class="kn"><span class="m">step</span><input type="range" id="kh" min="0.1" max="3" step="0.1" value="1"><output id="oh"></output></div>
+    <div class="kn"><span class="m">days</span><input type="range" id="kd" min="10" max="365" step="5" value="120"><output id="od"></output></div>
+    <div id="pl"></div>
+    <div class="cap">Distance from the earth, in thousands of km, against days. Ember: the stepped law. Ink: plain steps. The Moon starts 384 400 km out at the speed of a circle, pulled only by the earth.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29·G.3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="V = \tfrac12m\omega^2x^2,\ \ \omega = 2\pi \text{ per second},\ \ h = 0.1 \text{ s}"></span></span>Find the slope grid and determinant of the stepped law, and of the plain step. <br>Find the factor by which the plain step blows up area in 10 steps.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29time4">
+  <h2 class="sthead"><span class="stno">29time4</span>Energy: never kept, never lost</h2>
+  <p class="stands">Stands on 29·G.1, 29·G.3 and 21e (sums of turns).</p>
+  <p data-pid="e653e7">Take a spring, V = ½mω²x². With c = 2 − ω²h², the stepped law is x_{k+1} = c x_k − x_{k−1}. Its energy is not kept. Test a guess built from both ends of a step.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the stepped-energy technique">
+Q_k = x_k^2 + x_{k+1}^2 - c\,x_kx_{k+1} @@ the guess
+Q_{k+1} = x_{k+1}^2 + (cx_{k+1} - x_k)^2 - c\,x_{k+1}(cx_{k+1} - x_k) @@ put in x_{k+2} = cx_{k+1} − x_k
+Q_{k+1} = x_{k+1}^2 + x_k^2 - c\,x_kx_{k+1} = Q_k @@ multiply out: the c²x²_{k+1} cancel, and −2c + c = −c
+\htmlClass{new}{\tfrac{Q_k}{2h^2} = \tfrac12v_k^2 + \tfrac12\omega^2x_kx_{k+1} \text{ is kept}} \quad \blacksquare @@ v_k = (x_{k+1} − x_k)/h, and 2 − c = ω²h²
+  </pre>
+  <p data-pid="acce2e">Stepped-energy technique: <b>for a spring, the stepped law keeps ½v² + ½ω²x_k x_{k+1}, which differs from the energy per unit mass only in using both ends of a step, so the energy wobbles in a narrow band and never drifts.</b> The plain step multiplies the energy by 1 + ω²h² every step.</p>
+  <p data-pid="a0eb33">The stepped spring even swings exactly. If ωh < 2, put c = 2 cos θ. Then x_k = cos kθ obeys the law, since cos(k + 1)θ + cos(k − 1)θ = 2 cos θ cos kθ (21e). It is a true swing, sampled at the ticks, with a slightly wrong period. A spring of period 1 s stepped at h = 0.1 s has θ = 0.6391 against ωh = 0.6283, and swings with period 0.983 s. Plain steps at the same h multiply its energy by 1.39 every tick: by about 3 × 10¹⁴ in 100 ticks. If ωh > 2, then c < −2, and the stepped law blows up too.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · energy · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29·G.4.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\omega = 2\pi,\ \ h = 0.1,\ \ x_0 = 1,\ \ x_1 = 0.8026"></span></span>Find x₂, x₃ and Q₀, Q₁, Q₂. <br>Find the step h above which the stepped spring blows up.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29time5">
+  <h2 class="sthead"><span class="stno">29time5</span>What is proved, and what is open</h2>
+  <p class="stands">Stands on 29·G.1 to 29·G.4 and 29·phys (one ruler for space and time).</p>
+  <p data-pid="b2aff7"><b>Mechanics with time in steps, built from a stepped action, keeps momentum and area exactly and energy within a band; whether nature’s time has steps is open.</b></p>
+  <ul>
+    <li data-pid="351987">Used, 1907 and 1967. The stepped law x_{k+1} = 2x_k − x_{k−1} + h² times force over mass followed charged particles round the earth’s field, and later the atoms of a liquid. It worked far better over long runs than the plain step.</li>
+    <li data-pid="b5d2d5">Proposed, 1983. That time itself, not only a computer’s clock, might come in steps, with mechanics built on them.</li>
+    <li data-pid="536d4c">Proved, 1988 to 1991. Stepped versions of famous spinning and rolling problems keep as many quantities as the flowing ones.</li>
+    <li data-pid="1dbe76">Proved, 1994. The paper this page is named for. Mechanics with time in whole steps, even with places that come in steps too, built from a stepped action: the stepped law of motion, a symmetry keeping a quantity exactly, and the kept area.</li>
+    <li data-pid="e2d0a8">Proved, 1994 and 1997. Steps that keep area keep a nearby energy to within a tiny error for a number of steps that grows like e to the power of a constant over h.</li>
+    <li data-pid="fe0a48">Proved, 2001. A survey gathered stepped mechanics into one way of building simulations from an action. Runs of the solar system over billions of years, and simulations of molecules, are built on steps that keep area.</li>
+    <li data-pid="bd4661">Open. Whether time in nature comes in steps. The smallest time that physics suggests is about 5.4 × 10⁻⁴⁴ s. The shortest time yet measured, in 2020, is about 2.5 × 10⁻¹⁹ s. No measurement has found a step.</li>
+    <li data-pid="a411aa">Open. How stepped time can keep the one ruler of spacetime (29·phys). A tick for one observer is not a tick for another moving past her.</li>
+  </ul>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · open · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29·G.5.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">the smallest time physics suggests, 5.4 × 10⁻⁴⁴ s; the shortest measured, 2.47 × 10⁻¹⁹ s</span></span>Find how many of the first fit in the second. <br>Find how many of the first fit in one tick of a 1 GHz computer clock.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29time6">
+  <h2 class="sthead"><span class="stno">29time6</span>Illegal moves</h2>
+  <p class="stands">Stands on 29·G.1 to 29·G.5.</p>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{the stepped law keeps energy exactly}\,? @@ it keeps a nearby quantity; the energy wobbles
+\text{smaller plain steps keep area}\,? @@ the determinant is 1 + h²ω² &gt; 1 at every h &gt; 0
+\text{any step size will do}\,? @@ for a spring, ωh &lt; 2, or the steps blow up
+\text{the stepped momentum is kept only for small } h\,? @@ exactly, at every h
+\text{a symmetry in time keeps energy here too}\,? @@ stepped time slides only by whole ticks
+  </pre>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29·G.6.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span class="gtx">the spring, ω = 2π, h = 0.35 s</span></span>Find c, and whether the stepped spring swings or blows up.</li><li><span class="givens"><span class="gtx">a body with V = 0</span></span>Find the stepped law and what it keeps.</li><li><span class="givens"><span class="gtx">the plain step on the spring, h = 0.01 s</span></span>Find the factor on energy after 1000 steps.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">29·G.7.1</span><span class="tagq">build</span>Build the stepped law for a pendulum, V = mgℓ(1 − cos x), and run it by hand for four ticks from a small swing.</div>
+  <div class="chq"><span class="chid">29·G.7.2</span><span class="tagq">edge</span><span class="givens"><span class="gtx">the stepped spring with ωh = 2</span></span>Find c, and what the stepped places do from x₀ = 1, x₁ = −1, and from x₀ = 0, x₁ = 1.</div>
+  <div class="chq"><span class="chid">29·G.7.3</span><span class="tagq">converse</span>The stepped law keeps area. Turn it round: does every map of pairs that keeps area come from a stepped action? Test the map (x, y) ↦ (y, −x + 2y).</div>
+  <div class="chq"><span class="chid">29·G.7.4</span><span class="tagq">reroute</span><span class="givens"><span class="gtx">two bodies tied by a spring</span></span>Find the kept stepped momentum a second way, by adding the two bodies’ stepped laws, with no sliding.</div>
+  <div class="chq"><span class="chid">29·G.7.5</span><span class="tagq">seam</span>One side holds that time is a continuum: between any two instants lies another, and a motion is not a heap of jumps. The other holds that time is made of smallest instants with nothing between them, and that what looks like motion is a body being at one place at one instant and at the next place at the next. The stepped mechanics on this page works either way, and no clock has yet told them apart. <br>Can a law stated with time in steps be as true as one with flowing time, if no measurement can tell them apart?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r29nav.html">← 29·nav · why fly over the pole to Asia?</a><a href="r29now.html">29·now · can we hear space bend? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>L_h is a discrete Lagrangian, A_h the discrete action, and the stepped law the discrete Euler–Lagrange equation; for this L_h it is the Störmer–Verlet, or leapfrog, method. The stepped-symmetry technique is the discrete Noether theorem. A map that keeps area in this way is symplectic, and methods built from a stepped action are variational integrators. The plain step is the explicit (forward) Euler method. The nearby kept energy is a modified, or shadow, energy, found by backward error analysis. The smallest time physics suggests is the Planck time.</p>
+  <h3>Who said it first</h3>
+  <p>The paper this page is named for is John C. Baez and James W. Gilliam, “An algebraic approach to discrete mechanics”, Letters in Mathematical Physics 31 (1994), 205–212. Carl Størmer used the stepped law in 1907 to follow particles round the earth’s field toward the aurora, and Loup Verlet used it for the atoms of a liquid in 1967. Tsung-Dao Lee asked in 1983 whether time could be a discrete variable. Alexander Veselov (1988) and Jürgen Moser with Veselov (1991) built stepped spinning and rolling problems that keep their quantities. Giancarlo Benettin and Antonio Giorgilli (1994) and Ernst Hairer and Christian Lubich (1997) proved the long life of the nearby energy. Jerrold Marsden and Matthew West surveyed the field in 2001. Max Planck proposed his natural units in 1899. The 2020 measurement timed light crossing a hydrogen molecule, at about 247 zeptoseconds. In 29·G.7.5, Aristotle argued that time is continuous and a motion is never a heap of jumps (Physics, Book VI); the atomists of Islamic theology, as Maimonides reports, held that time is made of indivisible instants, and that God makes the world afresh at each one.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="29·G: a worked “proof”, not allowed">
+L_h(a + \varepsilon, b + \varepsilon) = L_h(a, b) @@ fine: sliding changes nothing
+\text{so } \tfrac12m\big(\tfrac{x_{k+1} - x_k}{h}\big)^2 + V(x_k) \text{ is kept} @@ not allowed: sliding in space keeps momentum; energy needs a slide in time, and stepped time has none
+  </pre>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+const V=c=>'var('+c+')';
+// plot(series, xr, yr, opts): series = [{pts:[[x,y],...], c:'--ember', w:1.6, dash:''}]; returns svg string
+function plot(series, xr, yr, o){ o=o||{}; const W=360,H=o.H||210,L=34,B=22,T=8,Rr=8;
+  const sx=x=>L+(x-xr[0])/(xr[1]-xr[0])*(W-L-Rr), sy=y=>H-B-(y-yr[0])/(yr[1]-yr[0])*(H-B-T);
+  let s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;max-width:440px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  (o.yt||[]).forEach(y=>{ s+='<line x1="'+L+'" x2="'+(W-Rr)+'" y1="'+sy(y)+'" y2="'+sy(y)+'" style="stroke:'+V('--grid')+';stroke-width:0.6"/><text x="'+(L-3)+'" y="'+(sy(y)+3)+'" text-anchor="end" style="font:9px var(--mono);fill:'+V('--muted')+'">'+y+'</text>'; });
+  (o.xt||[]).forEach(x=>{ s+='<text x="'+sx(x)+'" y="'+(H-8)+'" text-anchor="middle" style="font:9px var(--mono);fill:'+V('--muted')+'">'+x+'</text>'; });
+  s+='<line x1="'+L+'" x2="'+L+'" y1="'+T+'" y2="'+(H-B)+'" style="stroke:'+V('--ink')+';stroke-width:0.8"/><line x1="'+L+'" x2="'+(W-Rr)+'" y1="'+(H-B)+'" y2="'+(H-B)+'" style="stroke:'+V('--ink')+';stroke-width:0.8"/>';
+  series.forEach(se=>{ const cl=v=>Math.max(yr[0]-0.05*(yr[1]-yr[0]),Math.min(yr[1]+0.05*(yr[1]-yr[0]),v));
+    const d=se.pts.filter(p=>isFinite(p[1])).map((p,i)=>(i?'L':'M')+sx(p[0]).toFixed(1)+','+sy(cl(p[1])).toFixed(1)).join('');
+    s+='<path d="'+d+'" style="fill:none;stroke:'+V(se.c||'--ember')+';stroke-width:'+(se.w||1.6)+(se.dash?';stroke-dasharray:'+se.dash:'')+'"/>'; });
+  (o.dots||[]).forEach(p=>{ s+='<circle cx="'+sx(p[0])+'" cy="'+sy(p[1])+'" r="2.6" style="fill:'+V(p[2]||'--ember')+'"/>'; });
+  if(o.xl) s+='<text x="'+(W-Rr)+'" y="'+(H-B-4)+'" text-anchor="end" style="font:9px var(--mono);fill:'+V('--muted')+'">'+o.xl+'</text>';
+  if(o.yl) s+='<text x="'+(L+4)+'" y="'+(T+9)+'" style="font:9px var(--mono);fill:'+V('--muted')+'">'+o.yl+'</text>';
+  return s+'</svg>'; }
+
+const GM=3.986004418e14, R0=3.844e8, V0=Math.sqrt(GM/R0), DAY=86400;
+function run(plain,h,days){ let x=R0,y=0,vx=0,vy=V0; const n=Math.round(days/h), H=h*DAY, P=[[0,R0/1e6]];
+  const acc=(x,y)=>{ const r3=Math.pow(x*x+y*y,1.5); return [-GM*x/r3,-GM*y/r3]; };
+  let a=acc(x,y);
+  for(let k=1;k<=n;k++){
+    if(plain){ const nx=x+H*vx, ny=y+H*vy; vx+=H*a[0]; vy+=H*a[1]; x=nx; y=ny; a=acc(x,y); }
+    else { vx+=0.5*H*a[0]; vy+=0.5*H*a[1]; x+=H*vx; y+=H*vy; a=acc(x,y); vx+=0.5*H*a[0]; vy+=0.5*H*a[1]; }
+    P.push([k*h,Math.hypot(x,y)/1e6]); }
+  return P; }
+function draw(){ const h=+$('kh').value, d=+$('kd').value; $('oh').textContent=fm(h,1)+(h===1?' day':' days'); $('od').textContent=d;
+  const A=run(false,h,d), B=run(true,h,d);
+  const lo=Math.min(...A.map(p=>p[1])), hi=Math.max(...A.map(p=>p[1])), far=B[B.length-1][1];
+  $('pl').innerHTML=plot([{pts:B,c:'--ink',w:1.2},{pts:A,c:'--ember'}],[0,d],[0,1500],{xt:[0,Math.round(d/2),d],yt:[0,384,750,1125,1500],xl:'days',yl:'1000 km',H:220});
+  const v=$('vd'); v.className='verdict';
+  v.textContent='Steps of '+fm(h,1)+(h===1?' day.':' days.')+' Stepped law: the distance stays between '+fm(lo,0)+' and '+fm(hi,0)+' thousand km. Plain steps: '+fm(far,0)+' thousand km after '+d+' days.'; }
+$('kh').oninput=draw; $('kd').oninput=draw; draw();
+window.__pic={set:(h,d)=>{ $('kh').value=h; $('kd').value=d; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'one step',t:R`L_h(a, b)`,n:`Its action.`},
+  {k:'ember',kl:'level',t:R`\partial_{x_k}A_h = 0`,n:`Two steps each.`},
+  {k:'ember',kl:'law',t:R`\htmlClass{new}{m\tfrac{x_{k+1} - 2x_k + x_{k-1}}{h^2} = -V'(x_k)}`,n:`Stepped bend.`}
+],{title:'The slides · steps · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'slide',t:R`L_h(a + \varepsilon, b + \varepsilon) = L_h(a, b)`,n:`Everything together.`},
+  {k:'ember',kl:'kept',t:R`\htmlClass{new}{p_k = p_{k+1}}`,n:`Exactly.`}
+],{title:'The slides · symmetry · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'grid',t:R`\begin{pmatrix} 0 & 1 \\ -1 & \cdots \end{pmatrix}`,n:`The stepped law.`},
+  {k:'ember',kl:'kept',t:R`\htmlClass{new}{\det = 1}`,n:`At any h.`},
+  {k:'ember',kl:'plain',t:R`1 + h^2\omega^2`,n:`Grows.`}
+],{title:'The slides · area · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'guess',t:R`Q_k = x_k^2 + x_{k+1}^2 - cx_kx_{k+1}`,n:`Both ends.`},
+  {k:'ember',kl:'kept',t:R`\htmlClass{new}{Q_{k+1} = Q_k}`,n:`Exactly.`},
+  {k:'ember',kl:'swing',t:R`x_k = \cos k\theta`,n:`cos θ = c/2.`}
+],{title:'The slides · energy · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'proved',t:R`p,\ \text{area}`,n:`Exactly.`},
+  {k:'ember',kl:'band',t:R`E`,n:`Never drifts.`},
+  {k:'ember',kl:'open',t:R`\htmlClass{new}{\text{steps in nature?}}`,n:`Not found.`}
+],{title:'The slides · open · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'illegal',t:R`E \text{ kept}\,?`,n:`A nearby quantity is.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>One rule for every boundary</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r29cb3.html">← 29·cb3 counting past the endless</a><a href="r29phys.html">next: 29·phys does time run the same for everyone? →</a></p>
+  <div class="tags"><span class="tag then">29·cb28 · newsflash for 28</span></div>
+  <h1>One rule for every boundary</h1>
+  <p>Rung twenty-eight ended with three trades. Along a path, the total of an uphill field is the change between the two ends. Round the edge of a rectangle, the circulation is the total of the swirl inside. Out of a box, the flux is the total of the spread inside. Rung sixteen had made the first trade on a line, long before. Each proof on 28j was the same two moves, and each looked like a lucky accident of its own shape. This page asks whether they are one rule. The trouble is that the three totals are of different kinds: a function at two points, an arrow along a curve, an arrow across a surface, a number through a solid. The page builds one kind of thing to total for each of them, with one slope that takes each kind to the next. Taking that slope twice always gives nothing. Then the three trades become one rule, proved once, and it carries over to any curved surface. Last, the rule turns round and reads the holes of a region: the field round a power line has no swirl anywhere near it, and still its circulation round the line is never zero.</p>
+  <p class="gesture">A thing to total along a curve reads one arrow at each point; a thing to total across a surface reads two, and changes sign when they swap. One slope takes a function to its uphill arrow, an arrow field to its swirl, and a swirl to its spread. Its second use is always nothing: an uphill field has no swirl, and a swirl has no spread, because mixed slopes agree. The total of a thing over the edge of a region equals the total of its slope over the region, whether the region is a segment, a rectangle, a box, or a curved patch. And where the slope of a thing is nothing but its total round a loop is not, the loop goes round a hole.</p>
+  <div class="ready"><h3>What this calls back to, and what it stands on</h3><p>Calls back to <a href="r28j.html">28j</a> (the uphill-total, swirl and spread techniques) and <a href="r28n.html">28n</a> (totals along curves and across patches; the cross-slopes technique). Stands on <a href="r28d.html">28d</a> (the swap-knobs technique), <a href="r28c.html">28c</a> (the roads-add technique), <a href="r28g.html">28g</a> (the uphill arrow), <a href="r28h.html">28h</a> (totals in either order), <a href="r27e.html">27e</a> (the determinant), <a href="r27i.html">27i</a> (the cross technique), <a href="r28phys.html">28·phys</a> (the wire-field technique) and <a href="r16c.html">16c</a> (the area-is-a-change technique). 29·phys asks whether time runs the same for everyone.</p></div>
+</header>
+
+<section class="class step" data-step="29·cb28.1">
+  <h2 class="sthead"><span class="stno">29·cb28.1</span>Things made to be totalled</h2>
+  <p class="stands">Stands on 28j1 (circulation), 28n3 (totals across a patch), 27e (the determinant) and 27i (the cross technique).</p>
+  <p data-pid="0fd8ff">28j totalled P x′ + Q y′ + R z′ along a path. Write that thing to total as P dx + Q dy + R dz. At each point it reads one arrow v, and gives P v₁ + Q v₂ + R v₃: dx reads the first entry of v, dy the second, dz the third. Along a path, it reads the path’s own arrow r′(t), and its total is the circulation of (P, Q, R).</p>
+  <p data-pid="db886a">Across a surface, each small piece is spanned by two arrows. Write dx dy for the thing that reads two arrows u and v and gives u₁v₂ − u₂v₁. That is the determinant of their first two entries (27e): the area, with a sign, of their parallelogram seen from straight above.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the two-arrow technique">
+dx\,dy\,(u, v) = u_1v_2 - u_2v_1 @@ the determinant with rows (u₁, u₂) and (v₁, v₂)
+dy\,dx\,(u, v) = u_2v_1 - u_1v_2 = -\,dx\,dy\,(u, v) @@ swapping the rows turns the sign (27e)
+dx\,dx\,(u, v) = u_1v_1 - u_1v_1 = 0 @@ two equal rows
+\big(dy\,dz,\ dz\,dx,\ dx\,dy\big)(u, v) = u \times v @@ the cross technique (27i): its entries are these three determinants
+\htmlClass{new}{dy\,dx = -dx\,dy,\ \ dx\,dx = 0;\ \ \textstyle\iint (A\,dy\,dz + B\,dz\,dx + C\,dx\,dy) = \text{flux of } (A, B, C)} \quad \blacksquare @@ read on the patch’s edge arrows r_u, r_v: (A, B, C) · (r_u × r_v), 28n3’s flux
+  </pre>
+  <p data-pid="cc497b">From here on, a thing that reads k arrows at each point, adding in each arrow and turning its sign when two of them swap, is a <i>form</i> of degree k. A function is a form of degree 0. P dx + Q dy + R dz is of degree 1, and is totalled along curves. A dy dz + B dz dx + C dx dy is of degree 2, and is totalled across surfaces. f dx dy dz reads three arrows by their determinant, and is totalled through solids.</p>
+  <p data-pid="ebb435">Two-arrow technique: <b>dx dy reads two arrows by a determinant, so dy dx = −dx dy and dx dx = 0; the total of a form of degree 2 across a patch is the flux of its arrow (A, B, C).</b> The order in which the marks are written is now part of the form. In the books dx dy is written with the mark ∧ between them; on this ladder ∧ means “and” (1c), so the page leaves it out.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · forms · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">29·cb28.1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="u = (1, 2, 0),\ \ v = (3, 1, 4)"></span></span>Find dx dy, dy dz and dz dx on (u, v), and compare them with u × v. <br>Find (dx + dy)(dx − dy) written with dx dy alone.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29·cb28.2">
+  <h2 class="sthead"><span class="stno">29·cb28.2</span>One slope for every degree</h2>
+  <p class="stands">Stands on 29·cb28.1, 28a (partial slopes), 28g (the uphill arrow) and 28j2 (swirl and spread).</p>
+  <p data-pid="8650b3">Give every form a slope, d. On a function, d f = f_x dx + f_y dy + f_z dz: the uphill arrow of 28g, read as a form of degree 1. On any other form, take d of each function in front, and keep the marks after it: d(f dx) = (d f) dx. Then tidy with the two-arrow technique.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the one-slope technique">
+d(P\,dx) = (P_x\,dx + P_y\,dy + P_z\,dz)\,dx = -P_y\,dx\,dy + P_z\,dz\,dx @@ dx dx = 0, dy dx = −dx dy
+d(Q\,dy) = Q_x\,dx\,dy - Q_z\,dy\,dz,\ \ d(R\,dz) = R_y\,dy\,dz - R_x\,dz\,dx @@ the same two moves
+d(P\,dx + Q\,dy + R\,dz) = (R_y - Q_z)\,dy\,dz + (P_z - R_x)\,dz\,dx + (Q_x - P_y)\,dx\,dy @@ add, and gather
+d(A\,dy\,dz + B\,dz\,dx + C\,dx\,dy) = A_x\,dx\,dy\,dz + B_y\,dy\,dz\,dx + C_z\,dz\,dx\,dy @@ only the missing mark survives in each piece
+\htmlClass{new}{= (A_x + B_y + C_z)\,dx\,dy\,dz} \quad \blacksquare @@ dy dz dx and dz dx dy are each two swaps from dx dy dz
+  </pre>
+  <p data-pid="414ca5">From here on, (R_y − Q_z, P_z − R_x, Q_x − P_y) is the <i>swirl arrow</i> of the field (P, Q, R). Its third entry is 28j’s swirl in the plane, and each entry is the swirl in one of the three flat directions, as 28·phys took it. One-slope technique: <b>d takes a function to its uphill arrow, a form of degree 1 to its swirl arrow, and a form of degree 2 to its spread.</b> The uphill arrow, the swirl and the spread of rung twenty-eight are one slope, used on forms of three degrees.</p>
+  <pre class="lines" data-k="ember" data-label="this page: three slopes at once">
+d(x^2y + z) = 2xy\,dx + x^2\,dy + dz @@ the uphill arrow (2xy, x², 1)
+d(-y\,dx + x\,dy) = -dy\,dx + dx\,dy = 2\,dx\,dy @@ 28j’s whole-flow turn has swirl 2
+\htmlClass{new}{d(x\,dy\,dz + y\,dz\,dx + z\,dx\,dy) = 3\,dx\,dy\,dz} @@ the field (x, y, z) spreads at 3 everywhere, as on 28n3
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · one slope · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29·cb28.2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="f = xyz,\ \ \omega = yz\,dx + xz\,dy + xy\,dz,\ \ \eta = xy\,dy\,dz"></span></span>Find d f, d ω and d η. <br>Find which of the three is d of another.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29·cb28.3">
+  <h2 class="sthead"><span class="stno">29·cb28.3</span>d of d is nothing</h2>
+  <p class="stands">Stands on 29·cb28.2, 28d (the swap-knobs technique) and 28·phys (the wire-field technique).</p>
+  <p data-pid="cf3d4b">Take the slope twice. On a function, the first d gives its uphill arrow, and the second gives the swirl arrow of that. On a form of degree 1, the first gives its swirl arrow, and the second gives the spread of that.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the twice-nothing technique">
+d(df) = (f_{zy} - f_{yz})\,dy\,dz + (f_{xz} - f_{zx})\,dz\,dx + (f_{yx} - f_{xy})\,dx\,dy @@ the one-slope technique with (P, Q, R) = (f_x, f_y, f_z)
+= 0 @@ the swap-knobs technique (28d), when f’s second slopes are continuous
+d(d\omega) = (R_y - Q_z)_x + (P_z - R_x)_y + (Q_x - P_y)_z @@ the spread of the swirl arrow, times dx dy dz
+= (R_{yx} - R_{xy}) + (P_{zy} - P_{yz}) + (Q_{xz} - Q_{zx}) @@ regroup by P, Q, R
+\htmlClass{new}{d(d\omega) = 0 \text{ for every form whose second slopes are continuous}} \quad \blacksquare @@ the swap-knobs technique, three times; a form of degree 2 or 3 in space gives degree 4, which reads four arrows in three directions and is 0
+  </pre>
+  <p data-pid="296042">Twice-nothing technique: <b>for every form with continuous second slopes, d(dω) = 0: an uphill field has no swirl, and a swirl arrow has no spread.</b> It is one fact, the swap of the knobs, said once for each degree.</p>
+  <p data-pid="dc3d48">It cuts both ways in the world. Every compass ever read agrees with a measured law: the magnetic field B has no spread. No one has ever found a lone north pole. On a region with no holes, a field with no spread is the swirl arrow of some field A: stated here, not proved, as 28n named the same converse one degree down. For the earth’s field near Seattle, about 54 μT and taken as steady over a city block, one such A can be found by hand.</p>
+  <pre class="lines" data-k="ember" data-label="this page: a field whose swirl is the earth’s">
+B = (0,\ 0,\ B_0),\ \ B_0 \approx 54\ \mu\text{T} @@ the field over a block, with z along it
+A = \tfrac12 B_0\,(-y,\ x,\ 0) @@ a guess: 28j’s whole-flow turn, scaled
+\text{swirl arrow of } A = \big(0 - 0,\ 0 - 0,\ \tfrac12B_0 + \tfrac12B_0\big) = (0, 0, B_0) @@ the one-slope technique
+\htmlClass{new}{\text{spread of } B = 0} @@ as the twice-nothing technique demands of any swirl arrow
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · twice · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29·cb28.3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="F = (yz^2,\ xz,\ x^2y)"></span></span>Find the swirl arrow of F, and the spread of that swirl arrow. <br>Find a field whose swirl arrow is (0, 0, 2).</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29·cb28.4">
+  <h2 class="sthead"><span class="stno">29·cb28.4</span>One rule for every boundary</h2>
+  <p class="stands">Stands on 29·cb28.3, 28j1 (the uphill-total technique), 28j2 (the swirl technique), 28j3 (the spread technique), 28h (totals in either order) and 16c (the area-is-a-change technique).</p>
+  <p data-pid="edb984">Each region of 28j has an edge one degree down. A segment has two ends. A rectangle has four sides. A box has six faces. Turn each piece of edge outward: the far end of a segment counts with +, the near end with −; the sides of a rectangle are walked with the inside on the left; the faces of a box read their two arrows so that their cross points out. Then all three of 28j’s trades say one thing.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the boundary-rule technique">
+\text{segment, } \omega = f:\ \ f(b) - f(a) = \textstyle\int_a^b f'\,dx = \int d f @@ the area-is-a-change technique (16c); along a path, 28j1’s uphill-total technique
+\text{rectangle, } \omega = P\,dx + Q\,dy:\ \ \textstyle\oint P\,dx + Q\,dy = \iint (Q_x - P_y)\,dx\,dy = \iint d\omega @@ the swirl technique (28j2)
+\text{box, } \omega = C\,dx\,dy:\ \ d\omega = C_z\,dx\,dy\,dz,\ \ \textstyle\iiint C_z = \iint \big(C(\text{top}) - C(\text{bottom})\big)\,dx\,dy @@ totals in either order (28h), then 16c along z
+dx\,dy = 0 \text{ on the four upright faces},\ \ \text{the bottom reads } dx\,dy \text{ with } - @@ an upright face’s arrows have no part in x, or none in y; the bottom’s outward cross points down
+\htmlClass{new}{\textstyle\int_{\text{edge of } M} \omega = \int_M d\omega} \quad \blacksquare @@ the same for A dy dz along x and B dz dx along y; then add
+  </pre>
+  <p data-pid="3a8711">Boundary-rule technique: <b>for a segment, a rectangle or a box M, and a form ω one degree below M, the total of ω over the edge of M, turned outward, is the total of dω over M.</b> Every proof on 28j was this proof: d adds one slope in one direction, and totalling along that direction undoes it, leaving the values on two opposite pieces of edge.</p>
+  <p data-pid="d2f326">Put the twice-nothing technique beside it. The edge of a box is its six faces, and those faces have no edge of their own: each side of each face is shared with a neighbour, walked once each way. The edge of an edge is nothing, as d of d is nothing. One fact about regions, one about forms, and the boundary rule ties them.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · one rule · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29·cb28.4.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\eta = xz\,dx\,dy \text{ on the box } [0, 1]\times[0, 2]\times[0, 3],\ \ f = x^3 \text{ on } [1, 2]"></span></span>Find dη and its total over the box. <br>Find the total of η over each of the six faces, turned outward, and add them. <br>Find both sides of the boundary rule for f.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29·cb28.5">
+  <h2 class="sthead"><span class="stno">29·cb28.5</span>Carried onto a curved surface</h2>
+  <p class="stands">Stands on 29·cb28.4, 28n3 (patches and the patch technique), 28n1 (the retrace technique), 28c (the roads-add technique) and 28d (the swap-knobs technique).</p>
+  <p data-pid="a1f221">A patch r(u, v) = (x(u, v), y(u, v), z(u, v)) lays a rectangle S of the uv-plane onto a curved surface. Carry a form back along it: put x(u, v) for x, and x_u du + x_v dv for dx, and the same for y and z. Its total over S is its total over the surface, by 28n’s retrace and patch techniques.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the curved-swirl technique">
+\omega = P\,dx + Q\,dy + R\,dz \to U\,du + W\,dv,\ \ U = Px_u + Qy_u + Rz_u,\ \ W = Px_v + Qy_v + Rz_v @@ carried back to S
+W_u - U_v = P_ux_v - P_vx_u + Q_uy_v - Q_vy_u + R_uz_v - R_vz_u @@ the product rule; the x_uv, y_uv, z_uv parts cancel by the swap-knobs technique (28d)
+P_u = P_xx_u + P_yy_u + P_zz_u,\ \ P_v = P_xx_v + P_yy_v + P_zz_v @@ the roads-add technique (28c)
+P_ux_v - P_vx_u = P_y(y_ux_v - y_vx_u) + P_z(z_ux_v - z_vx_u) @@ the P_x parts cancel; the same for Q and R
+W_u - U_v = (\text{swirl arrow of } F)\cdot(r_u \times r_v) @@ gather by the entries of r_u × r_v (27i)
+\htmlClass{new}{\textstyle\oint_{\text{edge}} F\cdot dr = \oint_{\partial S} U\,du + W\,dv = \iint_S (W_u - U_v) = \text{flux of the swirl arrow through the patch}} \quad \blacksquare @@ the swirl technique on S, then 28n3
+  </pre>
+  <p data-pid="13ba0b">Curved-swirl technique: <b>the circulation of a field round the edge of a patch, walked with the patch on the left, equals the flux of its swirl arrow through the patch.</b> The carried slope of the carried form is the carried slope of the form: d and carrying can be done in either order. So the boundary rule rides on every patch, however curved.</p>
+  <pre class="lines" data-k="ember" data-label="this page: a dome, and a power line">
+F = (-y,\ x,\ 0),\ \ \text{swirl arrow } (0, 0, 2) @@ 28j’s whole-flow turn, in space
+\text{half sphere of radius } a:\ \ \text{flux of } (0, 0, 2) = 2\cdot\pi a^2 @@ (0, 0, 2) · (r_u × r_v) totals to 2 times the area seen from above
+\text{rim}:\ \ \textstyle\oint F\cdot dr = 2\pi a^2 @@ the flat disc under the dome has the same edge and the same total
+\text{swirl arrow of } B = \mu_0 J @@ 28·phys’s wire-field technique, in each of the three flat directions
+\htmlClass{new}{\textstyle\oint B\cdot dr = \mu_0\,(\text{current through any patch with that edge})} @@ the twice-nothing technique: J has no spread, so every patch with the same edge carries the same current
+  </pre>
+  <p data-pid="89218d">A Bonneville Power Administration line carrying 1000 A has circulation μ₀ · 1000 ≈ 1.26 × 10⁻³ T·m round any loop that goes once round it, flat or bent, near or far. On a circle 15 m from the line, that is a field of about 13.3 μT, a quarter of the earth’s.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · curved · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29·cb28.5.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="F = (z - y,\ x,\ xy),\ \ \text{the bowl } z = 1 - x^2 - y^2,\ z \ge 0"></span></span>Find the swirl arrow of F and its flux up through the bowl. <br>Find the circulation of F round the rim, and check the curved-swirl technique.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29·cb28.6">
+  <h2 class="sthead"><span class="stno">29·cb28.6</span>Holes, read by forms</h2>
+  <p class="stands">Stands on 29·cb28.5, 28n2 (the cross-slopes technique), 28j1 (the uphill-total technique) and 28·phys (the wire-field technique).</p>
+  <p data-pid="5650df">28·phys’s wire field, read as a form, is ω = (−y dx + x dy)/(x² + y²), times μ₀I/(2π). Away from the wire, at the line x = y = 0, its slope is nothing. Round the wire its total is not.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the hole-test technique">
+d\omega = \Big(\tfrac{\partial}{\partial x}\tfrac{x}{x^2 + y^2} + \tfrac{\partial}{\partial y}\tfrac{y}{x^2 + y^2}\Big)\,dx\,dy = \tfrac{(y^2 - x^2) + (x^2 - y^2)}{(x^2 + y^2)^2}\,dx\,dy = 0 @@ the one-slope technique, off the wire
+\textstyle\oint_{\text{circle round } 0} \omega = 2\pi @@ 28j4: on the circle of radius ρ, ω reads ρ² dθ/ρ²
+\text{if } \omega = dg \text{ on the region, every loop total is } 0 @@ the uphill-total technique (28j1)
+\text{if the loop is the edge of a patch in the region, its total is } \textstyle\iint d\omega = 0 @@ the boundary-rule technique
+\htmlClass{new}{\text{no loop round the wire is the edge of a patch that misses it, and } \omega \text{ is } d \text{ of nothing there}} \quad \blacksquare @@ both would make the total 0
+  </pre>
+  <p data-pid="82629e">Hole-test technique: <b>if dω = 0 on a region, and the total of ω round some loop in it is not 0, then that loop is the edge of no patch in the region, and ω is the slope of no function there.</b> The form finds the hole without looking for it. Its total round a loop counts how many times the loop goes round: twice round gives 4π, and a loop that misses the wire gives 0. The picture walks a loop past the wire.</p>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · holes · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · a loop walked past a wire</div>
+    <div class="kn"><span class="m">c</span><input type="range" id="kc" min="-3" max="3" step="0.1" value="0.6"><output id="oc"></output></div>
+    <div class="kn"><span class="m">ρ</span><input type="range" id="kr" min="0.3" max="2" step="0.05" value="1"><output id="or"></output></div>
+    <div id="pl"></div>
+    <div class="cap">The wire is the dot at the origin. Ember: a circle of radius ρ about (c, 0). The verdict totals ω = (−y dx + x dy)/(x² + y²) round it, in 2000 small steps.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29·cb28.6.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\omega = \tfrac{-y\,dx + x\,dy}{x^2 + y^2}"></span> <span class="gtx">a line carrying 400 A</span></span>Find the total of ω round the circle of radius 1 about (2, 0), and round the unit circle walked twice. <br>Find the circulation of the line’s field round a square 10 m on a side with the line through its middle, and the field 30 m from the line.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29·cb28.7">
+  <h2 class="sthead"><span class="stno">29·cb28.7</span>Illegal moves</h2>
+  <p class="stands">Stands on 29·cb28.1 to 29·cb28.6.</p>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+dx\,dy = dy\,dx\,? @@ the swap turns the sign: a determinant with its rows swapped
+d(f\,dx) = f_x\,dx\,dx\ \text{only}\,? @@ d f has three parts; f_x dx dx is the one that is 0
+d(d\omega) = 0 \text{ for every form}\,? @@ only when the second slopes are continuous, so that the knobs swap
+d\omega = 0, \text{ so } \omega = dg\,? @@ only on a region with no holes: the wire’s form is d of nothing round the wire
+\textstyle\oint_{\text{edge}} \omega = \iint d\omega \text{ with the edge walked either way}\,? @@ the edge must be turned outward; walked the other way, the sign turns
+  </pre>
+  <section class="slides" id="sl7"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29·cb28.7.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="(dx + 2\,dy)(3\,dx + dy)"></span></span>Find it written with dx dy alone.</li><li><span class="givens"><span data-tex-inline="\omega = x^2\,dy"></span></span>Find dω, and its total over the unit square, and the total of ω round the square walked clockwise.</li><li><span class="givens"><span data-tex-inline="\omega = \tfrac{x\,dx + y\,dy}{x^2 + y^2}"></span></span>Find dω off 0, the total of ω round the unit circle, and a g with dg = ω.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">29·cb28.8.1</span><span class="tagq">build</span>Build a form ω of degree 1 on space with 0 taken out along the whole z-line, with dω = 0, whose total round a loop going once round the z-line is 6π. Prove both facts.</div>
+  <div class="chq"><span class="chid">29·cb28.8.2</span><span class="tagq">edge</span>Find the total of the wire’s form round circles of radius ρ about (c, 0) as c passes from 0 to beyond ρ. <br>Find what happens to the total when the circle passes through the wire, and which demand of the boundary-rule technique fails there.</div>
+  <div class="chq"><span class="chid">29·cb28.8.3</span><span class="tagq">converse</span>The twice-nothing technique says that a form that is d of something has slope nothing. Turn it round on a box with no holes: if a form ω of degree 1 has dω = 0 on the box, build g with dg = ω, by totalling ω along straight pieces from a corner, as 28n2 did on a rectangle.</div>
+  <div class="chq"><span class="chid">29·cb28.8.4</span><span class="tagq">reroute</span>Find the volume inside the sphere of radius a a second way, by the boundary rule: find a form η of degree 2 with dη = dx dy dz, and total η over the sphere with 28n3’s patch.</div>
+  <div class="chq"><span class="chid">29·cb28.8.5</span><span class="tagq">seam</span>In the 1890s two camps fought over how physics should write its arrows. One held that the four-part numbers of 1843, which multiply arrows with their sign and their turn at once, were the natural language of space, and that the other camp’s dot and cross were a mangled piece of them. The other camp, a professor at Yale and a self-taught engineer in England, answered that physicists needed only the dot, the cross and the slopes of fields, and that the four-part numbers were a burden. A decade later, a third way appeared in France: the forms of this page, which work in any number of directions and on any curved space. <br>Which language is the right one? <br>Can a notation be wrong, or only clumsy?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r29cb3.html">← 29·cb3 · counting past the endless</a><a href="r29phys.html">29·phys · does time run the same for everyone? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A form of degree k is a differential k-form, and dx dy is written dx ∧ dy, the wedge product, so that the forms make an exterior algebra. d is the exterior derivative. The swirl arrow is the curl, curl F or ∇ × F; the spread is the divergence, div F or ∇ · F. The twice-nothing technique is d² = 0: curl grad f = 0 and div curl F = 0. The boundary-rule technique, for every region and every form, is the generalized Stokes theorem, ∫_∂M ω = ∫_M dω; carrying a form back along a patch is the pullback, and the curved-swirl technique is the Kelvin–Stokes theorem. A form with dω = 0 is closed, and one that is d of another is exact; that closed forms are exact on a region with no holes is the Poincaré lemma, and the closed forms that are not exact, counted, make the de Rham cohomology of the region. The number of times a loop goes round the wire is its winding number. A field whose swirl arrow is B is a vector potential for B, and ∮ B · dr = μ₀I is Ampère’s law.</p>
+  <h3>Who said it first</h3>
+  <p>Hermann Grassmann built the algebra in which dx dy = −dy dx in 1844. Élie Cartan wrote forms with d in 1899, and Henri Poincaré used them in his work on celestial mechanics in the same decade. The curved-swirl technique was sent by William Thomson to George Stokes in a letter of 1850, and Stokes set it as a Cambridge examination question in 1854. Vito Volterra stated a version for any number of directions in 1889, and the form ∫_∂M ω = ∫_M dω was set out by Cartan and others in the early 1900s. Georges de Rham proved in 1931 that forms count holes exactly. In 29·cb28.8.5, the four-part numbers are William Rowan Hamilton’s quaternions (1843), defended by Peter Guthrie Tait; the professor at Yale is Josiah Willard Gibbs and the engineer Oliver Heaviside, whose vector analysis won the textbooks; the third way is Cartan’s.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="29·cb28: a worked “proof”, not allowed">
+\omega = \tfrac{-y\,dx + x\,dy}{x^2 + y^2},\ \ d\omega = 0 \text{ off } 0 @@ fine
+\textstyle\oint_{\text{unit circle}} \omega = \iint_{\text{unit disc}} d\omega = 0 @@ not allowed: the disc holds 0, where ω is not defined
+\textstyle\oint_{\text{unit circle}} \omega = 0 @@ false: it is 2π
+  </pre>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+const V=c=>'var('+c+')';
+// plot(series, xr, yr, opts): series = [{pts:[[x,y],...], c:'--ember', w:1.6, dash:''}]; returns svg string
+function plot(series, xr, yr, o){ o=o||{}; const W=360,H=o.H||210,L=34,B=22,T=8,Rr=8;
+  const sx=x=>L+(x-xr[0])/(xr[1]-xr[0])*(W-L-Rr), sy=y=>H-B-(y-yr[0])/(yr[1]-yr[0])*(H-B-T);
+  let s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;max-width:440px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  (o.yt||[]).forEach(y=>{ s+='<line x1="'+L+'" x2="'+(W-Rr)+'" y1="'+sy(y)+'" y2="'+sy(y)+'" style="stroke:'+V('--grid')+';stroke-width:0.6"/><text x="'+(L-3)+'" y="'+(sy(y)+3)+'" text-anchor="end" style="font:9px var(--mono);fill:'+V('--muted')+'">'+y+'</text>'; });
+  (o.xt||[]).forEach(x=>{ s+='<text x="'+sx(x)+'" y="'+(H-8)+'" text-anchor="middle" style="font:9px var(--mono);fill:'+V('--muted')+'">'+x+'</text>'; });
+  s+='<line x1="'+L+'" x2="'+L+'" y1="'+T+'" y2="'+(H-B)+'" style="stroke:'+V('--ink')+';stroke-width:0.8"/><line x1="'+L+'" x2="'+(W-Rr)+'" y1="'+(H-B)+'" y2="'+(H-B)+'" style="stroke:'+V('--ink')+';stroke-width:0.8"/>';
+  series.forEach(se=>{ const cl=v=>Math.max(yr[0]-0.05*(yr[1]-yr[0]),Math.min(yr[1]+0.05*(yr[1]-yr[0]),v));
+    const d=se.pts.filter(p=>isFinite(p[1])).map((p,i)=>(i?'L':'M')+sx(p[0]).toFixed(1)+','+sy(cl(p[1])).toFixed(1)).join('');
+    s+='<path d="'+d+'" style="fill:none;stroke:'+V(se.c||'--ember')+';stroke-width:'+(se.w||1.6)+(se.dash?';stroke-dasharray:'+se.dash:'')+'"/>'; });
+  (o.dots||[]).forEach(p=>{ s+='<circle cx="'+sx(p[0])+'" cy="'+sy(p[1])+'" r="2.6" style="fill:'+V(p[2]||'--ember')+'"/>'; });
+  if(o.xl) s+='<text x="'+(W-Rr)+'" y="'+(H-B-4)+'" text-anchor="end" style="font:9px var(--mono);fill:'+V('--muted')+'">'+o.xl+'</text>';
+  if(o.yl) s+='<text x="'+(L+4)+'" y="'+(T+9)+'" style="font:9px var(--mono);fill:'+V('--muted')+'">'+o.yl+'</text>';
+  return s+'</svg>'; }
+
+function draw(){ const c=+$('kc').value, r=+$('kr').value; $('oc').textContent=mm(c,1); $('or').textContent=fm(r,2);
+  const N=2000, C=[]; let tot=0, hit=false;
+  for(let i=0;i<=N;i++){ const t=2*Math.PI*i/N; C.push([c+r*Math.cos(t), r*Math.sin(t)]); }
+  for(let i=0;i<N;i++){ const t=2*Math.PI*(i+0.5)/N, x=c+r*Math.cos(t), y=r*Math.sin(t), dx=-r*Math.sin(t)*2*Math.PI/N, dy=r*Math.cos(t)*2*Math.PI/N, q=x*x+y*y;
+    if(q<1e-6) hit=true; tot+=(-y*dx+x*dy)/q; }
+  if(Math.abs(Math.abs(c)-r)<0.02) hit=true;
+  $('pl').innerHTML=plot([{pts:C,c:'--ember'}],[-5,5],[-3,3],{xt:[-4,-2,0,2,4],yt:[-2,0,2],dots:[[0,0,'--ink']],H:220});
+  const v=$('vd'); v.className='verdict';
+  v.textContent=hit?'The loop passes through the wire: ω is not defined there, and the boundary rule does not apply.':'Total of ω round the loop: '+fm(tot,4)+' = '+fm(tot/(2*Math.PI),3)+' × 2π. '+(Math.abs(tot)>1?'The loop goes round the wire, and spans no patch that misses it.':'The loop misses the wire: it is the edge of a disc where dω = 0.'); }
+$('kc').oninput=draw; $('kr').oninput=draw; draw();
+window.__pic={set:(c,r)=>{ $('kc').value=c; $('kr').value=r; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'degree 1',t:R`P\,dx + Q\,dy + R\,dz`,n:`Along curves.`},
+  {k:'ember',kl:'degree 2',t:R`dx\,dy\,(u, v) = u_1v_2 - u_2v_1`,n:`A determinant.`},
+  {k:'ember',kl:'the swap',t:R`\htmlClass{new}{dy\,dx = -dx\,dy}`,n:`And dx dx = 0.`}
+],{title:'The slides · forms · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'degree 0',t:R`df = \nabla f\cdot(dx, dy, dz)`,n:`Uphill arrow.`},
+  {k:'ember',kl:'degree 1',t:R`\htmlClass{new}{\text{swirl arrow}}`,n:`R_y − Q_z, …`},
+  {k:'ember',kl:'degree 2',t:R`(A_x + B_y + C_z)\,dx\,dy\,dz`,n:`Spread.`}
+],{title:'The slides · one slope · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'uphill',t:R`\text{swirl of } \nabla f = 0`,n:`Swap the knobs.`},
+  {k:'ember',kl:'swirl',t:R`\text{spread of swirl} = 0`,n:`Swap them three times.`},
+  {k:'ember',kl:'one fact',t:R`\htmlClass{new}{d(d\omega) = 0}`,n:`Every degree.`}
+],{title:'The slides · twice · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'segment',t:R`f(b) - f(a) = \textstyle\int df`,n:`16c.`},
+  {k:'ember',kl:'rectangle',t:R`\oint \omega = \textstyle\iint d\omega`,n:`Swirl.`},
+  {k:'ember',kl:'box',t:R`\htmlClass{new}{\textstyle\int_{\partial M}\omega = \int_M d\omega}`,n:`Spread, and all three.`}
+],{title:'The slides · one rule · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'carried',t:R`dx \to x_u\,du + x_v\,dv`,n:`Back to S.`},
+  {k:'ember',kl:'the slope',t:R`W_u - U_v = \text{swirl}\cdot(r_u\times r_v)`,n:`Swap and roads-add.`},
+  {k:'ember',kl:'the rule',t:R`\htmlClass{new}{\oint F\cdot dr = \text{flux of swirl}}`,n:`Any patch.`}
+],{title:'The slides · curved · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'slope',t:R`d\omega = 0 \text{ off the wire}`,n:`No swirl.`},
+  {k:'ember',kl:'total',t:R`\oint \omega = 2\pi`,n:`Round the wire.`},
+  {k:'ember',kl:'the test',t:R`\htmlClass{new}{\text{a hole inside}}`,n:`No patch spans it.`}
+],{title:'The slides · holes · ← → keys work'});
+stepper('#sl7',[
+  {k:'ember',kl:'illegal',t:R`dx\,dy = dy\,dx\,?`,n:`The sign turns.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

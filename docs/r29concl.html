@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Flat is one geometry among many</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+.cl-lock{display:none;border-left:3px solid var(--gold);background:var(--sand);padding:10px 14px;border-radius:0 4px 4px 0;max-width:66ch}
+body.cl-locked .cl-lock{display:block} body.cl-locked .cl-body{display:none}
+.cl-lock button{margin-top:6px;font-size:.8rem}
+.claim{border:1px solid var(--grid);border-left:4px solid var(--teal);background:var(--card);border-radius:0 6px 6px 0;padding:10px 16px;max-width:66ch}
+.claim p{margin:.4em 0}
+ul.cl-adds{max-width:66ch;padding-left:1.1em} ul.cl-adds li{margin:.5em 0}
+ul.cl-adds .cl-w{display:none;color:var(--muted);font-style:italic}
+ul.cl-adds li.cl-wait .cl-t{display:none} ul.cl-adds li.cl-wait .cl-w{display:inline}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r29h.html">← 29h spaces flat up close</a><a href="r29i.html">next: 29i spherical triangles by hand →</a></p>
+  <div class="tags"><span class="tag concl">29·∎ · conclusion</span></div>
+  <h1>Flat is one geometry among many</h1>
+  <p class="gesture">The parallel axiom is independent of the other axioms: a sphere and a disc give geometries where it fails. A surface’s ruler gives every length, angle and area, its bend can be read from the ruler alone, shortest paths obey one equation, and the total bend counts holes.</p>
+  <div class="ready"><h3>What this stands on</h3><p>The survey of <a href="r29.html">rung 29</a>, and its proof steps: <a href="r29a.html">29a</a> to <a href="r29h.html">29h</a>. It opens once 29h is ticked, and it gains a line each time you finish a step or annex after it.</p></div>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The conclusion · the rung's claim, in full, and its proof</div>
+  <div class="cl-lock"><p>This page opens once every question on <a href="r29h.html">29h spaces flat up close</a> is ticked. The claim below is proved from the steps of this rung, so it waits for them.</p><button type="button" class="cl-peek">reviewing the ladder? open it anyway</button></div>
+  <div class="cl-body">
+  <h3>What the rung set out to show</h3>
+  <p data-pid="185e54">The survey of rung 29 asked whether Euclid’s fifth postulate follows from the other axioms, and how a creature inside a surface could tell which geometry it lives in. <b>The parallel axiom can be neither proved nor refuted from the other axioms, and the bend of a surface, which tells the geometries apart, can be read from its ruler alone.</b> The price is that geometry is no longer one thing: which one the world obeys must be measured.</p>
+  <p data-pid="854f33"><a href="r29a.html">29a</a> took the numbers away and put the fifth postulate on trial. <a href="r29b.html">29b</a> drew triangles on a sphere and <a href="r29c.html">29c</a> built the disc plane. <a href="r29d.html">29d</a> wrote the ruler, <a href="r29e.html">29e</a> read the bend from it, and <a href="r29f.html">29f</a> totalled the bend. <a href="r29g.html">29g</a> found the shortest paths and paid back 29f’s trust, and <a href="r29h.html">29h</a> covered a surface with pages. This page puts the claim together.</p>
+  <h3>The claim, in full</h3>
+  <div class="claim">
+  <p data-pid="c02e20"><b>Without the parallel axiom, every triangle has angle sum at most π. On a sphere of radius R a triangle has area (α + β + γ − π)R². The disc plane obeys the other axioms and not the parallel axiom, so the parallel axiom is independent of them.</b></p>
+  <p data-pid="39177d">On a surface with ruler ds² = E du² + 2F du dv + G dv², lengths, angles and areas come from E, F, G, and change of coordinates sends the ruler grid g to Jᵀ g J. The surface bend K = (LN − M²)/(EG − F²) is the product of the main bends and is built from E, F, G and their slopes alone.</p>
+  <p data-pid="130c00">A curve that makes ∫L(x, y, y′) dx least obeys d/dx L<sub>p</sub> = L<sub>y</sub>. A triangle of straightest paths has ∬K dA = α + β + γ − π, and a closed surface with g holes has ∬K dA = 2π(V − E + F) = 4π(1 − g). A surface is covered by charts whose changes are undoable, and every chart agrees on length, angle, area and bend.</p>
+  </div>
+  <h3>The proof</h3>
+  <p data-pid="bf6e2e">Each part below is a technique already proved on a step of this rung. The proof cites them by name and joins them.</p>
+  <pre class="lines" data-k="ember" data-label="the parallel question">
+\text{outside angle} > \text{each far inside angle} @@ the outside-angle technique (29a)
+\angle A + \angle B + \angle C \le \pi;\ \ \text{top angles equal, never blunt} @@ the no-more-than-straight, top-angles and no-blunt-top techniques (29a)
+\text{on a sphere, } |T| = (\alpha + \beta + \gamma - \pi)R^2 @@ the lines-always-meet, lune-area and excess-area techniques (29b)
+\text{disc plane: many parallels, angle sums below } \pi @@ the disc-moves, one-line, many-parallels and below-straight techniques (29c)
+\htmlClass{new}{\text{the parallel axiom is independent of the other axioms}} \quad \blacksquare @@ the parallel-independent technique (29c)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="the ruler and the bend">
+\text{length} = \int \sqrt{E u^{\prime 2} + 2F u^{\prime}v^{\prime} + G v^{\prime 2}},\ \ \text{area} = \iint \sqrt{EG - F^2} @@ the ruler-length, ruler-angle and ruler-area techniques (29d)
+g \mapsto J^{\mathsf T} g J;\ \ \text{the disc plane’s moves keep its ruler} @@ the ruler-change and disc-ruler techniques (29d)
+K = \frac{LN - M^2}{EG - F^2} = \kappa_1 \kappa_2 @@ the curve-bend, normal-bend and surface-bend techniques (29e)
+\htmlClass{new}{K \text{ from } E, F, G \text{ alone};\ \ K = -g_{uu}/g \text{ for } du^2 + g^2 dv^2} \quad \blacksquare @@ the remarkable and straight-out techniques (29e)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="paths and totals">
+\tfrac{d}{dx} L_p = L_y @@ the best-path technique (29g)
+\text{straightest paths: } u^{\prime\prime} = g g_u v^{\prime 2},\ \ d\psi = -g_u\,dv @@ the path-equations and heading techniques (29g)
+\iint_T K\,dA = \alpha + \beta + \gamma - \pi @@ the triangle-total technique (29g)
+\iint_S K\,dA = 2\pi(V - E + F) = 4\pi(1 - g) @@ the sphere-total, spun-total, excess-count and hole-count techniques (29f)
+\htmlClass{new}{\text{charts cover; every chart agrees}} \quad \blacksquare @@ the two-charts, page-change and page-agree techniques (29h)
+  </pre>
+  <p data-pid="4e12de">So the rung’s claim holds: flat is one geometry among many, the ruler alone tells them apart, and the total bend of a surface counts its holes.</p>
+  <h3>What the rest of the rung adds</h3>
+  <p data-pid="05f9fb">Each step and annex after the proof steps adds a line to the claim. A line appears here once you have finished its page.</p>
+  <ul class="cl-adds">
+    <li data-after="r29i" data-pid="8b1fba"><b><a href="r29i.html">29i spherical triangles by hand</a></b>: <span class="cl-t">sides and angles of triangles on the globe, and great-circle routes.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r29j" data-pid="09842e"><b><a href="r29j.html">29j hyperbolic geometry by hand</a></b>: <span class="cl-t">distances, lines and areas in the disc and the half-plane.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r29k" data-pid="a3bf48"><b><a href="r29k.html">29k curvature by hand</a></b>: <span class="cl-t">the bends of circles, helices, saddles and doughnuts.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r29l" data-pid="3223b2"><b><a href="r29l.html">29l the best path, by hand</a></b>: <span class="cl-t">the fastest slide, the hanging chain and the soap film.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r29m" data-pid="5e09ab"><b><a href="r29m.html">29m perspective</a></b>: <span class="cl-t">the painter’s geometry, where parallel lines meet at infinity.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r29then" data-pid="f0b1db"><b><a href="r29then.html">29·then does nature take the laziest path?</a></b>: <span class="cl-t">mechanics from least action, and what every symmetry keeps.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r29cb3" data-pid="cc32f0"><b><a href="r29cb3.html">29·cb3 counting past the endless</a></b>: <span class="cl-t">rung 3’s run carried past its end, and the axiom it needs.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r29cb28" data-pid="22f52a"><b><a href="r29cb28.html">29·cb28 one rule for every boundary</a></b>: <span class="cl-t">28j’s three edge techniques as one.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r29phys" data-pid="a7161f"><b><a href="r29phys.html">29·phys does time run the same for everyone?</a></b>: <span class="cl-t">spacetime’s ruler, and the turn that mixes space and time.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r29nav" data-pid="7cc725"><b><a href="r29nav.html">29·nav why fly over the pole to Asia?</a></b>: <span class="cl-t">great-circle routes from latitude and longitude.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r29time" data-pid="0e4f99"><b><a href="r29time.html">29·G sometimes time has holes, and apparently that’s ok (I)</a></b>: <span class="cl-t">mechanics rebuilt with time taken in steps.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r29now" data-pid="0aa37e"><b><a href="r29now.html">29·now can we hear space bend?</a></b>: <span class="cl-t">a ripple in the ruler of space, measured.</span><span class="cl-w">its line appears when you finish it.</span></li>
+  </ul>
+  <p data-pid="219e94">That is the end of geometry as one thing. The ladder now chooses its geometry and measures it. You have only just begun to see how many worlds a ruler can describe.</p>
+  </div>
+</section>
+
+<nav class="nextrung"><a href="r29h.html">← 29h · spaces flat up close</a><a href="r29i.html">29i · spherical triangles by hand →</a></nav>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+  const need="r29h";
+  let p={}; try{ p=JSON.parse(LS.getItem('pages:done')||'{}')||{}; }catch(e){}
+  let peek=false; try{ peek=sessionStorage.getItem('cl:peek')==='1'; }catch(e){}
+  const done=k=>!!(p[k]&&p[k].v);
+  function apply(){
+    const open=peek||done(need);
+    document.body.classList.toggle('cl-locked',!open);
+    document.querySelectorAll('ul.cl-adds li[data-after]').forEach(li=>li.classList.toggle('cl-wait',!(peek||done(li.dataset.after))));
+    if(open&&done(need)){ const me=(window.ladderPage?ladderPage():(location.pathname.split('/').pop()||'').replace(/\.html?$/,''));
+      if(window.MarksSync&&MarksSync.reportPage) MarksSync.reportPage(me,true,true,true,false);
+      else { try{ p[me]={v:true,a:true,o:true,h:false,t:Date.now()}; LS.setItem('pages:done',JSON.stringify(p)); }catch(e){} } }
+  }
+  const b=document.querySelector('.cl-peek'); if(b) b.addEventListener('click',()=>{ peek=true; try{ sessionStorage.setItem('cl:peek','1'); }catch(e){} apply(); });
+  apply();
+  try{ if(window.MarksSync&&MarksSync.pages) MarksSync.pages().then(q=>{ if(q){ p=Object.assign({},p,q); apply(); } },()=>{}); }catch(e){}
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

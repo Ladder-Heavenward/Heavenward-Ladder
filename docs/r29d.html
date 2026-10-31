@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The ruler that changes</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r29c.html">← 29c a plane where parallels are many</a><a href="r29e.html">next: 29e curvature lives in the ruler →</a></p>
+  <div class="tags"><span class="tag proof">29d · proof</span></div>
+  <h1>The ruler that changes</h1>
+  <p>A map of the world in a school atlas puts latitude up the side and longitude along the bottom. A step of one degree of longitude near the equator is about 111 km of ground. Near Anchorage it is only about 54 km. The map is the same paper everywhere, but the ruler you need to read real distances off it changes from place to place. This step says exactly what such a ruler is. At each point it is a small grid of three numbers, and from it come every length, every angle and every area. The sphere has one. The disc plane of 29c has one too, and it turns out to be the ruler that made its distances work.</p>
+  <p class="gesture">At each point of a surface, three numbers E, F, G give the length of every small step: ds² = E du² + 2F du dv + G dv². Lengths, angles and areas all come from them, and changing the coordinates changes the grid in one fixed way.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r28n.html">28n</a> (patches, and area as ∬|r<sub>u</sub> × r<sub>v</sub>|), <a href="r28c.html">28c</a> (chains), <a href="r18i.html">18i</a> (distance travelled as the total of speed), <a href="r27i.html">27i</a> (dot, cross and the angle-between technique) and <a href="r29c.html">29c</a>. <a href="r29e.html">29e</a> reads curvature from it.</p></div>
+</header>
+
+<section class="class step" data-step="29d1">
+  <h2 class="sthead"><span class="stno">29d1</span>Length from three numbers</h2>
+  <p class="stands">Stands on 28n, 28c, 18i.</p>
+  <p data-pid="50f620">Let r(u, v) be a patch of a surface in space, as in 28n, with edge arrows r<sub>u</sub> and r<sub>v</sub>. Put E = r<sub>u</sub> · r<sub>u</sub>, F = r<sub>u</sub> · r<sub>v</sub>, G = r<sub>v</sub> · r<sub>v</sub>. These three functions of (u, v) are the surface’s <i>ruler</i>, written ds² = E du² + 2F du dv + G dv², and the grid [[E, F], [F, G]] is the <i>ruler grid</i>.</p>
+  <p data-pid="680d57">Ruler-length technique: <b>a curve t ↦ r(u(t), v(t)) on the patch, for a ≤ t ≤ b, has length ∫ₐᵇ √(E u′² + 2F u′v′ + G v′²) dt.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the ruler-length technique">
+\frac{d}{dt}\,r(u(t), v(t)) = u^{\prime}\,r_u + v^{\prime}\,r_v @@ chains along several roads (28c)
+|u^{\prime} r_u + v^{\prime} r_v|^2 = u^{\prime 2}\,r_u\cdot r_u + 2u^{\prime}v^{\prime}\,r_u\cdot r_v + v^{\prime 2}\,r_v\cdot r_v @@ the dot product spreads over sums (27i)
+\text{speed} = \sqrt{E u^{\prime 2} + 2F u^{\prime}v^{\prime} + G v^{\prime 2}} @@ E, F, G by name
+\htmlClass{new}{\text{length} = \int_a^b \sqrt{E u^{\prime 2} + 2F u^{\prime}v^{\prime} + G v^{\prime 2}}\,dt} \quad \blacksquare @@ distance travelled is the total of speed (18i)
+  </pre>
+  <p data-pid="e5264e">On the sphere of radius R, with latitude φ and longitude λ, r = R(cos φ cos λ, cos φ sin λ, sin φ) (21o’s two turns). Then E = R², F = 0, G = R² cos² φ. A step of dλ along a circle of latitude has length R cos φ dλ, which is why a degree of longitude shrinks toward the poles.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the ruler · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">29d1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="r(\varphi,\lambda) = R(\cos\varphi\cos\lambda,\ \cos\varphi\sin\lambda,\ \sin\varphi)"></span> <span data-tex-inline="R = 6371\ \text{km}"></span></span>Find r<sub>φ</sub> and r<sub>λ</sub>, then E, F and G. <br>Find the length of one degree of longitude (π/180 radians) at the equator, at Seattle (47.6° N) and at Anchorage (61.2° N). <br>Find the length of the circle of latitude 49° N by the ruler-length technique, and compare it with the equator.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29d2">
+  <h2 class="sthead"><span class="stno">29d2</span>Angles and areas from the same grid</h2>
+  <p class="stands">Stands on 29d1, 27i, 28n.</p>
+  <p data-pid="7448f7">Ruler-angle technique: <b>two directions (a, b) and (c, d) in the uv-plane leave a point of the surface at the angle θ with cos θ = (Eac + F(ad + bc) + Gbd) / (√(Ea² + 2Fab + Gb²) √(Ec² + 2Fcd + Gd²)).</b></p>
+  <p data-pid="4344db">Ruler-area technique: <b>the patch has area ∬ √(EG − F²) du dv.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the ruler-angle and ruler-area techniques">
+p = a\,r_u + b\,r_v,\ \ q = c\,r_u + d\,r_v @@ the two directions as arrows on the surface (29d1)
+p \cdot q = Eac + F(ad + bc) + Gbd @@ the dot product spreads over sums
+\cos\theta = \frac{p \cdot q}{|p|\,|q|} @@ angle-between (27i)
+|r_u \times r_v|^2 = |r_u|^2|r_v|^2\sin^2\theta = |r_u|^2|r_v|^2 - (r_u\cdot r_v)^2 @@ cross technique (27i), and sin² = 1 − cos²
+|r_u \times r_v| = \sqrt{EG - F^2} @@ E, F, G by name
+\htmlClass{new}{\text{area} = \iint \sqrt{EG - F^2}\,du\,dv} \quad \blacksquare @@ area of a patch is ∬|r_u × r_v| (28n)
+  </pre>
+  <p data-pid="eff16d">So everything the surface knows about lengths, angles and areas is in three numbers per point. Nothing in these formulas mentions the space around the surface. A creature living in the surface, measuring with a tape, could find E, F and G without ever leaving it.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · angles and areas · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29d2.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="E = R^2,\ \ F = 0,\ \ G = R^2\cos^2\varphi,\ \ R = 6371\ \text{km}"></span></span>Find the area of the region between latitudes 45° N and 50° N and longitudes 125° W and 120° W, by the ruler-area technique. This patch takes in Seattle, Portland and Victoria. <br>Find the area of the flat rectangle with the same sides measured along the 45° N circle, and why it is too large.</li><li><span class="givens"><span data-tex-inline="\varphi = 60^\circ,\ \ (a, b) = (1, 1),\ \ (c, d) = (1, 0)"></span></span>In the (φ, λ) chart, a path heads at 45° between north and east. Find the angle at which it actually leaves the point, measured from due north, by the ruler-angle technique.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29d3">
+  <h2 class="sthead"><span class="stno">29d3</span>Changing the coordinates</h2>
+  <p class="stands">Stands on 29d1, 28c, 28n.</p>
+  <p data-pid="3e1e92">The same surface can be traced with other coordinates (s, t), through (u, v) = T(s, t). The ruler grid changes, but the lengths it gives must not.</p>
+  <p data-pid="632e78">Ruler-change technique: <b>if (u, v) = T(s, t) with slope grid J, the ruler grid in s and t is Jᵀ g J, where g is the ruler grid in u and v; and both give the same length to every curve.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the ruler-change technique">
+q(s,t) = r(T(s,t)),\ \ [\,q_s\ q_t\,] = [\,r_u\ r_v\,]\,J @@ chains (28c): each new edge arrow is a mix of the old
+\begin{bmatrix} q_s\cdot q_s & q_s\cdot q_t \\ q_t\cdot q_s & q_t\cdot q_t \end{bmatrix} = J^{\mathsf T} \begin{bmatrix} E & F \\ F & G \end{bmatrix} J @@ dot products of mixes, written as grids (27)
+\text{a curve's speed is the same in both} @@ its velocity is the same arrow in space, written two ways
+\htmlClass{new}{\text{new grid} = J^{\mathsf T} g J,\ \text{same lengths}} \quad \blacksquare @@ ruler-length (29d1)
+  </pre>
+  <p data-pid="474322">And √(det(Jᵀ g J)) = |det J| √(det g), since determinants multiply (27). That is 28n’s patch technique again: the area does not depend on the coordinates.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · change of coordinates · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29d3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="(x, y) = (\rho\cos\theta,\ \rho\sin\theta)"></span> <span data-tex-inline="g = \begin{pmatrix} 1 &amp; 0 \\ 0 &amp; 1 \end{pmatrix}"></span></span>Find the slope grid J of the change, then Jᵀ g J. <br>Read off ds² in ρ and θ. <br>Find the length of the circle ρ = 5 by the ruler-length technique, and the area of the disc ρ ≤ 5 by the ruler-area technique.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29d4">
+  <h2 class="sthead"><span class="stno">29d4</span>A ruler with no surface around it</h2>
+  <p class="stands">Stands on 29d1 to 29d3, 29c1, 29c2.</p>
+  <p data-pid="957444">Turn it round. Start with a region of the plane and any grid g = [[E, F], [F, G]] of continuous functions with E &gt; 0 and EG − F² &gt; 0 at every point. Define the length of a curve by the ruler-length technique, and angles and areas by 29d2. No surface in space is needed. The region with its ruler is a geometry of its own.</p>
+  <p data-pid="b7a333">The disc plane of 29c is one. Give it the ruler ds² = 4(dx² + dy²)/(1 − x² − y²)², that is E = G = 4/(1 − |z|²)², F = 0.</p>
+  <p data-pid="73edd3">Disc-ruler technique: <b>the disc plane’s moves keep its ruler, and along a diameter the length from 0 to a point at distance ρ from the centre is ln((1 + ρ)/(1 − ρ)), the distance 29c2 used.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the disc-ruler technique">
+1 - |f_a(z)|^2 = \frac{(1 - |z|^2)(1 - |a|^2)}{|1 - \bar a z|^2} @@ 29c1, line 1, divided by |1 − āz|²
+|c| = \frac{1 - |a|^2}{|1 - \bar a z|^2} @@ the size of fₐ’s slope number (29c1, product-size 25c)
+\frac{2\,|c|\,|dz|}{1 - |f_a(z)|^2} = \frac{2\,|dz|}{1 - |z|^2} @@ divide the two lines: a small step’s ruler length is the same after the move
+\int_0^{\rho} \frac{2\,ds}{1 - s^2} = \int_0^{\rho} \Big(\frac{1}{1+s} + \frac{1}{1-s}\Big) ds = \ln\frac{1+\rho}{1-\rho} @@ split the fraction (17k), then the log techniques (17)
+\htmlClass{new}{\text{moves keep lengths; } d(0,\rho) = \ln\tfrac{1+\rho}{1-\rho}} \quad \blacksquare @@ the lines above
+  </pre>
+  <p data-pid="83fb52">The length grows without bound as ρ heads to 1, so the edge is endlessly far away. To a creature in the disc plane, its world has no edge. It is only our flat drawing that squeezes it into a disc.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · the disc ruler · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29d4.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="ds = \dfrac{2\,|dz|}{1 - |z|^2}"></span></span>Find the ruler length from 0 to the points 0.5, 0.9, 0.99 and 0.999 along the real diameter. <br>Find ρ for the point of that diameter at ruler length 10 from 0, and how far it sits from the edge in the flat drawing. <br>The move f<sub>1/2</sub> sends 0 to −½ with slope number c = ¾. Find the ruler length of a small step |dz| at 0, and of its image at −½. Check that they agree.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29d5">
+  <h2 class="sthead"><span class="stno">29d5</span>Illegal moves</h2>
+  <p class="stands">Stands on 29d1 to 29d4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+ds^2 = E\,du^2 + F\,du\,dv + G\,dv^2\,? @@ the middle term comes twice: r_u · r_v and r_v · r_u
+\text{length} = \textstyle\int (E u^{\prime 2} + 2F u^{\prime}v^{\prime} + G v^{\prime 2})\,dt\,? @@ that totals the speed squared; length totals the speed
+\text{one degree of longitude is } 111 \text{ km everywhere}\,? @@ G = R² cos² φ: it shrinks toward the poles
+\text{area} = \textstyle\iint (EG - F^2)\,du\,dv\,? @@ the area of a small piece is |r_u × r_v|, the square root
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29d5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="r(u, v) = (u + v,\ v)"></span></span>Find E, F and G for this slanted chart of the flat plane. Take the step du = 1, dv = 1: find the arrow it makes in the plane and its true length. <br>Find the length from the first line, and from the ruler with the 2. Find which middle term matches.</li><li><span class="givens"><span data-tex-inline="\varphi = 0,\ \ \lambda = t,\ \ 0 \le t \le 2\pi,\ \ R = 6371\ \text{km}"></span></span>Find the length of the equator from the second line, and from the ruler-length technique. Find the units of each.</li><li><span class="givens"><span data-tex-inline="\varphi = 61.2^\circ"></span></span>Find the length of one degree of longitude at Anchorage, and how far off 111 km is there.</li><li><span class="givens"><span data-tex-inline="r(u, v) = (2u,\ 3v),\ \ 0 \le u, v \le 1"></span></span>Find E, F, G and the true area of the image. Find the area from the fourth line, and which one is right.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">29d.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="r(u, v) = (\cos u,\ \sin u,\ v)"></span></span>Build the ruler of a cylinder of radius 1. Find E, F and G, and the flat ruler they match. <br>Find the length of the curve u = t, v = t for 0 ≤ t ≤ 2π by the ruler-length technique, and check it by unrolling the cylinder flat.</div>
+  <div class="chq"><span class="chid">29d.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="E = R^2,\ \ F = 0,\ \ G = R^2\cos^2\varphi"></span></span>Find EG − F² at the North Pole, and what goes wrong there with the (φ, λ) chart. <br>Find the length of the circle of latitude φ as φ heads to 90°. <br>Find the area of the cap above 80° N on the earth (R = 6371 km) by the ruler-area technique, and why the bad point at the top costs no area.</div>
+  <div class="chq"><span class="chid">29d.4.3</span><span class="tagq">converse</span>Ruler-change: grids that come from one surface by a change of coordinates give every curve the same length. Turn it round: if two grids at a point, in the same coordinates, give the same length to every small step, must they be the same grid? <br>Find E, G and F from the step lengths in the directions (1, 0), (0, 1) and (1, 1).</div>
+  <div class="chq"><span class="chid">29d.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\text{the sphere of radius } R"></span></span>Find the sphere’s ruler another way, without the patch r(φ, λ). A step dφ north runs along a great circle of radius R. A step dλ east runs along a circle of latitude of radius R cos φ. The two directions are at right angles. <br>Find E, F and G from the lengths of those three steps, as in 29d.4.3.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r29c.html">← 29c · a plane where parallels are many</a><a href="r29e.html">29e · curvature lives in the ruler →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The ruler is the metric, or first fundamental form, and E, F, G are its coefficients; ds² is the line element. A region with a ruler of its own is a Riemannian metric on that region, and the disc plane’s ruler is the Poincaré metric. The rule Jᵀ g J is how the metric transforms as a tensor. The ruler-area total is the area element √(EG − F²) du dv.</p>
+  <h3>Who said it first</h3>
+  <p>Carl Friedrich Gauss wrote ds² with E, F and G in his Disquisitiones generales circa superficies curvas of 1827, after years of surveying. Bernhard Riemann’s lecture of 1854, On the hypotheses which lie at the foundations of geometry, took the ruler as the starting point for spaces of any number of dimensions, with no surrounding space needed. Henri Poincaré gave the disc and its ruler in 1882.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'velocity',t:R`u^{\prime} r_u + v^{\prime} r_v`,n:`Chains.`},
+  {k:'ember',kl:'square it',t:R`E u^{\prime 2} + 2F u^{\prime}v^{\prime} + G v^{\prime 2}`,n:`Dot spreads over sums.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{ds^2 = E\,du^2 + 2F\,du\,dv + G\,dv^2}`,n:`Three numbers per point.`}
+],{title:'The slides · the ruler · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'angle',t:R`\cos\theta = \frac{p\cdot q}{|p||q|}`,n:`Built from E, F, G.`},
+  {k:'ember',kl:'area',t:R`|r_u\times r_v|^2 = EG - F^2`,n:`The cross, squared.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\iint\sqrt{EG-F^2}}`,n:`The ruler holds it all.`}
+],{title:'The slides · angles and areas · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'mix',t:R`[\,q_s\ q_t\,] = [\,r_u\ r_v\,]J`,n:`New arrows from old.`},
+  {k:'ember',kl:'grid',t:R`J^{\mathsf T} g J`,n:`Dot products of mixes.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{same lengths}}`,n:`Only the bookkeeping changes.`}
+],{title:'The slides · change of coordinates · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'ruler',t:R`ds = \frac{2\,|dz|}{1 - |z|^2}`,n:`Steps grow near the edge.`},
+  {k:'ember',kl:'moves',t:R`\frac{2|c|}{1-|f_a|^2} = \frac{2}{1-|z|^2}`,n:`Kept.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{d(0,\rho) = \ln\tfrac{1+\rho}{1-\rho}}`,n:`The edge is endlessly far.`}
+],{title:'The slides · the disc ruler · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

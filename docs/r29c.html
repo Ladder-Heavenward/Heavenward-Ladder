@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A plane where parallels are many</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r29b.html">← 29b triangles on a sphere</a><a href="r29d.html">next: 29d the ruler that changes →</a></p>
+  <div class="tags"><span class="tag proof">29c · proof</span></div>
+  <h1>A plane where parallels are many</h1>
+  <p>The sphere made the angles of a triangle add to more than a straight angle, but it did so by breaking one of the other axioms: two opposite points lie on many lines. The sharp case of 29a asks for something harder. It asks for a world that keeps every one of the other axioms and still lets the angles add to less. This step builds one inside an ordinary disc, using the maps of the plane from rung 25. Its lines look curved to us, but inside the disc they behave in every way the other axioms ask. Through a point off a line, endlessly many of them never meet it. That settles the trial of 1733.</p>
+  <p class="gesture">Inside the disc, with arcs that meet the edge at right angles as lines and the maps of 25f as moves, every one of the other axioms holds and the parallel axiom fails. So the other axioms can neither prove it nor refute it.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r25f.html">25f</a> (maps of the plane that send circles and lines to circles and lines), <a href="r25c.html">25c</a> (the size of a product), <a href="r28b.html">28b</a> (the best flat map), <a href="r28c.html">28c</a> (chains) and <a href="r29a.html">29a</a>. <a href="r29d.html">29d</a> finds the ruler that this disc has been using.</p></div>
+</header>
+
+<section class="class step" data-step="29c1">
+  <h2 class="sthead"><span class="stno">29c1</span>The disc plane</h2>
+  <p class="stands">Stands on 25f, 9·cb8.</p>
+  <p data-pid="207328">Take the points z with |z| &lt; 1, the inside of the unit circle. Its <i>lines</i> are the diameters, and the arcs of circles that meet the unit circle at right angles, each taken inside the disc. Call this the <i>disc plane</i>. The unit circle itself is its edge, and is not part of it.</p>
+  <p data-pid="cac1ec">For a point a inside the disc, let f<sub>a</sub>(z) = (z − a)/(1 − āz), where ā is the conjugate of a.</p>
+  <p data-pid="216039">Disc-moves technique: <b>for |a| &lt; 1, f<sub>a</sub> sends the disc onto itself and a to 0, keeps angles, and sends lines of the disc plane to lines of the disc plane.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the disc-moves technique">
+|1 - \bar a z|^2 - |z - a|^2 = (1 - |z|^2)(1 - |a|^2) @@ expand both sides with |w|² = w w̄ (9·cb8)
+|z| < 1 \iff |f_a(z)| < 1,\ \ |z| = 1 \iff |f_a(z)| = 1 @@ the right side is positive, or zero, exactly then (|a| &lt; 1)
+f_a(a) = 0,\ \ f_{-a}(f_a(z)) = z @@ substitute and simplify: f₋ₐ undoes fₐ
+f_a(z + h) - f_a(z) = h \cdot \frac{1 - |a|^2}{(1 - \bar a z)(1 - \bar a z - \bar a h)} @@ subtract the fractions over one bottom
+\text{flat map at } z:\ h \mapsto c\,h,\ \ c = \frac{1 - |a|^2}{(1 - \bar a z)^2} @@ the line above, as h heads to 0 (28b)
+\text{multiplying by } c \text{ turns by its angle and stretches by } |c| @@ multiply-and-add (21·cb20): a product multiplies lengths and adds turns
+\htmlClass{new}{f_a \text{ keeps the angle between any two curves}} \quad \blacksquare @@ chains (28c): each tangent arrow is multiplied by the same c
+  </pre>
+  <p data-pid="283300">And f<sub>a</sub> is built from z ↦ az + b and z ↦ 1/z, so it sends circles and lines to circles and lines (25f). A line of the disc plane meets the edge at right angles. Its image meets the image of the edge, the edge again, at the same right angles. So lines go to lines. These maps, with the flip z ↦ z̄ and the turns z ↦ e<sup>iθ</sup>z, are the <i>moves</i> of the disc plane. Any point can be moved to the centre.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the moves · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">29c1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="a = \tfrac12,\ \ f_a(z) = \dfrac{z - \frac12}{1 - \frac12 z}"></span></span>Find f<sub>a</sub>(z) at z = 0, ½, i/2, −1 and i, and the size of each. <br>Find which of them start inside the disc and which on the edge, and check that each lands in the same place.</li><li><span class="givens"><span data-tex-inline="z = \tfrac{i}{2}"></span></span>Find both sides of the identity in line 1 of the disc-moves technique. <br>Find |f<sub>a</sub>(z)|² from it, and check against the value above.</li><li>Find the slope number c at z = 0. Find the turn and the stretch it gives a small arrow there.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29c2">
+  <h2 class="sthead"><span class="stno">29c2</span>Through two points, one line</h2>
+  <p class="stands">Stands on 29c1.</p>
+  <p data-pid="e34b80">A line of the disc plane that is not a diameter lies on a circle with centre c and radius r. Meeting the unit circle at right angles means the two radii at a crossing point are at right angles, so |c|² = 1 + r² (18f’s two-sides-and-the-angle technique, with a right angle). Then |0 − c| &gt; r: the centre of the disc is never on such a circle.</p>
+  <p data-pid="e6f75d">One-line technique: <b>through two points of the disc plane passes exactly one line of the disc plane.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the one-line technique">
+p \ne q \text{ in the disc};\ \ f_p(p) = 0,\ \ w = f_p(q) \ne 0 @@ disc-moves: move p to the centre
+\text{lines through } 0 \text{ are diameters only} @@ |c|² = 1 + r² &gt; r², so no arc passes through 0
+\text{exactly one diameter passes through } 0 \text{ and } w @@ the line through 0 and w (18c)
+\htmlClass{new}{f_{-p} \text{ of that diameter is the one line through } p \text{ and } q} \quad \blacksquare @@ disc-moves both ways: lines to lines, and f₋ₚ undoes fₚ
+  </pre>
+  <p data-pid="db9e4f">The other axioms can be checked in the same way: move the figure to the centre, where the lines are diameters, and check there. For sizes of segments the disc plane uses d(p, q) = ln((1 + ρ)/(1 − ρ)) with ρ = |f<sub>p</sub>(q)|. It grows without bound as q nears the edge, so lengths can be laid off. 29d shows where this distance comes from.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · one line · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29c2.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="p = 0,\ \ q = \tfrac12"></span></span>Find the line of the disc plane through p and q, and the distance d(p, q).</li><li><span class="givens"><span data-tex-inline="p = \tfrac12,\ \ q = \tfrac{i}{2}"></span></span>The line through them is not a diameter. Its circle has centre c and radius r with |c|² = 1 + r². By symmetry c lies on the line y = x. Find c and r. <br>Find ρ = |f<sub>p</sub>(q)|, and the distance d(p, q). <br>Find which is farther in the disc plane, ½ from 0, or i/2 from ½, and how that compares with the flat distances.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29c3">
+  <h2 class="sthead"><span class="stno">29c3</span>Parallels are many</h2>
+  <p class="stands">Stands on 29c1, 29c2.</p>
+  <p data-pid="72af67">Many-parallels technique: <b>through a point off a line of the disc plane pass endlessly many lines of the disc plane that never meet it.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the many-parallels technique">
+P \text{ off the line } \ell;\ \ \text{move } P \text{ to } 0 @@ disc-moves: meeting and not meeting are kept
+\ell \text{ on the circle } |z - c| = r,\ \ |c|^2 = 1 + r^2 @@ ℓ does not pass through 0, so it is not a diameter
+\text{the diameter along } u,\ |u| = 1:\ \ |t u - c|^2 = r^2 \iff t^2 - 2t(u \cdot c) + 1 = 0 @@ expand, with |c|² − r² = 1
+\text{it meets } \ell \text{ inside the disc} \iff |u \cdot c| > 1 @@ the two roots multiply to 1; a root of size below 1 needs (u · c)² &gt; 1
+|c| > 1,\ \text{so the directions with } |u \cdot c| \le 1 \text{ fill two arcs of the circle of directions} @@ u · c = |c| cos θ, and |cos θ| ≤ 1/|c| on two ranges of θ
+\htmlClass{new}{\text{endlessly many diameters through } 0 \text{ never meet } \ell} \quad \blacksquare @@ each direction in those ranges gives one; move back
+  </pre>
+  <p data-pid="d54792">So the parallel axiom fails in the disc plane. Not by a little: at every point, for every line, there is a whole fan of lines that never meet it.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · a fan of parallels · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29c3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\ell:\ |z - 2| = \sqrt3"></span></span>Check that this circle meets the edge at right angles. Find the two points where it meets the edge. <br>Find the angles θ for which the diameter in direction u = (cos θ, sin θ) meets ℓ inside the disc. <br>For θ = 0, find the point where it meets ℓ. <br>Find the two diameters at the ends of the fan that never meets ℓ, and what each shares with ℓ.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29c4">
+  <h2 class="sthead"><span class="stno">29c4</span>Angles add to less</h2>
+  <p class="stands">Stands on 29c1, 29c3.</p>
+  <p data-pid="b9f284">Below-straight technique: <b>the angles of every triangle in the disc plane add to less than π.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the below-straight technique">
+\text{move the vertex } A \text{ to } 0 @@ disc-moves keep all three angles
+\text{sides } AB, AC \text{ are diameters};\ BC \text{ is on a circle } |z-c| = r @@ only diameters pass through 0
+\text{ray } t\,u \text{ through a point } w = s\,u \text{ of the chord } BC:\ \text{meets the circle first at } t_1 \le s @@ the chord lies inside the circle, and the ray is inside it exactly for t₁ ≤ t ≤ t₂
+\text{the arc } BC \text{ lies inside the straight triangle } 0BC @@ every ray from 0 across the chord meets the arc first
+\text{at } B,\ \text{the arc leaves between } B0 \text{ and } BC,\ \text{and not along } BC @@ a circle meets the line BC only at B and C
+\angle B < \angle 0BC,\ \ \angle C < \angle 0CB @@ the disc plane’s angle is the angle of the arc’s tangent
+\htmlClass{new}{\angle A + \angle B + \angle C < \angle 0 + \angle 0BC + \angle 0CB = \pi} \quad \blacksquare @@ angle-sum (18f) for the straight triangle 0BC in ℝ²
+  </pre>
+  <p data-pid="0d8175">So the sharp case of 29a is the geometry of the disc plane. The upright figures there have sharp top angles, and every one of the strange techniques found in 1733 is true there.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · less than straight · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29c4.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="A = 0,\ \ B = \tfrac12,\ \ C = \tfrac{i}{2}"></span></span>Find the circle through B and C that meets the edge at right angles (29c2.1 has done half the work). <br>Find the tangent direction of that arc at B, heading toward C. Find the angle of the disc triangle at B, between the side toward A and that tangent. <br>Find the three angles of the disc triangle and their sum, and the angles of the straight triangle ABC. <br>Find the point where the arc crosses the line y = x, and whether the side BC sags toward A.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29c5">
+  <h2 class="sthead"><span class="stno">29c5</span>The trial settled</h2>
+  <p class="stands">Stands on 29a, 29c1 to 29c4, 18c.</p>
+  <p data-pid="4cfd48">Parallel-independent technique: <b>the parallel axiom can be neither proved nor refuted from the other axioms.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the parallel-independent technique">
+\text{the disc plane obeys every one of the other axioms} @@ 29c1, 29c2, checked at the centre and moved
+\text{the disc plane is built from } \mathbb{R}^2 @@ it is as sound as ℝ²: a false line there is a false line in ℝ²
+\text{suppose the other axioms proved the parallel axiom} @@ to be refuted
+\text{then it would hold in the disc plane} @@ a proof from axioms holds wherever the axioms hold
+\text{it fails there} @@ many-parallels (29c3)
+\text{so no proof} @@ the supposition gave a false line
+\text{and no refutation: } \mathbb{R}^2 \text{ obeys the other axioms and the parallel statement} @@ 18c, by the same reasoning
+\htmlClass{new}{\text{the parallel axiom is independent of the other axioms}} \quad \blacksquare @@ the two lines above
+  </pre>
+  <p data-pid="ee2f5a">The trial of 1733 could never end in a refutation. Two thousand years of attempts to prove the fifth postulate were attempts to prove something the other axioms do not say. Geometry is not one thing. There are at least three, flat, round and saddle, each as sound as the numbers it is built from. Which of them the world we live in obeys is not a question the axioms can answer. It is a question for measurement.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · independent · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29c5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li>The disc plane’s points are pairs of numbers, its lines are circles and diameters, and its moves are built from z ↦ az + b and z ↦ 1/z. Find what a false line about the disc plane would turn into, written out in pairs of numbers.</li><li>Someone hands in a proof of the parallel axiom from the other axioms. Find, without reading it, a world in which every line of it would have to hold. Find what then goes wrong, and what that tells you about the proof.</li><li>A surveyor measures the angles of a real triangle and finds a sum below π. Find whether this decides which geometry the other axioms describe, or which geometry space has, or neither.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29c6">
+  <h2 class="sthead"><span class="stno">29c6</span>Illegal moves</h2>
+  <p class="stands">Stands on 29c1 to 29c5.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{the lines of the disc plane are curved, so it is not a real geometry}\,? @@ straight means obeying the axioms for lines, not looking straight to us
+\text{the disc plane is small, so lengths cannot be laid off without bound}\,? @@ its distance grows without bound toward the edge
+\text{the edge points are points of the disc plane}\,? @@ the edge is not part of it; lines that share only an edge point never meet
+\text{the parallel axiom is false}\,? @@ it is independent: true in ℝ², false in the disc plane
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29c6.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li>List the other axioms of 29a. Find which of them asks how a line looks in a drawing.</li><li>Find the disc-plane distance from 0 to 0.9 and to 0.99. Find whether a length of 10 can be laid off from 0 along a diameter.</li><li><span class="givens"><span data-tex-inline="\text{the diameter } y = 0;\ \ \text{the line on } |z - (1 + i)| = 1"></span></span>Check that the circle meets the edge at right angles. Find every point where it meets the line y = 0, and whether that point is in the disc plane. <br>Find whether these two lines of the disc plane meet.</li><li>Find a world where the parallel statement holds, and one where it fails, both obeying the other axioms. Find what “false” would have to mean for the fourth line to be right.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">29c.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="A = 0,\ \ B = \rho,\ \ C = \rho\,i,\ \ 0 &lt; \rho &lt; 1"></span></span>Build disc triangles whose angles add to as little as you like above a right angle. Find the centre of the circle through B and C that meets the edge at right angles, and show that the angle at B has tan ∠B = (1 − ρ²)/(1 + ρ²). <br>Find the angle sum for ρ = 0.5, 0.9 and 0.99, and what it heads to as ρ heads to 1. <br>Find ρ for which the sum is 120°.</div>
+  <div class="chq"><span class="chid">29c.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="f_a(z) = \dfrac{z - a}{1 - \bar a z}"></span></span>The disc-moves technique demands |a| &lt; 1. Find f<sub>a</sub>(z) when |a| = 1, using 1/ā = a, and what it does to the disc. <br>Find f<sub>2</sub>(0), and where a point of the disc goes when |a| &gt; 1.</div>
+  <div class="chq"><span class="chid">29c.4.3</span><span class="tagq">converse</span>Below-straight: in the disc plane, the parallel axiom fails and every triangle has angles adding to less than π. Turn it round: in a world that obeys the other axioms, if every triangle has angles adding to less than π, must the parallel axiom fail? <br>Find which step of the ladder proved the angle sum π from the parallel statement and the moves, and use it. <br>On a sphere no two lines are parallel, yet triangles have angles adding to more than π. Find why that does not answer the question.</div>
+  <div class="chq"><span class="chid">29c.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="|z| = 1"></span></span>Show that f<sub>a</sub> sends the edge to the edge another way, without line 1 of the disc-moves technique. Use z̄ = 1/z on the edge to show that |1 − āz| = |z − a| there. <br>Find where line 1 is still needed: for the inside.</div>
+  <div class="chq"><span class="chid">29c.4.5</span><span class="tagq">seam</span>In 1781 a philosopher held that the flat geometry of the ancient books, parallel axiom and all, is known before any experience: the mind brings it to the world, so the world cannot break it. In letters he never published, the greatest calculator of the next century worked out a geometry with many parallels, and wondered whether space might obey it. Two younger men published it, in Kazan in 1829 and in Hungary in 1832. In 1902 a French mathematician answered that no measurement can decide: a measured sum below π can always be blamed on bent light rays instead of bent space, so the geometry is a convention, chosen for convenience. In 1915 a physicist built a theory of gravity in which space and time have a geometry that is measured, and that bends near mass. <br>Find what 29c settles, and what it leaves for measurement. <br>Is the geometry of space known before experience, chosen, or measured?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r29b.html">← 29b · triangles on a sphere</a><a href="r29d.html">29d · the ruler that changes →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The disc plane is the Poincaré disc model of the hyperbolic plane; its geometry is hyperbolic geometry (or Lobachevskian, or Bolyai–Lobachevskian geometry). The maps fₐ are disc automorphisms, a kind of Möbius transformation; maps that keep angles are conformal. A model of a list of axioms is a structure in which all of them hold, and the parallel-independent technique is the independence of the parallel postulate. Geometry with the other axioms alone is neutral geometry.</p>
+  <h3>Who said it first</h3>
+  <p>Carl Friedrich Gauss worked out much of the geometry with many parallels from about 1813 and never published it. Nikolai Lobachevsky published it in Kazan in 1829, and János Bolyai in an appendix to his father’s textbook in 1832. Neither showed that it could not lead to a false line. Eugenio Beltrami did, in 1868, by building a model of it inside ordinary geometry; Felix Klein gave another in 1871, and Henri Poincaré the disc and the half-plane in 1882. In his Critique of Pure Reason (1781) Immanuel Kant had held that Euclid’s geometry is known before any experience; the models showed that logic alone does not force it. In <i>Science and Hypothesis</i> (1902) Poincaré argued that the geometry of space is a convention, chosen for convenience, since a measured angle sum can always be read as bent light rather than bent space. Albert Einstein’s general theory of relativity (1915) made the geometry of space and time something measured, bent by mass.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'size',t:R`|1-\bar a z|^2 - |z-a|^2 = (1-|z|^2)(1-|a|^2)`,n:`Inside stays inside.`},
+  {k:'ember',kl:'slope',t:R`c = \frac{1-|a|^2}{(1-\bar a z)^2}`,n:`A turn and a stretch.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{f_a \text{ keeps angles, lines go to lines}}`,n:`Any point can come to the centre.`}
+],{title:'The slides · the moves · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'move',t:R`f_p(p) = 0`,n:`p to the centre.`},
+  {k:'ember',kl:'there',t:R`\text{a diameter through } 0, w`,n:`Only diameters pass through 0.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{one line through } p, q}`,n:`Move back.`}
+],{title:'The slides · one line · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'diameter',t:R`t^2 - 2t(u\cdot c) + 1 = 0`,n:`Where a diameter would meet ℓ.`},
+  {k:'ember',kl:'test',t:R`|u \cdot c| > 1`,n:`Only some directions reach.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{a fan never meets } \ell}`,n:`Endlessly many parallels.`}
+],{title:'The slides · a fan of parallels · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'centre',t:R`A = 0`,n:`Two sides straight.`},
+  {k:'ember',kl:'bulge',t:R`t_1 \le s`,n:`The third side sags toward 0.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\angle A + \angle B + \angle C < \pi}`,n:`Two angles shrink.`}
+],{title:'The slides · less than straight · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'model',t:R`\text{disc plane} \models \text{the other axioms}`,n:`All but one hold.`},
+  {k:'ember',kl:'fails',t:R`\text{many parallels}`,n:`The parallel axiom does not.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{no proof, no refutation}}`,n:`Measurement must decide.`}
+],{title:'The slides · independent · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Total curvature counts holes</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r29e.html">← 29e curvature lives in the ruler</a><a href="r29g.html">next: 29g shortest paths →</a></p>
+  <div class="tags"><span class="tag proof">29f · proof</span></div>
+  <h1>Total curvature counts holes</h1>
+  <p>Take a soft rubber ball and squeeze it into an egg, or a pear, or a peanut. The surface bend K changes everywhere: it grows where the rubber is pinched and shrinks where it flattens. This step totals K over the whole closed surface and finds that the total does not change at all. For every ball-shaped surface it is 4π. For a doughnut it is 0. For a surface with g holes it is 4π(1 − g). A number made of bends, added over a whole surface, can only count its holes.</p>
+  <p class="gesture">Total K over a closed surface is 2π times the number of corners minus edges plus faces of any way of cutting it into triangles, and that number is 2 − 2g for a surface with g holes.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r29b.html">29b</a> (area is the excess), <a href="r29d.html">29d</a> (the ruler and area), <a href="r29e.html">29e</a> (the surface bend and the straight-out technique) and <a href="r28h.html">28h</a> (double integrals). <a href="r29g.html">29g</a> pays back the one thing this step holds in trust.</p></div>
+</header>
+
+<section class="class step" data-step="29f1">
+  <h2 class="sthead"><span class="stno">29f1</span>The sphere’s total</h2>
+  <p class="stands">Stands on 29e3, 21o.</p>
+  <p data-pid="ba8d14">Total the surface bend over a whole closed surface S: ∬<sub>S</sub> K dA, with dA = √(EG − F²) du dv from 29d2. Call it the <i>total bend</i>.</p>
+  <p data-pid="4af470">Sphere-total technique: <b>a sphere of any radius has total bend 4π.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the sphere-total technique">
+K = 1/R^2 \text{ at every point} @@ surface-bend (29e3)
+\iint_S K\,dA = \tfrac{1}{R^2} \cdot 4\pi R^2 @@ a constant comes out of the total; skin technique (21o)
+\htmlClass{new}{= 4\pi} \quad \blacksquare @@ R cancels
+  </pre>
+  <p data-pid="daa414">A larger sphere bends less, but there is more of it, and the two balance exactly.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · sphere total · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">29f1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="R_{\text{earth}} = 6371\ \text{km}"></span> <span data-tex-inline="R_{\text{ball}} = 3.3\ \text{cm}"></span> <span data-tex-inline="\text{north of latitude } \varphi_0:\ \ \text{area } 2\pi R^2(1 - \sin\varphi_0)"></span></span>Find K for the earth, in 1/km², and for a tennis ball, in 1/cm². <br>Find each area, and each total bend. <br>Find the total bend of the northern half of each. <br>The area of the part north of φ₀ comes from the ruler-area technique, with dA = R² cos φ dφ dλ. Find the area of the earth north of 60° N, the northern border of British Columbia, and the total bend of that part of the earth and of the same part of the ball.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29f2">
+  <h2 class="sthead"><span class="stno">29f2</span>Spun surfaces</h2>
+  <p class="stands">Stands on 29e5, 28h.</p>
+  <p data-pid="2245ec">Spin a curve about the z-axis. Trace the curve at speed 1 as (ρ(u), z(u)), with ρ the distance from the axis. The surface is r(u, v) = (ρ cos v, ρ sin v, z), and its ruler is du² + ρ² dv²: E = 1, F = 0, G = ρ².</p>
+  <p data-pid="84f5a8">Spun-total technique: <b>a spun surface between u = a and u = b has total bend −2π(ρ′(b) − ρ′(a)).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the spun-total technique">
+K = -\rho^{\prime\prime}/\rho,\ \ dA = \rho\,du\,dv @@ straight-out (29e5) with g = ρ; ruler-area (29d2)
+\iint K\,dA = \int_0^{2\pi}\!\int_a^b -\rho^{\prime\prime}\,du\,dv @@ ρ cancels; either order (28h)
+\htmlClass{new}{= -2\pi\big(\rho^{\prime}(b) - \rho^{\prime}(a)\big)} \quad \blacksquare @@ ρ′ undoes ρ″ (16); the v total is 2π
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: ball-shaped and doughnut-shaped">
+\text{ball-shaped: the curve leaves the axis at right angles and returns at right angles} @@ an egg, a pear, a peanut
+\rho^{\prime}(a) = 1,\ \ \rho^{\prime}(b) = -1 \Rightarrow \text{total} = 4\pi @@ the surface closes smoothly over each pole
+\text{doughnut-shaped: the curve is a closed loop away from the axis} @@ a ring, a tyre, a bagel
+\rho^{\prime}(b) = \rho^{\prime}(a) \Rightarrow \text{total} = 0 @@ the curve comes back to where it started, heading the same way
+  </pre>
+  <p data-pid="bb928e">On a doughnut, the outside is bowl-like and K &gt; 0 there. The inside, round the hole, is saddle-like and K &lt; 0. The two exactly cancel, whatever the doughnut’s proportions.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · spun surfaces · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29f2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\rho(u) = 3 + \cos u,\ \ z(u) = \sin u,\ \ 0 \le u \le 2\pi"></span></span>Spinning this circle, of radius 1 with its centre 3 from the axis, makes a doughnut. Check that the circle is traced at speed 1. <br>Find K = −ρ″/ρ as a function of u. Find K on the outermost circle (u = 0) and on the innermost (u = π). <br>Find the total bend over the outer half, −π/2 ≤ u ≤ π/2, and over the inner half, π/2 ≤ u ≤ 3π/2, by the spun-total technique. Find the total over the whole doughnut. <br>Find the areas of the outer half and of the inner half. Find which half has the larger area, and which the larger total bend in size.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29f3">
+  <h2 class="sthead"><span class="stno">29f3</span>Cutting into triangles</h2>
+  <p class="stands">Stands on 29b3, 29f1.</p>
+  <p data-pid="c70d10">Cut a closed surface into F triangles whose sides are straightest paths (the lines of the surface, 29g), meeting edge to edge, with E edges and V corners in all. On the sphere, a triangle’s total bend is its area over R², which is its excess (29b3). In general this holds too: <i>triangle-total</i>, a triangle of straightest paths has total bend equal to its excess. 29g proves it. This step holds it in trust until then.</p>
+  <p data-pid="1859f2">Excess-count technique: <b>if every triangle’s total bend is its excess, the total bend of the surface is 2π(V − E + F).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the excess-count technique">
+\iint_S K\,dA = \sum_{\text{triangles}} (\alpha + \beta + \gamma - \pi) @@ triangle-total, held in trust to 29g; totals add over pieces (15a)
+= \sum \text{every angle} - \pi F @@ F triangles
+\sum \text{every angle} = 2\pi V @@ the angles round each corner fill a whole turn
+3F = 2E @@ each triangle has three edges, each edge sits in two triangles
+2\pi V - \pi F = 2\pi V - 2\pi E + 2\pi F @@ πF = 2πE − 2πF, from the line above
+\htmlClass{new}{\iint_S K\,dA = 2\pi(V - E + F)} \quad \blacksquare @@ the lines above
+  </pre>
+  <p data-pid="52d5e3">Look at what this says. The left side does not depend on how the surface is cut. So neither does V − E + F. And the right side is a count of corners, edges and faces. It cannot change when the surface is squeezed, as long as the cutting is squeezed along with it.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · count the pieces · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29f3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\text{sphere of radius } R:\ \text{the equator and the meridians at } 0^\circ,\ 90^\circ\text{E},\ 180^\circ,\ 90^\circ\text{W}"></span></span>These great circles cut the sphere into triangles. Find V, E and F, and check that 3F = 2E. <br>Find each triangle’s three angles, and its excess. Find the sum of the excesses. <br>Compare the sum with 2π(V − E + F) and with 4π. <br>Find the area of each triangle on the earth, R = 6371 km.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29f4">
+  <h2 class="sthead"><span class="stno">29f4</span>Each hole takes away two</h2>
+  <p class="stands">Stands on 29f2, 29f3.</p>
+  <p data-pid="f5969f">Hole-count technique: <b>a closed surface with g holes has V − E + F = 2 − 2g for every cutting into triangles, and total bend 4π(1 − g).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the hole-count technique">
+\text{ball-shaped: } 2\pi(V - E + F) = 4\pi,\ \ V - E + F = 2 @@ excess-count (29f3) and spun-total (29f2) or sphere-total (29f1)
+\text{a tube cut into 6 triangles between two triangular ends: } V = 6,\ E = 12,\ F = 6 @@ 3 + 3 end edges, 3 along, 3 across
+\text{remove two triangles, glue the tube's ends to their edges} @@ adds a hole
+V \mapsto V,\ \ E \mapsto E + 12 - 6,\ \ F \mapsto F - 2 + 6 @@ the tube's 6 corners and 6 end edges are glued to ones already counted
+V - E + F \text{ drops by } 6 - 4 = 2 @@ E gains 6, F gains 4
+\htmlClass{new}{V - E + F = 2 - 2g,\ \ \iint_S K\,dA = 4\pi(1 - g)} \quad \blacksquare @@ g handles from a ball; excess-count
+  </pre>
+  <p data-pid="06fb3b">So the total bend of a doughnut is 0, as 29f2 found from its ruler, and a two-holed pretzel has total bend −4π. Squeeze, stretch or dent a surface as you like. Unless you tear it or glue it, the total bend stays the same. A number made of slopes counts something that slopes cannot see.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · holes · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29f4.1</span><span class="ph do">do</span>Find V − E + F and the total bend for a ball, a doughnut, a pretzel with two holes and a pretzel with three. <br>Cut a square into a 3 × 3 grid of small squares, and split each small square into two triangles by one diagonal. Glue the left edge to the right edge and the top to the bottom, which makes a doughnut. Find V, E and F after the gluing, and V − E + F. <br>A closed surface has V − E + F = −6. Find its total bend and its number of holes.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29f5">
+  <h2 class="sthead"><span class="stno">29f5</span>Illegal moves</h2>
+  <p class="stands">Stands on 29f1 to 29f4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{a bigger sphere has a bigger total bend}\,? @@ K falls as 1/R² while the area grows as R²
+\text{a doughnut has total bend } 0, \text{ so } K = 0 \text{ everywhere on it}\,? @@ K &gt; 0 outside and K &lt; 0 round the hole, cancelling
+V - E + F \text{ depends on how finely the surface is cut}\,? @@ it equals the total bend over 2π, which does not
+\text{squeezing a ball into an egg changes its total bend}\,? @@ spun-total: only the ends’ slopes matter, and they stay 1 and −1
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29f5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="R = 3.3\ \text{cm},\ \ R = 6371\ \text{km}"></span></span>Find K, the area and the total bend for each sphere. <br>Find which of K and the area grows as R grows, and which shrinks.</li><li><span class="givens"><span data-tex-inline="\rho(u) = 3 + \cos u,\ \ K = \dfrac{\cos u}{3 + \cos u}"></span></span>Find K at u = 0 and at u = π. Find where on the doughnut K = 0. <br>Find what a total of 0 tells you about K, and what it does not.</li><li><span class="givens"><span data-tex-inline="\text{octahedron: } V = 6,\ E = 12,\ F = 8"></span> <span data-tex-inline="\text{icosahedron: } V = 12,\ E = 30,\ F = 20"></span></span>Each cuts a sphere into triangles. Find V − E + F for each. <br>Find what the finer cutting changes, and what it cannot change.</li><li><span class="givens"><span data-tex-inline="\text{an egg: } \rho^{\prime} = 1 \text{ at the blunt end},\ \ \rho^{\prime} = -1 \text{ at the pointed end}"></span></span>Find the egg’s total bend by the spun-total technique. <br>A squeeze makes the egg longer and thinner, and keeps both ends smooth. Find what happens to ρ′ at the ends, and to the total.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">29f.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="12 \text{ five-sided and } 20 \text{ six-sided panels, three at each corner}"></span></span>A soccer ball is sewn from these panels. Count V, E and F, and find V − E + F. (Faces need not be triangles: cut each k-sided panel into k triangles from a point in its middle, and check that V − E + F does not change.) <br>Pump the ball flat on each panel, so that all the bend sits at the corners. At each corner meet one five-sided panel, with angle 108°, and two six-sided panels, with angle 120°. Find the shortfall of the three angles from a whole turn, and the total shortfall over every corner, in degrees and in radians. <br>Find which technique of this step the total matches.</div>
+  <div class="chq"><span class="chid">29f.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{side: } \rho = u\sin\alpha,\ \ z = u\cos\alpha,\ \ 0 \le u \le \ell"></span> <span data-tex-inline="\alpha = 30^\circ"></span></span>An ice-cream cone is spun from this straight line, which leaves the axis at the tip, and is closed by a flat lid at u = ℓ. Find K on the side and on the lid, and the total of K over both. <br>The hole-count technique gives 4π for a closed surface with no holes. Find which demand of the spun-total technique this cone breaks, and where. <br>Round off the tip and the rim a little, smoothly. Find the total bend of the rounded tip, where ρ′ goes from 1 to sin α, and of the rounded rim, where ρ′ goes from sin α to −1 (the lid traced in toward the axis). Find the whole total.</div>
+  <div class="chq"><span class="chid">29f.4.3</span><span class="tagq">converse</span>The hole-count technique finds the total bend from the number of holes. Turn it round: if a closed surface has total bend 4π, must it have no holes? Find g from the total. <br>Must it be a round sphere, with the same K at every point? Find the sign of K at the narrow waist of a peanut-shaped surface, and its total bend. <br>Find what the total bend can tell you about a closed surface, and what it cannot.</div>
+  <div class="chq"><span class="chid">29f.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="ds^2 = R^2(d\varphi^2 + \cos^2\varphi\,d\lambda^2)"></span></span>Prove the sphere-total technique another way, without the skin technique. Total K dA, with K = 1/R² and dA = √(EG − F²) dφ dλ from this ruler. <br>Prove it a third way, by the spun-total technique, with ρ(u) = R sin(u/R) for 0 ≤ u ≤ πR. Check that the curve leaves and returns at right angles to the axis.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r29e.html">← 29e · curvature lives in the ruler</a><a href="r29g.html">29g · shortest paths →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The total bend is the total curvature. V − E + F is the Euler characteristic, written χ, and the number of holes g is the genus. The hole-count technique, total curvature = 2πχ, is the Gauss–Bonnet theorem; triangle-total is its local form. A cutting into triangles is a triangulation.</p>
+  <h3>Who said it first</h3>
+  <p>René Descartes noticed, around 1630, that the shortfalls of the angles at the corners of a solid add to four right angles twice over; Leonhard Euler found V − E + F = 2 for solids in 1752. Simon Antoine Jean L’Huilier saw in 1813 that solids with holes break the rule. Carl Friedrich Gauss proved the triangle form in 1827, and Pierre Ossian Bonnet extended it to triangles with curved sides in 1848. The form for whole surfaces with holes came later in the nineteenth century, with Walther von Dyck in 1888.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'bend',t:R`K = 1/R^2`,n:`Less for bigger spheres.`},
+  {k:'ember',kl:'area',t:R`4\pi R^2`,n:`More for bigger spheres.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{4\pi}`,n:`They balance.`}
+],{title:'The slides · sphere total · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'bend',t:R`K = -\rho^{\prime\prime}/\rho`,n:`From the ruler.`},
+  {k:'ember',kl:'total',t:R`-2\pi[\rho^{\prime}]_a^b`,n:`Only the ends matter.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{4\pi \text{ or } 0}`,n:`Ball or doughnut.`}
+],{title:'The slides · spun surfaces · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'sum',t:R`\sum(\alpha+\beta+\gamma-\pi)`,n:`Every triangle’s excess.`},
+  {k:'ember',kl:'corners',t:R`2\pi V - \pi F`,n:`Whole turns at each corner.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{2\pi(V - E + F)}`,n:`A count, not a measurement.`}
+],{title:'The slides · count the pieces · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'ball',t:R`V - E + F = 2`,n:`From 4π.`},
+  {k:'ember',kl:'handle',t:R`-2`,n:`Each hole takes two.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{4\pi(1 - g)}`,n:`The total counts holes.`}
+],{title:'The slides · holes · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

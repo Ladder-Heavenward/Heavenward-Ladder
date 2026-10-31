@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Curvature lives in the ruler</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r29d.html">← 29d the ruler that changes</a><a href="r29f.html">next: 29f total curvature counts holes →</a></p>
+  <div class="tags"><span class="tag proof">29e · proof</span></div>
+  <h1>Curvature lives in the ruler</h1>
+  <p>Roll a sheet of paper into a tube. It bends, but nothing on it stretches: every line drawn on it keeps its length. Now try to wrap the same sheet smoothly round a ball. It wrinkles or tears. Some bending can be done without changing the ruler, and some cannot. This step measures how a curve bends and how a surface bends, and then proves something surprising. One number, the product of a surface’s two main bends, can be found from the ruler alone, with no look at the space around the surface. The tube has that number 0, like the flat sheet. The ball has 1/R². That is why the sheet will not wrap it.</p>
+  <p class="gesture">A surface bends in two main amounts at each point, and their product K can be computed from E, F, G and their slopes alone. Surfaces with the same ruler have the same K.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r29d.html">29d</a> (the ruler), <a href="r27i.html">27i</a> (cross product and the moving-dot technique), <a href="r27e.html">27e</a> and <a href="r27g.html">27g</a> (det-product and side-turn), <a href="r28d.html">28d</a> (mixed slopes agree) and <a href="r28l.html">28l</a> (second slopes: bowl, dome, saddle). <a href="r29f.html">29f</a> totals K over a whole surface.</p></div>
+</header>
+
+<section class="class step" data-step="29e1">
+  <h2 class="sthead"><span class="stno">29e1</span>How a curve bends</h2>
+  <p class="stands">Stands on 18i, 27i.</p>
+  <p data-pid="897513">Trace a curve in space at speed 1: γ(s), with s the distance travelled. Its direction T = γ′(s) has length 1. How fast T turns is how sharply the curve bends. Call κ = |T′(s)| the <i>bend</i> of the curve. Accepted name: <i>curvature</i>.</p>
+  <p data-pid="4e4132">Curve-bend technique: <b>T′ is at right angles to T, a straight line has bend 0, and a circle of radius r has bend 1/r at every point.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the curve-bend technique">
+T \cdot T = 1 \Rightarrow 2\,T \cdot T^{\prime} = 0 @@ moving-dot (27i): the slope of a constant is 0
+\gamma = p + s\,v,\ |v| = 1 \Rightarrow T^{\prime} = 0 @@ a line at speed 1
+\gamma(s) = \big(r\cos\tfrac{s}{r},\ r\sin\tfrac{s}{r}\big) @@ the circle at speed 1 (21)
+T^{\prime}(s) = -\tfrac{1}{r}\big(\cos\tfrac{s}{r},\ \sin\tfrac{s}{r}\big) @@ slope twice, the chain technique (13, 21)
+\htmlClass{new}{\kappa = |T^{\prime}| = 1/r} \quad \blacksquare @@ the bracket has length 1
+  </pre>
+  <p data-pid="58bc46">So a tight curve bends a lot, and a wide one a little. A road engineer reads the bend off a design drawing as one over the radius of the circle that best fits the road there.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · bend of a curve · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">29e1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="y = x^2"></span> <span data-tex-inline="\kappa = \dfrac{|y^{\prime\prime}|}{(1 + y^{\prime 2})^{3/2}}\ \ \text{(the bend of a graph)}"></span></span>Trace the parabola as γ(t) = (t, t²). Find its speed at t = 0, and the slope of its speed there. Find why γ is at speed 1 to first order near t = 0. <br>The circle of radius c centred at (0, c) passes through (0, 0). Near x = 0 its lower part is y = c − √(c² − x²) ≈ x²/(2c). Find the c that matches y = x² near 0, and the bend at x = 0 that it gives. <br>Check the graph-bend formula at x = 0. Find the bend at x = 1. <br>Find the radius of the best circle at x = 0 and at x = 1, and where the parabola is most tightly curved.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29e2">
+  <h2 class="sthead"><span class="stno">29e2</span>How a surface bends along a direction</h2>
+  <p class="stands">Stands on 29e1, 29d1, 28c.</p>
+  <p data-pid="08019f">On a patch r(u, v), let n = (r<sub>u</sub> × r<sub>v</sub>)/|r<sub>u</sub> × r<sub>v</sub>|, the unit arrow standing out of the surface. Put L = r<sub>uu</sub> · n, M = r<sub>uv</sub> · n, N = r<sub>vv</sub> · n. The grid [[L, M], [M, N]] is the <i>bending grid</i>.</p>
+  <p data-pid="16c7e4">Normal-bend technique: <b>every curve on the surface through a point, at speed 1, in the direction (u′, v′), bends toward n by exactly L u′² + 2M u′v′ + N v′².</b> The curves that leave in the same direction all agree.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the normal-bend technique">
+\gamma(s) = r(u(s), v(s)),\ \ \gamma^{\prime} = u^{\prime} r_u + v^{\prime} r_v @@ chains (28c)
+\gamma^{\prime\prime} = u^{\prime\prime} r_u + v^{\prime\prime} r_v + u^{\prime 2} r_{uu} + 2u^{\prime}v^{\prime} r_{uv} + v^{\prime 2} r_{vv} @@ chains again, mixed slopes agree (28d)
+r_u \cdot n = r_v \cdot n = 0 @@ n is at right angles to both (cross technique)
+\htmlClass{new}{\gamma^{\prime\prime} \cdot n = L u^{\prime 2} + 2M u^{\prime}v^{\prime} + N v^{\prime 2}} \quad \blacksquare @@ the first two terms drop out; L, M, N by name
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · bending grid · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29e2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="r(u,v) = (\cos u,\ \sin u,\ v)"></span></span>This is the cylinder of radius 1 round the z-axis. Find r<sub>u</sub>, r<sub>v</sub>, E, F, G and the unit arrow n. <br>Find r<sub>uu</sub>, r<sub>uv</sub>, r<sub>vv</sub>, and L, M, N. <br>Find the normal bend in the direction round the cylinder (u′ = 1, v′ = 0), along its length (u′ = 0, v′ = 1), and halfway between, at 45°. <br>The circle round the cylinder has radius 1. Compare its bend with the normal bend round, and find what the sign of the normal bend tells you.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29e3">
+  <h2 class="sthead"><span class="stno">29e3</span>Two main bends, and their product</h2>
+  <p class="stands">Stands on 29e2, 29d2, 28l.</p>
+  <p data-pid="3b552a">Choose coordinates at a point p so that the surface is a graph over its flat map at p: z = f(x, y), with f(0, 0) = 0 and both partial slopes 0 there (28b, 28f). Then at p, E = G = 1, F = 0, n = (0, 0, 1), and L = f<sub>xx</sub>, M = f<sub>xy</sub>, N = f<sub>yy</sub>. The direction at angle θ has normal bend b(θ) = L cos² θ + 2M cos θ sin θ + N sin² θ.</p>
+  <p data-pid="307030">Surface-bend technique: <b>the normal bends at p range between a largest κ₁ and a smallest κ₂, the main bends, and κ₁κ₂ = LN − M². In any coordinates, this product is K = (LN − M²)/(EG − F²).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the surface-bend technique">
+b(\theta) = \tfrac{L+N}{2} + \tfrac{L-N}{2}\cos 2\theta + M \sin 2\theta @@ double technique (21): cos² θ = (1 + cos 2θ)/2, sin² θ = (1 − cos 2θ)/2
+\text{largest and least: } \tfrac{L+N}{2} \pm \sqrt{\big(\tfrac{L-N}{2}\big)^2 + M^2} @@ a cos t + b sin t = √(a² + b²) cos(t − t₀), by the difference technique (21) with (a, b) out and round (21·cb20)
+\kappa_1 \kappa_2 = \big(\tfrac{L+N}{2}\big)^2 - \big(\tfrac{L-N}{2}\big)^2 - M^2 = LN - M^2 @@ difference of squares
+\text{in other coordinates, } g \mapsto J^{\mathsf T} g J \text{ and the bending grid the same way} @@ ruler-change (29d3); for the bending grid, chains give the second slopes as Jᵀ-mixes plus arrows along r_u and r_v, which n drops
+\htmlClass{new}{K = \frac{LN - M^2}{EG - F^2} = \kappa_1\kappa_2} \quad \blacksquare @@ det-product (27e), side-turn (27g): det(JᵀAJ)/det(JᵀgJ) = det A / det g
+  </pre>
+  <p data-pid="c27d06">K is the <i>surface bend</i>. Accepted name: <i>Gaussian curvature</i>. Its sign is 28l’s test. Positive: both main bends the same way, a bowl or a dome, like a ball, K = 1/R². Zero: one main bend is 0, like a tube. Negative: they bend opposite ways, a saddle, like z = xy, where K = −1 at the centre.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · the surface bend · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29e3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="z = x^2 + 3y^2"></span> <span data-tex-inline="z = xy"></span> <span data-tex-inline="z = x^2"></span> <span data-tex-inline="z = R - \sqrt{R^2 - x^2 - y^2}"></span></span>At the origin each surface is a graph over its flat map, with both partial slopes 0. For each of the first three, find L, M, N, the two main bends and K. <br>Find which of the three is a bowl, which a saddle and which folds like a tube. <br>For z = xy, find b(θ), and the directions θ of its largest and least normal bends. <br>Find L, M, N and K at the bottom of the fourth, the sphere of radius R.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29e4">
+  <h2 class="sthead"><span class="stno">29e4</span>The remarkable technique</h2>
+  <p class="stands">Stands on 29e3, 29d1, 27i, 27e, 27g, 28d.</p>
+  <p data-pid="d9cdd6">L, M and N look outside the surface: they use n. So does K, it seems. It does not.</p>
+  <p data-pid="91ed88">Remarkable technique: <b>K can be computed from E, F, G and their first and second partial slopes alone.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the remarkable technique">
+W = |r_u \times r_v| = \sqrt{EG - F^2},\ \ L = \frac{\det[\,r_{uu}, r_u, r_v\,]}{W} @@ ruler-area (29d2); a · (b × c) written out is the 3 × 3 determinant (27)
+(LN - M^2)\,W^2 = \det[\,r_{uu}, r_u, r_v\,]\det[\,r_{vv}, r_u, r_v\,] - \det[\,r_{uv}, r_u, r_v\,]^2 @@ the same for M and N
+= \det P - \det Q,\ \ P = A^{\mathsf T}B,\ \ Q = C^{\mathsf T}C @@ det-product (27e) and side-turn (27g); A = [r_uu r_u r_v], B = [r_vv r_u r_v], C = [r_uv r_u r_v]
+r_{uu}\cdot r_u = \tfrac12 E_u,\ \ r_{uv}\cdot r_u = \tfrac12 E_v,\ \ r_{uv}\cdot r_v = \tfrac12 G_u,\ \ r_{vv}\cdot r_v = \tfrac12 G_v @@ moving-dot (27i): E_u = 2 r_uu · r_u, and so on
+r_{uu}\cdot r_v = F_u - \tfrac12 E_v,\ \ r_{vv}\cdot r_u = F_v - \tfrac12 G_u @@ F_u = r_uu · r_v + r_u · r_uv
+r_{uu}\cdot r_{vv} - r_{uv}\cdot r_{uv} = F_{uv} - \tfrac12 E_{vv} - \tfrac12 G_{uu} @@ slope of the last line’s parts; the r_u · r_uvv terms cancel (28d)
+P,\ Q \text{ share the lower right } 2\times 2 \text{ block } [[E, F], [F, G]] @@ every other entry is in the three lines above, except the two corners
+\det P - \det Q = (P_{11} - Q_{11})(EG - F^2) + (\text{entries from the lines above}) @@ expand both along the first row: the corners meet the same cofactor
+\htmlClass{new}{K = \frac{\det P - \det Q}{(EG - F^2)^2} \text{ is built from } E, F, G \text{ and their slopes}} \quad \blacksquare @@ the corner difference is the line before last
+  </pre>
+  <p data-pid="3d922e">So a creature in the surface, with a tape measure and nothing else, can find K. Two surfaces with the same ruler have the same K at matching points. The tube and the flat sheet share a ruler, and both have K = 0. A ball has K = 1/R², so no piece of it has the flat sheet’s ruler. That is why every flat map of the earth stretches something.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · the remarkable technique · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29e4.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="r(\varphi,\lambda) = R(\cos\varphi\cos\lambda,\ \cos\varphi\sin\lambda,\ \sin\varphi)"></span> <span data-tex-inline="u = \varphi,\ \ v = \lambda"></span></span>Find E, F, G and their partial slopes. <br>Find r<sub>φφ</sub> · r<sub>φ</sub>, r<sub>φλ</sub> · r<sub>φ</sub>, r<sub>φλ</sub> · r<sub>λ</sub>, r<sub>λλ</sub> · r<sub>λ</sub>, r<sub>φφ</sub> · r<sub>λ</sub> and r<sub>λλ</sub> · r<sub>φ</sub> straight from the patch. Check each against the lines of the proof. <br>Find r<sub>φφ</sub> · r<sub>λλ</sub> − r<sub>φλ</sub> · r<sub>φλ</sub> straight from the patch, and check it against F<sub>φλ</sub> − ½E<sub>λλ</sub> − ½G<sub>φφ</sub>. <br>Write P and Q. Find det P − det Q, and K = (det P − det Q)/(EG − F²)².</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29e5">
+  <h2 class="sthead"><span class="stno">29e5</span>A ruler with one long direction</h2>
+  <p class="stands">Stands on 29e4.</p>
+  <p data-pid="89e87b">Many rulers can be written with E = 1 and F = 0, so ds² = du² + G dv². Then u is distance along curves that leave at right angles to one line, or out from one point. Put g = √G.</p>
+  <p data-pid="79ebba">Straight-out technique: <b>for the ruler ds² = du² + g² dv², the surface bend is K = −g<sub>uu</sub>/g.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the straight-out technique">
+E = 1,\ F = 0:\ \ P_{12} = P_{13} = 0,\ \ Q_{12} = 0,\ \ Q_{13} = \tfrac12 G_u @@ the corner identities of 29e4
+\det P = P_{11}\,G,\ \ \det Q = Q_{11}\,G - \tfrac14 G_u^2 @@ expand along the first row
+\det P - \det Q = -\tfrac12 G\,G_{uu} + \tfrac14 G_u^2 @@ the corner difference is −½G_uu
+G = g^2:\ \ -\tfrac12 g^2(2g_u^2 + 2g\,g_{uu}) + g^2 g_u^2 = -g^3 g_{uu} @@ slopes of g², twice
+\htmlClass{new}{K = \frac{-g^3 g_{uu}}{g^4} = -\frac{g_{uu}}{g}} \quad \blacksquare @@ the remarkable technique, EG − F² = g²
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: three rulers, three bends">
+\text{flat, from a point: } g = u \Rightarrow K = 0 @@ polar coordinates (29d3)
+\text{sphere, from the pole: } g = R\sin(u/R) \Rightarrow K = 1/R^2 @@ u = R × (the angle from the pole)
+\text{disc plane, from the centre: } g = \tfrac12(e^{u} - e^{-u}) \Rightarrow K = -1 @@ 29d4 with ρ in terms of distance u; g is its own second slope
+  </pre>
+  <p data-pid="d90dcb">Flat, round and saddle again, as in 29c. The flat plane has K = 0, the sphere K &gt; 0 and the disc plane K = −1 at every point. The three geometries of the parallel question are the three signs of the surface bend.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · one long direction · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29e5.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="ds^2 = \dfrac{4(dx^2 + dy^2)}{(1 - x^2 - y^2)^2}"></span> <span data-tex-inline="x = \rho\cos\theta,\ \ y = \rho\sin\theta"></span></span>Write the disc ruler in ρ and θ, using the polar grid of 29d3.1. Find du, the ruler step straight out, in terms of dρ, and g with ds² = du² + g² dθ². <br>From u = ln((1 + ρ)/(1 − ρ)) (29d4), find ρ in terms of e<sup>u</sup>. Then write g = 2ρ/(1 − ρ²) in terms of e<sup>u</sup>. <br>Find K = −g<sub>uu</sub>/g. <br>Find K for a sphere of radius 6371 km, the earth, in units of 1/km². Find the radius of a sphere with K = 1/km².</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29e6">
+  <h2 class="sthead"><span class="stno">29e6</span>Illegal moves</h2>
+  <p class="stands">Stands on 29e1 to 29e5.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{a tube is curved, so its surface bend is not } 0\,? @@ one main bend is 0, so their product is 0
+K = L N - M^2 \text{ in every coordinates}\,? @@ only where the ruler grid is the identity; in general divide by EG − F²
+\text{the bend of a curve is } |\gamma^{\prime\prime}(t)| \text{ for any tracing}\,? @@ only at speed 1; a faster tracing gives a larger second slope
+\text{K uses } n, \text{ so it depends on the space around the surface}\,? @@ the remarkable technique: E, F, G alone fix it
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29e6.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="r(u,v) = (\cos u,\ \sin u,\ v)"></span></span>Find the two main bends of the cylinder at a point, from 29e2.1, and their product. <br>Find how a surface that is curved can still have surface bend 0.</li><li><span class="givens"><span data-tex-inline="r(\varphi,\lambda) = R(\cos\varphi\cos\lambda,\ \cos\varphi\sin\lambda,\ \sin\varphi)"></span> <span data-tex-inline="L = R,\ \ M = 0,\ \ N = R\cos^2\varphi"></span></span>Find E, F, G, LN − M² and (LN − M²)/(EG − F²) at latitude 60°. <br>Find which of the two is 1/R², and why the other changes with latitude.</li><li><span class="givens"><span data-tex-inline="\gamma(t) = (r\cos 2t,\ r\sin 2t)"></span></span>Find the speed of this tracing, and |γ″(t)|. <br>Compare |γ″(t)| with the bend 1/r. Find which tracing the curve-bend technique asks for, and why the bend should not depend on the tracing.</li><li><span class="givens"><span data-tex-inline="\text{flat: } (u,\ v,\ 0)"></span> <span data-tex-inline="\text{cylinder: } (\cos u,\ \sin u,\ v)"></span></span>Find E, F, G for both patches, and n for both. <br>Find whether n is the same on the two, and whether K can differ. Find K for each.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">29e.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="ds^2 = du^2 + g(u)^2\,dv^2"></span></span>Build a straight-out ruler with K = 4 at every point, and one with K = −¼. Check each with the straight-out technique. <br>Find the radius of the sphere with K = 4. <br>Build a ruler with K = −1 that is not the disc plane’s: try g = e<sup>−u</sup>. Find the length of the curve u = 5, with v from 0 to 2π, in this ruler and in the disc plane’s ruler g = ½(e<sup>u</sup> − e<sup>−u</sup>).</div>
+  <div class="chq"><span class="chid">29e.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="z = x^3 - 3xy^2"></span></span>This surface has three dips round the origin. Find L, M, N at the origin, every normal bend b(θ) there, and K. <br>Find its height on the circle of radius ρ round the origin, as a function of θ, and its height in the directions θ = 0, 60° and 120°. <br>Every normal bend at the origin is 0. Find whether the surface is flat near the origin, and what the bends at one point cannot see.</div>
+  <div class="chq"><span class="chid">29e.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="r(u,v) = (u\cos v,\ u\sin v,\ v)"></span> <span data-tex-inline="q(u,v) = (u\cos v,\ u\sin v,\ \ln u),\ \ u &gt; 0"></span></span>Two surfaces with the same ruler have the same K at matching points. Turn it round: if K is the same at matching points, must the ruler be the same? <br>Find E, F, G for both patches. <br>Find K for the first by the straight-out technique, with g = √(1 + u²). Find K for the second from L, M, N. <br>Find whether the matching (u, v) ↦ (u, v) between the two keeps lengths.</div>
+  <div class="chq"><span class="chid">29e.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="r(x,y) = (x,\ y,\ f(x,y))"></span></span>Prove the surface-bend formula for a graph another way, without first moving the point to where both partial slopes are 0. Find E, F, G, n, L, M and N for this patch, and show K = (f<sub>xx</sub>f<sub>yy</sub> − f<sub>xy</sub>²)/(1 + f<sub>x</sub>² + f<sub>y</sub>²)². <br>Use it on the lower half of the sphere, z = −√(R² − x² − y²), at every point with x² + y² &lt; R². <br>Use it on the surface of 29e.4.2 at (1, 0), where its slopes are not 0.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r29d.html">← 29d · the ruler that changes</a><a href="r29f.html">29f · total curvature counts holes →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The bend of a curve is its curvature κ, and 1/κ its radius of curvature. The bending grid is the second fundamental form, with coefficients L, M, N (also written e, f, g). The normal bend is the normal curvature, the main bends are the principal curvatures, and the formula for them in a direction is Euler’s formula (1760). K is the Gaussian curvature. The remarkable technique is Gauss’s Theorema Egregium, “the remarkable theorem”; the formula for K from det P − det Q is the Brioschi formula. Surfaces with the same ruler are isometric.</p>
+  <h3>Who said it first</h3>
+  <p>Leonhard Euler found how the normal curvature varies with direction in 1760. Carl Friedrich Gauss defined the curvature of a surface by the area its normals sweep, proved that it depends only on E, F, G, and named the result the Theorema Egregium in his Disquisitiones generales circa superficies curvas of 1827. Francesco Brioschi put the formula in its determinant form in the 1850s.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'unit speed',t:R`|T| = 1`,n:`Direction only.`},
+  {k:'ember',kl:'turn rate',t:R`\kappa = |T^{\prime}|`,n:`How fast it turns.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{circle: } 1/r}`,n:`Small circles bend more.`}
+],{title:'The slides · bend of a curve · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'acceleration',t:R`\gamma^{\prime\prime}`,n:`Five terms.`},
+  {k:'ember',kl:'drop',t:R`r_u\cdot n = r_v \cdot n = 0`,n:`Two go.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{L u^{\prime 2} + 2M u^{\prime}v^{\prime} + N v^{\prime 2}}`,n:`Direction decides the bend.`}
+],{title:'The slides · bending grid · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'normal bends',t:R`b(\theta)`,n:`One for each direction.`},
+  {k:'ember',kl:'extremes',t:R`\kappa_1,\ \kappa_2`,n:`Largest and least.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{K = \frac{LN-M^2}{EG-F^2}}`,n:`Their product.`}
+],{title:'The slides · the surface bend · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'outside',t:R`L = \frac{\det[r_{uu},r_u,r_v]}{W}`,n:`n, written as a determinant.`},
+  {k:'ember',kl:'multiply',t:R`\det P - \det Q`,n:`Products become dot products.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{K \text{ from } E, F, G}`,n:`The ruler alone reads the bend.`}
+],{title:'The slides · the remarkable technique · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'ruler',t:R`ds^2 = du^2 + g^2 dv^2`,n:`Distance straight out.`},
+  {k:'ember',kl:'bend',t:R`K = -g_{uu}/g`,n:`One second slope.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{0,\ 1/R^2,\ -1}`,n:`Flat, round, saddle.`}
+],{title:'The slides · one long direction · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Perspective</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r29l.html">← 29l the best path, by hand</a><a href="r29then.html">next: 29·then does nature take the laziest path? →</a></p>
+  <div class="tags"><span class="tag tech">29m · technique</span></div>
+  <h1>Perspective</h1>
+  <p>Stand between the rails of a straight railway and look along it. The rails never meet, yet in your eye, and in any photograph, they run together at one point on the horizon. Painters in Florence worked out the rule six hundred years ago by looking through a window and tracing what they saw on the glass. This step does the same with arrows. Every straight line in the world is painted as a straight line, and lines that run the same way are painted running into one point. Taking those meeting points seriously gives a plane with extra points far off, one for each direction, where any two lines meet, much as on the sphere. Then the moves of a painter are found, and one number made from four points on a line that every such move keeps, so that a photograph can be measured.</p>
+  <p class="gesture">A window in front of the eye paints each straight line as a straight line, and lines with the same direction as lines through one vanishing point. Adding a point far off for each direction gives a plane where any two lines meet in one point, found by a cross product. The painter’s moves keep one ratio of four points on a line.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r18c.html">18c</a> (lines, and the parallel-through-a-point technique), <a href="r27i.html">27i</a> (the cross technique), <a href="r27e.html">27e</a> (the nonzero-det technique), <a href="r25f.html">25f</a> (the four-number technique), <a href="r10.html">rung 10</a> (limits) and <a href="r29b.html">29b</a> (lines on a sphere always meet). <a href="r29then.html">29·then</a> asks whether nature takes the laziest path.</p></div>
+</header>
+
+<section class="class step" data-step="29m1">
+  <h2 class="sthead"><span class="stno">29m1</span>The painter’s window</h2>
+  <p class="stands">Stands on 18c (lines), 27i3 (the cross technique) and rung 10 (limits).</p>
+  <p data-pid="3d78ff">Put the eye at O and a window, the plane z = 1, in front of it. A point X = (x, y, z) with z &gt; 0 is painted where the line from the eye to X crosses the window, at the picture point (x/z, y/z). Write the window’s two places as u across and w up. A line of the world runs X(t) = P + tv, with P on it and v its direction.</p>
+  <p data-pid="9a8900">Vanishing-point technique: <b>let a line X(t) = P + tv miss the eye, with v₃ &gt; 0. Its picture lies on one line of the window, and as t grows the picture heads to (v₁/v₃, v₂/v₃), which depends on v alone. So lines of the world that run the same way are painted running into one point, their vanishing point.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the vanishing-point technique">
+n = P \times v \ne 0 @@ the line misses O, so P and v are not along one line (27i3)
+n\cdot X(t) = n\cdot P + t\,n\cdot v = 0 @@ the cross is at right angles to P and to v (27i3)
+n\cdot\big(\tfrac{x}{z},\ \tfrac{y}{z},\ 1\big) = \tfrac{1}{z}\,n\cdot X = 0 @@ divide by z &gt; 0: every picture point has n₁u + n₂w + n₃ = 0
+n_1, n_2 \text{ not both } 0 @@ otherwise n₃ ≠ 0 and n · v = n₃v₃ = 0, against v₃ &gt; 0
+\Big(\tfrac{P_1 + tv_1}{P_3 + tv_3},\ \tfrac{P_2 + tv_2}{P_3 + tv_3}\Big) \to \Big(\tfrac{v_1}{v_3},\ \tfrac{v_2}{v_3}\Big) @@ divide top and bottom by t, and let t grow (rung 10)
+\htmlClass{new}{\text{the picture is part of a line, running to } (v_1/v_3,\ v_2/v_3)} \quad \blacksquare @@ the lines above; the end point depends on v alone
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: a railway">
+\text{ground } y = -1.6,\ \ \text{rails } x = \pm 0.7175,\ \ v = (0, 0, 1) @@ an eye 1.6 m up; standard gauge is 1.435 m between the rails
+\text{rail at } z:\ \ \big(\pm\tfrac{0.7175}{z},\ -\tfrac{1.6}{z}\big) \to (0, 0) @@ the vanishing-point technique: both rails run to one point
+\text{sleepers at } z = 2, 4, 6, 8:\ \ w = -0.8,\ -0.4,\ -0.267,\ -0.2 @@ equal steps on the ground, shrinking steps in the picture
+v = (v_1, 0, v_3) \text{ on level ground}:\ \ \text{vanishing point } (v_1/v_3,\ 0) @@ every level direction
+\htmlClass{new}{\text{every level line vanishes on the horizon } w = 0,\ \text{at eye height}} \quad \blacksquare @@ the lines above
+  </pre>
+  <p data-pid="e0d24a">A line with v₃ = 0 runs across the window, square to the line of sight. Its picture never ends at a point, and two such lines that run the same way stay running the same way in the picture. So the upright corners of a building stay upright in a photograph taken level, and they lean together when the camera is tipped up.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the window · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">29m1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{eye } 1.6\ \text{m up},\ \ v = (\sin 30^\circ,\ 0,\ \cos 30^\circ)"></span></span>A straight road on level ground runs at 30° to the right of straight ahead. Find its vanishing point, and check that it lies on the horizon.</li><li><span class="givens"><span data-tex-inline="X = (3,\ -1.6,\ 10),\ \ v = (0, 1, 0)"></span></span>A lamp post stands on the ground 10 m ahead and 3 m to the right. Find the picture of its foot, and the picture of the post. Find whether two such posts are painted running together.</li><li><span class="givens"><span data-tex-inline="P = (1, 0, 2),\ \ Q = (-1, 2, 4),\ \ v = (1, 1, 2)"></span></span>Two lines run through P and through Q, both along v. Find each picture line from n = P × v and n = Q × v, and check that both pass through the vanishing point.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29m2">
+  <h2 class="sthead"><span class="stno">29m2</span>Points at infinity</h2>
+  <p class="stands">Stands on 29m1, 27i3 (the cross technique), 29b1 (the lines-always-meet technique) and 18c.</p>
+  <p data-pid="99e0af">The window point (u, w) is seen along the line through the eye and (u, w, 1). Take that line through O as the point itself. Then every arrow p ≠ 0 names a point, written [p₁ : p₂ : p₃], and p and every multiple sp, s ≠ 0, name the same one. The window points are the [u : w : 1]. The points [p₁ : p₂ : 0] are new: the <i>points at infinity</i>, one for each direction of the window, with a direction and its reverse counted as one. The vanishing point of a direction v is the point [v₁ : v₂ : v₃].</p>
+  <p data-pid="f64be5">A line becomes a plane through O, a · X = 0, written by its normal as [a₁ : a₂ : a₃]. The window line a₁u + a₂w + a₃ = 0 is [a₁ : a₂ : a₃], and it holds the point at infinity [−a₂ : a₁ : 0] of its own direction. The plane z = 0 gives one more line, [0 : 0 : 1], the <i>line at infinity</i>, which holds every point at infinity.</p>
+  <p data-pid="a658f9">Meet-by-cross technique: <b>in the plane with its points at infinity, two different lines [a] and [b] meet in exactly one point, [a × b]; and two different points [p] and [q] lie on exactly one line, [p × q].</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the meet-by-cross technique">
+a, b \text{ not multiples, so } a\times b \ne 0 @@ the cross technique (27i3)
+a\cdot(a\times b) = 0,\ \ b\cdot(a\times b) = 0 @@ the cross is at right angles to each of its arrows: [a × b] is on both lines
+a\cdot x = 0,\ b\cdot x = 0 \ \Rightarrow\ x = t\,(a\times b) @@ two planes through O meet in one line through O, as in the lines-always-meet technique (29b1)
+\text{the point } [p] \text{ is on the line } [a] \iff p\cdot a = 0 @@ the same condition read the other way round
+\htmlClass{new}{\text{one meeting point } [a\times b];\ \ \text{one joining line } [p\times q]} \quad \blacksquare @@ the same lines, with points and lines swapped
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: two parallels meet">
+u - w = 0:\ [1 : -1 : 0],\ \ u - w + 1 = 0:\ [1 : -1 : 1] @@ two parallel lines of the window (18c)
+(1, -1, 0)\times(1, -1, 1) = (-1, -1, 0) @@ the cross technique
+[-1 : -1 : 0] = [1 : 1 : 0] @@ multiply by −1: the same point
+u + w = 2:\ [1 : 1 : -2];\ \ (1, 1, -2)\times(1, -1, 0) = (-2, -2, -2) @@ an ordinary pair, for comparison
+\htmlClass{new}{\text{the parallels meet at infinity along } (1, 1);\ \text{the other pair at } [1 : 1 : 1] = (1, 1)} \quad \blacksquare @@ every pair of different lines meets once
+  </pre>
+  <p data-pid="e3ea84">Each line through O meets the sphere of radius 1 in two opposite points. So this plane is the sphere of 29b with each pair of opposite points taken as one point, and its lines are the great circles. The lines-always-meet technique of 29b1 met in two opposite points; here those two are one. The parallel statement of 18c, proved for ℝ², fails in the larger plane, because its parallels meet at infinity.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · points at infinity · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29m2.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="u + 2w = 4,\ \ 2u + 4w = 1"></span></span>Find where the two lines meet by the meet-by-cross technique, and what kind of point it is.</li><li><span class="givens"><span data-tex-inline="(1, 2),\ \ \text{the point at infinity along } (3, 1)"></span></span>Find the line through them, and check that it passes through (1, 2) and runs along (3, 1).</li><li><span class="givens"><span data-tex-inline="[1 : 0 : 0],\ \ [0 : 1 : 0],\ \ u - w = 3"></span></span>Find the line through the two points at infinity. Then find where it meets the line u − w = 3.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29m3">
+  <h2 class="sthead"><span class="stno">29m3</span>The painter’s moves, and the four-point ratio</h2>
+  <p class="stands">Stands on 29m2, 27e4 (the nonzero-det technique) and 25f4 (the four-number technique).</p>
+  <p data-pid="f3cbc4">A <i>painter’s move</i> sends [p] to [Mp], for a 3 × 3 grid M with det M ≠ 0. It sends lines to lines: if a · p = 0, then b · (Mp) = 0 for b = (M⁻¹)ᵀa, since b · Mp = a · M⁻¹Mp = a · p. Moving the window, tipping the head, and photographing a photograph are all painter’s moves. On one line, with its points written [t : 1] and the point at infinity [1 : 0], a painter’s move onto another line is t ↦ (at + b)/(ct + d) with ad − bc ≠ 0, the four-number maps of 25f4. Lengths are not kept, and neither are ratios of lengths. One number is.</p>
+  <p data-pid="d3900c">Four-point-ratio technique: <b>for four different numbers t₁, t₂, t₃, t₄, the ratio (t₁ − t₃)(t₂ − t₄) / ((t₂ − t₃)(t₁ − t₄)) is kept by every four-number map that sends none of them to infinity.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the four-point-ratio technique">
+f(s) - f(t) = \tfrac{(as + b)(ct + d) - (at + b)(cs + d)}{(cs + d)(ct + d)} @@ f(t) = (at + b)/(ct + d), over one bottom
+f(s) - f(t) = \tfrac{(ad - bc)(s - t)}{(cs + d)(ct + d)} @@ multiply out: the terms acst and bd cancel
+\tfrac{(f_1 - f_3)(f_2 - f_4)}{(f_2 - f_3)(f_1 - f_4)} = \tfrac{(ad - bc)^2 (t_1 - t_3)(t_2 - t_4)\,/\,B}{(ad - bc)^2 (t_2 - t_3)(t_1 - t_4)\,/\,B} @@ fᵢ = f(tᵢ); top and bottom each carry B = (ct₁ + d)(ct₂ + d)(ct₃ + d)(ct₄ + d)
+\htmlClass{new}{\text{the ratio of the } f_i \text{ equals the ratio of the } t_i} \quad \blacksquare @@ cancel (ad − bc)² and B, none of them 0
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: measuring the railway photograph">
+w = -\tfrac{1.6}{z}:\ \ a = 0,\ b = -1.6,\ c = 1,\ d = 0,\ \ ad - bc = 1.6 @@ along the ground between the rails, the window is a four-number map of the distance z (29m1)
+\text{ground } 2, 4, 6, 8:\ \ \tfrac{(2 - 6)(4 - 8)}{(4 - 6)(2 - 8)} = \tfrac{16}{12} = \tfrac43 @@ sleepers 2 m apart
+\text{picture } -0.8, -0.4, -0.267, -0.2:\ \ \tfrac{(-0.533)(-0.2)}{(-0.133)(-0.6)} = \tfrac43 @@ the four-point-ratio technique, checked
+\htmlClass{new}{\text{from three pictured sleepers and } \tfrac43,\ \text{the fourth is found}} \quad \blacksquare @@ one unknown in one sameness
+  </pre>
+  <p data-pid="fc1dcf">So a photograph can be measured. A surveyor who knows that four posts stand equally spaced, or that one stands halfway, reads the ratio 4/3, or another known ratio, off the picture, and finds where an unseen fifth must stand.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · the four-point ratio · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29m3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="f(t) = \tfrac{2t + 1}{t + 1},\ \ t = 0, 1, 2, 3"></span></span>Find the four images and their four-point ratio, and compare it with the ratio of 0, 1, 2, 3.</li><li><span class="givens"><span data-tex-inline="w_1 = -0.9,\ \ w_2 = -0.5,\ \ w_3 = -0.35"></span></span>Three fence posts, equally spaced along a straight level fence that runs away from the camera, are pictured at these heights. Find where the next post is pictured.</li><li><span class="givens"><span data-tex-inline="f(0) = 0,\ \ f(1) = 1,\ \ f(t) \to 2 \text{ as } t \text{ grows}"></span></span>Find a four-number map with these three facts. Find f(2) and f(3), and the four-point ratio of 0, 1, 2, 3 in the picture.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29m4">
+  <h2 class="sthead"><span class="stno">29m4</span>Illegal moves</h2>
+  <p class="stands">Stands on 29m1 to 29m3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{lines that run the same way in the world run the same way in the picture}\,? @@ only when they run square to the line of sight; the rails meet at (0, 0)
+\text{the picture of a midpoint is the midpoint of the picture}\,? @@ the sleeper at 4 m is pictured at −0.4, not halfway between −0.8 and −0.267
+\tfrac{t_1 - t_2}{t_2 - t_3} \text{ is kept by a painter’s move}\,? @@ three points are not enough: four are needed
+[1 : -1 : 0] \text{ and } [-1 : 1 : 0] \text{ are two points at infinity, one at each end}\,? @@ they are multiples, so one point
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29m4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{rails } x = \pm 0.7175,\ \ y = -1.6,\ \ v = (0, 0, 1)"></span></span>Find the two picture lines, and where they meet. <br>Find which lines of the world do run the same way in the picture.</li><li><span class="givens"><span data-tex-inline="\text{sleepers at } z = 2,\ 4,\ 6"></span></span>Find their pictures, the midpoint of the first and third in the picture, and the picture of the midpoint on the ground. <br>Find the slip.</li><li><span class="givens"><span data-tex-inline="t = 2,\ 4,\ 6;\ \ w = -\tfrac{1.6}{t}"></span></span>Find (t₁ − t₂)/(t₂ − t₃) on the ground and in the picture. <br>Find what the third line forgets.</li><li><span class="givens"><span data-tex-inline="u - w = 0,\ \ u - w + 1 = 0"></span></span>Find their meeting point by the cross, once with (1, −1, 0) and once with (−1, 1, 0) for the first line. <br>Find whether the two answers are different points.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">29m.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="p_1 = [4 : 0 : 1],\ \ p_2 = [-2 : 0 : 1],\ \ p_3 = [0 : -1 : 1],\ \ p_4 = [0.5 : -0.5 : 1]"></span></span>A photograph of a floor of square tiles. The tile edges of one way vanish at (4, 0), those of the other way at (−2, 0). One corner of a tile is pictured at (0, −1), and the opposite corner of the same tile at (0.5, −0.5). <br>Build a grid M sending [1 : 0 : 0], [0 : 1 : 0], [0 : 0 : 1] and [1 : 1 : 1] to [p₁], [p₂], [p₃] and [p₄]: take its columns as λ₁p₁, λ₂p₂, λ₃p₃ and find the λ’s. Then find where the corner (2, 3) of the tiling is pictured.</div>
+  <div class="chq"><span class="chid">29m.4.2</span><span class="tagq">edge</span>The vanishing-point technique asks that the line miss the eye and that v₃ &gt; 0. <br>Find the picture of a line through the eye. Find what happens to the picture of a line with v₃ = 0, and of a line with v₃ &lt; 0, as t grows. Find where each of the last two kinds meets the line at infinity.</div>
+  <div class="chq"><span class="chid">29m.4.3</span><span class="tagq">converse</span>Turn the four-point-ratio technique round. Let g send the line with its point at infinity to itself, one to one, and keep the four-point ratio of every four different points. <br>Prove that g is a four-number map. Take the four-number map h with h(g(0)) = 0, h(g(1)) = 1 and h(g(∞)) = ∞ (25f4), and show that h after g leaves every t where it is.</div>
+  <div class="chq"><span class="chid">29m.4.4</span><span class="tagq">reroute</span>Reroute 18c’s parallel-through-a-point technique by the meet-by-cross technique. The parallel to Ax + By = C through P = (p₁, p₂) is the line through [p₁ : p₂ : 1] and the point at infinity of the first line. <br>Find that point as [A : B : C] × [0 : 0 : 1], then the line, and compare with 18c. Find why there is exactly one.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r29l.html">← 29l · the best path, by hand</a><a href="r29then.html">29·then · does nature take the laziest path? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>Painting through the window is central (or linear) perspective, and the picture map is a perspective projection. The vanishing point and the horizon line keep their names; a picture with one vanishing point for its main lines is in one-point perspective. The plane with its points at infinity is the projective plane, ℝP², and [p₁ : p₂ : p₃] are homogeneous coordinates. The points at infinity are also called ideal points, and they lie on the line at infinity. That points and lines can swap roles in every technique is the principle of duality. A painter’s move is a projective transformation (a homography, or collineation). The four-point ratio is the cross-ratio, and the four-number maps on a line are its projective (or Möbius, or linear fractional) maps.</p>
+  <h3>Who said it first</h3>
+  <p>Filippo Brunelleschi showed a painted panel of the Baptistery of Florence, around 1415 to 1420, that matched the building seen through a hole in the panel. Leon Battista Alberti set out the rules for painters in On Painting in 1435, with the window and the point where the lines meet. Girard Desargues wrote in 1639 that parallel lines meet at a point infinitely far away, and treated the conic sections as pictures of a circle. Jean-Victor Poncelet built projective geometry in his Treatise of 1822, begun as a prisoner of war in Saratov in 1813. August Möbius in 1827 and Julius Plücker in 1830 brought in the coordinates that name a point by a whole line of arrows. Pappus of Alexandria knew around 320 CE that a ratio of four points on a line survives the drawing of lines from a point. Poncelet and Joseph Gergonne quarrelled in the 1820s over who first saw duality.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'the plane',t:R`n = P\times v`,n:`Through the eye and the whole line.`},
+  {k:'ember',kl:'the picture',t:R`n_1 u + n_2 w + n_3 = 0`,n:`A line of the window.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\to (v_1/v_3,\ v_2/v_3)}`,n:`One vanishing point per direction.`}
+],{title:'The slides · the window · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'points',t:R`[p_1 : p_2 : p_3]`,n:`A line through the eye.`},
+  {k:'ember',kl:'lines',t:R`[a_1 : a_2 : a_3]`,n:`A plane through the eye.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{[a]\cap[b] = [a\times b]}`,n:`Any two lines meet once.`}
+],{title:'The slides · points at infinity · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'differences',t:R`f(s) - f(t) = \tfrac{(ad - bc)(s - t)}{(cs + d)(ct + d)}`,n:`One bottom.`},
+  {k:'ember',kl:'cancel',t:R`(ad - bc)^2,\ B`,n:`Top and bottom.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\tfrac{(t_1 - t_3)(t_2 - t_4)}{(t_2 - t_3)(t_1 - t_4)}\ \text{kept}}`,n:`A photograph can be measured.`}
+],{title:'The slides · the four-point ratio · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>
