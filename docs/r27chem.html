@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Can every reaction be balanced?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r27nav.html">← 27·nav how does a phone know where it is?</a><a href="r27crypt.html">next: 27·crypt can a grid of numbers scramble letters? →</a></p>
+  <div class="tags"><span class="tag chem">27·chem · chemistry</span></div>
+  <h1>Can every reaction be balanced?</h1>
+  <p>Can every reaction be balanced? A propane barbecue on a deck in Portland burns its fuel with the air, and out come carbon dioxide and water. Chemists write that change with a number in front of each kind of molecule, so that no atom appears from nowhere and none is lost. For propane the numbers are easy to find by trying. For the water that runs out of the old copper mines at Butte, Montana, turning orange and sour, the reaction holds six kinds of particle and five things to keep, and trying stops working. Worse, some reactions seem to have many right sets of numbers, and some have none at all. What makes the question hard is that balancing looks like a craft, learned by feel, and a craft cannot tell you when to stop looking. This page turns it into rung twenty-seven’s straight samenesses: one sameness for each element, one more for the charge, and the balances are exactly the arrows a grid sends to zero. Then the dimension of that space decides everything: one balance up to stretching, many, or none.</p>
+  <p class="gesture">Count each element’s atoms on both sides, and ask that the counts agree. That is one straight sameness for each element, and one more for the charge when charged particles take part. The lists of amounts that keep them all are what one grid sends to zero, so they add and stretch, and form a space of arrows. When that space has dimension one, every balance is a stretch of one, and there is a single balance in least whole numbers. When it has dimension two or more, the reaction is a mix of separate reactions, and counting atoms cannot say in what proportion: the fire or the flask decides. When the grid sends only the zero list to zero, there is no balance, and some species has been left out. A balance with a negative amount is a balance with that species on the other side.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r27a.html">27a</a> (spaces of arrows; the inside-space technique), <a href="r27b.html">27b</a> (free arrows and bases), <a href="r27c.html">27c</a> (the nothing-sent and lost-plus-reached techniques), <a href="r27j.html">27j</a> (solving systems by elimination), <a href="r27e.html">27e</a> (the determinant), <a href="r04i.html">4i</a> (the greatest-common-divisor technique) and <a href="r05chem.html">5·chem</a> (counting what is too small to see). 27·crypt asks whether a grid of numbers can scramble letters.</p></div>
+</header>
+
+<section class="class step" data-step="27chem1">
+  <h2 class="sthead"><span class="stno">27chem1</span>One sameness for each element</h2>
+  <p class="stands">Stands on 5·chem (atoms and molecules counted), 27c (the nothing-sent technique) and 27a (the inside-space technique).</p>
+  <p data-pid="0c4539">A reaction is written with an unknown amount in front of each species, here x₁ to x₄. Atoms are not made or destroyed in a reaction: that is a law, measured for more than two hundred years. So each element gives a sameness: its atoms on the left equal its atoms on the right.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the atom-grid technique">
+x_1\,\text{C}_3\text{H}_8 + x_2\,\text{O}_2 \to x_3\,\text{CO}_2 + x_4\,\text{H}_2\text{O} @@ propane burning in a barbecue
+\text{C}: 3x_1 = x_3,\ \ \text{H}: 8x_1 = 2x_4,\ \ \text{O}: 2x_2 = 2x_3 + x_4 @@ count each element on both sides
+A\,x = 0,\ \ A = \begin{pmatrix} 3 & 0 & -1 & 0 \\ 8 & 0 & 0 & -2 \\ 0 & 2 & -2 & -1 \end{pmatrix} @@ one row per element, one column per species; the right side moved across with a minus
+\htmlClass{new}{\text{the balances are what } A \text{ loses: a space of arrows}} \quad \blacksquare @@ the nothing-sent technique (27c1): what a straight map loses is a space
+  </pre>
+  <p data-pid="995b53">Atom-grid technique: <b>a list of amounts balances a reaction exactly when the reaction’s atom grid sends it to zero, so balances add and stretch, and together they form a space of arrows.</b> Two balances added give a balance. A balance stretched gives a balance. The question “can it be balanced?” becomes a question about what one grid loses.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · atom grid · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">27·chem.1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a Douglas fir in the Cascades making sugar: x₁ CO₂ + x₂ H₂O → x₃ C₆H₁₂O₆ + x₄ O₂</span></span>Find the three samenesses and the atom grid. <br>Find whether (6, 6, 1, 6) is a balance, and whether (12, 12, 2, 12) is.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27chem2">
+  <h2 class="sthead"><span class="stno">27chem2</span>One balance, up to stretching</h2>
+  <p class="stands">Stands on 27·chem.1, 27j (elimination), 27c (the lost-plus-reached technique) and 4i (the greatest-common-divisor technique).</p>
+  <p data-pid="500834">Solve the propane samenesses by clearing one unknown at a time (27j). Then count the dimension of what the grid loses.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the one-up-to-scale technique">
+x_3 = 3x_1,\ \ x_4 = 4x_1 @@ the C and H rows
+2x_2 = 6x_1 + 4x_1 \ \Rightarrow\ x_2 = 5x_1 @@ the O row, with x₃ and x₄ cleared
+x = x_1\,(1, 5, 3, 4) @@ every balance is a stretch of one list
+\dim(\text{lost}) = 4 - 3 = 1 @@ lost-plus-reached (27c2): the three rows of A are free, so A reaches all lists of three
+\htmlClass{new}{\text{C}_3\text{H}_8 + 5\,\text{O}_2 \to 3\,\text{CO}_2 + 4\,\text{H}_2\text{O}} \quad \blacksquare @@ x₁ = 1 gives whole numbers with no common divisor
+  </pre>
+  <p data-pid="0e1fcb">One-up-to-scale technique: <b>when the atom grid of n species reaches a space of dimension n − 1, every balance is a stretch of one, and exactly one balance has whole amounts, all positive, with no common divisor above 1.</b> Find any balance, clear its fractions by multiplying by their bottoms, and divide by the greatest common divisor of what is left (4i). Charged particles add one row: the charge is kept too.</p>
+  <pre class="lines" data-k="ember" data-label="this page: a reaction with a charge row">
+x_1\,\text{MnO}_4^- + x_2\,\text{Fe}^{2+} + x_3\,\text{H}^+ \to x_4\,\text{Mn}^{2+} + x_5\,\text{Fe}^{3+} + x_6\,\text{H}_2\text{O} @@ purple permanganate, used to measure the iron in a sample
+x_4 = x_1,\ \ x_6 = 4x_1,\ \ x_5 = x_2,\ \ x_3 = 2x_6 = 8x_1 @@ the Mn, O, Fe and H rows
+-x_1 + 2x_2 + x_3 = 2x_4 + 3x_5 @@ the charge row: charges on the left equal charges on the right
+-x_1 + 2x_2 + 8x_1 = 2x_1 + 3x_2 \ \Rightarrow\ x_2 = 5x_1 @@ clear x₃, x₄ and x₅
+\htmlClass{new}{\text{MnO}_4^- + 5\,\text{Fe}^{2+} + 8\,\text{H}^+ \to \text{Mn}^{2+} + 5\,\text{Fe}^{3+} + 4\,\text{H}_2\text{O}} \quad \blacksquare @@ six species, five free rows: one balance up to stretching
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · one balance · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27·chem.2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">the sour orange water at Butte, Montana: x₁ FeS₂ + x₂ O₂ + x₃ H₂O → x₄ Fe²⁺ + x₅ SO₄²⁻ + x₆ H⁺</span></span>Find the five samenesses, counting the charge. <br>Find the balance in least whole numbers.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27chem3">
+  <h2 class="sthead"><span class="stno">27chem3</span>Many balances</h2>
+  <p class="stands">Stands on 27·chem.2, 27b (free arrows and bases) and 27c (the lost-plus-reached technique).</p>
+  <p data-pid="e52118">Wood is mostly carbon, hydrogen and oxygen. Follow its carbon. A flaming fire turns nearly all of it into carbon dioxide. A smouldering fire, as in the peat and duff of a forest floor, sends a larger part out as carbon monoxide. Write both products and see what the atoms allow.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the many-ways technique">
+x_1\,\text{C} + x_2\,\text{O}_2 \to x_3\,\text{CO} + x_4\,\text{CO}_2 @@ carbon burning to both oxides
+\text{C}: x_1 = x_3 + x_4,\ \ \text{O}: 2x_2 = x_3 + 2x_4 @@ two rows, four unknowns
+\dim(\text{lost}) = 4 - 2 = 2 @@ lost-plus-reached (27c2): the two rows are free
+x = s\,(2, 1, 2, 0) + t\,(1, 1, 0, 1) @@ put x₃ = 2s and x₄ = t; the two lists are free, a basis (27b)
+\htmlClass{new}{s:\ 2\,\text{C} + \text{O}_2 \to 2\,\text{CO};\ \ t:\ \text{C} + \text{O}_2 \to \text{CO}_2} \quad \blacksquare @@ every balance is a mix of these two
+  </pre>
+  <p data-pid="4e427b">Many-ways technique: <b>when the balances form a space of dimension two or more, every balance is a mix of free ones, and counting atoms cannot fix the proportions of the mix.</b> The amounts are all positive exactly when s and t are both at least 0, not both 0. Which mix happens is set by the fire: how hot it is, and how much air reaches it. If one carbon in five leaves as carbon monoxide, then per 100 carbons s = 10 and t = 80, and the fire takes 90 O₂. The atoms are kept either way.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · many · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · one fire, many balances</div>
+    <div class="kn"><span class="m">share to CO</span><input type="range" id="ks" min="0" max="1" step="0.01" value="0.2"><output id="os"></output></div>
+    <div id="pl"></div>
+    <div class="cap">Per 100 carbon atoms burned. Ember: the O₂ the fire takes, as the share of carbon leaving as carbon monoxide runs from 0 (all flaming) to 1. Ink: the CO made; teal: the CO₂. Every point is a balance.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27·chem.3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">hydrogen burning in oxygen to water and hydrogen peroxide: x₁ H₂ + x₂ O₂ → x₃ H₂O + x₄ H₂O₂</span></span>Find the dimension of the space of balances, and two free balances that build it. <br>Find which mixes have every amount positive.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27chem4">
+  <h2 class="sthead"><span class="stno">27chem4</span>No balance, and the wrong side</h2>
+  <p class="stands">Stands on 27·chem.1, 27·chem.2 and 27c (the nothing-sent technique).</p>
+  <p data-pid="5c4bbf">Hydrogen peroxide poured on a cut fizzes and leaves water. Write only the water, and try to balance.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the missing-species and wrong-side techniques">
+x_1\,\text{H}_2\text{O}_2 \to x_2\,\text{H}_2\text{O}:\ \ 2x_1 = 2x_2,\ \ 2x_1 = x_2 @@ the H and O rows
+x_2 = x_1 = 2x_1 \ \Rightarrow\ x_1 = x_2 = 0 @@ the grid loses only 0: no balance
+2\,\text{H}_2\text{O}_2 \to 2\,\text{H}_2\text{O} + \text{O}_2 @@ the fizz is oxygen: with it, a balance
+x_1\,\text{CaO} \to x_2\,\text{CaCO}_3 + x_3\,\text{CO}_2:\ \ x = x_1\,(1, 1, -1) @@ the Ca, C and O rows; one balance up to stretching, with a negative amount
+\htmlClass{new}{\text{CaO} + \text{CO}_2 \to \text{CaCO}_3} \quad \blacksquare @@ move the negative species across: lime taking up carbon dioxide as mortar sets
+  </pre>
+  <p data-pid="579919">Missing-species technique: <b>if the atom grid sends only the zero list to zero, the reaction as written has no balance, and some species has been left out.</b> Wrong-side technique: <b>a balance with a negative amount is a balance with that species moved to the other side.</b> So the question “can it be balanced?” always has an answer. Either the grid loses only 0, or it loses a space of dimension one or more. Then each balance says, by its signs, which side each species belongs on.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · none · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27·chem.4.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span class="gtx">KClO₃ → KCl, potassium chlorate heated</span></span>Find whether it balances as written, and what is missing.</li><li><span class="givens"><span class="gtx">CO₂ → CO + C</span></span>Find its balances, and the reaction with every amount positive.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27chem5">
+  <h2 class="sthead"><span class="stno">27chem5</span>Illegal moves</h2>
+  <p class="stands">Stands on 27·chem.1 to 27·chem.4.</p>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{N}_2 + 4\,\text{H}_2 \to 2\,\text{NH}_4 \text{ balances, so it happens}\,? @@ a balance is needed for a reaction, not enough: NH₄ alone is no stable molecule
+\text{H}_2\text{O} \to \text{H}_2\text{O}_2 \text{ balanced by changing the small numbers}\,? @@ that changes the species; only the amounts in front are unknowns
+\text{every reaction has exactly one balance}\,? @@ only when the space of balances has dimension 1
+\tfrac{13}{2}\,\text{O}_2 \text{ is not a balance}\,? @@ it is, for butane; whole numbers are only its stretch by 2
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27·chem.5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{N}_2 + 4\,\text{H}_2 \to 2\,\text{NH}_4"></span></span>Find its atom grid’s balances, and what else a reaction needs.</li><li><span class="givens"><span class="gtx">H₂O → H₂O₂</span></span>Find whether it balances, and what changing the small numbers did.</li><li><span class="givens"><span class="gtx">C + O₂ → CO + CO₂</span></span>Find two balances that are not stretches of each other.</li><li><span class="givens"><span data-tex-inline="x_1\,\text{C}_4\text{H}_{10} + x_2\,\text{O}_2 \to x_3\,\text{CO}_2 + x_4\,\text{H}_2\text{O}"></span></span>Find the balance with x₁ = 1, and the one in least whole numbers.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">27·chem.6.1</span><span class="tagq">build</span>Build a reaction of your own, with three elements and five species, whose space of balances has dimension exactly 2. <br>Find two free balances.</div>
+  <div class="chq"><span class="chid">27·chem.6.2</span><span class="tagq">edge</span><span class="givens"><span class="gtx">x₁ NO₂ → x₂ N₂O₄ + x₃ NO</span></span>Find every balance. <br>Find what it says about the species NO.</div>
+  <div class="chq"><span class="chid">27·chem.6.3</span><span class="tagq">converse</span>The one-up-to-scale technique: if the grid reaches dimension n − 1, every balance is a stretch of one. Turn it round: if every balance is a stretch of one nonzero balance, must the grid reach dimension n − 1?</div>
+  <div class="chq"><span class="chid">27·chem.6.4</span><span class="tagq">reroute</span><span class="givens"><span class="gtx">the propane grid A, three rows and four columns</span></span>Strike one column at a time and take the determinant of the 3 × 3 grid left, with alternating signs. <br>Find that these four numbers are a balance, and why.</div>
+  <div class="chq"><span class="chid">27·chem.6.5</span><span class="tagq">seam</span>A metal heated in air gains weight as it turns to a powder. One school held that burning releases a substance from the metal, and so that substance must weigh less than nothing. Another weighed everything in sealed vessels and held that the metal had taken something from the air, and that weight is never made or lost. <br>Which account fits the atom-grid technique, and could the first be rescued by a careful choice of its substance’s weight?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r27nav.html">← 27·nav · how does a phone know where it is?</a><a href="r27crypt.html">27·crypt · can a grid of numbers scramble letters? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The amounts in front are stoichiometric coefficients, and a reaction with them is a balanced equation. The atom grid is the formula matrix (or element matrix), and the space of balances is its null space. Keeping atoms is the law of conservation of mass; keeping charge, conservation of charge. A reaction with many balances is a system of independent reactions, and the dimension of the space of balances is their number. Reactions in which electrons move, like the permanganate one, are redox reactions; the sour water at Butte is acid mine drainage. Carbon burning to both oxides is incomplete combustion; carbon dioxide taking up carbon to make carbon monoxide is the Boudouard reaction.</p>
+  <h3>Who said it first</h3>
+  <p>Antoine Lavoisier weighed reactions in sealed vessels in the 1770s, and in 1789 stated that matter is neither made nor destroyed. Jeremias Richter counted the amounts in which substances combine, and named the study stoichiometry, in 1792. John Dalton’s atoms (1808) explained why the amounts are whole numbers. Chemical engineers set balancing out as a question about the rank of the formula matrix in the twentieth century, and with it the case of many balances. In 27·chem.6.5, Georg Stahl’s phlogiston, the substance released in burning, was defended in the 1770s by some with a negative weight; Lavoisier’s weighing ended it.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="27·chem: a worked “proof”, not allowed">
+x_1\,\text{C} + x_2\,\text{O}_2 \to x_3\,\text{CO} + x_4\,\text{CO}_2 @@ fine
+x_1 = x_3 + x_4,\ \ 2x_2 = x_3 + 2x_4 @@ fine
+\text{so } 2\,\text{C} + \tfrac32\,\text{O}_2 \to \text{CO} + \text{CO}_2 \text{ is the balance} @@ not allowed: it is one balance of a space of dimension 2; the fire, not the atoms, picks the mix
+  </pre>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+const V=c=>'var('+c+')';
+// plot(series, xr, yr, opts): series = [{pts:[[x,y],...], c:'--ember', w:1.6, dash:''}]; returns svg string
+function plot(series, xr, yr, o){ o=o||{}; const W=360,H=o.H||210,L=34,B=22,T=8,Rr=8;
+  const sx=x=>L+(x-xr[0])/(xr[1]-xr[0])*(W-L-Rr), sy=y=>H-B-(y-yr[0])/(yr[1]-yr[0])*(H-B-T);
+  let s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;max-width:440px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  (o.yt||[]).forEach(y=>{ s+='<line x1="'+L+'" x2="'+(W-Rr)+'" y1="'+sy(y)+'" y2="'+sy(y)+'" style="stroke:'+V('--grid')+';stroke-width:0.6"/><text x="'+(L-3)+'" y="'+(sy(y)+3)+'" text-anchor="end" style="font:9px var(--mono);fill:'+V('--muted')+'">'+y+'</text>'; });
+  (o.xt||[]).forEach(x=>{ s+='<text x="'+sx(x)+'" y="'+(H-8)+'" text-anchor="middle" style="font:9px var(--mono);fill:'+V('--muted')+'">'+x+'</text>'; });
+  s+='<line x1="'+L+'" x2="'+L+'" y1="'+T+'" y2="'+(H-B)+'" style="stroke:'+V('--ink')+';stroke-width:0.8"/><line x1="'+L+'" x2="'+(W-Rr)+'" y1="'+(H-B)+'" y2="'+(H-B)+'" style="stroke:'+V('--ink')+';stroke-width:0.8"/>';
+  series.forEach(se=>{ const cl=v=>Math.max(yr[0]-0.05*(yr[1]-yr[0]),Math.min(yr[1]+0.05*(yr[1]-yr[0]),v));
+    const d=se.pts.filter(p=>isFinite(p[1])).map((p,i)=>(i?'L':'M')+sx(p[0]).toFixed(1)+','+sy(cl(p[1])).toFixed(1)).join('');
+    s+='<path d="'+d+'" style="fill:none;stroke:'+V(se.c||'--ember')+';stroke-width:'+(se.w||1.6)+(se.dash?';stroke-dasharray:'+se.dash:'')+'"/>'; });
+  (o.dots||[]).forEach(p=>{ s+='<circle cx="'+sx(p[0])+'" cy="'+sy(p[1])+'" r="2.6" style="fill:'+V(p[2]||'--ember')+'"/>'; });
+  if(o.xl) s+='<text x="'+(W-Rr)+'" y="'+(H-B-4)+'" text-anchor="end" style="font:9px var(--mono);fill:'+V('--muted')+'">'+o.xl+'</text>';
+  if(o.yl) s+='<text x="'+(L+4)+'" y="'+(T+9)+'" style="font:9px var(--mono);fill:'+V('--muted')+'">'+o.yl+'</text>';
+  return s+'</svg>'; }
+
+function draw(){ const f=+$('ks').value; $('os').textContent=fm(100*f,0)+'%';
+  const O=f2=>100-50*f2; const P=[],C1=[],C2=[]; for(let k=0;k<=100;k++){ const g=k/100; P.push([g,O(g)]); C1.push([g,100*g]); C2.push([g,100-100*g]); }
+  $('pl').innerHTML=plot([{pts:C1,c:'--ink',w:1.2},{pts:C2,c:'--teal',w:1.2},{pts:P,c:'--ember'}],[0,1],[0,105],{xt:[0,0.2,0.4,0.6,0.8,1],yt:[0,25,50,75,100],dots:[[f,O(f),'--ember']],xl:'share to CO'});
+  const s=50*f, t=100-100*f; const v=$('vd'); v.className='verdict';
+  v.textContent='100 C + '+fm(O(f),1)+' O₂ → '+fm(100*f,1)+' CO + '+fm(100-100*f,1)+' CO₂. As a mix: s = '+fm(s,1)+' of 2C + O₂ → 2CO, and t = '+fm(t,1)+' of C + O₂ → CO₂.'; }
+$('ks').oninput=draw; draw();
+window.__pic={set:(f)=>{ $('ks').value=f; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'count',t:R`\text{C}: 3x_1 = x_3`,n:`One sameness per element.`},
+  {k:'ember',kl:'lost',t:R`\htmlClass{new}{A\,x = 0}`,n:`Balances form a space.`}
+],{title:'The slides · atom grid · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'solve',t:R`x = x_1\,(1, 5, 3, 4)`,n:`Clear one unknown at a time.`},
+  {k:'ember',kl:'scale',t:R`\htmlClass{new}{\dim = n - (n-1) = 1}`,n:`One, up to stretching.`}
+],{title:'The slides · one balance · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'two rows',t:R`\dim = 4 - 2 = 2`,n:`Room for a mix.`},
+  {k:'ember',kl:'mix',t:R`\htmlClass{new}{x = s\,u + t\,v}`,n:`The fire picks s and t.`}
+],{title:'The slides · many · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'lost only 0',t:R`A\,x = 0 \Rightarrow x = 0`,n:`A species is missing.`},
+  {k:'ember',kl:'sign',t:R`\htmlClass{new}{(1, 1, -1)}`,n:`Move it across.`}
+],{title:'The slides · none · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`\text{balanced} \Rightarrow \text{happens}\,?`,n:`Needed, not enough.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

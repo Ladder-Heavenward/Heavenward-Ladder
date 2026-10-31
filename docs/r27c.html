@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Maps that keep adding and stretching</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r27b.html">← 27b dimension</a><a href="r27d.html">next: 27d matrices as maps →</a></p>
+  <div class="tags"><span class="tag proof">27c · proof</span></div>
+  <h1>Maps that keep adding and stretching</h1>
+  <p>Some functions between spaces of arrows respect the arrows. Send a sum and you get the sum of what each part was sent to. Stretch first or stretch after, it comes to the same. Turns of the plane do this, and so does taking a slope. Such a map loses some arrows to zero and reaches some part of the far space. This step proves that what it loses and what it reaches always add up to the dimension it started with.</p>
+  <p class="gesture">A map that keeps adding and stretching sends a space of dimension n somewhere. The dimension of what it sends to zero, plus the dimension of what it reaches, is n.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r27b.html">27b</a> (bases and dimension) and <a href="r27a.html">27a</a> (spaces inside spaces). <a href="r27d.html">27d</a> writes such maps as grids of numbers.</p></div>
+</header>
+
+<section class="class step" data-step="27c1">
+  <h2 class="sthead"><span class="stno">27c1</span>What a map loses and reaches</h2>
+  <p class="stands">Stands on 27a2.</p>
+  <p data-pid="726080">A map L from a space V to a space W is <i>straight</i> if L(u + v) = L(u) + L(v) and L(t·v) = t·L(v) for all arrows and numbers. Accepted name: a <i>linear map</i>. The arrows it sends to 0 are what it <i>loses</i>; the arrows L(v) are what it <i>reaches</i>.</p>
+  <p data-pid="dd9b36">Nothing-sent technique: <b>for a straight map L, what it loses is a space inside V, what it reaches is a space inside W, and L is one-to-one exactly when it loses only 0.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the nothing-sent technique">
+L(0) = L(0\cdot 0) = 0\cdot L(0) = 0 @@ the zero-stretch technique (27a1), twice
+L(u) = L(v) = 0 \Rightarrow L(u + v) = 0,\ L(t\cdot u) = 0 @@ L keeps adding and stretching
+L(u) + L(v) = L(u+v),\ \ t\cdot L(v) = L(t\cdot v) @@ the same, read from the far side
+\text{both are spaces} @@ the inside-space technique (27a2)
+L(u) = L(v) \iff L(u - v) = 0 @@ L keeps adding, and −v = (−1)·v
+\htmlClass{new}{L \text{ one-to-one} \iff L \text{ loses only } 0} \quad \blacksquare @@ the line above
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · lost and reached · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">27c1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="L(p) = p&#x27; ,\ \ \deg p \le 3"></span></span>Check that L is straight, by 13c and 13d. <br>Find what L loses, and a basis of it. <br>Find what L reaches, and a basis of it. Find whether L is one-to-one, by the nothing-sent technique.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27c2">
+  <h2 class="sthead"><span class="stno">27c2</span>Lost plus reached</h2>
+  <p class="stands">Stands on 27c1, 27b3.</p>
+  <p data-pid="eba55b">Lost-plus-reached technique: <b>if V has dimension n and L is straight from V, then the dimension of what L loses plus the dimension of what it reaches is n.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the lost-plus-reached technique">
+u_1..u_k \text{ a basis of what } L \text{ loses} @@ it is a space inside V (27c1); its dimension k is at most n (27b2)
+u_1..u_k, v_1..v_r \text{ a basis of } V,\ k + r = n @@ the grow-to-basis technique (27b3)
+L(v_1), \ldots, L(v_r) \text{ build what } L \text{ reaches} @@ L(uᵢ) = 0, and L keeps mixes
+\textstyle\sum s_jL(v_j) = 0 \Rightarrow \sum s_jv_j \text{ is lost} \Rightarrow \sum s_jv_j = \sum t_iu_i @@ L keeps mixes; the u’s build what is lost
+\Rightarrow \text{all } s_j = 0 @@ the whole list u, v is free
+\htmlClass{new}{k + \dim(\text{reached}) = k + r = n} \quad \blacksquare @@ the L(vⱼ) are a basis of what is reached
+  </pre>
+  <p data-pid="7faad5">So a straight map from a space to itself of dimension n is one-to-one exactly when it reaches everything. If it loses only 0, what it reaches has dimension n, and the grow-to-basis technique says n free arrows in a space of dimension n already build it.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27c2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">L, a straight map from lists of five numbers to lists of three, that reaches every list of three</span></span>Find the dimension of what L loses. <br>Find why L cannot be one-to-one. <br>Build one such L, and a basis of what it loses.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27c3">
+  <h2 class="sthead"><span class="stno">27c3</span>Illegal moves</h2>
+  <p class="stands">Stands on 27c1 and 27c2.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+L(x) = 2x + 1 \text{ is straight}\,? @@ it sends 0 to 1; a straight map sends 0 to 0
+L(u) = L(v) \Rightarrow u = v \text{ for every straight map}\,? @@ only when L loses nothing but 0
+\dim(\text{lost}) + \dim(\text{reached}) = \dim W\,? @@ the sum is the dimension of the space you start from, V
+\text{onto} \Rightarrow \text{one-to-one, between any two spaces}\,? @@ only when the two dimensions are equal
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27c3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="L(x) = 2x + 1"></span></span>Find L(0), and L(1) + L(2) against L(3). <br>Find the line of the nothing-sent technique that this L breaks.</li><li><span class="givens"><span data-tex-inline="L(x, y) = x + y"></span></span>Find two different lists u, v with L(u) = L(v). <br>Find what L loses, and whether it loses only 0.</li><li><span class="givens"><span data-tex-inline="L(x, y, z) = (x, y)"></span></span>Find what L loses and what it reaches, with their dimensions. <br>Find the dimensions of the space it starts from and the space it lands in, and which one the sum matches.</li><li><span class="givens"><span data-tex-inline="L(x, y) = (x, y, 0),\ \ M(x, y, z) = (x, y)"></span></span>Find whether each is one-to-one, and whether each reaches everything. <br>Find the demand that makes onto and one-to-one the same, and why both maps miss it.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">27c.4.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">lists of four numbers, to lists of four numbers</span></span>Build a straight map that loses exactly the arrows (t, t, t, t). <br>Find the dimension of what it reaches before you build it, and then check it on your map.</div>
+  <div class="chq"><span class="chid">27c.4.2</span><span class="tagq">edge</span><span class="givens"><span class="gtx">all polynomials, of any degree; D(p) = p′ and X(p) = x·p</span></span>Find whether D and X are straight, what each loses, and whether each reaches every polynomial. <br>Find the demand of the lost-plus-reached technique that fails here, and what becomes of “one-to-one exactly when it reaches everything”.</div>
+  <div class="chq"><span class="chid">27c.4.3</span><span class="tagq">converse</span>For a straight map, what it loses and what it reaches are spaces, with dimensions adding to n. Turn it round: if what a map sends to 0 and what it reaches are spaces whose dimensions add to n, must the map be straight? <br>Test f(x) = x³ on the line, and f(x, y) = (x³, 0) on the plane.</div>
+  <div class="chq"><span class="chid">27c.4.4</span><span class="tagq">reroute</span>Prove that what a straight map L from a space of dimension n reaches has dimension at most n, without the lost-plus-reached technique. Start from a basis v₁, …, vₙ and the arrows L(v₁), …, L(vₙ), and use the spare-arrow technique. <br>Find why what L reaches also has dimension at most that of the space it lands in.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r27b.html">← 27b · dimension</a><a href="r27d.html">27d · matrices as maps →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A straight map is a linear map. What it loses is its kernel (or null space), and the kernel’s dimension is the nullity; what it reaches is its image (or range), and the image’s dimension is the rank. The lost-plus-reached technique is the rank–nullity theorem.</p>
+  <h3>Who said it first</h3>
+  <p>Grassmann had the idea in 1844. The theorem in this form became standard in the 1930s, when Bartel van der Waerden’s Moderne Algebra set linear algebra out from spaces and maps rather than from equations.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'straight',t:R`L(u+v) = Lu + Lv,\ L(tv) = tLv`,n:`Keeps adding and stretching.`},
+  {k:'ember',kl:'lost',t:R`\{v : Lv = 0\}`,n:`A space.`},
+  {k:'ember',kl:'reached',t:R`\{Lv\}`,n:`A space.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{one-to-one} \iff \text{loses only } 0}`,n:`Check one arrow, not every pair.`}
+],{title:'The slides · lost and reached · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

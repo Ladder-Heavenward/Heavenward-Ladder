@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Eigenvectors by hand</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r27k.html">← 27k determinants by hand</a><a href="r27m.html">next: 27m turns of space →</a></p>
+  <div class="tags"><span class="tag tech">27l · technique</span></div>
+  <h1>Eigenvectors by hand</h1>
+  <p>The stretch test turns the hunt for the arrows a grid only stretches into two smaller jobs. First find the stretches, as the roots of one polynomial. Then, for each stretch, find the arrows it loses when that stretch is taken off its middle, by elimination. For a grid of two rows the polynomial needs only two numbers: the sum down the middle and the determinant. Once the arrows are found, a grid done a hundred times is no harder than a grid done once, because in their directions it only stretches. The largest stretch wins in the long run, and that decides where a population settles. And the rabbit counts of an earlier rung, each the sum of the two before, are the powers of one small grid. Its two stretches are the two numbers in their closed form.</p>
+  <p class="gesture">The stretches of a grid are the roots of its stretch polynomial, and for a grid of two rows that polynomial is read off the sum down the middle and the determinant. The arrows come from elimination. Written in those arrows, a high power of a grid is a power of each stretch, and the largest stretch wins. The rabbit counts are powers of one grid.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r27f.html">27f</a> (the stretch-test, different-stretches and straighten-out techniques), <a href="r27j.html">27j</a> (elimination), <a href="r27e.html">27e</a> (the det-product technique), <a href="r25d.html">25d</a> (the root technique), <a href="r22h.html">22h</a> (the standard-sequences technique) and <a href="r23j.html">23j</a> (the rabbit closed-form technique). <a href="r27m.html">27m</a> finds the one arrow a turn of space leaves alone.</p></div>
+</header>
+
+<section class="class step" data-step="27l1">
+  <h2 class="sthead"><span class="stno">27l1</span>Stretches from the middle and the determinant</h2>
+  <p class="stands">Stands on 27f1 (the stretch-test technique), 27e2 (the three-rules technique), 27e3 (the det-product technique), 25d (the root technique), 9g (the same-coefficients technique) and 27j2 (elimination).</p>
+  <p data-pid="90bc74">The <i>middle sum</i> of a square grid is a₁₁ + a₂₂ + ⋯ + aₙₙ, the sum down its middle.</p>
+  <p data-pid="0742b8">Middle-sum technique: <b>det(A − λI) = (−λ)ⁿ + (a₁₁ + ⋯ + aₙₙ)(−λ)ⁿ⁻¹ + ⋯ + det A. So the n stretches of A in ℂ, each counted as often as its factor appears, add to the middle sum and multiply to det A. For a 2 × 2 grid the stretches are the roots of λ² − (a₁₁ + a₂₂)λ + det A. And P⁻¹AP has the same stretch polynomial as A, for every undoable P.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the middle-sum technique">
+\det(A - \lambda I) = \textstyle\sum_\sigma \operatorname{sign}\sigma\prod_j\big(a_{\sigma(j)j} - \lambda\,[\sigma(j){=}j]\big) @@ the three-rules formula (27e2), as in the stretch-test technique (27f1)
+\sigma \ne \text{doing nothing moves at least two places} @@ a shuffle that moves one place moves the place it lands on
+\text{so } \lambda^n,\ \lambda^{n-1} \text{ come only from } (a_{11} - \lambda)\cdots(a_{nn} - \lambda) @@ every other term has at most n − 2 factors holding λ
+\det(A - \lambda I) = (\lambda_1 - \lambda)\cdots(\lambda_n - \lambda) @@ the root technique (25d), with first number (−1)ⁿ
+\lambda_1 + \cdots + \lambda_n = a_{11} + \cdots + a_{nn},\ \ \lambda_1\cdots\lambda_n = \det A @@ compare the λⁿ⁻¹ and the plain numbers (9g); at λ = 0 the left side is det A
+\htmlClass{new}{\det(P^{-1}AP - \lambda I) = \det\big(P^{-1}(A - \lambda I)P\big) = \det(A - \lambda I)} \quad \blacksquare @@ λI = P⁻¹λIP; the det-product technique (27e3), with det P⁻¹ det P = 1
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: stretches and arrows">
+A = \begin{pmatrix}4&1\\2&3\end{pmatrix}:\ \ \lambda^2 - 7\lambda + 10 = (\lambda - 5)(\lambda - 2) @@ middle sum 7, det 12 − 2 = 10
+\lambda = 5:\ \ A - 5I = \begin{pmatrix}-1&1\\2&-2\end{pmatrix} \to \begin{pmatrix}1&-1\\0&0\end{pmatrix},\ \ v = (1, 1) @@ lowest terms (27j2): x = y, y free
+\lambda = 2:\ \ A - 2I = \begin{pmatrix}2&1\\2&1\end{pmatrix} \to \begin{pmatrix}1&\tfrac12\\0&0\end{pmatrix},\ \ v = (1, -2) @@ x = −y/2; take y = −2
+\htmlClass{new}{A(1, 1) = (5, 5),\ \ A(1, -2) = (2, -4)} \quad \blacksquare @@ check: 5 times and 2 times; and 5 + 2 = 7, 5 · 2 = 10
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · stretches · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">27l1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\begin{pmatrix}5&amp;-2\\1&amp;2\end{pmatrix}"></span></span>Find its stretches from its middle sum and det, and an arrow only stretched by each.</li><li><span class="givens"><span data-tex-inline="\begin{pmatrix}2&amp;0&amp;0\\1&amp;3&amp;0\\4&amp;-1&amp;1\end{pmatrix}"></span></span>Find its three stretches without multiplying anything out, and an arrow for each by elimination.</li><li><span class="givens"><span data-tex-inline="\begin{pmatrix}0&amp;-1\\1&amp;0\end{pmatrix}"></span></span>Find its stretches in ℂ, an arrow for each, and check that they add to the middle sum and multiply to det.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27l2">
+  <h2 class="sthead"><span class="stno">27l2</span>High powers, and the largest stretch</h2>
+  <p class="stands">Stands on 27f3 (the straighten-out technique), 27l1, 22h2 (the standard-sequences technique) and 4b (induction).</p>
+  <p data-pid="98cbf7">Leading-stretch technique: <b>if A, n × n, only stretches the free arrows v₁, …, vₙ, by λ₁, …, λₙ, and x = c₁v₁ + ⋯ + cₙvₙ, then Aᵏx = c₁λ₁ᵏv₁ + ⋯ + cₙλₙᵏvₙ. If |λ₁| is larger than every other |λᵢ|, and c₁ ≠ 0, then Aᵏx/λ₁ᵏ heads to c₁v₁ as k grows.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the leading-stretch technique">
+A^k v_i = \lambda_i^k v_i @@ induction on k (4b): A(λᵢᵏvᵢ) = λᵢᵏAvᵢ = λᵢᵏ⁺¹vᵢ
+A^kx = c_1\lambda_1^kv_1 + \cdots + c_n\lambda_n^kv_n @@ Aᵏ keeps mixes (27c1)
+\tfrac{A^kx}{\lambda_1^k} = c_1v_1 + c_2\big(\tfrac{\lambda_2}{\lambda_1}\big)^kv_2 + \cdots + c_n\big(\tfrac{\lambda_n}{\lambda_1}\big)^kv_n @@ divide by λ₁ᵏ ≠ 0
+\big|\tfrac{\lambda_i}{\lambda_1}\big|^k \to 0 \text{ for } i \ge 2 @@ the standard-sequences technique (22h2): rᵏ → 0 for |r| &lt; 1
+\htmlClass{new}{\tfrac{A^kx}{\lambda_1^k} \to c_1v_1} \quad \blacksquare @@ place by place, every other piece heads to 0
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: every power of one grid">
+A = PDP^{-1},\ P = \begin{pmatrix}1&1\\1&-2\end{pmatrix},\ D = \begin{pmatrix}5&0\\0&2\end{pmatrix} @@ the arrows of 27l1 as columns; the straighten-out technique (27f3)
+P^{-1} = \tfrac13\begin{pmatrix}2&1\\1&-1\end{pmatrix} @@ the 2 × 2 undo, by stand-ins (27g2): divide by det P = −3
+A^k = PD^kP^{-1} = \tfrac{5^k}{3}\begin{pmatrix}2&1\\2&1\end{pmatrix} + \tfrac{2^k}{3}\begin{pmatrix}1&-1\\-2&2\end{pmatrix} @@ multiply out, the 5ᵏ and 2ᵏ parts apart
+\htmlClass{new}{A^{10} = \tfrac{5^{10}}{3}\begin{pmatrix}2&1\\2&1\end{pmatrix} + \tfrac{2^{10}}{3}\begin{pmatrix}1&-1\\-2&2\end{pmatrix}} \quad \blacksquare @@ check k = 1: the sum is A; for large k the 5ᵏ part wins, as the leading-stretch technique says
+  </pre>
+  <p data-pid="00bc54">A grid that cannot be straightened needs another road. The slide with rows (1, 1), (0, 1) has only the stretch 1, and its powers are not powers of 1: by induction its k-th power has rows (1, k), (0, 1). Its powers grow, slowly, along the floor.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · high powers · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27l2.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="A = \begin{pmatrix}5&amp;-2\\1&amp;2\end{pmatrix}"></span></span>Use the arrows of 27l1.1 to find Aᵏ for every k, and find A⁵.</li><li><span class="givens"><span data-tex-inline="M = \begin{pmatrix}0.9&amp;0.2\\0.1&amp;0.8\end{pmatrix},\ \ (S_0, T_0) = (700, 300)"></span></span>Each year a tenth of the people of one town move to a second town, and a fifth of the second town’s people move to the first. (S, T), in thousands, goes to M(S, T) each year. Find the stretches of M and their arrows, (S₁₀, T₁₀), and where (S, T) heads.</li><li><span class="givens"><span data-tex-inline="\begin{pmatrix}2&amp;1\\0&amp;2\end{pmatrix}"></span></span>Find its stretches, and whether it can be straightened. Find its fifth power, and its k-th power by induction.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27l3">
+  <h2 class="sthead"><span class="stno">27l3</span>The rabbit counts again</h2>
+  <p class="stands">Stands on 27l2, 27f2 (the different-stretches technique), 27e3 and 23j2 (the rabbit closed-form technique).</p>
+  <p data-pid="c45424">Step-grid technique: <b>if aₙ₊₁ = p aₙ + q aₙ₋₁ for every n ≥ 1, then (aₙ₊₁, aₙ) = Mⁿ(a₁, a₀), where M has rows (p, q), (1, 0). The stretches of M are the roots of λ² = pλ + q, and when they are two different numbers λ and μ, aₙ = cλⁿ + dμⁿ for two numbers c, d fixed by a₀ and a₁.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the step-grid technique">
+(a_{n+1}, a_n) = M(a_n, a_{n-1}) = \cdots = M^n(a_1, a_0) @@ row 1 is the rule; row 2 copies aₙ; induction (4b)
+\det(M - \lambda I) = (p - \lambda)(-\lambda) - q = \lambda^2 - p\lambda - q @@ the middle-sum technique (27l1)
+M(\lambda, 1) = (p\lambda + q, \lambda) = (\lambda^2, \lambda) = \lambda(\lambda, 1) @@ λ² = pλ + q
+(a_1, a_0) = c(\lambda, 1) + d(\mu, 1) @@ different stretches give free arrows (27f2); two free arrows build the plane (27b3)
+(a_{n+1}, a_n) = c\lambda^n(\lambda, 1) + d\mu^n(\mu, 1) @@ the leading-stretch technique (27l2), first sentence
+\htmlClass{new}{a_n = c\lambda^n + d\mu^n} \quad \blacksquare @@ read the second place
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: the rabbit closed form, by a grid">
+F_{n+1} = F_n + F_{n-1},\ \ R = \begin{pmatrix}1&1\\1&0\end{pmatrix} @@ p = q = 1
+\lambda^2 = \lambda + 1:\ \ \varphi = \tfrac{1 + \sqrt5}{2},\ \ \psi = \tfrac{1 - \sqrt5}{2} @@ the stretches of R
+(F_1, F_0) = (1, 0) = \tfrac{1}{\sqrt5}\big((\varphi, 1) - (\psi, 1)\big) @@ φ − ψ = √5
+\htmlClass{new}{F_n = \tfrac{\varphi^n - \psi^n}{\sqrt5}} \quad \blacksquare @@ the step-grid technique: the rabbit closed-form technique of 23j2, reached without storing the list
+  </pre>
+  <p data-pid="328972">The grid gives more than the closed form. Rⁿ has rows (Fₙ₊₁, Fₙ), (Fₙ, Fₙ₋₁), by induction. Its det is (det R)ⁿ = (−1)ⁿ by the det-product technique, so Fₙ₊₁Fₙ₋₁ − Fₙ² = (−1)ⁿ for every n ≥ 1: at n = 10, 89 · 34 − 55² = 3026 − 3025 = 1. Neighbouring rabbit counts nearly make a square, and miss by exactly one.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · rabbits by a grid · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27l3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="a_{n+1} = a_n + 2a_{n-1},\ \ a_0 = 0,\ \ a_1 = 1"></span></span>Find the stretches of its grid, a closed form for aₙ, and a₁₀ both ways.</li><li><span class="givens"><span data-tex-inline="R^{m+n} = R^m R^n"></span></span>Read off the place in row 2, column 1 of both sides to find Fₘ₊ₙ in terms of rabbit counts with smaller numbers. Check it with m = 10, n = 10: F₂₀ = 6765.</li><li><span class="givens"><span data-tex-inline="F_{n+1}F_{n-1} - F_n^2 = (-1)^n"></span></span>Check it at n = 5 and n = 6 from the counts 0, 1, 1, 2, 3, 5, 8, 13.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27l4">
+  <h2 class="sthead"><span class="stno">27l4</span>Illegal moves</h2>
+  <p class="stands">Stands on 27l1 to 27l3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{the stretches of } A + B \text{ are sums of stretches of } A \text{ and of } B\,? @@ rows (0, 1), (0, 0) and rows (0, 0), (1, 0) each have only 0; their sum has 1 and −1
+A^k = P^kD^kP^{-k}\,? @@ the P⁻¹P in the middle cancel: Aᵏ = PDᵏP⁻¹
+\text{a repeated stretch means it cannot be straightened}\,? @@ I has the stretch 1 twice, and is already straight; the slide fails for another reason: too few arrows
+\text{row moves keep the stretches}\,? @@ they keep the answers of Ax = b, not the stretches: rows (4, 1), (2, 3) have 5 and 2; after −½ row 1 to row 2, 4 and 5/2
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27l4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="A = \begin{pmatrix}0&amp;1\\0&amp;0\end{pmatrix},\ \ B = \begin{pmatrix}0&amp;0\\1&amp;0\end{pmatrix}"></span></span>Find the stretches of A, of B and of A + B. <br>Find what the first line assumes.</li><li><span class="givens"><span data-tex-inline="P = \begin{pmatrix}1&amp;1\\1&amp;-2\end{pmatrix},\ \ D = \begin{pmatrix}5&amp;0\\0&amp;2\end{pmatrix}"></span></span>Find PDP⁻¹, then PD²P⁻¹ and P²D²P⁻², and compare each with A² for A = PDP⁻¹. <br>Find the slip in the second line.</li><li><span class="givens"><span data-tex-inline="I = \begin{pmatrix}1&amp;0\\0&amp;1\end{pmatrix},\ \ S = \begin{pmatrix}1&amp;1\\0&amp;1\end{pmatrix}"></span></span>Find the stretches of each, and how many free arrows each only stretches. <br>Find what decides whether a grid can be straightened.</li><li><span class="givens"><span data-tex-inline="\begin{pmatrix}4&amp;1\\2&amp;3\end{pmatrix}"></span></span>Add −½ times row 1 to row 2, and find the stretches before and after. <br>Find what row moves keep, and what they do not.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">27l.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{stretches } 2,\ 3;\ \ \text{arrows } (1, 2),\ (1, 3)"></span></span>Build the grid A with whole numbers that only stretches (1, 2) by 2 and (1, 3) by 3. <br>Find the step rule aₙ₊₁ = p aₙ + q aₙ₋₁ whose grid has the same stretches.</div>
+  <div class="chq"><span class="chid">27l.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="a_{n+1} = 4a_n - 4a_{n-1},\ \ a_0 = 0,\ \ a_1 = 1"></span></span>Find the stretches of its grid, and whether the grid can be straightened. The step-grid technique needs two different stretches. <br>Find a closed form of the kind (c + dn)2ⁿ, prove it by induction, and find a₁₀.</div>
+  <div class="chq"><span class="chid">27l.4.3</span><span class="tagq">converse</span>Two grids straightened by the same P commute: AB = BA. Turn it round: if AB = BA, and A is 2 × 2 with two different stretches, must every arrow A only stretches also be only stretched by B? <br>Prove your answer.</div>
+  <div class="chq"><span class="chid">27l.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="A = \begin{pmatrix}4&amp;1\\2&amp;3\end{pmatrix}"></span></span>Reroute the powers of A without its arrows. Use the own-polynomial technique (27g3), A² = 7A − 10I, to prove by induction that Aᵏ = sₖA + tₖI for numbers sₖ, tₖ, with a step rule for them. <br>Solve that step rule, and check your Aᵏ against the one on this page at k = 3.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r27k.html">← 27k · determinants by hand</a><a href="r27m.html">27m · turns of space →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The middle sum is the trace, tr A; the middle-sum technique says the eigenvalues add to the trace and multiply to the determinant. A grid P⁻¹AP is similar to A, and similar matrices share their characteristic polynomial. The leading-stretch technique is the idea behind the power method, and the largest stretch is the dominant eigenvalue. A rule aₙ₊₁ = paₙ + qaₙ₋₁ is a linear recurrence, and M is its companion matrix. Fₙ₊₁Fₙ₋₁ − Fₙ² = (−1)ⁿ is Cassini’s identity. A grid of shares moving between places, like the two towns, is a stochastic (or Markov) matrix, and the arrow it heads to is its steady state.</p>
+  <h3>Who said it first</h3>
+  <p>Giovanni Domenico Cassini found his identity in 1680. Abraham de Moivre found the closed form of the rabbit counts in 1730, and Jacques Binet rediscovered it in 1843. Andrey Markov studied chains of shares that move step by step from 1906. Richard von Mises and Hilda Pollaczek-Geiringer described the power method in 1929.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'the polynomial',t:R`\lambda^2 - (a_{11} + a_{22})\lambda + \det A`,n:`Two numbers decide it.`},
+  {k:'ember',kl:'the arrows',t:R`(A - \lambda I)v = 0`,n:`Elimination, one stretch at a time.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\textstyle\sum\lambda_i = \text{middle sum},\ \prod\lambda_i = \det A}`,n:`A check on every answer.`}
+],{title:'The slides · stretches · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'the arrows',t:R`A^kv_i = \lambda_i^kv_i`,n:`Only stretched, k times over.`},
+  {k:'ember',kl:'a mix',t:R`A^kx = \textstyle\sum c_i\lambda_i^kv_i`,n:`Each piece on its own.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{A^kx/\lambda_1^k \to c_1v_1}`,n:`The largest stretch wins.`}
+],{title:'The slides · high powers · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'one step',t:R`(F_{n+1}, F_n) = R(F_n, F_{n-1})`,n:`R has rows (1, 1), (1, 0).`},
+  {k:'ember',kl:'stretches',t:R`\lambda^2 = \lambda + 1:\ \varphi,\ \psi`,n:`The golden ratio and its partner.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{F_n = (\varphi^n - \psi^n)/\sqrt5}`,n:`And det Rⁿ = (−1)ⁿ.`}
+],{title:'The slides · rabbits by a grid · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

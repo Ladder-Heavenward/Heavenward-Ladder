@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Can an economy feed itself?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r27phys.html">← 27·phys what keeps a spinning thing steady?</a><a href="r27nav.html">next: 27·nav how does a phone know where it is? →</a></p>
+  <div class="tags"><span class="tag econ">27·econ · economics</span></div>
+  <h1>Can an economy feed itself?</h1>
+  <p>Can an economy feed itself? A plane built in Everett needs aluminium, wiring, software, lawyers and lunch for the people who build it. The farms of the Yakima Valley need tractors, fuel and trucks, and the truck makers need food. Every industry buys from every other, including from itself. So to sell one more plane abroad, the whole economy must make a little more of almost everything, and each of those makers must buy a little more in turn. What makes the question hard is that there is no first industry to plan: each one’s output waits on all the others. And it is not obvious that there is an answer at all. An economy whose industries used up more than they made could never meet any demand, however hard it worked. 22·econ followed one dollar of spending round after round and added the rounds as an endless sum. This page follows the rounds through every industry at once, finds the outputs that meet a demand as one system of samenesses, and asks when the system has an answer with no negative outputs: when an economy can feed itself.</p>
+  <p class="gesture">Each industry’s output must cover what the other industries buy from it and what the final buyers want. That is one system of samenesses, one grid, solved by elimination. The answer is also the sum of the rounds: the demand, what its makers buy, what those makers buy, and so on. If every industry spends less than a dollar on inputs for each dollar it makes, the rounds shrink like a geometric sum and add up. More generally, an economy can meet every demand exactly when there is some plan of outputs that leaves a surplus of every product. One new order raises every industry’s output by one column of the undoing of the grid. And the table is measured with errors, which the same undoing carries through to the outputs.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r22econ.html">22·econ</a> (the round technique), <a href="r27j.html">27j</a> (the row-move technique), <a href="r27k.html">27k</a> (the det-ratio technique), <a href="r27d.html">27d</a> (matrices as maps), <a href="r27e.html">27e</a> (the determinant) and <a href="r22e.html">22e</a> (compare with a geometric sum). 27·nav finds a phone with a system of samenesses.</p></div>
+</header>
+
+<section class="class step" data-step="27econ1">
+  <h2 class="sthead"><span class="stno">27econ1</span>Every industry buys from every other</h2>
+  <p class="stands">Stands on 27j (the row-move technique) and 27d (the columns technique).</p>
+  <p data-pid="84549b">Split Washington’s economy, as a sketch, into three industries: farms and food, manufacturing, and services. A table says how many cents’ worth of each industry’s output go into one dollar of another’s. Write x for the outputs, in billions of dollars a year, and d for the final demand: what households, governments and the rest of the world buy.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the gross-output technique">
+x = Ax + d @@ each industry’s output covers what industries buy from it, (Ax)ᵢ, and what final buyers buy, dᵢ
+A = \begin{pmatrix}0.10 & 0.05 & 0.01\\ 0.10 & 0.30 & 0.05\\ 0.15 & 0.15 & 0.25\end{pmatrix},\ \ d = (20, 120, 450) @@ column j: the cents of each industry’s output bought for a dollar of j’s
+(I - A)x = d @@ one system of samenesses in three unknowns
+\begin{pmatrix}0.9 & -0.05 & -0.01\\ 0 & 0.6944 & -0.0511\\ 0 & 0 & 0.7367\end{pmatrix}x = (20,\ 122.22,\ 481.20) @@ row moves (27j): clear x₁ from rows 2 and 3, then x₂ from row 3
+\htmlClass{new}{x \approx (41.9,\ 224.1,\ 653.2)} \quad \blacksquare @@ back up from the last row
+  </pre>
+  <p data-pid="3ad12d">From here on, the grid A is the economy’s <i>input–output table</i>. Gross-output technique: <b>the outputs that meet a final demand d solve (I − A)x = d, and when I − A can be undone they are x = (I − A)⁻¹d.</b> Final buyers take 590 billion dollars a year here, but the industries make 919. The other 329 billion they make for each other.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the table · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">27·econ.1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="A = \begin{pmatrix}0.2 &amp; 0.3\\ 0.4 &amp; 0.1\end{pmatrix},\ \ d = (60, 30)"></span></span>Find the outputs. <br>Check that each industry’s output covers what it sells to both and to final buyers.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27econ2">
+  <h2 class="sthead"><span class="stno">27econ2</span>Round after round</h2>
+  <p class="stands">Stands on 27·econ.1, 22·econ (the round technique), 27d (the product-is-doing and undoable-group techniques), 22e (compare with a geometric sum) and 4b (induction).</p>
+  <p data-pid="2e9805">22·econ followed one dollar of spending round after round. Here each round is a whole list. First the final demand d must be made. Its makers buy Ad. Those makers buy A²d. And so on.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the every-round technique">
+\textstyle\sum_i (AB)_{ij} = \sum_k\big(\sum_i a_{ik}\big)\,b_{kj} \le c\,\sum_k b_{kj} @@ the product-is-doing technique (27d); each column of A adds to at most c; no entry of B is negative
+\text{every column of } A^k \text{ adds to at most } c^k,\ \text{so every entry is at most } c^k @@ induction (4b), with B = A^{k−1}
+S = I + A + A^2 + \cdots \text{ settles, entry by entry} @@ compare with the geometric sum of cᵏ, for c &lt; 1 (22e)
+(I - A)(I + A + \cdots + A^k) = I - A^{k+1} \to I @@ the middle terms cancel; A^{k+1} heads to 0
+\htmlClass{new}{(I - A)^{-1} = I + A + A^2 + \cdots,\ \text{with no entry negative}} \quad \blacksquare @@ (I − A)S = I, so S loses only 0 and can be undone (27d), and I − A is its undoing
+  </pre>
+  <p data-pid="7ac1a6">Every-round technique: <b>if no entry of A is negative and every column of A adds to at most c &lt; 1, then I − A can be undone, its undoing is I + A + A² + ⋯, and every demand is met by outputs that are not negative; what the rounds after the kth add up to is at most cᵏ⁺¹/(1 − c) times the total demand.</b> Each column adding to less than 1 says that every industry spends less than a dollar on inputs for each dollar it makes. That is 22·econ’s round technique, with a list in place of a number.</p>
+  <p data-pid="f90736">In the sketch the columns add to 0.35, 0.50 and 0.31, so c = 0.5. The first round of buying is (12.5, 60.5, 133.5); after three rounds the running total is (40.4, 217.2, 643.7), already within 18 billion of the answer in all. After eight rounds it is within 0.2.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · rounds · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · rounds of buying, through every industry</div>
+    <div class="kn"><span class="m">scale</span><input type="range" id="ks" min="0.5" max="3" step="0.05" value="1"><output id="os"></output></div>
+    <div id="pl"></div>
+    <div class="cap">The sketch’s table A, with every entry scaled. Ember, ink, teal: the running totals of farms and food, manufacturing and services, in billions of dollars, after each of twenty rounds. Slide the scale up until every industry uses up nearly all it makes.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27·econ.2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="A = \begin{pmatrix}0.2 &amp; 0.3\\ 0.4 &amp; 0.1\end{pmatrix},\ \ d = (60, 30)"></span></span>Find the first three rounds of buying after d, and the running total. <br>Find the bound the every-round technique gives on what is left, and what is really left.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27econ3">
+  <h2 class="sthead"><span class="stno">27econ3</span>When an economy can feed itself</h2>
+  <p class="stands">Stands on 27·econ.2, 27k (the det-ratio technique) and 22e (compare with a geometric sum).</p>
+  <p data-pid="616769">The column test is enough, but it is not needed. Some economies have an industry that spends more than a dollar of inputs per dollar of output, and still feed themselves, because the others carry it. The right test asks for one plan that works.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the feeds-itself technique">
+p \gt 0,\ \ p - Ap \gt 0,\ \ \text{entry by entry} @@ a plan of outputs that leaves a surplus of every product
+c = \max_i \tfrac{(Ap)_i}{p_i} \lt 1,\ \ \text{so } Ap \le c\,p @@ each industry uses less of its product than the plan makes
+A^kp \le c^kp @@ induction: A has no negative entries, so it keeps the order; A(c^{k−1}p) = c^{k−1}Ap ≤ cᵏp
+(A^k)_{ij}\,p_j \le (A^kp)_i \le c^kp_i @@ one term of a sum with no negative terms is at most the sum
+(A^k)_{ij} \le c^k\tfrac{p_i}{p_j} \Rightarrow I + A + A^2 + \cdots \text{ settles} @@ compare with a geometric sum (22e)
+\htmlClass{new}{(I - A)^{-1} \text{ exists, with no entry negative}} \quad \blacksquare @@ the cancelling line of 27·econ.2
+  </pre>
+  <p data-pid="3f4052">And the other way: if (I − A)⁻¹ has no negative entry, the plan p = (I − A)⁻¹(1, …, 1) leaves a surplus of 1 of everything. Feeds-itself technique: <b>an economy can meet every demand that is not negative, with outputs that are not negative, exactly when some plan of outputs leaves a surplus of every product.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the two-industry test">
+\Delta = \det(I - A) = (1 - a_{11})(1 - a_{22}) - a_{12}a_{21} @@ the determinant of a 2 × 2 grid (27e)
+x_1 = \tfrac{(1 - a_{22})\,d_1 + a_{12}\,d_2}{\Delta},\ \ x_2 = \tfrac{a_{21}\,d_1 + (1 - a_{11})\,d_2}{\Delta} @@ the det-ratio technique (27k)
+a_{11}, a_{22} \lt 1:\ \text{every top is above } 0 \text{ for every demand above } 0 @@ no entry of A is negative
+\htmlClass{new}{\text{two industries feed themselves} \iff \Delta \gt 0} \quad \blacksquare @@ Δ &lt; 0 makes both outputs negative; Δ = 0 leaves I − A without an undoing
+  </pre>
+  <p data-pid="1f280b">A farm that puts 60 cents of its own grain into each dollar of grain, and 90 cents of fertiliser, beside a fertiliser plant that uses 50 cents of grain and 50 of its own fertiliser, has Δ = 0.4 × 0.5 − 0.5 × 0.9 = −0.25. To meet a demand of 10 of each, the sums ask for −40 of grain and −52 of fertiliser. No such economy can feed anyone.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · feeding · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27·econ.3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="A = \begin{pmatrix}0.5 &amp; 0.4\\ 0.7 &amp; 0.3\end{pmatrix}"></span></span>Find the column sums, and Δ. <br>Find a plan that leaves a surplus of 1 of each product.</li><li><span class="givens"><span data-tex-inline="A = \begin{pmatrix}0.5 &amp; 0.5\\ 0.7 &amp; 0.3\end{pmatrix}"></span></span>Find Δ, and what the two-industry test says.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27econ4">
+  <h2 class="sthead"><span class="stno">27econ4</span>One new order</h2>
+  <p class="stands">Stands on 27·econ.1 (the gross-output technique), 27c (maps that keep adding and stretching) and 27·econ.2.</p>
+  <p data-pid="700e16">Outputs are a straight map of the demand. So a change in demand moves the outputs by the same map.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the order-column technique">
+\Delta x = (I - A)^{-1}\,\Delta d @@ the gross-output technique is a straight map (27c)
+(I - A)^{-1} \approx \begin{pmatrix}1.124 & 0.085 & 0.021\\ 0.179 & 1.463 & 0.100\\ 0.261 & 0.310 & 1.357\end{pmatrix} @@ the sketch’s table, undone
+\Delta d = (0, 1, 0):\ \ \Delta x \approx (0.085,\ 1.463,\ 0.310) @@ a billion dollars more of planes for export picks out column 2
+\htmlClass{new}{\text{a total of about } 1.86 \text{ billion of output}} @@ the column’s sum
+  </pre>
+  <p data-pid="96e844">Order-column technique: <b>one more dollar of final demand for industry j raises every industry’s output by column j of (I − A)⁻¹, and the sum of that column is the total output it brings.</b> 22·econ called such a total a multiplier. Here each industry has its own: about 1.56 for farms and food, 1.86 for manufacturing, and 1.48 for services.</p>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · a table measured with error</div>
+    <p data-pid="1d34e9">The table is built from surveys of firms, and it is several years old by the time it is printed. Each entry might be a cent or so off, and next year’s firms buy a little differently from last year’s. The outputs inherit every one of those errors.</p>
+    <p data-pid="b9f9c2"><b>Carry the table’s own error through (I − A)⁻¹, and state the outputs with it.</b></p>
+    <p data-pid="a9acb0">The same undoing carries them through. If the true table is A + E, the true outputs x′ obey (I − A)(x′ − x) = Ex′, so x′ − x is close to (I − A)⁻¹Ex. If every entry of the sketch were one cent too low, the outputs would be about 11.3, 16.0 and 17.7 billion higher: a quarter more for farms and food, but only 7% and 3% more for the others. The smallest industry is the most fragile.</p>
+    <p class="bait" data-pid="97f5b8">A planner in Olympia wants next year’s output of farms and food to within 5%. Can a table whose entries are good to a cent give it, and what would you ask the people who build the table?</p>
+  </aside>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · an order · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27·econ.4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">the sketch of 27·econ.1, and a drop of 2 billion dollars a year in final demand for services</span></span>Find the change in each industry’s output. <br>Find the total, and the share of it that falls outside services.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27econ5">
+  <h2 class="sthead"><span class="stno">27econ5</span>Illegal moves</h2>
+  <p class="stands">Stands on 27·econ.1 to 27·econ.4.</p>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{output} = \text{final demand}\,? @@ industries also make for each other: x = Ax + d
+\text{a column adds to more than 1, so it cannot feed itself}\,? @@ the column test is enough, not needed: look for a surplus plan
+\det(I - A) \ne 0, \text{ so it feeds itself}\,? @@ the outputs must not be negative: Δ &lt; 0 gives negative ones
+x = d + Ad\,? @@ two rounds of endlessly many
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27·econ.5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="A = \begin{pmatrix}1 &amp; 0.2\\ 0.3 &amp; 0.4\end{pmatrix}"></span></span>Find what the first industry makes for anyone else, and what Δ and the two-industry test say.</li><li><span class="givens"><span data-tex-inline="A = \begin{pmatrix}0.6 &amp; 0.5\\ 0.9 &amp; 0.5\end{pmatrix},\ \ d = (10, 10)"></span></span>Find the outputs that (I − A)x = d asks for, and what they mean.</li><li><span class="givens"><span class="gtx">the sketch’s table with every entry doubled</span></span>Find the column sums, and whether the every-round technique applies. <br>Find whether the plan (10, 10, 10) leaves a surplus of everything.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">27·econ.6.1</span><span class="tagq">build</span>Build a table of two industries in which one column adds to more than 1, and the economy still feeds itself.</div>
+  <div class="chq"><span class="chid">27·econ.6.2</span><span class="tagq">edge</span><span class="givens"><span class="gtx">two industries with a₁₁, a₂₂ < 1, and a demand d = (1, 1)</span></span>Find what the outputs do as Δ falls toward 0 from above. <br>Find what that says about an economy close to the edge of feeding itself.</div>
+  <div class="chq"><span class="chid">27·econ.6.3</span><span class="tagq">converse</span>If an economy feeds itself, I − A can be undone. Turn it round: if I − A can be undone, must the economy feed itself?</div>
+  <div class="chq"><span class="chid">27·econ.6.4</span><span class="tagq">reroute</span>Find the feeds-itself technique’s plan for the sketch of 27·econ.1 a second way: show that p = (1, 1, 1) already leaves a surplus of everything, and find the c of 27·econ.3 for it.</div>
+  <div class="chq"><span class="chid">27·econ.6.5</span><span class="tagq">seam</span>One side held that a planning office, with a table like this one and enough samenesses, could set every output, and every price, as well as a market does. The other answered that the numbers such a table needs are scattered across millions of people, change every day, and are learned only by trading, so no office could ever gather them in time. <br>Can a table run an economy?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r27phys.html">← 27·phys · what keeps a spinning thing steady?</a><a href="r27nav.html">27·nav · how does a phone know where it is? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The table A is an input–output table, its entries technical coefficients, x the gross output and d the final demand. (I − A)⁻¹ is the Leontief inverse, and its column sums are output multipliers. The sum I + A + A² + ⋯ is a Neumann series. An economy that can meet every demand is productive, and the two-industry test, carried to n industries, is the Hawkins–Simon condition. That a table with no negative entries has a largest stretch which is real and has an arrow with no negative entries is the Perron–Frobenius theorem, proved much higher up the ladder.</p>
+  <h3>Who said it first</h3>
+  <p>François Quesnay drew money flowing between farmers, landlords and craftsmen in his Tableau économique of 1758. Wassily Leontief built the first tables of a whole economy, for the United States of 1919 and 1929, in 1936 and 1941, and was given the Nobel memorial prize in economics in 1973. David Hawkins and Herbert Simon gave the test for n industries in 1949. Washington State has published input–output tables of its own economy since the 1960s. In 27·econ.6.5, Ludwig von Mises (1920) and Friedrich Hayek (1945) argued that no planner could gather the knowledge prices carry; Oskar Lange (1936 and 1937) answered that a planning board could set prices by trial and error.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="27·econ: a worked “proof”, not allowed">
+A = \begin{pmatrix}0.6 & 0.5\\ 0.9 & 0.5\end{pmatrix} @@ fine
+\det(I - A) = -0.25 \ne 0,\ \text{so } I - A \text{ can be undone} @@ fine
+\text{so the economy meets every demand} @@ not allowed: undoable is not enough; for d = (10, 10) the outputs are −40 and −52
+  </pre>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+const V=c=>'var('+c+')';
+// plot(series, xr, yr, opts): series = [{pts:[[x,y],...], c:'--ember', w:1.6, dash:''}]; returns svg string
+function plot(series, xr, yr, o){ o=o||{}; const W=360,H=o.H||210,L=34,B=22,T=8,Rr=8;
+  const sx=x=>L+(x-xr[0])/(xr[1]-xr[0])*(W-L-Rr), sy=y=>H-B-(y-yr[0])/(yr[1]-yr[0])*(H-B-T);
+  let s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;max-width:440px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  (o.yt||[]).forEach(y=>{ s+='<line x1="'+L+'" x2="'+(W-Rr)+'" y1="'+sy(y)+'" y2="'+sy(y)+'" style="stroke:'+V('--grid')+';stroke-width:0.6"/><text x="'+(L-3)+'" y="'+(sy(y)+3)+'" text-anchor="end" style="font:9px var(--mono);fill:'+V('--muted')+'">'+y+'</text>'; });
+  (o.xt||[]).forEach(x=>{ s+='<text x="'+sx(x)+'" y="'+(H-8)+'" text-anchor="middle" style="font:9px var(--mono);fill:'+V('--muted')+'">'+x+'</text>'; });
+  s+='<line x1="'+L+'" x2="'+L+'" y1="'+T+'" y2="'+(H-B)+'" style="stroke:'+V('--ink')+';stroke-width:0.8"/><line x1="'+L+'" x2="'+(W-Rr)+'" y1="'+(H-B)+'" y2="'+(H-B)+'" style="stroke:'+V('--ink')+';stroke-width:0.8"/>';
+  series.forEach(se=>{ const cl=v=>Math.max(yr[0]-0.05*(yr[1]-yr[0]),Math.min(yr[1]+0.05*(yr[1]-yr[0]),v));
+    const d=se.pts.filter(p=>isFinite(p[1])).map((p,i)=>(i?'L':'M')+sx(p[0]).toFixed(1)+','+sy(cl(p[1])).toFixed(1)).join('');
+    s+='<path d="'+d+'" style="fill:none;stroke:'+V(se.c||'--ember')+';stroke-width:'+(se.w||1.6)+(se.dash?';stroke-dasharray:'+se.dash:'')+'"/>'; });
+  (o.dots||[]).forEach(p=>{ s+='<circle cx="'+sx(p[0])+'" cy="'+sy(p[1])+'" r="2.6" style="fill:'+V(p[2]||'--ember')+'"/>'; });
+  if(o.xl) s+='<text x="'+(W-Rr)+'" y="'+(H-B-4)+'" text-anchor="end" style="font:9px var(--mono);fill:'+V('--muted')+'">'+o.xl+'</text>';
+  if(o.yl) s+='<text x="'+(L+4)+'" y="'+(T+9)+'" style="font:9px var(--mono);fill:'+V('--muted')+'">'+o.yl+'</text>';
+  return s+'</svg>'; }
+
+const A0=[[0.10,0.05,0.01],[0.10,0.30,0.05],[0.15,0.15,0.25]], D=[20,120,450];
+function draw(){ const s=+$('ks').value; $('os').textContent=fm(s,2);
+  const A=A0.map(r=>r.map(x=>x*s)); let r=D.slice(), tot=D.slice(); const P=[[[0,tot[0]]],[[0,tot[1]]],[[0,tot[2]]]];
+  for(let k=1;k<=20;k++){ r=[0,1,2].map(i=>A[i][0]*r[0]+A[i][1]*r[1]+A[i][2]*r[2]); tot=tot.map((x,i)=>x+r[i]); for(let i=0;i<3;i++) P[i].push([k,tot[i]]); }
+  const top=Math.max(...tot)*1.05; const step=Math.pow(10,Math.floor(Math.log10(top))); const yt=[]; for(let y=0;y<=top;y+=step) yt.push(Math.round(y));
+  $('pl').innerHTML=plot([{pts:P[0],c:'--ember'},{pts:P[1],c:'--ink'},{pts:P[2],c:'--teal'}],[0,20],[0,top],{xt:[0,5,10,15,20],yt:yt,xl:'rounds'});
+  const cs=[0,1,2].map(j=>A[0][j]+A[1][j]+A[2][j]); const last=r[0]+r[1]+r[2]; let q=D.slice(); for(let k=1;k<20;k++) q=[0,1,2].map(i=>A[i][0]*q[0]+A[i][1]*q[1]+A[i][2]*q[2]); const ratio=last/(q[0]+q[1]+q[2]);
+  const v=$('vd'); v.className='verdict';
+  v.textContent='Column sums '+cs.map(x=>fm(x,2)).join(', ')+'. After twenty rounds the totals are '+tot.map(x=>fm(x,0)).join(', ')+' billion, and the twentieth round adds '+(last<0.01?'less than 0.01':fm(last,2))+'. Each round is now about '+fm(ratio,3)+' times the one before. '+(ratio<1?(last<0.01*590?'The rounds settle: it feeds itself.':'The rounds shrink, slowly, and still settle.'):'The rounds do not shrink: no outputs meet this demand.'); }
+$('ks').oninput=draw; draw();
+window.__pic={set:s=>{ $('ks').value=s; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'the balance',t:R`x = Ax + d`,n:`Inputs and final demand.`},
+  {k:'ember',kl:'the system',t:R`(I - A)x = d`,n:`Elimination.`},
+  {k:'ember',kl:'the outputs',t:R`\htmlClass{new}{x = (I - A)^{-1}d}`,n:`When it can be undone.`}
+],{title:'The slides · the table · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'the rounds',t:R`d + Ad + A^2d + \cdots`,n:`Through every industry.`},
+  {k:'ember',kl:'columns',t:R`\text{each} \le c \lt 1`,n:`Less than a dollar of inputs.`},
+  {k:'ember',kl:'the sum',t:R`\htmlClass{new}{(I - A)^{-1} = \textstyle\sum A^k}`,n:`No entry negative.`}
+],{title:'The slides · rounds · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'a plan',t:R`p - Ap \gt 0`,n:`A surplus of everything.`},
+  {k:'ember',kl:'the test',t:R`\htmlClass{new}{(I - A)^{-1} \ge 0}`,n:`Every demand met.`},
+  {k:'ember',kl:'two industries',t:R`\Delta \gt 0`,n:`With a₁₁, a₂₂ < 1.`}
+],{title:'The slides · feeding · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'a straight map',t:R`\Delta x = (I - A)^{-1}\Delta d`,n:`Demand to output.`},
+  {k:'ember',kl:'one dollar',t:R`\htmlClass{new}{\text{column } j}`,n:`Its sum: the multiplier.`}
+],{title:'The slides · an order · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`\det(I - A) \ne 0 \Rightarrow x \ge 0\,?`,n:`Not if Δ < 0.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

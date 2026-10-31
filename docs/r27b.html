@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dimension</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r27a.html">← 27a what adds and stretches like arrows</a><a href="r27c.html">next: 27c maps that keep adding and stretching →</a></p>
+  <div class="tags"><span class="tag proof">27b · proof</span></div>
+  <h1>Dimension</h1>
+  <p>The plane has two directions and space has three. But what is a direction in a space of polynomials, or of solutions to a rate rule? This step counts directions without pictures. Some arrows build every arrow by adding and stretching. Some arrows waste none of their number. A list that does both at once is a set of measuring directions, and every such list in a space has the same length. That length is the dimension.</p>
+  <p class="gesture">If some m arrows build every arrow in a space, then no more than m arrows can be free of each other. So every list that builds the space with nothing wasted has the same length, the dimension of the space.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r27a.html">27a</a> (spaces of arrows), <a href="r03.html">3</a> (induction over the counting numbers) and <a href="r24h.html">24h</a> (the swinging rule’s solutions). <a href="r27c.html">27c</a> counts what a map loses and keeps.</p></div>
+</header>
+
+<section class="class step" data-step="27b1">
+  <h2 class="sthead"><span class="stno">27b1</span>Building and wasting nothing</h2>
+  <p class="stands">Stands on 27a1.</p>
+  <p data-pid="7c1024">A <i>mix</i> of arrows v₁, …, vₖ is any t₁v₁ + ⋯ + tₖvₖ. The arrows <i>build</i> V if every arrow of V is a mix of them. They are <i>free</i> if the only mix equal to 0 is the one with every tᵢ = 0. A list that builds V and is free is a set of <i>measuring directions</i> for V; accepted name, a <i>basis</i>.</p>
+  <p data-pid="3d8815">Spare-arrow technique: <b>if v₁, …, vₖ are not free, and v₁ ≠ 0, then some vⱼ is a mix of the arrows before it, and dropping vⱼ leaves every mix the list can make.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the spare-arrow technique">
+t_1v_1 + \cdots + t_kv_k = 0,\ \text{not all } t_i = 0 @@ not free
+j = \text{the last index with } t_j \neq 0;\ j \ge 2 @@ if j were 1, then t₁v₁ = 0 with t₁ ≠ 0, so v₁ = 0
+v_j = -\tfrac{t_1}{t_j}v_1 - \cdots - \tfrac{t_{j-1}}{t_j}v_{j-1} @@ move the rest across and stretch by 1/tⱼ
+\htmlClass{new}{\text{any mix using } v_j \text{ is a mix of the others}} \quad \blacksquare @@ put that in for vⱼ, and gather
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · two words · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">27b1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="(1, 2),\ \ (3, 4),\ \ (5, 6)"></span></span>Find numbers t₁, t₂, t₃, not all 0, with t₁(1, 2) + t₂(3, 4) + t₃(5, 6) = 0. <br>Use the spare-arrow technique to find which arrow is a mix of the ones before it, and write that mix. <br>Find whether (1, 2) and (3, 4) alone are free.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27b2">
+  <h2 class="sthead"><span class="stno">27b2</span>No more free than builders</h2>
+  <p class="stands">Stands on 27b1 and 3 (induction).</p>
+  <p data-pid="12938d">Exchange technique: <b>if w₁, …, wₘ build V, and u₁, …, uₖ in V are free, then k ≤ m.</b> Swap the free arrows in, one at a time, and each time a builder goes out.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the exchange technique">
+u_1, w_1, \ldots, w_m \text{ builds } V \text{ and is not free} @@ u₁ is a mix of the w’s; u₁ ≠ 0, since the u’s are free
+\text{drop a spare } w;\ \text{still } m \text{ arrows, still builds} @@ the spare-arrow technique (27b1): the spare is not u₁, which is first
+u_1, \ldots, u_i \text{ and } m - i \text{ of the } w\text{’s build } V @@ repeat, by induction on i; the spare is never a u, since the u’s are free
+i = m + 1 \le k \Rightarrow u_{m+1} \text{ is a mix of } u_1..u_m @@ if k &gt; m, at i = m no w’s are left, and u₁..uₘ build V
+\htmlClass{new}{k \le m} \quad \blacksquare @@ the last line breaks the freedom of the u’s
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27b2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="w_1 = (1, 0, 0),\ \ w_2 = (1, 1, 0),\ \ w_3 = (1, 1, 1)"></span></span>Prove that w₁, w₂, w₃ build every list (a, b, c): find the mix. <br>Use the exchange technique to find the most free arrows a set of lists of three numbers can hold. <br>Find whether (1, 2, 3), (4, 5, 6), (7, 8, 9), (1, 0, 1) can be free, without solving anything.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27b3">
+  <h2 class="sthead"><span class="stno">27b3</span>Every basis is the same size</h2>
+  <p class="stands">Stands on 27b2.</p>
+  <p data-pid="d8f7ce">Same-size technique: <b>if a space has a basis of n arrows, every basis of it has n arrows.</b> That n is the <i>dimension</i> of the space.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the same-size technique">
+v_1..v_n \text{ and } u_1..u_k \text{ are both bases} @@ given
+k \le n @@ the exchange technique: the v’s build, the u’s are free
+n \le k @@ the same, the other way round
+\htmlClass{new}{k = n} \quad \blacksquare @@ the two lines above
+  </pre>
+  <p data-pid="f17694">Grow-to-basis technique: <b>in a space of dimension n, every free list can be grown into a basis, and every list of n free arrows is already one.</b> Add any arrow the list cannot make; the longer list is still free, since a mix equal to 0 could not use the new arrow. By the exchange technique this stops by n arrows.</p>
+  <p data-pid="8b64c2">Lists of n numbers have dimension n: the lists with a single 1 in one place build them and are free. Polynomials of degree at most n have dimension n + 1: 1, x, …, xⁿ build them, and are free because a polynomial that is 0 everywhere has every coefficient 0 (9g). The solutions of y″ = −y have dimension 2: cos and sin are free, and by 24h every solution is y(0) cos x + y′(0) sin x.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27b3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="W = \{p : \deg p \le 3,\ p(1) = 0\}"></span></span>Prove that W is a space inside the polynomials of degree at most 3. <br>Find a basis of W of the form x − 1, x² − 1, …, and prove that it builds W and is free. <br>Find the dimension of W.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27b4">
+  <h2 class="sthead"><span class="stno">27b4</span>Illegal moves</h2>
+  <p class="stands">Stands on 27b1 to 27b3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{three arrows in the plane are free}\,? @@ the plane has dimension 2: at most two free arrows
+v_1, v_2 \text{ not parallel in space} \Rightarrow \text{they build space}\,? @@ two arrows build at most a plane through 0; space has dimension 3
+\text{each pair free} \Rightarrow \text{the list is free}\,? @@ (1, 0), (0, 1), (1, 1): every pair is free, the three are not
+\text{every space of arrows has a dimension}\,? @@ only those with a finite list that builds them; all polynomials together have none
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27b4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="(1, 0),\ \ (0, 1),\ \ (2, 3)"></span></span>Find a mix of the three equal to 0, with numbers not all 0. <br>Find the step that proves no three arrows of the plane are free, and the builders it uses.</li><li><span class="givens"><span data-tex-inline="v_1 = (1, 0, 0),\ \ v_2 = (0, 1, 0)"></span></span>Check that they are not parallel. <br>Find every mix t₁v₁ + t₂v₂, and an arrow of space no mix can make.</li><li><span class="givens"><span data-tex-inline="(1, 0),\ \ (0, 1),\ \ (1, 1)"></span></span>Check that each of the three pairs is free. <br>Find a mix of all three equal to 0, and the arrow the spare-arrow technique drops.</li><li><span class="givens"><span data-tex-inline="1,\ x,\ x^2,\ x^3,\ \ldots"></span></span>Prove that no finite list of polynomials builds all polynomials: look at the highest degree in the list. <br>Find how many free arrows all polynomials together hold, and the demand of the same-size technique they miss.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">27b.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="(1, 2, 3),\ \ (2, 3, 4)"></span></span>Build a basis of the lists of three numbers that starts with these two, by the grow-to-basis technique. <br>Find the rule every mix of the two obeys, an arrow they cannot make, and prove the three arrows free.</div>
+  <div class="chq"><span class="chid">27b.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="V = \{0\}"></span></span>Find whether the list holding only the arrow 0 is free. <br>Find a list that builds V and is free, and the dimension of V. <br>Find the line of the spare-arrow proof that needs v₁ ≠ 0, and what goes wrong for the list (0, 0), (1, 0) in the plane.</div>
+  <div class="chq"><span class="chid">27b.4.3</span><span class="tagq">converse</span>In a space of dimension n, every n free arrows build it. Turn it round: must n arrows that build it be free? <br>Test (1, 1), (1, −1) in the plane, and 1 + x, 1 − x, x² in the polynomials of degree at most 2. <br>Prove the answer: if they were not free, drop a spare with the spare-arrow technique, and count with the exchange technique.</div>
+  <div class="chq"><span class="chid">27b.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="c_0 + c_1x + c_2x^2 + c_3x^3 = 0 \text{ for every } x"></span></span>Prove that 1, x, x², x³ are free another way, without 9g: put x = 0, then take slopes (13d) and put x = 0 again. <br>Find what each slope gives, and the slope that gives c₃.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r27a.html">← 27a · what adds and stretches like arrows</a><a href="r27c.html">27c · maps that keep adding and stretching →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A mix is a linear combination; arrows that build V span it, and the arrows a list can make are its span. Free arrows are linearly independent; arrows that are not free are linearly dependent. Measuring directions are a basis, and the size of a basis is the dimension. The exchange technique is the Steinitz exchange lemma. A space with no finite basis is infinite-dimensional.</p>
+  <h3>Who said it first</h3>
+  <p>Grassmann used the idea of dimension in 1844. Ernst Steinitz proved the exchange lemma in 1913, in a paper on fields.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'build',t:R`v = t_1v_1 + \cdots + t_kv_k`,n:`Every arrow is a mix.`},
+  {k:'ember',kl:'free',t:R`\textstyle\sum t_iv_i = 0 \Rightarrow \text{all } t_i = 0`,n:`No arrow is wasted.`},
+  {k:'ember',kl:'spare',t:R`\htmlClass{new}{v_j = \text{mix of } v_1..v_{j-1}}`,n:`Not free: one is spare.`}
+],{title:'The slides · two words · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

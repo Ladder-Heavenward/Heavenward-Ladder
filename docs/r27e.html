@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The determinant</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r27d.html">← 27d matrices as maps</a><a href="r27f.html">next: 27f the arrows a map only stretches →</a></p>
+  <div class="tags"><span class="tag proof">27e · proof</span></div>
+  <h1>The determinant</h1>
+  <p>A square grid moves the unit square to a slanted parallelogram, and the unit cube to a slanted box. By how much does it scale area, or volume? This step asks for a number with three plain properties, and finds there is exactly one. It multiplies when maps are done one after another, and it is zero exactly when the map flattens space and cannot be undone.</p>
+  <p class="gesture">Exactly one number per square grid is straight in each column, is zero when two columns agree, and is one for doing nothing. It multiplies along products, and it is zero exactly when the grid cannot be undone.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r27d.html">27d</a> (grids and products), <a href="r19e.html">19e</a> (the parity of shuffles) and <a href="r15e.html">15e</a> (signed area). <a href="r27f.html">27f</a> uses it to find the arrows a map only stretches.</p></div>
+</header>
+
+<section class="class step" data-step="27e1">
+  <h2 class="sthead"><span class="stno">27e1</span>Three rules for a volume scale</h2>
+  <p class="stands">Stands on 27d1 and 19e.</p>
+  <p data-pid="9df848">Look for a number D(A) for each n × n grid A, with three rules. Straight: D is straight in each column when the other columns are held fixed. Flat: D(A) = 0 when two columns of A are equal. Unit: D(I) = 1. These are what a signed volume should do: stretching one edge stretches the volume, a box with two equal edges is flat, and the unit cube has volume 1.</p>
+  <p data-pid="5d1c5c">Column-slide technique: <b>if D is straight and flat, then swapping two columns changes the sign of D, adding a stretch of one column to another leaves D unchanged, and a column of zeros gives 0.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the column-slide technique">
+0 = D(\ldots, u+v, \ldots, u+v, \ldots) @@ flat
+= D(.., u, .., u, ..) + D(.., u, .., v, ..) + D(.., v, .., u, ..) + D(.., v, .., v, ..) @@ straight, in each of the two columns
+\htmlClass{new}{D(.., u, .., v, ..) = -D(.., v, .., u, ..)} @@ the first and last are 0, by flat
+D(.., u + tv, .., v, ..) = D(.., u, .., v, ..) + t\,D(.., v, .., v, ..) @@ straight in the first column
+\htmlClass{new}{D(.., u + tv, .., v, ..) = D(.., u, .., v, ..)} \quad \blacksquare @@ flat; a zero column is 0 times itself, so gives 0
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · three rules · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">27e1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="A = \begin{pmatrix} a &amp; b \\ c &amp; d \end{pmatrix}"></span></span>Write column 1 as a e₁ + c e₂, and column 2 as b e₁ + d e₂. <br>Use straight, in each column, to write D(A) as four terms with D(eᵢ, eⱼ). <br>Use flat, the column-slide technique and unit to find D(A). Check it for A = I.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27e2">
+  <h2 class="sthead"><span class="stno">27e2</span>Exactly one such number</h2>
+  <p class="stands">Stands on 27e1 and 19e.</p>
+  <p data-pid="df0309">Three-rules technique: <b>exactly one D obeys straight, flat and unit: D(A) = Σ over the shuffles σ of 1..n of sign(σ) a_{σ(1)1} a_{σ(2)2} ⋯ a_{σ(n)n}, where sign(σ) is +1 for an even shuffle and −1 for an odd one. Any D that is only straight and flat equals D(I) times this.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the three-rules technique">
+\text{column } j = \textstyle\sum_i a_{ij}e_i @@ the columns technique (27d1)
+D(A) = \textstyle\sum_{i_1,\ldots,i_n} a_{i_1 1}\cdots a_{i_n n}\,D(e_{i_1}, \ldots, e_{i_n}) @@ straight, in every column in turn
+\text{terms with a repeated } e_i \text{ are } 0 @@ flat
+D(e_{\sigma(1)}, \ldots, e_{\sigma(n)}) = \operatorname{sign}(\sigma)\,D(I) @@ undo σ by swaps (19e); each swap changes the sign (27e1)
+\text{the formula is straight, and } 1 \text{ at } I @@ each term holds one entry from each column
+\text{two equal columns: terms pair off by one swap, with opposite signs} @@ a swap changes parity (19e)
+\htmlClass{new}{D(A) = D(I)\textstyle\sum_\sigma \operatorname{sign}(\sigma)\prod_j a_{\sigma(j)j}} \quad \blacksquare
+  </pre>
+  <p data-pid="9bba4b">For a 2 × 2 grid that number is ad − bc. It is the signed area of the parallelogram on the two columns, as 15e signed it: positive when the second column is a turn of less than a half turn anticlockwise from the first. Accepted name: the <i>determinant</i>, det A.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27e2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="A = \begin{pmatrix} 1 &amp; 2 &amp; 0 \\ 0 &amp; 1 &amp; 3 \\ 2 &amp; 0 &amp; 1 \end{pmatrix}"></span></span>List the six shuffles of 1, 2, 3, each with its sign. <br>Find the six terms of the formula and det A. <br>Find which terms are 0, and the entry that makes each one 0.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27e3">
+  <h2 class="sthead"><span class="stno">27e3</span>Volume scales multiply</h2>
+  <p class="stands">Stands on 27e2 and 27d2.</p>
+  <p data-pid="0efda0">Det-product technique: <b>det(AB) = det A · det B for all n × n grids.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the det-product technique">
+D(B) = \det(AB),\ A \text{ held fixed} @@ a number for each grid B
+\text{column } j \text{ of } AB = A(\text{column } j \text{ of } B) @@ the product-is-doing technique (27d2)
+D \text{ is straight and flat} @@ A keeps mixes; two equal columns of B give two equal columns of AB
+D(B) = D(I)\det B = \det A\,\det B @@ the three-rules technique (27e2), last sentence
+\htmlClass{new}{\det(AB) = \det A\,\det B} \quad \blacksquare
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27e3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="A = \begin{pmatrix} 2 &amp; 1 \\ 1 &amp; 1 \end{pmatrix},\ \ B = \begin{pmatrix} 0 &amp; -1 \\ 1 &amp; 0 \end{pmatrix}"></span></span>Find AB, det A, det B and det(AB), and check the det-product technique. <br>Find BA and det(BA), and whether AB = BA.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27e4">
+  <h2 class="sthead"><span class="stno">27e4</span>Zero exactly when it flattens</h2>
+  <p class="stands">Stands on 27e3, 27e1, 27d3 and 27b1.</p>
+  <p data-pid="f59403">Nonzero-det technique: <b>a square grid can be undone exactly when its determinant is not 0.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the nonzero-det technique">
+AA^{-1} = I \Rightarrow \det A\cdot\det A^{-1} = 1 @@ the det-product technique (27e3), and unit
+\Rightarrow \det A \ne 0 @@ a product of 1 has no zero factor
+A \text{ not undoable} \Rightarrow Av = 0,\ v \ne 0 @@ the undoable-group technique (27d3): it loses more than 0
+\Rightarrow \text{the columns are not free} \Rightarrow \text{one is a mix of the others} @@ Av is the mix of the columns with the numbers of v; the spare-arrow technique (27b1)
+\text{subtract that mix from it: a zero column, same det} @@ the column-slide technique (27e1)
+\htmlClass{new}{\det A = 0} \quad \blacksquare @@ a zero column gives 0
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27e4.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="A = \begin{pmatrix} 1 &amp; t \\ t &amp; 4 \end{pmatrix}"></span></span>Find det A as a polynomial in t. <br>Find every t for which A cannot be undone. <br>For each such t, find an arrow v ≠ 0 with Av = 0, and which column is a mix of the other.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27e5">
+  <h2 class="sthead"><span class="stno">27e5</span>Illegal moves</h2>
+  <p class="stands">Stands on 27e1 to 27e4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\det(A + B) = \det A + \det B\,? @@ det is straight in each column alone, not in the whole grid: det(I + I) = 2ⁿ
+\det(tA) = t\det A\,? @@ each of the n columns is stretched: det(tA) = tⁿ det A
+\text{swapping two rows leaves det alone}\,? @@ a row swap also changes the sign: 27g proves det A equals the det of A turned on its side
+\det A = 0 \Rightarrow \text{a column is } 0\,? @@ a column need only be a mix of the others
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27e5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="A = B = I,\ \ 2 \times 2"></span></span>Find det(A + B), and det A + det B. <br>Find what D is straight in, and why that is not the whole grid.</li><li><span class="givens"><span data-tex-inline="A = \begin{pmatrix} 1 &amp; 2 \\ 3 &amp; 4 \end{pmatrix},\ \ t = 3"></span></span>Find det A and det(3A). <br>Find how many columns were stretched by 3, and det(tA) for an n × n grid.</li><li><span class="givens"><span data-tex-inline="A = \begin{pmatrix} 1 &amp; 2 \\ 3 &amp; 4 \end{pmatrix}"></span></span>Find det A, and the det of A with its two rows swapped. <br>Find the step that proves the rule for rows, and whether a row swap can ever leave det alone.</li><li><span class="givens"><span data-tex-inline="A = \begin{pmatrix} 1 &amp; 2 &amp; 3 \\ 4 &amp; 5 &amp; 6 \\ 7 &amp; 8 &amp; 9 \end{pmatrix}"></span></span>Check that no column is 0, and find det A. <br>Find a mix of the columns equal to 0, and which column is a mix of the others.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">27e.4.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">a slanted box whose edges from one corner are (2, 0, 0), (1, 3, 0) and (1, 1, 4), in metres</span></span>Find the determinant of the grid with these columns, and the volume it gives the box. <br>Build a 3 × 3 grid with no entry 0 whose determinant is 0, and one with no entry 0 whose determinant is 1.</div>
+  <div class="chq"><span class="chid">27e.4.2</span><span class="tagq">edge</span>For 1 × 1 grids (a), find every D that is straight and has D(I) = 1, and whether flat asks anything at all. <br>For 2 × 2 grids, check that D(A) = a₁₁a₂₂, the product down the middle, is straight in each column and 1 at I. Find whether it is flat, and what it gives the grid of all 1s. <br>Find which rule the three-rules technique could not do without.</div>
+  <div class="chq"><span class="chid">27e.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="A = \begin{pmatrix} 2 &amp; 1 \\ 1 &amp; 1 \end{pmatrix}"></span></span>det(AB) = det A det B turns grids into numbers. Turn it round: if det A = det B, must A and B be the same grid? <br>Find a grid with the same det as this A that is not A. <br>Prove that if det A = det B ≠ 0, then B = AC for a grid C with det C = 1. Find whether that holds when det A = det B = 0: test A = 0 and B with rows (1, 0), (0, 0).</div>
+  <div class="chq"><span class="chid">27e.4.4</span><span class="tagq">reroute</span>Prove “columns not free gives det A = 0” another way, without the column-slide technique. Write column k as a mix of the others, and use straight in column k alone. <br>Find why every term that is left has two equal columns.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r27d.html">← 27d · matrices as maps</a><a href="r27f.html">27f · the arrows a map only stretches →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The number is the determinant, det A or |A|. The three rules say det is multilinear, alternating and normalised; the formula over shuffles is the Leibniz formula. The det-product technique is the multiplicativity of the determinant. A grid with det A = 0 is singular.</p>
+  <h3>Who said it first</h3>
+  <p>Seki Takakazu in 1683 and Gottfried Wilhelm Leibniz in 1693 each used determinants to decide when equations can be solved. Gabriel Cramer gave his rule in 1750. Augustin-Louis Cauchy proved det(AB) = det A det B in 1812, and gave the word its present meaning. Karl Weierstrass defined the determinant by the three rules in lectures published in 1903.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'straight',t:R`D(.., su + tv, ..) = sD(.., u, ..) + tD(.., v, ..)`,n:`One column at a time.`},
+  {k:'ember',kl:'flat',t:R`D(.., u, .., u, ..) = 0`,n:`Two equal edges, no volume.`},
+  {k:'ember',kl:'unit',t:R`D(I) = 1`,n:`The unit cube.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{swap} \Rightarrow -D}`,n:`Order of the edges gives the sign.`}
+],{title:'The slides · three rules · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

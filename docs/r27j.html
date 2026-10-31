@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Solving systems by elimination</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r27i.html">← 27i vectors by hand</a><a href="r27k.html">next: 27k determinants by hand →</a></p>
+  <div class="tags"><span class="tag tech">27j · technique</span></div>
+  <h1>Solving systems by elimination</h1>
+  <p>Many samenesses in many unknowns, all at once, are one grid times one unknown arrow equal to a known arrow. The oldest way to solve them is still the best by hand and by machine. Use one sameness to clear one unknown out of all the others. Then do it again with the next unknown, and the next, until the grid is a staircase. Three moves on the rows are all it takes, and none of them changes the answers. Carried all the way, the moves leave the grid in lowest terms, and like a fraction it has only one lowest form. From that form the answers can be read straight off: one answer, none, or a whole family of them, with exactly as many free choices as the grid loses directions. The same moves undo a grid. And the work can be counted. It grows like the cube of the number of unknowns, which is why a laptop solves a thousand samenesses in a moment.</p>
+  <p class="gesture">Three moves on the rows of a system never change its answers. Used to clear one unknown at a time, they bring any grid to one lowest form, and the answers are read off from it. The same moves undo a grid, and the work grows like the cube of the number of unknowns.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r27d.html">27d</a> (grids, products and the undoable-group technique), <a href="r27c.html">27c</a> (the lost-plus-reached technique), <a href="r27b.html">27b</a> (free arrows), <a href="r15g.html">15g</a> (sums of counting numbers and of squares) and <a href="r22k.html">22k</a> (how fast things grow). <a href="r27k.html">27k</a> uses the same moves to find determinants.</p></div>
+</header>
+
+<section class="class step" data-step="27j1">
+  <h2 class="sthead"><span class="stno">27j1</span>Three moves that keep the answers</h2>
+  <p class="stands">Stands on 27d1 (the columns technique), 27d2 (the product-is-doing technique) and 27d3 (the undoable-group technique).</p>
+  <p data-pid="f6bfe0">m samenesses in n unknowns, aᵢ₁x₁ + ⋯ + aᵢₙxₙ = bᵢ, are one sameness of arrows, Ax = b, with A the grid of the numbers in front (27d1). Write the rows of A with bᵢ at the end of each; that grid is [A | b]. Three <i>row moves</i> change it: swap two rows; stretch a row by a number that is not 0; add a stretch of one row to another.</p>
+  <p data-pid="aa50bc">Row-move technique: <b>each row move is multiplying on the left by an undoable grid E; so a row move on [A | b] keeps exactly the same answers x, and each row move is undone by another row move.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the row-move technique">
+E = I \text{ with the same move done to its rows} @@ swap: rows i, k of I swapped; stretch: c in place i, i; add: t in place i, k
+\text{row } i \text{ of } EA = \textstyle\sum_l e_{il}\,(\text{row } l \text{ of } A) @@ the product-is-doing technique (27d2)
+EA = A \text{ with the move done} @@ each kind of E picks out the rows the move asks for
+\text{undo: swap again; stretch by } 1/c;\ \text{add } -t \text{ times the row} @@ each undo is a row move of the same kind, so E is undoable (27d3)
+Ax = b \Rightarrow EAx = Eb;\ \ EAx = Eb \Rightarrow Ax = E^{-1}EAx = E^{-1}Eb = b @@ multiply on the left by E, then by E⁻¹
+\htmlClass{new}{\text{the same answers before and after}} \quad \blacksquare
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: three samenesses, cleared one unknown at a time">
+x + y + z = 6,\ \ 2x + y - z = 1,\ \ x - y + 2z = 5 @@ given
+-y - 3z = -11,\ \ -2y + z = -1 @@ add −2 times row 1 to row 2, and −1 times row 1 to row 3: x is cleared
+7z = 21 @@ add −2 times the new row 2 to the new row 3: y is cleared
+z = 3,\ \ y = 11 - 3z = 2,\ \ x = 6 - y - z = 1 @@ back up the stairs, one unknown at a time
+\htmlClass{new}{(x, y, z) = (1, 2, 3)} \quad \blacksquare @@ check: 1 + 2 + 3 = 6, 2 + 2 − 3 = 1, 1 − 2 + 6 = 5
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · row moves · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">27j1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="2x + y = 7,\ \ x - 3y = -7"></span></span>Solve by row moves, naming each move.</li><li><span class="givens"><span data-tex-inline="2p + r + a = 27,\ \ p + 2r + a = 24,\ \ p + r + 2a = 29"></span></span>A shop in Bend, Oregon sells peanuts, raisins and almonds by the kilogram. Three bags of trail mix, with the weights in front, cost the dollars on the right. Find the price of each.</li><li><span class="givens"><span data-tex-inline="\text{three rows}"></span></span>Find the grid E that adds −2 times row 1 to row 2, and the grid that undoes it. Check that their product is I.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27j2">
+  <h2 class="sthead"><span class="stno">27j2</span>One lowest form</h2>
+  <p class="stands">Stands on 27j1, 27b1 (free arrows) and 27c2 (the lost-plus-reached technique).</p>
+  <p data-pid="e59367">In each row that is not all 0, the first entry that is not 0 is its <i>lead</i>. A grid is in <i>lowest terms</i> when each lead is 1, each lead sits to the right of the lead in the row above, rows of zeros are at the bottom, and each lead is the only entry that is not 0 in its column. Elimination gets there column by column: find a row at or below the current one with a number that is not 0 in this column, swap it up, stretch it to make its lead 1, and clear the rest of the column by adding stretches of it to the other rows.</p>
+  <p data-pid="bf7665">Grid-lowest-terms technique: <b>row moves bring every grid to a grid in lowest terms, and to only one.</b> As each fraction has one form in lowest terms (5g), each grid has one.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the grid-lowest-terms technique">
+\text{elimination ends in lowest terms} @@ each column is finished once, and later moves leave it as it is
+R,\ R' \text{ lowest forms of } A \Rightarrow Rx = 0 \text{ and } R'x = 0 \text{ have the same answers} @@ both have the answers of Ax = 0 (the row-move technique, 27j1)
+\text{column } j \text{ is a lead column} \iff \text{it is not a mix of the columns before it} @@ a lead’s 1 sits where every column before it has 0; any other column is a mix of the lead columns before it
+\text{a mix } c_1(\text{col } 1) + \cdots = \text{col } j \iff x = (c_1, \ldots, -1, 0, \ldots, 0) \text{ is an answer} @@ Ax is the mix of the columns with the numbers of x (27d1)
+R \text{ and } R' \text{ have the same lead columns, and the same mixes for the others} @@ the same answers; the lead columns are free, so each mix is the only one
+\htmlClass{new}{R = R'} \quad \blacksquare @@ a lead column is e₁, e₂, … in order; every other column is fixed by its mix
+  </pre>
+  <p data-pid="ddd469">Bring [A | b] to lowest terms and read the answers. If a row says 0 = 1, there are none. Otherwise each unknown at a lead is its right side less the other unknowns in its row, and the unknowns with no lead are free: any numbers will do. The free unknowns are as many as the columns less the leads, and that is the dimension of what A loses, by the lost-plus-reached technique (27c2): the lead columns are a basis of what A reaches.</p>
+  <pre class="lines" data-k="ember" data-label="this step: a family of answers">
+x + 2y + z = 4,\ \ 2x + 4y + 3z = 9,\ \ 3x + 6y + 4z = 13 @@ given
+\begin{pmatrix}1&2&0&3\\0&0&1&1\\0&0&0&0\end{pmatrix} @@ lowest terms of [A | b]: −2 row 1 to row 2, −3 row 1 to row 3, −1 row 2 to row 3, −1 row 2 to row 1
+x = 3 - 2y,\ \ z = 1,\ \ y \text{ free} @@ leads in the x and z columns; no lead for y
+\htmlClass{new}{(x, y, z) = (3, 0, 1) + y\,(-2, 1, 0)} \quad \blacksquare @@ one free choice: A loses a line, of dimension 1
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · lowest terms · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27j2.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="x + y + 2z = 3,\ \ 2x + 3y + 5z = 7,\ \ x + 2y + 3z = 4"></span></span>Bring [A | b] to lowest terms, and find every answer.</li><li><span class="givens"><span data-tex-inline="x + y + 2z = 3,\ \ 2x + 3y + 5z = 7,\ \ x + 2y + 3z = 5"></span></span>The same left sides, a different right side. Bring it to lowest terms, and find every answer.</li><li><span class="givens"><span data-tex-inline="A = \begin{pmatrix}1&amp;2&amp;1&amp;0\\2&amp;4&amp;0&amp;2\\1&amp;2&amp;2&amp;-1\end{pmatrix}"></span></span>Find the dimension of what A loses, and a basis of it, from the lowest form of A.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27j3">
+  <h2 class="sthead"><span class="stno">27j3</span>Undoing a grid, and what it costs</h2>
+  <p class="stands">Stands on 27j1, 27j2, 27d3, 15g (the sum-of-squares technique) and 22k (O and ~).</p>
+  <p data-pid="09393a">Undo-by-rows technique: <b>a square grid A can be undone exactly when row moves bring it to I; and the same row moves, done to I, give A⁻¹.</b> So write [A | I], and bring it to lowest terms.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the undo-by-rows technique">
+E_k\cdots E_1A = I @@ the row moves that bring A to I, as grids (27j1)
+A = (E_k\cdots E_1)^{-1},\ \ A^{-1} = E_k\cdots E_1 = E_k\cdots E_1\,I @@ each Eᵢ is undoable, so their product is (27d3); multiply on the left by its undo
+A \text{ undoable} \Rightarrow R = E_k\cdots E_1A \text{ undoable} @@ products of undoable grids are undoable (27d3)
+R \text{ has no row of zeros} \Rightarrow n \text{ leads in } n \text{ columns} @@ a row of zeros in R stays one in RB, so RB ≠ I
+\htmlClass{new}{R = I} \quad \blacksquare @@ the only square grid in lowest terms with n leads
+  </pre>
+  <p data-pid="28cfe3">Elimination-cost technique: <b>for n samenesses in n unknowns, when no lead is 0 on the way, clearing down the stairs and solving back up takes n³/3 + n² − n/3 multiplications and divisions. So the work is ~ n³/3, and doubling n multiplies it by about 8.</b> Swaps cost no multiplying.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the elimination-cost technique">
+\text{column } k:\ n - k \text{ rows to clear} @@ the rows below the lead, k = 1, …, n − 1
+\text{each: one division, then } n - k + 1 \text{ multiplications} @@ the multiplier, then the rest of the row and its right side
+\textstyle\sum_{k=1}^{n-1}(n-k)(n-k+2) = \sum_{j=1}^{n-1}(j^2 + 2j) = \tfrac{(n-1)n(2n-1)}{6} + (n-1)n @@ j = n − k; sum of squares and doubled sum (15g)
+\text{back up: row } k \text{ takes } n - k \text{ multiplications and one division} @@ put in the unknowns already found
+\textstyle\sum_{k=1}^{n}(n-k+1) = \tfrac{n(n+1)}{2} @@ doubled sum (15g)
+\htmlClass{new}{\tfrac{n^3}{3} + n^2 - \tfrac{n}{3} \sim \tfrac{n^3}{3}} \quad \blacksquare @@ multiply out and add; the n³ term wins (22k)
+  </pre>
+  <p data-pid="4a8521">At n = 3 that is 17. At n = 1000 it is 334 333 000, under a second on a laptop. Weather forecasts, the strength of a bridge, the pages of a search engine: each is a system of samenesses, often of millions of unknowns, and each grid is mostly zeros, which careful elimination never has to touch.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · undo and cost · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27j3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="A = \begin{pmatrix}1&amp;2&amp;3\\0&amp;1&amp;4\\5&amp;6&amp;0\end{pmatrix}"></span></span>Find A⁻¹ by bringing [A | I] to lowest terms, and check one place of AA⁻¹.</li><li><span class="givens"><span data-tex-inline="n = 3"></span></span>Count the multiplications and divisions in solving the three samenesses of 27j1 the way the elimination-cost technique counts them, and compare with the formula.</li><li><span class="givens"><span data-tex-inline="n = 1000,\ \ n = 2000"></span></span>Find the work for each by the formula, and their ratio.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27j4">
+  <h2 class="sthead"><span class="stno">27j4</span>Illegal moves</h2>
+  <p class="stands">Stands on 27j1 to 27j3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{stretch a row by } 0\,? @@ it cannot be undone: x + y = 2, x − y = 0 becomes x + y = 2, 0 = 0, with new answers
+\text{add a stretch of one column to another}\,? @@ columns hold the unknowns; mixing them changes what the unknowns are, and the answers
+n \text{ samenesses in } n \text{ unknowns have exactly one answer}\,? @@ only when A can be undone: x + y = 1, 2x + 2y = 2 has a whole line of answers
+\text{more unknowns than samenesses} \Rightarrow \text{many answers}\,? @@ there may be none: x + y + z = 1, x + y + z = 2
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27j4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="x + y = 2,\ \ x - y = 0"></span></span>Find every answer before and after row 2 is stretched by 0. <br>Find which demand of a row move the first line breaks.</li><li><span class="givens"><span data-tex-inline="x + y = 3,\ \ x - y = 1"></span></span>Add column 1 to column 2, and solve what you get. <br>Find what its answer means for the first system.</li><li><span class="givens"><span data-tex-inline="x + y = 1,\ \ 2x + 2y = 2"></span></span>Find every answer, and det of the grid. <br>Find what the third line forgets.</li><li><span class="givens"><span data-tex-inline="x + y + z = 1,\ \ x + y + z = 2"></span></span>Bring it to lowest terms. <br>Find what the fourth line forgets.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">27j.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="(x, y, z) = (1, 0, 2) + t\,(1, 1, -1)"></span></span>Build a system of three samenesses in three unknowns, with no row a stretch of another, whose answers are exactly these, for every t. <br>Check it by bringing it to lowest terms.</div>
+  <div class="chq"><span class="chid">27j.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="0.0001x + y = 1,\ \ x + y = 2"></span></span>Solve it exactly. Then solve it by elimination keeping only three digits after each step, first with the rows as given, then with the rows swapped. <br>Find which order goes wrong, and why a small lead is dangerous.</div>
+  <div class="chq"><span class="chid">27j.4.3</span><span class="tagq">converse</span>Row moves keep the answers. Turn it round: if two systems in the same n unknowns have exactly the same answers, are their grids [A | b] the same in lowest terms, once rows of zeros are dropped? <br>Prove it when there is at least one answer. Find two systems with no answers whose lowest forms differ.</div>
+  <div class="chq"><span class="chid">27j.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="A = \begin{pmatrix}2&amp;1\\1&amp;1\end{pmatrix}"></span></span>27d3.1 undid this grid by guessing and checking. Reroute: undo it by bringing [A | I] to lowest terms, and name each row move. <br>Undo the grid with rows (a, b), (c, d), a ≠ 0, the same way, and find where ad − bc appears.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r27i.html">← 27i · vectors by hand</a><a href="r27k.html">27k · determinants by hand →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>Solving by clearing one unknown at a time is Gaussian elimination; carried to lowest terms it is Gauss–Jordan elimination. Row moves are elementary row operations, and their grids E are elementary matrices. The staircase is row echelon form, and lowest terms is reduced row echelon form, with the leads as pivots. A system with no answer is inconsistent. The number of leads is the rank of A, and the unknowns with no lead are free variables. Swapping the largest entry up to be the lead, as 27j.4.2 suggests, is partial pivoting. Grids that are mostly zeros are sparse.</p>
+  <h3>Who said it first</h3>
+  <p>The Nine Chapters on the Mathematical Art, compiled in China by about the first century, solves systems of up to six samenesses by this method, with counting rods on a board, column by column. Carl Friedrich Gauss used it around 1809 to find the orbit of the asteroid Pallas from many observations, and Wilhelm Jordan described the full reduction in 1888 for surveying. John von Neumann and Herman Goldstine, and Alan Turing, studied its rounding errors on the first computers in 1947 and 1948.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'one sameness',t:R`Ax = b`,n:`Many samenesses, one grid.`},
+  {k:'ember',kl:'three moves',t:R`\text{swap, stretch by } c \ne 0,\ \text{add a stretch of a row}`,n:`Each is a grid E that can be undone.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{EAx = Eb \iff Ax = b}`,n:`The answers never change.`}
+],{title:'The slides · row moves · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'clear',t:R`\text{one column at a time}`,n:`Swap up, stretch the lead to 1, clear the column.`},
+  {k:'ember',kl:'read',t:R`\text{lead unknowns} = \text{right side} - \text{free ones}`,n:`A row 0 = 1 means none.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{one lowest form; free unknowns} = \dim(\text{lost})}`,n:`As many free choices as directions lost.`}
+],{title:'The slides · lowest terms · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'side by side',t:R`[A \mid I] \to [I \mid A^{-1}]`,n:`The moves that clear A build its undo.`},
+  {k:'ember',kl:'count',t:R`\textstyle\sum (n-k)(n-k+2) + \tfrac{n(n+1)}{2}`,n:`Down the stairs, then back up.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\sim n^3/3}`,n:`Twice the unknowns, eight times the work.`}
+],{title:'The slides · undo and cost · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

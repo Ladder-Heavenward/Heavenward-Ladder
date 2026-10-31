@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Matrices as maps</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r27c.html">← 27c maps that keep adding and stretching</a><a href="r27e.html">next: 27e the determinant →</a></p>
+  <div class="tags"><span class="tag proof">27d · proof</span></div>
+  <h1>Matrices as maps</h1>
+  <p>A straight map is fixed by what it does to a few arrows. Send each measuring direction somewhere, and adding and stretching decide the rest. So a straight map between lists of numbers can be written as a grid: one column for where each direction goes. Doing one map after another becomes a way of multiplying grids. And the maps that can be undone form a group, of the kind rung 19 studied.</p>
+  <p class="gesture">A straight map from lists of n numbers to lists of m numbers is a grid of m rows and n columns. Doing one map after another is multiplying their grids, and the maps that can be undone form a group.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r27c.html">27c</a> (straight maps), <a href="r27b.html">27b</a> (bases) and <a href="r19a.html">19a</a> (groups). <a href="r27e.html">27e</a> finds one number that says whether a grid can be undone.</p></div>
+</header>
+
+<section class="class step" data-step="27d1">
+  <h2 class="sthead"><span class="stno">27d1</span>Columns are where the directions go</h2>
+  <p class="stands">Stands on 27c1 and 27b3.</p>
+  <p data-pid="510b7c">Write e₁, …, eₙ for the lists of n numbers with a single 1, in place 1, …, n. A <i>grid</i> A of m rows and n columns, with entry aᵢⱼ in row i and column j, acts on a list x by (Ax)ᵢ = aᵢ₁x₁ + ⋯ + aᵢₙxₙ. Accepted name: a <i>matrix</i>.</p>
+  <p data-pid="bfc874">Columns technique: <b>every straight map L from lists of n numbers to lists of m is x ↦ Ax for exactly one grid A, whose column j is L(eⱼ).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the columns technique">
+x = x_1e_1 + \cdots + x_ne_n @@ the eⱼ build every list (27b3)
+L(x) = x_1L(e_1) + \cdots + x_nL(e_n) @@ L keeps mixes (27c1)
+(Lx)_i = a_{i1}x_1 + \cdots + a_{in}x_n,\ \ a_{ij} = (L(e_j))_i @@ read off place i
+A e_j = \text{column } j \text{ of } A @@ only xⱼ = 1 is not 0
+\htmlClass{new}{L = A \text{ and } A \text{ is unique}} \quad \blacksquare @@ two grids that agree on every eⱼ have equal columns
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · a map is a grid · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">27d1.1</span><span class="ph do">do</span>Find where the quarter turn anticlockwise sends e₁ and e₂, and its grid Q. <br>Find where the flip across the line y = x sends e₁ and e₂, and its grid F. <br>Find Q(3, 1) and F(3, 1), and check each with a picture.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27d2">
+  <h2 class="sthead"><span class="stno">27d2</span>Doing one after another</h2>
+  <p class="stands">Stands on 27d1.</p>
+  <p data-pid="5cf4bb">Product-is-doing technique: <b>if B is a grid with n columns and k rows, and A has k columns and m rows, then doing B and then A is the grid AB, whose column j is A times column j of B: (AB)ᵢⱼ = aᵢ₁b₁ⱼ + ⋯ + aᵢₖbₖⱼ.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the product-is-doing technique">
+x \mapsto A(Bx) \text{ is straight} @@ each of the two keeps adding and stretching
+\text{its column } j \text{ is } A(Be_j) = A(\text{column } j \text{ of } B) @@ the columns technique (27d1)
+\big(A(Be_j)\big)_i = \textstyle\sum_{l} a_{il}\,b_{lj} @@ the action of A on the list Beⱼ
+\htmlClass{new}{(AB)_{ij} = \textstyle\sum_l a_{il}b_{lj},\ \ (AB)x = A(Bx)} \quad \blacksquare @@ the grid of a map is unique (27d1)
+  </pre>
+  <p data-pid="899db7">Since doing maps one after another is grouping-free, so is the product: (AB)C = A(BC), with no sums to check. It is not turn-about. The quarter turn after the flip across y = x is not the flip after the quarter turn, as rung 20 found with moves.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27d2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="Q = \begin{pmatrix} 0 &amp; -1 \\ 1 &amp; 0 \end{pmatrix},\ \ F = \begin{pmatrix} 0 &amp; 1 \\ 1 &amp; 0 \end{pmatrix}"></span></span>Find QF and FQ. <br>Find which move of the plane each product is, from where it sends e₁ and e₂. <br>Find QF − FQ, and Q² and F².</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27d3">
+  <h2 class="sthead"><span class="stno">27d3</span>The maps that can be undone</h2>
+  <p class="stands">Stands on 27d2, 27c2 and 19a.</p>
+  <p data-pid="b7c5d8">A square grid A is <i>undoable</i> if some grid A⁻¹ has AA⁻¹ = A⁻¹A = I, where I is the grid of doing nothing, with 1 down its middle and 0 elsewhere.</p>
+  <p data-pid="603756">Undoable-group technique: <b>the undoable grids with n rows and n columns form a group under the product; and a square grid is undoable as soon as it loses only 0.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the undoable-group technique">
+(AB)(B^{-1}A^{-1}) = A(BB^{-1})A^{-1} = AA^{-1} = I @@ grouping-free (27d2); socks and shoes, 19c
+I \text{ undoable},\ (A^{-1})^{-1} = A @@ the definition, read both ways
+\text{grouping-free, a neutral grid, an undo for each} @@ the three demands of a group (19a)
+A \text{ loses only } 0 \Rightarrow A \text{ reaches every list} @@ lost plus reached (27c2), with equal dimensions
+\Rightarrow x \mapsto Ax \text{ has a straight undo, with a grid} @@ its undo keeps adding and stretching; the columns technique
+\htmlClass{new}{\text{the undoable } n \times n \text{ grids form a group}} \quad \blacksquare
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27d3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="A = \begin{pmatrix} 2 &amp; 1 \\ 1 &amp; 1 \end{pmatrix}"></span></span>Find the grid B with AB = I: find its first column from A(x, y) = e₁, and its second from A(x, y) = e₂. <br>Check that BA = I too. <br>Find the undo of A², by the undoable-group technique, and check it.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27d4">
+  <h2 class="sthead"><span class="stno">27d4</span>Illegal moves</h2>
+  <p class="stands">Stands on 27d1 to 27d3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+AB = BA\,? @@ not in general: a quarter turn and a flip disagree, both ways round
+(AB)^{-1} = A^{-1}B^{-1}\,? @@ undo the last first: (AB)⁻¹ = B⁻¹A⁻¹
+(AB)_{ij} = a_{ij}\,b_{ij}\,? @@ place by place is not doing one after another: row of A against column of B
+AB = 0 \Rightarrow A = 0 \text{ or } B = 0\,? @@ the grid with rows (0, 1), (0, 0) times itself is 0
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27d4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="Q,\ F \text{ of 27d2.1}"></span></span>Find whether QF and FQ agree. <br>Find two grids, neither of them I, that do agree both ways round.</li><li><span class="givens"><span data-tex-inline="A = \begin{pmatrix} 1 &amp; 1 \\ 0 &amp; 1 \end{pmatrix},\ \ B = \begin{pmatrix} 2 &amp; 0 \\ 0 &amp; 1 \end{pmatrix}"></span></span>Find AB and its undo, then A⁻¹B⁻¹ and B⁻¹A⁻¹. <br>Find which one matches, and why the order flips.</li><li><span class="givens"><span data-tex-inline="A = \begin{pmatrix} 1 &amp; 2 \\ 3 &amp; 4 \end{pmatrix},\ \ x = (1, 1)"></span></span>Find the place-by-place product of A with itself, and what it does to x. <br>Find A(Ax), and AA by rows against columns, and compare.</li><li><span class="givens"><span data-tex-inline="N = \begin{pmatrix} 0 &amp; 1 \\ 0 &amp; 0 \end{pmatrix}"></span></span>Find Ne₁, Ne₂ and N². <br>Find what N loses and what it reaches, and why doing N twice loses everything.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">27d.4.1</span><span class="tagq">build</span>Build the grid R(θ) of the turn of the plane by θ anticlockwise, from where it sends e₁ and e₂ (rung 21). <br>Find R(α)R(β) by the product-is-doing technique, and prove it is R(α + β) with rung 21’s formulas for cos(α + β) and sin(α + β). <br>Find R(π/3)⁶ without multiplying six grids.</div>
+  <div class="chq"><span class="chid">27d.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="A = \begin{pmatrix} 1 &amp; 0 &amp; 0 \\ 0 &amp; 1 &amp; 0 \end{pmatrix},\ \ B = \begin{pmatrix} 1 &amp; 0 \\ 0 &amp; 1 \\ 0 &amp; 0 \end{pmatrix}"></span></span>Find AB and BA. <br>Find whether A or B is undoable, and the line of the undoable-group technique that needs square grids.</div>
+  <div class="chq"><span class="chid">27d.4.3</span><span class="tagq">converse</span>If A and B are undoable n × n grids, so is AB. Turn it round: if AB is undoable, must A and B be? <br>Prove that if B loses an arrow v ≠ 0, so does AB. <br>Prove that if AB and B are undoable, so is A. Then find what 27d.4.2 shows when the grids are not square.</div>
+  <div class="chq"><span class="chid">27d.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="A = \begin{pmatrix} 1 &amp; 2 \\ 0 &amp; 1 \end{pmatrix},\ \ B = \begin{pmatrix} 0 &amp; 1 \\ 1 &amp; 1 \end{pmatrix},\ \ C = \begin{pmatrix} 3 &amp; 0 \\ 1 &amp; 2 \end{pmatrix}"></span></span>Prove (AB)C = A(BC) another way, from the entries alone: write ((AB)C)ᵢⱼ as a double sum and regroup it. <br>Check it on these three grids.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r27c.html">← 27c · maps that keep adding and stretching</a><a href="r27e.html">27e · the determinant →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A grid is a matrix, an m × n matrix when it has m rows and n columns; doing nothing is the identity matrix I. The product AB is matrix multiplication. An undoable matrix is invertible (or non-singular), with inverse A⁻¹. The undoable n × n real matrices form the general linear group, GL(n, ℝ).</p>
+  <h3>Who said it first</h3>
+  <p>James Joseph Sylvester named the matrix in 1850. Arthur Cayley defined the product as the composition of maps in 1858, and noted that it is not commutative.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'directions',t:R`x = \textstyle\sum x_je_j`,n:`Every list is a mix of the eⱼ.`},
+  {k:'ember',kl:'columns',t:R`\text{column } j = L(e_j)`,n:`Where each direction goes.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{L(x) = Ax}`,n:`The grid is the map.`}
+],{title:'The slides · a map is a grid · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

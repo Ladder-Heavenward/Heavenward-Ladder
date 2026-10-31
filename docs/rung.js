@@ -949,6 +949,9 @@ async function edInit(){
   if(ED.owner) document.body.classList.add('ed-owner');
   try{ const snap=await db.collection('edits').where('page','==',ED.page).get();
     snap.docs.forEach(d=>{ const v=d.data()||{}; const p=document.querySelector('p[data-pid="'+(v.pid||d.id)+'"]'); if(p&&typeof v.html==='string'&&editable(p)) edApply(p,v.html); }); }catch(e){}
+  try{ const k='ladder:pending-edits', m=JSON.parse(localStorage.getItem(k)||'{}'); let sent=0;
+    for(const pid in m){ const r=m[pid]; try{ await ED.db.doc('edits/'+pid).set(r); delete m[pid]; sent++; const p=r.page===ED.page&&document.querySelector('p[data-pid="'+pid+'"]'); if(p&&editable(p)) edApply(p,r.html); }catch(_){ } }
+    localStorage.setItem(k,JSON.stringify(m)); if(sent) toast(sent+' edit'+(sent>1?'s':'')+' saved that had been waiting on this device'); }catch(_){}
 }
 function startEdit(p){ if(!ED.db||!ED.owner||!editable(p)||p.isContentEditable) return;
   const b=p.querySelector('button.pa'); if(b) b.remove(); const before=p.innerHTML;
@@ -960,9 +963,13 @@ function startEdit(p){ if(!ED.db||!ED.owner||!editable(p)||p.isContentEditable) 
   bar.addEventListener('click',async e=>{ const k=e.target.dataset.e; if(!k) return;
     if(k==='cancel'){ p.innerHTML=before; done(); return; }
     const html=edClean(p); e.target.disabled=true;
-    try{ await ED.db.doc('edits/'+p.dataset.pid).set({pid:p.dataset.pid,page:ED.page,html,at:new Date().toISOString()});
+    const rec={pid:p.dataset.pid,page:ED.page,html,at:new Date().toISOString()}; let err=null;
+    for(const wait of [0,1500,4000,9000]){ if(wait){ toast('the database is busy; trying again…'); await new Promise(r=>setTimeout(r,wait)); }
+      try{ await ED.db.doc('edits/'+p.dataset.pid).set(rec); err=null; break; }catch(x){ err=x; } }
+    if(!err){ try{ const k='ladder:pending-edits', m=JSON.parse(localStorage.getItem(k)||'{}'); delete m[p.dataset.pid]; localStorage.setItem(k,JSON.stringify(m)); }catch(_){}
       p.innerHTML=html; p.classList.add('pedited'); done(); toast('saved: every reader sees it now, and it goes into the page at the next publish'); }
-    catch(err){ e.target.disabled=false; toast('not saved: '+((err&&err.code)||'the database refused it')); } });
+    else{ try{ const k='ladder:pending-edits', m=JSON.parse(localStorage.getItem(k)||'{}'); m[p.dataset.pid]=rec; localStorage.setItem(k,JSON.stringify(m)); }catch(_){}
+      e.target.disabled=false; toast('not saved yet ('+((err&&err.code)||'the database refused it')+'). Your words are kept on this device and will be sent when the database answers.'); } });
 }
 function openMenu(p,b){ cur=p; const r=b.getBoundingClientRect(); const eb=menu.querySelector('[data-a=edit]'); if(eb) eb.hidden=!(ED.owner&&editable(p)); menu.hidden=false;
   const w=menu.offsetWidth||220; menu.style.left=Math.max(8,Math.min(window.innerWidth-w-8,r.left+r.width/2-w/2))+'px';

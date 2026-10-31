@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A matrix obeys its own polynomial</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r27f.html">← 27f the arrows a map only stretches</a><a href="r27h.html">next: 27h measuring sticks for arrows →</a></p>
+  <div class="tags"><span class="tag proof">27g · proof</span></div>
+  <h1>A matrix obeys its own polynomial</h1>
+  <p>The stretch test gave each square grid a polynomial: the determinant of the grid minus a number down its middle. Now put the grid itself into that polynomial, with its powers in place of the powers of the number. The answer is the grid of zeros, every time. This step proves it with a way of undoing a grid that uses only determinants of smaller grids, and then finds the smallest polynomial a grid obeys.</p>
+  <p class="gesture">Put a square grid into its own stretch-test polynomial and the result is the zero grid. Every polynomial the grid obeys is a multiple of the smallest one it obeys.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r27e.html">27e</a> (the determinant), <a href="r27f.html">27f</a> (the stretch-test polynomial), <a href="r19e.html">19e</a> (parity) and <a href="r09g.html">9g</a> (polynomials: long division, same function same coefficients). <a href="r27h.html">27h</a> measures arrows with straight maps to numbers.</p></div>
+</header>
+
+<section class="class step" data-step="27g1">
+  <h2 class="sthead"><span class="stno">27g1</span>A grid turned on its side</h2>
+  <p class="stands">Stands on 27e2 and 19e.</p>
+  <p data-pid="ab1c90">The grid Aᵀ has the rows of A as its columns: (Aᵀ)ᵢⱼ = aⱼᵢ. Accepted name: the <i>transpose</i>.</p>
+  <p data-pid="f9eb2d">Side-turn technique: <b>det Aᵀ = det A. So every rule for columns holds for rows: swapping two rows changes the sign, and adding a stretch of one row to another changes nothing.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the side-turn technique">
+\det A^{\mathsf T} = \textstyle\sum_\sigma \operatorname{sign}\sigma\ a_{1\sigma(1)}\cdots a_{n\sigma(n)} @@ the three-rules formula (27e2) for Aᵀ
+a_{1\sigma(1)}\cdots a_{n\sigma(n)} = a_{\tau(1)1}\cdots a_{\tau(n)n},\ \tau = \sigma^{-1} @@ the same n factors, in another order
+\operatorname{sign}\sigma^{-1} = \operatorname{sign}\sigma @@ σ σ⁻¹ does nothing, which is even (19e)
+\htmlClass{new}{\det A^{\mathsf T} = \textstyle\sum_\tau \operatorname{sign}\tau \prod_j a_{\tau(j)j} = \det A} \quad \blacksquare @@ σ ↦ σ⁻¹ runs through every shuffle once
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">27g1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="A = \begin{pmatrix} 1 &amp; 2 \\ 3 &amp; 4 \end{pmatrix},\ \ B = \begin{pmatrix} 1 &amp; 2 &amp; 0 \\ 0 &amp; 1 &amp; 3 \\ 2 &amp; 0 &amp; 1 \end{pmatrix}"></span></span>Write Aᵀ, and check det Aᵀ = det A. <br>Write Bᵀ, find det Bᵀ by the formula, and compare with 27e2.1. <br>Find which term of 27e2.1 each nonzero term of det Bᵀ matches.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27g2">
+  <h2 class="sthead"><span class="stno">27g2</span>Undoing by smaller determinants</h2>
+  <p class="stands">Stands on 27g1, 27e1 and 27e2.</p>
+  <p data-pid="382fc5">Strike row i and column j from A and take the determinant of what is left, times (−1)^{i+j}. Call it Cᵢⱼ, the <i>stand-in</i> for place i, j. Let the stand-in grid S have Cᵢⱼ in place j, i: the stand-ins, turned on their side.</p>
+  <p data-pid="720575">Stand-in technique: <b>S A = (det A) I. So when det A ≠ 0, A⁻¹ = S / det A.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the stand-in technique">
+\det A = \textstyle\sum_i a_{ij}\,\det(A \text{ with column } j \text{ replaced by } e_i) @@ column j = Σ aᵢⱼeᵢ; straight in column j (27e1)
+\det(A \text{ with column } j = e_i) = (-1)^{i+j}\det(\text{strike row } i,\ \text{column } j) = C_{ij} @@ move column j to the front and row i to the top by neighbour swaps (27e1, 27g1); then only shuffles fixing 1 count (27e2)
+\textstyle\sum_i C_{ij}\,a_{ik} = \det(A \text{ with column } j \text{ replaced by column } k) @@ the same two lines, with column k’s entries
+= \det A \text{ if } k = j,\ \ 0 \text{ if } k \ne j @@ flat: column k then appears twice
+\htmlClass{new}{(SA)_{jk} = \textstyle\sum_i C_{ij}a_{ik} = \det A\cdot[j{=}k]} \quad \blacksquare @@ the definition of S and of the product (27d2)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27g2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="A = \begin{pmatrix} a &amp; b \\ c &amp; d \end{pmatrix}"></span></span>Find the four stand-ins C₁₁, C₁₂, C₂₁ and C₂₂. <br>Write S, and check SA = (ad − bc)I. <br>Write A⁻¹ when ad − bc ≠ 0, and use it to undo the grid with rows (2, 1), (1, 1). Compare with 27d3.1.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27g3">
+  <h2 class="sthead"><span class="stno">27g3</span>The grid in its own polynomial</h2>
+  <p class="stands">Stands on 27g2, 27f1 and 9g.</p>
+  <p data-pid="7bcfa5">Own-polynomial technique: <b>if p(λ) = det(A − λI) = c₀ + c₁λ + ⋯ + cₙλⁿ, then p(A) = c₀I + c₁A + ⋯ + cₙAⁿ is the zero grid.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the own-polynomial technique">
+S(\lambda)\,(A - \lambda I) = p(\lambda)\,I \text{ for every } \lambda @@ the stand-in technique (27g2), for A − λI
+S(\lambda) = B_0 + B_1\lambda + \cdots + B_{n-1}\lambda^{n-1} @@ each stand-in is a determinant of a grid with at most n − 1 entries holding λ
+B_0A = c_0I,\ \ B_kA - B_{k-1} = c_kI\ (1 \le k \le n-1),\ \ -B_{n-1} = c_nI @@ the two sides agree for every λ, so place by place their coefficients agree (9g)
+\textstyle\sum_k c_kA^k = B_0A + \sum_{k=1}^{n-1}(B_kA^{k+1} - B_{k-1}A^k) - B_{n-1}A^n @@ multiply line k on the right by Aᵏ, and add
+\htmlClass{new}{p(A) = 0} \quad \blacksquare @@ every term cancels with the next: the sum telescopes
+  </pre>
+  <p data-pid="e5869d">The tempting proof puts λ = A into det(A − λI) and gets det(A − A) = det 0 = 0. It is not allowed: p(A) is a grid, while det(A − λI) with a grid in place of λ is not even written down sensibly. The stand-in grids are what make the substitution honest.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27g3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="A = \begin{pmatrix} 1 &amp; 2 \\ 3 &amp; 4 \end{pmatrix}"></span></span>Find p(λ) = det(A − λI). <br>Find A², then p(A), and check that it is the zero grid. <br>Use p(A) = 0 to write A⁻¹ as a mix of A and I, and check it.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27g4">
+  <h2 class="sthead"><span class="stno">27g4</span>The smallest polynomial it obeys</h2>
+  <p class="stands">Stands on 27g3 and 9g.</p>
+  <p data-pid="cffb1f">Least-obeyed technique: <b>among the polynomials q with first coefficient 1 and q(A) = 0 there is one of least degree, m. Every polynomial q with q(A) = 0 is a multiple of m, and every stretch of A is a root of m.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the least-obeyed technique">
+p(A) = 0 \Rightarrow \text{some polynomial is obeyed} @@ the own-polynomial technique (27g3); divide by (−1)ⁿ to make its first coefficient 1
+m = \text{one of least degree} @@ the counting numbers have a least member (3)
+q = s\,m + r,\ \deg r < \deg m @@ long division (9g)
+r(A) = q(A) - s(A)\,m(A) = 0 @@ powers of A commute, so (sm)(A) = s(A)m(A)
+\Rightarrow r = 0 @@ a nonzero r, scaled to first coefficient 1, would be obeyed with smaller degree
+Av = \lambda v \Rightarrow 0 = m(A)v = m(\lambda)v \Rightarrow m(\lambda) = 0 @@ Aᵏv = λᵏv; v ≠ 0
+\htmlClass{new}{m \text{ divides every obeyed } q;\ \text{every stretch is a root of } m} \quad \blacksquare
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27g4.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="I,\ \ 2 \times 2"></span></span>Find p(λ), and the smallest polynomial I obeys.</li><li><span class="givens"><span data-tex-inline="D = \begin{pmatrix} 2 &amp; 0 \\ 0 &amp; 3 \end{pmatrix}"></span></span>Find p(λ). Find whether D obeys any polynomial λ − c, and the smallest polynomial D obeys.</li><li><span class="givens"><span data-tex-inline="S = \begin{pmatrix} 1 &amp; 1 \\ 0 &amp; 1 \end{pmatrix}"></span></span>Find p(λ). Find whether S obeys λ − 1, and the smallest polynomial S obeys. <br>Find, for each of the three grids, whether its smallest polynomial is p up to sign.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27g5">
+  <h2 class="sthead"><span class="stno">27g5</span>Illegal moves</h2>
+  <p class="stands">Stands on 27g1 to 27g4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+p(A) = \det(A - A\,I) = 0\,? @@ a grid is not put in for a number inside a determinant; the stand-in proof is needed
+p(A) = 0 \Rightarrow p \text{ is the smallest obeyed polynomial}\,? @@ I obeys λ − 1, of degree 1, while its stretch polynomial is (1 − λ)ⁿ
+C_{ij} = \det(\text{strike row } i,\ \text{column } j)\,? @@ the sign (−1)^{i+j} is part of it
+SA = I\,? @@ SA = (det A) I; divide by det A, and only when it is not 0
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27g5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="A = \begin{pmatrix} 1 &amp; 2 \\ 3 &amp; 4 \end{pmatrix}"></span></span>Let q(λ) be the top left entry of A − λI. Find q(λ), and the grid q(A). <br>Find what putting A in for λ inside the top left entry would give, and why the two differ.</li><li><span class="givens"><span data-tex-inline="I,\ \ 3 \times 3"></span></span>Find p(λ) and the smallest polynomial I obeys. <br>Find the degree of each, and which one the own-polynomial technique gives.</li><li><span class="givens"><span data-tex-inline="B = \begin{pmatrix} 1 &amp; 2 &amp; 0 \\ 0 &amp; 1 &amp; 3 \\ 2 &amp; 0 &amp; 1 \end{pmatrix}"></span></span>Find the det left after striking row 1 and column 2, and the stand-in C₁₂. <br>Find b₁₁C₁₁ + b₁₂C₁₂ + b₁₃C₁₃, with the signs and without them, and compare with 27e2.1.</li><li><span class="givens"><span data-tex-inline="A = \begin{pmatrix} 2 &amp; 1 \\ 1 &amp; 1 \end{pmatrix},\ \ B = \begin{pmatrix} 1 &amp; 2 \\ 3 &amp; 4 \end{pmatrix}"></span></span>Find the stand-in grid of each, and SA and SB. <br>Find for which grid S is the undo, and what S must be divided by in general.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">27g.4.1</span><span class="tagq">build</span>For a 2 × 2 grid with rows (a, b), (c, d), find p(λ), and write p(A) = 0 with a + d and ad − bc. <br>Build a grid other than ±I with A² = I, one other than 0 with A² = 0, and one with A² = −I. Find what a + d and ad − bc must be for each.</div>
+  <div class="chq"><span class="chid">27g.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="A = \begin{pmatrix} 1 &amp; 2 \\ 2 &amp; 4 \end{pmatrix}"></span></span>Here det A = 0. Find S and SA. <br>Find what the stand-in technique still gives when det A = 0, and the line along which every column of S lies. Find what A does to that line.</div>
+  <div class="chq"><span class="chid">27g.4.3</span><span class="tagq">converse</span>Every stretch of A is a root of its smallest obeyed polynomial m. Turn it round: is every root of m a stretch? <br>Prove it: if m(μ) = 0, write m(λ) = (λ − μ)q(λ), and find what q(A) would be if A − μI could be undone. <br>Check it on the grids D and S of 27g4.1.</div>
+  <div class="chq"><span class="chid">27g.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="A = PDP^{-1}"></span></span>Prove the own-polynomial technique another way for a grid that can be straightened out. Find Aᵏ, then p(A), as P times a grid times P⁻¹, and the entries down the middle of that grid. <br>Find the grid of 27f that this route cannot reach.</div>
+  <div class="chq"><span class="chid">27g.4.5</span><span class="tagq">seam</span><span class="givens"><span data-tex-inline="p(A) = 0"></span></span>In 1858 the mathematician who first multiplied grids stated this step’s claim for grids of every size. He checked it for 2 × 2 grids and for 3 × 3, and wrote that he had not thought it necessary to undertake the labour of a formal proof in general. Twenty years later another mathematician proved it for every size. <br>Check one more case yourself: find p(A) for the grid of 27f2.1. <br>Find the tempting line that would have made the labour look needless, and why it is not allowed. <br>Did two checked sizes make the claim known in 1858? For someone who only ever meets 2 × 2 and 3 × 3 grids, what did the proof of 1878 add?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r27f.html">← 27f · the arrows a map only stretches</a><a href="r27h.html">27h · measuring sticks for arrows →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The grid turned on its side is the transpose. A stand-in Cᵢⱼ is a cofactor, the determinant inside it a minor, and S is the adjugate (or classical adjoint), adj A. Writing det A as Σ aᵢⱼCᵢⱼ is cofactor (or Laplace) expansion. The own-polynomial technique is the Cayley–Hamilton theorem; the smallest obeyed polynomial is the minimal polynomial.</p>
+  <h3>Who said it first</h3>
+  <p>Pierre-Simon Laplace gave the expansion by smaller determinants in 1772. Arthur Cayley stated the own-polynomial technique in 1858 and checked it for 2 × 2 and 3 × 3 grids; William Rowan Hamilton had a case of it for quaternions. Ferdinand Georg Frobenius proved it in general in 1878, and also introduced the minimal polynomial.</p>
+  <p>The words quoted in 27g.4.5 are Cayley’s, from his memoir on the theory of matrices of 1858; the proof of 1878 is Frobenius’s.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

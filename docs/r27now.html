@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Which web page matters most?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r27crypt.html">← 27·crypt can a grid of numbers scramble letters?</a><a href="floor5.html">next: F5 statistics floor →</a></p>
+  <div class="tags"><span class="tag now">27·now · research front</span></div>
+  <h1>Which web page matters most?</h1>
+  <p>Which web page matters most? Type a few words into a search box, and out of billions of pages that hold them, ten come first. In the early days of the web, search engines ranked pages by how often the words appeared on them, and anyone could climb the list by repeating a word a thousand times in hidden text. In 1998 two students at Stanford proposed a ranking that a page cannot write about itself. A page matters if pages that matter link to it. That sounds circular, and it is: to rank one page you must already know the ranks of the pages pointing at it. What makes the question hard is that the circle has to close. Is there a list of ranks that agrees with itself? Is there only one? Can it be found for a web far too large for any method that costs the cube of its size? This page answers with rung twenty-seven’s arrows that a grid only stretches. It proves that a grid with every entry above zero has exactly one such list, finds it by rounds instead of elimination, bounds how far a few changed links can move it, and ends with what is proved and what is still open.</p>
+  <p class="gesture">Each page passes its rank out in equal shares along its links, and a page’s rank is the total it receives. So the list of ranks is an arrow that the grid of links only stretches, and stretches by one. Such an arrow always exists, because every column of the grid adds to one. But it need not be the only one: two groups of pages that never link to each other can be ranked in any proportion. The fix is to pass most of each page’s rank along its links and spread the rest evenly over every page. Then every entry of the grid is above zero, the grid shrinks every difference of two lists, and that one fact gives a single ranking, reached from any start by repeating the step. Fifty to a hundred rounds are enough, each costing about one step per link.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r27f.html">27f</a> (the stretch-test technique), <a href="r27g.html">27g</a> (the side-turn technique), <a href="r27b.html">27b</a> (free arrows), <a href="r27j.html">27j</a> (elimination and its cost), <a href="r22c.html">22c</a> (the crowd technique), <a href="r22e.html">22e</a> (the comparison technique), <a href="r22h.html">22h</a> (the pull-together technique), <a href="r21a.html">21a</a> (the cloud) and <a href="r25now.html">25·now</a> (what is proved, and what is open). Rung 28 makes the slope of a function of many inputs a straight map.</p></div>
+</header>
+
+<section class="class step" data-step="27now1">
+  <h2 class="sthead"><span class="stno">27now1</span>Links as a grid</h2>
+  <p class="stands">Stands on 27d (grids), 27f (the stretch-test technique) and 27g (the side-turn technique).</p>
+  <p data-pid="301721">Take a web of four pages. Page 1 links to pages 2 and 3; page 2 to page 3; page 3 to page 1; page 4 to page 3. Nobody links to page 4. Each page splits its rank equally among its links, and a page’s rank is what it receives.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the column-sum technique">
+r_1 = r_3,\ \ r_2 = \tfrac12 r_1,\ \ r_3 = \tfrac12 r_1 + r_2 + r_4,\ \ r_4 = 0 @@ page 1 sends half its rank to 2 and half to 3; the others send all of theirs along one link
+r = M r,\ \ M = \begin{pmatrix} 0 & 0 & 1 & 0 \\ \tfrac12 & 0 & 0 & 0 \\ \tfrac12 & 1 & 0 & 1 \\ 0 & 0 & 0 & 0 \end{pmatrix} @@ column j: 1/(links out of j) in each row j links to
+M^{T}(1, 1, 1, 1) = (1, 1, 1, 1) @@ every column of M adds to 1
+\det(M - I) = \det\big((M - I)^{T}\big) = \det(M^{T} - I) = 0 @@ the side-turn technique (27g); 1 is a stretch of Mᵀ (27f)
+\htmlClass{new}{1 \text{ is a stretch of } M:\ \ r = \tfrac15\,(2, 1, 2, 0)} \quad \blacksquare @@ the stretch-test technique (27f); solve, with the entries adding to 1
+  </pre>
+  <p data-pid="0f7b08">Column-sum technique: <b>if every column of a grid adds to 1, then 1 is a stretch of the grid, so some list of ranks is only stretched by it, by 1.</b> The ranking is an arrow the grid only stretches. Its stretch polynomial here is λ⁴ − ½λ² − ½λ = λ(λ − 1)(λ² + λ + ½). The other stretches are 0 and −½ ± ½i.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · links · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">27·now.1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">three pages: 1 links to 2 and 3; 2 links to 3; 3 links to 1</span></span>Find the link grid M and check that its columns add to 1. <br>Find the ranks, with entries adding to 1.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27now2">
+  <h2 class="sthead"><span class="stno">27now2</span>Closed loops and dead ends</h2>
+  <p class="stands">Stands on 27·now.1, 27b (free arrows) and 27f (the arrows a map only stretches).</p>
+  <p data-pid="59ad78">The column-sum technique gives a ranking. It does not give only one. And a page with no links out breaks it.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the closed-loops technique">
+\text{links } 1 \to 2,\ 2 \to 1,\ 3 \to 4,\ 4 \to 3 @@ two loops, with no link between them
+M(1, 1, 0, 0) = (1, 1, 0, 0),\ \ M(0, 0, 1, 1) = (0, 0, 1, 1) @@ each loop passes its rank round itself
+\text{the two lists are free} @@ they have no page in common (27b)
+\htmlClass{new}{\text{every } s\,(1,1,0,0) + t\,(0,0,1,1) \text{ is a ranking}} \quad \blacksquare @@ the arrows stretched by 1 form a space of dimension 2 or more
+  </pre>
+  <p data-pid="c7cc77">Closed-loops technique: <b>when the pages split into groups with no links between them, the rankings the links allow form a space of dimension two or more, so the links alone choose no single order.</b> A page with no links out has a column of zeros: its rank passes nowhere, and round after round the total drains away. The web is full of both.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the share-out">
+\text{a page with no links out is read as linking to every page} @@ its column becomes 1/n in every row
+G = 0.85\,M + \tfrac{0.15}{n}\,J @@ J has 1 in every place: each page passes 85% of its rank along its links and spreads 15% over all n pages
+\htmlClass{new}{\text{every entry of } G \text{ is at least } \tfrac{0.15}{n} \gt 0,\ \text{and every column adds to } 1} @@ 0.85 + 0.15 = 1
+  </pre>
+  <p data-pid="ccf02f">From here on, G is the web’s grid, and 0.85 its share. For the four pages of 27·now.1, n = 4, every entry of G is at least 0.0375, and its ranking is about (0.373, 0.196, 0.394, 0.038). Page 4, linked by nobody, now has the floor 0.0375 instead of 0. Page 3 has edged past page 1.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · loops · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27·now.2.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">five pages: the two loops above, and page 5 linking to 1 and 3</span></span>Find two different rankings the links M allow, before the share-out. <br>Find G, and whether the closed-loops technique still applies to it.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27now3">
+  <h2 class="sthead"><span class="stno">27now3</span>A positive grid has one ranking</h2>
+  <p class="stands">Stands on 27·now.2, 22c (the crowd technique), 22e (the comparison technique) and 22h (the pull-together technique).</p>
+  <p data-pid="a066c7">Write ‖v‖ = |v₁| + ⋯ + |vₙ| for the size of a list. 22h pulled a rule fed its own answers together on the line. Here the same idea works for lists, once G is shown to shrink differences.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the shrinking-differences technique">
+v_1 + \cdots + v_n = 0,\ \ m_i = \text{the least entry of row } i \text{ of } G @@ a list whose entries add to 0
+(Gv)_i = \textstyle\sum_j g_{ij}\,v_j = \sum_j (g_{ij} - m_i)\,v_j @@ mᵢ(v₁ + ⋯ + vₙ) = 0 was taken away
+|(Gv)_i| \le \textstyle\sum_j (g_{ij} - m_i)\,|v_j| @@ each gᵢⱼ − mᵢ ≥ 0; the triangle technique
+\|Gv\| \le \textstyle\sum_j |v_j| \sum_i (g_{ij} - m_i) = (1 - m)\,\|v\|,\ \ m = m_1 + \cdots + m_n @@ add over i, and swap the two finite sums; each column adds to 1
+\htmlClass{new}{\|Gv\| \le 0.85\,\|v\|} \quad \blacksquare @@ every mᵢ ≥ 0.15/n, so m ≥ 0.15
+  </pre>
+  <p data-pid="2bb22d">Shrinking-differences technique: <b>if every column of a grid adds to 1, then it shrinks every list whose entries add to 0, by the factor 1 − m, where m adds up the least entry of each row; the web’s grid shrinks them by 0.85 or more.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the one-rank technique">
+r = Gr,\ r' = Gr',\ \text{both adding to } 1 \ \Rightarrow\ \|r - r'\| = \|G(r - r')\| \le 0.85\,\|r - r'\| @@ r − r′ adds to 0: at most one ranking
+x_{k+1} = G\,x_k,\ \ \|x_{k+1} - x_k\| \le 0.85^k\,\|x_1 - x_0\| @@ start from any x₀ ≥ 0 adding to 1; G keeps the total, so each gap adds to 0
+\|x_l - x_k\| \le \big(0.85^k + 0.85^{k+1} + \cdots\big)\,\|x_1 - x_0\| = \tfrac{0.85^k}{0.15}\,\|x_1 - x_0\| @@ for l &gt; k: the triangle technique, and the comparison technique (22e) with a sum of powers
+x_k \to r,\ \ G r = r @@ each entry crowds, so settles (22c); limits pass through sums and products
+\htmlClass{new}{r_i = \textstyle\sum_j g_{ij}\,r_j \ge \tfrac{0.15}{n} \gt 0} \quad \blacksquare @@ every gᵢⱼ ≥ 0.15/n, and the rⱼ add to 1
+  </pre>
+  <p data-pid="c73cd8">One-rank technique: <b>a grid with every entry above 0 and every column adding to 1 has exactly one list of ranks adding to 1, every rank is above 0, and the rounds x, Gx, G²x, … reach it from any start.</b> It needed no determinant and no polynomial: only that the grid shrinks differences.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · one rank · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27·now.3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="G = \begin{pmatrix} 0.1 &amp; 0.6 \\ 0.9 &amp; 0.4 \end{pmatrix}"></span></span>Find m and the shrink factor 1 − m. <br>Find the ranking, and x₁, x₂ and x₃ from x₀ = (1, 0).</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27now4">
+  <h2 class="sthead"><span class="stno">27now4</span>Rounds, not elimination</h2>
+  <p class="stands">Stands on 27·now.3, 27j (the cost of elimination), 27f (the stretch-test technique) and 21a (the cloud).</p>
+  <p data-pid="d9c640">Elimination (27j) solves n samenesses in about n³ steps. In 1998 the ranked web held about 26 million pages. Then n³ is about 1.8 × 10²², more than half a million years at a billion steps a second. A round x ↦ Gx costs about one step for each link, plus one for each page, since J spreads the same amount everywhere.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the second-stretch technique">
+G v = \lambda v,\ \ v \ne 0,\ \ \lambda \ne 1 @@ any other stretch, perhaps complex
+v_1 + \cdots + v_n = \lambda\,(v_1 + \cdots + v_n) \Rightarrow v_1 + \cdots + v_n = 0 @@ G keeps the total of a list
+|\lambda|\,\|v\| = \|Gv\| \le 0.85\,\|v\| @@ the shrinking-differences technique, with sizes of complex numbers (25c)
+\htmlClass{new}{|\lambda| \le 0.85} \quad \blacksquare @@ divide by ‖v‖ ≠ 0
+  </pre>
+  <p data-pid="f5eb83">Second-stretch technique: <b>every stretch of the web’s grid other than 1 has size at most 0.85, so each round brings the list closer to the ranking by that factor.</b> For an answer good to 10⁻⁸ in total, about 130 rounds are enough from any start, whatever the size of the web: 0.85¹³⁰/0.15 · 2 is below 10⁻⁸. On the four pages of 27·now.1 the gap is 0.005 after 10 rounds and 2 × 10⁻⁵ after 20.</p>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · the cloud, in rounds</div>
+    <p data-pid="06e30e">21a said that every measured value is a fence. A ranking found by rounds is a fence too. After k rounds the list lies within 0.85ᵏ/0.15 · ‖x₁ − x₀‖ of the ranking, in total size, and so each page’s rank lies within that much of its true value.</p>
+    <p data-pid="fa627d"><b>Stop the rounds when the fence is narrower than the gaps you mean to read, and report the fence with the order.</b></p>
+    <p data-pid="95f225">Two pages whose ranks differ by less than twice that width cannot yet be put in order. More rounds narrow the fence by the factor 0.85 each time. Nothing in the grid tells you when the order is right; only the fence does.</p>
+    <p class="bait" data-pid="662f0f">After some rounds on a web of a million pages, the fence is 0.000 01 wide. Page A shows 0.000 412 and page B 0.000 409. Which can you report: A above B; the two tied; not yet settled?</p>
+  </aside>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · rounds · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · four pages, round by round</div>
+    <div class="kn"><span class="m">share</span><input type="range" id="kd" min="0.5" max="0.99" step="0.01" value="0.85"><output id="od"></output></div>
+    <div class="kn"><span class="m">rounds</span><input type="range" id="kk" min="1" max="60" step="1" value="20"><output id="ok"></output></div>
+    <div id="pl"></div>
+    <div class="cap">The web of 27·now.1, starting from equal ranks ¼. Ember: page 1; ink: page 2; teal: page 3; muted: page 4. Raise the share toward 1 and watch the fence widen. This small web settles faster than its fence promises.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27·now.4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a web of 100 million pages and 1 billion links; 10⁹ steps a second</span></span>Find the time for one round, and for 130 rounds. <br>Find the time elimination would take.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27now5">
+  <h2 class="sthead"><span class="stno">27now5</span>How far can a few links move the ranks?</h2>
+  <p class="stands">Stands on 27·now.3 (the shrinking-differences technique).</p>
+  <p data-pid="7aaa6b">A page owner adds or drops links. Every page’s rank can change, since rank flows round the whole web. By how much, at most?</p>
+  <pre class="lines" data-k="ember" data-label="this page: the few-links technique">
+r = G r,\ \ r' = G' r' @@ the rankings before and after; G′ differs from G only in the changed pages’ columns
+r - r' = G\,(r - r') + (G - G')\,r' @@ add and take away G r′
+\|r - r'\| \le 0.85\,\|r - r'\| + \|(G - G')\,r'\| @@ r − r′ adds to 0: the shrinking-differences technique; the triangle technique
+\|r - r'\| \le \tfrac{1}{0.15}\,\textstyle\sum_{j \text{ changed}} 0.85 \cdot 2\,r'_j @@ gather; each changed column moves by at most 0.85 · 2 in size
+\htmlClass{new}{\|r - r'\| \le \tfrac{1.7}{0.15}\,\textstyle\sum_{j \text{ changed}} r'_j \approx 11.3\,\textstyle\sum_{j \text{ changed}} r'_j} \quad \blacksquare @@ 0.85 · 2 = 1.7
+  </pre>
+  <p data-pid="56dd9d">Few-links technique: <b>when some pages change their links, the whole ranking moves, in total size, by at most 1.7/0.15, about 11.3, times the rank those pages hold.</b> In the four pages, page 4 adds a link to page 2. Its rank is 0.0375, so the bound is 0.425; the ranking actually moves by 0.027 in total. A page with little rank cannot move the ranking much by its own links. But a page that makes many pages of its own can: each new page gets at least 0.15/n from the share-out, and can pass it all to one page.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · few links · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27·now.5.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a web of n pages; N new pages link only to page T, and T links only to them</span></span>Find a floor for the rank T receives from them, using rᵢ ≥ 0.15/n. <br>Find how large N must be for T’s rank to pass 1/100, in a web of a million pages.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27now6">
+  <h2 class="sthead"><span class="stno">27now6</span>What is proved, and what is open</h2>
+  <p class="stands">Stands on 27·now.1 to 27·now.5 and 25·now (what is proved, and what is open).</p>
+  <p data-pid="25753f"><b>That a positive grid has one ranking is proved; what it should mean for a page to matter, and whether any fair ranking can withstand pages made only to vote, are open.</b></p>
+  <ul>
+    <li data-pid="7ab3db">Proved, 1907 and 1912. A grid with every entry above 0 has one arrow with every entry above 0 that it only stretches, and its stretch is the largest in size. A grid with entries 0 or more keeps this when its links join every page to every other. This page proved the case the web needs.</li>
+    <li data-pid="e93ad5">Used, 1998. Ranking by that arrow, with the share 0.85, ordered about 26 million pages for a new search engine, computed in a few hours.</li>
+    <li data-pid="e5e115">Proved, 2003. Every other stretch of the web’s grid has size at most the share, as 27·now.4 found, and exactly the share when the web has two closed loops. That fixes how fast the rounds go.</li>
+    <li data-pid="f12cf1">Proved, 2005. A short list of plain demands on how links should count is met by exactly one ranking: the arrow the link grid stretches by 1. So the ranking is not an arbitrary choice.</li>
+    <li data-pid="4f8e81">Proved, 2005. No ranking that treats every page alike can stop an owner who makes pages for free from raising their own rank, as 27·now.5 began to show.</li>
+    <li data-pid="23c4ab">Open. Which ranking is right depends on what “matters” means, and no proof can settle that. Search engines now mix hundreds of signals and keep them secret. The same arrow ranks species in a food web, journals, and proteins, and in each field it is an open, measured question whether the arrow picks out what matters there.</li>
+  </ul>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · open · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27·now.6.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">the four pages of 27·now.1 with the share-out</span></span>Find the ranking before and after page 2 drops its link to 3 and links to 4 instead. <br>Find which page’s place in the order changes.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27now7">
+  <h2 class="sthead"><span class="stno">27now7</span>Illegal moves</h2>
+  <p class="stands">Stands on 27·now.1 to 27·now.6.</p>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{the most linked-to page ranks first}\,? @@ rank counts who links, and how many links each one shares out
+\text{the links alone fix one ranking}\,? @@ two closed loops leave a space of dimension 2
+\text{solve } r = Gr \text{ by elimination for the web}\,? @@ about n³ steps: for 26 million pages, half a million years
+\text{after 20 rounds the order is settled}\,? @@ only the order of ranks further apart than twice the fence
+  </pre>
+  <section class="slides" id="sl7"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27·now.7.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span class="gtx">page A has 3 links in, from pages with one link out each and rank 0.01; page B has 1 link in, from a page with rank 0.2 and two links out</span></span>Find which receives more rank along its links.</li><li><span class="givens"><span class="gtx">two loops of pages and no share-out</span></span>Find two rankings.</li><li><span class="givens"><span data-tex-inline="n = 10^6"></span></span>Find n³ and the number of rounds for a fence of 10⁻⁶ in total.</li><li><span class="givens"><span class="gtx">a fence of 0.001 and ranks 0.120 and 0.119</span></span>Find whether the order is settled.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">27·now.8.1</span><span class="tagq">build</span>Build a web of three or four pages in which the page with the most links in does not rank first, with the share-out at 0.85.</div>
+  <div class="chq"><span class="chid">27·now.8.2</span><span class="tagq">edge</span>Find what becomes of G and its ranking when the share is 0, and what fails in the one-rank technique when the share is 1.</div>
+  <div class="chq"><span class="chid">27·now.8.3</span><span class="tagq">converse</span>Every entry above 0 gives one ranking. Turn it round: if a grid with columns adding to 1 has exactly one ranking, must every entry be above 0? Test the grid M of 27·now.1.</div>
+  <div class="chq"><span class="chid">27·now.8.4</span><span class="tagq">reroute</span><span class="givens"><span class="gtx">the four pages of 27·now.1</span></span>Find the ranking a second way, by elimination: (I − 0.85M) r = 0.0375 (1, 1, 1, 1). <br>Find why the right side is that list.</div>
+  <div class="chq"><span class="chid">27·now.8.5</span><span class="tagq">seam</span>In the same year two rankings were proposed. One gives each page one number: it matters if pages that matter point to it. The other gives each page two: how good it is to point from, and how good to be pointed to, each fed by the other, and only for the pages a search has already found. <br>Which captures “matters most” better, and could a page do well on one and badly on the other?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r27crypt.html">← 27·crypt · can a grid of numbers scramble letters?</a><a href="floor5.html">F5 · statistics floor →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The ranking is PageRank, the share 0.85 the damping factor, and G the Google matrix; a grid whose columns are 0 or more and add to 1 is column-stochastic (a Markov matrix), and a page with no links out is a dangling node. Finding the ranking by rounds is the power method. The one-rank technique is the Perron–Frobenius theorem in the case of a positive matrix; the ranking is its Perron vector. The shrinking-differences technique says that G is a contraction in the ℓ¹ norm, as in the Banach fixed-point theorem. A ranking by an arrow a grid only stretches is eigenvector centrality. Pages made only to vote form a link farm, and an attack by fake identities is a Sybil attack. The two-number ranking of 27·now.8.5 is hubs and authorities (HITS). Reading the share as a reader who follows links and now and then jumps anywhere at random, the random surfer, waits for rung 30’s chance.</p>
+  <h3>Who said it first</h3>
+  <p>John Seeley ranked children by the friends who chose them in 1949, and Leo Katz counted status through chains of choices in 1953. Gabriel Pinski and Francis Narin ranked journals by who cites them in 1976. Sergey Brin and Larry Page, at Stanford, described the ranking in 1998, in their paper on the Google search engine given at a conference in Brisbane; PageRank is named after Page. Jon Kleinberg proposed hubs and authorities the same year. Oskar Perron proved the one-arrow fact for positive grids in 1907, and Georg Frobenius extended it in 1912. Taher Haveliwala and Sepandar Kamvar bounded the second stretch in 2003. Alon Altman and Moshe Tennenholtz gave the demands that single out the ranking in 2005, and Alice Cheng and Eric Friedman proved that no symmetric ranking resists fake pages the same year. Stefano Allesina and Mercedes Pascual used the ranking to find the species whose loss would collapse a food web in 2009.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="27·now: a worked “proof”, not allowed">
+M(1,1,0,0) = (1,1,0,0) @@ fine: two closed loops
+\text{1 is a stretch of } M \text{, so the ranking is } (\tfrac12, \tfrac12, 0, 0) @@ not allowed: (0, 0, ½, ½) is a ranking too; the stretch-1 arrows form a space of dimension 2
+\text{pages 3 and 4 do not matter} @@ false: the links alone cannot tell; the share-out gives every page ¼
+  </pre>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+const V=c=>'var('+c+')';
+// plot(series, xr, yr, opts): series = [{pts:[[x,y],...], c:'--ember', w:1.6, dash:''}]; returns svg string
+function plot(series, xr, yr, o){ o=o||{}; const W=360,H=o.H||210,L=34,B=22,T=8,Rr=8;
+  const sx=x=>L+(x-xr[0])/(xr[1]-xr[0])*(W-L-Rr), sy=y=>H-B-(y-yr[0])/(yr[1]-yr[0])*(H-B-T);
+  let s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;max-width:440px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  (o.yt||[]).forEach(y=>{ s+='<line x1="'+L+'" x2="'+(W-Rr)+'" y1="'+sy(y)+'" y2="'+sy(y)+'" style="stroke:'+V('--grid')+';stroke-width:0.6"/><text x="'+(L-3)+'" y="'+(sy(y)+3)+'" text-anchor="end" style="font:9px var(--mono);fill:'+V('--muted')+'">'+y+'</text>'; });
+  (o.xt||[]).forEach(x=>{ s+='<text x="'+sx(x)+'" y="'+(H-8)+'" text-anchor="middle" style="font:9px var(--mono);fill:'+V('--muted')+'">'+x+'</text>'; });
+  s+='<line x1="'+L+'" x2="'+L+'" y1="'+T+'" y2="'+(H-B)+'" style="stroke:'+V('--ink')+';stroke-width:0.8"/><line x1="'+L+'" x2="'+(W-Rr)+'" y1="'+(H-B)+'" y2="'+(H-B)+'" style="stroke:'+V('--ink')+';stroke-width:0.8"/>';
+  series.forEach(se=>{ const cl=v=>Math.max(yr[0]-0.05*(yr[1]-yr[0]),Math.min(yr[1]+0.05*(yr[1]-yr[0]),v));
+    const d=se.pts.filter(p=>isFinite(p[1])).map((p,i)=>(i?'L':'M')+sx(p[0]).toFixed(1)+','+sy(cl(p[1])).toFixed(1)).join('');
+    s+='<path d="'+d+'" style="fill:none;stroke:'+V(se.c||'--ember')+';stroke-width:'+(se.w||1.6)+(se.dash?';stroke-dasharray:'+se.dash:'')+'"/>'; });
+  (o.dots||[]).forEach(p=>{ s+='<circle cx="'+sx(p[0])+'" cy="'+sy(p[1])+'" r="2.6" style="fill:'+V(p[2]||'--ember')+'"/>'; });
+  if(o.xl) s+='<text x="'+(W-Rr)+'" y="'+(H-B-4)+'" text-anchor="end" style="font:9px var(--mono);fill:'+V('--muted')+'">'+o.xl+'</text>';
+  if(o.yl) s+='<text x="'+(L+4)+'" y="'+(T+9)+'" style="font:9px var(--mono);fill:'+V('--muted')+'">'+o.yl+'</text>';
+  return s+'</svg>'; }
+
+const SUP={'-':'⁻','0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹'};
+const sci=v=>{ if(v===0) return '0'; const e=Math.floor(Math.log10(Math.abs(v))); const m=v/Math.pow(10,e); return (e===0? fm(m,2) : fm(m,1)+' × 10'+String(e).split('').map(c=>SUP[c]).join('')); };
+const M=[[0,0,1,0],[.5,0,0,0],[.5,1,0,1],[0,0,0,0]], n=4;
+function step(x,d){ const y=[0,0,0,0]; for(let i=0;i<n;i++){ let s=0; for(let j=0;j<n;j++) s+=(d*M[i][j]+(1-d)/n)*x[j]; y[i]=s; } return y; }
+function draw(){ const d=+$('kd').value, K=+$('kk').value; $('od').textContent=fm(d,2); $('ok').textContent=K;
+  let x=[.25,.25,.25,.25]; const H=[[],[],[],[]]; for(let i=0;i<n;i++) H[i].push([0,x[i]]);
+  for(let k=1;k<=K;k++){ x=step(x,d); for(let i=0;i<n;i++) H[i].push([k,x[i]]); }
+  let r=[.25,.25,.25,.25]; for(let k=0;k<3000;k++) r=step(r,d);
+  const gap=x.reduce((s,v,i)=>s+Math.abs(v-r[i]),0); const x1=step([.25,.25,.25,.25],d); const g0=x1.reduce((s,v)=>s+Math.abs(v-.25),0);
+  const fence=Math.pow(d,K)/(1-d)*g0;
+  const C=['--ember','--ink','--teal','--muted'];
+  $('pl').innerHTML=plot(H.map((h,i)=>({pts:h,c:C[i],w:1.4})),[0,K],[0,0.7],{xt:[0,Math.round(K/2),K],yt:[0,0.2,0.4,0.6],xl:'round'});
+  const v=$('vd'); v.className='verdict';
+  v.textContent='After '+K+' rounds: ('+x.map(t=>fm(t,4)).join(', ')+'). Distance to the ranking: '+sci(gap)+'; the fence promised at most '+sci(fence)+'.'; }
+$('kd').oninput=draw; $('kk').oninput=draw; draw();
+window.__pic={set:(d,k)=>{ $('kd').value=d; $('kk').value=k; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'share',t:R`r = M r`,n:`Rank passed along links.`},
+  {k:'ember',kl:'columns',t:R`\htmlClass{new}{\det(M - I) = 0}`,n:`Columns add to 1.`}
+],{title:'The slides · links · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'two',t:R`s\,(1,1,0,0) + t\,(0,0,1,1)`,n:`No single order.`},
+  {k:'ember',kl:'share',t:R`\htmlClass{new}{G = 0.85\,M + \tfrac{0.15}{n}\,J}`,n:`Every entry above 0.`}
+],{title:'The slides · loops · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'shrink',t:R`\|Gv\| \le (1 - m)\,\|v\|`,n:`For v adding to 0.`},
+  {k:'ember',kl:'one',t:R`\htmlClass{new}{x_k \to r}`,n:`From any start.`}
+],{title:'The slides · one rank · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'second',t:R`|\lambda| \le 0.85`,n:`Every other stretch.`},
+  {k:'ember',kl:'fence',t:R`\htmlClass{new}{\tfrac{0.85^k}{0.15}\,\|x_1 - x_0\|}`,n:`After k rounds.`}
+],{title:'The slides · rounds · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'move',t:R`\|r - r'\| \le \tfrac{1}{0.15}\|(G - G')r'\|`,n:`Add and take away.`},
+  {k:'ember',kl:'bound',t:R`\htmlClass{new}{11.3 \textstyle\sum r_j}`,n:`The rank they held.`}
+],{title:'The slides · few links · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'proved',t:R`\text{one ranking}`,n:`A positive grid.`},
+  {k:'ember',kl:'open',t:R`\htmlClass{new}{\text{what matters?}}`,n:`Not a proof question.`}
+],{title:'The slides · open · ← → keys work'});
+stepper('#sl7',[
+  {k:'ember',kl:'illegal',t:R`\text{most links in} \Rightarrow \text{first}\,?`,n:`Who links counts.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

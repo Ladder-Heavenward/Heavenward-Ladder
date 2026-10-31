@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How does a phone know where it is?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r27econ.html">← 27·econ can an economy feed itself?</a><a href="r27chem.html">next: 27·chem can every reaction be balanced? →</a></p>
+  <div class="tags"><span class="tag nav">27·nav · navigation</span></div>
+  <h1>How does a phone know where it is?</h1>
+  <p>How does a phone know where it is? Stand on a street in Seattle and a small blue dot lands on the map within a few metres of you, with no tower in sight and no one telling the phone anything about where it is. High overhead, about thirty satellites circle the earth, each one calling out the time by its own very good clock and where it is. The phone only listens. What makes this hard is that a voice from the sky says how far away it is only through how long it took to arrive, and light is so fast that a thousandth of a second of delay is three hundred kilometres of distance. The phone’s own clock is a cheap crystal, nowhere near good enough. So the phone cannot simply time the signals. This page shows how it gets round that with rung twenty-seven’s straight samenesses and their grids: four satellites, four unknowns, three of them for where you are and one for how wrong your clock is. It then asks how the way the satellites stand in the sky decides how far the blue dot can be trusted.</p>
+  <p class="gesture">Each satellite’s signal gives a distance, but only up to the phone’s unknown clock error, the same for every satellite. Taking the samenesses of the spheres in pairs, one from another, cancels every square and leaves samenesses that are straight. With four satellites there are three straight samenesses in four unknowns, so the answers lie along a line. One sphere then picks a point of that line by a quadratic, and of its two roots, one is on the ground and the other is not. The same small error in the timing moves the answer a little when the satellites are spread across the sky, and a lot when they are bunched, because then the grid is nearly flat and nearly cannot be undone.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r18a.html">18a</a> (distance in space; spheres; the right-triangle technique), <a href="r27j.html">27j</a> (solving systems by elimination), <a href="r27c.html">27c</a> (straight maps), <a href="r27d.html">27d</a> (grids; the undoable-group technique), <a href="r27e.html">27e</a> (the nonzero-det technique), <a href="r27g.html">27g</a> (the stand-in technique), <a href="r08i.html">8i</a> (the quadratic-formula technique), <a href="r05i.html">5i</a> (the metre set by light) and <a href="r21a.html">21a</a> (the cloud). 27·chem asks whether a reaction can always be balanced.</p></div>
+</header>
+
+<section class="class step" data-step="27nav1">
+  <h2 class="sthead"><span class="stno">27nav1</span>A distance is a delay</h2>
+  <p class="stands">Stands on 5i (the metre set by light) and 18a (distance in space).</p>
+  <p data-pid="21c0d0">A satellite’s signal says, in effect: this left at time t_s, and at that moment I was at the point S. The phone hears it at time t_r. Light covers 299 792.458 km each second, exactly, since 5i set the metre by light. Write c for that speed.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the travel-time technique">
+d = c\,(t_r - t_s),\ \ c = 299\,792.458 \text{ km/s} @@ distance is speed times time; the metre is set by light (5i)
+\text{straight overhead, } d = 20\,200 \text{ km}: \ t_r - t_s = \tfrac{20\,200}{299\,792.458} \approx 0.0674 \text{ s} @@ GPS satellites fly about 20 200 km above the ground
+\text{an error } \delta \text{ in the delay gives an error } c\,\delta \text{ in } d @@ c(t + δ) = ct + cδ: stretching spreads over a sum
+\htmlClass{new}{\delta = 10^{-3} \text{ s} \Rightarrow c\delta \approx 300 \text{ km};\ \ \delta = 10^{-9} \text{ s} \Rightarrow c\delta \approx 0.3 \text{ m}} \quad \blacksquare @@ a thousandth of a second, and a billionth
+  </pre>
+  <p data-pid="c218f5">Travel-time technique: <b>a distance is the speed of light times the delay, so each billionth of a second of error in the delay is about 30 cm of error in the distance.</b> The satellites carry atomic clocks, kept to a few billionths of a second. The phone carries a quartz crystal. If its clock is a thousandth of a second ahead, every delay it measures is a thousandth of a second too long, and every distance is 300 km too long. Timing alone cannot work.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · travel time · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">27·nav.1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a satellite low in the sky, 25 800 km away, and a phone clock 0.2 ms ahead</span></span>Find the true delay of the signal. <br>Find the distance the phone measures, and its error.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27nav2">
+  <h2 class="sthead"><span class="stno">27nav2</span>Two spheres, one straight sameness</h2>
+  <p class="stands">Stands on 27·nav.1, 18a (spheres; the right-triangle technique), 27e (the nonzero-det technique) and 27j (elimination).</p>
+  <p data-pid="3eb069">Suppose first that the clock were perfect. Then the phone is at distance r from the satellite at S: it lies on the sphere of radius r about S (18a). Each sphere is a sameness with squares in it. Taken one from another, the squares cancel.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the sphere-difference technique">
+|X - S_i|^2 = |X|^2 - 2\,S_i \cdot X + |S_i|^2 @@ the right-triangle technique (18a), with u = X and v = −Sᵢ
+|X - S_i|^2 = r_i^2 \ \text{ and } \ |X - S_1|^2 = r_1^2 @@ X on the sphere about Sᵢ, and on the one about S₁
+\htmlClass{new}{2\,(S_i - S_1) \cdot X = |S_i|^2 - |S_1|^2 - r_i^2 + r_1^2} \quad \blacksquare @@ subtract: |X|² cancels, and what is left is straight in X
+  </pre>
+  <p data-pid="17372d">Sphere-difference technique: <b>taking one sphere’s sameness from another’s cancels every square, and the points on both spheres lie on the straight sameness that is left.</b> In the plane the spheres are circles. Here are three towers on a flat map, in km, and a phone at known distances from each.</p>
+  <pre class="lines" data-k="ember" data-label="this page: three circles, two straight samenesses">
+x^2 + y^2 = 41,\ \ (x-8)^2 + (y-2)^2 = 13,\ \ (x-3)^2 + (y-9)^2 = 29 @@ towers at (0, 0), (8, 2), (3, 9); distances √41, √13, √29
+-16x - 4y + 68 = -28 \ \Rightarrow\ 4x + y = 24 @@ second less first
+-6x - 18y + 90 = -12 \ \Rightarrow\ x + 3y = 17 @@ third less first
+\det\begin{pmatrix} 4 & 1 \\ 1 & 3 \end{pmatrix} = 11 \ne 0 @@ the grid can be undone: one answer (27e)
+4\,(17 - 3y) + y = 24 \ \Rightarrow\ y = 4,\ x = 5 @@ clear x, then put y back: elimination (27j)
+\htmlClass{new}{(5, 4):\ 25 + 16 = 41} \quad \blacksquare @@ check it on the first circle
+  </pre>
+  <p data-pid="be9811">The last line matters. Subtracting keeps every point on the spheres, but the straight samenesses alone may hold points on none of them. So the answer is checked on one sphere. The grid can be undone exactly when the three towers are not on one line, since its rows are the steps from the first tower to the other two.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · two spheres · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27·nav.2.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">towers at (0, 0), (10, 0) and (4, 8), in km; distances 5, √65 and √17</span></span>Find the two straight samenesses and solve them. <br>Find whether the answer lies on the first circle.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27nav3">
+  <h2 class="sthead"><span class="stno">27nav3</span>The fourth satellite is the clock</h2>
+  <p class="stands">Stands on 27·nav.2, 27c (the lost-plus-reached technique), 27d (the undoable-group technique), 27j (elimination) and 8i (the quadratic-formula technique).</p>
+  <p data-pid="9f2202">Now let the phone’s clock be ahead by an unknown time τ. Every delay it measures is τ too long, and every distance cτ too long. Write b = cτ, the clock error as a distance. The phone measures ρᵢ = (true distance to satellite i) + b, the same b for every satellite. The unknowns are four: x, y, z and b.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the clock-unknown technique">
+|X - S_i|^2 = (\rho_i - b)^2,\ \ i = 1, 2, 3, 4 @@ the true distance is ρᵢ − b
+|X|^2 - 2S_i\cdot X + |S_i|^2 = \rho_i^2 - 2\rho_i b + b^2 @@ multiply out both sides (18a)
+2(S_i - S_1)\cdot X - 2(\rho_i - \rho_1)\,b = |S_i|^2 - |S_1|^2 - \rho_i^2 + \rho_1^2,\ \ i = 2, 3, 4 @@ subtract the first: |X|² and b² both cancel
+M X = c - b\,a \ \Rightarrow\ X = M^{-1}c - b\,M^{-1}a = p + b\,q @@ M has rows 2(Sᵢ − S₁); undoable when the four satellites are not on one plane (27d, 27e)
+|p + bq - S_1|^2 = (\rho_1 - b)^2 @@ keep one sphere, as in 27·nav.2
+\htmlClass{new}{(|q|^2 - 1)\,b^2 + 2\big((p - S_1)\cdot q + \rho_1\big)\,b + |p - S_1|^2 - \rho_1^2 = 0} \quad \blacksquare @@ multiply out: a quadratic in b, solved by 8i
+  </pre>
+  <p data-pid="6d859a">Clock-unknown technique: <b>with the clock error as a fourth unknown, four satellites give three straight samenesses whose answers lie along a line, and one sphere then picks the point by a quadratic.</b> Three samenesses in four unknowns leave one unknown free, as lost-plus-reached (27c) would have it: the line is p + bq. Here is a fix in Seattle, worked in km, with the earth taken as a ball of radius 6371 km and the axes from its centre, z through the north pole. The satellites stand where four GPS satellites could, 26 560 km from the centre.</p>
+  <pre class="lines" data-k="ember" data-label="this page: a fix at the Space Needle">
+S_1 = (-3883, -12676, 23014),\ \rho_1 = 20\,568.079 @@ high in the north-east
+S_2 = (8030, -24300, 7105),\ \rho_2 = 23\,317.648 @@ low in the east
+S_3 = (-23106, -12765, 2932),\ \rho_3 = 22\,880.118 @@ low in the south-west
+S_4 = (-10571, 10061, 22191),\ \rho_4 = 23\,781.984 @@ low in the north-west
+p \approx (-2306.60, -3641.77, 4724.52),\ \ q \approx (0.1037, 0.1641, -0.2151) @@ the three straight samenesses, cleared one unknown at a time (27j)
+-0.9161\,b^2 + 52\,294.6\,b - 4\,438\,407 = 0 @@ put into the sphere about S₁
+b \approx 85.000 \ \text{ or } \ b \approx 57\,000 @@ the quadratic-formula technique (8i)
+\htmlClass{new}{X \approx (-2297.8, -3627.8, 4706.2):\ 47.62^\circ \text{N},\ 122.35^\circ \text{W}} \quad \blacksquare @@ from b ≈ 85.000; the other root puts X 10 117 km from the centre, out in space
+  </pre>
+  <p data-pid="6720cc">So the phone is at the Space Needle, and its clock was ahead by 85/299 792.458 s, about 0.28 thousandths of a second. It learned its place and its clock error in one stroke. The second root is not near the ground, so it is thrown out.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · the clock · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27·nav.3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">beacons on a flat map at (4, 6), (13, 7) and (−5, 10), in km; measured ρ = 6, 14 and 11 km; an unknown clock error b</span></span>Find the two straight samenesses in x, y and b, and the line of answers. <br>Find both fixes, and which one a fourth beacon at (1, −3) with ρ = 6 picks.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27nav4">
+  <h2 class="sthead"><span class="stno">27nav4</span>How the satellites stand</h2>
+  <p class="stands">Stands on 27·nav.2, 27·nav.3, 27e (the nonzero-det technique), 27g (the stand-in technique) and 21a (the cloud).</p>
+  <p data-pid="46fd9c">Each measured distance carries a small error. How far does it move the fix? The straight samenesses are M X = c, and an error in the distances changes c a little.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the spread-sky technique">
+M(X + \Delta X) = c + \Delta c \ \Rightarrow\ M\,\Delta X = \Delta c @@ subtract M X = c; grids spread over sums (27d)
+\Delta X = M^{-1}\Delta c = \tfrac{1}{\det M}\,S\,\Delta c @@ the stand-in technique (27g): S is the grid of stand-ins
+\text{towers } (0,0),\ (8,2),\ (3,9):\ \det M = 264,\ \text{a 10 m error moves the fix at most about } 8 \text{ m} @@ phone at (5, 4) km; one distance 10 m long, each in turn
+\text{towers } (0,0),\ (8,0.5),\ (16,2):\ \det M = 32,\ \text{at most about } 112 \text{ m} @@ three towers nearly along one road
+\htmlClass{new}{\text{the same 10 m error, about thirteen times the miss}} \quad \blacksquare @@ worked exactly, by solving again
+  </pre>
+  <p data-pid="59a83f">Spread-sky technique: <b>an error in the distances moves the fix by the undo of the grid, so when the satellites bunch and the determinant nears 0, the same small error moves the fix much further.</b> With the towers on one line the determinant is 0, and the grid cannot be undone at all (27e). Then the phone and its mirror image across the line of towers are at the same distances from all three, and nothing can tell them apart.</p>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · the cloud, from the sky</div>
+    <p data-pid="9a427c">21a said that every measured value is a fence. A satellite’s clock is kept to a few billionths of a second, and the air slows each signal a little, in ways only partly known. So each distance is a fence a few metres wide, never a single number.</p>
+    <p data-pid="02255f"><b>A fix is a fence: its width is the distances’ fence, stretched by how the satellites stand, and both are reported.</b></p>
+    <p data-pid="539a18">The fix is the undo of a grid applied to those fences. Satellites spread across the sky give a determinant far from 0, and the fence round the fix stays a few metres wide. Satellites bunched in one patch of sky, as seen from a street between tall buildings, give a determinant near 0, and the same fences make a fence round the fix many times wider. A phone draws both: its dot, and a pale circle round it for how wrong it might be.</p>
+    <p class="bait" data-pid="cd39aa">A phone on Granville Street in downtown Vancouver sees four satellites, all high in the sky and close together. Which of these would you report: the fix to the metre; the fix with a wide circle round it; no fix at all?</p>
+  </aside>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · spread · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · three towers and a 10 m error</div>
+    <div class="kn"><span class="m">h</span><input type="range" id="kh" min="-6" max="9" step="0.1" value="2"><output id="oh"></output></div>
+    <div id="pl"></div>
+    <div class="cap">Towers (ink dots) at (0, 0), (8, 0.5) and (16, h), in km; the phone (ember) at (5, 4). Teal: where the fix lands when the three distances are each 10 m long or short, in every combination, with the misses drawn 40 times larger. Move h to line the towers up.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27·nav.4.1</span><span class="ph bend">bend</span><span class="givens"><span class="gtx">towers at (0, 0), (8, 0) and (16, h), in km; phone at (5, 4)</span></span>Find det M as h changes, and the h at which the grid cannot be undone. <br>Find which of h = 9 and h = 1.5 gives the better fix, and why.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27nav5">
+  <h2 class="sthead"><span class="stno">27nav5</span>Illegal moves</h2>
+  <p class="stands">Stands on 27·nav.1 to 27·nav.4.</p>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{three satellites fix a phone}\,? @@ with an unknown clock there are four unknowns; three satellites leave a curve of answers
+\text{the straight samenesses alone give the place}\,? @@ subtracting dropped the squares; keep one sphere and check
+\rho_i \text{ is the distance to satellite } i\,? @@ ρᵢ is the distance plus the clock error b, the same for every satellite
+\text{more satellites in one patch of sky make a better fix}\,? @@ bunched satellites shrink the determinant; the spread matters
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27·nav.5.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span class="gtx">three satellites and an unknown clock</span></span>Find how many straight samenesses remain after subtracting, and what the answers form.</li><li><span class="givens"><span class="gtx">two circles that meet at two points</span></span>Find what the straight sameness from subtracting them is, and how many points it holds of each circle.</li><li><span class="givens"><span data-tex-inline="\rho_1 = 20\,568.079,\ b = 85.000"></span></span>Find the true distance to satellite 1.</li><li><span class="givens"><span class="gtx">four satellites with S₂ − S₁, S₃ − S₁ and S₄ − S₁ not free</span></span>Find whether M can be undone, and what that does to the fix.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">27·nav.6.1</span><span class="tagq">build</span>Build a flat example of your own: three beacons, a phone at a point with whole-number distances to all three, and a clock error of 2 km. <br>Solve it back from the ρᵢ alone, and find both roots.</div>
+  <div class="chq"><span class="chid">27·nav.6.2</span><span class="tagq">edge</span><span class="givens"><span class="gtx">four satellites with S₁, S₂, S₃ and S₄ on one plane</span></span>Find what the grid M does, and which part of the phone’s place the four signals can no longer tell.</div>
+  <div class="chq"><span class="chid">27·nav.6.3</span><span class="tagq">converse</span>A phone at a true place, with a true clock error, gives four ρᵢ that the method solves. Turn it round: do any four measured ρᵢ come from some place and some clock error?</div>
+  <div class="chq"><span class="chid">27·nav.6.4</span><span class="tagq">reroute</span><span class="givens"><span class="gtx">five satellites</span></span>Find the fix with no quadratic at all, from four straight samenesses in four unknowns. <br>Find what must hold for their grid to be undoable.</div>
+  <div class="chq"><span class="chid">27·nav.6.5</span><span class="tagq">seam</span>A GPS satellite’s clock, compared with clocks on the ground, gains about 38 millionths of a second a day: slower for its speed, faster for flying higher, and the second wins. One account holds that, left uncorrected, a fix would drift by about 11 km a day, since c times 38 millionths of a second is about 11 km. Another holds that the phone’s fourth unknown b soaks up any gain shared by every satellite, so the fix would barely move. <br>Which account does the clock-unknown technique back, and what would you measure to settle it?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r27econ.html">← 27·econ · can an economy feed itself?</a><a href="r27chem.html">27·chem · can every reaction be balanced? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The measured ρᵢ is a pseudorange, and b the receiver clock bias. Finding a place from distances is trilateration (from differences of distances, multilateration). The axes from the earth’s centre that turn with the earth are earth-centred, earth-fixed coordinates. How the satellites’ spread stretches the error is the dilution of precision (GDOP, or PDOP for place alone). The system is the Global Positioning System; with Europe’s Galileo, Russia’s GLONASS and China’s BeiDou, the systems together are GNSS. Solving the four spheres by straight samenesses and one quadratic is Bancroft’s method.</p>
+  <h3>Who said it first</h3>
+  <p>The US Navy’s Transit system (1964) fixed ships from the pitch shift of one satellite’s signal. Roger Easton’s Timation satellites (1967) first flew precise clocks. Bradford Parkinson led the joint program that became GPS from 1973; the first of its satellites was launched on 22 February 1978, and the full system was declared working in 1995. Until 1 May 2000 the signal open to everyone was deliberately blurred to about 100 m; that night it was switched off. Stephen Bancroft published the closed solution in 1985. Gladys West’s models of the earth’s shape went into the satellites’ orbits. In 27·nav.6.5, the satellite NTS-2 (1977) flew with its clock correction switched off for its first days, to measure the gain; it matched the prediction to within about one percent.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="27·nav: a worked “proof”, not allowed">
+x^2 + y^2 = 41,\ \ (x-8)^2 + (y-2)^2 = 13 @@ two circles: fine
+4x + y = 24 @@ fine: second less first
+\text{the phone is at } (6, 0) @@ not allowed: (6, 0) lies on the straight sameness but on neither circle (36 ≠ 41); the answer must be checked on a circle, and two circles leave two points
+  </pre>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+const V=c=>'var('+c+')';
+// plot(series, xr, yr, opts): series = [{pts:[[x,y],...], c:'--ember', w:1.6, dash:''}]; returns svg string
+function plot(series, xr, yr, o){ o=o||{}; const W=360,H=o.H||210,L=34,B=22,T=8,Rr=8;
+  const sx=x=>L+(x-xr[0])/(xr[1]-xr[0])*(W-L-Rr), sy=y=>H-B-(y-yr[0])/(yr[1]-yr[0])*(H-B-T);
+  let s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;max-width:440px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  (o.yt||[]).forEach(y=>{ s+='<line x1="'+L+'" x2="'+(W-Rr)+'" y1="'+sy(y)+'" y2="'+sy(y)+'" style="stroke:'+V('--grid')+';stroke-width:0.6"/><text x="'+(L-3)+'" y="'+(sy(y)+3)+'" text-anchor="end" style="font:9px var(--mono);fill:'+V('--muted')+'">'+y+'</text>'; });
+  (o.xt||[]).forEach(x=>{ s+='<text x="'+sx(x)+'" y="'+(H-8)+'" text-anchor="middle" style="font:9px var(--mono);fill:'+V('--muted')+'">'+x+'</text>'; });
+  s+='<line x1="'+L+'" x2="'+L+'" y1="'+T+'" y2="'+(H-B)+'" style="stroke:'+V('--ink')+';stroke-width:0.8"/><line x1="'+L+'" x2="'+(W-Rr)+'" y1="'+(H-B)+'" y2="'+(H-B)+'" style="stroke:'+V('--ink')+';stroke-width:0.8"/>';
+  series.forEach(se=>{ const cl=v=>Math.max(yr[0]-0.05*(yr[1]-yr[0]),Math.min(yr[1]+0.05*(yr[1]-yr[0]),v));
+    const d=se.pts.filter(p=>isFinite(p[1])).map((p,i)=>(i?'L':'M')+sx(p[0]).toFixed(1)+','+sy(cl(p[1])).toFixed(1)).join('');
+    s+='<path d="'+d+'" style="fill:none;stroke:'+V(se.c||'--ember')+';stroke-width:'+(se.w||1.6)+(se.dash?';stroke-dasharray:'+se.dash:'')+'"/>'; });
+  (o.dots||[]).forEach(p=>{ s+='<circle cx="'+sx(p[0])+'" cy="'+sy(p[1])+'" r="2.6" style="fill:'+V(p[2]||'--ember')+'"/>'; });
+  if(o.xl) s+='<text x="'+(W-Rr)+'" y="'+(H-B-4)+'" text-anchor="end" style="font:9px var(--mono);fill:'+V('--muted')+'">'+o.xl+'</text>';
+  if(o.yl) s+='<text x="'+(L+4)+'" y="'+(T+9)+'" style="font:9px var(--mono);fill:'+V('--muted')+'">'+o.yl+'</text>';
+  return s+'</svg>'; }
+
+const P=[5,4];
+function solve(T,d){ const a=2*(T[1][0]-T[0][0]), b=2*(T[1][1]-T[0][1]), c=2*(T[2][0]-T[0][0]), e=2*(T[2][1]-T[0][1]);
+  const sq=t=>t[0]*t[0]+t[1]*t[1];
+  const r1=sq(T[1])-sq(T[0])-d[1]*d[1]+d[0]*d[0], r2=sq(T[2])-sq(T[0])-d[2]*d[2]+d[0]*d[0], D=a*e-b*c;
+  return {D, X:[(r1*e-b*r2)/D,(a*r2-c*r1)/D]}; }
+function draw(){ const h=+$('kh').value; $('oh').textContent=fm(h,1)+' km';
+  const T=[[0,0],[8,0.5],[16,h]]; const d=T.map(t=>Math.hypot(t[0]-P[0],t[1]-P[1]));
+  const D=solve(T,d).D; const pts=[]; let worst=0;
+  for(const s0 of [-1,1]) for(const s1 of [-1,1]) for(const s2 of [-1,1]){ const dd=[d[0]+0.01*s0,d[1]+0.01*s1,d[2]+0.01*s2];
+    const X=solve(T,dd).X; const ex=X[0]-P[0], ey=X[1]-P[1]; worst=Math.max(worst,Math.hypot(ex,ey)); const cl=(v,a,b)=>Math.max(a,Math.min(b,v)); pts.push([cl(P[0]+40*ex,-2,18),cl(P[1]+40*ey,-7,10),'--teal']); }
+  const dots=T.map(t=>[t[0],t[1],'--ink']).concat(pts.filter(p=>isFinite(p[0])&&isFinite(p[1]))).concat([[P[0],P[1],'--ember']]);
+  $('pl').innerHTML=plot([],[-2,18],[-7,10],{xt:[0,4,8,12,16],yt:[-6,-3,0,3,6,9],dots:dots,xl:'km'});
+  const v=$('vd'); v.className='verdict';
+  v.textContent = Math.abs(D)<1e-9 ? 'det M = 0: the towers are on one line, and the grid cannot be undone.' : 'det M = '+fm(D,1)+'. With each distance 10 m long or short, the fix lands up to '+fm(1000*worst,0)+' m from the phone.'; }
+$('kh').oninput=draw; draw();
+window.__pic={set:(h)=>{ $('kh').value=h; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'distance',t:R`d = c\,(t_r - t_s)`,n:`Light: 299 792.458 km/s.`},
+  {k:'ember',kl:'error',t:R`\htmlClass{new}{c\,\delta}`,n:`A billionth of a second: 30 cm.`}
+],{title:'The slides · travel time · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'sphere',t:R`|X - S_i|^2 = r_i^2`,n:`Squares in it.`},
+  {k:'ember',kl:'subtract',t:R`\htmlClass{new}{2(S_i - S_1)\cdot X = \cdots}`,n:`Straight.`}
+],{title:'The slides · two spheres · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'pseudo',t:R`\rho_i = |X - S_i| + b`,n:`The same b for all.`},
+  {k:'ember',kl:'line',t:R`X = p + b\,q`,n:`Three straight, four unknowns.`},
+  {k:'ember',kl:'pick',t:R`\htmlClass{new}{\text{one sphere: a quadratic in } b}`,n:`One root on the ground.`}
+],{title:'The slides · the clock · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'miss',t:R`\Delta X = M^{-1}\Delta c`,n:`The undo of the grid.`},
+  {k:'ember',kl:'bunched',t:R`\htmlClass{new}{\det M \to 0}`,n:`The miss grows.`}
+],{title:'The slides · spread · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`\rho_i = |X - S_i|\,?`,n:`Plus the clock error b.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Can a grid of numbers scramble letters?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r27chem.html">← 27·chem can every reaction be balanced?</a><a href="r27now.html">next: 27·now which web page matters most? →</a></p>
+  <div class="tags"><span class="tag crypt">27·crypt · cryptography</span></div>
+  <h1>Can a grid of numbers scramble letters?</h1>
+  <p>Can a grid of numbers scramble letters? Rung four’s shift moved every letter the same number of places, and fell to anyone patient enough to try all twenty five keys. Later pages swapped single letters by a keyword or a machine, and each time the letters’ own habits gave the secret away: some letters are common, and a common letter stays common in disguise. In 1929 a teacher of mathematics in New York asked a new question. What if the letters were taken two or three at a time, as a list of numbers, and the whole list was sent through a grid? Then one letter no longer has one disguise. The same letter turns into different letters depending on its neighbour. What makes the question hard is that a grid of whole numbers is easy to undo with fractions, and fractions are not letters. This page shows when a grid can be undone with letters alone, using rung four’s remainders and rung twenty-seven’s determinant, and counts the keys. Then it takes the enemy’s side, and finds that a short guessed word gives the whole key away.</p>
+  <p class="gesture">Number the letters from zero to twenty five, and read the message two letters at a time, each pair a list of two numbers. Send each pair through a grid of whole numbers and keep the remainders by twenty six: that is the secret pair. Remainders can be taken at any stage of adding and multiplying, so the grid works among letters as it does among numbers. To read, send the secret pair through a second grid that undoes the first. That second grid exists exactly when the key’s determinant shares no divisor above one with twenty six. Then it is the key’s grid of stand-ins, times a number that undoes the determinant among letters. Because the scrambling is straight, two pairs of message with their secret pairs, read off a guessed word, are enough to solve for the key.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r04crypt.html">4·crypt</a> (letters as numbers, starting again past z), <a href="r04i.html">4i</a> (division with remainder; the plus-only combination technique; divides-the-rest), <a href="r27d.html">27d</a> (grids as maps; the columns and product-is-doing techniques), <a href="r27e.html">27e</a> (the determinant; the det-product technique), <a href="r27g.html">27g</a> (the stand-in technique) and <a href="r20crypt.html">20·crypt</a> (a guessed word). 27·now asks which web page matters most.</p></div>
+</header>
+
+<section class="class step" data-step="27crypt1">
+  <h2 class="sthead"><span class="stno">27crypt1</span>A pair of letters is an arrow</h2>
+  <p class="stands">Stands on 4·crypt (letters as numbers), 4i (division with remainder) and 27d (a grid acts on a list).</p>
+  <p data-pid="7d0e3c">As in 4·crypt, a names 0, b names 1, and so on to z, which names 25. A message is written in small letters and its secret form in capitals. From here on, on this page, the remainder by 26 of any whole number n is the number r from 0 to 25 with n − r a multiple of 26. For n below 0, add 26 until it is 0 or more: −3 leaves 23. The key is a grid K of whole numbers, two rows and two columns.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the remainders-pass-through technique">
+m = 26q + r,\ \ n = 26q' + r' @@ division with remainder (4i)
+m + n = 26\,(q + q') + (r + r') @@ regroup
+m\,n = 26\,(26qq' + qr' + rq') + r\,r' @@ multiply out: the spread technique
+\htmlClass{new}{m + n \text{ leaves what } r + r' \text{ leaves};\ \ m\,n \text{ leaves what } r\,r' \text{ leaves}} \quad \blacksquare @@ each pair differs by a multiple of 26, and one-split gives one remainder (4·crypt)
+  </pre>
+  <p data-pid="b87ab4">Remainders-pass-through technique: <b>the remainder by 26 of a sum or a product depends only on the remainders of its parts, so remainders may be taken at any stage.</b> So a grid’s action, made of sums of products, can be done among letters. Here is a chinook salmon run reported in pairs.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the pair scramble">
+\text{ch} = (2, 7) @@ c is 2, h is 7
+K = \begin{pmatrix} 7 & 8 \\ 11 & 11 \end{pmatrix}:\ \ K\,(2, 7) = (14 + 56,\ 22 + 77) = (70, 99) @@ a grid acts on a list (27d1)
+70 = 26 \cdot 2 + 18,\ \ 99 = 26 \cdot 3 + 21 @@ division with remainder
+(18, 21) = \text{SV} @@ s is 18, v is 21
+\htmlClass{new}{\text{chinookrun} \mapsto \text{SV EX CW YL KZ}} \quad \blacksquare @@ the same, pair by pair
+  </pre>
+  <p data-pid="8a1cf3">The doubled o of chinook came out as C and W: a doubled letter no longer shows. The two n’s came out as X and Z. One letter has many disguises, set by its neighbour. But each pair has one disguise: oo always gives CW under this key, so pairs can still be counted, as 4·crypt counted letters.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · pairs · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">27·crypt.1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="K = \begin{pmatrix} 7 &amp; 8 \\ 11 &amp; 11 \end{pmatrix}"></span> <span class="gtx">the message salmon</span></span>Find the secret text, pair by pair. <br>Find the secret pair of aa, and every pair this key sends to AA.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27crypt2">
+  <h2 class="sthead"><span class="stno">27crypt2</span>The way back among letters</h2>
+  <p class="stands">Stands on 27·crypt.1, 27g (the stand-in technique), 27e (the det-product technique) and 4i (the plus-only combination and divides-the-rest techniques).</p>
+  <p data-pid="49b024">Among numbers, K is undone by K⁻¹ = S / det K, where S is the grid of stand-ins (27g). For a grid with two rows, S swaps the corners and turns the other two entries to their opposites. But det K here is −11, and dividing by −11 gives fractions, which are not letters. Among letters, a number that undoes −11 is enough.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the letter-undo technique">
+S\,K = K\,S = (\det K)\,I,\ \ S = \begin{pmatrix} 11 & -8 \\ -11 & 7 \end{pmatrix} @@ the stand-in technique (27g); for two rows, multiply out both ways
+\det K = 77 - 88 = -11,\ \text{which leaves } 15;\ \ 15 \cdot 7 = 105 = 26 \cdot 4 + 1 @@ 15 shares no divisor above 1 with 26, so some e has 15e leaving 1 (4i): e = 7
+K' = 7\,S = \begin{pmatrix} 77 & -56 \\ -77 & 49 \end{pmatrix} \to \begin{pmatrix} 25 & 22 \\ 1 & 23 \end{pmatrix} @@ remainders by 26
+K'K = 7\,S\,K = 7\,(-11)\,I = -77\,I,\ \ -77 = 26 \cdot (-3) + 1 @@ grouping-free (27d2); remainders pass through
+\htmlClass{new}{K'(Kx) \text{ leaves } x:\ \ K'\,(18, 21) = (912, 501) \to (2, 7) = \text{ch}} \quad \blacksquare @@ SV read back
+  </pre>
+  <p data-pid="28c9ef">Letter-undo technique: <b>a key grid can be undone among letters exactly when its determinant shares no divisor above 1 with 26; then the key back is e times its grid of stand-ins, where e times the determinant leaves 1.</b> The lines above work one key. The same steps work for any key whose determinant shares no divisor above 1 with 26, since the plus-only combination technique (4i) then gives e. For the other half, suppose some K′ undoes K among letters. The determinant is made of sums of products of entries, so det(K′K) leaves what det I = 1 leaves. By the det-product technique (27e), det K′ · det K = 26q + 1 for some q. A divisor of det K and of 26 divides det K′ · det K and 26q, so it divides 1 (4i).</p>
+  <p data-pid="08c4d2">So a determinant that is not 0 is not enough. Of the 26 remainders, only 12 share no divisor above 1 with 26: the odd ones other than 13. Of the 456 976 grids with entries from 0 to 25, exactly 157 248 can be undone among letters, about a third. That is far more than the 25 shifts of 4·crypt, and far fewer than the keys of 10·crypt’s scrambled alphabets.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · undo · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · a key, and its way back</div>
+    <div class="kn"><span class="m">a</span><input type="range" id="ka" min="0" max="25" step="1" value="7"><output id="oa"></output></div>
+    <div class="kn"><span class="m">b</span><input type="range" id="kb" min="0" max="25" step="1" value="8"><output id="ob"></output></div>
+    <div class="kn"><span class="m">c</span><input type="range" id="kc" min="0" max="25" step="1" value="11"><output id="oc"></output></div>
+    <div class="kn"><span class="m">d</span><input type="range" id="kd" min="0" max="25" step="1" value="11"><output id="od"></output></div>
+    <div class="cap">The key has rows (a, b) and (c, d). The message is galewarningstraitofgeorgia, a marine forecast. Move the entries and watch the secret text, the determinant’s remainder, and whether the key can be undone among letters.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27·crypt.2.1</span><span class="ph undo">undo</span><span class="givens"><span data-tex-inline="K = \begin{pmatrix} 3 &amp; 3 \\ 2 &amp; 5 \end{pmatrix}"></span> <span class="gtx">the secret text VENYDS</span></span>Find det K, the e that undoes it among letters, and the key back. <br>Find the message.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27crypt3">
+  <h2 class="sthead"><span class="stno">27crypt3</span>A guessed word gives the key away</h2>
+  <p class="stands">Stands on 27·crypt.2, 20·crypt (a guessed word) and 27d (the columns technique).</p>
+  <p data-pid="ed83f7">Now take the enemy’s side. A marine forecast for the Strait of Georgia is sent with the key above, and the secret text begins QOFJYIPSEX. Forecasts often begin with the words gale warning. Guess that this one does, as 20·crypt guessed a word in a machine’s secret text. Then five pairs of message and secret text are known: ga to QO, le to FJ, wa to YI, rn to PS, in to EX.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the known-pairs technique">
+K\,P = C,\ \ P = \begin{pmatrix} 11 & 17 \\ 4 & 13 \end{pmatrix},\ \ C = \begin{pmatrix} 5 & 15 \\ 9 & 18 \end{pmatrix} @@ le and rn as the columns of P, FJ and PS as those of C; K acts column by column (27d2)
+\det P = 143 - 68 = 75,\ \text{which leaves } 23;\ \ 23 \cdot 17 = 391 = 26 \cdot 15 + 1 @@ 23 shares no divisor with 26: e = 17
+P' = 17 \begin{pmatrix} 13 & -17 \\ -4 & 11 \end{pmatrix} \to \begin{pmatrix} 13 & 23 \\ 10 & 5 \end{pmatrix} @@ the letter-undo technique
+K = K\,P\,P' = C\,P' = \begin{pmatrix} 215 & 190 \\ 297 & 297 \end{pmatrix} @@ PP′ leaves I; remainders pass through
+\htmlClass{new}{K \to \begin{pmatrix} 7 & 8 \\ 11 & 11 \end{pmatrix}} \quad \blacksquare @@ 215 = 26 · 8 + 7, 190 = 26 · 7 + 8, 297 = 26 · 11 + 11
+  </pre>
+  <p data-pid="a7f19c">Known-pairs technique: <b>two pairs of message with their secret pairs give the key, as C times the undo of P, whenever the grid P of the two message pairs can be undone among letters.</b> Not every two pairs will do. The first two, ga and le, give det P = 6 · 4 − 11 · 0 = 24, which shares 2 with 26. The enemy simply tries other pairs from the guessed words. With a key of three rows, three pairs are needed: nine letters of guessed message.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · guessed · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27·crypt.3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a secret text made with an unknown two-row key, known to begin with the message attack, sent as WFRLMM</span></span>Find which two of the pairs at, ta, ck give a grid P that can be undone among letters. <br>Find the key.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27crypt4">
+  <h2 class="sthead"><span class="stno">27crypt4</span>Illegal moves</h2>
+  <p class="stands">Stands on 27·crypt.1 to 27·crypt.3.</p>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\det K = 2 \ne 0, \text{ so } K \text{ can be undone among letters}\,? @@ 2 shares a divisor with 26; no e has 2e leaving 1
+K' = K^{-1} = \tfrac{1}{\det K}\,S\,? @@ fractions are not letters; use e with e det K leaving 1
+-11 \text{ leaves } 11 \text{ by } 26\,? @@ −11 + 26 = 15: it leaves 15
+\text{any two known pairs give the key}\,? @@ only when their grid P can be undone among letters; ga and le cannot
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27·crypt.4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="K = \begin{pmatrix} 1 &amp; 1 \\ 1 &amp; 3 \end{pmatrix}"></span></span>Find det K, and two different pairs this key sends to the same secret pair.</li><li><span class="givens"><span data-tex-inline="K = \begin{pmatrix} 7 &amp; 8 \\ 11 &amp; 11 \end{pmatrix}"></span></span>Find K⁻¹ among numbers, and why it is no key back among letters.</li><li><span class="givens"><span data-tex-inline="-11,\ -77,\ -121"></span></span>Find the remainder of each by 26.</li><li><span class="givens"><span class="gtx">ga ↦ QO and le ↦ FJ</span></span>Find det P, and what the enemy must do instead.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">27·crypt.5.1</span><span class="tagq">build</span>Build a two-row key, other than I, that is its own key back: KK leaves I. <br>Find how a sender and a reader could share such a key.</div>
+  <div class="chq"><span class="chid">27·crypt.5.2</span><span class="tagq">edge</span>Prove that a key whose determinant is even sends two different pairs to the same secret pair, so no reader can undo it. Use KS = (det K)I and the pair 13 times a column of S.</div>
+  <div class="chq"><span class="chid">27·crypt.5.3</span><span class="tagq">converse</span>A key that can be undone among letters sends different pairs to different secret pairs. Turn it round: if a key sends different pairs to different secret pairs, can it be undone among letters?</div>
+  <div class="chq"><span class="chid">27·crypt.5.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="K = \begin{pmatrix} 7 &amp; 8 \\ 11 &amp; 11 \end{pmatrix}"></span></span>Find the key back a second way, with no stand-ins: find the pairs x and y with Kx leaving (1, 0) and Ky leaving (0, 1), by trying second entries.</div>
+  <div class="chq"><span class="chid">27·crypt.5.5</span><span class="tagq">seam</span>One side held that a cipher built only of grids is safe if the grid is large enough: a key of ten rows has more keys than there are grains of sand. The other side held that a cipher built only of straight maps falls to a guessed word, however large the grid. <br>Who is right, and what must a cipher hold besides grids?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r27chem.html">← 27·chem · can every reaction be balanced?</a><a href="r27now.html">27·now · which web page matters most? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The pair scramble is the Hill cipher, and K its key matrix. Attacking it from guessed words is a known-plaintext attack. The key back is the inverse of K among letters; the accepted names for arithmetic with remainders, and for this inverse, wait for rung 39. The 157 248 keys that can be undone are the invertible 2 × 2 matrices over the remainders by 26. A step that mixes a block of letters by a grid is called diffusion.</p>
+  <h3>Who said it first</h3>
+  <p>Lester Hill, of Hunter College in New York, published the cipher in 1929 in the American Mathematical Monthly, and with Louis Weisner patented a machine of gears in 1932 that scrambled six letters at a time. It saw little use: the guessed-word attack was plain from the start. Its idea lives on. The cipher that guards much of today’s web traffic, made a standard in 2001, mixes four bytes at a time by a grid, and adds a step that is not straight, so that no guessed word can be solved for the key by elimination. In 27·crypt.5.5 the two sides are the hope of building safety from size alone, and the reply that straightness itself is the weakness.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="27·crypt: a worked “proof”, not allowed">
+K = \begin{pmatrix} 7 & 8 \\ 11 & 11 \end{pmatrix},\ \ \det K = -11 @@ fine
+K^{-1} = -\tfrac{1}{11}\begin{pmatrix} 11 & -8 \\ -11 & 7 \end{pmatrix} @@ fine, among numbers
+\text{the key back is } \begin{pmatrix} -1 & \tfrac{8}{11} \\ 1 & -\tfrac{7}{11} \end{pmatrix} @@ not allowed: 8/11 is no letter; the key back is 7S, with remainders: rows (25, 22), (1, 23)
+  </pre>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+const L='abcdefghijklmnopqrstuvwxyz', M='galewarningstraitofgeorgia';
+const rem=n=>((n%26)+26)%26;
+function gcd(a,b){ while(b){ [a,b]=[b,a%b]; } return a; }
+function draw(){ const a=+$('ka').value,b=+$('kb').value,c=+$('kc').value,d=+$('kd').value;
+  $('oa').textContent=a; $('ob').textContent=b; $('oc').textContent=c; $('od').textContent=d;
+  let out=''; for(let i=0;i<M.length;i+=2){ const x=L.indexOf(M[i]), y=L.indexOf(M[i+1]); out+=L[rem(a*x+b*y)].toUpperCase()+L[rem(c*x+d*y)].toUpperCase()+' '; }
+  const D=a*d-b*c, r=rem(D); const v=$('vd'); v.className='verdict';
+  let msg='Secret text: '+out.trim()+'. det = '+D+', which leaves '+r+'. ';
+  if(gcd(r,26)===1){ let e=1; while(rem(e*r)!==1) e++; msg+='It shares no divisor with 26: e = '+e+', and the key back has rows ('+rem(e*d)+', '+rem(-e*b)+') and ('+rem(-e*c)+', '+rem(e*a)+').'; }
+  else msg+='It shares '+gcd(r,26)+' with 26: this key cannot be undone among letters.';
+  v.textContent=msg; }
+['ka','kb','kc','kd'].forEach(k=>$(k).oninput=draw); draw();
+window.__pic={set:(a,b,c,d)=>{ $('ka').value=a; $('kb').value=b; $('kc').value=c; $('kd').value=d; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'pass',t:R`mn \to rr'`,n:`Remainders pass through.`},
+  {k:'ember',kl:'scramble',t:R`\htmlClass{new}{x \mapsto Kx,\ \text{remainders by } 26}`,n:`Two letters at a time.`}
+],{title:'The slides · pairs · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'stand-in',t:R`SK = (\det K)\,I`,n:`Whole numbers.`},
+  {k:'ember',kl:'e',t:R`e \det K \to 1`,n:`No shared divisor with 26.`},
+  {k:'ember',kl:'back',t:R`\htmlClass{new}{K' = e\,S}`,n:`Among letters.`}
+],{title:'The slides · undo · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'known',t:R`K\,P = C`,n:`Pairs as columns.`},
+  {k:'ember',kl:'key',t:R`\htmlClass{new}{K = C\,P'}`,n:`When P can be undone.`}
+],{title:'The slides · guessed · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'illegal',t:R`\det K \ne 0 \Rightarrow \text{undo}\,?`,n:`Not among letters.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

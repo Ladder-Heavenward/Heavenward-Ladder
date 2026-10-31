@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Systems of rate rules</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r27m.html">← 27m turns of space</a><a href="r27then.html">next: 27·then what if everything depends on everything else? →</a></p>
+  <div class="tags"><span class="tag then">27·cb24 · newsflash for 24</span></div>
+  <h1>Systems of rate rules</h1>
+  <p>Rung twenty-four solved rules that tie one function to its own rates. But almost nothing in the world changes alone. Two rooms of a cabin share their warmth through the floor. Two genes in a cell hold each other down. A bridge deck twists and bends at once, and each motion feeds the other. Each of these is a handful of unknowns whose rates are mixes of all of them. Rung twenty-four could solve none of them, and 24·bio held the honest check of its gene switch and its gene ring in trust for exactly that reason. What makes the question hard is that every rate steers every other, so no single rule can be solved first. This page finds that a grid of numbers untangles them. The arrows the grid only stretches are directions in which the unknowns change on their own, each at its own rate, so the whole system splits into rules rung twenty-four already knows. Then it draws every solution of two unknowns as a path in a plane, sorts the paths into a few kinds by two numbers of the grid, reads the gene switch and the gene ring from their stretches, and watches a closed loop being born out of a resting place, as a bridge in Tacoma once did.</p>
+  <p class="gesture">If a grid only stretches some arrow, then along that arrow the unknowns grow or shrink together at the rate of the stretch, as a single growth function does. When the grid has enough such arrows, every solution is a sum of these pieces. Every grid also has a growth function of its own, built from its powers, which solves the system in one stroke. With two unknowns, the paths come in a few kinds: a saddle, paths heading in or out without turning, spirals, and closed loops, and two numbers of the grid say which. Near a resting place, the rates behave almost like a grid, and its stretches say whether the rest holds, except on a border where the grid cannot tell. And a resting place that stops holding can give birth to a loop.</p>
+  <div class="ready"><h3>What this calls back to, and what it stands on</h3><p>Calls back to <a href="r24h.html">24h</a> (the shift-to-rest and steady-swing techniques), <a href="r24k.html">24k</a> (the sign-of-slope technique) and <a href="r24bio.html">24·bio</a> (the gene switch and ring, and the two-rule check held in trust). Stands on <a href="r27f.html">27f</a> (the arrows a map only stretches), <a href="r27e.html">27e</a> (the determinant), <a href="r27d.html">27d</a> (matrices as maps), <a href="r26cb24.html">26·cb24</a> (the complex-rate and decaying-turn techniques) and <a href="r23e.html">23e</a> (term by term). 27·then sets springs, predators and epidemics running by the same grids.</p></div>
+</header>
+
+<section class="class step" data-step="27·cb24.1">
+  <h2 class="sthead"><span class="stno">27·cb24.1</span>Rates that steer each other</h2>
+  <p class="stands">Stands on 27f (the straighten-out technique), 24h (the shift-to-rest technique) and 26·cb24.1 (the complex-rate technique).</p>
+  <p data-pid="598d18">Take n unknowns x₁, …, xₙ, each a function of the time t, and gather them as one arrow x. A system of rate rules with constant numbers in front says that each rate is a mix of all the unknowns: x′ = Ax, for one square grid A. The slope of an arrow is taken entry by entry.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the split-system technique">
+Av = \lambda v \Rightarrow \big(e^{\lambda t}v\big)' = \lambda e^{\lambda t}v = A\big(e^{\lambda t}v\big) @@ an arrow the grid only stretches (27f) grows at the rate of its stretch
+A = PDP^{-1},\ \ y = P^{-1}x \Rightarrow y' = P^{-1}x' = P^{-1}PDP^{-1}x = Dy @@ the straighten-out technique (27f); a fixed grid passes through a slope entry by entry
+y_i' = \lambda_iy_i \iff \big(e^{-\lambda_it}y_i\big)' = 0 \iff y_i = y_i(0)\,e^{\lambda_it} @@ n separate rules: the product rule, the complex-rate technique (26·cb24.1), and a slope of 0 is flat, part by part
+\htmlClass{new}{x = c_1e^{\lambda_1t}v_1 + \cdots + c_ne^{\lambda_nt}v_n,\ \ c = P^{-1}x(0)} \quad \blacksquare @@ x = Py: one list c for each start, and no other solution
+  </pre>
+  <p data-pid="fb2db2">Split-system technique: <b>if a grid A has n free arrows v₁, …, vₙ that it only stretches, by λ₁, …, λₙ, then every solution of x′ = Ax is c₁e^(λ₁t)v₁ + ⋯ + cₙe^(λₙt)vₙ, with exactly one list c for each start.</b> Each stretched arrow is a direction in which the system changes alone, as 24h’s single rule did.</p>
+  <pre class="lines" data-k="ember" data-label="this page: a cabin near Bozeman, heater off on a winter night">
+x_1' = -0.1x_1 - 0.1(x_1 - x_2),\ \ x_2' = -0.1x_2 - 0.1(x_2 - x_1) @@ each room leaks to the outdoors, and to the other room through the floor; degrees above outdoors, t in hours
+A = 0.1\begin{pmatrix}-2 & 1\\ 1 & -2\end{pmatrix}:\ \ (1, 1) \text{ stretched by } -0.1,\ \ (1, -1) \text{ by } -0.3 @@ check: A(1, 1) = (−0.1, −0.1) and A(1, −1) = (−0.3, 0.3)
+x(0) = (20, 10) = 15\,(1, 1) + 5\,(1, -1) @@ the shared warmth and the gap
+\htmlClass{new}{x = 15e^{-0.1t}(1, 1) + 5e^{-0.3t}(1, -1)} @@ the split-system technique: the gap dies three times as fast as the warmth
+  </pre>
+  <p data-pid="7b064f">After 10 hours the rooms are 5.8 and 5.3 degrees above the outdoors. The gap between them has shrunk to a twentieth, and the warmth they share to about a third.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · split · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">27·cb24.1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="x&#x27; = \begin{pmatrix}1 &amp; 2\\ 2 &amp; 1\end{pmatrix}x,\ \ x(0) = (3, 1)"></span></span>Find the stretches of the grid and an arrow for each. <br>Find the solution, and the direction it heads in as t grows.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27·cb24.2">
+  <h2 class="sthead"><span class="stno">27·cb24.2</span>A growth function for a grid</h2>
+  <p class="stands">Stands on 27·cb24.1, 27d (the product-is-doing technique), 22e (compare with a geometric sum), 23e (term by term) and 23h (the series of cos and sin).</p>
+  <p data-pid="263f2a">Not every grid has enough stretched arrows. The grid with rows (0, 1) and (0, 0) has only one direction it stretches. So build a growth function for the grid itself, from its powers, as the series of e^x was built from the powers of x.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the grid-exponential technique">
+e^{tA} = I + tA + \tfrac{t^2}{2!}A^2 + \tfrac{t^3}{3!}A^3 + \cdots \text{ settles, entry by entry} @@ if no entry of A passes M in size, no entry of Aᵏ passes nᵏ⁻¹Mᵏ (27d, by induction): compare with the series of e^{nMt} (22e)
+\big(e^{tA}\big)' = A + tA^2 + \tfrac{t^2}{2!}A^3 + \cdots = A\,e^{tA} @@ each entry is a power series in t that reaches every t: term by term (23e)
+\big(e^{-tA}x\big)' = -Ae^{-tA}x + e^{-tA}Ax = 0 \text{ for any solution } x @@ the product rule; A commutes with each of its powers, so with e^{−tA}
+e^{-tA}x(t) = x(0),\ \ \text{and } \big(e^{tA}e^{-tA}\big)' = 0 \text{ gives } e^{tA}e^{-tA} = I @@ a slope of 0 is flat, entry by entry; at t = 0 both are I
+\htmlClass{new}{x = e^{tA}x(0) \text{ is the one solution of } x' = Ax} \quad \blacksquare @@ multiply e^{−tA}x(t) = x(0) by e^{tA}
+  </pre>
+  <p data-pid="e4e6f2">Grid-exponential technique: <b>for every square grid A the sum I + tA + t²A²/2! + ⋯ settles for every t, and x = e^(tA)x(0) is the one solution of x′ = Ax.</b> When A = PDP⁻¹, every power is PDᵏP⁻¹, so e^(tA) = Pe^(tD)P⁻¹, and e^(tD) has e^(λᵢt) down its middle: the split-system technique again.</p>
+  <pre class="lines" data-k="ember" data-label="this page: 24h’s two rules, out of one grid">
+y'' = -y:\ \ x = (y, y'),\ \ A = \begin{pmatrix}0 & 1\\ -1 & 0\end{pmatrix},\ \ A^2 = -I @@ the second rate as a first rate of a longer arrow
+e^{tA} = \big(1 - \tfrac{t^2}{2!} + \cdots\big)I + \big(t - \tfrac{t^3}{3!} + \cdots\big)A = \begin{pmatrix}\cos t & \sin t\\ -\sin t & \cos t\end{pmatrix} @@ even powers are ±I, odd powers ±A; the series of cos and sin (23h)
+N = \begin{pmatrix}0 & 1\\ 0 & 0\end{pmatrix},\ N^2 = 0:\ \ e^{t(rI + N)} = e^{rt}\big(I + tN\big) @@ rI and N commute, so the exponential turns adding into multiplying, as 26b found for numbers
+\htmlClass{new}{e^{t(rI + N)} = e^{rt}\begin{pmatrix}1 & t\\ 0 & 1\end{pmatrix}} @@ the t e^{rt} of 24h’s repeated root, out of a grid with only one stretched direction
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · exponential · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27·cb24.2.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="A = \begin{pmatrix}0 &amp; 1\\ -4 &amp; 0\end{pmatrix}"></span></span>Find A², and e^(tA) by its series. <br>Find the solution from x(0) = (1, 0), and the rule on y it solves.</li><li><span class="givens"><span data-tex-inline="B = \begin{pmatrix}2 &amp; 1\\ 0 &amp; 2\end{pmatrix}"></span></span>Find e^(tB), and the solution from x(0) = (0, 1).</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27·cb24.3">
+  <h2 class="sthead"><span class="stno">27·cb24.3</span>Paths in the plane</h2>
+  <p class="stands">Stands on 27·cb24.1, 27e (the three-rules technique), 8i (the quadratic formula), 26·cb24.2 (the decaying-turn technique) and 24h (the steady-swing technique).</p>
+  <p data-pid="449005">With two unknowns, each solution is a point moving in the plane, and its trail is a path. Draw the paths from many starts at once, and the whole system is one picture. From here on, that plane, with a path for each start, is the <i>phase plane</i>. For a grid with rows (a, b) and (c, d), write T = a + d for the sum down its middle, and Δ = ad − bc for its determinant.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the sum-and-determinant technique">
+\det(A - \lambda I) = (a - \lambda)(d - \lambda) - bc = \lambda^2 - T\lambda + \Delta @@ the stretch polynomial of a 2 × 2 grid (27e)
+\lambda = \tfrac T2 \pm \sqrt{\tfrac{T^2}{4} - \Delta},\ \ \lambda_1\lambda_2 = \Delta,\ \ \lambda_1 + \lambda_2 = T @@ the quadratic formula (8i), with 9·cb8’s i under a negative root; 27k’s middle-sum technique
+\Delta \lt 0:\ \text{one stretch above 0 and one below: a saddle} @@ the product of the stretches is below 0
+\Delta \gt 0,\ T^2 \ge 4\Delta:\ \text{both one sign: every path in if } T \lt 0,\ \text{out if } T \gt 0,\ \text{without turning} @@ real stretches with a positive product share the sign of their sum
+T^2 \lt 4\Delta:\ \lambda = \alpha \pm i\beta,\ \alpha = \tfrac T2:\ \text{spirals, in if } T \lt 0,\ \text{out if } T \gt 0 @@ every path is e^{αt} times a turn (26·cb24.2)
+\htmlClass{new}{T = 0 \lt \Delta:\ \text{every path is a closed loop round the rest}} \quad \blacksquare @@ α = 0: steady swings (24h)
+  </pre>
+  <p data-pid="f128a3">Sum-and-determinant technique: <b>for x′ = Ax with a 2 × 2 grid, the paths form a saddle when Δ &lt; 0; head in, or out, without turning when Δ &gt; 0 and T² ≥ 4Δ; spiral when T² &lt; 4Δ, in for T &lt; 0 and out for T &gt; 0; and close up into loops when T = 0 &lt; Δ.</b> Two numbers of the grid sort every path.</p>
+  <pre class="lines" data-k="ember" data-label="this page: 26·cb24’s truck corner, in the plane">
+y'' + 2by' + \omega^2y = 0:\ \ A = \begin{pmatrix}0 & 1\\ -\omega^2 & -2b\end{pmatrix},\ \ T = -2b,\ \ \Delta = \omega^2 @@ x = (y, y′)
+T^2 \lt 4\Delta \iff b \lt \omega @@ 26·cb24’s light brake is a spiral in
+\htmlClass{new}{\omega^2 = 50,\ b = 1.77:\ \ \lambda \approx -1.77 \pm 6.85i} @@ each turn of the spiral is a bounce of the truck; past b = ω, the door closer of 24h heads in without turning
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · two numbers · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · two numbers sort every path</div>
+    <div class="kn"><span class="m">T</span><input type="range" id="kt" min="-3" max="3" step="0.1" value="-0.6"><output id="ot"></output></div>
+    <div class="kn"><span class="m">Δ</span><input type="range" id="kd" min="-2" max="4" step="0.1" value="2"><output id="od"></output></div>
+    <div id="pl"></div>
+    <div class="cap">Ember: paths of x′ = Ax for the grid with rows (0, 1) and (−Δ, T), from eight starts on a ring, for ten units of time. Dots: the starts. Slide T through 0 and Δ through 0 and T²/4.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27·cb24.3.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\begin{pmatrix}1 &amp; 2\\ 3 &amp; 0\end{pmatrix},\ \ \begin{pmatrix}-1 &amp; -4\\ 1 &amp; -1\end{pmatrix},\ \ \begin{pmatrix}0 &amp; -3\\ 3 &amp; 0\end{pmatrix},\ \ \begin{pmatrix}-3 &amp; 1\\ 0 &amp; -2\end{pmatrix}"></span></span>Find T and Δ for each grid, and the kind of its paths. <br>Find the stretches of the second.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27·cb24.4">
+  <h2 class="sthead"><span class="stno">27·cb24.4</span>Near a resting place</h2>
+  <p class="stands">Stands on 27·cb24.3, 24·bio (the switch and ring techniques), 24k (the sign-of-slope technique) and 27f (the stretch-test technique).</p>
+  <p data-pid="61d3a1">Most systems are not straight. 24·bio’s genes obey rules like u′ = f(v) − u, with f curved. Near a resting place x*, where every rate is 0, each rate is close to a straight mix of the gaps from x*: hold every unknown but one still, and take the slope in that one. Those slopes, rate by rate, make the <i>tangent grid</i> J at the rest. 28a names such slopes. Here it is enough that each rate below is a sum of one-unknown pieces.</p>
+  <p data-pid="824b57">Stated, not proved here: if every stretch of J has real part below 0, the rest holds, and starts near it head back; if one stretch has real part above 0, the rest does not hold. This is 24k’s sign-of-slope technique with a grid in place of a slope. Its proof is held in trust for much higher up the ladder. Call it the tangent-grid statement.</p>
+  <pre class="lines" data-k="ember" data-label="this page: 24·bio’s switch, checked with both rules">
+u' = f(v) - u,\ \ v' = f(u) - v,\ \ f(s) = \tfrac{a}{1 + s^2} @@ 24·bio’s two genes that hold each other down
+u = v = L,\ \ L(1 + L^2) = a,\ \ J = \begin{pmatrix}-1 & f'(L)\\ f'(L) & -1\end{pmatrix} @@ the even rest; u′ has slope −1 in u and f′(v) in v
+f'(L) = -\tfrac{2aL}{(1 + L^2)^2} = -\tfrac{2L^3}{a} @@ the chain rule; 1 + L² = a/L
+J(1, 1) = (-1 + f'(L))(1, 1),\ \ J(1, -1) = (-1 - f'(L))(1, -1) @@ the two stretched arrows
+\htmlClass{new}{|f'(L)| \gt 1 \Rightarrow -1 - f'(L) \gt 0:\ \text{the even rest does not hold}} \quad \blacksquare @@ the tangent-grid statement; a = 4: L ≈ 1.379, stretches 0.311 and −2.311
+  </pre>
+  <p data-pid="a9ebfd">That is the same test as 24·bio’s relay reading, so for the switch the two-rule check agrees with it, as 24·bio said. The ring of three is where they part.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the turning-ring technique">
+u_1' = f(u_3) - u_1,\ \ u_2' = f(u_1) - u_2,\ \ u_3' = f(u_2) - u_3,\ \ f(s) = \tfrac{a}{1 + s^n} @@ 24·bio’s ring; even rest u₁ = u₂ = u₃ = L
+J = -I + f'(L)\,C,\ \ C = \begin{pmatrix}0 & 0 & 1\\ 1 & 0 & 0\\ 0 & 1 & 0\end{pmatrix},\ \ f'(L) = -s,\ \ s = n\big(1 - \tfrac La\big) @@ C hands each gene the one before it; f′(L) from 24·bio
+C^3 = I,\ \ Cv = \mu v \Rightarrow v = C^3v = \mu^3v \Rightarrow \mu^3 = 1 @@ three hand-ons bring every gene home
+\mu = 1,\ \ -\tfrac12 \pm \tfrac{\sqrt3}{2}i,\ \ \text{arrows } (1, \mu^2, \mu) @@ check: C(1, μ², μ) = (μ, 1, μ²) = μ(1, μ², μ), using μ³ = 1
+\text{stretches of } J:\ -1 - s,\ \ -1 + \tfrac s2 \pm \tfrac{\sqrt3}{2}s\,i @@ J = −I − sC on each arrow of C
+\htmlClass{new}{\text{the even rest fails the test exactly when } s \gt 2} \quad \blacksquare @@ the real part −1 + s/2 is above 0
+  </pre>
+  <p data-pid="89c608">Turning-ring technique: <b>the tangent grid of 24·bio’s ring has stretches −1 − s and −1 + s/2 ± (s√3/2)i, with s = n(1 − L/a); so the even rest stops holding, and the genes start to turn, exactly when s &gt; 2.</b> That pays 24·bio’s check, as far as the tangent-grid statement reaches. With a = 10 and n = 3, s ≈ 2.49: the turning grows at 0.245 per unit of wear-out time, and turns at 2.16 radians per unit, so about once every 2.9 units.</p>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · the border line</div>
+    <p data-pid="e9417c">The tangent grid is a guess about the rates near a rest, and its error shrinks faster than the distance from the rest. That is enough to decide the rest whenever every stretch sits clearly off the line where the real part is 0. Clearly in, and the small error cannot push a path out. Clearly out, and it cannot hold a path in.</p>
+    <p data-pid="4adfb7"><b>Read a rest from its tangent grid only when no stretch sits on the line of real part 0; on that line, say that the grid cannot tell.</b></p>
+    <p data-pid="b13754">On the line itself the grid decides nothing. A centre of the tangent grid can be a slow spiral in, a slow spiral out, or a true centre of the rules. The left-over curve, which the grid threw away, settles it. 27·then’s predators and prey sit exactly on that line, and 28·bio settles them another way.</p>
+    <p class="bait" data-pid="5b689c">A pendulum with no friction has a centre in its tangent grid at the bottom. A pendulum in a classroom in Missoula slows down and stops. Which of the three kinds does its own rule make it, and what would you need to know to tell?</p>
+  </aside>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · near a rest · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27·cb24.4.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span class="gtx">24·bio’s switch, with a = 1.5 and n = 2</span></span>Find L, f′(L) and the two stretches of J. <br>Find whether the even rest holds, and whether the two genes make a switch.</li><li><span class="givens"><span class="gtx">24·bio’s ring, with a = 10 and n = 2</span></span>Find L and s. <br>Find whether the relay reading and the tangent grid agree on taking turns.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27·cb24.5">
+  <h2 class="sthead"><span class="stno">27·cb24.5</span>A loop is born</h2>
+  <p class="stands">Stands on 27·cb24.4, 27·cb24.3 (the sum-and-determinant technique), 16c (area and slope undo each other) and 24i (stepping forward).</p>
+  <p data-pid="1be729">Two more facts are stated here, not proved. First: in the plane, a path that stays for ever inside a closed, bounded region holding no rest heads round a closed loop. A path that is trapped, and has nowhere to rest, must cycle. Second: if, as a knob μ passes a value, a pair of stretches α ± iβ at a rest crosses the line α = 0 with β ≠ 0, then for most rules a small closed loop appears round the rest on one side of that value. Its size grows like the square root of the distance past it.</p>
+  <pre class="lines" data-k="ember" data-label="this page: a swing whose brake is negative near rest">
+y'' - (\mu - y^2)\,y' + y = 0 @@ a brake of y² − μ: it pushes when the swing is small, and brakes when it is large
+J = \begin{pmatrix}0 & 1\\ -1 & \mu\end{pmatrix}:\ \ T = \mu,\ \ \Delta = 1 @@ the tangent grid at the rest (0, 0); y²y′ has slope 0 there in both unknowns
+\mu \lt 0:\ \text{spiral in};\ \ \mu \gt 0:\ \text{spiral out} @@ the sum-and-determinant technique and the tangent-grid statement, for |μ| &lt; 2
+E = \tfrac12\big(y^2 + y'^2\big),\ \ E' = (\mu - y^2)\,y'^2 @@ the chain rule and the rule: energy is fed where y² &lt; μ and drained where y² &gt; μ
+y \approx \rho\cos t:\ \ \int_0^{2\pi}(\mu - \rho^2\cos^2t)\,\rho^2\sin^2t\,dt = \pi\rho^2\big(\mu - \tfrac{\rho^2}{4}\big) @@ over one turn of a near-circle; the integrals of sin² and of cos² sin² (16c, 21d)
+\htmlClass{new}{\text{no gain and no loss over a turn} \iff \rho = 2\sqrt\mu} \quad \blacksquare @@ smaller loops gain and grow; larger ones lose and shrink
+  </pre>
+  <p data-pid="693b11">Loop-size technique: <b>a near-circle path of y″ − (μ − y²)y′ + y = 0 neither gains nor loses energy over one turn exactly when its size is 2√μ.</b> The near-circle is a guess, good for small μ. Steps forward (24i) from 0.01 settle on a loop of size 0.6325 at μ = 0.1, against 2√0.1 ≈ 0.6325. The loop is born at μ = 0 and grows like √μ, as the second fact says.</p>
+  <p data-pid="a39ee1">On 7 November 1940 the first Tacoma Narrows Bridge twisted in a wind of about 65 km/h until it tore apart. Read with this page, the wind is the knob. Past some wind speed, the air fed the twist more than the deck’s own brake drained it, and the stretches of the twisting crossed the line. A loop was born, and grew until the deck broke. 26·phys asked whether that was the push of the wind at the deck’s own pace. This reading needs no pace in the wind at all.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · born loop · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27·cb24.5.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="y&#x27;&#x27; - (\mu - y^2)\,y&#x27; + y = 0"></span></span>Find the stretches of the tangent grid at μ = −0.2 and at μ = 0.2, and the kind of rest each gives. <br>Find the size of the loop at μ = 0.2, and the share by which it grows from μ = 0.2 to μ = 0.8.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27·cb24.6">
+  <h2 class="sthead"><span class="stno">27·cb24.6</span>Illegal moves</h2>
+  <p class="stands">Stands on 27·cb24.1 to 27·cb24.5.</p>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\big(e^{tA}\big)_{ij} = e^{ta_{ij}}\,? @@ e^{tA} is a sum of powers of the whole grid, not e of each entry
+e^{tA}e^{tB} = e^{t(A + B)}\,? @@ only when AB = BA
+T \lt 0, \text{ so every path heads in}\,? @@ only if Δ &gt; 0 too: a saddle can have T &lt; 0
+\text{the tangent grid has a centre, so the rest is a centre}\,? @@ on the border line the grid cannot tell
+\text{a trapped path must head to a rest}\,? @@ only if the region holds one; with no rest inside it cycles
+  </pre>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27·cb24.6.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="A = \begin{pmatrix}0 &amp; 1\\ 0 &amp; 0\end{pmatrix},\ \ B = \begin{pmatrix}0 &amp; 0\\ 1 &amp; 0\end{pmatrix}"></span></span>Find e^A e^B and e^(A + B), and whether they agree.</li><li><span class="givens"><span data-tex-inline="\begin{pmatrix}-3 &amp; 0\\ 0 &amp; 2\end{pmatrix}"></span></span>Find T, Δ and where a path from (1, 0.001) heads.</li><li><span class="givens"><span data-tex-inline="y&#x27;&#x27; + (y&#x27;)^3 + y = 0"></span></span>Find the tangent grid at (0, 0) and its kind. <br>Find E′ for E = ½(y² + y′²), and what that says the rule does near the rest.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">27·cb24.7.1</span><span class="tagq">build</span>Build a 2 × 2 grid whose paths spiral in, turning once every π units of time, and shrinking to a twentieth of their size in each turn.</div>
+  <div class="chq"><span class="chid">27·cb24.7.2</span><span class="tagq">edge</span><span class="givens"><span class="gtx">the cabin of 27·cb24.1, with the floor’s exchange rate k in place of 0.1</span></span>Find the two stretches for each k. <br>Find what each piece of the solution does as k falls to 0, and as k grows very large.</div>
+  <div class="chq"><span class="chid">27·cb24.7.3</span><span class="tagq">converse</span>If every stretch of A has real part below 0, every path of x′ = Ax heads to 0. Turn it round: if every path heads to 0, must every stretch have real part below 0?</div>
+  <div class="chq"><span class="chid">27·cb24.7.4</span><span class="tagq">reroute</span>Solve the cabin of 27·cb24.1 a second way, with no grid: find the rule that the sum s = x₁ + x₂ obeys, and the rule that the gap g = x₁ − x₂ obeys. <br>Find which arrows of the grid s and g are reading.</div>
+  <div class="chq"><span class="chid">27·cb24.7.5</span><span class="tagq">seam</span>Two engineers built a circuit whose swing is born as on 27·cb24.5, from a brake that pushes near rest. Its beat, drawn out, looked like a heart’s. One reader took the circuit as an account of the heartbeat. Another answered that a circuit made to copy a curve says nothing about what the heart’s cells do. <br>Does a rule on rates that copies a rhythm explain it?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r27m.html">← 27m · turns of space</a><a href="r27then.html">27·then · what if everything depends on everything else? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A rule x′ = Ax is a linear system of differential equations with constant coefficients, and e^(tA) is the matrix exponential. The phase plane, with its paths drawn, is a phase portrait; the paths are trajectories or orbits. A rest is an equilibrium, or fixed point. The kinds are a saddle, a stable or unstable node, a stable or unstable spiral (or focus), and a centre; T is the trace of the grid. The tangent grid is the Jacobian matrix, and the tangent-grid statement is linearised stability, with the Hartman–Grobman theorem saying the paths near such a rest look like the grid’s; a rest with no stretch on the border line is hyperbolic. The first stated fact of 27·cb24.5 is the Poincaré–Bendixson theorem, and the loop is a limit cycle. The birth of a loop is a Hopf bifurcation. The swing of 27·cb24.5 is the van der Pol oscillator.</p>
+  <h3>Who said it first</h3>
+  <p>Joseph-Louis Lagrange solved systems with constant numbers in front in the 1760s and 1770s, for the small swings of many bodies. Henri Poincaré drew the first phase portraits and sorted their rests between 1881 and 1886, and Ivar Bendixson finished the trapped-path result in 1901. Aleksandr Lyapunov proved linearised stability in 1892. Aleksandr Andronov found loops born from rests in the 1930s, and Eberhard Hopf proved the general case in 1942. In 27·cb24.7.5, Balthasar van der Pol and Jan van der Mark built the heartbeat circuit in 1928. The toggle switch and the ring of 24·bio were built in bacteria in 2000, by Timothy Gardner, Charles Cantor and James Collins, and by Michael Elowitz and Stanislas Leibler.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="27·cb24: a worked “proof”, not allowed">
+A = \begin{pmatrix}0 & 1\\ -1 & 0\end{pmatrix} @@ fine: the grid of y″ = −y
+e^{tA} = \begin{pmatrix}1 & e^t\\ e^{-t} & 1\end{pmatrix} @@ not allowed: e of each entry is not the grid exponential
+y = e^t \text{ from } x(0) = (0, 1) @@ false: y = sin t, a steady swing
+  </pre>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+const V=c=>'var('+c+')';
+// plot(series, xr, yr, opts): series = [{pts:[[x,y],...], c:'--ember', w:1.6, dash:''}]; returns svg string
+function plot(series, xr, yr, o){ o=o||{}; const W=360,H=o.H||210,L=34,B=22,T=8,Rr=8;
+  const sx=x=>L+(x-xr[0])/(xr[1]-xr[0])*(W-L-Rr), sy=y=>H-B-(y-yr[0])/(yr[1]-yr[0])*(H-B-T);
+  let s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;max-width:440px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  (o.yt||[]).forEach(y=>{ s+='<line x1="'+L+'" x2="'+(W-Rr)+'" y1="'+sy(y)+'" y2="'+sy(y)+'" style="stroke:'+V('--grid')+';stroke-width:0.6"/><text x="'+(L-3)+'" y="'+(sy(y)+3)+'" text-anchor="end" style="font:9px var(--mono);fill:'+V('--muted')+'">'+y+'</text>'; });
+  (o.xt||[]).forEach(x=>{ s+='<text x="'+sx(x)+'" y="'+(H-8)+'" text-anchor="middle" style="font:9px var(--mono);fill:'+V('--muted')+'">'+x+'</text>'; });
+  s+='<line x1="'+L+'" x2="'+L+'" y1="'+T+'" y2="'+(H-B)+'" style="stroke:'+V('--ink')+';stroke-width:0.8"/><line x1="'+L+'" x2="'+(W-Rr)+'" y1="'+(H-B)+'" y2="'+(H-B)+'" style="stroke:'+V('--ink')+';stroke-width:0.8"/>';
+  series.forEach(se=>{ const cl=v=>Math.max(yr[0]-0.05*(yr[1]-yr[0]),Math.min(yr[1]+0.05*(yr[1]-yr[0]),v));
+    const d=se.pts.filter(p=>isFinite(p[1])).map((p,i)=>(i?'L':'M')+sx(p[0]).toFixed(1)+','+sy(cl(p[1])).toFixed(1)).join('');
+    s+='<path d="'+d+'" style="fill:none;stroke:'+V(se.c||'--ember')+';stroke-width:'+(se.w||1.6)+(se.dash?';stroke-dasharray:'+se.dash:'')+'"/>'; });
+  (o.dots||[]).forEach(p=>{ s+='<circle cx="'+sx(p[0])+'" cy="'+sy(p[1])+'" r="2.6" style="fill:'+V(p[2]||'--ember')+'"/>'; });
+  if(o.xl) s+='<text x="'+(W-Rr)+'" y="'+(H-B-4)+'" text-anchor="end" style="font:9px var(--mono);fill:'+V('--muted')+'">'+o.xl+'</text>';
+  if(o.yl) s+='<text x="'+(L+4)+'" y="'+(T+9)+'" style="font:9px var(--mono);fill:'+V('--muted')+'">'+o.yl+'</text>';
+  return s+'</svg>'; }
+
+function draw(){ const T=+$('kt').value, D=+$('kd').value; $('ot').textContent=mm(T,1); $('od').textContent=mm(D,1);
+  const F=(x,y)=>[y,-D*x+T*y]; const S=[], dots=[];
+  for(let k=0;k<8;k++){ const th=k*Math.PI/4+0.2; let x=1.2*Math.cos(th), y=1.2*Math.sin(th); dots.push([x,y]); const P=[[x,y]]; const h=0.02;
+    for(let i=0;i<500;i++){ const a=F(x,y), b=F(x+h/2*a[0],y+h/2*a[1]), c=F(x+h/2*b[0],y+h/2*b[1]), d=F(x+h*c[0],y+h*c[1]);
+      x+=h/6*(a[0]+2*b[0]+2*c[0]+d[0]); y+=h/6*(a[1]+2*b[1]+2*c[1]+d[1]); if(Math.abs(x)>3||Math.abs(y)>3){ P.push([x,y]); break; } P.push([x,y]); }
+    S.push({pts:P,c:'--ember',w:1.2}); }
+  $('pl').innerHTML=plot(S,[-2.5,2.5],[-2.5,2.5],{xt:[-2,-1,0,1,2],yt:[-2,-1,0,1,2],dots:dots,H:300});
+  const disc=T*T/4-D; let kind, st;
+  if(disc>=0){ const r=Math.sqrt(disc); st=mm(T/2+r,2)+' and '+mm(T/2-r,2); } else { st=mm(T/2,2)+' ± '+fm(Math.sqrt(-disc),2)+'i'; }
+  if(Math.abs(D)<1e-9) kind='Δ = 0: a whole line of rests.';
+  else if(D<0) kind='Δ < 0: a saddle. Every path but two is flung out along one arrow.';
+  else if(Math.abs(T)<1e-9) kind='T = 0 < Δ: a centre. Every path is a closed loop.';
+  else if(disc>=0) kind='Δ > 0 and T² ≥ 4Δ: every path heads '+(T<0?'in':'out')+' without turning.';
+  else kind='T² < 4Δ: a spiral '+(T<0?'in':'out')+', one turn every '+fm(2*Math.PI/Math.sqrt(-disc),2)+' units of time.';
+  const v=$('vd'); v.className='verdict'; v.textContent='Stretches '+st+'. '+kind; }
+$('kt').oninput=draw; $('kd').oninput=draw; draw();
+window.__pic={set:(T,D)=>{ $('kt').value=T; $('kd').value=D; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'one arrow',t:R`Av = \lambda v \Rightarrow e^{\lambda t}v \text{ solves}`,n:`Grows at its stretch.`},
+  {k:'ember',kl:'straightened',t:R`y = P^{-1}x,\ \ y^{\prime} = Dy`,n:`n separate rules.`},
+  {k:'ember',kl:'every solution',t:R`\htmlClass{new}{x = \textstyle\sum c_ie^{\lambda_it}v_i}`,n:`One c for each start.`}
+],{title:'The slides · split · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'the series',t:R`e^{tA} = \textstyle\sum \tfrac{t^k}{k!}A^k`,n:`Settles for every grid.`},
+  {k:'ember',kl:'its slope',t:R`(e^{tA})^{\prime} = Ae^{tA}`,n:`Term by term.`},
+  {k:'ember',kl:'the solution',t:R`\htmlClass{new}{x = e^{tA}x(0)}`,n:`The only one.`}
+],{title:'The slides · exponential · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'the polynomial',t:R`\lambda^2 - T\lambda + \Delta`,n:`Sum and determinant.`},
+  {k:'ember',kl:'saddle',t:R`\Delta \lt 0`,n:`One in, one out.`},
+  {k:'ember',kl:'spiral',t:R`T^2 \lt 4\Delta`,n:`In if T < 0.`},
+  {k:'ember',kl:'loops',t:R`\htmlClass{new}{T = 0 \lt \Delta}`,n:`A centre.`}
+],{title:'The slides · two numbers · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'the grid',t:R`J = \text{slopes of the rates at } x^*`,n:`One unknown at a time.`},
+  {k:'ember',kl:'the switch',t:R`-1 \pm f^{\prime}(L)`,n:`The relay test again.`},
+  {k:'ember',kl:'the ring',t:R`\htmlClass{new}{-1 + \tfrac s2 \gt 0 \iff s \gt 2}`,n:`Stricter than the relay.`}
+],{title:'The slides · near a rest · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'trapped',t:R`\text{no rest inside} \Rightarrow \text{a loop}`,n:`Stated.`},
+  {k:'ember',kl:'the crossing',t:R`\alpha \pm i\beta,\ \alpha: - \to +`,n:`A loop is born.`},
+  {k:'ember',kl:'its size',t:R`\htmlClass{new}{2\sqrt\mu}`,n:`Balance over a turn.`}
+],{title:'The slides · born loop · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'illegal',t:R`(e^{tA})_{ij} = e^{ta_{ij}}\,?`,n:`A sum of powers of the grid.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

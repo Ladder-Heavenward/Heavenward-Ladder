@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Turns of space</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r27l.html">← 27l eigenvectors by hand</a><a href="r27cb24.html">next: 27·cb24 systems of rate rules →</a></p>
+  <div class="tags"><span class="tag tech">27m · technique</span></div>
+  <h1>Turns of space</h1>
+  <p>Rung twenty turned the plane about a point, and every such turn was one pair of numbers. Space can be turned in far more ways: tip a globe, spin a ball, roll a die across a table. A turn of space keeps every length and keeps which way round things stand. Turn a ball any way you like, as many times as you like, and one line through its centre ends up exactly where it started. That line is the axis, and the whole tangle of turns comes down to one turn about it. The proof is a few lines of determinants, and it needs space to have an odd number of directions. This step finds the axis of a turn by elimination, its angle from the sum down its middle, and builds the grid of any turn from its axis and angle. And it finds what rung twenty never met: two turns of space, done in the two orders, give two different turns.</p>
+  <p class="gesture">A grid keeps lengths exactly when its columns have length one and stand at right angles. A turn of space keeps lengths and handedness, and it always leaves one line in place: an arrow it only stretches by one. About that axis it is a turn of the plane, and its angle is read off the sum down its middle. Turns of space do not commute.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r27i.html">27i</a> (the dot, the cross and the read-off technique), <a href="r27l.html">27l</a> (the middle-sum technique), <a href="r27e.html">27e</a> (the det-product and nonzero-det techniques), <a href="r27g.html">27g</a> (the side-turn technique), <a href="r27h.html">27h</a> (the two-slot technique), <a href="r20j.html">20j</a> (turns of the plane as pairs) and <a href="r19a.html">19a</a> (groups). <a href="r27cb24.html">27·cb24</a> lets a grid steer how arrows change in time.</p></div>
+</header>
+
+<section class="class step" data-step="27m1">
+  <h2 class="sthead"><span class="stno">27m1</span>Grids that keep lengths</h2>
+  <p class="stands">Stands on 27i1 (the dot), 27h2 (the two-slot technique), 27d3 (the undoable-group technique), 27g1 (the side-turn technique) and 27e3 (the det-product technique).</p>
+  <p data-pid="6dcdf1">Length-keeper technique: <b>for a square grid Q, these three are the same: Q keeps every length, |Qx| = |x|; Q keeps every dot, Qx · Qy = x · y; QᵀQ = I, so the columns of Q have length 1 and stand at right angles. Then Q⁻¹ = Qᵀ, and det Q is 1 or −1.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the length-keeper technique">
+x\cdot y = \tfrac12\big(|x + y|^2 - |x|^2 - |y|^2\big) @@ the dot technique (27i1), as in the right-triangle technique (18a4)
+|Qx| = |x| \text{ for all } x \Rightarrow Qx\cdot Qy = x\cdot y @@ Q keeps sums (27c1), so every length on the right is kept
+Qx\cdot Qy = \textstyle\sum_{j,k} x_j\,(Qe_j\cdot Qe_k)\,y_k @@ the two-slot technique (27h2), with Gⱼₖ = Qeⱼ · Qeₖ
+\text{keeps dots} \iff Qe_j\cdot Qe_k = e_j\cdot e_k \iff Q^{\mathsf T}Q = I @@ the grid of a two-slot reading is unique; column j of Q is Qeⱼ, so Qeⱼ · Qeₖ is place j, k of QᵀQ (27d2)
+Q^{\mathsf T}Q = I \Rightarrow Q \text{ loses only } 0 \Rightarrow Q^{-1} = Q^{\mathsf T} @@ Qx = 0 gives x = QᵀQx = 0; the undoable-group technique (27d3)
+\htmlClass{new}{(\det Q)^2 = \det Q^{\mathsf T}\det Q = \det I = 1} \quad \blacksquare @@ the side-turn (27g1) and det-product (27e3) techniques
+  </pre>
+  <p data-pid="e988d1">A <i>turn of space</i> is a 3 × 3 grid that keeps lengths and has det 1. The det says which way round: Qe₁, Qe₂, Qe₃ stand the way e₁, e₂, e₃ do, as 20g asked of the plane. A grid that keeps lengths with det −1, like a mirror, swaps the hands. Turns of space form a group, a part-group of the undoable grids (27d3, 19a): a turn after a turn keeps lengths, with det 1 · 1 = 1, and the undo of a turn keeps lengths, since |Q⁻¹x| = |QQ⁻¹x| = |x|, with det 1. Accepted name: the turns of space form SO(3).</p>
+  <pre class="lines" data-k="ember" data-label="this step: a turn and a mirror">
+R = \begin{pmatrix}0&-1&0\\1&0&0\\0&0&1\end{pmatrix} @@ e₁ ↦ e₂, e₂ ↦ −e₁, e₃ ↦ e₃: a quarter turn of the floor, the up arrow held
+\text{columns of length } 1,\ \text{dots } 0,\ \det R = 1 @@ the length-keeper technique; along the last column, det = 0·0 − (−1)·1 (27k2)
+M = \begin{pmatrix}1&0&0\\0&1&0\\0&0&-1\end{pmatrix} @@ the mirror of the floor: up becomes down
+\htmlClass{new}{R \text{ is a turn};\ \ M \text{ keeps lengths, but } \det M = -1} \quad \blacksquare @@ M swaps the hands: a mirror, not a turn
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · keeping lengths · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">27m1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="Q = \tfrac13\begin{pmatrix}2&amp;-1&amp;2\\2&amp;2&amp;-1\\-1&amp;2&amp;2\end{pmatrix}"></span></span>Check that QᵀQ = I and det Q = 1, so that Q is a turn of space.</li><li><span class="givens"><span data-tex-inline="N = \begin{pmatrix}0&amp;1&amp;0\\1&amp;0&amp;0\\0&amp;0&amp;1\end{pmatrix}"></span></span>Find whether N keeps lengths, its det, and whether it is a turn. Find what it does to e₁, e₂ and e₃.</li><li><span class="givens"><span data-tex-inline="|Qx| = |x|,\ \ Qv = \lambda v,\ \ v \ne 0,\ \ \lambda \text{ real}"></span></span>Prove that λ = 1 or λ = −1.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27m2">
+  <h2 class="sthead"><span class="stno">27m2</span>Every turn has an axis</h2>
+  <p class="stands">Stands on 27m1, 27e3, 27g1, 27e4 (the nonzero-det technique), 27i3 (the cross technique), 27i2 (the read-off technique), 27l1 (the middle-sum technique), 20j (turns of the plane as pairs) and 21b (cos and sin as coordinates).</p>
+  <p data-pid="12af26">Axis technique: <b>every turn Q of space keeps some arrow a ≠ 0 in place: Qa = a. Take a of length 1. Then Q keeps the plane of arrows at right angles to a and turns it: for one θ, Qw = cos θ w + sin θ (a × w) for every w in that plane. And the middle sum of Q is 1 + 2 cos θ.</b> The line along a is the axis of the turn, and θ its angle.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the axis technique">
+\det(Q - I) = \det(Q - QQ^{\mathsf T}) = \det Q\,\det(I - Q^{\mathsf T}) @@ QQᵀ = I (27m1); Q − QQᵀ = Q(I − Qᵀ); the det-product technique (27e3)
+= \det\big((I - Q)^{\mathsf T}\big) = \det(I - Q) = (-1)^3\det(Q - I) @@ det Q = 1; the side-turn technique (27g1); each of three columns stretched by −1 (27e2)
+\det(Q - I) = 0 \Rightarrow Qa = a \text{ for some } a \ne 0 @@ a number equal to its opposite is 0; the nonzero-det technique (27e4)
+w\cdot a = 0 \Rightarrow Qw\cdot a = Qw\cdot Qa = w\cdot a = 0 @@ Q keeps dots (27m1): the plane at right angles to a is kept
+w_1 \perp a,\ |w_1| = 1,\ w_2 = a\times w_1:\ \ Qw_1 = c\,w_1 + s\,w_2,\ \ c^2 + s^2 = 1 @@ a, w₁, w₂ are of length 1 and at right angles (27i3); read Qw₁ off (27i2)
+Qw_2 = \pm(-s\,w_1 + c\,w_2) @@ of length 1, in the plane, at right angles to Qw₁
+\text{in the basis } a, w_1, w_2 \text{ the grid of } Q \text{ has det } \pm(c^2 + s^2) = \pm1 = \det Q = 1 @@ P⁻¹QP has the same polynomial, so the same det (27l1): the sign is +
+c = \cos\theta,\ s = \sin\theta,\ \ Q(\alpha w_1 + \beta w_2) = c(\alpha w_1 + \beta w_2) + s\,a\times(\alpha w_1 + \beta w_2) @@ a turn of the plane is a pair (20j) at one angle (21b); a × w₂ = −w₁, as (a × w₂) · w₁ = det[a w₂ w₁] = −1
+\htmlClass{new}{\text{middle sum of } Q = 1 + c + c = 1 + 2\cos\theta} \quad \blacksquare @@ the middle-sum technique (27l1): P⁻¹QP has rows (1, 0, 0), (0, c, −s), (0, s, c)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: the axis of a turn that cycles the three directions">
+C = \begin{pmatrix}0&0&1\\1&0&0\\0&1&0\end{pmatrix} @@ e₁ ↦ e₂ ↦ e₃ ↦ e₁; columns of length 1 at right angles, det 1: a turn
+C - I = \begin{pmatrix}-1&0&1\\1&-1&0\\0&1&-1\end{pmatrix} \to \begin{pmatrix}1&0&-1\\0&1&-1\\0&0&0\end{pmatrix} @@ lowest terms (27j2)
+a = \tfrac{1}{\sqrt3}(1, 1, 1) @@ x = z, y = z, z free; stretched to length 1
+\htmlClass{new}{1 + 2\cos\theta = 0 + 0 + 0,\ \ \cos\theta = -\tfrac12,\ \ \theta = \pm\tfrac{2\pi}{3}} \quad \blacksquare @@ the middle sum: a third of a turn about the long diagonal of the cube
+  </pre>
+  <p data-pid="b01a67">The proof used three in one place: (−1)³ = −1. In the plane the same line gives det(Q − I) = (−1)² det(Q − I), which says nothing, and indeed a quarter turn of the plane moves every arrow but 0. A turn of space with an even number of directions need not have an axis; with an odd number it always does.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · the axis · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27m2.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="Q = \tfrac13\begin{pmatrix}2&amp;-1&amp;2\\2&amp;2&amp;-1\\-1&amp;2&amp;2\end{pmatrix}"></span></span>Find its axis by elimination, and its angle from the middle sum.</li><li><span class="givens"><span data-tex-inline="\begin{pmatrix}-1&amp;0&amp;0\\0&amp;-1&amp;0\\0&amp;0&amp;1\end{pmatrix}"></span></span>Find its axis and its angle, and what it does to the floor.</li><li><span class="givens"><span data-tex-inline="\begin{pmatrix}0&amp;-1\\1&amp;0\end{pmatrix}"></span></span>Find det(Q − I) for this quarter turn of the plane, and every arrow it keeps in place. Find the line of the proof that fails in the plane.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27m3">
+  <h2 class="sthead"><span class="stno">27m3</span>A turn from its axis and angle</h2>
+  <p class="stands">Stands on 27m2, 27i2, 27i3, 27e1 (the column-slide technique) and 27e2.</p>
+  <p data-pid="08f421">Axis-turn technique: <b>the turn by θ about an arrow a of length 1 sends x to cos θ x + sin θ (a × x) + (1 − cos θ)(a · x)a. And for a turn Q with axis a, and any w ≠ 0 at right angles to a, sin θ has the sign of det[w Qw a].</b> The second sentence settles which way round a turn goes, which the middle sum cannot see.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the axis-turn technique">
+x = (a\cdot x)\,a + w,\ \ w = x - (a\cdot x)\,a,\ \ w\cdot a = 0 @@ the part along a, and the rest (27i2)
+a\times x = a\times w @@ a × a = 0: a and a are not free (27i3)
+Rx = (a\cdot x)\,a + \cos\theta\,w + \sin\theta\,(a\times w) @@ R keeps a and turns the plane at right angles to a (27m2)
+\htmlClass{new}{Rx = \cos\theta\,x + \sin\theta\,(a\times x) + (1 - \cos\theta)(a\cdot x)\,a} @@ put back w = x − (a · x)a
+\det[w\ \ Qw\ \ a] = \sin\theta\,\det[w\ \ a\times w\ \ a] @@ Qw = cos θ w + sin θ (a × w); straight and flat in column 2 (27e2)
+\det[w\ \ a\times w\ \ a] = \det[a\ \ w\ \ a\times w] = (a\times w)\cdot(a\times w) > 0 \quad \blacksquare @@ two swaps keep the sign (27e1); the cross technique (27i3)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: a half turn, column by column">
+\theta = \pi,\ \ a = \tfrac{1}{\sqrt2}(1, 1, 0):\ \ Rx = -x + 2(a\cdot x)\,a @@ cos π = −1, sin π = 0
+Re_1 = -e_1 + 2\cdot\tfrac{1}{\sqrt2}\cdot\tfrac{1}{\sqrt2}(1, 1, 0) = (0, 1, 0) @@ a · e₁ = 1/√2
+Re_2 = (1, 0, 0),\ \ Re_3 = -e_3 + 0 = (0, 0, -1) @@ the same, with a · e₂ = 1/√2 and a · e₃ = 0
+\htmlClass{new}{R = \begin{pmatrix}0&1&0\\1&0&0\\0&0&-1\end{pmatrix}} \quad \blacksquare @@ the columns are Re₁, Re₂, Re₃ (27d1); check: middle sum −1 = 1 + 2 cos π
+  </pre>
+  <p data-pid="668839">Two turns about different axes, done one after the other, are one turn about a third axis, since turns form a group and every turn has an axis. But the order matters. A quarter turn about the up arrow, done after a quarter turn about e₁, is a third of a turn about (1, 1, 1); done before it, a third of a turn about (1, −1, 1). Rung 20’s turns of the plane commuted. Turns of space do not.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · axis and angle · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27m3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\theta = \tfrac{\pi}{2},\ \ a = (0, 0, 1),\ \ x = (1, 2, 3)"></span></span>Find where the turn sends x, by the axis-turn technique, and check it with the grid R of 27m1.</li><li><span class="givens"><span data-tex-inline="R_z = \begin{pmatrix}0&amp;-1&amp;0\\1&amp;0&amp;0\\0&amp;0&amp;1\end{pmatrix},\ \ R_x = \begin{pmatrix}1&amp;0&amp;0\\0&amp;0&amp;-1\\0&amp;1&amp;0\end{pmatrix}"></span></span>Find RzRx and RxRz. For each, find its axis, its angle, and which way round it turns by the sign test.</li><li><span class="givens"><span data-tex-inline="Q = \tfrac13\begin{pmatrix}2&amp;-1&amp;2\\2&amp;2&amp;-1\\-1&amp;2&amp;2\end{pmatrix},\ \ w = (1, -1, 0)"></span></span>Its axis is along (1, 1, 1). Use det[w Qw a] to find the sign of sin θ, and so its angle.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27m4">
+  <h2 class="sthead"><span class="stno">27m4</span>Illegal moves</h2>
+  <p class="stands">Stands on 27m1 to 27m3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\det Q = 1 \Rightarrow Q \text{ keeps lengths}\,? @@ rows (2, 0, 0), (0, ½, 0), (0, 0, 1) have det 1 and double e₁
+\text{every turn of the plane keeps an arrow in place}\,? @@ the axis needs an odd number of directions: a quarter turn of the plane keeps only 0
+R_zR_x = R_xR_z\,? @@ turns of space do not commute: one is a third of a turn about (1, 1, 1), the other about (1, −1, 1)
+-I \text{ is a turn of space, with an axis}\,? @@ it keeps lengths, but det(−I) = (−1)³ = −1; it moves every arrow but 0
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27m4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\begin{pmatrix}2&amp;0&amp;0\\0&amp;\tfrac12&amp;0\\0&amp;0&amp;1\end{pmatrix}"></span></span>Find its det and |Qe₁|. <br>Find what the first line assumes about det.</li><li><span class="givens"><span data-tex-inline="\begin{pmatrix}\tfrac35&amp;-\tfrac45\\\tfrac45&amp;\tfrac35\end{pmatrix}"></span></span>Find every arrow this turn of the plane keeps in place. <br>Find which line of the axis technique needs three directions.</li><li><span class="givens"><span data-tex-inline="R_z,\ \ R_x \text{ of 27m3.1}"></span></span>Find where RzRx and RxRz each send e₁. <br>Find what the third line borrows from the plane.</li><li><span class="givens"><span data-tex-inline="-I = \begin{pmatrix}-1&amp;0&amp;0\\0&amp;-1&amp;0\\0&amp;0&amp;-1\end{pmatrix}"></span></span>Find whether it keeps lengths, its det, and every arrow it keeps in place. <br>Find why the axis technique does not apply.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">27m.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\theta = \tfrac{2\pi}{3},\ \ a = \tfrac{1}{\sqrt3}(1, 1, 1)"></span></span>Build the grid of this turn, column by column, from the axis-turn technique. <br>Compare it with the grid C that cycles e₁ ↦ e₂ ↦ e₃ ↦ e₁, and decide which way round C turns.</div>
+  <div class="chq"><span class="chid">27m.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="Q = \tfrac19\begin{pmatrix}-7&amp;4&amp;4\\4&amp;-1&amp;8\\4&amp;8&amp;-1\end{pmatrix}"></span></span>Check that Q is a turn, and find its angle from its middle sum. <br>Find its axis, and why the sign test of 27m3 cannot decide which way round it turns. Find Q².</div>
+  <div class="chq"><span class="chid">27m.4.3</span><span class="tagq">converse</span>Every turn of space keeps an arrow in place. Turn it round: if a 3 × 3 grid keeps lengths and keeps some arrow a ≠ 0 in place, must it be a turn? <br>Prove your answer, or find a grid that breaks it.</div>
+  <div class="chq"><span class="chid">27m.4.4</span><span class="tagq">reroute</span>Reroute the axis technique through stretches. The stretch polynomial of a turn Q is a cubic with real numbers, so it has a real root (12). Its three roots in ℂ multiply to det Q = 1 (27l1). <br>Use 27m1.1 c, and the fact that roots that are not real come in pairs a + bi, a − bi, to prove that 1 is a stretch of Q.</div>
+  <div class="chq"><span class="chid">27m.4.5</span><span class="tagq">seam</span>In 1830 an algebraist laid down a rule for new kinds of number: every law of arithmetic must carry over, turn-about multiplication included. In 1843 a new kind of number was built to describe turns of space, and its multiplication did not turn about. <br>From this page, could any system that describes turns of space by multiplying keep the turn-about law? <br>Was the 1830 rule a fact about numbers, or a wish?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r27l.html">← 27l · eigenvectors by hand</a><a href="r27cb24.html">27·cb24 · systems of rate rules →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A grid that keeps lengths is an orthogonal matrix, with QᵀQ = I; the length-keepers form the orthogonal group O(n), and those with det 1 the special orthogonal group SO(n). The turns of space are rotations, and SO(3) is the rotation group; a length-keeper with det −1 is an improper rotation, a mirror reflection followed by a turn. The axis technique is Euler’s rotation theorem. The axis-turn technique is Rodrigues’ rotation formula. That turns of space do not commute is the non-commutativity of SO(3).</p>
+  <h3>Who said it first</h3>
+  <p>Leonhard Euler proved in 1775 that any motion of a sphere about its centre leaves a diameter fixed. Olinde Rodrigues gave the axis-turn formula, and the rule for composing two turns, in 1840. George Peacock set out the principle of permanence of equivalent forms in his Treatise on Algebra of 1830. William Rowan Hamilton found the quaternions on 16 October 1843, walking by the Royal Canal in Dublin, and gave up turn-about multiplication to have them; they describe turns of space to this day, in spacecraft and in video games.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'lengths to dots',t:R`x\cdot y = \tfrac12(|x+y|^2 - |x|^2 - |y|^2)`,n:`Keep lengths, and dots are kept.`},
+  {k:'ember',kl:'dots to columns',t:R`Q^{\mathsf T}Q = I`,n:`Columns of length 1, at right angles.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{Q^{-1} = Q^{\mathsf T},\ \det Q = \pm1}`,n:`det 1: a turn. det −1: a mirror.`}
+],{title:'The slides · keeping lengths · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'the key line',t:R`\det(Q - I) = (-1)^3\det(Q - I)`,n:`Three directions: an odd number.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{Qa = a,\ a \ne 0}`,n:`One line stays put.`},
+  {k:'ember',kl:'the angle',t:R`\text{middle sum} = 1 + 2\cos\theta`,n:`Read off the diagonal.`}
+],{title:'The slides · the axis · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'split',t:R`x = (a\cdot x)a + w`,n:`Along the axis, and across it.`},
+  {k:'ember',kl:'turn the rest',t:R`w \mapsto \cos\theta\,w + \sin\theta\,(a\times w)`,n:`A turn of the plane across a.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{Rx = \cos\theta\,x + \sin\theta\,a\times x + (1-\cos\theta)(a\cdot x)a}`,n:`Any turn, from an axis and an angle.`}
+],{title:'The slides · axis and angle · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

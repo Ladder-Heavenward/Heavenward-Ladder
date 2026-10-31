@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Determinants by hand</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r27j.html">← 27j solving systems by elimination</a><a href="r27l.html">next: 27l eigenvectors by hand →</a></p>
+  <div class="tags"><span class="tag tech">27k · technique</span></div>
+  <h1>Determinants by hand</h1>
+  <p>The determinant was found as a sum over every shuffle, one term for each way of picking an entry from every column. For a grid of ten rows that is more than three million terms, each a product of ten numbers. Nobody works it out that way. The row moves that solved systems also find determinants: a swap changes the sign, adding a stretch of one row to another changes nothing, and once the grid is a staircase the determinant is the product down its middle. A row or a column with many zeros gives another road, through the smaller determinants of the stand-in grid. And when a system has exactly one answer, each unknown is one determinant divided by another, a formula that shows how the answer moves when the numbers do.</p>
+  <p class="gesture">Bring a grid to a staircase by row moves, counting the swaps, and its determinant is the product down the middle, with a sign for each swap. Or expand along any row or column through smaller determinants. When the determinant is not zero, each unknown of a system is a ratio of two determinants.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r27e.html">27e</a> (the three-rules, column-slide and nonzero-det techniques), <a href="r27g.html">27g</a> (the side-turn and stand-in techniques), <a href="r27j.html">27j</a> (row moves and their cost), <a href="r19e.html">19e</a> (shuffles) and <a href="r20g.html">20g</a> (signed area). <a href="r27l.html">27l</a> uses determinants to find the arrows a grid only stretches.</p></div>
+</header>
+
+<section class="class step" data-step="27k1">
+  <h2 class="sthead"><span class="stno">27k1</span>Determinants down the stairs</h2>
+  <p class="stands">Stands on 27e2 (the three-rules technique), 27e1 (the column-slide technique), 27g1 (the side-turn technique) and 27j2 (elimination).</p>
+  <p data-pid="b14b5d">Stair-det technique: <b>if every entry below the middle of a square grid is 0, its determinant is the product of the entries down the middle. So if row moves with s swaps, and otherwise only adding stretches of rows, bring A to a staircase, det A is (−1)ˢ times the product down the middle of the staircase.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the stair-det technique">
+\det A = \textstyle\sum_\sigma \operatorname{sign}\sigma\ a_{\sigma(1)1}\cdots a_{\sigma(n)n} @@ the three-rules technique (27e2)
+a_{\sigma(j)j} = 0 \text{ whenever } \sigma(j) > j @@ that entry is below the middle
+\text{a term that is not } 0 \text{ has } \sigma(j) \le j \text{ for every } j \Rightarrow \sigma(1) = 1,\ \sigma(2) = 2,\ \ldots @@ σ(j) ≤ j, and 1, …, j − 1 are already taken; induction on j
+\det A = a_{11}a_{22}\cdots a_{nn} @@ only doing nothing is left, and it is even (19e)
+\text{a row swap changes the sign; adding a stretch of a row changes nothing} @@ the column-slide technique (27e1), carried to rows by the side-turn technique (27g1)
+\htmlClass{new}{\det A = (-1)^s \times \text{the product down the middle of the staircase}} \quad \blacksquare
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: a grid of four rows">
+A = \begin{pmatrix}1&2&0&1\\2&5&1&3\\0&3&4&2\\1&2&2&6\end{pmatrix} @@ given
+\begin{pmatrix}1&2&0&1\\0&1&1&1\\0&3&4&2\\0&0&2&5\end{pmatrix} @@ add −2 times row 1 to row 2, and −1 times row 1 to row 4: det unchanged
+\begin{pmatrix}1&2&0&1\\0&1&1&1\\0&0&1&-1\\0&0&2&5\end{pmatrix} @@ add −3 times row 2 to row 3
+\begin{pmatrix}1&2&0&1\\0&1&1&1\\0&0&1&-1\\0&0&0&7\end{pmatrix} @@ add −2 times row 3 to row 4; no swaps, s = 0
+\htmlClass{new}{\det A = 1\cdot1\cdot1\cdot7 = 7} \quad \blacksquare @@ the stair-det technique
+  </pre>
+  <p data-pid="36d2eb">The formula over shuffles has n! terms. For n = 10 that is 3 628 800 terms of 9 multiplications each, about 33 million. Down the stairs it is the elimination of 27j3 without a right side, a few hundred. For n = 20 the shuffles number about 2.4 × 10¹⁸; the stairs take about three thousand.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · down the stairs · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">27k1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\begin{pmatrix}0&amp;2&amp;1\\1&amp;1&amp;0\\3&amp;1&amp;2\end{pmatrix}"></span></span>Find its determinant by row moves. The first lead is 0, so start with a swap.</li><li><span class="givens"><span data-tex-inline="\begin{pmatrix}2&amp;1&amp;0&amp;3\\4&amp;3&amp;1&amp;7\\-2&amp;0&amp;2&amp;1\\0&amp;1&amp;3&amp;5\end{pmatrix}"></span></span>Find its determinant down the stairs.</li><li><span class="givens"><span data-tex-inline="A \text{ is } 3 \times 3,\ \ \det A = 5"></span></span>Find det(2A), the det of A with rows 1 and 3 swapped, and the det of A with 4 times row 1 added to row 2.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27k2">
+  <h2 class="sthead"><span class="stno">27k2</span>Along any row or column</h2>
+  <p class="stands">Stands on 27g2 (the stand-in technique), 27g1 (the side-turn technique) and 27e1.</p>
+  <p data-pid="382ad2">Expansion technique: <b>for any column j, det A = a₁ⱼC₁ⱼ + ⋯ + aₙⱼCₙⱼ; and for any row i, det A = aᵢ₁Cᵢ₁ + ⋯ + aᵢₙCᵢₙ, where Cᵢⱼ is the stand-in for place i, j: (−1)^(i + j) times the det of A with row i and column j struck.</b> Choose the row or column with the most zeros.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the expansion technique">
+\det A = \textstyle\sum_i a_{ij}\,\det(A \text{ with column } j \text{ replaced by } e_i) @@ the first line of the stand-in technique (27g2): straight in column j
+\det(A \text{ with column } j \text{ replaced by } e_i) = C_{ij} @@ the second line of the stand-in technique (27g2)
+\det A = \textstyle\sum_i a_{ij}C_{ij} @@ down column j
+\text{striking row } j, \text{ column } i \text{ of } A^{\mathsf T} \text{ leaves the side-turn of what striking row } i, \text{ column } j \text{ of } A \text{ leaves} @@ (Aᵀ)ⱼᵢ = aᵢⱼ
+\htmlClass{new}{\det A = \det A^{\mathsf T} = \textstyle\sum_j a_{ij}C_{ij}} \quad \blacksquare @@ the side-turn technique (27g1), twice: down column i of Aᵀ is along row i of A
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: a column of zeros but one, and the six-term rule">
+\det\begin{pmatrix}2&0&1\\3&0&4\\1&5&2\end{pmatrix} = 5\cdot(-1)^{3+2}\det\begin{pmatrix}2&1\\3&4\end{pmatrix} @@ down column 2: only a₃₂ = 5 is not 0
+= -5\,(8 - 3) = -25 @@ the 2 × 2 det, ad − bc (27e2)
+\det\begin{pmatrix}a&b&c\\d&e&f\\g&h&i\end{pmatrix} = a(ei - fh) - b(di - fg) + c(dh - eg) @@ along row 1, signs +, −, +
+\htmlClass{new}{= aei + bfg + cdh - ceg - afh - bdi} \quad \blacksquare @@ multiply out: six terms, one for each shuffle of three (19e)
+  </pre>
+  <p data-pid="b964c6">Signs run like a chessboard, + in the top left corner. A grid of four rows has 24 terms, and the six-term pattern of diagonals does not stretch to it: copied to four rows it finds only 8.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · expand · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27k2.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\begin{pmatrix}3&amp;0&amp;0&amp;2\\1&amp;4&amp;0&amp;0\\0&amp;0&amp;5&amp;1\\2&amp;0&amp;0&amp;1\end{pmatrix}"></span></span>Find its determinant by expanding along the column with the most zeros, then again along a row.</li><li><span class="givens"><span data-tex-inline="\begin{pmatrix}2&amp;-1&amp;3\\1&amp;0&amp;4\\0&amp;5&amp;-2\end{pmatrix}"></span></span>Find its determinant by the six-term rule, and again by expanding down column 1.</li><li><span class="givens"><span data-tex-inline="(1, 1),\ \ (6, 2),\ \ (3, 7)"></span></span>Find the area of the triangle with these corners, as half the size of a 2 × 2 determinant of two of its sides (20g).</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27k3">
+  <h2 class="sthead"><span class="stno">27k3</span>Answers as ratios of determinants</h2>
+  <p class="stands">Stands on 27d1 (the columns technique), 27e1, 27e4 (the nonzero-det technique) and 27g2.</p>
+  <p data-pid="6b4168">Det-ratio technique: <b>if det A ≠ 0, then Ax = b has exactly one answer, and xⱼ = det Aⱼ / det A, where Aⱼ is A with column j replaced by b.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the det-ratio technique">
+A \text{ undoable, so } x = A^{-1}b \text{ is the one answer} @@ the nonzero-det technique (27e4)
+b = Ax = x_1(\text{col } 1) + \cdots + x_n(\text{col } n) @@ Ax is the mix of the columns with the numbers of x (27d1)
+\det A_j = \textstyle\sum_k x_k \det(A \text{ with column } j \text{ replaced by column } k) @@ straight in column j (27e1)
+\text{for } k \ne j \text{ that grid has column } k \text{ twice} @@ flat: its det is 0
+\htmlClass{new}{\det A_j = x_j\det A,\ \ x_j = \tfrac{\det A_j}{\det A}} \quad \blacksquare @@ only k = j is left; divide by det A ≠ 0
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: two samenesses">
+2x + y = 5,\ \ x + 3y = 10 @@ given
+\det A = 2\cdot3 - 1\cdot1 = 5 @@ not 0: exactly one answer
+x = \tfrac{1}{5}\det\begin{pmatrix}5&1\\10&3\end{pmatrix} = \tfrac{15 - 10}{5} = 1 @@ column 1 replaced by b
+\htmlClass{new}{y = \tfrac15\det\begin{pmatrix}2&5\\1&10\end{pmatrix} = \tfrac{20 - 5}{5} = 3} \quad \blacksquare @@ check: 2 + 3 = 5, 1 + 9 = 10
+  </pre>
+  <p data-pid="4339d8">For many unknowns the ratios are slow: n + 1 determinants where one elimination will do. Their worth is the formula. Every answer of a system with whole numbers is a fraction with det A below. And the undo of a 2 × 2 grid, by the stand-in technique, is the grid with rows (d, −b), (−c, a), divided by ad − bc.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · ratios · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27k3.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="3x - 2y = 4,\ \ 5x + y = 11"></span></span>Solve by ratios of determinants, and check.</li><li><span class="givens"><span data-tex-inline="x + y + z = 6,\ \ 2x + y - z = 1,\ \ x - y + 2z = 5"></span></span>Find z alone, by one ratio of two determinants, without finding x or y.</li><li><span class="givens"><span data-tex-inline="kx + 2y = 1,\ \ 8x + ky = 2"></span></span>Find every k for which the system does not have exactly one answer. For each such k, find whether it has none or many.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27k4">
+  <h2 class="sthead"><span class="stno">27k4</span>Illegal moves</h2>
+  <p class="stands">Stands on 27k1 to 27k3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{stretching a row by } c \text{ leaves det alone}\,? @@ det is straight in that row: it is multiplied by c
+\text{the six-term rule, copied to four rows}\,? @@ its diagonals find 8 terms; a grid of four rows has 4! = 24
+\det A = \textstyle\sum_j a_{1j}\det(\text{strike row } 1,\ \text{column } j)\,? @@ the stand-ins carry the signs (−1)^(1 + j)
+x_j = \det A_j/\det A \text{ when } \det A = 0\,? @@ there is no ratio; the system has no answer or many (27e4, 27j2)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27k4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\begin{pmatrix}1&amp;2\\3&amp;4\end{pmatrix}"></span></span>Find its det, then the det after row 1 is stretched by 3. <br>Find what the first line forgets.</li><li><span class="givens"><span data-tex-inline="\begin{pmatrix}1&amp;0&amp;0&amp;0\\0&amp;0&amp;1&amp;0\\0&amp;0&amp;0&amp;1\\0&amp;1&amp;0&amp;0\end{pmatrix}"></span></span>Find its det by expanding, and what the four-row diagonal pattern gives. <br>Find why the copied pattern fails.</li><li><span class="givens"><span data-tex-inline="\begin{pmatrix}1&amp;2&amp;3\\0&amp;1&amp;4\\5&amp;6&amp;0\end{pmatrix}"></span></span>Find its det along row 1 with the signs, and without them. <br>Find what the third line drops.</li><li><span class="givens"><span data-tex-inline="x + y = 1,\ \ 2x + 2y = 3"></span></span>Find det A and det A₁. <br>Find whether the system has an answer, and what the fourth line would divide by.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">27k.4.1</span><span class="tagq">build</span>Build a 3 × 3 grid with whole numbers, none of them 0, whose determinant is 1. <br>Find its undo, and prove that every such grid has an undo with whole numbers only.</div>
+  <div class="chq"><span class="chid">27k.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\begin{pmatrix}1&amp;2&amp;3\\4&amp;5&amp;6\\7&amp;8&amp;9\end{pmatrix},\ \ \begin{pmatrix}1&amp;2&amp;3\\4&amp;5&amp;6\\7&amp;8&amp;10\end{pmatrix}"></span></span>Find the det of the first, and an arrow it loses. <br>Find the det of the second, which differs in one place, and its undo. Find what happens to the undo as the last entry heads to 9.</div>
+  <div class="chq"><span class="chid">27k.4.3</span><span class="tagq">converse</span>If a square grid of whole numbers has det 1 or −1, its undo has whole numbers (27k.4.1). Turn it round: if A and A⁻¹ both hold whole numbers only, must det A be 1 or −1? <br>Prove your answer.</div>
+  <div class="chq"><span class="chid">27k.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\det\begin{pmatrix}1&amp;a&amp;a^2\\1&amp;b&amp;b^2\\1&amp;c&amp;c^2\end{pmatrix}"></span></span>Find it by row moves. <br>Reroute: find it again without row moves, as a polynomial in c that is 0 at c = a and at c = b (9g), and find the number in front by expanding along row 3.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r27j.html">← 27j · solving systems by elimination</a><a href="r27l.html">27l · eigenvectors by hand →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>Finding a determinant down the stairs is computing it by Gaussian elimination, or by LU decomposition; a grid with zeros below its middle is upper triangular. Expanding along a row or column is cofactor expansion, or Laplace expansion, and the six-term rule for 3 × 3 grids is the rule of Sarrus. The det-ratio technique is Cramer’s rule. The determinant in 27k.4.4 is the Vandermonde determinant.</p>
+  <h3>Who said it first</h3>
+  <p>Gabriel Cramer published the ratio rule in 1750, in a book on curves through given points; Colin Maclaurin had used it for two and three unknowns in a treatise printed in 1748. Pierre-Simon Laplace gave the expansion by smaller determinants in 1772. Pierre Frédéric Sarrus taught the six-term rule in the 1830s. Alexandre-Théophile Vandermonde studied determinants as objects in their own right in 1772, though the determinant that bears his name does not appear in his papers.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'a staircase',t:R`\det = a_{11}a_{22}\cdots a_{nn}`,n:`Only doing nothing survives.`},
+  {k:'ember',kl:'row moves',t:R`\text{swap} \to -\det,\ \ \text{add} \to \det`,n:`Turned on its side, rows act like columns.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\det A = (-1)^s\prod \text{middle}}`,n:`About n³/3 steps, not n!.`}
+],{title:'The slides · down the stairs · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'stand-ins',t:R`C_{ij} = (-1)^{i+j}\det(\text{strike row } i,\ \text{column } j)`,n:`Smaller determinants, signed like a chessboard.`},
+  {k:'ember',kl:'down a column',t:R`\det A = \textstyle\sum_i a_{ij}C_{ij}`,n:`From the stand-in technique.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\det A = \textstyle\sum_j a_{ij}C_{ij}}`,n:`Along a row too, by the side-turn.`}
+],{title:'The slides · expand · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'b is a mix',t:R`b = \textstyle\sum x_k(\text{col } k)`,n:`Put it in column j.`},
+  {k:'ember',kl:'flat',t:R`\det A_j = x_j\det A`,n:`Every other column appears twice.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{x_j = \det A_j/\det A}`,n:`Only when det A ≠ 0.`}
+],{title:'The slides · ratios · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>What keeps a spinning thing steady?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r27then.html">← 27·then what if everything depends on everything else?</a><a href="r27econ.html">next: 27·econ can an economy feed itself? →</a></p>
+  <div class="tags"><span class="tag phys">27·phys · physics</span></div>
+  <h1>What keeps a spinning thing steady?</h1>
+  <p>What keeps a spinning thing steady? A top stands up while it spins and falls over when it stops. A football thrown with a spiral flies true, and one thrown without wobbles end over end. Toss a hardcover book in the air spinning about its longest edge and it spins cleanly. Toss it spinning about the edge of middle length and it flips over every time, however carefully you throw it. A car wheel that is out of balance shakes the whole car at highway speed, though nothing is pushing it sideways. And the earth itself, a spinning ball, keeps its axis pointed at nearly the same star for thousands of years. What makes the question hard is that a spin has a direction as well as a size, and the direction of the spin is not always the direction of the turning. Rung twenty-three measured a turning push by a single number. This page makes the turning push an arrow, finds that spin is kept when nothing turns the body from outside, and finds that each body has three axes, the arrows of one grid that it only stretches, about which its spin and its turning agree. Two of those axes are steady and one is not. Then it turns to the spinning earth, which pushes every moving thing sideways, and to the sun, whose pull makes the planets sweep equal areas and ride on ellipses, as 18·phys found in the sky and could not explain.</p>
+  <p class="gesture">A turning push is an arrow along the axis it turns about, as long as the push times the arm. A body at rest has its pushes and its turning pushes adding to nothing, about any point at all. A body pulled only toward one point keeps its spin, so it stays in one plane and sweeps equal areas in equal times. A solid turning about an axis has a rotational inertia, the sum of each piece’s mass times the square of its distance from the axis, and a hoop rolls more slowly than a ball. In general the spin is a grid times the turning, and the grid’s stretched arrows, three of them at right angles, are the axes about which the two agree. About the axes of most and least inertia a free body spins steadily; about the middle one it flips. Seen from the turning earth, everything that moves is pushed sideways. And a pull that falls off as the square of the distance keeps one more arrow fixed, which bends every path into an ellipse, a parabola or a hyperbola.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r23eng.html">23·eng</a> (the turning push; the turn-work technique), <a href="r27i.html">27i</a> (the cross and moving-dot techniques), <a href="r27f.html">27f</a> (the arrows a map only stretches), <a href="r27h.html">27h</a> (the two-slot technique), <a href="r27cb24.html">27·cb24</a> (the sum-and-determinant technique), <a href="r21phys.html">21·phys</a> (forces add as arrows), <a href="r13phys.html">13·phys</a> (force is mass times acceleration) and <a href="r18phys.html">18·phys</a> (the lift technique). 27·econ turns a grid on an economy.</p></div>
+</header>
+
+<section class="class step" data-step="27phys1">
+  <h2 class="sthead"><span class="stno">27phys1</span>A turning push is an arrow</h2>
+  <p class="stands">Stands on 23·eng (the turning push), 27i (the cross technique) and 21·phys (the arrow technique).</p>
+  <p data-pid="d743fc">23·eng measured a turning push about a pivot by one number, τ = Fr sin φ. But a turning push also has an axis, and a way round that axis. 27i’s cross technique carries all three. For r the arrow from the pivot O to the place where a force F pushes, τ = r × F points along the axis, has size rF sin θ, and points the way your right thumb points when your fingers curl the way the push turns.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the any-pivot technique">
+\tau_O = \textstyle\sum r_i \times F_i @@ forces Fᵢ pushing at places rᵢ, measured from O (the cross technique, 27i)
+\tau_Q = \textstyle\sum (r_i - Q) \times F_i = \tau_O - Q \times \textstyle\sum F_i @@ the cross product spreads over sums, as its formula does (27i)
+\textstyle\sum F_i = 0 \Rightarrow \tau_Q = \tau_O \text{ for every point } Q @@ the last term is gone
+\htmlClass{new}{\text{at rest}:\ \textstyle\sum F_i = 0 \text{ and } \tau = 0 \text{ about one point, so about every point}} \quad \blacksquare @@ pick the point that makes the sums easiest
+  </pre>
+  <p data-pid="dccc46">Any-pivot technique: <b>if the forces on a body add to nothing, their turning push is the same about every point; so a body at rest has its forces and its turning pushes adding to nothing, about any point you choose.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: a bicycle on a Missoula hill">
+\text{crank } 0.17 \text{ m level},\ \text{a push of } 400 \text{ N straight down}:\ \ |\tau| = 0.17 \cdot 400 = 68 \text{ N·m} @@ θ is a right angle: sin θ = 1
+\text{front sprocket}: 68 = T\,r_1;\ \ \text{rear sprocket}: \tau_2 = T\,r_2 @@ the chain pulls with T on both; each sprocket is balanced about its own axle
+\tau_2 = 68 \cdot \tfrac{16}{44} \approx 24.7 \text{ N·m} @@ 44 teeth in front, 16 behind: the radii are in that ratio
+\htmlClass{new}{\text{push at the road} \approx \tfrac{24.7}{0.34} \approx 72.7 \text{ N}} @@ the wheel, radius 0.34 m, balanced about its axle
+  </pre>
+  <p data-pid="d08e8c">A steady turning push τ turning a body through θ radians does work τθ, as 23·eng found for a whole turn, 2πτ. Gears and chains trade turning push for turning speed and leave the work alone: the rear wheel turns 44/16 = 2.75 times for each turn of the crank.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · turning push · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">27·phys.1.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a wheel nut, a wrench 0.25 m long along the x-axis, and a push of 300 N in the xy-plane at 60° to the handle</span></span>Find the turning push as an arrow, and its size. <br>Find the push square to the handle that reaches 110 N·m.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27phys2">
+  <h2 class="sthead"><span class="stno">27phys2</span>Spin is kept</h2>
+  <p class="stands">Stands on 27·phys.1, 27i (the cross and moving-dot techniques) and 13·phys (force is mass times acceleration).</p>
+  <p data-pid="87c7e5">A body of mass m at r, moving at v, has a spin about O: L = r × mv. From here on, L is the <i>angular momentum</i> of the body about O.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the kept-spin technique">
+L' = v \times mv + r \times mv' = r \times F @@ the moving-dot technique (27i); v × v = 0; mv′ = F (13·phys)
+F \text{ along } r \Rightarrow L' = 0 @@ a pull toward O, as the sun’s on a planet
+r \cdot L = 0 \text{ for every } t @@ the cross technique (27i): r × mv is at right angles to r, so the path stays in the plane square to the fixed L
+\text{area swept in } \Delta t \approx \tfrac12|r \times v\,\Delta t| = \tfrac{|L|}{2m}\Delta t @@ half the parallelogram on r and vΔt: the cross technique (27i)
+\htmlClass{new}{\text{the swept area grows at } \tfrac{|L|}{2m},\ \text{a fixed rate}} \quad \blacksquare @@ equal areas in equal times
+  </pre>
+  <p data-pid="ff6d93">Kept-spin technique: <b>a body pulled only toward a fixed point keeps its angular momentum, so it moves in one plane, and the line from the point to it sweeps equal areas in equal times.</b> At its nearest and farthest places the motion is square to r, so |L| = mrv there and rv is the same at both ends.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the earth in January and in July">
+\text{nearest}: 147.1 \text{ million km at } 30.29 \text{ km/s};\ \ \text{farthest}: 152.1 \text{ at } 29.29 @@ measured
+147.1 \times 30.29 \approx 4455.7,\ \ 152.1 \times 29.29 \approx 4455.0 @@ rv at each end
+\htmlClass{new}{\text{the same to the rounding of the table}} @@ the kept-spin technique, seen in the sky
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · kept spin · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27·phys.2.1</span><span class="ph undo">undo</span><span class="givens"><span class="gtx">Mercury, nearest the sun at 46.0 million km and 58.98 km/s, farthest at 69.8 million km</span></span>Find its speed at its farthest place. <br>Find the share by which it slows from one end to the other.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27phys3">
+  <h2 class="sthead"><span class="stno">27phys3</span>How hard a solid is to turn</h2>
+  <p class="stands">Stands on 27·phys.2, 15 (area), 21j (radians) and 16·phys (the work-energy technique).</p>
+  <p data-pid="b187cb">A solid turning at ω radians a second about a fixed axis carries each piece round a circle. A piece at distance ρ from the axis moves at ρω (21j).</p>
+  <pre class="lines" data-k="ember" data-label="this page: the spin-energy technique">
+\tfrac12\textstyle\sum m_i(\rho_i\omega)^2 = \tfrac12I\omega^2,\ \ I = \textstyle\sum m_i\rho_i^2 @@ the energy of motion, piece by piece
+L_{\text{axis}} = \textstyle\sum m_i\rho_i(\rho_i\omega) = I\omega @@ each piece’s spin about the axis has size ρᵢmᵢvᵢ
+\text{rod about its middle}: \int_{-\ell/2}^{\ell/2}x^2\,\tfrac{M}{\ell}\,dx = \tfrac{M\ell^2}{12} @@ cut into thin pieces and add (15)
+\text{disc}: \int_0^R\rho^2\,\tfrac{M}{\pi R^2}\,2\pi\rho\,d\rho = \tfrac{MR^2}{2};\ \ \text{hoop}: MR^2 @@ rings of radius ρ; a hoop has all its mass at R
+\htmlClass{new}{\text{rolling}:\ v = R\omega,\ \ Mgh = \tfrac12Mv^2 + \tfrac12I\omega^2 \Rightarrow v = \sqrt{\tfrac{2gh}{1 + I/(MR^2)}}} \quad \blacksquare @@ the work-energy technique (16·phys): the drop pays for sliding and for turning
+  </pre>
+  <p data-pid="384eae">Spin-energy technique: <b>a solid turning at ω about a fixed axis has energy ½Iω² and spin Iω about the axis, where I = Σmρ², the sum of each piece’s mass times the square of its distance from the axis.</b> A ball, cut into discs, has I = (2/5)MR². So rolled from one height, a ball beats a disc, and a disc beats a hoop, whatever their masses and sizes: the hoop spends half its energy on turning, the ball only two sevenths.</p>
+  <p data-pid="f5cb75">With no turning push from outside, Iω is kept. A figure skater spinning with arms out who pulls them in, to a third of her rotational inertia, spins three times as fast.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · inertia · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27·phys.3.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a hoop and a solid disc let go side by side down a ramp that drops 0.5 m</span></span>Find each speed at the bottom. <br>Find the share of the hoop’s time the disc takes.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27phys4">
+  <h2 class="sthead"><span class="stno">27phys4</span>Spin that is not along the turning</h2>
+  <p class="stands">Stands on 27·phys.3, 27i (the cross technique), 27h (the two-slot technique), 27f (the stretch-test technique) and 25 (complex numbers).</p>
+  <p data-pid="f21e3b">A body turning about an axis through O, at ω radians a second, is described by one arrow ω along the axis. A point of the body at r moves at ω × r: square to both, of size ω times its distance from the axis. So every arrow u fixed in the body has slope ω × u.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the principal-axis technique">
+L = \textstyle\sum m_i\,r_i \times (\omega \times r_i) = \textstyle\sum m_i\big(|r_i|^2\omega - (r_i\cdot\omega)\,r_i\big) @@ r × (ω × r), checked entry by entry from the cross technique’s formula (27i)
+L = \Theta\,\omega,\ \ \Theta = \textstyle\sum m_i\big(|r_i|^2I - r_ir_i^{\mathsf T}\big) @@ a straight map of ω: a 3 × 3 grid, with I the grid that does nothing
+\Theta = \Theta^{\mathsf T}:\ \ (\Theta u)\cdot v = u\cdot(\Theta v) @@ r rᵀ turned is itself; the two-slot technique (27h)
+\Theta u = \lambda u,\ \Theta v = \mu v \Rightarrow \lambda\,u\cdot v = \mu\,u\cdot v @@ move Θ across the dot product
+\bar w^{\mathsf T}\Theta w \text{ equals its own conjugate} \Rightarrow \text{every stretch of } \Theta \text{ is real} @@ for Θw = λw, w complex: it is λ times |w|², which is real and not 0
+\htmlClass{new}{\lambda \ne \mu \Rightarrow u \cdot v = 0} \quad \blacksquare @@ (λ − μ) u·v = 0
+  </pre>
+  <p data-pid="710608">Principal-axis technique: <b>a body’s inertia grid Θ is equal to its own turn, so its stretches are real, and stretched arrows with different stretches are square to each other; spun about one of these axes the spin points along the turning, and about any other it does not.</b> The three stretches I₁, I₂, I₃ are the body’s rotational inertias about its three axes.</p>
+  <pre class="lines" data-k="ember" data-label="this page: a wheel out of balance, at a tire shop in Eugene">
+\text{two } 1 \text{ kg lumps at } \pm(0.1, 0.1, 0) \text{ m, axle along } x:\ \ \Theta = \begin{pmatrix}0.02 & -0.02 & 0\\ -0.02 & 0.02 & 0\\ 0 & 0 & 0.04\end{pmatrix} @@ each lump: |r|² = 0.02
+\omega = (10, 0, 0):\ \ L = \Theta\omega = (0.2, -0.2, 0) @@ not along the axle
+L' = \omega \times L = (0, 0, -2) \text{ N·m} @@ L is fixed in the wheel, and turns with it
+\htmlClass{new}{\text{the axle must push with a turning push of } 2 \text{ N·m that goes round with the wheel}} @@ a shake, ten turns in 2π seconds
+  </pre>
+  <p data-pid="c8958c">The stretched arrows of that Θ are (1, 1, 0) with stretch 0, the line of the lumps, and (1, −1, 0) and (0, 0, 1) with stretch 0.04. The axle is none of them. A balancing machine spins the wheel, reads the shake, and clips small weights to the rim until the axle is a principal axis.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · principal axes · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27·phys.4.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a hardcover book, 0.24 m by 0.16 m by 0.04 m, of mass 1.2 kg, with its edges along x, y, z</span></span>Find its inertia grid about its centre, given that a block has M/12 times (b² + c²), (a² + c²), (a² + b²) about its three edges’ directions. <br>Find L for ω = (1, 1, 0), and the angle between L and ω.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27phys5">
+  <h2 class="sthead"><span class="stno">27phys5</span>The book that flips</h2>
+  <p class="stands">Stands on 27·phys.4, 27·phys.2 (the kept-spin technique) and 27·cb24.3 (the sum-and-determinant technique).</p>
+  <p data-pid="2fed98">Throw a body into the air. Gravity pulls on every piece in proportion to its mass, which turns it about its centre not at all, so its spin about the centre is kept. Write the turning along the body’s own principal axes, which turn with it: ω = ω₁e₁ + ω₂e₂ + ω₃e₃.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the middle-axis technique">
+0 = L' = \textstyle\sum I_i\omega_i'e_i + \textstyle\sum I_i\omega_i\,(\omega \times e_i) = \textstyle\sum I_i\omega_i'e_i + \omega \times L @@ L = Σ Iᵢωᵢeᵢ; each eᵢ is fixed in the body (27·phys.4)
+I_1\omega_1' = (I_2 - I_3)\,\omega_2\omega_3,\ \ I_2\omega_2' = (I_3 - I_1)\,\omega_3\omega_1,\ \ I_3\omega_3' = (I_1 - I_2)\,\omega_1\omega_2 @@ the parts of ω × L along e₁, e₂, e₃, by the cross technique’s formula (27i)
+\omega_1 \approx \Omega,\ \ \omega_2' = \tfrac{(I_3 - I_1)\Omega}{I_2}\,\omega_3,\ \ \omega_3' = \tfrac{(I_1 - I_2)\Omega}{I_3}\,\omega_2 @@ spun about e₁, with a small wobble; ω₁ changes only by a product of two small numbers
+T = 0,\ \ \Delta = -\tfrac{(I_3 - I_1)(I_1 - I_2)}{I_2I_3}\,\Omega^2 @@ the grid of the wobble (27·cb24.3)
+\htmlClass{new}{I_1 \text{ between } I_2 \text{ and } I_3 \Rightarrow \Delta \lt 0:\ \text{a saddle; the wobble grows}} \quad \blacksquare @@ otherwise Δ &gt; 0, a centre, and the kept energy and kept spin hold it there
+  </pre>
+  <p data-pid="6cee80">Middle-axis technique: <b>a free body spun about its axis of largest or of smallest rotational inertia keeps spinning about it; spun about the middle axis, a wobble grows like e^(st), with s = Ω√((I₃ − I₁)(I₁ − I₂)/(I₂I₃)), and the body flips.</b> The book of 27·phys.4 has I = 0.00272, 0.00592 and 0.00832 kg·m². Spun about its middle axis at two turns a second, s ≈ 7.3 a second: a wobble of one degree grows a hundredfold in about 0.63 s, about one toss. A tennis racket flips the same way when spun about the axis that lies across its strings.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · tumbling · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · a book tossed with a spin</div>
+    <div class="kn"><span class="m">axis</span><input type="range" id="ka" min="1" max="3" step="1" value="2"><output id="oa"></output></div>
+    <div class="kn"><span class="m">turns/s</span><input type="range" id="kw" min="0.5" max="4" step="0.5" value="2"><output id="ow"></output></div>
+    <div id="pl"></div>
+    <div class="cap">The book of 27·phys.4, I = 0.00272, 0.00592, 0.00832 kg·m², spun about one axis with a 1% wobble on each of the others, for three seconds. Ember, ink, teal: ω₁, ω₂, ω₃ as shares of the starting spin. Axis 2 is the middle one.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27·phys.5.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a phone 0.147 m by 0.0716 m by 0.0078 m, of mass 0.17 kg, tossed spinning at two turns a second</span></span>Find its three rotational inertias, and which axis is the middle one. <br>Find the growth rate of a wobble about that axis, and the time for it to grow by a factor e.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27phys6">
+  <h2 class="sthead"><span class="stno">27phys6</span>The sideways push of a turning earth</h2>
+  <p class="stands">Stands on 27·phys.4 (an arrow fixed in a turning body), 27i (the cross technique) and 13·phys (force is mass times acceleration).</p>
+  <p data-pid="94f4df">The earth turns once every 23 hours 56 minutes, at Ω = 7.292 × 10⁻⁵ radians a second, about the arrow Ω from the south pole to the north. Mass times acceleration holds for arrows measured against the stars. We measure against the ground, which turns.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the sideways-push technique">
+u'_{\text{stars}} = u'_{\text{ground}} + \Omega \times u @@ the parts along axes fixed in the ground change, and those axes turn at Ω × each (27·phys.4)
+v_{\text{stars}} = v + \Omega \times r @@ applied to the place r; v is the speed seen from the ground
+a_{\text{stars}} = a + 2\,\Omega \times v + \Omega \times (\Omega \times r) @@ applied again; Ω is steady
+\htmlClass{new}{m\,a = F - 2m\,\Omega \times v - m\,\Omega \times (\Omega \times r)} \quad \blacksquare @@ m a_stars = F (13·phys): seen from the ground, two more pushes appear
+  </pre>
+  <p data-pid="d0c156">Sideways-push technique: <b>seen from the turning earth, a body moving at v is pushed by −2mΩ × v, square to its motion; in the northern half of the earth it pushes level motion to the right, by 2Ωv sin(latitude) for each kilogram.</b> It is square to v, so it does no work: it bends paths and never speeds them up. The last term, −mΩ × (Ω × r), pushes outward from the axis and only reshapes gravity a little.</p>
+  <pre class="lines" data-k="ember" data-label="this page: wind over Seattle, and a pendulum in Los Angeles">
+\text{a wind of } 10 \text{ m/s at latitude } 47.6^\circ:\ \ 2\Omega v\sin 47.6^\circ \approx 0.0011 \text{ m/s}^2 @@ tiny, but it acts for hours
+\text{over an hour}: 0.0011 \times 3600 \approx 3.9 \text{ m/s of sideways speed} @@ the wind is bent hard to the right
+\text{the swing of a long pendulum turns at } 15.04^\circ\sin(\text{latitude}) \text{ an hour} @@ a measured rate, which this push explains; its proof is held in trust
+\htmlClass{new}{\text{Griffith Observatory, } 34.1^\circ:\ \ 8.43^\circ \text{ an hour, a full turn in } 42.7 \text{ hours}} @@ the pendulum there knocks over pegs as its swing turns
+  </pre>
+  <p data-pid="446f95">Air flowing in toward a low is bent to its right, so it circles the low the other way: storms off the coast of British Columbia turn counter-clockwise, seen from above.</p>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · turning earth · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27·phys.6.1</span><span class="ph do">do</span><span class="givens"><span class="gtx">a freight car of 60 t heading north at 100 km/h on a straight track in Montana, at latitude 47°</span></span>Find the sideways push on it, its size and its side. <br>Find the same car’s push heading south.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27phys7">
+  <h2 class="sthead"><span class="stno">27phys7</span>Why the paths are ellipses</h2>
+  <p class="stands">Stands on 27·phys.2 (the kept-spin technique), 27i (the cross and moving-dot techniques), 27e (the determinant) and 18·phys (the lift technique).</p>
+  <p data-pid="d933fd">18·phys found that the measured places of Mars lie on an ellipse with the sun at a focus, and held in trust why. A measured law gives the sun’s pull on a planet of mass m: F = −(k/|r|³) r, with k = GMm, falling off as the square of the distance. Write p = mv for the planet’s momentum.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the fixed-arrow technique">
+p' \times L = -\tfrac{k}{|r|^3}\,r \times (r \times mv) = -\tfrac{km}{|r|^3}\big((r\cdot v)\,r - |r|^2v\big) @@ L is kept (27·phys.2); the double cross of 27·phys.4
+\big(\tfrac{r}{|r|}\big)' = \tfrac{v}{|r|} - \tfrac{(r\cdot v)}{|r|^3}\,r @@ the quotient rule, with |r|′ = (r·v)/|r|
+W = p \times L - km\,\tfrac{r}{|r|} \text{ has } W' = 0 @@ the two lines cancel term by term, since L′ = 0
+r\cdot W = r\cdot(p \times L) - km|r| = |L|^2 - km|r| @@ (u × v)·w = det[u v w] (27i); moving the columns round once is two swaps, which keep the sign (27e)
+|r|\,|W|\cos\theta = |L|^2 - km|r| \Rightarrow |r| = \tfrac{\ell}{1 + e\cos\theta},\ \ \ell = \tfrac{|L|^2}{km},\ \ e = \tfrac{|W|}{km} @@ θ the angle from the fixed arrow W to r
+\htmlClass{new}{|r| = \ell - e\,x,\ \ x = |r|\cos\theta} \quad \blacksquare @@ multiply out: 18·phys’s lift technique, so the path is an ellipse with the sun at a focus when e &lt; 1
+  </pre>
+  <p data-pid="5650bf">Fixed-arrow technique: <b>under a pull toward a point that falls off as the square of the distance, the arrow p × L − km r/|r| is kept; so every path is |r| = ℓ/(1 + e cos θ), an ellipse with the pulling point at a focus when e &lt; 1, a parabola when e = 1, and a hyperbola when e &gt; 1.</b> W points from the sun to the nearest place of the path. For the earth, e = (152.1 − 147.1)/(152.1 + 147.1) ≈ 0.0167. That pays what 18·phys held in trust.</p>
+  <section class="slides" id="sl7"><div class="eyebrow">The slides · ellipses · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27·phys.7.1</span><span class="ph undo">undo</span><span class="givens"><span class="gtx">Halley’s comet: nearest the sun at 0.586 AU, farthest at 35.1 AU</span></span>Find e, the long half-width a, and ℓ. <br>Find how many times faster it moves at its nearest place than at its farthest.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27phys8">
+  <h2 class="sthead"><span class="stno">27phys8</span>Illegal moves</h2>
+  <p class="stands">Stands on 27·phys.1 to 27·phys.7.</p>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{the spin points along the turning}\,? @@ only about a principal axis
+\text{a hoop and a ball of one mass and radius roll down together}\,? @@ the ball wins: 2/5 against 1
+\text{a book spins steadily about each of its three axes}\,? @@ not about the middle one
+\text{the sideways push of the earth speeds things up}\,? @@ it is square to v: it bends, and does no work
+\text{a planet moves fastest where it is farthest}\,? @@ rv is the same at both ends: fastest where nearest
+  </pre>
+  <section class="slides" id="sl8"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27·phys.8.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span class="gtx">a square tile 0.1 m by 0.1 m by 0.01 m</span></span>Find its three rotational inertias, and what the middle-axis technique says about each axis.</li><li><span class="givens"><span class="gtx">a stone dropped from rest 100 m down a mine shaft at the equator</span></span>Find the side the sideways push sends it, and roughly how far it lands from the plumb line.</li><li><span class="givens"><span class="gtx">a body pushed by a force that is never along r</span></span>Find whether it can still sweep equal areas about O.</li></ol></li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">27·phys.9.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">the wheel of 27·phys.4, two 1 kg lumps at ±(0.1, 0.1, 0) m, axle along x</span></span>Build two more lumps to add so that the axle becomes a principal axis.</div>
+  <div class="chq"><span class="chid">27·phys.9.2</span><span class="tagq">edge</span>Find the path of the fixed-arrow technique when |W| = km exactly. <br>Find the speed at its nearest place, against the speed of a circle of that radius.</div>
+  <div class="chq"><span class="chid">27·phys.9.3</span><span class="tagq">converse</span>A body pulled only toward a fixed point sweeps equal areas in equal times. Turn it round: if a body sweeps equal areas in equal times about a point, must the pull on it be toward that point?</div>
+  <div class="chq"><span class="chid">27·phys.9.4</span><span class="tagq">reroute</span>Find the kept-spin technique’s area rate a second way: with 21r’s swept-area technique, the area swept as θ runs on is ½∫r² dθ. <br>Find |L| in terms of r and the rate θ′.</div>
+  <div class="chq"><span class="chid">27·phys.9.5</span><span class="tagq">seam</span>Look at a spinning wheel in a mirror (20): the mirrored wheel turns the other way, so its right-hand arrow points the other way from the mirror image of the first wheel’s arrow. <br>Is a turning push an arrow, or something that only looks like one until a mirror is held up?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r27then.html">← 27·then · what if everything depends on everything else?</a><a href="r27econ.html">27·econ · can an economy feed itself? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The turning push τ = r × F is the torque, or moment, of F; the any-pivot technique is the balance of torques. L = r × mv is angular momentum, and equal areas in equal times is Kepler’s second law. I = Σmρ² is the moment of inertia. The inertia grid is the inertia tensor, its stretched arrows the principal axes, and its stretches the principal moments of inertia. The rules I₁ω₁′ = (I₂ − I₃)ω₂ω₃ are Euler’s equations for a free rigid body, and the middle-axis technique is the intermediate axis theorem, or tennis racket theorem. The sideways push is the Coriolis force, and −mΩ × (Ω × r) the centrifugal force; the pendulum is a Foucault pendulum. W is the Laplace–Runge–Lenz vector, and ℓ the semi-latus rectum.</p>
+  <h3>Who said it first</h3>
+  <p>Archimedes gave the balance of a lever about 250 BCE. Johannes Kepler found equal areas in 1609, and Isaac Newton derived them, and the ellipses, from a pull toward the sun in 1687. Leonhard Euler wrote the rules of a spinning solid and found its principal axes in 1765. Louis Poinsot pictured the free spin in 1834. Gaspard-Gustave de Coriolis gave the sideways push in 1835, and Léon Foucault hung his pendulum in the Panthéon in Paris in 1851. The fixed arrow W was found by Jakob Hermann in 1710 and again by Pierre-Simon Laplace in 1799, and was given its later names by Carl Runge and Wilhelm Lenz in the 1900s. In 1985 the cosmonaut Vladimir Dzhanibekov saw a wing nut, spinning free in orbit, flip over and over. In 27·phys.9.5, William Rowan Hamilton’s quaternions (1843) were defended by Peter Guthrie Tait against Josiah Willard Gibbs and Oliver Heaviside, who split the product into dot and cross; Hermann Grassmann (1844) had a product of two arrows that is neither.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="27·phys: a worked “proof”, not allowed">
+L = \Theta\omega,\ \ \omega = (10, 0, 0) @@ fine
+L = I\omega = (0.2, 0, 0) \text{ with } I = 0.02 @@ not allowed: one number in place of the grid; Θ has entries off its middle
+\text{the wheel turns smoothly with no push from the axle} @@ false: L = (0.2, −0.2, 0) turns with the wheel, and needs 2 N·m
+  </pre>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+const V=c=>'var('+c+')';
+// plot(series, xr, yr, opts): series = [{pts:[[x,y],...], c:'--ember', w:1.6, dash:''}]; returns svg string
+function plot(series, xr, yr, o){ o=o||{}; const W=360,H=o.H||210,L=34,B=22,T=8,Rr=8;
+  const sx=x=>L+(x-xr[0])/(xr[1]-xr[0])*(W-L-Rr), sy=y=>H-B-(y-yr[0])/(yr[1]-yr[0])*(H-B-T);
+  let s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;max-width:440px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  (o.yt||[]).forEach(y=>{ s+='<line x1="'+L+'" x2="'+(W-Rr)+'" y1="'+sy(y)+'" y2="'+sy(y)+'" style="stroke:'+V('--grid')+';stroke-width:0.6"/><text x="'+(L-3)+'" y="'+(sy(y)+3)+'" text-anchor="end" style="font:9px var(--mono);fill:'+V('--muted')+'">'+y+'</text>'; });
+  (o.xt||[]).forEach(x=>{ s+='<text x="'+sx(x)+'" y="'+(H-8)+'" text-anchor="middle" style="font:9px var(--mono);fill:'+V('--muted')+'">'+x+'</text>'; });
+  s+='<line x1="'+L+'" x2="'+L+'" y1="'+T+'" y2="'+(H-B)+'" style="stroke:'+V('--ink')+';stroke-width:0.8"/><line x1="'+L+'" x2="'+(W-Rr)+'" y1="'+(H-B)+'" y2="'+(H-B)+'" style="stroke:'+V('--ink')+';stroke-width:0.8"/>';
+  series.forEach(se=>{ const cl=v=>Math.max(yr[0]-0.05*(yr[1]-yr[0]),Math.min(yr[1]+0.05*(yr[1]-yr[0]),v));
+    const d=se.pts.filter(p=>isFinite(p[1])).map((p,i)=>(i?'L':'M')+sx(p[0]).toFixed(1)+','+sy(cl(p[1])).toFixed(1)).join('');
+    s+='<path d="'+d+'" style="fill:none;stroke:'+V(se.c||'--ember')+';stroke-width:'+(se.w||1.6)+(se.dash?';stroke-dasharray:'+se.dash:'')+'"/>'; });
+  (o.dots||[]).forEach(p=>{ s+='<circle cx="'+sx(p[0])+'" cy="'+sy(p[1])+'" r="2.6" style="fill:'+V(p[2]||'--ember')+'"/>'; });
+  if(o.xl) s+='<text x="'+(W-Rr)+'" y="'+(H-B-4)+'" text-anchor="end" style="font:9px var(--mono);fill:'+V('--muted')+'">'+o.xl+'</text>';
+  if(o.yl) s+='<text x="'+(L+4)+'" y="'+(T+9)+'" style="font:9px var(--mono);fill:'+V('--muted')+'">'+o.yl+'</text>';
+  return s+'</svg>'; }
+
+const IB=[0.00272,0.00592,0.00832];
+function draw(){ const ax=+$('ka').value-1, tw=+$('kw').value; $('oa').textContent=['1 (least)','2 (middle)','3 (most)'][ax]; $('ow').textContent=fm(tw,1);
+  const Om=2*Math.PI*tw, I=IB; let w=[0.01*Om,0.01*Om,0.01*Om]; w[ax]=Om;
+  const F=w=>[(I[1]-I[2])*w[1]*w[2]/I[0],(I[2]-I[0])*w[2]*w[0]/I[1],(I[0]-I[1])*w[0]*w[1]/I[2]];
+  const P=[[],[],[]], dt=0.0005; let t=0, mn=1, tf=null;
+  for(let i=0;i<=6000;i++){ if(i%20===0) for(let j=0;j<3;j++) P[j].push([t,w[j]/Om]);
+    const a=F(w), b=F(w.map((x,j)=>x+dt/2*a[j])), c=F(w.map((x,j)=>x+dt/2*b[j])), d=F(w.map((x,j)=>x+dt*c[j]));
+    w=w.map((x,j)=>x+dt/6*(a[j]+2*b[j]+2*c[j]+d[j])); t+=dt; const s=w[ax]/Om; if(s<mn) mn=s; if(tf===null&&s<0) tf=t; }
+  $('pl').innerHTML=plot([{pts:P[0],c:'--ember'},{pts:P[1],c:'--ink'},{pts:P[2],c:'--teal'}],[0,3],[-1.1,1.1],{xt:[0,1,2,3],yt:[-1,0,1],xl:'seconds'});
+  const v=$('vd'); v.className='verdict';
+  v.textContent=(ax===1?'Middle axis: ':'Axis '+(ax+1)+': ')+(tf!==null?'the spin about it falls to '+mm(mn,3)+' of its start, and first reverses after '+fm(tf,2)+' s. The book flips.':'the spin about it never drops below '+fm(Math.floor(mn*1000)/1000,3)+' of its start. It spins steadily.'); }
+$('ka').oninput=draw; $('kw').oninput=draw; draw();
+window.__pic={set:(a,w)=>{ $('ka').value=a; $('kw').value=w; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'the arrow',t:R`\tau = r \times F`,n:`Along the axis.`},
+  {k:'ember',kl:'its size',t:R`|\tau| = rF\sin\theta`,n:`As 23·eng.`},
+  {k:'ember',kl:'any pivot',t:R`\htmlClass{new}{\textstyle\sum F = 0 \Rightarrow \tau_Q = \tau_O}`,n:`Choose the easiest point.`}
+],{title:'The slides · turning push · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'the spin',t:R`L = r \times mv`,n:`Angular momentum.`},
+  {k:'ember',kl:'its slope',t:R`L^{\prime} = r \times F`,n:`The turning push.`},
+  {k:'ember',kl:'kept',t:R`\htmlClass{new}{F \parallel r \Rightarrow L \text{ fixed}}`,n:`Equal areas.`}
+],{title:'The slides · kept spin · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'energy',t:R`\tfrac12I\omega^2,\ \ I = \textstyle\sum m\rho^2`,n:`Piece by piece.`},
+  {k:'ember',kl:'rolling',t:R`\htmlClass{new}{v = \sqrt{\tfrac{2gh}{1 + I/(MR^2)}}}`,n:`Ball, disc, hoop.`}
+],{title:'The slides · inertia · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'the grid',t:R`L = \Theta\omega`,n:`Not along ω.`},
+  {k:'ember',kl:'equal to its turn',t:R`\Theta = \Theta^{\mathsf T}`,n:`Real stretches.`},
+  {k:'ember',kl:'the axes',t:R`\htmlClass{new}{\lambda \ne \mu \Rightarrow u\cdot v = 0}`,n:`Square to each other.`}
+],{title:'The slides · principal axes · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'free spin',t:R`\textstyle\sum I_i\omega_i^{\prime}e_i + \omega \times L = 0`,n:`Seen from the body.`},
+  {k:'ember',kl:'the wobble',t:R`\Delta = -\tfrac{(I_3 - I_1)(I_1 - I_2)}{I_2I_3}\Omega^2`,n:`Sum and product.`},
+  {k:'ember',kl:'the middle',t:R`\htmlClass{new}{\Delta \lt 0}`,n:`It flips.`}
+],{title:'The slides · tumbling · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'the frame',t:R`u^{\prime}_{\text{stars}} = u^{\prime} + \Omega \times u`,n:`Axes that turn.`},
+  {k:'ember',kl:'the push',t:R`\htmlClass{new}{-2m\,\Omega \times v}`,n:`Square to the motion.`},
+  {k:'ember',kl:'its size',t:R`2\Omega v\sin(\text{lat})`,n:`To the right, in the north.`}
+],{title:'The slides · turning earth · ← → keys work'});
+stepper('#sl7',[
+  {k:'ember',kl:'kept',t:R`L,\ \ W = p \times L - km\tfrac{r}{|r|}`,n:`Two fixed arrows.`},
+  {k:'ember',kl:'the path',t:R`\htmlClass{new}{|r| = \tfrac{\ell}{1 + e\cos\theta}}`,n:`A cut of the cone.`}
+],{title:'The slides · ellipses · ← → keys work'});
+stepper('#sl8',[
+  {k:'ember',kl:'illegal',t:R`L \parallel \omega\,?`,n:`Only on a principal axis.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>
