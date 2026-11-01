@@ -36,14 +36,14 @@ table.tt td.l{text-align:left}
 <section class="class step" data-step="28f1">
   <h2 class="sthead"><span class="stno">28f1</span>Keep x, report the equation</h2>
   <p class="stands">Stands on 28e2, 28b2, 27e1.</p>
-  <p data-pid="4521a2">Let F(x, y) be smoothly sloped near (a, b), with F(a, b) = 0 and F<sub>y</sub>(a, b) ≠ 0. Build the map that keeps x and reports how far the equation is from holding:</p>
+  <p data-pid="4521a2">Let F(x, y) be smoothly sloped near (w, b), with F(w, b) = 0 and F<sub>y</sub>(w, b) ≠ 0. Build the map that keeps x and reports how far the equation is from holding:</p>
   <p class="eqline" data-pid="9c4bb4">\(G(x, y) = \big(x,\ F(x, y)\big).\)</p>
-  <p data-pid="bedea6">Fixed-by-an-equation technique: <b>there are an interval I around a and an interval J around b such that for each x in I exactly one y in J has F(x, y) = 0. Calling it g(x), g is smoothly sloped on I.</b></p>
+  <p data-pid="bedea6">Fixed-by-an-equation technique: <b>there are an interval I around w and an interval J around b such that for each x in I exactly one y in J has F(x, y) = 0. Calling it g(x), g is smoothly sloped on I.</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the fixed-by-an-equation technique">
-DG(a,b) = \begin{pmatrix} 1 & 0 \\ F_x & F_y \end{pmatrix},\ \ \det DG(a,b) = F_y(a,b) \ne 0 @@ the slope-grid technique (28b2); the determinant of a stair grid is the product down the middle (27k)
-G \text{ has a smoothly sloped undoing } H \text{ near } G(a,b) = (a, 0) @@ the local-undo and undo-slope techniques (28e)
+DG(w,b) = \begin{pmatrix} 1 & 0 \\ F_x & F_y \end{pmatrix},\ \ \det DG(w,b) = F_y(w,b) \ne 0 @@ the slope-grid technique (28b2); the determinant of a stair grid is the product down the middle (27k)
+G \text{ has a smoothly sloped undoing } H \text{ near } G(w,b) = (w, 0) @@ the local-undo and undo-slope techniques (28e)
 G(x, y) = (x, 0) \iff F(x, y) = 0 @@ the first place of G is x itself
-H(x, 0) = (x, g(x)) \text{ for } x \text{ near } a @@ H undoes G, and G keeps the first place
+H(x, 0) = (x, g(x)) \text{ for } x \text{ near } w @@ H undoes G, and G keeps the first place
 \htmlClass{new}{F(x, g(x)) = 0, \text{ one } y \text{ near } b \text{ for each } x, \ g \text{ smoothly sloped}} \quad \blacksquare @@ g is the second place of H(x, 0), a chain of smoothly sloped maps (28c2)
   </pre>
   <section class="slides" id="sl1"><div class="eyebrow">The slides · fixed by an equation · ← → keys work</div></section>
@@ -61,8 +61,8 @@ H(x, 0) = (x, g(x)) \text{ for } x \text{ near } a @@ H undoes G, and G keeps th
   <p data-pid="767cad">Implicit-slope technique: <b>where F(x, g(x)) = 0 and F<sub>y</sub> ≠ 0, g′(x) = −F<sub>x</sub>(x, g(x)) / F<sub>y</sub>(x, g(x)).</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the implicit-slope technique">
 \tfrac{d}{dx} F(x, g(x)) = F_x \cdot 1 + F_y \cdot g'(x) @@ the roads-add technique (28c3), roads x and y = g(x); g has a slope by 28f1
-\tfrac{d}{dx} F(x, g(x)) = 0 @@ F(x, g(x)) = 0 for every x near a: the constant-has-slope-0 technique (13d)
-\htmlClass{new}{g'(x) = -\dfrac{F_x(x, g(x))}{F_y(x, g(x))}} \quad \blacksquare @@ F_y ≠ 0 near (a, b), by continuity (28a1)
+\tfrac{d}{dx} F(x, g(x)) = 0 @@ F(x, g(x)) = 0 for every x near w: the constant-has-slope-0 technique (13d)
+\htmlClass{new}{g'(x) = -\dfrac{F_x(x, g(x))}{F_y(x, g(x))}} \quad \blacksquare @@ F_y ≠ 0 near (w, b), by continuity (28a1)
   </pre>
   <p data-pid="805c76">For the circle x² + y² = 25 at (3, 4): F<sub>x</sub> = 6, F<sub>y</sub> = 8, so g′(3) = −3/4. That is 18·cb13’s circle-slope technique, minus the run over the rise, now with its assumption earned. At (5, 0) F<sub>y</sub> = 0, the circle stands straight up, and no function of x describes it there.</p>
   <p data-pid="1a27b0">With m equations in m unknowns y and any number of inputs x, the same lines run with grids: if the grid of slopes of F along the y’s is undoable, the equations fix the y’s as smoothly sloped functions of the x’s, and Dg = −(D<sub>y</sub>F)⁻¹ D<sub>x</sub>F.</p>
@@ -79,8 +79,8 @@ H(x, 0) = (x, g(x)) \text{ for } x \text{ near } a @@ H undoes G, and G keeps th
   <h2 class="sthead"><span class="stno">28f3</span>Illegal moves</h2>
   <p class="stands">Stands on 28f1 and 28f2.</p>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
-F(a,b) = 0 \Rightarrow y \text{ is a function of } x \text{ near } a\,? @@ only when F_y(a, b) ≠ 0; at (5, 0) on the circle it is not
-F_y(a,b) = 0 \Rightarrow \text{no function } g \text{ near } a\,? @@ y³ = x has F_y = 0 at (0, 0), and g(x) = ∛x still works, without a slope
+F(w,b) = 0 \Rightarrow y \text{ is a function of } x \text{ near } w\,? @@ only when F_y(w, b) ≠ 0; at (5, 0) on the circle it is not
+F_y(w,b) = 0 \Rightarrow \text{no function } g \text{ near } w\,? @@ y³ = x has F_y = 0 at (0, 0), and g(x) = ∛x still works, without a slope
 g'(x) = -F_y / F_x\,? @@ the slope along x goes on top
 \text{one } g \text{ for the whole curve}\,? @@ the technique fixes g near one point; the circle needs two halves
   </pre>
@@ -98,7 +98,7 @@ g'(x) = -F_y / F_x\,? @@ the slope along x goes on top
   <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
   <div class="chq"><span class="chid">28f.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="x + y + z = 6,\ \ x^2 + y^2 + z^2 = 14,\ \ (1, 2, 3)"></span></span>Check that (1, 2, 3) solves both. Find the grid of slopes of the two equations along y and z there, and whether it is undoable. <br>The equations fix y and z as functions of x near x = 1. Find y′(1) and z′(1) by taking slopes of both equations along x. <br>Build an equation F(x, y) = 0 through (1, 2), not a straight line, whose fixed function has slope 3 there.</div>
   <div class="chq"><span class="chid">28f.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="F(x,y) = x^2 - y^2,\ \ (0, 0)"></span></span>Find F<sub>x</sub> and F<sub>y</sub> at (0, 0). <br>Find every y with F(x, y) = 0 for a given x ≠ 0. Find how many functions g, continuous near 0, have F(x, g(x)) = 0. <br>Then take F = x² + y². Find the points of F = 0, and what the technique gives there.</div>
-  <div class="chq"><span class="chid">28f.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="F(x,y) = (y - x)^3"></span></span>If F<sub>y</sub>(a, b) ≠ 0, the equation fixes y near b. Turn it round: if near (a, b) the equation fixes exactly one y for each x, by a smoothly sloped g, must F<sub>y</sub>(a, b) ≠ 0? <br>Find the points where this F is 0, and F<sub>y</sub> there. <br>Find g, and whether it is smoothly sloped.</div>
+  <div class="chq"><span class="chid">28f.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="F(x,y) = (y - x)^3"></span></span>If F<sub>y</sub>(w, b) ≠ 0, the equation fixes y near b. Turn it round: if near (w, b) the equation fixes exactly one y for each x, by a smoothly sloped g, must F<sub>y</sub>(w, b) ≠ 0? <br>Find the points where this F is 0, and F<sub>y</sub> there. <br>Find g, and whether it is smoothly sloped.</div>
   <div class="chq"><span class="chid">28f.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="x^2 + y^2 = 25,\ \ (3, 4)"></span></span>Find the slope of the fixed function another way, without the roads-add technique. Build G(x, y) = (x, F(x, y)), and find DG(3, 4) and its undone grid. <br>The undoing H has H(x, 0) = (x, g(x)). Read g′(3) off the undone grid, by the undo-slope technique.</div>
 </section>
 <div class="themecert themeend"></div>

@@ -29,7 +29,7 @@ table.tt td.l{text-align:left}
   <div class="tags"><span class="tag proof">28e · proof</span></div>
   <h1>Locally undoable</h1>
   <p data-pid="9c684c">Rung 27 found that a grid can be undone exactly when its determinant is not zero. A curved map is harder: it bends space, and it may fold it over on itself far away. This step proves that if the best flat map of a curved map can be undone at a point, then the curved map itself can be undone near that point. The proof hunts for the answer by repeated small corrections, and rung 24’s shrinking map promises that the hunt ends at exactly one answer.</p>
-  <p class="gesture" data-pid="c48fd5">If a smoothly sloped map from lists of n numbers to lists of n numbers has an undoable slope grid at a, it can be undone on some patch around a, and the undoing is smoothly sloped, with the undone grid as its slope grid.</p>
+  <p class="gesture" data-pid="c48fd5">If a smoothly sloped map from lists of n numbers to lists of n numbers has an undoable slope grid at w, it can be undone on some patch around w, and the undoing is smoothly sloped, with the undone grid as its slope grid.</p>
   <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r28b.html">28b</a> and <a href="r28c.html">28c</a> (best flat maps and chains), <a href="r27e.html">27e</a> (the nonzero-det technique) and <a href="r24c.html">24c</a> (the shrinking-map technique). <a href="r28f.html">28f</a> uses it to solve equations for one input.</p></div>
 </header>
 
@@ -55,14 +55,14 @@ g(t) = \varphi_i(x' + t(x - x')),\ \ 0 \le t \le 1 @@ one output, along the segm
 <section class="class step" data-step="28e2">
   <h2 class="sthead"><span class="stno">28e2</span>Undoing near a point</h2>
   <p class="stands">Stands on 28e1, 24c, 27e3.</p>
-  <p data-pid="5dfc56">Let f be smoothly sloped near a, from lists of n numbers to lists of n numbers, with b = f(a) and A = Df(a) undoable (det A ≠ 0, 27e). To solve f(x) = y for y near b, correct a guess x by the undone flat map:</p>
+  <p data-pid="5dfc56">Let f be smoothly sloped near w, from lists of n numbers to lists of n numbers, with b = f(w) and A = Df(w) undoable (det A ≠ 0, 27e). To solve f(x) = y for y near b, correct a guess x by the undone flat map:</p>
   <p class="eqline" data-pid="c19939">\(\varphi_y(x) = x + A^{-1}\,(y - f(x)).\)</p>
-  <p data-pid="4c8451">A point x is <i>still</i> under φ<sub>y</sub> exactly when f(x) = y. Local-undo technique: <b>there are balls U around a and V around b such that each y in V has exactly one x in U with f(x) = y.</b></p>
+  <p data-pid="4c8451">A point x is <i>still</i> under φ<sub>y</sub> exactly when f(x) = y. Local-undo technique: <b>there are balls U around w and V around b such that each y in V has exactly one x in U with f(x) = y.</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the local-undo technique">
-D\varphi_y(x) = I - A^{-1}Df(x),\ \ D\varphi_y(a) = 0 @@ the chain-of-flat-maps technique (28c2); it does not depend on y
-\text{entries of } D\varphi_y \le \tfrac{1}{2n} \text{ on the closed ball } |x - a| \le r @@ the partial slopes are continuous at a (28a1); choose r small
+D\varphi_y(x) = I - A^{-1}Df(x),\ \ D\varphi_y(w) = 0 @@ the chain-of-flat-maps technique (28c2); it does not depend on y
+\text{entries of } D\varphi_y \le \tfrac{1}{2n} \text{ on the closed ball } |x - w| \le r @@ the partial slopes are continuous at a (28a1); choose r small
 |\varphi_y(x) - \varphi_y(x')| \le \tfrac12 |x - x'| @@ the segment-bound technique (28e1)
-|\varphi_y(x) - a| \le \tfrac12|x - a| + |A^{-1}(y - b)| \le \tfrac r2 + c\,|y - b| @@ φ_y(a) − a = A⁻¹(y − b); c from the stretch-bound technique (28c1) for A⁻¹
+|\varphi_y(x) - w| \le \tfrac12|x - w| + |A^{-1}(y - b)| \le \tfrac r2 + c\,|y - b| @@ φ_y(w) − w = A⁻¹(y − b); c from the stretch-bound technique (28c1) for A⁻¹
 |y - b| < \tfrac{r}{2c} \Rightarrow \varphi_y \text{ sends the ball into itself} @@ the line above is then less than r
 \htmlClass{new}{\text{exactly one } x \text{ in the ball with } f(x) = y} \quad \blacksquare @@ the shrinking-map technique (24c); its proof runs word for word with points and |·|, since crowding points settle place by place (12e)
   </pre>
@@ -83,7 +83,7 @@ D\varphi_y(x) = I - A^{-1}Df(x),\ \ D\varphi_y(a) = 0 @@ the chain-of-flat-maps 
 |x - x'| \le |\varphi_y(x) - \varphi_y(x')| + |A^{-1}(f(x) - f(x'))| \le \tfrac12|x - x'| + c\,|f(x) - f(x')| @@ write x − x′ = φ_y(x) − φ_y(x′) + A⁻¹(f(x) − f(x′)); 28e2 and 28c1
 |g(y) - g(y')| \le 2c\,|y - y'| @@ the line above with x = g(y), x′ = g(y′); so g is continuous
 f(x + k) - f(x) = Df(x)k + s(k),\ \ k = g(y + h) - g(y) @@ the best flat map of f at x = g(y) (28b1)
-k = Df(x)^{-1}h - Df(x)^{-1}s(k) @@ h = f(x + k) − f(x); Df(x) is undoable near a, since det is continuous and not 0 at a (27e)
+k = Df(x)^{-1}h - Df(x)^{-1}s(k) @@ h = f(x + k) − f(x); Df(x) is undoable near w, since det is continuous and not 0 at a (27e)
 \dfrac{|Df(x)^{-1}s(k)|}{|h|} \le c'\cdot 2c\,\dfrac{|s(k)|}{|k|} \to 0 @@ 28c1 for Df(x)⁻¹, and |k| ≤ 2c|h|
 \htmlClass{new}{Dg(y) = Df(g(y))^{-1}} \quad \blacksquare @@ the leftover shrinks faster than h (28b1); its entries are continuous, by the stand-in grid (27g)
   </pre>
@@ -101,8 +101,8 @@ k = Df(x)^{-1}h - Df(x)^{-1}s(k) @@ h = f(x + k) − f(x); Df(x) is undoable nea
   <h2 class="sthead"><span class="stno">28e4</span>Illegal moves</h2>
   <p class="stands">Stands on 28e1 to 28e3.</p>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
-\det Df(a) \ne 0 \Rightarrow f \text{ one-to-one everywhere}\,? @@ only near a: the polar map repeats every 2π
-\det Df(a) = 0 \Rightarrow f \text{ not one-to-one near } a\,? @@ x ↦ x³ is one-to-one with slope 0 at 0; only its undoing loses its slope there
+\det Df(w) \ne 0 \Rightarrow f \text{ one-to-one everywhere}\,? @@ only near w: the polar map repeats every 2π
+\det Df(w) = 0 \Rightarrow f \text{ not one-to-one near } w\,? @@ x ↦ x³ is one-to-one with slope 0 at 0; only its undoing loses its slope there
 Dg(y) = Df(y)^{-1}\,? @@ the grid of f is taken at the point g(y), not at y
 \det Df \ne 0 \text{ everywhere} \Rightarrow f \text{ one-to-one}\,? @@ (x, y) ↦ (eˣ cos y, eˣ sin y) has det e²ˣ ≠ 0 and repeats every 2π in y
   </pre>
@@ -120,7 +120,7 @@ Dg(y) = Df(y)^{-1}\,? @@ the grid of f is taken at the point g(y), not at y
   <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
   <div class="chq"><span class="chid">28e.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="f(x,y) = (2x + y^3,\ y)"></span></span>Find the undoing g of f as a formula, on the whole plane. <br>Check the undo-slope technique at (u, v) = (3, 1): find g(3, 1), Dg(3, 1) and Df(g(3, 1))⁻¹. <br>Build a map of the plane that is one-to-one on the whole plane, but whose slope grid has det 0 at (0, 0). Find what its undoing does there.</div>
   <div class="chq"><span class="chid">28e.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="f(x) = x + 2x^2\sin(1/x)\ \ (x \ne 0),\ \ f(0) = 0"></span></span>Find f′(0) from the definition. <br>Find f′(x) for x ≠ 0, and its values at x = 1/(2πn) and at x = 1/((2n + 1)π), for whole numbers n. <br>Find whether f is one-to-one on any interval around 0, and which demand of the local-undo technique it fails.</div>
-  <div class="chq"><span class="chid">28e.4.3</span><span class="tagq">converse</span>If det Df(a) ≠ 0, f has a smoothly sloped undoing near a. Turn it round: if f has an undoing g near a, and g has a best flat map at f(a), must det Df(a) ≠ 0? <br>Apply the chain-of-flat-maps technique to g(f(x)) = x, then the det-product technique. <br>Find how f(x) = x³ fits.</div>
+  <div class="chq"><span class="chid">28e.4.3</span><span class="tagq">converse</span>If det Df(w) ≠ 0, f has a smoothly sloped undoing near w. Turn it round: if f has an undoing g near w, and g has a best flat map at f(w), must det Df(w) ≠ 0? <br>Apply the chain-of-flat-maps technique to g(f(x)) = x, then the det-product technique. <br>Find how f(x) = x³ fits.</div>
   <div class="chq"><span class="chid">28e.4.4</span><span class="tagq">reroute</span>Prove Dg(y) = Df(g(y))⁻¹ another way, taking for granted that g has a best flat map. Apply the chain-of-flat-maps technique to f(g(y)) = y. <br>Find what the longer proof of 28e3 gives that this route takes for granted.</div>
 </section>
 <div class="themecert themeend"></div>
@@ -153,7 +153,7 @@ stepper('#sl1',[
 stepper('#sl2',[
   {k:'ember',kl:'correct',t:R`\varphi_y(x) = x + A^{-1}(y - f(x))`,n:`Still exactly when f(x) = y.`},
   {k:'ember',kl:'shrink',t:R`|\varphi_y(x) - \varphi_y(x^{\prime})| \le \tfrac12|x - x^{\prime}|`,n:`Small slopes near a.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{f(x) = y \text{ has one answer near } a}`,n:`Shrinking map, 24c.`}
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{f(x) = y \text{ has one answer near } w}`,n:`Shrinking map, 24c.`}
 ],{title:'The slides · local undo · ← → keys work'});
 stepper('#sl3',[
   {k:'ember',kl:'bound',t:R`|g(y) - g(y^{\prime})| \le 2c|y - y^{\prime}|`,n:`g is continuous.`},

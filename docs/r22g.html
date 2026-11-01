@@ -36,13 +36,13 @@ table.tt td.l{text-align:left}
 <section class="class step" data-step="22g1">
   <h2 class="sthead"><span class="stno">22g1</span>Steps that take turns</h2>
   <p class="stands">Stands on 22d1 (running totals), 22a2 (the climb and fall techniques) and 22b (threads).</p>
-  <p data-pid="0b4712">Bracket technique: <b>if bₙ falls and heads to 0, then b₁ − b₂ + b₃ − b₄ + ⋯ settles, and its total lies between any two running totals in a row.</b> The even running totals climb, the odd ones fall, and the gap between them is one piece.</p>
+  <p data-pid="0b4712">Bracket technique: <b>if vₙ falls and heads to 0, then v₁ − v₂ + b₃ − b₄ + ⋯ settles, and its total lies between any two running totals in a row.</b> The even running totals climb, the odd ones fall, and the gap between them is one piece.</p>
   <pre class="lines" data-k="ember" data-label="this step: the bracket technique">
-s_{2m+2} = s_{2m} + (b_{2m+1} - b_{2m+2}) \ge s_{2m} @@ bₙ falls: the even totals climb
-s_{2m+1} = s_{2m-1} - (b_{2m} - b_{2m+1}) \le s_{2m-1} @@ the odd totals fall
-s_2 \le s_{2m} \le s_{2m+1} \le s_1 @@ s₂ₘ₊₁ − s₂ₘ = b₂ₘ₊₁ ≥ 0
+s_{2m+2} = s_{2m} + (v_{2m+1} - v_{2m+2}) \ge s_{2m} @@ vₙ falls: the even totals climb
+s_{2m+1} = s_{2m-1} - (v_{2m} - v_{2m+1}) \le s_{2m-1} @@ the odd totals fall
+s_2 \le s_{2m} \le s_{2m+1} \le s_1 @@ s₂ₘ₊₁ − s₂ₘ = v₂ₘ₊₁ ≥ 0
 s_{2m} \to L,\ s_{2m+1} \to L' @@ the climb and fall techniques (22a2)
-L' - L = \lim b_{2m+1} = 0 @@ bₙ heads to 0
+L' - L = \lim v_{2m+1} = 0 @@ vₙ heads to 0
 \htmlClass{new}{s_n \to L, \text{ and } L \text{ lies between } s_n \text{ and } s_{n+1}} \quad \blacksquare @@ both threads settle at L (22b1)
   </pre>
   <p data-pid="ce85ff">So 1 − ½ + ⅓ − ¼ + ⋯ settles, though 1 + ½ + ⅓ + ⋯ wanders (22d3). Its total is ln 2. The even running total s₂ₙ is 1 + ½ + ⋯ + 1/(2n), less twice ½ + ¼ + ⋯ + 1/(2n), which is H₂ₙ − Hₙ. By the harmonic gap (22f4), that is (H₂ₙ − ln 2n) − (Hₙ − ln n) + ln 2, which heads to γ − γ + ln 2. The bracket gives an error bound for free: stop after n pieces, and you are off by less than the next piece.</p>
@@ -60,17 +60,17 @@ L' - L = \lim b_{2m+1} = 0 @@ bₙ heads to 0
   <p class="stands">Stands on 22e4 (settling in size) and 22g1.</p>
   <p data-pid="fc3071">A sum that settles in size settles (22e4). A sum can settle without settling in size, as 1 − ½ + ⅓ − ⋯ does. Call that settling <b>only by taking turns</b>.</p>
   <pre class="lines" data-k="ember" data-label="this step: splitting a sum into its gains and losses">
-a_n^+ = \max(a_n, 0),\ \ a_n^- = \max(-a_n, 0) @@ the gains and the losses
-a_n = a_n^+ - a_n^-,\ \ |a_n| = a_n^+ + a_n^- @@ each piece is one or the other
-\textstyle\sum |a_n| \text{ settles} \Rightarrow \sum a_n^+,\ \sum a_n^- \text{ settle} @@ comparison (22e1): each is at most |aₙ|
-\textstyle\sum a_n \text{ settles},\ \sum |a_n| \text{ wanders} \Rightarrow \sum a_n^+,\ \sum a_n^- \text{ both wander} @@ if one settled, the other would be ∑aₙ⁺ − ∑aₙ (22d4), and ∑|aₙ| would settle
+u_n^+ = \max(u_n, 0),\ \ u_n^- = \max(-u_n, 0) @@ the gains and the losses
+u_n = u_n^+ - u_n^-,\ \ |u_n| = u_n^+ + u_n^- @@ each piece is one or the other
+\textstyle\sum |u_n| \text{ settles} \Rightarrow \sum u_n^+,\ \sum u_n^- \text{ settle} @@ comparison (22e1): each is at most |uₙ|
+\textstyle\sum u_n \text{ settles},\ \sum |u_n| \text{ wanders} \Rightarrow \sum u_n^+,\ \sum u_n^- \text{ both wander} @@ if one settled, the other would be ∑uₙ⁺ − ∑uₙ (22d4), and ∑|uₙ| would settle
 \htmlClass{new}{\text{settling only by taking turns: the gains and the losses each pass every ceiling}} \quad \blacksquare @@ the two lines before
   </pre>
   <p data-pid="ae80dc">That last line is the whole trouble. Such a sum is a tug of war between two endless supplies, gains and losses, each big enough to pull anywhere. Only the order of the pieces keeps them balanced.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">22g2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="1 - \tfrac12 + \tfrac13 - \tfrac14 + \cdots"></span></span>Write a₁⁺ to a₄⁺ and a₁⁻ to a₄⁻. <br>Find the losses among the first 2m pieces as half of a running total of 1 + ½ + ⅓ + ⋯, and whether they pass every ceiling. <br>Find why the gains pass every ceiling too.</li>
+      <li><span class="qid">22g2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="1 - \tfrac12 + \tfrac13 - \tfrac14 + \cdots"></span></span>Write u₁⁺ to u₄⁺ and u₁⁻ to u₄⁻. <br>Find the losses among the first 2m pieces as half of a running total of 1 + ½ + ⅓ + ⋯, and whether they pass every ceiling. <br>Find why the gains pass every ceiling too.</li>
     </ol>
   </section>
 </section>
@@ -78,13 +78,13 @@ a_n = a_n^+ - a_n^-,\ \ |a_n| = a_n^+ + a_n^- @@ each piece is one or the other
 <section class="class step" data-step="22g3">
   <h2 class="sthead"><span class="stno">22g3</span>Any total you like</h2>
   <p class="stands">Stands on 22g2.</p>
-  <p data-pid="0611b6">Reorder technique: <b>if Σ aₙ settles only by taking turns, then for any number T some reordering of its pieces settles at T.</b> Every piece is used exactly once; only the order changes.</p>
+  <p data-pid="0611b6">Reorder technique: <b>if Σ uₙ settles only by taking turns, then for any number T some reordering of its pieces settles at T.</b> Every piece is used exactly once; only the order changes.</p>
   <pre class="lines" data-k="ember" data-label="this step: the reorder technique">
 \text{take gains until the running total first passes } T @@ possible: the gains pass every ceiling (22g2)
 \text{take losses until it first drops below } T @@ possible: so do the losses
 \text{repeat, always taking the next unused gain or loss} @@ each pile is used in its own order, so no piece is missed
 |\text{total} - T| \le \text{the last piece taken} @@ each switch overshoots by at most one piece
-\text{the pieces head to } 0 @@ ∑aₙ settles (22d2)
+\text{the pieces head to } 0 @@ ∑uₙ settles (22d2)
 \htmlClass{new}{\text{the reordered sum settles at } T} \quad \blacksquare @@ the overshoot heads to 0
   </pre>
   <p data-pid="18a57c">Taking two gains for each loss in 1 − ½ + ⅓ − ¼ + ⋯ gives 1 + ⅓ − ½ + ⅕ + ⅐ − ¼ + ⋯, which settles at (3/2) ln 2. Same pieces, a total half again as big. And a sum that settles in size cannot be pulled like this: every reordering of it has the same total. A sum written down is a set of pieces and an order, and the order is part of the arithmetic.</p>
@@ -104,7 +104,7 @@ a_n = a_n^+ - a_n^-,\ \ |a_n| = a_n^+ + a_n^- @@ each piece is one or the other
 1 - 1 + 1 - 1 + \cdots = (1-1) + (1-1) + \cdots = 0\,? @@ the pieces do not head to 0; the running totals take turns between 1 and 0 and wander
 \textstyle\sum \tfrac{(-1)^n}{n} \text{ settles, so } \sum \tfrac{1}{n} \text{ settles}\,? @@ settling only by taking turns is not settling in size
 \text{the pieces take turns and shrink, so the sum settles}\,? @@ the pieces must fall in size and head to 0; 1 − ¼ + ⅓ − ⅛ + ⅕ − ⋯ wanders
-\textstyle\sum a_n \text{ settles, so every reordering has the same total}\,? @@ only when it settles in size (22g3)
+\textstyle\sum u_n \text{ settles, so every reordering has the same total}\,? @@ only when it settles in size (22g3)
   </pre>
   <section class="sayback">
     <h3>Question</h3>
@@ -148,11 +148,11 @@ const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
   {k:'ember',kl:'evens climb, odds fall',t:R`s_2 \le s_4 \le \cdots \le s_3 \le s_1`,n:`The gap is one piece.`},
-  {k:'ember',kl:'the bound',t:R`\htmlClass{new}{|L - s_n| \le b_{n+1}}`,n:`Off by less than the next piece.`}
+  {k:'ember',kl:'the bound',t:R`\htmlClass{new}{|L - s_n| \le v_{n+1}}`,n:`Off by less than the next piece.`}
 ],{title:'The slides · bracket · ← → keys work'});
 stepper('#sl2',[
   {k:'ember',kl:'turns only',t:R`\htmlClass{new}{\text{reorder} \to \text{any } T}`,n:`The gains and losses each pass every ceiling.`},
-  {k:'ember',kl:'in size',t:R`\textstyle\sum |a_n| \text{ settles} \Rightarrow \text{every order, one total}`,n:`Order cannot matter.`}
+  {k:'ember',kl:'in size',t:R`\textstyle\sum |u_n| \text{ settles} \Rightarrow \text{every order, one total}`,n:`Order cannot matter.`}
 ],{title:'The slides · reorder · ← → keys work'});
 })();
 </script>

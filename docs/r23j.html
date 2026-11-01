@@ -36,14 +36,14 @@ table.tt td.l{text-align:left}
 <section class="class step" data-step="23j1">
   <h2 class="sthead"><span class="stno">23j1</span>Storing a list</h2>
   <p class="stands">Stands on 23e3 (a power sum is its own match), 23c2 (the reach) and 15i (the geometric sum).</p>
-  <p class="eqline" data-pid="cc2dec">From here on, the <i>storing function</i> of a list a₀, a₁, a₂, … is the power sum A(x) = Σ aₖxᵏ, wherever it settles. Accepted name: the generating function.</p>
-  <p data-pid="a63259">Read-back technique: <b>if the storing function of a list has reach above 0, the function alone gives back the list, aₖ = A⁽ᵏ⁾(0)/k!; so two lists whose storing functions agree near 0 are the same list.</b> That is 23e3's smooth-sum technique, used as a filing system.</p>
+  <p class="eqline" data-pid="cc2dec">From here on, the <i>storing function</i> of a list u₀, u₁, u₂, … is the power sum A(x) = Σ uₖxᵏ, wherever it settles. Accepted name: the generating function.</p>
+  <p data-pid="a63259">Read-back technique: <b>if the storing function of a list has reach above 0, the function alone gives back the list, uₖ = A⁽ᵏ⁾(0)/k!; so two lists whose storing functions agree near 0 are the same list.</b> That is 23e3's smooth-sum technique, used as a filing system.</p>
   <pre class="lines" data-k="ember" data-label="this step: five lists stored">
 1, 1, 1, \ldots:\ \ \textstyle\sum x^k = \tfrac{1}{1-x}\ \ (|x| < 1) @@ the geometric sum (15i)
 1, r, r^2, \ldots:\ \ \textstyle\sum r^k x^k = \tfrac{1}{1-rx}\ \ (|x| < 1/|r|) @@ the same, with rx in place of x
 1, 2, 3, \ldots:\ \ \textstyle\sum (k+1)x^k = \tfrac{1}{(1-x)^2} @@ the slope of 1/(1 − x), term by term (23e3)
-0, a_0, a_1, \ldots:\ \ x\,A(x) @@ times x moves every number one place on
-\htmlClass{new}{a_1, a_2, a_3, \ldots:\ \ \tfrac{A(x) - a_0}{x}} \quad \blacksquare @@ take off the first number and divide by x: every number moves one place back
+0, u_0, u_1, \ldots:\ \ x\,A(x) @@ times x moves every number one place on
+\htmlClass{new}{u_1, u_2, u_3, \ldots:\ \ \tfrac{A(x) - u_0}{x}} \quad \blacksquare @@ take off the first number and divide by x: every number moves one place back
   </pre>
   <p data-pid="bce342">A list obeys a rule. Its storing function then obeys an equation. Solve the equation for the function, which is one unknown instead of endlessly many, and read the list back. The next footing does it to the rabbit counts.</p>
   <section class="slides" id="sl1"><div class="eyebrow">The slides · storing · ← → keys work</div></section>
@@ -75,7 +75,7 @@ G(x) = \tfrac{x}{(1-\varphi x)(1-\psi x)} = \tfrac{1}{\sqrt5}\Big(\tfrac{1}{1-\v
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">23j2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="a_0 = 0,\ \ a_1 = 1,\ \ a_{n+2} = a_{n+1} + 2a_n"></span></span>Find its storing function. <br>Split it into two geometric sums, and find a closed form for aₙ. <br>Find a₁₀ from the rule and from the closed form.</li>
+      <li><span class="qid">23j2.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="u_0 = 0,\ \ u_1 = 1,\ \ u_{n+2} = u_{n+1} + 2u_n"></span></span>Find its storing function. <br>Split it into two geometric sums, and find a closed form for uₙ. <br>Find u₁₀ from the rule and from the closed form.</li>
     </ol>
   </section>
 </section>
@@ -83,13 +83,13 @@ G(x) = \tfrac{x}{(1-\varphi x)(1-\psi x)} = \tfrac{1}{\sqrt5}\Big(\tfrac{1}{1-\v
 <section class="class step" data-step="23j3">
   <h2 class="sthead"><span class="stno">23j3</span>Counting by multiplying</h2>
   <p class="stands">Stands on 23j1, 23c2 (settling in size inside the reach), 22a2 (the climb technique), 22g3 (a sum that settles in size can be reordered), 10c (limits multiply) and 4j (choosing).</p>
-  <p data-pid="beee59">Product technique: <b>inside both reaches, A(x)B(x) = Σ cₙxⁿ with cₙ = a₀bₙ + a₁bₙ₋₁ + ⋯ + aₙb₀.</b> The number in front of xⁿ collects every way to split n into a part from A and a part from B.</p>
+  <p data-pid="beee59">Product technique: <b>inside both reaches, A(x)B(x) = Σ cₙxⁿ with cₙ = u₀vₙ + u₁vₙ₋₁ + ⋯ + uₙv₀.</b> The number in front of xⁿ collects every way to split n into a part from A and a part from B.</p>
   <pre class="lines" data-k="ember" data-label="this step: the product technique">
-A(x)B(x) = \lim_N \Big(\textstyle\sum_{j \le N} a_j x^j\Big)\Big(\sum_{k \le N} b_k x^k\Big) @@ limits multiply (10c)
-\textstyle\sum_{j, k \le N} |a_j b_k x^{j+k}| \le \Big(\sum |a_j x^j|\Big)\Big(\sum |b_k x^k|\Big) @@ inside both reaches each settles in size (23c2)
-\text{every product } a_j b_k x^{j+k}, \text{ in one list, settles in size} @@ its running totals climb under that ceiling (22a2)
+A(x)B(x) = \lim_N \Big(\textstyle\sum_{j \le N} u_j x^j\Big)\Big(\sum_{k \le N} v_k x^k\Big) @@ limits multiply (10c)
+\textstyle\sum_{j, k \le N} |u_j v_k x^{j+k}| \le \Big(\sum |u_j x^j|\Big)\Big(\sum |v_k x^k|\Big) @@ inside both reaches each settles in size (23c2)
+\text{every product } u_j v_k x^{j+k}, \text{ in one list, settles in size} @@ its running totals climb under that ceiling (22a2)
 \text{any order of that list has the same total} @@ 22g3
-\htmlClass{new}{A(x)B(x) = \textstyle\sum_n \Big(\sum_{j=0}^{n} a_j b_{n-j}\Big)x^n} \quad \blacksquare @@ taken square by square it gives AB; taken by j + k = n it gives Σcₙxⁿ
+\htmlClass{new}{A(x)B(x) = \textstyle\sum_n \Big(\sum_{j=0}^{n} u_j v_{n-j}\Big)x^n} \quad \blacksquare @@ taken square by square it gives AB; taken by j + k = n it gives Σcₙxⁿ
   </pre>
   <pre class="lines" data-k="ember" data-label="this step: two counts by multiplying">
 (1+x)^m (1+x)^n = (1+x)^{m+n} @@ powers add
@@ -112,14 +112,14 @@ A(x)B(x) = \lim_N \Big(\textstyle\sum_{j \le N} a_j x^j\Big)\Big(\sum_{k \le N} 
   <p class="stands">Stands on 23j1 to 23j3.</p>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
 G(1) = \tfrac{1}{1 - 1 - 1} = -1, \text{ so } 0 + 1 + 1 + 2 + 3 + \cdots = -1\,? @@ 1 lies outside the reach 1/φ ≈ 0.618: there the sum wanders
-\text{the number in front of } x^n \text{ in } A(x)B(x) \text{ is } a_n b_n\,? @@ it collects every split: a₀bₙ + a₁bₙ₋₁ + ⋯ + aₙb₀
+\text{the number in front of } x^n \text{ in } A(x)B(x) \text{ is } u_n v_n\,? @@ it collects every split: u₀vₙ + u₁vₙ₋₁ + ⋯ + uₙv₀
 A(0) = B(0), \text{ so the two lists are the same}\,? @@ agreeing at 0 fixes only the first number; read-back needs agreement near 0
 F_n = \tfrac{\varphi^n}{\sqrt5}\,? @@ ψⁿ/√5 is missing: small, not 0; φⁿ/√5 is never a whole number
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">23j4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="G(x) = \tfrac{x}{1 - x - x^2}"></span></span>Find the running totals of F₀ + F₁ + F₂ + ⋯ up to F₆. <br>Find G(1) from the formula, and the x where the storing function stops settling.</li><li><span class="givens"><span data-tex-inline="A(x) = B(x) = \tfrac{1}{1-x}"></span></span>Find aₙbₙ. <br>Find the number in front of xⁿ in A(x)B(x), and the list it belongs to.</li><li><span class="givens"><span data-tex-inline="A(x) = \tfrac{1}{1-x},\ \ B(x) = 1 + x"></span></span>Find A(0) and B(0). <br>Find the two lists, and the first place they differ.</li><li><span class="givens"><span data-tex-inline="\varphi^5/\sqrt5"></span></span>Find it to four places, and F₅. <br>Find whether φⁿ/√5 can ever be a whole number.</li></ol></li>
+      <li><span class="qid">23j4.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="G(x) = \tfrac{x}{1 - x - x^2}"></span></span>Find the running totals of F₀ + F₁ + F₂ + ⋯ up to F₆. <br>Find G(1) from the formula, and the x where the storing function stops settling.</li><li><span class="givens"><span data-tex-inline="A(x) = B(x) = \tfrac{1}{1-x}"></span></span>Find uₙvₙ. <br>Find the number in front of xⁿ in A(x)B(x), and the list it belongs to.</li><li><span class="givens"><span data-tex-inline="A(x) = \tfrac{1}{1-x},\ \ B(x) = 1 + x"></span></span>Find A(0) and B(0). <br>Find the two lists, and the first place they differ.</li><li><span class="givens"><span data-tex-inline="\varphi^5/\sqrt5"></span></span>Find it to four places, and F₅. <br>Find whether φⁿ/√5 can ever be a whole number.</li></ol></li>
     </ol>
   </section>
 </section>
@@ -130,7 +130,7 @@ F_n = \tfrac{\varphi^n}{\sqrt5}\,? @@ ψⁿ/√5 is missing: small, not 0; φⁿ
   <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
   <div class="chq"><span class="chid">23j.4.1</span><span class="tagq">build</span>A staircase has n stairs, climbed one or two stairs at a time. Build the rule for the number of ways to climb it, and its storing function. <br>Find the closed form, and the number of ways to climb 12 stairs.</div>
   <div class="chq"><span class="chid">23j.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="G(x) = \tfrac{x}{1 - x - x^2}"></span></span>Find G(0.6) from the formula, and the running total of Σ Fₖ(0.6)ᵏ up to k = 50. <br>Find G(0.62) from the formula, and what the running totals do at x = 0.62.</div>
-  <div class="chq"><span class="chid">23j.4.3</span><span class="tagq">converse</span>Read-back says a storing function with reach above 0 decides its list. Turn it round. <br>Must every list have a storing function with reach above 0? Try aₖ = k!. <br>Is every smooth function near 0 the storing function of some list? Try 23f's function.</div>
+  <div class="chq"><span class="chid">23j.4.3</span><span class="tagq">converse</span>Read-back says a storing function with reach above 0 decides its list. Turn it round. <br>Must every list have a storing function with reach above 0? Try uₖ = k!. <br>Is every smooth function near 0 the storing function of some list? Try 23f's function.</div>
   <div class="chq"><span class="chid">23j.4.4</span><span class="tagq">reroute</span>Prove Fₙ = (φⁿ − ψⁿ)/√5 with no storing function: by induction, from φ² = φ + 1 and ψ² = ψ + 1. <br>Find what the storing function gave that the induction did not.</div>
 </section>
 <div class="themecert themeend"></div>
@@ -156,15 +156,15 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'store',t:R`\htmlClass{new}{A(x) = \textstyle\sum a_k x^k}`,n:`Each number in front of its power.`},
-  {k:'ember',kl:'read back',t:R`a_k = \tfrac{A^{(k)}(0)}{k!}`,n:`The function decides the list.`}
+  {k:'ember',kl:'store',t:R`\htmlClass{new}{A(x) = \textstyle\sum u_k x^k}`,n:`Each number in front of its power.`},
+  {k:'ember',kl:'read back',t:R`u_k = \tfrac{A^{(k)}(0)}{k!}`,n:`The function decides the list.`}
 ],{title:'The slides · storing · ← → keys work'});
 stepper('#sl2',[
   {k:'ember',kl:'the rule',t:R`G(x)(1 - x - x^2) = x`,n:`The rule empties every later bracket.`},
   {k:'ember',kl:'closed form',t:R`\htmlClass{new}{F_n = \tfrac{\varphi^n - \psi^n}{\sqrt5}}`,n:`Read back from two geometric sums.`}
 ],{title:'The slides · rabbit counts · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'product',t:R`\htmlClass{new}{c_n = \textstyle\sum_{j=0}^{n} a_j b_{n-j}}`,n:`Every split of n.`},
+  {k:'ember',kl:'product',t:R`\htmlClass{new}{c_n = \textstyle\sum_{j=0}^{n} u_j v_{n-j}}`,n:`Every split of n.`},
   {k:'ember',kl:'committees',t:R`\textstyle\sum_j \binom{m}{j}\binom{n}{r-j} = \binom{m+n}{r}`,n:`Read off (1 + x)^(m + n).`}
 ],{title:'The slides · multiplying · ← → keys work'});
 })();
