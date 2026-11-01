@@ -47,18 +47,18 @@ table.tt.peel td.lic{font-family:var(--serif);font-size:.85rem;color:var(--muted
 <section class="class step" data-step="11d2">
   <h2 class="sthead"><span class="stno">11d2</span>Peeling a power</h2>
   <p class="stands">Stands on 11d1, 4j (Σ) and 9g (polynomials).</p>
-  <p data-pid="52a5d4">Peel-off-the-constant technique: <b>for every number n and reals a₀, a₁, ⋯, a_S(n), and every real x, Σ_{k≤S(n)} a_k x^k = a₀ + x · Σ_{k≤n} a_S(k) x^k.</b> The sum on the right of x has the coefficients a₁, a₂, ⋯, a_S(n): the old list with its first entry taken off, each moved down one place.</p>
+  <p data-pid="52a5d4">Peel-off-the-constant technique: <b>for every number n and reals u₀, u₁, ⋯, u_S(n), and every real x, Σ_{k≤S(n)} u_k x^k = u₀ + x · Σ_{k≤n} u_S(k) x^k.</b> The sum on the right of x has the coefficients u₁, u₂, ⋯, u_S(n): the old list with its first entry taken off, each moved down one place.</p>
   <div class="brkkey"></div>
   <pre class="lines" data-k="ember" data-label="this step: the peel-off-the-constant technique">
-\textstyle\sum_{k \le S(n)} a_k x^k = \sum_{k \lt S(S(n))} a_k x^k @@ 4j's line: Σ over k ≤ m is Σ over k &lt; S(m)
-= a_0 x^0 + \textstyle\sum_{k \lt S(n)} a_{S(k)}\, x^{\htmlClass{new}{S(k)}} @@ first-term-off (4j), with real terms (9g): split off the first term
-= a_0 + \textstyle\sum_{k \lt S(n)} a_{S(k)}\,(\htmlClass{new}{x^k \cdot x}) @@ power-zero: x⁰ = 1, times-one on ℝ; power-of-a-next: x^S(k) = x^k · x (8f's powers of a real)
-= a_0 + \textstyle\sum_{k \lt S(n)} \htmlClass{new}{x} \cdot (a_{S(k)}\, x^k) @@ regroup for times on ℝ, turn-about for times on ℝ: regroup, turn about
-= a_0 + \htmlClass{keep}{x} \cdot \textstyle\sum_{k \le n} a_{S(k)}\, x^k \quad \blacksquare @@ factor-out (4j): a factor comes out; 4j's line back
+\textstyle\sum_{k \le S(n)} u_k x^k = \sum_{k \lt S(S(n))} u_k x^k @@ 4j's line: Σ over k ≤ m is Σ over k &lt; S(m)
+= u_0 x^0 + \textstyle\sum_{k \lt S(n)} u_{S(k)}\, x^{\htmlClass{new}{S(k)}} @@ first-term-off (4j), with real terms (9g): split off the first term
+= u_0 + \textstyle\sum_{k \lt S(n)} u_{S(k)}\,(\htmlClass{new}{x^k \cdot x}) @@ power-zero: x⁰ = 1, times-one on ℝ; power-of-a-next: x^S(k) = x^k · x (8f's powers of a real)
+= u_0 + \textstyle\sum_{k \lt S(n)} \htmlClass{new}{x} \cdot (u_{S(k)}\, x^k) @@ regroup for times on ℝ, turn-about for times on ℝ: regroup, turn about
+= u_0 + \htmlClass{keep}{x} \cdot \textstyle\sum_{k \le n} u_{S(k)}\, x^k \quad \blacksquare @@ factor-out (4j): a factor comes out; 4j's line back
   </pre>
-  <p data-pid="cb71a0">If the old list's last coefficient a_S(n) is not 0, the old sum has degree S(n). The new sum's last coefficient is that same a_S(n), now at the power n: degree n. So peeling lowers the degree by exactly one and keeps the leading coefficient. Done again and again, it writes a polynomial inside out:</p>
+  <p data-pid="cb71a0">If the old list's last coefficient u_S(n) is not 0, the old sum has degree S(n). The new sum's last coefficient is that same u_S(n), now at the power n: degree n. So peeling lowers the degree by exactly one and keeps the leading coefficient. Done again and again, it writes a polynomial inside out:</p>
   <pre class="lines" data-k="ember" data-label="this step: peeling all the way">
-2x^3 - 3x^2 + 5x - 7 @@ degree 3, coefficients −7, 5, −3, 2 (9g's order: a₀ first)
+2x^3 - 3x^2 + 5x - 7 @@ degree 3, coefficients −7, 5, −3, 2 (9g's order: u₀ first)
 = -7 + x\,(5 - 3x + 2x^2) @@ peel-off-the-constant once: degree 2 inside
 = -7 + x\,(5 + x\,(-3 + 2x)) @@ peel-off-the-constant again: degree 1 inside
 = -7 + x\,(5 + x\,(-3 + x \cdot \htmlClass{keep}{2})) @@ and again: degree 0 inside, the constant 2
@@ -93,22 +93,22 @@ table.tt.peel td.lic{font-family:var(--serif);font-size:.85rem;color:var(--muted
   <p class="stands">Stands on 11d2 and 4b (induction).</p>
   <p data-pid="f4e8d4">Polynomials-are-continuous technique: <b>every polynomial is continuous at every real.</b> The proof is 4b's induction, on the number n that a polynomial's sum runs up to. For a polynomial of degree n that number is its degree. The induction does not need the last coefficient to be nonzero, so it covers every polynomial of degree n, and the zero polynomial too, with no case left over.</p>
   <pre class="lines" data-k="ember" data-label="this step: the polynomials-are-continuous technique, by induction on the degree">
-\varphi(n):\ \text{for all reals } a_0, \cdots, a_n,\ x \mapsto \textstyle\sum_{k \le n} a_k x^k \text{ is continuous at every real} @@ name the condition first (4b's shape); 2b's φ
-\text{base: } \textstyle\sum_{k \le 0} a_k x^k = a_0 x^0 = \htmlClass{new}{a_0} @@ Σ's lines, power-zero: a constant
+\varphi(n):\ \text{for all reals } u_0, \cdots, u_n,\ x \mapsto \textstyle\sum_{k \le n} u_k x^k \text{ is continuous at every real} @@ name the condition first (4b's shape); 2b's φ
+\text{base: } \textstyle\sum_{k \le 0} u_k x^k = u_0 x^0 = \htmlClass{new}{u_0} @@ Σ's lines, power-zero: a constant
 \text{continuous at every real} @@ lines-are-continuous with step 0. So φ(0)
-\text{step: let } n \in \mathbb N;\ \text{assume } \varphi(n);\ \text{let } a_0, \cdots, a_{S(n)} \text{ be reals} @@ the induction hypothesis
-p(x) = a_0 + x \cdot \htmlClass{new}{q(x)},\ \ q(x) = \textstyle\sum_{k \le n} a_{S(k)}\,x^k @@ peel-off-the-constant, at every real x; equal-functions: p and x ↦ a₀ + x · q(x) are one function
-q \text{ continuous at every real} @@ φ(n), used with the reals a₁, ⋯, a_S(n): the hypothesis
+\text{step: let } n \in \mathbb N;\ \text{assume } \varphi(n);\ \text{let } u_0, \cdots, u_{S(n)} \text{ be reals} @@ the induction hypothesis
+p(x) = u_0 + x \cdot \htmlClass{new}{q(x)},\ \ q(x) = \textstyle\sum_{k \le n} u_{S(k)}\,x^k @@ peel-off-the-constant, at every real x; equal-functions: p and x ↦ u₀ + x · q(x) are one function
+q \text{ continuous at every real} @@ φ(n), used with the reals u₁, ⋯, u_S(n): the hypothesis
 x \cdot q(x) \text{ continuous at every real} @@ x by lines-are-continuous; continuous-products
-p \text{ continuous at every real} @@ the constant a₀ by lines-are-continuous; continuous-sums. So φ(S(n))
+p \text{ continuous at every real} @@ the constant u₀ by lines-are-continuous; continuous-sums. So φ(S(n))
 \forall n \in \mathbb N\ \varphi(n) \quad \blacksquare @@ the induction technique (4b)
   </pre>
-  <p data-pid="2df915">9g's line says a polynomial is a statement that names a function p for which there are a number n and reals a₀, ⋯, a_n with p(x) = Σ_{k≤n} a_k x^k at every x. Use a some; φ(n) at those reals; and p is continuous at every real. So every polynomial is continuous, in 11a's sense, on ℝ. Each polynomial of degree S(n) was continuous because one of degree n was: the induction climbs the degrees, one product and one sum per rung.</p>
+  <p data-pid="2df915">9g's line says a polynomial is a statement that names a function p for which there are a number n and reals u₀, ⋯, u_n with p(x) = Σ_{k≤n} u_k x^k at every x. Use a some; φ(n) at those reals; and p is continuous at every real. So every polynomial is continuous, in 11a's sense, on ℝ. Each polynomial of degree S(n) was continuous because one of degree n was: the induction climbs the degrees, one product and one sum per rung.</p>
   <section class="slides" id="sl3"><div class="eyebrow">The slides · polynomials-are-continuous · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">11d3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="p(x) = x^4 + 1"></span></span>Peel p, writing every middle row, and check that peel-off-the-constant still applies when a coefficient is 0.</li><li><span class="givens"><span data-tex-inline="\text{Suppose}"></span> <span data-tex-inline="\text{polynomials-are-continuous&#x27;s}"></span> <span data-tex-inline="\varphi(n) \text{ said “for all reals}"></span> <span data-tex-inline="a_0, \cdots, a_n \text{ with } a_n \ne 0 \text{”.}"></span></span>Decide whether the step still goes through, which polynomial is then left out, and what covers it.</li><li><span class="givens"><span data-tex-inline="h(x) = \sqrt{x^2 - 4}"></span></span>Decide whether h is continuous at 2, at 3 and at 0, naming the technique, or the reason the question cannot be asked.</li><li><span class="givens"><span data-tex-inline="“\dfrac{x^3 - 8}{x - 2} \text{ is continuous at } 2,"></span> <span data-tex-inline="\text{because it is a polynomial},"></span> <span data-tex-inline="\text{in disguise.}”"></span></span>Find what is true and what is not.</li></ol></li>
+      <li><span class="qid">11d3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="p(x) = x^4 + 1"></span></span>Peel p, writing every middle row, and check that peel-off-the-constant still applies when a coefficient is 0.</li><li><span class="givens"><span data-tex-inline="\text{Suppose}"></span> <span data-tex-inline="\text{polynomials-are-continuous&#x27;s}"></span> <span data-tex-inline="\varphi(n) \text{ said “for all reals}"></span> <span data-tex-inline="u_0, \cdots, u_n \text{ with } u_n \ne 0 \text{”.}"></span></span>Decide whether the step still goes through, which polynomial is then left out, and what covers it.</li><li><span class="givens"><span data-tex-inline="h(x) = \sqrt{x^2 - 4}"></span></span>Decide whether h is continuous at 2, at 3 and at 0, naming the technique, or the reason the question cannot be asked.</li><li><span class="givens"><span data-tex-inline="“\dfrac{x^3 - 8}{x - 2} \text{ is continuous at } 2,"></span> <span data-tex-inline="\text{because it is a polynomial},"></span> <span data-tex-inline="\text{in disguise.}”"></span></span>Find what is true and what is not.</li></ol></li>
     </ol>
   </section>
 </section>
@@ -116,7 +116,7 @@ p \text{ continuous at every real} @@ the constant a₀ by lines-are-continuous;
 <section class="class step" data-step="11d4">
   <h2 class="sthead"><span class="stno">11d4</span>Another road to the same place</h2>
   <p class="stands">Stands on 11d3 and 10c (substitution).</p>
-  <p data-pid="2efd77">10c's substitution already said lim_{x→w} p(x) = p(w) for every polynomial p and real w, and read with 11a's line that is this technique. Substitution's road was different: an induction on the number of terms, adding one term a_k x^k at a time. Each term headed to its value by power-limit and constant-factor, and the sum by limits-add. Here the road multiplies by x and adds a constant at each step. Two inductions, two plans of building, one conclusion. <b>When two roads reach the same place, a proof by either is a proof.</b> Seeing both is seeing why the conclusion does not depend on how you write the polynomial.</p>
+  <p data-pid="2efd77">10c's substitution already said lim_{x→w} p(x) = p(w) for every polynomial p and real w, and read with 11a's line that is this technique. Substitution's road was different: an induction on the number of terms, adding one term u_k x^k at a time. Each term headed to its value by power-limit and constant-factor, and the sum by limits-add. Here the road multiplies by x and adds a constant at each step. Two inductions, two plans of building, one conclusion. <b>When two roads reach the same place, a proof by either is a proof.</b> Seeing both is seeing why the conclusion does not depend on how you write the polynomial.</p>
   <section class="slides" id="sl4"><div class="eyebrow">The slides · the other road · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
@@ -163,7 +163,7 @@ p \text{ continuous at every real} @@ the constant a₀ by lines-are-continuous;
 <section class="class step" data-step="11d7">
   <h2 class="sthead"><span class="stno">11d7</span>Where the bricks stop</h2>
   <p class="stands">Stands on 11d6 and 8h (size).</p>
-  <p data-pid="f84067">Not every continuous function is built from these bricks. Size-is-not-a-polynomial technique: <b>there is no polynomial p with p(x) = |x| for every real x.</b> Suppose there were, with p(x) = Σ_{k≤n} a_k x^k; padding with zero coefficients, take n ≥ 1. Then p agrees with x ↦ x at the n + 1 reals 1, 2, ⋯, n + 1, since |x| = x there. 9g's same-coefficients gives a₁ = 1 and every other a_k = 0, so p(x) = x for every x. But p(−1) = −1 and |−1| = 1. Clash; refute. ∎ So |x| needs its own proof of continuity: 11c gave one as a chain, and 11e gives the one that matters.</p>
+  <p data-pid="f84067">Not every continuous function is built from these bricks. Size-is-not-a-polynomial technique: <b>there is no polynomial p with p(x) = |x| for every real x.</b> Suppose there were, with p(x) = Σ_{k≤n} u_k x^k; padding with zero coefficients, take n ≥ 1. Then p agrees with x ↦ x at the n + 1 reals 1, 2, ⋯, n + 1, since |x| = x there. 9g's same-coefficients gives u₁ = 1 and every other u_k = 0, so p(x) = x for every x. But p(−1) = −1 and |−1| = 1. Clash; refute. ∎ So |x| needs its own proof of continuity: 11c gave one as a chain, and 11e gives the one that matters.</p>
   <section class="slides" id="sl6"><div class="eyebrow">The slides · size-is-not-a-polynomial · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
@@ -180,7 +180,7 @@ p \text{ continuous at every real} @@ the constant a₀ by lines-are-continuous;
 \begin{aligned}&\text{a fraction of polynomials}\\ &\quad\text{is continuous at every real}\,?\end{aligned} @@ only at its inputs: 1/(x − 2) has no value at 2
 \tfrac{x^2 - 1}{x - 1} \text{ is a polynomial, so continuous at } 1\,? @@ it has no input 1, so it is not the polynomial x + 1, which does (9a's equal-functions)
 \begin{aligned}&\text{peel-off-the-constant: the}\\ &\quad\text{inside has degree } S(n) - 2\,?\end{aligned} @@ peeling lowers the degree by exactly one: from S(n) to n
-\text{the induction needs } a_n \ne 0 \text{ at every step}\,? @@ φ(n) is for all reals a₀, ⋯, a_n: zero coefficients included, so no case is lost
+\text{the induction needs } u_n \ne 0 \text{ at every step}\,? @@ φ(n) is for all reals u₀, ⋯, u_n: zero coefficients included, so no case is lost
 \begin{aligned}&|x| \text{ is continuous by}\\ &\quad\text{polynomials-are-continuous}\,?\end{aligned} @@ |x| is no polynomial (size-is-not-a-polynomial). 11c's chain-at-an-edge or 11e's direct proof is the licence
 \lim_{x \to 2} \tfrac{x^2 - 4}{x - 2} = \tfrac{0}{0}\,? @@ 2 is not an input: rational-functions-are-continuous says nothing. Factor and cancel (10f), and 11f mends
   </pre>
@@ -282,26 +282,26 @@ stepper('#sl1',[
   {k:'ember',kl:'bricks and joins',t:R`c,\ \ x;\qquad f + g,\ \ fg`,n:`Constants and x are continuous (lines-are-continuous); sums and products keep continuity (continuous-sums, continuous-products).`}
 ],{title:'The slides · bricks and joins · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'peel-off-the-constant · 1 of 4',t:R`\begin{gathered}\textstyle\sum_{k \le S(n)} a_k x^k\\ = a_0 + \textstyle\sum_{k \lt S(n)} a_{S(k)}\,x^{${N}{S(k)}}\end{gathered}`,n:`first-term-off: split off the first term; x⁰ = 1.`},
+  {k:'ember',kl:'peel-off-the-constant · 1 of 4',t:R`\begin{gathered}\textstyle\sum_{k \le S(n)} u_k x^k\\ = u_0 + \textstyle\sum_{k \lt S(n)} u_{S(k)}\,x^{${N}{S(k)}}\end{gathered}`,n:`first-term-off: split off the first term; x⁰ = 1.`},
   {k:'ember',kl:'peel-off-the-constant · 2 of 4',t:R`x^{S(k)} = ${N}{x^k \cdot x}`,n:`power-of-a-next, for powers of a real (8f).`},
-  {k:'ember',kl:'peel-off-the-constant · 3 of 4',t:R`a_{S(k)}\,(x^k \cdot x) = ${N}{x} \cdot (a_{S(k)}\,x^k)`,n:`Regroup and turn about (regroup for times on ℝ, turn-about for times on ℝ).`},
-  {k:'ember',kl:'peel-off-the-constant · 4 of 4',t:R`= a_0 + ${K}{x} \cdot \textstyle\sum_{k \le n} a_{S(k)}\, x^k`,n:`factor-out: a factor comes out. Degree S(n) becomes degree n inside, same leading coefficient. ∎`},
+  {k:'ember',kl:'peel-off-the-constant · 3 of 4',t:R`u_{S(k)}\,(x^k \cdot x) = ${N}{x} \cdot (u_{S(k)}\,x^k)`,n:`Regroup and turn about (regroup for times on ℝ, turn-about for times on ℝ).`},
+  {k:'ember',kl:'peel-off-the-constant · 4 of 4',t:R`= u_0 + ${K}{x} \cdot \textstyle\sum_{k \le n} u_{S(k)}\, x^k`,n:`factor-out: a factor comes out. Degree S(n) becomes degree n inside, same leading coefficient. ∎`},
   {k:'ember',kl:'peel · 1 of 3',t:R`\begin{gathered}2x^3 - 3x^2 + 5x - 7\\ = -7 + x\,(5 - 3x + 2x^2)\end{gathered}`,n:`Once.`},
   {k:'ember',kl:'peel · 2 of 3',t:R`= -7 + x\,(5 + x\,(-3 + x \cdot ${K}{2}))`,n:`All the way: degree 0 at the centre.`},
   {k:'ember',kl:'peel · 3 of 3',t:R`2 \to 1 \to 7 \to ${N}{7}`,n:`At 2, from the inside out: −3 + 2·2, 5 + 2·1, −7 + 2·7. The inside-out order.`}
 ],{title:'The slides · peel · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'polynomials-are-continuous · base',t:R`\textstyle\sum_{k \le 0} a_k x^k = ${N}{a_0}`,n:`A constant: continuous at every real (lines-are-continuous).`},
-  {k:'ember',kl:'polynomials-are-continuous · step 1 of 3',t:R`p(x) = a_0 + x \cdot ${N}{q(x)}`,n:`peel-off-the-constant. q has the coefficients a₁, ⋯, a_S(n): one degree less.`},
+  {k:'ember',kl:'polynomials-are-continuous · base',t:R`\textstyle\sum_{k \le 0} u_k x^k = ${N}{u_0}`,n:`A constant: continuous at every real (lines-are-continuous).`},
+  {k:'ember',kl:'polynomials-are-continuous · step 1 of 3',t:R`p(x) = u_0 + x \cdot ${N}{q(x)}`,n:`peel-off-the-constant. q has the coefficients u₁, ⋯, u_S(n): one degree less.`},
   {k:'ember',kl:'polynomials-are-continuous · step 2 of 3',t:R`q \text{ continuous};\ \ x \cdot q \text{ continuous}`,n:`The hypothesis φ(n), with those reals; then lines-are-continuous and continuous-products.`},
-  {k:'ember',kl:'polynomials-are-continuous · step 3 of 3',t:R`a_0 + x \cdot q(x) \text{ continuous}`,n:`lines-are-continuous for the constant; continuous-sums. So φ(S(n)).`},
+  {k:'ember',kl:'polynomials-are-continuous · step 3 of 3',t:R`u_0 + x \cdot q(x) \text{ continuous}`,n:`lines-are-continuous for the constant; continuous-sums. So φ(S(n)).`},
   {k:'ember',kl:'polynomials-are-continuous · close',t:R`\forall n \in \mathbb N\ \varphi(n)`,n:`The induction technique. Every polynomial is continuous at every real. ∎`}
 ],{title:'The slides · polynomials-are-continuous · ← → keys work'});
 stepper('#sl4',[
-  {k:'teal',kl:'from 10c: the other road',t:R`\lim_{x \to a} p(x) = p(a)`,n:`substitution: one term at a time, by power-limit, constant-factor, limits-add. The same conclusion.`}
+  {k:'teal',kl:'from 10c: the other road',t:R`\lim_{x \to w} p(x) = p(w)`,n:`substitution: one term at a time, by power-limit, constant-factor, limits-add. The same conclusion.`}
 ],{title:'The slides · the other road · ← → keys work'});
 stepper('#sl5',[
-  {k:'ember',kl:'rational-functions-are-continuous',t:R`\begin{gathered}\tfrac{p}{q}:\ \ q(a) \ne 0\\ \Rightarrow \text{continuous at } a\end{gathered}`,n:`continuous-quotients at every input; the domain is ℝ cut at the zeros of q, at most its degree of them (at-most-n-zeros).`},
+  {k:'ember',kl:'rational-functions-are-continuous',t:R`\begin{gathered}\tfrac{p}{q}:\ \ q(w) \ne 0\\ \Rightarrow \text{continuous at } w\end{gathered}`,n:`continuous-quotients at every input; the domain is ℝ cut at the zeros of q, at most its degree of them (at-most-n-zeros).`},
   {k:'ember',kl:'substitute',t:R`\begin{gathered}\lim_{x \to -1}\tfrac{x^2 + 3x}{x - 2}\\ = \tfrac{-2}{-3} = ${K}{\tfrac23}\end{gathered}`,n:`−1 is an input: the limit is the value.`}
 ],{title:'The slides · rational functions · ← → keys work'});
 stepper('#sl6',[

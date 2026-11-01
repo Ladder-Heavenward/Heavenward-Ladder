@@ -79,10 +79,10 @@ L - \varepsilon \lt f(x) \lt L + \varepsilon @@ at-most-is-a-partial-order on �
   <p data-pid="90fb80">Most traps are built from a size. Squeezed-to-0 technique: <b>if there is a reach r with |f(x)| ≤ h(x) for every x in the neighbourhood of w of reach r, and lim_{x→w} h(x) = 0, then lim_{x→w} f(x) = 0.</b> By unpack-the-bars, |f(x)| ≤ h(x) is −h(x) ≤ f(x) ≤ h(x); −h heads to −0 = 0 by constant-factor; squeeze. ∎</p>
   <p data-pid="9bb250">And the commonest size of all is the input's own distance. First a small fact: lim_{x→w} |x − w| = 0. Here ||x − w| − 0| = |x − w| &lt; δ, so δ = ε wins (the size of a size is itself, by 8h). Squeezed-by-distance technique: <b>if there are a real C ≥ 0 and a reach r with |f(x) − L| ≤ C · |x − w| for every x in the neighbourhood of w of reach r, then lim_{x→w} f(x) = L.</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the squeezed-by-distance technique">
-\lim_{x \to a} C\,|x - a| = C \cdot 0 = 0 @@ the small fact, then constant-factor (10c)
+\lim_{x \to w} C\,|x - w| = C \cdot 0 = 0 @@ the small fact, then constant-factor (10c)
 |f(x) - L| \le C\,|x - a| \ \ \text{near } a @@ the hypothesis
-\lim_{x \to a} \big(f(x) - L\big) = \htmlClass{new}{0} @@ squeezed-to-0, with f − L for f and C|x − a| for h
-\lim_{x \to a} f(x) = L \quad \blacksquare @@ ﹀ both lines: |(f(x) − L) − 0| and |f(x) − L| are the same distance
+\lim_{x \to w} \big(f(x) - L\big) = \htmlClass{new}{0} @@ squeezed-to-0, with f − L for f and C|x − w| for h
+\lim_{x \to w} f(x) = L \quad \blacksquare @@ ﹀ both lines: |(f(x) − L) − 0| and |f(x) − L| are the same distance
   </pre>
   <p data-pid="fd3c32">Squeezed-by-distance is the bound a linear function always gives (|(mx + b) − (mw + b)| = |m||x − w|), so it is line-limit again. But it also works for functions that only obey such a bound. Here is one. √(x + 4) at 0, heading to 2.</p>
   <pre class="lines" data-k="ember" data-label="this step: a root, squeezed by the distance">
@@ -105,7 +105,7 @@ L - \varepsilon \lt f(x) \lt L + \varepsilon @@ at-most-is-a-partial-order on �
   <p class="stands">Stands on 10d2, 9a5 (q) and 8e (fraction-between).</p>
   <p data-pid="9bd53b">9a's q is 1 at every fraction and 0 at every irrational. Both kinds are in every neighbourhood of every real. The fractions are there by 8e's fraction-between. The irrationals are there because, as 9a showed, r + √2/n is irrational for every fraction r and number n ≠ 0. And everyday-counting-passes makes √2/n as small as you like. So in any window, however narrow, q takes both values 0 and 1. Heads-nowhere technique: <b>for every real w and every real L, q does not head to L at w.</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the heads-nowhere technique, a refutation">
-\lim_{x \to a} q(x) = L @@ assume, to refute (no either-way principle needed)
+\lim_{x \to w} q(x) = L @@ assume, to refute (no either-way principle needed)
 \varepsilon = \tfrac12;\ \ \text{call } \delta @@ challenge with one half; use the some
 r \in \mathbb Q,\ \ a \lt r \lt a + \delta @@ fraction-between (8e): a fraction between two reals
 n \ne 0 \text{ with } \tfrac{\sqrt2}{n} \lt a + \delta - r;\ \ t = r + \tfrac{\sqrt2}{n} @@ everyday-counting-passes on the positive (a + δ − r)/√2; positive-reciprocal on ℚ
@@ -113,7 +113,7 @@ r \lt t \lt a + \delta,\ \ t \text{ irrational} @@ order-and-arithmetic-agree; 9
 q(r) = \htmlClass{new}{1},\ \ q(t) = \htmlClass{new}{0} @@ the definition of q, by cases
 |1 - L| \lt \tfrac12 \;\land\; |0 - L| \lt \tfrac12 @@ r and t are both in the window: carry the promise through twice; join
 \bot @@ two-targets (10b) with values 1 and 0: 2 · ½ = 1 = |1 − 0|
-\neg\big(\lim_{x \to a} q(x) = L\big) \quad \blacksquare @@ refute; then speak of everything: every L, every a
+\neg\big(\lim_{x \to w} q(x) = L\big) \quad \blacksquare @@ refute; then speak of everything: every L, every w
   </pre>
   <p data-pid="04124b">So q has no limit anywhere: the some of 10b's ∃! fails, at every real. Now multiply it by x. Every output of q is 0 or 1, so |q(x)| ≤ 1 and |x · q(x)| = |x| |q(x)| ≤ |x| (size-of-a-product). That is a trap: squeezed-to-0 with h(x) = |x|, which heads to 0 at 0 by the small fact. So lim_{x→0} x · q(x) = 0. A function that is wild everywhere, tamed at one point by a factor that heads to 0 there. At any other point w it is still wild: near w ≠ 0, x · q(x) is near w at fractions and is 0 at irrationals (10d5.1b). Likewise 1 + x² · q(x) sits between 1 and 1 + x², both heading to 1 at 0, so it heads to 1 there.</p>
   <p data-pid="6b3209">Such a function was first described at the end of a paper of 1829, as an example of a function the paper’s methods could not handle. It takes one value at the fractions and another at the irrationals, so that it jumps between the two in every stretch, however short.</p>
@@ -308,14 +308,14 @@ stepper('#sl1',[
 ],{title:'The slides · the squeeze · ← → keys work'});
 stepper('#sl2',[
   {k:'ember',kl:'squeezed-to-0',t:R`\begin{gathered}|f(x)| \le h(x),\ \ h \to 0 \;\\ \Rightarrow\; ${K}{f \to 0}\end{gathered}`,n:`unpack-the-bars makes the size bound a trap −h ≤ f ≤ h; constant-factor gives −h → 0.`},
-  {k:'ember',kl:'the small fact',t:R`\lim_{x \to a} |x - a| = 0`,n:`The size of a size is itself, so δ = ε wins.`},
+  {k:'ember',kl:'the small fact',t:R`\lim_{x \to w} |x - w| = 0`,n:`The size of a size is itself, so δ = ε wins.`},
   {k:'ember',kl:'squeezed-by-distance',t:R`\begin{gathered}|f(x) - L| \le ${N}{C\,|x - a|} \;\\ \Rightarrow\; f \to L\end{gathered}`,n:`squeezed-to-0 with f − L for f and the bound for h.`},
   {k:'ember',kl:'a root · 1 of 3',t:R`\sqrt{x + 4} - 2 = \tfrac{${N}{x}}{\sqrt{x + 4} + 2}`,n:`Times the conjugate over itself (8i); difference-of-squares on top.`},
   {k:'ember',kl:'a root · 2 of 3',t:R`\begin{gathered}\sqrt{x + 4} + 2 \ge 2 \;\\ \Rightarrow\; |\sqrt{x + 4} - 2| \le ${N}{\tfrac12}\,|x|\end{gathered}`,n:`The bottom is at least 2, so its reciprocal is at most ½.`},
   {k:'ember',kl:'a root · 3 of 3',t:R`\lim_{x \to 0} \sqrt{x + 4} = ${K}{2}`,n:`squeezed-by-distance with C = ½, reach 4. 10f does every root this way.`}
 ],{title:'The slides · squeezed-by-distance · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'heads-nowhere · 1 of 3',t:R`\lim_{x\to a} q(x) = L\ ?\quad \varepsilon = ${N}{\tfrac12}`,n:`Assume it, to refute, and challenge with one half.`},
+  {k:'ember',kl:'heads-nowhere · 1 of 3',t:R`\lim_{x\to w} q(x) = L\ ?\quad \varepsilon = ${N}{\tfrac12}`,n:`Assume it, to refute, and challenge with one half.`},
   {k:'ember',kl:'heads-nowhere · 2 of 3',t:R`\begin{gathered}r \in \mathbb Q,\ \ t = r + \tfrac{\sqrt2}{n}\\ \text{both in } (a, a + \delta)\end{gathered}`,n:`fraction-between gives the fraction; everyday-counting-passes makes √2/n small enough; 9a: t is irrational.`},
   {k:'ember',kl:'heads-nowhere · 3 of 3',t:R`|1 - L| \lt \tfrac12,\ \ |0 - L| \lt \tfrac12\ \ ${N}{\bot}`,n:`q(r) = 1, q(t) = 0; two-targets with values 1 and 0. Refute: q has no limit anywhere. ∎`},
   {k:'ember',kl:'x · q(x) · 1 of 2',t:R`|x\,q(x)| = |x|\,|q(x)| \le |x|`,n:`Every output of q is 0 or 1. A size bound, so a trap.`},

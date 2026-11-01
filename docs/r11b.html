@@ -36,10 +36,10 @@ table.tt.dem td{text-align:left;font-family:var(--serif)} table.tt.dem td.ok{col
   <p data-pid="55ee83">10c built the functions f + g, f − g, fg, cf, f/g and fⁿ out of f and g, each on its own domain, and proved that their limits are the sums, products and quotients of the limits. Continuous-sums technique: <b>if f and g are continuous at w, then f + g and f − g are continuous at w, and so is cf for every real c.</b></p>
   <div class="brkkey"></div>
   <pre class="lines" data-k="ember" data-label="this step: the continuous-sums technique, from 10c's limits-add">
-f, g \text{ defined near } a;\ \ a \in \operatorname{dom} f \cap \operatorname{dom} g @@ the definition (11a), unpacked for each
-f + g \text{ defined near } a;\ \ a \in \operatorname{dom}(f + g) @@ 10c's line: dom (f + g) = dom f ∩ dom g; reach min(r_f, r_g) by lesser-below-both
-\lim_{x \to a} (f + g)(x) = \htmlClass{keep}{f(a)} + \htmlClass{keep}{g(a)} @@ limits-add (10c), with L = f(a) and M = g(a): each limit is a value
-= \htmlClass{new}{(f + g)(a)} \quad \blacksquare @@ 10c's line for f + g, at the input a. It lands where it was headed
+f, g \text{ defined near } w;\ \ w \in \operatorname{dom} f \cap \operatorname{dom} g @@ the definition (11a), unpacked for each
+f + g \text{ defined near } w;\ \ w \in \operatorname{dom}(f + g) @@ 10c's line: dom (f + g) = dom f ∩ dom g; reach min(r_f, r_g) by lesser-below-both
+\lim_{x \to w} (f + g)(x) = \htmlClass{keep}{f(w)} + \htmlClass{keep}{g(w)} @@ limits-add (10c), with L = f(w) and M = g(w): each limit is a value
+= \htmlClass{new}{(f + g)(w)} \quad \blacksquare @@ 10c's line for f + g, at the input w. It lands where it was headed
   </pre>
   <p data-pid="387add">The difference is the same column with 10c's limits-subtract, and cf with constant-factor (its domain is dom f). Nothing new was proved: limits-add had done the work, and continuity only asked that the limits it was given be values.</p>
   <section class="slides" id="sl1"><div class="eyebrow">The slides · continuous-sums · ← → keys work</div></section>
@@ -75,9 +75,9 @@ f + g \text{ defined near } a;\ \ a \in \operatorname{dom}(f + g) @@ 10c's line:
   <p data-pid="001df2">11a's continuity-unpacked lets the proof be played with the input included. It is a little simpler than limits-add's, because there is no input to leave out and no reach to stay inside. <b>Every input of f + g is an input of both, so both promises apply to it.</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the continuous-sums technique, by continuity-unpacked">
 \text{let } \varepsilon \gt 0;\ \text{call } \delta_1 \text{ for } f,\ \delta_2 \text{ for } g \text{ at the gap } \htmlClass{new}{\tfrac{\varepsilon}{2}} @@ continuity-unpacked for f and for g: a budget of half the gap each (10c)
-\delta = \min(\delta_1, \delta_2);\ \ x \in \operatorname{dom}(f + g),\ |x - a| \lt \delta @@ the least of the two; x is an input of f and of g
-\begin{gathered}|(f + g)(x) - (f + g)(a)|\\ = |(f(x) - f(a)) + (g(x) - g(a))|\end{gathered} @@ the line for f + g; negative-of-a-sum and middle-swap: regroup
-\begin{gathered}\le |f(x) - f(a)| + |g(x) - g(a)|\\ \lt \tfrac{\varepsilon}{2} + \tfrac{\varepsilon}{2} = \htmlClass{keep}{\varepsilon} \quad \blacksquare\end{gathered} @@ triangle; both promises; same-direction-add
+\delta = \min(\delta_1, \delta_2);\ \ x \in \operatorname{dom}(f + g),\ |x - w| \lt \delta @@ the least of the two; x is an input of f and of g
+\begin{gathered}|(f + g)(x) - (f + g)(w)|\\ = |(f(x) - f(w)) + (g(x) - g(w))|\end{gathered} @@ the line for f + g; negative-of-a-sum and middle-swap: regroup
+\begin{gathered}\le |f(x) - f(w)| + |g(x) - g(w)|\\ \lt \tfrac{\varepsilon}{2} + \tfrac{\varepsilon}{2} = \htmlClass{keep}{\varepsilon} \quad \blacksquare\end{gathered} @@ triangle; both promises; same-direction-add
   </pre>
   <section class="slides" id="sl2"><div class="eyebrow">The slides · by the game · ← → keys work</div></section>
   <section class="sayback">
@@ -94,9 +94,9 @@ f + g \text{ defined near } a;\ \ a \in \operatorname{dom}(f + g) @@ 10c's line:
   <p data-pid="0b61da">Continuous-products technique: <b>if f and g are continuous at w, then fg is continuous at w, and so is fⁿ for every number n.</b> fg is defined near w, with w an input, as for f + g. 10c's limits-multiply, with L = f(w) and M = g(w), gives lim_{x→w} (fg)(x) = f(w)g(w) = (fg)(w). For powers, 10c's power-limit gives lim fⁿ = f(w)ⁿ, which is fⁿ(w). Or run 4b's induction with continuous-products itself: f⁰ is the constant 1, continuous by lines-are-continuous, and f^S(n) = fⁿ · f. ∎</p>
   <p data-pid="0d98ce">Played directly from the game, the product needs everything limits-multiply needed. The split f(x)g(x) − f(w)g(w) = f(x)(g(x) − g(w)) + g(w)(f(x) − f(w)) still has a wild factor, f(x), and bounded-near's first promise still tames it: |f(x)| &lt; |f(w)| + 1 near w. The answer is still the least of three reaches. Continuity changes the target, not the work.</p>
   <pre class="lines" data-k="teal" data-label="from 10c: limits-multiply's recipe, with values for limits">
-\delta_1:\ |f(x)| \lt |f(a)| + 1 @@ bounded-near, at the gap 1: the first promise
-\delta_2:\ |g(x) - g(a)| \lt \tfrac{\varepsilon}{2(|f(a)| + 1)} @@ half the budget, over the ceiling of the other factor
-\delta_3:\ |f(x) - f(a)| \lt \tfrac{\varepsilon}{2(|g(a)| + 1)} @@ the other half; |g(a)| + 1 is never 0
+\delta_1:\ |f(x)| \lt |f(w)| + 1 @@ bounded-near, at the gap 1: the first promise
+\delta_2:\ |g(x) - g(w)| \lt \tfrac{\varepsilon}{2(|f(w)| + 1)} @@ half the budget, over the ceiling of the other factor
+\delta_3:\ |f(x) - f(w)| \lt \tfrac{\varepsilon}{2(|g(w)| + 1)} @@ the other half; |g(w)| + 1 is never 0
 \delta = \htmlClass{keep}{\min(\delta_1, \delta_2, \delta_3)} @@ every promise at once, the input a included
   </pre>
   <section class="slides" id="sl3"><div class="eyebrow">The slides · continuous-products · ← → keys work</div></section>
@@ -134,11 +134,11 @@ f + g \text{ defined near } a;\ \ a \in \operatorname{dom}(f + g) @@ 10c's line:
   <p class="stands">Stands on 11b4 and 10c (away-from-zero, limits-divide).</p>
   <p data-pid="3bf601">Continuous-quotients technique: <b>if f and g are continuous at w and g(w) ≠ 0, then f/g is continuous at w.</b> The quotient's domain leaves out every input where g is 0. So two things must be checked before 10c's limits-divide can be used: that w is an input of f/g, and that f/g is defined near w.</p>
   <pre class="lines" data-k="ember" data-label="this step: the continuous-quotients technique">
-g(a) \ne 0,\ \ \lim_{x \to a} g(x) = g(a) @@ given; g is continuous at a
-\text{call } \delta_1:\ |g(x)| \gt \tfrac{|g(a)|}{2} \gt 0 @@ away-from-zero (10c), with M = g(a) ≠ 0: g is not 0 near a
-f/g \text{ defined near } a,\ \text{reach } \min(r_f, r_g, \delta_1) @@ 10c's line for f/g: inputs of both where g is not 0
-a \in \operatorname{dom}(f/g) @@ g(a) ≠ 0
-\lim_{x \to a} \tfrac{f(x)}{g(x)} = \tfrac{f(a)}{g(a)} = \htmlClass{new}{(f/g)(a)} \quad \blacksquare @@ limits-divide with L = f(a), M = g(a) ≠ 0; the line for f/g at a
+g(w) \ne 0,\ \ \lim_{x \to w} g(x) = g(w) @@ given; g is continuous at w
+\text{call } \delta_1:\ |g(x)| \gt \tfrac{|g(w)|}{2} \gt 0 @@ away-from-zero (10c), with M = g(w) ≠ 0: g is not 0 near w
+f/g \text{ defined near } w,\ \text{reach } \min(r_f, r_g, \delta_1) @@ 10c's line for f/g: inputs of both where g is not 0
+w \in \operatorname{dom}(f/g) @@ g(w) ≠ 0
+\lim_{x \to w} \tfrac{f(x)}{g(x)} = \tfrac{f(w)}{g(w)} = \htmlClass{new}{(f/g)(w)} \quad \blacksquare @@ limits-divide with L = f(w), M = g(w) ≠ 0; the line for f/g at w
   </pre>
   <p data-pid="de252e">One-over-x-is-continuous technique: <b>1/x is continuous at every input, that is at every w ≠ 0; so 1/x is continuous.</b> 1/x is the quotient of the constant 1 by x ↦ x, both continuous at w by lines-are-continuous, and the bottom's value at w is w ≠ 0: continuous-quotients. ∎ 10a's one-over-x-limit proved the same limit by hand, with a first promise |x − w| &lt; |w|/2. Continuous-quotients did it with away-from-zero, which is that first promise in general.</p>
   <p data-pid="0c0123">Here rung 9's question about 1/x is answered, and the words need care. 1/x is continuous: at every one of its inputs it lands where it was headed. It is neither continuous nor discontinuous at 0, because 0 is not an input, and 11a's line asks nothing there. What 1/x does near 0, passing every bound on the right and below every bound on the left, 10f has already said. 11f gives such a place a name, a break, of the endless kind.</p>
@@ -189,7 +189,7 @@ x^2 + 1 \ge 1 \gt 0 @@ square-never-negative; order-and-arithmetic-agree: the bo
   <h2 class="sthead"><span class="stno">11b8</span>Illegal moves</h2>
   <p class="stands">Stands on 11b1 to 11b7.</p>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
-f/g \text{ continuous at } a \text{ because } f \text{ and } g \text{ are}\,? @@ needs g(a) ≠ 0: 1/x at 0 has no value, and is not even asked
+f/g \text{ continuous at } w \text{ because } f \text{ and } g \text{ are}\,? @@ needs g(w) ≠ 0: 1/x at 0 has no value, and is not even asked
 f + g \text{ continuous, so } f \text{ and } g \text{ are}\,? @@ u + (1 − u) is the constant 1; neither summand is continuous at 0
 fg \text{ is discontinuous wherever } g \text{ is}\,? @@ x · q(x) is continuous at 0, and q is continuous nowhere
 \text{continuous-quotients for } \tfrac{x^2 - 1}{x - 1} \text{ at } 1\,? @@ the bottom's value at 1 is 0: 1 is not an input. continuous-quotients says nothing; 11f mends
@@ -295,28 +295,28 @@ all();
 /* ---------- slides ---------- */
 const N='\\htmlClass{new}', K='\\htmlClass{keep}';
 stepper('#sl1',[
-  {k:'ember',kl:'continuous-sums · 1 of 3',t:R`\begin{gathered}f, g \text{ continuous at } a:\\ \lim f = ${K}{f(a)},\ \ \lim g = ${K}{g(a)}\end{gathered}`,n:`The definition, for each. Both are defined near the point, and the point is an input of both.`},
-  {k:'ember',kl:'continuous-sums · 2 of 3',t:R`\lim_{x\to a}(f + g)(x) = f(a) + g(a)`,n:`10c's limits-add, with values standing where the limits stood.`},
-  {k:'ember',kl:'continuous-sums · 3 of 3',t:R`= ${N}{(f + g)(a)}`,n:`The line for f + g at the point. It lands where it was headed. ∎ limits-subtract and constant-factor give f − g and cf.`}
+  {k:'ember',kl:'continuous-sums · 1 of 3',t:R`\begin{gathered}f, g \text{ continuous at } w:\\ \lim f = ${K}{f(w)},\ \ \lim g = ${K}{g(w)}\end{gathered}`,n:`The definition, for each. Both are defined near the point, and the point is an input of both.`},
+  {k:'ember',kl:'continuous-sums · 2 of 3',t:R`\lim_{x\to w}(f + g)(x) = f(w) + g(w)`,n:`10c's limits-add, with values standing where the limits stood.`},
+  {k:'ember',kl:'continuous-sums · 3 of 3',t:R`= ${N}{(f + g)(w)}`,n:`The line for f + g at the point. It lands where it was headed. ∎ limits-subtract and constant-factor give f − g and cf.`}
 ],{title:'The slides · continuous-sums · ← → keys work'});
 stepper('#sl2',[
   {k:'ember',kl:'by the game · 1 of 2',t:R`\delta = \min(\delta_1, \delta_2) \text{ at the gap } ${N}{\tfrac{\varepsilon}{2}}`,n:`continuity-unpacked for each, half the gap each. No reach needed: every input of f + g is an input of both.`},
-  {k:'ember',kl:'by the game · 2 of 2',t:R`\begin{gathered}|(f+g)(x) - (f+g)(a)|\\ \le |f(x) - f(a)| + |g(x) - g(a)|\\ \lt ${K}{\varepsilon}\end{gathered}`,n:`Regroup, triangle, both promises. ∎`}
+  {k:'ember',kl:'by the game · 2 of 2',t:R`\begin{gathered}|(f+g)(x) - (f+g)(w)|\\ \le |f(x) - f(w)| + |g(x) - g(w)|\\ \lt ${K}{\varepsilon}\end{gathered}`,n:`Regroup, triangle, both promises. ∎`}
 ],{title:'The slides · by the game · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'continuous-products',t:R`\begin{gathered}\lim_{x \to a}(fg)(x) = f(a)\,g(a)\\ = ${N}{(fg)(a)}\end{gathered}`,n:`10c's limits-multiply. Powers by power-limit, or by induction with continuous-products from f⁰ = 1.`}
+  {k:'ember',kl:'continuous-products',t:R`\begin{gathered}\lim_{x \to w}(fg)(x) = f(w)\,g(w)\\ = ${N}{(fg)(w)}\end{gathered}`,n:`10c's limits-multiply. Powers by power-limit, or by induction with continuous-products from f⁰ = 1.`}
 ],{title:'The slides · continuous-products · ← → keys work'});
 stepper('#sl4',[
   {k:'teal',kl:'from 10c: the recipe',t:R`\delta = \min(\delta_1, \delta_2, \delta_3)`,n:`bounded-near's first promise (its ceiling: the size of f's value, plus 1), and the two budgets. Continuity changes the target, not the work.`}
 ],{title:'The slides · the recipe · ← → keys work'});
 stepper('#sl5',[
-  {k:'ember',kl:'continuous-quotients · 1 of 3',t:R`\begin{gathered}g(a) \ne 0 \;\Rightarrow\\ |g(x)| \gt ${N}{\tfrac{|g(a)|}{2}} \text{ near } a\end{gathered}`,n:`away-from-zero, with g's value as M. So f/g is defined near the point.`},
-  {k:'ember',kl:'continuous-quotients · 2 of 3',t:R`a \in \operatorname{dom}(f/g)`,n:`Because g's value there is not 0.`},
-  {k:'ember',kl:'continuous-quotients · 3 of 3',t:R`\lim_{x\to a}\tfrac{f(x)}{g(x)} = \tfrac{f(a)}{g(a)} = ${N}{(f/g)(a)}`,n:`limits-divide. ∎`},
-  {k:'ember',kl:'one-over-x-is-continuous',t:R`\begin{gathered}\tfrac1x:\ \text{the constant } 1 \text{ over } x\\ a \ne 0\end{gathered}`,n:`lines-are-continuous for the top and the bottom; continuous-quotients. 1/x is continuous at every input, so continuous. 0 is not an input: nothing is asked there.`}
+  {k:'ember',kl:'continuous-quotients · 1 of 3',t:R`\begin{gathered}g(w) \ne 0 \;\Rightarrow\\ |g(x)| \gt ${N}{\tfrac{|g(w)|}{2}} \text{ near } w\end{gathered}`,n:`away-from-zero, with g's value as M. So f/g is defined near the point.`},
+  {k:'ember',kl:'continuous-quotients · 2 of 3',t:R`w \in \operatorname{dom}(f/g)`,n:`Because g's value there is not 0.`},
+  {k:'ember',kl:'continuous-quotients · 3 of 3',t:R`\lim_{x\to w}\tfrac{f(x)}{g(x)} = \tfrac{f(w)}{g(w)} = ${N}{(f/g)(w)}`,n:`limits-divide. ∎`},
+  {k:'ember',kl:'one-over-x-is-continuous',t:R`\begin{gathered}\tfrac1x:\ \text{the constant } 1 \text{ over } x\\ w \ne 0\end{gathered}`,n:`lines-are-continuous for the top and the bottom; continuous-quotients. 1/x is continuous at every input, so continuous. 0 is not an input: nothing is asked there.`}
 ],{title:'The slides · continuous-quotients · ← → keys work'});
 stepper('#sl6',[
-  {k:'ember',kl:'one side',t:R`\begin{gathered}\text{from the right: } f + g,\ fg,\\ f/g\ \ (g(a) \ne 0)\end{gathered}`,n:`sides-too (10e): every technique may be carried out side by side, so every technique here may too.`},
+  {k:'ember',kl:'one side',t:R`\begin{gathered}\text{from the right: } f + g,\ fg,\\ f/g\ \ (g(w) \ne 0)\end{gathered}`,n:`sides-too (10e): every technique may be carried out side by side, so every technique here may too.`},
   {k:'ember',kl:'built, not played',t:R`\begin{gathered}\tfrac{x^3 - 2x}{x^2 + 1}\\ x^2 + 1 \ge 1 \gt 0\end{gathered}`,n:`continuous-products, continuous-sums for the top; square-never-negative for the bottom; continuous-quotients. Continuous at every real.`},
   {k:'ember',kl:'substitute',t:R`\lim_{x \to 1}\tfrac{x^3 - 2x}{x^2 + 1} = ${K}{-\tfrac12}`,n:`Continuous at 1, so the limit is the value.`}
 ],{title:'The slides · built, not played · ← → keys work'});

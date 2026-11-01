@@ -83,7 +83,7 @@
       <div class="chips" role="group" aria-label="sequence" id="sch"></div>
       <div class="kn"><span class="m">ε</span><input type="range" id="se" min="-3" max="0" step="0.05" value="-1"><output id="ose"></output></div>
       <canvas id="cvN"></canvas>
-      <div class="cap">The terms a_n for n from 0 to 24, as dots (n across, the term up). Gold rows: within ε of the claimed limit. The threshold N is the least number from which every term stays in the target (checked by the technique's bound, not by eye); terms from N on are teal, earlier ones ember.</div>
+      <div class="cap">The terms u_n for n from 0 to 24, as dots (n across, the term up). Gold rows: within ε of the claimed limit. The threshold N is the least number from which every term stays in the target (checked by the technique's bound, not by eye); terms from N on are teal, earlier ones ember.</div>
       <div class="eqbox" id="eqN"></div>
     </div>
   </section>
@@ -146,7 +146,7 @@
 N = \htmlClass{new}{\max(N_1, N_2, c)};\ \ \text{assume } x \gt N @@ the greatest: x is past every threshold, and in the domain
 \begin{gathered}|(f + g)(x) - (L + M)|\\ \le |f(x) - L| + |g(x) - M| \lt \varepsilon \quad \blacksquare\end{gathered} @@ as limits-add's column: regroup, triangle, the two promises
   </pre>
-  <p data-pid="15d76e">With those, a fraction of polynomials far out is decided by its leading terms. Rational-functions-far-out technique: <b>for polynomials p and q of degrees n and m, with leading coefficients a_n and b_m: if n = m, lim_{x→∞} p(x)/q(x) = a_n/b_m; if n &lt; m, the limit is 0.</b> Divide top and bottom by x^m (times 1, for x &gt; 0). Every term but the leading ones becomes a constant times a power of 1/x, which heads to 0 by one-over-x-far-out and power-limit. Then limits-divide, since the bottom heads to b_m ≠ 0. ∎</p>
+  <p data-pid="15d76e">With those, a fraction of polynomials far out is decided by its leading terms. Rational-functions-far-out technique: <b>for polynomials p and q of degrees n and m, with leading coefficients u_n and v_m: if n = m, lim_{x→∞} p(x)/q(x) = u_n/v_m; if n &lt; m, the limit is 0.</b> Divide top and bottom by x^m (times 1, for x &gt; 0). Every term but the leading ones becomes a constant times a power of 1/x, which heads to 0 by one-over-x-far-out and power-limit. Then limits-divide, since the bottom heads to v_m ≠ 0. ∎</p>
   <pre class="lines" data-k="ember" data-label="this step: divide by the greatest power on the bottom">
 \lim_{x \to \infty} \tfrac{3x^2 + 1}{x^2 + 5} = \lim_{x \to \infty} \tfrac{\htmlClass{new}{3 + \frac{1}{x^2}}}{\htmlClass{new}{1 + \frac{5}{x^2}}} @@ times (1/x²)/(1/x²), which is 1 for x ≠ 0
 = \tfrac{3 + 0}{1 + 0} = \htmlClass{keep}{3} @@ 1/x² = (1/x)(1/x) → 0 · 0 (one-over-x-far-out, limits-multiply); far-out-too's limits-add and limits-divide
@@ -162,7 +162,7 @@ N = \htmlClass{new}{\max(N_1, N_2, c)};\ \ \text{assume } x \gt N @@ the greates
   </pre>
   <p data-pid="2d6d6d">One more tech, for running a limit far out back to a limit at a point. Swap-to-one-over-x technique: <b>lim_{x→∞} f(x) = L exactly when lim_{t→0⁺} f(1/t) = L.</b> Inputs x &gt; N &gt; 0 are exactly the 1/t with 0 &lt; t &lt; 1/N (positive-reciprocal on ℚ). So a threshold N answers one game exactly when the reach 1/N answers the other. ∎ A limit far out is a one-sided limit at 0 in disguise. The picture uses this to draw it on a finite screen, and 10·bio uses it to read a ceiling off a line.</p>
   <p data-pid="43d627">Some outputs head nowhere because they grow. That needs words that are not a limit.</p>
-  <p class="eqline" data-pid="96675e">From here on, “f(x) passes every bound as x → ∞” means: ∀M ∃N : ∀x ∈ dom f (x &gt; N ⇒ f(x) &gt; M), with M and N reals. And “f(x) passes every bound as x → a⁺” means: ∀M ∃δ &gt; 0 : ∀x ∈ dom f (a &lt; x &lt; a + δ ⇒ f(x) &gt; M); likewise as x → a⁻ and as x → a, with those windows, and as x → −∞. “Passes below every bound” is the same with f(x) &lt; M. These are statements about outputs, not limits: no L is claimed, and this ladder never writes them as a limit equal to ∞.</p>
+  <p class="eqline" data-pid="96675e">From here on, “f(x) passes every bound as x → ∞” means: ∀M ∃N : ∀x ∈ dom f (x &gt; N ⇒ f(x) &gt; M), with M and N reals. And “f(x) passes every bound as x → w⁺” means: ∀M ∃δ &gt; 0 : ∀x ∈ dom f (w &lt; x &lt; w + δ ⇒ f(x) &gt; M); likewise as x → w⁻ and as x → w, with those windows, and as x → −∞. “Passes below every bound” is the same with f(x) &lt; M. These are statements about outputs, not limits: no L is claimed, and this ladder never writes them as a limit equal to ∞.</p>
   <p data-pid="5ce8d6">When f(x) heads to L far out, f is said to have the horizontal asymptote y = L. When f(x) passes every bound, or below every bound, as x → w from either side, f has the vertical asymptote x = w. Asymptote is from the Greek for “not falling together”. Passing every bound is also written as a limit equal to ∞, as in lim_{x→w⁺} f(x) = ∞, and called an infinite limit. The mark is shorthand for “passes every bound”. ∞ is not a number, and by passing-every-bound below, a function with an infinite limit has no limit in 10a's sense.</p>
   <p data-pid="1f7c00">Passing-every-bound technique: <b>if f(x) passes every bound (or below every bound) as x → w⁺, then f has no limit from the right at w; and likewise for the other sides and far out.</b> Suppose it headed to L. Challenge with ε = 1 and call the reach. The bound M = |L| + 1 gives a reach of its own. An input in both windows has f(x) &gt; |L| + 1 and |f(x) − L| &lt; 1, so f(x) &lt; L + 1 ≤ |L| + 1. ⊥. Refute. ∎ Now 9e's sentence is finished. 1/x passes every bound as x → 0⁺: for M &gt; 0 answer δ = 1/M, by positive-reciprocal on ℚ; for M ≤ 0 any δ, since 1/x &gt; 0. And 1/x passes below every bound as x → 0⁻. 9g's 1/(x − 1) does the same at 1. And x² passes every bound as x → ∞ (N = max(1, M), since x² ≥ x past 1), so it has no limit far out.</p>
   <section class="slides" id="sl3"><div class="eyebrow">The slides · far out · ← → keys work</div></section>
@@ -178,7 +178,7 @@ N = \htmlClass{new}{\max(N_1, N_2, c)};\ \ \text{assume } x \gt N @@ the greates
   <h2 class="sthead"><span class="stno">10f6</span>Sequences, where 9·cb4 left them</h2>
   <p class="stands">Stands on 10f5 and 9·cb4 (sequences).</p>
   <p data-pid="cb2dc7">A sequence is a statement that names a function on ℕ (9·cb4), so its inputs can only grow. The game is the one far out, with a whole-number threshold.</p>
-  <p class="eqline" data-pid="b6f535">From here on, for a sequence a of reals, lim_{n→∞} a_n = L, also written a_n → L, means: ∀ε &gt; 0 ∃N ∈ ℕ : ∀n ∈ ℕ (n ≥ N ⇒ |a_n − L| &lt; ε). Read it “a_n heads to L”; the sequence converges to L, and L is its limit. The mark n → ∞ says that the input letter n runs through the numbers past every one.</p>
+  <p class="eqline" data-pid="b6f535">From here on, for a sequence u of reals, lim_{n→∞} u_n = L, also written u_n → L, means: ∀ε &gt; 0 ∃N ∈ ℕ : ∀n ∈ ℕ (n ≥ N ⇒ |u_n − L| &lt; ε). Read it “u_n heads to L”; the sequence converges to L, and L is its limit. The mark n → ∞ says that the input letter n runs through the numbers past every one.</p>
   <p data-pid="427cf2">One-limit's proof works here with n = max(N₁, N₂), so a sequence has at most one limit. The limit techniques carry over as far-out-too says. One-over-n technique: <b>lim_{n→∞} 1/S(n) = 0.</b> Given ε, 8e's everyday-counting-passes gives a number N ≠ 0 with 1/N &lt; ε. For n ≥ N, S(n) &gt; N, so 0 &lt; 1/S(n) &lt; 1/N &lt; ε (positive-reciprocal on ℚ). ∎ That is the sentence 9·cb4 could not finish: the never-rising run of reals 1, ½, ⅓, ⋯ never stands still, and it heads to 0. Cut-offs technique: <b>for a real x ≥ 0 with 8·cb5's cut-offs c_k, lim_{k→∞} c_k = x.</b> 8·cb5's digit rule kept c_k ≤ x &lt; c_k + 10^(−k), so |c_k − x| &lt; 10^(−k) &lt; 1/k for k ≠ 0 (since 10^k &gt; k, by induction). Everyday-counting-passes gives N with 1/N &lt; ε, and k ≥ N does it. ∎ So 1, 1.4, 1.41, 1.414, ⋯ heads to √2: 10d's numbers squeezed, said as a limit.</p>
   <section class="slides" id="sl4"><div class="eyebrow">The slides · a sequence · ← → keys work</div></section>
   <section class="sayback">
@@ -332,10 +332,10 @@ setE('hole');
 const DIG=[1,4,1,4,2,1,3,5,6,2,3,7,3,0,9,5,0,4,8,8,0,1,6,8,8,7]; // √2 = 1.41421356237309504880168872…
 const cut=k=>{ let v=1, p=1; for(let i=1;i<=k;i++){ p/=10; v+=DIG[i]*p; } return v; };
 const SQ={
-  rec:{lab:'1/S(n)',a:n=>1/(n+1),L:0,tex:R`a_n = \tfrac{1}{S(n)}`,bound:n=>1/(n+1),why:R`|a_n| = \tfrac{1}{n + 1}`},
+  rec:{lab:'1/S(n)',a:n=>1/(n+1),L:0,tex:R`u_n = \tfrac{1}{S(n)}`,bound:n=>1/(n+1),why:R`|u_n| = \tfrac{1}{n + 1}`},
   cut:{lab:'cut-offs of √2',a:n=>cut(n),L:Math.SQRT2,tex:R`c_k = 1.41421\cdots \text{ cut at } k \text{ places}`,bound:n=>Math.pow(10,-n),why:R`|c_k - \sqrt2| \lt 10^{-k}`},
-  rat:{lab:'(2n + 1)/(n + 1)',a:n=>(2*n+1)/(n+1),L:2,tex:R`a_n = \tfrac{2n + 1}{n + 1}`,bound:n=>1/(n+1),why:R`|a_n - 2| = \tfrac{1}{n + 1}`},
-  alt:{lab:'(−1)ⁿ',a:n=>n%2?-1:1,L:0,tex:R`a_n = (-1)^n,\ \text{claim } 0`,bound:n=>1,why:R`|a_n - 0| = 1`}
+  rat:{lab:'(2n + 1)/(n + 1)',a:n=>(2*n+1)/(n+1),L:2,tex:R`u_n = \tfrac{2n + 1}{n + 1}`,bound:n=>1/(n+1),why:R`|u_n - 2| = \tfrac{1}{n + 1}`},
+  alt:{lab:'(−1)ⁿ',a:n=>n%2?-1:1,L:0,tex:R`u_n = (-1)^n,\ \text{claim } 0`,bound:n=>1,why:R`|u_n - 0| = 1`}
 };
 let S=SQ.rec, skey='rec';
 const se=$('se'), cvN=$('cvN');
