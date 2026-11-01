@@ -95,7 +95,7 @@
  {"q":"“The trail is open unless the river is high”, O and H. Which line?","a":"¬H ⇒ O","w":["O ⇒ ¬H","H ⇒ O","O ⇔ ¬H"],"why":"P unless Q is ¬Q ⇒ P."},
  {"q":"⊤. What does it stand for?","a":"always so: the denial of the totally false","w":["the totally false","a statement not yet settled","the end of a column"],"why":"Suppose ⊥, and ⊥ is in hand; refute."}];
 (window.LADDER_CARDS=window.LADDER_CARDS||{})["1h"]=[{"q":"“Every living mammoth is purple”, with no living mammoths. Is it so?","a":"yes, vacuously","w":["no: nothing is purple","it is not a statement","yes: some mammoth is purple"],"why":"The if is never broken, because there is nothing to check."},
- {"q":"“Some cat is an animal” written ∃x (A(x) ⇒ B(x)). What goes wrong?","a":"anything not a cat proves it","w":["nothing: some goes with if","it says everything is a cat","it is the every sentence"],"why":"A free if makes the some cheap: the shoe on your foot shows it."},
+ {"q":"“Some cat is an animal” written ∃x (A(x) ⇒ B(x)). What goes wrong?","a":"anything not a cat proves it","w":["nothing: some goes with if","it says everything is a cat","it is the every statement"],"why":"A free if makes the some cheap: the shoe on your foot shows it."},
  {"q":"“Every S is P” and “some S is not P”. How do they stand on the diagram?","a":"contradictories","w":["contraries","subcontraries","subalterns"],"why":"Each is the other’s denial."},
  {"q":"“Every S is P” and “no S is P”. How do they stand?","a":"contraries","w":["contradictories","subcontraries","subalterns"],"why":"Never both so, though both can be not so."},
  {"q":"“Some S is P” and “some S is not P”. How do they stand?","a":"subcontraries","w":["contraries","contradictories","subalterns"],"why":"Never both not so, when there are some S."},

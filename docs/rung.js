@@ -787,12 +787,21 @@ window.__deskInit=function(){
       const ax=at<0?[]:M.moves.map((m,i)=>[m,i]).filter(([m,i])=>m.kind==='axiom'&&/axiom|principle|line$/.test(m.name)&&MAIN.test(m.file)&&ord.indexOf(m.file)<=at&&!own.has(i));
       if((!ids||!ids.length)&&!ax.length){ note.textContent='This page builds and uses no named tech. The whole catalogue of what you have earned is a tap away.'; return; }
       if(!ids||!ids.length) note.textContent='This step builds and uses no named tech of its own. Below are the axioms you have earned so far, which every step stands on.';
-      const card=m=>'<div class="dmv'+(m.file===page?' here':'')+'"><b>'+m.name+(m.accepted?' <span class="acc">('+m.accepted+')</span>':'')+'</b> <span class="kd">'+m.kind+(m.file===page?' · built here':' · '+m.tag)+'</span>'+(m.tex?'<div class="mt" data-t="'+m.tex.replace(/"/g,'&quot;')+'"></div>':'')+'<div class="mw">'+m.words+'</div></div>';
+      const card=m=>'<div class="dmv'+(m.file===page?' here':'')+'"><b>'+m.name+(m.accepted?' <span class="acc">('+m.accepted+')</span>':'')+'</b> <span class="kd">'+m.kind+(m.file===page?' · built here':' · '+m.tag)+'</span>'+(m.tex?'<div class="mt" data-t="'+m.tex.replace(/"/g,'&quot;')+'"></div>':'')+'<div class="mw">'+m.words+'</div>'+(m.pid?'<a class="mwhere" href="'+(m.file===page?'':m.file+'.html')+'#'+m.pid+'">'+(m.file===page?'where it is built, on this page':'where it is built')+' →</a>':'')+'</div>';
       box.innerHTML=(ids||[]).map(i=>card(M.moves[i])).join('')+(ax.length?'<h4 class="dax">The axioms earned so far</h4>'+ax.map(([m])=>card(m)).join(''):'');
       if(false) box.innerHTML=ids.map(i=>M.moves[i]).map(m=>'<div class="dmv'+(m.file===page?' here':'')+'"><b>'+m.name+(m.accepted?' <span class="acc">('+m.accepted+')</span>':'')+'</b> <span class="kd">'+m.kind+(m.file===page?' · built here':' · '+m.tag)+'</span>'+(m.tex?'<div class="mt" data-t="'+m.tex.replace(/"/g,'&quot;')+'"></div>':'')+'<div class="mw">'+m.words+'</div></div>').join('');
       if(window.katex) box.querySelectorAll('.mt').forEach(el=>{ try{ katex.render(el.dataset.t,el,{throwOnError:false,strict:false,trust:true,displayMode:false}); }catch(e){ el.textContent=el.dataset.t; } }); };
     if(window.LADDER_MOVES) draw(); else { const s=document.createElement('script'); s.src='moves-data.js'; s.onload=draw; s.onerror=()=>{ box.textContent='The moves could not load.'; }; document.head.appendChild(s); } }
   btn.onclick=()=>open(!desk.classList.contains('open'));
+  /* a tech cited in a lesson (a.techref, data-tech = the move's name) opens the tray on that tech's card instead of leaving the page;
+     the card's own link goes on to the paragraph that built it. If the page's Reference has no such card, follow the link (0.1.18) */
+  document.addEventListener('click',e=>{ const a=e.target.closest&&e.target.closest('a.techref'); if(!a||!a.dataset.tech) return;
+    e.preventDefault(); open(true); show('moves'); const want=a.dataset.tech.trim().toLowerCase(); let tries=0;
+    const go=()=>{ const c=[...document.querySelectorAll('#dmoves .dmv')].find(d=>{ const b=d.querySelector('b'); return b&&b.textContent.trim().toLowerCase().startsWith(want); });
+      if(c){ document.querySelectorAll('#dmoves .dmv.hit').forEach(x=>x.classList.remove('hit')); c.classList.add('hit'); c.scrollIntoView({block:'center'}); setTimeout(()=>c.classList.remove('hit'),4000); }
+      else if(window.LADDER_MOVES||tries>12){ location.href=a.href; } else { tries++; setTimeout(go,250); } };
+    setTimeout(go,50); });
+  document.addEventListener('click',e=>{ const a=e.target.closest&&e.target.closest('#dmoves a.mwhere'); if(a&&a.getAttribute('href').startsWith('#')) open(false); });
   desk.querySelector('.x').onclick=()=>open(false);
   const dkb=desk.querySelector('.dkeys'); if(dkb) dkb.onclick=()=>{ const b=document.querySelector('#mk-tray .mk-btn'); if(b) b.click(); };
   desk.querySelectorAll('.dtabs [data-p]').forEach(b=>b.onclick=()=>show(b.dataset.p));
@@ -1093,7 +1102,14 @@ function steps(){
   addEventListener('resize',bleed);
   paint();
 }
-ready(()=>{ steps(); const info=tagInfo(); if(info){ titles(info); addresses(info); edInit(); } reportQuestions(); pn(); nonskid(); greek(); curly();
+/* every paragraph with a pid is a link target (rNN.html#pid), so a cite-back can point at the paragraph that built a thing (0.1.18) */
+function pids(){ document.querySelectorAll('[data-pid]').forEach(p=>{ const id=p.dataset.pid; if(id&&!p.id&&!document.getElementById(id)) p.id=id; });
+  /* a link may also name the address the page shows (1b1.0.3): turn it into the paragraph's pid before the steps open */
+  const h=decodeURIComponent(location.hash.slice(1)); if(!h||document.getElementById(h)) return; const info=tagInfo(); if(!info) return;
+  const per={}; const ps=[...document.querySelectorAll('header.top > p[data-pid], section.class p[data-pid]')];
+  for(const p of ps){ const top=!!p.closest('header.top'), st=p.closest('section.step'), k=top?info.label+'.top':(st?st.dataset.step:info.label); per[k]=(per[k]||0)+1; const ad=top?k+'.'+per[k]:k+'.0.'+per[k]; if(ad===h){ history.replaceState(null,'','#'+p.dataset.pid); break; } } }
+function toPid(){ const h=location.hash.slice(1); const t=h&&document.getElementById(h); if(t&&t.dataset&&t.dataset.pid) setTimeout(()=>t.scrollIntoView({block:'center'}),60); }
+ready(()=>{ pids(); steps(); const info=tagInfo(); if(info){ titles(info); addresses(info); edInit(); } toPid(); reportQuestions(); pn(); nonskid(); greek(); curly();
   const fit=()=>{ stackTables(); liftLong(); }; window.__fit=fit;
   setTimeout(fit,400); if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>setTimeout(fit,100)); });
 })();
