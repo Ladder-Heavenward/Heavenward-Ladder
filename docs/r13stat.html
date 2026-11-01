@@ -36,18 +36,18 @@ table.tt td.l{text-align:left}
   <div class="eyebrow">The class · read it through, then work the picture and the slides</div>
 
   <h3>Misses straight up and down</h3>
-  <p class="eqline" data-pid="1aebf4">From here on, take paired data (x₀, y₀), …, (x₍ₙ₋₁₎, y₍ₙ₋₁₎) and a line y = a + bx. The fitted value at xᵢ is ŷᵢ = a + bxᵢ, read “y hat sub i”: the small roof marks a value worked out from the line, not measured. The miss is eᵢ = yᵢ − ŷᵢ. Later the same roof marks the best a and b: â and b̂. The miss has the accepted name the residual. Write S(a, b) = Σᵢ eᵢ² for the total squared miss, and Sₓₓ = Σᵢ(xᵢ − x̄)², Sₓᵧ = Σᵢ(xᵢ − x̄)(yᵢ − ȳ), Sᵧᵧ = Σᵢ(yᵢ − ȳ)². Assume the xᵢ are not all equal, so Sₓₓ &gt; 0. The working on this page writes the intercept as a. The prose writes it as k: the line is y = k + bx, the best intercept is k̂, and the total squared miss is S(k, b).</p>
+  <p class="eqline" data-pid="1aebf4">From here on, take paired data (x₀, y₀), …, (x₍ₙ₋₁₎, y₍ₙ₋₁₎) and a line y = k + bx. The fitted value at xᵢ is ŷᵢ = k + bxᵢ, read “y hat sub i”: the small roof marks a value worked out from the line, not measured. The miss is eᵢ = yᵢ − ŷᵢ. Later the same roof marks the best k and b: k̂ and b̂. The miss has the accepted name the residual. Write S(k, b) = Σᵢ eᵢ² for the total squared miss, and Sₓₓ = Σᵢ(xᵢ − x̄)², Sₓᵧ = Σᵢ(xᵢ − x̄)(yᵢ − ȳ), Sᵧᵧ = Σᵢ(yᵢ − ȳ)². Assume the xᵢ are not all equal, so Sₓₓ &gt; 0.</p>
   <p data-pid="afbf33"><b>The misses are measured straight up and down, along y, because the question is how well x tells y.</b> That choice treats x as known exactly and puts all the error in y. Measuring the other way, along x, gives another line; 13·stat.3.1 asks how different.</p>
 
   <h3>The one best line</h3>
   <p data-pid="5b38a6">Best-line technique (least squares): <b>S(k, b) is least for exactly one line, with b̂ = Sₓᵧ/Sₓₓ and k̂ = ȳ − b̂x̄. The line passes through (x̄, ȳ), and b̂ = r · σ_y/σ_x.</b> Its accepted name is the least squares line, or the regression line of y on x.</p>
   <pre class="lines" data-k="ember" data-label="13·stat: the best-line technique">
-\text{fix } b:\ \ e_i = (y_i - bx_i) - a @@ the misses of the list zᵢ = yᵢ − bxᵢ from the single number a
-S(a, b) = \textstyle\sum_i (z_i - \bar z)^2 + n(\bar z - a)^2 @@ 8·stat's squared-misses, with c = a
-\text{least in } a \iff a = \bar z = \bar y - b\bar x @@ so the line passes through (x̄, ȳ)
+\text{fix } b:\ \ e_i = (y_i - bx_i) - k @@ the misses of the list zᵢ = yᵢ − bxᵢ from the single number k
+S(k, b) = \textstyle\sum_i (z_i - \bar z)^2 + n(\bar z - k)^2 @@ 8·stat's squared-misses, with c = k
+\text{least in } k \iff k = \bar z = \bar y - b\bar x @@ so the line passes through (x̄, ȳ)
 \textstyle\sum_i (z_i - \bar z)^2 = \sum_i \big((y_i - \bar y) - b(x_i - \bar x)\big)^2 = S_{yy} - 2bS_{xy} + b^2S_{xx} @@ 5h, added over i
 = S_{xx}\big(b - \tfrac{S_{xy}}{S_{xx}}\big)^2 + S_{yy} - \tfrac{S_{xy}^2}{S_{xx}} @@ completing the square in b (8i); Sₓₓ &gt; 0
-\htmlClass{new}{\text{least exactly at } \hat b = \tfrac{S_{xy}}{S_{xx}},\ \hat a = \bar y - \hat b\bar x} \quad \blacksquare @@ a square is least only at 0 (square-never-negative); one a, one b
+\htmlClass{new}{\text{least exactly at } \hat b = \tfrac{S_{xy}}{S_{xx}},\ \hat k = \bar y - \hat b\bar x} \quad \blacksquare @@ a square is least only at 0 (square-never-negative); one k, one b
   </pre>
   <p data-pid="efc4fd">Since r = Sₓᵧ/√(SₓₓSᵧᵧ) and σₓ = √(Sₓₓ/n), σ_y = √(Sᵧᵧ/n), the slope is b̂ = r · σ_y/σₓ. So a correlation of 0.6 says: one σₓ more in x goes with 0.6 of a σ_y more in y, on average. A scientist found in 1886 that children of very tall parents are tall, but on average less far from the mean than their parents. He called it regression towards mediocrity. It is this factor r, below 1 by 8·stat's correlation-bound, and the name regression stuck to the line.</p>
 
@@ -68,7 +68,7 @@ S_{yy} = \textstyle\sum_i \big((\hat y_i - \bar y) + e_i\big)^2 = \sum (\hat y_i
   <pre class="lines" data-k="ember" data-label="13·stat: worked">
 x: 1, 2, 3, 4, 5;\ \ y: 3, 5, 4, 8, 10 @@ 8·stat's pairs; x̄ = 3, ȳ = 6
 S_{xx} = 10,\ \ S_{xy} = 6 + 1 + 0 + 2 + 8 = 17,\ \ S_{yy} = 34 @@ deviations −2, −1, 0, 1, 2 and −3, −1, −2, 2, 4
-\hat b = 1.7,\ \ \hat a = 6 - 5.1 = 0.9 @@ best-line: y = 0.9 + 1.7x
+\hat b = 1.7,\ \ \hat k = 6 - 5.1 = 0.9 @@ best-line: y = 0.9 + 1.7x
 e: 0.4,\ 0.7,\ -2,\ 0.3,\ 0.6 @@ residuals: they add to 0, and Σxᵢeᵢ = 0.4 + 1.4 − 6 + 1.2 + 3 = 0
 r^2 = \tfrac{17^2}{10 \cdot 34} = \tfrac{289}{340} = 0.85 @@ r ≈ 0.922, as 8·stat.1.1d finds
   </pre>
@@ -232,10 +232,10 @@ function all(){ PF.redraw(); PL.redraw(); read(); }
 window.__pic={set:(a,b,q)=>{ ka.value=a; kb.value=b; kq.value=q; all(); const f=fit(AX,AY), g=fit(...QS[q]); return {best:[+f.a.toFixed(4),+f.b.toFixed(4)],Sbest:+S(AX,AY,f.a,f.b).toFixed(4),Syou:+S(AX,AY,a,b).toFixed(4),q:[+g.a.toFixed(3),+g.b.toFixed(3),+g.r.toFixed(3)]}; }};
 all();
 stepper('#sl1',[
-  {k:'ember',kl:'residuals',t:R`e_i = y_i - (a + bx_i)`,n:`Misses straight up and down.`},
-  {k:'ember',kl:'the total squared miss',t:R`S(a, b) = \textstyle\sum_i e_i^2`,n:`The total squared miss.`},
-  {k:'ember',kl:'best-line',t:R`${Nw}{\hat b = \tfrac{S_{xy}}{S_{xx}},\ \ \hat a = \bar y - \hat b\bar x}`,n:`squared-misses in the intercept, then completing the square in b.`},
-  {k:'ember',kl:'through the means',t:R`\bar y = \hat a + \hat b\bar x`,n:`The point (x̄, ȳ) is on it.`},
+  {k:'ember',kl:'residuals',t:R`e_i = y_i - (k + bx_i)`,n:`Misses straight up and down.`},
+  {k:'ember',kl:'the total squared miss',t:R`S(k, b) = \textstyle\sum_i e_i^2`,n:`The total squared miss.`},
+  {k:'ember',kl:'best-line',t:R`${Nw}{\hat b = \tfrac{S_{xy}}{S_{xx}},\ \ \hat k = \bar y - \hat b\bar x}`,n:`squared-misses in the intercept, then completing the square in b.`},
+  {k:'ember',kl:'through the means',t:R`\bar y = \hat k + \hat b\bar x`,n:`The point (x̄, ȳ) is on it.`},
   {k:'ember',kl:'b = rσ_y/σₓ',t:R`\hat b = r\,\tfrac{\sigma_y}{\sigma_x}`,n:`One σₓ more, r σ_y more.`},
   {k:'ember',kl:"regression to the mean",t:R`|r| \le 1`,n:`Back towards the mean, 1886.`},
   {k:'ember',kl:'the check by slopes',t:R`Q'(b) = 2S_{xx}b - 2S_{xy}`,n:`0 at b̂; the reason is rung 14's.`},

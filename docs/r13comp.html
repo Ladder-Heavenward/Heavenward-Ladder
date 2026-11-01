@@ -38,7 +38,7 @@
 
   <h3>The halving program</h3>
   <pre class="lines" data-k="teal" data-label="from 12e: bisection, as a program">
-\text{1. } c \leftarrow a,\ \ d \leftarrow b @@ given: f(a) and f(b) of opposite signs, so [a, b] is a trap
+\text{1. } c \leftarrow p,\ \ d \leftarrow q @@ given: f(p) and f(q) of opposite signs, so [p, q] is a trap
 \text{2. } m \leftarrow (c + d)/2 @@ the middle (8h)
 \text{3. if } m = c \text{ or } m = d,\ \text{stop: report } [c, d] @@ no machine number between: the trap has closed on neighbours
 \text{4. if } f(m) = 0,\ \text{stop: report } m @@ middle-of-a-trap: the middle is a zero
@@ -62,11 +62,11 @@
   <p data-pid="520735">Many computer chips divide this way. To find 1/k, hunt the zero of f(x) = 1/x − k. Its tangent step needs no division at all, only multiplying and taking away.</p>
   <p data-pid="cc0b4b">Reciprocal-step technique: <b>for f(x) = 1/x − k, the tangent step is x(2 − kx), and its new error is −k times the old error squared.</b> Precisely: for k ≠ 0 and x = 1/k + e, with x ≠ 0, N(x) = x(2 − kx) = 1/k − ke².</p>
   <pre class="lines" data-k="ember" data-label="13·comp: the reciprocal-step technique">
-f(x) = \tfrac1x - a,\ \ f'(x) = -\tfrac{1}{x^2} @@ slope-of-one-over-x (13a); a constant has slope 0
-N(x) = x - \dfrac{1/x - a}{-1/x^2} = x + x^2\big(\tfrac1x - a\big) @@ the tangent step; dividing by −1/x² is multiplying by −x²
+f(x) = \tfrac1x - k,\ \ f'(x) = -\tfrac{1}{x^2} @@ slope-of-one-over-x (13a); a constant has slope 0
+N(x) = x - \dfrac{1/x - k}{-1/x^2} = x + x^2\big(\tfrac1x - k\big) @@ the tangent step; dividing by −1/x² is multiplying by −x²
 = \htmlClass{new}{x(2 - ax)} @@ spread and collect (5h): no division left
-x = \tfrac1a + e:\ \ x(2 - ax) = \big(\tfrac1a + e\big)(1 - ae) @@ 2 − a(1/a + e) = 1 − ae
-= \tfrac1a - e + e - ae^2 = \htmlClass{new}{\tfrac1a - ae^2} \quad \blacksquare @@ spread (5h)
+x = \tfrac1k + e:\ \ x(2 - ax) = \big(\tfrac1k + e\big)(1 - ae) @@ 2 − k(1/k + e) = 1 − ae
+= \tfrac1k - e + e - ae^2 = \htmlClass{new}{\tfrac1k - ae^2} \quad \blacksquare @@ spread (5h)
   </pre>
   <pre class="lines" data-k="ember" data-label="13·comp: a chip finds 1/7">
 x_0 = 0.1 @@ error about 0.043
@@ -237,9 +237,9 @@ stepper('#sl1',[
   {k:'ember',kl:'a program',t:R`x \leftarrow v`,n:`Numbered instructions, boxes that hold numbers, and loops.`},
   {k:'ember',kl:"the machine's numbers",t:R`2^{-52}`,n:`Finitely many between 1 and 2: the line has holes.`},
   {k:'teal',kl:'the halving program',t:R`m \leftarrow \tfrac{c + d}{2};\ \text{keep the trap}`,n:`Stop when the middle is an end.`},
-  {k:'ember',kl:'one bit per step',t:R`\tfrac{b - a}{2^n}`,n:`34 halvings for 10 places of √2.`},
+  {k:'ember',kl:'one bit per step',t:R`\tfrac{q - p}{2^n}`,n:`34 halvings for 10 places of √2.`},
   {k:'teal',kl:'the tangent program',t:R`x \leftarrow x - \tfrac{f(x)}{f'(x)}`,n:`The places double, once close.`},
-  {k:'ember',kl:'reciprocal-step',t:R`\htmlClass{new}{x(2 - ax) = \tfrac1a - ae^2}`,n:`A chip divides with no division.`},
+  {k:'ember',kl:'reciprocal-step',t:R`\htmlClass{new}{x(2 - ax) = \tfrac1k - ae^2}`,n:`A chip divides with no division.`},
   {k:'ember',kl:'where each fails',t:R`0, 1, 0, 1, \cdots`,n:`Halving needs a trap; the tangent step can fly off or cycle.`},
   {k:'ember',kl:'the safe program',t:R`c \lt t \lt d\ ?\ \text{split at } t : \text{halve}`,n:`And halve again if the round did not halve the trap.`},
   {k:'ember',kl:'safe-step',t:R`\htmlClass{new}{d - c \le \tfrac{q - p}{2^n}}`,n:`A trap always, and at least halving.`},

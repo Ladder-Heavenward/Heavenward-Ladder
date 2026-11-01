@@ -76,34 +76,34 @@ f(x) \le K_1 \le |K_1| \le \htmlClass{new}{\max(|k|, |K_1|)} @@ sandwich's sandw
   <p class="stands">Stands on 12b2, 12a3 (closed-interval-continuity) and 8c (the no-holes technique).</p>
   <p data-pid="b2b598">Bounded-on-a-closed-interval technique: <b>if f is continuous on [v, w], then f is bounded on [v, w].</b> The idea is to walk the bound along the interval. At v, the bound |f(v)| does for the inputs up to v. Continuity at any input carries a bound a little further. But “a little further, again and again” is not a proof: the steps might shrink and pile up short of w. So instead of walking, take the least upper bound of everywhere the walk could get to, and walk once from there.</p>
   <pre class="lines" data-k="ember" data-label="this step: the bounded-on-a-closed-interval technique · setting up">
-B = \{x \in [a, b] : \exists K\ \forall t \in [a, b]\ (t \le x \Rightarrow |f(t)| \le K)\} @@ Separation (2b): the inputs up to which f is bounded. B ⊆ [a, b] by sift-is-part
-a \in B @@ K = |f(a)|: the only t ∈ [a, b] with t ≤ a is a itself (at-most-is-a-partial-order on ℝ's antisymmetry, 8a)
-\forall x \in B\ (x \le b) @@ b is an upper bound of B
+B = \{x \in [v, w] : \exists K\ \forall t \in [v, w]\ (t \le x \Rightarrow |f(t)| \le K)\} @@ Separation (2b): the inputs up to which f is bounded. B ⊆ [v, w] by sift-is-part
+v \in B @@ K = |f(v)|: the only t ∈ [v, w] with t ≤ v is v itself (at-most-is-a-partial-order on ℝ's antisymmetry, 8a)
+\forall x \in B\ (x \le w) @@ w is an upper bound of B
 \htmlClass{new}{\sigma = \sup B} @@ <span class="hl-new">no-holes (8c)</span>: B has a member and an upper bound. The one no-holes line
-a \le \sigma \le b @@ a ∈ B and σ an upper bound; σ least and b an upper bound
+v \le \sigma \le w @@ v ∈ B and σ an upper bound; σ least and w an upper bound
   </pre>
   <pre class="lines" data-k="ember" data-label="this step: the bounded-on-a-closed-interval technique · continuity at σ, once">
-\text{call } \delta:\ t \in [a, b] \land |t - \sigma| \lt \delta \Rightarrow |f(t) - f(\sigma)| \lt \htmlClass{new}{1} @@ closed-interval-continuity (12a) at σ, challenged with ε = 1
+\text{call } \delta:\ t \in [v, w] \land |t - \sigma| \lt \delta \Rightarrow |f(t) - f(\sigma)| \lt \htmlClass{new}{1} @@ closed-interval-continuity (12a) at σ, challenged with ε = 1
 \qquad \Rightarrow |f(t)| \lt |f(\sigma)| + 1 @@ triangle (8h): |f(t)| ≤ |f(t) − f(σ)| + |f(σ)|; order-and-arithmetic-agree
 \text{call } x \in B \text{ with } \sigma - \delta \lt x \le \sigma @@ σ − δ is not an upper bound, since σ is the least: not-every bounded, negated-if forward, three-way-order on ℝ; σ is an upper bound
-\text{call } K:\ \forall t \in [a, b]\ (t \le x \Rightarrow |f(t)| \le K) @@ ﹀ x ∈ B; use a some
-x' = \min(\sigma + \tfrac{\delta}{2},\ b),\ \ \ K' = \htmlClass{new}{\max(K,\ |f(\sigma)| + 1)} @@ 8b's min and max: a little past σ, and a bound for both stretches
+\text{call } K:\ \forall t \in [v, w]\ (t \le x \Rightarrow |f(t)| \le K) @@ ﹀ x ∈ B; use a some
+x' = \min(\sigma + \tfrac{\delta}{2},\ w),\ \ \ K' = \htmlClass{new}{\max(K,\ |f(\sigma)| + 1)} @@ 8b's min and max: a little past σ, and a bound for both stretches
   </pre>
   <pre class="lines" data-k="ember" data-label="this step: the bounded-on-a-closed-interval technique · the bound carried past σ">
-\text{let } t \in [a, b],\ t \le x' @@ to show |f(t)| ≤ K′
+\text{let } t \in [v, w],\ t \le x' @@ to show |f(t)| ≤ K′
 t \le x \;\lor\; x \lt t @@ three-way-order on ℝ
 \text{case } t \le x:\ \ |f(t)| \le K \le K' @@ the bound up to x; 8b's max, by its two cases, is at least each
 \text{case } x \lt t:\ \ \sigma - \delta \lt x \lt t \le x' \le \sigma + \tfrac{\delta}{2} @@ chain the order (at-most-is-a-partial-order on ℝ); lesser-below-both for x′
 \qquad |t - \sigma| \lt \delta, \text{ so } |f(t)| \lt |f(\sigma)| + 1 \le K' @@ unpack-the-bars packs; the window's line; max
-x' \in B @@ x′ ∈ [a, b] (σ ≤ x′ ≤ b, as min is one of the two), with the bound K′: ︿ the sift
+x' \in B @@ x′ ∈ [v, w] (σ ≤ x′ ≤ w, as min is one of the two), with the bound K′: ︿ the sift
   </pre>
   <pre class="lines" data-k="ember" data-label="this step: the bounded-on-a-closed-interval technique · σ is the right end">
 x' \le \sigma @@ σ is an upper bound of B
-\min(\sigma + \tfrac{\delta}{2},\ b) \ne \sigma + \tfrac{\delta}{2} @@ σ + δ/2 &gt; σ ≥ x′: three-way-order on ℝ
-x' = b @@ min is one of the two (8b's line by cases): the remaining-option technique
-b \le \sigma \le b,\ \ \text{so } \htmlClass{new}{\sigma = b} @@ the two lines above; at-most-is-a-partial-order on ℝ's antisymmetry
-b \in B @@ x′ = b and x′ ∈ B (the swap axiom)
-\exists K\ \forall t \in [a, b]\ (|f(t)| \le K) \quad \blacksquare @@ ﹀ b ∈ B: every t ∈ [a, b] has t ≤ b
+\min(\sigma + \tfrac{\delta}{2},\ w) \ne \sigma + \tfrac{\delta}{2} @@ σ + δ/2 &gt; σ ≥ x′: three-way-order on ℝ
+x' = w @@ min is one of the two (8b's line by cases): the remaining-option technique
+w \le \sigma \le w,\ \ \text{so } \htmlClass{new}{\sigma = w} @@ the two lines above; at-most-is-a-partial-order on ℝ's antisymmetry
+w \in B @@ x′ = w and x′ ∈ B (the swap axiom)
+\exists K\ \forall t \in [v, w]\ (|f(t)| \le K) \quad \blacksquare @@ ﹀ w ∈ B: every t ∈ [v, w] has t ≤ w
   </pre>
   <p data-pid="1ceab2">Notice what the proof did not need: a supposition. It never says “suppose f is not bounded”. It carries the bound past σ. It finds that the only way to be past σ and still at most σ is to have reached b, and so lands on b. No-holes was spent at one line, σ = sup B. Continuity was spent at one input, σ: the window of reach δ around σ, with gap 1. Rung 7's either-way principle was spent in the splits by three-way-order on ℝ and in not-every. The closed interval put its left end in B to begin with, and its right end in the interval to end with.</p>
   <p data-pid="0c0768">Notice too why the walk would not do. Start at the left end and carry the bound as far as continuity at your current input allows, halfway across the window, and repeat. Take a function with an infinite discontinuity at the right end, such as 1/(1 − x) on [0, 1) with the value 0 at 1. Each window is smaller than the last, and the walk piles up at 1 without arriving. The proof does not walk. It goes directly to σ, and at σ the window has a fixed reach δ, whatever happened before. For that function σ = 1, and at 1 there is no window at all. The one input where the proof spends continuity is the one input where continuity fails.</p>
@@ -136,12 +136,12 @@ b \in B @@ x′ = b and x′ ∈ B (the swap axiom)
   <h2 class="sthead"><span class="stno">12b4</span>A bound by hand, for a polynomial</h2>
   <p class="stands">Stands on 12b3 and 8h (triangle, size of a product).</p>
   <p data-pid="561d20">Bounded-on-a-closed-interval says a bound exists. It does not hand you one. For a polynomial, the triangle inequality does.</p>
-  <p data-pid="b7f1ad">Polynomial-bound technique: <b>for p(x) = Σ_{k≤n} a_k x^k and a closed interval [v, w], let R = max(|v|, |w|). Then |p(x)| ≤ Σ_{k≤n} |a_k| R^k for every x ∈ [v, w].</b></p>
+  <p data-pid="b7f1ad">Polynomial-bound technique: <b>for p(x) = Σ_{k≤n} u_k x^k and a closed interval [v, w], let R = max(|v|, |w|). Then |p(x)| ≤ Σ_{k≤n} |u_k| R^k for every x ∈ [v, w].</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the polynomial-bound technique">
-x \in [a, b] \;\Rightarrow\; |x| \le R @@ a ≤ x ≤ b: if x ≥ 0, |x| = x ≤ b ≤ |b|; if x &lt; 0, |x| = −x ≤ −a ≤ |a| (negative-reverses-order, sandwich); max
+x \in [v, w] \;\Rightarrow\; |x| \le R @@ v ≤ x ≤ w: if x ≥ 0, |x| = x ≤ w ≤ |w|; if x &lt; 0, |x| = −x ≤ −v ≤ |v| (negative-reverses-order, sandwich); max
 |x^k| = |x|^k \le R^k @@ size-of-a-product by induction on k; powers-keep-order (8f) when |x| &lt; R, the swap axiom when |x| = R; power-zero when k = 0
-\Big|\sum_{k\le n} a_k x^k\Big| \le \sum_{k\le n} |a_k x^k| @@ triangle, by induction on n with sum-one-more (9g's Σ with real terms)
-\le \sum_{k\le n} |a_k|\,\htmlClass{new}{R^k} \quad \blacksquare @@ size-of-a-product; keep-order for times on ℚ read in ℝ, term by term (same-direction-add for the sum)
+\Big|\sum_{k\le n} u_k x^k\Big| \le \sum_{k\le n} |u_k x^k| @@ triangle, by induction on n with sum-one-more (9g's Σ with real terms)
+\le \sum_{k\le n} |u_k|\,\htmlClass{new}{R^k} \quad \blacksquare @@ size-of-a-product; keep-order for times on ℚ read in ℝ, term by term (same-direction-add for the sum)
   </pre>
   <pre class="lines" data-k="teal" data-label="from 8h: the triangle inequality, at work">
 p(x) = x^3 - 3x + 1 \text{ on } [-2, 2]:\ \ R = 2 @@ R = max(|−2|, |2|)
@@ -166,7 +166,7 @@ q(x) = 2x^3 - x + 5 \text{ on } [-1, 3]:\ \ R = 3 @@ R = max(1, 3)
 \tfrac1x \text{ is continuous on } (0, 1], \text{ so bounded}\,? @@ (0, 1] is not closed: 1/x passes every bound as x → 0⁺ (10f)
 \begin{aligned}&f \text{ has a value at every input of } [0,\\ &\quad 1], \text{ so bounded}\,?\end{aligned} @@ 1/x with the value 0 at 0: an infinite discontinuity at the input 0
 \lfloor x \rfloor \text{ is bounded on } [0, 3], \text{ so continuous}\,? @@ bounded-on-a-closed-interval does not run backwards: three jumps
-\begin{aligned}&\text{carry the bound step}\\ &\quad\text{by step, so it reaches } b\,?\end{aligned} @@ the steps can pile up short of b; the proof jumps to σ = sup B instead
+\begin{aligned}&\text{carry the bound step}\\ &\quad\text{by step, so it reaches } w\,?\end{aligned} @@ the steps can pile up short of w; the proof jumps to σ = sup B instead
 \begin{aligned}&\text{polynomial-bound's}\\ &\quad\text{bound is the least bound}\,?\end{aligned} @@ x³ − 3x + 1 on [−2, 2]: polynomial-bound gives 15; no output has size above 3
 \text{bounded above, so bounded}\,? @@ bounded-both-ways needs both: −x² on ℝ is bounded above by 0 and not below
   </pre>
@@ -283,17 +283,17 @@ stepper('#sl2',[
   {k:'ember',kl:'not backwards',t:R`\lfloor x \rfloor \text{ on } [0, 3]:\ \text{bounded, three jumps}`,n:`Bounded is cheap. bounded-on-a-closed-interval says bounded because continuous.`}
 ],{title:'The slides · both words · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'bounded-on-a-closed-interval · the set',t:R`B = \{x \in [a,b] : f \text{ bounded on } [a,b] \text{ up to } x\}`,n:`The left end is in B: the size of f there is a bound. b is an upper bound.`},
+  {k:'ember',kl:'bounded-on-a-closed-interval · the set',t:R`B = \{x \in [v,w] : f \text{ bounded on } [v,w] \text{ up to } x\}`,n:`The left end is in B: the size of f there is a bound. w is an upper bound.`},
   {k:'ember',kl:'bounded-on-a-closed-interval · the sup',t:R`${Nw}{\sigma = \sup B}`,n:`no-holes: the one completeness line. σ lies in the interval.`},
   {k:'ember',kl:'bounded-on-a-closed-interval · the window',t:R`|t - \sigma| \lt \delta \Rightarrow |f(t)| \lt |f(\sigma)| + ${Nw}{1}`,n:`closed-interval-continuity at σ with ε = 1, then triangle. Continuity is spent here, at σ only.`},
   {k:'ember',kl:'bounded-on-a-closed-interval · a member near σ',t:R`x \in B,\ \ \sigma - \delta \lt x \le \sigma`,n:`σ − δ is not an upper bound, since σ is least. Call x's bound K.`},
-  {k:'ember',kl:'bounded-on-a-closed-interval · carried past',t:R`x' = \min(\sigma + \tfrac\delta2, b),\ \ K' = ${Nw}{\max(K, |f(\sigma)| + 1)}`,n:`Up to x: K. From x to x′: inside the window. So x′ ∈ B.`},
-  {k:'ember',kl:'bounded-on-a-closed-interval · σ is b',t:R`x' \le \sigma \;\Rightarrow\; x' = b \;\Rightarrow\; ${Nw}{\sigma = b}`,n:`x′ is at most σ but σ + δ/2 is not: so the min is b, and b ≤ σ ≤ b.`},
-  {k:'ember',kl:'bounded-on-a-closed-interval · the end',t:R`b \in B:\ \ \exists K\ \forall t \in [a, b]\ (|f(t)| \le K)`,n:`No supposition anywhere. ∎`},
+  {k:'ember',kl:'bounded-on-a-closed-interval · carried past',t:R`x' = \min(\sigma + \tfrac\delta2, w),\ \ K' = ${Nw}{\max(K, |f(\sigma)| + 1)}`,n:`Up to x: K. From x to x′: inside the window. So x′ ∈ B.`},
+  {k:'ember',kl:'bounded-on-a-closed-interval · σ is b',t:R`x' \le \sigma \;\Rightarrow\; x' = w \;\Rightarrow\; ${Nw}{\sigma = w}`,n:`x′ is at most σ but σ + δ/2 is not: so the min is w, and w ≤ σ ≤ w.`},
+  {k:'ember',kl:'bounded-on-a-closed-interval · the end',t:R`w \in B:\ \ \exists K\ \forall t \in [v, w]\ (|f(t)| \le K)`,n:`No supposition anywhere. ∎`},
   {k:'ember',kl:'why not walk',t:R`\tfrac{1}{1-x}:\ \text{windows shrink, the walk piles up at } 1`,n:`The proof does not walk. It goes to σ, where the window has a fixed reach, or, for this function, none.`}
 ],{title:'The slides · bounded-on-a-closed-interval · ← → keys work'});
 stepper('#sl4',[
-  {k:'ember',kl:'polynomial-bound',t:R`|p(x)| \le \sum_{k \le n} |a_k|\,${Nw}{R^k}`,n:`R = max(|v|, |w|) for x ∈ [v, w]; triangle and size-of-a-product. A bound by hand. ∎`},
+  {k:'ember',kl:'polynomial-bound',t:R`|p(x)| \le \sum_{k \le n} |u_k|\,${Nw}{R^k}`,n:`R = max(|v|, |w|) for x ∈ [v, w]; triangle and size-of-a-product. A bound by hand. ∎`},
   {k:'teal',kl:'from 8h · polynomial-bound used',t:R`x^3 - 3x + 1 \text{ on } [-2, 2]:\ \ 8 + 6 + 1 = 15`,n:`Generous: the values stay between −1 and 3. A bound only has to be above.`}
 ],{title:'The slides · polynomial-bound · ← → keys work'});
 

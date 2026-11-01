@@ -62,17 +62,17 @@ table.tt td.l{text-align:left}
   <p data-pid="d874ba"><b>The chance of landing in a range is the area over it.</b></p>
 
   <h3>A curve as a model of chance</h3>
-  <p class="eqline" data-pid="967b6a">From here on, a density on [c, d] is a function f, integrable on [c, d], with f(x) ≥ 0 there and ∫ᶜᵈ f(x) dx = 1. A quantity lands by f when, for c ≤ a ≤ b ≤ d, its chance of landing in [a, b] is ∫ₐᵇ f(x) dx. Accepted names: a probability density function; the quantity is a continuous random variable.</p>
+  <p class="eqline" data-pid="967b6a">From here on, a density on [c, d] is a function f, integrable on [c, d], with f(x) ≥ 0 there and ∫ᶜᵈ f(x) dx = 1. A quantity lands by f when, for c ≤ u ≤ v ≤ d, its chance of landing in [u, v] is ∫ᵤᵛ f(x) dx. Accepted names: a probability density function; the quantity is a continuous random variable.</p>
   <p data-pid="023e45">The tent f above was counted. For a real quantity, which f it follows is not proved. It is a guess, checked against a histogram, the way 4·stat took cases as equally likely and checked them against tallies.</p>
   <p data-pid="974e73">Range-chance technique: <b>let f be a density on [c, d]. Every range in [c, d] has a chance from 0 to 1. Two ranges that meet only at an end have chances that add. A single value has chance 0.</b></p>
   <pre class="lines" data-k="ember" data-label="this page: the range-chance technique">
-0 \le \textstyle\int_a^b f @@ smaller-function-smaller-area (15e): f ≥ 0
-\textstyle\int_c^d f = \int_c^a f + \int_a^b f + \int_b^d f @@ interval-cut-in-two (15e), twice
-\textstyle\int_a^b f \le \int_c^d f = 1 @@ the other two pieces are at least 0
-\textstyle\int_a^b f + \int_b^e f = \int_a^e f @@ interval-cut-in-two: ranges meeting at b add
+0 \le \textstyle\int_u^v f @@ smaller-function-smaller-area (15e): f ≥ 0
+\textstyle\int_c^d f = \int_c^u f + \int_u^v f + \int_v^d f @@ interval-cut-in-two (15e), twice
+\textstyle\int_u^v f \le \int_c^d f = 1 @@ the other two pieces are at least 0
+\textstyle\int_u^v f + \int_v^e f = \int_u^e f @@ interval-cut-in-two: ranges meeting at b add
 f \le M \text{ on } [c, d] @@ integrable means bounded (15c)
-\textstyle\int_a^{a + w} f \le Mw \text{ for every } w \gt 0 @@ smaller-function-smaller-area
-\htmlClass{new}{\text{the chance of exactly } a \text{ is } 0} \quad \blacksquare @@ it is at most every Mw; and ∫ₐᵃ f = 0 (15e)
+\textstyle\int_u^{u + w} f \le Mw \text{ for every } w \gt 0 @@ smaller-function-smaller-area
+\htmlClass{new}{\text{the chance of exactly } u \text{ is } 0} \quad \blacksquare @@ it is at most every Mw; and ∫ₐᵃ f = 0 (15e)
   </pre>
   <p data-pid="1e1b07">So [u, v] and the range without its ends have the same chance. A height of f is not a chance. A density can be taller than 1 where it is narrow: f = 3 on [0, ⅓] is a density.</p>
 
@@ -81,9 +81,9 @@ f \le M \text{ on } [c, d] @@ integrable means bounded (15c)
   <p data-pid="75fe70">Area-so-far technique: <b>F starts at 0 and ends at 1, never goes down, and has no gaps. The chance of [u, v] is F(v) − F(u). Some m has F(m) = ½.</b></p>
   <pre class="lines" data-k="ember" data-label="this page: the area-so-far technique">
 F(c) = 0,\ \ F(d) = 1 @@ ∫ᶜᶜ f = 0 (15e); f is a density
-F(b) = F(a) + \textstyle\int_a^b f @@ interval-cut-in-two
-F(b) - F(a) = \textstyle\int_a^b f \ge 0 @@ smaller-function-smaller-area: F never goes down
-0 \le F(b) - F(a) \le M(b - a) @@ f ≤ M: F is continuous, by the squeeze (10d)
+F(v) = F(u) + \textstyle\int_u^v f @@ interval-cut-in-two
+F(v) - F(u) = \textstyle\int_u^v f \ge 0 @@ smaller-function-smaller-area: F never goes down
+0 \le F(v) - F(u) \le M(v - u) @@ f ≤ M: F is continuous, by the squeeze (10d)
 F(c) \lt \tfrac12 \lt F(d) \;\Rightarrow\; \htmlClass{new}{F(m) = \tfrac12} \text{ for some } m @@ in-between-value (12a) ∎
   </pre>
   <p data-pid="0c2d05">For the tent, F(x) = x²/2 on [0, 1], and F(x) = 1 − (2 − x)²/2 on [1, 2], by area-under-a-power on each piece. The chance of [0.5, 1.5] is F(1.5) − F(0.5) = 0.875 − 0.125 = 0.75. The m with F(m) = ½ is 1, the median.</p>
@@ -121,7 +121,7 @@ F(c) \lt \tfrac12 \lt F(d) \;\Rightarrow\; \htmlClass{new}{F(m) = \tfrac12} \tex
   <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed">
 f(1) = 1 \text{, so the chance of exactly } 1 \text{ is } 1\,? @@ a height is not a chance; one value has chance 0
 \text{a density never passes } 1\,? @@ f = 3 on [0, ⅓] is a density; only areas stay at most 1
-\text{chance of } [a, b] = f(b) - f(a)\,? @@ that is F(b) − F(a), the running total
+\text{chance of } [u, v] = f(v) - f(u)\,? @@ that is F(v) − F(u), the running total
 \text{chance } 0 \text{, so it cannot happen}\,? @@ every value has chance 0, and one of them happens
 \begin{aligned}&\text{bars drawn by count, with}\\ &\quad\text{bins of different widths}\,?\end{aligned} @@ draw count/(nw), so that area is share
   </pre>
@@ -256,11 +256,11 @@ stepper('#sl1',[
   {k:'ember',kl:'the tent',t:R`${Nw}{f(x) = x \text{ on } [0, 1],\ 2 - x \text{ on } [1, 2]}`,n:`Counted, not measured.`},
   {k:'ember',kl:'a chance as an area',t:R`\textstyle\int_{0.5}^{1} x\,dx = 0.375`,n:`narrow-strips: the bars' total heads to the area.`},
   {k:'ember',kl:'a density',t:R`f \ge 0,\ \ \textstyle\int_c^d f = 1`,n:`Which curve a real quantity follows is a guess, checked against data.`},
-  {k:'ember',kl:'range-chance',t:R`0 \le \textstyle\int_a^b f \le 1`,n:`Ranges meeting at an end add.`},
-  {k:'ember',kl:'one value',t:R`\textstyle\int_a^{a+w} f \le Mw`,n:`So exactly u has chance 0.`},
-  {k:'ember',kl:'the area so far',t:R`F(x) = \textstyle\int_c^x f,\ \ F(b) - F(a)`,n:`Never goes down, no gaps, and a median by in-between-value.`},
+  {k:'ember',kl:'range-chance',t:R`0 \le \textstyle\int_u^v f \le 1`,n:`Ranges meeting at an end add.`},
+  {k:'ember',kl:'one value',t:R`\textstyle\int_u^{u+w} f \le Mw`,n:`So exactly u has chance 0.`},
+  {k:'ember',kl:'the area so far',t:R`F(x) = \textstyle\int_c^x f,\ \ F(v) - F(u)`,n:`Never goes down, no gaps, and a median by in-between-value.`},
   {k:'ember',kl:'the bus',t:R`\textstyle\int_{30}^{40} \tfrac{40 - x}{400}\,dx = \tfrac18`,n:`Two 20-minute buses: one trip in 8 waits over half an hour.`},
-  {k:'ember',kl:'illegal',t:R`f(a) \ne \text{a chance}`,n:`A height is not a chance; a density may pass 1.`}
+  {k:'ember',kl:'illegal',t:R`f(u) \ne \text{a chance}`,n:`A height is not a chance; a density may pass 1.`}
 ],{title:'The slides · bars as areas; two random numbers; the bars made thin; the tent; a chance as an area; a density; range-chance; one value; the area so far; the bus; illegal moves · ← → keys work'});
 function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
 Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);

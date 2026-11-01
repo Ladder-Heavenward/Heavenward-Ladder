@@ -152,8 +152,8 @@ table.tt td.num{font-family:var(--mono);text-align:right;white-space:nowrap}
 <section class="class step" data-step="12e5">
   <h2 class="sthead"><span class="stno">12e5</span>How fast the trap closes</h2>
   <p class="stands">Stands on 12e4 and 4b (induction).</p>
-  <p data-pid="c2870c">Halvings-width technique: <b>starting from a trap [u, v], if no tested middle is a zero, the trap after n halvings has width (v − u)/2ⁿ.</b> By induction on n. At the start the width is v − u = (v − u)/2⁰ (power-zero). Each halving takes a width w to w/2, which is (v − u)/2^{S(n)} by power-of-a-next and 5g's fractions-of-rationals. ∎</p>
-  <p data-pid="2e63ca">So to get the width below a tolerance t you need 2ⁿ &gt; (v − u)/t. No new function is needed to find n: double until you pass.</p>
+  <p data-pid="c2870c">Halvings-width technique: <b>starting from a trap [v, w], if no tested middle is a zero, the trap after n halvings has width (w − v)/2ⁿ.</b> By induction on n. At the start the width is w − v = (w − v)/2⁰ (power-zero). Each halving takes a width w to w/2, which is (w − v)/2^{S(n)} by power-of-a-next and 5g's fractions-of-rationals. ∎</p>
+  <p data-pid="2e63ca">So to get the width below a tolerance t you need 2ⁿ &gt; (w − v)/t. No new function is needed to find n: double until you pass.</p>
   <pre class="lines" data-k="ember" data-label="this step: counting halvings with powers of 2">
 [1, 2],\ t = 0.001:\ \ 2^n \gt \tfrac{1}{0.001} = 1000 @@ what to pass
 2^9 = 512,\ \ \htmlClass{new}{2^{10} = 1024} @@ double until you pass 1000: n = 10
@@ -182,11 +182,11 @@ t = 0.000001:\ \ 2^n \gt 10^6 @@ six places
   <h2 class="sthead"><span class="stno">12e6</span>The choices are bits</h2>
   <p class="stands">Stands on 12e5 and 4h (numerals in twos).</p>
   <p data-pid="699953">Write 0 for “keep the left half” and 1 for “keep the right half”. Then the choices are 4h's bits, and the trap can be read off them.</p>
-  <p data-pid="4af93b">Trap-from-its-bits technique: <b>the choices, read as a numeral in twos, say exactly where the trap is.</b> Precisely: start from [u, v], and make choices e₁, e₂, ⋯, e_n. Let k be the value of the bits e₁e₂⋯e_n read in twos by 4h's reading rule. (0s in front are allowed, as 5g allowed them for decimal places.) Then the trap is [u + k(v − u)/2ⁿ, u + (k + 1)(v − u)/2ⁿ]. By induction: the reading rule's step takes k to 2k + e_{S(n)}. Choosing left keeps [u + 2k(v − u)/2^{S(n)}, u + (2k + 1)(v − u)/2^{S(n)}], which is the left half. Choosing right adds 1. ∎</p>
+  <p data-pid="4af93b">Trap-from-its-bits technique: <b>the choices, read as a numeral in twos, say exactly where the trap is.</b> Precisely: start from [v, w], and make choices e₁, e₂, ⋯, e_n. Let k be the value of the bits e₁e₂⋯e_n read in twos by 4h's reading rule. (0s in front are allowed, as 5g allowed them for decimal places.) Then the trap is [v + k(w − v)/2ⁿ, v + (k + 1)(w − v)/2ⁿ]. By induction: the reading rule's step takes k to 2k + e_{S(n)}. Choosing left keeps [v + 2k(w − v)/2^{S(n)}, v + (2k + 1)(w − v)/2^{S(n)}], which is the left half. Choosing right adds 1. ∎</p>
   <pre class="lines" data-k="teal" data-label="from 4h: numerals in twos">
 \text{√2's choices: } 0, 1, 1, 0, 1 @@ left, right, right, left, right
 01101_2 = 13 @@ 4h's reading rule in twos: 8 + 4 + 1
-[1 + \tfrac{13}{32},\ 1 + \tfrac{14}{32}] = [\tfrac{45}{32}, \tfrac{46}{32}] @@ trap-from-its-bits with a = 1, b − a = 1: the trap after five tests
+[1 + \tfrac{13}{32},\ 1 + \tfrac{14}{32}] = [\tfrac{45}{32}, \tfrac{46}{32}] @@ trap-from-its-bits with v = 1, w − v = 1: the trap after five tests
 \text{ten choices } 0110101000:\ \ k = 424 @@ [1 + 424/1024, 1 + 425/1024] = [181/128, 1449/1024]: the table's last trap
   </pre>
   <p data-pid="7e73eb">So bisection on [1, 2] spells √2 out one bit per test. After n tests, √2 − 1 lies between k/2ⁿ and (k + 1)/2ⁿ, with k the first n bits read in twos. That is much as 5g's division place by place spelled a fraction out in tens. The bits are a list, read by 4h's rule; no new mark is needed.</p>
@@ -203,13 +203,13 @@ t = 0.000001:\ \ 2^n \gt 10^6 @@ six places
   <h2 class="sthead"><span class="stno">12e7</span>Why the trap always holds a zero</h2>
   <p class="stands">Stands on 12e6, 8c (the no-holes technique) and 12a4 (sign-kept-near-an-input).</p>
   <p data-pid="e2f077">12a proved a trap holds a zero by a least upper bound. Bisection gives a second proof: the traps close on a single real, and it is a zero. It is the proof put in a note to a course of lectures of 1821, and the idea behind the 1817 paper's own.</p>
-  <p data-pid="98fd29">Halving-traps technique: <b>let [u, v] be a trap with f(u) &lt; 0 &lt; f(v), and bisect it again and again. Either some middle is a zero, or the left ends c_n and right ends d_n close on a real z with f(z) = 0.</b> (Here c_n and d_n are terms of sequences, 9·cb4's low marks, and z is a letter naming a real.)</p>
+  <p data-pid="98fd29">Halving-traps technique: <b>let [v, w] be a trap with f(v) &lt; 0 &lt; f(w), and bisect it again and again. Either some middle is a zero, or the left ends c_n and right ends d_n close on a real z with f(z) = 0.</b> (Here c_n and d_n are terms of sequences, 9·cb4's low marks, and z is a letter naming a real.)</p>
   <pre class="lines" data-k="ember" data-label="this step: the halving-traps technique">
 f(c_n) \lt 0 \lt f(d_n),\ \ c_n \le c_{S(n)} \lt d_{S(n)} \le d_n @@ by induction with middle-of-a-trap: keep the half whose left end is negative
-z = \htmlClass{new}{\sup\{c_n : n \in \mathbb N\}} @@ no-holes (8c): every c_n is below d₀ = b
+z = \htmlClass{new}{\sup\{c_n : n \in \mathbb N\}} @@ no-holes (8c): every c_n is below d₀ = w
 c_n \le z \le d_n \text{ for every } n @@ z an upper bound; each d_n is an upper bound (c_k ≤ d_k ≤ d_n or c_k ≤ c_n &lt; d_n), and z is least
-|c_n - z|,\ |d_n - z| \le d_n - c_n = \tfrac{b - a}{2^n} \le \tfrac{b - a}{S(n)} @@ halvings-width; 2ⁿ ≥ S(n) by induction
-c_n \to z,\ \ d_n \to z @@ <span class="hl-new">the squeeze (10d), in 10f's form for sequences</span>, with (b − a)/S(n) → 0 by one-over-n and constant-factor
+|c_n - z|,\ |d_n - z| \le d_n - c_n = \tfrac{w - v}{2^n} \le \tfrac{w - v}{S(n)} @@ halvings-width; 2ⁿ ≥ S(n) by induction
+c_n \to z,\ \ d_n \to z @@ <span class="hl-new">the squeeze (10d), in 10f's form for sequences</span>, with (w − v)/S(n) → 0 by one-over-n and constant-factor
 f(z) \gt 0 \Rightarrow \text{a window of } z \text{ where } f \gt 0 \text{ holds some } c_n:\ \bot @@ sign-kept-near-an-input; the window's reach as a gap for c_n → z
 f(z) \lt 0 \Rightarrow \text{a window where } f \lt 0 \text{ holds some } d_n:\ \bot @@ sign-kept-near-an-input's negative form
 f(z) = 0 \quad \blacksquare @@ three-way-order on ℝ; the remaining-option technique twice
@@ -228,12 +228,12 @@ f(z) = 0 \quad \blacksquare @@ three-way-order on ℝ; the remaining-option tech
   <h2 class="sthead"><span class="stno">12e8</span>A polynomial of odd degree has a zero</h2>
   <p class="stands">Stands on 12e7, 9g (leading-term) and 10f (passing every bound).</p>
   <p data-pid="f2ebc4">9g's leading-term said the leading term decides the large inputs, and said that rung 12 would show an odd-degree polynomial must have a zero. Here it is, with 10f's words.</p>
-  <p data-pid="97e5c7">Odd-degree-passes-bounds technique: <b>if p has odd degree n and leading coefficient a_n &gt; 0, then p(x) passes every bound as x → ∞ and passes below every bound as x → −∞.</b></p>
+  <p data-pid="97e5c7">Odd-degree-passes-bounds technique: <b>if p has odd degree n and leading coefficient u_n &gt; 0, then p(x) passes every bound as x → ∞ and passes below every bound as x → −∞.</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the odd-degree-passes-bounds technique">
-|x| \ge M_0 \Rightarrow |p(x) - a_n x^n| \le \tfrac12 |a_n x^n| @@ leading-term (9g), its M written M₀ here because M names a greatest value in this step: M₀ = max(1, 2C/|a_n|)
-x \ge M_0:\ \ p(x) \ge \tfrac12 a_n x^n \ge \tfrac12 a_n x @@ unpack-the-bars; xⁿ ≥ x past 1 (9e)
-\text{given } K:\ N = \max(M_0, \tfrac{2|K|}{a_n}),\ \ x \gt N \Rightarrow p(x) \gt |K| \ge K @@ 10f's line “passes every bound as x → ∞”, with threshold N
-x \le -M_0:\ \ x^n = -|x|^n,\ \ p(x) \le \tfrac12 a_n x^n \le -\tfrac12 a_n |x| @@ n odd: even-or-odd-powers (9e); unpack-the-bars the other way
+|x| \ge M_0 \Rightarrow |p(x) - u_n x^n| \le \tfrac12 |u_n x^n| @@ leading-term (9g), its M written M₀ here because M names a greatest value in this step: M₀ = max(1, 2C/|u_n|)
+x \ge M_0:\ \ p(x) \ge \tfrac12 u_n x^n \ge \tfrac12 u_n x @@ unpack-the-bars; xⁿ ≥ x past 1 (9e)
+\text{given } K:\ N = \max(M_0, \tfrac{2|K|}{u_n}),\ \ x \gt N \Rightarrow p(x) \gt |K| \ge K @@ 10f's line “passes every bound as x → ∞”, with threshold N
+x \le -M_0:\ \ x^n = -|x|^n,\ \ p(x) \le \tfrac12 u_n x^n \le -\tfrac12 u_n |x| @@ n odd: even-or-odd-powers (9e); unpack-the-bars the other way
 \text{given } K:\ x \lt -N \Rightarrow p(x) \lt -|K| \le K \quad \blacksquare @@ passes below every bound as x → −∞
   </pre>
   <p data-pid="01401b">Odd-degree-zero technique: <b>every polynomial of odd degree has a zero.</b> If its leading coefficient is negative, take −p, which has the same zeros. By odd-degree-passes-bounds with the bound 0, some N₁ has p(x) &gt; 0 for every x &gt; N₁, and some N₂ has p(x) &lt; 0 for every x &lt; N₂. Let c = min(N₁, N₂) − 1 and d = max(N₁, N₂) + 1. Then c &lt; d, p(c) &lt; 0 &lt; p(d), p is continuous on [c, d] (polynomials-are-continuous), and in-between-value gives a zero. ∎ 9g's promise is kept.</p>
@@ -256,13 +256,13 @@ p(x) = x^3 - x - 1:\ \ p(1) = -1,\ \ p(2) = 5 @@ a trap, found by trying whole n
 <section class="class step" data-step="12e9">
   <h2 class="sthead"><span class="stno">12e9</span>Intervals to intervals</h2>
   <p class="stands">Stands on 12e8 and 12c (highest-and-lowest).</p>
-  <p data-pid="6f58e8">Closed-to-closed technique: <b>a continuous function takes a closed interval to a closed interval, or to a single real.</b> Precisely: let f be continuous on [u, v], with least value m and greatest value M (12c's highest-and-lowest). Then the set of its values {f(x) : x ∈ [u, v]} is [m, M] when m &lt; M, and {m} when m = M.</p>
+  <p data-pid="6f58e8">Closed-to-closed technique: <b>a continuous function takes a closed interval to a closed interval, or to a single real.</b> Precisely: let f be continuous on [v, w], with least value m and greatest value M (12c's highest-and-lowest). Then the set of its values {f(x) : x ∈ [v, w]} is [m, M] when m &lt; M, and {m} when m = M.</p>
   <pre class="lines" data-k="ember" data-label="this step: the closed-to-closed technique">
-\text{call } c, d \in [a, b]:\ f(c) = M,\ f(d) = m @@ highest-and-lowest (12c)
-x \in [a, b] \Rightarrow m \le f(x) \le M @@ the values lie in [m, M]
+\text{call } c, d \in [v, w]:\ f(c) = M,\ f(d) = m @@ highest-and-lowest (12c)
+x \in [v, w] \Rightarrow m \le f(x) \le M @@ the values lie in [m, M]
 \begin{aligned}&m \lt y \lt M \Rightarrow \text{some } x \text{ strictly}\\ &\quad\text{between } c \text{ and } d \text{ has } f(x) = y\end{aligned} @@ c ≠ d since m &lt; M; three-way-order on ℝ orders them; in-between-value, general form (12a) on the closed interval between them
 y = m \text{ at } d,\ \ y = M \text{ at } c @@ the ends are reached
-\{f(x) : x \in [a, b]\} = [m, M] \quad \blacksquare @@ chase a member both ways; same-members
+\{f(x) : x \in [v, w]\} = [m, M] \quad \blacksquare @@ chase a member both ways; same-members
   </pre>
   <p data-pid="e79238">On any interval I, closed or not, the same in-between-value, general form gives the property that matters. If y₁ and y₂ are values of a function continuous on I, every real between them is a value too, because the closed interval between the two inputs lies inside I. No-gaps technique: <b>for f continuous on an interval I, if f(x₁) &lt; y &lt; f(x₂) with x₁, x₂ ∈ I, then y is a value of f on I.</b> ∎ And a set of reals with no gaps is an interval. The gap-free-sets technique: <b>a set S of reals with two members, such that every real between two members is a member, is one of 8g's intervals.</b> Suppose S is bounded below and above, and let α = inf S and β = sup S (greatest-lower-bound, no-holes). Every y with α &lt; y &lt; β has a member below it (y is not a lower bound) and a member above it (not an upper bound), so y ∈ S. Hence (α, β) ⊆ S ⊆ [α, β]. The either-way principle's four cases on α ∈ S and β ∈ S give (α, β), [α, β), (α, β] or [α, β]. A side with no bound gives ∞ on that side the same way. ∎ So a continuous function takes an interval to an interval, or to a single real.</p>
   <pre class="lines" data-k="ember" data-label="this step: where intervals go">
@@ -303,7 +303,7 @@ x^2 \text{ on } (-1, 2) \;\to\; [0, 4) @@ an open interval to one that is neithe
 1.26 \text{ is } \sqrt[3]{2} \text{ to three places, cut off}\,? @@ cut off it is 1.259; rounded it is 1.260. Say which
 \text{bisect } \tfrac1x \text{ on } [-1, 2] @@ not a trap: 1/x is not continuous on [−1, 2]. The traps close on its discontinuity at 0
 \text{even degree, so no zero}\,? @@ x⁴ − 5x² + 4 has four. Only odd degree promises one
-\begin{aligned}&f \text{ continuous on } (a, b),\\ &\quad \text{ so its values form an open interval}\,?\end{aligned} @@ x² on (−1, 2) gives [0, 4)
+\begin{aligned}&f \text{ continuous on } (v, w),\\ &\quad \text{ so its values form an open interval}\,?\end{aligned} @@ x² on (−1, 2) gives [0, 4)
   </pre>
   <section class="sayback">
     <h3>Question</h3>
@@ -316,7 +316,7 @@ x^2 \text{ on } (-1, 2) \;\to\; [0, 4) @@ an open interval to one that is neithe
 <section class="class step" data-step="12e12">
   <h2 class="sthead"><span class="stno">12e12</span>Running it backwards</h2>
   <p class="stands">Stands on 12e1 to 12e10.</p>
-  <p data-pid="2f2149">Handed a trap and a list of choices, read the final trap off the bits (trap-from-its-bits). Handed a final trap and its width, double back to the starting width. Handed an accuracy, double until 2ⁿ passes (v − u)/t. Handed an equation of odd degree, say at once that it has an answer, then find two whole numbers whose values disagree in sign and start halving. Handed an interval and a continuous function, find its least and greatest values and say the set of values is the closed interval between them. Found upward; written downward.</p>
+  <p data-pid="2f2149">Handed a trap and a list of choices, read the final trap off the bits (trap-from-its-bits). Handed a final trap and its width, double back to the starting width. Handed an accuracy, double until 2ⁿ passes (w − v)/t. Handed an equation of odd degree, say at once that it has an answer, then find two whole numbers whose values disagree in sign and start halving. Handed an interval and a continuous function, find its least and greatest values and say the set of values is the closed interval between them. Found upward; written downward.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
@@ -460,8 +460,8 @@ stepper('#sl4',[
   {k:'ember',kl:'³√2',t:R`1.2595^3 \lt 2 \lt 1.26^3`,n:`Short decimals instead of middles: ³√2 ≈ 1.260 rounded, 1.259 cut off.`}
 ],{title:'The slides · ³√2 · ← → keys work'});
 stepper('#sl5',[
-  {k:'ember',kl:'halvings-width',t:R`\text{width after } n:\ \ ${Nw}{\tfrac{b - a}{2^n}}`,n:`Induction with power-of-a-next. ∎`},
-  {k:'ember',kl:'doubling',t:R`2^n \gt \tfrac{b - a}{t}:\ \ 2^{10} = 1024 \gt 1000`,n:`Ten halvings buy about three decimal places.`}
+  {k:'ember',kl:'halvings-width',t:R`\text{width after } n:\ \ ${Nw}{\tfrac{w - v}{2^n}}`,n:`Induction with power-of-a-next. ∎`},
+  {k:'ember',kl:'doubling',t:R`2^n \gt \tfrac{w - v}{t}:\ \ 2^{10} = 1024 \gt 1000`,n:`Ten halvings buy about three decimal places.`}
 ],{title:'The slides · halvings · ← → keys work'});
 stepper('#sl6',[
   {k:'teal',kl:'from 4h · trap-from-its-bits',t:R`01101_2 = 13:\ \ [1 + \tfrac{13}{32},\ 1 + \tfrac{14}{32}]`,n:`Left is 0, right is 1; the trap is read off the bits. ∎`}
@@ -471,11 +471,11 @@ stepper('#sl7',[
   {k:'ember',kl:'halving-traps · 2 of 2',t:R`f(z) \gt 0 \text{ or } \lt 0\ \Rightarrow\ \bot`,n:`sign-kept-near-an-input: a window of one sign holds an end of the other. So f(z) = 0. ∎`}
 ],{title:'The slides · halving-traps · ← → keys work'});
 stepper('#sl8',[
-  {k:'ember',kl:'odd-degree-passes-bounds',t:R`x \ge M_0 \Rightarrow p(x) \ge \tfrac12 a_n x`,n:`leading-term, then xⁿ ≥ x past 1: passes every bound. Odd n: below every bound on the left.`},
+  {k:'ember',kl:'odd-degree-passes-bounds',t:R`x \ge M_0 \Rightarrow p(x) \ge \tfrac12 u_n x`,n:`leading-term, then xⁿ ≥ x past 1: passes every bound. Odd n: below every bound on the left.`},
   {k:'ember',kl:'odd-degree-zero',t:R`p(c) \lt 0 \lt p(d) \;\Rightarrow\; \text{a zero}`,n:`Take c, d past the two thresholds; polynomials-are-continuous; in-between-value. Odd degree always has a zero. ∎`}
 ],{title:'The slides · odd degree · ← → keys work'});
 stepper('#sl9',[
-  {k:'ember',kl:'closed-to-closed',t:R`\{f(x) : x \in [a, b]\} = ${Nw}{[m, M]}`,n:`highest-and-lowest for the ends, in-between-value, general form for everything between. ∎`},
+  {k:'ember',kl:'closed-to-closed',t:R`\{f(x) : x \in [v, w]\} = ${Nw}{[m, M]}`,n:`highest-and-lowest for the ends, in-between-value, general form for everything between. ∎`},
   {k:'ember',kl:'where intervals go',t:R`x^2:\ (-1, 2) \to [0, 4)`,n:`Open goes to neither. No gaps (no-gaps), so an interval (gap-free-sets).`}
 ],{title:'The slides · closed-to-closed · ← → keys work'});
 stepper('#sl10',[

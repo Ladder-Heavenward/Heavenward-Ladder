@@ -35,7 +35,7 @@ table.tt td.l{text-align:left}
 <section class="class step" data-step="16g1">
   <h2 class="sthead"><span class="stno">16g1</span>The region between two graphs</h2>
   <p class="stands">Stands on 15a (the area axioms), 15c (exactly-one-between) and 16c (area-is-a-change).</p>
-  <p data-pid="dea1be">Area-between technique: <b>let f and g be integrable on [p, b], with f(x) ≥ g(x) there. Let the set of points (x, y) with p ≤ x ≤ b and g(x) ≤ y ≤ f(x) have an area A obeying the three area axioms. Then A = ∫ₚᵇ (f − g).</b></p>
+  <p data-pid="dea1be">Area-between technique: <b>let f and g be integrable on [p, q], with f(x) ≥ g(x) there. Let the set of points (x, y) with p ≤ x ≤ q and g(x) ≤ y ≤ f(x) have an area A obeying the three area axioms. Then A = ∫ₚ^q (f − g).</b></p>
   <div class="brkkey"></div>
   <pre class="lines" data-k="ember" data-label="the area-between technique">
 \begin{aligned}&\text{on the } i\text{-th piece of } P:\ \text{the box from }\\ &\quad  M_i(g) \text{ up to } m_i(f), \text{ if } m_i(f) \gt M_i(g)\end{aligned} @@ it fits inside the region: below f and above g on the whole piece
@@ -43,7 +43,7 @@ table.tt td.l{text-align:left}
 L(f, P) - U(g, P) \le A @@ each term is at least mᵢ(f)Δxᵢ − Mᵢ(g)Δxᵢ
 \begin{aligned}&\text{the boxes from } m_i(g) \text{ up to } M_i(f) \text{ cover}\\ &\quad\text{the region:\ } A \le U(f, P) - L(g, P)\end{aligned} @@ inside-no-more, side-by-side the same way
 \text{fix } \varepsilon:\ \text{one } P \text{ has both gaps } U - L \lt \tfrac{\varepsilon}{2} @@ gap-closes for f and for g, then a common refinement (15b's refining-tightens)
-|A - (\textstyle\int f - \int g)| \lt \varepsilon \text{ for every } \varepsilon,\ \ \htmlClass{new}{A = \int_a^b (f - g)} \quad \blacksquare @@ both numbers lie in [L(f) − U(g), U(f) − L(g)], an interval of width under ε; three-way on ℝ; areas-add
+|A - (\textstyle\int f - \int g)| \lt \varepsilon \text{ for every } \varepsilon,\ \ \htmlClass{new}{A = \int_p^q (f - g)} \quad \blacksquare @@ both numbers lie in [L(f) − U(g), U(f) − L(g)], an interval of width under ε; three-way on ℝ; areas-add
   </pre>
   <p data-pid="f295f7">No height of zero was needed. The graphs can sit above the axis, below it, or across it; only f ≥ g matters. Where the graphs cross, f ≥ g fails, so the interval is cut at the crossings and the top and bottom swapped on each piece.</p>
   <pre class="lines" data-k="ember" data-label="between y = 2x and y = x²">
@@ -69,7 +69,7 @@ A = \textstyle\int_{-1}^{0} (x^3 - x)\,dx + \int_0^1 (x - x^3)\,dx = \tfrac14 + 
     <div class="panel">
       <div class="lbl">f − g, and the box of its average height</div>
       <canvas id="cvA"></canvas>
-      <div class="cap">Ink: the difference f − g. Gold: the box on [p, b] whose height is the average of f − g; its area is the net.</div>
+      <div class="cap">Ink: the difference f − g. Gold: the box on [p, q] whose height is the average of f − g; its area is the net.</div>
       <div class="verdict" id="vdF"></div>
       <div class="eqbox" id="eqF"></div>
     </div>
@@ -122,7 +122,7 @@ f \text{ increasing} \Rightarrow F \text{ bends up};\ \ f \text{ decreasing} \Ri
 <section class="class step" data-step="16g4">
   <h2 class="sthead"><span class="stno">16g4</span>Net and total</h2>
   <p class="stands">Stands on 16g3, 15e (below the axis) and 12a (in-between-value).</p>
-  <p class="eqline" data-pid="31763d">From here on, ∫ₐᵇ f is the net area of f on [a, b], and ∫ₐᵇ |f| its total area. Their accepted names are signed area and total area; for a velocity, displacement and distance travelled.</p>
+  <p class="eqline" data-pid="31763d">From here on, ∫ₚ^q f is the net area of f on [p, q], and ∫ₚ^q |f| its total area. Their accepted names are signed area and total area; for a velocity, displacement and distance travelled.</p>
   <pre class="lines" data-k="ember" data-label="f(x) = x² − 1 on [0, 2]">
 x^2 - 1 = 0 \text{ at } x = 1 \text{ in } [0, 2] @@ the one crossing; f &lt; 0 on [0, 1), f &gt; 0 on (1, 2]
 \text{net: } \textstyle\int_0^2 (x^2 - 1)\,dx = \big(\tfrac{x^3}{3} - x\big)\Big|_0^2 = \tfrac23 @@ area-is-a-change
@@ -147,7 +147,7 @@ x^2 - 1 = 0 \text{ at } x = 1 \text{ in } [0, 2] @@ the one crossing; f &lt; 0 o
 x^2 = 3 \text{ at } c = \sqrt3 \in [0, 3] @@ the c that average-height promises
 \text{avg of } 6t - t^2 \text{ on } [0, 6] = \tfrac16\big(3t^2 - \tfrac{t^3}{3}\big)\Big|_0^6 = \tfrac16(108 - 72) = 6 @@ 16c's ferry: average speed 6 km an hour
   </pre>
-  <p data-pid="dd818f"><b>An average height times the width gives the area.</b> The box on [p, b] of height avg(f) has the same area as the region under f. 15f proved such a height is reached somewhere. 16c finds its value.</p>
+  <p data-pid="dd818f"><b>An average height times the width gives the area.</b> The box on [p, q] of height avg(f) has the same area as the region under f. 15f proved such a height is reached somewhere. 16c finds its value.</p>
   <section class="slides" id="sl3"><div class="eyebrow">The slides · averages · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
@@ -176,14 +176,14 @@ x^2 = 3 \text{ at } c = \sqrt3 \in [0, 3] @@ the c that average-height promises
   <pre class="lines" data-k="ember" data-label="tempting, and not allowed">
 \text{area between } x \text{ and } x^2 \text{ on } [0, 2] = \textstyle\int_0^2 (x - x^2)\,dx\,? @@ they cross at 1: x ≥ x² on [0, 1] but x² ≥ x on [1, 2]; cut and swap
 \textstyle\int_0^2 |x^2 - 1|\,dx = \big|\int_0^2 (x^2 - 1)\,dx\big|\,? @@ the size of the net is 2/3; the total is 2
-\text{avg of } f \text{ on } [a, b] = \tfrac{f(a) + f(b)}{2}\,? @@ true for straight lines, and for a few others by luck, such as (2t − 1)³ on [0, 1]; x² on [0, 3] gives 4.5, not 3
-\text{area} = \textstyle\int_a^b f \text{ for any } f\,? @@ only where f ≥ 0; elsewhere the part below the axis counts against
+\text{avg of } f \text{ on } [p, q] = \tfrac{f(p) + f(q)}{2}\,? @@ true for straight lines, and for a few others by luck, such as (2t − 1)³ on [0, 1]; x² on [0, 3] gives 4.5, not 3
+\text{area} = \textstyle\int_p^q f \text{ for any } f\,? @@ only where f ≥ 0; elsewhere the part below the axis counts against
   </pre>
   <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">16g7.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="y = x,"></span> <span data-tex-inline="y = x^2,"></span> <span data-tex-inline="[0, 2],"></span> <span data-tex-inline="\text{Claim: area} = \int_0^2 (x - x^2)\,dx"></span></span>Find what the claim gives, and the area between.</li><li><span class="givens"><span data-tex-inline="\text{boxes that meet}"></span> <span data-tex-inline="\text{along the graph of } g"></span></span>Area-between's proof used boxes standing on the pieces of P, meeting on upright lines.<br>Write the hypothesis of the side-by-side axiom that the given boxes would break.</li><li><span class="givens"><span data-tex-inline="u \text{ the step},"></span> <span data-tex-inline="f = 1 - u \text{ on } [-1, 1]"></span></span>Find the net area and the total area of f.<br>Is in-between-value, general form's argument about crossings needed?</li><li><span class="givens"><span data-tex-inline="\text{the average of } f \text{ on } [p, b],"></span> <span data-tex-inline="\tfrac{f(p) + f(b)}{2}"></span></span>Find every f for which the two agree for every p and b.</li></ol></li>
+      <li><span class="qid">16g7.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="y = x,"></span> <span data-tex-inline="y = x^2,"></span> <span data-tex-inline="[0, 2],"></span> <span data-tex-inline="\text{Claim: area} = \int_0^2 (x - x^2)\,dx"></span></span>Find what the claim gives, and the area between.</li><li><span class="givens"><span data-tex-inline="\text{boxes that meet}"></span> <span data-tex-inline="\text{along the graph of } g"></span></span>Area-between's proof used boxes standing on the pieces of P, meeting on upright lines.<br>Write the hypothesis of the side-by-side axiom that the given boxes would break.</li><li><span class="givens"><span data-tex-inline="u \text{ the step},"></span> <span data-tex-inline="f = 1 - u \text{ on } [-1, 1]"></span></span>Find the net area and the total area of f.<br>Is in-between-value, general form's argument about crossings needed?</li><li><span class="givens"><span data-tex-inline="\text{the average of } f \text{ on } [p, q],"></span> <span data-tex-inline="\tfrac{f(p) + f(q)}{2}"></span></span>Find every f for which the two agree for every p and b.</li></ol></li>
     </ol>
   </section>
 </section>
@@ -276,11 +276,11 @@ all();
 stepper('#sl1',[
   {k:'ember',kl:'inside',t:R`L(f, P) - U(g, P) \le A`,n:`Boxes from the top of g to the bottom of f.`},
   {k:'ember',kl:'over',t:R`A \le U(f, P) - L(g, P)`,n:`Boxes from the bottom of g to the top of f.`},
-  {k:'ember',kl:'area-between',t:R`${Nw}{A = \textstyle\int_a^b (f - g)}`,n:`gap-closes for both, a common refinement.`},
+  {k:'ember',kl:'area-between',t:R`${Nw}{A = \textstyle\int_p^q (f - g)}`,n:`gap-closes for both, a common refinement.`},
   {k:'ember',kl:'2x and x²',t:R`\textstyle\int_0^2 (2x - x^2)\,dx = \tfrac43`,n:`Find the crossings first.`}
 ],{title:'The slides · the region between · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'net and total',t:R`\textstyle\int_a^b f \text{ and } \int_a^b |f|`,n:`Signed area and total area.`},
+  {k:'ember',kl:'net and total',t:R`\textstyle\int_p^q f \text{ and } \int_p^q |f|`,n:`Signed area and total area.`},
   {k:'ember',kl:'cut at crossings',t:R`-\tfrac23 + \tfrac43 \text{ and } \tfrac23 + \tfrac43`,n:`x² − 1 on [0, 2]: net ⅔, total 2.`}
 ],{title:'The slides · net and total · ← → keys work'});
 stepper('#sl3',[
