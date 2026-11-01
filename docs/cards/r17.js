@@ -84,15 +84,15 @@
  {"q":"∫ ln x dx = x ln x − x + C. What move found it?","a":"parts, with f = ln x, g′ = 1","w":["area-under-g′/g","substitution r = ln x alone","log-slope"],"why":"ln x gets simpler by its slope."},
  {"q":"f = (x − 3)⁵(x + 1)² is negative at 0. Log-slope there in which form?","a":"with ln|f|","w":["with ln f","none applies","with ln f′"],"why":"For f ≠ 0, (ln|f|)′ = f′/f."}];
 (window.LADDER_CARDS=window.LADDER_CARDS||{})["17j"]=[{"q":"Readings 400, 300, 225, 168.75 at equal steps. Which kind?","a":"exponential: each is ¾ of the last","w":["linear: they fall by 100","linear: they fall evenly","neither"],"why":"Equal steps, equal factors."},
- {"q":"y = y₀e^{kt} exactly when equal steps give equal ratios. Which technique?","a":"equal-steps-equal-factors","w":["doubling-time","proportional-slope","the law of cooling (Newton's)"],"why":"The factor per step h is e^{kh}."},
+ {"q":"y = y₀e^{kt} exactly when equal steps give equal ratios. Which technique?","a":"equal-steps-equal-factors","w":["doubling-time","proportional-slope","the law of cooling"],"why":"The factor per step h is e^{kh}."},
  {"q":"y = 250e^{0.03t}. What is 250?","a":"the value at t = 0","w":["the yearly growth","the doubling time","the value after a year"],"why":"e⁰ = 1."},
  {"q":"y = y₀e^{kt}, k > 0. Time to double?","a":"ln 2 / k","w":["2/k","k ln 2","ln k / 2"],"why":"Doubling-time, from any start."},
  {"q":"5% a year, added once a year. k?","a":"ln 1.05 ≈ 0.0488","w":["0.05","1.05","e^{0.05}"],"why":"0.05 is 5% added continuously."},
  {"q":"Half-life 10 years. After 20?","a":"a quarter left","w":["none left","half left","a tenth left"],"why":"It halves each 10 years and never reaches 0."},
  {"q":"Cooling written as T = T₀e^{−kt}. Right?","a":"no: T − A decays, not T","w":["yes","yes, for a cold room","no: T grows"],"why":"That cools to 0, not to the room."},
- {"q":"T′ = −k(T − A), k > 0. What is it called?","a":"the law of cooling (Newton's)","w":["the logistic","equal-steps-equal-factors","doubling-time"],"why":"The rate is proportional to the difference from the room."},
+ {"q":"T′ = −k(T − A), k > 0. What is it called?","a":"the law of cooling","w":["the logistic","equal-steps-equal-factors","doubling-time"],"why":"The rate is proportional to the difference from the room."},
  {"q":"The rule of 70 gives a doubling time of?","a":"70 over the percent","w":["70 times the percent","the percent over 70","ln 70 over the percent"],"why":"ln 2 ≈ 0.69 and ln(1 + r) ≈ r."},
- {"q":"A hot drink in a cool room: the rate of cooling is in proportion to the gap from room temperature. What is it called?","a":"the law of cooling (Newton's)","w":["the law of gravitation (Newton's)","the law of charges (Coulomb's)","the equal-volumes law (Avogadro's)"],"why":"The page names it the law of cooling, and gives the accepted name in brackets: Newton's."}];
+ {"q":"A hot drink in a cool room: the rate of cooling is in proportion to the gap from room temperature. What is it called?","a":"the law of cooling","w":["the law of gravitation","the law of charges","the equal-volumes law"],"why":"The page names it the law of cooling, and gives the accepted name in brackets: Newton's."}];
 (window.LADDER_CARDS=window.LADDER_CARDS||{})["17k"]=[{"q":"(x + 7)/((x − 3)(x + 2)) = A/(x − 3) + B/(x + 2). Which technique?","a":"straight-factors","w":["cover-up alone","divide first","area-under-g′/g"],"why":"Different straight factors, top of lower degree."},
  {"q":"Hide x − 3 and put x = 3 in the rest: A = 10/5. What is that move?","a":"cover-up","w":["straight-factors’s proof","dividing first","putting in three values"],"why":"Aᵢ = p(cᵢ)/qᵢ(cᵢ)."},
  {"q":"5/((x − 2)(x + 3)): A at 2?","a":"1","w":["5","−1","5/2"],"why":"Cover x − 2, put in 2: 5/5."},

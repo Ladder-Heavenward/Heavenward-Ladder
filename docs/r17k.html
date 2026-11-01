@@ -38,11 +38,11 @@ table.tt td.l{text-align:left}
   <p data-pid="40c3f5">Straight-factors technique: <b>let c₁, …, cₙ be different reals, q(x) = (x − c₁)⋯(x − cₙ), and p a polynomial of degree less than n. Then for x different from every cᵢ, p(x)/q(x) = A₁/(x − c₁) + ⋯ + Aₙ/(x − cₙ), where Aᵢ = p(cᵢ)/qᵢ(cᵢ) and qᵢ is q with the factor (x − cᵢ) left out.</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the straight-factors technique">
 r(x) = p(x) - \textstyle\sum_i A_i\,q_i(x) @@ a polynomial of degree less than n
-r(a_k) = p(a_k) - A_k q_k(a_k) = 0 @@ qᵢ(aₖ) = 0 for i ≠ k, since qᵢ keeps the factor (x − aₖ); then the choice of Aₖ
+r(c_k) = p(c_k) - A_k q_k(c_k) = 0 @@ qᵢ(cₖ) = 0 for i ≠ k, since qᵢ keeps the factor (x − cₖ); then the choice of Aₖ
 \begin{aligned}&r \text{ has } n \text{ different}\\ &\quad\text{roots, and degree less than } n\end{aligned} @@ each root aₖ gives a factor x − aₖ: difference-of-powers (13h) splits r(x) − r(aₖ)
 r = 0 @@ a nonzero r would have n straight factors, so degree n at least
 \htmlClass{new}{p(x) = \textstyle\sum_i A_i q_i(x)} @@ for every x
-\tfrac{p(x)}{q(x)} = \textstyle\sum_i \tfrac{A_i}{x - a_i} \quad \blacksquare @@ divide by q(x) = (x − aᵢ)qᵢ(x), for x not a root
+\tfrac{p(x)}{q(x)} = \textstyle\sum_i \tfrac{A_i}{x - c_i} \quad \blacksquare @@ divide by q(x) = (x − cᵢ)qᵢ(x), for x not a root
   </pre>
   <p data-pid="44eaed">The formula for Aᵢ is a quick tech: <b>cover the factor (x − cᵢ) in the bottom of p/q with a finger, and put x = cᵢ into what is left.</b> Its accepted name is the cover-up rule; the split has the accepted name partial fractions.</p>
   <section class="slides" id="sl1"><div class="eyebrow">The slides · the split exists · ← → keys work</div></section>
@@ -58,7 +58,7 @@ r = 0 @@ a nonzero r would have n straight factors, so degree n at least
   <h2 class="sthead"><span class="stno">17k2</span>Then each piece is a log</h2>
   <p class="stands">Stands on 17k1, 17b (area-under-1/x) and 16f (antiderivatives-add-and-scale).</p>
   <pre class="lines" data-k="ember" data-label="this step: into logs">
-\textstyle\int \tfrac{p(x)}{q(x)}\,dx = \sum_i A_i \ln|x - a_i| + C @@ antiderivatives-add-and-scale (16f), then area-under-1/x (17b) with straight-inside (16d) on each piece; on an interval with no aᵢ in it
+\textstyle\int \tfrac{p(x)}{q(x)}\,dx = \sum_i A_i \ln|x - c_i| + C @@ antiderivatives-add-and-scale (16f), then area-under-1/x (17b) with straight-inside (16d) on each piece; on an interval with no cᵢ in it
   </pre>
   <pre class="lines" data-k="ember" data-label="this step: worked">
 \tfrac{3x + 5}{(x + 1)(x + 3)}:\ \ A = \tfrac{3(-1) + 5}{-1 + 3} = 1,\ \ B = \tfrac{3(-3) + 5}{-3 + 1} = 2 @@ cover-up at −1 and at −3
@@ -116,7 +116,7 @@ r = 0 @@ a nonzero r would have n straight factors, so degree n at least
 \tfrac{x^2}{(x - 1)(x + 1)} = \tfrac{A}{x - 1} + \tfrac{B}{x + 1}\,? @@ the top's degree is not less: divide first, x²/(x² − 1) = 1 + 1/(x² − 1)
 \tfrac{1}{(x - 1)^2} = \tfrac{A}{x - 1} + \tfrac{B}{x - 1}\,? @@ straight-factors needs different factors; this one is already its own antiderivative's slope, −1/(x − 1)
 \textstyle\int_0^2 \tfrac{dx}{x^2 - 1} = \tfrac12\ln\tfrac13 - 0\,? @@ [0, 2] contains 1, where the integrand has no bound
-\tfrac{1}{x^2 + 1} = \tfrac{A}{x - a} + \tfrac{B}{x - b}\,? @@ x² + 1 has no real roots; it does not split into real straight factors
+\tfrac{1}{x^2 + 1} = \tfrac{A}{x - c} + \tfrac{B}{x - d}\,? @@ x² + 1 has no real roots; it does not split into real straight factors
   </pre>
   <section class="slides" id="sl4"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
   <section class="sayback">
@@ -203,19 +203,19 @@ ka.addEventListener('input',all); kb.addEventListener('input',all);
 window.__pic={set:(a,b)=>{ ka.value=a; kb.value=b; all(); const s=AB(); if(!s) return null; const x=0.7, f=(3*x+5)/((x-s.a)*(x-s.b)); return {A:+s.A.toFixed(5),B:+s.B.toFixed(5),f:+f.toFixed(5),sum:+(s.A/(x-s.a)+s.B/(x-s.b)).toFixed(5)}; }};
 all();
 stepper('#sl1',[
-  {k:'ember',kl:'at each root',t:R`r(a_k) = 0`,n:`The choice of Aₖ.`},
+  {k:'ember',kl:'at each root',t:R`r(c_k) = 0`,n:`The choice of Aₖ.`},
   {k:'ember',kl:'r = 0',t:R`n \text{ roots, degree} \lt n`,n:`difference-of-powers gives a factor per root.`},
-  {k:'ember',kl:'straight-factors',t:R`${Nw}{\tfrac{p}{q} = \textstyle\sum \tfrac{A_i}{x - a_i}}`,n:`Different straight factors.`},
-  {k:'ember',kl:'cover-up',t:R`A_i = \tfrac{p(a_i)}{q_i(a_i)}`,n:`Cover the factor, put x = cᵢ.`}
+  {k:'ember',kl:'straight-factors',t:R`${Nw}{\tfrac{p}{q} = \textstyle\sum \tfrac{A_i}{x - c_i}}`,n:`Different straight factors.`},
+  {k:'ember',kl:'cover-up',t:R`A_i = \tfrac{p(c_i)}{q_i(c_i)}`,n:`Cover the factor, put x = cᵢ.`}
 ],{title:'The slides · the split exists · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'into logs',t:R`\textstyle\int \tfrac{p}{q} = \sum A_i \ln|x - a_i| + C`,n:`area-under-1/x on each piece.`},
+  {k:'ember',kl:'into logs',t:R`\textstyle\int \tfrac{p}{q} = \sum A_i \ln|x - c_i| + C`,n:`area-under-1/x on each piece.`},
   {k:'ember',kl:'worked',t:R`\tfrac{3x + 5}{(x + 1)(x + 3)} = \tfrac{1}{x + 1} + \tfrac{2}{x + 3}`,n:`A = 1, B = 2.`},
   {k:'ember',kl:'divide first',t:R`\tfrac{x^2 + 1}{x^2 - x - 2} = 1 + \tfrac{x + 3}{(x - 2)(x + 1)}`,n:`Equal degrees.`},
   {k:'ember',kl:'logistic piece',t:R`\textstyle\int \tfrac{dP}{P(K - P)} = \tfrac1K\ln\big|\tfrac{P}{K - P}\big| + C`,n:`For 17·bio.`}
 ],{title:'The slides · each piece a log · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'x⁴ + c⁴',t:R`x^4 + a^4\,?`,n:`1702.`}
+  {k:'ember',kl:'x⁴ + c⁴',t:R`x^4 + c^4\,?`,n:`1702.`}
 ],{title:'The slides · 1702 · ← → keys work'});
 stepper('#sl4',[
   {k:'ember',kl:'illegal',t:R`\tfrac{1}{x^2 + 1}`,n:`No real straight factors.`}
