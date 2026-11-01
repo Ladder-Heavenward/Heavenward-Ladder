@@ -848,9 +848,9 @@ function toast(msg){ let t=document.getElementById('patoast'); if(!t){ t=documen
   t.textContent=msg; t.classList.add('on'); clearTimeout(toast.h); toast.h=setTimeout(()=>t.classList.remove('on'),Math.max(2200,msg.length*70)); }
 const copy=s=>{ try{ navigator.clipboard.writeText(s).then(()=>{},()=>{}); }catch(e){} };
 function addresses(info){
-  const ps=[...document.querySelectorAll('section.class p[data-pid]')]; if(!ps.length) return;
+  const ps=[...document.querySelectorAll('header.top > p[data-pid], section.class p[data-pid]')]; if(!ps.length) return;
   const per={};
-  ps.forEach((p,i)=>{ const st=p.closest('section.step'), k=st?st.dataset.step:info.label; per[k]=(per[k]||0)+1; const ad=k+'.0.'+per[k]; p.dataset.addr=ad; p.id=p.id||'p-'+p.dataset.pid;
+  ps.forEach((p,i)=>{ const top=!!p.closest('header.top'), st=p.closest('section.step'), k=top?info.label+'.top':(st?st.dataset.step:info.label); per[k]=(per[k]||0)+1; const ad=top?k+'.'+per[k]:k+'.0.'+per[k]; p.dataset.addr=ad; p.id=p.id||'p-'+p.dataset.pid;
     const b=document.createElement('button'); b.type='button'; b.className='pa'; b.textContent=ad; b.setAttribute('aria-label','paragraph '+ad+': prompt, report or leave a note');
     b.addEventListener('click',e=>{ e.stopPropagation(); openMenu(p,b); }); p.appendChild(document.createTextNode(' ')); p.appendChild(b); });
   menu=document.createElement('div'); menu.className='pamenu'; menu.hidden=true;
@@ -944,7 +944,7 @@ function edClean(node){ const out=document.createElement('div');
 function edApply(p,html){ const b=p.querySelector('button.pa'); const tmp=document.createElement('div'); tmp.innerHTML=html;
   p.innerHTML=edClean(tmp); if(b){ p.appendChild(document.createTextNode(' ')); p.appendChild(b); } p.classList.add('pedited'); }
 async function edInit(){
-  if(!document.querySelector('section.class p[data-pid]')) return;
+  if(!document.querySelector('header.top > p[data-pid], section.class p[data-pid]')) return;
   if(!(await edWait())) return;
   let db=null,user=null; try{ db=await window.claude.use('db'); }catch(e){} if(!db) return; ED.db=db;
   try{ user=await window.claude.use('user'); ED.owner=user?!!(await user.isOwner()):false; }catch(e){ ED.owner=false; }
