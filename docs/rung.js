@@ -943,19 +943,23 @@ function edClean(node){ const out=document.createElement('div');
   return out.innerHTML.replace(/\s+/g,' ').trim(); }
 function edApply(p,html){ const b=p.querySelector('button.pa'); const tmp=document.createElement('div'); tmp.innerHTML=html;
   p.innerHTML=edClean(tmp); if(b){ p.appendChild(document.createTextNode(' ')); p.appendChild(b); } p.classList.add('pedited'); }
+function edClearPending(pid){ try{ const k='ladder:pending-edits', m=JSON.parse(localStorage.getItem(k)||'{}'); delete m[pid]; localStorage.setItem(k,JSON.stringify(m)); }catch(_){} }
+async function edFolded(){ const f={}; try{ const s=await ED.db.collection('folded').get(); s.docs.forEach(d=>{ const v=d.data()||{}; f[v.pid||d.id]=v.at||''; }); }catch(_){} return f; }
 async function edInit(){
   if(!document.querySelector('header.top > p[data-pid], section.class p[data-pid]')) return;
   if(!(await edWait())) return;
   let db=null,user=null; try{ db=await window.claude.use('db'); }catch(e){} if(!db) return; ED.db=db;
   try{ user=await window.claude.use('user'); ED.owner=user?!!(await user.isOwner()):false; }catch(e){ ED.owner=false; }
   if(ED.owner) document.body.classList.add('ed-owner');
+  const FOLD=await edFolded(), stale=r=>FOLD[r.pid]&&String(FOLD[r.pid])>=String(r.at||'');
   try{ const snap=await db.collection('edits').where('page','==',ED.page).get();
-    snap.docs.forEach(d=>{ const v=d.data()||{}; const p=document.querySelector('p[data-pid="'+(v.pid||d.id)+'"]'); if(p&&typeof v.html==='string'&&editable(p)) edApply(p,v.html); }); }catch(e){}
+    snap.docs.forEach(d=>{ const v=d.data()||{}; if(stale({pid:v.pid||d.id,at:v.at})) return; const p=document.querySelector('p[data-pid="'+(v.pid||d.id)+'"]'); if(p&&typeof v.html==='string'&&editable(p)) edApply(p,v.html); }); }catch(e){}
   try{ const k='ladder:pending-edits', m=JSON.parse(localStorage.getItem(k)||'{}'); let sent=0;
-    for(const pid in m){ const r=m[pid]; try{ await ED.db.doc('edits/'+pid).set(r); delete m[pid]; sent++; try{ const dm=JSON.parse(localStorage.getItem('ladder:edit-drafts')||'{}'); delete dm[pid]; localStorage.setItem('ladder:edit-drafts',JSON.stringify(dm)); }catch(_){} const p=r.page===ED.page&&document.querySelector('p[data-pid="'+pid+'"]'); if(p&&editable(p)) edApply(p,r.html); }catch(_){ } }
+    for(const pid in m){ const r=m[pid]; if(stale(r)){ delete m[pid]; try{ const dm=JSON.parse(localStorage.getItem('ladder:edit-drafts')||'{}'); delete dm[pid]; localStorage.setItem('ladder:edit-drafts',JSON.stringify(dm)); }catch(_){} continue; }
+      try{ const w=ED.db.doc('edits/'+pid).set(r); w.then(()=>edClearPending(pid),()=>{}); await Promise.race([w,new Promise((_,rj)=>setTimeout(()=>rj(0),10000))]); delete m[pid]; sent++; try{ const dm=JSON.parse(localStorage.getItem('ladder:edit-drafts')||'{}'); delete dm[pid]; localStorage.setItem('ladder:edit-drafts',JSON.stringify(dm)); }catch(_){} const p=r.page===ED.page&&document.querySelector('p[data-pid="'+pid+'"]'); if(p&&editable(p)) edApply(p,r.html); }catch(_){ } }
     localStorage.setItem(k,JSON.stringify(m)); if(sent) toast(sent+' edit'+(sent>1?'s':'')+' saved that had been waiting on this device'); }catch(_){}
   try{ const m=JSON.parse(localStorage.getItem('ladder:edit-drafts')||'{}'); let n=0;
-    for(const pid in m){ const d=m[pid]; if(d.page!==ED.page) continue; const p=document.querySelector('p[data-pid="'+pid+'"]'); if(!p||!editable(p)) continue;
+    for(const pid in m){ const d=m[pid]; if(d.page!==ED.page) continue; if(FOLD[pid]&&Number(new Date(FOLD[pid]))>=Number(d.at||0)) continue; const p=document.querySelector('p[data-pid="'+pid+'"]'); if(!p||!editable(p)) continue;
       startEdit(p); p.innerHTML=d.html; n++; }
     if(n) toast('your unsaved edit'+(n>1?'s are':' is')+' back, still open: press save when ready'); }catch(_){}
 }
@@ -974,7 +978,7 @@ function startEdit(p){ if(!ED.db||!ED.owner||!editable(p)||p.isContentEditable) 
     const html=edClean(p); e.target.disabled=true;
     const rec={pid:p.dataset.pid,page:ED.page,html,at:new Date().toISOString()}; let err=null;
     for(const wait of [0,1500,4000,9000]){ if(wait){ toast('the database is busy; trying again…'); await new Promise(r=>setTimeout(r,wait)); }
-      try{ await Promise.race([ED.db.doc('edits/'+p.dataset.pid).set(rec), new Promise((_,rj)=>setTimeout(()=>rj({code:'no answer in 10 seconds'}),10000))]); err=null; break; }catch(x){ err=x; } }
+      try{ const w=ED.db.doc('edits/'+p.dataset.pid).set(rec); w.then(()=>edClearPending(rec.pid),()=>{}); await Promise.race([w, new Promise((_,rj)=>setTimeout(()=>rj({code:'no answer in 10 seconds'}),10000))]); err=null; break; }catch(x){ err=x; } }
     if(!err){ try{ const k='ladder:pending-edits', m=JSON.parse(localStorage.getItem(k)||'{}'); delete m[p.dataset.pid]; localStorage.setItem(k,JSON.stringify(m)); }catch(_){}
       p.innerHTML=html; p.classList.add('pedited'); done(); toast('saved: every reader sees it now, and it goes into the page at the next publish'); }
     else{ try{ const k='ladder:pending-edits', m=JSON.parse(localStorage.getItem(k)||'{}'); m[p.dataset.pid]=rec; localStorage.setItem(k,JSON.stringify(m)); }catch(_){}
