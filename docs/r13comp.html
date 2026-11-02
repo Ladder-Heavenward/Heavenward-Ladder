@@ -26,7 +26,7 @@
   <h1>How does a calculator find a root?</h1>
   <p data-pid="a10694">How does a calculator find a root? Press the square root key and ten digits appear at once. Ask a financial calculator what interest a loan charges, and it finds the root of an equation that no formula solves. Yet the machine knows nothing a person does not. It adds, multiplies, compares, and does it again. 12e's halving and 13m's tangent steps are recipes of exactly that kind. The trouble is that each has a flaw. Halving never fails, but it is slow. Tangent steps are fast, but they can fly off, or cycle for ever. And the machine cannot look at a picture to see which is happening. This page writes both as programs, counts what each step buys, and builds the program real calculators use: both at once.</p>
   <p class="gesture" data-pid="f8f539">Halving keeps a trap and buys one bit of the answer per step: each step halves the width of the trap. A tangent step walks down the tangent line from the guess to where the line is 0; near a zero where the slope is not 0, it doubles the correct places. Far from one it can fly off. A safe program keeps the trap, takes the tangent step when it lands inside, and halves whenever the trap has not halved. The trap still halves each round, and the end game is the tangent step's.</p>
-  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r12e.html">12e</a> (trap, middle-of-a-trap, halvings-width, trap-from-its-bits, halving-traps), <a href="r13m.html">13m</a> (the tangent step, polynomial-guess-error, places-double, where it fails), <a href="r12a.html">12a</a> (in-between-value), <a href="r12d.html">12d</a> (the fractions' holes), <a href="r12comp.html">12·comp</a> (a machine reading one step at a time), <a href="r13d.html">13d</a> (polynomial-slope) and <a href="r05h.html">5h</a> (square-of-a-difference). Rung 14 proves the doubling for functions that are not polynomials.</p></div>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r12e.html">12e</a> (trap, middle-of-a-trap, halvings-width, trap-from-its-bits, halving-traps), <a href="r13m.html">13m</a> (the tangent step, polynomial-guess-error, places-double, where it fails), <a href="r12a.html">12a</a> (in-between-value), <a href="r12d.html">12d</a> (the fractions' holes), <a href="r12comp.html">12·comp</a> (a machine reading one step at a time), <a href="r13d.html">13d</a> (polynomial-slope) and <a href="r05i.html">5i</a> (square-of-a-difference). Rung 14 proves the doubling for functions that are not polynomials.</p></div>
 </header>
 
 <section class="class">
@@ -64,9 +64,9 @@
   <pre class="lines" data-k="ember" data-label="13·comp: the reciprocal-step technique">
 f(x) = \tfrac1x - k,\ \ f'(x) = -\tfrac{1}{x^2} @@ slope-of-one-over-x (13a); a constant has slope 0
 N(x) = x - \dfrac{1/x - k}{-1/x^2} = x + x^2\big(\tfrac1x - k\big) @@ the tangent step; dividing by −1/x² is multiplying by −x²
-= \htmlClass{new}{x(2 - ax)} @@ spread and collect (5h): no division left
+= \htmlClass{new}{x(2 - ax)} @@ spread and collect (5i): no division left
 x = \tfrac1k + e:\ \ x(2 - ax) = \big(\tfrac1k + e\big)(1 - ae) @@ 2 − k(1/k + e) = 1 − ae
-= \tfrac1k - e + e - ae^2 = \htmlClass{new}{\tfrac1k - ae^2} \quad \blacksquare @@ spread (5h)
+= \tfrac1k - e + e - ae^2 = \htmlClass{new}{\tfrac1k - ae^2} \quad \blacksquare @@ spread (5i)
   </pre>
   <pre class="lines" data-k="ember" data-label="13·comp: a chip finds 1/7">
 x_0 = 0.1 @@ error about 0.043
@@ -93,7 +93,7 @@ x_2 = 0.1417,\ \ x_3 = 0.14284777,\ \ x_4 = 0.1428571422\cdots @@ errors about 0
 c \lt s \lt d,\ f(s) \ne 0 \Rightarrow [c, s] \text{ or } [s, d] \text{ is a trap} @@ middle-of-a-trap's argument, at any point strictly inside (12e: any split point inside a trap is licensed)
 \text{each split keeps a trap} @@ the tangent split is made only when c &lt; t &lt; d; a middle is always strictly inside
 \text{after a round, } d - c \le w/2 @@ either the round already halved it, or instruction 5 halves it (halvings-width, one step)
-\text{after } n \text{ rounds},\ d - c \le \htmlClass{new}{(q - p)/2^n} \quad \blacksquare @@ induction on n (4b)
+\text{after } n \text{ rounds},\ d - c \le \htmlClass{new}{(q - p)/2^n} \quad \blacksquare @@ induction on n (4c)
   </pre>
   <p data-pid="dae5e3">So the safe program is never slower than halving by more than a factor of two in tests of f. And once the best guess is close, the tangent steps take over, and the places double. The trap's far end may lag behind. The answer to report is the best guess x, with the trap as its guarantee.</p>
   <pre class="lines" data-k="ember" data-label="13·comp: the safe program on 13m's cycle, x³ − 2x + 2 from the trap [−2, 1]">

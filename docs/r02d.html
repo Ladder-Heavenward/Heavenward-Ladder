@@ -1,250 +1,337 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>2d · All the subsets</title>
+<title>2d · Sifting, and a set to start from</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
 <link rel="stylesheet" href="rung.css">
 <style>
-.pic .panels{grid-template-columns:3fr 2fr}
+.pic .panels{grid-template-columns:1fr 1fr}
 @media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
 .panel{align-content:start;min-width:0}
 .pic .eqbox{font-size:.95rem;white-space:normal}
-.kd{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;align-items:center;font-family:var(--serif)}
-.kd button{font-family:var(--mono);font-size:.78rem;padding:2px 10px}
-.kd button.keep{border-color:var(--ember);color:var(--ember)}
-.pic .eqbox .katex{font-size:1em}
-@media (max-width:560px){#eq2 .katex{font-size:.9em}}
-.lst{font-family:var(--mono);font-size:.82rem;color:var(--muted);line-height:1.5}
+.colm{display:grid;gap:3px;font-family:var(--serif);background:var(--sand);padding:8px 12px;border-radius:4px}
+.ln{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 14px;align-items:baseline;font-size:.95rem}
+.ln .r{font-family:var(--mono);font-size:.74rem;color:var(--muted);text-align:right;max-width:28ch}
+.ln.in{padding-left:18px;border-left:2px solid var(--grid)}
+.ln.bot .s{color:var(--ember)} .ln.out .s{color:var(--teal)}
+@media (max-width:560px){.ln{grid-template-columns:1fr}.ln .r{text-align:left;max-width:none}}
+.refuse{font-family:var(--mono);font-size:.85rem;color:var(--ember);border:1px dashed var(--ember);padding:6px 10px;border-radius:4px}
 .rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
 </style>
 <link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r02c.html">← 2c gather and merge</a><a href="r02concl.html">next: 2·∎ conclusion →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r02c.html">← 2c membership and same members</a><a href="r02e.html">next: 2e gather and merge →</a></p>
   <div class="tags"><span class="tag proof">2d · proof</span></div>
-  <h1>All the subsets</h1>
-  <p data-pid="91c040">The last tool. From a set, the set of all its parts: every set you could make by keeping some of its members and dropping the rest, gathered into a set of their own. It is the tool whose result you cannot write down by tipping things out or picking things through. You have to run through every way of deciding, member by member, keep or drop. The step gives the tool its mark, and shows the keep-or-drop way of listing its result. Then it proves the techniques the rest of the ladder uses daily. The empty set is part of every set, and every set is part of itself, so both are always on the list. The tool respects inclusion. And it treats common members exactly, and merged members only by an inclusion.</p>
-  <p class="gesture" data-pid="17a25f">To list every subset, go through the members and decide each: keep or drop. Every way of deciding is a subset; every subset is a way of deciding. The empty set is the way that drops everything, the set itself the way that keeps everything.</p>
-  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r01b.html">1b</a> (when nothing is true, everything is permitted), <a href="r02a.html">2a</a> (⊆, the techniques self-part, chain for part of, double-inclusion), <a href="r02b.html">2b</a> (∅, the empty-set technique) and <a href="r02c.html">2c</a> (gather, ∪, ∩). <a href="r02e.html">2e</a> sifts products out of a power set of a power set; rung 3 and rung 4 build with it; the question of how fast the list grows is rung 4's.</p></div>
+  <h1>Sifting, and a set to start from</h1>
+  <p data-pid="3d0f9c">2c said what a set is and when sets are the same. This step builds. The tool is sifting: from a set you have and a condition, the set of those members that pass. It is the tool everyone uses when they write “the set of all things such that…”. The small print in it is that the sifting happens <i>inside a set you already have</i>, and that is what keeps the whole subject from falling over. The step also notices that a tool which makes sets from sets makes nothing from nothing. So it lays down the axiom that there is a set, and sifts from it the set with no members. That turns out to be the same set whichever set you began with. At the end it shows the outsider-set argument: what happens when you sift from nothing, set out in rows as far as rows can take it; <a href="r03a.html">3a</a> finishes it.</p>
+  <p class="gesture" data-pid="99be20">To pick out members, name the set you are picking from and the condition they must pass. Sifting keeps or drops; it never adds. Sift with a condition nothing passes and you have the empty set, the only set with no members.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r00a.html">0a</a> (statements with a gap), <a href="r01b.html">1b</a> (⊥, the clash, when nothing is true, everything is permitted), <a href="r01d.html">1d</a> (⇔), <a href="r02a.html">2a</a> (rows and cases), <a href="r02b.html">2b</a> (∃, use a some) and <a href="r02c.html">2c</a> (∈, listing, same-members, ⊆, the double-inclusion technique). <a href="r02e.html">2e</a> defines the common members of sets by sifting; <a href="r02f.html">2f</a> proves ∅ is part of every set; <a href="r03a.html#found">3a·f</a> runs the outsider-set argument again against a set of all sets; rung 3 starts its endless run from ∅.</p></div>
 </header>
 
 <section class="class step" data-step="2d1">
-  <h2 class="sthead"><span class="stno">2d1</span>All the subsets, as one set</h2>
-  <p class="stands">Stands on 2a9 (⊆) and 2b5 (axioms that say a set exists).</p>
-  <p data-pid="3165a8">2a said what it is for s to be a subset of u: every member of s is a member of u. Now gather all of them. A set may have subsets in great variety, and each of them is a thing, so the set of all of them is a set you should be able to ask for. By the power axiom, there is one:</p>
-  <div class="eqline" data-tex="\begin{aligned}&amp;\text{From here on, } \mathcal P(u) \text{ means: the set of }\\ &amp;\quad \text{all the subsets of } u\text{:}\qquad s \in \mathcal P(u) \;\\ &amp;\quad \Leftrightarrow\; s \subseteq u.\end{aligned}"></div>
-  <div class="eqline" data-tex="\begin{aligned}&amp;\textbf{Axiom Power:}\quad\\ &amp;\quad \text{for any set } u \text{ there is a set } \mathcal P(u).\end{aligned}"></div>
-  <p data-pid="8386ed">Its accepted name is the <b>power set</b> of u. The word “power” here is only a name, and means nothing beyond this line until a later rung gives it work of its own. Read 𝒫(u) as “the subsets of u” or “all the parts of u”. To use a membership in 𝒫(u), unpack it into ⊆ and then into the every-around-an-if. To make one, prove the inclusion and pack. There is nothing else to the mark. It is a name: 𝒫(u) names one set, built from u. Without the power axiom, you could name each part of a set, one at a time, but never hold them all at once.</p>
+  <h2 class="sthead"><span class="stno">2d1</span>Picking things out, in plain words</h2>
+  <p class="stands">Stands on 2c (a set and its members).</p>
+  <p data-pid="1ac39e">This step is about picking things out. You do it all day. From the clothes in a drawer, you pick the clean ones. From the people in a class, you pick the ones who walk to school. Each time you need a collection you already have. You also need a test that each member passes or fails. What comes out is the members that pass.</p>
+<p data-pid="586f93">Or take the cats. Tibbles and Mittens are among the cats in this room, and the cats in this room are among all the cats in the world. Sift the cats in the room by “is mine”, and you have Tibbles and Mittens: my cats. You made no cat. You kept two.</p>
+  <p data-pid="5368de">A kitchen sieve does the same. Pour in the flour, and the lumps stay behind. A sieve never makes flour. It only keeps some of what you poured in. A sieve is this step's tool, and the step calls it sifting.</p>
+  <p class="eqline" data-pid="d9e446"><b>Sifting keeps the members of a set you already have that pass a test, and it never adds anything.</b></p>
+  <p data-pid="c56628">The marks look harder than the idea. Here is one:</p>
+  <div class="eqline" data-tex="\{x \in u : x \text{ can fly}\}"></div>
+  <p data-pid="ffb056">It is read “the set of x in u such that x can fly”. The braces mean a set, as on 2c. The x is a blank that runs through the members of u, one at a time. The colon is read “such that”. After it comes the test.</p>
+  <p data-pid="bf0543">Let u be {cat, dog, owl}. The test runs on each member in turn. The cat can't fly, so it is dropped. The dog can't fly, so it is dropped too. The owl can fly, so it is kept. The result is {owl}.</p>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">2d1.1</span><span class="ph know">know</span>What does 𝒫(u) name? <br>How do you use a membership in it, and how do you make one?</li>
+      <li><span class="qid">2d1.1</span><span class="ph know">know</span>What does sifting do, and what does it never do?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="2d2">
-  <h2 class="sthead"><span class="stno">2d2</span>Curly capitals, and collections</h2>
-  <p class="stands">Stands on 2d1 (𝒫) and 2a5 (sets of sets).</p>
-  <p data-pid="a6386f">A set whose members are themselves sets is called a <b>collection</b>. The mark 𝒫 is a capital P with a flourish, said “curly P”. It is the first of a family. The curly capitals, <span data-tex-inline="\mathcal A, \mathcal B, \mathcal C">𝒜, ℬ, 𝒞</span> and the rest, are said “curly A”, “curly B” and so on, as ∀ and ∃ were named for their shapes. They all behave the same way. <b>A curly capital names a set whose members are themselves sets.</b></p>
-  <p data-pid="b06eea">A curly letter is a name like any other letter. The curl only warns the reader what kind of thing is inside: sets, not cats. 𝒫(u) fits the family, since each of its members is a part of u. The difference is that 𝒫 is a mark that builds a collection from a set, while 𝒜 or ℬ simply names a collection you already have.</p>
+  <h2 class="sthead"><span class="stno">2d2</span>A condition</h2>
+  <p class="stands">Stands on 2d1 (a test on each member) and 0a (a statement with a gap).</p>
+  <p data-pid="7d73ea">The step writes the test as φ(x), with a Greek letter, phi: the first Greek letter on the ladder. That letter means “some test, any test at all”. It works like a blank on a form: φ(x) is the test with x written in the blank.</p>
+  <p data-pid="c1c8b8">0a had statements with a gap: “… is asleep”, written P(x) with the gap shown. Put a name in the gap and you have a statement. When such a statement-with-a-gap is used to pick things out, the ladder calls it a <b>condition</b>. Examples: “x can fly”, “x is red”, “x ∈ b”, “x ≠ cat”, “∃y (y is a child of x)”. A condition is built from nothing but rung 1's joining words, 0b's =, 2c's ∈, and everyday words. It says of the thing in its gap something that is so or not so. Rung 1 wrote statements with gaps as P, Q, R. A condition that is to be <i>any condition whatever</i> is the one the sifting tool accepts. For it the ladder uses a letter from another alphabet, so that it is never confused with a particular statement:</p>
+  <p class="eqline" data-pid="70c8c3">From here on, <span data-tex-inline="\varphi"></span> (the Greek letter phi, in its small form) stands for any condition: a statement with a gap. <span data-tex-inline="\varphi(x)"></span> is that condition with x in its gap.</p>
+  <p data-pid="a633a0">For example, if φ(x) is “x can fly”, then φ(owl) is “owl can fly”, which is so, and φ(cat) is “cat can fly”, which is not. Back to the rule: nothing is assumed about φ except that, for each thing put in its gap, the result is a statement. The letter x in φ(x) is a placeholder in 2b's sense: it names nothing and may be renamed.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">2d2.1</span><span class="ph know">know</span>What does a curly capital tell the reader? <br>How does 𝒫 differ from a letter like 𝒜?</li>
+      <li><span class="qid">2d2.1</span><span class="ph know">know</span>What is a condition? <br>What does the letter φ stand for?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="2d3">
-  <h2 class="sthead"><span class="stno">2d3</span>Listing it: keep or drop</h2>
-  <p class="stands">Stands on 2d1 (𝒫) and 2a7 (the same-members axiom).</p>
-  <p data-pid="ed0e80">How do you write down 𝒫({cat, dog})? <b>Think of a subset as a way of deciding, for each member, whether it is in.</b> Go through the members in turn. Each decision so far gives a set. The next member comes back to every set you have made, kept and dropped.</p>
-  <p data-pid="a996f3">Start with no members decided. There is one way to decide nothing: the empty set. Now decide cat. Drop it, and you have ∅. Keep it, and you have {cat}.</p>
-  <p data-pid="72d50f">Now decide dog. Each set so far comes back twice: once without dog, and once with it. That gives ∅, {cat}, {dog} and {cat, dog}. Those are all the ways of keeping and dropping, and nothing else. So 𝒫({cat, dog}) = {∅, {cat}, {dog}, {cat, dog}}.</p>
-  <p data-pid="970b91">Why is that the whole list? Because a subset of {cat, dog} is fixed by the same-members axiom once you know, of cat and of dog, whether it is in. And those are exactly the decisions made. And why is every set on the list a subset? Because each was made by keeping only members of {cat, dog}.</p>
-  <p data-pid="cb4d23">Spelling the “exactly” out for a particular listed set is a case split on “cat ∈ s or cat ∉ s”. 1g's licence column allows that split for a set whose members are listed, since membership in it is settled.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · a power set listed · ← → keys work</div></section>
-  <section class="pic" id="pic">
-    <div class="eyebrow">The picture · every subset of a set, laid out in levels</div>
-    <div class="panel">
-      <div class="chips" role="group" aria-label="the set u"><span class="m" style="color:var(--muted)">u =</span><button data-nn="0">∅</button><button data-nn="1">{p}</button><button data-nn="2">{p, q}</button><button data-nn="3" class="on">{p, q, r}</button><button data-nn="4">{p, q, r, s}</button></div>
-      <div class="cap">Every subset of u. Each level up has another member kept. Tap a subset: it lights up, with everything below it that it contains (teal) and everything above it that contains it (ember). The readout lists the subsets of whatever is lit, which is a power set of its own.</div>
-      <canvas id="cv2"></canvas>
-      <div class="eqbox" id="eq2"></div>
-      <div class="cap">Change u from {p, q} to {p, q, r} and watch every subset come back with and without r.</div>
-    </div>
-  </section>
-  <p data-pid="c082de">The picture lays the subsets out in levels. A set sits above the sets it is made from by keeping another member, with the empty set at the foot and the whole set at the top. Tap any subset, and the picture lights the subsets below it that it contains and the subsets above it that contain it.</p>
+  <h2 class="sthead"><span class="stno">2d3</span>The empty set, in plain words</h2>
+  <p class="stands">Stands on 2d1 (sifting) and 2c (a set is nothing but its members).</p>
+  <p data-pid="80cf80">Now a strange case. Sift with a test nothing passes, such as “is not itself”. Everything is itself, so nothing is kept. You are left with a set that has no members. It is called the empty set.</p>
+  <p data-pid="069a46">Is there only one empty set? An empty cup and an empty bucket are different things, because each is made of something besides what is inside it. A set is made of nothing but its members (2c). So any empty set has the same members as any other, which is none, and they are the same set.</p>
+  <p data-pid="a2665a">Why did 2c1 lay down an axiom that the empty set exists? Because sifting needs a set to pour in. With nothing in the sieve, nothing comes out. The empty-set axiom puts one set in hand, and 2d9 writes it in marks. Any other set would sift down to it too, with “is not itself”.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">2d3.1</span><span class="ph know">know</span>Why does keep-or-drop list every subset of a listed set, with none missed and none twice?</li>
+      <li><span class="qid">2d3.1</span><span class="ph know">know</span>Why is there only one empty set?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="2d4">
-  <h2 class="sthead"><span class="stno">2d4</span>Small power sets</h2>
-  <p class="stands">Stands on 2d3 (keep or drop) and 2b12 (∅).</p>
-  <p data-pid="6f576d">More, to see the pattern, each with its reason:</p>
-  <p data-pid="abd0ac"><span data-tex-inline="\mathcal P(\{\text{owl}\}) = \{\varnothing, \{\text{owl}\}\}"></span>: drop the owl or keep it.</p>
-  <p data-pid="0e96e6"><span data-tex-inline="\mathcal P(\varnothing) = \{\varnothing\}"></span>: nothing to decide, so the only subset is the one that drops everything, which is ∅ itself. Notice 𝒫(∅) is not empty: it has ∅ as a member.</p>
-  <p data-pid="27c021"><span data-tex-inline="\mathcal P(\{\varnothing\}) = \{\varnothing, \{\varnothing\}\}"></span>: the member being kept or dropped is the empty set itself. Drop it and you have ∅; keep it and you have {∅}.</p>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · the power set of the empty set · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">2d4</span>Why a sieve needs a bowl</h2>
+  <p class="stands">Stands on 2d1 (sifting) and 1b (the clash).</p>
+  <p data-pid="0d52c0">Last, the step asks why a sieve needs a bowl. Imagine you could sift from nothing: “the set of every thing that passes the test”, with no set to pour from. It sounds harmless. Try the test “does not list itself”. Picture a library catalogue that lists every catalogue that does not list itself.</p>
+  <p class="bait" data-pid="a7d6a0">Does that catalogue list itself? Say yes, and follow where it leads. Then say no, and follow that.</p>
+  <p data-pid="1601e5">The step runs that question in rows in footing 2d14, and <a href="r03a.html">3a</a> finishes it. Then it shows what changes when the sifting happens inside a set you have. Now the same ideas again, with the care that turns them into arguments.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">2d4.1</span><span class="ph know">know</span>Why is 𝒫(∅) not empty?</li>
+      <li><span class="qid">2d4.1</span><span class="ph know">know</span>What goes wrong when you sift from nothing?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="2d5">
-  <h2 class="sthead"><span class="stno">2d5</span>The empty set is part of every set</h2>
-  <p class="stands">Stands on 2b12 (the empty-set technique), 1b (everything permitted) and 1h4 (an every with nothing to check).</p>
-  <p data-pid="a9db15">Whatever u is, 𝒫(u) has ∅ as a member and u as a member. That u is a member is 2a's self-part technique: u ⊆ u, so u ∈ 𝒫(u) by packing. That ∅ is a member needs a technique of its own:</p>
-  <p data-pid="1d8159">Empty-part technique: <b>the empty set is part of every set.</b></p>
-  <p data-pid="28b2cd">Its proof is the standard use of the tech “when nothing is true, everything is permitted”. Everything in ∅ is in b, because nothing is in ∅ that could fail to be: the if's hypothesis is never met. 2b held the empty-part technique in trust, and this step proves it, so that flag is closed. Proof. Let b be any set.</p>
-  <p data-pid="66921c">Let x be anything. Suppose x is in ∅, until we drop it. By the empty-set technique, x is not in ∅. That clashes with the supposition. When nothing is true, everything is permitted: so x is in b.</p>
-  <p data-pid="f01569">Drop the supposition: if x is in ∅, then x is in b. The line “x is in b” went with the supposition; the if is what leaves. Nothing was assumed about x, so this is true for everything. Pack ⊆: ∅ ⊆ b.</p>
-  <p data-pid="72e3ba">1h had the word for this: the every is true <i>vacuously</i>. There is no member of ∅ to check, so the check passes. People feel cheated by it when they meet it, and lean on it ever after. The whole keep-or-drop listing begins from the empty set, since the empty set is the way of dropping everything.</p>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">2d5.1</span><span class="ph know">know</span>What does the empty-part technique say, and where does “everything is permitted” come into its proof?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="2d6">
-  <h2 class="sthead"><span class="stno">2d6</span>Always on the list</h2>
-  <p class="stands">Stands on 2d5 (the empty-part technique) and 2a9 (the self-part technique).</p>
-  <p data-pid="0824e1">By the empty-part technique, ∅ ⊆ u. Pack 𝒫: ∅ is in 𝒫(u). By the self-part technique, u ⊆ u. Pack 𝒫 again: u is in 𝒫(u).</p>
-  <p data-pid="35c089">So 𝒫(u) is never empty, not even for u = ∅. When u has members, ∅ and u are among the members of 𝒫(u), and they differ: u has a member and ∅ does not, so a member of u is not a member of ∅, and they are not the same set.</p>
-  <p data-pid="132858">A founder of the subject asked a further question. Can the parts of a set all be matched, one each, with its members? Matching is not yet on the ladder; 4j builds it. The step's last challenge takes up what this step can say about it.</p>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">2d6.1</span><span class="ph know">know</span>Which two members does every power set have, and by which techniques?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="2d7">
-  <h2 class="sthead"><span class="stno">2d7</span>How the list grows, said without counting</h2>
-  <p class="stands">Stands on 2d3 (keep or drop).</p>
-  <p data-pid="6fbb65">Look again at keep-or-drop. When the set gains another member, every subset you already had comes back as itself and as itself with the newcomer added. Nothing is lost, and every old subset comes back in a version without and a version with. Add a further member and the same happens again to the whole new list. That is why the lists 𝒫 makes grow so quickly. It is why 𝒫(𝒫(u)) is already too long to list by hand even for u = {cat, dog}: it has sixteen members, each a set of sets. How fast, as a matter of counting, is a question for rung 4. Here the fact is structural: <b>each member of u is an independent decision, and the subsets are the ways the decisions can come out.</b></p>
-  <p data-pid="085d14">Said here, not proved; the slides and the picture chase it. In marks, take a set u and a thing c not in u. The subsets of u ∪ {c} split into two kinds. Those that leave c out are exactly the subsets of u. Those that take c in are each a subset of u with c added. The split itself, “c ∈ s or c ∉ s” for an arbitrary s, is 1g's either-way, licensed when membership is settled. For the listed sets of this rung, it is.</p>
-  <section class="pic" id="pic2">
-    <div class="eyebrow">The picture · a subset, decided member by member</div>
+  <h2 class="sthead"><span class="stno">2d5</span>The sift tool</h2>
+  <p class="stands">Stands on 2d2 (a condition φ) and 1c (and: keep, join).</p>
+  <p data-pid="f6a352">Here is the tool, in words: from a set u and a condition φ, the set of those members of u of which φ is true. In marks:</p>
+  <p class="eqline" data-pid="08c810">From here on, <span data-tex-inline="\{x \in u : \varphi(x)\}"></span> means: the set whose members are exactly the members of u that pass φ:</p>
+  <div class="eqline" data-tex="y \in \{x \in u : \varphi(x)\} \;\Leftrightarrow\; y \in u \land \varphi(y)"></div>
+  <div class="eqline" data-tex="\begin{aligned}&amp;\textbf{Axiom Sift:}\quad\\ &amp;\quad \text{for any set } u \text{ and any condition } \varphi,\\ &amp;\quad \text{ there is a set } \{x \in u : \varphi(x)\}.\end{aligned}"></div>
+  <p data-pid="a09cfd">Read the colon as “such that”: “the set of x in u such that φ of x”. The x before the colon is the placeholder, and it runs through u. The condition after the colon has that same letter in its gap.</p>
+  <p data-pid="bac298">The sift axiom says the sifted set exists. The “from here on” line says who its members are. The mark {x ∈ u : φ(x)} is a name: it names the one set the sift picks out. By 2c's same-members axiom, only one set has those members. Without the sift axiom, no condition could pick anything out: “the cats in this room that are mine” would be words with no set behind them.</p>
+  <p data-pid="d8f322"><b>A thing is in the sifted set exactly when it is in u and passes.</b> That is an and. To use a membership in a sifted set, keep either part. To make one, join.</p>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · the sieve: a set and a condition, and what passes</div>
     <div class="panel">
-      <div class="cap">The set b = {owl, cat, bat}, and a newcomer you may add. Decide each member: keep or drop. The readout names the subset you have decided and says why it is in 𝒫(b).</div>
-      <div class="chips" role="group" aria-label="newcomer"><span class="m" style="color:var(--muted)">emu:</span><button id="emuOff" class="on">not in b</button><button id="emuOn">add emu to b</button></div>
-      <div class="kd" id="kd"></div>
-      <div class="eqbox" id="eq3"></div>
-      <div class="lst" id="lst"></div>
+      <div class="cap">The set t: letters of the alphabet, each in a colour, some capital and some small. Choose the condition φ. The ember outline is {x ∈ t : φ(x)}; faded letters are the members of t that fail.</div>
+      <div class="knobs"><div class="knob"><label for="phi">φ(x)</label><select id="phi"></select></div></div>
+      <div class="chips" role="group" aria-label="sift from"><span class="m" style="color:var(--muted)">sift from:</span><button data-from="t" class="on">the set t</button><button data-from="none">nothing</button></div>
+      <canvas id="cv1"></canvas>
+      <div class="eqbox" id="eq1"></div>
+      <div class="refuse" id="ref1" style="display:none"></div>
+      <div class="cap">Try: a condition nothing in t passes, then x ≠ x, then x = x. Then switch to sifting from nothing and read why the sieve refuses.</div>
     </div>
   </section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">2d7.1</span><span class="ph know">know</span>When a set gains a member, what happens to its list of subsets?</li>
+      <li><span class="qid">2d5.1</span><span class="ph know">know</span>How do you use a membership in a sifted set, and how do you make one?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="2d6">
+  <h2 class="sthead"><span class="stno">2d6</span>The fliers among cat, dog and owl</h2>
+  <p class="stands">Stands on 2d5 (the sift tool) and 2c3 (the listing line).</p>
+  <p data-pid="d3b09f">The fliers among cat, dog and owl, with the facts about flying laid down as given, since the ladder cannot watch an owl.</p>
+  <p data-pid="29bc12">Given: the cat cannot fly, the dog cannot fly, and the owl can fly. The sift axiom gives this set; call it fliers:</p>
+  <div class="eqline" data-tex="\{x \in \{\text{cat},\text{dog},\text{owl}\} : x \text{ can fly}\}"></div>
+  <p data-pid="49821a">Is the owl in fliers? The owl is the owl, by the self-sameness axiom, so add an option and pack the listing: the owl is in {cat, dog, owl}. The owl can fly: keep that part of the given. Join the two, and pack the sift:</p>
+  <div class="eqline" data-tex="\text{owl} \in \text{fliers}"></div>
+  <p data-pid="ba53ca">Is the cat in fliers? Put cat ∈ fliers in a row beside the givens. Unpack the sift and keep the right part: the cat can fly. That clashes with the given: ⊥. So rows that hold cat ∈ fliers equal ⊥: the cat cannot stand in fliers. The same steps run for the dog: unpack, keep the right part, the dog can fly, clash. Writing the denial, <span data-tex-inline="\text{cat} \notin \text{fliers}"></span>, is a box’s output, and <a href="r03a.html">3a</a> earns it.</p>
+  <p data-pid="def43b">So fliers has owl as a member, and cat and dog cannot stand in it. By 2c's listing line and the same-members axiom, fliers = {owl}: the slides finish that. The habit to take from this: a sift is used by unpacking its membership into an and, and made by joining.</p>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · the fliers come to {owl} · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">2d6.1</span><span class="ph know">know</span>What habit does the fliers argument teach about sifts?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="2d7">
+  <h2 class="sthead"><span class="stno">2d7</span>Sifts worth knowing by sight</h2>
+  <p class="stands">Stands on 2d5 (the sift tool) and 0b (self-sameness).</p>
+  <p data-pid="35a016">Some sifts worth knowing by sight:</p>
+  <div class="eqline" data-tex="\begin{aligned} &amp;\{x \in u : x = x\} = u\\ &amp;\{s \in b : \text{cat} \in s\}\\ &amp;\{x \in u : x \in v\} \end{aligned}"></div>
+  <p data-pid="db8abb">A condition everything passes gives the set back, since x = x is the self-sameness axiom for any x.</p>
+  <p data-pid="540142">A sift can run on a set whose members are sets: {s ∈ b : cat ∈ s} picks out the members of b that have cat in them.</p>
+  <p data-pid="e775b3">A sift can mention other sets you have: {x ∈ u : x ∈ v} is the members u and v share, and 2e gives it a mark.</p>
+  <p data-pid="998e2e">What a condition may not do is mention the set being built, since that set is not yet in hand.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">2d7.1</span><span class="ph know">know</span>What does sifting u by “x = x” give, and why? <br>What may a condition not mention?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="2d8">
-  <h2 class="sthead"><span class="stno">2d8</span>The tool respects inclusion</h2>
-  <p class="stands">Stands on 2d1 (𝒫) and 2a10 (subsets chain).</p>
-  <p data-pid="9bd7c8">Power-keeps-parts technique: <b>if u is part of b, every part of u is a part of b.</b> In marks, 𝒫(u) ⊆ 𝒫(b). The argument is 2a’s chain technique, inside the shape of ⊆.</p>
-  <p data-pid="b4df5b">Let u and b be any sets, and suppose u ⊆ b. Let s be anything. Suppose s is in 𝒫(u), until we drop it. Unpack 𝒫: s ⊆ u. Chain that with u ⊆ b: s ⊆ b. Pack 𝒫: s is in 𝒫(b).</p>
-  <p data-pid="faccef">Drop the supposition: if s is in 𝒫(u), then s is in 𝒫(b). Nothing was assumed about s, so this is true for every s. Pack ⊆: 𝒫(u) ⊆ 𝒫(b).</p>
-  <p data-pid="8fbf24">The placeholder is called s because its values are sets; any letter would do. Run backwards, the power-keeps-parts technique also works: from 𝒫(u) ⊆ 𝒫(b), you may write u ⊆ b, because u ∈ 𝒫(u), so u ∈ 𝒫(b), so u ⊆ b. So u ⊆ b and 𝒫(u) ⊆ 𝒫(b) are interchangeable by techs. That is the kind of technique that lets you move a question about sets up to a question about their power sets, and back.</p>
+  <h2 class="sthead"><span class="stno">2d8</span>Sifting never adds</h2>
+  <p class="stands">Stands on 2d5 (the sift tool) and 2c9 (⊆).</p>
+  <p data-pid="456323">Sift-is-part technique: <b>whatever the condition, the sifted set is part of the set you sifted.</b> This is the technique to cite when someone expects a sift to produce something that was not there to keep.</p>
+  <p data-pid="a636f9">The plan: wanting the sift ⊆ u, the last step packs ⊆; before it is an every of a kind; so set in the case of any member of the sift.</p>
+  <p data-pid="5b15f3">Let u be any set and φ any condition. Let y be any member of the sift, a fresh name with this said of it:</p>
+  <div class="eqline" data-tex="y \in \{x \in u : \varphi(x)\}"></div>
+  <p data-pid="5289d8">Unpack the sift: y ∈ u and φ(y). Keep the left part: y ∈ u.</p>
+  <p data-pid="0bedce">The case used nothing about y but that it is in the sift, so, back at the margin, every member of the sift is in u. Pack the mark: <span data-tex-inline="\{x \in u : \varphi(x)\} \subseteq u"></span>.</p>
+  <p data-pid="f66267">2c's cup of seawater was a sift all along. The cup takes exactly the molecules of the Sound that are in a certain place: cupful = {x ∈ Sound : x is in the cup}. So the sift-is-part technique gives cupful ⊆ Sound with no further work. <b>A cup is a sift: it keeps what passes, and what it keeps was already there.</b></p>
+  <p data-pid="b90346">So <span data-tex-inline="\{x \in \{\text{cat},\text{dog}\} : x \text{ can fly}\}">{x ∈ {cat, dog} : x can fly}</span> is not {owl}, whatever the owl can do. No flier was in {cat, dog} to keep, so nothing passes, and the result is a set with no members at all. Which raises the question of what that set is, and whether there is such a thing.</p>
+  <section class="slides" id="sl8"><div class="eyebrow">The slides · the fliers of {cat, dog} come to ∅ · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">2d8.1</span><span class="ph know">know</span>What does the power-keeps-parts technique say? <br>Does it run backwards?</li>
+      <li><span class="qid">2d8.1</span><span class="ph know">know</span>What does the sift-is-part technique say?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="2d9">
-  <h2 class="sthead"><span class="stno">2d9</span>Common parts, exactly</h2>
-  <p class="stands">Stands on 2d8 (power-keeps-parts) and 2c8 (∩).</p>
-  <p data-pid="3cf34e">The parts of what u and b share are exactly the parts shared by 𝒫(u) and 𝒫(b):</p>
-  <div class="eqline" data-tex="\mathcal P(u \cap b) = \mathcal P(u) \cap \mathcal P(b)"></div>
-  <p data-pid="42da04"><b>A set is part of both u and b exactly when it is part of their common members.</b> The proof chases a member, with 2c's habit of unpacking everything to joining words and a technique in the middle; the slides have it. For ∪ only an inclusion is true:</p>
-  <section class="slides" id="sl9"><div class="eyebrow">The slides · common parts exactly · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">2d9</span>A set to start from</h2>
+  <p class="stands">Stands on 2d8 (sifting needs a set) and 2b (a some).</p>
+  <p data-pid="fce7b1">Look at what the tool needs. Sifting takes a set in. Every tool of this rung does: 2e's gather takes things you have, its merge takes a set of sets, 2f's tool takes a set. <b>The tools make sets from sets, and with nothing in hand they make nothing.</b> The techs of rung 1 never produce an object either; they reason about objects you have. And 2c's listing only <i>writes</i> a set you have. So without 2c1, nothing would say that there is any set at all. Mathematics does not pretend otherwise. 2c1 laid down an axiom that does not build but simply asserts. In marks:</p>
+  <div class="eqline" data-tex="\textbf{Empty-set axiom:}\qquad \exists e\;\forall y\; y \notin e."></div>
+  <p class="eqline" data-pid="486fae">From here on, “the empty-set axiom” is this axiom, in these marks.</p>
+  <p data-pid="cc4975">It is the smallest start there could be: one set, with nothing in it. Some books lay down instead only that some set exists, and sift the empty set out of it, as 2d10 does for any set. With sifting in hand, the two come to the same thing. The ladder starts from the empty one, because it is the first thing the rung needs. (Rung 3 will lay down an axiom that asserts another set exists, a particular and endless one.)</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">2d9.1</span><span class="ph know">know</span>What does this footing claim about the parts of u ∩ b?</li>
+      <li><span class="qid">2d9.1</span><span class="ph know">know</span>What does the empty-set axiom assert? <br>Why does the rung need an axiom that asserts instead of building?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="2d10">
-  <h2 class="sthead"><span class="stno">2d10</span>Merged parts, only by an inclusion</h2>
-  <p class="stands">Stands on 2d9 (common parts) and 1e (the counterexample technique).</p>
-  <div class="eqline" data-tex="\mathcal P(u) \cup \mathcal P(b) \subseteq \mathcal P(u \cup b)"></div>
-  <p data-pid="897a0a">A part of u is a part of u ∪ b (the power-keeps-parts technique with u ⊆ u ∪ b). That u ⊆ u ∪ b takes two lines. Take x in u. Then x is in u or in b, by adding an option, so x ∈ u ∪ b.</p>
-  <p data-pid="5f5181">The claim 𝒫(u ∪ b) = 𝒫(u) ∪ 𝒫(b) fails the other way, and here is the witness. Take u = {cat}, b = {dog}. Then {cat, dog} ⊆ u ∪ b, so it is in 𝒫(u ∪ b). But it is a part of neither u nor b, so it is in neither 𝒫(u) nor 𝒫(b), and so not in their union. The counterexample technique, and the sameness is dead. This failure is not a licence question like 2c's not-through; the sameness is simply not so, and a set on its own shows it.</p>
-  <section class="slides" id="sl10a"><div class="eyebrow">The slides · merged parts by inclusion only · ← → keys work</div></section>
-  <section class="slides" id="sl10b"><div class="eyebrow">The slides · the witness · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">2d10</span>Every set sifts to the empty set</h2>
+  <p class="stands">Stands on 2d9 (the empty-set axiom), 2d5 (the sift) and 2b (every).</p>
+  <p data-pid="0a1554">Empty-sift technique: <b>any set, sifted by “is not itself”, gives a set with no members.</b> The argument:</p>
+  <p data-pid="180dd6">Let u be any set at all, with nothing else said of it. Sift u by the condition “is not itself”, and call the result e: <span data-tex-inline="e = \{x \in u : x \ne x\}"></span>.</p>
+  <p data-pid="140309">Let y be any member of e: a fresh case, with y ∈ e said of it. Unpack the sift: y ∈ u and y ≠ y. Keep the right part, and unpack ≠: y is not y. But y = y, by the self-sameness axiom. That clashes: ⊥. The case closes.</p>
+  <p data-pid="a250f2">The case of any member of e closes, so nothing can stand in e. That is what this rung means by a set with no members: a row that puts anything in it equals ⊥. The empty-set axiom hands the same thing over as a given, in its own marks; writing it out as a denial for e is <a href="r03a.html">3a</a>’s work:</p>
+  <div class="eqline" data-tex="\forall y\; y \notin e"></div>
+  <p data-pid="a1224b">u was any set, so this holds for every set.</p>
+  <p data-pid="c550c6">This makes no new set appear: the empty-set axiom already gave one. It shows that every set leads down to a set with no members, by one sift. 2d11 shows that it is always the same one.</p>
+  <section class="pic" id="pic2">
+    <div class="eyebrow">The picture · the empty set, sifted from any set</div>
+    <div class="panel">
+      <div class="chips" role="group" aria-label="the set a" id="ach"><span class="m" style="color:var(--muted)">take any set u =</span></div>
+      <div class="cap">Whichever set u is, sift it by x ≠ x. The column below is the step's proof, run on that set, and the readout names what comes out.</div>
+      <div class="colm" id="colm"></div>
+      <div class="eqbox" id="eq2"></div>
+      <div class="cap">Change u. The sifted set never changes, and the one-empty-set technique is why: a set with no members is the only set with no members.</div>
+    </div>
+  </section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">2d10.1</span><span class="ph know">know</span>Which direction of 𝒫(u ∪ b) = 𝒫(u) ∪ 𝒫(b) holds, and what kills the other?</li>
+      <li><span class="qid">2d10.1</span><span class="ph know">know</span>What does the empty-sift technique say, and which clash does its argument turn on?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="2d11">
-  <h2 class="sthead"><span class="stno">2d11</span>In, and part of, again</h2>
-  <p class="stands">Stands on 2d6 (always on the list) and 2a12 (in and part of).</p>
-  <p data-pid="5c6959">Power sets are where 2a's distinction gets its exercise, because the members of 𝒫(u) are themselves sets, and most of them are also subsets of things. <b>Keep the test: ∈ asks “on the list?”, ⊆ asks “every member on the list?”.</b> The empty set is on the list, by the empty-part technique, and is a part of 𝒫(u) by the same technique, with 𝒫(u) in place of b. And u is always on the list.</p>
-  <div class="eqline" data-tex="\begin{aligned} &amp;\varnothing \in \mathcal P(u) &amp;&amp;\text{on the list}\\ &amp;\varnothing \subseteq \mathcal P(u) &amp;&amp;\text{empty-part}\\ &amp;u \in \mathcal P(u) &amp;&amp;\text{always} \end{aligned}"></div>
-  <p data-pid="1aac48">But <span data-tex-inline="u \subseteq \mathcal P(u)"></span> is true only when every member of u is itself a subset of u. For u = {cat} that fails (cat is not a set), and for u = {∅} it is true (∅ ⊆ {∅}). And a cat is not a subset of anything:</p>
-  <div class="eqline" data-tex="\begin{aligned} &amp;\{\text{cat}\} \in \mathcal P(\{\text{cat},\text{dog}\})\\ &amp;\text{cat} \notin \mathcal P(\{\text{cat},\text{dog}\}) \end{aligned}"></div>
+  <h2 class="sthead"><span class="stno">2d11</span>The only set with no members</h2>
+  <p class="stands">Stands on 2d10 (a set with no members), 2c11 (double inclusion) and 1b (when nothing is true, everything is permitted).</p>
+  <p data-pid="deceed">One-empty-set technique: <b>two sets with no members are the same set.</b></p>
+  <p data-pid="1e2c15">The argument that they are the same uses the tech “when nothing is true, everything is permitted”, and it is the standard use of that tech. Nothing can stand in e. So a case that sets in a member of e closes at once, and once a case equals ⊥, everything is permitted inside it: you may say that the member is in e′, for as long as the case is open.</p>
+  <p data-pid="c4df37">Here it is. Rows hold that e and e′ have no members: a row that puts anything in either equals ⊥. Aim at the double-inclusion technique.</p>
+  <p data-pid="2f7b7a">Let x be any member of e. Nothing can stand in e, so the case equals ⊥. Everything is permitted, so x ∈ e′. The case used nothing about x but x ∈ e, so, back at the margin, every member of e is in e′: e ⊆ e′. The line x ∈ e′ stays in the case; only the every comes out, and an every of a kind over no members is all double inclusion asks for. The same steps, with e and e′ exchanged, give e′ ⊆ e.</p>
+  <p data-pid="835307">Join the two inclusions. The double-inclusion technique then gives e = e′.</p>
+  <section class="slides" id="sl11"><div class="eyebrow">The slides · the empty set is unique · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">2d11.1</span><span class="ph know">know</span>When is u ⊆ 𝒫(u) true?</li>
+      <li><span class="qid">2d11.1</span><span class="ph know">know</span>Why is every member of e in e′ when nothing is in e?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="2d12">
-  <h2 class="sthead"><span class="stno">2d12</span>Illegal moves</h2>
-  <p class="stands">Stands on 2d1 to 2d11.</p>
-  <div class="brkkey"></div>
-  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
-\mathcal P(a) = a\,? @@ the members of 𝒫(a) are the subsets of a, not the members of a. 𝒫({cat}) = {∅, {cat}}, and neither ∅ nor {cat} is a cat
-\mathcal P(\varnothing) = \varnothing\,? @@ ∅ ⊆ ∅ (the empty-part technique, or self-part), so ∅ ∈ 𝒫(∅): the power set of the empty set has a member. 𝒫(∅) = {∅}
-\mathcal P(a \cup b) = \mathcal P(a) \cup \mathcal P(b)\,? @@ only ⊇ is true. a = {cat}, b = {dog}: {cat, dog} is a subset of a ∪ b and of neither a nor b
-s \subseteq a \quad\text{so } s \in a\,? @@ 2a's confusion. s ⊆ a says s ∈ 𝒫(a), which is a different set from a
-\text{cat} \in \mathcal P(\{\text{cat},\text{dog}\})\,? @@ a member of 𝒫(a) is a subset of a, so a set. A cat is not a set, so not a subset, so not on the list; {cat} is
-\mathcal P(a) \subseteq \mathcal P(b) \quad\text{so } a \subseteq b\;\text{: allowed} @@ this one IS a move, by the power-keeps-parts technique run backwards (a ∈ 𝒫(a) ⊆ 𝒫(b)). Put here so you check rather than guess
-  </pre>
+  <h2 class="sthead"><span class="stno">2d12</span>A name for the empty set</h2>
+  <p class="stands">Stands on 2d11 (only one set has no members).</p>
+  <p data-pid="cb0254">There is a set with no members, and no other. So it may be given a name of its own:</p>
+  <p class="eqline" data-pid="cbf09e">From here on, <span data-tex-inline="\varnothing"></span> means: the set with no members. Read it “the empty set”.</p>
+  <p data-pid="d70039">Empty-set technique: <b>nothing is a member of the empty set.</b> In marks, <span data-tex-inline="\forall y\; y \notin \varnothing"></span>.</p>
+  <p data-pid="d3da80">The empty-set technique is the empty-set argument of footing 2d10, read for ∅; the one-empty-set technique is why “the” is the right word. Every argument that mentions ∅ uses them, in one of two ways. Either “x ∉ ∅, so a row that holds x ∈ ∅ equals ⊥”, or “this set has no members, so it is ∅”. In particular <span data-tex-inline="\{x \in u : \varphi(x)\} = \varnothing">{x ∈ u : φ(x)} = ∅</span> exactly when no member of u passes φ; the slides prove the fliers among {cat, dog} come to ∅ that way.</p>
+  <p class="aside" data-pid="ab5c97">A word on the mark. It is a letter from the Danish and Norwegian alphabet, chosen by a group of French mathematicians who wrote under one shared pen name. One of them said he had taken it from the Norwegian he knew. It is not the Greek letter phi, which stands for a condition in this step, and it is not a mark from any later rung. Treat it as the mark its line makes it: a name, for one set.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">2d12.1</span><span class="ph know">know</span>Why is cat not in 𝒫({cat, dog}), while {cat} is?</li>
+      <li><span class="qid">2d12.1</span><span class="ph know">know</span>What does ∅ name? <br>What are the two ways an argument uses it?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="2d13">
-  <h2 class="sthead"><span class="stno">2d13</span>Running it backwards</h2>
-  <p class="stands">Stands on 2d1 to 2d10.</p>
-  <p data-pid="60c5ec">Wanting s ∈ 𝒫(u), you want s ⊆ u, so you open “let x be anything; suppose x ∈ s” and aim at x ∈ u. Wanting 𝒫(u) ⊆ 𝒫(b), you open “let s be anything; suppose s ∈ 𝒫(u)”, unpack, and need s ⊆ b. So you need u ⊆ b to chain with. Wanting the full list of 𝒫(u) for a listed u, run keep-or-drop. Then check by the same-members axiom that no way of deciding was missed and none written again. Wanting to refute a sameness between power sets, hunt for a set that is a part of one side's set and not of the other's. A power set's membership is an inclusion, so a witness is a set with a stray member. Found upward; written downward.</p>
+  <h2 class="sthead"><span class="stno">2d13</span>The illegal sift</h2>
+  <p class="stands">Stands on 2d5 (the sift needs a set to sift from).</p>
+  <p data-pid="d5b2eb">Here is the sift that looks most harmless and is not allowed: “the set of all cats”. It is written <span data-tex-inline="\{x : x \text{ is a cat}\}">{x : x is a cat}</span>, with nothing after the x to sift from. The sift axiom says nothing of it, and no tool of the rung builds it. If you want the cats, you must say which set's cats: the cats among the animals in the zoo, {x ∈ z : x is a cat}. Saying which set's cats seems pedantic in life. In mathematics it is the difference between a subject that stands and a subject that falls, and the argument that shows it is short enough to run in full.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">2d13.1</span><span class="ph know">know</span>Wanting s ∈ 𝒫(u), what do you aim at, and how do you open?</li>
+      <li><span class="qid">2d13.1</span><span class="ph know">know</span>What is missing from {x : x is a cat}, and why does the rung insist on it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="2d14">
+  <h2 class="sthead"><span class="stno">2d14</span>The outsider set</h2>
+  <p class="stands">Stands on 2d13 (the illegal sift), 1d (⇔) and 2a7 (a case that cannot stand). <a href="r03a.html">3a17</a> finishes it.</p>
+  <p data-pid="8de0f6">Early in the century before this one, a logician had completed a foundation for arithmetic. Its rules allowed a set to be formed from any condition at all, with no set to sift from. A younger logician wrote to him with a question. Take the condition “x ∉ x”, is not a member of itself. Most sets pass it: {cat} is not a member of {cat}, since its only member is a cat. The old rules allow the set r of all things that pass. Is r a member of itself?</p>
+  <p data-pid="d8ca45">Outsider-set technique: <b>no set has as its members exactly the things that are not members of themselves.</b> Rows set it up here, and it is held in trust until <a href="r03a.html">3a17</a> earns it.</p>
+  <p data-pid="79c430">Here is how far rows go, with the techs of rung 1 and 2a and nothing else.</p>
+  <p data-pid="b7898b">Rows hold that there is such a set. Use the some: call it r, a fresh name. So for every x, x ∈ r exactly when x ∉ x. Use that every on r itself: <span data-tex-inline="r \in r \Leftrightarrow r \notin r"></span>.</p>
+  <p data-pid="637293">Now set in the case r ∈ r. Keep the rightward direction and carry it through: r ∉ r. Unpack ∉: that clashes, ⊥. The case r ∈ r closes: it cannot stand.</p>
+  <p data-pid="c93b99">Rows can go no further. To use the leftward direction, a row needs r ∉ r at the margin, and that is the denial of the case that closed. Writing that denial is a box’s output. With it, the leftward direction gives r ∈ r, which clashes with r ∉ r, and the ⊥ does not mention r, so it comes out of r’s case.</p>
+  <p data-pid="73d8c7"><a href="r03a.html">3a17</a> takes those last moves with a box, and the rows that hold the outsider set then equal ⊥: <span data-tex-inline="\neg\exists r\;\forall x\,(x \in r \Leftrightarrow x \notin x)"></span>.</p>
+  <p data-pid="82d7dd">Look at what the argument does not do. It never asks “is r in r, or not?” and splits into cases; that would be 1f’s either-way, which this ladder does not grant for a statement like this. It closes the case r ∈ r, and 3a will turn that closing into a denial and carry the other direction through on it. Both sides of the final clash are earned. The outsider-set argument needs nothing that the ladder withholds, only the box that 3a brings.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">2d14.1</span><span class="ph know">know</span>What does the outsider-set technique say? <br>Why does its argument not split into cases on “r ∈ r, or not”?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="2d15">
+  <h2 class="sthead"><span class="stno">2d15</span>The sift inside a set</h2>
+  <p class="stands">Stands on 2d14 (the outsider-set technique) and 2d5 (the sift axiom).</p>
+  <p data-pid="1321e8">Now set the outsider-set technique beside the sift tool. The old rules said: for any condition, there is the set of all things that pass. With the condition x ∉ x that gives exactly the r whose rows equal ⊥, once 3a17 finishes them. So the old rules prove ⊥, and when nothing is true, everything is permitted: every statement, so and not so alike. The author of the foundation, with great generosity, wrote back that the argument had shaken the ground he meant to build on.</p>
+  <p data-pid="c4e7a1">All the water on Earth is the top of 2c's cup chain: every body of water in it is part of it. But its members are molecules, not sets. A set of everything has no such top to sift from.</p>
+  <p data-pid="2e136d"><b>The sift axiom says instead: for any condition and any set u you have, there is the set of members of u that pass.</b> Run the same sift inside a set:</p>
+  <p class="eqline" data-pid="bc506c">From here on, a small letter written low after a name, as in rᵤ, makes a new name that recalls the first. It claims nothing.</p>
+  <p data-pid="66aec6">So <span data-tex-inline="r_u = \{x \in u : x \notin x\}">rᵤ = {x ∈ u : x ∉ x}</span> is the outsider set made inside u. In rows, the case rᵤ ∈ rᵤ closes just as before. The second clash would need rᵤ ∈ u for free, and inside u that is not given. So, once 3a17 finishes the argument, the clash refutes rᵤ ∈ u instead: the set you sifted from does not contain its own outsider set. Nothing totally false; a technique. 3a·f runs that version, and draws from it that there is no set of all sets.</p>
+  <p data-pid="d2914e">The accepted word for what the outsider set did to the old rules is <b>paradox</b>, from the Greek for “contrary to expectation”.</p>
+  <section class="slides" id="sl15"><div class="eyebrow">The slides · the outsider set, inside a set · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">2d15.1</span><span class="ph know">know</span>What happens when the outsider sift is run inside a set u you have?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="2d16">
+  <h2 class="sthead"><span class="stno">2d16</span>Illegal moves</h2>
+  <p class="stands">Stands on 2d5 to 2d15.</p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\{x : x \text{ can fly}\} @@ no set to sift from. The tool wants {x ∈ u : …} for a set u you have. Written without the u, it is the old unrestricted rule, and the technique above shows where that leads
+\{x \in \{\text{cat},\text{dog}\} : x \text{ can fly}\} = \{\text{owl}\}\,? @@ sifting never adds (the sift-is-part technique). No owl was there to keep; the sift is ∅
+\varphi(y) \quad\text{so } y \in \{x \in u : \varphi(x)\}\,? @@ passing is not enough. The owl passes “can fly” and is not in the sift of {cat, dog}. You need y ∈ u as well: join
+s = \{x \in u : x \notin s\} @@ the condition mentions the set being built. Not a sift: s is not in hand until the sift is done. (This is the outsider set trying to get in through a side door)
+\varnothing \in u \quad\text{because } \varnothing \subseteq u\,? @@ 2c's confusion again. Every set has ∅ as a part (held in trust until 2f proves it); only some have it as a member
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">2d16.1</span><span class="ph know">know</span>Why is passing the test not enough to be in {x ∈ a : φ(x)}?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="2d17">
+  <h2 class="sthead"><span class="stno">2d17</span>Running it backwards</h2>
+  <p class="stands">Stands on 2d5 (the sift) and 2d12 (∅).</p>
+  <p data-pid="efc654">Wanting y ∈ {x ∈ u : φ(x)}, you know the step before is y ∈ u ∧ φ(y), so you want both of those, and join. Wanting to show y ∈ {x ∈ u : φ(x)} cannot stand, you put the membership in a row, unpack it, and need a clash with either part: either you have y ∉ u, or you have ¬φ(y). Wanting s = ∅, you have two routes. You can show s has no members, that is, any case of a member of s closes, and cite the one-empty-set technique. Or you can show inclusions each way. The direction ∅ ⊆ s is free by everything-permitted (held in trust here; 2f writes it out), and the direction s ⊆ ∅ is the real work. Found from the goal back; written from the givens forward.</p>
+  <section class="slides" id="sl17"><div class="eyebrow">The slides · backwards · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">2d17.1</span><span class="ph know">know</span>Wanting to show s = ∅, what are the two routes?</li>
     </ol>
   </section>
 </section>
@@ -252,23 +339,29 @@ s \subseteq a \quad\text{so } s \in a\,? @@ 2a's confusion. s ⊆ a says s ∈ �
 <section class="challenge themeend">
   <div class="eyebrow">Special challenges · there if you want them</div>
   <h2>Special challenges</h2>
-  <div class="chq"><span class="chid">2d.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{(i) } \mathcal{P}(u) \cap \mathcal{P}(b) = \{\varnothing\}"></span> <span data-tex-inline="\text{(ii) the members of } \mathcal{P}(c) \cap \mathcal{P}(d)"></span></span>Take sets u and b of things you know, with no member in common, and prove (i). <br>Then take sets c and d of things with a member in common, find (ii) in terms of what c and d share, and prove it.</div>
-  <div class="chq"><span class="chid">2d.4.2</span><span class="tagq">loop</span><span class="givens"><span data-tex-inline="u \text{ a set; } R \text{ a statement with}"></span> <span data-tex-inline="\text{gaps at both places.}"></span> <span data-tex-inline="\text{For } x \in u, \text{ the pick of } x \text{ is}"></span> <span data-tex-inline="\{y \in u : R(x, y)\}"></span> <span data-tex-inline="\text{(for this answer only).}"></span></span>Prove that some part of u is the pick of no member of u.</div>
-  <div class="chq"><span class="chid">2d.4.3</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{Wanted: a set } u \text{ with } \mathcal{P}(u) \subseteq u."></span></span>Find whether there is one, and prove your answer.</div>
-  <div class="chq"><span class="chid">2d.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="b \text{ any set.}"></span> <span data-tex-inline="\text{Off limits: when nothing is true,}"></span> <span data-tex-inline="\text{everything is permitted.}"></span> <span data-tex-inline="\text{Techniques already proved}"></span> <span data-tex-inline="\text{may be cited.}"></span> <span data-tex-inline="\text{Foot: } \varnothing \subseteq b"></span></span>Prove the foot.</div>
-  <div class="chq"><span class="chid">2d.4.5</span><span class="tagq">seam</span>From 2d.4.2: for every set u and every R, some d ⊆ u is {y ∈ u : R(x, y)} for no x ∈ u. Suppose u is a set that no listing can finish writing. <br>Does 2d.4.2 show that 𝒫(u) has more members than u, or only that no R reaches every part of u?</div>
+  <div class="chq"><span class="chid">2d.4.1</span><span class="tagq">build</span>Write a condition, other than “x is not x”, that sifts the empty set from every set, and prove it with no facts about the things. <br>Write another that empties a set of things you know only by facts about them; lay the facts down as givens, prove it, and find a set it does not empty. <br>Prove your two sifts give the same set.</div>
+  <div class="chq"><span class="chid">2d.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{Every member of } s \text{ is in}"></span> <span data-tex-inline="\text{the school; every}"></span> <span data-tex-inline="\text{member of } s \text{ is not.}"></span></span>Prove that every member of the empty set is a pet, and that every member of the empty set is not a pet, and find whether that is a clash. <br>Find s, and prove it.</div>
+  <div class="chq"><span class="chid">2d.4.3</span><span class="tagq">loop</span><span class="givens"><span data-tex-inline="R \text{ a statement with gaps}"></span> <span data-tex-inline="\text{at both places, settled:}"></span> <span data-tex-inline="\forall x\, \forall y\, (R(x, y) \lor \neg R(x, y))"></span> <span data-tex-inline="\text{Rows hold: } \exists r\, \forall x\, (R(x, r) \Leftrightarrow \neg R(x, x))"></span></span>Show that the rows equal ⊥. <br>Read R(x, y) as “y shaves x”, then as “x is a member of y”. For each reading, what can the rows not hold, in English?</div>
+  <div class="chq"><span class="chid">2d.4.4</span><span class="tagq">world</span><span class="givens"><span data-tex-inline="\text{A world's only things: Rex,}"></span> <span data-tex-inline="\text{Pickles and Pip, none a set.}"></span></span>Find which of the axioms same-members, sift and empty-set are true there. <br>Can the empty-set axiom be proved from the others?</div>
+  <div class="chq"><span class="chid">2d.4.6</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\mathit{Said}\text{: the ideas that can be said}"></span> <span data-tex-inline="\mathit{Approx}\text{: approximations of the world}"></span> <span data-tex-inline="\mathit{Obs} \subseteq \mathit{Approx}"></span> <span data-tex-inline="W\text{: lines a logical system writes}"></span> <span data-tex-inline="\forall s \in \mathit{Said}\;\exists w \in W\,(w \text{ writes } s)"></span> <span data-tex-inline="\forall o \in \mathit{Obs}\;\exists w \in W\,(w \text{ writes } o)"></span></span>Read the last two lines in plain words. Where on the ladder have you met them before? <br>Can they be proved from anything the ladder has? If not, what is someone doing when they write them down?</div>
+  <div class="chq"><span class="chid">2d.4.5</span><span class="tagq">seam</span>Sifting from nothing by x ∉ x makes trouble: 2d.4.3 brought rows holding such a set to ⊥. <br>Sift gives {x ∈ u : φ(x)} only for a set u in hand. <br>Should {x : x is a town on the Monterey County coast} be a set, with no set to sift it from? <br>Draw the line between the conditions that may make a set from nothing and those that may not.</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r02c.html">← 2c · gather and merge</a><a href="r02concl.html">2·∎ · conclusion →</a></nav>
+<nav class="nextrung"><a href="r02c.html">← 2c · membership and same members</a><a href="r02e.html">2e · gather and merge →</a></nav>
 
 <section class="extra basement">
   <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Other ways the same marks are written</h3>
+  <p>Mathematics writes some of these marks in more than one way, by subject and by century. Each one below means what the mark in this step means; know them on sight.</p>
+  <ul>
+    <li><span data-tex-inline="\{x \in u : \varphi(x)\}">{x ∈ u : φ(x)}</span> is also written with a bar, <span data-tex-inline="\{x \in u \mid \varphi(x)\}">{x ∈ u ∣ φ(x)}</span>. Either form is set-builder notation.</li>
+    <li><span data-tex-inline="\varnothing">\varnothing</span> is also written {}.</li>
+  </ul>
   <h3>Who said it first</h3>
-  <p>The founder who showed that the parts of a set outrun its members is Georg Cantor; the fact is Cantor’s theorem.</p>
-  <aside class="voice para"><p>Cantor showed in 1891 that the parts of a set can never all be matched, one each, with its members: whatever matching you try, some part is left out. He took this as a sign that there is no largest set.</p><cite>Cantor, “Über eine elementare Frage der Mannigfaltigkeitslehre” (1891); paraphrase</cite></aside>
+  <p>The logician whose foundation fell is Gottlob Frege; the younger logician who wrote to him, in 1902, is Bertrand Russell. The author of the ancestor list of axioms, who assumed an empty set outright, is Ernst Zermelo (1908). The French group with the shared pen name is Bourbaki; the member who chose ∅ from the Norwegian he knew is André Weil.</p>
   <h3>Accepted names</h3>
-  <p>The power axiom is the axiom of power set.</p>
+  <p>The outsider-set technique is Russell’s paradox; the outsider set is the Russell set. The old unrestricted rule is unrestricted comprehension. The sift axiom is the axiom of separation, or of subsets.</p>
 </section>
 </div>
 
@@ -278,84 +371,85 @@ s \subseteq a \quad\text{so } s \in a\,? @@ 2a's confusion. s ⊆ a says s ∈ �
 const {tex,col,stepper}=Rung;
 const R=String.raw;
 
-/* ---------- left: the levels of a power set ---------- */
-const cv2=document.getElementById('cv2'); let n=3;
-const NAMES=['p','q','r','s']; let sel=null, boxes=[];
-function setName(mask,n){ const m=[]; for(let i=0;i<n;i++) if(mask>>i&1) m.push(NAMES[i]); return m.length?'{'+m.join(',')+'}':'∅'; }
-const TXs=m=>setName(m,n).replace('∅','\\varnothing').replace(/[{}]/g,x=>'\\'+x).replace(/,/g,',\\,');
+/* ---------- left: the sieve ---------- */
+const TOK=[['A','ember'],['e','teal'],['i','gold'],['O','teal'],['u','ember'],['b','ember'],['K','gold'],['m','teal'],['S','ember'],['t','gold'],['R','teal'],['z','gold']].map(([id,c])=>({id,c,cap:id===id.toUpperCase(),vow:'aeiou'.includes(id.toLowerCase())}));
+const CONDS={
+  'x is a vowel':t=>t.vow,'x is a consonant':t=>!t.vow,'x is a capital':t=>t.cap,'x is small':t=>!t.cap,
+  'x is ember':t=>t.c==='ember','x is teal':t=>t.c==='teal','x is gold':t=>t.c==='gold',
+  'x is a vowel ∧ x is not ember':t=>t.vow&&t.c!=='ember','x is a vowel ∨ x is gold':t=>t.vow||t.c==='gold',
+  'x is a capital vowel that is teal':t=>t.cap&&t.vow&&t.c==='teal','x = x':t=>true,'x ≠ x':t=>false
+};
+const TEXC={'x is a vowel':'x \\text{ is a vowel}','x is a consonant':'x \\text{ is a consonant}','x is a capital':'x \\text{ is a capital}','x is small':'x \\text{ is small}','x is ember':'x \\text{ is ember}','x is teal':'x \\text{ is teal}','x is gold':'x \\text{ is gold}','x is a vowel ∧ x is not ember':'x \\text{ is a vowel} \\land \\neg(x \\text{ is ember})','x is a vowel ∨ x is gold':'x \\text{ is a vowel} \\lor x \\text{ is gold}','x is a capital vowel that is teal':'x \\text{ is a capital} \\land x \\text{ is a vowel} \\land x \\text{ is teal}','x = x':'x = x','x ≠ x':'x \\ne x'};
+const phi=document.getElementById('phi'); Object.keys(CONDS).forEach(k=>phi.add(new Option(k,k))); phi.value='x is a vowel';
+let from='t';
+const cv1=document.getElementById('cv1');
 function size(cv,ar){ const d=window.devicePixelRatio||1, W=cv.clientWidth||300, H=Math.round(W/ar); cv.width=W*d; cv.height=H*d; cv.style.height=H+'px'; const c=cv.getContext('2d'); c.setTransform(d,0,0,d,0,0); return {c,W,H}; }
-function draw2(){
-  const {c,W,H}=size(cv2,1.25); c.fillStyle=col('--card'); c.fillRect(0,0,W,H);
-  const levels=[]; for(let k=0;k<=n;k++) levels.push([]);
-  for(let m=0;m<(1<<n);m++){ let k=0; for(let i=0;i<n;i++) k+=m>>i&1; levels[k].push(m); }
-  boxes=[]; const top=26, bot=H-26;
-  levels.forEach((Lv,k)=>{ const y=n?bot-(bot-top)*k/n:H/2; Lv.forEach((m,j)=>{ const x=W*(j+1)/(Lv.length+1); boxes.push({m,x,y}); }); });
-  const isSub=(p,q)=>(p&q)===p;
-  c.lineWidth=1; boxes.forEach(p=>boxes.forEach(q=>{ if(p.m!==q.m && isSub(p.m,q.m)){ let d=q.m^p.m; if(d&&!(d&(d-1))){ c.strokeStyle=col('--grid'); if(sel!==null && isSub(sel,p.m)) c.strokeStyle=col('--ember'); if(sel!==null && isSub(q.m,sel)) c.strokeStyle=col('--teal'); c.beginPath(); c.moveTo(p.x,p.y); c.lineTo(q.x,q.y); c.stroke(); } } }));
-  c.font=(n>=4?11:13)+'px IBM Plex Mono, monospace'; c.textAlign='center';
-  boxes.forEach(b=>{ const s=setName(b.m,n); const w=c.measureText(s).width+12; let fill=col('--sand'), ink=col('--ink');
-    if(sel!==null){ if(b.m===sel){ fill=col('--ink'); ink=col('--paper'); } else if(isSub(b.m,sel)){ fill=col('--teal'); ink='#fff'; } else if(isSub(sel,b.m)){ fill=col('--ember'); ink='#fff'; } }
-    c.fillStyle=fill; c.beginPath(); c.roundRect?c.roundRect(b.x-w/2,b.y-11,w,22,5):c.rect(b.x-w/2,b.y-11,w,22); c.fill(); c.fillStyle=ink; c.fillText(s,b.x,b.y+4); b.w=w; });
-  c.textAlign='left';
-  const S=sel===null?(1<<n)-1:sel; const subs=[]; for(let m=0;m<(1<<n);m++) if(isSub(m,S)) subs.push(m);
-  subs.sort((p,q)=>{ const k=x=>{let t=0; for(let i=0;i<n;i++) t+=x>>i&1; return t;}; return k(p)-k(q)||p-q; });
-  const kk=x=>{let t=0; for(let i=0;i<n;i++) t+=x>>i&1; return t;}; const lv=[]; subs.forEach(m=>{ (lv[kk(m)]=lv[kk(m)]||[]).push(TXs(m)); });
-  const rowsOut=[]; lv.filter(Boolean).forEach(L=>{ for(let i=0;i<L.length;i+=4) rowsOut.push(L.slice(i,i+4).join(',\\;')); }); const body=rowsOut.join(',\\\\ ');
-  tex(document.getElementById('eq2'),lv.filter(Boolean).length>2?`\\begin{gathered}\\mathcal P(${TXs(S)}) = \\{${body}\\}\\end{gathered}`:`\\mathcal P(${TXs(S)}) = \\{${subs.map(TXs).join(',\\;')}\\}`,true);
+function badge(c,x,y,r){ c.beginPath(); c.roundRect?c.roundRect(x-r,y-r,2*r,2*r,r*.35):c.rect(x-r,y-r,2*r,2*r); }
+function draw1(){
+  const {c,W,H}=size(cv1,1.5); c.fillStyle=col('--card'); c.fillRect(0,0,W,H);
+  const f=CONDS[phi.value]; const pass=t=>from==='t'&&f(t);
+  if(from==='t'){ c.strokeStyle=col('--muted'); c.lineWidth=1.2; c.setLineDash([4,4]); c.strokeRect(8,8,W-16,H-16); c.setLineDash([]); c.fillStyle=col('--muted'); c.font='12px IBM Plex Mono, monospace'; c.fillText('t',16,24); }
+  else { c.fillStyle=col('--muted'); c.font='12px IBM Plex Mono, monospace'; c.fillText('no set: nothing to sift',16,24); }
+  const ins=TOK.filter(pass), outs=TOK.filter(t=>!pass(t));
+  const r=Math.max(10,Math.min(17,W/30));
+  // passing letters inside an ember region on the left; failing on the right
+  const cx=W*.3, cy=H*.52, rx=W*.22, ry=H*.36;
+  if(from==='t'){ c.strokeStyle=col('--ember'); c.lineWidth=2.4; c.beginPath(); c.ellipse(cx,cy,rx,ry,0,0,Math.PI*2); c.stroke(); c.fillStyle=col('--ember'); c.font='12px IBM Plex Mono, monospace'; c.fillText('φ',cx-rx*.9,cy-ry*.95); }
+  const grid=(L,x0,y0,w,h)=>{ const cols=Math.max(1,Math.min(L.length,Math.floor(w/(r*2.6)))); const rows=Math.ceil(L.length/cols)||1; L.forEach((t,j)=>{ const ro=Math.floor(j/cols), co=j%cols; const x=x0+(co-(cols-1)/2)*r*2.6, y=y0+(ro-(rows-1)/2)*r*2.6; const on=pass(t);
+    badge(c,x,y,r); c.fillStyle=col('--'+t.c); c.globalAlpha=from==='t'?(on?1:.22):.22; c.fill(); c.globalAlpha=1;
+    c.fillStyle=on?'#fff':col('--muted'); c.font='600 '+Math.round(r*1.2)+'px Source Serif 4, serif'; c.textAlign='center'; c.textBaseline='middle'; c.fillText(t.id,x,y+1); c.textAlign='left'; c.textBaseline='alphabetic'; }); };
+  if(from==='t'){ grid(ins,cx,cy,rx*1.7,ry*1.7); grid(outs,W*.72,cy,W*.4,H*.8); } else grid(TOK,W/2,cy,W*.8,H*.8);
+  const eq=document.getElementById('eq1'), rf=document.getElementById('ref1');
+  if(from==='t'){ const m=ins.map(t=>t.id); tex(eq,`\\{x \\in t : ${TEXC[phi.value]}\\} = ${m.length?'\\{'+m.join(',\\,')+'\\}':'\\varnothing'}${m.length===TOK.length?'\\; = t':''}`,true); rf.style.display='none'; }
+  else { tex(eq,`\\{x : ${TEXC[phi.value]}\\}`,true); rf.style.display=''; rf.textContent='refused: no set to sift from. By the sift axiom there is {x ∈ u : φ(x)} for a set u you have; with no u there is no tool, and “the set of all x such that φ(x)” is the old unrestricted rule, which the outsider-set technique turns into ⊥.'; }
 }
-cv2.addEventListener('pointerdown',e=>{ const r=cv2.getBoundingClientRect(), x=e.clientX-r.left, y=e.clientY-r.top; const hit=boxes.find(b=>Math.abs(x-b.x)<b.w/2+2&&Math.abs(y-b.y)<13); sel=hit?(sel===hit.m?null:hit.m):null; draw2(); });
-document.querySelectorAll('[data-nn]').forEach(b=>b.onclick=()=>{ n=+b.dataset.nn; sel=null; document.querySelectorAll('[data-nn]').forEach(x=>x.classList.toggle('on',x===b)); draw2(); });
-new ResizeObserver(draw2).observe(cv2);
-if(window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change',draw2);
-draw2();
+phi.onchange=draw1;
+document.querySelectorAll('[data-from]').forEach(b=>b.onclick=()=>{ from=b.dataset.from; document.querySelectorAll('[data-from]').forEach(x=>x.classList.toggle('on',x===b)); draw1(); });
+new ResizeObserver(draw1).observe(cv1);
+if(window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change',draw1);
+draw1();
 
-/* ---------- right: keep or drop ---------- */
-const BASE=['owl','cat','bat']; let emu=false; let keep=new Set(['owl','bat']);
-const kd=document.getElementById('kd');
-function members(){ return emu?BASE.concat(['emu']):BASE; }
-function drawKD(){
-  kd.innerHTML=''; members().forEach(m=>{ const n=document.createElement('span'); n.textContent=m; const b=document.createElement('button'); b.type='button'; b.textContent=keep.has(m)?'keep':'drop'; b.className=keep.has(m)?'keep':''; b.onclick=()=>{ keep.has(m)?keep.delete(m):keep.add(m); drawKD(); }; kd.append(n,b); });
-  const ms=members(), s=ms.filter(m=>keep.has(m));
-  const Lx=L=>L.length?'\\{'+L.map(x=>'\\text{'+x+'}').join(',\\,')+'\\}':'\\varnothing';
-  tex(document.getElementById('eq3'),`\\begin{gathered} s = ${Lx(s)}\\\\ s \\subseteq b \\text{ (each kept member is in } b\\text{), so } s \\in \\mathcal P(b)\\end{gathered}`,true);
-  // list all subsets by keep-or-drop
-  let all=[[]]; ms.forEach(m=>{ all=all.concat(all.map(t=>t.concat([m]))); });
-  const lst=document.getElementById('lst'); lst.innerHTML='𝒫(b), by keep-or-drop: '+all.map(t=>'<span style="color:'+(t.every(x=>keep.has(x))&&t.length===s.length?'var(--ember)':'inherit')+'">'+(t.length?'{'+t.join(', ')+'}':'∅')+'</span>').join(' · ')+(emu?'<br>Every member without emu was on the old list; every member with emu is an old member with the newcomer added.':'');
+/* ---------- right: the empty set from any u ---------- */
+const AS=[['{cat}','\\{\\text{cat}\\}'],['{Ann, Ben, Cal}','\\{\\text{Ann},\\text{Ben},\\text{Cal}\\}'],['{red, blue}','\\{\\text{red},\\text{blue}\\}'],['{{cat}}','\\{\\{\\text{cat}\\}\\}'],['∅ itself','\\varnothing']];
+let ai=0; const ach=document.getElementById('ach');
+AS.forEach(([lab],i)=>{ const b=document.createElement('button'); b.textContent=lab; if(i===0) b.className='on'; b.onclick=()=>{ ai=i; [...ach.querySelectorAll('button')].forEach(x=>x.classList.toggle('on',x===b)); draw2(); }; ach.appendChild(b); });
+function draw2(){
+  const [lab,tx]=AS[ai]; const colm=document.getElementById('colm'); colm.innerHTML='';
+  const lines=[['u = '+lab,'any set',''],['e = {x ∈ u : x ≠ x}','the sift axiom',''],['let y be any member of e','a fresh case','in'],['y ∈ u ∧ y ≠ y','﹀ the sift','in'],['y ≠ y','keep right','in'],['⊥','clash with y = y (the self-sameness axiom)','in bot'],['nothing can stand in e','the case closes','out']];
+  lines.forEach(([s,r,cls])=>{ const d=document.createElement('div'); d.className='ln '+cls; d.innerHTML='<span class="s"></span><span class="r"></span>'; d.children[0].textContent=s; d.children[1].textContent=r; colm.appendChild(d); });
+  tex(document.getElementById('eq2'),`\\begin{gathered}\\{x \\in ${tx} : x \\ne x\\} = \\varnothing\\\\ \\text{the one-empty-set technique: no members, so the empty set}\\end{gathered}`,true);
 }
-document.getElementById('emuOff').onclick=()=>{ emu=false; keep.delete('emu'); document.getElementById('emuOff').classList.add('on'); document.getElementById('emuOn').classList.remove('on'); drawKD(); };
-document.getElementById('emuOn').onclick=()=>{ emu=true; document.getElementById('emuOn').classList.add('on'); document.getElementById('emuOff').classList.remove('on'); drawKD(); };
-drawKD();
+draw2();
 
 /* ---------- slides ---------- */
 const N='\\htmlClass{new}', K='\\htmlClass{keep}';
 const col2=(...rows)=>'\\begin{aligned}'+rows.map(([l,r])=>'&'+l+' &&\\text{'+r+'}').join('\\\\ ')+'\\end{aligned}';
 const T=s=>'\\text{'+s+'}';
-stepper('#sl3',[
-  {k:'ember',kl:'a power set listed',t:R`\mathcal P(\{\text{owl},\text{cat}\})\,?`,n:`Keep or drop, member by member. Start with the only way to decide nothing: ∅.`},
-  {k:'ember',kl:'a power set listed',t:R`\text{owl:}\quad \varnothing,\; ${N}{\{\text{owl}\}}`,n:`Drop the owl, or keep it. Each set so far comes back without, and again with.`},
-  {k:'ember',kl:'a power set listed',t:R`\text{cat:}\quad \varnothing,\; \{\text{owl}\},\; ${N}{\{\text{cat}\}},\; ${N}{\{\text{owl},\text{cat}\}}`,n:`The cat comes back to each. The list is complete: a subset is fixed by what it decides about owl and cat, and every decision has been made.`},
-  {k:'ember',kl:'a power set listed',t:R`\mathcal P(\{\text{owl},\text{cat}\}) = \{\varnothing, \{\text{owl}\}, \{\text{cat}\}, \{\text{owl},\text{cat}\}\}`,n:`∅ (the empty-part technique) and the set itself (the self-part technique) are on it, as they always are.`}
-],{title:'The slides · a power set listed · ← → keys work'});
-stepper('#sl4',[
-  {k:'ember',kl:'the power set of the empty set',t:R`\mathcal P(\varnothing) \overset{?}{=} \{\varnothing\}`,n:`Work back from the claim: a sameness, so inclusions each way (the double-inclusion technique). The leftward one is short: ∅ ⊆ ∅ by the empty-part technique, so ∅ ∈ 𝒫(∅), and {∅}'s only member is in.`},
-  {k:'ember',kl:'the power set of the empty set',t:col2([R`\text{Take } s \text{, anything. Suppose } s \in \mathcal P(\varnothing).`,'supposed, for the rightward inclusion'],[R`\qquad \text{So } s \subseteq \varnothing.`,'unpack the power set'],[R`\qquad \text{And } \varnothing \subseteq s.`,'the empty-part technique'],[R`\qquad \text{So } ${N}{s = \varnothing}.`,'the double-inclusion technique'],[R`\qquad \text{So } s \in \{\varnothing\}.`,'pack the listing']),n:`The rightward one: a subset of ∅ is ∅, because ∅ is also a subset of it, and the double-inclusion technique closes the inclusions each way into a sameness.`},
-  {k:'ember',kl:'the power set of the empty set',t:R`${N}{\mathcal P(\varnothing) = \{\varnothing\}}`,n:` Nothing to decide, so exactly the way of deciding nothing. 𝒫(∅) has a member, and is not ∅; rung 3 will make much of exactly that difference.`}
-],{title:'The slides · the power set of the empty set · ← → keys work'});
-stepper('#sl9',[
-  {k:'ember',kl:'common parts exactly',t:R`\mathcal P(u \cap b) \overset{?}{=} \mathcal P(u) \cap \mathcal P(b)`,n:`Chase a member s. s ∈ 𝒫(u ∩ b) unpacks to s ⊆ u ∩ b, an every; so look at a member x of s inside it.`},
-  {k:'ember',kl:'common parts exactly',t:col2([R`s \in \mathcal P(u \cap b)`,'take s, anything'],[R`\text{exactly when every member of } s \text{ is in } u \cap b`,'unpack the power set and part of'],[R`\text{exactly when every member of } s \text{ is } ${N}{\text{in } u \text{ and in } b}`,'unpack the common part']),n:`Inside the every is an if: if x ∈ s, then x is in u and in b. An if with an and in its conclusion is 1g's two-ifs: an if each way.`},
-  {k:'ember',kl:'common parts exactly',t:col2([R`\text{exactly when, for every } x \text{: } ${N}{\text{if } x \in s \text{, then } x \in u \text{; and if } x \in s \text{, then } x \in b}`,'1g: two-ifs, both ways'],[R`\text{exactly when } ${N}{\text{every member of } s \text{ is in } u \text{, and every member of } s \text{ is in } b}`,'an every over an and is an and of everys (1e: use an every and keep, each way)']),n:`Split the and inside the every into an and of everys: both directions are techs of 1e and 1c.`},
-  {k:'ember',kl:'common parts exactly',t:col2([R`\text{exactly when } s \subseteq u \text{ and } s \subseteq b`,'pack part of'],[R`\text{exactly when } s \in \mathcal P(u) \text{ and } s \in \mathcal P(b)`,'pack the power set'],[R`\text{exactly when } s \in \mathcal P(u) \cap \mathcal P(b)`,'pack the common part'],[R`\text{So } ${N}{\mathcal P(u \cap b) = \mathcal P(u) \cap \mathcal P(b)}.`,'speak of everything; same members']),n:` Pack everything back up. The power set treats common members exactly.`}
-],{title:'The slides · common parts exactly · ← → keys work'});
-stepper('#sl10a',[
-  {k:'ember',kl:'merged parts by inclusion only',t:col2([R`\qquad \text{Suppose } s \in \mathcal P(u) \cup \mathcal P(b).`,'supposed, aiming at an inclusion'],[R`\qquad \text{So } s \in \mathcal P(u) \text{ or } s \in \mathcal P(b).`,'merge-membership'],[R`\qquad \text{Case } s \subseteq u \text{. And } u \subseteq u \cup b \text{, so } ${N}{s \subseteq u \cup b}.`,'by cases; u ⊆ u ∪ b, shown above; the chain technique for part of']),n:`For ∪ try the same and watch it give only an inclusion. A part of u is a part of u ∪ b, by chaining.`},
-  {k:'ember',kl:'merged parts by inclusion only',t:col2([R`\qquad \text{Case } s \subseteq b \text{: the same.}`,''],[R`\qquad \text{So in every case, } s \in \mathcal P(u \cup b).`,'by cases; pack the power set'],[R`\text{So } ${N}{\mathcal P(u) \cup \mathcal P(b) \subseteq \mathcal P(u \cup b)}.`,'drop the supposition: an if; speak of everything; pack']),n:` That is the inclusion. The other way would need: from s ⊆ u ∪ b, that s ⊆ u or s ⊆ b. No technique gives it, and the next slide shows why none could.`}
-],{title:'The slides · merged parts by inclusion only · ← → keys work'});
-stepper('#sl10b',[
-  {k:'ember',kl:'the witness',t:R`u = \{\text{cat}\},\; b = \{\text{dog}\}:\qquad ${N}{\{\text{cat},\text{dog}\}} \in \mathcal P(u \cup b)`,n:`{cat, dog} ⊆ {cat} ∪ {dog} by the self-part technique, since the union is {cat, dog}. So it is in the right side.`},
-  {k:'ember',kl:'the witness',t:R`\{\text{cat},\text{dog}\} \notin \mathcal P(u),\quad \{\text{cat},\text{dog}\} \notin \mathcal P(b)`,n:`But dog ∉ {cat}, so {cat, dog} is not a subset of u (the counterexample technique on the every); and cat ∉ {dog} likewise for b. So it is in neither power set.`},
-  {k:'ember',kl:'the witness',t:R`${N}{\neg\big(\mathcal P(u \cup b) \subseteq \mathcal P(u) \cup \mathcal P(b)\big)}`,n:`Show an example; the counterexample technique. Not a licence question: the sameness is simply not so, and a set on its own shows it.`}
-],{title:'The slides · the witness · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'the fliers come to {owl}',t:R`\text{fliers} = \{x \in \{\text{cat},\text{dog},\text{owl}\} : x \text{ can fly}\} \overset{?}{=} \{\text{owl}\}`,n:`The class showed owl ∈ fliers, and that cat and dog cannot stand in it. Two sets are the same when each is part of the other. So set in the case of any member of fliers.`},
+  {k:'ember',kl:'the fliers come to {owl}',t:col2([R`\qquad \text{Let } y \text{ be any member of fliers.}`,'a fresh case'],[R`\qquad \text{So } y \in \{\text{cat},\text{dog},\text{owl}\} \text{, and } y \text{ can fly.}`,'unpack the sift'],[R`\qquad \text{So } y = \text{cat} \lor y = \text{dog} \lor y = \text{owl}.`,'keep the left part; unpack the listing']),n:`In the case of y: the and gives both parts, and the listing gives an or, whose options can be worked one at a time.`},
+  {k:'ember',kl:'the fliers come to {owl}',t:col2([R`\qquad \text{Option } y = \text{cat: the cat can fly; } \bot.`,'swap cat in for y; clash with the given'],[R`\qquad \text{Option } y = \text{dog: the same; } \bot.`,''],[R`\qquad ${N}{y = \text{owl}}`,'the remaining option'],[R`\qquad ${N}{y \in \{\text{owl}\}}`,'pack the listing']),n:`The cat option: swap cat in for y in “y can fly” and it clashes with the given. The dog option the same. 1c’s remaining option leaves y = owl.`},
+  {k:'ember',kl:'the fliers come to {owl}',t:col2([R`\text{fliers} \subseteq \{\text{owl}\}`,'back to the margin: every member'],[R`\{\text{owl}\} \subseteq \text{fliers}`,'any member of {owl} is owl; the class gave owl ∈ fliers; swap'],[R`\text{So } ${N}{\text{fliers} = \{\text{owl}\}}.`,'the double-inclusion technique']),n:`The other inclusion is short: a member of {owl} is owl, and the class showed owl ∈ fliers; swap. A sift, listed.`}
+],{title:'The slides · the fliers come to {owl} · ← → keys work'});
+stepper('#sl8',[
+  {k:'ember',kl:'the fliers of {cat, dog} come to ∅',t:R`g = \{x \in \{\text{cat},\text{dog}\} : x \text{ can fly}\} \overset{?}{=} \varnothing`,n:`The quickest route to “= ∅” is the one-empty-set technique: show g has no members. So set in the case of any member of g and reach ⊥.`},
+  {k:'ember',kl:'the fliers of {cat, dog} come to ∅',t:col2([R`\qquad \text{Let } y \text{ be any member of } g.`,'a fresh case'],[R`\qquad \text{So } y \text{ is cat or dog, and } y \text{ can fly.}`,'unpack the sift and the listing; keep both'],[R`\qquad \text{Option cat: the cat can fly; } \bot.`,'swap; clash with the given'],[R`\qquad \text{Option dog: the same; } \bot.`,''],[R`\qquad ${N}{\bot}`,'say it once']),n:`Each option swaps into “y can fly” and clashes with what was given about cats and dogs. ⊥ ∨ ⊥ says ⊥ once: the case closes.`},
+  {k:'ember',kl:'the fliers of {cat, dog} come to ∅',t:col2([R`\text{Nothing can stand in } g.`,'any case of a member closes'],[R`\text{So } ${N}{g = \varnothing}.`,'the one-empty-set technique, with the empty-set technique for ∅']),n:` Sifting never adds: no flier was there to keep. The sift-is-part technique says it in general; this is it on a case.`}
+],{title:'The slides · the fliers of {cat, dog} come to ∅ · ← → keys work'});
+stepper('#sl11',[
+  {k:'ember',kl:'the empty set is unique',t:col2([R`\text{Nothing can stand in } e \text{, or in } e'.`,'given: both have no members'],[R`\qquad \text{Let } x \text{ be any member of } e.`,'a fresh case'],[R`\qquad \text{Nothing can stand in } e \text{: } \bot.`,'the case closes']),n:`The one-empty-set technique. Set in the case of any member of e. Nothing can stand in e, so ⊥ at once.`},
+  {k:'ember',kl:'the empty set is unique',t:col2([R`\qquad \text{So } ${N}{x \in e'}.`,'everything permitted'],[R`e \subseteq e'`,'back to the margin: every member'],[R`e' \subseteq e`,'the same, with the names exchanged']),n:`From ⊥, what the case needed. This is the standard use of everything permitted on sets: a promise about the members of a set with no members is kept vacuously (2i's word).`},
+  {k:'ember',kl:'the empty set is unique',t:col2([R`e \subseteq e' \land e' \subseteq e`,'join'],[R`\text{So } ${N}{e = e'}.`,'the double-inclusion technique']),n:` No other set has no members, which is why it may be called the empty set and given the mark ∅.`}
+],{title:'The slides · the empty set is unique · ← → keys work'});
+stepper('#sl15',[
+  {k:'ember',kl:'the outsider set, inside a set',t:R`r_u = \{x \in u : x \notin x\}`,n:`Now the outsider sift run legally, inside a set u you have. Watch how far rows take it.`},
+  {k:'ember',kl:'the outsider set, inside a set',t:col2([R`r_u \in r_u \text{ exactly when } r_u \in u \text{ and } r_u \notin r_u.`,'unpack the sift, with r-sub-u in the gap'],[R`\qquad \text{Case } r_u \in r_u.`,'set in'],[R`\qquad \text{Then } r_u \notin r_u \text{. Clash: } \bot.`,'carry through; keep right; clash'],[R`${N}{\text{The case } r_u \in r_u \text{ cannot stand.}}`,'the case closes']),n:`Just as before: the case r_u ∈ r_u gives r_u ∉ r_u, and they clash. Turning that closed case into the denial r_u ∉ r_u is a box’s output.`},
+  {k:'ember',kl:'the outsider set, inside a set',t:col2([R`\text{With } r_u \notin r_u \text{ (3a17):}`,'the denial, earned by a box'],[R`\qquad \text{Case } r_u \in u \text{: then } r_u \in r_u \text{, a clash.}`,'join; carry the leftward if through'],[R`${N}{\text{The case } r_u \in u \text{ cannot stand.}}`,'the case closes']),n:`Here is the step that differs. Before, with no set to sift from, the leftward direction needed only r ∉ r and gave ⊥ outright. Now it needs r_u ∈ u as well, and that case is what closes. So whatever set you sift the outsider condition from, the result cannot stand in that set. 2h draws the moral.`}
+],{title:'The slides · the outsider set, inside a set · ← → keys work'});
+stepper('#sl17',[
+  {k:'ember',kl:'backwards',t:R`\text{?}\qquad\qquad ${K}{\{x \in u : x \in v\} \subseteq v}\;\;\text{wanted}`,n:`Work back from the claim. ⊆ is an every of a kind: “let y be any member of {x ∈ u : x ∈ v}; … so y ∈ v”. In that case the sift unpacks to y ∈ u and y ∈ v, and keeping the right part gives the result.`},
+  {k:'ember',kl:'backwards',t:col2([R`\qquad \text{Let } y \text{ be any member of } \{x \in u : x \in v\}.`,'the plan: a fresh case'],[R`\qquad \text{So } y \in u \text{ and } y \in v.`,'unpack the sift'],[R`\qquad \text{So } ${N}{y \in v}.`,'keep the right part'],[R`\text{So } ${N}{\{x \in u : x \in v\} \subseteq v}.`,'back to the margin: every member; pack ⊆']),n:`Now in order, from the start. Compare the sift-is-part technique, which kept left: a sift is part of the set sifted, and when the condition is membership in v, part of v as well. 2e names this set.`}
+],{title:'The slides · backwards · ← → keys work'});
 
 /* long worked lines: stack the note under the line instead of scrolling */
 function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }

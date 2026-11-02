@@ -30,7 +30,7 @@ table.tt td.l{text-align:left}
   <h1>From counting to rare events</h1>
   <p data-pid="5981d3">Some things happen rarely, but have a great many chances to happen: a misprint among thousands of letters, a call to a help line from among thousands of people, a meteor in a patch of sky. Counting them exactly would need to know how many chances there were, and you seldom do. This step shows you do not need to. When the chances are many and each is small, only their average count matters, and the chances of seeing none, one, two or more come from a single endless sum. Along the way that sum turns out to be the growth function of the seventeenth rung, written out piece by piece.</p>
   <p class="gesture" data-pid="87503c">Many tries, each with a small chance, behave like one rule that needs only the average count. The chance of exactly k is the average to the kth power over k factorial, times e to the minus the average. Those chances add to one because e to a power is an endless sum.</p>
-  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r17e.html">17e</a> (exp and e), <a href="r17b.html">17b</a> (the slope of ln), <a href="r04j.html">4j</a> (counting choices), <a href="r14stat.html">14·stat</a> (the chance of k heads), <a href="r22e.html">22e</a> (the ratio test). <a href="r22stat.html">22·stat</a> puts it to work on misprints and help lines. <a href="r22k.html">22k</a> ranks how fast things grow.</p></div>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r17e.html">17e</a> (exp and e), <a href="r17b.html">17b</a> (the slope of ln), <a href="r04k.html">4k</a> (counting choices), <a href="r14stat.html">14·stat</a> (the chance of k heads), <a href="r22e.html">22e</a> (the ratio test). <a href="r22stat.html">22·stat</a> puts it to work on misprints and help lines. <a href="r22k.html">22k</a> ranks how fast things grow.</p></div>
 </header>
 
 <section class="class step" data-step="22j1">
@@ -54,11 +54,11 @@ N\ln\big(1 + \tfrac{x}{N}\big) \to x @@ the product technique (10c)
 
 <section class="class step" data-step="22j2">
   <h2 class="sthead"><span class="stno">22j2</span>The chance of exactly k</h2>
-  <p class="stands">Stands on 22j1, 14·stat (k of N with chance p) and 4j (counting choices).</p>
+  <p class="stands">Stands on 22j1, 14·stat (k of N with chance p) and 4k (counting choices).</p>
   <p data-pid="dd4f18">Rare-events technique: <b>if each of N tries has chance λ/N, the chance of exactly k successes heads to e^(−λ) λᵏ / k! as N grows.</b> Only λ is left in the answer.</p>
   <pre class="lines" data-k="ember" data-label="this step: the rare-events technique">
 P_N(k) = \tbinom{N}{k}\big(\tfrac{\lambda}{N}\big)^k\big(1 - \tfrac{\lambda}{N}\big)^{N-k} @@ k of N, each with chance λ/N (14·stat)
-\tbinom{N}{k}\tfrac{1}{N^k} = \tfrac{1}{k!} \cdot \tfrac{N}{N}\cdot\tfrac{N-1}{N}\cdots\tfrac{N-k+1}{N} \to \tfrac{1}{k!} @@ 4j's count; k fixed, each of the k fractions heads to 1
+\tbinom{N}{k}\tfrac{1}{N^k} = \tfrac{1}{k!} \cdot \tfrac{N}{N}\cdot\tfrac{N-1}{N}\cdots\tfrac{N-k+1}{N} \to \tfrac{1}{k!} @@ 4k's count; k fixed, each of the k fractions heads to 1
 \big(1 - \tfrac{\lambda}{N}\big)^{N-k} = \big(1 - \tfrac{\lambda}{N}\big)^N \big(1 - \tfrac{\lambda}{N}\big)^{-k} \to e^{-\lambda} \cdot 1 @@ 22j1; k is fixed
 \htmlClass{new}{P_N(k) \to e^{-\lambda}\tfrac{\lambda^k}{k!}} \quad \blacksquare @@ the product technique (10c)
   </pre>
@@ -74,11 +74,11 @@ P_N(k) = \tbinom{N}{k}\big(\tfrac{\lambda}{N}\big)^k\big(1 - \tfrac{\lambda}{N}\
 
 <section class="class step" data-step="22j3">
   <h2 class="sthead"><span class="stno">22j3</span>The chances add to one</h2>
-  <p class="stands">Stands on 22j1, 22j2, 4j (the two-term-power technique), 22e2 (the ratio test) and 22a2 (the climb technique).</p>
+  <p class="stands">Stands on 22j1, 22j2, 4k (the two-term-power technique), 22e2 (the ratio test) and 22a2 (the climb technique).</p>
   <p data-pid="169fc6">Exp-as-a-sum technique: <b>for every λ ≥ 0, e^λ = 1 + λ + λ²/2! + λ³/3! + ⋯. So the chances e^(−λ) λᵏ/k! add to one.</b> The rung 23 power sums take this to every real λ.</p>
   <pre class="lines" data-k="ember" data-label="this step: the exp-as-a-sum technique">
 \textstyle S = \sum \tfrac{\lambda^k}{k!} \text{ settles} @@ the ratio of neighbours is λ/(k + 1), which heads to 0 (22e2)
-\big(1 + \tfrac{\lambda}{N}\big)^N = \textstyle\sum_{k=0}^{N} \tfrac{\lambda^k}{k!}\, c_{N,k},\ \ c_{N,k} = \tfrac{N}{N}\cdot\tfrac{N-1}{N}\cdots\tfrac{N-k+1}{N} @@ the two-term-power technique (4j), as in 22j2
+\big(1 + \tfrac{\lambda}{N}\big)^N = \textstyle\sum_{k=0}^{N} \tfrac{\lambda^k}{k!}\, c_{N,k},\ \ c_{N,k} = \tfrac{N}{N}\cdot\tfrac{N-1}{N}\cdots\tfrac{N-k+1}{N} @@ the two-term-power technique (4k), as in 22j2
 0 \le c_{N,k} \le 1 \Rightarrow \big(1 + \tfrac{\lambda}{N}\big)^N \le S @@ every piece is at most λᵏ/k!, and λ ≥ 0
 M \le N \Rightarrow \big(1 + \tfrac{\lambda}{N}\big)^N \ge \textstyle\sum_{k=0}^{M} \tfrac{\lambda^k}{k!}\, c_{N,k} @@ drop the pieces past M; they are not negative
 e^\lambda \ge \textstyle\sum_{k=0}^{M} \tfrac{\lambda^k}{k!} \text{ for every } M,\ \ e^\lambda \le S @@ let N grow (22j1); each c_{N,k} heads to 1

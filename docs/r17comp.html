@@ -27,9 +27,9 @@ table.tt td.l{text-align:left}
   <p class="home"><a href="index.html">← the ladder</a><a href="r17phys.html">← 17·phys is light a dot or a flow?</a><a href="r17crypt.html">next: 17·crypt how long would it take to guess a password? →</a></p>
   <div class="tags"><span class="tag comp">17·comp · computing</span></div>
   <h1>What is the quickest way to sort a list?</h1>
-  <p data-pid="f2d6cd">What is the quickest way to sort a list? A machine sorting a list can only compare two items at a time and act on the answer. So a fair measure of a method's cost is how many comparisons it makes. This page counts them for three methods. Two take about half the square of the number of items in comparisons, by 4j’s sum. The third splits the list in half, sorts the halves, and zips them together, and it takes at most about the number of items times the number of halvings. With a million items that is the difference between a few seconds and a few days. Then the other way to go faster, many machines at once, and the technique that caps what they can do.</p>
+  <p data-pid="f2d6cd">What is the quickest way to sort a list? A machine sorting a list can only compare two items at a time and act on the answer. So a fair measure of a method's cost is how many comparisons it makes. This page counts them for three methods. Two take about half the square of the number of items in comparisons, by 4k’s sum. The third splits the list in half, sorts the halves, and zips them together, and it takes at most about the number of items times the number of halvings. With a million items that is the difference between a few seconds and a few days. Then the other way to go faster, many machines at once, and the technique that caps what they can do.</p>
   <p class="gesture" data-pid="2c7ed7">Selection sort always takes the same number of comparisons, about half the square of the count. Insertion sort takes from one fewer than the count to the same as selection sort, about a quarter of the square on average. Merge sort takes at most about the count times the number of halvings. When only part of the work can be split over many machines, the part that cannot be split caps the speedup, however many machines there are.</p>
-  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r04j.html">4j</a> (doubled-sum, arrangements), <a href="r04b.html">4b</a> (induction), <a href="r17g.html">17g</a> (log-base-p), <a href="r17d.html">17d</a> (log-loses-to-powers), <a href="r10a.html">rung 10</a> (limits), <a href="r04comp.html">4·comp</a> (gates). <a href="r17then.html">17·then</a> draws these counts on log scales.</p></div>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r04k.html">4k</a> (doubled-sum, arrangements), <a href="r04c.html">4c</a> (induction), <a href="r17g.html">17g</a> (log-base-p), <a href="r17d.html">17d</a> (log-loses-to-powers), <a href="r10a.html">rung 10</a> (limits), <a href="r04comp.html">4·comp</a> (gates). <a href="r17then.html">17·then</a> draws these counts on log scales.</p></div>
 </header>
 
 <section class="class">
@@ -44,7 +44,7 @@ table.tt td.l{text-align:left}
   <pre class="lines" data-k="ember" data-label="17·comp: the selection-count technique">
 \text{the least of } m \text{ items}:\ m - 1 \text{ comparisons} @@ keep the least so far; compare it with each of the rest once
 (n - 1) + (n - 2) + \cdots + 1 + 0 @@ the passes over n, n − 1, …, 1 items, whatever the items are
-= \htmlClass{new}{\tfrac{n(n - 1)}{2}} \quad \blacksquare @@ doubled-sum (4j) with n − 1 in place of n
+= \htmlClass{new}{\tfrac{n(n - 1)}{2}} \quad \blacksquare @@ doubled-sum (4k) with n − 1 in place of n
   </pre>
 
   <h3>Insertion sort</h3>
@@ -60,7 +60,7 @@ table.tt td.l{text-align:left}
 \begin{aligned}&\text{each step of a walk swaps}\\ &\quad\text{one inverted neighbour pair}\end{aligned} @@ the swap removes exactly that inversion, and no other pair changes order
 \text{comparisons} = \text{inversions} + (\text{walks that stop early}) @@ every comparison but a walk's last is a swap
 \text{a list and its reverse}:\ \text{inv} + \text{inv} = \tfrac{n(n - 1)}{2} @@ each of the n(n − 1)/2 pairs is out of order in exactly one of the two
-\text{average over the } n! \text{ orders} = \htmlClass{new}{\tfrac{n(n - 1)}{4}} \quad \blacksquare @@ the orders split into reversed pairs (arrangements, 4j); each pair averages n(n − 1)/4
+\text{average over the } n! \text{ orders} = \htmlClass{new}{\tfrac{n(n - 1)}{4}} \quad \blacksquare @@ the orders split into reversed pairs (arrangements, 4k); each pair averages n(n − 1)/4
   </pre>
 
   <h3>Merge sort</h3>
@@ -236,7 +236,7 @@ all();
 stepper('#sl1',[
   {k:'ember',kl:'cost',t:R`\text{cost} = \text{comparisons, as a function of } n`,n:`The time complexity.`},
   {k:'ember',kl:'selection',t:R`\text{least of the rest, to the front}`,n:`n − 1, then n − 2, …`},
-  {k:'ember',kl:'selection-count',t:R`${Nw}{\tfrac{n(n - 1)}{2}}`,n:`doubled-sum (4j). On every list.`},
+  {k:'ember',kl:'selection-count',t:R`${Nw}{\tfrac{n(n - 1)}{2}}`,n:`doubled-sum (4k). On every list.`},
   {k:'ember',kl:'insertion',t:R`\text{walk each new item toward the front}`,n:`Stop at one not larger.`},
   {k:'ember',kl:'insertion-range',t:R`${Nw}{n - 1 \le \text{count} \le \tfrac{n(n - 1)}{2}}`,n:`Sorted, and falling.`},
   {k:'ember',kl:'inversions',t:R`\text{inv}(L) + \text{inv}(\text{rev } L) = \tfrac{n(n - 1)}{2}`,n:`Each pair is wrong in exactly one.`},

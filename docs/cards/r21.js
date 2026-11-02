@@ -1,11 +1,11 @@
 /* flash cards, r21. */
-(window.LADDER_CARDS=window.LADDER_CARDS||{})["21a"]=[{"q": "π, on this step. What is it?", "a": "half the length around a circle of radius 1", "w": ["the length around a circle of radius 1", "the area of a circle of radius 2", "exactly 22/7"], "why": "5b named it as a guess; 21a fixes it."},
+(window.LADDER_CARDS=window.LADDER_CARDS||{})["21a"]=[{"q": "π, on this step. What is it?", "a": "half the length around a circle of radius 1", "w": ["the length around a circle of radius 1", "the area of a circle of radius 2", "exactly 22/7"], "why": "5c named it as a guess; 21a fixes it."},
  {"q": "L(x) = ∫ₓ¹ dt/√(1 − t²). What does it measure?", "a": "the arc from (1, 0) to the point above x", "w": ["the area under the circle", "the slope of the circle", "the height above x"], "why": "The arc-length technique."},
  {"q": "Length around a circle, divided by length across. What is it?", "a": "π, for every circle", "w": ["2π", "π for the unit circle only", "the radius"], "why": "The round-quotient technique."},
  {"q": "An angle of size θ, between 0 and π. What picks it out?", "a": "the one point on the upper half circle at arc θ from (1, 0)", "w": ["two points on the circle", "the slope of a line", "a length across the circle"], "why": "The arc-picks-a-point technique: an angle is an arc."},
  {"q": "π = 4 ∫₀^{1/√2} dt/√(1 − t²). Why this integral?", "a": "it has no trouble at either end", "w": ["it is the only true value", "it avoids the circle", "it is easier to say"], "why": "The full integral to 1 climbs at the end."},
  {"q": "A value that uses π, written to some places. What must come with it?", "a": "a width, chosen and said", "w": ["nothing: π is exact", "a proof of every digit", "a fraction"], "why": "π in a cloud: say how wrong you can be."},
- {"q": "22/7. What is it, on this step?", "a": "a guess, a little above π", "w": ["π exactly", "a little below π", "the area of the unit circle"], "why": "5b’s first guess; 223/71 < π < 22/7."}];
+ {"q": "22/7. What is it, on this step?", "a": "a guess, a little above π", "w": ["π exactly", "a little below π", "the area of the unit circle"], "why": "5c’s first guess; 223/71 < π < 22/7."}];
 (window.LADDER_CARDS=window.LADDER_CARDS||{})["21b"]=[{"q": "The point at arc θ round the unit circle. What are its coordinates called?", "a": "(cos θ, sin θ)", "w": ["(sin θ, cos θ)", "(tan θ, 1)", "(θ, π)"], "why": "Cos and sin are coordinates."},
  {"q": "cos(θ + 2π). What is it?", "a": "cos θ", "w": ["cos θ + 2π", "−cos θ", "0"], "why": "The whole-turns technique: a whole turn changes nothing."},
  {"q": "The point (1/2, √3/2). At what arc is it?", "a": "π/3", "w": ["π/6", "π/4", "π/2"], "why": "The thirds-of-the-half technique."},

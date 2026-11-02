@@ -1,344 +1,280 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>4e · Adding</title>
+<title>4e · Proof shapes</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
 <link rel="stylesheet" href="rung.css">
 <style>
-.pic .panels{grid-template-columns:1fr 1fr}
-@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
-.panel{align-content:start;min-width:0}
-.pic .eqbox{font-size:.95rem;white-space:normal}
-@media (max-width:520px){.pic .eqbox{font-size:.82rem}}
-#cvB{touch-action:manipulation}
+.paid{margin:1.2rem 0 1.6rem;min-width:0;max-width:100%;overflow-x:auto}
+.basement .stepgroup{min-width:0;max-width:100%}
+.paid h4{margin:.2rem 0 .3rem;font-size:1rem}
+.paid .from{font-size:.85rem;color:var(--muted)}
+.basement .stepgroup{border-top:1px solid var(--grid);padding-top:.6rem;margin-top:1.4rem}
 .rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
-.first{border:2px solid var(--ember);border-radius:6px;padding:12px 14px;display:grid;gap:8px}
-.first .lbl{font-family:var(--mono);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ember)}
-@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.panel{align-content:start}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+table.shape{border-collapse:collapse;background:var(--card);font-size:.93rem}
+table.shape th,table.shape td{border:1px solid var(--grid);padding:5px 9px;text-align:left;vertical-align:top}
+table.shape th{font-family:var(--mono);font-weight:500;color:var(--muted);font-size:.78rem}
+.goalbox{font-size:1rem;white-space:normal}
+.verdict{font-family:var(--mono);font-size:.85rem}
+.crea{display:flex;flex-wrap:wrap;gap:5px}
+.crea button{font-family:var(--serif);font-size:.9rem;padding:4px 9px}
+.crea button.off{opacity:.4;text-decoration:line-through}
+.crea button.hit{border-color:var(--ember);color:var(--ember)}
+#plines .row .n{max-width:32ch}
+.pic .eqbox{font-size:.95rem;white-space:normal}
+@media (max-width:560px){.slide .math{font-size:1.08rem}}
+.bench{font-family:var(--serif);font-size:1.08rem;border-left:3px solid var(--teal);padding:6px 16px;font-style:italic}
 </style>
 <link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r04d.html">← 4d completing the proof</a><a href="r04f.html">next: 4f multiplying and powers →</a></p>
-  <div class="tags"><span class="tag proof">4e · proof</span></div>
-  <h1>Adding</h1>
-  <p data-pid="aca9f5">The ground floor said that a thing is the same as itself. Everything since has been building the means to say, and prove, that one and three make four. This step does it. First it defines adding by repeating the next-one gesture, with 4c's technique doing the work. Adding 0 changes nothing, and adding the next one after a number is taking the next one after what adding that number gave. Then it unfolds one plus three, name by name, until four stands at the foot of the column. Then it proves the techniques of adding, each by induction. The order of the numbers added does not matter. The brackets do not matter. And a number added to both sides of a sameness can be taken away again.</p>
-  <p class="gesture" data-pid="66dde5">To add one number to another, start at the first and take the next one once for each step from 0 up to the second. Written as a start and a step: a number plus 0 is that number, and a number plus the next one after a second number is the next one after their sum.</p>
-  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r03a.html">3a</a> (the names 0 to 4), <a href="r04a.html">4a</a> (ℕ, the different-nexts technique), <a href="r04b.html">4b</a> (the induction technique, zero-or-a-next) and <a href="r04c.html">4c</a> (the recursion technique, the function s, chains). <a href="r04f.html">4f</a> builds multiplying out of adding; <a href="r04g.html">4g</a> reads order off adding; 4h names the sums past four.</p></div>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r04d.html">← 4d defining by repeating</a><a href="r04f.html">next: 4f adding →</a></p>
+  <div class="tags"><span class="tag tech">4e · technique</span></div>
+  <h1>Proof shapes</h1>
+  <p data-pid="e4f0fa">An argument is a run of short claims, and every claim carries its reason. This step is about the <i>shape</i> of an argument. Before you say anything, the statement you are arguing for tells you how the argument must begin and how it must end. An if starts by supposing. An every starts by letting a name stand for anything at all. A not starts by supposing the thing after it and hunting for something totally false. Between the opening and the close you choose a route: straight through, through the turned-about if, or by splitting into cases. And when the statement is not so, a counterexample finishes it. Each shape is licensed by a tech of rung 1 or 2, and each is a different way of reading the same goal. <a href="r04a.html">4a</a> built the proof itself, so this step can call these shapes proof shapes.</p>
+  <p class="gesture" data-pid="8f0da6">Read the goal's outermost mark; it hands you the opening move and the closing move. Fill the gap by the route that flows: straight, turned about, or split in pieces. To kill an every, show an example that fails.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r04a.html">4a</a> (the proof, built) and on rungs 1 and 2: the techs of <a href="r01b.html">1b</a> to <a href="r02b.html">2b</a>, the rewrites turn-and-deny and cases of <a href="r01f.html">1f</a>, and the counterexample of <a href="r02b.html">2b</a> and <a href="r02i.html">2i</a>. Every rung from here on is written in these shapes. 4c's induction is a shape of its own, and rung 7 adds the shape withheld until then, proof by contradiction proper.</p></div>
 </header>
 
 <section class="class step" data-step="4e1">
-  <h2 class="sthead"><span class="stno">4e1</span>Adding, in words</h2>
-  <p class="stands">Stands on 4c1 (defining by repeating) and 4c8 (the recursion technique).</p>
-  <p data-pid="cf7d54">To add three to one, start at one and take the next one, and again, and again: two, three, four.</p>
-  <p data-pid="fe517e">That is the whole idea, and the trouble with it is “and again, and again”. It does not say when to stop unless you already know how adding three goes, which is the very thing being defined.</p>
-  <p data-pid="2ab99f">The way out is the one 4c built. <b>Say what adding does when nothing is added, and say how adding the next one after b relates to adding b:</b></p>
-  <ul>
-    <li>Adding 0 to p gives p.</li>
-    <li>Adding the next one after b to p gives the next one after (p with b added).</li>
-  </ul>
-  <p data-pid="248a41">For a fixed p, that is a start, p, and a step, the next-one rule. And 4c's recursion technique says a start and a step fix exactly one function on the numbers.</p>
-  <p data-pid="66de8a">Example: adding 2 to 5. Adding 0 to 5 gives 5. Adding 1, the next one after 0, gives the next one after 5, which is 6. Adding 2, the next one after 1, gives the next one after 6, which is 7.</p>
+  <h2 class="sthead"><span class="stno">4e1</span>An argument is a run of claims</h2>
+  <p class="stands">Stands on 1a (an argument, a reason for each statement) and the techs of 1b to 2b.</p>
+  <p data-pid="b06503">Each change to a line names what allows it: given, a word's meaning unpacked, or a tech cited by name. A column of lines is a proof as <a href="r04a.html">4a</a> built it: one line to a row, the boxes as indents. Say each claim in a short line, say why it is true, and stop when the goal is reached. The oldest accepted word for such an argument is <i>demonstration</i>: a chain of reasoning that yields knowledge.</p>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">4e1.1</span><span class="ph know">know</span>What is the trouble with “and again, and again”, and what is the way out?</li>
+      <li><span class="qid">4e1.1</span><span class="ph know">know</span>Which reasons may a claim in an argument have? <br>What is a demonstration?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="4e2">
-  <h2 class="sthead"><span class="stno">4e2</span>The definition</h2>
-  <p class="stands">Stands on 4e1, 4c8 (the recursion technique), 4c6 (the function s) and 3c (the low mark).</p>
-  <p data-pid="70a5da">Fix a number p. Use recursion with A = ℕ, start p, and step s (4c's function n ↦ S(n)). It gives exactly one function from ℕ to ℕ. That function has the value p at 0 and, at each S(n), the next one after its value at n.</p>
-  <p data-pid="54d25a">That function goes with p, and a different p gives a different function. So its name must carry the number it starts at. 3c's low mark does that.</p>
-  <p class="eqline" data-pid="35c868">From here on, a low mark may be a letter as well as a numeral: <span data-tex-inline="f_a"></span> is a name that carries a, as <span data-tex-inline="V_k"></span> carried k.</p>
-  <p class="eqline" data-pid="ab34a4">From here on, for numbers a and b, <span data-tex-inline="a + b"></span> names <span data-tex-inline="f_a(b)"></span>, where <span data-tex-inline="f_a : \mathbb N \to \mathbb N"></span> is the one function with these two lines, for every number n:</p>
-  <div class="eqline" data-tex="\begin{aligned} &amp;f_a(0) = a\\ &amp;f_a(S(n)) = S(f_a(n)) \end{aligned}"></div>
-  <p data-pid="85a613">Read it “a plus b”; a + b is the <b>sum</b> of a and b.</p>
-  <p data-pid="7bb363">Example: f₃ starts at 3. So f₃(0) = 3, f₃(1) = S(f₃(0)) = 4, and 3 + 1 names f₃(1).</p>
-  <p data-pid="9e30eb">A schoolteacher of the century before last wrote a textbook of arithmetic in which adding is defined by exactly this pair of lines. Every technique of adding and multiplying is proved from them by induction. It seems nobody had done so before. A generation later another writer put the same pair of lines at the head of his arithmetic.</p>
+  <h2 class="sthead"><span class="stno">4e2</span>Words do most of the work</h2>
+  <p class="stands">Stands on 4e1 (an argument is a run of claims) and 1a (unpack and pack).</p>
+  <p data-pid="c9145e">The arguments in this step are about everyday things, because everyday things carry the shapes most plainly. The shapes are what matter, and they will carry unchanged onto every later rung. A word's meaning does most of the work. For example, “grandparent” unpacks into a some (someone with a child who is a parent), “parent” into an every around an if, and “puppy” into an and (young, and a dog). An argument opens by unpacking the words into statements with marks. It works with the techs, and packs the words back at the end.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4e2.1</span><span class="ph know">know</span>What does a + b name? <br>Why must the function’s name carry a?</li>
+      <li><span class="qid">4e2.1</span><span class="ph know">know</span>How does an argument use the words in it?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="4e3">
-  <h2 class="sthead"><span class="stno">4e3</span>Three techniques from the definition</h2>
-  <p class="stands">Stands on 4e2 (the definition of +), 4c (the function s) and 4b7 (zero-or-a-next).</p>
-  <p data-pid="450cc7">The name is honest because recursion says exactly one function fits. What the line gives you to cite are its two defining lines and a third line, each a technique.</p>
-  <ul>
-    <li data-pid="8db637">Plus-zero technique: <b>adding 0 changes nothing.</b> In marks: p + 0 = p. You know this one: put nothing more on the pile, and the pile is the same.</li>
-    <li data-pid="0f93f0">Plus-a-next technique: <b>adding the next one after b gives the next one after the sum with b.</b> In marks: p + S(b) = S(p + b).</li>
-    <li data-pid="5fb71f">Sums-are-numbers technique: <b>the sum of two numbers is a number.</b></li>
-  </ul>
-  <p data-pid="546566">Example: 5 + 0 = 5, by plus-zero. 5 + S(0) = S(5 + 0), by plus-a-next.</p>
-  <p data-pid="fb94af">Plan for the column: unpack + into f<sub>a</sub>, use f<sub>a</sub>'s start or step, then pack + back.</p>
-  <div class="brkkey"></div>
-  <pre class="lines" data-k="ember" data-label="this step: techniques plus-zero (plus zero), plus-a-next (plus a next) and sums-are-numbers (a sum is a number)">
-a + 0 = f_a(0) @@ ﹀ +
-\phantom{a + 0} = a @@ f<sub>a</sub>'s start: <b>the plus-zero technique</b>, a + 0 = a
-a + S(b) = f_a(S(b)) @@ ﹀ +
-\phantom{a + S(b)} = s(f_a(b)) @@ f<sub>a</sub>'s step, from recursion
-\phantom{a + S(b)} = S(f_a(b)) @@ s(m) = S(m), 4c
-\phantom{a + S(b)} = S(a + b) @@ ︿ + inside: <b>the plus-a-next technique</b>, a + S(b) = S(a + b)
-a + b = f_a(b) \in \mathbb N @@ f<sub>a</sub> takes ℕ to ℕ: <b>the sums-are-numbers technique</b>, a sum of numbers is a number
-  </pre>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · the definition, and plus-zero and plus-a-next · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">4e3</span>The goal's outermost mark</h2>
+  <p class="stands">Stands on 4e2 (words unpack into marks) and the opening tech of each mark, 1b to 2b.</p>
+  <p data-pid="28d465">Look at the outermost mark of what you want to prove. That mark decides the skeleton of the argument before you know anything else:</p>
+  <div class="tablewrap"><table class="shape">
+    <thead><tr><th>to prove</th><th>opening move</th><th>closing move</th><th>licensed by</th></tr></thead>
+    <tbody>
+      <tr><td data-tex-inline="P \Rightarrow Q">P ⇒ Q</td><td>Suppose P.</td><td>So Q. Hence P ⇒ Q.</td><td>1d: prove an if</td></tr>
+      <tr><td data-tex-inline="\forall x\, P(x)">∀x P(x)</td><td>Let n be anything.</td><td>So P(n); n was anything, so ∀x P(x).</td><td>2b: speak of everything by speaking of anything</td></tr>
+      <tr><td data-tex-inline="\exists x\, P(x)">∃x P(x)</td><td>Take t, a particular thing.</td><td>So P(t); hence ∃x P(x).</td><td>2b: show an example</td></tr>
+      <tr><td data-tex-inline="P \land Q">P ∧ Q</td><td colspan="2">an argument for P and an argument for Q, then join</td><td>1c: join</td></tr>
+      <tr><td data-tex-inline="P \lor Q">P ∨ Q</td><td colspan="2">an argument for either side, then add an option (or cases on an or you have)</td><td>1c: add an option; reason by cases</td></tr>
+      <tr><td data-tex-inline="P \Leftrightarrow Q">P ⇔ Q</td><td colspan="2">an if each way, P ⇒ Q and Q ⇒ P, then join and pack</td><td>1d: what ⇔ means</td></tr>
+      <tr><td data-tex-inline="\neg P">¬P</td><td>Suppose P.</td><td>⊥, so ¬P.</td><td>1b: refute</td></tr>
+    </tbody></table></div>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4e3.1</span><span class="ph know">know</span>What do the plus-zero, plus-a-next and sums-are-numbers techniques say, and where does each come from?</li>
+      <li><span class="qid">4e3.1</span><span class="ph know">know</span>What does the outermost mark of the goal decide?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="4e4">
-  <h2 class="sthead"><span class="stno">4e4</span>One plus three is four</h2>
-  <p class="stands">Stands on 4e3 (plus-zero, plus-a-next), 3a (the names 0 to 4) and 4c (the chain convention).</p>
-  <p data-pid="d2c60a">Here it is. Each line makes one move. It unpacks a name into the next one of the name before, or uses plus-a-next or plus-zero, or packs a name back.</p>
-  <p data-pid="23bcf2">The chain convention of 4c is in force. Each line beginning with = says that 1 + 3 is the same as what follows, by the chain technique with the line before it.</p>
-  <div class="first">
-  <div class="lbl">The ladder's earliest arithmetic</div>
-  <pre class="lines" data-k="ember" data-label="this step: 1 + 3 = 4, a move to each line">
-1 + 3 = 1 + \htmlClass{new}{S(2)} @@ 3 names S(2) (3a); the swap axiom
-\phantom{1 + 3} = \htmlClass{new}{S(1 + 2)} @@ the plus-a-next technique, with a = 1 and b = 2
-\phantom{1 + 3} = S(1 + \htmlClass{new}{S(1)}) @@ 2 names S(1); the swap axiom, inside
-\phantom{1 + 3} = S(\htmlClass{new}{S(1 + 1)}) @@ the plus-a-next technique, with b = 1, inside
-\phantom{1 + 3} = S(S(1 + \htmlClass{new}{S(0)})) @@ 1 names S(0), at the right-hand 1 only
-\phantom{1 + 3} = S(S(\htmlClass{new}{S(1 + 0)})) @@ the plus-a-next technique, with b = 0, inside
-\phantom{1 + 3} = S(S(S(\htmlClass{new}{1}))) @@ the plus-zero technique, inside
-\phantom{1 + 3} = S(S(\htmlClass{new}{2})) @@ 2 names S(1)
-\phantom{1 + 3} = S(\htmlClass{new}{3}) @@ 3 names S(2)
-\phantom{1 + 3} = \htmlClass{new}{4} \quad \blacksquare @@ 4 names S(3)
-  </pre>
-  </div>
-  <p data-pid="7a929a">Read the lines down and you see the definition at work. Plus-a-next moves the next-one gesture out of the right-hand number and wraps it around the sum, again and again, until nothing is left to add. Then plus-zero closes the sum, and the names are packed back up.</p>
-  <p data-pid="111660">Read them up and you see where each line came from. Nothing in the column is a matter of “everyone knows”. <b>Every line stands on a definition or a name, and every definition and name stands on the steps below this one, down to a thing being the same as itself.</b></p>
-  <p data-pid="309776">The same moves give 2 + 2 = 4, 3 + 1 = 4 and 0 + 4 = 4; the slides and the picture do them. Adding a number past 4 works the same way and ends in a name like S(S(4)); 4h gives such numbers short names.</p>
-  <section class="slides" id="sl4a"><div class="eyebrow">The slides · 1 + 3 = 4 · ← → keys work</div></section>
-  <section class="slides" id="sl4b"><div class="eyebrow">The slides · 2 + 2 = 4 · ← → keys work</div></section>
-  <section class="pic" id="pic">
-    <div class="eyebrow">The picture · the unfolding machine, a move per press</div>
-    <div class="panel">
-      <div class="chips" role="group" aria-label="p" id="ach"><span class="m" style="color:var(--muted)">p =</span></div>
-      <div class="chips" role="group" aria-label="b" id="bch"><span class="m" style="color:var(--muted)">b =</span></div>
-      <div class="chips"><button id="step1">next move</button><button id="stepAll">all moves</button><button id="restart">start again</button></div>
-      <div class="cap">Each press makes exactly one move of the column above: unpack a name, plus-a-next, plus-zero, or pack a name. The newest line is orange; its reason is beside it. Try p = 1, b = 3.</div>
-      <div class="eqbox" id="eqU"></div>
-    </div>
-  </section>
+  <h2 class="sthead"><span class="stno">4e4</span>Shapes nest, and what you have has a shape</h2>
+  <p class="stands">Stands on 4e3 (the skeleton from the outermost mark).</p>
+  <p data-pid="6ab4e0">Shapes nest. Example: “every grandparent is a parent” is an every around an if. So the argument opens “let n be anything”, then “suppose n is a grandparent”, and the argument closes in the reverse order, as <a href="r02b.html#0a0441">2b9</a> showed.</p>
+  <p data-pid="3dbac5">What you already <i>have</i> has a shape too, and rung 1 gave each shape a tech for using it. An and lets you keep either part. An or you have invites you to reason by cases. An if can be carried through. A some lets you name an example freshly. An every lets you apply it to whatever you have. A not clashes with the thing it denies. Example: if you have “every cat purrs” and a cat called Tibbles, the every is applied to Tibbles. <b>Read the goal for the skeleton; read what you have for the techs that fill it.</b></p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · the layout · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4e4.1</span><span class="ph know">know</span>In unfolding 1 + 3, what does each line do? <br>What does the chain convention say about a line beginning with =?</li>
+      <li><span class="qid">4e4.1</span><span class="ph know">know</span>How does an argument for a nested shape open and close? <br>What does the shape of what you have tell you?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="4e5">
-  <h2 class="sthead"><span class="stno">4e5</span>Adding one is taking the next one</h2>
-  <p class="stands">Stands on 4e3 (plus-zero, plus-a-next) and 3a (1 names S(0)).</p>
-  <p data-pid="088006">The line 3 + 1 = 4 needs only a short column, because adding 1 is a short story every time.</p>
-  <p data-pid="823cd0">Plus-one technique: <b>adding one is taking the next one.</b> In marks: for every number n, n + 1 = S(n). You did this on your fingers before you could write: one more is the next number.</p>
-  <p data-pid="c7fde3">Plan: unpack 1 into S(0), use plus-a-next, then plus-zero.</p>
-  <pre class="lines" data-k="ember" data-label="this step: the plus-one technique, n + 1 = S(n)">
-n + 1 = n + \htmlClass{new}{S(0)} @@ 1 names S(0)
-\phantom{n + 1} = S(n + 0) @@ the plus-a-next technique
-\phantom{n + 1} = \htmlClass{new}{S(n)} \quad \blacksquare @@ the plus-zero technique, inside
-  </pre>
-  <p class="eqline" data-pid="708b04">From here on, <span data-tex-inline="n + 1"></span> may be written for <span data-tex-inline="S(n)"></span>, and the other way about: the plus-one technique says they name the same number. It is not a new mark; it is a proved sameness, and writing one for the other is a move cited to the swap axiom.</p>
-  <p data-pid="519d70">So 3 + 1 = S(3) = 4. The step of every induction may be written “from n to n + 1”, as it is usually written.</p>
-  <p data-pid="27c1f6">4c's doubling function gets its shorter description too: d(n) = n + n, for every number n, by induction.</p>
-  <section class="slides" id="sl5a"><div class="eyebrow">The slides · the plus-one technique · ← → keys work</div></section>
-  <section class="slides" id="sl5b"><div class="eyebrow">The slides · doubling · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">4e5</span>Straight through: direct proof</h2>
+  <p class="stands">Stands on 4e4 (nested shapes) and 2b (speak of everything, show an example).</p>
+  <p data-pid="12a0e2">The plainest route: suppose the hypothesis, unpack the words, work with the techs, repack. Here is a nested one. If n is a parent of b, and b is a parent of c, then n is a grandparent of c. What “grandparent of c” means: someone with a child who is a parent of c.</p>
+  <p data-pid="8d16d1">Let P(x, y) say x is a parent of y, and G(x, y) that x is a grandparent of y. The claim, in marks:</p>
+  <div class="eqline" data-tex="\forall n\,\forall b\,\forall c\,\big((P(n,b) \land P(b,c)) \Rightarrow G(n,c)\big)"></div>
+  <p data-pid="eb45e5">Read the skeleton off the marks. Three everys open with “let n, b and c be anything”. The if opens with “suppose n is a parent of b, and b is a parent of c”. The argument closes in the reverse order.</p>
+  <p data-pid="c0c6ed">Here is the argument, said forward. Let n, b and c be anything, and suppose n is a parent of b and b is a parent of c. Then b is a child of n, and b is a parent of c: keep each part, and join them. So n has a child who is a parent of c, with b as the example: show an example. That is what “grandparent of c” means, so n is a grandparent of c: pack the word. Drop the supposition, which proves the if; and n, b and c were anything, so speak of everything.</p>
+  <p data-pid="7b8a31">Written as a column, one line to a row with a reason beside each, it is a proof in the sense of <a href="r04a.html">4a</a>.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4e5.1</span><span class="ph know">know</span>What does the plus-one technique say? <br>Why is writing n + 1 for S(n) not a new mark?</li>
+      <li><span class="qid">4e5.1</span><span class="ph know">know</span>What is a direct proof, and how does the grandparent argument run?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="4e6">
-  <h2 class="sthead"><span class="stno">4e6</span>Zero on the left</h2>
-  <p class="stands">Stands on 4e3 (plus-zero, plus-a-next) and 4b (the induction technique).</p>
-  <p data-pid="06d7dc">Plus-zero says p + 0 = p. It does not say 0 + p = p. That is a different statement, with 0 on the other side, and it needs its own proof.</p>
-  <p data-pid="f26ff2">Every technique we now take for granted has to be earned, just as when the ladder adopted the equal sign. 0b had to build the turning about of a sameness, and 4d to prove it. Here the same care is owed to adding. This is the earliest technique of adding, and the earliest induction of the arithmetic.</p>
-  <p data-pid="f64989">Zero-plus technique: <b>0 added to a number, on the left, gives that number.</b> In marks: 0 + p = p.</p>
-  <p data-pid="0409e9">Example: 0 + 1 = 0 + S(0) = S(0 + 0) = S(0) = 1.</p>
-  <p data-pid="c6fa8a">Plan: induct on the number. The base is plus-zero with 0. The step uses plus-a-next and the hypothesis.</p>
-  <pre class="lines" data-k="ember" data-label="this step: the zero-plus technique, 0 + a = a">
-\varphi(a):\ \ 0 + a = a @@ the condition, with its gap at a
-0 + 0 = 0 @@ the plus-zero technique, with a = 0: the base
-\text{let } a \in \mathbb N;\ \ \text{assume } 0 + a = a @@ the step opens: the induction hypothesis
-\qquad 0 + S(a) = S(0 + a) @@ the plus-a-next technique
-\qquad \phantom{0 + S(a)} = S(\htmlClass{keep}{a}) @@ the hypothesis, inside (the swap axiom)
-\htmlClass{new}{\forall a \in \mathbb N\;\; 0 + a = a} \quad \blacksquare @@ prove an if; speak of everything; the induction technique
-  </pre>
-  <section class="slides" id="sl6"><div class="eyebrow">The slides · the zero-plus technique · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">4e6</span>Turned about: proof by contrapositive</h2>
+  <p class="stands">Stands on 4e5 (direct proof), 1f9 (the contrapositive) and 1d (turn-and-deny).</p>
+  <p data-pid="684698">Now try this straight through: Rex never barks at a cat; so if Rex barks at a thing, that thing is not a cat. Let n be anything and suppose Rex barks at n. And then? You have an every about cats, and n is not known to be a cat. The hypothesis in hand and the promise you have do not meet. The direct route is stuck at the opening.</p>
+  <p data-pid="f7baf4">1f's turn-and-deny rewrite swaps P ⇒ Q for ¬Q ⇒ ¬P, two statements that say the same thing, and 1d proved the forward direction by techs. So read the goal for n, “Rex barks at n ⇒ n is not a cat”, turned about: “n is a cat ⇒ Rex does not bark at n”. That turned-about if is exactly what the every you have says of n.</p>
+  <p data-pid="b6cd6d">Let C(x) say x is a cat, and B(x) that Rex barks at x. What you have, and what you want:</p>
+  <div class="eqline" data-tex="\begin{aligned}&amp;\text{have: } \forall x\,\big(C(x) \Rightarrow \neg B(x)\big) \qquad\qquad\\ &amp;\quad \text{want: } \forall x\,\big(B(x) \Rightarrow \neg C(x)\big)\end{aligned}"></div>
+  <p data-pid="73d1d1">Inside what we want, turn the if about: C(x) ⇒ ¬B(x). That is exactly the every we have, word for word.</p>
+  <p data-pid="a8c680">Here is the argument, said forward, with its two suppositions. Let n be anything, and suppose Rex barks at n. To show n is not a cat, suppose n is a cat. Rex never barks at a cat, so Rex does not bark at n: use the every on n, and carry the if through. That clashes with “Rex barks at n”, so n is not a cat: refute. Drop the first supposition, which proves the if; and n was anything, so speak of everything.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4e6.1</span><span class="ph know">know</span>Why does 0 + p = p need its own proof when p + 0 = p is plus-zero? <br>How does the zero-plus induction go?</li>
+      <li><span class="qid">4e6.1</span><span class="ph know">know</span>When does the direct route stick, and what does proof by contrapositive do instead?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="4e7">
-  <h2 class="sthead"><span class="stno">4e7</span>The next one on the left</h2>
-  <p class="stands">Stands on 4e6 (zero-plus), 4e3 (plus-a-next) and 4b (induction).</p>
-  <p data-pid="b4d678">Plus-a-next moves the next-one gesture out of the right-hand number. Its partner moves it out of the left.</p>
-  <p data-pid="1be998">Next-on-the-left technique for plus: <b>adding to the next one after a number gives the next one after the sum.</b> In marks: S(p) + b = S(p + b).</p>
-  <p data-pid="821dc7">Example: S(2) + 1 = 3 + 1 = 4, and S(2 + 1) = S(3) = 4.</p>
-  <p data-pid="24a21e">Plan: keep the left-hand number fixed and induct on b, the number plus-a-next can act on.</p>
-  <pre class="lines" data-k="ember" data-label="this step: the next-on-the-left technique for plus, S(a) + b = S(a + b)">
-\text{let } a \in \mathbb N;\ \ \varphi(b):\ S(a) + b = S(a + b) @@ a kept fixed; the gap at b
-S(a) + 0 = S(a) = S(a + 0) @@ plus-zero; plus-zero inside, turned about: the base
-\text{let } b \in \mathbb N;\ \ \text{assume } S(a) + b = S(a + b) @@ the step opens
-\qquad S(a) + S(b) = S(S(a) + b) @@ the plus-a-next technique
-\qquad \phantom{S(a) + S(b)} = S(\htmlClass{keep}{S(a + b)}) @@ the hypothesis, inside
-\qquad \phantom{S(a) + S(b)} = S(\htmlClass{new}{a + S(b)}) @@ the plus-a-next technique inside, turned about
-\htmlClass{new}{\forall b \in \mathbb N\;\; S(a) + b = S(a + b)} \quad \blacksquare @@ the induction technique; a was any number
-  </pre>
-  <section class="slides" id="sl7"><div class="eyebrow">The slides · the next-on-the-left technique for plus · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">4e7</span>What licenses the turn-about</h2>
+  <p class="stands">Stands on 4e6 (the contrapositive argued), 1f4 (the last column) and 1b (refute).</p>
+  <p data-pid="06e483">Look at what licenses the turn-about. The goal's conclusion was itself a denial, “n is not a cat”. For such a goal the turn-about is nothing but 1d's turn-and-deny technique for If, run under a supposition of the hypothesis, with refute closing it: techs alone, good for anything. When the conclusion is not a denial, the turn-about needs turn-and-deny's backward direction, which 1f marked as waiting for rung 7, or as fine for settled statements. In life the statements are settled (you can look at the cat), so the shape is yours. On the endless ranges of later rungs you will have to ask.</p>
+  <p data-pid="06a49a">Notice too what this shape is <i>not</i>. It does not suppose the conclusion is not so and hunt for something totally false in general. It proves a different, equivalent if, directly. That keeps the contrapositive clear of proof by contradiction proper, which lives on rung 7.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4e7.1</span><span class="ph know">know</span>What does the next-on-the-left technique for plus say? <br>Which letter does its proof induct on, and why?</li>
+      <li><span class="qid">4e7.1</span><span class="ph know">know</span>When is the turn-about licensed by techs alone, and when does it need rung 7? <br>What is proof by contrapositive not?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="4e8">
-  <h2 class="sthead"><span class="stno">4e8</span>The order does not matter</h2>
-  <p class="stands">Stands on 4e6 (zero-plus), 4e7 (next-on-the-left for plus) and 4b (induction).</p>
-  <p data-pid="881e0f">With zero-plus and next-on-the-left for plus in hand, the order of the numbers added does not matter.</p>
-  <p data-pid="1e6b1b">Turn-about technique for plus: <b>a sum is the same in either order.</b> In marks: p + b = b + p. The accepted word for this is commutative, from the Latin commutare, “to exchange”. You already know it. Three apples and two apples make the same as two apples and three.</p>
-  <p data-pid="65c239">Example: 1 + 3 = 4, as 4e4 unfolded, and 3 + 1 = 4, as 4e5 gave.</p>
-  <p data-pid="c2f3f0">Plan: keep p fixed and induct on b. The base needs zero-plus. The step needs next-on-the-left.</p>
-  <pre class="lines" data-k="ember" data-label="this step: the turn-about technique for plus, a + b = b + a">
-\text{let } a \in \mathbb N;\ \ \varphi(b):\ a + b = b + a @@ a kept fixed
-a + 0 = a = 0 + a @@ the plus-zero technique; the zero-plus technique, turned about: the base
-\text{let } b \in \mathbb N;\ \ \text{assume } a + b = b + a @@ the step opens
-\qquad a + S(b) = S(a + b) @@ the plus-a-next technique
-\qquad \phantom{a + S(b)} = S(\htmlClass{keep}{b + a}) @@ the hypothesis, inside
-\qquad \phantom{a + S(b)} = \htmlClass{new}{S(b) + a} @@ the next-on-the-left technique for plus, turned about
-\htmlClass{new}{\forall b \in \mathbb N\;\; a + b = b + a} \quad \blacksquare @@ the induction technique; a was any number
-  </pre>
-  <p data-pid="350b2e">Look at what the base needed: zero-plus. Try to prove turn-about for plus without proving zero-plus before it. The base is 0 + p = p, which is zero-plus, so you would be proving it inside turn-about for plus anyway.</p>
-  <p data-pid="65b4d5"><b>Techniques come in a pecking order, and finding which earlier technique a proof needs is most of the work.</b></p>
-  <section class="slides" id="sl8"><div class="eyebrow">The slides · the turn-about technique for plus · ← → keys work</div></section>
-  <section class="pic" id="pic2">
-    <div class="eyebrow">The picture · a technique checked as rows of beads</div>
+  <h2 class="sthead"><span class="stno">4e8</span>Split in pieces: proof by cases</h2>
+  <p class="stands">Stands on 1c (reason by cases) and 1f13 (the cases rewrite).</p>
+  <p data-pid="74a5ab">If you have P ∨ Q, and you can reach R from P and also reach R from Q, then you have R. That is <a href="r01c.html#4f9c59">1c8</a>'s tech, and 1f packs that tech into the cases rewrite, good both ways for any statement. What you must check is that the cases cover everything: the or has to be something you have, not something you wish. Here is the shape on Ann's whereabouts.</p>
+  <p data-pid="64a046">Given: Ann is at the bakery or at the library. The bakery is on Main Street, and so is the library.</p>
+  <p data-pid="c7d1aa">Let B be “Ann is at the bakery”, L “Ann is at the library”, and H “Ann is on Main Street”:</p>
+  <div class="eqline" data-tex="\begin{aligned}&amp;\text{have: } B \lor L,\;\; B \Rightarrow H,\;\; L\\ &amp;\quad \Rightarrow H \qquad \text{case } B\text{: } H \qquad\\ &amp;\quad \text{case } L\text{: } H \qquad \text{so, by cases: } H\end{aligned}"></div>
+  <p data-pid="dffaa6">Cases are not examples. Checking some of the people who might be on Main Street proves nothing about Ann. Each case above covers every way its option could come about, because the case supposes only that option. And the or was given, not invented.</p>
+  <p data-pid="d3b1b5">The split everyone reaches for, “either it is so or it is not”, is 1f's either-way principle. This rung grants the either-way split only for settled statements. For anything else, find an or you actually have. The slides do a split inside a split. The picture lets you try every route on a goal, and see which flows and where each sticks.</p>
+  <section class="slides" id="sl8"><div class="eyebrow">The slides · a split inside a split · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · a goal and the routes to it, which flows and where each sticks</div>
     <div class="panel">
-      <div class="chips" role="group" aria-label="technique" id="lch"></div>
-      <div class="cap">Each row of beads is a side of the technique, built by its definition: gold for p, ember for b, teal for the steps the next-one gesture adds. The two sides of a technique name the same number when both rows have the same beads, for every p and b; the fake's two sides never do. The p and b are the unfolding machine's, in 4e4.</div>
-      <canvas id="cvB"></canvas>
-      <div class="eqbox" id="eqB"></div>
+      <div class="chips" role="group" aria-label="goal" id="gch"><span class="m" style="color:var(--muted)">goal:</span></div>
+      <div class="eqbox goalbox" id="goal"></div>
+      <div class="chips" role="group" aria-label="route" id="sch"><span class="m" style="color:var(--muted)">route:</span></div>
+      <div class="verdict" id="sv"></div>
+      <div id="plines"></div>
+      <div class="cap">Ember bar: the route goes through, and here is the argument, a move to a row with its reason. Dotted bar: where the route sticks, or why it does not apply. Try every route on every goal; the stuck routes teach you too.</div>
     </div>
   </section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4e8.1</span><span class="ph know">know</span>What does the turn-about technique for plus say, and which earlier techniques does its proof need? <br>Why do techniques come in a pecking order?</li>
+      <li><span class="qid">4e8.1</span><span class="ph know">know</span>What must you check before arguing by cases?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="4e9">
-  <h2 class="sthead"><span class="stno">4e9</span>The brackets do not matter</h2>
-  <p class="stands">Stands on 4e3 (plus-zero, plus-a-next) and 4b (induction).</p>
-  <p data-pid="1a0d70">Next, the brackets. Regroup technique for plus: <b>in a sum of three numbers, which pair is added first does not change the sum.</b> In marks: (p + b) + c = p + (b + c).</p>
-  <p data-pid="0be37e">Example: (1 + 1) + 2 = 2 + 2 = 4, and 1 + (1 + 2) = 1 + 3 = 4.</p>
-  <p data-pid="1b63b9">Plan: keep the first two numbers fixed and induct on the third, where plus-a-next acts.</p>
-  <pre class="lines" data-k="ember" data-label="this step: the regroup technique for plus, (a + b) + c = a + (b + c)">
-\text{let } a, b \in \mathbb N;\ \ \varphi(c):\ (a + b) + c = a + (b + c) @@ a and b kept fixed
-(a + b) + 0 = a + b = a + (b + 0) @@ the plus-zero technique; plus-zero inside, turned about: the base
-\text{let } c \in \mathbb N;\ \ \text{assume } (a + b) + c = a + (b + c) @@ the step opens
-\qquad (a + b) + S(c) = S((a + b) + c) @@ the plus-a-next technique
-\qquad \phantom{(a + b) + S(c)} = S(\htmlClass{keep}{a + (b + c)}) @@ the hypothesis, inside
-\qquad \phantom{(a + b) + S(c)} = a + S(b + c) @@ the plus-a-next technique, turned about
-\qquad \phantom{(a + b) + S(c)} = a + \htmlClass{new}{(b + S(c))} @@ the plus-a-next technique inside, turned about
-\htmlClass{new}{\forall c \in \mathbb N\;\; (a + b) + c = a + (b + c)} \quad \blacksquare @@ the induction technique; a and b were any numbers
-  </pre>
-  <p class="eqline" data-pid="041360">From here on, a sum written without brackets, <span data-tex-inline="a + b + c"></span>, names <span data-tex-inline="(a + b) + c"></span>; by the regroup technique for plus it is the same number as <span data-tex-inline="a + (b + c)"></span>, so either reading may be used.</p>
-  <section class="slides" id="sl9"><div class="eyebrow">The slides · the regroup technique for plus · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">4e9</span>Show an example that fails: the counterexample</h2>
+  <p class="stands">Stands on 2b (the counterexample technique) and 2i8 (pushing a not through an every).</p>
+  <p data-pid="60b0d0">To prove an every, you need an argument. To <i>refute</i> an every, you need an instance. 2b's counterexample technique is good for any statement: hand over a thing where P fails, and the every is dead. History is generous with examples. For a long time Europeans used “every swan is white” as the model of a safe generalisation. Then sailors on the far side of the world saw black swans on a river, and the line was dead. The rung has its own black swans. “Every pet is furry” sounds like the kind of thing that is so, and a goldfish kills it. The moral is lopsided and permanent: <b>no pile of examples proves an every, and a counterexample, alone, refutes it.</b> The hunter in the picture finds such creatures for you.</p>
+  <p data-pid="6caae1">Nemo is a goldfish: a pet, and not furry. So some pet is not furry: Nemo is the example. And some pet is not furry, so not every pet is furry. That last step is the counterexample technique (2b), with negated-if's licensed direction (1f) inside.</p>
+  <div class="eqline" data-tex="\begin{aligned}&amp;\text{pet}(\text{Nemo}) \land \neg\,\text{furry}(\text{Nemo}) \;\\ &amp;\quad \longrightarrow\; \exists x\,\big(\text{pet}(x) \land \neg\,\text{furry}(x)\big) \;\\ &amp;\quad \longrightarrow\; \neg\,\forall x\,\big(\text{pet}(x) \Rightarrow \text{furry}(x)\big)\end{aligned}"></div>
+  <section class="slides" id="sl9"><div class="eyebrow">The slides · counterexample · ← → keys work</div></section>
+  <section class="pic" id="pic2">
+    <div class="eyebrow">The picture · the counterexample hunter</div>
+    <div class="panel">
+      <div class="chips" role="group" aria-label="claim" id="cch"><span class="m" style="color:var(--muted)">claim:</span></div>
+      <div class="cap">The world: tap a creature to take it out or put it back. The hunter looks for a creature that breaks the every.</div>
+      <div class="crea" id="crea"></div>
+      <div class="eqbox" id="hv"></div>
+      <div class="cap">Ember: the counterexample. Take it out of the world and read what the hunter says then: a world where every creature passes proves nothing about creatures not in it.</div>
+    </div>
+  </section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4e9.1</span><span class="ph know">know</span>What does the regroup technique for plus say? <br>What does a + b + c name from here on?</li>
+      <li><span class="qid">4e9.1</span><span class="ph know">know</span>What does it take to prove an every, and what to refute one?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="4e10">
-  <h2 class="sthead"><span class="stno">4e10</span>Taking away again</h2>
-  <p class="stands">Stands on 4e3 (plus-a-next), 4a13 (different-nexts), 4e8 (turn-about for plus) and 4b (induction).</p>
-  <p data-pid="4a81cd">Last, cancelling. Cancel technique for plus: <b>if sums agree after adding the same number, they agreed before.</b> In marks: p + c = b + c ⇒ p = b.</p>
-  <p data-pid="89b88c">Example: if p + 2 = 5 + 2, then p = 5.</p>
-  <p data-pid="be23a7">Plan: keep p and b fixed and induct on c. The step is where 4a's different-nexts comes in: different numbers have different next ones, so sameness of the next ones carries back to sameness of the numbers.</p>
-  <pre class="lines" data-k="ember" data-label="this step: the cancel technique for plus, a + c = b + c ⇒ a = b">
-\text{let } a, b \in \mathbb N;\ \ \varphi(c):\ a + c = b + c \Rightarrow a = b @@ a and b kept fixed
-a + 0 = b + 0 \Rightarrow a = b @@ plus-zero on each side; the techniques turn-about and chain; prove an if: the base
-\text{let } c \in \mathbb N;\ \ \text{assume } \varphi(c) @@ the step opens
-\qquad \text{assume } a + S(c) = b + S(c) @@ aiming at φ(S(c))
-\qquad S(a + c) = S(b + c) @@ the plus-a-next technique, on each side
-\qquad a + c = b + c @@ the different-nexts technique
-\qquad \htmlClass{new}{a = b} @@ carry the hypothesis through
-\htmlClass{new}{\forall c \in \mathbb N\;\; (a + c = b + c \Rightarrow a = b)} \quad \blacksquare @@ prove an if; speak of everything; the induction technique
-  </pre>
-  <p data-pid="29ccf3">With turn-about for plus, cancelling works on the left as well: c + p = c + b gives p + c = b + c, and so p = b. These techniques have accepted names, given in the basement.</p>
-  <p data-pid="d592bc">A later author wrote a whole book that builds the numbers and their techniques in this style, technique by technique. He told the students who read it to forget the arithmetic they had learned at school, since they had not really learned it. In his preface he records that, at the last minute, a younger mathematician showed him a much simpler proof that adding exists, and that he used it.</p>
-  <section class="slides" id="sl10"><div class="eyebrow">The slides · the cancel technique for plus · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">4e10</span>Refutation</h2>
+  <p class="stands">Stands on 1b (refute) and 2b (use a some with a fresh name).</p>
+  <p data-pid="648f13"><a href="r01b.html#5bd5f9">1b5</a>'s refute proves a not: suppose P, reach ⊥, conclude ¬P. Here it is on a claim with a some inside, which is the usual case: nothing is both a cat and a dog, given that no cat is a dog.</p>
+  <div class="eqline" data-tex="\begin{aligned}&amp;\text{have: } \forall x\,\big(C(x) \Rightarrow \neg D(x)\big) \qquad\qquad\\ &amp;\quad \text{want: } \neg\,\exists x\,\big(C(x) \land D(x)\big)\end{aligned}"></div>
+  <p data-pid="ea9d95">The want starts with a not, so the skeleton is refute: suppose something is both, use the some with a fresh name, and reach ⊥.</p>
+  <p data-pid="3c3553">Here is the argument, said forward. Suppose something is both a cat and a dog, and call it b. No cat is a dog, so if b is a cat, b is not a dog: use the every on b. b is a cat, by keeping the left part, so b is not a dog: carry the if through. But b is a dog, by keeping the right part, and that clashes. The clash reached ⊥ without mentioning b, so ⊥ stands after the call, and the supposition is refuted: nothing is both a cat and a dog.</p>
+  <section class="slides" id="sl10"><div class="eyebrow">The slides · refutation · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4e10.1</span><span class="ph know">know</span>What does the cancel technique for plus say, and where does different-nexts come in?</li>
+      <li><span class="qid">4e10.1</span><span class="ph know">know</span>What is the skeleton of a refutation? <br>How does it use a some inside the supposition?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="4e11">
-  <h2 class="sthead"><span class="stno">4e11</span>Illegal moves</h2>
-  <p class="stands">Stands on 4e1 to 4e10.</p>
-  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
-S(a + b) = S(a) + S(b)\,? @@ false: with a = b = 1, the left is S(2) = 3 and the right is 2 + 2 = 4. The truth is S(a) + b = S(a + b) (next-on-the-left for plus) and a + S(b) = S(a + b) (plus-a-next): the next-one gesture comes out of either side alone, not both
-a + S(b) = S(a) + S(b)\,? @@ adding the next one to both numbers is not a tech. plus-a-next moves S out of the right-hand number and around the sum; it does not copy it
-2 + 1 = 4\,? @@ wrong arithmetic. Unfold 2 + 1 by plus-a-next and plus-zero, and the foot is S(2), which is 3. The line claims one thing under two names, where there are two things: you have rendered your equals false. Every swap it licenses now carries a falsehood, and the chain technique would give 3 = 4
-0 + a = a,\ \text{by plus-zero} @@ the right fact, the wrong reason: plus-zero is a + 0 = a. The reason is zero-plus, which needed its own induction
-a + c = b + d \Rightarrow a = b\,? @@ cancelling needs the same number on both sides: 1 + 3 = 2 + 2 and 1 ≠ 2. cancel for plus, with c = d, is the licence
-1 + 3 = 4,\ \text{because everyone knows it} @@ 4d's rule: “everyone knows” is a wish, not a reason. The column above is the reason
-\{1\} + 1 @@ + is defined for numbers. {1} is not a number (4a), so the mark means nothing there
-a + b + c + d @@ regroup for plus settles a + b + c. Longer sums are settled by using regroup for plus again, step by step; each regrouping is a line with its reason
-  </pre>
-  <section class="slides" id="sl11"><div class="eyebrow">The slides · a fake · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">4e11</span>Where refutation stops</h2>
+  <p class="stands">Stands on 4e10 (refutation) and 1b (not-not in, and the gap at ¬¬P).</p>
+  <p data-pid="94d782">Here is the boundary, said once more before rung 7. Refutation proves statements that <i>start with not</i>. The famous tech “suppose not-P, reach ⊥, therefore P” is different. Run on ¬P, refutation gives only ¬¬P, and getting from there to P is the step withheld until rung 7. The step from ¬¬P to P is proof by contradiction proper, and it belongs to rung 7. You have seen how much can be done without it: every argument of rungs 1 to 4 goes through with the shapes above.</p>
+  <p data-pid="516bc1">A mathematician once called this way of arguing one of the finest weapons a mathematician has, finer than any sacrifice in chess. A chess player may give up a pawn, or even a bigger piece, to win. A mathematician puts the whole claim at stake: suppose it, and if something totally false follows, the claim is gone. The mathematician meant the full weapon, suppose not-P and reach P. This rung hands you the half that proves a not.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4e11.1</span><span class="ph know">know</span>Why is “a + S(b) = S(a) + S(b)” not a move? <br>Why is “0 + a = a, by plus-zero” the wrong reason?</li>
+      <li><span class="qid">4e11.1</span><span class="ph know">know</span>What does refutation prove, and where does it stop?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="4e12">
-  <h2 class="sthead"><span class="stno">4e12</span>Running it backwards</h2>
-  <p class="stands">Stands on 4e1 to 4e10.</p>
-  <p data-pid="9c84bb">Given a sum, unfold. Unpack the right-hand name, use plus-a-next, and repeat until plus-zero applies. Then pack the names.</p>
-  <p data-pid="edb6bc">Given a result and a number added, ask what the other must be. Which b has 1 + b = 4? Unfolding 1 + 3 shows that 3 does.</p>
-  <p data-pid="cc22fb">Is it the only one? Suppose 1 + b = 4 and 1 + b′ = 4. Then 1 + b = 1 + b′, so b + 1 = b′ + 1 by turn-about for plus, and b = b′ by cancel for plus. So exactly one number takes 1 to 4, and it is 3.</p>
-  <p data-pid="a12566">That is the question a later mark will answer in general. On this rung it is answered case by case: find the number, and cite cancel for plus for “no other”.</p>
-  <p data-pid="17fe15">Wanting a technique, you find the earlier techniques its step needs, and prove those before it. Then induct on the right-hand letter, because that is where plus-a-next can act. Found upward; written downward.</p>
-  <section class="slides" id="sl12"><div class="eyebrow">The slides · backwards · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">4e12</span>Find it backwards, write it forwards</h2>
+  <p class="stands">Stands on 4e5 (the grandparent argument) and 1d (affirming the consequent).</p>
+  <p data-pid="000cfc">Discovery and presentation run in opposite directions. To find an argument you usually start from the goal and ask what would give it. Scratch work is allowed to wander: “I want a grandparent; that needs a child who is a parent; b is a child of n; is b a parent of c? yes, given.” The write-up then runs forward from what is given, every claim following from claims already made.</p>
+  <p data-pid="f3faa4">Here is that scratch work written forward. b is a child of n: given. b is a parent of c: given. So n has a child who is a parent of c: join, then show an example, b. So n is a grandparent of c: pack the word.</p>
+  <p data-pid="dd9669">The illegal move hides in the gap between finding and writing up. Starting from the thing you want to prove and arriving at something so proves nothing. Example: “suppose Rex is a cat; then Rex is a cat or a dog; that is so; so Rex is a cat.” Each step in that chain runs the wrong way. The if affirmed is “if Rex is a cat, then Rex is a cat or a dog”, and the chain is 1d's affirming the consequent in an argument's clothes. <b>Scratch work may run backwards only if, when you write it up, every step can be run forwards.</b></p>
+  <section class="slides" id="sl12"><div class="eyebrow">The slides · backwards, then forwards · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4e12.1</span><span class="ph know">know</span>Given a sum, how do you unfold it? <br>Wanting a technique about adding, why induct on the right-hand letter?</li>
+      <li><span class="qid">4e12.1</span><span class="ph know">know</span>Why may scratch work run backwards, and when does it become an illegal move?</li>
+    </ol>
+  </section>
+</section>
+
+
+<section class="class step" data-step="4e13">
+  <h2 class="sthead"><span class="stno">4e13</span>Illegal moves</h2>
+  <p class="stands">Stands on 4e5 to 4e12 (the shapes).</p>
+  <p data-pid="a13b9c">Five moves borrow the shape of a method in this step and leave out the part that makes it convince. One proves an every from examples. One proves an if by proving its converse. One splits into cases that do not cover every way things can be. One takes a failed argument for P as a proof that P is not so. And one refutes a some with one counterexample.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\begin{aligned}&\text{every pet here is}\\ &\quad\text{furry: Rex is, and Tib is}\,?\end{aligned} @@ examples prove a “some”, never an “every”: the goldfish is the counterexample
+\begin{aligned}&\text{to prove “if } P \text{ then } Q\text{”,}\\ &\quad\text{prove “if } Q \text{ then } P\text{”}\,?\end{aligned} @@ that is another statement. Turned about is “if not Q then not P”
+\begin{aligned}&\text{case Rex is a dog;}\\ &\quad\text{case Rex is a cat; so done}\,?\end{aligned} @@ the cases must cover every way things can be; split on P or not P, and Rex may be a fish
+\text{my proof of } P \text{ failed, so } P \text{ is not so}\,? @@ a failed argument refutes nothing; refute needs the totally false reached from P
+\begin{aligned}&\text{a pet that is not furry}\\ &\quad\text{refutes “some pet is furry”}\,?\end{aligned} @@ one counterexample refutes an every; to refute a some, show that every one fails
+  </pre>
+  <p data-pid="b29a70">The first two illegal moves are the commonest in the wild. Examples feel like evidence, and they are, for a some. The arrow turned without its denials sounds like the arrow turned with them; only the one with the denials says the same thing.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4e13.1</span><span class="ph know">know</span>Why do examples never prove an every? <br>Why does one counterexample not refute a some?</li>
+    </ol>
+  </section>
+</section>
+<section class="class step" data-step="4e14">
+  <h2 class="sthead"><span class="stno">4e14</span>Where you stand</h2>
+  <p class="stands">Stands on 4e1 to 4e13 (the shapes, and the moves that only look like them).</p>
+  <p data-pid="aecad3">You can take a statement apart into its marks and read its skeleton off its outermost mark. You can prove an if by supposing, an every by speaking of anything, a some by showing, and a not by refuting. You can turn an if about, split on an or you have, and kill an every with an example. You know the rulebook for rephrasing and which of its directions are yours. You know the moves that look like techs and are not, by name. That is the ordinary toolkit of reasoning, the one every mathematics book assumes without saying so. It is built here from the ground floor with nothing assumed. The gap at ¬¬P is still open, and you know exactly where it is.</p>
+  <p class="bench" data-pid="547a7e">Now you're a person who can use some logic.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4e14.1</span><span class="ph know">know</span>What is the one thing this footing hands on?</li>
     </ol>
   </section>
 </section>
@@ -346,152 +282,232 @@ a + b + c + d @@ regroup for plus settles a + b + c. Longer sums are settled by 
 <section class="challenge themeend">
   <div class="eyebrow">Special challenges · there if you want them</div>
   <h2>Special challenges</h2>
-  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
-  <div class="chq"><span class="chid">4e.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{Adding keeps}"></span> <span data-tex-inline="p + 0 = p,"></span> <span data-tex-inline="0 + p = p,"></span> <span data-tex-inline="p + b = b + p,"></span> <span data-tex-inline="(p + b) + c = p + (b + c),"></span> <span data-tex-inline="p + c = b + c \Rightarrow p = b."></span></span>Define an operation on numbers, other than adding, by a start and a step in the right-hand number; give it a mark by a “from here on” line, and compute it at two named numbers, one move per line. <br>Prove one of the laws adding keeps for your operation, and refute one it breaks.</div>
-  <div class="chq"><span class="chid">4e.4.2</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\text{Unfolding the } 3 \text{ earns}"></span> <span data-tex-inline="1 + 3 = 4,"></span> <span data-tex-inline="\text{one move per line.}"></span></span>Earn it by a shorter column, and list what that column leans on that the unfolding does not.</div>
-  <div class="chq"><span class="chid">4e.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="0 + 0 = 0,"></span> <span data-tex-inline="1 + 1 = 2,"></span> <span data-tex-inline="2 + 2 = 4"></span></span>Settle whether some number added to itself gives 3.</div>
-  <div class="chq"><span class="chid">4e.4.4</span><span class="tagq">world</span><span class="givens"><span data-tex-inline="\text{a start } 0,"></span> <span data-tex-inline="\text{a one-to-one next } S"></span> <span data-tex-inline="\text{that never gives } 0,"></span> <span data-tex-inline="p + 0 = p,"></span> <span data-tex-inline="p + S(b) = S(p + b),"></span> <span data-tex-inline="\text{for all things } p, b."></span></span>Build such a world in which some two things do not turn about under adding. Not everything need be reached from the start.</div>
-  <div class="chq"><span class="chid">4e.4.5</span><span class="tagq">seam</span>1 + 3 = 4 is earned from the names, plus-zero and plus-a-next. A lunchbox holds a plum, and then three more. <br>Has the column said anything about the lunchbox? <br>If a careful count of the lunchbox ever gave a number other than 4, which would be wrong: the count, the column, or reading the column as a count?</div>
+  <div class="chq"><span class="chid">4e.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{(i) } \exists x\, (P(x) \land Q(x))"></span> <span data-tex-inline="\text{(ii) } \exists x\, P(x) \land \exists x\, Q(x)"></span></span>Take statements-with-a-gap P and Q about people you know, and prove the if between (i) and (ii) that is true, writing its opening and closing lines from its goal first. <br>Convict the other if with people of your own.</div>
+  <div class="chq"><span class="chid">4e.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{This rung has no shape}"></span> <span data-tex-inline="\text{“suppose } \neg P; \text{ reach } \bot; \text{ so } P\text{”.}"></span> <span data-tex-inline="\text{Let } L \text{ be “the school}"></span> <span data-tex-inline="\text{library is open”,}"></span> <span data-tex-inline="P \text{ be } \neg L."></span></span>Supposing not-P, argue toward P in plain words, as far as you can take it. <br>For which other P can such an argument finish so?</div>
+  <div class="chq"><span class="chid">4e.4.3</span><span class="tagq">loop</span><span class="givens"><span data-tex-inline="g \text{ means exactly “no column}"></span> <span data-tex-inline="\text{on this ladder earns } g\text{”.}"></span> <span data-tex-inline="\text{Whatever a column earns from}"></span> <span data-tex-inline="\text{no given lines is so.}"></span></span>Supposing an argument earns g, take it as far as you can take it. <br>What have you shown about g, and did an argument on the ladder earn it?</div>
+  <div class="chq"><span class="chid">4e.4.4</span><span class="tagq">seam</span>Let R(x) say “x scored a goal in Saturday's game”. Someone proves ¬∀x ¬R(x). <br>Have they proved ∃x R(x)? <br>What ought a proof of a some to hand you?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r04d.html">← 4d · completing the proof</a><a href="r04f.html">4f · multiplying and powers →</a></nav>
+<nav class="nextrung"><a href="r04d.html">← 4d · defining by repeating</a><a href="r04f.html">4f · adding →</a></nav>
 
 <section class="extra basement">
   <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Other ways the same marks are written</h3>
+  <p>Mathematics writes some of these marks in more than one way, by subject and by century. Each one below means what the mark in this step means; know them on sight.</p>
+  <ul>
+    <li>∴ is read “therefore” and ∵ “because”; written proofs often put them at the start of a line in place of the reason.</li>
+    <li>The end mark is also written □, or Q.E.D., short for the Latin <i>quod erat demonstrandum</i>, “which was to be shown”.</li>
+  </ul>
   <h3>Who said it first</h3>
-  <p>The schoolteacher, in Stettin, is Hermann Grassmann; the writer a generation later is Giuseppe Peano. The author of the whole book is Edmund Landau, and the younger mathematician with the simpler proof is László Kalmár.</p>
-  <aside class="voice para"><p>Hermann Grassmann, a schoolteacher in Stettin, wrote a textbook of arithmetic in which adding is defined by exactly this pair of lines and every technique of adding and multiplying is proved from them by induction. It seems nobody had done so before. Peano, a generation later, put the same pair of lines at the head of his arithmetic.</p><cite>Grassmann, Lehrbuch der Arithmetik für höhere Lehranstalten (1861); Peano, Arithmetices principia (1889)</cite></aside>
-  <aside class="voice para"><p>Edmund Landau wrote a whole book that builds the numbers and their techniques in this style, technique by technique, and told the students who read it to forget the arithmetic they had learned at school, since they had not really learned it. In his preface he records that, at the last minute, László Kalmár showed him a much simpler proof that adding exists, and that he used it.</p><cite>Landau, Grundlagen der Analysis (1930), the prefaces</cite></aside>
-  <h3>Accepted names</h3>
-  <p>Turn-about for plus is the commutative law of addition; regroup for plus, the associative law; cancel for plus, the cancellation law.</p>
+  <p>“Demonstration” is Aristotle’s word; the chess line is G. H. Hardy’s, about the method the books call reductio ad absurdum, which Euclid loved. The black swans were seen by Willem de Vlamingh’s crew on the Swan River, in 1697.</p>
+  <blockquote class="voice"><p>“By demonstration I mean a syllogism productive of scientific knowledge.”</p><cite>Aristotle, Posterior Analytics I.2 (71b), trans. G. R. G. Mure, in The Works of Aristotle, vol. I (Oxford, 1928)</cite></blockquote>
+  <aside class="voice para"><p>Hardy called reductio ad absurdum, which Euclid loved, one of a mathematician’s finest weapons, finer than any gambit in chess. A chess player may offer a pawn or even a piece, he wrote; a mathematician offers the game.</p><cite>Hardy, A Mathematician’s Apology (1940), §12; paraphrase</cite></aside>
+
+  <h3>This step’s arguments, in columns</h3>
+  <p data-pid="c4e0a1">Each argument of this step, written again as a column in the form <a href="r04a.html">4a</a> builds: one line to a row, the reason on the right.</p>
+  <div class="stepgroup">
+  <p class="from"><a href="r04e.html">From 4e · Proof shapes</a></p>
+<section class="paid" data-from="r04e.html" data-step="4e">
+  <h4>4e · Straight through: direct proof</h4>
+  <p>This column proves directly that a parent of a parent is a grandparent.</p>
+  <p data-pid="dd1f55">Take n, b and c, anything at all. Suppose n is a parent of b, and b is a parent of c.</p>
+  <p data-pid="99f439">Then b is a child of n: that is what “parent of” means, turned about. So b is a child of n, and b is a parent of c. So someone is a child of n and a parent of c: b is the example. That is what “grandparent of c” means. So n is a grandparent of c.</p>
+  <p data-pid="b617c8">Drop the supposition: we have proved an if. If n is a parent of b and b is a parent of c, then n is a grandparent of c. And n, b and c were anything, so it is true for every n, b and c. The closing moves match the opening ones, in reverse order.</p>
+  <p data-pid="c312ee">One step took thought: joining “b is a child of n” to “b is a parent of c”. You know the shape you need at the end: a some about n's children. The only way to make a some is to show an example, and b is the only candidate. So you steer toward a claim about b that has the shape the some wants, and join supplies it. That is manipulating, not processing.</p>
+  <pre class="lines" data-k="ember" data-label="4e: a direct proof, a parent of a parent is a grandparent">
+\text{let } n, b, c \text{ be anything} @@ the everys give the opening line
+\qquad \text{assume } n \text{ is a parent of } b \land b \text{ is a parent of } c @@ the if gives the next: its hypothesis assumed
+\qquad b \text{ is a child of } n @@ keep left, and what “parent of” means, turned about: b is a's child
+\qquad \htmlClass{new}{b \text{ is a child of } n \land b \text{ is a parent of } c} @@ join, with keep right
+\qquad \exists y\,(y \text{ is a child of } n \land y \text{ is a parent of } c) @@ show an example: b
+\qquad n \text{ is a grandparent of } c @@ ︿ “grandparent of”: that is what the word means
+(n \text{ is a parent of } b \land b \text{ is a parent of } c) \Rightarrow n \text{ is a grandparent of } c @@ prove an if
+\htmlClass{new}{\forall x\,\forall y\,\forall z\,(\dots)} \quad \blacksquare @@ speak of everything, for each of n, b, c: the closing lines match the opening ones, in reverse order
+  </pre>
+</section>
+<section class="paid" data-from="r04e.html" data-step="4e">
+  <h4>4e · Turned about: proof by contrapositive</h4>
+  <p>This column proves, from “Rex never barks at a cat”, that whatever Rex barks at is not a cat, by the turned-about if.</p>
+  <p data-pid="ae36cb">Given: whatever is a cat, Rex does not bark at it. That is what “never barks at a cat” means.</p>
+  <p data-pid="b72ec3">Take n, anything at all. Suppose Rex barks at n. The conclusion we want, “n is not a cat”, is a denial. So suppose the thing after the not: suppose n is a cat.</p>
+  <p data-pid="e22421">Rex never barks at a cat, so Rex does not bark at n. That is the turned-about goal, and the every we have hands it over. It clashes with our first supposition: ⊥. So “n is a cat” is refuted: n is not a cat.</p>
+  <p data-pid="352d04">Drop the first supposition: if Rex barks at n, n is not a cat. And n was anything. So whatever Rex barks at is not a cat.</p>
+  <pre class="lines" data-k="ember" data-label="4e: proof by contrapositive, from “Rex never barks at a cat”">
+\forall x\,(x \text{ is a cat} \Rightarrow \neg(\text{Rex barks at } x)) @@ given: what “never barks at a cat” means
+\text{let } n \text{ be anything} @@ the goal is an every
+\qquad \text{assume Rex barks at } n @@ the goal inside is an if: assume its hypothesis
+\qquad\quad \text{assume } n \text{ is a cat} @@ the conclusion wanted is a denial: suppose the thing after the ¬
+\qquad\quad \htmlClass{new}{\neg(\text{Rex barks at } n)} @@ use an every, carry through: the turned-about goal is the line you have
+\qquad\quad \bot @@ clash
+\qquad \neg(n \text{ is a cat}) @@ refute
+\text{Rex barks at } n \Rightarrow \neg(n \text{ is a cat}) @@ prove an if
+\htmlClass{new}{\forall x\,(\text{Rex barks at } x \Rightarrow \neg(x \text{ is a cat}))} \quad \blacksquare @@ speak of everything
+  </pre>
+</section>
+<section class="paid" data-from="r04e.html" data-step="4e">
+  <h4>4e · Split in pieces: proof by cases</h4>
+  <p>This column proves by cases, from “Ann is at the bakery or the library”, that Ann is on the High Street.</p>
+  <p data-pid="656660">Take the cases. Suppose Ann is at the bakery. Then she is on the High Street. Suppose instead that she is at the library. Then, again, she is on the High Street.</p>
+  <p data-pid="4d5a63">Both cases end at the same claim. So, by cases, Ann is on the High Street.</p>
+  <pre class="lines" data-k="ember" data-label="4e: proof by cases, Ann is on the High Street">
+\text{Ann is at the bakery} \lor \text{Ann is at the library} @@ given: the or-line that supplies the cases
+\text{Ann is at the bakery} \Rightarrow \text{Ann is on the High Street} @@ given: the bakery is on the High Street
+\text{Ann is at the library} \Rightarrow \text{Ann is on the High Street} @@ given: so is the library
+\qquad \text{case: assume Ann is at the bakery} @@ the earlier disjunct
+\qquad \htmlClass{new}{\text{Ann is on the High Street}} @@ carry an if through
+\qquad \text{case: assume Ann is at the library} @@ the later disjunct
+\qquad \htmlClass{new}{\text{Ann is on the High Street}} @@ carry an if through
+\text{Ann is on the High Street} \quad \blacksquare @@ reason by cases: the same line from every case
+  </pre>
+</section>
+<section class="paid" data-from="r04e.html" data-step="4e">
+  <h4>4e · Show an example that fails: the counterexample</h4>
+  <p>This column kills “every pet is furry” with one goldfish.</p>
+  <pre class="lines" data-k="ember" data-label="4e: a counterexample, written as a proof">
+\text{Nemo is a pet} \land \neg(\text{Nemo is furry}) @@ given: the goldfish
+\htmlClass{new}{\exists x\,(x \text{ is a pet} \land \neg(x \text{ is furry}))} @@ show an example
+\neg\,\forall x\,(x \text{ is a pet} \Rightarrow x \text{ is furry}) \quad \blacksquare @@ the counterexample technique (2b), with negated-if's licensed direction (1f) inside: some pet is not furry, so not every pet is
+  </pre>
+</section>
+<section class="paid" data-from="r04e.html" data-step="4e">
+  <h4>4e · Refutation, and where it stops</h4>
+  <p>This column refutes “something is both a cat and a dog”, given that no cat is a dog.</p>
+  <p data-pid="9b162e">Given: no cat is a dog. Suppose, until we drop it, that something is both a cat and a dog. Use the some: give it a fresh name, b. So b is a cat and b is a dog.</p>
+  <p data-pid="779bf9">b is a cat, and no cat is a dog, so b is not a dog. But b is a dog. That clashes: ⊥. The ⊥ does not mention b, so it stands outside the some.</p>
+  <p data-pid="0931c7">Drop the supposition: it is refuted. Nothing is both a cat and a dog.</p>
+  <pre class="lines" data-k="ember" data-label="4e: refutation, nothing is both a cat and a dog">
+\forall x\,(x \text{ is a cat} \Rightarrow \neg(x \text{ is a dog})) @@ given: no cat is a dog
+\qquad \text{assume } \exists x\,(x \text{ is a cat} \land x \text{ is a dog}) @@ suppose the thing to be refuted
+\qquad\quad \text{call it } b\text{: assume } b \text{ is a cat} \land b \text{ is a dog} @@ use a some: a fresh name
+\qquad\quad b \text{ is a cat} @@ keep left
+\qquad\quad \htmlClass{new}{\neg(b \text{ is a dog})} @@ use an every, carry through
+\qquad\quad b \text{ is a dog} @@ keep right
+\qquad\quad \bot @@ clash
+\qquad \bot @@ the some closes: ⊥ does not mention b
+\htmlClass{new}{\neg\,\exists x\,(x \text{ is a cat} \land x \text{ is a dog})} \quad \blacksquare @@ refute
+  </pre>
+</section>
+  </div>
 </section>
 </div>
 
 <script src="rung.js"></script>
 <script>
 (function(){
-const {tex,col,stepper}=Rung;
+const {tex,stepper,renderAll}=Rung;
 const R=String.raw;
-function size(cv,ar){ const d=window.devicePixelRatio||1, W=cv.clientWidth||300, H=Math.round(W/ar); cv.width=W*d; cv.height=H*d; cv.style.height=H+'px'; const c=cv.getContext('2d'); c.setTransform(d,0,0,d,0,0); return {c,W,H}; }
-const nameOf=v=>{ if(v<=4) return String(v); let s='4'; for(let i=4;i<v;i++) s='S('+s+')'; return s; };
 
-/* ---------- left: the unfolding machine for + ---------- */
-let A=1, B=3;
-const num=k=>({t:'n',k}), Sx=x=>({t:'S',x}), add=(a,b)=>({t:'+',a,b});
-function show(e,hl){ const w=s=>hl&&hl.node===e?'\\htmlClass{new}{'+s+'}':s;
-  if(e.t==='n') return w(String(e.k)); if(e.t==='S') return w('S('+show(e.x,hl)+')'); return w(show(e.a,hl)+' + '+show(e.b,hl)); }
-function findAdd(e,par){ if(e.t==='+') return {node:e,par}; if(e.t==='S') return findAdd(e.x,e); return null; }
-function stepOnce(e){ // returns {e, reason, node} or null
-  const f=findAdd(e,null);
-  const replace=(old,nu)=>{ if(old===e) return nu; (function rec(x){ if(x.t==='S'){ if(x.x===old){ x.x=nu; return true; } return rec(x.x); } if(x.t==='+'){ if(x.a===old){x.a=nu;return true;} if(x.b===old){x.b=nu;return true;} } return false; })(e); return e; };
-  if(f){ const s=f.node;
-    if(s.b.t==='n'&&s.b.k>0){ const nu=Sx(num(s.b.k-1)); s.b=nu; return {e,reason:`${s.b.x.k+1} names S(${s.b.x.k})`,node:nu}; }
-    if(s.b.t==='S'){ const nu=Sx(add(s.a,s.b.x)); const e2=replace(s,nu); return {e:e2,reason:'the plus-a-next technique',node:nu}; }
-    if(s.b.t==='n'&&s.b.k===0){ const nu=s.a; const e2=replace(s,nu); return {e:e2,reason:'the plus-zero technique',node:nu}; } }
-  // pack the innermost S(num k) with k+1 ≤ 4
-  let target=null; (function rec(x,p){ if(x.t==='S'){ if(x.x.t==='n'&&x.x.k<4) target={x,p}; else rec(x.x,x); } })(e,null);
-  if(target){ const nu=num(target.x.x.k+1); const e2=replace(target.x,nu); return {e:e2,reason:`${nu.k} names S(${nu.k-1})`,node:nu}; }
-  return null;
+/* ---------- left: goals × routes ---------- */
+const GOALS=[
+ {id:'g1',b:'every puppy is an animal',t:R`\forall x\,(x \text{ is a puppy} \Rightarrow x \text{ is an animal})`,h:'given: every puppy is a dog; every dog is an animal'},
+ {id:'g2',b:'Rex barks at it ⇒ it is not a cat',t:R`\forall x\,(\text{Rex barks at } x \Rightarrow \neg(x \text{ is a cat}))`,h:'given: Rex never barks at a cat'},
+ {id:'g3',b:'Ann is on the Main Street',t:R`\text{Ann is on the Main Street}`,h:'given: Ann is at the bakery ∨ at the library; each is on the Main Street'},
+ {id:'g4',b:'every pet is furry',t:R`\forall x\,(x \text{ is a pet} \Rightarrow x \text{ is furry})`,h:'given: the creatures of the hunter\'s world'},
+ {id:'g5',b:'nothing is both a cat and a dog',t:R`\neg\,\exists x\,(x \text{ is a cat} \land x \text{ is a dog})`,h:'given: no cat is a dog'}
+];
+const ROUTES=[['direct','straight through'],['cp','turned about'],['cases','by cases'],['cx','counterexample'],['ref','refute']];
+const S=(note)=>({ok:false,note});
+const P=(lines,note)=>({ok:true,lines,note});
+const BOOK={
+ g1:{
+  direct:P([[R`\text{let } n;\; \text{suppose } n \text{ is a puppy}`,'opening lines from the ∀ and the ⇒'],[R`n \text{ is a dog}`,'use an every (every puppy is a dog), carry through'],[R`n \text{ is an animal}`,'use an every (every dog is an animal), carry through'],[R`\forall x\,(\dots)`,'prove an if; speak of everything']],'Flows: carry-through, and carry-through again, inside the skeleton.'),
+  cp:S('Turned about: if n is not an animal, n is not a puppy. Provable by techs (suppose ¬animal; suppose puppy; carry through, clash; refute). But turning it back to the goal needs turn-and-deny’s backward direction, which waits for rung 7 since “n is an animal” is not a denial. Fine for a creature you can look at; the direct route needs nothing.'),
+  cases:S('You have no or-line. Splitting on “n is a dog or not” would be either-way, granted before rung 7 only for settled statements. For a puppy in front of you, fine; as a shape, there is nothing to split on.'),
+  cx:S('No counterexample exists: the direct proof covers every n. Hunting is for claims you suspect are not so; a claim that is so gives you nothing to find.'),
+  ref:S('Refutation proves a not. This goal is not a not, and supposing it and hunting for ⊥ would find none, because it is so. (Refuting its denial gives only ¬¬, the step no rung before 7 can finish.)')},
+ g2:{
+  direct:S('Let n be anything; suppose Rex barks at n. You want “n is not a cat”. You have an every about cats, and n is not known to be a cat: the hypothesis and the every do not meet. Stuck at the opening, until you read the conclusion as a denial and refute, which is the turned-about route.'),
+  cp:P([[R`\text{let } n;\; \text{suppose Rex barks at } n`,'opening lines'],[R`\text{suppose } n \text{ is a cat}`,'the conclusion is a denial: suppose the thing after the ¬'],[R`\neg(\text{Rex barks at } n)`,'use an every (Rex never barks at a cat), carry through'],[R`\bot,\;\text{ so } \neg(n \text{ is a cat})`,'clash; refute'],[R`\forall x\,(\dots)`,'prove an if; speak of everything']],'Flows: the turned-about goal is exactly what the every says. Techs alone, since the conclusion is a denial.'),
+  cases:S('No or-line given. Nothing to split on.'),
+  cx:S('None exists: the turned-about proof covers every n.'),
+  ref:S('Not a not-statement at the top, so refutation does not prove it. Inside the turned-about route, though, a refutation is what proves the denial for each n.')},
+ g3:{
+  direct:S('You have “bakery ∨ library” and ifs from each to the Main Street. To carry an if through you need its hypothesis, and an or in hand does not give you either disjunct. The or is asking for cases.'),
+  cp:S('No if at the top of the goal to turn about.'),
+  cases:P([[R`\text{Ann is at the bakery} \lor \text{Ann is at the library}`,'given: the or-line'],[R`\text{case bakery:}\quad \text{Ann is on the Main Street}`,'carry an if through'],[R`\text{case library:}\quad \text{Ann is on the Main Street}`,'carry an if through'],[R`\text{Ann is on the Main Street}`,'reason by cases']],'Flows: each case is a row.'),
+  cx:S('Not an every. Nothing to hunt.'),
+  ref:S('Not a not-statement. Refutation has nothing to aim at.')},
+ g4:{
+  direct:S('Let n be anything; suppose n is a pet. You need “n is furry”, and nothing you have connects being a pet with fur. Stuck, and for a reason: the claim is not so.'),
+  cp:S('“If n is not furry, n is not a pet”: also stuck, and also not so. A contrapositive fails exactly when the original does.'),
+  cases:S('Split on “n is a mammal or not”? For the mammals, fine; for the rest, nothing. The cases expose the failure rather than proving anything.'),
+  cx:P([[R`\text{Nemo is a pet} \land \neg(\text{Nemo is furry})`,'given: the goldfish'],[R`\exists x\,(x \text{ is a pet} \land \neg(x \text{ is furry}))`,'show an example'],[R`\neg\,\forall x\,(x \text{ is a pet} \Rightarrow x \text{ is furry})`,'the counterexample technique, with negated-if inside']],'Flows: an example does it.'),
+  ref:P([[R`\text{suppose } \forall x\,(x \text{ is a pet} \Rightarrow x \text{ is furry})`,'suppose the claim'],[R`\text{Nemo is a pet} \Rightarrow \text{Nemo is furry}`,'use the every on Nemo'],[R`\text{Nemo is furry};\;\; \bot`,'carry through; clash with “Nemo is not furry”'],[R`\neg\,\forall x\,(\dots)`,'refute']],'Goes through: a counterexample is a refutation that uses an instance. Same argument, a different shape.')},
+ g5:{
+  direct:S('The goal begins with ¬, and before rung 7 a not is proved by refuting. “Straight through” for a not is the refutation; switch to that route.'),
+  cp:S('No if at the top to turn about.'),
+  cases:S('Splitting “n is a cat or not” for each n still needs a refutation inside the cat case, and the split is either-way besides. Cases add a layer and no help.'),
+  cx:S('A counterexample would be a thing that is both a cat and a dog. You cannot look at every thing; you need an argument, and it is the refutation.'),
+  ref:P([[R`\text{suppose } \exists x\,(x \text{ is a cat} \land x \text{ is a dog})`,'suppose the thing after the ¬'],[R`\text{call it } b:\;\; b \text{ is a cat} \land b \text{ is a dog}`,'use a some'],[R`\neg(b \text{ is a dog})`,'keep left; use an every (no cat is a dog); carry through'],[R`\bot`,'keep right; clash'],[R`\neg\,\exists x\,(\dots)`,'the some closes on ⊥; refute']],'Flows: it is a not, and refutation is exactly how a not is proved.')}
+};
+let G='g1', RT='direct';
+function mkChips(host,list,cur,on){ list.forEach(([k,label])=>{ const b=document.createElement('button'); b.dataset.k=k; b.textContent=label; if(k===cur) b.className='on'; b.onclick=()=>{ [...host.querySelectorAll('button')].forEach(x=>x.classList.toggle('on',x===b)); on(k); }; host.appendChild(b); }); }
+mkChips(document.getElementById('gch'),GOALS.map(g=>[g.id,g.b]),G,k=>{ G=k; drawP(); });
+mkChips(document.getElementById('sch'),ROUTES,RT,k=>{ RT=k; drawP(); });
+function drawP(){
+  const g=GOALS.find(x=>x.id===G), e=BOOK[G][RT]; const gb=document.getElementById('goal'); gb.innerHTML='<div class="kg"></div><div style="font-size:.8rem;color:var(--muted)"></div>'; tex(gb.children[0],g.t,true); gb.children[1].textContent=g.h;
+  const sv=document.getElementById('sv'), pl=document.getElementById('plines');
+  const tally=ROUTES.map(([k,l])=>(BOOK[G][k].ok?'✓ ':'· ')+l).join('   ');
+  sv.innerHTML=(e.ok?'<b class="teal">goes through.</b> '+e.note:'<b class="ember">sticks.</b>')+'<br><span style="color:var(--muted)">this goal: '+tally+'</span>';
+  if(e.ok){ pl.innerHTML='<div class="brk brk-ember" data-label="'+ROUTES.find(r=>r[0]===RT)[1]+': the argument, a move to a row"><div class="rows">'+e.lines.map(([t,n])=>'<div class="row"><div class="m" data-tex="'+t.replace(/"/g,'&quot;')+'"></div><div class="n">'+n+'</div></div>').join('')+'</div></div>'; renderAll(pl); }
+  else { pl.innerHTML='<div class="brk brk-plain" data-label="where it sticks"><div class="rows"><p style="font-family:var(--serif);font-size:.95rem;max-width:none">'+e.note+'</p></div></div>'; }
 }
-let cur, hist;
-function restart(){ cur=add(num(A),num(B)); hist=[{tex:show(cur),reason:'the sum to unfold'}]; drawU(); }
-function clone(e){ return JSON.parse(JSON.stringify(e)); }
-function one(){ const c=clone(cur); const r=stepOnce(c); if(!r) return false; cur=r.e; hist.push({tex:show(cur,{node:r.node}),reason:r.reason}); return true; }
-function drawU(){
-  const L=hist.slice(-7); const first=hist[0].tex;
-  let rows=L.map((h,i)=>{ const isFirst=(hist.length-L.length+i)===0; return (isFirst?'':'= ')+h.tex+'\\quad\\text{'+h.reason+'}'; });
-  if(hist.length>7) rows.unshift('\\vdots');
-  const done=!stepOnce(clone(cur));
-  if(done) rows.push(`\\htmlClass{keep}{${A} + ${B} = ${show(cur)}}\\ \\ \\blacksquare`);
-  tex(document.getElementById('eqU'),`\\begin{gathered}${rows.join('\\\\ ')}\\end{gathered}`,true);
-  document.getElementById('step1').disabled=done; document.getElementById('stepAll').disabled=done;
-}
-function chips(id,get,set){ const el=document.getElementById(id); [0,1,2,3,4].forEach(k=>{ const b=document.createElement('button'); b.textContent=String(k); if(k===get()) b.className='on'; b.onclick=()=>{ set(k); [...el.querySelectorAll('button')].forEach(z=>z.classList.toggle('on',z===b)); restart(); drawB(); }; el.appendChild(b); }); }
-chips('ach',()=>A,k=>A=k); chips('bch',()=>B,k=>B=k);
-document.getElementById('step1').onclick=()=>{ one(); drawU(); };
-document.getElementById('stepAll').onclick=()=>{ while(one()); drawU(); };
-document.getElementById('restart').onclick=restart;
-restart();
+drawP();
 
-/* ---------- right: a law as rows of beads ---------- */
-const LAWS=[
-  {id:'pc',lab:'p + b = b + p',L:(a,b)=>[['g',a],['e',b]],Rr:(a,b)=>[['e',b],['g',a]],lt:'p + b',rt:'b + p',ok:true,why:'the turn-about technique for plus'},
-  {id:'pl',lab:'S(p) + b = S(p + b)',L:(a,b)=>[['g',a],['t',1],['e',b]],Rr:(a,b)=>[['g',a],['e',b],['t',1]],lt:'S(p) + b',rt:'S(p + b)',ok:true,why:'the next-on-the-left technique for plus'},
-  {id:'pz',lab:'0 + p = p',L:(a,b)=>[['g',a]],Rr:(a,b)=>[['g',a]],lt:'0 + p',rt:'p',ok:true,why:'the zero-plus technique'},
-  {id:'fk',lab:'S(p + b) = S(p) + S(b) ?',L:(a,b)=>[['g',a],['e',b],['t',1]],Rr:(a,b)=>[['g',a],['t',1],['e',b],['t',1]],lt:'S(p + b)',rt:'S(p) + S(b)',ok:false,why:'an extra bead on the right: never-its-own-next'}];
-let li=0; const lch=document.getElementById('lch');
-LAWS.forEach((Lw,i)=>{ const b=document.createElement('button'); b.textContent=Lw.lab; if(i===li) b.className='on'; b.onclick=()=>{ li=i; [...lch.querySelectorAll('button')].forEach(z=>z.classList.toggle('on',z===b)); drawB(); }; lch.appendChild(b); });
-const cvB=document.getElementById('cvB');
-function drawB(){
-  const {c,W,H}=size(cvB,(cvB.clientWidth||300)<480?1.6:2.4); c.fillStyle=col('--card'); c.fillRect(0,0,W,H);
-  const Lw=LAWS[li]; const left=Lw.L(A,B), right=Lw.Rr(A,B);
-  const cnt=x=>x.reduce((s,[k,n])=>s+n,0); const nl=cnt(left), nr=cnt(right);
-  const maxN=Math.max(nl,nr,1), lx=W<480?94:112, r=Math.min(10,(W-lx-12)/(maxN*2.6));
-  const colr=k=>k==='g'?col('--gold'):(k==='e'?col('--ember'):col('--teal'));
-  c.font=(W<480?'10.5px':'12px')+' IBM Plex Mono, monospace'; c.textBaseline='middle';
-  const row=(beads,y,lab)=>{ c.fillStyle=col('--ink'); c.textAlign='left'; c.fillText(lab,6,y); let x=lx+r; beads.forEach(([k,n])=>{ for(let i=0;i<n;i++){ c.beginPath(); c.arc(x,y,r,0,7); c.fillStyle=colr(k); c.fill(); x+=r*2.6; } x+=r*.8; }); if(!cnt(beads)){ c.fillStyle=col('--muted'); c.fillText('no beads',lx,y); } };
-  row(left,H*.32,Lw.lt); row(right,H*.7,Lw.rt);
-  const same=nl===nr;
-  const sub=(s)=>s.replace(/\bp\b/g,String(A)).replace(/\bb\b/g,String(B));
-  let t=`${sub(Lw.lt)} = ${nameOf(nl)}\\\\ ${sub(Lw.rt)} = ${nameOf(nr)}\\\\ `;
-  t+= same? `\\htmlClass{keep}{\\text{the same number here}}\\\\ \\text{for every } p, b\\text{: ${Lw.why}}` : `\\htmlClass{new}{\\text{different numbers}}\\\\ \\text{${Lw.why}}`;
-  tex(document.getElementById('eqB'),`\\begin{gathered}${t}\\end{gathered}`,true);
+/* ---------- right: the counterexample hunter ---------- */
+const W=[['Tibbles',['cat','pet','mammal','furry']],['Rex',['dog','pet','mammal','furry']],['Robin',['bird','flier']],['Pengu',['bird','swimmer']],['Nemo',['fish','pet','swimmer']],['Flit',['mammal','flier','furry']],['Daisy',['cow','mammal','furry']]];
+const CL=[
+ {id:'c1',b:'every bird flies',A:'bird',B:'flier',neg:false},
+ {id:'c2',b:'every pet is furry',A:'pet',B:'furry',neg:false},
+ {id:'c3',b:'every flier is a bird',A:'flier',B:'bird',neg:false},
+ {id:'c4',b:'every cat is a pet',A:'cat',B:'pet',neg:false},
+ {id:'c5',b:'no swimmer is a pet',A:'swimmer',B:'pet',neg:true},
+ {id:'c6',b:'every mammal is furry',A:'mammal',B:'furry',neg:false}
+];
+let C='c1', on=new Set(W.map(w=>w[0]));
+mkChips(document.getElementById('cch'),CL.map(c=>[c.id,c.b]),C,k=>{ C=k; drawH(); });
+function drawH(){
+  const c=CL.find(x=>x.id===C); const cr=document.getElementById('crea'); cr.innerHTML='';
+  const bad=W.filter(([n,k])=>on.has(n)&&k.includes(c.A)&&(c.neg?k.includes(c.B):!k.includes(c.B)));
+  W.forEach(([n,k])=>{ const b=document.createElement('button'); b.type='button'; b.textContent=n; b.title=k.join(', '); b.className=(on.has(n)?'':'off')+(bad.length&&bad[0][0]===n?' hit':''); b.onclick=()=>{ if(on.has(n)) on.delete(n); else on.add(n); drawH(); }; cr.appendChild(b); });
+  const hv=document.getElementById('hv');
+  if(bad.length){ const [n,k]=bad[0]; const PH={furry:'furry'}; const ph=t=>PH[t]||('a '+t); hv.textContent='Counterexample: '+n+' ('+k.join(', ')+'). '+n+' is '+ph(c.A)+(c.neg?' and '+ph(c.B):' and not '+ph(c.B))+'. Show an example, then the counterexample technique: the every is dead, whatever else the world holds.'; }
+  else { const inA=W.filter(([n,k])=>on.has(n)&&k.includes(c.A)); hv.textContent= inA.length? 'Every '+c.A+' in this world passes: '+inA.map(w=>w[0]).join(', ')+'. That proves nothing about a '+c.A+' not in it; only an argument from what the words mean covers every '+c.A+'. Put a creature back and see.' : 'No '+c.A+' at all in this world: the every is vacuously true, and says nothing.'; }
 }
-new ResizeObserver(drawB).observe(cvB);
-if(window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change',drawB);
-drawB();
+drawH();
 
 /* ---------- slides ---------- */
 const N='\\htmlClass{new}', K='\\htmlClass{keep}';
-const SYM={'≠':'$\\ne$','∈':'$\\in$','∉':'$\\notin$','⇔':'$\\Leftrightarrow$','⊆':'$\\subseteq$','∅':'$\\varnothing$','⊥':'$\\bot$','∀':'$\\forall$','∃':'$\\exists$','¬':'$\\neg$','∧':'$\\land$','∨':'$\\lor$','⇒':'$\\Rightarrow$','ℕ':'$\\mathbb N$','φ':'$\\varphi$','↦':'$\\mapsto$'};
-const tx=r=>r.replace(/[≠∈∉⇔⊆∅⊥∀∃¬∧∨⇒ℕφ↦]/gu,ch=>SYM[ch]);
-const col2=(...rows)=>'\\begin{aligned}'+rows.map(([l,r])=>'&'+l+' &&\\text{'+tx(r)+'}').join('\\\\ ')+'\\end{aligned}';
-stepper('#sl3',[
-  {k:'ember',kl:'the definition',t:R`\begin{gathered}f_p(0) = p,\qquad f_p(S(n)) = ${N}{S(f_p(n))}\\ p + b = f_p(b)\end{gathered}`,n:`For each number p, recursion with start p and step s gives exactly one f_p. The low mark carries p. The sum p + b is the value of f_p at b.`},
-  {k:'ember',kl:'plus-zero and plus-a-next',t:R`p + 0 = p\qquad\qquad p + S(b) = ${N}{S(p + b)}`,n:`The defining lines, as techniques. Plus-a-next moves the next-one gesture out of the right-hand number and around the sum. Sums-are-numbers: a sum of numbers is a number.`}
-],{title:'The slides · the definition, and plus-zero and plus-a-next · ← → keys work'});
-stepper('#sl4a',[
-  {k:'ember',kl:'1 + 3 = 4',t:col2([`1 + 3 = 1 + ${N}{S(2)}`,'3 names S(2)'],[`= ${N}{S(1 + 2)}`,'the plus-a-next technique']),n:`The ladder's earliest arithmetic. Unpack the right-hand name, then plus-a-next.`},
-  {k:'ember',kl:'1 + 3 = 4',t:col2([`= S(1 + ${N}{S(1)})`,'2 names S(1)'],[`= S(${N}{S(1 + 1)})`,'the plus-a-next technique, inside']),n:`The same pair of moves again, a level in. Each move inside the S(…) is cited to the swap axiom.`},
-  {k:'ember',kl:'1 + 3 = 4',t:col2([`= S(S(1 + ${N}{S(0)}))`,'1 names S(0), the right-hand 1'],[`= S(S(${N}{S(1 + 0)}))`,'the plus-a-next technique, inside']),n:`And again. Only the right-hand 1 is unpacked: the left-hand number is never touched.`},
-  {k:'ember',kl:'1 + 3 = 4',t:col2([`= S(S(S(${N}{1})))`,'the plus-zero technique, inside'],[`= S(S(${N}{2}))`,'2 names S(1)']),n:`Nothing is left to add: plus-zero closes the sum. Now the names are packed back up.`},
-  {k:'ember',kl:'1 + 3 = 4',t:col2([`= S(${N}{3})`,'3 names S(2)'],[`= ${N}{4} \\quad \\blacksquare`,'4 names S(3)']),n:`∎ One and three make four. Every line stands on a definition or a name, and every definition on the pages below, down to a thing being the same as itself.`}
-],{title:'The slides · 1 + 3 = 4 · ← → keys work'});
-stepper('#sl4b',[
-  {k:'ember',kl:'2 + 2 = 4',t:R`2 + 2 = S(2 + 1) = S(S(2 + 0)) = S(S(2)) = S(3) = ${N}{4}`,n:`Written as a chain, with the unpacking of 2 and 1 done silently: 2 + S(1), plus-a-next; 2 + S(0), plus-a-next; plus-zero; then the names. On paper, write every move.`}
-],{title:'The slides · 2 + 2 = 4 · ← → keys work'});
-stepper('#sl5a',[
-  {k:'ember',kl:'the plus-one technique',t:R`n + 1 = n + S(0) = S(n + 0) = ${N}{S(n)}`,n:`∎ Adding one is taking the next one. From here on n + 1 may be written for S(n). So 3 + 1 = S(3) = 4 in two moves.`}
-],{title:'The slides · the plus-one technique · ← → keys work'});
-stepper('#sl5b',[
-  {k:'ember',kl:'doubling',t:R`d(0) = 0 + 0,\qquad d(S(n)) = S(S(n + n)) = ${N}{S(n) + S(n)}`,n:`4c's doubling function is n ↦ n + n: base by plus-zero; step by plus-a-next and next-on-the-left for plus. Same start, same step, so by recursion they are the same function.`}
-],{title:'The slides · doubling · ← → keys work'});
-stepper('#sl6',[
-  {k:'ember',kl:'the zero-plus technique',t:col2([`0 + 0 = 0`,'plus-zero: the base'],[`0 + S(p) = S(0 + p) = S(${K}{p})`,'plus-a-next; the hypothesis']),n:`∎ Plus-zero says p + 0 = p; 0 + p = p is a different statement and needs its own induction.`}
-],{title:'The slides · the zero-plus technique · ← → keys work'});
-stepper('#sl7',[
-  {k:'ember',kl:'the next-on-the-left technique for plus',t:col2([`S(p) + 0 = S(p) = S(p + 0)`,'plus-zero, on each side: the base'],[`S(p) + S(b) = S(${K}{S(p) + b})`,'plus-a-next'],[`= S(S(p + b)) = S(${N}{p + S(b)})`,'hypothesis; plus-a-next']),n:`∎ The partner of plus-a-next: the next-one gesture comes out of the left-hand number too.`}
-],{title:'The slides · the next-on-the-left technique for plus · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'the layout',t:R`\forall x\,(x \text{ is a cat} \Rightarrow x \text{ is content})\,?`,n:`Given: every cat purrs; every purrer is content. The claim: every cat is content. Shape before anything: an every around an if. So the argument opens “speak of anything, call it n; suppose n is a cat”, and it closes by undoing those two, in reverse order.`},
+  {k:'ember',kl:'the layout',t:R`\text{Speak of anything; call it } n. \;\; \text{Suppose } n \text{ is a cat.}`,n:`Speak of anything; supposed. The shape of the goal says so. Nothing is assumed about n beyond the supposition, until we drop it.`},
+  {k:'ember',kl:'the layout',t:R`\text{Every cat purrs, so } ${N}{n \text{ purrs.}}`,n:`Use the every in “every cat purrs” on n, and carry the if through. This is the step that took thought: it is where an every you have earns its place.`},
+  {k:'ember',kl:'the layout',t:R`\text{Every purrer is content, so } n \text{ is content.}`,n:`Use the every in “every purrer is content” on n, and carry the if through, from “n purrs”.`},
+  {k:'ember',kl:'the layout',t:R`\begin{aligned}&\text{So if } n \text{ is a cat, it is content.}\\ &\text{And } n \text{ was anything: every cat is content.}\end{aligned}`,n:`Drop the supposition: that proves an if. n was anything, so speak of everything. These two closing steps are usually said together when the shape is clear.`}
+],{title:'The slides · the layout · ← → keys work'});
 stepper('#sl8',[
-  {k:'ember',kl:'the turn-about technique for plus',t:col2([`p + 0 = p = 0 + p`,'plus-zero; zero-plus: the base'],[`p + S(b) = S(${K}{p + b}) = S(b + p) = ${N}{S(b) + p}`,'plus-a-next; hypothesis; next-on-the-left for plus']),n:`∎ The order of the numbers added does not matter. The base needed zero-plus, the step needed next-on-the-left for plus: techniques come in a pecking order.`}
-],{title:'The slides · the turn-about technique for plus · ← → keys work'});
+  {k:'ember',kl:'a split inside a split',t:R`\text{Rex is indoors} \lor (\text{Rex is in the garden} \land (\text{Rex is wet} \lor \text{Rex is warm}))`,n:`Given, with “indoors ⇒ warm”. Claim: Rex is wet or warm. The outer or supplies the cases.`},
+  {k:'ember',kl:'a split inside a split',t:R`\begin{aligned}&\text{Suppose Rex is indoors. Then he is warm,}\\ &\text{so } ${N}{\text{he is wet or warm.}}\end{aligned}`,n:`The first case. Carry “indoors ⇒ warm” through, then add an option. The common conclusion is reached.`},
+  {k:'ember',kl:'a split inside a split',t:R`\begin{aligned}&\text{Suppose instead he is in the garden,}\\ &\text{and wet or warm. So he is wet or warm.}\end{aligned}`,n:`The second case. Keep right on the and. The inner or is already the common conclusion; nothing to split further here, as it happens. Had the inner or been “wet or cold”, you would split on it while supposing this case.`},
+  {k:'ember',kl:'a split inside a split',t:R`\text{Either way, Rex is wet or warm.}`,n:`By cases: every case reached the same conclusion. No list of examples could have done this; each case covers every way its option comes about.`}
+],{title:'The slides · a split inside a split · ← → keys work'});
 stepper('#sl9',[
-  {k:'ember',kl:'the regroup technique for plus',t:col2([`(p + b) + S(c) = S((p + b) + c)`,'plus-a-next'],[`= S(${K}{p + (b + c)})`,'hypothesis'],[`= p + S(b + c) = p + ${N}{(b + S(c))}`,'plus-a-next turned about, then plus-a-next inside']),n:`∎ The brackets do not matter. Base: (p + b) + 0 = p + b = p + (b + 0). From here on p + b + c may be written without brackets.`}
-],{title:'The slides · the regroup technique for plus · ← → keys work'});
+  {k:'ember',kl:'counterexample',t:R`\forall x\,(x \text{ is a flier} \Rightarrow x \text{ is a bird})\,?`,n:`A tempting claim. Robin passes, and so does every bird you can think of. Is that every flier?`},
+  {k:'ember',kl:'counterexample',t:R`\begin{aligned}&\text{Flit is a flier, and Flit is not a bird.}\\ &${N}{\text{So not every flier is a bird.}}\end{aligned}`,n:`A bat. Show an example, then the counterexample technique: the every is dead. Birds, piled up without end, could never have proved it.`}
+],{title:'The slides · counterexample · ← → keys work'});
 stepper('#sl10',[
-  {k:'ember',kl:'the cancel technique for plus',t:col2([`p + S(c) = b + S(c)`,'assumed'],[`S(p + c) = S(b + c)`,'plus-a-next, each side'],[`p + c = b + c;\\ \\ ${N}{p = b}`,'the different-nexts technique; the hypothesis']),n:`∎ Cancelling. Different-nexts carries sameness of next ones back to sameness of the numbers, one step at a time.`}
-],{title:'The slides · the cancel technique for plus · ← → keys work'});
-stepper('#sl11',[
-  {k:'ember',kl:'a fake',t:R`S(1 + 1) = 3\qquad S(1) + S(1) = ${N}{4}`,n:`S(p + b) = S(p) + S(b) is false. The next-one gesture comes out of either side alone (plus-a-next or next-on-the-left for plus), not both. In general the right side has an extra bead, and never-its-own-next says no number is its own next.`},
-  {k:'ember',kl:'a fake',t:R`1 + 3 = 2 + 2,\qquad 1 \ne 2`,n:`Cancelling needs the same number on both sides. p + c = b + d gives nothing about p and b on its own.`}
-],{title:'The slides · a fake · ← → keys work'});
+  {k:'ember',kl:'refutation',t:R`\neg\,\exists x\,(x \text{ is a parent of } x)\,?`,n:`Nobody is their own parent, given: every parent is older than their child; nobody is older than themselves. The goal starts with ¬, so the proof starts by supposing the thing after it.`},
+  {k:'ember',kl:'refutation',t:R`\text{Suppose someone is their own parent; call them } b.`,n:`Supposed, and then use a some: name the thing b, and suppose nothing else about it.`},
+  {k:'ember',kl:'refutation',t:R`\begin{aligned}&\text{A parent is older than their child, so } ${K}{b \text{ is older than } b.}\\ &\text{But nobody is older than themselves.}\end{aligned}`,n:`Use the every about parents on b and b, and carry the if through (teal: the piece that will clash). Then use the every about nobody on b.`},
+  {k:'ember',kl:'refutation',t:R`\text{That clashes. So } ${N}{\text{nobody is their own parent.}}`,n:`Clash, reaching ⊥; drop the supposition, and it is refuted. This proves a not, which is all refutation ever does.`}
+],{title:'The slides · refutation · ← → keys work'});
 stepper('#sl12',[
-  {k:'ember',kl:'backwards',t:R`1 + b = 4:\quad b = ${N}{3},\ \text{and only } 3`,n:`Find it by unfolding 1 + 3. Only one: 1 + b = 1 + b′ gives b + 1 = b′ + 1 (turn-about for plus), so b = b′ (cancel for plus). A later mark answers this question in general.`}
-],{title:'The slides · backwards · ← → keys work'});
-
-function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
-Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+  {k:'ember',kl:'backwards, then forwards',t:R`\text{Ann is Cal's aunt}\,?`,n:`Given: Ann is Ben's sister; Ben is Cal's father; an aunt is a sister of a parent; a father is a parent. Begin with the scratch work, from the goal backwards. What would make Ann an aunt?`},
+  {k:'ember',kl:'backwards, then forwards',t:R`\begin{aligned}&\text{Scratch: we want someone Ann is a sister of,}\\ &\text{who is a parent of Cal. Try Ben: a parent?}\end{aligned}`,n:`Unpack the goal: an aunt is a sister of a parent, a some. Ben is the candidate; Ann is his sister, given; is Ben a parent of Cal? A father is a parent, given. The road is found.`},
+  {k:'ember',kl:'backwards, then forwards',t:R`\begin{aligned}&\text{Write-up: Ben is Cal's father, and a father is a parent,}\\ &${K}{\text{so Ben is a parent of Cal.}}\end{aligned}`,n:`Now forwards, every line from what came before: use the every about fathers on Ben, and carry the if through.`},
+  {k:'ember',kl:'backwards, then forwards',t:R`\begin{aligned}&\text{Ann is a sister of Ben, a parent of Cal.}\\ &${N}{\text{So Ann is a sister of a parent of Cal: Cal's aunt.}}\end{aligned}`,n:`Join; show an example (Ben); pack “aunt”. Every step in the write-up runs forward, so it proves the claim; the scratch work only found the road.`}
+],{title:'The slides · backwards, then forwards · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

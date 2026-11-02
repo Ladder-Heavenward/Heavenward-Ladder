@@ -1,5 +1,5 @@
 /* flash cards, r03. */
-(window.LADDER_CARDS=window.LADDER_CARDS||{})["3a"]=[{"q":"S(x) = x ∪ {x}. What is S(x) called?","a":"the next one after x","w":["the gathering of x","the merge of x","the power set of x"],"why":"It has every member of x, and x besides."},
+(window.LADDER_CARDS=window.LADDER_CARDS||{})["3b"]=[{"q":"S(x) = x ∪ {x}. What is S(x) called?","a":"the next one after x","w":["the gathering of x","the merge of x","the power set of x"],"why":"It has every member of x, and x besides."},
  {"q":"S(∅). Which set?","a":"{∅}","w":["∅","{{∅}}","{∅, {∅}}"],"why":"∅ ∪ {∅} = {∅}."},
  {"q":"2 names which set?","a":"{0, 1}","w":["{1}","{0, 1, 2}","{{0}}"],"why":"Each named set is the set of those named before it."},
  {"q":"S(3). Which set?","a":"4","w":["{3}","{0, 1, 2}","3 ∪ 4"],"why":"S(3) = {0, 1, 2, 3}, which is 4."},
@@ -10,7 +10,7 @@
  {"q":"y ∈ S(x) ⇔ y ∈ x ∨ y = x. Which technique?","a":"the next-membership technique","w":["the in-its-next technique","the merge-membership technique alone","the same-members axiom"],"why":"The membership line of the next one."},
  {"q":"{1}. Is it a named set?","a":"no: it is none of 0, 1, 2, 3, 4","w":["yes: it is 2","yes: it is 1","no: it is not a set"],"why":"{1} ≠ 2, since 0 ∈ 2 and 0 ∉ {1}."},
  {"q":"The next set after x is {x} alone, so 2 would be {{∅}}. What is it called?","a":"the gathering-alone successor (Zermelo's)","w":["the pair (Kuratowski's)","the outsider-set argument (Russell's)","the some-set axiom"],"why":"The page names it the gathering-alone successor, and gives the accepted name in brackets: Zermelo's."}];
-(window.LADDER_CARDS=window.LADDER_CARDS||{})["3b"]=[{"q":"0 ∈ I, and ∀x (x ∈ I ⇒ S(x) ∈ I). What is said of I?","a":"I is inductive","w":["I is the whole run, and no more","I is a named set","I is cargo"],"why":"That is the page’s line for “inductive”."},
+(window.LADDER_CARDS=window.LADDER_CARDS||{})["3c"]=[{"q":"0 ∈ I, and ∀x (x ∈ I ⇒ S(x) ∈ I). What is said of I?","a":"I is inductive","w":["I is the whole run, and no more","I is a named set","I is cargo"],"why":"That is the page’s line for “inductive”."},
  {"q":"∀x (x ∈ I ⇒ S(x) ∈ I). What is this part called?","a":"the step part","w":["the base part","the axiom of infinity","cargo"],"why":"For any thing, if it is in I, so is its next one."},
  {"q":"4 = {0, 1, 2, 3}. Is it inductive?","a":"no: it fails the step part at 3","w":["yes: it holds 0","no: it fails the base part","yes: every named set is"],"why":"S(3) = 4, and 4 ∉ 4."},
  {"q":"“Some set is inductive.” Which axiom?","a":"the axiom of infinity","w":["the some-set axiom","the power axiom","the foundation axiom"],"why":"The one axiom of this rung."},
@@ -18,9 +18,9 @@
  {"q":"An inductive set holds {1}. What is {1} to it?","a":"cargo","w":["an entry of the run","its step part","its base"],"why":"Whatever an inductive set holds that is not an entry of the run."},
  {"q":"“Let I be the inductive set the axiom gives.” What is the fault?","a":"the axiom gives some inductive set, not the one","w":["nothing: there is only one","I should be named 4","an inductive set is a listing"],"why":"The axiom is used by use-a-some with a fresh name."},
  {"q":"A set you can finish writing, with a member. Is it inductive?","a":"no: the next one after some member is missing","w":["yes, if it holds 0","yes: it is a set","no: it has no members"],"why":"Any set you finish writing misses the next one after a member."},
- {"q":"Is the axiom of infinity proved from what came before?","a":"no: it is laid down","w":["yes: by the named-sets technique","yes: the run never stops","no: it is a technique"],"why":"The axiom is a choice, and 3c shows it cannot be proved."},
+ {"q":"Is the axiom of infinity proved from what came before?","a":"no: it is laid down","w":["yes: by the named-sets technique","yes: the run never stops","no: it is a technique"],"why":"The axiom is a choice, and 3d shows it cannot be proved."},
  {"q":"Does ∅ meet the step part?","a":"yes: it has no members to check","w":["no: 0 is not in it","no: S(∅) is not in it","yes: ∅ is inductive"],"why":"The every holds vacuously; ∅ fails the base part."}];
-(window.LADDER_CARDS=window.LADDER_CARDS||{})["3c"]=[{"q":"$V_0 = \\varnothing$; $V_{S(k)} = \\mathcal P(V_k)$. Which set is $V_2$?","a":"{0, 1}","w":["{0}","{1}","{0, 1, 2}"],"why":"$V_1 = \\{0\\}$, and its subsets are 0 and 1."},
+(window.LADDER_CARDS=window.LADDER_CARDS||{})["3d"]=[{"q":"$V_0 = \\varnothing$; $V_{S(k)} = \\mathcal P(V_k)$. Which set is $V_2$?","a":"{0, 1}","w":["{0}","{1}","{0, 1, 2}"],"why":"$V_1 = \\{0\\}$, and its subsets are 0 and 1."},
  {"q":"Which set is $V_3$?","a":"{0, 1, {1}, 2}","w":["{0, 1, 2}","{0, 1, 2, 3}","{{0}, {1}, {2}}"],"why":"The subsets of {0, 1}: ∅, {0}, {1}, {0, 1}."},
  {"q":"The pair (0, 1) is first in which layer?","a":"$V_4$","w":["$V_2$","$V_3$","$V_1$"],"why":"(0, 1) = {1, 2}, and 2 is first in $V_3$."},
  {"q":"A world where every earlier principle holds and a statement fails. What does it show?","a":"the principles cannot prove the statement","w":["the statement is false","the principles refute it","the statement holds there"],"why":"A proof would run in that world too."},
@@ -30,3 +30,13 @@
  {"q":"⋃𝒫(x). Which set?","a":"x","w":["𝒫(x)","{x}","S(x)"],"why":"x is a member of 𝒫(x), and every member of 𝒫(x) is part of x."},
  {"q":"The axiom of infinity: not a consequence of rungs 0 to 2. What word does the page give it?","a":"independent","w":["vacuous","settled","well-founded"],"why":"It is chosen, not discovered."},
  {"q":"A world with an inductive set, built to show infinity is not refuted. What does it lean on?","a":"an inductive set, taken on trust","w":["only rungs 0 to 2","a finished listing","the layered world"],"why":"The argument assumes what it would show."}];
+(window.LADDER_CARDS=window.LADDER_CARDS||{})["3a"]=[{"q":"For any set u: if every member of u meets φ, then u meets φ. What is said of φ?","a":"φ passes up","w":["φ climbs down","φ is foundation","φ holds at ∅ only"],"why":"That is the page’s line for passing up."},
+ {"q":"A condition that passes up is so of every set. Which axiom?","a":"the foundation axiom","w":["the same-members axiom","the some-set axiom","the power axiom"],"why":"Foundation, in the form that never splits so or not so."},
+ {"q":"u ∉ u, for every set u. Which technique?","a":"the no-self-membership technique","w":["the no-loop technique","the not-its-own-gathering technique","the no-set-of-all-sets technique"],"why":"The condition x ∉ x passes up."},
+ {"q":"No two sets are each a member of the other. Which technique?","a":"the no-loop technique","w":["the no-self-membership technique","the not-its-own-gathering technique","the equal-pairs technique"],"why":"Membership never loops."},
+ {"q":"u ≠ {u}, for every set u. Which technique?","a":"the not-its-own-gathering technique","w":["the no-self-membership technique","the no-loop technique","the one-empty-set technique"],"why":"No set is its own gathering."},
+ {"q":"No set has everything as a member. Which technique?","a":"the no-set-of-all-sets technique","w":["the outsider-set technique alone","the no-loop technique","the empty-set technique"],"why":"Proved by foundation, and again by the outsider sift."},
+ {"q":"Ω = {Ω}. Is Ω well-founded?","a":"no: its membership runs down forever","w":["yes: it has a member","yes: it is its own gathering","no: it has no members"],"why":"Ω ∈ Ω ∈ Ω, and on."},
+ {"q":"In a world with Ω = {Ω}, which axiom fails?","a":"foundation","w":["same-members","gather","sift"],"why":"x ∉ x passes up, and Ω breaks it."},
+ {"q":"φ(∅) shown, so ∀x φ(x) “by foundation”. What is wrong?","a":"foundation asks that φ pass up at every set","w":["nothing: ∅ is the bottom","foundation needs φ at Ω","φ(∅) is vacuous"],"why":"Holding at ∅ is not passing up."},
+ {"q":"“The condition passes up: it held on the sets we looked at.” Is passing up shown?","a":"no: passing up is an every, proved of anything","w":["yes, if enough sets were looked at","yes, by foundation","no: it must hold at Ω"],"why":"An every is proved by speaking of anything."}];

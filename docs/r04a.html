@@ -1,340 +1,324 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>4a · The smallest inductive set</title>
+<title>4a · Prove it</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
 <link rel="stylesheet" href="rung.css">
 <style>
-.pic .panels{grid-template-columns:1fr 1fr}
-@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
-.panel{align-content:start;min-width:0}
-.pic .eqbox{font-size:.95rem;white-space:normal}
-@media (max-width:520px){.pic .eqbox{font-size:.82rem}}
-#cvV{touch-action:manipulation}
+.paid{margin:1.2rem 0 1.6rem;min-width:0;max-width:100%;overflow-x:auto}
+.basement .stepgroup{min-width:0;max-width:100%}
+.paid h4{margin:.2rem 0 .3rem;font-size:1rem}
+.paid .from{font-size:.85rem;color:var(--muted)}
+.basement .stepgroup{border-top:1px solid var(--grid);padding-top:.6rem;margin-top:1.4rem}
 .rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
-@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.tools{display:block;font-size:.82rem;color:var(--muted);margin-top:4px}
 </style>
 <link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r04.html">← 4 operating over a series</a><a href="r04b.html">next: 4b induction →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r04.html">← 4 operating over a series</a><a href="r04b.html">next: 4b the smallest inductive set →</a></p>
   <div class="tags"><span class="tag proof">4a · proof</span></div>
-  <h1>The smallest inductive set</h1>
-  <p data-pid="2116cf">By rung 3's axiom, some set is inductive, and nothing says what else such a set holds. This step throws the extra away. From an inductive set you have, it sifts the things that are in every inductive set. It proves that the result does not depend on which inductive set you started from, and gives it a mark of its own and a name for its members. Then it proves the facts that make it the right object. It is inductive itself, and it is a part of every inductive set. A stray set that is nobody's next is not in it. And different sets have different next ones.</p>
-  <p class="gesture" data-pid="6797e1">Keep exactly what every inductive set holds. That set holds 0 and the next one after each of its members, it sits inside every inductive set, and anything that is not 0 and is nobody's next is thrown out of it. And the next-one gesture never sends different sets to the same place.</p>
-  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r01e.html">1e</a> (every, some, their techs), <a href="r02a.html">2a</a> (same-members, ⊆, the double-inclusion technique), <a href="r02b.html">2b</a> (the sift axiom, the sift-is-part technique), <a href="r02f.html">2f</a> (the no-loop technique), <a href="r03a.html">3a</a> (S, the names, the techniques next-membership, in-its-next, next-never-empty) and <a href="r03b.html">3b</a> (inductive, the infinity axiom, the named-sets-are-inductive technique). <a href="r04b.html">4b</a> proves induction from this step's techniques; <a href="r04c.html">4c</a> builds functions on the set this step makes; 4e to 4g do arithmetic and order on it.</p></div>
-  <h3>New marks on this rung</h3>
-  <p data-pid="7eb9c7">Each mark below is said first in plain words. Each gets its own “from here on” line in the step named, before any proof uses it.</p>
-  <ul>
-    <li data-pid="11c099">ℕ, the set of the things in every inductive set; “n is a number” means n ∈ ℕ (4a)</li>
-    <li data-pid="bfb955">∀n ∈ s and ∃n ∈ s, every and some kept to the members of s (4a)</li>
-    <li data-pid="227e0d">“S is one-to-one”: different sets have different next ones (4a)</li>
-    <li data-pid="4ddb49">“t is a transitive set”: every member of t is a part of t (4b)</li>
-    <li data-pid="1a4044">f : A → B, a function from A to B; f(x), the one thing f pairs with x; x ↦ t(x), the rule that takes x to t(x)</li>
-    <li data-pid="c48919">a low mark that is a letter, as in f<sub>p</sub>, part of the name (4e)</li>
-    <li data-pid="5e4f94">p + b, the sum; n + 1 for S(n); p + b + c without brackets (4e)</li>
-    <li data-pid="2f308f">k · b, the product; k<sup>b</sup>, the power, with b written small and high (4f)</li>
-    <li data-pid="4f2cfc">p &lt; b, p ≤ b, b &gt; p, b ≥ p, less and at most; “settled”, said of a set of numbers (4g)</li>
-    <li data-pid="0c8bb2">5, 6, 7, 8, 9, the names after 4; “ten” and 10; digit; a list, its entries p<sub>1</sub>, p<sub>2</sub>, ⋯, p<sub>k</sub>; a tens numeral and its value; a numeral in twos, such as 1101<sub>2</sub> (4h)</li>
-    <li data-pid="61768a">d ∣ n and d ∤ n, divides and does not divide; ∃k ≤ m and ∀k ≤ m; quotient, remainder, even, odd, prime; gcd(u, b); p<sub>1</sub> · p<sub>2</sub> · ⋯ · p<sub>k</sub>, the product of a list (4i)</li>
-    <li data-pid="939901">a matching; “X has n members”; Σ, for adding up; n!; an arrangement; the two-high mark read “n choose k” (4j)</li>
-    <li data-pid="ebc10a">⟦P⟧, the mark of a statement P; A ⊕ B, exclusive or; nand(A, B) (4·comp)</li>
-    <li data-pid="069539">b − p, when p ≤ b; “k of n”, a chance (4·stat)</li>
-  </ul>
+  <h1>Prove it</h1>
+  <p data-pid="4d0a11">Since 1a you have worked lines; since 2a, rows; since 3a, boxes. Every row came with a reason (2a3). Those arguments convinced, and they were right. But they used a thing the ladder had never built: the proof itself. Counting, induction and lists are built in the steps after this one, so here they are held in trust, each flagged where it opens and closed where it is built. That is the trade: the proof comes first, and every step after it can be written as one. This step starts with questions, and each one picks up your last answer. Work them in order. By the end you will have built the thing the ladder has been holding in trust, and then the step gives it a syntax.</p>
+  <p data-pid="f66a6e">A row’s reason has been a given, an axiom or a tech all along (1a5, 1a6, 2a3). One thing is new here: <b>what a proof proves is always “from these givens, this foot”.</b> Change the givens and you have a different proof. A given nothing uses is harmless.</p>
+  <p data-pid="06aec6">Anything else is a <b>wish</b>: a line written with no given, axiom or tech behind it, such as “obvious” or “everyone knows” said in the middle of an argument. A wish stays a wish however true its statement is. It has two repairs: earn it from lines before it, or move it to the start as a given. And a reason points back, always, so that tracing a line through its reasons ends at givens and axioms and never goes round.</p>
+  <p class="gesture" data-pid="5e3602">Argue something from scratch. Then look at what your argument is made of: lines, what each stands under, and an order. Collect every line any argument could write, and see what kind of set that is. Then write it down the short way.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r01a.html">1a</a> (unpack, transform, pack), <a href="r01d.html">1d</a> (carry an if through), <a href="r02b.html">2b</a> (every and some), <a href="r02c.html">2c</a> (membership, parts), <a href="r02e.html">2e</a> (gather and merge), <a href="r02g.html">2g</a> (pairs in order), <a href="r03a.html">3a</a> (supposing, boxes, prove an if, refute) and <a href="r03b.html">3b</a> (each number is the set of the numbers before it). It borrows three things in plain words, each held in trust until its own step: the counting numbers (<a href="r04b.html">4b</a>), induction (<a href="r04c.html">4c</a>), and a function as its pairs and the smallest closed set (<a href="r04d.html">4d</a>). Every proof from <a href="r04f.html">4f</a> on is written in the form this step builds, and 4b to 4e write theirs again in that form in their basements. The basement writes the conclusions of rungs 0, 2 and 3, and 3c and 3d, again in that form.</p></div>
 </header>
 
 <section class="class step" data-step="4a1">
-  <h2 class="sthead"><span class="stno">4a1</span>Cargo, again</h2>
-  <p class="stands">Stands on 3b (inductive, the infinity axiom, cargo).</p>
-  <p data-pid="deb52d">The infinity axiom says some set is inductive: it holds 0, and whenever it holds a set it holds that set's next one. Use the some honestly and call such a set I. The named-sets-are-inductive technique put 0, 1, 2, 3, 4 in I, and S(4), and as far along the run as you care to write.</p>
-  <p data-pid="3e1c59">But I may hold other things. Example: if {1} is in I, then S({1}) is too, and S(S({1})). That is a chain of cargo, dragged along by the step part and never meeting the run. Another inductive set may carry no cargo, or different cargo.</p>
-  <p data-pid="bb799e"><b>So “every member of I” is not yet “every entry of the run”.</b> A proof about the members of I would be a proof about whatever cargo I happens to carry.</p>
+  <h2 class="sthead"><span class="stno">4a1</span>From scratch</h2>
+  <p class="stands">Stands on 1a (unpack), 3a (supposing, prove an if) and 2b (use an every).</p>
+  <div class="eyebrow">The chain · footings 4a1 to 4a7 ask first; the syntax comes after them</div>
+  <p data-pid="4d1b02">For a good reason, we begin with a run of questions which teach you more than we could with words alone.</p>
+  <p data-pid="3eb6a4">Plan for this step: suppose the first half of the if, walk from given to given, then report.</p>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">4a1.1</span><span class="ph know">know</span>What is cargo? <br>Why is “every member of I” not yet “every entry of the run”?</li>
+      <li><span class="qid">4a1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="\text{every smolt is}"></span> <span data-tex-inline="\text{a young salmon,}"></span> <span data-tex-inline="\text{every salmon is a fish,}"></span> <span data-tex-inline="\text{every fish swims}"></span></span>Argue, from scratch and in plain words, that if t is a smolt, t swims. One claim to a line.<br><span class="tools">Tools: <a href="r01a.html">1a</a> unpack; <a href="r03a.html#3a1">3a1</a> supposing; <a href="r03a.html#3a3">3a3</a> prove an if, closing the box with a report; <a href="r01d.html">1d</a> carry an if through; <a href="r02b.html">2b</a> use an every.</span></li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="4a2">
-  <h2 class="sthead"><span class="stno">4a2</span>The test that separates them</h2>
-  <p class="stands">Stands on 4a1 (cargo) and 3b (the illegal sift of “in every inductive set”).</p>
-  <p data-pid="ddce3b">3b's illegal-moves table named the test that separates them and refused to use it: the things that are in <i>every</i> inductive set. An entry of the run passes, since the named-sets-are-inductive technique puts it in each inductive set. The cargo {1} should fail, as long as some inductive set leaves it out. The trouble on 3b was that “the things in every inductive set” was a sift from nothing. Now there is a set to sift from.</p>
-  <p data-pid="80310a">Example: suppose one inductive set holds {1} and another does not. Then {1} fails the test. 2 passes it, since 2 is in every inductive set.</p>
+  <h2 class="sthead"><span class="stno">4a2</span>What each line stands under</h2>
+  <p class="stands">Stands on 4a1 (your argument) and 3a2 (a box: the suppositions still open).</p>
+  <p data-pid="298ce4">Read 3a2’s boxes from a single line: the suppositions still open when a line is written are what the line <b>stands under</b>.</p>
+  <p data-pid="66f901">Example: after “suppose it is raining”, every line up to the report stands under that one supposition. The report itself stands under nothing.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4a2.1</span><span class="ph know">know</span>What is the test that separates the run from the cargo? <br>Why could 3b not use it, and why can this footing?</li>
+      <li><span class="qid">4a2.1</span><span class="ph do">do</span>Take your argument from 4a1. Beside each line, write the suppositions still open when you wrote it. Write “nothing” where there are none.<br><span class="tools">Tools: <a href="r03a.html#3a2">3a2</a> what a line stands under: the boxes still open.</span></li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="4a3">
-  <h2 class="sthead"><span class="stno">4a3</span>The sift</h2>
-  <p class="stands">Stands on 4a2, 2b (conditions, sift) and 3b (inductive).</p>
-  <p data-pid="99bdfa">The condition, in words: x is in every inductive set. In marks, a statement with a gap at x:</p>
-  <div class="eqline" data-tex="\varphi(x):\qquad \forall J\,\big(J \text{ is inductive} \Rightarrow x \in J\big)"></div>
-  <p data-pid="c7ec87">It is a condition in 2b's sense: rung 1's joining words, ∈, and the word “inductive”, which unpacks into ∈ and S. It speaks of every set J, and that is allowed. What 2b forbade was sifting <i>from</i> everything; a condition may speak of anything it likes, as long as the set being sifted is a set you have. Sift it from I:</p>
-  <div class="eqline" data-tex="\{x \in I : \forall J\,(J \text{ is inductive} \Rightarrow x \in J)\}"></div>
-  <section class="slides" id="sl3a"><div class="eyebrow">The slides · the condition · ← → keys work</div></section>
-  <section class="slides" id="sl3b"><div class="eyebrow">The slides · the condition, unpacked · ← → keys work</div></section>
-  <section class="slides" id="sl3c"><div class="eyebrow">The slides · the sift · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">4a3</span>The argument as pairs</h2>
+  <p class="stands">Stands on 4a2, 2g (pairs in order) and 3b (each number is the set of the numbers before it). Holds two things in trust: the counting numbers (4b) and a function as its pairs (4d).</p>
+  <p data-pid="4ed5bd"><b>Held in trust until 4b and 4d.</b> This footing counts lines 0, 1, 2 and so on, and calls a numbered list a function. Neither is built yet, so here each means only this. The numbers are the ones 3b started, each the set of those before it. A function from a set pairs each of its members with exactly one thing. 4b gathers the numbers into one set, and 4d earns that a set of pairs can be a function.</p>
+  <p data-pid="55a25b">An order of things can be written as a function: number the things from 0, and pair each number with its thing.</p>
+  <p data-pid="77d034">Example: the list cat, dog, owl is the function {(0, cat), (1, dog), (2, owl)}. Its inputs are 0, 1 and 2, and 3b showed that those three are the members of 3.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4a3.1</span><span class="ph know">know</span>Why is the sift of I by “x is in every inductive set” legal, when 3b’s set was not?</li>
+      <li><span class="qid">4a3.1</span><span class="ph do">do</span>Number your lines from 0. Write the argument as a set of pairs: each number paired with its line and what that line stands under.<br>Say which set this set of pairs is a function from.<br><span class="tools">Tools: <a href="r02g.html">2g</a> pairs in order; <a href="r03b.html">3b</a> each number is the set of the numbers before it; <a href="r04d.html">4d</a> a function is its pairs, held in trust here.</span></li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="4a4">
-  <h2 class="sthead"><span class="stno">4a4</span>It does not matter which inductive set</h2>
-  <p class="stands">Stands on 4a3 (the sift), 2b (unpack and pack a sift) and 1e (use an every).</p>
-  <p data-pid="a53a73">Who is in it? Unpacking the sift gives both of these: y ∈ I, and y is in every inductive set. “y is in every inductive set” already gives “y ∈ I”, since I is an inductive set. So the members of the sift are exactly the things in every inductive set, and I has dropped out of the description.</p>
-  <p data-pid="fed96c">Whichever-inductive-set technique: <b>for any inductive set I, a thing is in the sift of I by “in every inductive set” exactly when it is in every inductive set.</b></p>
-  <p data-pid="118030">Each direction is short.</p>
-  <p data-pid="b5c47d">Let y be anything. Suppose first that y is in the sift. Unpack the sift: y is in I, and y is in every inductive set. Keep the second half. That is φ(y).</p>
-  <p data-pid="689a93">Now drop that supposition, and suppose instead φ(y): y is in every inductive set. I is an inductive set, so y is in I. Join the two: y is in I, and y is in every inductive set. Pack the sift: y is in it.</p>
-  <p data-pid="8d0ddd">Each way, the one gives the other. So y is in the sift exactly when φ(y). And y was anything.</p>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · the whichever-inductive-set technique · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">4a4</span>Someone else's list</h2>
+  <p class="stands">Stands on 4a3, 3a2 (what a line may cite) and 1e (the bad-row hunt).</p>
+  <p data-pid="f15def">Here is someone else's argument, written the way you wrote yours in 4a3.</p>
+  <p data-pid="92157e">Plan: read each line back into a plain line first. Then check, line by line, what each one leans on and what it stands under.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4a4.1</span><span class="ph know">know</span>What does the whichever-inductive-set technique say? <br>Why does I drop out of the description?</li>
+      <li><span class="qid">4a4.1</span><span class="ph undo">undo</span><span class="givens"><span data-tex-inline="L(0) = (\varnothing,\ R \Rightarrow W),"></span> <span data-tex-inline="L(1) = (\{R\},\ R),"></span> <span data-tex-inline="L(2) = (\{R\},\ W),"></span> <span data-tex-inline="L(3) = (\varnothing,\ R \Rightarrow W),"></span> <span data-tex-inline="L(4) = (\varnothing,\ W)"></span></span>This list is built the way you built yours in 4a3, with R “it rains” and W “the street is wet”. Read it back into plain words.<br>Then find the line that leans on something it may not, and find a way things could be with line 0 so and line 4 not.<br><span class="tools">Tools: <a href="r03a.html#3a2">3a2</a> a line may not cite one inside a closed box; <a href="r01e.html">1e</a> the bad-row hunt: a way things could be.</span></li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="4a5">
-  <h2 class="sthead"><span class="stno">4a5</span>The name ℕ</h2>
-  <p class="stands">Stands on 4a4, 2a7 (same-members) and 2b (naming ∅).</p>
-  <p data-pid="324867">So suppose you and a friend each have an inductive set, I and I′, and each of you sifts. Your sifts have the same members: a thing is in yours exactly when it is in every inductive set, exactly when it is in your friend's. Chain the exactly-whens, and the same-members axiom says the sifts are the same set. It does not matter which inductive set you sifted from.</p>
-  <p data-pid="53e18c">And the infinity axiom says there is an inductive set to sift from, so the some closes honestly. There is a set whose members are exactly the things in every inductive set, and its description mentions no particular I. There is only one such set, by same-members again.</p>
-  <p data-pid="3fbfc9">A set that exists and is the only one with its description may be given a name, as 2b named ∅. Here is the name:</p>
-  <p class="eqline" data-pid="9abac3">From here on, <span data-tex-inline="\mathbb N"></span> names the set whose members are exactly the things in every inductive set. Read it “N”, or “the counting numbers”, or “the natural numbers”. Its members are the <b>numbers</b>: from here on, “n is a number” means <span data-tex-inline="n \in \mathbb N"></span>.</p>
-  <p data-pid="380ddb">The mark is a capital N drawn with an extra stroke, which marks it as a name kept for this one set. What the line gives you to cite is its membership statement.</p>
-  <p data-pid="6dc76e">Membership-in-ℕ technique: <b>a thing is a number exactly when it is in every inductive set.</b></p>
-  <div class="eqline" data-tex="\begin{aligned}&amp;\textbf{Membership-in-}\mathbb N\textbf{ technique:}\qquad y \in \mathbb N \;\\ &amp;\quad \Leftrightarrow\; \forall J\,(J \text{ is inductive} \Rightarrow y \in J)\end{aligned}"></div>
-  <p data-pid="44f724">Every proof in this step that something is a number ends by packing membership-in-ℕ, and every proof that uses a number begins by unpacking it. A pair of habits of writing come with ℕ, and they are shorthand, not new statements:</p>
-  <section class="slides" id="sl5"><div class="eyebrow">The slides · the name · ← → keys work</div></section>
-  <section class="pic" id="pic">
-    <div class="eyebrow">The picture · what every voting set holds in common</div>
-    <div class="panel">
-      <div class="chips" role="group" aria-label="voters" id="vch"><span class="m" style="color:var(--muted)">voting:</span></div>
-      <div class="cap">Each row is a set as it might be: the axiom does not say which inductive sets there are. Gold dots: entries of the run; teal: the chain {1}, S({1}), S(S({1})); plum: the chain {2}, S({2}), S(S({2})). J is I with {1} sifted away and J′ is I with {2} sifted away, both proved inductive in this step. The last row keeps what is in every voting set.</div>
-      <canvas id="cvV"></canvas>
-      <div class="eqbox" id="eqV"></div>
-    </div>
-  </section>
+  <h2 class="sthead"><span class="stno">4a5</span>The rule for leaning</h2>
+  <p class="stands">Stands on 4a3 (your list), 4a4 (the broken line) and 2c (part of).</p>
+  <p data-pid="069186">Your list in 4a3 kept every line honest without a rule written down. The list in 4a4 broke one. Put the two side by side and the rule shows itself.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4a5.1</span><span class="ph know">know</span>What does ℕ name, and what licensed naming it? <br>What does the membership-in-ℕ technique say?</li>
+      <li><span class="qid">4a5.1</span><span class="ph undo">undo</span>From your list in 4a3 and the broken line in 4a4, write the rule: which earlier lines may a line lean on? Say it in terms of what each line stands under.<br><span class="tools">Tools: <a href="r02c.html">2c</a> part of (⊆); <a href="r03a.html#3a2">3a2</a> what a line may cite.</span></li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="4a6">
-  <h2 class="sthead"><span class="stno">4a6</span>Every and some, kept to a set</h2>
-  <p class="stands">Stands on 1e (every with ⇒, some with ∧).</p>
-  <p class="eqline" data-pid="1c35d5">From here on, <span data-tex-inline="\forall n \in a\; P(n)"></span> is short for <span data-tex-inline="\forall n\,(n \in a \Rightarrow P(n))"></span>, and <span data-tex-inline="\exists n \in a\; P(n)"></span> is short for <span data-tex-inline="\exists n\,(n \in a \land P(n))"></span>. Read them “for every n in a” and “for some n in a”.</p>
-  <p data-pid="6999b4">These are 1e's standard spellings, every with ⇒ and some with ∧, written shorter. The letters m, n and k will usually name numbers, by habit, not by rule; any letter is allowed.</p>
-  <p data-pid="ea81e4">One founder of the subject came to the numbers by this sift. Given a system and a step, he called a part of the system a chain when the step never leads out of it. He took the chain of a starting element to be what is common to every chain that holds that element. The counting numbers are the chain of the start under the next-one step.</p>
+  <h2 class="sthead"><span class="stno">4a6</span>All the lines at once</h2>
+  <p class="stands">Stands on 4a5 (the rule) and 2d (the sift). Holds two things in trust: induction (4c) and the smallest closed set (4d).</p>
+  <p data-pid="37330f">So far you have looked at one list at a time. Now collect every line that any list built by your rule could write, all into one set.</p>
+  <p data-pid="282f0e"><b>Held in trust until 4c and 4d.</b> Two tools are borrowed here, in plain words. First: if a set holds where you start, and one move never takes you out of it, then no run of moves does. That is induction, and 4c proves it. Second: among the sets that hold the start and that no move gets out of, there is a smallest one, the sift of what every such set holds. 4d earns that it exists and that no move gets out of it.</p>
+  <p data-pid="c700f6">Plan: show that one move never takes you out of the set. Then compare the set with the smallest closed set, held in trust above.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4a6.1</span><span class="ph know">know</span>What are ∀n ∈ a P(n) and ∃n ∈ a P(n) short for?</li>
+      <li><span class="qid">4a6.1</span><span class="ph bend">bend</span>Keep the givens of 4a1. Let C be the set of every line that some list built by your rule from 4a5 can write. Show that if lines are in C, whatever one move makes from them is in C.<br>Then say whether C is the smallest set that holds the given and supposed lines and is closed that way, as the smallest closed set held in trust above.<br><span class="tools">Tools: <a href="r02d.html">2d</a> the sift; <a href="r04c.html">4c</a> induction and <a href="r04d.html">4d</a> the smallest closed set, both held in trust in 4a6; <a href="r02c.html">2c</a> the double-inclusion technique.</span></li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="4a7">
-  <h2 class="sthead"><span class="stno">4a7</span>Inside every inductive set</h2>
-  <p class="stands">Stands on 4a5 (membership-in-ℕ) and 2a9 (⊆).</p>
-  <p data-pid="74435e">The earliest thing the name gives is what its description says.</p>
-  <p data-pid="7f42fb">Lies-below technique: <b>every number is in every inductive set.</b> That is to say, ℕ is a part of each of them.</p>
-  <p data-pid="2382d7">The plan: take any number y, and show that y is in J.</p>
-  <p data-pid="f038d4">Suppose J is inductive. Let y be anything, and suppose y is a number. Unpack membership-in-ℕ: y is in every inductive set. J is one of them, so y is in J.</p>
-  <p data-pid="fafd66">Drop the supposition that y is a number. Whatever y is, if y is a number then y is in J. Pack ⊆: ℕ is a part of J.</p>
-  <section class="slides" id="sl7"><div class="eyebrow">The slides · the lies-below technique · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">4a7</span>Lines that stand under nothing</h2>
+  <p class="stands">Stands on 4a6 (the set C) and 1e (the tables agree with the techs).</p>
+  <p data-pid="0f3227">A line that stands under nothing is where an argument ends. 1e checked the techs one row at a time. Here you check what C does with the givens you feed it.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4a7.1</span><span class="ph know">know</span>What does the lies-below technique say, and how is it proved?</li>
+      <li><span class="qid">4a7.1</span><span class="ph bend">bend</span>Take a line of C that stands under nothing. Try to find a way things could be with the three givens so and that line not.<br>Say what C does with the givens you feed it.<br><span class="tools">Tools: <a href="r01e.html">1e</a> the tables agree with the techs; <a href="r01e.html">1e</a> the bad-row hunt.</span></li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="4a8">
-  <h2 class="sthead"><span class="stno">4a8</span>0 is a number, and so is each next</h2>
-  <p class="stands">Stands on 4a5 (membership-in-ℕ), 3b3 (base part, step part) and 1d (prove an if).</p>
-  <p data-pid="c1dff7">Now both parts of “inductive”, for ℕ itself. The base part first.</p>
-  <p data-pid="09dafd">Zero-is-a-number technique: <b>0 is a number.</b></p>
-  <p data-pid="5a872d">The plan: 0 is in every inductive set, since that is the base part of each of them.</p>
-  <p data-pid="87b670">Let J be anything, and suppose J is inductive. Unpack “inductive”: 0 is in J, and J holds the next one after each of its members. Keep the first half: 0 is in J.</p>
-  <p data-pid="ec631d">Drop the supposition. J was anything, so 0 is in every inductive set. Pack membership-in-ℕ: 0 is a number.</p>
-  <p data-pid="ebac0a">The step part.</p>
-  <p data-pid="e1678f">Next-of-a-number technique: <b>if n is a number, so is the next one after n.</b></p>
-  <p data-pid="98a0a4">The plan: if n is in every inductive set, then so is S(n), because each of them carries n to S(n).</p>
-  <p data-pid="9d42a5">Suppose n is a number. Let J be anything, and suppose J is inductive. Unpack membership-in-ℕ on n: n is in every inductive set, so n is in J. Unpack “inductive” on J and keep its step part: J holds the next one after each of its members. Use it with n: S(n) is in J.</p>
-  <p data-pid="2a3ed3">Drop the supposition about J. J was anything, so S(n) is in every inductive set. Pack membership-in-ℕ: S(n) is a number. Drop the supposition about n: if n is a number, so is S(n).</p>
-  <section class="slides" id="sl8a"><div class="eyebrow">The slides · the zero-is-a-number technique · ← → keys work</div></section>
-  <section class="slides" id="sl8b"><div class="eyebrow">The slides · the next-of-a-number technique · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">4a8</span>What you built</h2>
+  <p class="stands">Stands on 4a1 to 4a7 (the chain).</p>
+  <div class="eyebrow">The syntax · footings 4a8 to 4a18; read them once the chain is done</div>
+  <p data-pid="4d1c03">Look back at the chain. In 4a2 every line turned out to carry two things: the statement, and the collection of suppositions it stands under. That collection may be empty, and the last line's is.</p>
+  <p data-pid="4d1d04"><b>A line of a proof is a pair: the suppositions it stands under, and the statement it says.</b></p>
+  <p data-pid="f2c04a">Example: in the fish argument, the line “the fish is a salmon” is the line ({the fish is a smolt}, the fish is a salmon). The last line is (∅, if the fish is a smolt, the fish swims).</p>
+  <p data-pid="4d1e05">Write the pair as (S, R), with S the collection of suppositions and R the statement. The pair is 2g's pair, so (S, R) and (R, S) are different things. Two lines are the same line exactly when both parts match.</p>
+  <p data-pid="12ec8b">In 4a3 the argument became a set of pairs; in 4a5 you wrote the rule for leaning; in 4a6 and 4a7 you found a set the rules cannot get out of, whose lines standing under nothing are the statements the givens force.</p>
+  <p data-pid="da5d41">That set is what the ladder has been holding in trust since 1a. Footings 4a9 to 4a18 state it once and name it.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4a8.1</span><span class="ph know">know</span>What do the zero-is-a-number and next-of-a-number techniques say? <br>From which part of “inductive” does each proof take its line?</li>
+      <li><span class="qid">4a8.1</span><span class="ph know">know</span>What is a line of a proof? <br>When are two lines the same line?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="4a9">
-  <h2 class="sthead"><span class="stno">4a9</span>The smallest inductive set</h2>
-  <p class="stands">Stands on 4a7 (lies-below), 4a8 and 2a (double-inclusion).</p>
-  <p data-pid="473a69">Join zero-is-a-number with next-of-a-number (spoken of every n) and pack “inductive”: ℕ is inductive. Put that beside lies-below and you have this step's main technique.</p>
-  <p data-pid="2cf1b2">Smallest-inductive-set technique: <b>ℕ is inductive, and ℕ is a part of every inductive set.</b> In marks: ℕ is inductive, and ℕ ⊆ J for every inductive set J.</p>
-  <div class="eqline" data-tex="\begin{aligned}&amp;\textbf{Smallest-inductive-set technique:}\qquad \mathbb N \text{ }\\ &amp;\quad \text{is inductive} \;\\ &amp;\quad \land\; \forall J\,(J \text{ is inductive} \Rightarrow \mathbb N \subseteq J)\end{aligned}"></div>
-  <p data-pid="0dce93">Read “smallest” with care. It does not mean “has the fewest members”, since nothing on the ladder has yet said what fewer means. It means: a part of every other inductive set.</p>
-  <p data-pid="fd84a5">And there is only one smallest. Suppose K is inductive and a part of every inductive set. Then K ⊆ ℕ, since ℕ is one of the inductive sets K is a part of. And ℕ ⊆ K, by the lies-below technique with K for J. So K = ℕ by the double-inclusion technique. The step's title names exactly one set.</p>
-  <p data-pid="5ee3fc">Now run the named-sets-are-inductive technique with ℕ in the place of the inductive set. It says that 0, 1, 2, 3, 4 are numbers, and S(4), and S(S(4)), as far as you write. Everything on the run you can name is in ℕ. What is not obvious yet is the other part, that ℕ holds nothing else, and that is where the cargo goes.</p>
-  <section class="slides" id="sl9a"><div class="eyebrow">The slides · the smallest-inductive-set technique · ← → keys work</div></section>
-  <section class="slides" id="sl9b"><div class="eyebrow">The slides · only one smallest · ← → keys work</div></section>
-  <section class="slides" id="sl9c"><div class="eyebrow">The slides · the run is in ℕ · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">4a9</span>A proof is a list</h2>
+  <p class="stands">Stands on 4a8 (a line is a pair), 3b and 4a3 (a list as a function, held in trust until 4d).</p>
+  <p data-pid="4d2007">A list of n lines is a function from n to lines. 3b showed that the number n is the set of the numbers before it: 4 is {0, 1, 2, 3}. So a list of four lines is a function L from {0, 1, 2, 3}, and L(2) is line 2.</p>
+  <p data-pid="bab6f0">Which lines come before line k? Exactly the numbers that are members of k, because k is the set of the numbers before it. The order of the lines costs nothing new.</p>
+  <p data-pid="4d2108">Now the rule. Fix a collection G of given statements. A list L of n lines is a <b>proof from G</b> when every line L(k) = (S, R) is one of these:</p>
+  <ul>
+    <li data-pid="4d2209"><b>Given.</b> R is a member of G, or an axiom, or a technique already earned. S may be anything.</li>
+    <li data-pid="4d230a"><b>Supposed.</b> R is a member of S. You may suppose anything, as long as it is kept in S.</li>
+    <li data-pid="4d240b"><b>Moved.</b> R comes by one move from given statements and from lines numbered before k, and every one of those lines stands under suppositions that are a part of S.</li>
+    <li data-pid="4d250c"><b>Dropped.</b> R comes by a tech that ends a supposition. It leans on earlier lines that stand under S with one supposition added, and on lines under S itself if it needs them, and the added supposition leaves. These are 3a’s outputs and 2a’s cases, written as pairs. Prove an if (3a3) takes (S with P added, Q) to “if P then Q”. Refute (3a4) takes (S with P added, ⊥) to “not P”. Cases (2a8) takes (S, P or Q), (S with P added, R) and (S with Q added, R) to R. Use a some (2b) takes (S, some x is P) and (S with “t is P” added, R) to R, for a name t used nowhere else.</li>
+  </ul>
+  <p data-pid="4d260d">The proof <b>reaches</b> R when its last line is (∅, R): the statement, under no supposition at all.</p>
+  <p data-pid="4d270e"><b>A proof is a statement that names a list of lines, each one given, supposed, moved from lines above it, or dropped, and its foot stands under no supposition.</b></p>
+  <p data-pid="262882">Example: with no givens at all, take L(0) = ({P}, P) and L(1) = (∅, if P then P). Line 0 is supposed: P is in its S. Line 1 is dropped: prove an if takes line 0 to it, and P leaves S. The foot stands under nothing, so this two-line list reaches “if P then P”.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4a9.1</span><span class="ph know">know</span>What does the smallest-inductive-set technique say? <br>What does “smallest” mean here, and what does it not mean?</li>
+      <li><span class="qid">4a9.1</span><span class="ph know">know</span>What is a proof from G? <br>What are the four kinds of line, and when does a proof reach R?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="4a10">
-  <h2 class="sthead"><span class="stno">4a10</span>A stray: nobody's next</h2>
-  <p class="stands">Stands on 4a7 (lies-below), 3a4 (in-its-next) and 3a9 (next-never-empty).</p>
-  <p data-pid="d9e06e">Take the cargo {1}. To show {1} is not a number, you need an inductive set that leaves it out: then {1} fails membership-in-ℕ's every, by the counterexample technique. The natural candidate is I with {1} sifted away, {x ∈ I : x ≠ {1}}. Its base part is true, since 0 ≠ {1} (0 has no members and {1} has the member 1). Its step part needs this: the next one after something is never {1}. That is so, and here is why.</p>
-  <p data-pid="54f33e">Suppose S(x) = {1}, aiming to refute it. Each set is in its own next, so x is in S(x). Swap S(x) for {1}: x is in {1}. The only member of {1} is 1, so x = 1.</p>
-  <p data-pid="e26cac">Now look at 0. 1 is {0}, so 0 is in 1. And 1 is a part of its next, S(1). So 0 is in S(1). Swap 1 back for x, then S(x) for {1}: 0 is in {1}. So 0 = 1.</p>
-  <p data-pid="83e870">But 1 names S(0), and a next is never empty, so 1 ≠ 0. Turn it about: 0 ≠ 1. That clashes with 0 = 1. Refute the supposition: S(x) ≠ {1}, whatever x is.</p>
-  <section class="slides" id="sl10"><div class="eyebrow">The slides · a stray · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">4a10</span>The old citing rule, as a part</h2>
+  <p class="stands">Stands on 4a9 (the four kinds of line) and 2c (part of).</p>
+  <p data-pid="4d280f">The third bullet of 4a9 holds 3a2’s rule for leaning, now said about parts.</p>
+  <p data-pid="e113df">Citing rule: <b>a line may lean on a line before it only if that line's suppositions are a part of its own.</b></p>
+  <p data-pid="1be20d">∅ is a part of every collection, so a line inside a box may lean on lines outside it; a line outside never leans on one inside, which carries a supposition it lacks. 3a2 laid that down as a rule. 4a14 earns it.</p>
+  <p data-pid="70a8ee">A box inside a box (3a6) is a line whose S has two members, and nothing more. An empty row (3a5) is a line whose S is ∅.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4a10.1</span><span class="ph know">know</span>Why is the next one after a set never {1}?</li>
+      <li><span class="qid">4a10.1</span><span class="ph know">know</span>What does the citing rule say? <br>Why may a line inside a supposition lean on lines outside, and never the reverse?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="4a11">
-  <h2 class="sthead"><span class="stno">4a11</span>Sifting the stray away</h2>
-  <p class="stands">Stands on 4a10 (S(x) ≠ {1}) and 4a7 (lies-below).</p>
-  <p data-pid="1214c1">The plan: build an inductive set that leaves {1} out. Then the lies-below technique does the rest.</p>
-  <p data-pid="24ee71">Now the sifted set is inductive. Base: 0 ∈ I and 0 ≠ {1}, join, pack the sift. Step: let x be anything, and suppose x is in the sift. Then x ∈ I, so S(x) ∈ I (I's step part). And S(x) ≠ {1} (shown above), so S(x) is in the sift. So {x ∈ I : x ≠ {1}} is an inductive set, and {1} is not in it. The lies-below technique says ℕ is a part of it. If {1} were a number, it would be in the sift, so {1} ≠ {1}, which clashes with the self-sameness axiom. Refute: <b>{1} ∉ ℕ</b>.</p>
-  <section class="slides" id="sl11"><div class="eyebrow">The slides · sifting the stray away · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">4a11</span>The identity of a statement, earned</h2>
+  <p class="stands">Stands on 4a9 (a proof from G) and 1a (the one-line argument).</p>
+  <p data-pid="7f28a0">The one-line argument, a given and nothing else, is the identity of a statement, as the self-sameness axiom is the identity of a name. Until now that could only be said. Here it is earned.</p>
+  <p data-pid="430b9d">Plan: write a list with one line, and check that the line is given.</p>
+  <p data-pid="4015f4">Proof. Let P be any statement, and let G be {P}, the collection whose only member is P. Let L be the list with one line, L(0) = (∅, P). That one line is given, since P is a member of G. So L is a proof from G. Its last line is (∅, P), so L reaches P. ∎</p>
+  <p data-pid="22ba6f">Identity technique: <b>every statement is reached by a proof from itself.</b></p>
+  <p data-pid="6a4c12">The proof reaches P exactly as P was given: no line was moved, so nothing was added and nothing was lost. The foot is as so, or as not so, as the given was.</p>
+  <p data-pid="2c45da">Could the identity technique be made an axiom, now that it is earned? Some ways of writing proofs do lay it down as an axiom, the first one every other proof starts from. On the ladder it cannot be one any more, and it does not need to be. An axiom is laid down with nothing beneath it. The identity technique now has something beneath it: the definition of a proof, built from lists, which were built from the numbers, which were built from sets. What is earned is a technique, and it is cited by name like any other. The self-sameness axiom stays an axiom: nothing on the ladder lies beneath it.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4a11.1</span><span class="ph know">know</span>How is {1} shown not to be a number?</li>
+      <li><span class="qid">4a11.1</span><span class="ph know">know</span>What does the identity technique say, and how is it earned? <br>Why can it not be an axiom on the ladder?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="4a12">
-  <h2 class="sthead"><span class="stno">4a12</span>The strays technique</h2>
-  <p class="stands">Stands on 4a11.</p>
-  <p data-pid="6f3268">Nothing about {1} was used but these facts: it is not 0, and it is nobody's next. Any set with both properties can be sifted away in the same way, leaving an inductive set behind, so no such set is a number.</p>
-  <p data-pid="b63ce8">Strays technique: <b>a set that is not 0 and is nobody's next one is not a number.</b> In marks: if c ≠ 0 and S(x) ≠ c for every set x, then c ∉ ℕ.</p>
-  <p data-pid="04b8e9">The same argument, with {2} or {{1}} for {1}, shows each of them is a stray.</p>
-  <p data-pid="6c9e0c">The next one after a stray is a different story. S({1}) is somebody's next, namely {1}'s. So sifting S({1}) away from an inductive set that holds {1} breaks the step part at {1}. Showing S({1}) is not a number is easiest with a technique 4b proves by induction: every number is 0 or the next one after a number. The rest of every cargo chain goes then.</p>
-  <p data-pid="05d10c">The picture lets you watch the start of a chain voted out and the rest survive.</p>
-  <section class="slides" id="sl12"><div class="eyebrow">The slides · the strays technique · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">4a12</span>The column, at last</h2>
+  <p class="stands">Stands on 4a9 (a proof is a list) and 4a10 (the citing rule).</p>
+  <p data-pid="4d2910">Writing every line as a pair is slow. So the ladder writes a proof as a <b>column</b>: 2a’s rows, one line to a row, the statement on the left and the reason on the right, with 3a’s boxes drawn as indents.</p>
+  <p data-pid="216af1"><b>The indent is S, drawn.</b> Each box still open pushes a row one step to the right; a row “assume P” is where P joins S, and the indent closes where P leaves S. Read from the left, the indents of a column are its suppositions, nested.</p>
+  <p data-pid="ce0fae">Example: here is the fish argument from 4a1 as a column.</p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="teal" data-label="this step: the fish argument, as a column">
+\qquad \text{assume the fish is a smolt} @@ supposed: S is {the fish is a smolt}
+\qquad \text{the fish is a salmon} @@ every smolt is a young salmon, a given; same S
+\qquad \text{the fish is a fish} @@ every salmon is a fish, a given; same S
+\qquad \text{the fish swims} @@ every fish swims, a given; same S
+\begin{aligned}&\htmlClass{new}{\text{if the fish is a smolt, the fish swims}} \quad\\ &\quad \blacksquare\end{aligned} @@ reported: prove an if; S is empty again
+  </pre>
+  <p data-pid="4d2a11">Read it back to pairs and you get the list you wrote in 4a3. The column is a way of writing; the list of pairs is the object. Every column from here on, and every column 2a and 3a drew, is one of these lists.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4a12.1</span><span class="ph know">know</span>What does the strays technique say? <br>Why does the same sift not throw out S({1})?</li>
+      <li><span class="qid">4a12.1</span><span class="ph know">know</span>What is a column, and what does the indent draw? <br>Which is the object, the column or the list of pairs?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="4a13">
-  <h2 class="sthead"><span class="stno">4a13</span>Different sets have different next ones</h2>
-  <p class="stands">Stands on 3a3 (next-membership), 3a4 (in-its-next) and 2f10 (no-loop).</p>
-  <p data-pid="2bdb1b">3a proved that the next one is never the set you started from (never-its-own-next) and never empty (next-never-empty). 3b held a third fact in trust, and this step proves it, so that foreclosure completes.</p>
-  <p data-pid="4ae349">Different-nexts technique: <b>two different sets never have the same next one.</b> Say it the way it is used: if S(x) = S(y), then x = y.</p>
-  <p data-pid="979320">The proof is about membership, not about “taking S off both sides”, which is not a tech. The plan: get “x ∈ y or x = y” and “y ∈ x or y = x”, then take the cases.</p>
-  <p data-pid="64e303">Suppose S(x) = S(y). Each set is in its own next, so x is in S(x). Swap S(x) for S(y): x is in S(y). By next-membership, x is in y, or x is y. The same moves, turned about, give: y is in x, or y is x.</p>
-  <p data-pid="27754e">Now reason by cases. If x is y, that is the goal. If x is in y, look at the other pair of options. If y is x, turn it about: x is y. If y is in x, then x is in y and y is in x. That is a loop, and the no-loop technique forbids loops. The clash permits everything, x = y too.</p>
-  <p data-pid="4163b8">Every case reaches x = y. Drop the supposition: if S(x) = S(y), then x = y.</p>
-  <p class="eqline" data-pid="9cb424">From here on, the statement “S is one-to-one” means this. Different sets have different next ones.</p>
-  <div class="eqline" data-tex="\forall x\,\forall y\,(S(x) = S(y) \Rightarrow x = y)"></div>
-  <section class="slides" id="sl13a"><div class="eyebrow">The slides · the different-nexts technique · ← → keys work</div></section>
-  <section class="slides" id="sl13b"><div class="eyebrow">The slides · a witness · ← → keys work</div></section>
-  <section class="pic" id="pic2">
-    <div class="eyebrow">The picture · two next ones, and why they differ</div>
-    <div class="panel">
-      <div class="chips" role="group" aria-label="x" id="xch"><span class="m" style="color:var(--muted)">x =</span></div>
-      <div class="chips" role="group" aria-label="y" id="ych"><span class="m" style="color:var(--muted)">y =</span></div>
-      <div class="cap">The different-nexts technique's pair of memberships for the sets you choose. If x ≠ y, they are not both true, since both would make a loop; a membership that fails is a witness that S(x) ≠ S(y).</div>
-      <div class="eqbox" id="eqD"></div>
-    </div>
-  </section>
+  <h2 class="sthead"><span class="stno">4a13</span>Everything the givens let in</h2>
+  <p class="stands">Stands on 4a9, 4a6 (induction and the smallest closed set, held in trust until 4c and 4d) and 2c (double inclusion).</p>
+  <p data-pid="4d2b12">Which statements can G reach? One answer: those that are the foot of some proof from G. There is a second answer, and it has the shape of 4a6’s smallest closed set.</p>
+  <p data-pid="4d2c13">Call a collection of lines <b>closed</b> when it holds every given line and every supposed line, and holds every line that is moved or dropped from lines it holds.</p>
+  <p data-pid="0207cd">Example: with G = {P}, the collection holding only (∅, P) is not closed. It leaves out the supposed lines, such as ({Q}, Q).</p>
+  <p data-pid="edfbbe">Closed collections exist. The lines that appear in proofs from G form one: to move from lines of two different proofs, write the proofs one after the other and add the new line at the foot. Sift the lines that belong to every closed collection. As 4a6 holds in trust until 4d, the result is closed, and it is a part of every closed collection. It is the smallest one.</p>
+  <p data-pid="4d2d14">Two-pictures technique: <b>the lines some proof reaches are exactly the lines in the smallest closed collection.</b></p>
+  <p data-pid="29b630">Plan: show each collection is a part of the other, then close with double inclusion.</p>
+  <p data-pid="4d2e15">First, every line of every proof is in every closed collection. Fix a closed collection C and a proof. Prove by induction, held in trust from 4a6 until 4c, that for every k all the lines numbered before k are in C. For 0 there are none. Suppose all the lines before k are in C. Line k is given, supposed, moved from givens and those lines, or dropped from some of them. Each way, C holds it, since C is closed. So all the lines before k + 1 are in C.</p>
+  <p data-pid="b7ad40">Second, the lines reached by proofs form a closed collection, as above, so the smallest one is a part of them. Each is a part of the other, so by 2c's double inclusion they are the same.</p>
+  <p data-pid="4d2f16">So there are two pictures of a proof. One is a list you can write down and check line by line. The other is the smallest collection the rules cannot get out of. They pick out the same statements. The first is how you work. The second is how you prove things about every proof at once, as the next part does.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4a13.1</span><span class="ph know">know</span>What does the different-nexts technique say, and what is its proof about?</li>
+      <li><span class="qid">4a13.1</span><span class="ph know">know</span>What does the two-pictures technique say, and what is each picture for?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="4a14">
-  <h2 class="sthead"><span class="stno">4a14</span>An endless collection, by the old mark</h2>
-  <p class="stands">Stands on 4a13, 4a8 (next-of-a-number) and 3b9 (matched with a part).</p>
-  <p data-pid="d2128b">The different-nexts technique says S is one-to-one, for every set, not only numbers, and it leans on foundation through no-loop. 4b gives another proof for numbers that uses induction instead and never touches foundation. That proof needs the technique that every member of a number is also a part of it, which is itself an induction, so it waits for 4b.</p>
-  <p data-pid="070a00">Read the techniques together for numbers. Every number has a next one that is a number (next-of-a-number). Different numbers have different next ones (different-nexts). And 0 is nobody's next (next-never-empty).</p>
-  <p data-pid="9d6d9d">That is exactly the old mark of an endless collection, which 3b described in words. ℕ can be matched, member for member, each number with its next one, with a part of itself that leaves 0 out. 4c makes that matching an object.</p>
-  <section class="slides" id="sl14"><div class="eyebrow">The slides · the endless mark · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">4a14</span>A supposition never hurts</h2>
+  <p class="stands">Stands on 4a9 (the four kinds of line) and 4a6 (induction, held in trust until 4c).</p>
+  <p data-pid="4d3017">One fact the lines used all along, without saying so: anything earned outside a supposition stays earned inside it. Here it is earned.</p>
+  <p data-pid="2585ea">More-suppositions technique: <b>if a proof from G holds the line (S, R), then for any statement P some proof from G holds the line (S with P added, R).</b></p>
+  <p data-pid="39e633">Example: the given line (∅, Q) becomes ({P}, Q), and it is still given, since a given line may stand under anything.</p>
+  <p data-pid="fae997">Plan: add P to every line of the proof, then check each line keeps its kind, by induction on line numbers.</p>
+  <p data-pid="4d3118">Proof. Take the proof, and add P to the suppositions of every line. A given line is still given, since S may be anything. A supposed line is still supposed, since its statement is still in its S. A moved line still leans on lines before it whose suppositions are a part of its own, because P was added to both sides.</p>
+  <p data-pid="e66ff8">A dropped line still drops. The lines it came from gain P too, so (S with Q added, R) becomes (S with Q and P added, R), and the same Q is dropped. (If P happens to mention the fresh name of a use-a-some, rename that name first.) Every line keeps its reason, so the new list is a proof. ∎</p>
+  <p data-pid="4d3219">That is why a box may cite the lines outside it. It is no longer a rule to follow. It is a technique, earned: the more-suppositions technique.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4a14.1</span><span class="ph know">know</span>Which three techniques together give the old mark of an endless collection, and what does the mark say?</li>
+      <li><span class="qid">4a14.1</span><span class="ph know">know</span>What does the more-suppositions technique say, and what habit of the box does it earn?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="4a15">
-  <h2 class="sthead"><span class="stno">4a15</span>Illegal moves</h2>
-  <p class="stands">Stands on 4a1 to 4a14.</p>
-  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
-\mathbb N = \{0, 1, 2, 3, 4, \dots\}\,? @@ the dots are not a tool, as 3b said. ℕ is a sift, and its members are given by membership-in-ℕ, not by a listing that never ends
-\mathbb N \subseteq J,\ \text{ so } J = \mathbb N\,? @@ J may carry cargo. lies-below puts ℕ inside J; nothing puts J inside ℕ
-x \in I \land x \in I',\ \text{ so } x \in \mathbb N\,? @@ a pair of inductive sets is not every inductive set. Both may carry the same cargo; the picture shows such a pair
-\text{a vote with } \{0,1,2,3,4\} \text{ among the voters} @@ only inductive sets vote. Let a set that runs out vote and the common part runs out with it: S(4) would be thrown out, and the result would not be inductive
-\{1\} \notin \mathbb N \ \text{ because } \{1\} \text{ is not a number} @@ that is the claim again, not a reason. The reason is an inductive set that misses {1}, built above
-S(x) = S(y),\ \text{ take } S \text{ off both sides} @@ there is no such tech. S is cancelled by the different-nexts technique, which earns it through membership and no-loop
-\{x \in I : x \ne S(\{1\})\} \text{ is inductive} @@ not if {1} ∈ I: then S({1}) must be in it by the step part. Only strays can be sifted away each on its own
-  </pre>
+  <h2 class="sthead"><span class="stno">4a15</span>The tables, again</h2>
+  <p class="stands">Stands on 4a13 (the two pictures), 1e (the tables agree with the techs) and 3d (cannot be proved).</p>
+  <p data-pid="4d4a17">1e checked each tech one row at a time, and said plainly that this covered only the argument in front of you. Now a proof is an object, and the same check covers every proof at once.</p>
+  <p data-pid="e4be3b">Plan: fix a row, or a world, where the givens are true. Then prove by induction on line numbers (held in trust from 4a6) that every line (S, R) of every proof from G has this property: wherever all of S is true, R is true.</p>
+  <p data-pid="accad1">A given line is true, by the choice of row. A supposed line has R in S. A moved line is true because each tech keeps what is true, which is 1e's table.</p>
+  <p data-pid="b0a337">A dropped line is true too, one way of dropping at a time. Prove an if: wherever S is true, either P is false, and then “if P then Q” is true, or P is true, and then Q is true by the line it came from. Refute: wherever S is true, P cannot be true, since then ⊥ would be, so “not P” is true. Cases: wherever S is true, P or Q is true, and either way R is true. Use a some: wherever S is true, something is P; call it t, and R is true, since R does not mention t.</p>
+  <p data-pid="9eb0f8">So the foot, which stands under nothing, is true wherever the givens are true. ∎</p>
+  <p data-pid="4d4b22">Soundness technique: <b>whatever a proof reaches from true statements is true.</b></p>
+  <p data-pid="e828ef">This is what 4a7 found by hand. Turned round, it is 3d's method: if some world has every given true and R false, then no proof from G reaches R. The basement writes 3d's argument out as a proof.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4a15.1</span><span class="ph know">know</span>Why is “x ∈ I and x ∈ I′, so x ∈ ℕ” an illegal move? <br>Why is “S(x) = S(y), take S off both sides” not a move?</li>
+      <li><span class="qid">4a15.1</span><span class="ph know">know</span>What does the soundness technique say, and how is it proved? <br>What does it give when turned round?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="4a16">
-  <h2 class="sthead"><span class="stno">4a16</span>Running it backwards</h2>
-  <p class="stands">Stands on 4a1 to 4a14.</p>
-  <p data-pid="437488">Wanting “t is a number”, you pack membership-in-ℕ: let J be any inductive set, and show t ∈ J. For an entry you can name, that is the named-sets-are-inductive technique's argument run inside any J, or zero-is-a-number and next-of-a-number used over and over.</p>
-  <p data-pid="1d61ed">Wanting “t is not a number”, you want an inductive set that leaves t out. For a stray, the sift of I by x ≠ t is that set, once you have shown t ≠ 0 and S(x) ≠ t for every set x.</p>
-  <p data-pid="d2db38">Wanting x = y from S(x) = S(y), you cite different-nexts.</p>
-  <p data-pid="15dc11">Wanting “K = ℕ”, you show K ⊆ ℕ and ℕ ⊆ K. For ℕ ⊆ K, showing K inductive and citing lies-below is usually the quickest road. Found upward; written downward.</p>
-  <section class="slides" id="sl16"><div class="eyebrow">The slides · backwards · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">4a16</span>0b’s techniques, checked</h2>
+  <p class="stands">Stands on 4a9 (a proof is a list), 0b6 to 0b8 (turn-about, chain, the places you choose) and 0·∎ (both shown one move to a line).</p>
+  <p data-pid="4fa603">0b argued in words that sameness turns about and that it chains, and flagged both as not yet set out one move at a time. <a href="r00concl.html#66d337">0·∎</a> showed them one move to a line, held in trust. Now each of those lines is checked against 4a9: each is given, or moved by one swap from lines above it, and each foot stands under nothing. <b>So each is a proof, and 0b’s flags close.</b></p>
+  <p data-pid="b756ac">The turn-about technique has a second road, which 0·∎ did not take: two swaps and no self-sameness line. x = b. That is given. Read x = b as a statement about x, with its gap at the left place. By the swap axiom, swap b in there: b = b. Read b = b as a statement about b, with its gap at the right place only. By the swap axiom, on x = b, swap x in there: b = x. ∎ The thought that took thinking is the choice of places, and each road shows exactly which places it chose.</p>
+  <p data-pid="fb4251">Being proved changes what a technique is. <b>Having been proved, a technique may be cited by name as a reason, exactly as an axiom may</b>, and its argument need not be told again. A long chain cites the chain technique, then cites it again on its own result.</p>
+  <p data-pid="bf2626">When a statement is about x at two places, the swap axiom gives one move for each choice of places (0b8). Lines that lean only on the givens may be written in any order, since none needs another first. And 0b found its route to d = x by starting from what it wanted; the finished list never shows the search, and 4e12 makes that search a technique.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4a16.1</span><span class="ph know">know</span>Wanting “t is a number”, how does the argument open and close? <br>Wanting “t is not a number”, what do you build?</li>
+      <li><span class="qid">4a16.1</span><span class="ph know">know</span>What does checking 0·∎’s lines against 4a9 do to 0b’s flags? <br>What does being proved change about a technique?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4a17">
+  <h2 class="sthead"><span class="stno">4a17</span>The end mark</h2>
+  <p class="stands">Stands on 4a9 (a proof is a list) and 0a10 (how a mark is brought in).</p>
+  <p data-pid="85ee00">An argument needs a way to say it is finished. Here is its mark, brought in by 0a's rule:</p>
+  <div class="eqline" data-tex="\begin{aligned}&amp;\text{From here on, the mark } \blacksquare \text{ at the close }\\ &amp;\quad \text{of an argument means: the }\\ &amp;\quad \text{argument is complete.}\end{aligned}"></div>
+  <p data-pid="c3e8a1">The end mark ∎ is a statement, named whole in 0a's way: “the argument is complete”.</p>
+  <p class="aside" data-pid="69b0c6">Typing an answer, with no key for the end mark? Write the word <b>end</b> in its place. It means the same thing, and the ladder reads it the same way.</p>
+  <p data-pid="0ef189">0a promised that a letter names one thing for the length of an argument, and is free when the argument is over, and left the ending to this step. The end mark is where an argument is over, and 0a's flag on freeing a letter is closed. A letter named inside an argument keeps its meaning down to the end mark and no further. So the same letter can name different things in different arguments, as long as each argument ends before the next begins. Here are two cats, with a single letter, in an argument each:</p>
+  <p data-pid="c7b402">Call the grey cat on the mat c. So c is the grey cat, until the end mark. c is asleep; that is given. ∎ The end mark frees c.</p>
+  <p data-pid="f691f7">Call the ginger cat on the wall c. Now c is the ginger cat, in this argument only. c is hungry; that is given. ∎ And c is free again.</p>
+  <p data-pid="85152e">Inside either argument, c names one cat throughout, so every line can be checked. What you may not do is let a line in the second argument lean on a line in the first: across the end mark, c is a different cat.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4a17.1</span><span class="ph know">know</span>What is the end mark, and what does it do to a letter named inside the argument?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4a18">
+  <h2 class="sthead"><span class="stno">4a18</span>Illegal moves</h2>
+  <p class="stands">Stands on 4a8 to 4a14.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\text{line 5, } (\varnothing,\ Q)\text{, cites line 3, } (\{P\},\ Q) @@ not allowed: line 3 stands under P and line 5 does not, so {P} is not a part of ∅
+\text{line 2 cites line 4} @@ not allowed: a move leans only on lines numbered before it
+(\{P\},\ R) \text{ as the foot} @@ not a proof of R: the foot must stand under no supposition. It proves “if P then R” once reported
+\begin{aligned}&(\varnothing,\\ &\quad \ P) \text{ because } P \text{ was supposed earlier}\end{aligned} @@ not allowed: a supposed line keeps its supposition in S. Dropping it gives something new, like “if P then …”, never P itself
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4a18.1</span><span class="ph know">know</span>Why may line 5, (∅, Q), not cite line 3, ({P}, Q)? <br>Why is ({P}, R) as the foot not a proof of R?</li>
     </ol>
   </section>
 </section>
@@ -342,187 +326,333 @@ S(x) = S(y),\ \text{ take } S \text{ off both sides} @@ there is no such tech. S
 <section class="challenge themeend">
   <div class="eyebrow">Special challenges · there if you want them</div>
   <h2>Special challenges</h2>
-  <div class="chq"><span class="chid">4a.4.1</span><span class="tagq">build</span>Pick a number c and a move m, built from S but not S, that takes each number to a number. Let C be the numbers in every set that holds c and holds m(x) for each of its members x. Decide, with a proof, which of 0, 1, 2, 3 and 4 are in C, and whether C is inductive.</div>
-  <div class="chq"><span class="chid">4a.4.2</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="s = S(\{1\})"></span></span>Prove that s is not a number by a condition that 0 meets, that passes from each set to its next one, and that s fails.</div>
-  <div class="chq"><span class="chid">4a.4.3</span><span class="tagq">world</span><span class="givens"><span data-tex-inline="\text{Every principle of rung 2}"></span> <span data-tex-inline="\text{but foundation is true.}"></span></span>Take the proof that S is one-to-one as far as you can take it, and write the line it needs next.<br>Build a world with two different sets that have the same next, or prove there is none.</div>
-  <div class="chq"><span class="chid">4a.4.4</span><span class="tagq">seam</span>For inductive I, ℕ = {x ∈ I : ∀J (J is inductive ⇒ x ∈ J)}, and ℕ is inductive, so its condition speaks, among others, of ℕ. A sift's condition may not mention the set being built. <br>Is that rule broken? <br>Is it harmless? <br>What would forbidding it cost?</div>
+  <p class="chnote">The builds and closers wait here for whoever wants them. Work them after the syntax steps, 4a8 to 4a18. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">4a.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="G \subseteq H,"></span> <span data-tex-inline="\text{a proof from } G"></span> <span data-tex-inline="\text{reaches } R"></span></span>Earn that some proof from H reaches R.</div>
+  <div class="chq"><span class="chid">4a.4.2</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{a proof from } G"></span> <span data-tex-inline="\text{with } P \text{ added}"></span> <span data-tex-inline="\text{reaches } Q"></span></span>Settle whether some proof from G reaches “if P then Q”.</div>
+  <div class="chq"><span class="chid">4a.4.3</span><span class="tagq">seam</span>Rungs 0 to 3 argued in prose, before lists of lines existed. <br>Were those arguments proofs when they were written? <br>What, if anything, did 4a add to them?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r04.html">← 4 · operating over a series</a><a href="r04b.html">4b · induction →</a></nav>
+<nav class="nextrung"><a href="r04.html">← 4 · operating over a series</a><a href="r04b.html">4b · the smallest inductive set →</a></nav>
 
 <section class="extra basement">
   <div class="eyebrow">The basement · there if you want it</div>
-  <h3>Who said it first</h3>
-  <p>The founder who came to the numbers by this sift, and whose mark of an endless collection this step proves, is Richard Dedekind.</p>
-  <aside class="voice para"><p>Dedekind's way to the numbers was this sift. Given a system and a step, he called a part of the system a chain when the step never leads out of it, and he took the chain of a starting element to be what is common to every chain that holds that element. The counting numbers are the chain of the start under the next-one step.</p><cite>Dedekind, Was sind und was sollen die Zahlen? (1888), §37, §44 and §71–73, trans. Beman, 1901</cite></aside>
   <h3>Accepted names</h3>
-  <p>A collection that can be matched with a part of itself that leaves something out is called Dedekind-infinite. That S is one-to-one is often written as an axiom, one of the Peano axioms.</p>
+  <p data-pid="4d3a1a">A proof written as a list of lines is called a <b>derivation</b>. Proofs built from suppositions that open and close are called <b>natural deduction</b>; a line written as a pair of suppositions and a statement is called a <b>sequent</b>, often written S ⊢ R. Closing a supposition is called <b>discharging</b> it. The smallest closed collection of statements reached from G is G's <b>deductive closure</b>. The identity technique is the <b>identity</b> (or reflexivity) of ⊢, written P ⊢ P; the way of writing proofs called the <b>sequent calculus</b> lays it down as its <b>identity axiom</b>. The more-suppositions technique is called <b>weakening</b>. 4a.4.2 is the <b>deduction theorem</b>.</p>
+  <h3>Cannot be proved, earned (3d)</h3>
+  <p data-pid="4d5a31">3d said in plain words that infinity cannot be argued from the axioms of rungs 0 to 2. Here it is as a proof. Let G be those axioms, and let W be 3d's world, the sets of the layers. 3d checked in words that every member of G is true in W, and that no set of W is inductive.</p>
+  <pre class="lines" data-k="teal" data-label="3d, earned: no proof from the axioms of rungs 0 to 2 reaches “some set is inductive”">
+\text{assume a proof from } G \text{ reaches } \exists x\,(x \text{ inductive}) @@ supposed, aiming to refute
+\quad \text{every member of } G \text{ is true in } W @@ 3d's check, “every earlier tool stays inside”
+\quad \exists x\,(x \text{ inductive}) \text{ is true in } W @@ soundness (“the tables, again”), on the two lines above
+\quad \neg\exists x\,(x \text{ inductive}) \text{ is true in } W @@ 3d's check, “no set of the world is inductive”
+\quad \bot @@ clash
+\htmlClass{new}{\text{no proof from } G \text{ reaches } \exists x\,(x \text{ inductive})} \quad \blacksquare @@ refute
+  </pre>
+  <p data-pid="4d5b32">The same column, with foundation in place of infinity and 3a·f's world in place of W, earns 3a·f's claim that foundation does not follow from the other axioms. A proof about proofs is an ordinary proof, once proofs are objects.</p>
+  <h3>Every argument from 0a to 3d, in columns</h3>
+  <p data-pid="4d3b1b">The lessons from 0a to 3d argued in lines. Here the proofs of the conclusions of rungs 0, 2 and 3, with 3c and 3d that the last one leans on, are written again as columns, with a link back to where each was earned.</p>
+  <div class="stepgroup">
+  <p class="from"><a href="r00concl.html">From 0·∎ · Things have ways to be the same</a></p>
+<section class="paid" data-from="r00concl.html" data-step="0·∎">
+  <h4>0·∎ · The proof</h4>
+  <p>x = x, by the self-sameness axiom.</p>
+  <pre class="lines" data-k="ember" data-label="the first part: x = x">
+\htmlClass{new}{x = x} \quad \blacksquare @@ the self-sameness axiom
+  </pre>
+</section>
+
+<section class="paid" data-from="r00concl.html" data-step="0·∎">
+  <h4>0·∎ · The proof</h4>
+  <p>From x = c and b = c, a turn-about and a chain give x = b.</p>
+  <pre class="lines" data-k="ember" data-label="the fourth part: from x = c and b = c, x = b">
+x = c @@ given
+b = c @@ given
+c = b @@ the turn-about technique, on b = c
+\htmlClass{new}{x = b} \quad \blacksquare @@ the chain technique, on x = c and c = b
+  </pre>
+</section>
+  </div>
+  <div class="stepgroup" id="rung0marks">
+  <h3>Rung 0, in marks</h3>
+  <p class="from" data-pid="c0b0a1">This was once a call back on rung 1. It writes the ground floor's two axioms as lines a column can cite, and proves the turn-about and chain techniques again from them, one move to a line. It belongs here, now that columns exist.</p>
+
+  <h4>The self-sameness axiom, as a line</h4>
+  <p data-pid="c0b35d">0b laid it down for any name whatever: each name names the same thing as itself. The words “for any name whatever” are what 2b's turn A says. So here is the axiom as one line:</p>
+  <div class="eqline" data-tex="\textbf{Self-sameness line.}\quad \forall x\,(x = x)"></div>
+  <p data-pid="c010c7">0·∎ filled the axiom with a name, and the reason beside that line said so: the self-sameness axiom, filled with the name. In rung 1's marks that is a tech you already know. <b>Filling an axiom with a name is using an every.</b></p>
+  <pre class="lines" data-k="ember" data-label="rung 0 in marks: filling the self-sameness axiom, in marks">
+\forall x\,(x = x) @@ the self-sameness line
+\htmlClass{new}{w = w} \quad \blacksquare @@ use an every, with w
+  </pre>
+
+  <h4>The swap axiom, as a line</h4>
+  <p data-pid="c0fe82">0b's swap axiom had two halves. When n = b and P(n) is so, P(b) is so. And it runs either way: when n = b and P(b) is so, P(n) is so. Each half is an if. Together they are an exactly-when. So the axiom becomes one line, with 1d's double arrow for “either way”:</p>
+  <div class="eqline" data-tex="\textbf{Swap line.}\quad \forall x\,\forall y\,\bigl(x = y \Rightarrow (P(x) \Leftrightarrow P(y))\bigr)"></div>
+  <p data-pid="c02cb5">Read it from the outside in. Take any two names. If they name one thing, then a claim about the first is so exactly when the same claim about the second is so. The left-to-right half of the ⇔ is 0b's first half. The right-to-left half is “the other way”.</p>
+  <p data-pid="c0da71">One thing in the line is not like the rest. The letters x and y are names, and the turn A speaks of every name. The letter P is a statement-with-a-gap, and no turn A stands in front of it. So the swap line is a pattern. You fill in P first, with any statement-with-a-gap you like, and then you have a line. Each P gives its own line. That is exactly what 0b said: “with P any statement-with-a-gap”.</p>
+  <p data-pid="c0f219">Filling P is also where 0b's choice of places went. 0b said you may swap at whichever of a name's places you choose. In the line, you choose the places by choosing the gap. Take “n lives next door to n's sister”. To swap at the left place only, fill P with “… lives next door to n's sister”. To swap at both, fill P with “… lives next door to …'s sister”, with one name in both gaps. <b>Choosing the places is choosing the pattern.</b> The picture below lets you try each choice.</p>
+
+  <h4>The turn-about technique, proved again</h4>
+  <p data-pid="c087a3">0b's technique: from n = b, you may write b = n. The line behind that tech is an if: whenever the line you start from is so, so is the line you write. The names n and b were any names, so the line is an every:</p>
+  <div class="eqline" data-tex="\textbf{Turn-about line.}\quad \forall x\,\forall y\,(x = y \Rightarrow y = x)"></div>
+  <p data-pid="c0b5ba">Its outermost marks are two turn As and then an arrow. 4e says what that hands you: two lets and an assume at the top, and the matching closing lines at the foot. The middle is 0·∎'s road: the self-sameness axiom, filled, and one swap at its left place.</p>
+  <pre class="lines" data-k="ember" data-label="rung 0 in marks: the turn-about line, from the two axiom lines">
+\text{let } w \text{ be anything} @@ speak of anything
+\text{let } b \text{ be anything} @@ speak of anything, again
+\qquad \text{assume } w = b @@ assumed: the hypothesis of the if we want
+\qquad w = w @@ use an every on the self-sameness line, with w
+\qquad \forall x\,\forall y\,\bigl(x = y \Rightarrow (x = w \Leftrightarrow y = w)\bigr) @@ the swap line, P filled with “… = w”: the gap at the left place only
+\qquad \forall y\,\bigl(w = y \Rightarrow (w = w \Leftrightarrow y = w)\bigr) @@ use an every, with w
+\qquad w = b \Rightarrow (w = w \Leftrightarrow b = w) @@ use an every, with b
+\qquad w = w \Leftrightarrow b = w @@ carry an if through, on the assumed line
+\qquad w = w \Rightarrow b = w @@ ﹀ ⇔; keep left
+\qquad \htmlClass{new}{b = w} @@ carry an if through, on the line w = w
+w = b \Rightarrow b = w @@ prove an if: the supposition closes
+\forall y\,(w = y \Rightarrow y = w) @@ speak of everything: nothing was assumed about b
+\htmlClass{new}{\forall x\,\forall y\,(x = y \Rightarrow y = x)} \quad \blacksquare @@ speak of everything: nothing was assumed about a
+  </pre>
+  <p data-pid="c02640">0·∎'s line had three moves, and this one has thirteen. Nothing new happened in the extra ten. Each one is a word of 0·∎'s line, written out as a move. “Filled with the name” became a use of an every. “The swap axiom, on the lines above” became a filled pattern, two uses of an every, a carried if, and a kept half. The lets and the closing lines say what 1a's letters said by being letters: that they were any names at all.</p>
+  <p data-pid="c0417c">The column above used only the left-to-right half of the swap line. Is the other half needed at all? The special challenges ask.</p>
+
+  <h4>The chain technique, proved again</h4>
+  <div class="eqline" data-tex="\textbf{Chain line.}\quad \forall x\,\forall y\,\forall z\,\bigl((x = y \land y = z) \Rightarrow x = z\bigr)"></div>
+  <p data-pid="c096e7">0b's argument read the first sameness as a claim about b, with the gap at the right, and swapped c in. That reading is the pattern.</p>
+  <pre class="lines" data-k="ember" data-label="rung 0 in marks: the chain line, from the swap line">
+\text{let } w, b \text{ and } c \text{ each be anything} @@ speak of anything, once for each letter
+\qquad \text{assume } w = b \land b = c @@ assumed: the hypothesis of the if we want
+\qquad w = b @@ keep left
+\qquad b = c @@ keep right
+\qquad \forall x\,\forall y\,\bigl(x = y \Rightarrow (w = x \Leftrightarrow w = y)\bigr) @@ the swap line, P filled with “w = …”: the gap at the right place
+\qquad \forall y\,\bigl(b = y \Rightarrow (w = b \Leftrightarrow w = y)\bigr) @@ use an every, with b
+\qquad b = c \Rightarrow (w = b \Leftrightarrow w = c) @@ use an every, with c
+\qquad w = b \Leftrightarrow w = c @@ carry an if through, on the line kept right
+\qquad w = b \Rightarrow w = c @@ ﹀ ⇔; keep left
+\qquad \htmlClass{new}{w = c} @@ carry an if through, on the line kept left
+(w = b \land b = c) \Rightarrow w = c @@ prove an if
+\htmlClass{new}{\forall x\,\forall y\,\forall z\,\bigl((x = y \land y = z) \Rightarrow x = z\bigr)} \quad \blacksquare @@ speak of everything, for c, then b, then a
+  </pre>
+  <p data-pid="c04de3">The self-sameness line was not used. 0b said so in words: “nothing was needed from the self-sameness axiom, because the statements in hand already supplied something to swap inside.” The column shows the same thing in marks. No line cites ∀x (x = x).</p>
+
+  <h4>What the words of 1a were already doing</h4>
+  <p data-pid="c07b11">1a gave its techs names and said what they do in English. Each one has a twin in rung 1's marks. The table pairs them.</p>
+  <div class="tablewrap"><table class="tt tw">
+    <tr><th>1a said, in words</th><th>in rung 1's marks</th></tr>
+    <tr><td class="l">the axiom, filled with a name</td><td class="l">use an every on the axiom's line, with that name (2b)</td></tr>
+    <tr><td class="l">the swap axiom, on the lines above</td><td class="l">fill the swap line's pattern; use an every for each name; carry an if through; keep the half you want (1c, 1d, 2b)</td></tr>
+    <tr><td class="l">the swap runs either way</td><td class="l">the ⇔ in the swap line, and its two halves (1d)</td></tr>
+    <tr><td class="l">swap at whichever places you choose</td><td class="l">choose the gap of the pattern P</td></tr>
+    <tr><td class="l">﹀ unpack a word</td><td class="l">the word's meaning as a line the word supplies; use an every; unpack the ⇔ and keep its left-to-right half; carry it through; keep the part you want</td></tr>
+    <tr><td class="l">︿ pack a word</td><td class="l">join the lines; the same meaning line; carry an if through on its right-to-left half</td></tr>
+    <tr><td class="l">transform a claim's shape</td><td class="l">the same statement, written once in marks: a statement proved from itself (4a11)</td></tr>
+    <tr><td class="l">a technique, cited by name</td><td class="l">use an every on the technique's line; carry an if through</td></tr>
+    <tr><td class="l">the given lines, and the end mark</td><td class="l">the givens joined and assumed; the foot; prove an if</td></tr>
+    <tr><td class="l">a letter freed by the end mark</td><td class="l">a let that ends where its supposition closes</td></tr>
+  </table></div>
+  <p data-pid="c0ceaa">Here unpack is earned, because every piece of it is now on the table: the every (2b), the exactly-when (1d), the and (1c), and carrying an if through (1d). A word's meaning says a thing is the word exactly when it is what the word means: ∀x (x is a puppy ⇔ (x is young ∧ x is a dog)). To unpack “Rex is a puppy”, use the every with Rex. Unpack the ⇔ and keep its left-to-right half. Carry it through: Rex is young and Rex is a dog. Keep the part you want. Pack runs the other way: join the parts, keep the right-to-left half, carry it through. <b>Unpack is not only an if: it is an every, around an exactly-when, around an and, each used in turn.</b></p>
+  <p data-pid="c0cf01">Unpack still stays a tech of its own. An if is a claim. It can be given, earned, refused or denied, and an argument that leans on it stands or falls with it. A word's meaning is not a claim in any argument. It comes with the word, the way a name comes with name = name by 0b's self-sameness axiom, and no column can deny it and keep the word. Every “from here on” line is a meaning line of the same kind: an every around an exactly-when, with the mark's letters as its placeholders.</p>
+  <p data-pid="9f407b">Transform comes out of foreclosure here too. 1a said a transform is any move that changes how a claim is written and keeps what it says. With rung 1's marks the whole family is on the table, and <b>each member of the family has its own warrant.</b> Shape transforms: once rung 1's marks are on the table, “Mike is winged” and “Mike has wings” are both written W(m). Moving between them is the identity of a statement, earned above. The possibility axiom is what lets both shapes be written as W(m). Rewrites by sameness: wherever a name is written, a name earned the same as it may be written, by 0b's swap axiom. Rewrites by exactly-when: 1f's rewrites put a statement in place of one that is true exactly when it is.</p>
+  <p data-pid="c0be16">The last two rows say what citing a technique is. 1a said that what a column proves is always “from these given lines, this foot”. In marks, that is an if: the givens joined, an arrow, the foot. When the column's letters were any names, nothing assumed of them but the givens, the if takes turn As in front. So every proved technique has a line behind it: a statement that packs the column that proved it. The technique licenses the move; the line is why the technique is sound. <b>Citing a technique by name is using an every on its line and carrying an if through.</b> Rung 0 had been using rung 1's techs all along, and calling them by words.</p>
+  <p data-pid="c08d8d">Four lines look like uses of these lines and are not. One fills the self-sameness line with a description that names no one thing. One fills the swap line's pattern with a question. One speaks of everything while a supposition about the letters is still open. And one runs the swap line's arrow backwards, from one shared claim to a sameness. The worked example is in the basement, under “Wrong moves, worked”.</p>
+
+
+  <h4>Running it backwards</h4>
+  <p data-pid="c0cadd">Given a rule in words, find its marks. “For any” is a turn A. “From … you may write …” is an if. “Either way” is an exactly-when. A claim about a thing is a pattern with its gap where the thing stood. Given a column in marks, find its words: each run of uses of an every, carried ifs and kept halves is one of 1a's reasons. Found upward; written downward.</p>
+
+  </div>
+  <div class="stepgroup">
+  <p class="from"><a href="r02concl.html">From 2·∎ · A collection is nothing but its members</a></p>
+<section class="paid" data-from="r02concl.html" data-step="2·∎">
+  <h4>2·∎ · The proof</h4>
+  <p>If two sets are the same, they have the same members, by the swap axiom.</p>
+  <pre class="lines" data-k="ember" data-label="the first part: the same set has the same members">
+w = b @@ given
+\text{let } x \text{ be anything} @@ aiming at an every: speak of anything
+\qquad \text{assume } x \in w @@ assumed
+\qquad \htmlClass{new}{x \in b} @@ the swap axiom: b written where w stood, licensed by w = b
+x \in w \Rightarrow x \in b @@ prove an if
+\qquad \text{assume } x \in b @@ assumed
+\qquad b = w @@ the turn-about technique, on the given line
+\qquad \htmlClass{new}{x \in w} @@ the swap axiom: w written where b stood
+x \in b \Rightarrow x \in w @@ prove an if
+x \in w \Leftrightarrow x \in b @@ join; ︿ ⇔
+\htmlClass{new}{\forall x\,(x \in w \Leftrightarrow x \in b)} \quad \blacksquare @@ speak of everything: nothing was assumed about x
+  </pre>
+</section>
+
+<section class="paid" data-from="r02concl.html" data-step="2·∎">
+  <h4>2·∎ · The proof</h4>
+  <p>Two sets whose members are exactly the things meeting one condition are the same set.</p>
+  <pre class="lines" data-k="ember" data-label="the second part: a condition fixes at most one set">
+\forall x\,(x \in c \Leftrightarrow \varphi(x)) @@ given
+\forall x\,(x \in d \Leftrightarrow \varphi(x)) @@ given
+\text{let } x \text{ be anything} @@ aiming at same-members
+x \in c \Leftrightarrow \varphi(x) @@ use an every, with x
+\varphi(x) \Leftrightarrow x \in d @@ use an every, with x; an exactly-when turns about (1d)
+\htmlClass{new}{x \in c \Leftrightarrow x \in d} @@ an exactly-when chains (1d), on the two lines above
+\forall x\,(x \in c \Leftrightarrow x \in d) @@ speak of everything
+\htmlClass{new}{c = d} \quad \blacksquare @@ the same-members axiom, carried through
+  </pre>
+</section>
+
+<section class="paid" data-from="r02concl.html" data-step="2·∎">
+  <h4>2·∎ · The proof</h4>
+  <p>A list in another order names the same set.</p>
+  <pre class="lines" data-k="ember" data-label="the third part: {w, b} = {b, w}">
+\forall x\,(x \in \{w, b\} \Leftrightarrow x = w \lor x = b) @@ the gather axiom (2e); speak of everything
+\forall x\,(x \in \{b, w\} \Leftrightarrow x = b \lor x = w) @@ the gather axiom, with b and w
+\text{let } x \text{ be anything} @@ aiming at an every
+x \in \{b, w\} \Leftrightarrow x = b \lor x = w @@ use an every, with x
+x = b \lor x = w \Leftrightarrow x = w \lor x = b @@ 1f's turn-about technique for or, licensed both ways for any statement
+\htmlClass{new}{x \in \{b, w\} \Leftrightarrow x = w \lor x = b} @@ an exactly-when chains
+\forall x\,(x \in \{b, w\} \Leftrightarrow x = w \lor x = b) @@ speak of everything
+\htmlClass{new}{\{w, b\} = \{b, w\}} \quad \blacksquare @@ the second part, with φ(x) the condition x = w ∨ x = b
+  </pre>
+</section>
+
+<section class="paid" data-from="r02concl.html" data-step="2·∎">
+  <h4>2·∎ · The proof</h4>
+  <p>A condition sifted inside a set fixes a set; the same condition with nothing to sift from fixes none.</p>
+  <pre class="lines" data-k="ember" data-label="the fourth part: at most one, and maybe none">
+\exists r\,\forall x\,(x \in r \Leftrightarrow x \in w \land x \notin x) @@ the sift axiom (2d), with the condition x ∉ x, inside a set w you have; show an example
+\htmlClass{new}{\neg\exists r\,\forall x\,(x \in r \Leftrightarrow x \notin x)} \quad \blacksquare @@ the outsider-set technique (2d): with nothing to sift from, the same condition fixes no set
+  </pre>
+</section>
+  </div>
+  <div class="stepgroup">
+  <p class="from"><a href="r03c.html">From 3c · Inductive sets and the axiom of infinity</a></p>
+<section class="paid" data-from="r03c.html" data-step="3c">
+  <h4>3c · A set that runs out</h4>
+  <p>The next one after 4 is not a member of {0, 1, 2, 3, 4}.</p>
+  <pre class="lines" data-k="ember" data-label="3c: S(4) ∉ {0, 1, 2, 3, 4}">
+4 \in S(4) @@ the in-its-next technique
+\qquad \text{assume } S(4) \in J @@ aiming to refute
+\qquad S(4) \in 4 \lor S(4) = 4 @@ J = S(4) by 3b (J lists the members of 4, then 4: J = 4 ∪ {4}); the next-membership technique
+\qquad\quad \text{case } S(4) = 4:\quad \bot @@ the never-its-own-next technique; clash
+\qquad\quad \text{case } S(4) \in 4:\quad 4 \in S(4) \land S(4) \in 4;\quad \bot @@ join with the line 4 ∈ S(4); the no-loop technique; clash
+\qquad \bot @@ reason by cases
+\htmlClass{new}{S(4) \notin J} \quad \blacksquare @@ refute; ︿ ∉
+  </pre>
+</section>
+
+<section class="paid" data-from="r03c.html" data-step="3c">
+  <h4>3c · The axiom</h4>
+  <p>Every inductive set holds 0, 1, 2, 3 and 4.</p>
+  <pre class="lines" data-k="ember" data-label="3c: the named-sets-are-inductive technique, from I inductive get 0, 1, 2, 3, 4 ∈ I">
+0 \in I \land \forall x\,(x \in I \Rightarrow S(x) \in I) @@ ﹀ “inductive”
+\htmlClass{new}{0 \in I} @@ keep left
+0 \in I \Rightarrow S(0) \in I @@ keep right; use the every, with 0
+\htmlClass{new}{1 \in I} @@ carry through; 1 names S(0)
+1 \in I \Rightarrow S(1) \in I @@ use the every, with 1
+\htmlClass{new}{2 \in I} @@ carry through; ︿ the name 2
+3 \in I,\quad \htmlClass{new}{4 \in I} \quad \blacksquare @@ the same lines, with 2 and then 3 in the every
+  </pre>
+</section>
+  </div>
+  <div class="stepgroup">
+  <p class="from"><a href="r03d.html">From 3d · Why infinity is chosen, not discovered</a></p>
+<section class="paid" data-from="r03d.html" data-step="3d">
+  <h4>3d · The layers</h4>
+  <p>The earliest layers, worked out by keep-or-drop: V₀ to V₄ hold the names 0 to 3 as they arrive.</p>
+  <pre class="lines" data-k="ember" data-label="3d: the earliest layers, by keep-or-drop">
+V_0 = \varnothing = 0 @@ the rule's start; 0 names ∅
+V_1 = \mathcal P(\varnothing) = \{\varnothing\} = \htmlClass{new}{1} @@ 2f: 𝒫(∅) = {∅}, which 3b named 1
+V_2 = \mathcal P(\{0\}) = \{\varnothing, \{0\}\} = \{0, 1\} = \htmlClass{new}{2} @@ keep-or-drop on its only member; 1 = {0}; 3b's listing for 2
+V_3 = \mathcal P(\{0, 1\}) = \{0,\ 1,\ \{1\},\ \htmlClass{new}{2}\} @@ keep-or-drop on both members: ∅, {0}, {1}, {0, 1}. Only the last is new, and it is 2 itself
+V_4 = \mathcal P(V_3) = \{\dots,\ \htmlClass{new}{3},\ \dots\} @@ every subset of {0, 1, {1}, 2}, written by keep-or-drop; among them {0, 1, 2}, which is 3
+  </pre>
+</section>
+
+<section class="paid" data-from="r03d.html" data-step="3d">
+  <h4>3d · No set of the world is inductive</h4>
+  <p>No inductive set is a member of the layer V₄.</p>
+  <pre class="lines" data-k="ember" data-label="3d: an inductive set cannot sit in V₄">
+I \in V_4,\quad I \text{ inductive} @@ supposed
+0, 1, 2, 3, 4 \in I @@ the named-sets-are-inductive technique (3c)
+4 \in I \land I \in V_4 \;\Rightarrow\; \htmlClass{new}{4 \in V_3} @@ I ⊆ V₃ (﹀ 𝒫); use the every with 4
+3 \in 4 \land 4 \in V_3 \;\Rightarrow\; \htmlClass{new}{3 \in V_2} @@ 3 ∈ 4 (3b); 4 ⊆ V₂; carry through: a step of membership, a layer down
+2 \in V_1,\qquad 1 \in V_0 @@ the same line, with 2 ∈ 3 and then 1 ∈ 2
+1 \in \varnothing @@ V₀ = ∅
+\bot @@ the empty-set technique; clash
+\htmlClass{new}{\neg(I \in V_4 \land I \text{ inductive})} \quad \blacksquare @@ refute
+  </pre>
+</section>
+
+<section class="paid" data-from="r03d.html" data-step="3d">
+  <h4>3d · The conclusion, and what it is not</h4>
+  <p>No proof of “some set is inductive” from the axioms of rungs 0 to 2 exists.</p>
+  <pre class="lines" data-k="ember" data-label="3d: the axiom is not a consequence of rungs 0 to 2">
+\text{in the layered world, every axiom of rungs 0 to 2 is true} @@ the tool-by-tool check above
+\text{in the layered world, no set is inductive} @@ the column above, for any layer
+\qquad \text{suppose a proof of } \exists I\,(I \text{ inductive}) \text{ from those axioms} @@ aiming to refute
+\qquad \text{the same column, parsed inside the world, is a proof there} @@ its lines are axioms, which are true there, and techs, which care nothing for the world
+\qquad \exists I\,(I \text{ inductive}) \text{ is true in the world} @@ the last line of a proof is true
+\qquad \bot @@ clash with the line “no set is inductive”
+\htmlClass{new}{\text{no such proof exists}} \quad \blacksquare @@ refute
+  </pre>
+</section>
+  </div>
+  <div class="stepgroup">
+  <p class="from"><a href="r03concl.html">From 3·∎ · An endless collection can be one object</a></p>
+<section class="paid" data-from="r03concl.html" data-step="3·∎">
+  <h4>3·∎ · The proof</h4>
+  <p>Every named entry of the run, and the next one after 4, is in an inductive set I.</p>
+  <pre class="lines" data-k="ember" data-label="the first part: every named entry is in I">
+I \text{ is inductive} @@ given: a set from the infinity axiom, called I by use a some
+0 \in I,\ 1 \in I,\ 2 \in I,\ 3 \in I,\ 4 \in I @@ the named-sets-are-inductive technique (3c)
+4 \in I \Rightarrow S(4) \in I @@ ﹀ “inductive”; keep right; use the every, with 4
+\htmlClass{new}{S(4) \in I} \quad \blacksquare @@ carry an if through
+  </pre>
+</section>
+
+<section class="paid" data-from="r03concl.html" data-step="3·∎">
+  <h4>3·∎ · The proof</h4>
+  <p>For every member x of an inductive set I, S(x) is in I, S(x) is not x, and S(x) is not 0.</p>
+  <pre class="lines" data-k="ember" data-label="the second part: I never runs out">
+I \text{ is inductive} @@ given
+\text{let } x \text{ be anything} @@ to speak of everything, speak of anything
+\qquad \text{assume } x \in I @@ assumed: the hypothesis of the if we want
+\qquad \htmlClass{new}{S(x) \in I} @@ ﹀ “inductive”; keep right; use the every, with x; carry an if through
+\qquad S(x) \ne x @@ the never-its-own-next technique (3b)
+\qquad S(x) \ne 0 @@ the next-never-empty technique (3b): 0 names ∅
+\qquad S(x) \in I \land (S(x) \ne x \land S(x) \ne 0) @@ join
+x \in I \Rightarrow \big(S(x) \in I \land (S(x) \ne x \land S(x) \ne 0)\big) @@ prove an if
+\htmlClass{new}{\forall x\,\big(x \in I \Rightarrow (S(x) \in I \land (S(x) \ne x \land S(x) \ne 0))\big)} \quad \blacksquare @@ speak of everything: nothing was assumed about x
+  </pre>
+</section>
+
+<section class="paid" data-from="r03concl.html" data-step="3·∎">
+  <h4>3·∎ · The proof</h4>
+  <p>The set {0, 1, 2, 3, 4} is not inductive.</p>
+  <pre class="lines" data-k="ember" data-label="the third part: a set you finish writing is not inductive">
+4 \in J @@ ﹀ the listing; the self-sameness axiom; add an option
+S(4) \notin J @@ 3c's column: S(4) ∉ {0, 1, 2, 3, 4}
+\qquad \text{assume } 4 \in J \Rightarrow S(4) \in J @@ aiming to refute it
+\qquad S(4) \in J @@ carry an if through, with the earlier line
+\qquad \bot @@ clash, after unpacking ∉
+\neg(4 \in J \Rightarrow S(4) \in J) @@ refute
+\exists x\,\neg(x \in J \Rightarrow S(x) \in J) @@ show an example: 4
+\neg\forall x\,(x \in J \Rightarrow S(x) \in J) @@ the counterexample technique (2b)
+\htmlClass{new}{\neg(J \text{ is inductive})} \quad \blacksquare @@ assume J is inductive; ﹀ “inductive”; keep right; clash with the line above; refute
+  </pre>
+</section>
+  </div>
 </section>
 </div>
 
 <script src="rung.js"></script>
 <script>
 (function(){
-const {tex,col,stepper}=Rung;
-const R=String.raw;
-function size(cv,ar){ const d=window.devicePixelRatio||1, W=cv.clientWidth||300, H=Math.round(W/ar); cv.width=W*d; cv.height=H*d; cv.style.height=H+'px'; const c=cv.getContext('2d'); c.setTransform(d,0,0,d,0,0); return {c,W,H}; }
-
-/* ---------- left: the vote ---------- */
-const COLS=[
-  {id:'r0',lab:'0',k:'run'},{id:'r1',lab:'1',k:'run'},{id:'r2',lab:'2',k:'run'},{id:'r3',lab:'3',k:'run'},{id:'r4',lab:'4',k:'run'},{id:'r5',lab:'S(4)',k:'run'},
-  {id:'a0',lab:'{1}',k:'a'},{id:'a1',lab:'S({1})',k:'a'},{id:'a2',lab:'S(S({1}))',k:'a'},
-  {id:'b0',lab:'{2}',k:'b'},{id:'b1',lab:'S({2})',k:'b'},{id:'b2',lab:'S(S({2}))',k:'b'}];
-const TX={r0:'0',r1:'1',r2:'2',r3:'3',r4:'4',r5:'S(4)',a0:'\\{1\\}',a1:'S(\\{1\\})',a2:'S(S(\\{1\\}))',b0:'\\{2\\}',b1:'S(\\{2\\})',b2:'S(S(\\{2\\}))'};
-const ALL=COLS.map(c=>c.id);
-const RUN=ALL.filter(x=>x[0]==='r'), CA=['a0','a1','a2'], CB=['b0','b1','b2'];
-const ROWS=[
-  {name:'I',tex:'I',ind:true,has:new Set(ALL)},
-  {name:'I′',tex:"I'",ind:true,has:new Set([...RUN,...CB])},
-  {name:'J',tex:'J',ind:true,has:new Set(ALL.filter(x=>x!=='a0'))},
-  {name:'J′',tex:"J'",ind:true,has:new Set(ALL.filter(x=>x!=='b0'))},
-  {name:'K',tex:'K',ind:false,has:new Set(['r0','r1','r2','r3','r4'])}];
-let vote=new Set([0]);
-const vch=document.getElementById('vch');
-ROWS.forEach((r,i)=>{ const b=document.createElement('button'); b.textContent=r.name+(r.ind?'':' (not inductive)'); if(vote.has(i)) b.className='on'; b.onclick=()=>{ vote.has(i)?vote.delete(i):vote.add(i); b.classList.toggle('on',vote.has(i)); drawV(); }; vch.appendChild(b); });
-const cvV=document.getElementById('cvV');
-function drawV(){
-  const {c,W,H}=size(cvV,W0()<480?1.05:1.6); c.fillStyle=col('--card'); c.fillRect(0,0,W,H);
-  const lx=6, x0=W<480?30:40, nGap=2, slots=COLS.length+nGap*1+3, gw=(W-x0-8)/slots;
-  const xOf=i=>{ let s=i; if(i>=6) s+=1.2; if(i>=9) s+=1.2; return x0+gw*(s+.5); };
-  const top=W<480?26:30, rh=(H-top-8)/(ROWS.length+1.4);
-  c.font=(W<480?'9px':'10.5px')+' IBM Plex Mono, monospace'; c.textBaseline='middle'; c.textAlign='center';
-  // column headers for the run only
-  COLS.forEach((cc,i)=>{ if(cc.k==='run'){ c.fillStyle=col('--muted'); c.fillText(cc.lab,xOf(i),top-12); } });
-  c.fillStyle=col('--teal'); c.fillText('{1} …',xOf(7),top-12); c.fillStyle=col('--plum'); c.fillText('{2} …',xOf(10),top-12);
-  const colr=k=>k==='run'?col('--gold'):(k==='a'?col('--teal'):col('--plum'));
-  const rad=Math.max(3.5,Math.min(7,gw*.3));
-  const dots=(y,hasF,faded)=>{ COLS.forEach((cc,i)=>{ const x=xOf(i); c.beginPath(); c.arc(x,y,rad,0,7); if(hasF(cc.id)){ c.fillStyle=colr(cc.k); c.globalAlpha=faded?.28:1; c.fill(); c.globalAlpha=1; } else { c.strokeStyle=col('--grid'); c.lineWidth=1.2; c.stroke(); } });
-    [5,8,11].forEach(i=>{ if(hasF(COLS[i].id)){ c.fillStyle=faded?col('--grid'):col('--muted'); c.textAlign='left'; c.fillText('⋯',xOf(i)+rad+1,y); c.textAlign='center'; } }); };
-  ROWS.forEach((r,i)=>{ const y=top+rh*(i+.5); const on=vote.has(i); c.fillStyle=on?col('--ink'):col('--muted'); c.textAlign='left'; c.fillText(r.name,lx,y); c.textAlign='center'; dots(y,id=>r.has.has(id),!on); });
-  const yC=top+rh*(ROWS.length+.85);
-  c.strokeStyle=col('--ink'); c.lineWidth=1; c.beginPath(); c.moveTo(4,yC-rh*.62); c.lineTo(W-4,yC-rh*.62); c.stroke();
-  const V=[...vote];
-  const common=new Set(ALL.filter(id=>V.length&&V.every(i=>ROWS[i].has.has(id))));
-  c.fillStyle=col('--ember'); c.textAlign='left'; c.fillText('all',lx,yC); c.textAlign='center';
-  dots(yC,id=>common.has(id),false);
-  // readout: short lines, so it fits a phone
-  let t;
-  if(!V.length) t='\\text{no set is voting:}\\\\ \\text{choose some set}';
-  else {
-    const runL=RUN.filter(id=>common.has(id)).map(id=>TX[id]); const runEnd=common.has('r5')?',\\dots':'';
-    const ch=(ids,c0)=>{ const L=ids.filter(id=>common.has(id)); if(!L.length) return null; return L.map(id=>TX[id]).join(',\\,')+(common.has(ids[2])?',\\dots':''); };
-    const ca=ch(CA), cb=ch(CB);
-    t='\\text{in every voter:}\\\\ \\{'+runL.join(',\\,')+runEnd+(ca||cb?',':'\\}')+'\\\\ ';
-    if(ca||cb) t+=[ca,cb].filter(Boolean).join(',\\\\ ')+'\\}\\\\ ';
-    if(V.some(i=>!ROWS[i].ind)) t+='\\htmlClass{new}{K \\text{ runs out at } 4}\\\\ \\text{only inductive sets vote}';
-    else if(common.has('a0')||common.has('b0')){ const s=common.has('a0')?'\\{1\\}':'\\{2\\}'; t+=`\\htmlClass{new}{\\text{the stray } ${s} \\text{ survives}}\\\\ \\text{let in a voter without it (strays)}`; }
-    else if([...CA,...CB].some(id=>common.has(id))) t+='\\text{strays out; the rest of a chain stays}\\\\ \\htmlClass{keep}{\\text{4b throws it out}}';
-    else t+='\\htmlClass{keep}{\\text{no cargo among these voters}}\\\\ \\text{when every inductive set votes,}\\\\ \\text{what is left is }\\mathbb N';
-  }
-  tex(document.getElementById('eqV'),`\\begin{gathered}${t}\\end{gathered}`,true);
-}
-function W0(){ return cvV.clientWidth||300; }
-new ResizeObserver(drawV).observe(cvV);
-if(window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{drawV();drawD();});
-drawV();
-
-/* ---------- right: different nexts ---------- */
-const st=(...m)=>({k:'set',m});
-const same=(p,q)=>p.m.every(x=>q.m.some(y=>same(x,y)))&&q.m.every(y=>p.m.some(x=>same(x,y)));
-const mem=(x,A)=>A.m.some(y=>same(x,y));
-function dedupe(m){ const o=[]; m.forEach(x=>{ if(!o.some(y=>same(x,y))) o.push(x); }); return o; }
-const NUM=[st()]; for(let k=1;k<=5;k++) NUM.push(st(...NUM.slice(0,k)));
-const nameOf=t=>{ const i=NUM.findIndex(u=>same(u,t)); return i<0?null:(i<=4?String(i):'S(4)'); };
-const show=t=>{ const nm=nameOf(t); if(nm!==null) return nm; return '\\{'+dedupe(t.m).map(show).join(',\\,')+'\\}'; };
-const showTop=t=>'\\{'+dedupe(t.m).map(show).join(',\\,')+'\\}';
-const Sx=x=>st(...x.m,x);
-const XS=[['0',NUM[0]],['1',NUM[1]],['2',NUM[2]],['3',NUM[3]],['4',NUM[4]],['{1}',st(NUM[1])],['{0, 2}',st(NUM[0],NUM[2])]];
-let xi=1, yi=3;
-function chips(id,get,set){ const el=document.getElementById(id); XS.forEach(([lab],i)=>{ const b=document.createElement('button'); b.textContent=lab; if(i===get()) b.className='on'; b.onclick=()=>{ set(i); [...el.querySelectorAll('button')].forEach(z=>z.classList.toggle('on',z===b)); drawD(); }; el.appendChild(b); }); }
-chips('xch',()=>xi,i=>xi=i); chips('ych',()=>yi,i=>yi=i);
-function drawD(){
-  const x=XS[xi][1], y=XS[yi][1], sx=Sx(x), sy=Sx(y);
-  const X=show(x), Y=show(y);
-  let t=`S(${X}) = ${showTop(sx)}\\\\ S(${Y}) = ${showTop(sy)}\\\\ `;
-  if(same(x,y)){ t+=`x = y\\\\ \\htmlClass{keep}{\\text{the same set, the same next}}`; }
-  else {
-    const a=mem(x,sy), b=mem(y,sx);
-    t+=`${X} \\in S(${Y})\\text{: }${a?'\\text{yes}':'\\htmlClass{new}{\\text{no}}'}\\\\ ${Y} \\in S(${X})\\text{: }${b?'\\text{yes}':'\\htmlClass{new}{\\text{no}}'}\\\\ `;
-    if(a&&b) t+='\\text{both: a loop (never happens)}';
-    else { const w=!a?X:Y, o=!a?Y:X; t+=`\\text{witness: } ${w} \\in S(${w}),\\ ${w} \\notin S(${o})\\\\ \\htmlClass{new}{S(${X}) \\ne S(${Y})}`; }
-    t+=`\\\\ \\text{both yes would need}\\\\ ${X} \\in ${Y} \\text{ and } ${Y} \\in ${X}\\text{: no-loop forbids it}`;
-  }
-  tex(document.getElementById('eqD'),`\\begin{gathered}${t}\\end{gathered}`,true);
-}
-drawD();
-
-/* ---------- slides ---------- */
-const N='\\htmlClass{new}', K='\\htmlClass{keep}';
-const SYM={'≠':'$\\ne$','∈':'$\\in$','∉':'$\\notin$','⋃':'$\\bigcup$','⇔':'$\\Leftrightarrow$','⊆':'$\\subseteq$','∅':'$\\varnothing$','∪':'$\\cup$','⊥':'$\\bot$','∀':'$\\forall$','∃':'$\\exists$','¬':'$\\neg$','∧':'$\\land$','∨':'$\\lor$','⇒':'$\\Rightarrow$','ℕ':'$\\mathbb N$','φ':'$\\varphi$'};
-const tx=r=>r.replace(/[≠∈∉⋃⇔⊆∅∪⊥∀∃¬∧∨⇒ℕφ]/g,ch=>SYM[ch]);
-const col2=(...rows)=>'\\begin{aligned}'+rows.map(([l,r])=>'&'+l+' &&\\text{'+tx(r)+'}').join('\\\\ ')+'\\end{aligned}';
-const PW=s=>'\\text{'+tx(s.replace(/[{}]/g,c=>'\\'+c)).replace(/[×↦𝒫′ψ]/gu,c=>({'×':'$\\times$','↦':'$\\mapsto$','𝒫':'$\\mathcal P$','′':"$'$",'ψ':'$\\psi$'})[c])+'}';
-const PN=s=>N+'{'+PW(s)+'}', PK=s=>K+'{'+PW(s)+'}';
-const T=s=>'\\text{'+s+'}';
-stepper('#sl3a',[
-  {k:'ember',kl:'the condition',t:R`\varphi(x):\;\; \forall J\,\big(J \text{ is inductive} \Rightarrow ${N}{x \in J}\big)`,n:`“x is in every inductive set”, read aloud: for every thing J, if J is inductive, then x is in J. It speaks of every set, and that is allowed; it is not yet a sift of anything.`}
-],{title:'The slides · the condition · ← → keys work'});
-stepper('#sl3b',[
-  {k:'ember',kl:'the condition, unpacked',t:R`\forall J\,\Big(\big(0 \in J \land \forall y\,(y \in J \Rightarrow S(y) \in J)\big) \Rightarrow x \in J\Big)`,n:`With “inductive” unpacked, only ∀, ⇒, ∧, ∈ and S are left. It is a condition in 2b's sense, built from rung 1's words and ∈.`}
-],{title:'The slides · the condition, unpacked · ← → keys work'});
-stepper('#sl3c',[
-  {k:'ember',kl:'the sift',t:R`\{x \in ${K}{I} : \varphi(x)\}`,n:`sift it from I, the inductive set you named when you used the infinity axiom's some. Sifting from a set you have is exactly the move of 2b, and what 3b's gallery was waiting for.`}
-],{title:'The slides · the sift · ← → keys work'});
-stepper('#sl4',[
-  {k:'ember',kl:'the whichever-inductive-set technique',t:col2([PW('Let y be anything. Suppose y is in the sift.'),'supposed'],[PW('Then y ∈ I, and φ(y).'),'unpack the sift'],[PN('So φ(y).'),'keep the second half'],[PW('Drop that. Suppose instead φ(y).'),'supposed'],[PN('I is inductive, so y ∈ I.'),'use the every with I'],[PW('So y is in the sift.'),'join; pack the sift']),n:`Each way is short. The second way is where the inductive set I drops out: being in every inductive set already puts y in I.`}
-],{title:'The slides · the whichever-inductive-set technique · ← → keys work'});
-stepper('#sl5',[
-  {k:'ember',kl:'the name',t:R`y \in ${N}{\mathbb N} \;\Leftrightarrow\; \forall J\,(J \text{ is inductive} \Rightarrow y \in J)`,n:`People sifting from different inductive sets get sets with the same members, so the same set by same-members; and there is an inductive set to sift from, by the infinity axiom. So the description fits exactly one set, and it gets a name: ℕ. This line is the membership-in-ℕ technique.`}
-],{title:'The slides · the name · ← → keys work'});
-stepper('#sl7',[
-  {k:'ember',kl:'the lies-below technique',t:col2([PW('Suppose J is inductive.'),'supposed'],[PW('Let y be anything, and suppose y ∈ ℕ.'),'supposed'],[PW('Then y is in every inductive set.'),'unpack membership-in-ℕ'],[PN('J is one of them, so y ∈ J.'),'use the every with J'],[PW('So ℕ ⊆ J.'),'drop the supposition about y; pack ⊆']),n:` ℕ lies below every inductive set. Its description says exactly that, and the argument is an unpacking and one use of an every.`}
-],{title:'The slides · the lies-below technique · ← → keys work'});
-stepper('#sl8a',[
-  {k:'ember',kl:'the zero-is-a-number technique',t:col2([PW('Let J be anything, and suppose J is inductive.'),'supposed'],[PW('Then 0 ∈ J.'),'unpack “inductive”; keep the first half'],[PW('So 0 is in every inductive set.'),'drop the supposition; J was anything'],[PN('So 0 ∈ ℕ.'),'pack membership-in-ℕ']),n:` The base part of ℕ is the base part of every inductive set, gathered.`}
-],{title:'The slides · the zero-is-a-number technique · ← → keys work'});
-stepper('#sl8b',[
-  {k:'ember',kl:'the next-of-a-number technique',t:col2([PW('Suppose n ∈ ℕ.'),'supposed'],[PW('Let J be anything, and suppose J is inductive.'),'supposed'],[PW('Then n ∈ J.'),'unpack membership-in-ℕ'],[PW('J holds the next one after n, so S(n) ∈ J.'),'J\'s step part, used with n'],[PW('So S(n) is in every inductive set.'),'drop the supposition about J'],[PN('So S(n) ∈ ℕ.'),'pack membership-in-ℕ']),n:` The step part of ℕ is each inductive set's step part, used inside it. Every inductive set carries n to S(n), so S(n) is in every inductive set.`}
-],{title:'The slides · the next-of-a-number technique · ← → keys work'});
-stepper('#sl9a',[
-  {k:'ember',kl:'the smallest-inductive-set technique',t:R`\mathbb N \text{ is inductive} \;\land\; \forall J\,(J \text{ inductive} \Rightarrow ${N}{\mathbb N \subseteq J})`,n:`zero-is-a-number and next-of-a-number joined are “ℕ is inductive”; lies-below is the rest. Smallest means: a part of every other inductive set. Not “fewest members”: nothing has said what fewer means.`}
-],{title:'The slides · the smallest-inductive-set technique · ← → keys work'});
-stepper('#sl9b',[
-  {k:'ember',kl:'only one smallest',t:col2([PW('Suppose K is inductive.'),'supposed'],[PW('Suppose K is a part of every inductive set.'),'supposed'],[PW('ℕ is inductive, so K ⊆ ℕ.'),'use the every with ℕ'],[PW('And ℕ ⊆ K.'),'the lies-below technique with K'],[PN('So K = ℕ.'),'the double-inclusion technique']),n:` Any set that is inductive and a part of every inductive set is ℕ. “The smallest inductive set” names exactly one set.`}
-],{title:'The slides · only one smallest · ← → keys work'});
-stepper('#sl9c',[
-  {k:'ember',kl:'the run is in ℕ',t:R`0 \in \mathbb N,\;\; 1 \in \mathbb N,\;\; \dots,\;\; 4 \in \mathbb N,\;\; ${N}{S(4) \in \mathbb N}`,n:`The named-sets-are-inductive technique, with ℕ in the place of the inductive set; or zero-is-a-number, then next-of-a-number over and over. Every entry you can name is a number. The other part, that nothing else is, starts on the next slide.`}
-],{title:'The slides · the run is in ℕ · ← → keys work'});
-stepper('#sl10',[
-  {k:'ember',kl:'a stray',t:col2([PW('Suppose S(x) = {1}.'),'supposed, to refute it'],[PW('x is in S(x), so x is in {1}.'),'in-its-next; swap'],[PW('So x = 1.'),'the only member of \\{1\\} is 1'],[PW('0 is in 1, and 1 is a part of S(1).'),'1 is \\{0\\}; in-its-next'],[PW('So 0 is in S(1), so 0 is in {1}.'),'swap back'],[PN('So 0 = 1.'),'the only member of \\{1\\} is 1'],[PW('But 1 ≠ 0. That clashes.'),'next-never-empty; clash'],[PW('So S(x) ≠ {1}.'),'drop the supposition: refute']),n:`{1} is nobody's next. If it were S(x), then x would be its only member, 1, and S(1) would hold 0 as well, which {1} does not.`}
-],{title:'The slides · a stray · ← → keys work'});
-stepper('#sl11',[
-  {k:'ember',kl:'sifting the stray away',t:col2([PW('Let J be I with {1} sifted away.'),'a sift of I'],[PW('0 is in J.'),'0 ∈ I; 0 has no member, \\{1\\} has 1'],[PW('Suppose x ∈ J.'),'supposed'],[PW('Then x ∈ I, so S(x) ∈ I.'),'unpack the sift; I\'s step part'],[PN('And S(x) ≠ {1}.'),'the stray argument'],[PW('So S(x) ∈ J.'),'pack the sift']),n:`J is inductive. Its base is true because 0 is not {1}; its step is true because nothing has {1} as its next.`}
-],{title:'The slides · sifting the stray away · ← → keys work'});
-stepper('#sl12',[
-  {k:'ember',kl:'the strays technique',t:col2([PW('Suppose {1} ∈ ℕ.'),'supposed, to refute it'],[PW('Then {1} ∈ J.'),'the lies-below technique'],[PW('So {1} ≠ {1}.'),'unpack the sift'],[PW('But {1} = {1}. That clashes.'),'the self-sameness axiom; clash'],[PN('So {1} ∉ ℕ.'),'drop the supposition: refute']),n:` In general, the strays technique: if c ≠ 0 and c is nobody's next, then c is not a number. S({1}) is somebody's next, so it needs 4b.`}
-],{title:'The slides · the strays technique · ← → keys work'});
-stepper('#sl13a',[
-  {k:'ember',kl:'the different-nexts technique',t:col2([PW('Suppose S(x) = S(y).'),'supposed'],[PW('x is in S(x), so x is in S(y).'),'in-its-next; swap'],[PW('So x ∈ y, or x = y.'),'next-membership'],[PW('Likewise, y ∈ x, or y = x.'),'the same moves, turned about'],[PN('If neither is an “is”, then x ∈ y and y ∈ x.'),'the loop case']),n:`Each set is in the other's next one, so each is in the other or is the other. Two “is” cases give x = y at once.`},
-  {k:'ember',kl:'the different-nexts technique',t:col2([PW('In the loop case, x ∈ y and y ∈ x.'),'that case'],[PW('That is a loop, and loops clash.'),'the no-loop technique; clash'],[PN('So x = y here too.'),'everything permitted'],[PW('Every case reaches x = y.'),'by cases']),n:` The loop case is totally false, by foundation through no-loop, and, since nothing is then true, everything is permitted, the goal too. Every case reaches x = y: S is one-to-one, for every set.`}
-],{title:'The slides · the different-nexts technique · ← → keys work'});
-stepper('#sl13b',[
-  {k:'ember',kl:'a witness',t:R`S(1) = \{0, 1\},\quad S(3) = \{0,1,2,3\},\quad ${N}{3 \in S(3)},\ 3 \notin S(1)`,n:`The proof says: for different sets, x ∈ S(y) and y ∈ S(x) cannot both be true. Here 1 ∈ S(3) is true, so 3 ∈ S(1) is false, and 3 is the witness that the nexts differ. The right picture finds the witness for any pair.`}
-],{title:'The slides · a witness · ← → keys work'});
-stepper('#sl14',[
-  {k:'ember',kl:'the endless mark',t:R`\begin{gathered}\text{each } n \text{ with } S(n):\\ \text{a number (next-of-a-number)}\\ \text{different for different } n \text{ (different-nexts)}\\ \text{never } 0 \text{ (next-never-empty)}\end{gathered}`,n:`ℕ is matched, member for member, with a part of itself that leaves 0 out: the founder's mark of an endless collection, now proved. 4c turns the matching into an object.`}
-],{title:'The slides · the endless mark · ← → keys work'});
-stepper('#sl16',[
-  {k:'ember',kl:'backwards',t:R`t \notin \mathbb N\;\;\text{wanted}`,n:`Find it from the foot. A not-number is a failed every in membership-in-ℕ, so you want an inductive set without t. For a stray, sift t away from I: show t ≠ 0 and that t is nobody's next, check both parts of “inductive”, then lies-below and a clash.`}
-],{title:'The slides · backwards · ← → keys work'});
-
 function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
 Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
+})();
+</script>
+<script>
+(function(){
+const {stepper}=Rung;
+const N='\\htmlClass{new}', K='\\htmlClass{keep}';
+const col2=(...rows)=>'\\begin{aligned}'+rows.map(([l,r])=>'&'+l+' &&\\text{'+r+'}').join('\\\\ ')+'\\end{aligned}';
+const T=s=>'\\text{'+s+'}';
 })();
 </script>
 <script src="tray.js"></script>

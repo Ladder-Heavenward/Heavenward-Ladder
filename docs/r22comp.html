@@ -30,15 +30,15 @@ table.tt td.l{text-align:left}
   <h1>Does forgetting cost energy?</h1>
   <p data-pid="975865">Does forgetting cost energy? A computer gets warm. Some of that heat comes from wires that are not perfect, and better wires could cut it. But is there a part that no engineering can remove? A memory that is wiped clean has lost something. Before, it could have held either of two things; after, it holds one. Physicists had long tied heat to the number of ways the molecules of a body can sit. What makes it hard is that a bit is information and heat is energy, and for a long time nobody could see why one should cost the other. This page shows, with counting from rung 4, logs from rung 17 and 22k’s size of the factorials, how to count the ways a thing can sit in bits, why a gas that fills its room is a matter of counting, and why wiping a bit sends a least amount of heat into the room. Then it looks back at the gates of 4·comp, and finds which of them forget.</p>
   <p class="gesture" data-pid="47615b">The log of the number of ways a thing can sit adds when two things sit side by side, so it can be counted in bits, and a measured law ties heat to the same count. Choosing a share of many things can be done in a number of ways whose log is the count of things times a fixed fraction, by the size of the factorials. Squeezing a gas into half its room at a steady temperature turns a fixed amount of work into heat, and that heat is exactly what the lost ways are worth. A memory wiped clean loses ways in the same manner, so it must send heat into the room. A gate that sends two different inputs to the same output forgets, and pays.</p>
-  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r04comp.html">4·comp</a> (gates), <a href="r04j.html">4j</a> (stages-multiply, choosing-counts-parts), <a href="r17c.html">17c</a> (log-of-a-product), <a href="r17h.html">17h</a> (change of base), <a href="r17a.html">17a</a> (the log as an area), <a href="r15chem.html">15·chem</a> (the gas law; work as an area), <a href="r17crypt.html">17·crypt</a> (bits of a choice), <a href="r17phys.html">17·phys</a> (the fixed number k), <a href="r22k.html">22k</a> (the size of n!) and <a href="r05stat.html">5·stat</a> (expected value). 30·comp counts what a noisy line can carry.</p></div>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r04comp.html">4·comp</a> (gates), <a href="r04k.html">4k</a> (stages-multiply, choosing-counts-parts), <a href="r17c.html">17c</a> (log-of-a-product), <a href="r17h.html">17h</a> (change of base), <a href="r17a.html">17a</a> (the log as an area), <a href="r15chem.html">15·chem</a> (the gas law; work as an area), <a href="r17crypt.html">17·crypt</a> (bits of a choice), <a href="r17phys.html">17·phys</a> (the fixed number k), <a href="r22k.html">22k</a> (the size of n!) and <a href="r05stat.html">5·stat</a> (expected value). 30·comp counts what a noisy line can carry.</p></div>
 </header>
 
 <section class="class step" data-step="22comp1">
   <h2 class="sthead"><span class="stno">22comp1</span>Counting ways in bits</h2>
-  <p class="stands">Stands on 4j (stages-multiply), 17c (log-of-a-product), 17h (change of base) and 17·crypt (bits of a choice).</p>
+  <p class="stands">Stands on 4k (stages-multiply), 17c (log-of-a-product), 17h (change of base) and 17·crypt (bits of a choice).</p>
   <p data-pid="6d0d2c">17·crypt counted a password’s choices in bits. Physics counts the ways the molecules of a body can sit. If one thing can sit in W₁ ways and another in W₂, the two side by side can sit in W₁W₂ ways. A count that multiplies is awkward. Its log adds.</p>
   <pre class="lines" data-k="ember" data-label="this page: the ways-to-bits technique">
-W = W_1 W_2 @@ stages-multiply (4j): each way of the first with each way of the second
+W = W_1 W_2 @@ stages-multiply (4k): each way of the first with each way of the second
 \ln W = \ln W_1 + \ln W_2 @@ log-of-a-product (17c)
 \text{bits} = \log_2 W = \tfrac{\ln W}{\ln 2} @@ change of base (17h); n switches have W = 2ⁿ, so n bits
 \htmlClass{new}{S = k\ln W = (k\ln 2)\cdot \text{bits}} @@ the measured law; k ln 2 ≈ 9.57 × 10⁻²⁴ J/K for each bit
@@ -55,10 +55,10 @@ W = W_1 W_2 @@ stages-multiply (4j): each way of the first with each way of the 
 
 <section class="class step" data-step="22comp2">
   <h2 class="sthead"><span class="stno">22comp2</span>The size of n! as the bridge</h2>
-  <p class="stands">Stands on 22·comp.1, 4j (choosing-counts-parts) and 22k (the size of n!).</p>
-  <p data-pid="ef099b">N switches with exactly k of them on can sit in N choose k ways (4j). Those factorials are far too large to write out. 22k gives their size: ln n! = n ln n − n + rₙ, where rₙ lies between 0 and ln n + 1. Write p = k/N for the share that is on.</p>
+  <p class="stands">Stands on 22·comp.1, 4k (choosing-counts-parts) and 22k (the size of n!).</p>
+  <p data-pid="ef099b">N switches with exactly k of them on can sit in N choose k ways (4k). Those factorials are far too large to write out. 22k gives their size: ln n! = n ln n − n + rₙ, where rₙ lies between 0 and ln n + 1. Write p = k/N for the share that is on.</p>
   <pre class="lines" data-k="ember" data-label="this page: the share-count technique">
-\ln\binom{N}{k} = \ln N! - \ln k! - \ln(N - k)! @@ choosing-counts-parts (4j)
+\ln\binom{N}{k} = \ln N! - \ln k! - \ln(N - k)! @@ choosing-counts-parts (4k)
 = N\ln N - k\ln k - (N - k)\ln(N - k) + r @@ the size of n! (22k); the −n parts cancel; |r| ≤ 2(ln N + 1)
 = -k\ln\tfrac{k}{N} - (N - k)\ln\tfrac{N - k}{N} + r @@ N ln N = k ln N + (N − k) ln N
 \htmlClass{new}{\log_2\binom{N}{k} = N\,h(p) + \tfrac{r}{\ln 2},\ \ h(p) = -p\log_2 p - (1 - p)\log_2(1 - p)} \quad \blacksquare @@ divide by ln 2 (17h)
@@ -95,7 +95,7 @@ W = W_1 W_2 @@ stages-multiply (4j): each way of the first with each way of the 
   <p data-pid="0d236e">Halved-room technique: <b>halving a gas’s room at a fixed temperature turns NkT ln 2 of work into heat, and that heat over T is exactly the entropy the gas lost.</b> The squeeze lost N bits of ways, and the room took them as heat. A litre of air at 300 K and one atmosphere has pV ≈ 101.3 J, so halving it gives off about 70.2 J. It holds about 2.45 × 10²² molecules, so that is 2.45 × 10²² bits.</p>
   <aside class="nature">
     <div class="eyebrow">Anexact, yet rigorous · counting, by the trillion trillion</div>
-    <p data-pid="22d3a9">4j set beside counting a principle: random things in a crowd make smooth, steady patterns. One molecule can be anywhere in its box. A litre of air spreads evenly, and nothing pushes it to. Of the 2ᴺ ways to place N molecules in two halves, nearly all are close to even.</p>
+    <p data-pid="22d3a9">4k set beside counting a principle: random things in a crowd make smooth, steady patterns. One molecule can be anywhere in its box. A litre of air spreads evenly, and nothing pushes it to. Of the 2ᴺ ways to place N molecules in two halves, nearly all are close to even.</p>
     <p data-pid="b48187"><b>One molecule can be anywhere; a crowd of them sits where the ways are most, and the ways are the law.</b></p>
     <p data-pid="abd3c3">The second law is that counting, done for you. It does not say the gas cannot crowd into one half. It says how rarely: for 100 molecules, all in the left half at one glance has chance 2⁻¹⁰⁰, about 8 × 10⁻³¹. For a litre of air the chance, written as a decimal, starts with about 7 × 10²¹ zeros.</p>
     <p class="bait" data-pid="fb78e5">A box holds 50 molecules. What share of the ways to place them in two halves puts exactly 25 in each? Is an even split the rule, or only the middle of a pile?</p>

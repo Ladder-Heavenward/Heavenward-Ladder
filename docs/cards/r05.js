@@ -1,5 +1,5 @@
 /* flash cards, r05. */
-(window.LADDER_CARDS=window.LADDER_CARDS||{})["5a"]=[{"q":"(k, b) ∼ (c, d) means k + d = b + c. What is the class [k, b] called?","a":"an integer","w":["a pair","a counting number","a difference"],"why":"Its members are the pairs; the class itself is the integer."},
+(window.LADDER_CARDS=window.LADDER_CARDS||{})["5b"]=[{"q":"(k, b) ∼ (c, d) means k + d = b + c. What is the class [k, b] called?","a":"an integer","w":["a pair","a counting number","a difference"],"why":"Its members are the pairs; the class itself is the integer."},
  {"q":"A line speaks of “the integer (3, 5)”. What is wrong?","a":"a pair is a member, never an integer","w":["(3, 5) names 2","3 is less than 5","nothing: it is −2"],"why":"The integer is the class [3, 5]."},
  {"q":"A line reads: [3, 5] = [0, 2], so 3 = 0. True?","a":"no: same-class is the test","w":["yes: equal classes, equal entries","yes: by member-with-a-0","no: [3, 5] ≠ [0, 2]"],"why":"A class has many members."},
  {"q":"(a, b), (c, d) ↦ (ac, bd), for integers. What fails?","a":"it is not honest: members disagree","w":["it does not give a pair","it is not reflexive","nothing: it multiplies"],"why":"(0, 2) and (1, 3) are both −2, yet with (0, 3) they give −6 and −9."},
@@ -9,7 +9,7 @@
  {"q":"2 = [2, 0] as sets. True?","a":"no: it is a reading, by ℕ-inside-ℤ","w":["yes: both are 2","yes: by same-class","no: 2 is [0, 2]"],"why":"2 = {0, 1}, and [2, 0] is a set of pairs."},
  {"q":"For every number k other than 0, no number x has k + x = 0. Which technique?","a":"gap-in-ℕ","w":["zero-plus","member-with-a-0","cancel for plus"],"why":"It is the missing answer the pairs stand in for."},
  {"q":"(x − y) − z = x − (y − z). True?","a":"no: brackets matter for subtracting","w":["yes: by regroup for plus on ℤ","yes: both are differences","no: subtracting twice is not allowed"],"why":"(5 − 3) − 1 = 1 and 5 − (3 − 1) = 3."}];
-(window.LADDER_CARDS=window.LADDER_CARDS||{})["5b"]=[{"q":"In the fraction pair (p, q), what is q called?","a":"the denominator","w":["the numerator","the quotient","the reciprocal"],"why":"The top is the numerator, the bottom the denominator."},
+(window.LADDER_CARDS=window.LADDER_CARDS||{})["5c"]=[{"q":"In the fraction pair (p, q), what is q called?","a":"the denominator","w":["the numerator","the quotient","the reciprocal"],"why":"The top is the numerator, the bottom the denominator."},
  {"q":"Is (1, 0) a fraction pair?","a":"no: a denominator of 0 is refused","w":["yes: it names 1/0","yes: its top is not 0","no: its top must be 0"],"why":"Refusing 0 is what lets the relation make classes at all."},
  {"q":"p/q = r/s exactly when ps = qr. Which technique?","a":"cross-multiplying","w":["scaling","same-fraction","honest-fractions"],"why":"It is the test for two pairs in one class."},
  {"q":"(kp)/(kq) = p/q for k ≠ 0. Which technique?","a":"scaling","w":["cross-multiplying","cancel for fractions","reciprocal"],"why":"A pair scaled by k ≠ 0 stays in its class."},
@@ -19,7 +19,7 @@
  {"q":"Is p/q the pair (p, q)?","a":"no: p/q names the class","w":["yes: by the fraction line","yes: when q is the least","no: p/q names q/p"],"why":"A pair is one member of it."},
  {"q":"A line reads: xz = yz, so x = y, for integers. What does the move need?","a":"z other than 0","w":["x and y other than 0","z a counting number","nothing: cancel for times gives it"],"why":"3 · 0 = 5 · 0."},
  {"q":"No integer x has 2x = 1. Which technique?","a":"gap-in-ℤ","w":["gap-in-ℕ","no-zero-product on ℤ","cancel for times on ℤ"],"why":"It is the question the fractions answer."}];
-(window.LADDER_CARDS=window.LADDER_CARDS||{})["5c"]=[{"q":"Every rational is 0, positive, or the negative of a positive, exactly one. Which rule?","a":"three-way on ℚ","w":["positive-sum on ℚ","any-two-compare on ℚ","settled-order on ℚ"],"why":"Three-way is one of the three order rules."},
+(window.LADDER_CARDS=window.LADDER_CARDS||{})["5d"]=[{"q":"Every rational is 0, positive, or the negative of a positive, exactly one. Which rule?","a":"three-way on ℚ","w":["positive-sum on ℚ","any-two-compare on ℚ","settled-order on ℚ"],"why":"Three-way is one of the three order rules."},
  {"q":"p/q is positive exactly when p is. True?","a":"no: (−2)/(−3) is positive","w":["yes: the top decides","yes: by honest-positive","no: the bottom decides"],"why":"The test is the product pq."},
  {"q":"A line reads: w < b, so wc < bc. What does the move need?","a":"c positive","w":["c other than 0","w positive","nothing: it keeps order"],"why":"With c = −1: 1 < 2, yet −1 < −2 fails."},
  {"q":"a − (b − c) = a − b − c. True?","a":"no: 5 − (3 − 1) = 3, and 5 − 3 − 1 = 1","w":["yes: by regroup for plus on ℚ","yes: subtracting regroups","no: a − b − c names nothing"],"why":"Work out the negative of a sum first."},
@@ -29,7 +29,7 @@
  {"q":"If w + x = 0, then x = −w. Which technique?","a":"one-negative","w":["negative on ℚ","honest-negative","plus-zero on ℚ"],"why":"A negative is the only number that adds to give 0."},
  {"q":"−a is never positive. True?","a":"no: −(−3/4) = 3/4","w":["yes: a negative is never positive","yes: by three-way on ℚ","no: −a is always positive"],"why":"−a is the negative of a, whatever a is."},
  {"q":"Times spreads over plus, on ℚ. Which rule?","a":"spread on ℚ","w":["regroup for times on ℚ","turn-about for times on ℚ","times-one on ℚ"],"why":"Spread is the only rule that ties adding to multiplying."}];
-(window.LADDER_CARDS=window.LADDER_CARDS||{})["5d"]=[{"q":"w · 0 = 0, from the twelve rules alone. Which technique?","a":"anything-times-zero","w":["times-zero on ℤ","plus-zero on ℚ","zero-product"],"why":"w · 0 = w · (0 + 0) = w · 0 + w · 0."},
+(window.LADDER_CARDS=window.LADDER_CARDS||{})["5e"]=[{"q":"w · 0 = 0, from the twelve rules alone. Which technique?","a":"anything-times-zero","w":["times-zero on ℤ","plus-zero on ℚ","zero-product"],"why":"w · 0 = w · (0 + 0) = w · 0 + w · 0."},
  {"q":"A line reads: ac = bc, so a = b, with c = 0. What is wrong?","a":"cancel for times needs c ≠ 0","w":["a and b must be positive","c must be 1","nothing: cancelling is free"],"why":"2 · 0 = 1 · 0. Every “proof” that 1 = 2 hides a division by 0."},
  {"q":"A line reads: xx = x, so x = 1. What was lost?","a":"the answer 0","w":["the answer −1","nothing: 1 is the only answer","the answer 1/2"],"why":"Cancelling x loses x = 0; zero-product keeps both."},
  {"q":"(−a)(−a) = −(aa). True?","a":"no: two-negatives gives aa","w":["yes: by negative-out on ℚ","yes: a negative times a negative","no: it is −a"],"why":"With a = 3: 9, not −9."},
@@ -39,7 +39,7 @@
  {"q":"On {0, 1, 2, 3}, with remainders by 4, 2 · 2 = 0. Which technique fails there?","a":"zero-product","w":["anything-times-zero","negative-out on ℚ","two-negatives"],"why":"Two things other than 0 multiply to 0."},
  {"q":"(−w)b = −(wb). Which technique?","a":"negative-out on ℚ","w":["two-negatives","one-negative","negative-of-a-negative"],"why":"The negative comes out of the product."},
  {"q":"On this page, what are the twelve rules?","a":"the only premises","w":["techniques proved on pairs","facts checked on examples","definitions of the marks"],"why":"Here they are the starting point, and no line looks inside a fraction."}];
-(window.LADDER_CARDS=window.LADDER_CARDS||{})["5e"]=[{"q":"w < b, so w < (w + b)/2 < b. Which technique?","a":"another-between","w":["keep-order for plus on ℚ","no-greatest-below","compare-by-cross-multiplying"],"why":"The half of the sum lands strictly between."},
+(window.LADDER_CARDS=window.LADDER_CARDS||{})["5f"]=[{"q":"w < b, so w < (w + b)/2 < b. Which technique?","a":"another-between","w":["keep-order for plus on ℚ","no-greatest-below","compare-by-cross-multiplying"],"why":"The half of the sum lands strictly between."},
  {"q":"Another between any two, so no holes. True?","a":"no: crowded is not complete","w":["yes: by another-between","yes: every gap is filled","no: some pairs have none between"],"why":"Another-between and no-fraction-squares-to-2 both hold."},
  {"q":"p/q < r/s exactly when ps < qr. What does it need?","a":"positive denominators","w":["positive numerators","denominators other than 1","nothing: it always holds"],"why":"1/(−1) < 1/1, yet 1 · 1 < (−1) · 1 fails."},
  {"q":"Halfway between a and b, written a + b/2. What is wrong?","a":"it reads a + (b/2)","w":["it reads (a + b)/2","b/2 names nothing","nothing: it is halfway"],"why":"By the convention; halfway is (a + b)/2, with its brackets written."},
@@ -49,8 +49,8 @@
  {"q":"p · p = 2 · q · q, so p is even. Which technique gives that?","a":"even-square","w":["odd-times-odd","no-double-square","prime-divides-a-factor"],"why":"If a number times itself is even, the number is even."},
  {"q":"For every rational r, r² ≠ 2. Which technique?","a":"no-fraction-squares-to-2","w":["no-greatest-below","no-double-square","another-between"],"why":"No-double-square is about counting numbers; this one is about rationals."},
  {"q":"If w < b and c is positive, then wc < bc. Which technique?","a":"keep-order for times on ℚ","w":["keep-order for plus on ℚ","positive-product on ℚ","compare-by-cross-multiplying"],"why":"It needs c positive."},
- {"q":"r² for a rational r, by 4e’s powers. What is wrong?","a":"4e’s powers are of numbers","w":["4e’s powers need r ≠ 0","r² is r + r","nothing: it is r to the 2"],"why":"For rationals, r² is this page’s line: r · r."}];
-(window.LADDER_CARDS=window.LADDER_CARDS||{})["5f"]=[{"q":"In a condition, x stands in the place of a rational that is asked for. What is x called?","a":"an unknown","w":["an answer","a coefficient","an answer set"],"why":"The rationals that make the condition hold are its answers."},
+ {"q":"r² for a rational r, by 4f’s powers. What is wrong?","a":"4f’s powers are of numbers","w":["4f’s powers need r ≠ 0","r² is r + r","nothing: it is r to the 2"],"why":"For rationals, r² is this page’s line: r · r."}];
+(window.LADDER_CARDS=window.LADDER_CARDS||{})["5g"]=[{"q":"In a condition, x stands in the place of a rational that is asked for. What is x called?","a":"an unknown","w":["an answer","a coefficient","an answer set"],"why":"The rationals that make the condition hold are its answers."},
  {"q":"3x − 7 = 11 becomes 3x = 18. Which technique?","a":"adding-keeps-answers","w":["multiplying-keeps-answers","add-a-sameness","rewriting"],"why":"Adding 7 to both sides keeps the answers."},
  {"q":"A line reads: 2x + 6 = 10, so x + 6 = 5. What is wrong?","a":"the ½ must reach every term","w":["the 6 should become 3 on the right","the 10 should stay","nothing: both sides were halved"],"why":"A change to both sides is done to each whole side: x + 3 = 5."},
  {"q":"5(x − 2) − 3x becomes 2x − 10. Which kind of move?","a":"rewriting: one side, same value","w":["a change to both sides","solving for x","a move that gains answers"],"why":"Rewriting replaces an expression by one with the same value at every x."},
@@ -62,7 +62,7 @@
  {"q":"2x + 2 = 2(x + 1). What is its answer set?","a":"every rational","w":["no rational","only 0","only −1"],"why":"Rewriting the right side gives the left, so every x answers."},
  {"q":"0 · (3x + 5) = 0 · (11 − x). Same answers as 3x + 5 = 11 − x?","a":"no: every rational now answers","w":["yes: by multiplying-keeps-answers","yes: both sides are 0","no: there are no answers now"],"why":"Multiplying by 0 makes every rational an answer, with no way back."},
  {"q":"A line reads: 1/x + 1/2 = 1/3, so x + 2 = 3. What is wrong?","a":"reciprocals taken term by term","w":["the sides were swapped","the 2 should be 1/2","nothing: reciprocals keep answers"],"why":"The reciprocal of a sum is not the sum of reciprocals."}];
-(window.LADDER_CARDS=window.LADDER_CARDS||{})["5g"]=[{"q":"A fraction pair whose top and bottom share no divisor but 1, bottom positive. What is it?","a":"in lowest terms","w":["a unit fraction","a finite decimal","a scaled pair"],"why":"Every fraction has exactly one such member."},
+(window.LADDER_CARDS=window.LADDER_CARDS||{})["5h"]=[{"q":"A fraction pair whose top and bottom share no divisor but 1, bottom positive. What is it?","a":"in lowest terms","w":["a unit fraction","a finite decimal","a scaled pair"],"why":"Every fraction has exactly one such member."},
  {"q":"If gcd(z, b) = 1 and z ∣ bc, then z ∣ c. Which technique?","a":"factor-that-shares-nothing","w":["prime-divides-a-factor","lowest-terms","one-lowest-terms"],"why":"z shares nothing with b, so it must divide c."},
  {"q":"1/n, for a number n other than 0. What is it called?","a":"a unit fraction","w":["a decimal place","a lowest term","a percent"],"why":"A unit fraction has top 1."},
  {"q":"Does 3/40 have a finite decimal?","a":"yes: 40 has only 2 and 5 as primes","w":["no: 40 is not a power of ten","no: its top is not 1","yes: every fraction has one"],"why":"The finite-decimal technique."},
@@ -74,7 +74,7 @@
  {"q":"(bk)⁻¹ = b⁻¹k⁻¹, for b and k other than 0. Which technique?","a":"reciprocal-of-a-product","w":["power-of-a-product","reciprocal on ℚ","fractions-of-rationals"],"why":"The reciprocal of a product is the product of the reciprocals."},
  {"q":"A price rises 25%, then falls 20%. Where does it end?","a":"where it started","w":["5% above where it started","5% below where it started","45% below where it started"],"why":"5/4 · 4/5 = 1: each change multiplies by one fraction."},
  {"q":"0.375 as a fraction in lowest terms. Which is it?","a":"3/8","w":["375/100","3/75","37/5"],"why":"0.375 = 375/1000, and cancelling 125 leaves 3/8."}];
-(window.LADDER_CARDS=window.LADDER_CARDS||{})["5h"]=[{"q":"In 5x, what is 5 called?","a":"the coefficient","w":["the term","the factor list","the unknown"],"why":"The number in front of a term."},
+(window.LADDER_CARDS=window.LADDER_CARDS||{})["5i"]=[{"q":"In 5x, what is 5 called?","a":"the coefficient","w":["the term","the factor list","the unknown"],"why":"The number in front of a term."},
  {"q":"3x and 5x. What are they?","a":"like terms","w":["factors","coefficients","a factored sum"],"why":"Terms that differ only in their coefficients."},
  {"q":"x² − 5x + 6 = (x − 2)(x − 3). Which technique finds −2 and −3?","a":"sum-and-product","w":["difference-of-squares","square-of-a-difference","same-squares"],"why":"Two numbers that add to −5 and multiply to 6."},
  {"q":"x² + 6x + 9 = (x + 3)². Which technique?","a":"square-of-a-sum","w":["sum-and-product","difference-of-squares","grid-of-cells"],"why":"(w + b)² = w² + 2wb + b², with w = x and b = 3."},
@@ -86,7 +86,7 @@
  {"q":"x² − 6x + 2 = (x − 3)² − 7. What form is (x − 3)² − 7?","a":"the displacement pattern, with a rational added","w":["a difference of squares","a factored form","the grid of cells"],"why":"The shifted square shows the least value, −7, at x = 3."},
  {"q":"If w² = b², then w = b or w = −b. Which technique?","a":"same-squares","w":["difference-of-squares","zero-product","square-of-a-difference"],"why":"It runs through (w + b)(w − b) = 0."},
  {"q":"−(a − b) = −a − b. True?","a":"no: it is −a + b","w":["yes: the minus spreads","yes: by negative-out on ℚ","no: it is a − b"],"why":"The negative of a sum is the sum of the negatives."}];
-(window.LADDER_CARDS=window.LADDER_CARDS||{})["5i"]=[{"q":"Juice to water is 3 : 2. What part of the drink is juice?","a":"3/5","w":["3/2","2/3","2/5"],"why":"Part to part: the juice is 3 of 5 parts."},
+(window.LADDER_CARDS=window.LADDER_CARDS||{})["5j"]=[{"q":"Juice to water is 3 : 2. What part of the drink is juice?","a":"3/5","w":["3/2","2/3","2/5"],"why":"Part to part: the juice is 3 of 5 parts."},
  {"q":"1 : 2 = 3 : 6. What tests it?","a":"ratios-cross-multiply, not the entries","w":["the first entries","the sums of the entries","the second entries"],"why":"1 · 6 = 2 · 3."},
  {"q":"Is y = 2x + 3 a proportion?","a":"no: 0 goes to 3, not 0","w":["yes: y grows with x","yes: its step is fixed","no: 2 is not a ratio"],"why":"The step is fixed, not the ratio."},
  {"q":"3 m + 2 s = 5. What is wrong?","a":"unlike units do not add","w":["it should be 5 m s","it should be 6 m s","nothing: 3 + 2 = 5"],"why":"Nothing is 5 of."},

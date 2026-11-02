@@ -31,7 +31,7 @@ canvas{width:100%;display:block;border-radius:4px}
   <h1>Can I prove I know a secret without telling it?</h1>
   <p data-pid="c79900">Can I prove I know a secret without telling it? Every time you type a password, you hand the secret over to prove you have it. Whoever receives it, and anyone listening in, now has it too. People asked whether there was another way, and the question sounds impossible. To convince someone you know a thing, surely you have to show them the thing. What makes it hard is that the checker must end up sure, and also end up knowing nothing new. This page answers with a cave, a locked door and a coin. The checker never sees the secret. Instead he sets a challenge, again and again, that only someone with the secret can meet every time. Rung 7 does the heavy lifting: whether she knows the secret is true or false, even though the checker cannot look inside her head, so he can reason in each case. The page ends with the strangest part. The checker becomes sure, and yet he could not convince anyone else, because the record of what he saw is something he could have made up on his own.</p>
   <p class="gesture" data-pid="27c025">Set a challenge the prover can meet every time if she knows the secret, and only half the time if she does not. Let a fair coin choose the challenge, after she has committed. Split on whether she knows: in one case she always passes, in the other she passes many rounds only by a long run of luck, whose chance halves with every round. Then ask what the checker saw. If he could have produced the same record alone, with the same chances, the record told him nothing about the secret.</p>
-  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r07a.html">7a</a> (the either-way principle), <a href="r07d.html">7d</a> (proof by cases on any statement), <a href="r04j.html">4j</a> (stages-multiply, counted-functions), <a href="r04b.html">4b</a> (induction), <a href="r05stat.html">5·stat</a> (chance as a fraction, the chance-product technique) and <a href="r04crypt.html">4·crypt</a> (keys, and trying them all). Later cryptography pages build locks from remainders and from numbers too large to search.</p></div>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r07a.html">7a</a> (the either-way principle), <a href="r07d.html">7d</a> (proof by cases on any statement), <a href="r04k.html">4k</a> (stages-multiply, counted-functions), <a href="r04c.html">4c</a> (induction), <a href="r05stat.html">5·stat</a> (chance as a fraction, the chance-product technique) and <a href="r04crypt.html">4·crypt</a> (keys, and trying them all). Later cryptography pages build locks from remainders and from numbers too large to search.</p></div>
 </header>
 
 <section class="class">
@@ -47,15 +47,15 @@ canvas{width:100%;display:block;border-radius:4px}
   <p data-pid="72e8c6">In one round, the coin has two equally likely calls. A cheat's side is fixed before the call, and exactly one of the two calls matches it. So a cheat passes one round with chance 1/2, by 5·stat's chance as a fraction. Half the time is no proof of anything. So they play again.</p>
   <p data-pid="1bb680">Cheat's-chance technique: <b>a cheat passes n rounds in a row with chance 1/2ⁿ, however she plays.</b> She may choose each side by any plan, and her plan may use the calls she has heard so far. The proof counts lists of calls.</p>
   <pre class="lines" data-k="ember" data-label="this page: the cheat's-chance technique">
-2^n \text{ lists of calls, equally likely} @@ counted-functions (4j): a call for each of n rounds, from {left, right}; the coin is fair
+2^n \text{ lists of calls, equally likely} @@ counted-functions (4k): a call for each of n rounds, from {left, right}; the coin is fair
 \text{her side in round } i \text{ is fixed by the calls before it} @@ her plan: whatever it is, the earlier calls settle it
-n = 0:\ \text{one list, the empty one, and it passes} @@ induction on n (4b)
+n = 0:\ \text{one list, the empty one, and it passes} @@ induction on n (4c)
 \text{a list of } S(n) \text{ passes} \iff \text{its first } n \text{ pass and the last matches} @@ the rounds are passed in turn
 \text{exactly one first part passes, and one of two last calls fits it} @@ the induction, then her side for round S(n) is fixed
 \htmlClass{new}{1 \text{ list of } 2^n:\ P(\text{pass}) = \tfrac{1}{2^n}} \quad \blacksquare @@ chance as a fraction
   </pre>
   <p data-pid="19cbbb">A cheat who tosses a coin of her own to choose her sides does no better. For each way her own coin falls, she passes exactly one list in 2ⁿ, so her chance is 1/2ⁿ whatever her coin does. Ten rounds bring a cheat's chance down to 1/1024. Twenty bring it to 1/1 048 576, about one in a million. Each round halves it.</p>
-  <p data-pid="cb8616">One failed round settles the matter the other way. A prover who knows the word passes every round. So a prover who fails a round does not know it, by 1i's refutation: suppose she knows; then she passes; she failed; a collision. <b>One failure refutes the claim; no run of passes proves it outright.</b></p>
+  <p data-pid="cb8616">One failed round settles the matter the other way. A prover who knows the word passes every round. So a prover who fails a round does not know it, by 4e's refutation: suppose she knows; then she passes; she failed; a collision. <b>One failure refutes the claim; no run of passes proves it outright.</b></p>
 
   <h3>She knows, or she does not</h3>
   <p data-pid="24c898">The checker cannot look inside her head. Before rung 7, a proof could split into cases only on a statement someone could settle. “She knows the word” is not one the checker can settle, and that is the whole point. With 7a's either-way principle, it is true or false all the same, and 7d's proof by cases may split on it.</p>
@@ -105,8 +105,8 @@ P(\text{left} \mid \text{kept}) = \tfrac{1/4}{1/2} = \tfrac12 @@ of the 4 equall
   <div class="tablewrap"><table class="tt">
     <tr><th>step</th><th>the mathematics</th><th>from</th></tr>
     <tr><td class="l">one round</td><td class="l">chance as a fraction</td><td><a href="r05stat.html">5·stat</a></td></tr>
-    <tr><td class="l">n rounds</td><td class="l">counted-functions; induction</td><td><a href="r04j.html">4j</a>, <a href="r04b.html">4b</a></td></tr>
-    <tr><td class="l">one failure refutes</td><td class="l">refutation</td><td><a href="r01i.html">1i</a></td></tr>
+    <tr><td class="l">n rounds</td><td class="l">counted-functions; induction</td><td><a href="r04k.html">4k</a>, <a href="r04c.html">4c</a></td></tr>
+    <tr><td class="l">one failure refutes</td><td class="l">refutation</td><td><a href="r04e.html">4e</a></td></tr>
     <tr><td class="l">she knows or she does not</td><td class="l">the either-way principle; proof by cases</td><td><a href="r07a.html">7a</a>, <a href="r07d.html">7d</a></td></tr>
     <tr><td class="l">nothing learned</td><td class="l">chance given that; chance-product</td><td><a href="r05stat.html">5·stat</a></td></tr>
   </table></div>
@@ -247,7 +247,7 @@ window.__pic={set:(k,n)=>{ knows=k; hist=[]; last=null; over=false; for(let i=0;
 stepper('#sl1',[
   {k:'ember',kl:'the cave',t:R`\text{left} \quad \text{door} \quad \text{right}`,n:`Two passages from one fork, joined deep inside behind a door only the word opens.`},
   {k:'ember',kl:'one round',t:R`P(\text{a cheat passes}) = \tfrac12`,n:`Her side is fixed before the toss; one of two equally likely calls matches it.`},
-  {k:'ember',kl:'n rounds',t:R`2^n \text{ lists of calls}`,n:`Counted-functions (4j). Her side each round is fixed by the calls before it.`},
+  {k:'ember',kl:'n rounds',t:R`2^n \text{ lists of calls}`,n:`Counted-functions (4k). Her side each round is fixed by the calls before it.`},
   {k:'ember',kl:'the cheat\'s-chance technique',t:R`P(\text{a cheat passes } n) = ${Nw}{\tfrac{1}{2^n}}`,n:`Exactly one list of calls in 2ⁿ passes, by induction on n.`},
   {k:'ember',kl:'twenty rounds',t:R`\tfrac{1}{2^{20}} = \tfrac{1}{1\,048\,576}`,n:`About one in a million. Each round halves it.`},
   {k:'ember',kl:'one failure refutes',t:R`\text{knows} \Rightarrow \text{passes every round}`,n:`She failed, so she does not know: a refutation, no rung 7 needed.`},

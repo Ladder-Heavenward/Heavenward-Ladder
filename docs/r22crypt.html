@@ -30,17 +30,17 @@ table.tt td.l{text-align:left}
   <h1>Can two files have the same fingerprint?</h1>
   <p data-pid="08a458">Can two files have the same fingerprint? A fingerprint of a file is a short code worked out from the whole file, the same way every time. Change one letter of the file and the code changes beyond recognition. Computers use fingerprints to check that a download arrived whole, to store passwords without storing the passwords themselves, and to name every version of a program. Each of these uses trusts that two different files never share a fingerprint. But there are far more files than codes, so some pairs of files must share one. What makes it hard is to tell how soon such a pair turns up, when nobody can predict the codes. This page shows, with counting, rung seventeen’s exp and rung twenty-two’s rare events, that among codes drawn at random a shared code turns up far sooner than the number of codes suggests, after about its square root, and why fingerprints are made twice as long as a count of codes alone would ask.</p>
   <p class="gesture" data-pid="4abf3e">Draw codes at random, one after another. The chance that no code matches an earlier one is a product of shrinking fractions, one for each draw. Count the pairs of draws, and share them out over the codes. The chance of a match is fenced above by that share, and below by a fence built from rung seventeen’s exp of it. So a match is as likely as not once the pairs are about seven tenths of the codes, and that happens at about the square root of the number of codes. Twenty-three people share a birthday as often as not. A fingerprint holds out against a search for any matching pair only half as many bits as it has.</p>
-  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r08cb5.html">8·cb5</a> (the pigeonhole technique), <a href="r04j.html">4j</a> (counted-functions; arrangements), <a href="r04stat.html">4·stat</a> (chance by counting), <a href="r04b.html">4b</a> (induction), <a href="r14d.html">14d</a> (slope-sign-order), <a href="r17e.html">17e</a> and <a href="r17f.html">17f</a> (exp), <a href="r17crypt.html">17·crypt</a> (bits), <a href="r22j.html">22j</a> (the rare-events technique) and <a href="r22k.html">22k</a> (the ranking technique). 27·crypt asks whether a grid of numbers can scramble letters.</p></div>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r08cb5.html">8·cb5</a> (the pigeonhole technique), <a href="r04k.html">4k</a> (counted-functions; arrangements), <a href="r04stat.html">4·stat</a> (chance by counting), <a href="r04c.html">4c</a> (induction), <a href="r14d.html">14d</a> (slope-sign-order), <a href="r17e.html">17e</a> and <a href="r17f.html">17f</a> (exp), <a href="r17crypt.html">17·crypt</a> (bits), <a href="r22j.html">22j</a> (the rare-events technique) and <a href="r22k.html">22k</a> (the ranking technique). 27·crypt asks whether a grid of numbers can scramble letters.</p></div>
 </header>
 
 <section class="class step" data-step="22crypt1">
   <h2 class="sthead"><span class="stno">22crypt1</span>Shared fingerprints must exist</h2>
-  <p class="stands">Stands on 8·cb5 (the pigeonhole technique), 4j (counted-functions) and 17·crypt (bits).</p>
+  <p class="stands">Stands on 8·cb5 (the pigeonhole technique), 4k (counted-functions) and 17·crypt (bits).</p>
   <p class="eqline" data-pid="221cd7">From here on, on this page, a fingerprint is a function F from files to codes of b bits, so there are N = 2ᵇ codes. A collision is two files f ≠ g with F(f) = F(g).</p>
   <pre class="lines" data-k="ember" data-label="this page: collisions exist">
-\text{files of 1 kB}:\ 2^{8192} @@ counted-functions (4j): 8192 bits, each 0 or 1
+\text{files of 1 kB}:\ 2^{8192} @@ counted-functions (4k): 8192 bits, each 0 or 1
 \text{codes of 256 bits}:\ 2^{256} @@ the same count
-2^{8192} > 2^{256} @@ powers of 2 rise (4f)
+2^{8192} > 2^{256} @@ powers of 2 rise (4g)
 \htmlClass{new}{\text{some two files of 1 kB share a code}} \quad \blacksquare @@ the pigeonhole technique (8·cb5)
   </pre>
   <p data-pid="47d718">Collision technique: <b>a fingerprint of b bits on files longer than b bits always has collisions; what can be made hard is only to find one.</b> So the question is how many files someone must fingerprint before two of them collide.</p>
@@ -56,10 +56,10 @@ table.tt td.l{text-align:left}
 
 <section class="class step" data-step="22crypt2">
   <h2 class="sthead"><span class="stno">22crypt2</span>No match, counted</h2>
-  <p class="stands">Stands on 22·crypt.1, 4j (counted-functions; arrangements) and 4·stat (chance by counting).</p>
+  <p class="stands">Stands on 22·crypt.1, 4k (counted-functions; arrangements) and 4·stat (chance by counting).</p>
   <pre class="lines" data-k="ember" data-label="this page: the no-match technique">
-\text{lists of } n \text{ codes}:\ N^n @@ counted-functions (4j)
-\text{lists with no two alike}:\ N(N - 1)\cdots(N - n + 1) @@ arrangements (4j)
+\text{lists of } n \text{ codes}:\ N^n @@ counted-functions (4k)
+\text{lists with no two alike}:\ N(N - 1)\cdots(N - n + 1) @@ arrangements (4k)
 q_n = \tfrac{N(N-1)\cdots(N-n+1)}{N^n} @@ chance by counting (4·stat), every list equally likely
 \htmlClass{new}{q_n = (1 - \tfrac1N)(1 - \tfrac2N)\cdots(1 - \tfrac{n-1}{N})} \quad \blacksquare @@ one fraction for each draw after the first
   </pre>
@@ -76,12 +76,12 @@ q_n = \tfrac{N(N-1)\cdots(N-n+1)}{N^n} @@ chance by counting (4·stat), every li
 
 <section class="class step" data-step="22crypt3">
   <h2 class="sthead"><span class="stno">22crypt3</span>Fenced by e</h2>
-  <p class="stands">Stands on 22·crypt.2, 4b (induction), 14d (slope-sign-order), 17e (adding becomes multiplying), 17f (exp is its own slope), 15g (sums by hand) and 22j (the rare-events technique).</p>
+  <p class="stands">Stands on 22·crypt.2, 4c (induction), 14d (slope-sign-order), 17e (adding becomes multiplying), 17f (exp is its own slope), 15g (sums by hand) and 22j (the rare-events technique).</p>
   <p data-pid="6f08be">The product is hard to read. Fence it. Write λ = n(n − 1)/(2N): the number of pairs of draws, n(n − 1)/2, shared out over the N codes.</p>
   <pre class="lines" data-k="ember" data-label="this page: the pair technique">
 1 - x \le e^{-x} \text{ for } x \ge 0 @@ exp(−x) − (1 − x) is 0 at 0, and its slope 1 − exp(−x) ≥ 0 (14d, 17f)
 q_n \le e^{-1/N} e^{-2/N} \cdots e^{-(n-1)/N} = e^{-\lambda} @@ multiply the fences; adding becomes multiplying (17e); 1 + ⋯ + (n − 1) = n(n − 1)/2 (15g)
-q_n \ge 1 - (\tfrac1N + \tfrac2N + \cdots + \tfrac{n-1}{N}) = 1 - \lambda @@ (1 − x₁)⋯(1 − xⱼ) ≥ 1 − (x₁ + ⋯ + xⱼ) for each xᵢ in [0, 1], by induction (4b)
+q_n \ge 1 - (\tfrac1N + \tfrac2N + \cdots + \tfrac{n-1}{N}) = 1 - \lambda @@ (1 − x₁)⋯(1 − xⱼ) ≥ 1 − (x₁ + ⋯ + xⱼ) for each xᵢ in [0, 1], by induction (4c)
 \htmlClass{new}{1 - e^{-\lambda} \le 1 - q_n \le \lambda} \quad \blacksquare @@ take each fence from 1
   </pre>
   <p data-pid="d64f4d">Pair technique: <b>with λ the number of pairs per code, the chance of a match lies between 1 − e<sup>−λ</sup> and λ.</b> For 23 birthdays λ ≈ 0.693, so the chance is fenced between 0.500 and 0.693; the count gave 0.507.</p>

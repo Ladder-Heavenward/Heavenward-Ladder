@@ -58,7 +58,7 @@
  {"q":"From ¬Q ⇒ ¬P, a line reads P ⇒ Q. Earned on this rung?","a":"no: the turn back stops at ¬¬Q","w":["yes: by turn-and-deny","yes: it is the same promise","no: ¬Q ⇒ ¬P is never earned"],"why":"Following the plan reaches ¬¬Q, and the gap stops it there."},
  {"q":"Making P ⇔ Q. Which lines must stand first?","a":"P ⇒ Q and Q ⇒ P, then join","w":["P and Q, then join","P ⇒ Q alone","P ∨ Q, then cases"],"why":"Exactly when is a promise each way."},
  {"q":"“If it rains in Salem, the street is wet.” Which day breaks it?","a":"rain, and a dry street","w":["no rain, and a wet street","no rain, and a dry street","rain, and a wet street"],"why":"An if is broken only by its condition met and its promise failing."}];
-(window.LADDER_CARDS=window.LADDER_CARDS||{})["1e"]=[{"q":"“let n be anything”; … P(n); then ∀x P(x). What move?","a":"speak of everything by speaking of anything","w":["use an every","show an example","use a some"],"why":"Nothing was assumed of n but that it is a thing."},
+(window.LADDER_CARDS=window.LADDER_CARDS||{})["2b"]=[{"q":"“let n be anything”; … P(n); then ∀x P(x). What move?","a":"speak of everything by speaking of anything","w":["use an every","show an example","use a some"],"why":"Nothing was assumed of n but that it is a thing."},
  {"q":"From ∀x P(x), a line reads P(t). What move?","a":"use an every","w":["show an example","speak of everything","use a some"],"why":"A promise about everything covers the thing in your hand."},
  {"q":"From P(t), a line reads ∃x P(x). What move?","a":"show an example","w":["use an every","use a some","speak of everything"],"why":"A some is made by naming a thing that has P."},
  {"q":"From ∃x P(x), a line reads “call such a thing b”. Which move is opening?","a":"use a some","w":["show an example","use an every","speak of everything"],"why":"The fresh name stands for whatever it is, with nothing assumed but P."},
@@ -70,7 +70,7 @@
  {"q":"From ∃x ¬P(x), a line reads ¬∀x P(x). Which technique?","a":"the counterexample technique","w":["the not-some technique","show an example","the licensed-swap technique"],"why":"A thing that fails kills the every."},
  {"q":"From ¬∀x P(x), a line reads ∃x ¬P(x). Earned on this rung?","a":"no: “not every” hands over no name","w":["yes: by the counterexample technique","yes: by the not-some technique","no: ¬∀x P(x) is not a statement"],"why":"Show an example needs a name, and none is given."},
  {"q":"Deny “every student read the book”, with the not pushed through.","a":"some student did not read the book","w":["no student read the book","every student did not read the book","some student read the book"],"why":"The denial of every is some … not."}];
-(window.LADDER_CARDS=window.LADDER_CARDS||{})["1f"]=[{"q":"Rows TT, TF, FT, FF; a column reads T F T T. Which statement?","a":"P ⇒ Q","w":["P ∧ Q","P ∨ Q","Q ⇒ P"],"why":"The if is F only in the row TF."},
+(window.LADDER_CARDS=window.LADDER_CARDS||{})["1e"]=[{"q":"Rows TT, TF, FT, FF; a column reads T F T T. Which statement?","a":"P ⇒ Q","w":["P ∧ Q","P ∨ Q","Q ⇒ P"],"why":"The if is F only in the row TF."},
  {"q":"Which machine is F only in the row FF?","a":"∨","w":["∧","⇒","⇔"],"why":"The generous or fails only when both parts fail."},
  {"q":"A statement whose final column is all T. What is it called?","a":"a tautology","w":["a contradiction","an equivalence","a valid row"],"why":"It holds whatever its letters do."},
  {"q":"(P ∧ (P ⇒ Q)) ⇒ Q. Is it a tautology?","a":"yes: no row makes it F","w":["no: the row TF breaks it","no: the row FT breaks it","yes, but only where P is T"],"why":"With Q F, the left side is F in every row."},
@@ -82,7 +82,7 @@
  {"q":"A = B, between statements. What does it say?","a":"they have the same column in every row","w":["they are spelled alike","each is earned from the other","they agree in some row"],"why":"The table’s sameness: no row tells them apart."},
  {"q":"P ⇒ Q and Q ⇒ P. Same column?","a":"no: they differ in the rows TF and FT","w":["yes: the same letters","no: they differ only in TT","yes: both are ifs"],"why":"P ⇒ Q reads T F T T; Q ⇒ P reads T T F T."},
  {"q":"¬(P ∧ Q) and ¬P ∧ ¬Q. Same column?","a":"no: the row TF tells them apart","w":["yes: the not passes through","no: only the row TT differs","yes, for settled statements"],"why":"In TF the first is T and the second F."}];
-(window.LADDER_CARDS=window.LADDER_CARDS||{})["1g"]=[{"q":"¬(P ∨ Q) rewritten ¬P ∧ ¬Q. Which technique?","a":"not-through for or","w":["not-through for and","spread and over or","not-not"],"why":"Not either is neither."},
+(window.LADDER_CARDS=window.LADDER_CARDS||{})["1f"]=[{"q":"¬(P ∨ Q) rewritten ¬P ∧ ¬Q. Which technique?","a":"not-through for or","w":["not-through for and","spread and over or","not-not"],"why":"Not either is neither."},
  {"q":"P ⇒ Q rewritten ¬P ∨ Q. Which technique, which way?","a":"if-as-or, forward","w":["if-as-or, backward","turn-and-deny, forward","negated-if, forward"],"why":"Left to right is forward."},
  {"q":"For statements nobody can settle, which way is if-as-or licensed by the moves now?","a":"backward only: from ¬P ∨ Q to P ⇒ Q","w":["forward only: from P ⇒ Q to ¬P ∨ Q","both ways","neither way"],"why":"An if hands you neither ¬P nor Q to add an option to."},
  {"q":"P ∧ (Q ∨ R) rewritten (P ∧ Q) ∨ (P ∧ R). Which technique?","a":"spread and over or","w":["spread or over and","regroup","absorb"],"why":"The and spreads onto each side of the or."},
@@ -94,7 +94,7 @@
  {"q":"¬(P ⇒ Q), pushed in. Which line?","a":"P ∧ ¬Q","w":["¬P ⇒ ¬Q","¬P ∨ Q","¬P ∧ Q"],"why":"The negation of an if is an and: P happened and Q did not."},
  {"q":"“The trail is open unless the river is high”, O and H. Which line?","a":"¬H ⇒ O","w":["O ⇒ ¬H","H ⇒ O","O ⇔ ¬H"],"why":"P unless Q is ¬Q ⇒ P."},
  {"q":"⊤. What does it stand for?","a":"always so: the denial of the totally false","w":["the totally false","a statement not yet settled","the end of a column"],"why":"Suppose ⊥, and ⊥ is in hand; refute."}];
-(window.LADDER_CARDS=window.LADDER_CARDS||{})["1h"]=[{"q":"“Every living mammoth is purple”, with no living mammoths. Is it so?","a":"yes, vacuously","w":["no: nothing is purple","it is not a statement","yes: some mammoth is purple"],"why":"The if is never broken, because there is nothing to check."},
+(window.LADDER_CARDS=window.LADDER_CARDS||{})["2i"]=[{"q":"“Every living mammoth is purple”, with no living mammoths. Is it so?","a":"yes, vacuously","w":["no: nothing is purple","it is not a statement","yes: some mammoth is purple"],"why":"The if is never broken, because there is nothing to check."},
  {"q":"“Some cat is an animal” written ∃x (A(x) ⇒ B(x)). What goes wrong?","a":"anything not a cat proves it","w":["nothing: some goes with if","it says everything is a cat","it is the every statement"],"why":"A free if makes the some cheap: the shoe on your foot shows it."},
  {"q":"“Every S is P” and “some S is not P”. How do they stand on the diagram?","a":"contradictories","w":["contraries","subcontraries","subalterns"],"why":"Each is the other’s denial."},
  {"q":"“Every S is P” and “no S is P”. How do they stand?","a":"contraries","w":["contradictories","subcontraries","subalterns"],"why":"Never both so, though both can be not so."},
@@ -105,7 +105,7 @@
  {"q":"The subject is emptied. Which links of the diagram survive?","a":"only the crossing links","w":["only the contraries","all of them","only the subalterns"],"why":"The crossing links are pushes of a not, not facts about the subject."},
  {"q":"Deny ∀x ∃y M(y, x), pushing the not through.","a":"∃x ∀y ¬M(y, x)","w":["∀x ∃y ¬M(y, x)","∃y ∀x ¬M(y, x)","¬∃x ∀y M(y, x)"],"why":"Each sign turns into its partner; their order stays put."},
  {"q":"“No S is P” in marks?","a":"∀x (S(x) ⇒ ¬P(x))","w":["¬∀x (S(x) ⇒ P(x))","∃x (S(x) ∧ ¬P(x))","∀x (¬S(x) ⇒ P(x))"],"why":"No is every … not."}];
-(window.LADDER_CARDS=window.LADDER_CARDS||{})["1i"]=[{"q":"To prove ∀x P(x), what is the opening line?","a":"Let n be anything.","w":["Take t, a particular thing.","Assume ∀x P(x).","Suppose ¬P(n)."],"why":"Speak of everything by speaking of anything."},
+(window.LADDER_CARDS=window.LADDER_CARDS||{})["4e"]=[{"q":"To prove ∀x P(x), what is the opening line?","a":"Let n be anything.","w":["Take t, a particular thing.","Assume ∀x P(x).","Suppose ¬P(n)."],"why":"Speak of everything by speaking of anything."},
  {"q":"To prove ¬P, what is the opening line?","a":"Suppose P.","w":["Suppose ¬P.","Let P be anything.","Assume ¬¬P."],"why":"Refute: suppose P, reach ⊥."},
  {"q":"To prove ∃x P(x), what does the proof need?","a":"a particular t with P(t)","w":["a let n be anything, and P(n)","a supposition of ¬∃x P(x)","an or held, and cases"],"why":"Show an example."},
  {"q":"To prove P ⇒ Q, a proof of ¬Q ⇒ ¬P is written instead. What shape?","a":"proof by contrapositive","w":["proof by cases","refutation","proof by counterexample"],"why":"The if turned about with denials."},

@@ -39,7 +39,7 @@ table.grid tr.block th.l{color:var(--ember)}
   <h1>Can every job get a driver?</h1>
   <p data-pid="7cf699">Can every job get a driver? Every morning in the harvest, a dispatcher in Salinas has a list of loads to move and a list of drivers. Lettuce must come in from the fields near Gonzales and Soledad before it wilts. A tanker of fertilizer must go out to Chualar. Not every driver can take every load: a tractor-trailer needs one licence, a tanker of ammonia another. So each load has its own set of drivers who could take it, and the dispatcher must pick one from each set. That is 6a's choosing function, met in a yard full of trucks. What makes the question hard is that the picks are not separate. A driver picked for one load is gone for the others. This page counts the ways to pick, finds the one shape that makes picking impossible, and ends in a cold store, where the picks do not matter and a rule must still make them.</p>
   <p class="gesture" data-pid="fc80e6">An assignment gives each job a driver from that job's set. Count them by multiplying the sizes of the sets. A fair one gives no driver two jobs. If some group of jobs has fewer drivers between them than there are jobs in the group, no fair assignment exists. Where every pick is as good as any other, a rule that picks still has to be written down.</p>
-  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r06a.html">6a</a> (choosing functions; rules that pick; least-chooses; socks), <a href="r06b.html">6b</a> (finite-choice, counting-pickings), <a href="r04j.html">4j</a> (matchings, lead-one-out, one-count, stages-multiply, arrangements, n choose k) and <a href="r04g.html">4g</a> (order, least-member). Later logistics pages count routes and lines of waiting trucks.</p></div>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r06a.html">6a</a> (choosing functions; rules that pick; least-chooses; socks), <a href="r06b.html">6b</a> (finite-choice, counting-pickings), <a href="r04k.html">4k</a> (matchings, lead-one-out, one-count, stages-multiply, arrangements, n choose k) and <a href="r04h.html">4h</a> (order, least-member). Later logistics pages count routes and lines of waiting trucks.</p></div>
 </header>
 
 <section class="class">
@@ -56,14 +56,14 @@ table.grid tr.block th.l{color:var(--ember)}
   </table></div>
   <p class="eqline" data-pid="00d6ec">From here on, on this page, for a job j, D(j) is the set of drivers who can take it. An assignment is a function f on the jobs with f(j) ∈ D(j) for every job j.</p>
   <p data-pid="51cb41">That is 6a's choosing function, with one change. 6a picks from each member of a collection, and a collection is a set, so two equal members are one member. Here jobs g and s have the same set of drivers. The collection {D(g), D(s), D(t), D(v)} has only three members, and a choosing function for it gives g and s the same driver. So the picks are made by job, not by set: the assignment is a choosing function for the list of sets, one entry per job.</p>
-  <p data-pid="0a46e8">How many assignments are there? Pick for g, then for s, then t, then v. Each stage has as many choices as its set has members, whatever was picked before. So 4j's stages-multiply counts them, as 6b's counting-pickings did. <b>The number of assignments is the product of the sizes of the sets.</b></p>
+  <p data-pid="0a46e8">How many assignments are there? Pick for g, then for s, then t, then v. Each stage has as many choices as its set has members, whatever was picked before. So 4k's stages-multiply counts them, as 6b's counting-pickings did. <b>The number of assignments is the product of the sizes of the sets.</b></p>
   <pre class="lines" data-k="teal" data-label="from 6b: counting-pickings, one factor per job">
 3 \cdot 3 \cdot 2 \cdot 5 = \htmlClass{new}{90} @@ one factor for each of g, s, t, v
   </pre>
   <p data-pid="a12588">No axiom is needed. There are four jobs, and 6b's finite-choice picks from finitely many sets in turn. The question of this page is a different one.</p>
 
   <h3>Fair assignments: no driver twice</h3>
-  <p data-pid="984c38">Most of those 90 send one driver out on two loads at once, which no one can do. An assignment is <b>fair</b> when it gives no driver two jobs: f(j) = f(j′) only when j = j′. A fair assignment is a matching of the jobs with the drivers it uses, in 4j's sense. Count them by cases on the tanker, which has the fewest drivers.</p>
+  <p data-pid="984c38">Most of those 90 send one driver out on two loads at once, which no one can do. An assignment is <b>fair</b> when it gives no driver two jobs: f(j) = f(j′) only when j = j′. A fair assignment is a matching of the jobs with the drivers it uses, in 4k's sense. Count them by cases on the tanker, which has the fewest drivers.</p>
   <pre class="lines" data-k="ember" data-label="this page: counting the fair assignments">
 f(t) = \text{Cruz}:\ \ g, s \text{ from Ana, Ben}:\ 2 \cdot 1 @@ two drivers left for the two trailers, in order
 \quad v \text{ from Dev, Eli}:\ 2,\ \ \text{so } 2 \cdot 1 \cdot 2 = 4 @@ the van takes one of the two left
@@ -96,8 +96,8 @@ D(g) \cup D(s) \cup D(f) = \{\text{Ana}, \text{Ben}\} @@ 2 drivers between them
   <p data-pid="109994">A busy dispatcher works down the board and gives each job the first free driver on its list. That is finite-choice's picking in turn, made into a rule. It can fail when a fair assignment exists. Say job g can go to Ana or Ben, and job t only to Ana. Down the board, g takes Ana, and t is left with nobody. Yet g to Ben and t to Ana is fair. <b>Picking in turn can strand a job that a better order would have served.</b> The fix is a swap: move g from Ana to Ben, and give Ana to t. Dispatchers do this all day.</p>
 
   <h3>The cold store that has to pick</h3>
-  <p data-pid="0f6964">Last, a pick that does not matter. A cooler in Salinas holds 40 cases of the same strawberries, and an order comes in for 3. Any 3 will do. There are 40 choose 3 = 9880 ways to pick them, by 4j, and the customer cannot tell them apart. In 6a's words these cases are socks. No condition the customer cares about picks one.</p>
-  <p data-pid="4737ac">The order still has to be filled, so the store writes a rule that picks. Number the cases by the day they came in, and take the 3 oldest: least first, by 4g's least-member. That is 6a's least-chooses, applied to strawberries. It has a reason, too: older fruit spoils first. <b>When every pick is as good as any other, a rule that picks has to be written down anyway, and the best rules pick by a number.</b></p>
+  <p data-pid="0f6964">Last, a pick that does not matter. A cooler in Salinas holds 40 cases of the same strawberries, and an order comes in for 3. Any 3 will do. There are 40 choose 3 = 9880 ways to pick them, by 4k, and the customer cannot tell them apart. In 6a's words these cases are socks. No condition the customer cares about picks one.</p>
+  <p data-pid="4737ac">The order still has to be filled, so the store writes a rule that picks. Number the cases by the day they came in, and take the 3 oldest: least first, by 4h's least-member. That is 6a's least-chooses, applied to strawberries. It has a reason, too: older fruit spoils first. <b>When every pick is as good as any other, a rule that picks has to be written down anyway, and the best rules pick by a number.</b></p>
 
   <h3>Illegal moves</h3>
   <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed">
@@ -112,11 +112,11 @@ D(g) \cup D(s) \cup D(f) = \{\text{Ana}, \text{Ben}\} @@ 2 drivers between them
   <div class="tablewrap"><table class="tt">
     <tr><th>step</th><th>the mathematics</th><th>from</th></tr>
     <tr><td class="l">an assignment</td><td class="l">a choosing function, by job</td><td><a href="r06a.html">6a</a></td></tr>
-    <tr><td class="l">counting assignments</td><td class="l">counting-pickings, stages-multiply</td><td><a href="r06b.html">6b</a>, <a href="r04j.html">4j</a></td></tr>
-    <tr><td class="l">fair assignments</td><td class="l">matchings; cases; separate-piles</td><td><a href="r04j.html">4j</a></td></tr>
-    <tr><td class="l">no room, a blocking group</td><td class="l">induction, lead-one-out, one-count</td><td><a href="r04j.html">4j</a></td></tr>
+    <tr><td class="l">counting assignments</td><td class="l">counting-pickings, stages-multiply</td><td><a href="r06b.html">6b</a>, <a href="r04k.html">4k</a></td></tr>
+    <tr><td class="l">fair assignments</td><td class="l">matchings; cases; separate-piles</td><td><a href="r04k.html">4k</a></td></tr>
+    <tr><td class="l">no room, a blocking group</td><td class="l">induction, lead-one-out, one-count</td><td><a href="r04k.html">4k</a></td></tr>
     <tr><td class="l">picking in turn</td><td class="l">finite-choice</td><td><a href="r06b.html">6b</a></td></tr>
-    <tr><td class="l">the cold store</td><td class="l">n choose k; least-chooses</td><td><a href="r04j.html">4j</a>, <a href="r06a.html">6a</a></td></tr>
+    <tr><td class="l">the cold store</td><td class="l">n choose k; least-chooses</td><td><a href="r04k.html">4k</a>, <a href="r06a.html">6a</a></td></tr>
   </table></div>
 </section>
 

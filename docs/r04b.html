@@ -1,21 +1,22 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>4b · Induction</title>
+<title>4b · The smallest inductive set</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
 <link rel="stylesheet" href="rung.css">
 <style>
+.paid{margin:1.2rem 0 1.6rem;min-width:0;max-width:100%;overflow-x:auto}
+.basement .stepgroup{min-width:0;max-width:100%}
+.paid h4{margin:.2rem 0 .3rem;font-size:1rem}
+.paid .from{font-size:.85rem;color:var(--muted)}
+.basement .stepgroup{border-top:1px solid var(--grid);padding-top:.6rem;margin-top:1.4rem}
 .pic .panels{grid-template-columns:1fr 1fr}
 @media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
 .panel{align-content:start;min-width:0}
 .pic .eqbox{font-size:.95rem;white-space:normal}
 @media (max-width:520px){.pic .eqbox{font-size:.82rem}}
-#cvD{touch-action:manipulation;cursor:pointer}
-table.chk{border-collapse:collapse;font-family:var(--mono);font-size:.82rem;width:100%;background:var(--card)}
-table.chk th,table.chk td{border:1px solid var(--grid);padding:3px 5px;text-align:center}
-table.chk th{color:var(--muted);font-weight:500}
-table.chk .ok{color:var(--teal)} table.chk .no{color:var(--ember);font-weight:500}
+#cvV{touch-action:manipulation}
 .rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
 @media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
 </style>
@@ -23,280 +24,306 @@ table.chk .ok{color:var(--teal)} table.chk .no{color:var(--ember);font-weight:50
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r04a.html">← 4a the smallest inductive set</a><a href="r04c.html">next: 4c defining by repeating →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r04a.html">← 4a prove it</a><a href="r04c.html">next: 4c induction →</a></p>
   <div class="tags"><span class="tag proof">4b · proof</span></div>
-  <h1>Induction</h1>
-  <p data-pid="2987b3">This is the step the rung is named for. 4a proved that the counting numbers are an inductive set lying inside every inductive set. From that alone comes the principle of induction: whatever is so of 0, and passes from each number to its next one, is so of every number. The step proves it, in a set form and a form for conditions, and turns it into a shape of proof. Then it puts the shape to work at once. Every number is 0 or a next one, so the rest of every cargo chain is thrown out. Every number is a statement that names a set whose members are also its parts. Merging undoes the next-one gesture on every number. And a pair of techniques 4a and 3a proved with foundation are proved again for numbers without it. Last, the dominoes, and a gallery of proofs that look like induction and are not.</p>
-  <p class="gesture" data-pid="772f61">To prove something of every number, prove it of 0, then show that whenever it is so of a number it is so of that number's next one. The numbers that have the property make an inductive part of the numbers, and the numbers are inside every inductive set, so the part is the whole.</p>
-  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r01i.html">1i</a> (proof shapes), <a href="r02b.html">2b</a> (sifting, the sift-is-part technique), <a href="r02a.html">2a</a> (the techniques double-inclusion, chain for part of), <a href="r02c.html">2c</a> (⋃), <a href="r03a.html">3a</a> (the techniques next-membership, in-its-next, next-never-empty), <a href="r03b.html">3b</a> (inductive) and <a href="r04a.html">4a</a> (ℕ, the techniques membership-in-ℕ, lies-below, zero-is-a-number, next-of-a-number, strays, different-nexts). Every later step of the rung proves its techniques with this step's technique; <a href="r04c.html">4c</a> uses it to show that defining by repeating works; <a href="r04g.html">4g</a> gives it a stronger form.</p></div>
+  <h1>The smallest inductive set</h1>
+  <p data-pid="2116cf">By rung 3's axiom, some set is inductive, and nothing says what else such a set holds. This step throws the extra away. From an inductive set you have, it sifts the things that are in every inductive set. It proves that the result does not depend on which inductive set you started from, and gives it a mark of its own and a name for its members. Then it proves the facts that make it the right object. It is inductive itself, and it is a part of every inductive set. A stray set that is nobody's next is not in it. And different sets have different next ones.</p>
+  <p class="gesture" data-pid="6797e1">Keep exactly what every inductive set holds. That set holds 0 and the next one after each of its members, it sits inside every inductive set, and anything that is not 0 and is nobody's next is thrown out of it. And the next-one gesture never sends different sets to the same place.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r02b.html">2b</a> (every, some, their techs), <a href="r02c.html">2c</a> (same-members, ⊆, the double-inclusion technique), <a href="r02d.html">2d</a> (the sift axiom, the sift-is-part technique), <a href="r03a.html#found">3a·f</a> (the no-loop technique), <a href="r03b.html">3b</a> (S, the names, the techniques next-membership, in-its-next, next-never-empty) and <a href="r03c.html">3c</a> (inductive, the infinity axiom, the named-sets-are-inductive technique). <a href="r04c.html">4c</a> proves induction from this step's techniques; <a href="r04d.html">4d</a> builds functions on the set this step makes; 4f to 4h do arithmetic and order on it. <a href="r04a.html">4a</a> held the counting numbers in trust (4a3); this step builds them, and that foreclosure completes.</p></div>
+  <h3>New marks on this rung</h3>
+  <p data-pid="7eb9c7">Each mark below is said first in plain words. Each gets its own “from here on” line in the step named, before any proof uses it.</p>
+  <ul>
+    <li data-pid="11c099">ℕ, the set of the things in every inductive set; “n is a number” means n ∈ ℕ (4b)</li>
+    <li data-pid="bfb955">∀n ∈ s and ∃n ∈ s, every and some kept to the members of s (4b)</li>
+    <li data-pid="227e0d">“S is one-to-one”: different sets have different next ones (4b)</li>
+    <li data-pid="4ddb49">“t is a transitive set”: every member of t is a part of t (4c)</li>
+    <li data-pid="1a4044">f : A → B, a function from A to B; f(x), the one thing f pairs with x; x ↦ t(x), the rule that takes x to t(x)</li>
+    <li data-pid="c48919">a low mark that is a letter, as in f<sub>p</sub>, part of the name (4f)</li>
+    <li data-pid="5e4f94">p + b, the sum; n + 1 for S(n); p + b + c without brackets (4f)</li>
+    <li data-pid="2f308f">k · b, the product; k<sup>b</sup>, the power, with b written small and high (4g)</li>
+    <li data-pid="4f2cfc">p &lt; b, p ≤ b, b &gt; p, b ≥ p, less and at most; “settled”, said of a set of numbers (4h)</li>
+    <li data-pid="0c8bb2">5, 6, 7, 8, 9, the names after 4; “ten” and 10; digit; a list, its entries p<sub>1</sub>, p<sub>2</sub>, ⋯, p<sub>k</sub>; a tens numeral and its value; a numeral in twos, such as 1101<sub>2</sub> (4i)</li>
+    <li data-pid="61768a">d ∣ n and d ∤ n, divides and does not divide; ∃k ≤ m and ∀k ≤ m; quotient, remainder, even, odd, prime; gcd(u, b); p<sub>1</sub> · p<sub>2</sub> · ⋯ · p<sub>k</sub>, the product of a list (4j)</li>
+    <li data-pid="939901">a matching; “X has n members”; Σ, for adding up; n!; an arrangement; the two-high mark read “n choose k” (4k)</li>
+    <li data-pid="ebc10a">⟦P⟧, the mark of a statement P; A ⊕ B, exclusive or; nand(A, B) (4·comp)</li>
+    <li data-pid="069539">b − p, when p ≤ b; “k of n”, a chance (4·stat)</li>
+  </ul>
 </header>
 
 <section class="class step" data-step="4b1">
-  <h2 class="sthead"><span class="stno">4b1</span>The principle, in words</h2>
-  <p class="stands">Stands on 4a9 (the smallest inductive set) and 1a (induction over cases).</p>
-  <p data-pid="a7d9a7">Take a property of numbers. Suppose it is so of 0. Suppose also that, for any number at all, if the property is so of it then it is so of that number's next one. Then it is so of every number. <b>Said as sets: a part of ℕ that holds 0 and holds the next one after each of its members is all of ℕ.</b></p>
-  <p data-pid="c61a7c">Example: the property “n is a set”. 0 is a set. And the next one after a set is a set, a merge of two sets. So every number is a set.</p>
-  <p data-pid="fa0b2d">Why should that be so? Because such a part is inductive: holding 0 is the base part, and holding the next one after each member is the step part. And 4a's lies-below technique says ℕ lies inside every inductive set, so ℕ lies inside the part. A part of ℕ that ℕ lies inside is ℕ. That is the whole proof, and below it is set out a claim at a time.</p>
-  <p data-pid="ca6c64">A note about the name. This is induction over the series, called <i>mathematical induction</i>, and it is not the induction over cases of <a href="r01a.html">1a</a>, from cases to a rule. Checking 0, 1, 2 and a thousand more numbers proves nothing about the next. The principle proves the rule for every number from two pieces of work, the base and the step, and the step is itself proved for any number at all. It is built from induction over the arrangement, like every other argument on the ladder, so its conclusion cannot fail.</p>
+  <h2 class="sthead"><span class="stno">4b1</span>Cargo, again</h2>
+  <p class="stands">Stands on 3c (inductive, the infinity axiom, cargo).</p>
+  <p data-pid="deb52d">The infinity axiom says some set is inductive: it holds 0, and whenever it holds a set it holds that set's next one. Use the some honestly and call such a set I. The named-sets-are-inductive technique put 0, 1, 2, 3, 4 in I, and S(4), and as far along the run as you care to write.</p>
+  <p data-pid="3e1c59">But I may hold other things. Example: if {1} is in I, then S({1}) is too, and S(S({1})). That is a chain of cargo, dragged along by the step part and never meeting the run. Another inductive set may carry no cargo, or different cargo.</p>
+  <p data-pid="bb799e"><b>So “every member of I” is not yet “every entry of the run”.</b> A proof about the members of I would be a proof about whatever cargo I happens to carry.</p>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">4b1.1</span><span class="ph know">know</span>What does induction say, said as sets? <br>Why is it not 1a’s induction over cases?</li>
+      <li><span class="qid">4b1.1</span><span class="ph know">know</span>What is cargo? <br>Why is “every member of I” not yet “every entry of the run”?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="4b2">
-  <h2 class="sthead"><span class="stno">4b2</span>The set form</h2>
-  <p class="stands">Stands on 4b1, 4a7 (lies-below) and 2a (double-inclusion).</p>
-  <p data-pid="02a7e4">Induction technique, set form: <b>a part of ℕ that holds 0, and holds the next one after each of its members, is all of ℕ.</b></p>
-  <p data-pid="9f63ac">The plan: show the part is inductive, then let lies-below and double-inclusion finish.</p>
-  <p data-pid="87b419">Suppose A is a part of ℕ. Suppose also that 0 is in A, and that A holds the next one after each of its members. Those two are the base part and the step part. Pack them: A is inductive.</p>
-  <p data-pid="494713">4a’s lies-below technique says ℕ is a part of every inductive set. A is one, so ℕ is a part of A. Now each of A and ℕ is a part of the other. By the double-inclusion technique, A = ℕ.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · induction, set form · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">4b2</span>The test that separates them</h2>
+  <p class="stands">Stands on 4b1 (cargo) and 3c (the illegal sift of “in every inductive set”).</p>
+  <p data-pid="ddce3b">3c's illegal-moves table named the test that separates them and refused to use it: the things that are in <i>every</i> inductive set. An entry of the run passes, since the named-sets-are-inductive technique puts it in each inductive set. The cargo {1} should fail, as long as some inductive set leaves it out. The trouble on 3c was that “the things in every inductive set” was a sift from nothing. Now there is a set to sift from.</p>
+  <p data-pid="80310a">Example: suppose one inductive set holds {1} and another does not. Then {1} fails the test. 2 passes it, since 2 is in every inductive set.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4b2.1</span><span class="ph know">know</span>What does the set form of the induction technique say? <br>Which two techniques finish its proof?</li>
+      <li><span class="qid">4b2.1</span><span class="ph know">know</span>What is the test that separates the run from the cargo? <br>Why could 3c not use it, and why can this footing?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="4b3">
-  <h2 class="sthead"><span class="stno">4b3</span>The form for a condition</h2>
-  <p class="stands">Stands on 4b2 (the set form) and 2b (sift).</p>
-  <p data-pid="3f773d">A short argument, and most of its sentences are given or packing. The work was done on 4a, by sifting the cargo away; induction is what that sift was for.</p>
-  <p data-pid="9ed071">Induction technique, condition form: <b>a property that is so of 0, and is carried from each number to its next one, is so of every number.</b> Write φ(n) for the property, a condition in 2b's sense with its gap at n.</p>
-  <p data-pid="221715">The plan: sift ℕ by φ, and show the sift holds 0 and the next one after each of its members.</p>
-  <p data-pid="e605f8">Suppose φ(0). Suppose also that, for every number n, φ(n) gives φ(S(n)). Sift ℕ by φ, and call the sift A: the numbers n with φ(n). A sift of ℕ is a part of ℕ.</p>
-  <p data-pid="d58f3c">The base part. 0 is a number, and φ(0) is true. Pack the sift: 0 is in A.</p>
-  <p data-pid="bbedee">The step part. Let n be anything, and suppose n is in A. Unpack the sift: n is a number, and φ(n). Use the given every with n: φ(S(n)). And S(n) is a number, by next-of-a-number. Pack the sift: S(n) is in A.</p>
-  <p data-pid="e74dd8">So A holds 0 and the next one after each of its members. The set form says A = ℕ. Now let n be any number. A letter such as n, holding the place of any number at all, is called a variable. Then n is in A, since A is ℕ. Unpack the sift: φ(n). And n was any number, so φ is true of every number.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · induction, for a condition · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">4b3</span>The sift</h2>
+  <p class="stands">Stands on 4b2, 2d (conditions, sift) and 3c (inductive).</p>
+  <p data-pid="99bdfa">The condition, in words: x is in every inductive set. In marks, a statement with a gap at x:</p>
+  <div class="eqline" data-tex="\varphi(x):\qquad \forall J\,\big(J \text{ is inductive} \Rightarrow x \in J\big)"></div>
+  <p data-pid="c7ec87">It is a condition in 2d's sense: rung 1's joining words, ∈, and the word “inductive”, which unpacks into ∈ and S. It speaks of every set J, and that is allowed. What 2d forbade was sifting <i>from</i> everything; a condition may speak of anything it likes, as long as the set being sifted is a set you have. Sift it from I:</p>
+  <div class="eqline" data-tex="\{x \in I : \forall J\,(J \text{ is inductive} \Rightarrow x \in J)\}"></div>
+  <section class="slides" id="sl3a"><div class="eyebrow">The slides · the condition · ← → keys work</div></section>
+  <section class="slides" id="sl3b"><div class="eyebrow">The slides · the condition, unpacked · ← → keys work</div></section>
+  <section class="slides" id="sl3c"><div class="eyebrow">The slides · the sift · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4b3.1</span><span class="ph know">know</span>How does the condition form of induction come out of the set form?</li>
+      <li><span class="qid">4b3.1</span><span class="ph know">know</span>Why is the sift of I by “x is in every inductive set” legal, when 3c’s set was not?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="4b4">
-  <h2 class="sthead"><span class="stno">4b4</span>Base, step, hypothesis</h2>
-  <p class="stands">Stands on 4b3 and 1i (proof shapes).</p>
-  <p data-pid="527be9">The two pieces of work have names.</p>
-  <p data-pid="ee1b42"><b>The base</b> is φ(0).</p>
-  <p data-pid="05b044"><b>The step</b> is ∀n ∈ ℕ (φ(n) ⇒ φ(S(n))). Inside it, the supposed φ(n) is called the <b>induction hypothesis</b>.</p>
-  <p data-pid="377c20">The hypothesis is not supposing what you want to prove. It is the hypothesis of an if, opened by 1d's tech and closed by it, for a number n about which nothing else is supposed. What you want to prove is the every, and the every comes from the induction technique.</p>
-  <p data-pid="91dad6">1i's table of proof shapes said rung 4 would add a shape of its own. Here it is. <b>Proof by induction.</b> Goal: ∀n ∈ ℕ φ(n). Opening: “base: φ(0)”, proved however you can; then “step: let n be a number; suppose φ(n)”. Closing: “… so φ(S(n)); prove an if; speak of everything; by the induction technique, φ(n) for every number n.” Every proof on 4c to 4g has this skeleton, often nested.</p>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · the shape · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">4b4</span>It does not matter which inductive set</h2>
+  <p class="stands">Stands on 4b3 (the sift), 2d (unpack and pack a sift) and 2b (use an every).</p>
+  <p data-pid="a53a73">Who is in it? Unpacking the sift gives both of these: y ∈ I, and y is in every inductive set. “y is in every inductive set” already gives “y ∈ I”, since I is an inductive set. So the members of the sift are exactly the things in every inductive set, and I has dropped out of the description.</p>
+  <p data-pid="fed96c">Whichever-inductive-set technique: <b>for any inductive set I, a thing is in the sift of I by “in every inductive set” exactly when it is in every inductive set.</b></p>
+  <p data-pid="118030">Each direction is short.</p>
+  <p data-pid="b5c47d">Let y be anything. Suppose first that y is in the sift. Unpack the sift: y is in I, and y is in every inductive set. Keep the second half. That is φ(y).</p>
+  <p data-pid="689a93">Now drop that supposition, and suppose instead φ(y): y is in every inductive set. I is an inductive set, so y is in I. Join the two: y is in I, and y is in every inductive set. Pack the sift: y is in it.</p>
+  <p data-pid="8d0ddd">Each way, the one gives the other. So y is in the sift exactly when φ(y). And y was anything.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · the whichever-inductive-set technique · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4b4.1</span><span class="ph know">know</span>What are the base, the step and the induction hypothesis? <br>Why is the hypothesis not supposing what you want to prove?</li>
+      <li><span class="qid">4b4.1</span><span class="ph know">know</span>What does the whichever-inductive-set technique say? <br>Why does I drop out of the description?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="4b5">
-  <h2 class="sthead"><span class="stno">4b5</span>Why it is a technique here</h2>
-  <p class="stands">Stands on 4b2 and 4a1 (cargo).</p>
-  <p data-pid="dfa46b">Early in the century before this one, a great mathematician called this reasoning by recurrence, and thought it the characteristic form of mathematical reasoning: it holds an endless run of syllogisms condensed into a statement. He judged that it could not be reduced to logic, and took it to be an intuition the mind has before any proof. Another writer listed it among his axioms for the numbers. A third proved it, as a technique about his chains, which is the road this ladder has taken.</p>
-  <p data-pid="7b7f2f">Here it is a technique. The endless run of syllogisms has not vanished: it was paid for, and for good, by the infinity axiom and by 4a's sift. And the sift is exactly what the technique needs. Run the set form on an inductive set I that carries cargo, with A = I. The argument reaches “I is inductive” and “ℕ ⊆ I”, and stops, because I ⊆ ℕ is not given and is false. A property can be so of 0, pass along every step, and fail for the cargo. Induction is a technique about ℕ, not about every inductive set.</p>
+  <h2 class="sthead"><span class="stno">4b5</span>The name ℕ</h2>
+  <p class="stands">Stands on 4b4, 2c7 (same-members) and 2d (naming ∅).</p>
+  <p data-pid="324867">So suppose you and a friend each have an inductive set, I and I′, and each of you sifts. Your sifts have the same members: a thing is in yours exactly when it is in every inductive set, exactly when it is in your friend's. Chain the exactly-whens, and the same-members axiom says the sifts are the same set. It does not matter which inductive set you sifted from.</p>
+  <p data-pid="53e18c">And the infinity axiom says there is an inductive set to sift from, so the some closes honestly. There is a set whose members are exactly the things in every inductive set, and its description mentions no particular I. There is only one such set, by same-members again.</p>
+  <p data-pid="3fbfc9">A set that exists and is the only one with its description may be given a name, as 2d named ∅. Here is the name:</p>
+  <p class="eqline" data-pid="9abac3">From here on, <span data-tex-inline="\mathbb N"></span> names the set whose members are exactly the things in every inductive set. Read it “N”, or “the counting numbers”, or “the natural numbers”. Its members are the <b>numbers</b>: from here on, “n is a number” means <span data-tex-inline="n \in \mathbb N"></span>.</p>
+  <p data-pid="380ddb">The mark is a capital N drawn with an extra stroke, which marks it as a name kept for this one set. What the line gives you to cite is its membership statement.</p>
+  <p data-pid="6dc76e">Membership-in-ℕ technique: <b>a thing is a number exactly when it is in every inductive set.</b></p>
+  <div class="eqline" data-tex="\begin{aligned}&amp;\textbf{Membership-in-}\mathbb N\textbf{ technique:}\qquad y \in \mathbb N \;\\ &amp;\quad \Leftrightarrow\; \forall J\,(J \text{ is inductive} \Rightarrow y \in J)\end{aligned}"></div>
+  <p data-pid="44f724">Every proof in this step that something is a number ends by packing membership-in-ℕ, and every proof that uses a number begins by unpacking it. A pair of habits of writing come with ℕ, and they are shorthand, not new statements:</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · the name · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · what every voting set holds in common</div>
+    <div class="panel">
+      <div class="chips" role="group" aria-label="voters" id="vch"><span class="m" style="color:var(--muted)">voting:</span></div>
+      <div class="cap">Each row is a set as it might be: the axiom does not say which inductive sets there are. Gold dots: entries of the run; teal: the chain {1}, S({1}), S(S({1})); plum: the chain {2}, S({2}), S(S({2})). J is I with {1} sifted away and J′ is I with {2} sifted away, both proved inductive in this step. The last row keeps what is in every voting set.</div>
+      <canvas id="cvV"></canvas>
+      <div class="eqbox" id="eqV"></div>
+    </div>
+  </section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4b5.1</span><span class="ph know">know</span>Why is induction a technique about ℕ and not about every inductive set?</li>
+      <li><span class="qid">4b5.1</span><span class="ph know">know</span>What does ℕ name, and what licensed naming it? <br>What does the membership-in-ℕ technique say?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="4b6">
-  <h2 class="sthead"><span class="stno">4b6</span>The dominoes</h2>
-  <p class="stands">Stands on 4b4 (base and step).</p>
-  <p data-pid="49115f">Stand a row of dominoes, a domino for each number, so that each, falling, knocks over the next. Push the domino at the start. <b>The push is the base, the spacing is the step, and the conclusion is that every domino falls.</b> Take away the push and nothing falls, however well spaced the row is. Leave a gap in the spacing and everything past the gap stays standing, whatever fell before it. The picture lets you do both. What the picture cannot show is the reason it works. The row has no extra pieces lying beside it, no cargo the falls never reach: that is 4a's sift. The fallen dominoes make an inductive set, and the numbers lie inside every inductive set, so every number has fallen.</p>
-  <section class="pic" id="pic">
-    <div class="eyebrow">The picture · the dominoes</div>
+  <h2 class="sthead"><span class="stno">4b6</span>Every and some, kept to a set</h2>
+  <p class="stands">Stands on 2b (every with ⇒, some with ∧).</p>
+  <p class="eqline" data-pid="1c35d5">From here on, <span data-tex-inline="\forall n \in a\; P(n)"></span> is short for <span data-tex-inline="\forall n\,(n \in a \Rightarrow P(n))"></span>, and <span data-tex-inline="\exists n \in a\; P(n)"></span> is short for <span data-tex-inline="\exists n\,(n \in a \land P(n))"></span>. Read them “for every n in a” and “for some n in a”.</p>
+  <p data-pid="6999b4">These are 2b's standard spellings, every with ⇒ and some with ∧, written shorter. The letters m, n and k will usually name numbers, by habit, not by rule; any letter is allowed.</p>
+  <p data-pid="ea81e4">One founder of the subject came to the numbers by this sift. Given a system and a step, he called a part of the system a chain when the step never leads out of it. He took the chain of a starting element to be what is common to every chain that holds that element. The counting numbers are the chain of the start under the next-one step.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4b6.1</span><span class="ph know">know</span>What are ∀n ∈ a P(n) and ∃n ∈ a P(n) short for?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4b7">
+  <h2 class="sthead"><span class="stno">4b7</span>Inside every inductive set</h2>
+  <p class="stands">Stands on 4b5 (membership-in-ℕ) and 2c9 (⊆).</p>
+  <p data-pid="74435e">The earliest thing the name gives is what its description says.</p>
+  <p data-pid="7f42fb">Lies-below technique: <b>every number is in every inductive set.</b> That is to say, ℕ is a part of each of them.</p>
+  <p data-pid="2382d7">The plan: take any number y, and show that y is in J.</p>
+  <p data-pid="f038d4">Suppose J is inductive. Let y be anything, and suppose y is a number. Unpack membership-in-ℕ: y is in every inductive set. J is one of them, so y is in J.</p>
+  <p data-pid="fafd66">Drop the supposition that y is a number. Whatever y is, if y is a number then y is in J. Pack ⊆: ℕ is a part of J.</p>
+  <section class="slides" id="sl7"><div class="eyebrow">The slides · the lies-below technique · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4b7.1</span><span class="ph know">know</span>What does the lies-below technique say, and how is it proved?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4b8">
+  <h2 class="sthead"><span class="stno">4b8</span>0 is a number, and so is each next</h2>
+  <p class="stands">Stands on 4b5 (membership-in-ℕ), 3c3 (base part, step part) and 1d (prove an if).</p>
+  <p data-pid="c1dff7">Now both parts of “inductive”, for ℕ itself. The base part first.</p>
+  <p data-pid="09dafd">Zero-is-a-number technique: <b>0 is a number.</b></p>
+  <p data-pid="5a872d">The plan: 0 is in every inductive set, since that is the base part of each of them.</p>
+  <p data-pid="87b670">Let J be anything, and suppose J is inductive. Unpack “inductive”: 0 is in J, and J holds the next one after each of its members. Keep the first half: 0 is in J.</p>
+  <p data-pid="ec631d">Drop the supposition. J was anything, so 0 is in every inductive set. Pack membership-in-ℕ: 0 is a number.</p>
+  <p data-pid="ebac0a">The step part.</p>
+  <p data-pid="e1678f">Next-of-a-number technique: <b>if n is a number, so is the next one after n.</b></p>
+  <p data-pid="98a0a4">The plan: if n is in every inductive set, then so is S(n), because each of them carries n to S(n).</p>
+  <p data-pid="9d42a5">Suppose n is a number. Let J be anything, and suppose J is inductive. Unpack membership-in-ℕ on n: n is in every inductive set, so n is in J. Unpack “inductive” on J and keep its step part: J holds the next one after each of its members. Use it with n: S(n) is in J.</p>
+  <p data-pid="2a3ed3">Drop the supposition about J. J was anything, so S(n) is in every inductive set. Pack membership-in-ℕ: S(n) is a number. Drop the supposition about n: if n is a number, so is S(n).</p>
+  <section class="slides" id="sl8a"><div class="eyebrow">The slides · the zero-is-a-number technique · ← → keys work</div></section>
+  <section class="slides" id="sl8b"><div class="eyebrow">The slides · the next-of-a-number technique · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4b8.1</span><span class="ph know">know</span>What do the zero-is-a-number and next-of-a-number techniques say? <br>From which part of “inductive” does each proof take its line?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4b9">
+  <h2 class="sthead"><span class="stno">4b9</span>The smallest inductive set</h2>
+  <p class="stands">Stands on 4b7 (lies-below), 4b8 and 2c (double-inclusion).</p>
+  <p data-pid="473a69">Join zero-is-a-number with next-of-a-number (spoken of every n) and pack “inductive”: ℕ is inductive. Put that beside lies-below and you have this step's main technique.</p>
+  <p data-pid="2cf1b2">Smallest-inductive-set technique: <b>ℕ is inductive, and ℕ is a part of every inductive set.</b> In marks: ℕ is inductive, and ℕ ⊆ J for every inductive set J.</p>
+  <div class="eqline" data-tex="\begin{aligned}&amp;\textbf{Smallest-inductive-set technique:}\qquad \mathbb N \text{ }\\ &amp;\quad \text{is inductive} \;\\ &amp;\quad \land\; \forall J\,(J \text{ is inductive} \Rightarrow \mathbb N \subseteq J)\end{aligned}"></div>
+  <p data-pid="0dce93">Read “smallest” with care. It does not mean “has the fewest members”, since nothing on the ladder has yet said what fewer means. It means: a part of every other inductive set.</p>
+  <p data-pid="fd84a5">And there is only one smallest. Suppose K is inductive and a part of every inductive set. Then K ⊆ ℕ, since ℕ is one of the inductive sets K is a part of. And ℕ ⊆ K, by the lies-below technique with K for J. So K = ℕ by the double-inclusion technique. The step's title names exactly one set.</p>
+  <p data-pid="5ee3fc">Now run the named-sets-are-inductive technique with ℕ in the place of the inductive set. It says that 0, 1, 2, 3, 4 are numbers, and S(4), and S(S(4)), as far as you write. Everything on the run you can name is in ℕ. What is not obvious yet is the other part, that ℕ holds nothing else, and that is where the cargo goes.</p>
+  <section class="slides" id="sl9a"><div class="eyebrow">The slides · the smallest-inductive-set technique · ← → keys work</div></section>
+  <section class="slides" id="sl9b"><div class="eyebrow">The slides · only one smallest · ← → keys work</div></section>
+  <section class="slides" id="sl9c"><div class="eyebrow">The slides · the run is in ℕ · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4b9.1</span><span class="ph know">know</span>What does the smallest-inductive-set technique say? <br>What does “smallest” mean here, and what does it not mean?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4b10">
+  <h2 class="sthead"><span class="stno">4b10</span>A stray: nobody's next</h2>
+  <p class="stands">Stands on 4b7 (lies-below), 3b4 (in-its-next) and 3b9 (next-never-empty).</p>
+  <p data-pid="d9e06e">Take the cargo {1}. To show {1} is not a number, you need an inductive set that leaves it out: then {1} fails membership-in-ℕ's every, by the counterexample technique. The natural candidate is I with {1} sifted away, {x ∈ I : x ≠ {1}}. Its base part is true, since 0 ≠ {1} (0 has no members and {1} has the member 1). Its step part needs this: the next one after something is never {1}. That is so, and here is why.</p>
+  <p data-pid="54f33e">Suppose S(x) = {1}, aiming to refute it. Each set is in its own next, so x is in S(x). Swap S(x) for {1}: x is in {1}. The only member of {1} is 1, so x = 1.</p>
+  <p data-pid="e26cac">Now look at 0. 1 is {0}, so 0 is in 1. And 1 is a part of its next, S(1). So 0 is in S(1). Swap 1 back for x, then S(x) for {1}: 0 is in {1}. So 0 = 1.</p>
+  <p data-pid="83e870">But 1 names S(0), and a next is never empty, so 1 ≠ 0. Turn it about: 0 ≠ 1. That clashes with 0 = 1. Refute the supposition: S(x) ≠ {1}, whatever x is.</p>
+  <section class="slides" id="sl10"><div class="eyebrow">The slides · a stray · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4b10.1</span><span class="ph know">know</span>Why is the next one after a set never {1}?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4b11">
+  <h2 class="sthead"><span class="stno">4b11</span>Sifting the stray away</h2>
+  <p class="stands">Stands on 4b10 (S(x) ≠ {1}) and 4b7 (lies-below).</p>
+  <p data-pid="1214c1">The plan: build an inductive set that leaves {1} out. Then the lies-below technique does the rest.</p>
+  <p data-pid="24ee71">Now the sifted set is inductive. Base: 0 ∈ I and 0 ≠ {1}, join, pack the sift. Step: let x be anything, and suppose x is in the sift. Then x ∈ I, so S(x) ∈ I (I's step part). And S(x) ≠ {1} (shown above), so S(x) is in the sift. So {x ∈ I : x ≠ {1}} is an inductive set, and {1} is not in it. The lies-below technique says ℕ is a part of it. If {1} were a number, it would be in the sift, so {1} ≠ {1}, which clashes with the self-sameness axiom. Refute: <b>{1} ∉ ℕ</b>.</p>
+  <section class="slides" id="sl11"><div class="eyebrow">The slides · sifting the stray away · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4b11.1</span><span class="ph know">know</span>How is {1} shown not to be a number?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4b12">
+  <h2 class="sthead"><span class="stno">4b12</span>The strays technique</h2>
+  <p class="stands">Stands on 4b11.</p>
+  <p data-pid="6f3268">Nothing about {1} was used but these facts: it is not 0, and it is nobody's next. Any set with both properties can be sifted away in the same way, leaving an inductive set behind, so no such set is a number.</p>
+  <p data-pid="b63ce8">Strays technique: <b>a set that is not 0 and is nobody's next one is not a number.</b> In marks: if c ≠ 0 and S(x) ≠ c for every set x, then c ∉ ℕ.</p>
+  <p data-pid="04b8e9">The same argument, with {2} or {{1}} for {1}, shows each of them is a stray.</p>
+  <p data-pid="6c9e0c">The next one after a stray is a different story. S({1}) is somebody's next, namely {1}'s. So sifting S({1}) away from an inductive set that holds {1} breaks the step part at {1}. Showing S({1}) is not a number is easiest with a technique 4c proves by induction: every number is 0 or the next one after a number. The rest of every cargo chain goes then.</p>
+  <p data-pid="05d10c">The picture lets you watch the start of a chain voted out and the rest survive.</p>
+  <section class="slides" id="sl12"><div class="eyebrow">The slides · the strays technique · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4b12.1</span><span class="ph know">know</span>What does the strays technique say? <br>Why does the same sift not throw out S({1})?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4b13">
+  <h2 class="sthead"><span class="stno">4b13</span>Different sets have different next ones</h2>
+  <p class="stands">Stands on 3b3 (next-membership), 3b4 (in-its-next) and 3a·f10 (no-loop).</p>
+  <p data-pid="2bdb1b">3b proved that the next one is never the set you started from (never-its-own-next) and never empty (next-never-empty). 3c held a third fact in trust, and this step proves it, so that foreclosure completes.</p>
+  <p data-pid="4ae349">Different-nexts technique: <b>two different sets never have the same next one.</b> Say it the way it is used: if S(x) = S(y), then x = y.</p>
+  <p data-pid="979320">The proof is about membership, not about “taking S off both sides”, which is not a tech. The plan: get “x ∈ y or x = y” and “y ∈ x or y = x”, then take the cases.</p>
+  <p data-pid="64e303">Suppose S(x) = S(y). Each set is in its own next, so x is in S(x). Swap S(x) for S(y): x is in S(y). By next-membership, x is in y, or x is y. The same moves, turned about, give: y is in x, or y is x.</p>
+  <p data-pid="27754e">Now reason by cases. If x is y, that is the goal. If x is in y, look at the other pair of options. If y is x, turn it about: x is y. If y is in x, then x is in y and y is in x. That is a loop, and the no-loop technique forbids loops. The clash permits everything, x = y too.</p>
+  <p data-pid="4163b8">Every case reaches x = y. Drop the supposition: if S(x) = S(y), then x = y.</p>
+  <p class="eqline" data-pid="9cb424">From here on, the statement “S is one-to-one” means this. Different sets have different next ones.</p>
+  <div class="eqline" data-tex="\forall x\,\forall y\,(S(x) = S(y) \Rightarrow x = y)"></div>
+  <section class="slides" id="sl13a"><div class="eyebrow">The slides · the different-nexts technique · ← → keys work</div></section>
+  <section class="slides" id="sl13b"><div class="eyebrow">The slides · a witness · ← → keys work</div></section>
+  <section class="pic" id="pic2">
+    <div class="eyebrow">The picture · two next ones, and why they differ</div>
     <div class="panel">
-      <div class="chips" role="group" aria-label="tap mode"><span class="m" style="color:var(--muted)">tap a domino to:</span><button data-m="push" class="on">push it</button><button data-m="gap">break the step after it</button><button id="reset">stand all up</button></div>
-      <div class="cap">Ember: fallen, the statement proved there. A wide gap means the step from that number to the next fails. Push a domino and watch how far the truth travels. Dominoes past the picture are the later numbers.</div>
-      <canvas id="cvD"></canvas>
+      <div class="chips" role="group" aria-label="x" id="xch"><span class="m" style="color:var(--muted)">x =</span></div>
+      <div class="chips" role="group" aria-label="y" id="ych"><span class="m" style="color:var(--muted)">y =</span></div>
+      <div class="cap">The different-nexts technique's pair of memberships for the sets you choose. If x ≠ y, they are not both true, since both would make a loop; a membership that fails is a witness that S(x) ≠ S(y).</div>
       <div class="eqbox" id="eqD"></div>
     </div>
   </section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4b6.1</span><span class="ph know">know</span>In the dominoes, what are the push and the spacing? <br>What can the picture not show?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="4b7">
-  <h2 class="sthead"><span class="stno">4b7</span>Every number is 0 or a next one</h2>
-  <p class="stands">Stands on 4b4 and 1c (add an option).</p>
-  <p data-pid="b21f92">The earliest induction.</p>
-  <p data-pid="7b5154">Zero-or-a-next technique: <b>every number is 0, or is the next one after some number.</b></p>
-  <p data-pid="e243ee">Notice that the step never uses its hypothesis: S(n) is the next one after n, whatever is so of n. You still need induction, because the conclusion speaks of every number. Induction is the only road from ℕ's description to a fact about all its members.</p>
-  <p data-pid="1c488e">The condition φ(n): n is 0, or n is the next one after some number.</p>
-  <p data-pid="4b8b0a">The base. 0 = 0, by the self-sameness axiom. Add an option: 0 is 0, or the next one after some number. That is φ(0).</p>
-  <p data-pid="d54f1c">The step. Let n be a number, and suppose φ(n). S(n) = S(n), by self-sameness, and n is a number. So S(n) is the next one after some number, with n as the example. Add an option: that is φ(S(n)). The hypothesis φ(n) was never used.</p>
-  <p data-pid="854046">The induction technique closes it: φ(n) for every number n.</p>
-  <section class="slides" id="sl7"><div class="eyebrow">The slides · zero or a next · ← → keys work</div></section>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">4b7.1</span><span class="ph know">know</span>What does the zero-or-a-next technique say? <br>Why does it need induction when its step never uses the hypothesis?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="4b8">
-  <h2 class="sthead"><span class="stno">4b8</span>The cargo goes</h2>
-  <p class="stands">Stands on 4b7, 4a12 (strays) and 4a13 (different-nexts).</p>
-  <p data-pid="79bd6d">Put zero-or-a-next beside 4a's techniques and the cargo goes.</p>
-  <p data-pid="bf00cb">Back-from-a-next technique: <b>if the next one after x is a number, so is x.</b></p>
-  <p data-pid="e5269f">Suppose S(x) is a number. Use zero-or-a-next with S(x): S(x) is 0, or S(x) is the next one after some number. A next is never empty, so S(x) is not 0. The remaining option is true: S(x) = S(m) for some number m. Call it m.</p>
-  <p data-pid="246124">By different-nexts, x = m. And m is a number, so swap: x is a number. That claim does not mention m, so the some closes. Drop the supposition: if S(x) is a number, so is x.</p>
-  <p data-pid="884d10">Turn it about by 1d's turn-and-deny technique for If: if x is not a number, neither is S(x). 4a showed {1} is not a number (the strays technique). So S({1}) is not a number, and so S(S({1})) is not, and so on down the chain as far as you write. Whatever cargo chain starts at a stray, the stray is thrown out by strays and every later link by back-from-a-next. The vote in 4a's picture left S({1}) standing because no voter drawn there lacked it; ℕ itself lacks it.</p>
-  <p data-pid="e8cffd">Zero-or-a-next has a companion you will use constantly: every number other than 0 is the next one after exactly one number. There is at least one, by zero-or-a-next and the remaining-option technique. There is at most one, by different-nexts. 4e calls on this companion every time it opens up a number that is not 0.</p>
-  <section class="slides" id="sl8a"><div class="eyebrow">The slides · back from a next · ← → keys work</div></section>
-  <section class="slides" id="sl8b"><div class="eyebrow">The slides · the cargo goes · ← → keys work</div></section>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">4b8.1</span><span class="ph know">know</span>What does the back-from-a-next technique say? <br>How does it clear the rest of a cargo chain?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="4b9">
-  <h2 class="sthead"><span class="stno">4b9</span>Transitive sets</h2>
-  <p class="stands">Stands on 2a9 (⊆), 2e12 (transitive relations) and 3a7 (each is the set of those before it).</p>
-  <p data-pid="84540f">3a noticed that each of 0 to 4 is both a member and a part of each later one, and that every member of 4 is also a subset of 4. That latter fact deserves a name, because it is what makes merging undo S and what makes “less than” behave on 4g.</p>
-  <p class="eqline" data-pid="852344">From here on, the statement “t is a transitive set” means this. Each member of t is also a part of t.</p>
-  <div class="eqline" data-tex="\forall y\,(y \in t \Rightarrow y \subseteq t)"></div>
-  <p data-pid="d87161">The word is 2e's, used of a set rather than a relation, and both uses agree. Unpack ⊆ and the line says: if x ∈ y and y ∈ t, then x ∈ t. That is 2a's illegal “membership chaining”, which is illegal in general and legal exactly into a transitive set. <b>So a transitive set is one into which ∈ chains</b>, the way a relation is transitive when it chains.</p>
-  <p data-pid="a61ef3">Example: 3 = {0, 1, 2} is transitive, since 0, 1 = {0} and 2 = {0, 1} are all parts of 3. {1} is not transitive: 1 ∈ {1}, and 0 ∈ 1, but 0 ∉ {1}.</p>
-  <section class="slides" id="sl9"><div class="eyebrow">The slides · transitive · ← → keys work</div></section>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">4b9.1</span><span class="ph know">know</span>What is a transitive set? <br>What does it have to do with 2a’s illegal membership chaining?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="4b10">
-  <h2 class="sthead"><span class="stno">4b10</span>Every number is transitive</h2>
-  <p class="stands">Stands on 4b9, 4b4 (induction) and 3a4 (in-its-next).</p>
-  <p data-pid="624b03">Numbers-are-transitive technique: <b>every number is a transitive set.</b> The proof is by induction.</p>
-  <p data-pid="857d55">The base. Suppose y is in 0. But 0 has no members, so that clashes, and the clash permits everything: y is a part of 0. So each member of 0 is a part of 0, and 0 is transitive.</p>
-  <p data-pid="a42b59">The step. Let n be a number, and suppose n is transitive. That is the induction hypothesis. Let y be anything in S(n). By next-membership, y is in n, or y is n.</p>
-  <p data-pid="560f78">Reason by cases. If y is in n, the hypothesis makes y a part of n. And n is a part of S(n), by in-its-next. Chain the two: y is a part of S(n). If y is n, then y is a part of S(n) at once, by in-its-next. Either way, y is a part of S(n). So S(n) is transitive.</p>
-  <p data-pid="095b4f">The induction technique closes it: every number is a transitive set.</p>
-  <section class="slides" id="sl10"><div class="eyebrow">The slides · the numbers-are-transitive technique · ← → keys work</div></section>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">4b10.1</span><span class="ph know">know</span>What does the numbers-are-transitive technique say? <br>Where in the step does the induction hypothesis do its work?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="4b11">
-  <h2 class="sthead"><span class="stno">4b11</span>Two techniques from the step</h2>
-  <p class="stands">Stands on 4b10.</p>
-  <p data-pid="9c5ed6">Look at the step. It never used that n is a number. It showed that the next one after any transitive set is transitive.</p>
-  <p data-pid="552b5c">Transitive-next technique: <b>the next one after a transitive set is a transitive set.</b></p>
-  <p data-pid="4dbd91">The base and transitive-next together give numbers-are-transitive through the induction technique. Another technique goes the same way, and 4g leans on it.</p>
-  <p data-pid="b21019">ℕ-is-transitive technique: <b>every member of a number is a number.</b></p>
-  <p data-pid="f74da9">The condition is ∀y (y ∈ n ⇒ y ∈ ℕ). The base is true because 0 has no members. In the step, a member of S(n) is a member of n, a number by the hypothesis, or is n, a number by supposition.</p>
-  <section class="slides" id="sl11"><div class="eyebrow">The slides · the ℕ-is-transitive technique · ← → keys work</div></section>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">4b11.1</span><span class="ph know">know</span>What do the transitive-next and ℕ-is-transitive techniques say?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="4b12">
-  <h2 class="sthead"><span class="stno">4b12</span>Merging undoes the next one</h2>
-  <p class="stands">Stands on 4b10 and 3a11 (merging back).</p>
-  <p data-pid="f3ea96">3a showed that merging undoes S on 0 to 4, and said why: each member is also a part, so tipping out the members of S(n) gives back nothing beyond n. Numbers-are-transitive makes that true of every number.</p>
-  <p data-pid="94bd28">Merge-undoes-next technique: <b>for every number n, merging the members of the next one after n gives back n.</b> In marks: ⋃S(n) = n.</p>
-  <p data-pid="191a80">The plan: show that each side has every member of the other.</p>
-  <p data-pid="8fc2cb">Let n be a number. Suppose first that y is in ⋃S(n). Then y is in some member of S(n); call it z. By next-membership, z is in n, or z is n. If z is in n, numbers-are-transitive makes z a part of n, so y is in n. If z is n, swap: y is in n. Either way, y is in n.</p>
-  <p data-pid="4855e9">Now suppose instead that y is in n. And n is in S(n), by in-its-next. So y is in a member of S(n), with n as the example: y is in ⋃S(n).</p>
-  <p data-pid="93dc28">Each way is true, for every y. By the same-members axiom, ⋃S(n) = n.</p>
-  <section class="slides" id="sl12"><div class="eyebrow">The slides · the merge-undoes-next technique · ← → keys work</div></section>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">4b12.1</span><span class="ph know">know</span>What does the merge-undoes-next technique say, and which technique makes it true for every number?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="4b13">
-  <h2 class="sthead"><span class="stno">4b13</span>The other road</h2>
-  <p class="stands">Stands on 4b12, 4a13 (different-nexts) and 3a9 (never-its-own-next).</p>
-  <p data-pid="d88501">And with merge-undoes-next, another proof that S is one-to-one, for numbers. If m and n are numbers and S(m) = S(n), then ⋃S(m) = ⋃S(n) by the swap axiom. Merge-undoes-next turns each side into m and n: m = n. That is the proof the next-one gesture was built for: <b>S adds the old set as a member, and merging takes the newest member back out.</b></p>
-  <p data-pid="1f693c">Compare the roads. 4a's proof of different-nexts works for every set and leans on foundation, through 2f's no-loop. This one works only for numbers and never touches foundation: numbers-are-transitive, merge-undoes-next and the techs are all it uses.</p>
-  <p data-pid="ceabac">The same goes for 3a's never-its-own-next technique, that nothing is its own next. 3a proved it for every set with foundation (the no-self-membership technique). For numbers it is an induction. Base: S(0) ≠ 0, by next-never-empty. Step: if S(n) ≠ n, then S(S(n)) ≠ S(n). For S(S(n)) = S(n) would give S(n) = n by different-nexts as just proved for numbers (S(n) and n are both numbers), clashing with the hypothesis.</p>
-  <p data-pid="1e0c3e">Why prove a thing again? Because the later proof says something the earlier does not: the counting numbers do not need foundation for these techniques. Foundation forbids loops everywhere; for the numbers, induction does the forbidding by itself. In 2f's looped world, where Ω = {Ω} and foundation fails, S(Ω) = Ω, and never-its-own-next fails for Ω. The induction above says nothing about Ω, since Ω is not a number there.</p>
-  <section class="slides" id="sl13a"><div class="eyebrow">The slides · the other road · ← → keys work</div></section>
-  <section class="slides" id="sl13b"><div class="eyebrow">The slides · never-its-own-next without foundation · ← → keys work</div></section>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">4b13.1</span><span class="ph know">know</span>Why does the ladder prove different-nexts and never-its-own-next a second time, for numbers only?</li>
+      <li><span class="qid">4b13.1</span><span class="ph know">know</span>What does the different-nexts technique say, and what is its proof about?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="4b14">
-  <h2 class="sthead"><span class="stno">4b14</span>Five techniques about ℕ</h2>
-  <p class="stands">Stands on 4a and 4b.</p>
-  <p data-pid="0d11cc">Now the ladder holds five techniques about ℕ: 0 is a number; the next one after a number is a number; 0 is nobody's next; different numbers have different next ones; and induction. Written down as a list of axioms, they were taken as the starting point of arithmetic in 1889. On the ladder none of them was taken: each is a technique about the smallest inductive set.</p>
+  <h2 class="sthead"><span class="stno">4b14</span>An endless collection, by the old mark</h2>
+  <p class="stands">Stands on 4b13, 4b8 (next-of-a-number) and 3c9 (matched with a part).</p>
+  <p data-pid="d2128b">The different-nexts technique says S is one-to-one, for every set, not only numbers, and it leans on foundation through no-loop. 4c gives another proof for numbers that uses induction instead and never touches foundation. That proof needs the technique that every member of a number is also a part of it, which is itself an induction, so it waits for 4c.</p>
+  <p data-pid="070a00">Read the techniques together for numbers. Every number has a next one that is a number (next-of-a-number). Different numbers have different next ones (different-nexts). And 0 is nobody's next (next-never-empty).</p>
+  <p data-pid="9d6d9d">That is exactly the old mark of an endless collection, which 3c described in words. ℕ can be matched, member for member, each number with its next one, with a part of itself that leaves 0 out. 4d makes that matching an object.</p>
+  <section class="slides" id="sl14"><div class="eyebrow">The slides · the endless mark · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4b14.1</span><span class="ph know">know</span>Which five techniques about ℕ does the ladder now hold? <br>How does the ladder’s standing for them differ from the list of 1889?</li>
+      <li><span class="qid">4b14.1</span><span class="ph know">know</span>Which three techniques together give the old mark of an endless collection, and what does the mark say?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="4b15">
-  <h2 class="sthead"><span class="stno">4b15</span>Illegal inductions</h2>
+  <h2 class="sthead"><span class="stno">4b15</span>Illegal moves</h2>
   <p class="stands">Stands on 4b1 to 4b14.</p>
-  <p data-pid="6efade">Every fake below feels convincing while you write it. Each goes wrong at a piece, and nowhere else.</p>
-  <pre class="lines" data-k="ember" data-wrong data-label="this step: inductions that are not proofs">
-\varphi(n):\ S(n) = n.\ \ \text{Step: } S(n) = n \Rightarrow S(S(n)) = S(n) @@ a good step, for every n: the swap axiom, at the right places. But the base S(0) = 0 fails (the next-never-empty technique), and φ fails at every number (never-its-own-next). A step carries truth; it cannot make any
-\varphi(n):\ n \in 3.\ \ \varphi(0),\ \varphi(1),\ \varphi(2) @@ the base is true. The step is true at 0 and at 1, and at 3, 4, S(4) and every later number (its hypothesis fails there, so the if is true: the free-if technique), and fails at 2: 2 ∈ 3 and 3 ∉ 3. A gap in the spacing, after domino 2, and φ fails from 3 on
-\varphi(n):\ n \in S(4).\ \ \text{checked at } 0, 1, 2, 3, 4 @@ every check passes, and checking is not a step. At 4 the step fails: 4 ∈ S(4) and S(4) ∉ S(4). No number of checks is a proof of the every
-\text{step: assume } \varphi(S(n))\ \dots\ \text{so } \varphi(S(n)) @@ the hypothesis of the step is φ(n), not φ(S(n)). A step that assumes its own conclusion proves nothing, however long the column between
-A = I \text{ with cargo:}\ 0 \in I,\ \text{closed under } S,\ \text{so } I = \mathbb N @@ the set form needs A ⊆ ℕ. induction proves facts about numbers, not about every inductive set
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\mathbb N = \{0, 1, 2, 3, 4, \dots\}\,? @@ the dots are not a tool, as 3c said. ℕ is a sift, and its members are given by membership-in-ℕ, not by a listing that never ends
+\mathbb N \subseteq J,\ \text{ so } J = \mathbb N\,? @@ J may carry cargo. lies-below puts ℕ inside J; nothing puts J inside ℕ
+x \in I \land x \in I',\ \text{ so } x \in \mathbb N\,? @@ a pair of inductive sets is not every inductive set. Both may carry the same cargo; the picture shows such a pair
+\text{a vote with } \{0,1,2,3,4\} \text{ among the voters} @@ only inductive sets vote. Let a set that runs out vote and the common part runs out with it: S(4) would be thrown out, and the result would not be inductive
+\{1\} \notin \mathbb N \ \text{ because } \{1\} \text{ is not a number} @@ that is the claim again, not a reason. The reason is an inductive set that misses {1}, built above
+S(x) = S(y),\ \text{ take } S \text{ off both sides} @@ there is no such tech. S is cancelled by the different-nexts technique, which earns it through membership and no-loop
+\{x \in I : x \ne S(\{1\})\} \text{ is inductive} @@ not if {1} ∈ I: then S({1}) must be in it by the step part. Only strays can be sifted away each on its own
   </pre>
-  <p data-pid="6b7c12">There is a famous fake about horses, all of one colour. Its step fails at the smallest number, and nowhere else. It is worked in the basement, under “Wrong moves, worked”.</p>
-  <section class="slides" id="sl15a"><div class="eyebrow">The slides · a fake: no base · ← → keys work</div></section>
-  <section class="slides" id="sl15b"><div class="eyebrow">The slides · a fake: a gap · ← → keys work</div></section>
-  <section class="slides" id="sl15c"><div class="eyebrow">The slides · a fake: checking · ← → keys work</div></section>
-  <section class="slides" id="sl15d"><div class="eyebrow">The slides · the horses · ← → keys work</div></section>
-  <section class="pic" id="pic2">
-    <div class="eyebrow">The picture · a condition checked case by case, and where its step fails</div>
-    <div class="panel">
-      <div class="chips" role="group" aria-label="condition" id="qch"></div>
-      <div class="cap">Each row is a number, computed as a set. The φ column checks the statement at that number; the step column checks the if from that number to its next. Teal ✓ is true, ember ✗ is false. A table is checking, and checking is not proof: it shows where a step breaks, and only a step proved for every n gives the every.</div>
-      <div class="tablewrap" id="tq"></div>
-      <div class="eqbox" id="eqQ"></div>
-    </div>
-  </section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4b15.1</span><span class="ph know">know</span>Why is “checked at 0, 1, 2, 3, 4” not a proof of φ for every number? <br>Why does a step whose hypothesis is φ(S(n)) prove nothing?</li>
+      <li><span class="qid">4b15.1</span><span class="ph know">know</span>Why is “x ∈ I and x ∈ I′, so x ∈ ℕ” an illegal move? <br>Why is “S(x) = S(y), take S off both sides” not a move?</li>
     </ol>
   </section>
 </section>
@@ -304,14 +331,15 @@ A = I \text{ with cargo:}\ 0 \in I,\ \text{closed under } S,\ \text{so } I = \ma
 <section class="class step" data-step="4b16">
   <h2 class="sthead"><span class="stno">4b16</span>Running it backwards</h2>
   <p class="stands">Stands on 4b1 to 4b14.</p>
-  <p data-pid="694f5d">Wanting ∀n ∈ ℕ φ(n), you name φ before anything else, as a statement with a gap, so that φ(0), φ(n) and φ(S(n)) are definite statements you can write down.</p>
-  <p data-pid="3e482c">Then a pair of pieces of scratch work. For the base, φ(0), often by unpacking 0 as ∅. For the step, write φ(S(n)) and look for φ(n) inside it, or for a way to reach it from φ(n). Next-membership is usually the opening move, since it says what is in S(n).</p>
-  <p data-pid="da3da3">If the step works for every n but 0, check the base with extra care. If it works only from some number on, you have a gap. Find the number where it fails, and see whether the statement fails there too. Found upward; written downward.</p>
+  <p data-pid="437488">Wanting “t is a number”, you pack membership-in-ℕ: let J be any inductive set, and show t ∈ J. For an entry you can name, that is the named-sets-are-inductive technique's argument run inside any J, or zero-is-a-number and next-of-a-number used over and over.</p>
+  <p data-pid="1d61ed">Wanting “t is not a number”, you want an inductive set that leaves t out. For a stray, the sift of I by x ≠ t is that set, once you have shown t ≠ 0 and S(x) ≠ t for every set x.</p>
+  <p data-pid="d2db38">Wanting x = y from S(x) = S(y), you cite different-nexts.</p>
+  <p data-pid="15dc11">Wanting “K = ℕ”, you show K ⊆ ℕ and ℕ ⊆ K. For ℕ ⊆ K, showing K inductive and citing lies-below is usually the quickest road. Found upward; written downward.</p>
   <section class="slides" id="sl16"><div class="eyebrow">The slides · backwards · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4b16.1</span><span class="ph know">know</span>Wanting ∀n ∈ ℕ φ(n), what do you write first? <br>How do you work the step, and what does a step that works only from some number on tell you?</li>
+      <li><span class="qid">4b16.1</span><span class="ph know">know</span>Wanting “t is a number”, how does the argument open and close? <br>Wanting “t is not a number”, what do you build?</li>
     </ol>
   </section>
 </section>
@@ -319,28 +347,113 @@ A = I \text{ with cargo:}\ 0 \in I,\ \text{closed under } S,\ \text{so } I = \ma
 <section class="challenge themeend">
   <div class="eyebrow">Special challenges · there if you want them</div>
   <h2>Special challenges</h2>
-  <div class="chq"><span class="chid">4b.4.1</span><span class="tagq">build</span>Make a condition φ on numbers, in marks built so far, whose step needs its hypothesis, and prove it of every number. <br>Change φ as little as you can so its base stays true and its step fails at exactly one number, and prove the changed φ at every number the attempt reaches.</div>
-  <div class="chq"><span class="chid">4b.4.2</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{Every number is a transitive set}"></span> <span data-tex-inline="\text{whose members are transitive sets.}"></span></span>Settle whether every transitive set whose members are transitive sets is a number.</div>
-  <div class="chq"><span class="chid">4b.4.3</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\text{Every number is a transitive set,}"></span> <span data-tex-inline="\forall n \in \mathbb{N}\; n \notin n,"></span> <span data-tex-inline="\text{both proved without foundation.}"></span> <span data-tex-inline="m, n \in \mathbb{N},"></span> <span data-tex-inline="S(m) = S(n)"></span></span>With foundation and merging off limits, prove that m and n are the same set.</div>
-  <div class="chq"><span class="chid">4b.4.4</span><span class="tagq">seam</span>φ(0) ∧ ∀n ∈ ℕ (φ(n) ⇒ φ(S(n))) ⇒ ∀n ∈ ℕ φ(n) is proved here, from ℕ being the smallest inductive set. It could instead be laid down as an axiom about the numbers, or taken to need no proof, being what counting is. <br>Which should it be?</div>
+  <div class="chq"><span class="chid">4b.4.1</span><span class="tagq">build</span>Pick a number c and a move m, built from S but not S, that takes each number to a number. Let C be the numbers in every set that holds c and holds m(x) for each of its members x. Decide, with a proof, which of 0, 1, 2, 3 and 4 are in C, and whether C is inductive.</div>
+  <div class="chq"><span class="chid">4b.4.2</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="s = S(\{1\})"></span></span>Prove that s is not a number by a condition that 0 meets, that passes from each set to its next one, and that s fails.</div>
+  <div class="chq"><span class="chid">4b.4.3</span><span class="tagq">world</span><span class="givens"><span data-tex-inline="\text{Every principle of rung 2}"></span> <span data-tex-inline="\text{but foundation is true.}"></span></span>Take the proof that S is one-to-one as far as you can take it, and write the line it needs next.<br>Build a world with two different sets that have the same next, or prove there is none.</div>
+  <div class="chq"><span class="chid">4b.4.4</span><span class="tagq">seam</span>For inductive I, ℕ = {x ∈ I : ∀J (J is inductive ⇒ x ∈ J)}, and ℕ is inductive, so its condition speaks, among others, of ℕ. A sift's condition may not mention the set being built. <br>Is that rule broken? <br>Is it harmless? <br>What would forbidding it cost?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r04a.html">← 4a · the smallest inductive set</a><a href="r04c.html">4c · defining by repeating →</a></nav>
+<nav class="nextrung"><a href="r04a.html">← 4a · prove it</a><a href="r04c.html">4c · induction →</a></nav>
 
 <section class="extra basement">
   <div class="eyebrow">The basement · there if you want it</div>
   <h3>Who said it first</h3>
-  <p>Written as axioms, these lines are Peano’s axioms. Reasoning by recurrence is Henri Poincaré’s phrase; the writer who listed induction as an axiom, in 1889, is Giuseppe Peano; the one who proved it about his chains is Richard Dedekind. The looped world is Peter Aczel’s. The horses are usually credited to George Pólya.</p>
-  <aside class="voice para"><p>Henri Poincaré called this reasoning by recurrence and thought it the characteristic form of mathematical reasoning: it holds an endless run of syllogisms condensed into a statement. He judged that it could not be reduced to logic, and took it to be an intuition the mind has before any proof. Peano listed it among his axioms for the numbers. Dedekind proved it, as a technique about his chains, which is the road this ladder has taken.</p><cite>Poincaré, Science and Hypothesis (1902), ch. 1, trans. Greenstreet, 1905; Peano, Arithmetices principia (1889); Dedekind, Was sind und was sollen die Zahlen? (1888), §59 and §80, trans. Beman, 1901</cite></aside>
-  <aside class="voice para"><p>The horses are usually credited to George Pólya, who told a version of this fake to make the point that the step must be true at every number, the smallest included.</p><cite>after Pólya, Induction and Analogy in Mathematics (1954)</cite></aside>
+  <p>The founder who came to the numbers by this sift, and whose mark of an endless collection this step proves, is Richard Dedekind.</p>
+  <aside class="voice para"><p>Dedekind's way to the numbers was this sift. Given a system and a step, he called a part of the system a chain when the step never leads out of it, and he took the chain of a starting element to be what is common to every chain that holds that element. The counting numbers are the chain of the start under the next-one step.</p><cite>Dedekind, Was sind und was sollen die Zahlen? (1888), §37, §44 and §71–73, trans. Beman, 1901</cite></aside>
   <h3>Accepted names</h3>
-  <p>The five techniques, taken as axioms, are the Peano axioms. The induction technique is the principle of mathematical induction; the base and the step are the base case and the inductive step.</p>
-  <h3>Wrong moves, worked</h3>
-  <p>The famous fake, told about horses. 3b used the word “matching” in plain words, pairing things off member for member, and this story needs nothing more. Say a herd is matched with a set when its horses can be paired off with that set's members, each member with its own horse and each horse with its own member. The claim: in every herd, all the horses are the same colour. The “proof” is by induction on n, with φ(n): every herd matched with S(n) is all of the same colour.</p>
-  <p>Base: a herd matched with 1 = {0} is a horse alone, and a horse alone is the same colour as itself. Step: assume every herd matched with S(n) is all of the same colour, and take a herd matched with S(S(n)). Lead a horse, u, out of the barn. The horses left are matched with S(n), so they are all of the same colour. Bring u back and lead out a different horse, v. The horses left are again matched with S(n), so they too are all of the same colour. The horses that stayed in the barn both times belong to both groups. So the colour of the group left the earlier time and the colour of the group left the later time are the same colour. And the whole herd is all of the same colour. By induction, every herd is all of the same colour.</p>
-  <p>The facts about leading a horse out are granted here (4j proves the counting facts behind them); the flaw is elsewhere. Run the step at n = 0, where a herd matched with S(1) = 2 has a horse for 0 and a horse for 1, call them u and v. Lead out u, and only v is left; lead out v, and only u is left. No horse stayed in both times, and the statement “the horses that stayed in both times belong to both groups” is about nobody. The step from 0 to 1 fails. From n = 1 on, a herd matched with S(S(n)) has a horse that is neither u nor v, and the step is sound. So the fake is a row of dominoes with a gap right after the domino at the start: nothing past a horse alone is proved.</p>
-  <p>The horses are an old classroom fake, told to make the point that the step must be true at every number, the smallest included.</p>
+  <p>A collection that can be matched with a part of itself that leaves something out is called Dedekind-infinite. That S is one-to-one is often written as an axiom, one of the Peano axioms.</p>
+  <h3>This step’s arguments, in columns</h3>
+  <p data-pid="c4b0a1">Each argument of this step, written again as a column in the form <a href="r04a.html">4a</a> builds: one line to a row, the reason on the right.</p>
+  <div class="stepgroup">
+  <p class="from"><a href="r04b.html">From 4b · The smallest inductive set</a></p>
+<section class="paid" data-from="r04b.html" data-step="4b">
+  <h4>4b · The sift</h4>
+  <p>For any inductive set I, a thing is in the sift of I by “in every inductive set” exactly when it is in every inductive set.</p>
+  <pre class="lines" data-k="ember" data-label="4b: the whichever-inductive-set technique, for inductive I: y ∈ {x ∈ I : φ(x)} ⇔ φ(y)">
+I \text{ is inductive} @@ given: the fresh name from using the infinity axiom's some
+\text{let } y \text{ be anything;}\ \ \text{assume } y \in \{x \in I : \varphi(x)\} @@ aiming at the rightward if
+\qquad y \in I \land \varphi(y) @@ ﹀ the sift (2d)
+\qquad \htmlClass{new}{\varphi(y)} @@ keep right
+\text{assume } \forall J\,(J \text{ is inductive} \Rightarrow y \in J) @@ that is, assume φ(y): aiming at the leftward if
+\qquad I \text{ is inductive} \Rightarrow y \in I @@ use the every, with I
+\qquad y \in I @@ carry through, with the given line
+\qquad y \in I \land \varphi(y) @@ join
+\qquad \htmlClass{new}{y \in \{x \in I : \varphi(x)\}} @@ ︿ the sift
+y \in \{x \in I : \varphi(x)\} \Leftrightarrow \varphi(y) \quad \blacksquare @@ prove an if each way; join; ︿ ⇔; y was anything
+  </pre>
+</section>
+<section class="paid" data-from="r04b.html" data-step="4b">
+  <h4>4b · Inside every inductive set</h4>
+  <p>Every number is in every inductive set: ℕ is a part of each inductive set J.</p>
+  <pre class="lines" data-k="ember" data-label="4b: the lies-below technique, J inductive ⇒ ℕ ⊆ J">
+J \text{ is inductive} @@ given
+\text{let } y \text{ be anything;}\ \ \text{assume } y \in \mathbb N @@ the skeleton for ⊆ (2c)
+\qquad \forall J\,(J \text{ is inductive} \Rightarrow y \in J) @@ ﹀ membership-in-ℕ
+\qquad J \text{ is inductive} \Rightarrow y \in J @@ use the every, with this J
+\qquad \htmlClass{new}{y \in J} @@ carry through
+\htmlClass{new}{\mathbb N \subseteq J} \quad \blacksquare @@ prove an if; speak of everything; ︿ ⊆
+  </pre>
+</section>
+<section class="paid" data-from="r04b.html" data-step="4b">
+  <h4>4b · ℕ is inductive</h4>
+  <p>0 is a number, because 0 is in every inductive set.</p>
+  <pre class="lines" data-k="ember" data-label="4b: the zero-is-a-number technique, 0 ∈ ℕ">
+\text{let } J \text{ be anything;}\ \ \text{assume } J \text{ is inductive} @@ aiming at the every inside membership-in-ℕ
+\qquad 0 \in J \land \forall x\,(x \in J \Rightarrow S(x) \in J) @@ ﹀ “inductive”
+\qquad 0 \in J @@ keep left
+\forall J\,(J \text{ is inductive} \Rightarrow 0 \in J) @@ prove an if; speak of everything
+\htmlClass{new}{0 \in \mathbb N} \quad \blacksquare @@ ︿ membership-in-ℕ
+  </pre>
+</section>
+<section class="paid" data-from="r04b.html" data-step="4b">
+  <h4>4b · ℕ is inductive</h4>
+  <p>If n is a number, so is S(n), because each inductive set carries n to S(n).</p>
+  <pre class="lines" data-k="ember" data-label="4b: the next-of-a-number technique, n ∈ ℕ ⇒ S(n) ∈ ℕ">
+\text{assume } n \in \mathbb N @@ aiming at an if
+\qquad \text{let } J \text{ be anything;}\ \ \text{assume } J \text{ is inductive} @@ aiming at the every inside membership-in-ℕ
+\qquad\qquad n \in J @@ ﹀ membership-in-ℕ on the line n ∈ ℕ; use the every with J; carry through
+\qquad\qquad \forall x\,(x \in J \Rightarrow S(x) \in J) @@ ﹀ “inductive”; keep right
+\qquad\qquad n \in J \Rightarrow S(n) \in J @@ use the every, with n
+\qquad\qquad S(n) \in J @@ carry through
+\qquad \forall J\,(J \text{ is inductive} \Rightarrow S(n) \in J) @@ prove an if; speak of everything
+\qquad \htmlClass{new}{S(n) \in \mathbb N} @@ ︿ membership-in-ℕ
+n \in \mathbb N \Rightarrow S(n) \in \mathbb N \quad \blacksquare @@ prove an if
+  </pre>
+</section>
+<section class="paid" data-from="r04b.html" data-step="4b">
+  <h4>4b · Strays are thrown out</h4>
+  <p>{1} is nobody’s next: S(x) ≠ {1} for every set x.</p>
+  <pre class="lines" data-k="ember" data-label="4b: {1} is nobody's next, S(x) ≠ {1}">
+\text{assume } S(x) = \{1\} @@ aiming to refute
+\qquad x \in S(x) @@ the in-its-next technique, keep left
+\qquad x \in \{1\},\ \text{ so } x = 1 @@ the swap axiom; the listing line
+\qquad 0 \in 1 \land 1 \subseteq S(1) @@ 1 = {0} (3b); the in-its-next technique, keep right; join
+\qquad 0 \in S(1) @@ ﹀ ⊆; use the every with 0; carry through
+\qquad 0 \in S(x),\ \text{ so } 0 \in \{1\} @@ the swap axiom with x = 1, then with the assumption
+\qquad 0 = 1 @@ the listing line
+\qquad 1 \ne 0 @@ the next-never-empty technique: 1 names S(0), and a next is never empty
+\qquad \bot @@ the turn-about technique on the line above it, then clash
+\htmlClass{new}{S(x) \ne \{1\}} \quad \blacksquare @@ refute; ︿ ≠
+  </pre>
+</section>
+<section class="paid" data-from="r04b.html" data-step="4b">
+  <h4>4b · Different sets have different next ones</h4>
+  <p>If S(x) = S(y), then x = y: two different sets never have the same next one.</p>
+  <pre class="lines" data-k="ember" data-label="4b: the different-nexts technique, S(x) = S(y) ⇒ x = y">
+\text{assume } S(x) = S(y) @@ aiming at an if
+\qquad x \in S(x),\ \text{ so } x \in S(y) @@ the in-its-next technique; the swap axiom
+\qquad x \in y \lor x = y @@ the next-membership technique
+\qquad y \in S(y),\ \text{ so } y \in S(x),\ \text{ so } y \in x \lor y = x @@ the same moves, turned about (the turn-about technique on the assumption)
+\qquad\quad \text{case } x = y:\quad x = y @@ that is the goal
+\qquad\quad \text{case } x \in y:\quad \text{inner cases on } y \in x \lor y = x @@ reason by cases inside a case (1c)
+\qquad\qquad \text{case } y = x:\quad x = y @@ the turn-about technique
+\qquad\qquad \text{case } y \in x:\quad x \in y \land y \in x;\ \ \bot;\ \ x = y @@ join; the no-loop technique, clash; everything permitted
+\qquad \htmlClass{new}{x = y} @@ reason by cases: every case reached x = y
+S(x) = S(y) \Rightarrow x = y \quad \blacksquare @@ prove an if
+  </pre>
+</section>
+  </div>
 </section>
 </div>
 
@@ -350,71 +463,95 @@ A = I \text{ with cargo:}\ 0 \in I,\ \text{closed under } S,\ \text{so } I = \ma
 const {tex,col,stepper}=Rung;
 const R=String.raw;
 function size(cv,ar){ const d=window.devicePixelRatio||1, W=cv.clientWidth||300, H=Math.round(W/ar); cv.width=W*d; cv.height=H*d; cv.style.height=H+'px'; const c=cv.getContext('2d'); c.setTransform(d,0,0,d,0,0); return {c,W,H}; }
-const NAMES=['0','1','2','3','4','S(4)','S(S(4))','S(S(S(4)))'];
 
-/* ---------- left: dominoes ---------- */
-const cvD=document.getElementById('cvD');
-const NN=6; let mode='push', gaps=new Set(), ang=new Array(NN).fill(0), fallen=new Set(), anim=null, pushedAt=null, geo=null;
-function reset(){ ang=new Array(NN).fill(0); fallen=new Set(); if(anim) cancelAnimationFrame(anim); anim=null; pushedAt=null; }
-function drawD(){
-  const {c,W,H}=size(cvD,2.0); c.fillStyle=col('--card'); c.fillRect(0,0,W,H);
-  const ground=H-30;
-  const s=(W-40)/(NN+gaps.size*0.9+0.6); const dh=Math.min(H*.6,s*1.55), dw=Math.max(5,dh*.16); let x=16; const xs=[];
-  for(let i=0;i<NN;i++){ xs.push(x); x+=s*(gaps.has(i)?1.9:1); }
-  geo={xs,dw}; const lean=Math.asin(Math.min(1,(s-dw)/dh));
-  c.strokeStyle=col('--muted'); c.lineWidth=1.2; c.beginPath(); c.moveTo(6,ground); c.lineTo(W-6,ground); c.stroke();
-  c.font=(W<420?'10px':'11px')+' IBM Plex Mono, monospace'; c.textAlign='center';
-  for(let i=0;i<NN;i++){ const full=(gaps.has(i)||i===NN-1)?Math.PI/2:lean; const a=ang[i]*full; c.save(); c.translate(xs[i]+dw,ground); c.rotate(a); c.fillStyle=fallen.has(i)?col('--ember'):col('--sand'); c.strokeStyle=fallen.has(i)?col('--ember'):col('--ink'); c.lineWidth=1.3; c.beginPath(); c.rect(-dw,-dh,dw,dh); c.fill(); c.stroke(); c.restore();
-    c.fillStyle=col('--muted'); c.fillText(NAMES[i],xs[i]+dw/2,ground+17);
-    if(gaps.has(i)){ c.fillStyle=col('--ember'); c.fillText('✗',xs[i]+dw+s*.75,ground-dh-6); } }
-  c.fillStyle=col('--muted'); c.textAlign='left'; c.fillText('⋯',W-16,ground-6);
-  const L=k=>'\\{'+NAMES.slice(0,k+1).join(',')+'\\}';
+/* ---------- left: the vote ---------- */
+const COLS=[
+  {id:'r0',lab:'0',k:'run'},{id:'r1',lab:'1',k:'run'},{id:'r2',lab:'2',k:'run'},{id:'r3',lab:'3',k:'run'},{id:'r4',lab:'4',k:'run'},{id:'r5',lab:'S(4)',k:'run'},
+  {id:'a0',lab:'{1}',k:'a'},{id:'a1',lab:'S({1})',k:'a'},{id:'a2',lab:'S(S({1}))',k:'a'},
+  {id:'b0',lab:'{2}',k:'b'},{id:'b1',lab:'S({2})',k:'b'},{id:'b2',lab:'S(S({2}))',k:'b'}];
+const TX={r0:'0',r1:'1',r2:'2',r3:'3',r4:'4',r5:'S(4)',a0:'\\{1\\}',a1:'S(\\{1\\})',a2:'S(S(\\{1\\}))',b0:'\\{2\\}',b1:'S(\\{2\\})',b2:'S(S(\\{2\\}))'};
+const ALL=COLS.map(c=>c.id);
+const RUN=ALL.filter(x=>x[0]==='r'), CA=['a0','a1','a2'], CB=['b0','b1','b2'];
+const ROWS=[
+  {name:'I',tex:'I',ind:true,has:new Set(ALL)},
+  {name:'I′',tex:"I'",ind:true,has:new Set([...RUN,...CB])},
+  {name:'J',tex:'J',ind:true,has:new Set(ALL.filter(x=>x!=='a0'))},
+  {name:'J′',tex:"J'",ind:true,has:new Set(ALL.filter(x=>x!=='b0'))},
+  {name:'K',tex:'K',ind:false,has:new Set(['r0','r1','r2','r3','r4'])}];
+let vote=new Set([0]);
+const vch=document.getElementById('vch');
+ROWS.forEach((r,i)=>{ const b=document.createElement('button'); b.textContent=r.name+(r.ind?'':' (not inductive)'); if(vote.has(i)) b.className='on'; b.onclick=()=>{ vote.has(i)?vote.delete(i):vote.add(i); b.classList.toggle('on',vote.has(i)); drawV(); }; vch.appendChild(b); });
+const cvV=document.getElementById('cvV');
+function drawV(){
+  const {c,W,H}=size(cvV,W0()<480?1.05:1.6); c.fillStyle=col('--card'); c.fillRect(0,0,W,H);
+  const lx=6, x0=W<480?30:40, nGap=2, slots=COLS.length+nGap*1+3, gw=(W-x0-8)/slots;
+  const xOf=i=>{ let s=i; if(i>=6) s+=1.2; if(i>=9) s+=1.2; return x0+gw*(s+.5); };
+  const top=W<480?26:30, rh=(H-top-8)/(ROWS.length+1.4);
+  c.font=(W<480?'9px':'10.5px')+' IBM Plex Mono, monospace'; c.textBaseline='middle'; c.textAlign='center';
+  // column headers for the run only
+  COLS.forEach((cc,i)=>{ if(cc.k==='run'){ c.fillStyle=col('--muted'); c.fillText(cc.lab,xOf(i),top-12); } });
+  c.fillStyle=col('--teal'); c.fillText('{1} …',xOf(7),top-12); c.fillStyle=col('--plum'); c.fillText('{2} …',xOf(10),top-12);
+  const colr=k=>k==='run'?col('--gold'):(k==='a'?col('--teal'):col('--plum'));
+  const rad=Math.max(3.5,Math.min(7,gw*.3));
+  const dots=(y,hasF,faded)=>{ COLS.forEach((cc,i)=>{ const x=xOf(i); c.beginPath(); c.arc(x,y,rad,0,7); if(hasF(cc.id)){ c.fillStyle=colr(cc.k); c.globalAlpha=faded?.28:1; c.fill(); c.globalAlpha=1; } else { c.strokeStyle=col('--grid'); c.lineWidth=1.2; c.stroke(); } });
+    [5,8,11].forEach(i=>{ if(hasF(COLS[i].id)){ c.fillStyle=faded?col('--grid'):col('--muted'); c.textAlign='left'; c.fillText('⋯',xOf(i)+rad+1,y); c.textAlign='center'; } }); };
+  ROWS.forEach((r,i)=>{ const y=top+rh*(i+.5); const on=vote.has(i); c.fillStyle=on?col('--ink'):col('--muted'); c.textAlign='left'; c.fillText(r.name,lx,y); c.textAlign='center'; dots(y,id=>r.has.has(id),!on); });
+  const yC=top+rh*(ROWS.length+.85);
+  c.strokeStyle=col('--ink'); c.lineWidth=1; c.beginPath(); c.moveTo(4,yC-rh*.62); c.lineTo(W-4,yC-rh*.62); c.stroke();
+  const V=[...vote];
+  const common=new Set(ALL.filter(id=>V.length&&V.every(i=>ROWS[i].has.has(id))));
+  c.fillStyle=col('--ember'); c.textAlign='left'; c.fillText('all',lx,yC); c.textAlign='center';
+  dots(yC,id=>common.has(id),false);
+  // readout: short lines, so it fits a phone
   let t;
-  if(pushedAt===null) t='\\text{nothing pushed: no base,}\\\\ \\text{so nothing is proved}';
-  else { const lo=pushedAt; const stop=[...gaps].filter(g=>g>=lo).sort((a,b)=>a-b)[0];
-    if(lo>0) t=`\\text{pushed at } ${NAMES[lo]},\\text{ not at } 0\\\\ \\htmlClass{new}{0 \\text{ stands}}\\text{: no base for induction}`;
-    else if(stop===undefined) t=`\\varphi(0)\\ \\checkmark,\\ \\text{no step fails}\\\\ \\htmlClass{keep}{A = \\mathbb N}\\text{: every number,}\\\\ \\text{past the picture too}`;
-    else t=`\\varphi(0)\\ \\checkmark,\\ \\text{the step fails after } ${NAMES[stop]}\\\\ \\text{proved: } \\htmlClass{new}{${L(stop)}}\\text{, and nothing past it}`; }
-  tex(document.getElementById('eqD'),`\\begin{gathered}${t}\\end{gathered}`,true);
+  if(!V.length) t='\\text{no set is voting:}\\\\ \\text{choose some set}';
+  else {
+    const runL=RUN.filter(id=>common.has(id)).map(id=>TX[id]); const runEnd=common.has('r5')?',\\dots':'';
+    const ch=(ids,c0)=>{ const L=ids.filter(id=>common.has(id)); if(!L.length) return null; return L.map(id=>TX[id]).join(',\\,')+(common.has(ids[2])?',\\dots':''); };
+    const ca=ch(CA), cb=ch(CB);
+    t='\\text{in every voter:}\\\\ \\{'+runL.join(',\\,')+runEnd+(ca||cb?',':'\\}')+'\\\\ ';
+    if(ca||cb) t+=[ca,cb].filter(Boolean).join(',\\\\ ')+'\\}\\\\ ';
+    if(V.some(i=>!ROWS[i].ind)) t+='\\htmlClass{new}{K \\text{ runs out at } 4}\\\\ \\text{only inductive sets vote}';
+    else if(common.has('a0')||common.has('b0')){ const s=common.has('a0')?'\\{1\\}':'\\{2\\}'; t+=`\\htmlClass{new}{\\text{the stray } ${s} \\text{ survives}}\\\\ \\text{let in a voter without it (strays)}`; }
+    else if([...CA,...CB].some(id=>common.has(id))) t+='\\text{strays out; the rest of a chain stays}\\\\ \\htmlClass{keep}{\\text{4c throws it out}}';
+    else t+='\\htmlClass{keep}{\\text{no cargo among these voters}}\\\\ \\text{when every inductive set votes,}\\\\ \\text{what is left is }\\mathbb N';
+  }
+  tex(document.getElementById('eqV'),`\\begin{gathered}${t}\\end{gathered}`,true);
 }
-function push(i){ reset(); pushedAt=i; let cur=i; let tStart=null;
-  const step=ts=>{ if(tStart===null) tStart=ts; const p=Math.min(1,(ts-tStart)/170); ang[cur]=p; if(p>=1){ fallen.add(cur); if(!gaps.has(cur)&&cur+1<NN){ cur++; tStart=ts; } else { drawD(); anim=null; return; } } drawD(); anim=requestAnimationFrame(step); };
-  anim=requestAnimationFrame(step); }
-cvD.addEventListener('pointerdown',e=>{ if(!geo) return; const r=cvD.getBoundingClientRect(), x=e.clientX-r.left; let best=0,bd=1e9; geo.xs.forEach((xx,i)=>{ const d=Math.abs(x-(xx+geo.dw/2)); if(d<bd){bd=d;best=i;} });
-  if(mode==='push') push(best); else { gaps.has(best)?gaps.delete(best):gaps.add(best); reset(); drawD(); } });
-document.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{ mode=b.dataset.m; document.querySelectorAll('[data-m]').forEach(x=>x.classList.toggle('on',x===b)); });
-document.getElementById('reset').onclick=()=>{ gaps.clear(); reset(); drawD(); };
-new ResizeObserver(drawD).observe(cvD);
-if(window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change',drawD);
-drawD();
+function W0(){ return cvV.clientWidth||300; }
+new ResizeObserver(drawV).observe(cvV);
+if(window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{drawV();drawD();});
+drawV();
 
-/* ---------- right: the checker, on real sets ---------- */
-const st=(...m)=>({m});
+/* ---------- right: different nexts ---------- */
+const st=(...m)=>({k:'set',m});
 const same=(p,q)=>p.m.every(x=>q.m.some(y=>same(x,y)))&&q.m.every(y=>p.m.some(x=>same(x,y)));
 const mem=(x,A)=>A.m.some(y=>same(x,y));
-const NUM=[st()]; for(let k=1;k<=8;k++) NUM.push(st(...NUM.slice(0,k)));
+function dedupe(m){ const o=[]; m.forEach(x=>{ if(!o.some(y=>same(x,y))) o.push(x); }); return o; }
+const NUM=[st()]; for(let k=1;k<=5;k++) NUM.push(st(...NUM.slice(0,k)));
+const nameOf=t=>{ const i=NUM.findIndex(u=>same(u,t)); return i<0?null:(i<=4?String(i):'S(4)'); };
+const show=t=>{ const nm=nameOf(t); if(nm!==null) return nm; return '\\{'+dedupe(t.m).map(show).join(',\\,')+'\\}'; };
+const showTop=t=>'\\{'+dedupe(t.m).map(show).join(',\\,')+'\\}';
 const Sx=x=>st(...x.m,x);
-const trans=t=>t.m.every(y=>y.m.every(z=>mem(z,t)));
-const CONDS=[
-  {id:'tr',lab:'n is transitive',tex:'n \\text{ is a transitive set}',f:n=>trans(n),note:['the table only checks;','the step is proved for every n','(the transitive-next technique), so numbers-are-transitive follows by induction']},
-  {id:'zs',lab:'0 or a next',tex:'n = 0 \\lor \\exists m\\,(n = S(m))',f:n=>n.m.length===0||NUM.some(m=>same(Sx(m),n)),note:['the step never needs','its hypothesis: the zero-or-a-next technique']},
-  {id:'nn',lab:'S(n) ≠ n',tex:'S(n) \\ne n',f:n=>!same(Sx(n),n),note:['base: next-never-empty; the step is this','page\'s induction, without foundation']},
-  {id:'sn',lab:'S(n) = n',tex:'S(n) = n',f:n=>same(Sx(n),n),note:['every step is true (its hypothesis','always fails); the base fails,','so nothing is proved']},
-  {id:'in3',lab:'n ∈ 3',tex:'n \\in 3',f:n=>mem(n,NUM[3]),note:['a gap: the step fails after 2,','and the statement fails from 3 on']},
-  {id:'in5',lab:'n ∈ S(4)',tex:'n \\in S(4)',f:n=>mem(n,NUM[5]),note:['every check up to 4 passes;','the step fails at 4']}];
-let qi=0; const qch=document.getElementById('qch');
-CONDS.forEach((C,i)=>{ const b=document.createElement('button'); b.textContent=C.lab; if(i===qi) b.className='on'; b.onclick=()=>{ qi=i; [...qch.querySelectorAll('button')].forEach(z=>z.classList.toggle('on',z===b)); drawQ(); }; qch.appendChild(b); });
-function drawQ(){
-  const C=CONDS[qi]; const rows=[];
-  for(let k=0;k<=6;k++){ const a=C.f(NUM[k]), b=C.f(NUM[k+1]); rows.push({k,a,step:(!a)||b}); }
-  let h='<table class="chk"><tr><th>n</th><th>φ(n)</th><th>φ(n) ⇒ φ(S(n))</th></tr>';
-  rows.forEach(r=>{ h+=`<tr><td>${NAMES[r.k]}</td><td class="${r.a?'ok':'no'}">${r.a?'✓':'✗'}</td><td class="${r.step?'ok':'no'}">${r.step?'✓':'✗'}</td></tr>`; });
-  h+='</table>'; document.getElementById('tq').innerHTML=h;
-  const base=rows[0].a; const bad=rows.find(r=>!r.step);
-  let t=`\\varphi(n):\\ ${C.tex}\\\\ \\text{base: }${base?'\\htmlClass{keep}{\\text{true}}':'\\htmlClass{new}{\\text{false}}'}\\\\ \\text{step: }${bad?'\\htmlClass{new}{\\text{fails at } '+NAMES[bad.k]+'}':'\\text{no failure in the table}'}\\\\ `+C.note.map(x=>'\\text{'+x+'}').join('\\\\ ');
-  tex(document.getElementById('eqQ'),`\\begin{gathered}${t}\\end{gathered}`,true);
+const XS=[['0',NUM[0]],['1',NUM[1]],['2',NUM[2]],['3',NUM[3]],['4',NUM[4]],['{1}',st(NUM[1])],['{0, 2}',st(NUM[0],NUM[2])]];
+let xi=1, yi=3;
+function chips(id,get,set){ const el=document.getElementById(id); XS.forEach(([lab],i)=>{ const b=document.createElement('button'); b.textContent=lab; if(i===get()) b.className='on'; b.onclick=()=>{ set(i); [...el.querySelectorAll('button')].forEach(z=>z.classList.toggle('on',z===b)); drawD(); }; el.appendChild(b); }); }
+chips('xch',()=>xi,i=>xi=i); chips('ych',()=>yi,i=>yi=i);
+function drawD(){
+  const x=XS[xi][1], y=XS[yi][1], sx=Sx(x), sy=Sx(y);
+  const X=show(x), Y=show(y);
+  let t=`S(${X}) = ${showTop(sx)}\\\\ S(${Y}) = ${showTop(sy)}\\\\ `;
+  if(same(x,y)){ t+=`x = y\\\\ \\htmlClass{keep}{\\text{the same set, the same next}}`; }
+  else {
+    const a=mem(x,sy), b=mem(y,sx);
+    t+=`${X} \\in S(${Y})\\text{: }${a?'\\text{yes}':'\\htmlClass{new}{\\text{no}}'}\\\\ ${Y} \\in S(${X})\\text{: }${b?'\\text{yes}':'\\htmlClass{new}{\\text{no}}'}\\\\ `;
+    if(a&&b) t+='\\text{both: a loop (never happens)}';
+    else { const w=!a?X:Y, o=!a?Y:X; t+=`\\text{witness: } ${w} \\in S(${w}),\\ ${w} \\notin S(${o})\\\\ \\htmlClass{new}{S(${X}) \\ne S(${Y})}`; }
+    t+=`\\\\ \\text{both yes would need}\\\\ ${X} \\in ${Y} \\text{ and } ${Y} \\in ${X}\\text{: no-loop forbids it}`;
+  }
+  tex(document.getElementById('eqD'),`\\begin{gathered}${t}\\end{gathered}`,true);
 }
-drawQ();
+drawD();
 
 /* ---------- slides ---------- */
 const N='\\htmlClass{new}', K='\\htmlClass{keep}';
@@ -423,61 +560,61 @@ const tx=r=>r.replace(/[≠∈∉⋃⇔⊆∅∪⊥∀∃¬∧∨⇒ℕφ]/g,ch=
 const col2=(...rows)=>'\\begin{aligned}'+rows.map(([l,r])=>'&'+l+' &&\\text{'+tx(r)+'}').join('\\\\ ')+'\\end{aligned}';
 const PW=s=>'\\text{'+tx(s.replace(/[{}]/g,c=>'\\'+c)).replace(/[×↦𝒫′ψ]/gu,c=>({'×':'$\\times$','↦':'$\\mapsto$','𝒫':'$\\mathcal P$','′':"$'$",'ψ':'$\\psi$'})[c])+'}';
 const PN=s=>N+'{'+PW(s)+'}', PK=s=>K+'{'+PW(s)+'}';
-stepper('#sl2',[
-  {k:'ember',kl:'induction, set form',t:col2([PW('A is a part of ℕ.'),'given'],[PW('0 ∈ A.'),'given'],[PW('A holds the next one after each of its members.'),'given'],[PN('So A is inductive.'),'pack “inductive”']),n:`A part of ℕ that holds 0 and the next one after each member: that is exactly what “inductive” says.`},
-  {k:'ember',kl:'induction, set form',t:col2([PW('So ℕ ⊆ A.'),'the lies-below technique'],[PN('So A = ℕ.'),'the double-inclusion technique, with A ⊆ ℕ']),n:` ℕ lies inside every inductive set, so inside A; A was inside ℕ. The work was done on 4a, sifting the cargo away.`}
-],{title:'The slides · induction, set form · ← → keys work'});
-stepper('#sl3',[
-  {k:'ember',kl:'induction, for a condition',t:R`A = \{n \in \mathbb N : \varphi(n)\}`,n:`To prove φ(n) for every number, sift the numbers where it is true. φ(0) puts 0 in A; the step puts S(n) in A whenever n is in A.`},
-  {k:'ember',kl:'induction, for a condition',t:R`\varphi(0) \;\land\; \forall n \in \mathbb N\,\big(${K}{\varphi(n)} \Rightarrow \varphi(S(n))\big) \;\Rightarrow\; ${N}{\forall n \in \mathbb N\;\varphi(n)}`,n:`The base, the step, and in teal the induction hypothesis: assumed for a number n, inside the step's if, and closed by it.`}
-],{title:'The slides · induction, for a condition · ← → keys work'});
+const T=s=>'\\text{'+s+'}';
+stepper('#sl3a',[
+  {k:'ember',kl:'the condition',t:R`\varphi(x):\;\; \forall J\,\big(J \text{ is inductive} \Rightarrow ${N}{x \in J}\big)`,n:`“x is in every inductive set”, read aloud: for every thing J, if J is inductive, then x is in J. It speaks of every set, and that is allowed; it is not yet a sift of anything.`}
+],{title:'The slides · the condition · ← → keys work'});
+stepper('#sl3b',[
+  {k:'ember',kl:'the condition, unpacked',t:R`\forall J\,\Big(\big(0 \in J \land \forall y\,(y \in J \Rightarrow S(y) \in J)\big) \Rightarrow x \in J\Big)`,n:`With “inductive” unpacked, only ∀, ⇒, ∧, ∈ and S are left. It is a condition in 2d's sense, built from rung 1's words and ∈.`}
+],{title:'The slides · the condition, unpacked · ← → keys work'});
+stepper('#sl3c',[
+  {k:'ember',kl:'the sift',t:R`\{x \in ${K}{I} : \varphi(x)\}`,n:`sift it from I, the inductive set you named when you used the infinity axiom's some. Sifting from a set you have is exactly the move of 2d, and what 3c's gallery was waiting for.`}
+],{title:'The slides · the sift · ← → keys work'});
 stepper('#sl4',[
-  {k:'ember',kl:'the shape',t:col2([PW('Base: show φ(0).'),'any argument you can find'],[PW('Step: let n ∈ ℕ, and suppose φ(n).'),'supposed: the induction hypothesis'],[PW('Reach φ(S(n)), then drop the supposition.'),'an if, for every n'],[PN('So φ(n) is true for every n ∈ ℕ.'),'the induction technique']),n:`Proof by induction, the shape 1i promised rung 4 would add. Name φ before anything else, so that φ(0), φ(n) and φ(S(n)) are definite statements.`}
-],{title:'The slides · the shape · ← → keys work'});
+  {k:'ember',kl:'the whichever-inductive-set technique',t:col2([PW('Let y be anything. Suppose y is in the sift.'),'supposed'],[PW('Then y ∈ I, and φ(y).'),'unpack the sift'],[PN('So φ(y).'),'keep the second half'],[PW('Drop that. Suppose instead φ(y).'),'supposed'],[PN('I is inductive, so y ∈ I.'),'use the every with I'],[PW('So y is in the sift.'),'join; pack the sift']),n:`Each way is short. The second way is where the inductive set I drops out: being in every inductive set already puts y in I.`}
+],{title:'The slides · the whichever-inductive-set technique · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'the name',t:R`y \in ${N}{\mathbb N} \;\Leftrightarrow\; \forall J\,(J \text{ is inductive} \Rightarrow y \in J)`,n:`People sifting from different inductive sets get sets with the same members, so the same set by same-members; and there is an inductive set to sift from, by the infinity axiom. So the description fits exactly one set, and it gets a name: ℕ. This line is the membership-in-ℕ technique.`}
+],{title:'The slides · the name · ← → keys work'});
 stepper('#sl7',[
-  {k:'ember',kl:'zero or a next',t:col2([PW('Base: 0 = 0.'),'the self-sameness axiom'],[PW('So 0 is zero or a next.'),'add an option'],[PW('Step: S(n) = S(n), and n ∈ ℕ.'),'the self-sameness axiom'],[PW('So S(n) is the next of a number.'),'show an example'],[PW('So S(n) is zero or a next.'),'add an option']),n:`The zero-or-a-next technique. The step never used its hypothesis, and induction was still needed: it is the only road from ℕ's description to a fact about all its members.`}
-],{title:'The slides · zero or a next · ← → keys work'});
+  {k:'ember',kl:'the lies-below technique',t:col2([PW('Suppose J is inductive.'),'supposed'],[PW('Let y be anything, and suppose y ∈ ℕ.'),'supposed'],[PW('Then y is in every inductive set.'),'unpack membership-in-ℕ'],[PN('J is one of them, so y ∈ J.'),'use the every with J'],[PW('So ℕ ⊆ J.'),'drop the supposition about y; pack ⊆']),n:` ℕ lies below every inductive set. Its description says exactly that, and the argument is an unpacking and one use of an every.`}
+],{title:'The slides · the lies-below technique · ← → keys work'});
 stepper('#sl8a',[
-  {k:'ember',kl:'back from a next',t:col2([PW('Suppose S(x) ∈ ℕ.'),'supposed'],[PW('S(x) ≠ 0.'),'the next-never-empty technique'],[PW('So S(x) = S(m), for some number m.'),'zero-or-a-next; the remaining option; use the some'],[PW('So x = m.'),'the different-nexts technique'],[PN('So x ∈ ℕ.'),'swap']),n:` The back-from-a-next technique. If the next one after x is a number, x was a number.`}
-],{title:'The slides · back from a next · ← → keys work'});
+  {k:'ember',kl:'the zero-is-a-number technique',t:col2([PW('Let J be anything, and suppose J is inductive.'),'supposed'],[PW('Then 0 ∈ J.'),'unpack “inductive”; keep the first half'],[PW('So 0 is in every inductive set.'),'drop the supposition; J was anything'],[PN('So 0 ∈ ℕ.'),'pack membership-in-ℕ']),n:` The base part of ℕ is the base part of every inductive set, gathered.`}
+],{title:'The slides · the zero-is-a-number technique · ← → keys work'});
 stepper('#sl8b',[
-  {k:'ember',kl:'the cargo goes',t:R`\{1\} \notin \mathbb N \;\Rightarrow\; S(\{1\}) \notin \mathbb N \;\Rightarrow\; ${N}{S(S(\{1\})) \notin \mathbb N} \;\Rightarrow\; \dots`,n:`strays throws out the stray; back-from-a-next turned about (the turn-and-deny technique for If) throws out each later link. 4a's vote left S({1}) standing only because no voter drawn there lacked it.`}
-],{title:'The slides · the cargo goes · ← → keys work'});
-stepper('#sl9',[
-  {k:'ember',kl:'transitive',t:R`t \text{ is a transitive set} \;\Leftrightarrow\; \forall y\,(y \in t \Rightarrow ${N}{y \subseteq t})`,n:`Each member is also a part. Unpacked: x ∈ y and y ∈ t give x ∈ t, 2a's membership chaining, legal into a transitive set and nowhere else. {1} fails: 1 ∈ {1}, 0 ∈ 1, 0 ∉ {1}.`}
-],{title:'The slides · transitive · ← → keys work'});
+  {k:'ember',kl:'the next-of-a-number technique',t:col2([PW('Suppose n ∈ ℕ.'),'supposed'],[PW('Let J be anything, and suppose J is inductive.'),'supposed'],[PW('Then n ∈ J.'),'unpack membership-in-ℕ'],[PW('J holds the next one after n, so S(n) ∈ J.'),'J\'s step part, used with n'],[PW('So S(n) is in every inductive set.'),'drop the supposition about J'],[PN('So S(n) ∈ ℕ.'),'pack membership-in-ℕ']),n:` The step part of ℕ is each inductive set's step part, used inside it. Every inductive set carries n to S(n), so S(n) is in every inductive set.`}
+],{title:'The slides · the next-of-a-number technique · ← → keys work'});
+stepper('#sl9a',[
+  {k:'ember',kl:'the smallest-inductive-set technique',t:R`\mathbb N \text{ is inductive} \;\land\; \forall J\,(J \text{ inductive} \Rightarrow ${N}{\mathbb N \subseteq J})`,n:`zero-is-a-number and next-of-a-number joined are “ℕ is inductive”; lies-below is the rest. Smallest means: a part of every other inductive set. Not “fewest members”: nothing has said what fewer means.`}
+],{title:'The slides · the smallest-inductive-set technique · ← → keys work'});
+stepper('#sl9b',[
+  {k:'ember',kl:'only one smallest',t:col2([PW('Suppose K is inductive.'),'supposed'],[PW('Suppose K is a part of every inductive set.'),'supposed'],[PW('ℕ is inductive, so K ⊆ ℕ.'),'use the every with ℕ'],[PW('And ℕ ⊆ K.'),'the lies-below technique with K'],[PN('So K = ℕ.'),'the double-inclusion technique']),n:` Any set that is inductive and a part of every inductive set is ℕ. “The smallest inductive set” names exactly one set.`}
+],{title:'The slides · only one smallest · ← → keys work'});
+stepper('#sl9c',[
+  {k:'ember',kl:'the run is in ℕ',t:R`0 \in \mathbb N,\;\; 1 \in \mathbb N,\;\; \dots,\;\; 4 \in \mathbb N,\;\; ${N}{S(4) \in \mathbb N}`,n:`The named-sets-are-inductive technique, with ℕ in the place of the inductive set; or zero-is-a-number, then next-of-a-number over and over. Every entry you can name is a number. The other part, that nothing else is, starts on the next slide.`}
+],{title:'The slides · the run is in ℕ · ← → keys work'});
 stepper('#sl10',[
-  {k:'ember',kl:'the numbers-are-transitive technique',t:col2([PW('Base: 0 has no members.'),'the empty-set technique'],[PW('So every member of 0 is a part of 0.'),'nothing to check: everything permitted'],[PW('Step: suppose n is transitive.'),'supposed: the induction hypothesis'],[PW('Let y ∈ S(n).'),'supposed'],[PW('Then y ∈ n, or y = n.'),'the next-membership technique']),n:`Base: 0 has no members, so it is transitive with nothing to check. Step: a member of S(n) is a member of n or is n.`},
-  {k:'ember',kl:'the numbers-are-transitive technique',t:col2([PW('If y ∈ n, then y ⊆ n.'),'the hypothesis'],[PW('And n ⊆ S(n), so y ⊆ S(n).'),'in-its-next; chain for part of'],[PW('If y = n, then y ⊆ S(n) too.'),'in-its-next; swap'],[PN('So S(n) is transitive.'),'by cases; pack; the induction technique']),n:` Every number is a transitive set. The step never used that n is a number: the next of any transitive set is transitive (the transitive-next technique).`}
-],{title:'The slides · the numbers-are-transitive technique · ← → keys work'});
+  {k:'ember',kl:'a stray',t:col2([PW('Suppose S(x) = {1}.'),'supposed, to refute it'],[PW('x is in S(x), so x is in {1}.'),'in-its-next; swap'],[PW('So x = 1.'),'the only member of \\{1\\} is 1'],[PW('0 is in 1, and 1 is a part of S(1).'),'1 is \\{0\\}; in-its-next'],[PW('So 0 is in S(1), so 0 is in {1}.'),'swap back'],[PN('So 0 = 1.'),'the only member of \\{1\\} is 1'],[PW('But 1 ≠ 0. That clashes.'),'next-never-empty; clash'],[PW('So S(x) ≠ {1}.'),'drop the supposition: refute']),n:`{1} is nobody's next. If it were S(x), then x would be its only member, 1, and S(1) would hold 0 as well, which {1} does not.`}
+],{title:'The slides · a stray · ← → keys work'});
 stepper('#sl11',[
-  {k:'ember',kl:'the ℕ-is-transitive technique',t:R`y \in S(n) \;\Rightarrow\; ${K}{y \in n} \lor y = n \;\Rightarrow\; ${N}{y \in \mathbb N}`,n:`Every member of a number is a number: by induction, with the hypothesis for the teal case and n ∈ ℕ for the other. So ℕ is a transitive set too. 4g leans on this.`}
-],{title:'The slides · the ℕ-is-transitive technique · ← → keys work'});
+  {k:'ember',kl:'sifting the stray away',t:col2([PW('Let J be I with {1} sifted away.'),'a sift of I'],[PW('0 is in J.'),'0 ∈ I; 0 has no member, \\{1\\} has 1'],[PW('Suppose x ∈ J.'),'supposed'],[PW('Then x ∈ I, so S(x) ∈ I.'),'unpack the sift; I\'s step part'],[PN('And S(x) ≠ {1}.'),'the stray argument'],[PW('So S(x) ∈ J.'),'pack the sift']),n:`J is inductive. Its base is true because 0 is not {1}; its step is true because nothing has {1} as its next.`}
+],{title:'The slides · sifting the stray away · ← → keys work'});
 stepper('#sl12',[
-  {k:'ember',kl:'the merge-undoes-next technique',t:col2([PW('Suppose y ∈ ⋃S(n).'),'supposed'],[PW('Then y ∈ z, for some z ∈ S(n).'),'unpack ⋃; use the some'],[PW('If z ∈ n, then z ⊆ n, so y ∈ n.'),'the numbers-are-transitive technique'],[PW('If z = n, then y ∈ n.'),'swap'],[PN('Either way, y ∈ n.'),'by cases']),n:`Tip out the members of S(n). A member of a member of n is a member of n, because n is transitive; a member of n itself is a member of n.`},
-  {k:'ember',kl:'the merge-undoes-next technique',t:R`\textstyle\bigcup S(n) = ${N}{n}`,n:` And back: each y ∈ n is in the member n of S(n). Merging undoes S, for every number, which 3a showed for 0 to 4 by hand.`}
-],{title:'The slides · the merge-undoes-next technique · ← → keys work'});
+  {k:'ember',kl:'the strays technique',t:col2([PW('Suppose {1} ∈ ℕ.'),'supposed, to refute it'],[PW('Then {1} ∈ J.'),'the lies-below technique'],[PW('So {1} ≠ {1}.'),'unpack the sift'],[PW('But {1} = {1}. That clashes.'),'the self-sameness axiom; clash'],[PN('So {1} ∉ ℕ.'),'drop the supposition: refute']),n:` In general, the strays technique: if c ≠ 0 and c is nobody's next, then c is not a number. S({1}) is somebody's next, so it needs 4c.`}
+],{title:'The slides · the strays technique · ← → keys work'});
 stepper('#sl13a',[
-  {k:'ember',kl:'the other road',t:col2([PW('Suppose S(m) = S(n), for numbers m and n.'),'supposed'],[PW('Then ⋃S(m) = ⋃S(n).'),'the swap axiom'],[PN('So m = n.'),'the merge-undoes-next technique, each side; the chain technique']),n:` S is one-to-one on numbers, with no use of foundation. 4a's proof reached every set, with foundation; this one reaches only numbers, without it.`}
-],{title:'The slides · the other road · ← → keys work'});
+  {k:'ember',kl:'the different-nexts technique',t:col2([PW('Suppose S(x) = S(y).'),'supposed'],[PW('x is in S(x), so x is in S(y).'),'in-its-next; swap'],[PW('So x ∈ y, or x = y.'),'next-membership'],[PW('Likewise, y ∈ x, or y = x.'),'the same moves, turned about'],[PN('If neither is an “is”, then x ∈ y and y ∈ x.'),'the loop case']),n:`Each set is in the other's next one, so each is in the other or is the other. Two “is” cases give x = y at once.`},
+  {k:'ember',kl:'the different-nexts technique',t:col2([PW('In the loop case, x ∈ y and y ∈ x.'),'that case'],[PW('That is a loop, and loops clash.'),'the no-loop technique; clash'],[PN('So x = y here too.'),'everything permitted'],[PW('Every case reaches x = y.'),'by cases']),n:` The loop case is totally false, by foundation through no-loop, and, since nothing is then true, everything is permitted, the goal too. Every case reaches x = y: S is one-to-one, for every set.`}
+],{title:'The slides · the different-nexts technique · ← → keys work'});
 stepper('#sl13b',[
-  {k:'ember',kl:'never-its-own-next without foundation',t:col2([PW('Base: S(0) ≠ 0.'),'the next-never-empty technique'],[PW('Step: suppose S(n) ≠ n.'),'supposed: the induction hypothesis'],[PW('Suppose too that S(S(n)) = S(n).'),'supposed, to refute it'],[PW('Then S(n) = n. That clashes.'),'different-nexts for numbers; clash'],[PW('So S(S(n)) ≠ S(n).'),'drop the supposition: refute'],[PN('So S(n) ≠ n, for every number n.'),'the induction technique']),n:` Nothing is its own next, proved for numbers by induction. In the looped world S(Ω) = Ω; Ω is no number there, and induction says nothing of it.`}
-],{title:'The slides · never-its-own-next without foundation · ← → keys work'});
-stepper('#sl15a',[
-  {k:'ember',kl:'a fake: no base',t:R`S(n) = n \;\Rightarrow\; ${N}{S(S(n)) = S(n)}`,n:`A good step for every n, by the swap axiom. But S(0) = 0 is false, and S(n) = n is false at every number. A step carries truth; it cannot make any.`}
-],{title:'The slides · a fake: no base · ← → keys work'});
-stepper('#sl15b',[
-  {k:'ember',kl:'a fake: a gap',t:R`2 \in 3,\quad S(2) = 3 \notin 3`,n:`φ(n): n ∈ 3. The base is true, and the step is true at 0, at 1, and at 3 and beyond (vacuously). At 2 it fails. The dominoes stop after 2, and so does the statement.`}
-],{title:'The slides · a fake: a gap · ← → keys work'});
-stepper('#sl15c',[
-  {k:'ember',kl:'a fake: checking',t:R`0, 1, 2, 3, 4 \in S(4)\quad\text{but}\quad S(4) \notin S(4)`,n:`The checks at 0, 1, 2, 3 and 4 pass. The step fails at 4. A table of checks is not a step, however long it is.`}
-],{title:'The slides · a fake: checking · ← → keys work'});
-stepper('#sl15d',[
-  {k:'ember',kl:'the horses',t:R`\text{herd matched with } S(S(n)):\ \text{lead out } u;\ \text{lead out } v`,n:`“Every herd is all of the same colour.” Each herd left in the barn is matched with S(n), so all of the same colour by the hypothesis. The horses that stayed in both times make the colours of both groups the same.`},
-  {k:'ember',kl:'the horses',t:R`n = 0:\quad \{u, v\} \to \{v\},\ \{u\}:\ \ ${N}{\text{no horse stays in both times}}`,n:`A herd matched with 2 has a horse for 0 and a horse for 1. Leading out either leaves the other alone, and nothing joins the colours. The step from 0 to 1 fails; from 1 on it is sound. A gap, right after the domino at the start.`}
-],{title:'The slides · the horses · ← → keys work'});
+  {k:'ember',kl:'a witness',t:R`S(1) = \{0, 1\},\quad S(3) = \{0,1,2,3\},\quad ${N}{3 \in S(3)},\ 3 \notin S(1)`,n:`The proof says: for different sets, x ∈ S(y) and y ∈ S(x) cannot both be true. Here 1 ∈ S(3) is true, so 3 ∈ S(1) is false, and 3 is the witness that the nexts differ. The right picture finds the witness for any pair.`}
+],{title:'The slides · a witness · ← → keys work'});
+stepper('#sl14',[
+  {k:'ember',kl:'the endless mark',t:R`\begin{gathered}\text{each } n \text{ with } S(n):\\ \text{a number (next-of-a-number)}\\ \text{different for different } n \text{ (different-nexts)}\\ \text{never } 0 \text{ (next-never-empty)}\end{gathered}`,n:`ℕ is matched, member for member, with a part of itself that leaves 0 out: the founder's mark of an endless collection, now proved. 4d turns the matching into an object.`}
+],{title:'The slides · the endless mark · ← → keys work'});
 stepper('#sl16',[
-  {k:'ember',kl:'backwards',t:R`\forall n \in \mathbb N\;\varphi(n)\;\;\text{wanted}`,n:`Name φ. Write φ(0), φ(n), φ(S(n)) as definite statements. Open S(n) with next-membership. Look for φ(n) inside φ(S(n)). Check the step at 0 by hand; that is where the horses broke.`}
+  {k:'ember',kl:'backwards',t:R`t \notin \mathbb N\;\;\text{wanted}`,n:`Find it from the foot. A not-number is a failed every in membership-in-ℕ, so you want an inductive set without t. For a stray, sift t away from I: show t ≠ 0 and that t is nobody's next, check both parts of “inductive”, then lies-below and a clash.`}
 ],{title:'The slides · backwards · ← → keys work'});
 
 function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }

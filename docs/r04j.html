@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="ladder-cert" content="rung"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>4j · Counting choices</title>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>4j · Divides, remainders and primes</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -11,7 +11,8 @@
 .panel{align-content:start;min-width:0}
 .pic .eqbox{font-size:.95rem;white-space:normal}
 @media (max-width:520px){.pic .eqbox{font-size:.82rem}}
-#cvP,#cvZ{touch-action:manipulation;cursor:pointer}
+#cvR{touch-action:manipulation}
+#cvT{touch-action:manipulation;cursor:pointer}
 .rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
 @media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
 </style>
@@ -19,437 +20,543 @@
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r04i.html">← 4i divides, remainders and primes</a><a href="r04k.html">next: 4k what a recipe for answers is made of →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r04i.html">← 4i writing numbers</a><a href="r04k.html">next: 4k counting choices →</a></p>
   <div class="tags"><span class="tag tech">4j · technique</span></div>
-  <h1>Counting choices</h1>
-  <p data-pid="8ec429">3a said that “three cats sat on the wall” is a matter of matching the cats with the members of the set named 3, and left the matching to this rung. 4b's basement told the story of the horses and granted the facts about leading a horse out of the barn. This step builds the matching, says what it means for a set to have a given number of members, and proves those facts. Then the techs of counting: separate piles add, choices made in stages multiply. Then a mark for adding up a list, and the sum of every number from 0 up to a given one. Then how fast the subsets of a set pile up, and arrangements and factorials. Last, how many ways there are to choose a few things from many, the table those numbers make, and why they are the numbers that appear when a power of a sum is multiplied out.</p>
-  <p class="gesture" data-pid="1004e2">To count a set, match it with a number. Separate piles add; choices made in stages multiply. To count the parts of a given size, ask of one member whether it is in or out, and add the two answers. That is the table's rule, and it is also how a power of a sum multiplies out.</p>
-  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r02d.html">2d</a> (all the subsets), <a href="r02e.html">2e</a> (pairs and products), <a href="r04c.html">4c</a> (functions, recursion), <a href="r04g.html">4g</a> (order, settled-order), <a href="r04h.html">4h</a> (counted-recursion, lists) and <a href="r04i.html">4i</a> (even and odd). 4·comp counts the rows of its tables. Rung 7 makes every part of a set settled, and rung 9 builds the full theory of functions.</p></div>
+  <h1>Divides, remainders and primes</h1>
+  <p data-pid="84fb0c">Multiplying two numbers always gives a number. The question this step asks runs the other way: given a number, which numbers make it a product of themselves times something? That question gets a mark, and its rules. Then the split of 4i gets its usual names, quotient and remainder. It also gets a second proof by the least-member search of 4h, which first needs a technique about which statements can be searched at all. Then come even and odd, and the primes. Then an algorithm for what two numbers share, and what it gives when run backwards. Then the technique that a prime dividing a product divides a factor. Last, three of the oldest techniques there are. Every number other than 0 is a product of primes in exactly one way. The primes never run out. And no number multiplied by itself is two times another number, other than 0, multiplied by itself.</p>
+  <p class="gesture" data-pid="bcc7b6">To learn whether one number divides another, split the second by the first and look at the remainder. To find what two numbers share, replace the pair by the smaller and the remainder, again and again: the common divisors never change. A prime that divides a product divides one of the factors, and that is why a number splits into primes in only one way.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r04g.html">4g</a> (the techniques of multiplying), <a href="r04h.html">4h</a> (any-two-compare, settled-order, keep-order for times, cancel for times, settled sets, least-member, strong induction) and <a href="r04i.html">4i</a> (counted-recursion, lists, times-does-not-lessen, split-by-a-base, one-split, numerals). 4k uses even and odd. Rung 5 reads this step's last technique as a statement about fractions.</p></div>
 </header>
 
 <section class="class step" data-step="4j1">
-  <h2 class="sthead"><span class="stno">4j1</span>Matched with</h2>
-  <p class="stands">Stands on 3a (three cats), 4c (functions, rule-makes-a-function) and 2e (pairs, ×).</p>
-  <p data-pid="a96e27">Pair the cats off with the members of 3, one cat to each member, no cat used twice and no member left over. That is all that “there are three cats” means, and here it is as a line.</p>
-  <p class="eqline" data-pid="144595">From here on, a <b>matching</b> between sets X and Y is a set m ⊆ X × Y such that every member of X is paired by m with exactly one member of Y. And every member of Y must be paired by m with exactly one member of X. X is <b>matched with</b> Y when there is a matching between them.</p>
-  <p data-pid="90cade">Example: {(Rex, 0), (Pip, 1)} is a matching between {Rex, Pip} and 2: each pet has exactly one partner in 2, and each of 0 and 1 has exactly one pet.</p>
-  <p data-pid="2f3c3c">A matching is a function from X to Y (4c), so m(x) is the partner of x. Since the definition reads the same from either side, the pairs turned about make a matching between Y and X.</p>
-  <p data-pid="4ffce3">Three short checks follow from the line. Every set is matched with itself, by {(x, x) : x ∈ X}.</p>
-  <p data-pid="a9d183">Turn-about technique for matchings: <b>if X is matched with Y, then Y is matched with X.</b> You know this one: if every child has a chair and every chair a child, the chairs are matched with the children too.</p>
-  <p data-pid="9e47cc">Chain technique for matchings: <b>if X is matched with Y and Y with Z, then X is matched with Z.</b> The matching is x ↦ m′(m(x)), by rule-makes-a-function.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · a matching · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">4j1</span>Divides</h2>
+  <p class="stands">Stands on 4g (times, times-zero, zero-times, one-changes-nothing) and 4h10 (keep-order for times).</p>
+  <p class="eqline" data-pid="960406">From here on, for numbers d and n, <span data-tex-inline="d \mid n"></span> means this. Read it “d divides n”; d is a <b>divisor</b> of n, and n is a <b>multiple</b> of d.</p>
+  <div class="eqline" data-tex="\exists k \in \mathbb N\,(n = d \cdot k)"></div>
+  <p class="eqline" data-pid="f4826b">From here on, <span data-tex-inline="d \nmid n"></span> means <span data-tex-inline="\neg(d \mid n)"></span>. Read it “d does not divide n”.</p>
+  <p data-pid="d3085f">d ∣ n is a statement, so or not so, never a number.</p>
+  <p data-pid="621068">Example: 3 ∣ 12, since 12 = 3 · 4. 5 ∣ 0, since 0 = 5 · 0 (times-zero). 1 ∣ n and n ∣ n for every n (one-changes-nothing). But 0 ∣ n only when n = 0, since 0 · k = 0 (zero-times).</p>
+  <p data-pid="566dfa">And 4 ∤ 10: 4 · 2 = 8 &lt; 10 &lt; 12 = 4 · 3. By keep-order for times, any k at most 2 gives at most 8, while any k at least 3 gives at least 12. An older word for it is “measures”: 3 measures 12 because four 3s make 12 exactly.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · divides · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">4j1.1</span><span class="ph know">know</span>What is a matching between X and Y? <br>What do turn-about and chain for matchings say?</li>
+      <li><span class="qid">4j1.1</span><span class="ph know">know</span>What does d ∣ n mean? <br>Why does 0 divide nothing but 0?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="4j2">
-  <h2 class="sthead"><span class="stno">4j2</span>Having n members</h2>
-  <p class="stands">Stands on 4j1 (matchings) and 3a (each number is the set of the numbers before it).</p>
-  <p class="eqline" data-pid="b610c7">From here on, for a number n, the statement “X <b>has n members</b>” means X is matched with n, and n is then the <b>number of members</b> of X. A set is <b>finite</b> when it has n members for some number n.</p>
-  <p data-pid="e6fda5">Example: since 3 = {0, 1, 2}, the cats {Tom, Kit, Puss} have 3 members by the matching {(Tom, 0), (Kit, 1), (Puss, 2)}, given that they are three different cats.</p>
-  <p data-pid="e7f3a2">A fruit stand has a row of apples, a row of peaches and a row of pears. Lay them side by side: every apple has one peach and one pear beside it, and nothing is left over. The rows match (4j1), and nobody has counted. 3a built a pile out of nothing: 0, then the next, and the next, seven times over. It holds no fruit, and the rows match it too. Sift the stand’s collection of parts (2d) by “is matched with that pile” (2b’s sift), and the apples, the peaches and the pears all come out, with every mixed handful that matches. <b>A number is what is left when everything but how many has been taken away.</b> That fruitless pile is the one the ladder calls 7.</p>
-  <p data-pid="b5d81c">The sift needed the stand to pour from. Every collection anywhere that matches the pile cannot be gathered into one set: anything at all sits in some such collection, so merging them would give a set of everything, and 2b showed there is none. So the ladder keeps the one standard pile, 7 itself, and every collection of seven is matched against it, wherever it sits.</p>
-  <p data-pid="66d647">This completes a foreclosure from <a href="r02a.html#2a3">2a3</a>. A set with n members is matched with n, and the matching is its list: one entry for each number before n. So every finite set can be listed and checked member by member, one case to an entry.</p>
+  <h2 class="sthead"><span class="stno">4j2</span>Three rules that run forward</h2>
+  <p class="stands">Stands on 4j1 and 4g (regroup for times, spread for times over plus).</p>
+  <p data-pid="c993ca">Four rules do most of the work, each proved by unpacking ∣ and using a technique. Here are the first three.</p>
+  <p data-pid="4b460d">Chain technique for divides: <b>if d divides m and m divides n, then d divides n.</b> For n = m · k = (d · j) · k = d · (j · k), by regroup for times.</p>
+  <p data-pid="393dfc">Divides-a-sum technique: <b>a number that divides each of two numbers divides their sum.</b> In marks: d ∣ x and d ∣ y give d ∣ x + y. For d · j + d · k = d · (j + k), by spread for times over plus.</p>
+  <p data-pid="474fd2">Divides-a-multiple technique: <b>a number that divides m divides every multiple of m.</b> In marks: d ∣ m gives d ∣ m · c, by regroup for times.</p>
+  <p data-pid="51d18f">Example: 2 ∣ 4 and 4 ∣ 12 give 2 ∣ 12. 3 ∣ 6 and 3 ∣ 9 give 3 ∣ 15.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · the rules · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4j2.1</span><span class="ph know">know</span>What does “X has n members” mean? <br>Why does the ladder keep one standard pile?</li>
+      <li><span class="qid">4j2.1</span><span class="ph know">know</span>What do chain for divides, divides-a-sum and divides-a-multiple say, and how is each proved?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="4j3">
-  <h2 class="sthead"><span class="stno">4j3</span>Leading one out, bringing one in</h2>
-  <p class="stands">Stands on 4j2, 3a (next-membership) and 4g7 (settled-order).</p>
-  <p data-pid="91e396">Now the facts the horses of 4b's basement needed. Lead-one-out technique: <b>if X has S(n) members and w ∈ X, then X ∖ {w} has n members.</b></p>
-  <p data-pid="6bd48b">Example: {Rex, Pip, Bo} has 3 members, so {Rex, Pip, Bo} ∖ {Pip} = {Rex, Bo} has 2.</p>
-  <p data-pid="9177d8">Plan: take the matching with S(n), and give w's partner to the member paired with n.</p>
+  <h2 class="sthead"><span class="stno">4j3</span>The way back</h2>
+  <p class="stands">Stands on 4j2, 4h5 (at-most-is-adding), 4h10 (keep-order for times) and 4f (cancel for plus).</p>
+  <p data-pid="afac9b">The fourth rule runs the other way and needs care, because there is no taking away on this rung: everything is done with + and ·.</p>
+  <p data-pid="c2cfd2">Divides-the-rest technique: <b>a number that divides x, and divides x + y, divides y.</b></p>
+  <p data-pid="d719cf">Example: 3 ∣ 6 and 3 ∣ 6 + 9 give 3 ∣ 9.</p>
+  <p data-pid="07f2d7">Plan: unpack both givens, split on d = 0, and otherwise cancel d · j from both sides.</p>
   <div class="brkkey"></div>
-  <pre class="lines" data-k="ember" data-label="this step: the lead-one-out technique">
-f \text{ a matching between } X \text{ and } S(n);\ \ w \in X,\ \ f(w) = k @@ given
-c \text{ the partner of } n \text{ in } X @@ f pairs n with exactly one member of X
-g(u) = f(u) \text{ when } f(u) \ne n,\ \ g(u) = k \text{ when } f(u) = n @@ a rule on X ∖ {w}, by cases on a settled statement (settled-order)
-g(u) \lt n @@ f(u) &lt; S(n), f(u) ≠ n; and f(u) = n means u = c ≠ w, so k ≠ n: next-membership
-v \lt n:\ \ v = k \text{ has } c;\ \ v \ne k \text{ has its } f\text{-partner} @@ c ≠ w since f(w) = k ≠ n; the f-partner of v is not w, since f(w) = k ≠ v
-g(u) = g(u') \Rightarrow u = u' @@ cases on f(u) = n and f(u′) = n (settled-order); a mixed case makes f(u′) = k = f(w), so u′ = w: clash
-\htmlClass{new}{X ∖ \{w\} \text{ has } n \text{ members}} \quad \blacksquare @@ g's pairs are a matching between X ∖ {w} and n
+  <pre class="lines" data-k="ember" data-label="this step: the divides-the-rest technique, d ∣ x ∧ d ∣ x + y ⇒ d ∣ y">
+d \mid x,\ \ d \mid x + y @@ given; aiming at d ∣ y
+x = d \cdot j,\ \ x + y = d \cdot k @@ ﹀ ∣; use the somes
+\text{case } d = 0:\ \ x = 0,\ \ 0 + y = 0,\ \ y = 0 = 0 \cdot 0 @@ zero-times; the swap axiom, zero-plus; times-zero
+\text{case } d \ne 0:\ \ d \cdot j \le d \cdot k @@ x ≤ x + y (at-most-is-adding); the swap axiom
+\qquad j \le k @@ k &lt; j would give d · k &lt; d · j by keep-order for times (with turn-about for times), against the line above: any-two-compare
+\qquad k = j + m @@ at-most-is-adding, its some used
+\qquad d \cdot j + y = d \cdot j + d \cdot m @@ the swap axiom; spread for times over plus
+\qquad y = \htmlClass{new}{d \cdot m} @@ cancel for plus, on the left
+d \mid y \quad \blacksquare @@ ︿ ∣; reason by cases (settled-order settles d = 0)
   </pre>
-  <p data-pid="b3ba4d">(When f(w) = n, the second case never arises and g is f with w's pair removed. When f(w) &lt; n, the member that was paired with n takes w's old partner.)</p>
-  <p data-pid="752927">The other way is easier. Bring-one-in technique: <b>if X has n members and x ∉ X, then X ∪ {x} has S(n) members</b>, by f ∪ {(x, n)}. For n ∉ n, so no member of X was paired with n; and x ∉ X, so x has only its new pair.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · the lead-one-out technique · ← → keys work</div></section>
+  <p data-pid="d75ee6">Notice what divides-a-sum does not say. It runs from the parts to the sum, not back: 3 ∣ 1 + 2, and 3 divides neither 1 nor 2. Divides-the-rest is the one way back, and it needs d to divide one of the parts already.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · the divides-the-rest technique · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4j3.1</span><span class="ph know">know</span>What do lead-one-out and bring-one-in say?</li>
+      <li><span class="qid">4j3.1</span><span class="ph know">know</span>What does divides-the-rest say? <br>What does divides-a-sum not say?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="4j4">
-  <h2 class="sthead"><span class="stno">4j4</span>One count</h2>
-  <p class="stands">Stands on 4j3 (lead-one-out), 4j1 (turn-about and chain for matchings) and 4b (induction).</p>
-  <p data-pid="401194">One-count technique: <b>if X has n members and has n′ members, then n = n′.</b> You already trust this. Count the chairs twice, in any order, and you get the same number.</p>
-  <p data-pid="b02166">Plan: by turn-about for matchings and chain for matchings, n is matched with n′. So it is enough to prove, by induction on n, that n matched with m gives n = m.</p>
-  <p data-pid="1dd9b4">If n = 0, a member of m would need a partner in 0, so m = 0. If S(n) is matched with m, then m has a member, so m = S(m′) by zero-or-a-next. Then S(n) has S(m′) members. Lead-one-out with w = n says S(n) ∖ {n}, which is n (next-membership, no-self-membership), has m′ members. The hypothesis gives n = m′, and so S(n) = m.</p>
-  <p data-pid="999d94">The horses' facts are now techniques, so the flag 4b's basement opened is closed. A herd with S(S(n)) members, with a horse led out, has S(n) members (lead-one-out), and the flaw stays exactly where 4b's basement found it, at n = 0.</p>
-  <p data-pid="21de37">One more technique, quiet but essential. Finite-is-settled technique: <b>if X has n members, then any two members of X are the same or not: x = y ∨ x ≠ y.</b></p>
-  <p data-pid="b80b70">For f(x) = f(y) ∨ f(x) ≠ f(y) by settled-order. The first gives x = y, since each member of n has one partner. The second gives x ≠ y, since x = y would make f(x) = f(y). So X = (X ∖ {w}) ∪ {w} for w ∈ X, by chasing a member, and every case split in this step about members of a finite set is licensed.</p>
-  <p data-pid="cffecf">Two last things about finite sets of numbers, which 4g left to this step. Greatest-member technique: <b>a finite set of numbers with a member has a greatest member.</b></p>
-  <p data-pid="9eb64f">Plan: induct on its number of members. Lead out one member x (lead-one-out). If nothing is left, x is greatest. Otherwise the rest has a greatest member g, and the larger of x and g (any-two-compare) is greatest.</p>
-  <p data-pid="a45bb7">And ℕ is not finite, since it has no greatest member (n &lt; S(n)). 3b's mark of an endless collection is the other side of this: ℕ is matched with the part ℕ ∖ {0} by 4c's function s.</p>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · one-count and finite-is-settled · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">4j4</span>Size and divisors</h2>
+  <p class="stands">Stands on 4j1, 4i5 (times-does-not-lessen) and 4h11 (cancel for times).</p>
+  <p data-pid="516d2e">Two more. Divisor-not-past technique: <b>a divisor of a number other than 0 is at most that number.</b> In marks: if d ∣ n and n ≠ 0 then d ≤ n.</p>
+  <p data-pid="3fc957">For n = d · k with k ≠ 0, and d ≤ d · k by 4i's times-does-not-lessen.</p>
+  <p data-pid="4167d3">Divides-both-ways technique: <b>two numbers that divide each other are the same number.</b> In marks: d ∣ e and e ∣ d give d = e.</p>
+  <p data-pid="4564a6">Example: 4 ∣ 12 and 4 ≤ 12. 3 ∣ 3 and 3 ∣ 3, so 3 = 3.</p>
+  <p data-pid="8ea2ec">Proof. e = d · j and d = e · k give d = d · (j · k). If d = 0 then e = 0 too. Otherwise cancel for times cancels d, leaving 1 = j · k. So neither is 0 and neither is past 1 (times-does-not-lessen), so j = 1 and e = d.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4j4.1</span><span class="ph know">know</span>What does the one-count technique say? <br>What does finite-is-settled license?</li>
+      <li><span class="qid">4j4.1</span><span class="ph know">know</span>What do divisor-not-past and divides-both-ways say?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="4j5">
-  <h2 class="sthead"><span class="stno">4j5</span>Separate piles add</h2>
-  <p class="stands">Stands on 4j3 (lead-one-out, bring-one-in), 4j4 (finite-is-settled) and 4e (plus-a-next).</p>
-  <p data-pid="0242ed">Separate-piles technique: <b>if A has p members, B has b members, and A ∩ B = ∅, then A ∪ B has p + b members.</b> Its accepted name is in the basement. You know this one: three cats and two dogs, with nobody both, are five pets.</p>
-  <p data-pid="1662a9">Example: {Rex, Pip} and {Bo} share no member, so {Rex, Pip, Bo} has 2 + 1 = 3.</p>
-  <p data-pid="c569e9">Plan: induct on b, leading a member out of B and bringing it back into the union.</p>
-  <pre class="lines" data-k="ember" data-label="this step: the separate-piles technique, by induction on b">
-\varphi(b):\ \forall A\,\forall B\,\big(A \text{ has } a,\ B \text{ has } b,\ A \cap B = \varnothing \Rightarrow A \cup B \text{ has } a + b\big) @@ a kept fixed
-b = 0:\ \ B = \varnothing,\ \ A \cup \varnothing = A,\ \ a + 0 = a @@ a member of B would need a partner in 0; 2c's units technique; plus-zero
-B \text{ has } S(b):\ \ y \text{ the partner of } b,\ \ B' = B ∖ \{y\} \text{ has } b @@ the lead-one-out technique
-\qquad A \cup B' \text{ has } a + b @@ the hypothesis: A ∩ B′ = ∅ still
-\qquad y \notin A \cup B',\ \ A \cup B = (A \cup B') \cup \{y\} @@ A ∩ B = ∅; finite-is-settled on B
-\qquad A \cup B \text{ has } S(a + b) = \htmlClass{new}{a + S(b)} @@ the bring-one-in technique; plus-a-next
-\forall b\;\varphi(b) \quad \blacksquare @@ the induction technique
+  <h2 class="sthead"><span class="stno">4j5</span>Which statements can be searched</h2>
+  <p class="stands">Stands on 4h14 (settled sets), 4h15 (least-member) and 4c (induction).</p>
+  <p data-pid="1b3ccd">The search of 4h's least-member technique asks, at each number in turn, “is it in the set?”. So least-member is for settled sets. 4h's list of settled sets covered sifts of ℕ by conditions built from =, &lt;, + and · with the joining marks.</p>
+  <p data-pid="0a6633">But d ∣ n has a some inside it, ∃k, and a some over all the numbers cannot be checked number by number: there is always another number to try. A some with a bound can be.</p>
+  <p class="eqline" data-pid="48ed71">From here on, <span data-tex-inline="\exists k \le m\ \varphi(k)"></span> is short for <span data-tex-inline="\exists k \in \mathbb N\,(k \le m \land \varphi(k))"></span>, and <span data-tex-inline="\forall k \le m\ \varphi(k)"></span> for <span data-tex-inline="\forall k \in \mathbb N\,(k \le m \Rightarrow \varphi(k))"></span>; likewise with &lt; in place of ≤. (4h already wrote ∀k &lt; n in this way; this line makes it official.)</p>
+  <p data-pid="20f0fd">Bounded-some technique: <b>a some or an every kept below a bound is settled, when its condition is settled at each number.</b> In marks: if φ(k) is settled at every number k, then for every m, ∃k ≤ m φ(k) is settled, and so is ∀k ≤ m φ(k).</p>
+  <p data-pid="d9bf77">Example: “some k ≤ 3 has k · k = 4” is settled: check k = 0, 1, 2, 3, and 2 · 2 = 4.</p>
+  <p data-pid="932d64">Plan: induct on the bound m, adding one more number to check at each step.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the bounded-some technique, by induction on the bound m">
+\psi(m):\ \big(\exists k \le m\ \varphi(k)\big) \lor \neg\big(\exists k \le m\ \varphi(k)\big) @@ the condition; φ settled at every number is given
+\exists k \le 0\ \varphi(k) \;\Leftrightarrow\; \varphi(0) @@ k ≤ 0 means k = 0, since ¬(k &lt; 0) by the empty-set technique: the base, as φ(0) is settled
+k \le S(m) \;\Leftrightarrow\; k \le m \lor k = S(m) @@ the next-membership technique; ﹀ ≤
+\exists k \le S(m)\ \varphi(k) \;\Leftrightarrow\; \big(\exists k \le m\ \varphi(k)\big) \lor \varphi(S(m)) @@ the line above, inside the some
+\text{an or of two settled statements is settled} @@ cases on each: one is true, or neither is, and then neither (1c) gives the denial
+\htmlClass{new}{\psi(S(m))} @@ the hypothesis; φ(S(m)) settled; the exactly-when above, each way
+\forall m \in \mathbb N\;\psi(m) \quad \blacksquare @@ the induction technique. The every goes the same way, with ∧ in place of ∨
   </pre>
-  <section class="slides" id="sl5"><div class="eyebrow">The slides · the separate-piles technique · ← → keys work</div></section>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · bounded somes · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4j5.1</span><span class="ph know">know</span>What does the separate-piles technique say, and what does its condition rule out?</li>
+      <li><span class="qid">4j5.1</span><span class="ph know">know</span>Why can a some over all the numbers not be checked number by number, while a bounded one can? <br>What does bounded-some say?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="4j6">
-  <h2 class="sthead"><span class="stno">4j6</span>Choices in stages multiply</h2>
-  <p class="stands">Stands on 4j5 (separate-piles), 4j3 (lead-one-out) and 4f (next-on-the-left for times).</p>
-  <p data-pid="cd3efe">Now stages. Three shirts and four pairs of trousers: for each shirt, a row of four outfits; three rows of four. The same is true when the second choice depends on the first, provided the number of second choices does not.</p>
-  <p data-pid="eb8fc5">Stages-multiply technique: <b>if X has p members and, for each x ∈ X, a set Yₓ has b members, then the set of pairs (x, y) with x ∈ X and y ∈ Yₓ has p · b members.</b> Its accepted name is in the basement. You already do this when you dress. Three shirts and two pairs of trousers make six outfits.</p>
-  <p data-pid="1075ba">Plan: induct on the number of members of X. Lead one member out, and add its row of b pairs by separate-piles.</p>
-  <pre class="lines" data-k="ember" data-label="this step: the stages-multiply technique, by induction on a">
-T_X = \{(x, y) : x \in X,\ y \in Y_x\} @@ the pairs; each Y_x a part of one set Z, so T_X is a sift of X × Z
-a = 0:\ \ X = \varnothing,\ \ T_X = \varnothing,\ \ 0 \cdot b = 0 @@ zero-times
-X \text{ has } S(a):\ \ x_0 \text{ the partner of } a,\ \ X' = X ∖ \{x_0\} \text{ has } a @@ the lead-one-out technique
-\qquad T_X = T_{X'} \cup (\{x_0\} \times Y_{x_0}),\ \ \text{no pair in both} @@ finite-is-settled on X; first entries differ (equal-pairs)
-\qquad T_{X'} \text{ has } a \cdot b;\ \ \{x_0\} \times Y_{x_0} \text{ has } b @@ the hypothesis; (x₀, y) ↦ y is a matching
-\qquad T_X \text{ has } a \cdot b + b = \htmlClass{new}{S(a) \cdot b} @@ the separate-piles technique; next-on-the-left for times
-\forall a\ (\dots) \quad \blacksquare @@ the induction technique
-  </pre>
-  <p data-pid="04cf05">With every Yₓ the same Y, the pairs are X × Y: <b>a set with p members times a set with b members has p · b members.</b> That is why 2e called p × b a product, and why 2g's grids have p · b cells.</p>
-  <p data-pid="35c812">Ask every time: is this a choice made and then another (multiply), or one pile or else another (add)? Three shirts and four trousers make 3 · 4 = 12 outfits; three shirts or else two sweaters make 3 + 2 = 5 choices of top.</p>
-  <section class="slides" id="sl6"><div class="eyebrow">The slides · the stages-multiply technique · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">4j6</span>Divides is settled</h2>
+  <p class="stands">Stands on 4j5 (bounded-some), 4i5 (times-does-not-lessen) and 4h7 (settled-order).</p>
+  <p data-pid="1400b8">Settled-divides technique: <b>whether d divides n is always settled, because the some inside it can be kept below n.</b> In marks: d ∣ n ⇔ ∃k ≤ n (n = d · k), and so d ∣ n ∨ d ∤ n.</p>
+  <p data-pid="9e7412">Example: 4 ∣ 10? Check k = 0 to 10: 4 · 2 = 8 and 4 · 3 = 12, and no k gives 10. So 4 ∤ 10.</p>
+  <p data-pid="97d964">Leftward is keeping a part. Rightward: if n = 0, then k = 0 will do. If n ≠ 0, then k ≠ 0 and d ≠ 0, and k ≤ d · k = n by times-does-not-lessen. The sameness n = d · k is settled by settled-order, so bounded-some settles the bounded some.</p>
+  <p data-pid="2ac78c">From here on, every case split in this step is on a settled statement, and the line says which.</p>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · the settled-divides technique · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4j6.1</span><span class="ph know">know</span>What does stages-multiply say? <br>What question tells adding from multiplying?</li>
+      <li><span class="qid">4j6.1</span><span class="ph know">know</span>What does settled-divides say, and why may the k be kept below n?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="4j7">
-  <h2 class="sthead"><span class="stno">4j7</span>Adding up a list</h2>
-  <p class="stands">Stands on 4h3 (counted-recursion) and 4e (adding).</p>
-  <p class="eqline" data-pid="26cb72">From here on, the Greek letter <b>Σ</b> (sigma, in its capital form) is used for adding up. For a rule i ↦ t(i) giving numbers, <span data-tex-inline="\sum_{i \lt n} t(i)"></span> names s(n), where s is fixed by counted-recursion with start s(0) = 0 and step s(S(i)) = s(i) + t(i). Read it “the sum of t(i) for i less than n”. Writing sums this way is called summation notation. A sum up to n, and the long way to write it:</p>
-  <div class="eqline" data-tex="\sum_{i \le n} t(i) \;=\; \sum_{i \lt S(n)} t(i) \;=\; t(0) + t(1) + \cdots + t(n)"></div>
-  <p class="eqline" data-pid="c78465">In this line s is a letter for the summing function, as f is in a definition by repeating; 4c's function s, the next one, keeps its name elsewhere.</p>
-  <p data-pid="d5f52e">Its two defining lines are techniques. Sum-of-none technique: <b>a sum of no terms is 0.</b> Sum-one-more technique: <b>a sum of one more term is the old sum plus the new term.</b> In marks:</p>
-  <div class="eqline" data-tex="\begin{aligned} &amp;\sum_{i \lt 0} t(i) = 0\\ &amp;\sum_{i \lt S(n)} t(i) = \sum_{i \lt n} t(i) + t(n) \end{aligned}"></div>
-  <p data-pid="fd79c8">Example: the sum of i for i &lt; 3 is s(3) = s(2) + 2 = (s(1) + 1) + 2 = ((0 + 0) + 1) + 2 = 3.</p>
-  <section class="slides" id="sl7"><div class="eyebrow">The slides · Σ · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">4j7</span>Division with remainder</h2>
+  <p class="stands">Stands on 4j5 (bounded-some), 4h15 (least-member) and 4i7 (one-split).</p>
+  <p data-pid="5378c2">4i split a number by b by counting up, the last place rolling over. Here is the other road, the older one: take as many copies of b out of the number as fit, and look at what is left. “As many as fit” is a least member: the least thing that can be left.</p>
+  <p class="eqline" data-pid="5ed4a7">From here on, when a = b · q + r and r &lt; b, q is the <b>quotient</b> and r the <b>remainder</b> of a by b. (4i's one-split makes them “the”.)</p>
+  <p data-pid="b123f9">Division-with-remainder technique: <b>dividing by a number other than 0 leaves a remainder less than that number.</b> In marks: if b ≠ 0, then for every u there are q and r with u = b · q + r and r &lt; b. Its accepted name is in the basement. You already do this. Share seventeen sweets among five children: three each, and two left over, fewer than five.</p>
+  <p data-pid="7b7db4">Example: 17 = 5 · 3 + 2: quotient 3, remainder 2.</p>
+  <p data-pid="351f87">Plan: take the least possible remainder, then refute that it could be b or more.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the division-with-remainder technique, by the least-member search (least-member) on a settled set">
+X = \{r \in \mathbb N : \exists q \le a\ (a = b \cdot q + r)\} @@ b ≠ 0 and a kept fixed; a sift of ℕ
+X \text{ is settled} @@ the bounded-some technique, with settled-order for each sameness
+a \in X @@ q = 0: a = b · 0 + a (times-zero, zero-plus), and 0 ≤ a
+r \text{ least in } X;\ \ a = b \cdot q + r,\ \ q \le a @@ the least-member technique; use the some
+\text{suppose } b \le r:\ \ r = b + c @@ aiming to refute; at-most-is-adding, its some used
+\qquad a = b \cdot q + b + c = \htmlClass{new}{b \cdot S(q) + c} @@ the swap axiom, regroup for plus; times-a-next turned about
+\qquad S(q) \le b \cdot S(q) \le a,\ \text{so } c \in X @@ times-does-not-lessen; at-most-is-adding; ︿ the sift
+\qquad c \lt r @@ r = c + b with b ≠ 0 (turn-about for plus): the less-is-adding technique
+\qquad r \le c,\ \text{so } r \lt r;\ \ \bot @@ r is least; chain for less; no-self-membership; clash
+\htmlClass{new}{r \lt b} \quad \blacksquare @@ refute; then any-two-compare: b ≤ r is refuted, so r &lt; b
+  </pre>
+  <p data-pid="6c5327">Look at the line “X is settled”. Without it least-member could not be cited. With only 4h's list it could not be shown, since the condition has a some in it. Bounded-some is what lets the search run.</p>
+  <p data-pid="99fb20">17 = 5 · 2 + 7 is a true sameness but not this split, since 7 &lt; 5 fails: too few 5s were taken out.</p>
+  <p data-pid="300752">The remainder is 0 exactly when b ∣ u. For u = b · k is the split u = b · k + 0, and one-split makes it the only one. So every question “does b divide u?” becomes “what is the remainder?”.</p>
+  <section class="slides" id="sl7"><div class="eyebrow">The slides · the division-with-remainder technique · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4j7.1</span><span class="ph know">know</span>What does the sum of t(i) for i < n name? <br>What do sum-of-none and sum-one-more say?</li>
+      <li><span class="qid">4j7.1</span><span class="ph know">know</span>What are the quotient and the remainder? <br>What does division-with-remainder say, and where does bounded-some enter its proof?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="4j8">
-  <h2 class="sthead"><span class="stno">4j8</span>The doubled sum</h2>
-  <p class="stands">Stands on 4j7 (Σ), 4f (spread for times over plus) and 4b (induction).</p>
-  <p data-pid="d78785">Now the sum 0 + 1 + ⋯ + n. Write it forwards, and under it backwards: under 0 stands n, under 1 the number before n, and so on. Every column adds to n, and there are n + 1 columns, so the two rows together make n · (n + 1). That is the idea.</p>
-  <p data-pid="a81b8e">The proof is an induction, and it needs no taking away and no taking a part of anything: the technique is stated doubled. Doubled-sum technique: <b>twice the sum 0 + 1 + ⋯ + n is n times n + 1.</b></p>
-  <div class="eqline" data-tex="\begin{aligned}&amp;\textbf{Doubled-sum technique:}\quad 2\\ &amp;\quad \cdot (0 + 1 + \cdots + n) = n \cdot (n + 1)\end{aligned}"></div>
-  <pre class="lines" data-k="ember" data-label="this step: the doubled-sum technique, by induction on n">
-2 \cdot \sum_{i \le 0} i = 2 \cdot (0 + 0) = 0 = 0 \cdot 1 @@ sum-of-none, sum-one-more; times-zero, zero-times: the base
-\text{assume } 2 \cdot \sum_{i \le n} i = n \cdot (n + 1) @@ the step opens
-\qquad 2 \cdot \sum_{i \le S(n)} i = 2 \cdot \Big(\sum_{i \le n} i + S(n)\Big) @@ sum-one-more
-\qquad \phantom{2 \cdot \sum_{i \le S(n)} i} = \htmlClass{keep}{2 \cdot \sum_{i \le n} i} + 2 \cdot S(n) @@ spread for times over plus
-\qquad \phantom{2 \cdot \sum_{i \le S(n)} i} = \htmlClass{new}{n \cdot S(n)} + 2 \cdot S(n) @@ the hypothesis, with plus-one
-\qquad \phantom{2 \cdot \sum_{i \le S(n)} i} = (n + 2) \cdot S(n) @@ spread for times over plus turned about, with turn-about for times
-\qquad \phantom{2 \cdot \sum_{i \le S(n)} i} = \htmlClass{new}{S(n) \cdot (S(n) + 1)} @@ n + 2 = S(S(n)) = S(n) + 1 (plus-a-next, plus-one); turn-about for times
-\forall n\;\Big(2 \cdot \sum_{i \le n} i = n \cdot (n + 1)\Big) \quad \blacksquare @@ the induction technique
+  <h2 class="sthead"><span class="stno">4j8</span>Even and odd</h2>
+  <p class="stands">Stands on 4j7 (division with remainder), 4i7 (one-split) and 4h13 (the two kinds of number).</p>
+  <p class="eqline" data-pid="049d93">From here on, the statement “n is <b>even</b>” means 2 ∣ n, and “n is <b>odd</b>” means n = 2 · d + 1 for some number d.</p>
+  <p data-pid="3408f9">Example: 6 = 2 · 3 is even, and 7 = 2 · 3 + 1 is odd. Since 2 · d = d + d (turn-about for times, times-a-next, one-changes-nothing), these are 4h's two kinds, d + d and S(d + d).</p>
+  <p data-pid="e14544">Even-or-odd technique: <b>every number is even or odd, and not both.</b> You know this from pairing socks: either every sock has a partner, or one is left over.</p>
+  <p data-pid="613463">Division-with-remainder with b = 2 gives n = 2 · q + r with r ∈ 2 = {0, 1}: remainder 0 is even, remainder 1 is odd. Both at once would be two splits by 2 with remainders 0 and 1, and one-split says 0 = 1, against next-never-empty. So “even” is settled, and odd is its denial.</p>
+  <ul>
+    <li data-pid="6a7fbb">Odd-times-odd technique: <b>an odd number times an odd number is odd.</b></li>
+    <li data-pid="680dd0">Even-square technique: <b>if a number times itself is even, the number is even.</b></li>
+  </ul>
+  <pre class="lines" data-k="ember" data-label="this step: techniques odd-times-odd (odd times odd) and even-square (an even product of a number with itself)">
+(2 \cdot a + 1) \cdot (2 \cdot b + 1) = 4 \cdot a \cdot b + 2 \cdot a + 2 \cdot b + 1 @@ spread for times over plus, turn-about for times, regroup for times, one-changes-nothing
+\phantom{(2 \cdot a + 1) \cdot (2 \cdot b + 1)} = \htmlClass{new}{2 \cdot (2 \cdot a \cdot b + a + b) + 1} @@ spread for times over plus turned about: <b>the odd-times-odd technique</b>, odd times odd is odd
+p \cdot p \text{ even};\ \ p \text{ even or odd} @@ given; the even-or-odd technique
+\text{case } p \text{ odd}:\ \ p \cdot p \text{ odd};\ \ \bot @@ the odd-times-odd technique; even-or-odd's “not both”; clash
+\htmlClass{new}{p \text{ even}} \quad \blacksquare @@ everything permitted in that case; reason by cases: <b>the even-square technique</b>
   </pre>
-  <p data-pid="29a2ff">Example: 2 · (0 + 1 + ⋯ + 100) = 100 · 101 = 10100. And 0 + 1 + ⋯ + 4 = 10, since 2 · 10 = 4 · 5. The 0 adds nothing, so this is also the sum from 1.</p>
-  <p data-pid="a97e00">And the sum itself is named by 4i's words. First, n · (n + 1) is even. If n is even this is divides-a-multiple. If n = 2 · d + 1 then n + 1 = 2 · (d + 1), and divides-a-multiple again. Then doubled-sum is the split n · (n + 1) = 2 · (0 + 1 + ⋯ + n) + 0. <b>So 0 + 1 + ⋯ + n is the quotient of n · (n + 1) by 2</b>, and one-split makes it the only one.</p>
-  <p data-pid="7751bd">A story is told of a schoolboy who was set, with his class, the adding up of a long run of numbers. He laid his slate down with the answer almost as soon as the task was given.</p>
-  <section class="slides" id="sl8"><div class="eyebrow">The slides · the doubled-sum technique · ← → keys work</div></section>
+  <p data-pid="ef10c3">And an even number times anything is even, by divides-a-multiple.</p>
+  <section class="slides" id="sl8a"><div class="eyebrow">The slides · even and odd · ← → keys work</div></section>
+  <section class="slides" id="sl8b"><div class="eyebrow">The slides · the even-square technique · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4j8.1</span><span class="ph know">know</span>What does the doubled-sum technique say, and why is it stated doubled?</li>
+      <li><span class="qid">4j8.1</span><span class="ph know">know</span>What do even and odd mean? <br>Why is every number one or the other and not both?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="4j9">
-  <h2 class="sthead"><span class="stno">4j9</span>Counting functions</h2>
-  <p class="stands">Stands on 4j3 (lead-one-out), 4j6 (stages-multiply) and 4f (power-zero, power-of-a-next).</p>
-  <p data-pid="909ce4">Counted-functions technique: <b>if X has n members and Y has m members, then the set of functions from X to Y (a sift of 𝒫(X × Y)) has mⁿ members.</b></p>
-  <p data-pid="6c004b">Example: from {Rex, Pip} to {cat, owl} there are 2² = 4 functions: both cat, both owl, Rex cat and Pip owl, Rex owl and Pip cat.</p>
-  <p data-pid="28b3d9">Plan: induct on n. With n = 0 there is exactly one function, the empty one, and <span data-tex-inline="m^0 = 1"></span> (power-zero).</p>
-  <p data-pid="5adbb3">With S(n), lead out x₀ (lead-one-out), so X′ = X ∖ {x₀} has n members. A function on X is a function on X′ together with a value at x₀. They are matched by f ↦ (f on X′, f(x₀)), and back by (g, y) ↦ g ∪ {(x₀, y)} (finite-is-settled on X). Stages-multiply counts the pairs, <span data-tex-inline="m^n \cdot m = m^{S(n)}"></span> by power-of-a-next.</p>
-  <section class="slides" id="sl9"><div class="eyebrow">The slides · the counted-functions technique · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">4j9</span>Primes</h2>
+  <p class="stands">Stands on 4j4 (divisor-not-past) and 4j5 (bounded-some).</p>
+  <p class="eqline" data-pid="d99713">From here on, the statement “p is <b>prime</b>” means 1 &lt; p and every divisor of p is 1 or p:</p>
+  <div class="eqline" data-tex="\forall d \in \mathbb N\,(d \mid p \Rightarrow d = 1 \lor d = p)"></div>
+  <p data-pid="f583e1">Example: 2, 3, 5 and 7 are prime; 4 = 2 · 2, 6 = 2 · 3 and 9 = 3 · 3 are not.</p>
+  <p data-pid="5eaf54">Being prime is settled. By divisor-not-past every divisor of p is at most p, so the every is bounded, and bounded-some applies.</p>
+  <p data-pid="7877b3">1 is not prime, on purpose: 1 &lt; 1 fails. The reason for leaving it out comes in 4j18, where it would spoil “exactly one way”.</p>
+  <p data-pid="52af4f">The oldest definition: a prime number is one that is measured by a unit alone.</p>
+  <section class="slides" id="sl9"><div class="eyebrow">The slides · primes · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4j9.1</span><span class="ph know">know</span>What does counted-functions say, and how does its step use stages-multiply?</li>
+      <li><span class="qid">4j9.1</span><span class="ph know">know</span>What does “p is prime” mean, and why is it settled?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="4j10">
-  <h2 class="sthead"><span class="stno">4j10</span>How fast the subsets pile up</h2>
-  <p class="stands">Stands on 4j9 (counted-functions), 2d (keep or drop) and 4g14 (settled).</p>
-  <p data-pid="6b1ee6">2d built the subsets by keep or drop, and the split “cat ∈ s or cat ∉ s” needed the part s to be settled. So the honest count is of the parts that are.</p>
-  <p class="eqline" data-pid="6a95b9">From here on, for a part s of a set X, the statement “s is <b>settled</b>” means:</p>
-  <div class="eqline" data-tex="\forall x \in X\,(x \in s \lor x \notin s)"></div>
-  <p class="eqline" data-pid="f0e32e">This is 4g's word “settled”, said now of a part of any set: for a part of ℕ it is 4g's line, and said of a statement the word keeps 1g's meaning.</p>
-  <p data-pid="4ae1ff">Settled-parts technique: <b>a set with n members has 2ⁿ settled parts.</b></p>
-  <p data-pid="f65b12">Example: {Rex, Pip} has 2² = 4 settled parts: ∅, {Rex}, {Pip} and {Rex, Pip}.</p>
-  <p data-pid="1bd458">Plan: match the settled parts of X with the functions from X to 2 = {0, 1}, and count the functions.</p>
-  <p data-pid="fb898c">A part s goes to its keep-or-drop function, which gives 1 at x when x ∈ s and 0 when x ∉ s (a rule by cases on a settled statement). A function h goes back to the part {x ∈ X : h(x) = 1}, which is settled by settled-order. Counted-functions counts the functions: 2ⁿ.</p>
-  <p data-pid="ac36d0">Every listed part of a finite set is settled, by finite-is-settled. Rung 7 makes every part settled, and then 𝒫(X) itself has 2ⁿ members.</p>
-  <p data-pid="3364c5">This answers three questions left open. 2d asked how fast the subsets pile up. Each new member doubles them, the old parts once without it and once with it:</p>
-  <div class="eqline" data-tex="2^{S(n)} = 2^n \cdot 2 = 2^n + 2^n"></div>
-  <p data-pid="3c0c06">2d also named the set of all parts of a set its power set, “power” only as a name. Now it has its reason: the parts of a set with n members number 2 to the power n. And 1f named the rows of a table by their letters and never counted them. A row gives each letter T or F, so a table for n letters has 2ⁿ rows. And the numerals of four bits in 4h, leading 0s allowed, number 2⁴ = 16, naming 0 to 15.</p>
-  <section class="slides" id="sl10"><div class="eyebrow">The slides · the settled-parts technique · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">4j10</span>Every number above 1 has a prime divisor</h2>
+  <p class="stands">Stands on 4j9 (primes), 4h15 (least-member) and 4j2 (chain for divides).</p>
+  <p data-pid="0c711f">Prime-divisor technique: <b>every number above 1 has a prime divisor; its least divisor above 1 is prime.</b></p>
+  <p data-pid="d256e9">Example: the divisors of 15 above 1 are 3, 5 and 15. The least, 3, is prime.</p>
+  <p data-pid="bcfc9b">Plan: take the least divisor above 1 by the search, then show any divisor of it is 1 or itself.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the prime-divisor technique, by the least-member search">
+D = \{d \in \mathbb N : 1 \lt d \land d \mid n\},\ \ 1 \lt n @@ given n; a sift, settled by settled-divides and settled-order
+n \in D;\ \ p \text{ least in } D @@ n ∣ n; the least-member technique
+\text{let } e \mid p @@ aiming at e = 1 ∨ e = p
+\qquad e \ne 0,\ \ e \le p @@ 0 ∣ p would make p = 0; divisor-not-past
+\qquad \text{case } 1 \lt e:\ \ e \mid n,\ \text{so } e \in D,\ p \le e @@ chain for divides; ︿ the sift; p is least
+\qquad\quad \htmlClass{new}{e = p} @@ e ≤ p and p ≤ e: any-two-compare
+\qquad \text{otherwise } e = 1 @@ e ≠ 0 and not above 1: any-two-compare, next-is-not-past
+p \text{ is prime} \quad \blacksquare @@ add an option in each case; speak of everything; 1 &lt; p from D
+  </pre>
+  <section class="slides" id="sl10"><div class="eyebrow">The slides · the prime-divisor technique · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4j10.1</span><span class="ph know">know</span>What does settled-parts say, and why does it count settled parts rather than all parts?</li>
+      <li><span class="qid">4j10.1</span><span class="ph know">know</span>What does the prime-divisor technique say, and why is the least divisor above 1 prime?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="4j11">
-  <h2 class="sthead"><span class="stno">4j11</span>Arrangements and factorials</h2>
-  <p class="stands">Stands on 4h3 (counted-recursion), 4j6 (stages-multiply) and 4j3 (lead-one-out).</p>
-  <p class="eqline" data-pid="63cfea">From here on, <span data-tex-inline="n!"></span> names f(n), where f is fixed by counted-recursion with start f(0) = 1 and step f(S(n)) = S(n) · f(n). Read it “n factorial”.</p>
-  <p data-pid="c02c58">Example: 1! = 1, 2! = 2, 3! = 6, 4! = 24, 5! = 120, and by 10, 10! = 3628800.</p>
-  <p data-pid="4331fb">The start is 1 for the reason 4f gave for power-zero: an empty product is the do-nothing of multiplying.</p>
-  <p class="eqline" data-pid="46f2e9">From here on, an <b>arrangement</b> of a set X with n members is a matching between n and X: the member paired with 0 stands first, the member paired with 1 next, and so on.</p>
-  <p data-pid="774e9b">Arrangements technique: <b>a set with n members has n! arrangements.</b> You have met this lining up: the first place has n people to choose from, the next one fewer, and so on.</p>
-  <p data-pid="64fe0d">Plan: induct on n. Choose who stands at the last place, then arrange the rest.</p>
-  <pre class="lines" data-k="ember" data-label="this step: the arrangements technique, by induction on n">
-\begin{aligned}&n = 0:\ \ \text{one arrangement,}\\ &\quad\text{the empty matching};\ \ 0! = 1\end{aligned} @@ counted-recursion's start
-X \text{ has } S(n):\ \ \text{who stands at place } n?\ \ S(n) \text{ choices} @@ X has S(n) members
-\qquad \text{then arrange } X ∖ \{x\} \text{ on the places of } n:\ \ n! \text{ ways} @@ the lead-one-out technique; the hypothesis
-\qquad f \mapsto (f(n),\ f \text{ on } n) \text{ is a matching} @@ back: (x, g) ↦ g ∪ {(n, x)}
-\qquad S(n) \cdot n! = \htmlClass{new}{S(n)!} \quad \blacksquare @@ the stages-multiply technique; counted-recursion's step; the induction technique
+  <h2 class="sthead"><span class="stno">4j11</span>Common divisors</h2>
+  <p class="stands">Stands on 4j2 (divides-a-multiple, divides-a-sum), 4j3 (divides-the-rest) and 4j4 (divides-both-ways).</p>
+  <p class="eqline" data-pid="7403ee">From here on, the statement “g is a <b>greatest common divisor</b> of a and b” means g ∣ a, g ∣ b, and every common divisor of a and b divides g:</p>
+  <div class="eqline" data-tex="\forall d\,(d \mid a \land d \mid b \Rightarrow d \mid g)"></div>
+  <p data-pid="e7cbca">Example: 6 is a greatest common divisor of 12 and 18: 6 ∣ 12, 6 ∣ 18, and the common divisors 1, 2, 3, 6 all divide 6.</p>
+  <p data-pid="41a0ee">“Greatest” here is in the sense of ∣, and that is the stronger sense: when g ≠ 0, divisor-not-past puts every common divisor at most g. There is at most one, by divides-both-ways.</p>
+  <p data-pid="31bb13">That there is one at all is the greatest-common-divisor technique in 4j12, and it rests on a single technique. Split-keeps-divisors technique: <b>if u = b · q + r, then u and b have exactly the same common divisors as b and r.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the split-keeps-divisors technique">
+a = b \cdot q + r @@ given
+d \mid a,\ d \mid b \;\Rightarrow\; d \mid b \cdot q \;\Rightarrow\; \htmlClass{new}{d \mid r} @@ divides-a-multiple; divides-the-rest, since d divides b · q and b · q + r
+d \mid b,\ d \mid r \;\Rightarrow\; d \mid b \cdot q \;\Rightarrow\; \htmlClass{new}{d \mid a} @@ divides-a-multiple; divides-a-sum. So the two pairs share their common divisors
   </pre>
-  <p data-pid="7b0753">Stopping after the first few places works the same way. Gold, silver and bronze among 8 runners: 8 · 7 · 6 = 336 ways, by stages-multiply twice; and arranging the other 5 afterwards, 336 · 5! = 40320 = 8!.</p>
-  <p data-pid="ec3517">The accepted name for an arrangement is a permutation, from the Latin permutare, “to change thoroughly”.</p>
-  <section class="slides" id="sl11"><div class="eyebrow">The slides · factorials · ← → keys work</div></section>
+  <section class="slides" id="sl11"><div class="eyebrow">The slides · the split-keeps-divisors technique · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4j11.1</span><span class="ph know">know</span>What does n! name? <br>What is an arrangement, and how many has a set with n members?</li>
+      <li><span class="qid">4j11.1</span><span class="ph know">know</span>What is a greatest common divisor of a and b? <br>What does split-keeps-divisors say?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="4j12">
-  <h2 class="sthead"><span class="stno">4j12</span>The choosing table</h2>
-  <p class="stands">Stands on 4h3 (counted-recursion) and 4c8 (recursion).</p>
-  <p data-pid="b1f42d">From 5 people, how many committees of 2? A committee has no order: {Ann, Ben} is {Ben, Ann}. Counted with order there are 5 · 4 = 20 pairs, and each committee was counted twice, once in each order: 20 = 10 · 2. So 10 committees.</p>
-  <p data-pid="af43f7">The number of k-member parts of a set with n members could be defined that way. But there is a cleaner start: ask about one member at a time, which gives a table.</p>
-  <p class="eqline" data-pid="404485">From here on, <span data-tex-inline="\binom{n}{k}"></span> (read “n choose k”) names the entry at k of row n of the table fixed by recursion and counted-recursion as follows. Row 0 has 1 at 0 and 0 everywhere else. In each next row, the entry at 0 is 1, and the entry at S(k) is the entry at k plus the entry at S(k) of the row before. This is <b>the choosing table</b>.</p>
-  <p class="eqline" data-pid="d95637">Here a row is a function from ℕ to ℕ and its entries are its values. 1f's rows of a table, 2e's entries of a pair and 4h's entries of a list keep their meanings.</p>
-  <p data-pid="2ed9ec">(The rows are functions from ℕ to ℕ, members of a sift of 𝒫(ℕ × ℕ). Recursion takes each row to the next, and counted-recursion builds each next row.)</p>
-  <p data-pid="5baa8c">The defining lines are techniques. Choose-edges technique: <b>every row starts with 1, and row 0 is 1 followed by 0s.</b> In marks: <span data-tex-inline="\binom{n}{0} = 1"></span> and <span data-tex-inline="\binom{0}{S(k)} = 0"></span>.</p>
-  <p data-pid="07f390">And the table's own step, the row-step technique: <b>an entry after the start of a row is the entry above it plus the one before that.</b></p>
-  <div class="eqline" data-tex="\begin{aligned}&amp;\textbf{Row-step technique:}\quad \binom{S(n)}{S(k)}\\ &amp;\quad = \binom{n}{k} + \binom{n}{S(k)}\end{aligned}"></div>
-  <p data-pid="6e8ff5">Two short inductions give the choose-ends technique: <b>past the end of row n every entry is 0, and the last entry of row n is 1.</b> In marks, the first when n &lt; k:</p>
-  <div class="eqline" data-tex="\begin{aligned} &amp;\tbinom{n}{k} = 0\\ &amp;\tbinom{n}{n} = 1, \;\text{ since } \tbinom{S(n)}{S(n)} = \tbinom{n}{n} + \tbinom{n}{S(n)} = 1 + 0 \end{aligned}"></div>
-  <p data-pid="27cbf5">Here are rows 0 to 7, each entry the sum of the entry above it and the one before that.</p>
-  <div class="eqline" data-tex="\begin{array}{r|llllllll} n & & & & & & & & \\ \hline 0 & 1 \\ 1 & 1 & 1 \\ 2 & 1 & 2 & 1 \\ 3 & 1 & 3 & 3 & 1 \\ 4 & 1 & 4 & 6 & 4 & 1 \\ 5 & 1 & 5 & 10 & 10 & 5 & 1 \\ 6 & 1 & 6 & 15 & 20 & 15 & 6 & 1 \\ 7 & 1 & 7 & 21 & 35 & 35 & 21 & 7 & 1 \end{array}"></div>
-  <section class="slides" id="sl12"><div class="eyebrow">The slides · the choosing table · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">4j12</span>The gcd algorithm</h2>
+  <p class="stands">Stands on 4j11 (split-keeps-divisors), 4j7 (division with remainder) and 4h12 (strong induction).</p>
+  <p data-pid="3acb31">Greatest-common-divisor technique, the gcd algorithm: <b>any two numbers have a greatest common divisor.</b></p>
+  <p data-pid="4d43bb">Plan: replace the pair (u, b) by (b, r); the second number shrinks, so strong induction carries it.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the greatest-common-divisor technique, by strong induction on b">
+\begin{aligned}&\varphi(b):\ \forall a\ \exists g\ (g \text{ is}\\ &\quad\text{a greatest common divisor of } a \text{ and } b)\end{aligned} @@ the condition
+\text{case } b = 0:\ \ g = a @@ a ∣ a, a ∣ 0, and any common divisor of a and 0 divides a
+\text{case } b \ne 0:\ \ a = b \cdot q + r,\ \ r \lt b @@ the division-with-remainder technique
+\qquad g \text{ a greatest common divisor of } b \text{ and } r @@ the hypothesis, used with r, and with b for a
+\qquad \htmlClass{new}{g \text{ is one of } a \text{ and } b} @@ the split-keeps-divisors technique: the same common divisors
+\forall b\;\varphi(b) \quad \blacksquare @@ the strong induction technique; settled-order settles b = 0
+  </pre>
+  <p class="eqline" data-pid="a73c62">From here on, <span data-tex-inline="\gcd(a, b)"></span> names the greatest common divisor of a and b. Read it “the gcd of a and b”.</p>
+  <p data-pid="b785bf">Example: the algorithm on 1071 and 462.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the gcd algorithm on 1071 and 462">
+1071 = 462 \cdot 2 + \htmlClass{new}{147} @@ division-with-remainder; the remainder takes the smaller number's place
+462 = 147 \cdot 3 + \htmlClass{new}{21} @@ division-with-remainder again
+147 = 21 \cdot 7 + 0 @@ remainder 0: the pair is now (21, 0)
+\gcd(1071, 462) = \gcd(462, 147) = \gcd(147, 21) = \htmlClass{new}{21} @@ split-keeps-divisors at each line; gcd(21, 0) = 21
+  </pre>
+  <p data-pid="a89a69">Three divisions, and neither number was broken into primes. <b>The algorithm measures the larger number by the smaller as often as it goes, then goes on with the smaller and what is left over.</b> On this ladder, each round of that is one use of division-with-remainder.</p>
+  <p data-pid="030d5b">The oldest account sets the problem of finding the greatest common measure of two numbers not prime to one another. It adds that whatever measures both numbers also measures their greatest common measure.</p>
+  <section class="slides" id="sl12"><div class="eyebrow">The slides · the gcd algorithm · ← → keys work</div></section>
   <section class="pic" id="pic">
-    <div class="eyebrow">The picture · the choosing table and its rule</div>
+    <div class="eyebrow">The picture · the gcd algorithm keeps the common divisors, and runs backwards</div>
     <div class="panel">
-      <div class="chips" role="group" aria-label="view" id="vch"><button data-v="rule" class="on">tap for the rule</button><button data-v="sum">row sums</button><button data-v="odd">odd entries</button></div>
-      <div class="cap">Tap any entry. Ember: n choose k. Gold: the two entries of the row before that add to it (row-step). Teal: the same count read from the other end of the row. The readout checks product-identity. “row sums” shows each row adding to a power of 2; “odd entries” colours every odd number.</div>
-      <canvas id="cvP"></canvas>
-      <div class="eqbox" id="eqP"></div>
+      <div class="knobs"><div class="knob"><label for="ea">u</label><input type="range" id="ea" min="1" max="90" step="1" value="84"><output id="oea"></output></div><div class="knob"><label for="eb">b</label><input type="range" id="eb" min="1" max="90" step="1" value="36"><output id="oeb"></output></div></div>
+      <div class="chips"><button id="e1">one division</button><button id="eall">divide to the end</button><button id="eback">run it backwards</button><button id="e0">start again</button></div>
+      <div class="cap">Each row is one pair of the algorithm: (u, b), then (b, r), down to (g, 0). The dots stand for the numbers from 1 up to the smaller starting number; a dot is lit teal when it divides both numbers of its row. The lit dots never change from row to row (split-keeps-divisors). At the end, ember marks the gcd; “run it backwards” gives the plus-only combination technique's line for this pair.</div>
+      <canvas id="cvR"></canvas>
+      <div class="eqbox" id="eqR"></div>
     </div>
   </section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4j12.1</span><span class="ph know">know</span>What is the choosing table? <br>What do choose-edges and row-step say?</li>
+      <li><span class="qid">4j12.1</span><span class="ph know">know</span>How does the gcd algorithm find a greatest common divisor, and why does strong induction carry it?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="4j13">
-  <h2 class="sthead"><span class="stno">4j13</span>Choosing counts parts</h2>
-  <p class="stands">Stands on 4j12 (the table), 4j5 (separate-piles) and 4j3 (lead-one-out, bring-one-in).</p>
-  <p data-pid="0f17a7">Now the meaning. Choosing-counts-parts technique: <b>a set with n members has exactly <span data-tex-inline="\binom{n}{k}"></span> parts with k members.</b></p>
-  <p data-pid="50128d">Example: {Rex, Pip, Bo} has 3 choose 2 = 3 parts with 2 members: {Rex, Pip}, {Rex, Bo} and {Pip, Bo}.</p>
-  <p data-pid="3158ca">Plan: single out one member, Zoe. A committee either has Zoe on it or not, and the two piles add.</p>
-  <pre class="lines" data-k="ember" data-label="this step: the choosing-counts-parts technique, by induction on n: is Zoe on it?">
-n = 0:\ \ \text{the only part of } \varnothing \text{ is } \varnothing,\ \text{with } 0 \text{ members} @@ empty-part, double-inclusion: so 1 part with 0 members, none with S(k), as choose-edges says
-X \text{ has } S(n);\ \ z \text{ the partner of } n;\ \ X' = X ∖ \{z\} \text{ has } n @@ the lead-one-out technique
-\qquad k = 0:\ \ \text{only } \varnothing;\ \ \tbinom{S(n)}{0} = 1 @@ a part with 0 members has no member; choose-edges
-\begin{aligned}&\qquad S(k)\text{-member parts: without } z,\\ &\quad \ \text{or with } z\end{aligned} @@ settled: whether z is in a finite part is a bounded search through its matching (finite-is-settled, bounded-some)
-\qquad\quad \text{without } z:\ \ \text{the } S(k)\text{-member parts of } X':\ \ \tbinom{n}{S(k)} @@ the hypothesis
-\begin{aligned}&\qquad\quad \text{with } z:\ \ s \mapsto s ∖ \{z\} \text{ matches them}\\ &\quad\text{with the } k\text{-member parts of } X':\ \ \tbinom{n}{k}\end{aligned} @@ lead-one-out one way, bring-one-in back; the hypothesis
-\qquad \tbinom{n}{k} + \tbinom{n}{S(k)} = \htmlClass{new}{\tbinom{S(n)}{S(k)}} @@ the separate-piles technique; row-step
-\forall n\ (\dots) \quad \blacksquare @@ the induction technique; zero-or-a-next splits k
+  <h2 class="sthead"><span class="stno">4j13</span>Running it backwards, with + only</h2>
+  <p class="stands">Stands on 4j12 (the gcd algorithm) and 4f, 4g (adding and multiplying).</p>
+  <p data-pid="534665">Read the lines from the foot up and feed each into the one above. What comes out ties the gcd to the two numbers.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the algorithm on 1071 and 462, run backwards">
+147 \cdot 3 + 21 = 462 @@ the second line, turned about
+1071 \cdot 3 = 462 \cdot 6 + \htmlClass{keep}{147 \cdot 3} @@ the first line, times 3 (the swap axiom; spread for times over plus, regroup for times)
+1071 \cdot 3 + 21 = 462 \cdot 6 + \htmlClass{keep}{147 \cdot 3 + 21} @@ add 21 to each side (the swap axiom); regroup for plus
+\phantom{1071 \cdot 3 + 21} = 462 \cdot 6 + \htmlClass{new}{462} @@ the first line of this column
+462 \cdot 7 = 1071 \cdot 3 + 21 \quad \blacksquare @@ times-a-next; turned about: 3234 = 3213 + 21
   </pre>
-  <section class="slides" id="sl13"><div class="eyebrow">The slides · the choosing-counts-parts technique · ← → keys work</div></section>
-  <section class="pic" id="pic2">
-    <div class="eyebrow">The picture · is Zoe on the committee?</div>
-    <div class="panel">
-      <div class="knobs"><div class="knob"><label for="zn">members (the last one is Zoe)</label><input type="range" id="zn" min="1" max="6" step="1" value="5"><output id="ozn"></output></div><div class="knob"><label for="zk">k, members of each part</label><input type="range" id="zk" min="0" max="6" step="1" value="2"><output id="ozk"></output></div></div>
-      <div class="cap">Every part with k members, written out. Ember: the parts with Zoe (Z) on them; teal: the parts without her. Tap a part to see its match: with Zoe, it goes to the part of the rest that she leaves (lead-one-out); without her, it is already a part of the rest. The two piles add to the next row's entry.</div>
-      <canvas id="cvZ"></canvas>
-      <div class="eqbox" id="eqZ"></div>
-    </div>
-  </section>
+  <p data-pid="5d4ab0">With + only, the next technique has to say which side the gcd lands on, and it may land on either.</p>
+  <p data-pid="ffbe16">Plus-only combination technique: <b>for any two numbers, a multiple of one is a multiple of the other with their gcd added.</b> In marks: for any numbers u and b there are numbers x and y with u · x = b · y + gcd(u, b) or b · y = u · x + gcd(u, b).</p>
+  <p data-pid="413f00">Plan: strong induction on b, following the algorithm down and feeding each line into the one above.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the plus-only combination technique, by strong induction on b">
+\psi(b):\ \forall a\ \exists x\,\exists y\,\big(a \cdot x = b \cdot y + g \lor b \cdot y = a \cdot x + g\big),\ \ g = \gcd(a, b) @@ the condition
+b = 0:\ \ a \cdot 1 = 0 \cdot 0 + a @@ one-changes-nothing, zero-times, zero-plus; gcd(a, 0) = a
+b \ne 0:\ \ a = b \cdot q + r,\ \ r \lt b,\ \ \gcd(b, r) = g @@ division-with-remainder; split-keeps-divisors
+\qquad b \cdot x = r \cdot y + g \ \lor\ r \cdot y = b \cdot x + g @@ the hypothesis, used with r, and with b for a
+\qquad \text{first}:\ b \cdot (x + q \cdot y) = b \cdot q \cdot y + r \cdot y + g = \htmlClass{new}{a \cdot y + g} @@ spread for times over plus; the given (the swap axiom); regroup for plus, turn-about for plus; then a · y = b · q · y + r · y by spread for times over plus
+\qquad \text{second}:\ a \cdot y = b \cdot q \cdot y + r \cdot y = \htmlClass{new}{b \cdot (q \cdot y + x) + g} @@ spread for times over plus; the given; regroup for plus; spread for times over plus
+\forall b\;\psi(b) \quad \blacksquare @@ add an option in each case; reason by cases; the strong induction technique
+  </pre>
+  <p data-pid="9e092d">Each case lands the gcd on the other side from where it was one step up the column, which is why both sides must be allowed.</p>
+  <p data-pid="b64f03">When u ≠ 0 the first side can always be had. If b = 0 it is u · 1 = 0 · 0 + u. Otherwise, start from b · y = u · x + g, and take t = x + y. Choose c and e with x + c = b · t and y + e = u · t (times-does-not-lessen and at-most-is-adding give them). Then u · c + u · x = u · b · t = b · e + b · y = b · e + u · x + g, by spread for times over plus, regroup for times and turn-about for times. And cancel for plus leaves u · c = b · e + g.</p>
+  <section class="slides" id="sl13a"><div class="eyebrow">The slides · backwards · ← → keys work</div></section>
+  <section class="slides" id="sl13b"><div class="eyebrow">The slides · the plus-only combination technique · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4j13.1</span><span class="ph know">know</span>What does choosing-counts-parts say, and how does its step use Zoe?</li>
+      <li><span class="qid">4j13.1</span><span class="ph know">know</span>What does the plus-only combination technique say, and why must it allow either side?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="4j14">
-  <h2 class="sthead"><span class="stno">4j14</span>The product identity</h2>
-  <p class="stands">Stands on 4j13 (choosing-counts-parts), 4j11 (factorials) and 4g11 (cancel for times).</p>
-  <p data-pid="1fcd1f">Now the product identity, which says that counting with order counts each choice a fixed number of times. Arrange all k + j members of a set and call the first k places the chosen part. Each k-member part turns up once for every arrangement of itself and every arrangement of the j left behind.</p>
-  <p data-pid="df9f16">Product-identity technique: <b>choosing k of k + j things, then arranging the k chosen and the j left, counts every arrangement of all k + j once.</b></p>
-  <div class="eqline" data-tex="\begin{aligned}&amp;\textbf{Product-identity technique:}\quad\\ &amp;\quad \binom{k+j}{k} \cdot k! \cdot j! = (k+j)!\end{aligned}"></div>
-  <p data-pid="acf4b1">Plan: induct on n = k + j, splitting the table entry by row-step.</p>
-  <pre class="lines" data-k="ember" data-label="this step: the product-identity technique, by induction on n = k + j">
-\varphi(n):\ \forall k\,\forall j\ \big(k + j = n \Rightarrow \tbinom{n}{k} \cdot k! \cdot j! = n!\big) @@ the condition
-n = 0:\ \ k = j = 0,\ \ 1 \cdot 1 \cdot 1 = 1 = 0! @@ a sum is 0 only when both are (zero-or-a-next, plus-a-next, next-never-empty); choose-edges
-k = 0:\ \ \tbinom{S(n)}{0} \cdot 0! \cdot S(n)! = S(n)! @@ choose-edges; counted-recursion's start; one-changes-nothing. And j = 0 the same, by choose-ends
-k = S(k'),\ \ j = S(j'):\ \ k' + j = n = k + j' @@ next-on-the-left for plus, plus-a-next; different-nexts
-\qquad \tbinom{S(n)}{k} \cdot k! \cdot j! = \tbinom{n}{k'} \cdot k! \cdot j! + \tbinom{n}{k} \cdot k! \cdot j! @@ row-step; spread for times over plus (with turn-about for times)
-\qquad \phantom{=} = \big(\tbinom{n}{k'} \cdot k'! \cdot j!\big) \cdot k + \big(\tbinom{n}{k} \cdot k! \cdot j'!\big) \cdot j @@ counted-recursion's step for k! and j!; regroup for times, turn-about for times
-\qquad \phantom{=} = n! \cdot k + n! \cdot j = n! \cdot S(n) = \htmlClass{new}{S(n)!} @@ the hypothesis, twice; spread for times over plus; k + j = S(n); turn-about for times and counted-recursion's step
-\forall n\;\varphi(n) \quad \blacksquare @@ the induction technique
+  <h2 class="sthead"><span class="stno">4j14</span>A prime that divides a product</h2>
+  <p class="stands">Stands on 4j13 (plus-only combination), 4j6 (settled-divides) and 4j3 (divides-the-rest).</p>
+  <p data-pid="e6f0f2">Prime-divides-a-factor technique: <b>a prime that divides a product of two numbers divides one of them.</b> In marks: if p is prime and p ∣ u · b, then p ∣ u or p ∣ b.</p>
+  <p data-pid="dcf419">Example: 3 ∣ 4 · 6 = 24, and 3 ∣ 6.</p>
+  <p data-pid="c0b837">Plan: split on whether p divides u. If not, their gcd is 1, so plus-only combination gives a line with 1 added; multiply it by b.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the prime-divides-a-factor technique, from plus-only combination">
+p \text{ prime},\ \ p \mid a \cdot b @@ given
+p \mid a \lor p \nmid a @@ the settled-divides technique
+\text{case } p \nmid a:\ \ \gcd(p, a) = 1 @@ the gcd divides p, so is 1 or p; p would divide a
+\qquad p \cdot x = a \cdot y + 1 \ \lor\ a \cdot y = p \cdot x + 1 @@ the plus-only combination technique
+\qquad p \cdot x \cdot b = a \cdot b \cdot y + b \ \lor\ a \cdot b \cdot y = p \cdot x \cdot b + b @@ the swap axiom, times b; spread for times over plus, turn-about for times, regroup for times
+\qquad p \mid p \cdot x \cdot b,\ \ p \mid a \cdot b \cdot y @@ divides-a-multiple, twice
+\qquad \htmlClass{new}{p \mid b} @@ divides-the-rest in each case: p divides one side and the other piece
+p \mid a \lor p \mid b \quad \blacksquare @@ add an option; reason by cases
   </pre>
-  <p data-pid="7c590a">So:</p>
-  <div class="eqline" data-tex="\tbinom{5}{2} \cdot 2! \cdot 3! = 10 \cdot 2 \cdot 6 = 120 = 5!"></div>
-  <p data-pid="422c07">Three consequences. Choosing the k who serve is choosing the j who don't:</p>
-  <div class="eqline" data-tex="\tbinom{k+j}{k} = \tbinom{k+j}{j}"></div>
-  <p data-pid="60e234">For both times k! · j! give (k + j)!, and k! · j! ≠ 0 (no-zero-product), so cancel for times cancels it. Adding a row counts every part once, sorted by size, since every k-member part of a finite set is settled:</p>
-  <div class="eqline" data-tex="\tbinom{n}{0} + \tbinom{n}{1} + \cdots + \tbinom{n}{n} = 2^n"></div>
-  <p data-pid="e04555">Row 4 is 1, 4, 6, 4, 1, and 16 = 2⁴. And 0! = 1 is forced once more: product-identity at k = 0 reads 1 · 0! · n! = n!.</p>
-  <p data-pid="dc699b">A treatise on this table, finished in the middle of the seventeenth century and printed after its author's death, proved its properties by passing from each row to the next. It is one of the first arguments by induction set out as such. The table was known long before. It was printed in China in the thirteenth century, crediting a writer two centuries earlier, and its rule was known in Baghdad around the year 1000. Old Sanskrit rules of verse count, in effect, the lines of n syllables with exactly k long ones, which is n choose k.</p>
-  <section class="slides" id="sl14a"><div class="eyebrow">The slides · the product-identity technique · ← → keys work</div></section>
-  <section class="slides" id="sl14b"><div class="eyebrow">The slides · symmetry · ← → keys work</div></section>
+  <p data-pid="1a1a00">The second line is where primeness was used, and without it the technique is false. 6 ∣ 4 · 9 = 36, yet 6 divides neither 4 nor 9: its 2 went to the 4 and its 3 to the 9.</p>
+  <section class="slides" id="sl14"><div class="eyebrow">The slides · the prime-divides-a-factor technique · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4j14.1</span><span class="ph know">know</span>What does the product identity say? <br>Why does it force 0! = 1?</li>
+      <li><span class="qid">4j14.1</span><span class="ph know">know</span>What does prime-divides-a-factor say, and where is primeness used?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="4j15">
-  <h2 class="sthead"><span class="stno">4j15</span>A sum raised to a power</h2>
-  <p class="stands">Stands on 4j13 (choosing-counts-parts), 4j7 (Σ) and 4f (spread for times over plus, powers).</p>
-  <p data-pid="cf1a0e">4f warned that (p + b)² is not p² + b². Here is what it is, for every power.</p>
-  <p data-pid="7fa18e">Example: multiply out (p + b) · (p + b) · (p + b) by spread for times over plus. Each term comes from choosing p or b in each bracket, a word like p·p·b or b·p·b, and there are 2³ = 8 words. The words with one b are p·p·b, p·b·p, b·p·p, one for each choice of the bracket that gives b. That is <span data-tex-inline="\binom{3}{1} = 3"></span> words, and each is p² · b by turn-about for times and regroup for times. So (p + b)³ = p³ + 3 · p² · b + 3 · p · b² + b³, with row 3 as the counts.</p>
-  <p data-pid="fb25ab">Two-term-power technique: <b>row n of the table gives the counts of the terms when a sum of two numbers is raised to the n.</b></p>
-  <div class="eqline" data-tex="\begin{aligned}&amp;\textbf{Two-term-power technique:}\quad (a + b)^n \\ &amp;\quad = \sum_{k \le n} \binom{n}{k} \cdot a^{j} \cdot b^{k},\quad \text{where in each term } j \text{ }\\ &amp;\quad \text{is the one number with } j + k = n\end{aligned}"></div>
-  <p data-pid="fb826e">(The j exists by at-most-is-adding, since k ≤ n, and there is one by cancel for plus.)</p>
-  <p data-pid="b9a1db">Plan: induct on n, moving terms of sums about. It needs three techniques about Σ, each a short induction on the length, step by regroup for plus, turn-about for plus or spread for times over plus.</p>
-  <p data-pid="f2a38c">Termwise technique: <b>sums add term by term.</b> Factor-out technique: <b>a factor of every term comes out of the sum.</b> First-term-off technique: <b>a sum of S(n) terms is its first term plus the sum of the rest.</b> In marks, in that order:</p>
-  <div class="eqline" data-tex="\begin{aligned} &amp;\sum_{i \lt n} (s(i) + t(i)) = \sum_{i \lt n} s(i) + \sum_{i \lt n} t(i)\\ &amp;\sum_{i \lt n} c \cdot t(i) = c \cdot \sum_{i \lt n} t(i)\\ &amp;\sum_{i \lt S(n)} t(i) = t(0) + \sum_{i \lt n} t(S(i)) \end{aligned}"></div>
-  <pre class="lines" data-k="ember" data-label="this step: the two-term-power technique, by induction on n. Write B_n for the right side">
-B_0 = \tbinom{0}{0} \cdot a^0 \cdot b^0 = 1 = (a + b)^0 @@ sum-of-none, sum-one-more; choose-edges, power-zero, one-changes-nothing: the base
-(a + b) \cdot B_n = a \cdot B_n + b \cdot B_n @@ spread for times over plus, with turn-about for times
-a \cdot B_n = a^{S(n)} + \sum_{k \lt n} \tbinom{n}{S(k)} \cdot a^{S(j')} \cdot b^{S(k)},\ \ j' + S(k) = n @@ factor-out; first-term-off splits off k = 0; power-of-a-next, regroup for times, turn-about for times
-b \cdot B_n = \sum_{k \le n} \tbinom{n}{k} \cdot a^{j} \cdot b^{S(k)},\ \ j + k = n @@ factor-out; power-of-a-next, regroup for times, turn-about for times
-B_{S(n)} = a^{S(n)} + \sum_{k \le n} \big(\tbinom{n}{k} + \tbinom{n}{S(k)}\big) \cdot a^{j} \cdot b^{S(k)} @@ first-term-off; row-step; j + S(k) = S(n) exactly when j + k = n (plus-a-next, different-nexts)
-\phantom{B_{S(n)}} = \htmlClass{new}{b \cdot B_n} + a^{S(n)} + \sum_{k \le n} \tbinom{n}{S(k)} \cdot a^{j} \cdot b^{S(k)} @@ spread for times over plus; termwise; regroup for plus, turn-about for plus
-\phantom{B_{S(n)}} = b \cdot B_n + \htmlClass{new}{a \cdot B_n} @@ the term at k = n is 0 (choose-ends); for k &lt; n, S(j′) = j (next-on-the-left for plus, cancel for plus)
-(a + b)^{S(n)} = (a + b)^n \cdot (a + b) = \htmlClass{new}{B_{S(n)}} \quad \blacksquare @@ power-of-a-next; the hypothesis; turn-about for times; the induction technique
-  </pre>
-  <p data-pid="76c6dc">Read it in words before reading it in marks. <b>To raise a sum to the n, add up every way of taking k b's and the rest p's, each counted as often as there are ways to choose which brackets give the b's.</b></p>
-  <p data-pid="dd4f97">Two checks. When both numbers are 1, it says 2ⁿ is the sum of row n, which choosing-counts-parts and separate-piles said already. When they are 10 and 1, it says 11² = 121, 11³ = 1331, 11⁴ = 14641. Those are the rows themselves, read as numerals, until an entry reaches 10 and carries.</p>
-  <aside class="nature">
-    <div class="eyebrow">Anexact, yet rigorous · counting</div>
-    <p data-pid="836223">Random things in a crowd make smooth, steady patterns, and counting is the first tool that shows the pattern. Toss 4 coins. Which coins land heads is a choice of some of the 4, so the ways to get k heads number 4 choose k: 1, 4, 6, 4, 1, out of 16 ways in all. The counts pile up in the middle. 6 of the 16 ways give two heads, and 14 of the 16 give one, two or three. You cannot say what 4 coins will do. You can say the shape of the pile.</p>
-    <p data-pid="f42490"><b>The spread is part of the answer, not noise around it.</b></p>
-    <p data-pid="fc6a04">A leaf falling at random lands anywhere; a thousand leaves land in a pile with a definite shape. The pile is the counting done for you.</p>
-    <p class="bait" data-pid="0c19e8">Toss 10 coins. How many of the 1024 ways give between 3 and 7 heads? What does the answer say about where 10 coins usually land?</p>
-  </aside>
-  <section class="slides" id="sl15a"><div class="eyebrow">The slides · multiplying out · ← → keys work</div></section>
-  <section class="slides" id="sl15b"><div class="eyebrow">The slides · the two-term-power technique · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">4j15</span>Products of lists</h2>
+  <p class="stands">Stands on 4i3 (counted-recursion), 4i4 (lists) and 4j14 (prime-divides-a-factor).</p>
+  <p class="eqline" data-pid="6b4b4c">From here on, for a list p of numbers of length k, <span data-tex-inline="p_1 \cdot p_2 \cdot \cdots \cdot p_k"></span> names P(k), where P is fixed by counted-recursion with this start and step, the step when S(i) ≤ k:</p>
+  <div class="eqline" data-tex="\begin{aligned} &amp;P(0) = 1\\ &amp;P(S(i)) = P(i) \cdot p_{S(i)} \end{aligned}"></div>
+  <p data-pid="228068">Past the last entry the step changes nothing. It is the <b>product</b> of the list; the empty list's product is 1.</p>
+  <p class="eqline" data-pid="f22a76">Here P is a letter for the function of this line, and P(k) is its value at k by 4d's line. It is not 0a's P(a), a statement with a in its gap. Capitals for statements were 0a's habit, not a rule, and the letter is free once the line is done. The product of a list is also a new use of 4g's word; 4g's product a · b of two numbers keeps its meaning.</p>
+  <p data-pid="930a8d">Example: 2 · 3 · 5 = (1 · 2 · 3) · 5 = 30.</p>
+  <p data-pid="3a8b15">Two techniques about these products follow, each by induction along the list. Entry-divides technique: <b>each entry of a list divides the product of the list.</b> It is proved by divides-a-multiple at each step.</p>
+  <p data-pid="0f2247">Prime-divides-a-list technique: <b>a prime that divides the product of a list divides one of its entries.</b> In marks: a prime that divides p₁ · ⋯ · pₖ divides some entry. It is proved by prime-divides-a-factor at each step, the empty product 1 having no prime divisor (divisor-not-past).</p>
+  <p data-pid="f70244">A product of a list of numbers none of which is 0 is not 0, by no-zero-product at each step.</p>
+  <section class="slides" id="sl15"><div class="eyebrow">The slides · products of lists · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4j15.1</span><span class="ph know">know</span>What does the two-term-power technique say, in words?</li>
+      <li><span class="qid">4j15.1</span><span class="ph know">know</span>What is the product of a list, and what is the empty list’s product? <br>What do entry-divides and prime-divides-a-list say?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="4j16">
-  <h2 class="sthead"><span class="stno">4j16</span>Illegal moves</h2>
-  <p class="stands">Stands on 4j1 to 4j15.</p>
-  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
-\text{committees of 2 from 4: } 4 \cdot 3 = 12\,? @@ each committee was counted in both orders: 12 = 6 · 2, and there are 6. Ask: if two choices swap, is the outcome different?
-\text{a chair and a scribe from 4: } \tbinom{4}{2} = 6\,? @@ the other way about: here order matters, and there are 4 · 3 = 12
-3 + 4 \text{ outfits from 3 shirts and 4 trousers}\,? @@ a shirt and then trousers is stages: multiply. Add only separate piles: a shirt or else a sweater
-\tbinom{k+j}{k} \cdot k! = (k + j)!\,? @@ forgets the j left behind, who were arranged too: it would make the 4-member set's pairs number 12
-0! = 0\,? @@ then product-identity at k = 0 would read 0 = n!, which fails: n! ≠ 0 (no-zero-product). The empty product is 1
-\text{BOOK has } 4! = 24 \text{ orders}\,? @@ the two O's swap without changing anything, so each order was counted twice: 24 = 12 · 2, and there are 12
-X \text{ has } 3 \text{ and } 4 \text{ members}\,? @@ one-count: the number of members is unique; that is what makes “how many” a question with one answer
-\mathcal P(X) \text{ has } 2^n \text{ members, for any } X \text{ with } n\,? @@ settled-parts counts the settled parts. That every part is settled is rung 7's
-(a + b)^2 = a^2 + b^2\,? @@ the words a · b and b · a are missing: (a + b)² = a² + 2 · a · b + b², row 2
+  <h2 class="sthead"><span class="stno">4j16</span>The primes never run out</h2>
+  <p class="stands">Stands on 4j10 (prime-divisor), 4j15 (entry-divides) and 4j3 (divides-the-rest).</p>
+  <p data-pid="b70f87">The oldest proof does not say that there are endlessly many primes. It says that the primes are more than any multitude of primes you care to set out: hand it a list, and it finds one not on it.</p>
+  <p data-pid="58226a">Endless-primes technique: <b>for any list of primes p₁, ⋯, pₖ there is a prime that is none of them.</b></p>
+  <p data-pid="312abb">Plan: multiply the list and add 1. A prime divisor of that number cannot be on the list, since it would then divide 1.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the endless-primes technique">
+p_1, \cdots, p_k \text{ primes};\ \ N = p_1 \cdot \cdots \cdot p_k + 1 @@ given; the product by counted-recursion
+p_1 \cdot \cdots \cdot p_k \ne 0,\ \text{so } 1 \lt N @@ no-zero-product along the list; next-is-not-past gives 1 ≤ the product; keep-order for plus
+q \text{ prime},\ \ q \mid N @@ the prime-divisor technique
+\text{suppose } q = p_i,\ \ 1 \le i \le k @@ aiming to refute
+\qquad q \mid p_1 \cdot \cdots \cdot p_k @@ the entry-divides technique
+\qquad q \mid 1,\ \text{so } q \le 1 @@ divides-the-rest; divisor-not-past
+\qquad 1 \lt q:\ \ \bot @@ q is prime; any-two-compare; clash
+\htmlClass{new}{q \ne p_i \text{ for every } i} \quad \blacksquare @@ refute; speak of everything: q is a prime not on the list
   </pre>
-  <section class="slides" id="sl16"><div class="eyebrow">The slides · a fake · ← → keys work</div></section>
+  <p data-pid="2e4274">A common misreading is that N itself is prime. It need not be: 2 · 3 · 5 · 7 · 11 · 13 + 1 = 30031 = 59 · 509. But 59 and 509 are both new, which is all the technique says.</p>
+  <section class="slides" id="sl16"><div class="eyebrow">The slides · the endless-primes technique · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4j16.1</span><span class="ph know">know</span>Why is “committees of 2 from 4: 4 · 3 = 12” an illegal move?</li>
+      <li><span class="qid">4j16.1</span><span class="ph know">know</span>What does the endless-primes technique say, and why is the prime divisor of N not on the list?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="4j17">
-  <h2 class="sthead"><span class="stno">4j17</span>Running it backwards</h2>
-  <p class="stands">Stands on 4j1 to 4j15.</p>
-  <p data-pid="7567a6"><b>Given a count, find the question's numbers.</b></p>
-  <p data-pid="f32753">Example: if 15 pairs can be formed from a group, how many are in it? Call the number m + 1. The pairs counted with order number (m + 1) · m, each pair twice, so (m + 1) · m = 2 · 15 = 30. The two neighbouring numbers whose product is 30 are 6 and 5: there are 6.</p>
-  <p data-pid="433fdf">In (p + b)⁷, which terms have count 35? Row 7 is 1, 7, 21, 35, 35, 21, 7, 1: two of them, p⁴ · b³ and p³ · b⁴, the same choice read from either end.</p>
-  <p data-pid="6e5d7d">Wanting the number of members of a set, find a matching with a number, or split the set into separate piles (separate-piles) or into stages (stages-multiply). Wanting to show two counts agree, match the two sets, as choosing-counts-parts matched the parts with Zoe to the parts of the rest. Found upward; written downward.</p>
-  <section class="slides" id="sl17"><div class="eyebrow">The slides · backwards · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">4j17</span>Every number splits into primes</h2>
+  <p class="stands">Stands on 4j10 (prime-divisor), 4j15 (products of lists) and 4h12 (strong induction).</p>
+  <p data-pid="d59343">To say “one way” the order must be fixed, since 2 · 3 and 3 · 2 are the same product by turn-about for times. The order that suits counted-recursion's step, which sets each new entry at the end, is from the greatest prime to the least.</p>
+  <p class="eqline" data-pid="85696d">From here on, a <b>prime list</b> for n is a list <span data-tex-inline="p_1, \cdots, p_k"></span> of primes, each at least the next (<span data-tex-inline="p_{S(i)} \le p_i"></span> whenever S(i) ≤ k), whose product is n.</p>
+  <p data-pid="bbbcfd">Example: 5, 3, 2 is a prime list for 30: each entry is prime, each is at least the next, and the product is 30.</p>
+  <p data-pid="e6f653">Prime-list technique: <b>every number other than 0 has a prime list.</b></p>
+  <p data-pid="ff647d">Plan: take the least prime divisor and put it at the end. Then build the rest of the list for what is left, by strong induction.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the prime-list technique, by strong induction">
+\varphi(n):\ 1 \le n \Rightarrow n \text{ has a prime list} @@ the condition
+n = 1:\ \ \text{the empty list} @@ its product is 1
+1 \lt n:\ \ p \text{ the least divisor of } n \text{ above } 1 @@ the prime-divisor technique: p is prime
+\qquad n = m \cdot p,\ \ 1 \le m,\ \ m \lt n @@ ﹀ ∣, turn-about for times; m ≠ 0; m = m · 1 &lt; m · p by keep-order for times
+\qquad m \text{ has a prime list } q_1, \cdots, q_j @@ the hypothesis, used with m
+\qquad p \le q_i \text{ for each } i @@ q_i ∣ m ∣ n (entry-divides, chain for divides), and p is least
+\qquad \htmlClass{new}{q_1, \cdots, q_j, p} \text{ is a prime list for } n @@ the product's step: (q₁ · ⋯ · q_j) · p = m · p = n
+\forall n\;\varphi(n) \quad \blacksquare @@ the strong induction technique; any-two-compare and settled-order settle the cases
+  </pre>
+  <section class="slides" id="sl17"><div class="eyebrow">The slides · the prime-list technique · ← → keys work</div></section>
+  <section class="pic" id="pic2">
+    <div class="eyebrow">The picture · every way of splitting ends in the same primes</div>
+    <div class="panel">
+      <div class="knobs"><div class="knob"><label for="tn">n</label><input type="range" id="tn" min="2" max="600" step="1" value="360"><output id="otn"></output></div></div>
+      <div class="cap">Tap any sand node (a number above 1 that is not prime) to split it another way. Ember leaves are primes. However you split, the leaves are the same primes, and they make the one prime list, written from the greatest to the least.</div>
+      <canvas id="cvT"></canvas>
+      <div class="eqbox" id="eqT"></div>
+    </div>
+  </section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4j17.1</span><span class="ph know">know</span>Given a count, how do you find the question’s numbers? <br>Wanting the number of members of a set, what do you look for?</li>
+      <li><span class="qid">4j17.1</span><span class="ph know">know</span>What is a prime list for n, and why is its order fixed from greatest to least?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4j18">
+  <h2 class="sthead"><span class="stno">4j18</span>In only one way</h2>
+  <p class="stands">Stands on 4j17, 4j15 (prime-divides-a-list) and 4h11 (cancel for times).</p>
+  <p data-pid="4fd8c1">One-prime-list technique: <b>a number has only one prime list.</b></p>
+  <p data-pid="633909">Plan: the last entry of a prime list is pinned down by n alone, and then the rest is a prime list for a smaller number. Its accepted name, together with prime-list, is in the basement.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the one-prime-list technique, by strong induction">
+\varphi(n):\ \text{any two prime lists for } n \text{ are one list} @@ the condition
+n = 1:\ \ \text{both lists are empty} @@ a list with an entry has a product at least that entry (times-does-not-lessen), so at least 2
+1 \lt n:\ \ \text{last entries } p \text{ and } p' @@ both lists have entries
+\qquad p \text{ is the least prime that divides } n @@ a prime dividing n divides an entry (prime-divides-a-list), is that entry, and every entry is at least the last
+\qquad \htmlClass{new}{p = p'} @@ the same for p′; a least member is unique (4h)
+\qquad \text{the rests have one product } m,\ \ m \lt n @@ cancel for times, since p ≠ 0; keep-order for times
+\qquad \text{the rests are one list} @@ the hypothesis, used with m
+\qquad \text{the lists are one list} @@ same length, same entry at every place: same-outputs
+\forall n\;\varphi(n) \quad \blacksquare @@ the strong induction technique
+  </pre>
+  <p data-pid="d79bcf">So 360 has exactly one prime list, 5, 3, 3, 2, 2, 2. Every other way of writing 360 as a product of primes is a rearrangement of it, which turn-about for times and regroup for times allow. Gathered into powers by power-of-a-next, 360 = 2³ · 3² · 5.</p>
+  <p data-pid="6e7323">Now the reason 1 is not prime. If it were, 6 = 3 · 2 = 3 · 2 · 1 = 3 · 2 · 1 · 1 would have as many lists as you liked, and the technique would need an exception.</p>
+  <p data-pid="562f23">With prime lists in hand, gcds have a second route. 84 = 7 · 3 · 2 · 2 and 36 = 3 · 3 · 2 · 2 share 3 · 2 · 2 = 12, and 12 = gcd(84, 36). For small numbers that is quick. For large numbers finding the primes is very slow and the gcd algorithm is very fast, which is why the algorithm is how a gcd is found in practice.</p>
+  <p data-pid="9a4a1a">Writing a number as a product of primes, as 360 = 2³ · 3² · 5, has the accepted name prime factorisation.</p>
+  <section class="slides" id="sl18"><div class="eyebrow">The slides · the one-prime-list technique · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4j18.1</span><span class="ph know">know</span>How does one-prime-list pin down the last entry? <br>Why is 1 not prime?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4j19">
+  <h2 class="sthead"><span class="stno">4j19</span>Twice a square is never a square</h2>
+  <p class="stands">Stands on 4j8 (even-square), 4j5 (bounded-some), 4h15 (least-member) and 4g4 (powers).</p>
+  <p data-pid="11837f">The last technique uses the high mark: p² = p¹ · p = p · p, by power-of-a-next and power-one.</p>
+  <p data-pid="a1fdce">No-double-square technique: <b>twice a square, other than 0, is never a square.</b> In marks: there are no numbers p and q with q ≠ 0 and p² = 2 · q².</p>
+  <p data-pid="ac66d1">Example: 2 · 1² = 2, 2 · 2² = 8 and 2 · 3² = 18, and none of 2, 8, 18 is a square.</p>
+  <p data-pid="3c6328">Plan: take the least q that works and make a smaller one, which cannot be. The set of q's that work has a some in it, “for some p”. So first that some is given a bound: p ≤ p · p (times-does-not-lessen, or p = 0) = 2 · q².</p>
+  <pre class="lines" data-k="ember" data-label="this step: the no-double-square technique, by the least q">
+\text{assume } p^2 = 2 \cdot q^2,\ \ q \ne 0 @@ aiming to refute; the somes used
+X = \{q \in \mathbb N : q \ne 0 \land \exists p \le 2 \cdot q^2\ (p^2 = 2 \cdot q^2)\} @@ a sift of ℕ, settled by bounded-some and settled-order
+q \in X @@ p ≤ p² = 2 · q² (times-does-not-lessen, or p = 0); ︿ the sift
+m \text{ least in } X;\ \ p'^2 = 2 \cdot m^2 @@ the least-member technique; use the some
+p' \text{ is even}:\ \ p' = 2 \cdot r @@ 2 ∣ p′ · p′; the even-square technique
+2 \cdot (2 \cdot r^2) = 2 \cdot m^2,\ \text{so } \htmlClass{new}{m^2 = 2 \cdot r^2} @@ the swap axiom, regroup for times, turn-about for times; cancel for times, cancelling 2 ≠ 0
+r \ne 0 @@ r = 0 gives m² = 0, against m ≠ 0 (no-zero-product)
+r \lt m @@ m² = r² + r² with r² ≠ 0, so r² &lt; m² (less-is-adding); m ≤ r would give m² ≤ r² (keep-order for times twice)
+r \in X @@ m ≤ m² = 2 · r² (times-does-not-lessen): m is the witness
+m \le r \text{ and } r \lt m;\ \ \bot @@ m is least; chain for less; no-self-membership; clash
+\htmlClass{new}{\neg\exists p\,\exists q\,(q \ne 0 \land p^2 = 2 \cdot q^2)} \quad \blacksquare @@ refute; the somes close
+  </pre>
+  <p data-pid="396a87">Look at the shape. A solution (p, q) made a solution (q, r) with a smaller second number, which would make another, and so on down. The numbers have no room for that, because the least member is at the bottom. Rung 5 reads this technique as a statement about fractions.</p>
+  <p data-pid="7e8828">This way of arguing has an old name, descent. From a supposed case, produce a smaller one, and the supposed case falls, since the numbers cannot go down forever.</p>
+  <section class="slides" id="sl19"><div class="eyebrow">The slides · the no-double-square technique · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4j19.1</span><span class="ph know">know</span>What does the no-double-square technique say? <br>What is descent?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4j20">
+  <h2 class="sthead"><span class="stno">4j20</span>Illegal moves</h2>
+  <p class="stands">Stands on 4j1 to 4j19.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+d \mid a + b \Rightarrow d \mid a\,? @@ divides-a-sum run backwards: 3 ∣ 1 + 2, and 3 ∤ 1. divides-the-rest needs d to divide one part already
+d \mid a \cdot b \Rightarrow d \mid a \lor d \mid b\,? @@ prime-divides-a-factor without “prime”: 6 ∣ 4 · 9, 6 ∤ 4, 6 ∤ 9
+a \mid n \land b \mid n \Rightarrow a \cdot b \mid n\,? @@ 4 ∣ 12, 6 ∣ 12, and 24 ∤ 12: 4 and 6 share a 2, counted twice
+12 \mid 3 = 4\,? @@ ∣ makes a statement, not a number; and the divisor is on the left: 3 ∣ 12
+0 \mid 5\,? @@ false: 0 · k = 0 for every k. But 5 ∣ 0 is true: 0 = 5 · 0
+17 = 5 \cdot 2 + 7 \text{ as the division} @@ a true sameness, not the split: 7 &lt; 5 fails. The split is 17 = 5 · 3 + 2
+\text{least-member on } \{q : \exists p\ (p^2 = 2 \cdot q^2)\} @@ the some has no bound, so the set is not shown settled; bound p by 2 · q² first, then bounded-some
+N = p_1 \cdot \cdots \cdot p_k + 1 \text{ is prime}\,? @@ 2 · 3 · 5 · 7 · 11 · 13 + 1 = 30031 = 59 · 509. Its prime divisors are new; N need not be prime
+n \cdot n + n + 41 \text{ is prime for every } n\,? @@ it is for n from 0 to 39, and at 40 it is 40 · 41 + 41 = 41 · 41. Checking cases is not a proof
+1 \text{ is prime}\,? @@ 1 &lt; 1 fails, on purpose: otherwise 6 = 3 · 2 = 3 · 2 · 1 and one-prime-list would need an exception
+  </pre>
+  <section class="slides" id="sl20"><div class="eyebrow">The slides · a fake · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4j20.1</span><span class="ph know">know</span>Why is “d ∣ a · b, so d ∣ a or d ∣ b” an illegal move?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4j21">
+  <h2 class="sthead"><span class="stno">4j21</span>Running it backwards</h2>
+  <p class="stands">Stands on 4j1 to 4j19.</p>
+  <p data-pid="7d116c">Wanting d ∣ n, find the k. Wanting d ∤ n, find the remainder and show it is not 0, or squeeze n strictly between two multiples of d with keep-order for times.</p>
+  <p data-pid="48c425"><b>Wanting a least member, first show the set settled, bounding every some (bounded-some).</b></p>
+  <p data-pid="481e88">Wanting gcd(u, b), run the algorithm forwards; wanting the plus-only combination line, run it backwards from the foot. Wanting a prime list, take least prime divisors one at a time and set each at the end.</p>
+  <p data-pid="790ba6">Wanting to show a number has no divisor above 1 but itself, check only up to the number, which bounded-some allows. Found upward; written downward.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4j21.1</span><span class="ph know">know</span>Wanting a least member on this step, what comes first? <br>Wanting d ∤ n, what are the two routes?</li>
     </ol>
   </section>
 </section>
@@ -458,24 +565,26 @@ X \text{ has } 3 \text{ and } 4 \text{ members}\,? @@ one-count: the number of m
   <div class="eyebrow">Special challenges · there if you want them</div>
   <h2>Special challenges</h2>
   <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
-  <div class="chq"><span class="chid">4j.4.1</span><span class="tagq">build</span>Make a counting question of your own, not about choosing, whose answer is an entry of row 4 of the choosing table, and prove its answer by matching its set with a set of parts.</div>
-  <div class="chq"><span class="chid">4j.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="X \text{ has } n \text{ members}"></span></span>Count the matchings between the empty set and itself.<br>Count the parts of X with 0 members.</div>
-  <div class="chq"><span class="chid">4j.4.3</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="L: \text{the lists of length } n \text{ from } \{0, 1\}"></span></span>Count L by stages, and again by sorting its lists by how many entries are 1.<br>Write the sameness the two counts give.</div>
-  <div class="chq"><span class="chid">4j.4.4</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="X \text{ has } S(n) \text{ members},"></span> <span data-tex-inline="Y \text{ has } n,"></span> <span data-tex-inline="f : X \to Y"></span></span>By induction on n, prove that two different members of X have the same value under f.</div>
-  <div class="chq"><span class="chid">4j.4.5</span><span class="tagq">seam</span>Toss a coin twice; stop at the first head. One reckoning finds three ways: a head at once; a tail, then a head; a tail, then a tail. Two of the three show a head. Count the ways yourself.<br>Are these three the ways to count?</div>
+  <div class="chq"><span class="chid">4j.4.1</span><span class="tagq">build</span>Define a kind of number of your own by a “from here on” line using divides, and find its two least members. <br>Prove one fact about every member of your kind.</div>
+  <div class="chq"><span class="chid">4j.4.2</span><span class="tagq">edge</span>Settle from the lines whether 0 divides 0, whether 0 is even, whether 0 is prime, and whether 2 divides 0.</div>
+  <div class="chq"><span class="chid">4j.4.3</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="n \neq 0,"></span> <span data-tex-inline="n \text{ and } n + 1 \text{ share no divisor but } 1,"></span> <span data-tex-inline="P = n \cdot (n + 1)"></span></span>From these alone, prove that P has a prime divisor that n does not have.<br>Settle whether that shows the primes have no greatest member.</div>
+  <div class="chq"><span class="chid">4j.4.4</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="u \mid b \land b \mid u \Rightarrow u = b,"></span> <span data-tex-inline="u \mid b \cdot b,"></span> <span data-tex-inline="b \mid u \cdot u"></span></span>Settle whether u and b must be the same.</div>
+  <div class="chq"><span class="chid">4j.4.5</span><span class="tagq">seam</span>The step’s line says 1 is not prime. A table of primes printed in 1914 begins 1, 2, 3, 5, 7. <br>Which is right?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r04i.html">← 4i · divides, remainders and primes</a><a href="r04k.html">4k · what a recipe for answers is made of →</a></nav>
+<nav class="nextrung"><a href="r04i.html">← 4i · writing numbers</a><a href="r04k.html">4k · counting choices →</a></nav>
 
 <section class="extra basement">
   <div class="eyebrow">The basement · there if you want it</div>
   <h3>Who said it first</h3>
-  <p>The schoolboy is Gauss, in the story told by Sartorius von Waltershausen, who knew him. The treatise is Pascal's. Yang Hui printed the table in 1261, crediting Jia Xian; al-Karaji knew the rule; the rules of verse go under Pingala's name. 3b's mark of an endless collection is Dedekind's.</p>
-  <aside class="voice para"><p>Sartorius von Waltershausen, who knew Gauss, tells that as a schoolboy Gauss was set, with his class, the adding up of a long run of numbers, and laid his slate down with the answer almost as soon as the task was given.</p><cite>Sartorius von Waltershausen, Gauss zum Gedächtniss (1856); paraphrase</cite></aside>
-  <aside class="voice para"><p>Pascal wrote a treatise on this table, finished by 1654 and printed after his death, and proved its properties by an argument that passes from each row to the next, one of the first arguments by induction set out as such. He was far from the first to know the table: Yang Hui printed it in 1261, crediting Jia Xian two centuries earlier; al-Karaji knew the rule in Baghdad around 1000; and the rules of Sanskrit prosody that go under Pingala's name count, in effect, the lines of n syllables with exactly k long ones, which is n choose k.</p><cite>Pascal, treatise on the arithmetical table (written 1654, printed 1665); paraphrase</cite></aside>
+  <p>The older word “measures”, the older road to the remainder, the oldest definition of a prime, the gcd algorithm, the prime-divides-a-factor technique and the endless-primes proof are all Euclid's, in the Elements. The gcd algorithm is Euclid's algorithm, and prime-divides-a-factor is Euclid's lemma. The plus-only combination technique carries Bézout's name; Bachet had it for numbers a century and more before him. Descent, as a name for the argument, is Fermat's (infinite descent).</p>
+  <aside class="voice para"><p>Euclid's definition: a prime number is one that is measured by a unit alone.</p><cite>Euclid, Elements VII, definition 11; paraphrase after Heath's translation (1908)</cite></aside>
+  <aside class="voice para"><p>Euclid sets the problem of finding the greatest common measure of two numbers not prime to one another, and adds, as a corollary, that whatever measures both numbers also measures their greatest common measure.</p><cite>Euclid, Elements VII.2 and its porism; paraphrase after Heath's translation (1908)</cite></aside>
+  <aside class="voice para"><p>Euclid does not say that there are endlessly many primes. He says that the primes are more than any multitude of primes you care to set out: hand him a list, and he will find one not on it.</p><cite>Euclid, Elements IX.20; paraphrase after Heath's translation (1908)</cite></aside>
+  <aside class="voice para"><p>Fermat, describing his own methods in a letter late in life, called this way of arguing infinite descent: from a supposed case, produce a smaller one, and the supposed case falls, since the numbers cannot go down forever.</p><cite>Fermat, letter to Carcavi (1659); paraphrase</cite></aside>
   <h3>Accepted names</h3>
-  <p>A matching is also called a one-to-one correspondence, or a bijection. Separate-piles is the addition principle, and stages-multiply the multiplication principle. An arrangement is a permutation, and a part with k members picked from n is a combination. The choosing table is Pascal's triangle, after the look of its rows when they are set out evenly under each other; triangle is a geometry word, and the ladder has not built geometry yet, but the name stands. The two-term-power technique is the binomial theorem: a two-term sum is a binomial, and the entries of the table, which stand in front of the terms of its powers, are the binomial coefficients.</p>
+  <p>Division-with-remainder is the division algorithm. The plus-only combination technique is a form of Bézout's identity. A prime list is a prime factorisation, and prime-list with one-prime-list is the fundamental theorem of arithmetic, or unique factorisation.</p>
 </section>
 </div>
 
@@ -485,144 +594,147 @@ X \text{ has } 3 \text{ and } 4 \text{ members}\,? @@ one-count: the number of m
 const {tex,col,stepper}=Rung;
 const R=String.raw;
 function size(cv,ar){ const d=window.devicePixelRatio||1, W=cv.clientWidth||300, H=Math.round(W/ar); cv.width=W*d; cv.height=H*d; cv.style.height=H+'px'; const c=cv.getContext('2d'); c.setTransform(d,0,0,d,0,0); return {c,W,H}; }
-const C=(n,k)=>{ if(k<0||k>n) return 0; let r=1; for(let i=1;i<=k;i++) r=r*(n-k+i)/i; return Math.round(r); };
-const F=n=>{ let r=1; for(let i=2;i<=n;i++) r*=i; return r; };
 
-/* ---------- left: Pascal's table ---------- */
-const cvP=document.getElementById('cvP'); let view='rule', sel=[5,2], cellsP=[];
-function drawP(){
-  const {c,W,H}=size(cvP,(cvP.clientWidth||300)<480?1.0:1.15); c.fillStyle=col('--card'); c.fillRect(0,0,W,H);
-  const Rn=W<480?7:9; const lab=26, extra=view==='sum'?(W<480?52:62):0;
-  const rowH=(H-12)/(Rn+1), cw=Math.min((W-lab-extra-8)/(Rn+1),rowH*1.7);
-  cellsP=[]; c.textAlign='center'; c.textBaseline='middle';
-  const fs=Math.max(9,Math.min(14,cw*.36));
-  for(let n=0;n<=Rn;n++){ const y=8+rowH*(n+.5);
-    c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.fillText(String(n),lab/2,y+1);
-    for(let k=0;k<=n;k++){ const x=lab+cw*(k+.5); const v=C(n,k);
-      let fill=col('--sand'), ink=col('--ink');
-      if(view==='odd'){ if(v%2){ fill=col('--ember'); ink='#fff'; } }
-      else if(view==='rule'&&sel){ const [sn,sk]=sel; if(n===sn&&k===sk){ fill=col('--ember'); ink='#fff'; } else if(n===sn-1&&(k===sk-1||k===sk)){ fill=col('--gold'); ink='#fff'; } else if(n===sn&&k===sn-sk){ fill=col('--teal'); ink='#fff'; } }
-      c.fillStyle=fill; c.beginPath(); if(c.roundRect) c.roundRect(x-cw*.46,y-rowH*.4,cw*.92,rowH*.8,4); else c.rect(x-cw*.46,y-rowH*.4,cw*.92,rowH*.8); c.fill();
-      c.fillStyle=ink; c.font=(v>=100?fs*.82:fs)+'px IBM Plex Mono, monospace'; c.fillText(v,x,y+1); cellsP.push({n,k,x,y,w:cw*.46,h:rowH*.4}); }
-    if(view==='sum'){ c.fillStyle=col('--teal'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='left'; c.fillText('= '+Math.pow(2,n),lab+cw*(n+1)+4,y+1); c.textAlign='center'; } }
-  c.textBaseline='alphabetic';
-  let t='';
-  if(view==='rule'&&sel){ const [n,k]=sel, j=n-k;
-    const ck=`\\binom{${n}}{${k}}\\cdot ${k}!\\cdot ${j}! = ${C(n,k)}\\cdot ${F(k)}\\cdot ${F(j)} = ${F(n)} = ${n}!`;
-    if(n===0||k===0||k===n) t=`\\begin{gathered}\\binom{${n}}{${k}} = 1\\quad\\text{(an end of the row: choose-edges, choose-ends)}\\\\ ${ck}\\end{gathered}`;
-    else t=`\\begin{gathered}\\htmlClass{new}{\\binom{${n}}{${k}}} = \\binom{${n-1}}{${k-1}} + \\binom{${n-1}}{${k}} = ${C(n-1,k-1)} + ${C(n-1,k)} = \\htmlClass{new}{${C(n,k)}}\\\\ = \\htmlClass{keep}{\\binom{${n}}{${j}}}\\\\ ${ck}\\end{gathered}`; }
-  else if(view==='sum') t=`\\begin{gathered}\\binom{n}{0} + \\binom{n}{1} + \\cdots + \\binom{n}{n} = 2^n\\\\ \\text{every part once, sorted by size}\\end{gathered}`;
-  else t=`\\text{odd entries: an entry is odd exactly when}\\\\ \\text{one, not both, of the two that add to it is odd}`;
-  if(view==='odd') t='\\begin{gathered}'+t+'\\end{gathered}';
-  tex(document.getElementById('eqP'),t,true);
+/* ---------- left: the algorithm, its common divisors, and BZ ---------- */
+const cvR=document.getElementById('cvR'), ea=document.getElementById('ea'), eb=document.getElementById('eb');
+let cuts=0, back=false;
+function chain(a,b){ const P=[[a,b]], L=[]; let x=a,y=b; while(y>0){ const q=Math.floor(x/y), r=x%y; L.push([x,y,q,r]); x=y; y=r; P.push([x,y]); } return {P,L}; }
+function bz(a,b){ if(b===0) return {f:1,x:1,y:0,g:a}; const q=Math.floor(a/b), r=a%b; const s=bz(b,r);
+  if(s.f===1) return {f:2,x:s.y,y:s.x+q*s.y,g:s.g}; return {f:1,x:s.y,y:q*s.y+s.x,g:s.g}; }
+function drawR(){
+  const a=+ea.value, b=+eb.value; document.getElementById('oea').textContent=a; document.getElementById('oeb').textContent=b;
+  const {P,L}=chain(a,b); if(cuts>L.length) cuts=L.length; const done=cuts===L.length;
+  const {c,W,H}=size(cvR,(cvR.clientWidth||300)<480?1.1:1.35); c.fillStyle=col('--card'); c.fillRect(0,0,W,H);
+  const M=Math.min(a,b), lw=W<420?58:70, x0=lw+6, x1=W-8, cw=(x1-x0)/M, rad=Math.max(1.3,Math.min(5,cw*.38));
+  const rowH=Math.min(34,(H-28)/(L.length+1)), top=22;
+  const g=L.length? L[L.length-1][1] : a;
+  c.font='11px IBM Plex Mono, monospace'; c.textBaseline='middle';
+  c.fillStyle=col('--muted'); c.textAlign='left'; c.fillText('1',x0,10); c.textAlign='right'; c.fillText(String(M),x1,10);
+  for(let i=0;i<=cuts;i++){ const [x,y]=P[i], yy=top+rowH*(i+.5);
+    c.fillStyle=col('--ink'); c.textAlign='right'; c.fillText(x+', '+y,lw,yy);
+    for(let d=1; d<=M; d++){ const cx=x0+cw*(d-.5); const lit=(x%d===0)&&(y%d===0);
+      c.beginPath(); c.arc(cx,yy,rad,0,7);
+      if(lit){ c.fillStyle=(done&&d===g)?col('--ember'):col('--teal'); c.fill(); }
+      else { c.strokeStyle=col('--grid'); c.lineWidth=1; c.stroke(); } } }
+  c.textAlign='left'; c.textBaseline='alphabetic';
+  const common=[]; for(let d=1; d<=M; d++) if(a%d===0&&b%d===0) common.push(d);
+  const shown=L.slice(0,cuts).map(Ln=>`${Ln[0]} = ${Ln[1]}\\cdot ${Ln[2]} + ${Ln[3]===0?'0':'\\htmlClass{new}{'+Ln[3]+'}'}`);
+  let t= shown.length? shown.join('\\\\ ') : `\\text{the pair } (${a}, ${b})\\text{: press one division}`;
+  t+=`\\\\ \\text{common divisors in every row: } \\{${common.join(',\\,')}\\}`;
+  if(done) t+=`\\\\ \\gcd(${a}, ${b}) = \\htmlClass{new}{${g}}`;
+  if(done&&back){ const s=bz(a,b); t+= s.f===1? `\\\\ \\text{plus-only combination: } \\htmlClass{keep}{${a}\\cdot ${s.x} = ${b}\\cdot ${s.y} + ${s.g}}\\\\ ${a*s.x} = ${b*s.y} + ${s.g}` : `\\\\ \\text{plus-only combination: } \\htmlClass{keep}{${b}\\cdot ${s.y} = ${a}\\cdot ${s.x} + ${s.g}}\\\\ ${b*s.y} = ${a*s.x} + ${s.g}`; }
+  tex(document.getElementById('eqR'),'\\begin{gathered}'+t+'\\end{gathered}',true);
 }
-cvP.addEventListener('pointerdown',e=>{ const r=cvP.getBoundingClientRect(), x=e.clientX-r.left, y=e.clientY-r.top; const hit=cellsP.find(o=>Math.abs(x-o.x)<=o.w&&Math.abs(y-o.y)<=o.h); if(hit){ sel=[hit.n,hit.k]; if(view!=='rule'){ view='rule'; document.querySelectorAll('#vch [data-v]').forEach(b=>b.classList.toggle('on',b.dataset.v==='rule')); } drawP(); } });
-document.querySelectorAll('#vch [data-v]').forEach(b=>b.onclick=()=>{ view=b.dataset.v; document.querySelectorAll('#vch [data-v]').forEach(x=>x.classList.toggle('on',x===b)); drawP(); });
+document.getElementById('e1').onclick=()=>{ cuts++; back=false; drawR(); };
+document.getElementById('eall').onclick=()=>{ cuts=1e9; drawR(); };
+document.getElementById('eback').onclick=()=>{ cuts=1e9; back=true; drawR(); };
+document.getElementById('e0').onclick=()=>{ cuts=0; back=false; drawR(); };
+ea.oninput=()=>{ cuts=0; back=false; drawR(); }; eb.oninput=()=>{ cuts=0; back=false; drawR(); };
 
-/* ---------- right: is Zoe on it? ---------- */
-const cvZ=document.getElementById('cvZ'), zn=document.getElementById('zn'), zk=document.getElementById('zk');
-const LET=['a','b','c','d','e','Z'];
-let pick=null, partsHit=[];
-function parts(n,k){ const out=[]; (function rec(i,cur){ if(cur.length===k){ out.push(cur.slice()); return; } if(i>=n) return; cur.push(i); rec(i+1,cur); cur.pop(); rec(i+1,cur); })(0,[]); return out; }
-function nameOf(n){ const L=LET.slice(0,n-1); L.push('Z'); return L; }
-function drawZ(){
-  let n=+zn.value, k=+zk.value; if(k>n){ k=n; zk.value=k; }
-  const L=nameOf(n);
-  document.getElementById('ozn').textContent=n+': {'+L.join(', ')+'}'; document.getElementById('ozk').textContent=k;
-  const P=parts(n,k), withZ=P.filter(p=>p.includes(n-1)), without=P.filter(p=>!p.includes(n-1));
-  const W0=cvZ.clientWidth||300, small=W0<480, perRow=small?3:4, lh=small?26:28;
-  const rowsN=Math.max(1,Math.ceil(withZ.length/perRow))+Math.max(1,Math.ceil(without.length/perRow));
-  const Hh=60+lh*rowsN+28;
-  const {c,W,H}=size(cvZ,W0/Hh); c.fillStyle=col('--card'); c.fillRect(0,0,W,H);
-  c.font=(small?'11px':'12px')+' IBM Plex Mono, monospace'; c.textBaseline='middle';
-  partsHit=[];
-  const cellW=(W-16)/perRow;
-  const block=(arr,y0,label,colr)=>{ c.fillStyle=colr; c.textAlign='left'; c.fillText(label,8,y0); let y=y0+lh*.9;
-    if(!arr.length){ c.fillStyle=col('--muted'); c.fillText('none',14,y); return y+lh*.6; }
-    arr.forEach((p,i)=>{ const x=8+cellW*(i%perRow), yy=y+lh*Math.floor(i/perRow); const s='{'+p.map(q=>L[q]).join(',')+'}';
-      const on=pick&&pick.join()===p.join();
-      c.fillStyle=on?colr:col('--sand'); c.beginPath(); if(c.roundRect) c.roundRect(x,yy-lh*.4,cellW-6,lh*.8,5); else c.rect(x,yy-lh*.4,cellW-6,lh*.8); c.fill();
-      c.fillStyle=on?'#fff':col('--ink'); c.textAlign='center'; c.fillText(k===0?'∅':s,x+(cellW-6)/2,yy+1); partsHit.push({p,x0:x,x1:x+cellW-6,y0:yy-lh*.4,y1:yy+lh*.4}); });
-    return y+lh*(Math.ceil(arr.length/perRow)-1)+lh*.6; };
-  let y=block(withZ,16,'with Z: '+withZ.length,col('--ember'));
-  block(without,y+lh*.9,'without Z: '+without.length,col('--teal'));
-  const n1=n-1;
-  let t;
-  if(k===0) t=`\\binom{${n}}{0} = 1\\text{: only } \\varnothing`;
-  else t=`\\binom{${n}}{${k}} = \\htmlClass{new}{\\binom{${n1}}{${k-1}}} + \\htmlClass{keep}{\\binom{${n1}}{${k}}} = ${C(n1,k-1)} + ${C(n1,k)} = ${C(n,k)}`;
-  if(pick&&pick.length===k){ const has=pick.includes(n-1); const s='\\{'+pick.map(q=>L[q]).join(',')+'\\}';
-    const rest=pick.filter(q=>q!==n-1).map(q=>L[q]); const s2=rest.length?'\\{'+rest.join(',')+'\\}':'\\varnothing';
-    t+= has? `\\\\ ${s} \\mapsto ${s} \\setminus \\{Z\\} = ${s2}\\text{, a part of the rest with } ${k-1}` : `\\\\ ${s}\\text{ is already a part of the rest, with } ${k}`; }
-  tex(document.getElementById('eqZ'),`\\begin{gathered}${t}\\end{gathered}`,true);
+/* ---------- right: factor trees ---------- */
+const cvT=document.getElementById('cvT'), tn=document.getElementById('tn');
+const isP=m=>{ if(m<2) return false; for(let d=2;d*d<=m;d++) if(m%d===0) return false; return true; };
+const pairs=m=>{ const P=[]; for(let d=2;d*d<=m;d++) if(m%d===0) P.push([d,m/d]); return P; };
+let choice={};
+function build(v,path){ const node={v,path,kids:null}; if(!isP(v)&&v>1){ const P=pairs(v); const k=(choice[path]??Math.floor((P.length-1)/2))%P.length; node.k=k; node.n=P.length; node.kids=[build(P[k][0],path+'L'),build(P[k][1],path+'R')]; } return node; }
+let nodesT=[];
+function drawT(){
+  const n=+tn.value; document.getElementById('otn').textContent=n;
+  const root=build(n,'');
+  const leaves=[]; let depth=0; (function walk(nd,d){ nd.d=d; depth=Math.max(depth,d); if(!nd.kids) leaves.push(nd); else nd.kids.forEach(k=>walk(k,d+1)); })(root,0);
+  const {c,W,H}=size(cvT,(cvT.clientWidth||300)<480?1.0:1.25); c.fillStyle=col('--card'); c.fillRect(0,0,W,H);
+  let li=0; (function place(nd){ if(!nd.kids){ nd.x=(li+.5)/leaves.length; li++; } else { nd.kids.forEach(place); nd.x=(nd.kids[0].x+nd.kids[1].x)/2; } })(root);
+  const top=24, bot=H-26, Y=d=> depth? top+(bot-top)*d/depth : H/2, X=x=>14+(W-28)*x;
+  nodesT=[];
+  (function edges(nd){ if(nd.kids) nd.kids.forEach(k=>{ c.strokeStyle=col('--muted'); c.lineWidth=1.2; c.beginPath(); c.moveTo(X(nd.x),Y(nd.d)); c.lineTo(X(k.x),Y(k.d)); c.stroke(); edges(k); }); })(root);
+  const fs=leaves.length>8?(W<480?9:11):(W<480?11:13);
+  (function nodes(nd){ const x=X(nd.x), y=Y(nd.d); const lab=String(nd.v); c.font=fs+'px IBM Plex Mono, monospace'; const w=c.measureText(lab).width+10; const prime=!nd.kids;
+    c.fillStyle=prime?col('--ember'):col('--sand'); c.beginPath(); if(c.roundRect) c.roundRect(x-w/2,y-11,w,22,5); else c.rect(x-w/2,y-11,w,22); c.fill();
+    if(!prime&&nd.n>1){ c.strokeStyle=col('--ink'); c.lineWidth=1; c.setLineDash([2,2]); c.stroke(); c.setLineDash([]); }
+    c.fillStyle=prime?'#fff':col('--ink'); c.textAlign='center'; c.fillText(lab,x,y+4); nodesT.push({nd,x,y,w}); if(nd.kids) nd.kids.forEach(nodes); })(root);
+  c.textAlign='left';
+  const L=leaves.map(l=>l.v).sort((a,b)=>b-a);
+  const cnt={}; L.forEach(p=>cnt[p]=(cnt[p]||0)+1);
+  const pw=Object.keys(cnt).map(Number).sort((a,b)=>a-b).map(p=>cnt[p]>1?`${p}^{${cnt[p]}}`:`${p}`).join('\\cdot ');
+  const first=root.kids?`${root.kids[0].v}\\cdot ${root.kids[1].v}`:'';
+  tex(document.getElementById('eqT'), isP(n)? `${n} \\text{ is prime: its prime list is } ${n}` : `\\begin{gathered}${n} = ${first}\\\\ \\text{prime list: } \\htmlClass{new}{${L.join(',\\ ')}}\\\\ ${n} = ${pw}\\\\ \\text{top split ${root.k+1} of ${root.n}: tap } ${n} \\text{ to change it}\\end{gathered}`,true);
 }
-cvZ.addEventListener('pointerdown',e=>{ const r=cvZ.getBoundingClientRect(), x=e.clientX-r.left, y=e.clientY-r.top; const hit=partsHit.find(o=>x>=o.x0&&x<=o.x1&&y>=o.y0&&y<=o.y1); pick= hit? hit.p : null; drawZ(); });
-zn.oninput=()=>{ zk.max=zn.value; pick=null; drawZ(); }; zk.oninput=()=>{ pick=null; drawZ(); };
-new ResizeObserver(()=>{drawP();drawZ();}).observe(cvP);
-if(window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{drawP();drawZ();});
-zk.max=zn.value; drawP(); drawZ();
+cvT.addEventListener('pointerdown',e=>{ const r=cvT.getBoundingClientRect(), x=e.clientX-r.left, y=e.clientY-r.top; const hit=nodesT.find(o=>Math.abs(x-o.x)<o.w/2+3&&Math.abs(y-o.y)<14); if(hit&&hit.nd.kids){ const p=hit.nd.path; choice[p]=((choice[p]??hit.nd.k)+1)%hit.nd.n; Object.keys(choice).forEach(q=>{ if(q.startsWith(p)&&q!==p) delete choice[q]; }); drawT(); } });
+tn.oninput=()=>{ choice={}; drawT(); };
+new ResizeObserver(()=>{drawR();drawT();}).observe(cvR);
+if(window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{drawR();drawT();});
+drawR(); drawT();
 
 /* ---------- slides ---------- */
 const N='\\htmlClass{new}', K='\\htmlClass{keep}';
-const SYM={'≠':'$\\ne$','∈':'$\\in$','∉':'$\\notin$','⇔':'$\\Leftrightarrow$','⊥':'$\\bot$','∀':'$\\forall$','∃':'$\\exists$','¬':'$\\neg$','∧':'$\\land$','∨':'$\\lor$','⇒':'$\\Rightarrow$','ℕ':'$\\mathbb N$','φ':'$\\varphi$','≤':'$\\le$','<':'$\\lt$','·':'$\\cdot$','∅':'$\\varnothing$','∪':'$\\cup$','∖':'$\\setminus$','↦':'$\\mapsto$','Σ':'$\\Sigma$'};
-const tx=r=>r.replace(/[≠∈∉⇔⊥∀∃¬∧∨⇒ℕφ≤<·∅∪∖↦Σ]/gu,ch=>SYM[ch]);
+const SYM={'≠':'$\\ne$','∈':'$\\in$','⇔':'$\\Leftrightarrow$','⊥':'$\\bot$','∀':'$\\forall$','∃':'$\\exists$','¬':'$\\neg$','∧':'$\\land$','∨':'$\\lor$','⇒':'$\\Rightarrow$','ℕ':'$\\mathbb N$','φ':'$\\varphi$','≤':'$\\le$','<':'$\\lt$','·':'$\\cdot$','∣':'$\\mid$','∤':'$\\nmid$'};
+const tx=r=>r.replace(/[≠∈⇔⊥∀∃¬∧∨⇒ℕφ≤<·∣∤]/gu,ch=>SYM[ch]);
 const col2=(...rows)=>'\\begin{aligned}'+rows.map(([l,r])=>'&'+l+' &&\\text{'+tx(r)+'}').join('\\\\ ')+'\\end{aligned}';
 stepper('#sl1',[
-  {k:'ember',kl:'a matching',t:R`\{(\text{Tom}, 0), (\text{Kit}, 1), (\text{Puss}, 2)\}`,n:`Each cat paired with exactly one member of 3, each member of 3 with exactly one cat. The cats have 3 members: “three cats”, as 3a promised.`}
-],{title:'The slides · a matching · ← → keys work'});
+  {k:'ember',kl:'divides',t:R`d \mid n \;\Leftrightarrow\; \exists k\,(n = d \cdot k)`,n:`A statement, never a number. 3 ∣ 12; 5 ∣ 0; 0 ∣ n only for n = 0; 4 ∤ 10, squeezed between 8 and 12 by keep-order for times.`}
+],{title:'The slides · divides · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'the rules',t:R`d \cdot j + d \cdot k = ${N}{d \cdot (j + k)}`,n:`Divides-a-sum by spread for times over plus. Chain for divides and divides-a-multiple by regroup for times. Each rule is: unpack ∣, use a technique, pack ∣.`}
+],{title:'The slides · the rules · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'the lead-one-out technique',t:R`\text{from } X \text{ has } S(n),\ w \in X,\ \text{ write } ${N}{X \setminus \{w\} \text{ has } n}`,n:`Lead one out. If w was paired with n, drop its pair; otherwise the member paired with n takes w's old partner. Every case split is on numbers, so settled.`}
-],{title:'The slides · the lead-one-out technique · ← → keys work'});
-stepper('#sl4',[
-  {k:'ember',kl:'one-count and finite-is-settled',t:R`\text{from } n \text{ matched with } m,\ \text{ write } ${N}{n = m}`,n:`By induction with lead-one-out: the number of members is unique. And members of a finite set are the same or not (finite-is-settled), through their partners.`}
-],{title:'The slides · one-count and finite-is-settled · ← → keys work'});
+  {k:'ember',kl:'the divides-the-rest technique',t:col2([`d \\cdot j \\le d \\cdot k,\\ \\text{so } j \\le k`,'at-most-is-adding; keep-order for times and any-two-compare'],[`k = j + m,\\ \\ d \\cdot j + y = d \\cdot j + d \\cdot m`,'at-most-is-adding; spread for times over plus'],[`y = ${N}{d \\cdot m}`,'cancel for plus']),n:`∎ If d divides x and x + y, it divides y. No taking away: the gap is found by at-most-is-adding and closed by cancel for plus. The case d = 0 goes on its own.`}
+],{title:'The slides · the divides-the-rest technique · ← → keys work'});
 stepper('#sl5',[
-  {k:'ember',kl:'the separate-piles technique',t:R`A \cap B = \varnothing:\quad p + b \text{ members in } A \cup B`,n:`Separate piles add. Induction on b: lead a member y out of B (lead-one-out), bring it back into the union (bring-one-in), plus-a-next.`}
-],{title:'The slides · the separate-piles technique · ← → keys work'});
+  {k:'ember',kl:'bounded somes',t:R`\exists k \le S(m)\,\varphi(k) \;\Leftrightarrow\; (\exists k \le m\,\varphi(k)) \lor ${N}{\varphi(S(m))}`,n:`The bounded-some technique, by induction on the bound: each step adds one settled statement to an or. A some with no bound has no last number to check.`}
+],{title:'The slides · bounded somes · ← → keys work'});
 stepper('#sl6',[
-  {k:'ember',kl:'the stages-multiply technique',t:R`3 \text{ shirts, then } 4 \text{ trousers}:\ \ ${N}{3 \cdot 4 = 12}`,n:`Stages multiply, as long as the number of second choices is the same whatever the first. So p × b has p · b pairs: why 2e said “product”.`}
-],{title:'The slides · the stages-multiply technique · ← → keys work'});
+  {k:'ember',kl:'the settled-divides technique',t:R`d \mid n \;\Leftrightarrow\; ${N}{\exists k \le n}\ (n = d \cdot k)`,n:`∎ The k is never past n (times-does-not-lessen, or n = 0), so divides is settled. Every case split in this step is on a settled statement.`}
+],{title:'The slides · the settled-divides technique · ← → keys work'});
 stepper('#sl7',[
-  {k:'ember',kl:'Σ',t:R`\sum_{i \lt 0} t(i) = 0,\qquad \sum_{i \lt S(n)} t(i) = \sum_{i \lt n} t(i) + ${N}{t(n)}`,n:`Σ by counted-recursion: add the next term at each step. t(0) + t(1) + ⋯ + t(n) is another way to write the sum for i ≤ n.`}
-],{title:'The slides · Σ · ← → keys work'});
-stepper('#sl8',[
-  {k:'ember',kl:'the doubled-sum technique',t:col2([`2 \\cdot \\textstyle\\sum_{i \\le S(n)} i = n \\cdot S(n) + 2 \\cdot S(n)`,'sum-one-more; spread for times over plus; the hypothesis'],[`= ${N}{S(n) \\cdot (S(n) + 1)}`,'spread for times over plus; plus-a-next, plus-one; turn-about for times']),n:`∎ 2 · (0 + 1 + ⋯ + n) = n · (n + 1), stated doubled so nothing is taken apart. The sum is the quotient of n · (n + 1) by 2: n · (n + 1) is even (4i).`},
-  {k:'ember',kl:'the doubled-sum technique',t:R`2 \cdot (0 + 1 + \cdots + 100) = 100 \cdot 101 = ${N}{10100}`,n:`So 0 + 1 + ⋯ + 100 = 5050. Forwards and backwards, every column adds to the last number; that is the idea, and the induction is the proof.`}
-],{title:'The slides · the doubled-sum technique · ← → keys work'});
+  {k:'ember',kl:'the division-with-remainder technique',t:col2([`X = \\{r : \\exists q \\le a\\ (a = b \\cdot q + r)\\}`,'settled: bounded-some'],[`r \\text{ least};\\ \\ b \\le r \\Rightarrow r = b + c`,'least-member; at-most-is-adding'],[`a = ${N}{b \\cdot S(q) + c},\\ \\ c \\lt r`,'times-a-next; less-is-adding']),n:`∎ The least remainder is less than b: a remainder b or more leaves room for one more b, and a smaller remainder, against leastness. Quotient q, remainder r.`}
+],{title:'The slides · the division-with-remainder technique · ← → keys work'});
+stepper('#sl8a',[
+  {k:'ember',kl:'even and odd',t:R`n = 2 \cdot q + r,\ \ r \in \{0, 1\}`,n:`The even-or-odd technique: even (remainder 0) or odd (remainder 1), and one-split forbids both. Odd-times-odd: odd times odd is 2 · (2 · u · b + u + b) + 1.`}
+],{title:'The slides · even and odd · ← → keys work'});
+stepper('#sl8b',[
+  {k:'ember',kl:'the even-square technique',t:R`\text{from } p \cdot p \text{ even, write } ${N}{p \text{ even}}`,n:`If p were odd, p · p would be odd (odd-times-odd), and nothing is both. A case split on the settled “even or odd”, not a use of the either-way that rung 7 adds.`}
+],{title:'The slides · the even-square technique · ← → keys work'});
 stepper('#sl9',[
-  {k:'ember',kl:'the counted-functions technique',t:R`X \text{ has } n,\ Y \text{ has } m:\quad ${N}{m^n} \text{ functions } X \to Y`,n:`A function on X is a function on the rest, then a value at the member led out: stages-multiply and power-of-a-next at each step.`}
-],{title:'The slides · the counted-functions technique · ← → keys work'});
+  {k:'ember',kl:'primes',t:R`1 \lt p \;\land\; \forall d\,(d \mid p \Rightarrow d = 1 \lor d = p)`,n:`2, 3, 5, 7 are prime; 4, 6, 9 are not; 1 is left out on purpose. Prime is settled: divisors are bounded by p (divisor-not-past).`}
+],{title:'The slides · primes · ← → keys work'});
 stepper('#sl10',[
-  {k:'ember',kl:'the settled-parts technique',t:R`s \;\mapsto\; (x \mapsto 1 \text{ if } x \in s,\ 0 \text{ if } x \notin s):\quad ${N}{2^n}`,n:`The settled parts match the keep-or-drop functions to 2. Each new member doubles them. Why “power set”; why a table on n letters has 2ⁿ rows.`}
-],{title:'The slides · the settled-parts technique · ← → keys work'});
+  {k:'ember',kl:'the prime-divisor technique',t:R`\text{from } p = \text{least of } \{d : 1 \lt d \land d \mid n\},\ \text{write } ${N}{p \text{ prime}}`,n:`∎ A divisor e of p above 1 divides n (chain for divides), so p ≤ e; and e ≤ p (divisor-not-past). So e = p.`}
+],{title:'The slides · the prime-divisor technique · ← → keys work'});
 stepper('#sl11',[
-  {k:'ember',kl:'factorials',t:R`0! = 1,\quad S(n)! = S(n) \cdot n!:\quad 5! = ${N}{120}`,n:`n! by counted-recursion, a step that uses the count. Arrangements: a set with n members has n! arrangements: who stands last, then arrange the rest.`}
-],{title:'The slides · factorials · ← → keys work'});
+  {k:'ember',kl:'the split-keeps-divisors technique',t:R`a = b \cdot q + r:\quad d \mid a \land d \mid b \;\Leftrightarrow\; ${N}{d \mid b \land d \mid r}`,n:`Divides-a-multiple and divides-the-rest one way, divides-a-multiple and divides-a-sum the other. A split keeps the common divisors.`}
+],{title:'The slides · the split-keeps-divisors technique · ← → keys work'});
 stepper('#sl12',[
-  {k:'ember',kl:'the choosing table',t:R`\binom{S(n)}{S(k)} = \binom{n}{k} + ${N}{\binom{n}{S(k)}}`,n:`Row-step, the table's own rule; choose-edges gives the edges: 1 at the start of each row, and row 0 is 1 then 0s.`}
-],{title:'The slides · the choosing table · ← → keys work'});
-stepper('#sl13',[
-  {k:'ember',kl:'the choosing-counts-parts technique',t:R`\binom{6}{2} = \binom{5}{1} + \binom{5}{2} = 5 + 10 = ${N}{15}`,n:`Is Zoe on it? With her, choose the rest of the part from the others; without her, choose it all from the others. Separate piles add: the table counts the parts.`}
-],{title:'The slides · the choosing-counts-parts technique · ← → keys work'});
-stepper('#sl14a',[
-  {k:'ember',kl:'the product-identity technique',t:R`\binom{5}{2} \cdot 2! \cdot 3! = 10 \cdot 2 \cdot 6 = ${N}{120} = 5!`,n:`Arrange everybody; the first 2 places are the committee. Each committee turns up 2! · 3! times: once per order of itself and of the rest.`},
-  {k:'ember',kl:'the product-identity technique',t:col2([`\\tbinom{S(n)}{k} \\cdot k! \\cdot j! = (\\tbinom{n}{k'} \\cdot k'! \\cdot j!) \\cdot k + (\\tbinom{n}{k} \\cdot k! \\cdot j'!) \\cdot j`,'row-step; spread for times over plus; factorial steps'],[`= n! \\cdot (k + j) = ${N}{S(n)!}`,'the hypothesis twice; spread for times over plus']),n:`∎ The proof by induction on k + j, with k = S(k′), j = S(j′). The ends k = 0 and j = 0 go on their own.`}
-],{title:'The slides · the product-identity technique · ← → keys work'});
-stepper('#sl14b',[
-  {k:'ember',kl:'symmetry',t:R`\binom{k+j}{k} = ${N}{\binom{k+j}{j}}`,n:`Both times k! · j! give (k + j)!, and k! · j! ≠ 0: cancel for times cancels. Choosing who serves is choosing who doesn't.`}
-],{title:'The slides · symmetry · ← → keys work'});
-stepper('#sl15a',[
-  {k:'ember',kl:'multiplying out',t:R`(p + b)^3 = p^3 + ${N}{3} \cdot p^2 \cdot b + ${N}{3} \cdot p \cdot b^2 + b^3`,n:`Each term picks p or b from each bracket: 2³ = 8 words. Those with one b: choose which bracket gives it: 3 choose 1, which is 3.`}
-],{title:'The slides · multiplying out · ← → keys work'});
-stepper('#sl15b',[
-  {k:'ember',kl:'the two-term-power technique',t:R`(p + b)^n = \sum_{k \le n} \binom{n}{k} \cdot p^j \cdot b^k,\quad j + k = n`,n:`∎ By induction: (p + b) · B_n splits into p · B_n and b · B_n, and row-step puts them back together as B_{S(n)}. Termwise, factor-out and first-term-off move the terms.`},
-  {k:'ember',kl:'the two-term-power technique',t:R`11^4 = (10 + 1)^4 = ${N}{14641}`,n:`Row 4 read as a numeral: 1, 4, 6, 4, 1. With p = b = 1, two-term-power says each row adds to 2ⁿ.`}
-],{title:'The slides · the two-term-power technique · ← → keys work'});
-stepper('#sl16',[
-  {k:'ember',kl:'a fake',t:R`\text{committees of 2 from 4}:\ 4 \cdot 3 = 12\,? = ${N}{6} \cdot 2`,n:`Order was counted where it does not matter. For a chair and a scribe, 12 is right.`}
-],{title:'The slides · a fake · ← → keys work'});
-stepper('#sl17',[
-  {k:'ember',kl:'backwards',t:R`(m + 1) \cdot m = 2 \cdot 15 = 30 \;\Rightarrow\; ${N}{m + 1 = 6}`,n:`15 pairs: pairs counted with order number (m + 1) · m, each pair twice. The neighbours whose product is 30 are 6 and 5.`}
+  {k:'ember',kl:'the gcd algorithm',t:R`252 = 198 \cdot 1 + ${N}{54},\quad 198 = 54 \cdot 3 + ${N}{36}`,n:`Split the larger by the smaller; the remainder takes the smaller's place.`},
+  {k:'ember',kl:'the gcd algorithm',t:R`54 = 36 \cdot 1 + ${N}{18},\quad 36 = 18 \cdot 2 + 0 \;\Rightarrow\; \gcd = ${N}{18}`,n:`Remainder 0: the last divisor is the gcd. Greatest-common-divisor: by strong induction, the second number shrinks every time.`}
+],{title:'The slides · the gcd algorithm · ← → keys work'});
+stepper('#sl13a',[
+  {k:'ember',kl:'backwards',t:col2([`54 = 36 + 18,\\ \\ 198 + 18 = 54 \\cdot 3 + 54 = 54 \\cdot 4`,'add 18; substitute'],[`252 \\cdot 4 = 198 \\cdot 4 + 54 \\cdot 4 = ${N}{198 \\cdot 5 + 18}`,'times 4; substitute']),n:`Run from the foot up: 1008 = 990 + 18. A multiple of one number is a multiple of the other with the gcd added.`}
 ],{title:'The slides · backwards · ← → keys work'});
+stepper('#sl13b',[
+  {k:'ember',kl:'the plus-only combination technique',t:R`a \cdot x = b \cdot y + g \;\;\lor\;\; ${N}{b \cdot y = a \cdot x + g}`,n:`∎ By strong induction on b. Each step moves the gcd to the other side, so the technique allows both. With + only, there is no other way to say it on this rung.`}
+],{title:'The slides · the plus-only combination technique · ← → keys work'});
+stepper('#sl14',[
+  {k:'ember',kl:'the prime-divides-a-factor technique',t:col2([`p \\nmid a:\\ \\ \\gcd(p, a) = 1`,'p is prime'],[`p \\cdot x \\cdot b = a \\cdot b \\cdot y + b`,'plus-only combination, times b'],[`${N}{p \\mid b}`,'divides-a-multiple; divides-the-rest']),n:`∎ Prime-divides-a-factor: a prime dividing a product divides a factor. Not for 6: 6 ∣ 4 · 9, and 6 divides neither.`}
+],{title:'The slides · the prime-divides-a-factor technique · ← → keys work'});
+stepper('#sl15',[
+  {k:'ember',kl:'products of lists',t:R`P(0) = 1,\quad P(S(i)) = P(i) \cdot p_{S(i)}:\quad 2 \cdot 3 \cdot 5 = ${N}{30}`,n:`p₁ · ⋯ · p_k by counted-recursion. Entry-divides: each entry divides the product. Prime-divides-a-list: a prime dividing the product divides an entry.`}
+],{title:'The slides · products of lists · ← → keys work'});
+stepper('#sl16',[
+  {k:'ember',kl:'the endless-primes technique',t:R`q \mid p_1 \cdot \cdots \cdot p_k + 1,\ \ q = p_i \;\Rightarrow\; q \mid 1\ ${N}{\bot}`,n:`∎ The primes never run out: a prime divisor of N is none of the listed primes. N itself need not be prime: 30031 = 59 · 509.`}
+],{title:'The slides · the endless-primes technique · ← → keys work'});
+stepper('#sl17',[
+  {k:'ember',kl:'the prime-list technique',t:R`n = m \cdot p,\ \ p \text{ least prime divisor}:\ \ q_1, \cdots, q_j, ${N}{p}`,n:`A prime list for m, with the least prime divisor of n set at the end, is a prime list for n. Strong induction.`}
+],{title:'The slides · the prime-list technique · ← → keys work'});
+stepper('#sl18',[
+  {k:'ember',kl:'the one-prime-list technique',t:R`360:\quad ${N}{5, 3, 3, 2, 2, 2}\quad = 2^3 \cdot 3^2 \cdot 5`,n:`∎ The last entry is the least prime dividing n, so two lists agree there; cancel it (cancel for times) and the rests are lists for a smaller number.`}
+],{title:'The slides · the one-prime-list technique · ← → keys work'});
+stepper('#sl19',[
+  {k:'ember',kl:'the no-double-square technique',t:col2([`m \\text{ least with } p'^2 = 2 \\cdot m^2`,'least-member on a settled set'],[`p' = 2 \\cdot r \\Rightarrow ${N}{m^2 = 2 \\cdot r^2}`,'even-square; cancel for times'],[`0 \\lt r \\lt m:\\ \\ \\bot`,'least']),n:`∎ No p, q with q ≠ 0 and p² = 2 · q². The bound p ≤ 2 · q² is what makes the set settled. The descent.`}
+],{title:'The slides · the no-double-square technique · ← → keys work'});
+stepper('#sl20',[
+  {k:'ember',kl:'a fake',t:R`6 \mid 4 \cdot 9,\quad ${N}{6 \nmid 4,\ \ 6 \nmid 9}`,n:`Prime-divides-a-factor needs a prime: 6's 2 went to 4, its 3 to 9.`},
+  {k:'ember',kl:'a fake',t:R`40 \cdot 40 + 40 + 41 = ${N}{41 \cdot 41}`,n:`n · n + n + 41 is prime for forty n in a row, and then not. Checking is not proving.`}
+],{title:'The slides · a fake · ← → keys work'});
 
 function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
 Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);

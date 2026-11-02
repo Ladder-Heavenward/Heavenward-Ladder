@@ -954,6 +954,8 @@ function edApply(p,html){ const b=p.querySelector('button.pa'); const tmp=docume
   p.innerHTML=edClean(tmp); if(b){ p.appendChild(document.createTextNode(' ')); p.appendChild(b); } p.classList.add('pedited'); }
 function edClearPending(pid){ try{ const k='ladder:pending-edits', m=JSON.parse(localStorage.getItem(k)||'{}'); delete m[pid]; localStorage.setItem(k,JSON.stringify(m)); }catch(_){} }
 async function edFolded(){ const f={}; try{ const s=await ED.db.collection('folded').get(); s.docs.forEach(d=>{ const v=d.data()||{}; f[v.pid||d.id]=v.at||''; }); }catch(_){ return null; } return f; }
+/* The owner check runs once at load; if the host was slow to answer then, check again when a menu opens. */
+async function edRecheck(){ try{ if(!window.claude||typeof window.claude.use!=='function') return false; if(!ED.db) ED.db=await window.claude.use('db'); if(!ED.db) return false; const u=await window.claude.use('user'); ED.owner=u?!!(await u.isOwner()):false; if(ED.owner) document.body.classList.add('ed-owner'); }catch(e){} return ED.owner; }
 async function edInit(){
   if(!document.querySelector('header.top > p[data-pid], section.class p[data-pid]')) return;
   if(!(await edWait())) return;
@@ -993,7 +995,7 @@ function startEdit(p){ if(!ED.db||!ED.owner||!editable(p)||p.isContentEditable) 
     else{ try{ const k='ladder:pending-edits', m=JSON.parse(localStorage.getItem(k)||'{}'); m[p.dataset.pid]=rec; localStorage.setItem(k,JSON.stringify(m)); }catch(_){}
       e.target.disabled=false; toast('not saved yet ('+((err&&err.code)||'the database refused it')+'). Your words are kept on this device and will be sent when the database answers.'); } });
 }
-function openMenu(p,b){ cur=p; const r=b.getBoundingClientRect(); const eb=menu.querySelector('[data-a=edit]'); if(eb) eb.hidden=!(ED.owner&&editable(p)); menu.hidden=false;
+function openMenu(p,b){ cur=p; const r=b.getBoundingClientRect(); const eb=menu.querySelector('[data-a=edit]'); if(eb){ eb.hidden=!(ED.owner&&editable(p)); if(!ED.owner&&editable(p)) edRecheck().then(ok=>{ if(ok&&cur===p) eb.hidden=false; }); } menu.hidden=false;
   const w=menu.offsetWidth||220; menu.style.left=Math.max(8,Math.min(window.innerWidth-w-8,r.left+r.width/2-w/2))+'px';
   menu.style.top=(r.bottom+window.scrollY+6)+'px'; }
 /* the non-skid key: the annex tags show or hide their annexes; the geometry-transform mark waits for the geometry floor */

@@ -1,391 +1,357 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>1f · Tables</title>
+<title>1f · Rewriting by the rulebook</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
 <link rel="stylesheet" href="rung.css">
 <style>
-.ttin{width:100%;font-size:1.05rem}
-.keys{display:flex;flex-wrap:wrap;gap:5px}
-.keys button{padding:5px 10px;font-family:var(--serif);font-size:1.05rem;min-width:2.3rem}
-.keys button.w{font-family:var(--mono);font-size:.8rem}
-.err{font-family:var(--mono);font-size:.8rem;color:var(--ember);min-height:1.1em}
-.verdict{font-family:var(--mono);font-size:.85rem}
-.verdict b{font-weight:500}
-table.tt tr.sel td{background:var(--sand)}
-table.tt td.fin,table.tt th.fin{font-weight:600;border-left:2px solid var(--ink)}
-table.tt tr.diff td{box-shadow:inset 0 0 0 999px color-mix(in srgb,var(--ember) 12%,transparent)}
-table.tt tbody tr{cursor:pointer}
-table.tt th .katex{font-size:.95em}
-.tree svg{width:100%;height:auto;display:block}
-.chain{display:grid;gap:2px}
-.chain .katex-display{margin:.1em 0;text-align:left}
-.chain .katex-display>.katex{text-align:left}
-.tog{display:grid;grid-template-columns:auto auto;gap:4px 12px;align-items:center;justify-content:start;font-family:var(--mono);font-size:.9rem}
-.tog button{min-width:3.2rem;padding:4px 10px}
-.tog button.T{color:var(--teal);border-color:var(--teal)} .tog button.F{color:var(--ember);border-color:var(--ember)}
-.compact table.tt{font-size:.85rem} .compact table.tt th,.compact table.tt td{padding:3px 7px}
 .panel{align-content:start}
 @media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
-table.agree{border-collapse:collapse;background:var(--card);font-size:.9rem;min-width:520px}
-table.agree th,table.agree td{border:1px solid var(--grid);padding:4px 8px;text-align:left;vertical-align:top}
-table.agree th{font-family:var(--mono);font-weight:500;color:var(--muted);font-size:.76rem}
-table.agree td:first-child{font-family:var(--mono);font-size:.8rem;color:var(--ember);white-space:nowrap}
-#vc{white-space:normal;font-size:.95rem}
+table.laws{border-collapse:collapse;background:var(--card);font-size:.92rem;min-width:560px}
+table.laws th,table.laws td{border:1px solid var(--grid);padding:5px 9px;text-align:left;vertical-align:top}
+table.laws th{font-family:var(--mono);font-weight:500;color:var(--muted);font-size:.78rem}
+table.laws td.c{font-family:var(--mono);color:var(--ember)}
+table.laws td.lic{font-family:var(--mono);font-size:.76rem;color:var(--muted)}
+table.laws td.lic b{color:var(--teal);font-weight:500}
+table.eng{border-collapse:collapse;background:var(--card);font-size:.95rem}
+table.eng td,table.eng th{border:1px solid var(--grid);padding:5px 10px;text-align:left}
+table.eng th{font-family:var(--mono);font-weight:500;color:var(--muted);font-size:.78rem}
+.stmt{font-family:var(--serif);font-size:1.45rem;line-height:1.9;background:var(--sand);border-radius:4px;padding:8px 12px;overflow-x:auto;white-space:nowrap;user-select:none}
+.sx{border-radius:4px;cursor:pointer;padding:0 1px;transition:background .15s}
+.sx:hover{background:color-mix(in srgb,var(--teal) 14%,transparent)}
+.sx.sel{outline:2px solid var(--ember);background:color-mix(in srgb,var(--ember) 12%,transparent)}
+.lawbtns{display:flex;flex-wrap:wrap;gap:5px}
+.lawbtns button{font-size:.78rem;padding:5px 8px}
+.lawbtns button .s7{color:var(--gold);font-size:.78rem;margin-left:4px}
+.lawbtns.bad button{border-style:dashed;border-color:var(--ember);color:var(--ember)}
+.lawbtns button:disabled{opacity:.3}
+.lh{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.colchip{font-family:var(--mono);font-size:.78rem;letter-spacing:.12em;white-space:nowrap}
+.colchip .T{color:var(--teal)} .colchip .F{color:var(--ember)} .colchip .x{text-decoration:underline wavy var(--ember)}
+#der .row .n{max-width:30ch}
+#der .row.bad .m{outline:1px dashed var(--ember);border-radius:3px}
+.status{font-family:var(--mono);font-size:.85rem;white-space:normal}
+.own{display:grid;grid-template-columns:1fr 1fr auto;gap:6px;align-items:end}
+.own input{width:100%}
+@media (max-width:520px){.own{grid-template-columns:1fr}}
 @media (max-width:560px){.slide .math{font-size:1.08rem}}
 </style>
 <link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r01concl.html">← 1·∎ conclusion</a><a href="r01g.html">next: 1g rewriting by the rulebook →</a></p>
-  <div class="tags"><span class="tag support">1f · support</span></div>
-  <h1>Tables</h1>
-  <p data-pid="376129">The proof steps of this rung gave each joining word its techs. This step gives each a table: for every way its letters could come out, what the whole comes to. Each word becomes a machine, and any statement built from them, however tangled, has a table of its own. The tables are a check on the techs, and the check comes out exactly right. The agreement fails at precisely the gap the rung left on purpose, and that failure is the best evidence that the gap is real. The tables also give a meaning to “these statements say the same thing”, which 1g turns into a rulebook. They end with marks moved on paper by rules, the step that turned reasoning into a calculus.</p>
-  <p class="gesture" data-pid="9e2e82">List every way the letters can come out; push each row through the machines from the inside out; read the final column. Same column, same statement.</p>
-  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r01b.html">1b</a> to <a href="r01e.html">1e</a>: the marks ¬ ⊥ ∧ ∨ ⇒ ⇔ and their techs, which the tables are checked against. The = between statements (“same column”) is laid down in footing 1f14, and <a href="r01g.html">1g</a> uses it to license rewriting; <a href="r01h.html">1h</a> and <a href="r01i.html">1i</a> use the bad-row hunt; rung 7 is where every statement, not only the checkable ones, is granted a row.</p></div>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r01e.html">← 1e tables</a><a href="r02.html">next: 2 collecting and sorting →</a></p>
+  <div class="tags"><span class="tag tech">1f · technique</span></div>
+  <h1>Rewriting by the rulebook</h1>
+  <p data-pid="361a0c">In English you can turn “nobody came” into “it is not so that anybody came” without checking who came, because the two sentences always say the same thing. Logic has a precise version of that: rewriting by the rulebook. 1e gave every statement a column. Each entry in the rulebook is a technique: a rewrite between two statements whose columns match. Once a technique is proved, you can use it to rewrite, each move on its own line, without drawing another table. Each rewrite is a transform in 1a's sense: it changes how a claim is written and keeps what it says. This step is the rulebook, with a name for each technique. It covers the jobs you will do with the rulebook most: pushing a not inward, and handling the if family. It shows the tempting moves that are not in the rulebook. And the rulebook's last column says which directions this rung's techs license for any statement whatever, and which wait for rung 7.</p>
+  <p class="gesture" data-pid="88ab1e">Find a piece of the statement that matches a side of a technique; replace it with the technique's other side; write the technique's name beside the line. The column never changes, so the final line says what the opening line said.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r01e.html">1e</a> (columns, = between statements, the bad-row hunt) and on the proof steps <a href="r01b.html">1b</a> to <a href="r01d.html">1d</a>, whose techniques license each direction for any statement. <a href="r04e.html">4e</a> reads proof shapes off the techniques turn-and-deny and cases; rung 2's principles obey the same rewriting with new marks; rung 7 licenses the withheld directions.</p></div>
 </header>
 
 <section class="class step" data-step="1f1">
-  <h2 class="sthead"><span class="stno">1f1</span>Marks for the ways a statement can come out</h2>
-  <p class="stands">Stands on 1b1 (the word, then the mark) and 0a3 (what a statement is).</p>
-  <p data-pid="10a941">A statement is so or not so. The rung's techs never needed to say which, because a proof earns a line without looking at the world. A table does look, in a way. It asks: “suppose this letter came out so, and that one not so; what then of the whole?” For that it wants marks for the ways a statement can come out, and here they are:</p>
-  <div class="eqline" data-tex="\begin{aligned}&amp;\text{From here on, in a table, } \mathrm{T} \text{ under a }\\ &amp;\quad \text{statement means: it is true in this }\\ &amp;\quad \text{row; } \mathrm{F} \text{ means: it is false in this row.}\end{aligned}"></div>
-  <p data-pid="fcb346">T is short for “true” and F for “false”. In this step they mean only this: true in the row, false in the row.</p>
-  <ul>
-    <li data-pid="6ea51b">A <b>table</b> is a listing of rows.</li>
-    <li data-pid="5137f9">A <b>row</b> is a way the letters come out, written as a string of T and F in the order of the letters. For P and Q the rows are TT, TF, FT and FF.</li>
-    <li data-pid="033aa0">Rows are named by their letters, never counted. Example: the row TF is the row where P is true and Q is false. With P “it rains” and Q “the street is wet”, the row TF is the rainy day with a dry street.</li>
-    <li data-pid="026c97">A <b>column</b> of the table is what a statement does, row by row.</li>
-    <li data-pid="434f22">A table of this kind is called a <b>truth table</b>.</li>
-  </ul>
-  <p class="eqline" data-pid="73b0f5">From here on, the upright T and F under a statement in a table are these marks.</p>
+  <h2 class="sthead"><span class="stno">1f1</span>Why you may rewrite a piece</h2>
+  <p class="stands">Stands on 1e14 (= between statements: same column) and 0b's swap axiom.</p>
+  <p data-pid="2dc180">The power of a rephrasing is not that “nobody came” means “not anybody came”. The power is that you may make the swap <i>inside</i> a sentence that holds it, and nothing else changes. Example: “if nobody came, the party was a flop” becomes “if not anybody came, the party was a flop”. Logic gets the same power for the same reason. Each machine in 1e reads only the T or F of its inputs. So replace a piece of a statement with another piece that has the same column. Every machine above the piece receives, in every row, exactly what it received before. So the column of the whole is untouched. <b>That is the licence for every rewrite in this step: substitute for the piece, where the sameness is “same column”.</b> It rests on 0b's swap axiom, with 1e's = between statements. By that axiom, the statement with the piece replaced has the old statement's column.</p>
+  <p data-pid="3982e7">A chain of such rewrites shows that the statement it starts from and the statement it ends at are equivalent, with no table. Tables check each technique once; chains then use the technique for ever after. Check once, use for ever: that is the trade rewriting always makes, and rung 5 will make it again with a rulebook of its own.</p>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">1f1.1</span><span class="ph know">know</span>What is a row of a truth table, and what is a column? <br>What do T and F mean in a table?</li>
+      <li><span class="qid">1f1.1</span><span class="ph know">know</span>Why may a piece of a statement be replaced by another piece with the same column?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="1f2">
-  <h2 class="sthead"><span class="stno">1f2</span>The machines</h2>
-  <p class="stands">Stands on 1f1 (marks for the ways a statement can come out).</p>
-  <p data-pid="039761">A joining word makes a statement out of others, and the new statement's row depends only on theirs. So each word is a machine: feed in T or F for each part, and it hands back T or F. ¬ works on a statement by itself; the others join P and Q. Here they are, each described in words before the table:</p>
-  <ul>
-    <li><b>Not</b>, <span data-tex-inline="\neg P">¬P</span>: swaps T and F. T becomes F, F becomes T.</li>
-    <li><b>And</b>, <span data-tex-inline="P \land Q">P ∧ Q</span>: T only when both parts are T.</li>
-    <li><b>Or</b>, <span data-tex-inline="P \lor Q">P ∨ Q</span>: T when either part is T, or both. The generous or, as 1c said. (Latin had a word for each sense, <i>vel</i> for this and <i>aut</i> for “but not both”; ∨ is usually said to come from <i>vel</i>.)</li>
-    <li><b>If</b>, <span data-tex-inline="P \Rightarrow Q">P ⇒ Q</span>: F in exactly the row where P is T and Q is F, and T otherwise.</li>
-    <li><b>Exactly when</b>, <span data-tex-inline="P \Leftrightarrow Q">P ⇔ Q</span>: T when P and Q match, both T or both F.</li>
-    <li><b>The totally false</b>, <span data-tex-inline="\bot">⊥</span>: F in every row. It is never true, so no row makes it T.</li>
-  </ul>
-  <div class="tablewrap"><table class="tt" id="five"></table></div>
-  <p data-pid="a1b044">Learn each machine by the row that stands out. ∧ is T only in the row TT. ∨ is F only in the row FF. ⇒ is F only in the row TF. ⇔ is T in the rows TT and FF, where the letters agree.</p>
-  <section class="pic" id="regions">
-    <div class="eyebrow">The picture · the four rows as four regions</div>
-    <div class="panel">
-      <div class="cap">Each patch is where its letter is true. The four regions are the four rows: inside both is TT, inside P only is TF, inside Q only is FT, outside both is FF. Tap a machine and the regions where it gives T turn green. Set P and Q to pick a row: the dot moves to that region, and the readout says what the machine gives there.</div>
-      <div class="chips" role="group" aria-label="machine" id="rgop"><span class="m" style="color:var(--muted)">machine:</span></div>
-      <div class="chips" role="group" aria-label="the row"><span class="m" style="color:var(--muted)">the row:</span><button type="button" id="rgP">P is T</button><button type="button" id="rgQ">Q is T</button></div>
-      <svg id="rgsvg" viewBox="0 0 360 230" role="img" aria-label="two overlapping patches P and Q in a box; the regions where the chosen machine gives T are green" style="width:100%;max-width:520px;height:auto;display:block;margin:0 auto"></svg>
-      <div class="eqbox" id="rgout"></div>
-      <div class="tablewrap compact"><table class="tt" id="rgtab"></table></div>
-    </div>
-  </section>
+  <h2 class="sthead"><span class="stno">1f2</span>A mark for “always”</h2>
+  <p class="stands">Stands on 1b (not, the totally false ⊥) and 1e2 (⊥ is F in every row).</p>
+  <p data-pid="881ffa">The rulebook wants a partner for ⊥: a statement that is true in every row. The denial of the totally false will do. ⊥ is F in every row (1e2), so its denial is T in every row, and a line may hold it beside anything without changing what the line says. 3a earns it as a technique from nothing, with a box: suppose ⊥, and refute. Here is the mark:</p>
+  <div class="eqline" data-tex="\begin{aligned}&amp;\text{From here on, } \top \text{ means: } \neg\bot,\\ &amp;\quad \text{ the denial of the totally false.}\\ &amp;\quad\text{Read it “top”; its column is all T.}\end{aligned}"></div>
+  <p data-pid="670db6">Example: P ∧ ⊤ has the column of P. In the row where P is T, the and gets T and T, which gives T. In the row where P is F, the and gets F and T, which gives F. So adding “and always” says nothing new. ⊤ is the statement that never fails, and ⊥ is the statement that never holds.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">1f2.1</span><span class="ph know">know</span>Why is each joining word a machine? <br>By which row does each of ∧, ∨ and ⇒ stand out?</li>
+      <li><span class="qid">1f2.1</span><span class="ph know">know</span>What is ⊤, and why may a line hold it beside anything?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="1f3">
-  <h2 class="sthead"><span class="stno">1f3</span>Why the if machine is built that way</h2>
-  <p class="stands">Stands on 1f2 (the machines) and 1d12 (free ifs).</p>
-  <p data-pid="a7fbbe"><a href="r01d.html#2f2e8d">1d1</a> said it: an if is broken only by its condition met and its promise failing. 1d's street-cleaning truck is the row FT: no rain, wet street, promise intact.</p>
-  <p data-pid="845277">The rows where P is F bother everyone at the start. Why should “if P then Q” count as true when P is false? 1d already answered, by techs, before any table existed. The free-if technique is the move that fixes the rows: from ¬P, you may write P ⇒ Q for any Q; and from Q, you may write P ⇒ Q for any P. So in the rows FT and FF, where ¬P is true, the if must be true. In the rows TT and FT, where Q is true, the if must be true. That fixes T in the rows FT, FF and TT. The remaining row, TF, is fixed by carry-through: if P and P ⇒ Q were both true there, Q would be true. But in that row Q is false, so the if is false. The ⇒ table is not a convention someone chose. The techs of 1d leave it no other way to be.</p>
+  <h2 class="sthead"><span class="stno">1f3</span>The rulebook</h2>
+  <p class="stands">Stands on 1f1 (the licence to rewrite a piece), 1f2 (⊤), and the techniques of 1b to 1d.</p>
+  <p data-pid="8b97d4">Here are the techniques, with names to say beside each rewrite. Each is a matching of columns, which you can check in 1e's machine. Each is written as a sameness, and the technique is the move: where a piece matches one side, you may write the other side in its place. Read each left to right <i>and</i> right to left. A technique used backwards is still the technique, as far as columns go. The last column of the table is about something else, and footing 1f4 explains that column.</p>
+  <p data-pid="75d187">Turn-about is a name you have met. <a href="r00b.html#4d5170">0b6</a>'s turns a sameness about; <a href="r01c.html#ed091d">1c3</a>'s and <a href="r01c.html#dbe67e">1c10</a>'s turn an and or an or about. <b>Every entry in the book is a technique: proved, and cited by its name.</b></p>
+  <p data-pid="0463a2">Say-it-again: saying a thing twice adds nothing. P ∧ P is P, and P ∨ P is P. The = in the table is <a href="r01e.html#dcd28c">1e's</a> = between statements: the two sides have the same column in every row.</p>
+  <p class="eqline" data-pid="0a2d69">From here on, a stroke written high after a letter makes a new name. So e′ is a different thing from e.</p>
+  <div class="tablewrap"><table class="laws" id="book">
+    <thead><tr><th>technique</th><th>in marks</th><th>in words</th><th>licensed by the techs, before rung 7</th></tr></thead>
+    <tbody>
+      <tr><td class="c">turn-about for And, for Or</td><td data-tex-inline="P \land Q = Q \land P,\;\; P \lor Q = Q \lor P">commute</td><td>order does not matter in and, or</td><td class="lic"><b>both ways, any statement</b> (1c: turn-about for And, turn-about for Or)</td></tr>
+      <tr><td class="c">regroup</td><td data-tex-inline="(P \land Q) \land R = P \land (Q \land R)">regroup</td><td>grouping does not matter (the same for ∨)</td><td class="lic"><b>both ways, any</b> (keep and join; cases)</td></tr>
+      <tr><td class="c">spread and over or</td><td data-tex-inline="P \land (Q \lor R) = (P \land Q) \lor (P \land R)">spread ∧ over ∨</td><td>the and spreads onto each side of the or; read backwards, a shared part is pulled out</td><td class="lic"><b>both ways, any</b> (cases)</td></tr>
+      <tr><td class="c">spread or over and</td><td data-tex-inline="P \lor (Q \land R) = (P \lor Q) \land (P \lor R)">spread ∨ over ∧</td><td>the spreading technique with ∨ outside</td><td class="lic"><b>both ways, any</b> (cases)</td></tr>
+      <tr><td class="c">say-it-again</td><td data-tex-inline="P \land P = P,\;\; P \lor P = P">idempotent</td><td>saying it again adds nothing: doing it twice does what doing it once did </td><td class="lic"><b>both ways, any</b></td></tr>
+      <tr><td class="c">absorb</td><td data-tex-inline="P \land (P \lor Q) = P,\;\; P \lor (P \land Q) = P">absorb</td><td>P swallows an or or an and it already settles</td><td class="lic"><b>both ways, any</b></td></tr>
+      <tr><td class="c">not-through for or</td><td data-tex-inline="\neg(P \lor Q) = \neg P \land \neg Q">De Morgan for or</td><td>not either is neither</td><td class="lic"><b>both ways, any</b> (1c: neither)</td></tr>
+      <tr><td class="c">not-through for and</td><td data-tex-inline="\neg(P \land Q) = \neg P \lor \neg Q">De Morgan for and</td><td>not both; P fails or Q fails</td><td class="lic"><b>← any</b> (1c); → rung 7</td></tr>
+      <tr><td class="c">not-not</td><td data-tex-inline="\neg\neg P = P">not-not</td><td>a not on a not cancels</td><td class="lic"><b>← any</b> (1b: not-not-in); → rung 7</td></tr>
+      <tr><td class="c">if-as-or</td><td data-tex-inline="P \Rightarrow Q = \neg P \lor Q">if as or</td><td>either P is false or Q is true</td><td class="lic"><b>← any</b> (1d: free-if, cases); → rung 7</td></tr>
+      <tr><td class="c">turn-and-deny</td><td data-tex-inline="P \Rightarrow Q = \neg Q \Rightarrow \neg P">contrapositive</td><td>turn it about and deny both</td><td class="lic"><b>→ any</b> (1d: turn-and-deny); ← rung 7</td></tr>
+      <tr><td class="c">negated-if</td><td data-tex-inline="\neg(P \Rightarrow Q) = P \land \neg Q">negate an if</td><td>the hypothesis is true, the conclusion false</td><td class="lic"><b>← any</b>; → rung 7</td></tr>
+      <tr><td class="c">two-ifs</td><td data-tex-inline="P \Leftrightarrow Q = (P \Rightarrow Q) \land (Q \Rightarrow P)">an if each way</td><td>what 1d's line for ⇔ says</td><td class="lic"><b>both ways, any</b> (unpack, pack)</td></tr>
+      <tr><td class="c">cases</td><td data-tex-inline="(P \Rightarrow R) \land (Q \Rightarrow R) = (P \lor Q) \Rightarrow R">cases</td><td>ifs sharing a conclusion</td><td class="lic"><b>both ways, any</b> (cases; add an option)</td></tr>
+      <tr><td class="c">hypotheses-in-turn</td><td data-tex-inline="(P \land Q) \Rightarrow R = P \Rightarrow (Q \Rightarrow R)">export</td><td>hypotheses taken in turn</td><td class="lic"><b>both ways, any</b> (prove an if; keep, join)</td></tr>
+      <tr><td class="c">clash</td><td data-tex-inline="P \land \neg P = \bot">contradiction</td><td>both at once is never so</td><td class="lic"><b>both ways, any</b> (clash; everything permitted)</td></tr>
+      <tr><td class="c">either-way principle</td><td data-tex-inline="P \lor \neg P = \top">excluded middle</td><td>P or not-P is true</td><td class="lic">rung 7 (its very principle)</td></tr>
+      <tr><td class="c">units</td><td data-tex-inline="P \land \top = P,\;\; P \lor \bot = P,\;\; P \land \bot = \bot,\;\; P \lor \top = \top">units</td><td>⊤ is always, ⊥ is never</td><td class="lic"><b>both ways, any</b></td></tr>
+    </tbody></table></div>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">1f3.1</span><span class="ph know">know</span>Why must P ⇒ Q be T in the rows where P is F, and F in the row TF?</li>
+      <li><span class="qid">1f3.1</span><span class="ph know">know</span>What is an entry in the rulebook, and how is it used?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="1f4">
-  <h2 class="sthead"><span class="stno">1f4</span>The tables agree with the techs</h2>
-  <p class="stands">Stands on 1f3 (why the if machine is built that way) and the techs of 1b to 1d.</p>
-  <p data-pid="4118db"><b>Each tech of the rung, run on lines that are T in a row, gives a line that is T in that row.</b> No table lets a tech lead from T to F. That is what it means for the tables to agree with the techs, and here is the check, tech by tech.</p>
-  <div class="tablewrap"><table class="agree">
-    <thead><tr><th>the tech</th><th>what it needs of the tables</th><th>the check</th></tr></thead>
-    <tbody>
-      <tr><td>join</td><td>P and Q both T make P ∧ Q T</td><td>∧ is T in the row TT</td></tr>
-      <tr><td>keep either part</td><td>P ∧ Q T makes P T, and Q T</td><td>∧ is T only in the row TT, where both are T</td></tr>
-      <tr><td>add an option</td><td>P T makes P ∨ Q T (and Q T does too)</td><td>∨ is T in the rows TT, TF and FT</td></tr>
-      <tr><td>reason by cases</td><td>where P ∨ Q is T, P is T or Q is T</td><td>∨ is F only in the row FF</td></tr>
-      <tr><td>carry an if through</td><td>P and P ⇒ Q both T make Q T</td><td>only the row TT has both T, and Q is T there</td></tr>
-      <tr><td>prove an if</td><td>P ⇒ Q is T wherever Q follows from P</td><td>forced by the free-if technique and carry-through, in 1f3</td></tr>
-      <tr><td>refute, clash</td><td>P and ¬P are never both T</td><td>¬ swaps T and F</td></tr>
-      <tr><td>when nothing is true, everything is permitted</td><td>⊥ is never T</td><td>no row to break</td></tr>
-      <tr><td>an if each way</td><td>P ⇔ Q has the column of (P ⇒ Q) ∧ (Q ⇒ P)</td><td>checked on the slides, row by row</td></tr>
-    </tbody></table></div>
-  <p data-pid="f1a7c2">Be clear about what this table claims. It checks single techs, one row at a time: put statements that are T into any one tech, and what comes out is T in the same row. That is all it says right now. It is enough to check any argument in front of you, one move after another. <b>It does not yet say anything about every argument at once.</b> That would be a claim about arguments as things you can collect and count, and those are built at 4d. There this same table grows into a claim about every proof there is: whatever the techs reach from true statements is true.</p>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · an exactly-when is an if each way · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">1f4</span>Settled statements, and the last column</h2>
+  <p class="stands">Stands on 1f3 (the rulebook) and 1e11 (where the table takes a row for granted).</p>
+  <p data-pid="61c291">Every technique in the book has matching columns. So for any statement you can <b>settle</b>, every technique may be used both ways. To settle a statement is to find out whether it is true or false. For example, you settle “the school library is open” by walking past the door. Once you can find your row, the table does the rest. Unless a question says a statement is unsettled, its statements are settled, so on that question use the whole book freely.</p>
+  <p data-pid="8744af">The last column is for the other kind: statements nobody can settle. That column is where the rung's gap shows up. From here on, beside a technique, 1e's arrow also has this job. → stands for the technique read left to right, its forward direction. ← stands for the technique read right to left, its backward direction. For example, not-through for and read → turns ¬(P ∧ Q) into ¬P ∨ ¬Q.</p>
+  <p data-pid="20412f">An arrow marked <b>any</b> is a direction the rung's techs prove, for any statements at all. Where a technique on an earlier step does it, that technique is named. A direction marked <b>rung 7</b> is one the table supports and the techs do not. It needs the principle rung 7 lays down: that every statement has a row.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">1f4.1</span><span class="ph know">know</span>What does it mean for the tables to agree with the techs? <br>What does the check claim, and what does it not yet claim?</li>
+      <li><span class="qid">1f4.1</span><span class="ph know">know</span>What is it to settle a statement? <br>What do the marks any and rung 7 in the last column say?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="1f5">
-  <h2 class="sthead"><span class="stno">1f5</span>Where tables and techs part company</h2>
-  <p class="stands">Stands on 1f4 (the tables agree with the techs) and 1b14 (the step you cannot take).</p>
-  <p data-pid="480804">Now the place where tables and techs part company, which is the place the rung flagged. The ¬ table gives ¬¬P the same column as P: swap, and swap again, and you are back. Yet 1b has no tech from ¬¬P to P. The table has quietly assumed something: that P sits in a row at all, T or F, settled. For a statement you can settle by looking, that costs nothing. For a statement nobody can settle, giving P a row is an assumption, not a calculation, and the techs make no such assumption. Keep the thought that a row is an assumption; it comes back in 1f11.</p>
+  <h2 class="sthead"><span class="stno">1f5</span>Why a direction waits for rung 7</h2>
+  <p class="stands">Stands on 1f4 (the arrows in the last column) and 1c (not both, and where the techs stopped).</p>
+  <p data-pid="892505">Take not-through for and. If you know “not both P and Q”, does that tell you “P fails, or Q fails”? Only if you can find out which one fails, and a line cannot: “Ann and Ben cannot both be guilty” never points at an innocent suspect.</p>
+  <p data-pid="bdfa2d">Read not-through for and the other way, and it is fine. If P fails, then certainly not both P and Q. So the backward direction is marked <b>any</b>, and the forward direction is marked <b>rung 7</b>.</p>
+  <p data-pid="59f842">Likewise ¬¬P says “P is not totally false”. On this rung that is weaker than P. So not-not is fine backward and waits forward. Each technique marked with a rung-7 direction has this shape: fine one way, blocked the other. The either-way principle, P ∨ ¬P, is the gap itself. When you make a chain, it is worth knowing which steps leaned on a rung-7 direction. The machine in footing 1f8 marks them for you.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">1f5.1</span><span class="ph know">know</span>Where do the tables and the techs part company, and what did the table quietly assume there?</li>
+      <li><span class="qid">1f5.1</span><span class="ph know">know</span>Why is the forward direction of not-through for and marked rung 7, while the backward direction is any?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="1f6">
-  <h2 class="sthead"><span class="stno">1f6</span>Rows: every way the letters can come out</h2>
-  <p class="stands">Stands on 1f1 (marks for the ways a statement can come out).</p>
-  <p data-pid="bd4ec2">A statement made of letters and machines is a <b>compound statement</b>. Its table has a row for each way of making its letters T or F. Bring in another letter and every old row comes back twice: once with the newcomer T and once with it F. The rows for P, Q and R are the rows for P and Q, each with an R of T and again with an R of F. To list them without missing any, let the letters change at different speeds. The last letter changes at every row. The letter before it changes only after the last has been through T and F. The earliest stays T until all the others have been through all their ways together. Then it turns F while they go through them again. The machine in 1f16 lists the rows for P, Q and R that way.</p>
+  <h2 class="sthead"><span class="stno">1f6</span>Turned-about places</h2>
+  <p class="stands">Stands on 1f5 (one-way techniques) and 1d (the hypothesis of an if).</p>
+  <p data-pid="c90d57">A further subtlety, which the machine also tracks. A technique licensed both ways may be used on a piece anywhere inside a statement, and the whole says the same by techs. (The proof is a routine on the joining word above the piece.) A technique licensed only forward, or only backward, may be used on a piece standing on its own. It may also be used on a piece inside an and, an or, or the conclusion of an if.</p>
+  <p data-pid="aed601">Inside a not, or inside the hypothesis of an if, the direction turns about. Those places are turned about: making the hypothesis stronger makes the if weaker. Example: “if you have a dog, you get a sticker” promises more than “if you have a big dog, you get a sticker”. Strengthen the hypothesis from “a dog” to “a big dog”, and the if says less. The machine marks a one-way technique used in a turned-about place as a rung-7 step. That is why the if-as-or step in footing 1f7 is licensed there: it sits inside a not.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">1f6.1</span><span class="ph know">know</span>What is a compound statement? <br>What happens to the rows when another letter is brought in, and how are they listed without missing one?</li>
+      <li><span class="qid">1f6.1</span><span class="ph know">know</span>What is a turned-about place, and what happens to a one-way technique used in one?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="1f7">
-  <h2 class="sthead"><span class="stno">1f7</span>One row, worked by hand</h2>
-  <p class="stands">Stands on 1f6 (rows) and 1f2 (the machines).</p>
-  <p data-pid="60ab1e">Work out the compound statement from the inside out, the way you unpack “the sister of the mother of Ann”: find Ann's mother, then her sister. Innermost brackets before outer ones. Recall from <a href="r01c.html#669fee">1c1</a> that this ladder writes its brackets, with the exception that ¬ grabs only the letter or bracket right after it. Here is a statement, worked in the row FTT, one step at a time:</p>
-  <div class="eqline" data-tex="(P \lor Q) \Rightarrow \neg R"></div>
-  <p data-pid="d01dbd">Take the row FTT: P is F, Q is T, R is T. Put those marks in place of the letters:</p>
-  <div class="eqline" data-tex="(\mathrm F \lor \mathrm T) \Rightarrow \neg \mathrm T"></div>
-  <p data-pid="aff8e6">Start with the innermost bracket. An or is T when either side is T, so F ∨ T is T. Next the not: ¬T is F. That leaves T ⇒ F. An if from T to F is the bad row of ⇒, so it is F.</p>
-  <p data-pid="223a12">So in the row FTT the whole statement is F.</p>
+  <h2 class="sthead"><span class="stno">1f7</span>Pushing a not inward: the negation of an if</h2>
+  <p class="stands">Stands on 1f6 (turned-about places) and the rulebook's not-through, if-as-or and not-not.</p>
+  <p data-pid="86aa59">The commonest job in all of mathematics is to say exactly what it would take for a statement to fail. The method: put ¬ in front of the whole thing, then push it inward, one technique at a time, until it sits only on letters. Every joining word the not passes through changes. Through ∧ it becomes ∨, by not-through, and through ∨ it becomes ∧. Through ⇒ it becomes ∧ with the ¬ moved onto the conclusion. And ¬ on ¬ cancels.</p>
+  <p data-pid="4e07ac">Here is the negation of an if, the one people get wrong most. Take “if it rains, the game is cancelled”. What would it take for that promise to fail? It fails only if it rains and the game is played anyway. Here is the same answer reached in three rewrites, with P for “it rains” and Q for “the game is cancelled”.</p>
+  <p data-pid="20abbe">Start from <span data-tex-inline="\neg(P \Rightarrow Q)"></span>: what it would take for “if P then Q” to fail. First rewrite the if inside as an or, by if-as-or read forward: <span data-tex-inline="\neg(\neg P \lor Q)"></span>. On its own that direction waits for rung 7. But here the if sits inside a not, a turned-about place, so here the forward direction is licensed.</p>
+  <p data-pid="72a31e">Next push the not through the or, by not-through for or. The or turns into an and: <span data-tex-inline="\neg\neg P \land \neg Q"></span>. That technique works both ways, for any statement.</p>
+  <p data-pid="d53a11">Last, cancel the not on a not, by not-not read forward: <span data-tex-inline="P \land \neg Q"></span>. That is a rung-7 direction, fine for a settled P.</p>
+  <p data-pid="8d1b79">So the negation of an if is <i>not</i> another if. <b>The negation of an if is an and: the hypothesis happened and the conclusion did not.</b> “It is not so that if it rains the game is cancelled” means “it rains and the game is played”. The negated-if technique in the book is that whole chain packed into one rewrite. Read right to left, negated-if may be used on any statement. If P happened and Q did not, then “if P then Q” certainly failed: suppose the if, carry it through, clash, refute.</p>
+  <section class="slides" id="sl7"><div class="eyebrow">The slides · negating an if · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">1f7.1</span><span class="ph know">know</span>In what order is a compound statement worked in one row?</li>
+      <li><span class="qid">1f7.1</span><span class="ph know">know</span>What is the negation of an if? <br>By which three rewrites is it reached?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="1f8">
-  <h2 class="sthead"><span class="stno">1f8</span>A whole table</h2>
-  <p class="stands">Stands on 1f7 (one row, worked by hand).</p>
-  <p data-pid="6166c2">A whole table is the work of 1f7, done for every row, with a column for each piece so that the work shows. For <span data-tex-inline="\neg(P \land \neg Q)">¬(P ∧ ¬Q)</span> the pieces are ¬Q, then P ∧ ¬Q, then the whole:</p>
-  <div class="tablewrap"><table class="tt" id="t2"></table></div>
-  <p data-pid="05b75c">Its final column, down the rows TT, TF, FT, FF, reads T F T T. You have seen that column already: it is the ⇒ column. That is 1d's “no P without Q”, ¬(P ∧ ¬Q), showing up as the if by its column. Keep that in mind; it comes back in 1f14.</p>
+  <h2 class="sthead"><span class="stno">1f8</span>A chain that simplifies, and the rewriting machine</h2>
+  <p class="stands">Stands on 1f3 (the rulebook) and 1f5 (marking a rung-7 step).</p>
+  <p data-pid="74efcd">A chain can also make a statement smaller. Take (P ∧ Q) ∨ (P ∧ ¬Q): “P and Q, or P and not Q”. It feels as if it should just be P. Here is the plan: pull the shared P out, then show that what is left adds nothing.</p>
+  <p data-pid="e394e4">Read spread and over or backward: both sides of the or are “P and something”, so the P comes out in front, giving P ∧ (Q ∨ ¬Q). Then Q ∨ ¬Q is ⊤ by the either-way principle. That step is rung 7's very principle, so it needs Q settled until then. Last, units: P ∧ ⊤ is P. The chain is honest for any Q you can settle, and the either-way step must be marked.</p>
+  <p data-pid="9f1259">The machine below lets you make chains of your own. Pick a piece, apply a technique, and watch the column stay put. It marks with † every step that waits for rung 7, by direction or by place.</p>
+  <section class="slides" id="sl8"><div class="eyebrow">The slides · simplify · ← → keys work</div></section>
+  <section class="pic" id="pic">
+  <div class="eyebrow">The picture · the rewriting machine: pick a piece, apply a technique, and watch the column stay put</div>
+  <div class="panels">
+    <div class="panel">
+      <div class="chips" role="group" aria-label="goals"><span class="m" style="color:var(--muted)">start → aim:</span><button data-g="¬(P ⇒ Q)|P ∧ ¬Q" class="on">negate an if</button><button data-g="(P ∧ Q) ∨ (P ∧ ¬Q)|P">simplify</button><button data-g="(P ⇒ R) ∧ (Q ⇒ R)|(¬P ∧ ¬Q) ∨ R">cases, opened</button><button data-g="¬(P ∨ ¬Q)|¬P ∧ Q">push a ¬</button><button data-g="P ⇔ Q|(¬P ∨ Q) ∧ (¬Q ∨ P)">iff as ors</button></div>
+      <div class="own"><div class="knob" style="min-width:0"><label for="ownS">or start from</label><input type="text" id="ownS" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder="e.g. ¬(P ∧ (Q ∨ R))"></div><div class="knob" style="min-width:0"><label for="ownG">aim for (optional)</label><input type="text" id="ownG" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder="leave blank to explore"></div><button id="ownGo">start</button></div>
+      <div class="err" id="ownE" style="font-family:var(--mono);font-size:.8rem;color:var(--ember)"></div>
+      <div class="cap">Tap a piece of the statement to select it (ember outline); tap a mark to select the piece it joins. Techniques that fit the selected piece light up.</div>
+      <div class="stmt" id="stmt" aria-live="polite"></div>
+      <div class="chips"><button id="selAll">select the whole statement</button><button id="undo">undo</button><button id="reset">start over</button></div>
+      <div class="lh">the rulebook · <span style="text-transform:none;letter-spacing:0">† marks a step that waits for rung 7, by direction or by place</span></div>
+      <div class="lawbtns" id="laws"></div>
+      <div class="lh" style="color:var(--ember)">tempting, illegal</div>
+      <div class="lawbtns bad" id="bad"></div>
+    </div>
+    <div class="panel">
+      <div class="cap">Your derivation, each move on its own line. Orange: the piece the move made. Right: the line's column (rows in 1e's order); a wavy underline marks a row where it no longer matches the start.</div>
+      <div class="brk brk-ember" data-label="your chain" id="derbox"><div class="rows" id="der"></div></div>
+      <div class="eqbox status" id="status"></div>
+    </div>
+  </div>
+</section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">1f8.1</span><span class="ph know">know</span>What is a whole table? <br>Which column did ¬(P ∧ ¬Q) turn out to have?</li>
+      <li><span class="qid">1f8.1</span><span class="ph know">know</span>How does the chain bring (P ∧ Q) ∨ (P ∧ ¬Q) down to P, and which step must be marked?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="1f9">
-  <h2 class="sthead"><span class="stno">1f9</span>Statements that cannot fail</h2>
-  <p class="stands">Stands on 1f8 (a whole table).</p>
-  <p data-pid="2b2a04">A <b>tautology</b> is a statement whose final column is all T: it is true whatever its letters do. A <b>contradiction</b>, in this step, is a statement whose column is all F. Example: 1b's ⊥, the plainest contradiction there is. The word is the same as the everyday word for what clash finds. Everything else is true in some rows and false in others. The most important tautology in this step is carry-through, written as a statement:</p>
-  <div class="eqline" data-tex="\big(P \land (P \Rightarrow Q)\big) \Rightarrow Q"></div>
-  <p data-pid="3bfc7a">You do not need every row to check it. An ⇒ can only fail where its right side is F and its left side is T. So <b>hunt for the bad row</b>: make Q F and see whether the left side can still be T. With Q F, P ⇒ Q is F when P is T, and P itself is F otherwise. Either way the left side is F. No bad row, so it is a tautology.</p>
-  <section class="slides" id="sl9"><div class="eyebrow">The slides · the bad-row hunt · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">1f9</span>The if family</h2>
+  <p class="stands">Stands on 1d (turn-and-deny) and 1e (the rows TF and FT).</p>
+  <p data-pid="328982">Every if has relatives, and here are their names. Start from <span data-tex-inline="P \Rightarrow Q">P ⇒ Q</span>:</p>
+  <ul>
+    <li>the <b>converse</b>, <span data-tex-inline="Q \Rightarrow P">Q ⇒ P</span>: the arrow turned about;</li>
+    <li>the <b>inverse</b>, <span data-tex-inline="\neg P \Rightarrow \neg Q">¬P ⇒ ¬Q</span>: both sides denied, arrow left alone;</li>
+    <li>the <b>contrapositive</b>, <span data-tex-inline="\neg Q \Rightarrow \neg P">¬Q ⇒ ¬P</span>: both at once.</li>
+  </ul>
+  <p data-pid="0380ed">The contrapositive is equivalent to the original: that is the turn-and-deny technique, whose forward direction is 1d's. The converse and the inverse are not equivalent to the original. But they are equivalent to <i>each other</i>, since the inverse is the contrapositive of the converse. So they split into partners that stand or fall together: the original with its contrapositive, the converse with the inverse. 1e's table showed the rows TF and FT, where the partnerships disagree.</p>
+  <p data-pid="1429e7">Example: “if it is a cat, it is an animal” and “if it is not an animal, it is not a cat” stand or fall together. “If it is an animal, it is a cat” and “if it is not a cat, it is not an animal” are the other partnership. Rex, an animal that is not a cat, sinks both.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">1f9.1</span><span class="ph know">know</span>What is a tautology, and what is a contradiction? <br>How does the bad-row hunt check an ⇒?</li>
+      <li><span class="qid">1f9.1</span><span class="ph know">know</span>What are the converse, the inverse and the contrapositive of P ⇒ Q? <br>Which pairs stand or fall together?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="1f10">
-  <h2 class="sthead"><span class="stno">1f10</span>The hunt catches a 1d mistake</h2>
-  <p class="stands">Stands on 1f9 (statements that cannot fail) and 1d16 (illegal moves).</p>
-  <p data-pid="50c813">Now swap the roles in carry-through, which is 1d's affirming the consequent:</p>
-  <div class="eqline" data-tex="\big(Q \land (P \Rightarrow Q)\big) \Rightarrow P"></div>
-  <p data-pid="54b174">Hunt: make P F. Can the left side be T? Yes. Q T makes P ⇒ Q come out F ⇒ T, which is T. So the left side is T ∧ T, and the whole is T ⇒ F, which is F. That row, P F and Q T, is the street-cleaning truck: the street is wet, the promise is kept, it did not rain. The table finds the convicting row for you, and the machine in 1f16 will hunt it for you too.</p>
-  <section class="slides" id="sl10"><div class="eyebrow">The slides · from 1d: affirming the consequent, caught · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">1f10</span>The if in English</h2>
+  <p class="stands">Stands on 1f9 (the if family) and 1d (the readings of the arrow).</p>
+  <p data-pid="5c59ab">English has a crowd of phrasings for the arrow, and they point in different directions. Here they are one to a row, each with why it is that arrow:</p>
+  <div class="tablewrap"><table class="eng">
+    <thead><tr><th>English</th><th>marks</th><th>why it is that arrow</th></tr></thead>
+    <tbody>
+      <tr><td>if P, then Q</td><td data-tex-inline="P \Rightarrow Q">P ⇒ Q</td><td>the line itself</td></tr>
+      <tr><td>Q if P</td><td data-tex-inline="P \Rightarrow Q">P ⇒ Q</td><td>the same condition, said last</td></tr>
+      <tr><td>Q whenever P</td><td data-tex-inline="P \Rightarrow Q">P ⇒ Q</td><td>every time the condition is met, the promise is kept</td></tr>
+      <tr><td>P is sufficient for Q</td><td data-tex-inline="P \Rightarrow Q">P ⇒ Q</td><td>having P is enough to have Q</td></tr>
+      <tr><td>P only if Q</td><td data-tex-inline="P \Rightarrow Q">P ⇒ Q</td><td>P never happens except alongside Q</td></tr>
+      <tr><td>Q is necessary for P</td><td data-tex-inline="P \Rightarrow Q">P ⇒ Q</td><td>without Q there is no P</td></tr>
+      <tr><td>no P without Q</td><td data-tex-inline="P \Rightarrow Q">P ⇒ Q</td><td>it forbids the one breaking case, P with not-Q</td></tr>
+      <tr><td>P unless Q</td><td data-tex-inline="\neg Q \Rightarrow P">¬Q ⇒ P</td><td>when Q is false, P is true</td></tr>
+      <tr><td>P, if not Q</td><td data-tex-inline="\neg Q \Rightarrow P">¬Q ⇒ P</td><td>the condition is not-Q</td></tr>
+      <tr><td>P if and only if Q</td><td data-tex-inline="P \Leftrightarrow Q">P ⇔ Q</td><td>an if each way</td></tr>
+      <tr><td>P exactly when Q</td><td data-tex-inline="P \Leftrightarrow Q">P ⇔ Q</td><td>1d's reading of the two-way mark</td></tr>
+      <tr><td>P is necessary and sufficient for Q</td><td data-tex-inline="P \Leftrightarrow Q">P ⇔ Q</td><td>sufficient one way, necessary the other</td></tr>
+    </tbody></table></div>
+  <p data-pid="12abf0">“Only if” is the trap <a href="r01d.html#7ae36a">1d2</a> warned of. “You can ride the big coaster only if you are tall enough” says riding needs height: <span data-tex-inline="C \Rightarrow T">C ⇒ T</span>. It does not promise that being tall enough gets you on.</p>
+  <p data-pid="d4e2a6">And everyday speech often hears what is not said. “You can have dessert if you finish your dinner” is usually taken to mean “and not if you don't”, an exactly-when. That is a fact about conversation, not about the arrow. On the ladder, “if” means only what the ⇒ machine says.</p>
+  <section class="slides" id="sl10"><div class="eyebrow">The slides · English · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">1f10.1</span><span class="ph know">know</span>What does the hunt find when it is run on affirming the consequent?</li>
+      <li><span class="qid">1f10.1</span><span class="ph know">know</span>Which arrow does “only if” write? <br>What does the ladder’s “if” leave out that conversation puts in?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="1f11">
-  <h2 class="sthead"><span class="stno">1f11</span>A tautology that needs a caution</h2>
-  <p class="stands">Stands on 1f10 (the hunt catches a 1d mistake) and 1f5 (where tables and techs part company).</p>
-  <p data-pid="140488">Another tautology needs a caution:</p>
-  <div class="eqline" data-tex="P \lor \neg P"></div>
-  <p data-pid="0a2db2">Every row gives T: in the row where P is T, the left disjunct is T; where P is F, the right is. The table says “tautology”, and for any statement you can settle by looking, the table is right. “The cat is on the mat or the cat is not on the mat”: you go and look. But notice what the table took for granted. It gave P a row in which P is T and a row in which P is F, as if P were settled. No tech of the rung proves P ∨ ¬P. The last move would be add an option, which needs P in hand or ¬P in hand, and for a bare letter you have neither.</p>
-  <p data-pid="cd8f66">Take a statement nobody can check, such as “it was raining on this very spot on a morning ten thousand years ago”. For it, the table's row is a guess about a world it cannot see.</p>
-  <p data-pid="8cca21">Rung 7 lays down, as a principle, that every statement has a row, and by that principle P ∨ ¬P is so for all P. Until then the table is a tool for statements you can settle. That includes every statement about things you can list and look at, and that is where you will use it. <b>The tables are honest; it is the rows that need a licence.</b></p>
-  <section class="slides" id="sl11"><div class="eyebrow">The slides · where the table assumes · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">1f11</span>A chain for turn-and-deny</h2>
+  <p class="stands">Stands on 1f8 (chains that mark their rung-7 steps) and 1d (turn-and-deny by techs).</p>
+  <p data-pid="0df8cf">Here is turn-and-deny itself, derived from other techniques. Take “if it rains, the street is wet”. Its contrapositive is “if the street is not wet, it did not rain”. Here is the chain from the one to the other. Watch which steps lean on a rung-7 direction.</p>
+  <p data-pid="503beb">Start from <span data-tex-inline="P \Rightarrow Q"></span>. Rewrite it as an or, by if-as-or read forward: <span data-tex-inline="\neg P \lor Q"></span>: “it does not rain, or the street is wet”. That direction is a rung-7 one.</p>
+  <p data-pid="54a480">Turn the or about: <span data-tex-inline="Q \lor \neg P"></span>. Then put a not on a not in front of Q, by not-not read backward: <span data-tex-inline="\neg\neg Q \lor \neg P"></span>. That direction is fine for any statement.</p>
+  <p data-pid="0f5dbf">Now read if-as-or backward, with ¬Q as the hypothesis: <span data-tex-inline="\neg Q \Rightarrow \neg P"></span>: “if the street is not wet, it did not rain”. That direction is fine for any statement too.</p>
+  <p data-pid="342c0f">One step used a rung-7 direction, so this chain proves turn-and-deny forward for settled statements only. Yet turn-and-deny forward may be used on <i>any</i> statement: 1d proved it by techs, with a supposition inside a supposition, and no rewriting. Chains are fast, but they are not the only road, and sometimes the slower road reaches further. So whenever a chain marks a step, ask whether the techs would get there without it.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">1f11.1</span><span class="ph know">know</span>Why does the tautology P ∨ ¬P need a caution?</li>
+      <li><span class="qid">1f11.1</span><span class="ph know">know</span>What does the chain for turn-and-deny show about chains and techs?</li>
     </ol>
   </section>
 </section>
 
+
 <section class="class step" data-step="1f12">
-  <h2 class="sthead"><span class="stno">1f12</span>Earned, and valid</h2>
-  <p class="stands">Stands on 1f11 (a tautology that needs a caution) and 1a6 (“true”).</p>
-  <p data-pid="1914d1">Since <a href="r01a.html#4e58bf">1a6</a>, a statement an argument reaches by changes that keep it true, each with its technique, is <b>earned</b>. Whether a statement is earned depends only on the steps and their reasons. Whether it is so is another matter. “Tibbles is a dog”, simply given, is earned, and it is not so.</p>
-  <p data-pid="75ed75">The tables give another idea, a different one. Call an argument, given lines above and a foot below, <b>valid</b> when no row makes every given line T and the foot F. Whatever the letters do, true given lines never come with a false foot. A statement on its own is valid when its column is all T, which is the tautology of 1f9. Validity is checked on the tables, by the bad-row hunt. Earning is checked on the argument, step by step. The next step asks whether earned and valid always agree.</p>
+  <h2 class="sthead"><span class="stno">1f12</span>Where a licence comes from</h2>
+  <p class="stands">Stands on 1f12 (illegal moves) and 1e2 (vel and aut).</p>
+  <p data-pid="da32ca">Here is a lesson about where licences come from. Spread or over and spreads ∨ over ∧. Now read “or” the Latin way, as <i>aut</i>, “this or that but not both”. The same-looking spreading move becomes illegal. The row TTF convicts it. Q ∧ R is T ∧ F, which is F, so P <i>aut</i> (Q ∧ R) is T <i>aut</i> F, which is T. But P <i>aut</i> Q is T <i>aut</i> T, which is F, so (P <i>aut</i> Q) ∧ (P <i>aut</i> R) is F.</p>
+  <p data-pid="fc60da">So the move is legal for <i>vel</i> and illegal for <i>aut</i>. <b>A move's licence comes from the rulebook it belongs to, never from its looks.</b> Rung 5 comes back to this with a rulebook of its own.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">1f12.1</span><span class="ph know">know</span>What is it for a statement to be earned? <br>What is it for an argument to be valid?</li>
+      <li><span class="qid">1f12.1</span><span class="ph know">know</span>Where does a move’s licence come from?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="1f13">
-  <h2 class="sthead"><span class="stno">1f13</span>Earned is valid, and not back</h2>
-  <p class="stands">Stands on 1f12 (earned, and valid) and 1f4 (the tables agree with the techs).</p>
-  <p data-pid="af914b">From earned to valid, they do agree. Every tech of the rung keeps T in every row: that was the check in 1f4. So take any argument in front of you and walk down it, step by step. The given lines are T in some row; each move gives a statement that is T in that row too; and so on, to the foot. That argument has no row with the given lines T and the foot F, so it is valid. You can do this for every argument you write. The word for techs like these is <b>sound</b>: each tech of this rung is sound. Saying “everything earned is valid” about every argument at once, including ones nobody has written, waits for 4d, where arguments become objects.</p>
-  <p data-pid="19f384">The other way round, they do not agree, yet. P ∨ ¬P, with no given lines at all, is valid: its column is all T. But no tech of the rung earns it, as 1f11 showed. So on this rung valid does not mean earned, and the gap is exactly the statements nobody can settle by looking. Rung 7 closes that gap, and much later the ladder asks how far the gap between valid and earned can be closed in general.</p>
-  <p data-pid="d8849b">Keep these words apart from here on. <b>So</b> is about the world: things are as the statement says. <b>Valid</b> is about the tables: no row breaks the argument. <b>Earned</b> is about the argument: every step has its reason. An earned statement is always valid. A valid argument with a given line that is not so can have a foot that is not so. And a valid statement is not always one you can earn.</p>
+  <h2 class="sthead"><span class="stno">1f13</span>Growing a statement on purpose</h2>
+  <p class="stands">Stands on 1f3 (techniques read right to left) and 1c (cases).</p>
+  <p data-pid="fd08d6">Simplifying is only half the craft. The other half reads the techniques right to left, and makes a statement bigger. Why make it bigger? Because a bigger statement can show how to argue for it. The outermost mark of a statement says what the first move of the argument must be. An if wants a supposition. An and wants each part proved. A small statement can hide the shape a proof needs, and a technique read the other way can bring that shape out.</p>
+  <p class="eqline" data-pid="97aa91"><b>To grow a statement, choose the shape you want to prove, find a technique whose other side has that shape, and read the technique toward it.</b></p>
+  <p data-pid="13eae4">Here is the method on a school rule. Let W be “it is raining”. Let S be “the field is muddy”. Let C be “recess is indoors”. The rule: if it is raining or the field is muddy, recess is indoors. In marks, (W ∨ S) ⇒ C.</p>
+  <p data-pid="025df2">The rule's outermost mark is ⇒, and its hypothesis is an or. Proving it straight means supposing an or. An or hands you nothing until you take cases. So grow the rule first.</p>
+  <p data-pid="10144f">Read cases backward. Cases, read backward, is fine for any statement. It turns the rule into <span data-tex-inline="(W \Rightarrow C) \land (S \Rightarrow C)"></span>: if it is raining, recess is indoors; and if the field is muddy, recess is indoors.</p>
+  <p data-pid="371b9a">Now the outermost mark is ∧. An and wants each part proved, so the argument is two ifs. One supposes rain. One supposes mud. Neither supposes an or.</p>
+  <p data-pid="65ad86">The slides take the cases technique itself apart, from the other techniques, one rewrite at a time.</p>
+  <section class="slides" id="sl14"><div class="eyebrow">The slides · cases, opened · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">1f13.1</span><span class="ph know">know</span>Why is everything earned valid? <br>Why is not everything valid earned on this rung?</li>
+      <li><span class="qid">1f13.1</span><span class="ph know">know</span>Why grow a statement, and how?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="1f14">
-  <h2 class="sthead"><span class="stno">1f14</span>Same column, same statement</h2>
-  <p class="stands">Stands on 1f8 (a whole table) and 0b2 (the mark for sameness).</p>
-  <p data-pid="dab3a6">When do compound statements say the same thing? The table's answer: when no row tells them apart. A statement is a thing the ladder can name, as 0a named one A. So 0b's = can stand between statements, and the table gives it a test:</p>
-  <div class="eqline" data-tex="\begin{aligned}&amp;\text{From here on, between statements,}\\ &amp;\quad A = B \text{ means: in every row,}\\ &amp;\quad A \text{ and } B \text{ are equally true or false.}\end{aligned}"></div>
-  <p data-pid="dcd28c">Read it “A and B are equally true or false”: in every row, both are T or both are F. They have the same column. Its accepted name: A is equivalent to B. <b>Between statements, = says that they agree in every row.</b> The statements may be spelled quite differently and still be one statement by the table's lights. Put another way, A ⇔ B is a tautology, since ⇔ is T exactly where its sides match. The if family shows why the mark matters. Put these side by side:</p>
-  <div class="tablewrap"><table class="tt" id="t3"></table></div>
-  <p data-pid="a5f209"><span data-tex-inline="P \Rightarrow Q">P ⇒ Q</span>, <span data-tex-inline="\neg P \lor Q">¬P ∨ Q</span> and <span data-tex-inline="\neg Q \Rightarrow \neg P">¬Q ⇒ ¬P</span> all read T F T T. The if, the if as an or, and 1d's turned-about if are the same statement by the table's lights. <span data-tex-inline="Q \Rightarrow P">Q ⇒ P</span>, the arrow turned about without the denials, reads T T F T. It disagrees in the rows TF and FT, so it is a different statement. The rows where it differs are exactly where 1d's illegal moves bite. 1g names all of these.</p>
+  <h2 class="sthead"><span class="stno">1f14</span>Splitting a hypothesis</h2>
+  <p class="stands">Stands on 1f13 (growing toward a shape) and 1d (prove an if, a supposition inside a supposition).</p>
+  <p data-pid="c4705a">A second growth splits a hypothesis. Let B be “you have a library card”. Let F be “you have no overdue books”. Let L be “you may borrow a laptop”. The rule is (B ∧ F) ⇒ L.</p>
+  <p data-pid="f72955">Read hypotheses-in-turn forward. Hypotheses-in-turn too is fine both ways, for any statement. The rule becomes <span data-tex-inline="B \Rightarrow (F \Rightarrow L)"></span>.</p>
+  <p data-pid="aac463">The grown shape is an if inside an if. An argument for it supposes B. Then, inside that, it supposes F. An and in the hypothesis has become two suppositions, one inside the other. The librarian checks the card first and the overdue books second, and the grown statement checks them in the same order.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">1f14.1</span><span class="ph know">know</span>What does = between statements say? <br>Which members of the if family are one statement by the table’s lights, and which is not?</li>
+      <li><span class="qid">1f14.1</span><span class="ph know">know</span>What does hypotheses-in-turn do to a hypothesis that is an and?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="1f15">
-  <h2 class="sthead"><span class="stno">1f15</span>A sameness is not yet a licence</h2>
-  <p class="stands">Stands on 1f14 (same column, same statement) and 1c8 (reason by cases).</p>
-  <p data-pid="de9b38">A caution that 1g will take up. The table says ¬P ∨ Q = P ⇒ Q. By techs, from ¬P ∨ Q you can prove P ⇒ Q: by cases, with the free-if technique in each case. But from P ⇒ Q, no tech proves ¬P ∨ Q. The last move would be add an option, needing ¬P or Q in hand, and an if hands you neither.</p>
-  <p data-pid="a2cbde">So between statements, having equality means that your truth tables match. That is a fact about the tables, and the swap axiom is true of that equality, as it is of every sameness, whether or not any technique makes use of it. Using the swap is a move, and a move needs a licence. 1g's rulebook says, technique by technique, which directions the techs license for statements you cannot settle, and rung 7 is where every direction is earned.</p>
+  <h2 class="sthead"><span class="stno">1f15</span>Growing an exactly-when twice</h2>
+  <p class="stands">Stands on 1f14 (growing), 1f9 (the inverse) and 1f6 (where a one-way technique may be used).</p>
+  <p data-pid="64b756">A growth can take more than one step. Here is the plan: grow an exactly-when into two ifs, then turn one of them about.</p>
+  <p data-pid="e8e223">Start from <span data-tex-inline="P \Leftrightarrow Q"></span>. Read two-ifs forward, fine both ways for any statement:</p>
+  <div class="eqline" data-tex="(P \Rightarrow Q) \land (Q \Rightarrow P)"></div>
+  <p data-pid="b40991">Now rewrite the right piece by turn-and-deny, read forward. It turns Q ⇒ P into ¬P ⇒ ¬Q. The piece sits inside an and, so the forward direction works for any statement:</p>
+  <div class="eqline" data-tex="(P \Rightarrow Q) \land (\neg P \Rightarrow \neg Q)"></div>
+  <p data-pid="6cd427">Read the result in English: if P then Q, and if not P then not Q. Its second part is the inverse of its first. The inverse is in the gallery of illegal moves in footing 1f12.</p>
+  <p class="bait" data-pid="6058d9">Alone, the inverse was a counterfeit of the if. Here, beside the if and inside an exactly-when, it is earned. What did the exactly-when hold that the if alone did not?</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">1f15.1</span><span class="ph know">know</span>Why is the sameness ¬P ∨ Q = P ⇒ Q not yet a licence to swap either way?</li>
+      <li><span class="qid">1f15.1</span><span class="ph know">know</span>Why is the inverse earned inside a grown exactly-when, when alone it is a counterfeit?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="1f16">
-  <h2 class="sthead"><span class="stno">1f16</span>From a column to a statement</h2>
-  <p class="stands">Stands on 1f14 (same column, same statement) and 1c13 (or, but not both).</p>
-  <p data-pid="1fae38">Going forward, a statement gives a column. Can every column be reached? Yes, by a recipe. For each row where you want T, write the “and” of what that row says: a letter where the row has T, its denial where it has F. That piece is T on that row and nowhere else. Then join all the pieces with “or”. Here it is for “P or Q but not both”, whose column is F T T F: cake but not ice cream, or ice cream but not cake.</p>
-  <p class="eqline" data-pid="f53b35">From here on, an arrow → between pieces of a working is short for “gives” or “becomes”. The slides write, for example, “row TF → P ∧ ¬Q”. It says what the working makes of the piece on its left. It is a statement about the working, not a line of one, and it is not 1d's ⇒.</p>
-  <p data-pid="373d8d">We want the column F, T, T, F, down the rows TT, TF, FT, FF. It has T in two rows, TF and FT. The row TF says P is T and Q is F, so its piece is <span data-tex-inline="P \land \neg Q"></span>. That piece is T in the row TF and nowhere else. The row FT gives <span data-tex-inline="\neg P \land Q"></span>, T there only.</p>
-  <p data-pid="7bb351">Now or the two pieces together:</p>
-  <div class="eqline" data-tex="(P \land \neg Q) \lor (\neg P \land Q)"></div>
-  <p data-pid="8a48dc">It is T exactly on the rows TF and FT, which is the column we wanted.</p>
-  <p data-pid="539e85">So ¬, ∧ and ∨ between them can say anything a table can say. The recipe's answers are often clumsy, and a neater statement with the same column usually exists. Finding the neater one is 1g's business.</p>
-  <section class="slides" id="sl16"><div class="eyebrow">The slides · from a column · ← → keys work</div></section>
-  <section class="pic" id="pic">
-    <div class="eyebrow">The picture · the table machine: type a statement, compare two, or build from a column</div>
-    <div class="panels">
-      <div class="panel">
-        <div class="cap">Type a statement in P, Q, R (or tap the keys). Typed words work too: not, and, or, -&gt;, &lt;-&gt;. Tap a row to send it through the machines.</div>
-        <input type="text" class="ttin" id="fa" spellcheck="false" autocomplete="off" autocapitalize="off" value="(P ∨ Q) ⇒ ¬R" aria-label="statement A">
-        <div class="keys" data-for="fa"></div>
-        <div class="chips" role="group" aria-label="examples"><span class="m" style="color:var(--muted)">try:</span><button data-pa="(P ∧ (P ⇒ Q)) ⇒ Q">carry through</button><button data-pa="(Q ∧ (P ⇒ Q)) ⇒ P">affirming the consequent</button><button data-pa="P ∨ ¬P">P ∨ ¬P</button><button data-pa="P ∧ ¬P">P ∧ ¬P</button><button data-pa="¬(P ∧ ¬Q)">¬(P ∧ ¬Q)</button></div>
-        <div class="err" id="ea"></div>
-        <div class="eqbox" id="sa"></div>
-        <div class="verdict" id="va"></div>
-        <div class="tablewrap compact"><table class="tt" id="ta"></table></div>
-        <div class="tree" id="tree" aria-label="the statement as a machine, wires coloured by the chosen row"></div>
-        <div class="cap">The tree is the statement as a machine: letters at the foot, the outermost machine at the top. Wires carry the chosen row: <span class="teal">teal T</span>, <span class="ember">ember F</span>.</div>
-        <div class="eqbox chain" id="ch"></div>
-      </div>
-      <div class="panel">
-        <div class="chips" role="group" aria-label="mode"><span class="m" style="color:var(--muted)">mode:</span><button data-mode="cmp" class="on">compare A with B</button><button data-mode="build">build from a column</button></div>
-        <div id="mcmp" style="display:grid;gap:8px">
-          <div class="cap">Statement A is the one on the left. Type B here. Rows where they disagree are tinted ember.</div>
-          <input type="text" class="ttin" id="fb" spellcheck="false" autocomplete="off" autocapitalize="off" value="¬P ∨ Q" aria-label="statement B">
-          <div class="keys" data-for="fb"></div>
-          <div class="chips" role="group" aria-label="pairs"><span class="m" style="color:var(--muted)">compare:</span><button data-pab="P ⇒ Q|¬Q ⇒ ¬P">⇒ vs turned about with denials</button><button data-pab="P ⇒ Q|Q ⇒ P">⇒ vs arrow turned</button><button data-pab="P ⇔ Q|(P ⇒ Q) ∧ (Q ⇒ P)">⇔ vs an if each way</button><button data-pab="P ∧ (Q ∨ R)|(P ∧ Q) ∨ (P ∧ R)">spreading ∧ over ∨</button><button data-pab="¬¬P|P">¬¬P vs P</button></div>
-          <div class="err" id="eb"></div>
-          <div class="tablewrap compact"><table class="tt" id="tc"></table></div>
-          <div class="eqbox" id="vc"></div>
-        </div>
-        <div id="mbuild" style="display:none;gap:8px">
-          <div class="cap">Choose the letters, then tap the final-column cells to set the column you want. The recipe writes a statement with exactly that column: an “and” for each T row, joined by “or”.</div>
-          <div class="chips" role="group" aria-label="letters"><span class="m" style="color:var(--muted)">letters:</span><button data-n="pq" class="on">P, Q</button><button data-n="pqr">P, Q, R</button></div>
-          <div class="tog" id="tog"></div>
-          <div class="eqbox" id="dnf"></div>
-          <div class="chips"><button id="load">put it in the machine (as A) →</button></div>
-        </div>
-      </div>
-    </div>
-  </section>
+  <h2 class="sthead"><span class="stno">1f16</span>A letter from nowhere, and a growth that waits</h2>
+  <p class="stands">Stands on 1f15 (growing in several steps), 1f2 (⊤ and ⊥) and 1f5 (the either-way principle waits for rung 7).</p>
+  <p data-pid="d6b138">A growth can even bring in a letter the statement never had. P becomes P ∨ ⊥, by units read backward. ⊥ becomes Q ∧ ¬Q, by clash read backward. Both directions are any. So P = P ∨ (Q ∧ ¬Q), and Q has walked in from nowhere. Writing a thing in a clever form is a real move, not a trick, and sometimes the clever form is exactly the shape you need.</p>
+  <p data-pid="0d3b93">One tempting growth does not work on this rung. Grow P into P ∧ ⊤, and then grow ⊤ into Q ∨ ¬Q. That would split P into two cases, Q and not Q. The second growth reads either-way right to left, and either-way waits for rung 7. Any statement can be grown into its cases on Q only once every statement has a row.</p>
+  <p data-pid="3cafca">A growth needs a target. Grown at random, a statement only gets longer. So decide first which outermost mark you want, then look in the book for the technique that puts that mark there. The slides grow P into a statement that spells out cases on Q, with no rung-7 step. 4e makes arguing by cases a shape of its own.</p>
+  <section class="slides" id="sl17"><div class="eyebrow">The slides · growing, backwards · ← → keys work</div></section>
+  <p class="bait" data-pid="43393e">Which technique grows ¬(P ∧ Q) into an or? What would that or then ask of a proof? And is that growth licensed for statements nobody can settle?</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">1f16.1</span><span class="ph know">know</span>How does the recipe build a statement with a given column? <br>What does → between pieces of a working mean?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="1f17">
-  <h2 class="sthead"><span class="stno">1f17</span>Illegal moves</h2>
-  <p class="stands">Stands on 1f2 to 1f16.</p>
-  <p data-pid="7c6ca4">Five moves look like uses of this step and are not, and one row decides each. One reads the conclusion off an if that is T. One gives ¬(P ∧ Q) and ¬P ∧ ¬Q one column. One gives an if and its converse one column. One leaves a row out of the table. And one calls a statement always so from the rows checked so far.</p>
-  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
-P \Rightarrow Q \text{ is T, so } Q \text{ is T}\,? @@ the row FF, where P fails and Q fails: the if machine gives T there, and Q is F
-\neg(P \land Q) \text{ and } \neg P \land \neg Q \text{ have one column}\,? @@ the row TF, where P is true and Q is false: the first is T, the second F
-P \Rightarrow Q \text{ and } Q \Rightarrow P \text{ have one column}\,? @@ the row TF, where P is true and Q is false: the first is F, the second T
-\text{three rows for the letters } P, Q\,? @@ two letters come out in four ways; a table that leaves out a row has not checked every way
-\text{T in the rows checked, so always so}\,? @@ only every row will do: the one row left out may be the F
-  </pre>
-  <p data-pid="679b49">The first illegal move is the one that catches people, because the if really was T. But the if machine was built to be T whenever its left side is F, and a T that comes from a false left side says nothing about the right side.</p>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">1f17.1</span><span class="ph know">know</span>Why is “P ⇒ Q is T, so Q is T” an illegal move?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="1f18">
-  <h2 class="sthead"><span class="stno">1f18</span>Marks moved on paper</h2>
-  <p class="stands">Stands on 1f14 (same column, same statement) and 1f9 (statements that cannot fail).</p>
-  <p data-pid="2adce6">Write the ways a statement can come out as marks, and write the joining words as signs between the marks. Then the marks can be moved about by rules, on paper, without thinking about what the letters mean. One such law: saying a thing again adds nothing, so the column of P ∧ P is the column of P. Boole drew a familiar principle from that law. Here is the principle, checked by rows instead. P ∧ ¬P is F in the row where P is T, since the right side fails. It is F in the row where P is F, since the left side fails. A contradiction, for any P.</p>
-  <p data-pid="5ca4a7">This is the hinge to the next step. <b>With statements written as marks, you can rewrite them by techniques, without ever drawing a table; the tables are the check that each technique is honest.</b> A warning to carry over: a table assumes every letter is already settled. With it, ¬¬P and P have the same column for free, and <a href="#480804">1f5</a> said why that is not a licence. 1g will mark which techniques need that licence and which do not.</p>
-  <section class="slides" id="sl18"><div class="eyebrow">The slides · Boole · ← → keys work</div></section>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">1f18.1</span><span class="ph know">know</span>What does writing the ways a statement comes out as marks make possible? <br>What warning carries over to the next step?</li>
+      <li><span class="qid">1f16.1</span><span class="ph know">know</span>How can a growth bring in a letter the statement never had? <br>Which growth waits for rung 7?</li>
     </ol>
   </section>
 </section>
@@ -393,39 +359,207 @@ P \Rightarrow Q \text{ and } Q \Rightarrow P \text{ have one column}\,? @@ the r
 <section class="challenge themeend">
   <div class="eyebrow">Special challenges · there if you want them</div>
   <h2>Special challenges</h2>
-  <div class="chq"><span class="chid">1f.4.1</span><span class="tagq">build</span>About a place you know, write: a valid argument, argued in plain words, that earns its foot; a valid argument with a given line that is not so and a foot that is not so; and a valid statement you cannot earn, with the letter you would have to settle to earn it.</div>
-  <div class="chq"><span class="chid">1f.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{Let } O \text{ be “the post}"></span> <span data-tex-inline="\text{office is open”,}"></span> <span data-tex-inline="R \text{ “the moon is made of cheese”.}"></span> <span data-tex-inline="O,"></span> <span data-tex-inline="\neg O"></span> <span data-tex-inline="\text{Foot: } R"></span></span>Is the argument valid, and is R earned? <br>Is an argument with no given lines and a totally false foot valid?</div>
-  <div class="chq"><span class="chid">1f.4.3</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\bot \Rightarrow \bot \text{ has no letters.}"></span></span>Write the rows of its table and its column, and find whether it is a tautology.</div>
-  <div class="chq"><span class="chid">1f.4.4</span><span class="tagq">world</span><span class="givens"><span data-tex-inline="\text{A mark } U, \text{ “not yet settled”,}"></span> <span data-tex-inline="\text{sits between } F \text{ and } T"></span> <span data-tex-inline="\text{(} F \text{ lowest, } T \text{ highest).}"></span> <span data-tex-inline="\land \text{ gives the lower side,}"></span> <span data-tex-inline="\lor \text{ the higher;}"></span> <span data-tex-inline="P \Rightarrow Q \text{ gives } T \text{ when } P"></span> <span data-tex-inline="\text{is no higher than } Q, \text{ else } Q;"></span> <span data-tex-inline="\bot \text{ is } F \text{ in every row;}"></span> <span data-tex-inline="\neg P \text{ is } P \Rightarrow \bot."></span> <span data-tex-inline="\text{(i) } P \lor \neg P"></span> <span data-tex-inline="\text{(ii) } \neg\neg P \Rightarrow P"></span> <span data-tex-inline="\text{(iii) } \neg(P \land \neg P)"></span> <span data-tex-inline="\text{(iv) } (P \land (P \Rightarrow Q)) \Rightarrow Q"></span></span>Find the columns of not-U and not-not-U. <br>Find which of (i) to (iv) are T in every row.</div>
-  <div class="chq"><span class="chid">1f.4.5</span><span class="tagq">seam</span>Let K be “the kitchen tap is running”. K ∨ ¬K is T in every row, and the techs do not earn it; with 1f.4.4’s U it is not T in every row. <br>Which should decide what follows from what: the rows, or the techs?</div>
+  <div class="chq"><span class="chid">1f.4.1</span><span class="tagq">build</span>Find a real rule with “unless” or “only if” and a further condition inside it. Write it in marks and rewrite it by a chain to the plainest statement you can, naming each technique and its direction and marking the steps that wait for rung 7. <br>Reading its statements as unsettled, argue each way between start and end by the techs alone, as far as you can take it.</div>
+  <div class="chq"><span class="chid">1f.4.2</span><span class="tagq">world</span><span class="givens"><span data-tex-inline="\text{Read every } \lor \text{ in the rulebook}"></span> <span data-tex-inline="\text{as aut, “or, but not both”,}"></span> <span data-tex-inline="\text{column } F\ T\ T\ F."></span></span>Find which of turn-about, regroup, say-it-again, spread (both kinds) and units still match columns, with a convicting row for each that fails.</div>
+  <div class="chq"><span class="chid">1f.4.3</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{Units rewrite: } P \land \top = P"></span> <span data-tex-inline="\text{and } P \lor \bot = P."></span></span>Find the mark that should stand for an and with no parts, so that taking P in as a part gives P's column, and the mark for an or with no options.</div>
+  <div class="chq"><span class="chid">1f.4.4</span><span class="tagq">seam</span><span class="givens"><span data-tex-inline="\text{Let } O \text{ be “the town pool is open”,}"></span> <span data-tex-inline="B \text{ “the moon is made of cheese”.}"></span> <span data-tex-inline="\neg O"></span> <span data-tex-inline="\text{If-as-or gives } P \Rightarrow Q"></span> <span data-tex-inline="\text{the column of } \neg P \lor Q."></span> <span data-tex-inline="\text{Foot: } O \Rightarrow B"></span></span>Prove the foot. <br>Is this step's if the English “if”? <br>What would an if have to be for the foot not to be earned, and which techs would go with it?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r01concl.html">← 1·∎ · conclusion</a><a href="r01g.html">1g · rewriting by the rulebook →</a></nav>
+<nav class="nextrung"><a href="r01e.html">← 1e · tables</a><a href="r02.html">2 · collecting and sorting →</a></nav>
 
 <section class="extra basement">
   <div class="eyebrow">The basement · there if you want it</div>
-  <h3>Other ways the same marks are written</h3>
-  <p>Mathematics writes some of these marks in more than one way, by subject and by century. Each one below means what the mark in this step means; know them on sight.</p>
-  <div class="eqline" data-tex="\text{From here on, } A \models B \text{ means: in every row where } A \text{ is true, } B \text{ is true. Read it “} A \text{ entails } B\text{”.}"></div>
-  <div class="eqline" data-tex="\text{From here on, } A \vdash B \text{ means: a column with } A \text{ given reaches } B \text{ by the techs. Read it “} B \text{ is provable from } A\text{”.}"></div>
-  <p>The two marks keep apart the two things this step compares: <span data-tex-inline="\vdash">\vdash</span> is the techs, <span data-tex-inline="\models">\models</span> is the tables. Whenever <span data-tex-inline="A \vdash B">A \vdash B</span>, also <span data-tex-inline="A \models B">A \models B</span>. The other way round is true everywhere on this rung except at the gap: <span data-tex-inline="\neg\neg P \models P">\neg\neg P \models P</span>, and not <span data-tex-inline="\neg\neg P \vdash P">\neg\neg P \vdash P</span>.</p>
+  <h3>The techniques, proved by built techs</h3>
+  <p>The rulebook's table checks each technique by columns. Columns settle a technique only for statements you can settle. For statements nobody can settle, each direction marked any is earned by techs, and here are the columns that earn them. Each column takes one side as given and reaches the other. A line written “A to B” is a short column of its own: given A, the tech named beside it reaches B. Where a technique on an earlier page already does it, the page is named and the column is not repeated.</p>
+  <p><b>A direction marked any is proved: a column of rung 1's techs runs from one side to the other.</b></p>
   <ul>
-    <li>Boole wrote T and F with two other marks, which rung 3 brings in as names. A statement whose column is all T is also called a tautology, and one whose column is all F a contradiction.</li>
+    <li>turn-about, both ways: 1c's turn-about techniques for And and for Or.</li>
+    <li>not-through for or, both ways: 1c's neither technique, and the column after it.</li>
+    <li>not-not, backward: 1b's not-not-in technique.</li>
+    <li>turn-and-deny, forward: 1d's turn-and-deny technique for If.</li>
+    <li>two-ifs, both ways: ﹀ and ︿ on 1d's from-here-on line for ⇔.</li>
   </ul>
-  <h3>Who said it first: Boole's marks</h3>
-  <p>In the middle of the century before last, George Boole did something that looks small and was not: he wrote the ways a statement can come out as marks, wrote the joining words as signs between the marks, and then moved the marks about by rules, on paper, without thinking about what the letters meant. Here is how he put the ambition:</p>
-  <blockquote class="voice"><p>“The design of the following treatise is to investigate the fundamental laws of those operations of the mind by which reasoning is performed; to give expression to them in the symbolical language of a Calculus, and upon this foundation to establish the science of Logic and construct its method; …”</p><cite>Boole, An Investigation of the Laws of Thought (1854), ch. I, §1</cite></blockquote>
-  <p>Boole's marks for the ways a statement can come out were not T and F. He borrowed the marks that this ladder has not yet built, the ones rung 3 will bring in as names for its earliest objects, and he was emphatic that in his logic they were not what rung 3 will make them, only marks: they were marks whose whole meaning was given by their tables, exactly as T and F are here. This page uses T and F for them, because the ladder does not write a mark before the line that brings it in, and the line for Boole's marks belongs to rung 3. Nothing is lost: every table in this step is one of Boole's, with the marks renamed.</p>
-  <p>His signs, in T and F: his <i>product</i> of P and Q is T when both are T, which is ∧. His “taking away” from the always-T mark gives the swap of T and F, which is ¬. And his sum he allowed only between pieces that are never both T, which is why he wrote “or” as “P, or else not-P and Q”: the pieces cannot overlap, and the column is ∨'s. Then the law he put at the foundation of everything:</p>
-  <div class="eqline" data-tex="P \land P \;=\; P"></div>
-  <p>Saying a thing again adds nothing; the column of P ∧ P is the column of P. Boole wrote this law with his product and called it the fundamental law of thought, and he drew from it what logicians had always called the principle of contradiction:</p>
-  <aside class="voice para"><p>The principle that a thing cannot both have a quality and lack it, he says, is not an axiom to be laid down but a consequence of the fundamental law, which he states as: the product of a thing with itself is the thing.</p><cite>Boole, An Investigation of the Laws of Thought (1854), ch. III</cite></aside>
-  <p>And here is that consequence, in T and F, each move a row check: P ∧ ¬P is F in the row where P is T (the right side fails) and F in the row where P is F (the left side fails). A contradiction, for any P. Boole's marks, like the table, assume every letter is already settled, so the hinge paragraph's warning holds for them too.</p>
-  <p>The machine “not both” building all the others was shown by Henry Sheffer, early in the century before this one; Charles Peirce had found it earlier and left it unpublished. Its accepted names are the Sheffer stroke, or NAND.</p>
-  <h3>Accepted names</h3>
-  <p>A statement earned from given lines is derived from them; one earned from no given lines, from the axioms and the techs alone, is provable. “Equivalent” is from the Latin for “of equal worth”.</p>
-  <p>Statements with the same column in every row are equivalent, or logically equivalent. Many books write this sameness of statements with a three-bar mark, A ≡ B, to keep it apart from the = between names. Others, as in most statements of the swap-the-denial rewrites (De Morgan's), use the plain =. This ladder uses the plain =.</p>
+  <pre class="lines" data-k="ember" data-label="the basement: regroup for and, forward">
+(P \land Q) \land R @@ given
+P \land Q @@ keep left
+P @@ keep left, on the line above
+Q @@ keep right, on the line above that
+R @@ keep right, on the given line
+Q \land R @@ join
+\htmlClass{new}{P \land (Q \land R)} @@ join. Backward runs the same techs from the other end
+  </pre>
+  <pre class="lines" data-k="ember" data-label="the basement: regroup for or, forward">
+(P \lor Q) \lor R @@ given
+\qquad \text{case } P \lor Q @@ assumed: the earlier disjunct
+\qquad\quad \text{case } P @@ assumed
+\qquad\quad P \lor (Q \lor R) @@ add an option
+\qquad\quad \text{case } Q @@ assumed
+\qquad\quad Q \lor R @@ add an option
+\qquad\quad P \lor (Q \lor R) @@ add an option
+\qquad P \lor (Q \lor R) @@ reason by cases: the inner cases close
+\qquad \text{case } R @@ assumed
+\qquad Q \lor R @@ add an option
+\qquad P \lor (Q \lor R) @@ add an option
+\htmlClass{new}{P \lor (Q \lor R)} @@ reason by cases. Backward runs the same techs from the other end
+  </pre>
+  <pre class="lines" data-k="ember" data-label="the basement: spread and over or, forward">
+P \land (Q \lor R) @@ given
+P @@ keep left
+Q \lor R @@ keep right
+\qquad \text{case } Q @@ assumed
+\qquad P \land Q @@ join
+\qquad (P \land Q) \lor (P \land R) @@ add an option
+\qquad \text{case } R @@ assumed
+\qquad P \land R @@ join
+\qquad (P \land Q) \lor (P \land R) @@ add an option
+\htmlClass{new}{(P \land Q) \lor (P \land R)} @@ reason by cases
+  </pre>
+  <pre class="lines" data-k="ember" data-label="the basement: spread and over or, backward">
+(P \land Q) \lor (P \land R) @@ given
+\qquad \text{case } P \land Q @@ assumed
+\qquad P @@ keep left
+\qquad Q @@ keep right
+\qquad Q \lor R @@ add an option
+\qquad P \land (Q \lor R) @@ join
+\qquad \text{case } P \land R @@ assumed
+\qquad P @@ keep left
+\qquad R @@ keep right
+\qquad Q \lor R @@ add an option
+\qquad P \land (Q \lor R) @@ join
+\htmlClass{new}{P \land (Q \lor R)} @@ reason by cases
+  </pre>
+  <pre class="lines" data-k="ember" data-label="the basement: spread or over and, forward">
+P \lor (Q \land R) @@ given
+\qquad \text{case } P @@ assumed
+\qquad P \lor Q @@ add an option
+\qquad P \lor R @@ add an option
+\qquad (P \lor Q) \land (P \lor R) @@ join
+\qquad \text{case } Q \land R @@ assumed
+\qquad P \lor Q @@ keep left; add an option
+\qquad P \lor R @@ keep right; add an option
+\qquad (P \lor Q) \land (P \lor R) @@ join
+\htmlClass{new}{(P \lor Q) \land (P \lor R)} @@ reason by cases
+  </pre>
+  <pre class="lines" data-k="ember" data-label="the basement: spread or over and, backward">
+(P \lor Q) \land (P \lor R) @@ given
+P \lor Q @@ keep left
+P \lor R @@ keep right
+\qquad \text{case } P @@ assumed
+\qquad P \lor (Q \land R) @@ add an option
+\qquad \text{case } Q @@ assumed; now take cases on P ∨ R
+\qquad\quad \text{case } P @@ assumed
+\qquad\quad P \lor (Q \land R) @@ add an option
+\qquad\quad \text{case } R @@ assumed
+\qquad\quad Q \land R @@ join, with the case Q
+\qquad\quad P \lor (Q \land R) @@ add an option
+\qquad P \lor (Q \land R) @@ reason by cases: the inner cases close
+\htmlClass{new}{P \lor (Q \land R)} @@ reason by cases
+  </pre>
+  <pre class="lines" data-k="ember" data-label="the basement: say-it-again and absorb, both ways">
+P \land P \;\text{ to }\; P @@ keep left
+P \;\text{ to }\; P \land P @@ join, P with itself
+P \lor P \;\text{ to }\; P @@ reason by cases: each case is P itself
+P \;\text{ to }\; P \lor P @@ add an option
+P \land (P \lor Q) \;\text{ to }\; P @@ keep left
+P \;\text{ to }\; P \land (P \lor Q) @@ add an option, then join
+P \lor (P \land Q) \;\text{ to }\; P @@ reason by cases: case P, P itself; case P ∧ Q, keep left
+\htmlClass{new}{P \;\text{ to }\; P \lor (P \land Q)} @@ add an option
+  </pre>
+  <pre class="lines" data-k="ember" data-label="the basement: not-through for and, backward">
+\neg P \lor \neg Q @@ given
+\qquad \text{assume } P \land Q @@ assumed: aiming to refute it
+\qquad P @@ keep left
+\qquad Q @@ keep right
+\qquad\quad \text{case } \neg P @@ assumed
+\qquad\quad \bot @@ clash, with “P”
+\qquad\quad \text{case } \neg Q @@ assumed
+\qquad\quad \bot @@ clash, with “Q”
+\qquad \bot @@ reason by cases
+\htmlClass{new}{\neg(P \land Q)} @@ refute
+  </pre>
+  <pre class="lines" data-k="ember" data-label="the basement: if-as-or, backward">
+\neg P \lor Q @@ given
+\qquad \text{case } \neg P @@ assumed
+\qquad P \Rightarrow Q @@ 1d's free-if technique, from a denied hypothesis
+\qquad \text{case } Q @@ assumed
+\qquad P \Rightarrow Q @@ 1d's free-if technique, from a conclusion you have
+\htmlClass{new}{P \Rightarrow Q} @@ reason by cases
+  </pre>
+  <pre class="lines" data-k="ember" data-label="the basement: negated-if, backward">
+P \land \neg Q @@ given
+P @@ keep left
+\neg Q @@ keep right
+\qquad \text{assume } P \Rightarrow Q @@ assumed: aiming to refute it
+\qquad Q @@ carry an if through
+\qquad \bot @@ clash, with “¬Q”
+\htmlClass{new}{\neg(P \Rightarrow Q)} @@ refute
+  </pre>
+  <pre class="lines" data-k="ember" data-label="the basement: cases, forward">
+(P \Rightarrow R) \land (Q \Rightarrow R) @@ given
+P \Rightarrow R @@ keep left
+Q \Rightarrow R @@ keep right
+\qquad \text{assume } P \lor Q @@ assumed: the hypothesis of the if we want
+\qquad\quad \text{case } P @@ assumed
+\qquad\quad R @@ carry an if through
+\qquad\quad \text{case } Q @@ assumed
+\qquad\quad R @@ carry an if through
+\qquad R @@ reason by cases
+\htmlClass{new}{(P \lor Q) \Rightarrow R} @@ prove an if
+  </pre>
+  <pre class="lines" data-k="ember" data-label="the basement: cases, backward">
+(P \lor Q) \Rightarrow R @@ given
+\qquad \text{assume } P @@ assumed
+\qquad P \lor Q @@ add an option
+\qquad R @@ carry an if through
+P \Rightarrow R @@ prove an if
+\qquad \text{assume } Q @@ assumed
+\qquad P \lor Q @@ add an option
+\qquad R @@ carry an if through
+Q \Rightarrow R @@ prove an if
+\htmlClass{new}{(P \Rightarrow R) \land (Q \Rightarrow R)} @@ join
+  </pre>
+  <pre class="lines" data-k="ember" data-label="the basement: hypotheses-in-turn, forward">
+(P \land Q) \Rightarrow R @@ given
+\qquad \text{assume } P @@ assumed: the hypothesis of the if we want
+\qquad\quad \text{assume } Q @@ assumed: the hypothesis of the inner if
+\qquad\quad P \land Q @@ join
+\qquad\quad R @@ carry an if through
+\qquad Q \Rightarrow R @@ prove an if: the inner supposition closes
+\htmlClass{new}{P \Rightarrow (Q \Rightarrow R)} @@ prove an if: the outer supposition closes
+  </pre>
+  <pre class="lines" data-k="ember" data-label="the basement: hypotheses-in-turn, backward">
+P \Rightarrow (Q \Rightarrow R) @@ given
+\qquad \text{assume } P \land Q @@ assumed
+\qquad P @@ keep left
+\qquad Q \Rightarrow R @@ carry an if through
+\qquad Q @@ keep right
+\qquad R @@ carry an if through
+\htmlClass{new}{(P \land Q) \Rightarrow R} @@ prove an if
+  </pre>
+  <pre class="lines" data-k="ember" data-label="the basement: ⊤, earned from nothing">
+\qquad \text{assume } \bot @@ assumed: aiming to refute it
+\qquad \bot @@ the supposition itself: already in hand
+\neg\bot @@ refute
+\htmlClass{new}{\top} @@ ︿ ⊤: what the mark means
+  </pre>
+  <pre class="lines" data-k="ember" data-label="the basement: clash and units, both ways">
+P \land \neg P \;\text{ to }\; \bot @@ keep left; keep right; clash
+\bot \;\text{ to }\; P \land \neg P @@ everything permitted
+P \land \top \;\text{ to }\; P @@ keep left
+P \;\text{ to }\; P \land \top @@ join, with ⊤ from nothing
+P \lor \bot \;\text{ to }\; P @@ reason by cases: case P, P itself; case ⊥, everything permitted
+P \;\text{ to }\; P \lor \bot @@ add an option
+P \land \bot \;\text{ to }\; \bot @@ keep right
+\bot \;\text{ to }\; P \land \bot @@ everything permitted
+P \lor \top \;\text{ to }\; \top @@ ⊤ from nothing
+\htmlClass{new}{\top \;\text{ to }\; P \lor \top} @@ add an option
+  </pre>
+  <p>What is left is the withheld half of the book: not-through for and forward, not-not forward, if-as-or forward, turn-and-deny backward, negated-if forward, and either-way. Try to write the column for any of them. The techs can reach a not-not of what you want, and no tech on this rung strips the not-not. That is 1b's gap each time.</p>
+  <h3>Who said it first</h3>
+  <blockquote class="voice para"><p>The opposite of “either A or B” is “neither A nor B”, and the opposite of “both A and B” is “either not A or not B”. He observed that the same rules govern classes of things, which is rung 2's business.</p><cite>De Morgan, Formal Logic (1847)</cite></blockquote>
+  <p>De Morgan’s name stuck to the not-through techniques, but medieval logicians, William of Ockham among them, had stated both rules in words. What De Morgan and Boole added was the rulebook: rules you can apply to letters without thinking about rain.</p>
+  <p>Accepted names. In the books these techniques are called laws: turn-about is commutativity, regroup associativity, spread distributivity, say-it-again idempotence (from the Latin for “the same power”: done twice, it does no more than done once; Boole’s law), absorb absorption, not-through De Morgan’s laws, not-not double negation, turn-and-deny the contrapositive, hypotheses-in-turn exportation, and the either-way principle the law of excluded middle. Hearing “and not if you don’t” in an everyday “if” is what linguists call conditional perfection.</p>
 
 </section>
 </div>
@@ -435,9 +569,9 @@ P \Rightarrow Q \text{ and } Q \Rightarrow P \text{ have one column}\,? @@ the r
 (function(){
 const {tex,stepper}=Rung;
 
-/* ---------- the logic engine ---------- */
-const WORDS=[['<=>','iff'],['<->','iff'],['iff','iff'],['⇔','iff'],['↔','iff'],['=>','imp'],['->','imp'],['implies','imp'],['⇒','imp'],['→','imp'],['and','and'],['∧','and'],['&','and'],['^','and'],['or','or'],['∨','or'],['|','or'],['not','not'],['¬','not'],['~','not'],['!','not'],['(','('],[')',')'],['⊥','F']];
-const SYM={iff:'⇔',imp:'⇒',and:'∧',or:'∨',not:'¬','(':'(',')':')',F:'⊥',var:'a letter'};
+/* ---------- parser (as on 1e) ---------- */
+const WORDS=[['<=>','iff'],['<->','iff'],['iff','iff'],['⇔','iff'],['↔','iff'],['=>','imp'],['->','imp'],['implies','imp'],['⇒','imp'],['→','imp'],['and','and'],['∧','and'],['&','and'],['^','and'],['or','or'],['∨','or'],['|','or'],['not','not'],['¬','not'],['~','not'],['!','not'],['(','('],[')',')'],['⊤','T'],['⊥','F']];
+const SYM={iff:'⇔',imp:'⇒',and:'∧',or:'∨',not:'¬','(':'(',')':')',T:'⊤',F:'⊥',var:'a letter'};
 function lex(s){ const out=[]; let i=0;
   while(i<s.length){ const ch=s[i]; if(/\s/.test(ch)){i++;continue;}
     let hit=null;
@@ -446,7 +580,7 @@ function lex(s){ const out=[]; let i=0;
       hit=[w,k]; break; }
     if(hit){ out.push({k:hit[1]}); i+=hit[0].length; continue; }
     if(/[pqr]/i.test(ch)){ out.push({k:'var',v:ch.toUpperCase()}); i++; continue; }
-    throw new Error('I can’t read “'+ch+'”: use P, Q, R and the keys');
+    throw new Error('I can’t read “'+ch+'”: use P, Q, R, ¬ ∧ ∨ ⇒ ⇔ ⊤ ⊥');
   } return out; }
 function parse(s){ const t=lex(s); let p=0; if(!t.length) throw new Error('type a statement');
   const pk=()=>t[p]?t[p].k:null;
@@ -457,235 +591,149 @@ function parse(s){ const t=lex(s); let p=0; if(!t.length) throw new Error('type 
   function not(){ if(pk()==='not'){ p++; return {op:'not',a:not()}; } return atom(); }
   function atom(){ const k=pk();
     if(k==='var') return {op:'var',v:t[p++].v};
-    if(k==='F'){ p++; return {op:'const',v:false}; }
+    if(k==='T'||k==='F'){ p++; return {op:'const',v:k==='T'}; }
     if(k==='('){ p++; const e=iff(); if(pk()!==')') throw new Error('a “(” is never closed'); p++; return e; }
     throw new Error(k?'something is missing before “'+SYM[k]+'”':'the statement stops too soon'); }
   const e=iff(); if(p<t.length) throw new Error('I didn’t expect “'+SYM[t[p].k]+'” there'); return e; }
-const OPT={and:'\\land',or:'\\lor',imp:'\\Rightarrow',iff:'\\Leftrightarrow'};
-const OPU={and:'∧',or:'∨',imp:'⇒',iff:'⇔'};
-function TX(e,parent,side,vals){
-  if(e.op==='var') return vals?vals(e):e.v;
-  if(e.op==='val') return e.fresh?'\\htmlClass{new}{\\mathrm '+(e.v?'T':'F')+'}':'\\mathrm '+(e.v?'T':'F');
-  if(e.op==='const') return '\\bot';
-  if(e.op==='not') return '\\neg '+TX(e.a,'not',null,vals);
-  const s=TX(e.a,e.op,'L',vals)+' '+OPT[e.op]+' '+TX(e.b,e.op,'R',vals);
-  if(!parent) return s;
-  if(parent===e.op&&(e.op==='and'||e.op==='or')&&side==='L') return s;
-  return '('+s+')'; }
-function ev(e,env){ switch(e.op){ case 'var': return env[e.v]; case 'const': case 'val': return e.v; case 'not': return !ev(e.a,env);
-  case 'and': return ev(e.a,env)&&ev(e.b,env); case 'or': return ev(e.a,env)||ev(e.b,env); case 'imp': return !ev(e.a,env)||ev(e.b,env);
-  case 'iff': return ev(e.a,env)===ev(e.b,env); } }
+const OPT={and:'\\land',or:'\\lor',imp:'\\Rightarrow',iff:'\\Leftrightarrow'}, OPU={and:'∧',or:'∨',imp:'⇒',iff:'⇔'};
+const bin=e=>!['var','const','not'].includes(e.op);
+const needP=(e,parent,side)=>bin(e)&&parent&&!(parent===e.op&&(e.op==='and'||e.op==='or')&&side==='L');
+function TX(e,hp,path,parent,side){ path=path||'r';
+  let s; if(e.op==='var') s=e.v; else if(e.op==='const') s=e.v?'\\top':'\\bot';
+  else if(e.op==='not') s='\\neg '+TX(e.a,hp,path+'a','not');
+  else s=TX(e.a,hp,path+'a',e.op,'L')+' '+OPT[e.op]+' '+TX(e.b,hp,path+'b',e.op,'R');
+  if(needP(e,parent,side)) s='('+s+')';
+  if(hp&&hp===path) s='\\htmlClass{new}{'+s+'}';
+  return s; }
+const key=e=>TX(e);
+function ev(e,env){ switch(e.op){ case 'var': return env[e.v]; case 'const': return e.v; case 'not': return !ev(e.a,env);
+  case 'and': return ev(e.a,env)&&ev(e.b,env); case 'or': return ev(e.a,env)||ev(e.b,env); case 'imp': return !ev(e.a,env)||ev(e.b,env); case 'iff': return ev(e.a,env)===ev(e.b,env); } }
 function letters(e,S){ S=S||new Set(); if(e.op==='var') S.add(e.v); if(e.a) letters(e.a,S); if(e.b) letters(e.b,S); return S; }
 function rowsFor(L){ const n=L.length, R=[]; for(let r=0;r<(1<<n);r++){ const env={}; L.forEach((l,i)=>env[l]=!((r>>(n-1-i))&1)); R.push(env); } return R; }
-function subs(e,out,seen){ out=out||[]; seen=seen||new Set(); if(e.a) subs(e.a,out,seen); if(e.b) subs(e.b,out,seen);
-  if(e.op!=='var'){ const k=TX(e); if(!seen.has(k)){ seen.add(k); out.push(e); } } return out; }
-const TF=v=>'<span class="'+(v?'T':'F')+'">'+(v?'T':'F')+'</span>';
-const thTeX=t=>{ const th=document.createElement('th'); tex(th,t,false); return th; };
-function sortL(S){ return [...S].sort(); }
-const rowName=(L,env)=>L.map(l=>env[l]?'T':'F').join('');
 
-/* ---------- static tables in the class ---------- */
-function staticTable(id,cols,L){ const tb=document.getElementById(id); const tr=document.createElement('tr');
-  L.forEach(l=>tr.appendChild(thTeX(l))); cols.forEach((c,i)=>{ const th=thTeX(c.t); if(c.fin) th.className='fin'; tr.appendChild(th); });
-  const thead=document.createElement('thead'); thead.appendChild(tr); tb.appendChild(thead); const body=document.createElement('tbody');
-  rowsFor(L).forEach(env=>{ const r=document.createElement('tr'); r.innerHTML=L.map(l=>'<td>'+TF(env[l])+'</td>').join('')+cols.map(c=>'<td'+(c.fin?' class="fin"':'')+'>'+TF(ev(parse(c.s),env))+'</td>').join(''); body.appendChild(r); });
-  tb.appendChild(body); }
-staticTable('five',[{t:'\\neg P',s:'¬P'},{t:'P \\land Q',s:'P∧Q'},{t:'P \\lor Q',s:'P∨Q'},{t:'P \\Rightarrow Q',s:'P⇒Q'},{t:'P \\Leftrightarrow Q',s:'P⇔Q'},{t:'\\bot',s:'⊥'}],['P','Q']);
-staticTable('t2',[{t:'\\neg Q',s:'¬Q'},{t:'P \\land \\neg Q',s:'P∧¬Q'},{t:'\\neg(P \\land \\neg Q)',s:'¬(P∧¬Q)',fin:1}],['P','Q']);
-staticTable('t3',[{t:'P \\Rightarrow Q',s:'P⇒Q',fin:1},{t:'\\neg P \\lor Q',s:'¬P∨Q'},{t:'\\neg Q \\Rightarrow \\neg P',s:'¬Q⇒¬P'},{t:'Q \\Rightarrow P',s:'Q⇒P',fin:1}],['P','Q']);
+/* ---------- the rulebook as code ---------- */
+/* s7(e): true when THIS application, on piece e, is the direction that waits for rung 7 (position aside) */
+const Nn=a=>({op:'not',a}), B=(op,a,b)=>({op,a,b}), K=v=>({op:'const',v});
+const is=(e,op)=>!!e&&e.op===op, same=(x,y)=>key(x)===key(y);
+const LAWS=[
+ {id:'C',t:'turn-about',f:e=>['and','or','iff'].includes(e.op)?B(e.op,e.b,e.a):null},
+ {id:'A',t:'regroup',f:e=>{ if(e.op==='and'||e.op==='or'){ if(is(e.a,e.op)) return B(e.op,e.a.a,B(e.op,e.a.b,e.b)); if(is(e.b,e.op)) return B(e.op,B(e.op,e.a,e.b.a),e.b.b);} return null; }},
+ {id:'D',t:'spread',f:e=>{ const o=e.op==='and'?'or':e.op==='or'?'and':null; if(!o) return null;
+    if(is(e.b,o)) return B(o,B(e.op,e.a,e.b.a),B(e.op,e.a,e.b.b)); if(is(e.a,o)) return B(o,B(e.op,e.a.a,e.b),B(e.op,e.a.b,e.b)); return null; }},
+ {id:'F',t:'spread backward: pull out',f:e=>{ const o=e.op==='or'?'and':e.op==='and'?'or':null; if(!o||!is(e.a,o)||!is(e.b,o)) return null;
+    if(same(e.a.a,e.b.a)) return B(o,e.a.a,B(e.op,e.a.b,e.b.b)); if(same(e.a.b,e.b.b)) return B(o,B(e.op,e.a.a,e.b.a),e.a.b); return null; }},
+ {id:'DM',t:'not-through',s7:e=>is(e,'not')&&is(e.a,'and'),tw:e=>(is(e,'not')&&is(e.a,'or'))||(e.op==='and'&&is(e.a,'not')&&is(e.b,'not')),f:e=>{ if(is(e,'not')&&(is(e.a,'and')||is(e.a,'or'))) return B(e.a.op==='and'?'or':'and',Nn(e.a.a),Nn(e.a.b));
+    if((e.op==='and'||e.op==='or')&&is(e.a,'not')&&is(e.b,'not')) return Nn(B(e.op==='and'?'or':'and',e.a.a,e.b.a)); return null; }},
+ {id:'DN',t:'not-not drop ¬¬',s7:()=>true,f:e=>is(e,'not')&&is(e.a,'not')?e.a.a:null},
+ {id:'not-not+',t:'not-not add ¬¬',f:e=>Nn(Nn(e))},
+ {id:'IO',t:'if-as-or',s7:e=>e.op==='imp',f:e=>{ if(e.op==='imp') return B('or',Nn(e.a),e.b); if(e.op==='or'&&is(e.a,'not')) return B('imp',e.a.a,e.b); return null; }},
+ {id:'CP',t:'turn-and-deny',s7:e=>e.op==='imp'&&is(e.a,'not')&&is(e.b,'not'),f:e=>e.op==='imp'?(is(e.a,'not')&&is(e.b,'not')?B('imp',e.b.a,e.a.a):B('imp',Nn(e.b),Nn(e.a))):null},
+ {id:'NI',t:'negated-if',s7:e=>is(e,'not'),f:e=>{ if(is(e,'not')&&is(e.a,'imp')) return B('and',e.a.a,Nn(e.a.b)); if(e.op==='and'&&is(e.b,'not')) return Nn(B('imp',e.a,e.b.a)); return null; }},
+ {id:'TI',t:'two-ifs',f:e=>{ if(e.op==='iff') return B('and',B('imp',e.a,e.b),B('imp',e.b,e.a)); if(e.op==='and'&&is(e.a,'imp')&&is(e.b,'imp')&&same(e.a.a,e.b.b)&&same(e.a.b,e.b.a)) return B('iff',e.a.a,e.a.b); return null; }},
+ {id:'Ca',t:'cases',f:e=>{ if(e.op==='and'&&is(e.a,'imp')&&is(e.b,'imp')&&same(e.a.b,e.b.b)) return B('imp',B('or',e.a.a,e.b.a),e.a.b); if(e.op==='imp'&&is(e.a,'or')) return B('and',B('imp',e.a.a,e.b),B('imp',e.a.b,e.b)); return null; }},
+ {id:'Ex',t:'hypotheses-in-turn',f:e=>{ if(e.op==='imp'&&is(e.a,'and')) return B('imp',e.a.a,B('imp',e.a.b,e.b)); if(e.op==='imp'&&is(e.b,'imp')) return B('imp',B('and',e.a,e.b.a),e.b.b); return null; }},
+ {id:'I',t:'say-it-again',f:e=>(e.op==='and'||e.op==='or')&&same(e.a,e.b)?e.a:null},
+ {id:'Ab',t:'absorb',f:e=>{ const o=e.op==='and'?'or':e.op==='or'?'and':null; if(!o) return null; if(is(e.b,o)&&(same(e.b.a,e.a)||same(e.b.b,e.a))) return e.a; if(is(e.a,o)&&(same(e.a.a,e.b)||same(e.a.b,e.b))) return e.b; return null; }},
+ {id:'Ct',t:'clash P ∧ ¬P → ⊥',f:e=>e.op==='and'&&((is(e.b,'not')&&same(e.b.a,e.a))||(is(e.a,'not')&&same(e.a.a,e.b)))?K(false):null},
+ {id:'EM',t:'either-way P ∨ ¬P → ⊤',s7:()=>true,f:e=>e.op==='or'&&((is(e.b,'not')&&same(e.b.a,e.a))||(is(e.a,'not')&&same(e.a.a,e.b)))?K(true):null},
+ {id:'U',t:'units ⊤ and ⊥',f:e=>{ const c=x=>!!x&&x.op==='const';
+    if(e.op==='and'){ if(c(e.a)) return e.a.v?e.b:K(false); if(c(e.b)) return e.b.v?e.a:K(false); }
+    if(e.op==='or'){ if(c(e.a)) return e.a.v?K(true):e.b; if(c(e.b)) return e.b.v?K(true):e.a; }
+    if(e.op==='not'&&c(e.a)) return K(!e.a.v);
+    if(e.op==='imp'){ if(c(e.a)) return e.a.v?e.b:K(true); if(c(e.b)) return e.b.v?K(true):Nn(e.a); }
+    return null; }}
+];
+const ONEWAY=new Set(['DM','DN','not-not+','IO','CP','NI','EM']);
+const BAD=[
+ {id:'conv',t:'converse',f:e=>e.op==='imp'?B('imp',e.b,e.a):null},
+ {id:'inv',t:'inverse',f:e=>e.op==='imp'?B('imp',Nn(e.a),Nn(e.b)):null},
+ {id:'bdm',t:'¬ straight through ∧ or ∨',f:e=>is(e,'not')&&(is(e.a,'and')||is(e.a,'or'))?B(e.a.op,Nn(e.a.a),Nn(e.a.b)):null},
+ {id:'bni',t:'¬ straight through ⇒',f:e=>is(e,'not')&&is(e.a,'imp')?B('imp',Nn(e.a.a),Nn(e.a.b)):null}
+];
 
-/* ---------- keys ---------- */
-const KEYS=['P','Q','R','¬','∧','∨','⇒','⇔','⊥','(',')'];
-document.querySelectorAll('.keys').forEach(k=>{ const inp=document.getElementById(k.dataset.for);
-  KEYS.forEach(s=>{ const b=document.createElement('button'); b.textContent=s; b.type='button'; b.onclick=()=>ins(inp,s); k.appendChild(b); });
-  const bs=document.createElement('button'); bs.className='w'; bs.textContent='⌫'; bs.setAttribute('aria-label','delete'); bs.onclick=()=>{ const a=inp.selectionStart??inp.value.length, z=inp.selectionEnd??a; if(a===z&&a>0){ inp.setRangeText('',a-1,a,'end'); } else inp.setRangeText('',a,z,'end'); inp.dispatchEvent(new Event('input')); }; k.appendChild(bs);
-  const cl=document.createElement('button'); cl.className='w'; cl.textContent='clear'; cl.onclick=()=>{ inp.value=''; inp.dispatchEvent(new Event('input')); }; k.appendChild(cl); });
-function ins(inp,s){ const a=inp.selectionStart??inp.value.length, z=inp.selectionEnd??a; const pad=/[∧∨⇒⇔]/.test(s)?' '+s+' ':s; inp.setRangeText(pad,a,z,'end'); inp.dispatchEvent(new Event('input')); }
+/* ---------- state ---------- */
+let start=null, goal=null, L=[], R=[], col0=[], lines=[], sel='r';
+const cur=()=>lines[lines.length-1].e;
+function get(e,p){ for(const ch of p.slice(1)) e=e[ch]; return e; }
+function put(e,p,n){ if(p.length===1) return n; const c=Object.assign({},e); c[p[1]]=put(e[p[1]],'r'+p.slice(2),n); return c; }
+function polarity(e,p){ // +1 positive place, -1 turned about, 0 inside an iff (both)
+  let pol=1; let cur=e; for(const ch of p.slice(1)){ if(cur.op==='not') pol=-pol; else if(cur.op==='imp'&&ch==='a') pol=-pol; else if(cur.op==='iff') pol=0; cur=cur[ch]; } return pol; }
+function colOf(e){ return R.map(env=>ev(e,env)); }
+function load(s,g){ const e=parse(s); start=e; goal=g?parse(g):null; L=[...letters(e)].sort(); if(goal) [...letters(goal)].forEach(x=>{ if(!L.includes(x)) L.push(x); }); L.sort(); R=rowsFor(L); col0=colOf(e); lines=[{e,law:'start',hp:null}]; sel='r'; render(); }
 
-/* ---------- left: the machine ---------- */
-const fa=document.getElementById('fa'), fb=document.getElementById('fb');
-let A=null, selRow=0;
-function drawA(){
-  const ea=document.getElementById('ea'), ta=document.getElementById('ta'); ea.textContent='';
-  try{ A=parse(fa.value); }catch(e){ ea.textContent=e.message; A=null; ta.innerHTML=''; document.getElementById('tree').innerHTML=''; document.getElementById('ch').innerHTML=''; document.getElementById('va').textContent=''; tex(document.getElementById('sa'),'\\text{…}',true); drawC(); return; }
-  tex(document.getElementById('sa'),TX(A),true);
-  const L=sortL(letters(A)); const R=rowsFor(L); if(selRow>=R.length) selRow=0;
-  const S=subs(A); ta.innerHTML='';
-  const hr=document.createElement('tr'); L.forEach(l=>hr.appendChild(thTeX(l))); S.forEach((s,i)=>{ const th=thTeX(TX(s)); if(i===S.length-1) th.className='fin'; hr.appendChild(th); });
-  const th=document.createElement('thead'); th.appendChild(hr); ta.appendChild(th); const body=document.createElement('tbody');
-  let nT=0;
-  R.forEach((env,ri)=>{ const tr=document.createElement('tr'); if(ri===selRow) tr.className='sel';
-    tr.innerHTML=L.map(l=>'<td>'+TF(env[l])+'</td>').join('')+S.map((s,i)=>{ const v=ev(s,env); if(i===S.length-1&&v) nT++; return '<td'+(i===S.length-1?' class="fin"':'')+'>'+TF(v)+'</td>'; }).join('');
-    tr.onclick=()=>{ selRow=ri; drawA(); }; body.appendChild(tr); });
-  ta.appendChild(body);
-  const va=document.getElementById('va');
-  va.innerHTML= nT===R.length?'<b class="teal">tautology</b>: T in every row' : nT===0?'<b class="ember">contradiction</b>: F in every row' : 'T in some rows and F in others: it depends on the row'+(A.op==='imp'?'. Bad rows (left T, right F): '+R.filter(env=>!ev(A,env)).map(env=>rowName(L,env)).join(', '):'');
-  drawTree(A,R[selRow]); drawChain(A,R[selRow],L); drawC();
+function H(e,path,parent,side){
+  let s; if(e.op==='var') s=e.v; else if(e.op==='const') s=e.v?'⊤':'⊥';
+  else if(e.op==='not') s='¬'+H(e.a,path+'a','not');
+  else s=H(e.a,path+'a',e.op,'L')+' '+OPU[e.op]+' '+H(e.b,path+'b',e.op,'R');
+  if(needP(e,parent,side)) s='('+s+')';
+  return '<span class="sx'+(path===sel?' sel':'')+'" data-p="'+path+'">'+s+'</span>'; }
+function chip(c){ return '<span class="colchip">'+c.map((v,i)=>'<span class="'+(v?'T':'F')+(v!==col0[i]?' x':'')+'">'+(v?'T':'F')+'</span>').join(' ')+'</span>'; }
+function needs7(l,node,path){ if(!ONEWAY.has(l.id)) return false; if(l.tw&&l.tw(node)) return false; const dir=l.s7?l.s7(node):false; const pol=polarity(cur(),path); if(pol===0) return true; return pol===1?dir:!dir; }
+function render(){
+  const e=cur(); document.getElementById('stmt').innerHTML=H(e,'r');
+  const node=get(e,sel);
+  const mk=(host,list,bad)=>{ host.innerHTML=''; list.forEach(l=>{ const b=document.createElement('button'); const r=node?l.f(node):null; b.disabled=!r;
+      const n7=!bad&&r&&needs7(l,node,sel);
+      b.innerHTML=l.t+(n7?'<span class="s7">†</span>':''); b.title=r?('becomes: '+key(r).replace(/\\[a-zA-Z]+\s?/g,m=>({'\\land ':'∧ ','\\lor ':'∨ ','\\neg ':'¬','\\Rightarrow ':'⇒ ','\\Leftrightarrow ':'⇔ ','\\top':'⊤','\\bot':'⊥'})[m]||m)):'doesn’t fit the selected piece';
+      b.onclick=()=>{ const nn=l.f(get(cur(),sel)); if(!nn) return; const ne=put(cur(),sel,nn); lines.push({e:ne,law:l.t,hp:sel,s7:n7,bad}); render(); };
+      host.appendChild(b); }); };
+  mk(document.getElementById('laws'),LAWS,false); mk(document.getElementById('bad'),BAD,true);
+  const der=document.getElementById('der'); der.innerHTML='';
+  lines.forEach((ln,i)=>{ const c=colOf(ln.e); const changed=c.some((v,j)=>v!==col0[j]);
+    const row=document.createElement('div'); row.className='row'+(changed?' bad':'');
+    const m=document.createElement('div'); m.className='m'; tex(m,TX(ln.e,ln.hp),true);
+    const n=document.createElement('div'); n.className='n'; n.innerHTML=(i?(ln.bad?'<span class="ember">illegal: '+ln.law+'</span>':ln.law)+(ln.s7?' · <i>† rung 7</i>':''):'start')+'<br>'+chip(c);
+    row.append(m,n); der.appendChild(row); });
+  const now=colOf(e), diff=R.filter((env,j)=>now[j]!==col0[j]).map(env=>L.map(l=>env[l]?'T':'F').join(''));
+  const s7=lines.filter(l=>l.s7).length, bads=lines.filter(l=>l.bad).length;
+  let st= diff.length? '<span class="ember">column changed in the row'+(diff.length>1?'s ':' ')+diff.join(', ')+': this line no longer says what the start said</span>' : 'column unchanged in every row';
+  st+=(s7||bads)?'<br>'+(s7?'rung-7 steps used (marked † in the chain): fine for settled statements':'')+(s7&&bads?' · ':'')+(bads?'illegal moves made (marked in the chain)':''):'';
+  if(goal){ st+='<br>'+(same(e,goal)?'<b class="teal">aim reached</b>':'aiming for: <span id="gk"></span>'); }
+  document.getElementById('status').innerHTML=st; const gk=document.getElementById('gk'); if(gk) tex(gk,TX(goal),false);
 }
-function drawChain(e,env,L){
-  const lines=[]; const clone=x=>JSON.parse(JSON.stringify(x));
-  let cur=clone(e);
-  (function sub(n){ if(n.op==='var'){ n.op='val'; n.v=env[n.v]; n.keep=true; } if(n.a) sub(n.a); if(n.b) sub(n.b); })(cur);
-  lines.push('\\text{row '+rowName(L,env)+': }\\; '+L.map(l=>l+' \\text{ is }'+(env[l]?'\\mathrm T':'\\mathrm F')).join(',\\; '));
-  lines.push(TX(cur).replace(/\\mathrm (T|F)/g,'\\htmlClass{keep}{\\mathrm $1}'));
-  function clearFresh(n){ if(n.fresh) n.fresh=false; if(n.a) clearFresh(n.a); if(n.b) clearFresh(n.b); }
-  function step(n){ if(n.op==='val'||n.op==='const') return false;
-    if(n.a&&step(n.a)) return true; if(n.b&&step(n.b)) return true;
-    const kids=[n.a,n.b].filter(Boolean); if(kids.every(k=>k.op==='val'||k.op==='const')){ const v=ev(n,{}); for(const k in n) delete n[k]; n.op='val'; n.v=v; n.fresh=true; return true; } return false; }
-  let guard=0; while(cur.op!=='val'&&cur.op!=='const'&&guard++<40){ clearFresh(cur); step(cur); lines.push(TX(cur)); }
-  const ch=document.getElementById('ch'); ch.innerHTML='';
-  lines.forEach((t,i)=>{ const d=document.createElement('div'); ch.appendChild(d); tex(d,(i>1?'\\text{then }\\; ':'')+t,true); });
-}
-function drawTree(e,env){
-  let leaf=0, maxD=0; const nodes=[];
-  (function lay(n,d){ maxD=Math.max(maxD,d); const me={n,d}; nodes.push(me);
-    if(n.op==='var'||n.op==='const'){ me.x=leaf++; }
-    else { const kids=[n.a,n.b].filter(Boolean).map(k=>lay(k,d+1)); me.kids=kids; me.x=kids.reduce((s,k)=>s+k.x,0)/kids.length; }
-    me.v=ev(n,env); return me; })(e,0);
-  const gx=64, gy=54, W=Math.max(1,leaf)*gx, H=(maxD+1)*gy+10;
-  const X=x=>gx/2+x*gx; const Yd=d=>18+d*gy;
-  let s='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="statement tree" style="max-height:'+Math.min(340,H*1.6)+'px">';
-  nodes.forEach(m=>{ (m.kids||[]).forEach(k=>{ s+='<line x1="'+X(m.x)+'" y1="'+(Yd(m.d)+12)+'" x2="'+X(k.x)+'" y2="'+(Yd(k.d)-12)+'" style="stroke:var(--'+(k.v?'teal':'ember')+');stroke-width:2.6"/>'; }); });
-  nodes.forEach(m=>{ const lab=m.n.op==='var'?m.n.v:m.n.op==='const'?'⊥':m.n.op==='not'?'¬':OPU[m.n.op];
-    const c=m.v?'teal':'ember';
-    s+='<rect x="'+(X(m.x)-17)+'" y="'+(Yd(m.d)-12)+'" width="34" height="24" rx="'+(m.n.op==='var'?12:5)+'" style="fill:var(--card);stroke:var(--'+c+');stroke-width:2"/>';
-    s+='<text x="'+X(m.x)+'" y="'+(Yd(m.d)+5)+'" text-anchor="middle" style="fill:var(--ink);font:16px var(--serif)">'+lab+'</text>';
-    s+='<text x="'+(X(m.x)+21)+'" y="'+(Yd(m.d)-4)+'" style="fill:var(--'+c+');font:11px var(--mono)">'+(m.v?'T':'F')+'</text>'; });
-  s+='</svg>'; document.getElementById('tree').innerHTML=s;
-}
-fa.addEventListener('input',()=>{ selRow=0; drawA(); });
-document.querySelectorAll('[data-pa]').forEach(b=>b.onclick=()=>{ fa.value=b.dataset.pa; selRow=0; drawA(); });
-
-/* ---------- right: compare ---------- */
-function drawC(){
-  const eb=document.getElementById('eb'), tc=document.getElementById('tc'), vc=document.getElementById('vc'); eb.textContent=''; tc.innerHTML='';
-  let B; try{ B=parse(fb.value); }catch(e){ eb.textContent=e.message; tex(vc,'\\text{…}',true); return; }
-  if(!A){ tex(vc,'\\text{fix statement A on the left}',true); return; }
-  const L=sortL(new Set([...letters(A),...letters(B)])); const R=rowsFor(L);
-  const hr=document.createElement('tr'); L.forEach(l=>hr.appendChild(thTeX(l))); const ha=thTeX('A'); ha.className='fin'; hr.appendChild(ha); hr.appendChild(thTeX('B'));
-  const th=document.createElement('thead'); th.appendChild(hr); tc.appendChild(th); const body=document.createElement('tbody'); const diff=[];
-  R.forEach(env=>{ const a=ev(A,env), b=ev(B,env); const tr=document.createElement('tr'); if(a!==b){ tr.className='diff'; diff.push(rowName(L,env)); }
-    tr.innerHTML=L.map(l=>'<td>'+TF(env[l])+'</td>').join('')+'<td class="fin">'+TF(a)+'</td><td>'+TF(b)+'</td>'; body.appendChild(tr); });
-  tc.appendChild(body);
-  vc.innerHTML='<div>A: <span class="ka"></span></div><div>B: <span class="kb"></span></div><div style="margin-top:4px">'+(diff.length?'<b class="ember">differ</b> in the row'+(diff.length>1?'s ':' ')+diff.join(', ')+': not equivalent':'<b class="teal">the same column</b> in every row: A = B')+'</div>';
-  tex(vc.querySelector('.ka'),TX(A),false); tex(vc.querySelector('.kb'),TX(B),false);
-}
-fb.addEventListener('input',drawC);
-document.querySelectorAll('[data-pab]').forEach(b=>b.onclick=()=>{ const [x,y]=b.dataset.pab.split('|'); fa.value=x; fb.value=y; selRow=0; drawA(); });
-
-/* ---------- right: build from a column ---------- */
-let nB='pq', want={pq:[false,true,true,false],pqr:[true,false,false,false,false,false,false,true]};
-function drawB(){
-  const L=nB==='pq'?['P','Q']:['P','Q','R'], R=rowsFor(L), w=want[nB], tg=document.getElementById('tog'); tg.innerHTML='';
-  R.forEach((env,i)=>{ const lab=document.createElement('span'); lab.textContent='row '+rowName(L,env)+':'; tg.appendChild(lab);
-    const b=document.createElement('button'); b.className=w[i]?'T':'F'; b.textContent=w[i]?'T':'F'; b.setAttribute('aria-label','row '+rowName(L,env)+' output'); b.onclick=()=>{ w[i]=!w[i]; drawB(); }; tg.appendChild(b); });
-  const terms=[]; R.forEach((env,i)=>{ if(w[i]) terms.push(L.map(l=>env[l]?l:'\\neg '+l).join(' \\land ')); });
-  let t, u; if(!terms.length){ t='P \\land \\neg P'; u='P ∧ ¬P'; }
-  else { t=terms.map(x=>terms.length>1&&L.length>1?'('+x+')':x).join(' \\lor '); u=terms.map(x=>{ const v=x.replace(/\\neg /g,'¬').replace(/ \\land /g,' ∧ '); return terms.length>1&&L.length>1?'('+v+')':v; }).join(' ∨ '); }
-  tex(document.getElementById('dnf'),t+(terms.length?'':'\\qquad\\text{(no T rows: a contradiction)}'),true);
-  document.getElementById('load').onclick=()=>{ fa.value=u; selRow=0; drawA(); fa.scrollIntoView({block:'center'}); };
-}
-document.querySelectorAll('[data-n]').forEach(b=>b.onclick=()=>{ nB=b.dataset.n; document.querySelectorAll('[data-n]').forEach(x=>x.classList.toggle('on',x===b)); drawB(); });
-document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{ document.querySelectorAll('[data-mode]').forEach(x=>x.classList.toggle('on',x===b));
-  document.getElementById('mcmp').style.display=b.dataset.mode==='cmp'?'grid':'none'; document.getElementById('mbuild').style.display=b.dataset.mode==='build'?'grid':'none'; });
-drawA(); drawB();
+document.getElementById('stmt').addEventListener('click',ev=>{ const sp=ev.target.closest('.sx'); if(!sp) return; sel=sp.dataset.p; render(); });
+document.getElementById('selAll').onclick=()=>{ sel='r'; render(); };
+document.getElementById('undo').onclick=()=>{ if(lines.length>1){ lines.pop(); let ok=true; try{ ok=!!get(cur(),sel); }catch(x){ ok=false; } if(!ok) sel='r'; render(); } };
+document.getElementById('reset').onclick=()=>{ lines=lines.slice(0,1); sel='r'; render(); };
+document.querySelectorAll('[data-g]').forEach(b=>b.onclick=()=>{ document.querySelectorAll('[data-g]').forEach(x=>x.classList.toggle('on',x===b)); const [s,g]=b.dataset.g.split('|'); document.getElementById('ownE').textContent=''; load(s,g); });
+document.getElementById('ownGo').onclick=()=>{ const s=document.getElementById('ownS').value, g=document.getElementById('ownG').value.trim(); const E=document.getElementById('ownE'); E.textContent='';
+  try{ load(s,g||null); document.querySelectorAll('[data-g]').forEach(x=>x.classList.remove('on')); }catch(e){ E.textContent=e.message; } };
+load('¬(P ⇒ Q)','P ∧ ¬Q');
 
 /* ---------- slides ---------- */
-const N='\\htmlClass{new}', K='\\htmlClass{keep}', T='\\mathrm T', F='\\mathrm F';
-stepper('#sl4',[
-  {k:'ember',kl:'an exactly-when is an if each way',t:`P \\Leftrightarrow Q \\;\\overset{?}{=}\\; (P \\Rightarrow Q) \\land (Q \\Rightarrow P)`,n:`1d defined ⇔ as an if each way. Does the ⇔ table agree? Statements are equivalent when their columns agree in every row, so check every row.`},
-  {k:'ember',kl:'an exactly-when is an if each way',t:`\\begin{aligned}&\\text{row TT: } (${T} \\Rightarrow ${T}) \\land (${T} \\Rightarrow ${T})\\\\ &= ${T} \\land ${T} = ${N}{${T}}\\\\ &P \\Leftrightarrow Q = ${T}\\end{aligned}`,n:`Substitute, then the innermost brackets before the outer ones: both ifs go from T to T, so both are T. The left side, P ⇔ Q, is T because the letters match. Agree.`},
-  {k:'ember',kl:'an exactly-when is an if each way',t:`\\begin{aligned}&\\text{row TF: } (${T} \\Rightarrow ${F}) \\land (${F} \\Rightarrow ${T})\\\\ &= ${F} \\land ${T} = ${N}{${F}}\\\\ &P \\Leftrightarrow Q = ${F}\\end{aligned}`,n:`P ⇒ Q goes from T to F: the bad row of ⇒. An F anywhere inside an ∧ makes it F. The letters differ, so P ⇔ Q is F. Agree.`},
-  {k:'ember',kl:'an exactly-when is an if each way',t:`\\begin{aligned}&\\text{row FT: } (${F} \\Rightarrow ${T}) \\land (${T} \\Rightarrow ${F})\\\\ &= ${T} \\land ${F} = ${N}{${F}}\\\\ &P \\Leftrightarrow Q = ${F}\\end{aligned}`,n:`The row TF with P and Q traded: now Q ⇒ P is the if that fails. Agree.`},
-  {k:'ember',kl:'an exactly-when is an if each way',t:`\\begin{aligned}&\\text{row FF: } (${F} \\Rightarrow ${F}) \\land (${F} \\Rightarrow ${F}) = ${N}{${T}}\\\\ &${N}{P \\Leftrightarrow Q}\\\\ &= ${N}{(P \\Rightarrow Q) \\land (Q \\Rightarrow P)}\\end{aligned}`,n:`Both ifs start from F, so both are T. Columns T F F T and T F F T: equivalent. The table agrees with 1d's line that brought ⇔ in.`}
-],{title:'The slides · an exactly-when is an if each way · ← → keys work'});
-stepper('#sl9',[
-  {k:'ember',kl:'the bad-row hunt',t:`\\big(P \\land (P \\Rightarrow Q)\\big) \\Rightarrow Q`,n:`Is carry-through a tautology? An if can only fail with its right side F and its left side T. So do not build the table: hunt for that kind of row and no other.`},
-  {k:'ember',kl:'the bad-row hunt',t:`\\begin{aligned}&Q \\text{ is } ${N}{${F}},\\; P \\text{ is } ${T}:\\\\ &${T} \\land (${T} \\Rightarrow ${F}) = ${T} \\land ${F} = ${F}\\end{aligned}`,n:`Force the right side F: Q is F. Try P T: then P ⇒ Q is the bad row of ⇒, so the left side is F. No failure here.`},
-  {k:'ember',kl:'the bad-row hunt',t:`\\begin{aligned}&Q \\text{ is } ${F},\\; P \\text{ is } ${F}:\\quad ${F} \\land (\\dots) = ${F}\\\\ &${N}{\\text{no bad row: a tautology}}\\end{aligned}`,n:`P F makes the ∧ F at once, whatever is in the bracket. Neither candidate is a bad row, so none exists. The rows with Q T were never checked at all; as letters pile up, the hunt saves a lot of work.`}
-],{title:'The slides · the bad-row hunt · ← → keys work'});
+const N='\\htmlClass{new}', Kp='\\htmlClass{keep}';
+stepper('#sl7',[
+  {k:'ember',kl:'negating an if',t:`\\neg(\\text{it rains} \\Rightarrow \\text{the game is cancelled})`,n:`What would it take for “if it rains, the game is cancelled” to fail? Put the ¬ outside and push it in. Write P for “it rains” and Q for “the game is cancelled”.`},
+  {k:'ember',kl:'negating an if',t:`\\neg(\\htmlClass{new}{\\neg P \\lor Q})`,n:`if-as-or, forward, on the piece inside the brackets: the if becomes an or. On its own that direction waits for rung 7, but inside a ¬ the place is turned about, and the turned-about direction is the licensed one; the machine agrees. Rewriting a piece is allowed because the column of the piece does not change, so nothing above it can notice.`},
+  {k:'ember',kl:'negating an if',t:`${N}{\\neg\\neg P \\land \\neg Q}`,n:`not-through for or: the ¬ goes through the ∨, lands on each side, and turns ∨ into ∧. This technique is good for any statement, in both directions: 1c's neither technique.`},
+  {k:'ember',kl:'negating an if',t:`${N}{P} \\land \\neg Q`,n:`not-not, forward: not-not cancels, a rung-7 direction, fine for a settled P (and whether it rains is settled by looking out of the window). Result: it rains and the game is played. The negation of an if is an and.`}
+],{title:'The slides · negating an if · ← → keys work'});
+stepper('#sl8',[
+  {k:'ember',kl:'simplify',t:`(P \\land Q) \\lor (P \\land \\neg Q)`,n:`“P and Q, or P and not Q.” It feels as if it should just be P. Prove it by rewriting.`},
+  {k:'ember',kl:'simplify',t:`${Kp}{P} \\land ${N}{(Q \\lor \\neg Q)}`,n:`D read backwards: both parts of the ∨ are “P and something”, so pull the shared P out in front (teal: carried). The spreading technique, read right to left.`},
+  {k:'ember',kl:'simplify · a rung-7 step',t:`P \\land ${N}{\\top}`,n:`either-way: Q ∨ ¬Q is always so. That is rung 7's very principle, and it needs Q settled until then. The chain is honest for a library that is open or shut; mark the step.`},
+  {k:'ember',kl:'simplify',t:`${N}{P}`,n:`U: “and always” adds nothing. A quick chain, no table. 1e's machine agrees: compare the start with P in its compare mode.`}
+],{title:'The slides · simplify · ← → keys work'});
 stepper('#sl10',[
-  {k:'teal',kl:'from 1d: affirming the consequent, caught',t:`\\begin{aligned}&\\big(Q \\land (P \\Rightarrow Q)\\big) \\Rightarrow P\\\\ &P \\text{ is } ${F},\\; Q \\text{ is } ${T}:\\;\\; (${T} \\land ${T}) \\Rightarrow ${F} = ${N}{${F}}\\end{aligned}`,n:`The same hunt on 1d's illegal move. Force P F; Q T makes the left side T ∧ (F ⇒ T), which is T ∧ T, which is T. A bad row exists, so the shape is not a tautology, and the row is the street-cleaning truck: wet street, promise kept, no rain.`}
-],{title:'The slides · affirming the consequent, caught · ← → keys work'});
-stepper('#sl11',[
-  {k:'ember',kl:'where the table assumes',t:`\\neg\\neg P \\;=\\; P \\qquad\\text{(by the table)}`,n:`Swap, and swap again, and you are back: the table says so. The techs of 1b go from P to ¬¬P and no further. The table assumed P sits in a row; the techs assumed nothing. For anything you can check by looking, the table is right. For the rest, rung 7.`}
-],{title:'The slides · where the table assumes · ← → keys work'});
-stepper('#sl16',[
-  {k:'ember',kl:'from a column',t:`\\begin{aligned}&\\text{want: } ${F},\\; ${T},\\; ${T},\\; ${F}\\\\ &(\\text{rows TT, TF, FT, FF})\\end{aligned}`,n:`Now run the machine backwards. The target is “P or Q, but not both”: T in the rows TF and FT only.`},
-  {k:'ember',kl:'from a column',t:`\\text{row TF} \\;\\to\\; ${N}{P \\land \\neg Q}`,n:`Describe the row TF as an and: P is T there, so write P; Q is F there, so write ¬Q. This piece is T in the row TF and in no other.`},
-  {k:'ember',kl:'from a column',t:`\\text{row FT} \\;\\to\\; ${N}{\\neg P \\land Q}`,n:`The same for the row FT. The rows TT and FF want F, so they get no piece.`},
-  {k:'ember',kl:'from a column',t:`${N}{(P \\land \\neg Q) \\lor (\\neg P \\land Q)}`,n:`Join the pieces with or: T exactly where some piece is T, the rows TF and FT. Check the row TT: (T ∧ F) ∨ (F ∧ T) = F ∨ F = F. Every column can be built this way, so ¬, ∧, ∨ can say anything a table can.`}
-],{title:'The slides · from a column · ← → keys work'});
-stepper('#sl18',[
-  {k:'ember',kl:'Boole',t:`P \\lor Q \\;=\\; P \\lor (\\neg P \\land Q)`,n:`Boole's or: “P, or else not-P and Q”. He allowed his sum only between pieces that are never both T, and these never are. Check the row TT: T ∨ (F ∧ T) = T ∨ F = T. Try the other rows yourself: TF gives T, FT gives T, FF gives F.`},
-  {k:'ember',kl:'Boole',t:`\\begin{aligned}&P \\land \\neg P\\\\ &\\text{row T: } ${T} \\land ${F} = ${N}{${F}}\\qquad \\text{row F: } ${F} \\land ${T} = ${N}{${F}}\\end{aligned}`,n:`The principle of contradiction, by rows: a contradiction, for any P. Boole drew it from his fundamental law that a thing said again adds nothing; 1b drew it from clash. Both are right, and the table agrees with the tech.`}
-],{title:'The slides · Boole · ← → keys work'});
-})();
-</script>
-<script>
-(function(){
-const {tex,col}=Rung;
-const NS='http://www.w3.org/2000/svg';
-const OPS=[
- ['P','P',(p,q)=>p],['Q','Q',(p,q)=>q],
- ['¬P','\\neg P',(p,q)=>!p],
- ['P ∧ Q','P \\land Q',(p,q)=>p&&q],
- ['P ∨ Q','P \\lor Q',(p,q)=>p||q],
- ['P ⇒ Q','P \\Rightarrow Q',(p,q)=>!p||q],
- ['P ⇔ Q','P \\Leftrightarrow Q',(p,q)=>p===q],
- ['P ∧ ¬Q','P \\land \\neg Q',(p,q)=>p&&!q],
- ['¬(P ∧ Q)','\\neg(P \\land Q)',(p,q)=>!(p&&q)]
-];
-let op=5, P=true, Q=false;
-const host=document.getElementById('rgop');
-OPS.forEach(([lab],i)=>{ const b=document.createElement('button'); b.type='button'; b.textContent=lab; if(i===op) b.className='on'; b.onclick=()=>{ op=i; [...host.querySelectorAll('button')].forEach(x=>x.classList.toggle('on',x===b)); draw(); }; host.appendChild(b); });
-const bP=document.getElementById('rgP'), bQ=document.getElementById('rgQ');
-bP.onclick=()=>{ P=!P; draw(); }; bQ.onclick=()=>{ Q=!Q; draw(); };
-const svg=document.getElementById('rgsvg');
-const el=(t,a)=>{ const e=document.createElementNS(NS,t); for(const k in a) e.setAttribute(k,a[k]); return e; };
-const CP={x:140,y:118}, CQ={x:220,y:118}, R=78;
-const ROWS=[[true,true],[true,false],[false,true],[false,false]];
-function draw(){
-  bP.textContent='P is '+(P?'T':'F'); bQ.textContent='Q is '+(Q?'T':'F');
-  bP.classList.toggle('on',P); bQ.classList.toggle('on',Q);
-  const f=OPS[op][2], green=col('--moss'), card=col('--card'), ink=col('--ink'), grid=col('--grid'), ember=col('--ember');
-  while(svg.firstChild) svg.removeChild(svg.firstChild);
-  const defs=el('defs',{});
-  const cp=el('clipPath',{id:'rgcp'}); cp.appendChild(el('circle',{cx:CP.x,cy:CP.y,r:R})); defs.appendChild(cp);
-  const cq=el('clipPath',{id:'rgcq'}); cq.appendChild(el('circle',{cx:CQ.x,cy:CQ.y,r:R})); defs.appendChild(cq);
-  const mq=el('mask',{id:'rgmq'}); mq.appendChild(el('rect',{x:0,y:0,width:360,height:230,fill:'#fff'})); mq.appendChild(el('circle',{cx:CQ.x,cy:CQ.y,r:R,fill:'#000'})); defs.appendChild(mq);
-  const mp=el('mask',{id:'rgmp'}); mp.appendChild(el('rect',{x:0,y:0,width:360,height:230,fill:'#fff'})); mp.appendChild(el('circle',{cx:CP.x,cy:CP.y,r:R,fill:'#000'})); defs.appendChild(mp);
-  const mboth=el('mask',{id:'rgmb'}); mboth.appendChild(el('rect',{x:0,y:0,width:360,height:230,fill:'#fff'})); mboth.appendChild(el('circle',{cx:CP.x,cy:CP.y,r:R,fill:'#000'})); mboth.appendChild(el('circle',{cx:CQ.x,cy:CQ.y,r:R,fill:'#000'})); defs.appendChild(mboth);
-  svg.appendChild(defs);
-  const fill=v=>v?green:card, op_=v=>v?'0.55':'1';
-  // FF: outside both
-  svg.appendChild(el('rect',{x:4,y:4,width:352,height:222,rx:6,fill:fill(f(false,false)),'fill-opacity':op_(f(false,false)),mask:'url(#rgmb)'}));
-  // TF: P only
-  svg.appendChild(el('circle',{cx:CP.x,cy:CP.y,r:R,fill:fill(f(true,false)),'fill-opacity':op_(f(true,false)),mask:'url(#rgmq)'}));
-  // FT: Q only
-  svg.appendChild(el('circle',{cx:CQ.x,cy:CQ.y,r:R,fill:fill(f(false,true)),'fill-opacity':op_(f(false,true)),mask:'url(#rgmp)'}));
-  // TT: both
-  svg.appendChild(el('circle',{cx:CQ.x,cy:CQ.y,r:R,fill:fill(f(true,true)),'fill-opacity':op_(f(true,true)),'clip-path':'url(#rgcp)'}));
-  svg.appendChild(el('rect',{x:4,y:4,width:352,height:222,rx:6,fill:'none',stroke:grid,'stroke-width':1.5}));
-  svg.appendChild(el('circle',{cx:CP.x,cy:CP.y,r:R,fill:'none',stroke:ink,'stroke-width':1.6}));
-  svg.appendChild(el('circle',{cx:CQ.x,cy:CQ.y,r:R,fill:'none',stroke:ink,'stroke-width':1.6}));
-  const txt=(x,y,s,sz,c)=>{ const t=el('text',{x,y,'text-anchor':'middle','font-family':'var(--mono), monospace','font-size':sz,fill:c||ink}); t.textContent=s; svg.appendChild(t); };
-  txt(CP.x-48,40,'P',16); txt(CQ.x+48,40,'Q',16);
-  txt(CP.x-38,122,'TF',12,col('--muted')); txt(180,122,'TT',12,col('--muted')); txt(CQ.x+38,122,'FT',12,col('--muted')); txt(330,214,'FF',12,col('--muted'));
-  const pos={TT:[180,150],TF:[CP.x-40,152],FT:[CQ.x+40,152],FF:[34,206]};
-  const key=(P?'T':'F')+(Q?'T':'F'), v=f(P,Q), [dx,dy]=pos[key];
-  svg.appendChild(el('circle',{cx:dx,cy:dy,r:9,fill:v?green:ember,stroke:ink,'stroke-width':2}));
-  const out=document.getElementById('rgout');
-  out.innerHTML='<div></div><div style="font-family:var(--mono);font-size:.85rem"></div>';
-  tex(out.children[0],OPS[op][1]+'\\ \\text{ in the row }'+key+':\\ \\ '+(v?'\\textbf{T}':'\\htmlClass{ember}{\\textbf{F, false}}'),true);
-  const greens=ROWS.filter(([p,q])=>f(p,q)).map(([p,q])=>(p?'T':'F')+(q?'T':'F'));
-  out.children[1].innerHTML=(greens.length===4?'green everywhere: it is true in every row, a tautology':greens.length===0?'green nowhere: it is false in every row':'green in '+greens.join(', ')+'; <span style="color:var(--ember)">false</span> in the rest');
-  const t=document.getElementById('rgtab');
-  t.innerHTML='<tr><th>P</th><th>Q</th><th></th></tr>'+ROWS.map(([p,q])=>{ const k=(p?'T':'F')+(q?'T':'F'), w=f(p,q); return '<tr'+(k===key?' style="outline:2px solid var(--ink)"':'')+'><td>'+(p?'T':'F')+'</td><td>'+(q?'T':'F')+'</td><td style="'+(w?'color:var(--moss);font-weight:600':'color:var(--ember);font-weight:600')+'">'+(w?'T':'F')+'</td></tr>'; }).join('');
-  tex(t.rows[0].cells[2],OPS[op][1],false);
-}
-draw();
-window.addEventListener('themechange',draw);
+  {k:'ember',kl:'English',t:`\\text{No entry unless you are on the list}`,n:`Translate. “A unless B” is “if not B, then A”. Here A is “no entry” (¬E) and B is “you are on the list” (L).`},
+  {k:'ember',kl:'English',t:`\\neg L \\Rightarrow \\neg E`,n:`If you are not on the list, you do not enter. Now apply turn-and-deny, forward: good for any statement.`},
+  {k:'ember',kl:'English',t:`${N}{\\neg\\neg E \\Rightarrow \\neg\\neg L} \\;\\to\\; ${N}{E \\Rightarrow L}`,n:`turn-and-deny gives ¬¬E ⇒ ¬¬L, and not-not on each side (whether you entered and whether you are listed are settled facts) gives E ⇒ L: you enter only if you are on the list. Same rule, spelled in different English.`}
+],{title:'The slides · English · ← → keys work'});
+/* slides sl12 held for 4a with their footing */
+stepper('#sl14',[
+  {k:'ember',kl:'cases, opened',t:`(P \\lor Q) \\Rightarrow R`,n:`Now a statement to grow on purpose. “If P or Q, then R.” The goal is separate ifs, because proving each piece on its own is easier than proving the whole.`},
+  {k:'ember',kl:'cases, opened',t:`${N}{\\neg(P \\lor Q) \\lor R}`,n:`if-as-or forward (a rung-7 direction): the if becomes an or.`},
+  {k:'ember',kl:'cases, opened',t:`${N}{(\\neg P \\land \\neg Q)} \\lor R`,n:`not-through on the piece ¬(P ∨ Q): neither P nor Q. Good for any statement.`},
+  {k:'ember',kl:'cases, opened',t:`${N}{(\\neg P \\lor R) \\land (\\neg Q \\lor R)}`,n:`spread for or over and: ∨ spreads over ∧. Here the R (on the right) is shared out to both pieces.`},
+  {k:'ember',kl:'cases, opened',t:`${N}{(P \\Rightarrow R)} \\land (\\neg Q \\lor R)`,n:`if-as-or backward on the left piece: ¬P ∨ R is P ⇒ R. Backward is the direction good for any statement.`},
+  {k:'ember',kl:'cases, opened',t:`(P \\Rightarrow R) \\land ${N}{(Q \\Rightarrow R)}`,n:`if-as-or backward on the right piece. Done: to prove “if P or Q then R”, prove “if P then R” and “if Q then R”. That is proof by cases, and it is the cases technique; this chain used a rung-7 step, yet cases is good both ways by techs: the chain is not the only road.`}
+],{title:'The slides · cases, opened · ← → keys work'});
+stepper('#sl17',[
+  {k:'ember',kl:'growing, backwards',t:`P`,n:`Run a simplification in reverse: start from P and grow it into (P ∨ Q) ∧ (P ∨ ¬Q). The opening moves read techniques right to left.`},
+  {k:'ember',kl:'growing, backwards',t:`P \\lor ${N}{\\bot}`,n:`U backwards: P is P ∨ ⊥. Writing a thing in a clever form.`},
+  {k:'ember',kl:'growing, backwards',t:`P \\lor ${N}{(Q \\land \\neg Q)}`,n:`clash backwards: ⊥ is Q ∧ ¬Q. Good for any statement: both at once never happens.`},
+  {k:'ember',kl:'growing, backwards',t:`${N}{(P \\lor Q) \\land (P \\lor \\neg Q)}`,n:`spread for or over and, read forward this time: spread the P over the ∧. No rung-7 direction needed anywhere.`}
+],{title:'The slides · growing, backwards · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

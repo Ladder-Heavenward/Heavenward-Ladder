@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>What a recipe for answers is made of</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r04k.html">← 4k counting choices</a><a href="r04stat.html">next: 4·stat what can counting alone say about a list? →</a></p>
+  <div class="tags"><span class="tag tech">4l · technique</span></div>
+  <h1>What a recipe for answers is made of</h1>
+  <p data-pid="8ff43f">4j ran the gcd algorithm. 4i wrote numbers in twos. 4f added by counting on. Each of these takes a starting point and makes the same kind of move again and again until a check says stop. This step takes such a recipe apart. It asks what its parts are, why it stops, and why its answer is right.</p>
+  <p class="gesture" data-pid="fcc2b9">A recipe for answers needs two proofs, not one. One says every run stops. The other says the answer at the stop is right. A number that falls on every move gives the first. A statement that every move keeps gives the second.</p>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r04c.html">4c</a> (induction), <a href="r04d.html">4d</a> (functions, defining by repeating), <a href="r04f.html">4f</a> (adding), <a href="r04h.html">4h</a> (order, strong induction, settled statements), <a href="r04i.html">4i</a> (splitting by a base, twos) and <a href="r04j.html">4j</a> (division with remainder, split-keeps-divisors, the gcd algorithm). <a href="r04comp.html">4·comp</a> builds a machine that runs one.</p></div>
+</header>
+
+<section class="class step" data-step="4l1">
+  <h2 class="sthead"><span class="stno">4l1</span>A recipe, part by part</h2>
+  <p class="stands">Stands on 4d2 (a function is its pairs), 4d8 (the recursion technique), 4h7 (order is settled) and 4j12 (the gcd algorithm).</p>
+  <p data-pid="dd3678">A recipe for answers has five parts.</p>
+  <ul>
+    <li data-pid="a40681"><b>A state</b>: what the recipe holds between moves, such as a pair of numbers.</li>
+    <li data-pid="85ba02"><b>A start</b>: the state made from the input.</li>
+    <li data-pid="aa0116"><b>A stop test</b>: a settled statement about the state (4h7), so it can always be checked.</li>
+    <li data-pid="142728"><b>A move</b>: a function from states to states (4d2). It is used only when the stop test fails.</li>
+    <li data-pid="5d8bb5"><b>An output</b>: what is read off the state at the stop.</li>
+  </ul>
+  <p data-pid="ae0f75">The accepted name for a recipe like this is an <b>algorithm</b>. From here on the ladder uses that word.</p>
+  <p data-pid="a1b7c4"><b>An algorithm is an operator built from repeating: a statement that names a start, a move and a stop test.</b> Carry it out, and the move repeats until the test says stop, and the test is sure to say it. What is left is the output. A clock’s hand repeats too, but it never stops, so it is a cycle, not an algorithm.</p>
+  <p class="eqline" data-pid="7b1349">From here on, the run of an algorithm is the function run on ℕ given by the recursion technique (4d8): run(0) is the start. run(n + 1) is the move applied to run(n) when run(n) fails the stop test, and is run(n) itself when it passes. The run <b>stops</b> when some run(n) passes the stop test.</p>
+  <p data-pid="78f4a0">Example: the gcd algorithm of 4j12, part by part.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the gcd algorithm as an algorithm">
+\text{state: } (u, b) \text{, a pair of numbers} @@ the state
+\text{start: } (a, b) @@ the two numbers given
+\text{stop test: } b = 0 @@ settled, by settled-order
+\text{move: } (u, b) \mapsto (b, r),\ \ u = b \cdot q + r,\ \ r \lt b @@ division-with-remainder (4j7); used only when b ≠ 0
+\text{output: } u @@ read off at the stop
+(84, 36) \mapsto (36, 12) \mapsto \htmlClass{new}{(12, 0)} @@ two moves; 12 is the output
+  </pre>
+  <p data-pid="5f0e19"><b>Writing an algorithm down is naming its five parts; nothing else may happen between moves.</b></p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · parts · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">4l1.1</span><span class="ph know">know</span>What are the five parts of an algorithm? <br>What is its run?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4l2">
+  <h2 class="sthead"><span class="stno">4l2</span>Why it stops</h2>
+  <p class="stands">Stands on 4l1 (a run), 4h12 (strong induction) and 4h6 (any two compare).</p>
+  <p data-pid="838142">Each move of the gcd algorithm makes b smaller. A counting number cannot get smaller for ever. That is the whole reason it stops.</p>
+  <p data-pid="bf0bc3">Falling-measure technique: <b>if a counting number read off the state is smaller after every move, every run stops.</b> The number is called the measure. You already know it: a countdown that drops every second must reach the end.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the falling-measure technique, by strong induction on the measure">
+\varphi(m):\ \text{every run whose start has measure } m \text{ stops} @@ the condition
+\text{suppose } \varphi(k) \text{ for every } k \lt m @@ the strong induction hypothesis
+\text{case: the start passes the stop test} @@ then run(0) stops it
+\text{case: it fails:\ \ run}(1) \text{ has measure } m' \lt m @@ the move lowers the measure
+\qquad \text{the run from run}(1) \text{ stops at some } n @@ the hypothesis with k = m′; it is this run, one place on
+\qquad \htmlClass{new}{\text{this run stops at } n + 1} @@ run(n + 1) is that run’s n-th state
+\forall m\;\varphi(m) \quad \blacksquare @@ the strong induction technique
+  </pre>
+  <p data-pid="4c964a">For the gcd algorithm the measure is b. The move puts r in its place, and r &lt; b.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · stops · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4l2.1</span><span class="ph know">know</span>What does the falling-measure technique say, and why does it hold?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4l3">
+  <h2 class="sthead"><span class="stno">4l3</span>Why the answer is right</h2>
+  <p class="stands">Stands on 4l1 (a run), 4c (induction), 4j11 (split-keeps-divisors) and 4j4 (divisor-not-past).</p>
+  <p data-pid="748bad">Stopping is not enough. An algorithm that outputs 0 at once always stops, and is nearly always wrong. Rightness needs a second proof.</p>
+  <p data-pid="abd18d">Kept-statement technique: <b>a statement true at the start, and kept by every move, is true at the stop.</b> “Kept” means that whenever it holds of a state, it holds of the state the move makes. You know this too. If every swap in a game keeps the number of cards even, and it was even at the start, it is even at the end.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the kept-statement technique, by induction on n">
+\psi(n):\ P(\mathrm{run}(n)) @@ the condition
+\psi(0) @@ P holds at the start
+\text{if run}(n) \text{ passes: run}(n + 1) = \mathrm{run}(n) @@ nothing moves, so P still holds
+\text{if it fails: run}(n + 1) = \mathrm{move}(\mathrm{run}(n)) @@ P is kept by the move
+\forall n\;\psi(n) @@ the induction technique
+\htmlClass{new}{P \text{ and the stop test hold at the stop}} \quad \blacksquare @@ the stop is some run(n)
+  </pre>
+  <p data-pid="3274c2">The accepted name for a kept statement is an <b>invariant</b>. From here on the ladder uses that word.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the gcd algorithm is right">
+P(u, b):\ u, b \text{ have the same common divisors as } a, b @@ the invariant
+P(a, b) @@ true at the start
+P(u, b) \Rightarrow P(b, r) @@ split-keeps-divisors: u, b and b, r share their common divisors
+\text{at the stop } (g, 0):\ \text{common divisors of } a, b = \text{divisors of } g @@ everything divides 0
+\htmlClass{new}{g = \gcd(a, b)} \quad \blacksquare @@ divisor-not-past: each divisor of g is at most g, when g ≠ 0
+  </pre>
+  <p data-pid="7cf55d">So the algorithm has a measure, b, and an invariant, P. The measure says it stops. The invariant says what it gives.</p>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · loose, then locked</div>
+    <p data-pid="d2e68a">2e set out a principle of the second kind of care: things are made in two steps, a loose gathering and then a lock. An algorithm is made the same way. First comes the loose gathering. The same moves are run on input after input, by habit, and the answers come out right nearly every time. Adding in columns was a habit long before it was a recipe. Then the gathering locks. A measure and an invariant fix it: every run stops, and every answer is right.</p>
+    <p data-pid="000a25"><b>Describe both steps: what runs were gathered, under what loose rule, and what proof locked them.</b></p>
+    <p data-pid="1e2dbc">The lock has a price, and it can be read without watching a single run. Each move lowers the measure by at least one, so a run from a start with measure m takes at most m moves. The gcd algorithm on (a, b) takes at most b divisions, whatever a is.</p>
+    <p data-pid="7fe7b5">Unlocking runs the steps backward. Change one move, and the proofs can fail while the runs still look right. In between sits a real state: a recipe that has worked on every input tried, with no lock found yet.</p>
+    <p class="bait" data-pid="dbfe34">The recipe of 4l.6.5 has stopped on every start anyone has tried. Is it loose, or locked?</p>
+  </aside>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · right · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4l3.1</span><span class="ph know">know</span>What does the kept-statement technique say? <br>Why does an algorithm need an invariant as well as a measure?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4l4">
+  <h2 class="sthead"><span class="stno">4l4</span>Two more, worked</h2>
+  <p class="stands">Stands on 4l2, 4l3, 4f (adding), 4i6 (split-by-a-base) and 4i14 (in twos).</p>
+  <p data-pid="89f49d">Adding by counting on, as an algorithm. The state is (s, k), the start is (a, b), and the stop test is k = 0. The move is (s, S(j)) ↦ (S(s), j). The output is s.</p>
+  <pre class="lines" data-k="ember" data-label="this step: counting on stops, and adds">
+\text{measure: } k @@ j &lt; S(j): the next is past (4h)
+\text{invariant: } s + k = a + b @@ true at the start
+S(s) + j = s + S(j) @@ the techniques of plus (4f): the move keeps it
+\htmlClass{new}{s = s + 0 = a + b} \text{ at the stop} \quad \blacksquare @@ the stop test, k = 0
+  </pre>
+  <p data-pid="1803a7">Writing n in twos, as an algorithm. The state is (q, w, L): what is left to write, the value of the bits written, and how many there are. The start is (n, 0, 0), and the stop test is q = 0. The move splits q = 2 · q′ + d (4i6). It writes d to the left of the bits so far, and goes to (q′, d · 2<sup>L</sup> + w, L + 1).</p>
+  <pre class="lines" data-k="ember" data-label="this step: writing in twos stops, and is right">
+\text{measure: } q @@ q′ &lt; q whenever q ≠ 0
+\text{invariant: } n = q \cdot 2^L + w @@ n · 2⁰ + 0 = n at the start
+(2q' + d) \cdot 2^L + w = q' \cdot 2^{L+1} + (d \cdot 2^L + w) @@ spread and the power techniques (4g): the move keeps it
+\htmlClass{new}{n = w} \text{ at the stop} \quad \blacksquare @@ q = 0
+  </pre>
+  <p data-pid="acf080"><b>Finding an algorithm’s invariant is finding what its moves never change.</b> The measure is usually the part of the state that shrinks.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · worked · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · a run, its measure and its invariant</div>
+    <div class="chips"></div>
+    <div class="kn"><span class="m" id="kal">a</span><input type="range" id="ka" min="0" max="120" step="1" value="84"><output id="oka"></output></div>
+    <div class="kn" id="kbw"><span class="m">b</span><input type="range" id="kb" min="0" max="120" step="1" value="36"><output id="okb"></output></div>
+    <div class="chips"><button type="button" id="r1">one move</button><button type="button" id="rall">run to the stop</button><button type="button" id="r0">start again</button></div>
+    <div class="tablewrap" id="rt"></div>
+    <div class="cap">Pick an algorithm and its input. Each row is one state of the run. The measure falls on every move; the invariant holds on every row; at the stop, the invariant and the stop test give the answer.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4l4.1</span><span class="ph know">know</span>How do you find an algorithm’s invariant, and where is its measure usually found?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4l5">
+  <h2 class="sthead"><span class="stno">4l5</span>Illegal moves</h2>
+  <p class="stands">Stands on 4l1 to 4l4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{it stopped on every input tried, so it always stops\,?} @@ trying is not proving: name a measure
+\text{it stops, so its answer is right\,?} @@ stopping and rightness are two proofs: name an invariant too
+\text{the measure falls on most moves\,?} @@ it must fall on every move the stop test lets through
+P \text{ at the start and at the stop, so } P \text{ is kept\,?} @@ kept means every move keeps it, wherever P holds
+\text{the pair } (u, b) \text{ falls\,?} @@ “falls” is less (4h), for counting numbers; read one number off the pair
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4l5.1</span><span class="ph know">know</span>Why is “it stopped on every input tried, so it always stops” an illegal move?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">4l.6.1</span><span class="tagq">build</span>Build an algorithm that finds the least member of a settled set of numbers with at least one member, by checking 0, 1, 2, … in turn (4h15). <br>Find a measure for it. Which member of the set does it use?</div>
+  <div class="chq"><span class="chid">4l.6.2</span><span class="tagq">edge</span>Run the gcd algorithm on (0, 0). <br>Find its output. Is it a greatest common divisor of 0 and 0?</div>
+  <div class="chq"><span class="chid">4l.6.3</span><span class="tagq">converse</span>If every run of an algorithm stops, is there always a measure? <br>Try the number of moves left.</div>
+  <div class="chq"><span class="chid">4l.6.4</span><span class="tagq">reroute</span>Prove that the gcd algorithm stops, using u + b as the measure in place of b. <br>Find the move where this breaks, and mend it.</div>
+  <div class="chq"><span class="chid">4l.6.5</span><span class="tagq">seam</span>Here is an algorithm. The state is a number n other than 0, and the stop test is n = 1. If n is even, n = 2 · k, the move is n ↦ k. If n is odd, the move is n ↦ 3 · n + 1. <br>Run it from 6, from 7 and from 27. <br>Does every run stop? What measure would you try, and what happens to it?</div>
+  <div class="chq"><span class="chid">4l.6.6</span><span class="tagq">seam</span>Take a proof column you wrote on rung 0 or 1. Name its state, its start, its moves and its stop test. <br>Is the column a run? <br>If it is, what falls on every line, and what does every line keep? <br>Who ran it?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r04k.html">← 4k · counting choices</a><a href="r04stat.html">4·stat · what can counting alone say about a list? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>An algorithm is an effective procedure. A run is also called an execution or a trace. The falling measure is called a variant or a termination measure, and an algorithm whose every run stops is said to terminate. The kept statement is a loop invariant. An algorithm that stops with the right answer is totally correct; one that is right whenever it stops is partially correct.</p>
+  <h3>Who said it first</h3>
+  <p>The word algorithm comes from the name of Muhammad ibn Musa al-Khwarizmi, whose ninth-century book taught reckoning with the Hindu numerals. Alan Turing checked a long routine by an invariant and a measure in a short paper of 1949. Robert Floyd (1967) and Tony Hoare (1969) made invariants a method for proving programs right. The algorithm of 4l.6.5 is Lothar Collatz’s (1937). Whether every run of it stops is still open: computers have checked every start below about 2.95 × 10<sup>20</sup>.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+/* moves of the plane, drawn in SVG, for rung 20 */
+const V=c=>'var('+c+')';
+const FLAG=[[0,0],[0,3],[2,3],[2,2.4],[0.6,2.4],[0.6,1.8],[1.5,1.8],[1.5,1.2],[0.6,1.2],[0.6,0]];
+const M={
+  id:()=>p=>p,
+  slide:(h,k)=>p=>[p[0]+h,p[1]+k],
+  turn:(a,b)=>p=>[a*p[0]-b*p[1],b*p[0]+a*p[1]],
+  stretch:k=>p=>[k*p[0],k*p[1]],
+  flipU:(c,s)=>p=>{ const d=2*(p[0]*c+p[1]*s); return [d*c-p[0],d*s-p[1]]; },              /* across the line through O along (c, s), c² + s² = 1 */
+  flipAt:(q,c,s)=>p=>{ const x=p[0]-q[0],y=p[1]-q[1],d=2*(x*c+y*s); return [q[0]+d*c-x,q[1]+d*s-y]; },
+  turnAt:(q,a,b)=>p=>{ const x=p[0]-q[0],y=p[1]-q[1]; return [q[0]+a*x-b*y,q[1]+b*x+a*y]; },
+  then:(g,f)=>p=>g(f(p))                                                                    /* f first, then g */
+};
+const unit=(x,y)=>{ const r=Math.hypot(x,y); return [x/r,y/r]; };
+const fx=v=>(Math.abs(v)<5e-10?0:v);
+const show=(v,d)=>{ let s=fx(v).toFixed(d==null?2:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return (s==='-0'?'0':s).replace('-','−'); };
+/* shapes: {pts, c, fill, dash, w, open}; dots: {p, c, t}; lines: {p, d, c, dash} */
+function svgPlane(o){ const lo=o.lo==null?-6:o.lo, hi=o.hi==null?6:o.hi, S=300, X=x=>(x-lo)/(hi-lo)*S, Y=y=>S-(y-lo)/(hi-lo)*S;
+  let s='<svg viewBox="0 0 '+S+' '+S+'" style="width:100%;max-width:340px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  for(let g=Math.ceil(lo);g<=hi;g++){ s+='<line x1="'+X(g)+'" y1="0" x2="'+X(g)+'" y2="'+S+'" style="stroke:'+V('--grid')+';stroke-width:'+(g===0?1.6:0.6)+'"/><line x1="0" y1="'+Y(g)+'" x2="'+S+'" y2="'+Y(g)+'" style="stroke:'+V('--grid')+';stroke-width:'+(g===0?1.6:0.6)+'"/>'; }
+  (o.lines||[]).forEach(l=>{ const L=40; s+='<line x1="'+X(l.p[0]-L*l.d[0])+'" y1="'+Y(l.p[1]-L*l.d[1])+'" x2="'+X(l.p[0]+L*l.d[0])+'" y2="'+Y(l.p[1]+L*l.d[1])+'" style="stroke:'+V(l.c||'--teal')+';stroke-width:1.6;stroke-dasharray:'+(l.dash||'5 4')+'"/>'; });
+  (o.shapes||[]).forEach(z=>{ const pts=z.pts.map(p=>X(p[0]).toFixed(1)+','+Y(p[1]).toFixed(1)).join(' ');
+    s+='<'+(z.open?'polyline':'polygon')+' points="'+pts+'" style="fill:'+(z.fill?V(z.c):'none')+';fill-opacity:'+(z.fill?0.28:0)+';stroke:'+V(z.c)+';stroke-width:'+(z.w||2)+(z.dash?';stroke-dasharray:'+z.dash:'')+'"/>'; });
+  (o.dots||[]).forEach(d=>{ s+='<circle cx="'+X(d.p[0])+'" cy="'+Y(d.p[1])+'" r="4" style="fill:'+V(d.c||'--ink')+'"/>'+(d.t?'<text x="'+(X(d.p[0])+7)+'" y="'+(Y(d.p[1])-6)+'" style="fill:'+V(d.c||'--ink')+';font:12px IBM Plex Mono,monospace">'+d.t+'</text>':''); });
+  return s+'</svg>'; }
+function knob(id,lab,min,max,step,val){ return '<div class="kn"><span class="m">'+lab+'</span><input type="range" id="'+id+'" min="'+min+'" max="'+max+'" step="'+step+'" value="'+val+'"><output id="o'+id+'"></output></div>'; }
+function chipRow(el,keys,get,set,after){ el.innerHTML=''; keys.forEach(k=>{ const b=document.createElement('button'); b.type='button'; b.textContent=k; if(k===get()) b.className='on'; b.onclick=()=>{ set(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
+
+const RC={
+  gcd:{lab:'gcd',a:'a',b:'b',start:(a,b)=>[a,b],stop:s=>s[1]===0,move:s=>[s[1],s[0]%s[1]],meas:s=>s[1],
+       show:s=>'('+s[0]+', '+s[1]+')',inv:(s,a,b)=>{const g=(x,y)=>y?g(y,x%y):x; return g(s[0],s[1])===g(a,b);},invt:'same common divisors as (a, b)',out:s=>s[0],outt:(a,b)=>'gcd('+a+', '+b+')',want:(a,b)=>{const g=(x,y)=>y?g(y,x%y):x; return g(a,b);}},
+  add:{lab:'counting on',a:'a',b:'b',start:(a,b)=>[a,b],stop:s=>s[1]===0,move:s=>[s[0]+1,s[1]-1],meas:s=>s[1],
+       show:s=>'('+s[0]+', '+s[1]+')',inv:(s,a,b)=>s[0]+s[1]===a+b,invt:'s + k = a + b',out:s=>s[0],outt:(a,b)=>a+' + '+b,want:(a,b)=>a+b},
+  twos:{lab:'twos',a:'n',b:null,start:(a)=>[a,0,0],stop:s=>s[0]===0,move:s=>[Math.floor(s[0]/2),(s[0]%2)*2**s[2]+s[1],s[2]+1],meas:s=>s[0],
+       show:s=>'('+s[0]+', '+(s[2]?s[1].toString(2).padStart(s[2],'0')+'₂':'0')+', '+s[2]+')',inv:(s,a)=>s[0]*2**s[2]+s[1]===a,invt:'n = q · 2ᴸ + w',out:s=>s[1],outt:a=>a+' in twos',want:a=>a}
+};
+let rk='gcd', A=84, B=36, st=null, rows=[];
+$('pic').querySelector('.chips').id='rch';
+chipRow($('rch'),Object.keys(RC).map(k=>RC[k].lab),()=>RC[rk].lab,l=>{ rk=Object.keys(RC).find(k=>RC[k].lab===l); },()=>{ reset(); });
+$('ka').addEventListener('input',()=>{ A=+$('ka').value; reset(); });
+$('kb').addEventListener('input',()=>{ B=+$('kb').value; reset(); });
+$('r1').onclick=()=>{ step(); draw(); };
+$('rall').onclick=()=>{ let g=0; while(!RC[rk].stop(st)&&g++<200) step(); draw(); };
+$('r0').onclick=()=>{ reset(); };
+function reset(){ const r=RC[rk]; [...$('rch').children].forEach(z=>z.classList.toggle('on',z.textContent===r.lab)); st=r.start(A,B); rows=[st]; $('kbw').style.display=r.b?'':'none'; draw(); }
+function step(){ const r=RC[rk]; if(r.stop(st)) return; st=r.move(st); rows.push(st); }
+function draw(){ const r=RC[rk];
+  $('oka').textContent=A; $('okb').textContent=B; $('kal').textContent=r.a;
+  let h='<table class="tt"><tr><th>n</th><th>run(n)</th><th>measure</th><th>'+r.invt+'</th></tr>';
+  rows.forEach((s,i)=>{ const ok=r.inv(s,A,B); h+='<tr><td>'+i+'</td><td>'+r.show(s)+'</td><td>'+r.meas(s)+'</td><td class="'+(ok?'T':'F')+'">'+(ok?'holds':'fails')+'</td></tr>'; });
+  $('rt').innerHTML=h+'</table>';
+  const v=$('vd'); v.className='verdict';
+  if(r.stop(st)){ const o=r.out(st), w=r.want(A,B); v.textContent='Stopped after '+(rows.length-1)+' moves. Output '+(rk==='twos'?A.toString(2)+'₂':o)+'; the right answer, '+r.outt(A,B)+', is '+(rk==='twos'?A.toString(2)+'₂':w)+'.'+(rk==='gcd'&&A===0&&B===0?' Every number divides 0: there is no greatest.':''); }
+  else v.textContent='Not stopped yet. The measure is '+r.meas(st)+'; each move makes it smaller.';
+}
+reset();
+window.__pic={set:(k,a,b)=>{ rk=k; A=a; B=b; reset(); let g=0; while(!RC[rk].stop(st)&&g++<200) step(); draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'the parts',t:R`\htmlClass{new}{\text{state, start, stop test, move, output}}`,n:`Nothing else happens between moves.`},
+  {k:'ember',kl:'a run',t:R`\mathrm{run}(n + 1) = \mathrm{move}(\mathrm{run}(n))`,n:`Until the stop test passes.`}
+],{title:'The slides · parts · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'falling measure',t:R`\htmlClass{new}{m\text{ falls on every move} \Rightarrow \text{every run stops}}`,n:`A counting number cannot fall for ever.`}
+],{title:'The slides · stops · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'invariant',t:R`\htmlClass{new}{P(\text{start}) \wedge (P \Rightarrow P \text{ after a move})}`,n:`P holds at the stop.`}
+],{title:'The slides · right · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'counting on',t:R`\htmlClass{new}{s + k = a + b}`,n:`Kept by every move.`},
+  {k:'ember',kl:'twos',t:R`\htmlClass{new}{n = q \cdot 2^L + w}`,n:`Kept by every split.`}
+],{title:'The slides · worked · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`\text{stops} \not\Rightarrow \text{right}`,n:`Two proofs, every time.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

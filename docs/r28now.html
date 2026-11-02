@@ -35,13 +35,13 @@ table.tt td.l{text-align:left}
 
 <section class="class step" data-step="28now1">
   <h2 class="sthead"><span class="stno">28now1</span>A machine that learns from its mistakes</h2>
-  <p class="stands">Stands on 27i (the angle-between technique) and 4b (induction).</p>
+  <p class="stands">Stands on 27i (the angle-between technique) and 4c (induction).</p>
   <p data-pid="831ea6">Each example is a list of inputs x, with a 1 put last to stand for a fixed push, and a right answer y, which is +1 or −1. The machine holds a list of weights w and answers +1 when w · x is above 0. It starts at w = 0. On a mistake, when y (w · x) ≤ 0, it adds yx to w. Nothing else.</p>
   <pre class="lines" data-k="ember" data-label="this page: the mistake-bound technique">
 |w^*| = 1,\ \ y\,(w^* \cdot x) \ge \gamma \gt 0,\ \ |x| \le R \text{ for every example} @@ some weights w* get every example right, with room γ
 w_{k+1} \cdot w^* = w_k \cdot w^* + y\,(x \cdot w^*) \ge w_k \cdot w^* + \gamma @@ the (k + 1)th mistake adds yx
 |w_{k+1}|^2 = |w_k|^2 + 2y\,(w_k \cdot x) + |x|^2 \le |w_k|^2 + R^2 @@ on a mistake y(w_k · x) ≤ 0
-k\gamma \le w_k \cdot w^* \le |w_k| \le \sqrt{k}\,R @@ induction (4b) from w₀ = 0; the angle-between technique (27i): w · w* ≤ |w||w*|
+k\gamma \le w_k \cdot w^* \le |w_k| \le \sqrt{k}\,R @@ induction (4c) from w₀ = 0; the angle-between technique (27i): w · w* ≤ |w||w*|
 \htmlClass{new}{k \le (R/\gamma)^2} \quad \blacksquare @@ square, and divide by kγ²
   </pre>
   <p data-pid="922a15">Mistake-bound technique: <b>if some weights get every example right with room γ, and no example is longer than R, the machine makes at most (R/γ)² mistakes, however the examples are ordered and however many times they come round.</b> Teach it either-or (OR) on two inputs: the examples (0, 0, 1) with −1, and (0, 1, 1), (1, 0, 1), (1, 1, 1) with +1. Here R = √3, and w* = (1, 1, −0.5)/1.5 has room ⅓. The bound is 27 mistakes. Shown the four examples round and round, the machine makes 9 and stops at w = (2, 2, −1).</p>

@@ -30,19 +30,19 @@ table.tt td.l{text-align:left}
   <h1>Splitting the work, counted</h1>
   <p data-pid="748aef">Merge sort cut a list in half, sorted each half the same way, and zipped the halves together. Its cost was counted on the seventeenth rung, but only for lists whose length is a power of two, and only for that one recipe. Many good recipes work the same way: cut the job into smaller copies of itself, solve the copies, and pay something to cut and to join. This step counts the cost of every recipe of that kind at once. Picture the work laid out in levels, the whole job at the top and the smallest pieces at the bottom. Either the top level costs the most, or every level costs the same, or the bottom wins. Then it counts merge sort for lists of any length, and shows that no sort that only compares can do much better.</p>
   <p class="gesture" data-pid="485bbd">A recipe that splits its work has a cost given by its own smaller costs. Lay the work out in levels and add them: the top wins, every level ties, or the bottom wins. Merge sort is a tie, so it costs about the length times the number of halvings, and no sort that only compares does much better.</p>
-  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r17comp.html">17·comp</a> (merge sort, first counted), <a href="r22k.html">22k</a> (O, ~ and ≪), <a href="r15i.html">15i</a> (geometric sums), <a href="r04g.html">4g</a> (strong induction), <a href="r17g.html">17g</a> (the log to any base). <a href="r22stat.html">22·stat</a> puts the rare events of 22j to work on misprints and help lines.</p></div>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r17comp.html">17·comp</a> (merge sort, first counted), <a href="r22k.html">22k</a> (O, ~ and ≪), <a href="r15i.html">15i</a> (geometric sums), <a href="r04h.html">4h</a> (strong induction), <a href="r17g.html">17g</a> (the log to any base). <a href="r22stat.html">22·stat</a> puts the rare events of 22j to work on misprints and help lines.</p></div>
 </header>
 
 <section class="class step" data-step="22l1">
   <h2 class="sthead"><span class="stno">22l1</span>Unrolling a split</h2>
-  <p class="stands">Stands on 17·comp (the merge-count technique), 4b (induction), 17g4 (the log to any base) and 9·cb4 (recursion as sequences).</p>
-  <p data-pid="9792c3">A rule that gives a cost at size n from the cost at a smaller size is a recursion, as in 4c and 9·cb4. Here the size halves at each call. 17·comp met one: M(2n) = 2M(n) + 2n − 1. Take the plainest of its kind, T(n) = 2T(n/2) + n: two halves solved the same way, and n steps to cut and join.</p>
+  <p class="stands">Stands on 17·comp (the merge-count technique), 4c (induction), 17g4 (the log to any base) and 9·cb4 (recursion as sequences).</p>
+  <p data-pid="9792c3">A rule that gives a cost at size n from the cost at a smaller size is a recursion, as in 4d and 9·cb4. Here the size halves at each call. 17·comp met one: M(2n) = 2M(n) + 2n − 1. Take the plainest of its kind, T(n) = 2T(n/2) + n: two halves solved the same way, and n steps to cut and join.</p>
   <p data-pid="07bfe4">Unrolling technique: <b>if T(1) = c and T(n) = 2T(n/2) + n at every power of 2 from 2 on, then T(n) = n log₂ n + cn at every power of 2.</b> Divide by n and the halving becomes a plain count: one more for each doubling.</p>
   <pre class="lines" data-k="ember" data-label="this step: the unrolling technique">
 n = 2^k,\ \ S(k) = T(2^k)/2^k @@ name the cost per item at size 2ᵏ
 T(2^k) = 2T(2^{k-1}) + 2^k @@ the rule at n = 2ᵏ, for k ≥ 1
 S(k) = S(k-1) + 1 @@ divide both sides by 2ᵏ
-S(k) = S(0) + k = c + k @@ add 1, k times: induction on k (4b)
+S(k) = S(0) + k = c + k @@ add 1, k times: induction on k (4c)
 \htmlClass{new}{T(n) = n\log_2 n + cn} \quad \blacksquare @@ multiply back by 2ᵏ = n; k = log₂ n (17g4)
   </pre>
   <p data-pid="4d4ed9">S(k) = S(k − 1) + 1 is the rule x ↦ x + 1 fed its own answers, as in 9·cb4. The same division works on 17·comp's rule: M(2ᵏ)/2ᵏ rises by 1 − 1/2ᵏ at each doubling, and adding those back gives n log₂ n − n + 1. The −1 at each merge changes only the part that grows like n. The n log₂ n is the n steps of joining, paid once at each of the log₂ n levels.</p>
@@ -87,14 +87,14 @@ r > 1:\ \ T(n) = \big(c + \tfrac{1}{r - 1}\big)a^k - \tfrac{n^d}{r - 1} @@ the f
 
 <section class="class step" data-step="22l3">
   <h2 class="sthead"><span class="stno">22l3</span>Every n, not only powers of two</h2>
-  <p class="stands">Stands on 17·comp (merging s items with t takes at most s + t − 1 comparisons), 4g12 (strong induction) and 22l1.</p>
+  <p class="stands">Stands on 17·comp (merging s items with t takes at most s + t − 1 comparisons), 4h12 (strong induction) and 22l1.</p>
   <p data-pid="d83e50">17·comp proved its count for powers of 2 only. A list of 7 splits into 3 and 4, and the halves are uneven. Let W(n) be the most comparisons merge sort makes on any list of n items. For n ≥ 2, the halves have n₁ and n₂ items, with n₁ ≤ n₂ ≤ n₁ + 1 and n₁ + n₂ = n. Sorting the halves costs at most W(n₁) + W(n₂), and the merge at most n − 1. So W(1) = 0 and W(n) ≤ W(n₁) + W(n₂) + n − 1. Let L(n) be the number of halvings that bring n down to 1: the least k with n ≤ 2ᵏ.</p>
   <p data-pid="5b98ff">Halvings technique: <b>for every n ≥ 1, merge sort makes at most n·L(n) comparisons, and n·L(n) &lt; n log₂ n + n.</b> The proof leans on every smaller size at once, so it is a strong induction.</p>
   <pre class="lines" data-k="ember" data-label="this step: the halvings technique">
 W(1) = 0 = 1 \cdot L(1) @@ one item needs no comparison, and no halving
 n \ge 2,\ k = L(n):\ \ n_1 \le n_2 \le 2^{k-1} @@ n₂ is n/2 or (n + 1)/2, and an odd n ≤ 2ᵏ is at most 2ᵏ − 1
 L(n_1) \le k - 1,\ \ L(n_2) \le k - 1 @@ each half fits in 2ᵏ⁻¹
-W(n) \le n_1(k - 1) + n_2(k - 1) + n - 1 = nk - 1 @@ strong induction (4g12): the claim at every smaller size; n₁ + n₂ = n
+W(n) \le n_1(k - 1) + n_2(k - 1) + n - 1 = nk - 1 @@ strong induction (4h12): the claim at every smaller size; n₁ + n₂ = n
 2^{k-1} < n \Rightarrow k < \log_2 n + 1 @@ k is the least with n ≤ 2ᵏ, so 2ᵏ⁻¹ is too small
 \htmlClass{new}{W(n) \le n\,L(n) < n\log_2 n + n} \quad \blacksquare @@ the last two lines
   </pre>
@@ -110,14 +110,14 @@ W(n) \le n_1(k - 1) + n_2(k - 1) + n - 1 = nk - 1 @@ strong induction (4g12): th
 
 <section class="class step" data-step="22l4">
   <h2 class="sthead"><span class="stno">22l4</span>No sort does much better</h2>
-  <p class="stands">Stands on 4j (n! orders), 22k3 (the factorial-fence technique), 22l3 and 10d (the squeeze).</p>
+  <p class="stands">Stands on 4k (n! orders), 22k3 (the factorial-fence technique), 22l3 and 10d (the squeeze).</p>
   <p data-pid="cc1877">Merge sort is fast. Could some cleverer sort be faster by more than a fixed factor? Count what a sort can learn. A sort that learns about the items only by comparing two of them gets a yes or a no each time. The answers so far decide what it does next.</p>
   <p data-pid="57779c">Answer-count technique: <b>a sort that learns only by comparing makes at least log₂ n! comparisons on some list of n different items, and log₂ n! ~ n log₂ n.</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the answer-count technique">
 \text{at most } m \text{ comparisons on every list} @@ suppose it, for some m
 \text{the runs fork at most } m \text{ times deep: at most } 2^m \text{ ends} @@ each answer is yes or no
 \text{two lists that get the same answers get the same moves} @@ the sort learns nothing else about the items
-\text{the } n! \text{ orders of } n \text{ different items need } n! \text{ different moves} @@ one rearrangement sorts only one order (4j)
+\text{the } n! \text{ orders of } n \text{ different items need } n! \text{ different moves} @@ one rearrangement sorts only one order (4k)
 2^m \ge n! \Rightarrow m \ge \log_2 n! @@ log₂ rises (17g4)
 n\log_2\tfrac{n}{e} + \log_2 e \le \log_2 n! \le n\log_2 n @@ the factorial fence (22k3); n! ≤ nⁿ
 \htmlClass{new}{\log_2 n! \le W(n) < n\log_2 n + n,\ \text{so } W(n) \sim n\log_2 n} \quad \blacksquare @@ merge sort is such a sort; 22l3; divide by n log₂ n and squeeze (10d)

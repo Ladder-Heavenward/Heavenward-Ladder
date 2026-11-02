@@ -29,7 +29,7 @@ table.tt td.l{text-align:left}
   <h1>How many trucks does a route need?</h1>
   <p data-pid="3f853e">How many trucks does a route need? Every summer morning in the Salinas Valley, crews cut lettuce in the fields, and trucks carry it to the coolers in Salinas, where it is chilled within hours of being cut. Too few trucks, and cut lettuce wilts in the sun. Too many, and drivers sit idle and are paid to wait. The question is hard because nothing about it stays still: trucks leave at odd times, some trips run long, and a jam at the cooler backs up into the fields. This page proves one exact fact about any queue at all: the number of items in it, on average, is how often they arrive times how long each one stays. It proves the fact for a day by counting, and for the long run by rung 10's limits. Then it counts the trucks, and shows why one slow step fills the whole line.</p>
   <p class="gesture" data-pid="8d43cb">Count the item-hours two ways: hour by hour, adding how many are waiting, and item by item, adding how long each stays. Divide by the hours: the average number waiting is the arrivals per hour times the average stay. Trucks on the road are trips per hour times hours per trip. And the line can pass on no more per hour than its slowest step: past that, the queue passes every bound.</p>
-  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r04j.html">4j</a> (the separate-piles technique, the number of members, Σ), <a href="r05i.html">5i</a> (rates, units, per), <a href="r09cb4.html">9·cb4</a> (sequences), <a href="r10c.html">10c</a> (limits-add, limits-multiply, constant-factor), <a href="r10d.html">10d</a> (the squeeze), <a href="r10f.html">10f</a> (a sequence heads to a limit, one-over-n, passing-every-bound). Later logistics pages balance stock against orders (named by rung number only: 14·logi).</p></div>
+  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r04k.html">4k</a> (the separate-piles technique, the number of members, Σ), <a href="r05j.html">5j</a> (rates, units, per), <a href="r09cb4.html">9·cb4</a> (sequences), <a href="r10c.html">10c</a> (limits-add, limits-multiply, constant-factor), <a href="r10d.html">10d</a> (the squeeze), <a href="r10f.html">10f</a> (a sequence heads to a limit, one-over-n, passing-every-bound). Later logistics pages balance stock against orders (named by rung number only: 14·logi).</p></div>
 </header>
 
 <section class="class">
@@ -42,9 +42,9 @@ table.tt td.l{text-align:left}
   <p data-pid="095b61">Item-hours technique: <b>if every item that is ever in the queue during hours 0 to T − 1 arrives and leaves within those hours, then Σ_{t&lt;T} N(t) = Σ_j W_j.</b></p>
   <pre class="lines" data-k="ember" data-label="this page: the item-hours technique">
 H = \{(j, t) : \text{item } j \text{ is in the queue at hour } t\} @@ a finite set: finitely many items, hours below T
-H \text{ by hours: } \htmlClass{new}{\textstyle\sum_{t \lt T} N(t)} \text{ members} @@ the pairs at hour t are N(t), and different hours share none (separate-piles, 4j)
+H \text{ by hours: } \htmlClass{new}{\textstyle\sum_{t \lt T} N(t)} \text{ members} @@ the pairs at hour t are N(t), and different hours share none (separate-piles, 4k)
 H \text{ by items: } \htmlClass{new}{\textstyle\sum_j W_j} \text{ members} @@ the pairs of item j are its W_j hours, all below T by the supposition; different items share none
-\textstyle\sum_{t \lt T} N(t) = \htmlClass{keep}{\sum_j W_j} \quad \blacksquare @@ one set has one number of members (4j)
+\textstyle\sum_{t \lt T} N(t) = \htmlClass{keep}{\sum_j W_j} \quad \blacksquare @@ one set has one number of members (4k)
   </pre>
   <p data-pid="8e5d33">Now share both sides out. Let A be the number of items. The average number in the queue over the window is L = (1/T) Σ N(t). The arrivals per hour are λ = A/T. The average stay is W = (1/A) Σ W_j. Here λ is the Greek letter lambda, in its small form: on this page it names arrivals per hour, and its capital form is not used.</p>
   <pre class="lines" data-k="ember" data-label="this page: the queue identity">
@@ -52,7 +52,7 @@ L = \tfrac1T \textstyle\sum_{t \lt T} N(t) = \tfrac1T \sum_j W_j @@ item-hours
 = \tfrac{A}{T} \cdot \tfrac1A \textstyle\sum_j W_j @@ times A/A, which is 1 when A ≠ 0
 = \htmlClass{keep}{\lambda\,W} @@ arrivals per hour times the average stay
   </pre>
-  <p data-pid="47677f">Queue identity: <b>on average, the number of items waiting equals how often they arrive times how long each stays.</b> You may use it for any queue that starts and ends a window empty, whatever the order of arrivals, whatever the spread of stays, whoever is served first. Check the units by 5i: items per hour times hours is items.</p>
+  <p data-pid="47677f">Queue identity: <b>on average, the number of items waiting equals how often they arrive times how long each stays.</b> You may use it for any queue that starts and ends a window empty, whatever the order of arrivals, whatever the spread of stays, whoever is served first. Check the units by 5j: items per hour times hours is items.</p>
   <pre class="lines" data-k="ember" data-label="this page: a cooler's afternoon">
 \text{pallets in, } 4 \text{ hours, empty to empty: } N = 3, 5, 6, 4, 2, 0 @@ six looks, hours 0 to 5, a model
 \textstyle\sum N(t) = 20 \text{ pallet-hours} @@ by hours
@@ -230,7 +230,7 @@ const N='\\htmlClass{new}', Kp='\\htmlClass{keep}';
 stepper('#sl1',[
   {k:'ember',kl:'a queue',t:R`\text{arrive at } a_j,\ \text{leave at } d_j,\ \ W_j = d_j - a_j`,n:`One look an hour; N(t) items at hour t.`},
   {k:'ember',kl:'item-hours',t:R`H = \{(j, t) : j \text{ in the queue at } t\}`,n:`A truck that waits three hours makes three item-hours.`},
-  {k:'teal',kl:'from 4j · counted two ways',t:R`\textstyle\sum_t N(t) = ${Kp}{\sum_j W_j}`,n:`By hours or by items: one set, one number of members.`},
+  {k:'teal',kl:'from 4k · counted two ways',t:R`\textstyle\sum_t N(t) = ${Kp}{\sum_j W_j}`,n:`By hours or by items: one set, one number of members.`},
   {k:'ember',kl:'the queue identity',t:R`L = \tfrac{A}{T}\cdot\tfrac1A\textstyle\sum_j W_j = ${N}{\lambda W}`,n:`For a window that starts and ends empty.`},
   {k:'ember',kl:'a cooler’s afternoon',t:R`\tfrac{20}{6} = \tfrac{10}{6} \times 2`,n:`20 pallet-hours, by hours and by pallets.`},
   {k:'teal',kl:'from 10f · the long run',t:R`0 \le \lambda_T W_T - L_T \le \tfrac{MS}{T} \to 0`,n:`The squeeze far out, then limits-multiply: L_T → λW.`},
