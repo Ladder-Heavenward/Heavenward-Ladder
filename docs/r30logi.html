@@ -30,12 +30,10 @@ table.tt td.l{text-align:left}
   <h1>How many seats should an airline sell?</h1>
   <p data-pid="518f91">How many seats should an airline sell? A regional jet that flies from Seattle to Spokane in the morning has seventy-six seats. Not everyone who buys a ticket turns up. A meeting moves, a child is sick, a traveller takes an earlier flight. If the airline sells exactly seventy-six tickets, the plane leaves most mornings with empty seats that could have been sold. If it sells more, now and then more people turn up than there are seats, and someone is bumped: put on a later flight and paid for the trouble. Airlines have sold more tickets than seats for as long as they have flown, and the question of how many more is a real one, asked every day for every flight. What makes it hard is that no one knows who will come. Each traveller shows or does not by chance, and the count who show wobbles from day to day. The answer sets one cost against another: the fare lost on an empty seat against the price of a bumped passenger. This page counts who shows with rung thirty’s chance functions, finds the exact number of tickets that makes the average cost least, sees why a bigger plane can sell a bigger share of extra seats, sees what goes wrong when travellers come in groups, and asks what promise an airline can honestly make about bumping.</p>
   <p class="gesture" data-pid="020bd0">Each ticket holder shows with the same chance, independently of the others. Then the count who show has a chance function that is the chance function of one traveller multiplied by itself once for each ticket, and from it come the chance of every count, the average and the spread. Now ask what one more ticket does. If its holder stays home, nothing changes. If its holder shows, then either there was an empty seat, and the airline gains a fare, or there was not, and someone is bumped. So one more ticket lowers the average cost exactly while the chance that the plane is already full is below the fare over the fare plus the cost of a bump. That chance rises as tickets are added, so there is one best number. For a big plane the count who show has a spread that grows only like the square root of the tickets, so a bigger plane can overbook by a bigger share. Families and groups who travel together make the spread wider, and the same number of tickets bumps more often. And the airline’s promise about bumping is a rule with a stated chance of failing, which is only as good as its estimate of who shows.</p>
-  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r30i.html">30i</a> (the chances-from-G, average-from-G and sums-multiply techniques), <a href="r30g.html">30g</a> (the independent-spreads-add and spread-of-a-sum techniques), <a href="r30f.html">30f</a> (the independent and whole-chance techniques), <a href="r30j.html">30j</a> (the central limit technique), <a href="r30q.html">30q</a> (the sample-average technique) and <a href="r23h.html">23h</a> (the binomial-sum technique). 30·nav weighs two fixes by how far each can be trusted.</p></div>
 </header>
 
 <section class="class step" data-step="30logi1">
   <h2 class="sthead"><span class="stno">30logi1</span>Who shows</h2>
-  <p class="stands">Stands on 30i (the chances-from-G, average-from-G and sums-multiply techniques), 30g (the independent-spreads-add technique) and 23h (the binomial-sum technique).</p>
   <p data-pid="55e50c">Sell n tickets. Let Bᵢ be 1 if the holder of ticket i shows and 0 if not, with P(Bᵢ = 1) = p and q = 1 − p, each traveller independent of the others. The count who show is S = B₁ + ⋯ + B_n. One traveller’s chance function (30i) is E[s^{Bᵢ}] = q + ps.</p>
   <pre class="lines" data-k="ember" data-label="this page: the count who show, by 30i’s techniques">
 G_S(s) = (q + ps)^n @@ the sums-multiply technique (30i): independent, so the chance functions multiply
@@ -56,7 +54,6 @@ E\,S = G_S'(1) = np(q + p)^{n-1} = np @@ the average-from-G technique (30i)
 
 <section class="class step" data-step="30logi2">
   <h2 class="sthead"><span class="stno">30logi2</span>One more ticket</h2>
-  <p class="stands">Stands on 30·logi.1 and 30f (the independent and whole-chance techniques).</p>
   <p data-pid="3c4a42">Set c seats, a fare f lost on each empty seat, and a cost b for each passenger bumped: payment, a seat on a later flight, a hotel, goodwill. The average cost of selling n tickets is K(n) = f·E[(c − S_n)⁺] + b·E[(S_n − c)⁺], where x⁺ is x when x > 0 and 0 otherwise. Selling ticket n + 1 adds one traveller B, independent of S_n.</p>
   <pre class="lines" data-k="ember" data-label="this page: the one-more-ticket technique">
 S_{n+1} = S_n + B @@ B shows with chance p, independently of S_n
@@ -86,7 +83,6 @@ P(S_n \ge c) \text{ rises with } n @@ S_{n+1} ≥ S_n always
 
 <section class="class step" data-step="30logi3">
   <h2 class="sthead"><span class="stno">30logi3</span>A bigger plane</h2>
-  <p class="stands">Stands on 30·logi.2 and 30j (the bell; the central limit technique).</p>
   <p data-pid="03cc82">Alaska Airlines flies the Boeing 737-900ER, with 178 seats, between Seattle and Anchorage. The count who show is a sum of many independent parts, so by the central limit technique (30j) it is close to a bell with average np and width √(npq). The one-more-ticket rule asks for the n at which P(S_n ≥ 178) reaches 0.158, and on the bell that is about one width: np + √(npq) ≈ 177.5.</p>
   <pre class="lines" data-k="ember" data-label="this page: the bell for 189 tickets">
 np = 189 \times 0.92 = 173.88,\ \ \sqrt{npq} = 3.73 @@ the count of 30·logi.1
@@ -106,7 +102,6 @@ P(S_{188} \ge 178) = 0.107,\ \ P(S_{189} \ge 178) = 0.166 @@ exact, by the count
 
 <section class="class step" data-step="30logi4">
   <h2 class="sthead"><span class="stno">30logi4</span>Travellers who come together</h2>
-  <p class="stands">Stands on 30·logi.1 and 30g (the spread-of-a-sum technique).</p>
   <p data-pid="76ae8d">30·logi.1 asked for independent travellers. A couple on one booking shows together or not at all; so does a family, or a group of four on a business trip. Sell n tickets as n/g groups of g, each group showing whole with chance p, independently.</p>
   <pre class="lines" data-k="ember" data-label="this page: the groups-widen technique">
 S = g\,(C_1 + \cdots + C_{n/g}),\ \ C_j \text{ is } 1 \text{ if group } j \text{ shows} @@ each group counts g seats
@@ -126,7 +121,6 @@ E\,S = g \cdot \tfrac ng \cdot p = np @@ the average-adds technique (30g): uncha
 
 <section class="class step" data-step="30logi5">
   <h2 class="sthead"><span class="stno">30logi5</span>A promise with a known exception rate</h2>
-  <p class="stands">Stands on 30·logi.1, 30·logi.2 and 30q (the sample-average technique).</p>
   <p data-pid="aa2dbb">An airline may choose not the cheapest number but a promise: bump someone on no more than 5% of flights. By the count of 30·logi.1, 79 tickets bump on 4.3% of flights and 80 on 10.9%. So the promise means 79 tickets, at $550 a flight against $513: the promise costs about $38 a flight.</p>
   <p data-pid="b4160f">But p is not known. It is estimated from past flights, as the share who showed, and by 30q’s sample-average technique that share has width √(p(1 − p)/n). From 2000 past tickets on the route, 92% of whom showed, the estimate has width √(0.92 × 0.08/2000) = 0.006. Within a width or two of 0.92 the chance of a bump changes a great deal.</p>
   <pre class="lines" data-k="ember" data-label="this page: the bump chance for 80 tickets as p moves">
@@ -155,7 +149,6 @@ p = 0.93:\ \ 18.1\% @@
 
 <section class="class step" data-step="30logi6">
   <h2 class="sthead"><span class="stno">30logi6</span>Illegal moves</h2>
-  <p class="stands">Stands on 30·logi.1 to 30·logi.5.</p>
   <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
 8\% \text{ don’t show, so sell } 76/0.92 \approx 83 \text{ tickets}\,? @@ the average fills the plane; half the flights would bump
 \text{the width of the count grows like } n\,? @@ like √n, so big planes overbook by a bigger share

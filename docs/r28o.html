@@ -30,12 +30,10 @@ table.tt td.l{text-align:left}
   <h1>Gradient descent</h1>
   <p data-pid="866a1c">To find the bottom of a valley in fog, take a step in the steepest way down, look again, and take another. With a formula in place of a valley, the steepest way down is minus the uphill arrow, and the walk is a few multiplications per step, even with a million inputs where no one could solve for the flat point. This step proves that a small enough step always goes down. Then it asks how big a step can be. Too small and the walk crawls; too big and it bounces from wall to wall and climbs out. In a long narrow valley the walls are steep and the floor is gentle, and the walk is slow however the step is chosen. Last, it finds the valleys where the walk cannot be fooled: those that bend up along every line have one bottom, and any flat point is it.</p>
   <p class="gesture" data-pid="dc2537">Step against the uphill arrow: a small enough step always goes down. In a bowl, the step must be shorter than two over the steepest bend, and the best step balances the steepest bend against the gentlest. A valley that bends up along every line has exactly one bottom.</p>
-  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r28g.html">28g</a> (the uphill technique), <a href="r28c.html">28c</a> (the roads-add technique), <a href="r28l.html">28l</a> (the surface-match and grid-test techniques), <a href="r13k.html">13k</a> (the slope-sign-near technique), <a href="r22h.html">22h</a> (the standard-sequences technique), <a href="r24i.html">24i</a> (the stiff-step technique), <a href="r14d.html">14d</a> (the slope-sign-order technique) and <a href="r14g.html">14g</a> (the bends-up technique). <a href="r28p.html">28p</a> follows errors through a formula.</p></div>
 </header>
 
 <section class="class step" data-step="28o1">
   <h2 class="sthead"><span class="stno">28o1</span>A step against the uphill arrow</h2>
-  <p class="stands">Stands on 28g1 (the uphill technique), 28c3 (the roads-add technique) and 13k (the slope-sign-near technique).</p>
   <p data-pid="5e273b">By 28g1, the steepest way down from p is −∇f(p). A <i>downhill step</i> of size η &gt; 0 goes from p to p − η∇f(p). Repeated, it is the walk x<sub>k+1</sub> = x<sub>k</sub> − η∇f(x<sub>k</sub>). Accepted name: <i>gradient descent</i>.</p>
   <p data-pid="989ec3">Downhill-step technique: <b>let f be smoothly sloped near p, with ∇f(p) ≠ 0. Then some η₀ &gt; 0 makes f(p − η∇f(p)) &lt; f(p) for every η with 0 &lt; η &lt; η₀.</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the downhill-step technique">
@@ -62,7 +60,6 @@ f = (x - 3)^2 + 2(y + 1)^2,\ \ \nabla f = \big(2(x - 3),\ 4(y + 1)\big),\ \ \eta
 
 <section class="class step" data-step="28o2">
   <h2 class="sthead"><span class="stno">28o2</span>How big a step</h2>
-  <p class="stands">Stands on 28o1, 28a2 (the one-knob technique), 22h2 (the standard-sequences technique), 4c (induction) and 24i (the stiff-step technique).</p>
   <p data-pid="3f6589">A <i>bowl</i> is f(x) = ½(λ₁x₁² + ⋯ + λₙxₙ²) with 0 &lt; λ₁ ≤ ⋯ ≤ λₙ: its bottom is 0, and λᵢ is how sharply it bends along the i-th knob. Near a bottom, 28l’s hug makes every smooth valley look like a bowl, turned to some directions.</p>
   <p data-pid="5ff1f6">Step-size technique: <b>on a bowl, the walk with step η heads to the bottom from every start exactly when 0 &lt; η &lt; 2/λₙ. Each step shrinks the distance to the bottom by a factor of at most the largest |1 − ηλᵢ|. That factor is least at η = 2/(λ₁ + λₙ), where it is (λₙ − λ₁)/(λₙ + λ₁).</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the step-size technique">
@@ -91,7 +88,6 @@ f = \tfrac12(x^2 + 10y^2):\ \ \lambda_1 = 1,\ \lambda_2 = 10 @@ ten times steepe
 
 <section class="class step" data-step="28o3">
   <h2 class="sthead"><span class="stno">28o3</span>Valleys with one bottom</h2>
-  <p class="stands">Stands on 28l1 (the surface-match technique), 28l2 (the grid-test technique), 28c3, 14d (the slope-sign-order technique) and 14g (the bends-up technique).</p>
   <p data-pid="7dda3b">14g said f bends up on an interval when, between any two inputs, f lies below the chord. A function of two inputs <i>bends up along every line</i> when for every p and every arrow h ≠ 0 the curve t ↦ f(p + th) bends up.</p>
   <p data-pid="5e41f5">One-bottom technique: <b>let f have continuous second partial slopes on the whole plane, with f<sub>xx</sub> &gt; 0 and D = f<sub>xx</sub>f<sub>yy</sub> − f<sub>xy</sub>² &gt; 0 at every point. Then f bends up along every line. And if ∇f(p) = 0, then f(q) &gt; f(p) for every q ≠ p: p is the one bottom, and the lowest point of all.</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the one-bottom technique">
@@ -120,7 +116,6 @@ f = x^2 + xy + y^2 - 3x:\ \ f_{xx} = 2,\ f_{xy} = 1,\ f_{yy} = 2,\ D = 3 @@ the 
 
 <section class="class step" data-step="28o4">
   <h2 class="sthead"><span class="stno">28o4</span>Illegal moves</h2>
-  <p class="stands">Stands on 28o1 to 28o3.</p>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
 \text{a bigger step gets down faster}\,? @@ on x² + 4y² from (2, 1), η = 0.3 lands at f = 8.48, above the start’s 8
 \text{the walk has stopped, so it is at the lowest point}\,? @@ on x⁴ − 2x² + x it stops near 0.838 from x = 1; the lowest point is near −1.107

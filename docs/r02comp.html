@@ -30,12 +30,10 @@ table.tt td.l{text-align:left}
   <h1>What does a computer check when it reads "if"?</h1>
   <p data-pid="c7bd5b">What does a computer check when it reads "if"? Every program that makes a choice makes it with an if. A sprinkler opens when the soil is dry. A gate lifts when the toll is paid. The words after the if are a condition. The machine has to find out whether the condition is true before it acts. That sounds like the work of this rung, and it is. What makes it hard is that a machine reads one piece at a time. Some pieces cost something to read. Reading one can take time, or ask a driver for money, or look for a boat that is not there. So the order of the pieces matters to the machine, even where it does not matter to the statement. This page shows that a condition is a statement the machine settles by reading. It shows that an and with a false left side, and an or with a true left side, are fixed whatever their right side is. It shows what a machine that reads the left side first, and stops as soon as the answer is fixed, can do that the turned-about condition cannot. And it ends with the part after the then, which is not a statement at all.</p>
   <p class="gesture" data-pid="3b1721">A computer reading an if checks only the condition. It reads the left side first. When the left side of an and is false, or the left side of an or is true, it stops there, since the right side cannot change the answer. So the left side can guard the right side: put on the left the check that makes the right side safe to read. Then the machine does the then part, which is a thing to do, not a thing to check.</p>
-  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r01b.html">1b</a> (¬, clash, a line that equals ⊥), <a href="r01c.html">1c</a> (∧, ∨, keep either part, add an option, the turn-about techniques), <a href="r01d.html">1d</a> (⇒, free ifs), <a href="r01e.html">1e</a> (rows, T and F, the machines) and <a href="r01f.html">1f</a> (settled statements, not-through for and). <a href="r03comp.html">3·comp</a> runs an instruction again and again; <a href="r04comp.html">4·comp</a> builds the machines of 1e out of switches.</p></div>
 </header>
 
 <section class="class step" data-step="2comp1">
   <h2 class="sthead"><span class="stno">2comp1</span>A condition is a statement</h2>
-  <p class="stands">Stands on 1e2 (the machines), 1e7 (one row, worked by hand) and 1f4 (settled statements).</p>
   <p data-pid="0d492a">A program is a list of instructions that a machine carries out in order. An instruction that begins with if tells the machine to check something first. The words between the if and the then are the <b>condition</b>.</p>
   <p data-pid="e9f559">Here is an instruction from a drip-watering controller in an almond orchard near Modesto. Let D be “the soil at the sensor is dry”. Let R be “rain is forecast for tonight”. The instruction reads:</p>
   <div class="eqline" data-tex="\text{if } D \land \neg R\text{, open the valve.}"></div>
@@ -52,7 +50,6 @@ table.tt td.l{text-align:left}
 
 <section class="class step" data-step="2comp2">
   <h2 class="sthead"><span class="stno">2comp2</span>Left first, and stopping early</h2>
-  <p class="stands">Stands on 2·comp1, 1b4 (clash), 1c2 (keep either part), 1c6 (add an option) and 1e2 (the machines).</p>
   <p data-pid="ed10d9">A machine does not see a whole statement at once. It reads one piece, then the next. Most programming languages fix the order: the left side of an and, or of an or, is read first. Sometimes the left side settles the whole.</p>
   <p data-pid="b08cb9">Look at 1e2’s and machine. In the rows FT and FF the and is F. The left side is F in both rows, and the right side differs. So once the left side is F, the right side cannot change the answer. The or machine is the same the other way about. In the rows TT and TF the or is T, whatever the right side is.</p>
   <p data-pid="d56801">The techs of 1b and 1c say the same in one line, with no table. A line holds ¬P beside P ∧ Q. Keep left, and the line holds ¬P and P: a clash, so the line equals ⊥. Whatever Q is, an and with a false left side cannot stand in a line beside that falsehood. The or part is shorter. From P, add an option gives P ∨ Q, for any Q at all.</p>
@@ -69,7 +66,6 @@ table.tt td.l{text-align:left}
 
 <section class="class step" data-step="2comp3">
   <h2 class="sthead"><span class="stno">2comp3</span>A right side that names nothing</h2>
-  <p class="stands">Stands on 2·comp2, 0a2 (a letter for a thing), 1c3 (and turns about) and 1e5 (a row is an assumption).</p>
   <p data-pid="4fe329">On the car ferry from Seattle to Bainbridge Island, a ramp joins the dock to the boat’s car deck. A program at the dock tells the cars to roll. Let F be “a ferry is in the slip”. Let L be “the ferry in the slip has its car deck level with the ramp”. The program reads: if F ∧ L, wave the cars on.</p>
   <p data-pid="0aa220">When no ferry is in the slip, “the ferry in the slip” names nothing. Then L is not a statement about anything, and it has no row. A machine told to read L looks for a sensor on a boat that is not there. Real machines then stop with an error.</p>
   <p data-pid="a9e2ba">Read left first, F ∧ L is safe. When F is F, the stop-early technique fixes the answer at F, and the machine never reads L. The left side guards the right side.</p>
@@ -86,7 +82,6 @@ table.tt td.l{text-align:left}
 
 <section class="class step" data-step="2comp4">
   <h2 class="sthead"><span class="stno">2comp4</span>A right side that does something</h2>
-  <p class="stands">Stands on 2·comp2 and 1c10 (or turns about).</p>
   <p data-pid="d99c35">Eastbound over the Tacoma Narrows Bridge, every car pays a toll. A car with a Good To Go pass pays by the pass. Other drivers pay at a booth. Picture a gate whose program reads: if G ∨ B, lift the gate. Let G be “the car carries a Good To Go pass”. Let B be “the driver pays at the booth”.</p>
   <p data-pid="a24bc5">Reading B is not just looking. To read B, the machine asks the driver to pay, and waits. Read left first, G ∨ B asks only drivers with no pass. When G is T, the stop-early technique fixes the or at T, and B is never read.</p>
   <p data-pid="f2b38e">Turned about, B ∨ G reads B first. It asks every driver to pay, pass or no pass. 1c10’s technique gives B ∨ G from G ∨ B, with the same column. Yet on the bridge they make different days: one of them charges a pass holder at the booth as well. <b>When reading a part does something, the order of reading decides who it is done to.</b></p>
@@ -101,7 +96,6 @@ table.tt td.l{text-align:left}
 
 <section class="class step" data-step="2comp5">
   <h2 class="sthead"><span class="stno">2comp5</span>The then part is not checked</h2>
-  <p class="stands">Stands on 2·comp1 and 1e3 (why the if machine is built that way).</p>
   <p data-pid="d10d57">So far the page has looked at the condition. Now the rest of the instruction: if D ∧ ¬R, open the valve. “Open the valve” is not a statement. It is not true or false. It is a command, a thing to do.</p>
   <p data-pid="04cc0a">Compare 1d’s if. Let V be “the valve is open”. Then (D ∧ ¬R) ⇒ V is a statement. It is true in every row where D ∧ ¬R is false, as 1e’s if machine shows. The program does nothing in those rows. It skips the command and leaves the valve as it was.</p>
   <p data-pid="421685">The machine reads the condition. When the condition is T, the machine does the command. When it is F, the machine skips the command. <b>A program’s if checks only its condition; the then part is done or skipped, never checked.</b></p>

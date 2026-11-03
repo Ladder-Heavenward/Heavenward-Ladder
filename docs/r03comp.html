@@ -34,12 +34,10 @@ table.tt td.l{text-align:left}
   <h1>Can a program run forever?</h1>
   <p data-pid="e0bcf7">Can a program run forever? A program is a list of steps for a machine, and many programs say: do this step again, and again, until something is so. That is a loop. A loop that should stop and does not is one of the oldest troubles in computing. The screen freezes, the fan spins, and nobody can tell whether the machine is nearly done or will never be done. Yet some loops are meant to run forever, like the one that turns a traffic light from green to yellow to red and back. What makes the question hard is that watching cannot settle it. You can watch a loop stop. You can never watch it run forever, since every watch ends. This page treats a loop as the next-one rule of this rung, run by a machine, with a test that can stop it. It proves that one loop never stops, from the fact that the next one after a set is never empty. It shows a loop that runs forever by coming back to where it was, and a loop that stops because its work shrinks. And it shows why no program can read every program and always tell whether it stops.</p>
   <p class="gesture" data-pid="b9239e">A loop does one step again and again, and checks its test before each pass. It stops the first time the test is false. A loop whose step always makes a next one, with the test “not yet empty”, never stops, since the next one after a set is never empty. A loop that comes back to where it was does the same passes again, and never stops. A loop that takes a member out of a list you can write down, and puts nothing back, empties the list and stops. Shrinking is not enough for an endless set. And no checker can tell, for every program, whether it stops.</p>
-  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r02d.html">2d</a> (the outsider set), <a href="r02e.html">2e</a> (⋃, ∖), <a href="r03b.html">3b</a> (S, iterating, the names, next-never-empty, merging back, S outside the run), <a href="r03c.html">3c</a> (inductive, the axiom of infinity) and <a href="r02comp.html">2·comp</a> (a machine checks a condition). Rung 4 builds counting, which settles the shrinking loop for every list at once.</p></div>
 </header>
 
 <section class="class step" data-step="3comp1">
   <h2 class="sthead"><span class="stno">3comp1</span>A loop is the next-one rule, run by a machine</h2>
-  <p class="stands">Stands on 3b1 (the move, as a mark; iterating) and 3b5 (the names).</p>
   <p data-pid="e594e3">3b1 called feeding a move its own output, again and again, iterating it. A machine iterates with a <b>loop</b>. A loop has a step, called its body, and a test. Before each pass the machine checks the test, as 2·comp’s machine checks a condition. If the test is true, it does the body once and checks again. If the test is false, it stops.</p>
   <p data-pid="c956b1">Here is a loop in plain words, built from 3b’s next one:</p>
   <div class="lp">start: x is 0
@@ -57,7 +55,6 @@ while x ≠ 4: x becomes S(x)</div>
 
 <section class="class step" data-step="3comp2">
   <h2 class="sthead"><span class="stno">3comp2</span>A loop that never stops</h2>
-  <p class="stands">Stands on 3·comp1, 3b9 (next-never-empty) and 2b5 (speak of everything by speaking of anything).</p>
   <p data-pid="4443af">Change the test:</p>
   <div class="lp">start: x is 1
 while x ≠ ∅: x becomes S(x)</div>
@@ -76,7 +73,6 @@ while x ≠ ∅: x becomes S(x)</div>
 
 <section class="class step" data-step="3comp3">
   <h2 class="sthead"><span class="stno">3comp3</span>Forever by coming back</h2>
-  <p class="stands">Stands on 3·comp2 and 0b2 (the mark for sameness).</p>
   <p data-pid="365be9">Not every loop that runs forever is a mistake. At a crossing in Eugene, the signal is run by a loop like this one:</p>
   <div class="lp">start: x is green
 while x is a colour of the signal:
@@ -96,7 +92,6 @@ while x is a colour of the signal:
 
 <section class="class step" data-step="3comp4">
   <h2 class="sthead"><span class="stno">3comp4</span>A loop whose work shrinks</h2>
-  <p class="stands">Stands on 3·comp1, 2d8 (sifting never adds), 2e8 (∖), 3b11 (running S backwards) and 3c (inductive, the axiom).</p>
   <p data-pid="6a1999">When the ferry docks at Bainbridge Island, the cars on its deck drive off, one at a time. A program that tracks the deck looks like this:</p>
   <div class="lp">start: u is the set of cars on the deck
 while u ≠ ∅: pick a member c of u;
@@ -125,7 +120,6 @@ while u ≠ ∅: pick a member c of u;
 
 <section class="class step" data-step="3comp5">
   <h2 class="sthead"><span class="stno">3comp5</span>Why nobody can always tell</h2>
-  <p class="stands">Stands on 3·comp2 to 3·comp4, 2d4 (why a sieve needs a bowl), 2d14 (the outsider set) and 1b5 (refute).</p>
   <p data-pid="ff7745">The page has settled three loops by argument: one never stops, one comes back, one shrinks and stops. Could a program do this work for us? Picture a checker, a program that reads any program and answers “stops” or “runs forever”, and is always right.</p>
   <p data-pid="f2ad0b">Here is a sketch of why there can be none, held in trust. Build a program that reads its own text, asks the checker about itself, and does the opposite. If the checker says “stops”, it runs a loop that never stops. If the checker says “runs forever”, it stops at once. Suppose the checker says “stops”: then the program runs forever, and the checker was wrong. Suppose it says “runs forever”: then the program stops, and the checker was wrong again. Both cases clash with “always right”, so refute: no such checker.</p>
   <p data-pid="b19781">That is the shape of 2d4’s catalogue and 2d14’s outsider set: a thing asked about itself, made to do the opposite. The full argument needs programs as objects that programs can read, and it is much higher up the ladder. <b>No checker can read every program and always tell, rightly, whether it stops.</b> Each loop on this page was settled by an argument made for that loop, and no single method makes them all.</p>
@@ -147,7 +141,6 @@ while u ≠ ∅: pick a member c of u;
 
 <section class="class step" data-step="3comp6">
   <h2 class="sthead"><span class="stno">3comp6</span>Illegal moves</h2>
-  <p class="stands">Stands on 3·comp1 to 3·comp5.</p>
   <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
 \begin{aligned}&\text{the work shrinks each pass,}\\ &\quad\text{so the loop stops}\,?\end{aligned} @@ only for a set you can write down: an inductive set shrinks forever
 \begin{aligned}&\text{watched a long time and still going,}\\ &\quad\text{so it runs forever}\,?\end{aligned} @@ every watch ends; the next pass may stop it

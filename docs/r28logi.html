@@ -30,12 +30,10 @@ table.tt td.l{text-align:left}
   <h1>Where should the warehouse go?</h1>
   <p data-pid="1b3bf6">Where should the warehouse go? A grocery chain with stores in Missoula, Great Falls, Bozeman and Billings sends trucks from one warehouse to all four, every week, all year. Each kilometre of each trip costs fuel, a driver’s time and wear on the truck. Put the warehouse in the wrong town and the chain pays for it on every trip for decades. The question is old. In the seventeenth century it was asked for three points: find the one point whose distances to all three add up to the least. What makes it hard is that there are two inputs, east and west, north and south, and moving the warehouse toward one store moves it away from others. There is no formula for the answer in general. And the answer depends on what you add up. Add the squares of the distances and the best point is an average, found in one line. Add the distances themselves, which is what the trucks pay for, and the best point is somewhere else. This page finds both with the flat maps of rung twenty-eight: the uphill arrow of the total, the point where it is zero, and a walk downhill to reach it.</p>
   <p class="gesture" data-pid="d1ffd4">On one road, the total distance is lowest at the middle store, where no more than half the trucks lie on either side; the total of squared distances is lowest at the average. In the plane the same split holds. The total of squared distances has an uphill arrow that points straight away from the weighted average of the stores, so the average is its bottom. The total of distances has an uphill arrow made of one unit arrow from each store, weighted by its trucks: each store pulls the warehouse toward itself with the same force, however far away it is. The best point is where those pulls balance, and the total bends up, so there is only one such point. It has no formula, but a step downhill can be taken as a fresh weighted average, with each store weighted by its trucks over its distance, and each such step never raises the total. Sometimes the best point is a store itself: when that store’s trucks outweigh the pull of all the others. And near the bottom the total is so flat that a whole region does nearly as well.</p>
-  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r28a.html">28a</a> (the one-knob technique), <a href="r28c.html">28c</a> (the roads-add technique), <a href="r28g.html">28g</a> (the uphill technique), <a href="r28o.html">28o</a> (gradient descent), <a href="r18a.html">18a</a> (distance), <a href="r18b.html">18b</a> (the triangle inequality in the plane), <a href="r14g.html">14g</a> (the bends-up technique), <a href="r14d.html">14d</a> (the slope-sign-order technique) and <a href="r22logi.html">22·logi</a> (routes between stops). 28·now walks downhill in a million directions at once.</p></div>
 </header>
 
 <section class="class step" data-step="28logi1">
   <h2 class="sthead"><span class="stno">28logi1</span>One road: the middle store</h2>
-  <p class="stands">Stands on 13 (slope), 14d (the slope-sign-order technique) and 14a (the candidates technique).</p>
   <p data-pid="7e8892">Start on one road. Interstate 5 runs north and south through five cities of Puget Sound and beyond. Measured north from Seattle as the crow flies, Bellingham is at 127 km, Everett at 41, Seattle at 0, Tacoma at −39 and Olympia at −63. Each gets one truck a day. Where on the line should the warehouse be?</p>
   <pre class="lines" data-k="ember" data-label="this page: the middle-store technique">
 F(p) = \textstyle\sum_i w_i\,(p - s_i)^2,\ \ F'(p) = 2\textstyle\sum_i w_i\,(p - s_i) @@ squared distances, with wᵢ trucks to the store at sᵢ
@@ -57,7 +55,6 @@ G \text{ falls while more than half the trucks lie north, and rises while more t
 
 <section class="class step" data-step="28logi2">
   <h2 class="sthead"><span class="stno">28logi2</span>Two inputs: the average point</h2>
-  <p class="stands">Stands on 28·logi.1, 28a (the one-knob technique), 28g (the uphill technique) and 18a (distance).</p>
   <p data-pid="3c8401">Now the plane. Put Helena at (0, 0) and measure east and north in kilometres, as the crow flies. Missoula is at (−150, 31), Great Falls at (56, 102), Bozeman at (76, −101) and Billings at (271, −90). The chain sends trucks in proportion to each city’s people in the 2020 count: 7, 6, 5 and 12 a week.</p>
   <pre class="lines" data-k="ember" data-label="this page: the average-point technique">
 F(p) = \textstyle\sum_i w_i\,|p - s_i|^2 = \sum_i w_i\big((x - a_i)^2 + (y - b_i)^2\big) @@ stores sᵢ = (aᵢ, bᵢ), the warehouse p = (x, y)
@@ -78,7 +75,6 @@ F(p) = W\,|p - m|^2 + F(m) @@ expand, and use Σ wᵢ(sᵢ − m) = 0
 
 <section class="class step" data-step="28logi3">
   <h2 class="sthead"><span class="stno">28logi3</span>Distance itself: the pulls balance</h2>
-  <p class="stands">Stands on 28·logi.2, 28c (the roads-add technique), 28g (the uphill technique), 18b (the triangle inequality in the plane) and 14g (the bends-up technique).</p>
   <p data-pid="3a2181">The trucks pay for distance, not its square. Write G(p) = Σ wᵢ|p − sᵢ|, the truck-kilometres a week, one way.</p>
   <pre class="lines" data-k="ember" data-label="this page: the balanced-pulls technique">
 \tfrac{\partial}{\partial x}|p - s| = \tfrac{x - a}{|p - s|},\ \ \tfrac{\partial}{\partial y}|p - s| = \tfrac{y - b}{|p - s|} @@ the one-knob technique and the chain technique of rung 13, for p ≠ s
@@ -101,7 +97,6 @@ G(tp + (1 - t)q) \le t\,G(p) + (1 - t)\,G(q),\ \ 0 \le t \le 1 @@ the triangle i
 
 <section class="class step" data-step="28logi4">
   <h2 class="sthead"><span class="stno">28logi4</span>Stepping downhill by reweighting</h2>
-  <p class="stands">Stands on 28·logi.2 (the average-point technique), 28·logi.3 and 28o (gradient descent).</p>
   <p data-pid="bf0283">Where the pulls balance has no formula. So walk downhill (28o): p ↦ p − η∇G(p), for a step size η. One step size turns each step into an average.</p>
   <pre class="lines" data-k="ember" data-label="this page: the reweighting technique">
 \nabla G(p) = \textstyle\sum_i \tfrac{w_i}{d_i}\,(p - s_i),\ \ d_i = |p - s_i| @@ 28·logi.3
@@ -139,7 +134,6 @@ p_4 = (110.2,\ -43.0),\ \ G = 5169.4 @@ four
 
 <section class="class step" data-step="28logi5">
   <h2 class="sthead"><span class="stno">28logi5</span>When a store is the answer</h2>
-  <p class="stands">Stands on 28·logi.3, 28c (the roads-add technique) and 18b (the triangle inequality in the plane).</p>
   <p data-pid="16e9b7">At a store the distance to that store has a sharp point, and no uphill arrow. Test the slopes in each direction instead.</p>
   <pre class="lines" data-k="ember" data-label="this page: the heavy-store technique">
 \varphi(t) = G(s_k + tu),\ \ |u| = 1,\ \ t \ge 0 @@ walk out of store k in the direction u
@@ -160,7 +154,6 @@ w_k + R\cdot u \ge w_k - |R| @@ the dot bound (18b)
 
 <section class="class step" data-step="28logi6">
   <h2 class="sthead"><span class="stno">28logi6</span>A flat bottom</h2>
-  <p class="stands">Stands on 28·logi.3, 28·logi.4 and 28b (the best flat map).</p>
   <p data-pid="da2f68">At the best point the uphill arrow is zero, so the best flat map of G there is the zero map: walk a little way and G changes by far less than the distance walked. That is good news and bad news.</p>
   <aside class="nature">
     <div class="eyebrow">Anexact, yet rigorous · the cloud, at the bottom</div>
@@ -181,7 +174,6 @@ w_k + R\cdot u \ge w_k - |R| @@ the dot bound (18b)
 
 <section class="class step" data-step="28logi7">
   <h2 class="sthead"><span class="stno">28logi7</span>Illegal moves</h2>
-  <p class="stands">Stands on 28·logi.1 to 28·logi.6.</p>
   <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
 \text{the best point for distance is the average}\,? @@ that is the best point for squares; for distance the pulls must balance
 \text{a far store pulls harder}\,? @@ for distance, every store pulls with its trucks, near or far

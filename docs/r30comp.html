@@ -30,12 +30,10 @@ table.tt td.l{text-align:left}
   <h1>How much can a noisy line carry?</h1>
   <p data-pid="91ebf1">How much can a noisy line carry? Every line that carries a message garbles some of it. A phone line hisses, a radio link from a buoy off Cape Flattery fades in a storm, and a fibre under the Pacific, landing on the Oregon coast at Pacific City, loses a little of its light in every kilometre. The old answer was to say everything twice, or three times, and let the copies outvote the errors. But each repeat cuts the speed, and the errors never quite go away: a message sent three times can still have two of its copies spoiled. It looked as if a noisy line forced a trade, so that fewer errors always cost more repeats, without end. What makes the question hard is that it seems to need a measure of how much a message holds, apart from what it says. Rung twenty-two counted the ways a thing can sit in bits. Rung thirty made chance a size and averages integrals. With both, this page finds how much a message holds on average, how short a code for it can be, how much one signal tells about another, and how much a noisy line can carry. The answer to the old trade is a surprise: below a certain speed set by the noise, errors can be made as rare as anyone likes without slowing down any further.</p>
   <p class="gesture" data-pid="2794bb">A rare thing tells you more when it happens than a common thing does. Measure the surprise of an outcome by the log of one over its chance, and average it: that average is the least number of bits a code needs for each outcome, give or take one, and coding long blocks at a time takes away even that one. One signal tells you about another by however much it cuts your surprise about it, and that amount is the same read either way. A line that flips each bit with a fixed small chance tells you, for each bit sent, one bit less the surprise of a flip, at best. Pick a large number of long codewords at random. The noise flips about its usual share of each block, and the chance that some other codeword lies as close to what came out is tiny as long as the codewords are not too many. So a code that runs at any speed below that best amount can make its errors as rare as you like.</p>
-  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r22comp.html">22·comp</a> (the ways-to-bits and share-count techniques), <a href="r17crypt.html">17·crypt</a> (bits of a choice), <a href="r17a.html">17a</a> (the log-bounds technique), <a href="r17h.html">17h</a> (change of base), <a href="r23h.html">23h</a> (the binomial-sum technique), <a href="r30f.html">30f</a> (the chance-rules and independent techniques), <a href="r30g.html">30g</a> (the average-adds technique), <a href="r30h.html">30h</a> (the spread-bound and averages-settle techniques) and <a href="r30phys.html">30·phys</a> (the energy-share technique: most ways under fixed totals). 30·econ asks whether watching prices can beat the market.</p></div>
 </header>
 
 <section class="class step" data-step="30comp1">
   <h2 class="sthead"><span class="stno">30comp1</span>Surprise and its average</h2>
-  <p class="stands">Stands on 22·comp (the ways-to-bits and share-count techniques), 17·crypt (bits of a choice), 30g (the average-adds technique), 30f (the independent technique) and 17a (the log-bounds technique).</p>
   <p data-pid="11e943">17·crypt counted a choice among 2ⁿ equally likely ways as n bits. When the ways are not equally likely, call log₂(1/p) the surprise of an outcome with chance p. A sure thing has surprise 0. A coin’s heads has 1 bit. Let X take values with chances p(x).</p>
   <pre class="lines" data-k="ember" data-label="this page: the surprise-average technique">
 H(X) = \operatorname{E}\big[\log_2\tfrac{1}{p(X)}\big] = \textstyle\sum_x p(x)\log_2\tfrac{1}{p(x)} @@ the average surprise (30g’s average)
@@ -57,7 +55,6 @@ H(X) - \log_2 n = \textstyle\sum_x p(x)\log_2\tfrac{1/n}{p(x)} \le \tfrac{1}{\ln
 
 <section class="class step" data-step="30comp2">
   <h2 class="sthead"><span class="stno">30comp2</span>The shortest codes</h2>
-  <p class="stands">Stands on 30·comp.1, 4k (stages-multiply) and 17a (the log-bounds technique).</p>
   <p data-pid="ad0778">A code gives each outcome a string of bits. Read a stream of them without commas, and you must know where each codeword ends: so no codeword may begin another. Draw every string of length L as a leaf at the bottom of a tree that splits in two at each bit. A codeword of length ℓ sits above 2^(L − ℓ) of the leaves, and since none begins another, no two codewords sit above the same leaf.</p>
   <pre class="lines" data-k="ember" data-label="this page: the leaf-count technique">
 \textstyle\sum_x 2^{L - \ell_x} \le 2^L @@ separate sets of leaves, out of 2^L (stages-multiply, 4k)
@@ -83,7 +80,6 @@ L \lt \textstyle\sum_x p(x)\big(\log_2\tfrac{1}{p(x)} + 1\big) = H + 1 @@ each l
 
 <section class="class step" data-step="30comp3">
   <h2 class="sthead"><span class="stno">30comp3</span>What one signal says about another</h2>
-  <p class="stands">Stands on 30·comp.1, 30f (the given-chance and whole-chance techniques) and 17a (the log-bounds technique).</p>
   <p data-pid="d2aa2c">Send X down a line, and receive Y. After seeing Y, the surprise left about X averages H(X | Y) = E[log₂(1/p(X | Y))], with 30f’s given chance. How much did Y tell you about X?</p>
   <pre class="lines" data-k="ember" data-label="this page: the shared-information technique">
 I(X; Y) = H(X) - H(X \mid Y) = \operatorname{E}\big[\log_2\tfrac{p(X \mid Y)}{p(X)}\big] @@ the surprise taken away, on average
@@ -111,7 +107,6 @@ P(X = 0) = \tfrac12 \Rightarrow P(Y = 0) = \tfrac12(1 - \varepsilon) + \tfrac12\
 
 <section class="class step" data-step="30comp4">
   <h2 class="sthead"><span class="stno">30comp4</span>The noisy channel technique</h2>
-  <p class="stands">Stands on 30·comp.3, 23h (the binomial-sum technique), 30h (the spread-bound technique), 30f (the chance-rules technique) and 30g (the average-adds technique).</p>
   <p data-pid="d54ebd">Send blocks of n bits. A code is a list of 2^(nR) codewords, so each block carries nR bits, and R is the rate. The line flips each bit with chance ε. Decode by looking for the one codeword that differs from what arrived in at most n(ε + δ) places, for a small δ with ε + δ < ½. First, how many strings lie that close to a given one?</p>
   <pre class="lines" data-k="ember" data-label="this page: the ball-count technique">
 1 = (\rho + (1 - \rho))^n = \textstyle\sum_j \binom nj \rho^j(1 - \rho)^{n - j} @@ the binomial-sum technique (23h), ρ = k/n ≤ ½
@@ -154,7 +149,6 @@ R \lt 1 - h(\varepsilon) \Rightarrow \text{pick } \delta \text{ with } R \lt 1 -
 
 <section class="class step" data-step="30comp5">
   <h2 class="sthead"><span class="stno">30comp5</span>Illegal moves</h2>
-  <p class="stands">Stands on 30·comp.1 to 30·comp.4.</p>
   <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
 H \text{ is the number of outcomes, in bits}\,? @@ it is the average surprise; log₂ n only when the chances are equal
 \text{a code can average fewer than } H \text{ bits}\,? @@ not without commas: the source coding technique

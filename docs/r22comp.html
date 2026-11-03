@@ -30,12 +30,10 @@ table.tt td.l{text-align:left}
   <h1>Does forgetting cost energy?</h1>
   <p data-pid="975865">Does forgetting cost energy? A computer gets warm. Some of that heat comes from wires that are not perfect, and better wires could cut it. But is there a part that no engineering can remove? A memory that is wiped clean has lost something. Before, it could have held either of two things; after, it holds one. Physicists had long tied heat to the number of ways the molecules of a body can sit. What makes it hard is that a bit is information and heat is energy, and for a long time nobody could see why one should cost the other. This page shows, with counting from rung 4, logs from rung 17 and 22k’s size of the factorials, how to count the ways a thing can sit in bits, why a gas that fills its room is a matter of counting, and why wiping a bit sends a least amount of heat into the room. Then it looks back at the gates of 4·comp, and finds which of them forget.</p>
   <p class="gesture" data-pid="47615b">The log of the number of ways a thing can sit adds when two things sit side by side, so it can be counted in bits, and a measured law ties heat to the same count. Choosing a share of many things can be done in a number of ways whose log is the count of things times a fixed fraction, by the size of the factorials. Squeezing a gas into half its room at a steady temperature turns a fixed amount of work into heat, and that heat is exactly what the lost ways are worth. A memory wiped clean loses ways in the same manner, so it must send heat into the room. A gate that sends two different inputs to the same output forgets, and pays.</p>
-  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r04comp.html">4·comp</a> (gates), <a href="r04k.html">4k</a> (stages-multiply, choosing-counts-parts), <a href="r17c.html">17c</a> (log-of-a-product), <a href="r17h.html">17h</a> (change of base), <a href="r17a.html">17a</a> (the log as an area), <a href="r15chem.html">15·chem</a> (the gas law; work as an area), <a href="r17crypt.html">17·crypt</a> (bits of a choice), <a href="r17phys.html">17·phys</a> (the fixed number k), <a href="r22k.html">22k</a> (the size of n!) and <a href="r05stat.html">5·stat</a> (expected value). 30·comp counts what a noisy line can carry.</p></div>
 </header>
 
 <section class="class step" data-step="22comp1">
   <h2 class="sthead"><span class="stno">22comp1</span>Counting ways in bits</h2>
-  <p class="stands">Stands on 4k (stages-multiply), 17c (log-of-a-product), 17h (change of base) and 17·crypt (bits of a choice).</p>
   <p data-pid="6d0d2c">17·crypt counted a password’s choices in bits. Physics counts the ways the molecules of a body can sit. If one thing can sit in W₁ ways and another in W₂, the two side by side can sit in W₁W₂ ways. A count that multiplies is awkward. Its log adds.</p>
   <pre class="lines" data-k="ember" data-label="this page: the ways-to-bits technique">
 W = W_1 W_2 @@ stages-multiply (4k): each way of the first with each way of the second
@@ -55,7 +53,6 @@ W = W_1 W_2 @@ stages-multiply (4k): each way of the first with each way of the 
 
 <section class="class step" data-step="22comp2">
   <h2 class="sthead"><span class="stno">22comp2</span>The size of n! as the bridge</h2>
-  <p class="stands">Stands on 22·comp.1, 4k (choosing-counts-parts) and 22k (the size of n!).</p>
   <p data-pid="ef099b">N switches with exactly k of them on can sit in N choose k ways (4k). Those factorials are far too large to write out. 22k gives their size: ln n! = n ln n − n + rₙ, where rₙ lies between 0 and ln n + 1. Write p = k/N for the share that is on.</p>
   <pre class="lines" data-k="ember" data-label="this page: the share-count technique">
 \ln\binom{N}{k} = \ln N! - \ln k! - \ln(N - k)! @@ choosing-counts-parts (4k)
@@ -84,7 +81,6 @@ W = W_1 W_2 @@ stages-multiply (4k): each way of the first with each way of the 
 
 <section class="class step" data-step="22comp3">
   <h2 class="sthead"><span class="stno">22comp3</span>A gas that fills its room</h2>
-  <p class="stands">Stands on 22·comp.1, 15·chem (the gas law; work as an area) and 17a (the log as an area).</p>
   <p data-pid="e8e639">N molecules of gas sit in a box at temperature T. The gas law of 15·chem, written for molecules, is pV = NkT. Squeeze it slowly into half its room, letting heat leave so the temperature stays fixed. A measured law, the second law of heat, says two things. Heat Q passed into a room at temperature T raises the room’s entropy by Q/T. And in anything that happens, the total entropy of a body and its room does not fall.</p>
   <pre class="lines" data-k="ember" data-label="this page: the halved-room technique">
 \text{work} = \int_{V/2}^{V}\tfrac{NkT}{v}\,dv = NkT\big(\ln V - \ln\tfrac V2\big) = NkT\ln 2 @@ work is the area under the pressure (15·chem); ln as an area (17a)
@@ -111,7 +107,6 @@ W = W_1 W_2 @@ stages-multiply (4k): each way of the first with each way of the 
 
 <section class="class step" data-step="22comp4">
   <h2 class="sthead"><span class="stno">22comp4</span>Wiping a bit</h2>
-  <p class="stands">Stands on 22·comp.3 (the halved-room technique) and 22·comp.1.</p>
   <p data-pid="51f9e1">Build a memory out of one molecule in a box, with a wall across the middle. The molecule on the left is 0; on the right, 1. To wipe the memory is to set it to 0, whatever it held, without looking.</p>
   <pre class="lines" data-k="ember" data-label="this page: the erasure technique">
 \text{take out the wall; push a piston from the right end to the middle} @@ whatever the bit was, the molecule is now on the left
@@ -131,7 +126,6 @@ W = W_1 W_2 @@ stages-multiply (4k): each way of the first with each way of the 
 
 <section class="class step" data-step="22comp5">
   <h2 class="sthead"><span class="stno">22comp5</span>Gates that forget</h2>
-  <p class="stands">Stands on 22·comp.4, 4·comp (gates) and 5·stat (expected value).</p>
   <p data-pid="b445d0">A gate of 4·comp takes two bits in and gives one out. Feed it inputs whose four rows are equally likely. When an output comes from m rows, the gate has forgotten which of the m it was: log₂ m bits. On average that is the expected value of log₂ m.</p>
   <pre class="lines" data-k="ember" data-label="this page: the gate-loss technique">
 \text{AND}:\ 1 \text{ from } 1 \text{ row},\ 0 \text{ from } 3:\ \ \tfrac14\log_2 1 + \tfrac34\log_2 3 \approx 1.19 \text{ bits} @@ the table (4·comp); expected value (5·stat)
@@ -152,7 +146,6 @@ W = W_1 W_2 @@ stages-multiply (4k): each way of the first with each way of the 
 
 <section class="class step" data-step="22comp6">
   <h2 class="sthead"><span class="stno">22comp6</span>Illegal moves</h2>
-  <p class="stands">Stands on 22·comp.1 to 22·comp.5.</p>
   <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
 \text{ways side by side add}: W = W_1 + W_2\,? @@ ways multiply; their logs add
 \log_2\binom{N}{k} = N h(p) \text{ exactly}\,? @@ off by r/ln 2, a few times ln N

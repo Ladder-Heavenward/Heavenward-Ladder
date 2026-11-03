@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>6b · Finitely many needs no axiom</title>
+<title>6b · Picking one from every box</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -13,248 +13,254 @@
 @media (max-width:520px){.pic .eqbox{font-size:.8rem}}
 .rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
 @media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+#cvP{touch-action:manipulation;cursor:pointer}
 .boxes{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0}
 .sbox{border:1.5px solid var(--grid);border-radius:8px;padding:6px 8px;background:var(--card);min-width:84px}
 .sbox .lab{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin-bottom:4px}
 .sbox button{margin:2px;padding:3px 8px;font-size:.85rem}
 .sbox button.pick{background:var(--ember);color:#fff;border-color:var(--ember)}
-.sbox.cur{border-color:var(--gold);border-width:2.5px}
-.sbox.wait{opacity:.55}
 .sbox.empty{border-style:dashed;border-color:var(--ember)}
 .sbox .none{font-size:.8rem;color:var(--ember)}
-table.trap{border-collapse:collapse;margin:6px 0;font-family:var(--mono);font-size:.82rem}
-table.trap td,table.trap th{border:1px solid var(--grid);padding:3px 5px;text-align:center;min-width:26px}
-table.trap td.s{cursor:pointer;background:var(--card)}
-table.trap td.bad{color:var(--ember);font-weight:600}
-table.trap td.good{color:var(--teal);font-weight:600}
-table.trap td.off{background:var(--sand);color:var(--muted)}
-@media (max-width:520px){table.trap td,table.trap th{padding:2px 3px;min-width:20px;font-size:.74rem}}
 </style>
 <link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r06a.html">← 6a picking one from every box</a><a href="r06c.html">next: 6c a world where it is true, and one where it is false →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r06a.html">← 6a the price of free</a><a href="r06c.html">next: 6c finitely many needs no axiom →</a></p>
   <div class="tags"><span class="tag proof">6b · proof</span></div>
-  <h1>Finitely many needs no axiom</h1>
-  <p data-pid="3e05c6">6a laid down the choosing axiom. It said in passing that a collection you can write out needs none of it: pick from each set in turn, one call per set. This step proves that for every collection you can count, by induction on how many sets it holds, with 4k's counting doing the work. The proof is short, but one line of it needs care. It is a case split on whether two members of the collection are the same set, and the ladder licenses it only because a finite set is settled. Then the step counts the choosing functions of a finite collection, which turns out to be a product. It ends with the place where the axiom earns its keep: collections that are infinite and have no rule. The tempting proof that “picks one, and so on” is taken apart there.</p>
-  <p class="gesture" data-pid="a39923">Lead one set out of the collection, pick from the rest by the induction hypothesis, name a member of the one led out, and put it back with its pick. One call per step, and as many calls as there are sets.</p>
-  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r04c.html">4c</a> (induction, the shape of a proof by induction), <a href="r04k.html">4k</a> (matching, has n members, lead-one-out, finite-is-settled, stages-multiply), <a href="r06a.html">6a</a> (non-empty, choosing function, empty-collection, empty-member, infinite), <a href="r02e.html">2e</a> (merge-membership) and <a href="r02g.html">2g</a> (equal-pairs). <a href="r06c.html">6c</a> uses the only-the-infinite-fails technique below: a world in which choice fails must have an infinite collection in it. <a href="r06d.html">6d</a> orders a finite set without the axiom.</p></div>
+  <h1>Picking one from every box</h1>
+  <p data-pid="6b2042">Inside a proof you can already pick: 2b's tech for using a some names one member of a set that has a member. This step makes picks into an object. It says exactly what it means for a set to have a member. It gives a name to collections of sets. And it defines a choosing function: a function that takes each set of a collection to a member of that set. Then it lays down the axiom that such a function always exists when every set in the collection has a member. Before and after the axiom it shows when you do not need it: when a rule does the picking. “Take the left shoe” does this for shoes, and “take the least” does it for settled sets of numbers. And it shows what the rule-free case looks like: socks.</p>
+  <p class="gesture" data-pid="3549fb">A choosing function is one object holding one pick from every set. With a rule, a sift builds it. Without a rule, the axiom says it exists and says nothing about which member it took.</p>
 </header>
 
 <section class="class step" data-step="6b1">
-  <h2 class="sthead"><span class="stno">6b1</span>Picking in turn, by hand</h2>
-  <p class="stands">Stands on 6a (choosing functions) and 2b (use a some).</p>
-  <p data-pid="2bd105">Take 𝒜 = {A₁, A₂, A₃} with A₁ = {ant, bee, cow}, A₂ = {cat, dog}, A₃ = {owl}, three different sets. Each has a member, so each can be called.</p>
-  <div class="brkkey"></div>
-  <pre class="lines" data-k="ember" data-label="this step: picking in turn, three calls">
-\text{call } p \in A_1,\ \ \text{call } q \in A_2,\ \ \text{call } r \in A_3 @@ use a some, three times: each set is non-empty
-c = \{(A_1, p),\ (A_2, q),\ (A_3, r)\} @@ Pairing and union (2e), pairs (2g)
-c \subseteq \mathcal A \times \textstyle\bigcup\mathcal A @@ each left entry in 𝒜; each right entry in its left entry, so in ⋃𝒜
-A_1 \ne A_2,\ A_1 \ne A_3,\ A_2 \ne A_3 @@ same-members: ant is in A₁ only, cat in A₂ only, owl in A₃ only
-\htmlClass{new}{c \text{ is a choosing function for } \mathcal A} @@ one pair per member, by the line above; each pick in its set
-\exists c\,(c \text{ chooses for } \mathcal A) \quad \blacksquare @@ show an example; the three calls close, since the line mentions none of p, q, r
-  </pre>
-  <p data-pid="2dc383">Notice the fourth line. Suppose two of the names A₁, A₂, A₃ had named the same set. Then the gathering would have given that set two pairs, possibly with two different picks, and c would not be a function. By hand, you look at the listing and see that the sets differ. <b>In general you need to know, for any two members of the collection, whether they are the same set or not.</b> The techs give that for free only in a settled world. 4k's finite-is-settled makes a finite set one: from X has n members, and x, y ∈ X, you may write x = y ∨ x ≠ y. That is the licence the general proof uses.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · by hand · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">6b1</span>Picking one, inside a proof</h2>
+  <p data-pid="d6405b">2b's tech for using a some runs like this. From a line ∃x P(x), write “call such a thing b”. Open a supposition of P(b) with b a name not in use. Reason with b, and close when you reach a line that does not mention b. <b>That tech is a pick: it names one thing with the property, and says nothing about which one.</b> If there are many, b is any of them, and the proof must work whichever it is. That is why the closing line may not mention b.</p>
+  <p data-pid="93d1b1">Two things limit this kind of picking. The pick lives only inside its call: after the close, b names nothing. And one call names one thing: a proof that wants a hundred picks makes a hundred calls, and a proof is finitely many lines. To hold many picks at once, after the calls have closed, you need an object that holds them: a set of pairs, each set with its pick. That object is a function in 4d's sense, and the question of this rung is when it exists.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · a pick, inside a proof · ← → keys work</div></section>
   <section class="sayback">
-    <h3>Question</h3><div class="phkey"></div>
+    <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">6b1.1</span><span class="ph know">know</span>Why does picking by hand need to know that the sets named differ?</li>
+      <li><span class="qid">6b1.1</span><span class="ph know">know</span>What is a pick? <br>What are the two limits on picking?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="6b2">
-  <h2 class="sthead"><span class="stno">6b2</span>The technique, and its base</h2>
-  <p class="stands">Stands on 6b1, 4c (induction) and 6a (the empty-collection technique).</p>
-  <p data-pid="25c04c">In plain words: <b>a collection with any number of members, each of them non-empty, has a choosing function, with no axiom.</b> Finite-choice technique, in marks:</p>
-  <div data-tex="\begin{gathered}\text{From } \mathcal A \text{ has } n \text{ members},\\ \text{for a number } n,\\ \text{and } \forall A \in \mathcal A\,(A \text{ is non-empty}),\\ \text{you may write}\\ \exists c\,(c \text{ chooses for } \mathcal A)\end{gathered}"></div>
-  <p data-pid="e8fd03">The shape is 4c's proof by induction. Name the condition first: φ(n) is the statement ∀𝒜 (𝒜 has n members ∧ ∀A ∈ 𝒜 (A is non-empty) ⇒ ∃c (c is a choosing function for 𝒜)), with n in its gap. The column proves ∀n ∈ ℕ φ(n), and that is the box's licence. It speaks of every collection, which a condition may do (4b). The base is short.</p>
-  <pre class="lines" data-k="ember" data-label="this step: the finite-choice technique, the base">
-\text{let } \mathcal A \text{ have } 0 \text{ members} @@ let 𝒜 be anything; assume (the non-empty part is not needed)
-\mathcal A \text{ is matched with } 0,\ \text{and } 0 \text{ names } \varnothing @@ ﹀ “has 0 members”; 3b's name
-\quad \text{assume } A \in \mathcal A:\ A \text{ has a partner } k \in \varnothing @@ the matching pairs every member of 𝒜 with a member of 0
-\quad \bot @@ the empty-set technique, clash
-\forall A\,(A \notin \mathcal A),\ \text{so } \mathcal A = \varnothing @@ refute; speak of everything; one-empty-set with the empty-set technique
-\htmlClass{new}{\varnothing \text{ is a choosing function for } \mathcal A} @@ the empty-collection technique (6a), and the swap axiom
-\varphi(0) @@ show an example; prove an if; speak of everything
+  <h2 class="sthead"><span class="stno">6b2</span>Having a member</h2>
+  <p data-pid="103df1">Everything here is about sets that have something in them. The ladder needs to say this the right way round.</p>
+  <p class="eqline" data-pid="16a8">From here on, a set A is <b>non-empty</b> when it has a member: <span data-tex-inline="\exists x\,(x \in A)"></span>. Read it “A is non-empty”, or “A has a member”.</p>
+  <p data-pid="1faddd">Why not write A ≠ ∅? Because the two are not interchangeable by the techs. One direction is easy and the other is not. Non-empty technique: <b>a non-empty set is not ∅; and a set that is not ∅ is, at least, not without a member.</b> In marks: from ∃x (x ∈ A), A ≠ ∅; from A ≠ ∅, ¬¬∃x (x ∈ A).</p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: the non-empty technique, the easy direction">
+\exists x\,(x \in A) @@ given: A is non-empty, unpacked
+\text{call such a thing } b:\ \ b \in A @@ use a some
+\quad \text{assume } A = \varnothing @@ aiming to refute
+\quad b \in \varnothing @@ the swap axiom, with the line above
+\quad b \notin \varnothing @@ the empty-set technique (2d)
+\quad \bot @@ clash
+\htmlClass{new}{A \ne \varnothing} \quad \blacksquare @@ refute; ︿ ≠; the some closes, since the line does not mention b
   </pre>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · the finite-choice technique · ← → keys work</div></section>
+  <pre class="lines" data-k="ember" data-label="this step: the non-empty technique, the other direction, as far as the techs go">
+A \ne \varnothing @@ given
+\quad \text{assume } \neg\exists x\,(x \in A) @@ aiming to refute
+\quad \forall x\,(x \notin A) @@ the not-some technique (2b); ︿ ∉
+\quad A = \varnothing @@ the one-empty-set technique (2d), with the empty-set technique for ∅
+\quad \bot @@ clash with the given, unpacked
+\htmlClass{new}{\neg\neg\exists x\,(x \in A)} \quad \blacksquare @@ refute
+  </pre>
+  <p data-pid="2502cf">The second column stops at a double negative, 1b's gap again: no tech turns ¬¬∃x (x ∈ A) into ∃x (x ∈ A). The gap stays open until 7d closes it. A set known only to be not ∅ is a set of which you know it is totally false that it has nothing. That is not the same as having something in hand to name. The axiom below is laid down for sets with a member, so that every pick could at least be made by a call.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · non-empty · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">6b2.1</span><span class="ph know">know</span>What does the finite-choice technique say? <br>What is the condition φ(n) the induction climbs, and what proves its base?</li>
+      <li><span class="qid">6b2.1</span><span class="ph know">know</span>What does “A is non-empty” say, and why is it not written A ≠ ∅?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="6b3">
-  <h2 class="sthead"><span class="stno">6b3</span>The step: one set led out and put back</h2>
-  <p class="stands">Stands on 6b2, 4k (leading one out) and 2e (merge).</p>
-  <p data-pid="645ca0">The step leads one set out, uses the hypothesis on the rest, and puts the set back with a pick. Here it is in four parts.</p>
-  <pre class="lines" data-k="ember" data-label="this step: the finite-choice technique, the step: lead one out and pick">
-\text{let } n \in \mathbb N;\ \text{assume } \varphi(n) @@ the induction hypothesis
-\text{let } \mathcal A \text{ have } S(n) \text{ members, each non-empty} @@ let 𝒜 be anything; assume
-n \in S(n);\ \text{call } A \text{ the partner of } n;\ A \in \mathcal A @@ in-its-next; the matching gives n exactly one partner; use the some
-\mathcal A \setminus \{A\} \text{ has } n \text{ members} @@ the lead-one-out technique (4k): lead one out
-\text{each member of } \mathcal A \setminus \{A\} \text{ is non-empty} @@ ﹀ ∖: it is a member of 𝒜
-\text{call } c' \text{ a choosing function for } \mathcal A \setminus \{A\} @@ φ(n), used with 𝒜 ∖ {A}; carry through; use the some
-\text{call } a \in A @@ A is non-empty; use the some: <b>the one new call of the step</b>
-\htmlClass{new}{c = c' \cup \{(A, a)\}} @@ Pairing, Union: the pick put back with its set
-  </pre>
-  <pre class="lines" data-k="ember" data-label="this step: the finite-choice technique, the step: every input has an output">
-c \subseteq \mathcal A \times \textstyle\bigcup \mathcal A @@ merge-membership: a pair of c′ has its set in 𝒜 ∖ {A} ⊆ 𝒜 and its pick in that set; and a ∈ A ∈ 𝒜
-\text{let } B \in \mathcal A;\ \ B = A \ \lor\ B \ne A @@ <b>finite-is-settled (4k)</b>: 𝒜 has S(n) members, so sameness among its members is settled
-\quad \text{case } B = A:\ (B, a) \in c,\ a \in B @@ the swap axiom; merge-membership; add an option
-\quad \text{case } B \ne A:\ B \in \mathcal A \setminus \{A\},\ (B, c'(B)) \in c,\ c'(B) \in B @@ B ∉ {A} by the listing line; ︿ ∖; c′ chooses; c′ ⊆ c by merge-membership
-\exists y\,((B, y) \in c \land y \in B) @@ show an example in each case; reason by cases
-  </pre>
-  <pre class="lines" data-k="ember" data-label="this step: the finite-choice technique, the step: no input has two">
-(B, y) \in c \ \land\ (B, z) \in c @@ assume two pairs with the same input
-\text{each is in } c' \text{ or is } (A, a) @@ merge-membership and the listing: a proved or, not a split on “so or not so”
-\quad \text{both in } c':\ y = z @@ c′ is a function
-\quad (B, y) \in c',\ (B, z) = (A, a):\ B = A,\ (A, y) \in c' @@ equal-pairs; the swap axiom
-\quad\quad A \in \mathcal A \setminus \{A\},\ \text{so } A \notin \{A\};\ \ A \in \{A\};\ \ \bot @@ c′'s inputs are in 𝒜 ∖ {A}; ﹀ ∖; the listing; clash
-\quad\quad y = z @@ everything permitted
-\begin{aligned}&\quad \text{the same with } y \text{ and } z \text{ turned about}\\ &\quad ;\ \ \text{both } (A, a):\ y = a = z\end{aligned} @@ the case above again; equal-pairs
-\htmlClass{new}{y = z} @@ reason by cases
-  </pre>
-  <pre class="lines" data-k="ember" data-label="this step: the finite-choice technique, the close">
-c : \mathcal A \to \textstyle\bigcup\mathcal A,\quad c(B) \in B \text{ for every } B \in \mathcal A @@ ︿ 4d's line for a function from the three parts; the value line
-\exists c\,(c \text{ is a choosing function for } \mathcal A) @@ show an example; the calls for A, c′ and a close: the line mentions none of them
-\varphi(S(n)) @@ prove an if; speak of everything
-\forall n \in \mathbb N\,\varphi(n) \quad \blacksquare @@ the induction technique (4c)
-  </pre>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · the step · ← → keys work</div></section>
-  <section class="pic" id="pic">
-    <div class="eyebrow">The picture · picking in turn, one call per step</div>
-    <div class="panel">
-      <div class="chips" role="group" aria-label="collection" id="cch"></div>
-      <div class="chips"><button id="emp">put ∅ in</button><button id="rst">start again</button></div>
-      <div class="boxes" id="bx"></div>
-      <div class="cap">The collection's members are numbered by their partners 0, 1, 2, …. Step by step, finite-choice's induction reaches each set: the gold box is the set being led in at this step (the partner of n). Tap one of its members to make the step's one call; earlier picks stay (ember), later sets wait (faded). The readout runs the step's lines and keeps the count of choosing functions, a product.</div>
-      <div class="eqbox" id="eqF"></div>
-    </div>
-  </section>
+  <h2 class="sthead"><span class="stno">6b3</span>Collections of sets</h2>
+  <p data-pid="769c0c">A collection is written with a curly capital, as 2f set out: <span data-tex-inline="\mathcal A"></span>, <span data-tex-inline="\mathcal B"></span> or <span data-tex-inline="\mathcal S"></span> names a set whose members are sets.</p>
+  <p data-pid="1fdb04">For a collection 𝒜, 2e's union ⋃𝒜 is the set of everything in any member of 𝒜. If A ∈ 𝒜 and x ∈ A, then x ∈ ⋃𝒜, by 2e's line with A as the example. So ⋃𝒜 is a set big enough to hold every pick from every member, which is what the next line needs.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · collections · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">6b3.1</span><span class="ph know">know</span>What does the step of finite-choice do, and which is its one new call?</li>
+      <li><span class="qid">6b3.1</span><span class="ph know">know</span>What is ⋃𝒜 for a collection 𝒜, and why does the rung need it?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="6b4">
-  <h2 class="sthead"><span class="stno">6b4</span>Counting the calls</h2>
-  <p class="stands">Stands on 6b3 and 4k (finite sets are settled).</p>
-  <p data-pid="b4a211">Count the calls. The step makes one new call: a member of the set led out. Unfold the induction for a collection with 3 members and you get the three calls of the column above, one per set, made in turn. That is what the technique does: picking in turn always works, for any number of sets you can count. Induction lets one written proof cover every number at once, because each number's column is finite.</p>
-  <p data-pid="e69172">And look where the step split on “B = A or B ≠ A”. That is the kind of split the either-way principle would license for any statement, and that principle is rung 7's. Here the split is licensed by finite-is-settled, because the collection has S(n) members. Its members can be told apart, one from another, through their partners in S(n) and 4h's settled-order. The other split, in the last part, comes from merge-membership, a proved or. So finite-choice uses no choosing axiom and no either-way principle.</p>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · counting the calls · ← → keys work</div></section>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">6b4.1</span><span class="ph know">know</span>Why is the split “B = A or B ≠ A” licensed in the step, when either-way is rung 7’s?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="6b5">
-  <h2 class="sthead"><span class="stno">6b5</span>How many ways to pick</h2>
-  <p class="stands">Stands on 6b3 and 4k (choices in stages multiply).</p>
-  <p data-pid="fa0ef8">6a found exactly two choosing functions for {{cat, dog}, {owl}}. The step of finite-choice shows why. Each choosing function for 𝒜 is a choosing function for 𝒜 ∖ {A} with one more pair (A, x), x ∈ A. And each such pair of a smaller function and a member of A gives one. Counting-pickings technique: <b>if 𝒜 is finite, A ∈ 𝒜, A has s members, and 𝒜 ∖ {A} has q choosing functions, then 𝒜 has q · s choosing functions.</b> The matching takes c to (c ∖ {(A, c(A))}, c(A)). Back, it takes (c′, x) to c′ ∪ {(A, x)}. The first is a choosing function for 𝒜 ∖ {A} by the same parts as finite-choice's step. So the choosing functions of 𝒜 are matched with the product of A and the set of choosing functions of 𝒜 ∖ {A}. That product has q · s members by 4k's stages-multiply. ∎ By induction on the number of sets, then, the count is the product of the sizes, one factor per set.</p>
-  <pre class="lines" data-k="ember" data-label="this step: counts, by counting-pickings">
-\{\{\text{ant}, \text{bee}, \text{cow}\},\ \{\text{cat}, \text{dog}\},\ \{\text{owl}\}\}:\quad 3 \cdot 2 \cdot 1 = \htmlClass{new}{6} @@ a factor for each set
-\{\{1, 2\},\ \{2, 3\},\ \{3\}\}:\quad 2 \cdot 2 \cdot 1 = 4 @@ picks may coincide: 2 from both of the first two sets is allowed
-\{\{\text{cat}, \text{dog}\},\ \varnothing\}:\quad 2 \cdot 0 = \htmlClass{new}{0} @@ times-zero (4g): agrees with empty-member, which said there is none
-\varnothing:\quad \text{the empty product} = 1 @@ 4j: the empty list's product is 1; agrees with empty-collection, which said there is exactly one
+  <h2 class="sthead"><span class="stno">6b4</span>A function that picks</h2>
+  <p class="eqline" data-pid="7d0dec">From here on, for a collection 𝒜, a <b>choosing function</b> for 𝒜 is a function from 𝒜 to ⋃𝒜 with c(A) ∈ A for every A ∈ 𝒜. Read c(A) as “c's pick from A”. In marks:</p>
+  <div class="eqline" data-tex="c : \mathcal A \to \textstyle\bigcup \mathcal A \ \land\ \forall A \in \mathcal A\,(c(A) \in A)"></div>
+  <p data-pid="9e3e02">Its accepted name is a choice function.</p>
+  <p data-pid="6800b9">Unpacked through 4d's lines, a choosing function is a set of pairs (A, x) with A ∈ 𝒜 and x ∈ ⋃𝒜. In it, every member of 𝒜 is the left entry of exactly one pair, and the right entry of each pair is in its left entry. A worked case. Let 𝒜 = {{cat, dog}, {owl}}, where cat, dog and owl are different animals. Then ⋃𝒜 = {cat, dog, owl}, and</p>
+  <pre class="lines" data-k="ember" data-label="this step: a choosing function, checked">
+c_1 = \{(\{\text{cat}, \text{dog}\}, \text{cat}),\ (\{\text{owl}\}, \text{owl})\} @@ a set of two pairs (Pairing, 2g)
+c_1 \subseteq \mathcal A \times \textstyle\bigcup\mathcal A @@ each pair has its left entry in 𝒜 and its right entry in ⋃𝒜
+\{\text{cat}, \text{dog}\} \ne \{\text{owl}\} @@ same-members: cat is in the first, and not in the second, since cat ≠ owl
+\begin{aligned}&\text{every input has an}\\ &\quad\text{output; no input has two}\end{aligned} @@ each member of 𝒜 is the left entry of one pair only, by the line above
+c_1(\{\text{cat}, \text{dog}\}) = \htmlClass{new}{\text{cat}} \in \{\text{cat}, \text{dog}\},\quad c_1(\{\text{owl}\}) = \text{owl} \in \{\text{owl}\} @@ 4d's value line; the listings
+c_1 \text{ is a choosing function for } \mathcal A \quad \blacksquare @@ ︿ the line
   </pre>
-  <p data-pid="9de483">The two edge cases of 6a fall out of the arithmetic: a factor 0 for ∅ in the collection, and the product of no factors, 1, for the empty collection. Rung 4's conventions were chosen well.</p>
-  <section class="slides" id="sl5"><div class="eyebrow">The slides · how many ways · ← → keys work</div></section>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">6b5.1</span><span class="ph know">know</span>What does the counting-pickings technique say, and how does it recover 6a’s two edge cases?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="6b6">
-  <h2 class="sthead"><span class="stno">6b6</span>Where the axiom adds something</h2>
-  <p class="stands">Stands on 6b2 and 6a (infinite).</p>
-  <p data-pid="177b69">Turn finite-choice about. Only-the-infinite-fails technique: <b>a collection of non-empty sets with no choosing function is infinite.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the only-the-infinite-fails technique">
-\forall A \in \mathcal A\,(A \text{ non-empty}),\ \ \neg\exists c\,(c \text{ chooses for } \mathcal A) @@ given
-\quad \text{assume } \exists n\,(\mathcal A \text{ has } n \text{ members});\ \text{call it } n @@ aiming to refute; use the some
-\quad \exists c\,(c \text{ chooses for } \mathcal A) @@ the finite-choice technique, used with n and 𝒜; carry through
-\quad \bot @@ clash
-\htmlClass{new}{\neg\exists n\,(\mathcal A \text{ has } n \text{ members})} \quad \blacksquare @@ refute: 𝒜 is infinite (6a's line)
+  <p data-pid="3ffcea">The other one is c₂, which picks dog from {cat, dog}. There are no more: a choosing function must pick owl from {owl}, and has two members of {cat, dog} to choose between. 6c counts choosing functions in general.</p>
+  <p data-pid="e1f7ef">Two edge cases decide a lot. If ∅ is in the collection, there is no choosing function, because there is nothing to pick from ∅. Empty-member technique: <b>if ∅ ∈ 𝒜, then 𝒜 has no choosing function.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the empty-member technique">
+\varnothing \in \mathcal A @@ given
+\quad \text{assume } \exists c\,(c \text{ is a choosing function for } \mathcal A) @@ aiming to refute
+\quad \text{call such a thing } c @@ use a some
+\quad c(\varnothing) \in \varnothing @@ ﹀; use the every with ∅
+\quad c(\varnothing) \notin \varnothing @@ the empty-set technique
+\quad \bot @@ clash; the some closes, since ⊥ does not mention c
+\htmlClass{new}{\neg\exists c\,(c \text{ is a choosing function for } \mathcal A)} \quad \blacksquare @@ refute
   </pre>
-  <p data-pid="3b3655">This ends in a denial, so it is honest without rung 7. Together with 6a, it marks out exactly where the axiom is needed. The collection must be infinite, and there must be no rule, no condition true of exactly one member of each set. Shoes have a rule; settled sets of numbers have one. Socks matched with ℕ have neither a rule nor a finite count. Even the axiom restricted to collections matched with ℕ cannot be proved; call it listed choosing. 6c shows a world where it fails, for socks.</p>
-  <section class="slides" id="sl6"><div class="eyebrow">The slides · where the axiom adds · ← → keys work</div></section>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">6b6.1</span><span class="ph know">know</span>What does only-the-infinite-fails say, and why is its proof honest without rung 7?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="6b7">
-  <h2 class="sthead"><span class="stno">6b7</span>The trap in “and so on”</h2>
-  <p class="stands">Stands on 6b2, 2b (every and some do not swap) and 4d (defining by repeating).</p>
-  <p data-pid="094006">Here is the tempting argument that the axiom is not needed even for socks. Let 𝒦 be matched with ℕ, pair K_n for each number n. Let 𝒦_n = {K ∈ 𝒦 : the partner of K is less than n}, the first n pairs (a sift of 𝒦). 𝒦_n has n members, so finite-choice gives a choosing function for it. “So pick from the first pair, then the second, and so on, and you have picked from them all.”</p>
-  <pre class="lines" data-k="ember" data-label="this step: where “and so on” breaks">
-\forall n\ \exists c\ (c \text{ chooses for } \mathcal K_n) @@ true: the finite-choice technique, for each n
-\htmlClass{new}{\exists c\ \forall n}\ (c \text{ chooses from } \mathcal K_n) @@ illegal to conclude: ∃ and ∀ have swapped places. 2b's licensed-swap goes only the other way
-  </pre>
-  <p data-pid="cec314">The first line is a separate fact for each n, with a separate function for each n, made afresh by its own column of n calls. Nothing says the function for 𝒦₃ agrees with the function for 𝒦₄ on the first three pairs: the column for 𝒦₄ makes its own four calls. To glue them into one function you would have to pick, for every n at once, one of the functions that choose for 𝒦_n. That would be a choosing function for the collection of those sets of functions. That is the axiom again, in disguise. <b>The words “and so on” smuggle in exactly the thing being avoided.</b></p>
-  <p data-pid="1f8145">There is a second disguise, more dangerous because it looks like rung 4. “Define the picks by repeating: start with ∅, and at each step add a sock of the next pair.” 4d's recursion needs a step that is a function g, taking each stage to exactly one next stage. “Add a sock of K_n” is not a function: it fits two next stages. The step would need a function that takes each pair to one of its socks. That is a choosing function for 𝒦, the very thing wanted. Recursion builds endless runs only from steps that are rules.</p>
-  <section class="slides" id="sl7"><div class="eyebrow">The slides · the trap · ← → keys work</div></section>
+  <p data-pid="28c49e">And if the collection itself is empty, there is exactly one choosing function, the empty set. Empty-collection technique: <b>the empty set is a choosing function for the empty collection.</b> In marks: ∅ is a choosing function for ∅. ∅ ⊆ ∅ × ⋃∅ by empty-part. The lines “every input has an output” and “c(A) ∈ A for every A ∈ ∅” are everys over a subject with no members, so they are vacuously true. (That is 2i's word: assume A ∈ ∅, and clash with the empty-set technique; when nothing is true, everything is permitted. The permitted line goes when the supposition is dropped, and only the empty if remains.) And no pair is in ∅ to have a second output. ∎</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · choosing functions · ← → keys work</div></section>
   <section class="pic" id="pic2">
-    <div class="eyebrow">The picture · the trap in “and so on”</div>
+    <div class="eyebrow">The picture · build a choosing function by hand</div>
     <div class="panel">
-      <div class="chips"><button id="fresh">make every row afresh</button><button id="agree">make the rows agree</button></div>
-      <div class="tablewrap"><table class="trap" id="trap"></table></div>
-      <div class="cap">Pairs of socks K₀ to K₇, one column each. Row n is a choosing function for the first n pairs, made by its own n calls: each cell names the sock called, s or s′ (names given at the call, not features of the socks). Tap a cell to call the other sock. Below the rows: where every row that reaches a pair agrees, teal; where rows disagree, ember. The column past the last row stands for every pair no row reaches.</div>
-      <div class="eqbox" id="eqT"></div>
+      <div class="chips" role="group" aria-label="collection" id="cch"></div>
+      <div class="chips"><button id="emp">put ∅ in</button><button id="clr">clear the picks</button></div>
+      <div class="boxes" id="bx"></div>
+      <div class="cap">Each box is a member of the collection 𝒜. Tap one member in each box to set c's pick there (ember). The readout writes c as a set of pairs and checks it against the line for a choosing function, then lists every choosing function there is, with yours marked. “Put ∅ in” adds the empty set to the collection.</div>
+      <div class="eqbox" id="eqB"></div>
     </div>
   </section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">6b7.1</span><span class="ph know">know</span>What does “and so on” smuggle in? <br>Why is “add a sock of the next pair” not a step for recursion?</li>
+      <li><span class="qid">6b4.1</span><span class="ph know">know</span>What is a choosing function for 𝒜? <br>What do the empty-member and empty-collection techniques say?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="6b5">
+  <h2 class="sthead"><span class="stno">6b5</span>The axiom</h2>
+  <p data-pid="338f02">In plain words: <b>for any collection of sets, each of which has a member, there is one object that holds a pick from each, all at once.</b> That is, there is a choosing function. In marks:</p>
+  <div data-tex="\begin{gathered}\forall \mathcal A\,\Big(\forall A \in \mathcal A\,(A \text{ is non-empty})\\ \Rightarrow\; \exists c\,\big(c : \mathcal A \to \textstyle\bigcup\mathcal A\\ \land\ \forall A \in \mathcal A\,(c(A) \in A)\big)\Big)\end{gathered}"></div>
+  <p data-pid="7af472">With the collection fixed and its members non-empty, the heart of it is short:</p>
+  <div class="eqline" data-tex="\exists c\,\forall A \in \mathcal A\,(c(A) \in A)"></div>
+  <p data-pid="071f14">This is <b>the choosing axiom</b>. From here on the ladder lays it down, as 3c laid down the infinity axiom. 6d shows why it has to be laid down rather than proved, and why it cannot be refuted either. Without it, a choice from endlessly many sets, with no rule to follow, could never be made, and 6d shows exactly what is lost.</p>
+  <p data-pid="66f29e">Look at what the axiom says and does not say. Like the infinity axiom, it asserts that something exists, and builds nothing. It does not say which member c takes from any set. A proof uses it the way it uses any some. It writes “call such a function c”, with c a fresh name, reasons with c, and closes on a line that does not mention c. Every tool of rung 2 said exactly what was in its result. This one says only that c(A) is in A. That is the whole difference, and the whole controversy.</p>
+  <p data-pid="33a35d">On this rung no proof leans on the axiom to reach its last line. Where a step states something with the axiom in it, it says so, and 6e proves its two working forms as statements about the axiom, not with it.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · the choosing axiom · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">6b5.1</span><span class="ph know">know</span>What does the choosing axiom assert, and what does it not say?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="6b6">
+  <h2 class="sthead"><span class="stno">6b6</span>Rules that pick: shoes</h2>
+  <p data-pid="ce0b3b">Before the axiom is needed, look at the cases where it is not. In this step's everyday examples, a pair of shoes means what a shop means: the set of its two shoes, {l, r}, one left and one right. That is not 2g's pair (l, r), and the step writes it with braces to keep them apart. Let 𝒮 be a collection of pairs of shoes, as many as you like, and write L(x) for “x is a left shoe”. The shop supplies two facts as given lines. <b>(g1)</b> Every member of 𝒮 has a left shoe in it. <b>(g2)</b> Only one.</p>
+  <div class="eqline" data-tex="\begin{aligned} &amp;\textbf{(g1)}\;\; \forall A \in \mathcal S\,\exists x\,(x \in A \land L(x))\\ &amp;\textbf{(g2)}\;\; \forall A \in \mathcal S\,\forall x\,\forall y\,\big(x \in A \land L(x)\\ &amp;\qquad\quad \land\; y \in A \land L(y) \Rightarrow x = y\big) \end{aligned}"></div>
+  <p data-pid="2747df">Left-shoes technique: <b>𝒮 has a choosing function, built by a sift, with no axiom.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the left-shoes technique">
+c = \{(A, x) \in \mathcal S \times \textstyle\bigcup\mathcal S : x \in A \land L(x)\} @@ Separation, written with 2h's shorthand
+\text{let } A \in \mathcal S;\ \text{call } x \text{ with } x \in A \land L(x) @@ (g1); use a some
+x \in \textstyle\bigcup \mathcal S,\ \ \htmlClass{new}{(A, x) \in c} @@ 2e's line for ⋃, with A as the example; ︿ the sift: every input has an output
+(A, x) \in c \land (A, y) \in c \;\Rightarrow\; x = y @@ ﹀ the sift twice; (g2): no input has two
+c : \mathcal S \to \textstyle\bigcup\mathcal S,\quad c(A) \in A @@ ︿ 4d's line for a function; the value line, and the sift unpacked
+c \text{ is a choosing function for } \mathcal S \quad \blacksquare @@ ︿; speak of everything. No axiom was used
+  </pre>
+  <p data-pid="4a06a5">The proof never asked how many pairs there are. One condition, L(x), did every pick at once, and by Separation the sift by that condition is a set: the function. That is what a rule is: a condition that, in each set of the collection, is so of exactly one member.</p>
+  <p class="eqline" data-pid="9dbdbd">This is a new job for 4d's word. There a rule, x ↦ t(x), is a piece of writing that names an output for each input. Here a rule for a collection is a condition. Both stand; what the rule is for says which.</p>
+  <p class="eqline" data-pid="cb3e80">From here on, a set X is <b>infinite</b> when it is not finite:</p>
+  <div class="eqline" data-tex="\neg\exists n \in \mathbb N\,(X \text{ has } n \text{ members})"></div>
+  <p data-pid="36ca96">4k showed that ℕ is infinite.</p>
+  <p data-pid="0f26db">Matched-with-ℕ technique: <b>a set matched with ℕ is infinite.</b> Assume X has n members. X is matched with n, and with ℕ. Turn the second matching about (turn-about for matchings) and join (chain for matchings). Then ℕ is matched with n, so ℕ has n members, against 4k. Refute; the some closes. ∎ So “endlessly many pairs of shoes” has a meaning: a collection 𝒮 matched with ℕ, pair A_n for each number n. Left-shoes covers it with no change.</p>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · the left-shoes technique · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">6b6.1</span><span class="ph know">know</span>What is a rule for a collection? <br>Why does left-shoes need no axiom, however many pairs there are?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="6b7">
+  <h2 class="sthead"><span class="stno">6b7</span>Rules that pick: least members</h2>
+  <p data-pid="973c62">The ladder owns a second rule. 4h's least-member gives a least member to a settled set of numbers that has a member. And 4h showed a set of numbers has at most one. Least-chooses technique: <b>if every member of 𝒜 is a non-empty settled set of numbers, then 𝒜 has a choosing function, with no axiom: take the least.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the least-chooses technique">
+c = \{(A, m) \in \mathcal A \times \textstyle\bigcup\mathcal A : m \text{ is the least member of } A\} @@ Separation, 2h's shorthand
+\text{let } A \in \mathcal A;\ A \text{ has a least member } m @@ given: A settled and non-empty; the least-member technique (4h); use the some
+m \in A,\ \ m \in \textstyle\bigcup\mathcal A,\ \ \htmlClass{new}{(A, m) \in c} @@ ﹀ “least member”; 2e's ⋃ line; ︿ the sift
+(A, m) \in c \land (A, m') \in c \;\Rightarrow\; m \le m' \land m' \le m @@ ﹀ the sift, and “least member” for each, used with the other
+\phantom{(A, m) \in c \land (A, m') \in c} \;\Rightarrow\; m = m' @@ 4h: at most one least member (any-two-compare: not both m &lt; m′ and m′ &lt; m)
+c \text{ is a choosing function for } \mathcal A \quad \blacksquare @@ ︿, as in left-shoes. No axiom was used
+  </pre>
+  <p data-pid="ffd806">So from {4, 9}, from the even numbers above 7, and from the nonzero multiples of 3, c picks 4, 8 and 3. It would pick from a collection matched with ℕ just as well. The rule fails in three places, and each is instructive.</p>
+  <ul>
+    <li><b>Integers.</b> {x ∈ ℤ : x &lt; 0} has no least member. For any x in it, x − 1 is in it and x − 1 &lt; x (5d's order, 5f's keep-order for plus on ℚ). “Take the least” answers nothing there. 6b.3.1 mends the rule.</li>
+    <li><b>Fractions.</b> {x ∈ ℚ : 0 &lt; x ∧ x &lt; 1} has no least member. For x in it, x · ½ is in it and smaller, since x − x · ½ = x · ½ is positive (5f). 6b.4.1 builds a rule of another kind.</li>
+    <li><b>Unsettled sets.</b> Least-member needs the set settled. For a set of numbers whose membership cannot be decided number by number, 4h had only no-least-no-members. No least member means no members, which turned about gives only ¬¬(A has a least member). So “take the least” is not yet a rule for every set of numbers; 7·cb4 returns to it.</li>
+  </ul>
+  <section class="slides" id="sl7"><div class="eyebrow">The slides · the least-chooses technique · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">6b7.1</span><span class="ph know">know</span>What does the least-chooses technique say, and where does “take the least” fail?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="6b8">
-  <h2 class="sthead"><span class="stno">6b8</span>Illegal moves</h2>
-  <p class="stands">Stands on 6b1 to 6b7.</p>
-  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
-\forall n\,\exists c_n \Rightarrow \exists c\,\forall n\,? @@ the swap 2b forbade: one function for each n is not one function for all
-\begin{aligned}&\text{recursion with the step “add a sock of } K_n\text{”}\,\\ &\quad ?\end{aligned} @@ not a function: recursion's step must name one next stage (4d)
-\text{one call per name in a listing}\,? @@ if two names in the listing name one set, two picks make two outputs. Pick per member, and know the members differ (finite-is-settled, or same-members by looking)
-\begin{aligned}&\text{finite-choice for every}\\ &\quad\text{collection, by induction}\,?\end{aligned} @@ induction covers collections with n members, for each number n. An infinite collection has no n
-\begin{aligned}&\text{a choosing function from } c' \text{ by adding } (A,\\ &\quad a) \text{ when } A \text{ already has a pick}\,?\end{aligned} @@ the step leads A out first (lead-one-out), so c′ has no pair at A; otherwise (A, a) may make a second output
-B = A \lor B \ne A \text{ for members of any collection}\,? @@ licensed by finite-is-settled only when the collection is finite; in general it is either-way, rung 7
-  </pre>
+  <h2 class="sthead"><span class="stno">6b8</span>Socks</h2>
+  <p data-pid="17a125">Now a collection 𝒦 of pairs of socks, each member a set {s, s′} of two socks made alike. Here the given line is the opposite of the shop's: whatever you can say of one sock of a pair, you can say of the other. A rule would be a condition that is so of exactly one sock in each pair. By the given line, any condition is so of both socks of a pair or of neither. <b>So there is no rule.</b></p>
+  <p data-pid="40908c">With a few pairs on the bed you can still pick. Call a sock of the first pair s₁, a sock of the second s₂, and so on to the last. Then gather the pairs of sets and picks. 6c proves this works for any finite collection. With 𝒦 matched with ℕ, a column runs out of calls before it runs out of pairs. The choosing axiom now says a choosing function for 𝒦 exists. Call it c. Then c(K) is a sock of K, for every pair K. That is all anyone can say: not which sock, for any pair. 6d builds a world in which every other principle is true and 𝒦 has no choosing function at all. That is why the axiom is needed.</p>
+  <section class="slides" id="sl8"><div class="eyebrow">The slides · socks · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · endlessly many pairs, and three ways to pick</div>
+    <div class="panel">
+      <div class="chips" role="group" aria-label="kind" id="kch"><span class="m" style="color:var(--muted)">pairs of:</span><button data-k="boots" class="on">shoes</button><button data-k="socks">socks</button></div>
+      <div class="chips" role="group" aria-label="mode" id="mch"><span class="m" style="color:var(--muted)">pick by:</span><button data-m="hand" class="on">hand</button><button data-m="rule">a rule</button><button data-m="axiom">the axiom</button></div>
+      <div class="chips" role="group" aria-label="jump" id="jch"><span class="m" style="color:var(--muted)">look at pairs from:</span><button data-j="0" class="on">0</button><button data-j="1000">1000</button><button data-j="1000000">1000000</button><button data-j="big">10¹⁰⁰</button></div>
+      <canvas id="cvP"></canvas>
+      <div class="cap">Endlessly many pairs, A₀, A₁, A₂, …; eight are on the table at a time. Shoes are marked L and R; socks are made alike. By hand: tap an item to pick it (ember). A rule: a condition does the picking (teal). The axiom: a pick exists in every pair (gold, dashed), and nothing says which. Jump along the pairs to see which ways still answer there.</div>
+      <div class="eqbox" id="eqP"></div>
+    </div>
+  </section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">6b8.1</span><span class="ph know">know</span>Why is “finite-choice for every collection, by induction” an illegal move? <br>Why is “one call per name in a listing” one?</li>
+      <li><span class="qid">6b8.1</span><span class="ph know">know</span>Why is there no rule for socks, and what does the axiom then give?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="6b9">
-  <h2 class="sthead"><span class="stno">6b9</span>Running it backwards</h2>
-  <p class="stands">Stands on 6b1 to 6b7.</p>
-  <p data-pid="5462ec"><b>Wanting a choosing function for a collection you can count, run finite-choice: say how many members it has, and the induction does the rest.</b> For a written-out collection, make one call per set and check by same-members that the sets differ. Wanting to know how many there are, multiply the sizes (counting-pickings). Wanting to know whether the axiom is needed, ask two questions. Is the collection infinite (only-the-infinite-fails)? Is there a rule (6a)? Only a yes and a no call for the axiom. Seeing “and so on” in a proof, find the ∀∃ it hides and ask whether it has been swapped. Found upward; written downward.</p>
+  <h2 class="sthead"><span class="stno">6b9</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+c(A) = \text{a member of } A\,? @@ not a name: a name must fit exactly one thing (4d). “A member of A” fits each member. A rule needs a condition true of exactly one
+A \ne \varnothing,\ \text{so call a member } b\,? @@ non-empty gives only ¬¬∃x (x ∈ A) from A ≠ ∅; a call needs ∃x (x ∈ A) in hand
+\varnothing \in \mathcal A,\ \text{yet } c \text{ chooses from } \mathcal A\,? @@ empty-member: c(∅) ∈ ∅ is totally false. Every member must be non-empty
+c(A) \subseteq A\,? @@ a pick is a member, c(A) ∈ A, not a part. 2c's ∈ and ⊆ again
+\text{by the axiom, } c(K) = \text{the left sock}\,? @@ the axiom never says which. Socks have no left
+\text{the left-shoe rule needs the axiom}\,? @@ left-shoes: a sift does it, with no axiom, however many pairs
+\text{take the least, for any set of numbers}\,? @@ least-member is for settled sets; otherwise only no-least-no-members's double negative (4h)
+\text{take the least, for sets of fractions}\,? @@ fractions above 0 have no least: halve any one (5f)
+  </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">6b9.1</span><span class="ph know">know</span>Wanting to know whether the axiom is needed, which two questions do you ask?</li>
+      <li><span class="qid">6b9.1</span><span class="ph know">know</span>Why is “let c(A) be a member of A” an illegal move? <br>Why is “A ≠ ∅, so call a member b” one?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="6b10">
+  <h2 class="sthead"><span class="stno">6b10</span>Running it backwards</h2>
+  <p data-pid="118f2d"><b>Wanting a choosing function for a collection, ask first for a rule: a condition that is so of exactly one member of each set.</b> If you find one, sift, as left-shoes and least-chooses did, and no axiom is used. If the collection is written out, pick by hand, one call per set (6c). If neither, by the axiom there is one, and your proof must work whichever member it took. Wanting to show a collection has none, look for ∅ in it (empty-member). Handed a function and asked whether it chooses, check the three parts. It must be a set of pairs from 𝒜 × ⋃𝒜. It must have exactly one pair for each member of 𝒜. And each right entry must be in its left entry. Found upward; written downward.</p>
+  <section class="slides" id="sl9"><div class="eyebrow">The slides · running it backwards · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">6b10.1</span><span class="ph know">know</span>Wanting a choosing function, what do you ask first? <br>Handed a function, which three parts do you check?</li>
     </ol>
   </section>
 </section>
@@ -263,22 +269,24 @@ B = A \lor B \ne A \text{ for members of any collection}\,? @@ licensed by finit
   <div class="eyebrow">Special challenges · there if you want them</div>
   <h2>Special challenges</h2>
   <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
-  <div class="chq"><span class="chid">6b.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{Glued pickings must agree}"></span> <span data-tex-inline="\text{where they meet.}"></span> <span data-tex-inline="X\text{: } n \text{ members,}"></span> <span data-tex-inline="\mathcal A\text{: the settled non-empty parts of } X,"></span> <span data-tex-inline="\text{for a listing of } X\text{ (4k&#x27;s arrangement):}"></span> <span data-tex-inline="c\text{: the sift of } (A, x),\ A \in \mathcal A,\ x \in A,"></span> <span data-tex-inline="\text{no member of } A \text{ listed before } x"></span></span>Build pickings that agree, from listings.<ol class="parts" type="a"><li>Prove c is a choosing function of 𝒜, and that different listings give different ones.</li><li><span class="givens"><span data-tex-inline="d\text{: a choosing function of } \mathcal A"></span></span>Find a condition on d alone that is true exactly when d comes from a listing, and prove it.</li><li>Count all the choosing functions of 𝒜, and compare the count with the number of listings.</li></ol></div>
-  <div class="chq"><span class="chid">6b.4.2</span><span class="tagq">edge</span>Find an infinite collection of non-empty sets of numbers with exactly one choosing function.</div>
-  <div class="chq"><span class="chid">6b.4.3</span><span class="tagq">loop</span><span class="givens"><span data-tex-inline="\text{“Pick from the first pair,}"></span> <span data-tex-inline="\text{then the next, and so on.”}"></span></span>For shoes, write the step as a function taking each stage to its next stage.<br>Do the same for socks, as far as you can take it.</div>
-  <div class="chq"><span class="chid">6b.4.4</span><span class="tagq">seam</span>Pick a sock from the first pair, then from the second, and so on, forever. Decide whether you have picked a sock from every pair.</div>
+  <div class="chq"><span class="chid">6b.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{The rationals between 0 and 1}"></span> <span data-tex-inline="\text{have no member nearest } 0."></span> <span data-tex-inline="\text{each rational in lowest terms}"></span> <span data-tex-inline="p/q,\ q \ge 1,"></span> <span data-tex-inline="p = N(p) \text{ or } p = -N(p),"></span> <span data-tex-inline="L_n = \{p/q : N(p) + q = n\}"></span></span>Build a rule of your own for every non-empty settled set of rationals.<ol class="parts" type="a"><li>Prove each of the levels L is finite.</li><li>Using the levels, give your rule, and prove it is one.</li><li>Name the line of your proof that needs “settled”.</li></ol></div>
+  <div class="chq"><span class="chid">6b.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\mathcal A \text{ finite,}"></span> <span data-tex-inline="\text{every member of } \mathcal A \text{ non-empty}"></span></span>Find for which 𝒜 there is a choosing function whose outputs make up all of the union of 𝒜.</div>
+  <div class="chq"><span class="chid">6b.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="c\text{: a choosing function for } \mathcal A"></span></span>Write a condition, using c, that is so of exactly one member of each set of 𝒜.<br>Name what your condition mentions that a rule for socks could not.</div>
+  <div class="chq"><span class="chid">6b.4.4</span><span class="tagq">world</span><span class="givens"><span data-tex-inline="\text{Every set is finite.}"></span> <span data-tex-inline="\text{Every principle of rung 2 is true.}"></span></span>Prove every collection of non-empty sets has a choosing function.<br>Name the axiom of the ladder that fails there.</div>
+  <div class="chq"><span class="chid">6b.4.5</span><span class="tagq">seam</span>Endlessly many pairs of socks; nobody can say which sock a choosing function takes from any pair. Decide whether such a choosing function exists.</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r06a.html">← 6a · picking one from every box</a><a href="r06c.html">6c · a world where it is true, and one where it is false →</a></nav>
+<nav class="nextrung"><a href="r06a.html">← 6a · the price of free</a><a href="r06c.html">6c · finitely many needs no axiom →</a></nav>
 
 <section class="extra basement">
   <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The choosing axiom is the axiom of choice, and a choosing function is a choice function.</p>
   <h3>Who said it first</h3>
-  <p>The refusal to pick endlessly many times without a rule is Giuseppe Peano’s, in 1890.</p>
-  <aside class="voice para"><p>Peano, proving a technique about differential equations, refused to make his argument by choosing a member from each of endlessly many classes. He remarked that one cannot apply an arbitrary law, one that assigns to a class some member of it, endlessly many times, and he arranged his proof to use a definite rule instead.</p><cite>Peano, “Démonstration de l'intégrabilité des équations différentielles ordinaires”, Mathematische Annalen 37 (1890)</cite></aside>
-  <h3>Accepted names</h3>
-  <p>The either-way principle has the accepted name the law of excluded middle. The axiom restricted to collections in bijection with ℕ is called countable choice.</p>
+  <p>The axiom was introduced by Ernst Zermelo in 1904. The boots and socks are Bertrand Russell’s.</p>
+  <aside class="voice para"><p>Zermelo, introducing the principle, took it that for any collection of non-empty parts of a set one may imagine each part assigned one of its own members, and that this principle, used without comment in many places, could serve as the foundation of his proof that every set can be put in order.</p><cite>Zermelo, “Beweis, dass jede Menge wohlgeordnet werden kann”, Mathematische Annalen 59 (1904)</cite></aside>
+  <aside class="voice para"><p>Russell's millionaire bought a pair of socks every time he bought a pair of boots, until he had endlessly many of each. To choose one boot from each pair, choose all the left boots. With socks, Russell observed, no principle of selection suggests itself, and unless we assume the axiom we cannot be sure there is any collection consisting of one sock out of each pair.</p><cite>Russell, Introduction to Mathematical Philosophy (1919), ch. XII (Russell's name for the axiom is the multiplicative axiom)</cite></aside>
 </section>
 </div>
 
@@ -287,95 +295,138 @@ B = A \lor B \ne A \text{ for members of any collection}\,? @@ licensed by finit
 (function(){
 const {tex,col,stepper}=Rung;
 const R=String.raw;
+function size(cv,H){ const dp=window.devicePixelRatio||1, W=cv.clientWidth||300; cv.width=W*dp; cv.height=H*dp; cv.style.height=H+'px'; const c=cv.getContext('2d'); c.setTransform(dp,0,0,dp,0,0); return {c,W}; }
+
+/* ---------- left: endless pairs ---------- */
+let kind='boots', mode='hand', jump='0'; const picks=new Map(); let geo=[];
+function idx(k){ return jump==='big'?`10^{100}+${k}`:String(Number(jump)+k); }
+function idxPlain(k){ return jump==='big'?`10¹⁰⁰+${k}`:String(Number(jump)+k); }
+// socks: which side shows which sock is fixed per pair, but they look alike
+function bind(id,attr,set){ document.querySelectorAll('#'+id+' button').forEach(b=>b.onclick=()=>{ set(b.dataset[attr]); document.querySelectorAll('#'+id+' button').forEach(z=>z.classList.toggle('on',z===b)); drawP(); }); }
+bind('kch','k',v=>kind=v); bind('mch','m',v=>mode=v); bind('jch','j',v=>jump=v);
+const cvP=document.getElementById('cvP');
+function shoe(c,x,y,s,left,stroke,fill){ // a simple shoe: sole and upper, toe pointing outward
+  c.save(); c.translate(x,y); if(!left){ c.scale(-1,1); }
+  c.beginPath(); c.moveTo(-s*.45,-s*.55); c.lineTo(-s*.05,-s*.55); c.lineTo(-s*.05,-s*.1); c.quadraticCurveTo(s*.5,-s*.05,s*.5,s*.25); c.lineTo(-s*.45,s*.25); c.closePath();
+  c.fillStyle=fill; c.fill(); c.strokeStyle=stroke; c.lineWidth=1.4; c.stroke(); c.restore(); }
+function sock(c,x,y,s,stroke,fill){ c.save(); c.translate(x,y);
+  c.beginPath(); c.moveTo(-s*.2,-s*.6); c.lineTo(s*.15,-s*.6); c.lineTo(s*.15,s*.05); c.quadraticCurveTo(s*.15,s*.35,-s*.15,s*.35); c.lineTo(-s*.45,s*.35); c.quadraticCurveTo(-s*.6,s*.2,-s*.45,s*.05); c.lineTo(-s*.2,s*.05); c.closePath();
+  c.fillStyle=fill; c.fill(); c.strokeStyle=stroke; c.lineWidth=1.4; c.stroke(); c.restore(); }
+function drawP(){
+  const W0=cvP.clientWidth||300, cols=W0<460?2:4, rws=8/cols, bw=(W0-10)/cols, bh=Math.min(100,bw*.9), H=rws*(bh+4)+10;
+  const {c}=size(cvP,H); c.fillStyle=col('--card'); c.fillRect(0,0,W0,H); geo=[];
+  const s=Math.min(30,bw*.24);
+  for(let k=0;k<8;k++){ const x0=5+(k%cols)*bw, y0=5+Math.floor(k/cols)*(bh+4);
+    c.strokeStyle=col('--grid'); c.lineWidth=1; c.strokeRect(x0+2,y0+2,bw-4,bh-4);
+    c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='left'; c.fillText('A '+idxPlain(k),x0+7,y0+15);
+    const key=jump+':'+k, pk=picks.get(key);
+    for(let j=0;j<2;j++){ const cx=x0+bw*(j?0.7:0.3), cy=y0+bh*.55;
+      let ring=null, dash=false;
+      if(mode==='hand'&&pk===j) ring='--ember';
+      if(mode==='rule'&&kind==='boots'&&j===0) ring='--teal';
+      if(mode==='axiom'){ ring='--gold'; dash=true; }
+      if(ring){ c.beginPath(); c.strokeStyle=col(ring); c.lineWidth=2.4; c.setLineDash(dash?[4,3]:[]); c.arc(cx,cy-s*.12,s*.78,0,Math.PI*2); c.stroke(); c.setLineDash([]); }
+      if(kind==='boots'){ shoe(c,cx,cy,s,j===0,col('--ink'),col('--sand')); c.fillStyle=col('--ink'); c.font='600 11px IBM Plex Mono, monospace'; c.textAlign='center'; c.fillText(j===0?'L':'R',cx,cy+s*.75); }
+      else { sock(c,cx,cy,s,col('--ink'),col('--sand')); }
+      if(mode==='axiom'){ c.fillStyle=col('--gold'); c.font='600 12px IBM Plex Mono, monospace'; c.textAlign='center'; c.fillText('?',cx+s*.6,cy-s*.6); }
+      geo.push({x:cx,y:cy,r:s*.8,key,j}); }
+  }
+  c.textAlign='left';
+  const L=[];
+  const it=(kind==='boots')?['l','r']:['s','s\'']; const nm=kind==='boots'?'\\mathcal S':'\\mathcal K';
+  if(mode==='hand'){ const mine=[...picks.entries()].filter(([k])=>k.startsWith(jump+':')); const all=picks.size;
+    const shown=mine.slice(0,4).map(([k,j])=>{ const n=idx(+k.split(':')[1]); return `(A_{${n}},\\ ${it[j]}_{${n}})`; });
+    L.push(`\\text{by hand: } c = \\{${shown.join(',\\ ')}${mine.length>4?',\\ \\dots':''}\\}`);
+    L.push(`\\text{picks made: } ${all}\\text{, one call each}`);
+    L.push(`\\htmlClass{new}{\\text{every untapped pair: no pick}}`);
+    L.push(`\\text{${all} calls answer ${all} pairs (6c), never all}`); }
+  else if(mode==='rule'){ if(kind==='boots'){ L.push(`c = \\{(A, x) \\in ${nm}\\times\\textstyle\\bigcup${nm} : x \\in A \\land L(x)\\}`); L.push(`\\htmlClass{keep}{c(A_{${idx(5)}}) = l_{${idx(5)}}}\\text{, and so for every pair}`); L.push(`\\text{left-shoes: one condition, every pick}`); }
+    else { L.push(`\\htmlClass{new}{\\text{no condition picks one sock of each pair}}`); L.push(`\\text{what is so of } s_{${idx(5)}} \\text{ is so of } s'_{${idx(5)}}`); L.push(`\\text{no rule: no sift builds } c`); } }
+  else { L.push(`\\text{the choice axiom: } \\exists c\\,\\forall A \\in ${nm}\\,(c(A) \\in A)`); L.push(`\\text{call it } c:\\ \\ c(A_{${idx(5)}}) \\in \\{${it[0]}_{${idx(5)}},\\ ${it[1]}_{${idx(5)}}\\}`);
+    L.push(kind==='boots'?`\\text{which shoe? not said (left-shoes answers anyway)}`:`\\htmlClass{new}{\\text{which sock? not said, for any pair}}`); }
+  tex(document.getElementById('eqP'),'\\begin{gathered}'+L.join('\\\\ ')+'\\end{gathered}',true);
+}
+cvP.addEventListener('pointerdown',e=>{ if(mode!=='hand') return; const Rc=cvP.getBoundingClientRect(), x=e.clientX-Rc.left, y=e.clientY-Rc.top; const g=geo.find(o=>Math.hypot(x-o.x,y-o.y)<o.r+4); if(!g) return; if(picks.get(g.key)===g.j) picks.delete(g.key); else picks.set(g.key,g.j); drawP(); });
+new ResizeObserver(drawP).observe(cvP);
+if(window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change',drawP);
+
+/* ---------- right: build one by hand ---------- */
+const COLS=[
+  {lab:'{{cat, dog}, {owl}}',sets:[['cat','dog'],['owl']]},
+  {lab:'{{1, 2}, {2, 3}, {3}}',sets:[['1','2'],['2','3'],['3']]},
+  {lab:'{{ant, bee, cow}, {cat, dog}, {owl}}',sets:[['ant','bee','cow'],['cat','dog'],['owl']]},
+  {lab:'{{p, q}, {q, r}, {r, p}}',sets:[['p','q'],['q','r'],['r','p']]}];
+let ci=0, withE=false, mine=[];
+const cch=document.getElementById('cch');
+COLS.forEach((C,i)=>{ const b=document.createElement('button'); b.textContent=C.lab; if(i===0) b.className='on'; b.onclick=()=>{ ci=i; mine=[]; [...cch.querySelectorAll('button')].forEach(z=>z.classList.toggle('on',z===b)); drawB(); }; cch.appendChild(b); });
+document.getElementById('emp').onclick=e=>{ withE=!withE; e.target.textContent=withE?'take ∅ out':'put ∅ in'; drawB(); };
+document.getElementById('clr').onclick=()=>{ mine=[]; drawB(); };
 const T=s=>/^\d$/.test(s)?s:`\\text{${s}}`;
 const setT=S=>S.length?`\\{${S.map(T).join(', ')}\\}`:'\\varnothing';
-
-/* ---------- left: picking in turn ---------- */
-const COLS=[
-  {lab:'{{ant, bee, cow}, {cat, dog}, {owl}}',sets:[['ant','bee','cow'],['cat','dog'],['owl']]},
-  {lab:'{{1, 2}, {2, 3}, {3}}',sets:[['1','2'],['2','3'],['3']]},
-  {lab:'{{p, q}, {q, r}, {r, p}, {s}}',sets:[['p','q'],['q','r'],['r','p'],['s']]}];
-let ci=0, withE=false, picks=[];
-const cch=document.getElementById('cch');
-COLS.forEach((C,i)=>{ const b=document.createElement('button'); b.textContent=C.lab; if(i===0) b.className='on'; b.onclick=()=>{ ci=i; picks=[]; [...cch.querySelectorAll('button')].forEach(z=>z.classList.toggle('on',z===b)); drawF(); }; cch.appendChild(b); });
-document.getElementById('emp').onclick=e=>{ withE=!withE; picks=[]; e.target.textContent=withE?'take ∅ out':'put ∅ in'; drawF(); };
-document.getElementById('rst').onclick=()=>{ picks=[]; drawF(); };
-function sets(){ const S=COLS[ci].sets.slice(); if(withE) S.splice(1,0,[]); return S; }
-function drawF(){
-  const S=sets(), n=picks.length; const bx=document.getElementById('bx'); bx.innerHTML='';
-  S.forEach((A,i)=>{ const d=document.createElement('div'); d.className='sbox'+(i===n?' cur':'')+(i>n?' wait':'')+(A.length?'':' empty');
-    const l=document.createElement('div'); l.className='lab'; l.textContent='partner '+i+': '+(A.length?'{'+A.join(', ')+'}':'∅'); d.appendChild(l);
-    if(!A.length){ const z=document.createElement('div'); z.className='none'; z.textContent='nothing to call'; d.appendChild(z); }
-    A.forEach((m,j)=>{ const b=document.createElement('button'); b.textContent=m; if(picks[i]===j) b.className='pick'; b.disabled=i>n; b.onclick=()=>{ if(i===n){ picks.push(j); drawF(); } }; d.appendChild(b); });
+function drawB(){
+  const sets=COLS[ci].sets.slice(); if(withE) sets.push([]);
+  const bx=document.getElementById('bx'); bx.innerHTML='';
+  sets.forEach((S,i)=>{ const d=document.createElement('div'); d.className='sbox'+(S.length?'':' empty');
+    const l=document.createElement('div'); l.className='lab'; l.textContent=S.length?'{'+S.join(', ')+'}':'∅'; d.appendChild(l);
+    if(!S.length){ const n=document.createElement('div'); n.className='none'; n.textContent='no member to tap'; d.appendChild(n); }
+    S.forEach((m,j)=>{ const b=document.createElement('button'); b.textContent=m; if(mine[i]===j) b.className='pick'; b.onclick=()=>{ mine[i]=(mine[i]===j?undefined:j); drawB(); }; d.appendChild(b); });
     bx.appendChild(d); });
-  const L=[];
-  const pk=k=>S.slice(0,k).map((A,i)=>T(A[picks[i]])).join(',\\ ');
-  const prod=k=>S.slice(0,k).map(A=>A.length);
-  if(n===0) L.push(`\\text{base: } \\varnothing \\text{ chooses (empty-collection)}`);
-  if(n<S.length){ const A=S[n];
-    L.push(`\\text{step at } n = ${n}:\\ A = ${setT(A)}`);
-    L.push(n?`c' \\text{ picks } ${pk(n)}\\ \\text{(hypothesis)}`:`c' = \\varnothing\\ \\text{(the base)}`);
-    L.push(A.length?`\\htmlClass{new}{\\text{call } a \\in ${setT(A)}\\text{: tap one}}`:`\\htmlClass{new}{A = \\varnothing\\text{: nothing to call (empty-member)}}`); }
-  else { L.push(`c \\text{ picks } ${pk(n)}`); L.push(`\\htmlClass{keep}{\\text{chooses, by } ${n} \\text{ calls}}`); }
-  const p=prod(S.length); const tot=p.reduce((a,b)=>a*b,1);
-  L.push(`\\text{count: } ${p.join(' \\cdot ')} = ${tot}\\ \\text{(counting-pickings)}`);
-  tex(document.getElementById('eqF'),'\\begin{gathered}'+L.join('\\\\ ')+'\\end{gathered}',true);
+  const L=[]; const A=`\\{${sets.map(setT).join(',\\ ')}\\}`;
+  L.push(`\\mathcal A = ${A}`);
+  const pairs=sets.map((S,i)=>mine[i]!==undefined?`(${setT(S)},\\ ${T(S[mine[i]])})`:null).filter(Boolean);
+  L.push(`c = \\{${pairs.join(',\\ ')}\\}`);
+  const missing=sets.map((S,i)=>mine[i]===undefined?setT(S):null).filter(Boolean);
+  if(withE){ L.push(`\\htmlClass{new}{\\varnothing \\in \\mathcal A:\\ \\text{none at all (empty-member)}}`); }
+  else if(missing.length){ L.push(`\\htmlClass{new}{\\text{no output yet at } ${missing.join(',\\ ')}}`); }
+  else { L.push(`\\htmlClass{keep}{\\text{one output each, each pick in its set}}`); L.push(`\\htmlClass{keep}{\\text{a choice function}}`); }
+  // all choice functions
+  let all=[[]]; sets.forEach(S=>{ const nx=[]; all.forEach(a=>S.forEach((m,j)=>nx.push(a.concat([j])))); all=nx; });
+  const sizes=sets.map(S=>S.length);
+  L.push(`\\text{all choice functions: } ${sizes.join(' \\cdot ')} = ${all.length}`);
+  if(all.length&&all.length<=12){ const rows=all.map(a=>{ const s=a.map((j,i)=>T(sets[i][j])).join(',\\,'); const me=!missing.length&&a.every((j,i)=>mine[i]===j); return me?`\\htmlClass{new}{(${s})}`:`(${s})`; });
+    L.push(`\\text{picks, set by set: } ${rows.join('\\ \\ ')}`); }
+  tex(document.getElementById('eqB'),'\\begin{gathered}'+L.join('\\\\ ')+'\\end{gathered}',true);
 }
-
-/* ---------- right: the trap ---------- */
-const NP=8; let rows=[];
-function fresh(){ rows=[]; for(let n=1;n<=NP;n++){ const r=[]; for(let i=0;i<n;i++) r.push(Math.random()<.5?0:1); rows.push(r); } }
-fresh();
-document.getElementById('fresh').onclick=()=>{ fresh(); drawT(); };
-document.getElementById('agree').onclick=()=>{ const last=rows[NP-1]; rows=rows.map((r,k)=>last.slice(0,k+1)); drawT(); };
-function drawT(){
-  const tb=document.getElementById('trap'); let h='<tr><th>row</th>'; for(let i=0;i<NP;i++) h+=`<th>K<sub>${i}</sub></th>`; h+='<th>K<sub>8</sub>, …</th></tr>';
-  rows.forEach((r,k)=>{ h+=`<tr><th>n = ${k+1}</th>`; for(let i=0;i<NP;i++) h+=i<r.length?`<td class="s" data-r="${k}" data-i="${i}">${r[i]?'s′':'s'}</td>`:'<td class="off"></td>'; h+='<td class="off">·</td></tr>'; });
-  let bad=0; h+='<tr><th>glued</th>'; for(let i=0;i<NP;i++){ const vals=rows.filter(r=>r.length>i).map(r=>r[i]); const ok=vals.every(v=>v===vals[0]); if(!ok) bad++; h+=`<td class="${ok?'good':'bad'}">${ok?(vals[0]?'s′':'s'):'?'}</td>`; } h+='<td class="bad">none</td></tr>';
-  tb.innerHTML=h;
-  tb.querySelectorAll('td.s').forEach(td=>td.onclick=()=>{ const k=+td.dataset.r, i=+td.dataset.i; rows[k][i]=1-rows[k][i]; drawT(); });
-  const L=[`\\htmlClass{keep}{\\forall n\\ \\exists c\\,(c \\text{ chooses for } \\mathcal K_n)}\\ \\text{: each row (finite-choice)}`];
-  L.push(bad?`\\htmlClass{new}{\\text{rows disagree at ${bad} pair${bad>1?'s':''}: which row to keep is a choice}}`:`\\text{the rows agree on } K_0 \\text{ to } K_7`);
-  L.push(`\\text{no row reaches } K_8\\text{: every row has its own end}`);
-  L.push(`\\htmlClass{new}{\\exists c\\ \\forall n}\\ \\text{needs one pick for every pair: choice}`);
-  tex(document.getElementById('eqT'),'\\begin{gathered}'+L.join('\\\\ ')+'\\end{gathered}',true);
-}
-drawF(); drawT();
+drawP(); drawB();
 
 /* ---------- slides ---------- */
 const N='\\htmlClass{new}', K='\\htmlClass{keep}';
 stepper('#sl1',[
-  {k:'ember',kl:'by hand',t:R`\text{call } p \in A_1,\ q \in A_2,\ r \in A_3;\ \ c = \{(A_1, p), (A_2, q), (A_3, r)\}`,n:`One call per set, then gather. The sets must differ, or one set gets two picks.`}
-],{title:'The slides · by hand · ← → keys work'});
+  {k:'ember',kl:'a pick, inside a proof',t:R`\exists x\,P(x):\ \ \text{call such a thing } ${N}{b}`,n:`2b's use of a some names one thing with the property, and never says which. The name lives only until the call closes.`}
+],{title:'The slides · a pick, inside a proof · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'the finite-choice technique',t:R`\mathcal A \text{ has } n \text{ members, each non-empty} \;\Rightarrow\; ${N}{\exists c}\,(c \text{ chooses for } \mathcal A)`,n:`Finite choice, by induction on n. No axiom.`},
-  {k:'ember',kl:'the base',t:R`\mathcal A \text{ has } 0 \text{ members} \;\Rightarrow\; \mathcal A = \varnothing \;\Rightarrow\; ${N}{\varnothing} \text{ chooses}`,n:`A member would have a partner in 0 = ∅, against the empty-set technique. Then empty-collection.`}
-],{title:'The slides · the finite-choice technique · ← → keys work'});
+  {k:'ember',kl:'non-empty',t:R`A \text{ is non-empty} \;\Leftrightarrow\; \exists x\,(x \in A)`,n:`Having a member in hand, so that a call could name it.`},
+  {k:'ember',kl:'the non-empty technique',t:R`\text{from } \exists x\,(x \in A)\text{, write } ${N}{A \ne \varnothing}`,n:`Call a member b; if A = ∅ then b ∈ ∅, against the empty-set technique. Refute. The easy direction.`},
+  {k:'ember',kl:'the non-empty technique',t:R`\text{from } A \ne \varnothing\text{, write } ${N}{\neg\neg}\exists x\,(x \in A)`,n:`If A had no member, one-empty-set would make it ∅. Refute. The techs stop at the double negative: 1b's gap, closed on 7d.`}
+],{title:'The slides · non-empty · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'the step',t:R`A = \text{the partner of } n;\quad \mathcal A \setminus \{A\} \text{ has } n \text{ members}`,n:`Lead one out: 4k's lead-one-out. Its members are non-empty, so the hypothesis gives c′.`},
-  {k:'ember',kl:'the step',t:R`\text{call } a \in A;\quad c = c' \cup \{${N}{(A, a)}\}`,n:`The step's one new call. Put the pick back with its set.`},
-  {k:'ember',kl:'every input',t:R`B = A \ \lor\ B \ne A`,n:`The split is licensed by finite-is-settled: a finite set is settled. For any collection, this would be either-way, rung 7's.`},
-  {k:'ember',kl:'every input',t:R`B = A:\ (B, a) \in c;\qquad B \ne A:\ (B, c'(B)) \in c`,n:`In each case an output in B. Reason by cases.`},
-  {k:'ember',kl:'no input has two',t:R`(B, y), (B, z) \in c:\ \text{each in } c' \text{ or } = (A, a)`,n:`A proved or, from merge-membership. Both in c′: y = z. Both (A, a): y = z by equal-pairs.`},
-  {k:'ember',kl:'no input has two',t:R`(A, y) \in c' \;\Rightarrow\; A \in \mathcal A \setminus \{A\} \;\Rightarrow\; ${N}{\bot}`,n:`A mixed case puts A among c′'s inputs, which A was led out of. From the totally false, y = z.`},
-  {k:'ember',kl:'the close',t:R`\varphi(S(n));\quad \forall n \in \mathbb N\,\varphi(n)\ \ \blacksquare`,n:`The calls for A, c′ and a close, since the line mentions none of them. Then induction.`}
-],{title:'The slides · the step · ← → keys work'});
+  {k:'ember',kl:'collections',t:R`\mathcal A,\ \mathcal B,\ \mathcal S:\ \text{names of sets of sets}`,n:`A curly capital is only a name; the curl reminds you its members are sets. ⋃𝒜 holds every member of every member.`}
+],{title:'The slides · collections · ← → keys work'});
 stepper('#sl4',[
-  {k:'ember',kl:'counting the calls',t:R`n \text{ members} \;\to\; ${N}{n} \text{ calls}`,n:`Unfolded, the induction makes one call per set: picking in turn. One written proof covers every number because each number's column is finite.`}
-],{title:'The slides · counting the calls · ← → keys work'});
+  {k:'ember',kl:'choice function',t:R`c : \mathcal A \to \textstyle\bigcup\mathcal A \ \land\ \forall A \in \mathcal A\,(${N}{c(A) \in A})`,n:`One object holding one pick from every set. Read c(A) as c's pick from A.`},
+  {k:'ember',kl:'by hand',t:R`\{(\{\text{cat},\text{dog}\},\ \text{cat}),\ (\{\text{owl}\},\ \text{owl})\}`,n:`A choice function for {{cat, dog}, {owl}}. The only other one picks dog. Two choices for the first set, one for the second.`},
+  {k:'ember',kl:'the empty-member technique',t:R`\text{from } \varnothing \in \mathcal A\text{, write } ${N}{\neg\exists c}\,(c \text{ chooses for } \mathcal A)`,n:`c(∅) ∈ ∅ clashes with the empty-set technique. Nothing can be picked from nothing.`},
+  {k:'ember',kl:'the empty-collection technique',t:R`\varnothing : \varnothing \to \textstyle\bigcup\varnothing \text{ chooses}`,n:`The empty collection has exactly one choice function, the empty set: every condition on its members is vacuously true.`}
+],{title:'The slides · choice functions · ← → keys work'});
 stepper('#sl5',[
-  {k:'ember',kl:'the counting-pickings technique',t:R`q \text{ for } \mathcal A \setminus \{A\},\ s \text{ members in } A \;\Rightarrow\; ${N}{q \cdot s} \text{ for } \mathcal A`,n:`Each choice function is a smaller one with one more pair (A, x). stages-multiply multiplies.`},
-  {k:'ember',kl:'counts',t:R`3 \cdot 2 \cdot 1 = 6,\qquad 2 \cdot 0 = ${N}{0},\qquad \text{no factors: } ${N}{1}`,n:`A factor per set. ∅ in the collection gives a factor 0 (empty-member); the empty collection gives the empty product 1 (empty-collection).`}
-],{title:'The slides · how many ways · ← → keys work'});
+  {k:'ember',kl:'the choice axiom',t:R`\forall A \in \mathcal A\,(A \text{ non-empty}) \;\Rightarrow\; ${N}{\exists c}\,\forall A \in \mathcal A\,(c(A) \in A)`,n:`For any collection of sets each with a member, a choice function exists: one pick from each, all at once. Laid down from here on.`},
+  {k:'ember',kl:'the choice axiom',t:R`\text{call such a function } c:\ \ c(A) \in A,\ \text{and nothing more}`,n:`Like infinity, it asserts and builds nothing. It never says which member was taken.`}
+],{title:'The slides · the choice axiom · ← → keys work'});
 stepper('#sl6',[
-  {k:'ember',kl:'the only-the-infinite-fails technique',t:R`\text{from } \neg\exists c\,(c \text{ chooses})\text{, write } ${N}{\neg\exists n}\,(\mathcal A \text{ has } n \text{ members})`,n:`finite-choice turned about, by refute. Only an infinite collection can fail, and only one with no rule.`},
-  {k:'ember',kl:'where the axiom adds',t:R`\text{infinite} \ \land\ \text{no rule}`,n:`Only then. Shoes have a rule; settled sets of numbers have one; socks matched with ℕ have neither.`}
-],{title:'The slides · where the axiom adds · ← → keys work'});
+  {k:'ember',kl:'the left-shoes technique',t:R`c = \{(A, x) \in \mathcal S \times \textstyle\bigcup\mathcal S : x \in A \land ${N}{L(x)}\}`,n:`A rule: “is a left shoe” is so of exactly one member of each pair (g1, g2). By Separation the sift is a set: the function. No axiom of choice, however many pairs.`},
+  {k:'ember',kl:'infinite',t:R`X \text{ infinite} \;\Leftrightarrow\; \neg\exists n \in \mathbb N\,(X \text{ has } n \text{ members})`,n:`Not finite. The matched-with-ℕ technique: anything matched with ℕ is infinite, since ℕ is (4k).`}
+],{title:'The slides · the left-shoes technique · ← → keys work'});
 stepper('#sl7',[
-  {k:'ember',kl:'the trap',t:R`\forall n\,\exists c\,(c \text{ chooses for } \mathcal K_n)`,n:`True, by finite-choice for each n. A separate function for each n, made by its own calls.`},
-  {k:'ember',kl:'the trap',t:R`${N}{\exists c\,\forall n}\,(c \text{ chooses from } \mathcal K_n)\ ?`,n:`Illegal: the swap 2b forbade. Gluing the separate functions means picking one for every n at once: the axiom in disguise.`},
-  {k:'ember',kl:'the second trap',t:R`\text{recursion, step: “add a sock of } K_n\text{”}\ ?`,n:`Not a function: it fits two next stages. A step that is a function would itself pick a sock from every pair.`}
-],{title:'The slides · the trap · ← → keys work'});
+  {k:'ember',kl:'the least-chooses technique',t:R`c(A) = ${N}{\text{the least member of } A}`,n:`For non-empty settled sets of numbers, least-member gives a least member and 4h says only one. A second rule, no axiom.`},
+  {k:'ember',kl:'where least-chooses stops',t:R`\{x \in \mathbb Z : x \lt 0\},\quad \{a \in \mathbb Q : 0 \lt a \lt 1\}`,n:`No least member in either: x − 1 is smaller, a · ½ is smaller. And for unsettled sets of numbers, 4h had only no-least-no-members's double negative.`}
+],{title:'The slides · the least-chooses technique · ← → keys work'});
+stepper('#sl8',[
+  {k:'ember',kl:'socks',t:R`\varphi(s) \;\Leftrightarrow\; \varphi(s')\ \ \text{for each pair } \{s, s'\}`,n:`Whatever is so of one sock of a pair is so of the other. So no condition is so of exactly one: no rule.`},
+  {k:'ember',kl:'socks',t:R`\text{the axiom: } c(K) \in K\ \text{for every pair } K`,n:`With socks matched with ℕ, only the axiom says a choice function exists, and it says nothing about which sock. 6d shows why it must be an axiom.`}
+],{title:'The slides · socks · ← → keys work'});
+stepper('#sl9',[
+  {k:'ember',kl:'running it backwards',t:R`\text{a rule?}\ \to\ \text{sift.}\quad \text{written out?}\ \to\ \text{by hand.}\quad \text{else}\ \to\ ${N}{\text{Choice}}`,n:`Look for a condition true of exactly one member of each set first; then for a finite collection (6c); then the axiom.`}
+],{title:'The slides · running it backwards · ← → keys work'});
 
 function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
 Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);

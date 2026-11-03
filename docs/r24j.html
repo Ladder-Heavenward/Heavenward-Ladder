@@ -30,12 +30,10 @@ table.tt td.l{text-align:left}
   <h1>The logistic equation solved</h1>
   <p data-pid="512ace">The seventeenth rung met a population that grows at a rate set by its size, slowed by the share of room already taken. It found the S-shaped curve, and the moment of fastest growth at half the ceiling. But it worked under a quiet assumption: that the population stays between nothing and the ceiling, so that its logarithms make sense. It never showed that the curve is the only one the rule allows, and it waved at starts above the ceiling. This step pays all of that. The rule is tame, so the curve is the one solution, and it can never touch the ceiling. Every start is solved, including the ones that fall and the ones that run off. Turned upside down, the rule becomes the cooling rule, and that gives a way to read the ceiling from three counts. And walked forward a year at a time, the same rule can refuse to settle at all.</p>
   <p class="gesture" data-pid="5cc025">The logistic rule is tame, so its S-shaped curve is the only solution from its start, and it never touches the ceiling. Every start has a formula. Turned upside down, the population cools toward one over the ceiling, and three counts at equal times fix the whole curve. Taken a year at a time, the rule settles only if the yearly growth is not too strong.</p>
-  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r17bio.html">17·bio</a> (the logistic-solution and fastest-growth techniques), <a href="r24d.html">24d</a> (tame rules, the drift technique), <a href="r24f.html">24f</a> (resting lines), <a href="r24e.html">24e</a> (the run-off technique), <a href="r24a.html">24a</a> (the own-rate technique), <a href="r22h.html">22h</a> (rules fed their own answers), <a href="r24i.html">24i</a> (stepping forward). <a href="r24k.html">24k</a> asks which steady states hold, and follows the yearly rule into chaos.</p></div>
 </header>
 
 <section class="class step" data-step="24j1">
   <h2 class="sthead"><span class="stno">24j1</span>One solution, and it never touches the ceiling</h2>
-  <p class="stands">Stands on 17·bio (the logistic-solution technique), 24d1 (tame rules), 24d3 (the drift technique), 24f2 (the put-back technique) and 24f3 (the resting-line technique).</p>
   <p data-pid="6f2008">17·bio solved P′ = rP(1 − P/K) “while 0 &lt; P &lt; K”. It used ln P and ln(K − P), which need both to be positive. So it found one solution that stays between, and left open whether a solution could reach K, or whether another curve could share the start. Both are closed here.</p>
   <p data-pid="dda875">Stays-between technique: <b>for P′ = rP(1 − P/K) with r, K &gt; 0 and 0 &lt; P₀ &lt; K, exactly one solution passes through (0, P₀). It is P = K/(1 + Ce^(−rt)) with C = (K − P₀)/P₀, it exists for every real t, and it never touches 0 or K.</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the stays-between technique">
@@ -57,7 +55,6 @@ P = \tfrac{K}{1 + Ce^{-rt}},\ \ C = \tfrac{K - P_0}{P_0} > 0 @@ now 17·bio's st
 
 <section class="class step" data-step="24j2">
   <h2 class="sthead"><span class="stno">24j2</span>Every start</h2>
-  <p class="stands">Stands on 24j1, 13e (the chain rule) and 24e2 (the run-off technique).</p>
   <p data-pid="15c7eb">Every-start technique: <b>for every start P₀ ≠ 0, the one solution of P′ = rP(1 − P/K) through (0, P₀) is P = K/(1 + Ce^(−rt)), C = (K − P₀)/P₀, wherever 1 + Ce^(−rt) &gt; 0. A start above K falls to K; a start below 0 runs off to minus infinity at t = ln(−C)/r.</b> A start at 0 stays at 0.</p>
   <pre class="lines" data-k="ember" data-label="this step: the every-start technique">
 P = \tfrac{K}{1 + Ce^{-rt}} \Rightarrow P' = \tfrac{rKCe^{-rt}}{(1 + Ce^{-rt})^2} @@ the chain rule (13e)
@@ -79,7 +76,6 @@ P_0 < 0:\ C < -1,\ \ 1 + Ce^{-rt} = 0 \text{ at } t^* = \tfrac{\ln(-C)}{r} > 0 @
 
 <section class="class step" data-step="24j3">
   <h2 class="sthead"><span class="stno">24j3</span>Turned over, the population cools</h2>
-  <p class="stands">Stands on 24j1, 13e (the chain rule), 24a3 (the own-rate technique) and 17j (cooling).</p>
   <p data-pid="7f816b">Reciprocal-cooling technique: <b>if P solves P′ = rP(1 − P/K) and is never 0, then u = 1/P solves u′ = −r(u − 1/K): u closes on 1/K as a drink cools toward its room, and the gap u − 1/K shrinks by the factor e^(−rT) in every stretch of time T.</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the reciprocal-cooling technique, and three counts">
 u = \tfrac1P,\ \ u' = -\tfrac{P'}{P^2} = -\tfrac{r}{P} + \tfrac{r}{K} = -r\big(u - \tfrac1K\big) @@ the chain rule (13e); put in the rule
@@ -109,7 +105,6 @@ q = \tfrac{u_3 - u_2}{u_2 - u_1} @@ subtract the two lines
 
 <section class="class step" data-step="24j4">
   <h2 class="sthead"><span class="stno">24j4</span>Walking the rule a year at a time</h2>
-  <p class="stands">Stands on 24j1, 24i1 (the forward walk), 22h4 (where a rule does not settle) and 13 (slopes).</p>
   <p data-pid="a7b556">Many animals and plants breed once a year, so a census is a list, one count a year, and the rule becomes a forward walk with h = 1: Pₙ₊₁ = Pₙ + rPₙ(1 − Pₙ/K). The smooth rule always settles at K from any start between. The walk need not.</p>
   <p data-pid="d3d4b3">Logistic-walk technique: <b>forward steps of size h on P′ = rP(1 − P/K) pull starts near K in when 0 &lt; hr &lt; 2, and push them away when hr &gt; 2. Written in x = hrP/((1 + hr)K), the walk is xₙ₊₁ = μ·xₙ(1 − xₙ), with μ = 1 + hr.</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the logistic-walk technique">
@@ -130,7 +125,6 @@ P = cx,\ c = \tfrac{(1 + hr)K}{hr}:\ \ x_{n+1} = (1 + hr)x_n - \tfrac{hr\,c}{K}x
 
 <section class="class step" data-step="24j5">
   <h2 class="sthead"><span class="stno">24j5</span>Illegal moves</h2>
-  <p class="stands">Stands on 24j1 to 24j4.</p>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
 P = \tfrac{K}{1 + Ce^{-rt}} \text{ solves the rule, so no other solution starts at } P_0\,? @@ checking one solution says nothing about others; tameness and the drift technique do (24j1, 24f2)
 P \text{ climbs toward } K, \text{ so it reaches } K \text{ and rests there}\,? @@ it would touch the resting line P = K, and a tame rule forbids it (24f3)

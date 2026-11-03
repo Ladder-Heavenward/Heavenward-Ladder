@@ -30,12 +30,10 @@ table.tt td.num{font-family:var(--mono);text-align:right;white-space:nowrap}
   <h1>Bisection by hand</h1>
   <p data-pid="a14715">12a proved that a continuous function that changes sign on a closed interval has a zero there. It did not say where. Bisection finds out. Keep the zero trapped between two inputs whose values have opposite signs. Test the middle, throw away the half that cannot be relied on, and repeat. It is slow, it never fails on a trap, and on a polynomial with whole-number coefficients it needs nothing but whole-number multiplication. By the end of this step you will have the square root and the cube root of 2 to three decimal places, by hand. You will have a way to say in advance how many tests any accuracy costs. And you will have two proofs: that a polynomial of odd degree always has a zero, and that a continuous function takes intervals to intervals.</p>
   <p class="gesture" data-pid="9b97af">Keep a closed interval whose ends have values of opposite sign; test the middle; keep the half whose ends still disagree. Each test halves the trap, so ten tests shrink it about a thousand times.</p>
-  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r12a.html">12a</a> (in-between-value, in-between-value, general form, sign-kept-near-an-input, closed interval, zero), <a href="r12c.html">12c</a> (highest-and-lowest), <a href="r08c.html">8c</a> (no-holes, greatest-lower-bound), <a href="r08h.html">8h</a> (middle, unpack-the-bars), <a href="r08f.html">8f</a> (√, ³√, roots-of-every-order), <a href="r05h.html">5h</a> (rounding, ≈, the decimal point), <a href="r08e.html">8e</a> (counting-passes-any-real), <a href="r07cb4.html">7·cb4</a> (least-member-for-any-set), <a href="r04g.html">4g</a> (powers), <a href="r04i.html">4i</a> (the reading rule in twos), <a href="r09g.html">9g</a> (leading-term, polynomials), <a href="r09e.html">9e</a> (even-or-odd-powers, xⁿ ≥ x past 1), <a href="r10f.html">10f</a> (passes every bound, sequence limits, one-over-n), <a href="r10d.html">10d</a> (the squeeze), <a href="r11d.html">11d</a> (polynomials-are-continuous), <a href="r11f.html">11f</a> (discontinuities). <a href="r12phys.html">12·phys</a> finds a balance point by halving.</p></div>
 </header>
 
 <section class="class step" data-step="12e1">
   <h2 class="sthead"><span class="stno">12e1</span>The trap</h2>
-  <p class="stands">Stands on 12a (in-between-value) and 8h (the middle of a stretch).</p>
   <p class="eqline" data-pid="b87c13">From here on, a trap for f is a closed interval [c, d] on which f is continuous, with f(c) and f(d) of opposite signs: one negative and the other positive. By 12a's in-between-value a trap holds a zero of f strictly inside it. To bisect a trap is to test its middle m = (c + d)/2. Then keep [c, m] or [m, d], whichever is still a trap. The method is called bisection. Bisection is from the Latin bi-, “two”, and secare, “to cut”.</p>
   <p data-pid="2790f7">The middle is strictly inside: c &lt; (c + d)/2 &lt; d, by 5f's another-between read in ℝ. It is 8h's middle of the stretch from c to d. And f is continuous on each half. Every input of a half is an input of [c, d]. At the cut m, f is continuous (m is inside [c, d]), so from each side.</p>
   <p data-pid="718d51">Middle-of-a-trap technique: <b>for a trap [c, d] with middle m, exactly one is true: f(m) = 0; or [c, m] is a trap; or [m, d] is a trap.</b> Three-way-order on ℝ splits f(m) three ways. If f(m) has the sign of f(d), then f(c) and f(m) disagree and [c, m] is a trap. If it has the sign of f(c), then [m, d] is. ∎ So only the sign of f(m) matters, never its size. The tempting illegal move is to keep the half whose middle value is nearer 0. Nearness of a value to 0 says nothing about where the zero is, and the sign says everything.</p>
@@ -75,7 +73,6 @@ table.tt td.num{font-family:var(--mono);text-align:right;white-space:nowrap}
 
 <section class="class step" data-step="12e2">
   <h2 class="sthead"><span class="stno">12e2</span>√2 with whole numbers</h2>
-  <p class="stands">Stands on 12e1 and 8f (squares keep order).</p>
   <p data-pid="b9c503">Take f(x) = x² − 2 on [1, 2]: f(1) = −1, f(2) = 2, a trap. Every middle is a fraction whose bottom is a power of 2: 3/2, then 5/4 or 7/4, then eighths, and so on. To find the sign of (p/q)² − 2, multiply through by the positive q² (keep-order for times on ℚ read in ℝ keeps the order): compare p² with 2q². <b>No decimals, no roots, just whole-number squares.</b></p>
   <div class="brkkey"></div>
   <pre class="lines" data-k="ember" data-label="this step: √2 by halving">
@@ -107,7 +104,6 @@ table.tt td.num{font-family:var(--mono);text-align:right;white-space:nowrap}
 
 <section class="class step" data-step="12e3">
   <h2 class="sthead"><span class="stno">12e3</span>To three decimal places</h2>
-  <p class="stands">Stands on 12e2 and 5h (rounding).</p>
   <p class="eqline" data-pid="fd3ad9">From here on, 5h's rounding and its mark ≈ apply to any positive real x, not only to rationals. To round to m places, take the number k with k/10^m ≤ x &lt; (k + 1)/10^m. It exists. Some number passes 10^m · x (counting-passes-any-real, 8e), and the least number that passes it is k + 1 (least-member-for-any-set, 7·cb4). The rest of 5h's line is unchanged, and x ≈ b is still a statement, as on 5h: it says that b is x rounded to as many places as b shows.</p>
   <p data-pid="6e7032">After ten halvings the trap is 1/1024 wide, less than 0.001. Is that √2 to three places, in 5h's sense of rounding? Not yet. The trap runs from 1.4140625 to 1.4150390625, and it holds 1.4145, the boundary between rounding down to 1.414 and up to 1.415. <b>Width alone does not settle a rounding: the trap must also be clear of the boundary.</b> Two more halvings would do it (the trap becomes 1.4140625 to 1.414306640625). Or test the boundary itself.</p>
   <pre class="lines" data-k="ember" data-label="this step: settle the rounding at its boundary">
@@ -127,7 +123,6 @@ table.tt td.num{font-family:var(--mono);text-align:right;white-space:nowrap}
 
 <section class="class step" data-step="12e4">
   <h2 class="sthead"><span class="stno">12e4</span>Cube roots: split where the arithmetic is short</h2>
-  <p class="stands">Stands on 12e3.</p>
   <p data-pid="ff8123">For ³√2, use x³ − 2 on [1, 2]. Exact middles mean cubing fractions like 161/128: honest work, and tedious. The invented move: <b>split at a short decimal near the middle instead.</b> You give up exact halving and gain arithmetic you can do on the back of an envelope.</p>
   <pre class="lines" data-k="ember" data-label="this step: ³√2 by short decimals">
 1.5^3 = 3.375 \gt 2 @@ keep [1, 1.5]
@@ -151,7 +146,6 @@ table.tt td.num{font-family:var(--mono);text-align:right;white-space:nowrap}
 
 <section class="class step" data-step="12e5">
   <h2 class="sthead"><span class="stno">12e5</span>How fast the trap closes</h2>
-  <p class="stands">Stands on 12e4 and 4c (induction).</p>
   <p data-pid="c2870c">Halvings-width technique: <b>starting from a trap [v, w], if no tested middle is a zero, the trap after n halvings has width (w − v)/2ⁿ.</b> By induction on n. At the start the width is w − v = (w − v)/2⁰ (power-zero). Each halving takes a width w to w/2, which is (w − v)/2^{S(n)} by power-of-a-next and 5h's fractions-of-rationals. ∎</p>
   <p data-pid="2e63ca">So to get the width below a tolerance t you need 2ⁿ &gt; (w − v)/t. No new function is needed to find n: double until you pass.</p>
   <pre class="lines" data-k="ember" data-label="this step: counting halvings with powers of 2">
@@ -180,7 +174,6 @@ t = 0.000001:\ \ 2^n \gt 10^6 @@ six places
 
 <section class="class step" data-step="12e6">
   <h2 class="sthead"><span class="stno">12e6</span>The choices are bits</h2>
-  <p class="stands">Stands on 12e5 and 4i (numerals in twos).</p>
   <p data-pid="699953">Write 0 for “keep the left half” and 1 for “keep the right half”. Then the choices are 4i's bits, and the trap can be read off them.</p>
   <p data-pid="4af93b">Trap-from-its-bits technique: <b>the choices, read as a numeral in twos, say exactly where the trap is.</b> Precisely: start from [v, w], and make choices e₁, e₂, ⋯, e_n. Let k be the value of the bits e₁e₂⋯e_n read in twos by 4i's reading rule. (0s in front are allowed, as 5h allowed them for decimal places.) Then the trap is [v + k(w − v)/2ⁿ, v + (k + 1)(w − v)/2ⁿ]. By induction: the reading rule's step takes k to 2k + e_{S(n)}. Choosing left keeps [v + 2k(w − v)/2^{S(n)}, v + (2k + 1)(w − v)/2^{S(n)}], which is the left half. Choosing right adds 1. ∎</p>
   <pre class="lines" data-k="teal" data-label="from 4i: numerals in twos">
@@ -201,7 +194,6 @@ t = 0.000001:\ \ 2^n \gt 10^6 @@ six places
 
 <section class="class step" data-step="12e7">
   <h2 class="sthead"><span class="stno">12e7</span>Why the trap always holds a zero</h2>
-  <p class="stands">Stands on 12e6, 8c (the no-holes technique) and 12a4 (sign-kept-near-an-input).</p>
   <p data-pid="e2f077">12a proved a trap holds a zero by a least upper bound. Bisection gives a second proof: the traps close on a single real, and it is a zero. It is the proof put in a note to a course of lectures of 1821, and the idea behind the 1817 paper's own.</p>
   <p data-pid="98fd29">Halving-traps technique: <b>let [v, w] be a trap with f(v) &lt; 0 &lt; f(w), and bisect it again and again. Either some middle is a zero, or the left ends c_n and right ends d_n close on a real z with f(z) = 0.</b> (Here c_n and d_n are terms of sequences, 9·cb4's low marks, and z is a letter naming a real.)</p>
   <pre class="lines" data-k="ember" data-label="this step: the halving-traps technique">
@@ -226,7 +218,6 @@ f(z) = 0 \quad \blacksquare @@ three-way-order on ℝ; the remaining-option tech
 
 <section class="class step" data-step="12e8">
   <h2 class="sthead"><span class="stno">12e8</span>A polynomial of odd degree has a zero</h2>
-  <p class="stands">Stands on 12e7, 9g (leading-term) and 10f (passing every bound).</p>
   <p data-pid="f2ebc4">9g's leading-term said the leading term decides the large inputs, and said that rung 12 would show an odd-degree polynomial must have a zero. Here it is, with 10f's words.</p>
   <p data-pid="97e5c7">Odd-degree-passes-bounds technique: <b>if p has odd degree n and leading coefficient u_n &gt; 0, then p(x) passes every bound as x → ∞ and passes below every bound as x → −∞.</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the odd-degree-passes-bounds technique">
@@ -255,7 +246,6 @@ p(x) = x^3 - x - 1:\ \ p(1) = -1,\ \ p(2) = 5 @@ a trap, found by trying whole n
 
 <section class="class step" data-step="12e9">
   <h2 class="sthead"><span class="stno">12e9</span>Intervals to intervals</h2>
-  <p class="stands">Stands on 12e8 and 12c (highest-and-lowest).</p>
   <p data-pid="6f58e8">Closed-to-closed technique: <b>a continuous function takes a closed interval to a closed interval, or to a single real.</b> Precisely: let f be continuous on [v, w], with least value m and greatest value M (12c's highest-and-lowest). Then the set of its values {f(x) : x ∈ [v, w]} is [m, M] when m &lt; M, and {m} when m = M.</p>
   <pre class="lines" data-k="ember" data-label="this step: the closed-to-closed technique">
 \text{call } c, d \in [v, w]:\ f(c) = M,\ f(d) = m @@ highest-and-lowest (12c)
@@ -282,7 +272,6 @@ x^2 \text{ on } (-1, 2) \;\to\; [0, 4) @@ an open interval to one that is neithe
 
 <section class="class step" data-step="12e10">
   <h2 class="sthead"><span class="stno">12e10</span>When the trap fails</h2>
-  <p class="stands">Stands on 12e1 to 12e9.</p>
   <p data-pid="92d123">No sign change to start: x² − ¼ on [−1, 1] is positive at both ends and has two zeros, ±½. Equal signs at the ends tell you nothing; split first until the signs disagree. A zero that touches without crossing: (x − 1)² is 0 at 1 and positive elsewhere, so no trap ever holds it. A discontinuity inside: 1/x on [−1, 2] has values −1 and ½ at the ends. Bisection will close happily on 0, where there is an infinite discontinuity (11f) and no zero. The hypothesis “continuous on [c, d]” was false. 11f's hunt for discontinuities comes before any bisection.</p>
   <p data-pid="9fac39">The oldest geometry book that has come down whole proves a fact behind every halving. From the greater of two unequal sizes, take away more than its half; from the remainder, more than its half; and so on. Some remainder will be less than the lesser size. Halving again and again gets below any size you name.</p>
   <section class="slides" id="sl10"><div class="eyebrow">The slides · when it fails · ← → keys work</div></section>
@@ -296,7 +285,6 @@ x^2 \text{ on } (-1, 2) \;\to\; [0, 4) @@ an open interval to one that is neithe
 
 <section class="class step" data-step="12e11">
   <h2 class="sthead"><span class="stno">12e11</span>Illegal moves</h2>
-  <p class="stands">Stands on 12e1 to 12e10.</p>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
 \begin{aligned}&\text{keep the half whose}\\ &\quad\text{middle value is nearer } 0\,?\end{aligned} @@ size is not sign: only the sign of f(m) decides (middle-of-a-trap)
 \text{width} \lt 0.001, \text{ so three places}\,? @@ the trap must also be clear of the rounding boundary: 1.4145 sat inside
@@ -315,7 +303,6 @@ x^2 \text{ on } (-1, 2) \;\to\; [0, 4) @@ an open interval to one that is neithe
 
 <section class="class step" data-step="12e12">
   <h2 class="sthead"><span class="stno">12e12</span>Running it backwards</h2>
-  <p class="stands">Stands on 12e1 to 12e10.</p>
   <p data-pid="2f2149">Handed a trap and a list of choices, read the final trap off the bits (trap-from-its-bits). Handed a final trap and its width, double back to the starting width. Handed an accuracy, double until 2ⁿ passes (w − v)/t. Handed an equation of odd degree, say at once that it has an answer, then find two whole numbers whose values disagree in sign and start halving. Handed an interval and a continuous function, find its least and greatest values and say the set of values is the closed interval between them. Found upward; written downward.</p>
   <section class="sayback">
     <h3>Question</h3>

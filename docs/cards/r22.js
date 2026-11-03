@@ -15,7 +15,7 @@
  {"q": "Two threads of s settle at different places. What does s do?", "a": "it wanders", "w": ["it settles at their average", "it settles at the larger", "it crowds"], "why": "The thread technique read backwards."},
  {"q": "An interval holds sₙ for endlessly many n. What is it called?", "a": "crowded", "w": ["a ceiling", "a thread", "settled"], "why": "The halving technique keeps a crowded half."},
  {"q": "A sequence has a floor and a ceiling. What must it have?", "a": "a thread that settles", "w": ["a limit", "a climbing thread with no ceiling", "only one gathering point"], "why": "The halving technique for sequences."},
- {"q": "At each halving, both halves are crowded. Which does the technique keep?", "a": "the left half, by rule", "w": ["either, picked freely", "the right half", "both"], "why": "A rule, so no choosing is spent (6b)."},
+ {"q": "At each halving, both halves are crowded. Which does the technique keep?", "a": "the left half, by rule", "w": ["either, picked freely", "the right half", "both"], "why": "A rule, so no choosing is spent (6c)."},
  {"q": "Some thread of s settles at c. What is c?", "a": "a gathering point of s", "w": ["the limit of s", "a ceiling of s", "a running total"], "why": "Accepted name: a cluster point."},
  {"q": "A bounded sequence has exactly one gathering point. What follows?", "a": "it settles there", "w": ["it wanders", "it climbs", "nothing"], "why": "The gathering technique."},
  {"q": "The even thread of (−1)ⁿ settles at 1. Does (−1)ⁿ settle?", "a": "no", "w": ["yes, at 1", "yes, at 0", "only every other term"], "why": "Illegal move: one settling thread proves nothing about the whole."},

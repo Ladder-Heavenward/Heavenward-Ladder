@@ -30,12 +30,10 @@ table.tt td.l{text-align:left}
   <h1>Expansions that diverge yet help</h1>
   <p data-pid="08f1b8">Some endless sums wander for every input but one, and are still the best way to compute. The trick is to stop early. Their pieces shrink for a while and then grow, and the error of stopping is no bigger than the first piece left out. So you stop at the smallest piece, and the answer is good to that size. Such a sum makes a different promise from a sum that settles: not that more pieces always help, but that a fixed number of pieces gets better and better as the input shrinks. The same habit of mind sizes an area by its peak: a tall narrow hill has an area of about its height times its width. Put together with a fence made of trapezoids and an old product for half of pi, it proves at last how big n factorial is, which the last rung could only state.</p>
   <p class="gesture" data-pid="288d62">A sum that wanders can still compute, if you stop at its smallest piece. An area is about its peak times its width. With trapezoids under the log curve and areas under powers of the sine, the size of n factorial is proved.</p>
-  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r23e.html">23e</a> (the finite geometric sum and its leftover), <a href="r23b.html">23b</a> (the match-error technique), <a href="r22k.html">22k</a> (O, ~ and the factorial fence), <a href="r22f.html">22f</a> (sums against areas), <a href="r14g.html">14g</a> (bending), <a href="r16h.html">16h</a> (one integral through a smaller one), <a href="r21g.html">21g</a> (the slopes of sin and cos). <a href="r23l.html">23l</a> computes areas from a few heights.</p></div>
 </header>
 
 <section class="class step" data-step="23k1">
   <h2 class="sthead"><span class="stno">23k1</span>A sum that wanders, and computes</h2>
-  <p class="stands">Stands on 15i (the finite geometric sum, exact), 16e (parts), 16i (improper integrals), 22k1 (O) and 23c3 (Σ k!xᵏ has reach 0).</p>
   <p data-pid="dbc583">Let f(x) = ∫₀^∞ e^(−t)/(1 + xt) dt for x ≥ 0. Its endless power sum is 1 − x + 2!x² − 3!x³ + ⋯, which 23c3 found settles only at x = 0. Yet the sum, stopped early, gives f.</p>
   <pre class="lines" data-k="ember" data-label="this step: the leftover of a sum with reach 0">
 \int_0^\infty t^k e^{-t}\,dt = k! @@ parts (16e): the area for k is k times the area for k − 1; the area for 0 is 1 (16i)
@@ -58,7 +56,6 @@ f(x) = \textstyle\sum_{k \lt n} (-1)^k k!\,x^k + R_n(x),\ \ R_n(x) = (-x)^n \int
 
 <section class="class step" data-step="23k2">
   <h2 class="sthead"><span class="stno">23k2</span>An area dominated by its peak</h2>
-  <p class="stands">Stands on 23k1, 23b1 (the match-error technique), 14a (a top has slope 0), 17e (exp climbs) and 15e (a bigger curve has a bigger area).</p>
   <p data-pid="410f2f">Peak technique: <b>if ln g has its top at m, and its second slope is at least −K on a stretch of width w beside m, then g stays above e^(−Kw²/2)·g(m) there, and the area under g is at least w·e^(−Kw²/2)·g(m).</b> Near a smooth top a curve falls away like the square of the distance, and the second slope says how fast.</p>
   <pre class="lines" data-k="ember" data-label="this step: the peak technique">
 \ln g(t) = \ln g(m) + 0\cdot(t-m) + \tfrac12(\ln g)''(c)\,(t-m)^2 @@ the match-error technique with n = 1 (23b1); the slope is 0 at the top (14a)
@@ -83,7 +80,6 @@ n! = \int_0^\infty g,\ \ g(t) = t^n e^{-t},\ \ \ln g = n\ln t - t @@ 23k1
 
 <section class="class step" data-step="23k3">
   <h2 class="sthead"><span class="stno">23k3</span>A trapezoid fence for ln n!</h2>
-  <p class="stands">Stands on 22k3 (the factorial fence), 14g1 (a curve that bends down lies above its chords and below its tangent lines), 17a (ln(1 + u) ≤ u), 17i (the area under ln), 15g2 (the collapse) and 22a2 (the climb technique).</p>
   <p data-pid="cfa3a7">Write dₙ = ln n! − (n + ½) ln n + n, so that n! = e^(dₙ)·√n·(n/e)ⁿ. Trapezoid-fence technique: <b>dₙ falls and settles at some c, with c &lt; dₙ &lt; c + 1/(8n).</b> Lay trapezoids under ln, one per strip, and measure the slivers between.</p>
   <pre class="lines" data-k="ember" data-label="this step: the trapezoid-fence technique">
 \tfrac12(\ln k + \ln(k+1)) \le \int_k^{k+1} \ln x\,dx \le \ln(k + \tfrac12) @@ ln bends down: its chord lies under it, its tangent line at k + ½ over it (14g1); the area under that tangent line is its height at the middle
@@ -105,7 +101,6 @@ d_n = 1 - (s_1 + \cdots + s_{n-1}) \text{ falls, and } s_1 + s_2 + \cdots \le \t
 
 <section class="class step" data-step="23k4">
   <h2 class="sthead"><span class="stno">23k4</span>The size of n!, proved</h2>
-  <p class="stands">Stands on 23k3, 16e (parts), 16h4 (one integral through a smaller one), 21g (the slopes of sin and cos), 21c (sin² + cos² = 1), 10f4 (the squeeze) and 10c (limits multiply).</p>
   <p data-pid="890be5">Size-of-factorials technique: <b>n! ~ √(2πn)(n/e)ⁿ, and more: √(2πn)(n/e)ⁿ &lt; n! &lt; √(2πn)(n/e)ⁿ·e^(1/(8n)).</b> The constant comes from areas under powers of sin, which know π.</p>
   <pre class="lines" data-k="ember" data-label="this step: areas under powers of sin">
 I_m = \int_0^{\pi/2} \sin^m x\,dx,\ \ I_0 = \tfrac{\pi}{2},\ \ I_1 = 1 @@ −cos is an antiderivative of sin (21g)
@@ -134,7 +129,6 @@ k! = e^{d_k}\sqrt k\,\big(\tfrac{k}{e}\big)^k,\ \ (2k)! = e^{d_{2k}}\sqrt{2k}\,\
 
 <section class="class step" data-step="23k5">
   <h2 class="sthead"><span class="stno">23k5</span>Illegal moves</h2>
-  <p class="stands">Stands on 23k1 to 23k4.</p>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
 \textstyle\sum (-1)^k k!\,x^k \text{ wanders, so it says nothing about } f\,? @@ nine pieces give f(0.1) to within 0.0004 (23k1)
 \text{more pieces of an expansion always do better}\,? @@ at x = 0.1 thirty pieces give −65; the pieces grow past k = 10

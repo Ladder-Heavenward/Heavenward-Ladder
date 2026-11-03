@@ -30,12 +30,10 @@ table.tt td.l{text-align:left}
   <h1>Can you beat the market by watching prices?</h1>
   <p data-pid="51a249">Can you beat the market by watching prices? Every trading day the shares of the big companies of Puget Sound, the software house in Redmond, the bookseller turned everything store in Seattle, the warehouse club in Issaquah, change hands millions of times, and their prices move. Charts of those prices look as if they have shapes in them: runs up, runs down, floors and ceilings. People have asked for well over a century whether the shapes can be read, so that you buy before the rise and sell before the fall. If they could, the reader would grow rich, and a great many people have tried. What makes the question hard is that a chart made by tossing a coin each day also looks as if it has shapes in it. The eye finds patterns in pure luck. So the question is not whether a pattern can be seen, but whether it would still be there if it were only luck. This page takes rung thirty’s random walks and fair games to it. It finds how slowly the steady rise of prices shows through the daily wobble, why no rule built from past prices can change the average of the next change if the game is fair, how to test whether a pattern in past prices is real, why a crowd of people who each try a rule will always throw up some winners, and where the bell curve, which this page leans on, fails on the worst days.</p>
   <p class="gesture" data-pid="a509f0">Think of the day’s change in a price as a step of a random walk, with a small steady drift and a much larger wobble. Over many days the drift adds up in proportion to the number of days, but the wobble adds up only like the square root of that number, because spreads of independent steps add, not their widths. So the drift does show through in the end, but only after many years. If the market is a fair game once the drift is taken out, then the next change, averaged with everything about the past known, is nothing, and so it is unrelated to anything you could build from the past. That is the claim to test. Multiply each day’s change by the next one and average: if the claim holds, the result sits near nothing, within a width of one over the square root of the number of days, and a pattern smaller than about two widths cannot be told from luck. Try twenty such rules and one will pass the test by luck more often than not, and among hundreds of fund managers some will beat the market year after year by luck alone. Finally, the bell curve for a month’s change is a good guide to an ordinary month and a poor one to a crash.</p>
-  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r30n.html">30n</a> (the root-n and exit-time techniques), <a href="r30k.html">30k</a> (fair games: the no-system and ruin-chance techniques), <a href="r30g.html">30g</a> (the average-adds, spread-of-a-sum and independent-averages-multiply techniques), <a href="r30l.html">30l</a> (the at-least-one technique), <a href="r30j.html">30j</a> (the central limit technique), <a href="r30s.html">30s</a> (the bell-test technique) and <a href="r17.html">17</a> (logarithms). 30·logi sells seats against chance.</p></div>
 </header>
 
 <section class="class step" data-step="30econ1">
   <h2 class="sthead"><span class="stno">30econ1</span>The drift and the wobble</h2>
-  <p class="stands">Stands on 30n (the root-n technique), 30g (the average-adds technique) and 17 (logarithms).</p>
   <p data-pid="1dfb20">Measure a price by its log (17), so that a day’s change D is close to its change in percent, and a rise of 1% counts the same at any price. Take the changes D₁, D₂, … of successive days as independent, each with average μ and spread width σ. A broad index of large American shares has moved, over long stretches, by about σ = 1.2% on a typical day, with a drift of about μ = 0.04% a day, near 10% a year over 252 trading days. A single company’s shares wobble more, often 1.5% to 2% a day.</p>
   <pre class="lines" data-k="ember" data-label="this page: the drift-and-width technique">
 \log P_t - \log P_0 = D_1 + D_2 + \cdots + D_t @@ the changes add, since logs turn products into sums (17)
@@ -56,7 +54,6 @@ E[\log P_t - \log P_0] = t\mu @@ the average-adds technique (30g)
 
 <section class="class step" data-step="30econ2">
   <h2 class="sthead"><span class="stno">30econ2</span>If the game is fair, the past is silent</h2>
-  <p class="stands">Stands on 30·econ.1, 30k (fair games; the no-system and ruin-chance techniques), 30n (the exit-time technique) and 30g (co-spread).</p>
   <p data-pid="db6e75">Take the drift out: let X_n be the log price less nμ. The claim to test is that X is a fair game (30k): with everything up to day n known, the average of the next change X_{n+1} − X_n is 0. Let f be any number built from prices up to day n: yesterday’s change, a ten-day average, a pattern on a chart.</p>
   <pre class="lines" data-k="ember" data-label="this page: the past-is-silent technique">
 E[X_{n+1} - X_n \mid \text{the past}] = 0 @@ the fair game of 30k
@@ -77,7 +74,6 @@ E\big[f\,(X_{n+1} - X_n)\big] = \textstyle\sum_h f(h)\big(E(X_{n+1} \mid h) - X_
 
 <section class="class step" data-step="30econ3">
   <h2 class="sthead"><span class="stno">30econ3</span>The test that a pattern is luck</h2>
-  <p class="stands">Stands on 30·econ.2, 30g (the independent-averages-multiply and spread-of-a-sum techniques), 30j (the central limit technique) and 30s (the bell-test technique).</p>
   <p data-pid="1d24a7">To test the claim, take f to be yesterday’s change. Suppose the changes D₁, …, D_{n+1} are independent with average 0 and width σ. Form the lag product average r = (D₁D₂ + D₂D₃ + ⋯ + D_nD_{n+1})/(nσ²). If yesterday helped, r would sit away from 0.</p>
   <pre class="lines" data-k="ember" data-label="this page: the lag-check technique">
 E[D_iD_{i+1}] = E D_i \cdot E D_{i+1} = 0 @@ the independent-averages-multiply technique (30g)
@@ -99,7 +95,6 @@ E[D_iD_{i+1}\,D_jD_{j+1}] = 0 \text{ for } i < j @@ D_{j+1} is independent of th
 
 <section class="class step" data-step="30econ4">
   <h2 class="sthead"><span class="stno">30econ4</span>Many tries make winners</h2>
-  <p class="stands">Stands on 30·econ.3, 30l (the at-least-one technique) and 30g (the average-adds technique).</p>
   <p data-pid="3ad13d">One test at the one-in-twenty line is wrong by luck one time in twenty. But no one tests one rule. Suppose m rules are tested on the same prices, and each has chance α of passing by luck. Take the tests as independent.</p>
   <pre class="lines" data-k="ember" data-label="this page: tries, and the luck among them">
 P(\text{at least one passes by luck}) = 1 - (1 - \alpha)^m @@ the at-least-one technique (30l), every rule false and the tests independent
@@ -127,7 +122,6 @@ E(\text{number passing}) = m\alpha @@ the average-adds technique (30g), one 0-or
 
 <section class="class step" data-step="30econ5">
   <h2 class="sthead"><span class="stno">30econ5</span>The bell, and the worst days</h2>
-  <p class="stands">Stands on 30·econ.1, 30j (the bell; the central limit technique) and 30h (the spread-bound technique).</p>
   <p data-pid="694205">A month’s change is a sum of 21 daily changes, so by the central limit technique (30j) it is close to a bell with average 21μ and width σ√21. For the index, the width is 1.2% × √21 ≈ 5.5%. Banks use such a bell to set aside money: the loss over 10 days that is passed with chance only 1%.</p>
   <pre class="lines" data-k="ember" data-label="this page: a loss line from the bell">
 P(Z < -2.326) = 0.01 @@ the bell, from its table
@@ -155,7 +149,6 @@ P(|Z| > 4) = 6.3 \times 10^{-5} @@ the bell: one day in 15 800, about once in 63
 
 <section class="class step" data-step="30econ6">
   <h2 class="sthead"><span class="stno">30econ6</span>Illegal moves</h2>
-  <p class="stands">Stands on 30·econ.1 to 30·econ.5.</p>
   <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
 \text{the price rose 5 days running, so it is due to fall}\,? @@ in a fair game the past is silent
 \text{a year’s fall shows the drift is down}\,? @@ a year’s drift is half its width

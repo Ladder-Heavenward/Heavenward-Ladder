@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="ladder-cert" content="rung"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>6d · Choosing, lining up any set, and the top of every chain</title>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>6d · A world where it is true, and one where it is false</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -13,279 +13,199 @@
 @media (max-width:520px){.pic .eqbox{font-size:.8rem}}
 .rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
 @media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
-table.tt td.l{text-align:left;font-family:var(--serif)} @media (max-width:520px){table.tt td.l{min-width:7em}}
-#cvW,#cvZ{touch-action:manipulation;cursor:pointer}
+table.sw{border-collapse:collapse;margin:6px 0;font-family:var(--mono);font-size:.82rem}
+table.sw td,table.sw th{border:1px solid var(--grid);padding:3px 5px;text-align:center;min-width:24px}
+table.sw th.k{cursor:pointer;background:var(--sand)}
+table.sw th.k.on{background:var(--ember);color:#fff}
+table.sw td.p{cursor:pointer;background:var(--card)}
+table.sw td.sup{box-shadow:inset 0 0 0 2px var(--teal)}
+table.sw td.mv{color:var(--ember);font-weight:600}
+table.sw td.off{background:var(--sand);color:var(--muted)}
+@media (max-width:520px){table.sw td,table.sw th{padding:2px 2px;min-width:18px;font-size:.72rem}}
+.gchips button{font-family:var(--serif);margin:2px}
+.gchips button.in{background:var(--ember);color:#fff;border-color:var(--ember)}
 </style>
 <link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r06concl.html">← 6·∎ conclusion</a><a href="r06stat.html">next: 6·stat how do you pick a fair sample? →</a></p>
-  <div class="tags"><span class="tag support">6d · support</span></div>
-  <h1>Choosing, lining up any set, and the top of every chain</h1>
-  <p data-pid="c861db">Mathematicians rarely quote the choosing axiom in 6a's form. They quote one of two statements that, given the other principles, say the same thing. One is that every set can be put in an order in which every non-empty part has a least member. The other is that if every chain in a partly ordered set has something above it all, then something has nothing above it. This step builds the words those statements need, each with its line: partial order, chain, upper bound, maximal member, least member, well-order. Then it proves what the ladder can prove, one move per line, and says plainly what it cannot yet. Well-ordering gives choice, with nothing to spare. The maximal-member principle gives choice too, but the column stops one line short, at a double negative. Choice gives well-ordering by choosing from what is left, again and again, past every counting number. The recursion that runs that far is not built here. A finite set, though, is put in order by 4k's counting alone.</p>
-  <p class="gesture" data-pid="5633dc">An order with a least member in every part picks for you: take the least. A largest partial picking picks from every set, if nothing is missing from it. Choosing from what is left, over and over, lays a set out in order.</p>
-  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r02g.html">2g</a> (relations, reflexive, transitive), <a href="r04h.html">4h</a> (≤, any-two-compare, settled-order, least member, least-member, no-least-no-members), <a href="r04k.html">4k</a> (matching, has n members), <a href="r06a.html">6a</a> (non-empty, choosing function, Choice) and <a href="r06b.html">6b</a> (the “and so on” trap). Rung 7 takes up the double negative this step stops at, and 7·cb4 returns to least members of every set of numbers.</p></div>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r06c.html">← 6c finitely many needs no axiom</a><a href="r06concl.html">next: 6·∎ conclusion →</a></p>
+  <div class="tags"><span class="tag proof">6d · proof</span></div>
+  <h1>A world where it is true, and one where it is false</h1>
+  <p data-pid="85dbd1">3d showed that the axiom of infinity cannot be proved from what came before it, by building a world where everything earlier is true and the axiom is false. The choosing axiom is in a stranger position. It can be neither proved nor refuted from the other principles, and showing that took two worlds, one for each direction. This step explains both, and the earlier world, with the socks, that showed the way. The great constructions themselves are far beyond the ladder, and the step describes them in words, as 3d described its world. Two pieces are worked by hand. One is a small written-out world in which choice is true by a rule: the idea of the first world, in miniature. The other is the heart of the argument that, in the sock world, endlessly many pairs of socks have no choosing function at all.</p>
+  <p class="gesture" data-pid="6dc336">To show a statement cannot be proved, build a world where every principle is true and the statement is false. To show it cannot be refuted, build one where it is true. For choice, both worlds exist.</p>
 </header>
 
 <section class="class step" data-step="6d1">
-  <h2 class="sthead"><span class="stno">6d1</span>Orders that leave some pairs uncompared</h2>
-  <p class="stands">Stands on 2g (relations: reflexive, transitive) and 4h (≤).</p>
-  <p data-pid="34fb85">4h's ≤ compares any two numbers (any-two-compare). Many useful orders do not. ⊆ between sets is an order of a kind: a set is a part of itself, parts of parts are parts, and two sets each a part of the other are the same set (double-inclusion). But {cat} and {dog} are not parts of each other either way. Divides, on the numbers, is the same: 2 ∣ 6 and 3 ∣ 6, but neither of 2 and 3 divides the other. 2g gave relations the words reflexive and transitive. One more is needed.</p>
-  <p class="eqline" data-pid="b47ec7">From here on, a relation r on a set W is <b>antisymmetric</b> when two things related each way are the same thing:</p>
-  <div class="eqline" data-tex="\forall x\,\forall y\,(x\,r\,y \land y\,r\,x \Rightarrow x = y)"></div>
-  <p class="eqline" data-pid="7d5412">From here on, a <b>partial order</b> on W is a relation on W that is reflexive, antisymmetric and transitive. When a partial order is in hand, <span data-tex-inline="x \preccurlyeq y"></span> may be written for x r y; read it “x is below y”, or “y is above x”. The mark is a statement with two gaps, like 2g's ∼, and it names whichever partial order is in hand.</p>
-  <p data-pid="03b4de">Three partial orders. The first is ≤ on ℕ: reflexive by =, antisymmetric because any-two-compare allows at most one of x &lt; y, x = y, y &lt; x, and transitive by chain for less. The second is ⊆ on any set of sets (self-part, double-inclusion, chain for part of). The third is ∣ on ℕ (n = n · 1, 4j's divides-both-ways, chain for divides). Two relations that are not: &lt; (not reflexive: no-self-membership), and 2g's “has met” (Ann has met Ben and Ben has met Ann, and they are two people).</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · partial orders · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">6d1</span>What “independent” means, again</h2>
+  <p data-pid="042151">3d's argument runs like this. A proof is a statement that names a column of axioms and techs. The techs care nothing for the world they are used in (1e). In any world where the axioms are true, every line of a proof from them is true, and so does its last line. So if there is a world where the axioms are true and a statement is false, there is no proof of that statement from those axioms. 3d called a statement <b>independent</b> of what came before when it is not a technique of it. <b>Choice is independent in both directions: neither it nor its denial is a technique of the other principles.</b> A world in which every axiom of a list is true has the accepted name a model of that list.</p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="teal" data-label="from 3d: the world-building tech, run both ways">
+\begin{aligned}&\text{assume a proof of choice}\\ &\quad\text{from the other principles}\end{aligned} @@ aiming to refute
+\begin{aligned}&\text{choice is true in every}\\ &\quad\text{world where they are true}\end{aligned} @@ the techs care nothing for the world (1e)
+\begin{aligned}&\text{in the 1963 world they}\\ &\quad\text{are true, and choice is false}\end{aligned} @@ the world's description (below)
+\bot @@ clash
+\htmlClass{new}{\text{no proof of choice}} @@ refute
+\begin{aligned}&\text{and with the described world, where}\\ &\quad\text{choice is true: } \htmlClass{new}{\text{no proof of its denial}}\end{aligned} @@ the same column, with the denial in choice's place
+  </pre>
+  <p data-pid="becdc7">Which “other principles”? The two worlds were built for the standard list of axioms for sets. It holds the axioms of rungs 2 and 3, together with 4d's replacement, which the ladder names only as history, and with every statement true or false, which is rung 7's. That list holds every principle the ladder has laid down, and more. A world where the longer list is true is a world where the ladder's is true. So those worlds serve the ladder: no proof of choice from the ladder's principles, and no refutation either.</p>
+  <p data-pid="7f4bac">One caution carries over from 3d. Nobody can build a world for these principles inside a column of the ladder's techs. The worlds are built from the principles themselves, and what the techniques say is relative. The first world shows this: if the other principles are free of anything totally false, they stay free of anything totally false with choice added. The second shows the same with its denial added. Whether the principles themselves are free of anything totally false is held in trust here, the question 3d's last question raised.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · independent · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">6d1.1</span><span class="ph know">know</span>What is a partial order? <br>What does antisymmetric say, and which relation of 2g fails it?</li>
+      <li><span class="qid">6d1.1</span><span class="ph know">know</span>What does it mean that choice is independent of the other principles? <br>How does a world show that a statement has no proof?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="6d2">
-  <h2 class="sthead"><span class="stno">6d2</span>Chains, upper bounds, maximal members</h2>
-  <p class="stands">Stands on 6d1.</p>
-  <p class="eqline" data-pid="ca0949">From here on, for a partial order ≼ on W, these four words mean the lines below, in order. A part C of W is a <b>chain</b> when any two of its members compare. u is an <b>upper bound</b> of a part C when it is in W and above every member of C. m is a <b>maximal member</b> of W when nothing in W is above m but m itself. And m is a <b>least member</b> of a part X when it is in X and below every member of X.</p>
-  <div class="eqline" data-tex="\begin{aligned} &amp;\text{chain:}\\ &amp;\quad\forall x \in C\,\forall y \in C\,(x \preccurlyeq y \lor y \preccurlyeq x)\\ &amp;\text{upper bound:}\\ &amp;\quad u \in W \land \forall x \in C\,(x \preccurlyeq u)\\ &amp;\text{maximal:}\\ &amp;\quad m \in W \land \forall x \in W\,(m \preccurlyeq x \Rightarrow x = m)\\ &amp;\text{least:}\\ &amp;\quad m \in X \land \forall x \in X\,(m \preccurlyeq x) \end{aligned}"></div>
-  <p class="eqline" data-pid="1d1383">This chain is a set. 4d's chain of samenesses, a = b = c, and 4i's chain of order, 1 ≤ i ≤ k, are pieces of writing and keep their meanings.</p>
-  <p data-pid="b0c3e4">Under ∣, {1, 2, 4, 8} is a chain and {2, 3} is not, and 24 is an upper bound of {2, 3, 4}. In {1, 2, 3, 4, 6}, both 4 and 6 are maximal. Nothing in the set is a multiple of either but itself, and neither is above everything. <b>That is the difference between maximal and greatest: a maximal member has nothing above it, a greatest member is above everything.</b> Under ⊆ on {∅, {cat}, {dog}}, {cat} and {dog} are both maximal and nothing is greatest. ∅ is a chain under any order, vacuously, and every member of the set is an upper bound of it. The least-member line agrees with 4h's when ≼ is ≤. And there is never more than one. One-least-member technique: <b>if m and m′ are least members of X, then m = m′</b>: each is below the other, since each is in X; antisymmetric. ∎</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · chains and maximal members · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">6d2</span>A toy: the written-out world</h2>
+  <p data-pid="aeaa30">Start small, with 3d's layers: V₀ = ∅, and each next layer all the parts of the one before. Their members can be written out to the last brace. Take V₃ = {0, 1, {1}, 2} and the layer above. Every collection you can write down there is finite, so 6c's finite-choice gives it a choosing function by calls. But there is a better way, and it is the idea behind the world where choice is true.</p>
+  <p data-pid="562b9a">Write the members of V₃ in a fixed listing, say 0, 1, {1}, 2, in the order 3d's keep-or-drop wrote them. Every member of V₄ is a part of V₃, so every member of a member of V₄ is one of these four. Now take the condition “x is in A, and no member of A comes before x in the listing”. In each non-empty A it is so of exactly one member, the one listed earliest. That is because the listing puts the four in order, and a part of the list has one first entry (least-member, on the settled set of places of A's members). <b>So it is a rule, of the boot kind.</b> By Separation the sift by it is a set: a choosing function for any collection of non-empty parts of V₃, at once, with no calls.</p>
+  <pre class="lines" data-k="ember" data-label="this step: choosing by the earliest in a listing">
+\text{listing: } 0,\ 1,\ \{1\},\ 2\ \ \text{at places } 0, 1, 2, 3 @@ a matching between 4 and V₃ (4k's arrangement); place(x) names x's partner
+\mathcal A = \{\{1, 2\},\ \{\{1\}, 2\},\ \{0, \{1\}\}\} @@ a collection of non-empty parts of V₃
+c(\{1, 2\}) = 1,\ \ c(\{\{1\}, 2\}) = \{1\},\ \ c(\{0, \{1\}\}) = \htmlClass{new}{0} @@ the earliest-listed member of each
+c = \{(A, x) \in \mathcal A \times \textstyle\bigcup\mathcal A : x \in A \land \forall y \in A\,(\text{place}(x) \le \text{place}(y))\} @@ the rule as a sift; one output each, by least-member and 4h's at-most-one least member
+  </pre>
+  <p data-pid="5668a1">In this world the infinity axiom is not true, so it is only a toy: it shows the method, not the result. Change the listing and you get a different choosing function, by a different rule. <b>What matters is that every set of the world sits in one listing, so “earliest” always makes sense.</b></p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · the toy world · ← → keys work</div></section>
+  <section class="pic" id="pic2">
+    <div class="eyebrow">The picture · choosing by the earliest in a listing</div>
+    <div class="panel">
+      <div class="chips" role="group" aria-label="listing" id="lch"><span class="m" style="color:var(--muted)">listing:</span><button data-l="0" class="on">0, 1, {1}, 2</button><button data-l="1">2, {1}, 1, 0</button><button data-l="2">{1}, 0, 2, 1</button></div>
+      <div class="gchips chips" id="gp"></div>
+      <div class="cap">The fifteen non-empty parts of V₃ = {0, 1, {1}, 2}. Tap parts to put them in the collection 𝒜 (ember). The rule “the member listed earliest” picks from each at once, with no calls; the readout writes c as a set of pairs. Change the listing, and the rule changes, and so does c.</div>
+      <div class="eqbox" id="eqG"></div>
+    </div>
+  </section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">6d2.1</span><span class="ph know">know</span>What are a chain, an upper bound, a maximal member and a least member? <br>What is the difference between maximal and greatest?</li>
+      <li><span class="qid">6d2.1</span><span class="ph know">know</span>In the written-out world, what rule chooses from every collection at once?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="6d3">
-  <h2 class="sthead"><span class="stno">6d3</span>Well-orders</h2>
-  <p class="stands">Stands on 6d2 and 4h (least members).</p>
-  <p class="eqline" data-pid="cedb93">From here on, a partial order on W is a <b>well-order</b> when every non-empty part of W has a least member under it; W is then <b>well-ordered</b> by it.</p>
-  <p data-pid="d16da5">Well-order-compares technique: <b>if ≼ is a well-order on a set, then the whole set is a chain.</b> A partial order under which the whole set is a chain has the accepted name total order: any two members compare.</p>
-  <div class="brkkey"></div>
-  <pre class="lines" data-k="ember" data-label="this step: the well-order-compares technique">
-\text{let } x, y \in W;\ \ \{x, y\} \subseteq W,\ \ x \in \{x, y\} @@ Pairing; the listing: a non-empty part
-\text{call } m \text{ the least member of } \{x, y\} @@ the well-order; use the some
-m = x \ \lor\ m = y @@ the listing line: a proved or
-\text{case } m = x:\ x \preccurlyeq y;\quad \text{case } m = y:\ y \preccurlyeq x @@ ﹀ least, with y and with x; add an option each time
-x \preccurlyeq y \lor y \preccurlyeq x \quad \blacksquare @@ reason by cases; speak of everything
-  </pre>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · well-orders · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">6d3</span>The described world, where choice is true</h2>
+  <p data-pid="b8692e">The world of <b>described</b> sets is built in stages, like 3d's layers, with one change. Where 3d took all the parts of the layer below, this world takes only the parts that can be described. Those are the parts sifted from the layer below by a condition that mentions only sets already built. Every set of the world, then, comes with a description, and a description is a string of marks. Strings of marks can be listed in order, the way 4i's numerals can, shorter before longer and then letter by letter. So every set has an earliest description, and the condition “the member of A whose earliest description comes first” is a rule. <b>In the described world, choosing is like choosing shoes.</b></p>
+  <p data-pid="4a4711">Two things in that sketch go beyond the ladder. The stages do not stop after every counting number: they go on, past all of them, along a longer run. The recursion that builds stages along such a run is not built here. And checking that every other principle is true in the world is long work. It was done, and the result announced, in 1938.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · the described world · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">6d3.1</span><span class="ph know">know</span>What is a well-order? <br>Why is a well-ordered set a chain?</li>
+      <li><span class="qid">6d3.1</span><span class="ph know">know</span>How do the stages of the described world differ from 3d’s layers, and why is choosing there like choosing shoes?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="6d4">
-  <h2 class="sthead"><span class="stno">6d4</span>The two principles</h2>
-  <p class="stands">Stands on 6d3.</p>
-  <p data-pid="c6dccb">Now the principles, in plain words and then in marks. The <b>well-ordering principle</b>: <b>every set has a well-order</b>.</p>
-  <div class="eqline" data-tex="\forall s\,\exists r\,(r \text{ is a well-order on } s)"></div>
-  <p data-pid="425450">The <b>maximal-member principle</b>: <b>if a partial order on a set gives every chain an upper bound, the set has a maximal member</b>.</p>
-  <div class="eqline" data-tex="\begin{aligned} &amp;\forall s\,\forall r\,\big(r \text{ partial order on } s\\ &amp;\quad \land\; \forall C \subseteq s\,(C \text{ chain}\\ &amp;\qquad \Rightarrow \exists u\,(u \text{ upper bound of } C))\\ &amp;\quad \Rightarrow \exists m\,(m \text{ maximal in } s)\big) \end{aligned}"></div>
-  <p data-pid="2d8275">The empty chain must have an upper bound too, so the set has a member.</p>
-  <p data-pid="6d9340">A caution before anything is proved. Is ℕ well-ordered by ≤? 4h's least-member gives a least member to every non-empty <i>settled</i> part. For a part whose membership cannot be decided number by number, 4h had only no-least-no-members, the double negative. So the ladder has not yet shown that ≤ is a well-order in this step's sense; 7·cb4 comes back to it. <b>The same is true for every order this step builds by hand: they reach the settled parts.</b></p>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · the two principles · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">6d4</span>The sock world: socks made exact</h2>
+  <p data-pid="776dfa">The other direction came first in a simpler setting. In 1922 a world was built containing things that are not sets, and the ladder has had such things since 2c: a cat is not a set. Its things are the socks of 6b. For each number n there are two socks s_n and s′_n, with the pair K_n = {s_n, s′_n}, and the collection 𝒦 = {K_n : n ∈ ℕ}. The socks are given to be different things, s_n ≠ s′_n, and alike in everything else.</p>
+  <p data-pid="bfcd2d">A <b>swap</b> exchanges the two socks of some of the pairs, any pairs you like. It carries every set built from socks along with it: the members of a set are swapped, and their members, all the way down. A swap that touches pair k turns s_k into s′_k and back, and leaves every other sock where it was. Swaps leave every pair K_n in place, as a set, since {s′_n, s_n} = {s_n, s′_n} by same-members. So they leave 𝒦 in place too, and the numbers, which have no socks in them.</p>
+  <p class="eqline" data-pid="dabf44">This swap is a new use of the word: 0b's swap axiom, swap equals, which writes one name of a thing in place of another, keeps its name and job. In this step the letter w names a swap, and w(x) is what the swap makes of x; it is a name like any other letter.</p>
+  <p data-pid="b1b861">The sock world keeps only some of the sets built from socks. A set belongs to it when it and its members, and their members, all the way down, each have a <b>support</b>. A support is a finite list of pairs such that every swap touching none of those pairs leaves the set in place. A sock has a support: its own pair. A pair, 𝒦 and every number have the empty support. A choosing function for the first n pairs, picking s_i from K_i for i &lt; n, has a support: the first n pairs, since a swap of any later pair does not touch it. So in the world finite-choice still gives a choosing function, as it must.</p>
+  <p data-pid="034734">It was checked that every principle is true in the world (in the form that allows things that are not sets), and the step does not repeat that check. What it does show, line by line, is the heart of the matter. No-sock-picking technique: <b>in the sock world, 𝒦 has no choosing function.</b></p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · the sock world · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · the sock world's swaps, and which picks survive them</div>
+    <div class="panel">
+      <div class="chips" role="group" aria-label="candidate" id="fch"><span class="m" style="color:var(--muted)">c picks:</span><button data-f="hand" class="on">by hand, first pairs only</button><button data-f="all">s from every pair</button></div>
+      <div class="tablewrap"><table class="sw" id="sw"></table></div>
+      <div class="chips"><button id="unsw">swap nothing</button></div>
+      <div class="cap">Pairs K₀ to K₉, and every pair after. Row c: the sock c picks from each pair; tap a cell to pick, or to drop the pick (by hand). Teal outline: c's support, the pairs its picks mention. Tap a pair's heading to swap its two socks; row w(c) shows c after the swap, ember where it moved. A swap of a pair outside the support leaves c in place. With “s from every pair”, every pair is in play, so no finite support exists.</div>
+      <div class="eqbox" id="eqS"></div>
+    </div>
+  </section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">6d4.1</span><span class="ph know">know</span>What do the well-ordering principle and the maximal-member principle say? <br>Why has the ladder not shown that ≤ well-orders ℕ?</li>
+      <li><span class="qid">6d4.1</span><span class="ph know">know</span>What is a swap in the sock world? <br>What is a support?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="6d5">
-  <h2 class="sthead"><span class="stno">6d5</span>Well-ordering gives choice</h2>
-  <p class="stands">Stands on 6d3, 6a (least-chooses) and 2d (the sift).</p>
-  <p data-pid="4968c2">Well-ordering-gives-choice technique: <b>if 𝒜 is a collection of non-empty sets and ⋃𝒜 has a well-order, then 𝒜 has a choosing function: take the least.</b> With the well-ordering principle, every ⋃𝒜 has one, so the well-ordering principle gives Choice.</p>
-  <pre class="lines" data-k="ember" data-label="this step: the well-ordering-gives-choice technique">
-\preccurlyeq \text{ a well-order on } \textstyle\bigcup\mathcal A @@ given; use the some
-c = \{(A, m) \in \mathcal A \times \textstyle\bigcup\mathcal A : m \text{ is the least member of } A\} @@ Separation, 2h's shorthand
-\text{let } A \in \mathcal A;\ \ A \subseteq \textstyle\bigcup\mathcal A @@ 2e's ⋃ line: a member of a member is in the union
-\text{call } m \text{ the least member of } A @@ A is a non-empty part; the well-order; use the some
-\htmlClass{new}{(A, m) \in c} @@ m ∈ A ⊆ ⋃𝒜; ︿ the sift: every input has an output
-(A, m) \in c \land (A, m') \in c \;\Rightarrow\; m = m' @@ ﹀ the sift; the one-least-member technique: no input has two
-c(A) \in A,\quad c \text{ is a choosing function for } \mathcal A \quad \blacksquare @@ the value line; ﹀ least; ︿ 
+  <h2 class="sthead"><span class="stno">6d5</span>No picking socks</h2>
+  <pre class="lines" data-k="ember" data-label="this step: the no-sock-picking technique, inside the sock world">
+\begin{aligned}&\text{assume } c \text{ is a choosing function}\\ &\quad\text{for } \mathcal K \text{ in the world}\end{aligned} @@ aiming to refute; the some used
+c \text{ has a support } E\text{, a finite list of pairs} @@ the world's line
+\text{call } k \text{ a number with } K_k \text{ not on } E @@ the numbers of the pairs on E are a finite set; past its greatest member (greatest-member), or 0 if it is empty
+\text{let } w \text{ swap } s_k \text{ and } s'_k \text{ only} @@ a swap touching no pair of E
+w(c) = c @@ c's support
+c(K_k) = s_k \ \lor\ c(K_k) = s'_k @@ c chooses: c(K_k) ∈ {s_k, s′_k}; the listing line, a proved or
+\text{case } s_k:\ (K_k, s_k) \in c @@ 4d's value line
+\quad (w(K_k), w(s_k)) \in w(c) @@ a swap carries membership, pairs and all, along
+\quad (K_k, \htmlClass{new}{s'_k}) \in c @@ w(K_k) = K_k; w(s_k) = s′_k; w(c) = c
+\quad s_k = s'_k @@ c is a function: no input has two
+\quad \bot @@ clash with s_k ≠ s′_k
+\begin{aligned}&\text{case } s'_k\text{: the}\\ &\quad\text{same, with the names turned about}\end{aligned} @@ w also sends s′_k to s_k
+\htmlClass{new}{\neg\exists c\,(c \text{ chooses for } \mathcal K \text{ in the world})} \quad \blacksquare @@ reason by cases; refute
   </pre>
-  <p data-pid="2d4794">This is 6a's least-chooses with any well-order in place of ≤. It splits nothing into cases and calls on no choosing axiom. <b>Picking is easy once everything stands in a line with a first member in every part.</b></p>
-  <section class="slides" id="sl5"><div class="eyebrow">The slides · well-ordering gives choice · ← → keys work</div></section>
+  <p data-pid="4a6b48">The proof uses exactly what the socks picture said in words. Nothing in the world can tell the socks of a pair apart, because a swap exchanges them and changes nothing that matters. A choosing function would have to tell apart the socks of every pair. Any set of the world can only tell apart the socks of finitely many pairs, the ones on its support. 𝒦 is infinite, so some pair is left over. Notice too what the proof shows about listed choosing. 𝒦 is matched with ℕ: the numbers and 𝒦 are in the world, and the matching n ↦ K_n has the empty support. So even choice restricted to collections matched with ℕ fails in the sock world.</p>
+  <p data-pid="02aa1e">And notice why it does not work for shoes. A swap must keep everything the world is given. Suppose the world is given “s_n is a left shoe”. A swap of s_n and s′_n does not keep it, so it is not one of the world's swaps. And the left-shoe rule (6b's left-shoes) is a set of the world with the empty support.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · no picking socks · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">6d5.1</span><span class="ph know">know</span>What does well-ordering-gives-choice say, and what is its rule?</li>
+      <li><span class="qid">6d5.1</span><span class="ph know">know</span>How does no-sock-picking refute a choosing function for 𝒦 in the sock world? <br>Why does the argument not work for shoes?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="6d6">
-  <h2 class="sthead"><span class="stno">6d6</span>Partial pickings</h2>
-  <p class="stands">Stands on 6d2 and 6a (choosing functions).</p>
-  <p data-pid="085bb1">The idea: look at all the partial pickings, ordered by ⊆. These are the sets of pairs that pick from some of the members of 𝒜 but perhaps not all. The maximal-member principle gives a maximal one. A maximal partial picking cannot be missing any set, since a missing set could be added. That last “since” is where the ladder must be careful.</p>
-  <p class="eqline" data-pid="0876cd">From here on, a <b>partial choosing function</b> for 𝒜 is a part p of 𝒜 × ⋃𝒜 in which no input has two outputs and every output is in its input:</p>
-  <div class="eqline" data-tex="\begin{aligned} &amp;\forall A\,\forall y\,\forall z\,((A, y) \in p \land (A, z) \in p \Rightarrow y = z)\\ &amp;\land\; \forall A\,\forall y\,((A, y) \in p \Rightarrow y \in A) \end{aligned}"></div>
-  <p data-pid="f84a13">A is an <b>input</b> of p when <span data-tex-inline="\exists y\,((A, y) \in p)"></span>.</p>
-  <p class="eqline" data-pid="902164">This is 4d's word “input”, said of a part p that need not be a function. When p is a function from 𝒜, its inputs in this sense are its inputs in 4d's.</p>
-  <p data-pid="5899f5">A choosing function is a partial one with every member of 𝒜 an input. Write ℱ for the set of all partial choosing functions for 𝒜, sifted from 𝒫(𝒜 × ⋃𝒜), and order it by ⊆. ∅ is in ℱ. Bounded-chains technique: <b>if 𝒞 ⊆ ℱ is a chain under ⊆, then ⋃𝒞 ∈ ℱ, and ⋃𝒞 is an upper bound of 𝒞.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the bounded-chains technique">
-(A, y) \in \textstyle\bigcup\mathcal C \;\Rightarrow\; (A, y) \in p \text{ for some } p \in \mathcal C @@ 2e's ⋃ line; use the some
-\textstyle\bigcup\mathcal C \subseteq \mathcal A \times \textstyle\bigcup\mathcal A,\ \ y \in A @@ p ∈ ℱ, unpacked: every output in its input
-(A, y) \in p,\ \ (A, z) \in q,\ \ p, q \in \mathcal C @@ two pairs with one input, each from its member of 𝒞
-p \subseteq q \ \lor\ q \subseteq p @@ 𝒞 is a chain: a proved or
-\text{case } p \subseteq q:\ (A, y), (A, z) \in q,\ \ y = z;\quad \text{case } q \subseteq p:\ \text{the same in } p @@ q ∈ ℱ (or p ∈ ℱ): no input has two
-\htmlClass{new}{\textstyle\bigcup\mathcal C \in \mathcal F} @@ reason by cases; ︿ the sift
-p \in \mathcal C \;\Rightarrow\; p \subseteq \textstyle\bigcup\mathcal C \quad \blacksquare @@ 2e: an upper bound. (𝒞 = ∅ gives ⋃∅ = ∅ ∈ ℱ)
-  </pre>
-  <section class="slides" id="sl6"><div class="eyebrow">The slides · partial pickings · ← → keys work</div></section>
-  <section class="pic" id="pic2">
-    <div class="eyebrow">The picture · the maximal-member principle on partial pickings</div>
-    <div class="panel">
-      <canvas id="cvZ"></canvas>
-      <div class="chips"><button id="zclr">empty 𝒞</button><button id="zgrow">grow the last one</button></div>
-      <div class="cap">The eighteen partial choosing functions for 𝒜 = {{cat, dog}, {owl}, {ant, bee}}, in levels by how many inputs they have; each shows its picks from the three sets, initials, with – for no input. A link joins p to q when p ⊆ q with one pair more. Tap to put functions in 𝒞 (ember). The readout says whether 𝒞 is a chain and gives its upper bound ⋃𝒞 (bounded-chains). Gold rings: the maximal members, which here are the four choosing functions. “Grow the last one” runs chains-give-choice's step on the last function tapped.</div>
-      <div class="eqbox" id="eqZ"></div>
-    </div>
-  </section>
+  <h2 class="sthead"><span class="stno">6d6</span>The 1963 world</h2>
+  <p data-pid="d1b70a">The sock world's socks are not sets, and the standard list asks for a world of sets only. In 1963 a way was found to make new sets so alike that nothing in the old world can tell them apart. The world was then cut down to the sets with finite supports, much as the sock world had been. In this 1963 world every other principle is true and choice is false. So choice cannot be proved.</p>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · the 1963 world · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">6d6.1</span><span class="ph know">know</span>What is a partial choosing function? <br>What does bounded-chains say about a chain of them?</li>
+      <li><span class="qid">6d6.1</span><span class="ph know">know</span>What did the 1963 world add to the sock world?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="6d7">
-  <h2 class="sthead"><span class="stno">6d7</span>The maximal-member principle gives choice, almost</h2>
-  <p class="stands">Stands on 6d6, 6d4 and 1b (refute).</p>
-  <p data-pid="7c560f">So the maximal-member principle applies to ℱ. Chains-give-choice technique: <b>if the maximal-member principle is true, then for each collection 𝒜 of non-empty sets there is a partial choosing function m such that, for every A ∈ 𝒜, it is not so that A fails to be an input of m.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the chains-give-choice technique">
-\text{call } m \text{ a maximal member of } \mathcal F @@ the maximal-member principle, with bounded-chains for its hypothesis; use the some
-\text{let } A \in \mathcal A @@ speak of everything
-\quad \text{assume } \neg(A \text{ is an input of } m) @@ aiming to refute
-\quad \text{call } a \in A;\ \ m' = m \cup \{(A, a)\} @@ A is non-empty; use the some; Pairing, union
-\quad m' \in \mathcal F @@ outputs in inputs by merge-membership; a second output at A would make A an input of m, against the assumption
-\quad m \subseteq m',\ \ \text{so } m' = m @@ 2e; m is maximal: use the every with m′
-\quad (A, a) \in m,\ \ A \text{ is an input of } m,\ \ \bot @@ the swap axiom; show an example; clash
-\htmlClass{new}{\neg\neg(A \text{ is an input of } m)} @@ refute; the call for a closes on ⊥
-\forall A \in \mathcal A\ \neg\neg(A \text{ is an input of } m) \quad \blacksquare @@ speak of everything
-  </pre>
-  <p data-pid="36631b">The line a choosing function needs is “A is an input of m”, for every A. The column reaches “not not”, and stops. <b>It is 1b's gap, the same place 4h's no-least-no-members stopped and 6a's non-empty stopped.</b> With the step from ¬¬P to P, which rung 7 takes up, m is a choosing function (7·cb6 writes that line), and the maximal-member principle gives Choice. Without it, this is as far as the techs go, and the stop is not the column's fault.</p>
-  <section class="slides" id="sl7"><div class="eyebrow">The slides · chains give choice · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">6d7</span>What the two worlds leave you</h2>
+  <p data-pid="cfb89f"><b>Like infinity, choice is chosen, not discovered.</b> Neither world is a mistake: in each, every other principle is true. 6b laid the axiom down, as almost all of mathematics does. The cost of doing so is that some sets exist about which nothing more can be said than that they exist. Where a result uses the axiom, careful writers say so, and the ladder will.</p>
+  <p data-pid="d0d8b3">Two short facts frame the whole picture. By 6c's only-the-infinite-fails, a world in which choice fails must hold an infinite collection with no choosing function. Every finite collection has one, in every world of the principles. And by 6b, that infinite collection can have no rule: shoes, and settled sets of numbers, have choosing functions in every world.</p>
+  <section class="slides" id="sl7"><div class="eyebrow">The slides · what is left · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">6d7.1</span><span class="ph know">know</span>What does chains-give-choice reach, and where does it stop?</li>
+      <li><span class="qid">6d7.1</span><span class="ph know">know</span>What do the two worlds leave you? <br>Which two facts frame the picture?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="6d8">
-  <h2 class="sthead"><span class="stno">6d8</span>Choice gives well-ordering: choose from what is left</h2>
-  <p class="stands">Stands on 6d4, 6a (the choosing axiom) and 4d (defining by repeating).</p>
-  <p data-pid="e27763">The other direction is an old idea, and it is easy to say. Given a set X, use Choice on the collection of the non-empty parts of X (a sift of 𝒫(X)), and call the choosing function c. The first member of the order is c(X). The next is c's pick from what is left, c(X ∖ {c(X)}). The next is c's pick from what is left after that. Keep going. Put x below y when x was picked no later than y. <b>The least member of a part is its earliest pick.</b> That every set has a well-order was first proved from Choice in 1904.</p>
-  <p data-pid="3d4957">For a finite X this is 4d's defining by repeating, with start X and step “take away c's pick”. It runs out after as many steps as X has members. For an endless X, it runs through all of ℕ and may still not have used X up. Then it must go on: after all the counting numbers, choose again from what is left, and again, along a run longer than ℕ. Runs that long, and the recursion along them, are not built on this ladder. The first proof, of 1904, avoided the long run. It looked at all the orders that start out “choose from what is left” and glued them together, which also needs more than the ladder has built. And the step “is anything left?” splits on whether a set is empty, which the techs license only for settled sets. So this direction is a sketch here, and 6d says so; 7·cb6 makes it a proof.</p>
-  <p data-pid="a26b36">Choice gives the maximal-member principle the same way. Climb, choosing at each step something strictly above where you are. At the end of every run, take an upper bound of the chain climbed so far. The climb cannot go on forever along the long runs, so it stops, at a maximal member. Again, the long run is not built. 7·cb6 takes this direction up again.</p>
-  <section class="slides" id="sl8"><div class="eyebrow">The slides · choose from what is left · ← → keys work</div></section>
-  <section class="pic" id="pic">
-    <div class="eyebrow">The picture · choose from what is left, and an order appears</div>
-    <div class="panel">
-      <div class="chips"><button id="rnd">different choices</button><button id="alp">c takes the first letter</button></div>
-      <canvas id="cvW"></canvas>
-      <div class="chips" id="tch"><span class="m" style="color:var(--muted)">a part T:</span></div>
-      <div class="cap">The set X = {r, s, t, u, v, w}. The top row is X; each row below is what is left. The ember token is c's pick from that row; tap any token in a row to make it c's pick there, and the rows below rebuild. Teal, on the left: the order built so far. Choose a part T with the letter chips; its least member is its earliest pick, found by running down the order (gold).</div>
-      <div class="eqbox" id="eqW"></div>
-    </div>
-  </section>
+  <h2 class="sthead"><span class="stno">6d8</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\text{the 1963 world shows choice is false}\,? @@ it shows choice is not provable. In the described world it is true. 3d's same warning about infinity
+\text{the described world proves choice}\,? @@ it shows the denial is not provable. A world is not a proof
+\begin{aligned}&\text{no choosing function found}\\ &\quad\text{for socks, so choice fails}\,?\end{aligned} @@ no proof of P is not a proof of ¬P (1b)
+\begin{aligned}&\text{in the sock world, } \{K_0, K_1,\\ &\quad K_2\} \text{ has no choosing function}\,?\end{aligned} @@ it has one, with support the first three pairs: finite-choice works there
+\text{the swap argument works for shoes}\,? @@ a swap must keep what the world is given; “left” is given, so no swap exchanges shoes
+\text{the sock world settles it for sets}\,? @@ its socks are not sets; for a world of sets only, the 1963 method was needed
+\begin{aligned}&\text{the ladder's principles prove choice, once }\\ &\quad \text{rung 7 adds every statement true or }\\ &\quad \text{false}\,?\end{aligned} @@ no: the 1963 world has every statement true or false, and choice fails there
+  </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">6d8.1</span><span class="ph know">know</span>How does Choice give a well-order, and why is this direction only a sketch here?</li>
+      <li><span class="qid">6d8.1</span><span class="ph know">know</span>Why is “the 1963 world shows choice is false” an illegal move? <br>Why is “no choosing function found for socks, so choice fails” one?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="6d9">
-  <h2 class="sthead"><span class="stno">6d9</span>What can be proved: a finite set is in order</h2>
-  <p class="stands">Stands on 6d3 and 4k (matched with n).</p>
-  <p data-pid="5a37fa">For a finite set no choosing is needed at all: 4k's counting already lays it out. Finite-order technique: <b>if X has n members, there is a partial order on X under which X is a chain and every non-empty settled part of X has a least member.</b> Let f take each member of X to its partner in n, and g take each k ∈ n to its partner in X (the matching, both ways: turn-about for matchings).</p>
-  <pre class="lines" data-k="ember" data-label="this step: the finite-order technique">
-x \preccurlyeq y \;\Leftrightarrow\; f(x) \le f(y) @@ a sift of X × X: x below y when x's place is no later
-\text{reflexive, transitive} @@ f(x) ≤ f(x); ≤ chains (chain for less, the swap axiom)
-f(x) \le f(y) \land f(y) \le f(x) \Rightarrow f(x) = f(y) \Rightarrow x = y @@ any-two-compare: at most one; f(x) has exactly one partner: antisymmetric
-x \preccurlyeq y \lor y \preccurlyeq x @@ any-two-compare on f(x), f(y): a chain
-T \subseteq X \text{ settled, non-empty};\ \ P = \{k \in \mathbb N : k \lt n \land g(k) \in T\} @@ given; Separation: the places of T
-k \in P \lor k \notin P,\ \text{for each } k @@ settled-order: k &lt; n or not; if so, T settled: g(k) ∈ T or not. <b>P is settled</b>
-\text{call } t \in T;\ \ f(t) \in P @@ T non-empty; f(t) ∈ n so f(t) &lt; n; g(f(t)) = t
-\text{call } k_0 \text{ the least member of } P;\ \ m = g(k_0) \in T @@ <b>least-member</b> (4h), on the settled set P; ﹀ P
-t \in T \Rightarrow f(t) \in P \Rightarrow k_0 \le f(t) \Rightarrow \htmlClass{new}{m \preccurlyeq t} @@ g(f(t)) = t, so f(t) ∈ P; k₀ least; f(m) = k₀
-m \text{ is the least member of } T \quad \blacksquare @@ ︿ 
-  </pre>
-  <p data-pid="251a26">So {cat, dog, owl}, matched with 3 by cat ↦ 0, dog ↦ 1, owl ↦ 2, is ordered cat ≼ dog ≼ owl, and the least of {owl, dog} is dog. For a part of X that is not settled, the same column reaches only no-least-no-members's double negative: “it is not so that T has no least member”. So, on this ladder, a finite set is well-ordered on its settled parts. 7·cb4 is where every part joins them.</p>
-  <section class="slides" id="sl9"><div class="eyebrow">The slides · the finite-order technique · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">6d9</span>Running it backwards</h2>
+  <p data-pid="0814e5"><b>Asked whether a statement follows from the principles, look for a proof and for a world at the same time; finding either ends the search.</b> Asked whether a set belongs to the sock world, look for a finite support: a finite list of pairs such that swaps elsewhere leave it in place. If every finite list misses a pair whose swap moves it, it is not in the world. Asked why a rule works in the described world, find the listing it uses. Found upward; written downward.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">6d9.1</span><span class="ph know">know</span>What does the finite-order technique say, and what order does it use?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="6d10">
-  <h2 class="sthead"><span class="stno">6d10</span>Where the three stand</h2>
-  <p class="stands">Stands on 6d5 to 6d9.</p>
-  <div class="tablewrap"><table class="tt">
-    <tr><th>from, to</th><th>in this step</th><th>needs rung 7's step?</th><th>needs a run past ℕ?</th></tr>
-    <tr><td class="l">well-ordering ⇒ Choice</td><td class="l">proved (well-ordering-gives-choice)</td><td>no</td><td>no</td></tr>
-    <tr><td class="l">maximal-member ⇒ Choice</td><td class="l">proved to a double negative (bounded-chains, chains-give-choice)</td><td>yes, the last line</td><td>no</td></tr>
-    <tr><td class="l">Choice ⇒ well-ordering</td><td class="l">sketched in words</td><td>yes, in general</td><td>yes</td></tr>
-    <tr><td class="l">Choice ⇒ maximal-member</td><td class="l">sketched in words</td><td>yes, in general</td><td>yes</td></tr>
-    <tr><td class="l">a finite set is in order</td><td class="l">proved for settled parts (finite-order)</td><td>for every part, yes</td><td>no</td></tr>
-  </table></div>
-  <p data-pid="56e4c7"><b>With every statement true or false, and with a recursion along runs longer than ℕ, the three statements are one principle, given the other axioms.</b> That is what it means to call them equivalent. It is why, in practice, mathematicians reach for whichever form fits the job. They use well-ordering when they want to run through a set one member at a time. They use the maximal-member principle when they want something that cannot be made any bigger. These two forms are what follows from the choosing axiom, and they are the working tools.</p>
-  <section class="slides" id="sl10"><div class="eyebrow">The slides · where they stand · ← → keys work</div></section>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">6d10.1</span><span class="ph know">know</span>Where do the three statements stand: which arrow is proved outright, and what do the others wait for?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="6d11">
-  <h2 class="sthead"><span class="stno">6d11</span>Illegal moves</h2>
-  <p class="stands">Stands on 6d1 to 6d10.</p>
-  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
-m \text{ maximal, so } \forall x\,(x \preccurlyeq m)\,? @@ that is greatest. Under ∣ on {1, 2, 3, 4, 6}, 4 is maximal and 6 is not below it
-\text{any part is a chain}\,? @@ only when any two of its members compare: {2, 3} under ∣ is not
-\text{the maximal-member principle on } \varnothing\,? @@ the empty chain needs an upper bound in a; on ∅ it has none, so the principle's hypothesis fails
-\le \text{ well-orders } \mathbb Z\,? @@ {x ∈ ℤ : x &lt; 0} has no least member. Some other order may (6d.4.3)
-\le \text{ well-orders } \mathbb N, \text{ by least-member}\,? @@ least-member covers settled parts; for any part only no-least-no-members's double negative, until 7·cb4
-m \text{ maximal in } \mathcal F, \text{ so } A \text{ is an input}\,? @@ chains-give-choice gives ¬¬(A is an input of m); the last step is rung 7's
-\begin{aligned}&\text{choose from what is left,}\\ &\quad\text{and so on, orders every set}\,?\end{aligned} @@ past ℕ the run needs a recursion longer than ℕ, not built; and 6b's “and so on” trap
-\begin{aligned}&\text{well-ordering-gives-choice,}\\ &\quad\text{using choice to find the least}\,?\end{aligned} @@ circular, and needless: the well-order picks
-  </pre>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">6d11.1</span><span class="ph know">know</span>Why is “m is maximal, so everything is below m” an illegal move? <br>Why is “any part is a chain” one?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="6d12">
-  <h2 class="sthead"><span class="stno">6d12</span>Running it backwards</h2>
-  <p class="stands">Stands on 6d1 to 6d10.</p>
-  <p data-pid="6fc743"><b>Wanting a choosing function and having a well-order, take the least (well-ordering-gives-choice).</b> Wanting something that cannot be made bigger, set up the partial things and order them by ⊆. Show unions of chains stay inside (as bounded-chains did), and call on the maximal-member principle. Then check whether the last step needs rung 7, as chains-give-choice's did. Wanting an order on a finite set, use its matching with n (finite-order); on its settled parts the order is a well-order. Seeing “and so on” past the counting numbers, name the recursion it needs. Found upward; written downward.</p>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">6d12.1</span><span class="ph know">know</span>Wanting something that cannot be made bigger, what do you set up, and what do you check last?</li>
+      <li><span class="qid">6d9.1</span><span class="ph know">know</span>Asked whether a statement follows from the principles, what do you look for? <br>How do you tell whether a set belongs to the sock world?</li>
     </ol>
   </section>
 </section>
@@ -294,24 +214,22 @@ m \text{ maximal in } \mathcal F, \text{ so } A \text{ is an input}\,? @@ chains
   <div class="eyebrow">Special challenges · there if you want them</div>
   <h2>Special challenges</h2>
   <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
-  <div class="chq"><span class="chid">6d.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\mathcal A = \{\{1, 2\}, \{2, 3\}, \{3, 1\}\},"></span> <span data-tex-inline="P\text{: the partial choosing functions of } \mathcal A"></span> <span data-tex-inline="\text{that never take one member twice,}"></span> <span data-tex-inline="\text{ordered by } \subseteq"></span></span>Build an order of your own from partial pickings, and test it.<ol class="parts" type="a"><li>Prove every chain in P has an upper bound, and find every maximal member.</li><li>Find which members of P have every member of 𝒜 as an input.</li><li>Find the line of chains-give-choice's column that breaks for P.</li></ol></div>
-  <div class="chq"><span class="chid">6d.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\emptyset \text{ with the empty relation,}"></span> <span data-tex-inline="\{x\} \text{ with } \{(x, x)\}"></span></span>Decide whether each is a well-order.</div>
-  <div class="chq"><span class="chid">6d.4.3</span><span class="tagq">reroute</span>Find an order on the integers under which they form a chain and every non-empty settled part has a least member.</div>
-  <div class="chq"><span class="chid">6d.4.4</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="X \text{ finite,}"></span> <span data-tex-inline="\preccurlyeq\text{: a partial order making } X \text{ a chain}"></span></span>Decide whether every non-empty settled part of X has a least member.</div>
-  <div class="chq"><span class="chid">6d.4.5</span><span class="tagq">seam</span>Decide whether the parts of the numbers can be put in a line in which every non-empty collection of them has a first.</div>
+  <div class="chq"><span class="chid">6d.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="T_n = \{s_n, s&#x27;_n, s&#x27;&#x27;_n\}\text{, three socks alike,}"></span> <span data-tex-inline="\mathcal T = \{T_0, T_1, \ldots\},"></span> <span data-tex-inline="\text{swap: a rearrangement of the socks}"></span> <span data-tex-inline="\text{inside some of the } T_n,"></span> <span data-tex-inline="\text{in your world: a set that, all the way}"></span> <span data-tex-inline="\text{down, has finite supports}"></span></span>Build a sock world of your own, with three socks to a set.<ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\{s_0, s&#x27;_0\},"></span> <span data-tex-inline="\{s_0, s_1\}"></span></span>Find a support of each.</li><li>Prove 𝒯 has no choosing function in your world.</li><li>Find, in your world, a function taking each set of 𝒯 to a part of it with exactly 2 members, or prove there is none.</li></ol></div>
+  <div class="chq"><span class="chid">6d.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\mathbb N,"></span> <span data-tex-inline="\mathcal P(\mathbb N)"></span></span>Decide whether each is in the sock world.<br>Decide whether every set of numbers is.</div>
+  <div class="chq"><span class="chid">6d.4.3</span><span class="tagq">loop</span><span class="givens"><span data-tex-inline="S\text{: the set of all finite}"></span> <span data-tex-inline="\text{supports of a sock}"></span></span>Find a support of S, or prove there is none.</div>
+  <div class="chq"><span class="chid">6d.4.4</span><span class="tagq">seam</span>Choice is true in one world of the principles and false in another. Decide whether choice is true.</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r06concl.html">← 6·∎ · conclusion</a><a href="r06stat.html">6·stat · how do you pick a fair sample? →</a></nav>
+<nav class="nextrung"><a href="r06c.html">← 6c · finitely many needs no axiom</a><a href="r06concl.html">6·∎ · conclusion →</a></nav>
 
 <section class="extra basement">
   <div class="eyebrow">The basement · there if you want it</div>
   <h3>Who said it first</h3>
-  <p>“Choose from what is left” is Ernst Zermelo’s idea, and his 1904 proof is the first proof that every set can be well-ordered. Max Zorn published the maximal-member principle in 1935, as a remark on method in algebra; Kazimierz Kuratowski had stated a close relative in 1922, and Felix Hausdorff had one earlier still.</p>
-  <aside class="voice para"><p>John Bell, studying Zorn's lemma in settings that keep rung 1's gap, found that the lemma, suitably stated, survives there in places where the axiom of choice does not. So the double negative above cannot be removed by a cleverer column; it needs a new principle.</p><cite>after Bell, “Zorn's lemma and complete Boolean algebras in intuitionistic type theories”, Journal of Symbolic Logic 62 (1997)</cite></aside>
-  <aside class="voice para"><p>A joke that mathematicians tell, attributed to Jerry Bona: the axiom of choice is obviously true, the well-ordering principle obviously false, and who can tell about Zorn's lemma? The joke is that, given the other principles, all three are one statement.</p><cite>attributed to Jerry Bona</cite></aside>
+  <p>The described world is Kurt Gödel’s (1938); the sock world is Abraham Fraenkel’s (1922), built on Bertrand Russell’s socks; the 1963 world is Paul Cohen’s, and his method of making new sets is called forcing.</p>
+  <aside class="voice para"><p>Gödel stated the result in two sentences: if the axioms of set theory without choice are free from contradiction, they remain so when the axiom of choice is added; the model that shows it consists of the constructible sets.</p><cite>Gödel, “The consistency of the axiom of choice and of the generalized continuum-hypothesis”, Proceedings of the National Academy of Sciences 24 (1938)</cite></aside>
   <h3>Accepted names</h3>
-  <p>The maximal-member principle is Zorn’s lemma. “Every set has a well-order”, proved from Choice, is the well-ordering theorem. A partial order under which the whole set is a chain, as ≤ is on ℕ, is called a total order, or a linear order. The runs longer than ℕ are the ordinals, and the recursion along them is transfinite recursion.</p>
+  <p>A world in which every axiom of a list is true is a model of that list. The described sets are the constructible sets, and the described world is the constructible universe. The standard list of axioms for sets is Zermelo–Fraenkel set theory, ZF, or ZFC with choice. The longer run of stages, past every counting number, is the ordinals. The sock world is the Fraenkel model (with Mostowski, the Fraenkel–Mostowski permutation model).</p>
 </section>
 </div>
 
@@ -320,129 +238,90 @@ m \text{ maximal in } \mathcal F, \text{ so } A \text{ is an input}\,? @@ chains
 (function(){
 const {tex,col,stepper}=Rung;
 const R=String.raw;
-function size(cv,H){ const dp=window.devicePixelRatio||1, W=cv.clientWidth||300; cv.width=W*dp; cv.height=H*dp; cv.style.height=H+'px'; const c=cv.getContext('2d'); c.setTransform(dp,0,0,dp,0,0); return {c,W}; }
 
-/* ---------- left: choose from what is left ---------- */
-const X=['r','s','t','u','v','w'];
-let choice=[]; // choice[k] = letter picked at row k
-function rebuild(from){ const left=X.filter(x=>!choice.slice(0,from).includes(x)); for(let k=from;k<X.length;k++){ const rest=X.filter(x=>!choice.slice(0,k).includes(x)); if(!rest.includes(choice[k])) choice[k]=rest[0]; } choice=choice.slice(0,X.length); }
-function random(){ const rest=X.slice(); choice=[]; while(rest.length){ const i=Math.floor(Math.random()*rest.length); choice.push(rest.splice(i,1)[0]); } }
-choice=['t','r','w','s','v','u'];
-let T=new Set(['s','u','w']); let geoW=[];
-document.getElementById('rnd').onclick=()=>{ random(); drawW(); };
-document.getElementById('alp').onclick=()=>{ choice=X.slice(); drawW(); };
-const tch=document.getElementById('tch');
-X.forEach(x=>{ const b=document.createElement('button'); b.textContent=x; if(T.has(x)) b.className='on'; b.onclick=()=>{ if(T.has(x)) T.delete(x); else T.add(x); b.classList.toggle('on',T.has(x)); drawW(); }; tch.appendChild(b); });
-const cvW=document.getElementById('cvW');
-function drawW(){
-  const W0=cvW.clientWidth||300, rh=30, H=X.length*rh+10; const {c}=size(cvW,H); c.fillStyle=col('--card'); c.fillRect(0,0,W0,H); geoW=[];
-  const lw=W0<460?Math.min(96,W0*.3):Math.min(175,W0*.38), tw=Math.min(34,(W0-lw-10)/6);
-  const least=choice.find(x=>T.has(x));
-  for(let k=0;k<X.length;k++){ const rest=X.filter(x=>!choice.slice(0,k).includes(x)); const y=6+k*rh;
-    // order so far (left)
-    c.font='12px IBM Plex Mono, monospace'; c.textAlign='left'; c.fillStyle=col('--teal'); c.fillText(choice.slice(0,k+1).join(W0<460?' ':' ≼ '),4,y+18);
-    rest.forEach((x,j)=>{ const cx=lw+j*tw+tw/2, cy=y+rh/2; const pick=x===choice[k];
-      c.beginPath(); c.fillStyle=pick?col('--ember'):col('--sand'); c.strokeStyle=(pick&&x===least)?col('--gold'):col('--grid'); c.lineWidth=(pick&&x===least)?3:1;
-      if(c.roundRect) c.roundRect(cx-tw/2+2,cy-11,tw-4,22,4); else c.rect(cx-tw/2+2,cy-11,tw-4,22); c.fill(); c.stroke();
-      c.fillStyle=pick?'#fff':col('--ink'); c.textAlign='center'; c.font=(T.has(x)?'600 ':'')+'13px IBM Plex Mono, monospace'; c.fillText(x,cx,cy+4); geoW.push({x:cx,y:cy,w:tw,k,l:x}); });
-  }
-  c.textAlign='left';
-  const Ts=[...T].sort();
-  const L=[`\\text{order: } ${choice.join(' \\preccurlyeq ')}`];
-  L.push(`c(X) = ${choice[0]},\\ \\ c(X \\setminus \\{${choice[0]}\\}) = ${choice[1]},\\ \\dots`);
-  if(Ts.length){ const steps=[]; for(const x of choice){ steps.push(x); if(T.has(x)) break; }
-    L.push(`T = \\{${Ts.join(', ')}\\}:\\ \\text{run down: } ${steps.join(',\\ ')}`);
-    L.push(`\\htmlClass{new}{\\text{least member of } T = ${least}}\\ \\text{(its earliest pick)}`); }
-  else L.push(`T = \\varnothing:\\ \\text{no least member}`);
-  tex(document.getElementById('eqW'),'\\begin{gathered}'+L.join('\\\\ ')+'\\end{gathered}',true);
+/* ---------- left: Fraenkel's swaps ---------- */
+const NP=10; let fm='hand', picks=[0,1,0,null,null,null,null,null,null,null], swp=null;
+document.querySelectorAll('#fch button').forEach(b=>b.onclick=()=>{ fm=b.dataset.f; swp=null; document.querySelectorAll('#fch button').forEach(z=>z.classList.toggle('on',z===b)); drawS(); });
+document.getElementById('unsw').onclick=()=>{ swp=null; drawS(); };
+const sk=v=>v===null?'':(v?'s′':'s');
+function cur(){ return fm==='all'?Array(NP).fill(0):picks; }
+function drawS(){
+  const c=cur(); const tb=document.getElementById('sw');
+  let h='<tr><th></th>'; for(let i=0;i<NP;i++) h+=`<th class="k${swp===i?' on':''}" data-i="${i}">K<sub>${i}</sub></th>`; h+='<th>K<sub>10</sub>, …</th></tr>';
+  h+='<tr><th>c</th>'; for(let i=0;i<NP;i++){ const sup=c[i]!==null; h+=`<td class="p${sup?' sup':''}" data-i="${i}">${sk(c[i])}</td>`; } h+=`<td class="${fm==='all'?'sup':'off'}">${fm==='all'?'s, s, …':''}</td></tr>`;
+  const pc=c.map((v,i)=>(v!==null&&i===swp)?1-v:v);
+  h+='<tr><th>w(c)</th>'; for(let i=0;i<NP;i++){ const mv=pc[i]!==c[i]; h+=`<td class="${mv?'mv':''}">${sk(pc[i])}</td>`; } h+=`<td class="${fm==='all'?'':'off'}">${fm==='all'?'s, s, …':''}</td></tr>`;
+  tb.innerHTML=h;
+  tb.querySelectorAll('th.k').forEach(th=>th.onclick=()=>{ const i=+th.dataset.i; swp=(swp===i?null:i); drawS(); });
+  tb.querySelectorAll('td.p').forEach(td=>td.onclick=()=>{ if(fm!=='hand') return; const i=+td.dataset.i; picks[i]=picks[i]===null?0:(picks[i]===0?1:null); drawS(); });
+  const L=[]; const sup=c.map((v,i)=>v!==null?i:null).filter(v=>v!==null);
+  if(fm==='hand'){ L.push(sup.length?`\\text{support: } ${sup.map(i=>`K_{${i}}`).join(',\\ ')}`:`\\text{support: empty}`);
+    L.push(`c \\text{ chooses for the pairs it picks from: finite-choice}`);
+    if(swp===null) L.push(`\\text{tap a pair's heading to swap it}`);
+    else if(c[swp]===null) L.push(`\\htmlClass{keep}{w \\text{ swaps } K_{${swp}}\\text{, off the support: } w(c) = c}`);
+    else L.push(`\\htmlClass{new}{w \\text{ swaps } K_{${swp}}\\text{, on the support: } c \\text{ moves}}`);
+    L.push(`\\text{in the world: a finite support exists}`); }
+  else { L.push(`c = \\{(K_n, s_n) : n \\in \\mathbb N\\}`);
+    L.push(swp===null?`\\text{tap any pair's heading}`:`\\htmlClass{new}{w \\text{ swaps } K_{${swp}}:\\ (K_{${swp}}, s'_{${swp}}) \\in w(c),\\ w(c) \\ne c}`);
+    L.push(`\\text{any finite list misses such a pair}`);
+    L.push(`\\htmlClass{new}{\\text{no finite support: not in the world (no-sock-picking)}}`); }
+  tex(document.getElementById('eqS'),'\\begin{gathered}'+L.join('\\\\ ')+'\\end{gathered}',true);
 }
-cvW.addEventListener('pointerdown',e=>{ const Rc=cvW.getBoundingClientRect(), x=e.clientX-Rc.left, y=e.clientY-Rc.top; const g=geoW.find(o=>Math.abs(x-o.x)<o.w/2&&Math.abs(y-o.y)<13); if(!g) return; choice[g.k]=g.l; rebuild(g.k+1); drawW(); });
 
-/* ---------- right: Zorn on partial pickings ---------- */
-const SETS=[['c','d'],['o'],['a','b']], NAMES=[['cat','dog'],['owl'],['ant','bee']], STN=['\\{\\text{cat},\\text{dog}\\}','\\{\\text{owl}\\}','\\{\\text{ant},\\text{bee}\\}'];
-const F=[]; for(let i=0;i<3;i++) for(let j=0;j<2;j++) for(let k=0;k<3;k++){ F.push([i?SETS[0][i-1]:null,j?SETS[1][j-1]:null,k?SETS[2][k-1]:null]); }
-const lev=p=>p.filter(v=>v!==null).length;
-const sub=(p,q)=>p.every((v,i)=>v===null||v===q[i]);
-const lab=p=>p.map(v=>v===null?'–':v).join('\u2009');
-let Csel=[], geoZ=[];
-document.getElementById('zclr').onclick=()=>{ Csel=[]; drawZ(); };
-document.getElementById('zgrow').onclick=()=>{ if(!Csel.length) return; const p=F[Csel[Csel.length-1]]; const i=p.findIndex(v=>v===null); if(i<0) return; const q=p.slice(); q[i]=SETS[i][0]; const qi=F.findIndex(r=>r.join()===q.join()); if(!Csel.includes(qi)) Csel.push(qi); else { Csel.splice(Csel.indexOf(qi),1); Csel.push(qi); } drawZ(); };
-const cvZ=document.getElementById('cvZ');
-function drawZ(){
-  const W0=cvZ.clientWidth||300, rows=[[],[],[],[]]; F.forEach((p,i)=>rows[lev(p)].push(i));
-  const rh=58, H=4*rh+6; const {c}=size(cvZ,H); c.fillStyle=col('--card'); c.fillRect(0,0,W0,H);
-  const pos={}; rows.forEach((r,L)=>{ r.forEach((i,j)=>{ pos[i]=[W0*(j+.5)/r.length, H-rh*(L+.5)]; }); });
-  // links
-  c.lineWidth=1; F.forEach((p,i)=>F.forEach((q,j)=>{ if(lev(q)===lev(p)+1&&sub(p,q)){ const on=Csel.includes(i)&&Csel.includes(j); c.strokeStyle=on?col('--ember'):col('--grid'); c.lineWidth=on?2:1; c.beginPath(); c.moveTo(pos[i][0],pos[i][1]-10); c.lineTo(pos[j][0],pos[j][1]+10); c.stroke(); } }));
-  const bw=Math.min(52,W0/8.6); geoZ=[]; c.font=(W0<420?'10':'11')+'px IBM Plex Mono, monospace'; c.textAlign='center';
-  F.forEach((p,i)=>{ const [x,y]=pos[i]; const inC=Csel.includes(i), mx=lev(p)===3;
-    c.beginPath(); if(c.roundRect) c.roundRect(x-bw/2,y-10,bw,20,4); else c.rect(x-bw/2,y-10,bw,20);
-    c.fillStyle=inC?col('--ember'):col('--sand'); c.fill(); c.strokeStyle=mx?col('--gold'):col('--grid'); c.lineWidth=mx?2.5:1; c.stroke();
-    c.fillStyle=inC?'#fff':col('--ink'); c.fillText(lab(p),x,y+4); geoZ.push({x,y,w:bw,i}); });
-  c.textAlign='left';
-  const L=[]; const sel=Csel.map(i=>F[i]);
-  const pT=p=>{ const pr=p.map((v,k)=>v===null?null:`(${STN[k]},\\ \\text{${NAMES[k][SETS[k].indexOf(v)]}})`).filter(Boolean); return pr.length?`\\{${pr.join(',\\ ')}\\}`:'\\varnothing'; };
-  if(!sel.length){ L.push(`\\mathcal C = \\varnothing:\\ \\text{a chain, vacuously}`); L.push(`\\text{upper bound: } \\textstyle\\bigcup\\varnothing = \\varnothing \\in \\mathcal F`); }
-  else { let bad=null; for(let a=0;a<sel.length&&!bad;a++) for(let b=a+1;b<sel.length;b++) if(!sub(sel[a],sel[b])&&!sub(sel[b],sel[a])){ bad=[sel[a],sel[b]]; break; }
-    if(bad){ L.push(`\\htmlClass{new}{\\text{not a chain: ${lab(bad[0])} and ${lab(bad[1])}}}`); L.push(`\\text{do not compare}`);
-      const u=[0,1,2].map(k=>{ const vs=[...new Set(sel.map(p=>p[k]).filter(v=>v!==null))]; return vs; }); const clash=u.some(v=>v.length>1);
-      L.push(clash?`\\text{union: an input with two outputs}`:`\\text{(here the union is still in } \\mathcal F\\text{)}`); }
-    else { const top=[0,1,2].map(k=>{ const v=sel.map(p=>p[k]).find(v=>v!==null); return v===undefined?null:v; });
-      const nm=top.map((v,k)=>v===null?null:NAMES[k][SETS[k].indexOf(v)]).filter(Boolean);
-      L.push(`\\htmlClass{keep}{\\text{a chain}}`); L.push(`\\textstyle\\bigcup\\mathcal C \\text{ picks } ${nm.length?nm.map(x=>'\\text{'+x+'}').join(',\\ '):'\\text{nothing}'}`); L.push(`\\text{an upper bound, in } \\mathcal F\\ \\text{(bounded-chains)}`); }
-    const last=F[Csel[Csel.length-1]]; const miss=last.findIndex(v=>v===null);
-    if(miss>=0) L.push(`\\text{last one misses } ${STN[miss]}\\text{: grow it}`); else L.push(`\\htmlClass{keep}{\\text{last one: maximal; it chooses}}`); }
-  L.push(`\\text{gold, maximal: the } 2 \\cdot 1 \\cdot 2 = 4 \\text{ choosers}`);
-  tex(document.getElementById('eqZ'),'\\begin{gathered}'+L.join('\\\\ ')+'\\end{gathered}',true);
+/* ---------- right: earliest in a listing ---------- */
+const V3=['0','1','\\{1\\}','2'], V3p=['0','1','{1}','2'];
+const LST=[[0,1,2,3],[3,2,1,0],[2,0,3,1]];
+let li=0; const parts=[]; for(let m=1;m<16;m++){ const s=[]; for(let i=0;i<4;i++) if(m&(1<<i)) s.push(i); parts.push(s); }
+let inA=new Set([parts.findIndex(s=>s.join()==='1,3'),parts.findIndex(s=>s.join()==='2,3'),parts.findIndex(s=>s.join()==='0,2')]);
+document.querySelectorAll('#lch button').forEach(b=>b.onclick=()=>{ li=+b.dataset.l; document.querySelectorAll('#lch button').forEach(z=>z.classList.toggle('on',z===b)); drawG(); });
+const gp=document.getElementById('gp');
+function drawG(){
+  gp.innerHTML=''; parts.forEach((s,k)=>{ const b=document.createElement('button'); b.textContent='{'+s.map(i=>V3p[i]).join(', ')+'}'; if(inA.has(k)) b.className='in'; b.onclick=()=>{ if(inA.has(k)) inA.delete(k); else inA.add(k); drawG(); }; gp.appendChild(b); });
+  const order=LST[li]; const place=i=>order.indexOf(i);
+  const L=[`\\text{listing: } ${order.map(i=>V3[i]).join(',\\ ')}`];
+  const sel=[...inA].sort((a,b)=>a-b).map(k=>parts[k]);
+  if(!sel.length) L.push(`\\mathcal A = \\varnothing:\\ c = \\varnothing\\ \\text{(empty-collection)}`);
+  else { const st=s=>`\\{${s.map(i=>V3[i]).join(', ')}\\}`;
+    const pr=sel.map(s=>{ const e=s.slice().sort((a,b)=>place(a)-place(b))[0]; return `(${st(s)},\\ \\htmlClass{new}{${V3[e]}})`; });
+    for(let i=0;i<pr.length;i+=2) L.push((i?'':'c = \\{')+pr.slice(i,i+2).join(',\\ ')+(i+2>=pr.length?'\\}':','));
+    L.push(`\\text{one rule, every set at once: a sift, no calls}`); }
+  tex(document.getElementById('eqG'),'\\begin{gathered}'+L.join('\\\\ ')+'\\end{gathered}',true);
 }
-cvZ.addEventListener('pointerdown',e=>{ const Rc=cvZ.getBoundingClientRect(), x=e.clientX-Rc.left, y=e.clientY-Rc.top; const g=geoZ.find(o=>Math.abs(x-o.x)<o.w/2&&Math.abs(y-o.y)<12); if(!g) return; const k=Csel.indexOf(g.i); if(k>=0) Csel.splice(k,1); else Csel.push(g.i); drawZ(); });
-new ResizeObserver(()=>{ drawW(); drawZ(); }).observe(cvW);
-if(window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{ drawW(); drawZ(); });
-Csel=[F.findIndex(p=>p.join()===[null,null,null].join()),F.findIndex(p=>p.join()===['c',null,null].join())];
-drawW(); drawZ();
+drawS(); drawG();
 
 /* ---------- slides ---------- */
 const N='\\htmlClass{new}', K='\\htmlClass{keep}';
 stepper('#sl1',[
-  {k:'ember',kl:'antisymmetric',t:R`x\,r\,y \land y\,r\,x \;\Rightarrow\; ${N}{x = y}`,n:`Two things related each way are the same. ⊆ has it by double-inclusion; ∣ by divides-both-ways; ≤ by any-two-compare.`},
-  {k:'ember',kl:'partial order',t:R`\text{reflexive} \land \text{antisymmetric} \land \text{transitive}:\ \ x \preccurlyeq y`,n:`Read “x is below y”. Some pairs may not compare: {cat} and {dog} under ⊆; 2 and 3 under ∣.`}
-],{title:'The slides · partial orders · ← → keys work'});
+  {k:'teal',kl:'from 3d',t:R`\text{a world where the axioms are true and } S \text{ is false} \;\Rightarrow\; ${N}{\text{no proof of } S}`,n:`The techs care nothing for the world: a proof's last line is true wherever its axioms are true.`},
+  {k:'teal',kl:'independent',t:R`\text{no proof of choice},\quad \text{no proof of } \neg\text{Choice}`,n:`Two worlds, one for each direction: the 1963 world for the first, the described world for the second.`},
+  {k:'ember',kl:'the other principles',t:R`\text{the ladder's} \subseteq \text{the standard list}`,n:`The standard list holds every principle the ladder laid down, with replacement and every statement true or false besides. Its worlds serve the ladder.`},
+  {k:'ember',kl:'relative',t:R`\text{free of anything totally false} \;\Rightarrow\; \text{still free, with choice or with its denial}`,n:`What the two worlds show. That the principles are free of anything totally false is held in trust (3d).`}
+],{title:'The slides · independent · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'chain',t:R`\forall x, y \in C\,(x \preccurlyeq y \lor y \preccurlyeq x)`,n:`A part in which any two compare. {1, 2, 4, 8} under ∣ is one; {2, 3} is not; ∅ is one, vacuously.`},
-  {k:'ember',kl:'upper bound, maximal',t:R`\forall x \in C\,(x \preccurlyeq u);\qquad m \preccurlyeq x \Rightarrow ${N}{x = m}`,n:`An upper bound is above all of C. A maximal member has nothing above it but itself, which is not the same as being above everything.`},
-  {k:'ember',kl:'maximal, not greatest',t:R`\{1, 2, 3, 4, 6\} \text{ under } \mid:\ \ 4 \text{ and } 6 \text{ maximal}`,n:`Neither divides the other, and nothing else in the set is a multiple of either. No greatest member.`}
-],{title:'The slides · chains and maximal members · ← → keys work'});
+  {k:'ember',kl:'the toy world',t:R`\text{listing: } 0,\ 1,\ \{1\},\ 2`,n:`Every member of a member of V₄ is in this listing.`},
+  {k:'ember',kl:'the toy world',t:R`c(A) = ${N}{\text{the member of } A \text{ listed earliest}}`,n:`A condition true of exactly one member of each non-empty A (least-member on the places, and at most one least). A rule: by Separation, the sift c is a set.`}
+],{title:'The slides · the toy world · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'the one-least-member technique',t:R`\text{from } m, m' \text{ least, write } ${N}{m = m'}`,n:`At most one least member, by antisymmetry.`},
-  {k:'ember',kl:'well-order',t:R`\text{every non-empty part has a least member}`,n:`The well-order-compares technique: then any two compare, since {x, y} has a least member, which is x or y.`}
-],{title:'The slides · well-orders · ← → keys work'});
+  {k:'ember',kl:'the described world',t:R`\text{stage after stage: only the described parts}`,n:`Every set of the described world comes with a description, a string of marks.`},
+  {k:'ember',kl:'the described world',t:R`\text{strings listed: shorter first, then letter by letter}`,n:`So every set has an earliest description, and “earliest described member” is a rule. Choice is true, as for shoes.`}
+],{title:'The slides · the described world · ← → keys work'});
 stepper('#sl4',[
-  {k:'ember',kl:'the two principles',t:R`\text{well-ordering: } \forall s\,\exists r\,(r \text{ well-orders } s)`,n:`Every set can be put in an order with a least member in every non-empty part.`},
-  {k:'ember',kl:'the two principles',t:R`\text{maximal-member: every chain bounded} \;\Rightarrow\; ${N}{\exists m}\ \text{maximal}`,n:`If every chain, the empty one included, has an upper bound, something has nothing above it.`},
-  {k:'ember',kl:'a caution',t:R`\le \text{ on } \mathbb N:\ \text{settled parts (least-member)},\ \text{any part only } \neg\neg \text{ (no-least-no-members)}`,n:`So ≤ is not yet shown a well-order of ℕ. 7·cb4 returns to it.`}
-],{title:'The slides · the two principles · ← → keys work'});
+  {k:'ember',kl:'the sock world',t:R`K_n = \{s_n, s'_n\},\quad s_n \ne s'_n`,n:`Socks that are not sets, alike in everything but being two.`},
+  {k:'ember',kl:'swaps',t:R`w:\ s_k \leftrightarrow s'_k,\quad w(K_k) = K_k`,n:`A swap exchanges the socks of some pairs and carries every set along. Pairs, 𝒦 and the numbers stay in place.`},
+  {k:'ember',kl:'support',t:R`E \text{ finite: every swap off } E \text{ leaves the set in place}`,n:`A set belongs to the sock world when it, and everything inside it, has a finite support.`}
+],{title:'The slides · the sock world · ← → keys work'});
 stepper('#sl5',[
-  {k:'ember',kl:'the well-ordering-gives-choice technique',t:R`c(A) = ${N}{\text{the least member of } A}`,n:`A well-order on ⋃𝒜 picks from every A at once: least-chooses with any well-order. No case split, no axiom of choice. The well-ordering principle gives choice.`}
-],{title:'The slides · well-ordering gives choice · ← → keys work'});
+  {k:'ember',kl:'the no-sock-picking technique',t:R`c \text{ with support } E;\ \ K_k \text{ off } E;\ \ w \text{ swaps } K_k`,n:`𝒦 is infinite and E is finite, so a pair is left over (greatest-member). Swap it: w(c) = c.`},
+  {k:'ember',kl:'the no-sock-picking technique',t:R`(K_k, s_k) \in c \;\Rightarrow\; (K_k, ${N}{s'_k}) \in w(c) = c`,n:`So c has two outputs at K_k: s_k = s′_k, a clash. Refute: no choice function for 𝒦 in the world.`},
+  {k:'ember',kl:'countable',t:R`n \mapsto K_n \text{ is in the world}`,n:`𝒦 is matched with ℕ inside the world, so even countable choice fails there.`},
+  {k:'ember',kl:'not for shoes',t:R`L(s_n) \text{ given} \;\Rightarrow\; \text{no swap of } s_n, s'_n`,n:`A swap must keep what the world is given. The left-shoe rule has the empty support.`}
+],{title:'The slides · no picking socks · ← → keys work'});
 stepper('#sl6',[
-  {k:'ember',kl:'partial pickings',t:R`p \subseteq \mathcal A \times \textstyle\bigcup\mathcal A:\ \text{one output at most; outputs in inputs}`,n:`A partial choice function. ℱ is the set of them, ordered by ⊆, with ∅ at the bottom.`},
-  {k:'ember',kl:'the bounded-chains technique',t:R`\text{from } \mathcal C \text{ a chain, write } ${N}{\textstyle\bigcup\mathcal C} \in \mathcal F`,n:`Two pairs with one input come from p and q in 𝒞; one is a part of the other, so both pairs lie in one partial picking: one output.`}
-],{title:'The slides · partial pickings · ← → keys work'});
+  {k:'ember',kl:'the 1963 world',t:R`\text{new sets, featureless to the old world; then finite supports}`,n:`A method named only as history. A world of sets only, every other principle true, choice false.`}
+],{title:'The slides · the 1963 world · ← → keys work'});
 stepper('#sl7',[
-  {k:'ember',kl:'the chains-give-choice technique',t:R`m \text{ maximal};\ \neg(A \text{ an input}) \;\Rightarrow\; m \cup \{(A, a)\} \in \mathcal F`,n:`A missing set could be added, and maximality makes the bigger one equal to m: so A was an input after all. Clash.`},
-  {k:'ember',kl:'the chains-give-choice technique',t:R`${N}{\neg\neg}(A \text{ is an input of } m)`,n:`Refute gives only the double negative. The last step, to “A is an input”, is 1b's gap: rung 7's.`}
-],{title:'The slides · chains give choice · ← → keys work'});
-stepper('#sl8',[
-  {k:'ember',kl:'choose from what is left',t:R`c(X),\ \ c(X \setminus \{c(X)\}),\ \ \dots`,n:`An old idea: the picks, in turn, lay X out in order. The least member of a part is its earliest pick.`},
-  {k:'ember',kl:'past every number',t:R`\text{after all of } \mathbb N\text{: choose again from what is left}`,n:`For an endless set the run must go past every counting number: a recursion along a run longer than ℕ, not built here. A sketch, said as one.`}
-],{title:'The slides · choose from what is left · ← → keys work'});
-stepper('#sl9',[
-  {k:'ember',kl:'the finite-order technique',t:R`x \preccurlyeq y \;\Leftrightarrow\; f(x) \le f(y)`,n:`A finite set, matched with n, is ordered by its places: a chain, by any-two-compare.`},
-  {k:'ember',kl:'the finite-order technique',t:R`P = \{k : k \lt n \land g(k) \in T\} \text{ settled};\ \ ${N}{g(\text{least of } P)}`,n:`For a settled non-empty part T, least-member finds the least place, and its partner is T's least member.`}
-],{title:'The slides · the finite-order technique · ← → keys work'});
-stepper('#sl10',[
-  {k:'ember',kl:'where they stand',t:R`\begin{gathered}\text{well-ordering} \Rightarrow \text{choice}\\ \text{maximal-member} \Rightarrow \neg\neg\,\text{choice}\\ \text{choice} \Rightarrow \text{both: sketched}\end{gathered}`,n:`With every statement true or false and a recursion past ℕ, the three are one principle. In practice, the two forms are the working tools.`}
-],{title:'The slides · where they stand · ← → keys work'});
+  {k:'ember',kl:'what is left',t:R`\text{Choice: chosen, not discovered}`,n:`By only-the-infinite-fails, a world where it fails holds an infinite collection; by 6b, one with no rule.`}
+],{title:'The slides · what is left · ← → keys work'});
 
 function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
 Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);

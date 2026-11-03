@@ -30,12 +30,10 @@ table.tt td.l{text-align:left}
   <h1>How does a machine learn from its mistakes?</h1>
   <p data-pid="f60dc6">How does a machine learn from its mistakes? A program that reads handwritten digits, or turns speech into text, is not written line by line by anyone. It starts as a machine with millions of knobs set at random, and it is shown examples with their right answers. Each time it is wrong, every knob is turned a little, in the direction that would have made it less wrong. After enough examples it is right most of the time. People have tried to build such machines since the 1950s. The first could learn only what a single straight line can separate, and in 1969 a short proof showed how little that is. What makes the question hard is the knobs. To know which way to turn each of millions of them, you need the slope of the error in each of millions of directions, and finding each slope by trying the knob costs a whole run of the machine. In 1986 a paper showed that every one of those slopes comes out of one run backwards through the machine, by the chain technique of rung twenty-eight. Training is then a walk downhill in a space with millions of directions. This page proves the first machine’s mistake count, why one unit cannot learn either-but-not-both, how the backward run gets every slope at once, and what a walk downhill is sure to find. It ends with what is proved, and with what is still open: why the huge machines of today work as well as they do.</p>
   <p class="gesture" data-pid="b03c48">The first machine adds up its inputs with weights and answers yes when the total is above 0. When it is wrong, it adds the example to its weights, or takes it away. If some weights would get every example right with room to spare, the machine stops making mistakes after a number of them fixed by that room. But one such unit cannot answer either-but-not-both, and units stacked in layers cannot be trained by that rule. Replace the sharp yes or no by a smooth switch whose slope is easy to find. Then the error of the whole machine is a chain of flat maps, and its slopes multiply as grids do. Multiply them starting from the error and going back toward the inputs, and each step is a row times a grid: the backward run costs about as much as the forward run, however many knobs there are. With every slope in hand, step downhill. If the error does not bend too sharply, each step lowers it, and after many steps some step was taken where the ground was nearly flat. Nearly flat is not the bottom: it can be a saddle, or a poor hollow. Why walking downhill on the error of a huge machine finds answers that also work on examples it never saw is the open question.</p>
-  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r28c.html">28c</a> (the chain-of-flat-maps and roads-add techniques), <a href="r28b.html">28b</a> (the slope-grid technique), <a href="r28g.html">28g</a> (the uphill technique), <a href="r28o.html">28o</a> (gradient descent), <a href="r28l.html">28l</a> (the second-slope grid and saddles), <a href="r27i.html">27i</a> (the angle-between technique), <a href="r27d.html">27d</a> (the product-is-doing technique), <a href="r23b.html">23b</a> (how wrong the match is), <a href="r17e.html">17e</a> (exp), <a href="r26then.html">26·then</a> (a nerve that fires) and <a href="r27now.html">27·now</a> (what is proved, and what is open). Rung 29 asks whether space itself must be flat.</p></div>
 </header>
 
 <section class="class step" data-step="28now1">
   <h2 class="sthead"><span class="stno">28now1</span>A machine that learns from its mistakes</h2>
-  <p class="stands">Stands on 27i (the angle-between technique) and 4c (induction).</p>
   <p data-pid="831ea6">Each example is a list of inputs x, with a 1 put last to stand for a fixed push, and a right answer y, which is +1 or −1. The machine holds a list of weights w and answers +1 when w · x is above 0. It starts at w = 0. On a mistake, when y (w · x) ≤ 0, it adds yx to w. Nothing else.</p>
   <pre class="lines" data-k="ember" data-label="this page: the mistake-bound technique">
 |w^*| = 1,\ \ y\,(w^* \cdot x) \ge \gamma \gt 0,\ \ |x| \le R \text{ for every example} @@ some weights w* get every example right, with room γ
@@ -56,7 +54,6 @@ k\gamma \le w_k \cdot w^* \le |w_k| \le \sqrt{k}\,R @@ induction (4c) from w₀ 
 
 <section class="class step" data-step="28now2">
   <h2 class="sthead"><span class="stno">28now2</span>What one unit cannot learn, and a smooth switch</h2>
-  <p class="stands">Stands on 28·now.1, 17e (exp) and 13 (slope).</p>
   <p data-pid="e32a00">Either-but-not-both (XOR) answers +1 for (0, 1) and (1, 0), and −1 for (0, 0) and (1, 1). Can one unit learn it?</p>
   <pre class="lines" data-k="ember" data-label="this page: the either-not-both technique">
 w = (p, q, r):\ \ r \lt 0,\ \ p + r \gt 0,\ \ q + r \gt 0,\ \ p + q + r \lt 0 @@ what the four answers need, if one unit is right on all four
@@ -83,7 +80,6 @@ p + q + r \gt -r \gt 0 @@ take r away; r &lt; 0
 
 <section class="class step" data-step="28now3">
   <h2 class="sthead"><span class="stno">28now3</span>Every slope from one run backwards</h2>
-  <p class="stands">Stands on 28·now.2, 28c (the chain-of-flat-maps technique), 28b (the slope-grid technique) and 27d (the product-is-doing technique).</p>
   <p data-pid="c3f2cb">Stack the units in layers. Layer k takes the list a₍ₖ₋₁₎ from the layer before and gives aₖ = σ(Wₖ a₍ₖ₋₁₎), with σ applied to each entry. The grid Wₖ holds that layer’s knobs. The last layer’s list is the answer o, and the error on one example with right answer t is ℓ = ½|o − t|².</p>
   <pre class="lines" data-k="ember" data-label="this page: the backward-pass technique">
 z_k = W_k\,a_{k-1},\ \ a_k = \sigma(z_k),\ \ k = 1, \dots, D @@ the forward run, from a₀ = x to a_D = o
@@ -105,7 +101,6 @@ g_{k-1} = g_k\,\Sigma_k\,W_k @@ the chain-of-flat-maps technique (28c): slope gr
 
 <section class="class step" data-step="28now4">
   <h2 class="sthead"><span class="stno">28now4</span>Training is walking downhill</h2>
-  <p class="stands">Stands on 28·now.3, 28o (gradient descent), 28g (the uphill technique), 28l (saddles) and 23b (how wrong the match is).</p>
   <p data-pid="84cbeb">Add the errors over every example: that is the total error, a function of all the knobs. Its uphill arrow comes from the backward pass, one example at a time. Training steps the knobs p ↦ p − η∇ℓ(p), as 28o walks downhill. The total error of a network is no bowl: it has many hollows, and saddles between them. What can a walk downhill be sure of?</p>
   <pre class="lines" data-k="ember" data-label="this page: the small-slope technique">
 \varphi(t) = \ell(p - t\,g),\ \ g = \nabla\ell(p),\ \ \varphi'(0) = -|g|^2 @@ the roads-add technique (28c) along the step
@@ -142,7 +137,6 @@ g_{k-1} = g_k\,\Sigma_k\,W_k @@ the chain-of-flat-maps technique (28c): slope gr
 
 <section class="class step" data-step="28now5">
   <h2 class="sthead"><span class="stno">28now5</span>What is proved, and what is open</h2>
-  <p class="stands">Stands on 28·now.1 to 28·now.4 and 27·now (what is proved, and what is open).</p>
   <p data-pid="78771a"><b>How to get every slope at once, and what a walk downhill is sure to reach, are proved; why walking downhill on a huge machine finds rules that work on new cases is open.</b></p>
   <ul>
     <li data-pid="22580d">Proposed, 1943 and 1958. A unit that fires when a weighted sum passes a threshold, and then a machine that learns its weights from mistakes.</li>
@@ -166,7 +160,6 @@ g_{k-1} = g_k\,\Sigma_k\,W_k @@ the chain-of-flat-maps technique (28c): slope gr
 
 <section class="class step" data-step="28now6">
   <h2 class="sthead"><span class="stno">28now6</span>Illegal moves</h2>
-  <p class="stands">Stands on 28·now.1 to 28·now.5.</p>
   <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
 \text{the mistake rule always stops}\,? @@ only when some weights get every example right with room γ &gt; 0
 \text{a sharp yes or no can be trained by slopes}\,? @@ its slope is 0 wherever it has one

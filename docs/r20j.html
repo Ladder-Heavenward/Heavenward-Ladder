@@ -30,12 +30,10 @@ table.tt td.l{text-align:left}
   <h1>Turns in coordinates</h1>
   <p data-pid="bfb0ab">A turn about the origin is decided by one point: where it sends (1, 0). Record that point, and the turn is a pair of numbers. This step works with turns as pairs. Two turns make a third by a rule for pairs, the rule works in either order, and undoing changes one sign. A pair whose squares do not add to 1 is still a move: a turn and a stretch.</p>
   <p class="gesture" data-pid="1e5660">Every other point follows by the same mixing of across and up. One turn then another is a turn, and its pair comes from the two pairs by a fixed rule of multiplying. Turning the second number’s sign gives the turn that undoes it.</p>
-  <div class="ready"><h3>What this stands on, and where it goes</h3><p>Stands on <a href="r18f.html">18f</a> (turns as pairs), <a href="r20c.html">20c</a> (turns), <a href="r20e.html">20e</a> (two flips), <a href="r20f.html">20f</a> (three points decide), <a href="r20g.html">20g</a> (which way round). The call backs to <a href="r19f.html">19f</a>, <a href="r09d.html">9d</a> and <a href="r08i.html">8i</a> follow.</p></div>
 </header>
 
 <section class="class step" data-step="20j1">
   <h2 class="sthead"><span class="stno">20j1</span>A turn is a pair</h2>
-  <p class="stands">Stands on 20c2 (turns), 20f2 (three points decide) and 20g (which way round).</p>
   <p data-pid="7b3f9e">Turn-is-a-pair technique: <b>a turn about the origin is fixed by where it sends (1, 0).</b> If it sends (1, 0) to (a, b), it sends (0, 1) to (−b, a), and every (x, y) to (ax − by, bx + ay).</p>
   <pre class="lines" data-k="ember" data-label="this step: the turn-is-a-pair technique">
 R(0, 0) = (0, 0),\ \ R(1, 0) = (a, b) @@ a turn about O; a² + b² = 1, since R keeps the length 1
@@ -55,7 +53,6 @@ R(0, 1) \text{ is 1 from } O \text{ and } \sqrt{2} \text{ from } (a, b) @@ R kee
 
 <section class="class step" data-step="20j2">
   <h2 class="sthead"><span class="stno">20j2</span>Turns combine by a rule for pairs</h2>
-  <p class="stands">Stands on 20j1.</p>
   <p data-pid="8b48c5">Pair-product technique: <b>the turn by (a, b) after the turn by (c, d) is the turn by (ac − bd, ad + bc).</b> Follow (1, 0): the first turn sends it to (c, d), and the second sends (c, d) to (ac − bd, bc + ad).</p>
   <pre class="lines" data-k="ember" data-label="this step: the pair-product technique">
 R_{(a,b)}(R_{(c,d)}(1, 0)) = R_{(a,b)}(c, d) @@ 20j1
@@ -82,7 +79,6 @@ R_{(a,b)}(R_{(c,d)}(1, 0)) = R_{(a,b)}(c, d) @@ 20j1
 
 <section class="class step" data-step="20j3">
   <h2 class="sthead"><span class="stno">20j3</span>Undoing a turn</h2>
-  <p class="stands">Stands on 20j2 and 20b2 (undoing).</p>
   <p data-pid="72be99">Pair-undo technique: <b>the turn by (a, −b) undoes the turn by (a, b).</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the pair-undo technique">
 (a, b) \cdot (a, -b) = (a^2 + b^2,\ -ab + ab) @@ the pair product
@@ -101,7 +97,6 @@ R_{(a,b)}(R_{(c,d)}(1, 0)) = R_{(a,b)}(c, d) @@ 20j1
 
 <section class="class step" data-step="20j4">
   <h2 class="sthead"><span class="stno">20j4</span>Turn and stretch</h2>
-  <p class="stands">Stands on 20j2 and 20a3 (similarities).</p>
   <p data-pid="1924da">Turn-and-stretch technique: <b>for any pair (a, b) other than (0, 0), (x, y) ↦ (ax − by, bx + ay) is a turn followed by a stretch by r = √(a² + b²).</b> And such pairs combine by the same rule, with the stretches multiplying.</p>
   <pre class="lines" data-k="ember" data-label="this step: the turn-and-stretch technique">
 (a, b) = r\,(a/r,\ b/r),\ \ (a/r)^2 + (b/r)^2 = 1 @@ r = √(a² + b²) &gt; 0
@@ -120,7 +115,6 @@ R_{(a,b)}(R_{(c,d)}(1, 0)) = R_{(a,b)}(c, d) @@ 20j1
 
 <section class="class step" data-step="20j5">
   <h2 class="sthead"><span class="stno">20j5</span>Illegal moves</h2>
-  <p class="stands">Stands on 20j1 to 20j4.</p>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
 (a, b) \cdot (c, d) = (ac,\ bd)\,? @@ (ac − bd, ad + bc): each new coordinate mixes all four
 R_{(a,b)}^{-1} = R_{(-a,-b)}\,? @@ that is the half turn after it; undo is (a, −b)
