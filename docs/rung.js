@@ -86,7 +86,9 @@ window.LadderRecord={
     a.download='ladder-record-'+new Date().toISOString().slice(0,10)+'.json'; document.body.appendChild(a); a.click();
     setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },500); },
   import(o){ if(!o||o.schema!=='ladder-record') throw new Error('not a ladder record');
-    const b=blank(); for(const k in b) if(!(k in o)) o[k]=b[k]; rec=o; save(); }
+    const b=blank(); for(const k in b) if(!(k in o)) o[k]=b[k]; rec=o; save(); },
+  /* 0.3.4: erase all progress; keeps only the terms agreement and the reset marker */
+  erase(){ const o=load(), b=blank(); b.meta=o.meta||{}; if(o.prefs&&o.prefs.agreed!==undefined) b.prefs.agreed=o.prefs.agreed; rec=b; save(); }
 };
 addEventListener('storage',e=>{ if(e.key===RK){ raw=null; } });
 })();
@@ -480,7 +482,7 @@ function deskHTML(){
     +'<div class="dpane" id="dp-graph"><div id="dmg"></div><p class="dnote" style="margin-top:10px">Type it as on paper: x^2, 2sin(x), e^x, ln x, √x, |x|, x!. a, b, c and k get sliders.</p></div>'
     +'<div class="dpane" id="dp-moves"><p class="dnote" id="dmnote">The techs this step uses and builds: what each is called, what it does in words, and the line in symbols.</p><div id="dmoves"></div><p><a class="dlink" href="moves.html">every tech you have earned →</a></p></div>'
     +'<div class="dpane" id="dp-rand"><p class="dnote">Practice drawn from the pools your steps have opened, with no repeats.</p></div>'
-    +'<div class="dpane" id="dp-rec"><p class="dnote">Everything the ladder remembers about your climb is one record, kept on this device. Save it as a file to keep a copy or to carry it to another device, and open that file there.</p><p><button type="button" class="dlink recx">save my record as a file</button></p><p><label class="dlink">open a record file <input type="file" accept=".json,application/json" class="reci" hidden></label></p><p class="dnote" id="recnote"></p></div>';
+    +'<div class="dpane" id="dp-rec"><p class="dnote">Everything the ladder remembers about your climb is one record, kept on this device. Save it as a file to keep a copy or to carry it to another device, and open that file there.</p><p><button type="button" class="dlink recx">save my record as a file</button></p><p><label class="dlink">open a record file <input type="file" accept=".json,application/json" class="reci" hidden></label></p><p><button type="button" class="dlink recdel">delete my progress</button></p><p class="dnote" id="recnote"></p></div>';
   document.body.append(b,d);
 }
 
@@ -847,6 +849,8 @@ window.__deskInit=function(){
   const dh=desk.querySelector('.dheights'); if(dh) dh.onclick=()=>{ open(false); if(window.LadderFV) LadderFV.heights(); else location.href='index.html'; };
   const rx=desk.querySelector('.recx'), ri=desk.querySelector('.reci'), rn=desk.querySelector('#recnote');
   if(rx) rx.onclick=()=>LadderRecord.export();
+  const rd=desk.querySelector('.recdel'); if(rd) rd.onclick=()=>{ if(!confirm('Delete your progress? You will lose all your progress: every footing, star, measure, standing question and note on this device. Save your record as a file first if you may want it back.')) return;
+    LadderRecord.erase(); rn.textContent='Progress deleted. Reloading…'; setTimeout(()=>location.href='index.html',400); };
   if(ri) ri.onchange=()=>{ const f=ri.files[0]; if(!f) return; f.text().then(t=>{ const o=JSON.parse(t);
     if(!confirm('Replace the record on this device with the one in this file?')) return;
     LadderRecord.import(o); rn.textContent='Record opened. Reloading…'; setTimeout(()=>location.reload(),400); }).catch(()=>{ rn.textContent='That file is not a ladder record.'; }); };
