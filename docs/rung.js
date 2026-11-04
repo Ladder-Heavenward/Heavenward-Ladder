@@ -570,6 +570,7 @@ function starCounts(){
   return {blue,gold,wings};
 }
 const ICON_L='<svg class="lb-L" viewBox="104 92 308 328" aria-hidden="true"><path d="M222,132 L384,358" stroke="#5fd13a" stroke-width="16" stroke-linecap="round"/><path fill="currentColor" d="M112,100 L262,100 L262,108 C238,108 225,112 223,136 L222,360 L360,360 C384,359 397,342 398,294 L405,294 L400,412 L112,412 L112,404 C134,404 149,399 150,378 L150,136 C149,112 136,108 112,108 Z"/><path d="M222,318 L264,318 L264,360" fill="none" stroke="#e8703a" stroke-width="16"/></svg>';
+window.ICON_L_HTML='<span class="lb-l">'+ICON_L+'<span class="lb-w">adder</span></span>';
 const WINGS='<svg viewBox="0 0 28 14" width="22" height="11" aria-hidden="true"><path fill="currentColor" d="M13.4 9.2C11 3.6 6.4.9.8.8c1 3 2.4 5 4.4 6.2-1 .5-1.7 1.1-2.2 1.9 1.9.9 3.8 1 5.2.7-.6 1-.8 2-.5 3.2 1.4.4 3.4-.2 5.7-3.6z"/><path fill="currentColor" transform="matrix(-1 0 0 1 28 0)" d="M13.4 9.2C11 3.6 6.4.9.8.8c1 3 2.4 5 4.4 6.2-1 .5-1.7 1.1-2.2 1.9 1.9.9 3.8 1 5.2.7-.6 1-.8 2-.5 3.2 1.4.4 3.4-.2 5.7-3.6z"/></svg>';
 
 /* The ladder bar: sticky along the foot of every page. The ladder (home, with how far you have climbed),
@@ -1397,7 +1398,9 @@ function onIndex(){
   if(!document.querySelector('.rungs')) return;
   const came=ss.get('fv:heights'); ss.del('fv:heights');
   const first=!ss.get('fv:session'); ss.set('fv:session','1');
-  if(first&&!came&&!location.hash&&!window.LADDER_DESK){ const h=LadderFV.resumeHref(); if(h){ ss.set('fv:want','fv'); location.replace(h); return; } }
+  if(first&&!came&&!location.hash&&!window.LADDER_DESK){ let fs=null; try{ fs=LS.getItem('ladder:started'); }catch(e){}
+    const h=LadderFV.resumeHref(); if(h){ ss.set('fv:want','fv'); location.replace(h); return; }
+    if(fs!=='done'){ ss.set('fv:want','fv'); location.replace('start.html'); return; } }
   /* a row's link opens the page view; a footing in a row's footing list opens that footing */
   document.addEventListener('click',e=>{ const a=e.target.closest('a'); if(!a) return;
     if(a.closest('.flist')) ss.set('fv:want','fv'); else if(a.closest('.ladder')) ss.set('fv:want',window.LADDER_DESK?'page':'fv'); },true);
@@ -1531,7 +1534,7 @@ function index(){ const sec=document.getElementById('skysec'), top=document.getE
   load().then(L=>{ const n=Math.min(got().n,L.length), ol=sec.querySelector('ol');
     const esc=t=>String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;');
     let fresh=null; try{ fresh=sessionStorage.getItem('sky:new'); sessionStorage.removeItem('sky:new'); }catch(e){} window.__skyFresh=fresh;
-    if(!n){ ol.innerHTML='<li class="k-floor built"><span class="n">∞</span><span class="t">Endless floor<span class="kind">floor</span></span><span class="b">past the ladder: at the top of the climb, the blue sky button brings one new step from the front, and it lands here</span></li>'; sec.hidden=false; return; }
+    if(!n){ sec.hidden=true; return; }
     ol.innerHTML=L.slice(0,n).reverse().map(x=>'<li class="k-sky built"><span class="n">∞'+x.n+'</span><span class="t"><a href="'+x.page+'.html">'+esc(x.title)+'</a><span class="kind">'+esc(x.kw)+'</span></span></li>').join('');
     sec.hidden=false;
     if(fresh){ const fa=ol.querySelector('a[href="'+fresh+'.html"]'); if(fa){ const li=fa.closest('li'); li.classList.add('fvhere'); setTimeout(()=>li.scrollIntoView({block:'center'}),80); setTimeout(()=>li.scrollIntoView({block:'center'}),700); } } }); }
@@ -1903,7 +1906,8 @@ function lock(){
   rows.forEach((r,i)=>{ const li=r.li, fl=secFl.get(r.sec), isFloor=r.sec.classList.contains('floor'), n=rungNo(r.stem);
     const isRungRow=li.classList.contains('k-theory')&&r.sec.querySelector(':scope>ol.ladder>li')===li;
     let show, collapsed=false;
-    if(isFloor){ show=true; collapsed=!flOpen(fl); }
+    if(isFloor&&M.length&&!M.some(F=>F[0]===fl)){ show=!!(window.LadderSky&&LadderSky.endless&&LadderSky.endless()); }
+    else if(isFloor){ show=true; collapsed=!flOpen(fl); }
     else if(!flOpen(fl)) show=false;
     else if(i<=reach||(n!=null&&rOpen(n))||(r.stem&&(cert(r.stem)||(P[r.stem]&&P[r.stem].v)))) show=true;
     else if(isRungRow){ show=true; collapsed=true; }
@@ -1931,4 +1935,79 @@ document.addEventListener('click',e=>{ if(window.LADDER_DESK) return; const a=e.
 window.LadderLock={lock};
 const go=()=>{ if(!document.querySelector('.rungs')) return; lock(); if(!window.LADMAP){ const s=document.createElement('script'); s.src='ladmap.js'; s.onload=()=>{ lock(); }; document.head.appendChild(s); } };
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',go); else go();
+})();
+
+/* 0.3.6 (Andrew 22:19): the toolbox opens its tools as you climb. Graph view at 9e (reading and drawing graphs), Techs read at 0b,
+   the laundry at 1e, the measuring stick and the standing questions at 0a, Annexes with the first subject annex.
+   Record, Quick keys and Share the ladder are always open (and the rest not named stay open). The desk shows everything. */
+(function(){
+'use strict';
+const J=(k,d)=>{ try{ const v=JSON.parse(LS.getItem(k)||'null'); return v==null?d:v; }catch(e){ return d; } };
+const SUBJ=/^r\d\d(phys|chem|bio|comp|eng|econ|logi|crypt|nav)\d*$/;
+let ORD=null;
+function order(){ if(ORD) return ORD; const M=window.LADMAP; if(!M) return null; ORD={}; let i=0;
+  M.forEach(([fl,rungs])=>{ ORD['floor'+fl]=i++; rungs.forEach(([r,core,annex])=>{ const R='r'+String(r).padStart(2,'0'); ORD[R]=i++;
+    core.forEach(([s])=>{ ORD[s]=i++; }); ORD[R+'concl']=i++; annex.forEach(([s])=>{ if(!(s in ORD)) ORD[s]=i++; }); }); ORD['floor'+fl+'concl']=i++; });
+  return ORD; }
+function pos(stem){ const O=order(); if(!O||!stem) return -1; stem=String(stem).replace(/\.html$/,''); if(stem in O) return O[stem];
+  if(/^sky/.test(stem)) return 1e9; const m=stem.match(/^r(\d\d)/); if(m){ const R='r'+m[1]; if(R+'concl' in O) return O[R+'concl']; } return -1; }
+function furthestPos(){ let best=-1; const f=J('ladder:furthest',null); if(f&&f.page) best=Math.max(best,pos(f.page));
+  const P=J('pages:done',{}); for(const s in P) if(P[s]&&P[s].v) best=Math.max(best,pos(s));
+  /* a step you measured into counts as reached */
+  try{ for(let i=0;i<LS.length;i++){ const k=LS.key(i); const m=k&&k.match(/^cert:(.+)$/); if(m) best=Math.max(best,pos(m[1])); } }catch(e){}
+  const here=(window.ladderPage&&ladderPage())||''; best=Math.max(best,pos(here)); return best; }
+function firstAnnex(){ const O=order(); if(!O) return null; let b=null; for(const s in O) if(SUBJ.test(s)&&(b==null||O[s]<O[b])) b=s; return b; }
+function reached(stem){ if(!stem) return true; const p=pos(stem); if(p<0) return true; return furthestPos()>=p; }
+const GATES=[['[data-p="graph"]','r09e','reading and drawing graphs (9e)'],['[data-p="moves"]','r00b','0b'],['[data-p="rand"]','r01e','1e'],
+  ['.dstick','r00a','0a'],['.dstand','r00a','0a'],['.dannex',()=>firstAnnex(),'the first annex']];
+function apply(){ if(window.LADDER_DESK) return; if(!order()){ load(); return; }
+  const d=document.getElementById('desk');
+  GATES.forEach(([sel,stem,say])=>{ const s=typeof stem==='function'?stem():stem; const ok=reached(s);
+    if(d) d.querySelectorAll('.dtabs '+sel).forEach(b=>{ b.classList.toggle('lk-hide',!ok); b.title=ok?'':'opens at '+say; }); });
+  /* the index tiles follow the same gates */
+  document.querySelectorAll('.tiles a.tile[href="moves.html"]').forEach(a=>a.classList.toggle('lk-hide',!reached('r00b')));
+  document.querySelectorAll('.tiles a.tile[href="laundry.html"]').forEach(a=>a.classList.toggle('lk-hide',!reached('r01e')));
+  skid();
+}
+let loading=false; function load(){ if(window.LADMAP){ apply(); return; } if(loading) return; loading=true;
+  const s=document.createElement('script'); s.src='ladmap.js'; s.onload=()=>apply(); document.head.appendChild(s); }
+/* 0.3.6 (Andrew 22:16): the non-skid key opens tag by tag as you pass steps that carry them (basement and anexact included);
+   the floor and theory tags are gone from it */
+function passed(stem){ const P=J('pages:done',{}); if(P[stem]&&P[stem].v) return true; const p=pos(stem); return p>=0&&p<furthestPos(); }
+function skid(){ if(window.LADDER_DESK) return; const key=document.querySelector('.ladderkey'), rungs=document.querySelector('.rungs'); if(!key||!rungs||!order()) return;
+  const stemOf=li=>{ const a=li.querySelector(':scope>.t>a'); const m=a&&(a.getAttribute('href')||'').match(/^([^#.]+)\.html/); return m?m[1]:null; };
+  const rows=[...rungs.querySelectorAll('.ladder>li')].map(li=>({li,s:stemOf(li)})).filter(r=>r.s&&passed(r.s));
+  const has=k=>rows.some(r=>r.li.classList.contains('k-'+k));
+  key.querySelectorAll('.legend .tag, .legend .tagbtn').forEach(t=>{ if(t.closest('.gtkey')) return; const k=[...t.classList].find(c=>!/^(tag|tagbtn|off)$/.test(c)); if(!k) return;
+    let ok=has(k); if(k==='cert'){ ok=false; try{ for(let i=0;i<LS.length;i++){ if(/^cert:/.test(LS.key(i)||'')){ ok=true; break; } } }catch(e){} ok=ok||passed('floor1concl'); }
+    t.classList.toggle('lk-hide',!ok); });
+  const bm=key.querySelector('.bmkey'); if(bm) bm.classList.toggle('lk-hide',!rows.some(r=>r.li.querySelector('.bm')));
+  const pz=key.querySelector('.pzkey'), PZ=(window.LADDER_SKID||{}).pz;
+  if(pz){ if(!PZ){ if(skid.ld){ pz.classList.add('lk-hide'); } else { skid.ld=1; const s=document.createElement('script'); s.src='skid.js'; s.onload=()=>skid(); document.head.appendChild(s); pz.classList.add('lk-hide'); } }
+    else pz.classList.toggle('lk-hide',!PZ.some(passed)); }
+  const gt=key.querySelector('.gtkey'); if(gt){ const ok=pos('r16a')>=0&&furthestPos()>=pos('r16a'); gt.classList.toggle('lk-hide',!ok); if(ok) gt.hidden=false; }
+  key.querySelectorAll('.legend').forEach(l=>{ const vis=[...l.children].some(c=>!c.classList.contains('lk-hide')&&!c.hidden&&getComputedStyle(c).display!=='none'); if(l.querySelector('.tag,.tagbtn,.bmkey,.pzkey,.gtkey')) l.classList.toggle('lk-hide',!vis); });
+}
+window.LadderUnlock={reached,apply,pos,firstAnnex,skid,passed};
+const go=()=>{ apply(); const d=document.getElementById('desk'); if(d) new MutationObserver(()=>{ clearTimeout(go.t); go.t=setTimeout(apply,30); }).observe(d.querySelector('.dtabs')||d,{childList:true}); };
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',go); else setTimeout(go,0);
+})();
+
+/* 0.3.6 (Andrew 22:16): the first time the ladder opens, it opens on a footing that is the ladder's instruction (start.html, the
+   Ladder mark at its head), then "how to read the ladder" (intro.html), then the logic floor (floor1.html), and from there the
+   dizzying heights index. LS 'ladder:started' = 'start' while that walk is on, 'done' after. */
+(function(){
+'use strict';
+if(window.LADDER_DESK) return;
+const pg=(window.ladderPage&&ladderPage())||'';
+let st=null; try{ st=LS.getItem('ladder:started'); }catch(e){}
+const go=()=>{
+  if(pg==='start'){ try{ if(st!=='done') LS.setItem('ladder:started','start'); }catch(e){}
+    const m=document.querySelector('.startmark'); if(m&&window.ICON_L_HTML) m.innerHTML=window.ICON_L_HTML;
+    setTimeout(()=>{ if(window.LadderFV&&LadderFV.goId&&!location.hash) LadderFV.goId('start'); },120); }
+  if(pg==='floor1'&&st==='start'){ document.querySelectorAll('.pn a.pnb.next, header.top .home a, nav.nextrung a').forEach(a=>{ if(/→/.test(a.textContent)&&/r00\.html/.test(a.getAttribute('href')||'')){
+      a.setAttribute('href','index.html'); if(a.classList.contains('pnb')){ const l=a.querySelector('.pl,.pt,span:last-child'); if(l&&l!==a) l.textContent='the dizzying heights'; else a.textContent='next → the dizzying heights'; } else a.textContent='next: the dizzying heights →';
+      a.addEventListener('click',e=>{ e.preventDefault(); try{ LS.setItem('ladder:started','done'); }catch(x){} if(window.LadderFV&&LadderFV.heights) LadderFV.heights(); else location.href='index.html'; }); } }); }
+};
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(go,0)); else setTimeout(go,0);
 })();
