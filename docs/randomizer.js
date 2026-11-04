@@ -12,6 +12,13 @@ const get=(k,d)=>{ try{ return JSON.parse(LS.getItem(k)||'')||d; }catch(e){ retu
 const put=(k,v)=>{ try{ LS.setItem(k,JSON.stringify(v)); }catch(e){} };
 const seen=()=>get('cards:seen',{});
 const has=tag=>!!seen()[tag];
+/* 0.3.1 (Andrew 20:25): seed pools open by the measuring stick; link pools by regular progress (has).
+   A step counts as measured when its own stick is passed, or its rung's, or its floor's. */
+const cert=k=>{ try{ return JSON.parse(LS.getItem('cert:'+k)||'null'); }catch(e){ return null; } };
+function tagStem(t){ const M=window.LADDER_CARDMAP||{}; for(const s in M) if(M[s][0]===t) return s; return (typeof STEPS!=='undefined'&&STEPS[t])?STEPS[t][0]:null; }
+function measured(tag){ const s=tagStem(tag); if(!s) return false; if(cert(s)) return true;
+  const W=window.LadderStick&&LadderStick.where(s); if(!W) return false; if(cert('floor'+W.fl+'concl')) return true;
+  const c=cert(W.core[W.core.length-1]); return !!(c&&c.scope==='rung'&&W.core.includes(s)); }
 const rnd=n=>Math.floor(Math.random()*n);
 const pick=a=>a[rnd(a.length)];
 const shuffle=a=>{ for(let i=a.length-1;i>0;i--){ const j=rnd(i+1); [a[i],a[j]]=[a[j],a[i]]; } return a; };
@@ -19,7 +26,7 @@ const esc=t=>String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;');
 
 const STEPS={'0a':['r00a','Names and statements'],'0b':['r00b','The same as itself'],'1b':['r01b','Not, and the totally false'],
   '1c':['r01c','And, and the ors'],'4f':['r04f','Adding'],'4g':['r04g','Multiplying and powers']};
-const stepLink=s=>'<a href="'+STEPS[s][0]+'.html">'+s+' '+esc(STEPS[s][1])+'</a>';
+const stepLink=s=>{ const S=STEPS[s]; if(S) return '<a href="'+S[0]+'.html">'+s+' '+esc(S[1])+'</a>'; const st=tagStem(s); return st?'<a href="'+st+'.html">'+esc(s)+'</a>':esc(s); };
 
 /* Seed pools: each makes one sameness claim {l, r}, a claim that differs {n}, and the index of the values it drew. */
 const NAME_SEEDS=`Tahoma = Mount Rainier = the tallest peak in Washington
@@ -330,15 +337,17 @@ function strayDue(){ const day=new Date().toISOString().slice(0,10); let s=get('
 
 function build(){
   const off=get('rand:off',{});
-  if(!LINKS.some(l=>l.open())) return {closed:'The laundry opens with 0b, the step that earns the first techniques for sameness.'};
+  if(!LINKS.some(l=>l.open())&&!CARDP.some(P=>P.open())) return {closed:'The laundry opens with 0b, the step that earns the first techniques for sameness, and fills as you pass measuring sticks.'};
   const openS=SEEDS.filter(s=>s.open()), openL=LINKS.filter(l=>l.open());
   let seeds=openS.filter(s=>!off[s.id]), links=openL.filter(l=>!off[l.id]);
-  const qps=QP.filter(P=>P.open()&&!off[P.id]), linkOK=seeds.length&&links.length;
-  if(!linkOK&&!qps.length) return {closed:'Pick at least one claim pool and one technique pool, or one question pool, below.'};
+  const qps=QP.filter(P=>P.open()&&!off[P.id]), cps=CARDP.filter(P=>P.open()&&!off[P.id]&&(window.LADDER_CARDS||{})[P.step]), linkOK=seeds.length&&links.length;
+  if(!linkOK&&!qps.length&&!cps.length) return {closed:seeds.length||openS.length||qps.length?'Pick at least one claim pool and one technique pool, or one question pool, below.':'The laundry’s claim and question pools open as you pass measuring sticks: finish a step, then sit its stick from the toolbox.'};
+  const used=get('rand:seen',{});
   const st=strayDue(), offL=openL.filter(l=>off[l.id]), offS=openS.filter(s=>off[s.id]);
   let stray=false;
   if(st.due>st.served&&(offL.length||offS.length)){ stray=true; if(offL.length) links=offL; if(offS.length&&!offL.length) seeds=offS; }
-  const used=get('rand:seen',{}), last=get('rand:last',[]);
+  const last=get('rand:last',[]);
+  if(cps.length&&(!stray&&!(linkOK||qps.length)||Math.random()<0.4)) for(let tries=0;tries<40;tries++){ const x=cardQ(pick(cps)); if(!x||used[x.index]) continue; return x; }
   if(qps.length&&!stray&&(!linkOK||Math.random()<0.5)) for(let tries=0;tries<60;tries++){ const P=pick(qps), x=P.make(); if(!x||used[x.index]) continue;
     if(x.opts.length>2&&last.length>=2&&last[0]===x.right&&last[1]===x.right) continue;
     if(x.opts.filter(o=>o===x.right).length!==1) continue;
@@ -374,12 +383,18 @@ function picker(q){
   SEEDS.filter(x=>x.open()).forEach(P=>(by[P.step]=by[P.step]||[]).push([P,'claims: '+P.label]));
   LINKS.filter(x=>x.open()).forEach(P=>(by[P.step]=by[P.step]||[]).push([P,P.name.replace(/^the /,'')]));
   QP.filter(x=>x.open()).forEach(P=>(by[P.step]=by[P.step]||[]).push([P,P.label]));
-  const rows=Object.keys(STEPS).filter(s=>by[s]).map(s=>'<p class="rzph">'+s+' · '+esc(STEPS[s][1])+'</p>'
+  CARDP.filter(x=>x.open()).forEach(P=>(by[P.step]=by[P.step]||[]).push([P,P.label]));
+  const order=[...new Set(Object.keys(STEPS).concat(Object.keys(by)))];
+  const rows=order.filter(s=>by[s]).map(s=>'<p class="rzph">'+s+(STEPS[s]?' · '+esc(STEPS[s][1]):'')+'</p>'
     +by[s].map(([P,t])=>'<label class="rzp"><input type="checkbox" data-id="'+P.id+'"'+(off[P.id]?'':' checked')+'> '+esc(t)+'</label>').join('')).join('');
   return '<details class="rzpick"'+(q.closed?' open':'')+'><summary>pools</summary>'+rows+'</details>';
 }
 
 function render(box){
+  const S=window.LadderStick;
+  if(!window.LADDER_CARDMAP&&S&&!render.maps){ render.maps=1; box.innerHTML='<p class="dnote">Gathering the pools…</p>'; S.maps().then(()=>render(box)); return; }
+  cardPools(); const wantD=CARDP.filter(P=>P.open()&&!(window.LADDER_CARDS||{})[P.step]&&!deckOnce[P.deck]);
+  if(wantD.length){ box.innerHTML='<p class="dnote">Gathering the pools…</p>'; needDecks().then(()=>render(box)); return; }
   const q=build(), right=get('rand:right',0);
   if(window.MathKeys){ const off=get('rand:off',{}), K=new Set(); [...SEEDS,...LINKS,...QP].filter(P=>P.open()&&!off[P.id]).forEach(P=>(P.keys||[]).forEach(k=>K.add(k))); MathKeys.limit(K,'the laundry’s chosen pools'); }
   if(q.closed&&!LINKS.some(l=>l.open())){ box.innerHTML='<p class="dnote">'+esc(q.closed)+'</p>'; return; }
@@ -391,6 +406,7 @@ function render(box){
     +'<p class="rzwhy" hidden></p><p><button type="button" class="dlink rznext">another question</button></p>'
     +'<p class="dnote">If this question does not make sense, report it: <button type="button" class="rzseed" title="report this question">seed.link</button></p>'+picker(q);
   wire();
+  if(/\$[^$]+\$/.test(q.ask)&&window.katex){ const el=box.querySelector('.rzask'); el.innerHTML=''; String(q.ask).split(/(\$[^$]+\$)/).forEach(t=>{ if(/^\$[^$]+\$$/.test(t)){ const sp=document.createElement('span'); try{ katex.render(t.slice(1,-1),sp,{throwOnError:false}); }catch(e){ sp.textContent=t; } el.appendChild(sp); } else el.appendChild(document.createTextNode(t)); }); }
   box.querySelector('.rzseed').onclick=()=>{ if(window.__report) window.__report({kind:'laundry',where:'seed.link '+btoa(unescape(encodeURIComponent(q.addr))).replace(/=+$/,''),text:q.lines.map(l=>l[0]).join(' / ')+' | '+q.ask}); };
   const why=box.querySelector('.rzwhy'); let done=false;
   box.querySelectorAll('.rzo').forEach(b=>b.onclick=()=>{ if(done) return; done=true;
@@ -406,6 +422,17 @@ function render(box){
   box.querySelector('.rznext').onclick=()=>render(box);
 }
 
-window.LadderRandomizer={render, build, parseNames, licensers, LINKS, SEEDS, QP};
+SEEDS.forEach(S=>{ S.open=()=>measured(S.step); });
+QP.forEach(P=>{ P.open=()=>measured(P.step); });
+/* card pools: every measured step's crosswalk cards are a seed pool of the laundry (0.3.1) */
+const CARDP=[];
+function cardPools(){ const M=window.LADDER_CARDMAP||{}; CARDP.length=0;
+  for(const st in M){ const [tag,deck,n]=M[st]; if(!deck||!n) continue; CARDP.push({id:'cards.'+tag, step:tag, deck, label:'crosswalk cards', open:()=>measured(tag)}); } return CARDP; }
+const deckOnce={};
+function needDecks(){ const want=CARDP.filter(P=>P.open()&&!(window.LADDER_CARDS&&window.LADDER_CARDS[P.step])); const decks=[...new Set(want.map(P=>P.deck))].filter(d=>!deckOnce[d]);
+  return Promise.all(decks.map(d=>deckOnce[d]=new Promise(res=>{ const sc=document.createElement('script'); sc.src='cards/'+d+'.js'; sc.onload=sc.onerror=()=>res(); document.head.appendChild(sc); }))); }
+function cardQ(P){ const C=(window.LADDER_CARDS||{})[P.step]||[]; if(!C.length) return null; const k=rnd(C.length), c=C[k]; if(!c.w||!c.w.length) return null;
+  return {index:'c:'+P.step+'#'+k, addr:P.step+'#'+k, stray:false, step:P.step, lines:[], ask:c.q, right:c.a, opts:shuffle([c.a].concat(c.w.slice(0,3))), why:c.why||'', lead:'It is '+c.a+'. '}; }
+window.LadderRandomizer={render, build, parseNames, licensers, LINKS, SEEDS, QP, measured, cardPools};
 const pane=document.getElementById('dp-rand'); if(pane){ let box=pane.querySelector('.rzbox'); if(!box){ box=document.createElement('div'); box.className='rzbox'; pane.innerHTML=''; pane.appendChild(box); } render(box); }
 })();

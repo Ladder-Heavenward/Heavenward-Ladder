@@ -246,17 +246,18 @@ function progress(){
    required questions (x.1 to x.3) are ticked; sat under a proctor it becomes a green check, sat on your own a gold star.
    The sitting itself (fresh questions from the randomizer) is not built yet; the record is cert:<page> = 'proctor' | 'self'. */
 function certRead(key){ try{ return JSON.parse(LS.getItem('cert:'+(key||PAGE))||'null'); }catch(e){ return null; } }
-const CERTTXT={rung:'This is the rung’s last step, so its certification is the rung’s: one short sitting of fresh questions on the whole rung, this step’s among them.',step:'A certification is one short sitting of fresh questions on this step, drawn from the laundry.',floor:'The floor’s certification is one fresh question a rung, about an hour in all.'};
-function certFill(w,key,open,what){
+const CERTTXT={rung:'This is the rung’s last step, so its measuring stick is the rung’s: one short sitting of fresh questions on the whole rung, drawn from its steps.',step:'The measuring stick is one short sitting of fresh questions on this step, drawn from its own pool.',floor:'The floor’s measuring stick is two fresh questions a rung, drawn from its rungs.'};
+function certFill(w,key,open,what,sk){
   const rec=certRead(key);
   if(!open&&!rec){ w.innerHTML=''; w.hidden=true; return; }
   w.hidden=false;
-  if(rec&&rec.by==='proctor'){ w.innerHTML='<span class="certdone proctor" title="certified under a proctor">✓ certified</span>'; return; }
-  if(rec&&rec.by==='self'){ w.innerHTML='<span class="certdone self" title="certified on your own">★ certified</span>'; return; }
-  w.innerHTML='<button type="button" class="certbtn">'+(what==='rung'?'rung certification':what==='floor'?'floor certification':'certification')+'</button><div class="certpanel" hidden><p>'+CERTTXT[what||'step']+' Sit it under a proctor and it becomes a green check. Sit it on your own and it becomes a gold star.</p><p class="certsoon">The sitting is still being built; this button is where it will open.</p></div>';
+  if(rec&&rec.by==='proctor'){ w.innerHTML='<span class="certdone proctor" title="measured under a proctor">✓ measured</span>'; return; }
+  if(rec&&rec.by==='self'){ w.innerHTML='<span class="certdone self" title="measured on your own'+(rec.score?', '+rec.score:'')+'">★ measured</span>'; return; }
+  w.innerHTML='<button type="button" class="certbtn">'+(what==='rung'?'the rung’s measuring stick':what==='floor'?'the floor’s measuring stick':'the measuring stick')+'</button><div class="certpanel" hidden><p>'+CERTTXT[what||'step']+' Pass with four in five right and it becomes a gold star.</p><p><button type="button" class="certgo">sit it now</button></p></div>';
   const b=w.querySelector('.certbtn'), p=w.querySelector('.certpanel'); b.onclick=e=>{ e.preventDefault(); e.stopPropagation(); p.hidden=!p.hidden; };
+  w.querySelector('.certgo').onclick=e=>{ e.preventDefault(); e.stopPropagation(); if(window.LadderStick&&sk) LadderStick.sit(sk[0],sk[1],{done:()=>certFill(w,key,open,what,sk)}); };
 }
-window.LadderCert={read:certRead,fill:(el,key,open)=>{ if(!el) return; el.classList.add('certwrap'); certFill(el,key,open,'floor'); }};
+window.LadderCert={read:certRead,fill:(el,key,open)=>{ if(!el) return; el.classList.add('certwrap'); const fm=String(key).match(/^floor(\d+)concl$/); certFill(el,key,open,'floor',fm?['floor',+fm[1]]:null); }};
 /* the last in a series folds into the larger one (Andrew, 2026-10-29 18:32): a rung's last core step carries the rung's
    certification; the last step of a floor's last rung carries none, since the floor's certification covers it */
 function certify(box,all){
@@ -264,8 +265,9 @@ function certify(box,all){
   if(!w){ w=document.createElement('div'); w.className='certwrap'; box.appendChild(w); }
   const m=(document.querySelector('meta[name="ladder-cert"]')||{}).content||'';
   if(/^floor:/.test(m)){ const n=m.split(':')[1]; w.hidden=!all;
-    w.innerHTML=all?'<p class="certnote">This is the floor’s last step, so its certification is the floor’s: <a href="floor'+n+'concl.html#cert">beside the floor conclusion</a>.</p>':''; return; }
-  certFill(w,PAGE,all,m==='rung'?'rung':'step');
+    w.innerHTML=all?'<p class="certnote">This is the floor’s last step, so its measuring stick is the floor’s: <a href="floor'+n+'concl.html#cert">beside the floor conclusion</a>.</p>':''; return; }
+  const rm=PAGE.match(/^r0*(\d+)/);
+  certFill(w,PAGE,all,m==='rung'?'rung':'step',m==='rung'&&rm?['rung',+rm[1]]:['step',PAGE]);
 }
 /* on the ladder: beside each floor conclusion row, its certification (once the floor conclusion has opened) */
 function floorCerts(){
@@ -275,10 +277,10 @@ function floorCerts(){
   rows.forEach(li=>{ const stem=hstem(li.querySelector('.t a').getAttribute('href'));
     let w=li.querySelector('.certrow'); if(!w){ w=document.createElement('a'); w.className='certrow'; w.href=stem+'.html#cert'; li.querySelector('.t').appendChild(w); }
     const rec=certRead(stem), open=!!(pages[stem]&&pages[stem].v);
-    if(rec&&rec.by==='proctor'){ w.textContent='✓ certified'; w.className='certrow proctor'; }
-    else if(rec&&rec.by==='self'){ w.textContent='★ certified'; w.className='certrow self'; }
-    else if(open){ w.textContent='certification'; w.className='certrow'; }
-    else { w.textContent='certification'; w.className='certrow wait'; w.title='opens once every step of the floor is ticked'; } });
+    if(rec&&rec.by==='proctor'){ w.textContent='✓ measured'; w.className='certrow proctor'; }
+    else if(rec&&rec.by==='self'){ w.textContent='★ measured'; w.className='certrow self'; }
+    else if(open){ w.textContent='measuring stick'; w.className='certrow'; }
+    else { w.textContent='measuring stick'; w.className='certrow wait'; w.title='opens once every step of the floor is ticked'; } });
 }
 /* on the ladder: a step row can be ticked only once its page reports every question ticked; integer rungs are self-report */
 async function gateLadder(localOnly){
@@ -446,7 +448,7 @@ function marks(){
   const items=[];
   const VAR=/^(?:[^.\s]+\.\d+\.\d+|\d+[a-z]+\d+\.\d+)$/;
   document.querySelectorAll('.qid').forEach(el=>{ if(el.closest('#desk')) return; if(!VAR.test(el.textContent.trim())){ el.classList.add('auto'); el.title='ticks itself when every question in this group is ticked; tap for prompt or report'; return; } items.push({el,id:'q:'+el.textContent.trim(),on:()=>el.classList.contains('done'),set:v=>el.classList.toggle('done',v)}); });
-  document.querySelectorAll('section.challenge .chid').forEach(el=>{ if(el.closest('#desk')) return; el.title='tap when you have cleared this challenge'; items.push({el,id:'c:'+el.textContent.trim(),on:()=>el.classList.contains('done'),set:v=>el.classList.toggle('done',v)}); });
+  document.querySelectorAll('section.challenge .chid').forEach(el=>{ if(el.closest('#desk')) return; el.title='tap when you have cleared this standing question'; items.push({el,id:'c:'+el.textContent.trim(),on:()=>el.classList.contains('done'),set:v=>el.classList.toggle('done',v)}); });
   document.querySelectorAll('li>.n').forEach(el=>{ const li=el.parentElement;
     if(li.classList.contains('built')&&!li.classList.contains('k-theory')&&!li.classList.contains('k-gate')){ li.classList.add('autorow'); el.title='ticks itself when every question on this page is ticked'; el.addEventListener('click',e=>{ e.preventDefault(); e.stopPropagation(); lockedHint(li); }); return; }
     items.push({el,id:'L:'+el.textContent.trim(),on:()=>li.classList.contains('passed'),set:v=>li.classList.toggle('passed',v)}); });
@@ -473,7 +475,7 @@ function deskHTML(){
   const b=document.createElement('button'); b.id='deskbtn'; b.setAttribute('aria-label','open the desk: questions and a grapher'); b.textContent='☰ desk';
   const d=document.createElement('div'); d.id='desk'; d.setAttribute('role','dialog'); d.setAttribute('aria-label','desk');
   const qs=!!document.querySelector('.sayback');
-  d.innerHTML='<div class="dtabs">'+(qs?'<button data-p="qs">Questions</button>':'')+'<button data-p="graph">Graph view</button><button data-p="moves">Techs read</button><button data-p="rand">Laundry</button>'+(document.querySelector('.qid')?'<button type="button" class="dcross">Crosswalk</button>':'')+'<button data-p="rec">Record</button><button type="button" class="dkeys" aria-label="the math keys">⌨ Keys</button>'+(document.querySelector('.wrap>section.class.step')?'<button type="button" class="dfv">Page view</button>':'')+'<button type="button" class="dheights">Dizzying heights</button><a class="dshare" href="install.html">Share the ladder</a><button class="x" aria-label="close">✕</button></div>'
+  d.innerHTML='<div class="dtabs">'+(qs?'<button data-p="qs">Questions</button>':'')+'<button data-p="graph">Graph view</button><button data-p="moves">Techs read</button><button data-p="rand">Laundry</button>'+(document.querySelector('.qid')?'<button type="button" class="dcross">Crosswalk</button>':'')+'<button type="button" class="dstick">Measuring stick</button><button type="button" class="dstand">Standing questions</button><button data-p="rec">Record</button><button type="button" class="dkeys" aria-label="the math keys">⌨ Keys</button>'+(document.querySelector('.wrap>section.class.step')?'<button type="button" class="dfv">Page view</button>':'')+'<button type="button" class="dheights">Dizzying heights</button><a class="dshare" href="install.html">Share the ladder</a><button class="x" aria-label="close">✕</button></div>'
     +(qs?'<div class="dpane" id="dp-qs"><p class="dnote">The page’s questions, here so you can read them beside the class.</p><div class="dq" id="dq"></div></div>':'')
     +'<div class="dpane" id="dp-graph"><div id="dmg"></div><p class="dnote" style="margin-top:10px">Type it as on paper: x^2, 2sin(x), e^x, ln x, √x, |x|, x!. a, b, c and k get sliders.</p></div>'
     +'<div class="dpane" id="dp-moves"><p class="dnote" id="dmnote">The techs this step uses and builds: what each is called, what it does in words, and the line in symbols.</p><div id="dmoves"></div><p><a class="dlink" href="moves.html">every tech you have earned →</a></p></div>'
@@ -517,14 +519,14 @@ function introFold(){
   document.querySelectorAll('a[href="r00.html"]').forEach(a=>a.addEventListener('click',()=>{ try{ LS.setItem('ladder:introFolded','1'); }catch(e){} }));
 }
 
-/* Beside the ladder: an orange ladder with the furthest rung with a certification or a floor passed,
+/* Beside the ladder: an orange ladder with the furthest rung measured or a floor passed,
    and a teal star with the number of rungs crowned. */
 function ladderStats(){
   const rungs=document.querySelector('.rungs'); if(!rungs) return;
   let box=document.querySelector('.ladderstats');
   if(!box){
     box=document.createElement('div'); box.className='ladderstats'; box.setAttribute('role','status');
-    box.innerHTML='<span class="ls ls-far" title="the furthest rung with a certification or a floor passed"><svg viewBox="0 0 20 28" width="18" height="25" aria-hidden="true"><path d="M5 1v26M15 1v26M5 6h10M5 12h10M5 18h10M5 24h10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg><b class="ls-n">–</b><span class="ls-l">furthest rung passed</span></span><span class="ls ls-star" title="rungs crowned with the star"><span class="ls-s" aria-hidden="true">★</span><b class="ls-n">0</b><span class="ls-l">rungs starred</span></span>';
+    box.innerHTML='<span class="ls ls-far" title="the furthest rung measured or a floor passed"><svg viewBox="0 0 20 28" width="18" height="25" aria-hidden="true"><path d="M5 1v26M15 1v26M5 6h10M5 12h10M5 18h10M5 24h10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg><b class="ls-n">–</b><span class="ls-l">furthest rung passed</span></span><span class="ls ls-star" title="rungs crowned with the star"><span class="ls-s" aria-hidden="true">★</span><b class="ls-n">0</b><span class="ls-l">rungs starred</span></span>';
     rungs.parentNode.insertBefore(box,rungs);
   }
   let pages={}; try{ pages=JSON.parse(LS.getItem('pages:done')||'{}')||{}; }catch(e){}
@@ -545,23 +547,23 @@ function ladderStats(){
 
 /* The bar's three counts (Andrew, 2026-11-04 18:38):
    blue stars = steps with every footing question cleared + rungs with every step starred + floors with every rung starred;
-   gold stars = steps certified + rungs certified + floors certified;
-   angel wings = rungs and floors with their blue star, their gold star and every challenge cleared.
+   gold stars = steps measured + rungs measured + floors measured;
+   angel wings = rungs and floors with their blue star, their gold star and every standing question cleared.
    The shape of the ladder comes from ladmap.js (made from ladder.tsv). A rung's certification is its last core step's;
-   the last rung of a floor is certified by the floor's certification. */
+   the last rung of a floor is measured by the floor's measuring stick. */
 function starCounts(){
   const M=window.LADMAP; if(!M) return null;
   let pages={}; try{ pages=JSON.parse(LS.getItem('pages:done')||'{}')||{}; }catch(e){}
-  const cert=k=>!!certRead(k), P=s=>pages[s]||{};
+  let below=true; const certAt=k=>{ const c=certRead(k); return !!c&&(c.via!=='measure'||below); }, P=s=>pages[s]||{};
   const blueStep=s=>!!P(s).v, starStep=s=>!!(P(s).v&&P(s).o!==false), cleared=([s,n])=>!n||(+P(s).cd||0)>=n;
   let blue=0,gold=0,wings=0;
-  M.forEach(([fl,rungs])=>{ let fB=rungs.length>0,fC=true; const fG=cert('floor'+fl+'concl');
+  M.forEach(([fl,rungs])=>{ let fB=rungs.length>0,fC=true; const cert=certAt, fG=cert('floor'+fl+'concl');
     rungs.forEach(([r,core,annex],i)=>{
       core.concat(annex).forEach(([s])=>{ if(blueStep(s)) blue++; if(cert(s)) gold++; });
       const rB=core.every(([s])=>starStep(s)), rG=i===rungs.length-1?fG:cert(core[core.length-1][0]), rC=core.every(cleared);
       if(rB) blue++; if(rG) gold++; if(rB&&rG&&rC) wings++;
       fB=fB&&rB; fC=fC&&rC; });
-    if(fB) blue++; if(fG) gold++; if(fB&&fG&&fC) wings++; });
+    if(fB) blue++; if(fG) gold++; if(fB&&fG&&fC) wings++; below=below&&fB; });
   return {blue,gold,wings};
 }
 const ICON_L='<svg class="lb-L" viewBox="104 92 308 328" aria-hidden="true"><path d="M222,132 L384,358" stroke="#5fd13a" stroke-width="16" stroke-linecap="round"/><path fill="currentColor" d="M112,100 L262,100 L262,108 C238,108 225,112 223,136 L222,360 L360,360 C384,359 397,342 398,294 L405,294 L400,412 L112,412 L112,404 C134,404 149,399 150,378 L150,136 C149,112 136,108 112,108 Z"/><path d="M222,318 L264,318 L264,360" fill="none" stroke="#e8703a" stroke-width="16"/></svg>';
@@ -574,7 +576,7 @@ function ladderBar(){
   const home=!!document.querySelector('.rungs');
   const bar=document.createElement('nav'); bar.id='lbar'; bar.setAttribute('aria-label','the ladder bar');
   bar.innerHTML=(home?'<button type="button" class="lb lb-ladder"':'<a class="lb lb-ladder" href="index.html"')+' title="the ladder"><span class="lb-l" aria-label="Ladder">'+ICON_L+'<span class="lb-w">adder</span></span>'+(home?'</button>':'</a>')
-    +'<span class="lb-counts" role="status"><span class="lc lc-blue" title="blue stars: steps with every footing question cleared, rungs with every step starred, floors with every rung starred"><span aria-hidden="true">★</span><b>0</b><span class="vh"> blue stars</span></span><span class="lc lc-gold" title="gold stars: steps, rungs and floors certified"><span aria-hidden="true">★</span><b>0</b><span class="vh"> gold stars</span></span><span class="lc lc-wing" title="angel wings: rungs and floors with their blue star, their gold star and every challenge cleared">'+WINGS+'<b>0</b><span class="vh"> angel wings</span></span></span>'
+    +'<span class="lb-counts" role="status"><span class="lc lc-blue" title="blue stars: steps with every footing question cleared, rungs with every step starred, floors with every rung starred"><span aria-hidden="true">★</span><b>0</b><span class="vh"> blue stars</span></span><span class="lc lc-gold" title="gold stars: steps, rungs and floors measured"><span aria-hidden="true">★</span><b>0</b><span class="vh"> gold stars</span></span><span class="lc lc-wing" title="angel wings: rungs and floors with their blue star, their gold star and every standing question cleared">'+WINGS+'<b>0</b><span class="vh"> angel wings</span></span></span>'
     +'<span class="lb-gap"></span>'+'<button type="button" class="lb lb-keys" aria-label="the keys" hidden>⌨ <span class="lb-l">keys</span></button>'+'<button type="button" class="lb lb-tray" aria-label="the toolbox">☰ <span class="lb-l">toolbox</span></button>';
   document.body.appendChild(bar); document.body.classList.add('hasbar');
   const stats=()=>{ const v=starCounts(); if(!v) return;
@@ -840,6 +842,8 @@ window.__deskInit=function(){
   desk.querySelectorAll('.dtabs [data-p]').forEach(b=>b.onclick=()=>show(b.dataset.p));
   const dfv=desk.querySelector('.dfv'); if(dfv) dfv.onclick=()=>{ open(false); if(window.LadderFV&&LadderFV.toggle) LadderFV.toggle(); };
   const dx=desk.querySelector('.dcross'); if(dx) dx.onclick=()=>{ open(false); if(window.LadderCards) LadderCards.open(); else if(typeof toast==='function') toast('the crosswalk is loading'); };
+  const dsk=desk.querySelector('.dstick'); if(dsk) dsk.onclick=()=>{ open(false); if(window.LadderMeasure) LadderMeasure.list(); };
+  const dsq=desk.querySelector('.dstand'); if(dsq) dsq.onclick=()=>{ open(false); if(window.LadderStanding) LadderStanding.list(); else if(typeof toast==='function') toast('the standing questions are loading'); };
   const dh=desk.querySelector('.dheights'); if(dh) dh.onclick=()=>{ open(false); if(window.LadderFV) LadderFV.heights(); else location.href='index.html'; };
   const rx=desk.querySelector('.recx'), ri=desk.querySelector('.reci'), rn=desk.querySelector('#recnote');
   if(rx) rx.onclick=()=>LadderRecord.export();
@@ -1434,4 +1438,227 @@ function index(){ const sec=document.getElementById('skysec'), top=document.getE
 window.LadderSky={supply,load,count:()=>got().n};
 const go=()=>{ index(); };
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',go); else go();
+})();
+
+/* ---- 0.3.1 the measuring stick (Andrew 2026-11-04 20:25): the certification, renamed, with real sittings.
+   A step's stick draws from its own pool: its crosswalk cards and its laundry question pools. A rung's stick draws from
+   its steps' pools, a floor's from its rungs'. Pass with 80%. The record stays cert:<key> = {by, via, t, score}:
+   a step's key is its page, a rung's is its last core step (as before), a floor's is floorNconcl.
+   via 'stick' = sat at a section you reached; via 'measure' = measured into ahead from the index, which unlocks it,
+   but its gold star waits until every floor below it is accomplished. */
+(function(){
+'use strict';
+const get=(k,d)=>{ try{ const v=JSON.parse(LS.getItem(k)||'null'); return v==null?d:v; }catch(e){ return d; } };
+const put=(k,v)=>{ try{ LS.setItem(k,JSON.stringify(v)); }catch(e){} };
+const esc=t=>String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+const shuffle=a=>{ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+const once={};
+function script(src,test){ if(test&&test()) return Promise.resolve(true); if(once[src]) return once[src];
+  return once[src]=new Promise(res=>{ const s=document.createElement('script'); s.src=src; s.onload=()=>res(true); s.onerror=()=>res(false); document.head.appendChild(s); }); }
+const maps=()=>Promise.all([script('ladmap.js',()=>window.LADMAP),script('cardmap.js',()=>window.LADDER_CARDMAP)]);
+const rand=()=>script('randomizer.js',()=>window.LadderRandomizer);
+function rich(el,t){ el.innerHTML=''; String(t).split(/(\$[^$]+\$)/).forEach(p=>{ if(/^\$[^$]+\$$/.test(p)){ const sp=document.createElement('span'); const x=p.slice(1,-1);
+    if(window.katex){ try{ katex.render(x,sp,{throwOnError:false,strict:false}); }catch(e){ sp.textContent=x; } } else sp.textContent=x; el.appendChild(sp); }
+  else el.appendChild(document.createTextNode(p)); }); }
+/* the shape of the ladder */
+function where(stem){ const M=window.LADMAP||[]; for(const [fl,rungs] of M) for(let i=0;i<rungs.length;i++){ const [r,core,annex]=rungs[i];
+    if(core.some(x=>x[0]===stem)||annex.some(x=>x[0]===stem)) return {fl,r,core:core.map(x=>x[0]),annex:annex.map(x=>x[0]),lastRung:i===rungs.length-1}; } return null; }
+function rungOf(r){ const M=window.LADMAP||[]; for(const [fl,rungs] of M) for(let i=0;i<rungs.length;i++) if(rungs[i][0]===r) return {fl,r,core:rungs[i][1].map(x=>x[0]),annex:rungs[i][2].map(x=>x[0]),lastRung:i===rungs.length-1}; return null; }
+function floorOf(fl){ const F=(window.LADMAP||[]).find(x=>x[0]===fl); return F?{fl,rungs:F[1].map(x=>x[0])}:null; }
+/* pools */
+const CM=s=>(window.LADDER_CARDMAP||{})[s]||[null,null,0];
+async function stepPool(stem){ const [tag,deck]=CM(stem); const out=[];
+  if(deck){ await script('cards/'+deck+'.js',()=>window.LADDER_CARDS&&window.LADDER_CARDS[tag]);
+    (window.LADDER_CARDS&&window.LADDER_CARDS[tag]||[]).forEach((c,i)=>out.push({id:tag+'#'+i,q:c.q,a:c.a,w:c.w||[],why:c.why||'',tag})); }
+  if(tag){ await rand(); const R=window.LadderRandomizer; (R&&R.QP||[]).filter(P=>P.step===tag).forEach(P=>{ for(let k=0;k<4;k++){ let x=null; for(let t=0;t<20&&!x;t++) x=P.make(); if(x) out.push({id:x.index,q:x.lines.map(l=>l[0]).join('\n')+'\n'+x.ask,a:x.right,w:x.opts.filter(o=>o!==x.right),why:x.why,html:x.html,tag}); } }); }
+  return out; }
+const pick=(arr,n)=>shuffle(arr.slice()).slice(0,n);
+async function draw(scope,key){
+  if(scope==='step') return pick(await stepPool(key),6);
+  if(scope==='rung'){ const R=rungOf(key); if(!R) return []; let q=[]; for(const s of R.core) q=q.concat(pick(await stepPool(s),2)); return pick(q,Math.min(16,q.length)); }
+  if(scope==='floor'){ const F=floorOf(key); if(!F) return []; let q=[]; for(const r of F.rungs){ const R=rungOf(r); let rq=[]; for(const s of R.core) rq=rq.concat(pick(await stepPool(s),1)); q=q.concat(pick(rq,2)); } return shuffle(q); }
+  return []; }
+/* keys and records */
+function certKey(scope,key){ if(scope==='step') return key; if(scope==='rung'){ const R=rungOf(key); return R?R.core[R.core.length-1]:null; } if(scope==='floor') return 'floor'+key+'concl'; return null; }
+const read=k=>get('cert:'+k,null);
+function unlock(scope,key){ const set=stem=>{ if(window.MarksSync&&MarksSync.reportPage) MarksSync.reportPage('open:'+stem,true,true,true,false);
+    else { const p=get('pages:done',{}); p['open:'+stem]={v:true,a:true,o:true,h:false,t:Date.now()}; put('pages:done',p); } };
+  const rr=r=>set('r'+String(r).padStart(2,'0'));
+  if(scope==='step'){ const w=where(key); if(w) rr(w.r); } else if(scope==='rung') rr(key); else if(scope==='floor'){ const F=floorOf(key); if(F) F.rungs.forEach(rr); } }
+const label=(scope,key)=>scope==='step'?(CM(key)[0]||key):scope==='rung'?'rung '+key:'floor '+key;
+/* the sitting */
+let box=null;
+function close(){ if(box){ box.remove(); box=null; document.body.classList.remove('stickopen'); } }
+async function sit(scope,key,opts){ opts=opts||{}; close();
+  box=document.createElement('div'); box.id='stick'; box.setAttribute('role','dialog'); box.setAttribute('aria-label','the measuring stick'); document.body.appendChild(box); document.body.classList.add('stickopen');
+  const head=t=>'<div class="sk-top"><span>the measuring stick · '+esc(label(scope,key))+'</span><button type="button" class="sk-x" aria-label="close">×</button></div>';
+  const wire=()=>{ const x=box.querySelector('.sk-x'); if(x) x.onclick=close; };
+  box.innerHTML='<div class="sk-card">'+head()+'<p class="sk-q">Gathering the questions…</p></div>'; wire();
+  await maps(); const qs=await draw(scope,key);
+  if(!qs.length){ box.innerHTML='<div class="sk-card">'+head()+'<p class="sk-q">This section has no question pool yet, so its measuring stick cannot be sat.</p></div>'; wire(); return; }
+  const need=Math.ceil(qs.length*0.8); let i=0, right=0;
+  const show=()=>{ const c=qs[i]; const opts=shuffle([c.a].concat(c.w.slice(0,3)));
+    box.innerHTML='<div class="sk-card">'+head()+'<p class="sk-n">question '+(i+1)+' of '+qs.length+' · '+need+' right to pass</p><div class="sk-q"></div><div class="sk-opts"></div><p class="sk-why" hidden></p><p><button type="button" class="sk-next" hidden>'+(i+1<qs.length?'next':'finish')+'</button></p></div>'; wire();
+    const qe=box.querySelector('.sk-q'); String(c.q).split('\n').forEach((ln,k)=>{ const p=document.createElement('div'); rich(p,ln); if(k) p.style.marginTop='4px'; qe.appendChild(p); });
+    const oe=box.querySelector('.sk-opts');
+    opts.forEach(o=>{ const b=document.createElement('button'); b.type='button'; b.className='sk-o'; b.dataset.v=o; if(c.html&&c.html[o]){ b.innerHTML=c.html[o]; b.setAttribute('aria-label',o); b.classList.add('sk-g'); } else rich(b,o);
+      b.onclick=()=>{ if(oe.dataset.done) return; oe.dataset.done='1'; const ok=o===c.a; if(ok) right++;
+        oe.querySelectorAll('.sk-o').forEach(x=>{ x.disabled=true; if(x.dataset.v===c.a) x.classList.add('ok'); }); if(!ok) b.classList.add('no');
+        const w=box.querySelector('.sk-why'); w.hidden=false; rich(w,(ok?'Right. ':'Not this one. ')+(c.why||'')); box.querySelector('.sk-next').hidden=false; };
+      oe.appendChild(b); });
+    box.querySelector('.sk-next').onclick=()=>{ i++; if(i<qs.length) show(); else end(); }; };
+  const end=()=>{ const pass=right>=need, k=certKey(scope,key);
+    if(pass&&k){ const old=read(k); const via=opts.via||'stick'; if(!old||(old.via==='measure'&&via==='stick')) put('cert:'+k,{by:'self',via,scope,t:Date.now(),score:right+'/'+qs.length}); if(via==='measure') unlock(scope,key); }
+    box.innerHTML='<div class="sk-card">'+head()+'<p class="sk-q">'+right+' of '+qs.length+' right. '+(pass?(opts.via==='measure'?'It measures up: '+esc(label(scope,key))+' is unlocked. Its gold star waits until every floor below it is done.':'It measures up: a gold star.'):'Not yet: '+need+' were needed. Sit it again whenever you like; the questions are drawn fresh.')+'</p><p><button type="button" class="sk-again">'+(pass?'close':'sit it again')+'</button></p></div>'; wire();
+    box.querySelector('.sk-again').onclick=()=>{ if(pass) close(); else sit(scope,key,opts); };
+    if(window.__barStats) window.__barStats(); if(opts.done) opts.done(pass); };
+  show(); }
+window.LadderStick={sit,read,certKey,where,rungOf,floorOf,stepPool,draw,maps};
+})();
+
+/* ---- 0.3.1 measure into (Andrew 20:25): a small ruler on the index rows you have not reached or finished,
+   and the toolbox's "Measuring stick", which lists the sections you have finished. */
+(function(){
+'use strict';
+const RULER='<svg viewBox="0 0 24 12" width="20" height="10" aria-hidden="true"><rect x="1" y="1" width="22" height="10" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M5 1v4M9 1v6M13 1v4M17 1v6M21 1v4" stroke="currentColor" stroke-width="1.4"/></svg>';
+const pages=()=>{ try{ return JSON.parse(LS.getItem('pages:done')||'{}')||{}; }catch(e){ return {}; } };
+const cert=k=>{ try{ return JSON.parse(LS.getItem('cert:'+k)||'null'); }catch(e){ return null; } };
+const S=()=>window.LadderStick;
+const stemOf=li=>{ const a=li.querySelector(':scope>.t>a'); const m=a&&(a.getAttribute('href')||'').match(/^([^#.]+)\.html/); return m?m[1]:null; };
+function icon(li,scope,key,title){ if(li.querySelector(':scope>.msr')) return;
+  const b=document.createElement('button'); b.type='button'; b.className='msr'; b.title=title; b.setAttribute('aria-label',title); b.innerHTML=RULER;
+  b.onclick=e=>{ e.preventDefault(); e.stopPropagation(); if(!S()) return; S().sit(scope,key,{via:'measure',done:ok=>{ if(ok) setTimeout(()=>location.reload(),1600); }}); };
+  (li.querySelector(':scope>.t')||li).appendChild(b); }
+function indexIcons(){ if(!document.querySelector('.rungs')||!S()) return;
+  S().maps().then(()=>{ const P=pages(), done=s=>!!(P[s]&&P[s].v);
+    document.querySelectorAll('section.floor li.k-floor.built').forEach(li=>{ const m=(stemOf(li)||'').match(/^floor(\d+)$/); if(!m) return; const F=S().floorOf(+m[1]); if(!F) return;
+      const open=F.rungs.some(r=>P['open:r'+String(r).padStart(2,'0')]&&P['open:r'+String(r).padStart(2,'0')].v); /* a floor you have set foot on is reached */
+      if(!open&&!cert('floor'+m[1]+'concl')) icon(li,'floor',+m[1],'measure into floor '+m[1]); });
+    document.querySelectorAll('section.rung li.k-theory.built').forEach(li=>{ const n=((li.querySelector(':scope>.n')||{}).textContent||'').trim(); if(!/^\d+$/.test(n)) return;
+      const R=S().rungOf(+n); if(!R) return; const open=li.classList.contains('passed');
+      if(!open&&!cert(R.core[R.core.length-1])) icon(li,'rung',+n,'measure into rung '+n); });
+    document.querySelectorAll('section.rung li.built:not(.k-theory):not(.k-floor)').forEach(li=>{ const s=stemOf(li); if(!s||!S().where(s)) return;
+      if(!done(s)&&!cert(s)) icon(li,'step',s,'measure into this step'); });
+  }); }
+/* the toolbox list: every finished section, with its measure */
+function finished(){ const M=window.LADMAP||[], P=pages(), v=s=>!!(P[s]&&P[s].v), out=[];
+  M.forEach(([fl,rungs])=>{ const F={fl,rows:[]}; let all=rungs.length>0;
+    rungs.forEach(([r,core,annex])=>{ const steps=core.concat(annex).map(x=>x[0]).filter(v); steps.forEach(s=>F.rows.push(['step',s]));
+      const rd=core.every(x=>v(x[0])); if(rd) F.rows.push(['rung',r]); all=all&&rd; });
+    if(all) F.rows.push(['floor',fl]); if(F.rows.length) out.push(F); });
+  return out; }
+function list(){ const s=S(); if(!s) return;
+  s.maps().then(()=>{ const box=document.createElement('div'); box.id='stick'; box.setAttribute('role','dialog'); box.setAttribute('aria-label','the measuring stick'); document.body.appendChild(box); document.body.classList.add('stickopen');
+    const F=finished(), lab=(sc,k)=>sc==='step'?((window.LADDER_CARDMAP||{})[k]||[k])[0]:sc+' '+k;
+    const st=(sc,k)=>{ const c=cert(s.certKey(sc,k)); return c?(c.via==='measure'?'measured ahead':'★ measured '+(c.score||'')):'not yet measured'; };
+    box.innerHTML='<div class="sk-card"><div class="sk-top"><span>the measuring stick</span><button type="button" class="sk-x" aria-label="close">×</button></div>'
+      +(F.length?'<p class="sk-n">The sections you have finished. Each measure draws fresh questions from its own pool; 80% passes and gives the gold star.</p>'
+        +F.map(f=>'<details class="sk-fl"'+(f===F[F.length-1]?' open':'')+'><summary>floor '+f.fl+' · '+f.rows.length+'</summary><ul class="sk-list">'
+          +f.rows.map(([sc,k])=>'<li><button type="button" class="sk-sit" data-s="'+sc+'" data-k="'+k+'">'+lab(sc,k)+'</button> <span class="sk-st">'+st(sc,k)+'</span></li>').join('')+'</ul></details>').join('')
+        :'<p class="sk-q">Nothing is finished yet. A step is finished when every footing question on it is cleared; then its measuring stick is here. To test into a section you have not reached, use the small ruler beside it on the ladder.</p>')+'</div>';
+    box.querySelector('.sk-x').onclick=()=>{ box.remove(); document.body.classList.remove('stickopen'); };
+    box.querySelectorAll('.sk-sit').forEach(b=>b.onclick=()=>{ const sc=b.dataset.s, k=sc==='step'?b.dataset.k:+b.dataset.k; box.remove(); s.sit(sc,k,{via:'stick'}); });
+  }); }
+window.LadderMeasure={list,finished,indexIcons};
+const go=()=>setTimeout(indexIcons,400);
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',go); else go();
+})();
+
+/* ---- 0.3.1 standing questions (Andrew 2026-11-04 20:25): each standing question walks a branching tree.
+   Trees live in sq/<stem>.js as window.LADDER_SQ[chid] = {kind, start, n:{id:node}, areas?}.
+   challenge kind: node {t, c:[{t, why, go:id} | {t, why, win:1} | {t, why, fail:1}]}. Each choice says why it is the
+     right or wrong path; a right end finishes it; a wrong path locks it for 6 minutes, then 1 hour, 10 hours,
+     4.16 days, ... (each lock ten times the last).
+   debate kind: node {t, area:k, c:[{t, cost, faces, go:id}]} or a leaf {t, area:k, end:1}. Every choice is
+     supported: it says what the choice costs in the discourse and what it faces. It finishes at a leaf, and every leaf
+     lies in one of the debate's last two areas of inquiry.
+   Record: sq:<chid> = {fails, until, done, t}. Finishing ticks the question (c:<chid>) on its page.
+   The toolbox's "Standing questions" lists the standing questions of every step you have finished (sq/index.js). */
+(function(){
+'use strict';
+const get=(k,d)=>{ try{ const v=JSON.parse(LS.getItem(k)||'null'); return v==null?d:v; }catch(e){ return d; } };
+const put=(k,v)=>{ try{ LS.setItem(k,JSON.stringify(v)); }catch(e){} };
+const esc=t=>String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+const once={};
+function script(src,test){ if(test&&test()) return Promise.resolve(true); if(once[src]) return once[src];
+  return once[src]=new Promise(res=>{ const s=document.createElement('script'); s.src=src; s.onload=()=>res(true); s.onerror=()=>res(false); document.head.appendChild(s); }); }
+function rich(el,t){ el.innerHTML=''; String(t).split('\n').forEach((ln,k)=>{ const d=document.createElement(k?'p':'span'); if(k) d.style.margin='.4em 0 0';
+  ln.split(/(\$[^$]+\$)/).forEach(p=>{ if(/^\$[^$]+\$$/.test(p)){ const sp=document.createElement('span'); const x=p.slice(1,-1);
+    if(window.katex){ try{ katex.render(x,sp,{throwOnError:false,strict:false}); }catch(e){ sp.textContent=x; } } else sp.textContent=x; d.appendChild(sp); }
+    else d.appendChild(document.createTextNode(p)); }); el.appendChild(d); }); }
+const stemOf=chid=>{ const tag=String(chid).split('.')[0]; const M=window.LADDER_CARDMAP||{}; for(const s in M) if(M[s][0]===tag) return s;
+  const m=tag.match(/^(\d+)([a-z]+\d*)$/); if(m) return 'r'+m[1].padStart(2,'0')+m[2]; const n=tag.match(/^(\d+)·(.+)$/); return n?'r'+n[1].padStart(2,'0')+n[2]:null; };
+const trees=stem=>script('sq/has.js',()=>window.LADDER_SQHAS).then(()=>(window.LADDER_SQHAS||[]).includes(stem)?script('sq/'+stem+'.js',null):null).then(()=>window.LADDER_SQ||{});
+const LOCK0=6*60*1000;
+const lockFor=f=>LOCK0*Math.pow(10,Math.max(0,f-1));
+function left(ms){ const m=Math.ceil(ms/60000); if(m<60) return m+' minute'+(m===1?'':'s'); const h=ms/3600000; if(h<48) return (Math.round(h*10)/10)+' hours'; return (Math.round(h/24*100)/100)+' days'; }
+/* the walk */
+let box=null;
+function close(){ if(box){ box.remove(); box=null; document.body.classList.remove('stickopen'); } }
+function frame(chid,kind){ close(); box=document.createElement('div'); box.id='stick'; box.className='sqbox'; box.setAttribute('role','dialog'); box.setAttribute('aria-label','standing question '+chid);
+  document.body.appendChild(box); document.body.classList.add('stickopen');
+  box.innerHTML='<div class="sk-card"><div class="sk-top"><span>standing question '+esc(chid)+(kind?' · '+(kind==='debate'?'a debate':'a path to the answer'):'')+'</span><button type="button" class="sk-x" aria-label="close">×</button></div><div class="sq-body"></div></div>';
+  box.querySelector('.sk-x').onclick=close; return box.querySelector('.sq-body'); }
+function finish(chid){ const r=get('sq:'+chid,{}); r.done=true; r.t=Date.now(); put('sq:'+chid,r);
+  const el=[...document.querySelectorAll('section.challenge .chid')].find(e=>e.textContent.trim()===chid);
+  if(el&&!el.classList.contains('done')&&el.__tick) el.__tick();
+  if(window.__barStats) window.__barStats(); }
+function walk(chid,opts){ opts=opts||{}; const stem=opts.stem||stemOf(chid);
+  const body=frame(chid); body.innerHTML='<p class="sk-q">Gathering the path…</p>';
+  trees(stem).then(T=>{ const tr=T[chid]; if(!tr){ body.innerHTML='<p class="sk-q">This standing question has no branching path yet. You can still work it on paper and tick it on its page.</p>'; return; }
+    const top=box.querySelector('.sk-top span'); top.textContent='standing question '+chid+' · '+(tr.kind==='debate'?'a debate':'a path to the answer');
+    const rec=get('sq:'+chid,{fails:0});
+    if(tr.kind!=='debate'&&rec.until&&rec.until>Date.now()&&!rec.done){ body.innerHTML='<p class="sk-q">This one is resting. It opens again in '+left(rec.until-Date.now())+'. Each wrong path rests it ten times longer than the last; the time is for thinking it through away from the screen.</p>'; return; }
+    const trail=[]; let node=tr.start;
+    const show=()=>{ const N=tr.n[node]; body.innerHTML='';
+      if(tr.kind==='debate'&&tr.areas&&N.area!=null){ const a=document.createElement('p'); a.className='sk-n'; a.textContent='area of inquiry '+(N.area+1)+' of '+tr.areas.length+': '+tr.areas[N.area]; body.appendChild(a); }
+      if(trail.length){ const tl=document.createElement('p'); tl.className='sq-trail'; tl.textContent=trail.map(x=>'› '+x).join(' '); body.appendChild(tl); }
+      const q=document.createElement('div'); q.className='sk-q'; rich(q,N.t); body.appendChild(q);
+      if(N.end){ const e=document.createElement('p'); e.className='sq-end'; e.textContent=opts.review?'This is the bottom of the debate along this line.':'You have reached the bottom of the debate along this line. The standing question is answered for you: '+(rec.done?'it was already ticked.':'it is ticked on its step.'); body.appendChild(e);
+        if(!opts.review) finish(chid); const again=document.createElement('p'); again.innerHTML='<button type="button" class="sk-again">walk another line</button> <button type="button" class="sq-close">close</button>'; body.appendChild(again);
+        again.querySelector('.sk-again').onclick=()=>{ trail.length=0; node=tr.start; show(); }; again.querySelector('.sq-close').onclick=close; return; }
+      const oe=document.createElement('div'); oe.className='sk-opts'; body.appendChild(oe);
+      const fb=document.createElement('div'); fb.className='sq-fb'; fb.hidden=true; body.appendChild(fb);
+      const nx=document.createElement('p'); nx.hidden=true; nx.innerHTML='<button type="button" class="sk-next">go on</button>'; body.appendChild(nx);
+      N.c.forEach(c=>{ const b=document.createElement('button'); b.type='button'; b.className='sk-o'; rich(b,c.t);
+        b.onclick=()=>{ if(oe.dataset.done) return; oe.dataset.done='1'; oe.querySelectorAll('.sk-o').forEach(x=>x.disabled=true); b.classList.add('picked'); fb.hidden=false; fb.innerHTML='';
+          if(tr.kind==='debate'){ b.classList.add('ok');
+            const p1=document.createElement('p'); p1.innerHTML='<b>What it costs you.</b> '; const s1=document.createElement('span'); rich(s1,c.cost||''); p1.appendChild(s1);
+            const p2=document.createElement('p'); p2.innerHTML='<b>What it faces.</b> '; const s2=document.createElement('span'); rich(s2,c.faces||''); p2.appendChild(s2); fb.append(p1,p2);
+            nx.hidden=false; nx.querySelector('.sk-next').onclick=()=>{ trail.push(c.t.replace(/\$/g,'').slice(0,40)); node=c.go; show(); }; return; }
+          const w=document.createElement('p'); rich(w,(c.fail?'Not this path. ':'Right. ')+(c.why||'')); fb.appendChild(w);
+          if(c.fail){ b.classList.add('no'); if(!opts.review&&!rec.done){ rec.fails=(rec.fails||0)+1; rec.until=Date.now()+lockFor(rec.fails); put('sq:'+chid,rec);
+              const l=document.createElement('p'); l.className='sq-end'; l.textContent='The question rests for '+left(lockFor(rec.fails))+'. Next time it opens at the start.'; fb.appendChild(l); }
+            else { nx.hidden=false; nx.querySelector('.sk-next').textContent='back one'; nx.querySelector('.sk-next').onclick=()=>show(); } return; }
+          b.classList.add('ok');
+          if(c.win){ const l=document.createElement('p'); l.className='sq-end'; l.textContent=opts.review?'That is the answer.':'That is the answer. The standing question is ticked on its step.'; fb.appendChild(l); if(!opts.review) finish(chid); return; }
+          nx.hidden=false; nx.querySelector('.sk-next').onclick=()=>{ trail.push(c.t.replace(/\$/g,'').slice(0,40)); node=c.go; show(); }; };
+        oe.appendChild(b); }); };
+    show(); }); }
+/* on a step: a standing question with a tree opens its walk from its label */
+function pageHooks(){ const ids=[...document.querySelectorAll('section.challenge .chid')].filter(e=>!e.closest('#desk')); if(!ids.length) return;
+  const stem=(location.pathname.split('/').pop()||'').replace(/\.html$/,''); if(!stem) return;
+  const go=()=>trees(stem).then(T=>{ ids.forEach(el=>{ const id=el.textContent.trim(), tr=T[id]; if(!tr) return; const q=el.closest('.chq'); if(!q||q.querySelector('.sqgo')) return;
+      const b=document.createElement('button'); b.type='button'; b.className='sqgo'; b.textContent=tr.kind==='debate'?'walk the debate':'walk the path';
+      b.onclick=e=>{ e.preventDefault(); e.stopPropagation(); walk(id,{stem}); }; q.appendChild(b);
+      /* walked to its end from the toolbox: tick it here */
+      if(get('sq:'+id,{}).done&&!el.classList.contains('done')&&el.__tick) el.__tick(); }); });
+  (window.LadderStick?LadderStick.maps():Promise.resolve()).then(go); }
+/* the toolbox list */
+function list(){ close(); const body=frame('','');
+  box.querySelector('.sk-top span').textContent='standing questions'; body.innerHTML='<p class="sk-q">Gathering them…</p>';
+  Promise.all([window.LadderStick?LadderStick.maps():null,script('sq/index.js',()=>window.LADDER_SQINDEX)]).then(()=>{
+    const P=get('pages:done',{}), I=window.LADDER_SQINDEX||{}, M=window.LADMAP||[]; const out=[];
+    M.forEach(([fl,rungs])=>rungs.forEach(([r,core,annex])=>core.concat(annex).forEach(([s])=>{ if(P[s]&&P[s].v&&I[s]) out.push([fl,s,I[s]]); })));
+    if(!out.length){ body.innerHTML='<p class="sk-q">None yet. A step’s standing questions come here once you have passed its footings; each one walks a branching path, a path to its answer or a debate to the bottom of one line of inquiry.</p>'; return; }
+    const st=id=>{ const r=get('sq:'+id,{}); return r.done?'✓':(r.until&&r.until>Date.now()?'resting '+left(r.until-Date.now()):''); };
+    const byF={}; out.forEach(x=>(byF[x[0]]=byF[x[0]]||[]).push(x)); const fls=Object.keys(byF);
+    body.innerHTML='<p class="sk-n">The standing questions of the steps you have passed. Each walks a branching path. A wrong path on a question with one answer rests it: 6 minutes, then an hour, then 10 hours, each rest ten times the last.</p>'
+      +fls.map(f=>'<details class="sk-fl"'+(f===fls[fls.length-1]?' open':'')+'><summary>floor '+f+'</summary><ul class="sk-list">'
+        +byF[f].map(([,s,qs])=>qs.map(([id,kind,txt,has])=>'<li>'+(has?'<button type="button" class="sk-sit" data-stem="'+s+'" data-id="'+esc(id)+'">'+esc(id)+'</button>':'<a href="'+s+'.html#'+esc(id)+'">'+esc(id)+'</a>')+' <span class="sk-st" data-txt="'+esc(txt).replace(/"/g,'&quot;')+'" data-pre="'+(kind==='debate'?'debate · ':'')+'" data-post="'+st(id)+'"></span></li>').join('')).join('')+'</ul></details>').join('');
+    body.querySelectorAll('.sk-st[data-txt]').forEach(e=>{ rich(e,e.dataset.pre+e.dataset.txt+' '+e.dataset.post); });
+    body.querySelectorAll('.sk-sit').forEach(b=>b.onclick=()=>walk(b.dataset.id,{stem:b.dataset.stem})); }); }
+window.LadderStanding={walk,list,lockFor,stemOf};
+const boot=()=>setTimeout(pageHooks,300);
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot); else boot();
 })();
