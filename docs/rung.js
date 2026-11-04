@@ -1369,7 +1369,7 @@ const href=(p,id)=>p+'.html'+(id?'#'+id:'');
 const FK='ladder:furthest';
 const furthest=()=>{ try{ return JSON.parse(LS.getItem(FK)||'null'); }catch(e){ return null; } };
 const OPTX=/(phys|chem|bio|comp|eng|econ|logi|crypt|nav)\d*$/;
-function placeOf(stem){ const M=window.LADMAP; let m=String(stem||'').match(/^floor(\d+)(concl)?$/);
+function placeOf(stem){ const M=window.LADMAP; if(stem==='start') return -2000; if(stem==='intro') return -1000; /* the first run's pages, below floor 1 */ let m=String(stem||'').match(/^floor(\d+)(concl)?$/);
   if(m){ if(!M) return null; const F=M.find(x=>x[0]===+m[1]); if(!F||!F[1].length) return null; return m[2]?F[1][F[1].length-1][0]*1000+960:F[1][0][0]*1000; }
   m=String(stem||'').match(/^r(\d+)(.*)$/); if(!m) return null; const r=+m[1], suf=m[2];
   if(suf==='') return r*1000+10; if(suf==='concl') return r*1000+950; if(OPTX.test(suf)) return null;
@@ -1411,7 +1411,10 @@ function footingView(){
   const steps=[...wrap.querySelectorAll(':scope>section.class.step')]; if(!steps.length) return;
   const kids=[...wrap.children], i0=kids.indexOf(steps[0]), iN=kids.indexOf(steps[steps.length-1]);
   const units=[kids.slice(0,i0)];
-  steps.forEach(s=>units.push([s]));
+  /* 0.3.8 (Andrew 23:28): a page of one footing (start, how to read the ladder, the floor pages) opens with its title and its
+     footing together, not on a title alone */
+  const ONE=steps.length===1;
+  if(ONE) units[0].push(steps[0]); else steps.forEach(s=>units.push([s]));
   /* 0.3.2 (Andrew 21:27): what follows the last footing (the standing questions, the measuring stick, the links) is not a footing:
      it is reached from the toolbox, or by a link to it; "next" on the last footing goes to the first footing of the next page */
   const tail=kids.slice(iN+1); if(tail.length) units.push(tail);
@@ -1441,7 +1444,7 @@ function footingView(){
   const label=()=>{ const atEnd=cur>=LASTU, nextPage=atEnd?pageLink(1):null, prevPage=cur<=0?pageLink(-1):null;
     up.hidden=!on||(atEnd&&!nextPage); dn.hidden=!on||(cur<=0&&!prevPage); sky.hidden=!on||!atEnd||!!nextPage||!skyOpen();
     up.setAttribute('aria-label','next: '+(atEnd?(nextPage||''):idOf(cur+1))); dn.setAttribute('aria-label','previous: '+(cur>0?idOf(cur-1):(prevPage||'')));
-    pos.textContent=cur>0&&cur<=steps.length?' · '+cur+' of '+steps.length:''; };
+    pos.textContent=!ONE&&cur>0&&cur<=steps.length?' · '+cur+' of '+steps.length:''; };
   const paint=()=>{ units.forEach((u,n)=>u.forEach(el=>el.classList.toggle('fv-on',n===cur))); document.body.classList.toggle('fv-notend',cur<N-1); label(); };
   const remember=()=>{ try{ LS.setItem(LK,JSON.stringify({page:P,id:idOf(cur),t:Date.now()})); }catch(e){} if(cur<=LASTU) climbed(P,idOf(cur),cur); };
   const top=()=>{ window.scrollTo(0,0); };
@@ -1508,7 +1511,7 @@ function footingView(){
   window.LadderFV.toggle=()=>{ const el=units[cur]&&units[cur][0]; setMode(!on); if(!on&&el&&cur>0) el.scrollIntoView({block:'start'}); else if(on) go(cur,{instant:true,force:true}); };
   window.LadderFV.go=n=>go(n);
   window.LadderFV.here=()=>({id:idOf(cur),els:on?units[cur]:[...document.querySelectorAll('.wrap>section.class.step')].filter(s=>{ const r=s.getBoundingClientRect(); return r.top<innerHeight*.5&&r.bottom>0; }).slice(0,1)});
-  window.LadderFV.goId=id=>{ if(!on) setMode(true); const n=id==='top'?0:id==='end'?N-1:1+steps.findIndex(s=>s.dataset.step===id); go(n<0?0:n,{force:true}); };
+  window.LadderFV.goId=id=>{ if(!on) setMode(true); const i=steps.findIndex(s=>s.dataset.step===id), n=id==='top'?0:id==='end'?N-1:(i<0?-1:ONE?0:1+i); go(n<0?0:n,{force:true}); };
 }
 const ladmap=()=>window.LADMAP?Promise.resolve():new Promise(res=>{ const s=document.createElement('script'); s.src='ladmap.js'; s.onload=s.onerror=()=>res(); document.head.appendChild(s); });
 window.LadderFV.ladmap=ladmap;
