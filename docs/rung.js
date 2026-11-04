@@ -1408,7 +1408,11 @@ function onIndex(){
 const REDUCE=()=>window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
 function footingView(){
   const wrap=document.querySelector('.wrap'); if(!wrap||document.querySelector('.rungs')) return;
-  const steps=[...wrap.querySelectorAll(':scope>section.class.step')]; if(!steps.length) return;
+  let steps=[...wrap.querySelectorAll(':scope>section.class.step')];
+  /* 0.3.9 (Andrew 23:43): a page built as one class section with no footings (a rung's theory page, a rung's or a floor's
+     conclusion) is one footing, so the climb runs through it on next and previous */
+  if(!steps.length){ const one=wrap.querySelectorAll(':scope>section.class'); if(one.length===1){ one[0].classList.add('step'); if(!one[0].dataset.step) one[0].dataset.step=page(); steps=[one[0]]; } }
+  if(!steps.length) return;
   const kids=[...wrap.children], i0=kids.indexOf(steps[0]), iN=kids.indexOf(steps[steps.length-1]);
   const units=[kids.slice(0,i0)];
   /* 0.3.8 (Andrew 23:28): a page of one footing (start, how to read the ladder, the floor pages) opens with its title and its
@@ -1425,7 +1429,9 @@ function footingView(){
   /* the pages before and after on the climb: nav.nextrung as built, or the .pn rows pn() made of it (annex links relinked) */
   const pageLink=dir=>{ const a=document.querySelector(dir>0?'.pn .pnb.next[href], nav.nextrung a.pnb.next[href]':'.pn .pnb.prev[href], nav.nextrung a.pnb.prev[href]')
       ||[...document.querySelectorAll('nav.nextrung a')].find(x=>dir>0?/→/.test(x.textContent):(/←/.test(x.textContent)&&!/index\.html$/.test(x.getAttribute('href')||'')));
-    const h=a&&a.getAttribute('href'); return h&&(dir>0||!/^index\.html/.test(h))?h:null; };
+    const h=a&&a.getAttribute('href'); if(h&&(dir>0||!/^index\.html/.test(h))) return h;
+    /* a floor page's links go back to the ladder only: its previous on the climb is the floor below's conclusion */
+    const fm=dir<0&&P.match(/^floor(\d+)$/); return fm&&+fm[1]>1?'floor'+(+fm[1]-1)+'concl.html':null; };
   /* 0.3.7: forward, press the page's own next link, so a link a page has rewritten (the first run's floor 1 -> the dizzying
      heights) keeps its own handler; back, open the previous page at its last footing */
   const leave=(h,dir)=>{ ss.set('fv:want','fv'); if(dir>0){ const a=document.querySelector('.pn .pnb.next[href], nav.nextrung a.pnb.next[href]')||[...document.querySelectorAll('nav.nextrung a')].find(x=>/→/.test(x.textContent)); if(a&&a.getAttribute('href')===h){ a.click(); return; } }
